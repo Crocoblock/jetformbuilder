@@ -1,0 +1,74 @@
+.jet-form-builder {
+	background: #fff;
+	margin: 20px 0 0 0;
+	padding: 0;
+	border: 1px solid #ccd0d4;
+}
+
+.jet-form-builder > .components-drop-zone__provider {
+	display: flex;
+	justify-content: space-between;
+	min-height: 60vh;
+	flex-wrap: wrap;
+}
+
+.jet-form-builder__sidebar {
+	flex: 0 0 30%;
+	order: 2;
+	border-left: 1px solid #e2e4e7;
+}
+
+.jet-form-builder__content,
+.editor-styles-wrapper {
+	flex: 0 0 65%;
+	padding: 10px 0 35px;
+	order: 1;
+}
+
+.block-editor-block-contextual-toolbar:not([data-align="wide"]):not([data-align="full"]) .block-editor-block-mover:not(.is-horizontal).is-visible {
+	opacity: 1;
+}
+
+.editor-styles-wrapper .block-editor-block-list__block {
+	min-height: 45px;
+}
+
+.jet-form-builder .editor-post-title__block {
+	padding-left: 40px;
+}
+
+.block-editor-block-list__layout.is-root-container {
+	padding-left: 40px;
+}
+
+.jet-form-builder__header {
+	width: 100%;
+	flex: 0 0 100%;
+	box-sizing: border-box;
+	display: flex;
+	padding: 0 40px 0 6px;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #e2e4e7;
+	height: 60px;
+}
+
+.jet-form-toggle-box {
+	padding: 0 12px;
+}
+
+.jet-form-toggle-box .components-base-control__field {
+	margin: 0;
+}
+
+.jet-form-action {
+	margin-bottom: 10px;
+}
+
+.jet-form-action:first-child {
+	margin-top: 15px;
+}
+
+.jet-form-action .components-base-control__field {
+	margin: 0;
+}

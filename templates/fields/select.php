@@ -1,0 +1,62 @@
+<?php
+/**
+ * input[type="hidden"] template
+ */
+
+$this->add_attribute( 'required', $this->get_required_val( $args ) );
+$this->add_attribute( 'name', $this->get_field_name( $args['name'] ) );
+$this->add_attribute( 'data-field-name', $args['name'] );
+$this->add_attribute( 'id', $this->get_field_id( $args ) );
+
+if ( ! empty( $args['switch_on_change'] ) ) {
+	$this->add_attribute( 'data-switch', 1 );
+}
+
+$placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : false;
+$default     = isset( $args['default'] ) ? $args['default'] : false;
+
+$this->add_attribute( 'data-default-val', $default );
+
+?>
+<select class="jet-form__field select-field"<?php $this->render_attributes_string(); ?>><?php
+
+	if ( $placeholder ) {
+		$selected_placeholder = '';
+
+		if ( ! $default ){
+			$selected_placeholder = 'selected';
+		}
+
+		printf( '<option value="" %1$s>%2$s</option>', $selected_placeholder, $placeholder );
+	}
+
+	if ( ! empty( $args['field_options'] ) ) {
+
+		foreach ( $args['field_options'] as $value => $option ) {
+
+			$selected = '';
+			$calc     = '';
+
+			if ( is_array( $option ) ) {
+				$val   = isset( $option['value'] ) ? $option['value'] : $value;
+				$label = isset( $option['label'] ) ? $option['label'] : $val;
+			} else {
+				$val   = $value;
+				$label = $option;
+			}
+
+			if ( $default ) {
+				$selected = selected( $default, $val, false );
+			}
+
+			if ( is_array( $option ) && isset( $option['calculate'] ) ) {
+				$calc = ' data-calculate="' . $option['calculate'] . '"';
+			}
+
+			printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );
+
+		}
+
+	}
+
+?></select>

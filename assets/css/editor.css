@@ -72,3 +72,44 @@
 .jet-form-action .components-base-control__field {
 	margin: 0;
 }
+
+.jet-form-edit-modal .components-base-control__field {
+	display: flex;
+	padding: 12px 0 5px;
+	border-top: 1px solid #ddd;
+}
+
+.jet-form-edit-modal .components-base-control:first-child .components-base-control__field {
+	border-top: none;
+	padding-top: 0;
+}
+
+.jet-form-edit-modal .components-base-control__label {
+	flex: 0 0 200px;
+	max-width: 200px;
+}
+
+.jet-form-edit-modal .components-base-control .components-base-control__label {
+	padding: 6px 0 0;
+}
+
+.jet-form-editor__macros-wrap {
+	position: relative;
+}
+
+.jet-form-edit-modal .jet-form-editor__macros-wrap .components-base-control .components-base-control__field {
+	padding-top: 12px;
+	border-top: 1px solid #ddd;
+}
+
+.jet-form-editor__macros-trigger {
+	height: 36px;
+	min-height: 36px;
+}
+
+.jet-form-editor__macros-inserter {
+	position: absolute;
+	right: 0;
+	top: 13px;
+	z-index: 99;
+}

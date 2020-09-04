@@ -4,21 +4,31 @@
 const {
 	TextControl,
 	TextareaControl,
-	SelectControl
+	SelectControl,
+	Button,
+	Popover,
+	PanelBody,
+	PanelRow
 } = wp.components;
 
 const { __ } = wp.i18n;
 
+const {
+	useState
+} = wp.element;
+
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 window.jetFormDefaultActions['send_email'] = window.jetFormDefaultActions['send_email'] || {};
 
-window.jetFormDefaultActions['send_email'] = function( action, onChange ) {
+window.jetFormDefaultActions['send_email'] = ( action, onChange ) => {
 
 	const result = {};
 	const onChangeValue = ( value, key ) => {
 		result[ key ] = value;
 		onChange( result );
 	};
+
+	const [ showMacrosPopover, setMacrosPopover ] = useState( false );
 
 	const settings = action.settings;
 	const formFields = []
@@ -45,8 +55,13 @@ window.jetFormDefaultActions['send_email'] = function( action, onChange ) {
 
 	blocksRecursiveIterator();
 
+	const insertMacros = ( macros ) => {
+		var content = settings.content || '';
+		onChangeValue( content + '%' + macros + '%', 'content' );
+	}
+
 	/* eslint-disable jsx-a11y/no-onchange */
-	return <div key="send_email">
+	return ( <div key="send_email">
 		<SelectControl
 			key="mail_to"
 			value={ settings.mail_to }
@@ -132,15 +147,56 @@ window.jetFormDefaultActions['send_email'] = function( action, onChange ) {
 				onChangeValue( newValue, 'from_address' );
 			} }
 		/>
-		<TextareaControl
-			key="content"
-			value={ settings.content }
-			label={ window.jetFormEmailData.labels.content }
-			help={ window.jetFormEmailData.labels.content_help }
-			onChange={ ( newValue ) => {
-				onChangeValue( newValue, 'content' );
-			} }
-		/>
-	</div>;
+		<div className="jet-form-editor__macros-wrap">
+			<TextareaControl
+				key="content"
+				value={ settings.content }
+				label={ window.jetFormEmailData.labels.content }
+				help={ window.jetFormEmailData.labels.content_help }
+				onChange={ ( newValue ) => {
+					onChangeValue( newValue, 'content' );
+				} }
+			/>
+			<div className="jet-form-editor__macros-inserter">
+				<Button
+					isTertiary
+					isSmall
+					icon={ showMacrosPopover ? 'no-alt' : 'admin-tools' }
+					label={ 'Insert macros' }
+					className="jet-form-editor__macros-trigger"
+					onClick={ () => {
+						setMacrosPopover( ! showMacrosPopover );
+					} }
+				></Button>
+				{ showMacrosPopover && (
+					<Popover
+						position={ 'bottom left' }
+					>
+						{ formFields.length && <PanelBody title={ 'Form Fields' }>
+							{ formFields.map( ( field ) => {
+								return <div key={ 'field_' + field.value }>
+									<Button
+										isLink
+										onClick={ () => { insertMacros( field.value ) } }
+									>{ '%' + field.value + '%' }</Button>
+								</div>;
+							} ) }
+						</PanelBody> }
+						{ window.jetFormEmailData.customMacros && <PanelBody title={ 'Custom Macros' }>
+							{ window.jetFormEmailData.customMacros.map( ( macros ) => {
+								return <div key={ 'macros_' + macros }>
+									<Button
+										isLink
+										onClick={ () => { insertMacros( macros ) } }
+									>{ '%' + macros + '%' }</Button>
+								</div>;
+							} ) }
+						</PanelBody> }
+					</Popover>
+				) }
+			</div>
+		</div>
+	</div> );
 	/* eslint-enable jsx-a11y/no-onchange */
+
 }

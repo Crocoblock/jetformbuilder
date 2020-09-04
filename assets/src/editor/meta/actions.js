@@ -31,6 +31,10 @@ function ActionsMeta() {
 		useEffect
 	} = wp.element;
 
+	const {
+		withState
+	} = wp.compose;
+
 	const DocumentSettingPanel = () => {
 
 		const meta = useSelect( ( select ) => {
@@ -97,6 +101,34 @@ function ActionsMeta() {
 				value: action.id,
 				label: action.name,
 			};
+		} );
+
+		const FormModalContent = withState( {
+			editedAction: editedAction,
+		} )( ( { editedAction } ) => {
+
+			var callback = false;
+
+			for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
+
+				if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
+					callback = window.jetFormActionTypes[ i ].callback;
+				}
+			};
+
+			if ( ! callback ) {
+				return <div className="jet-form-edit-modal__content">{ 'Action callback is not found.' }</div>
+			} else {
+				return <div className="jet-form-edit-modal__content">{ callback( editedAction,
+					( data ) => {
+						setEditedAction( ( prevData ) => ( {
+							...prevData,
+							settings: data
+						} ) );
+					}
+				) }</div>;
+			}
+
 		} );
 
 		const updateActionFromModal = () => {
@@ -207,23 +239,13 @@ function ActionsMeta() {
 				{ isEdit && (
 					<Modal
 						onRequestClose={ closeModal }
+						className={ 'jet-form-edit-modal' }
 						style={ { width: '60vw' } }
 						title={ 'Edit Action' }
 					>
-						<div>
-							{ window.jetFormActionTypes.map( function( actionType ) {
-								if ( actionType.id === editedAction.type && actionType.callback ) {
-									return actionType.callback( editedAction, ( data ) => {
-										setEditedAction( ( prevData ) => ( {
-											...prevData,
-											settings: data
-										} ) );
-									} );
-								}
-							} ) }
-						</div>
+						<FormModalContent/>
 						<ButtonGroup
-							className="jet-form-edit-actions"
+							className="jet-form-edit-modal__actions"
 							style={ {
 								position: 'sticky',
 								bottom: '0',

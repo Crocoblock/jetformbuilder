@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Send_Email {
+class Insert_Post {
 
 	public function get_name() {
 		return __( 'Insert Post', 'jet-form-builder' );
@@ -31,31 +31,20 @@ class Send_Email {
 	public function action_data( $editor, $handle ) {
 
 		wp_localize_script( $handle, 'jetFormInsertPostData', array(
-			'postTypes' => $this->get_post_types_for_options(),
-			'taxonomies' => $this->get_taxonomies_for_options(),
-			'postStatuses' => $this->get_post_statuses_for_options(),
-			'postFields' => $this->get_post_fields_for_options(),
-			'labels' => array(
-				'mail_to'               => __( 'Mail To:', 'jet-form-builder' ),
-				'mail_to_help'          => false,
-				'custom_email'          => __( 'Email Address:', 'jet-form-builder' ),
-				'custom_email_help'     => false,
-				'from_field'            => __( 'From Field:', 'jet-form-builder' ),
-				'from_field_help'       => false,
-				'reply_to'              => __( 'Reply To:', 'jet-form-builder' ),
-				'reply_to_help'         => false,
-				'reply_to_email'        => __( 'Reply to Email Address:', 'jet-form-builder' ),
-				'reply_to_email_help'   => false,
-				'reply_from_field'      => __( 'Reply To Email From Field:', 'jet-form-builder' ),
-				'reply_from_field_help' => false,
-				'subject'               => __( 'Subject:', 'jet-form-builder' ),
-				'subject_help'          => false,
-				'from_name'             => __( 'From Name:', 'jet-form-builder' ),
-				'from_name_help'        => false,
-				'from_address'          => __( 'From Email Address:', 'jet-form-builder' ),
-				'from_address_help'     => false,
-				'content'               => __( 'Content:', 'jet-form-builder' ),
-				'content_help'          => false,
+			'postTypes'        => $this->get_post_types_for_options(),
+			'taxonomies'       => $this->get_taxonomies_for_options(),
+			'postStatuses'     => $this->get_post_statuses_for_options(),
+			'postFields'       => $this->get_post_fields_for_options(),
+			'fieldsMapOptions' => $this->get_fields_map_options(),
+			'labels'           => array(
+				'post_type'         => __( 'Post Type:', 'jet-form-builder' ),
+				'post_type_help'    => false,
+				'post_status'       => __( 'Post Status:', 'jet-form-builder' ),
+				'post_status_help'  => false,
+				'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
+				'fields_map_help'   => __( 'Set meta fields names or post properties to save appropriate form fields into', 'jet-form-builder' ),
+				'default_meta'      => __( 'Default Fields:', 'jet-form-builder' ),
+				'default_meta_help' => __( 'Set default meta values which should be set on post insert/update', 'jet-form-builder' ),
 			),
 		) );
 	}
@@ -98,6 +87,8 @@ class Send_Email {
 			);
 		}
 
+		return $result;
+
 	}
 
 	/**
@@ -122,32 +113,66 @@ class Send_Email {
 	}
 
 	/**
+	 * Returns allowed chilces for the fields map control
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_fields_map_options() {
+
+		$post_fields = $this->get_post_fields_for_options();
+
+		foreach ( $post_fields as $index => $data ) {
+			if ( 'ID' === $data['value'] ) {
+				$post_fields[ $index ]['label'] = 'Post ID (will update the post)';
+			}
+		}
+
+		$post_fields[] = array(
+			'value' => '_thumbnail_id',
+			'label' => 'Post Thumbnail',
+		);
+
+		$post_fields[] = array(
+			'value' => 'post_meta',
+			'label' => 'Post Meta',
+		);
+
+		$post_fields[] = array(
+			'value' => 'post_terms',
+			'label' => 'Post Terms',
+		);
+
+		return $post_fields;
+
+	}
+
+	/**
 	 * Returns post object fields list for the options
 	 *
 	 * @return array
 	 */
 	public function get_post_fields_for_options() {
 
-		return apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields' array(
+		return apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
 			array(
 				'value' => 'ID',
-				'label' => 'ID',
+				'label' => 'Post ID',
 			),
 			array(
 				'value' => 'post_title',
-				'label' => 'post_title',
+				'label' => 'Post Title',
 			),
 			array(
 				'value' => 'post_content',
-				'label' => 'post_content',
+				'label' => 'Post Content',
 			),
 			array(
 				'value' => 'post_excerpt',
-				'label' => 'post_excerpt',
+				'label' => 'Post Excerpt',
 			),
 			array(
 				'value' => 'post_status',
-				'label' => 'post_status',
+				'label' => 'Post Status',
 			),
 		) );
 

@@ -18,7 +18,6 @@ const {
 } = wp.element;
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-window.jetFormDefaultActions['send_email'] = window.jetFormDefaultActions['send_email'] || {};
 
 window.jetFormDefaultActions['send_email'] = ( action, onChange ) => {
 

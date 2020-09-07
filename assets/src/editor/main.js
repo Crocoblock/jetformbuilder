@@ -6,6 +6,7 @@ import './blocks/text-field/edit';
 import './blocks/text-field/save';
 
 import './form-actions/send-email';
+import './form-actions/insert-post';
 
 const {
 	registerBlockType
@@ -71,6 +72,7 @@ document.addEventListener( 'DOMContentLoaded', (event) => {
 
 	window.jetFormActionTypes.forEach( function( action, index ) {
 		if ( window.jetFormDefaultActions && window.jetFormDefaultActions[ action.id ] ) {
+			console.log( action.id );
 			window.jetFormActionTypes[ index ].callback = window.jetFormDefaultActions[ action.id ];
 		}
 	});

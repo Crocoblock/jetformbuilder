@@ -27,6 +27,7 @@ class Manager {
 
 		$defaults = array(
 			new Types\Send_Email(),
+			new Types\Insert_Post(),
 		);
 
 		foreach ( $defaults as $action ) {

@@ -19,21 +19,23 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['send_email'] = ( action, onChange ) => {
+window.jetFormDefaultActions['send_email'] = ( settings, onChange ) => {
 
-	const result = {};
 	const onChangeValue = ( value, key ) => {
-		result[ key ] = value;
-		onChange( result );
+
+		onChange( {
+			...settings,
+			[ key ]: value
+		} );
+
 	};
 
 	const [ showMacrosPopover, setMacrosPopover ] = useState( false );
 
-	const settings = action.settings;
 	const formFields = []
 	const blocksRecursiveIterator = ( blocks ) => {
 
-		blocks = blocks || wp.data.select( 'core/editor' ).getBlocks();
+		blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
 
 		blocks.map( ( block ) => {
 

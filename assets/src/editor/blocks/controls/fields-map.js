@@ -29,16 +29,18 @@ function JetFieldsMapControl( {
 	className,
 	metaProp,
 	termsProp,
-	value
+	value,
+	type,
+	name,
+	field,
+	fieldsMap,
+	index
 } ) {
 
 	metaProp  = metaProp || 'post_meta';
 	termsProp = termsProp || 'post_terms';
 
 	const id = `inspector-select-control-${ instanceId }`;
-
-	const [ fieldType, setFieldType ] = useState( '' );
-	const [ fieldName, setFieldName ] = useState( '' );
 
 	const preparedTaxes = [];
 
@@ -51,31 +53,63 @@ function JetFieldsMapControl( {
 		} );
 	};
 
-	const onChangeValue = ( context ) => {
+	const getFieldType = ( value ) => {
 
-		value = value || {};
-
-		switch ( context ) {
-			case 'field_type':
-				break;
-
-			case 'field_name':
-				break;
+		if ( ! value ) {
+			return '';
 		}
 
-		value = newValue;
+		for ( var i = 0; i < fieldTypes.length; i++ ) {
+			if ( value === fieldTypes[ i ].value ) {
+				return value;
+			}
+		}
 
-		onChange( value );
+		if ( value.includes( taxPrefix ) ) {
+			return termsProp;
+		} else {
+			return metaProp;
+		}
 
 	};
 
-	useEffect( () => {
-		onChangeValue( 'field_type' );
-	}, [ fieldType ] );
+	const getFieldName = ( value ) => {
 
-	useEffect( () => {
-		onChangeValue( 'field_name' );
-	}, [ fieldName ] );
+		if ( ! value ) {
+			return '';
+		}
+
+		var fieldType = getFieldType( value );
+
+		if ( termsProp === fieldType || metaProp === fieldType ) {
+			return value;
+		} else {
+			return '';
+		}
+
+	};
+
+	const onChangeType = ( newValue ) => {
+		//value.type = newValue;
+		onChange( {
+			...fieldsMap,
+			[ field ] : {
+				type: newValue,
+				name: name,
+			}
+		} );
+	};
+
+	const onChangeName = ( newValue ) => {
+		//value.name = newValue;
+		onChange( {
+			...fieldsMap,
+			[ field ] : {
+				type: type,
+				name: newValue,
+			}
+		} );
+	};
 
 	// Disable reason: A select with an onchange throws a warning
 
@@ -85,24 +119,24 @@ function JetFieldsMapControl( {
 	>
 		<div className="jet-post-field-control">
 			<SelectControl
-				key={ 'field_type' }
-				value={ fieldType }
-				onChange={ setFieldType }
+				key={ 'field_type_' + field + index }
+				value={ type }
+				onChange={ onChangeType }
 				options={ fieldTypes }
 				style={ {
 					width: '160px'
 				} }
 			/>
-			{ ( metaProp === fieldType ) && <TextControl
-				key={ 'field_name' }
-				value={ fieldName }
-				onChange={ setFieldName }
+			{ ( metaProp === type ) && <TextControl
+				key={ 'field_name_' + field + index }
+				value={ name }
+				onChange={ onChangeName }
 				style={ { width: '200px' } }
 			/> }
-			{ ( termsProp === fieldType ) && <SelectControl
-				key={ 'field_tax' }
-				value={ fieldName }
-				onChange={ setFieldName }
+			{ ( termsProp === type ) && <SelectControl
+				key={ 'field_tax_' + field + index }
+				value={ name }
+				onChange={ onChangeName }
 				options={ preparedTaxes }
 				style={ { width: '160px' } }
 			/> }

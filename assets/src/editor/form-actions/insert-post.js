@@ -21,19 +21,19 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['insert_post'] = ( action, onChange ) => {
+window.jetFormDefaultActions['insert_post'] = ( settings, onChange ) => {
 
-	const result = {};
 	const onChangeValue = ( value, key ) => {
-		result[ key ] = value;
-		onChange( result );
+		onChange( {
+			...settings,
+			[ key ]: value
+		} );
 	};
 
-	const settings = action.settings;
 	const formFields = []
 	const blocksRecursiveIterator = ( blocks ) => {
 
-		blocks = blocks || wp.data.select( 'core/editor' ).getBlocks();
+		blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
 
 		blocks.map( ( block ) => {
 
@@ -52,7 +52,9 @@ window.jetFormDefaultActions['insert_post'] = ( action, onChange ) => {
 
 	};
 
-	settings.fields_map = settings.fields_map || {};
+	if ( ! settings.fields_map ) {
+		onChangeValue( {}, 'fields_map' );
+	}
 
 	blocksRecursiveIterator();
 
@@ -80,18 +82,29 @@ window.jetFormDefaultActions['insert_post'] = ( action, onChange ) => {
 		/>
 		<BaseControl
 			label={ window.jetFormInsertPostData.labels.fields_map }
+			key="fields_map"
 		>
 			{ window.jetFormInsertPostData.labels.fields_map_help && <div className="jet-fields-map__help">{ window.jetFormInsertPostData.labels.fields_map_help }</div> }
 			<div className="jet-fields-map__list">
-				{ formFields && formFields.map( ( field ) => {
+				{ formFields && formFields.map( ( field, index ) => {
+					var fieldData = settings.fields_map[ field.value ];
+
+					if ( ! fieldData ) {
+						fieldData = {};
+					}
+
 					return <div
 						className="jet-fields-map__row"
-						key={ 'field_map_' + field.value }
+						key={ 'field_map_' + field.value + index }
 					>
 						<div className="jet-fields-map__item-field">{ field.value }</div>
 						<JetFieldsMapControl
-							key="fields_map"
-							value={ settings.fields_map[ field.value ] }
+							//value={ fieldData }
+							type={ fieldData.type }
+							name={ fieldData.name }
+							field={ field.value }
+							index={ index }
+							fieldsMap={ settings.fields_map }
 							taxonomiesList={ window.jetFormInsertPostData.taxonomies }
 							fieldTypes={ window.jetFormInsertPostData.fieldsMapOptions }
 							onChange={ ( newValue ) => {

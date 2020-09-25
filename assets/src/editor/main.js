@@ -4,6 +4,8 @@ import ActionsMeta from './meta/actions';
 //import MessagesMeta from './meta/messages';
 import './blocks/text-field/edit';
 import './blocks/text-field/save';
+import './blocks/hidden-field/edit';
+import './blocks/hidden-field/save';
 
 import './form-actions/send-email';
 import './form-actions/insert-post';

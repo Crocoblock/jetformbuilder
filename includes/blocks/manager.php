@@ -27,6 +27,7 @@ class Manager {
 
 		$types = array(
 			new Types\Text_Field(),
+			new Types\Hidden_Field(),
 		);
 
 		foreach ( $types as $type ) {
@@ -63,6 +64,9 @@ class Manager {
 				'className'  => $type->block_class_name(),
 				'slug'       => $type->get_name(),
 			);
+
+			$type->block_data( $editor, $handle );
+
 		}
 
 		wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );

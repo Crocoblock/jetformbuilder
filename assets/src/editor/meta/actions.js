@@ -103,76 +103,16 @@ function ActionsMeta() {
 			};
 		} );
 
-		const FormModalContent = withState( {
-			currentAction: editedAction,
-		} )( ( { currentAction, setState } ) => {
+		var Callback = false;
 
-			var callback = false;
+		for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
 
-			for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
-
-				if ( window.jetFormActionTypes[ i ].id === currentAction.type && window.jetFormActionTypes[ i ].callback ) {
-					callback = window.jetFormActionTypes[ i ].callback;
-				}
-			};
-
-			if ( ! callback ) {
-				return <div className="jet-form-edit-modal__content">{ 'Action callback is not found.' }</div>
-			} else {
-				return <div>
-					<div className="jet-form-edit-modal__content">{ callback( currentAction.settings,
-						( data ) => {
-							console.log( 'Data:' );
-							console.log( data );
-							setState( () => {
-								currentAction = {
-									...currentAction,
-									settings: data
-								}
-							} );
-							console.log( 'After set state:' );
-							console.log( currentAction );
-						}
-					) }</div>
-					<ButtonGroup
-						className="jet-form-edit-modal__actions"
-						style={ {
-							position: 'sticky',
-							bottom: '0',
-							margin: '20px -24px -24px',
-							padding: '18px 24px 20px',
-							backgroundColor: '#fff',
-							width: 'calc( 100% + 48px )',
-							borderTop: '1px solid #ddd',
-						} }
-					>
-						<Button
-							isPrimary
-							onClick={ () => {
-								console.log( 'Before update:' );
-								console.log( currentAction );
-								updateActionFromModal( currentAction )
-							} }
-						>
-							Update
-						</Button>
-						<Button
-							isSecondary
-							style={ {
-								margin: '0 0 0 10px'
-							} }
-							onClick={ closeModal }
-						>
-							Cancel
-						</Button>
-					</ButtonGroup>
-				</div>;
+			if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
+				Callback = window.jetFormActionTypes[ i ].callback;
 			}
-
-		} );
+		};
 
 		const updateActionFromModal = ( action ) => {
-			console.log( action );
 			updateAction( action.id, 'settings', action.settings );
 			closeModal();
 		}
@@ -284,7 +224,52 @@ function ActionsMeta() {
 						style={ { width: '60vw' } }
 						title={ 'Edit Action' }
 					>
-						<FormModalContent/>
+						{ ! Callback && <div
+							className="jet-form-edit-modal__content"
+						>{ 'Action callback is not found.' }</div> }
+						{ Callback && <div>
+							<div className="jet-form-edit-modal__content">
+								<Callback
+									settings={ editedAction.settings }
+									onChange={ ( data ) => {
+										setEditedAction( {
+											...editedAction,
+											settings: data
+										} );
+									} }
+								/>
+							</div>
+							<ButtonGroup
+								className="jet-form-edit-modal__actions"
+								style={ {
+									position: 'sticky',
+									bottom: '0',
+									margin: '20px -24px -24px',
+									padding: '18px 24px 20px',
+									backgroundColor: '#fff',
+									width: 'calc( 100% + 48px )',
+									borderTop: '1px solid #ddd',
+								} }
+							>
+								<Button
+									isPrimary
+									onClick={ () => {
+										updateActionFromModal( editedAction )
+									} }
+								>
+									Update
+								</Button>
+								<Button
+									isSecondary
+									style={ {
+										margin: '0 0 0 10px'
+									} }
+									onClick={ closeModal }
+								>
+									Cancel
+								</Button>
+							</ButtonGroup>
+						</div> }
 					</Modal>
 				) }
 			</PluginDocumentSettingPanel>

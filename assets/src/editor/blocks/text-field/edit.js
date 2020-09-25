@@ -1,6 +1,7 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
+import JetFieldPlaceholder from '../controls/placeholder';
 const block = 'jet-forms/text-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
@@ -9,7 +10,6 @@ window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbac
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
 	ColorPalette,
 	RichText,
 	Editable,
@@ -17,6 +17,11 @@ const {
 	ServerSideRender,
 	BlockControls,
 } = wp.editor;
+
+const {
+	InspectorControls,
+} = wp.blockEditor;
+
 const {
 	PanelColor,
 	IconButton,
@@ -81,12 +86,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 						/> }
 					</InspectorControls>
 			),
-			<Disabled>
-				<ServerSideRender
-					block={ block }
-					attributes={ attributes }
-				/>
-			</Disabled>
+			<JetFieldPlaceholder
+				title={ 'Text Field' }
+				subtitle={ [ attributes.label, attributes.name ] }
+				isRequired={ attributes.required }
+			/>
 		];
 	}
 };

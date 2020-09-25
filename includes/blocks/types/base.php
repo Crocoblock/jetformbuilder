@@ -251,6 +251,16 @@ abstract class Base {
 	}
 
 	/**
+	 * Register blocks specific JS variables
+	 *
+	 * @param  [type] $editor [description]
+	 * @param  [type] $handle [description]
+	 * @return [type]         [description]
+	 */
+	public function block_data( $editor, $handle ) {
+	}
+
+	/**
 	 * Allow to filter raw attributes from block type instance to adjust JS and PHP attributes format
 	 *
 	 * @param  [type] $attributes [description]

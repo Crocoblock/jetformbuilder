@@ -29,6 +29,7 @@ abstract class Base {
 
 		ob_start();
 		if ( ! empty( $this->args['label'] ) && $this->label_allowed() ) {
+			$args = $this->args;
 			include $this->get_template( 'common/field-label.php' );
 		}
 		return ob_get_clean();
@@ -44,6 +45,7 @@ abstract class Base {
 
 		ob_start();
 		if ( ! empty( $this->args['desc'] ) && $this->label_allowed() ) {
+			$args = $this->args;
 			include $this->get_template( 'common/field-description.php' );
 		}
 		return ob_get_clean();

@@ -106,6 +106,135 @@ class Editor {
 
 	}
 
+	public function get_preset_config() {
+		return apply_filters( 'jet-form-builder/editor/preset-config', array(
+			'global_fields' => array(
+				array(
+					'name' => 'from',
+					'label' => __( 'Source:', 'jet-engine' ),
+					'type' => 'select',
+					'options' => array(
+						array(
+							'value' => 'post',
+							'label' => __( 'Post', 'jet-engine' ) ,
+						),
+						array(
+							'value' => 'user',
+							'label' => __( 'User', 'jet-engine' ),
+						),
+					)
+				),
+				array(
+					'name' => 'post_from',
+					'label' => __( 'Get post ID from:', 'jet-engine' ),
+					'type' => 'select',
+					'options' => array(
+						array(
+							'value' => 'current_post',
+							'label' => __( 'Current post', 'jet-engine' ) ,
+						),
+						array(
+							'value' => 'query_var',
+							'label' => __( 'URL Query Variable', 'jet-engine' ),
+						),
+					),
+					'condition' => array(
+						'field' => 'from',
+						'value' => 'post',
+					),
+				),
+				array(
+					'name' => 'post_from',
+					'label' => __( 'Get post ID from:', 'jet-engine' ),
+					'type' => 'select',
+					'options' => array(
+						array(
+							'value' => 'current_user',
+							'label' => __( 'Current user', 'jet-engine' ) ,
+						),
+						array(
+							'value' => 'query_var',
+							'label' => __( 'URL Query Variable', 'jet-engine' ),
+						),
+					),
+					'condition' => array(
+						'field' => 'from',
+						'value' => 'user',
+					),
+				),
+				array(
+					'name' => 'query_var',
+					'label' => __( 'Query variable name:', 'jet-engine' ),
+					'type' => 'text',
+					'custom_condition' => 'query_var',
+				)
+			),
+			'map_fields' => array(
+				array(
+					'name' => 'key',
+					'label' => __( 'Query variable key', 'jet-engine' ),
+					'type' => 'text',
+					'parent_condition' => array(
+						'field' => 'from',
+						'value' => 'query_vars'
+					),
+				),
+				array(
+					'name' => 'prop',
+					'label' => __( 'Select post property...', 'jet-engine' ),
+					'type' => 'select',
+					'options' => array(
+						array(
+							'value' => 'ID',
+							'label' => __( 'Post ID', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_title',
+							'label' => __( 'Post Title', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_content',
+							'label' => __( 'Post Content', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_excerpt',
+							'label' => __( 'Post Excerpt', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_thumb',
+							'label' => __( 'Post Thumbnail', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_meta',
+							'label' => __( 'Post Meta', 'jet-engine' ),
+						),
+						array(
+							'value' => 'post_terms',
+							'label' => __( 'Post Terms', 'jet-engine' ),
+						),
+					),
+					'parent_condition' => array(
+						'field' => 'prop',
+						'value' => 'post_meta'
+					),
+				),
+				array(
+					'name' => 'key',
+					'label' => __( 'Meta field key', 'jet-engine' ),
+					'type' => 'text',
+					'parent_condition' => array(
+						'field' => 'from',
+						'value' => 'post'
+					),
+					'condition' => array(
+						'field' => 'from',
+						'value' => 'post'
+					),
+				),
+			),
+		) );
+	}
+
 	/**
 	 * Enqueue editor assets
 	 *
@@ -150,6 +279,7 @@ class Editor {
 			'allowedBlocks' => $this->get_allowed_blocks(),
 			'action'        => $this->get_action(),
 			'itemID'        => $this->get_item_id(),
+			'presetConfig'  => $this->get_preset_config(),
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );

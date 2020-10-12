@@ -36,8 +36,8 @@ function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }
 
-register_activation_hook( __FILE__, function() {
+/*register_activation_hook( __FILE__, function() {
 	jet_form_builder_init();
 	jet_form_builder()->init_components();
 	jet_form_builder()->db->install_table();
-} );
+} );*/

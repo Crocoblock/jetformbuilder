@@ -22,71 +22,67 @@ const {
 	SVG
 } = wp.components;
 
-// register the core blocks, whitelist them, then convert the comment forms
-document.addEventListener( 'DOMContentLoaded', (event) => {
+window.jetFormBuilderControls = {
+	toolbar: {},
+	general: {},
+	advanced: {},
+};
 
-	window.jetFormBuilderControls = {
-		toolbar: {},
-		general: {},
-		advanced: {},
-	};
+var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize-block-callbacks' );
 
-	var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize-block-callbacks' );
+document.dispatchEvent( initializeCallbacksEvent );
 
-	document.dispatchEvent( initializeCallbacksEvent );
+if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
-	if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
+	window.jetFormBuilderBlocks.forEach( function( blockData ) {
 
-		window.jetFormBuilderBlocks.forEach( function( blockData ) {
+		if ( window.jetFormBuilderBlockCallbacks[ blockData.blockName ] ) {
 
-			if ( window.jetFormBuilderBlockCallbacks[ blockData.blockName ] ) {
-
-				if ( blockData.controls.toolbar ) {
-					window.jetFormBuilderControls.toolbar[ blockData.blockName ] = blockData.controls.toolbar;
-				}
-
-				if ( blockData.controls.general ) {
-					window.jetFormBuilderControls.general[ blockData.blockName ] = blockData.controls.general;
-				}
-
-				if ( blockData.controls.advanced ) {
-					window.jetFormBuilderControls.advanced[ blockData.blockName ] = blockData.controls.advanced;
-				}
-
-				registerBlockType( blockData.blockName, {
-					title: blockData.title,
-					icon: <span dangerouslySetInnerHTML={{__html: blockData.icon}}></span>,
-					category: 'layout',
-					attributes: blockData.attributes,
-					className: blockData.className,
-					supports: {
-						customClassName: false,
-					},
-					edit: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].edit,
-					save: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].save,
-				} );
-
+			if ( blockData.controls.toolbar ) {
+				window.jetFormBuilderControls.toolbar[ blockData.blockName ] = blockData.controls.toolbar;
 			}
 
-		});
+			if ( blockData.controls.general ) {
+				window.jetFormBuilderControls.general[ blockData.blockName ] = blockData.controls.general;
+			}
 
-	}
+			if ( blockData.controls.advanced ) {
+				window.jetFormBuilderControls.advanced[ blockData.blockName ] = blockData.controls.advanced;
+			}
 
-	window.jetFormActionTypes.forEach( function( action, index ) {
-		if ( window.jetFormDefaultActions && window.jetFormDefaultActions[ action.id ] ) {
-			console.log( action.id );
-			window.jetFormActionTypes[ index ].callback = window.jetFormDefaultActions[ action.id ];
+			console.log( blockData.blockName );
+
+			registerBlockType( blockData.blockName, {
+				title: blockData.title,
+				icon: <span dangerouslySetInnerHTML={{__html: blockData.icon}}></span>,
+				category: 'layout',
+				attributes: blockData.attributes,
+				className: blockData.className,
+				supports: {
+					customClassName: false,
+				},
+				edit: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].edit,
+				save: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].save,
+			} );
+
 		}
+
 	});
 
-	ArgsMeta();
-	ActionsMeta();
+}
 
-	var initializedEvent = new Event( 'jet-form-builder-initialized' );
-
-	document.dispatchEvent( initializedEvent );
-
+window.jetFormActionTypes.forEach( function( action, index ) {
+	if ( window.jetFormDefaultActions && window.jetFormDefaultActions[ action.id ] ) {
+		window.jetFormActionTypes[ index ].callback = window.jetFormDefaultActions[ action.id ];
+	}
 });
+
+ArgsMeta();
+ActionsMeta();
+
+var initializedEvent = new Event( 'jet-form-builder-initialized' );
+
+document.dispatchEvent( initializedEvent );
 
 /**
  * Takes a target input element via ID and turns it into a block editor

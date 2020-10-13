@@ -42,8 +42,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 		const attributes = props.attributes;
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
-		console.log( hasToolbar );
-
 		return [
 			hasToolbar && (
 				<BlockControls>

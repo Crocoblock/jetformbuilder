@@ -115,6 +115,10 @@ class Editor {
 					'type' => 'select',
 					'options' => array(
 						array(
+							'value' => '',
+							'label' => __( 'Select...', 'jet-engine' ) ,
+						),
+						array(
 							'value' => 'post',
 							'label' => __( 'Post', 'jet-engine' ) ,
 						),
@@ -144,8 +148,8 @@ class Editor {
 					),
 				),
 				array(
-					'name' => 'post_from',
-					'label' => __( 'Get post ID from:', 'jet-engine' ),
+					'name' => 'user_from',
+					'label' => __( 'Get user ID from:', 'jet-engine' ),
 					'type' => 'select',
 					'options' => array(
 						array(

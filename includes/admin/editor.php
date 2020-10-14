@@ -185,9 +185,12 @@ class Editor {
 				),
 				array(
 					'name' => 'prop',
-					'label' => __( 'Select post property...', 'jet-engine' ),
 					'type' => 'select',
 					'options' => array(
+						array(
+							'value' => '',
+							'label' => __( 'Select post property...', 'jet-engine' ),
+						),
 						array(
 							'value' => 'ID',
 							'label' => __( 'Post ID', 'jet-engine' ),
@@ -218,8 +221,8 @@ class Editor {
 						),
 					),
 					'parent_condition' => array(
-						'field' => 'prop',
-						'value' => 'post_meta'
+						'field' => 'from',
+						'value' => 'post'
 					),
 				),
 				array(
@@ -231,8 +234,8 @@ class Editor {
 						'value' => 'post'
 					),
 					'condition' => array(
-						'field' => 'from',
-						'value' => 'post'
+						'field' => 'prop',
+						'value' => 'post_meta'
 					),
 				),
 			),

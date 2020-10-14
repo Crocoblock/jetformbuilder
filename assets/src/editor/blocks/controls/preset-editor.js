@@ -7,101 +7,260 @@ const {
 	Modal
 } = wp.components;
 
-function JetFormPresetEditor( {
-	value,
-	onChange,
-	decode,
-	encode,
-	availableFields
-} ) {
+const JetFormPresetEditor = class extends wp.element.Component {
 
-	if ( decode ) {
+	constructor( props ) {
+		super( props );
+		this.state = { value: {} };
+	}
 
-		if ( ! value ) {
-			value = '{}';
+	onChangeValue( newValue, name ) {
+		this.setState( { value: {
+			...this.state.value,
+			[ name ]: newValue
+		} } );
+		
+		this.props.onChange( this.state.value );
+
+	};
+
+	componentDidMount() {
+
+		if ( this.props.decode ) {
+
+			let value;
+
+			if ( ! this.props.value ) {
+				value = '{}';
+			} else {
+				value = this.props.value;
+			}
+
+			this.setState( { value: JSON.parse( value ) } );
+
+		} else if ( this.props.value ) {
+			this.setState( { value: this.props.value } );
 		}
-
-		value = JSON.parse( value );
 
 	}
 
-	const isVisible = ( data ) => {
+	render() {
 
-		if ( ! data.condition && ! data.custom_condition ) {
+		const isVisible = ( data ) => {
+
+			if ( ! data.condition && ! data.custom_condition ) {
+				return true;
+			}
+
+			if ( data.custom_condition ) {
+				switch ( data.custom_condition ) {
+					case 'query_var':
+						return ( ( 'post' === this.state.value.from && 'query_var' === this.state.value.post_from ) || ( 'user' === this.state.value.from && 'query_var' === this.state.value.user_from ) );
+				}
+			}
+
+			if ( data.condition ) {
+				return this.state.value[ data.condition.field ] === data.condition.value;
+			}
+
+			return true;
+
+		};
+
+		const isCurrentFieldVisible = ( data ) => {
+
+			if ( ! data.condition && ! data.parent_condition ) {
+				return true;
+			}
+
+			if ( data.parent_condition && ! data.condition ) {
+				return this.state.value[ data.parent_condition.field ] === data.parent_condition.value;
+			} else if ( data.parent_condition && data.condition ) {
+				return this.state.value[ 'current_field_' + data.condition.field ] === data.condition.value && this.state.value[ data.parent_condition.field ] === data.parent_condition.value;
+			} else if ( ! data.parent_condition && data.condition ) {
+				return this.state.value[ 'current_field_' + data.condition.field ] === data.condition.value;
+			}
+
 			return true;
 		}
 
-		if ( data.custom_condition ) {
-			switch ( data.custom_condition ) {
-				case 'query_var':
-					return ( ( 'post' === value.from && 'query_var' === value.post_from ) || ( 'user' === value.from && 'query_var' === value.user_from ) );
+		const isMapFieldVisible = ( data, field ) => {
+
+			if ( ! data.condition && ! data.parent_condition ) {
+				return true;
 			}
-		}
 
-		console.log( data.condition );
-
-		if ( data.condition ) {
-			return value[ data.condition.field ] === data.condition.value;
-		}
-
-		return true;
-
-	};
-
-	const onChangeValue = ( newValue, name ) => {
-		value[ name ] = newValue;
-	};
-
-	return ( <div>
-		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => {
-			switch ( data.type ) {
-				case 'text':
-					return ( isVisible( data ) &&
-						<div
-							key={ 'field_' + data.name + index }
-							className={ 'jet-form-canvas__preset-row' }
-						>
-							<TextControl
-								key={ data.name + index }
-								label={ data.label }
-								value={ value[ data.name ] }
-								onChange={ newVal => {
-									onChangeValue( newVal, data.name )
-								} }
-							/>
-						</div>
-					);
-				case 'select':
-					return ( isVisible( data ) &&
-						<div
-							key={ 'field_' + data.name + index }
-							className={ 'jet-form-canvas__preset-row' }
-						>
-							<SelectControl
-								key={ data.name + index }
-								labelPosition="side"
-								options={ data.options }
-								label={ data.label }
-								value={ value[ data.name ] }
-								onChange={ newVal => {
-									onChangeValue( newVal, data.name )
-								} }
-							/>
-						</div>
-					);
+			if ( data.parent_condition && ! data.condition ) {
+				return this.state.value[ data.parent_condition.field ] === data.parent_condition.value;
+			} else if ( data.parent_condition && data.condition ) {
+				if ( ! this.state.value.fields_map || ! this.state.value.fields_map[ field ] ) {
+					return false;
+				} else {
+					return this.state.value.fields_map[ field ][ data.condition.field ] === data.condition.value && this.state.value[ data.parent_condition.field ] === data.parent_condition.value;
+				}
+			} else if ( ! data.parent_condition && data.condition ) {
+				if ( ! this.state.value.fields_map || ! this.state.value.fields_map[ field ] ) {
+					return false;
+				} else {
+					return this.state.value.fields_map[ field ][ data.condition.field ] === data.condition.value;
+				}
 			}
-		} ) }
 
-		{ availableFields && (
-			availableFields.map( ( field, index ) => {
+			return true;
 
-			} )
-		) }
+		};
 
-		{ ! availableFields && (
-			<div></div>
-		) }
-	</div> );
+		return ( <div>
+			{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => {
+				switch ( data.type ) {
+					case 'text':
+						return ( isVisible( data ) &&
+							<div
+								key={ 'field_' + data.name + index }
+								className={ 'jet-form-preset__row' }
+							>
+								<TextControl
+									key={ data.name + index }
+									label={ data.label }
+									value={ this.state.value[ data.name ] }
+									onChange={ newVal => {
+										this.onChangeValue( newVal, data.name )
+									} }
+								/>
+							</div>
+						);
+					case 'select':
+						return ( isVisible( data ) &&
+							<div
+								key={ 'field_' + data.name + index }
+								className={ 'jet-form-preset__row' }
+							>
+								<SelectControl
+									key={ data.name + index }
+									labelPosition="side"
+									options={ data.options }
+									label={ data.label }
+									value={ this.state.value[ data.name ] }
+									onChange={ newVal => {
+										this.onChangeValue( newVal, data.name )
+									} }
+								/>
+							</div>
+						);
+				}
+			} ) }
+
+			{ this.props.availableFields && (
+				this.props.availableFields.map( ( field, index ) => {
+
+					var fieldsMap =  this.state.value.fields_map;
+					var currentVal = null;
+
+					if ( ! fieldsMap ) {
+						fieldsMap = {};
+					}
+
+					currentVal = fieldsMap[ field ];
+
+					if ( ! currentVal ) {
+						currentVal = {};
+					}
+
+					return <div>
+						<div>{ field }</div>
+						{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
+
+							switch ( data.type ) {
+								case 'text':
+									return ( isMapFieldVisible( data, field ) &&
+										<div
+											key={ field + data.name + index + fIndex }
+											className={ 'jet-form-preset__fields-map-item' }
+										>
+											<TextControl
+												key={ 'control_' + field + data.name + index + fIndex }
+												placeholder={ data.label }
+												value={ currentVal[ data.name ] }
+												onChange={ newVal => {
+													currentVal[ data.name ] = newVal;
+													this.onChangeValue( {
+														...fieldsMap,
+														[ field ]: currentVal
+													}, 'fields_map' );
+												} }
+											/>
+										</div>
+									);
+								case 'select':
+									return ( isMapFieldVisible( data, field ) &&
+										<div
+											key={ field + data.name + index + fIndex }
+											className={ 'jet-form-preset__fields-map-item' }
+										>
+											<SelectControl
+												key={ 'control_' + field + data.name + index + fIndex }
+												labelPosition="side"
+												options={ data.options }
+												label={ data.label }
+												value={ currentVal[ data.name ] }
+												onChange={ newVal => {
+													currentVal[ data.name ] = newVal;
+													this.onChangeValue( {
+														...fieldsMap,
+														[ field ]: currentVal
+													}, 'fields_map' );
+												} }
+											/>
+										</div>
+									);
+							}
+						} ) }
+					</div>;
+				} )
+			) }
+
+			{ ! this.props.availableFields && ( window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
+
+					switch ( data.type ) {
+						case 'text':
+							return ( isCurrentFieldVisible( data ) &&
+								<div
+									key={ data.name + fIndex }
+									className={ 'jet-form-preset__row' }
+								>
+									<TextControl
+										key={ 'control_' + data.name + fIndex }
+										placeholder={ data.label }
+										value={ this.state.value[ 'current_field_' + data.name ] }
+										onChange={ newVal => {
+											this.onChangeValue( newVal, 'current_field_' + data.name )
+										} }
+									/>
+								</div>
+							);
+						case 'select':
+							return ( isCurrentFieldVisible( data ) &&
+								<div
+									key={ data.name + fIndex }
+									className={ 'jet-form-preset__row' }
+								>
+									<SelectControl
+										key={ 'control_' + data.name + fIndex }
+										labelPosition="side"
+										options={ data.options }
+										label={ data.label }
+										value={ this.state.value[ 'current_field_' + data.name ] }
+										onChange={ newVal => {
+											this.onChangeValue( newVal, 'current_field_' + data.name )
+										} }
+									/>
+								</div>
+							);
+					}
+				} )
+			) }
+		</div> );
+	}
 }
 
 export default JetFormPresetEditor;

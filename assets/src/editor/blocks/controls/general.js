@@ -48,30 +48,6 @@ const JetFormGeneral = class extends wp.element.Component {
 			result[ this.props.controls[ i ].key ] = this.props.values[ this.props.controls[ i ].key ];
 		};
 
-		/*
-		const formFields = []
-		const blocksRecursiveIterator = ( blocks ) => {
-
-			blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
-
-			blocks.map( ( block ) => {
-
-				if ( block.name.includes( 'jet-forms/' ) && block.attributes.name ) {
-					formFields.push( block.attributes.name );
-				}
-
-				if ( block.innerBlocks.length ) {
-					blocksRecursiveIterator( block.innerBlocks );
-				}
-
-			} );
-
-		};
-
-		blocksRecursiveIterator();
-
-		*/
-
 		/* eslint-disable jsx-a11y/no-onchange */
 		return <PanelBody title={ __( 'General' ) }>
 			{ this.props.controls.map( ( data, index ) => {

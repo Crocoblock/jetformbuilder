@@ -102,6 +102,10 @@ class Post_Type {
 				'type'    => 'string',
 				'default' => '{}',
 			),
+			'_jf_preset' => array(
+				'type'    => 'string',
+				'default' => '{}',
+			),
 		);
 
 		foreach ( $meta as $key => $args ) {

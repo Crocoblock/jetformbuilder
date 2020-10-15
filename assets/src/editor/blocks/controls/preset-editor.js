@@ -15,12 +15,17 @@ const JetFormPresetEditor = class extends wp.element.Component {
 	}
 
 	onChangeValue( newValue, name ) {
+
 		this.setState( { value: {
 			...this.state.value,
 			[ name ]: newValue
-		} } );
-		
-		this.props.onChange( this.state.value );
+		} }, () => {
+			if ( this.props.encode ) {
+				this.props.onChange( JSON.stringify( this.state.value ) );
+			} else {
+				this.props.onChange( this.state.value );
+			}
+		} );
 
 	};
 

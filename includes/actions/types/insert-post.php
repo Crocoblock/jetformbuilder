@@ -1,6 +1,8 @@
 <?php
 namespace Jet_Form_Builder\Actions\Types;
 
+use Jet_Form_Builder\Classes\Tools;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -31,8 +33,8 @@ class Insert_Post {
 	public function action_data( $editor, $handle ) {
 
 		wp_localize_script( $handle, 'jetFormInsertPostData', array(
-			'postTypes'        => $this->get_post_types_for_options(),
-			'taxonomies'       => $this->get_taxonomies_for_options(),
+			'postTypes'        => Tools::get_post_types_for_js(),
+			'taxonomies'       => Tools::get_taxonomies_for_js(),
 			'postStatuses'     => $this->get_post_statuses_for_options(),
 			'postFields'       => $this->get_post_fields_for_options(),
 			'fieldsMapOptions' => $this->get_fields_map_options(),
@@ -49,47 +51,6 @@ class Insert_Post {
 		) );
 	}
 
-	/**
-	 * Returns post types list for the options
-	 *
-	 * @return array
-	 */
-	public function get_post_types_for_options() {
-
-		$post_types = get_post_types( array(), 'objects', 'and' );
-		$result     = array();
-
-		foreach ( $post_types as $post_type ) {
-			$result[] = array(
-				'value' => $post_type->name,
-				'label' => $post_type->label,
-			);
-		}
-
-		return $result;
-
-	}
-
-	/**
-	 * Returns taxonomies list for the options
-	 *
-	 * @return array
-	 */
-	public function get_taxonomies_for_options() {
-
-		$taxonomies = get_taxonomies( array(), 'objects', 'and' );
-		$result     = array();
-
-		foreach ( $taxonomies as $tax ) {
-			$result[] = array(
-				'value' => $tax->name,
-				'label' => $tax->label,
-			);
-		}
-
-		return $result;
-
-	}
 
 	/**
 	 * Returns post statuses list for the options

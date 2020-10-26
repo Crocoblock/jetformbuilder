@@ -3,10 +3,8 @@ import ArgsMeta from './meta/arguments';
 import ActionsMeta from './meta/actions';
 import PresetMeta from './meta/preset';
 //import MessagesMeta from './meta/messages';
-import './blocks/text-field/edit';
-import './blocks/text-field/save';
-import './blocks/hidden-field/edit';
-import './blocks/hidden-field/save';
+
+import './blocks/form-fields';
 
 import './form-actions/send-email';
 import './form-actions/insert-post';
@@ -100,10 +98,10 @@ window.JetFormEditor = function( id, inputName, content, formName ) {
 	const original = document.getElementById( id );
 
 	// make the content and inputName parameters optional
-	if ( content == undefined ) {
+	if ( typeof content === 'undefined' ) {
 		content = original.value;
 	}
-	if ( inputName == undefined ) {
+	if ( typeof inputName === 'undefined' ) {
 		inputName = original.name;
 	}
 

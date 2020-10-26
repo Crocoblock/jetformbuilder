@@ -78,7 +78,7 @@ class Form_Builder {
 			$refer = trailingslashit( $refer ) . '?' . $_SERVER['QUERY_STRING'];
 		}
 
-		return apply_filters( 'jet-engine/forms/booking/form-refer-url', $refer, $this );
+		return apply_filters( 'jet-form-builder/forms/booking/form-refer-url', $refer, $this );
 
 	}
 

@@ -35,6 +35,7 @@ const {
 	Disabled,
 } = wp.components;
 
+
 window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Component {
 	render() {
 

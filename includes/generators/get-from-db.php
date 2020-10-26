@@ -1,5 +1,5 @@
 <?php
-namespace Jet_Engine\Forms\Generators;
+namespace Jet_Form_Builder\Generators;
 
 class Get_From_DB extends Base {
 

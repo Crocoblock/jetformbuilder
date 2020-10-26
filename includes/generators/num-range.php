@@ -1,5 +1,5 @@
 <?php
-namespace Jet_Engine\Forms\Generators;
+namespace Jet_Form_Builder\Generators;
 
 class Num_Range extends Base {
 
@@ -41,7 +41,7 @@ class Num_Range extends Base {
 			return $result;
 		}
 
-		$start = apply_filters( 'jet-engine/forms/generators/num-range/start-from', 1 );
+		$start = apply_filters( 'jet-form-builder/forms/generators/num-range/start-from', 1 );
 
 		for ( $i = $start; $i <= $meta_value; $i++ ) {
 			$result[] = array(

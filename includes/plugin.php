@@ -62,11 +62,12 @@ class Plugin {
 	 */
 	public function init_components() {
 
-		//$this->rest   = new Rest\Manager();
-		//$this->db     = new DB();
-		$this->post_type = new Post_Type();
-		$this->blocks    = new Blocks\Manager();
-		$this->actions   = new Actions\Manager();
+		//$this->rest       = new Rest\Manager();
+		//$this->db         = new DB();
+		$this->post_type    = new Post_Type();
+		$this->blocks       = new Blocks\Manager();
+		$this->actions      = new Actions\Manager();
+		$this->form         = new Form_Manager();
 
 		if ( is_admin() ) {
 

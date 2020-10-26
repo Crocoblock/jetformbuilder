@@ -2,6 +2,8 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Tools;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

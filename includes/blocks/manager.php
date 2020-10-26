@@ -1,7 +1,14 @@
 <?php
 namespace Jet_Form_Builder\Blocks;
 
+use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
+use Jet_Form_Builder\Blocks\Types\Hidden_Field;
+use Jet_Form_Builder\Blocks\Types\Radio_Field;
+use Jet_Form_Builder\Blocks\Types\Select_Field;
+use Jet_Form_Builder\Blocks\Types\Text_Field;
+
 // If this file is called directly, abort.
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -26,8 +33,11 @@ class Manager {
 	public function register_block_types() {
 
 		$types = array(
-			new Types\Text_Field(),
-			new Types\Hidden_Field(),
+			new Text_Field(),
+			new Hidden_Field(),
+            new Select_Field(),
+            new Radio_Field(),
+            new Checkbox_Field()
 		);
 
 		foreach ( $types as $type ) {

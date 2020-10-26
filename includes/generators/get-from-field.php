@@ -1,5 +1,5 @@
 <?php
-namespace Jet_Engine\Forms\Generators;
+namespace Jet_Form_Builder\Generators;
 
 class Get_From_Field extends Base {
 
@@ -18,7 +18,7 @@ class Get_From_Field extends Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return __( 'Get values list from JetEngine field options', 'jet-engine' );
+		return __( 'Get values list from JetEngine field options', 'jet-form-builder' );
 	}
 
 	/**

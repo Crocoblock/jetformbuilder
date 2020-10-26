@@ -65,6 +65,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 						<PanelBody
 							title={ __( 'Field Settings' ) }
 						>
+
 							<ToggleControl
 								key={ 'enable_input_mask' }
 								label={ __( 'Set Input Mask' ) }

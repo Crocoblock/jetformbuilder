@@ -9,10 +9,10 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Checkbox_Field extends Base {
+class Radio_Field_Render extends Base {
 
     public function get_name() {
-        return 'checkbox-field';
+        return 'radio-field';
     }
 
     public function render() {

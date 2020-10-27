@@ -3,16 +3,10 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-
-const block = 'jet-forms/select-field';
+const block = 'jet-forms/time-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
-const localizeData = window.JetFormSelectFieldData;
 
 const { __ } = wp.i18n;
 
@@ -40,11 +34,12 @@ const {
     Disabled,
 } = wp.components;
 
+
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class TimeEdit extends wp.element.Component {
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -74,50 +69,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                             props.setAttributes( newValues );
                         }}
                     /> }
-                    <PanelBody
-                        title={ __( 'Field Settings' ) }
-                        key={ 'select_fields' }
-                    >
-                        <SelectControl
-                            key='fill_options_from'
-                            label='Fill Options From'
-                            labelPosition='top'
-                            value={ attributes.fill_options_from }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { fill_options_from: newValue } );
-                            } }
-                            options={ localizeData.options_from }
-                        />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
-                        { 'terms' === attributes.fill_options_from && <FromTermsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
 
-                        { 'meta_field' === attributes.fill_options_from && <TextControl
-                            key='from_meta_field'
-                            label='Meta field to get value from'
-                            value={ attributes.from_meta_field }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { from_meta_field: newValue } );
-                            } }
-                        /> }
-
-                        { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
-
-                    </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
                         values={ attributes }
                         controls={ window.jetFormBuilderControls.advanced[ block ] }
@@ -129,7 +81,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
             ),
             <JetFieldPlaceholder
                 key={ keyPlaceHolder }
-                title={ 'Select Field' }
+                title={ 'Time Field' }
                 subtitle={ [ attributes.label, attributes.name ] }
                 isRequired={ attributes.required }
             />

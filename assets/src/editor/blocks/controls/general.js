@@ -49,7 +49,7 @@ const JetFormGeneral = class extends wp.element.Component {
 		};
 
 		/* eslint-disable jsx-a11y/no-onchange */
-		return <PanelBody title={ __( 'General' ) }>
+		return <PanelBody title={ __( 'General' ) } key={ 'test-general-key' }>
 			{ this.props.controls.map( ( data, index ) => {
 				switch ( data.type ) {
 					case 'text':

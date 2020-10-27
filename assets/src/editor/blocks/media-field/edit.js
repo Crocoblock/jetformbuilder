@@ -2,17 +2,12 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import Tools from "../../tools/tools";
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-
-const block = 'jet-forms/select-field';
+const block = 'jet-forms/media-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
-const localizeData = window.JetFormSelectFieldData;
 
 const { __ } = wp.i18n;
 
@@ -38,13 +33,23 @@ const {
     RangeControl,
     CheckboxControl,
     Disabled,
+    TextHighlight,
+    __experimentalNumberControl,
 } = wp.components;
+
+let { NumberControl } = wp.components;
+
+if ( typeof NumberControl === 'undefined' ) {
+    NumberControl = __experimentalNumberControl;
+}
 
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.element.Component {
+const localizeData = window.jetFormMediaFieldData;
+
+window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.element.Component {
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -66,6 +71,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                 <InspectorControls
                     key={ keyControls }
                 >
+
                     { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
                         key={ keyGeneral }
                         values={ attributes }
@@ -76,46 +82,59 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                     /> }
                     <PanelBody
                         title={ __( 'Field Settings' ) }
-                        key={ 'select_fields' }
                     >
                         <SelectControl
-                            key='fill_options_from'
-                            label='Fill Options From'
+                            key='field__user_access'
+                            label={ __( 'User access' ) }
                             labelPosition='top'
-                            value={ attributes.fill_options_from }
+                            value={ attributes.field__user_access }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { fill_options_from: newValue } );
+                                props.setAttributes( { field__user_access: newValue } );
                             } }
-                            options={ localizeData.options_from }
+                            options={ localizeData.user_access }
                         />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
-                        { 'terms' === attributes.fill_options_from && <FromTermsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
-
-                        { 'meta_field' === attributes.fill_options_from && <TextControl
-                            key='from_meta_field'
-                            label='Meta field to get value from'
-                            value={ attributes.from_meta_field }
+                        <ToggleControl
+                            key='field__is_insert_attachment'
+                            label={ __( 'Insert attachment' ) }
+                            checked={ attributes.field__is_insert_attachment }
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__is_insert_attachment' ) }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { from_meta_field: newValue } );
+                                props.setAttributes( { field__is_insert_attachment: Boolean(newValue) } );
                             } }
-                        /> }
-
-                        { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
-                        /> }
+                        />
+                        <NumberControl
+                            key='field__max_allowed_to_upload'
+                            label={ __( 'Maximum allowed files to upload' ) }
+                            labelPosition='top'
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_allowed_to_upload' ) }
+                            value={ attributes.field__max_allowed_to_upload }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { field__max_allowed_to_upload: parseInt(newValue) } );
+                            } }
+                        />
+                        <NumberControl
+                            label={ __( 'Maximum size in Mb' ) }
+                            labelPosition='top'
+                            key='field__max_size_mb'
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_size_mb' ) }
+                            value={ attributes.field__max_size_mb }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { field__max_size_mb: parseInt(newValue) } );
+                            } }
+                        />
+                        <SelectControl
+                            multiple
+                            key='field__mime_types'
+                            label={ __( 'Allow MIME types' ) }
+                            labelPosition='top'
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__mime_types' ) }
+                            value={ attributes.field__mime_types }
+                            onChange={ ( newValue ) => {
+                                console.log( newValue );
+                                props.setAttributes( { field__mime_types: newValue } );
+                            } }
+                            options={ localizeData.mime_types }
+                        />
 
                     </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
@@ -129,7 +148,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
             ),
             <JetFieldPlaceholder
                 key={ keyPlaceHolder }
-                title={ 'Select Field' }
+                title={ 'Media Field' }
                 subtitle={ [ attributes.label, attributes.name ] }
                 isRequired={ attributes.required }
             />

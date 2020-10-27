@@ -1,7 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
+use Jet_Form_Builder\Blocks\Render\Date_Field_Render;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -11,9 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Radio_Field extends Base {
-
-    use Base_Select_Radio_Check;
+class Date_Field extends Base {
 
 	/**
 	 * Returns block title
@@ -21,7 +19,7 @@ class Radio_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_title() {
-		return 'Radio Field';
+		return 'Date Field';
 	}
 
 	/**
@@ -30,7 +28,7 @@ class Radio_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_name() {
-		return 'radio-field';
+		return 'date-field';
 	}
 
 	/**
@@ -48,24 +46,20 @@ class Radio_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new Radio_Field_Render( $attributes );
+		return new Date_Field_Render( $attributes );
 	}
 
-	/**
-	 * Register blocks specific JS variables
-	 *
-	 * @param  [type] $editor [description]
-	 * @param  [type] $handle [description]
-	 * @return [type]         [description]
-	 */
-	public function block_data( $editor, $handle ) {
-
-		wp_localize_script(
-		    $handle,
-            'JetFormRadioFieldData',
-            $this->get_local_data_check_radio_select()
-        );
-	}
+	public function block_data($editor, $handle)
+    {
+        wp_localize_script( $handle, 'jetFormDateFieldData', array(
+            'help_messages' => array(
+                'is_timestamp' => __(
+                    'Check this if you want to send value of this field as timestamp instead of plain date',
+                    'jet-form-builder'
+                ),
+            ),
+        ) );
+    }
 
 	/**
 	 * Return attributes array
@@ -73,7 +67,12 @@ class Radio_Field extends Base {
 	 * @return array
 	 */
 	public function get_attributes() {
-        return $this->get_attributes_check_radio_select();
+        return array(
+            'is_timestamp' => array(
+                'type' => 'boolean',
+                'default' => false
+            )
+        );
 	}
 
 }

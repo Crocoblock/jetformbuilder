@@ -216,7 +216,7 @@ function ActionsMeta() {
 					} }
 				>
 					{ '+ New Action' }
-				</Button>;
+				</Button>
 				{ isEdit && (
 					<Modal
 						onRequestClose={ closeModal }

@@ -1,8 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Render\Select_Field as Select_Render;
-use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -49,7 +48,7 @@ class Select_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new Select_Render( $attributes );
+		return new Select_Field_Render( $attributes );
 	}
 
 	/**

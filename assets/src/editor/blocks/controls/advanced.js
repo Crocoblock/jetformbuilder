@@ -10,6 +10,7 @@ const {
 	TextControl,
 	SelectControl,
 	PanelBody,
+	ToggleControl,
 } = wp.components;
 
 const { __ } = wp.i18n;
@@ -63,6 +64,15 @@ function JetFormAdvanced( {
 							onChangeValue( newVal, data.key )
 						} }
 					/>;
+				case 'toggle':
+					return condition && <ToggleControl
+						key={ data.key }
+						label={ data.label }
+						checked={ result[ data.key ] }
+						onChange={ newVal => {
+							onChangeValue( newVal, data.key )
+						} }
+					/>
 			};
 		})}
 	</PanelBody>

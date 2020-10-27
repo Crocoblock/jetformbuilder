@@ -23,9 +23,6 @@ const {
     MediaUpload,
     ServerSideRender,
     BlockControls,
-} = wp.editor;
-
-const {
     InspectorControls,
 } = wp.blockEditor;
 
@@ -43,6 +40,9 @@ const {
     Disabled,
 } = wp.components;
 
+const keyControls = block + '-controls-edit';
+const keyPlaceHolder = block + '-placeholder-edit';
+const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends wp.element.Component {
     render() {
@@ -64,10 +64,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
             ),
             props.isSelected && (
                 <InspectorControls
-                    key={ 'inspector' }
-
+                    key={ keyControls }
                 >
                     { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
+                        key={ keyGeneral }
                         values={ attributes }
                         controls={ window.jetFormBuilderControls.general[ block ] }
                         onChange={ ( newValues ) => {
@@ -128,6 +128,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
                 </InspectorControls>
             ),
             <JetFieldPlaceholder
+                key={ keyPlaceHolder }
                 title={ 'Checkbox Field' }
                 subtitle={ [ attributes.name ] }
                 isRequired={ attributes.required }

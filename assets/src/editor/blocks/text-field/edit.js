@@ -16,9 +16,6 @@ const {
 	MediaUpload,
 	ServerSideRender,
 	BlockControls,
-} = wp.editor;
-
-const {
 	InspectorControls,
 } = wp.blockEditor;
 
@@ -35,14 +32,20 @@ const {
 	Disabled,
 } = wp.components;
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Component {
+const keyControls = block + '-controls-edit';
+const keyPlaceHolder = block + '-placeholder-edit';
+const keyGeneral = block + '-general-edit';
+
+window.jetFormBuilderBlockCallbacks[ block ].edit = class TextEdit extends wp.element.Component {
 	render() {
 
 		const props      = this.props;
 		const attributes = props.attributes;
 
 		return [
-			( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length && <BlockControls>
+			( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length && <BlockControls
+				key={ keyControls }
+			>
 				<JetFormToolbar
 					values={ attributes }
 					controls={ window.jetFormBuilderControls.toolbar[ block ] }
@@ -56,6 +59,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 						key={ 'inspector' }
 					>
 						{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
+							key={ keyGeneral }
 							values={ attributes }
 							controls={ window.jetFormBuilderControls.general[ block ] }
 							onChange={ ( newValues ) => {
@@ -88,6 +92,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 					</InspectorControls>
 			),
 			<JetFieldPlaceholder
+				key={ keyPlaceHolder }
 				title={ 'Text Field' }
 				subtitle={ [ attributes.label, attributes.name ] }
 				isRequired={ attributes.required }

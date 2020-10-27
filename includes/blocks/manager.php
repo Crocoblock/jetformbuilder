@@ -1,11 +1,18 @@
 <?php
 namespace Jet_Form_Builder\Blocks;
 
+use Jet_Form_Builder\Blocks\Types\Calculated_Field;
 use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
+use Jet_Form_Builder\Blocks\Types\Date_Field;
 use Jet_Form_Builder\Blocks\Types\Hidden_Field;
+use Jet_Form_Builder\Blocks\Types\Media_Field;
+use Jet_Form_Builder\Blocks\Types\Number_Field;
 use Jet_Form_Builder\Blocks\Types\Radio_Field;
+use Jet_Form_Builder\Blocks\Types\Range_Field;
 use Jet_Form_Builder\Blocks\Types\Select_Field;
 use Jet_Form_Builder\Blocks\Types\Text_Field;
+use Jet_Form_Builder\Blocks\Types\Time_Field;
+use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
 
 // If this file is called directly, abort.
 
@@ -37,7 +44,14 @@ class Manager {
 			new Hidden_Field(),
             new Select_Field(),
             new Radio_Field(),
-            new Checkbox_Field()
+            new Checkbox_Field(),
+            new Number_Field(),
+            new Date_Field(),
+            new Time_Field(),
+            new Calculated_Field(),
+            new Media_Field(),
+            new Wysiwyg_Field(),
+            new Range_Field()
 		);
 
 		foreach ( $types as $type ) {

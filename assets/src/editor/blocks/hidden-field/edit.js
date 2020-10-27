@@ -16,9 +16,6 @@ const {
 	MediaUpload,
 	ServerSideRender,
 	BlockControls,
-} = wp.editor;
-
-const {
 	InspectorControls,
 } = wp.blockEditor;
 
@@ -35,8 +32,11 @@ const {
 	Disabled,
 } = wp.components;
 
+const keyControls = block + '-controls-edit';
+const keyPlaceHolder = block + '-placeholder-edit';
+const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.element.Component {
 	render() {
 
 		const props      = this.props;
@@ -45,7 +45,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 
 		return [
 			hasToolbar && (
-				<BlockControls>
+				<BlockControls >
 					<JetFormToolbar
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
@@ -57,7 +57,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ 'inspector' }
+					key={ keyControls }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
 						values={ attributes }
@@ -122,6 +122,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class extends wp.element.Com
 				</InspectorControls>
 			),
 			<JetFieldPlaceholder
+				key={ keyPlaceHolder }
 				title={ 'Hidden Field' }
 				subtitle={ [ attributes.name ] }
 				isRequired={ attributes.required }

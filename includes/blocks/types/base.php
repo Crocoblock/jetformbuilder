@@ -159,7 +159,7 @@ abstract class Base {
 				'type' => 'boolean',
 				'default' => false,
 				'advanced' => array(
-					'type'  => 'text',
+					'type'  => 'toggle',
 					'label' => __( 'Add Prev Page Button', 'jet-form-builder' )
 				),
 			),

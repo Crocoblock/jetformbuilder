@@ -2,17 +2,12 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import Tools from "../../tools/tools";
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-
-const block = 'jet-forms/radio-field';
+const block = 'jet-forms/calculated-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
-const localizeData = window.JetFormRadioFieldData;
 
 const { __ } = wp.i18n;
 
@@ -38,12 +33,16 @@ const {
     RangeControl,
     CheckboxControl,
     Disabled,
+    __experimentalNumberControl,
 } = wp.components;
 
-const keyControls = () => block + '-controls-edit';
+const NumberControl = __experimentalNumberControl;
+
+const keyControls = block + '-controls-edit';
+const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends wp.element.Component {
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -51,7 +50,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 
         return [
             hasToolbar && (
-                <BlockControls key={ keyControls() }>
+                <BlockControls key={ keyControls + '-block' }>
                     <JetFormToolbar
                         values={ attributes }
                         controls={ window.jetFormBuilderControls.toolbar[ block ] }
@@ -63,7 +62,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
             ),
             props.isSelected && (
                 <InspectorControls
-                    key={ 'inspector' }
+                    key={ keyControls }
                 >
                     { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
                         key={ keyGeneral }
@@ -75,46 +74,57 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                     /> }
                     <PanelBody
                         title={ __( 'Field Settings' ) }
-                        key={ 'checkbox_fields' }
                     >
-                        <SelectControl
-                            key='fill_options_from'
-                            label='Fill Options From'
-                            labelPosition='top'
-                            value={ attributes.fill_options_from }
+                        <TextareaControl
+                            label={ __( 'Calculation Formula' ) }
+                            value={ attributes.field__calc_formula }
+
+                            /* TODO: Need to add line break between fields */
+                            help={ Tools.getAvailableFieldsString() }
+
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { fill_options_from: newValue } );
+                                props.setAttributes( { field__calc_formula: newValue } );
                             } }
-                            options={ localizeData.options_from }
                         />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-                        { 'terms' === attributes.fill_options_from && <FromTermsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-
-                        { 'meta_field' === attributes.fill_options_from && <TextControl
-                            key='from_meta_field'
-                            label='Meta field to get value from'
-                            value={ attributes.from_meta_field }
+                        <NumberControl
+                            label={ __( 'Decimal Places Number' ) }
+                            labelPosition='top'
+                            key='field__decimal_place_number'
+                            value={ attributes.field__decimal_place_number }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { from_meta_field: newValue } );
+                                props.setAttributes( { field__decimal_place_number: parseInt( newValue ) } );
                             } }
-                        /> }
-
-                        { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
+                        />
+                        <TextControl
+                            key='field__calc_prefix'
+                            label={ __( 'Calculated Value Prefix' ) }
+                            value={ attributes.field__calc_prefix }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { field__calc_prefix: newValue } );
+                            } }
+                        />
+                        <TextControl
+                            key='field__calc_suffix'
+                            label={ __( 'Calculated Value Suffix' ) }
+                            value={ attributes.field__calc_suffix }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { field__calc_suffix: newValue } );
+                            } }
+                        />
+                        <ToggleControl
+                            key={ 'field__is_hidden' }
+                            label={ __( 'Hidden' ) }
+                            checked={ attributes.field__is_hidden }
+                            help={ Tools.getHelpMessage(
+                                window.jetFormCalculatedFieldData,
+                                'field__is_hidden'
+                            ) }
+                            onChange={ newVal => {
+                                props.setAttributes( {
+                                    field__is_hidden: Boolean(newVal),
+                                } );
+                            } }
+                        />
 
                     </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
@@ -127,7 +137,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                 </InspectorControls>
             ),
             <JetFieldPlaceholder
-                title={ 'Radio Field' }
+                key={ keyPlaceHolder }
+                title={ 'Calculated Field' }
                 subtitle={ [ attributes.label, attributes.name ] }
                 isRequired={ attributes.required }
             />

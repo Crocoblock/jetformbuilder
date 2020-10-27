@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Text_Field extends Base {
+class Text_Field_Render extends Base {
 
 	public function get_name() {
 		return 'text-field';

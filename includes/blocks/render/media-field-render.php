@@ -9,10 +9,10 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Hidden_Field extends Base {
+class Media_Field_Render extends Base {
 
 	public function get_name() {
-		return 'hidden-field';
+		return 'media-field';
 	}
 
 	public function render() {

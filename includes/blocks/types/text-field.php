@@ -1,6 +1,8 @@
 <?php
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Render\Text_Field_Render;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -44,7 +46,7 @@ class Text_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new \Jet_Form_Builder\Blocks\Render\Text_Field( $attributes );
+		return new Text_Field_Render( $attributes );
 	}
 
 	/**

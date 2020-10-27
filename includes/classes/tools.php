@@ -43,6 +43,11 @@ class Tools
         return self::prepare_list_for_js( $generators );
     }
 
+    public static function get_allowed_mimes_list_for_js() {
+        $mimes = get_allowed_mime_types();
+        return self::prepare_list_for_js( $mimes );
+    }
+
     /**
      * Prepare passed array for using in JS options
      *

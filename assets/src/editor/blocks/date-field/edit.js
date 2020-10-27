@@ -2,17 +2,12 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import Tools from "../../tools/tools";
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-
-const block = 'jet-forms/radio-field';
+const block = 'jet-forms/date-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
-const localizeData = window.JetFormRadioFieldData;
 
 const { __ } = wp.i18n;
 
@@ -40,10 +35,12 @@ const {
     Disabled,
 } = wp.components;
 
-const keyControls = () => block + '-controls-edit';
+
+const keyControls = block + '-controls-edit';
+const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.element.Component {
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -51,7 +48,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 
         return [
             hasToolbar && (
-                <BlockControls key={ keyControls() }>
+                <BlockControls key={ keyControls + '-block' }>
                     <JetFormToolbar
                         values={ attributes }
                         controls={ window.jetFormBuilderControls.toolbar[ block ] }
@@ -63,7 +60,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
             ),
             props.isSelected && (
                 <InspectorControls
-                    key={ 'inspector' }
+                    key={ keyControls }
                 >
                     { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
                         key={ keyGeneral }
@@ -75,47 +72,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                     /> }
                     <PanelBody
                         title={ __( 'Field Settings' ) }
-                        key={ 'checkbox_fields' }
                     >
-                        <SelectControl
-                            key='fill_options_from'
-                            label='Fill Options From'
-                            labelPosition='top'
-                            value={ attributes.fill_options_from }
+                        <ToggleControl
+                            key='is_timestamp'
+                            label={ __( 'Is Timestamp' ) }
+                            checked={ attributes.is_timestamp }
+                            help={ Tools.getHelpMessage( window.jetFormDateFieldData, 'is_timestamp' ) }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { fill_options_from: newValue } );
+                                props.setAttributes( { is_timestamp: Boolean(newValue) } );
                             } }
-                            options={ localizeData.options_from }
                         />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-                        { 'terms' === attributes.fill_options_from && <FromTermsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-
-                        { 'meta_field' === attributes.fill_options_from && <TextControl
-                            key='from_meta_field'
-                            label='Meta field to get value from'
-                            value={ attributes.from_meta_field }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { from_meta_field: newValue } );
-                            } }
-                        /> }
-
-                        { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-
                     </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
                         values={ attributes }
@@ -127,7 +93,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                 </InspectorControls>
             ),
             <JetFieldPlaceholder
-                title={ 'Radio Field' }
+                key={ keyPlaceHolder }
+                title={ 'Date Field' }
                 subtitle={ [ attributes.label, attributes.name ] }
                 isRequired={ attributes.required }
             />

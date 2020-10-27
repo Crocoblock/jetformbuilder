@@ -2,6 +2,8 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Render\Hidden_Field_Render;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -44,7 +46,7 @@ class Hidden_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new \Jet_Form_Builder\Blocks\Render\Hidden_Field( $attributes );
+		return new Hidden_Field_Render( $attributes );
 	}
 
 	/**

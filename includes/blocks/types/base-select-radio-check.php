@@ -71,7 +71,7 @@ trait Base_Select_Radio_Check
         return array_merge( array(
             'fill_options_from' => array(
                 'type' => 'string',
-                'default' => ''
+                'default' => 'manual_input'
             ),
 
             'from_manual_input__value' => array(

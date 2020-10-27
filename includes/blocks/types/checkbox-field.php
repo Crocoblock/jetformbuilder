@@ -1,7 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Render\Checkbox_Field as Checkbox_Render;
+use Jet_Form_Builder\Blocks\Render\Checkbox_Field_Render;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -48,7 +48,7 @@ class Checkbox_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new Checkbox_Render( $attributes );
+		return new Checkbox_Field_Render( $attributes );
 	}
 
 	/**

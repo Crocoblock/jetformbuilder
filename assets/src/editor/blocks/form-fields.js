@@ -12,3 +12,24 @@ import './radio-field/save';
 
 import './checkbox-field/edit';
 import './checkbox-field/save';
+
+import './number-field/edit';
+import './number-field/save';
+
+import './date-field/edit';
+import './date-field/save';
+
+import './time-field/edit';
+import './time-field/save';
+
+import './calculated-field/edit';
+import './calculated-field/save';
+
+import './media-field/edit';
+import './media-field/save';
+
+import './wysiwyg-field/edit';
+import './wysiwyg-field/save';
+
+import './range-field/edit';
+import './range-field/save';

@@ -1,3 +1,5 @@
+import Tools from "../../tools/tools";
+
 const {
     PanelColor,
     IconButton,
@@ -24,18 +26,6 @@ class FromGeneratorsFields extends wp.element.Component {
         const parentProps = props.parentProps;
         const localizeData = props.localizeData;
 
-        function getHelpMessage( name ) {
-            let message = '';
-
-            if( typeof localizeData.help_messages[ name ] !== 'undefined' ) {
-                return localizeData.help_messages[ name ];
-            }
-
-            if ( typeof localizeData.help_messages[ attributes.from_generator__function ] === 'object' ) {
-                return localizeData.help_messages[attributes.from_generator__function][ name ];
-            }
-        }
-
         return (
             <div>
                 <SelectControl
@@ -52,7 +42,7 @@ class FromGeneratorsFields extends wp.element.Component {
                     key='from_generator__field_name'
                     label='Field Name'
                     value={ attributes.from_generator__field_name }
-                    help={ getHelpMessage( 'field_name' ) }
+                    help={ Tools.getHelpMessage( localizeData, 'field_name' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__field_name: newValue } );
                     } }
@@ -60,7 +50,7 @@ class FromGeneratorsFields extends wp.element.Component {
                 <TextControl
                     key='from_generator__value_from_meta'
                     label='Value from meta field'
-                    help={ getHelpMessage( 'value_from_meta' ) }
+                    help={ Tools.getHelpMessage( localizeData,'value_from_meta' ) }
                     value={ attributes.from_generator__value_from_meta }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__value_from_meta: newValue } );
@@ -69,7 +59,7 @@ class FromGeneratorsFields extends wp.element.Component {
                 <TextControl
                     key='from_generator__calc_value_from_meta'
                     label='Calculated value from meta field'
-                    help={ getHelpMessage( 'calc_value_from_meta' ) }
+                    help={ Tools.getHelpMessage( localizeData,'calc_value_from_meta' ) }
                     value={ attributes.from_generator__calc_value_from_meta }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__calc_value_from_meta: newValue } );

@@ -1,4 +1,5 @@
 import JetFieldsMapControl from '../blocks/controls/fields-map';
+import Tools from "../tools/tools";
 /**
  * Internal dependencies
  */
@@ -21,7 +22,22 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['insert_post'] = class extends wp.element.Component {
+window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.element.Component {
+
+	getFieldMap( name ) {
+		const settings = this.props.settings;
+
+		if ( settings && settings.fields_map && settings.fields_map[ name ] ) {
+			return settings.fields_map[ name ];
+		}
+		return {
+			[ name ]: '',
+
+		};
+	}
+	isRenderHelp( fields ) {
+		return window.jetFormInsertPostData.labels.fields_map_help && ! fields.length;
+	}
 
 	render() {
 
@@ -35,33 +51,7 @@ window.jetFormDefaultActions['insert_post'] = class extends wp.element.Component
 			} );
 		};
 
-		const formFields = []
-		const blocksRecursiveIterator = ( blocks ) => {
-
-			blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
-
-			blocks.map( ( block ) => {
-
-				if ( block.name.includes( 'jet-forms/' ) && block.attributes.name ) {
-					formFields.push( {
-						value: block.attributes.name,
-						label: block.attributes.label || block.attributes.name,
-					} );
-				}
-
-				if ( block.innerBlocks.length ) {
-					blocksRecursiveIterator( block.innerBlocks );
-				}
-
-			} );
-
-		};
-
-		if ( ! settings.fields_map ) {
-			onChangeValue( {}, 'fields_map' );
-		}
-
-		blocksRecursiveIterator();
+		const formFields = Tools.getFormFieldsBlocks();
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="insert_post">
@@ -89,25 +79,28 @@ window.jetFormDefaultActions['insert_post'] = class extends wp.element.Component
 				label={ window.jetFormInsertPostData.labels.fields_map }
 				key="fields_map"
 			>
-				{ window.jetFormInsertPostData.labels.fields_map_help && <div className="jet-fields-map__help">{ window.jetFormInsertPostData.labels.fields_map_help }</div> }
+				{ this.isRenderHelp( formFields ) &&
+					<div className="jet-fields-map__help">
+						{ window.jetFormInsertPostData.labels.fields_map_help }
+					</div>
+				}
 				<div className="jet-fields-map__list">
 					{ formFields && formFields.map( ( field, index ) => {
-						var fieldData = settings.fields_map[ field.value ];
 
-						if ( ! fieldData ) {
-							fieldData = {};
-						}
+						const fieldData = this.getFieldMap( field.name );
+
 
 						return <div
 							className="jet-fields-map__row"
-							key={ 'field_map_' + field.value + index }
+							key={ 'field_map_' + field.name + index }
 						>
-							<div className="jet-fields-map__item-field">{ field.value }</div>
+							<div className="jet-fields-map__item-field">{ field.name }</div>
 							<JetFieldsMapControl
 								//value={ fieldData }
+								key={ field.name + index }
 								type={ fieldData.type }
 								name={ fieldData.name }
-								field={ field.value }
+								field={ field.name }
 								index={ index }
 								fieldsMap={ settings.fields_map }
 								taxonomiesList={ window.jetFormInsertPostData.taxonomies }

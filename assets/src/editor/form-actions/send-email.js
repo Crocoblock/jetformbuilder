@@ -19,7 +19,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['send_email'] = class extends wp.element.Component {
+window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );

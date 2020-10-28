@@ -2,9 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
 
-const block = 'jet-forms/media-field';
+const block = 'jet-forms/textarea-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
@@ -33,7 +32,6 @@ const {
     RangeControl,
     CheckboxControl,
     Disabled,
-    TextHighlight,
     __experimentalNumberControl,
 } = wp.components;
 
@@ -47,9 +45,7 @@ const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-const localizeData = window.jetFormMediaFieldData;
-
-window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.element.Component {
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -71,7 +67,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
                 <InspectorControls
                     key={ keyControls }
                 >
-
                     { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
                         key={ keyGeneral }
                         values={ attributes }
@@ -82,60 +77,25 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
                     /> }
                     <PanelBody
                         title={ __( 'Field Settings' ) }
-                        className='jet-form-media-fields'
                     >
-                        <SelectControl
-                            key='field__user_access'
-                            label={ __( 'User access' ) }
+
+                        <NumberControl
+                            label={ __( 'Min length' ) }
                             labelPosition='top'
-                            value={ attributes.field__user_access }
+                            key='field__min_length'
+                            value={ attributes.field__min_length }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__user_access: newValue } );
-                            } }
-                            options={ localizeData.user_access }
-                        />
-                        <ToggleControl
-                            key='field__is_insert_attachment'
-                            label={ __( 'Insert attachment' ) }
-                            checked={ attributes.field__is_insert_attachment }
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__is_insert_attachment' ) }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { field__is_insert_attachment: Boolean(newValue) } );
+                                props.setAttributes( { field__min_length: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
-                            key='field__max_allowed_to_upload'
-                            label={ __( 'Maximum allowed files to upload' ) }
+                            label={ __( 'Max length' ) }
                             labelPosition='top'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_allowed_to_upload' ) }
-                            value={ attributes.field__max_allowed_to_upload }
+                            key='field__max_length'
+                            value={ attributes.field__max_length }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_allowed_to_upload: parseInt(newValue) } );
+                                props.setAttributes( { field__max_length: parseInt(newValue) } );
                             } }
-                        />
-                        <NumberControl
-                            label={ __( 'Maximum size in Mb' ) }
-                            labelPosition='top'
-                            key='field__max_size_mb'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_size_mb' ) }
-                            value={ attributes.field__max_size_mb }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_size_mb: parseInt(newValue) } );
-                            } }
-                        />
-                        <SelectControl
-                            multiple
-                            className='field-mime-types'
-                            key='field__mime_types'
-                            label={ __( 'Allow MIME types' ) }
-                            labelPosition='top'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__mime_types' ) }
-                            value={ attributes.field__mime_types }
-                            onChange={ ( newValue ) => {
-                                console.log( newValue );
-                                props.setAttributes( { field__mime_types: newValue } );
-                            } }
-                            options={ localizeData.mime_types }
                         />
 
                     </PanelBody>
@@ -150,7 +110,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
             ),
             <JetFieldPlaceholder
                 key={ keyPlaceHolder }
-                title={ 'Media Field' }
+                title={ 'Number Field' }
                 subtitle={ [ attributes.label, attributes.name ] }
                 isRequired={ attributes.required }
             />

@@ -20,11 +20,23 @@ class FromGeneratorsFields extends wp.element.Component {
         super( props );
     }
 
+    getHelpMessage( name = '' ) {
+        const messages = window.JetFormSelectFieldData.help_messages;
+        const func = this.props.attributes.from_generator__function;
+
+        if( typeof messages[ name ] !== 'undefined' ) {
+            return messages[ name ];
+        }
+
+        if ( func && typeof messages[ func ] === 'object' ) {
+            return messages[ func ][ name ];
+        }
+    }
+
     render() {
         const props = this.props;
         const attributes = props.attributes;
         const parentProps = props.parentProps;
-        const localizeData = props.localizeData;
 
         return (
             <div>
@@ -36,13 +48,13 @@ class FromGeneratorsFields extends wp.element.Component {
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__function: newValue } );
                     } }
-                    options={ localizeData.generators_list }
+                    options={ window.JetFormSelectFieldData.generators_list }
                 />
                 <TextControl
                     key='from_generator__field_name'
                     label='Field Name'
                     value={ attributes.from_generator__field_name }
-                    help={ Tools.getHelpMessage( localizeData, 'field_name' ) }
+                    help={ this.getHelpMessage( 'field_name' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__field_name: newValue } );
                     } }
@@ -50,7 +62,7 @@ class FromGeneratorsFields extends wp.element.Component {
                 <TextControl
                     key='from_generator__value_from_meta'
                     label='Value from meta field'
-                    help={ Tools.getHelpMessage( localizeData,'value_from_meta' ) }
+                    help={ this.getHelpMessage( 'value_from_meta' ) }
                     value={ attributes.from_generator__value_from_meta }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__value_from_meta: newValue } );
@@ -59,7 +71,7 @@ class FromGeneratorsFields extends wp.element.Component {
                 <TextControl
                     key='from_generator__calc_value_from_meta'
                     label='Calculated value from meta field'
-                    help={ Tools.getHelpMessage( localizeData,'calc_value_from_meta' ) }
+                    help={ this.getHelpMessage( 'calc_value_from_meta' ) }
                     value={ attributes.from_generator__calc_value_from_meta }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_generator__calc_value_from_meta: newValue } );

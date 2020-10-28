@@ -1,3 +1,5 @@
+import Tools from "../../tools/tools";
+
 const {
     PanelColor,
     IconButton,
@@ -11,6 +13,8 @@ const {
     CheckboxControl,
     Disabled,
 } = wp.components;
+
+const { __ } = wp.i18n;
 
 const localizeData = window.JetFormSelectFieldData;
 
@@ -29,7 +33,7 @@ class FromPostsFields extends wp.element.Component {
             <div>
                 <SelectControl
                     key='from__posts'
-                    label='Post Type'
+                    label={ __( 'Post Type' ) }
                     labelPosition='top'
                     value={ attributes.from_posts__type }
                     onChange={ ( newValue ) => {
@@ -39,16 +43,18 @@ class FromPostsFields extends wp.element.Component {
                 />
                 <TextControl
                     key='from_posts__value_from_meta'
-                    label='Value from meta field'
+                    label={ __( 'Value from meta field' ) }
                     value={ attributes.from_posts__value_from_meta }
+                    help={ Tools.getHelpMessage( localizeData, 'value_from_meta' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_posts__value_from_meta: newValue } );
                     } }
                 />
                 <TextControl
                     key='from_posts__calc_value_from_meta'
-                    label='Calculated value from meta field'
+                    label={ __( 'Calculated value from meta field' ) }
                     value={ attributes.from_posts__calc_value_from_meta }
+                    help={ Tools.getHelpMessage( localizeData, 'calc_value_from_meta' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_posts__calc_value_from_meta: newValue } );
                     } }

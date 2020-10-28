@@ -145,3 +145,21 @@
 .jet-form-dynamic-preset__trigger svg {
 	width: 50%;
 }
+
+.jet-form-repeater-modal {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.jet-form-repeater-modal .repeater-item-column label {
+	text-align: center;
+	flex: 0 0 75px;
+}
+
+.jet-form-media-fields .field-mime-types select[multiple] {
+	height: 7rem;
+}
+
+.jet-form-media-fields .field-mime-types svg {
+	display: none;
+}

@@ -6,6 +6,8 @@ import JetFieldPlaceholder from '../controls/placeholder';
 import FromTermsFields from "../base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
+import FromManualFields from "../base-select-check-radio/from-manual-fields";
+import Tools from "../../tools/tools";
 
 const block = 'jet-forms/select-field';
 
@@ -45,6 +47,7 @@ const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.element.Component {
+
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -80,7 +83,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                     >
                         <SelectControl
                             key='fill_options_from'
-                            label='Fill Options From'
+                            label={ __( 'Fill Options From' ) }
                             labelPosition='top'
                             value={ attributes.fill_options_from }
                             onChange={ ( newValue ) => {
@@ -88,15 +91,18 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                             } }
                             options={ localizeData.options_from }
                         />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
+                        { 'manual_input' === attributes.fill_options_from && <FromManualFields
+                            key='from_manual'
                             attributes={ attributes }
                             parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
+                        /> }
+                        { 'posts' === attributes.fill_options_from && <FromPostsFields
+                            key='from_posts'
+                            attributes={ attributes }
+                            parentProps={ props }
                         /> }
                         { 'terms' === attributes.fill_options_from && <FromTermsFields
+                            key='from_terms'
                             attributes={ attributes }
                             parentProps={ props }
                             localizeData={ window.JetFormSelectFieldData }
@@ -104,7 +110,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
 
                         { 'meta_field' === attributes.fill_options_from && <TextControl
                             key='from_meta_field'
-                            label='Meta field to get value from'
+                            label={ __( 'Meta field to get value from' ) }
                             value={ attributes.from_meta_field }
                             onChange={ ( newValue ) => {
                                 props.setAttributes( { from_meta_field: newValue } );
@@ -112,10 +118,20 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                         /> }
 
                         { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
+                            key='from_generator'
                             attributes={ attributes }
                             parentProps={ props }
-                            localizeData={ window.JetFormSelectFieldData }
                         /> }
+
+                        <ToggleControl
+                            key='is_switch_page'
+                            label={ __( 'Switch page on change' ) }
+                            checked={ attributes.is_switch_page }
+                            help={ Tools.getHelpMessage( window.JetFormSelectFieldData, 'is_switch_page' ) }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { is_switch_page: Boolean(newValue) } );
+                            } }
+                        />
 
                     </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced

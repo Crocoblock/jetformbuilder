@@ -6,6 +6,7 @@ import JetFieldPlaceholder from '../controls/placeholder';
 import FromTermsFields from "../base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
+import FromManualFields from "../base-select-check-radio/from-manual-fields";
 
 const block = 'jet-forms/checkbox-field';
 
@@ -88,15 +89,19 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
                             } }
                             options={ localizeData.options_from }
                         />
-                        { 'manual_input' === attributes.fill_options_from &&
-                            <Button isSecondary>{ __('Add Item') }</Button>
-                        }
+                        { 'manual_input' === attributes.fill_options_from && <FromManualFields
+                            key='from_manual'
+                            attributes={ attributes }
+                            parentProps={ props }
+                        /> }
                         { 'posts' === attributes.fill_options_from && <FromPostsFields
+                            key='form_posts'
                             attributes={ attributes }
                             parentProps={ props }
                             localizeData={ localizeData }
                         /> }
                         { 'terms' === attributes.fill_options_from && <FromTermsFields
+                            key='form_terms'
                             attributes={ attributes }
                             parentProps={ props }
                             localizeData={ localizeData }
@@ -112,6 +117,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
                         /> }
 
                         { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
+                            key='form_generators'
                             attributes={ attributes }
                             parentProps={ props }
                             localizeData={ localizeData }

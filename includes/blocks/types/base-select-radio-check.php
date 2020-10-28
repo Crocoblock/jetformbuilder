@@ -51,6 +51,10 @@ trait Base_Select_Radio_Check
                     'Here you can set meta field name to use its value as calculated value for current form field',
                     'jet-form-builder'
                 ),
+                'is_switch_page' => __(
+                    'Check this to switch page to next on current value change',
+                    'jet-form-builder'
+                ),
                 'num_range'     => array(
                     'field_name'    => __(
                         'For Numbers range generator set field with max range value',
@@ -70,10 +74,20 @@ trait Base_Select_Radio_Check
     public function get_attributes_check_radio_select( $merged = array() ) {
         return array_merge( array(
             'fill_options_from' => array(
-                'type' => 'string',
-                'default' => 'manual_input'
+                'type'      => 'string',
+                'default'   => 'manual_input'
             ),
 
+            'from_manual_input' => array(
+                'type'      => 'array',
+                'default'   => array(
+                    array(
+                        'label' => '',
+                        'value' => '',
+                        'calc'  => '',
+                    )
+                )
+            ),
             'from_manual_input__value' => array(
                 'type'      => 'string',
                 'default'   => ''
@@ -137,6 +151,11 @@ trait Base_Select_Radio_Check
             'from_generator__calc_value_from_meta' => array(
                 'type'      => 'string',
                 'default'   => ''
+            ),
+
+            'is_switch_page' => array(
+                'type' => 'boolean',
+                'default' => false
             ),
 
         ), $merged );

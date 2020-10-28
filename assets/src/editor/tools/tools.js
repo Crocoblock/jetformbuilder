@@ -9,7 +9,7 @@ class Tools {
         }
 
         if ( typeof from.help_messages[ attributes.from_generator__function ] === 'object' ) {
-            return from.help_messages[attributes.from_generator__function][ name ];
+            return from.help_messages[ attributes.from_generator__function ][ name ];
         }
     }
 

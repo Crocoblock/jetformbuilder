@@ -33,3 +33,9 @@ import './wysiwyg-field/save';
 
 import './range-field/edit';
 import './range-field/save';
+
+import './heading-field/edit';
+import './heading-field/save';
+
+import './textarea-field/edit';
+import './textarea-field/save';

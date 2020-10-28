@@ -49,6 +49,68 @@ class Text_Field extends Base {
 		return new Text_Field_Render( $attributes );
 	}
 
+    /**
+     * Register blocks specific JS variables
+     *
+     * @param  [type] $editor [description]
+     * @param  [type] $handle [description]
+     * @return [type]         [description]
+     */
+    public function block_data( $editor, $handle ) {
+
+        wp_localize_script(
+            $handle,
+            'JetFormTextFieldData',
+            array(
+                'mask_types_list' => array(
+                    array(
+                        'value' => '',
+                        'label' => __( 'Default', 'jet-form-builder' )
+                    ),
+                    array(
+                        'value' => 'datetime',
+                        'label' => __( 'Datetime', 'jet-form-builder' )
+                    ),
+                ),
+                'mask_visibilities_list' => array(
+                    array(
+                        'value' => 'always',
+                        'label' => __( 'Always', 'jet-form-builder' )
+                    ),
+                    array(
+                        'value' => 'hover',
+                        'label' => __( 'On Hover', 'jet-form-builder' )
+                    ),
+                    array(
+                        'value' => 'focus',
+                        'label' => __( 'On Focus', 'jet-form-builder' )
+                    ),
+                ),
+                'mask_placeholders_list' => array(
+                    array(
+                        'value' => '_', 'label' => '_'
+                    ),
+                    array(
+                        'value' => '-', 'label' => '-'
+                    ),
+                    array(
+                        'value' => '*', 'label' => '*'
+                    ),
+                    array(
+                        'value' => '•', 'label' => '•'
+                    ),
+                ),
+                'help_messages' => array(
+                    'input_mask' => __(
+                        __( 'Examples: (999) 999-9999 - static mask, 9-a{1,3}9{1,3} - mask with dynamic syntax 
+                        Default masking definitions: 9 - numeric, a - alphabetical, * - alphanumeric', 'jet-form-builder'),
+                        'jet-form-builder'
+                    ),
+                ),
+            )
+        );
+    }
+
 	/**
 	 * Return attributes array
 	 *
@@ -70,7 +132,7 @@ class Text_Field extends Base {
 			),
 			'input_mask' => array(
 				'type' => 'string',
-				'default' => ',',
+				'default' => '',
 			),
 			'mask_visibility' => array(
 				'type' => 'string',

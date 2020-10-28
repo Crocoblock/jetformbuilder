@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Blocks\Types\Calculated_Field;
 use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
 use Jet_Form_Builder\Blocks\Types\Date_Field;
+use Jet_Form_Builder\Blocks\Types\Heading_Field;
 use Jet_Form_Builder\Blocks\Types\Hidden_Field;
 use Jet_Form_Builder\Blocks\Types\Media_Field;
 use Jet_Form_Builder\Blocks\Types\Number_Field;
@@ -11,6 +12,7 @@ use Jet_Form_Builder\Blocks\Types\Radio_Field;
 use Jet_Form_Builder\Blocks\Types\Range_Field;
 use Jet_Form_Builder\Blocks\Types\Select_Field;
 use Jet_Form_Builder\Blocks\Types\Text_Field;
+use Jet_Form_Builder\Blocks\Types\Textarea_Field;
 use Jet_Form_Builder\Blocks\Types\Time_Field;
 use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
 
@@ -51,7 +53,9 @@ class Manager {
             new Calculated_Field(),
             new Media_Field(),
             new Wysiwyg_Field(),
-            new Range_Field()
+            new Range_Field(),
+            new Heading_Field(),
+            new Textarea_Field(),
 		);
 
 		foreach ( $types as $type ) {

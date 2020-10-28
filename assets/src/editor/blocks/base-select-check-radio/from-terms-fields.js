@@ -1,3 +1,5 @@
+import Tools from "../../tools/tools";
+
 const {
     PanelColor,
     IconButton,
@@ -41,6 +43,7 @@ class FromTermsFields extends wp.element.Component {
                     key='from_terms__value_from_meta'
                     label='Value from meta field'
                     value={ attributes.from_terms__value_from_meta }
+                    help={ Tools.getHelpMessage( localizeData, 'value_from_meta' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_terms__value_from_meta: newValue } );
                     } }
@@ -49,6 +52,7 @@ class FromTermsFields extends wp.element.Component {
                     key='from_terms__calc_value_from_meta'
                     label='Calculated value from meta field'
                     value={ attributes.from_terms__calc_value_from_meta }
+                    help={ Tools.getHelpMessage( localizeData, 'calc_value_from_meta' ) }
                     onChange={ ( newValue ) => {
                         parentProps.setAttributes( { from_terms__calc_value_from_meta: newValue } );
                     } }

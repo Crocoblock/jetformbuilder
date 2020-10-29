@@ -1,5 +1,3 @@
-import JetFormPresetEditor from "../controls/preset-editor";
-
 const {
     Modal,
     Button,
@@ -61,7 +59,7 @@ class FromManualFields extends wp.element.Component {
     }
 
     getOptions() {
-        return Array.from(this.props.attributes.from_manual_input);
+        return Array.from( this.props.attributes.from_manual_input );
     }
 
     addNewOption() {

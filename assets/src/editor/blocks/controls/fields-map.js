@@ -21,67 +21,56 @@ const {
 	useEffect
 } = wp.element;
 
-function JetFieldsMapControl( {
-	instanceId,
-	onChange,
-	fieldTypes,
-	taxonomiesList,
-	className,
-	metaProp,
-	termsProp,
-	value,
-	type,
-	name,
-	field,
-	fieldsMap,
-	index
-} ) {
 
-	metaProp  = metaProp || 'post_meta';
-	termsProp = termsProp || 'post_terms';
+class JetFieldsMapControl extends wp.element.Component {
 
-	const id = `inspector-select-control-${ instanceId }`;
+	constructor( props ) {
+		super( props );
 
-	const preparedTaxes = [];
+		this.fieldTypes = this.props.fieldTypes;
+		this.taxonomiesList = this.props.taxonomiesList;
+		this.className = this.props.className;
+		this.metaProp = this.props.metaProp ? this.props.metaProp : 'post_meta';
+		this.termsProp = this.props.termsProp ? this.props.termsProp : 'post_terms';
+		this.index = this.props.index;
 
-	const taxPrefix = 'jet_tax__';
+		this.init();
+		this.bindFunctions();
 
-	for ( var i = 0; i < taxonomiesList.length; i++ ) {
-		preparedTaxes.push( {
-			value: taxPrefix + taxonomiesList[ i ].value,
-			label: taxonomiesList[ i ].label,
-		} );
-	};
+		this.state = {
+			type: this.getFieldType( this.props.fieldValue ),
+		};
+	}
 
-	const getFieldType = ( value ) => {
+	bindFunctions() {
+		this.onChangeType = this.onChangeType.bind( this );
+		this.onChangeValue = this.onChangeValue.bind( this );
+	}
+
+
+	init() {
+
+		this.id = `inspector-select-control-${ this.index }`;
+		this.preparedTaxes = [];
+		this.taxPrefix = 'jet_tax__';
+
+		for ( var i = 0; i < this.taxonomiesList.length; i++ ) {
+			this.preparedTaxes.push( {
+				value: this.taxPrefix + this.taxonomiesList[ i ].value,
+				label: this.taxonomiesList[ i ].label,
+			} );
+		}
+	}
+
+	getFieldName( value ) {
 
 		if ( ! value ) {
 			return '';
 		}
 
-		for ( var i = 0; i < fieldTypes.length; i++ ) {
-			if ( value === fieldTypes[ i ].value ) {
-				return value;
-			}
-		}
+		const fieldType = this.getFieldType( value );
 
-		if ( value.includes( taxPrefix ) ) {
-			return termsProp;
-		} else {
-			return metaProp;
-		}
-
-	};
-
-	const getFieldName = ( value ) => {
-
-		if ( ! value ) {
-			return '';
-		}
-
-		var fieldType = getFieldType( value );
-
-		if ( termsProp === fieldType || metaProp === fieldType ) {
+		if ( this.termsProp === fieldType || this.metaProp === fieldType ) {
 			return value;
 		} else {
 			return '';
@@ -89,60 +78,90 @@ function JetFieldsMapControl( {
 
 	};
 
-	const onChangeType = ( newValue ) => {
-		//value.type = newValue;
-		onChange( {
-			...fieldsMap,
-			[ field ] : {
-				type: newValue,
-				name: name,
+	isTermOrMeta( value ) {
+		return ( this.termsProp === value || this.metaProp === value );
+	}
+
+
+	getFieldType( value ) {
+
+		if ( ! value ) {
+			return '';
+		}
+
+		for ( var i = 0; i < this.fieldTypes.length; i++ ) {
+			if ( value === this.fieldTypes[ i ].value ) {
+				return value;
 			}
+		}
+
+		if ( value.includes( this.taxPrefix ) ) {
+			return this.termsProp;
+		} else {
+			return this.metaProp;
+		}
+
+	};
+
+
+	onChangeValue( newValue ) {
+		this.props.onChange( {
+			...this.props.fieldsMap,
+			[ this.props.fieldName ] : newValue
 		} );
 	};
 
-	const onChangeName = ( newValue ) => {
-		//value.name = newValue;
-		onChange( {
-			...fieldsMap,
-			[ field ] : {
-				type: type,
-				name: newValue,
-			}
+
+	onChangeType( newValue ) {
+		let val = this.getFieldType( newValue );
+
+		this.setState( {
+			type: val
 		} );
-	};
+
+		if( this.isTermOrMeta( val ) ) {
+			val = '';
+		}
+
+		this.onChangeValue( val );
+	}
+
 
 	// Disable reason: A select with an onchange throws a warning
 
 	/* eslint-disable jsx-a11y/no-onchange */
-	return <div
-		className="jet-fields-map__row"
-	>
-		<div className="jet-post-field-control">
-			<SelectControl
-				key={ 'field_type_' + field + index }
-				value={ type }
-				onChange={ onChangeType }
-				options={ fieldTypes }
-				style={ {
-					width: '160px'
-				} }
-			/>
-			{ ( metaProp === type ) && <TextControl
-				key={ 'field_name_' + field + index }
-				value={ name }
-				onChange={ onChangeName }
-				style={ { width: '200px' } }
-			/> }
-			{ ( termsProp === type ) && <SelectControl
-				key={ 'field_tax_' + field + index }
-				value={ name }
-				onChange={ onChangeName }
-				options={ preparedTaxes }
-				style={ { width: '160px' } }
-			/> }
-		</div>
-	</div>;
+	render() {
+		return <div
+			className="jet-fields-map__row"
+		>
+			<div className="jet-post-field-control">
+				<SelectControl
+					key={ 'field_type_' + this.props.fieldName + this.index }
+					value={ this.state.type }
+					onChange={ this.onChangeType }
+					options={ this.fieldTypes }
+					style={ {
+						width: '160px'
+					} }
+				/>
+				{ ( this.metaProp === this.state.type ) && <TextControl
+					key={ 'field_name_' + this.props.fieldName + this.index }
+					value={ this.props.fieldValue }
+					onChange={ this.onChangeValue }
+					style={ { width: '200px' } }
+				/> }
+				{ ( this.termsProp === this.state.type ) && <SelectControl
+					key={ 'field_tax_' + this.props.fieldName + this.index }
+					value={ this.props.fieldValue }
+					onChange={ this.onChangeValue }
+					options={ this.preparedTaxes }
+					style={ { width: '160px' } }
+				/> }
+			</div>
+		</div>;
+	}
+
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-export default withInstanceId( JetFieldsMapControl );
+export default JetFieldsMapControl;

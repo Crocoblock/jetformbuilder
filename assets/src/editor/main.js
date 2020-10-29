@@ -8,6 +8,7 @@ import './blocks/form-fields';
 
 import './form-actions/send-email';
 import './form-actions/insert-post';
+import './form-actions/register-user';
 
 const {
 	registerBlockType

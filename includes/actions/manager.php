@@ -1,7 +1,12 @@
 <?php
 namespace Jet_Form_Builder\Actions;
 
+use Jet_Form_Builder\Actions\Types\Insert_Post;
+use Jet_Form_Builder\Actions\Types\Register_User;
+use Jet_Form_Builder\Actions\Types\Send_Email;
+
 // If this file is called directly, abort.
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -26,8 +31,9 @@ class Manager {
 	public function register_action_types() {
 
 		$defaults = array(
-			new Types\Send_Email(),
-			new Types\Insert_Post(),
+			new Send_Email(),
+			new Insert_Post(),
+            new Register_User()
 		);
 
 		foreach ( $defaults as $action ) {

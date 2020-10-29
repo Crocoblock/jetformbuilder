@@ -1,6 +1,8 @@
 /**
  * Internal dependencies
  */
+import Tools from "../tools/tools";
+
 const {
 	TextControl,
 	TextareaControl,
@@ -40,29 +42,7 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 
 		};
 
-		const formFields = []
-		const blocksRecursiveIterator = ( blocks ) => {
-
-			blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
-
-			blocks.map( ( block ) => {
-
-				if ( block.name.includes( 'jet-forms/' ) && block.attributes.name ) {
-					formFields.push( {
-						value: block.attributes.name,
-						label: block.attributes.label || block.attributes.name,
-					} );
-				}
-
-				if ( block.innerBlocks.length ) {
-					blocksRecursiveIterator( block.innerBlocks );
-				}
-
-			} );
-
-		};
-
-		blocksRecursiveIterator();
+		const formFields = Tools.getFormFieldsBlocks();
 
 		const insertMacros = ( macros ) => {
 			var content = settings.content || '';
@@ -176,7 +156,7 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 						onClick={ () => {
 							this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
 						} }
-					></Button>
+					/>
 					{ this.state.showMacrosPopover && (
 						<Popover
 							position={ 'bottom left' }

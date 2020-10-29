@@ -1,5 +1,6 @@
 import JetFieldsMapControl from '../blocks/controls/fields-map';
 import Tools from "../tools/tools";
+import JetDefaultMetaControl from "../blocks/controls/default-meta";
 /**
  * Internal dependencies
  */
@@ -30,10 +31,7 @@ window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.
 		if ( settings && settings.fields_map && settings.fields_map[ name ] ) {
 			return settings.fields_map[ name ];
 		}
-		return {
-			[ name ]: '',
-
-		};
+		return '';
 	}
 	isRenderHelp( fields ) {
 		return window.jetFormInsertPostData.labels.fields_map_help && ! fields.length;
@@ -89,18 +87,15 @@ window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.
 
 						const fieldData = this.getFieldMap( field.name );
 
-
 						return <div
 							className="jet-fields-map__row"
 							key={ 'field_map_' + field.name + index }
 						>
 							<div className="jet-fields-map__item-field">{ field.name }</div>
 							<JetFieldsMapControl
-								//value={ fieldData }
 								key={ field.name + index }
-								type={ fieldData.type }
-								name={ fieldData.name }
-								field={ field.name }
+								fieldValue={ fieldData }
+								fieldName={ field.name }
 								index={ index }
 								fieldsMap={ settings.fields_map }
 								taxonomiesList={ window.jetFormInsertPostData.taxonomies }
@@ -112,6 +107,17 @@ window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.
 						</div>;
 					} ) }
 				</div>
+			</BaseControl>
+			<BaseControl
+				label={ window.jetFormInsertPostData.labels.default_meta }
+				key="default_meta"
+			>
+				<JetDefaultMetaControl
+					defaultMeta={ settings.default_meta }
+					onChange={ ( newValue ) => {
+						onChangeValue( newValue, 'default_meta' );
+					} }
+				/>
 			</BaseControl>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */

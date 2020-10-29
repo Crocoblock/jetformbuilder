@@ -49,6 +49,46 @@ class Tools
     }
 
     /**
+     * Returns all registeredroles for JS
+     */
+    public static function get_user_roles_for_js() {
+
+        $roles = self::get_user_roles();
+        $result = array();
+
+        foreach ( $roles as $role => $label ) {
+            $result[] = array(
+                'value' => $role,
+                'label' => $label,
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * Returns all registered user roles
+     *
+     * @return [type] [description]
+     */
+    public static function get_user_roles() {
+
+        if ( ! function_exists( 'get_editable_roles' ) ) {
+            return array();
+        } else {
+            /**
+             * TODO: поставить фильтр на `editable_roles` что бы исключить администратора
+             */
+            $roles  = get_editable_roles();
+            $result = array();
+
+            foreach ( $roles as $role => $data ) {
+                $result[ $role ] = $data['name'];
+            }
+            return $result;
+        }
+    }
+
+    /**
      * Prepare passed array for using in JS options
      *
      * @return [type] [description]

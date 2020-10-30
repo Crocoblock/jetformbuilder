@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Send_Email {
+class Send_Email extends Base {
 
 	public function get_name() {
 		return __( 'Send Email', 'jet-form-builder' );

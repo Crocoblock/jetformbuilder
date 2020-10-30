@@ -163,3 +163,17 @@
 .jet-form-media-fields .field-mime-types svg {
 	display: none;
 }
+.jet-user-meta-rows {
+	flex: 0 0 40%;
+}
+
+.jet-user-fields-map__list {
+	flex: 0 0 35%;
+}
+
+.jet-user-fields-map__list .components-flex__item {
+	flex: 2;
+}
+.jet-user-fields-map__list .components-input-control__container {
+	flex: 5;
+}

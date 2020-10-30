@@ -65,6 +65,21 @@ class Tools
         return $result;
     }
 
+    public static function get_options_pages_for_js() {
+        $pages = jet_engine()->options_pages->get_options_pages_for_select();
+        return self::prepare_list_for_js( $pages );
+    }
+
+    /**
+     * Returns pages list
+     * @return [type] [description]
+     */
+    public static function get_pages_list_for_js() {
+        $pages = get_pages();
+
+        return self::prepare_list_for_js( $pages, 'ID', 'post_title' );
+    }
+
     /**
      * Returns all registered user roles
      *
@@ -75,9 +90,6 @@ class Tools
         if ( ! function_exists( 'get_editable_roles' ) ) {
             return array();
         } else {
-            /**
-             * TODO: поставить фильтр на `editable_roles` что бы исключить администратора
-             */
             $roles  = get_editable_roles();
             $result = array();
 

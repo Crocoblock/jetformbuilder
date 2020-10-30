@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Insert_Post {
+class Insert_Post extends Base {
 
 	public function get_name() {
 		return __( 'Insert Post', 'jet-form-builder' );

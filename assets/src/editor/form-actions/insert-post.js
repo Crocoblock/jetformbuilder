@@ -33,6 +33,7 @@ window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.
 		}
 		return '';
 	}
+
 	isRenderHelp( fields ) {
 		return window.jetFormInsertPostData.labels.fields_map_help && ! fields.length;
 	}

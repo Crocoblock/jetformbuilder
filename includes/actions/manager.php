@@ -4,6 +4,8 @@ namespace Jet_Form_Builder\Actions;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Actions\Types\Register_User;
 use Jet_Form_Builder\Actions\Types\Send_Email;
+use Jet_Form_Builder\Actions\Types\Update_User;
+use Jet_Form_Builder\Actions\Dependence_Manager;
 
 // If this file is called directly, abort.
 
@@ -30,18 +32,22 @@ class Manager {
 	 */
 	public function register_action_types() {
 
-		$defaults = array(
-			new Send_Email(),
-			new Insert_Post(),
-            new Register_User()
-		);
+	    $manager = new Dependence_Manager(
+	        'Send_Email',
+            'Insert_Post',
+            'Register_User',
+            'Update_User',
+            'Update_Options',
+            'Call_Hook',
+            'Call_Webhook',
+            'Redirect_To_Page'
+        );
 
-		foreach ( $defaults as $action ) {
+		foreach ( $manager->get_actions() as $action ) {
 			$this->register_action_type( $action );
 		}
 
 		do_action( 'jet-form-builder/actions/register', $this );
-
 	}
 
 	/**

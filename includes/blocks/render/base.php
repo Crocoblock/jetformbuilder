@@ -291,13 +291,15 @@ abstract class Base {
 			$sanitized_args[ $key ] = $value;
 		}
 
+		//var_dump( $sanitized_args ); die;
+
 		$args          = wp_parse_args( $sanitized_args, $defaults );
 		$template_name = $this->get_name();
 		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
 		$label         = $this->get_field_label();
 		$desc          = $this->get_field_desc();
 		$layout        = 'column';
-
+		
 		if ( 'column' === $layout ) {
 			include $this->get_template( 'common/field-column.php' );
 		} else {

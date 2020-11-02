@@ -50,21 +50,30 @@ class Number_Field extends Base {
 	}
 
 	/**
+	 * Returns block attributes
+	 */
+	public function get_field_attrs( $attributes ) {
+		return array(
+			'field_type' => 'number'
+		);
+	}
+
+	/**
 	 * Return attributes array
 	 *
 	 * @return array
 	 */
 	public function get_attributes() {
         return array(
-            'field__min_value' => array(
+            'min' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__max_value' => array(
+            'max' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__step' => array(
+            'step' => array(
                 'type' => 'number',
                 'default' => ''
             ),

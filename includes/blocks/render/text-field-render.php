@@ -14,5 +14,4 @@ class Text_Field_Render extends Base {
 	public function get_name() {
 		return 'text-field';
 	}
-
 }

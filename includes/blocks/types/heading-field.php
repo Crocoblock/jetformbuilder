@@ -76,7 +76,7 @@ class Heading_Field extends Base {
             ),
             'name' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => 'heading_name',
                 'general' => array(
                     'type'  => 'text',
                     'label' => __( 'Field Name', 'jet-form-builder' )

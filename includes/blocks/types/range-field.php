@@ -56,23 +56,23 @@ class Range_Field extends Base {
 	 */
 	public function get_attributes() {
         return array(
-            'field__min_value' => array(
+            'min' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__max_value' => array(
+            'max' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__step' => array(
+            'step' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__prefix' => array(
+            'prefix' => array(
                 'type' => 'string',
                 'default' => ''
             ),
-            'field__suffix' => array(
+            'suffix' => array(
                 'type' => 'string',
                 'default' => ''
             ),
@@ -97,7 +97,7 @@ class Range_Field extends Base {
             ),
             'name' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => 'field_name',
                 'general' => array(
                     'type'  => 'text',
                     'label' => __( 'Field Name', 'jet-form-builder' )

@@ -69,20 +69,35 @@ class Media_Field extends Base {
             ),
             'mime_types' => Tools::get_allowed_mimes_list_for_js(),
 
+            'value_format' => array(
+                array(
+                    'value' => 'id',
+                    'label' => __( 'Attachment ID', 'jet-form-builder' )
+                ),
+                array(
+                    'value' => 'url',
+                    'label' => __( 'Attachment URL', 'jet-form-builder' )
+                ),
+                array(
+                    'value' => 'both',
+                    'label' => __( 'Array with attachment ID and URL', 'jet-form-builder' )
+                ),
+            ),
+
             'help_messages' => array(
-                'field__is_insert_attachment' => __(
+                'insert_attachment' => __(
                     'If checked new attachment will be inserted for uploaded file',
                     'jet-form-builder'
                 ),
-                'field__max_allowed_to_upload' => __(
+                'max_files' => __(
                     'If not set allow to upload 1 file',
                     'jet-form-builder'
                 ),
-                'field__max_size_mb' => __(
+                'max_size' => __(
                     'Mb',
                     'jet-form-builder'
                 ),
-                'field__mime_types' => __(
+                'allowed_mimes' => __(
                     'If no MIME type selected will allow all types.
                     Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.',
                     'jet-form-builder'
@@ -98,23 +113,27 @@ class Media_Field extends Base {
 	 */
 	public function get_attributes() {
         return array(
-            'field__user_access' => array(
+            'allowed_user_cap' => array(
                 'type' => 'string',
                 'default' => 'all'
             ),
-            'field__is_insert_attachment' => array(
+            'insert_attachment' => array(
                 'type' => 'boolean',
                 'default' => false
             ),
-            'field__max_allowed_to_upload' => array(
+            'value_format' => array(
+                'type' => 'string',
+                'default' => 'id'
+            ),
+            'max_files' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__max_size_mb' => array(
+            'max_size' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__mime_types' => array(
+            'allowed_mimes' => array(
                 'type' => 'array',
                 'default' => array()
             ),
@@ -139,7 +158,7 @@ class Media_Field extends Base {
             ),
             'name' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => 'field_name',
                 'general' => array(
                     'type'  => 'text',
                     'label' => __( 'Field Name', 'jet-form-builder' )

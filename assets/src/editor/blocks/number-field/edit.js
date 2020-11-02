@@ -78,28 +78,28 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
                         <NumberControl
                             label={ __( 'Min Value' ) }
                             labelPosition='top'
-                            key='field__min_value'
-                            value={ attributes.field__min_value }
+                            key='min'
+                            value={ attributes.min }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__min_value: parseInt(newValue) } );
+                                props.setAttributes( { min: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Max Value' ) }
                             labelPosition='top'
-                            key='field__max_value'
-                            value={ attributes.field__max_value }
+                            key='max'
+                            value={ attributes.max }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_value: parseInt(newValue) } );
+                                props.setAttributes( { max: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Step' ) }
                             labelPosition='top'
-                            key='field__step'
-                            value={ attributes.field__step }
+                            key='step'
+                            value={ attributes.step }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__step: parseInt(newValue) } );
+                                props.setAttributes( { step: parseInt(newValue) } );
                             } }
                         />
 

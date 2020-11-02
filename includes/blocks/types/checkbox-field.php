@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Checkbox_Field extends Base {
+class Checkbox_Field extends Base implements Field_Interface {
 
     use Base_Select_Radio_Check;
 

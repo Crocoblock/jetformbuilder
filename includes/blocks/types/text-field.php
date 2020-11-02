@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Text_Field extends Base {
+class Text_Field extends Base implements Field_Interface {
 
 	/**
 	 * Returns block title
@@ -29,6 +29,15 @@ class Text_Field extends Base {
 	 */
 	public function get_name() {
 		return 'text-field';
+	}
+
+	/**
+	 * Returns block attributes
+	 */
+	public function get_field_attrs( $attributes ) {
+		return array(
+			'field_type' => 'text'
+		);
 	}
 
 	/**

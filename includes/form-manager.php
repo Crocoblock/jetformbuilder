@@ -7,6 +7,7 @@ use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
 
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
     die();
@@ -15,7 +16,21 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Manager
 {
     public  $generators = false;
+    const   NAMESPACE_FIELDS = 'jet-forms/';
 
+    public function __construct() {
+        if ( ! isset( $_GET['form_id'] ) ) {
+            return;
+        }
+        
+        add_filter( 'the_content', array( $this, 'inject_content' ) );
+    }
+
+    public function inject_content( $content ) {
+        $builder = new Form_Builder( $_GET['form_id'] );
+
+        return $builder->render_form( false );
+    }
     /**
      * Returns all instatnces of options genrators classes
      *

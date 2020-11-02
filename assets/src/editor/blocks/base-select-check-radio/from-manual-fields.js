@@ -42,7 +42,7 @@ class FromManualFields extends wp.element.Component {
         } );
 
         this.props.parentProps.setAttributes( {
-            from_manual_input: valid_options
+            field_options: valid_options
         } );
 
         this.setState( { showPresetModal: ! this.state.showPresetModal } )
@@ -50,16 +50,16 @@ class FromManualFields extends wp.element.Component {
 
     onChangeValue ( { value, name, id } ) {
 
-        const manual_items = Array.from(this.props.attributes.from_manual_input);
+        const manual_items = Array.from(this.props.attributes.field_options);
         manual_items[ id ][ name ] = value;
 
         this.props.parentProps.setAttributes( {
-            from_manual_input: manual_items
+            field_options: manual_items
         } );
     }
 
     getOptions() {
-        return Array.from( this.props.attributes.from_manual_input );
+        return Array.from( this.props.attributes.field_options );
     }
 
     addNewOption() {
@@ -72,7 +72,7 @@ class FromManualFields extends wp.element.Component {
         } );
 
         this.props.parentProps.setAttributes( {
-            from_manual_input: manual_items
+            field_options: manual_items
         } );
     }
 
@@ -81,7 +81,7 @@ class FromManualFields extends wp.element.Component {
         manual_items.splice( index, 1 );
 
         this.props.parentProps.setAttributes( {
-            from_manual_input: manual_items
+            field_options: manual_items
         } );
     }
 
@@ -115,7 +115,7 @@ class FromManualFields extends wp.element.Component {
                     >
                         <div>
                             <div className="jet-form-edit-modal__content">
-                                { attributes.from_manual_input.map( ( currentItem, index ) => {
+                                { attributes.field_options.map( ( currentItem, index ) => {
                                     return <div
                                         className="jet-form-repeater-modal"
                                         key={ 'jet-form-repeater-item-' + index }

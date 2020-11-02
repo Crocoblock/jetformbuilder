@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Select_Field extends Base {
+class Select_Field extends Base implements Field_Interface {
 
     use Base_Select_Radio_Check;
 
@@ -48,7 +48,7 @@ class Select_Field extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_block_renderer( $attributes = array() ) {
-		return new Select_Field_Render( $attributes );
+        return new Select_Field_Render( $attributes );
 	}
 
 	/**
@@ -60,8 +60,8 @@ class Select_Field extends Base {
 	 */
 	public function block_data( $editor, $handle ) {
 
-		wp_localize_script(
-		    $handle,
+        wp_localize_script(
+            $handle,
             'JetFormSelectFieldData',
             $this->get_local_data_check_radio_select()
         );

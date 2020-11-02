@@ -8,8 +8,8 @@ class Tools {
             return from.help_messages[ name ];
         }
 
-        if ( typeof from.help_messages[ attributes.from_generator__function ] === 'object' ) {
-            return from.help_messages[ attributes.from_generator__function ][ name ];
+        if ( typeof from.help_messages[ attributes.generator_function ] === 'object' ) {
+            return from.help_messages[ attributes.generator_function ][ name ];
         }
     }
 

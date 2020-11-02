@@ -35,9 +35,9 @@ class FromPostsFields extends wp.element.Component {
                     key='from__posts'
                     label={ __( 'Post Type' ) }
                     labelPosition='top'
-                    value={ attributes.from_posts__type }
+                    value={ attributes.field_options_post_type }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_posts__type: newValue } );
+                        parentProps.setAttributes( { field_options_post_type: newValue } );
                     } }
                     options={ localizeData.post_types_list }
                 />

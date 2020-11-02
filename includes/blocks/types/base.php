@@ -13,8 +13,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
-	protected $namespace = 'jet-forms/';
-
 	private $_unregistered = array();
 
 	public function __construct() {
@@ -22,8 +20,8 @@ abstract class Base {
 		register_block_type(
 			$this->block_name(),
 			array(
-				'attributes' => $this->block_attributes(),
-				'render_callback' => array( $this, 'render_callback' ),
+				'attributes'		=> $this->block_attributes(),
+				//'render_callback' 	=> array( $this, 'render_callback_field' ),
 				//'editor_style'    => 'jet-engine-frontend',
 			)
 		);
@@ -72,6 +70,16 @@ abstract class Base {
 	abstract public function get_block_renderer( $attributes = array() );
 
 	/**
+	 * Render callback for the block
+	 *
+	 * @param  array  $attributes [description]
+	 * @return [type]             [description]
+	 */
+	public function render_callback_field( $attributes = array() ) {
+		return $this->get_block_renderer()->render();
+	}
+
+	/**
 	 * Remove attribute from registered
 	 * (should be called only inside get_attributes() method)
 	 *
@@ -88,7 +96,7 @@ abstract class Base {
 	 * @return [type] [description]
 	 */
 	public function block_name() {
-		return $this->namespace . $this->get_name();
+		return jet_form_builder()->form::NAMESPACE_FIELDS . $this->get_name();
 	}
 
 	/**
@@ -117,7 +125,7 @@ abstract class Base {
 			),
 			'name' => array(
 				'type' => 'string',
-				'default' => '',
+				'default' => 'field_name',
 				'general' => array(
 					'type'  => 'text',
 					'label' => __( 'Field Name', 'jet-form-builder' )

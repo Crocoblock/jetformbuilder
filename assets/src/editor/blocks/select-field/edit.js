@@ -82,42 +82,42 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                         key={ 'select_fields' }
                     >
                         <SelectControl
-                            key='fill_options_from'
+                            key='field_options_from'
                             label={ __( 'Fill Options From' ) }
                             labelPosition='top'
-                            value={ attributes.fill_options_from }
+                            value={ attributes.field_options_from }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { fill_options_from: newValue } );
+                                props.setAttributes( { field_options_from: newValue } );
                             } }
                             options={ localizeData.options_from }
                         />
-                        { 'manual_input' === attributes.fill_options_from && <FromManualFields
+                        { 'manual_input' === attributes.field_options_from && <FromManualFields
                             key='from_manual'
                             attributes={ attributes }
                             parentProps={ props }
                         /> }
-                        { 'posts' === attributes.fill_options_from && <FromPostsFields
+                        { 'posts' === attributes.field_options_from && <FromPostsFields
                             key='from_posts'
                             attributes={ attributes }
                             parentProps={ props }
                         /> }
-                        { 'terms' === attributes.fill_options_from && <FromTermsFields
+                        { 'terms' === attributes.field_options_from && <FromTermsFields
                             key='from_terms'
                             attributes={ attributes }
                             parentProps={ props }
                             localizeData={ window.JetFormSelectFieldData }
                         /> }
 
-                        { 'meta_field' === attributes.fill_options_from && <TextControl
-                            key='from_meta_field'
+                        { 'meta_field' === attributes.field_options_from && <TextControl
+                            key='field_options_key'
                             label={ __( 'Meta field to get value from' ) }
-                            value={ attributes.from_meta_field }
+                            value={ attributes.field_options_key }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { from_meta_field: newValue } );
+                                props.setAttributes( { field_options_key: newValue } );
                             } }
                         /> }
 
-                        { 'generate' === attributes.fill_options_from && <FromGeneratorsFields
+                        { 'generate' === attributes.field_options_from && <FromGeneratorsFields
                             key='from_generator'
                             attributes={ attributes }
                             parentProps={ props }

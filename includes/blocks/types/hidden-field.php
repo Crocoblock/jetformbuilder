@@ -156,7 +156,7 @@ class Hidden_Field extends Base {
 		return array(
 			'name' => array(
 				'type' => 'string',
-				'default' => '',
+				'default' => 'hidden_field_name',
 				'general' => array(
 					'type'  => 'text',
 					'label' => __( 'Field Name', 'jet-form-builder' )

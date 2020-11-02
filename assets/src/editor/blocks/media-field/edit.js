@@ -12,28 +12,14 @@ window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbac
 const { __ } = wp.i18n;
 
 const {
-    ColorPalette,
-    RichText,
-    Editable,
-    MediaUpload,
-    ServerSideRender,
     BlockControls,
     InspectorControls,
 } = wp.blockEditor;
 
 const {
-    PanelColor,
-    IconButton,
-    TextControl,
-    TextareaControl,
     SelectControl,
     ToggleControl,
     PanelBody,
-    Button,
-    RangeControl,
-    CheckboxControl,
-    Disabled,
-    TextHighlight,
     __experimentalNumberControl,
 } = wp.components;
 
@@ -85,55 +71,65 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
                         className='jet-form-media-fields'
                     >
                         <SelectControl
-                            key='field__user_access'
+                            key='allowed_user_cap'
                             label={ __( 'User access' ) }
                             labelPosition='top'
-                            value={ attributes.field__user_access }
+                            value={ attributes.allowed_user_cap }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__user_access: newValue } );
+                                props.setAttributes( { allowed_user_cap: newValue } );
                             } }
                             options={ localizeData.user_access }
                         />
                         <ToggleControl
-                            key='field__is_insert_attachment'
+                            key='insert_attachment'
                             label={ __( 'Insert attachment' ) }
-                            checked={ attributes.field__is_insert_attachment }
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__is_insert_attachment' ) }
+                            checked={ attributes.insert_attachment }
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'insert_attachment' ) }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__is_insert_attachment: Boolean(newValue) } );
+                                props.setAttributes( { insert_attachment: Boolean(newValue) } );
                             } }
                         />
+                        { attributes.insert_attachment && <SelectControl
+                            key='value_format'
+                            label={ __( 'Field value' ) }
+                            labelPosition='top'
+                            value={ attributes.value_format }
+                            onChange={ ( newValue ) => {
+                                props.setAttributes( { value_format: newValue } );
+                            } }
+                            options={ localizeData.value_format }
+                        /> }
                         <NumberControl
-                            key='field__max_allowed_to_upload'
+                            key='max_files'
                             label={ __( 'Maximum allowed files to upload' ) }
                             labelPosition='top'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_allowed_to_upload' ) }
-                            value={ attributes.field__max_allowed_to_upload }
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'max_files' ) }
+                            value={ attributes.max_files }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_allowed_to_upload: parseInt(newValue) } );
+                                props.setAttributes( { max_files: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Maximum size in Mb' ) }
                             labelPosition='top'
-                            key='field__max_size_mb'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__max_size_mb' ) }
-                            value={ attributes.field__max_size_mb }
+                            key='max_size'
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'max_size' ) }
+                            value={ attributes.max_size }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_size_mb: parseInt(newValue) } );
+                                props.setAttributes( { max_size: parseInt(newValue) } );
                             } }
                         />
                         <SelectControl
                             multiple
                             className='field-mime-types'
-                            key='field__mime_types'
+                            key='allowed_mimes'
                             label={ __( 'Allow MIME types' ) }
                             labelPosition='top'
-                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'field__mime_types' ) }
-                            value={ attributes.field__mime_types }
+                            help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'allowed_mimes' ) }
+                            value={ attributes.allowed_mimes }
                             onChange={ ( newValue ) => {
                                 console.log( newValue );
-                                props.setAttributes( { field__mime_types: newValue } );
+                                props.setAttributes( { allowed_mimes: newValue } );
                             } }
                             options={ localizeData.mime_types }
                         />

@@ -33,28 +33,28 @@ class FromTermsFields extends wp.element.Component {
                     key='from__terms'
                     label='Taxonomy'
                     labelPosition='top'
-                    value={ attributes.from_terms__type }
+                    value={ attributes.field_options_tax }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_terms__type: newValue } );
+                        parentProps.setAttributes( { field_options_tax: newValue } );
                     } }
                     options={ localizeData.taxonomies_list }
                 />
                 <TextControl
-                    key='from_terms__value_from_meta'
+                    key='value_from_key'
                     label='Value from meta field'
-                    value={ attributes.from_terms__value_from_meta }
+                    value={ attributes.value_from_key }
                     help={ Tools.getHelpMessage( localizeData, 'value_from_meta' ) }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_terms__value_from_meta: newValue } );
+                        parentProps.setAttributes( { value_from_key: newValue } );
                     } }
                 />
                 <TextControl
-                    key='from_terms__calc_value_from_meta'
+                    key='calculated_value_from_key'
                     label='Calculated value from meta field'
-                    value={ attributes.from_terms__calc_value_from_meta }
+                    value={ attributes.calculated_value_from_key }
                     help={ Tools.getHelpMessage( localizeData, 'calc_value_from_meta' ) }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_terms__calc_value_from_meta: newValue } );
+                        parentProps.setAttributes( { calculated_value_from_key: newValue } );
                     } }
                 />
             </div>

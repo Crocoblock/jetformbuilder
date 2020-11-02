@@ -77,51 +77,51 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
                     >
                         <TextareaControl
                             label={ __( 'Calculation Formula' ) }
-                            value={ attributes.field__calc_formula }
+                            value={ attributes.calc_formula }
 
                             /* TODO: Need to add line break between fields */
                             help={ Tools.getAvailableFieldsString() }
 
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__calc_formula: newValue } );
+                                props.setAttributes( { calc_formula: newValue } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Decimal Places Number' ) }
                             labelPosition='top'
-                            key='field__decimal_place_number'
-                            value={ attributes.field__decimal_place_number }
+                            key='precision'
+                            value={ attributes.precision }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__decimal_place_number: parseInt( newValue ) } );
+                                props.setAttributes( { precision: parseInt( newValue ) } );
                             } }
                         />
                         <TextControl
-                            key='field__calc_prefix'
+                            key='calc_prefix'
                             label={ __( 'Calculated Value Prefix' ) }
-                            value={ attributes.field__calc_prefix }
+                            value={ attributes.calc_prefix }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__calc_prefix: newValue } );
+                                props.setAttributes( { calc_prefix: newValue } );
                             } }
                         />
                         <TextControl
-                            key='field__calc_suffix'
+                            key='calc_suffix'
                             label={ __( 'Calculated Value Suffix' ) }
-                            value={ attributes.field__calc_suffix }
+                            value={ attributes.calc_suffix }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__calc_suffix: newValue } );
+                                props.setAttributes( { calc_suffix: newValue } );
                             } }
                         />
                         <ToggleControl
-                            key={ 'field__is_hidden' }
+                            key={ 'calc_hidden' }
                             label={ __( 'Hidden' ) }
-                            checked={ attributes.field__is_hidden }
+                            checked={ attributes.calc_hidden }
                             help={ Tools.getHelpMessage(
                                 window.jetFormCalculatedFieldData,
-                                'field__is_hidden'
+                                'calc_hidden'
                             ) }
                             onChange={ newVal => {
                                 props.setAttributes( {
-                                    field__is_hidden: Boolean(newVal),
+                                    calc_hidden: Boolean(newVal),
                                 } );
                             } }
                         />

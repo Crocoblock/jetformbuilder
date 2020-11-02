@@ -56,11 +56,11 @@ class Textarea_Field extends Base {
 	 */
 	public function get_attributes() {
         return array(
-            'field__min_length' => array(
+            'minlength' => array(
                 'type' => 'number',
                 'default' => ''
             ),
-            'field__max_length' => array(
+            'maxlength' => array(
                 'type' => 'number',
                 'default' => ''
             ),

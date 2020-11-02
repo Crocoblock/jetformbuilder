@@ -22,7 +22,7 @@ class FromGeneratorsFields extends wp.element.Component {
 
     getHelpMessage( name = '' ) {
         const messages = window.JetFormSelectFieldData.help_messages;
-        const func = this.props.attributes.from_generator__function;
+        const func = this.props.attributes.generator_function;
 
         if( typeof messages[ name ] !== 'undefined' ) {
             return messages[ name ];
@@ -41,22 +41,22 @@ class FromGeneratorsFields extends wp.element.Component {
         return (
             <div>
                 <SelectControl
-                    key='from_generator__function'
+                    key='generator_function'
                     label='Generator Function'
                     labelPosition='top'
-                    value={ attributes.from_generator__function }
+                    value={ attributes.generator_function }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_generator__function: newValue } );
+                        parentProps.setAttributes( { generator_function: newValue } );
                     } }
                     options={ window.JetFormSelectFieldData.generators_list }
                 />
                 <TextControl
-                    key='from_generator__field_name'
+                    key='generator_field'
                     label='Field Name'
-                    value={ attributes.from_generator__field_name }
+                    value={ attributes.generator_field }
                     help={ this.getHelpMessage( 'field_name' ) }
                     onChange={ ( newValue ) => {
-                        parentProps.setAttributes( { from_generator__field_name: newValue } );
+                        parentProps.setAttributes( { generator_field: newValue } );
                     } }
                 />
                 <TextControl

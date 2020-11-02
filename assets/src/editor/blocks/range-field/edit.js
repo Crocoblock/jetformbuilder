@@ -85,44 +85,44 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
                         <NumberControl
                             label={ __( 'Min Value' ) }
                             labelPosition='top'
-                            key='field__min_value'
-                            value={ attributes.field__min_value }
+                            key='min'
+                            value={ attributes.min }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__min_value: parseInt(newValue) } );
+                                props.setAttributes( { min: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Max Value' ) }
                             labelPosition='top'
-                            key='field__max_value'
-                            value={ attributes.field__max_value }
+                            key='max'
+                            value={ attributes.max }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_value: parseInt(newValue) } );
+                                props.setAttributes( { max: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Step' ) }
                             labelPosition='top'
-                            key='field__step'
-                            value={ attributes.field__step }
+                            key='step'
+                            value={ attributes.step }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__step: parseInt(newValue) } );
+                                props.setAttributes( { step: parseInt(newValue) } );
                             } }
                         />
                         <TextControl
-                            key='field__prefix'
+                            key='prefix'
                             label={ __( 'Value prefix' ) }
-                            value={ attributes.field__prefix }
+                            value={ attributes.prefix }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__prefix: newValue } );
+                                props.setAttributes( { prefix: newValue } );
                             } }
                         />
                         <TextControl
-                            key='field__suffix'
+                            key='suffix'
                             label={ __( 'Value suffix' ) }
-                            value={ attributes.field__suffix }
+                            value={ attributes.suffix }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__suffix: newValue } );
+                                props.setAttributes( { suffix: newValue } );
                             } }
                         />
 

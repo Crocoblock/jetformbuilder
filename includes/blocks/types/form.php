@@ -67,7 +67,7 @@ class Form extends Base {
 	 * @param  array  $attributes [description]
 	 * @return [type]             [description]
 	 */
-	public function render_callback( $attributes = array() ) {
+	public function render_callback_field( $attributes = array() ) {
 
 		$form_id = $attributes['form_id'];
 

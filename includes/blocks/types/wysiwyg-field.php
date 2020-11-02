@@ -76,7 +76,7 @@ class Wysiwyg_Field extends Base {
             ),
             'name' => array(
                 'type' => 'string',
-                'default' => '',
+                'default' => 'field_name',
                 'general' => array(
                     'type'  => 'text',
                     'label' => __( 'Field Name', 'jet-form-builder' )

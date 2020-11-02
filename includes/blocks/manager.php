@@ -16,6 +16,8 @@ use Jet_Form_Builder\Blocks\Types\Textarea_Field;
 use Jet_Form_Builder\Blocks\Types\Time_Field;
 use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
 
+use Jet_Form_Builder\Blocks\Types\Field_Interface;
+
 // If this file is called directly, abort.
 
 if ( ! defined( 'WPINC' ) ) {
@@ -30,7 +32,7 @@ class Manager {
 	private $_types = array();
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_block_types' ), 99 );
+		add_action( 'init', array( $this, 'register_block_types' ) );
 		add_action( 'jet-form-builder/editor-assets/after', array( $this, 'register_block_types_for_editor' ), 10, 2 );
 	}
 
@@ -42,9 +44,9 @@ class Manager {
 	public function register_block_types() {
 
 		$types = array(
+            new Select_Field(),
 			new Text_Field(),
 			new Hidden_Field(),
-            new Select_Field(),
             new Radio_Field(),
             new Checkbox_Field(),
             new Number_Field(),
@@ -153,6 +155,26 @@ class Manager {
 
 		return $type->get_attributes();
 
+	}
+
+
+	public function get_field_attrs( $block_name, $attributes ) {
+		
+		if ( ! $block_name ) {
+			return;
+		}
+
+		$field = isset( $this->_types[ $block_name ] ) ? $this->_types[ $block_name ] : false;
+
+		if ( ! $field ) {
+			return;
+		}
+
+		if( $field instanceof Field_Interface ) {
+			return array_merge( $attributes, $field->get_field_attrs( $attributes ) );
+		}
+
+		return $attributes;		
 	}
 
 }

@@ -53,7 +53,7 @@ class Calculated_Field extends Base {
     {
         wp_localize_script( $handle, 'jetFormCalculatedFieldData', array(
             'help_messages' => array(
-                'field__is_hidden' => __(
+                'calc_hidden' => __(
                     'Check this to hide calculated field',
                     'jet-form-builder'
                 ),
@@ -68,23 +68,23 @@ class Calculated_Field extends Base {
 	 */
 	public function get_attributes() {
         return array(
-            'field__calc_formula' => array(
+            'calc_formula' => array(
                 'type' => 'string',
                 'default' => ''
             ),
-            'field__decimal_place_number' => array(
+            'precision' => array(
                 'type' => 'number',
                 'default' => 2
             ),
-            'field__calc_prefix' => array(
+            'calc_prefix' => array(
                 'type' => 'string',
                 'default' => ''
             ),
-            'field__calc_suffix' => array(
+            'calc_suffix' => array(
                 'type' => 'string',
                 'default' => ''
             ),
-            'field__is_hidden' => array(
+            'calc_hidden' => array(
                 'type' => 'boolean',
                 'default' => false
             ),

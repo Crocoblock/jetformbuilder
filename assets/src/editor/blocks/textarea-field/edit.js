@@ -82,19 +82,19 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
                         <NumberControl
                             label={ __( 'Min length' ) }
                             labelPosition='top'
-                            key='field__min_length'
-                            value={ attributes.field__min_length }
+                            key='minlength'
+                            value={ attributes.minlength }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__min_length: parseInt(newValue) } );
+                                props.setAttributes( { minlength: parseInt(newValue) } );
                             } }
                         />
                         <NumberControl
                             label={ __( 'Max length' ) }
                             labelPosition='top'
-                            key='field__max_length'
-                            value={ attributes.field__max_length }
+                            key='maxlength'
+                            value={ attributes.maxlength }
                             onChange={ ( newValue ) => {
-                                props.setAttributes( { field__max_length: parseInt(newValue) } );
+                                props.setAttributes( { maxlength: parseInt(newValue) } );
                             } }
                         />
 

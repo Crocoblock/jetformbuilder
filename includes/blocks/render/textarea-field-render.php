@@ -15,24 +15,5 @@ class Textarea_Field_Render extends Base {
 		return 'textarea-field';
 	}
 
-	public function render() {
-
-		$args = $this->args;
-		$defaults = array(
-			'field_value' => '',
-			'name'        => '',
-		);
-
-		$sanitized_args = array();
-
-		foreach ( $args as $key => $value ) {
-			$sanitized_args[ $key ] = $value;
-		}
-
-		$args          = wp_parse_args( $sanitized_args, $defaults );
-		$template_name = $this->get_name();
-		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
-
-	}
 
 }

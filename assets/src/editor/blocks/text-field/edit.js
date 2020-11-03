@@ -73,6 +73,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TextEdit extends wp.el
 							title={ __( 'Field Settings' ) }
 						>
 
+							<SelectControl
+								key='field_type'
+								label={ __( 'Field Type' ) }
+								labelPosition='top'
+								value={ attributes.field_type }
+								onChange={ ( newValue ) => {
+									props.setAttributes( { field_type: newValue } );
+								} }
+								options={ localizeData.field_types_list }
+							/>
 							<ToggleControl
 								key={ 'enable_input_mask' }
 								label={ __( 'Set Input Mask' ) }

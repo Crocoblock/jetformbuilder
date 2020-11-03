@@ -13,9 +13,11 @@ abstract class Base {
 
 	public $attrs = array();
 	public $args = array();
+	public $form_id = null;
 
-	public function __construct( $args = array() ) {
+	public function __construct( $form_id, $args = array() ) {
 		$this->args = $args;
+		$this->form_id = $form_id;
 	}
 
 	abstract public function get_name();
@@ -290,8 +292,6 @@ abstract class Base {
 		foreach ( $args as $key => $value ) {
 			$sanitized_args[ $key ] = $value;
 		}
-
-		//var_dump( $sanitized_args ); die;
 
 		$args          = wp_parse_args( $sanitized_args, $defaults );
 		$template_name = $this->get_name();

@@ -6,7 +6,7 @@ module.exports = {
 	context: path.resolve(__dirname, 'src'),
 	entry: {
 		'editor.js': './editor/main.js',
-		//'blocks.js': './js/blocks/index.js'
+		'others.js': './editor/others.js'
 	},
 	output: {
 		path: path.resolve( __dirname, 'js' ),

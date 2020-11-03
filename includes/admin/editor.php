@@ -411,6 +411,38 @@ class Editor {
 
 	}
 
+	public function enqueue_form_assets() {
+
+		$handle = 'jet-form-builder/form';
+
+		do_action( 'jet-form-builder/other-editor-assets/before', $this, $handle );
+
+        wp_enqueue_script(
+            $handle,
+            JET_FORM_BUILDER_URL . 'assets/js/others.js',
+            array(
+                'wp-editor',
+                'wp-core-data',
+                'wp-data',
+                'wp-block-library',
+                'wp-format-library',
+                'wp-api-fetch',
+            ),
+            JET_FORM_BUILDER_VERSION,
+            true
+        );
+		
+		wp_localize_script( $handle, 'JetFormEditorData', array(
+			'allowedBlocks' => $this->get_allowed_blocks(),
+			'action'        => $this->get_action(),
+			'itemID'        => $this->get_item_id(),
+			'presetConfig'  => $this->get_preset_config(),
+		) );
+
+		do_action( 'jet-form-builder/other-editor-assets/after', $this, $handle );
+
+	}
+
 	/**
 	 * Render new editor instance
 	 *

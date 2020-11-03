@@ -17,7 +17,7 @@ if ( ! empty( $args['allowed_mimes'] ) ) {
 	$this->add_attribute( 'accept', implode( ',', $args['allowed_mimes'] ) );
 }
 
-$max_size = Jet_Engine_Forms_File_Upload::instance()->get_max_size_for_field( $args );
+$max_size = File_Upload::instance()->get_max_size_for_field( $args );
 
 $this->add_attribute( 'data-max_size', $max_size );
 
@@ -27,15 +27,15 @@ if ( $required ) {
 	$required = 'required="required"';
 }
 
-$value = Jet_Engine_Forms_File_Upload::instance()->get_result_value( $args );
+$value = File_Upload::instance()->get_result_value( $args );
 $value = is_array( $value ) ? json_encode( $value ) : $value;
 
 ?>
 <div class="jet-engine-file-upload">
 	<div class="jet-engine-file-upload__content">
-		<?php echo Jet_Engine_Forms_File_Upload::instance()->get_loader(); ?>
-		<div class="jet-engine-file-upload__files" <?php echo Jet_Engine_Forms_File_Upload::instance()->get_files_data_args( $args ); ?>><?php
-			echo Jet_Engine_Forms_File_Upload::instance()->get_result_html( $args );
+		<?php echo File_Upload::instance()->get_loader(); ?>
+		<div class="jet-engine-file-upload__files" <?php echo File_Upload::instance()->get_files_data_args( $args ); ?>><?php
+			echo File_Upload::instance()->get_result_html( $args );
 		?></div>
 	</div>
 	<div class="jet-engine-file-upload__fields">

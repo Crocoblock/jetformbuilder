@@ -24,6 +24,7 @@ class Tools {
 
                 if ( block.name.includes( 'jet-forms/' ) && block.attributes.name ) {
                     formFields.push( {
+                        blockName: block.name,
                         name: block.attributes.name,
                         label: block.attributes.label || block.attributes.name,
                     } );
@@ -41,16 +42,16 @@ class Tools {
         return formFields;
     }
 
-    static getAvailableFields() {
+    static getAvailableFields( exclude = [] ) {
 
         let fields = [];
-        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', 'repeater_end' ];
+        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', 'repeater_end', ...exclude ]; 
 
         const blocks = this.getFormFieldsBlocks();
 
         if ( blocks ) {
             blocks.forEach( function( item ) {
-                if ( -1 === skipFields.indexOf( item.name ) ) {
+                if ( ! skipFields.find( field => item.blockName.includes( field ) ) ) {
                     fields.push( item.name );
                 }
             });
@@ -59,7 +60,7 @@ class Tools {
     }
 
     static getAvailableFieldsString() {
-        const fields = this.getAvailableFields();
+        const fields = this.getAvailableFields( ['calculated'] );
 
         let fieldsString = __( 'Available fields: ' );
         fields.forEach( function ( item ) {

@@ -26,8 +26,12 @@ class Form extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_name() {
-		return 'form';
+		return 'form-block';
 	}
+
+    public function get_storage_name() {
+        return jet_form_builder()->blocks::OTHERS_STORAGE;
+    }
 
 	/**
 	 * Returns icon class name
@@ -43,7 +47,7 @@ class Form extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_block_renderer( $attributes = array() ) {
+	public function get_block_renderer( $form_id, $attributes = array() ) {
 		return false;
 	}
 
@@ -61,7 +65,14 @@ class Form extends Base {
 		);
 	}
 
-	/**
+	public function block_data($editor, $handle)
+    {
+//        wp_localize_script( $handle, 'JetFormData', array(
+//
+//        ) );
+    }
+
+    /**
 	 * Render callback for the block
 	 *
 	 * @param  array  $attributes [description]

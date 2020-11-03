@@ -38,13 +38,9 @@ class Plugin {
 	public static function instance() {
 
 		if ( is_null( self::$instance ) ) {
-
 			self::$instance = new self();
-
 		}
-
 		return self::$instance;
-
 	}
 
 	/**
@@ -81,6 +77,23 @@ class Plugin {
 		}
 
 	}
+
+	/*
+	* Returns url to file or dir inside plugin folder
+	*
+	* @param  string $path Path inside plugin dir.
+	* @return string
+	*/
+   public function plugin_url( $path = null ) {
+	   return JET_FORM_BUILDER_URL . $path;
+   }
+
+   /**
+	* Returns plugin version
+    */
+   public function get_version() {
+	   return JET_FORM_BUILDER_VERSION;
+   }
 
 	/**
 	 * Plugin constructor.

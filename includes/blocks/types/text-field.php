@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Text_Field extends Base implements Field_Interface {
+class Text_Field extends Base  {
 
 	/**
 	 * Returns block title
@@ -32,15 +32,6 @@ class Text_Field extends Base implements Field_Interface {
 	}
 
 	/**
-	 * Returns block attributes
-	 */
-	public function get_field_attrs( $attributes ) {
-		return array(
-			'field_type' => 'text'
-		);
-	}
-
-	/**
 	 * Returns icon class name
 	 *
 	 * @return [type] [description]
@@ -54,8 +45,8 @@ class Text_Field extends Base implements Field_Interface {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_block_renderer( $attributes = array() ) {
-		return new Text_Field_Render( $attributes );
+	public function get_block_renderer( $form_id, $attributes = array() ) {
+		return new Text_Field_Render( $form_id, $attributes );
 	}
 
     /**
@@ -71,6 +62,28 @@ class Text_Field extends Base implements Field_Interface {
             $handle,
             'JetFormTextFieldData',
             array(
+				'field_types_list' => array(
+					array(
+						'value' => 'text',
+                    	'label' => __( 'Text', 'jet-form-builder' )
+					),
+					array(
+						'value' => 'email',
+                    	'label' => __( 'Email', 'jet-form-builder' )
+					),
+					array(
+						'value' => 'url',
+                    	'label' => __( 'Url', 'jet-form-builder' )
+					),
+					array(
+						'value' => 'tel',
+                    	'label' => __( 'Tel', 'jet-form-builder' )
+					),
+					array(
+						'value' => 'password',
+                    	'label' => __( 'Password', 'jet-form-builder' )
+					),
+				),
                 'mask_types_list' => array(
                     array(
                         'value' => '',

@@ -33,6 +33,10 @@ abstract class Base {
 
 	}
 
+	public function get_storage_name() {
+	    return jet_form_builder()->blocks::FORM_EDITOR_STORAGE;
+    }
+
 	/**
 	 * Returns block title
 	 *
@@ -67,7 +71,7 @@ abstract class Base {
 	 * @param  array  $attributes [description]
 	 * @return [type]             [description]
 	 */
-	abstract public function get_block_renderer( $attributes = array() );
+	abstract public function get_block_renderer( $form_id, $attributes = array() );
 
 	/**
 	 * Render callback for the block
@@ -106,6 +110,10 @@ abstract class Base {
 	 */
 	public function block_class_name() {
 		return 'jet-form-' . $this->get_name();
+	}
+
+	public function get_block_field_type() {
+		return explode( '-', $this->get_name() )[0];
 	}
 
 	/**
@@ -242,6 +250,14 @@ abstract class Base {
 		$attributes['className'] = array(
 			'type'    => 'string',
 			'default' => '',
+		);
+
+		/**
+		 * This attribute should not change 
+		 */
+		$attributes['type'] = array(
+			'type'    => 'string',
+			'default' => $this->get_block_field_type(),
 		);
 
 		$global_attributes = $this->get_global_attributes();

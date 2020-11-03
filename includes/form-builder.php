@@ -16,8 +16,8 @@ class Form_Builder {
 	public $post    				= null;
 	public $render_field_args 		= null;
 	
-	private $field_namespace_render = 'Jet_Form_Builder\\Blocks\\Render\\';
-	private $field_class 			= null;
+	private $field_type 			= null;
+	private $field_name             = null;
 	private $current_field_data 	= null;
 
 	/**
@@ -43,6 +43,12 @@ class Form_Builder {
 		}
 
 		$this->post = $post;
+
+		add_filter( 
+			'render_block', 
+			array( $this, 'render_form_blocks' ), 
+			10, 3
+		);
 
 		//$this->captcha = $captcha;
 		//$this->preset  = new Jet_Engine_Booking_Forms_Preset( $this->form_id );
@@ -86,11 +92,48 @@ class Form_Builder {
 
 	}
 
+	public function pre_render() {
+		return apply_filters( 'jet-engine/forms/pre-render/' . $this->form_id, false );
+	}
+	
+	
+	/*
+	* Open form wrapper
+	*
+	* @return [type] [description]
+	*/
+	public function start_form() {
+
+		do_action( 'jet-engine/forms/booking/before-start-form', $this );
+
+//		$this->add_attribute( 'class', 'jet-form' );
+//		$this->add_attribute( 'class', 'layout-' . $this->args['fields_layout'] );
+//		$this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
+//		$this->add_attribute( 'action', $this->get_form_action_url() );
+//		$this->add_attribute( 'method', 'POST' );
+//		$this->add_attribute( 'data-form-id', $this->form_id );
+
+		$this->rendered_rows = 0;
+
+		include jet_engine()->get_template( 'forms/common/start-form.php' );
+
+		do_action( 'jet-engine/forms/booking/after-start-form', $this );
+
+	}
+	
+
+
 	/**
 	 * Render from HTML
 	 * @return [type] [description]
 	 */
 	public function render_form( $echo = true ) {
+
+		if ( $this->pre_render() ) {
+			return false;
+		}
+
+		$this->start_form();
 
 		ob_start();
 
@@ -105,12 +148,6 @@ class Form_Builder {
 			'default' => $this->get_form_refer_url(),
 			'name'    => '_jet_engine_refer',
 		) );
-
-		add_filter( 
-			'render_block', 
-			array( $this, 'render_form_blocks' ), 
-			10, 3
-		);
 
 		//var_dump( parse_blocks( get_post( $this->form_id )->post_content ) ); die;
 		 
@@ -147,18 +184,6 @@ class Form_Builder {
 	/**
 	 * 
 	 */
-	public function set_field_data( $block ) {
-
-		$this->current_field_data = $block;
-
-		$this->set_field_name()
-				->make_field_class_name()
-				->set_field_args();
-	}
-
-	/**
-	 * 
-	 */
 	public function render_form_field( $block_content, $block ) {
 
 		if ( stripos( $block['blockName'], jet_form_builder()->form::NAMESPACE_FIELDS ) === false ) {
@@ -168,11 +193,21 @@ class Form_Builder {
 
 		return $this->get_field_object()->render();
 	}
+	
+	/**
+	 * 
+	 */
+	public function set_field_data( $block ) {
+
+		$this->current_field_data = $block; 
+
+		$this->set_field_name()->set_field_args();
+	}
 
 	public function get_field_object() {
-		$name = $this->field_class;
-
-		return new $name( $this->current_field_data['attrs'] );
+		return jet_form_builder()->blocks
+				->get_field_by_name( $this->field_name )
+				->get_block_renderer( $this->form_id, $this->current_field_data['attrs'] );
 	}
 
 	/**
@@ -185,21 +220,16 @@ class Form_Builder {
 
         return $this;
 	}
-	
+
 	/**
 	 * 
 	 */
-	public function make_field_class_name() {
-		$field_class = explode( '-', $this->field_name );
-
-        foreach ($field_class as $key => $value) {
-            $field_class[ $key ] = ucfirst( $value );
-		}
-
-		$this->field_class = $this->field_namespace_render . implode( '_', $field_class ) . '_Render';
+	public function set_field_type() {
+		$this->field_type = jet_form_builder()->blocks->get_field_by_name( $this->field_name )->get_block_field_type();
 		
 		return $this;
 	}
+	
 
 	/**
 	 * 
@@ -212,129 +242,205 @@ class Form_Builder {
 				);
 	}
 
-	
 
+	/*
+	* Render form field by passed arguments.
+	*
+	* @param  array  $args [description]
+	* @return [type]       [description]
+	*/
+	public function render_field( $args = array() ) {
 
-	/**
-		 * Render form field by passed arguments.
-		 *
-		 * @param  array  $args [description]
-		 * @return [type]       [description]
-		 */
-		public function render_field( $args = array() ) {
+		return;
 
-			if ( empty( $args['type'] ) ) {
-				return;
-			}
+		if ( empty( $args['type'] ) ) {
+			return;
+		}
 
-			$defaults = array(
-				'default'     => '',
-				'name'        => '',
-				'placeholder' => '',
-				'required'    => false,
-			);
+		$defaults = array(
+			'default'     => '',
+			'name'        => '',
+			'placeholder' => '',
+			'required'    => false,
+		);
 
-			$template = null;
+		$template = null;
 
-			// Prepare defaults
-			switch ( $args['type'] ) {
+		// Prepare defaults
+		switch ( $args['type'] ) {
 
-				case 'hidden':
+			case 'hidden':
 
-					if ( empty( $args['default'] ) ) {
-						$defaults['default'] = $this->get_hidden_val( $args );
-					}
+				if ( empty( $args['default'] ) ) {
+					$defaults['default'] = $this->get_hidden_val( $args );
+				}
 
-					if ( isset( $args['default'] ) && empty( $args['default'] ) ) {
-						unset( $args['default'] );
-					}
+				if ( isset( $args['default'] ) && empty( $args['default'] ) ) {
+					unset( $args['default'] );
+				}
 
-					break;
+				break;
 
-				case 'number':
-				case 'range':
+			case 'number':
+			case 'range':
 
-					$defaults['min'] = '';
-					$defaults['max'] = '';
-					$defaults['step'] = 1;
+				$defaults['min'] = '';
+				$defaults['max'] = '';
+				$defaults['step'] = 1;
 
-					break;
+				break;
 
-				case 'text':
+			case 'text':
 
-					$defaults['field_type'] = 'text';
+				$defaults['field_type'] = 'text';
 
-					break;
+				break;
 
-				case 'calculated':
+			case 'calculated':
 
-					$defaults['formula']  = '';
-					$args['required']     = false;
+				$defaults['formula']  = '';
+				$args['required']     = false;
 
-					break;
+				break;
 
-				case 'textarea':
-				case 'select':
-				case 'checkboxes':
-				case 'radio':
-				case 'date':
-				case 'time':
-				case 'wysiwyg':
-				case 'heading':
-				case 'group_break':
+			case 'submit':
 
-					// Ensure template not rewritten
-					$template = false;
+				$defaults['label']      = __( 'Submit', 'jet-engine' );
+				$defaults['class_name'] = '';
 
-					if ( 'wysiwyg' === $args['type'] ) {
+				$this->is_submit_row = true;
 
-						wp_localize_script( 
-							'jet-engine-frontend-forms', 
-							'JetEngineFormsEditor',
-							array(
-								'hasEditor' => true,
-							)
-						);
+				break;
 
-						add_filter(
-							'jet-engine/compatibility/popup-package/the_content',
-							array( $this, 'ensure_wysiwyg_js' ), 10, 2
-						);
-					}
+			case 'page_break':
 
-					break;
+				$defaults['label']      = __( 'Submit', 'jet-engine' );
+				$defaults['class_name'] = '';
 
-				default:
+				$this->is_page_break_row = true;
 
-					if ( 'hidden' !== $args['type'] ) {
-						$this->is_hidden_row = false;
-					}
+				break;
 
-					/**
-					 * Render custom field
-					 */
-					do_action( 'jet-engine/forms/booking/render-field/' . $args['type'], $args, $this );
+			case 'media':
+				File_Upload::instance()->set_custom_messages( $this->form_id );
+				File_Upload::instance()->enqueue_upload_script();
 
-					/**
-					 * Or just get custom template for field
-					 */
-					$template = apply_filters(
-						'jet-engine/forms/booking/field-template/' . $args['type'],
-						$template,
-						$args,
-						$this
+				add_filter(
+					'jet-engine/compatibility/popup-package/the_content',
+					array( File_Upload::instance(), 'ensure_media_js' ), 10, 2
+				);
+
+				break;
+
+			case 'textarea':
+			case 'select':
+			case 'checkboxes':
+			case 'radio':
+			case 'date':
+			case 'time':
+			case 'wysiwyg':
+			case 'heading':
+			case 'group_break':
+
+				// Ensure template not rewritten
+				$template = false;
+
+				if ( 'wysiwyg' === $args['type'] ) {
+
+					wp_localize_script( 
+						'jet-engine-frontend-forms', 
+						'JetEngineFormsEditor',
+						array(
+							'hasEditor' => true,
+						)
 					);
 
-					if ( ! $template ) {
-						return;
-					} else {
-						break;
-					}
+					add_filter(
+						'jet-engine/compatibility/popup-package/the_content',
+						array( $this, 'ensure_wysiwyg_js' ), 10, 2
+					);
+				}
 
-			}
+				break;
 
-		
+			default:
+
+				if ( 'hidden' !== $args['type'] ) {
+					$this->is_hidden_row = false;
+				}
+
+				/**
+				 * Render custom field
+				 */
+				do_action( 'jet-engine/forms/booking/render-field/' . $args['type'], $args, $this );
+
+				/**
+				 * Or just get custom template for field
+				 */
+				$template = apply_filters(
+					'jet-engine/forms/booking/field-template/' . $args['type'],
+					$template,
+					$args,
+					$this
+				);
+
+				if ( ! $template ) {
+					return;
+				} else {
+					break;
+				}
 
 		}
 
+		$sanitized_args = array();
+
+		foreach ( $args as $key => $value ) {
+			$sanitized_args[ $key ] = $value;
+		}
+
+		$args = wp_parse_args( $sanitized_args, $defaults );
+
+		if ( ! $template ) {
+			$template_name = str_replace( '_', '-', $args['type'] );
+			$template      = jet_engine()->get_template( 'forms/fields/' . $template_name . '.php' );
+		}
+
+		// Ensure args
+		switch ( $args['type'] ) {
+
+			case 'select':
+			case 'checkboxes':
+			case 'radio':
+
+				$args['field_options'] = $this->get_field_options( $args );
+
+				break;
+		}
+
+		$label        = $this->get_field_label( $args );
+		$desc         = $this->get_field_desc( $args );
+		$layout       = $this->args['fields_layout'];
+		$preset_value = $this->preset->get_field_value( $args['name'], $args );
+
+		if ( $preset_value['rewrite'] ) {
+			$args['default'] = $preset_value['value'];
+		} else {
+			$args['default'] = $this->maybe_adjust_value( $args );
+		}
+
+		if ( 'column' === $layout ) {
+			include jet_engine()->get_template( 'forms/common/field-column.php' );
+		} else {
+			include jet_engine()->get_template( 'forms/common/field-row.php' );
+		}
+
+		if ( 'hidden' !== $args['type'] ) {
+			$this->is_hidden_row = false;
+		}
+
+	}
+
+
 }
+
+

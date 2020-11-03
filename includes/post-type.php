@@ -32,8 +32,13 @@ class Post_Type {
 			$screen->action = ! empty( $_GET['action'] ) ? $_GET['action'] : '';
 		}
 
-		if ( $this->slug() === $screen->id && in_array( $screen->action, array( 'add', 'edit' ) ) ) {
+		$is_editor_page = in_array( $screen->action, array( 'add', 'edit' ) );
+
+		if ( $this->slug() === $screen->id && $is_editor_page ) {
 			Plugin::instance()->editor->enqueue_assets();
+		} 
+		elseif ( $this->slug() !== $screen->id && $is_editor_page ) {
+			Plugin::instance()->editor->enqueue_form_assets();
 		}
 
 	}

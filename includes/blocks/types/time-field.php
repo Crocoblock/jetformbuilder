@@ -45,8 +45,8 @@ class Time_Field extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_block_renderer( $attributes = array() ) {
-		return new Time_Field_Render( $attributes );
+	public function get_block_renderer( $form_id, $attributes = array() ) {
+		return new Time_Field_Render( $form_id, $attributes );
 	}
 
 	/**

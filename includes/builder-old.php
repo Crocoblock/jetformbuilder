@@ -485,12 +485,12 @@ if ( ! class_exists( 'Jet_Engine_Booking_Forms_Builder' ) ) {
 					break;
 
 				case 'media':
-					Jet_Engine_Forms_File_Upload::instance()->set_custom_messages( $this->form_id );
-					Jet_Engine_Forms_File_Upload::instance()->enqueue_upload_script();
+					File_Upload::instance()->set_custom_messages( $this->form_id );
+					File_Upload::instance()->enqueue_upload_script();
 
 					add_filter(
 						'jet-engine/compatibility/popup-package/the_content',
-						array( Jet_Engine_Forms_File_Upload::instance(), 'ensure_media_js' ), 10, 2
+						array( File_Upload::instance(), 'ensure_media_js' ), 10, 2
 					);
 
 					break;

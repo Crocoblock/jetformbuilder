@@ -49,6 +49,30 @@ class Hidden_Field extends Base {
 		return new Hidden_Field_Render( $form_id, $attributes );
 	}
 
+    public function get_field_value( $value, $params = array() ) {
+        $callables = $this->field_values_callabels();
+
+        if ( isset( $callables[ $value ] ) ) {
+            return $callables[ $value ]( $params );
+        }
+
+        return $value;
+    }
+
+	public function field_values_callabels() {
+	    return array(
+	        'post_id' => array( $this, 'current_post_id' )
+        );
+    }
+
+    public function current_post_id( $params = array() ) {
+	    global $post;
+
+	    return $post->ID;
+    }
+
+
+
 	/**
 	 * Register blocks specific JS variables
 	 *
@@ -60,6 +84,10 @@ class Hidden_Field extends Base {
 
 		wp_localize_script( $handle, 'jetFormHiddenFieldData', array(
 			'values' => apply_filters( 'jet-form-builder/blocks/hidden-field/values', array(
+                array(
+                    'value' => '',
+                    'label' => __( 'Select value...', 'jet-form-builder' ),
+                ),
 				array(
 					'value' => 'post_id',
 					'label' => __( 'Current Post ID', 'jet-form-builder' ),
@@ -126,7 +154,7 @@ class Hidden_Field extends Base {
 		return array(
 			'field_value' => array(
 				'type'    => 'string',
-				'default' => 'post_id',
+				'default' => '',
 			),
 			'hidden_value_field' => array(
 				'type'    => 'string',

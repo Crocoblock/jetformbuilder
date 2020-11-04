@@ -15,6 +15,8 @@ class Calculated_Field extends Base {
 
 	public function __construct() {
 		$this->unregister_attribute( 'required' );
+
+        parent::__construct();
 	}
 
 	/**

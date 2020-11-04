@@ -2,6 +2,9 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Render\Form_Builder;
+use Jet_Form_Builder\Classes\Tools;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -11,7 +14,36 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form extends Base {
 
-	/**
+    public function __construct() {
+
+        $this->unregister_attributes(
+            array(
+                'required',
+                'label',
+                'name',
+                'desc',
+                'default',
+                'placeholder',
+                'required',
+                'add_prev',
+                'prev_label',
+                'visibility',
+                'class_name',
+            )
+        );
+
+        parent::__construct();
+    }
+
+
+    public function block_params() {
+        return array(
+            'attributes'		=> $this->block_attributes(),
+            'render_callback' 	=> array( $this, 'render_callback_field' ),
+        );
+    }
+
+    /**
 	 * Returns block title
 	 *
 	 * @return [type] [description]
@@ -59,7 +91,7 @@ class Form extends Base {
 	public function get_attributes() {
 		return array(
 			'form_id' => array(
-				'type' => 'string',
+				'type' => 'number',
 				'default' => '',
 			),
 		);
@@ -67,9 +99,9 @@ class Form extends Base {
 
 	public function block_data($editor, $handle)
     {
-//        wp_localize_script( $handle, 'JetFormData', array(
-//
-//        ) );
+        wp_localize_script( $handle, 'JetFormData', array(
+            'forms_list' => Tools::get_forms_list_for_js()
+        ) );
     }
 
     /**
@@ -88,8 +120,7 @@ class Form extends Base {
 
 		$builder = new Form_Builder( $form_id );
 
-		return $builder->render_form();
-
+		return $builder->render_form( false );
 	}
 
 }

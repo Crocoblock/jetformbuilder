@@ -81,6 +81,20 @@ class Tools
     }
 
     /**
+     * Returns pages list
+     * @return [type] [description]
+     */
+    public static function get_forms_list_for_js() {
+        $posts = get_posts( array(
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'post_type'      => jet_form_builder()->post_type->slug(),
+        ) );
+
+        return self::prepare_list_for_js( $posts, 'ID', 'post_title' );
+    }
+
+    /**
      * Returns all registered user roles
      *
      * @return [type] [description]

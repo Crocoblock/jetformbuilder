@@ -39,3 +39,6 @@ import './heading-field/save';
 
 import './textarea-field/edit';
 import './textarea-field/save';
+
+import './submit-field/edit';
+import './submit-field/save';

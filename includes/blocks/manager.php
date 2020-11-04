@@ -11,6 +11,7 @@ use Jet_Form_Builder\Blocks\Types\Number_Field;
 use Jet_Form_Builder\Blocks\Types\Radio_Field;
 use Jet_Form_Builder\Blocks\Types\Range_Field;
 use Jet_Form_Builder\Blocks\Types\Select_Field;
+use Jet_Form_Builder\Blocks\Types\Submit_Field;
 use Jet_Form_Builder\Blocks\Types\Text_Field;
 use Jet_Form_Builder\Blocks\Types\Textarea_Field;
 use Jet_Form_Builder\Blocks\Types\Time_Field;
@@ -54,7 +55,31 @@ class Manager {
 			'wp_enqueue_scripts',
 			array( $this, 'register_frontend_assets' )
 		);
+
+		add_filter(
+            'jet-form-builder/post-type/args',
+            array( $this, 'add_default_fields_to_form' ),
+            99
+        );
 	}
+
+	public function add_default_fields_to_form( $arguments ) {
+	    $hidden_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'hidden-field';
+        $submit_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'submit-field';
+
+        $arguments['template'] = array(
+            array(
+                $hidden_post_id,
+                array( 'name' => 'post_id' )
+            ),
+            array(
+                $submit_post_id,
+                array( 'label' => __( 'Submit', 'jet-form-builder' ) )
+            )
+        );
+
+        return $arguments;
+    }
 
 	/**
 	 * Register block types
@@ -79,6 +104,7 @@ class Manager {
             new Range_Field(),
             new Heading_Field(),
             new Textarea_Field(),
+            new Submit_Field()
 		);
 
 		foreach ( $types as $type ) {
@@ -158,14 +184,14 @@ class Manager {
 
 		wp_enqueue_script(
 			'jet-form-builder-frontend',
-			jet_engine()->plugin_url( 'assets/js/frontend.js' ),
-			array( 'jquery' ),
-			jet_engine()->get_version(),
+            jet_form_builder()->plugin_url( 'assets/js/frontend.js' ),
+			array(),
+            jet_form_builder()->get_version(),
 			true
 		);
 
 		wp_enqueue_script(
-			'jet-form-builder-frontend-froms',
+			'jet-form-builder-frontend-forms',
 			jet_form_builder()->plugin_url( 'assets/js/frontend-forms.js' ),
 			array(),
 			jet_form_builder()->get_version(),
@@ -175,10 +201,15 @@ class Manager {
 		wp_enqueue_script(
 			'jet-form-builder-inputmask',
 			jet_form_builder()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-			array( 'jet-form-builder-frontend-froms' ),
+			array( 'jet-form-builder-frontend-forms' ),
 			jet_form_builder()->get_version(),
 			true
 		);
+
+        wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
+            'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
+            'form_action'   => 'jet_form_builder_submit'
+        ) );
 
 	}
 
@@ -243,6 +274,7 @@ class Manager {
 		return $type->get_attributes();
 
 	}
+
 
 	public function get_field_by_name( $block_name ) {
 		if ( ! $block_name ) {

@@ -3,16 +3,20 @@
  * submit button template
  */
 
+$has_class = isset( $this->args['class_name'] );
+
 $classes = array(
-	'jet-form__submit',
-	$args['class_name']
+	'jet-form__submit'
 );
 
+if ( $has_class )  {
+    $classes[] = $this->args['class_name'];
+}
 $this->add_attribute( 'class', 'jet-form__submit' );
 $this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
-$this->add_attribute( 'class', $args['class_name'] );
+$has_class ? $this->add_attribute( 'class', $this->args['class_name'] ) : '';
 
-if ( 'reload' === $this->args['submit_type'] ) {
+if ( isset( $this->args['submit_type'] ) && 'reload' === $this->args['submit_type'] ) {
 	$this->add_attribute( 'type', 'submit' );
 } else {
 	$this->add_attribute( 'type', 'button' );
@@ -20,7 +24,7 @@ if ( 'reload' === $this->args['submit_type'] ) {
 
 $wrap_classes = array( 'jet-form__submit-wrap' );
 
-if ( ! empty( $args['add_prev'] ) && 1 < $this->page ) {
+if ( isset( $args['add_prev'] ) && ! empty( $args['add_prev'] ) && 1 < $this->page ) {
 	$wrap_classes[] = 'has-prev';
 }
 

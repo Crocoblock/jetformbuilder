@@ -815,7 +815,7 @@ if ( ! class_exists( 'Jet_Engine_Booking_Forms_Builder' ) ) {
 
 			$action = add_query_arg(
 				array(
-					'jet_engine_action' => 'book',
+					'jet_form_builder_action' => 'book',
 				),
 				home_url( '/' )
 			);

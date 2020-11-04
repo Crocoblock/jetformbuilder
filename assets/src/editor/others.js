@@ -10,7 +10,6 @@ const {
     RichText,
     Editable,
     MediaUpload,
-    ServerSideRender,
     BlockControls,
     InspectorControls,
 } = wp.blockEditor;
@@ -18,32 +17,66 @@ const {
 const {
     PanelBody,
     Button,
+    ComboboxControl
 } = wp.components;
 
-function FormEdit ( props ) {
+const {
+    serverSideRender: ServerSideRender
+} = wp;
+
+const { useState } = wp.element;
+
+const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[0] : false;
+
+function FormEdit ( { attributes, setAttributes, isSelected } ) {
     this.name = 'jet-forms/form';
 
     this.keyControls = function () {
-        return this.name + '-controls-edit';
-    }
-    this.keyGeneral = function () {
-        return this.name + '-general-edit';
-    }
-    
-    const attributes = props.attributes;
 
-    return props.isSelected && (
-        <InspectorControls
-            key={this.keyControls()}
+        return this.name + '-controls-edit';
+    };
+    this.keyGeneral = function () {
+
+        return this.name + '-general-edit';
+    };
+
+    const forms_list = window.JetFormData.forms_list;
+    const [ filteredOptions, setFilteredOptions ] = useState( forms_list );
+
+    return [
+        isSelected && <InspectorControls
+            key={ this.keyControls() }
         >
             <PanelBody
                 title={__('Form Settings')}
-                key={this.keyGeneral()}
+                key={ this.keyGeneral() }
             >
-
-
+                <ComboboxControl
+                    label='Select from'
+                    name='_form_id'
+                    value={ attributes.form_id }
+                    onChange={ val => {
+                        if ( ! val ) {
+                            val = 0;
+                        }
+                        setAttributes( { form_id: val } )
+                    } }
+                    options={ filteredOptions }
+                    onInputChange={ inputValue =>
+                        setFilteredOptions(
+                            forms_list.filter( option =>
+                                option.label.toLowerCase().startsWith( inputValue.toLowerCase() )
+                            )
+                        )
+                    }
+                />
             </PanelBody>
-        </InspectorControls>);
+        </InspectorControls>,
+        <ServerSideRender
+            block={ formBlock.blockName }
+            attributes={ attributes }
+        />
+    ];
 
 }
 
@@ -51,7 +84,7 @@ function FormSave( props ) {
     return null;
 }
 
-const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[0] : false;
+
 
 
 registerBlockType(
@@ -66,7 +99,6 @@ registerBlockType(
 
         supports: {
             html: false,
-            multiple: false,
         },
     }
 );

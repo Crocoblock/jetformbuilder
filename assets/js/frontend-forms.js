@@ -402,11 +402,11 @@
 			 * TODO: когда навешу старт формы и ее окончание, найти все формы и вызвать для каждой
 			 * widgetBookingForm
 			 */
-			//var fields = $.find('');
 
-			// $.each( widgets, function( index, value ) {
-			// 	JetFormBuilder.widgetBookingForm();
-			// });
+			$('.jet-form').each( function( index, value ) {
+				JetFormBuilder.widgetBookingForm( $( value ) );
+			});
+
 
 			$( document )
 				.on( 'click.JetFormBuilderMain', '.jet-form__submit.submit-type-ajax', self.ajaxSubmitForm )
@@ -695,8 +695,6 @@
 
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
-			console.log( 'widgetBookingForm', $calcFields );
-
 			var $editor = $scope.find( '.wp-editor-area' );
 
 			if ( $editor.length && window.wp && window.wp.editor ) {
@@ -718,7 +716,7 @@
 				return;
 			}
 
-			$calcFields.each( function() {
+			$( $calcFields ).each( function() {
 
 				var $this      = $( this ),
 					calculated = null;
@@ -1052,8 +1050,6 @@
 				return;
 			}
 
-			console.log( JetFormBuilder.calcFields );
-
 			$.each( JetFormBuilder.calcFields, function( calcFieldName, field ) {
 
 				fieldName = fieldName.replace( '[]', '' );
@@ -1164,7 +1160,7 @@
 				$form  = $this.closest( '.jet-form' ),
 				formID = $form.data( 'form-id' ),
 				data   = {
-					action: 'jet_engine_form_booking_submit',
+					action: JetFormBuilderSettings.form_action,
 				};
 
 			if ( 'undefined' !== typeof $form[0].checkValidity && 'undefined' !== typeof $form[0].reportValidity && !$form[0].checkValidity() ) {
@@ -1186,7 +1182,7 @@
 			$form.find( '.jet-form__field-error' ).remove();
 
 			$.ajax({
-				url: JetFormBuilderMainSettings.ajaxurl,
+				url: JetFormBuilderSettings.ajaxurl,
 				type: 'POST',
 				dataType: 'json',
 				data: data,

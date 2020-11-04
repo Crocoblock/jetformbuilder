@@ -1,7 +1,13 @@
 <?php
 namespace Jet_Form_Builder\Blocks\Render;
 
+
+use Jet_Form_Builder\Classes\Arguments_Trait;
+use Jet_Form_Builder\Classes\Attributes_Trait;
+use Jet_Form_Builder\Classes\Get_Template_Trait;
+
 // If this file is called directly, abort.
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -11,13 +17,17 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
-	public $attrs = array();
-	public $args = array();
+    use Attributes_Trait;
+    use Arguments_Trait;
+    use Get_Template_Trait;
+
 	public $form_id = null;
 
 	public function __construct( $form_id, $args = array() ) {
-		$this->args = $args;
-		$this->form_id = $form_id;
+        $this->form_id = $form_id;
+        $this->args = $args;
+
+        $this->set_sumbit_type();
 	}
 
 	abstract public function get_name();
@@ -55,16 +65,6 @@ abstract class Base {
 	}
 
 	/**
-	 * Returns template path
-	 *
-	 * @param  [type] $path [description]
-	 * @return [type]       [description]
-	 */
-	public function get_template( $path ) {
-		return JET_FORM_BUILDER_PATH . 'templates/' . $path;
-	}
-
-	/**
 	 * Defines if this form control supports label
 	 *
 	 * @return [type] [description]
@@ -73,44 +73,6 @@ abstract class Base {
 		return true;
 	}
 
-	/**
-	 * Add attribute
-	 */
-	public function add_attribute( $attr, $value = null ) {
-
-		if ( '' === $value ) {
-			return;
-		}
-
-		if ( ! isset( $this->attrs[ $attr ] ) ) {
-			$this->attrs[ $attr ] = $value;
-		} else {
-			$this->attrs[ $attr ] .= ' ' . $value;
-		}
-
-	}
-
-	/**
-	 * Reset attributes array
-	 */
-	public function reset_attributes() {
-		$this->attrs = array();
-	}
-
-	/**
-	 * Render current attributes string
-	 *
-	 * @return [type] [description]
-	 */
-	public function render_attributes_string() {
-
-		foreach ( $this->attrs as $attr => $value ) {
-			printf( ' %1$s="%2$s"', $attr, $value );
-		}
-
-		$this->attrs = array();
-
-	}
 
 	/**
 	 * Returns field options list
@@ -219,24 +181,7 @@ abstract class Base {
 
 	}
 
-	/**
-	 * Get required attribute value
-	 *
-	 * @param  [type] $args [description]
-	 * @return [type]       [description]
-	 */
-	public function get_required_val() {
 
-		if (
-			! empty( $this->args['required'] )
-			&& ( 'required' === $this->args['required'] || true === $this->args['required'] )
-		) {
-			return 'required';
-		}
-
-		return '';
-
-	}
 
 	/**
 	 * Returns field name with repeater prefix if needed
@@ -277,7 +222,19 @@ abstract class Base {
 
 	}
 
+	public function set_sumbit_type() {
+        $this->args = array_merge( $this->args,
+            json_decode( get_metadata(
+                'post',
+                $this->form_id,
+                '_jf_args'
+            )[0],
+            true
+        ) );
+    }
+
 	public function render() {
+
 
 		$args = $this->args;
 		$defaults = array(
@@ -292,8 +249,8 @@ abstract class Base {
 		foreach ( $args as $key => $value ) {
 			$sanitized_args[ $key ] = $value;
 		}
-
 		$args          = wp_parse_args( $sanitized_args, $defaults );
+
 		$template_name = $this->get_name();
 		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
 		$label         = $this->get_field_label();
@@ -301,11 +258,16 @@ abstract class Base {
 		$layout        = 'column';
 		
 		if ( 'column' === $layout ) {
+            ob_start();
 			include $this->get_template( 'common/field-column.php' );
+			$result_field = ob_get_clean();
 		} else {
-			include $this->get_template( 'common/field-row.php' );
+            ob_start();
+            include $this->get_template( 'common/field-row.php' );
+            $result_field = ob_get_clean();
 		}
 
+        return $result_field;
 	}
 
 }

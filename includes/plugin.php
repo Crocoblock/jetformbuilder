@@ -24,6 +24,11 @@ class Plugin {
 	 */
 	public static $instance = null;
 
+	public $post_type;
+	public $blocks;
+	public $actions;
+	public $form;
+
 	/**
 	 * Instance.
 	 *
@@ -64,6 +69,8 @@ class Plugin {
 		$this->blocks       = new Blocks\Manager();
 		$this->actions      = new Actions\Manager();
 		$this->form         = new Form_Manager();
+
+
 
 		if ( is_admin() ) {
 

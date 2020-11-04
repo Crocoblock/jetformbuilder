@@ -15,24 +15,18 @@ class Hidden_Field_Render extends Base {
 		return 'hidden-field';
 	}
 
-	public function render() {
+    public function render()
+    {
+        if ( isset( $this->args['field_value'] ) && ! empty( $this->args['field_value'] ) ) {
 
-		$args = $this->args;
-		$defaults = array(
-			'field_value' => '',
-			'name'        => '',
-		);
+            $this->args['field_value'] = jet_form_builder()->blocks
+                ->get_field_by_name( $this->get_name() )
+                ->get_field_value( $this->args['field_value'] );
+        }
 
-		$sanitized_args = array();
+        return parent::render();
+    }
 
-		foreach ( $args as $key => $value ) {
-			$sanitized_args[ $key ] = $value;
-		}
 
-		$args          = wp_parse_args( $sanitized_args, $defaults );
-		$template_name = $this->get_name();
-		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
-
-	}
 
 }

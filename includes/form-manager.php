@@ -18,18 +18,21 @@ class Form_Manager
     public  $generators = false;
     const   NAMESPACE_FIELDS = 'jet-forms/';
 
-    public function __construct() {
-        if ( ! isset( $_GET['form_id'] ) ) {
-            return;
+    public $builder;
+
+    /**
+     *
+     */
+    public function render_form_blocks( $block_content, $block ) {
+        $fields = array();
+
+        if ( stripos( $block['blockName'], jet_form_builder()->form::NAMESPACE_FIELDS . 'form-block' ) === false ) {
+            return $block_content;
         }
-        
-        add_filter( 'the_content', array( $this, 'inject_content' ) );
-    }
 
-    public function inject_content( $content ) {
-        $builder = new Form_Builder( $_GET['form_id'] );
+        $fields[] = $this->inject_form( $block['attrs']['form_id'] );
 
-        return $builder->render_form( false );
+        return implode( "\n", $fields );
     }
     /**
      * Returns all instatnces of options genrators classes

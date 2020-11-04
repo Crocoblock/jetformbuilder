@@ -17,14 +17,7 @@ abstract class Base {
 
 	public function __construct() {
 
-		register_block_type(
-			$this->block_name(),
-			array(
-				'attributes'		=> $this->block_attributes(),
-				//'render_callback' 	=> array( $this, 'render_callback_field' ),
-				//'editor_style'    => 'jet-engine-frontend',
-			)
-		);
+        $this->_register_block();
 
 		add_filter( 'jet-form-builder/editor/allowed-blocks', function( $blocks ) {
 			$blocks[] = $this->block_name();
@@ -32,6 +25,21 @@ abstract class Base {
 		} );
 
 	}
+
+	private function _register_block() {
+        register_block_type(
+            $this->block_name(),
+            $this->block_params()
+        );
+    }
+
+    public function block_params() {
+        return array(
+            'attributes'		=> $this->block_attributes(),
+            //'render_callback' 	=> array( $this, 'render_callback_field' ),
+            //'editor_style'    => 'jet-engine-frontend',
+        );
+    }
 
 	public function get_storage_name() {
 	    return jet_form_builder()->blocks::FORM_EDITOR_STORAGE;
@@ -93,6 +101,13 @@ abstract class Base {
 	public function unregister_attribute( $key ) {
 		$this->_unregistered[] = $key;
 	}
+
+    public function unregister_attributes( $keys = array() ) {
+        $this->_unregistered = array_merge(
+            $this->_unregistered,
+            $keys
+        );
+    }
 
 	/**
 	 * Returns full block name

@@ -208,7 +208,7 @@ class Manager {
 
         wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
             'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
-            'form_action'   => 'jet_form_builder_submit'
+            'form_action'   => jet_form_builder()->form_handler->hook_key
         ) );
 
 	}

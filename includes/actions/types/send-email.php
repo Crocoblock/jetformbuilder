@@ -19,11 +19,12 @@ class Send_Email extends Base {
 		return 'send_email';
 	}
 
-	public function do_action() {
+	public function do_action($request)
+    {
+        // TODO: Implement do_action() method.
+    }
 
-	}
-
-	/**
+    /**
 	 * Regsiter custom action data for the editor
 	 *
 	 * @return [type] [description]

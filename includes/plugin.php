@@ -28,6 +28,7 @@ class Plugin {
 	public $blocks;
 	public $actions;
 	public $form;
+	public $form_handler;
 
 	/**
 	 * Instance.
@@ -69,8 +70,7 @@ class Plugin {
 		$this->blocks       = new Blocks\Manager();
 		$this->actions      = new Actions\Manager();
 		$this->form         = new Form_Manager();
-
-
+		$this->form_handler = new Form_Handler();
 
 		if ( is_admin() ) {
 

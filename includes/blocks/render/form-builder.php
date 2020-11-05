@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 
@@ -22,34 +23,16 @@ class Form_Builder {
     use Arguments_Trait;
     use Get_Template_Trait;
 
-    /**
-     * @var mixed|null
-     */
-    public $form_id 				= null;
-    /**
-     * @var false|mixed|null
-     */
-    public $post    				= null;
-    /**
-     * @var null
-     */
-    public $render_field_args 		= null;
 
-    /**
-     * @var null
-     */
+    public $form_id 				= null;
+    public $post    				= null;
+
     private $field_type 			= null;
-    /**
-     * @var null
-     */
+
     private $field_name             = null;
-    /**
-     * @var null
-     */
+
     private $current_field_data 	= null;
-    /**
-     * @var null
-     */
+
     private $blocks                 = null;
 
 	/**
@@ -74,7 +57,7 @@ class Form_Builder {
 			global $post;
 		}
 
-        $this->blocks = parse_blocks( get_post( $this->form_id )->post_content );
+        $this->blocks = Plugin::instance()->form->get_fields( $form_id );
 
 		$this->post = $post;
 	}
@@ -88,7 +71,7 @@ class Form_Builder {
 
 		$action = add_query_arg(
 			array(
-				'jet_form_builder_action' => 'submit',
+				jet_form_builder()->form_handler->hook_key => jet_form_builder()->form_handler->hook_val,
 			),
 			home_url( '/' )
 		);
@@ -112,7 +95,7 @@ class Form_Builder {
 			$refer = trailingslashit( $refer ) . '?' . $_SERVER['QUERY_STRING'];
 		}
 
-		return apply_filters( 'jet-form-builder/forms/booking/form-refer-url', $refer, $this );
+		return apply_filters( 'jet-form-builder/form-refer-url', $refer, $this );
 
 	}
 
@@ -120,7 +103,7 @@ class Form_Builder {
      * @return mixed|void
      */
     public function pre_render() {
-		return apply_filters( 'jet-engine/forms/pre-render/' . $this->form_id, false );
+		return apply_filters( 'jet-form-builder/pre-render/' . $this->form_id, false );
 	}
 
 
@@ -159,6 +142,7 @@ class Form_Builder {
     public function end_form() {
 
         $end_form = apply_filters( 'jet-form-builder/before-end-form', '', $this );
+        $form_id = $this->form_id;
 
         ob_start();
         include $this->get_template( 'common/end-form.php' );
@@ -212,29 +196,12 @@ class Form_Builder {
 		$fields = array();
 
 		foreach ( $this->blocks as $block ) {
-		    $block = $this->render_form_field( $block );
+            $this->set_field_data( $block );
 
-			if ( $block ) {
-			    $fields[] = $block;
-            }
+            $fields[] = $this->get_field_object()->render();
 		}
 
 		return implode( "\n", $fields );
-	}
-
-    /**
-     * @param $block
-     * @return void
-     */
-	public function render_form_field( $block ) {
-
-	    if ( stripos( $block['blockName'], jet_form_builder()->form::NAMESPACE_FIELDS ) === false ) {
-            return;
-        }
-
-		$this->set_field_data( $block );
-
-		return $this->get_field_object()->render();
 	}
 
     /**

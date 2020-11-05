@@ -21,12 +21,12 @@ class Redirect_To_Page extends Base {
 		return 'redirect_to_page';
 	}
 
-	public function do_action()
+	public function do_action($request)
     {
         // TODO: Implement do_action() method.
     }
 
-	/**
+    /**
 	 * Regsiter custom action data for the editor
 	 *
 	 * @return [type] [description]

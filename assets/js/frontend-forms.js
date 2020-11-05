@@ -398,15 +398,9 @@
 
 			var self = JetFormBuilder;
 
-			/**
-			 * TODO: когда навешу старт формы и ее окончание, найти все формы и вызвать для каждой
-			 * widgetBookingForm
-			 */
-
 			$('.jet-form').each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			});
-
 
 			$( document )
 				.on( 'click.JetFormBuilderMain', '.jet-form__submit.submit-type-ajax', self.ajaxSubmitForm )
@@ -1219,7 +1213,6 @@
 						$( document ).trigger( 'jet-form-builder/ajax/on-success', [ response, $form, data ] );
 
 						break;
-
 				}
 
 				$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( response.message );
@@ -1239,7 +1232,7 @@
 
 	};
 
-	$( window ).on( 'elementor/frontend/init', JetFormBuilder.init );
+	$( document ).ready( JetFormBuilder.init );
 
 	window.JetFormBuilder = JetFormBuilder;
 

@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -21,8 +22,9 @@ class Insert_Post extends Base {
 		return 'insert_post';
 	}
 
-	public function do_action() {
-
+	public function do_action( $request ) {
+	    // $this->settings - action settings
+	    // throw new Action_Exception( 'failed' );
 	}
 
 	/**

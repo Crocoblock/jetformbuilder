@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 
@@ -27,7 +28,7 @@ abstract class Base {
         $this->form_id = $form_id;
         $this->args = $args;
 
-        $this->set_sumbit_type();
+        $this->set_meta_args();
 	}
 
 	abstract public function get_name();
@@ -222,15 +223,11 @@ abstract class Base {
 
 	}
 
-	public function set_sumbit_type() {
-        $this->args = array_merge( $this->args,
-            json_decode( get_metadata(
-                'post',
-                $this->form_id,
-                '_jf_args'
-            )[0],
-            true
-        ) );
+	public function set_meta_args() {
+        $this->args = array_merge(
+            $this->args,
+            Plugin::instance()->form->get_args( $this->form_id )
+        );
     }
 
 	public function render() {

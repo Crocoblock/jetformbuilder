@@ -16,24 +16,16 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Manager
 {
     public  $generators = false;
+    public  $messages_manager;
+
     const   NAMESPACE_FIELDS = 'jet-forms/';
 
     public $builder;
 
-    /**
-     *
-     */
-    public function render_form_blocks( $block_content, $block ) {
-        $fields = array();
-
-        if ( stripos( $block['blockName'], jet_form_builder()->form::NAMESPACE_FIELDS . 'form-block' ) === false ) {
-            return $block_content;
-        }
-
-        $fields[] = $this->inject_form( $block['attrs']['form_id'] );
-
-        return implode( "\n", $fields );
+    public function __construct() {
+        $this->messages_manager = new Form_Messages_Manager();
     }
+
     /**
      * Returns all instatnces of options genrators classes
      *
@@ -60,6 +52,27 @@ class Form_Manager
     }
 
     /**
+     * Returns form fields,
+     * parsed from post_content
+     *
+     * @param $form_id
+     * @return array[]
+     */
+    public function get_fields( $form_id ) {
+        $blocks = parse_blocks( get_post( $form_id )->post_content );
+        $fields = array();
+
+        foreach ( $blocks as $block ) {
+            if ( stripos( $block['blockName'], self::NAMESPACE_FIELDS ) === false ) {
+                continue;
+            }
+            $fields[] = $block;
+        }
+        return $fields;
+    }
+
+
+    /**
      * Returns generators list
      *
      * @return [type] [description]
@@ -68,7 +81,7 @@ class Form_Manager
 
         $generators = $this->get_options_generators();
         $result     = array(
-            0 => __( 'Select function...', 'jet-engine' ),
+            0 => __( 'Select function...', 'jet-form-builder' ),
         );
 
         foreach ( $generators as $id => $generator ) {
@@ -77,6 +90,52 @@ class Form_Manager
 
         return $result;
 
+    }
+
+    public function get_form_meta( $meta_key, $form_id ) {
+        return json_decode( get_post_meta(
+            $form_id,
+            $meta_key,
+            true
+        ),
+            true
+        );
+    }
+
+    public function field_name( $blockName ) {
+        return explode( self::NAMESPACE_FIELDS, $blockName )[1];
+    }
+
+    /**
+     * Returns form meta arguments:
+     * fields_layout, submit_type and required_mark
+     * in assoc array
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_args( $form_id ) {
+        return $this->get_form_meta( '_jf_args', $form_id );
+    }
+
+    /**
+     * Returns form actions
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_actions( $form_id ) {
+        return $this->get_form_meta( '_jf_actions', $form_id );
+    }
+
+    /**
+     * Returns form actions
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_preset( $form_id ) {
+        return $this->get_form_meta( '_jf_preset', $form_id );
     }
 
 }

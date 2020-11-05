@@ -21,7 +21,7 @@ class Update_User extends Base {
 		return 'update_user';
 	}
 
-	public function do_action()
+	public function do_action($request)
     {
         // TODO: Implement do_action() method.
     }

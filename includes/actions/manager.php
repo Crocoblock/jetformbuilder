@@ -1,12 +1,6 @@
 <?php
 namespace Jet_Form_Builder\Actions;
 
-use Jet_Form_Builder\Actions\Types\Insert_Post;
-use Jet_Form_Builder\Actions\Types\Register_User;
-use Jet_Form_Builder\Actions\Types\Send_Email;
-use Jet_Form_Builder\Actions\Types\Update_User;
-use Jet_Form_Builder\Actions\Dependence_Manager;
-
 // If this file is called directly, abort.
 
 if ( ! defined( 'WPINC' ) ) {
@@ -32,7 +26,7 @@ class Manager {
 	 */
 	public function register_action_types() {
 
-	    $manager = new Dependence_Manager(
+	    $manager = new Action_Compatibility(
 	        'Send_Email',
             'Insert_Post',
             'Register_User',
@@ -58,6 +52,13 @@ class Manager {
 	public function register_action_type( $type ) {
 		$this->_types[ $type->get_id() ] = $type;
 	}
+
+    /**
+     * @return array
+     */
+    public function get_actions() {
+        return $this->_types;
+    }
 
 	/**
 	 * Regsiter action types data for the editor

@@ -19,12 +19,12 @@ class Call_Webhook extends Base {
 		return 'call_webhook';
 	}
 
-	public function do_action()
+	public function do_action($request)
     {
         // TODO: Implement do_action() method.
     }
 
-	/**
+    /**
 	 * Regsiter custom action data for the editor
 	 *
 	 * @return [type] [description]

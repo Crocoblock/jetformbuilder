@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Actions;
 
 
-class Dependence_Manager
+class Action_Compatibility
 {
     public $actions = [];
     public $valid_actions = [];

@@ -35,9 +35,7 @@ abstract class Base {
 
     public function block_params() {
         return array(
-            'attributes'		=> $this->block_attributes(),
-            //'render_callback' 	=> array( $this, 'render_callback_field' ),
-            //'editor_style'    => 'jet-engine-frontend',
+            'attributes' => $this->block_attributes(),
         );
     }
 

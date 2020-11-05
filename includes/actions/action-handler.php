@@ -2,6 +2,8 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Plugin;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -9,202 +11,153 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Actions handler class class
  */
-class Handler {
+class Action_Handler {
 
-	public $form            = null;
-	public $data            = null;
-	public $form_actions    = array();
-	public $manager         = null;
-	public $handler         = null;
-	public $log             = array();
-	public $log_status      = false;
-	public $specific_status = false;
+	public $form_id             = null;
+	public $data                = null;
+    public $manager             = null;
+    public $handler             = null;
+    public $log                 = array();
+    public $log_status          = false;
+    public $specific_status     = false;
+    public $form_actions        = array();
+    public $available_actions   = array();
 
 	public $headers;
 	public $email_data;
 
-	/**
-	 * Constructor for the class
-	 */
-	function __construct( $form = null, $data = array(), $handler ) {
+	const ACTION_HANDLER_HOOK_PREFIX = 'jet-form-builder/action-handler/';
 
-		$this->form         = $form;
-		$this->data         = $data;
-		$this->handler      = $handler;
-		//$this->form_actions = Plugin::instance()->form->get_actions( $this->form );
+    /**
+     * Constructor for the class
+     * @param $form_id
+     * @param array $data
+     */
+	function __construct( $form_id, $data = array() ) {
 
-		add_action(
-			'jet-engine/forms/booking/notification/register_user',
-			array( $this, 'register_user' )
-		);
+		$this->form_id  = $form_id;
+		$this->data     = $data;
 
-		add_action(
-			'jet-engine/forms/booking/notification/update_user',
-			array( $this, 'update_user' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/webhook',
-			array( $this, 'webhook' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/hook',
-			array( $this, 'hook' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/insert_post',
-			array( $this, 'insert_post' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/email',
-			array( $this, 'email' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/redirect',
-			array( $this, 'do_redirect' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/activecampaign',
-			array( $this, 'activecampaign' )
-		);
-
-		add_action(
-			'jet-engine/forms/booking/notification/mailchimp',
-			array( $this, 'mailchimp' )
-		);
-		add_action(
-			'jet-engine/forms/booking/notification/getresponse',
-			array( $this, 'getresponse' )
-		);
-
-		add_action( 'jet-engine/forms/booking/email/send-before', array( $this, 'send_before' ) );
-		add_action( 'jet-engine/forms/booking/email/send-after', array( $this, 'send_after' ) );
-
+		$this->set_available_actions()->set_form_actions()->set_available_actions_hooks();
 	}
 
-	/**
-	 * Unregister notification
-	 *
-	 * @param  [type] $type [description]
-	 * @return [type]       [description]
-	 */
-	public function unregister_notification_type( $type ) {
+    /**
+     * Set form actions,
+     * which were saved in form meta
+     *
+     * @return $this
+     */
+	public function set_form_actions() {
+        $form_actions = Plugin::instance()->form->get_actions( $this->form_id );
 
-		switch ( $type ) {
+        foreach ( $form_actions as $form_action ) {
+            $id = $form_action['type'];
 
-			case 'register_user':
-				remove_action(
-					'jet-engine/forms/booking/notification/register_user',
-					array( $this, 'register_user' )
-				);
-				break;
+            if ( isset( $this->available_actions[ $id ] ) ) {
+                /**
+                 * Save action settings to the class field,
+                 * it allows to not send action settings
+                 * in action hook
+                 */
+                $this->available_actions[ $id ]->settings = $form_action['settings'];
 
-			case 'update_user':
-				remove_action(
-					'jet-engine/forms/booking/notification/update_user',
-					array( $this, 'update_user' )
-				);
-				break;
+                $this->form_actions[] = $this->available_actions[ $id ];
+            }
+        }
 
-			case 'webhook':
-				remove_action(
-					'jet-engine/forms/booking/notification/webhook',
-					array( $this, 'webhook' )
-				);
-				break;
+        return $this;
+    }
 
-			case 'hook':
-				remove_action(
-					'jet-engine/forms/booking/notification/hook',
-					array( $this, 'hook' )
-				);
-				break;
 
-			case 'insert_post':
-				remove_action(
-					'jet-engine/forms/booking/notification/insert_post',
-					array( $this, 'insert_post' )
-				);
-				break;
+    /**
+     * Set All available actions,
+     * which were installed in Action\Manager
+     *
+     * @return $this
+     */
+    public function set_available_actions() {
+	    $this->available_actions = Plugin::instance()->actions->get_actions();
 
-			case 'redirect':
-				remove_action(
-					'jet-engine/forms/booking/notification/redirect',
-					array( $this, 'do_redirect' )
-				);
-				break;
+	    return $this;
+    }
 
-			case 'activecampaign':
-				remove_action(
-					'jet-engine/forms/booking/notification/activecampaign',
-					array( $this, 'activecampaign' )
-				);
-				break;
+    /**
+     * Add actions, which are triggered
+     * in their own action class
+     * via a method `do_action`
+     */
+    public function set_available_actions_hooks() {
 
-			default:
-				remove_all_actions( 'jet-engine/forms/booking/notification/' . $type );
-				break;
-		}
-	}
+        foreach ( $this->available_actions as $action ) {
 
-	/**
-	 * Unregister notification bu index
-	 *
-	 * @param  [type] $index [description]
-	 * @return [type]        [description]
-	 */
-	public function unregister_notification( $index ) {
+            if ( ! is_callable( array( $action, 'do_action' ) ) ) {
+                continue;
+            }
 
-		if ( isset( $this->notifications[ $index ] ) ) {
-			unset( $this->notifications[ $index ] );
+            $name = self::ACTION_HANDLER_HOOK_PREFIX . $action->get_id();
+
+            add_action( $name, array( $action, 'do_action' ) );
+        }
+    }
+
+    /**
+     * @param $action_id
+     */
+    public function unregister_action( $action_id ) {
+        if ( ! isset( $this->available_actions[ $action_id ] ) ) {
+            return;
+        }
+
+        remove_action(
+            self::ACTION_HANDLER_HOOK_PREFIX . $action_id,
+            array(
+                $this->available_actions[ $action_id ],
+                'do_action'
+            )
+        );
+    }
+
+    /**
+     * Unregister notification by id
+     *
+     * @param   $id [description]
+     * @return  void [description]
+     */
+	public function unregister_notification( $id ) {
+
+		if ( isset( $this->form_actions[ $id ] ) ) {
+			unset( $this->form_actions[ $id ] );
 		}
 
 	}
 
-	/**
-	 * Returns all registered notifications
-	 *
-	 * @return [type] [description]
-	 */
+    /**
+     * Returns all registered notifications
+     *
+     * @return array [description]
+     */
 	public function get_all() {
-		return $this->notifications;
+		return $this->form_actions;
 	}
 
-	/**
-	 * Send form notifications
-	 *
-	 * @return [type] [description]
-	 */
-	public function send() {
+    /**
+     * Send form notifications
+     *
+     * @param $request_data
+     * @return void [type] [description]
+     */
+	public function do_actions( $request_data ) {
 
-		if ( empty( $this->notifications ) ) {
+		if ( empty( $this->form_actions ) ) {
 			return;
 		}
 
-		$this->notifications = $this->manager->editor->get_notifications( $this->form );
-
-		do_action( 'jet-engine/forms/notifications/before-send', $this );
-
-		foreach ( $this->notifications as $index => $notification ) {
-
+		foreach ( $this->form_actions as $action ) {
 			/**
-			 * Process single notification
+			 * Process single action
 			 */
-			do_action( 'jet-engine/forms/booking/notification/' . $notification['type'], $notification, $this );
-
+			do_action( self::ACTION_HANDLER_HOOK_PREFIX . $action->get_id(), $request_data );
 		}
-
-		if ( empty( $this->log ) ) {
-			return false;
-		} else {
-			return count( $this->log ) === count( array_filter( $this->log ) );
-		}
-
 	}
 
 	/**

@@ -11,11 +11,19 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
+    /**
+     * Stores the action settings
+     * from the form meta field
+     *
+     * @var array
+     */
+    public $settings = array();
+
 	abstract public function get_name();
 
 	abstract public function get_id();
 
-	abstract public function do_action();
+	abstract public function do_action( $request );
 
 	/**
 	 * Register custom action data

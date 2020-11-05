@@ -21,7 +21,7 @@ class Update_Options extends Base {
 		return 'update_options';
 	}
 
-	public function do_action()
+	public function do_action($request)
     {
         // TODO: Implement do_action() method.
     }

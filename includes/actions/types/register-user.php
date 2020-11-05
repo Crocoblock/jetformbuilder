@@ -14,7 +14,10 @@ if ( ! defined( 'WPINC' ) ) {
 class Register_User extends Base {
 
     public function __construct() {
-        $this->do_action();
+        add_filter(
+            'editable_roles',
+            [ $this, 'hide_roles' ]
+        );
     }
 
 	public function get_name() {
@@ -25,14 +28,12 @@ class Register_User extends Base {
 		return 'register_user';
 	}
 
-	public function do_action() {
-        add_filter(
-            'editable_roles',
-            [ $this, 'hide_roles' ]
-        );
-	}
+	public function do_action($request)
+    {
+        // TODO: Implement do_action() method.
+    }
 
-	/**
+    /**
 	 * Regsiter custom action data for the editor
 	 *
 	 * @return [type] [description]

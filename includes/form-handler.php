@@ -1,6 +1,11 @@
 <?php
 
 namespace Jet_Form_Builder;
+
+
+use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
+
 /**
  * Form builder class
  */
@@ -15,15 +20,18 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-    public $hook_key      = 'jet_engine_action';
-    public $hook_val      = 'book';
-    public $form          = null;
-    public $refer         = null;
-    public $manager       = null;
-    public $notifcations  = null;
-    public $form_data     = array();
-    public $response_data = array();
-    public $is_ajax       = false;
+    public $hook_key        = 'jet_form_builder_submit';
+    public $hook_val        = 'submit';
+    public $form_data       = array();
+    public $response_data   = array();
+    public $is_ajax         = false;
+    public $is_success      = false;
+
+    public $form_id;
+    public $refer;
+    public $manager;
+    public $action_handler;
+    public $request_data;
 
     /**
      * Constructor for the class
@@ -32,8 +40,14 @@ class Form_Handler {
 
         if ( wp_doing_ajax() ) {
 
-            add_action( 'wp_ajax_jet_engine_form_booking_submit', array( $this, 'process_ajax_form' ) );
-            add_action( 'wp_ajax_nopriv_jet_engine_form_booking_submit', array( $this, 'process_ajax_form' ) );
+            add_action(
+                'wp_ajax_' . $this->hook_key,
+                array( $this, 'process_ajax_form' )
+            );
+            add_action(
+                'wp_ajax_nopriv_' . $this->hook_key,
+                array( $this, 'process_ajax_form' )
+            );
 
         } else {
 
@@ -65,15 +79,15 @@ class Form_Handler {
         $refer_key = '_jet_engine_refer';
 
         if ( ! $this->is_ajax ) {
-            $this->form  = ! empty( $_REQUEST[ $form_key ] ) ? $_REQUEST[ $form_key ] : false;
-            $this->refer = ! empty( $_REQUEST[ $refer_key ] ) ? $_REQUEST[ $refer_key ] : false;
+            $this->form_id  = ! empty( $_REQUEST[ $form_key ] ) ? $_REQUEST[ $form_key ] : false;
+            $this->refer    = ! empty( $_REQUEST[ $refer_key ] ) ? $_REQUEST[ $refer_key ] : false;
         } else {
 
             $values = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
 
             foreach ( $values as $data ) {
                 if ( $data['name'] === $form_key ) {
-                    $this->form = $data['value'];
+                    $this->form_id = $data['value'];
                 }
             }
 
@@ -86,7 +100,7 @@ class Form_Handler {
      * @return boolean [description]
      */
     public function has_gateway() {
-        return apply_filters( 'jet-engine/forms/handler/has-gateways', false, $this->form );
+        return apply_filters( 'jet-form-builder/form-handler/has-gateways', false, $this->form_id );
     }
 
     /**
@@ -108,33 +122,56 @@ class Form_Handler {
 
         $this->setup_form();
 
-        $data = $this->get_form_data();
+        $this->try_set_data();
 
-        require_once jet_engine()->modules->modules_path( 'forms/notifications.php' );
+        do_action( 'jet-form-builder/form-handler/before-send', $this );
 
-        $this->notifcations = new Jet_Engine_Booking_Forms_Notifications(
-            $this->form,
-            $data,
-            $this->manager,
-            $this
-        );
+        $this->try_to_do_actions();
 
-        do_action( 'jet-engine/forms/handler/before-send', $this );
+        do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 
-        $success = $this->notifcations->send();
-
-        do_action( 'jet-engine/forms/handler/after-send', $this, $success );
-
-        if ( true === $success ) {
-            $this->redirect( array(
+        if ( true === $this->is_success ) {
+            $this->send_response( array(
                 'status' => 'success',
             ) );
         } else {
-            $this->redirect( array(
+            $this->send_response( array(
                 'status' => 'failed',
             ) );
         }
+    }
 
+    public function try_set_data() {
+        try {
+            $request = array(
+                'form_id' => $this->form_id,
+                'is_ajax' => $this->is_ajax
+            );
+            $request_handler = new Request_Handler( $request );
+
+            $this->request_data = $request_handler->get_form_data();
+
+        } catch ( Handler_Exception $exception ) {
+
+            $this->send_response( array(
+                'status' => $exception->get_form_status(),
+            ) );
+        }
+    }
+
+
+    public function try_to_do_actions() {
+        try {
+            $this->action_handler = new Action_Handler( $this->form_id, $this->request_data );
+
+            $this->action_handler->do_actions( $this->request_data );
+            $this->is_success = true;
+
+        } catch ( Handler_Exception $exception ) {
+            $this->send_response( array(
+                'status' => $exception->get_form_status(),
+            ) );
+        }
     }
 
     /**
@@ -151,19 +188,13 @@ class Form_Handler {
      * @param  array  $args [description]
      * @return [type]       [description]
      */
-    public function redirect( $args = array() ) {
+    public function send_response( $args = array() ) {
 
         $args = wp_parse_args( $args, array(
             'status' => 'success',
         ) );
 
         $error_statuses  = array( 'validation_failed', 'invalid_email' );
-
-        if ( $this->notifcations ) {
-            $specific_status = $this->notifcations->get_specific_status();
-        } else {
-            $specific_status = false;
-        }
 
         if ( ! empty( $specific_status ) ) {
             $args['status'] = $specific_status;
@@ -186,20 +217,23 @@ class Form_Handler {
             }
         }
 
-        $send_values = apply_filters( 'jet-engine/forms/booking/handler/send-values-on-error', true );
+        $send_values = apply_filters( 'jet-form-builder/form-handler/send-values-on-error', true );
 
         if ( ! $this->is_ajax && $send_values && in_array( $args['status'], $error_statuses ) ) {
             $query_args['values'] = $this->form_data;
         }
 
-        $query_args = apply_filters( 'jet-engine/forms/handler/query-args', $query_args, $args, $this );
+        $query_args = apply_filters( 'jet-form-builder/form-handler/query-args', $query_args, $args, $this );
 
         if ( $this->is_ajax ) {
 
-            $messages = jet_engine()->forms->get_messages_builder( $this->form );
+            $messages = new Form_Messages_Builder(
+                $this->form_id,
+                $args['status'],
+                true
+            );
 
             ob_start();
-            $messages->set_form_status( $args['status'] );
             $messages->render_messages();
             $query_args['message'] = ob_get_clean();
 
@@ -216,179 +250,6 @@ class Form_Handler {
             wp_redirect( $redirect );
             die();
         }
-
-    }
-
-    /**
-     * Get form values from request
-     *
-     * @return [type] [description]
-     */
-    public function get_values_from_request() {
-
-        if ( $this->is_ajax ) {
-
-            $prepared = array();
-            $raw      = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
-
-            if ( empty( $raw ) ) {
-                return $prepared;
-            }
-
-            foreach ( $raw as $data ) {
-
-                $name  = $data['name'];
-                $value = $data['value'];
-
-                if ( false !== strpos( $name, '[]') ) {
-
-                    $name = str_replace( '[]', '', $name );
-
-                    if ( empty( $prepared[ $name ] ) ) {
-                        $prepared[ $name ] = array();
-                    }
-
-                    $prepared[ $name ][] = $value;
-
-                } else {
-                    $prepared[ $name ] = $value;
-                }
-
-            }
-
-            return $prepared;
-
-        } else {
-            return $_REQUEST;
-        }
-
-    }
-
-    /**
-     * Get submitted form data
-     *
-     * @return [type] [description]
-     */
-    public function get_form_data() {
-
-        $fields        = $this->manager->editor->get_form_data( $this->form );
-        $data          = array();
-        $errors        = array();
-        $invalid_email = false;
-        $request       = $this->get_values_from_request();
-
-        $skip_fields = array( 'submit', 'page_break', 'heading', 'group_break' );
-
-        foreach ( $fields as $field ) {
-
-            if ( in_array( $field['settings']['name'], $skip_fields ) ) {
-                continue;
-            }
-
-            if ( in_array( $field['settings']['type'], array( 'heading', 'group_break' ) ) ) {
-                continue;
-            }
-
-            if ( ! $this->is_field_visible( $field['settings'] ) ) {
-                continue;
-            }
-
-            $settings = $field['settings'];
-            $required = ! empty( $settings['required'] ) ? $settings['required'] : '';
-            $name     = $settings['name'];
-            $value    = isset( $request[ $name ] ) ? $request[ $name ] : '';
-
-            if ( 'media' === $settings['type'] ) {
-
-                $value = json_decode( wp_unslash( $value ), true );
-
-                if ( ! empty( $settings['insert_attachment'] ) && ! empty( $settings['value_format'] ) && 'id' === $settings['value_format'] ) {
-                    if ( ! is_array( $value ) ) {
-                        $value = absint( $value );
-                    } else {
-                        $value = implode( ',', $value );
-                    }
-                }
-
-            }
-
-            if ( 'wysiwyg' === $settings['type'] ) {
-                $required = false;
-                $value = jet_engine_sanitize_wysiwyg( $value );
-            }
-
-            $data[ $name ] = $value;
-
-            if ( 'text' === $settings['type'] && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
-                $invalid_email = true;
-            }
-
-            if ( is_array( $value ) ) {
-                $value = implode( ', ', $value );
-            }
-
-            if ( $required && '' === $value ) {
-                $errors[] = $name;
-            }
-
-        }
-
-        $this->form_data = apply_filters( 'jet-engine/forms/handler/form-data', $data, $this->form, $fields );
-
-        if ( ! $this->manager->captcha->verify( $this->form, $this->is_ajax ) ) {
-            $this->redirect( array(
-                'status' => 'captcha_failed',
-                'errors' => $errors,
-            ) );
-        }
-
-        if ( ! empty( $errors ) ) {
-            $this->redirect( array(
-                'status' => 'validation_failed',
-                'errors' => $errors,
-            ) );
-        }
-
-        if ( $invalid_email ) {
-            $this->redirect( array(
-                'status' => 'invalid_email',
-            ) );
-        }
-
-        return $data;
-
-    }
-
-    /**
-     * Returns true if field is visible
-     *
-     * @param  array   $field [description]
-     * @return boolean        [description]
-     */
-    public function is_field_visible( $field = array() ) {
-
-        // For backward compatibility and hidden fields
-        if ( empty( $field['visibility'] ) ) {
-            return true;
-        }
-
-        // If is visible for all - show field
-        if ( 'all' === $field['visibility'] ) {
-            return true;
-        }
-
-        // If is visible for logged in users and user is logged in - show field
-        if ( 'logged_id' === $field['visibility'] && is_user_logged_in() ) {
-            return true;
-        }
-
-        // If is visible for not logged in users and user is not logged in - show field
-        if ( 'not_logged_in' === $field['visibility'] && ! is_user_logged_in() ) {
-            return true;
-        }
-
-        return false;
-
     }
 
 }

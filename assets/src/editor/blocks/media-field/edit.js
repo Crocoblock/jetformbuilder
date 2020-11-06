@@ -128,7 +128,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
                             help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'allowed_mimes' ) }
                             value={ attributes.allowed_mimes }
                             onChange={ ( newValue ) => {
-                                console.log( newValue );
                                 props.setAttributes( { allowed_mimes: newValue } );
                             } }
                             options={ localizeData.mime_types }

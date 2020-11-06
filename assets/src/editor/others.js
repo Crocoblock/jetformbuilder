@@ -48,7 +48,7 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
             key={ this.keyControls() }
         >
             <PanelBody
-                title={__('Form Settings')}
+                title={ __('Form Settings') }
                 key={ this.keyGeneral() }
             >
                 <ComboboxControl

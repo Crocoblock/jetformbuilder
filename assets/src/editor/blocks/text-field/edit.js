@@ -72,13 +72,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TextEdit extends wp.el
 						<PanelBody
 							title={ __( 'Field Settings' ) }
 						>
-
 							<SelectControl
 								key='field_type'
 								label={ __( 'Field Type' ) }
 								labelPosition='top'
 								value={ attributes.field_type }
-								onChange={ ( newValue ) => {
+								onChange={ newValue => {
 									props.setAttributes( { field_type: newValue } );
 								} }
 								options={ localizeData.field_types_list }

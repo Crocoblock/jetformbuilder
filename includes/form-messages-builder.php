@@ -18,25 +18,21 @@ class Form_Messages_Builder
 
     use Get_Template_Trait;
 
-    private $form_id = null;
-    private $status = null;
-    private $is_ajaxified = false;
+    private $form_id;
+    private $status;
 
     public  $manager;
 
     /**
      * Class constructor
-     * @param $form_id
-     * @param $status
-     * @param bool $is_ajaxified
+     * @param $data
      */
-    public function __construct( $form_id, $status, $is_ajaxified = true )
+    public function __construct( $data )
     {
-        $this->form_id = $form_id;
-        $this->manager = Plugin::instance()->form->messages_manager;
+        $this->form_id = $data->form_id;
+        $this->manager = new Form_Messages_Manager( $this->form_id, $data->actions );
 
-        $this->set_form_status( $status );
-        $this->set_is_ajaxified( $is_ajaxified );
+        $this->set_form_status( $data->status );
     }
 
     /**
@@ -46,16 +42,6 @@ class Form_Messages_Builder
     public function set_form_status($status)
     {
         $this->status = $status;
-    }
-
-    /**
-     * Set is ajaxified status
-     *
-     * @param [type] $is_ajaxified [description]
-     */
-    public function set_is_ajaxified( $is_ajaxified )
-    {
-        $this->is_ajaxified = $is_ajaxified;
     }
 
     /**
@@ -72,7 +58,7 @@ class Form_Messages_Builder
 
     public function render_empty_field_message()
     {
-        $message_content = $this->manager->get_message_text( 'empty_field', $this->form_id );
+        $message_content = $this->manager->get_message_text( 'empty_field' );
 
         include $this->get_template('common/field-message.php');
     }
@@ -92,7 +78,7 @@ class Form_Messages_Builder
             $status_class = 'error';
         }
 
-        $message_content = $this->manager->get_message_text( $status, $this->form_id );
+        $message_content = $this->manager->get_message_text( $status );
 
         $class = 'jet-form-message';
         $class .= ' jet-form-message--' . $status_class;

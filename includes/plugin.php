@@ -29,6 +29,7 @@ class Plugin {
 	public $actions;
 	public $form;
 	public $form_handler;
+	public $editor;
 
 	/**
 	 * Instance.
@@ -80,12 +81,10 @@ class Plugin {
 			) ); */
 
 			$this->editor = new Admin\Editor();
-
 		}
-
 	}
 
-	/*
+	/**
 	* Returns url to file or dir inside plugin folder
 	*
 	* @param  string $path Path inside plugin dir.

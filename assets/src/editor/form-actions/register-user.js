@@ -27,6 +27,24 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 		this.data = window.jetFormRegisterUserData;
 
 		this.userFields = Object.entries( this.data.userFields );
+
+		this.setMessages();
+	}
+
+	setMessages() {
+		if ( this.props.settings && this.props.settings.messages ) {
+			return;
+		}
+		const messages = {};
+
+		Object.entries( this.data.messages ).forEach( ( [ type, data ] ) => {
+			messages[ type ] = data.value;
+		} )
+
+		this.props.onChange( {
+			...this.props.settings,
+			messages: messages
+		} );
 	}
 
 	getFormFieldsList() {
@@ -69,10 +87,19 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 		} );
 	}
 
-	changeFieldsMap( { source, nameField, value } ) {
-		const fieldsMap = Object.assign( {}, this.props.settings[ source ] );
+	getMessage( name ) {
+		return this.getFieldByName( {
+			source: 'messages',
+			name
+		} );
+	}
 
-		fieldsMap[ nameField ] = value;
+	changeFieldsMap( { source, nameField, value } ) {
+		const fieldsMap = Object.assign(
+			{},
+			this.props.settings[ source ],
+			{ [ nameField ]: value }
+		);
 
 		this.props.onChange( {
 			...this.props.settings,
@@ -101,6 +128,14 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 			);
 		};
 
+		const onChangeMessage = ( value, nameField ) => {
+			const source = 'messages';
+
+			this.changeFieldsMap(
+				{ value, nameField, source }
+			);
+		};
+
 		const onChangeSetting = ( value, key ) => {
 			onChange( {
 				...settings,
@@ -109,7 +144,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 		};
 
 		/* eslint-disable jsx-a11y/no-onchange */
-		return ( <div key="register_user">
+		return ( <React.Fragment key="register_user">
 			<BaseControl
 				label={ this.data.labels.fields_map }
 				key="user_fields_map"
@@ -205,8 +240,30 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 					/>
 				</div>
 			</BaseControl>
+			<BaseControl
+				label={ __( 'Messages Settings:' ) }
+				key='messages_settings_fields'
+			>
+				<div className='jet-user-meta-rows'>
+					{ settings.messages && Object.entries( settings.messages )
+						.map( ( [ type, data ], id ) => {
 
-		</div> );
+						return <div
+							className="jet-user-meta__row"
+							key={ 'message_' + type + id }
+						>
+							<TextControl
+								key={ type + id }
+								label={ this.data.messages[ type ].label }
+								value={ this.getMessage( type ) }
+								onChange={ newValue => onChangeMessage( newValue, type ) }
+							/>
+						</div>;
+					} ) }
+				</div>
+			</BaseControl>
+
+		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
 

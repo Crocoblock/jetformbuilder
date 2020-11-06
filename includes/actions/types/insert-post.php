@@ -22,9 +22,145 @@ class Insert_Post extends Base {
 		return 'insert_post';
 	}
 
+    /**
+     * Return object fields
+     *
+     * @return string[] [type] [description]
+     */
+    public function get_object_fields() {
+        return array(
+            'ID',
+            'post_title',
+            'post_content',
+            'post_excerpt',
+        );
+    }
+
 	public function do_action( $request ) {
 	    // $this->settings - action settings
 	    // throw new Action_Exception( 'failed' );
+
+        $post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
+
+        if ( ! $post_type || ! post_type_exists( $post_type ) ) {
+            throw new Action_Exception('failed');
+        }
+
+
+        $fields_map    = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
+        $meta_input    = array();
+        $terms_input   = array();
+        $object_fields = $this->get_object_fields();
+        $has_title     = false;
+
+        $postarr = array(
+            'post_type'   => $post_type,
+        );
+
+        if ( ! empty( $this->settings['default_meta'] ) ) {
+            foreach ( $this->settings['default_meta'] as $meta_row ) {
+                if ( ! empty( $meta_row['key'] ) ) {
+                    $meta_input[ $meta_row['key'] ] = $meta_row['value'];
+                }
+            }
+        }
+
+
+
+        foreach ( $request as $key => $value ) {
+
+            $key = ! empty( $fields_map[ $key ] ) ? esc_attr( $fields_map[ $key ] ) : $key;
+
+            if ( 'Submit' === $key ) {
+                continue;
+            }
+
+            if ( ! in_array( $key, $object_fields ) ) {
+
+                if ( false !== strpos( $key, 'jet_tax__' ) ) {
+
+                    $tax = str_replace( 'jet_tax__', '', $key );
+
+                    if ( ! isset( $terms_input[ $tax ] ) ) {
+                        $terms_input[ $tax ] = array();
+                    }
+
+                    if ( ! is_array( $value ) ) {
+                        $terms_input[ $tax ][] = absint( $value );
+                    } else {
+                        $terms_input[ $tax ] = array_merge( $terms_input[ $tax ], array_map( 'absint', $value ) );
+                    }
+
+                } else {
+                    $meta_input[ $key ] = $value;
+                }
+
+            } else {
+                $postarr[ $key ] = $value;
+
+                if ( 'post_title' === $key ) {
+                    $has_title = true;
+                }
+
+            }
+
+        }
+
+        $post_status = ! empty( $this->settings['post_status'] ) ? $this->settings['post_status'] : '';
+
+        if ( $post_status && 'keep-current' !== $post_status ) {
+            $postarr['post_status'] = $post_status;
+        }
+
+        $postarr['meta_input'] = $meta_input;
+
+        $post_type_obj = get_post_type_object( $post_type );
+
+
+
+        if ( ! empty( $postarr['ID'] ) ) {
+
+            $post = get_post( (int) $postarr['ID'] );
+
+            if ( ! $post || ( absint( $post->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) ) {
+                throw new Action_Exception('failed' );
+            }
+
+            $post_id = wp_update_post( $postarr );
+
+        } else {
+
+            if ( ! $has_title ) {
+                $postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
+            }
+
+            $post_id = wp_insert_post( $postarr );
+
+        }
+
+        $this->response_data['inserted_post_id'] = $post_id;
+
+        if ( ! $post_id ) {
+            throw new Action_Exception( 'failed' );
+        }
+
+        if ( ! empty( $terms_input ) ) {
+
+            foreach ( $terms_input as $tax => $terms ) {
+                $res = wp_set_post_terms( $post_id, $terms, $tax );
+            }
+        }
+
+        if ( ! $has_title && empty( $postarr['ID'] ) ) {
+
+            $title = $post_type_obj->labels->singular_name . ' #' . $post_id;
+
+            wp_update_post( array(
+                'ID'         => $post_id,
+                'post_title' => $title,
+            ) );
+
+        }
 	}
 
 	/**
@@ -54,7 +190,9 @@ class Insert_Post extends Base {
 	}
 
 
-	/**
+
+
+    /**
 	 * Returns post statuses list for the options
 	 *
 	 * @return array
@@ -82,7 +220,7 @@ class Insert_Post extends Base {
 	 */
 	public function get_fields_map_options() {
 
-		$post_fields = $this->get_post_fields_for_options();
+		$post_fields = $this->get_post_fields_for_options() ;
 
 		foreach ( $post_fields as $index => $data ) {
 			if ( 'ID' === $data['value'] ) {
@@ -117,6 +255,10 @@ class Insert_Post extends Base {
 	public function get_post_fields_for_options() {
 
 		return apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
+            array(
+                'value' => '',
+                'label' => 'Select field...',
+            ),
 			array(
 				'value' => 'ID',
 				'label' => 'Post ID',

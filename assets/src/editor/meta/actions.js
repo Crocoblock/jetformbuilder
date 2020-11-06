@@ -160,7 +160,7 @@ function ActionsMeta() {
 												} ) );
 											} }
 										/>
-										<div></div>
+										<div/>
 									</Flex>
 								</FlexItem>
 								<FlexItem>

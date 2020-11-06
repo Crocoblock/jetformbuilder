@@ -14,31 +14,28 @@ if ( ! defined( 'WPINC' ) ) {
 class Action_Handler {
 
 	public $form_id             = null;
-	public $data                = null;
+	public $request_data        = null;
     public $manager             = null;
     public $handler             = null;
     public $log                 = array();
     public $log_status          = false;
     public $specific_status     = false;
     public $form_actions        = array();
-    public $available_actions   = array();
 
 	public $headers;
 	public $email_data;
 
-	const ACTION_HANDLER_HOOK_PREFIX = 'jet-form-builder/action-handler/';
-
     /**
      * Constructor for the class
      * @param $form_id
-     * @param array $data
+     * @param array $request_data
      */
-	function __construct( $form_id, $data = array() ) {
+	function __construct( $form_id, $request_data = array() ) {
 
-		$this->form_id  = $form_id;
-		$this->data     = $data;
+		$this->form_id      = $form_id;
+		$this->request_data = $request_data;
 
-		$this->set_available_actions()->set_form_actions()->set_available_actions_hooks();
+		$this->set_form_actions();
 	}
 
     /**
@@ -48,73 +45,26 @@ class Action_Handler {
      * @return $this
      */
 	public function set_form_actions() {
-        $form_actions = Plugin::instance()->form->get_actions( $this->form_id );
+        $available_actions = Plugin::instance()->actions->get_actions();
+
+        $form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
 
         foreach ( $form_actions as $form_action ) {
             $id = $form_action['type'];
 
-            if ( isset( $this->available_actions[ $id ] ) ) {
+            if ( isset( $available_actions[ $id ] ) ) {
                 /**
                  * Save action settings to the class field,
                  * it allows to not send action settings
                  * in action hook
                  */
-                $this->available_actions[ $id ]->settings = $form_action['settings'];
+                $available_actions[ $id ]->settings = $form_action['settings'];
 
-                $this->form_actions[] = $this->available_actions[ $id ];
+                $this->form_actions[] = $available_actions[ $id ];
             }
         }
 
         return $this;
-    }
-
-
-    /**
-     * Set All available actions,
-     * which were installed in Action\Manager
-     *
-     * @return $this
-     */
-    public function set_available_actions() {
-	    $this->available_actions = Plugin::instance()->actions->get_actions();
-
-	    return $this;
-    }
-
-    /**
-     * Add actions, which are triggered
-     * in their own action class
-     * via a method `do_action`
-     */
-    public function set_available_actions_hooks() {
-
-        foreach ( $this->available_actions as $action ) {
-
-            if ( ! is_callable( array( $action, 'do_action' ) ) ) {
-                continue;
-            }
-
-            $name = self::ACTION_HANDLER_HOOK_PREFIX . $action->get_id();
-
-            add_action( $name, array( $action, 'do_action' ) );
-        }
-    }
-
-    /**
-     * @param $action_id
-     */
-    public function unregister_action( $action_id ) {
-        if ( ! isset( $this->available_actions[ $action_id ] ) ) {
-            return;
-        }
-
-        remove_action(
-            self::ACTION_HANDLER_HOOK_PREFIX . $action_id,
-            array(
-                $this->available_actions[ $action_id ],
-                'do_action'
-            )
-        );
     }
 
     /**
@@ -123,7 +73,7 @@ class Action_Handler {
      * @param   $id [description]
      * @return  void [description]
      */
-	public function unregister_notification( $id ) {
+	public function unregister_action( $id ) {
 
 		if ( isset( $this->form_actions[ $id ] ) ) {
 			unset( $this->form_actions[ $id ] );
@@ -143,10 +93,9 @@ class Action_Handler {
     /**
      * Send form notifications
      *
-     * @param $request_data
      * @return void [type] [description]
      */
-	public function do_actions( $request_data ) {
+	public function do_actions() {
 
 		if ( empty( $this->form_actions ) ) {
 			return;
@@ -156,7 +105,7 @@ class Action_Handler {
 			/**
 			 * Process single action
 			 */
-			do_action( self::ACTION_HANDLER_HOOK_PREFIX . $action->get_id(), $request_data );
+            $action->do_action( $this->request_data );
 		}
 	}
 
@@ -259,149 +208,6 @@ class Action_Handler {
 
 	}
 
-	/**
-	 * Insert post notification
-	 *
-	 * @param  [type] $notification [description]
-	 * @return [type]               [description]
-	 */
-	public function insert_post( $notification ) {
-
-		$post_type = ! empty( $notification['post_type'] ) ? $notification['post_type'] : false;
-
-		if ( ! $post_type || ! post_type_exists( $post_type ) ) {
-			return;
-		}
-
-		$fields_map    = ! empty( $notification['fields_map'] ) ? $notification['fields_map'] : array();
-		$meta_input    = array();
-		$terms_input   = array();
-		$rels_input    = array();
-		$object_fields = $this->manager->get_object_fields();
-		$has_title     = false;
-
-		$postarr = array(
-			'post_type'   => $post_type,
-		);
-
-		if ( ! empty( $notification['default_meta'] ) ) {
-			foreach ( $notification['default_meta'] as $meta_row ) {
-				if ( ! empty( $meta_row['key'] ) ) {
-					$meta_input[ $meta_row['key'] ] = $meta_row['value'];
-				}
-			}
-		}
-
-		foreach ( $this->data as $key => $value ) {
-
-			$key = ! empty( $fields_map[ $key ] ) ? esc_attr( $fields_map[ $key ] ) : $key;
-
-			if ( 'Submit' === $key ) {
-				continue;
-			}
-
-			if ( ! in_array( $key, $object_fields ) ) {
-
-				if ( false !== strpos( $key, 'jet_tax__' ) ) {
-
-					$tax = str_replace( 'jet_tax__', '', $key );
-
-					if ( ! isset( $terms_input[ $tax ] ) ) {
-						$terms_input[ $tax ] = array();
-					}
-
-					if ( ! is_array( $value ) ) {
-						$terms_input[ $tax ][] = absint( $value );
-					} else {
-						$terms_input[ $tax ] = array_merge( $terms_input[ $tax ], array_map( 'absint', $value ) );
-					}
-
-				} else {
-					if ( jet_engine()->relations && jet_engine()->relations->is_relation_key( $key ) ) {
-						$rels_input[ $key ] = $value;
-					} else {
-						$meta_input[ $key ] = $value;
-					}
-				}
-
-			} else {
-				$postarr[ $key ] = $value;
-
-				if ( 'post_title' === $key ) {
-					$has_title = true;
-				}
-
-			}
-
-		}
-
-		$post_status = ! empty( $notification['post_status'] ) ? $notification['post_status'] : '';
-
-		if ( $post_status && 'keep-current' !== $post_status ) {
-			$postarr['post_status'] = $post_status;
-		}
-
-		$postarr['meta_input'] = $meta_input;
-
-		$post_type_obj = get_post_type_object( $post_type );
-
-		if ( ! empty( $postarr['ID'] ) ) {
-
-			$post = get_post( $postarr['ID'] );
-
-			if ( ! $post || ( absint( $post->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) ) {
-				$this->log[] = false;
-				return;
-			}
-
-			$post_id = wp_update_post( $postarr );
-
-		} else {
-
-			if ( ! $has_title ) {
-				$postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
-			}
-
-			$post_id = wp_insert_post( $postarr );
-
-		}
-
-		$this->data['inserted_post_id']               = $post_id;
-		$this->handler->form_data['inserted_post_id'] = $post_id;
-
-		if ( $post_id ) {
-
-			if ( ! empty( $terms_input ) ) {
-
-				foreach ( $terms_input as $tax => $terms ) {
-					$res = wp_set_post_terms( $post_id, $terms, $tax );
-				}
-			}
-
-			if ( ! $has_title && empty( $postarr['ID'] ) ) {
-
-				$title = $post_type_obj->labels->singular_name . ' #' . $post_id;
-
-				wp_update_post( array(
-					'ID'         => $post_id,
-					'post_title' => $title,
-				) );
-
-			}
-
-			if ( ! empty( $rels_input ) ) {
-				foreach ( $rels_input as $rel_key => $rel_posts ) {
-					jet_engine()->relations->process_meta( false, $post_id, $rel_key, $rel_posts );
-				}
-			}
-
-			$this->log[] = true;
-
-		} else {
-			$this->log[] = false;
-		}
-
-	}
 
 	/**
 	 * Regsiter new user notification callback

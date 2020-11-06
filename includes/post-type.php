@@ -1,7 +1,11 @@
 <?php
 namespace Jet_Form_Builder;
 
+
+use Jet_Form_Builder\Classes\Messages_Helper_Trait;
+
 // If this file is called directly, abort.
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -11,6 +15,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Post_Type {
 
+    use Messages_Helper_Trait;
+
 	/**
 	 * Constructor for the class
 	 */
@@ -19,12 +25,12 @@ class Post_Type {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 	}
 
-	/**
-	 * Register admin assets
-	 *
-	 * @return [type] [description]
-	 */
-	public function admin_assets( $hook ) {
+    /**
+     * Register admin assets
+     *
+     * @return void [type] [description]
+     */
+	public function admin_assets() {
 
 		$screen = get_current_screen();
 
@@ -43,11 +49,11 @@ class Post_Type {
 
 	}
 
-	/**
-	 * Returns current post type slug
-	 *
-	 * @return [type] [description]
-	 */
+    /**
+     * Returns current post type slug
+     *
+     * @return string [type] [description]
+     */
 	public function slug() {
 		return 'jet-form-builder';
 	}
@@ -61,17 +67,17 @@ class Post_Type {
 
 		$args = array(
 			'labels' => array(
-				'name'               => esc_html__( 'Forms', 'jet-engine' ),
-				'singular_name'      => esc_html__( 'Form', 'jet-engine' ),
-				'add_new'            => esc_html__( 'Add New', 'jet-engine' ),
-				'add_new_item'       => esc_html__( 'Add New Form', 'jet-engine' ),
-				'edit_item'          => esc_html__( 'Edit Form', 'jet-engine' ),
-				'new_item'           => esc_html__( 'Add New Item', 'jet-engine' ),
-				'view_item'          => esc_html__( 'View Form', 'jet-engine' ),
-				'search_items'       => esc_html__( 'Search Form', 'jet-engine' ),
-				'not_found'          => esc_html__( 'No Forms Found', 'jet-engine' ),
-				'not_found_in_trash' => esc_html__( 'No Forms Found In Trash', 'jet-engine' ),
-				'menu_name'          => esc_html__( 'Forms', 'jet-engine' ),
+				'name'               => esc_html__( 'Jet Forms', 'jet-form-builder' ),
+				'singular_name'      => esc_html__( 'Jet Form', 'jet-form-builder' ),
+				'add_new'            => esc_html__( 'Add New', 'jet-form-builder' ),
+				'add_new_item'       => esc_html__( 'Add New Jet Form', 'jet-form-builder' ),
+				'edit_item'          => esc_html__( 'Edit Jet Form', 'jet-form-builder' ),
+				'new_item'           => esc_html__( 'Add New Item', 'jet-form-builder' ),
+				'view_item'          => esc_html__( 'View Jet Form', 'jet-form-builder' ),
+				'search_items'       => esc_html__( 'Search Form', 'jet-form-builder' ),
+				'not_found'          => esc_html__( 'No Jet Forms Found', 'jet-form-builder' ),
+				'not_found_in_trash' => esc_html__( 'No Jet Forms Found In Trash', 'jet-form-builder' ),
+				'menu_name'          => esc_html__( 'Jet Forms', 'jet-form-builder' ),
 			),
 			'public'              => true,
 			'show_ui'             => true,
@@ -94,6 +100,8 @@ class Post_Type {
 			apply_filters( 'jet-form-builder/post-type/args', $args )
 		);
 
+        $this->set_default_messages();
+
 		$meta = array(
 			'_jf_args'     => array(
 				'type'    => 'string',
@@ -105,7 +113,7 @@ class Post_Type {
 			),
 			'_jf_messages' => array(
 				'type'    => 'string',
-				'default' => '{}',
+				'default' => $this->get_default_messages_values_json(),
 			),
 			'_jf_preset' => array(
 				'type'    => 'string',
@@ -128,5 +136,83 @@ class Post_Type {
 		}
 
 	}
+
+    public function get_form_meta( $meta_key, $form_id ) {
+        return json_decode( get_post_meta(
+            $form_id,
+            $meta_key,
+            true
+        ),
+            true
+        );
+    }
+
+    /**
+     * Returns form meta arguments:
+     * fields_layout, submit_type and required_mark
+     * in assoc array
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_args( $form_id ) {
+        return $this->get_form_meta( '_jf_args', $form_id );
+    }
+
+    /**
+     * Returns form actions
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_actions( $form_id ) {
+        return $this->get_form_meta( '_jf_actions', $form_id );
+    }
+
+    /**
+     * Returns form actions
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_preset( $form_id ) {
+        return $this->get_form_meta( '_jf_preset', $form_id );
+    }
+
+    /**
+     * Returns form actions
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_messages( $form_id ) {
+        return $this->get_form_meta( '_jf_messages', $form_id );
+    }
+
+
+	public function set_default_messages() {
+	    $this->messages = apply_filters( 'jet-form-builder/message-types', array(
+            'success' => array(
+                'label' => __( 'Form successfully submitted.', 'jet-form-builder' ),
+                'value' => 'Form successfully submitted.',
+            ),
+            'failed' => array(
+                'label' => __( 'Submit failed.', 'jet-form-builder' ),
+                'value' => 'There was an error trying to submit form. Please try again later.',
+            ),
+            'validation_failed' => array(
+                'label' => __( 'Validation error', 'jet-form-builder' ),
+                'value' => 'One or more fields have an error. Please check and try again.',
+            ),
+            'empty_field' => array(
+                'label' => __( 'Required field is empty', 'jet-form-builder' ),
+                'value' => 'The field is required.',
+            ),
+            'internal_error' => array(
+                'label' => __( 'Internal server error', 'jet-form-builder' ),
+                'value' => 'Internal server error. Please try again later.',
+            ),
+        ) );
+    }
 
 }

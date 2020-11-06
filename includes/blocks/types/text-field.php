@@ -63,6 +63,10 @@ class Text_Field extends Base  {
             'JetFormTextFieldData',
             array(
 				'field_types_list' => array(
+                    array(
+                        'value' => '',
+                        'label' => __( 'Select field type...', 'jet-form-builder' )
+                    ),
 					array(
 						'value' => 'text',
                     	'label' => __( 'Text', 'jet-form-builder' )
@@ -142,7 +146,7 @@ class Text_Field extends Base  {
 		return array(
 			'field_type' => array(
 				'type' => 'string',
-				'default' => 'text',
+				'default' => '',
 			),
 			'enable_input_mask' => array(
 				'type' => 'boolean',

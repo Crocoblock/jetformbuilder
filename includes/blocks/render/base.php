@@ -226,7 +226,7 @@ abstract class Base {
 	public function set_meta_args() {
         $this->args = array_merge(
             $this->args,
-            Plugin::instance()->form->get_args( $this->form_id )
+            Plugin::instance()->post_type->get_args( $this->form_id )
         );
     }
 

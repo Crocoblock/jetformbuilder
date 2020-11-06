@@ -92,7 +92,7 @@ class Form extends Base {
 		return array(
 			'form_id' => array(
 				'type' => 'number',
-				'default' => '',
+				'default' => 0,
 			),
 		);
 	}

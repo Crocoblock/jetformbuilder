@@ -49,8 +49,6 @@ class JetFieldsMapControl extends wp.element.Component {
 
 
 	init() {
-		console.log( this.fieldTypes );
-
 		this.id = `inspector-select-control-${ this.index }`;
 		this.preparedTaxes = [];
 		this.taxPrefix = 'jet_tax__';

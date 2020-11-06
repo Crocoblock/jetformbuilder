@@ -2,6 +2,8 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Messages_Helper_Trait;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -11,6 +13,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
+    use Messages_Helper_Trait;
+
     /**
      * Stores the action settings
      * from the form meta field
@@ -19,17 +23,37 @@ abstract class Base {
      */
     public $settings = array();
 
+    public $response_data;
+
+    public function __construct() {
+        $this->set_action_messages();
+    }
+
 	abstract public function get_name();
 
 	abstract public function get_id();
 
 	abstract public function do_action( $request );
 
-	/**
-	 * Register custom action data
-	 *
-	 * @return [type] [description]
-	 */
+	public function messages() {
+	    return array();
+    }
+
+	public function set_action_messages() {
+
+        $this->messages = apply_filters(
+            'jet-form-builder/message-types/' . $this->get_id(),
+            $this->messages()
+        );
+    }
+
+    /**
+     * Register custom action data
+     *
+     * @param $editor
+     * @param $handle
+     * @return void [type] [description]
+     */
 	public function action_data( $editor, $handle ) {}
 
     /**

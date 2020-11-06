@@ -1,5 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Admin;
+use Jet_Form_Builder\Plugin;
+
 /**
  * Form editor class
  * Thanks Tom J Nowell for initial editor idea and inspiration!
@@ -341,6 +343,10 @@ class Editor {
 		) );
 	}
 
+	public function get_messages_labels() {
+        return Plugin::instance()->post_type->get_messages_labels();
+    }
+
 	/**
 	 * Enqueue editor assets
 	 *
@@ -382,10 +388,11 @@ class Editor {
 		);
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'allowedBlocks' => $this->get_allowed_blocks(),
-			'action'        => $this->get_action(),
-			'itemID'        => $this->get_item_id(),
-			'presetConfig'  => $this->get_preset_config(),
+			'allowedBlocks'     => $this->get_allowed_blocks(),
+			'action'            => $this->get_action(),
+			'itemID'            => $this->get_item_id(),
+			'presetConfig'      => $this->get_preset_config(),
+            'messagesLabels'    => $this->get_messages_labels()
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );

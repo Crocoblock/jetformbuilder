@@ -16,16 +16,9 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Manager
 {
     public  $generators = false;
-    public  $messages_manager;
-
-    const   NAMESPACE_FIELDS = 'jet-forms/';
-
     public $builder;
 
-    public function __construct() {
-        $this->messages_manager = new Form_Messages_Manager();
-    }
-
+    const   NAMESPACE_FIELDS = 'jet-forms/';
     /**
      * Returns all instatnces of options genrators classes
      *
@@ -92,50 +85,10 @@ class Form_Manager
 
     }
 
-    public function get_form_meta( $meta_key, $form_id ) {
-        return json_decode( get_post_meta(
-            $form_id,
-            $meta_key,
-            true
-        ),
-            true
-        );
-    }
-
     public function field_name( $blockName ) {
         return explode( self::NAMESPACE_FIELDS, $blockName )[1];
     }
 
-    /**
-     * Returns form meta arguments:
-     * fields_layout, submit_type and required_mark
-     * in assoc array
-     *
-     * @param $form_id
-     * @return array
-     */
-    public function get_args( $form_id ) {
-        return $this->get_form_meta( '_jf_args', $form_id );
-    }
 
-    /**
-     * Returns form actions
-     *
-     * @param $form_id
-     * @return array
-     */
-    public function get_actions( $form_id ) {
-        return $this->get_form_meta( '_jf_actions', $form_id );
-    }
-
-    /**
-     * Returns form actions
-     *
-     * @param $form_id
-     * @return array
-     */
-    public function get_preset( $form_id ) {
-        return $this->get_form_meta( '_jf_preset', $form_id );
-    }
 
 }

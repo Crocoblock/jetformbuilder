@@ -26,6 +26,7 @@ class Form_Handler {
     public $response_data   = array();
     public $is_ajax         = false;
     public $is_success      = false;
+    public $response_status = 'failed';
 
     public $form_id;
     public $refer;
@@ -152,7 +153,6 @@ class Form_Handler {
             $this->request_data = $request_handler->get_form_data();
 
         } catch ( Handler_Exception $exception ) {
-
             $this->send_response( array(
                 'status' => $exception->get_form_status(),
             ) );
@@ -164,7 +164,7 @@ class Form_Handler {
         try {
             $this->action_handler = new Action_Handler( $this->form_id, $this->request_data );
 
-            $this->action_handler->do_actions( $this->request_data );
+            $this->action_handler->do_actions();
             $this->is_success = true;
 
         } catch ( Handler_Exception $exception ) {
@@ -183,6 +183,17 @@ class Form_Handler {
         $this->response_data = array_merge( $this->response_data, $data );
     }
 
+    public function get_message_builder() {
+
+        $data = ( object ) array(
+            'form_id'   => $this->form_id,
+            'status'    => $this->response_status,
+            'actions'   => $this->action_handler->form_actions
+         );
+
+         return new Form_Messages_Builder( $data );
+    }
+
     /**
      * Redirect back to refer
      * @param  array  $args [description]
@@ -196,12 +207,10 @@ class Form_Handler {
 
         $error_statuses  = array( 'validation_failed', 'invalid_email' );
 
-        if ( ! empty( $specific_status ) ) {
-            $args['status'] = $specific_status;
-        }
+        $this->response_status = $args['status'];
 
         $query_args = array(
-            'status' => $args['status'],
+            'status' => $this->response_status,
         );
 
         $query_args = array_merge( $query_args, $this->response_data );
@@ -209,7 +218,7 @@ class Form_Handler {
         // Clear form-related arguments
         $this->refer = remove_query_arg( array( 'values', 'status', 'fields' ), $this->refer );
 
-        if ( 'validation_failed' === $args['status'] ) {
+        if ( 'validation_failed' === $this->response_status ) {
             if ( $this->is_ajax ) {
                 $query_args['fields'] = $args['errors'];
             } else {
@@ -219,7 +228,7 @@ class Form_Handler {
 
         $send_values = apply_filters( 'jet-form-builder/form-handler/send-values-on-error', true );
 
-        if ( ! $this->is_ajax && $send_values && in_array( $args['status'], $error_statuses ) ) {
+        if ( ! $this->is_ajax && $send_values && in_array( $this->response_status, $error_statuses ) ) {
             $query_args['values'] = $this->form_data;
         }
 
@@ -227,17 +236,13 @@ class Form_Handler {
 
         if ( $this->is_ajax ) {
 
-            $messages = new Form_Messages_Builder(
-                $this->form_id,
-                $args['status'],
-                true
-            );
+            $messages = $this->get_message_builder();
 
             ob_start();
             $messages->render_messages();
             $query_args['message'] = ob_get_clean();
 
-            if ( 'validation_failed' === $args['status'] ) {
+            if ( 'validation_failed' === $this->response_status ) {
                 ob_start();
                 $messages->render_empty_field_message();
                 $query_args['field_message'] = ob_get_clean();

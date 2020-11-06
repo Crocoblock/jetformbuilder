@@ -2,7 +2,7 @@ import Editor from './editor';
 import ArgsMeta from './meta/arguments';
 import ActionsMeta from './meta/actions';
 import PresetMeta from './meta/preset';
-//import MessagesMeta from './meta/messages';
+import MessagesMeta from './meta/messages';
 
 import './blocks/form-fields';
 
@@ -85,6 +85,7 @@ window.jetFormActionTypes.forEach( function( action, index ) {
 ArgsMeta();
 ActionsMeta();
 PresetMeta();
+MessagesMeta();
 
 var initializedEvent = new Event( 'jet-form-builder-initialized' );
 
@@ -96,6 +97,7 @@ document.dispatchEvent( initializedEvent );
  * @param  {string} id        The html ID of the input to be transformed
  * @param  {string} inputName The input name to use for when the form gets submitted
  * @param  {string} content   Starting content to fill the editor with, leave blank to use the value of the target element
+ * @param formName
  * @return {void}             This function returns no values
  */
 window.JetFormEditor = function( id, inputName, content, formName ) {

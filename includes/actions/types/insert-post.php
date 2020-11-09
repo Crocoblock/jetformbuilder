@@ -36,7 +36,7 @@ class Insert_Post extends Base {
         );
     }
 
-	public function do_action( $request ) {
+	public function do_action( $request, $index_action, $size_all, $actions_response ) {
 	    // $this->settings - action settings
 	    // throw new Action_Exception( 'failed' );
 

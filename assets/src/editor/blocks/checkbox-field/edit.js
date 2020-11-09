@@ -133,12 +133,24 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Checkbox Field' }
-                subtitle={ [ attributes.name ] }
-                isRequired={ attributes.required }
-            />
+            <React.Fragment>
+                <CheckboxControl
+                    key={`place_holder_block_${block + 1}`}
+                    label='Sample 1'
+                />
+                <CheckboxControl
+                    key={`place_holder_block_${block + 2}`}
+                    label='Sample 2'
+                />
+                <CheckboxControl
+                    key={`place_holder_block_${block + 3}`}
+                    label='Sample 3'
+                />
+                <CheckboxControl
+                    key={`place_holder_block_${block + 4}`}
+                    label='Sample 4'
+                />
+            </React.Fragment>
         ];
     }
 }

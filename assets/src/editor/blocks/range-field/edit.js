@@ -32,6 +32,7 @@ const {
     Button,
     RangeControl,
     CheckboxControl,
+    RadioControl,
     Disabled,
     __experimentalNumberControl,
 } = wp.components;
@@ -41,8 +42,6 @@ let { NumberControl } = wp.components;
 if ( typeof NumberControl === 'undefined' ) {
     NumberControl = __experimentalNumberControl;
 }
-
-
 
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
@@ -136,11 +135,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Range Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <RangeControl
+                label={ attributes.label }
+                min={ 0 }
+                max={ 100 }
             />
         ];
     }

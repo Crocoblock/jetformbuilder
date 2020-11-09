@@ -21,7 +21,7 @@ class Call_Hook extends Base {
 		return 'call_hook';
 	}
 
-	public function do_action($request)
+	public function do_action( $request, $index_action, $size_all, $actions_response )
     {
         // TODO: Implement do_action() method.
     }

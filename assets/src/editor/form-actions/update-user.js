@@ -1,5 +1,6 @@
 import Tools from "../tools/tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
+import ActionMessages from "../meta/action-messages";
 /**
  * Internal dependencies
  */
@@ -119,9 +120,11 @@ window.jetFormDefaultActions['update_user'] = class UpdateUserAction extends wp.
 					/>
 				</div>
 
-
 			</BaseControl>
-
+			<ActionMessages
+				localizedData={ this.data }
+				{ ...this.props }
+			/>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}

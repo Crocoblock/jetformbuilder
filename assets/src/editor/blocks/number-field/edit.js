@@ -35,7 +35,11 @@ const {
     __experimentalNumberControl,
 } = wp.components;
 
-const NumberControl = __experimentalNumberControl;
+let { NumberControl } = wp.components;
+
+if ( typeof NumberControl === 'undefined' ) {
+    NumberControl = __experimentalNumberControl;
+}
 
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
@@ -115,11 +119,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Number Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <NumberControl
+                label={ attributes.label }
+                labelPosition='top'
             />
         ];
     }

@@ -32,6 +32,7 @@ const {
     Button,
     RangeControl,
     CheckboxControl,
+    DateTimePicker,
     Disabled,
 } = wp.components;
 
@@ -92,11 +93,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Date Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <DateTimePicker
+                key={`place_holder_block_${block}`}
             />
         ];
     }

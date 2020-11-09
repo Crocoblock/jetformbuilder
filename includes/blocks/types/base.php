@@ -234,6 +234,17 @@ abstract class Base {
 		);
 	}
 
+	public function get_default_attributes() {
+	    $attributes = $this->get_attributes();
+	    $default    = array();
+
+	    foreach ( $attributes as $name => $value ) {
+	        $default[ $name ] = $value['default'];
+        }
+
+	    return $default;
+    }
+
 	/**
 	 * Retruns attra from input array if not isset, get from defaults
 	 *

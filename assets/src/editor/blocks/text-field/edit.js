@@ -143,11 +143,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TextEdit extends wp.el
 						/> }
 					</InspectorControls>
 			),
-			<JetFieldPlaceholder
-				key={ keyPlaceHolder }
-				title={ 'Text Field' }
-				subtitle={ [ attributes.label, attributes.name ] }
-				isRequired={ attributes.required }
+			<TextControl
+				key={`place_holder_block_${block}`}
+				label={ attributes.label }
 			/>
 		];
 	}

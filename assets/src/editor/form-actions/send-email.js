@@ -77,7 +77,7 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 				label={ window.jetFormEmailData.labels.from_field }
 				help={ window.jetFormEmailData.labels.from_field_help }
 				onChange={ ( newValue ) => {
-					onChangeValue( newValue, 'custom_email' );
+					onChangeValue( newValue, 'from_field' );
 				} }
 			/> }
 			<SelectControl
@@ -162,12 +162,12 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 							position={ 'bottom left' }
 						>
 							{ formFields.length && <PanelBody title={ 'Form Fields' }>
-								{ formFields.map( ( field ) => {
-									return <div key={ 'field_' + field.value }>
+								{ formFields.map( field => {
+									return <div key={ 'field_' + field.name }>
 										<Button
 											isLink
-											onClick={ () => { insertMacros( field.value ) } }
-										>{ '%' + field.value + '%' }</Button>
+											onClick={ () => { insertMacros( field.name ) } }
+										>{ '%' + field.name + '%' }</Button>
 									</div>;
 								} ) }
 							</PanelBody> }

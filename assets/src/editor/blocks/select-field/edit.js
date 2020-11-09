@@ -143,11 +143,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Select Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <SelectControl
+                key={`place_holder_block_${block}`}
+                label={ attributes.label }
+                labelPosition='top'
+                options={ [
+                    { label: 'Sample 1' },
+                    { label: 'Sample 2' },
+                    { label: 'Sample 3' },
+                    { label: 'Sample 4' },
+                ] }
             />
         ];
     }

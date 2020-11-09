@@ -21,6 +21,7 @@ class Action_Handler {
     public $log_status          = false;
     public $specific_status     = false;
     public $form_actions        = array();
+    public $is_ajax             = false;
 
 	public $headers;
 	public $email_data;
@@ -67,6 +68,7 @@ class Action_Handler {
         return $this;
     }
 
+
     /**
      * Unregister notification by id
      *
@@ -93,20 +95,27 @@ class Action_Handler {
     /**
      * Send form notifications
      *
-     * @return void [type] [description]
+     * @return array [type] [description]
      */
 	public function do_actions() {
 
 		if ( empty( $this->form_actions ) ) {
-			return;
+			return array();
 		}
 
-		foreach ( $this->form_actions as $action ) {
+		$size_all = sizeof( $this->form_actions );
+		$response_data = array();
+
+		foreach ( $this->form_actions as $index => $action ) {
 			/**
 			 * Process single action
 			 */
-            $action->do_action( $this->request_data );
+            $action->do_action( $this->request_data, $index, $size_all, $response_data );
+
+            $response_data = array_merge( $response_data, $action->response_data );
 		}
+
+		return $response_data;
 	}
 
 	/**

@@ -215,13 +215,15 @@ class Form_Builder {
 	}
 
     /**
-     * @return mixed
+     * @return Base [render]
      */
     public function get_field_object() {
+        $block = jet_form_builder()->blocks->get_field_by_name( $this->field_name );
 
-		return jet_form_builder()->blocks
-				->get_field_by_name( $this->field_name )
-				->get_block_renderer( $this->form_id, $this->current_field_data['attrs'] );
+		return $block->get_block_renderer( $this->form_id, array_merge(
+                    $block->get_default_attributes(),
+                    $this->current_field_data['attrs']
+                ) );
 	}
 
 	/**

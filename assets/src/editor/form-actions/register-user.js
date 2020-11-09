@@ -1,4 +1,5 @@
 import Tools from "../tools/tools";
+import ActionMessages from "../meta/action-messages";
 /**
  * Internal dependencies
  */
@@ -27,24 +28,6 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 		this.data = window.jetFormRegisterUserData;
 
 		this.userFields = Object.entries( this.data.userFields );
-
-		this.setMessages();
-	}
-
-	setMessages() {
-		if ( this.props.settings && this.props.settings.messages ) {
-			return;
-		}
-		const messages = {};
-
-		Object.entries( this.data.messages ).forEach( ( [ type, data ] ) => {
-			messages[ type ] = data.value;
-		} )
-
-		this.props.onChange( {
-			...this.props.settings,
-			messages: messages
-		} );
 	}
 
 	getFormFieldsList() {
@@ -87,13 +70,6 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 		} );
 	}
 
-	getMessage( name ) {
-		return this.getFieldByName( {
-			source: 'messages',
-			name
-		} );
-	}
-
 	changeFieldsMap( { source, nameField, value } ) {
 		const fieldsMap = Object.assign(
 			{},
@@ -122,14 +98,6 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 
 		const onChangeMetaFieldMap = ( value, nameField ) => {
 			const source = 'meta_fields_map';
-
-			this.changeFieldsMap(
-				{ value, nameField, source }
-			);
-		};
-
-		const onChangeMessage = ( value, nameField ) => {
-			const source = 'messages';
 
 			this.changeFieldsMap(
 				{ value, nameField, source }
@@ -240,29 +208,10 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 					/>
 				</div>
 			</BaseControl>
-			<BaseControl
-				label={ __( 'Messages Settings:' ) }
-				key='messages_settings_fields'
-			>
-				<div className='jet-user-meta-rows'>
-					{ settings.messages && Object.entries( settings.messages )
-						.map( ( [ type, data ], id ) => {
-
-						return <div
-							className="jet-user-meta__row"
-							key={ 'message_' + type + id }
-						>
-							<TextControl
-								key={ type + id }
-								label={ this.data.messages[ type ].label }
-								value={ this.getMessage( type ) }
-								onChange={ newValue => onChangeMessage( newValue, type ) }
-							/>
-						</div>;
-					} ) }
-				</div>
-			</BaseControl>
-
+			<ActionMessages
+				localizedData={ this.data }
+				{ ...this.props }
+			/>
 		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}

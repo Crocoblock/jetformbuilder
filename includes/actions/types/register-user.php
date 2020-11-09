@@ -17,7 +17,7 @@ class Register_User extends Base {
     public function __construct() {
         add_filter(
             'editable_roles',
-            [ $this, 'hide_roles' ]
+            array( $this, 'hide_roles' )
         );
 
         parent::__construct();
@@ -31,9 +31,185 @@ class Register_User extends Base {
 		return 'register_user';
 	}
 
-	public function do_action( $request )
+	public function do_action( $request, $index_action, $size_all, $actions_response )
     {
-        throw new Action_Exception( 'password_mismatch' );
+        if ( is_user_logged_in() ) {
+
+            if ( 1 === $size_all ) {
+                throw new Action_Exception( 'already_logged_in' );
+            }
+
+            if ( $this->settings['add_user_id'] ) {
+                $this->response_data['user_id'] = get_current_user_id();
+            }
+
+            return;
+        }
+
+        $fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
+
+        // Prepare fields
+        $username = false;
+        $email    = false;
+        $password = false;
+        $fname    = false;
+        $lname    = false;
+        $user_url = false;
+
+        // If fields map for login, password or email is not set - abort but allow submit form (its not user fault)
+        if ( empty( $fields_map['login'] ) || empty( $fields_map['email'] ) || empty( $fields_map['password'] ) ) {
+            return;
+        }
+
+        /**
+         * Validate username
+         */
+        $raw_username = ! empty( $request[ $fields_map['login'] ] ) ? $request[ $fields_map['login'] ] : false;
+
+        if ( ! $raw_username ) {
+            throw new Action_Exception( 'empty_username' );
+        }
+
+        $username = sanitize_user( $raw_username );
+
+        if ( $username !== $raw_username ) {
+            throw new Action_Exception( 'sanitize_user' );
+        }
+
+        if ( username_exists( $username ) ) {
+            throw new Action_Exception( 'username_exists' );
+        }
+        // username - ok
+
+        /**
+         * Validate email
+         */
+        $raw_email = ! empty( $request[ $fields_map['email'] ] ) ? $request[ $fields_map['email'] ] : false;
+
+        if ( ! $raw_email ) {
+            throw new Action_Exception( 'empty_email' );
+        }
+
+        $email = sanitize_email( $raw_email );
+
+        if ( $email !== $raw_email ) {
+            throw new Action_Exception( 'empty_email' );
+        }
+
+        if ( email_exists( $email ) ) {
+
+            throw new Action_Exception( 'email_exists' );
+        }
+        // email - ok
+
+        /**
+         * Validate password
+         */
+        $password = ! empty( $request[ $fields_map['password'] ] ) ? $request[ $fields_map['password'] ] : false;
+
+        if ( ! $password ) {
+            throw new Action_Exception( 'empty_password' );
+        }
+
+        if ( ! empty( $fields_map['confirm_password'] ) ) {
+            $confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
+
+            if ( $confirm_password !== $password ) {
+                throw new Action_Exception( 'password_mismatch' );
+            }
+
+        }
+        // password - ok
+
+        if ( ! empty( $fields_map['first_name'] ) ) {
+            $fname = ! empty( $request[ $fields_map['first_name'] ] ) ? $request[ $fields_map['first_name'] ] : false;
+        }
+
+        if ( ! empty( $fields_map['last_name'] ) ) {
+            $lname = ! empty( $request[ $fields_map['last_name'] ] ) ? $request[ $fields_map['last_name'] ] : false;
+        }
+
+        if ( ! empty( $fields_map['user_url'] ) ) {
+            $user_url = ! empty( $request[ $fields_map['user_url'] ] ) ? $request[ $fields_map['user_url'] ] : false;
+        }
+
+        $metafields_map = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
+        $metadata       = array();
+
+        if ( ! empty( $metafields_map ) ) {
+            foreach ( $metafields_map as $form_field => $meta_field ) {
+                if ( ! empty( $request[ $form_field ] ) ) {
+                    $metadata[ $meta_field ] = $request[ $form_field ];
+                }
+            }
+        }
+
+        $userarr = array(
+            'user_pass'  => $password,
+            'user_login' => $username,
+            'user_email' => $email,
+            'first_name' => $fname,
+            'last_name'  => $lname,
+            'user_url'   => $user_url,
+        );
+
+        if ( ! empty( $this->settings['user_role'] ) && 'administrator' !== $this->settings['user_role'] ) {
+            $userarr['role'] = $this->settings['user_role'];
+        }
+
+        $user_id = wp_insert_user( $userarr );
+
+        if ( ! is_wp_error( $user_id ) ) {
+
+            if ( ! empty( $metadata ) ) {
+                foreach ( $metadata as $meta_key => $meta_value ) {
+
+                    /*if ( $this->is_repeater_val( $meta_value ) ) {
+
+                        $prepared_value = array();
+
+                        foreach ( $meta_value as $index => $row ) {
+
+                            $prepared_row = array();
+
+                            foreach ( $row as $item_key => $item_value ) {
+
+                                $item_key = ! empty( $metafields_map[ $item_key ] ) ? esc_attr( $metafields_map[ $item_key ] ) : $item_key;
+
+                                $prepared_row[ $item_key ] = $item_value;
+                            }
+
+                            $prepared_value[ 'item-' . $index ] = $prepared_row;
+                        }
+
+                        $meta_value = $prepared_value;
+                    }*/
+
+                    update_user_meta( $user_id, $meta_key, $meta_value );
+                }
+            }
+
+            if ( ! empty( $this->settings['log_in'] ) ) {
+
+                wp_signon( array(
+                    'user_login'    => $username,
+                    'user_password' => $password,
+                ) );
+
+                // If form submitted by AJAX - we need to reload page to ensure user is logged in
+                if ( $request['__is_ajax'] ) {
+                    $this->response_data['reload'] = true;
+                }
+
+            }
+
+            if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
+                $this->response_data['user_id'] = $user_id;
+            }
+
+        } else {
+            throw new Action_Exception( 'failed' );
+        }
     }
 
     /**

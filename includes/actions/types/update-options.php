@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -21,9 +22,33 @@ class Update_Options extends Base {
 		return 'update_options';
 	}
 
-	public function do_action($request)
+	public function do_action( $request, $index_action, $size_all, $actions_response )
     {
-        // TODO: Implement do_action() method.
+        $fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
+        $options_data = array();
+
+        if ( empty( $this->settings['options_page'] ) ) {
+            return;
+        }
+
+        if ( ! empty( $fields_map ) ) {
+            foreach ( $fields_map as $form_field => $option_field ) {
+                if ( ! empty( $option_field ) && ! empty( $request[ $form_field ] ) ) {
+                    $options_data[ $option_field ] = $request[ $form_field ];
+                }
+            }
+        }
+
+        if ( empty( $options_data ) ) {
+            throw new Action_Exception( 'failed' );
+        }
+
+        $option_name = $this->settings['options_page'];
+
+        $current_value = get_option( $option_name, array() );
+        $new_value     = array_merge( $current_value, $options_data );
+
+        update_option( $option_name, $new_value );
     }
 
     /**

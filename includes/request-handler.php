@@ -11,8 +11,16 @@ class Request_Handler
     public $request;
     public $errors;
 
+
     public function __construct( $request ) {
-        $this->request = (object) $request;
+        $this->request = $request;
+    }
+
+    private function merge_with_base_request( $data ) {
+        foreach ( $this->request as $name => $field ) {
+            $data[ '__' . $name ] = $field;
+        }
+        return $data;
     }
 
 
@@ -23,7 +31,7 @@ class Request_Handler
      */
     public function get_values_from_request() {
 
-        if ( $this->request->is_ajax ) {
+        if ( $this->request['is_ajax'] ) {
 
             $prepared = array();
             $raw      = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
@@ -70,10 +78,10 @@ class Request_Handler
      */
     public function get_form_data() {
 
-        $fields         = Plugin::instance()->form->get_fields( $this->request->form_id );
+        $fields         = Plugin::instance()->form->get_fields( $this->request['form_id'] );
         $data           = array();
         $errors         = array();
-        $invalid_email  = false;
+        $invalid_email  = true;
         $request        = $this->get_values_from_request();
 
 
@@ -114,10 +122,8 @@ class Request_Handler
                 $value = jet_engine_sanitize_wysiwyg( $value );
             }
 
-            $data[ $name ] = $value;
-
-            if ( 'text-field' === $type && 'email' === $settings['field_type'] ) {
-                $invalid_email = is_email( $value );
+            if ( 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
+                throw new Request_Exception( 'invalid_email' );
             }
 
             if ( is_array( $value ) ) {
@@ -125,22 +131,16 @@ class Request_Handler
             }
 
             if ( $required && '' === $value ) {
-                $this->errors[] = $name;
+                throw new Request_Exception( 'empty_field' );
             }
 
+            $data[ $name ] = $value;
+
         }
 
-        $data = apply_filters( 'jet-form-builder/form-handler/form-data', $data, $this->request->form_id, $fields );
+        $data = apply_filters( 'jet-form-builder/form-handler/form-data', $data, $this->request['form_id'], $fields );
 
-        if ( ! empty( $errors ) ) {
-            throw new Request_Exception( 'success' );
-        }
-
-        if ( $invalid_email ) {
-            throw new Request_Exception( 'invalid_email' );
-        }
-
-        return $data;
+        return $this->merge_with_base_request( $data );
     }
 
 

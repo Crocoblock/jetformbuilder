@@ -13,7 +13,18 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Hidden_Field extends Base {
 
-	/**
+    private $post;
+
+    public function __construct() {
+        parent::__construct();
+
+        /**
+         * Get current post object
+         */
+        $this->post = get_post();
+    }
+
+    /**
 	 * Returns block title
 	 *
 	 * @return [type] [description]
@@ -50,27 +61,195 @@ class Hidden_Field extends Base {
 	}
 
     public function get_field_value( $value, $params = array() ) {
-        $callables = $this->field_values_callabels();
 
-        if ( isset( $callables[ $value ] ) ) {
-            return $callables[ $value ]( $params );
+        if ( ! empty( $value ) && is_callable( array( $this, $value ) ) ) {
+            return $this->$value( $params );
+        }
+        elseif ( ! empty( $params['default'] ) ) {
+            return $params['default'];
         }
 
         return $value;
     }
 
-	public function field_values_callabels() {
-	    return array(
-	        'post_id' => array( $this, 'current_post_id' )
-        );
+    /**
+     * @param array $params
+     * @return int|null
+     */
+    private function post_id($params = array() ) {
+        if ( ! $this->post ) {
+            return null;
+        } else {
+            return $this->post->ID;
+        }
     }
 
-    public function current_post_id( $params = array() ) {
-	    global $post;
-
-	    return $post->ID;
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function post_title($params = array() ) {
+        if ( ! $this->post ) {
+            return null;
+        } else {
+            return get_the_title( $this->post->ID );
+        }
     }
 
+    /**
+     * @param array $params
+     * @return false|string|\WP_Error|null
+     */
+    private function post_url($params = array() ) {
+        if ( ! $this->post ) {
+            return null;
+        } else {
+            return get_permalink( $this->post->ID );
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return mixed|null
+     */
+    private function post_meta($params = array() ) {
+        if ( ! $this->post ) {
+            return null;
+        }
+
+        $key = ! empty( $params['hidden_value_field'] ) ? $params['hidden_value_field'] : '';
+
+        if ( ! $key ) {
+            return null;
+        } else {
+            return get_post_meta( $this->post->ID, $key, true );
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return string|void|null
+     */
+    private function query_var($params = array() ) {
+        $key = ! empty( $params['query_var_key'] ) ? $params['query_var_key'] : '';
+
+        if ( ! $key ) {
+            return null;
+        } else {
+            return isset( $_GET[ $key ] ) ? esc_attr( $_GET[ $key ] ) : null;
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function user_id($params = array() ) {
+        if ( ! is_user_logged_in() ) {
+            return null;
+        } else {
+            $user = wp_get_current_user();
+            return $user->user_email;
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function user_name($params = array() ) {
+        if ( ! is_user_logged_in() ) {
+            return null;
+        } else {
+            $user = wp_get_current_user();
+            return $user->display_name;
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return mixed|null
+     */
+    private function user_meta($params = array() ) {
+        $key = ! empty( $args['hidden_value_field'] ) ? $args['hidden_value_field'] : '';
+
+        if ( ! $key ) {
+            return null;
+        }
+
+        if ( ! is_user_logged_in() ) {
+            return null;
+        } else {
+            return get_user_meta( get_current_user_id(), $key, true );
+        }
+    }
+
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function author_id($params = array() ) {
+        return $this->get_author_meta( 'ID' );
+    }
+
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function author_email($params = array() ) {
+        return $this->get_author_meta( 'user_email' );
+    }
+
+    /**
+     * @param array $params
+     * @return string|null
+     */
+    private function author_name($params = array() ) {
+        return $this->get_author_meta( 'display_name' );
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     */
+    private function current_date($params = array() ) {
+        $format = ! empty( $params['date_format'] ) ? $params['date_format'] : get_option( 'date_format' );
+
+        return date_i18n( $format );
+    }
+
+    /**
+     * @param array $params
+     * @return int|string|void
+     */
+    private function manual_input($params = array() ) {
+        return ! empty( $args['default'] ) ? esc_attr( $args['default'] ) : 0;
+    }
+
+
+    public function get_author_meta( $key ) {
+
+        $post_id = get_the_ID();
+
+        if ( ! $post_id ) {
+            return null;
+        }
+
+        global $authordata;
+
+        if ( $authordata ) {
+            return get_the_author_meta( $key );
+        }
+
+        $post = get_post( $post_id );
+
+        if ( ! $post ) {
+            return null;
+        }
+
+        return get_the_author_meta( $key, $post->post_author );
+
+    }
 
 
 	/**

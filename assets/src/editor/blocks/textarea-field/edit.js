@@ -108,11 +108,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Number Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <TextareaControl
+                key={`place_holder_block_${block}`}
+                label={ attributes.label }
             />
         ];
     }

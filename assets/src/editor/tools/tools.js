@@ -13,8 +13,10 @@ class Tools {
         }
     }
 
-    static getFormFieldsBlocks() {
+    static getFormFieldsBlocks( exclude = [] ) {
         const formFields = [];
+
+        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', 'repeater_end', ...exclude ];
 
         const blocksRecursiveIterator = ( blocks ) => {
 
@@ -22,11 +24,15 @@ class Tools {
 
             blocks.map( ( block ) => {
 
-                if ( block.name.includes( 'jet-forms/' ) && block.attributes.name ) {
+                if ( block.name.includes( 'jet-forms/' )
+                    && block.attributes.name
+                    && ! skipFields.find( field => block.name.includes( field ) )
+                ) {
                     formFields.push( {
                         blockName: block.name,
                         name: block.attributes.name,
                         label: block.attributes.label || block.attributes.name,
+                        value: block.attributes.name,
                     } );
                 }
 
@@ -45,16 +51,12 @@ class Tools {
     static getAvailableFields( exclude = [] ) {
 
         let fields = [];
-        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', 'repeater_end', ...exclude ]; 
 
-        const blocks = this.getFormFieldsBlocks();
+
+        const blocks = this.getFormFieldsBlocks( exclude );
 
         if ( blocks ) {
-            blocks.forEach( function( item ) {
-                if ( ! skipFields.find( field => item.blockName.includes( field ) ) ) {
-                    fields.push( item.name );
-                }
-            });
+            blocks.forEach( item => fields.push( item.name ) );
         }
         return fields;
     }

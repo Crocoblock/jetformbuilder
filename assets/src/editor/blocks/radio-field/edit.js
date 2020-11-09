@@ -35,6 +35,7 @@ const {
     SelectControl,
     ToggleControl,
     PanelBody,
+    RadioControl,
     Button,
     RangeControl,
     CheckboxControl,
@@ -132,10 +133,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                title={ 'Radio Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
+            <RadioControl
+                key={`place_holder_block_${block}`}
+                label={ attributes.label }
+                labelPosition='top'
+                options={ [
+                    { label: 'Sample 1' },
+                    { label: 'Sample 2' },
+                    { label: 'Sample 3' },
+                    { label: 'Sample 4' },
+                ] }
             />
         ];
     }

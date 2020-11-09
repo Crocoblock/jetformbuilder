@@ -204,6 +204,10 @@ class Post_Type {
                 'label' => __( 'Validation error', 'jet-form-builder' ),
                 'value' => 'One or more fields have an error. Please check and try again.',
             ),
+            'invalid_email' => array(
+                'label' => __( 'Entered an invalid email', 'jet-form-builder' ),
+                'value' => 'The e-mail address entered is invalid.',
+            ),
             'empty_field' => array(
                 'label' => __( 'Required field is empty', 'jet-form-builder' ),
                 'value' => 'The field is required.',

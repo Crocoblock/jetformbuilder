@@ -153,4 +153,16 @@ class Tools
 
     }
 
+    /**
+     * Check if is valid timestamp
+     *
+     * @param  mixed $timestamp
+     * @return boolean
+     */
+    public static function is_valid_timestamp( $timestamp ) {
+        return ( ( string ) ( int ) $timestamp === $timestamp || ( int ) $timestamp === $timestamp )
+            && ( $timestamp <= PHP_INT_MAX )
+            && ( $timestamp >= ~PHP_INT_MAX );
+    }
+
 }

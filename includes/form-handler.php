@@ -145,8 +145,9 @@ class Form_Handler {
     public function try_set_data() {
         try {
             $request = array(
-                'form_id' => $this->form_id,
-                'is_ajax' => $this->is_ajax
+                'form_id'   => $this->form_id,
+                'is_ajax'   => $this->is_ajax,
+                'refer'     => $this->refer
             );
             $request_handler = new Request_Handler( $request );
 
@@ -160,11 +161,12 @@ class Form_Handler {
     }
 
 
+
     public function try_to_do_actions() {
         try {
             $this->action_handler = new Action_Handler( $this->form_id, $this->request_data );
 
-            $this->action_handler->do_actions();
+            $this->add_response_data( $this->action_handler->do_actions() );
             $this->is_success = true;
 
         } catch ( Handler_Exception $exception ) {
@@ -185,13 +187,15 @@ class Form_Handler {
 
     public function get_message_builder() {
 
+        $actions = $this->action_handler ? $this->action_handler->form_actions : array();
+
         $data = ( object ) array(
             'form_id'   => $this->form_id,
             'status'    => $this->response_status,
-            'actions'   => $this->action_handler->form_actions
-         );
+            'actions'   => $actions
+        );
 
-         return new Form_Messages_Builder( $data );
+        return new Form_Messages_Builder( $data );
     }
 
     /**
@@ -249,7 +253,6 @@ class Form_Handler {
             }
 
             wp_send_json( $query_args );
-
         } else {
             $redirect = add_query_arg( $query_args, $this->refer );
             wp_redirect( $redirect );

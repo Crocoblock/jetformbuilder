@@ -52,7 +52,7 @@ class Number_Field extends Base {
 	/**
 	 * Returns block attributes
 	 */
-	public function get_field_attrs( $attributes ) {
+	public function get_field_attrs() {
 		return array(
 			'field_type' => 'number'
 		);

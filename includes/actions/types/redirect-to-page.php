@@ -3,6 +3,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -21,9 +22,52 @@ class Redirect_To_Page extends Base {
 		return 'redirect_to_page';
 	}
 
-	public function do_action($request)
+	public function do_action( $request, $index_action, $size_all, $actions_response )
     {
-        // TODO: Implement do_action() method.
+        $type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
+
+        switch ( $type ) {
+            case 'static_page':
+                $to_page = ! empty( $this->settings['redirect_page'] ) ? $this->settings['redirect_page'] : false;
+                $to_url  = ! empty( $to_page ) ? get_permalink( $to_page ) : false;
+                break;
+
+            case 'current_page':
+                $to_url = $request['__refer'];
+                break;
+
+            default:
+                $to_url = ! empty( $this->settings['redirect_url'] ) ? $this->settings['redirect_url'] : false;
+                break;
+        }
+
+        if ( ! $to_url ) {
+            throw new Action_Exception( 'failed' );
+        } else {
+
+            if ( ! empty( $this->settings['redirect_hash'] ) ) {
+                $to_url = trailingslashit( $to_url ) . '#' . $this->settings['redirect_hash'];
+            }
+
+            if ( ! empty( $this->settings['redirect_args'] ) ) {
+
+                $redirect_args = array();
+
+                foreach ( $this->settings['redirect_args'] as $arg ) {
+                    $redirect_args[ $arg ] = ! empty( $this->data[ $arg ] ) ? $request[ $arg ] : 0;
+                }
+
+                $to_url = add_query_arg( $redirect_args, $to_url );
+
+            }
+
+            if ( ! $request['__is_ajax'] ) {
+                wp_safe_redirect( $to_url );
+                die();
+            } else {
+                $this->response_data['redirect'] = $to_url;
+            }
+        }
     }
 
     /**

@@ -83,11 +83,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                title={ 'Submit Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
-            />
+            <Button
+                key={`place_holder_block_${block}`}
+                isPrimary
+            >
+                { attributes.label }
+            </Button>
         ];
     }
 }

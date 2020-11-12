@@ -146,7 +146,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
             <SelectControl
                 key={`place_holder_block_${block}`}
                 label={ attributes.label }
-                labelPosition='top'
+                labelposition='top'
                 options={ [
                     { label: 'Sample 1' },
                     { label: 'Sample 2' },

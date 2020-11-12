@@ -80,7 +80,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
                             value={ attributes.calc_formula }
 
                             /* TODO: Need to add line break between fields */
-                            help={ Tools.getAvailableFieldsString() }
+                            help={ Tools.getAvailableFieldsString( block ) }
 
                             onChange={ ( newValue ) => {
                                 props.setAttributes( { calc_formula: newValue } );

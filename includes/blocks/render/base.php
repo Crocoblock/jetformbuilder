@@ -24,14 +24,25 @@ abstract class Base {
 
 	public $form_id = null;
 
+	public $block_data;
+	public $current_repeater_i = false;
+	public $current_repeater;
+
 	public function __construct( $form_id, $args = array() ) {
         $this->form_id = $form_id;
-        $this->args = $args;
+        $this->set_args( $args );
 
         $this->set_meta_args();
 	}
 
 	abstract public function get_name();
+
+	public function set_args( $args = array() ) {
+	    $this->args = $args['attrs'];
+	    unset($args['attrs']);
+
+	    $this->block_data = $args;
+    }
 
 	/**
 	 * Returns field label
@@ -189,14 +200,13 @@ abstract class Base {
 	 */
 	public function get_field_name( $name ) {
 
-		/*
-		Find some solution for the repeater field
+		//Find some solution for the repeater field
 
 		if ( $this->current_repeater ) {
 			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
 			$index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
-		}*/
+		}
 
 		return $name;
 
@@ -211,13 +221,14 @@ abstract class Base {
 			$name = $name['name'];
 		}
 
-		/*
-		Find some solution for the repeater field
+
+		//Find some solution for the repeater field
+
 		if ( $this->current_repeater ) {
 			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
 			$index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
-		}*/
+		}
 
 		return $name;
 
@@ -231,7 +242,6 @@ abstract class Base {
     }
 
 	public function render() {
-
 
 		$args = $this->args;
 		$defaults = array(

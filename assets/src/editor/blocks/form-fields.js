@@ -42,3 +42,6 @@ import './textarea-field/save';
 
 import './submit-field/edit';
 import './submit-field/save';
+
+import './repeater-field/edit';
+import './repeater-field/save';

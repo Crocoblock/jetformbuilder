@@ -10,6 +10,7 @@ use Jet_Form_Builder\Blocks\Types\Media_Field;
 use Jet_Form_Builder\Blocks\Types\Number_Field;
 use Jet_Form_Builder\Blocks\Types\Radio_Field;
 use Jet_Form_Builder\Blocks\Types\Range_Field;
+use Jet_Form_Builder\Blocks\Types\Repeater_Field;
 use Jet_Form_Builder\Blocks\Types\Select_Field;
 use Jet_Form_Builder\Blocks\Types\Submit_Field;
 use Jet_Form_Builder\Blocks\Types\Text_Field;
@@ -70,7 +71,10 @@ class Manager {
         $arguments['template'] = array(
             array(
                 $hidden_post_id,
-                array( 'name' => 'post_id' )
+                array(
+                    'name'          => 'post_id',
+                    'field_value'   => 'post_id'
+                )
             ),
             array(
                 $submit_post_id,
@@ -104,7 +108,8 @@ class Manager {
             new Range_Field(),
             new Heading_Field(),
             new Textarea_Field(),
-            new Submit_Field()
+            new Submit_Field(),
+            new Repeater_Field()
 		);
 
 		foreach ( $types as $type ) {
@@ -300,6 +305,7 @@ class Manager {
 		}
 
 		if( $field instanceof Field_Interface ) {
+
 			return array_merge( $attributes, $field->get_field_attrs( $attributes ) );
 		}
 

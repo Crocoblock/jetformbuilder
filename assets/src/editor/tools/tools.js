@@ -16,7 +16,7 @@ class Tools {
     static getFormFieldsBlocks( exclude = [] ) {
         const formFields = [];
 
-        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', 'repeater_end', ...exclude ];
+        let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', ...exclude ];
 
         const blocksRecursiveIterator = ( blocks ) => {
 
@@ -36,7 +36,7 @@ class Tools {
                     } );
                 }
 
-                if ( block.innerBlocks.length ) {
+                if ( block.innerBlocks.length && ! block.name.includes( 'repeater' )) {
                     blocksRecursiveIterator( block.innerBlocks );
                 }
 
@@ -61,15 +61,15 @@ class Tools {
         return fields;
     }
 
-    static getAvailableFieldsString() {
-        const fields = this.getAvailableFields( ['calculated'] );
+    static getAvailableFieldsString( blockName ) {
+        const fields = this.getAvailableFields( [ blockName ] );
 
-        let fieldsString = __( 'Available fields: ' );
+        let fieldsString = [];
         fields.forEach( function ( item ) {
-            fieldsString += '%FIELD::' + item + '%, ';
+            fieldsString.push( '%FIELD::' + item + '%' );
         } );
 
-        return  fieldsString;
+        return __( 'Available fields: ' ) + fieldsString.join(', ');
     }
 }
 

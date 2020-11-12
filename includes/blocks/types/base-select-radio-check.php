@@ -94,7 +94,7 @@ trait Base_Select_Radio_Check
              */
             'field_options_post_type' => array(
                 'type'      => 'string',
-                'default'   => ''
+                'default'   => 'post'
             ),
            
 
@@ -103,7 +103,7 @@ trait Base_Select_Radio_Check
              */
             'field_options_tax' => array(
                 'type'      => 'string',
-                'default'   => ''
+                'default'   => 'category'
             ),
            
 

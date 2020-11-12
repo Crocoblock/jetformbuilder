@@ -48,11 +48,12 @@ class Form_Manager
      * Returns form fields,
      * parsed from post_content
      *
-     * @param $form_id
+     * @param $content
+     * @param bool $parsed
      * @return array[]
      */
-    public function get_fields( $form_id ) {
-        $blocks = parse_blocks( get_post( $form_id )->post_content );
+    public function get_fields( $content, $parsed = false ) {
+        $blocks = $parsed ? $content : parse_blocks( $content );
         $fields = array();
 
         foreach ( $blocks as $block ) {
@@ -62,6 +63,10 @@ class Form_Manager
             $fields[] = $block;
         }
         return $fields;
+    }
+
+    public function get_fields_by_form_id( $form_id ) {
+        return $this->get_fields( get_post( $form_id )->post_content );
     }
 
 

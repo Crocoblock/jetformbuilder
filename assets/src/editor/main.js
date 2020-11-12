@@ -37,6 +37,8 @@ var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize-block-cal
 
 document.dispatchEvent( initializeCallbacksEvent );
 
+window.jetRepeaterAllowedFields = [];
+
 if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
 	window.jetFormBuilderBlocks.forEach( function( blockData ) {
@@ -55,7 +57,7 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 				window.jetFormBuilderControls.advanced[ blockData.blockName ] = blockData.controls.advanced;
 			}
 
-			console.log( blockData.blockName );
+			window.jetRepeaterAllowedFields.push( blockData.blockName );
 
 			registerBlockType( blockData.blockName, {
 				title: blockData.title,

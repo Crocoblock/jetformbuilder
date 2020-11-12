@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Fields_Factory;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -26,12 +27,6 @@ class Form_Builder {
 
     public $form_id 				= null;
     public $post    				= null;
-
-    private $field_type 			= null;
-
-    private $field_name             = null;
-
-    private $current_field_data 	= null;
 
     private $blocks                 = null;
 
@@ -54,12 +49,10 @@ class Form_Builder {
 		) );
 
 		if ( empty( $post ) ) {
-			global $post;
+            $this->post = get_post();
 		}
 
-        $this->blocks = Plugin::instance()->form->get_fields( $form_id );
-
-		$this->post = $post;
+        $this->blocks = Plugin::instance()->form->get_fields_by_form_id( $form_id );
 	}
 
 	/**
@@ -166,17 +159,24 @@ class Form_Builder {
 
         $form = $this->start_form();
 
-        $form .= $this->force_render_field( 'hidden-field', array(
-            'field_value'   => $this->form_id,
-            'name'          => '_jet_engine_booking_form_id',
-        ) );
+        $form .= Fields_Factory::force_render_field( 'hidden-field',
+            $this->form_id,
+            array(
+                'field_value'   => $this->form_id,
+                'name'          => '_jet_engine_booking_form_id',
+            )
+        );
 
-        $form .= $this->force_render_field( 'hidden-field', array(
-            'field_value'   => $this->get_form_refer_url(),
-            'name'          => '_jet_engine_refer',
-        ) );
+        $form .= Fields_Factory::force_render_field( 'hidden-field',
+            $this->form_id,
+            array(
+                'field_value'   => $this->get_form_refer_url(),
+                'name'          => '_jet_engine_refer',
+            )
+        );
 
-        $form .= $this->render_form_blocks();
+        $factory = new Fields_Factory( $this->form_id );
+        $form .= $factory->render_form_blocks( $this->blocks );
 
         $form .= $this->end_form();
 
@@ -187,90 +187,7 @@ class Form_Builder {
 		}
 
 	}
-	
 
-	/**
-	 * 
-	 */
-	public function render_form_blocks() {
-		$fields = array();
-
-		foreach ( $this->blocks as $block ) {
-            $this->set_field_data( $block );
-
-            $fields[] = $this->get_field_object()->render();
-		}
-
-		return implode( "\n", $fields );
-	}
-
-    /**
-     * @param $block
-     */
-	public function set_field_data( $block ) {
-
-		$this->current_field_data = $block; 
-
-		$this->set_field_name()->set_field_args();
-	}
-
-    /**
-     * @return Base [render]
-     */
-    public function get_field_object() {
-        $block = jet_form_builder()->blocks->get_field_by_name( $this->field_name );
-
-		return $block->get_block_renderer( $this->form_id, array_merge(
-                    $block->get_default_attributes(),
-                    $this->current_field_data['attrs']
-                ) );
-	}
-
-	/**
-	 * 
-	 */
-	public function set_field_name() {
-		$block = explode( jet_form_builder()->form::NAMESPACE_FIELDS, $this->current_field_data['blockName'] );
-
-		$this->field_name = $block[1];
-
-        return $this;
-	}
-
-	/**
-	 * 
-	 */
-	public function set_field_type() {
-		$this->field_type = jet_form_builder()->blocks->get_field_by_name( $this->field_name )->get_block_field_type();
-		
-		return $this;
-	}
-	
-
-	/**
-	 * 
-	 */
-	public function set_field_args() {
-		$this->current_field_data['attrs'] = jet_form_builder()->blocks
-				->get_field_attrs( 
-					$this->field_name, 
-					$this->current_field_data['attrs'] 
-				);
-	}
-
-	public function force_render_field( $name, $arguments = array() ) {
-
-	    if( empty( $name ) ) {
-	        return;
-        }
-        $field = jet_form_builder()->blocks->get_field_by_name( $name );
-
-        if( ! $field ) {
-            return;
-        }
-
-	    return $field->get_block_renderer( $this->form_id, $arguments )->render();
-    }
 
 
 }

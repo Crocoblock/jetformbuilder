@@ -17,7 +17,8 @@ const {
 const {
     PanelBody,
     Button,
-    ComboboxControl
+    ComboboxControl,
+    SelectControl
 } = wp.components;
 
 const {
@@ -29,7 +30,7 @@ const { useState } = wp.element;
 const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[0] : false;
 
 function FormEdit ( { attributes, setAttributes, isSelected } ) {
-    this.name = 'jet-forms/form';
+    this.name = 'jet-forms/form-block';
 
     this.keyControls = function () {
 
@@ -41,7 +42,7 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
     };
 
     const forms_list = window.JetFormData.forms_list;
-    const [ filteredOptions, setFilteredOptions ] = useState( forms_list );
+    //const [ filteredOptions, setFilteredOptions ] = useState( forms_list );
 
     return [
         isSelected && <InspectorControls
@@ -51,7 +52,7 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
                 title={ __('Form Settings') }
                 key={ this.keyGeneral() }
             >
-                <ComboboxControl
+                {/*<ComboboxControl
                     label='Select from'
                     name='_form_id'
                     value={ attributes.form_id }
@@ -62,13 +63,19 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
                         setAttributes( { form_id: val } )
                     } }
                     options={ filteredOptions }
-                    onInputChange={ inputValue =>
-                        setFilteredOptions(
-                            forms_list.filter( option =>
-                                option.label.toLowerCase().startsWith( inputValue.toLowerCase() )
-                            )
-                        )
-                    }
+                />*/}
+                <SelectControl
+                    key='form_id'
+                    label={ __( 'Choose Form' ) }
+                    labelposition='top'
+                    value={ attributes.form_id }
+                    onChange={ newValue => {
+                        setAttributes( { form_id: newValue } );
+                    } }
+                    options={ [
+                        { label: __( 'Select form...' ) },
+                        ...forms_list
+                    ] }
                 />
             </PanelBody>
         </InspectorControls>,

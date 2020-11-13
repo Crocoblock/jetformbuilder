@@ -31,17 +31,16 @@ class Form_Messages_Builder
     {
         $this->form_id = $data->form_id;
         $this->manager = new Form_Messages_Manager( $this->form_id, $data->actions );
-
-        $this->set_form_status( $data->status );
     }
 
     /**
      * Set form submittion status
      * @param [type] $status [description]
      */
-    public function set_form_status($status)
-    {
+    public function set_form_status( $status ) {
         $this->status = $status;
+
+        return $this;
     }
 
     /**
@@ -71,6 +70,10 @@ class Form_Messages_Builder
     public function render_messages()
     {
         $status = $this->get_form_status();
+
+        if ( ! $status ) {
+            return;
+        }
 
         if ( 'success' === $status ) {
             $status_class = 'success';

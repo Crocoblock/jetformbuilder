@@ -70,7 +70,7 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
                     labelposition='top'
                     value={ attributes.form_id }
                     onChange={ newValue => {
-                        setAttributes( { form_id: newValue } );
+                        setAttributes( { form_id: Number( newValue ) } );
                     } }
                     options={ [
                         { label: __( 'Select form...' ) },

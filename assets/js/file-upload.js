@@ -158,7 +158,7 @@
 		lockButtons: function( $upload ) {
 
 			var $form    = $upload.closest( 'form.jet-form' ),
-				$buttons = $form.find( '.jet-form__submit, .jet-form__next-page, .jet-form__prev-page' );
+				$buttons = $form.find( '.jet-form-builder__submit, .jet-form__next-page, .jet-form__prev-page' );
 
 			$buttons.attr( 'disabled', true );
 
@@ -167,7 +167,7 @@
 		unlockButtons: function( $upload ) {
 
 			var $form    = $upload.closest( 'form.jet-form' ),
-				$buttons = $form.find( '.jet-form__submit, .jet-form__next-page, .jet-form__prev-page' );
+				$buttons = $form.find( '.jet-form-builder__submit, .jet-form__next-page, .jet-form__prev-page' );
 
 			$buttons.attr( 'disabled', false );
 

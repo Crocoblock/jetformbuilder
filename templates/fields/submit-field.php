@@ -6,13 +6,13 @@
 $has_class = isset( $this->args['class_name'] );
 
 $classes = array(
-	'jet-form__submit'
+	'jet-form-builder__submit'
 );
 
 if ( $has_class )  {
     $classes[] = $this->args['class_name'];
 }
-$this->add_attribute( 'class', 'jet-form__submit' );
+$this->add_attribute( 'class', 'jet-form-builder__submit' );
 $this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
 $has_class ? $this->add_attribute( 'class', $this->args['class_name'] ) : '';
 

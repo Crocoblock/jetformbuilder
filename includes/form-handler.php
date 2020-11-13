@@ -185,13 +185,19 @@ class Form_Handler {
         $this->response_data = array_merge( $this->response_data, $data );
     }
 
-    public function get_message_builder() {
+    public function get_message_builder( $form_id = null ) {
 
-        $actions = $this->action_handler ? $this->action_handler->form_actions : array();
+        $form_id = $this->form_id ? $this->form_id : $form_id;
+
+        if ( $this->action_handler && ! empty( $this->action_handler->form_actions ) ) {
+            $actions = $this->action_handler->form_actions;
+        }
+        else {
+            $actions = ( new Action_Handler( $form_id ) )->get_all();
+        }
 
         $data = ( object ) array(
-            'form_id'   => $this->form_id,
-            'status'    => $this->response_status,
+            'form_id'   => $form_id,
             'actions'   => $actions
         );
 
@@ -240,7 +246,7 @@ class Form_Handler {
 
         if ( $this->is_ajax ) {
 
-            $messages = $this->get_message_builder();
+            $messages = $this->get_message_builder()->set_form_status( $this->response_status );
 
             ob_start();
             $messages->render_messages();

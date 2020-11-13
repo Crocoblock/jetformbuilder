@@ -100,7 +100,7 @@ class Repeater_Field_Render extends Base {
         if ( 'manually' === $manage_items ) {
             echo '<div class="jet-form-repeater__actions">';
             $new_item_label = ! empty( $this->args['new_item_label'] ) ? $this->args['new_item_label'] : __( 'Add new', 'jet-engine' );
-            printf( '<button type="button" class="jet-form-repeater__new">%1$s</button>', $new_item_label );
+            printf( '<button type="button" class="jet-form-builder-repeater__new">%1$s</button>', $new_item_label );
             echo '</div>';
         }
 

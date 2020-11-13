@@ -403,8 +403,8 @@
 			});
 
 			$( document )
-				.on( 'click.JetFormBuilderMain', '.jet-form__submit.submit-type-ajax', self.ajaxSubmitForm )
-				.on( 'submit.JetFormBuilderMain', 'form.jet-form.submit-type-reload', self.reloadSubmitForm )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
+				.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
 				.on( 'click.JetFormBuilderMain', '.jet-form__next-page', self.nextFormPage )
 				.on( 'click.JetFormBuilderMain', '.jet-form__prev-page', self.prevFormPage )
 				.on( 'focus.JetFormBuilderMain', '.jet-form__field', self.clearFieldErrors )
@@ -414,7 +414,7 @@
 				.on( 'change.JetFormBuilderMain', '.jet-form__field.checkboxes-group-required', self.requiredCheckboxGroup )
 				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
 				.on( 'input.JetFormBuilderMain/range', '.jet-form__field.range-field', self.updateRangeField )
-				.on( 'click.JetFormBuilderMain', '.jet-form-repeater__new', self.newRepeaterItem )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
 				.on( 'click.JetFormBuilderMain', '.jet-form-repeater__remove', self.removeRepeaterItem )
 				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage );
 
@@ -1145,7 +1145,7 @@
 		},
 
 		reloadSubmitForm: function( event ) {
-			$( this ).find( '.jet-form__submit' ).attr( 'disabled', true );
+			$( this ).find( '.jet-form-builder__submit' ).attr( 'disabled', true );
 		},
 
 		ajaxSubmitForm: function() {

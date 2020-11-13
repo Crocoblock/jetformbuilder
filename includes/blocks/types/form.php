@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Form_Messages_Builder;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -119,8 +120,14 @@ class Form extends Base {
 		}
 
 		$builder = new Form_Builder( $form_id );
+		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
 
-		return $builder->render_form( false );
+        ob_start();
+
+        $builder->render_form();
+        $messages->render_messages();
+
+		return ob_get_clean();
 	}
 
 }

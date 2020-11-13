@@ -30,6 +30,6 @@ if ( isset( $args['add_prev'] ) && ! empty( $args['add_prev'] ) && 1 < $this->pa
 
 ?>
 <div class="<?php echo implode( ' ', $wrap_classes ) ?>">
-	<?php include jet_engine()->get_template( 'forms/common/prev-page-button.php' ); ?>
+	<?php include $this->get_template( 'common/prev-page-button.php' ); ?>
 	<button<?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
 </div>

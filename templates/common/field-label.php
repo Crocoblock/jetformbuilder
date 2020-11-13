@@ -27,5 +27,5 @@ if ( ! empty( $this->args['label_tag'] ) && 'label' === $this->args['label_tag']
 	}
 
 	?></<?php echo $tag; ?>>
-	<?php include jet_engine()->get_template( 'forms/common/prev-page-button.php' ); ?>
+	<?php include $this->get_template( 'common/prev-page-button.php' ); ?>
 </div>

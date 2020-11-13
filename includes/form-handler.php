@@ -153,6 +153,8 @@ class Form_Handler {
 
             $this->request_data = $request_handler->get_form_data();
 
+            //var_dump( $this->request_data ); die;
+
         } catch ( Handler_Exception $exception ) {
             $this->send_response( array(
                 'status' => $exception->get_form_status(),

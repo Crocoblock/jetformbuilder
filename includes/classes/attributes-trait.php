@@ -10,6 +10,8 @@ trait Attributes_Trait
 
     /**
      * Add attribute
+     * @param $attr
+     * @param null $value
      */
     public function add_attribute( $attr, $value = null ) {
 
@@ -35,7 +37,7 @@ trait Attributes_Trait
     /**
      * Render current attributes string
      *
-     * @return [type] [description]
+     * @return void
      */
     public function render_attributes_string() {
 

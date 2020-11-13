@@ -30,9 +30,12 @@ class Form_Builder {
 
     private $blocks                 = null;
 
-	/**
-	 * Constructor for the class
-	 */
+    /**
+     * Constructor for the class
+     * @param null $form_id
+     * @param bool $post
+     * @param array $args
+     */
 	function __construct( $form_id = null, $post = false, $args = array() ) {
 
 		if ( ! $form_id ) {
@@ -52,7 +55,7 @@ class Form_Builder {
             $this->post = get_post();
 		}
 
-        $this->blocks = Plugin::instance()->form->get_fields_by_form_id( $form_id );
+        $this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
 	}
 
 	/**
@@ -115,8 +118,6 @@ class Form_Builder {
 		$this->add_attribute( 'action', $this->get_form_action_url() );
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
-
-		$this->rendered_rows = 0;
 
 		ob_start();
 		include $this->get_template( 'common/start-form.php' );

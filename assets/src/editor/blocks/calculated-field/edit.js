@@ -30,6 +30,7 @@ const {
     ToggleControl,
     PanelBody,
     Button,
+    Popover,
     RangeControl,
     CheckboxControl,
     Disabled,
@@ -43,10 +44,25 @@ const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends wp.element.Component {
+
+    constructor( props ) {
+        super( props );
+
+        this.data = window.jetFormCalculatedFieldData;
+        this.state = { showMacrosPopover: false };
+    }
+
     render() {
         const props      = this.props;
         const attributes = props.attributes;
         const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+
+        const formFields = Tools.getAvailableFields( [ block ] );
+
+        const insertMacros = ( macros ) => {
+            const formula = attributes.calc_formula || '';
+            props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
+        }
 
         return [
             hasToolbar && (
@@ -75,17 +91,17 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
                     <PanelBody
                         title={ __( 'Field Settings' ) }
                     >
-                        <TextareaControl
-                            label={ __( 'Calculation Formula' ) }
-                            value={ attributes.calc_formula }
+                        <div className="jet-form-editor__row-notice">
+                            { __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
+                            { __( 'For example:', 'jet-form-builder' ) }<br/><br/>
+                            %FIELD::quantity%*%META::price%<br/><br/>
+                            { __( 'Where:', 'jet-form-builder' ) }<br/>
+                            -
+                            { __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+                            -
+                            { __( '%META::price% - macros for current post meta value. "quantity" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+                        </div>
 
-                            /* TODO: Need to add line break between fields */
-                            help={ Tools.getAvailableFieldsString( block ) }
-
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { calc_formula: newValue } );
-                            } }
-                        />
                         <NumberControl
                             label={ __( 'Decimal Places Number' ) }
                             labelPosition='top'
@@ -115,10 +131,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
                             key={ 'calc_hidden' }
                             label={ __( 'Hidden' ) }
                             checked={ attributes.calc_hidden }
-                            help={ Tools.getHelpMessage(
-                                window.jetFormCalculatedFieldData,
-                                'calc_hidden'
-                            ) }
+                            help={ Tools.getHelpMessage( this.data, 'calc_hidden' ) }
                             onChange={ newVal => {
                                 props.setAttributes( {
                                     calc_hidden: Boolean(newVal),
@@ -136,12 +149,50 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
                     /> }
                 </InspectorControls>
             ),
-            <JetFieldPlaceholder
-                key={ keyPlaceHolder }
-                title={ 'Calculated Field' }
-                subtitle={ [ attributes.label, attributes.name ] }
-                isRequired={ attributes.required }
-            />
+            <div className="jet-forms__calc-formula-editor">
+                <div className="jet-form-editor__macros-wrap">
+                    <TextareaControl
+                        key="calc_formula"
+                        value={ attributes.calc_formula }
+                        label={ __( 'Calculation Formula' ) }
+
+                        onChange={ ( newValue ) => {
+                            props.setAttributes( { calc_formula: newValue } );
+                        } }
+                    />
+                    <div
+                        className="jet-form-editor__macros-inserter"
+                        style={ { top: '31px' } }
+                    >
+                        <Button
+                            isTertiary
+                            isSmall
+                            icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
+                            label={ 'Insert macros' }
+                            className="jet-form-editor__macros-trigger"
+                            onClick={ () => {
+                                this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+                            } }
+                        />
+                        { this.state.showMacrosPopover && (
+                            <Popover
+                                position={ 'bottom left' }
+                            >
+                                { formFields.length && <PanelBody title={ 'Form Fields' }>
+                                    { formFields.map( field => {
+                                        return <div key={ 'field_' + field }>
+                                            <Button
+                                                isLink
+                                                onClick={ () => { insertMacros( field ) } }
+                                            >{ '%FIELD::' + field + '%' }</Button>
+                                        </div>;
+                                    } ) }
+                                </PanelBody> }
+                            </Popover>
+                        ) }
+                    </div>
+                </div>
+            </div>
         ];
     }
 }

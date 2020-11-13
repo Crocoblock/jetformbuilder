@@ -220,8 +220,6 @@ abstract class Base {
 		if ( is_array( $name ) ) {
 			$name = $name['name'];
 		}
-
-
 		//Find some solution for the repeater field
 
 		if ( $this->current_repeater ) {
@@ -241,9 +239,11 @@ abstract class Base {
         );
     }
 
-	public function render() {
+	public function render( $data = array() ) {
 
 		$args = $this->args;
+		$data = ( object ) $data;
+
 		$defaults = array(
 			'default'     => '',
 			'name'        => '',

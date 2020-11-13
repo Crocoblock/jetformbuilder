@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Blocks\Types\Calculated_Field;
 use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
 use Jet_Form_Builder\Blocks\Types\Date_Field;
+use Jet_Form_Builder\Blocks\Types\Form_Break_Field;
 use Jet_Form_Builder\Blocks\Types\Heading_Field;
 use Jet_Form_Builder\Blocks\Types\Hidden_Field;
 use Jet_Form_Builder\Blocks\Types\Media_Field;
@@ -109,7 +110,8 @@ class Manager {
             new Heading_Field(),
             new Textarea_Field(),
             new Submit_Field(),
-            new Repeater_Field()
+            new Repeater_Field(),
+            new Form_Break_Field()
 		);
 
 		foreach ( $types as $type ) {

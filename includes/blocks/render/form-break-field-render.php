@@ -9,14 +9,10 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Submit_Field_Render extends Base {
+class Form_Break_Field_Render extends Base {
 
 	public function get_name() {
-		return 'submit-field';
+		return 'form-break-field';
 	}
-
-	public function label_allowed() {
-	    return false;
-    }
 
 }

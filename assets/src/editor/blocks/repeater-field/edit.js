@@ -138,6 +138,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
                             } }
                             options={ this.data.repeater_calc_type }
                         />
+                        { 'dynamically' === attributes.repeater_calc_type && <div className="jet-form-editor__row-notice">
+                            { __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
+                            { __( 'For example:', 'jet-form-builder' ) }<br/><br/>
+                            %FIELD::quantity%*%META::price%<br/><br/>
+                            { __( 'Where:', 'jet-form-builder' ) }<br/>
+                            -
+                            { __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+                            -
+                            { __( '%META::price% - macros for current post meta value. "quantity" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+                        </div> }
 
 
                     </PanelBody>
@@ -151,34 +161,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
                 </InspectorControls>
             ),
             <React.Fragment>
-                {/*{ 'dynamically1' === attributes.repeater_calc_type && <TextareaControl
-                    label={ __( 'Calculation Formula' ) }
-                    value={ attributes.calc_formula }
-
-                    // TODO: Need to add line break between fields
-                    help={ Tools.getAvailableFieldsString( block ) }
-
-                    onChange={ ( newValue ) => {
-                        props.setAttributes( { calc_formula: newValue } );
-                    } }
-                /> }*/}
-
                 { 'dynamically' === attributes.repeater_calc_type && <div className="jet-forms__calc-formula-editor">
-                    <div className="jet-form-editor__row-notice">
-                        { __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
-                        { __( 'For example:', 'jet-form-builder' ) }<br/><br/>
-                        %FIELD::quantity%*%META::price%<br/><br/>
-                        { __( 'Where:', 'jet-form-builder' ) }<br/>
-                        -
-                        { __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
-                        -
-                        { __( '%META::price% - macros for current post meta value. "quantity" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
-                    </div>
                     <div className="jet-form-editor__macros-wrap">
                         <TextareaControl
                             key="calc_formula"
                             value={ attributes.calc_formula }
-                            label={ __( 'Calculation Formula' ) }
+                            label={ __( 'Calculation Formula for Repeater' ) }
 
                             onChange={ ( newValue ) => {
                                 props.setAttributes( { calc_formula: newValue } );

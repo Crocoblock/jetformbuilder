@@ -78,18 +78,19 @@ class Request_Handler
      */
     public function get_form_data() {
 
-        $fields         = Plugin::instance()->form->get_fields( $this->request['form_id'] );
+        $fields         = Plugin::instance()->form->get_fields_by_form_id( $this->request['form_id'] );
         $data           = array();
         $errors         = array();
         $invalid_email  = true;
         $request        = $this->get_values_from_request();
-
 
         $skip_fields = array( 'submit-field', 'page-break-field', 'heading-field', 'group-break-field' );
 
         foreach ( $fields as $field ) {
             $settings   = $field['attrs'];
             $type       = Plugin::instance()->form->field_name( $field['blockName'] );
+
+
 
             if ( in_array( $type, $skip_fields ) ) {
                 continue;

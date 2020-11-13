@@ -3,13 +3,12 @@
  * next page button template
  */
 
-$classes = array(
-	'jet-form__next-page',
-	$args['class_name']
-);
+$class_name = isset( $args['class_name'] ) ? $args['class_name'] : '';
+
+$classes = array( 'jet-form__next-page', $class_name );
 
 $this->add_attribute( 'class', 'jet-form__next-page' );
-$this->add_attribute( 'class', $args['class_name'] );
+$this->add_attribute( 'class', $class_name );
 $this->add_attribute( 'type', 'button' );
 ?>
 <div class="jet-form__next-page-wrap">
@@ -18,7 +17,7 @@ $this->add_attribute( 'type', 'button' );
 		echo wp_kses_post( $args['page_break_disabled'] );
 	?></div>
 	<?php endif; ?>
-	<?php include jet_engine()->get_template( 'forms/common/prev-page-button.php' ); ?>
+	<?php include $this->get_template( 'common/prev-page-button.php' ); ?>
 	<?php if ( ! empty( $args['label'] ) ) : ?>
 	<button<?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
 	<?php endif; ?>

@@ -45,3 +45,6 @@ import './submit-field/save';
 
 import './repeater-field/edit';
 import './repeater-field/save';
+
+import './form-break-field/edit';
+import './form-break-field/save';

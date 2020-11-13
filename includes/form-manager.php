@@ -49,23 +49,14 @@ class Form_Manager
      * parsed from post_content
      *
      * @param $content
-     * @param bool $parsed
      * @return array[]
      */
-    public function get_fields( $content, $parsed = false ) {
-        $blocks = $parsed ? $content : parse_blocks( $content );
-        $fields = array();
+    public function get_fields( $content ) {
+        return parse_blocks( $content );
 
-        foreach ( $blocks as $block ) {
-            if ( stripos( $block['blockName'], self::NAMESPACE_FIELDS ) === false ) {
-                continue;
-            }
-            $fields[] = $block;
-        }
-        return $fields;
     }
 
-    public function get_fields_by_form_id( $form_id ) {
+    public function get_form_by_id( $form_id ) {
         return $this->get_fields( get_post( $form_id )->post_content );
     }
 

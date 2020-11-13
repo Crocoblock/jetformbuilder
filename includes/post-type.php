@@ -216,6 +216,18 @@ class Post_Type {
                 'label' => __( 'Internal server error', 'jet-form-builder' ),
                 'value' => 'Internal server error. Please try again later.',
             ),
+            'upload_max_files' => array(
+                'label' => __( 'Media Specific: Max files limit', 'jet-form-builder' ),
+                'value' => 'Maximum upload files limit is reached.',
+            ),
+            'upload_max_size' => array(
+                'label' => __( 'Media Specific: Max size reached', 'jet-form-builder' ),
+                'value' => 'Upload max size exceeded.',
+            ),
+            'upload_mime_types' => array(
+                'label' => __( 'Media Specific: File type error', 'jet-form-builder' ),
+                'value' => 'File type is not allowed.',
+            ),
         ) );
     }
 

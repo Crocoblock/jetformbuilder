@@ -138,7 +138,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
                             } }
                             options={ this.data.repeater_calc_type }
                         />
-                        { 'dynamically' === attributes.repeater_calc_type && <div className="jet-form-editor__row-notice">
+                        { 'custom' === attributes.repeater_calc_type && <div className="jet-form-editor__row-notice">
                             { __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
                             { __( 'For example:', 'jet-form-builder' ) }<br/><br/>
                             %FIELD::quantity%*%META::price%<br/><br/>
@@ -161,7 +161,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
                 </InspectorControls>
             ),
             <React.Fragment>
-                { 'dynamically' === attributes.repeater_calc_type && <div className="jet-forms__calc-formula-editor">
+                { 'custom' === attributes.repeater_calc_type && <div className="jet-forms__calc-formula-editor">
                     <div className="jet-form-editor__macros-wrap">
                         <TextareaControl
                             key="calc_formula"

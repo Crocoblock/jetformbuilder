@@ -996,7 +996,7 @@
 				regexp   = /%([a-zA-Z0-9-_]+)%/g,
 				func     = null;
 
-			if ( ! formula ) {
+			if ( typeof formula === 'undefined' ) {
 				return null;
 			}
 
@@ -1015,6 +1015,8 @@
 				} else {
 					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
 				}
+
+				console.log( 'object:', object );
 
 				return JetFormBuilder.getFieldValue( object );
 

@@ -184,13 +184,18 @@
 	margin-bottom: 28px;
 }
 
-.wp-block-form-break-field {
+.block-editor-block-list__block[data-type="jet-forms/group-break-field"] {
+	margin-top: 28px;
+	margin-bottom: 28px;
+}
+
+.wp-block-form-break-field, .wp-block-group-break-field {
 	display: block;
 	text-align: center;
 	white-space: nowrap;
 }
 
-.wp-block-form-break-field:before {
+.wp-block-form-break-field:before, .wp-block-group-break-field:before {
 	content: "";
 	position: absolute;
 	top: 50%;
@@ -199,7 +204,7 @@
 	border-top: 3px dotted #ccc;
 }
 
-.wp-block-form-break-field > span {
+.wp-block-form-break-field > span, .wp-block-group-break-field > span {
 	font-size: 13px;
 	position: relative;
 	display: inline-block;

@@ -48,3 +48,6 @@ import './repeater-field/save';
 
 import './form-break-field/edit';
 import './form-break-field/save';
+
+import './group-break-field/edit';
+import './group-break-field/save';

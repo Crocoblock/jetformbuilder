@@ -80,7 +80,7 @@ class Repeater_Field extends Base {
                     'label' => __( 'Default (returns rows count)', 'jet-form-builder' )
                 ),
                 array(
-                    'value' => 'dynamically',
+                    'value' => 'custom',
                     'label' => __( 'Custom (calculate custom value for each row)', 'jet-form-builder' )
                 ),
             ),

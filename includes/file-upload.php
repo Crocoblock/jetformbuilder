@@ -17,9 +17,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 class File_Upload {
 
-    private $nonce_key       = 'jet-engine-file-upload';
-    private $errors          = array();
-    private $custom_messages = array();
+    private $nonce_key          = 'jet-form-builder-file-upload-nonce-key';
+    private $action             = 'jet-form-builder-upload-file';
+    private $errors             = array();
+    private $custom_messages    = array();
 
     /**
      * A reference to an instance of this class.
@@ -32,26 +33,8 @@ class File_Upload {
 
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
-        add_action( 'wp_ajax_jet-engine-forms-upload-file', array( $this, 'ajax_file_upload' ) );
+        add_action( 'wp_ajax_'. $this->action, array( $this, 'ajax_file_upload' ) );
 
-    }
-
-    /**
-     * [set_custom_messages description]
-     * @param [type] $form_id [description]
-     */
-    public function set_custom_messages( $form_id ) {
-
-        $message_builder = jet_engine()->forms->get_messages_builder( $form_id );
-        $messages        = $message_builder->get_messages_data();
-
-        if ( ! empty( $messages ) ) {
-            $this->custom_messages = array(
-                'upload_limit' => $messages['upload_max_files'],
-                'file_type'    => $messages['upload_mime_types'],
-                'file_size'    => $messages['upload_max_size'],
-            );
-        }
     }
 
     /**
@@ -575,9 +558,9 @@ class File_Upload {
         $file_type = ! empty( $this->custom_messages['file_type'] ) ? $this->custom_messages['file_type'] : __( 'File type is not supported', 'jet-engine' );
         $file_size = ! empty( $this->custom_messages['file_size'] ) ? $this->custom_messages['file_size'] : __( 'Maximum upload file size is exceeded', 'jet-engine' );
 
-        wp_localize_script( 'jet-engine-file-upload', 'JetEngineFileUploadConfig', array(
+        wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
             'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
-            'action'          => 'jet-engine-forms-upload-file',
+            'action'          => $this->action,
             'nonce'           => wp_create_nonce( $this->nonce_key ),
             'max_upload_size' => wp_max_upload_size(),
             'errors'          => array(
@@ -587,7 +570,7 @@ class File_Upload {
             ),
         ) );
 
-        wp_enqueue_script( 'jet-engine-file-upload' );
+        wp_enqueue_script( 'jet-form-builder-file-upload' );
 
     }
 

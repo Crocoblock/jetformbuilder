@@ -143,8 +143,8 @@
 				JetEngineFileUpload.uploadFiles( files, event.target );
 			} catch ( error ) {
 
-				if ( window.JetEngineFileUploadConfig.errors[ error ] ) {
-					$errors.html( window.JetEngineFileUploadConfig.errors[ error ] ).removeClass( 'is-hidden' );
+				if ( window.JetFormBuilderFileUploadConfig.errors[ error ] ) {
+					$errors.html( window.JetFormBuilderFileUploadConfig.errors[ error ] ).removeClass( 'is-hidden' );
 				} else {
 					$errors.html( error ).removeClass( 'is-hidden' );
 				}
@@ -192,7 +192,7 @@
 			allowedTypes = input.dataset.allowed_types || false;
 			formID       = input.dataset.form_id || false;
 			field        = input.dataset.field || false;
-			maxSize      = input.dataset.max_size || window.JetEngineFileUploadConfig.max_upload_size;
+			maxSize      = input.dataset.max_size || window.JetFormBuilderFileUploadConfig.max_upload_size;
 			maxSize      = parseInt( maxSize, 10 );
 
 			if ( currentVal && '' !== currentVal ) {
@@ -210,8 +210,8 @@
 
 			formData = new FormData();
 
-			formData.append( 'action', window.JetEngineFileUploadConfig.action );
-			formData.append( 'nonce', window.JetEngineFileUploadConfig.nonce );
+			formData.append( 'action', window.JetFormBuilderFileUploadConfig.action );
+			formData.append( 'nonce', window.JetFormBuilderFileUploadConfig.nonce );
 			formData.append( 'form_id', formID );
 			formData.append( 'field', field );
 
@@ -236,7 +236,7 @@
 			$upload.addClass( 'is-loading' );
 			JetEngineFileUpload.lockButtons( $upload );
 
-			xhr.open( 'POST', window.JetEngineFileUploadConfig.ajaxurl, true );
+			xhr.open( 'POST', window.JetFormBuilderFileUploadConfig.ajaxurl, true );
 
 			xhr.onload = function( e, r ) {
 
@@ -249,7 +249,7 @@
 					try {
 						response = JSON.parse( response );
 					} catch ( e ) {
-						$errors.html( window.JetEngineFileUploadConfig.errors.internal ).removeClass( 'is-hidden' );
+						$errors.html( window.JetFormBuilderFileUploadConfig.errors.internal ).removeClass( 'is-hidden' );
 						return false;
 					}
 

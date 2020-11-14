@@ -2,7 +2,9 @@
 /**
  * Prev page button template
  */
-$add_button = isset( $data ) && isset( $data->has_prev ) && ( $data->has_prev || 1 < $data->page );
+$add_button = isset( $this->factory->spec_data )
+            && isset( $this->factory->spec_data->has_prev )
+            && ( $this->factory->spec_data->has_prev || 1 < $this->factory->spec_data->page );
 
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && $add_button ) {
 
@@ -11,7 +13,7 @@ if ( isset( $args['add_prev'] ) && $args['add_prev'] && $add_button ) {
 	printf(
 		'<button type="button" class="jet-form__prev-page" data-to-page="%2$d">%1$s</button>',
 		$prev_label,
-        $data->page - 1
+        $this->factory->spec_data->page - 1
 	);
 
 }

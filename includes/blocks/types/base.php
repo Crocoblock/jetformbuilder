@@ -77,7 +77,7 @@ abstract class Base {
 	 * @param  array  $attributes [description]
 	 * @return [type]             [description]
 	 */
-	abstract public function get_block_renderer( $form_id, $attributes = array() );
+	abstract public function get_block_renderer( $form_id, $attributes = array(), $factory = null );
 
 	/**
 	 * Render callback for the block

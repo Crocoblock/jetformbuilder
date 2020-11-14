@@ -14,6 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Repeater_Field_Render extends Base {
 
+    public $current_repeater_i = false;
+    public $current_repeater;
+
 	public function get_name() {
 		return 'repeater-field';
 	}

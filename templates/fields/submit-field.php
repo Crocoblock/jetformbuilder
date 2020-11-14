@@ -13,10 +13,10 @@ if ( $has_class )  {
     $classes[] = $this->args['class_name'];
 }
 $this->add_attribute( 'class', 'jet-form-builder__submit' );
-$this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
+$this->add_attribute( 'class', 'submit-type-' . $this->factory->spec_data->submit_type );
 $has_class ? $this->add_attribute( 'class', $this->args['class_name'] ) : '';
 
-if ( isset( $this->args['submit_type'] ) && 'reload' === $this->args['submit_type'] ) {
+if ( isset( $this->factory->spec_data->submit_type ) && 'reload' === $this->factory->spec_data->submit_type ) {
 	$this->add_attribute( 'type', 'submit' );
 } else {
 	$this->add_attribute( 'type', 'button' );

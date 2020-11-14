@@ -183,8 +183,6 @@ class Form_Builder {
             )
         );
 
-
-
         $factory = new Fields_Factory( $this->form_id );
         $form .= $factory->render_form_blocks( $this->blocks );
 

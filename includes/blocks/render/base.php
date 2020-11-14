@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Fields_Factory;
 use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Plugin;
 
@@ -24,30 +25,23 @@ abstract class Base {
     use Get_Template_Trait;
 
 	public $form_id;
-	private $preset;
+    public $block_data;
+    public $factory;
 
-	public $block_data;
-	public $current_repeater_i = false;
-	public $current_repeater;
 
-	public function __construct( $form_id, $args = array() ) {
+    public function __construct( $form_id, $args = array(), $factory = null ) {
         $this->form_id = $form_id;
 
+        $this->set_factory_manager( $factory );
         $this->set_args( $args );
-        $this->set_meta_args();
 	}
 
 	abstract public function get_name();
 
-    /**
-     * @param Form_Preset $preset
-     * @return Base
-     */
-    public function set_preset( $preset ) {
-        $this->preset = $preset;
-
-        return $this;
+    public function set_factory_manager( $manager ) {
+        $this->factory = $manager;
     }
+
 
 	public function set_args( $args = array() ) {
 	    $this->args = $args['attrs'];
@@ -227,9 +221,9 @@ abstract class Base {
 
 		//Find some solution for the repeater field
 
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
+		if ( $this->factory && $this->factory->current_repeater ) {
+			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->factory->current_repeater['name'] : 'repeater';
+			$index = ( false !== $this->factory->current_repeater_i ) ? $this->factory->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
 		}
 
@@ -247,9 +241,9 @@ abstract class Base {
 		}
 		//Find some solution for the repeater field
 
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
+		if ( $this->factory && $this->factory->current_repeater ) {
+			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->factory->current_repeater['name'] : 'repeater';
+			$index = ( false !== $this->factory->current_repeater_i ) ? $this->factory->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
 		}
 
@@ -257,17 +251,9 @@ abstract class Base {
 
 	}
 
-	public function set_meta_args() {
-        $this->args = array_merge(
-            $this->args,
-            Plugin::instance()->post_type->get_args( $this->form_id )
-        );
-    }
-
 	public function render( $data = array() ) {
 
 		$args = $this->args;
-		$data = ( object ) $data;
 
 		$defaults = array(
 			'default'     => '',
@@ -287,10 +273,7 @@ abstract class Base {
 		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
 		$label         = $this->get_field_label();
 		$desc          = $this->get_field_desc();
-        /**
-         * TODO:
-         */
-		$layout        = 'column';
+		$layout        = $this->factory ? $this->factory->spec_data->fields_layout : 'column';
 
         $args['default'] = $this->get_default_from_preset( $args );
 		
@@ -308,21 +291,25 @@ abstract class Base {
 	}
 
 	private function get_default_from_preset( $args ) {
-	    if ( ! $this->preset ) {
+	    if ( ! $this->factory || ! $this->factory->preset ) {
 	        return $args['default'];
         }
 
-        $preset_value = $this->preset->get_field_value( $args['name'], $args );
+        $preset_value = $this->factory->preset->get_field_value( $args['name'], $args );
         $result_value = '';
 
-        if ( ! $this->current_repeater ) {
+        if ( ! $this->factory->current_repeater ) {
+
             if ( $preset_value['rewrite'] ) {
                 $result_value = $preset_value['value'];
             } elseif ( ! $this->is_field( 'hidden' ) ) {
-                $result_value = $this->preset->maybe_adjust_value( $args );
+                $result_value = $this->factory->preset->maybe_adjust_value( $args );
             }
-        } elseif ( ! empty( $this->current_repeater['values'] ) && isset( $this->current_repeater['values'][ $args['name'] ] ) ) {
-            $result_value = $this->current_repeater['values'][ $args['name'] ];
+
+        } elseif ( ! empty( $this->factory->current_repeater['values'] )
+            && isset( $this->factory->current_repeater['values'][ $args['name'] ] ) )
+        {
+            $result_value = $this->factory->current_repeater['values'][ $args['name'] ];
         }
 
         return $result_value ? $result_value : $args['default'];

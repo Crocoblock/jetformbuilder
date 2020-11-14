@@ -45,8 +45,8 @@ class Text_Field extends Base  {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_block_renderer( $form_id, $attributes = array() ) {
-		return new Text_Field_Render( $form_id, $attributes );
+	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
+		return new Text_Field_Render( $form_id, $attributes, $factory );
 	}
 
     /**

@@ -56,8 +56,8 @@ class Hidden_Field extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_block_renderer( $form_id, $attributes = array() ) {
-		return new Hidden_Field_Render( $form_id, $attributes );
+	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
+		return new Hidden_Field_Render( $form_id, $attributes, $factory );
 	}
 
     public function get_field_value( $value, $params = array() ) {

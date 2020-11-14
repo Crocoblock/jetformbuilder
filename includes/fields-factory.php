@@ -20,22 +20,25 @@ class Fields_Factory {
 
 	private $form_id = false;
 	private $form    = false;
-	private $preset;
+
 
     private $pages                  = 0;
     private $rendered_rows          = 0;
     private $field_name;
     private $current_field_data;
-    private $page;
-    private $has_prev;
     private $start_new_page;
 
     private $is_hidden_row;
     private $is_submit_row;
     private $is_page_break_row;
 
-    private $repeater;
-    private $repeater_count;
+    public $current_repeater;
+    public $current_repeater_i;
+    public $preset;
+    public $spec_data;
+
+    public $page;
+    public $has_prev;
 
 	/**
 	 * Create form instance
@@ -46,16 +49,27 @@ class Fields_Factory {
 	    $this->form_id = $form_id;
         $this->preset = Form_Preset::instance( $form_id );
 
+        $this->set_specific_data_for_render();
+
         $this->rendered_rows = 0;
         $this->page = 0;
         $this->has_prev = false;
 	}
 
 	public function set_repeater( $item, $count = false ) {
-	    $this->repeater = $item;
-	    $this->repeater_count = $count;
+	    $this->current_repeater = $item;
+	    $this->current_repeater_i = $count;
 
 	    return $this;
+    }
+
+    private function set_specific_data_for_render() {
+        $spec_data = Plugin::instance()->post_type->get_args( $this->form_id );
+
+        $spec_data['has_prev'] = $this->has_prev;
+        $spec_data['page'] = $this->page;
+
+        $this->spec_data = ( object ) $spec_data;
     }
 
     private function is_not_field() {
@@ -68,8 +82,9 @@ class Fields_Factory {
 
     /**
      * Setup fields prop
+     * @param $fields
      */
-    public function setup_fields( $fields = false ) {
+    public function setup_fields( $fields ) {
         foreach ( $fields as $field ) {
             $this->current_field_data = $field;
 
@@ -95,18 +110,26 @@ class Fields_Factory {
 
             $this->current_field_data = $block;
 
+            /**
+             * TODO: change render algorithm.
+             * This way it will not work to render form fields
+             * inside third-party blocks (columns)
+             *
+             * Most likely we will have to switch to render
+             * through the pre_render_block action or render_callback
+             */
+            if ( ! empty( $block['innerBlocks'] ) && ! $this->is_field( 'repeater' ) ) {
+                $fields[] = $this->render_form_blocks( $block['innerBlocks'] );
+            }
+
             if ( $this->is_not_field() ) {
                 $fields[] = render_block( $block );
                 continue;
             }
 
             $this->set_field_name()->set_field_args();
-            $field = $this->get_field_object()->set_preset( $this->preset );
+            $field = $this->get_field_object();
 
-            if ( $this->repeater ) {
-                $field->current_repeater = $this->repeater;
-                $field->current_repeater_i = $this->repeater_count;
-            }
 
             $fields[] = $this->render_item( $field );
             $this->current_field_data = null;
@@ -127,10 +150,7 @@ class Fields_Factory {
 
         if ( $this->is_field_visible() ) {
 
-            $result[] = $field->render( array(
-                'has_prev'  => $this->has_prev,
-                'page'      => $this->page,
-            ) );
+            $result[] = $field->render();
         }
 
         $result[] = $this->end_form_row();
@@ -145,14 +165,14 @@ class Fields_Factory {
      * @return Base [render]
      */
     public function get_field_object() {
-        $block = jet_form_builder()->blocks->get_field_by_name( $this->field_name );
+        $block = Plugin::instance()->blocks->get_field_by_name( $this->field_name );
 
         $this->current_field_data['attrs'] = array_merge(
             $block->get_default_attributes(),
             $this->current_field_data['attrs']
         );
 
-        return $block->get_block_renderer( $this->form_id,  $this->current_field_data );
+        return $block->get_block_renderer( $this->form_id, $this->current_field_data, $this );
     }
 
     /**

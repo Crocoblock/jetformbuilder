@@ -41,7 +41,12 @@ const JetFormPresetEditor = class extends wp.element.Component {
 				value = this.props.value;
 			}
 
-			this.setState( { value: JSON.parse( value ) } );
+			value = {
+				...JSON.parse( value ),
+				jet_preset: true,
+			};
+
+			this.setState( { value } );
 
 		} else if ( this.props.value ) {
 			this.setState( { value: this.props.value } );

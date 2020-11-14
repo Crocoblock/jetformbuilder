@@ -10,9 +10,9 @@ class Form_Messages_Manager
     public $form_id;
     public $actions;
 
-    protected $_types   = array();
+    protected $_types = array();
 
-    public function __construct( $form_id, $actions ) {
+    public function __construct( $form_id, $actions = array() ) {
         $this->form_id = $form_id;
         $this->actions = $actions;
 

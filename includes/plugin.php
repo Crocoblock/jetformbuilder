@@ -72,6 +72,7 @@ class Plugin {
 		$this->actions      = new Actions\Manager();
 		$this->form         = new Form_Manager();
         $this->form_handler = new Form_Handler();
+        File_Upload::instance();
 
 		if ( is_admin() ) {
 
@@ -81,9 +82,7 @@ class Plugin {
 			) ); */
 
 			$this->editor = new Admin\Editor();
-		} else {
-            File_Upload::instance();
-        }
+		}
 	}
 
 	/**

@@ -56,17 +56,12 @@ class Fields_Factory {
 	    return $this;
     }
 
-    public function is_not_field() {
-	    return (
-	        stripos(
-                $this->current_field_data['blockName'],
-                jet_form_builder()->form::NAMESPACE_FIELDS
-            ) === false
-        );
+    private function is_not_field() {
+	    return Plugin::instance()->form->is_not_field( $this->current_field_data['blockName'] );
     }
 
-    public function is_field( $needle ) {
-	    return stristr( $this->current_field_data['blockName'], $needle );
+    private function is_field( $needle ) {
+	    return Plugin::instance()->form->is_field( $this->current_field_data['blockName'], $needle );
     }
 
     /**

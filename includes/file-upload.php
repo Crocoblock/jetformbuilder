@@ -33,6 +33,8 @@ class File_Upload {
 
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_upload_script' ) );
+
         add_action( 'wp_ajax_'. $this->action, array( $this, 'ajax_file_upload' ) );
 
     }
@@ -78,18 +80,17 @@ class File_Upload {
             wp_send_json_error( __( 'Required parameters not found in request', 'jet-engine' ) );
         }
 
-        $form_data = get_post_meta( $form_id, '_form_data', true );
+        $form_data = Plugin::instance()->form->get_only_form_fields( $form_id );
 
         if ( ! $form_data ) {
             wp_send_json_error( __( 'Form data not found', 'jet-engine' ) );
         }
 
-        $form_data  = Jet_Engine_Booking_Forms_Editor::sanitize_form_data( $form_data );
         $field_data = null;
 
         foreach ( $form_data as $item ) {
-            if ( ! empty( $item['settings']['name'] ) && $item['settings']['name'] === $field ) {
-                $field_data = $item['settings'];
+            if ( ! empty( $item['attrs']['name'] ) && $item['attrs']['name'] === $field ) {
+                $field_data = $item['attrs'];
                 break;
             }
         }
@@ -120,8 +121,8 @@ class File_Upload {
             $settings['insert_attachment'] = $field_data['insert_attachment'];
         }
 
-        $message_builder      = jet_engine()->forms->get_messages_builder( $form_id );
-        $settings['messages'] = $message_builder->get_messages_data();
+        $message_builder      = Plugin::instance()->form_handler->get_message_builder( $form_id );
+        $settings['messages'] = $message_builder->manager->get_messages();
 
         $result = $this->process_upload( $_FILES, $settings );
 
@@ -135,6 +136,111 @@ class File_Upload {
             'value'  => $this->get_result_value( $field_data, $result ),
             'errors' => $this->get_errors_string(),
         ) );
+
+    }
+
+    /**
+     * Process files upload
+     *
+     * @param  boolean $files [description]
+     * @return [type]         [description]
+     */
+    public function process_upload( $files = false, $settings = array() ) {
+
+        $settings = wp_parse_args( $settings, array(
+            'max_size'          => wp_max_upload_size(),
+            'max_files'         => 1,
+            'insert_attachment' => false,
+        ) );
+
+        $insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
+
+        if ( ! $files ) {
+            $files = $_FILES;
+        }
+
+        if ( empty( $files ) || ! is_array( $files ) ) {
+            return false;
+        }
+
+        if ( count( $files ) > $settings['max_files'] ) {
+            wp_send_json_error( $settings['messages']['upload_max_files'] );
+        }
+
+        $result = array();
+        $index  = 0;
+
+        foreach ( $files as $file ) {
+
+            if ( ! $file['size'] > $settings['max_size'] ) {
+                wp_send_json_error( $settings['messages']['upload_max_size'] );
+            }
+
+            if ( ! empty( $settings['mime_types'] ) && ! in_array( $file['type'], $settings['mime_types'] ) ) {
+                wp_send_json_error( $settings['messages']['upload_mime_types'] );
+            }
+
+            $result[] = $this->upload_file( $file, $insert_attachment );
+
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Upload file
+     *
+     * @return [type] [description]
+     */
+    public function upload_file( $file = array(), $insert_attachment = false ) {
+
+        $result = array();
+
+        if ( ! function_exists( 'wp_handle_upload' ) ) {
+            include_once ABSPATH . 'wp-admin/includes/file.php';
+            include_once ABSPATH . 'wp-admin/includes/media.php';
+        }
+
+        add_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
+
+        $upload = wp_handle_upload(
+            $file,
+            array( 'test_form' => false )
+        );
+
+        if ( empty( $upload['error'] ) && $insert_attachment ) {
+
+            $filepath   = $upload['file'];
+            $attachment = wp_insert_attachment(
+                array(
+                    'guid'           => $upload['url'],
+                    'post_mime_type' => $upload['type'],
+                    'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filepath ) ),
+                    'post_content'   => '',
+                    'post_status'    => 'publish'
+                ),
+                $filepath,
+                0,
+                true
+            );
+
+            if ( ! is_wp_error( $attachment ) ) {
+                $metadata = wp_generate_attachment_metadata( $attachment, $filepath );
+                wp_update_attachment_metadata( $attachment, $metadata );
+            } else {
+                $this->errors[] = $attachment->get_error_message();
+            }
+
+            $upload['attachment'] = $attachment;
+
+        } elseif ( ! empty( $upload['error'] ) ) {
+            $this->errors[] = $upload['error'];
+        }
+
+        remove_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
+
+        return $upload;
 
     }
 
@@ -237,14 +343,10 @@ class File_Upload {
     }
 
     public function get_loader() {
-        return '';
-
-        /**
-         * <div class="jet-engine-file-upload__loader">' . apply_filters(
-        'jet-engine/forms/file-upload/loader',
-        '<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
-        ) . '</div>'
-         */
+        return '<div class="jet-engine-file-upload__loader">' . apply_filters(
+                'jet-engine/forms/file-upload/loader',
+                '<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
+            ) . '</div>';
     }
 
     /**
@@ -375,110 +477,7 @@ class File_Upload {
 
     }
 
-    /**
-     * Process files upload
-     *
-     * @param  boolean $files [description]
-     * @return [type]         [description]
-     */
-    public function process_upload( $files = false, $settings = array() ) {
 
-        $settings = wp_parse_args( $settings, array(
-            'max_size'          => wp_max_upload_size(),
-            'max_files'         => 1,
-            'insert_attachment' => false,
-        ) );
-
-        $insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
-
-        if ( ! $files ) {
-            $files = $_FILES;
-        }
-
-        if ( empty( $files ) || ! is_array( $files ) ) {
-            return false;
-        }
-
-        if ( count( $files ) > $settings['max_files'] ) {
-            wp_send_json_error( $settings['messages']['upload_max_files'] );
-        }
-
-        $result = array();
-        $index  = 0;
-
-        foreach ( $files as $file ) {
-
-            if ( ! $file['size'] > $settings['max_size'] ) {
-                wp_send_json_error( $settings['messages']['upload_max_size'] );
-            }
-
-            if ( ! empty( $settings['mime_types'] ) && ! in_array( $file['type'], $settings['mime_types'] ) ) {
-                wp_send_json_error( $settings['messages']['upload_mime_types'] );
-            }
-
-            $result[] = $this->upload_file( $file, $insert_attachment );
-
-        }
-
-        return $result;
-
-    }
-
-    /**
-     * Upload file
-     *
-     * @return [type] [description]
-     */
-    public function upload_file( $file = array(), $insert_attachment = false ) {
-
-        $result = array();
-
-        if ( ! function_exists( 'wp_handle_upload' ) ) {
-            include_once ABSPATH . 'wp-admin/includes/file.php';
-            include_once ABSPATH . 'wp-admin/includes/media.php';
-        }
-
-        add_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
-
-        $upload = wp_handle_upload(
-            $file,
-            array( 'test_form' => false )
-        );
-
-        if ( empty( $upload['error'] ) && $insert_attachment ) {
-
-            $filepath   = $upload['file'];
-            $attachment = wp_insert_attachment(
-                array(
-                    'guid'           => $upload['url'],
-                    'post_mime_type' => $upload['type'],
-                    'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filepath ) ),
-                    'post_content'   => '',
-                    'post_status'    => 'publish'
-                ),
-                $filepath,
-                0,
-                true
-            );
-
-            if ( ! is_wp_error( $attachment ) ) {
-                $metadata = wp_generate_attachment_metadata( $attachment, $filepath );
-                wp_update_attachment_metadata( $attachment, $metadata );
-            } else {
-                $this->errors[] = $attachment->get_error_message();
-            }
-
-            $upload['attachment'] = $attachment;
-
-        } elseif ( ! empty( $upload['error'] ) ) {
-            $this->errors[] = $upload['error'];
-        }
-
-        remove_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
-
-        return $upload;
-
-    }
 
     /**
      * Returns upload subdirectory
@@ -526,23 +525,23 @@ class File_Upload {
     /**
      * Register form-specific assets
      *
-     * @return [type] [description]
+     * @return void
      */
     public function register_assets() {
 
-        wp_register_script(
-            'jet-engine-sortable',
-            jet_engine()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
+        wp_enqueue_script(
+            'jet-form-builder-sortable',
+            Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
             array(),
-            jet_engine()->get_version(),
+            Plugin::instance()->get_version(),
             true
         );
 
-        wp_register_script(
-            'jet-engine-file-upload',
-            jet_engine()->plugin_url( 'assets/js/file-upload.js' ),
-            array( 'jet-engine-frontend', 'jet-engine-sortable' ),
-            jet_engine()->get_version(),
+        wp_enqueue_script(
+            'jet-form-builder-file-upload',
+            Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
+            array( 'jet-form-builder-frontend', 'jet-form-builder-sortable' ),
+            Plugin::instance()->get_version(),
             true
         );
 
@@ -550,27 +549,23 @@ class File_Upload {
 
     /**
      * Enqueue upload file JS
-     * @return [type] [description]
+     * @return void
      */
     public function enqueue_upload_script() {
-
-        $upload_limit = ! empty( $this->custom_messages['upload_limit'] ) ? $this->custom_messages['upload_limit'] : __( 'Maximum upload files limit is reached', 'jet-engine' );
-        $file_type = ! empty( $this->custom_messages['file_type'] ) ? $this->custom_messages['file_type'] : __( 'File type is not supported', 'jet-engine' );
-        $file_size = ! empty( $this->custom_messages['file_size'] ) ? $this->custom_messages['file_size'] : __( 'Maximum upload file size is exceeded', 'jet-engine' );
 
         wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
             'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
             'action'          => $this->action,
             'nonce'           => wp_create_nonce( $this->nonce_key ),
             'max_upload_size' => wp_max_upload_size(),
-            'errors'          => array(
+            /*'errors'          => array(
                 'upload_limit' => $upload_limit,
                 'file_type'    => $file_type,
                 'file_size'    => $file_size,
-            ),
+            ),*/
         ) );
 
-        wp_enqueue_script( 'jet-form-builder-file-upload' );
+        //wp_enqueue_script( 'jet-form-builder-file-upload-config' );
 
     }
 

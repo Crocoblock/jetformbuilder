@@ -78,7 +78,7 @@ class Request_Handler
      */
     public function get_form_data() {
 
-        $fields         = Plugin::instance()->form->get_fields_by_form_id( $this->request['form_id'] );
+        $fields         = Plugin::instance()->form->get_only_form_fields( $this->request['form_id'] );
         $data           = array();
         $errors         = array();
         $invalid_email  = true;
@@ -103,6 +103,7 @@ class Request_Handler
             $required = ! empty( $settings['required'] ) ? $settings['required'] : '';
             $name     = $settings['name'];
             $value    = isset( $request[ $name ] ) ? $request[ $name ] : '';
+
 
             if ( 'media-field' === $type ) {
 

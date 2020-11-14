@@ -2,17 +2,17 @@
 
 	"use strict";
 
-	var JetEngineFileUpload = {
+	var JetFormBuilderFileUpload = {
 
 		init: function() {
 			$( document )
-				.on( 'change', '.jet-engine-file-upload__input', JetEngineFileUpload.processUpload )
-				.on( 'click', '.jet-engine-file-upload__file-remove', JetEngineFileUpload.deleteUpload );
+				.on( 'change', '.jet-engine-file-upload__input', JetFormBuilderFileUpload.processUpload )
+				.on( 'click', '.jet-engine-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
 
 			$( '.jet-engine-file-upload__files' ).sortable({
 				items: '.jet-engine-file-upload__file',
 				forcePlaceholderSize: true,
-			} ).bind( 'sortupdate', JetEngineFileUpload.onSortCallback );
+			} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 		},
 
 		onSortCallback: function( e, ui ) {
@@ -140,8 +140,11 @@
 			$errors.html( '' ).addClass( 'is-hidden' );
 
 			try {
-				JetEngineFileUpload.uploadFiles( files, event.target );
+				JetFormBuilderFileUpload.uploadFiles( files, event.target );
 			} catch ( error ) {
+
+				console.log( error );
+				return;
 
 				if ( window.JetFormBuilderFileUploadConfig.errors[ error ] ) {
 					$errors.html( window.JetFormBuilderFileUploadConfig.errors[ error ] ).removeClass( 'is-hidden' );
@@ -234,14 +237,14 @@
 			xhr = new XMLHttpRequest();
 
 			$upload.addClass( 'is-loading' );
-			JetEngineFileUpload.lockButtons( $upload );
+			JetFormBuilderFileUpload.lockButtons( $upload );
 
 			xhr.open( 'POST', window.JetFormBuilderFileUploadConfig.ajaxurl, true );
 
 			xhr.onload = function( e, r ) {
 
 				$upload.removeClass( 'is-loading' );
-				JetEngineFileUpload.unlockButtons( $upload );
+				JetFormBuilderFileUpload.unlockButtons( $upload );
 
 				if ( xhr.status == 200 ) {
 					var response = e.currentTarget.response;
@@ -257,7 +260,7 @@
 						$errors.html( response.data ).removeClass( 'is-hidden' );
 						return;
 					} else {
-						JetEngineFileUpload.updateResults( $upload, response.data );
+						JetFormBuilderFileUpload.updateResults( $upload, response.data );
 						if ( response.data.errors ) {
 							$errors.html( response.data.errors ).removeClass( 'is-hidden' );
 						} else {
@@ -314,13 +317,13 @@
 				$filesContainer.sortable( {
 					items: '.jet-engine-file-upload__file',
 					forcePlaceholderSize: true,
-				} ).bind( 'sortupdate', JetEngineFileUpload.onSortCallback );
+				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
 		}
 
 	};
 
-	JetEngineFileUpload.init();
+	JetFormBuilderFileUpload.init();
 
 }( jQuery ) );

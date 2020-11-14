@@ -16,7 +16,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Manager
 {
     public  $generators = false;
-    public $builder;
+    public  $builder;
+    private $result_fields = array();
 
     const   NAMESPACE_FIELDS = 'jet-forms/';
     /**
@@ -56,8 +57,43 @@ class Form_Manager
 
     }
 
+    public function is_not_field( $block_name ) {
+        return (
+            stripos(
+                $block_name,
+                self::NAMESPACE_FIELDS
+            ) === false
+        );
+    }
+
+    public function is_field( $block_name, $needle ) {
+        return stristr( $block_name, $needle );
+    }
+
     public function get_form_by_id( $form_id ) {
         return $this->get_fields( get_post( $form_id )->post_content );
+    }
+
+    public function get_only_form_fields( $form_id ) {
+        $content = $this->get_form_by_id( $form_id );
+
+        $this->result_fields = array();
+        $this->get_inner_fields( $content );
+
+        return $this->result_fields;
+    }
+
+    function get_inner_fields( $source ) {
+        foreach ( $source as $block ) {
+
+            if ( ! $this->is_not_field( $block['blockName'] ) ) {
+                $this->result_fields[] = $block;
+            }
+
+            if ( ! empty( $block['innerBlocks'] ) ) {
+                $this->get_inner_fields( $block['innerBlocks'] );
+            }
+        }
     }
 
 

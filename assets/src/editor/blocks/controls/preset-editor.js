@@ -206,7 +206,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 												key={ 'control_' + field + data.name + index + fIndex }
 												labelPosition="side"
 												options={ data.options }
-												label={ data.label }
+												//label={ data.label }
 												value={ currentVal[ data.name ] }
 												onChange={ newVal => {
 													currentVal[ data.name ] = newVal;

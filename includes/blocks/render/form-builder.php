@@ -7,6 +7,7 @@ use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Fields_Factory;
+use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -25,10 +26,10 @@ class Form_Builder {
     use Get_Template_Trait;
 
 
-    public $form_id 				= null;
-    public $post    				= null;
+    public $form_id;
+    public $post;
 
-    private $blocks                 = null;
+    private $blocks;
 
     /**
      * Constructor for the class
@@ -58,6 +59,7 @@ class Form_Builder {
         $this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
 	}
 
+
 	/**
 	 * Returns form action url
 	 *
@@ -67,7 +69,7 @@ class Form_Builder {
 
 		$action = add_query_arg(
 			array(
-				jet_form_builder()->form_handler->hook_key => jet_form_builder()->form_handler->hook_val,
+				Plugin::instance()->form_handler->hook_key => Plugin::instance()->form_handler->hook_val,
 			),
 			home_url( '/' )
 		);
@@ -158,6 +160,11 @@ class Form_Builder {
 			return false;
 		}
 
+        if ( ! $this->preset()->sanitize_source() ) {
+            echo 'You are not permitted to submit this form!';
+            return;
+        }
+
         $form = $this->start_form();
 
         $form .= Fields_Factory::force_render_field( 'hidden-field',
@@ -176,6 +183,8 @@ class Form_Builder {
             )
         );
 
+
+
         $factory = new Fields_Factory( $this->form_id );
         $form .= $factory->render_form_blocks( $this->blocks );
 
@@ -189,7 +198,9 @@ class Form_Builder {
 
 	}
 
-
+	public function preset() {
+	    return Form_Preset::instance( $this->form_id );
+    }
 
 }
 

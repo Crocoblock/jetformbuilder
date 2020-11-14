@@ -50,7 +50,7 @@
 
 			} );
 
-			$valueInput.val( JSON.stringify( values ) ).trigger( 'change.JetEngine' );
+			$valueInput.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain' );
 
 		},
 
@@ -128,7 +128,7 @@
 				val = JSON.stringify( val )
 			}
 
-			$value.val( val ).trigger( 'change.JetEngine' );
+			$value.val( val ).trigger( 'change.JetFormBuilderMain' );
 
 		},
 
@@ -137,12 +137,16 @@
 			var files   = event.target.files,
 				$errors = $( event.target ).closest( '.jet-engine-file-upload' ).find( '.jet-engine-file-upload__errors' );
 
+			console.log( event.target.files );
+
 			$errors.html( '' ).addClass( 'is-hidden' );
 
 			try {
 				JetFormBuilderFileUpload.uploadFiles( files, event.target );
 			} catch ( error ) {
-
+				/**
+				 *
+				 */
 				console.log( error );
 				return;
 
@@ -246,7 +250,7 @@
 				$upload.removeClass( 'is-loading' );
 				JetFormBuilderFileUpload.unlockButtons( $upload );
 
-				if ( xhr.status == 200 ) {
+				if ( xhr.status === 200 ) {
 					var response = e.currentTarget.response;
 
 					try {
@@ -293,7 +297,7 @@
 
 			if ( 1 === limit ) {
 				$filesContainer.html( responseData.html );
-				$input.val( JSON.stringify( responseData.value ) ).trigger( 'change.JetEngine' );
+				$input.val( JSON.stringify( responseData.value ) ).trigger( 'change.JetFormBuilderMain' );
 			} else {
 
 				inputValues = $input.val();
@@ -309,7 +313,7 @@
 					values.push( responseData.value[ i ] );
 				};
 
-				$input.val( JSON.stringify( values ) ).trigger( 'change.JetEngine' );
+				$input.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain' );
 
 				$filesContainer.append( responseData.html );
 				$filesContainer.sortable( 'destroy' );

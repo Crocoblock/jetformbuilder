@@ -20,11 +20,12 @@ class Fields_Factory {
 
 	private $form_id = false;
 	private $form    = false;
+	private $preset;
 
-    private $field_name             = null;
-    private $current_field_data 	= null;
     private $pages                  = 0;
     private $rendered_rows          = 0;
+    private $field_name;
+    private $current_field_data;
     private $page;
     private $has_prev;
     private $start_new_page;
@@ -43,6 +44,7 @@ class Fields_Factory {
 	 */
 	public function __construct( $form_id ) {
 	    $this->form_id = $form_id;
+        $this->preset = Form_Preset::instance( $form_id );
 
         $this->rendered_rows = 0;
         $this->page = 0;
@@ -99,7 +101,7 @@ class Fields_Factory {
             }
 
             $this->set_field_name()->set_field_args();
-            $field = $this->get_field_object();
+            $field = $this->get_field_object()->set_preset( $this->preset );
 
             if ( $this->repeater ) {
                 $field->current_repeater = $this->repeater;

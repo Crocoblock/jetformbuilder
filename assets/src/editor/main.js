@@ -33,7 +33,7 @@ window.jetFormBuilderControls = {
 	advanced: {},
 };
 
-var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize-block-callbacks' );
+var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize' );
 
 document.dispatchEvent( initializeCallbacksEvent );
 

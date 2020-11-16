@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -64,7 +65,6 @@ class Action_Handler {
                 $this->form_actions[] = $available_actions[ $id ];
             }
         }
-
         return $this;
     }
 
@@ -100,7 +100,7 @@ class Action_Handler {
 	public function do_actions() {
 
 		if ( empty( $this->form_actions ) ) {
-			return array();
+            throw new Action_Exception( 'failed' );
 		}
 
 		$size_all = sizeof( $this->form_actions );

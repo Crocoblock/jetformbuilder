@@ -79,4 +79,9 @@ function JetFormAdvanced( {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
+window.jetFormBuilderControlComponents = {
+	...window.jetFormBuilderControlComponents,
+	JetFormAdvanced
+};
+
 export default withInstanceId( JetFormAdvanced );

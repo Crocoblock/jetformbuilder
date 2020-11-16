@@ -7,13 +7,12 @@ import FromTermsFields from "../base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
 import FromManualFields from "../base-select-check-radio/from-manual-fields";
+import {GetFieldPlaceholder} from "../../tools/radio-check-select-helper";
 
 const block = 'jet-forms/radio-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
 window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
-const localizeData = window.JetFormRadioFieldData;
 
 const { __ } = wp.i18n;
 
@@ -46,6 +45,13 @@ const keyControls = () => block + '-controls-edit';
 const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
+
+    constructor( props ) {
+        super( props );
+
+        this.data = window.JetFormRadioFieldData;
+    }
+
     render() {
         const props      = this.props;
         const attributes = props.attributes;
@@ -75,55 +81,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                             props.setAttributes( newValues );
                         }}
                     /> }
-                    <PanelBody
-                        title={ __( 'Field Settings' ) }
-                        key={ 'checkbox_fields' }
-                    >
-                        <SelectControl
-                            key='field_options_from'
-                            label='Fill Options From'
-                            labelPosition='top'
-                            value={ attributes.field_options_from }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { field_options_from: newValue } );
-                            } }
-                            options={ localizeData.options_from }
-                        />
-                        { 'manual_input' === attributes.field_options_from && <FromManualFields
-                            key='from_manual'
-                            attributes={ attributes }
-                            parentProps={ props }
-                        /> }
-                        { 'posts' === attributes.field_options_from && <FromPostsFields
-                            key='from_posts'
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-                        { 'terms' === attributes.field_options_from && <FromTermsFields
-                            key='from_terms'
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
 
-                        { 'meta_field' === attributes.field_options_from && <TextControl
-                            key='field_options_key'
-                            label='Meta field to get value from'
-                            value={ attributes.field_options_key }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { field_options_key: newValue } );
-                            } }
-                        /> }
-
-                        { 'generate' === attributes.field_options_from && <FromGeneratorsFields
-                            key='from_generators'
-                            attributes={ attributes }
-                            parentProps={ props }
-                            localizeData={ localizeData }
-                        /> }
-
-                    </PanelBody>
                     { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
                         values={ attributes }
                         controls={ window.jetFormBuilderControls.advanced[ block ] }
@@ -133,17 +91,59 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
                     /> }
                 </InspectorControls>
             ),
-            <RadioControl
-                key={`place_holder_block_${block}`}
-                label={ attributes.label }
-                labelPosition='top'
-                options={ [
-                    { label: 'Sample 1' },
-                    { label: 'Sample 2' },
-                    { label: 'Sample 3' },
-                    { label: 'Sample 4' },
-                ] }
-            />
+            <React.Fragment>
+                { props.isSelected && <div className='inside-block-options'>
+                    <SelectControl
+                        key='field_options_from'
+                        label='Fill Options From'
+                        labelPosition='top'
+                        value={ attributes.field_options_from }
+                        onChange={ ( newValue ) => {
+                            props.setAttributes( { field_options_from: newValue } );
+                        } }
+                        options={ this.data.options_from }
+                    />
+                    { 'manual_input' === attributes.field_options_from && <FromManualFields
+                        key='from_manual'
+                        attributes={ attributes }
+                        parentProps={ props }
+                    /> }
+                    { 'posts' === attributes.field_options_from && <FromPostsFields
+                        key='from_posts'
+                        attributes={ attributes }
+                        parentProps={ props }
+                        localizeData={ this.data }
+                    /> }
+                    { 'terms' === attributes.field_options_from && <FromTermsFields
+                        key='from_terms'
+                        attributes={ attributes }
+                        parentProps={ props }
+                        localizeData={ this.data }
+                    /> }
+
+                    { 'meta_field' === attributes.field_options_from && <TextControl
+                        key='field_options_key'
+                        label='Meta field to get value from'
+                        value={ attributes.field_options_key }
+                        onChange={ ( newValue ) => {
+                            props.setAttributes( { field_options_key: newValue } );
+                        } }
+                    /> }
+
+                    { 'generate' === attributes.field_options_from && <FromGeneratorsFields
+                        key='from_generators'
+                        attributes={ attributes }
+                        parentProps={ props }
+                        localizeData={ this.data }
+                    /> }
+                </div> }
+
+                <GetFieldPlaceholder
+                    blockName={ block }
+                    scriptData={ this.data }
+                    source={ attributes }
+                />
+            </React.Fragment>
         ];
     }
 }

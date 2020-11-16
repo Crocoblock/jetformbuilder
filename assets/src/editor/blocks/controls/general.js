@@ -143,4 +143,9 @@ const JetFormGeneral = class extends wp.element.Component {
 	}
 }
 
+window.jetFormBuilderControlComponents = {
+	...window.jetFormBuilderControlComponents,
+	JetFormGeneral
+};
+
 export default withInstanceId( JetFormGeneral );

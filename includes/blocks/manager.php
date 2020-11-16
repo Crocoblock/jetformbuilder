@@ -120,7 +120,7 @@ class Manager {
 			$this->register_block_type( $type );
 		}
 
-		do_action( 'jet-form-builder/blocks/init', $this );
+		do_action( 'jet-form-builder/blocks/register', $this );
 
 	}
 

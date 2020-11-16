@@ -31,29 +31,32 @@ function JetFormToolbar( {
 
 	for ( var i = 0; i < controls.length; i++) {
 		result[ controls[ i ].key ] = values[ controls[ i ].key ];
-	};
+	}
 
-	/* eslint-disable jsx-a11y/no-onchange */
 	return <ToolbarGroup>
-		<Flex
-			align={ 'center' }
-			justify={ 'center' }
-			className={ 'jet-form-toggle-box' }
-		>
-			{ controls.map( ( data, index) => {
-				return <ToggleControl
-					key={ data.key }
-					label={ data.label }
-					checked={ result[ data.key ] }
-					onChange={ newVal => {
-						onChangeValue( newVal, data.key )
-					} }
-				/>
-			})}
+			<Flex
+				align={ 'center' }
+				justify={ 'center' }
+				className={ 'jet-form-toggle-box' }
+			>
+				{ controls.map( ( data, index) => {
+					return <ToggleControl
+						key={ data.key }
+						label={ data.label }
+						checked={ result[ data.key ] }
+						onChange={ newVal => {
+							onChangeValue( newVal, data.key )
+						} }
+					/>
+				})}
 
-		</Flex>
-	</ToolbarGroup>
-	/* eslint-enable jsx-a11y/no-onchange */
+			</Flex>
+		</ToolbarGroup>;
 }
+
+window.jetFormBuilderControlComponents = {
+	...window.jetFormBuilderControlComponents,
+	JetFormToolbar
+};
 
 export default withInstanceId( JetFormToolbar );

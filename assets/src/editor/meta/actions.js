@@ -1,3 +1,23 @@
+
+function getRandomID () {
+	return Math.floor( Math.random() * 8999 ) + 1000;
+}
+
+const defaultActions = [{
+	type: 'send_email',
+	id: getRandomID(),
+	settings: {
+		subject: 'New order on website',
+		content: 'Hi admin!\n\nThere are new order on your website.\n\nOrder details:\n- Post ID: %post_id%'
+	}
+}];
+
+function getStringifyActions ( actions ) {
+	const _actions = Array.from( actions );
+
+	return _actions.length ? JSON.stringify( _actions ) : JSON.stringify( defaultActions );
+}
+
 function ActionsMeta() {
 
 	const {
@@ -35,6 +55,7 @@ function ActionsMeta() {
 		withState
 	} = wp.compose;
 
+
 	const DocumentSettingPanel = () => {
 
 		const meta = useSelect( ( select ) => {
@@ -45,22 +66,28 @@ function ActionsMeta() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
+
 		const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions ) );
+
+		const [ userAction, setUserAction ] = useState( 'load' );
 
 		useEffect( () => {
 
 			editPost({
-				meta: ( {
+				meta: ({
 					...meta,
-					_jf_actions: JSON.stringify( actions )
-				} )
+					_jf_actions: JSON.stringify(actions)
+				})
 			});
 
+			return () => {
+				if ( userAction === 'load' && actions.length === 0 ) {
+					setActions( defaultActions );
+					setUserAction(0);
+				}
+			}
 		} );
 
-		const getRandomID = () => {
-			return Math.floor( Math.random() * 8999 ) + 1000;
-		};
 
 		const moveAction = ( fromIndex, toIndex ) => {
 

@@ -35,7 +35,7 @@ class Send_Email extends Base {
 		return 'send_email';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+    public function do_action( $request, $index_action, $size_all, $actions_response )
     {
         $this->data = $request;
 

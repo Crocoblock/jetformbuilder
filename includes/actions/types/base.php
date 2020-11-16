@@ -63,4 +63,8 @@ abstract class Base {
         return true;
     }
 
+    public function default_settings() {
+        return array();
+    }
+
 }

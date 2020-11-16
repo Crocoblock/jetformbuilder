@@ -21,7 +21,7 @@ class Repeater_Field_Render extends Base {
 		return 'repeater-field';
 	}
 
-	public function render( $data = array() )
+	public function render()
     {
         /**
          * Дополнительная проверка не нужна, если используем allowedBlocks

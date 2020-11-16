@@ -15,7 +15,7 @@ class Hidden_Field_Render extends Base {
 		return 'hidden-field';
 	}
 
-    public function render( $data = array() )
+    public function render()
     {
         if ( isset( $this->args['field_value'] ) && ! empty( $this->args['field_value'] ) ) {
 
@@ -24,7 +24,7 @@ class Hidden_Field_Render extends Base {
                 ->get_field_value( $this->args['field_value'] );
         }
 
-        return parent::render( $data );
+        return parent::render();
     }
 
 

@@ -251,7 +251,7 @@ abstract class Base {
 
 	}
 
-	public function render( $data = array() ) {
+	public function render() {
 
 		$args = $this->args;
 

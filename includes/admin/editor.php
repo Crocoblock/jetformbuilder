@@ -396,26 +396,6 @@ class Editor {
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );
-
-		/*global $wp_scripts;
-
-		$wp_scripts->registered['wp-data']->extra['after'] = array();
-		wp_add_inline_script(
-			'wp-data',
-			implode(
-				"\n",
-				array(
-					'( function() {',
-					'   var userId = ' . intval( get_current_user_ID() ) . ';',
-					'   var storageKey = "WP_DATA_USER_" + userId;',
-					'   wp.data',
-					'       .use( wp.data.plugins.persistence, { storageKey: storageKey } );',
-					'   wp.data.plugins.persistence.__unstableMigrate( { storageKey: storageKey } );',
-					'} )();',
-				)
-			)
-		);*/
-
 	}
 
 	public function enqueue_form_assets() {

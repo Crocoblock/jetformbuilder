@@ -19,7 +19,6 @@ class Form_Preset {
 
     public static $instance;
 
-    private $meta_key  = '_preset';
     private $form_id   = null;
     private $data      = null;
     private $source    = null;

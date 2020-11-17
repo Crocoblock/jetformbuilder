@@ -42,7 +42,6 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
     };
 
     const forms_list = window.JetFormData.forms_list;
-    //const [ filteredOptions, setFilteredOptions ] = useState( forms_list );
 
     return [
         isSelected && <InspectorControls
@@ -52,18 +51,6 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
                 title={ __('Form Settings') }
                 key={ this.keyGeneral() }
             >
-                {/*<ComboboxControl
-                    label='Select from'
-                    name='_form_id'
-                    value={ attributes.form_id }
-                    onChange={ val => {
-                        if ( ! val ) {
-                            val = 0;
-                        }
-                        setAttributes( { form_id: val } )
-                    } }
-                    options={ filteredOptions }
-                />*/}
                 <SelectControl
                     key='form_id'
                     label={ __( 'Choose Form' ) }
@@ -90,9 +77,6 @@ function FormEdit ( { attributes, setAttributes, isSelected } ) {
 function FormSave( props ) {
     return null;
 }
-
-
-
 
 registerBlockType(
     formBlock.blockName, {

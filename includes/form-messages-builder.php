@@ -89,21 +89,6 @@ class Form_Messages_Builder
         include $this->get_template('common/messages.php');
     }
 
-    public function get_messages_data()
-    {
-        $all_messages = jet_engine()->forms->editor->get_messages($this->form_id);
-        $default_messages = jet_engine()->forms->get_message_types();
-
-        foreach ($default_messages as $status => $message) {
-            if (!isset($all_messages[$status])) {
-                $all_messages[$status] = $message['default'];
-            }
-        }
-
-        return $all_messages;
-
-    }
-
     /**
      * Render message samples for editor
      *

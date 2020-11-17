@@ -20,7 +20,6 @@ class File_Upload {
     private $nonce_key          = 'jet-form-builder-file-upload-nonce-key';
     private $action             = 'jet-form-builder-upload-file';
     private $errors             = array();
-    private $custom_messages    = array();
 
     /**
      * A reference to an instance of this class.
@@ -494,7 +493,7 @@ class File_Upload {
      * @return [type] [description]
      */
     public function upload_base() {
-        return apply_filters( 'jet-engine/forms/file-upload/dir', 'jet-engine-forms' );
+        return apply_filters( 'jet-form-builder/file-upload/dir', 'jet-form-builder' );
     }
 
     /**
@@ -558,14 +557,7 @@ class File_Upload {
             'action'          => $this->action,
             'nonce'           => wp_create_nonce( $this->nonce_key ),
             'max_upload_size' => wp_max_upload_size(),
-            /*'errors'          => array(
-                'upload_limit' => $upload_limit,
-                'file_type'    => $file_type,
-                'file_size'    => $file_size,
-            ),*/
         ) );
-
-        //wp_enqueue_script( 'jet-form-builder-file-upload-config' );
 
     }
 

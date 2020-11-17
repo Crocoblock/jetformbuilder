@@ -34,7 +34,8 @@ class Manager {
             'Update_Options',
             'Call_Hook',
             'Call_Webhook',
-            'Redirect_To_Page'
+            'Redirect_To_Page',
+            'MailChimp'
         );
 
 		foreach ( $manager->get_actions() as $action ) {

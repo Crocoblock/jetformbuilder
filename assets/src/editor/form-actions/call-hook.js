@@ -21,7 +21,7 @@ window.jetFormDefaultActions['call_hook'] = class CallHookAction extends wp.elem
 
 	constructor( props ) {
 		super( props );
-		
+
 		this.data 	= window.jetFormCallHookData;
 	}
 

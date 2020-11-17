@@ -54,7 +54,7 @@ class Plugin {
 	 * Register autoloader.
 	 */
 	private function register_autoloader() {
-		require JET_FORM_BUILDER_PATH . 'includes/autoloader.php';
+		require JET_FORM_BUILDER_PATH . 'includes' . DIRECTORY_SEPARATOR . 'autoloader.php';
 		Autoloader::run();
 	}
 
@@ -65,8 +65,6 @@ class Plugin {
 	 */
 	public function init_components() {
 
-		//$this->rest       = new Rest\Manager();
-		//$this->db         = new DB();
 		$this->post_type    = new Post_Type();
 		$this->blocks       = new Blocks\Manager();
 		$this->actions      = new Actions\Manager();
@@ -75,13 +73,7 @@ class Plugin {
         File_Upload::instance();
 
 		if ( is_admin() ) {
-
-			/*$this->dashboard = new Admin\Dashboard( array(
-				new Admin\Pages\Forms_List(),
-				new Admin\Pages\Edit(),
-			) ); */
-
-			$this->editor = new Admin\Editor();
+		    $this->editor = new Admin\Editor();
 		}
 	}
 

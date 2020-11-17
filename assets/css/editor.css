@@ -244,3 +244,14 @@
 	padding: 6px 8px;
 	height: 24px;
 }
+
+.jet-form-edit-modal__content .input_with_button {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	width: 45%;
+}
+
+.jet-form-edit-modal__content .input_with_button .components-base-control {
+	width: 60%;
+}

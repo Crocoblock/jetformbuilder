@@ -1,6 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Actions\Types;
 
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -22,7 +23,7 @@ class Update_Options extends Base {
 		return 'update_options';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         $fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
         $options_data = array();

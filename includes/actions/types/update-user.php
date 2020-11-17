@@ -1,6 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Actions\Types;
 
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -22,7 +23,7 @@ class Update_User extends Base {
 		return 'update_user';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         $fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
         $fields_map = array_filter( $fields_map );
@@ -131,7 +132,7 @@ class Update_User extends Base {
         if ( ! empty( $data_map ) ) {
             foreach ( $data_map as $meta_key => $meta_value ) {
 
-                /*if ( $this->is_repeater_val( $meta_value ) ) {
+                if ( $this->is_repeater_val( $meta_value ) ) {
 
                     $prepared_value = array();
 
@@ -150,13 +151,12 @@ class Update_User extends Base {
                     }
 
                     $meta_value = $prepared_value;
-                }*/
+                }
 
                 update_user_meta( $user['ID'], $meta_key, $meta_value );
             }
         }
     }
-
 
     /**
 	 * Regsiter custom action data for the editor

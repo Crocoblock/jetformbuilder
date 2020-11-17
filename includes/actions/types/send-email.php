@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Listing_Filter_Manager;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -35,7 +36,7 @@ class Send_Email extends Base {
 		return 'send_email';
 	}
 
-    public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         $this->data = $request;
 
@@ -100,6 +101,7 @@ class Send_Email extends Base {
             throw new Action_Exception( 'failed' );
         }
     }
+
 
     /**
      * Send the email

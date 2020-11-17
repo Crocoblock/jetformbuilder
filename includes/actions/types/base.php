@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -23,8 +24,6 @@ abstract class Base {
      */
     public $settings = array();
 
-    public $response_data = array();
-
     public function __construct() {
         $this->set_action_messages();
     }
@@ -33,7 +32,12 @@ abstract class Base {
 
 	abstract public function get_id();
 
-	abstract public function do_action( $request, $index_action, $size_all, $actions_response );
+    /**
+     * @param $request array - Form data
+     * @param $handler Action_Handler
+     * @return mixed
+     */
+	abstract public function do_action( array $request, Action_Handler $handler );
 
 	public function messages() {
 	    return array();
@@ -66,5 +70,15 @@ abstract class Base {
     public function default_settings() {
         return array();
     }
+
+
+    public function is_repeater_val( $value ) {
+        if ( is_array( $value ) && ! empty( $value ) ) {
+            return is_array( $value[0] );
+        } else {
+            return false;
+        }
+    }
+
 
 }

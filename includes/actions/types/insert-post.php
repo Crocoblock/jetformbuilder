@@ -1,6 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Actions\Types;
 
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -36,10 +37,8 @@ class Insert_Post extends Base {
         );
     }
 
-	public function do_action( $request, $index_action, $size_all, $actions_response ) {
-	    // $this->settings - action settings
-	    // throw new Action_Exception( 'failed' );
-
+    public function do_action( array $request, Action_Handler $handler )
+    {
         $post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
 
         if ( ! $post_type || ! post_type_exists( $post_type ) ) {
@@ -138,7 +137,7 @@ class Insert_Post extends Base {
 
         }
 
-        $this->response_data['inserted_post_id'] = $post_id;
+        $handler->response_data['inserted_post_id'] = $post_id;
 
         if ( ! $post_id ) {
             throw new Action_Exception( 'failed' );
@@ -161,7 +160,7 @@ class Insert_Post extends Base {
             ) );
 
         }
-	}
+    }
 
 	/**
 	 * Regsiter custom action data for the editor

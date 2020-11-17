@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -22,7 +23,7 @@ class Redirect_To_Page extends Base {
 		return 'redirect_to_page';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         $type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
 
@@ -65,7 +66,7 @@ class Redirect_To_Page extends Base {
                 wp_safe_redirect( $to_url );
                 die();
             } else {
-                $this->response_data['redirect'] = $to_url;
+                $handler->response_data['redirect'] = $to_url;
             }
         }
     }

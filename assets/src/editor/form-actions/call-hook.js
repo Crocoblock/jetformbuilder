@@ -21,8 +21,7 @@ window.jetFormDefaultActions['call_hook'] = class CallHookAction extends wp.elem
 
 	constructor( props ) {
 		super( props );
-
-		this.fields = Tools.getFormFieldsBlocks();
+		
 		this.data 	= window.jetFormCallHookData;
 	}
 
@@ -64,17 +63,15 @@ window.jetFormDefaultActions['call_hook'] = class CallHookAction extends wp.elem
 				<div className='jet-call-hook-instruction'>
 					{ __( 'Called hook names:') }
 					<ul>
-						<li><code>jet-engine-booking/{ settings.hook_name }</code> - { __( 'WP action. Perform a hook without an ability to validate form,' ) }</li>
-						<li><code>jet-engine-booking/filter/{ settings.hook_name }</code> - { __( 'WP filter. Perform a hook with an ability to validate form. Allows to return error message.' ) }</li>
+						<li><code>jet-form-builder/custom-action/{ settings.hook_name }</code> - { __( 'WP action. Perform a hook without an ability to validate form,' ) }</li>
+						<li><code>jet-form-builder/custom-filter/{ settings.hook_name }</code> - { __( 'WP filter. Perform a hook with an ability to validate form. Allows to return error message.' ) }</li>
 					</ul>
 					{ __( 'Hook arguments:') }
 					<ul>
 						<li><code>$result</code> - { __( 'only for WP filter. Hook execution result,' ) }</li>
-						<li><code>$data</code> - { __( 'array with submitted form data,' ) }</li>
-						<li><code>$form</code> - { __( 'current form ID,' ) }</li>
-						<li><code>$notifications</code> - { __( 'notifications object, allows to returns error status by returning' ) }
-							<code>$notifications->set_specific_status( "Status message" )</code>
-							{ __( 'method from the hook callback.' ) }
+						<li><code>$request</code> - { __( 'array with submitted form data,' ) }</li>
+						<li><code>$action_handler</code> - { __( 'action handler object, allows to manage actions data and to throws error status:' ) }
+							<code>throw new Action_Exception( 'failed' )</code>
 						</li>
 					</ul>
 				</div>

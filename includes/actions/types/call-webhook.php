@@ -2,6 +2,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -21,7 +22,7 @@ class Call_Webhook extends Base {
 		return 'call_webhook';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         $webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url( $this->settings['webhook_url'] ) : false;
 
@@ -37,7 +38,7 @@ class Call_Webhook extends Base {
          * Filter webhook arguments
          */
         $args = apply_filters(
-            'jet-engine/forms/booking/notification/webhook/request-args', $args, $this->settings, $this
+            'jet-form-builder/action/webhook/request-args', $args, $this->settings, $this
         );
 
         $response = wp_remote_post( $webhook_url, $args );
@@ -46,10 +47,11 @@ class Call_Webhook extends Base {
             throw new Action_Exception( 'failed' );
         }
         /**
-         * Firtes whe webhook response recieved
+         * Fires whe webhook response received
          */
-        do_action( 'jet-engine/forms/booking/notification/webhook/response', $response, $this->settings, $this );
+        do_action( 'jet-form-builder/action/webhook/response', $response, $this->settings, $this );
     }
+
 
     /**
 	 * Regsiter custom action data for the editor

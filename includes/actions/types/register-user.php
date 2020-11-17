@@ -1,6 +1,7 @@
 <?php
 namespace Jet_Form_Builder\Actions\Types;
 
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -31,16 +32,16 @@ class Register_User extends Base {
 		return 'register_user';
 	}
 
-	public function do_action( $request, $index_action, $size_all, $actions_response )
+	public function do_action( array $request, Action_Handler $handler )
     {
         if ( is_user_logged_in() ) {
 
-            if ( 1 === $size_all ) {
+            if ( 1 === $handler->size_all ) {
                 throw new Action_Exception( 'already_logged_in' );
             }
 
             if ( $this->settings['add_user_id'] ) {
-                $this->response_data['user_id'] = get_current_user_id();
+                $handler->response_data['user_id'] = get_current_user_id();
             }
 
             return;
@@ -164,7 +165,7 @@ class Register_User extends Base {
             if ( ! empty( $metadata ) ) {
                 foreach ( $metadata as $meta_key => $meta_value ) {
 
-                    /*if ( $this->is_repeater_val( $meta_value ) ) {
+                    if ( $this->is_repeater_val( $meta_value ) ) {
 
                         $prepared_value = array();
 
@@ -183,7 +184,7 @@ class Register_User extends Base {
                         }
 
                         $meta_value = $prepared_value;
-                    }*/
+                    }
 
                     update_user_meta( $user_id, $meta_key, $meta_value );
                 }
@@ -198,13 +199,13 @@ class Register_User extends Base {
 
                 // If form submitted by AJAX - we need to reload page to ensure user is logged in
                 if ( $request['__is_ajax'] ) {
-                    $this->response_data['reload'] = true;
+                    $handler->response_data['reload'] = true;
                 }
 
             }
 
             if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
-                $this->response_data['user_id'] = $user_id;
+                $handler->response_data['user_id'] = $user_id;
             }
 
         } else {

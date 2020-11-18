@@ -15,6 +15,7 @@ import './form-actions/call-hook';
 import './form-actions/call-webhook';
 import './form-actions/redirect-to-page';
 import './form-actions/mailchimp';
+import './form-actions/getresponse';
 
 const {
 	registerBlockType

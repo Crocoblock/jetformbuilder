@@ -36,7 +36,6 @@ function Editor ( { startingContent, formName, inputName } ) {
 	useEffect( () => {
 		registerCoreBlocks();
 		var allowedBlocks = window.JetFormEditorData.allowedBlocks;
-		console.log( allowedBlocks );
 		getBlockTypes().forEach( function ( blockType ) {
 			if ( allowedBlocks.indexOf( blockType.name ) === -1 ) {
 				unregisterBlockType( blockType.name );

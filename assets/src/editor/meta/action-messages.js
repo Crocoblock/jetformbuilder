@@ -14,9 +14,6 @@ class ActionMessages extends wp.element.Component {
         super( props );
 
         this.data = props.localizedData;
-
-        console.log( this.messages );
-
         this.setMessages();
     }
 

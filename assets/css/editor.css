@@ -249,6 +249,9 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+}
+
+.jet-form-edit-modal__content .components-base-control__field > .input_with_button {
 	width: 45%;
 }
 

@@ -10,7 +10,14 @@ const {
 	SelectControl,
 	BaseControl,
 	Button,
+	__experimentalNumberControl,
 } = wp.components;
+
+let { NumberControl } = wp.components;
+
+if ( typeof NumberControl === 'undefined' ) {
+	NumberControl = __experimentalNumberControl;
+}
 
 const { __ } = wp.i18n;
 
@@ -20,24 +27,19 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends IntegrationComponent {
+window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
 
-		this.data 	= window.jetFormMailchimpData;
+		this.data = window.jetFormGetResponseData;
 	}
-
 
 	getFields() {
 		const settings = this.props.settings;
 
-		if ( settings.list_id
-			&& settings.data.fields
-			&& settings.data
-			&& settings.data.fields[ settings.list_id ] )
-		{
-			return Object.entries( settings.data.fields[ settings.list_id ] );
+		if ( settings.data && settings.data.fields ) {
+			return Object.entries( settings.data.fields );
 		}
 		return [];
 	}
@@ -51,19 +53,8 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 		return [];
 	}
 
-	getGroups() {
-		const settings = this.props.settings;
 
-		if ( settings.data
-			&& settings.data.groups
-			&& settings.list_id )
-		{
-			return this.formatEntriesArray( settings.data.groups[ settings.list_id ] );
-		}
-		return [];
-	}
-
-	formatEntriesArray( entries = [] ) {
+	formatEntriesArray( entries = [], isNeedPlaceholder = true ) {
 		const placeholder = {
 			label: '--'
 		};
@@ -75,12 +66,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 			return { value, label };
 		} );
 
-		return [ placeholder, ...options ];
-	}
-
-
-	updateLists() {
-
+		return isNeedPlaceholder ? [ placeholder, ...options ] : options ;
 	}
 
 	render() {
@@ -88,10 +74,10 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 		const fields = this.getFields();
 
 		/* eslint-disable jsx-a11y/no-onchange */
-		return ( <div key="mailchimp">
+		return ( <React.Fragment key="getresponse">
 			<BaseControl
 				label={ this.data.labels.api_key }
-				key={'mailchimp_input_key'}
+				key={'getresponse_input_key'}
 			>
 				<div>
 					<div className='input_with_button'>
@@ -117,7 +103,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
 					label={ this.data.labels.list_id }
-					key={'mailchimp_select_lists'}
+					key={'getresponse_select_lists'}
 				>
 					<div className='input_with_button'>
 						<SelectControl
@@ -140,47 +126,15 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 				</BaseControl>
 
 				<BaseControl
-					label={ this.data.labels.groups_ids }
-					key={'mailchimp_groups_ids'}
+					label={ this.data.labels.day_of_cycle }
+					key={'getresponse_day_of_cycle'}
 				>
 					<div>
-						<SelectControl
-							key='groups_ids'
-							value={ settings.groups_ids }
+						<NumberControl
+							key='day_of_cycle'
+							value={ settings.day_of_cycle }
 							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'groups_ids' )
-							} }
-							options={ this.getGroups() }
-						/>
-					</div>
-
-				</BaseControl>
-				<BaseControl
-					label={ this.data.labels.tags }
-					key={'mailchimp_tags'}
-				>
-					<div>
-						<TextControl
-							key='tags'
-							value={ settings.tags }
-							help={ this.data.help.tags }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'tags' )
-							} }
-						/>
-					</div>
-
-				</BaseControl>
-				<BaseControl
-					label={ this.data.labels.double_opt_in }
-					key={'mailchimp_double_opt_in'}
-				>
-					<div>
-						<ToggleControl
-							key={ 'double_opt_in' }
-							checked={ settings.double_opt_in }
-							onChange={ newVal => {
-								this.onChangeSetting( Boolean( newVal ), 'double_opt_in' )
+								this.onChangeSetting( Number( newVal ), 'day_of_cycle' )
 							} }
 						/>
 					</div>
@@ -188,21 +142,22 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 				</BaseControl>
 				<BaseControl
 					label={ this.data.labels.fields_map }
-					key='mailchimp_fields_map'
+					key='getresponse_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [ mcFieldId, mcFieldData ], index ) => {
+						{ fields.map( ( [ fieldName, fieldData ], index ) => {
+
 							return <div
 								className="jet-user-meta__row"
-								key={ 'user_meta_' + mcFieldId + index }
+								key={ 'user_meta_' + fieldName + index }
 							>
 								<SelectControl
-									key={ mcFieldId + index }
-									label={ mcFieldData.label }
+									key={ fieldName + index }
+									label={ fieldData.label }
 									//labelPosition={'side'}
-									value={ this.getFieldDefault( mcFieldId ) }
+									value={ this.getFieldDefault( fieldName ) }
 									onChange={ value => {
-										this.onChangeFieldMap( value, mcFieldId )
+										this.onChangeFieldMap( value, fieldName )
 									} }
 									options={ this.formFieldsList }
 								/>
@@ -211,10 +166,9 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 					</div>
 				</BaseControl>
 
-
 			</React.Fragment> }
 
-		</div> );
+		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
 

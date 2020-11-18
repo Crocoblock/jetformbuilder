@@ -84,7 +84,10 @@ function ActionsMeta() {
 
 			return () => {
 				if ( userAction === 'load' && actions.length === 0 ) {
+					setUserAction(0);
 					setActions( defaultActions );
+				}
+				if ( actions.length !== 0 ) {
 					setUserAction(0);
 				}
 			}

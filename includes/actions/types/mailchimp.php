@@ -2,8 +2,8 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Integrations\Integration_Base;
 use Jet_Form_Builder\Integrations\MailChimp_Handler;
 
 // If this file is called directly, abort.
@@ -14,18 +14,11 @@ if (!defined('WPINC')) {
 /**
  * Define Base_Type class
  */
-class Mailchimp extends Base
+class Mailchimp extends Integration_Base_Action
 {
 
-    private $action = 'jet_form_builder_get_mailchimp_data';
-
-    public function __construct() {
-        parent::__construct();
-
-        if ( wp_doing_ajax() ) {
-            add_action( 'wp_ajax_' . $this->action, array( $this, 'get_mailchimp_data' ) );
-        }
-    }
+    protected $action = 'jet_form_builder_get_mailchimp_data';
+    private $request;
 
     public function get_name()
     {
@@ -37,6 +30,11 @@ class Mailchimp extends Base
         return 'mailchimp';
     }
 
+    public function api_handler( $api_key )
+    {
+        return new MailChimp_Handler( $api_key );
+    }
+
     /**
      * Run a hook notification
      *
@@ -45,43 +43,23 @@ class Mailchimp extends Base
      * @return void
      * @throws Action_Exception
      */
-    public function do_action(array $request, Action_Handler $handler)
+    public function do_action( array $request, Action_Handler $handler )
     {
+        $this->request = $request;
+
         if ( empty( $this->settings['api_key'] ) || empty( $this->settings['list_id'] ) ) {
             throw new Action_Exception( 'mailchimp_invalid_key' );
         }
 
-        $api_key = $this->settings['api_key'];
-        $handler = new MailChimp_Handler( $api_key );
+        $handler = $this->api_handler( $this->settings['api_key'] );
 
         if ( is_wp_error( $handler ) ) {
             throw new Action_Exception( 'mailchimp_invalid_key' );
         }
 
-        $status_if_new = isset( $this->settings['double_opt_in'] ) && filter_var(
-            $this->settings['double_opt_in'],
-            FILTER_VALIDATE_BOOLEAN
-        ) ? 'pending' : 'subscribed';
-
-        $body_args = array(
-            'status'        => 'subscribed',
-            'status_if_new' => $status_if_new,
-        );
-
         $fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
 
-        foreach ( $fields_map as $param => $field ) {
-
-            if ( empty( $field ) || empty( $request[ $field ] ) ) {
-                continue;
-            }
-
-            if ( 'email' === $param ) {
-                $body_args['email_address'] = $request[ $field ];
-            } else {
-                $body_args['merge_fields'][ $param ] = $request[ $field ];
-            }
-        }
+        $body_args = $this->get_body_args( $fields_map );
 
         if ( empty( $body_args['email_address'] ) ) {
             throw new Action_Exception( 'empty_field' );
@@ -115,9 +93,10 @@ class Mailchimp extends Base
 
         if ( isset( $response['status'] ) && ! in_array( $response['status'], $handler->success_statuses ) ) {
 
-            /*if ( isset( $response['title'] ) ) {
-                throw new Action_Exception( 'internal_error' );
-            }*/
+            if ( isset( $response['title'] ) ) {
+                throw new Action_Exception( "dynamic|{$response['title']}" );
+            }
+
             throw new Action_Exception( 'internal_error' );
         }
 
@@ -125,6 +104,37 @@ class Mailchimp extends Base
         if ( empty( $response['id'] ) ) {
             throw new Action_Exception( 'failed' );
         }
+    }
+
+    private function get_body_args( $fields_map ) {
+
+        $status_if_new = isset( $this->settings['double_opt_in'] ) && filter_var(
+            $this->settings['double_opt_in'],
+            FILTER_VALIDATE_BOOLEAN
+        ) ? 'pending' : 'subscribed';
+
+        $body_args = array(
+            'status'        => 'subscribed',
+            'status_if_new' => $status_if_new,
+        );
+
+        foreach ( $fields_map as $param => $field ) {
+
+            if ( empty( $field ) || empty( $this->request[ $field ] ) ) {
+                continue;
+            }
+            switch ( $param ) {
+                case 'email':
+                    $body_args['email_address'] = $this->request[ $field ];
+                    break;
+                case 'BIRTHDAY':
+                    $body_args['merge_fields'][ $param ] = mysql2date( 'm/d', $this->request[ $field ] );
+                    break;
+                default:
+                    $body_args['merge_fields'][ $param ] = $this->request[ $field ];
+            }
+        }
+        return $body_args;
     }
 
     /**
@@ -171,11 +181,9 @@ class Mailchimp extends Base
                 'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
             ),
             'help' => array(
-                'api_key'           => esc_html__(
-                    'How to obtain your MailChimp API Key? More info 
-                    <a href="https://mailchimp.com/help/about-api-keys/" target="_blank">here</a>.'
-                ),
-                'tags'     => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' )
+                'api_key_link_prefix'   => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
+                'api_key_link_suffix'   => __( 'here', 'jet-form-builder' ),
+                'api_key_link'      => 'https://mailchimp.com/help/about-api-keys/',
             ),
         ) );
     }

@@ -1,5 +1,8 @@
 import Tools from "../tools/tools";
 import ActionMessages from "../meta/action-messages";
+import BaseActionComponent from "./base-action-component";
+
+import * as fieldsManager from '../tools/form-fields-manager';
 /**
  * Internal dependencies
  */
@@ -18,98 +21,22 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends wp.element.Component {
+window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends BaseActionComponent {
 
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
-		this.formFieldsList = this.getFormFieldsList();
 		this.data = window.jetFormRegisterUserData;
-
 		this.userFields = Object.entries( this.data.userFields );
-	}
 
-	getFormFieldsList() {
-
-		let formFieldsList = [ {
-				value: '',
-				label: __('Select field...')
-		} ];
-
-		this.fields.forEach( field => {
-			let label = field.label ? field.label : field.name;
-			let value = field.name;
-
-			formFieldsList.push( { value, label } );
-		} );
-
-		return formFieldsList;
-	}
-
-	getFieldByName( { source, name } ) {
-		const settings = this.props.settings;
-
-		if (settings[ source ] && settings[ source ][ name ]) {
-			return settings[ source ][ name ];
-		}
-		return '';
-	}
-
-	getFieldDefault( name ) {
-		return this.getFieldByName( {
-			source: 'fields_map',
-			name
-		} );
-	}
-
-	getFieldMeta( name ) {
-		return this.getFieldByName( {
-			source: 'meta_fields_map',
-			name
-		} );
-	}
-
-	changeFieldsMap( { source, nameField, value } ) {
-		const fieldsMap = Object.assign(
-			{},
-			this.props.settings[ source ],
-			{ [ nameField ]: value }
-		);
-
-		this.props.onChange( {
-			...this.props.settings,
-			[ source ]: fieldsMap
-		} );
+		this.fields = Tools.getFormFieldsBlocks();
+		this.formFieldsList = fieldsManager.getFormFieldsList();
 	}
 
 	render() {
 
 		const settings = this.props.settings;
 		const onChange = this.props.onChange;
-
-		const onChangeFieldMap = ( value, nameField ) => {
-			const source = 'fields_map';
-
-			this.changeFieldsMap(
-				{ value, nameField, source }
-			);
-		};
-
-		const onChangeMetaFieldMap = ( value, nameField ) => {
-			const source = 'meta_fields_map';
-
-			this.changeFieldsMap(
-				{ value, nameField, source }
-			);
-		};
-
-		const onChangeSetting = ( value, key ) => {
-			onChange( {
-				...settings,
-				[ key ]: value
-			} );
-		};
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="register_user">
@@ -131,7 +58,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 								label={ label }
 								labelPosition='side'
 								onChange={ ( newValue ) => {
-									onChangeFieldMap( newValue, value );
+									this.onChangeFieldMap( newValue, value );
 								} }
 							/>
 						</div>;
@@ -149,7 +76,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 						value={ settings.user_role }
 						options={ this.data.userRoles }
 						onChange={ ( newValue ) => {
-							onChangeSetting( newValue, 'user_role' );
+							this.onChangeSetting( newValue, 'user_role' );
 						} }
 					/>
 				</div>
@@ -171,7 +98,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 							label={ name }
 							value={ this.getFieldMeta( name ) }
 							onChange={ newVal => {
-								onChangeMetaFieldMap( newVal, name )
+								this.onChangeMetaFieldMap( newVal, name )
 							} }
 						/>
 					</div>;
@@ -187,7 +114,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 						key='log_in'
 						checked={ settings.log_in }
 						onChange={ ( newValue ) => {
-							onChangeSetting( newValue, 'log_in' );
+							this.onChangeSetting( newValue, 'log_in' );
 						} }
 					/>
 				</div>
@@ -202,7 +129,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 						key='add_user_id_control'
 						checked={ settings.add_user_id }
 						onChange={ ( newValue ) => {
-							onChangeSetting( newValue, 'add_user_id' );
+							this.onChangeSetting( newValue, 'add_user_id' );
 						} }
 						help={ Tools.getHelpMessage( this.data, 'add_user_id' ) }
 					/>

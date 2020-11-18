@@ -14,12 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define MailChimp_Handler class
  */
-class MailChimp_Handler {
+class MailChimp_Handler extends Integration_Base {
 
-    private $api_base_url = '';
-    private $api_key = '';
-    private $api_request_args = array();
-    public  $success_statuses = array( 'subscribed', 'pending' );
+    public $success_statuses = array( 'subscribed', 'pending' );
 
     /**
      * Constructor for the class
@@ -46,25 +43,6 @@ class MailChimp_Handler {
             ),
         );
 
-    }
-
-    public function request( $end_point, $request_args = array() ) {
-        $args     = array_merge_recursive( $this->api_request_args, $request_args );
-        $response = wp_remote_request( $this->api_base_url . $end_point, $args );
-
-        if ( ! $response || is_wp_error( $response ) ) {
-            return false;
-        }
-
-        $data = wp_remote_retrieve_body( $response );
-
-        if ( ! $data ) {
-            return array();
-        }
-
-        $data = json_decode( $data, true );
-
-        return $data;
     }
 
     public function get_all_data() {

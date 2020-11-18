@@ -47,8 +47,17 @@ class Form_Messages_Manager
 
 
     public function get_message_text( $type ) {
-        if ( $this->isset_message_type( $type ) ) {
-            return $this->_types[ $type ];
+        $message = explode( '|', $type );
+
+        /**
+         * Return dynamic message
+         */
+        if ( $message[0] === 'dynamic' && isset( $message[1] ) && ! empty( $message[1] ) ) {
+            return $message[1];
+        }
+
+        if ( $this->isset_message_type( $message[0] ) ) {
+            return $this->_types[ $message[0] ];
         }
         return '';
     }

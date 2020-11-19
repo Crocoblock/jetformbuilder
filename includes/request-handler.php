@@ -140,6 +140,11 @@ class Request_Handler
 
         }
 
+        if ( ! Plugin::instance()->captcha->verify( $this->request['form_id'], $this->request['is_ajax'] ) ) {
+            throw new Request_Exception( 'captcha_failed' );
+        }
+
+
         $data = apply_filters( 'jet-form-builder/form-handler/form-data', $data, $this->request['form_id'], $fields );
 
         return $this->merge_with_base_request( $data );

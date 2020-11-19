@@ -146,10 +146,6 @@ abstract class Base {
 
 	public function render() {
 
-		if ( ! is_array( $this->args ) ) {
-		    return;
-        }
-
 		$defaults = array(
 			'default'     => '',
 			'name'        => '',

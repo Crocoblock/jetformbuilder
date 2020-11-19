@@ -1,12 +1,12 @@
 import Tools from "../tools/tools";
 
-const { __ } = wp.i18n;
-
 function Messages() {
     const {
         ToggleControl,
         TextControl
     } = wp.components;
+
+    const { __ } = wp.i18n;
 
     const {
         registerPlugin

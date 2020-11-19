@@ -497,12 +497,10 @@ class Form_Preset {
      *
      * Ensures only one instance of the plugin class is loaded or can be loaded.
      *
-     * @param $form_id
      * @return Form_Preset An instance of the class.
      * @since 1.0.0
      * @access public
      * @static
-     *
      */
     public static function instance() {
 

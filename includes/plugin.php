@@ -2,6 +2,8 @@
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Integrations\Forms_Captcha;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -30,6 +32,7 @@ class Plugin {
 	public $form;
 	public $form_handler;
 	public $editor;
+	public $captcha;
 
 	/**
 	 * Instance.
@@ -70,6 +73,8 @@ class Plugin {
 		$this->actions      = new Actions\Manager();
 		$this->form         = new Form_Manager();
         $this->form_handler = new Form_Handler();
+        $this->captcha      = new Forms_Captcha();
+
         File_Upload::instance();
 
 		if ( is_admin() ) {

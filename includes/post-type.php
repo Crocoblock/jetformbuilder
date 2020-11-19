@@ -107,6 +107,10 @@ class Post_Type {
 				'type'    => 'string',
 				'default' => '{}',
 			),
+			'_jf_recaptcha' => array(
+                'type'    => 'string',
+                'default' => '{}',
+            ),
 			'_jf_actions'  => array(
 				'type'    => 'string',
 				'default' => '[]',
@@ -149,7 +153,7 @@ class Post_Type {
 
     /**
      * Returns form meta arguments:
-     * fields_layout, submit_type and required_mark
+     * fields_layout, submit_type, captcha and required_mark
      * in assoc array
      *
      * @param $form_id
@@ -180,6 +184,16 @@ class Post_Type {
     }
 
     /**
+     * Returns captcha settings
+     *
+     * @param $form_id
+     * @return array
+     */
+    public function get_recaptcha( $form_id ) {
+        return $this->get_form_meta( '_jf_recaptcha', $form_id );
+    }
+
+    /**
      * Returns form actions
      *
      * @param $form_id
@@ -203,6 +217,10 @@ class Post_Type {
             'validation_failed' => array(
                 'label' => __( 'Validation error', 'jet-form-builder' ),
                 'value' => 'One or more fields have an error. Please check and try again.',
+            ),
+            'captcha_failed' => array(
+                'label' => __( 'Captcha validation failed', 'jet-form-builder' ),
+                'value' => __( 'Captcha validation failed', 'jet-form-builder' ),
             ),
             'invalid_email' => array(
                 'label' => __( 'Entered an invalid email', 'jet-form-builder' ),

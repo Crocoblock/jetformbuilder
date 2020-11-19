@@ -142,9 +142,15 @@ class Form_Builder {
         $form_id = $this->form_id;
 
         ob_start();
+
+        if ( Plugin::instance()->captcha ) {
+            Plugin::instance()->captcha->render( $this->form_id );
+        }
+
         echo Live_Form::instance()->maybe_end_page( true );
 
         include $this->get_template( 'common/end-form.php' );
+
         $end_form .= ob_get_clean();
 
         $end_form .= apply_filters( 'jet-form-builder/after-end-form', '', $this );

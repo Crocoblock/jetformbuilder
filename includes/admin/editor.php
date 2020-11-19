@@ -347,6 +347,14 @@ class Editor {
         return Plugin::instance()->post_type->get_messages_labels();
     }
 
+    public function get_recaptcha_labels() {
+	    return array(
+            'enabled'   => __( 'Enable reCAPTCHA v3 form verification', 'jet-form-builder' ),
+            'key'       => __( 'Site Key:', 'jet-form-builder' ),
+            'secret'    => __( 'Secret Key:', 'jet-form-builder' ),
+        );
+    }
+
 	/**
 	 * Enqueue editor assets
 	 *
@@ -392,7 +400,8 @@ class Editor {
 			'action'            => $this->get_action(),
 			'itemID'            => $this->get_item_id(),
 			'presetConfig'      => $this->get_preset_config(),
-            'messagesLabels'    => $this->get_messages_labels()
+            'messagesLabels'    => $this->get_messages_labels(),
+            'recaptchaLabels'   => $this->get_recaptcha_labels(),
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );

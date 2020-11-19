@@ -19,7 +19,7 @@ $this->add_attribute( 'data-name', $args['name'] );
 $this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
 
-if ( ! empty( $this->current_repeater ) ) {
+if ( ! empty( $this->live_form->current_repeater ) ) {
 	$class_name = 'jet-form__calculated-field--child';
 } else {
 	$class_name = 'jet-form__calculated-field';

@@ -21,21 +21,71 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction extends IntegrationComponent {
+window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
 
 		this.data = window.jetFormActiveCampaignData;
+		this.validateActiveCampaignData = this.validateActiveCampaignData.bind( this );
+		this.getActiveCampaignData = this.getActiveCampaignData.bind( this );
 	}
 
+	validateActiveCampaignData() {
+		this.getActiveCampaignData( true );
+	}
 
+	getActiveCampaignData( isValidate = false ) {
+		const self = this,
+			settings = this.props.settings,
+			lists = [],
+			api_url = settings.api_url,
+			api_key = settings.api_key,
+			endpoint = '/admin/api.php?api_action=list_list';
+
+		isValidate = isValidate || false;
+
+		if ( isValidate ) {
+			self.requestProcessing = 'validate';
+		} else {
+			self.requestProcessing = 'loading';
+		}
+
+		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
+
+		jQuery.getJSON( url )
+			.success( function( data ) {
+				if ( undefined !== data.result_code && data.result_code ) {
+
+					for ( var prop in data ) {
+						if ( undefined === data[prop].id ) {
+							continue;
+						}
+						lists.push( {
+							value: data[prop].id,
+							label: data[prop].name
+						} );
+					}
+
+					self.onChangeSetting( lists, 'data' );
+					self.onChangeSetting( true, 'isValidAPI' );
+
+				} else {
+					self.onChangeSetting( false, 'isValidAPI' );
+				}
+				self.state.requestProcessing = false;
+			} )
+			.error( function() {
+				self.onChangeSetting( false, 'isValidAPI' );
+				self.state.requestProcessing = false;
+			} );
+	}
 
 	getLists() {
 		const settings = this.props.settings;
 
-		if ( settings.data && settings.data.lists ) {
-			return this.formatEntriesArray( settings.data.lists );
+		if ( settings.data && settings.data ) {
+			return this.addPlaceholderForSelect( settings.data );
 		}
 		return [];
 	}
@@ -56,9 +106,11 @@ window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction exte
 		return isNeedPlaceholder ? [ placeholder, ...options ] : options ;
 	}
 
+
+
 	render() {
-		const settings = this.props.settings;
-		const fields = this.getFields();
+		const settings 	= this.props.settings;
+		const fields	= Object.entries( this.data.activecampaign_fields );
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="activecampaign">
@@ -76,30 +128,30 @@ window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction exte
 							} }
 						/>
 						<TextControl
-							key='api_key'
-							value={ settings.api_key }
+							key='api_url'
+							value={ settings.api_url }
 							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'api_key' )
+								this.onChangeSetting( newVal, 'api_url' )
 							} }
 						/>
-						<Button
-							key={ 'validate_api_key' }
-							isPrimary
-							onClick={ this.validateAPIKey }
-							className={ this.getClassNameValidateButton() }
-						>
-							{ this.data.labels.validate_api_key }
-						</Button>
 					</div>
 					<div>{ this.data.help.api_key_link_prefix } <a href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
+					{ ( settings.api_key && settings.api_url ) && <Button
+						key={ 'validate_api_key' }
+						isPrimary
+						onClick={ this.validateActiveCampaignData }
+						className={ this.getClassNameValidateButton() }
+					>
+						{ this.data.labels.validate_api_key }
+					</Button> }
 				</div>
 			</BaseControl>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
 					label={ this.data.labels.list_id }
-					key={'getresponse_select_lists'}
+					key={'activecampaign_select_lists'}
 				>
-					<div className='input_with_button'>
+					<div>
 						<SelectControl
 							key='list_id'
 							value={ settings.list_id }
@@ -111,7 +163,7 @@ window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction exte
 						<Button
 							key={ 'update_list_ids' }
 							isPrimary
-							onClick={ this.updateLists }
+							onClick={ this.getActiveCampaignData }
 						>
 							{ this.data.labels.update_list_ids }
 						</Button>
@@ -120,26 +172,28 @@ window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction exte
 				</BaseControl>
 
 				<BaseControl
-					label={ this.data.labels.day_of_cycle }
-					key={'getresponse_day_of_cycle'}
+					label={ this.data.labels.tags }
+					key={'activecampaign_tags'}
 				>
 					<div>
-						<NumberControl
-							key='day_of_cycle'
-							value={ settings.day_of_cycle }
+						<TextControl
+							key='tags'
+							value={ settings.tags }
+							help={ this.data.help.tags }
 							onChange={ newVal => {
-								this.onChangeSetting( Number( newVal ), 'day_of_cycle' )
+								this.onChangeSetting( newVal, 'tags' )
 							} }
 						/>
 					</div>
 
 				</BaseControl>
+
 				<BaseControl
 					label={ this.data.labels.fields_map }
-					key='getresponse_fields_map'
+					key='activecampaign_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [ fieldName, fieldData ], index ) => {
+						{ fields.map( ( [ fieldName, fieldLabel ], index ) => {
 
 							return <div
 								className="jet-user-meta__row"
@@ -147,7 +201,7 @@ window.jetFormDefaultActions['activecampaign'] = class ActiveCampaignAction exte
 							>
 								<SelectControl
 									key={ fieldName + index }
-									label={ fieldData.label }
+									label={ fieldLabel }
 									//labelPosition={'side'}
 									value={ this.getFieldDefault( fieldName ) }
 									onChange={ value => {

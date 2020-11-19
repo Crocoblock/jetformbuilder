@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Fields_Factory;
 use Jet_Form_Builder\Form_Preset;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -141,6 +142,8 @@ class Form_Builder {
         $form_id = $this->form_id;
 
         ob_start();
+        echo Live_Form::instance()->maybe_end_page( true );
+
         include $this->get_template( 'common/end-form.php' );
         $end_form .= ob_get_clean();
 
@@ -167,24 +170,25 @@ class Form_Builder {
 
         $form = $this->start_form();
 
-        $form .= Fields_Factory::force_render_field( 'hidden-field',
-            $this->form_id,
+        Live_Form::instance()->set_form_id( $this->form_id )->setup_fields( $this->blocks );
+
+        $form .= Live_Form::force_render_field( 'hidden-field',
             array(
                 'field_value'   => $this->form_id,
                 'name'          => '_jet_engine_booking_form_id',
             )
         );
 
-        $form .= Fields_Factory::force_render_field( 'hidden-field',
-            $this->form_id,
+        $form .= Live_Form::force_render_field( 'hidden-field',
             array(
                 'field_value'   => $this->get_form_refer_url(),
                 'name'          => '_jet_engine_refer',
             )
         );
 
-        $factory = new Fields_Factory( $this->form_id );
-        $form .= $factory->render_form_blocks( $this->blocks );
+        foreach ( $this->blocks as $block ) {
+            $form .= render_block( $block );
+        }
 
         $form .= $this->end_form();
 
@@ -197,7 +201,9 @@ class Form_Builder {
 	}
 
 	public function preset() {
-	    return Form_Preset::instance( $this->form_id );
+	    Form_Preset::instance()->set_form_id( $this->form_id );
+
+	    return Form_Preset::instance();
     }
 
 }

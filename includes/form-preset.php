@@ -31,9 +31,11 @@ class Form_Preset {
         'fields_map' => array(),
     );
 
-    private function __construct( $form_id = null ) {
-        $this->form_id = $form_id;
+    private function __construct() {
+    }
 
+    public function set_form_id( $form_id ) {
+        $this->form_id = $form_id;
         $this->set_data();
     }
 
@@ -502,10 +504,10 @@ class Form_Preset {
      * @static
      *
      */
-    public static function instance( $form_id ) {
+    public static function instance() {
 
         if ( is_null( self::$instance ) ) {
-            self::$instance = new self( $form_id );
+            self::$instance = new self();
         }
         return self::$instance;
     }

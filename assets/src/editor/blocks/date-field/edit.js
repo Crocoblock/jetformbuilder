@@ -34,7 +34,14 @@ const {
     CheckboxControl,
     DateTimePicker,
     Disabled,
+    __experimentalInputControl,
 } = wp.components;
+
+let { InputControl } = wp.components;
+
+if ( typeof InputControl === 'undefined' ) {
+    InputControl = __experimentalInputControl;
+}
 
 
 const keyControls = block + '-controls-edit';
@@ -93,8 +100,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
                     /> }
                 </InspectorControls>
             ),
-            <DateTimePicker
+            <InputControl
                 key={`place_holder_block_${block}`}
+                label={ attributes.label }
+                type={'date'}
             />
         ];
     }

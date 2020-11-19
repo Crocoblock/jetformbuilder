@@ -79,10 +79,6 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 	}
 
 
-	updateLists() {
-
-	}
-
 	render() {
 		const settings = this.props.settings;
 		const fields = this.getFields();
@@ -119,7 +115,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 					label={ this.data.labels.list_id }
 					key={'mailchimp_select_lists'}
 				>
-					<div className='input_with_button'>
+					<div>
 						<SelectControl
 							key='list_id'
 							value={ settings.list_id }
@@ -131,7 +127,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 						<Button
 							key={ 'update_list_ids' }
 							isPrimary
-							onClick={ this.updateLists }
+							onClick={ this.getApiData }
 						>
 							{ this.data.labels.update_list_ids }
 						</Button>

@@ -5,6 +5,13 @@ export default class BaseActionComponent extends wp.element.Component {
         super( props );
     }
 
+    addPlaceholderForSelect( array, label = '--' ) {
+        return [
+            { label },
+            ...array
+        ];
+    }
+
     onChangeSetting( value, key ) {
         this.props.onChange( {
             ...this.props.settings,

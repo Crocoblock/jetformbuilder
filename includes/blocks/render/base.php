@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
-use Jet_Form_Builder\Fields_Factory;
 use Jet_Form_Builder\Form_Preset;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -26,29 +26,30 @@ abstract class Base {
 
 	public $form_id;
     public $block_data;
-    public $factory;
+    public $live_form;
+    public $preset;
 
 
-    public function __construct( $form_id, $args = array(), $factory = null ) {
-        $this->form_id = $form_id;
+    public function __construct( $args = array() ) {
+        $this->form_id = Live_Form::instance()->form_id;
 
-        $this->set_factory_manager( $factory );
+        $this->set_live_form();
         $this->set_args( $args );
 	}
 
 	abstract public function get_name();
 
-    public function set_factory_manager( $manager ) {
-        $this->factory = $manager;
+    public function set_live_form() {
+        $this->live_form = Live_Form::instance();
+    }
+
+    public function set_form_preset() {
+        $this->preset = Form_Preset::instance();
     }
 
 
 	public function set_args( $args = array() ) {
-	    $this->args = $args['attrs'];
-
-	    unset($args['attrs']);
-
-	    $this->block_data = $args;
+	    $this->args = $args;
 
 	    if ( $this->block_data ) {
             $this->args['type'] = $this->get_field_type();
@@ -60,7 +61,7 @@ abstract class Base {
     }
 
     private function get_field_type() {
-        return Plugin::instance()->form->field_name( $this->block_data['blockName'] );
+        return Plugin::instance()->form->field_name( $this->args['blockName'] );
     }
 
 	/**
@@ -105,114 +106,6 @@ abstract class Base {
 	}
 
 
-	/**
-	 * Returns field options list
-	 *
-	 * @return array
-	 */
-	public function get_field_options() {
-
-		$args         = $this->args;
-		$options_from = ! empty( $args['field_options_from'] ) ? $args['field_options_from'] : 'manual_input';
-		$options      = array();
-
-		if ( 'manual_input' === $options_from ) {
-
-			if ( ! empty( $args['field_options'] ) ) {
-
-				foreach ( $args['field_options'] as $option ) {
-
-					$item = array(
-						'value' => $option['value'],
-						'label' => $option['label'],
-					);
-
-					if ( isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
-						$item['calculate'] = $option['calculate'];
-					}
-
-					$options[] = $item;
-				}
-
-			}
-
-		} elseif ( 'posts' === $options_from ) {
-
-			$post_type = ! empty( $args['field_options_post_type'] ) ? $args['field_options_post_type'] : false;
-
-			if ( ! $post_type ) {
-				return $options;
-			}
-
-			$posts = get_posts( array(
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'post_type'      => $post_type,
-			) );
-
-			if ( empty( $posts ) ) {
-				return $options;
-			}
-
-			return wp_list_pluck( $posts, 'post_title', 'ID' );
-
-		} elseif ( 'terms' === $options_from ) {
-
-			$tax = ! empty( $args['field_options_tax'] ) ? $args['field_options_tax'] : false;
-
-			if ( ! $tax ) {
-				return $options;
-			}
-
-			$terms = get_terms( array(
-				'taxonomy'   => $tax,
-				'hide_empty' => false,
-			) );
-
-			if ( empty( $terms ) || is_wp_error( $terms ) ) {
-				return $options;
-			}
-
-			return wp_list_pluck( $terms, 'name', 'term_id' );
-
-		} elseif ( 'generate' === $options_from ) {
-
-			$generator = ! empty( $args['generator_function'] ) ? $args['generator_function'] : false;
-			$field     = ! empty( $args['generator_field'] ) ? $args['generator_field'] : false;
-
-			if ( ! $generator || ! $field ) {
-				return $options;
-			}
-
-			if ( ! $this->manager ) {
-				return $options;
-			}
-
-			$generators         = $this->manager->get_options_generators();
-			$generator_instance = isset( $generators[ $generator ] ) ? $generators[ $generator ] : false;
-
-			if ( ! $generator_instance ) {
-				return $options;
-			} else {
-				return $generator_instance->generate( $field );
-			}
-
-		} else {
-
-			$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
-
-			if ( $key ) {
-				$options = get_post_meta( $this->post->ID, $key, true );
-				$options = $this->maybe_parse_repeater_options( $options );
-			}
-
-		}
-
-		return $options;
-
-	}
-
-
 
 	/**
 	 * Returns field name with repeater prefix if needed
@@ -221,9 +114,9 @@ abstract class Base {
 
 		//Find some solution for the repeater field
 
-		if ( $this->factory && $this->factory->current_repeater ) {
-			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->factory->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->factory->current_repeater_i ) ? $this->factory->current_repeater_i : '__i__';
+		if ( $this->live_form && $this->live_form->current_repeater ) {
+			$repeater_name = ! empty( $this->live_form->current_repeater['name'] ) ? $this->live_form->current_repeater['name'] : 'repeater';
+			$index = ( false !== $this->live_form->current_repeater_i ) ? $this->live_form->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
 		}
 
@@ -241,9 +134,9 @@ abstract class Base {
 		}
 		//Find some solution for the repeater field
 
-		if ( $this->factory && $this->factory->current_repeater ) {
-			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->factory->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->factory->current_repeater_i ) ? $this->factory->current_repeater_i : '__i__';
+		if ( $this->live_form && $this->live_form->current_repeater ) {
+			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->live_form->current_repeater['name'] : 'repeater';
+			$index = ( false !== $this->live_form->current_repeater_i ) ? $this->live_form->current_repeater_i : '__i__';
 			$name = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
 		}
 
@@ -253,7 +146,9 @@ abstract class Base {
 
 	public function render() {
 
-		$args = $this->args;
+		if ( ! is_array( $this->args ) ) {
+		    return;
+        }
 
 		$defaults = array(
 			'default'     => '',
@@ -264,7 +159,7 @@ abstract class Base {
 
 		$sanitized_args = array();
 
-		foreach ( $args as $key => $value ) {
+		foreach ( $this->args as $key => $value ) {
 			$sanitized_args[ $key ] = $value;
 		}
 		$args          = wp_parse_args( $sanitized_args, $defaults );
@@ -273,7 +168,7 @@ abstract class Base {
 		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
 		$label         = $this->get_field_label();
 		$desc          = $this->get_field_desc();
-		$layout        = $this->factory ? $this->factory->spec_data->fields_layout : 'column';
+		$layout        = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
         $args['default'] = $this->get_default_from_preset( $args );
 		
@@ -291,25 +186,25 @@ abstract class Base {
 	}
 
 	private function get_default_from_preset( $args ) {
-	    if ( ! $this->factory || ! $this->factory->preset ) {
+	    if ( ! $this->preset ) {
 	        return $args['default'];
         }
 
-        $preset_value = $this->factory->preset->get_field_value( $args['name'], $args );
+        $preset_value = $this->preset->get_field_value( $args['name'], $args );
         $result_value = '';
 
-        if ( ! $this->factory->current_repeater ) {
+        if ( ! $this->live_form->current_repeater ) {
 
             if ( $preset_value['rewrite'] ) {
                 $result_value = $preset_value['value'];
             } elseif ( ! $this->is_field( 'hidden' ) ) {
-                $result_value = $this->factory->preset->maybe_adjust_value( $args );
+                $result_value = $this->preset->maybe_adjust_value( $args );
             }
 
-        } elseif ( ! empty( $this->factory->current_repeater['values'] )
-            && isset( $this->factory->current_repeater['values'][ $args['name'] ] ) )
+        } elseif ( ! empty( $this->live_form->current_repeater['values'] )
+            && isset( $this->live_form->current_repeater['values'][ $args['name'] ] ) )
         {
-            $result_value = $this->factory->current_repeater['values'][ $args['name'] ];
+            $result_value = $this->live_form->current_repeater['values'][ $args['name'] ];
         }
 
         return $result_value ? $result_value : $args['default'];

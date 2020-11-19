@@ -52,12 +52,11 @@ class Repeater_Field extends Base {
     /**
      * Returns current block render instance
      *
-     * @param $form_id
      * @param array $attributes
      * @return Repeater_Field_Render
      */
-	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
-		return new Repeater_Field_Render( $form_id, $attributes, $factory );
+	public function get_block_renderer( $attributes = array() ) {
+		return new Repeater_Field_Render( $attributes );
 	}
 
     public function block_data($editor, $handle)

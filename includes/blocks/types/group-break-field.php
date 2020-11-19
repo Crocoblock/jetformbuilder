@@ -43,12 +43,11 @@ class Group_Break_Field extends Base {
     /**
      * Returns current block render instatnce
      *
-     * @param $form_id
      * @param array $attributes
-     * @return Group_Break_Field_Render [type] [description]
+     * @return Group_Break_Field_Render
      */
-	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
-		return new Group_Break_Field_Render( $form_id, $attributes, $factory );
+	public function get_block_renderer( $attributes = array() ) {
+		return new Group_Break_Field_Render( $attributes );
 	}
 
 	/**

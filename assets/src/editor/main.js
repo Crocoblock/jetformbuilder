@@ -16,6 +16,7 @@ import './form-actions/call-webhook';
 import './form-actions/redirect-to-page';
 import './form-actions/mailchimp';
 import './form-actions/getresponse';
+import './form-actions/activecampaign';
 
 const {
 	registerBlockType

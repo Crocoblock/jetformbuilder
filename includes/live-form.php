@@ -13,24 +13,24 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Main file
  */
-class Fields_Factory {
+class Live_Form {
 
     use Attributes_Trait;
     use Get_Template_Trait;
 
-	private $form_id = false;
+	public $form_id = false;
 	private $form    = false;
 
 
-    private $pages                  = 0;
-    private $rendered_rows          = 0;
     private $field_name;
     private $current_field_data;
     private $start_new_page;
+    public $pages                  = 0;
+    public $rendered_rows          = 0;
 
-    private $is_hidden_row;
-    private $is_submit_row;
-    private $is_page_break_row;
+    public $is_hidden_row;
+    public $is_submit_row;
+    public $is_page_break_row;
 
     public $current_repeater;
     public $current_repeater_i;
@@ -40,21 +40,58 @@ class Fields_Factory {
     public $page;
     public $has_prev;
 
+    /**
+     * Instance.
+     *
+     * Holds the plugin instance.
+     *
+     * @since 1.0.0
+     * @access public
+     * @static
+     *
+     * @var Plugin
+     */
+    public static $instance = null;
+
+    /**
+     * Instance.
+     *
+     * Ensures only one instance of the plugin class is loaded or can be loaded.
+     *
+     * @param $form_id
+     * @return Plugin An instance of the class.
+     * @since 1.0.0
+     * @access public
+     * @static
+     *
+     */
+    public static function instance() {
+
+        if ( is_null( self::$instance ) ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
 	/**
 	 * Create form instance
 	 *
 	 * @param [type] $form_id [description]
 	 */
-	public function __construct( $form_id ) {
-	    $this->form_id = $form_id;
-        $this->preset = Form_Preset::instance( $form_id );
-
-        $this->set_specific_data_for_render();
-
+	private function __construct() {
         $this->rendered_rows = 0;
         $this->page = 0;
         $this->has_prev = false;
+
 	}
+
+	public function set_form_id( $form_id ) {
+        $this->form_id = $form_id;
+        $this->set_specific_data_for_render();
+
+        return $this;
+    }
+
 
 	public function set_repeater( $item, $count = false ) {
 	    $this->current_repeater = $item;
@@ -72,134 +109,29 @@ class Fields_Factory {
         $this->spec_data = ( object ) $spec_data;
     }
 
-    private function is_not_field() {
-	    return Plugin::instance()->form->is_not_field( $this->current_field_data['blockName'] );
+    public function is_not_field( $block ) {
+	    return Plugin::instance()->form->is_not_field( $block['blockName'] );
     }
 
-    private function is_field( $needle ) {
-	    return Plugin::instance()->form->is_field( $this->current_field_data['blockName'], $needle );
+    public function is_field( $block, $needle ) {
+	    return Plugin::instance()->form->is_field( $block['blockName'], $needle );
     }
 
     /**
      * Setup fields prop
-     * @param $fields
+     * @param $blocks
      */
-    public function setup_fields( $fields ) {
-        foreach ( $fields as $field ) {
-            $this->current_field_data = $field;
-
-            if ( ! $this->is_not_field() && $this->is_field( 'form-break' ) ) {
+    public function setup_fields( $blocks ) {
+        foreach ( $blocks as $field ) {
+            if ( $this->is_field( $field, 'form-break' ) ) {
                 $this->pages++;
             }
-
-            $this->current_field_data = null;
         }
     }
 
 
-    /**
-     * @param $source
-     * @return string
-     */
-    public function render_form_blocks( $source ) {
-        $fields = array();
 
-        $this->setup_fields( $source );
-
-        foreach ( $source as $block ) {
-
-            $this->current_field_data = $block;
-
-            /**
-             * TODO: change render algorithm.
-             * This way it will not work to render form fields
-             * inside third-party blocks (columns)
-             *
-             * Most likely we will have to switch to render
-             * through the pre_render_block action or render_callback
-             */
-            if ( ! empty( $block['innerBlocks'] ) && ! $this->is_field( 'repeater' ) ) {
-                $fields[] = $this->render_form_blocks( $block['innerBlocks'] );
-            }
-
-            if ( $this->is_not_field() ) {
-                $fields[] = render_block( $block );
-                continue;
-            }
-
-            $this->set_field_name()->set_field_args();
-            $field = $this->get_field_object();
-
-
-            $fields[] = $this->render_item( $field );
-            $this->current_field_data = null;
-        }
-        $this->maybe_end_page( true );
-
-        return implode( "\n", $fields );
-    }
-
-    public function render_item( $field ) {
-        $result = [];
-
-        $this->is_hidden_row     = true;
-        $this->is_submit_row     = false;
-
-        $result[] = $this->maybe_start_page();
-        $result[] = $this->start_form_row();
-
-        if ( $this->is_field_visible() ) {
-
-            $result[] = $field->render();
-        }
-
-        $result[] = $this->end_form_row();
-        $result[] = $this->maybe_end_page();
-
-        return implode( "\n", $result );
-    }
-
-
-
-    /**
-     * @return Base [render]
-     */
-    public function get_field_object() {
-        $block = Plugin::instance()->blocks->get_field_by_name( $this->field_name );
-
-        $this->current_field_data['attrs'] = array_merge(
-            $block->get_default_attributes(),
-            $this->current_field_data['attrs']
-        );
-
-        return $block->get_block_renderer( $this->form_id, $this->current_field_data, $this );
-    }
-
-    /**
-     *
-     */
-    public function set_field_name() {
-        $block = explode( jet_form_builder()->form::NAMESPACE_FIELDS, $this->current_field_data['blockName'] );
-
-        $this->field_name = $block[1];
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     */
-    public function set_field_args() {
-        $this->current_field_data['attrs'] = jet_form_builder()->blocks
-            ->get_field_attrs(
-                $this->field_name,
-                $this->current_field_data['attrs']
-            );
-    }
-
-    public static function force_render_field( $name, $form_id = 0, $arguments = array() ) {
+    public static function force_render_field( $name, $arguments = array() ) {
 
         if( empty( $name ) ) {
             return;
@@ -209,11 +141,8 @@ class Fields_Factory {
         if( ! $field ) {
             return;
         }
-        $attrs = array(
-            'attrs' => $arguments
-        );
 
-        return $field->get_block_renderer( $form_id, $attrs )->render();
+        return $field->get_block_renderer( $arguments )->render();
     }
 
     /**
@@ -221,7 +150,7 @@ class Fields_Factory {
      *
      * @return [type] [description]
      */
-    public function start_form_row() {
+    public function start_form_row( $field ) {
 
         if ( ! $this->is_hidden_row ) {
             $this->rendered_rows++;
@@ -237,11 +166,11 @@ class Fields_Factory {
             $this->add_attribute( 'class', 'jet-form-row--hidden' );
         }
 
-        if ( $this->is_field( 'submit' ) ) {
+        if ( $this->is_field( $field, 'submit' ) ) {
             $this->add_attribute( 'class', 'jet-form-row--submit' );
         }
 
-        if ( $this->is_field( 'form-break' ) ) {
+        if ( $this->is_field( $field,'form-break' ) ) {
             $this->add_attribute( 'class', 'jet-form-row--page-break' );
         }
 
@@ -312,15 +241,17 @@ class Fields_Factory {
     /**
      * Maybe start new page
      *
-     * @return [type] [description]
+     * @param $is_last
+     * @param $field
+     * @return false|string|void [type] [description]
      */
-    public function maybe_end_page( $is_last = false ) {
+    public function maybe_end_page( $is_last, $field = false ) {
 
         if ( 0 >= $this->pages ) {
             return;
         }
 
-        if ( ! $is_last && ! $this->is_field( 'form-break' ) ) {
+        if ( ! $is_last && ! $field && ! $this->is_field( $field, 'form-break' ) ) {
             return;
         }
 
@@ -339,11 +270,10 @@ class Fields_Factory {
     /**
      * Returns true if field is visible
      *
+     * @param $field
      * @return boolean        [description]
      */
-    public function is_field_visible() {
-
-        $field = $this->current_field_data['attrs'];
+    public function is_field_visible( $field ) {
 
         // For backward compatibility and hidden fields
         if ( empty( $field['visibility'] ) ) {

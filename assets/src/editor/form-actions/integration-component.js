@@ -8,6 +8,7 @@ export default class IntegrationComponent extends BaseActionComponent {
         super( props );
 
         this.validateAPIKey = this.validateAPIKey.bind( this );
+        this.getApiData     = this.getApiData.bind( this );
         this.getLists 		= this.getLists.bind( this );
 
         this.formFieldsList = fieldsManager.getFormFieldsList();
@@ -17,7 +18,11 @@ export default class IntegrationComponent extends BaseActionComponent {
         };
     }
 
-    validateAPIKey( isValidate ) {
+    validateAPIKey() {
+        this.getApiData( true )
+    }
+
+    getApiData( isValidate = false ) {
         const self = this;
         const settings = self.props.settings;
 

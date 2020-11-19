@@ -3,6 +3,8 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -35,7 +37,8 @@ abstract class Base {
 
     public function block_params() {
         return array(
-            'attributes' => $this->block_attributes(),
+            'attributes'        => $this->block_attributes(),
+            'render_callback'   => array( $this, 'render_callback_field' )
         );
     }
 
@@ -71,22 +74,45 @@ abstract class Base {
 	 */
 	abstract public function get_icon();
 
-	/**
-	 * Returns renderer class instance for current block
-	 *
-	 * @param  array  $attributes [description]
-	 * @return [type]             [description]
-	 */
-	abstract public function get_block_renderer( $form_id, $attributes = array(), $factory = null );
+    /**
+     * Returns renderer class instance for current block
+     *
+     * @param array $attributes [description]
+     * @return  [type] [description]
+     */
+	abstract public function get_block_renderer( $attributes = array() );
 
-	/**
-	 * Render callback for the block
-	 *
-	 * @param  array  $attributes [description]
-	 * @return [type]             [description]
-	 */
-	public function render_callback_field( $attributes = array() ) {
-		return $this->get_block_renderer()->render();
+    /**
+     * Render callback for the block
+     *
+     * @param array $attrs
+     * @return string [type]             [description]
+     */
+	public function render_callback_field( $attrs = array() ) {
+        $attributes = array_merge(
+            $this->get_default_attributes(),
+            $attrs
+        );
+
+        $attributes['blockName'] = $this->block_name();
+
+        $form = Live_Form::instance();
+
+        $form->is_hidden_row     = true;
+        $form->is_submit_row     = false;
+
+        $result[] = $form->maybe_start_page();
+        $result[] = $form->start_form_row( $attributes );
+
+        if ( $form->is_field_visible( $attributes ) ) {
+
+            $result[] = $this->get_block_renderer( $attributes )->render();
+        }
+
+        $result[] = $form->end_form_row();
+        $result[] = $form->maybe_end_page( $attributes );
+
+        return implode( "\n", $result );
 	}
 
 	/**
@@ -123,10 +149,6 @@ abstract class Base {
 	 */
 	public function block_class_name() {
 		return 'jet-form-' . $this->get_name();
-	}
-
-	public function get_block_field_type() {
-		return explode( '-', $this->get_name() )[0];
 	}
 
 	/**
@@ -235,7 +257,7 @@ abstract class Base {
 	}
 
 	public function get_default_attributes() {
-	    $attributes = $this->get_attributes();
+	    $attributes = array_merge( $this->get_attributes(), $this->get_global_attributes() );
 	    $default    = array();
 
 	    foreach ( $attributes as $name => $value ) {
@@ -276,14 +298,6 @@ abstract class Base {
 			'default' => '',
 		);
 
-		/**
-		 * This attribute should not change 
-		 */
-		$attributes['type'] = array(
-			'type'    => 'string',
-			'default' => $this->get_block_field_type(),
-		);
-
 		$global_attributes = $this->get_global_attributes();
 
 		if ( ! empty( $global_attributes ) ) {
@@ -320,22 +334,5 @@ abstract class Base {
 		return $attributes;
 	}
 
-	/**
-	 * Render callback for the block
-	 *
-	 * @param  array  $attributes [description]
-	 * @return [type]             [description]
-	 */
-	public function render_callback( $attributes = array() ) {
-
-		$renderer = $this->get_block_renderer( $attributes );
-
-		if ( $renderer ) {
-			ob_start();
-			$renderer->render();
-			return ob_get_clean();
-		}
-
-	}
 
 }

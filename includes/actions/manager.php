@@ -36,7 +36,8 @@ class Manager {
             'Call_Webhook',
             'Redirect_To_Page',
             'MailChimp',
-            'Getresponse'
+            'Getresponse',
+            'Active_Campaign'
         );
 
 		foreach ( $manager->get_actions() as $action ) {

@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Checkbox_Field extends Base implements Field_Interface {
+class Checkbox_Field extends Base {
 
     use Base_Select_Radio_Check;
 
@@ -45,13 +45,11 @@ class Checkbox_Field extends Base implements Field_Interface {
     /**
      * Returns current block render instatnce
      *
-     * @param $form_id
      * @param array $attributes
-     * @param null $factory
-     * @return Checkbox_Field_Render [type] [description]
+     * @return Checkbox_Field_Render
      */
-	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
-		return new Checkbox_Field_Render( $form_id, $attributes, $factory );
+	public function get_block_renderer( $attributes = array() ) {
+		return new Checkbox_Field_Render( $attributes );
 	}
 
 	/**

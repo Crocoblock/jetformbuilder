@@ -124,7 +124,7 @@ class Request_Handler
                 $value = jet_engine_sanitize_wysiwyg( $value );
             }
 
-            if ( 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
+            if ( isset( $settings['field_type'] ) && 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
                 throw new Request_Exception( 'invalid_email' );
             }
 

@@ -117,7 +117,7 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 						<Button
 							key={ 'update_list_ids' }
 							isPrimary
-							onClick={ this.updateLists }
+							onClick={ this.getApiData }
 						>
 							{ this.data.labels.update_list_ids }
 						</Button>

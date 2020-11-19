@@ -13,10 +13,10 @@ if ( $has_class )  {
     $classes[] = $this->args['class_name'];
 }
 $this->add_attribute( 'class', 'jet-form-builder__submit' );
-$this->add_attribute( 'class', 'submit-type-' . $this->factory->spec_data->submit_type );
+$this->add_attribute( 'class', 'submit-type-' . $this->live_form->spec_data->submit_type );
 $has_class ? $this->add_attribute( 'class', $this->args['class_name'] ) : '';
 
-if ( isset( $this->factory->spec_data->submit_type ) && 'reload' === $this->factory->spec_data->submit_type ) {
+if ( isset( $this->live_form->spec_data->submit_type ) && 'reload' === $this->live_form->spec_data->submit_type ) {
 	$this->add_attribute( 'type', 'submit' );
 } else {
 	$this->add_attribute( 'type', 'button' );
@@ -24,7 +24,7 @@ if ( isset( $this->factory->spec_data->submit_type ) && 'reload' === $this->fact
 
 $wrap_classes = array( 'jet-form__submit-wrap' );
 
-if ( isset( $args['add_prev'] ) && ! empty( $args['add_prev'] ) && 1 < $this->factory->spec_data->page ) {
+if ( isset( $args['add_prev'] ) && ! empty( $args['add_prev'] ) && 1 < $this->live_form->spec_data->page ) {
 	$wrap_classes[] = 'has-prev';
 }
 

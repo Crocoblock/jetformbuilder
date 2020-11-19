@@ -50,13 +50,11 @@ class Calculated_Field extends Base {
     /**
      * Returns current block render instatnce
      *
-     * @param $form_id
      * @param array $attributes
-     * @param null $factory
-     * @return Calculated_Field_Render [type] [description]
+     * @return Calculated_Field_Render
      */
-	public function get_block_renderer( $form_id, $attributes = array(), $factory = null ) {
-		return new Calculated_Field_Render( $form_id, $attributes, $factory );
+	public function get_block_renderer( $attributes = array() ) {
+		return new Calculated_Field_Render( $attributes );
 	}
 
     public function block_data($editor, $handle)

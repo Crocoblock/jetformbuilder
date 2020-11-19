@@ -9,7 +9,13 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Select_Field_Render extends Base {
+class Select_Field_Render extends Base_Select_Radio_Check {
+
+    public function __construct( $attributes = array() ) {
+        parent::__construct( $attributes );
+
+        $this->set_options();
+    }
 
 	public function get_name() {
 		return 'select-field';

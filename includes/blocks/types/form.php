@@ -40,7 +40,7 @@ class Form extends Base {
     public function block_params() {
         return array(
             'attributes'		=> $this->block_attributes(),
-            'render_callback' 	=> array( $this, 'render_callback_field' ),
+            'render_callback' 	=> array( $this, 'render_callback_form' ),
         );
     }
 
@@ -107,14 +107,14 @@ class Form extends Base {
     }
 
     /**
-	 * Render callback for the block
-	 *
-	 * @param  array  $attributes [description]
-	 * @return [type]             [description]
-	 */
-	public function render_callback_field( $attributes = array() ) {
+     * Render callback for the block
+     *
+     * @param array $attrs [description]
+     * @return false|string [type]             [description]
+     */
+	public function render_callback_form( $attrs = array() ) {
 
-		$form_id = $attributes['form_id'];
+		$form_id = $attrs['form_id'];
 
 		if ( ! $form_id ) {
 			return 'Please select form to show';

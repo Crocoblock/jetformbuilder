@@ -2,9 +2,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -16,6 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base {
 
 	private $_unregistered = array();
+
+	protected $block_attrs = array();
+	protected $block_content;
 
 	public function __construct() {
 
@@ -77,24 +78,20 @@ abstract class Base {
     /**
      * Returns renderer class instance for current block
      *
-     * @param array $attributes [description]
+     * @param null $wp_block
      * @return  [type] [description]
      */
-	abstract public function get_block_renderer( $attributes = array() );
+	abstract public function get_block_renderer( $wp_block = null );
 
     /**
      * Render callback for the block
      *
      * @param array $attrs
-     * @return string [type]             [description]
+     * @param $content
+     * @return string
      */
-	public function render_callback_field( $attrs = array() ) {
-        $attributes = array_merge(
-            $this->get_default_attributes(),
-            $attrs
-        );
-
-        $attributes['blockName'] = $this->block_name();
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+	    $this->set_block_data( $attrs, $content );
 
         $form = Live_Form::instance();
 
@@ -102,18 +99,34 @@ abstract class Base {
         $form->is_submit_row     = false;
 
         $result[] = $form->maybe_start_page();
-        $result[] = $form->start_form_row( $attributes );
+        $result[] = $form->start_form_row( $this->block_attrs );
 
-        if ( $form->is_field_visible( $attributes ) ) {
+        if ( $form->is_field_visible( $this->block_attrs ) ) {
 
-            $result[] = $this->get_block_renderer( $attributes )->render();
+            /**
+             * $wp_block should not save in $this,
+             * like $attributes & $content
+             * because it's too large
+             */
+            $parsed_block = $wp_block ? $wp_block->parsed_block : null;
+            $result[] = $this->get_block_renderer( $parsed_block );
         }
 
         $result[] = $form->end_form_row();
-        $result[] = $form->maybe_end_page( $attributes );
+        $result[] = $form->maybe_end_page( $this->block_attrs );
 
         return implode( "\n", $result );
 	}
+
+	public function set_block_data( $attributes, $content = null ) {
+        $this->block_content    = $content;
+        $this->block_attrs      = array_merge(
+            $this->get_default_attributes(),
+            $attributes
+        );
+
+        $this->block_attrs['blockName'] = $this->block_name();
+    }
 
 	/**
 	 * Remove attribute from registered

@@ -43,12 +43,15 @@ class Text_Field extends Base  {
     /**
      * Returns current block render instatnce
      *
-     * @param array $attributes
-     * @return Text_Field_Render
+     * @param null $wp_block
+     * @return string
      */
-	public function get_block_renderer( $attributes = array() ) {
-		return new Text_Field_Render( $attributes );
-	}
+    public function get_block_renderer( $wp_block = null ) {
+        return ( new Text_Field_Render(
+            $this->block_attrs,
+            $this->block_content
+        ) )->render();
+    }
 
     /**
      * Register blocks specific JS variables

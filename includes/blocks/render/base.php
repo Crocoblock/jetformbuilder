@@ -26,12 +26,14 @@ abstract class Base {
 
 	public $form_id;
     public $block_data;
+    public $content;
     public $live_form;
     public $preset;
 
 
-    public function __construct( $args = array() ) {
+    public function __construct( $args, $content = null ) {
         $this->form_id = Live_Form::instance()->form_id;
+        $this->content = $content;
 
         $this->set_live_form();
         $this->set_args( $args );
@@ -47,17 +49,13 @@ abstract class Base {
         $this->preset = Form_Preset::instance();
     }
 
-
 	public function set_args( $args = array() ) {
 	    $this->args = $args;
-
-	    if ( $this->block_data ) {
-            $this->args['type'] = $this->get_field_type();
-        }
+        $this->args['type'] = $this->get_field_type();
     }
 
     private function is_field( $needle ) {
-        return Plugin::instance()->form->is_field( $this->block_data['blockName'], $needle );
+        return Plugin::instance()->form->is_field( $this->args['blockName'], $needle );
     }
 
     private function get_field_type() {
@@ -144,7 +142,7 @@ abstract class Base {
 
 	}
 
-	public function render() {
+	public function render( $wp_block = null ) {
 
 		$defaults = array(
 			'default'     => '',

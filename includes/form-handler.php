@@ -149,9 +149,7 @@ class Form_Handler {
                 'is_ajax'   => $this->is_ajax,
                 'refer'     => $this->refer
             );
-            $request_handler = new Request_Handler( $request );
-
-            $this->request_data = $request_handler->get_form_data();
+            $this->request_data = ( new Request_Handler( $request ) )->get_form_data();
 
         } catch ( Handler_Exception $exception ) {
             $this->send_response( array(

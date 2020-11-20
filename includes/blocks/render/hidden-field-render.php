@@ -15,7 +15,7 @@ class Hidden_Field_Render extends Base {
 		return 'hidden-field';
 	}
 
-    public function render()
+    public function render( $wp_block = null )
     {
         if ( isset( $this->args['field_value'] ) && ! empty( $this->args['field_value'] ) ) {
 

@@ -41,14 +41,17 @@ class Wysiwyg_Field extends Base {
 	}
 
     /**
-     * Returns current block render instatnce
+     * Returns current block render
      *
-     * @param array $attributes
-     * @return Wysiwyg_Field_Render
+     * @param null $wp_block
+     * @return string
      */
-	public function get_block_renderer( $attributes = array() ) {
-		return new Wysiwyg_Field_Render( $attributes );
-	}
+    public function get_block_renderer( $wp_block = null ) {
+        return ( new Wysiwyg_Field_Render(
+            $this->block_attrs,
+            $this->block_content
+        ) )->render();
+    }
 
     /**
 	 * Return attributes array

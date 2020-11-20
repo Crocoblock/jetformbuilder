@@ -3,6 +3,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Fields_Factory;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -21,7 +22,7 @@ class Repeater_Field_Render extends Base {
 		return 'repeater-field';
 	}
 
-	public function render()
+	public function render( $wp_block = null )
     {
         /**
          * Дополнительная проверка не нужна, если используем allowedBlocks
@@ -29,11 +30,11 @@ class Repeater_Field_Render extends Base {
          */
         //$children = Plugin::instance()->form->get_fields( $this->block_data['innerBlocks'], true );
 
-        $children = $this->block_data['innerBlocks'];
+       /* $children = $this->block_data['innerBlocks'];
 
         if ( empty( $children ) ) {
             return;
-        }
+        }*/
 
         $manage_items = ! empty( $this->args['manage_items_count'] ) ? $this->args['manage_items_count'] : 'manually';
         $items_field = ! empty( $this->args['manage_items_count_field'] ) ? $this->args['manage_items_count_field'] : false;
@@ -76,17 +77,13 @@ class Repeater_Field_Render extends Base {
             }
         }
 
-        ob_start();
+        $html = '<div class="jet-form-repeater" data-repeater="1" data-field-name="' . $this->args['name'] . '" name="' . $this->args['name'] . '" data-settings="' . $settings . '"' . $calc_dataset . '>';
 
-        echo '<div class="jet-form-repeater" data-repeater="1" data-field-name="' . $this->args['name'] . '" name="' . $this->args['name'] . '" data-settings="' . $settings . '"' . $calc_dataset . '>';
+        $html .= '<template class="jet-form-repeater__initial">';
+        $html .= $this->render_repeater_row( $wp_block, false, $manage_items, $calc_dataset );
+        $html .= '</template>';
 
-        echo '<template class="jet-form-repeater__initial">';
-
-        $this->render_repeater_row( $children, false, $manage_items, $calc_dataset );
-
-        echo '</template>';
-
-        echo '<div class="jet-form-repeater__items">';
+        $html .= '<div class="jet-form-repeater__items">';
 
         /*if ( ! empty( $args['default'] ) && is_array( $args['default'] ) ) {
             $i = 0;
@@ -98,26 +95,26 @@ class Repeater_Field_Render extends Base {
             $this->current_repeater['values'] = false;
         }*/
 
-        echo '</div>';
+        $html .= '</div>';
 
         if ( 'manually' === $manage_items ) {
-            echo '<div class="jet-form-repeater__actions">';
+            $html .= '<div class="jet-form-repeater__actions">';
             $new_item_label = ! empty( $this->args['new_item_label'] ) ? $this->args['new_item_label'] : __( 'Add new', 'jet-engine' );
-            printf( '<button type="button" class="jet-form-builder-repeater__new">%1$s</button>', $new_item_label );
-            echo '</div>';
+            $html .= sprintf( '<button type="button" class="jet-form-builder-repeater__new">%1$s</button>', $new_item_label );
+            $html .= '</div>';
         }
 
-        echo '</div>';
+        $html .= '</div>';
 
         $this->current_repeater = false;
 
-        return ob_get_clean();
+        return $html;
     }
 
     /**
      * Render current repeater row
      */
-    public function render_repeater_row( $children, $index = false, $manage_items = 'manually', $calc_dataset = '' ) {
+    public function render_repeater_row( $wp_block, $index = false, $manage_items = 'manually', $calc_dataset = '' ) {
 
         if ( false !== $index ) {
             $this->current_repeater_i = $index;
@@ -125,23 +122,24 @@ class Repeater_Field_Render extends Base {
             $index = 0;
         }
 
-        echo '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $calc_dataset . '>';
+        $html = '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $calc_dataset . '>';
+        $html .= '<div class="jet-form-repeater__row-fields">';
 
-        echo '<div class="jet-form-repeater__row-fields">';
+        //$factory = new Fields_Factory( $this->form_id );
+        Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );
 
-        $factory = new Fields_Factory( $this->form_id );
-        echo $factory->set_repeater( $this->current_repeater, $this->current_repeater_i )->render_form_blocks( $children );
-
-        echo '</div>';
-
-        if ( 'manually' === $manage_items ) {
-            echo '<div class="jet-form-repeater__row-remove">';
-            echo '<button type="button" class="jet-form-repeater__remove">&times;</button>';
-            echo '</div>';
+        foreach ( $wp_block['innerBlocks'] as $block ) {
+            $html .= render_block( $block );
         }
 
-        echo '</div>';
+        $html .= '</div>';
 
+        if ( 'manually' === $manage_items ) {
+            $html .= '<div class="jet-form-repeater__row-remove">';
+            $html .= '<button type="button" class="jet-form-repeater__remove">&times;</button>';
+            $html .= '</div>';
+        }
+        return $html . '</div>';
     }
 
     /**

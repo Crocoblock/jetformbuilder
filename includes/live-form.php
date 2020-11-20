@@ -1,7 +1,7 @@
 <?php
 namespace Jet_Form_Builder;
 
-use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 
@@ -138,17 +138,19 @@ class Live_Form {
         }
         $field = jet_form_builder()->blocks->get_field_by_name( $name );
 
-        if( ! $field ) {
+        if( ! $field instanceof Block_Type_Base ) {
             return;
         }
+        $field->set_block_data( $arguments );
 
-        return $field->get_block_renderer( $arguments )->render();
+        return $field->get_block_renderer();
     }
 
     /**
      * Open form wrapper
      *
-     * @return [type] [description]
+     * @param $field
+     * @return false|string [type] [description]
      */
     public function start_form_row( $field ) {
 

@@ -11,8 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Radio_Field_Render extends Base_Select_Radio_Check {
 
-    public function __construct( $attributes = array() ) {
-        parent::__construct( $attributes );
+    public function __construct( $attributes, $content = null ) {
+        parent::__construct( $attributes, $content );
 
         $this->set_options();
     }

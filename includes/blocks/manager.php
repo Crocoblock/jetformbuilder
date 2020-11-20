@@ -22,6 +22,9 @@ use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
 use Jet_Form_Builder\Blocks\Types\Form;
 
 use Jet_Form_Builder\Blocks\Types\Field_Interface;
+use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Plugin;
+use JET_SM\Gutenberg\Block_Manager;
 
 // If this file is called directly, abort.
 
@@ -35,13 +38,20 @@ if ( ! defined( 'WPINC' ) ) {
 class Manager {
 
 	private $_types = array();
+	public $base_control;
+
+    /**
+     * @var Block_Manager
+     */
+    public $jet_sm__block_manager;
 
     const FORM_EDITOR_STORAGE = 'form_editor';
     const OTHERS_STORAGE = 'others';
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_block_types' ) );
-		
+        add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
+        add_action( 'init', array( $this, 'register_block_types' ) );
+
 		add_action( 
 			'jet-form-builder/editor-assets/after', 
 			array( $this, 'register_block_types_for_form_editor' ),
@@ -85,6 +95,12 @@ class Manager {
         );
 
         return $arguments;
+    }
+
+    public function init_jet_sm_block_manager() {
+        if( Jet_Style_Manager::is_activated() ){
+            $this->jet_sm__block_manager = Block_Manager::get_instance();
+        }
     }
 
 	/**
@@ -150,17 +166,18 @@ class Manager {
         $attributes = $type->block_attributes();
 
         return array(
-            'blockName'  => $type->block_name(),
-            'title'      => $type->get_title(),
-            'icon'       => $type->get_icon(),
-            'attributes' => $attributes,
-            'controls'   => array(
-                'toolbar'  => $this->get_controls_list( $attributes, 'toolbar' ),
-                'general'  => $this->get_controls_list( $attributes, 'general' ),
-                'advanced' => $this->get_controls_list( $attributes, 'advanced' ),
+            'blockName'     => $type->block_name(),
+            'title'         => $type->get_title(),
+            'icon'          => $type->get_icon(),
+            'attributes'    => $attributes,
+            'controls'  => array(
+                'toolbar'   => $this->get_controls_list( $attributes, 'toolbar' ),
+                'general'   => $this->get_controls_list( $attributes, 'general' ),
+                'advanced'  => $this->get_controls_list( $attributes, 'advanced' ),
             ),
-            'className'  => $type->block_class_name(),
-            'slug'       => $type->get_name(),
+            'className'     => $type->block_class_name(),
+            'slug'          => $type->get_name(),
+            'supports'      => $type->get_supports()
         );
     }
 
@@ -193,31 +210,31 @@ class Manager {
 
 		wp_enqueue_script(
 			'jet-form-builder-frontend',
-            jet_form_builder()->plugin_url( 'assets/js/frontend.js' ),
+            Plugin::instance()->plugin_url( 'assets/js/frontend.js' ),
 			array(),
-            jet_form_builder()->get_version(),
+            Plugin::instance()->get_version(),
 			true
 		);
 
 		wp_enqueue_script(
 			'jet-form-builder-frontend-forms',
-			jet_form_builder()->plugin_url( 'assets/js/frontend-forms.js' ),
+            Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
 			array(),
-			jet_form_builder()->get_version(),
+            Plugin::instance()->get_version(),
 			true
 		);
 
 		wp_enqueue_script(
 			'jet-form-builder-inputmask',
-			jet_form_builder()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
+            Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
 			array( 'jet-form-builder-frontend-forms' ),
-			jet_form_builder()->get_version(),
+            Plugin::instance()->get_version(),
 			true
 		);
 
         wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
             'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
-            'form_action'   => jet_form_builder()->form_handler->hook_key
+            'form_action'   => Plugin::instance()->form_handler->hook_key
         ) );
 
 	}
@@ -306,11 +323,6 @@ class Manager {
 
 		if ( ! $field ) {
 			return;
-		}
-
-		if( $field instanceof Field_Interface ) {
-
-			return array_merge( $attributes, $field->get_field_attrs( $attributes ) );
 		}
 
 		return $attributes;		

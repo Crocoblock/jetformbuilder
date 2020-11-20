@@ -34,6 +34,8 @@ class Plugin {
 	public $editor;
 	public $captcha;
 
+	public $is_activated_jet_sm;
+
 	/**
 	 * Instance.
 	 *

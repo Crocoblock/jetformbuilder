@@ -68,6 +68,8 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 				className: blockData.className,
 				supports: {
 					customClassName: false,
+					html: false,
+					...blockData.supports
 				},
 				edit: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].edit,
 				save: window.jetFormBuilderBlockCallbacks[ blockData.blockName ].save,

@@ -66,6 +66,12 @@ class Submit_Field extends Base {
         return array();
 	}
 
+	public function get_supports()
+    {
+        return array(
+            'multiple' => false
+        );
+    }
 
     /**
      * Returns global attributes list

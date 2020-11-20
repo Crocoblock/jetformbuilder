@@ -97,7 +97,6 @@ abstract class Base {
 		return true;
 	}
 
-
 	public function render( $wp_block = null ) {
 
 		$defaults = array(

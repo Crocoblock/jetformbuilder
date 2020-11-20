@@ -3,8 +3,10 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
+use JET_SM\Gutenberg\Controls_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -17,9 +19,13 @@ abstract class Base {
 
     use Get_Template_Trait;
 
-	private $_unregistered = array();
+	private $_unregistered          = array();
 
-	public $block_attrs = array();
+	protected $controls_manager;
+	protected $css_scheme;
+	public $style_attributes        = array();
+
+	public $block_attrs             = array();
     public $block_content;
 
 	public function __construct() {
@@ -31,24 +37,27 @@ abstract class Base {
 			return $blocks;
 		} );
 
+		$this->maybe_init_style_manager();
 	}
 
-	private function _register_block() {
-        register_block_type(
-            $this->block_name(),
-            $this->block_params()
-        );
+    /**
+     * Override this method to set you style controls
+     */
+    protected function add_style_manager_options() {
+        //
     }
 
-    public function block_params() {
-        return array(
-            'attributes'        => $this->block_attributes(),
-            'render_callback'   => array( $this, 'render_callback_field' )
-        );
+    /**
+     * Return style controls attributes
+     *
+     * @return array
+     */
+    public function get_style_attributes(){
+        return array();
     }
 
-	public function get_storage_name() {
-	    return jet_form_builder()->blocks::FORM_EDITOR_STORAGE;
+    public function get_css_scheme() {
+        return array();
     }
 
 	/**
@@ -86,6 +95,59 @@ abstract class Base {
      * @return  [type] [description]
      */
 	abstract public function get_block_renderer( $wp_block = null );
+
+	public function get_supports() {
+	    return array();
+    }
+
+
+
+    private function _register_block() {
+        register_block_type(
+            $this->block_name(),
+            $this->block_params()
+        );
+    }
+
+    private function maybe_init_style_manager() {
+
+	    if( Jet_Style_Manager::is_activated() ) {
+            $this->style_attributes = $this->get_style_attributes();
+            $this->css_scheme = $this->_get_css_scheme();
+
+            if ( ! empty( $this->style_attributes ) && ! empty( $this->css_scheme ) ) {
+                $this->set_style_manager_instance()->add_style_manager_options();
+            }
+        }
+    }
+
+    private function _get_css_scheme(){
+         return apply_filters(
+            "jet-form-builder/{$this->get_name()}/css-scheme",
+            $this->get_css_scheme()
+        );
+    }
+
+    /**
+     * Set style manager class instance
+     *
+     * @return Base
+     */
+    private function  set_style_manager_instance(){
+        $this->controls_manager = new Controls_Manager( $this->block_name() );
+        return $this;
+    }
+
+    public function block_params() {
+        return array(
+            'attributes'        => $this->block_attributes(),
+            'render_callback'   => array( $this, 'render_callback_field' )
+        );
+    }
+
+    public function get_storage_name() {
+        return jet_form_builder()->blocks::FORM_EDITOR_STORAGE;
+    }
 
     /**
      * Render callback for the block
@@ -172,7 +234,6 @@ abstract class Base {
     public function common_templates_path() {
         return false;
     }
-
 
 	/**
 	 * Remove attribute from registered
@@ -389,7 +450,7 @@ abstract class Base {
 	 */
 	public function block_attributes() {
 
-		$attributes = $this->get_attributes();
+		$attributes = array_merge( $this->get_attributes(), $this->style_attributes );
 
 		/**
 		 * Set default blocks attributes to avoid errors

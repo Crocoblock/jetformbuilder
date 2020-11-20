@@ -33,7 +33,155 @@ class Checkbox_Field extends Base {
 		return 'checkbox-field';
 	}
 
-	/**
+	public function get_css_scheme()
+    {
+        return array(
+            'item'                  => '.jet-checkboxes-list__row',
+            'child-items'           => '.jet-list-tree__children',
+            'button'                => '.jet-checkboxes-list__button',
+            'label'                 => '.jet-checkboxes-list__label',
+            'checkbox'              => '.jet-checkboxes-list__decorator',
+            'checkbox-checked-icon' => '.jet-checkboxes-list__checked-icon',
+            'list-item'             => '.jet-forms-checkbox-field',
+            'list-wrapper'          => '.jet-checkboxes-list-wrapper',
+            'list-children'         => '.jet-list-tree__children',
+        );
+    }
+
+    public function add_style_manager_options() {
+        $this->controls_manager->start_section(
+            'style_controls',
+            [
+                'id'          => 'items_style',
+                'initialOpen' => true,
+                'title'       => __( 'Items', 'jet-form-builder' )
+            ]
+        );
+
+        $this->controls_manager->add_control([
+            'id'        => 'filters_position',
+            'type'      => 'choose',
+            'label'     => __( 'Filters Position', 'jet-form-builder' ),
+            'separator' => 'after',
+            'options'   =>[
+                'inline-block'    => [
+                    'shortcut' => __( 'Line', 'jet-form-builder' ),
+                    'icon'  => 'dashicons-ellipsis',
+                ],
+                'block' => [
+                    'shortcut' => __( 'Column', 'jet-form-builder' ),
+                    'icon'  => 'dashicons-menu-alt',
+                ],
+            ],
+            'css_selector' => [
+                '{{WRAPPER}} ' . $this->css_scheme['list-item']     => 'display: {{VALUE}};',
+                '{{WRAPPER}} ' . $this->css_scheme['list-children'] => 'display: {{VALUE}};',
+            ],
+            'attributes' => [
+                'default' => [
+                    'value' =>'block'
+                ],
+            ]
+        ]);
+
+
+
+        $this->controls_manager->add_control([
+            'id'        => 'items_space_between',
+            'type'      => 'range',
+            'label'     => __( 'Space Between', 'jet-form-builder' ),
+            'separator' => 'after',
+            'unit'      => 'px',
+            'min'       => 0,
+            'max'       => 50,
+            'step'      => 1,
+            'css_selector' => [
+                '{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+                '{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+                '{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'         => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+                '{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)'        => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+            ],
+            'attributes' => [
+                'default' => [
+                    'value' => 10
+                ],
+            ]
+        ]);
+
+        $this->controls_manager->add_control([
+            'id'        => 'sub_items_offset_left',
+            'type'      => 'range',
+            'label'     => __( 'Children Offset Left', 'jet-form-builder' ),
+            'unit'      => 'px',
+            'min'       => 0,
+            'max'       => 50,
+            'step'      => 1,
+            'css_selector' => [
+                '{{WRAPPER}} ' . $this->css_scheme['child-items'] => 'padding-left: {{VALUE}}{{UNIT}};',
+            ],
+            'attributes' => [
+                'default' => [
+                    'value' => 10
+                ],
+            ]
+        ]);
+
+        $this->controls_manager->end_section();
+    }
+
+	public function get_style_attributes()
+    {
+        return array(
+            'blockID' => [
+                'type'    => 'string',
+                'default' => '',
+            ],
+            'filters_position' => [
+                'type' => 'object',
+            ],
+            'horisontal_layout_description' => [
+                'type' => 'object',
+            ],
+            'filters_list_alignment' => [
+                'type' => 'object',
+            ],
+            'items_space_between' => [
+                'type' => 'object',
+            ],
+            'sub_items_offset_left' => [
+                'type' => 'object',
+            ],
+            'show_decorator' => [
+                'type' => 'object',
+            ],
+            'item_typography' => [
+                'type' => 'object',
+            ],
+            'item_normal_color' => [
+                'type' => 'object',
+            ],
+            'item_normal_background_color' => [
+                'type' => 'object',
+            ],
+            'item_checked_color' => [
+                'type' => 'object',
+            ],
+            'item_checked_background_color' => [
+                'type' => 'object',
+            ],
+            'item_checked_border_color' => [
+                'type' => 'object',
+            ],
+            'item_padding' => [
+                'type' => 'object',
+            ],
+            'item_border' => [
+                'type' => 'object',
+            ],
+        );
+    }
+
+    /**
 	 * Returns icon class name
 	 *
 	 * @return [type] [description]

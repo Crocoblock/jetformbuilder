@@ -16,6 +16,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
     const getCheckbox = ( label, index = 1 ) => {
         return <CheckboxControl
+            className={'jet-forms-checkbox-field'}
             key={`place_holder_block_${label + index}`}
             label={ label }
         />;

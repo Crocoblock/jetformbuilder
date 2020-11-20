@@ -58,10 +58,7 @@ class Hidden_Field extends Base {
      * @return string
      */
     public function get_block_renderer( $wp_block = null ) {
-        return ( new Hidden_Field_Render(
-            $this->block_attrs,
-            $this->block_content
-        ) )->render();
+        return ( new Hidden_Field_Render( $this ) )->render();
     }
 
     public function get_field_value( $value, $params = array() ) {

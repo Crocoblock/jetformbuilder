@@ -3,6 +3,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
+use Jet_Form_Builder\Form_Preset;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,12 +15,21 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Repeater_Field extends Base {
 
+    public $manage_items;
+    public $items_field;
+    public $repeater_calc_type;
+    public $new_item_label;
+    public $settings;
+    public $default_value;
+
+    public $calc_data           = array();
+    public $calc_dataset        = '';
+
     public function __construct() {
         $this->unregister_attribute( 'placeholder' );
 
         parent::__construct();
     }
-
 
     /**
      * Returns block title
@@ -55,11 +65,122 @@ class Repeater_Field extends Base {
      * @return string
      */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Repeater_Field_Render(
-		    $this->block_attrs,
-            $this->block_content
-        ) )->render( $wp_block );
+	    $this->set_manage_items();
+	    $this->set_items_field();
+	    $this->set_repeater_calc_type();
+	    $this->set_new_repeater_label();
+	    $this->set_settings();
+	    $this->set_default_value();
+	    $this->set_calc_data();
+	    $this->set_calc_dataset();
+
+		return ( new Repeater_Field_Render( $this ) )->render( $wp_block );
 	}
+
+	public function set_manage_items() {
+        $this->manage_items = ! empty( $this->block_attrs['manage_items_count'] ) ? $this->block_attrs['manage_items_count'] : 'manually';
+    }
+
+    public function set_items_field() {
+        $this->items_field = ! empty( $this->block_attrs['manage_items_count_field'] ) ? $this->block_attrs['manage_items_count_field'] : false;
+    }
+
+    public function set_repeater_calc_type() {
+        $this->repeater_calc_type = ! empty( $this->block_attrs['repeater_calc_type'] ) ? $this->block_attrs['repeater_calc_type'] : 'default';
+    }
+
+    public function set_new_repeater_label() {
+        $this->new_item_label = ! empty( $this->block_attrs['new_item_label'] ) ? $this->block_attrs['new_item_label'] : __( 'Add new', 'jet-engine' );
+    }
+
+    public function set_settings() {
+        $this->settings = htmlspecialchars( json_encode( array(
+            'manageItems' => $this->manage_items,
+            'itemsField'  => $this->items_field,
+            'calcType'    => $this->repeater_calc_type,
+        ) ) );
+    }
+
+    public function set_default_value() {
+        $preset_value = Form_Preset::instance()->get_field_value( $this->block_attrs['name'], $this->block_attrs );
+
+        if ( $preset_value['rewrite'] ) {
+            $args['default'] = $preset_value['value'];
+        } else {
+            $args['default'] = Form_Preset::instance()->maybe_adjust_value( $this->block_attrs );
+        }
+
+        $this->default_value = array_merge( $this->block_attrs, $args );
+    }
+
+    public function set_calc_data() {
+        if ( 'custom' === $this->repeater_calc_type ) {
+            $this->calc_data = $this->get_calculated_data();
+        }
+    }
+
+    public function set_calc_dataset() {
+        if ( ! $this->calc_data ) {
+            return;
+        }
+
+        foreach ( $this->calc_data as $data_key => $data_value ) {
+
+            if ( is_array( $data_value ) ) {
+                $data_value = json_encode( $data_value );
+            }
+            $this->calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
+        }
+    }
+    /**
+     * Get calulation formula for calculated field
+     *
+     * @return [type] [description]
+     */
+    public function get_calculated_data() {
+
+        if ( empty( $this->block_attrs['calc_formula'] ) ) {
+            return '';
+        }
+
+        $listen_fields = array();
+
+        $formula = preg_replace_callback(
+            '/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
+            function( $matches ) use ( &$listen_fields ) {
+
+                switch ( strtolower( $matches[1] ) ) {
+                    case 'field':
+
+                        $listen_fields[] = $matches[2];
+                        return '%' . $matches[2] . '%';
+
+                    case 'meta':
+
+                        return get_post_meta( $this->post->ID, $matches[2], true );
+
+                    default:
+                        $macros_name = $matches[1];
+                        $field_key   = isset( $matches[2] ) ? $matches[2] : '' ;
+
+                        if( $field_key ){
+                            $listen_fields[] = $field_key;
+                        }
+
+                        return apply_filters( "jet-form-builder/calculated-data/$macros_name", $matches[0], $matches );
+                }
+
+            },
+            $this->block_attrs['calc_formula']
+        );
+
+        return array(
+            'formula'       => $formula,
+            'listen_fields' => $listen_fields,
+            'listen_to'     => $listen_fields,
+        );
+    }
+
 
     public function block_data( $editor, $handle )
     {

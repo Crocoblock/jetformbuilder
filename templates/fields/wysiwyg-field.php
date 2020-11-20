@@ -6,9 +6,9 @@ if ( empty( $args['default'] ) ) {
 	$args['default'] = '';
 }
 
-$editor_id = 'wp_editor_' . $this->get_field_id( $args['name'] );
+$editor_id = 'wp_editor_' . $this->block_type->get_field_id( $args['name'] );
 $editor    = array(
-	'textarea_name' => $this->get_field_name( $args['name'] ),
+	'textarea_name' => $this->block_type->get_field_name( $args['name'] ),
 	'media_buttons' => false,
 	'textarea_rows' => 8,
 	'quicktags'     => false,

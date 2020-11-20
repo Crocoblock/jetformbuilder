@@ -18,7 +18,6 @@ trait Attributes_Trait
         if ( '' === $value ) {
             return;
         }
-
         if ( ! isset( $this->attrs[ $attr ] ) ) {
             $this->attrs[ $attr ] = $value;
         } else {

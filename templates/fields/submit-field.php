@@ -3,18 +3,18 @@
  * submit button template
  */
 
-$has_class = isset( $this->args['class_name'] );
+$has_class = isset( $args['class_name'] );
 
 $classes = array(
 	'jet-form-builder__submit'
 );
 
 if ( $has_class )  {
-    $classes[] = $this->args['class_name'];
+    $classes[] = $args['class_name'];
 }
 $this->add_attribute( 'class', 'jet-form-builder__submit' );
 $this->add_attribute( 'class', 'submit-type-' . $this->live_form->spec_data->submit_type );
-$has_class ? $this->add_attribute( 'class', $this->args['class_name'] ) : '';
+$has_class ? $this->add_attribute( 'class', $args['class_name'] ) : '';
 
 if ( isset( $this->live_form->spec_data->submit_type ) && 'reload' === $this->live_form->spec_data->submit_type ) {
 	$this->add_attribute( 'type', 'submit' );

@@ -47,10 +47,7 @@ class Textarea_Field extends Base {
      * @return string
      */
     public function get_block_renderer( $wp_block = null ) {
-        return ( new Textarea_Field_Render(
-            $this->block_attrs,
-            $this->block_content
-        ) )->render();
+        return ( new Textarea_Field_Render( $this ) )->render();
     }
 
 	/**

@@ -3,8 +3,8 @@
  * input[type="hidden"] template
  */
 
-$required = $this->get_required_val( $args );
-$name        = $this->get_field_name( $args['name'] );
+$required = $this->block_type->get_required_val( $args );
+$name        = $this->block_type->get_field_name( $args['name'] );
 $default     = ! empty( $args['default'] ) ? $args['default'] : false;
 $data_switch = '';
 

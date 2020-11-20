@@ -4,11 +4,11 @@
  */
 use Jet_Form_Builder\File_Upload;
 
-$this->add_attribute( 'name', $this->get_field_name( $args['name'] . '_input' ) );
+$this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] . '_input' ) );
 $this->add_attribute( 'type', 'file' );
 $this->add_attribute( 'data-form_id', $this->form_id );
 $this->add_attribute( 'data-field', $args['name'] );
-$this->add_attribute( 'id', $this->get_field_id( $args ) );
+$this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 
 if ( ! empty( $args['max_files'] ) ) {
 	$this->add_attribute( 'data-max_files', absint( $args['max_files'] ) );
@@ -23,7 +23,7 @@ $max_size = File_Upload::instance()->get_max_size_for_field( $args );
 
 $this->add_attribute( 'data-max_size', $max_size );
 
-$required = $this->get_required_val( $args );
+$required = $this->block_type->get_required_val( $args );
 
 if ( $required ) {
 	$required = 'required="required"';
@@ -41,7 +41,7 @@ $value = is_array( $value ) ? json_encode( $value ) : $value;
 		?></div>
 	</div>
 	<div class="jet-engine-file-upload__fields">
-		<input class="jet-engine-file-upload__value" type="hidden" name="<?php echo $this->get_field_name( $args['name'] ); ?>" data-field-name="<?php echo $args['name']; ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
+		<input class="jet-engine-file-upload__value" type="hidden" name="<?php echo $this->block_type->get_field_name( $args['name'] ); ?>" data-field-name="<?php echo $args['name']; ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
 		<input class="jet-form__field file-field jet-engine-file-upload__input"<?php $this->render_attributes_string(); ?>>
 	</div>
 	<div class="jet-engine-file-upload__message"><small><?php _e( 'Maximum file size', 'jet-engine' );?>: <?php echo size_format( $max_size ); ?></small></div>

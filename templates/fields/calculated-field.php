@@ -8,7 +8,7 @@ if ( empty( $calc_data['formula'] ) ){
 	return;
 }
 
-$name          = $this->get_field_name( $args['name'] );
+$name          = $this->block_type->get_field_name( $args['name'] );
 $default_value = ! empty( $args['default'] ) ? $args['default'] : '';
 $prefix        = ! empty( $args['calc_prefix'] ) ? $args['calc_prefix'] : false;
 $suffix        = ! empty( $args['calc_suffix'] ) ? $args['calc_suffix'] : false;

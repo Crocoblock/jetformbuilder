@@ -21,22 +21,20 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base {
 
     use Attributes_Trait;
-    use Arguments_Trait;
     use Get_Template_Trait;
 
 	public $form_id;
-    public $block_data;
+    public $block_type;
     public $content;
     public $live_form;
     public $preset;
 
 
-    public function __construct( $args, $content = null ) {
+    public function __construct( $block_type ) {
         $this->form_id = Live_Form::instance()->form_id;
-        $this->content = $content;
 
         $this->set_live_form();
-        $this->set_args( $args );
+        $this->set_block_type( $block_type );
         $this->set_form_preset();
 	}
 
@@ -50,18 +48,14 @@ abstract class Base {
         $this->preset = Form_Preset::instance();
     }
 
-	public function set_args( $args = array() ) {
-	    $this->args = $args;
-        $this->args['type'] = $this->get_field_type();
+	public function set_block_type( $block_type ) {
+	    $this->block_type = $block_type;
     }
 
     private function is_field( $needle ) {
-        return Plugin::instance()->form->is_field( $this->args['blockName'], $needle );
+        return Plugin::instance()->form->is_field( $this->block_type->block_attrs['blockName'], $needle );
     }
 
-    private function get_field_type() {
-        return Plugin::instance()->form->field_name( $this->args['blockName'] );
-    }
 
 	/**
 	 * Returns field label
@@ -71,8 +65,8 @@ abstract class Base {
 	public function get_field_label() {
 
 		ob_start();
-		if ( ! empty( $this->args['label'] ) && $this->label_allowed() ) {
-			$args = $this->args;
+		if ( ! empty( $this->block_type->block_attrs['label'] ) && $this->label_allowed() ) {
+			$args = $this->block_type->block_attrs;
 			include $this->get_template( 'common/field-label.php' );
 		}
 		return ob_get_clean();
@@ -87,8 +81,8 @@ abstract class Base {
 	public function get_field_desc() {
 
 		ob_start();
-		if ( ! empty( $this->args['desc'] ) && $this->label_allowed() ) {
-			$args = $this->args;
+		if ( ! empty( $this->block_type->block_attrs['desc'] ) && $this->label_allowed() ) {
+			$args = $this->block_type->block_attrs;
 			include $this->get_template( 'common/field-description.php' );
 		}
 		return ob_get_clean();
@@ -105,44 +99,6 @@ abstract class Base {
 	}
 
 
-
-	/**
-	 * Returns field name with repeater prefix if needed
-	 */
-	public function get_field_name( $name ) {
-
-		//Find some solution for the repeater field
-
-		if ( $this->live_form && $this->live_form->current_repeater ) {
-			$repeater_name = ! empty( $this->live_form->current_repeater['name'] ) ? $this->live_form->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->live_form->current_repeater_i ) ? $this->live_form->current_repeater_i : '__i__';
-			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
-		}
-
-		return $name;
-
-	}
-
-	/**
-	 * Returns field ID with repeater prefix if needed
-	 */
-	public function get_field_id( $name ) {
-
-		if ( is_array( $name ) ) {
-			$name = $name['name'];
-		}
-		//Find some solution for the repeater field
-
-		if ( $this->live_form && $this->live_form->current_repeater ) {
-			$repeater_name = ! empty( $this->factory->current_repeater['name'] ) ? $this->live_form->current_repeater['name'] : 'repeater';
-			$index = ( false !== $this->live_form->current_repeater_i ) ? $this->live_form->current_repeater_i : '__i__';
-			$name = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
-		}
-
-		return $name;
-
-	}
-
 	public function render( $wp_block = null ) {
 
 		$defaults = array(
@@ -154,7 +110,7 @@ abstract class Base {
 
 		$sanitized_args = array();
 
-		foreach ( $this->args as $key => $value ) {
+		foreach ( $this->block_type->block_attrs as $key => $value ) {
 			$sanitized_args[ $key ] = $value;
 		}
 		$args          = wp_parse_args( $sanitized_args, $defaults );

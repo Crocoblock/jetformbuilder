@@ -2,7 +2,9 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -15,8 +17,8 @@ abstract class Base {
 
 	private $_unregistered = array();
 
-	protected $block_attrs = array();
-	protected $block_content;
+	public $block_attrs = array();
+    public $block_content;
 
 	public function __construct() {
 
@@ -126,7 +128,31 @@ abstract class Base {
         );
 
         $this->block_attrs['blockName'] = $this->block_name();
+        $this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
     }
+
+    /**
+     * <Easy access to Live_Form functions>
+     */
+
+    /**
+     * Returns field ID with repeater prefix if needed
+     * @param $name
+     * @return string
+     */
+    public function get_field_id( $name ) {
+        return Live_Form::instance()->get_field_id( $name );
+    }
+
+    /**
+     * Returns field name with repeater prefix if needed
+     * @param $name
+     * @return string
+     */
+    public function get_field_name( $name ) {
+        return Live_Form::instance()->get_field_name( $name );
+    }
+
 
 	/**
 	 * Remove attribute from registered
@@ -163,6 +189,22 @@ abstract class Base {
 	public function block_class_name() {
 		return 'jet-form-' . $this->get_name();
 	}
+
+    /**
+     * Get required attribute value
+     *
+     * @param  [type] $args [description]
+     * @return [type]       [description]
+     */
+    public function get_required_val() {
+        if (
+            ! empty( $this->block_attrs['required'] )
+            && ( 'required' === $this->block_attrs['required'] || true === $this->block_attrs['required'] )
+        ) {
+            return 'required';
+        }
+        return '';
+    }
 
 	/**
 	 * Returns global attributes list

@@ -29,59 +29,31 @@ class Repeater_Field_Render extends Base {
             return;
         }
 
-        $manage_items = ! empty( $this->args['manage_items_count'] ) ? $this->args['manage_items_count'] : 'manually';
-        $items_field = ! empty( $this->args['manage_items_count_field'] ) ? $this->args['manage_items_count_field'] : false;
+        $this->current_repeater = $this->block_type->default_value;
 
-        $preset_value = Form_Preset::instance()->get_field_value( $this->args['name'], $this->args );
+        $template = sprintf(
+            '<template class="jet-form-repeater__initial">%1$s</template>',
+            $this->render_repeater_row( $wp_block, false )
+        );
 
-        if ( $preset_value['rewrite'] ) {
-            $args['default'] = $preset_value['value'];
-        } else {
-            $args['default'] = Form_Preset::instance()->maybe_adjust_value( $this->args );
-        }
+        $html = sprintf(
+            '<div class="jet-form-repeater" data-repeater="1" 
+            data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s >%4$s',
+            $this->block_type->block_attrs['name'],
+            $this->block_type->settings,
+            $this->block_type->calc_dataset,
+            $template
+        );
 
-        $this->args = array_merge( $this->args, $args );
 
-        $this->current_repeater = $args;
-
-        $repeater_calc_type = ! empty( $this->args['repeater_calc_type'] ) ? $this->args['repeater_calc_type'] : 'default';
-        $calc_data = false;
-
-        if ( 'custom' === $repeater_calc_type ) {
-            $calc_data = $this->get_calculated_data();
-        }
-
-        $settings = htmlspecialchars( json_encode( array(
-            'manageItems' => $manage_items,
-            'itemsField'  => $items_field,
-            'calcType'    => $repeater_calc_type,
-        ) ) );
-
-        $calc_dataset = '';
-
-        if ( $calc_data ) {
-            foreach ( $calc_data as $data_key => $data_value ) {
-
-                if ( is_array( $data_value ) ) {
-                    $data_value = json_encode( $data_value );
-                }
-                $calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
-            }
-        }
-
-        $html = '<div class="jet-form-repeater" data-repeater="1" data-field-name="' . $this->args['name'] . '" name="' . $this->args['name'] . '" data-settings="' . $settings . '"' . $calc_dataset . '>';
-
-        $html .= '<template class="jet-form-repeater__initial">';
-        $html .= $this->render_repeater_row( $wp_block, false, $manage_items, $calc_dataset );
-        $html .= '</template>';
 
         $html .= '<div class="jet-form-repeater__items">';
 
-        if ( ! empty( $args['default'] ) && is_array( $args['default'] ) ) {
+        if ( ! empty( $this->current_repeater['default'] ) && is_array( $this->current_repeater['default'] ) ) {
             $i = 0;
-            foreach ( $args['default'] as $item ) {
+            foreach ( $this->current_repeater['default'] as $item ) {
                 $this->current_repeater['values'] = $item;
-                $html .= $this->render_repeater_row( $wp_block, $i, $manage_items, $calc_dataset );
+                $html .= $this->render_repeater_row( $wp_block, $i );
                 $i++;
             }
             $this->current_repeater['values'] = false;
@@ -89,11 +61,13 @@ class Repeater_Field_Render extends Base {
 
         $html .= '</div>';
 
-        if ( 'manually' === $manage_items ) {
-            $html .= '<div class="jet-form-repeater__actions">';
-            $new_item_label = ! empty( $this->args['new_item_label'] ) ? $this->args['new_item_label'] : __( 'Add new', 'jet-engine' );
-            $html .= sprintf( '<button type="button" class="jet-form-builder-repeater__new">%1$s</button>', $new_item_label );
-            $html .= '</div>';
+        if ( 'manually' === $this->block_type->manage_items ) {
+            $html .= sprintf(
+                '<div class="jet-form-repeater__actions">
+                <button type="button" class="jet-form-builder-repeater__new">%1$s</button>
+                </div>',
+                $this->block_type->new_item_label
+            );
         }
 
         $html .= '</div>';
@@ -105,8 +79,11 @@ class Repeater_Field_Render extends Base {
 
     /**
      * Render current repeater row
+     * @param $wp_block
+     * @param bool $index
+     * @return string
      */
-    public function render_repeater_row( $wp_block, $index = false, $manage_items = 'manually', $calc_dataset = '' ) {
+    public function render_repeater_row( $wp_block, $index = false ) {
 
         if ( false !== $index ) {
             $this->current_repeater_i = $index;
@@ -114,7 +91,7 @@ class Repeater_Field_Render extends Base {
             $index = 0;
         }
 
-        $html = '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $calc_dataset . '>';
+        $html = '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $this->block_type->calc_dataset . '>';
         $html .= '<div class="jet-form-repeater__row-fields">';
 
         Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );
@@ -125,7 +102,7 @@ class Repeater_Field_Render extends Base {
 
         $html .= '</div>';
 
-        if ( 'manually' === $manage_items ) {
+        if ( 'manually' === $this->block_type->manage_items ) {
             $html .= '<div class="jet-form-repeater__row-remove">';
             $html .= '<button type="button" class="jet-form-repeater__remove">&times;</button>';
             $html .= '</div>';
@@ -133,54 +110,6 @@ class Repeater_Field_Render extends Base {
         return $html . '</div>';
     }
 
-    /**
-	 * Get calulation formula for calculated field
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_calculated_data() {
 
-		if ( empty( $this->args['calc_formula'] ) ) {
-			return '';
-		}
-
-		$listen_fields = array();
-
-		$formula = preg_replace_callback(
-			'/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
-			function( $matches ) use ( &$listen_fields ) {
-
-				switch ( strtolower( $matches[1] ) ) {
-					case 'field':
-
-						$listen_fields[] = $matches[2];
-						return '%' . $matches[2] . '%';
-
-					case 'meta':
-
-						return get_post_meta( $this->post->ID, $matches[2], true );
-
-					default:
-						$macros_name = $matches[1];
-						$field_key   = isset( $matches[2] ) ? $matches[2] : '' ;
-
-						if( $field_key ){
-							$listen_fields[] = $field_key;
-						}
-
-						return apply_filters( "jet-form-builder/calculated-data/$macros_name", $matches[0], $matches );
-				}
-
-			},
-            $this->args['calc_formula']
-		);
-
-		return array(
-			'formula'       => $formula,
-			'listen_fields' => $listen_fields,
-			'listen_to'     => $listen_fields,
-		);
-
-	}
 
 }

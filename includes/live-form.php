@@ -300,5 +300,43 @@ class Live_Form {
         return false;
 
     }
+    /**
+     * Returns field ID with repeater prefix if needed
+     */
+    public function get_field_id( $name ) {
+
+        if ( is_array( $name ) ) {
+            $name = $name['name'];
+        }
+        //Find some solution for the repeater field
+
+        if ( $this->current_repeater ) {
+            $repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
+            $index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
+            $name = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
+        }
+
+        return $name;
+    }
+    /**
+     * Returns field name with repeater prefix if needed
+     */
+    public function get_field_name( $name ) {
+
+        //Find some solution for the repeater field
+        if ( $this->current_repeater ) {
+
+            $repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
+            $index = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
+
+            //var_dump( $repeater_name, $index, $name ); die;
+            $name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
+        }
+
+        return $name;
+
+    }
+
+
 
 }

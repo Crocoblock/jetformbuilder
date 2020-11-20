@@ -40,7 +40,7 @@ var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize' );
 
 document.dispatchEvent( initializeCallbacksEvent );
 
-window.jetRepeaterAllowedFields = [];
+
 
 if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
@@ -59,8 +59,6 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 			if ( blockData.controls.advanced ) {
 				window.jetFormBuilderControls.advanced[ blockData.blockName ] = blockData.controls.advanced;
 			}
-
-			window.jetRepeaterAllowedFields.push( blockData.blockName );
 
 			registerBlockType( blockData.blockName, {
 				title: blockData.title,

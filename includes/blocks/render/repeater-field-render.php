@@ -3,6 +3,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Fields_Factory;
+use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
@@ -24,32 +25,24 @@ class Repeater_Field_Render extends Base {
 
 	public function render( $wp_block = null )
     {
-        /**
-         * Дополнительная проверка не нужна, если используем allowedBlocks
-         * на стороне UI
-         */
-        //$children = Plugin::instance()->form->get_fields( $this->block_data['innerBlocks'], true );
-
-       /* $children = $this->block_data['innerBlocks'];
-
-        if ( empty( $children ) ) {
+        if ( empty( $wp_block['innerBlocks'] ) ) {
             return;
-        }*/
+        }
 
         $manage_items = ! empty( $this->args['manage_items_count'] ) ? $this->args['manage_items_count'] : 'manually';
         $items_field = ! empty( $this->args['manage_items_count_field'] ) ? $this->args['manage_items_count_field'] : false;
 
+        $preset_value = Form_Preset::instance()->get_field_value( $this->args['name'], $this->args );
 
-
-        //$preset_value = $this->preset->get_field_value( $args['name'], $args );
-
-        /*if ( $preset_value['rewrite'] ) {
+        if ( $preset_value['rewrite'] ) {
             $args['default'] = $preset_value['value'];
         } else {
-            $args['default'] = $this->maybe_adjust_value( $args );
-        }*/
+            $args['default'] = Form_Preset::instance()->maybe_adjust_value( $this->args );
+        }
 
-        $this->current_repeater = $this->args;
+        $this->args = array_merge( $this->args, $args );
+
+        $this->current_repeater = $args;
 
         $repeater_calc_type = ! empty( $this->args['repeater_calc_type'] ) ? $this->args['repeater_calc_type'] : 'default';
         $calc_data = false;
@@ -72,7 +65,6 @@ class Repeater_Field_Render extends Base {
                 if ( is_array( $data_value ) ) {
                     $data_value = json_encode( $data_value );
                 }
-
                 $calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
             }
         }
@@ -85,15 +77,15 @@ class Repeater_Field_Render extends Base {
 
         $html .= '<div class="jet-form-repeater__items">';
 
-        /*if ( ! empty( $args['default'] ) && is_array( $args['default'] ) ) {
+        if ( ! empty( $args['default'] ) && is_array( $args['default'] ) ) {
             $i = 0;
             foreach ( $args['default'] as $item ) {
                 $this->current_repeater['values'] = $item;
-                $this->render_repeater_row( $children, $i, $manage_items, $calc_dataset );
+                $html .= $this->render_repeater_row( $wp_block, $i, $manage_items, $calc_dataset );
                 $i++;
             }
             $this->current_repeater['values'] = false;
-        }*/
+        }
 
         $html .= '</div>';
 
@@ -125,7 +117,6 @@ class Repeater_Field_Render extends Base {
         $html = '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $calc_dataset . '>';
         $html .= '<div class="jet-form-repeater__row-fields">';
 
-        //$factory = new Fields_Factory( $this->form_id );
         Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );
 
         foreach ( $wp_block['innerBlocks'] as $block ) {
@@ -177,7 +168,7 @@ class Repeater_Field_Render extends Base {
 							$listen_fields[] = $field_key;
 						}
 
-						return apply_filters( "jet-engine/calculated-data/$macros_name", $matches[0], $matches );
+						return apply_filters( "jet-form-builder/calculated-data/$macros_name", $matches[0], $matches );
 				}
 
 			},

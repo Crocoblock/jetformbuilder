@@ -229,12 +229,10 @@ class Form_Preset {
                             $prepared_value[] = $prepared_row;
 
                         }
-
                         $value = $prepared_value;
-
                     }
 
-                    if ( function_exists( 'jet_engine' )
+                    else if ( function_exists( 'jet_engine' )
                         && jet_engine()->relations
                         && jet_engine()->relations->is_relation_key( $field_data['key'] ) ) {
 
@@ -370,9 +368,7 @@ class Form_Preset {
             $result['rewrite'] = true;
             $result['value']   = $value;
         }
-
         return $result;
-
     }
 
     /**

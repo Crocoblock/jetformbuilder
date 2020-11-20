@@ -207,7 +207,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
                 </div> }
 
                 <InnerBlocks
-                    allowedBlocks={ window.jetRepeaterAllowedFields }
+                    key={'repeater-fields'}
                 />
 
             </React.Fragment>

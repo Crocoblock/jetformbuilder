@@ -37,6 +37,7 @@ abstract class Base {
 
         $this->set_live_form();
         $this->set_args( $args );
+        $this->set_form_preset();
 	}
 
 	abstract public function get_name();

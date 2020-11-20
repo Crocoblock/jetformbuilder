@@ -2,7 +2,6 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 
-use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Form_Preset;
@@ -67,7 +66,7 @@ abstract class Base {
 		ob_start();
 		if ( ! empty( $this->block_type->block_attrs['label'] ) && $this->label_allowed() ) {
 			$args = $this->block_type->block_attrs;
-			include $this->get_template( 'common/field-label.php' );
+			include $this->block_type->get_common_template( 'field-label.php' );
 		}
 		return ob_get_clean();
 
@@ -83,7 +82,7 @@ abstract class Base {
 		ob_start();
 		if ( ! empty( $this->block_type->block_attrs['desc'] ) && $this->label_allowed() ) {
 			$args = $this->block_type->block_attrs;
-			include $this->get_template( 'common/field-description.php' );
+			include $this->block_type->get_common_template( 'field-description.php' );
 		}
 		return ob_get_clean();
 
@@ -116,7 +115,7 @@ abstract class Base {
 		$args          = wp_parse_args( $sanitized_args, $defaults );
 
 		$template_name = $this->get_name();
-		$template      = $this->get_template( 'fields/' . $template_name . '.php' );
+		$template      = $this->block_type->get_field_template(  $template_name . '.php' );
 		$label         = $this->get_field_label();
 		$desc          = $this->get_field_desc();
 		$layout        = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
@@ -125,11 +124,11 @@ abstract class Base {
 		
 		if ( 'column' === $layout ) {
             ob_start();
-			include $this->get_template( 'common/field-column.php' );
+			include $this->block_type->get_common_template( 'field-column.php' );
 			$result_field = ob_get_clean();
 		} else {
             ob_start();
-            include $this->get_template( 'common/field-row.php' );
+            include $this->block_type->get_common_template( 'field-row.php' );
             $result_field = ob_get_clean();
 		}
 
@@ -158,7 +157,14 @@ abstract class Base {
             $result_value = $this->live_form->current_repeater['values'][ $args['name'] ];
         }
 
-        return $result_value ? $result_value : $args['default'];
+
+        if ( $result_value ) {
+            return $result_value;
+        } elseif ( $preset_value['rewrite'] ) {
+            return '';
+        } else {
+            return $args['default'];
+        }
     }
 
 }

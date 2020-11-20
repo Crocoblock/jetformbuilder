@@ -23,12 +23,13 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Builder {
 
     use Attributes_Trait;
-    use Arguments_Trait;
+
     use Get_Template_Trait;
 
 
     public $form_id;
     public $post;
+    public $args = array();
 
     private $blocks;
 
@@ -123,7 +124,7 @@ class Form_Builder {
 		$this->add_attribute( 'data-form-id', $this->form_id );
 
 		ob_start();
-		include $this->get_template( 'common/start-form.php' );
+		include $this->get_global_template( 'common/start-form.php' );
 		$start_form .= ob_get_clean();
 
         $start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );
@@ -149,7 +150,7 @@ class Form_Builder {
 
         echo Live_Form::instance()->maybe_end_page( true );
 
-        include $this->get_template( 'common/end-form.php' );
+        include $this->get_global_template( 'common/end-form.php' );
 
         $end_form .= ob_get_clean();
 

@@ -48,13 +48,13 @@ class Mailchimp extends Integration_Base_Action
         $this->request = $request;
 
         if ( empty( $this->settings['api_key'] ) || empty( $this->settings['list_id'] ) ) {
-            throw new Action_Exception( 'mailchimp_invalid_key' );
+            throw new Action_Exception( 'invalid_api_key' );
         }
 
         $handler = $this->api_handler( $this->settings['api_key'] );
 
         if ( is_wp_error( $handler ) ) {
-            throw new Action_Exception( 'mailchimp_invalid_key' );
+            throw new Action_Exception( 'invalid_api_key' );
         }
 
         $fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();

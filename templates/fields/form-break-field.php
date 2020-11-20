@@ -17,7 +17,7 @@ $this->add_attribute( 'type', 'button' );
 		echo wp_kses_post( $args['page_break_disabled'] );
 	?></div>
 	<?php endif; ?>
-	<?php include $this->get_template( 'common/prev-page-button.php' ); ?>
+	<?php include $this->get_global_template( 'common/prev-page-button.php' ); ?>
 	<?php if ( ! empty( $args['label'] ) ) : ?>
 	<button<?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
 	<?php endif; ?>

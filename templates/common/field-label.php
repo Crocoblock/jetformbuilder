@@ -27,5 +27,5 @@ if ( ! empty( $args['label_tag'] ) && 'label' === $args['label_tag'] ) {
 	}
 
 	?></<?php echo $tag; ?>>
-	<?php include $this->get_template( 'common/prev-page-button.php' ); ?>
+	<?php include $this->get_global_template( 'common/prev-page-button.php' ); ?>
 </div>

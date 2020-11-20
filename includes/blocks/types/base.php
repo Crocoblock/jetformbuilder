@@ -2,7 +2,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Arguments_Trait;
+use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 abstract class Base {
+
+    use Get_Template_Trait;
 
 	private $_unregistered = array();
 
@@ -153,6 +155,24 @@ abstract class Base {
         return Live_Form::instance()->get_field_name( $name );
     }
 
+    /**
+     * You can override this method
+     * to set your own template path
+     * @return false|string
+     */
+    public function fields_templates_path() {
+        return false;
+    }
+
+    /**
+     * You can override this method
+     * to set your own template path
+     * @return false|string
+     */
+    public function common_templates_path() {
+        return false;
+    }
+
 
 	/**
 	 * Remove attribute from registered
@@ -204,6 +224,32 @@ abstract class Base {
             return 'required';
         }
         return '';
+    }
+
+    /**
+     * Returns template path
+     *
+     * @param  [type] $path [description]
+     * @return [type]       [description]
+     */
+    public function get_field_template( $path ) {
+        $fields_path = $this->fields_templates_path();
+
+        if ( ! $fields_path ) {
+            $fields_path = JET_FORM_BUILDER_PATH . 'templates/fields/';
+        }
+
+        return $fields_path . $path;
+    }
+
+    public function get_common_template( $path ) {
+        $fields_path = $this->common_templates_path();
+
+        if ( ! $fields_path ) {
+            $fields_path = JET_FORM_BUILDER_PATH . 'templates/common/';
+        }
+
+        return $fields_path . $path;
     }
 
 	/**

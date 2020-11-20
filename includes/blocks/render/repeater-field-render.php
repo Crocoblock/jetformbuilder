@@ -38,14 +38,12 @@ class Repeater_Field_Render extends Base {
 
         $html = sprintf(
             '<div class="jet-form-repeater" data-repeater="1" 
-            data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s >%4$s',
+            data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
             $this->block_type->block_attrs['name'],
             $this->block_type->settings,
             $this->block_type->calc_dataset,
             $template
         );
-
-
 
         $html .= '<div class="jet-form-repeater__items">';
 

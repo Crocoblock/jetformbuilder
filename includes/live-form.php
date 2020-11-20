@@ -180,7 +180,7 @@ class Live_Form {
             $this->add_attribute( 'class', 'jet-form-row--first-visible' );
         }
 
-        include $this->get_template( 'common/start-form-row.php' );
+        include $this->get_global_template( 'common/start-form-row.php' );
 
         do_action( 'jet-engine/forms/booking/after-start-form-row', $this );
 
@@ -197,7 +197,7 @@ class Live_Form {
         ob_start();
         do_action( 'jet-engine/forms/booking/before-end-form-row', $this );
 
-        include $this->get_template( 'common/end-form-row.php' );
+        include $this->get_global_template( 'common/end-form-row.php' );
 
         do_action( 'jet-engine/forms/booking/after-end-form-row', $this );
         return ob_get_clean();
@@ -233,7 +233,7 @@ class Live_Form {
             $hidden_class = 'jet-form-page--hidden';
         }
 
-        include $this->get_template( 'common/start-page.php' );
+        include $this->get_global_template( 'common/start-page.php' );
 
         do_action( 'jet-engine/forms/after-page-start', $this );
 
@@ -263,7 +263,7 @@ class Live_Form {
         ob_start();
         do_action( 'jet-engine/forms/before-page-end', $this );
 
-        include $this->get_template( 'common/end-page.php' );
+        include $this->get_global_template( 'common/end-page.php' );
 
         do_action( 'jet-engine/forms/after-page-end', $this );
         return ob_get_clean();

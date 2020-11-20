@@ -59,7 +59,7 @@ class Form_Messages_Builder
     {
         $message_content = $this->manager->get_message_text( 'empty_field' );
 
-        include $this->get_template('common/field-message.php');
+        include $this->get_global_template('common/field-message.php');
     }
 
     /**
@@ -86,7 +86,7 @@ class Form_Messages_Builder
         $class = 'jet-form-message';
         $class .= ' jet-form-message--' . $status_class;
 
-        include $this->get_template('common/messages.php');
+        include $this->get_global_template('common/messages.php');
     }
 
     /**

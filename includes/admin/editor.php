@@ -1,5 +1,8 @@
 <?php
+
 namespace Jet_Form_Builder\Admin;
+
+use Jet_Form_Builder\Gateways\Manager;
 use Jet_Form_Builder\Plugin;
 
 /**
@@ -20,8 +23,8 @@ class Editor {
 	public static $index = 0;
 
 	public $allowed_blocks = null;
-	public $action         = null;
-	public $item_id        = null;
+	public $action = null;
+	public $item_id = null;
 
 	/**
 	 * Set up editor instatnce props
@@ -105,7 +108,6 @@ class Editor {
 		}
 
 		return $this->allowed_blocks;
-
 	}
 
 	/**
@@ -133,17 +135,17 @@ class Editor {
 		return apply_filters( 'jet-form-builder/editor/preset-config', array(
 			'global_fields' => array(
 				array(
-					'name' => 'from',
-					'label' => __( 'Source:', 'jet-form-builder' ),
-					'type' => 'select',
+					'name'    => 'from',
+					'label'   => __( 'Source:', 'jet-form-builder' ),
+					'type'    => 'select',
 					'options' => array(
 						array(
 							'value' => '',
-							'label' => __( 'Select...', 'jet-form-builder' ) ,
+							'label' => __( 'Select...', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'post',
-							'label' => __( 'Post', 'jet-form-builder' ) ,
+							'label' => __( 'Post', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'user',
@@ -152,13 +154,13 @@ class Editor {
 					)
 				),
 				array(
-					'name' => 'post_from',
-					'label' => __( 'Get post ID from:', 'jet-form-builder' ),
-					'type' => 'select',
-					'options' => array(
+					'name'      => 'post_from',
+					'label'     => __( 'Get post ID from:', 'jet-form-builder' ),
+					'type'      => 'select',
+					'options'   => array(
 						array(
 							'value' => 'current_post',
-							'label' => __( 'Current post', 'jet-form-builder' ) ,
+							'label' => __( 'Current post', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'query_var',
@@ -171,13 +173,13 @@ class Editor {
 					),
 				),
 				array(
-					'name' => 'user_from',
-					'label' => __( 'Get user ID from:', 'jet-form-builder' ),
-					'type' => 'select',
-					'options' => array(
+					'name'      => 'user_from',
+					'label'     => __( 'Get user ID from:', 'jet-form-builder' ),
+					'type'      => 'select',
+					'options'   => array(
 						array(
 							'value' => 'current_user',
-							'label' => __( 'Current user', 'jet-form-builder' ) ,
+							'label' => __( 'Current user', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'query_var',
@@ -190,27 +192,27 @@ class Editor {
 					),
 				),
 				array(
-					'name' => 'query_var',
-					'label' => __( 'Query variable name:', 'jet-form-builder' ),
-					'type' => 'text',
+					'name'             => 'query_var',
+					'label'            => __( 'Query variable name:', 'jet-form-builder' ),
+					'type'             => 'text',
 					'custom_condition' => 'query_var',
 				)
 			),
-			'map_fields' => array(
+			'map_fields'    => array(
 				array(
-					'name' => 'key',
-					'label' => __( 'Query variable key', 'jet-form-builder' ),
-					'type' => 'text',
+					'name'             => 'key',
+					'label'            => __( 'Query variable key', 'jet-form-builder' ),
+					'type'             => 'text',
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'query_vars'
 					),
 				),
 				array(
-					'name' => 'prop',
-					'label' => __( 'Post property', 'jet-form-builder' ),
-					'type' => 'select',
-					'options' => array(
+					'name'             => 'prop',
+					'label'            => __( 'Post property', 'jet-form-builder' ),
+					'type'             => 'select',
+					'options'          => array(
 						array(
 							'value' => '',
 							'label' => __( 'Select post property...', 'jet-form-builder' ),
@@ -250,40 +252,42 @@ class Editor {
 					),
 				),
 				array(
-					'name' => 'key',
-					'label' => __( 'Taxonomy', 'jet-form-builder' ),
-					'type' => 'select',
-					'options' => array_merge( array( array(
-						'value' => '',
-						'label' => __( 'Select taxonomy...', 'jet-form-builder' ),
-					 ) ), $this->get_taxonomies_list() ),
+					'name'             => 'key',
+					'label'            => __( 'Taxonomy', 'jet-form-builder' ),
+					'type'             => 'select',
+					'options'          => array_merge( array(
+						array(
+							'value' => '',
+							'label' => __( 'Select taxonomy...', 'jet-form-builder' ),
+						)
+					), $this->get_taxonomies_list() ),
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'post'
 					),
-					'condition' => array(
+					'condition'        => array(
 						'field' => 'prop',
 						'value' => 'post_terms'
 					),
 				),
 				array(
-					'name' => 'key',
-					'label' => __( 'Meta field key', 'jet-form-builder' ),
-					'type' => 'text',
+					'name'             => 'key',
+					'label'            => __( 'Meta field key', 'jet-form-builder' ),
+					'type'             => 'text',
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'post'
 					),
-					'condition' => array(
+					'condition'        => array(
 						'field' => 'prop',
 						'value' => 'post_meta'
 					),
 				),
 				array(
-					'name' => 'prop',
-					'label' => __( 'User field', 'jet-form-builder' ),
-					'type' => 'select',
-					'options' => array(
+					'name'             => 'prop',
+					'label'            => __( 'User field', 'jet-form-builder' ),
+					'type'             => 'select',
+					'options'          => array(
 						array(
 							'value' => '',
 							'label' => __( 'Select User Property...', 'jet-form-builder' ),
@@ -327,14 +331,14 @@ class Editor {
 					),
 				),
 				array(
-					'name' => 'key',
-					'label' => __( 'Meta field key', 'jet-form-builder' ),
-					'type' => 'text',
+					'name'             => 'key',
+					'label'            => __( 'Meta field key', 'jet-form-builder' ),
+					'type'             => 'text',
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'user'
 					),
-					'condition' => array(
+					'condition'        => array(
 						'field' => 'prop',
 						'value' => 'user_meta'
 					),
@@ -344,16 +348,16 @@ class Editor {
 	}
 
 	public function get_messages_labels() {
-        return Plugin::instance()->post_type->get_messages_labels();
-    }
+		return Plugin::instance()->post_type->get_messages_labels();
+	}
 
-    public function get_recaptcha_labels() {
-	    return array(
-            'enabled'   => __( 'Enable reCAPTCHA v3 form verification', 'jet-form-builder' ),
-            'key'       => __( 'Site Key:', 'jet-form-builder' ),
-            'secret'    => __( 'Secret Key:', 'jet-form-builder' ),
-        );
-    }
+	public function get_recaptcha_labels() {
+		return array(
+			'enabled' => __( 'Enable reCAPTCHA v3 form verification', 'jet-form-builder' ),
+			'key'     => __( 'Site Key:', 'jet-form-builder' ),
+			'secret'  => __( 'Secret Key:', 'jet-form-builder' ),
+		);
+	}
 
 	/**
 	 * Enqueue editor assets
@@ -396,15 +400,33 @@ class Editor {
 		);
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'allowedBlocks'     => $this->get_allowed_blocks(),
-			'action'            => $this->get_action(),
-			'itemID'            => $this->get_item_id(),
-			'presetConfig'      => $this->get_preset_config(),
-            'messagesLabels'    => $this->get_messages_labels(),
-            'recaptchaLabels'   => $this->get_recaptcha_labels(),
+			'allowedBlocks'   => $this->get_allowed_blocks(),
+			'action'          => $this->get_action(),
+			'itemID'          => $this->get_item_id(),
+			'presetConfig'    => $this->get_preset_config(),
+			'messagesLabels'  => $this->get_messages_labels(),
+			'recaptchaLabels' => $this->get_recaptcha_labels(),
+			'gateways'        => $this->get_gateways_data(),
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );
+	}
+
+	private function get_gateways_data() {
+		$result = array(
+			'allowed' => Plugin::instance()->post_type->allow_gateways
+		);
+
+		if ( $result['allowed'] ) {
+
+			$result['list']     = Manager::instance()->get_gateways_for_js();
+			$result['messages'] = array(
+				'success' => 'Payment success message',
+				'failed'  => 'Payment failed message',
+			);
+		}
+
+		return $result;
 	}
 
 	public function enqueue_form_assets() {
@@ -413,21 +435,21 @@ class Editor {
 
 		do_action( 'jet-form-builder/other-editor-assets/before', $this, $handle );
 
-        wp_enqueue_script(
-            $handle,
-            JET_FORM_BUILDER_URL . 'assets/js/others.js',
-            array(
-                'wp-editor',
-                'wp-core-data',
-                'wp-data',
-                'wp-block-library',
-                'wp-format-library',
-                'wp-api-fetch',
-            ),
-            JET_FORM_BUILDER_VERSION,
-            true
-        );
-		
+		wp_enqueue_script(
+			$handle,
+			JET_FORM_BUILDER_URL . 'assets/js/others.js',
+			array(
+				'wp-editor',
+				'wp-core-data',
+				'wp-data',
+				'wp-block-library',
+				'wp-format-library',
+				'wp-api-fetch',
+			),
+			JET_FORM_BUILDER_VERSION,
+			true
+		);
+
 		wp_localize_script( $handle, 'JetFormEditorData', array(
 			'allowedBlocks' => $this->get_allowed_blocks(),
 			'action'        => $this->get_action(),
@@ -448,21 +470,21 @@ class Editor {
 
 		if ( ! $input_name ) {
 			$input_name = 'jet_form_editor_' . self::$index;
-			self::$index++;
+			self::$index ++;
 		}
 
 		?>
-		<input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden" />
-		<script>
-			document.addEventListener( 'jet-form-builder-initialized', function(event) {
+        <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
+        <script>
+			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
 				window.JetFormEditor(
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo html_entity_decode( esc_js( $content ) ); ?>',
 					'<?php echo esc_js( $form_name ); ?>'
 				);
-			});
-		</script>
+			} );
+        </script>
 		<?php
 	}
 

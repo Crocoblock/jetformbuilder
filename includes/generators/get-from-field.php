@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Generators;
 
 class Get_From_Field extends Base {

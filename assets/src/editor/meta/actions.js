@@ -1,7 +1,4 @@
-
-
-
-function getRandomID () {
+function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
 }
 
@@ -13,12 +10,6 @@ const defaultActions = [{
 		content: 'Hi admin!\n\nThere are new order on your website.\n\nOrder details:\n- Post ID: %post_id%'
 	}
 }];
-
-function getStringifyActions ( actions ) {
-	const _actions = Array.from( actions );
-
-	return _actions.length ? JSON.stringify( _actions ) : JSON.stringify( defaultActions );
-}
 
 function ActionsMeta() {
 
@@ -69,26 +60,26 @@ function ActionsMeta() {
 		} = useDispatch( 'core/editor' );
 
 
-		const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions ) );
+		const [actions, setActions] = useState( JSON.parse( meta._jf_actions ) );
 
-		const [ userAction, setUserAction ] = useState( 'load' );
+		const [userAction, setUserAction] = useState( 'load' );
 
 		useEffect( () => {
 
-			editPost({
-				meta: ({
+			editPost( {
+				meta: ( {
 					...meta,
-					_jf_actions: JSON.stringify(actions)
-				})
-			});
+					_jf_actions: JSON.stringify( actions )
+				} )
+			} );
 
 			return () => {
 				if ( userAction === 'load' && actions.length === 0 ) {
-					setUserAction(0);
+					setUserAction( 0 );
 					setActions( defaultActions );
 				}
 				if ( actions.length !== 0 ) {
-					setUserAction(0);
+					setUserAction( 0 );
 				}
 			}
 		} );
@@ -102,13 +93,13 @@ function ActionsMeta() {
 			actions.splice( toIndex, 1, item );
 			actions.splice( fromIndex, 1, replacedItem );
 
-			setActions( [ ...actions ] );
+			setActions( [...actions] );
 
 		};
 
 		const deleteAction = ( index ) => {
 			actions.splice( index, 1 );
-			setActions( [ ...actions ] );
+			setActions( [...actions] );
 		};
 
 		const updateAction = ( id, key, value ) => {
@@ -123,12 +114,14 @@ function ActionsMeta() {
 			} ) );
 		};
 
-		const [ isEdit, setEdit ] = useState( false );
-		const [ editedAction, setEditedAction ] = useState( {} );
+		const [isEdit, setEdit] = useState( false );
+		const [editedAction, setEditedAction] = useState( {} );
 
-		const closeModal = () => { setEdit( false ) };
+		const closeModal = () => {
+			setEdit( false )
+		};
 
-		const actionTypes = window.jetFormActionTypes.map( function( action ) {
+		const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 			return {
 				value: action.id,
 				label: action.name,
@@ -137,12 +130,13 @@ function ActionsMeta() {
 
 		var Callback = false;
 
-		for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
+		for ( var i = 0; i < window.jetFormActionTypes.length; i ++ ) {
 
 			if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
 				Callback = window.jetFormActionTypes[ i ].callback;
 			}
-		};
+		}
+		;
 
 		const updateActionFromModal = ( action ) => {
 			updateAction( action.id, 'settings', action.settings );
@@ -153,7 +147,7 @@ function ActionsMeta() {
 			if ( editedAction.type ) {
 				setEdit( true );
 			}
-		}, [ editedAction ] );
+		}, [editedAction] );
 
 		return (
 			<PluginDocumentSettingPanel
@@ -233,18 +227,18 @@ function ActionsMeta() {
 							</Flex>
 						</CardBody>
 					</Card>
-				})}
+				} ) }
 				<Button
 					isPrimary
 					onClick={ () => {
-						setActions([
+						setActions( [
 							...actions,
 							{
 								type: 'send_email',
 								id: getRandomID(),
 								settings: {},
 							}
-						]);
+						] );
 					} }
 				>
 					{ '+ New Action' }

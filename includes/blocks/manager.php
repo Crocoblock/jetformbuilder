@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types\Calculated_Field;
@@ -40,68 +41,68 @@ class Manager {
 	private $_types = array();
 	public $base_control;
 
-    /**
-     * @var Block_Manager
-     */
-    public $jet_sm__block_manager;
+	/**
+	 * @var Block_Manager
+	 */
+	public $jet_sm__block_manager;
 
-    const FORM_EDITOR_STORAGE = 'form_editor';
-    const OTHERS_STORAGE = 'others';
+	const FORM_EDITOR_STORAGE = 'form_editor';
+	const OTHERS_STORAGE = 'others';
 
 	public function __construct() {
-        add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
-        add_action( 'init', array( $this, 'register_block_types' ) );
+		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
+		add_action( 'init', array( $this, 'register_block_types' ) );
 
-		add_action( 
-			'jet-form-builder/editor-assets/after', 
+		add_action(
+			'jet-form-builder/editor-assets/after',
 			array( $this, 'register_block_types_for_form_editor' ),
-			10, 2 
+			10, 2
 		);
 
-        add_action(
-            'jet-form-builder/other-editor-assets/after',
-            array( $this, 'register_block_types_for_others' ),
-            10, 2
-        );
+		add_action(
+			'jet-form-builder/other-editor-assets/after',
+			array( $this, 'register_block_types_for_others' ),
+			10, 2
+		);
 
-		add_action( 
+		add_action(
 			'wp_enqueue_scripts',
 			array( $this, 'register_frontend_assets' )
 		);
 
 		add_filter(
-            'jet-form-builder/post-type/args',
-            array( $this, 'add_default_fields_to_form' ),
-            99
-        );
+			'jet-form-builder/post-type/args',
+			array( $this, 'add_default_fields_to_form' ),
+			99
+		);
 	}
 
 	public function add_default_fields_to_form( $arguments ) {
-	    $hidden_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'hidden-field';
-        $submit_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'submit-field';
+		$hidden_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'hidden-field';
+		$submit_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'submit-field';
 
-        $arguments['template'] = array(
-            array(
-                $hidden_post_id,
-                array(
-                    'name'          => 'post_id',
-                    'field_value'   => 'post_id'
-                )
-            ),
-            array(
-                $submit_post_id,
-                array( 'label' => __( 'Submit', 'jet-form-builder' ) )
-            )
-        );
+		$arguments['template'] = array(
+			array(
+				$hidden_post_id,
+				array(
+					'name'        => 'post_id',
+					'field_value' => 'post_id'
+				)
+			),
+			array(
+				$submit_post_id,
+				array( 'label' => __( 'Submit', 'jet-form-builder' ) )
+			)
+		);
 
-        return $arguments;
-    }
+		return $arguments;
+	}
 
-    public function init_jet_sm_block_manager() {
-        if( Jet_Style_Manager::is_activated() ){
-            $this->jet_sm__block_manager = Block_Manager::get_instance();
-        }
-    }
+	public function init_jet_sm_block_manager() {
+		if ( Jet_Style_Manager::is_activated() ) {
+			$this->jet_sm__block_manager = Block_Manager::get_instance();
+		}
+	}
 
 	/**
 	 * Register block types
@@ -112,24 +113,24 @@ class Manager {
 
 		$types = array(
 			new Form(),
-            new Select_Field(),
+			new Select_Field(),
 			new Text_Field(),
 			new Hidden_Field(),
-            new Radio_Field(),
-            new Checkbox_Field(),
-            new Number_Field(),
-            new Date_Field(),
-            new Time_Field(),
-            new Calculated_Field(),
-            new Media_Field(),
-            new Wysiwyg_Field(),
-            new Range_Field(),
-            new Heading_Field(),
-            new Textarea_Field(),
-            new Submit_Field(),
-            new Repeater_Field(),
-            new Form_Break_Field(),
-            new Group_Break_Field(),
+			new Radio_Field(),
+			new Checkbox_Field(),
+			new Number_Field(),
+			new Date_Field(),
+			new Time_Field(),
+			new Calculated_Field(),
+			new Media_Field(),
+			new Wysiwyg_Field(),
+			new Range_Field(),
+			new Heading_Field(),
+			new Textarea_Field(),
+			new Submit_Field(),
+			new Repeater_Field(),
+			new Form_Break_Field(),
+			new Group_Break_Field(),
 		);
 
 		foreach ( $types as $type ) {
@@ -140,21 +141,22 @@ class Manager {
 
 	}
 
-    /**
-     * Register block types for editor
-     *
-     * @param $editor
-     * @param $handle
-     * @return void [type] [description]
-     */
+	/**
+	 * Register block types for editor
+	 *
+	 * @param $editor
+	 * @param $handle
+	 *
+	 * @return void [type] [description]
+	 */
 	public function register_block_types_for_form_editor( $editor, $handle ) {
 
 		$prepared_types = array();
 
 		foreach ( $this->_types[ self::FORM_EDITOR_STORAGE ] as $type ) {
-            $prepared_types[] = $this->register_block_data_for_js( $type );
+			$prepared_types[] = $this->register_block_data_for_js( $type );
 
-            $type->block_data( $editor, $handle );
+			$type->block_data( $editor, $handle );
 
 		}
 
@@ -163,79 +165,80 @@ class Manager {
 	}
 
 	public function register_block_data_for_js( $type ) {
-        $attributes = $type->block_attributes();
+		$attributes = $type->block_attributes();
 
-        return array(
-            'blockName'     => $type->block_name(),
-            'title'         => $type->get_title(),
-            'icon'          => $type->get_icon(),
-            'attributes'    => $attributes,
-            'controls'  => array(
-                'toolbar'   => $this->get_controls_list( $attributes, 'toolbar' ),
-                'general'   => $this->get_controls_list( $attributes, 'general' ),
-                'advanced'  => $this->get_controls_list( $attributes, 'advanced' ),
-            ),
-            'className'     => $type->block_class_name(),
-            'slug'          => $type->get_name(),
-            'supports'      => $type->get_supports()
-        );
-    }
-
-    /**
-     * Register block types for editor
-     *
-     * @param $editor
-     * @param $handle
-     * @return void [type] [description]
-     */
-    public function register_block_types_for_others( $editor, $handle ) {
-
-        $prepared_types = array();
-
-        foreach ( $this->_types[ self::OTHERS_STORAGE ] as $type ) {
-            $prepared_types[] = $this->register_block_data_for_js( $type );
-
-            $type->block_data( $editor, $handle );
-        }
-
-        wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );
-
-    }
+		return array(
+			'blockName'  => $type->block_name(),
+			'title'      => $type->get_title(),
+			'icon'       => $type->get_icon(),
+			'attributes' => $attributes,
+			'controls'   => array(
+				'toolbar'  => $this->get_controls_list( $attributes, 'toolbar' ),
+				'general'  => $this->get_controls_list( $attributes, 'general' ),
+				'advanced' => $this->get_controls_list( $attributes, 'advanced' ),
+			),
+			'className'  => $type->block_class_name(),
+			'slug'       => $type->get_name(),
+			'supports'   => $type->get_supports()
+		);
+	}
 
 	/**
-     * Register form JS
-     * @return [type] [description]
-     */
+	 * Register block types for editor
+	 *
+	 * @param $editor
+	 * @param $handle
+	 *
+	 * @return void [type] [description]
+	 */
+	public function register_block_types_for_others( $editor, $handle ) {
+
+		$prepared_types = array();
+
+		foreach ( $this->_types[ self::OTHERS_STORAGE ] as $type ) {
+			$prepared_types[] = $this->register_block_data_for_js( $type );
+
+			$type->block_data( $editor, $handle );
+		}
+
+		wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );
+
+	}
+
+	/**
+	 * Register form JS
+	 * @return [type] [description]
+	 */
 	public function register_frontend_assets() {
 
 		wp_enqueue_script(
 			'jet-form-builder-frontend',
-            Plugin::instance()->plugin_url( 'assets/js/frontend.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend.js' ),
 			array(),
-            Plugin::instance()->get_version(),
+			Plugin::instance()->get_version(),
 			true
 		);
 
 		wp_enqueue_script(
 			'jet-form-builder-frontend-forms',
-            Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
 			array(),
-            Plugin::instance()->get_version(),
+			Plugin::instance()->get_version(),
 			true
 		);
 
 		wp_enqueue_script(
 			'jet-form-builder-inputmask',
-            Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
+			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
 			array( 'jet-form-builder-frontend-forms' ),
-            Plugin::instance()->get_version(),
+			Plugin::instance()->get_version(),
 			true
 		);
 
-        wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
-            'ajaxurl'       => esc_url( admin_url( 'admin-ajax.php' ) ),
-            'form_action'   => Plugin::instance()->form_handler->hook_key
-        ) );
+		wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
+			'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'form_action' => Plugin::instance()->form_handler->hook_key
+		) );
 
 	}
 
@@ -267,19 +270,19 @@ class Manager {
 	 * Register new block type
 	 *
 	 * @param  [type] $block_type [description]
+	 *
 	 * @return [type]             [description]
 	 */
 	public function register_block_type( $block_type ) {
 		$this->_types[ $block_type->get_storage_name() ][ $block_type->get_name() ] = $block_type;
 	}
 
-    /**
-     * @return array
-     */
-    public function get_form_editor_types()
-    {
-        return $this->_types[ self::FORM_EDITOR_STORAGE ];
-    }
+	/**
+	 * @return array
+	 */
+	public function get_form_editor_types() {
+		return $this->_types[ self::FORM_EDITOR_STORAGE ];
+	}
 
 	/**
 	 * Returns block attributes list
@@ -306,18 +309,18 @@ class Manager {
 		if ( ! $block_name ) {
 			return;
 		}
-        $types = $this->get_form_editor_types();
+		$types = $this->get_form_editor_types();
 
 		return isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
 	}
 
 
 	public function get_field_attrs( $block_name, $attributes ) {
-		
+
 		if ( ! $block_name ) {
 			return;
 		}
-        $types = $this->get_form_editor_types();
+		$types = $this->get_form_editor_types();
 
 		$field = isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
 
@@ -325,7 +328,7 @@ class Manager {
 			return;
 		}
 
-		return $attributes;		
+		return $attributes;
 	}
 
 }

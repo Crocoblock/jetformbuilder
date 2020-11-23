@@ -1,6 +1,7 @@
 import Tools from "../tools/tools";
 import * as fieldsManager from "../tools/form-fields-manager";
 import IntegrationComponent from "./integration-component";
+
 /**
  * Internal dependencies
  */
@@ -20,12 +21,12 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends IntegrationComponent {
+window.jetFormDefaultActions[ 'mailchimp' ] = class MailChimpAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
 
-		this.data 	= window.jetFormMailchimpData;
+		this.data = window.jetFormMailchimpData;
 	}
 
 
@@ -35,8 +36,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 		if ( settings.list_id
 			&& settings.data.fields
 			&& settings.data
-			&& settings.data.fields[ settings.list_id ] )
-		{
+			&& settings.data.fields[ settings.list_id ] ) {
 			return Object.entries( settings.data.fields[ settings.list_id ] );
 		}
 		return [];
@@ -56,8 +56,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 
 		if ( settings.data
 			&& settings.data.groups
-			&& settings.list_id )
-		{
+			&& settings.list_id ) {
 			return this.formatEntriesArray( settings.data.groups[ settings.list_id ] );
 		}
 		return [];
@@ -71,11 +70,11 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
+		const options = Object.entries( entries ).map( ( [value, label] ) => {
 			return { value, label };
 		} );
 
-		return [ placeholder, ...options ];
+		return [placeholder, ...options];
 	}
 
 
@@ -87,7 +86,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 		return ( <div key="mailchimp">
 			<BaseControl
 				label={ this.data.labels.api_key }
-				key={'mailchimp_input_key'}
+				key={ 'mailchimp_input_key' }
 			>
 				<div>
 					<div className='input_with_button'>
@@ -107,13 +106,14 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 							{ this.data.labels.validate_api_key }
 						</Button>
 					</div>
-					<div>{ this.data.help.api_key_link_prefix } <a href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
+					<div>{ this.data.help.api_key_link_prefix } <a
+						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
 				</div>
 			</BaseControl>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
 					label={ this.data.labels.list_id }
-					key={'mailchimp_select_lists'}
+					key={ 'mailchimp_select_lists' }
 				>
 					<div>
 						<SelectControl
@@ -137,7 +137,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 
 				<BaseControl
 					label={ this.data.labels.groups_ids }
-					key={'mailchimp_groups_ids'}
+					key={ 'mailchimp_groups_ids' }
 				>
 					<div>
 						<SelectControl
@@ -153,7 +153,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 				</BaseControl>
 				<BaseControl
 					label={ this.data.labels.tags }
-					key={'mailchimp_tags'}
+					key={ 'mailchimp_tags' }
 				>
 					<div>
 						<TextControl
@@ -169,7 +169,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 				</BaseControl>
 				<BaseControl
 					label={ this.data.labels.double_opt_in }
-					key={'mailchimp_double_opt_in'}
+					key={ 'mailchimp_double_opt_in' }
 				>
 					<div>
 						<ToggleControl
@@ -187,7 +187,7 @@ window.jetFormDefaultActions['mailchimp'] = class MailChimpAction extends Integr
 					key='mailchimp_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [ mcFieldId, mcFieldData ], index ) => {
+						{ fields.map( ( [mcFieldId, mcFieldData], index ) => {
 							return <div
 								className="jet-user-meta__row"
 								key={ 'user_meta_' + mcFieldId + index }

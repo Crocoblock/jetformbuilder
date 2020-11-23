@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Gateways\Manager;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
@@ -10,117 +11,126 @@ use Jet_Form_Builder\Generators\Num_Range;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-    die();
+	die();
 }
 
-class Form_Manager
-{
-    public  $generators = false;
-    public  $builder;
-    private $result_fields = array();
+class Form_Manager {
+	public $generators = false;
+	public $builder;
+	private $result_fields = array();
 
-    const   NAMESPACE_FIELDS = 'jet-forms/';
-    /**
-     * Returns all instatnces of options genrators classes
-     *
-     * @return [type] [description]
-     */
-    public function get_options_generators() {
+	const   NAMESPACE_FIELDS = 'jet-forms/';
 
-        if ( false === $this->generators ) {
+	public function __construct() {
+		add_filter( 'jet-engine/forms/allow-gateways', '__return_true' );
+		add_filter( 'jet-engine/forms/gateways/paypal/sandbox-mode', '__return_true' );
 
-            $instances = array(
-                new Num_Range(),
-                new Get_From_DB(),
-                new Get_From_Field(),
-            );
+		if ( Plugin::instance()->post_type->allow_gateways ) {
+			Manager::instance();
+		}
+	}
 
-            $instances = apply_filters( 'jet-form-builder/forms/options-generators', $instances, $this );
+	/**
+	 * Returns all instances of options generators classes
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_options_generators() {
 
-            foreach ( $instances as $instance ) {
-                $this->generators[ $instance->get_id() ] = $instance;
-            }
+		if ( false === $this->generators ) {
 
-        }
-        return $this->generators;
-    }
+			$instances = array(
+				new Num_Range(),
+				new Get_From_DB(),
+				new Get_From_Field(),
+			);
 
-    /**
-     * Returns form fields,
-     * parsed from post_content
-     *
-     * @param $content
-     * @return array[]
-     */
-    public function get_fields( $content ) {
-        return parse_blocks( $content );
+			$instances = apply_filters( 'jet-form-builder/forms/options-generators', $instances, $this );
 
-    }
+			foreach ( $instances as $instance ) {
+				$this->generators[ $instance->get_id() ] = $instance;
+			}
 
-    public function is_not_field( $block_name ) {
-        return (
-            stripos(
-                $block_name,
-                self::NAMESPACE_FIELDS
-            ) === false
-        );
-    }
+		}
 
-    public function is_field( $block_name, $needle ) {
-        return stristr( $block_name, $needle );
-    }
+		return $this->generators;
+	}
 
-    public function get_form_by_id( $form_id ) {
-        return $this->get_fields( get_post( $form_id )->post_content );
-    }
+	/**
+	 * Returns form fields,
+	 * parsed from post_content
+	 *
+	 * @param $content
+	 *
+	 * @return array[]
+	 */
+	public function get_fields( $content ) {
+		return parse_blocks( $content );
+	}
 
-    public function get_only_form_fields( $form_id ) {
-        $content = $this->get_form_by_id( $form_id );
+	public function is_not_field( $block_name ) {
+		return (
+			stripos(
+				$block_name,
+				self::NAMESPACE_FIELDS
+			) === false
+		);
+	}
 
-        $this->result_fields = array();
-        $this->get_inner_fields( $content );
+	public function is_field( $block_name, $needle ) {
+		return stristr( $block_name, $needle );
+	}
 
-        return $this->result_fields;
-    }
+	public function get_form_by_id( $form_id ) {
+		return $this->get_fields( get_post( $form_id )->post_content );
+	}
 
-    function get_inner_fields( $source ) {
-        foreach ( $source as $block ) {
+	public function get_only_form_fields( $form_id ) {
+		$content = $this->get_form_by_id( $form_id );
 
-            if ( ! $this->is_not_field( $block['blockName'] ) ) {
-                $this->result_fields[] = $block;
-            }
+		$this->result_fields = array();
+		$this->get_inner_fields( $content );
 
-            if ( ! empty( $block['innerBlocks'] ) ) {
-                $this->get_inner_fields( $block['innerBlocks'] );
-            }
-        }
-    }
+		return $this->result_fields;
+	}
+
+	function get_inner_fields( $source ) {
+		foreach ( $source as $block ) {
+
+			if ( ! $this->is_not_field( $block['blockName'] ) ) {
+				$this->result_fields[] = $block;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$this->get_inner_fields( $block['innerBlocks'] );
+			}
+		}
+	}
 
 
-    /**
-     * Returns generators list
-     *
-     * @return [type] [description]
-     */
-    public function get_generators_list() {
+	/**
+	 * Returns generators list
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_generators_list() {
 
-        $generators = $this->get_options_generators();
-        $result     = array(
-            0 => __( 'Select function...', 'jet-form-builder' ),
-        );
+		$generators = $this->get_options_generators();
+		$result     = array(
+			0 => __( 'Select function...', 'jet-form-builder' ),
+		);
 
-        foreach ( $generators as $id => $generator ) {
-            $result[ $id ] = $generator->get_name();
-        }
+		foreach ( $generators as $id => $generator ) {
+			$result[ $id ] = $generator->get_name();
+		}
 
-        return $result;
+		return $result;
 
-    }
+	}
 
-    public function field_name( $blockName ) {
-        return explode( self::NAMESPACE_FIELDS, $blockName )[1];
-    }
-
+	public function field_name( $blockName ) {
+		return explode( self::NAMESPACE_FIELDS, $blockName )[1];
+	}
 
 
 }

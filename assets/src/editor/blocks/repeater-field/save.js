@@ -4,6 +4,6 @@ window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbac
 
 const { InnerBlocks } = wp.blockEditor;
 
-window.jetFormBuilderBlockCallbacks[ block ].save = function( props ) {
-    return <InnerBlocks.Content />;
+window.jetFormBuilderBlockCallbacks[ block ].save = function ( props ) {
+	return <InnerBlocks.Content/>;
 };

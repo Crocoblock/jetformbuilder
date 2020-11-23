@@ -57,7 +57,7 @@ class JetFieldsMapControl extends wp.element.Component {
 			return;
 		}
 
-		for ( var i = 0; i < this.taxonomiesList.length; i++ ) {
+		for ( var i = 0; i < this.taxonomiesList.length; i ++ ) {
 			this.preparedTaxes.push( {
 				value: this.taxPrefix + this.taxonomiesList[ i ].value,
 				label: this.taxonomiesList[ i ].label,
@@ -92,7 +92,7 @@ class JetFieldsMapControl extends wp.element.Component {
 			return '';
 		}
 
-		for ( var i = 0; i < this.fieldTypes.length; i++ ) {
+		for ( var i = 0; i < this.fieldTypes.length; i ++ ) {
 			if ( value === this.fieldTypes[ i ].value ) {
 				return value;
 			}
@@ -110,7 +110,7 @@ class JetFieldsMapControl extends wp.element.Component {
 	onChangeValue( newValue ) {
 		this.props.onChange( {
 			...this.props.fieldsMap,
-			[ this.props.fieldName ] : newValue
+			[ this.props.fieldName ]: newValue
 		} );
 	};
 
@@ -122,7 +122,7 @@ class JetFieldsMapControl extends wp.element.Component {
 			type: val
 		} );
 
-		if( this.isTermOrMeta( val ) ) {
+		if ( this.isTermOrMeta( val ) ) {
 			val = '';
 		}
 

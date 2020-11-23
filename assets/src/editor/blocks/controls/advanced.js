@@ -16,23 +16,24 @@ const {
 const { __ } = wp.i18n;
 
 function JetFormAdvanced( {
-	help,
-	instanceId,
-	onChange,
-	className,
-	controls,
-	values,
-	hideLabelFromVision
-} ) {
+							  help,
+							  instanceId,
+							  onChange,
+							  className,
+							  controls,
+							  values,
+							  hideLabelFromVision
+						  } ) {
 	const result = {};
 	const onChangeValue = ( value, key ) => {
 		result[ key ] = value;
 		onChange( result );
 	};
 
-	for ( var i = 0; i < controls.length; i++) {
+	for ( var i = 0; i < controls.length; i ++ ) {
 		result[ controls[ i ].key ] = values[ controls[ i ].key ];
-	};
+	}
+	;
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
@@ -73,8 +74,9 @@ function JetFormAdvanced( {
 							onChangeValue( newVal, data.key )
 						} }
 					/>
-			};
-		})}
+			}
+			;
+		} ) }
 	</PanelBody>
 	/* eslint-enable jsx-a11y/no-onchange */
 }

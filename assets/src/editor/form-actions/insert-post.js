@@ -1,6 +1,7 @@
 import JetFieldsMapControl from '../blocks/controls/fields-map';
 import Tools from "../tools/tools";
 import JetDefaultMetaControl from "../blocks/controls/default-meta";
+
 /**
  * Internal dependencies
  */
@@ -23,7 +24,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'insert_post' ] = class InsertPostAction extends wp.element.Component {
 
 	getFieldMap( name ) {
 		const settings = this.props.settings;
@@ -79,9 +80,9 @@ window.jetFormDefaultActions['insert_post'] = class InsertPostAction extends wp.
 				key="fields_map"
 			>
 				{ this.isRenderHelp( formFields ) &&
-					<div className="jet-fields-map__help">
-						{ window.jetFormInsertPostData.labels.fields_map_help }
-					</div>
+				<div className="jet-fields-map__help">
+					{ window.jetFormInsertPostData.labels.fields_map_help }
+				</div>
 				}
 				<div className="jet-fields-map__list">
 					{ formFields && formFields.map( ( field, index ) => {

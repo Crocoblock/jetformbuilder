@@ -31,24 +31,24 @@ const {
 
 const { serialize, parse } = wp.blocks;
 
-function Editor ( { startingContent, formName, inputName } ) {
+function Editor( { startingContent, formName, inputName } ) {
 
 	useEffect( () => {
 		registerCoreBlocks();
 		var allowedBlocks = window.JetFormEditorData.allowedBlocks;
 		getBlockTypes().forEach( function ( blockType ) {
-			if ( allowedBlocks.indexOf( blockType.name ) === -1 ) {
+			if ( allowedBlocks.indexOf( blockType.name ) === - 1 ) {
 				unregisterBlockType( blockType.name );
 			}
 		} );
 	}, [] );
 
-	const [ isSaving, setSaving ] = useState( false );
-	const [ showInserter, setShowInserter ] = useState( false );
-	const [ blocks, updateBlocks ] = useState( parse( startingContent ) );
-	const [ fName, updateFormName ] = useState( formName );
+	const [isSaving, setSaving] = useState( false );
+	const [showInserter, setShowInserter] = useState( false );
+	const [blocks, updateBlocks] = useState( parse( startingContent ) );
+	const [fName, updateFormName] = useState( formName );
 
-	const saveSettings = function() {
+	const saveSettings = function () {
 
 		setSaving( true );
 
@@ -60,7 +60,7 @@ function Editor ( { startingContent, formName, inputName } ) {
 				name: fName,
 				item_id: window.JetFormEditorData.itemID,
 			}
-		} ).then( function( response ) {
+		} ).then( function ( response ) {
 
 			setSaving( false );
 
@@ -71,18 +71,18 @@ function Editor ( { startingContent, formName, inputName } ) {
 			} else {
 				alert( response.message );
 			}
-		} ).catch( function( response ) {
+		} ).catch( function ( response ) {
 			alert( response.message );
 			setSaving( false );
 		} );
 
 	};
 
-	const updateBlocksCallback = function( newBlocks ) {
+	const updateBlocksCallback = function ( newBlocks ) {
 		updateBlocks( newBlocks );
 	};
 
-	const updateFormNameCallback = function( event ) {
+	const updateFormNameCallback = function ( event ) {
 		updateFormName( event.target.value );
 	};
 
@@ -114,11 +114,11 @@ function Editor ( { startingContent, formName, inputName } ) {
 						</div>
 					</div>
 					<div className="jet-form-builder__sidebar">
-						<BlockInspector />
+						<BlockInspector/>
 					</div>
 					<div className="editor-styles-wrapper">
-						<Popover.Slot name="block-toolbar" />
-						<BlockEditorKeyboardShortcuts />
+						<Popover.Slot name="block-toolbar"/>
+						<BlockEditorKeyboardShortcuts/>
 						<WritingFlow>
 							<ObserveTyping>
 								<div className="edit-post-visual-editor__post-title-wrapper">
@@ -134,11 +134,11 @@ function Editor ( { startingContent, formName, inputName } ) {
 										</div>
 									</div>
 								</div>
-								<BlockList />
+								<BlockList/>
 							</ObserveTyping>
 						</WritingFlow>
 					</div>
-					<Popover.Slot />
+					<Popover.Slot/>
 				</BlockEditorProvider>
 			</DropZoneProvider>
 		</SlotFillProvider>

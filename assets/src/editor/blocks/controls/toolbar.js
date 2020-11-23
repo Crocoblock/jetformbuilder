@@ -14,14 +14,14 @@ const {
 } = wp.components;
 
 function JetFormToolbar( {
-	help,
-	instanceId,
-	onChange,
-	className,
-	controls,
-	values,
-	hideLabelFromVision
-} ) {
+							 help,
+							 instanceId,
+							 onChange,
+							 className,
+							 controls,
+							 values,
+							 hideLabelFromVision
+						 } ) {
 	const result = {};
 	const id = `inspector-select-control-${ instanceId }`;
 	const onChangeValue = ( value, key ) => {
@@ -29,29 +29,29 @@ function JetFormToolbar( {
 		onChange( result );
 	};
 
-	for ( var i = 0; i < controls.length; i++) {
+	for ( var i = 0; i < controls.length; i ++ ) {
 		result[ controls[ i ].key ] = values[ controls[ i ].key ];
 	}
 
 	return <ToolbarGroup>
-			<Flex
-				align={ 'center' }
-				justify={ 'center' }
-				className={ 'jet-form-toggle-box' }
-			>
-				{ controls.map( ( data, index) => {
-					return <ToggleControl
-						key={ data.key }
-						label={ data.label }
-						checked={ result[ data.key ] }
-						onChange={ newVal => {
-							onChangeValue( newVal, data.key )
-						} }
-					/>
-				})}
+		<Flex
+			align={ 'center' }
+			justify={ 'center' }
+			className={ 'jet-form-toggle-box' }
+		>
+			{ controls.map( ( data, index ) => {
+				return <ToggleControl
+					key={ data.key }
+					label={ data.label }
+					checked={ result[ data.key ] }
+					onChange={ newVal => {
+						onChangeValue( newVal, data.key )
+					} }
+				/>
+			} ) }
 
-			</Flex>
-		</ToolbarGroup>;
+		</Flex>
+	</ToolbarGroup>;
 }
 
 window.jetFormBuilderControlComponents = {

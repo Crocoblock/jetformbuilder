@@ -1,13 +1,14 @@
 <?php
-namespace Jet_Engine\Gateways;
 
-class PayPal {
+namespace Jet_Form_Builder\Gateways;
+
+class Paypal {
 
 	private $client_id;
 	private $secret;
 
-	public $data     = false;
-	public $message  = false;
+	public $data = false;
+	public $message = false;
 	public $redirect = false;
 
 	public function __construct() {
@@ -81,7 +82,7 @@ class PayPal {
 
 		Manager::instance()->add_data( $data );
 
-		if ( in_array( $data['status'], $failed_statuses )  ) {
+		if ( in_array( $data['status'], $failed_statuses ) ) {
 			$this->process_status( 'failed', $data['form_id'], $gateways, $data['form_data'] );
 		} else {
 			$this->process_status( 'success', $data['form_id'], $gateways, $data['form_data'] );
@@ -92,14 +93,15 @@ class PayPal {
 	/**
 	 * Process status notification and enqueue message
 	 *
-	 * @param  string $type     [description]
+	 * @param string $type [description]
 	 * @param  [type] $form_id  [description]
-	 * @param  array  $settings [description]
+	 * @param array $settings [description]
+	 *
 	 * @return [type]           [description]
 	 */
 	public function process_status( $type = 'success', $form_id, $settings = array(), $form_data ) {
 
-		$message = ! empty( $settings[ $type . '_message' ] ) ? wp_kses_post( $settings[ $type . '_message' ] ) : null;
+		$message       = ! empty( $settings[ $type . '_message' ] ) ? wp_kses_post( $settings[ $type . '_message' ] ) : null;
 		$notifications = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
 		if ( $message ) {
@@ -148,6 +150,7 @@ class PayPal {
 	 * Returns form data by payment ID
 	 *
 	 * @param  [type] $payment [description]
+	 *
 	 * @return [type]          [description]
 	 */
 	public function get_form_by_payment( $payment = null ) {
@@ -176,29 +179,32 @@ class PayPal {
 	 */
 	public function editor_fields() {
 		?>
-		<div class="jet-engine-gateways-section" v-if="'paypal' === gateways.gateway">
-			<div class="jet-engine-gateways-section__title"><?php
+        <div class="jet-engine-gateways-section" v-if="'paypal' === gateways.gateway">
+            <div class="jet-engine-gateways-section__title"><?php
 				_e( 'PayPal settings:', 'jet-engine' );
-			?></div>
-			<div class="jet-engine-gateways-row">
-				<label for="gateways_paypal_client_id" class="jet-engine-gateways-row__label"><?php
+				?></div>
+            <div class="jet-engine-gateways-row">
+                <label for="gateways_paypal_client_id" class="jet-engine-gateways-row__label"><?php
 					_e( 'Client ID', 'jet-engine' );
-				?></label>
-				<input type="text" v-model="gateways.paypal_client_id" id="gateways_paypal_client_id" name="_gateways[paypal_client_id]" placeholder="<?php _e( 'Client ID', 'jet-engine' ); ?>">
-			</div>
-			<div class="jet-engine-gateways-row">
-				<label for="gateways_paypal_secret" class="jet-engine-gateways-row__label"><?php
+					?></label>
+                <input type="text" v-model="gateways.paypal_client_id" id="gateways_paypal_client_id"
+                       name="_gateways[paypal_client_id]" placeholder="<?php _e( 'Client ID', 'jet-engine' ); ?>">
+            </div>
+            <div class="jet-engine-gateways-row">
+                <label for="gateways_paypal_secret" class="jet-engine-gateways-row__label"><?php
 					_e( 'Secret Key', 'jet-engine' );
-				?></label>
-				<input type="text" id="gateways_paypal_secret" v-model="gateways.paypal_secret" name="_gateways[paypal_secret]" placeholder="<?php _e( 'Secret', 'jet-engine' ); ?>">
-			</div>
-			<div class="jet-engine-gateways-row">
-				<label for="gateways_paypal_currency" class="jet-engine-gateways-row__label"><?php
+					?></label>
+                <input type="text" id="gateways_paypal_secret" v-model="gateways.paypal_secret"
+                       name="_gateways[paypal_secret]" placeholder="<?php _e( 'Secret', 'jet-engine' ); ?>">
+            </div>
+            <div class="jet-engine-gateways-row">
+                <label for="gateways_paypal_currency" class="jet-engine-gateways-row__label"><?php
 					_e( 'Currency Code', 'jet-engine' );
-				?></label>
-				<input type="text" v-model="gateways.paypal_currency" id="gateways_paypal_currency" name="_gateways[paypal_currency]" placeholder="<?php _e( 'Currency code', 'jet-engine' ); ?>">
-			</div>
-		</div>
+					?></label>
+                <input type="text" v-model="gateways.paypal_currency" id="gateways_paypal_currency"
+                       name="_gateways[paypal_currency]" placeholder="<?php _e( 'Currency code', 'jet-engine' ); ?>">
+            </div>
+        </div>
 		<?php
 	}
 
@@ -224,6 +230,7 @@ class PayPal {
 	 * Prevent unnecessary notifications processings before form is send.
 	 *
 	 * @param  [type] $handler [description]
+	 *
 	 * @return [type]          [description]
 	 */
 	public function prevent_notifications( $handler ) {
@@ -334,7 +341,7 @@ class PayPal {
 			$type = ! empty( $this->redirect['redirect_type'] ) ? $this->redirect['redirect_type'] : 'static_page';
 
 			if ( 'static_page' === $type ) {
-				$to_page = ! empty( $this->redirect['redirect_page'] ) ? $this->redirect['redirect_page'] : false;
+				$to_page       = ! empty( $this->redirect['redirect_page'] ) ? $this->redirect['redirect_page'] : false;
 				$success_refer = ! empty( $to_page ) ? get_permalink( $to_page ) : false;
 			} else {
 				$success_refer = ! empty( $this->redirect['redirect_url'] ) ? $this->redirect['redirect_url'] : false;
@@ -345,7 +352,7 @@ class PayPal {
 			'v2/checkout/orders',
 			array(),
 			array(
-				'intent' => 'CAPTURE',
+				'intent'              => 'CAPTURE',
 				'application_context' => array(
 					'landing_page' => 'BILLING',
 					'user_action'  => 'PAY_NOW',
@@ -359,10 +366,10 @@ class PayPal {
 						trailingslashit( remove_query_arg( $remove_refer_args, $cancel_refer ) )
 					),
 				),
-				'purchase_units' => array(
+				'purchase_units'      => array(
 					array(
 						'custom_id' => $handler->form . '-' . $order_id,
-						'amount' => array(
+						'amount'    => array(
 							'currency_code' => $currency,
 							'value'         => $price,
 						),
@@ -432,6 +439,7 @@ class PayPal {
 	 *
 	 * @param  [type] $client_id [description]
 	 * @param  [type] $secret    [description]
+	 *
 	 * @return [type]            [description]
 	 */
 	public function get_token( $client_id = false, $secret = false ) {
@@ -489,8 +497,9 @@ class PayPal {
 	 * Make a request
 	 *
 	 * @param  [type] $endpoint [description]
-	 * @param  array  $headers  [description]
-	 * @param  array  $body     [description]
+	 * @param array $headers [description]
+	 * @param array $body [description]
+	 *
 	 * @return [type]           [description]
 	 */
 	public function request( $endpoint = null, $headers = array(), $body = array(), $token = false, $method = 'post' ) {

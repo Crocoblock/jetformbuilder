@@ -12,29 +12,29 @@ window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbac
 const { __ } = wp.i18n;
 
 const {
-    ColorPalette,
-    RichText,
-    Editable,
-    MediaUpload,
-    ServerSideRender,
-    BlockControls,
-    InspectorControls,
+	ColorPalette,
+	RichText,
+	Editable,
+	MediaUpload,
+	ServerSideRender,
+	BlockControls,
+	InspectorControls,
 } = wp.blockEditor;
 
 const {
-    PanelColor,
-    IconButton,
-    TextControl,
-    TextareaControl,
-    SelectControl,
-    ToggleControl,
-    PanelBody,
-    Button,
-    Popover,
-    RangeControl,
-    CheckboxControl,
-    Disabled,
-    __experimentalNumberControl,
+	PanelColor,
+	IconButton,
+	TextControl,
+	TextareaControl,
+	SelectControl,
+	ToggleControl,
+	PanelBody,
+	Button,
+	Popover,
+	RangeControl,
+	CheckboxControl,
+	Disabled,
+	__experimentalNumberControl,
 } = wp.components;
 
 const NumberControl = __experimentalNumberControl;
@@ -45,154 +45,158 @@ const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends wp.element.Component {
 
-    constructor( props ) {
-        super( props );
+	constructor( props ) {
+		super( props );
 
-        this.data = window.jetFormCalculatedFieldData;
-        this.state = { showMacrosPopover: false };
-    }
+		this.data = window.jetFormCalculatedFieldData;
+		this.state = { showMacrosPopover: false };
+	}
 
-    render() {
-        const props      = this.props;
-        const attributes = props.attributes;
-        const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+	render() {
+		const props = this.props;
+		const attributes = props.attributes;
+		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
-        const formFields = Tools.getAvailableFields( [ block ] );
+		const formFields = Tools.getAvailableFields( [block] );
 
-        const insertMacros = ( macros ) => {
-            const formula = attributes.calc_formula || '';
-            props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
-        }
+		const insertMacros = ( macros ) => {
+			const formula = attributes.calc_formula || '';
+			props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
+		}
 
-        return [
-            hasToolbar && (
-                <BlockControls key={ keyControls + '-block' }>
-                    <JetFormToolbar
-                        values={ attributes }
-                        controls={ window.jetFormBuilderControls.toolbar[ block ] }
-                        onChange={ ( newValues ) => {
-                            props.setAttributes( newValues );
-                        }}
-                    />
-                </BlockControls>
-            ),
-            props.isSelected && (
-                <InspectorControls
-                    key={ keyControls }
-                >
-                    { window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
-                        key={ keyGeneral }
-                        values={ attributes }
-                        controls={ window.jetFormBuilderControls.general[ block ] }
-                        onChange={ ( newValues ) => {
-                            props.setAttributes( newValues );
-                        }}
-                    /> }
-                    <PanelBody
-                        title={ __( 'Field Settings' ) }
-                    >
-                        <div className="jet-form-editor__row-notice">
-                            { __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
-                            { __( 'For example:', 'jet-form-builder' ) }<br/><br/>
-                            %FIELD::quantity%*%META::price%<br/><br/>
-                            { __( 'Where:', 'jet-form-builder' ) }<br/>
-                            -
-                            { __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
-                            -
-                            { __( '%META::price% - macros for current post meta value. "quantity" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
-                        </div>
+		return [
+			hasToolbar && (
+				<BlockControls key={ keyControls + '-block' }>
+					<JetFormToolbar
+						values={ attributes }
+						controls={ window.jetFormBuilderControls.toolbar[ block ] }
+						onChange={ ( newValues ) => {
+							props.setAttributes( newValues );
+						} }
+					/>
+				</BlockControls>
+			),
+			props.isSelected && (
+				<InspectorControls
+					key={ keyControls }
+				>
+					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
+					<JetFormGeneral
+						key={ keyGeneral }
+						values={ attributes }
+						controls={ window.jetFormBuilderControls.general[ block ] }
+						onChange={ ( newValues ) => {
+							props.setAttributes( newValues );
+						} }
+					/> }
+					<PanelBody
+						title={ __( 'Field Settings' ) }
+					>
+						<div className="jet-form-editor__row-notice">
+							{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
+							{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
+							%FIELD::quantity%*%META::price%<br/><br/>
+							{ __( 'Where:', 'jet-form-builder' ) }<br/>
+							-
+							{ __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+							-
+							{ __( '%META::price% - macros for current post meta value. "quantity" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+						</div>
 
-                        <NumberControl
-                            label={ __( 'Decimal Places Number' ) }
-                            labelPosition='top'
-                            key='precision'
-                            value={ attributes.precision }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { precision: parseInt( newValue ) } );
-                            } }
-                        />
-                        <TextControl
-                            key='calc_prefix'
-                            label={ __( 'Calculated Value Prefix' ) }
-                            value={ attributes.calc_prefix }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { calc_prefix: newValue } );
-                            } }
-                        />
-                        <TextControl
-                            key='calc_suffix'
-                            label={ __( 'Calculated Value Suffix' ) }
-                            value={ attributes.calc_suffix }
-                            onChange={ ( newValue ) => {
-                                props.setAttributes( { calc_suffix: newValue } );
-                            } }
-                        />
-                        <ToggleControl
-                            key={ 'calc_hidden' }
-                            label={ __( 'Hidden' ) }
-                            checked={ attributes.calc_hidden }
-                            help={ Tools.getHelpMessage( this.data, 'calc_hidden' ) }
-                            onChange={ newVal => {
-                                props.setAttributes( {
-                                    calc_hidden: Boolean(newVal),
-                                } );
-                            } }
-                        />
+						<NumberControl
+							label={ __( 'Decimal Places Number' ) }
+							labelPosition='top'
+							key='precision'
+							value={ attributes.precision }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { precision: parseInt( newValue ) } );
+							} }
+						/>
+						<TextControl
+							key='calc_prefix'
+							label={ __( 'Calculated Value Prefix' ) }
+							value={ attributes.calc_prefix }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { calc_prefix: newValue } );
+							} }
+						/>
+						<TextControl
+							key='calc_suffix'
+							label={ __( 'Calculated Value Suffix' ) }
+							value={ attributes.calc_suffix }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { calc_suffix: newValue } );
+							} }
+						/>
+						<ToggleControl
+							key={ 'calc_hidden' }
+							label={ __( 'Hidden' ) }
+							checked={ attributes.calc_hidden }
+							help={ Tools.getHelpMessage( this.data, 'calc_hidden' ) }
+							onChange={ newVal => {
+								props.setAttributes( {
+									calc_hidden: Boolean( newVal ),
+								} );
+							} }
+						/>
 
-                    </PanelBody>
-                    { window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
-                        values={ attributes }
-                        controls={ window.jetFormBuilderControls.advanced[ block ] }
-                        onChange={ ( newValues ) => {
-                            props.setAttributes( newValues );
-                        }}
-                    /> }
-                </InspectorControls>
-            ),
-            <div className="jet-forms__calc-formula-editor">
-                <div className="jet-form-editor__macros-wrap">
-                    <TextareaControl
-                        key="calc_formula"
-                        value={ attributes.calc_formula }
-                        label={ __( 'Calculation Formula' ) }
+					</PanelBody>
+					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
+					<JetFormAdvanced
+						values={ attributes }
+						controls={ window.jetFormBuilderControls.advanced[ block ] }
+						onChange={ ( newValues ) => {
+							props.setAttributes( newValues );
+						} }
+					/> }
+				</InspectorControls>
+			),
+			<div className="jet-forms__calc-formula-editor">
+				<div className="jet-form-editor__macros-wrap">
+					<TextareaControl
+						key="calc_formula"
+						value={ attributes.calc_formula }
+						label={ __( 'Calculation Formula' ) }
 
-                        onChange={ ( newValue ) => {
-                            props.setAttributes( { calc_formula: newValue } );
-                        } }
-                    />
-                    <div
-                        className="jet-form-editor__macros-inserter"
-                        style={ { top: '31px' } }
-                    >
-                        <Button
-                            isTertiary
-                            isSmall
-                            icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-                            label={ 'Insert macros' }
-                            className="jet-form-editor__macros-trigger"
-                            onClick={ () => {
-                                this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
-                            } }
-                        />
-                        { this.state.showMacrosPopover && (
-                            <Popover
-                                position={ 'bottom left' }
-                            >
-                                { formFields.length && <PanelBody title={ 'Form Fields' }>
-                                    { formFields.map( field => {
-                                        return <div key={ 'field_' + field }>
-                                            <Button
-                                                isLink
-                                                onClick={ () => { insertMacros( field ) } }
-                                            >{ '%FIELD::' + field + '%' }</Button>
-                                        </div>;
-                                    } ) }
-                                </PanelBody> }
-                            </Popover>
-                        ) }
-                    </div>
-                </div>
-            </div>
-        ];
-    }
+						onChange={ ( newValue ) => {
+							props.setAttributes( { calc_formula: newValue } );
+						} }
+					/>
+					<div
+						className="jet-form-editor__macros-inserter"
+						style={ { top: '31px' } }
+					>
+						<Button
+							isTertiary
+							isSmall
+							icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
+							label={ 'Insert macros' }
+							className="jet-form-editor__macros-trigger"
+							onClick={ () => {
+								this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+							} }
+						/>
+						{ this.state.showMacrosPopover && (
+							<Popover
+								position={ 'bottom left' }
+							>
+								{ formFields.length && <PanelBody title={ 'Form Fields' }>
+									{ formFields.map( field => {
+										return <div key={ 'field_' + field }>
+											<Button
+												isLink
+												onClick={ () => {
+													insertMacros( field )
+												} }
+											>{ '%FIELD::' + field + '%' }</Button>
+										</div>;
+									} ) }
+								</PanelBody> }
+							</Popover>
+						) }
+					</div>
+				</div>
+			</div>
+		];
+	}
 }

@@ -2,6 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+
 const block = 'jet-forms/hidden-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
@@ -39,19 +40,19 @@ const keyGeneral = block + '-general-edit';
 window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.element.Component {
 	render() {
 
-		const props      = this.props;
+		const props = this.props;
 		const attributes = props.attributes;
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
 		return [
 			hasToolbar && (
-				<BlockControls >
+				<BlockControls>
 					<JetFormToolbar
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
 							props.setAttributes( newValues );
-						}}
+						} }
 					/>
 				</BlockControls>
 			),
@@ -59,12 +60,13 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 				<InspectorControls
 					key={ keyControls }
 				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length && <JetFormGeneral
+					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
+					<JetFormGeneral
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
 							props.setAttributes( newValues );
-						}}
+						} }
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
@@ -112,19 +114,20 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 							} }
 						/> }
 					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length && <JetFormAdvanced
+					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
+					<JetFormAdvanced
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
 							props.setAttributes( newValues );
-						}}
+						} }
 					/> }
 				</InspectorControls>
 			),
 			<JetFieldPlaceholder
 				key={ keyPlaceHolder }
 				title={ 'Hidden Field' }
-				subtitle={ [ attributes.name ] }
+				subtitle={ [attributes.name] }
 				isRequired={ attributes.required }
 			/>
 		];

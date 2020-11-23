@@ -33,16 +33,16 @@ function ArgsMeta() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [ args, setArgs ] = useState( JSON.parse( meta._jf_args ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_args ) );
 
 		useEffect( () => {
 
-			editPost({
+			editPost( {
 				meta: ( {
 					...meta,
 					_jf_args: JSON.stringify( args )
 				} )
-			});
+			} );
 
 		} );
 

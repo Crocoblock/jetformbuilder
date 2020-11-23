@@ -35,16 +35,16 @@ function PresetMeta() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [ args, setArgs ] = useState( JSON.parse( meta._jf_preset ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_preset ) );
 
 		useEffect( () => {
 
-			editPost({
+			editPost( {
 				meta: ( {
 					...meta,
 					_jf_preset: JSON.stringify( args )
 				} )
-			});
+			} );
 
 		} );
 

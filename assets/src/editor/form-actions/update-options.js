@@ -1,4 +1,5 @@
 import Tools from "../tools/tools";
+
 /**
  * Internal dependencies
  */
@@ -17,7 +18,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['update_options'] = class UpdateOptionsAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -30,7 +31,7 @@ window.jetFormDefaultActions['update_options'] = class UpdateOptionsAction exten
 	getFieldByName( { source, name } ) {
 		const settings = this.props.settings;
 
-		if (settings[ source ] && settings[ source ][ name ]) {
+		if ( settings[ source ] && settings[ source ][ name ] ) {
 			return settings[ source ][ name ];
 		}
 		return '';

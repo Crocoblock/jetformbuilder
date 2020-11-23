@@ -1,95 +1,94 @@
-
 const {
-    registerBlockType,
+	registerBlockType,
 } = wp.blocks;
 
 const { __ } = wp.i18n;
 
 const {
-    ColorPalette,
-    RichText,
-    Editable,
-    MediaUpload,
-    BlockControls,
-    InspectorControls,
+	ColorPalette,
+	RichText,
+	Editable,
+	MediaUpload,
+	BlockControls,
+	InspectorControls,
 } = wp.blockEditor;
 
 const {
-    PanelBody,
-    Button,
-    ComboboxControl,
-    SelectControl
+	PanelBody,
+	Button,
+	ComboboxControl,
+	SelectControl
 } = wp.components;
 
 const {
-    serverSideRender: ServerSideRender
+	serverSideRender: ServerSideRender
 } = wp;
 
 const { useState } = wp.element;
 
-const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[0] : false;
+const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[ 0 ] : false;
 
-function FormEdit ( { attributes, setAttributes, isSelected } ) {
-    this.name = 'jet-forms/form-block';
+function FormEdit( { attributes, setAttributes, isSelected } ) {
+	this.name = 'jet-forms/form-block';
 
-    this.keyControls = function () {
+	this.keyControls = function () {
 
-        return this.name + '-controls-edit';
-    };
-    this.keyGeneral = function () {
+		return this.name + '-controls-edit';
+	};
+	this.keyGeneral = function () {
 
-        return this.name + '-general-edit';
-    };
+		return this.name + '-general-edit';
+	};
 
-    const forms_list = window.JetFormData.forms_list;
+	const forms_list = window.JetFormData.forms_list;
 
-    return [
-        isSelected && <InspectorControls
-            key={ this.keyControls() }
-        >
-            <PanelBody
-                title={ __('Form Settings') }
-                key={ this.keyGeneral() }
-            >
-                <SelectControl
-                    key='form_id'
-                    label={ __( 'Choose Form' ) }
-                    labelposition='top'
-                    value={ attributes.form_id }
-                    onChange={ newValue => {
-                        setAttributes( { form_id: Number( newValue ) } );
-                    } }
-                    options={ [
-                        { label: __( 'Select form...' ) },
-                        ...forms_list
-                    ] }
-                />
-            </PanelBody>
-        </InspectorControls>,
-        <ServerSideRender
-            block={ formBlock.blockName }
-            attributes={ attributes }
-        />
-    ];
+	return [
+		isSelected && <InspectorControls
+			key={ this.keyControls() }
+		>
+			<PanelBody
+				title={ __( 'Form Settings' ) }
+				key={ this.keyGeneral() }
+			>
+				<SelectControl
+					key='form_id'
+					label={ __( 'Choose Form' ) }
+					labelposition='top'
+					value={ attributes.form_id }
+					onChange={ newValue => {
+						setAttributes( { form_id: Number( newValue ) } );
+					} }
+					options={ [
+						{ label: __( 'Select form...' ) },
+						...forms_list
+					] }
+				/>
+			</PanelBody>
+		</InspectorControls>,
+		<ServerSideRender
+			block={ formBlock.blockName }
+			attributes={ attributes }
+		/>
+	];
 
 }
 
 function FormSave( props ) {
-    return null;
+	return null;
 }
 
 registerBlockType(
-    formBlock.blockName, {
+	formBlock.blockName, {
 
-        title:  formBlock.title,
-        category: 'layout',
-        icon: 'feedback',
-        attributes: formBlock.attributes,
-        edit: FormEdit,
-        save: FormSave,
+		title: formBlock.title,
+		category: 'layout',
+		icon: 'feedback',
+		attributes: formBlock.attributes,
+		edit: FormEdit,
+		save: FormSave,
 
-        supports: {
-            html: false,
-        },
-    }
+		supports: {
+			html: false,
+		},
+	}
 );

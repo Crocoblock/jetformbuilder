@@ -1,6 +1,7 @@
 import Tools from "../tools/tools";
 import * as fieldsManager from "../tools/form-fields-manager";
 import IntegrationComponent from "./integration-component";
+
 /**
  * Internal dependencies
  */
@@ -27,7 +28,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends IntegrationComponent {
+window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
@@ -62,11 +63,11 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
+		const options = Object.entries( entries ).map( ( [value, label] ) => {
 			return { value, label };
 		} );
 
-		return isNeedPlaceholder ? [ placeholder, ...options ] : options ;
+		return isNeedPlaceholder ? [placeholder, ...options] : options;
 	}
 
 	render() {
@@ -77,7 +78,7 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 		return ( <React.Fragment key="getresponse">
 			<BaseControl
 				label={ this.data.labels.api_key }
-				key={'getresponse_input_key'}
+				key={ 'getresponse_input_key' }
 			>
 				<div>
 					<div className='input_with_button'>
@@ -97,13 +98,14 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 							{ this.data.labels.validate_api_key }
 						</Button>
 					</div>
-					<div>{ this.data.help.api_key_link_prefix } <a href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
+					<div>{ this.data.help.api_key_link_prefix } <a
+						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
 				</div>
 			</BaseControl>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
 					label={ this.data.labels.list_id }
-					key={'getresponse_select_lists'}
+					key={ 'getresponse_select_lists' }
 				>
 					<div className='input_with_button'>
 						<SelectControl
@@ -127,7 +129,7 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 
 				<BaseControl
 					label={ this.data.labels.day_of_cycle }
-					key={'getresponse_day_of_cycle'}
+					key={ 'getresponse_day_of_cycle' }
 				>
 					<div>
 						<NumberControl
@@ -145,7 +147,7 @@ window.jetFormDefaultActions['getresponse'] = class GetResponseAction extends In
 					key='getresponse_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [ fieldName, fieldData ], index ) => {
+						{ fields.map( ( [fieldName, fieldData], index ) => {
 
 							return <div
 								className="jet-user-meta__row"

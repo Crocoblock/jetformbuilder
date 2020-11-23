@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Date_Field_Render;
@@ -41,27 +42,27 @@ class Date_Field extends Base {
 	}
 
 
-    /**
-     * Returns current block render instatnce
-     *
-     * @param null $wp_block
-     * @return string
-     */
-    public function get_block_renderer( $wp_block = null ) {
-        return ( new Date_Field_Render( $this ) )->render();
-    }
+	/**
+	 * Returns current block render instatnce
+	 *
+	 * @param null $wp_block
+	 *
+	 * @return string
+	 */
+	public function get_block_renderer( $wp_block = null ) {
+		return ( new Date_Field_Render( $this ) )->render();
+	}
 
-	public function block_data($editor, $handle)
-    {
-        wp_localize_script( $handle, 'jetFormDateFieldData', array(
-            'help_messages' => array(
-                'is_timestamp' => __(
-                    'Check this if you want to send value of this field as timestamp instead of plain date',
-                    'jet-form-builder'
-                ),
-            ),
-        ) );
-    }
+	public function block_data( $editor, $handle ) {
+		wp_localize_script( $handle, 'jetFormDateFieldData', array(
+			'help_messages' => array(
+				'is_timestamp' => __(
+					'Check this if you want to send value of this field as timestamp instead of plain date',
+					'jet-form-builder'
+				),
+			),
+		) );
+	}
 
 	/**
 	 * Return attributes array
@@ -69,12 +70,12 @@ class Date_Field extends Base {
 	 * @return array
 	 */
 	public function get_attributes() {
-        return array(
-            'is_timestamp' => array(
-                'type' => 'boolean',
-                'default' => false
-            )
-        );
+		return array(
+			'is_timestamp' => array(
+				'type'    => 'boolean',
+				'default' => false
+			)
+		);
 	}
 
 }

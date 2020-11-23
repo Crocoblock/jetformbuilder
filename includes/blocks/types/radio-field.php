@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
@@ -13,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Radio_Field extends Base {
 
-    use Base_Select_Radio_Check;
+	use Base_Select_Radio_Check;
 
 	/**
 	 * Returns block title
@@ -43,30 +44,32 @@ class Radio_Field extends Base {
 	}
 
 
-    /**
-     * Returns current block render instatnce
-     *
-     * @param null $wp_block
-     * @return string
-     */
-    public function get_block_renderer( $wp_block = null ) {
-        return ( new Radio_Field_Render( $this ) )->render();
-    }
+	/**
+	 * Returns current block render instatnce
+	 *
+	 * @param null $wp_block
+	 *
+	 * @return string
+	 */
+	public function get_block_renderer( $wp_block = null ) {
+		return ( new Radio_Field_Render( $this ) )->render();
+	}
 
 	/**
 	 * Register blocks specific JS variables
 	 *
 	 * @param  [type] $editor [description]
 	 * @param  [type] $handle [description]
+	 *
 	 * @return [type]         [description]
 	 */
 	public function block_data( $editor, $handle ) {
 
 		wp_localize_script(
-		    $handle,
-            'JetFormRadioFieldData',
-            $this->get_local_data_check_radio_select()
-        );
+			$handle,
+			'JetFormRadioFieldData',
+			$this->get_local_data_check_radio_select()
+		);
 	}
 
 	/**
@@ -75,7 +78,7 @@ class Radio_Field extends Base {
 	 * @return array
 	 */
 	public function get_attributes() {
-        return $this->get_attributes_check_radio_select();
+		return $this->get_attributes_check_radio_select();
 	}
 
 }

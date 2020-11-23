@@ -4,12 +4,13 @@ import ActionsMeta from './meta/actions';
 import PresetMeta from './meta/preset';
 import MessagesMeta from './meta/messages';
 import Captcha from "./meta/captcha";
+import Gateways from "./meta/gateways";
 
 import './blocks/form-fields';
 import './form-actions/send-email';
 import './form-actions/insert-post';
 import './form-actions/register-user';
-import  './form-actions/update-user';
+import './form-actions/update-user';
 import './form-actions/update-options';
 import './form-actions/call-hook';
 import './form-actions/call-webhook';
@@ -41,10 +42,9 @@ var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize' );
 document.dispatchEvent( initializeCallbacksEvent );
 
 
-
 if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
-	window.jetFormBuilderBlocks.forEach( function( blockData ) {
+	window.jetFormBuilderBlocks.forEach( function ( blockData ) {
 
 		if ( window.jetFormBuilderBlockCallbacks[ blockData.blockName ] ) {
 
@@ -62,7 +62,7 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
 			registerBlockType( blockData.blockName, {
 				title: blockData.title,
-				icon: <span dangerouslySetInnerHTML={{__html: blockData.icon}}></span>,
+				icon: <span dangerouslySetInnerHTML={ { __html: blockData.icon } }></span>,
 				category: 'layout',
 				attributes: blockData.attributes,
 				className: blockData.className,
@@ -77,18 +77,19 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 
 		}
 
-	});
+	} );
 
 }
 
-window.jetFormActionTypes.forEach( function( action, index ) {
+window.jetFormActionTypes.forEach( function ( action, index ) {
 	if ( window.jetFormDefaultActions && window.jetFormDefaultActions[ action.id ] ) {
 		window.jetFormActionTypes[ index ].callback = window.jetFormDefaultActions[ action.id ];
 	}
-});
+} );
 
 ArgsMeta();
 Captcha();
+Gateways();
 ActionsMeta();
 PresetMeta();
 MessagesMeta();
@@ -106,7 +107,7 @@ document.dispatchEvent( initializedEvent );
  * @param formName
  * @return {void}             This function returns no values
  */
-window.JetFormEditor = function( id, inputName, content, formName ) {
+window.JetFormEditor = function ( id, inputName, content, formName ) {
 
 	// find our element and swap it out for a div container
 	const original = document.getElementById( id );
@@ -128,11 +129,11 @@ window.JetFormEditor = function( id, inputName, content, formName ) {
 	);
 
 	element.setAttribute( 'id', id );
-	original.replaceWith(element);
+	original.replaceWith( element );
 
 	// tada!
 	ReactDOM.render(
-		<Editor startingContent={content} inputName={inputName} formName={formName}/>,
+		<Editor startingContent={ content } inputName={ inputName } formName={ formName }/>,
 		element
 	);
 

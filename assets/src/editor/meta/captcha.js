@@ -35,16 +35,16 @@ function Captcha() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [ args, setArgs ] = useState( JSON.parse( meta._jf_recaptcha ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_recaptcha ) );
 
 		useEffect( () => {
 
-			editPost({
+			editPost( {
 				meta: ( {
 					...meta,
 					_jf_recaptcha: JSON.stringify( args )
 				} )
-			});
+			} );
 
 		} );
 		const data = window.JetFormEditorData.recaptchaLabels;

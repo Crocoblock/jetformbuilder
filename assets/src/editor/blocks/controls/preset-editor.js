@@ -16,10 +16,12 @@ const JetFormPresetEditor = class extends wp.element.Component {
 
 	onChangeValue( newValue, name ) {
 
-		this.setState( { value: {
-			...this.state.value,
-			[ name ]: newValue
-		} }, () => {
+		this.setState( {
+			value: {
+				...this.state.value,
+				[ name ]: newValue
+			}
+		}, () => {
 			if ( this.props.encode ) {
 				this.props.onChange( JSON.stringify( this.state.value ) );
 			} else {
@@ -163,7 +165,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 			{ this.props.availableFields && (
 				this.props.availableFields.map( ( field, index ) => {
 
-					var fieldsMap =  this.state.value.fields_map;
+					var fieldsMap = this.state.value.fields_map;
 					var currentVal = null;
 
 					if ( ! fieldsMap ) {

@@ -1,5 +1,6 @@
 <?php
-namespace Jet_Engine\Gateways;
+
+namespace Jet_Form_Builder\Gateways;
 
 class Manager {
 
@@ -15,16 +16,15 @@ class Manager {
 	private $_gateways = false;
 
 	public $message = null;
-	public $data    = null;
+	public $data = null;
 
 	/**
 	 * Register gateways components
 	 */
 	public function __construct() {
 
-		add_action( 'jet-engine/forms/editor/meta-boxes', array( $this, 'register_gateways_metabox' ) );
-		add_action( 'jet-engine/forms/editor/assets', array( $this, 'register_gateways_assets' ) );
-		add_action( 'jet-engine/forms/editor/save-meta', array( $this, 'save_gateways_meta' ) );
+		add_action( 'jet-form-builder/editor/meta-boxes', array( $this, 'register_gateways_metabox' ) );
+		add_action( 'jet-form-builder/editor/assets', array( $this, 'register_gateways_assets' ) );
 
 		$this->get_gateways();
 
@@ -43,6 +43,7 @@ class Manager {
 	 * Register new payment-related dynamic tags
 	 *
 	 * @param  [type] $dynamic_tags [description]
+	 *
 	 * @return [type]               [description]
 	 */
 	public function register_elementor_tags( $dynamic_tags ) {
@@ -57,10 +58,11 @@ class Manager {
 	 */
 	public function apply_macros( $string = null ) {
 
-		return preg_replace_callback( '/%(.*?)%/', function( $matches ) {
+		return preg_replace_callback( '/%(.*?)%/', function ( $matches ) {
 			switch ( $matches[1] ) {
 				case 'gateway_amount':
 					$amount = ! empty( $this->data['amount'] ) ? $this->data['amount'] : false;
+
 					return ! empty( $amount ) ? $amount['value'] . ' ' . $amount['currency_code'] : '';
 
 				case 'gateway_status':
@@ -68,6 +70,7 @@ class Manager {
 
 				default:
 					$form_data = ! empty( $this->data['form_data'] ) ? $this->data['form_data'] : array();
+
 					return ! empty( $form_data[ $matches[1] ] ) ? $form_data[ $matches[1] ] : '';
 			}
 
@@ -115,8 +118,9 @@ class Manager {
 
 		$form_id = $this->data['form_id'];
 
-		add_filter( 'jet-engine/forms/pre-render/' . $form_id, function( $res ) use ( $form_id ) {
+		add_filter( 'jet-engine/forms/pre-render/' . $form_id, function ( $res ) use ( $form_id ) {
 			echo $this->apply_macros( $this->message, $form_id );
+
 			return true;
 		} );
 	}
@@ -136,6 +140,7 @@ class Manager {
 	 *
 	 * @param  [type] $post_id [description]
 	 * @param  [type] $metabox [description]
+	 *
 	 * @return [type]          [description]
 	 */
 	public function render_meta_box( $post_id, $metabox ) {
@@ -149,7 +154,8 @@ class Manager {
 	 * Iterate array data to show in meta box
 	 *
 	 * @param  [type] $data [description]
-	 * @param  string $tag  [description]
+	 * @param string $tag [description]
+	 *
 	 * @return [type]       [description]
 	 */
 	public function iterate_data( $data, $tag = 'tr' ) {
@@ -177,8 +183,9 @@ class Manager {
 			echo '</' . $title . '>';
 			echo '<' . $val . '>';
 			if ( ! is_array( $value ) ) {
-				if ( 'form_id' )
-				echo $value;
+				if ( 'form_id' ) {
+					echo $value;
+				}
 			} else {
 				$this->iterate_data( $value, 'div' );
 			}
@@ -188,15 +195,6 @@ class Manager {
 		}
 	}
 
-	/**
-	 * Save gateways related meta
-	 *
-	 * @return [type] [description]
-	 */
-	public function save_gateways_meta( $post_id ) {
-		$data = isset( $_POST['_gateways'] ) ? $_POST['_gateways'] : json_encode( array() );
-		update_post_meta( $post_id, '_gateways', wp_slash( $data ) );
-	}
 
 	/**
 	 * Returns all registered gateways
@@ -207,9 +205,7 @@ class Manager {
 
 		if ( false === $this->_gateways ) {
 
-			require_once jet_engine()->modules->modules_path( 'forms/gateways/paypal.php' );
-
-			$paypal = new PayPal();
+			$paypal = new Paypal();
 
 			$this->_gateways = array(
 				$paypal->get_id = $paypal,
@@ -221,12 +217,26 @@ class Manager {
 
 	}
 
+	public function get_gateways_for_js() {
+		$result = [];
+		$gateways = $this->get_gateways();
+
+		foreach ( $gateways as $gateway ) {
+			$result[] = array(
+				'value' => $gateway->get_id(),
+				'label' => $gateway->get_name()
+			);
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Register gateways metabox
 	 *
 	 * @return [type] [description]
 	 */
-	public function register_gateways_metabox( $editor ) {
+	public function register_gateways_tabpanel_data( $editor ) {
 
 		$gateways = $this->get_gateways();
 
@@ -236,20 +246,9 @@ class Manager {
 
 		$gateways_settings = apply_filters( 'jet-engine/forms/booking/messages-settings', array(
 			'_gateways' => array(
-				'type'  => 'html',
-				'html'  => $content,
+				'type' => 'html',
+				'html' => $content,
 			)
-		) );
-
-		new \Cherry_X_Post_Meta( array(
-			'id'            => 'gatewys-settings',
-			'title'         => __( 'Gateways Settings', 'jet-engine' ),
-			'page'          => array( $editor->manager->slug() ),
-			'context'       => 'normal',
-			'priority'      => 'high',
-			'callback_args' => false,
-			'builder_cb'    => array( $editor, 'get_builder' ),
-			'fields'        => $gateways_settings,
 		) );
 
 	}
@@ -274,6 +273,7 @@ class Manager {
 	 * Returns gatewyas config for current form
 	 *
 	 * @param  [type] $post_id [description]
+	 *
 	 * @return [type]          [description]
 	 */
 	public function get_form_gateways( $post_id = null ) {
@@ -317,15 +317,16 @@ class Manager {
 	/**
 	 * Returns the instance.
 	 *
+	 * @return object
 	 * @since  1.0.0
 	 * @access public
-	 * @return object
 	 */
 	public static function instance() {
 		// If the single instance hasn't been set, set it now.
 		if ( null == self::$instance ) {
 			self::$instance = new self;
 		}
+
 		return self::$instance;
 	}
 

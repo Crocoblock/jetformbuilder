@@ -1,4 +1,5 @@
 import Tools from "../tools/tools";
+
 /**
  * Internal dependencies
  */
@@ -17,13 +18,13 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['call_webhook'] = class CallWebHookAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'call_webhook' ] = class CallWebHookAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.data 	= window.jetFormCallWebHookData;
+		this.data = window.jetFormCallWebHookData;
 	}
 
 	render() {

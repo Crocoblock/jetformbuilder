@@ -1,4 +1,5 @@
 import Tools from "../tools/tools";
+
 /**
  * Internal dependencies
  */
@@ -18,13 +19,13 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['redirect_to_page'] = class RedirectToPageAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.data 	= window.jetFormRedirectToPageData;
+		this.data = window.jetFormRedirectToPageData;
 	}
 
 	isChecked( name ) {
@@ -76,19 +77,19 @@ window.jetFormDefaultActions['redirect_to_page'] = class RedirectToPageAction ex
 				</div>
 			</BaseControl>
 			{ 'static_page' === settings.redirect_type && <BaseControl
-					label={ this.data.labels.redirect_page }
-					key="redirect_page_control"
-				>
-					<div className='redirect_page-control'>
-						<SelectControl
-							key='redirect_type'
-							value={ settings.redirect_page }
-							options={ this.data.pages }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'redirect_page' )
-							} }
-						/>
-					</div>
+				label={ this.data.labels.redirect_page }
+				key="redirect_page_control"
+			>
+				<div className='redirect_page-control'>
+					<SelectControl
+						key='redirect_type'
+						value={ settings.redirect_page }
+						options={ this.data.pages }
+						onChange={ newVal => {
+							this.onChangeSetting( newVal, 'redirect_page' )
+						} }
+					/>
+				</div>
 			</BaseControl> }
 
 			{ 'custom_url' === settings.redirect_type && <BaseControl

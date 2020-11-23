@@ -21,7 +21,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -166,7 +166,9 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 									return <div key={ 'field_' + field.name }>
 										<Button
 											isLink
-											onClick={ () => { insertMacros( field.name ) } }
+											onClick={ () => {
+												insertMacros( field.name )
+											} }
 										>{ '%' + field.name + '%' }</Button>
 									</div>;
 								} ) }
@@ -176,7 +178,9 @@ window.jetFormDefaultActions['send_email'] = class SendEmailAction extends wp.el
 									return <div key={ 'macros_' + macros }>
 										<Button
 											isLink
-											onClick={ () => { insertMacros( macros ) } }
+											onClick={ () => {
+												insertMacros( macros )
+											} }
 										>{ '%' + macros + '%' }</Button>
 									</div>;
 								} ) }

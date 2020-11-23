@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
@@ -41,17 +42,18 @@ class Plugin {
 	 *
 	 * Ensures only one instance of the plugin class is loaded or can be loaded.
 	 *
+	 * @return Plugin An instance of the class.
 	 * @since 1.0.0
 	 * @access public
 	 * @static
 	 *
-	 * @return Plugin An instance of the class.
 	 */
 	public static function instance() {
 
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
 		}
+
 		return self::$instance;
 	}
 
@@ -74,32 +76,33 @@ class Plugin {
 		$this->blocks       = new Blocks\Manager();
 		$this->actions      = new Actions\Manager();
 		$this->form         = new Form_Manager();
-        $this->form_handler = new Form_Handler();
-        $this->captcha      = new Forms_Captcha();
+		$this->form_handler = new Form_Handler();
+		$this->captcha      = new Forms_Captcha();
 
-        File_Upload::instance();
+		File_Upload::instance();
 
 		if ( is_admin() ) {
-		    $this->editor = new Admin\Editor();
+			$this->editor = new Admin\Editor();
 		}
 	}
 
 	/**
-	* Returns url to file or dir inside plugin folder
-	*
-	* @param  string $path Path inside plugin dir.
-	* @return string
-	*/
-   public function plugin_url( $path = null ) {
-	   return JET_FORM_BUILDER_URL . $path;
-   }
+	 * Returns url to file or dir inside plugin folder
+	 *
+	 * @param string $path Path inside plugin dir.
+	 *
+	 * @return string
+	 */
+	public function plugin_url( $path = null ) {
+		return JET_FORM_BUILDER_URL . $path;
+	}
 
-   /**
-	* Returns plugin version
-    */
-   public function get_version() {
-	   return JET_FORM_BUILDER_VERSION;
-   }
+	/**
+	 * Returns plugin version
+	 */
+	public function get_version() {
+		return JET_FORM_BUILDER_VERSION;
+	}
 
 	/**
 	 * Plugin constructor.

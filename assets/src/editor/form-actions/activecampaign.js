@@ -1,6 +1,7 @@
 import Tools from "../tools/tools";
 import * as fieldsManager from "../tools/form-fields-manager";
 import IntegrationComponent from "./integration-component";
+
 /**
  * Internal dependencies
  */
@@ -21,7 +22,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction extends IntegrationComponent {
+window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
@@ -54,16 +55,16 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 
 		jQuery.getJSON( url )
-			.success( function( data ) {
+			.success( function ( data ) {
 				if ( undefined !== data.result_code && data.result_code ) {
 
 					for ( var prop in data ) {
-						if ( undefined === data[prop].id ) {
+						if ( undefined === data[ prop ].id ) {
 							continue;
 						}
 						lists.push( {
-							value: data[prop].id,
-							label: data[prop].name
+							value: data[ prop ].id,
+							label: data[ prop ].name
 						} );
 					}
 
@@ -75,7 +76,7 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 				}
 				self.state.requestProcessing = false;
 			} )
-			.error( function() {
+			.error( function () {
 				self.onChangeSetting( false, 'isValidAPI' );
 				self.state.requestProcessing = false;
 			} );
@@ -99,24 +100,23 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
+		const options = Object.entries( entries ).map( ( [value, label] ) => {
 			return { value, label };
 		} );
 
-		return isNeedPlaceholder ? [ placeholder, ...options ] : options ;
+		return isNeedPlaceholder ? [placeholder, ...options] : options;
 	}
 
 
-
 	render() {
-		const settings 	= this.props.settings;
-		const fields	= Object.entries( this.data.activecampaign_fields );
+		const settings = this.props.settings;
+		const fields = Object.entries( this.data.activecampaign_fields );
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="activecampaign">
 			<BaseControl
 				label={ this.data.labels.api_key }
-				key={'activecampaign_input_key'}
+				key={ 'activecampaign_input_key' }
 			>
 				<div>
 					<div className='input_with_button'>
@@ -135,7 +135,8 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 							} }
 						/>
 					</div>
-					<div>{ this.data.help.api_key_link_prefix } <a href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
+					<div>{ this.data.help.api_key_link_prefix } <a
+						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
 					{ ( settings.api_key && settings.api_url ) && <Button
 						key={ 'validate_api_key' }
 						isPrimary
@@ -149,7 +150,7 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
 					label={ this.data.labels.list_id }
-					key={'activecampaign_select_lists'}
+					key={ 'activecampaign_select_lists' }
 				>
 					<div>
 						<SelectControl
@@ -173,7 +174,7 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 
 				<BaseControl
 					label={ this.data.labels.tags }
-					key={'activecampaign_tags'}
+					key={ 'activecampaign_tags' }
 				>
 					<div>
 						<TextControl
@@ -193,7 +194,7 @@ window.jetFormDefaultActions['active_campaign'] = class ActiveCampaignAction ext
 					key='activecampaign_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [ fieldName, fieldLabel ], index ) => {
+						{ fields.map( ( [fieldName, fieldLabel], index ) => {
 
 							return <div
 								className="jet-user-meta__row"

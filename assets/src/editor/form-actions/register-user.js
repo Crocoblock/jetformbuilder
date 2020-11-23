@@ -3,6 +3,7 @@ import ActionMessages from "../meta/action-messages";
 import BaseActionComponent from "./base-action-component";
 
 import * as fieldsManager from '../tools/form-fields-manager';
+
 /**
  * Internal dependencies
  */
@@ -21,7 +22,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends BaseActionComponent {
+window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction extends BaseActionComponent {
 
 	constructor( props ) {
 		super( props );
@@ -45,7 +46,7 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 				key="user_fields_map"
 			>
 				<div className="jet-user-fields-map__list">
-					{ this.userFields.map( ( [ value, label ], index ) => {
+					{ this.userFields.map( ( [value, label], index ) => {
 
 						return <div
 							className="jet-fields-map__row"
@@ -88,21 +89,21 @@ window.jetFormDefaultActions['register_user'] = class RegisterUserAction extends
 				key='user_meta_list'
 			>
 				<div className='jet-user-meta-rows'>
-				{ this.fields.map( ( { name }, index ) => {
-					return <div
-						className="jet-user-meta__row"
-						key={ 'user_meta_' + name + index }
-					>
-						<TextControl
-							key={ name + index }
-							label={ name }
-							value={ this.getFieldMeta( name ) }
-							onChange={ newVal => {
-								this.onChangeMetaFieldMap( newVal, name )
-							} }
-						/>
-					</div>;
-				} ) }
+					{ this.fields.map( ( { name }, index ) => {
+						return <div
+							className="jet-user-meta__row"
+							key={ 'user_meta_' + name + index }
+						>
+							<TextControl
+								key={ name + index }
+								label={ name }
+								value={ this.getFieldMeta( name ) }
+								onChange={ newVal => {
+									this.onChangeMetaFieldMap( newVal, name )
+								} }
+							/>
+						</div>;
+					} ) }
 				</div>
 			</BaseControl>
 			<BaseControl

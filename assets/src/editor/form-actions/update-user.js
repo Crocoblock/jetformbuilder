@@ -1,6 +1,7 @@
 import Tools from "../tools/tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
 import ActionMessages from "../meta/action-messages";
+
 /**
  * Internal dependencies
  */
@@ -19,7 +20,7 @@ const {
 
 window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 
-window.jetFormDefaultActions['update_user'] = class UpdateUserAction extends wp.element.Component {
+window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -36,10 +37,10 @@ window.jetFormDefaultActions['update_user'] = class UpdateUserAction extends wp.
 	}
 
 	getUserFieldsList() {
-		let formFieldsList = [ {
+		let formFieldsList = [{
 			value: '',
-			label: __('Select user property...')
-		} ];
+			label: __( 'Select user property...' )
+		}];
 
 		this.data.userFields.forEach( field => {
 

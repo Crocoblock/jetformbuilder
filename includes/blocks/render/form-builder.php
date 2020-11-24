@@ -22,23 +22,24 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Builder {
 
-    use Attributes_Trait;
+	use Attributes_Trait;
 
-    use Get_Template_Trait;
+	use Get_Template_Trait;
 
 
-    public $form_id;
-    public $post;
-    public $args = array();
+	public $form_id;
+	public $post;
+	public $args = array();
 
-    private $blocks;
+	private $blocks;
 
-    /**
-     * Constructor for the class
-     * @param null $form_id
-     * @param bool $post
-     * @param array $args
-     */
+	/**
+	 * Constructor for the class
+	 *
+	 * @param null $form_id
+	 * @param bool $post
+	 * @param array $args
+	 */
 	function __construct( $form_id = null, $post = false, $args = array() ) {
 
 		if ( ! $form_id ) {
@@ -55,10 +56,10 @@ class Form_Builder {
 		) );
 
 		if ( empty( $post ) ) {
-            $this->post = get_post();
+			$this->post = get_post();
 		}
 
-        $this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
+		$this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
 	}
 
 
@@ -99,22 +100,22 @@ class Form_Builder {
 
 	}
 
-    /**
-     * @return mixed|void
-     */
-    public function pre_render() {
+	/**
+	 * @return mixed|void
+	 */
+	public function pre_render() {
 		return apply_filters( 'jet-form-builder/pre-render/' . $this->form_id, false );
 	}
 
 
-    /**
-     * Open form wrapper
-     *
-     * @return string [type] [description]
-     */
-    public function start_form() {
+	/**
+	 * Open form wrapper
+	 *
+	 * @return string [type] [description]
+	 */
+	public function start_form() {
 
-        $start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
+		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
 		$this->add_attribute( 'class', 'jet-form' );
 		$this->add_attribute( 'class', 'layout-' . $this->args['fields_layout'] );
@@ -127,77 +128,81 @@ class Form_Builder {
 		include $this->get_global_template( 'common/start-form.php' );
 		$start_form .= ob_get_clean();
 
-        $start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );
+		$start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );
 
-        return $start_form;
+		return $start_form;
 	}
 
-    /**
-     * Close form wrapper
-     *
-     * @return string [type] [description]
-     */
-    public function end_form() {
+	/**
+	 * Close form wrapper
+	 *
+	 * @return string [type] [description]
+	 */
+	public function end_form() {
 
-        $end_form = apply_filters( 'jet-form-builder/before-end-form', '', $this );
-        $form_id = $this->form_id;
+		$end_form = apply_filters( 'jet-form-builder/before-end-form', '', $this );
+		$form_id  = $this->form_id;
 
-        ob_start();
+		ob_start();
 
-        if ( Plugin::instance()->captcha ) {
-            Plugin::instance()->captcha->render( $this->form_id );
-        }
+		if ( Plugin::instance()->captcha ) {
+			Plugin::instance()->captcha->render( $this->form_id );
+		}
 
-        echo Live_Form::instance()->maybe_end_page( true );
+		echo Live_Form::instance()->maybe_end_page( true );
 
-        include $this->get_global_template( 'common/end-form.php' );
+		include $this->get_global_template( 'common/end-form.php' );
 
-        $end_form .= ob_get_clean();
+		$end_form .= ob_get_clean();
 
-        $end_form .= apply_filters( 'jet-form-builder/after-end-form', '', $this );
-        return $end_form;
-    }
+		$end_form .= apply_filters( 'jet-form-builder/after-end-form', '', $this );
+
+		return $end_form;
+	}
 
 
-    /**
-     * Render from HTML
-     * @param bool $echo
-     * @return false|string [type] [description]
-     */
+	/**
+	 * Render from HTML
+	 *
+	 * @param bool $echo
+	 *
+	 * @return false|string [type] [description]
+	 */
 	public function render_form( $echo = true ) {
 
 		if ( $this->pre_render() ) {
-			return false;
+			return;
 		}
 
-        if ( ! $this->preset()->sanitize_source() ) {
-            echo 'You are not permitted to submit this form!';
-            return;
-        }
+		if ( ! $this->preset()->sanitize_source() ) {
+			echo 'You are not permitted to submit this form!';
 
-        $form = $this->start_form();
+			return;
+		}
 
-        Live_Form::instance()->set_form_id( $this->form_id )->setup_fields( $this->blocks );
+		$form = $this->start_form();
 
-        $form .= Live_Form::force_render_field( 'hidden-field',
-            array(
-                'field_value'   => $this->form_id,
-                'name'          => '_jet_engine_booking_form_id',
-            )
-        );
+		Live_Form::instance()->set_form_id( $this->form_id )->setup_fields( $this->blocks );
 
-        $form .= Live_Form::force_render_field( 'hidden-field',
-            array(
-                'field_value'   => $this->get_form_refer_url(),
-                'name'          => '_jet_engine_refer',
-            )
-        );
+		$form .= Live_Form::force_render_field( 'hidden-field',
+			array(
+				'field_value' => $this->form_id,
+				'name'        => '_jet_engine_booking_form_id',
+			)
+		);
 
-        foreach ( $this->blocks as $block ) {
-            $form .= render_block( $block );
-        }
+		$form .= Live_Form::force_render_field( 'hidden-field',
+			array(
+				'field_value' => $this->get_form_refer_url(),
+				'name'        => '_jet_engine_refer',
+			)
+		);
 
-        $form .= $this->end_form();
+		foreach ( $this->blocks as $block ) {
+			$form .= render_block( $block );
+		}
+
+		$form .= $this->end_form();
 
 		if ( $echo ) {
 			echo $form;
@@ -208,10 +213,10 @@ class Form_Builder {
 	}
 
 	public function preset() {
-	    Form_Preset::instance()->set_form_id( $this->form_id );
+		Form_Preset::instance()->set_form_id( $this->form_id );
 
-	    return Form_Preset::instance();
-    }
+		return Form_Preset::instance();
+	}
 
 }
 

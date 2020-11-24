@@ -2,7 +2,7 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-class Manager {
+class Gateway_Manager {
 
 	/**
 	 * A reference to an instance of this class.
@@ -34,22 +34,9 @@ class Manager {
 
 		add_action( 'add_meta_boxes', array( $this, 'maybe_register_gateway_meta' ) );
 
-		add_action( 'jet-engine/elementor-views/dynamic-tags/register', array( $this, 'register_elementor_tags' ) );
-		add_filter( 'jet-engine/forms/handler/has-gateways', array( $this, 'check_form_gateways' ), 10, 2 );
-
+		//add_filter( 'jet-engine/forms/handler/has-gateways', array( $this, 'check_form_gateways' ), 10, 2 );
 	}
 
-	/**
-	 * Register new payment-related dynamic tags
-	 *
-	 * @param  [type] $dynamic_tags [description]
-	 *
-	 * @return [type]               [description]
-	 */
-	public function register_elementor_tags( $dynamic_tags ) {
-		require_once jet_engine()->modules->modules_path( 'forms/gateways/elementor-tag.php' );
-		$dynamic_tags->register_tag( '\Jet_Engine\Gateways\Message_Tag' );
-	}
 
 	/**
 	 * Apply macros in string
@@ -118,8 +105,8 @@ class Manager {
 
 		$form_id = $this->data['form_id'];
 
-		add_filter( 'jet-engine/forms/pre-render/' . $form_id, function ( $res ) use ( $form_id ) {
-			echo $this->apply_macros( $this->message, $form_id );
+		add_filter( 'jet-form-builder/pre-render/' . $form_id, function ( $res ) use ( $form_id ) {
+			echo $this->apply_macros( $this->message );
 
 			return true;
 		} );
@@ -131,7 +118,7 @@ class Manager {
 	 * @return [type] [description]
 	 */
 	public function catch_payment_result() {
-		do_action( 'jet-engine/forms/gateways/success/' . $_GET['jet_gateway'] );
+		do_action( 'jet-form-builder/gateways/success/' . $_GET['jet_gateway'] );
 		$token = $_GET['token'];
 	}
 
@@ -218,7 +205,7 @@ class Manager {
 	}
 
 	public function get_gateways_for_js() {
-		$result = [];
+		$result   = [];
 		$gateways = $this->get_gateways();
 
 		foreach ( $gateways as $gateway ) {
@@ -266,34 +253,6 @@ class Manager {
 		wp_localize_script( 'jet-engine-forms-gateways', 'JetEngineGatewaysSettings', array(
 			'gateways' => $this->get_form_gateways(),
 		) );
-
-	}
-
-	/**
-	 * Returns gatewyas config for current form
-	 *
-	 * @param  [type] $post_id [description]
-	 *
-	 * @return [type]          [description]
-	 */
-	public function get_form_gateways( $post_id = null ) {
-
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-
-		$default = array(
-			'gateway'   => 'none',
-			'post_type' => '',
-		);
-
-		$meta = get_post_meta( $post_id, '_gateways', true );
-
-		if ( ! $meta || ! is_array( $meta ) ) {
-			return $default;
-		} else {
-			return array_merge( $default, $meta );
-		}
 
 	}
 

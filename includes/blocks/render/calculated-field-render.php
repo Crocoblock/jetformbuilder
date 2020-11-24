@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
@@ -30,12 +31,13 @@ class Calculated_Field_Render extends Base {
 
 		$formula = preg_replace_callback(
 			'/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
-			function( $matches ) use ( &$listen_fields ) {
+			function ( $matches ) use ( &$listen_fields ) {
 
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
 
 						$listen_fields[] = $matches[2];
+
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
@@ -44,9 +46,9 @@ class Calculated_Field_Render extends Base {
 
 					default:
 						$macros_name = $matches[1];
-						$field_key   = isset( $matches[2] ) ? $matches[2] : '' ;
+						$field_key   = isset( $matches[2] ) ? $matches[2] : '';
 
-						if( $field_key ){
+						if ( $field_key ) {
 							$listen_fields[] = $field_key;
 						}
 

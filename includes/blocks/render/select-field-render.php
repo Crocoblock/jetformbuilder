@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
@@ -11,11 +12,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Select_Field_Render extends Base_Select_Radio_Check {
 
-    public function __construct( $attributes, $content = null ) {
-        parent::__construct( $attributes, $content );
+	public function __construct( $attributes, $content = null ) {
+		parent::__construct( $attributes, $content );
 
-        $this->set_options();
-    }
+		$this->set_options();
+	}
 
 	public function get_name() {
 		return 'select-field';

@@ -329,12 +329,13 @@ trait Base_Select_Radio_Check {
 
 		} else {
 
-			$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
+			/*$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
 
 			if ( $key ) {
 				$options = get_post_meta( $this->post->ID, $key, true );
 				$options = $this->maybe_parse_repeater_options( $options );
-			}
+			}*/
+			$options = array();
 
 		}
 

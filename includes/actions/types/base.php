@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
@@ -14,71 +15,74 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
-    use Messages_Helper_Trait;
+	use Messages_Helper_Trait;
 
-    /**
-     * Stores the action settings
-     * from the form meta field
-     *
-     * @var array
-     */
-    public $settings = array();
+	/**
+	 * Stores the action settings
+	 * from the form meta field
+	 *
+	 * @var array
+	 */
+	public $settings = array();
 
-    public function __construct() {
-        $this->set_action_messages();
-    }
+	public function __construct() {
+		$this->set_action_messages();
+	}
 
 	abstract public function get_name();
 
 	abstract public function get_id();
 
-    /**
-     * @param $request array - Form data
-     * @param $handler Action_Handler
-     * @return mixed
-     */
+	/**
+	 * @param $request array - Form data
+	 * @param $handler Action_Handler
+	 *
+	 * @return mixed
+	 */
 	abstract public function do_action( array $request, Action_Handler $handler );
 
 	public function messages() {
-	    return array();
-    }
+		return array();
+	}
 
 	public function set_action_messages() {
 
-        $this->messages = apply_filters(
-            'jet-form-builder/message-types/' . $this->get_id(),
-            $this->messages()
-        );
-    }
+		$this->messages = apply_filters(
+			'jet-form-builder/message-types/' . $this->get_id(),
+			$this->messages()
+		);
+	}
 
-    /**
-     * Register custom action data
-     *
-     * @param $editor
-     * @param $handle
-     * @return void [type] [description]
-     */
-	public function action_data( $editor, $handle ) {}
+	/**
+	 * Register custom action data
+	 *
+	 * @param $editor
+	 * @param $handle
+	 *
+	 * @return void [type] [description]
+	 */
+	public function action_data( $editor, $handle ) {
+	}
 
-    /**
-     * @return bool
-     */
-    public static function can_run() {
-        return true;
-    }
+	/**
+	 * @return bool
+	 */
+	public static function can_run() {
+		return true;
+	}
 
-    public function default_settings() {
-        return array();
-    }
+	public function default_settings() {
+		return array();
+	}
 
 
-    public function is_repeater_val( $value ) {
-        if ( is_array( $value ) && ! empty( $value ) ) {
-            return is_array( $value[0] );
-        } else {
-            return false;
-        }
-    }
+	public function is_repeater_val( $value ) {
+		if ( is_array( $value ) && ! empty( $value ) ) {
+			return is_array( $value[0] );
+		} else {
+			return false;
+		}
+	}
 
 
 }

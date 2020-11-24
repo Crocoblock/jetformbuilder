@@ -2,7 +2,7 @@
 
 namespace Jet_Form_Builder\Admin;
 
-use Jet_Form_Builder\Gateways\Manager;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
 /**
@@ -419,7 +419,7 @@ class Editor {
 
 		if ( $result['allowed'] ) {
 
-			$result['list']     = Manager::instance()->get_gateways_for_js();
+			$result['list']     = Gateway_Manager::instance()->get_gateways_for_js();
 			$result['messages'] = array(
 				'success' => 'Payment success message',
 				'failed'  => 'Payment failed message',
@@ -476,14 +476,14 @@ class Editor {
 		?>
         <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
         <script>
-			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
-				window.JetFormEditor(
-					'<?php echo esc_js( $input_name ); ?>',
-					'<?php echo esc_js( $input_name ); ?>',
-					'<?php echo html_entity_decode( esc_js( $content ) ); ?>',
-					'<?php echo esc_js( $form_name ); ?>'
-				);
-			} );
+            document.addEventListener('jet-form-builder-initialized', function (event) {
+                window.JetFormEditor(
+                    '<?php echo esc_js( $input_name ); ?>',
+                    '<?php echo esc_js( $input_name ); ?>',
+                    '<?php echo html_entity_decode( esc_js( $content ) ); ?>',
+                    '<?php echo esc_js( $form_name ); ?>'
+                );
+            });
         </script>
 		<?php
 	}

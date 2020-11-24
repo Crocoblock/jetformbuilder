@@ -18,6 +18,7 @@ function Gateways() {
 		RadioControl,
 		Button,
 		Modal,
+		Text,
 	} = wp.components;
 
 	const {
@@ -189,59 +190,40 @@ function Gateways() {
 						>
 							<div>
 								<div className="jet-form-edit-modal__content">
-									<BaseControl
-										label={ __( 'If you want to process any payments on this form submission, please select payment gateway', 'jet-form-builder' ) }
-										key="check_gateway_type_control"
-									>
-										<div>
-											<RadioControl
-												key={ 'gateways_radio_control' }
-												selected={ args.gateway }
-												options={ [
-													{ label: 'None', value: 'none' },
-													...gatewaysData.list
-												] }
-												onChange={ newVal => {
-													setArgs( ( prevArgs ) => ( {
-														...prevArgs,
-														gateway: newVal
-													} ) );
-												} }
-											/>
-										</div>
-
-									</BaseControl>
+                                    <RadioControl
+                                        label={ __( 'If you want to process any payments on this form submission, please select payment gateway', 'jet-form-builder' ) }
+                                        key={ 'gateways_radio_control' }
+                                        selected={ args.gateway }
+                                        options={ [
+                                            { label: 'None', value: 'none' },
+                                            ...gatewaysData.list
+                                        ] }
+                                        onChange={ newVal => {
+                                            setArgs( ( prevArgs ) => ( {
+                                                ...prevArgs,
+                                                gateway: newVal
+                                            } ) );
+                                        } }
+                                    />
 									{ 'paypal' === args.gateway && <React.Fragment>
-										<BaseControl
-											label={ __( 'Client ID', 'jet-form-builder' ) }
-											key="client_id_base_control"
-										>
-											<TextControl
-												key='paypal_client_id_setting'
-												value={ getPayPalSetting( 'client_id' ) }
-												onChange={ newVal => setPayPalSetting( 'client_id', newVal ) }
-											/>
-										</BaseControl>
-										<BaseControl
-											label={ __( 'Secret Key', 'jet-form-builder' ) }
-											key="secret_key_base_control"
-										>
-											<TextControl
-												key='paypal_secret_setting'
-												value={ getPayPalSetting( 'secret' ) }
-												onChange={ newVal => setPayPalSetting( 'secret', newVal ) }
-											/>
-										</BaseControl>
-										<BaseControl
-											label={ __( 'Currency Code', 'jet-form-builder' ) }
-											key="currency_code_base_control"
-										>
-											<TextControl
-												key='paypal_currency_code_setting'
-												value={ getPayPalSetting( 'currency' ) }
-												onChange={ newVal => setPayPalSetting( 'currency', newVal ) }
-											/>
-										</BaseControl>
+                                        <TextControl
+                                            label={ __( 'Client ID', 'jet-form-builder' ) }
+                                            key='paypal_client_id_setting'
+                                            value={ getPayPalSetting( 'client_id' ) }
+                                            onChange={ newVal => setPayPalSetting( 'client_id', newVal ) }
+                                        />
+                                        <TextControl
+                                            label={ __( 'Secret Key', 'jet-form-builder' ) }
+                                            key='paypal_secret_setting'
+                                            value={ getPayPalSetting( 'secret' ) }
+                                            onChange={ newVal => setPayPalSetting( 'secret', newVal ) }
+                                        />
+                                        <TextControl
+                                            label={ __( 'Currency Code', 'jet-form-builder' ) }
+                                            key='paypal_currency_code_setting'
+                                            value={ getPayPalSetting( 'currency' ) }
+                                            onChange={ newVal => setPayPalSetting( 'currency', newVal ) }
+                                        />
 									</React.Fragment> }
 									<BaseControl
 										label={ __( 'Before payment processed:', 'jet-form-builder' ) }
@@ -300,48 +282,54 @@ function Gateways() {
 											} ) }
 										</div>
 									</BaseControl>
+
+                                    <SelectControl
+                                        label={ __( 'Price/amount field', 'jet-form-builder' ) }
+                                        key={ 'form_fields_price_field' }
+                                        value={ args.price_field }
+                                        onChange={ newVal => {
+                                            setArgs( ( prevArgs ) => ( {
+                                                ...prevArgs,
+                                                price_field: newVal
+                                            } ) );
+                                        } }
+                                        options={ formFields }
+                                    />
 									<BaseControl
-										label={ __( 'Price/amount field', 'jet-form-builder' ) }
-										key="price_field_base_control"
+										key="payment_result_macros_base_control"
 									>
-										<div>
-											<SelectControl
-												key={ 'form_fields_price_field' }
-												value={ args.price_field }
-												onChange={ newVal => {
-													setArgs( ( prevArgs ) => ( {
-														...prevArgs,
-														price_field: newVal
-													} ) );
-												} }
-												options={ formFields }
-											/>
-										</div>
+										<h4>
+											{ __( 'Available macros list: ', 'jet-form-builder' ) }<br/>
+											{ __( '%gateway_amount% - payment amount returned from gateway template;', 'jet-form-builder' ) }<br/>
+											{ __( '%gateway_status% - payemnt status returned from payment gateway;', 'jet-form-builder' ) }<br/>
+											{ __( '%field_name% - replace "field_name" with any field name from the form;', 'jet-form-builder' ) }<br/>
+										</h4>
 									</BaseControl>
-									<BaseControl
-										label={ __( 'Payment success message', 'jet-form-builder' ) }
-										key="payment_result_success_base_control"
-									>
-										<div>
-											<TextareaControl
-												key="payment_result_message_success"
-												value={ getResultMessage( 'success' ) }
-												onChange={ newValue => setResultMessage( 'success', newValue ) }
-											/>
-										</div>
-									</BaseControl>
-									<BaseControl
-										label={ __( 'Payment failed message', 'jet-form-builder' ) }
-										key="payment_result_failed_base_control"
-									>
-										<div>
-											<TextareaControl
-												key="payment_result_message_failed"
-												value={ getResultMessage( 'failed' ) }
-												onChange={ newValue => setResultMessage( 'failed', newValue ) }
-											/>
-										</div>
-									</BaseControl>
+
+                                    <TextareaControl
+                                        key="payment_result_message_success"
+                                        label={ __( 'Payment success message', 'jet-form-builder' ) }
+                                        value={ getResultMessage( 'success' ) }
+                                        onChange={ newValue => setResultMessage( 'success', newValue ) }
+                                    />
+                                    <TextareaControl
+                                        key="payment_result_message_failed"
+                                        label={ __( 'Payment failed message', 'jet-form-builder' ) }
+                                        value={ getResultMessage( 'failed' ) }
+                                        onChange={ newValue => setResultMessage( 'failed', newValue ) }
+                                    />
+                                    { activeActions.find( action => action.type === 'redirect_to_page' ) && <CheckboxControl
+                                        key="checkbox_block_redirect_to_page"
+                                        checked={ args.use_success_redirect }
+                                        label={ __( 'Use redirect URL from Redirect notification', 'jet-form-builder' ) }
+                                        onChange={ value => {
+                                            setArgs( ( prevArgs ) => ( {
+                                                ...prevArgs,
+                                                use_success_redirect: value
+                                            } ) );
+                                        } }
+                                    /> }
+
 								</div>
 							</div>
 						</Modal>

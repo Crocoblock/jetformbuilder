@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.

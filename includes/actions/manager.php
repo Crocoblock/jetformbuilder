@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
@@ -26,19 +27,19 @@ class Manager {
 	 */
 	public function register_action_types() {
 
-	    $manager = new Action_Compatibility(
-	        'Send_Email',
-            'Insert_Post',
-            'Register_User',
-            'Update_User',
-            'Update_Options',
-            'Call_Hook',
-            'Call_Webhook',
-            'Redirect_To_Page',
-            'MailChimp',
-            'Getresponse',
-            'Active_Campaign'
-        );
+		$manager = new Action_Compatibility(
+			'Send_Email',
+			'Insert_Post',
+			'Register_User',
+			'Update_User',
+			'Update_Options',
+			'Call_Hook',
+			'Call_Webhook',
+			'Redirect_To_Page',
+			'MailChimp',
+			'Getresponse',
+			'Active_Campaign'
+		);
 
 		foreach ( $manager->get_actions() as $action ) {
 			$this->register_action_type( $action );
@@ -49,19 +50,21 @@ class Manager {
 
 	/**
 	 * Register new action type
+	 *
 	 * @param  [type] $type [description]
+	 *
 	 * @return [type]       [description]
 	 */
 	public function register_action_type( $type ) {
 		$this->_types[ $type->get_id() ] = $type;
 	}
 
-    /**
-     * @return array
-     */
-    public function get_actions() {
-        return $this->_types;
-    }
+	/**
+	 * @return array
+	 */
+	public function get_actions() {
+		return $this->_types;
+	}
 
 	/**
 	 * Regsiter action types data for the editor

@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\File_Upload;
@@ -13,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Media_Field_Render extends Base {
 
-    public function get_name() {
+	public function get_name() {
 		return 'media-field';
 	}
 

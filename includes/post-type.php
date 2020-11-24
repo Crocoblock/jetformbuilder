@@ -30,7 +30,7 @@ class Post_Type {
 		/**
 		 * TODO: change FALSE to TRUE before release
 		 */
-		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', true );
+		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 	}
 
 	/**
@@ -221,6 +221,17 @@ class Post_Type {
 	 */
 	public function get_messages( $form_id ) {
 		return $this->get_form_meta( '_jf_messages', $form_id );
+	}
+
+	/**
+	 * Returns form gateways
+	 *
+	 * @param $form_id
+	 *
+	 * @return array
+	 */
+	public function get_gateways( $form_id ) {
+		return $this->get_form_meta( '_jf_gateways', $form_id );
 	}
 
 

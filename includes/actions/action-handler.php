@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
@@ -14,27 +15,28 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id             = null;
-	public $request_data        = null;
-    public $manager             = null;
+	public $form_id = null;
+	public $request_data = null;
+	public $manager = null;
 
 
-    public $form_actions        = array();
-    public $is_ajax             = false;
+	public $form_actions = array();
+	public $is_ajax = false;
 
-    /**
-     * Data for actions
-     */
-    public $size_all;
-    public $current_position;
-    public $response_data = array();
+	/**
+	 * Data for actions
+	 */
+	public $size_all;
+	public $current_position;
+	public $response_data = array();
 
 
-    /**
-     * Constructor for the class
-     * @param $form_id
-     * @param array $request_data
-     */
+	/**
+	 * Constructor for the class
+	 *
+	 * @param $form_id
+	 * @param array $request_data
+	 */
 	function __construct( $form_id, $request_data = array() ) {
 
 		$this->form_id      = $form_id;
@@ -43,41 +45,43 @@ class Action_Handler {
 		$this->set_form_actions();
 	}
 
-    /**
-     * Set form actions,
-     * which were saved in form meta
-     *
-     * @return $this
-     */
+	/**
+	 * Set form actions,
+	 * which were saved in form meta
+	 *
+	 * @return $this
+	 */
 	public function set_form_actions() {
-        $available_actions = Plugin::instance()->actions->get_actions();
+		$available_actions = Plugin::instance()->actions->get_actions();
 
-        $form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
+		$form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
 
-        foreach ( $form_actions as $form_action ) {
-            $id = $form_action['type'];
+		foreach ( $form_actions as $form_action ) {
+			$id = $form_action['type'];
 
-            if ( isset( $available_actions[ $id ] ) ) {
-                /**
-                 * Save action settings to the class field,
-                 * it allows to not send action settings
-                 * in action hook
-                 */
-                $available_actions[ $id ]->settings = $form_action['settings'];
+			if ( isset( $available_actions[ $id ] ) ) {
+				/**
+				 * Save action settings to the class field,
+				 * it allows to not send action settings
+				 * in action hook
+				 */
+				$available_actions[ $id ]->settings = $form_action['settings'];
 
-                $this->form_actions[] = $available_actions[ $id ];
-            }
-        }
-        return $this;
-    }
+				$this->form_actions[ $id ] = $available_actions[ $id ];
+			}
+		}
+
+		return $this;
+	}
 
 
-    /**
-     * Unregister notification by id
-     *
-     * @param   $id [description]
-     * @return  void [description]
-     */
+	/**
+	 * Unregister notification by id
+	 *
+	 * @param   $id [description]
+	 *
+	 * @return  void [description]
+	 */
 	public function unregister_action( $id ) {
 
 		if ( isset( $this->form_actions[ $id ] ) ) {
@@ -86,42 +90,43 @@ class Action_Handler {
 
 	}
 
-    /**
-     * Returns all registered notifications
-     *
-     * @return array [description]
-     */
+	/**
+	 * Returns all registered notifications
+	 *
+	 * @return array [description]
+	 */
 	public function get_all() {
 		return $this->form_actions;
 	}
 
-    /**
-     * Send form notifications
-     *
-     * @return array [type] [description]
-     */
+	/**
+	 * Send form notifications
+	 *
+	 * @return array [type] [description]
+	 */
 	public function do_actions() {
 
 		if ( empty( $this->form_actions ) ) {
-            throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed' );
 		}
 
 		$this->size_all = sizeof( $this->form_actions );
 
+		do_action( 'jet-form-builder/actions/before-send', $this );
+
 		foreach ( $this->form_actions as $index => $action ) {
 
-		    $this->current_position = $index;
+			$this->current_position = $index;
 			/**
 			 * Process single action
 			 */
-            $action->do_action( $this->request_data, $this );
+			$action->do_action( $this->request_data, $this );
 		}
+
+		do_action( 'jet-form-builder/actions/after-send', $this );
 
 		return $this->response_data;
 	}
-
-
-
 
 
 }

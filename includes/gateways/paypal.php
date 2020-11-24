@@ -2,21 +2,47 @@
 
 namespace Jet_Form_Builder\Gateways;
 
+use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Plugin;
+
 class Paypal {
 
-	private $client_id;
-	private $secret;
+	private $options = array();
+	private $gateways_meta;
+	private $action_handler;
+	private $price_field = false;
+	private $order_id;
+	private $price;
+	private $token;
 
 	public $data = false;
 	public $message = false;
 	public $redirect = false;
 
 	public function __construct() {
-		add_action( 'jet-engine/forms/gateways/fields', array( $this, 'editor_fields' ) );
-		add_action( 'jet-engine/forms/handler/before-send', array( $this, 'prevent_notifications' ) );
-		add_action( 'jet-engine/forms/handler/after-send', array( $this, 'process_payment' ), 10, 2 );
-		add_action( 'jet-engine/forms/gateways/success/paypal', array( $this, 'process_payment_result' ) );
+		add_action( 'jet-form-builder/actions/before-send', array( $this, 'prevent_notifications' ) );
+		add_action( 'jet-form-builder/actions/after-send', array( $this, 'process_payment' ) );
+		add_action( 'jet-form-builder/gateways/success/paypal', array( $this, 'process_payment_result' ) );
+	}
 
+	/**
+	 * Returns current gateway ID
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_id() {
+		return 'paypal';
+	}
+
+	/**
+	 * Returns current gateway name
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_name() {
+		return __( 'PayPal Checkout', 'jet-form-builder' );
 	}
 
 	/**
@@ -25,26 +51,60 @@ class Paypal {
 	 */
 	public function process_payment_result() {
 
-		$token     = $_GET['token'];
-		$data      = $this->get_form_by_payment( $token );
-		$gateways  = Manager::instance()->get_form_gateways( $data['form_id'] );
-		$client_id = ! empty( $gateways['paypal_client_id'] ) ? esc_attr( $gateways['paypal_client_id'] ) : false;
-		$secret    = ! empty( $gateways['paypal_secret'] ) ? esc_attr( $gateways['paypal_secret'] ) : false;
+		$token      = $_GET['token'];
+		$this->data = $this->get_form_by_payment( $token );
 
-		if ( ! $client_id || ! $secret ) {
+		if ( ! $this->set_gateway_data_on_result() ) {
 			return;
 		}
 
-		$this->client_id = $client_id;
-		$this->secret    = $secret;
+		$this->data['date'] = date_i18n( 'F j, Y, H:i' );
 
-		$token = $this->get_token( $this->client_id, $this->secret );
+		$this->data['gateway'] = $this->get_name();
 
+		update_post_meta( $this->data['order_id'], '_jet_gateway_data', $this->data );
+
+		$this->try_do_actions();
+	}
+
+	private function try_do_actions() {
+		$failed_statuses = array( 'VOIDED' );
+
+		Gateway_Manager::instance()->add_data( $this->data );
+
+		try {
+			if ( in_array( $this->data['status'], $failed_statuses ) ) {
+				$this->process_status( 'failed' );
+			} else {
+				$this->process_status( 'success' );
+			}
+		} catch ( Action_Exception $exception ) {
+		    //
+        }
+
+    }
+
+	private function set_gateway_data_on_result() {
+		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
+
+		try {
+			$this->set_paypal_options();
+			$this->set_token();
+			$this->set_payment_status();
+
+		} catch ( Gateway_Exception $exception ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function set_payment_status() {
 		$payment = $this->request(
-			'v2/checkout/orders/' . $data['payment_id'] . '/capture',
+			'v2/checkout/orders/' . $this->data['payment_id'] . '/capture',
 			array(),
 			null,
-			$token
+			$this->token
 		);
 
 		if ( ! $payment ) {
@@ -54,40 +114,48 @@ class Paypal {
 		$payment = json_decode( $payment, true );
 
 		if ( empty( $payment['status'] ) ) {
-			return;
+			throw new Gateway_Exception( 'Empty payment status' );
 		}
 
-		$data['status'] = $payment['status'];
+		$this->data['status'] = $payment['status'];
 
+		$this->set_payer( $payment );
+		$this->set_payment_amount( $payment );
+	}
+
+	private function set_payer( $payment ) {
 		if ( ! empty( $payment['payer'] ) ) {
-			$data['payer'] = array(
+			$this->data['payer'] = array(
 				'first_name' => $payment['payer']['name']['given_name'],
 				'last_name'  => $payment['payer']['name']['surname'],
 				'email'      => $payment['payer']['email_address'],
 			);
 		}
+	}
 
-		$data['date'] = date_i18n( 'F j, Y, H:i' );
-
+	private function set_payment_amount( $payment ) {
 		if ( ! empty( $payment['purchase_units'][0]['payments']['captures'] ) ) {
 			$payment_unit   = $payment['purchase_units'][0]['payments']['captures'][0];
-			$data['amount'] = $payment_unit['amount'];
+			$this->data['amount'] = $payment_unit['amount'];
+		}
+    }
+
+	private function set_gateway_data() {
+		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->action_handler->form_id );
+
+		try {
+			$this->set_order_id();
+			$this->is_paypal_gateway();
+			$this->set_price_field();
+			$this->set_price_from_filed();
+			$this->set_paypal_options();
+			$this->set_token();
+
+		} catch ( Gateway_Exception $exception ) {
+			return false;
 		}
 
-		$data['gateway'] = $this->get_name();
-
-		update_post_meta( $data['order_id'], '_jet_gateway_data', $data );
-
-		$failed_statuses = array( 'VOIDED' );
-
-		Manager::instance()->add_data( $data );
-
-		if ( in_array( $data['status'], $failed_statuses ) ) {
-			$this->process_status( 'failed', $data['form_id'], $gateways, $data['form_data'] );
-		} else {
-			$this->process_status( 'success', $data['form_id'], $gateways, $data['form_data'] );
-		}
-
+		return true;
 	}
 
 	/**
@@ -99,33 +167,26 @@ class Paypal {
 	 *
 	 * @return [type]           [description]
 	 */
-	public function process_status( $type = 'success', $form_id, $settings = array(), $form_data ) {
+	public function process_status( $type = 'success' ) {
 
 		$message       = ! empty( $settings[ $type . '_message' ] ) ? wp_kses_post( $settings[ $type . '_message' ] ) : null;
 		$notifications = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
 		if ( $message ) {
-			Manager::instance()->add_message( $message );
+			Gateway_Manager::instance()->add_message( $message );
 		}
 
-		do_action( 'jet-engine/forms/gateways/on-payment-' . $type, $form_id, $settings, $form_data );
+		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this->data, $settings );
 
 		if ( ! empty( $notifications ) ) {
-
-			if ( ! class_exists( '\Jet_Engine_Booking_Forms_Notifications' ) ) {
-				require_once jet_engine()->modules->modules_path( 'forms/notifications.php' );
-			}
-
-			$notifcations = new \Jet_Engine_Booking_Forms_Notifications(
-				$form_id,
-				$form_data,
-				jet_engine()->forms,
-				jet_engine()->forms->handler
+			$notifications = new Action_Handler(
+				$this->data['form_id'],
+				$this->data['form_data']
 			);
 
-			$notifcations->unregister_notification_type( 'redirect' );
+			$notifications->unregister_action( 'redirect_to_page' );
 
-			$all        = $notifcations->get_all();
+			$all        = $notifications->get_all();
 			$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
 			if ( empty( $all ) ) {
@@ -135,13 +196,12 @@ class Paypal {
 			foreach ( $all as $index => $notification ) {
 
 				if ( ! in_array( $index, $keep_these ) ) {
-					$notifcations->unregister_notification( $index );
+					$notifications->unregister_action( $index );
 				}
 
 			}
 
-			$notifcations->send();
-
+			$notifications->do_actions();
 		}
 
 	}
@@ -172,156 +232,125 @@ class Paypal {
 
 	}
 
-	/**
-	 * Gateway-specific editor fields
-	 *
-	 * @return [type] [description]
-	 */
-	public function editor_fields() {
-		?>
-        <div class="jet-engine-gateways-section" v-if="'paypal' === gateways.gateway">
-            <div class="jet-engine-gateways-section__title"><?php
-				_e( 'PayPal settings:', 'jet-engine' );
-				?></div>
-            <div class="jet-engine-gateways-row">
-                <label for="gateways_paypal_client_id" class="jet-engine-gateways-row__label"><?php
-					_e( 'Client ID', 'jet-engine' );
-					?></label>
-                <input type="text" v-model="gateways.paypal_client_id" id="gateways_paypal_client_id"
-                       name="_gateways[paypal_client_id]" placeholder="<?php _e( 'Client ID', 'jet-engine' ); ?>">
-            </div>
-            <div class="jet-engine-gateways-row">
-                <label for="gateways_paypal_secret" class="jet-engine-gateways-row__label"><?php
-					_e( 'Secret Key', 'jet-engine' );
-					?></label>
-                <input type="text" id="gateways_paypal_secret" v-model="gateways.paypal_secret"
-                       name="_gateways[paypal_secret]" placeholder="<?php _e( 'Secret', 'jet-engine' ); ?>">
-            </div>
-            <div class="jet-engine-gateways-row">
-                <label for="gateways_paypal_currency" class="jet-engine-gateways-row__label"><?php
-					_e( 'Currency Code', 'jet-engine' );
-					?></label>
-                <input type="text" v-model="gateways.paypal_currency" id="gateways_paypal_currency"
-                       name="_gateways[paypal_currency]" placeholder="<?php _e( 'Currency code', 'jet-engine' ); ?>">
-            </div>
-        </div>
-		<?php
-	}
 
 	/**
-	 * Returns current gateway ID
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_id() {
-		return 'paypal';
-	}
-
-	/**
-	 * Returns current gateway name
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_name() {
-		return __( 'PayPal Checkout', 'jet-engine' );
-	}
-
-	/**
-	 * Prevent unnecessary notifications processings before form is send.
+	 * Prevent unnecessary notifications processing before form is send.
 	 *
 	 * @param  [type] $handler [description]
 	 *
 	 * @return [type]          [description]
 	 */
-	public function prevent_notifications( $handler ) {
+	public function prevent_notifications( $action_handler ) {
 
-		$gateways = Manager::instance()->get_form_gateways( $handler->form );
+		$gateways = Plugin::instance()->post_type->get_gateways( $action_handler->form_id );
 
 		if ( empty( $gateways ) || empty( $gateways['gateway'] ) ) {
 			return;
 		}
 
-		$handler->notifcations->unregister_notification_type( 'redirect' );
+		$action_handler->unregister_action( 'redirect_to_page' );
 
-		$keep_these = ! empty( $gateways['notifications_before'] ) ? $gateways['notifications_before'] : array();
-		$all        = $handler->notifcations->get_all();
-		$keep_these = apply_filters( 'jet-engine/forms/gateways/notifications-before', $keep_these, $all );
+		$keep_these   = ! empty( $gateways['notifications_before'] ) ? $gateways['notifications_before'] : array();
+		$form_actions = $action_handler->get_all();
+		$keep_these   = apply_filters( 'jet-form-builder/gateways/notifications-before', $keep_these, $form_actions );
 
-		if ( empty( $all ) ) {
+		if ( empty( $form_actions ) ) {
 			return;
 		}
 
-		foreach ( $all as $index => $notification ) {
+		foreach ( $form_actions as $index => $action ) {
 
-			if ( 'insert_post' === $notification['type'] ) {
+			if ( 'insert_post' === $action['type'] ) {
 				continue;
 			}
 
-			if ( 'redirect' === $notification['type'] ) {
-				$this->redirect = $notification;
+			if ( 'redirect_to_page' === $action['type'] ) {
+				$this->redirect = $action;
 			}
 
 			if ( ! in_array( $index, $keep_these ) ) {
-				$handler->notifcations->unregister_notification( $index );
+				$action_handler->unregister_action( $index );
 			}
 
 		}
 
 	}
 
+
+	private function set_order_id() {
+		$response = $this->action_handler->response_data;
+		if ( ! isset( $response['inserted_post_id'] )
+		     || empty( $response['inserted_post_id'] ) ) {
+
+			throw new Gateway_Exception( 'There is not inserted_post_id' );
+		}
+		$this->order_id = $response['inserted_post_id'];
+	}
+
+	private function is_paypal_gateway() {
+		if ( ! isset( $this->gateways_meta['gateway'] ) ||
+		     empty( $this->gateways_meta['gateway'] ) ||
+		     $this->get_id() !== $this->gateways_meta['gateway'] ) {
+
+			throw new Gateway_Exception( 'Invalid gateway' );
+		}
+	}
+
+	private function set_price_field() {
+		if ( isset( $this->gateways_meta['price_field'] ) && ! empty( $this->gateways_meta['price_field'] ) ) {
+			$this->price_field = esc_attr( $this->gateways_meta['price_field'] );
+		}
+
+		$this->price_field = apply_filters( 'jet-form-builder/gateways/price-field', $this->price_field, $this->action_handler );
+
+		if ( ! $this->price_field ) {
+			throw new Gateway_Exception( 'Invalid price field' );
+		}
+	}
+
+	private function set_price_from_filed() {
+		if ( isset( $this->action_handler->response_data[ $this->price_field ] ) ) {
+			$this->price = $this->action_handler->response_data[ $this->price_field ];
+		}
+
+		if ( ! $this->price ) {
+			throw new Gateway_Exception( 'Empty price field' );
+		}
+	}
+
+	private function set_paypal_options() {
+		$gateway = $this->gateways_meta['paypal'];
+
+		foreach ( [ 'client_id', 'secret', 'currency' ] as $option ) {
+			if ( ! isset( $gateway[ $option ] ) || empty( $gateway[ $option ] ) ) {
+				throw new Gateway_Exception( 'Invalid gateway options' );
+			}
+			$this->options[ $option ] = esc_attr( $gateway[ $option ] );
+		}
+	}
+
+	private function set_token() {
+		$this->token = $this->get_token(
+			$this->options['client_id'],
+			$this->options['secret']
+		);
+
+		if ( ! $this->token ) {
+			throw new Gateway_Exception( 'Invalid token' );
+		}
+	}
+
 	/**
 	 * Process gateway payment
 	 *
-	 * @return [type] [description]
+	 * @param $action_handler
+	 *
+	 * @return void [type] [description]
 	 */
-	public function process_payment( $handler, $success ) {
+	public function process_payment( $action_handler ) {
+		$this->action_handler = $action_handler;
 
-		if ( ! $success ) {
-			return;
-		}
-
-		$gateways = Manager::instance()->get_form_gateways( $handler->form );
-
-		if ( empty( $gateways ) || empty( $gateways['gateway'] ) ) {
-			return;
-		}
-
-		$price_field = ! empty( $gateways['price_field'] ) ? esc_attr( $gateways['price_field'] ) : false;
-		$price_field = apply_filters( 'jet-engine/forms/gateways/price-field', $price_field, $handler );
-
-		if ( ! $price_field ) {
-			return;
-		}
-
-		if ( empty( $handler->form_data['inserted_post_id'] ) ) {
-			return;
-		}
-
-		$order_id = $handler->form_data['inserted_post_id'];
-		$price    = ! empty( $handler->form_data[ $price_field ] ) ? $handler->form_data[ $price_field ] : false;
-
-		if ( ! $order_id || ! $price ) {
-			return;
-		}
-
-		if ( $this->get_id() !== $gateways['gateway'] ) {
-			return;
-		}
-
-		$client_id = ! empty( $gateways['paypal_client_id'] ) ? esc_attr( $gateways['paypal_client_id'] ) : false;
-		$secret    = ! empty( $gateways['paypal_secret'] ) ? esc_attr( $gateways['paypal_secret'] ) : false;
-		$currency  = ! empty( $gateways['paypal_currency'] ) ? esc_attr( $gateways['paypal_currency'] ) : false;
-
-		if ( ! $currency || ! $client_id || ! $secret ) {
-			return;
-		}
-
-		$this->client_id = $client_id;
-		$this->secret    = $secret;
-
-		$token = $this->get_token( $client_id, $secret );
-
-		if ( ! $token ) {
+		if ( ! $this->set_gateway_data() ) {
 			return;
 		}
 
@@ -332,9 +361,10 @@ class Paypal {
 			'PayerID',
 		);
 
-		$success_refer    = $handler->refer;
-		$cancel_refer     = $handler->refer;
-		$success_redirect = ! empty( $gateways['use_success_redirect'] ) ? $gateways['use_success_redirect'] : false;
+		$success_refer = $action_handler->request_data['__refer'];
+		$cancel_refer  = $action_handler->request_data['__refer'];
+
+		$success_redirect = ! empty( $this->gateways_meta['use_success_redirect'] ) ? $this->gateways_meta['use_success_redirect'] : false;
 		$success_redirect = filter_var( $success_redirect, FILTER_VALIDATE_BOOLEAN );
 
 		if ( $success_redirect && $this->redirect ) {
@@ -368,10 +398,10 @@ class Paypal {
 				),
 				'purchase_units'      => array(
 					array(
-						'custom_id' => $handler->form . '-' . $order_id,
+						'custom_id' => $action_handler->form_id . '-' . $this->order_id,
 						'amount'    => array(
-							'currency_code' => $currency,
-							'value'         => $price,
+							'currency_code' => $this->options['currency'],
+							'value'         => $this->price,
 						),
 					),
 				),
@@ -395,13 +425,13 @@ class Paypal {
 		}
 
 		update_post_meta(
-			$order_id,
+			$this->order_id,
 			'_jet_gateway_data',
 			array(
 				'payment_id' => $pp_order_id,
-				'order_id'   => $order_id,
-				'form_id'    => $handler->form,
-				'form_data'  => $handler->form_data,
+				'order_id'   => $this->order_id,
+				'form_id'    => $action_handler->form_id,
+				'form_data'  => $action_handler->request_data,
 			)
 		);
 
@@ -423,7 +453,7 @@ class Paypal {
 	 */
 	public function api_url( $endpoint ) {
 
-		$sandbox = apply_filters( 'jet-engine/forms/gateways/paypal/sandbox-mode', false );
+		$sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
 
 		if ( $sandbox ) {
 			$url = 'https://api.sandbox.paypal.com/';
@@ -448,11 +478,11 @@ class Paypal {
 		$token = get_transient( $hash );
 
 		if ( ! $client_id ) {
-			$client_id = $this->client_id;
+			$client_id = $this->options['client_id'];
 		}
 
 		if ( ! $secret ) {
-			$secret = $this->secret;
+			$secret = $this->options['secret'];
 		}
 
 		if ( ! $client_id || ! $secret ) {

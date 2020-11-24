@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder;
 
-use Jet_Form_Builder\Gateways\Manager;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
@@ -26,7 +26,7 @@ class Form_Manager {
 		add_filter( 'jet-engine/forms/gateways/paypal/sandbox-mode', '__return_true' );
 
 		if ( Plugin::instance()->post_type->allow_gateways ) {
-			Manager::instance();
+			Gateway_Manager::instance();
 		}
 	}
 

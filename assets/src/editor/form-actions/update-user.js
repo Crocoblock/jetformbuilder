@@ -106,22 +106,15 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 					} ) }
 				</div>
 			</BaseControl>
-			<BaseControl
+			<SelectControl
 				label={ this.data.labels.user_role }
-				key="user_role"
-			>
-				<div className='user-role-select'>
-					<SelectControl
-						key="user_role_list"
-						value={ settings.user_role }
-						options={ this.data.userRoles }
-						onChange={ ( newValue ) => {
-							onChangeValue( newValue, 'user_role' );
-						} }
-					/>
-				</div>
-
-			</BaseControl>
+				key="user_role_list"
+				value={ settings.user_role }
+				options={ this.data.userRoles }
+				onChange={ ( newValue ) => {
+					onChangeValue( newValue, 'user_role' );
+				} }
+			/>
 			<ActionMessages
 				localizedData={ this.data }
 				{ ...this.props }

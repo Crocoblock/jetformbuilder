@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
@@ -23,41 +24,40 @@ class Update_Options extends Base {
 		return 'update_options';
 	}
 
-	public function do_action( array $request, Action_Handler $handler )
-    {
-        $fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
-        $options_data = array();
+	public function do_action( array $request, Action_Handler $handler ) {
+		$fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
+		$options_data = array();
 
-        if ( empty( $this->settings['options_page'] ) ) {
-            return;
-        }
+		if ( empty( $this->settings['options_page'] ) ) {
+			return;
+		}
 
-        if ( ! empty( $fields_map ) ) {
-            foreach ( $fields_map as $form_field => $option_field ) {
-                if ( ! empty( $option_field ) && ! empty( $request[ $form_field ] ) ) {
-                    $options_data[ $option_field ] = $request[ $form_field ];
-                }
-            }
-        }
+		if ( ! empty( $fields_map ) ) {
+			foreach ( $fields_map as $form_field => $option_field ) {
+				if ( ! empty( $option_field ) && ! empty( $request[ $form_field ] ) ) {
+					$options_data[ $option_field ] = $request[ $form_field ];
+				}
+			}
+		}
 
-        if ( empty( $options_data ) ) {
-            throw new Action_Exception( 'failed' );
-        }
+		if ( empty( $options_data ) ) {
+			throw new Action_Exception( 'failed' );
+		}
 
-        $option_name = $this->settings['options_page'];
+		$option_name = $this->settings['options_page'];
 
-        $current_value = get_option( $option_name, array() );
-        $new_value     = array_merge( $current_value, $options_data );
+		$current_value = get_option( $option_name, array() );
+		$new_value     = array_merge( $current_value, $options_data );
 
-        update_option( $option_name, $new_value );
-    }
+		update_option( $option_name, $new_value );
+	}
 
-    /**
-     * @return bool
-     */
-    public static function can_run() {
-        return function_exists( 'jet_engine' );
-    }
+	/**
+	 * @return bool
+	 */
+	public static function can_run() {
+		return function_exists( 'jet_engine' );
+	}
 
 	/**
 	 * Regsiter custom action data for the editor
@@ -67,31 +67,31 @@ class Update_Options extends Base {
 	public function action_data( $editor, $handle ) {
 
 		wp_localize_script( $handle, 'jetFormUpdateOptionsData', array(
-			'optionsPages'      => $this->get_pages(),
-			'labels'            => array(
-                'options_page'     => __(
-                    'Options Page:',
-                    'jet-form-builder'
-                ),
-                'options_map'    => __(
-                    'Options Map:',
-                    'jet-form-builder'
-                ),
-            ),
+			'optionsPages' => $this->get_pages(),
+			'labels'       => array(
+				'options_page' => __(
+					'Options Page:',
+					'jet-form-builder'
+				),
+				'options_map'  => __(
+					'Options Map:',
+					'jet-form-builder'
+				),
+			),
 		) );
 	}
 
 	private function get_pages() {
-	    return array_merge(
-	        array(
-	            array(
-	            'value' => '',
-                'label' => __( 'Select page...', 'jet-form-builder' )
-                ),
-            ),
-            Tools::get_options_pages_for_js()
-        );
-    }
+		return array_merge(
+			array(
+				array(
+					'value' => '',
+					'label' => __( 'Select page...', 'jet-form-builder' )
+				),
+			),
+			Tools::get_options_pages_for_js()
+		);
+	}
 
 
 }

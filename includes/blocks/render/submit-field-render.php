@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
@@ -16,7 +17,7 @@ class Submit_Field_Render extends Base {
 	}
 
 	public function label_allowed() {
-	    return false;
-    }
+		return false;
+	}
 
 }

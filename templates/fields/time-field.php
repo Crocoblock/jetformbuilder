@@ -12,4 +12,4 @@ $this->add_attribute( 'type', 'time' );
 $this->add_attribute( 'data-field-name', $args['name'] );
 
 ?>
-<input class="jet-form__field time-field"<?php $this->render_attributes_string(); ?>>
+<input class="jet-form-builder__field time-field"<?php $this->render_attributes_string(); ?>>

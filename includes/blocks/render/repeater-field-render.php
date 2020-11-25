@@ -100,6 +100,8 @@ class Repeater_Field_Render extends Base {
 			$html .= render_block( $block );
 		}
 
+		Live_Form::instance()->set_repeater( false );
+
 		$html .= '</div>';
 
 		if ( 'manually' === $this->block_type->manage_items ) {

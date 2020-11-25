@@ -5,7 +5,7 @@
 $required      = $this->block_type->get_required_val( $args );
 $name          = $this->block_type->get_field_name( $args['name'] );
 $default       = ! empty( $args['default'] ) ? $args['default'] : false;
-$field_classes = array( 'jet-form__field', 'checkboxes-field', 'checkradio-field' );
+$field_classes = array( 'jet-form-builder__field', 'checkboxes-field', 'checkradio-field' );
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -19,7 +19,7 @@ if ( ! empty( $args['field_options'] ) ) {
 		$field_classes[] = 'checkboxes-group-required';
 	}
 
-	echo '<div class="jet-form__fields-group checkradio-wrap">';
+	echo '<div class="jet-form-builder__fields-group checkradio-wrap">';
 
 	foreach ( $args['field_options'] as $value => $option ) {
 
@@ -53,11 +53,11 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		?>
-		<div class="jet-form__field-wrap checkboxes-wrap checkradio-wrap">
+		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php if ( $custom_template ) {
 				echo $custom_template;
 			} ?>
-			<label class="jet-form__field-label">
+			<label class="jet-form-builder__field-label for-checkbox">
 				<input
 					type="checkbox"
 					name="<?php echo $name . $name_suffix; ?>"
@@ -68,7 +68,7 @@ if ( ! empty( $args['field_options'] ) ) {
 					<?php echo $required; ?>
 					<?php echo $calc; ?>
 				>
-				<?php echo $label; ?>
+                <span><?php echo $label; ?></span>
 			</label>
 		</div>
 		<?php

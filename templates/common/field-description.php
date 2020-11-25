@@ -3,10 +3,10 @@
  * Field description template
  */
 if ( isset( $args['type'] ) && 'heading' === $args['type'] ) {
-	$class = 'jet-form__heading-desc';
+	$class = 'jet-form-builder__heading-desc';
 	$tag   = 'div';
 } else {
-	$class = 'jet-form__desc';
+	$class = 'jet-form-builder__desc';
 	$tag   = 'small';
 }
 

@@ -13,4 +13,4 @@ $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] )
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 ?>
-<input type="number" class="jet-form__field text-field"<?php $this->render_attributes_string(); ?>>
+<input type="number" class="jet-form-builder__field text-field"<?php $this->render_attributes_string(); ?>>

@@ -22,7 +22,7 @@ if ( ! empty( $args['maxlength'] ) ) {
 $mask_class = '';
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
-	$mask_class = 'jet-form__masked-field';
+	$mask_class = 'jet-form-builder__masked-field';
 
 	$mask_type = ! empty( $args['mask_type'] ) ? $args['mask_type'] : '';
 
@@ -60,4 +60,4 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 }
 
 ?>
-<input class="jet-form__field text-field <?php echo $mask_class; ?>"<?php $this->render_attributes_string(); ?>>
+<input class="jet-form-builder__field text-field <?php echo $mask_class; ?>"<?php $this->render_attributes_string(); ?>>

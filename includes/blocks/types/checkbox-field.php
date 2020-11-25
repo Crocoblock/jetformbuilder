@@ -37,17 +37,16 @@ class Checkbox_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			// Active
-			'item'                  => '.jet-forms-checkbox-field',
-			'child-items'           => '.jet-list-tree__children',
-			'button'                => '.jet-checkboxes-list__button',
+			'item'         => '.jet-form-builder__field-wrap',
 			// Active
-			'label'                 => '.jet-forms-checkbox-field label',
-			'checkbox'              => '.jet-checkboxes-list__decorator',
-			'checkbox-checked-icon' => '.jet-checkboxes-list__checked-icon',
+			'label'        => '.jet-form-builder__field-wrap label',
+			'checkbox'     => '.jet-form-builder__field-wrap input',
 			// Active
-			'list-item'             => '.jet-forms-checkbox-field',
-			'list-wrapper'          => '.jet-checkboxes-list-wrapper',
-			'list-children'         => '.jet-list-tree__children',
+			'list-item'    => '.jet-form-builder__field-wrap',
+			'list-wrapper' => '.jet-form-builder__fields-group',
+
+			'field-label'       => '.jet-form-builder__label span',
+			'field-description' => '.jet-form-builder__desc'
 		);
 	}
 
@@ -77,8 +76,7 @@ class Checkbox_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['list-item']     => 'display: {{VALUE}};',
-				'{{WRAPPER}} ' . $this->css_scheme['list-children'] => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['list-item'] => 'display: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => [
@@ -98,10 +96,8 @@ class Checkbox_Field extends Base {
 			'max'          => 50,
 			'step'         => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-				'{{WRAPPER}} ' . $this->css_scheme['child-items'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'         => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)'        => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
 			],
 			'attributes'   => [
 				'default' => [
@@ -110,23 +106,26 @@ class Checkbox_Field extends Base {
 			]
 		] );
 
-		$this->controls_manager->add_control( [
-			'id'           => 'sub_items_offset_left',
+		$this->controls_manager->add_responsive_control( [
+			'id'           => 'horisontal_layout_description',
 			'type'         => 'range',
-			'label'        => __( 'Children Offset Left', 'jet-form-builder' ),
+			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
+			'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
+			'separator'    => 'after',
 			'unit'         => 'px',
 			'min'          => 0,
-			'max'          => 50,
+			'max'          => 40,
 			'step'         => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['child-items'] => 'padding-left: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: calc({{VALUE}}{{UNIT}}/2); margin-left: calc({{VALUE}}{{UNIT}}/2);',
 			],
 			'attributes'   => [
 				'default' => [
-					'value' => 10
-				],
+					'value' => 10,
+				]
 			]
 		] );
+
 
 		$this->controls_manager->end_section();
 
@@ -134,9 +133,30 @@ class Checkbox_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'item_style',
-				'title' => esc_html__( 'Item', 'jet-smart-filters' )
+				'title' => __( 'Item', 'jet-forms-builder' )
 			]
 		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'show_decorator',
+			'type'         => 'toggle',
+			'separator'    => 'before',
+			'label'        => __( 'Show Checkbox', 'jet-forms-builder' ),
+			'attributes'   => [
+				'default' => [
+					'value' => true
+				],
+			],
+			'unit'         => 'px',
+			'return_value' => [
+				'true'  => 'inline-block',
+				'false' => 'none',
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox']       => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
+			],
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
@@ -146,81 +166,238 @@ class Checkbox_Field extends Base {
 			],
 		] );
 
+
 		$this->controls_manager->add_control( [
-			'id'           => 'show_decorator',
-			'type'         => 'toggle',
-			'separator'    => 'before',
-			'label'        => esc_html__( 'Show Checkbox', 'jet-smart-filters' ),
+			'id'           => 'item_normal_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'attributes'   => [
-				'default' => true,
+				'default' => '',
 			],
-			'unit'         => 'px',
-			'return_value' => [
-				'true'  => 'inline-block',
-				'false' => 'none',
-			],
-			'css_selector' => [
-				'{{WRAPPER}} .jet-checkboxes-list__item ' . $this->css_scheme['checkbox'] => 'display: {{VALUE}};',
-			],
-			'attributes'   => [
-				'default' => [
-					'value' => true
-				],
-			]
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'color: {{VALUE}}',
+			),
 		] );
 
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span'                                 => 'background-color: {{VALUE}}',
+
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'checkbox_style',
+				'title' => __( 'Checkbox', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id'        => 'checkbox_style_tabs',
+				'separator' => 'both',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'checkbox_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'checkbox_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox']                  => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span::before' => 'background-color: {{VALUE}}',
+			),
+		] );
 
 		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'item_checked_styles',
+				'title' => __( 'Checked', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'checkbox_checked_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox'] . ':checked'              => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'label_style',
+				'title' => __( 'Label', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'description_style',
+				'title' => __( 'Description', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'description_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'description_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_section();
 	}
 
 	public function get_style_attributes() {
 		return array(
-			'blockID'                       => [
+			'blockID'                           => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			'filters_position'              => [
+			'filters_position'                  => [
 				'type' => 'object',
 			],
-			'horisontal_layout_description' => [
+			'horisontal_layout_description'     => [
 				'type' => 'object',
 			],
-			'filters_list_alignment'        => [
+			'filters_list_alignment'            => [
 				'type' => 'object',
 			],
-			'items_space_between'           => [
+			'items_space_between'               => [
 				'type' => 'object',
 			],
-			'sub_items_offset_left'         => [
+			'show_decorator'                    => [
 				'type' => 'object',
 			],
-			'show_decorator'                => [
+			'item_typography'                   => [
 				'type' => 'object',
 			],
-			'item_typography'               => [
+			'item_normal_color'                 => [
 				'type' => 'object',
 			],
-			'item_normal_color'             => [
+			'item_normal_background_color'      => [
 				'type' => 'object',
 			],
-			'item_normal_background_color'  => [
-				'type' => 'object',
-			],
-			'item_checked_color'            => [
-				'type' => 'object',
-			],
-			'item_checked_background_color' => [
-				'type' => 'object',
-			],
-			'item_checked_border_color'     => [
-				'type' => 'object',
-			],
-			'item_padding'                  => [
-				'type' => 'object',
-			],
-			'item_border'                   => [
-				'type' => 'object',
-			],
+			'checkbox_normal_background_color'  => array(
+				'type' => 'object'
+			),
+			'checkbox_checked_background_color' => array(
+				'type' => 'object'
+			),
+			'label_typography'                  => array(
+				'type' => 'object'
+			),
+			'label_color'                       => array(
+				'type' => 'object'
+			),
+			'label_background_color'            => array(
+				'type' => 'object'
+			),
+			'description_typography'            => array(
+				'type' => 'object'
+			),
+			'description_color'                 => array(
+				'type' => 'object'
+			),
+			'description_background_color'      => array(
+				'type' => 'object'
+			),
 		);
 	}
 

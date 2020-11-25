@@ -34,6 +34,384 @@ class Radio_Field extends Base {
 		return 'radio-field';
 	}
 
+	public function get_css_scheme() {
+		return array(
+			// Active
+			'item'        => '.components-radio-control__option',
+			// Active
+			'label'       => '.components-radio-control__option label',
+			'front-label' => '.jet-form-builder__field-wrap label',
+
+			'radio'        => '.components-radio-control__option input',
+
+			// Active
+			'list-item'    => '.components-radio-control__option',
+			'list-wrapper' => '.jet-form-builder__fields-group',
+
+			'field-label'       => '.jet-form-builder__label span',
+			'field-description' => '.jet-form-builder__desc'
+		);
+	}
+
+	public function add_style_manager_options() {
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'          => 'items_style',
+				'initialOpen' => true,
+				'title'       => __( 'Items', 'jet-form-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'filters_position',
+			'type'         => 'choose',
+			'label'        => __( 'Filters Position', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'options'      => [
+				'inline-block' => [
+					'shortcut' => __( 'Line', 'jet-form-builder' ),
+					'icon'     => 'dashicons-ellipsis',
+				],
+				'block'        => [
+					'shortcut' => __( 'Column', 'jet-form-builder' ),
+					'icon'     => 'dashicons-menu-alt',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['list-item'] => 'display: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => [
+					'value' => 'block'
+				],
+			]
+		] );
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'items_space_between',
+			'type'         => 'range',
+			'label'        => __( 'Space Between', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'unit'         => 'px',
+			'min'          => 0,
+			'max'          => 50,
+			'step'         => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+			],
+			'attributes'   => [
+				'default' => [
+					'value' => 10
+				],
+			]
+		] );
+
+		$this->controls_manager->add_responsive_control( [
+			'id'           => 'horisontal_layout_description',
+			'type'         => 'range',
+			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
+			'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'unit'         => 'px',
+			'min'          => 0,
+			'max'          => 40,
+			'step'         => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: calc({{VALUE}}{{UNIT}}/2); margin-left: calc({{VALUE}}{{UNIT}}/2);',
+			],
+			'attributes'   => [
+				'default' => [
+					'value' => 10,
+				]
+			]
+		] );
+
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'item_style',
+				'title' => __( 'Item', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'show_decorator',
+			'type'         => 'toggle',
+			'separator'    => 'before',
+			'label'        => __( 'Show Radio', 'jet-forms-builder' ),
+			'attributes'   => [
+				'default' => [
+					'value' => true
+				],
+			],
+			'unit'         => 'px',
+			'return_value' => [
+				'true'  => 'inline-block',
+				'false' => 'none',
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['radio']          => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				// editor
+				'{{WRAPPER}} ' . $this->css_scheme['label']                   => 'background-color: {{VALUE}}',
+				// front
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span' => 'background-color: {{VALUE}}',
+
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'radio_style',
+				'title' => __( 'Radio', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id'        => 'radio_style_tabs',
+				'separator' => 'both',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'radio_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'radio_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				// editor
+				'{{WRAPPER}} ' . $this->css_scheme['radio']                           => 'background-color: {{VALUE}}',
+				// front
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span::before' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'item_checked_styles',
+				'title' => __( 'Checked', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'radio_checked_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				// editor
+				'{{WRAPPER}} ' . $this->css_scheme['radio'] . ':checked'                       => 'background-color: {{VALUE}}',
+				// front
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'label_style',
+				'title' => __( 'Label', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'description_style',
+				'title' => __( 'Description', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'label_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'description_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'description_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'blockID'                        => [
+				'type'    => 'string',
+				'default' => '',
+			],
+			'filters_position'               => [
+				'type' => 'object',
+			],
+			'horisontal_layout_description'  => [
+				'type' => 'object',
+			],
+			'filters_list_alignment'         => [
+				'type' => 'object',
+			],
+			'items_space_between'            => [
+				'type' => 'object',
+			],
+			'show_decorator'                 => [
+				'type' => 'object',
+			],
+			'item_typography'                => [
+				'type' => 'object',
+			],
+			'item_normal_color'              => [
+				'type' => 'object',
+			],
+			'item_normal_background_color'   => [
+				'type' => 'object',
+			],
+			'radio_normal_background_color'  => array(
+				'type' => 'object'
+			),
+			'radio_checked_background_color' => array(
+				'type' => 'object'
+			),
+			'label_typography'               => array(
+				'type' => 'object'
+			),
+			'label_color'                    => array(
+				'type' => 'object'
+			),
+			'label_background_color'         => array(
+				'type' => 'object'
+			),
+			'description_typography'         => array(
+				'type' => 'object'
+			),
+			'description_color'              => array(
+				'type' => 'object'
+			),
+			'description_background_color'   => array(
+				'type' => 'object'
+			),
+		);
+	}
+
 	/**
 	 * Returns icon class name
 	 *

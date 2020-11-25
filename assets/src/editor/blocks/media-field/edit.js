@@ -21,12 +21,17 @@ const {
 	ToggleControl,
 	PanelBody,
 	__experimentalNumberControl,
+	__experimentalInputControl,
 } = wp.components;
 
-let { NumberControl } = wp.components;
+let { NumberControl, InputControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
+}
+
+if ( typeof InputControl === 'undefined' ) {
+	InputControl = __experimentalInputControl;
 }
 
 const keyControls = block + '-controls-edit';
@@ -145,11 +150,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<JetFieldPlaceholder
-				key={ keyPlaceHolder }
-				title={ 'Media Field' }
-				subtitle={ [attributes.label, attributes.name] }
-				isRequired={ attributes.required }
+			<InputControl
+				key={ `place_holder_block_${ block }` }
+				label={ attributes.label }
+				type={ 'file' }
+				disabled={ true }
+				help={ attributes.desc }
 			/>
 		];
 	}

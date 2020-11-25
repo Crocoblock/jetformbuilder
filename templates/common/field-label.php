@@ -4,9 +4,9 @@
  */
 
 if ( isset( $args['type'] ) && 'heading' === $args['type'] ) {
-	$class = 'jet-form__heading';
+	$class = 'jet-form-builder__field-heading';
 } else {
-	$class = 'jet-form__label';
+	$class = 'jet-form-builder__label';
 }
 
 if ( ! empty( $args['label_tag'] ) && 'label' === $args['label_tag'] ) {
@@ -19,11 +19,11 @@ if ( ! empty( $args['label_tag'] ) && 'label' === $args['label_tag'] ) {
 
 ?>
 <div class="<?php echo $class; ?>">
-	<<?php echo $tag; ?> class="jet-form__label-text" <?php echo $for; ?>><?php
+	<<?php echo $tag; ?> class="jet-form-builder__label-text" <?php echo $for; ?>><?php
 	echo $args['label'];
 
-	if ( $this->block_type->get_required_val( $args ) && ! empty( $args['required_mark'] ) ) {
-		printf( '<span class="jet-form__required">%s</span>', $args['required_mark'] );
+	if ( $this->block_type->get_required_val( $args ) && ! empty( $this->live_form->spec_data->required_mark ) ) {
+		printf( ' <span class="jet-form-builder__required">%s</span>', $this->live_form->spec_data->required_mark );
 	}
 
 	?></<?php echo $tag; ?>>

@@ -35,6 +35,7 @@ const {
 	CheckboxControl,
 	Disabled,
 	Popover,
+	BaseControl,
 	__experimentalNumberControl,
 } = wp.components;
 
@@ -209,6 +210,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						</div>
 					</div>
 				</div> }
+				<BaseControl key={'repeater-fields-title'} style={ { textAlign: 'center' } }>
+					<h4>{ attributes.label || 'Repeater field' }</h4>
+					<p className={ 'components-base-control__help' } style={ { marginTop: '-4px' } }>{ attributes.desc }</p>
+				</BaseControl>
 
 				<InnerBlocks
 					key={ 'repeater-fields' }

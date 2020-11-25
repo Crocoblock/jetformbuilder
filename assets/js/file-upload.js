@@ -6,19 +6,19 @@
 
 		init: function() {
 			$( document )
-				.on( 'change', '.jet-engine-file-upload__input', JetFormBuilderFileUpload.processUpload )
-				.on( 'click', '.jet-engine-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
+				.on( 'change', '.jet-form-builder-file-upload__input', JetFormBuilderFileUpload.processUpload )
+				.on( 'click', '.jet-form-builder-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
 
-			$( '.jet-engine-file-upload__files' ).sortable({
-				items: '.jet-engine-file-upload__file',
+			$( '.jet-form-builder-file-upload__files' ).sortable({
+				items: '.jet-form-builder-file-upload__file',
 				forcePlaceholderSize: true,
 			} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 		},
 
 		onSortCallback: function( e, ui ) {
-			var $upload = ui.item.closest( '.jet-engine-file-upload' ),
+			var $upload = ui.item.closest( '.jet-form-builder-file-upload' ),
 				$files = $( e.target ),
-				$valueInput = $upload.find( '.jet-engine-file-upload__value' ),
+				$valueInput = $upload.find( '.jet-form-builder-file-upload__value' ),
 				args = $files.data( 'args' ),
 				maxFiles = parseInt( args.max_files, 10 ),
 				values = [];
@@ -27,7 +27,7 @@
 				return;
 			}
 
-			$files.find( '.jet-engine-file-upload__file' ).each( function() {
+			$files.find( '.jet-form-builder-file-upload__file' ).each( function() {
 
 				var $file = $( this );
 
@@ -56,13 +56,13 @@
 
 		deleteUpload: function() {
 			var $this   = $( this ),
-				$file   = $this.closest( '.jet-engine-file-upload__file' ),
-				$upload = $this.closest( '.jet-engine-file-upload' ),
-				$value  = $upload.find( '.jet-engine-file-upload__value' ),
+				$file   = $this.closest( '.jet-form-builder-file-upload__file' ),
+				$upload = $this.closest( '.jet-form-builder-file-upload' ),
+				$value  = $upload.find( '.jet-form-builder-file-upload__value' ),
 				val     = $value.val(),
 				fileURL = $file.data( 'file' ),
 				fileID  = $file.data( 'id' ),
-				$errors = $upload.find( '.jet-engine-file-upload__errors' ),
+				$errors = $upload.find( '.jet-form-builder-file-upload__errors' ),
 				format  = $file.data( 'format' );
 
 
@@ -135,7 +135,7 @@
 		processUpload: function( event ) {
 
 			var files   = event.target.files,
-				$errors = $( event.target ).closest( '.jet-engine-file-upload' ).find( '.jet-engine-file-upload__errors' );
+				$errors = $( event.target ).closest( '.jet-form-builder-file-upload' ).find( '.jet-form-builder-file-upload__errors' );
 
 			console.log( event.target.files );
 
@@ -165,7 +165,7 @@
 		lockButtons: function( $upload ) {
 
 			var $form    = $upload.closest( 'form.jet-form' ),
-				$buttons = $form.find( '.jet-form-builder__submit, .jet-form__next-page, .jet-form__prev-page' );
+				$buttons = $form.find( '.jet-form-builder__submit, .jet-form-builder__next-page, .jet-form-builder__prev-page' );
 
 			$buttons.attr( 'disabled', true );
 
@@ -174,7 +174,7 @@
 		unlockButtons: function( $upload ) {
 
 			var $form    = $upload.closest( 'form.jet-form' ),
-				$buttons = $form.find( '.jet-form-builder__submit, .jet-form__next-page, .jet-form__prev-page' );
+				$buttons = $form.find( '.jet-form-builder__submit, .jet-form-builder__next-page, .jet-form-builder__prev-page' );
 
 			$buttons.attr( 'disabled', false );
 
@@ -188,9 +188,9 @@
 
 			var file, formData, formID, field, xhr, limit, allowedTypes, maxSize;
 			var $input      = $( input ),
-				$upload     = $input.closest( '.jet-engine-file-upload' ),
-				$valueInput = $upload.find( '.jet-engine-file-upload__value' ),
-				$errors     = $upload.find( '.jet-engine-file-upload__errors' ),
+				$upload     = $input.closest( '.jet-form-builder-file-upload' ),
+				$valueInput = $upload.find( '.jet-form-builder-file-upload__value' ),
+				$errors     = $upload.find( '.jet-form-builder-file-upload__errors' ),
 				currentVal  = $valueInput.val();
 
 			limit = input.dataset.max_files || 1;
@@ -286,8 +286,8 @@
 
 		updateResults: function( $upload, responseData ) {
 
-			var $filesContainer = $upload.find( '.jet-engine-file-upload__files' ),
-				$input          = $upload.find( '.jet-engine-file-upload__value' ),
+			var $filesContainer = $upload.find( '.jet-form-builder-file-upload__files' ),
+				$input          = $upload.find( '.jet-form-builder-file-upload__value' ),
 				args            = $filesContainer.data( 'args' ),
 				values          = [],
 				inputValues     = false,
@@ -319,7 +319,7 @@
 				$filesContainer.sortable( 'destroy' );
 
 				$filesContainer.sortable( {
-					items: '.jet-engine-file-upload__file',
+					items: '.jet-form-builder-file-upload__file',
 					forcePlaceholderSize: true,
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}

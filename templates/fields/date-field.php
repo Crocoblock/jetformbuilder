@@ -12,4 +12,4 @@ $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 
 ?>
-<input class="jet-form__field date-field"<?php $this->render_attributes_string(); ?>>
+<input class="jet-form-builder__field date-field"<?php $this->render_attributes_string(); ?>>

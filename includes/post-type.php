@@ -4,6 +4,7 @@ namespace Jet_Form_Builder;
 
 
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
+use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 
 // If this file is called directly, abort.
 
@@ -112,7 +113,7 @@ class Post_Type {
 		$meta = array(
 			'_jf_args'      => array(
 				'type'    => 'string',
-				'default' => '{}',
+				'default' => json_encode( $this->get_default_args() ),
 			),
 			'_jf_recaptcha' => array(
 				'type'    => 'string',
@@ -176,7 +177,30 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_args( $form_id ) {
-		return $this->get_form_meta( '_jf_args', $form_id );
+		$arguments = $this->get_form_meta( '_jf_args', $form_id );
+
+		if ( empty( $arguments ) ) {
+			return $this->get_default_args();
+		}
+
+		return $arguments;
+	}
+
+	/**
+	 * Returns form messages
+	 *
+	 * @param $form_id
+	 *
+	 * @return array
+	 */
+	public function get_messages( $form_id ) {
+		$messages = $this->get_form_meta( '_jf_messages', $form_id );
+
+		if ( empty( $messages ) ) {
+			return $this->messages;
+		}
+
+		return $messages;
 	}
 
 	/**
@@ -212,16 +236,14 @@ class Post_Type {
 		return $this->get_form_meta( '_jf_recaptcha', $form_id );
 	}
 
-	/**
-	 * Returns form actions
-	 *
-	 * @param $form_id
-	 *
-	 * @return array
-	 */
-	public function get_messages( $form_id ) {
-		return $this->get_form_meta( '_jf_messages', $form_id );
+	public function maybe_get_jet_sm_ready_styles( $form_id ) {
+		if ( Jet_Style_Manager::is_activated() ) {
+			return get_post_meta( $form_id, '_jet_sm_ready_style', true );
+		}
+		return '';
 	}
+
+
 
 	/**
 	 * Returns form gateways
@@ -232,6 +254,14 @@ class Post_Type {
 	 */
 	public function get_gateways( $form_id ) {
 		return $this->get_form_meta( '_jf_gateways', $form_id );
+	}
+
+	public function get_default_args() {
+		return array(
+			'submit_type'   => 'reload',
+			'required_mark' => '*',
+			'fields_layout' => 'column',
+		);
 	}
 
 

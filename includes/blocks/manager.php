@@ -203,6 +203,13 @@ class Manager {
 
 		wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );
 
+		wp_enqueue_style(
+			'jet-form-builder-others',
+			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
+			array(),
+			Plugin::instance()->get_version()
+		);
+
 	}
 
 	/**
@@ -217,6 +224,13 @@ class Manager {
 			array(),
 			Plugin::instance()->get_version(),
 			true
+		);
+
+		wp_enqueue_style(
+			'jet-form-builder-frontend',
+			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
+			array(),
+			Plugin::instance()->get_version()
 		);
 
 		wp_enqueue_script(

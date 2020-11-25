@@ -156,6 +156,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					<TextareaControl
 						key="calc_formula"
 						value={ attributes.calc_formula }
+						help={ attributes.desc }
 						label={ __( 'Calculation Formula' ) }
 
 						onChange={ ( newValue ) => {

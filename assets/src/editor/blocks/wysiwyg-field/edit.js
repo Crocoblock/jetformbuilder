@@ -85,6 +85,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class WysiwygEdit extends wp
 			<TextareaControl
 				key={ `place_holder_block_${ block }` }
 				label={ attributes.label }
+				help={ attributes.desc }
 			/>
 		];
 	}

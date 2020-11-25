@@ -93,6 +93,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TimeEdit extends wp.el
 				key={ `place_holder_block_${ block }` }
 				label={ attributes.label }
 				type={ 'time' }
+				help={ attributes.desc }
 			/>
 		];
 	}

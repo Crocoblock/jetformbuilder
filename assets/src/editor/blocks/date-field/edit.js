@@ -103,6 +103,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 				</InspectorControls>
 			),
 			<InputControl
+				help={ attributes.desc }
 				key={ `place_holder_block_${ block }` }
 				label={ attributes.label }
 				type={ 'date' }

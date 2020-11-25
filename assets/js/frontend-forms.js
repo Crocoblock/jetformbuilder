@@ -185,7 +185,7 @@
 				return;
 			}
 
-			$field = $section.find( '.jet-form__field' );
+			$field = $section.find( '.jet-form-builder__field' );
 
 			if ( ! $field.length ) {
 				return;
@@ -405,15 +405,15 @@
 			$( document )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
 				.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
-				.on( 'click.JetFormBuilderMain', '.jet-form__next-page', self.nextFormPage )
-				.on( 'click.JetFormBuilderMain', '.jet-form__prev-page', self.prevFormPage )
-				.on( 'focus.JetFormBuilderMain', '.jet-form__field', self.clearFieldErrors )
-				.on( 'click.JetFormBuilderMain', '.jet-form__field-template', self.simLabelClick )
-				.on( 'change.JetFormBuilderMain', '.jet-form__field', self.recalcFields )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
+				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
+				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
 				.on( 'jet-form-builder/repeater-changed', '.jet-form-repeater', self.recalcFields )
-				.on( 'change.JetFormBuilderMain', '.jet-form__field.checkboxes-group-required', self.requiredCheckboxGroup )
+				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
 				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
-				.on( 'input.JetFormBuilderMain/range', '.jet-form__field.range-field', self.updateRangeField )
+				.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
 				.on( 'click.JetFormBuilderMain', '.jet-form-repeater__remove', self.removeRepeaterItem )
 				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage );
@@ -466,7 +466,7 @@
 
 				var res = window.wp.editor.initialize(
 					$editor.attr( 'id' ),
-					$editor.closest( '.jet-form__field' ).data( 'editor' )
+					$editor.closest( '.jet-form-builder__field' ).data( 'editor' )
 				);
 
 			}
@@ -527,7 +527,7 @@
 
 		calculateFieldsInRow: function( $row ) {
 
-			$row.find( '.jet-form__calculated-field--child' ).each( function() {
+			$row.find( '.jet-form-builder__calculated-field--child' ).each( function() {
 
 				var $childCalculatedField = $( this ),
 					val = JetFormBuilder.calculateValue( $childCalculatedField )
@@ -536,8 +536,8 @@
 					val = 0;
 				}
 
-				$childCalculatedField.find( '.jet-form__calculated-field-val' ).text( val.toFixed( $childCalculatedField.data( 'precision' ) ) );
-				$childCalculatedField.find( '.jet-form__calculated-field-input' ).val( val.toFixed( $childCalculatedField.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
+				$childCalculatedField.find( '.jet-form-builder__calculated-field-val' ).text( val.toFixed( $childCalculatedField.data( 'precision' ) ) );
+				$childCalculatedField.find( '.jet-form-builder__calculated-field-input' ).val( val.toFixed( $childCalculatedField.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
 
 			} );
 
@@ -584,7 +584,7 @@
 				var $initial = $this.find( '.jet-form-repeater__initial' );
 					$initial = $( $initial.html() );
 
-				var $calcFields = $initial.find( '.jet-form__calculated-field--child' );
+				var $calcFields = $initial.find( '.jet-form-builder__calculated-field--child' );
 
 				if ( $calcFields.length ) {
 
@@ -610,7 +610,7 @@
 		},
 
 		simLabelClick: function( event ) {
-			$( this ).next( '.jet-form__field-label' ).trigger( 'click' );
+			$( this ).next( '.jet-form-builder__field-label' ).trigger( 'click' );
 		},
 
 		maybeSwitchPage: function( event, $field, $page, disabled ) {
@@ -651,7 +651,7 @@
 		changeActiveTemplateClass: function( event ) {
 
 			var $this     = $( this ),
-				$template = $this.closest( '.jet-form__field-wrap' ).find( '.jet-form__field-template' );
+				$template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
 
 			if ( ! $template.length ) {
 				return;
@@ -659,12 +659,12 @@
 
 			if ( 'radio' === $this[0].type ) {
 				$template
-					.closest( '.jet-form__fields-group' )
-					.find( '.jet-form__field-template--checked' )
-					.removeClass( 'jet-form__field-template--checked' );
+					.closest( '.jet-form-builder__fields-group' )
+					.find( '.jet-form-builder__field-template--checked' )
+					.removeClass( 'jet-form-builder__field-template--checked' );
 			}
 
-			$template.toggleClass( 'jet-form__field-template--checked', $this[0].checked );
+			$template.toggleClass( 'jet-form-builder__field-template--checked', $this[0].checked );
 
 		},
 
@@ -674,7 +674,7 @@
 
 		widgetBookingForm: function( $scope ) {
 
-			var $calcFields = $.find( '.jet-form__calculated-field' );
+			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
 
 			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
 
@@ -684,7 +684,7 @@
 			JetFormBuilder.initConditions( $scope );
 
 			if ( $.fn.inputmask ) {
-				$scope.find( '.jet-form__masked-field' ).inputmask();
+				$scope.find( '.jet-form-builder__masked-field' ).inputmask();
 			}
 
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
@@ -693,7 +693,7 @@
 
 			if ( $editor.length && window.wp && window.wp.editor ) {
 
-				var editorDefaults = $editor.closest( '.jet-form__field' ).data( 'editor' );
+				var editorDefaults = $editor.closest( '.jet-form-builder__field' ).data( 'editor' );
 
 				wp.editor.getDefaultSettings = function() {
 					return editorDefaults;
@@ -722,8 +722,8 @@
 
 				calculated = JetFormBuilder.calculateValue( $this );
 
-				$this.find( '.jet-form__calculated-field-val' ).text( calculated.toFixed( $this.data( 'precision' ) ) );
-				$this.find( '.jet-form__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
+				$this.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( $this.data( 'precision' ) ) );
+				$this.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
 
 			});
 
@@ -751,9 +751,9 @@
 
 		initSingleFormPage: function( $page, $form, $changedField ) {
 
-			var $button = $page.find( '.jet-form__next-page' ),
-				$msg = $page.find( '.jet-form__next-page-msg' ),
-				requiredFields = $page[0].querySelectorAll( '.jet-form__field[required]' ),
+			var $button = $page.find( '.jet-form-builder__next-page' ),
+				$msg = $page.find( '.jet-form-builder__next-page-msg' ),
+				requiredFields = $page[0].querySelectorAll( '.jet-form-builder__field[required]' ),
 				pageNum = parseInt( $page.data( 'page' ), 10 ),
 				disabled = false,
 				radioFields = {};
@@ -810,14 +810,14 @@
 			if ( disabled ) {
 
 				if ( $msg.length ) {
-					$msg.addClass( 'jet-form__next-page-msg--visible' );
+					$msg.addClass( 'jet-form-builder__next-page-msg--visible' );
 				}
 
 				$button.attr( 'disabled', true );
 			} else {
 
 				if ( $msg.length ) {
-					$msg.removeClass( 'jet-form__next-page-msg--visible' );
+					$msg.removeClass( 'jet-form-builder__next-page-msg--visible' );
 				}
 
 				$button.attr( 'disabled', false );
@@ -840,7 +840,7 @@
 				return;
 			}
 
-			$page.on( 'change.JetFormBuilderMain', '.jet-form__field', function() {
+			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function() {
 				JetFormBuilder.initSingleFormPage( $page, $form, $( this ) );
 			} );
 
@@ -852,7 +852,7 @@
 
 			var $button     = $( this ),
 				$fromPage   = $button.closest( '.jet-form-page' ),
-				$pageFields = $fromPage.find( '.jet-form__field' ).filter( ':input' ),
+				$pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
 				$toPage     = $fromPage.next();
 
 			if ( !JetFormBuilder.isFieldsValid( $pageFields ) ) {
@@ -1008,7 +1008,7 @@
 
 				if ( $scope.data( 'repeater' ) ) {
 					object = $scope;
-				} else if ( $scope.hasClass( 'jet-form__calculated-field--child' ) ) {
+				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
 					object = $scope.closest( '.jet-form-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
 				} else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
@@ -1055,8 +1055,8 @@
 					calculated = JetFormBuilder.calculateValue( field.el );
 					fieldPrecision  = field.el.data( 'precision' );
 
-					field.el.find( '.jet-form__calculated-field-val' ).text( calculated.toFixed( fieldPrecision ) );
-					field.el.find( '.jet-form__calculated-field-input' ).val( calculated.toFixed( fieldPrecision ) ).trigger( 'change.JetFormBuilderMain' );
+					field.el.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( fieldPrecision ) );
+					field.el.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( fieldPrecision ) ).trigger( 'change.JetFormBuilderMain' );
 
 				}
 
@@ -1092,7 +1092,7 @@
 		},
 
 		initRequiredCheckboxGroup: function( $scope ) {
-			var $group = $scope.find( '.jet-form__fields-group' );
+			var $group = $scope.find( '.jet-form-builder__fields-group' );
 
 			$group.each( function() {
 				var $this = $( this ),
@@ -1108,7 +1108,7 @@
 
 		requiredCheckboxGroup: function( event ) {
 			var $this = $( event.target ),
-				$group = $this.closest( '.jet-form__fields-group' ),
+				$group = $this.closest( '.jet-form-builder__fields-group' ),
 				$checkboxes = $( '.checkboxes-field', $group );
 
 			if ( $checkboxes.length < 2 ) {
@@ -1121,7 +1121,7 @@
 		},
 
 		initRangeFields: function( $scope ) {
-			var $rangeFields = $scope.find( '.jet-form__field.range-field' );
+			var $rangeFields = $scope.find( '.jet-form-builder__field.range-field' );
 
 			if ( ! $rangeFields.length ) {
 				return;
@@ -1134,8 +1134,8 @@
 
 		updateRangeField: function( event ) {
 			var $target = $( event.target ),
-				$wrap   = $target.closest( '.jet-form__field-wrap' ),
-				$number = $wrap.find( '.jet-form__field-value-number' ),
+				$wrap   = $target.closest( '.jet-form-builder__field-wrap' ),
+				$number = $wrap.find( '.jet-form-builder__field-value-number' ),
 				max     = $target.attr( 'max' ) || 100,
 				val     = $target.val();
 
@@ -1175,7 +1175,7 @@
 			$this.attr( 'disabled', true );
 
 			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
-			$form.find( '.jet-form__field-error' ).remove();
+			$form.find( '.jet-form-builder__field-error' ).remove();
 
 			$.ajax({
 				url: JetFormBuilderSettings.ajaxurl,
@@ -1192,10 +1192,10 @@
 					case 'validation_failed':
 
 						$.each( response.fields, function( index, fieldName ) {
-							var $field = $form.find( '.jet-form__field[name="' + fieldName + '"]:last' );
+							var $field = $form.find( '.jet-form-builder__field[name="' + fieldName + '"]:last' );
 
 							if ( $field.hasClass( 'checkradio-field' ) ) {
-								$field.closest( '.jet-form__field-wrap' ).after( response.field_message );
+								$field.closest( '.jet-form-builder__field-wrap' ).after( response.field_message );
 							} else {
 								$field.after( response.field_message );
 							}
@@ -1227,7 +1227,7 @@
 
 			var $this  = $( this ),
 				formID = $this.closest( '.jet-form' ).data( 'form-id' );
-			$this.closest( '.jet-form-col' ).find( '.jet-form__field-error' ).remove();
+			$this.closest( '.jet-form-col' ).find( '.jet-form-builder__field-error' ).remove();
 			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
 
 		},

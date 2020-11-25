@@ -1,7 +1,8 @@
 const {
 	CheckboxControl,
 	SelectControl,
-	RadioControl
+	RadioControl,
+	BaseControl,
 } = wp.components;
 
 const DELIMITER = ' - ';
@@ -16,25 +17,31 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
-			className={ 'jet-forms-checkbox-field' }
+			className={ 'jet-form-builder__field-wrap' }
 			key={ `place_holder_block_${ label + index }` }
 			label={ label }
+			onChange={ () => {} }
 		/>;
 	}
 
 	const getSelect = ( { options, index } ) => {
 		return <SelectControl
+			className={ 'jet-form-builder__field-wrap' }
 			key={ `place_holder_block_${ source.name + index }` }
-			label={ source.label }
+			//label={ source.label }
 			options={ options }
+			//help={ source.desc }
+			onChange={ () => {} }
 		/>;
 	}
 
 	const getRadio = ( { options, label, index } ) => {
 		return <RadioControl
 			key={ `place_holder_block_${ label + index }` }
-			label={ source.label }
+			//label={ source.label }
 			options={ options }
+			//help={ source.desc }
+			onChange={ () => {} }
 		/>;
 	}
 
@@ -103,6 +110,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 			return source.field_options.map( ( { label: checkLabel } ) => {
 				return getCheckbox( checkLabel )
 			} );
+
 		} else if ( blockName.includes( 'select' ) ) {
 			if ( label ) {
 				return getSelect( {
@@ -128,13 +136,23 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 		}
 	}
 
-	return <React.Fragment>
+	return <React.Fragment key={'jet-form-builder-field-wrapper'}>
+		<BaseControl
+			className={ 'jet-form-builder__label' }
+			label={ source.label }
+		/>
+
+		<div className={ 'jet-form-builder__fields-group' }>
 		{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
 		getManualField( getFullLabel( scriptData, source ) )
 		}
 		{ 'manual_input' === source.field_options_from && source.field_options.length &&
-		getManualField()
+			getManualField()
 		}
+		</div>
+		<BaseControl key={ 'custom_help_description' }>
+			<p className={ 'components-base-control__help jet-form-builder__desc' } style={ { marginTop: '-4px' } }>{ source.desc }</p>
+		</BaseControl>
 	</React.Fragment>;
 
 }

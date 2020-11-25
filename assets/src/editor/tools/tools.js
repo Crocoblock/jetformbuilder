@@ -12,6 +12,15 @@ class Tools {
 		}
 	}
 
+	static getLabel( meta, attrs ) {
+		const label = {};
+		label.name = attrs.label;
+		if ( attrs.required ) {
+			label.mark = JSON.parse( meta._jf_args ).required_mark || '';
+		}
+		return label;
+	}
+
 	static getFormFieldsBlocks( exclude = [] ) {
 		const formFields = [];
 

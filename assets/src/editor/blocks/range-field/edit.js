@@ -138,6 +138,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 				</InspectorControls>
 			),
 			<RangeControl
+				help={ attributes.desc }
 				label={ attributes.label }
 				min={ 0 }
 				max={ 100 }

@@ -1,1 +1,1 @@
-<div class="jet-form__field-error"><?php echo $message_content; ?></div>
+<div class="jet-form-builder__field-error"><?php echo $message_content; ?></div>

@@ -83,7 +83,7 @@ class Form extends Base {
 	 *
 	 * @return false
 	 */
-	public function get_block_renderer( $attributes = array() ) {
+	public function get_block_renderer( $attributes = null ) {
 		return false;
 	}
 

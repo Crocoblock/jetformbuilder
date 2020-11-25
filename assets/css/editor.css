@@ -109,7 +109,7 @@
 
 .jet-form-editor__macros-inserter {
 	position: absolute;
-	right: 0;
+	right: 10px;
 	top: 13px;
 	z-index: 20;
 }

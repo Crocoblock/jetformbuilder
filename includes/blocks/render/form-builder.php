@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Fields_Factory;
 use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
@@ -153,6 +154,8 @@ class Form_Builder {
 
 		include $this->get_global_template( 'common/end-form.php' );
 
+		echo $this->maybe_render_styles_block();
+
 		$end_form .= ob_get_clean();
 
 		$end_form .= apply_filters( 'jet-form-builder/after-end-form', '', $this );
@@ -210,6 +213,16 @@ class Form_Builder {
 			return $form;
 		}
 
+	}
+
+	private function maybe_render_styles_block() {
+		if ( ! Jet_Style_Manager::is_activated() ) {
+			return '';
+		}
+		$result = '<div id="jet-sm-gb-style"><style>';
+		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id );
+
+		return $result.'</style></div>';
 	}
 
 	public function preset() {

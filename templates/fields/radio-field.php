@@ -14,7 +14,7 @@ if ( ! empty( $args['switch_on_change'] ) ) {
 
 if ( ! empty( $args['field_options'] ) ) {
 
-	echo '<div class="jet-form__fields-group checkradio-wrap">';
+	echo '<div class="jet-form-builder__fields-group checkradio-wrap">';
 
 	foreach ( $args['field_options'] as $value => $option ) {
 
@@ -44,15 +44,15 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		?>
-		<div class="jet-form__field-wrap radio-wrap checkradio-wrap">
+		<div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
 			<?php if ( $custom_template ) {
 				echo $custom_template;
 			} ?>
-			<label class="jet-form__field-label">
+			<label class="jet-form-builder__field-label for-radio">
 				<input
 					type="radio"
 					name="<?php echo $name; ?>"
-					class="jet-form__field radio-field checkradio-field"
+					class="jet-form-builder__field radio-field checkradio-field"
 					value="<?php echo $val; ?>"
 					data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>
@@ -60,7 +60,7 @@ if ( ! empty( $args['field_options'] ) ) {
 					<?php echo $calc; ?>
 					<?php echo $data_switch; ?>
 				>
-				<?php echo $label; ?>
+				 <span><?php echo $label; ?></span>
 			</label>
 		</div>
 		<?php

@@ -5,15 +5,15 @@
 
 $class_name = isset( $args['class_name'] ) ? $args['class_name'] : '';
 
-$classes = array( 'jet-form__next-page', $class_name );
+$classes = array( 'jet-form-builder__next-page', $class_name );
 
-$this->add_attribute( 'class', 'jet-form__next-page' );
+$this->add_attribute( 'class', 'jet-form-builder__next-page' );
 $this->add_attribute( 'class', $class_name );
 $this->add_attribute( 'type', 'button' );
 ?>
-<div class="jet-form__next-page-wrap">
+<div class="jet-form-builder__next-page-wrap">
 	<?php if ( ! empty( $args['page_break_disabled'] ) ) : ?>
-	<div class="jet-form__next-page-msg"><?php
+	<div class="jet-form-builder__next-page-msg"><?php
 		echo wp_kses_post( $args['page_break_disabled'] );
 	?></div>
 	<?php endif; ?>

@@ -38,8 +38,9 @@ class Live_Form {
 	public $preset;
 	public $spec_data;
 
-	public $page;
-	public $has_prev;
+	public $page = 0;
+	public $has_prev = false;
+	public $post_id;
 
 	/**
 	 * Instance.
@@ -59,13 +60,10 @@ class Live_Form {
 	 *
 	 * Ensures only one instance of the plugin class is loaded or can be loaded.
 	 *
-	 * @param $form_id
-	 *
 	 * @return Plugin An instance of the class.
 	 * @since 1.0.0
 	 * @access public
 	 * @static
-	 *
 	 */
 	public static function instance() {
 
@@ -82,10 +80,7 @@ class Live_Form {
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->rendered_rows = 0;
-		$this->page          = 0;
-		$this->has_prev      = false;
-
+		$this->post_id = get_post()->ID;
 	}
 
 	public function set_form_id( $form_id ) {

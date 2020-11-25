@@ -18,6 +18,6 @@ if ( ! empty( $args['maxlength'] ) ) {
 }
 
 ?>
-<textarea class="jet-form__field textarea-field"<?php $this->render_attributes_string(); ?>><?php
+<textarea class="jet-form-builder__field textarea-field"<?php $this->render_attributes_string(); ?>><?php
 	echo $args['default'];
 ?></textarea>

@@ -121,6 +121,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 				</InspectorControls>
 			),
 			<NumberControl
+
 				label={ attributes.label }
 				labelPosition='top'
 			/>

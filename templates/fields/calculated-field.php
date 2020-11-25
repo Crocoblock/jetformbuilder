@@ -20,19 +20,19 @@ $this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_dat
 $this->add_attribute( 'data-precision', $precision );
 
 if ( ! empty( $this->live_form->current_repeater ) ) {
-	$class_name = 'jet-form__calculated-field--child';
+	$class_name = 'jet-form-builder__calculated-field--child';
 } else {
-	$class_name = 'jet-form__calculated-field';
+	$class_name = 'jet-form-builder__calculated-field';
 }
 
 ?>
 <div class="<?php echo $class_name; ?>"<?php $this->render_attributes_string(); ?>>
-	<?php if ( false !== $prefix ) { ?><div class="jet-form__calculated-field-prefix">
+	<?php if ( false !== $prefix ) { ?><div class="jet-form-builder__calculated-field-prefix">
 	<?php echo $prefix; ?>
 	</div><?php } ?>
-	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $default_value; ?>" class="jet-form__calculated-field-input jet-form__field" data-field-name="<?php echo $args['name']; ?>">
-	<div class="jet-form__calculated-field-val"></div>
-	<?php if ( false !== $suffix ) { ?><div class="jet-form__calculated-field-suffix">
+	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $default_value; ?>" class="jet-form-builder__calculated-field-input jet-form-builder__field" data-field-name="<?php echo $args['name']; ?>">
+	<div class="jet-form-builder__calculated-field-val"></div>
+	<?php if ( false !== $suffix ) { ?><div class="jet-form-builder__calculated-field-suffix">
 	<?php echo $suffix; ?>
 	</div><?php } ?>
 </div>

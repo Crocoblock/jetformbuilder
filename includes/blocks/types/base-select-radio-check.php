@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
 trait Base_Select_Radio_Check {
@@ -161,6 +162,8 @@ trait Base_Select_Radio_Check {
 		$options      = array();
 		$value_from   = ! empty( $args['value_from_key'] ) ? $args['value_from_key'] : false;
 		$calc_from    = ! empty( $args['calculated_value_from_key'] ) ? $args['calculated_value_from_key'] : false;
+
+
 
 		if ( 'manual_input' === $options_from ) {
 
@@ -329,17 +332,98 @@ trait Base_Select_Radio_Check {
 
 		} else {
 
-			/*$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
+			$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
 
 			if ( $key ) {
-				$options = get_post_meta( $this->post->ID, $key, true );
+				$options = get_post_meta( Live_Form::instance()->post_id, $key, true );
 				$options = $this->maybe_parse_repeater_options( $options );
-			}*/
-			$options = array();
+			}
 
 		}
 
 		return $options;
+
+	}
+
+	/**
+	 * Prepare repeater options fields
+	 *
+	 * @param  [type] $options [description]
+	 * @return [type]          [description]
+	 */
+	public function maybe_parse_repeater_options( $options ) {
+
+		$result = array();
+
+		if ( empty( $options ) ) {
+			return $result;
+		}
+
+		if ( ! is_array( $options ) ) {
+			$options = array( $options );
+		}
+
+		if ( in_array( 'true', $options ) || in_array( 'false', $options ) ) {
+			return $this->get_checked_options( $options );
+		}
+
+		$option_values = array_values( $options );
+
+		if ( ! is_array( $option_values[0] ) ) {
+
+			foreach ( $options as $key => $value ) {
+				$result[] = array(
+					'value' => is_string( $key ) ? $key : $value,
+					'label' => $value,
+				);
+			}
+
+			return $result;
+		}
+
+		foreach ( $options as $option ) {
+
+			$values = array_values( $option );
+
+			if ( ! isset( $values[0] ) ) {
+				continue;
+			}
+
+			$result[] = array(
+				'value' => $values[0],
+				'label' => isset( $values[1] ) ? $values[1] : $values[0],
+			);
+
+		}
+
+		return $result;
+
+	}
+
+	/**
+	 * Returns checked options
+	 *
+	 * @param $options
+	 *
+	 * @return array
+	 */
+	public function get_checked_options( $options ) {
+
+		$result = array();
+
+		foreach ( $options as $label => $checked ) {
+			$checked = filter_var( $checked, FILTER_VALIDATE_BOOLEAN );
+
+			if ( $checked ) {
+				$result[] = array(
+					'value' => $label,
+					'label' => $label,
+				);
+			}
+
+		}
+
+		return $result;
 
 	}
 

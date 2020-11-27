@@ -166,7 +166,7 @@ abstract class Base {
 
 		if ( $result_value ) {
 			return $result_value;
-		} elseif ( $preset_value['rewrite'] ) {
+		} elseif ( $preset_value['rewrite'] ) { // if default was set by dynamic preset (json format)
 			return '';
 		} else {
 			return $args['default'];

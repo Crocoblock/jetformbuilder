@@ -187,7 +187,7 @@ abstract class Base {
 		}
 
 		$result[] = $form->end_form_row();
-		$result[] = $form->maybe_end_page( $this->block_attrs );
+		$result[] = $form->maybe_end_page( false, $this->block_attrs );
 
 		return implode( "\n", $result );
 	}

@@ -220,8 +220,7 @@ class Live_Form {
 		}
 
 		$this->start_new_page = false;
-
-		$this->page ++;
+		$this->page++;
 
 		ob_start();
 		do_action( 'jet-form-builder/before-page-start', $this );
@@ -247,7 +246,7 @@ class Live_Form {
 	 *
 	 * @return false|string|void [type] [description]
 	 */
-	public function maybe_end_page( $is_last, $field = false ) {
+	public function maybe_end_page( $is_last = false, $field = false ) {
 
 		if ( 0 >= $this->pages ) {
 			return;

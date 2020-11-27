@@ -32,6 +32,125 @@ class Group_Break_Field extends Base {
 		return 'group-break-field';
 	}
 
+	public function general_style_attributes() {
+		return array();
+	}
+
+	public function general_style_manager_options() {
+	}
+
+	public function get_css_scheme() {
+		return array(
+			'field'       => '.jet-form-builder__group-break',
+			'front-field' => '.jet-form-builder__field-wrap .jet-form-builder__group-break'
+		);
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'break_height'              => [
+				'type' => 'object',
+			],
+			'break_background_color'	=> [
+				'type' => 'object',
+			],
+			'break_gap_before' 			=> [
+				'type' => 'object',
+			],
+			'break_gap_after' 			=> [
+				'type' => 'object',
+			],
+		);
+	}
+
+	protected function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'break_style',
+				'initialOpen' => true,
+				'title' => __( 'Group Break', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control([
+			'id'        => 'break_height',
+			'type'      => 'range',
+			'label'     => __( 'Height', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 20,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'height: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before'  => 'border-top-width: {{VALUE}}{{UNIT}};',
+
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 1
+				),
+			]
+		]);
+
+		$this->controls_manager->add_control([
+			'id'       => 'break_background_color',
+			'type'     => 'color-picker',
+			'label'     => __( 'Color', 'jet-form-builder' ),
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'background-color: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before'  => 'border-top-color: {{VALUE}}',
+			],
+			'separator'    => 'after',
+			'attributes' => array(
+				'default' => array(
+					'value' => '#e3ddd8'
+				)
+			)
+		]);
+
+		$this->controls_manager->add_control([
+			'id'        => 'break_gap_before',
+			'type'      => 'range',
+			'label'     => __( 'Gap Before', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'margin-top: {{VALUE}}{{UNIT}};',
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 1
+				),
+			]
+		]);
+
+		$this->controls_manager->add_control([
+			'id'        => 'break_gap_after',
+			'type'      => 'range',
+			'label'     => __( 'Gap After', 'jet-form-builder' ),
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'margin-bottom: {{VALUE}}{{UNIT}};',
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 1
+				),
+			]
+		]);
+		
+		$this->controls_manager->end_section();
+	}
+
 	/**
 	 * Returns icon class name
 	 *

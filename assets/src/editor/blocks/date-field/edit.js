@@ -3,6 +3,7 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../tools/tools";
+import WrapperControl from '../../tools/wrapper-control';
 
 const block = 'jet-forms/date-field';
 
@@ -102,12 +103,15 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 					/> }
 				</InspectorControls>
 			),
-			<InputControl
-				help={ attributes.desc }
-				key={ `place_holder_block_${ block }` }
-				label={ attributes.label }
-				type={ 'date' }
-			/>
+			<WrapperControl
+				block={ block }
+				attributes={ attributes }
+			>
+				<InputControl
+					key={ `place_holder_block_${ block }` }
+					type={ 'date' }
+				/>
+			</WrapperControl>
 		];
 	}
 }

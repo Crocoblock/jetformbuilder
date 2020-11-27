@@ -25,7 +25,7 @@ class Live_Form {
 
 	private $field_name;
 	private $current_field_data;
-	private $start_new_page;
+	private $start_new_page = true;
 	public $pages = 0;
 	public $rendered_rows = 0;
 
@@ -123,7 +123,7 @@ class Live_Form {
 	public function setup_fields( $blocks ) {
 		foreach ( $blocks as $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
-				$this->pages ++;
+				$this->pages++;
 			}
 		}
 	}
@@ -159,7 +159,7 @@ class Live_Form {
 
 		ob_start();
 
-		do_action( 'jet-engine/forms/booking/before-start-form-row', $this );
+		do_action( 'jet-form-builder/before-start-form-row', $this );
 
 		$this->add_attribute( 'class', 'jet-form-row' );
 
@@ -181,7 +181,7 @@ class Live_Form {
 
 		include $this->get_global_template( 'common/start-form-row.php' );
 
-		do_action( 'jet-engine/forms/booking/after-start-form-row', $this );
+		do_action( 'jet-form-builder/after-start-form-row', $this );
 
 		return ob_get_clean();
 	}
@@ -194,11 +194,11 @@ class Live_Form {
 	public function end_form_row() {
 
 		ob_start();
-		do_action( 'jet-engine/forms/booking/before-end-form-row', $this );
+		do_action( 'jet-form-builder/before-end-form-row', $this );
 
 		include $this->get_global_template( 'common/end-form-row.php' );
 
-		do_action( 'jet-engine/forms/booking/after-end-form-row', $this );
+		do_action( 'jet-form-builder/after-end-form-row', $this );
 
 		return ob_get_clean();
 	}
@@ -220,12 +220,11 @@ class Live_Form {
 		}
 
 		$this->start_new_page = false;
-		$this->has_prev       = true;
 
 		$this->page ++;
 
 		ob_start();
-		do_action( 'jet-engine/forms/before-page-start', $this );
+		do_action( 'jet-form-builder/before-page-start', $this );
 
 		$hidden_class = '';
 
@@ -235,7 +234,7 @@ class Live_Form {
 
 		include $this->get_global_template( 'common/start-page.php' );
 
-		do_action( 'jet-engine/forms/after-page-start', $this );
+		do_action( 'jet-form-builder/after-page-start', $this );
 
 		return ob_get_clean();
 	}
@@ -262,11 +261,11 @@ class Live_Form {
 		$this->has_prev       = true;
 
 		ob_start();
-		do_action( 'jet-engine/forms/before-page-end', $this );
+		do_action( 'jet-form-builder/before-page-end', $this );
 
 		include $this->get_global_template( 'common/end-page.php' );
 
-		do_action( 'jet-engine/forms/after-page-end', $this );
+		do_action( 'jet-form-builder/after-page-end', $this );
 
 		return ob_get_clean();
 	}

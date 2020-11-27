@@ -45,12 +45,26 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+if ( typeof InputControl === 'undefined' ) {
+	InputControl = __experimentalInputControl;
+}
+
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.element.Component {
+
+	constructor( props ) {
+		super( props );
+
+		this.state = {
+			rangeValue: 50
+		};
+	}
+
+
 	render() {
 		const props = this.props;
 		const attributes = props.attributes;
@@ -142,18 +156,23 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 			<WrapperControl
 				attributes={ attributes }
 				block={ block }
+				wrapClasses={ [
+					'range-wrap'
+				] }
 			>
-				<RangeControl
-					onChange={ () => {} }
+				<InputControl 
+					key={ `place_holder_block_${ block }` }
+					type={ 'range' }
 					min={ attributes.min || 0 }
 					max={ attributes.max || 100 }
 					step={ attributes.step || 1 }
-					showTooltip={ false }
-					withInputField={ false }
-					railColor={ attributes.range_background_color.value }
-					trackColor={ attributes.range_background_color.value }
+					onChange={ rangeValue => this.setState( { rangeValue } ) }
 				/>
-				
+				<div className={ 'jet-form-builder__field-value' }>
+					<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
+					<span>{ this.state.rangeValue }</span>
+					<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
+				</div>
 			</WrapperControl>
 			
 		];

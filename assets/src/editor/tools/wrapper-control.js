@@ -1,6 +1,6 @@
 import Tools from "./tools";
 
-export default function WrapperControl( { attributes, block, children } ) {
+export default function WrapperControl( { attributes, block, children, wrapClasses = [] } ) {
     const {
         BaseControl,
     } = wp.components;
@@ -16,11 +16,13 @@ export default function WrapperControl( { attributes, block, children } ) {
     const label = Tools.getLabel( meta, attributes );
 
     return (
-        <BaseControl key={ `place_holder_block_${ block }_label` } className={ 'jet-form-builder__field-wrap' }>
+        <BaseControl key={ `place_holder_block_${ block }_label` } className={ `jet-form-builder__field-wrap ${ wrapClasses.join( ' ' ) }` }>
             <BaseControl.VisualLabel>
                 <div className={ 'jet-form-builder__label-text' }>
-                    { label.name }
-                    <span className={'jet-form-builder__required'}> { label.mark }</span>
+                    { label.name } 
+                    { attributes.required && <span className={'jet-form-builder__required'}>
+                        { label.mark }
+                    </span> }
                 </div>
             </BaseControl.VisualLabel>
             { children }

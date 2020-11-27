@@ -57,7 +57,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HeadingEdit extends wp
 					/> }
 				</InspectorControls>
 			),
-			<div className={ 'wp-block-group-break-field' }>
+			<div className={ 'jet-form-builder__group-break' }>
 				<span>{ __( 'GROUP BREAK' ) }</span>
 			</div>
 		];

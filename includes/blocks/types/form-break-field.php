@@ -32,6 +32,13 @@ class Form_Break_Field extends Base {
 		return 'form-break-field';
 	}
 
+	public function general_style_attributes() {
+		return array();
+	}
+
+	public function general_style_manager_options() {
+	}
+
 	/**
 	 * Returns icon class name
 	 *

@@ -46,6 +46,15 @@ trait General_Style {
 			'description_background_color' => array(
 				'type' => 'object'
 			),
+			'required_color'			   => array(
+				'type' => 'object'	
+			),
+			'required_background_color'	   => array(
+				'type' => 'object'	
+			),
+			'required_typography'		   => array(
+				'type' => 'object'	
+			),
 		);
 	}
 
@@ -174,6 +183,52 @@ trait General_Style {
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'background-color: {{VALUE}}',
 			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'required_style',
+				'title' => __( 'Required Mark', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'required_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-required'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'required_background_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field-required'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'required_typography',
+			
+			'disable_line_height' 		=> true,
+			'disable_family' 			=> true,
+			'disable_transform' 		=> true,
+			'disable_style' 			=> true,
+			'disable_decoration' 		=> true,
+			'disable_letter_spacing' 	=> true,
+
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field-required'] => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
 		] );
 
 		$this->controls_manager->end_section();

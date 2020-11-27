@@ -16,4 +16,8 @@ class Form_Break_Field_Render extends Base {
 		return 'form-break-field';
 	}
 
+	public function label_allowed() {
+		return false;
+	}
+
 }

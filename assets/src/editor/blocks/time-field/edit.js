@@ -2,6 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import WrapperControl from '../../tools/wrapper-control';
 
 const block = 'jet-forms/time-field';
 
@@ -89,12 +90,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TimeEdit extends wp.el
 					/> }
 				</InspectorControls>
 			),
-			<InputControl
-				key={ `place_holder_block_${ block }` }
-				label={ attributes.label }
-				type={ 'time' }
-				help={ attributes.desc }
-			/>
+			
+			<WrapperControl
+				block={ block }
+				attributes={ attributes }
+			>
+				<InputControl
+					key={ `place_holder_block_${ block }` }
+					type={ 'time' }
+				/>
+			</WrapperControl>
 		];
 	}
 }

@@ -1139,7 +1139,7 @@
 				max     = $target.attr( 'max' ) || 100,
 				val     = $target.val();
 
-			if ( event.firstInit && ! window.elementorFrontend.isEditMode() ) {
+			if ( event.firstInit ) {
 				$number.text( max ).css( 'min-width', $number.width() );
 			}
 

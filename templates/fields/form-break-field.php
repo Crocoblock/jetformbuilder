@@ -7,6 +7,7 @@ $class_name = isset( $args['class_name'] ) ? $args['class_name'] : '';
 
 $classes = array( 'jet-form-builder__next-page', $class_name );
 
+
 $this->add_attribute( 'class', 'jet-form-builder__next-page' );
 $this->add_attribute( 'class', $class_name );
 $this->add_attribute( 'type', 'button' );

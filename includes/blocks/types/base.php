@@ -169,7 +169,7 @@ abstract class Base {
 
 		$form = Live_Form::instance();
 
-		$form->is_hidden_row = true;
+		$form->is_hidden_row = false;
 		$form->is_submit_row = false;
 
 		$result[] = $form->maybe_start_page();

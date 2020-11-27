@@ -1,3 +1,5 @@
+import WrapperControl from './wrapper-control';
+
 const {
 	CheckboxControl,
 	SelectControl,
@@ -136,23 +138,22 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 		}
 	}
 
-	return <React.Fragment key={'jet-form-builder-field-wrapper'}>
-		<BaseControl
-			className={ 'jet-form-builder__label' }
-			label={ source.label }
-		/>
-
+	return <WrapperControl
+			key={ 'jet-form-builder-field-wrapper' }
+			attributes={ source }
+			block={ blockName }
+		>
 		<div className={ 'jet-form-builder__fields-group' }>
-		{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
-		getManualField( getFullLabel( scriptData, source ) )
-		}
-		{ 'manual_input' === source.field_options_from && source.field_options.length &&
-			getManualField()
-		}
+			{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
+				getManualField( getFullLabel( scriptData, source ) )
+			}
+			{ 'manual_input' === source.field_options_from && source.field_options.length &&
+				getManualField()
+			}
 		</div>
-		<BaseControl key={ 'custom_help_description' }>
-			<p className={ 'components-base-control__help jet-form-builder__desc' } style={ { marginTop: '-4px' } }>{ source.desc }</p>
-		</BaseControl>
-	</React.Fragment>;
+	</WrapperControl>;
+
 
 }
+
+

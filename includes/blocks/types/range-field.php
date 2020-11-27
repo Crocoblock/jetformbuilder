@@ -25,9 +25,8 @@ class Range_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'slider'      => '.jet-form-builder__field-wrap .components-range-control__slider',
-			'slider-root' => '.jet-form-builder__field-wrap .components-range-control__root',
-			'front-field' => '.jet-form-builder__field-wrap input.range-field',
+			'front-field' 	=> '.jet-form-builder__field-wrap input[type="range"]',
+			'range-values' 	=> '.jet-form-builder__field-wrap .jet-form-builder__field-value',
 			'wrapper'     => '.jet-form-builder__field-wrap',
 		);
 	}
@@ -46,11 +45,18 @@ class Range_Field extends Base {
 			'range_width' => array(
 				'type' => 'object'
 			),
-
-			'range_background_color' => [
-				'type'    => 'object',
-			],
+			'range_height' => array(
+				'type' => 'object'
+			),
 		
+			'slider_size' => array(
+				'type' => 'object'
+			),
+		
+
+			'slider_border' => array(
+				'type' => 'object'
+			),
 			'slider_background_color' => [
 				'type'    => 'object',
 			],
@@ -74,6 +80,22 @@ class Range_Field extends Base {
 		);
 	}
 
+	public function style_slider( $style_line ) {
+		return array(
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => $style_line,
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => $style_line,
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => $style_line,
+		);
+	}
+
+	public function style_range( $style_line ) {
+		return array(
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-runnable-track' => $style_line,
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-track' => $style_line,
+			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-track' => $style_line,
+		);
+	}
+
 	
 	public function add_style_manager_options(){
 		$this->controls_manager->start_section(
@@ -90,14 +112,12 @@ class Range_Field extends Base {
 			'type'      => 'range',
 			'label'     => __( 'Width', 'jet-form-builder' ),
 			'separator' => 'after',
-			'unit'      => '%',
+			'unit'      => 'px',
 			'min'       => 1,
-			'max'       => 100,
+			'max'       => 1000,
 			'step'      => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['slider-root'] => 'width: {{VALUE}}{{UNIT}};',
-				// front
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'width: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'max-width: {{VALUE}}{{UNIT}};',
 			],
 			'attributes' => [
 				'default' => array(
@@ -106,17 +126,33 @@ class Range_Field extends Base {
 			]
 		]);
 
+		$this->controls_manager->add_control([
+			'id'        => 'range_height',
+			'type'      => 'range',
+			'label'     => __( 'Range Height', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => array_merge( 
+				$this->style_range( 'height: {{VALUE}}{{UNIT}};' ), 
+				$this->style_slider( 'margin-top: calc( (18px - {{VALUE}}{{UNIT}})/-2 )' )
+			),
+			'attributes' => [
+				'default' => array(
+					'value' => 5
+				),
+			]
+		]);
 		
 
 		$this->controls_manager->add_control([
 			'id'       => 'range_background_color',
 			'type'     => 'color-picker',
-			'label'     => __( 'Color', 'jet-smart-filters' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-runnable-track' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-track' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-track' => 'background-color: {{VALUE}}',
-			),
+			'label'     => __( 'Color', 'jet-form-builder' ),
+			'css_selector' => $this->style_range( 'background-color: {{VALUE}}' ),
+			'separator'    => 'after',
 			'attributes' => array(
 				'default' => array(
 					'value' => '#e3ddd8'
@@ -128,16 +164,11 @@ class Range_Field extends Base {
 			'id'         => 'range_border',
 			'type'       => 'border',
 			'label'       => __( 'Border', 'jet-form-builder' ),
-			'css_selector'  => array(
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-runnable-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
+			'css_selector'  =>  $this->style_range( 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};' ),
 		]);
 
 		
 		$this->controls_manager->end_section();
-
 
 
 		$this->controls_manager->start_section(
@@ -148,16 +179,37 @@ class Range_Field extends Base {
 				'title'       => __( 'Slider', 'jet-form-builder' )
 			]
 		);
+
+		//width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; margin-top: calc( ({{SIZE}}{{UNIT}} - 4px)/-2 )
 		
+		$this->controls_manager->add_control([
+			'id'        => 'slider_size',
+			'type'      => 'range',
+			'label'     => __( 'Size', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}}; margin-top: calc( ({{VALUE}}{{UNIT}} - 4.5px)/-2 )',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
+				
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'min-height: {{VALUE}}{{UNIT}};',
+			),
+			'attributes' => [
+				'default' => array(
+					'value' => 18
+				),
+			]
+		]);
+
 		$this->controls_manager->add_control([
 			'id'       => 'slider_background_color',
 			'type'     => 'color-picker',
-			'label'     => esc_html__( 'Color', 'jet-smart-filters' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => 'background-color: {{VALUE}}',
-			),
+			'label'     => __( 'Color', 'jet-form-builder' ),
+			'css_selector' => $this->style_slider( 'background-color: {{VALUE}}' ),
 			'attributes' => array(
 				'default' => array(
 					'value' => '#ccc'
@@ -169,11 +221,7 @@ class Range_Field extends Base {
 			'id'         => 'slider_border',
 			'type'       => 'border',
 			'label'       => __( 'Border', 'jet-form-builder' ),
-			'css_selector'  => array(
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
+			'css_selector'  => $this->style_slider( 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};' )
 		]);
 	
 
@@ -185,7 +233,7 @@ class Range_Field extends Base {
 			[
 				'id'          => 'section_values_style',
 				'initialOpen' => false,
-				'title'       => esc_html__( 'Values', 'jet-smart-filters' )
+				'title'       => __( 'Values', 'jet-form-builder' )
 			]
 		);
 
@@ -200,7 +248,7 @@ class Range_Field extends Base {
 		$this->controls_manager->add_control([
 			'id'       => 'values_color',
 			'type'     => 'color-picker',
-			'label'     => esc_html__( 'Color', 'jet-smart-filters' ),
+			'label'     => __( 'Color', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'color: {{VALUE}}',
 			),
@@ -209,7 +257,7 @@ class Range_Field extends Base {
 		$this->controls_manager->add_control([
 			'id'         => 'values_margin',
 			'type'       => 'dimensions',
-			'label'      => esc_html__( 'Margin', 'jet-smart-filters' ),
+			'label'      => __( 'Margin', 'jet-form-builder' ),
 			'units'      => array( 'px', '%' ),
 			'css_selector'  => array(
 				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
@@ -220,19 +268,19 @@ class Range_Field extends Base {
 		$this->controls_manager->add_control([
 			'id'        => 'values_alignment',
 			'type'      => 'choose',
-			'label'     => esc_html__( 'Alignment', 'jet-smart-filters' ),
+			'label'     => __( 'Alignment', 'jet-form-builder' ),
 			'separator'    => 'before',
 			'options'   =>[
 				'left'    => [
-					'shortcut' => esc_html__( 'Left', 'jet-smart-filters' ),
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
 					'icon'  => 'dashicons-editor-alignleft',
 				],
 				'center'    => [
-					'shortcut' => esc_html__( 'Center', 'jet-smart-filters' ),
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
 					'icon'  => 'dashicons-editor-aligncenter',
 				],
 				'right'    => [
-					'shortcut' => esc_html__( 'Right', 'jet-smart-filters' ),
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
 					'icon'  => 'dashicons-editor-alignright',
 				],
 			],

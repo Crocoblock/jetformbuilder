@@ -37,6 +37,13 @@ class Form extends Base {
 		parent::__construct();
 	}
 
+	public function general_style_attributes() {
+		return array();
+	}
+
+	public function general_style_manager_options() {
+	}
+
 
 	public function block_params() {
 		return array(

@@ -3,6 +3,7 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../tools/tools";
+import WrapperControl from '../../tools/wrapper-control';
 
 const block = 'jet-forms/media-field';
 
@@ -150,13 +151,17 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<InputControl
-				key={ `place_holder_block_${ block }` }
-				label={ attributes.label }
-				type={ 'file' }
-				disabled={ true }
-				help={ attributes.desc }
-			/>
+			
+			<WrapperControl
+				block={ block }
+				attributes={ attributes }
+			>
+				<InputControl
+					key={ `place_holder_block_${ block }` }
+					type={ 'file' }
+					disabled={ true }
+				/>
+			</WrapperControl>
 		];
 	}
 }

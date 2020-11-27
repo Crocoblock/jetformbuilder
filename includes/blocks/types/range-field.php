@@ -23,6 +23,15 @@ class Range_Field extends Base {
 		return 'Range Field';
 	}
 
+	public function get_css_scheme() {
+		return array(
+			'slider'      => '.jet-form-builder__field-wrap .components-range-control__slider',
+			'slider-root' => '.jet-form-builder__field-wrap .components-range-control__root',
+			'front-field' => '.jet-form-builder__field-wrap input.range-field',
+			'wrapper'     => '.jet-form-builder__field-wrap',
+		);
+	}
+
 	/**
 	 * Returns block name
 	 *
@@ -30,6 +39,212 @@ class Range_Field extends Base {
 	 */
 	public function get_name() {
 		return 'range-field';
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'range_width' => array(
+				'type' => 'object'
+			),
+
+			'range_background_color' => [
+				'type'    => 'object',
+			],
+		
+			'slider_background_color' => [
+				'type'    => 'object',
+			],
+			
+
+			'values_typography' => [
+				'type'    => 'object',
+			],
+			'values_color' => [
+				'type'    => 'string',
+				'default' => '',
+			],
+			'values_margin' => [
+				'type'    => 'object',
+				'default' => '',
+			],
+			'values_alignment' => [
+				'type'    => 'string',
+				'default' => 'left',
+			],
+		);
+	}
+
+	
+	public function add_style_manager_options(){
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'          => 'section_range_style',
+				'initialOpen' => false,
+				'title'       => __( 'Range', 'jet-form-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control([
+			'id'        => 'range_width',
+			'type'      => 'range',
+			'label'     => __( 'Width', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => '%',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['slider-root'] => 'width: {{VALUE}}{{UNIT}};',
+				// front
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'width: {{VALUE}}{{UNIT}};',
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 100
+				),
+			]
+		]);
+
+		
+
+		$this->controls_manager->add_control([
+			'id'       => 'range_background_color',
+			'type'     => 'color-picker',
+			'label'     => __( 'Color', 'jet-smart-filters' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-runnable-track' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-track' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-track' => 'background-color: {{VALUE}}',
+			),
+			'attributes' => array(
+				'default' => array(
+					'value' => '#e3ddd8'
+				)
+			)
+		]);
+
+		$this->controls_manager->add_control([
+			'id'         => 'range_border',
+			'type'       => 'border',
+			'label'       => __( 'Border', 'jet-form-builder' ),
+			'css_selector'  => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-runnable-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-track' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		]);
+
+		
+		$this->controls_manager->end_section();
+
+
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'          => 'section_slider_style',
+				'initialOpen' => false,
+				'title'       => __( 'Slider', 'jet-form-builder' )
+			]
+		);
+		
+		$this->controls_manager->add_control([
+			'id'       => 'slider_background_color',
+			'type'     => 'color-picker',
+			'label'     => esc_html__( 'Color', 'jet-smart-filters' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => 'background-color: {{VALUE}}',
+			),
+			'attributes' => array(
+				'default' => array(
+					'value' => '#ccc'
+				)
+			)
+		]);
+
+		$this->controls_manager->add_control([
+			'id'         => 'slider_border',
+			'type'       => 'border',
+			'label'       => __( 'Border', 'jet-form-builder' ),
+			'css_selector'  => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		]);
+	
+
+		
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'          => 'section_values_style',
+				'initialOpen' => false,
+				'title'       => esc_html__( 'Values', 'jet-smart-filters' )
+			]
+		);
+
+		$this->controls_manager->add_control([
+			'id'         => 'values_typography',
+			'type'       => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		]);
+
+		$this->controls_manager->add_control([
+			'id'       => 'values_color',
+			'type'     => 'color-picker',
+			'label'     => esc_html__( 'Color', 'jet-smart-filters' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'color: {{VALUE}}',
+			),
+		]);
+
+		$this->controls_manager->add_control([
+			'id'         => 'values_margin',
+			'type'       => 'dimensions',
+			'label'      => esc_html__( 'Margin', 'jet-smart-filters' ),
+			'units'      => array( 'px', '%' ),
+			'css_selector'  => array(
+				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+			'separator'    => 'before',
+		]);
+
+		$this->controls_manager->add_control([
+			'id'        => 'values_alignment',
+			'type'      => 'choose',
+			'label'     => esc_html__( 'Alignment', 'jet-smart-filters' ),
+			'separator'    => 'before',
+			'options'   =>[
+				'left'    => [
+					'shortcut' => esc_html__( 'Left', 'jet-smart-filters' ),
+					'icon'  => 'dashicons-editor-alignleft',
+				],
+				'center'    => [
+					'shortcut' => esc_html__( 'Center', 'jet-smart-filters' ),
+					'icon'  => 'dashicons-editor-aligncenter',
+				],
+				'right'    => [
+					'shortcut' => esc_html__( 'Right', 'jet-smart-filters' ),
+					'icon'  => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'text-align: {{VALUE}};',
+			],
+			'attributes' => [
+				'default' => 'left',
+			]
+		]);
+
+		$this->controls_manager->end_section();
 	}
 
 	/**

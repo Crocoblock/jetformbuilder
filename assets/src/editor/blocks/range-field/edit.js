@@ -3,6 +3,7 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../tools/tools";
+import WrapperControl from '../../tools/wrapper-control';
 
 const block = 'jet-forms/range-field';
 
@@ -35,9 +36,10 @@ const {
 	RadioControl,
 	Disabled,
 	__experimentalNumberControl,
+	__experimentalInputControl
 } = wp.components;
 
-let { NumberControl } = wp.components;
+let { NumberControl, InputControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
@@ -137,12 +139,23 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<RangeControl
-				help={ attributes.desc }
-				label={ attributes.label }
-				min={ 0 }
-				max={ 100 }
-			/>
+			<WrapperControl
+				attributes={ attributes }
+				block={ block }
+			>
+				<RangeControl
+					onChange={ () => {} }
+					min={ attributes.min || 0 }
+					max={ attributes.max || 100 }
+					step={ attributes.step || 1 }
+					showTooltip={ false }
+					withInputField={ false }
+					railColor={ attributes.range_background_color.value }
+					trackColor={ attributes.range_background_color.value }
+				/>
+				
+			</WrapperControl>
+			
 		];
 	}
 }

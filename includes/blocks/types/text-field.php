@@ -32,6 +32,75 @@ class Text_Field extends Base {
 		return 'text-field';
 	}
 
+	public function get_css_scheme() {
+		return array(
+			'field'   => '.jet-form-builder__field-wrap input',
+			'wrapper' => '.jet-form-builder__field-wrap',
+		);
+	}
+
+	public function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'field_style',
+				'title' => __( 'Text Input', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_typography',
+			'type'         => 'typography',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'item_typography'              => [
+				'type' => 'object',
+			],
+			'item_normal_color'            => [
+				'type' => 'object',
+			],
+			'item_normal_background_color' => [
+				'type' => 'object',
+			],
+
+		);
+	}
+
 	/**
 	 * Returns icon class name
 	 *

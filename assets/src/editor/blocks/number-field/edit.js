@@ -2,6 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import Tools from "../../tools/tools";
+import WrapperControl from "../../tools/wrapper-control";
 
 const block = 'jet-forms/number-field';
 
@@ -32,10 +34,16 @@ const {
 	RangeControl,
 	CheckboxControl,
 	Disabled,
+	BaseControl,
+	__experimentalInputControl,
 	__experimentalNumberControl,
 } = wp.components;
 
-let { NumberControl } = wp.components;
+let { InputControl, NumberControl } = wp.components;
+
+if ( typeof InputControl === 'undefined' ) {
+	InputControl = __experimentalInputControl;
+}
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
@@ -120,11 +128,18 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 					/> }
 				</InspectorControls>
 			),
-			<NumberControl
-
-				label={ attributes.label }
-				labelPosition='top'
-			/>
+            <WrapperControl
+                block={ block }
+                attributes={ attributes }
+            >
+                <NumberControl
+                    placeholder={ attributes.placeholder }
+					key={ `place_holder_block_${ block }_control` }
+					min={ attributes.min }
+					max={ attributes.max }
+					step={ attributes.step }
+                />
+            </WrapperControl>
 		];
 	}
 }

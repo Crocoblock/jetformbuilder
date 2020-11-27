@@ -1820,7 +1820,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     box-sizing: border-box
 }
 
-.layout-column .jet-form__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
+.layout-column .jet-form-builder__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
     max-width: 100%;
     width: 100%;
     -webkit-box-flex: 0;
@@ -1828,15 +1828,15 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     flex: 0 1 100%
 }
 
-.layout-row .jet-form__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
+.layout-row .jet-form-builder__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
     width: 100%
 }
 
-.jet-form__field-wrap {
+.jet-form-builder__field-wrap {
     position: relative
 }
 
-.jet-form__field-label {
+.jet-form-builder__field-label {
     cursor: pointer;
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -1846,7 +1846,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     align-items: center
 }
 
-.jet-form__field-template + .jet-form__field-label {
+.jet-form-builder__field-template + .jet-form-builder__field-label {
     position: absolute;
     top: 0;
     left: 0;
@@ -1856,28 +1856,28 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     opacity: 0
 }
 
-.jet-form__field-label input {
+.jet-form-builder__field-label input {
     margin: 0 5px 0 0
 }
 
-.rtl .jet-form__field-label input {
+.rtl .jet-form-builder__field-label input {
     margin: 0 0 0 5px
 }
 
-.jet-form__field-template {
+.jet-form-builder__field-template {
     cursor: pointer
 }
 
-.jet-form__field-value {
+.jet-form-builder__field-value {
     white-space: nowrap
 }
 
-.jet-form__field-value-number {
+.jet-form-builder__field-value-number {
     display: inline-block;
     text-align: center
 }
 
-.jet-form__submit-wrap {
+.jet-form-builder__submit-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1888,7 +1888,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     width: 100%
 }
 
-.jet-form__submit-wrap.has-prev {
+.jet-form-builder__submit-wrap.has-prev {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
@@ -1898,7 +1898,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: space-between
 }
 
-.jet-form__check-mark {
+.jet-form-builder__check-mark {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1910,11 +1910,11 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: center
 }
 
-.jet-form__check-mark__icon.is-svg-icon svg {
+.jet-form-builder__check-mark__icon.is-svg-icon svg {
     display: block
 }
 
-.jet-form__check-mark--default {
+.jet-form-builder__check-mark--default {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1926,11 +1926,11 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: center
 }
 
-.jet-form__field-template--checked .jet-form__check-mark--default {
+.jet-form-builder__field-template--checked .jet-form-builder__check-mark--default {
     display: none
 }
 
-.jet-form__check-mark--checked {
+.jet-form-builder__check-mark--checked {
     display: none;
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -1940,7 +1940,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: center
 }
 
-.jet-form__field-template--checked .jet-form__check-mark--checked {
+.jet-form-builder__field-template--checked .jet-form-builder__check-mark--checked {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex
@@ -1986,11 +1986,11 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     text-decoration: none !important
 }
 
-.layout-column .jet-form__fields-group.checkradio-wrap {
+.layout-column .jet-form-builder__fields-group.checkradio-wrap {
     width: 100%
 }
 
-.jet-form__field-wrap.range-wrap {
+.jet-form-builder__field-wrap.range-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2000,18 +2000,18 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     width: 100%
 }
 
-input[type="range"].jet-form__field.range-field {
+input[type="range"].jet-form-builder__field.range-field {
     margin-right: 10px;
     -webkit-appearance: none;
     min-height: 18px
 }
 
-.rtl input[type="range"].jet-form__field.range-field {
+.rtl input[type="range"].jet-form-builder__field.range-field {
     margin-left: 10px;
     margin-right: 0
 }
 
-input[type="range"].jet-form__field.range-field, input[type="range"].jet-form__field.range-field:focus {
+input[type="range"].jet-form-builder__field.range-field, input[type="range"].jet-form-builder__field.range-field:focus {
     padding: 0;
     background: transparent;
     border: none;
@@ -2021,17 +2021,20 @@ input[type="range"].jet-form__field.range-field, input[type="range"].jet-form__f
     outline: none
 }
 
-input[type="range"].jet-form__field.range-field::-webkit-slider-runnable-track {
+input[type="range"].jet-form-builder__field.range-field::-webkit-slider-runnable-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
+    /**
+    test
+    */
     background: #e3ddd8;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: none
 }
 
-input[type="range"].jet-form__field.range-field::-moz-range-track {
+input[type="range"].jet-form-builder__field.range-field::-moz-range-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
@@ -2040,7 +2043,7 @@ input[type="range"].jet-form__field.range-field::-moz-range-track {
     border: none
 }
 
-input[type="range"].jet-form__field.range-field::-ms-track {
+input[type="range"].jet-form-builder__field.range-field::-ms-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
@@ -2050,18 +2053,18 @@ input[type="range"].jet-form__field.range-field::-ms-track {
     color: transparent
 }
 
-input[type="range"].jet-form__field.range-field::-ms-fill-lower {
+input[type="range"].jet-form-builder__field.range-field::-ms-fill-lower {
     background: transparent
 }
 
-input[type="range"].jet-form__field.range-field::-ms-fill-upper {
+input[type="range"].jet-form-builder__field.range-field::-ms-fill-upper {
     background: transparent
 }
 
-input[type="range"].jet-form__field.range-field::-webkit-slider-thumb {
+input[type="range"].jet-form-builder__field.range-field::-webkit-slider-thumb {
     width: 18px;
     height: 18px;
-    background: #ccc;
+    background:#ccc;
     border-radius: 50%;
     cursor: pointer;
     -webkit-box-shadow: none;
@@ -2071,7 +2074,7 @@ input[type="range"].jet-form__field.range-field::-webkit-slider-thumb {
     -webkit-appearance: none
 }
 
-input[type="range"].jet-form__field.range-field::-moz-range-thumb {
+input[type="range"].jet-form-builder__field.range-field::-moz-range-thumb {
     width: 18px;
     height: 18px;
     background: #ccc;
@@ -2081,7 +2084,7 @@ input[type="range"].jet-form__field.range-field::-moz-range-thumb {
     border: none
 }
 
-input[type="range"].jet-form__field.range-field::-ms-thumb {
+input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
     width: 18px;
     height: 18px;
     background: #ccc;
@@ -2218,7 +2221,7 @@ input[type="range"].jet-form__field.range-field::-ms-thumb {
     display: none
 }
 
-input.jet-form__field.file-field.jet-form-builder-file-upload__input {
+input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     border: none !important;
     padding: 0 !important;
     border-radius: 0 !important;
@@ -2226,7 +2229,7 @@ input.jet-form__field.file-field.jet-form-builder-file-upload__input {
     width: auto !important
 }
 
-.field-type-wysiwyg .jet-form__field {
+.field-type-wysiwyg .jet-form-builder__field {
     padding: 0 !important;
     border: none !important;
     border-radius: 0 !important

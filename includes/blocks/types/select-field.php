@@ -37,11 +37,7 @@ class Select_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			'select' => '.jet-form-builder__field-wrap select',
-
 			'list-wrapper' => '.jet-form-builder__fields-group',
-
-			'field-label'       => '.jet-form-builder__label span',
-			'field-description' => '.jet-form-builder__desc'
 		);
 	}
 
@@ -118,99 +114,10 @@ class Select_Field extends Base {
 		] );
 
 		$this->controls_manager->end_section();
-
-
-		$this->controls_manager->start_section(
-			'style_controls',
-			[
-				'id'    => 'label_style',
-				'title' => __( 'Label', 'jet-forms-builder' )
-			]
-		);
-
-		$this->controls_manager->add_control( [
-			'id'           => 'label_typography',
-			'type'         => 'typography',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'label_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'label_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'background-color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->end_section();
-
-		$this->controls_manager->start_section(
-			'style_controls',
-			[
-				'id'    => 'description_style',
-				'title' => __( 'Description', 'jet-forms-builder' )
-			]
-		);
-
-		$this->controls_manager->add_control( [
-			'id'           => 'label_typography',
-			'type'         => 'typography',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'description_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'description_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'background-color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->end_section();
 	}
 
 	public function get_style_attributes() {
 		return array(
-			'blockID'                      => [
-				'type'    => 'string',
-				'default' => '',
-			],
 			'select_width'                 => [
 				'type' => 'object',
 			],
@@ -223,24 +130,6 @@ class Select_Field extends Base {
 			'item_normal_background_color' => [
 				'type' => 'object',
 			],
-			'label_typography'             => array(
-				'type' => 'object'
-			),
-			'label_color'                  => array(
-				'type' => 'object'
-			),
-			'label_background_color'       => array(
-				'type' => 'object'
-			),
-			'description_typography'       => array(
-				'type' => 'object'
-			),
-			'description_color'            => array(
-				'type' => 'object'
-			),
-			'description_background_color' => array(
-				'type' => 'object'
-			),
 		);
 	}
 

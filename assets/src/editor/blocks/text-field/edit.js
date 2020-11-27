@@ -3,6 +3,7 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../tools/tools";
+import WrapperControl from "../../tools/wrapper-control";
 
 const block = 'jet-forms/text-field';
 
@@ -35,11 +36,6 @@ const {
 	BaseControl,
 } = wp.components;
 
-const {
-	useSelect,
-	useDispatch
-} = wp.data;
-
 
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
@@ -49,12 +45,6 @@ const localizeData = window.JetFormTextFieldData;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 	const attributes = props.attributes;
-
-	const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
-
-	const label = Tools.getLabel( meta, attributes );
 
 	return [
 		( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length &&
@@ -157,16 +147,15 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 				/> }
 			</InspectorControls>
 		),
-		<BaseControl key={ `place_holder_block_${ block }_label` }>
-			<BaseControl.VisualLabel>
-				{ label.name } <span className={'label-required-mark'}>{ label.mark }</span>
-			</BaseControl.VisualLabel>
+		<WrapperControl
+			block={ block }
+			attributes={ attributes }
+		>
 			<TextControl
 				placeholder={ attributes.placeholder }
 				key={ `place_holder_block_${ block }_control` }
-				help={ attributes.desc }
+				onChange={ () => {} }
 			/>
-		</BaseControl>
-
+		</WrapperControl>
 	];
 };

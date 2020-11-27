@@ -40,7 +40,7 @@ class Live_Form {
 
 	public $page = 0;
 	public $has_prev = false;
-	public $post_id;
+	public $post;
 
 	/**
 	 * Instance.
@@ -80,7 +80,7 @@ class Live_Form {
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->post_id = get_post()->ID;
+		$this->post = get_post();
 	}
 
 	public function set_form_id( $form_id ) {

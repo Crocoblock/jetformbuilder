@@ -19,6 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base {
 
 	use Get_Template_Trait;
+	use General_Style;
 
 	private $_unregistered = array();
 
@@ -114,11 +115,12 @@ abstract class Base {
 	private function maybe_init_style_manager() {
 
 		if ( Jet_Style_Manager::is_activated() ) {
-			$this->style_attributes = $this->get_style_attributes();
-			$this->css_scheme       = $this->_get_css_scheme();
+			$this->style_attributes = array_merge( $this->general_style_attributes(), $this->get_style_attributes() );
+			$this->css_scheme       = array_merge( $this->general_css_scheme(), $this->_get_css_scheme() );
 
 			if ( ! empty( $this->style_attributes ) && ! empty( $this->css_scheme ) ) {
 				$this->set_style_manager_instance()->add_style_manager_options();
+				$this->general_style_manager_options();
 			}
 		}
 	}
@@ -157,6 +159,8 @@ abstract class Base {
 	 *
 	 * @param array $attrs
 	 * @param $content
+	 *
+	 * @param null $wp_block
 	 *
 	 * @return string
 	 */
@@ -261,6 +265,7 @@ abstract class Base {
 			$keys
 		);
 	}
+
 
 	/**
 	 * Returns full block name

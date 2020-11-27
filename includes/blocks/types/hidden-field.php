@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Render\Hidden_Field_Render;
+use Jet_Form_Builder\Live_Form;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -22,7 +23,14 @@ class Hidden_Field extends Base {
 		/**
 		 * Get current post object
 		 */
-		$this->post = get_post();
+		$this->post = Live_Form::instance()->post;
+	}
+
+	public function general_style_attributes() {
+		return array();
+	}
+
+	public function general_style_manager_options() {
 	}
 
 	/**
@@ -246,25 +254,17 @@ class Hidden_Field extends Base {
 
 	public function get_author_meta( $key ) {
 
-		$post_id = get_the_ID();
-
-		if ( ! $post_id ) {
-			return null;
-		}
-
 		global $authordata;
 
 		if ( $authordata ) {
 			return get_the_author_meta( $key );
 		}
 
-		$post = get_post( $post_id );
-
-		if ( ! $post ) {
+		if ( ! $this->post ) {
 			return null;
 		}
 
-		return get_the_author_meta( $key, $post->post_author );
+		return get_the_author_meta( $key, $this->post->post_author );
 
 	}
 

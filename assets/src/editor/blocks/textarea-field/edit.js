@@ -2,6 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import Tools from "../../tools/tools";
+import WrapperControl from "../../tools/wrapper-control";
 
 const block = 'jet-forms/textarea-field';
 
@@ -123,14 +124,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function NumberEdit( props )
 				/> }
 			</InspectorControls>
 		),
-		<BaseControl key={ `place_holder_block_${ block }_label` }>
-			<BaseControl.VisualLabel>
-				{ label.name } <span className={'label-required-mark'}>{ label.mark }</span>
-			</BaseControl.VisualLabel>
-			<TextareaControl
-				key={ `place_holder_block_${ block }` }
-				help={ attributes.desc }
-			/>
-		</BaseControl>
+		<WrapperControl
+            block={ block }
+            attributes={ attributes }
+        >
+            <TextareaControl
+                key={ `place_holder_block_${ block }` }
+				placeholder={ attributes.placeholder }
+				onChange={ () => {} }
+            />
+        </WrapperControl>
+
 	];
 }

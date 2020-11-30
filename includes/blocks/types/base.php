@@ -172,6 +172,7 @@ abstract class Base {
 		$form->is_hidden_row = false;
 		$form->is_submit_row = false;
 
+		$result = array();
 		$result[] = $form->maybe_start_page();
 		$result[] = $form->start_form_row( $this->block_attrs );
 
@@ -183,7 +184,12 @@ abstract class Base {
 			 * because it's too large
 			 */
 			$parsed_block = $wp_block ? $wp_block->parsed_block : null;
-			$result[]     = $this->get_block_renderer( $parsed_block );
+
+			if ( static::class === 'Jet_Form_Builder\Blocks\Types\Repeater_Field' ) {
+				//var_dump( $this->get_block_renderer( $parsed_block ) );
+			}
+			$result[] = $this->get_block_renderer( $parsed_block );
+
 		}
 
 		$result[] = $form->end_form_row();

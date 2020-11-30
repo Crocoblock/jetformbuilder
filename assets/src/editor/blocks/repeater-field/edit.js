@@ -23,6 +23,10 @@ const {
 } = wp.blockEditor;
 
 const {
+	select,
+} = wp.data;
+
+const {
 	PanelColor,
 	IconButton,
 	TextControl,
@@ -64,6 +68,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
 		const formFields = Tools.getAvailableFields( [block] );
+		const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+
+		const label = Tools.getLabel( meta, attributes );
 
 		const insertMacros = ( macros ) => {
 			const formula = attributes.calc_formula || '';
@@ -211,13 +218,35 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 					</div>
 				</div> }
 				<BaseControl key={'repeater-fields-title'} style={ { textAlign: 'center' } }>
-					<h4>{ attributes.label || 'Repeater field' }</h4>
-					<p className={ 'components-base-control__help' } style={ { marginTop: '-4px' } }>{ attributes.desc }</p>
+					<BaseControl.VisualLabel>
+						<div className={ 'jet-form-builder__label-text' }>
+							{ label.name || 'Repeater field' }
+							{ attributes.required && <span className={'jet-form-builder__required'}>
+								{ label.mark }
+							</span> }
+						</div>
+					</BaseControl.VisualLabel>
+					<div className={ 'components-base-control__help jet-form-builder__desc' } style={ { marginTop: '0px' } }>{ attributes.desc }</div>
 				</BaseControl>
 
 				<InnerBlocks
 					key={ 'repeater-fields' }
+					renderAppender={ () => (
+						<InnerBlocks.ButtonBlockAppender />
+					) }
 				/>
+				<Button
+					className={ 'jet-form-repeater__remove' }
+					isSecondary
+					onClick={ () => {} }
+				>&times;</Button>
+				<div className="jet-form-repeater__actions">
+					<Button
+						className={ 'jet-form-builder-repeater__new' }
+						isSecondary
+						onClick={ () => {} }
+					>{ attributes.new_item_label || 'Add New' }</Button>
+				</div>
 
 			</React.Fragment>
 		];

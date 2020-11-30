@@ -16,7 +16,7 @@ class Hidden_Field_Render extends Base {
 		return 'hidden-field';
 	}
 
-	public function render( $wp_block = null ) {
+	public function render( $wp_block = null, $template = null ) {
 		if ( isset( $this->block_type->block_attrs['field_value'] ) && ! empty( $this->block_type->block_attrs['field_value'] ) ) {
 
 			$this->block_type->block_attrs['field_value'] = jet_form_builder()->blocks

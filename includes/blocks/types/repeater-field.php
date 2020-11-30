@@ -16,6 +16,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Repeater_Field extends Base {
 
+	use General_Style;
+
 	public $manage_items;
 	public $items_field;
 	public $repeater_calc_type;
@@ -48,6 +50,202 @@ class Repeater_Field extends Base {
 	 */
 	public function get_name() {
 		return 'repeater-field';
+	}
+
+	public function get_css_scheme() {
+		return array(
+			'repeater-row-editor' => '.block-editor-inner-blocks',
+			'repeater-row'        => '.jet-form-repeater__row',
+			'remove-button'       => '.jet-form-repeater__remove',
+			'new-button'          => '.jet-form-builder-repeater__new',
+			'actions'             => '.jet-form-repeater__actions'
+		);
+	}
+
+	public function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'field_style',
+				'title' => __( 'Repeater Row', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'repeater_row_padding',
+			'type'         => 'dimensions',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['repeater-row']        => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['repeater-row-editor'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+		] );
+
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'new_button_style',
+				'title' => __( 'New Item Button', 'jet-forms-builder' )
+			]
+		);
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_background_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'options'      => [
+				'flex-start'   => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center' => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'flex-end'  => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['actions']  => 'justify-content: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'left'
+				),
+			]
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'remove_button_style',
+				'title' => __( 'Remove Item Button', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_background_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'repeater_row_padding'           => array(
+				'type' => 'object',
+			),
+			'new_button_typography'          => array(
+				'type' => 'object',
+			),
+			'new_button_typography_color'    => array(
+				'type' => 'object',
+			),
+			'new_button_background_color'    => array(
+				'type' => 'object',
+			),
+			'new_button_border'              => array(
+				'type' => 'object',
+			),
+			'new_button_alignment'           => array(
+				'type' => 'object',
+			),
+			'remove_button_typography'       => array(
+				'type' => 'object',
+			),
+			'remove_button_typography_color' => array(
+				'type' => 'object',
+			),
+			'remove_button_background_color' => array(
+				'type' => 'object',
+			),
+			'remove_button_border'           => array(
+				'type' => 'object',
+			),
+		);
 	}
 
 	/**

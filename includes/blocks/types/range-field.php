@@ -288,7 +288,9 @@ class Range_Field extends Base {
 				'{{WRAPPER}} ' . $this->css_scheme['range-values'] => 'text-align: {{VALUE}};',
 			],
 			'attributes' => [
-				'default' => 'left',
+				'default' => array(
+					'value' => 'left'
+				),
 			]
 		]);
 

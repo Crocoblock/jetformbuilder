@@ -3,11 +3,6 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-import FromManualFields from "../base-select-check-radio/from-manual-fields";
-
 const block = 'jet-forms/submit-field';
 
 window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
@@ -43,7 +38,7 @@ const {
 const keyControls = () => block + '-controls-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class SubmitEdit extends wp.element.Component {
 	render() {
 		const props = this.props;
 		const attributes = props.attributes;
@@ -85,12 +80,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<Button
-				key={ `place_holder_block_${ block }` }
-				isPrimary
-			>
-				{ attributes.label }
-			</Button>
+
+			<div className="jet-form-builder__submit-wrap">
+				<Button
+					key={ `place_holder_block_${ block }` }
+					isPrimary
+					className={ 'jet-form-builder__submit' }
+				>
+					{ attributes.label }
+				</Button>
+			</div>
 		];
 	}
 }

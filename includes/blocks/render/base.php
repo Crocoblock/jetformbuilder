@@ -100,12 +100,11 @@ abstract class Base {
 		return true;
 	}
 
-	public function render( $wp_block = null ) {
+	public function render( $wp_block = null, $template = null ) {
 
 		if ( ! $this->live_form->form_id ) {
 			return;
 		}
-
 
 		$defaults = array(
 			'default'     => '',
@@ -122,7 +121,11 @@ abstract class Base {
 		$args = wp_parse_args( $sanitized_args, $defaults );
 
 		$template_name = $this->get_name();
-		$template      = $this->block_type->get_field_template( $template_name . '.php' );
+
+		if ( is_null( $template ) ) {
+			$template      = $this->block_type->get_field_template( $template_name . '.php' );
+		}
+
 		$label         = $this->get_field_label();
 		$desc          = $this->get_field_desc();
 		$layout        = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';

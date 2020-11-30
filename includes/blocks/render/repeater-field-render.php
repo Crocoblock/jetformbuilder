@@ -24,7 +24,7 @@ class Repeater_Field_Render extends Base {
 		return 'repeater-field';
 	}
 
-	public function render( $wp_block = null ) {
+	public function render( $wp_block = null, $template = null ) {
 		if ( empty( $wp_block['innerBlocks'] ) ) {
 			return;
 		}
@@ -72,7 +72,7 @@ class Repeater_Field_Render extends Base {
 
 		$this->current_repeater = false;
 
-		return $html;
+		return parent::render( null, $html );
 	}
 
 	/**
@@ -100,9 +100,9 @@ class Repeater_Field_Render extends Base {
 			$html .= render_block( $block );
 		}
 
-		Live_Form::instance()->set_repeater( false );
-
 		$html .= '</div>';
+
+		Live_Form::instance()->set_repeater( false );
 
 		if ( 'manually' === $this->block_type->manage_items ) {
 			$html .= '<div class="jet-form-repeater__row-remove">';

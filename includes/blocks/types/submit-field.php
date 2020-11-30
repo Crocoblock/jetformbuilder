@@ -21,6 +21,121 @@ class Submit_Field extends Base {
 		parent::__construct();
 	}
 
+	public function general_style_attributes() {
+		return array();
+	}
+
+	public function general_style_manager_options() {
+	}
+
+	public function get_css_scheme() {
+		return array(
+			'button' => '.jet-form-builder__submit',
+			'wrap'   => '.jet-form-builder__submit-wrap'
+		);
+	}
+
+	public function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'submit_style',
+				'title' => __( 'Submit Button', 'jet-forms-builder' )
+			]
+		);
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_background_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'options'      => [
+				'flex-start' => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center'     => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'flex-end'   => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'align-items: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'flex-start'
+				),
+			]
+		] );
+
+		$this->controls_manager->end_section();
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'submit_typography'       => array(
+				'type' => 'object',
+			),
+			'submit_typography_color' => array(
+				'type' => 'object',
+			),
+			'submit_background_color' => array(
+				'type' => 'object',
+			),
+			'submit_border'           => array(
+				'type' => 'object',
+			),
+			'submit_alignment'        => array(
+				'type' => 'object',
+			),
+		);
+	}
+
 	/**
 	 * Returns block title
 	 *
@@ -37,13 +152,6 @@ class Submit_Field extends Base {
 	 */
 	public function get_name() {
 		return 'submit-field';
-	}
-
-	public function general_style_attributes() {
-		return array();
-	}
-
-	public function general_style_manager_options() {
 	}
 
 	/**

@@ -212,11 +212,11 @@ class Live_Form {
 	public function maybe_start_page() {
 
 		if ( 0 >= $this->pages ) {
-			return;
+			return '';
 		}
 
 		if ( false === $this->start_new_page ) {
-			return;
+			return '';
 		}
 
 		$this->start_new_page = false;
@@ -252,7 +252,7 @@ class Live_Form {
 			return;
 		}
 
-		if ( ! $is_last && ! $field && ! $this->is_field( $field, 'form-break' ) ) {
+		if ( ! $is_last && ! $this->is_field( $field, 'form-break' ) ) {
 			return;
 		}
 

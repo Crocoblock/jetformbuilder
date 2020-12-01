@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Messages_Builder;
+use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -37,18 +38,253 @@ class Form extends Base {
 		parent::__construct();
 	}
 
-	public function general_style_attributes() {
-		return array();
+	public function get_label_selector() {
+		return '.jet-form-builder__label-text';
 	}
 
-	public function general_style_manager_options() {
+	public function get_required_selector() {
+		return '.jet-form-builder__label-text .jet-form-builder__required';
 	}
 
+	public function get_description_selector() {
+		return '.jet-form-builder__desc';
+	}
 
-	public function block_params() {
+	public function get_css_scheme() {
 		return array(
-			'attributes'      => $this->block_attributes(),
-			'render_callback' => array( $this, 'render_callback_form' ),
+			'success' => '.jet-form-message--success',
+			'error'   => '.jet-form-message--error',
+		);
+	}
+
+	public function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'success_style',
+				'title' => __( 'Message Success', 'jet-forms-builder' )
+			]
+		);
+
+		$this->add_margin_padding( $this->css_scheme['success'], array(
+			'padding' => 'success_padding',
+			'margin'  => 'success_margin'
+		) );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'success_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'options'      => [
+				'left'   => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center' => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'right'  => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'text-align: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'left'
+				),
+			]
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'success_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'success_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'success_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'success_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'error_style',
+				'title' => __( 'Message Error', 'jet-forms-builder' )
+			]
+		);
+
+		$this->add_margin_padding( $this->css_scheme['error'], array(
+			'padding' => 'error_padding',
+			'margin'  => 'error_margin'
+		) );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'error_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'options'      => [
+				'left'   => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center' => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'right'  => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'text-align: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'left'
+				),
+			]
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'error_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'error_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'error_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'attributes'   => [
+				'default' => '',
+			],
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'error_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+	}
+
+	public function get_style_attributes() {
+		return array(
+			'success_padding'          => array(
+				'type' => 'object'
+			),
+			'success_margin'           => array(
+				'type' => 'object'
+			),
+			'success_alignment'        => array(
+				'type' => 'object'
+			),
+			'success_typography'       => array(
+				'type' => 'object'
+			),
+			'success_color'            => array(
+				'type' => 'object'
+			),
+			'success_background_color' => array(
+				'type' => 'object'
+			),
+			'success_border'           => array(
+				'type' => 'object'
+			),
+
+
+			'error_padding'          => array(
+				'type' => 'object'
+			),
+			'error_margin'           => array(
+				'type' => 'object'
+			),
+			'error_typography'       => array(
+				'type' => 'object'
+			),
+			'error_color'            => array(
+				'type' => 'object'
+			),
+			'error_background_color' => array(
+				'type' => 'object'
+			),
+			'error_alignment'        => array(
+				'type' => 'object'
+			),
+			'error_border'           => array(
+				'type' => 'object'
+			),
 		);
 	}
 
@@ -105,6 +341,19 @@ class Form extends Base {
 				'type'    => 'number',
 				'default' => 0,
 			),
+
+			'submit_type' => array(
+				'type'    => 'string',
+				'default' => Plugin::instance()->post_type->get_default_arg__submit_type()
+			),
+			'required_mark' => array(
+				'type'    => 'string',
+				'default' => Plugin::instance()->post_type->get_default_arg__required_mark()
+			),
+			'fields_layout' => array(
+				'type'    => 'string',
+				'default' => Plugin::instance()->post_type->get_default_arg__fields_layout()
+			),
 		);
 	}
 
@@ -119,9 +368,12 @@ class Form extends Base {
 	 *
 	 * @param array $attrs [description]
 	 *
+	 * @param null $content
+	 * @param null $wp_block
+	 *
 	 * @return false|string [type]             [description]
 	 */
-	public function render_callback_form( $attrs = array() ) {
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
 
 		$form_id = $attrs['form_id'];
 
@@ -136,6 +388,10 @@ class Form extends Base {
 
 		$builder->render_form();
 		$messages->render_messages();
+
+		if ( Tools::is_editor() ) {
+			$messages->render_messages_samples();
+		}
 
 		return ob_get_clean();
 	}

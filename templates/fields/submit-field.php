@@ -24,7 +24,8 @@ if ( isset( $this->live_form->spec_data->submit_type ) && 'reload' === $this->li
 
 $wrap_classes = array( 'jet-form-builder__submit-wrap' );
 
-if ( isset( $args['add_prev'] ) && ! empty( $args['add_prev'] ) && 1 < $this->live_form->spec_data->page ) {
+
+if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $this->live_form->page ) {
 	$wrap_classes[] = 'has-prev';
 }
 

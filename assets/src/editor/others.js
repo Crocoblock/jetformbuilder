@@ -17,7 +17,8 @@ const {
 	PanelBody,
 	Button,
 	ComboboxControl,
-	SelectControl
+	SelectControl,
+	TextControl
 } = wp.components;
 
 const {
@@ -63,6 +64,37 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 						...forms_list
 					] }
 				/>
+				{ attributes.form_id && <React.Fragment>
+					<SelectControl
+						label={ 'Fields Layout' }
+						value={ attributes.fields_layout }
+						options={ [
+							{ value: 'column', label: 'Column' },
+							{ value: 'row', label: 'Row' }
+						] }
+						onChange={ newValue => {
+							setAttributes( { fields_layout: newValue } );
+						} }
+					/>
+					<TextControl
+						label={ 'Required Mark' }
+						value={ attributes.required_mark }
+						onChange={ newValue => {
+							setAttributes( { required_mark: newValue } );
+						} }
+					/>
+					<SelectControl
+						label={ 'Submit Type' }
+						value={ attributes.submit_type }
+						options={ [
+							{ value: 'reload', label: 'Page Reload' },
+							{ value: 'ajax', label: 'AJAX' }
+						] }
+						onChange={ newValue => {
+							setAttributes( { submit_type: newValue } );
+						} }
+					/>
+				</React.Fragment> }
 			</PanelBody>
 		</InspectorControls>,
 		<ServerSideRender

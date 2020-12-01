@@ -401,3 +401,16 @@
 	font-size: 12px;
 	color: rgb(117, 117, 117);
 }
+
+.jet-form-edit-modal .jet-post-field-control {
+	display: flex;
+}
+
+.jet-form-edit-modal .jet-post-field-control .components-base-control__field {
+	padding: 0;
+	border: none;
+}
+
+.jet-form-edit-modal .jet-post-field-control .components-base-control:nth-child(2) {
+	margin-left: 1em;
+}

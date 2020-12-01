@@ -22,10 +22,18 @@ class Post_Type {
 	public $allow_gateways;
 
 	/**
+	 * Used to define the editor
+	 *
+	 * @var boolean
+	 */
+	public $is_form_editor;
+
+	/**
 	 * Constructor for the class
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 
 		/**
@@ -34,6 +42,7 @@ class Post_Type {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 	}
 
+
 	/**
 	 * Register admin assets
 	 *
@@ -41,20 +50,12 @@ class Post_Type {
 	 */
 	public function admin_assets() {
 
-		$screen = get_current_screen();
-
-		if ( ! $screen->action ) {
-			$screen->action = ! empty( $_GET['action'] ) ? $_GET['action'] : '';
-		}
-
-		$is_editor_page = in_array( $screen->action, array( 'add', 'edit' ) );
-
-		if ( $this->slug() === $screen->id && $is_editor_page ) {
+		if ( $this->is_form_editor ) {
 			Plugin::instance()->editor->enqueue_assets();
-		} elseif ( $this->slug() !== $screen->id && $is_editor_page ) {
+
+		} elseif ( false === $this->is_form_editor ) {
 			Plugin::instance()->editor->enqueue_form_assets();
 		}
-
 	}
 
 	/**
@@ -64,6 +65,24 @@ class Post_Type {
 	 */
 	public function slug() {
 		return 'jet-form-builder';
+	}
+
+
+	public function set_current_screen() {
+		$screen = get_current_screen();
+
+		if ( ! $screen->action ) {
+			$screen->action = ! empty( $_GET['action'] ) ? $_GET['action'] : '';
+		}
+
+		$is_editor_page = in_array( $screen->action, array( 'add', 'edit' ) );
+
+		if ( $this->slug() === $screen->id && $is_editor_page ) {
+			$this->is_form_editor = true;
+
+		} elseif ( $this->slug() !== $screen->id && $is_editor_page ) {
+			$this->is_form_editor = false;
+		}
 	}
 
 	/**
@@ -254,6 +273,18 @@ class Post_Type {
 	 */
 	public function get_gateways( $form_id ) {
 		return $this->get_form_meta( '_jf_gateways', $form_id );
+	}
+
+	public function get_default_arg__submit_type() {
+		return $this->get_default_args()['submit_type'];
+	}
+
+	public function get_default_arg__required_mark() {
+		return $this->get_default_args()['required_mark'];
+	}
+
+	public function get_default_arg__fields_layout() {
+		return $this->get_default_args()['fields_layout'];
 	}
 
 	public function get_default_args() {

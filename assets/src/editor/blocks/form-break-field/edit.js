@@ -100,7 +100,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 				</InspectorControls>
 			),
 			<div className={ 'wp-block-form-break-field' }>
-				<span>{ __( 'FORM BREAK' ) }</span>
+				<span>{ attributes.label || 'FORM BREAK' }</span>
 			</div>
 		];
 	}

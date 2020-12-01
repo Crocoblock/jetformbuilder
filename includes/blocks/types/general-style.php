@@ -6,11 +6,23 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 trait General_Style {
 
+	public function get_label_selector() {
+		return 'span.jet-form-builder__label-text';
+	}
+
+	public function get_required_selector() {
+		return '.jet-form-builder__label-text span.jet-form-builder__required';
+	}
+
+	public function get_description_selector() {
+		return 'small.jet-form-builder__desc';
+	}
+
 	public function general_css_scheme() {
 		return array(
-			'field-label'       => '.jet-form-builder__label-text',
-			'field-required'    => '.jet-form-builder__label-text .jet-form-builder__required',
-			'field-description' => '.jet-form-builder__desc'
+			'field-label'       => $this->get_label_selector(),
+			'field-required'    => $this->get_required_selector(),
+			'field-description' => $this->get_description_selector()
 		);
 	}
 
@@ -46,14 +58,14 @@ trait General_Style {
 			'description_background_color' => array(
 				'type' => 'object'
 			),
-			'required_color'			   => array(
-				'type' => 'object'	
+			'required_color'               => array(
+				'type' => 'object'
 			),
-			'required_background_color'	   => array(
-				'type' => 'object'	
+			'required_background_color'    => array(
+				'type' => 'object'
 			),
-			'required_typography'		   => array(
-				'type' => 'object'	
+			'required_typography'          => array(
+				'type' => 'object'
 			),
 		);
 	}
@@ -216,14 +228,14 @@ trait General_Style {
 		] );
 
 		$this->controls_manager->add_control( [
-			'id'           => 'required_typography',
-			
-			'disable_line_height' 		=> true,
-			'disable_family' 			=> true,
-			'disable_transform' 		=> true,
-			'disable_style' 			=> true,
-			'disable_decoration' 		=> true,
-			'disable_letter_spacing' 	=> true,
+			'id' => 'required_typography',
+
+			'disable_line_height'    => true,
+			'disable_family'         => true,
+			'disable_transform'      => true,
+			'disable_style'          => true,
+			'disable_decoration'     => true,
+			'disable_letter_spacing' => true,
 
 			'type'         => 'typography',
 			'css_selector' => [

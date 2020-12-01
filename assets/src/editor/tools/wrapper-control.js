@@ -18,16 +18,16 @@ export default function WrapperControl( { attributes, block, children, wrapClass
     return (
         <BaseControl key={ `place_holder_block_${ block }_label` } className={ `jet-form-builder__field-wrap ${ wrapClasses.join( ' ' ) }` }>
             <BaseControl.VisualLabel>
-                <div className={ 'jet-form-builder__label-text' }>
+                <span className={ 'jet-form-builder__label-text' }>
                     { label.name } 
                     { attributes.required && <span className={'jet-form-builder__required'}>
                         { label.mark }
                     </span> }
-                </div>
+                </span>
             </BaseControl.VisualLabel>
             { children }
-            <BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
-                <div className={ 'components-base-control__help' } style={ { marginTop: '0px' } }>{ attributes.desc }</div>
+            <BaseControl key={ 'custom_help_description' }>
+                <small className={ 'jet-form-builder__desc components-base-control__help' } style={ { marginTop: '0px' } }>{ attributes.desc }</small>
             </BaseControl>
         </BaseControl>
     );

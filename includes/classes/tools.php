@@ -12,6 +12,12 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Tools {
 
+	public static function is_editor() {
+		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
+
+		return in_array( $action, array( 'add', 'edit' ) );
+	}
+
 	/**
 	 * Returns all post types list to use in JS components
 	 *

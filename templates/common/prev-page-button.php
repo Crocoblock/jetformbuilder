@@ -4,7 +4,7 @@
  */
 $add_button = isset( $this->live_form->spec_data )
             && isset( $this->live_form->spec_data->has_prev )
-            && ( $this->live_form->spec_data->has_prev || 1 < $this->live_form->spec_data->page );
+            && ( $this->live_form->spec_data->has_prev || 1 < $this->live_form->page );
 
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && $add_button ) {
 
@@ -13,7 +13,7 @@ if ( isset( $args['add_prev'] ) && $args['add_prev'] && $add_button ) {
 	printf(
 		'<button type="button" class="jet-form-builder__prev-page" data-to-page="%2$d">%1$s</button>',
 		$prev_label,
-        $this->live_form->spec_data->page - 1
+        $this->live_form->page - 1
 	);
 
 }

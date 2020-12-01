@@ -267,14 +267,26 @@
     border: none;
 }
 
+.jet-form-builder__field-wrap.range-wrap .range-flex-wrap {
+	display: flex;
+	/*display: -webkit-box;*/
+	display: -ms-flexbox;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+/* Range */
+.jet-form-builder__field-wrap.range-wrap .range-flex-wrap .components-input-control{
+	margin-right: auto;
+}
+
+/* Range Values */
+.jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
+	max-width: 150px;
+	margin-left: 10px;
+}
 
 .jet-form-builder__field-wrap.range-wrap {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     width: 100%
 }
 
@@ -378,4 +390,14 @@
 	-ms-flex-direction: column;
 	flex-direction: column;
 	width: 100%
+}
+
+.jet-form-builder__field-wrap.range-wrap .components-input-control__backdrop[aria-hidden="true"] {
+	border-width: 0;
+}
+
+.jet-form-builder__field-settings .help-input {
+	margin-bottom: 2em;
+	font-size: 12px;
+	color: rgb(117, 117, 117);
 }

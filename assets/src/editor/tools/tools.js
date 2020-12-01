@@ -44,7 +44,7 @@ class Tools {
 					} );
 				}
 
-				if ( block.innerBlocks.length && ! block.name.includes( 'repeater' ) ) {
+				if ( block.innerBlocks.length ) {
 					blocksRecursiveIterator( block.innerBlocks );
 				}
 

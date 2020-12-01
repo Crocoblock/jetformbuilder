@@ -15,10 +15,16 @@ if ( ! defined( 'WPINC' ) ) {
 class Calculated_Field extends Base {
 
 	public function __construct() {
-		$this->unregister_attribute( 'required' );
+		$this->unregister_attributes(
+			array(
+				'required',
+				'placeholder',
+			)
+		);
 
 		parent::__construct();
 	}
+
 
 	/**
 	 * Returns block title

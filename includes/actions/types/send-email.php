@@ -131,7 +131,7 @@ class Send_Email extends Base {
 		$log_errors = apply_filters( 'jet-form-builder/send-email/log-errors', true, $to, $subject, $message );
 
 		// Test
-		$log_errors = true;
+		$log_errors = false;
 
 		if ( ! $sent && true === $log_errors ) {
 

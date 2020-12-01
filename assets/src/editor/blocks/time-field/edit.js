@@ -95,9 +95,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TimeEdit extends wp.el
 				block={ block }
 				attributes={ attributes }
 			>
-				<InputControl
+				<TextControl
+					onChange={ () => {} }
 					key={ `place_holder_block_${ block }` }
-					type={ 'time' }
+					placeholder={ 'Input type="time"' }
 				/>
 			</WrapperControl>
 		];

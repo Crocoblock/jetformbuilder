@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder;
 
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
 class Request_Handler {
@@ -100,7 +101,7 @@ class Request_Handler {
 			}
 
 			$required = ! empty( $settings['required'] ) ? $settings['required'] : '';
-			$name     = $settings['name'];
+			$name     = isset( $settings['name'] ) ? $settings['name'] : 'field_name' ;
 			$value    = isset( $request[ $name ] ) ? $request[ $name ] : '';
 
 
@@ -120,7 +121,7 @@ class Request_Handler {
 
 			if ( 'wysiwyg-field' === $type ) {
 				$required = false;
-				$value    = jet_engine_sanitize_wysiwyg( $value );
+				$value    = Tools::sanitize_wysiwyg( $value );
 			}
 
 			if ( isset( $settings['field_type'] ) && 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {

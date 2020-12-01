@@ -1016,8 +1016,6 @@
 					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
 				}
 
-				console.log( 'object:', object );
-
 				return JetFormBuilder.getFieldValue( object );
 
 			} );

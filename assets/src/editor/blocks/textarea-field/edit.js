@@ -95,18 +95,20 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function NumberEdit( props )
 				>
 
 					<NumberControl
-						label={ __( 'Min length' ) }
+						label={ __( 'Min length (symbols)' ) }
 						labelPosition='top'
 						key='minlength'
+						min={ 1 }
 						value={ attributes.minlength }
 						onChange={ ( newValue ) => {
 							props.setAttributes( { minlength: parseInt( newValue ) } );
 						} }
 					/>
 					<NumberControl
-						label={ __( 'Max length' ) }
+						label={ __( 'Max length (symbols)' ) }
 						labelPosition='top'
 						key='maxlength'
+						min={ 1 }
 						value={ attributes.maxlength }
 						onChange={ ( newValue ) => {
 							props.setAttributes( { maxlength: parseInt( newValue ) } );

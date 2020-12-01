@@ -74,6 +74,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 				/> }
 				<PanelBody
 					title={ __( 'Field Settings' ) }
+					className={ 'jet-form-builder__field-settings' }
 				>
 					<SelectControl
 						key='field_type'
@@ -96,45 +97,57 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 							} );
 						} }
 					/>
-					{ attributes.enable_input_mask && <SelectControl
-						key='mask_type'
-						label={ __( 'Mask type' ) }
-						labelPosition='top'
-						value={ attributes.mask_type }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { mask_type: newValue } );
-						} }
-						options={ localizeData.mask_types_list }
-					/> }
-					{ attributes.enable_input_mask && <TextControl
-						key='input_mask'
-						label={ __( 'Input mask' ) }
-						help={ Tools.getHelpMessage( localizeData, 'input_mask' ) }
-						value={ attributes.input_mask }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { input_mask: newValue } );
-						} }
-					/> }
-					{ attributes.enable_input_mask && <SelectControl
-						key='mask_visibility'
-						label={ __( 'Mask visibility' ) }
-						labelPosition='top'
-						value={ attributes.mask_visibility }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { mask_visibility: newValue } );
-						} }
-						options={ localizeData.mask_visibilities_list }
-					/> }
-					{ attributes.enable_input_mask && <SelectControl
-						key='mask_placeholder'
-						label={ __( 'Mask placeholder' ) }
-						labelPosition='top'
-						value={ attributes.mask_placeholder }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { mask_placeholder: newValue } );
-						} }
-						options={ localizeData.mask_placeholders_list }
-					/> }
+					{ attributes.enable_input_mask && <React.Fragment>
+						<SelectControl
+							key='mask_type'
+							label={ __( 'Mask type' ) }
+							labelPosition='top'
+							value={ attributes.mask_type }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { mask_type: newValue } );
+							} }
+							options={ localizeData.mask_types_list }
+						/>
+						<TextControl
+							key='input_mask'
+							label={ __( 'Input mask' ) }
+							/*help={ Tools.getHelpMessage( localizeData, 'input_mask-default' ) }*/
+							value={ attributes.input_mask }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { input_mask: newValue } );
+							} }
+						/>
+						{ ( ! attributes.mask_type ) && <div className={ 'help-input' }>
+							{ Tools.getHelpMessage( localizeData, 'input_mask_default' ) }
+						</div> }
+
+						{ 'datetime' === attributes.mask_type && <div className={ 'help-input' }>
+							{ __( 'Examples:', 'jet-form-builder' ) } dd/mm/yyyy, mm/dd/yyyy<br/>
+							{ __( 'More info - ', 'jet-form-builder' ) }
+							<a href={ localizeData.help_messages.input_mask_datetime_link } target='_blank'>{ __( 'here', 'jet-form-builder' ) }</a>
+						</div> }
+
+						<SelectControl
+							key='mask_visibility'
+							label={ __( 'Mask visibility' ) }
+							labelPosition='top'
+							value={ attributes.mask_visibility }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { mask_visibility: newValue } );
+							} }
+							options={ localizeData.mask_visibilities_list }
+						/>
+						<SelectControl
+							key='mask_placeholder'
+							label={ __( 'Mask placeholder' ) }
+							labelPosition='top'
+							value={ attributes.mask_placeholder }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { mask_placeholder: newValue } );
+							} }
+							options={ localizeData.mask_placeholders_list }
+						/>
+					</React.Fragment> }
 
 				</PanelBody>
 				{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&

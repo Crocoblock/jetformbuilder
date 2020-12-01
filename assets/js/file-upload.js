@@ -137,8 +137,6 @@
 			var files   = event.target.files,
 				$errors = $( event.target ).closest( '.jet-form-builder-file-upload' ).find( '.jet-form-builder-file-upload__errors' );
 
-			console.log( event.target.files );
-
 			$errors.html( '' ).addClass( 'is-hidden' );
 
 			try {
@@ -147,7 +145,6 @@
 				/**
 				 *
 				 */
-				console.log( error );
 				return;
 
 				if ( window.JetFormBuilderFileUploadConfig.errors[ error ] ) {

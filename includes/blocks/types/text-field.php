@@ -200,11 +200,11 @@ class Text_Field extends Base {
 					),
 				),
 				'help_messages'          => array(
-					'input_mask' => __(
-						__( 'Examples: (999) 999-9999 - static mask, 9-a{1,3}9{1,3} - mask with dynamic syntax 
-                        Default masking definitions: 9 - numeric, a - alphabetical, * - alphanumeric', 'jet-form-builder' ),
+					'input_mask_default' => __( 'Examples: (999) 999-9999 - static mask, 9-a{1,3}9{1,3} - mask with dynamic syntax 
+                        Default masking definitions: 9 - numeric, a - alphabetical, * - alphanumeric',
 						'jet-form-builder'
 					),
+					'input_mask_datetime_link' => 'https://github.com/RobinHerbots/Inputmask/blob/5.x/README_date.md',
 				),
 			)
 		);

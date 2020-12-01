@@ -38,6 +38,7 @@ $this->add_attribute( 'data-default-val', $default );
                 $selected = '';
                 $calc     = '';
 
+
                 if ( is_array( $option ) ) {
                     $val   = isset( $option['value'] ) ? $option['value'] : $value;
                     $label = isset( $option['label'] ) ? $option['label'] : $val;

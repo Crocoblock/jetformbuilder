@@ -160,18 +160,20 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					'range-wrap'
 				] }
 			>
-				<InputControl 
-					key={ `place_holder_block_${ block }` }
-					type={ 'range' }
-					min={ attributes.min || 0 }
-					max={ attributes.max || 100 }
-					step={ attributes.step || 1 }
-					onChange={ rangeValue => this.setState( { rangeValue } ) }
-				/>
-				<div className={ 'jet-form-builder__field-value' }>
-					<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
-					<span>{ this.state.rangeValue }</span>
-					<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
+				<div className="range-flex-wrap">
+					<InputControl
+						key={ `place_holder_block_${ block }` }
+						type={ 'range' }
+						min={ attributes.min || 0 }
+						max={ attributes.max || 100 }
+						step={ attributes.step || 1 }
+						onChange={ rangeValue => this.setState( { rangeValue } ) }
+					/>
+					<div className={ 'jet-form-builder__field-value' }>
+						<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
+						<span>{ this.state.rangeValue }</span>
+						<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
+					</div>
 				</div>
 			</WrapperControl>
 			

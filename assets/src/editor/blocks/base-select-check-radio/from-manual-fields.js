@@ -38,7 +38,7 @@ class FromManualFields extends wp.element.Component {
 
 		/* Remove empty options */
 		const valid_options = manual_items.filter( option => {
-			return ( option.value || option.calc );
+			return ( option.value || option.calculate );
 		} );
 
 		this.props.parentProps.setAttributes( {
@@ -68,7 +68,7 @@ class FromManualFields extends wp.element.Component {
 		manual_items.push( {
 			label: '',
 			value: '',
-			calc: ''
+			calculate: ''
 		} );
 
 		this.props.parentProps.setAttributes( {
@@ -149,11 +149,11 @@ class FromManualFields extends wp.element.Component {
 											<TextControl
 												key='manual_calculate'
 												label={ __( 'Calculate' ) }
-												value={ currentItem.calc }
+												value={ currentItem.calculate }
 												onChange={ ( newValue ) => {
 													this.onChangeValue( {
 														value: newValue,
-														name: 'calc',
+														name: 'calculate',
 														id: index
 													} );
 												} }

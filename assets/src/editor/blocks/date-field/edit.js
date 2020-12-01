@@ -1,7 +1,6 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../tools/tools";
 import WrapperControl from '../../tools/wrapper-control';
 
@@ -107,9 +106,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 				block={ block }
 				attributes={ attributes }
 			>
-				<InputControl
+				<TextControl
+					onChange={ () => {} }
 					key={ `place_holder_block_${ block }` }
-					type={ 'date' }
+					placeholder={ 'Input type="date"' }
 				/>
 			</WrapperControl>
 		];

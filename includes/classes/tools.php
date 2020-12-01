@@ -61,6 +61,18 @@ class Tools {
 	}
 
 	/**
+	 * Sanitize WYSIWYG field
+	 *
+	 * @param $input
+	 *
+	 * @return string
+	 */
+	public static function sanitize_wysiwyg( $input ) {
+		$input = wpautop( $input );
+		return wp_kses_post( $input );
+	}
+
+	/**
 	 * Return all taxonomies list to use in JS components
 	 *
 	 * @return [type] [description]
@@ -72,7 +84,7 @@ class Tools {
 	}
 
 	public static function get_generators_list_for_js() {
-		$generators = jet_form_builder()->form->get_generators_list();
+		$generators = Plugin::instance()->form->get_generators_list();
 
 		return self::prepare_list_for_js( $generators );
 	}
@@ -80,7 +92,15 @@ class Tools {
 	public static function get_allowed_mimes_list_for_js() {
 		$mimes = get_allowed_mime_types();
 
-		return self::prepare_list_for_js( $mimes );
+		$mimes_list = array();
+		foreach ( $mimes as $mime ) {
+			$mimes_list[] = array(
+				'label' => $mime,
+				'value' => $mime
+			);
+		}
+
+		return $mimes_list;
 	}
 
 	/**

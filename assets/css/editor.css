@@ -148,12 +148,16 @@
 
 .jet-form-repeater-modal {
 	display: flex;
-	justify-content: space-evenly;
+	/*justify-content: space-evenly;*/
 }
 
 .jet-form-repeater-modal .repeater-item-column label {
-	text-align: center;
+	/*text-align: center;*/
 	flex: 0 0 75px;
+}
+
+.jet-form-repeater-modal .repeater-item-column input {
+	margin-right: 1em;
 }
 
 .jet-form-media-fields .field-mime-types select[multiple] {

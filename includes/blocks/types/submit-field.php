@@ -209,7 +209,8 @@ class Submit_Field extends Base {
 				'default' => 'Submit',
 				'general' => array(
 					'type'  => 'text',
-					'label' => __( 'Field Name', 'jet-form-builder' )
+					'label' => __( 'Field Name', 'jet-form-builder' ),
+					'show' => false,
 				),
 			),
 			'add_prev'   => array(

@@ -75,6 +75,17 @@ class Manager {
 			array( $this, 'add_default_fields_to_form' ),
 			99
 		);
+
+		add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2);
+	}
+
+	public function add_category( $categories, $post ) {
+		$categories[] = array(
+			'slug' => 'jet-form-builder-fields',
+			'title' => __( 'Jet Form Fields', 'jet-form-builder' ),
+		);
+
+		return $categories;
 	}
 
 	public function add_default_fields_to_form( $arguments ) {
@@ -273,6 +284,8 @@ class Manager {
 					'label'     => $data[ $context ]['label'],
 					'options'   => isset( $data[ $context ]['options'] ) ? $data[ $context ]['options'] : array(),
 					'condition' => isset( $data[ $context ]['condition'] ) ? $data[ $context ]['condition'] : false,
+					// for Submit field name
+					'show'   => isset( $data[ $context ]['show'] ) ? $data[ $context ]['show'] : true,
 				);
 			}
 		}

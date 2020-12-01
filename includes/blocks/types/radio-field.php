@@ -16,6 +16,13 @@ class Radio_Field extends Base {
 
 	use Base_Select_Radio_Check;
 
+	public function __construct() {
+		$this->unregister_attribute( 'placeholder' );
+
+		parent::__construct();
+	}
+
+
 	/**
 	 * Returns block title
 	 *

@@ -3,6 +3,8 @@
 namespace Jet_Form_Builder\Classes;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Plugin;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -13,18 +15,49 @@ class Tools {
 	/**
 	 * Returns all post types list to use in JS components
 	 *
-	 * @return [type] [description]
+	 * @param bool $placeholder
+	 *
+	 * @param array $args
+	 * @param string $operator
+	 *
+	 * @return array [type] [description]
 	 */
-	public static function get_post_types_for_js( $placeholder = false ) {
+	public static function get_post_types_for_js( $placeholder = false, $args = array(), $operator = 'and' ) {
 
-		$post_types = get_post_types( array(), 'objects' );
-		$types_list = self::prepare_list_for_js( $post_types, 'name', 'label' );
+		$post_types = get_post_types( $args, 'objects', $operator );
+
+		$post_types_list = array();
 
 		if ( $placeholder && is_array( $placeholder ) ) {
-			$types_list = array_merge( array( $placeholder ), $types_list );
+			$placeholder['value'] = isset( $placeholder['value'] ) ? $placeholder['value'] : '';
+			$post_types_list[] = $placeholder;
 		}
 
-		return $types_list;
+		foreach ( $post_types as $post_type ) {
+			if ( $post_type->name !== Plugin::instance()->post_type->slug() ) {
+				$post_types_list[] = array(
+					'value' => $post_type->name,
+					'label' => $post_type->label,
+				);
+			}
+		}
+
+
+		return $post_types_list;
+	}
+
+	/**
+	 * Get post types list for options.
+	 *
+	 * @return array
+	 */
+	public static function get_post_types_for_options() {
+
+		return self::get_post_types_for_js(
+			array( 'label' => '--' ),
+			array( 'public' => true )
+		);
+
 	}
 
 	/**

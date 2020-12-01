@@ -63,7 +63,7 @@ if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 			registerBlockType( blockData.blockName, {
 				title: blockData.title,
 				icon: <span dangerouslySetInnerHTML={ { __html: blockData.icon } }></span>,
-				category: 'layout',
+				category: 'jet-form-builder-fields',
 				attributes: blockData.attributes,
 				className: blockData.className,
 				supports: {

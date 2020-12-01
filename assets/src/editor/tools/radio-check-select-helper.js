@@ -145,10 +145,10 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 		>
 		<div className={ 'jet-form-builder__fields-group' }>
 			{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
-				getManualField( getFullLabel( scriptData, source ) )
+				getManualField( getFullLabel( scriptData, source ) ) || null
 			}
 			{ 'manual_input' === source.field_options_from && source.field_options.length &&
-				getManualField()
+				getManualField() || null
 			}
 		</div>
 	</WrapperControl>;

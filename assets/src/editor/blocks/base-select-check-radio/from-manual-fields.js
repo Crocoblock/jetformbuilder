@@ -92,9 +92,6 @@ class FromManualFields extends wp.element.Component {
 		return (
 			<div
 				key='jet-form/manage-manual-items'
-				style={ {
-					textAlign: 'center'
-				} }
 			>
 				<Button
 					isSecondary
@@ -110,7 +107,7 @@ class FromManualFields extends wp.element.Component {
 					<Modal
 						onRequestClose={ this.closeModal }
 						className={ 'jet-form-edit-modal' }
-						style={ { width: '60vw' } }
+						/*style={ { width: '60vw' } }*/
 						title={ 'Edit Manual Options' }
 					>
 						<div>

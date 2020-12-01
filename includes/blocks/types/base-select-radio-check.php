@@ -41,7 +41,7 @@ trait Base_Select_Radio_Check {
 					'label' => 'Generate Dynamically'
 				),
 			),
-			'post_types_list' => Tools::get_post_types_for_js(),
+			'post_types_list' => Tools::get_post_types_for_options(),
 			'taxonomies_list' => Tools::get_taxonomies_for_js(),
 			'generators_list' => Tools::get_generators_list_for_js(),
 

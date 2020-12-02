@@ -81,11 +81,11 @@ class Checkbox_Field extends Base {
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['list-item'] => 'display: {{VALUE}};',
 			],
-			'attributes'   => [
-				'default' => [
+			'attributes'   => array(
+				'default' => array(
 					'value' => 'block'
-				],
-			]
+				),
+			),
 		] );
 
 
@@ -174,9 +174,11 @@ class Checkbox_Field extends Base {
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'color: {{VALUE}}',
 			),
@@ -186,9 +188,11 @@ class Checkbox_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span'                                 => 'background-color: {{VALUE}}',
@@ -226,9 +230,11 @@ class Checkbox_Field extends Base {
 			'id'           => 'checkbox_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['checkbox']                  => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span::before' => 'background-color: {{VALUE}}',
@@ -249,9 +255,11 @@ class Checkbox_Field extends Base {
 			'id'           => 'checkbox_checked_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#398ffc'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['checkbox'] . ':checked'              => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',

@@ -125,9 +125,11 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'color: {{VALUE}}',
 			),
@@ -137,9 +139,11 @@ trait General_Style {
 			'id'           => 'label_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field-label'] => 'background-color: {{VALUE}}',
 			),
@@ -177,9 +181,11 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'color: {{VALUE}}',
 			),
@@ -189,9 +195,11 @@ trait General_Style {
 			'id'           => 'description_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field-description'] => 'background-color: {{VALUE}}',
 			),

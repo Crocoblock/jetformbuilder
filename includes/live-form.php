@@ -85,7 +85,6 @@ class Live_Form {
 
 	public function set_form_id( $form_id ) {
 		$this->form_id = $form_id;
-		$this->set_specific_data_for_render();
 
 		return $this;
 	}
@@ -98,13 +97,26 @@ class Live_Form {
 		return $this;
 	}
 
-	private function set_specific_data_for_render() {
-		$spec_data = Plugin::instance()->post_type->get_args( $this->form_id );
+	/**
+	 * It turns out the inheritance of such an image
+	 * Individual Form Arguments <- General Form Attributes <- Default Values
+	 *
+	 * @param array $attributes
+	 *
+	 * @return $this
+	 */
+	public function set_specific_data_for_render( $attributes = array() ) {
+		$jf_default_args = Plugin::instance()->post_type->get_default_args();
+		$jf_args = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data['has_prev'] = $this->has_prev;
-		$spec_data['page']     = $this->page;
+		$spec_data = array_diff( $jf_args, $jf_default_args );
+		$attributes = array_merge( $jf_default_args, $attributes );
+
+		$spec_data = array_merge( $attributes, $spec_data );
 
 		$this->spec_data = ( object ) $spec_data;
+
+		return $this;
 	}
 
 	public function is_not_field( $block ) {

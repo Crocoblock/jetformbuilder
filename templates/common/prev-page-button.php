@@ -2,9 +2,7 @@
 /**
  * Prev page button template
  */
-$add_button = isset( $this->live_form->spec_data )
-            && isset( $this->live_form->spec_data->has_prev )
-            && ( $this->live_form->spec_data->has_prev || 1 < $this->live_form->page );
+$add_button = ( $this->live_form->has_prev || 1 < $this->live_form->page );
 
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && $add_button ) {
 

@@ -108,6 +108,11 @@ class Repeater_Field extends Base {
 			'id'           => 'new_button_typography_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
@@ -119,6 +124,11 @@ class Repeater_Field extends Base {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#398ffc'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
 			),
@@ -185,6 +195,11 @@ class Repeater_Field extends Base {
 			'id'           => 'remove_button_typography_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'color: {{VALUE}}',
@@ -196,6 +211,11 @@ class Repeater_Field extends Base {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#398ffc'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
 			),

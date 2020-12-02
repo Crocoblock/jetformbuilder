@@ -59,6 +59,11 @@ class Submit_Field extends Base {
 			'id'           => 'submit_typography_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'color: {{VALUE}}',
@@ -70,6 +75,11 @@ class Submit_Field extends Base {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#398ffc'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'background-color: {{VALUE}}',
 			),

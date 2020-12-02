@@ -181,9 +181,11 @@ class Radio_Field extends Base {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'color: {{VALUE}}',
@@ -194,9 +196,11 @@ class Radio_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				// editor
 				'{{WRAPPER}} ' . $this->css_scheme['label']                   => 'background-color: {{VALUE}}',
@@ -235,9 +239,11 @@ class Radio_Field extends Base {
 			'id'           => 'radio_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				// editor
 				'{{WRAPPER}} ' . $this->css_scheme['radio']                           => 'background-color: {{VALUE}}',
@@ -260,9 +266,11 @@ class Radio_Field extends Base {
 			'id'           => 'radio_checked_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#398ffc'
+				),
+			),
 			'css_selector' => array(
 				// editor
 				'{{WRAPPER}} ' . $this->css_scheme['radio'] . ':checked'                       => 'background-color: {{VALUE}}',

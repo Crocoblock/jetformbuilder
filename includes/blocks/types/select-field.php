@@ -60,9 +60,11 @@ class Select_Field extends Base {
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}}',
 			],
-			'attributes'   => [
-				'default' => 50,
-			]
+			'attributes'   => array(
+				'default' => array(
+					'value' => 50
+				),
+			),
 		] );
 
 
@@ -93,9 +95,11 @@ class Select_Field extends Base {
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'color: {{VALUE}}',
 			),
@@ -105,9 +109,11 @@ class Select_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
 			),

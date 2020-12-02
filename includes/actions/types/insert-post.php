@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Insert_Post extends Base {
 
 	public function get_name() {
-		return __( 'Insert Post', 'jet-form-builder' );
+		return __( 'Insert/Update Post', 'jet-form-builder' );
 	}
 
 	public function get_id() {
@@ -49,6 +49,7 @@ class Insert_Post extends Base {
 		$fields_map    = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
 		$meta_input    = array();
 		$terms_input   = array();
+		$rels_input    = array();
 		$object_fields = $this->get_object_fields();
 		$has_title     = false;
 
@@ -66,8 +67,12 @@ class Insert_Post extends Base {
 
 
 		foreach ( $request as $key => $value ) {
+			$key_found_in_map = false;
 
-			$key = ! empty( $fields_map[ $key ] ) ? esc_attr( $fields_map[ $key ] ) : $key;
+			if ( ! empty( $fields_map[ $key ] ) ) {
+				$key              = esc_attr( $fields_map[ $key ] );
+				$key_found_in_map = true;
+			}
 
 			if ( 'Submit' === $key ) {
 				continue;
@@ -90,7 +95,37 @@ class Insert_Post extends Base {
 					}
 
 				} else {
-					$meta_input[ $key ] = $value;
+					if ( function_exists( 'jet_engine' )
+					     && jet_engine()->relations
+					     && jet_engine()->relations->is_relation_key( $key ) ) {
+						$rels_input[ $key ] = $value;
+					} else {
+						if ( $this->is_repeater_val( $value ) ) {
+
+							$prepared_value = array();
+
+							foreach ( $value as $index => $row ) {
+
+								$prepared_row = array();
+
+								foreach ( $row as $item_key => $item_value ) {
+
+									$item_key = ! empty( $fields_map[ $item_key ] ) ? esc_attr( $fields_map[ $item_key ] ) : $item_key;
+
+									$prepared_row[ $item_key ] = $item_value;
+								}
+
+								$prepared_value[ 'item-' . $index ] = $prepared_row;
+							}
+
+							if ( $key_found_in_map ) {
+								$meta_input[ $key ] = $prepared_value;
+							}
+
+						} elseif ( $key_found_in_map ) {
+							$meta_input[ $key ] = $value;
+						}
+					}
 				}
 
 			} else {
@@ -109,11 +144,14 @@ class Insert_Post extends Base {
 		if ( $post_status && 'keep-current' !== $post_status ) {
 			$postarr['post_status'] = $post_status;
 		}
-
 		$postarr['meta_input'] = $meta_input;
-
 		$post_type_obj = get_post_type_object( $post_type );
 
+		$pre_post_check = apply_filters( 'jet-form-builder/action/insert-post/pre-check', true, $postarr, $this );
+
+		if ( ! $pre_post_check ) {
+			return;
+		}
 
 		if ( ! empty( $postarr['ID'] ) ) {
 
@@ -124,7 +162,7 @@ class Insert_Post extends Base {
 			}
 
 			$post_id = wp_update_post( $postarr );
-
+			$post_action = 'update';
 		} else {
 
 			if ( ! $has_title ) {
@@ -132,10 +170,15 @@ class Insert_Post extends Base {
 			}
 
 			$post_id = wp_insert_post( $postarr );
-
+			$post_action = 'insert';
 		}
 
 		$handler->response_data['inserted_post_id'] = $post_id;
+
+		/**
+		 * Perform any actions after post inserted/updated
+		 */
+		do_action( 'jet-form-builder/action/after-post-' . $post_action, $this, $handler );
 
 		if ( ! $post_id ) {
 			throw new Action_Exception( 'failed' );
@@ -157,6 +200,12 @@ class Insert_Post extends Base {
 				'post_title' => $title,
 			) );
 
+		}
+
+		if ( ! empty( $rels_input ) ) {
+			foreach ( $rels_input as $rel_key => $rel_posts ) {
+				jet_engine()->relations->process_meta( false, $post_id, $rel_key, $rel_posts );
+			}
 		}
 	}
 

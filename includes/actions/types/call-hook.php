@@ -65,12 +65,6 @@ class Call_Hook extends Base {
 		);
 	}
 
-	/**
-	 * @return bool
-	 */
-	public static function can_run() {
-		return function_exists( 'jet_engine' );
-	}
 
 	/**
 	 * Regsiter custom action data for the editor

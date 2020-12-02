@@ -33,7 +33,7 @@ class Listing_Filter {
 				'args' => false,
 			),
 			'post_titles_by_ids'  => array(
-				'cb'   => 'jet_engine_render_post_titles',
+				'cb'   => array( $this, 'render_post_titles' ),
 				'args' => false,
 			),
 			'post_link_by_id'     => array(
@@ -45,7 +45,7 @@ class Listing_Filter {
 				'args' => 'full',
 			),
 			'render_acf_checkbox' => array(
-				'cb'   => 'jet_engine_render_acf_checkbox_values',
+				'cb'   => array( $this, 'render_acf_checkbox_values' ),
 				'args' => false,
 			),
 			'embed_url'           => array(
@@ -57,11 +57,11 @@ class Listing_Filter {
 				'args' => false,
 			),
 			'term_title_by_id'    => array(
-				'cb'   => 'jet_engine_get_term_title',
+				'cb'   => array( $this, 'get_term_title' ),
 				'args' => false,
 			),
 			'term_titles_by_ids'  => array(
-				'cb'   => 'jet_engine_get_term_titles',
+				'cb'   => array( $this, 'get_term_titles' ),
 				'args' => false,
 			),
 		) );
@@ -108,6 +108,80 @@ class Listing_Filter {
 
 		return call_user_func_array( $_filter['cb'], array_filter( array( $value, $filter_arg ) ) );
 
+	}
+
+	/**
+	 * Return post titles from post IDs array as string with passed delimiter
+	 *
+	 * @param null $value
+	 * @param string $delimiter
+	 *
+	 * @return [type]            [description]
+	 */
+	public function render_post_titles( $value = null, $delimiter = ', ' ) {
+
+		if ( ! $value || ! is_array( $value ) ) {
+			return $value;
+		}
+
+		return wp_kses_post( implode( $delimiter, array_map( 'get_the_title', $value ) ) );
+
+	}
+
+
+	/**
+	 * Return term title from ID
+	 *
+	 * @param mixed $id Term ID.
+	 *
+	 * @return string
+	 */
+	public function get_term_title( $id = null ) {
+		$term = get_term( $id );
+
+		if ( is_wp_error( $term ) ) {
+			return '';
+		}
+
+		return $term->name;
+	}
+
+
+	/**
+	 * Return term titles from terms IDs array as a string with passed delimiter
+	 *
+	 * @param array $ids
+	 * @param string $delimiter
+	 *
+	 * @return mixed
+	 */
+	public function get_term_titles( $ids = array(), $delimiter = ', ' ) {
+
+		if ( ! $ids || ! is_array( $ids ) ) {
+			return $ids;
+		}
+
+		$titles = array_map( array( $this, 'get_term_title' ), $ids );
+		$titles = array_filter( $titles );
+
+		return wp_kses_post( implode( $delimiter, $titles ) );
+	}
+
+	/**
+	 * Return checkbox values as string with passed delimiter
+	 *
+	 * @param null $value
+	 * @param string $delimiter
+	 *
+	 * @return [type]            [description]
+	 */
+	public function render_acf_checkbox_values( $value = null, $delimiter = ', ' ) {
+
+		if ( ! $value || ! is_array( $value ) ) {
+			return $value;
+		}
+
+		return wp_kses_post( implode( $delimiter, $value ) );
 	}
 
 	/**

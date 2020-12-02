@@ -196,13 +196,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_args( $form_id ) {
-		$arguments = $this->get_form_meta( '_jf_args', $form_id );
-
-		if ( empty( $arguments ) ) {
-			return $this->get_default_args();
-		}
-
-		return $arguments;
+		return $this->get_form_meta( '_jf_args', $form_id );
 	}
 
 	/**

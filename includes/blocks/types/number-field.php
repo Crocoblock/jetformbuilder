@@ -63,9 +63,11 @@ class Number_Field extends Base {
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'color: {{VALUE}}',
@@ -77,9 +79,11 @@ class Number_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'background-color: {{VALUE}}',

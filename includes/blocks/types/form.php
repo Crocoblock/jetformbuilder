@@ -54,10 +54,58 @@ class Form extends Base {
 		return array(
 			'success' => '.jet-form-message--success',
 			'error'   => '.jet-form-message--error',
+			'form-row' => '.jet-form-row'
 		);
 	}
 
 	public function add_style_manager_options() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'form_row_style',
+				'title' => __( 'Form Row', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control([
+			'id'        => 'form_row_gap_before',
+			'type'      => 'range',
+			'label'     => __( 'Gap Before', 'jet-form-builder' ),
+			'separator' => 'after',
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-top: {{VALUE}}{{UNIT}};',
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 1
+				),
+			]
+		]);
+		$this->controls_manager->add_control([
+			'id'        => 'form_row_gap_after',
+			'type'      => 'range',
+			'label'     => __( 'Gap After', 'jet-form-builder' ),
+			'unit'      => 'px',
+			'min'       => 1,
+			'max'       => 100,
+			'step'      => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-bottom: {{VALUE}}{{UNIT}};',
+			],
+			'attributes' => [
+				'default' => array(
+					'value' => 1
+				),
+			]
+		]);
+
+		$this->controls_manager->end_section();
+
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -116,9 +164,11 @@ class Form extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 'green'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'color: {{VALUE}}',
 			),
@@ -129,9 +179,11 @@ class Form extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'background-color: {{VALUE}}',
 			),
@@ -205,9 +257,11 @@ class Form extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#000000'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'color: {{VALUE}}',
 			),
@@ -218,9 +272,11 @@ class Form extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'attributes'   => [
-				'default' => '',
-			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => '#FFFFFF'
+				),
+			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'background-color: {{VALUE}}',
 			),
@@ -241,6 +297,14 @@ class Form extends Base {
 
 	public function get_style_attributes() {
 		return array(
+			'form_row_gap_after' => array(
+				'type' => 'object'
+			),
+			'form_row_gap_before' => array(
+				'type' => 'object'
+			),
+
+
 			'success_padding'          => array(
 				'type' => 'object'
 			),
@@ -381,7 +445,7 @@ class Form extends Base {
 			return 'Please select form to show';
 		}
 
-		$builder  = new Form_Builder( $form_id );
+		$builder  = new Form_Builder( $form_id, false, $attrs );
 		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
 
 		ob_start();

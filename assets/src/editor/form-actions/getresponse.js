@@ -40,6 +40,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 		const settings = this.props.settings;
 
 		if ( settings.data && settings.data.fields ) {
+			console.log( settings.data.fields );
 			return Object.entries( settings.data.fields );
 		}
 		return [];
@@ -53,7 +54,6 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 		}
 		return [];
 	}
-
 
 	formatEntriesArray( entries = [], isNeedPlaceholder = true ) {
 		const placeholder = {
@@ -147,16 +147,20 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 					key='getresponse_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [fieldName, fieldData], index ) => {
+						{ fields.map( ( [ fieldName, fieldData ], index ) => {
 
 							return <div
-								className="jet-user-meta__row"
+								className="jet-user-meta__row without-border"
 								key={ 'user_meta_' + fieldName + index }
 							>
+								<div className="jet-field-map__row-label">
+									{ fieldData.label && <span className={'fields-map__label'}>
+										{ fieldData.label }
+									</span> }
+									{ fieldData.required && <span className={'fields-map__required'}> *</span> }
+								</div>
 								<SelectControl
 									key={ fieldName + index }
-									label={ fieldData.label }
-									//labelPosition={'side'}
 									value={ this.getFieldDefault( fieldName ) }
 									onChange={ value => {
 										this.onChangeFieldMap( value, fieldName )

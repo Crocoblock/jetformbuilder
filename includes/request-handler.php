@@ -11,6 +11,9 @@ class Request_Handler {
 	public $request;
 	public $errors;
 
+	private $repeaters = array();
+
+	const REPEATERS_SETTINGS = '__repeaters_settings';
 
 	public function __construct( $request ) {
 		$this->request = $request;
@@ -20,6 +23,7 @@ class Request_Handler {
 		foreach ( $this->request as $name => $field ) {
 			$data[ '__' . $name ] = $field;
 		}
+		$data[ self::REPEATERS_SETTINGS ] = $this->repeaters;
 
 		return $data;
 	}
@@ -46,7 +50,35 @@ class Request_Handler {
 				$name  = $data['name'];
 				$value = $data['value'];
 
-				if ( false !== strpos( $name, '[]' ) ) {
+				if ( preg_match( '/\[\d\]\[/', $name ) ) {
+
+					$name_parts = explode( '[', $name );
+
+					$name  = $name_parts[0];
+					$index = absint( rtrim( $name_parts[1], ']' ) );
+					$key   = rtrim( $name_parts[2], ']' );
+
+					if ( empty( $prepared[ $name ] ) ) {
+						$prepared[ $name ] = array();
+					}
+
+					if ( empty( $prepared[ $name ][ $index ] ) ) {
+						$prepared[ $name ][ $index ] = array();
+					}
+
+					if ( isset( $name_parts[3] ) ) {
+
+						if ( empty( $prepared[ $name ][ $index ][ $key ] ) ) {
+							$prepared[ $name ][ $index ][ $key ] = array();
+						}
+
+						$prepared[ $name ][ $index ][ $key ][] = $value;
+
+					} else {
+						$prepared[ $name ][ $index ][ $key ] = $value;
+					}
+
+				} elseif ( false !== strpos( $name, '[]' ) ) {
 
 					$name = str_replace( '[]', '', $name );
 
@@ -85,11 +117,15 @@ class Request_Handler {
 		$invalid_email = true;
 		$request       = $this->get_values_from_request();
 
-		$skip_fields = array( 'submit-field', 'page-break-field', 'heading-field', 'group-break-field' );
+		$skip_fields = array( 'submit-field', 'form-break-field', 'heading-field', 'group-break-field' );
 
 		foreach ( $fields as $field ) {
 			$settings = $field['attrs'];
-			$type     = Plugin::instance()->form->field_name( $field['blockName'] );
+			$required = ! empty( $settings['required'] ) ? $settings['required'] : '';
+			$name     = isset( $settings['name'] ) ? $settings['name'] : 'field_name';
+			$value    = isset( $request[ $name ] ) ? $request[ $name ] : '';
+
+			$type = Plugin::instance()->form->field_name( $field['blockName'] );
 
 
 			if ( in_array( $type, $skip_fields ) ) {
@@ -100,10 +136,45 @@ class Request_Handler {
 				continue;
 			}
 
-			$required = ! empty( $settings['required'] ) ? $settings['required'] : '';
-			$name     = isset( $settings['name'] ) ? $settings['name'] : 'field_name' ;
-			$value    = isset( $request[ $name ] ) ? $request[ $name ] : '';
+			$is_repeater = false;
 
+			if ( in_array( $type, array( 'date-field', 'datetime-field' ) ) && ! empty( $settings['is_timestamp'] ) ) {
+				$value = strtotime( $value );
+			}
+
+
+			if ( 'repeater-field' === $type ) {
+				$is_repeater                          = true;
+				$in_repeater                          = true;
+				$current_repeater                     = $name;
+				$this->repeaters[ $settings['name'] ] = $settings;
+			} else {
+				$in_repeater      = false;
+				$current_repeater = null;
+			}
+
+			if ( ! $is_repeater && $in_repeater ) {
+				if ( 'media' === $settings['type'] && ! empty( $data[ $current_repeater ] ) ) {
+					foreach ( $data[ $current_repeater ] as $index => $row ) {
+						if ( ! empty( $row[ $name ] ) ) {
+
+							$value = json_decode( wp_unslash( $row[ $name ] ), true );
+
+							if ( ! empty( $settings['insert_attachment'] ) && ! empty( $settings['value_format'] ) && 'id' === $settings['value_format'] ) {
+								if ( ! is_array( $value ) ) {
+									$value = ! empty( $value ) ? absint( $value ) : null;
+								} else {
+									$value = implode( ',', $value );
+								}
+							}
+
+							$row[ $name ]                        = $value;
+							$data[ $current_repeater ][ $index ] = $row;
+						}
+					}
+				}
+				continue;
+			}
 
 			if ( 'media-field' === $type ) {
 
@@ -128,11 +199,11 @@ class Request_Handler {
 				throw new Request_Exception( 'invalid_email' );
 			}
 
-			if ( is_array( $value ) ) {
+			/*if ( is_array( $value ) && ! $is_repeater ) {
 				$value = implode( ', ', $value );
-			}
+			}*/
 
-			if ( $required && '' === $value ) {
+			if ( $required && empty( $value ) ) {
 				throw new Request_Exception( 'empty_field' );
 			}
 
@@ -143,7 +214,6 @@ class Request_Handler {
 		if ( ! Plugin::instance()->captcha->verify( $this->request['form_id'], $this->request['is_ajax'] ) ) {
 			throw new Request_Exception( 'captcha_failed' );
 		}
-
 
 		$data = apply_filters( 'jet-form-builder/form-handler/form-data', $data, $this->request['form_id'], $fields );
 

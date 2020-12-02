@@ -4,6 +4,8 @@ namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
 
+use Jet_Form_Builder\Actions\Types;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -27,21 +29,21 @@ class Manager {
 	 */
 	public function register_action_types() {
 
-		$manager = new Action_Compatibility(
-			'Send_Email',
-			'Insert_Post',
-			'Register_User',
-			'Update_User',
-			'Update_Options',
-			'Call_Hook',
-			'Call_Webhook',
-			'Redirect_To_Page',
-			'MailChimp',
-			'Getresponse',
-			'Active_Campaign'
+		$actions = array(
+			new Types\Send_Email(),
+			new Types\Insert_Post(),
+			new Types\Register_User(),
+			new Types\Update_User(),
+			new Types\Update_Options(),
+			new Types\Call_Hook(),
+			new Types\Call_Webhook(),
+			new Types\Redirect_To_Page(),
+			new Types\Mailchimp(),
+			new Types\Getresponse(),
+			new Types\Active_Campaign()
 		);
 
-		foreach ( $manager->get_actions() as $action ) {
+		foreach ( $actions as $action ) {
 			$this->register_action_type( $action );
 		}
 

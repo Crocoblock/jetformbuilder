@@ -64,12 +64,6 @@ abstract class Base {
 	public function action_data( $editor, $handle ) {
 	}
 
-	/**
-	 * @return bool
-	 */
-	public static function can_run() {
-		return true;
-	}
 
 	public function default_settings() {
 		return array();

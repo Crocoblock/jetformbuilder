@@ -46,21 +46,23 @@ class Form_Builder {
 		if ( ! $form_id ) {
 			return;
 		}
-
 		$this->form_id = $form_id;
-
-		$this->args = wp_parse_args( $args, array(
-			'fields_layout' => 'column',
-			'rows_divider'  => false,
-			'required_mark' => '*',
-			'submit_type'   => 'reload',
-		) );
+		$this->set_form_args( $args );
 
 		if ( empty( $post ) ) {
 			$this->post = get_post();
 		}
 
 		$this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
+	}
+
+	/**
+	 * @param $arguments
+	 */
+	public function set_form_args( $arguments ) {
+		$this->args = array_intersect_key( $arguments, Plugin::instance()->post_type->get_default_args() );
+
+		return $this;
 	}
 
 
@@ -185,7 +187,10 @@ class Form_Builder {
 
 		$form = $this->start_form();
 
-		Live_Form::instance()->set_form_id( $this->form_id )->setup_fields( $this->blocks );
+		Live_Form::instance()
+		         ->set_form_id( $this->form_id )
+		         ->set_specific_data_for_render( $this->args )
+		         ->setup_fields( $this->blocks );
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
@@ -222,7 +227,7 @@ class Form_Builder {
 		$result = '<div id="jet-sm-gb-style"><style>';
 		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id );
 
-		return $result.'</style></div>';
+		return $result . '</style></div>';
 	}
 
 	public function preset() {

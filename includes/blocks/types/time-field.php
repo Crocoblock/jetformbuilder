@@ -14,6 +14,15 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Time_Field extends Base {
 
+	public function __construct() {
+		$this->unregister_attributes(
+			array(
+				'placeholder',
+			)
+		);
+
+		parent::__construct();
+	}
 	/**
 	 * Returns block title
 	 *

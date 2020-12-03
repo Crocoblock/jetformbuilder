@@ -166,6 +166,21 @@ class Hidden_Field extends Base {
 		} else {
 			$user = wp_get_current_user();
 
+			return $user->ID;
+		}
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return string|null
+	 */
+	private function user_email( $params = array() ) {
+		if ( ! is_user_logged_in() ) {
+			return null;
+		} else {
+			$user = wp_get_current_user();
+
 			return $user->user_email;
 		}
 	}

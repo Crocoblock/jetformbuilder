@@ -258,6 +258,8 @@ class Form_Handler {
 
 			wp_send_json( $query_args );
 		} else {
+			$query_args['status'] = urlencode( $query_args['status'] );
+
 			$redirect = add_query_arg( $query_args, $this->refer );
 			wp_redirect( $redirect );
 			die();

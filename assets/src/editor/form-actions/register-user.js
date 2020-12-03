@@ -37,7 +37,6 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 	render() {
 
 		const settings = this.props.settings;
-		const onChange = this.props.onChange;
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="register_user">
@@ -46,6 +45,7 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 				key="user_fields_map"
 			>
 				<div className="jet-user-fields-map__list">
+					<span className={ 'description-controls' }>{ __( 'Set form fields names to to get user data from', 'jet-form-builder' ) }</span>
 					{ this.userFields.map( ( [value, label], index ) => {
 
 						return <div
@@ -89,6 +89,7 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 				key='user_meta_list'
 			>
 				<div className='jet-user-meta-rows'>
+					<span className={ 'description-controls' }>{ __( 'Set user meta fields to save appropriate form fields into', 'jet-form-builder' ) }</span>
 					{ this.fields.map( ( { name }, index ) => {
 						return <div
 							className="jet-user-meta__row"

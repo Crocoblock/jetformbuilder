@@ -255,7 +255,6 @@
 
 .jet-form-edit-modal__content .input_with_button {
 	display: flex;
-	justify-content: space-between;
 	align-items: flex-start;
 }
 
@@ -264,7 +263,7 @@
 }
 
 .jet-form-edit-modal__content .input_with_button .components-base-control {
-	width: 60%;
+	margin-right: 1em;
 }
 
 .jet-form-builder__field-wrap.range-wrap fieldset.components-input-control__backdrop {
@@ -422,4 +421,38 @@
 .jet-field-map__row-label .fields-map__required {
 	color: red;
 	font-weight: 900;
+}
+
+.jet-form-load-button.components-button.loading i, .jet-form-validate-button.components-button.loading i {
+	animation: jet-form-editor-spin 2s infinite linear
+}
+
+
+.jet-form-validate-button.components-button i.dashicons:before {
+	content: ""
+}
+
+.jet-form-validate-button.components-button.is-valid i.dashicons:before {
+	content: "";
+	color: #46b450
+}
+
+.jet-form-validate-button.components-button.is-invalid i.dashicons:before {
+	content: "";
+	color: #a00
+}
+
+@keyframes jet-form-editor-spin {
+	0% {
+		transform: rotate(0deg)
+	}
+	to {
+		transform: rotate(359deg)
+	}
+}
+
+.jet-form-edit-modal__content .description-controls {
+	color: #999;
+	display: block;
+	margin-bottom: 1.2em;
 }

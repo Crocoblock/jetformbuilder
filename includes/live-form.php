@@ -344,7 +344,6 @@ class Live_Form {
 			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
 			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
 
-			//var_dump( $repeater_name, $index, $name ); die;
 			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
 		}
 

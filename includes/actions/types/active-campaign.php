@@ -82,7 +82,9 @@ class Active_Campaign extends Integration_Base_Action {
 		wp_localize_script( $handle, 'jetFormActiveCampaignData', array(
 			'activecampaign_fields' => $this->get_fields(),
 			'labels'                => array(
-				'api_key'          => __( 'API Key:', 'jet-form-builder' ),
+				'api_data'         => __( 'API Data', 'jet-form-builder' ),
+				'api_key'          => __( 'API Key', 'jet-form-builder' ),
+				'api_url'          => __( 'API URL', 'jet-form-builder' ),
 				'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
 				'list_id'          => __( 'List Id:', 'jet-form-builder' ),
 				'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),

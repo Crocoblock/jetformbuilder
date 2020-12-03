@@ -35,13 +35,11 @@ abstract class Integration_Base_Action extends Base {
 			wp_send_json_error();
 		}
 
-		$data = $handler->get_all_data();
-
-		$this->filter_result( $data );
+		$this->filter_result( $handler->get_all_data() );
 	}
 
 	public function filter_result( $data ) {
-		if ( empty( $data['lists'] ) ) {
+		if ( empty( $data ) || empty( $data['lists'] ) ) {
 			wp_send_json_error();
 		}
 

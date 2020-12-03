@@ -35,3 +35,5 @@ function jet_form_builder_init() {
 function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }
+
+

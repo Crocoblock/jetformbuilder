@@ -33,6 +33,7 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 	}
 
 	validateActiveCampaignData() {
+		this.setState( { className: [ 'loading' ] } );
 		this.getActiveCampaignData( true );
 	}
 
@@ -44,13 +45,6 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 			api_key = settings.api_key,
 			endpoint = '/admin/api.php?api_action=list_list';
 
-		isValidate = isValidate || false;
-
-		if ( isValidate ) {
-			self.requestProcessing = 'validate';
-		} else {
-			self.requestProcessing = 'loading';
-		}
 
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 
@@ -70,15 +64,16 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 
 					self.onChangeSetting( lists, 'data' );
 					self.onChangeSetting( true, 'isValidAPI' );
+					self.setState( { className: [ 'is-valid' ] } );
 
 				} else {
 					self.onChangeSetting( false, 'isValidAPI' );
+					self.setState( { className: [ 'is-invalid' ] } );
 				}
-				self.state.requestProcessing = false;
 			} )
 			.error( function () {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.state.requestProcessing = false;
+				self.setState( { className: [ 'is-invalid' ] } );
 			} );
 	}
 
@@ -115,25 +110,31 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="activecampaign">
 			<BaseControl
-				label={ this.data.labels.api_key }
+				label={ this.data.labels.api_data }
 				key={ 'activecampaign_input_key' }
 			>
 				<div>
 					<div className='input_with_button'>
-						<TextControl
-							key='api_key'
-							value={ settings.api_key }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'api_key' )
-							} }
-						/>
-						<TextControl
-							key='api_url'
-							value={ settings.api_url }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'api_url' )
-							} }
-						/>
+						<div>
+							<label>{ this.data.labels.api_key }</label>
+							<TextControl
+								key='api_key'
+								value={ settings.api_key }
+								onChange={ newVal => {
+									this.onChangeSetting( newVal, 'api_key' )
+								} }
+							/>
+						</div>
+						<div>
+							<label>{ this.data.labels.api_url }</label>
+							<TextControl
+								key='api_url'
+								value={ settings.api_url }
+								onChange={ newVal => {
+									this.onChangeSetting( newVal, 'api_url' )
+								} }
+							/>
+						</div>
 					</div>
 					<div>{ this.data.help.api_key_link_prefix } <a
 						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
@@ -141,8 +142,9 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 						key={ 'validate_api_key' }
 						isPrimary
 						onClick={ this.validateActiveCampaignData }
-						className={ this.getClassNameValidateButton() }
+						className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 					>
+						<i className="dashicons"/>
 						{ this.data.labels.validate_api_key }
 					</Button> }
 				</div>

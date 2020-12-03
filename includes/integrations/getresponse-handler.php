@@ -56,6 +56,9 @@ class Getresponse_Handler extends Integration_Base {
 				if ( ! is_array( $list ) ) {
 					continue;
 				}
+				if ( ! isset( $list['campaignId'] ) ) {
+					return array();
+				}
 
 				$result[ $list['campaignId'] ] = $list['name'];
 			}
@@ -80,6 +83,9 @@ class Getresponse_Handler extends Integration_Base {
 
 		if ( ! empty( $custom_fields ) ) {
 			foreach ( $custom_fields as $field ) {
+				if ( ! isset( $field['customFieldId'] ) ) {
+					return array();
+				}
 				$result[ $field['customFieldId'] ] = array(
 					'label'    => $field['name'],
 					'required' => false,

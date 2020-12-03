@@ -195,10 +195,6 @@ class Update_User extends Base {
 				'label' => __( 'User ID (will update this user)', 'jet-form-builder' ),
 			),
 			array(
-				'value' => 'login',
-				'label' => __( 'User Login', 'jet-form-builder' ),
-			),
-			array(
 				'value' => 'email',
 				'label' => __( 'Email', 'jet-form-builder' ),
 			),

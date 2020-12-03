@@ -14,29 +14,24 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.formFieldsList = fieldsManager.getFormFieldsList();
 
 		this.state = {
-			requestProcessing: false,
+			className: [ this.getClassNameValidateButton() ],
 		};
 	}
 
 	validateAPIKey() {
-		this.getApiData( true )
+		this.setState( { className: [ 'loading' ] } );
+
+		this.getApiData();
 	}
 
-	getApiData( isValidate = false ) {
+	getApiData( event ) {
 		const self = this;
 		const settings = self.props.settings;
 
 		if ( ! settings.api_key ) {
-			self.onChangeSetting( false, 'isValidAPI' );
+			self.onChangeSetting( null, 'isValidAPI' );
+			self.setState( { className: [] } );
 			return;
-		}
-
-		isValidate = isValidate || false;
-
-		if ( isValidate ) {
-			self.state.requestProcessing = 'validate';
-		} else {
-			self.state.requestProcessing = 'loading';
 		}
 
 		jQuery.ajax( {
@@ -51,30 +46,27 @@ export default class IntegrationComponent extends BaseActionComponent {
 					self.onChangeSetting( true, 'isValidAPI' );
 					self.onChangeSetting( response.data, 'data' );
 
+					self.setState( { className: [ 'is-valid' ] } );
 				} else {
 					self.onChangeSetting( false, 'isValidAPI' );
+					self.setState( { className: [ 'is-invalid' ] } );
 				}
-
-				self.state.requestProcessing = false;
 			},
 			error: function () {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.state.requestProcessing = false;
+				self.setState( { className: [ 'is-invalid' ] } );
 			}
 		} );
+
+
 	}
 
 	getClassNameValidateButton() {
 		const settings = this.props.settings;
 
-		if ( this.state.requestProcessing === 'validate' ) {
-			return 'loading';
-		} else if ( true === settings.isValidAPI &&
-			'validate' !== this.state.requestProcessing ) {
+		if ( true === settings.isValidAPI ) {
 			return 'is-valid';
-
-		} else if ( false === settings.isValidAPI &&
-			'validate' !== this.state.requestProcessing ) {
+		} else if ( false === settings.isValidAPI) {
 			return 'is-invalid';
 		}
 	}

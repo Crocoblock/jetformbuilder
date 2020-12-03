@@ -40,7 +40,6 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 		const settings = this.props.settings;
 
 		if ( settings.data && settings.data.fields ) {
-			console.log( settings.data.fields );
 			return Object.entries( settings.data.fields );
 		}
 		return [];
@@ -93,8 +92,9 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 							key={ 'validate_api_key' }
 							isPrimary
 							onClick={ this.validateAPIKey }
-							className={ this.getClassNameValidateButton() }
+							className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 						>
+							<i className="dashicons"/>
 							{ this.data.labels.validate_api_key }
 						</Button>
 					</div>

@@ -101,8 +101,9 @@ window.jetFormDefaultActions[ 'mailchimp' ] = class MailChimpAction extends Inte
 							key={ 'validate_api_key' }
 							isPrimary
 							onClick={ this.validateAPIKey }
-							className={ this.getClassNameValidateButton() }
+							className={ this.state.className.join( ' ' ) + ' jet-form-validate-button'  }
 						>
+							<i className="dashicons"/>
 							{ this.data.labels.validate_api_key }
 						</Button>
 					</div>

@@ -98,7 +98,7 @@ class Getresponse extends Integration_Base_Action {
 
 		// Error response
 		if ( isset( $response['httpStatus'] ) && isset( $response['code'] ) ) {
-			throw new Action_Exception( "dynamic|{$response['codeDescription']}" );
+			throw new Action_Exception( "dynamic|{$response['message']}" );
 		}
 
 	}

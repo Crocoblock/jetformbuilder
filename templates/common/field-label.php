@@ -13,7 +13,7 @@ if ( ! empty( $args['label_tag'] ) && 'label' === $args['label_tag'] ) {
 	$tag = 'label';
 	$for = 'for="' . $this->block_type->get_field_id( $args ) . '"';
 } else {
-	$tag = 'span';
+	$tag = 'div';
 	$for = '';
 }
 

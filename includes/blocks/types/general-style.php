@@ -7,7 +7,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 trait General_Style {
 
 	public function get_label_selector() {
-		return 'span.jet-form-builder__label-text';
+		return 'div.jet-form-builder__label-text';
 	}
 
 	public function get_required_selector() {
@@ -15,7 +15,7 @@ trait General_Style {
 	}
 
 	public function get_description_selector() {
-		return 'small.jet-form-builder__desc';
+		return 'div.jet-form-builder__desc';
 	}
 
 	public function general_css_scheme() {

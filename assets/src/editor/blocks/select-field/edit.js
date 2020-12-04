@@ -101,7 +101,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
 					<SelectControl
 						key='field_options_from'
 						label={ __( 'Fill Options From' ) }
-						labelPosition='top'
 						value={ attributes.field_options_from }
 						onChange={ ( newValue ) => {
 							props.setAttributes( { field_options_from: newValue } );

@@ -2371,7 +2371,7 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
 }
 
 .jet-form-builder__field-wrap {
-    width: 100%;
+    width: auto;
 }
 
 .jet-form-builder__field.checkradio-field {

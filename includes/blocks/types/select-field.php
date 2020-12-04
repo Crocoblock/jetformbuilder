@@ -36,8 +36,9 @@ class Select_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'select' => '.jet-form-builder__field-wrap select',
-			'list-wrapper' => '.jet-form-builder__fields-group',
+			'select'         => '.jet-form-builder__field-wrap select',
+			'list-wrapper'   => '.jet-form-builder__fields-group',
+			'select-wrapper' => '.jet-form-builder__field-wrap',
 		);
 	}
 
@@ -58,7 +59,7 @@ class Select_Field extends Base {
 			'min'          => 10,
 			'max'          => 100,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}}',
+				'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}}',
 			],
 			'attributes'   => array(
 				'default' => array(

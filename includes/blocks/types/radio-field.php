@@ -48,11 +48,12 @@ class Radio_Field extends Base {
 			// Active
 			'label'       => '.components-radio-control__option label',
 			'front-label' => '.jet-form-builder__field-wrap label',
+			'front-wrap'  => '.jet-form-builder__field-wrap',
 
 			'radio'        => '.components-radio-control__option input',
 
 			// Active
-			'list-item'    => '.components-radio-control__option',
+			'field'        => '.components-base-control__field',
 			'list-wrapper' => '.jet-form-builder__fields-group',
 		);
 	}
@@ -83,7 +84,8 @@ class Radio_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['list-item'] => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item']       => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'display: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => [
@@ -103,8 +105,10 @@ class Radio_Field extends Base {
 			'max'          => 50,
 			'step'         => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'        => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)'       => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
 			],
 			'attributes'   => [
 				'default' => [
@@ -124,7 +128,8 @@ class Radio_Field extends Base {
 			'max'          => 40,
 			'step'         => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: calc({{VALUE}}{{UNIT}}/2); margin-left: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item']       => 'margin-right: {{VALUE}}{{UNIT}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'margin-right: {{VALUE}}{{UNIT}}',
 			],
 			'attributes'   => [
 				'default' => [
@@ -162,8 +167,26 @@ class Radio_Field extends Base {
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['radio']          => 'display: {{VALUE}};',
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
+
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'display: {{VALUE}};',
 			],
 		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_size_decorator',
+			'type'         => 'range',
+			'label'        => __( 'Size Radio', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'unit'         => 'px',
+			'min'          => 0,
+			'max'          => 50,
+			'step'         => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'font-size: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' input'              => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
+			],
+		] );
+
 
 		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
@@ -181,11 +204,6 @@ class Radio_Field extends Base {
 			'type'         => 'color-picker',
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#000000'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'color: {{VALUE}}',
@@ -196,11 +214,7 @@ class Radio_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
+
 			'css_selector' => array(
 				// editor
 				'{{WRAPPER}} ' . $this->css_scheme['label']                   => 'background-color: {{VALUE}}',
@@ -223,7 +237,7 @@ class Radio_Field extends Base {
 		$this->controls_manager->start_tabs(
 			'style_controls',
 			[
-				'id'        => 'radio_style_tabs',
+				'id' => 'radio_style_tabs',
 			]
 		);
 

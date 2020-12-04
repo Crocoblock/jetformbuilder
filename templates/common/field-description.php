@@ -4,15 +4,14 @@
  */
 if ( isset( $args['type'] ) && 'heading' === $args['type'] ) {
 	$class = 'jet-form-builder__heading-desc';
-	$tag   = 'div';
+	$format   = '<div class="%1$s">%2$s</div>';
 } else {
 	$class = 'jet-form-builder__desc';
-	$tag   = 'small';
+	$format = '<div class="%1$s"><small>%2$s</small></div>';
 }
 
 printf(
-	'<%1$s class="%2$s">%3$s</%1$s>',
-	$tag,
+	$format,
 	$class,
 	$args['desc']
 );

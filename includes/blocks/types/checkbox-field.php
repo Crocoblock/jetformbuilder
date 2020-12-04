@@ -43,13 +43,14 @@ class Checkbox_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			// Active
-			'item'         => '.jet-form-builder__field-wrap',
+			'item'            => '.jet-form-builder__field-wrap',
 			// Active
-			'label'        => '.jet-form-builder__field-wrap label',
-			'checkbox'     => '.jet-form-builder__field-wrap input',
+			'label'           => '.jet-form-builder__field-wrap label',
+			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
+			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
 			// Active
-			'list-item'    => '.jet-form-builder__field-wrap',
-			'list-wrapper' => '.jet-form-builder__fields-group',
+			'list-item'       => '.jet-form-builder__field-wrap',
+			'list-wrapper'    => '.jet-form-builder__fields-group',
 		);
 	}
 
@@ -114,13 +115,12 @@ class Checkbox_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
 			'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-			'separator'    => 'after',
 			'unit'         => 'px',
 			'min'          => 0,
 			'max'          => 40,
 			'step'         => 1,
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: calc({{VALUE}}{{UNIT}}/2); margin-left: calc({{VALUE}}{{UNIT}}/2);',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: {{VALUE}}{{UNIT}};',
 			],
 			'attributes'   => [
 				'default' => [
@@ -143,7 +143,7 @@ class Checkbox_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'show_decorator',
 			'type'         => 'toggle',
-			'separator'    => 'before',
+			'separator'    => 'after',
 			'label'        => __( 'Show Checkbox', 'jet-forms-builder' ),
 			'attributes'   => [
 				'default' => [
@@ -156,8 +156,24 @@ class Checkbox_Field extends Base {
 				'false' => 'none',
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['checkbox']       => 'display: {{VALUE}};',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']  => 'display: {{VALUE}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'items_size_decorator',
+			'type'         => 'range',
+			'label'        => __( 'Size Checkbox', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'unit'         => 'px',
+			'min'          => 0,
+			'max'          => 50,
+			'step'         => 1,
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'font-size: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor']            => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
 			],
 		] );
 
@@ -174,11 +190,6 @@ class Checkbox_Field extends Base {
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#000000'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'color: {{VALUE}}',
 			),
@@ -188,11 +199,6 @@ class Checkbox_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span'                                 => 'background-color: {{VALUE}}',

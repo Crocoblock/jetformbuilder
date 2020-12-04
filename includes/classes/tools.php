@@ -128,7 +128,11 @@ class Tools {
 	}
 
 	public static function get_options_pages_for_js() {
-		$pages = jet_engine()->options_pages->get_options_pages_for_select();
+		$pages = array();
+
+		if ( function_exists( 'jet_engine' ) ) {
+			$pages = jet_engine()->options_pages->get_options_pages_for_select();
+		}
 
 		return self::prepare_list_for_js( $pages );
 	}

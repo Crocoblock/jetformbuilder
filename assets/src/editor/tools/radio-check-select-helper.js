@@ -19,7 +19,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
-			className={ 'jet-form-builder__field-wrap' }
+			className={ 'jet-form-builder__field-wrap checkradio-wrap' }
 			key={ `place_holder_block_${ label + index }` }
 			label={ label }
 			onChange={ () => {} }
@@ -28,7 +28,6 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getSelect = ( { options, index } ) => {
 		return <SelectControl
-			className={ 'jet-form-builder__field-wrap' }
 			key={ `place_holder_block_${ source.name + index }` }
 			//label={ source.label }
 			options={ options }

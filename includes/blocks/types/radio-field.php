@@ -22,7 +22,6 @@ class Radio_Field extends Base {
 		parent::__construct();
 	}
 
-
 	/**
 	 * Returns block title
 	 *
@@ -48,7 +47,7 @@ class Radio_Field extends Base {
 			// Active
 			'label'       => '.components-radio-control__option label',
 			'front-label' => '.jet-form-builder__field-wrap label',
-			'front-wrap'  => '.jet-form-builder__field-wrap',
+			'front-wrap'  => '.jet-form-builder__field-wrap.checkradio-wrap',
 
 			'radio'        => '.components-radio-control__option input',
 
@@ -92,6 +91,30 @@ class Radio_Field extends Base {
 					'value' => 'block'
 				],
 			]
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'items_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'options'      => [
+				'left'   => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center' => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'right'  => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['list-wrapper'] => 'text-align: {{VALUE}};',
+			],
 		] );
 
 
@@ -211,9 +234,9 @@ class Radio_Field extends Base {
 		] );
 
 		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'id'    => 'item_normal_background_color',
+			'type'  => 'color-picker',
+			'label' => __( 'Background Color', 'jet-form-builder' ),
 
 			'css_selector' => array(
 				// editor

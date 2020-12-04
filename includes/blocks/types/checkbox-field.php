@@ -43,14 +43,13 @@ class Checkbox_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			// Active
-			'item'            => '.jet-form-builder__field-wrap',
+			'item'            =>'.jet-form-builder__field-wrap.checkradio-wrap',
 			// Active
 			'label'           => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
 			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
-			// Active
-			'list-item'       => '.jet-form-builder__field-wrap',
-			'list-wrapper'    => '.jet-form-builder__fields-group',
+
+			'wrapper'    => '.jet-form-builder__fields-group',
 		);
 	}
 
@@ -80,13 +79,37 @@ class Checkbox_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['list-item'] => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'display: {{VALUE}};',
 			],
 			'attributes'   => array(
 				'default' => array(
 					'value' => 'block'
 				),
 			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'items_alignment',
+			'type'         => 'choose',
+			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'options'      => [
+				'left'   => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center' => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'right'  => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'text-align: {{VALUE}};',
+			],
 		] );
 
 
@@ -219,8 +242,7 @@ class Checkbox_Field extends Base {
 		$this->controls_manager->start_tabs(
 			'style_controls',
 			[
-				'id'        => 'checkbox_style_tabs',
-				'separator' => 'both',
+				'id' => 'checkbox_style_tabs',
 			]
 		);
 
@@ -242,8 +264,8 @@ class Checkbox_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['checkbox']                  => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span::before' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span::before'  => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -267,7 +289,7 @@ class Checkbox_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['checkbox'] . ':checked'              => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked' => 'background-color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
 			),
 		] );

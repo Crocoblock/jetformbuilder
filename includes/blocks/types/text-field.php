@@ -14,6 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Text_Field extends Base {
 
+
 	/**
 	 * Returns block title
 	 *

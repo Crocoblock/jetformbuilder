@@ -40,6 +40,7 @@ const {
 	Disabled,
 	Popover,
 	BaseControl,
+	ToolbarItem,
 	__experimentalNumberControl,
 } = wp.components;
 
@@ -86,7 +87,35 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						onChange={ ( newValues ) => {
 							props.setAttributes( newValues );
 						} }
-					/>
+					>
+						{ 'custom' === attributes.repeater_calc_type && <ToolbarItem as={ Button }
+									 isTertiary
+									 isSmall
+									 icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
+									 onClick={ () => {
+										 this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+									 } }
+						>
+							{ this.state.showMacrosPopover && (
+								<Popover
+									position={ 'bottom left' }
+								>
+									{ formFields.length && <PanelBody title={ 'Form Fields' }>
+										{ formFields.map( field => {
+											return <div key={ 'field_' + field }>
+												<Button
+													isLink
+													onClick={ () => {
+														insertMacros( field )
+													} }
+												>{ '%FIELD::' + field + '%' }</Button>
+											</div>;
+										} ) }
+									</PanelBody> }
+								</Popover>
+							) }
+						</ToolbarItem> }
+					</JetFormToolbar>
 				</BlockControls>
 			),
 			props.isSelected && (
@@ -182,39 +211,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 								props.setAttributes( { calc_formula: newValue } );
 							} }
 						/>
-						<div
-							className="jet-form-editor__macros-inserter"
-							style={ { top: '31px' } }
-						>
-							<Button
-								isTertiary
-								isSmall
-								icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-								label={ 'Insert macros' }
-								className="jet-form-editor__macros-trigger"
-								onClick={ () => {
-									this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
-								} }
-							/>
-							{ this.state.showMacrosPopover && (
-								<Popover
-									position={ 'bottom left' }
-								>
-									{ formFields.length && <PanelBody title={ 'Form Fields' }>
-										{ formFields.map( field => {
-											return <div key={ 'field_' + field }>
-												<Button
-													isLink
-													onClick={ () => {
-														insertMacros( field )
-													} }
-												>{ '%FIELD::' + field + '%' }</Button>
-											</div>;
-										} ) }
-									</PanelBody> }
-								</Popover>
-							) }
-						</div>
 					</div>
 				</div> }
 				<BaseControl key={'repeater-fields-title'} style={ { textAlign: 'center' } }>

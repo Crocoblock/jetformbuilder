@@ -20,7 +20,8 @@ function JetFormToolbar( {
 							 className,
 							 controls,
 							 values,
-							 hideLabelFromVision
+							 hideLabelFromVision,
+							 children
 						 } ) {
 	const result = {};
 	const id = `inspector-select-control-${ instanceId }`;
@@ -49,7 +50,7 @@ function JetFormToolbar( {
 					} }
 				/>
 			} ) }
-
+			{ children }
 		</Flex>
 	</ToolbarGroup>;
 }

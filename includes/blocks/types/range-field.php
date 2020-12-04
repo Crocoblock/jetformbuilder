@@ -31,6 +31,10 @@ class Range_Field extends Base {
 		);
 	}
 
+	public function general_style_unregister() {
+		return array( 'required', 'input' );
+	}
+
 	/**
 	 * Returns block name
 	 *
@@ -159,14 +163,6 @@ class Range_Field extends Base {
 				)
 			)
 		]);
-
-		$this->controls_manager->add_control([
-			'id'         => 'range_border',
-			'type'       => 'border',
-			'label'       => __( 'Border', 'jet-form-builder' ),
-			'css_selector'  =>  $this->style_range( 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};' ),
-		]);
-
 		
 		$this->controls_manager->end_section();
 
@@ -179,8 +175,6 @@ class Range_Field extends Base {
 				'title'       => __( 'Slider', 'jet-form-builder' )
 			]
 		);
-
-		//width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; margin-top: calc( ({{SIZE}}{{UNIT}} - 4px)/-2 )
 		
 		$this->controls_manager->add_control([
 			'id'        => 'slider_size',

@@ -42,6 +42,10 @@ class Date_Field extends Base {
 		return 'date-field';
 	}
 
+	public function general_style_unregister() {
+		return array();
+	}
+
 	/**
 	 * Returns icon class name
 	 *

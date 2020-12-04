@@ -25,6 +25,15 @@ class Calculated_Field extends Base {
 		parent::__construct();
 	}
 
+	public function general_style_unregister() {
+		return array( 'required' );
+	}
+
+
+	public function get_field_input() {
+		return 'div.jet-form-row .jet-form-builder__calculated-field';
+	}
+
 
 	/**
 	 * Returns block title

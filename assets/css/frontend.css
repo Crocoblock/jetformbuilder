@@ -1764,13 +1764,12 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__calculated-field {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex
+    display: inline-block;
+    width: 100%;
 }
 
 .jet-form-builder__calculated-field--hidden {
-    display: none
+    display: none;
 }
 
 .layout-column .jet-form-builder__label {
@@ -1781,7 +1780,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__heading, .jet-form-builder__label {
-    -webkit-box-flex: 0;
+    /*-webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     display: -webkit-box;
@@ -1792,7 +1791,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: space-between;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center;
+    align-items: center;*/
     width: 100%
 }
 
@@ -1833,7 +1832,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__field-wrap {
-    position: relative
+    position: relative;
 }
 
 .jet-form-builder__field-label {
@@ -2370,8 +2369,8 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     max-width: none
 }
 
-.jet-form-builder__field-wrap {
-    width: auto;
+.jet-form-builder__field-wrap:not(.checkradio-wrap) {
+    width: 100%;
 }
 
 .jet-form-builder__field.checkradio-field {

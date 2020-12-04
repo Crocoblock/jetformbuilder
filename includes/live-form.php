@@ -165,6 +165,10 @@ class Live_Form {
 	 */
 	public function start_form_row( $field ) {
 
+		if ( $this->is_field( $field, 'hidden' ) ) {
+			return '';
+		}
+
 		if ( ! $this->is_hidden_row ) {
 			$this->rendered_rows ++;
 		}
@@ -201,9 +205,15 @@ class Live_Form {
 	/**
 	 * Close form wrapper
 	 *
-	 * @return [type] [description]
+	 * @param $field
+	 *
+	 * @return false|string [type] [description]
 	 */
-	public function end_form_row() {
+	public function end_form_row( $field ) {
+
+		if ( $this->is_field( $field, 'hidden' ) ) {
+			return '';
+		}
 
 		ob_start();
 		do_action( 'jet-form-builder/before-end-form-row', $this );

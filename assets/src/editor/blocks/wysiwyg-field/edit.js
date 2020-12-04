@@ -2,6 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import WrapperControl from "../../tools/wrapper-control";
 
 const block = 'jet-forms/wysiwyg-field';
 
@@ -82,11 +83,15 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class WysiwygEdit extends wp
 					/> }
 				</InspectorControls>
 			),
-			<TextareaControl
-				key={ `place_holder_block_${ block }` }
-				label={ attributes.label }
-				help={ attributes.desc }
-			/>
+			<WrapperControl
+				block={ block }
+				attributes={ attributes }
+			>
+				<TextareaControl
+					key={ `place_holder_block_${ block }` }
+					onChange={ () => {} }
+				/>
+			</WrapperControl>
 		];
 	}
 }

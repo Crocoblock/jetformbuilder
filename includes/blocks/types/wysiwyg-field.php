@@ -32,6 +32,10 @@ class Wysiwyg_Field extends Base {
 		return 'wysiwyg-field';
 	}
 
+	public function general_style_unregister() {
+		return array( 'required', 'input' );
+	}
+
 	/**
 	 * Returns icon class name
 	 *

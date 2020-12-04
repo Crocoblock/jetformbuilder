@@ -285,8 +285,11 @@
 
 /* Range Values */
 .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
-	max-width: 150px;
+	white-space: nowrap;
 	margin-left: 10px;
+}
+.jet-form-builder__field-wrap.range-wrap .range-flex-wrap .components-input-control__container {
+	background-color: rgba(255, 255, 255, 0);
 }
 
 .jet-form-builder__field-wrap.range-wrap {

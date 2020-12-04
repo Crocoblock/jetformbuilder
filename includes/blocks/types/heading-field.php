@@ -32,6 +32,10 @@ class Heading_Field extends Base {
 		return 'heading-field';
 	}
 
+	public function general_style_unregister() {
+		return array( 'required', 'input' );
+	}
+
 	/**
 	 * Returns icon class name
 	 *

@@ -41,6 +41,10 @@ class Time_Field extends Base {
 		return 'time-field';
 	}
 
+	public function general_style_unregister() {
+		return array();
+	}
+
 	/**
 	 * Returns icon class name
 	 *

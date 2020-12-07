@@ -30,7 +30,7 @@ class Submit_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'button' => '.jet-form-builder__submit',
+			'button' => 'button.jet-form-builder__submit',
 			'wrap'   => '.jet-form-builder__submit-wrap'
 		);
 	}
@@ -91,6 +91,31 @@ class Submit_Field extends Base {
 		] );
 
 		$this->controls_manager->add_control( [
+			'id'           => 'submit_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id' => 'submit_style_tabs',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'submit_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
 			'id'           => 'submit_typography_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
@@ -103,22 +128,43 @@ class Submit_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'submit_background_color',
 			'type'         => 'color-picker',
-			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'background-color: {{VALUE}}',
 			),
 		] );
 
+		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'submit_hover_styles',
+				'title' => __( 'Hover', 'jet-form-builder' ),
+			]
+		);
+
 		$this->controls_manager->add_control( [
-			'id'           => 'submit_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
+			'id'           => 'submit_hover_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 			),
 		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_hover_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
 
 		$this->controls_manager->end_section();
 	}

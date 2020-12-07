@@ -58,7 +58,7 @@ class Form extends Base {
 		return array(
 			'success' => '.jet-form-message--success',
 			'error'   => '.jet-form-message--error',
-			'form-row' => '.jet-form-row'
+			'form-row' => '.jet-form-builder-row'
 		);
 	}
 

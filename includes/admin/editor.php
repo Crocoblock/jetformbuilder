@@ -450,6 +450,13 @@ class Editor {
 			true
 		);
 
+		wp_enqueue_style(
+			'jet-form-builder-others',
+			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
+			array(),
+			Plugin::instance()->get_version()
+		);
+
 		wp_localize_script( $handle, 'JetFormEditorData', array(
 			'allowedBlocks' => $this->get_allowed_blocks(),
 			'action'        => $this->get_action(),

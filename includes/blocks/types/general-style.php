@@ -51,11 +51,11 @@ trait General_Style {
 	}
 
 	public function get_field_wrap() {
-		return 'div.jet-form-row';
+		return 'div.jet-form-builder-row';
 	}
 
 	public function get_field_input() {
-		return 'div.jet-form-row input';
+		return 'div.jet-form-builder-row input';
 	}
 
 

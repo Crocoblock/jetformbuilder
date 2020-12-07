@@ -177,22 +177,22 @@ class Live_Form {
 
 		do_action( 'jet-form-builder/before-start-form-row', $this );
 
-		$this->add_attribute( 'class', 'jet-form-row' );
+		$this->add_attribute( 'class', 'jet-form-builder-row' );
 
 		if ( $this->is_hidden_row ) {
-			$this->add_attribute( 'class', 'jet-form-row--hidden' );
+			$this->add_attribute( 'class', 'jet-form-builder-row--hidden' );
 		}
 
 		if ( $this->is_field( $field, 'submit' ) ) {
-			$this->add_attribute( 'class', 'jet-form-row--submit' );
+			$this->add_attribute( 'class', 'jet-form-builder-row--submit' );
 		}
 
 		if ( $this->is_field( $field, 'form-break' ) ) {
-			$this->add_attribute( 'class', 'jet-form-row--page-break' );
+			$this->add_attribute( 'class', 'jet-form-builder-row--page-break' );
 		}
 
 		if ( 1 === $this->rendered_rows ) {
-			$this->add_attribute( 'class', 'jet-form-row--first-visible' );
+			$this->add_attribute( 'class', 'jet-form-builder-row--first-visible' );
 		}
 
 		include $this->get_global_template( 'common/start-form-row.php' );

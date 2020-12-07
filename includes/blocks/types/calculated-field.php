@@ -31,7 +31,7 @@ class Calculated_Field extends Base {
 
 
 	public function get_field_input() {
-		return 'div.jet-form-row .jet-form-builder__calculated-field';
+		return 'div.jet-form-builder-row .jet-form-builder__calculated-field';
 	}
 
 

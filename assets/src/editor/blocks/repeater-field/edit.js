@@ -213,9 +213,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						/>
 					</div>
 				</div> }
-				<BaseControl key={'repeater-fields-title'} style={ { textAlign: 'center' } }>
+				<BaseControl key={'repeater-fields-title'}>
 					<BaseControl.VisualLabel>
-						<div className={ 'jet-form-builder__label-text' }>
+						<div className={ 'jet-form-builder__label' }>
 							{ label.name || 'Repeater field' }
 							{ attributes.required && <span className={'jet-form-builder__required'}>
 								{ label.mark }

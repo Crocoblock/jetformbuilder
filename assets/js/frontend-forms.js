@@ -255,7 +255,7 @@
 		var setVisibility = function( $section ) {
 
 			var checked = $section.data( 'checked' );
-			var $row = $section.closest( '.jet-form-row' );
+			var $row = $section.closest( '.jet-form-builder-row' );
 			var res = true;
 
 			if ( ! checked ) {

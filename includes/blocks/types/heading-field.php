@@ -87,7 +87,8 @@ class Heading_Field extends Base {
 				'default' => 'heading_name',
 				'general' => array(
 					'type'  => 'text',
-					'label' => __( 'Field Name', 'jet-form-builder' )
+					'label' => __( 'Field Name', 'jet-form-builder' ),
+					'show' => false,
 				),
 			),
 			'desc'       => array(

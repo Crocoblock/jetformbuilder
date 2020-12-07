@@ -2,6 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
+import WrapperControl from "../../tools/wrapper-control";
 
 const block = 'jet-forms/heading-field';
 
@@ -67,11 +68,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HeadingEdit extends wp
 					/> }
 				</InspectorControls>
 			),
-			<JetFieldPlaceholder
-				key={ keyPlaceHolder }
-				title={ 'Heading Field' }
-				subtitle={ [attributes.label, attributes.name] }
-				isRequired={ attributes.required }
+			<WrapperControl
+				block={ block }
+				attributes={ attributes }
+				valueIfEmptyLabel={ 'Heading' }
 			/>
 		];
 	}

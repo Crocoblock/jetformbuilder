@@ -50,6 +50,10 @@ class Form extends Base {
 		return '.jet-form-builder__desc';
 	}
 
+	public function general_style_unregister() {
+		return array( 'input', 'wrap' );
+	}
+
 	public function get_css_scheme() {
 		return array(
 			'success' => '.jet-form-message--success',

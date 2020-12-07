@@ -60,11 +60,11 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 						setAttributes( { form_id: Number( newValue ) } );
 					} }
 					options={ [
-						{ label: __( 'Select form...' ) },
+						{ label: __( 'Select form...' ), value: 0 },
 						...forms_list
 					] }
 				/>
-				{ attributes.form_id && <React.Fragment>
+				{ Boolean( attributes.form_id ) && <React.Fragment>
 					<SelectControl
 						label={ 'Fields Layout' }
 						value={ attributes.fields_layout }
@@ -100,6 +100,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 		<ServerSideRender
 			block={ formBlock.blockName }
 			attributes={ attributes }
+			httpMethod={ 'POST' }
 		/>
 	];
 

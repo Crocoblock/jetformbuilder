@@ -59,7 +59,6 @@ trait General_Style {
 	}
 
 
-
 	public function general_style_attributes() {
 		return array(
 			'label_margin'                 => array(
@@ -72,6 +71,12 @@ trait General_Style {
 				'type' => 'object'
 			),
 			'label_color'                  => array(
+				'type' => 'object'
+			),
+			'label_border'                 => array(
+				'type' => 'object'
+			),
+			'label_alignment'              => array(
 				'type' => 'object'
 			),
 			'label_background_color'       => array(
@@ -90,6 +95,12 @@ trait General_Style {
 				'type' => 'object'
 			),
 			'description_background_color' => array(
+				'type' => 'object'
+			),
+			'description_border'                 => array(
+				'type' => 'object'
+			),
+			'description_alignment'              => array(
 				'type' => 'object'
 			),
 			'required_color'               => array(
@@ -437,7 +448,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme[ 'input' ],
+			$this->css_scheme['input'],
 			array(
 				'margin'  => 'input_margin',
 				'padding' => 'input_padding'

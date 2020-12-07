@@ -55,8 +55,8 @@ class JetDefaultMetaControl extends wp.element.Component {
 		>
 			{ this.getDefaultMeta().map( ( currentItem, index ) => {
 				return <div
-					className="jet-form-repeater-modal"
-					key={ 'jet-form-repeater-item-' + index }
+					className="jet-form-builder-repeater-modal"
+					key={ 'jet-form-builder-repeater-item-' + index }
 				>
 					<div className='repeater-item-column'>
 						<TextControl

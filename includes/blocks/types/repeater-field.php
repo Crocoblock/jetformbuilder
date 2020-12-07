@@ -55,10 +55,10 @@ class Repeater_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			'repeater-row-editor' => '.block-editor-inner-blocks',
-			'repeater-row'        => '.jet-form-repeater__row',
-			'remove-button'       => '.jet-form-repeater__remove',
-			'new-button'          => '.jet-form-builder-repeater__new',
-			'actions'             => '.jet-form-repeater__actions'
+			'repeater-row'        => '.jet-form-builder-repeater__row',
+			'remove-button'       => 'button.jet-form-builder-repeater__remove',
+			'new-button'          => 'button.jet-form-builder-repeater__new',
+			'actions'             => '.jet-form-builder-repeater__actions'
 		);
 	}
 
@@ -94,59 +94,10 @@ class Repeater_Field extends Base {
 			]
 		);
 
-
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_typography_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_background_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#398ffc'
-				),
-			),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
-
 		$this->controls_manager->add_control( [
 			'id'           => 'new_button_alignment',
 			'type'         => 'choose',
+			'separator'    => 'after',
 			'label'        => __( 'Alignment', 'jet-form-builder' ),
 			'options'      => [
 				'flex-start'   => [
@@ -172,6 +123,90 @@ class Repeater_Field extends Base {
 			]
 		] );
 
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id' => 'new_button_style_tabs',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'new_button_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'new_button_hover_styles',
+				'title' => __( 'Hover', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_hover_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_hover_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
 		$this->controls_manager->end_section();
 
 		$this->controls_manager->start_section(
@@ -192,14 +227,34 @@ class Repeater_Field extends Base {
 		] );
 
 		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_border',
+			'type'         => 'border',
+			'separator'    => 'after',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id' => 'remove_button_style_tabs',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'remove_button_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
 			'id'           => 'remove_button_typography_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
 			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'color: {{VALUE}}',
@@ -209,27 +264,43 @@ class Repeater_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'remove_button_background_color',
 			'type'         => 'color-picker',
-			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#398ffc'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
 			),
 		] );
 
+		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'remove_button_hover_styles',
+				'title' => __( 'Hover', 'jet-form-builder' ),
+			]
+		);
+
 		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
+			'id'           => 'remove_button_hover_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 			),
 		] );
 
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_hover_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
 		$this->controls_manager->end_section();
 	}
 

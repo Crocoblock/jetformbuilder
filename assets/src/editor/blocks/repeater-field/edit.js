@@ -232,11 +232,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 					) }
 				/>
 				<Button
-					className={ 'jet-form-repeater__remove' }
+					className={ 'jet-form-builder-repeater__remove' }
 					isSecondary
 					onClick={ () => {} }
 				>&times;</Button>
-				<div className="jet-form-repeater__actions">
+				<div style={ { width: '100%', height: '0.7em' } } />
+				<div className="jet-form-builder-repeater__actions">
 					<Button
 						className={ 'jet-form-builder-repeater__new' }
 						isSecondary

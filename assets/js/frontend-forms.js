@@ -410,12 +410,12 @@
 				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
 				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
-				.on( 'jet-form-builder/repeater-changed', '.jet-form-repeater', self.recalcFields )
+				.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
 				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
 				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
 				.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
-				.on( 'click.JetFormBuilderMain', '.jet-form-repeater__remove', self.removeRepeaterItem )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
 				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage );
 
 		},
@@ -423,9 +423,9 @@
 		removeRepeaterItem: function() {
 
 			var $this = $( this ),
-				$repeater = $this.closest( '.jet-form-repeater' );
+				$repeater = $this.closest( '.jet-form-builder-repeater' );
 
-			$this.closest( '.jet-form-repeater__row' ).remove();
+			$this.closest( '.jet-form-builder-repeater__row' ).remove();
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
 
 		},
@@ -433,14 +433,14 @@
 		newRepeaterItem: function() {
 
 			var $this = $( this ),
-				$repeater = $this.closest( '.jet-form-repeater' ),
-				$initial = $repeater.find( '.jet-form-repeater__initial' ),
-				$items = $repeater.find( '.jet-form-repeater__items' ),
+				$repeater = $this.closest( '.jet-form-builder-repeater' ),
+				$initial = $repeater.find( '.jet-form-builder-repeater__initial' ),
+				$items = $repeater.find( '.jet-form-builder-repeater__items' ),
 				$newVal = $initial.html(),
 				index = 0;
 
-			if ( $items.find( '.jet-form-repeater__row' ).length ) {
-				$items.find( '.jet-form-repeater__row' ).each( function() {
+			if ( $items.find( '.jet-form-builder-repeater__row' ).length ) {
+				$items.find( '.jet-form-builder-repeater__row' ).each( function() {
 					var $this = $( this ),
 						currentIndex = parseInt( $this.data( 'index' ), 10 );
 
@@ -487,7 +487,7 @@
 
 			for ( var i = 0; i < val; i++ ) {
 
-				var $item = $repeater.find( '.jet-form-repeater__row[data-index="' + i + '"]' );
+				var $item = $repeater.find( '.jet-form-builder-repeater__row[data-index="' + i + '"]' );
 
 				if ( ! $item.length ) {
 					JetFormBuilder.newRepeaterItem.call( $repeater );
@@ -495,7 +495,7 @@
 
 			};
 
-			var $rows = $repeater.find( '.jet-form-repeater__row' );
+			var $rows = $repeater.find( '.jet-form-builder-repeater__row' );
 
 			if ( $rows.length ) {
 				$rows.each( function() {
@@ -545,7 +545,7 @@
 
 		initRepeaterListener: function( $scope ) {
 
-			var $repeater = $scope.find( '.jet-form-repeater' );
+			var $repeater = $scope.find( '.jet-form-builder-repeater' );
 
 			if ( ! $repeater.length ) {
 				return;
@@ -581,7 +581,7 @@
 
 				}
 
-				var $initial = $this.find( '.jet-form-repeater__initial' );
+				var $initial = $this.find( '.jet-form-builder-repeater__initial' );
 					$initial = $( $initial.html() );
 
 				var $calcFields = $initial.find( '.jet-form-builder__calculated-field--child' );
@@ -598,7 +598,7 @@
 							'listenTo': $childField.data( 'listen_to' ),
 						};
 
-						$this.find( '.jet-form-repeater__row' ).each( function() {
+						$this.find( '.jet-form-builder-repeater__row' ).each( function() {
 							JetFormBuilder.calculateRowValue( $( this ), $childField.data( 'precision' ) );
 						} );
 
@@ -958,10 +958,10 @@
 
 				if ( 'DIV' === $field[0].nodeName ) {
 
-					if ( $field.hasClass( 'jet-form-repeater' ) ) {
+					if ( $field.hasClass( 'jet-form-builder-repeater' ) ) {
 						var repeaterSettings = $field.data( 'settings' );
 						if ( repeaterSettings && 'custom' === repeaterSettings.calcType ) {
-							$field.find( '.jet-form-repeater__row' ).each( function() {
+							$field.find( '.jet-form-builder-repeater__row' ).each( function() {
 								var $row = $( this ),
 									rowVal = JetFormBuilder.calculateValue( $row );
 
@@ -971,7 +971,7 @@
 							} );
 
 						} else {
-							val = $field.find( '.jet-form-repeater__row' ).length;
+							val = $field.find( '.jet-form-builder-repeater__row' ).length;
 						}
 					}
 
@@ -1009,7 +1009,7 @@
 				if ( $scope.data( 'repeater' ) ) {
 					object = $scope;
 				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
-					object = $scope.closest( '.jet-form-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
+					object = $scope.closest( '.jet-form-builder-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
 				} else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
 				} else {
@@ -1081,7 +1081,7 @@
 				fieldName = fieldName.replace( '[]', '' );
 
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					var $row = $this.closest( '.jet-form-repeater__row' );
+					var $row = $this.closest( '.jet-form-builder-repeater__row' );
 					JetFormBuilder.calculateFieldsInRow( $row );
 				}
 

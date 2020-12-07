@@ -32,12 +32,12 @@ class Repeater_Field_Render extends Base {
 		$this->current_repeater = $this->block_type->default_value;
 
 		$template = sprintf(
-			'<template class="jet-form-repeater__initial">%1$s</template>',
+			'<template class="jet-form-builder-repeater__initial">%1$s</template>',
 			$this->render_repeater_row( $wp_block, false )
 		);
 
 		$html = sprintf(
-			'<div class="jet-form-repeater" data-repeater="1" 
+			'<div class="jet-form-builder-repeater" data-repeater="1" 
             data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
 			$this->block_type->block_attrs['name'],
 			$this->block_type->settings,
@@ -45,7 +45,7 @@ class Repeater_Field_Render extends Base {
 			$template
 		);
 
-		$html .= '<div class="jet-form-repeater__items">';
+		$html .= '<div class="jet-form-builder-repeater__items">';
 
 		if ( ! empty( $this->current_repeater['default'] ) && is_array( $this->current_repeater['default'] ) ) {
 			$i = 0;
@@ -61,7 +61,7 @@ class Repeater_Field_Render extends Base {
 
 		if ( 'manually' === $this->block_type->manage_items ) {
 			$html .= sprintf(
-				'<div class="jet-form-repeater__actions">
+				'<div class="jet-form-builder-repeater__actions">
                 <button type="button" class="jet-form-builder-repeater__new">%1$s</button>
                 </div>',
 				$this->block_type->new_item_label
@@ -91,8 +91,8 @@ class Repeater_Field_Render extends Base {
 			$index = 0;
 		}
 
-		$html = '<div class="jet-form-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $this->block_type->calc_dataset . '>';
-		$html .= '<div class="jet-form-repeater__row-fields">';
+		$html = '<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $this->block_type->calc_dataset . '>';
+		$html .= '<div class="jet-form-builder-repeater__row-fields">';
 
 		Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );
 
@@ -105,8 +105,8 @@ class Repeater_Field_Render extends Base {
 		Live_Form::instance()->set_repeater( false );
 
 		if ( 'manually' === $this->block_type->manage_items ) {
-			$html .= '<div class="jet-form-repeater__row-remove">';
-			$html .= '<button type="button" class="jet-form-repeater__remove">&times;</button>';
+			$html .= '<div class="jet-form-builder-repeater__row-remove">';
+			$html .= '<button type="button" class="jet-form-builder-repeater__remove">&times;</button>';
 			$html .= '</div>';
 		}
 

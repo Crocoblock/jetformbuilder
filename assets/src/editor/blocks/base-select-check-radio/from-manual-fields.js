@@ -114,8 +114,8 @@ class FromManualFields extends wp.element.Component {
 							<div className="jet-form-edit-modal__content">
 								{ attributes.field_options.map( ( currentItem, index ) => {
 									return <div
-										className="jet-form-repeater-modal"
-										key={ 'jet-form-repeater-item-' + index }
+										className="jet-form-builder-repeater-modal"
+										key={ 'jet-form-builder-repeater-item-' + index }
 									>
 										<div className='repeater-item-column'>
 											<TextControl

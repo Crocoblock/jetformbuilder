@@ -150,17 +150,17 @@
 	width: 50%;
 }
 
-.jet-form-repeater-modal {
+.jet-form-builder-repeater-modal {
 	display: flex;
 	/*justify-content: space-evenly;*/
 }
 
-.jet-form-repeater-modal .repeater-item-column label {
+.jet-form-builder-repeater-modal .repeater-item-column label {
 	/*text-align: center;*/
 	flex: 0 0 75px;
 }
 
-.jet-form-repeater-modal .repeater-item-column input {
+.jet-form-builder-repeater-modal .repeater-item-column input {
 	margin-right: 1em;
 }
 

@@ -2003,12 +2003,14 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 input[type="range"].jet-form-builder__field.range-field {
     margin-right: 10px;
     -webkit-appearance: none;
-    min-height: 18px
+    min-height: 18px;
+    width: 100%;
 }
 
 .rtl input[type="range"].jet-form-builder__field.range-field {
     margin-left: 10px;
-    margin-right: 0
+    margin-right: 0;
+    width: 100%;
 }
 
 input[type="range"].jet-form-builder__field.range-field, input[type="range"].jet-form-builder__field.range-field:focus {

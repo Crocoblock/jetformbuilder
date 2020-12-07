@@ -152,11 +152,10 @@
 
 .jet-form-builder-repeater-modal {
 	display: flex;
-	/*justify-content: space-evenly;*/
+	margin-bottom: 1em;
 }
 
 .jet-form-builder-repeater-modal .repeater-item-column label {
-	/*text-align: center;*/
 	flex: 0 0 75px;
 }
 

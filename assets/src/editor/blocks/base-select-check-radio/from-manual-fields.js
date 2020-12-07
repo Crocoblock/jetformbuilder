@@ -38,7 +38,7 @@ class FromManualFields extends wp.element.Component {
 
 		/* Remove empty options */
 		const valid_options = manual_items.filter( option => {
-			return ( option.value || option.calculate );
+			return ( Boolean( option.value ) || Boolean( option.calculate ) );
 		} );
 
 		this.props.parentProps.setAttributes( {
@@ -63,16 +63,12 @@ class FromManualFields extends wp.element.Component {
 	}
 
 	addNewOption() {
-		const manual_items = this.getOptions();
-
-		manual_items.push( {
-			label: '',
-			value: '',
-			calculate: ''
-		} );
-
 		this.props.parentProps.setAttributes( {
-			field_options: manual_items
+			field_options: [ ...this.getOptions(), {
+				label: '',
+				value: '',
+				calculate: ''
+			} ]
 		} );
 	}
 

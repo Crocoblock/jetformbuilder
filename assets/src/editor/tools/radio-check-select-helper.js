@@ -20,7 +20,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
 			className={ 'jet-form-builder__field-wrap checkradio-wrap' }
-			key={ `place_holder_block_${ label + index }` }
+			key={ `check_place_holder_block_${ label + index }` }
 			label={ label }
 			onChange={ () => {} }
 		/>;
@@ -28,7 +28,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getSelect = ( { options, index } ) => {
 		return <SelectControl
-			key={ `place_holder_block_${ source.name + index }` }
+			key={ `select_place_holder_block_${ source.name + index }` }
 			//label={ source.label }
 			options={ options }
 			//help={ source.desc }
@@ -38,7 +38,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getRadio = ( { options, label, index } ) => {
 		return <RadioControl
-			key={ `place_holder_block_${ label + index }` }
+			key={ `radio_place_holder_block_${ label + index }` }
 			//label={ source.label }
 			options={ options }
 			//help={ source.desc }
@@ -108,8 +108,8 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 			if ( label ) {
 				return getCheckbox( label );
 			}
-			return source.field_options.map( ( { label: checkLabel } ) => {
-				return getCheckbox( checkLabel )
+			return source.field_options.map( ( { label: checkLabel }, index ) => {
+				return getCheckbox( checkLabel, index )
 			} );
 
 		} else if ( blockName.includes( 'select' ) ) {

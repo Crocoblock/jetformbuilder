@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace Jet_Form_Builder\Blocks\Modules;
 
 
 trait General_Style {

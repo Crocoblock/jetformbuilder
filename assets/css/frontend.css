@@ -2500,3 +2500,10 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     -ms-flex-positive: 1;
     flex-grow: 1
 }
+
+.jet-form-builder__field.field-has-error {
+    background-color: rgba( 255, 0, 0, 0.25 );
+}
+.jet-form-builder__field.field-has-error + span.error-message {
+    color: red;
+}

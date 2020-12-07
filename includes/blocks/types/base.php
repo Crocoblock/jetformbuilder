@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -16,10 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-abstract class Base {
-
-	use Get_Template_Trait;
-	use General_Style;
+abstract class Base extends Base_Module {
 
 	private $_unregistered = array();
 
@@ -29,6 +26,8 @@ abstract class Base {
 
 	public $block_attrs = array();
 	public $block_content;
+
+	public $error_data = false;
 
 	public function __construct() {
 
@@ -40,7 +39,6 @@ abstract class Base {
 
 			return $blocks;
 		} );
-
 	}
 
 	/**

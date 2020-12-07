@@ -33,7 +33,7 @@ $value = File_Upload::instance()->get_result_value( $args );
 $value = is_array( $value ) ? json_encode( $value ) : $value;
 
 ?>
-<div class="jet-form-builder-file-upload">
+<div class="jet-form-builder__field jet-form-builder-file-upload">
 	<div class="jet-form-builder-file-upload__content">
 		<?php echo File_Upload::instance()->get_loader(); ?>
 		<div class="jet-form-builder-file-upload__files" <?php echo File_Upload::instance()->get_files_data_args( $args ); ?>><?php

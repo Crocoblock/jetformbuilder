@@ -5,6 +5,7 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Request_Exception;
 
 /**
  * Form builder class
@@ -151,9 +152,10 @@ class Form_Handler {
 			);
 			$this->request_data = ( new Request_Handler( $request ) )->get_form_data();
 
-		} catch ( Handler_Exception $exception ) {
+		} catch ( Request_Exception $exception ) {
 			$this->send_response( array(
 				'status' => $exception->get_form_status(),
+				'errors' => $exception->get_fields_errors()
 			) );
 		}
 	}
@@ -167,6 +169,7 @@ class Form_Handler {
 			$this->is_success = true;
 
 		} catch ( Handler_Exception $exception ) {
+
 			$this->send_response( array(
 				'status' => $exception->get_form_status(),
 			) );
@@ -211,6 +214,7 @@ class Form_Handler {
 
 		$args = wp_parse_args( $args, array(
 			'status' => 'success',
+			'errors' => array()
 		) );
 
 		$error_statuses = array( 'validation_failed', 'invalid_email' );
@@ -230,7 +234,7 @@ class Form_Handler {
 			if ( $this->is_ajax ) {
 				$query_args['fields'] = $args['errors'];
 			} else {
-				$query_args['fields'] = implode( ',', $args['errors'] );
+				$query_args['fields'] = urlencode( json_encode( $args['errors'] ) );
 			}
 		}
 

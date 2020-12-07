@@ -1172,8 +1172,7 @@
 			$form.addClass( 'is-loading' );
 			$this.attr( 'disabled', true );
 
-			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
-			$form.find( '.jet-form-builder__field-error' ).remove();
+			JetFormBuilder.clearFieldErrors( formID );
 
 			$.ajax({
 				url: JetFormBuilderSettings.ajaxurl,
@@ -1189,15 +1188,18 @@
 
 					case 'validation_failed':
 
-						$.each( response.fields, function( index, fieldName ) {
+						Object.entries( response.fields ).forEach( function( [ fieldName, fieldData ] ) {
 							var $field = $form.find( '.jet-form-builder__field[name="' + fieldName + '"]:last' );
 
-							if ( $field.hasClass( 'checkradio-field' ) ) {
-								$field.closest( '.jet-form-builder__field-wrap' ).after( response.field_message );
-							} else {
-								$field.after( response.field_message );
-							}
+							const afterMessage = `<span class="error-message">${ fieldData.message }</span>`;
 
+							$field.addClass( 'field-has-error' );
+
+							if ( $field.hasClass( 'checkradio-field' ) ) {
+								$field.closest( '.jet-form-builder__field-wrap' ).after( afterMessage );
+							} else {
+								$field.after( afterMessage );
+							}
 						});
 
 						break;
@@ -1221,11 +1223,16 @@
 
 		},
 
-		clearFieldErrors: function() {
+		clearFieldErrors: function( formID ) {
+			var $this  = $( this );
 
-			var $this  = $( this ),
-				formID = $this.closest( '.jet-form' ).data( 'form-id' );
 			$this.closest( '.jet-form-col' ).find( '.jet-form-builder__field-error' ).remove();
+
+			$( '.jet-form-builder__field.field-has-error' ).each( ( index, elem ) => {
+				$( elem ).removeClass( 'field-has-error' );
+				$( elem ).siblings( 'span.error-message' ).remove();
+			} );
+
 			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
 
 		},

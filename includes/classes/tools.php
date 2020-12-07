@@ -36,7 +36,7 @@ class Tools {
 
 		if ( $placeholder && is_array( $placeholder ) ) {
 			$placeholder['value'] = isset( $placeholder['value'] ) ? $placeholder['value'] : '';
-			$post_types_list[] = $placeholder;
+			$post_types_list[]    = $placeholder;
 		}
 
 		foreach ( $post_types as $post_type ) {
@@ -75,6 +75,7 @@ class Tools {
 	 */
 	public static function sanitize_wysiwyg( $input ) {
 		$input = wpautop( $input );
+
 		return wp_kses_post( $input );
 	}
 
@@ -232,6 +233,31 @@ class Tools {
 		return ( ( string ) ( int ) $timestamp === $timestamp || ( int ) $timestamp === $timestamp )
 		       && ( $timestamp <= PHP_INT_MAX )
 		       && ( $timestamp >= ~PHP_INT_MAX );
+	}
+
+	/**
+	 * @param $class_string
+	 *
+	 * @return string
+	 */
+	public static function make_class_name( $class_string ) {
+		$delimiters = array( '_', '-' );
+		$delimiter  = '_';
+
+		foreach ( $delimiters as $del ) {
+			if ( false !== strpos( $class_string, $del ) ) {
+				$delimiter = $del;
+				break;
+			}
+		}
+
+		$exploded_class = explode( $delimiter, $class_string );
+
+		foreach ( $exploded_class as $key => $value ) {
+			$exploded_class[ $key ] = ucfirst( $value );
+		}
+
+		return implode( '_', $exploded_class );
 	}
 
 }

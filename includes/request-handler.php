@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder;
 
-
+use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
@@ -196,19 +196,24 @@ class Request_Handler {
 			}
 
 			if ( isset( $settings['field_type'] ) && 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
-				throw new Request_Exception( 'invalid_email' );
+				Error_Handler::instance()->add(
+					$type, array( 'name' => $name, 'params' => $settings )
+				);
 			}
 
-			/*if ( is_array( $value ) && ! $is_repeater ) {
-				$value = implode( ', ', $value );
-			}*/
 
 			if ( $required && empty( $value ) ) {
-				throw new Request_Exception( 'empty_field' );
+				Error_Handler::instance()->add(
+					$type, array( 'name' => $name, 'params' => $settings )
+				);
 			}
 
 			$data[ $name ] = $value;
 
+		}
+
+		if ( Error_Handler::instance()->has_errors() ) {
+			throw new Request_Exception( 'validation_failed', Error_Handler::instance()->errors() );
 		}
 
 		if ( ! Plugin::instance()->captcha->verify( $this->request['form_id'], $this->request['is_ajax'] ) ) {

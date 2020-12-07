@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Messages_Builder;
@@ -451,6 +452,8 @@ class Form extends Base {
 
 		$builder  = new Form_Builder( $form_id, false, $attrs );
 		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
+
+		Error_Handler::instance();
 
 		ob_start();
 

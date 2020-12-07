@@ -39,7 +39,6 @@ class Call_Hook extends Base {
 			throw new Action_Exception( 'failed' );
 		}
 
-
 		/**
 		 * Fires custom hook. Keep action for backward compatibility.
 		 *

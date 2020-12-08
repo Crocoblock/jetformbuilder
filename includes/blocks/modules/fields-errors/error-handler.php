@@ -19,6 +19,9 @@ class Error_Handler {
 			new Textarea_Field_Error(),
 			new Number_Field_Error(),
 			new Checkboxes_Field_Error(),
+			new Media_Field_Error(),
+			new Wysiwyg_Field_Error(),
+			new Repeater_Field_Error(),
 		);
 
 		foreach ( $types as $type ) {
@@ -90,10 +93,6 @@ class Error_Handler {
 
 		$message = $arguments['message'] ? $arguments['message'] : $field->error();
 
-		if ( empty( $message ) ) {
-			return false;
-		}
-
 		$this->_errors[ $arguments['name'] ] = array(
 			'message' => $message
 		);
@@ -110,7 +109,9 @@ class Error_Handler {
 	}
 
 	public function error_by_name( $name ) {
-		return $this->_errors[ $name ]['message'];
+		if ( isset( $this->_errors[ $name ]['message'] ) ) {
+			return $this->_errors[ $name ]['message'];
+		}
 	}
 
 	public function errors() {

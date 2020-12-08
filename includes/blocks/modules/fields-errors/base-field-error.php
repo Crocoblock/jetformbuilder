@@ -20,7 +20,7 @@ abstract class Base_Field_Error {
 	}
 
 	public function error() {
-		return 'This field has an error.';
+		return 'This field is required.';
 	}
 
 }

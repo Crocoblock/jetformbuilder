@@ -143,7 +143,7 @@ class Request_Handler {
 			}
 
 
-			if ( 'repeater-field' === $type ) {
+			if ( 'repeater-field' === $type && isset( $settings['name'] ) ) {
 				$is_repeater                          = true;
 				$in_repeater                          = true;
 				$current_repeater                     = $name;
@@ -154,6 +154,7 @@ class Request_Handler {
 			}
 
 			if ( ! $is_repeater && $in_repeater ) {
+
 				if ( 'media' === $settings['type'] && ! empty( $data[ $current_repeater ] ) ) {
 					foreach ( $data[ $current_repeater ] as $index => $row ) {
 						if ( ! empty( $row[ $name ] ) ) {
@@ -191,7 +192,6 @@ class Request_Handler {
 			}
 
 			if ( 'wysiwyg-field' === $type ) {
-				$required = false;
 				$value    = Tools::sanitize_wysiwyg( $value );
 			}
 
@@ -201,7 +201,6 @@ class Request_Handler {
 				);
 			}
 
-
 			if ( $required && empty( $value ) ) {
 				Error_Handler::instance()->add(
 					$type, array( 'name' => $name, 'params' => $settings )
@@ -209,7 +208,6 @@ class Request_Handler {
 			}
 
 			$data[ $name ] = $value;
-
 		}
 
 		if ( Error_Handler::instance()->has_errors() ) {

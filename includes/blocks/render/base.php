@@ -67,7 +67,7 @@ abstract class Base {
 
 	public function maybe_render_error( $args ) {
 		if ( $this->has_error( $args ) ) {
-			return "<span class='error-message'>". Error_Handler::instance()->error_by_name( $args['name'] ) ."</span>";
+			return "<div class='error-message'>". Error_Handler::instance()->error_by_name( $args['name'] ) ."</div>";
 		}
 		return '';
 	}

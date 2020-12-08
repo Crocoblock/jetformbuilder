@@ -120,6 +120,24 @@ class Range_Field extends Base {
 			'min'       => 1,
 			'max'       => 1000,
 			'step'      => 1,
+			/*'units' => [
+				[
+					'value' => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 1000,
+					]
+				],
+				[
+					'value' => '%',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 100,
+					]
+				],
+			],*/
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'max-width: {{VALUE}}{{UNIT}};',
 			],

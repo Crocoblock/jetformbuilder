@@ -88,33 +88,32 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 							props.setAttributes( newValues );
 						} }
 					>
-						{ 'custom' === attributes.repeater_calc_type && <ToolbarItem as={ Button }
-									 isTertiary
-									 isSmall
-									 icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-									 onClick={ () => {
-										 this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
-									 } }
-						>
-							{ this.state.showMacrosPopover && (
-								<Popover
-									position={ 'bottom left' }
-								>
-									{ formFields.length && <PanelBody title={ 'Form Fields' }>
-										{ formFields.map( field => {
-											return <div key={ 'field_' + field }>
-												<Button
-													isLink
-													onClick={ () => {
-														insertMacros( field )
-													} }
-												>{ '%FIELD::' + field + '%' }</Button>
-											</div>;
-										} ) }
-									</PanelBody> }
-								</Popover>
-							) }
-						</ToolbarItem> }
+						{ 'custom' === attributes.repeater_calc_type && <Button
+							isTertiary
+							isSmall
+							icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
+							onClick={ () => {
+								this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+							} }
+						/> }
+						{ this.state.showMacrosPopover && (
+							<Popover
+								position={ 'bottom left' }
+							>
+								{ formFields.length && <PanelBody title={ 'Form Fields' }>
+									{ formFields.map( field => {
+										return <div key={ 'field_' + field }>
+											<Button
+												isLink
+												onClick={ () => {
+													insertMacros( field )
+												} }
+											>{ '%FIELD::' + field + '%' }</Button>
+										</div>;
+									} ) }
+								</PanelBody> }
+							</Popover>
+						) }
 					</JetFormToolbar>
 				</BlockControls>
 			),

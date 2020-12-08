@@ -37,7 +37,6 @@ const {
 	Disabled,
 	ToolbarGroup,
 	ToolbarItem,
-	DropdownMenu,
 	__experimentalNumberControl,
 } = wp.components;
 
@@ -71,33 +70,32 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 		return [
 			<BlockControls key={ keyControls + '-block' }>
 				<ToolbarGroup>
-					<ToolbarItem as={ Button }
+					<Button
 								 isTertiary
 								 isSmall
 								 icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
 								 onClick={ () => {
 									 this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
 								 } }
-					>
-						{ this.state.showMacrosPopover && (
-							<Popover
-								position={ 'bottom left' }
-							>
-								{ formFields.length && <PanelBody title={ 'Form Fields' }>
-									{ formFields.map( field => {
-										return <div key={ 'field_' + field }>
-											<Button
-												isLink
-												onClick={ () => {
-													insertMacros( field )
-												} }
-											>{ '%FIELD::' + field + '%' }</Button>
-										</div>;
-									} ) }
-								</PanelBody> }
-							</Popover>
-						) }
-					</ToolbarItem>
+					/>
+					{ this.state.showMacrosPopover && (
+						<Popover
+							position={ 'bottom left' }
+						>
+							{ formFields.length && <PanelBody title={ 'Form Fields' }>
+								{ formFields.map( field => {
+									return <div key={ 'field_' + field }>
+										<Button
+											isLink
+											onClick={ () => {
+												insertMacros( field )
+											} }
+										>{ '%FIELD::' + field + '%' }</Button>
+									</div>;
+								} ) }
+							</PanelBody> }
+						</Popover>
+					) }
 				</ToolbarGroup>
 			</BlockControls>,
 			props.isSelected && (

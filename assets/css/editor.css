@@ -79,8 +79,9 @@
 	border-top: 1px solid #ddd;
 }
 
-.jet-form-edit-modal .without-border .components-base-control__field {
+.jet-form-edit-modal .fields-map-control .components-base-control__field {
 	border: none;
+	padding: 0 0 5px 0;
 }
 
 .jet-form-edit-modal .components-base-control:first-child .components-base-control__field {
@@ -104,6 +105,17 @@
 .jet-form-edit-modal .jet-form-editor__macros-wrap .components-base-control .components-base-control__field {
 	padding-top: 12px;
 	border-top: 1px solid #ddd;
+}
+
+.jet-form-edit-modal .jet-user-meta__row {
+	display: flex;
+}
+
+.jet-form-edit-modal .jet-user-meta__row .jet-field-map__row-label {
+	flex: 1 1 30%;
+}
+.jet-form-edit-modal .jet-user-meta__row .components-base-control {
+	flex: 1 1 40%;
 }
 
 .jet-form-editor__macros-trigger {

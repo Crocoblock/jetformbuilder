@@ -56,6 +56,13 @@ class Tools {
 		return formFields;
 	}
 
+	static getFormFieldsBlocksWithPlaceholder( placeholder = '--' ) {
+		return [
+			{ value: '', label: placeholder },
+			...this.getFormFieldsBlocks()
+		];
+	}
+
 	static getAvailableFields( exclude = [] ) {
 
 		let fields = [];

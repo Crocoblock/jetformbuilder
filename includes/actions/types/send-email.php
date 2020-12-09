@@ -81,7 +81,7 @@ class Send_Email extends Base {
 				$this->settings['reply_email'] = ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
 				break;
 		}
-		
+
 		if ( ! $email || ! is_email( $email ) ) {
 			throw new Action_Exception( 'invalid_email' );
 		}

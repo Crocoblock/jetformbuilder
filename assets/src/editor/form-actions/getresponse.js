@@ -1,6 +1,7 @@
 import Tools from "../tools/tools";
 import * as fieldsManager from "../tools/form-fields-manager";
 import IntegrationComponent from "./integration-component";
+import WrapperRequiredControl from "../components/wrapper-required-control";
 
 /**
  * Internal dependencies
@@ -124,9 +125,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 							{ this.data.labels.update_list_ids }
 						</Button>
 					</div>
-
 				</BaseControl>
-
 				<BaseControl
 					label={ this.data.labels.day_of_cycle }
 					key={ 'getresponse_day_of_cycle' }
@@ -140,25 +139,17 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 							} }
 						/>
 					</div>
-
 				</BaseControl>
 				<BaseControl
 					label={ this.data.labels.fields_map }
 					key='getresponse_fields_map'
 				>
-					<div className='jet-user-meta-rows'>
+					<div className='jet-user-fields-map__list'>
 						{ fields.map( ( [ fieldName, fieldData ], index ) => {
 
-							return <div
-								className="jet-user-meta__row without-border"
-								key={ 'user_meta_' + fieldName + index }
+							return <WrapperRequiredControl
+								field={ [ fieldName, fieldData ] }
 							>
-								<div className="jet-field-map__row-label">
-									{ fieldData.label && <span className={'fields-map__label'}>
-										{ fieldData.label }
-									</span> }
-									{ fieldData.required && <span className={'fields-map__required'}> *</span> }
-								</div>
 								<SelectControl
 									key={ fieldName + index }
 									value={ this.getFieldDefault( fieldName ) }
@@ -167,15 +158,12 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 									} }
 									options={ this.formFieldsList }
 								/>
-							</div>;
+							</WrapperRequiredControl>;
 						} ) }
 					</div>
 				</BaseControl>
-
 			</React.Fragment> }
-
 		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-
 }

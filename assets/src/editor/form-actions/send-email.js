@@ -42,7 +42,7 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 
 		};
 
-		const formFields = Tools.getFormFieldsBlocks();
+		const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
 
 		const insertMacros = ( macros ) => {
 			var content = settings.content || '';

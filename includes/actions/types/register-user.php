@@ -309,13 +309,25 @@ class Register_User extends Base {
 	 */
 	public function get_user_fields() {
 		return array(
-			'login'            => __( 'User Login', 'jet-form-builder' ),
-			'email'            => __( 'Email', 'jet-engine' ),
-			'password'         => __( 'Password', 'jet-engine' ),
-			'confirm_password' => __( 'Confirm Password', 'jet-engine' ),
-			'first_name'       => __( 'First Name', 'jet-engine' ),
-			'last_name'        => __( 'Last Name', 'jet-engine' ),
-			'user_url'         => __( 'User URL', 'jet-engine' ),
+			'login'            => array(
+				'label'    => __( 'User Login', 'jet-form-builder' ),
+				'required' => true
+			),
+			'email'            => array(
+				'label'    =>  __( 'Email', 'jet-form-builder' ),
+				'required' => true
+			),
+			'password'         => array(
+				'label'    =>  __( 'Password', 'jet-form-builder' ),
+				'required' => true
+			),
+			'confirm_password' => array(
+				'label'    =>  __( 'Confirm Password', 'jet-form-builder' ),
+				'required' => true
+			),
+			'first_name'       => __( 'First Name', 'jet-form-builder' ),
+			'last_name'        => __( 'Last Name', 'jet-form-builder' ),
+			'user_url'         => __( 'User URL', 'jet-form-builder' ),
 		);
 	}
 

@@ -1584,7 +1584,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin: 0 -5px;
+    margin: 0;
     padding: 5px 0;
     overflow: hidden;
 }

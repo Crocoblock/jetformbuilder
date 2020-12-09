@@ -3,6 +3,7 @@ import ActionMessages from "../meta/action-messages";
 import BaseActionComponent from "./base-action-component";
 
 import * as fieldsManager from '../tools/form-fields-manager';
+import WrapperRequiredControl from "../components/wrapper-required-control";
 
 /**
  * Internal dependencies
@@ -46,24 +47,20 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 			>
 				<div className="jet-user-fields-map__list">
 					<span className={ 'description-controls' }>{ __( 'Set form fields names to to get user data from', 'jet-form-builder' ) }</span>
-					{ this.userFields.map( ( [value, label], index ) => {
+					{ this.userFields.map( ( [ value, data ] ) => {
 
-						return <div
-							className="jet-fields-map__row"
-							key={ 'field_map_' + value + index }
+						return <WrapperRequiredControl
+							field={ [ value, data ] }
 						>
 							<SelectControl
-								key="form_fields"
+								key={ `form_fields_${ value }` }
 								value={ this.getFieldDefault( value ) }
 								options={ this.formFieldsList }
-								label={ label }
-								labelPosition='side'
 								onChange={ ( newValue ) => {
 									this.onChangeFieldMap( newValue, value );
 								} }
 							/>
-						</div>;
-
+						</WrapperRequiredControl>;
 					} ) }
 				</div>
 			</BaseControl>

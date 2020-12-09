@@ -1,6 +1,5 @@
-import Tools from "../tools/tools";
-import * as fieldsManager from "../tools/form-fields-manager";
 import IntegrationComponent from "./integration-component";
+import WrapperRequiredControl from "../components/wrapper-required-control";
 
 /**
  * Internal dependencies
@@ -187,23 +186,21 @@ window.jetFormDefaultActions[ 'mailchimp' ] = class MailChimpAction extends Inte
 					label={ this.data.labels.fields_map }
 					key='mailchimp_fields_map'
 				>
-					<div className='jet-user-meta-rows'>
+					<div className='jet-user-fields-map__list'>
 						{ fields.map( ( [mcFieldId, mcFieldData], index ) => {
-							return <div
-								className="jet-user-meta__row"
-								key={ 'user_meta_' + mcFieldId + index }
+
+							return <WrapperRequiredControl
+								field={ [ mcFieldId, mcFieldData ] }
 							>
 								<SelectControl
 									key={ mcFieldId + index }
-									label={ mcFieldData.label }
-									//labelPosition={'side'}
 									value={ this.getFieldDefault( mcFieldId ) }
 									onChange={ value => {
 										this.onChangeFieldMap( value, mcFieldId )
 									} }
 									options={ this.formFieldsList }
 								/>
-							</div>;
+							</WrapperRequiredControl>
 						} ) }
 					</div>
 				</BaseControl>

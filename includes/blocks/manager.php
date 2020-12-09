@@ -225,7 +225,7 @@ class Manager {
 		wp_enqueue_script(
 			'jet-form-builder-frontend',
 			Plugin::instance()->plugin_url( 'assets/js/frontend.js' ),
-			array(),
+			array( 'jquery' ),
 			Plugin::instance()->get_version(),
 			true
 		);
@@ -240,7 +240,7 @@ class Manager {
 		wp_enqueue_script(
 			'jet-form-builder-frontend-forms',
 			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
-			array(),
+			array( 'jquery' ),
 			Plugin::instance()->get_version(),
 			true
 		);
@@ -248,7 +248,7 @@ class Manager {
 		wp_enqueue_script(
 			'jet-form-builder-inputmask',
 			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-			array( 'jet-form-builder-frontend-forms' ),
+			array( 'jquery', 'jet-form-builder-frontend-forms' ),
 			Plugin::instance()->get_version(),
 			true
 		);

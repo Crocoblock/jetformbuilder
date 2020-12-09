@@ -42,14 +42,11 @@ class Checkbox_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			// Active
-			'item'            => '.jet-form-builder__field-wrap.checkradio-wrap',
-			// Active
-			'label'           => '.jet-form-builder__field-wrap label',
+			'item'            => '.jet-form-builder__field-wrap.checkboxes-wrap',
+			'option-label'    => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
 			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
-
-			'wrapper' => '.jet-form-builder__fields-group',
+			'wrapper'         => '.jet-form-builder__fields-group',
 		);
 	}
 
@@ -170,13 +167,13 @@ class Checkbox_Field extends Base {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
-				'id'    => 'item_style',
+				'id'    => 'item_checkbox_style',
 				'title' => __( 'Item', 'jet-forms-builder' )
 			]
 		);
 
 		$this->controls_manager->add_control( [
-			'id'           => 'show_decorator',
+			'id'           => 'show_checkbox_decorator',
 			'type'         => 'toggle',
 			'separator'    => 'after',
 			'label'        => __( 'Show Checkbox', 'jet-forms-builder' ),
@@ -185,7 +182,6 @@ class Checkbox_Field extends Base {
 					'value' => true
 				],
 			],
-			'unit'         => 'px',
 			'return_value' => [
 				'true'  => 'inline-block',
 				'false' => 'none',
@@ -222,7 +218,7 @@ class Checkbox_Field extends Base {
 			'id'           => 'item_typography',
 			'type'         => 'typography',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -232,7 +228,7 @@ class Checkbox_Field extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -242,7 +238,7 @@ class Checkbox_Field extends Base {
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span'                                 => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label']                                      => 'background-color: {{VALUE}}',
 
 			),
 		] );
@@ -282,8 +278,8 @@ class Checkbox_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' > span::before'  => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input'       => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] . ' > span::before' => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -307,8 +303,8 @@ class Checkbox_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -332,7 +328,7 @@ class Checkbox_Field extends Base {
 			'items_space_between'               => [
 				'type' => 'object',
 			],
-			'show_decorator'                    => [
+			'show_checkbox_decorator'           => [
 				'type' => 'object',
 			],
 			'item_typography'                   => [

@@ -21,7 +21,7 @@ export default function WrapperControl( { attributes, block, children, wrapClass
                 <div className={ 'jet-form-builder__label' }>
                     { label.name ? label.name : valueIfEmptyLabel }
                     { attributes.required && <span className={'jet-form-builder__required'}>
-                        { label.mark }
+                        { label.mark ? label.mark : '*' }
                     </span> }
                 </div>
             </BaseControl.VisualLabel>

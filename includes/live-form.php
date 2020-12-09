@@ -99,7 +99,7 @@ class Live_Form {
 
 	/**
 	 * It turns out the inheritance of such an image
-	 * Individual Form Arguments <- General Form Attributes <- Default Values
+	 * Individual Form Arguments (if not) ->  General Form Attributes (if not) -> Default Values
 	 *
 	 * @param array $attributes
 	 *

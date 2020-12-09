@@ -45,7 +45,7 @@ class Radio_Field extends Base {
 			// Active
 			'item'        => '.components-radio-control__option',
 			// Active
-			'label'       => '.components-radio-control__option label',
+			'option-label'       => '.components-radio-control__option label',
 			'front-label' => '.jet-form-builder__field-wrap label',
 			'front-wrap'  => '.jet-form-builder__field-wrap.checkradio-wrap',
 
@@ -234,7 +234,7 @@ class Radio_Field extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label']       => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
@@ -246,7 +246,7 @@ class Radio_Field extends Base {
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['label']       => 'color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label']       => 'color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-label'] => 'color: {{VALUE}}',
 			),
 		] );
@@ -258,7 +258,7 @@ class Radio_Field extends Base {
 
 			'css_selector' => array(
 				// editor
-				'{{WRAPPER}} ' . $this->css_scheme['label']                   => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label']                   => 'background-color: {{VALUE}}',
 				// front
 				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span' => 'background-color: {{VALUE}}',
 

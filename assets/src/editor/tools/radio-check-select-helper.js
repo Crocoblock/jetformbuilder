@@ -19,7 +19,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
-			className={ 'jet-form-builder__field-wrap checkradio-wrap' }
+			className={ 'jet-form-builder__field-wrap checkboxes-wrap' }
 			key={ `check_place_holder_block_${ label + index }` }
 			label={ label }
 			onChange={ () => {} }

@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Frontend_Helper;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 
 if ( ! defined( 'WPINC' ) ) {

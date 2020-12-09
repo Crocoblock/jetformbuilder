@@ -283,9 +283,9 @@ class Post_Type {
 
 	public function get_default_args() {
 		return array(
-			'submit_type'   => 'reload',
-			'required_mark' => '*',
-			'fields_layout' => 'column',
+			'submit_type'   => '',
+			'required_mark' => '',
+			'fields_layout' => '',
 		);
 	}
 

@@ -81,7 +81,7 @@ class Send_Email extends Base {
 				$this->settings['reply_email'] = ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
 				break;
 		}
-
+		
 		if ( ! $email || ! is_email( $email ) ) {
 			throw new Action_Exception( 'invalid_email' );
 		}
@@ -218,11 +218,10 @@ class Send_Email extends Base {
 		$index  = 1;
 
 		foreach ( $items as $item ) {
-
 			$item_data = array();
 
 			foreach ( $item as $key => $value ) {
-				$item_data[] = sprintf( '%1$s: %2$s', $key, $value );
+				$item_data[] = sprintf( '%1$s: %2$s', $key, $this->maybe_parse_if_array( $value ) );
 			}
 			$result .= $index ++ . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
@@ -230,6 +229,15 @@ class Send_Email extends Base {
 		return $result;
 
 	}
+
+	private function maybe_parse_if_array( $value ) {
+		if ( is_array( $value ) ) {
+			return implode( ', ', $value );
+		}
+		return $value;
+	}
+
+
 
 	/**
 	 * Get the email headers

@@ -184,14 +184,6 @@ trait General_Style {
 			],
 		] );
 
-		$this->controls_manager->add_control( [
-			'id'           => 'field_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'field_border',
@@ -200,16 +192,6 @@ trait General_Style {
 			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'field_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -407,7 +389,7 @@ trait General_Style {
 			'disable_style'          => true,
 			'disable_decoration'     => true,
 			'disable_letter_spacing' => true,
-
+			'separator'    => 'after',
 			'type'         => 'typography',
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
@@ -427,7 +409,6 @@ trait General_Style {
 		$this->controls_manager->add_control( [
 			'id'           => 'required_background_color',
 			'type'         => 'color-picker',
-			'separator'    => 'after',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'background-color: {{VALUE}}',

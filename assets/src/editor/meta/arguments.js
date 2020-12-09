@@ -55,6 +55,7 @@ function ArgsMeta() {
 					label={ 'Fields Layout' }
 					value={ args.fields_layout }
 					options={ [
+						{ value: '', label: '--' },
 						{ value: 'column', label: 'Column' },
 						{ value: 'row', label: 'Row' }
 					] }
@@ -79,6 +80,7 @@ function ArgsMeta() {
 					label={ 'Submit Type' }
 					value={ args.submit_type }
 					options={ [
+						{ value: '', label: '--' },
 						{ value: 'reload', label: 'Page Reload' },
 						{ value: 'ajax', label: 'AJAX' }
 					] }

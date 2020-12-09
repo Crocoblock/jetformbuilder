@@ -459,3 +459,7 @@
 	display: block;
 	margin-bottom: 1.2em;
 }
+
+.jet-form-builder-row {
+	overflow: hidden;
+}

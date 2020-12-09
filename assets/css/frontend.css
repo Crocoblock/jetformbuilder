@@ -1585,7 +1585,8 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     margin: 0 -5px;
-    padding: 5px 0
+    padding: 5px 0;
+    overflow: hidden;
 }
 
 .jet-form-builder-row:last-child {
@@ -1872,7 +1873,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__field-value-number {
-    display: inline-block;
+    /*display: inline-block;*/
     text-align: center
 }
 
@@ -2499,4 +2500,8 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1
+}
+
+.jet-form-builder__field-wrap.checkradio-wrap span {
+    display: contents;
 }

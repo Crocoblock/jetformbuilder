@@ -72,17 +72,17 @@ class File_Upload {
 		$field   = ! empty( $_REQUEST['field'] ) ? $_REQUEST['field'] : false;
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, $this->nonce_key ) ) {
-			wp_send_json_error( __( 'You not allowed to do this', 'jet-engine' ) );
+			wp_send_json_error( __( 'You not allowed to do this', 'jet-form-builder' ) );
 		}
 
 		if ( ! $form_id || ! $field ) {
-			wp_send_json_error( __( 'Required parameters not found in request', 'jet-engine' ) );
+			wp_send_json_error( __( 'Required parameters not found in request', 'jet-form-builder' ) );
 		}
 
 		$form_data = Plugin::instance()->form->get_only_form_fields( $form_id );
 
 		if ( ! $form_data ) {
-			wp_send_json_error( __( 'Form data not found', 'jet-engine' ) );
+			wp_send_json_error( __( 'Form data not found', 'jet-form-builder' ) );
 		}
 
 		$field_data = null;
@@ -101,7 +101,7 @@ class File_Upload {
 		$cap = ! empty( $field_data['allowed_user_cap'] ) ? $field_data['allowed_user_cap'] : 'upload_files';
 
 		if ( 'all' !== $cap && ! current_user_can( $cap ) ) {
-			wp_send_json_error( __( 'You are not allowed to upload files', 'jet-engine' ) );
+			wp_send_json_error( __( 'You are not allowed to upload files', 'jet-form-builder' ) );
 		}
 
 		$settings = array(
@@ -126,7 +126,7 @@ class File_Upload {
 		$result = $this->process_upload( $_FILES, $settings );
 
 		if ( ! $result ) {
-			wp_send_json_error( __( 'Internal error. Plaese check uploaded files and try again.', 'jet-engine' ) );
+			wp_send_json_error( __( 'Internal error. Plaese check uploaded files and try again.', 'jet-form-builder' ) );
 		}
 
 		wp_send_json_success( array(
@@ -345,7 +345,7 @@ class File_Upload {
 
 	public function get_loader() {
 		return '<div class="jet-form-builder-file-upload__loader">' . apply_filters(
-				'jet-engine/forms/file-upload/loader',
+				'jet-form-builder/file-upload/loader',
 				'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
 			) . '</div>';
 	}
@@ -361,7 +361,7 @@ class File_Upload {
 	public function get_result_value( $field = array(), $files = array() ) {
 
 		if ( ! empty( $field['insert_attachment'] ) ) {
-			$format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'url';
+			$format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'id';
 		} else {
 			$format = 'url';
 		}
@@ -570,7 +570,7 @@ class File_Upload {
 		jet_engine()->frontend->frontend_scripts();
 		$this->register_assets();
 		$this->enqueue_upload_script();
-		wp_scripts()->done[] = 'jet-engine-frontend';
+		wp_scripts()->done[] = 'jet-form-builder-frontend';
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
 
 		return $content . ob_get_clean();

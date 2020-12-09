@@ -424,15 +424,15 @@ class Form extends Base {
 
 			'submit_type'   => array(
 				'type'    => 'string',
-				'default' => Plugin::instance()->post_type->get_default_arg__submit_type()
+				'default' => 'reload'
 			),
 			'required_mark' => array(
 				'type'    => 'string',
-				'default' => Plugin::instance()->post_type->get_default_arg__required_mark()
+				'default' => '*'
 			),
 			'fields_layout' => array(
 				'type'    => 'string',
-				'default' => Plugin::instance()->post_type->get_default_arg__fields_layout()
+				'default' => 'column'
 			),
 		);
 	}

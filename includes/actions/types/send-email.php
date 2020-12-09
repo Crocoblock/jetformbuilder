@@ -224,7 +224,7 @@ class Send_Email extends Base {
 			foreach ( $item as $key => $value ) {
 				$item_data[] = sprintf( '%1$s: %2$s', $key, $value );
 			}
-			$result .= $index++ . ') ' . implode( ', ', $item_data ) . ';<br>';
+			$result .= $index ++ . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
 
 		return $result;
@@ -306,6 +306,7 @@ class Send_Email extends Base {
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = get_option( 'admin_email' );
 		}
+
 		return apply_filters( 'jet-form-builder/send-email/from-address', $address, $this );
 	}
 

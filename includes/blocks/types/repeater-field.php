@@ -100,21 +100,21 @@ class Repeater_Field extends Base {
 			'separator'    => 'after',
 			'label'        => __( 'Alignment', 'jet-form-builder' ),
 			'options'      => [
-				'flex-start'   => [
+				'flex-start' => [
 					'shortcut' => __( 'Left', 'jet-form-builder' ),
 					'icon'     => 'dashicons-editor-alignleft',
 				],
-				'center' => [
+				'center'     => [
 					'shortcut' => __( 'Center', 'jet-form-builder' ),
 					'icon'     => 'dashicons-editor-aligncenter',
 				],
-				'flex-end'  => [
+				'flex-end'   => [
 					'shortcut' => __( 'Right', 'jet-form-builder' ),
 					'icon'     => 'dashicons-editor-alignright',
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['actions']  => 'justify-content: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['actions'] => 'justify-content: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(

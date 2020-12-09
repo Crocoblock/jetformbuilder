@@ -123,10 +123,16 @@ class Radio_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Space Between', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 50,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 50,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'        => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)'       => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
@@ -146,10 +152,16 @@ class Radio_Field extends Base {
 			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
 			'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
 			'separator'    => 'none',
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 40,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 40,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['item']       => 'margin-right: {{VALUE}}{{UNIT}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'margin-right: {{VALUE}}{{UNIT}}',
@@ -200,10 +212,16 @@ class Radio_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Size Radio', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 50,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 50,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'font-size: {{VALUE}}{{UNIT}};',
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' input'              => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',

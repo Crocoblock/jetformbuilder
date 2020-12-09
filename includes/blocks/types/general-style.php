@@ -97,10 +97,10 @@ trait General_Style {
 			'description_background_color' => array(
 				'type' => 'object'
 			),
-			'description_border'                 => array(
+			'description_border'           => array(
 				'type' => 'object'
 			),
-			'description_alignment'              => array(
+			'description_alignment'        => array(
 				'type' => 'object'
 			),
 			'required_color'               => array(

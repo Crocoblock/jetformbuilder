@@ -138,6 +138,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 							key='calc_prefix'
 							label={ __( 'Calculated Value Prefix' ) }
 							value={ attributes.calc_prefix }
+							help={ __( 'For space before or after text use: &nbsp;' ) }
 							onChange={ ( newValue ) => {
 								props.setAttributes( { calc_prefix: newValue } );
 							} }
@@ -146,6 +147,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 							key='calc_suffix'
 							label={ __( 'Calculated Value Suffix' ) }
 							value={ attributes.calc_suffix }
+							help={ __( 'For space before or after text use: &nbsp;' ) }
 							onChange={ ( newValue ) => {
 								props.setAttributes( { calc_suffix: newValue } );
 							} }
@@ -176,6 +178,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 			<WrapperControl
 				block={ block }
 				attributes={ attributes }
+				valueIfEmptyLabel={ 'Calculated Field' }
 			>
 				{ props.isSelected && <TextareaControl
 					key="calc_formula"
@@ -185,7 +188,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					} }
 				/> }
 				<div className={ 'jet-form-builder__calculated-field' }>
+					{ attributes.calc_prefix }
 					{ attributes.calc_formula }
+					{ attributes.calc_suffix }
 				</div>
 			</WrapperControl>
 		];

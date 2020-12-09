@@ -54,16 +54,16 @@ const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = function NumberEdit( props ) {
+window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props ) {
 
 	const attributes = props.attributes;
 	const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
-	const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
+	const changeNumberValue = ( key, newValue ) => {
+		const value = ( newValue && newValue > 0 ) ? parseInt( newValue ) : null;
 
-	const label = Tools.getLabel( meta, attributes );
+		props.setAttributes( { [ key ]: value } );
+	}
 
 	return [
 		hasToolbar && (
@@ -100,9 +100,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function NumberEdit( props )
 						key='minlength'
 						min={ 1 }
 						value={ attributes.minlength }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { minlength: parseInt( newValue ) } );
-						} }
+						onChange={ ( newValue ) => changeNumberValue( 'minlength', newValue ) }
 					/>
 					<NumberControl
 						label={ __( 'Max length (symbols)' ) }
@@ -110,9 +108,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function NumberEdit( props )
 						key='maxlength'
 						min={ 1 }
 						value={ attributes.maxlength }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { maxlength: parseInt( newValue ) } );
-						} }
+						onChange={ ( newValue ) => changeNumberValue( 'maxlength', newValue ) }
 					/>
 
 				</PanelBody>

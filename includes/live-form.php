@@ -107,9 +107,9 @@ class Live_Form {
 	 */
 	public function set_specific_data_for_render( $attributes = array() ) {
 		$jf_default_args = Plugin::instance()->post_type->get_default_args();
-		$jf_args = Plugin::instance()->post_type->get_args( $this->form_id );
+		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data = array_diff( $jf_args, $jf_default_args );
+		$spec_data  = array_diff( $jf_args, $jf_default_args );
 		$attributes = array_merge( $jf_default_args, $attributes );
 
 		$spec_data = array_merge( $attributes, $spec_data );
@@ -135,7 +135,7 @@ class Live_Form {
 	public function setup_fields( $blocks ) {
 		foreach ( $blocks as $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
-				$this->pages++;
+				$this->pages ++;
 			}
 		}
 	}
@@ -242,7 +242,7 @@ class Live_Form {
 		}
 
 		$this->start_new_page = false;
-		$this->page++;
+		$this->page ++;
 
 		ob_start();
 		do_action( 'jet-form-builder/before-page-start', $this );

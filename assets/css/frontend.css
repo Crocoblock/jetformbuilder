@@ -1764,7 +1764,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__calculated-field {
-    display: inline-block;
+    display: flex;
     width: 100%;
 }
 

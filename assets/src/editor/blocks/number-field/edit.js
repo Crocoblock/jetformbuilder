@@ -59,6 +59,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 		const attributes = props.attributes;
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
+		const changeNumberValue = ( key, newValue ) => {
+			props.setAttributes( { [ key ]: newValue ? parseInt( newValue ) : null } );
+		}
+
+
 		return [
 			hasToolbar && (
 				<BlockControls key={ keyControls + '-block' }>
@@ -93,27 +98,21 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 							labelPosition='top'
 							key='min'
 							value={ attributes.min }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { min: parseInt( newValue ) } );
-							} }
+							onChange={ newValue => changeNumberValue( 'min', newValue ) }
 						/>
 						<NumberControl
 							label={ __( 'Max Value' ) }
 							labelPosition='top'
 							key='max'
 							value={ attributes.max }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { max: parseInt( newValue ) } );
-							} }
+							onChange={ newValue => changeNumberValue( 'max', newValue ) }
 						/>
 						<NumberControl
 							label={ __( 'Step' ) }
 							labelPosition='top'
 							key='step'
 							value={ attributes.step }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { step: parseInt( newValue ) } );
-							} }
+							onChange={ newValue => changeNumberValue( 'step', newValue ) }
 						/>
 
 

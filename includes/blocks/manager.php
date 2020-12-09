@@ -76,12 +76,12 @@ class Manager {
 			99
 		);
 
-		add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2);
+		add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );
 	}
 
 	public function add_category( $categories, $post ) {
 		$categories[] = array(
-			'slug' => 'jet-form-builder-fields',
+			'slug'  => 'jet-form-builder-fields',
 			'title' => __( 'Jet Form Fields', 'jet-form-builder' ),
 		);
 
@@ -278,7 +278,9 @@ class Manager {
 					'options'   => isset( $data[ $context ]['options'] ) ? $data[ $context ]['options'] : array(),
 					'condition' => isset( $data[ $context ]['condition'] ) ? $data[ $context ]['condition'] : false,
 					// for Submit field name
-					'show'   => isset( $data[ $context ]['show'] ) ? $data[ $context ]['show'] : true,
+					'show'      => isset( $data[ $context ]['show'] ) ? $data[ $context ]['show'] : true,
+					// for Date and Time field
+					'help'      => isset( $data[ $context ]['help'] ) ? $data[ $context ]['help'] : '',
 				);
 			}
 		}

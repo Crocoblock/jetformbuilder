@@ -17,11 +17,12 @@ class Hidden_Field_Render extends Base {
 	}
 
 	public function render( $wp_block = null, $template = null ) {
-		if ( isset( $this->block_type->block_attrs['field_value'] ) && ! empty( $this->block_type->block_attrs['field_value'] ) ) {
+		if ( isset( $this->block_type->block_attrs['field_value'] ) ) {
 
 			$this->block_type->block_attrs['field_value'] = jet_form_builder()->blocks
 				->get_field_by_name( $this->get_name() )
 				->get_field_value( $this->block_type->block_attrs['field_value'] );
+
 		}
 
 		return parent::render();

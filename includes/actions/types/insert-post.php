@@ -145,7 +145,7 @@ class Insert_Post extends Base {
 			$postarr['post_status'] = $post_status;
 		}
 		$postarr['meta_input'] = $meta_input;
-		$post_type_obj = get_post_type_object( $post_type );
+		$post_type_obj         = get_post_type_object( $post_type );
 
 		$pre_post_check = apply_filters( 'jet-form-builder/action/insert-post/pre-check', true, $postarr, $this );
 
@@ -161,7 +161,7 @@ class Insert_Post extends Base {
 				throw new Action_Exception( 'failed' );
 			}
 
-			$post_id = wp_update_post( $postarr );
+			$post_id     = wp_update_post( $postarr );
 			$post_action = 'update';
 		} else {
 
@@ -169,8 +169,12 @@ class Insert_Post extends Base {
 				$postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
 			}
 
-			$post_id = wp_insert_post( $postarr );
+			$post_id     = wp_insert_post( $postarr );
 			$post_action = 'insert';
+		}
+
+		if ( ! $post_id ) {
+			throw new Action_Exception( 'failed' );
 		}
 
 		$handler->response_data['inserted_post_id'] = $post_id;
@@ -180,9 +184,6 @@ class Insert_Post extends Base {
 		 */
 		do_action( 'jet-form-builder/action/after-post-' . $post_action, $this, $handler );
 
-		if ( ! $post_id ) {
-			throw new Action_Exception( 'failed' );
-		}
 
 		if ( ! empty( $terms_input ) ) {
 

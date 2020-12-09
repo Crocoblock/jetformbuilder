@@ -172,8 +172,7 @@ abstract class Base {
 		$form->is_hidden_row = false;
 		$form->is_submit_row = false;
 
-		$result = array();
-		$result[] = $form->maybe_start_page();
+		$result   = array();
 		$result[] = $form->start_form_row( $this->block_attrs );
 
 		if ( $form->is_field_visible( $this->block_attrs ) ) {
@@ -184,11 +183,10 @@ abstract class Base {
 			 * because it's too large
 			 */
 			$parsed_block = $wp_block ? $wp_block->parsed_block : null;
-			$result[] = $this->get_block_renderer( $parsed_block );
+			$result[]     = $this->get_block_renderer( $parsed_block );
 		}
 
 		$result[] = $form->end_form_row( $this->block_attrs );
-		$result[] = $form->maybe_end_page( false, $this->block_attrs );
 
 		return implode( "\n", $result );
 	}

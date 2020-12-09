@@ -72,6 +72,7 @@ const JetFormGeneral = class extends wp.element.Component {
 							<TextControl
 								key={ data.key }
 								label={ data.label }
+								help={ data.help ? data.help : '' }
 								value={ result[ data.key ] }
 								onChange={ newVal => {
 									onChangeValue( newVal, data.key )

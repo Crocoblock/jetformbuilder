@@ -15,15 +15,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Hidden_Field extends Base {
 
-	private $post;
+	private function current_post() {
+		if ( ! Live_Form::instance()->post ) {
+			Live_Form::instance()->post = get_post();
+		}
 
-	public function __construct() {
-		parent::__construct();
-
-		/**
-		 * Get current post object
-		 */
-		$this->post = Live_Form::instance()->post;
+		return Live_Form::instance()->post;
 	}
 
 	public function general_style_attributes() {
@@ -73,7 +70,7 @@ class Hidden_Field extends Base {
 
 	public function get_field_value( $value, $params = array() ) {
 
-		if ( ! empty( $value ) && is_callable( array( $this, $value ) ) ) {
+		if ( is_callable( array( $this, $value ) ) ) {
 			return $this->$value( $params );
 		} elseif ( ! empty( $params['default'] ) ) {
 			return $params['default'];
@@ -88,10 +85,10 @@ class Hidden_Field extends Base {
 	 * @return int|null
 	 */
 	private function post_id( $params = array() ) {
-		if ( ! $this->post ) {
+		if ( ! $this->current_post() ) {
 			return null;
 		} else {
-			return $this->post->ID;
+			return $this->current_post()->ID;
 		}
 	}
 
@@ -101,10 +98,10 @@ class Hidden_Field extends Base {
 	 * @return string|null
 	 */
 	private function post_title( $params = array() ) {
-		if ( ! $this->post ) {
+		if ( ! $this->current_post() ) {
 			return null;
 		} else {
-			return get_the_title( $this->post->ID );
+			return get_the_title( $this->current_post()->ID );
 		}
 	}
 
@@ -114,10 +111,10 @@ class Hidden_Field extends Base {
 	 * @return false|string|\WP_Error|null
 	 */
 	private function post_url( $params = array() ) {
-		if ( ! $this->post ) {
+		if ( ! $this->current_post() ) {
 			return null;
 		} else {
-			return get_permalink( $this->post->ID );
+			return get_permalink( $this->current_post()->ID );
 		}
 	}
 
@@ -127,7 +124,7 @@ class Hidden_Field extends Base {
 	 * @return mixed|null
 	 */
 	private function post_meta( $params = array() ) {
-		if ( ! $this->post ) {
+		if ( ! $this->current_post() ) {
 			return null;
 		}
 
@@ -136,7 +133,7 @@ class Hidden_Field extends Base {
 		if ( ! $key ) {
 			return null;
 		} else {
-			return get_post_meta( $this->post->ID, $key, true );
+			return get_post_meta( $this->current_post()->ID, $key, true );
 		}
 	}
 
@@ -275,12 +272,18 @@ class Hidden_Field extends Base {
 			return get_the_author_meta( $key );
 		}
 
-		if ( ! $this->post ) {
+		if ( ! $this->current_post() ) {
 			return null;
 		}
 
-		return get_the_author_meta( $key, $this->post->post_author );
+		return get_the_author_meta( $key, $this->current_post()->post_author );
 
+	}
+
+	private function get_default_field_value() {
+		$field = $this->get_attributes()['field_value'];
+
+		return isset( $field['default'] ) ? $field['default'] : '';
 	}
 
 

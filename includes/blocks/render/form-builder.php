@@ -152,8 +152,6 @@ class Form_Builder {
 			Plugin::instance()->captcha->render( $this->form_id );
 		}
 
-		echo Live_Form::instance()->maybe_end_page( true );
-
 		include $this->get_global_template( 'common/end-form.php' );
 
 		echo $this->maybe_render_styles_block();
@@ -205,11 +203,13 @@ class Form_Builder {
 				'name'        => '_jet_engine_refer',
 			)
 		);
+		$form .= Live_Form::instance()->maybe_start_page();
 
 		foreach ( $this->blocks as $block ) {
 			$form .= render_block( $block );
 		}
 
+		$form .= Live_Form::instance()->maybe_end_page( true );
 		$form .= $this->end_form();
 
 		if ( $echo ) {

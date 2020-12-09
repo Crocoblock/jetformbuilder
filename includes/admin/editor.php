@@ -483,14 +483,14 @@ class Editor {
 		?>
         <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
         <script>
-            document.addEventListener('jet-form-builder-initialized', function (event) {
-                window.JetFormEditor(
-                    '<?php echo esc_js( $input_name ); ?>',
-                    '<?php echo esc_js( $input_name ); ?>',
-                    '<?php echo html_entity_decode( esc_js( $content ) ); ?>',
-                    '<?php echo esc_js( $form_name ); ?>'
-                );
-            });
+			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
+				window.JetFormEditor(
+					'<?php echo esc_js( $input_name ); ?>',
+					'<?php echo esc_js( $input_name ); ?>',
+					'<?php echo html_entity_decode( esc_js( $content ) ); ?>',
+					'<?php echo esc_js( $form_name ); ?>'
+				);
+			} );
         </script>
 		<?php
 	}

@@ -79,10 +79,10 @@ class Paypal {
 				$this->process_status( 'success' );
 			}
 		} catch ( Action_Exception $exception ) {
-		    //
-        }
+			//
+		}
 
-    }
+	}
 
 	private function set_gateway_data_on_result() {
 		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
@@ -135,10 +135,10 @@ class Paypal {
 
 	private function set_payment_amount( $payment ) {
 		if ( ! empty( $payment['purchase_units'][0]['payments']['captures'] ) ) {
-			$payment_unit   = $payment['purchase_units'][0]['payments']['captures'][0];
+			$payment_unit         = $payment['purchase_units'][0]['payments']['captures'][0];
 			$this->data['amount'] = $payment_unit['amount'];
 		}
-    }
+	}
 
 	private function set_gateway_data() {
 		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->action_handler->form_id );

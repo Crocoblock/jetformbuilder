@@ -36,7 +36,7 @@ class Tools {
 
 		if ( $placeholder && is_array( $placeholder ) ) {
 			$placeholder['value'] = isset( $placeholder['value'] ) ? $placeholder['value'] : '';
-			$post_types_list[] = $placeholder;
+			$post_types_list[]    = $placeholder;
 		}
 
 		foreach ( $post_types as $post_type ) {
@@ -75,6 +75,7 @@ class Tools {
 	 */
 	public static function sanitize_wysiwyg( $input ) {
 		$input = wpautop( $input );
+
 		return wp_kses_post( $input );
 	}
 

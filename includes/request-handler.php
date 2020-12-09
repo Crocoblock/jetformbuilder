@@ -177,7 +177,6 @@ class Request_Handler {
 			}
 
 			if ( 'media-field' === $type ) {
-
 				$value = json_decode( wp_unslash( $value ), true );
 
 				if ( ! empty( $settings['insert_attachment'] ) && ! empty( $settings['value_format'] ) && 'id' === $settings['value_format'] ) {
@@ -187,7 +186,6 @@ class Request_Handler {
 						$value = implode( ',', $value );
 					}
 				}
-
 			}
 
 			if ( 'wysiwyg-field' === $type ) {

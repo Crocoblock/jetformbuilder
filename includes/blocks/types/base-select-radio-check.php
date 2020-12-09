@@ -164,7 +164,6 @@ trait Base_Select_Radio_Check {
 		$calc_from    = ! empty( $args['calculated_value_from_key'] ) ? $args['calculated_value_from_key'] : false;
 
 
-
 		if ( 'manual_input' === $options_from ) {
 
 			if ( ! empty( $args['field_options'] ) ) {
@@ -349,6 +348,7 @@ trait Base_Select_Radio_Check {
 	 * Prepare repeater options fields
 	 *
 	 * @param  [type] $options [description]
+	 *
 	 * @return [type]          [description]
 	 */
 	public function maybe_parse_repeater_options( $options ) {

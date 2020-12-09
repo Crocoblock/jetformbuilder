@@ -48,16 +48,16 @@ class Group_Break_Field extends Base {
 
 	public function get_style_attributes() {
 		return array(
-			'break_height'              => [
+			'break_height'           => [
 				'type' => 'object',
 			],
-			'break_background_color'	=> [
+			'break_background_color' => [
 				'type' => 'object',
 			],
-			'break_gap_before' 			=> [
+			'break_gap_before'       => [
 				'type' => 'object',
 			],
-			'break_gap_after' 			=> [
+			'break_gap_after'        => [
 				'type' => 'object',
 			],
 		);
@@ -68,86 +68,104 @@ class Group_Break_Field extends Base {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
-				'id'    => 'break_style',
+				'id'          => 'break_style',
 				'initialOpen' => true,
-				'title' => __( 'Group Break', 'jet-forms-builder' )
+				'title'       => __( 'Group Break', 'jet-forms-builder' )
 			]
 		);
 
-		$this->controls_manager->add_control([
-			'id'        => 'break_height',
-			'type'      => 'range',
-			'label'     => __( 'Height', 'jet-form-builder' ),
-			'separator' => 'after',
-			'unit'      => 'px',
-			'min'       => 1,
-			'max'       => 20,
-			'step'      => 1,
+		$this->controls_manager->add_control( [
+			'id'           => 'break_height',
+			'type'         => 'range',
+			'label'        => __( 'Height', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 20,
+					]
+				],
+			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'height: {{VALUE}}{{UNIT}};',
-				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before'  => 'border-top-width: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field']       => 'height: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before' => 'border-top-width: {{VALUE}}{{UNIT}};',
 
 			],
-			'attributes' => [
+			'attributes'   => [
 				'default' => array(
 					'value' => 1
 				),
 			]
-		]);
+		] );
 
-		$this->controls_manager->add_control([
-			'id'       => 'break_background_color',
-			'type'     => 'color-picker',
-			'label'     => __( 'Color', 'jet-form-builder' ),
+		$this->controls_manager->add_control( [
+			'id'           => 'break_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Color', 'jet-form-builder' ),
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'background-color: {{VALUE}};',
-				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before'  => 'border-top-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field']       => 'background-color: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field'] . ':before' => 'border-top-color: {{VALUE}}',
 			],
 			'separator'    => 'after',
-			'attributes' => array(
+			'attributes'   => array(
 				'default' => array(
 					'value' => '#e3ddd8'
 				)
 			)
-		]);
+		] );
 
-		$this->controls_manager->add_control([
-			'id'        => 'break_gap_before',
-			'type'      => 'range',
-			'label'     => __( 'Gap Before', 'jet-form-builder' ),
-			'separator' => 'after',
-			'unit'      => 'px',
-			'min'       => 1,
-			'max'       => 100,
-			'step'      => 1,
+		$this->controls_manager->add_control( [
+			'id'           => 'break_gap_before',
+			'type'         => 'range',
+			'label'        => __( 'Gap Before', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'margin-top: {{VALUE}}{{UNIT}};',
 			],
-			'attributes' => [
+			'attributes'   => [
 				'default' => array(
 					'value' => 1
 				),
 			]
-		]);
+		] );
 
-		$this->controls_manager->add_control([
-			'id'        => 'break_gap_after',
-			'type'      => 'range',
-			'label'     => __( 'Gap After', 'jet-form-builder' ),
-			'unit'      => 'px',
-			'min'       => 1,
-			'max'       => 100,
-			'step'      => 1,
+		$this->controls_manager->add_control( [
+			'id'           => 'break_gap_after',
+			'type'         => 'range',
+			'label'        => __( 'Gap After', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'margin-bottom: {{VALUE}}{{UNIT}};',
 			],
-			'attributes' => [
+			'attributes'   => [
 				'default' => array(
 					'value' => 1
 				),
 			]
-		]);
-		
+		] );
+
 		$this->controls_manager->end_section();
 	}
 

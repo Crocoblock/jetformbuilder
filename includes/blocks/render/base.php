@@ -123,12 +123,12 @@ abstract class Base {
 		$template_name = $this->get_name();
 
 		if ( is_null( $template ) ) {
-			$template      = $this->block_type->get_field_template( $template_name . '.php' );
+			$template = $this->block_type->get_field_template( $template_name . '.php' );
 		}
 
-		$label         = $this->get_field_label();
-		$desc          = $this->get_field_desc();
-		$layout        = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
+		$label  = $this->get_field_label();
+		$desc   = $this->get_field_desc();
+		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
 		$args['default'] = $this->get_default_from_preset( $args );
 

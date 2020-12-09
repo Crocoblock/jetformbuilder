@@ -253,9 +253,9 @@ class Post_Type {
 		if ( Jet_Style_Manager::is_activated() ) {
 			return get_post_meta( $form_id, '_jet_sm_ready_style', true );
 		}
+
 		return '';
 	}
-
 
 
 	/**

@@ -43,33 +43,6 @@ class Select_Field extends Base {
 	}
 
 	public function add_style_manager_options() {
-		$this->controls_manager->start_section(
-			'style_controls',
-			[
-				'id'          => 'content_style',
-				'initialOpen' => true,
-				'title'       => __( 'Content', 'jet-form-builder' )
-			]
-		);
-		$this->controls_manager->add_control( [
-			'id'           => 'select_width',
-			'type'         => 'range',
-			'label'        => __( 'Select Width (%)', 'jet-form-builder' ),
-			'unit'         => '%',
-			'min'          => 10,
-			'max'          => 100,
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}}',
-			],
-			'attributes'   => array(
-				'default' => array(
-					'value' => 50
-				),
-			),
-		] );
-
-
-		$this->controls_manager->end_section();
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -79,10 +52,36 @@ class Select_Field extends Base {
 			]
 		);
 
+		$this->controls_manager->add_control( [
+			'id'           => 'select_width',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Select Width', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => '%',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 10,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 50
+				),
+			),
+		] );
+
 
 		$this->controls_manager->add_control( [
 			'id'                  => 'item_typography',
 			'type'                => 'typography',
+			'separator'           => 'after',
 			'disable_line_height' => true,
 			'css_selector'        => [
 				'{{WRAPPER}} ' . $this->css_scheme['select']         => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
@@ -95,12 +94,8 @@ class Select_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
+			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#000000'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'color: {{VALUE}}',
 			),
@@ -110,11 +105,6 @@ class Select_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
 			),

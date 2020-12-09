@@ -120,7 +120,7 @@
 
 .jet-form-dynamic-preset {
 	display: flex;
-	align-items: flex-end;
+	align-items: flex-start;
 }
 
 .jet-form-dynamic-preset .components-base-control {
@@ -137,7 +137,7 @@
 	border-radius: 0 2px 2px 0;
     border: 1px solid #757575;
     border-left: none;
-    margin: 0 0 32px;
+	margin: 26px 0 0 0;
     cursor: pointer;
 }
 

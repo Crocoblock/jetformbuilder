@@ -43,13 +43,13 @@ class Checkbox_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			// Active
-			'item'            =>'.jet-form-builder__field-wrap.checkradio-wrap',
+			'item'            => '.jet-form-builder__field-wrap.checkradio-wrap',
 			// Active
 			'label'           => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
 			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
 
-			'wrapper'    => '.jet-form-builder__fields-group',
+			'wrapper' => '.jet-form-builder__fields-group',
 		);
 	}
 
@@ -118,10 +118,16 @@ class Checkbox_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Space Between', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 50,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 50,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
 				'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
@@ -138,10 +144,16 @@ class Checkbox_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
 			'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 40,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 40,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: {{VALUE}}{{UNIT}};',
 			],
@@ -189,10 +201,16 @@ class Checkbox_Field extends Base {
 			'type'         => 'range',
 			'label'        => __( 'Size Checkbox', 'jet-form-builder' ),
 			'separator'    => 'after',
-			'unit'         => 'px',
-			'min'          => 0,
-			'max'          => 50,
-			'step'         => 1,
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 50,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'font-size: {{VALUE}}{{UNIT}};',
 				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor']            => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}};',

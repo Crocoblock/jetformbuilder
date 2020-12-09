@@ -56,8 +56,8 @@ class Form extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'success' => '.jet-form-message--success',
-			'error'   => '.jet-form-message--error',
+			'success'  => '.jet-form-message--success',
+			'error'    => '.jet-form-message--error',
 			'form-row' => '.jet-form-builder-row'
 		);
 	}
@@ -72,41 +72,53 @@ class Form extends Base {
 			]
 		);
 
-		$this->controls_manager->add_control([
-			'id'        => 'form_row_gap_before',
-			'type'      => 'range',
-			'label'     => __( 'Gap Before', 'jet-form-builder' ),
-			'separator' => 'after',
-			'unit'      => 'px',
-			'min'       => 1,
-			'max'       => 100,
-			'step'      => 1,
+		$this->controls_manager->add_control( [
+			'id'           => 'form_row_gap_before',
+			'type'         => 'range',
+			'label'        => __( 'Gap Before', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 100,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-top: {{VALUE}}{{UNIT}};',
 			],
-			'attributes' => [
+			'attributes'   => [
 				'default' => array(
 					'value' => 1
 				),
 			]
-		]);
-		$this->controls_manager->add_control([
-			'id'        => 'form_row_gap_after',
-			'type'      => 'range',
-			'label'     => __( 'Gap After', 'jet-form-builder' ),
-			'unit'      => 'px',
-			'min'       => 1,
-			'max'       => 100,
-			'step'      => 1,
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_row_gap_after',
+			'type'         => 'range',
+			'label'        => __( 'Gap After', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 100,
+					]
+				],
+			],
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-bottom: {{VALUE}}{{UNIT}};',
 			],
-			'attributes' => [
+			'attributes'   => [
 				'default' => array(
 					'value' => 1
 				),
 			]
-		]);
+		] );
 
 		$this->controls_manager->end_section();
 
@@ -301,7 +313,7 @@ class Form extends Base {
 
 	public function get_style_attributes() {
 		return array(
-			'form_row_gap_after' => array(
+			'form_row_gap_after'  => array(
 				'type' => 'object'
 			),
 			'form_row_gap_before' => array(
@@ -410,7 +422,7 @@ class Form extends Base {
 				'default' => 0,
 			),
 
-			'submit_type' => array(
+			'submit_type'   => array(
 				'type'    => 'string',
 				'default' => Plugin::instance()->post_type->get_default_arg__submit_type()
 			),

@@ -118,37 +118,37 @@ class Forms_Captcha {
         <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
         <script>
 
-            if (!window.JetEngineFormCaptcha) {
-                window.JetEngineFormCaptcha = function (formID) {
+			if ( ! window.JetEngineFormCaptcha ) {
+				window.JetEngineFormCaptcha = function ( formID ) {
 
-                    var $cpField = jQuery('form[data-form-id="' + formID + '"]').find('.captcha-token');
+					var $cpField = jQuery( 'form[data-form-id="' + formID + '"]' ).find( '.captcha-token' );
 
-                    if (window.JetEngineFormToken) {
-                        $cpField.val(window.JetEngineFormToken);
-                    } else if (window.grecaptcha) {
-                        window.grecaptcha.ready(function () {
-                            grecaptcha.execute(
-                                '<?php echo $key; ?>',
-                                {
-                                    action: 'submit_form'
-                                }
-                            ).then(function (token) {
-                                $cpField.val(token);
-                                window.JetEngineFormToken = token;
-                            });
-                        });
-                    }
+					if ( window.JetEngineFormToken ) {
+						$cpField.val( window.JetEngineFormToken );
+					} else if ( window.grecaptcha ) {
+						window.grecaptcha.ready( function () {
+							grecaptcha.execute(
+								'<?php echo $key; ?>',
+								{
+									action: 'submit_form'
+								}
+							).then( function ( token ) {
+								$cpField.val( token );
+								window.JetEngineFormToken = token;
+							} );
+						} );
+					}
 
-                }
-            }
+				}
+			}
 
-            window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
+			window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
 
-            jQuery(window).on('jet-popup/show-event/after-show', function () {
+			jQuery( window ).on( 'jet-popup/show-event/after-show', function () {
 
-                window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
+				window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
 
-            });
+			} );
         </script>
 		<?php
 

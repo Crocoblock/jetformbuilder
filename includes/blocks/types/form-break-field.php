@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Form_Break_Field_Render;
+use Jet_Form_Builder\Live_Form;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -13,6 +14,25 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Text field block class
  */
 class Form_Break_Field extends Base {
+
+
+	public function block_params() {
+		return array(
+			'attributes'      => $this->block_attributes(),
+			'render_callback' => array( $this, 'render_field__form_break' )
+		);
+	}
+
+	public function render_field__form_break( array $attrs, $content = null ) {
+		$result = array();
+		$this->set_block_data( $attrs, $content );
+
+		$result[] = $this->get_block_renderer();
+		$result[] = Live_Form::instance()->maybe_end_page( false, $this->block_attrs );
+		$result[] = Live_Form::instance()->maybe_start_page();
+
+		return implode( "\n", $result );
+	}
 
 	/**
 	 * Returns block title
@@ -94,7 +114,7 @@ class Form_Break_Field extends Base {
 		return array(
 			'label' => array(
 				'type'    => 'string',
-				'default' => '',
+				'default' => 'Next',
 				'general' => array(
 					'type'  => 'text',
 					'label' => __( 'Label', 'jet-form-builder' )

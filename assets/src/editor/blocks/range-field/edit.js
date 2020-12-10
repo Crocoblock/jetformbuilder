@@ -171,7 +171,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					/>
 					<div className={ 'jet-form-builder__field-value' }>
 						<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
-						<span> { this.state.rangeValue } </span>
+						<span>&nbsp;{ this.state.rangeValue }&nbsp;</span>
 						<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
 					</div>
 				</div>

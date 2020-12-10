@@ -123,7 +123,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 
 		};
 
-		return ( <div>
+		return ( <React.Fragment>
 			{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => {
 				switch ( data.type ) {
 					case 'text':
@@ -150,7 +150,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 							>
 								<SelectControl
 									key={ data.name + index }
-									labelPosition="side"
+									labelPosition="top"
 									options={ data.options }
 									label={ data.label }
 									value={ this.state.value[ data.name ] }
@@ -163,7 +163,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 				}
 			} ) }
 
-			{ this.props.availableFields && (
+			{ ( this.props.availableFields && this.props.value.from ) && (
 				this.props.availableFields.map( ( field, index ) => {
 
 					var fieldsMap = this.state.value.fields_map;
@@ -179,8 +179,8 @@ const JetFormPresetEditor = class extends wp.element.Component {
 						currentVal = {};
 					}
 
-					return <div>
-						<div>{ field }</div>
+					return <React.Fragment>
+						<span>{ field }</span>
 						{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
 
 							switch ( data.type ) {
@@ -212,7 +212,6 @@ const JetFormPresetEditor = class extends wp.element.Component {
 										>
 											<SelectControl
 												key={ 'control_' + field + data.name + index + fIndex }
-												labelPosition="side"
 												options={ data.options }
 												//label={ data.label }
 												value={ currentVal[ data.name ] }
@@ -228,11 +227,11 @@ const JetFormPresetEditor = class extends wp.element.Component {
 									);
 							}
 						} ) }
-					</div>;
+					</React.Fragment>;
 				} )
 			) }
 
-			{ ! this.props.availableFields && ( window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
+			{ ! Boolean( this.props.availableFields ) && ( window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
 
 					switch ( data.type ) {
 						case 'text':
@@ -272,7 +271,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 					}
 				} )
 			) }
-		</div> );
+		</React.Fragment> );
 	}
 }
 

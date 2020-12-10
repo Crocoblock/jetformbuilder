@@ -1874,7 +1874,8 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder__field-value {
-    white-space: nowrap
+    white-space: nowrap;
+    display: flex;
 }
 
 .jet-form-builder__field-value-number {
@@ -2515,6 +2516,14 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     display: contents;
 }
 
-.jet-form-builder__next-page-wrap {
-    text-align: center;
+.rtl .jet-form-builder-row,
+.rtl .jet-form-builder__field,
+.rtl .jet-form-builder__next-page-wrap {
+    text-align: right;
 }
+.rtl .jet-form-builder__field-label > span::before {
+    margin-right: unset;
+    margin-left: 0.5em;
+}
+
+

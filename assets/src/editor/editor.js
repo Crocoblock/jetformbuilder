@@ -88,6 +88,8 @@ function Editor( { startingContent, formName, inputName } ) {
 
 	const editorSettings = wp.data.select( 'core/block-editor' ).getSettings();
 
+	wp.data.select( 'core/editor' ).isEditedPostAutosaveable = () => false;
+
 	editorSettings.__experimentalSetIsInserterOpened = ( isOpen ) => {
 		setShowInserter( isOpen );
 	};

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -174,6 +175,25 @@ abstract class Base {
 		} else {
 			return $args['default'];
 		}
+	}
+
+	public function render_disabled_message_form_break( $args ) {
+		$format = '<div class="jet-form-builder__next-page-msg" %2$s>%1$s</div>';
+
+		if ( ! empty( $args['page_break_disabled'] ) && ! Tools::is_editor() ) {
+			return sprintf( $format, $args['page_break_disabled'], '' );
+
+		} elseif ( Tools::is_editor() ) {
+
+			$message = ! empty( $args['page_break_disabled'] ) ? $args['page_break_disabled'] : 'Disabled message';
+			return sprintf( $format, $message, $this->get_style_attrs( array( 'display:block' ) ) );
+		}
+
+		return '';
+	}
+
+	public function get_style_attrs( $style ) {
+		return 'style=' . implode(';', $style );
 	}
 
 }

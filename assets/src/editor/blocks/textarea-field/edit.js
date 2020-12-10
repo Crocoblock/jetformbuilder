@@ -1,8 +1,8 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../tools/tools";
-import WrapperControl from "../../tools/wrapper-control";
+import Tools from "../../tools";
+import FieldWrapper from "../../components/field-wrapper";
 
 const block = 'jet-forms/textarea-field';
 
@@ -122,7 +122,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 				/> }
 			</InspectorControls>
 		),
-		<WrapperControl
+		<FieldWrapper
             block={ block }
             attributes={ attributes }
         >
@@ -131,7 +131,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 				placeholder={ attributes.placeholder }
 				onChange={ () => {} }
             />
-        </WrapperControl>
+        </FieldWrapper>
 
 	];
 }

@@ -2,8 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
-import WrapperControl from '../../tools/wrapper-control';
+import Tools from "../../tools";
+import FieldWrapper from '../../components/field-wrapper';
 
 const block = 'jet-forms/media-field';
 
@@ -152,7 +152,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 				</InspectorControls>
 			),
 			
-			<WrapperControl
+			<FieldWrapper
 				block={ block }
 				attributes={ attributes }
 			>
@@ -161,7 +161,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 					type={ 'file' }
 					disabled={ true }
 				/>
-			</WrapperControl>
+			</FieldWrapper>
 		];
 	}
 }

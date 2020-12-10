@@ -1,5 +1,5 @@
 import JetFormPresetEditor from '../blocks/controls/preset-editor';
-import Tools from '../tools/tools';
+import Tools from '../tools';
 
 function PresetMeta() {
 

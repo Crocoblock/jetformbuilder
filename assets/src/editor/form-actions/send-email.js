@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import Tools from "../tools/tools";
+import Tools from "../tools";
 
 const {
 	TextControl,

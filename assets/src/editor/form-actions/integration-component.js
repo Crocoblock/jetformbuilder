@@ -1,6 +1,5 @@
 import BaseActionComponent from "./base-action-component";
-import * as fieldsManager from "../tools/form-fields-manager";
-
+import Tools from "../tools";
 
 export default class IntegrationComponent extends BaseActionComponent {
 
@@ -11,7 +10,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.getApiData = this.getApiData.bind( this );
 		this.getLists = this.getLists.bind( this );
 
-		this.formFieldsList = fieldsManager.getFormFieldsList();
+		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder(  );
 
 		this.state = {
 			className: [ this.getClassNameValidateButton() ],

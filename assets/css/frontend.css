@@ -2514,3 +2514,7 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
 .jet-form-builder__field-wrap.checkradio-wrap span {
     display: contents;
 }
+
+.jet-form-builder__next-page-wrap {
+    text-align: center;
+}

@@ -1,21 +1,15 @@
-import WrapperControl from './wrapper-control';
+import FieldWrapper from './field-wrapper';
 
 const {
 	CheckboxControl,
 	SelectControl,
 	RadioControl,
-	BaseControl,
 } = wp.components;
 
 const DELIMITER = ' - ';
 
-const {
-	useEffect,
-	useState
-} = wp.element;
 
-
-export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
+export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } ) {
 
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
@@ -137,7 +131,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 		}
 	}
 
-	return <WrapperControl
+	return <FieldWrapper
 			key={ 'jet-form-builder-field-wrapper' }
 			attributes={ source }
 			block={ blockName }
@@ -150,7 +144,7 @@ export function GetFieldPlaceholder( { blockName, scriptData, source } ) {
 				getManualField() || null
 			}
 		</div>
-	</WrapperControl>;
+	</FieldWrapper>;
 
 
 }

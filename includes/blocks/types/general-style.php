@@ -115,33 +115,59 @@ trait General_Style {
 		);
 	}
 
-	public function add_margin_padding( $selector, $selector_ids ) {
-		if ( isset( $selector_ids['margin'] ) ) {
-			$this->controls_manager->add_control( [
-				'id'           => $selector_ids['margin'],
-				'type'         => 'dimensions',
-				'label'        => __( 'Margin', 'jet-form-builder' ),
-				'units'        => array( 'px', '%' ),
-				'css_selector' => array(
-					'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-				),
-				'separator'    => 'after',
-			] );
+	public function get_default_margin_control( $selector ) {
+		return array(
+			'type'         => 'dimensions',
+			'label'        => __( 'Margin', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+		);
+	}
+
+	public function get_default_padding_control( $selector ) {
+		return array(
+			'type'         => 'dimensions',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+		);
+	}
+
+	public function add_margin_padding( $selector, $control_options ) {
+		if ( isset( $control_options['margin'] ) ) {
+
+			$options = $this->merge_controls_or_add_id(
+				$this->get_default_margin_control( $selector ),
+				$control_options['margin']
+			);
+			$this->controls_manager->add_control( $options );
 		}
 
-		if ( isset( $selector_ids['padding'] ) ) {
-			$this->controls_manager->add_control( [
-				'id'           => $selector_ids['padding'],
-				'type'         => 'dimensions',
-				'label'        => __( 'Padding', 'jet-form-builder' ),
-				'units'        => array( 'px', '%' ),
-				'css_selector' => array(
-					'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-				),
-				'separator'    => 'after',
-			] );
+		if ( isset( $control_options['padding'] ) ) {
+
+			$options = $this->merge_controls_or_add_id(
+				$this->get_default_padding_control( $selector ),
+				$control_options['padding']
+			);
+			$this->controls_manager->add_control( $options );
 		}
 	}
+
+	public function merge_controls_or_add_id( $control, $options ) {
+		if ( is_array( $options ) ) {
+			return array_merge( $control, $options );
+
+		} elseif (is_string( $options ) ) {
+
+			$control['id'] = $options;
+			return $control;
+		}
+	}
+
 
 	private function add_content_controls() {
 		$this->controls_manager->start_section(
@@ -155,8 +181,14 @@ trait General_Style {
 		$this->add_margin_padding(
 			$this->css_scheme['wrap'],
 			array(
-				'margin'  => 'field_margin',
-				'padding' => 'field_padding'
+				'margin'  => array(
+					'id' => 'field_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id' => 'field_padding',
+					'separator' => 'after',
+				)
 			)
 		);
 
@@ -219,8 +251,14 @@ trait General_Style {
 		$this->add_margin_padding(
 			$this->css_scheme['label'],
 			array(
-				'margin'  => 'label_margin',
-				'padding' => 'label_padding'
+				'margin'  => array(
+					'id' => 'label_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id' => 'label_padding',
+					'separator' => 'after',
+				)
 			)
 		);
 
@@ -294,15 +332,24 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'description_style',
-				'title' => __( 'Description', 'jet-forms-builder' )
+				'title' => __( 'Description', 'jet-forms-builder' ),
+				/*'condition' => array(
+					'desc' => true
+				),*/
 			]
 		);
 
 		$this->add_margin_padding(
 			$this->css_scheme['description'],
 			array(
-				'margin'  => 'description_margin',
-				'padding' => 'description_padding'
+				'margin'  => array(
+					'id' => 'description_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id' => 'description_padding',
+					'separator' => 'after',
+				)
 			)
 		);
 
@@ -389,9 +436,9 @@ trait General_Style {
 			'disable_style'          => true,
 			'disable_decoration'     => true,
 			'disable_letter_spacing' => true,
-			'separator'    => 'after',
-			'type'         => 'typography',
-			'css_selector' => [
+			'separator'              => 'after',
+			'type'                   => 'typography',
+			'css_selector'           => [
 				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
@@ -431,8 +478,14 @@ trait General_Style {
 		$this->add_margin_padding(
 			$this->css_scheme['input'],
 			array(
-				'margin'  => 'input_margin',
-				'padding' => 'input_padding'
+				'margin'  => array(
+					'id' => 'input_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id' => 'input_padding',
+					'separator' => 'after',
+				)
 			)
 		);
 

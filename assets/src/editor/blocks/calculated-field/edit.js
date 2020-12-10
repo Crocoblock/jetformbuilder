@@ -2,8 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
-import WrapperControl from "../../tools/wrapper-control";
+import Tools from "../../tools";
+import FieldWrapper from "../../components/field-wrapper";
 
 const block = 'jet-forms/calculated-field';
 
@@ -175,7 +175,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					/> }
 				</InspectorControls>
 			),
-			<WrapperControl
+			<FieldWrapper
 				block={ block }
 				attributes={ attributes }
 				valueIfEmptyLabel={ 'Calculated Field' }
@@ -192,7 +192,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					{ attributes.calc_formula }
 					{ attributes.calc_suffix }
 				</div>
-			</WrapperControl>
+			</FieldWrapper>
 		];
 	}
 }

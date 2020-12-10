@@ -1,6 +1,6 @@
-import Tools from "./tools";
+import Tools from "../tools";
 
-export default function WrapperControl( { attributes, block, children, wrapClasses = [], valueIfEmptyLabel = '' } ) {
+export default function FieldWrapper( { attributes, block, children, wrapClasses = [], valueIfEmptyLabel = '' } ) {
     const {
         BaseControl,
     } = wp.components;

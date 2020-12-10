@@ -1,5 +1,5 @@
 import JetFieldsMapControl from '../blocks/controls/fields-map';
-import Tools from "../tools/tools";
+import Tools from "../tools";
 import JetDefaultMetaControl from "../blocks/controls/default-meta";
 
 /**

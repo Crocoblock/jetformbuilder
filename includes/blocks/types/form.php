@@ -17,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form extends Base {
 
+	use Form_Break_Field_Style;
+
 	public function __construct() {
 
 		$this->unregister_attributes(
@@ -55,15 +57,17 @@ class Form extends Base {
 	}
 
 	public function get_css_scheme() {
-		return array(
-			'success'  => '.jet-form-message--success',
-			'error'    => '.jet-form-message--error',
-			'form-row' => '.jet-form-builder-row'
+		return array_merge(
+			array(
+				'success'  => '.jet-form-message--success',
+				'error'    => '.jet-form-message--error',
+				'form-row' => '.jet-form-builder-row'
+			),
+			$this->form_break_css_scheme()
 		);
 	}
 
 	public function add_style_manager_options() {
-
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -123,6 +127,15 @@ class Form extends Base {
 		$this->controls_manager->end_section();
 
 
+		/**
+		 * Form Break fields
+		 */
+		$this->form_break_styles();
+
+
+		/**
+		 * Response Success Message
+		 */
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -132,8 +145,14 @@ class Form extends Base {
 		);
 
 		$this->add_margin_padding( $this->css_scheme['success'], array(
-			'padding' => 'success_padding',
-			'margin'  => 'success_margin'
+			'margin'  => array(
+				'id'        => 'success_margin',
+				'separator' => 'after',
+			),
+			'padding' => array(
+				'id'        => 'success_padding',
+				'separator' => 'after',
+			)
 		) );
 
 		$this->controls_manager->add_control( [
@@ -216,6 +235,9 @@ class Form extends Base {
 
 		$this->controls_manager->end_section();
 
+		/**
+		 * Response Error Message
+		 */
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -225,8 +247,14 @@ class Form extends Base {
 		);
 
 		$this->add_margin_padding( $this->css_scheme['error'], array(
-			'padding' => 'error_padding',
-			'margin'  => 'error_margin'
+			'margin'  => array(
+				'id' => 'error_margin',
+				'separator' => 'after',
+			),
+			'padding' => array(
+				'id' => 'error_padding',
+				'separator' => 'after',
+			)
 		) );
 
 		$this->controls_manager->add_control( [

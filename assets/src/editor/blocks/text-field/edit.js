@@ -2,8 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
-import WrapperControl from "../../tools/wrapper-control";
+import Tools from "../../tools";
+import FieldWrapper from "../../components/field-wrapper";
 
 const block = 'jet-forms/text-field';
 
@@ -160,7 +160,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 				/> }
 			</InspectorControls>
 		),
-		<WrapperControl
+		<FieldWrapper
 			block={ block }
 			attributes={ attributes }
 		>
@@ -169,6 +169,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 				key={ `place_holder_block_${ block }_control` }
 				onChange={ () => {} }
 			/>
-		</WrapperControl>
+		</FieldWrapper>
 	];
 };

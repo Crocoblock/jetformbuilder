@@ -243,22 +243,22 @@
 }
 
 
-.wp-block-form-break-field, .jet-form-builder__group-break {
+.jet-form-builder__next-page-wrap, .jet-form-builder__group-break {
     display: block;
     text-align: center;
     white-space: nowrap;
 }
 
-.wp-block-form-break-field:before, .jet-form-builder__group-break:before {
+.jet-form-builder__next-page-wrap:before, .jet-form-builder__group-break:before {
     content: "";
     position: absolute;
-    top: 55%;
+    bottom: 0;
     left: 0;
     right: 0;
     border-top: 1px solid #ccc;
 }
 
-.wp-block-form-break-field > span, .jet-form-builder__group-break > span {
+.jet-form-builder__next-page-wrap > span, .jet-form-builder__group-break > span {
     font-size: 13px;
     position: relative;
     display: inline-block;

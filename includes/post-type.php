@@ -269,17 +269,6 @@ class Post_Type {
 		return $this->get_form_meta( '_jf_gateways', $form_id );
 	}
 
-	public function get_default_arg__submit_type() {
-		return $this->get_default_args()['submit_type'];
-	}
-
-	public function get_default_arg__required_mark() {
-		return $this->get_default_args()['required_mark'];
-	}
-
-	public function get_default_arg__fields_layout() {
-		return $this->get_default_args()['fields_layout'];
-	}
 
 	public function get_default_args() {
 		return array(

@@ -15,7 +15,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Break_Field extends Base {
 
-
 	public function block_params() {
 		return array(
 			'attributes'      => $this->block_attributes(),
@@ -58,6 +57,8 @@ class Form_Break_Field extends Base {
 
 	public function general_style_manager_options() {
 	}
+
+
 
 	/**
 	 * Returns icon class name

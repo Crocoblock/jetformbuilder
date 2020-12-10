@@ -2,7 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import WrapperControl from "../../tools/wrapper-control";
+import FieldWrapper from "../../components/field-wrapper";
 
 const block = 'jet-forms/wysiwyg-field';
 
@@ -83,7 +83,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class WysiwygEdit extends wp
 					/> }
 				</InspectorControls>
 			),
-			<WrapperControl
+			<FieldWrapper
 				block={ block }
 				attributes={ attributes }
 			>
@@ -91,7 +91,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class WysiwygEdit extends wp
 					key={ `place_holder_block_${ block }` }
 					onChange={ () => {} }
 				/>
-			</WrapperControl>
+			</FieldWrapper>
 		];
 	}
 }

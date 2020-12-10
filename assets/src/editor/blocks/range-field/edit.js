@@ -2,8 +2,8 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
-import WrapperControl from '../../tools/wrapper-control';
+import Tools from "../../tools";
+import FieldWrapper from '../../components/field-wrapper';
 
 const block = 'jet-forms/range-field';
 
@@ -153,7 +153,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<WrapperControl
+			<FieldWrapper
 				attributes={ attributes }
 				block={ block }
 				wrapClasses={ [
@@ -175,7 +175,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 						<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
 					</div>
 				</div>
-			</WrapperControl>
+			</FieldWrapper>
 			
 		];
 	}

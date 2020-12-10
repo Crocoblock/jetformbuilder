@@ -1,8 +1,7 @@
-import Tools from "../tools/tools";
+import Tools from "../tools";
 import ActionMessages from "../meta/action-messages";
 import BaseActionComponent from "./base-action-component";
 
-import * as fieldsManager from '../tools/form-fields-manager';
 import WrapperRequiredControl from "../components/wrapper-required-control";
 
 /**
@@ -32,7 +31,7 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 		this.userFields = Object.entries( this.data.userFields );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.formFieldsList = fieldsManager.getFormFieldsList();
+		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder( '--' );
 	}
 
 	render() {

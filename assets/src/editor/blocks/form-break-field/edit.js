@@ -1,8 +1,7 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
+import Tools from "../../tools";
 
 const block = 'jet-forms/form-break-field';
 
@@ -34,7 +33,6 @@ const {
 
 
 const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
 const keyGeneral = block + '-general-edit';
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends wp.element.Component {
@@ -48,20 +46,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 	render() {
 		const props = this.props;
 		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
 		return [
-			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
-					<JetFormToolbar
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.toolbar[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/>
-				</BlockControls>
-			),
 			props.isSelected && (
 				<InspectorControls
 					key={ keyControls }
@@ -99,8 +85,18 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 					/> }
 				</InspectorControls>
 			),
-			<div className={ 'wp-block-form-break-field' }>
-				<span>{ attributes.label || 'FORM BREAK' }</span>
+			<div className={ 'jet-form-builder__next-page-wrap' }>
+				<Button
+					isSecondary
+					key="next_page_button"
+					className="jet-form-builder__next-page"
+				>{ attributes.label || 'Next' }</Button>
+
+				{ attributes.add_prev && <Button
+					isSecondary
+					key="prev_page_button"
+					className="jet-form-builder__prev-page"
+				>{ attributes.prev_label || 'Prev' }</Button> }
 			</div>
 		];
 	}

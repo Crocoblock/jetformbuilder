@@ -1,4 +1,4 @@
-import Tools from "../tools/tools";
+import Tools from "../tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
 import ActionMessages from "../meta/action-messages";
 

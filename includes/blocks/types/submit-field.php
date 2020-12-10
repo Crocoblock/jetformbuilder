@@ -48,7 +48,10 @@ class Submit_Field extends Base {
 		$this->add_margin_padding(
 			$this->css_scheme['wrap'],
 			array(
-				'padding' => 'submit_padding'
+				'padding' => array(
+					'id' => 'submit_padding',
+					'separator' => 'after',
+				)
 			)
 		);
 

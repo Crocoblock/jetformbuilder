@@ -1,4 +1,4 @@
-import Tools from "../tools/tools";
+import Tools from "../tools";
 
 function Messages() {
 	const {

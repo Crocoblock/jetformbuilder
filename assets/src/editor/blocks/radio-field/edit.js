@@ -7,7 +7,7 @@ import FromTermsFields from "../base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
 import FromManualFields from "../base-select-check-radio/from-manual-fields";
-import { GetFieldPlaceholder } from "../../tools/radio-check-select-helper";
+import { SelectRadioCheckPlaceholder } from "../../components/select-radio-check-placeholder";
 
 const block = 'jet-forms/radio-field';
 
@@ -140,7 +140,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 					/> }
 				</div> }
 
-				<GetFieldPlaceholder
+				<SelectRadioCheckPlaceholder
 					blockName={ block }
 					scriptData={ this.data }
 					source={ attributes }

@@ -2,7 +2,7 @@ import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-import Tools from "../../tools/tools";
+import Tools from "../../tools";
 
 const block = 'jet-forms/repeater-field';
 

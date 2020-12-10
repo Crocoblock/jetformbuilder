@@ -1,5 +1,4 @@
-import Tools from "../tools/tools";
-import * as fieldsManager from "../tools/form-fields-manager";
+import Tools from "../tools";
 import IntegrationComponent from "./integration-component";
 
 /**

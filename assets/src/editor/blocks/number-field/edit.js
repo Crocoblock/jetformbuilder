@@ -127,18 +127,18 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 					/> }
 				</InspectorControls>
 			),
-            <FieldWrapper
-                block={ block }
-                attributes={ attributes }
-            >
-                <NumberControl
-                    placeholder={ attributes.placeholder }
+			<FieldWrapper
+				block={ block }
+				attributes={ attributes }
+			>
+				<NumberControl
+					placeholder={ attributes.placeholder }
 					key={ `place_holder_block_${ block }_control` }
 					min={ attributes.min || 0 }
 					max={ attributes.max || 1000 }
 					step={ attributes.step || 1 }
-                />
-            </FieldWrapper>
+				/>
+			</FieldWrapper>
 		];
 	}
 }

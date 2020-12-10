@@ -1,3 +1,5 @@
+import ActionModal from "../components/action-modal";
+
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
 }
@@ -115,7 +117,9 @@ function ActionsMeta() {
 		};
 
 		const [isEdit, setEdit] = useState( false );
+		const [isEditProcessAction, setEditProcessAction] = useState( false );
 		const [editedAction, setEditedAction] = useState( {} );
+		const [processedAction, setProcessedAction] = useState( {} );
 
 		const closeModal = () => {
 			setEdit( false )
@@ -136,7 +140,6 @@ function ActionsMeta() {
 				Callback = window.jetFormActionTypes[ i ].callback;
 			}
 		}
-		;
 
 		const updateActionFromModal = ( action ) => {
 			updateAction( action.id, 'settings', action.settings );
@@ -148,6 +151,12 @@ function ActionsMeta() {
 				setEdit( true );
 			}
 		}, [editedAction] );
+
+		useEffect( () => {
+			if ( processedAction.type ) {
+				setEditProcessAction( true );
+			}
+		}, [processedAction] );
 
 		return (
 			<PluginDocumentSettingPanel
@@ -187,42 +196,47 @@ function ActionsMeta() {
 											} }
 										/>
 										<div/>
+										<Button
+											icon={ 'admin-generic' }
+											label={ 'Process & Manipulate' }
+											onClick={ () => {
+												setProcessedAction( () => ( { ...action } ) );
+											} }
+										/>
+										<DropdownMenu
+											icon={ 'ellipsis' }
+											label={ 'Edit, move or delete' }
+											controls={ [
+												{
+													title: 'Up',
+													icon: 'arrow-up',
+													disabled: true,
+													onClick: () => {
+														if ( 0 !== index ) {
+															moveAction( index, index - 1 );
+														}
+													}
+												},
+												{
+													title: 'Down',
+													icon: 'arrow-down',
+													disabled: index === actions.length,
+													onClick: () => {
+														if ( ( actions.length - 1 ) !== index ) {
+															moveAction( index, index + 1 );
+														}
+													}
+												},
+												{
+													title: 'Delete',
+													icon: 'trash',
+													onClick: () => {
+														deleteAction( index );
+													}
+												}
+											] }
+										/>
 									</Flex>
-								</FlexItem>
-								<FlexItem>
-									<DropdownMenu
-										icon={ 'ellipsis' }
-										label={ 'Edit, move or delete' }
-										controls={ [
-											{
-												title: 'Up',
-												icon: 'arrow-up',
-												disabled: true,
-												onClick: () => {
-													if ( 0 !== index ) {
-														moveAction( index, index - 1 );
-													}
-												}
-											},
-											{
-												title: 'Down',
-												icon: 'arrow-down',
-												disabled: index === actions.length,
-												onClick: () => {
-													if ( ( actions.length - 1 ) !== index ) {
-														moveAction( index, index + 1 );
-													}
-												}
-											},
-											{
-												title: 'Delete',
-												icon: 'trash',
-												onClick: () => {
-													deleteAction( index );
-												}
-											}
-										] }
-									/>
 								</FlexItem>
 							</Flex>
 						</CardBody>
@@ -243,61 +257,30 @@ function ActionsMeta() {
 				>
 					{ '+ New Action' }
 				</Button>
-				{ isEdit && (
-					<Modal
-						onRequestClose={ closeModal }
-						className={ 'jet-form-edit-modal' }
-						style={ { width: '60vw' } }
-						title={ 'Edit Action' }
-					>
-						{ ! Callback && <div
-							className="jet-form-edit-modal__content"
-						>{ 'Action callback is not found.' }</div> }
-						{ Callback && <div>
-							<div className="jet-form-edit-modal__content">
-								<Callback
-									settings={ editedAction.settings }
-									onChange={ ( data ) => {
-										setEditedAction( {
-											...editedAction,
-											settings: data
-										} );
-									} }
-								/>
-							</div>
-							<ButtonGroup
-								className="jet-form-edit-modal__actions"
-								style={ {
-									position: 'sticky',
-									bottom: '0',
-									margin: '20px -24px -24px',
-									padding: '18px 24px 20px',
-									backgroundColor: '#fff',
-									width: 'calc( 100% + 48px )',
-									borderTop: '1px solid #ddd',
-								} }
-							>
-								<Button
-									isPrimary
-									onClick={ () => {
-										updateActionFromModal( editedAction )
-									} }
-								>
-									Update
-								</Button>
-								<Button
-									isSecondary
-									style={ {
-										margin: '0 0 0 10px'
-									} }
-									onClick={ closeModal }
-								>
-									Cancel
-								</Button>
-							</ButtonGroup>
-						</div> }
-					</Modal>
-				) }
+				{ isEdit && <ActionModal
+					onRequestClose={ closeModal }
+					title={ 'Edit Action' }
+					onUpdateClick={ () => {
+						updateActionFromModal( editedAction )
+					} }
+				>
+					<Callback
+						settings={ editedAction.settings }
+						onChange={ ( data ) => {
+							setEditedAction( {
+								...editedAction,
+								settings: data
+							} );
+						} }
+					/>
+				</ActionModal> }
+				{ isEditProcessAction && <ActionModal
+					onRequestClose={ () => setEditProcessAction( false ) }
+					title={ 'Edit Process Conditions & Data Manipulation' }
+					onUpdateClick={ () => setEditProcessAction( false ) }
+				>
+					{ console.log( processedAction ) }
+				</ActionModal> }
 			</PluginDocumentSettingPanel>
 		)
 	};

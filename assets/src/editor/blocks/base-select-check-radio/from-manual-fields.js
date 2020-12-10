@@ -64,11 +64,11 @@ class FromManualFields extends wp.element.Component {
 
 	addNewOption() {
 		this.props.parentProps.setAttributes( {
-			field_options: [ ...this.getOptions(), {
+			field_options: [...this.getOptions(), {
 				label: '',
 				value: '',
 				calculate: ''
-			} ]
+			}]
 		} );
 	}
 

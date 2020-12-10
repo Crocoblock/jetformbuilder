@@ -485,3 +485,17 @@
 .jet-form-builder-row {
     overflow: hidden;
 }
+
+.interface-complementary-area {
+    width: 340px;
+}
+
+.jet-form-edit-modal__actions {
+    position: sticky;
+    bottom: 0;
+    margin: 20px -24px -24px;
+    padding: 18px 24px 20px;
+    background-color: #fff;
+    width: calc( 100% + 48px );
+    border-top: 1px solid #ddd;
+}

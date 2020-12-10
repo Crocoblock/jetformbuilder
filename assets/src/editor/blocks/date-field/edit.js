@@ -107,7 +107,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 				attributes={ attributes }
 			>
 				<TextControl
-					onChange={ () => {} }
+					onChange={ () => {
+					} }
 					key={ `place_holder_block_${ block }` }
 					placeholder={ 'Input type="date"' }
 				/>

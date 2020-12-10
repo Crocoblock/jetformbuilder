@@ -90,13 +90,14 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class TimeEdit extends wp.el
 					/> }
 				</InspectorControls>
 			),
-			
+
 			<FieldWrapper
 				block={ block }
 				attributes={ attributes }
 			>
 				<TextControl
-					onChange={ () => {} }
+					onChange={ () => {
+					} }
 					key={ `place_holder_block_${ block }` }
 					placeholder={ 'Input type="time"' }
 				/>

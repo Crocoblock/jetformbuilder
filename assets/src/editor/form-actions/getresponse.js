@@ -144,10 +144,10 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 					key='getresponse_fields_map'
 				>
 					<div className='jet-user-fields-map__list'>
-						{ fields.map( ( [ fieldName, fieldData ], index ) => {
+						{ fields.map( ( [fieldName, fieldData], index ) => {
 
 							return <WrapperRequiredControl
-								field={ [ fieldName, fieldData ] }
+								field={ [fieldName, fieldData] }
 							>
 								<SelectControl
 									key={ fieldName + index }

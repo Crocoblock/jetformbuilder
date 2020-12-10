@@ -124,7 +124,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 						{ 'datetime' === attributes.mask_type && <div className={ 'help-input' }>
 							{ __( 'Examples:', 'jet-form-builder' ) } dd/mm/yyyy, mm/dd/yyyy<br/>
 							{ __( 'More info - ', 'jet-form-builder' ) }
-							<a href={ localizeData.help_messages.input_mask_datetime_link } target='_blank'>{ __( 'here', 'jet-form-builder' ) }</a>
+							<a href={ localizeData.help_messages.input_mask_datetime_link }
+							   target='_blank'>{ __( 'here', 'jet-form-builder' ) }</a>
 						</div> }
 
 						<SelectControl
@@ -167,7 +168,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 			<TextControl
 				placeholder={ attributes.placeholder }
 				key={ `place_holder_block_${ block }_control` }
-				onChange={ () => {} }
+				onChange={ () => {
+				} }
 			/>
 		</FieldWrapper>
 	];

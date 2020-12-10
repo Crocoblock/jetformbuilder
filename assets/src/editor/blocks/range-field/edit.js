@@ -176,7 +176,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					</div>
 				</div>
 			</FieldWrapper>
-			
+
 		];
 	}
 }

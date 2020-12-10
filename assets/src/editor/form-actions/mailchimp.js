@@ -100,7 +100,7 @@ window.jetFormDefaultActions[ 'mailchimp' ] = class MailChimpAction extends Inte
 							key={ 'validate_api_key' }
 							isPrimary
 							onClick={ this.validateAPIKey }
-							className={ this.state.className.join( ' ' ) + ' jet-form-validate-button'  }
+							className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 						>
 							<i className="dashicons"/>
 							{ this.data.labels.validate_api_key }
@@ -190,7 +190,7 @@ window.jetFormDefaultActions[ 'mailchimp' ] = class MailChimpAction extends Inte
 						{ fields.map( ( [mcFieldId, mcFieldData], index ) => {
 
 							return <WrapperRequiredControl
-								field={ [ mcFieldId, mcFieldData ] }
+								field={ [mcFieldId, mcFieldData] }
 							>
 								<SelectControl
 									key={ mcFieldId + index }

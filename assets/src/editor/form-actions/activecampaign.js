@@ -32,7 +32,7 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 	}
 
 	validateActiveCampaignData() {
-		this.setState( { className: [ 'loading' ] } );
+		this.setState( { className: ['loading'] } );
 		this.getActiveCampaignData( true );
 	}
 
@@ -63,16 +63,16 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 
 					self.onChangeSetting( lists, 'data' );
 					self.onChangeSetting( true, 'isValidAPI' );
-					self.setState( { className: [ 'is-valid' ] } );
+					self.setState( { className: ['is-valid'] } );
 
 				} else {
 					self.onChangeSetting( false, 'isValidAPI' );
-					self.setState( { className: [ 'is-invalid' ] } );
+					self.setState( { className: ['is-invalid'] } );
 				}
 			} )
 			.error( function () {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.setState( { className: [ 'is-invalid' ] } );
+				self.setState( { className: ['is-invalid'] } );
 			} );
 	}
 

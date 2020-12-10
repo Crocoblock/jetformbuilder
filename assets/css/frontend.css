@@ -1,3 +1,8 @@
+:root {
+    --jet-fb__range-field-slider--size: 18px;
+    --jet-fb__range-field-range--height: 4px;
+}
+
 .jet-listing-dynamic-field {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1590,7 +1595,7 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
 }
 
 .jet-form-builder-row:last-child {
-    padding-bottom: 0 !important
+    padding-bottom: 0;
 }
 
 .jet-form-builder-row--first-visible {
@@ -2026,7 +2031,7 @@ input[type="range"].jet-form-builder__field.range-field, input[type="range"].jet
 
 input[type="range"].jet-form-builder__field.range-field::-webkit-slider-runnable-track {
     width: 100%;
-    height: 4px;
+    height: var(--jet-fb__range-field-range--height, 4px);
     cursor: pointer;
     /**
     test
@@ -2039,7 +2044,7 @@ input[type="range"].jet-form-builder__field.range-field::-webkit-slider-runnable
 
 input[type="range"].jet-form-builder__field.range-field::-moz-range-track {
     width: 100%;
-    height: 4px;
+    height: var(--jet-fb__range-field-range--height, 4px);
     cursor: pointer;
     background: #e3ddd8;
     box-shadow: none;
@@ -2048,7 +2053,7 @@ input[type="range"].jet-form-builder__field.range-field::-moz-range-track {
 
 input[type="range"].jet-form-builder__field.range-field::-ms-track {
     width: 100%;
-    height: 4px;
+    height: var(--jet-fb__range-field-range--height, 4px);
     cursor: pointer;
     background: #e3ddd8;
     box-shadow: none;
@@ -2065,21 +2070,21 @@ input[type="range"].jet-form-builder__field.range-field::-ms-fill-upper {
 }
 
 input[type="range"].jet-form-builder__field.range-field::-webkit-slider-thumb {
-    width: 18px;
-    height: 18px;
-    background:#ccc;
+    width: var(--jet-fb__range-field-slider--size, 18px);
+    height: var(--jet-fb__range-field-slider--size, 18px);
+    background: #ccc;
     border-radius: 50%;
     cursor: pointer;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: none;
-    margin-top: -7px;
+    margin-top: calc((var(--jet-fb__range-field-slider--size, 18px) - var(--jet-fb__range-field-range--height, 4px)) / -2);
     -webkit-appearance: none
 }
 
 input[type="range"].jet-form-builder__field.range-field::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
+    width: var(--jet-fb__range-field-slider--size, 18px);
+    height: var(--jet-fb__range-field-slider--size, 18px);
     background: #ccc;
     border-radius: 50%;
     cursor: pointer;
@@ -2088,8 +2093,8 @@ input[type="range"].jet-form-builder__field.range-field::-moz-range-thumb {
 }
 
 input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
-    width: 18px;
-    height: 18px;
+    width: var(--jet-fb__range-field-slider--size, 18px);
+    height: var(--jet-fb__range-field-slider--size, 18px);
     background: #ccc;
     border-radius: 50%;
     cursor: pointer;
@@ -2388,7 +2393,8 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     align-items: center;
     user-select: none;
 }
-.jet-form-builder__field-label>span::before {
+
+.jet-form-builder__field-label > span::before {
     content: '';
     display: inline-block;
     width: 0.8em;
@@ -2402,20 +2408,21 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     background-size: 50% 50%;
 }
 
-.jet-form-builder__field-label.for-checkbox>span::before {
+.jet-form-builder__field-label.for-checkbox > span::before {
     border-radius: 10%;
 }
 
-.jet-form-builder__field-label.for-radio>span::before {
+.jet-form-builder__field-label.for-radio > span::before {
     border-radius: 50%;
 }
 
 /* стили при наведении курсора на радио */
-.jet-form-builder__field-label.for-radio :not(:disabled).jet-form-builder__field-label.for-radio :not(:checked):hover+span::before {
+.jet-form-builder__field-label.for-radio :not(:disabled).jet-form-builder__field-label.for-radio :not(:checked):hover + span::before {
     border-color: #b3d7ff;
 }
+
 /* стили для активной радиокнопки (при нажатии на неё) */
-.jet-form-builder__field-label.for-radio :not(:disabled):active+span::before {
+.jet-form-builder__field-label.for-radio :not(:disabled):active + span::before {
     background-color: #b3d7ff;
     border-color: #b3d7ff;
 }
@@ -2426,27 +2433,29 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
 /*}*/
 
 /* стили для радиокнопки, находящейся в фокусе и не находящейся в состоянии checked */
-.jet-form-builder__field-label.for-radio :focus:not(:checked)+span::before {
+.jet-form-builder__field-label.for-radio :focus:not(:checked) + span::before {
     border-color: #80bdff;
 }
+
 /* стили для радиокнопки, находящейся в состоянии checked */
-.jet-form-builder__field-label.for-radio :checked+span::before {
+.jet-form-builder__field-label.for-radio :checked + span::before {
     border-color: #0b76ef;
     background-color: #0b76ef;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
 }
+
 /* стили для радиокнопки, находящейся в состоянии disabled */
-.jet-form-builder__field-label.for-radio :disabled+span::before {
+.jet-form-builder__field-label.for-radio :disabled + span::before {
     background-color: #e9ecef;
 }
 
 /* стили при наведении курсора на checkbox */
-.jet-form-builder__field-label.for-checkbox :not(:disabled):not(:checked):hover+span::before {
+.jet-form-builder__field-label.for-checkbox :not(:disabled):not(:checked):hover + span::before {
     border-color: #b3d7ff;
 }
 
 /* стили для активного чекбокса (при нажатии на него) */
-.jet-form-builder__field-label.for-checkbox :not(:disabled):active+span::before {
+.jet-form-builder__field-label.for-checkbox :not(:disabled):active + span::before {
     background-color: #b3d7ff;
     border-color: #b3d7ff;
 }
@@ -2457,19 +2466,19 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
 /*}*/
 
 /* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
-.jet-form-builder__field-label.for-checkbox :focus:not(:checked)+span::before {
+.jet-form-builder__field-label.for-checkbox :focus:not(:checked) + span::before {
     border-color: #80bdff;
 }
 
 /* стили для чекбокса, находящегося в состоянии checked */
-.jet-form-builder__field-label.for-checkbox :checked+span::before {
+.jet-form-builder__field-label.for-checkbox :checked + span::before {
     border-color: #0b76ef;
     background-color: #0b76ef;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
 }
 
 /* стили для чекбокса, находящегося в состоянии disabled */
-.jet-form-builder__field-label.for-checkbox :disabled+span::before {
+.jet-form-builder__field-label.for-checkbox :disabled + span::before {
     background-color: #e9ecef;
 }
 

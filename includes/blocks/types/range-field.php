@@ -14,6 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Range_Field extends Base {
 
+	const CSS_VAR_SLIDER_SIZE = '--jet-fb__range-field-slider--size';
+	const CSS_VAR_RANGE_HEIGHT = '--jet-fb__range-field-range--height';
+
 	/**
 	 * Returns block title
 	 *
@@ -160,9 +163,8 @@ class Range_Field extends Base {
 					]
 				],
 			],
-			'css_selector' => array_merge(
-				$this->style_range( 'height: {{VALUE}}{{UNIT}};' ),
-				$this->style_slider( 'margin-top: calc( (18px - {{VALUE}}{{UNIT}})/-2 );' )
+			'css_selector' => array(
+				'{{WRAPPER}}' => self::CSS_VAR_RANGE_HEIGHT . ': {{VALUE}}{{UNIT}}',
 			),
 			'attributes'   => [
 				'default' => array(
@@ -170,7 +172,6 @@ class Range_Field extends Base {
 				),
 			]
 		] );
-
 
 		$this->controls_manager->add_control( [
 			'id'           => 'range_background_color',
@@ -212,11 +213,7 @@ class Range_Field extends Base {
 				],
 			],
 			'css_selector' => array( // margin-top: calc( ({{VALUE}}{{UNIT}} - 3px)/-2 );
-				'{{WRAPPER}} ' . $this->css_scheme['front-field']                            => 'min-height: {{VALUE}}{{UNIT}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}}; margin-top: calc( ({{VALUE}}{{UNIT}} - 4px)/-2',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-moz-range-thumb'     => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-ms-thumb'            => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
-
+				'{{WRAPPER}}' => self::CSS_VAR_SLIDER_SIZE . ': {{VALUE}}{{UNIT}}',
 			),
 			'attributes'   => [
 				'default' => array(

@@ -1,4 +1,4 @@
-import Repeater from "../../components/repeater";
+import RepeaterWithState from "../../components/repeater-with-state";
 import ActionModal from "../../components/action-modal";
 
 const {
@@ -22,7 +22,7 @@ class FromManualFields extends wp.element.Component {
 		this.state = {
 			showManualModal: false,
 			prevManual: null,
-			isUpdate: false
+			isUpdate: null
 		};
 		this.onClickManageButton = this.onClickManageButton.bind( this );
 		this.onClickUpdate = this.onClickUpdate.bind( this );
@@ -39,7 +39,7 @@ class FromManualFields extends wp.element.Component {
 
 	closeModal() {
 		this.setState( { showManualModal: ! this.state.showManualModal } );
-		this.setState( { isUpdate: false } );
+		this.setState( { isUpdate: null } );
 	}
 
 	onUpdateOptions( items ) {
@@ -59,15 +59,11 @@ class FromManualFields extends wp.element.Component {
 	}
 
 	onClickUpdate () {
-		this.setState( {
-			isUpdate: 'update',
-		} )
+		this.setState( { isUpdate: true } )
 	};
 
 	onClickCancel () {
-		this.setState( {
-			isUpdate: 'cancel',
-		} )
+		this.setState( { isUpdate: false } )
 	};
 
 	render() {
@@ -97,19 +93,21 @@ class FromManualFields extends wp.element.Component {
 					onCancelClick={ this.onClickCancel }
 					onUpdateClick={ this.onClickUpdate }
 				>
-
-					<Repeater
+					<RepeaterWithState
 						items={ this.getOptions() }
 						addNewButtonLabel={ __( 'Add New Option' ) }
 						newItem={ addNewOption }
 						onSaveItems={ this.onUpdateOptions }
-						isUpdateModal={ this.state.isUpdate }
-						closeModal={ this.closeModal }
-						ItemTemplate={ ( { currentItem, index, changeCurrentItem } ) => {
+						onUnMount={ this.closeModal }
+						isSaveAction={ this.state.isUpdate }
+
+						ItemHeading={ ( { currentItem, index } ) => {
+							return `#${ index } ${ currentItem.label }`;
+						} }
+						ItemTemplate={ ( { currentItem, changeCurrentItem } ) => {
 
 							return <div
 								className="jet-form-builder__flex-controls"
-								key={ 'jet-form-builder-repeater-item-' + index }
 							>
 								<div className='repeater-item-column'>
 									<TextControl
@@ -120,7 +118,6 @@ class FromManualFields extends wp.element.Component {
 											changeCurrentItem( {
 												value: newValue,
 												name: 'label',
-												id: index
 											} );
 										} }
 									/>
@@ -134,7 +131,6 @@ class FromManualFields extends wp.element.Component {
 											changeCurrentItem( {
 												value: newValue,
 												name: 'value',
-												id: index
 											} );
 										} }
 									/>
@@ -148,7 +144,6 @@ class FromManualFields extends wp.element.Component {
 											changeCurrentItem( {
 												value: newValue,
 												name: 'calculate',
-												id: index
 											} );
 										} }
 									/>

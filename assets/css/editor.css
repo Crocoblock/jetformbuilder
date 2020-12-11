@@ -508,14 +508,17 @@
     width: 340px;
 }
 
-.jet-form-builder__repeater-component-item {
-    display: flex;
-    padding: 1em 0;
+.jet-form-edit-modal.width-60 {
+    width: 60vw;
 }
+
+.jet-form-builder__repeater-component-item {
+    margin-bottom: 2em;
+}
+
 .jet-form-builder__repeater-component-item .repeater-item__content {
     flex: 1 1 100%;
-    padding: 1em;
-    background-color: aliceblue;
+    background-color: #f9f9f9;
 }
 .jet-form-builder__repeater-component-item .repeater-item__remove {
     flex: 1;

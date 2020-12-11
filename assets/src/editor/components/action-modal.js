@@ -4,6 +4,7 @@ export default function ActionModal( {
 										 title,
 										 onCancelClick,
 										 onUpdateClick,
+										 classNames = []
 									 } ) {
 
 	const {
@@ -12,9 +13,11 @@ export default function ActionModal( {
 		Modal,
 	} = wp.components;
 
+	const modalClasses = [ 'jet-form-edit-modal', ...classNames ].join( ' ' );
+
 	return <Modal
 		onRequestClose={ onRequestClose }
-		className={ 'jet-form-edit-modal' }
+		className={ modalClasses }
 		title={ title }
 	>
 		{ ! children && <div

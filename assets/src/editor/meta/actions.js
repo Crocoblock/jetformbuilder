@@ -1,5 +1,5 @@
 import ActionModal from "../components/action-modal";
-import Repeater from "../components/repeater";
+import RepeaterWithState from "../components/repeater-with-state";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -261,6 +261,7 @@ function ActionsMeta() {
 					{ '+ New Action' }
 				</Button>
 				{ isEdit && <ActionModal
+					classNames={ ['width-60'] }
 					onRequestClose={ closeModal }
 					title={ 'Edit Action' }
 					onUpdateClick={ () => {
@@ -278,31 +279,14 @@ function ActionsMeta() {
 					/>
 				</ActionModal> }
 				{ isEditProcessAction && <ActionModal
+					classNames={ ['width-60'] }
 					onRequestClose={ () => setEditProcessAction( false ) }
 					title={ 'Edit Process Conditions & Data Manipulation' }
 					onUpdateClick={ () => setEditProcessAction( false ) }
 				>
-					<Repeater
+					<RepeaterWithState
 						items={ [1, 2, 34, 56] }
 						addNewButtonLabel={ __( 'Add New Condition' ) }
-						ItemTemplate={ ( { currentItem, index } ) => {
-							return <>
-								<SelectControl
-									value=''
-									label={ `${ currentItem }_${ index }` }
-									options={ [{ label: '--' }, { label: '++' }] }
-									onChange={ () => {
-									} }
-								/>
-								<SelectControl
-									value=''
-									label={ `${ currentItem }_${ index }` }
-									options={ [{ label: '11' }, { label: '22' }] }
-									onChange={ () => {
-									} }
-								/>
-							</>;
-						} }
 					/>
 				</ActionModal> }
 			</PluginDocumentSettingPanel>

@@ -2,19 +2,19 @@ export default function ActionModal( {
 										 onRequestClose,
 										 children,
 										 title,
+										 onCancelClick,
 										 onUpdateClick,
-										 onCancelClick } ) {
+									 } ) {
 
 	const {
 		Button,
 		ButtonGroup,
-		Modal
+		Modal,
 	} = wp.components;
 
 	return <Modal
 		onRequestClose={ onRequestClose }
 		className={ 'jet-form-edit-modal' }
-		style={ { width: '60vw' } }
 		title={ title }
 	>
 		{ ! children && <div
@@ -38,7 +38,7 @@ export default function ActionModal( {
 					style={ {
 						margin: '0 0 0 10px'
 					} }
-					onClick={ onCancelClick ? onCancelClick : onRequestClose }
+					onClick={ onCancelClick }
 				>Cancel</Button>
 			</ButtonGroup>
 		</div> }

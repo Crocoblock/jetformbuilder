@@ -1,4 +1,5 @@
 import ActionModal from "../components/action-modal";
+import Repeater from "../components/repeater";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -25,6 +26,7 @@ function ActionsMeta() {
 		Flex,
 		FlexItem,
 		DropdownMenu,
+		Panel,
 		Modal
 	} = wp.components;
 
@@ -50,6 +52,7 @@ function ActionsMeta() {
 		withState
 	} = wp.compose;
 
+	const { __ } = wp.i18n;
 
 	const DocumentSettingPanel = () => {
 
@@ -279,7 +282,28 @@ function ActionsMeta() {
 					title={ 'Edit Process Conditions & Data Manipulation' }
 					onUpdateClick={ () => setEditProcessAction( false ) }
 				>
-					{ console.log( processedAction ) }
+					<Repeater
+						items={ [1, 2, 34, 56] }
+						addNewButtonLabel={ __( 'Add New Condition' ) }
+						ItemTemplate={ ( { currentItem, index } ) => {
+							return <>
+								<SelectControl
+									value=''
+									label={ `${ currentItem }_${ index }` }
+									options={ [{ label: '--' }, { label: '++' }] }
+									onChange={ () => {
+									} }
+								/>
+								<SelectControl
+									value=''
+									label={ `${ currentItem }_${ index }` }
+									options={ [{ label: '11' }, { label: '22' }] }
+									onChange={ () => {
+									} }
+								/>
+							</>;
+						} }
+					/>
 				</ActionModal> }
 			</PluginDocumentSettingPanel>
 		)

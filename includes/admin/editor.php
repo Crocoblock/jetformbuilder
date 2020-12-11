@@ -215,7 +215,7 @@ class Editor {
 					'options'          => array(
 						array(
 							'value' => '',
-							'label' => __( 'Select post property...', 'jet-form-builder' ),
+							'label' => __( '--', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'ID',
@@ -290,7 +290,7 @@ class Editor {
 					'options'          => array(
 						array(
 							'value' => '',
-							'label' => __( 'Select User Property...', 'jet-form-builder' ),
+							'label' => __( '--', 'jet-form-builder' ),
 						),
 						array(
 							'value' => 'ID',
@@ -398,6 +398,8 @@ class Editor {
 			JET_FORM_BUILDER_VERSION,
 			'all'
 		);
+
+
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
 			'allowedBlocks'   => $this->get_allowed_blocks(),

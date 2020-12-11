@@ -245,7 +245,6 @@
 
 .jet-form-builder__next-page-wrap, .jet-form-builder__group-break {
     display: block;
-    text-align: center;
     white-space: nowrap;
 }
 
@@ -307,6 +306,7 @@
 .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
     white-space: nowrap;
     margin-left: 10px;
+    display: flex;
 }
 
 .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .components-input-control__container {
@@ -486,16 +486,11 @@
     overflow: hidden;
 }
 
-.interface-complementary-area {
-    width: 340px;
+.rtl .jet-form-editor__macros-inserter {
+    left: 15px;
+    right: unset;
 }
-
-.jet-form-edit-modal__actions {
-    position: sticky;
-    bottom: 0;
-    margin: 20px -24px -24px;
-    padding: 18px 24px 20px;
-    background-color: #fff;
-    width: calc( 100% + 48px );
-    border-top: 1px solid #ddd;
+.rtl .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
+    margin-left: unset;
+    margin-right: 10px;
 }

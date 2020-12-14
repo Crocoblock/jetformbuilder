@@ -29,7 +29,11 @@ const JetFormPresetEditor = class extends wp.element.Component {
 		if ( 'object' === typeof this.props.value ) {
 			value = { ...this.props.value };
 		} else if ( this.props.value && 'string' === typeof this.props.value ) {
-			value = JSON.parse( this.props.value );
+			try {
+				value = JSON.parse( this.props.value );
+			} catch ( exception ) {
+				value = {};
+			}
 		}
 		value.jet_preset = true;
 
@@ -37,7 +41,6 @@ const JetFormPresetEditor = class extends wp.element.Component {
 	}
 
 	componentDidMount() {
-		console.log( this.props.isSaveAction );
 		if ( true === this.props.isSaveAction ) {
 			const cloneItems = { ...this.props.value };
 

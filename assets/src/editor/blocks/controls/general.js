@@ -38,7 +38,6 @@ const JetFormGeneral = class extends wp.element.Component {
 
 		const result = {};
 		const onChangeValue = ( value, key ) => {
-			console.log( value, key );
 			result[ key ] = value;
 			this.props.onChange( result );
 		};

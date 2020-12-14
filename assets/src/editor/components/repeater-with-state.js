@@ -31,7 +31,7 @@ function RepeaterWithState( {
 	const itemClassNames = ['jet-form-builder__repeater-component-item', ...repeaterItemClasses].join( ' ' );
 
 	const parsedItems = () => {
-		if ( items.length > 0 ) {
+		if ( items && items.length > 0 ) {
 			const cloneItems = [...items];
 
 			cloneItems.forEach( item => {
@@ -132,7 +132,7 @@ function RepeaterWithState( {
 		} else if ( false === isSaveAction ) {
 			onUnMount();
 		}
-	} );
+	}, [isSaveAction] );
 
 
 	return <div
@@ -154,7 +154,6 @@ function RepeaterWithState( {
 								onClick={ () => toggleVisible( index ) }
 								className={ 'repeater-action-button' }
 							/>
-
 							<Button
 								isSmall
 								isSecondary

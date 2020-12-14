@@ -1,5 +1,6 @@
 import ActionModal from "../components/action-modal";
 import RepeaterWithState from "../components/repeater-with-state";
+import Tools from "../tools";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -14,6 +15,23 @@ const defaultActions = [{
 	}
 }];
 
+const newItemCondition = {
+	execute: false,
+	operator: '',
+	field: '',
+	compare: '',
+};
+
+const conditionOperators = [
+	{ label: '--', value: '' },
+	{ label: 'Equal', value: 'equal' },
+	{ label: 'Greater than', value: 'greater' },
+	{ label: 'Less than', value: 'less' },
+	{ label: 'Between', value: 'between' },
+	{ label: 'In the list', value: 'one_of' },
+	{ label: 'Contain text', value: 'contain' },
+];
+
 function ActionsMeta() {
 
 	const {
@@ -27,7 +45,9 @@ function ActionsMeta() {
 		FlexItem,
 		DropdownMenu,
 		Panel,
-		Modal
+		Modal,
+		ToggleControl,
+		TextareaControl,
 	} = wp.components;
 
 	const {
@@ -108,7 +128,7 @@ function ActionsMeta() {
 		};
 
 		const updateAction = ( id, key, value ) => {
-			setActions( actions.map( ( action, index ) => {
+			setActions( actions.map( action => {
 				if ( action.id === id ) {
 					var newAction = JSON.parse( JSON.stringify( action ) );
 					newAction[ key ] = value;
@@ -144,9 +164,14 @@ function ActionsMeta() {
 			}
 		}
 
-		const updateActionFromModal = ( action ) => {
+		const updateActionSettings = ( action ) => {
 			updateAction( action.id, 'settings', action.settings );
 			closeModal();
+		}
+
+		const updateActionCondition = ( items ) => {
+			updateAction( processedAction.id, 'conditions', items );
+			setEditProcessAction( false );
 		}
 
 		useEffect( () => {
@@ -160,6 +185,8 @@ function ActionsMeta() {
 				setEditProcessAction( true );
 			}
 		}, [processedAction] );
+
+		const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
 
 		return (
 			<PluginDocumentSettingPanel
@@ -254,6 +281,7 @@ function ActionsMeta() {
 								type: 'send_email',
 								id: getRandomID(),
 								settings: {},
+								conditions: []
 							}
 						] );
 					} }
@@ -265,8 +293,9 @@ function ActionsMeta() {
 					onRequestClose={ closeModal }
 					title={ 'Edit Action' }
 					onUpdateClick={ () => {
-						updateActionFromModal( editedAction )
+						updateActionSettings( editedAction )
 					} }
+					onCancelClick={ closeModal }
 				>
 					<Callback
 						settings={ editedAction.settings }
@@ -280,14 +309,68 @@ function ActionsMeta() {
 				</ActionModal> }
 				{ isEditProcessAction && <ActionModal
 					classNames={ ['width-60'] }
-					onRequestClose={ () => setEditProcessAction( false ) }
 					title={ 'Edit Process Conditions & Data Manipulation' }
-					onUpdateClick={ () => setEditProcessAction( false ) }
+					onRequestClose={ () => setEditProcessAction( false ) }
+					onCancelClick={ () => setEditProcessAction( false ) }
 				>
-					<RepeaterWithState
-						items={ [1, 2, 34, 56] }
-						addNewButtonLabel={ __( 'Add New Condition' ) }
-					/>
+					{ ( { actionClick, onRequestClose } ) => {
+						return <RepeaterWithState
+							items={ processedAction.conditions }
+							newItem={ newItemCondition }
+							onUnMount={ onRequestClose }
+							isSaveAction={ actionClick }
+							onSaveItems={ updateActionCondition }
+							addNewButtonLabel={ __( 'Add New Condition' ) }
+						>
+							{ ( { currentItem, changeCurrentItem } ) => {
+								return <>
+									<ToggleControl
+										label={ __( 'Execute an action when the condition is met' ) }
+										checked={ currentItem.execute }
+										onChange={ newValue => {
+											changeCurrentItem( {
+												value: newValue,
+												name: 'execute',
+											} );
+										} }
+									/>
+									<SelectControl
+										label="Operator"
+										value={ currentItem.operator }
+										options={ conditionOperators }
+										onChange={ newValue => {
+											changeCurrentItem( {
+												value: newValue,
+												name: 'operator',
+											} );
+										} }
+									/>
+									<SelectControl
+										label="Field"
+										value={ currentItem.field }
+										options={ formFields }
+										onChange={ newValue => {
+											changeCurrentItem( {
+												value: newValue,
+												name: 'field',
+											} );
+										} }
+									/>
+									<TextareaControl
+										label="Value to Compare"
+										value={ currentItem.compare }
+										onChange={ newValue => {
+											changeCurrentItem( {
+												value: newValue,
+												name: 'compare',
+											} );
+										} }
+									/>
+								</>;
+							} }
+						</RepeaterWithState>;
+					} }
+
 				</ActionModal> }
 			</PluginDocumentSettingPanel>
 		)

@@ -131,9 +131,10 @@
 
 .jet-form-editor__macros-inserter {
     position: absolute;
-    right: 10px;
-    top: 13px;
+    right: 1px;
+    top: 14px;
     z-index: 20;
+    background: whitesmoke;
 }
 
 .jet-form-dynamic-preset {
@@ -522,4 +523,14 @@
 }
 .jet-form-builder__repeater-component-item .repeater-item__remove {
     flex: 1;
+}
+
+.jet-form-builder__repeater-component-item .repeater__item__header .repeater-action-button {
+    margin-right: 1em;
+}
+
+.jet-form-builder__repeater-component-item .repeater__item__header span.repeater-item-title {
+    font-size: 1.5em;
+    font-style: italic;
+    color: #8e8e8e;
 }

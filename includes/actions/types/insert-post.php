@@ -39,6 +39,7 @@ class Insert_Post extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
+		var_dump( 32423443 ); die;
 		$post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
 
 		if ( ! $post_type || ! post_type_exists( $post_type ) ) {

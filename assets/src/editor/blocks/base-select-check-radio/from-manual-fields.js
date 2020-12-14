@@ -90,67 +90,67 @@ class FromManualFields extends wp.element.Component {
 				{ this.state.showManualModal && <ActionModal
 					title={ 'Edit Manual Options' }
 					onRequestClose={ this.closeModal }
-					onCancelClick={ this.onClickCancel }
-					onUpdateClick={ this.onClickUpdate }
 				>
-					<RepeaterWithState
-						items={ this.getOptions() }
-						addNewButtonLabel={ __( 'Add New Option' ) }
-						newItem={ addNewOption }
-						onSaveItems={ this.onUpdateOptions }
-						onUnMount={ this.closeModal }
-						isSaveAction={ this.state.isUpdate }
+					{ ( { actionClick, onRequestClose } ) => {
+						return <RepeaterWithState
+							items={ this.getOptions() }
+							onSaveItems={ this.onUpdateOptions }
+							newItem={ addNewOption }
+							onUnMount={ onRequestClose }
+							isSaveAction={ actionClick }
+							addNewButtonLabel={ __( 'Add New Option' ) }
+							ItemHeading={ ( { currentItem, index } ) => {
+								return `#${ index + 1 } ${ currentItem.label }`;
+							} }
+						>
+							{ ( { currentItem, changeCurrentItem } ) => {
+								return <div
+									className="jet-form-builder__flex-controls"
+								>
+									<div className='repeater-item-column'>
+										<TextControl
+											key='manual_label'
+											label={ __( 'Label' ) }
+											value={ currentItem.label }
+											onChange={ newValue => {
+												changeCurrentItem( {
+													value: newValue,
+													name: 'label',
+												} );
+											} }
+										/>
+									</div>
+									<div className='repeater-item-column'>
+										<TextControl
+											key='manual_value'
+											label={ __( 'Value' ) }
+											value={ currentItem.value }
+											onChange={ ( newValue ) => {
+												changeCurrentItem( {
+													value: newValue,
+													name: 'value',
+												} );
+											} }
+										/>
+									</div>
+									<div className='repeater-item-column'>
+										<TextControl
+											key='manual_calculate'
+											label={ __( 'Calculate' ) }
+											value={ currentItem.calculate }
+											onChange={ ( newValue ) => {
+												changeCurrentItem( {
+													value: newValue,
+													name: 'calculate',
+												} );
+											} }
+										/>
+									</div>
+								</div>;
+							} }
+						</RepeaterWithState>
+					} }
 
-						ItemHeading={ ( { currentItem, index } ) => {
-							return `#${ index } ${ currentItem.label }`;
-						} }
-						ItemTemplate={ ( { currentItem, changeCurrentItem } ) => {
-
-							return <div
-								className="jet-form-builder__flex-controls"
-							>
-								<div className='repeater-item-column'>
-									<TextControl
-										key='manual_label'
-										label={ __( 'Label' ) }
-										value={ currentItem.label }
-										onChange={ newValue => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'label',
-											} );
-										} }
-									/>
-								</div>
-								<div className='repeater-item-column'>
-									<TextControl
-										key='manual_value'
-										label={ __( 'Value' ) }
-										value={ currentItem.value }
-										onChange={ ( newValue ) => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'value',
-											} );
-										} }
-									/>
-								</div>
-								<div className='repeater-item-column'>
-									<TextControl
-										key='manual_calculate'
-										label={ __( 'Calculate' ) }
-										value={ currentItem.calculate }
-										onChange={ ( newValue ) => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'calculate',
-											} );
-										} }
-									/>
-								</div>
-							</div>;
-						} }
-					/>
 				</ActionModal> }
 			</div>
 		);

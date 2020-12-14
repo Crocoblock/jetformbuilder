@@ -11,15 +11,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
-		this.state = { value: {} };
-	}
-
-	updateValue() {
-		if ( this.props.encode ) {
-			this.props.onChange( JSON.stringify( this.state.value ) );
-		} else {
-			this.props.onChange( this.state.value );
-		}
+		this.state = { value: this.parseValue() };
 	}
 
 	onChangeValue( newValue, name ) {
@@ -28,34 +20,37 @@ const JetFormPresetEditor = class extends wp.element.Component {
 				...this.state.value,
 				[ name ]: newValue
 			}
-		}, () => this.updateValue() );
+		} );
 	};
 
+	parseValue() {
+		let value = {};
+
+		if ( 'object' === typeof this.props.value ) {
+			value = { ...this.props.value };
+		} else if ( this.props.value && 'string' === typeof this.props.value ) {
+			value = JSON.parse( this.props.value );
+		}
+		value.jet_preset = true;
+
+		return value;
+	}
 
 	componentDidMount() {
+		console.log( this.props.isSaveAction );
+		if ( true === this.props.isSaveAction ) {
+			const cloneItems = { ...this.props.value };
 
-		if ( this.props.decode ) {
-
-			let value;
-
-			if ( ! this.props.value ) {
-				value = '{}';
-			} else {
-				value = this.props.value;
+			if ( this.props.onSavePreset ) {
+				this.props.onSavePreset( JSON.stringify( cloneItems ) );
 			}
+			this.props.onUnMount();
 
-			value = {
-				...JSON.parse( value ),
-				jet_preset: true,
-			};
-
-			this.setState( { value } );
-
-		} else if ( this.props.value ) {
-			this.setState( { value: this.props.value } );
+		} else if ( false === this.props.isSaveAction ) {
+			this.props.onUnMount();
 		}
-
 	}
+
 
 	render() {
 

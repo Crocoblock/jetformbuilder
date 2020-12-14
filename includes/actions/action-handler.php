@@ -4,6 +4,8 @@ namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -66,6 +68,7 @@ class Action_Handler {
 				 * in action hook
 				 */
 				$available_actions[ $id ]->settings = $form_action['settings'];
+				$available_actions[ $id ]->conditions = $form_action['conditions'];
 
 				$this->form_actions[ $id ] = $available_actions[ $id ];
 			}
@@ -117,6 +120,15 @@ class Action_Handler {
 		foreach ( $this->form_actions as $index => $action ) {
 
 			$this->current_position = $index;
+
+			/**
+			 * Check conditions for action
+			 */
+			try {
+				$action->condition( $this );
+			} catch ( Condition_Exception $exception ) {
+				continue;
+			}
 			/**
 			 * Process single action
 			 */

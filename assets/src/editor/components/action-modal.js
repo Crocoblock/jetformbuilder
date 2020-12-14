@@ -2,9 +2,9 @@ export default function ActionModal( {
 										 onRequestClose,
 										 children,
 										 title,
-										 onCancelClick,
+										 classNames = [],
 										 onUpdateClick,
-										 classNames = []
+										 onCancelClick
 									 } ) {
 
 	const {
@@ -13,7 +13,27 @@ export default function ActionModal( {
 		Modal,
 	} = wp.components;
 
-	const modalClasses = [ 'jet-form-edit-modal', ...classNames ].join( ' ' );
+	const {
+		useState,
+		useEffect
+	} = wp.element;
+
+	const modalClasses = ['jet-form-edit-modal', ...classNames].join( ' ' );
+
+	const [actionClick, setActionClick] = useState( null );
+
+	const updateClick = () => {
+		if ( onUpdateClick ) {
+			onUpdateClick();
+		}
+		setActionClick( true )
+	}
+	const cancelClick = () => {
+		if ( onCancelClick ) {
+			onCancelClick();
+		}
+		setActionClick( false );
+	}
 
 	return <Modal
 		onRequestClose={ onRequestClose }
@@ -27,21 +47,22 @@ export default function ActionModal( {
 		</div> }
 		{ children && <div>
 			<div className="jet-form-edit-modal__content">
-				{ children }
+				{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
+				{ 'function' !== typeof children && children }
 			</div>
 			<ButtonGroup
 				className="jet-form-edit-modal__actions"
 			>
 				<Button
 					isPrimary
-					onClick={ onUpdateClick }
+					onClick={ updateClick }
 				>Update</Button>
 				<Button
 					isSecondary
 					style={ {
 						margin: '0 0 0 10px'
 					} }
-					onClick={ onCancelClick }
+					onClick={ cancelClick }
 				>Cancel</Button>
 			</ButtonGroup>
 		</div> }

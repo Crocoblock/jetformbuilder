@@ -13,7 +13,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder();
 
 		this.state = {
-			className: [this.getClassNameValidateButton()],
+			className: [this.getclassNameValidateButton()],
 		};
 	}
 
@@ -60,7 +60,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 
 	}
 
-	getClassNameValidateButton() {
+	getclassNameValidateButton() {
 		const settings = this.props.settings;
 
 		if ( true === settings.isValidAPI ) {

@@ -54,6 +54,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 		return ( <div key="send_email">
 			<SelectControl
 				key="mail_to"
+				labelPosition="side"
+				className="full-width"
 				value={ settings.mail_to }
 				options={ window.jetFormEmailData.mailTo }
 				label={ window.jetFormEmailData.labels.mail_to }
@@ -83,6 +85,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			/> }
 			<SelectControl
 				key="reply_to"
+				labelPosition="side"
+				className="full-width"
 				value={ settings.reply_to }
 				options={ window.jetFormEmailData.replyTo }
 				label={ window.jetFormEmailData.labels.reply_to }
@@ -102,6 +106,7 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			/> }
 			{ 'form' === settings.reply_to && <SelectControl
 				key="reply_from_field"
+				labelPosition="side"
 				value={ settings.reply_from_field }
 				options={ formFields }
 				label={ window.jetFormEmailData.labels.reply_from_field }

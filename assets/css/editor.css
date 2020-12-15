@@ -85,7 +85,11 @@
 }
 
 .jet-form-edit-modal .components-flex__item {
-    flex: 0 0 193px;
+    flex: 0 0 150px;
+}
+
+.jet-form-edit-modal .jet-post-field-control .components-base-control:nth-child(2) .components-select-control .components-flex__item {
+    display: none;
 }
 
 .jet-form-edit-modal .fields-map-control .components-base-control__field {
@@ -100,7 +104,7 @@
 
 .jet-form-edit-modal .components-base-control__label {
     flex: 0 0 200px;
-    max-width: 200px;
+    max-width: 157px;
 }
 
 .jet-form-edit-modal .components-base-control .components-base-control__label {
@@ -277,15 +281,20 @@
 
 .jet-form-edit-modal__content .input_with_button {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .jet-form-edit-modal__content .components-base-control__field > .input_with_button {
-    width: 45%;
+    width: 55%;
 }
 
 .jet-form-edit-modal__content .input_with_button .components-base-control {
     margin-right: 1em;
+}
+
+.input_with_button select.components-select-control__input {
+    min-width: 26em;
 }
 
 .jet-form-builder__field-wrap.range-wrap fieldset.components-input-control__backdrop {
@@ -436,6 +445,7 @@
 
 .jet-form-edit-modal .jet-post-field-control {
     display: flex;
+    position: relative;
 }
 
 .jet-form-edit-modal .jet-post-field-control .components-base-control__field {
@@ -444,7 +454,8 @@
 }
 
 .jet-form-edit-modal .jet-post-field-control .components-base-control:nth-child(2) {
-    margin-left: 1em;
+    position: absolute;
+    left: 148%;
 }
 
 .jet-field-map__row-label .fields-map__required {
@@ -494,6 +505,7 @@
     left: 15px;
     right: unset;
 }
+
 .rtl .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
     margin-left: unset;
     margin-right: 10px;
@@ -505,7 +517,7 @@
     margin: 20px -24px -24px;
     padding: 18px 24px 20px;
     background-color: #fff;
-    width: calc( 100% + 48px );
+    width: calc(100% + 48px);
     border-top: 1px solid #ddd;
 }
 
@@ -525,6 +537,7 @@
     flex: 1 1 100%;
     background-color: #f9f9f9;
 }
+
 .jet-form-builder__repeater-component-item .repeater-item__remove {
     flex: 1;
 }
@@ -537,4 +550,23 @@
     font-size: 1.1em;
     font-style: italic;
     color: #8e8e8e;
+}
+
+.jet-form-edit-modal .input-with-button .components-input-control__container,
+.jet-form-edit-modal .input-with-button .components-text-control__input {
+    width: 30em;
+    margin-right: 1em;
+}
+
+.jet-form-edit-modal .with-wrap .components-base-control__field {
+    flex-wrap: wrap;
+}
+
+.jet-form-edit-modal .margin-bottom--small {
+    margin-bottom: 0.7em;
+}
+
+.jet-form-edit-modal .full-width select {
+    max-width: 100vw;
+    width: 100%;
 }

@@ -89,7 +89,6 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 							className="jet-user-meta__row"
 							key={ 'user_meta_' + field.name + index }
 						>
-							<div className="jet-fields-map__item-field">{ field.name }</div>
 							<JetFieldsMapControl
 								key={ field.name + index }
 								fieldValue={ fieldData }
@@ -108,7 +107,9 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 			</BaseControl>
 			<SelectControl
 				label={ this.data.labels.user_role }
+				labelPosition="side"
 				key="user_role_list"
+				className="full-width"
 				value={ settings.user_role }
 				options={ this.data.userRoles }
 				onChange={ ( newValue ) => {

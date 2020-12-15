@@ -79,44 +79,30 @@ window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction ext
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="register_user">
 
-			<BaseControl
+			<SelectControl
+				key="options_page_list"
+				className="full-width"
 				label={ this.data.labels.options_page }
-				key="user_role"
-			>
-				<div className='options-page-select'>
-					<SelectControl
-						key="options_page_list"
-						value={ settings.options_page }
-						options={ this.data.optionsPages }
-						onChange={ ( newValue ) => {
-							onChangeSetting( newValue, 'options_page' );
-						} }
-					/>
-				</div>
-
-
-			</BaseControl>
-
+				labelPosition="side"
+				value={ settings.options_page }
+				options={ this.data.optionsPages }
+				onChange={ ( newValue ) => {
+					onChangeSetting( newValue, 'options_page' );
+				} }
+			/>
 			<BaseControl
-				label={ this.data.labels.user_meta }
+				label={ this.data.labels.options_map }
 				key='options_meta_list'
 			>
 				<div className='jet-user-meta-rows'>
-					{ this.fields.map( ( { name }, index ) => {
-						return <div
-							className="jet-options-meta__row"
-							key={ 'options_meta_' + name + index }
-						>
-							<TextControl
-								key={ name + index }
-								label={ name }
-								value={ this.getFieldMeta( name ) }
-								onChange={ newVal => {
-									onChangeMetaFieldMap( newVal, name )
-								} }
-							/>
-						</div>;
-					} ) }
+					{ this.fields.map( ( { name }, index ) => <TextControl
+						key={ 'options_meta_' + name + index }
+						label={ name }
+						value={ this.getFieldMeta( name ) }
+						onChange={ newVal => {
+							onChangeMetaFieldMap( newVal, name )
+						} }
+					/> ) }
 				</div>
 			</BaseControl>
 

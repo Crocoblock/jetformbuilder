@@ -57,6 +57,8 @@ window.jetFormDefaultActions[ 'insert_post' ] = class InsertPostAction extends w
 		return ( <div key="insert_post">
 			<SelectControl
 				key="post_type"
+				className="full-width"
+				labelPosition="side"
 				value={ settings.post_type }
 				options={ window.jetFormInsertPostData.postTypes }
 				label={ window.jetFormInsertPostData.labels.post_type }
@@ -67,6 +69,8 @@ window.jetFormDefaultActions[ 'insert_post' ] = class InsertPostAction extends w
 			/>
 			<SelectControl
 				key="post_status"
+				className="full-width"
+				labelPosition="side"
 				value={ settings.post_status }
 				options={ window.jetFormInsertPostData.postStatuses }
 				label={ window.jetFormInsertPostData.labels.post_status }
@@ -93,7 +97,6 @@ window.jetFormDefaultActions[ 'insert_post' ] = class InsertPostAction extends w
 							className="jet-fields-map__row"
 							key={ 'field_map_' + field.name + index }
 						>
-							<div className="jet-fields-map__item-field">{ field.name }</div>
 							<JetFieldsMapControl
 								key={ field.name + index }
 								fieldValue={ fieldData }

@@ -110,86 +110,72 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 		return ( <React.Fragment key="activecampaign">
 			<BaseControl
 				label={ this.data.labels.api_data }
+				className='input-with-button with-wrap'
 				key={ 'activecampaign_input_key' }
 			>
-				<div>
-					<div className='input_with_button'>
-						<div>
-							<label>{ this.data.labels.api_key }</label>
-							<TextControl
-								key='api_key'
-								value={ settings.api_key }
-								onChange={ newVal => {
-									this.onChangeSetting( newVal, 'api_key' )
-								} }
-							/>
-						</div>
-						<div>
-							<label>{ this.data.labels.api_url }</label>
-							<TextControl
-								key='api_url'
-								value={ settings.api_url }
-								onChange={ newVal => {
-									this.onChangeSetting( newVal, 'api_url' )
-								} }
-							/>
-						</div>
-					</div>
-					<div>{ this.data.help.api_key_link_prefix } <a
-						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
-					{ ( settings.api_key && settings.api_url ) && <Button
-						key={ 'validate_api_key' }
-						isPrimary
-						onClick={ this.validateActiveCampaignData }
-						className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
-					>
-						<i className="dashicons"/>
-						{ this.data.labels.validate_api_key }
-					</Button> }
+				<TextControl
+					key='api_url'
+					value={ settings.api_url }
+					help={ this.data.labels.api_url }
+					onChange={ newVal => {
+						this.onChangeSetting( newVal, 'api_url' )
+					} }
+				/>
+				<TextControl
+					key='api_key'
+					help={ this.data.labels.api_key }
+					value={ settings.api_key }
+					onChange={ newVal => {
+						this.onChangeSetting( newVal, 'api_key' )
+					} }
+				/>
+				{ ( settings.api_key && settings.api_url ) && <Button
+					key={ 'validate_api_key' }
+					isPrimary
+					onClick={ this.validateActiveCampaignData }
+					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
+				>
+					<i className="dashicons"/>
+					{ this.data.labels.validate_api_key }
+				</Button> }
+				<div/>
+				<div>{ this.data.help.api_key_link_prefix } <a
+					href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a>
 				</div>
 			</BaseControl>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
-					label={ this.data.labels.list_id }
-					key={ 'activecampaign_select_lists' }
+					key='activecampaign_input_key'
+					className='input-with-button'
 				>
-					<div>
-						<SelectControl
-							key='list_id'
-							value={ settings.list_id }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'list_id' )
-							} }
-							options={ this.getLists() }
-						/>
-						<Button
-							key={ 'update_list_ids' }
-							isPrimary
-							onClick={ this.getActiveCampaignData }
-						>
-							{ this.data.labels.update_list_ids }
-						</Button>
-					</div>
-
+					<SelectControl
+						className="full-width"
+						key='activecampaign_select_lists'
+						label={ this.data.labels.list_id }
+						labelPosition="side"
+						value={ settings.list_id }
+						onChange={ newVal => {
+							this.onChangeSetting( newVal, 'list_id' )
+						} }
+						options={ this.getLists() }
+					/>
+					<Button
+						key={ 'update_list_ids' }
+						isPrimary
+						onClick={ this.getActiveCampaignData }
+					>
+						{ this.data.labels.update_list_ids }
+					</Button>
 				</BaseControl>
-
-				<BaseControl
+				<TextControl
+					key='activecampaign_tags'
 					label={ this.data.labels.tags }
-					key={ 'activecampaign_tags' }
-				>
-					<div>
-						<TextControl
-							key='tags'
-							value={ settings.tags }
-							help={ this.data.help.tags }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'tags' )
-							} }
-						/>
-					</div>
-
-				</BaseControl>
-
+					value={ settings.tags }
+					help={ this.data.help.tags }
+					onChange={ newVal => {
+						this.onChangeSetting( newVal, 'tags' )
+					} }
+				/>
 				<BaseControl
 					label={ this.data.labels.fields_map }
 					key='activecampaign_fields_map'
@@ -202,9 +188,10 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 								key={ 'user_meta_' + fieldName + index }
 							>
 								<SelectControl
+									className="full-width"
 									key={ fieldName + index }
 									label={ fieldLabel }
-									//labelPosition={'side'}
+									labelPosition="side"
 									value={ this.getFieldDefault( fieldName ) }
 									onChange={ value => {
 										this.onChangeFieldMap( value, fieldName )

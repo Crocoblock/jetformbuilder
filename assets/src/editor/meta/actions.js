@@ -1,6 +1,8 @@
 import ActionModal from "../components/action-modal";
 import RepeaterWithState from "../components/repeater-with-state";
 import Tools from "../tools";
+import JetFormPresetEditor from "../blocks/controls/preset-editor";
+import FieldWithPreset from "../components/field-with-preset";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -32,47 +34,47 @@ const conditionOperators = [
 	{ label: 'Contain text', value: 'contain' },
 ];
 
+const {
+	TextControl,
+	SelectControl,
+	Button,
+	ButtonGroup,
+	Card,
+	CardBody,
+	Flex,
+	FlexItem,
+	DropdownMenu,
+	Panel,
+	Modal,
+	ToggleControl,
+	TextareaControl,
+} = wp.components;
+
+const {
+	registerPlugin
+} = wp.plugins;
+
+const {
+	PluginDocumentSettingPanel
+} = wp.editPost;
+
+const {
+	useSelect,
+	useDispatch
+} = wp.data;
+
+const {
+	useState,
+	useEffect
+} = wp.element;
+
+const {
+	withState
+} = wp.compose;
+
+const { __ } = wp.i18n;
+
 function ActionsMeta() {
-
-	const {
-		TextControl,
-		SelectControl,
-		Button,
-		ButtonGroup,
-		Card,
-		CardBody,
-		Flex,
-		FlexItem,
-		DropdownMenu,
-		Panel,
-		Modal,
-		ToggleControl,
-		TextareaControl,
-	} = wp.components;
-
-	const {
-		registerPlugin
-	} = wp.plugins;
-
-	const {
-		PluginDocumentSettingPanel
-	} = wp.editPost;
-
-	const {
-		useSelect,
-		useDispatch
-	} = wp.data;
-
-	const {
-		useState,
-		useEffect
-	} = wp.element;
-
-	const {
-		withState
-	} = wp.compose;
-
-	const { __ } = wp.i18n;
 
 	const DocumentSettingPanel = () => {
 
@@ -336,6 +338,7 @@ function ActionsMeta() {
 									/>
 									<SelectControl
 										label="Operator"
+										labelPosition="side"
 										value={ currentItem.operator }
 										options={ conditionOperators }
 										onChange={ newValue => {
@@ -347,6 +350,7 @@ function ActionsMeta() {
 									/>
 									<SelectControl
 										label="Field"
+										labelPosition="side"
 										value={ currentItem.field }
 										options={ formFields }
 										onChange={ newValue => {
@@ -356,16 +360,31 @@ function ActionsMeta() {
 											} );
 										} }
 									/>
-									<TextareaControl
-										label="Value to Compare"
-										value={ currentItem.compare }
-										onChange={ newValue => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'compare',
-											} );
-										} }
-									/>
+									<FieldWithPreset
+										ModalEditor={ ( { actionClick, onRequestClose } ) => <JetFormPresetEditor
+											value={ currentItem.compare }
+											isSaveAction={ actionClick }
+											onSavePreset={ newValue => {
+												changeCurrentItem( {
+													value: newValue,
+													name: 'compare',
+												} );
+											} }
+											onUnMount={ onRequestClose }
+											availableFields={ false }
+										/> }
+									>
+										<TextareaControl
+											label="Value to Compare"
+											value={ currentItem.compare }
+											onChange={ newValue => {
+												changeCurrentItem( {
+													value: newValue,
+													name: 'compare',
+												} );
+											} }
+										/>
+									</FieldWithPreset>
 								</>;
 							} }
 						</RepeaterWithState>;

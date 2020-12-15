@@ -140,6 +140,8 @@ class JetFieldsMapControl extends wp.element.Component {
 			<div className="jet-post-field-control">
 				<SelectControl
 					key={ 'field_type_' + this.props.fieldName + this.index }
+					label={ this.props.fieldName }
+					labelPosition="side"
 					value={ this.state.type }
 					onChange={ this.onChangeType }
 					options={ this.fieldTypes }
@@ -154,11 +156,12 @@ class JetFieldsMapControl extends wp.element.Component {
 					style={ { width: '200px' } }
 				/> }
 				{ ( this.termsProp === this.state.type ) && <SelectControl
+					className='jet-control-without-label'
 					key={ 'field_tax_' + this.props.fieldName + this.index }
 					value={ this.props.fieldValue }
 					onChange={ this.onChangeValue }
 					options={ this.preparedTaxes }
-					style={ { width: '160px' } }
+					style={ { width: '200px' } }
 				/> }
 			</div>
 		</div>;

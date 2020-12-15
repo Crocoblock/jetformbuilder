@@ -76,68 +76,67 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="getresponse">
 			<BaseControl
-				label={ this.data.labels.api_key }
 				key={ 'getresponse_input_key' }
+				className="input-with-button"
 			>
-				<div>
-					<div className='input_with_button'>
-						<TextControl
-							key='api_key'
-							value={ settings.api_key }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'api_key' )
-							} }
-						/>
-						<Button
-							key={ 'validate_api_key' }
-							isPrimary
-							onClick={ this.validateAPIKey }
-							className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
-						>
-							<i className="dashicons"/>
-							{ this.data.labels.validate_api_key }
-						</Button>
-					</div>
-					<div>{ this.data.help.api_key_link_prefix } <a
-						href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a></div>
-				</div>
+				<TextControl
+					key='api_key'
+					label={ this.data.labels.api_key }
+					value={ settings.api_key }
+					onChange={ newVal => {
+						this.onChangeSetting( newVal, 'api_key' )
+					} }
+				/>
+				<Button
+					key={ 'validate_api_key' }
+					isPrimary
+					onClick={ this.validateAPIKey }
+					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
+				>
+					<i className="dashicons"/>
+					{ this.data.labels.validate_api_key }
+				</Button>
 			</BaseControl>
+			<div/>
+			<div className='margin-bottom--small'>{ this.data.help.api_key_link_prefix } <a
+				href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a>
+			</div>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
-					label={ this.data.labels.list_id }
-					key={ 'getresponse_select_lists' }
+					key='getresponse_select_lists'
+					className='input-with-button'
 				>
-					<div className='input_with_button'>
-						<SelectControl
-							key='list_id'
-							value={ settings.list_id }
-							onChange={ newVal => {
-								this.onChangeSetting( newVal, 'list_id' )
-							} }
-							options={ this.getLists() }
-						/>
-						<Button
-							key={ 'update_list_ids' }
-							isPrimary
-							onClick={ this.getApiData }
-						>
-							{ this.data.labels.update_list_ids }
-						</Button>
-					</div>
+					<SelectControl
+						key='list_id'
+						className="full-width"
+						label={ this.data.labels.list_id }
+						labelPosition="side"
+						value={ settings.list_id }
+						onChange={ newVal => {
+							this.onChangeSetting( newVal, 'list_id' )
+						} }
+						options={ this.getLists() }
+					/>
+					<Button
+						key={ 'update_list_ids' }
+						isPrimary
+						onClick={ this.getApiData }
+					>
+						{ this.data.labels.update_list_ids }
+					</Button>
 				</BaseControl>
 				<BaseControl
-					label={ this.data.labels.day_of_cycle }
 					key={ 'getresponse_day_of_cycle' }
 				>
-					<div>
-						<NumberControl
-							key='day_of_cycle'
-							value={ settings.day_of_cycle }
-							onChange={ newVal => {
-								this.onChangeSetting( Number( newVal ), 'day_of_cycle' )
-							} }
-						/>
-					</div>
+					<NumberControl
+						key='day_of_cycle'
+						label={ this.data.labels.day_of_cycle }
+						labelPosition="side"
+						value={ settings.day_of_cycle }
+						onChange={ newVal => {
+							this.onChangeSetting( Number( newVal ), 'day_of_cycle' )
+						} }
+					/>
 				</BaseControl>
 				<BaseControl
 					label={ this.data.labels.fields_map }
@@ -150,6 +149,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 								field={ [fieldName, fieldData] }
 							>
 								<SelectControl
+									className="full-width"
 									key={ fieldName + index }
 									value={ this.getFieldDefault( fieldName ) }
 									onChange={ value => {

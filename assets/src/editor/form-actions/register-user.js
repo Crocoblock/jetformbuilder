@@ -53,6 +53,7 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 							field={ [value, data] }
 						>
 							<SelectControl
+								className="full-width"
 								key={ `form_fields_${ value }` }
 								value={ this.getFieldDefault( value ) }
 								options={ this.formFieldsList }
@@ -64,23 +65,17 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 					} ) }
 				</div>
 			</BaseControl>
-			<BaseControl
+			<SelectControl
+				key="user_role_list"
+				className="full-width"
 				label={ this.data.labels.user_role }
-				key="user_role"
-			>
-				<div className='user-role-select'>
-					<SelectControl
-						key="user_role_list"
-						value={ settings.user_role }
-						options={ this.data.userRoles }
-						onChange={ ( newValue ) => {
-							this.onChangeSetting( newValue, 'user_role' );
-						} }
-					/>
-				</div>
-
-
-			</BaseControl>
+				labelPosition="side"
+				value={ settings.user_role }
+				options={ this.data.userRoles }
+				onChange={ ( newValue ) => {
+					this.onChangeSetting( newValue, 'user_role' );
+				} }
+			/>
 			<BaseControl
 				label={ this.data.labels.user_meta }
 				key='user_meta_list'

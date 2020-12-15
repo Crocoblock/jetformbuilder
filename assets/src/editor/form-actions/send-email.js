@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import Tools from "../tools";
+import MacrosInserter from "../components/macros-inserter";
 
 const {
 	TextControl,
@@ -53,6 +54,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 		return ( <div key="send_email">
 			<SelectControl
 				key="mail_to"
+				labelPosition="side"
+				className="full-width"
 				value={ settings.mail_to }
 				options={ window.jetFormEmailData.mailTo }
 				label={ window.jetFormEmailData.labels.mail_to }
@@ -82,6 +85,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			/> }
 			<SelectControl
 				key="reply_to"
+				labelPosition="side"
+				className="full-width"
 				value={ settings.reply_to }
 				options={ window.jetFormEmailData.replyTo }
 				label={ window.jetFormEmailData.labels.reply_to }
@@ -101,6 +106,7 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			/> }
 			{ 'form' === settings.reply_to && <SelectControl
 				key="reply_from_field"
+				labelPosition="side"
 				value={ settings.reply_from_field }
 				options={ formFields }
 				label={ window.jetFormEmailData.labels.reply_from_field }
@@ -146,48 +152,11 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 						onChangeValue( newValue, 'content' );
 					} }
 				/>
-				<div className="jet-form-editor__macros-inserter">
-					<Button
-						isTertiary
-						isSmall
-						icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-						label={ 'Insert macros' }
-						className="jet-form-editor__macros-trigger"
-						onClick={ () => {
-							this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
-						} }
-					/>
-					{ this.state.showMacrosPopover && (
-						<Popover
-							position={ 'bottom left' }
-						>
-							{ formFields.length && <PanelBody title={ 'Form Fields' }>
-								{ formFields.map( field => {
-									return <div key={ 'field_' + field.name }>
-										<Button
-											isLink
-											onClick={ () => {
-												insertMacros( field.name )
-											} }
-										>{ '%' + field.name + '%' }</Button>
-									</div>;
-								} ) }
-							</PanelBody> }
-							{ window.jetFormEmailData.customMacros && <PanelBody title={ 'Custom Macros' }>
-								{ window.jetFormEmailData.customMacros.map( ( macros ) => {
-									return <div key={ 'macros_' + macros }>
-										<Button
-											isLink
-											onClick={ () => {
-												insertMacros( macros )
-											} }
-										>{ '%' + macros + '%' }</Button>
-									</div>;
-								} ) }
-							</PanelBody> }
-						</Popover>
-					) }
-				</div>
+				<MacrosInserter
+					fields={ formFields }
+					onFieldClick={ insertMacros }
+					customMacros={ window.jetFormEmailData.customMacros }
+				/>
 			</div>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */

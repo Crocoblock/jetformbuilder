@@ -40,26 +40,17 @@ window.jetFormDefaultActions[ 'call_hook' ] = class CallHookAction extends wp.el
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="call_hook">
-
-			<BaseControl
+			<TextControl
+				key='hook_name'
 				label={ this.data.labels.hook_name }
-				key="call_hook_input"
-			>
-				<div className='options-page-select'>
-					<TextControl
-						key='hook_name'
-						value={ settings.hook_name }
-						onChange={ newVal => {
-							onChangeSetting( newVal, 'hook_name' )
-						} }
-					/>
-				</div>
-
-
-			</BaseControl>
-
+				value={ settings.hook_name }
+				onChange={ newVal => {
+					onChangeSetting( newVal, 'hook_name' )
+				} }
+			/>
 			<BaseControl
 				key='help_message'
+				className={'erwerer35345345'}
 			>
 				<div className='jet-call-hook-instruction'>
 					{ __( 'Called hook names:' ) }

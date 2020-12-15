@@ -61,86 +61,60 @@ window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction 
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="redirect_to_page">
-			<BaseControl
+			<SelectControl
+				className="full-width"
+				key='redirect_type'
 				label={ this.data.labels.redirect_type }
-				key="redirect_type_control"
-			>
-				<div className='redirect_type-control'>
-					<SelectControl
-						key='redirect_type'
-						value={ settings.redirect_type }
-						options={ this.data.redirect_types }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'redirect_type' )
-						} }
-					/>
-				</div>
-			</BaseControl>
-			{ 'static_page' === settings.redirect_type && <BaseControl
+				labelPosition="side"
+				value={ settings.redirect_type }
+				options={ this.data.redirect_types }
+				onChange={ newVal => {
+					this.onChangeSetting( newVal, 'redirect_type' )
+				} }
+			/>
+			<SelectControl
+				key='redirect_type'
+				className="full-width"
 				label={ this.data.labels.redirect_page }
-				key="redirect_page_control"
-			>
-				<div className='redirect_page-control'>
-					<SelectControl
-						key='redirect_type'
-						value={ settings.redirect_page }
-						options={ this.data.pages }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'redirect_page' )
-						} }
-					/>
-				</div>
-			</BaseControl> }
-
-			{ 'custom_url' === settings.redirect_type && <BaseControl
+				labelPosition="side"
+				value={ settings.redirect_page }
+				options={ this.data.pages }
+				onChange={ newVal => {
+					this.onChangeSetting( newVal, 'redirect_page' )
+				} }
+			/>
+			{ 'custom_url' === settings.redirect_type && <TextControl
+				key='redirect_url_control'
 				label={ this.data.labels.redirect_url }
-				key="redirect_url_control"
-			>
-				<div className='redirect_url-control'>
-					<TextControl
-						key='redirect_url'
-						value={ settings.redirect_url }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'redirect_url' )
-						} }
-					/>
-				</div>
-			</BaseControl> }
-
+				value={ settings.redirect_url }
+				onChange={ newVal => {
+					this.onChangeSetting( newVal, 'redirect_url' )
+				} }
+			/> }
 			<BaseControl
 				label={ this.data.labels.redirect_args }
 				key="redirect_args_control"
 			>
 				<div className='redirect_args-control'>
-					{ this.fields.map( ( { name } ) => {
-
-						return <CheckboxControl
+					{ this.fields.map( ( { name }, index ) => <CheckboxControl
+							key={ `checkbox_args_${ name }_${ index }` }
 							label={ name }
 							checked={ this.isChecked( name ) }
 							onChange={ newVal => {
 								this.onChangeRedirectArgs( newVal, name )
 							} }
 						/>
-					} ) }
+					) }
 				</div>
 			</BaseControl>
-
-			<BaseControl
+			<TextControl
+				key='redirect_hash_control'
 				label={ this.data.labels.redirect_hash }
-				key="redirect_hash_control"
-			>
-				<div className='redirect_hash-control'>
-					<TextControl
-						key='redirect_hash'
-						value={ settings.redirect_hash }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'redirect_hash' )
-						} }
-					/>
-				</div>
-			</BaseControl>
-
-
+				value={ settings.redirect_hash }
+				onChange={ newVal => {
+					this.onChangeSetting( newVal, 'redirect_hash' )
+				} }
+			/>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}

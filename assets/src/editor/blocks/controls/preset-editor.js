@@ -154,6 +154,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 									key={ data.name + index }
 									labelPosition="side"
 									options={ data.options }
+									className="full-width"
 									label={ data.label }
 									value={ this.state.value[ data.name ] }
 									onChange={ newVal => {
@@ -259,6 +260,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 									className={ 'jet-form-preset__row' }
 								>
 									<SelectControl
+										className="full-width"
 										key={ 'control_' + data.name + fIndex }
 										labelPosition="side"
 										options={ data.options }

@@ -45,13 +45,15 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 				key="user_fields_map"
 			>
 				<div className="jet-user-fields-map__list">
-					<span className={ 'description-controls' }>{ __( 'Set form fields names to to get user data from', 'jet-form-builder' ) }</span>
-					{ this.userFields.map( ( [ value, data ] ) => {
+					<span
+						className={ 'description-controls' }>{ __( 'Set form fields names to to get user data from', 'jet-form-builder' ) }</span>
+					{ this.userFields.map( ( [value, data] ) => {
 
 						return <WrapperRequiredControl
-							field={ [ value, data ] }
+							field={ [value, data] }
 						>
 							<SelectControl
+								className="full-width"
 								key={ `form_fields_${ value }` }
 								value={ this.getFieldDefault( value ) }
 								options={ this.formFieldsList }
@@ -63,29 +65,24 @@ window.jetFormDefaultActions[ 'register_user' ] = class RegisterUserAction exten
 					} ) }
 				</div>
 			</BaseControl>
-			<BaseControl
+			<SelectControl
+				key="user_role_list"
+				className="full-width"
 				label={ this.data.labels.user_role }
-				key="user_role"
-			>
-				<div className='user-role-select'>
-					<SelectControl
-						key="user_role_list"
-						value={ settings.user_role }
-						options={ this.data.userRoles }
-						onChange={ ( newValue ) => {
-							this.onChangeSetting( newValue, 'user_role' );
-						} }
-					/>
-				</div>
-
-
-			</BaseControl>
+				labelPosition="side"
+				value={ settings.user_role }
+				options={ this.data.userRoles }
+				onChange={ ( newValue ) => {
+					this.onChangeSetting( newValue, 'user_role' );
+				} }
+			/>
 			<BaseControl
 				label={ this.data.labels.user_meta }
 				key='user_meta_list'
 			>
 				<div className='jet-user-meta-rows'>
-					<span className={ 'description-controls' }>{ __( 'Set user meta fields to save appropriate form fields into', 'jet-form-builder' ) }</span>
+					<span
+						className={ 'description-controls' }>{ __( 'Set user meta fields to save appropriate form fields into', 'jet-form-builder' ) }</span>
 					{ this.fields.map( ( { name }, index ) => {
 						return <div
 							className="jet-user-meta__row"

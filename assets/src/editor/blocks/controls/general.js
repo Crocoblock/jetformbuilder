@@ -95,19 +95,15 @@ const JetFormGeneral = class extends wp.element.Component {
 									classNames={ ['width-60'] }
 									title={ 'Edit Preset' }
 								>
-									{ ( { actionClick, onRequestClose } ) => {
-										return <JetFormPresetEditor
+									{ ( { actionClick, onRequestClose } ) => <JetFormPresetEditor
 											value={ result[ data.key ] }
 											isSaveAction={ actionClick }
 											onSavePreset={ newVal => {
 												onChangeValue( newVal, data.key )
 											} }
 											onUnMount={ onRequestClose }
-											decode={ true }
-											encode={ true }
 											availableFields={ false }
-										/>;
-									} }
+									/> }
 								</ActionModal>
 							) }
 						</div>;

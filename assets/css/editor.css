@@ -84,6 +84,10 @@
     border-top: 1px solid #ddd;
 }
 
+.jet-form-edit-modal .components-flex__item {
+    flex: 0 0 193px;
+}
+
 .jet-form-edit-modal .fields-map-control .components-base-control__field {
     border: none;
     padding: 0 0 5px 0;

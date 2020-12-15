@@ -152,7 +152,7 @@ const JetFormPresetEditor = class extends wp.element.Component {
 							>
 								<SelectControl
 									key={ data.name + index }
-									labelPosition="top"
+									labelPosition="side"
 									options={ data.options }
 									label={ data.label }
 									value={ this.state.value[ data.name ] }

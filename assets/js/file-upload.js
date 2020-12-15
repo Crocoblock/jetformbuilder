@@ -54,7 +54,8 @@
 
 		},
 
-		deleteUpload: function() {
+		deleteUpload: function( e ) {
+
 			var $this   = $( this ),
 				$file   = $this.closest( '.jet-form-builder-file-upload__file' ),
 				$upload = $this.closest( '.jet-form-builder-file-upload' ),
@@ -64,7 +65,6 @@
 				fileID  = $file.data( 'id' ),
 				$errors = $upload.find( '.jet-form-builder-file-upload__errors' ),
 				format  = $file.data( 'format' );
-
 
 			if ( ! $errors.hasClass( 'is-hidden' ) ) {
 				$errors.html( '' ).addClass( 'is-hidden' );
@@ -154,9 +154,7 @@
 				}
 
 				event.target.value = '';
-
 			}
-
 		},
 
 		lockButtons: function( $upload ) {
@@ -201,11 +199,9 @@
 
 			if ( currentVal && '' !== currentVal ) {
 				currentVal = JSON.parse( currentVal );
-
 				if ( Array.isArray( currentVal ) && currentVal.length && limit < ( files.length + currentVal.length ) ) {
 					throw 'upload_limit';
 				}
-
 			}
 
 			if ( limit < files.length ) {

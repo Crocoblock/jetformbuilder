@@ -46,13 +46,12 @@ class File_Upload {
 		$data_args = array(
 			'max_files'         => 1,
 			'insert_attachment' => false,
-			'value_format'      => 'url',
+			'value_format'      => 'id',
 		);
 
 		foreach ( $data_args as $key => $value ) {
 			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
 		}
-
 		return sprintf( ' data-args="%s"', htmlspecialchars( json_encode( $data_args ) ) );
 	}
 
@@ -310,9 +309,9 @@ class File_Upload {
 	public function get_result_html( $field = array(), $files = array() ) {
 
 		if ( ! empty( $field['insert_attachment'] ) ) {
-			$result_format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'url';
+			$result_format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'id';
 		} else {
-			$result_format = 'url';
+			$result_format = 'id';
 		}
 
 		if ( empty( $files ) ) {

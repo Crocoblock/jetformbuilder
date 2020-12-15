@@ -79,6 +79,10 @@ class Hidden_Field extends Base {
 		return $value;
 	}
 
+	private function manual_input() {
+		return $this->block_attrs['hidden_value'];
+	}
+
 	/**
 	 * @param array $params
 	 *
@@ -252,15 +256,6 @@ class Hidden_Field extends Base {
 		$format = ! empty( $params['date_format'] ) ? $params['date_format'] : get_option( 'date_format' );
 
 		return date_i18n( $format );
-	}
-
-	/**
-	 * @param array $params
-	 *
-	 * @return int|string|void
-	 */
-	private function manual_input( $params = array() ) {
-		return ! empty( $args['default'] ) ? esc_attr( $args['default'] ) : 0;
 	}
 
 

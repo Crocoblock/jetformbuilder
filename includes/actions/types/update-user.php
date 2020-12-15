@@ -33,7 +33,7 @@ class Update_User extends Base {
 			if ( ! empty( $fields_map[ $field ] ) ) {
 				$prop = $fields_map[ $field ];
 
-				$data_map[ $prop ] = ! empty( $field_value ) ? $field_value : false;
+				$data_map[ $prop ] = ! empty( $field_value ) ? $field_value : '';
 			}
 		}
 
@@ -121,7 +121,7 @@ class Update_User extends Base {
 
 		}
 
-		$user = array_filter( $user );
+		//$user = array_filter( $user );
 
 		wp_update_user( $user );
 

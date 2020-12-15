@@ -152,7 +152,7 @@ function JetFormPresetEditor( {
 						>
 							<SelectControl
 								key={ data.name + index }
-								labelPosition="top"
+								labelPosition="side"
 								options={ data.options }
 								label={ data.label }
 								value={ stateValue[ data.name ] }

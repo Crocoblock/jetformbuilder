@@ -182,7 +182,8 @@
 }
 
 .jet-form-builder__flex-controls .repeater-item-column label {
-    flex: 0 0 75px;
+    flex: 0 0 1em;
+    margin-right: 1em;
 }
 
 .jet-form-builder__flex-controls .repeater-item-column input {

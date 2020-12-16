@@ -49,17 +49,17 @@ function MacrosInserter( {
 					} ) }
 				</PanelBody> }
 				{ customMacros && <PanelBody title={ 'Custom Macros' }>
-						{ customMacros.map( macros => {
-							return <div key={ 'macros_' + macros }>
-								<Button
-									isLink
-									onClick={ () => {
-										onFieldClick( macros )
-									} }
-								>{ '%' + macros + '%' }</Button>
-							</div>;
-						} ) }
-					</PanelBody> }
+					{ customMacros.map( macros => {
+						return <div key={ 'macros_' + macros }>
+							<Button
+								isLink
+								onClick={ () => {
+									onFieldClick( macros )
+								} }
+							>{ '%' + macros + '%' }</Button>
+						</div>;
+					} ) }
+				</PanelBody> }
 			</Popover>
 		) }
 	</div>;

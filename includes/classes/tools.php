@@ -87,7 +87,7 @@ class Tools {
 	public static function get_taxonomies_for_js() {
 		$taxonomies = get_taxonomies( array(), 'objects' );
 
-		return self::prepare_list_for_js( $taxonomies, 'name', 'label' );
+		return self::with_placeholder( self::prepare_list_for_js( $taxonomies, 'name', 'label' ) );
 	}
 
 	public static function get_generators_list_for_js() {
@@ -179,7 +179,7 @@ class Tools {
 				$result[ $role ] = $data['name'];
 			}
 
-			return $result;
+			return self::with_placeholder( $result );
 		}
 	}
 
@@ -220,6 +220,15 @@ class Tools {
 
 		return $result;
 
+	}
+
+	public static function with_placeholder( $array, $label = '--' ) {
+		return array_merge(
+			array(
+				array('label' => $label, 'value' => '' ),
+			),
+			$array
+		);
 	}
 
 	/**

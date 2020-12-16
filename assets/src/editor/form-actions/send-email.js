@@ -43,7 +43,7 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 
 		};
 
-		const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
+		const formFields = Tools.getFormFieldsBlocks();
 
 		const insertMacros = ( macros ) => {
 			var content = settings.content || '';
@@ -75,6 +75,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			/> }
 			{ 'form' === settings.mail_to && <SelectControl
 				key="from_field"
+				labelPosition="side"
+				className="full-width"
 				value={ settings.from_field }
 				options={ formFields }
 				label={ window.jetFormEmailData.labels.from_field }
@@ -107,6 +109,7 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			{ 'form' === settings.reply_to && <SelectControl
 				key="reply_from_field"
 				labelPosition="side"
+				className="full-width"
 				value={ settings.reply_from_field }
 				options={ formFields }
 				label={ window.jetFormEmailData.labels.reply_from_field }

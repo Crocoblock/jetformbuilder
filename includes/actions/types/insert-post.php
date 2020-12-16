@@ -218,7 +218,7 @@ class Insert_Post extends Base {
 	public function action_data( $editor, $handle ) {
 
 		wp_localize_script( $handle, 'jetFormInsertPostData', array(
-			'postTypes'        => Tools::get_post_types_for_js(),
+			'postTypes'        => Tools::get_post_types_for_js( array( 'label' => '--' ) ),
 			'taxonomies'       => Tools::get_taxonomies_for_js(),
 			'postStatuses'     => $this->get_post_statuses_for_options(),
 			'postFields'       => $this->get_post_fields_for_options(),
@@ -254,7 +254,7 @@ class Insert_Post extends Base {
 			);
 		}
 
-		return apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result );
+		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
 
 	}
 
@@ -299,11 +299,7 @@ class Insert_Post extends Base {
 	 */
 	public function get_post_fields_for_options() {
 
-		return apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
-			array(
-				'value' => '',
-				'label' => 'Select field...',
-			),
+		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
 			array(
 				'value' => 'ID',
 				'label' => 'Post ID',
@@ -324,7 +320,7 @@ class Insert_Post extends Base {
 				'value' => 'post_status',
 				'label' => 'Post Status',
 			),
-		) );
+		) ) );
 
 	}
 

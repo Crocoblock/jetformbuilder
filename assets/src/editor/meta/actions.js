@@ -373,6 +373,7 @@ function ActionsMeta() {
 											onUnMount={ onRequestClose }
 											availableFields={ false }
 										/> }
+										triggerClasses={ ['trigger--unset-margin-top'] }
 									>
 										<TextareaControl
 											label="Value to Compare"

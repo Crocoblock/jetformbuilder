@@ -80,5 +80,9 @@ class Condition_Helper {
 		return false;
 	}
 
+	private function get_parsed_value() {
+
+	}
+
 
 }

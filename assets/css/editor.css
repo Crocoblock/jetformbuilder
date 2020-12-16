@@ -148,10 +148,16 @@
 .jet-form-dynamic-preset {
     display: flex;
     align-items: flex-start;
+    position: relative;
 }
 
 .jet-form-dynamic-preset .components-base-control {
-    width: calc(100% - 31px);
+    width: 100%;
+}
+
+.jet-form-dynamic-preset .components-base-control__field input,
+.jet-form-dynamic-preset .components-base-control__field textarea {
+    padding-right: 36px;
 }
 
 .jet-form-dynamic-preset__trigger {
@@ -163,10 +169,19 @@
     justify-content: center;
     border-radius: 0 2px 2px 0;
     border: 1px solid #757575;
-    border-left: none;
+    border-right: none;
     margin: 26px 0 0 0;
     cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
 }
+
+.jet-form-dynamic-preset__trigger.trigger--unset-margin-top {
+    margin-top: unset;
+}
+
 
 .jet-form-dynamic-preset__trigger:hover svg path {
     fill: #007cba;

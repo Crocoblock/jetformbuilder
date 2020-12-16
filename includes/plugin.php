@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Frontend_Helper;
+use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -15,18 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Plugin {
 
-	/**
-	 * Instance.
-	 *
-	 * Holds the plugin instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 *
-	 * @var Plugin
-	 */
-	public static $instance = null;
+	use Instance_Trait;
 
 	public $post_type;
 	public $blocks;
@@ -37,26 +26,6 @@ class Plugin {
 	public $captcha;
 
 	public $is_activated_jet_sm;
-
-	/**
-	 * Instance.
-	 *
-	 * Ensures only one instance of the plugin class is loaded or can be loaded.
-	 *
-	 * @return Plugin An instance of the class.
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 *
-	 */
-	public static function instance() {
-
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
 
 	/**
 	 * Register autoloader.
@@ -116,5 +85,4 @@ class Plugin {
 	}
 
 }
-
 Plugin::instance();

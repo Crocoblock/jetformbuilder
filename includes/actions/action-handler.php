@@ -60,6 +60,7 @@ class Action_Handler {
 
 		foreach ( $form_actions as $form_action ) {
 			$id = $form_action['type'];
+			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
 
 			if ( isset( $available_actions[ $id ] ) ) {
 				/**
@@ -68,7 +69,7 @@ class Action_Handler {
 				 * in action hook
 				 */
 				$available_actions[ $id ]->settings = $form_action['settings'];
-				$available_actions[ $id ]->conditions = $form_action['conditions'];
+				$available_actions[ $id ]->conditions = $conditions;
 
 				$this->form_actions[ $id ] = $available_actions[ $id ];
 			}

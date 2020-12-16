@@ -5,6 +5,7 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Classes\Instance_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -18,6 +19,7 @@ class Live_Form {
 
 	use Attributes_Trait;
 	use Get_Template_Trait;
+	use Instance_Trait;
 
 	public $form_id = false;
 	private $form = false;
@@ -41,38 +43,6 @@ class Live_Form {
 	public $page = 0;
 	public $has_prev = false;
 	public $post;
-
-	/**
-	 * Instance.
-	 *
-	 * Holds the plugin instance.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 *
-	 * @var Plugin
-	 */
-	public static $instance = null;
-
-	/**
-	 * Instance.
-	 *
-	 * Ensures only one instance of the plugin class is loaded or can be loaded.
-	 *
-	 * @return Plugin An instance of the class.
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 */
-	public static function instance() {
-
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
 
 	/**
 	 * Create form instance

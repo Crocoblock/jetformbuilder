@@ -6,9 +6,9 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
-use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Presets\Form_Base_Preset;
 
 // If this file is called directly, abort.
 
@@ -229,9 +229,9 @@ class Form_Builder {
 	}
 
 	public function preset() {
-		Form_Preset::instance()->set_form_id( $this->form_id );
+		Form_Base_Preset::instance()->set_form_id( $this->form_id );
 
-		return Form_Preset::instance();
+		return Form_Base_Preset::instance();
 	}
 
 }

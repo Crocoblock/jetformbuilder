@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Admin;
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -138,11 +139,7 @@ class Editor {
 					'name'    => 'from',
 					'label'   => __( 'Source:', 'jet-form-builder' ),
 					'type'    => 'select',
-					'options' => array(
-						array(
-							'value' => '',
-							'label' => __( 'Select...', 'jet-form-builder' ),
-						),
+					'options' => Tools::with_placeholder( array(
 						array(
 							'value' => 'post',
 							'label' => __( 'Post', 'jet-form-builder' ),
@@ -151,13 +148,13 @@ class Editor {
 							'value' => 'user',
 							'label' => __( 'User', 'jet-form-builder' ),
 						),
-					)
+					) ),
 				),
 				array(
 					'name'      => 'post_from',
 					'label'     => __( 'Get post ID from:', 'jet-form-builder' ),
 					'type'      => 'select',
-					'options'   => array(
+					'options'   => Tools::with_placeholder( array(
 						array(
 							'value' => 'current_post',
 							'label' => __( 'Current post', 'jet-form-builder' ),
@@ -166,7 +163,7 @@ class Editor {
 							'value' => 'query_var',
 							'label' => __( 'URL Query Variable', 'jet-form-builder' ),
 						),
-					),
+					) ),
 					'condition' => array(
 						'field' => 'from',
 						'value' => 'post',
@@ -176,7 +173,7 @@ class Editor {
 					'name'      => 'user_from',
 					'label'     => __( 'Get user ID from:', 'jet-form-builder' ),
 					'type'      => 'select',
-					'options'   => array(
+					'options'   => Tools::with_placeholder( array(
 						array(
 							'value' => 'current_user',
 							'label' => __( 'Current user', 'jet-form-builder' ),
@@ -185,7 +182,7 @@ class Editor {
 							'value' => 'query_var',
 							'label' => __( 'URL Query Variable', 'jet-form-builder' ),
 						),
-					),
+					) ),
 					'condition' => array(
 						'field' => 'from',
 						'value' => 'user',
@@ -212,11 +209,7 @@ class Editor {
 					'name'             => 'prop',
 					'label'            => __( 'Post property', 'jet-form-builder' ),
 					'type'             => 'select',
-					'options'          => array(
-						array(
-							'value' => '',
-							'label' => __( '--', 'jet-form-builder' ),
-						),
+					'options'          => Tools::with_placeholder( array(
 						array(
 							'value' => 'ID',
 							'label' => __( 'Post ID', 'jet-form-builder' ),
@@ -245,7 +238,7 @@ class Editor {
 							'value' => 'post_terms',
 							'label' => __( 'Post Terms', 'jet-form-builder' ),
 						),
-					),
+					) ),
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'post'
@@ -255,12 +248,7 @@ class Editor {
 					'name'             => 'key',
 					'label'            => __( 'Taxonomy', 'jet-form-builder' ),
 					'type'             => 'select',
-					'options'          => array_merge( array(
-						array(
-							'value' => '',
-							'label' => __( 'Select taxonomy...', 'jet-form-builder' ),
-						)
-					), $this->get_taxonomies_list() ),
+					'options'          => Tools::with_placeholder( $this->get_taxonomies_list() ),
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'post'
@@ -287,11 +275,7 @@ class Editor {
 					'name'             => 'prop',
 					'label'            => __( 'User field', 'jet-form-builder' ),
 					'type'             => 'select',
-					'options'          => array(
-						array(
-							'value' => '',
-							'label' => __( '--', 'jet-form-builder' ),
-						),
+					'options'          => Tools::with_placeholder( array(
 						array(
 							'value' => 'ID',
 							'label' => __( 'User ID', 'jet-form-builder' ),
@@ -324,7 +308,7 @@ class Editor {
 							'value' => 'user_meta',
 							'label' => __( 'User Meta', 'jet-form-builder' ),
 						),
-					),
+					) ),
 					'parent_condition' => array(
 						'field' => 'from',
 						'value' => 'user'

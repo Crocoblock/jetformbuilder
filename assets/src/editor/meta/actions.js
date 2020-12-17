@@ -370,6 +370,7 @@ function ActionsMeta() {
 													name: 'compare',
 												} );
 											} }
+											excludeSources={ [ 'query_var' ] }
 											onUnMount={ onRequestClose }
 											availableFields={ false }
 										/> }

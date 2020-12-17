@@ -18,6 +18,7 @@ function JetFormPresetEditor( {
 								  onSavePreset,
 								  onUnMount,
 								  availableFields,
+								  excludeSources = [],
 							  } ) {
 
 	const parseValue = () => {
@@ -124,6 +125,15 @@ function JetFormPresetEditor( {
 
 	};
 
+	const excludeOptions = ( selectOptions ) => {
+		selectOptions.forEach( ( option, index ) => {
+			if ( excludeSources.includes( option.value ) ) {
+				selectOptions.splice( index, 1 );
+			}
+		} );
+		return selectOptions;
+	};
+
 
 	return ( <React.Fragment>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => {
@@ -153,7 +163,8 @@ function JetFormPresetEditor( {
 							<SelectControl
 								key={ data.name + index }
 								labelPosition="side"
-								options={ data.options }
+								className="full-width"
+								options={ excludeOptions( data.options ) }
 								label={ data.label }
 								value={ stateValue[ data.name ] }
 								onChange={ newVal => {
@@ -216,6 +227,7 @@ function JetFormPresetEditor( {
 											key={ 'control_' + field + data.name + index + fIndex }
 											options={ data.options }
 											//label={ data.label }
+											className="full-width"
 											value={ currentVal[ data.name ] }
 											onChange={ newVal => {
 												currentVal[ data.name ] = newVal;
@@ -261,6 +273,7 @@ function JetFormPresetEditor( {
 								<SelectControl
 									key={ 'control_' + data.name + fIndex }
 									labelPosition="side"
+									className="full-width"
 									options={ data.options }
 									label={ data.label }
 									value={ stateValue[ 'current_field_' + data.name ] }

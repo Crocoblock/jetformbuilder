@@ -41,7 +41,7 @@ class Form extends Base {
 	}
 
 	public function get_label_selector() {
-		return '.jet-form-builder__label-text';
+		return '.jet-form-builder__label';
 	}
 
 	public function get_required_selector() {

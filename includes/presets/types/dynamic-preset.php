@@ -30,7 +30,7 @@ class Dynamic_Preset extends Base_Preset {
 			return $this->result;
 		}
 
-		return array();
+		return $this->__get_values();
 	}
 
 	/**

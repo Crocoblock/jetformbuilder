@@ -16,14 +16,31 @@ abstract class Base_Source {
 		$this->preset_type = $preset_type;
 	}
 
-	abstract protected function can_get_preset();
+	protected function can_get_preset() {
+		return true;
+	}
 
-	abstract protected function set_prop();
+	public function __call( string $prop, array $arguments ) {
+		$source = $this->preset_type->source;
+
+		if ( isset( $source->data->$prop ) ) {
+			return $source->data->$prop;
+		} elseif ( isset( $source->$prop ) ) {
+			return $source->$prop;
+		}
+
+		return '';
+	}
+
+	protected function set_prop() {
+		$this->prop = ! empty( $this->preset_type->field_data['prop'] ) ? $this->preset_type->field_data['prop'] : 'post_title';
+	}
 
 	public function get_result_on_prop() {
 		if ( ! is_callable( array( $this, $this->prop ) ) ) {
 			return $this->preset_type->result;
 		}
+
 		return call_user_func( array( $this, $this->prop ) );
 	}
 

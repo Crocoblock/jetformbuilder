@@ -281,11 +281,11 @@ class Editor {
 							'label' => __( 'User ID', 'jet-form-builder' ),
 						),
 						array(
-							'value' => 'login',
+							'value' => 'user_login',
 							'label' => __( 'User Login', 'jet-form-builder' ),
 						),
 						array(
-							'value' => 'email',
+							'value' => 'user_email',
 							'label' => __( 'Email', 'jet-form-builder' ),
 						),
 						array(

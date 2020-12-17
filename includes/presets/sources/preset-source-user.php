@@ -10,13 +10,24 @@ class Preset_Source_User extends Base_Source {
 	 * @return mixed
 	 */
 	protected function can_get_preset() {
-		// TODO: Implement can_get_preset() method.
+		$source = $this->preset_type->source;
+
+		return (
+			( ! $source || is_wp_error( $source ) )
+			|| ! is_user_logged_in()
+			|| ( get_current_user_id() !== $source->ID && ! current_user_can( 'edit_users' ) )
+		);
 	}
 
-	/**
-	 * @return mixed
-	 */
-	protected function set_prop() {
-		// TODO: Implement set_prop() method.
+	public function user_meta() {
+		if ( ! empty( $this->preset_type->field_data['key'] ) ) {
+			return get_user_meta(
+				$this->preset_type->source->ID,
+				$this->preset_type->field_data['key'],
+				true
+			);
+		} else {
+			return $this->preset_type->result;
+		}
 	}
 }

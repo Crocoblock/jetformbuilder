@@ -17,7 +17,7 @@ class Form_Base_Preset extends Base_Preset {
 			return $this->result;
 		}
 
-		return $this->
+		return $this->__get_values();
 	}
 
 	/**

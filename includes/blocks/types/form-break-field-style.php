@@ -77,8 +77,8 @@ trait Form_Break_Field_Style {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
-				'id'        => 'next_button_style',
-				'title'     => __( 'Form Break Next Button', 'jet-forms-builder' ),
+				'id'    => 'next_button_style',
+				'title' => __( 'Form Break Next Button', 'jet-forms-builder' ),
 
 			]
 		);
@@ -107,7 +107,7 @@ trait Form_Break_Field_Style {
 		$this->controls_manager->add_control( [
 			'id'           => 'next_button_border',
 			'type'         => 'border',
-			'separator' => 'after',
+			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['next-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
@@ -216,7 +216,7 @@ trait Form_Break_Field_Style {
 		$this->controls_manager->add_control( [
 			'id'           => 'prev_button_border',
 			'type'         => 'border',
-			'separator' => 'after',
+			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',

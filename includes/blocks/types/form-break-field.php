@@ -59,7 +59,6 @@ class Form_Break_Field extends Base {
 	}
 
 
-
 	/**
 	 * Returns icon class name
 	 *

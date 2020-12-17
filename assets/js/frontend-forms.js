@@ -1138,7 +1138,7 @@
 				val     = $target.val();
 
 			if ( event.firstInit ) {
-				$number.text( max ).css( 'min-width', $number.width() );
+				$number.text( max );
 			}
 
 			$number.text( val );

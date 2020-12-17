@@ -34,6 +34,30 @@ class Calculated_Field extends Base {
 		return 'div.jet-form-builder-row .jet-form-builder__calculated-field';
 	}
 
+	public function additional_selectors_for_controls() {
+		return array(
+			'input_alignment' => array(
+				'options'      => [
+					'flex-start'   => [
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					],
+					'center' => [
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					],
+					'flex-end'  => [
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					],
+				],
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['input'] => 'justify-content: {{VALUE}};',
+				),
+
+			)
+		);
+	}
 
 	/**
 	 * Returns block title

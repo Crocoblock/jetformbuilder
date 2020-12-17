@@ -129,6 +129,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 							key='prefix'
 							label={ __( 'Value prefix' ) }
 							value={ attributes.prefix }
+							help={ __( 'For space before or after text use: &nbsp;' ) }
 							onChange={ ( newValue ) => {
 								props.setAttributes( { prefix: newValue } );
 							} }
@@ -137,6 +138,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 							key='suffix'
 							label={ __( 'Value suffix' ) }
 							value={ attributes.suffix }
+							help={ __( 'For space before or after text use: &nbsp;' ) }
 							onChange={ ( newValue ) => {
 								props.setAttributes( { suffix: newValue } );
 							} }
@@ -171,7 +173,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					/>
 					<div className={ 'jet-form-builder__field-value' }>
 						<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
-						<span>&nbsp;{ this.state.rangeValue }&nbsp;</span>
+						<span>{ this.state.rangeValue }</span>
 						<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
 					</div>
 				</div>

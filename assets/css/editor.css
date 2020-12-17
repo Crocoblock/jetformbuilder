@@ -586,3 +586,8 @@
 .interface-complementary-area {
     width: 340px;
 }
+
+.jet-form-builder__calculated-field {
+    display: flex;
+    width: 100%;
+}

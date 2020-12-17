@@ -188,9 +188,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					} }
 				/> }
 				<div className={ 'jet-form-builder__calculated-field' }>
-					{ attributes.calc_prefix }
-					{ attributes.calc_formula }
-					{ attributes.calc_suffix }
+					<div className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
+					<div className={ 'calc-formula' }>{ attributes.calc_formula }</div>
+					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
 				</div>
 			</FieldWrapper>
 		];

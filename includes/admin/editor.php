@@ -400,7 +400,6 @@ class Editor {
 		);
 
 
-
 		wp_localize_script( $handle, 'JetFormEditorData', array(
 			'allowedBlocks'   => $this->get_allowed_blocks(),
 			'action'          => $this->get_action(),

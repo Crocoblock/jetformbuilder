@@ -225,7 +225,7 @@ class Tools {
 	public static function with_placeholder( $array, $label = '--' ) {
 		return array_merge(
 			array(
-				array('label' => $label, 'value' => '' ),
+				array( 'label' => $label, 'value' => '' ),
 			),
 			$array
 		);

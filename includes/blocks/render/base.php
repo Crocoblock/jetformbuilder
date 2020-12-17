@@ -186,6 +186,7 @@ abstract class Base {
 		} elseif ( Tools::is_editor() ) {
 
 			$message = ! empty( $args['page_break_disabled'] ) ? $args['page_break_disabled'] : 'Disabled message';
+
 			return sprintf( $format, $message, $this->get_style_attrs( array( 'display:block' ) ) );
 		}
 
@@ -193,7 +194,7 @@ abstract class Base {
 	}
 
 	public function get_style_attrs( $style ) {
-		return 'style=' . implode(';', $style );
+		return 'style=' . implode( ';', $style );
 	}
 
 }

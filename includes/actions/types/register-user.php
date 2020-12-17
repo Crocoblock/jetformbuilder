@@ -314,15 +314,15 @@ class Register_User extends Base {
 				'required' => true
 			),
 			'email'            => array(
-				'label'    =>  __( 'Email', 'jet-form-builder' ),
+				'label'    => __( 'Email', 'jet-form-builder' ),
 				'required' => true
 			),
 			'password'         => array(
-				'label'    =>  __( 'Password', 'jet-form-builder' ),
+				'label'    => __( 'Password', 'jet-form-builder' ),
 				'required' => true
 			),
 			'confirm_password' => array(
-				'label'    =>  __( 'Confirm Password', 'jet-form-builder' ),
+				'label'    => __( 'Confirm Password', 'jet-form-builder' ),
 				'required' => true
 			),
 			'first_name'       => __( 'First Name', 'jet-form-builder' ),

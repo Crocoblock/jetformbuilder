@@ -248,11 +248,11 @@ class Form extends Base {
 
 		$this->add_margin_padding( $this->css_scheme['error'], array(
 			'margin'  => array(
-				'id' => 'error_margin',
+				'id'        => 'error_margin',
 				'separator' => 'after',
 			),
 			'padding' => array(
-				'id' => 'error_padding',
+				'id'        => 'error_padding',
 				'separator' => 'after',
 			)
 		) );

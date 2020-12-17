@@ -52,6 +52,7 @@ class File_Upload {
 		foreach ( $data_args as $key => $value ) {
 			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
 		}
+
 		return sprintf( ' data-args="%s"', htmlspecialchars( json_encode( $data_args ) ) );
 	}
 

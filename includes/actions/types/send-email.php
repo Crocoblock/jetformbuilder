@@ -234,9 +234,9 @@ class Send_Email extends Base {
 		if ( is_array( $value ) ) {
 			return implode( ', ', $value );
 		}
+
 		return $value;
 	}
-
 
 
 	/**

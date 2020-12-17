@@ -161,9 +161,10 @@ trait General_Style {
 		if ( is_array( $options ) ) {
 			return array_merge( $control, $options );
 
-		} elseif (is_string( $options ) ) {
+		} elseif ( is_string( $options ) ) {
 
 			$control['id'] = $options;
+
 			return $control;
 		}
 	}
@@ -182,11 +183,11 @@ trait General_Style {
 			$this->css_scheme['wrap'],
 			array(
 				'margin'  => array(
-					'id' => 'field_margin',
+					'id'        => 'field_margin',
 					'separator' => 'after',
 				),
 				'padding' => array(
-					'id' => 'field_padding',
+					'id'        => 'field_padding',
 					'separator' => 'after',
 				)
 			)
@@ -252,11 +253,11 @@ trait General_Style {
 			$this->css_scheme['label'],
 			array(
 				'margin'  => array(
-					'id' => 'label_margin',
+					'id'        => 'label_margin',
 					'separator' => 'after',
 				),
 				'padding' => array(
-					'id' => 'label_padding',
+					'id'        => 'label_padding',
 					'separator' => 'after',
 				)
 			)
@@ -343,11 +344,11 @@ trait General_Style {
 			$this->css_scheme['description'],
 			array(
 				'margin'  => array(
-					'id' => 'description_margin',
+					'id'        => 'description_margin',
 					'separator' => 'after',
 				),
 				'padding' => array(
-					'id' => 'description_padding',
+					'id'        => 'description_padding',
 					'separator' => 'after',
 				)
 			)
@@ -479,39 +480,42 @@ trait General_Style {
 			$this->css_scheme['input'],
 			array(
 				'margin'  => array(
-					'id' => 'input_margin',
+					'id'        => 'input_margin',
 					'separator' => 'after',
 				),
 				'padding' => array(
-					'id' => 'input_padding',
+					'id'        => 'input_padding',
 					'separator' => 'after',
 				)
 			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'input_alignment',
-			'type'         => 'choose',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'options'      => [
-				'left'   => [
-					'shortcut' => __( 'Left', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignleft',
+		$this->controls_manager->add_control( $this->merge_controls_or_add_id(
+			array(
+				'id'           => 'input_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => [
+					'left'   => [
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					],
+					'center' => [
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					],
+					'right'  => [
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					],
 				],
-				'center' => [
-					'shortcut' => __( 'Center', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-aligncenter',
-				],
-				'right'  => [
-					'shortcut' => __( 'Right', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignright',
-				],
-			],
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['input'] => 'text-align: {{VALUE}};',
-			],
-		] );
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['input'] => 'text-align: {{VALUE}};',
+				),
+			),
+			$this->get_additional_styles( 'input_alignment' )
+		) );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'input_typography',
@@ -563,5 +567,14 @@ trait General_Style {
 		}
 	}
 
+	public function additional_selectors_for_controls() {
+		return array();
+	}
+
+	public function get_additional_styles( $id ) {
+		$styles = $this->additional_selectors_for_controls();
+
+		return isset( $styles[ $id ] ) ? $styles[ $id ] : array();
+	}
 
 }

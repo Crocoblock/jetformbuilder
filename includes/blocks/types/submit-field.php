@@ -49,7 +49,7 @@ class Submit_Field extends Base {
 			$this->css_scheme['wrap'],
 			array(
 				'padding' => array(
-					'id' => 'submit_padding',
+					'id'        => 'submit_padding',
 					'separator' => 'after',
 				)
 			)

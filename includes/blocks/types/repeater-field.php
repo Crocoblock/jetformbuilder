@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
 use Jet_Form_Builder\Presets\Form_Base_Preset;
+use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -393,12 +394,12 @@ class Repeater_Field extends Base {
 	}
 
 	public function set_default_value() {
-		$preset_value = Form_Base_Preset::instance()->get_field_value( $this->block_attrs['name'], $this->block_attrs );
+		$preset_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
 
 		if ( $preset_value['rewrite'] ) {
 			$args['default'] = $preset_value['value'];
 		} else {
-			$args['default'] = Form_Base_Preset::instance()->maybe_adjust_value( $this->block_attrs );
+			$args['default'] = Preset_Manager::instance()->maybe_adjust_value( $this->block_attrs );
 		}
 
 		$this->default_value = array_merge( $this->block_attrs, $args );

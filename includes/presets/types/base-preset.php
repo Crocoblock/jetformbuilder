@@ -34,6 +34,12 @@ abstract class Base_Preset {
 
 	abstract public function get_fields_map();
 
+	abstract public function get_preset_value();
+
+	public function is_active_preset( $args ) {
+		return false;
+	}
+
 	public function set_init_data( $data = array() ) {
 		if ( ! empty( $data ) && empty( $this->data ) ) {
 			$this->data = $data;
@@ -42,9 +48,9 @@ abstract class Base_Preset {
 		return $this;
 	}
 
-	public function set_additional_data( $field = null, $args = array() ) {
-		if ( ! empty( $field ) ) {
-			$this->field = $field;
+	public function set_additional_data( $args = array() ) {
+		if ( ! empty( $args['name'] ) ) {
+			$this->field = $args['name'];
 		}
 		if ( ! empty( $args ) ) {
 			$this->args = $args;
@@ -74,63 +80,18 @@ abstract class Base_Preset {
 
 	public function set_source() {
 		$this->from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
-		$source     = array();
+		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset-source-' );
 
-		switch ( $this->from ) {
-			case 'query_vars':
-				$source = $_GET;
-				break;
-
-			case 'user':
-				$user_from = ! empty( $this->data['user_from'] ) ? $this->data['user_from'] : $this->defaults['user_from'];
-
-				if ( 'current_user' === $user_from ) {
-					if ( is_user_logged_in() ) {
-						$source = wp_get_current_user();
-					}
-				} else {
-
-					$var     = ! empty( $this->data['query_var'] ) ? $this->data['query_var'] : $this->defaults['query_var'];
-					$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
-
-					$source = get_user_by( 'ID', $user_id );
-
-				}
-
-				break;
-
-			default:
-
-				$post_from = ! empty( $this->data['post_from'] ) ? $this->data['post_from'] : $this->defaults['post_from'];
-
-				if ( 'current_post' === $post_from ) {
-					$post_id = get_the_ID();
-				} else {
-					$var     = ! empty( $this->data['query_var'] ) ? $this->data['query_var'] : $this->defaults['query_var'];
-					$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
-				}
-
-				if ( $post_id ) {
-					$source = get_post( $post_id );
-				}
-
-				break;
-		}
-
-		$this->source = $source;
+		$this->source = $from_manager->create_one( $this->from, $this )->get_source();
 	}
 
-	abstract public function get_preset_value();
-
-	public function __get_values() {
+	public function _get_values() {
 
 		if ( ! $this->field_data ) {
 			return $this->result;
 		}
 
-		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset-source-' );
-
-		return $from_manager->create_one( $this->from, $this )->result();
+		return $this->source->result();
 	}
 
 }

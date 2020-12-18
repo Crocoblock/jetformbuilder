@@ -9,6 +9,7 @@ use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Form_Base_Preset;
+use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 
@@ -229,9 +230,9 @@ class Form_Builder {
 	}
 
 	public function preset() {
-		Form_Base_Preset::instance()->set_form_id( $this->form_id );
+		Preset_Manager::instance()->set_form_id( $this->form_id );
 
-		return Form_Base_Preset::instance();
+		return Preset_Manager::instance();
 	}
 
 }

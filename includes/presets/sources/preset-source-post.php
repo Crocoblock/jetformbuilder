@@ -6,14 +6,25 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 class Preset_Source_Post extends Base_Source {
 
+	public function on_sanitize() {
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		if ( absint( $this->src->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) {
+			return false;
+		}
+		return true;
+	}
+
 	protected function can_get_preset() {
-		return ( absint( $this->preset_type->source->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
+		return ( absint( $this->src->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
 	}
 
 	public function post_meta() {
 		if ( ! empty( $field_data['key'] ) ) {
 
-			$value = get_post_meta( $this->preset_type->source->ID, $field_data['key'], true );
+			$value = get_post_meta( $this->src->ID, $field_data['key'], true );
 
 			if ( $this->is_repeater_val( $value ) ) {
 
@@ -45,12 +56,12 @@ class Preset_Source_Post extends Base_Source {
 				}
 
 				$args = array(
-					'post_id'     => $this->preset_type->source->ID,
+					'post_id'     => $this->src->ID,
 					'post_type_1' => $info['post_type_1'],
 					'post_type_2' => $info['post_type_2'],
 				);
 
-				if ( $this->preset_type->source->post_type === $info['post_type_1'] ) {
+				if ( $this->src->post_type === $info['post_type_1'] ) {
 					$args['from'] = $info['post_type_2'];
 				} else {
 					$args['from'] = $info['post_type_1'];
@@ -59,7 +70,7 @@ class Preset_Source_Post extends Base_Source {
 				$value = jet_engine()->relations->get_related_posts( $args );
 
 			} else {
-				$value = get_post_meta( $this->preset_type->source->ID, $field_data['key'], true );
+				$value = get_post_meta( $this->src->ID, $field_data['key'], true );
 			}
 
 			return $value;
@@ -72,7 +83,7 @@ class Preset_Source_Post extends Base_Source {
 	public function post_terms() {
 		if ( ! empty( $field_data['key'] ) ) {
 
-			$value = wp_get_post_terms( $this->preset_type->source->ID, $field_data['key'] );
+			$value = wp_get_post_terms( $this->src->ID, $field_data['key'] );
 
 			if ( empty( $value ) || is_wp_error( $value ) ) {
 				return $this->preset_type->result;
@@ -94,7 +105,7 @@ class Preset_Source_Post extends Base_Source {
 	}
 
 	public function post_thumb() {
-		return get_post_thumbnail_id( $this->preset_type->source->ID );
+		return get_post_thumbnail_id( $this->src->ID );
 	}
 
 	public function is_repeater_val( $value ) {

@@ -11,9 +11,27 @@ abstract class Base_Source {
 
 	protected $preset_type;
 	protected $prop;
+	public $src = false;
 
 	public function __construct( Base_Preset $preset_type ) {
 		$this->preset_type = $preset_type;
+	}
+
+	public function get_source() {
+		$post_from = ! empty( $this->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
+
+		if ( 'current_post' === $post_from ) {
+			$post_id = get_the_ID();
+		} else {
+			$var     = ! empty( $this->data['query_var'] ) ? $this->preset_type->data['query_var'] : $this->preset_type->defaults['query_var'];
+			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+		}
+
+		if ( $post_id ) {
+			$this->src = get_post( $post_id );
+		}
+
+		return $this;
 	}
 
 	protected function can_get_preset() {

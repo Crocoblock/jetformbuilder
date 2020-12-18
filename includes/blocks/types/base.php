@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -18,8 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base {
 
-	use Get_Template_Trait;
 	use General_Style;
+	use Get_Icon_Trait;
 
 	private $_unregistered = array();
 
@@ -89,7 +89,9 @@ abstract class Base {
 	 *
 	 * @return [type] [description]
 	 */
-	abstract public function get_icon();
+	public function get_icon() {
+		return $this->get_field_icon();
+	}
 
 	/**
 	 * Returns renderer class instance for current block
@@ -513,6 +515,12 @@ abstract class Base {
 	 */
 	public function prepare_attributes( $attributes ) {
 		return $attributes;
+	}
+
+	final public function get_field_icon() {
+		ob_start();
+		require $this->get_icon_path( $this->get_name() . '.php' );
+		return ob_get_clean();
 	}
 
 

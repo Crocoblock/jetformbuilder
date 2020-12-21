@@ -41,7 +41,7 @@ abstract class Base_Source {
 	public function __call( string $prop, array $arguments ) {
 		$source = $this->preset_type->source;
 
-		if ( isset( $source->data->$prop ) ) {
+		if ( isset( $source->data ) && isset( $source->data->$prop ) ) {
 			return $source->data->$prop;
 		} elseif ( isset( $source->$prop ) ) {
 			return $source->$prop;

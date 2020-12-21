@@ -10,7 +10,7 @@ use Jet_Form_Builder\Plugin;
 class General_Preset extends Base_Preset {
 
 	public function is_active_preset( $args ) {
-		return $args['enabled'];
+		return $this->data['enabled'];
 	}
 
 	public function get_fields_map() {

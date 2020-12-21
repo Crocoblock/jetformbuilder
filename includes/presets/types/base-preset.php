@@ -74,7 +74,7 @@ abstract class Base_Preset {
 	}
 
 	public function has_field_in_map() {
-		return ( empty( $map[ $this->field ] ) || ( empty( $map[ $this->field ]['prop'] ) && empty( $map[ $this->field ]['key'] ) ) );
+		return ( isset( $this->fields_map[ $this->field ] ) && isset( $this->fields_map[ $this->field ]['prop'] ) && isset( $this->fields_map[ $this->field ]['key'] ) );
 	}
 
 

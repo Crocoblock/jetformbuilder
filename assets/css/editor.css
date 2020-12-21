@@ -563,7 +563,7 @@
     margin-bottom: 0.7em;
 }
 
-.jet-form-edit-modal .full-width select {
+select.components-select-control__input {
     max-width: 100vw;
     width: 100%;
 }

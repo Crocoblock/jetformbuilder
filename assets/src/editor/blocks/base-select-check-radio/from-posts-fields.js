@@ -42,21 +42,21 @@ class FromPostsFields extends wp.element.Component {
 					options={ localizeData.post_types_list }
 				/>
 				<TextControl
-					key='from_posts__value_from_meta'
+					key='value_from_key'
 					label={ __( 'Value from meta field' ) }
-					value={ attributes.from_posts__value_from_meta }
+					value={ attributes.value_from_key }
 					help={ Tools.getHelpMessage( localizeData, 'value_from_meta' ) }
 					onChange={ ( newValue ) => {
-						parentProps.setAttributes( { from_posts__value_from_meta: newValue } );
+						parentProps.setAttributes( { value_from_key: newValue } );
 					} }
 				/>
 				<TextControl
-					key='from_posts__calc_value_from_meta'
+					key='calculated_value_from_key'
 					label={ __( 'Calculated value from meta field' ) }
-					value={ attributes.from_posts__calc_value_from_meta }
+					value={ attributes.calculated_value_from_key }
 					help={ Tools.getHelpMessage( localizeData, 'calc_value_from_meta' ) }
 					onChange={ ( newValue ) => {
-						parentProps.setAttributes( { from_posts__calc_value_from_meta: newValue } );
+						parentProps.setAttributes( { calculated_value_from_key: newValue } );
 					} }
 				/>
 			</div>

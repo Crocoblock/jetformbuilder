@@ -69,12 +69,12 @@ class FromGeneratorsFields extends wp.element.Component {
 					} }
 				/>
 				<TextControl
-					key='from_generator__calc_value_from_meta'
+					key='calculated_value_from_key'
 					label='Calculated value from meta field'
-					help={ this.getHelpMessage( 'calc_value_from_meta' ) }
-					value={ attributes.from_generator__calc_value_from_meta }
+					help={ this.getHelpMessage( 'calculated_value_from_key' ) }
+					value={ attributes.calculated_value_from_key }
 					onChange={ ( newValue ) => {
-						parentProps.setAttributes( { from_generator__calc_value_from_meta: newValue } );
+						parentProps.setAttributes( { calculated_value_from_key: newValue } );
 					} }
 				/>
 			</div>

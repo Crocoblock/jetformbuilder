@@ -25,4 +25,8 @@ abstract class Base {
 	 */
 	abstract public function generate( $field );
 
+	public function can_generate() {
+		return true;
+	}
+
 }

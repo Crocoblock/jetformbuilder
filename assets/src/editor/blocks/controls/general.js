@@ -1,5 +1,5 @@
-import JetFormPresetEditor from '../controls/preset-editor';
 import FieldWithPreset from "../../components/field-with-preset";
+import DynamicPreset from "../../components/presets/dynamic-preset";
 
 /**
  * WordPress dependencies
@@ -55,14 +55,13 @@ const JetFormGeneral = class extends wp.element.Component {
 						/>;
 					case 'dynamic_text':
 						return <FieldWithPreset
-							ModalEditor={ ( { actionClick, onRequestClose } ) => <JetFormPresetEditor
+							ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 								value={ result[ data.key ] }
 								isSaveAction={ actionClick }
 								onSavePreset={ newVal => {
 									onChangeValue( newVal, data.key )
 								} }
 								onUnMount={ onRequestClose }
-								availableFields={ false }
 							/> }
 						>
 							<TextControl

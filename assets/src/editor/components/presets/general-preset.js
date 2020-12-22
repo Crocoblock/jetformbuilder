@@ -1,29 +1,39 @@
 import PresetRender from "./preset-render";
+import withPreset from "./preset-editor";
 
-function GeneralPreset( {} ) {
-	return ( <React.Fragment>
+function GeneralPreset( {
+							value,
+							availableFields,
+							isMapFieldVisible,
+							isVisible,
+							onChange,
+						} ) {
+
+	const onChangeValue = ( newValue, name ) => {
+		onChange( { ...value, [ name ]: newValue } );
+	}
+
+	return <>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
-			value={ stateValue[ data.name ] }
+			value={ value }
 			index={ index }
 			data={ data }
-			options={ excludeOptions( data.options ) }
+			options={ data.options }
 			onChangeValue={ onChangeValue }
+			isVisible={ isVisible }
 		/> ) }
 
-		{ ( availableFields && stateValue.from ) && (
+		{ value.from && (
 			availableFields.map( ( field, index ) => <PresetRender.AvailableMapField
-				fieldsMap={ stateValue.fields_map }
+				fieldsMap={ value.fields_map }
 				field={ field }
 				index={ index }
-			/> )
-		) }
-
-		{ ! Boolean( availableFields ) && ( window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
-				value={ stateValue[ 'current_field_' + data.name ] }
-				index={ index }
-				data={ data }
 				onChangeValue={ onChangeValue }
+				isMapFieldVisible={ isMapFieldVisible }
+				value={ value }
 			/> )
 		) }
-	</React.Fragment> );
+	</>;
 }
+
+export default withPreset( GeneralPreset );

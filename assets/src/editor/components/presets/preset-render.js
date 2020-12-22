@@ -13,10 +13,18 @@ const {
 } = wp.components;
 
 const PresetRender = {
-	GlobalField: function ( { data, value, index, onChangeValue, options, isVisible } ) {
+	GlobalField: function ( {
+								data,
+								value,
+								index,
+								onChangeValue,
+								options,
+								isVisible,
+	} ) {
+
 		switch ( data.type ) {
 			case 'text':
-				return ( isVisible( data ) &&
+				return ( isVisible( value, data ) &&
 					<div
 						key={ 'field_' + data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -24,7 +32,7 @@ const PresetRender = {
 						<TextControl
 							key={ data.name + index }
 							label={ data.label }
-							value={ value }
+							value={ value[ data.name ] }
 							onChange={ newVal => {
 								onChangeValue( newVal, data.name )
 							} }
@@ -32,7 +40,7 @@ const PresetRender = {
 					</div>
 				);
 			case 'select':
-				return ( isVisible( data ) &&
+				return ( isVisible( value, data ) &&
 					<div
 						key={ 'field_' + data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -42,7 +50,7 @@ const PresetRender = {
 							labelPosition="side"
 							options={ options }
 							label={ data.label }
-							value={ value }
+							value={ value[ data.name ] }
 							onChange={ newVal => {
 								onChangeValue( newVal, data.name )
 							} }
@@ -50,11 +58,13 @@ const PresetRender = {
 					</div>
 				);
 		}
+		return null;
 	},
 	AvailableMapField: function ( {
 									  fieldsMap,
 									  field,
 									  index,
+									  value,
 									  onChangeValue,
 									  isMapFieldVisible
 	} ) {
@@ -77,7 +87,7 @@ const PresetRender = {
 
 				switch ( data.type ) {
 					case 'text':
-						return ( isMapFieldVisible( data, field ) &&
+						return ( isMapFieldVisible( value, data, field ) &&
 							<div
 								key={ field + data.name + index + fIndex }
 								className={ 'jet-form-preset__fields-map-item' }
@@ -97,7 +107,7 @@ const PresetRender = {
 							</div>
 						);
 					case 'select':
-						return ( isMapFieldVisible( data, field ) &&
+						return ( isMapFieldVisible( value, data, field ) &&
 							<div
 								key={ field + data.name + index + fIndex }
 								className={ 'jet-form-preset__fields-map-item' }
@@ -126,13 +136,14 @@ const PresetRender = {
 							 data,
 							 value,
 							 index,
+							 currentState,
 							 onChangeValue,
 							 isCurrentFieldVisible
 	} ) {
 
 		switch ( data.type ) {
 			case 'text':
-				return ( isCurrentFieldVisible( data ) &&
+				return ( isCurrentFieldVisible( currentState, data ) &&
 					<div
 						key={ data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -148,7 +159,7 @@ const PresetRender = {
 					</div>
 				);
 			case 'select':
-				return ( isCurrentFieldVisible( data ) &&
+				return ( isCurrentFieldVisible( currentState, data ) &&
 					<div
 						key={ data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -166,6 +177,7 @@ const PresetRender = {
 					</div>
 				);
 		}
+		return null;
 	}
 }
 

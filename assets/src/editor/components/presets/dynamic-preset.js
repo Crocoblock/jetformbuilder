@@ -13,15 +13,17 @@ const {
 } = wp.element;
 
 function DynamicPreset( {
+							value,
 							isSaveAction,
 							onSavePreset,
 							onUnMount,
 							parseValue,
-							availableFields,
-							excludeOptions
+							excludeOptions,
+							isCurrentFieldVisible,
+							isVisible,
 						} ) {
 
-	const [stateValue, setValue] = useState( parseValue );
+	const [stateValue, setValue] = useState( () => parseValue( value ) );
 
 	const onChangeValue = ( newValue, name ) => {
 		setValue( prev => ( { ...prev, [ name ]: newValue } ) );
@@ -29,10 +31,8 @@ function DynamicPreset( {
 
 	useEffect( () => {
 		if ( true === isSaveAction ) {
-			const cloneItems = { ...stateValue };
-
 			if ( onSavePreset ) {
-				onSavePreset( JSON.stringify( cloneItems ) );
+				onSavePreset( JSON.stringify( stateValue ) );
 			}
 			onUnMount();
 
@@ -41,31 +41,25 @@ function DynamicPreset( {
 		}
 	}, [isSaveAction] );
 
-	return ( <React.Fragment>
-		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
-			value={ stateValue[ data.name ] }
+	return <>
+		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => data.options && <PresetRender.GlobalField
+			value={ stateValue }
 			index={ index }
 			data={ data }
 			options={ excludeOptions( data.options ) }
 			onChangeValue={ onChangeValue }
+			isVisible={ isVisible }
 		/> ) }
 
-		{ ( availableFields && stateValue.from ) && (
-			availableFields.map( ( field, index ) => <PresetRender.AvailableMapField
-				fieldsMap={ stateValue.fields_map }
-				field={ field }
-				index={ index }
-			/> )
-		) }
-
-		{ ! Boolean( availableFields ) && ( window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
+		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
+				currentState={ stateValue }
 				value={ stateValue[ 'current_field_' + data.name ] }
 				index={ index }
 				data={ data }
 				onChangeValue={ onChangeValue }
-			/> )
-		) }
-	</React.Fragment> );
+				isCurrentFieldVisible={ isCurrentFieldVisible }
+		/> ) }
+	</>;
 }
 
 export default withPreset( DynamicPreset );

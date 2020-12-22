@@ -22,7 +22,7 @@ function withPreset( WrappedComponent ) {
 
 			if ( 'object' === typeof props.value ) {
 				val = { ...props.value };
-			} else if ( value && 'string' === typeof props.value ) {
+			} else if ( props.value && 'string' === typeof props.value ) {
 				try {
 					val = JSON.parse( props.value );
 					if ( 'number' === typeof val ) {
@@ -77,6 +77,7 @@ function withPreset( WrappedComponent ) {
 
 		const isMapFieldVisible = ( currentState, data, field ) => {
 
+
 			if ( ! data.condition && ! data.parent_condition ) {
 				return true;
 			}
@@ -103,7 +104,7 @@ function withPreset( WrappedComponent ) {
 
 		const excludeOptions = ( selectOptions ) => {
 			selectOptions.forEach( ( option, index ) => {
-				if ( props.excludeSources.includes( option.value ) ) {
+				if ( props.excludeSources && props.excludeSources.includes( option.value ) ) {
 					selectOptions.splice( index, 1 );
 				}
 			} );

@@ -1,8 +1,8 @@
 import ActionModal from "../components/action-modal";
 import RepeaterWithState from "../components/repeater-with-state";
-import Tools from "../tools";
-import JetFormPresetEditor from "../blocks/controls/preset-editor";
 import FieldWithPreset from "../components/field-with-preset";
+import Tools from "../tools";
+import DynamicPreset from "../components/presets/dynamic-preset";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -361,7 +361,7 @@ function ActionsMeta() {
 										} }
 									/>
 									<FieldWithPreset
-										ModalEditor={ ( { actionClick, onRequestClose } ) => <JetFormPresetEditor
+										ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 											value={ currentItem.compare }
 											isSaveAction={ actionClick }
 											onSavePreset={ newValue => {
@@ -372,7 +372,6 @@ function ActionsMeta() {
 											} }
 											excludeSources={ [ 'query_var' ] }
 											onUnMount={ onRequestClose }
-											availableFields={ false }
 										/> }
 										triggerClasses={ ['trigger--unset-margin-top'] }
 									>

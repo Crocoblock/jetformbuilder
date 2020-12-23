@@ -20,8 +20,6 @@ function ActionsMeta() {
 		ButtonGroup,
 		Card,
 		CardBody,
-		Flex,
-		FlexItem,
 		DropdownMenu,
 		Modal
 	} = wp.components;
@@ -158,57 +156,57 @@ function ActionsMeta() {
 					>
 						<CardBody>
 
-										<SelectControl
-											value={ action.type }
-											options={ actionTypes }
-											onChange={ ( newType ) => {
-												updateAction( action.id, 'type', newType );
-											} }
-										/>
-										<Button
-											icon={ 'edit' }
-											label={ 'Edit Action' }
-											onClick={ () => {
-												setEditedAction( () => ( {
-													...action
-												} ) );
-											} }
-										/>
-										<div/>
+							<SelectControl
+								value={ action.type }
+								options={ actionTypes }
+								onChange={ ( newType ) => {
+									updateAction( action.id, 'type', newType );
+								} }
+							/>
+							<Button
+								icon={ 'edit' }
+								label={ 'Edit Action' }
+								onClick={ () => {
+									setEditedAction( () => ( {
+										...action
+									} ) );
+								} }
+							/>
+							<div/>
 
-									<DropdownMenu
-										icon={ 'ellipsis' }
-										label={ 'Edit, move or delete' }
-										controls={ [
-											{
-												title: 'Up',
-												icon: 'arrow-up',
-												disabled: true,
-												onClick: () => {
-													if ( 0 !== index ) {
-														moveAction( index, index - 1 );
-													}
-												}
-											},
-											{
-												title: 'Down',
-												icon: 'arrow-down',
-												disabled: index === actions.length,
-												onClick: () => {
-													if ( ( actions.length - 1 ) !== index ) {
-														moveAction( index, index + 1 );
-													}
-												}
-											},
-											{
-												title: 'Delete',
-												icon: 'trash',
-												onClick: () => {
-													deleteAction( index );
-												}
+							<DropdownMenu
+								icon={ 'ellipsis' }
+								label={ 'Edit, move or delete' }
+								controls={ [
+									{
+										title: 'Up',
+										icon: 'arrow-up',
+										disabled: true,
+										onClick: () => {
+											if ( 0 !== index ) {
+												moveAction( index, index - 1 );
 											}
-										] }
-									/>
+										}
+									},
+									{
+										title: 'Down',
+										icon: 'arrow-down',
+										disabled: index === actions.length,
+										onClick: () => {
+											if ( ( actions.length - 1 ) !== index ) {
+												moveAction( index, index + 1 );
+											}
+										}
+									},
+									{
+										title: 'Delete',
+										icon: 'trash',
+										onClick: () => {
+											deleteAction( index );
+										}
+									}
+								] }
+							/>
 
 						</CardBody>
 					</Card>

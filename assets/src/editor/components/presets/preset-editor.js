@@ -103,12 +103,13 @@ function withPreset( WrappedComponent ) {
 		};
 
 		const excludeOptions = ( selectOptions ) => {
-			selectOptions.forEach( ( option, index ) => {
+			const options = [ ...selectOptions ];
+			options.forEach( ( option, index ) => {
 				if ( props.excludeSources && props.excludeSources.includes( option.value ) ) {
-					selectOptions.splice( index, 1 );
+					options.splice( index, 1 );
 				}
 			} );
-			return selectOptions;
+			return options;
 		};
 
 		return <WrappedComponent

@@ -1,29 +1,29 @@
+const { __ } = wp.i18n;
+
+const {
+	ToggleControl,
+	TextControl,
+} = wp.components;
+
+const {
+	registerPlugin
+} = wp.plugins;
+
+const {
+	PluginDocumentSettingPanel
+} = wp.editPost;
+
+const {
+	useSelect,
+	useDispatch
+} = wp.data;
+
+const {
+	useState,
+	useEffect
+} = wp.element;
+
 function Captcha() {
-
-	const { __ } = wp.i18n;
-
-	const {
-		ToggleControl,
-		TextControl,
-	} = wp.components;
-
-	const {
-		registerPlugin
-	} = wp.plugins;
-
-	const {
-		PluginDocumentSettingPanel
-	} = wp.editPost;
-
-	const {
-		useSelect,
-		useDispatch
-	} = wp.data;
-
-	const {
-		useState,
-		useEffect
-	} = wp.element;
 
 	const DocumentSettingPanelCaptcha = () => {
 

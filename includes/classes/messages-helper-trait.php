@@ -33,4 +33,8 @@ trait Messages_Helper_Trait {
 		return $this->get_messages_by_key( 'label' );
 	}
 
+	public function get_messages_default() {
+		return $this->messages;
+	}
+
 }

@@ -25,17 +25,15 @@ function Captcha() {
 		useEffect
 	} = wp.element;
 
-	const DocumentSettingPanel = () => {
+	const DocumentSettingPanelCaptcha = () => {
 
-		const meta = useSelect( ( select ) => {
-			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-		} );
+		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [args, setArgs] = useState( JSON.parse( meta._jf_recaptcha ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_recaptcha || '{}' ) );
 
 		useEffect( () => {
 
@@ -91,7 +89,7 @@ function Captcha() {
 	};
 
 	registerPlugin( 'jf-captcha-panel', {
-		render: DocumentSettingPanel,
+		render: DocumentSettingPanelCaptcha,
 		icon: null,
 	} );
 }

@@ -86,6 +86,10 @@ class Tools {
 
 		return __( 'Available fields: ' ) + fieldsString.join( ', ' );
 	}
+
+	static isEmptyObject( object ) {
+		return 'object' === typeof object && Object.keys( object ).length === 0;
+	}
 }
 
 export default Tools;

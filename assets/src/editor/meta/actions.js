@@ -48,19 +48,16 @@ function ActionsMeta() {
 		withState
 	} = wp.compose;
 
+	const DocumentSettingPanelActions = () => {
 
-	const DocumentSettingPanel = () => {
-
-		const meta = useSelect( ( select ) => {
-			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-		} );
+		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const {
 			editPost
 		} = useDispatch( 'core/editor' );
 
 
-		const [actions, setActions] = useState( JSON.parse( meta._jf_actions ) );
+		const [actions, setActions] = useState( JSON.parse( meta._jf_actions || '[]' ) );
 
 		const [userAction, setUserAction] = useState( 'load' );
 
@@ -136,7 +133,6 @@ function ActionsMeta() {
 				Callback = window.jetFormActionTypes[ i ].callback;
 			}
 		}
-		;
 
 		const updateActionFromModal = ( action ) => {
 			updateAction( action.id, 'settings', action.settings );
@@ -154,22 +150,14 @@ function ActionsMeta() {
 				name={ 'jf-actions' }
 				title={ 'Post Submit Actions' }
 			>
-				{ actions.map( ( action, index ) => {
+				{ actions && actions.map( ( action, index ) => {
 					return <Card
 						key={ action.id }
 						size={ 'extraSmall' }
 						className={ 'jet-form-action' }
 					>
 						<CardBody>
-							<Flex
-								align={ 'center' }
-								justify={ 'space-between' }
-							>
-								<FlexItem>
-									<Flex
-										align={ 'center' }
-										justify={ 'space-between' }
-									>
+
 										<SelectControl
 											value={ action.type }
 											options={ actionTypes }
@@ -187,9 +175,7 @@ function ActionsMeta() {
 											} }
 										/>
 										<div/>
-									</Flex>
-								</FlexItem>
-								<FlexItem>
+
 									<DropdownMenu
 										icon={ 'ellipsis' }
 										label={ 'Edit, move or delete' }
@@ -223,8 +209,7 @@ function ActionsMeta() {
 											}
 										] }
 									/>
-								</FlexItem>
-							</Flex>
+
 						</CardBody>
 					</Card>
 				} ) }
@@ -303,7 +288,7 @@ function ActionsMeta() {
 	};
 
 	registerPlugin( 'jf-actions-panel', {
-		render: DocumentSettingPanel,
+		render: DocumentSettingPanelActions,
 		icon: null,
 	} );
 }

@@ -15,7 +15,7 @@ const { __ } = wp.i18n;
 const {
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	SelectControl,

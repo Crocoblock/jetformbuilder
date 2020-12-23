@@ -20,7 +20,7 @@ const {
 	BlockControls,
 	InspectorControls,
 	InnerBlocks,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	select,

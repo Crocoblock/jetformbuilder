@@ -11,7 +11,7 @@ const {
 	WritingFlow,
 	ObserveTyping,
 	Inserter,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	Popover,

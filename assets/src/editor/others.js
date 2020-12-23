@@ -11,7 +11,7 @@ const {
 	MediaUpload,
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	PanelBody,

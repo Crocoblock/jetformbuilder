@@ -39,13 +39,11 @@ function Gateways() {
 		useEffect
 	} = wp.element;
 
-	const DocumentSettingPanel = () => {
+	const DocumentSettingPanelGateways = () => {
 
 		const gatewaysData = window.JetFormEditorData.gateways;
 
-		const meta = useSelect( ( select ) => {
-			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-		} );
+		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const {
 			editPost
@@ -53,7 +51,7 @@ function Gateways() {
 
 		const activeActions = JSON.parse( meta._jf_actions );
 
-		const [args, setArgs] = useState( JSON.parse( meta._jf_gateways ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_gateways || '{}' ) );
 		const [isEdit, setEdit] = useState( false );
 
 		const closeModal = () => {
@@ -340,7 +338,7 @@ function Gateways() {
 	};
 
 	registerPlugin( 'jf-gateways-panel', {
-		render: DocumentSettingPanel,
+		render: DocumentSettingPanelGateways,
 		icon: null,
 	} );
 }

@@ -125,7 +125,7 @@ class Tools {
 			);
 		}
 
-		return $result;
+		return self::with_placeholder( $result );
 	}
 
 	public static function get_options_pages_for_js() {
@@ -179,7 +179,7 @@ class Tools {
 				$result[ $role ] = $data['name'];
 			}
 
-			return self::with_placeholder( $result );
+			return $result;
 		}
 	}
 

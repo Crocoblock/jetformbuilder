@@ -26,18 +26,27 @@ function Messages() {
 		useEffect
 	} = wp.element;
 
-	const DocumentSettingPanel = () => {
+	const DocumentSettingPanelMessages = () => {
 
-		const meta = useSelect( ( select ) => {
-			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-		} );
+		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const {
 			editPost
 		} = useDispatch( 'core/editor' );
 
+		const getDefaultMessagesValues = () => {
+			const defaults = {};
+			Object.entries( JetFormEditorData.messagesDefault ).forEach( ( [ type, data ] ) => {
+				defaults[ type ] = data.value;
+			} );
 
-		const [messages, setMessages] = useState( JSON.parse( meta._jf_messages ) );
+			return defaults;
+		}
+
+		const [messages, setMessages] = useState( () => {
+			const metaMessages = JSON.parse( meta._jf_messages || '{}' );
+			return Tools.isEmptyObject( metaMessages ) ? getDefaultMessagesValues() : metaMessages;
+		} );
 
 		useEffect( () => {
 			editPost( {
@@ -50,13 +59,7 @@ function Messages() {
 		} );
 
 		const onChangeMessage = ( type, value ) => {
-			setMessages(
-				Object.assign(
-					{},
-					messages,
-					{ [ type ]: value }
-				)
-			);
+			setMessages( prev => ( { ...prev, [ type ]: value } ) );
 		}
 
 		return (
@@ -67,7 +70,7 @@ function Messages() {
 				{ Object.entries( messages ).map( ( [type, text], id ) => {
 					return <TextControl
 						key={ type + id }
-						label={ JetFormEditorData.messagesLabels[ type ] }
+						label={ JetFormEditorData.messagesDefault[ type ].label }
 						value={ text }
 						onChange={ newValue => onChangeMessage( type, newValue ) }
 					/>;
@@ -78,7 +81,7 @@ function Messages() {
 	};
 
 	registerPlugin( 'jf-messages-panel', {
-		render: DocumentSettingPanel,
+		render: DocumentSettingPanelMessages,
 		icon: null,
 	} );
 }

@@ -24,7 +24,7 @@ const {
 	ServerSideRender,
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	PanelColor,

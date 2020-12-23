@@ -54,7 +54,7 @@ trait Base_Select_Radio_Check {
 					'Here you can set meta field name to use its value as calculated value for current form field',
 					'jet-form-builder'
 				),
-				'is_switch_page'       => __(
+				'switch_on_change'       => __(
 					'Check this to switch page to next on current value change',
 					'jet-form-builder'
 				),
@@ -142,7 +142,9 @@ trait Base_Select_Radio_Check {
 				'default' => ''
 			),
 
-			'is_switch_page' => array(
+			// is_switch_page
+
+			'switch_on_change' => array(
 				'type'    => 'boolean',
 				'default' => false
 			),
@@ -157,6 +159,9 @@ trait Base_Select_Radio_Check {
    */
 	public function get_field_options() {
 		$args = $this->block_attrs;
+
+//		echo '<pre>';
+//		var_dump( $args );
 
 		$options_from = ! empty( $args['field_options_from'] ) ? $args['field_options_from'] : 'manual_input';
 		$options      = array();

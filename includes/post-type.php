@@ -298,7 +298,7 @@ class Post_Type {
 		$this->messages = apply_filters( 'jet-form-builder/message-types', array(
 			'success'           => array(
 				'label' => __( 'Form successfully submitted.', 'jet-form-builder' ),
-				'value' => 'Form successfully submitted.',
+				'value' => 'Form successfully submitted.!!!!',
 			),
 			'failed'            => array(
 				'label' => __( 'Submit failed.', 'jet-form-builder' ),

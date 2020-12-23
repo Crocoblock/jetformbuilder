@@ -331,8 +331,8 @@ class Editor {
 		) );
 	}
 
-	public function get_messages_labels() {
-		return Plugin::instance()->post_type->get_messages_labels();
+	public function get_messages_default() {
+		return Plugin::instance()->post_type->get_messages_default();
 	}
 
 	public function get_recaptcha_labels() {
@@ -389,7 +389,7 @@ class Editor {
 			'action'          => $this->get_action(),
 			'itemID'          => $this->get_item_id(),
 			'presetConfig'    => $this->get_preset_config(),
-			'messagesLabels'  => $this->get_messages_labels(),
+			'messagesDefault' => $this->get_messages_default(),
 			'recaptchaLabels' => $this->get_recaptcha_labels(),
 			'gateways'        => $this->get_gateways_data(),
 		) );

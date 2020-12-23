@@ -578,7 +578,7 @@
     margin-bottom: 0.7em;
 }
 
-.jet-form-edit-modal .full-width select {
+select.components-select-control__input {
     max-width: 100vw;
     width: 100%;
 }
@@ -590,4 +590,14 @@
 .jet-form-builder__calculated-field {
     display: flex;
     width: 100%;
+}
+
+.jet-form-action .components-card__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jet-form-action .components-card__body div:first-child {
+    flex: 0 0 60%;
 }

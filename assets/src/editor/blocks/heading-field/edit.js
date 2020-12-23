@@ -19,7 +19,7 @@ const {
 	ServerSideRender,
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 
 const keyControls = block + '-controls-edit';

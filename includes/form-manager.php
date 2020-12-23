@@ -48,7 +48,9 @@ class Form_Manager {
 			$instances = apply_filters( 'jet-form-builder/forms/options-generators', $instances, $this );
 
 			foreach ( $instances as $instance ) {
-				$this->generators[ $instance->get_id() ] = $instance;
+				if ( $instance->can_generate() ) {
+					$this->generators[ $instance->get_id() ] = $instance;
+				}
 			}
 
 		}

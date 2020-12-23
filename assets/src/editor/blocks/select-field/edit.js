@@ -27,7 +27,7 @@ const {
 	ServerSideRender,
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	PanelColor,
@@ -140,12 +140,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class SelectEdit extends wp.
 					/> }
 
 					<ToggleControl
-						key='is_switch_page'
+						key='switch_on_change'
 						label={ __( 'Switch page on change' ) }
-						checked={ attributes.is_switch_page }
-						help={ Tools.getHelpMessage( this.data, 'is_switch_page' ) }
+						checked={ attributes.switch_on_change }
+						help={ Tools.getHelpMessage( this.data, 'switch_on_change' ) }
 						onChange={ ( newValue ) => {
-							props.setAttributes( { is_switch_page: Boolean( newValue ) } );
+							props.setAttributes( { switch_on_change: Boolean( newValue ) } );
 						} }
 					/>
 				</div> }

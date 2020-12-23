@@ -22,6 +22,10 @@ class Get_From_Field extends Base {
 		return __( 'Get values list from JetEngine field options', 'jet-form-builder' );
 	}
 
+	public function can_generate() {
+		return function_exists( 'jet_engine' );
+	}
+
 	/**
 	 * Returns generated options list
 	 *

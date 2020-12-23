@@ -25,17 +25,15 @@ function PresetMeta() {
 		useEffect
 	} = wp.element;
 
-	const DocumentSettingPanel = () => {
+	const DocumentSettingPanelPreset = () => {
 
-		const meta = useSelect( ( select ) => {
-			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-		} );
+		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [args, setArgs] = useState( JSON.parse( meta._jf_preset ) );
+		const [args, setArgs] = useState( JSON.parse( meta._jf_preset || '{}' ) );
 
 		useEffect( () => {
 
@@ -83,7 +81,7 @@ function PresetMeta() {
 	};
 
 	registerPlugin( 'jf-preset-panel', {
-		render: DocumentSettingPanel,
+		render: DocumentSettingPanelPreset,
 		icon: null,
 	} );
 }

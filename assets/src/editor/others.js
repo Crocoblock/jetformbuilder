@@ -11,7 +11,7 @@ const {
 	MediaUpload,
 	BlockControls,
 	InspectorControls,
-} = wp.blockEditor;
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	PanelBody,
@@ -115,7 +115,7 @@ registerBlockType(
 
 		title: formBlock.title,
 		category: 'layout',
-		icon: 'feedback',
+		icon: <span dangerouslySetInnerHTML={ { __html: formBlock.icon } }></span>,
 		attributes: formBlock.attributes,
 		edit: FormEdit,
 		save: FormSave,

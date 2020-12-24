@@ -5,7 +5,7 @@ function RepeaterWithState( {
 								repeaterItemClasses = [],
 								newItem,
 								addNewButtonLabel = 'Add New',
-								items,
+								items = [],
 								isSaveAction,
 								onSaveItems,
 								onUnMount,

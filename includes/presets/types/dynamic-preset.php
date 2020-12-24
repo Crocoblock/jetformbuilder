@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Presets\Types;
 
 class Dynamic_Preset extends Base_Preset {
 
+	public $json_value_key;
+
+	public function __construct( $json_value_key = 'default' ) {
+		$this->json_value_key = $json_value_key;
+	}
 
 	public $result = array(
 		'rewrite' => true,
@@ -36,11 +41,11 @@ class Dynamic_Preset extends Base_Preset {
 
 	public function is_active_preset( $args ) {
 
-		if ( empty( $args['default'] ) ) {
+		if ( empty( $args[ $this->json_value_key ] ) ) {
 			return false;
 		}
 
-		$dynamic_preset = json_decode( $args['default'], true );
+		$dynamic_preset = json_decode( $args[ $this->json_value_key ], true );
 
 		if ( empty( $dynamic_preset ) || empty( $dynamic_preset['jet_preset'] ) ) {
 			return false;
@@ -49,6 +54,15 @@ class Dynamic_Preset extends Base_Preset {
 		$this->set_init_data( $dynamic_preset );
 
 		return true;
+	}
+
+	public function parse_value( $args ) {
+
+		if ( ! $this->is_active_preset( $args ) ) {
+			return $args[ $this->json_value_key ];
+		}
+
+		return $this->set_additional_data()->get_preset_value()['value'];
 	}
 
 }

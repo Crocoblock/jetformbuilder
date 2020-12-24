@@ -45,6 +45,8 @@
 				} );
 			}
 
+			console.log( val, listenFor );
+
 			switch ( operator ) {
 				case 'equal':
 					if ( val && val.constructor === Array ) {
@@ -109,7 +111,6 @@
 					break;
 
 				case 'contain':
-
 					if ( val && val.constructor === Array ) {
 
 						var intersect = val.filter( function( n ) {
@@ -121,7 +122,7 @@
 					} else if ( ! val ) {
 						checkResult = false;
 					} else {
-						checkResult = 0 <= val.indexOf( listenFor );
+						checkResult = 0 <= listenFor.indexOf( val );
 					}
 
 					break;
@@ -135,6 +136,8 @@
 			var checked = $section.data( 'checked' );
 			var $listenTo = $( listenTo );
 			var checkResult = checkValue( $listenTo, listenFor, operator );
+
+			console.log( checkResult );
 
 			type = type || 'show';
 
@@ -669,7 +672,7 @@
 		},
 
 		initConditions: function( $scope ) {
-			$scope.find( '.jet-form-col' ).jetFormConditional();
+			$scope.find( '.jet-form-builder__conditional' ).jetFormConditional();
 		},
 
 		widgetBookingForm: function( $scope ) {

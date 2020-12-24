@@ -23,8 +23,6 @@ class Preset_Source_User extends Base_Source {
 		if ( 'current_user' === $user_from ) {
 			if ( is_user_logged_in() ) {
 				$this->src = wp_get_current_user();
-				echo '<pre>';
-				var_dump( $this->src );
 			}
 		} else {
 

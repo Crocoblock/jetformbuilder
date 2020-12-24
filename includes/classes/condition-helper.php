@@ -84,13 +84,7 @@ class Condition_Helper {
 	}
 
 	private function get_parsed_value( $condition ) {
-		$preset = new Dynamic_Preset();
-
-		if ( ! $preset->is_active_preset( $condition ) ) {
-			return $condition['default'];
-		}
-
-		return $preset->set_additional_data()->get_preset_value()['value'];
+		return ( new Dynamic_Preset )->parse_value( $condition );
 	}
 
 

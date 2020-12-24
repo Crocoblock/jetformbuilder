@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types\Calculated_Field;
 use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
+use Jet_Form_Builder\Blocks\Types\Conditional_Block;
 use Jet_Form_Builder\Blocks\Types\Date_Field;
 use Jet_Form_Builder\Blocks\Types\Form_Break_Field;
 use Jet_Form_Builder\Blocks\Types\Group_Break_Field;
@@ -142,6 +143,7 @@ class Manager {
 			new Repeater_Field(),
 			new Form_Break_Field(),
 			new Group_Break_Field(),
+			new Conditional_Block(),
 		);
 
 		foreach ( $types as $type ) {

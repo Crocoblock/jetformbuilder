@@ -518,8 +518,14 @@ abstract class Base {
 	}
 
 	final public function get_field_icon() {
+		$icon = $this->get_icon_path( $this->get_name() . '.php' );
+
+		if ( ! file_exists( $icon ) ) {
+			$icon = $this->get_icon_path( 'empty-field.php' );
+		}
+
 		ob_start();
-		require $this->get_icon_path( $this->get_name() . '.php' );
+		require $icon;
 		return ob_get_clean();
 	}
 

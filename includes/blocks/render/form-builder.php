@@ -192,16 +192,23 @@ class Form_Builder {
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
 				'field_value' => $this->form_id,
-				'name'        => '_jet_engine_booking_form_id',
+				'name'        => Plugin::instance()->form_handler->form_key,
 			)
 		);
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
 				'field_value' => $this->get_form_refer_url(),
-				'name'        => '_jet_engine_refer',
+				'name'        => Plugin::instance()->form_handler->refer_key,
 			)
 		);
+		$form .= Live_Form::force_render_field( 'hidden-field',
+			array(
+				'field_value' => Live_Form::instance()->post->ID,
+				'name'        => Plugin::instance()->form_handler->post_id_key,
+			)
+		);
+
 		$form .= Live_Form::instance()->maybe_start_page();
 
 		foreach ( $this->blocks as $block ) {

@@ -18,7 +18,7 @@ abstract class Base_Source {
 	}
 
 	public function get_source() {
-		$post_from = ! empty( $this->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
+		$post_from = ! empty( $this->preset_type->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
 
 		if ( 'current_post' === $post_from ) {
 			$post_id = get_the_ID();
@@ -39,14 +39,13 @@ abstract class Base_Source {
 	}
 
 	public function __call( string $prop, array $arguments ) {
-		$source = $this->preset_type->source;
+		$source = $this->src;
 
-		if ( isset( $source->data ) && isset( $source->data->$prop ) ) {
-			return $source->data->$prop;
-		} elseif ( isset( $source->$prop ) ) {
+		if ( isset( $source->$prop ) ) {
 			return $source->$prop;
+		} elseif ( isset( $source->data ) && isset( $source->data->$prop ) ) {
+			return $source->data->$prop;
 		}
-
 		return '';
 	}
 
@@ -55,15 +54,12 @@ abstract class Base_Source {
 	}
 
 	public function get_result_on_prop() {
-		if ( ! is_callable( array( $this, $this->prop ) ) ) {
-			return $this->preset_type->result;
-		}
-
 		return call_user_func( array( $this, $this->prop ) );
 	}
 
 	public function result() {
-		if ( $this->can_get_preset() ) {
+		if ( ! $this->can_get_preset() ) {
+			var_dump(342342 );
 			return $this->preset_type->result;
 		}
 		$this->set_prop();

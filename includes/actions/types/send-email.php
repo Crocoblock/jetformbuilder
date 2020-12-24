@@ -38,6 +38,7 @@ class Send_Email extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
+		var_dump( 'send_email' ); die;
 		$this->data = $request;
 
 		$mail_to     = ! empty( $this->settings['mail_to'] ) ? $this->settings['mail_to'] : 'admin';

@@ -23,6 +23,8 @@ class Preset_Source_User extends Base_Source {
 		if ( 'current_user' === $user_from ) {
 			if ( is_user_logged_in() ) {
 				$this->src = wp_get_current_user();
+				echo '<pre>';
+				var_dump( $this->src );
 			}
 		} else {
 
@@ -40,9 +42,9 @@ class Preset_Source_User extends Base_Source {
 	 */
 	protected function can_get_preset() {
 		return (
-			( ! $this->src || is_wp_error( $this->src ) )
-			|| ! is_user_logged_in()
-			|| ( get_current_user_id() !== $this->src->ID && ! current_user_can( 'edit_users' ) )
+			( ! $this->src && ! is_wp_error( $this->src ) )
+			&& is_user_logged_in()
+			|| ( get_current_user_id() === $this->src->ID || current_user_can( 'edit_users' ) )
 		);
 	}
 

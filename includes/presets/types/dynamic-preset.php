@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Presets\Types;
 
 class Dynamic_Preset extends Base_Preset {
 
+
 	public $result = array(
 		'rewrite' => true,
 		'value'   => '',
@@ -22,7 +23,7 @@ class Dynamic_Preset extends Base_Preset {
 
 	public function get_preset_value() {
 
-		if ( ! $this->source ) {
+		if ( ! $this->source->src ) {
 			return $this->result;
 		}
 
@@ -34,6 +35,7 @@ class Dynamic_Preset extends Base_Preset {
 	}
 
 	public function is_active_preset( $args ) {
+
 		if ( empty( $args['default'] ) ) {
 			return false;
 		}

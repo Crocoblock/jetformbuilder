@@ -167,7 +167,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 
 						<SelectControl
 							key='repeater_calc_type'
-							label={ __( 'Manage repeater items count' ) }
+							label={ __( 'Calculate repeater row value' ) }
 							labelPosition='top'
 							value={ attributes.repeater_calc_type }
 							onChange={ newValue => {

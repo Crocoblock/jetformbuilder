@@ -19,18 +19,11 @@ class General_Preset extends Base_Preset {
 
 	public function get_preset_value() {
 
-		if ( empty( $this->data['enabled'] ) || ! $this->source ) {
+		if ( empty( $this->data['enabled'] ) || ! $this->source->src || empty( $this->field_data ) ) {
 			return $this->result;
 		}
 
 		return $this->_get_values();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function get_source() {
-		// TODO: Implement get_source() method.
 	}
 
 	public function preset_source( $form_id ) {

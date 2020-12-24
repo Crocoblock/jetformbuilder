@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Classes;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 class Condition_Helper {
 
@@ -32,27 +33,29 @@ class Condition_Helper {
 
 	public function check( $condition ) {
 		$request = $this->action_handler->request_data;
+		$compare = $this->get_parsed_value( $condition );
+
 		switch ( $condition['operator'] ) {
 			case 'equal':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] === $condition['compare'];
+					return $request[ $condition['field'] ] == $compare;
 				}
 				break;
 			case 'greater':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] > $condition['compare'];
+					return $request[ $condition['field'] ] > $compare;
 				}
 				break;
 			case 'less':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] < $condition['compare'];
+					return $request[ $condition['field'] ] < $compare;
 				}
 				break;
 			case 'between':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					$compare_values = array_map( 'trim', explode( ',', $condition['compare'] ) );
+					$compare_values = array_map( 'trim', explode( ',', $compare ) );
 
-					if ( count( $compare_values ) !== 2 ) {
+					if ( count( $compare_values ) != 2 ) {
 						return false;
 					}
 
@@ -61,7 +64,7 @@ class Condition_Helper {
 				break;
 			case 'one_of':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					$compare_values = array_map( 'trim', explode( ',', $condition['compare'] ) );
+					$compare_values = array_map( 'trim', explode( ',', $compare ) );
 
 					if ( ! is_array( $compare_values ) ) {
 						return false;
@@ -72,7 +75,7 @@ class Condition_Helper {
 				break;
 			case 'contain':
 				if ( isset( $request[ $condition['field'] ] ) ) {
-					return ( strpos( $request[ $condition['field'] ], $condition['compare'] ) !== false );
+					return ( strpos( $request[ $condition['field'] ], $compare ) !== false );
 				}
 				break;
 		}
@@ -80,8 +83,14 @@ class Condition_Helper {
 		return false;
 	}
 
-	private function get_parsed_value() {
+	private function get_parsed_value( $condition ) {
+		$preset = new Dynamic_Preset();
 
+		if ( ! $preset->is_active_preset( $condition ) ) {
+			return $condition['default'];
+		}
+
+		return $preset->set_additional_data()->get_preset_value()['value'];
 	}
 
 

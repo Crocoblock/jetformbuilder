@@ -25,6 +25,8 @@ class Redirect_To_Page extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
+		var_dump( 11111122222 ); die;
+
 		$type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
 
 		switch ( $type ) {

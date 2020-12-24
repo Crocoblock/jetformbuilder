@@ -21,7 +21,7 @@ const newItemCondition = {
 	execute: false,
 	operator: '',
 	field: '',
-	compare: '',
+	default: '',
 };
 
 const conditionOperators = [
@@ -347,12 +347,12 @@ function ActionsMeta() {
 									/>
 									<FieldWithPreset
 										ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-											value={ currentItem.compare }
+											value={ currentItem.default }
 											isSaveAction={ actionClick }
 											onSavePreset={ newValue => {
 												changeCurrentItem( {
 													value: newValue,
-													name: 'compare',
+													name: 'default',
 												} );
 											} }
 											excludeSources={ [ 'query_var' ] }
@@ -362,11 +362,11 @@ function ActionsMeta() {
 									>
 										<TextareaControl
 											label="Value to Compare"
-											value={ currentItem.compare }
+											value={ currentItem.default }
 											onChange={ newValue => {
 												changeCurrentItem( {
 													value: newValue,
-													name: 'compare',
+													name: 'default',
 												} );
 											} }
 										/>

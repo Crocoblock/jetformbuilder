@@ -26,10 +26,10 @@ abstract class Base_Preset {
 	public $from;
 	public $fields_map;
 	public $field_data = array();
-	public $array_allowed;
+	public $array_allowed = false;
 
 	public $data;
-	public $field;
+	public $field = '__condition__';
 	public $args;
 
 	abstract public function get_fields_map();
@@ -64,7 +64,9 @@ abstract class Base_Preset {
 	}
 
 	private function set_array_allowed() {
-		$this->array_allowed = in_array( $this->args['type'], array( 'checkboxes' ) ) || ! empty( $args['array_allowed'] );
+		if ( isset( $this->args['type'] ) && isset( $args['array_allowed'] ) ) {
+			$this->array_allowed = in_array( $this->args['type'], array( 'checkboxes' ) ) || ! empty( $args['array_allowed'] );
+		}
 	}
 
 	private function set_field_data() {
@@ -91,7 +93,14 @@ abstract class Base_Preset {
 			return $this->result;
 		}
 
-		return $this->source->result();
+		$result = $this->source->result();
+
+
+		$this->args = array();
+		$this->field_data = array();
+		$this->result['value'] = null;
+
+		return $result;
 	}
 
 }

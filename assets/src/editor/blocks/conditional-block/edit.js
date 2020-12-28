@@ -1,8 +1,4 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
 import Tools from "../../tools";
-import FieldWrapper from '../../components/field-wrapper';
 import ActionModal from "../../components/action-modal";
 import RepeaterWithState from "../../components/repeater-with-state";
 import FieldWithPreset from "../../components/field-with-preset";
@@ -40,13 +36,24 @@ const condition = {
 	field: '',
 	operator: '',
 	value: '',
-	set_value: ''
+	set_value: '',
 };
 
 const conditionTypes = [
-	{ label: 'Hide this field if...', value: 'hide' },
-	{ label: 'Show this field if...', value: 'show' },
-	{ label: 'Set value for this field if...', value: 'set_value' },
+	{ label: '--', value: '' },
+	{
+		label: 'Hide this field if...',
+		value: 'hide'
+	},
+	{
+		label: 'Show this field if...',
+		value: 'show'
+	},
+	{
+		label: 'Set value for this field if...',
+		value: 'set_value',
+		condition: 'isSingleField',
+	},
 ];
 
 const conditionOperators = [
@@ -59,9 +66,22 @@ const conditionOperators = [
 	{ label: 'Contain text', value: 'contain' },
 ];
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = function ConditionalBlockEdit( { isSelected, setAttributes, attributes } ) {
 
-	const [ showModal, setShowModal ] = useState( false );
+
+function ConditionalBlockEdit( {
+								   isSelected,
+								   setAttributes,
+								   attributes,
+								   clientId
+							   } ) {
+
+	Tools.addConditionForCondType( 'isSingleField', () => {
+		return 1 === Tools.getInnerBlocks( clientId ).length;
+	} )
+
+	const getConditionTypes = Tools.parseConditionsFunc( conditionTypes );
+	const [showModal, setShowModal] = useState( false );
+
 	const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
 
 	return [
@@ -103,12 +123,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function ConditionalBlockEdi
 						label="Type"
 						labelPosition="side"
 						value={ currentItem.type }
-						options={ conditionTypes }
+						options={ getConditionTypes }
 						onChange={ newValue => {
-							changeCurrentItem( {
-								value: newValue,
-								name: 'type',
-							} );
+							changeCurrentItem( { type: newValue } );
 						} }
 					/>
 					<SelectControl
@@ -117,10 +134,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function ConditionalBlockEdi
 						value={ currentItem.field }
 						options={ formFields }
 						onChange={ newValue => {
-							changeCurrentItem( {
-								value: newValue,
-								name: 'field',
-							} );
+							changeCurrentItem( { field: newValue } );
 						} }
 					/>
 					<SelectControl
@@ -129,39 +143,53 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function ConditionalBlockEdi
 						value={ currentItem.operator }
 						options={ conditionOperators }
 						onChange={ newValue => {
-							changeCurrentItem( {
-								value: newValue,
-								name: 'operator',
-							} );
+							changeCurrentItem( { operator: newValue } );
 						} }
 					/>
 					<FieldWithPreset
+						key="value_to_compare"
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							value={ currentItem.value }
 							isSaveAction={ actionClick }
 							onSavePreset={ newValue => {
-								changeCurrentItem( {
-									value: newValue,
-									name: 'value',
-								} );
+								changeCurrentItem( { value: newValue } );
 							} }
 							onUnMount={ onRequestClose }
 						/> }
-						triggerClasses={ ['trigger--unset-margin-top'] }
+						triggerClasses={ ['trigger__textarea'] }
 					>
 						<TextareaControl
 							label="Value to Compare"
 							value={ currentItem.value }
 							onChange={ newValue => {
-								changeCurrentItem( {
-									value: newValue,
-									name: 'value',
-								} );
+								changeCurrentItem( { value: newValue } );
 							} }
 						/>
 					</FieldWithPreset>
+					{ 'set_value' === currentItem.type && <FieldWithPreset
+						key="value_to_set"
+						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+							value={ currentItem.set_value }
+							isSaveAction={ actionClick }
+							onSavePreset={ newValue => {
+								changeCurrentItem( { set_value: newValue } );
+							} }
+							onUnMount={ onRequestClose }
+						/> }
+						triggerClasses={ ['trigger__textarea'] }
+					>
+						<TextareaControl
+							label="Value to Set"
+							value={ currentItem.set_value }
+							onChange={ newValue => {
+								changeCurrentItem( { value: newValue } );
+							} }
+						/>
+					</FieldWithPreset> }
 				</> }
 			</RepeaterWithState> }
 		</ActionModal>
 	];
 }
+
+window.jetFormBuilderBlockCallbacks[ block ].edit = ConditionalBlockEdit;

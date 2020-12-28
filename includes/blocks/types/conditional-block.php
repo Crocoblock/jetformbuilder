@@ -3,7 +3,6 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
-use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 // If this file is called directly, abort.
@@ -31,14 +30,14 @@ class Conditional_Block extends Base {
 
 	public function get_conditions() {
 		foreach ( $this->block_attrs['conditions'] as $index => $condition ) {
-			$this->block_attrs['conditions'][ $index ]['value'] = $this->parse_condition( $condition );
+			$this->parse_condition( $condition, $index );
 		}
-
 		return htmlspecialchars( json_encode( $this->block_attrs['conditions'] ) );
 	}
 
-	private function parse_condition( $condition ) {
-		return ( new Dynamic_Preset( 'value' ) )->parse_value( $condition );
+	private function parse_condition( $condition, $index ) {
+		$this->block_attrs['conditions'][ $index ]['value'] = ( new Dynamic_Preset( 'value' ) )->parse_value( $condition );
+		$this->block_attrs['conditions'][ $index ]['set_value'] = ( new Dynamic_Preset( 'set_value' ) )->parse_value( $condition );
 	}
 
 	/**

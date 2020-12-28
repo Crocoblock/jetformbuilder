@@ -148,9 +148,16 @@
 .jet-form-dynamic-preset {
     display: flex;
     align-items: flex-start;
+    position: relative;
 }
 
 .jet-form-dynamic-preset .components-base-control {
+    width: 100%;
+}
+
+.jet-form-dynamic-preset .components-base-control__field input,
+.jet-form-dynamic-preset .components-base-control__field textarea {
+    padding-right: 36px;
     width: calc(100% - 31px);
 }
 
@@ -166,6 +173,15 @@
     border-left: none;
     margin: 26px 0 0 0;
     cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.jet-form-dynamic-preset__trigger.trigger__textarea {
+    margin-top: unset;
+    border-radius: 0 0 0 5px;
 }
 
 .jet-form-dynamic-preset__trigger:hover svg path {
@@ -226,6 +242,7 @@
 }
 
 .block-editor-block-list__block[data-type="jet-forms/repeater-field"],
+.block-editor-block-list__block[data-type="jet-forms/conditional-block"],
 .block-editor-block-list__block[data-type^="jet-forms/"] .inside-block-options {
     padding: 20px;
     background: #fff;
@@ -240,7 +257,8 @@
     margin-bottom: 20px;
 }
 
-.block-editor-block-list__block[data-type="jet-forms/repeater-field"]:hover {
+.block-editor-block-list__block[data-type="jet-forms/repeater-field"]:hover,
+.block-editor-block-list__block[data-type="jet-forms/conditional-block"]:hover {
     -webkit-box-shadow: 0 20px 20px rgba(22, 43, 64, .12);
     box-shadow: 0 20px 20px rgba(22, 43, 64, .12);
     -webkit-transition: .3s all;
@@ -580,7 +598,7 @@ select.components-select-control__input {
 }
 
 .jet-form-action .components-card__body div:first-child {
-    flex: 0 0 60%;
+    flex: 0 0 50%;
 }
 
 .components-text-control__input {

@@ -49,12 +49,13 @@ function RepeaterWithState( {
 
 	const [itemsData, setItemsData] = useState( () => parsedItems() );
 
-	const changeCurrentItem = ( { value, name }, index ) => {
+	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
-			const clonePrev = [...prev];
-			clonePrev[ index ][ name ] = value;
-
-			return clonePrev;
+			prev[ index ] = {
+				...prev[ index ],
+				...valueToSet,
+			};
+			return [ ...prev ];
 		} );
 	};
 

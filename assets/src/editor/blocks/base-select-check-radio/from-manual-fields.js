@@ -113,10 +113,7 @@ class FromManualFields extends wp.element.Component {
 											label={ __( 'Label' ) }
 											value={ currentItem.label }
 											onChange={ newValue => {
-												changeCurrentItem( {
-													value: newValue,
-													name: 'label',
-												} );
+												changeCurrentItem( { label: newValue } );
 											} }
 										/>
 									</div>
@@ -126,10 +123,7 @@ class FromManualFields extends wp.element.Component {
 											label={ __( 'Value' ) }
 											value={ currentItem.value }
 											onChange={ ( newValue ) => {
-												changeCurrentItem( {
-													value: newValue,
-													name: 'value',
-												} );
+												changeCurrentItem( { value: newValue } );
 											} }
 										/>
 									</div>
@@ -139,10 +133,7 @@ class FromManualFields extends wp.element.Component {
 											label={ __( 'Calculate' ) }
 											value={ currentItem.calculate }
 											onChange={ ( newValue ) => {
-												changeCurrentItem( {
-													value: newValue,
-													name: 'calculate',
-												} );
+												changeCurrentItem( { calculate: newValue } );
 											} }
 										/>
 									</div>

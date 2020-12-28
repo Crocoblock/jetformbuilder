@@ -12,6 +12,11 @@ const {
 	BaseControl,
 } = wp.components;
 
+const {
+	useState,
+	useEffect
+} = wp.element;
+
 const PresetRender = {
 	GlobalField: function ( {
 								data,
@@ -20,7 +25,7 @@ const PresetRender = {
 								onChangeValue,
 								options,
 								isVisible,
-	} ) {
+							} ) {
 
 		switch ( data.type ) {
 			case 'text':
@@ -58,6 +63,8 @@ const PresetRender = {
 					</div>
 				);
 		}
+
+
 		return null;
 	},
 	AvailableMapField: function ( {
@@ -67,7 +74,7 @@ const PresetRender = {
 									  value,
 									  onChangeValue,
 									  isMapFieldVisible
-	} ) {
+								  } ) {
 
 		let currentVal = null;
 
@@ -139,7 +146,7 @@ const PresetRender = {
 							 currentState,
 							 onChangeValue,
 							 isCurrentFieldVisible
-	} ) {
+						 } ) {
 
 		switch ( data.type ) {
 			case 'text':

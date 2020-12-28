@@ -315,10 +315,7 @@ function ActionsMeta() {
 										label={ __( 'Execute an action when the condition is met' ) }
 										checked={ currentItem.execute }
 										onChange={ newValue => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'execute',
-											} );
+											changeCurrentItem( { execute: newValue } );
 										} }
 									/>
 									<SelectControl
@@ -327,10 +324,7 @@ function ActionsMeta() {
 										value={ currentItem.operator }
 										options={ conditionOperators }
 										onChange={ newValue => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'operator',
-											} );
+											changeCurrentItem( { operator: newValue } );
 										} }
 									/>
 									<SelectControl
@@ -339,10 +333,7 @@ function ActionsMeta() {
 										value={ currentItem.field }
 										options={ formFields }
 										onChange={ newValue => {
-											changeCurrentItem( {
-												value: newValue,
-												name: 'field',
-											} );
+											changeCurrentItem( { field: newValue } );
 										} }
 									/>
 									<FieldWithPreset
@@ -350,24 +341,18 @@ function ActionsMeta() {
 											value={ currentItem.default }
 											isSaveAction={ actionClick }
 											onSavePreset={ newValue => {
-												changeCurrentItem( {
-													value: newValue,
-													name: 'default',
-												} );
+												changeCurrentItem( { default: newValue } );
 											} }
 											excludeSources={ [ 'query_var' ] }
 											onUnMount={ onRequestClose }
 										/> }
-										triggerClasses={ ['trigger--unset-margin-top'] }
+										triggerClasses={ ['trigger__textarea'] }
 									>
 										<TextareaControl
 											label="Value to Compare"
 											value={ currentItem.default }
 											onChange={ newValue => {
-												changeCurrentItem( {
-													value: newValue,
-													name: 'default',
-												} );
+												changeCurrentItem( { default: newValue } );
 											} }
 										/>
 									</FieldWithPreset>

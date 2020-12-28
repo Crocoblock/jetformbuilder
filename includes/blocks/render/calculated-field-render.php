@@ -59,6 +59,8 @@ class Calculated_Field_Render extends Base {
 			$args['calc_formula']
 		);
 
+		$formula = str_replace( '^', '**', $formula );
+
 		return array(
 			'formula'       => $formula,
 			'listen_fields' => $listen_fields,

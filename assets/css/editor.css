@@ -148,16 +148,10 @@
 .jet-form-dynamic-preset {
     display: flex;
     align-items: flex-start;
-    position: relative;
 }
 
 .jet-form-dynamic-preset .components-base-control {
-    width: 100%;
-}
-
-.jet-form-dynamic-preset .components-base-control__field input,
-.jet-form-dynamic-preset .components-base-control__field textarea {
-    padding-right: 36px;
+    width: calc(100% - 31px);
 }
 
 .jet-form-dynamic-preset__trigger {
@@ -169,19 +163,10 @@
     justify-content: center;
     border-radius: 0 2px 2px 0;
     border: 1px solid #757575;
-    border-right: none;
+    border-left: none;
     margin: 26px 0 0 0;
     cursor: pointer;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 100;
 }
-
-.jet-form-dynamic-preset__trigger.trigger--unset-margin-top {
-    margin-top: unset;
-}
-
 
 .jet-form-dynamic-preset__trigger:hover svg path {
     fill: #007cba;
@@ -241,7 +226,6 @@
 }
 
 .block-editor-block-list__block[data-type="jet-forms/repeater-field"],
-.block-editor-block-list__block[data-type="jet-forms/conditional-block"],
 .block-editor-block-list__block[data-type^="jet-forms/"] .inside-block-options {
     padding: 20px;
     background: #fff;
@@ -256,8 +240,7 @@
     margin-bottom: 20px;
 }
 
-.block-editor-block-list__block[data-type="jet-forms/repeater-field"]:hover,
-.block-editor-block-list__block[data-type="jet-forms/conditional-block"]:hover {
+.block-editor-block-list__block[data-type="jet-forms/repeater-field"]:hover {
     -webkit-box-shadow: 0 20px 20px rgba(22, 43, 64, .12);
     box-shadow: 0 20px 20px rgba(22, 43, 64, .12);
     -webkit-transition: .3s all;
@@ -585,10 +568,6 @@ select.components-select-control__input {
     width: 100%;
 }
 
-.interface-complementary-area {
-    width: 340px;
-}
-
 .jet-form-builder__calculated-field {
     display: flex;
     width: 100%;
@@ -601,5 +580,10 @@ select.components-select-control__input {
 }
 
 .jet-form-action .components-card__body div:first-child {
-    flex: 0 0 50%;
+    flex: 0 0 60%;
+}
+
+.components-text-control__input {
+    margin: unset;
+    box-sizing: border-box;
 }

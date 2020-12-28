@@ -91,6 +91,7 @@ class Manager {
 	public function add_default_fields_to_form( $arguments ) {
 		$hidden_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'hidden-field';
 		$submit_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'submit-field';
+		$text_field     = jet_form_builder()->form::NAMESPACE_FIELDS . 'text-field';
 
 		$arguments['template'] = array(
 			array(
@@ -98,6 +99,13 @@ class Manager {
 				array(
 					'name'        => 'post_id',
 					'field_value' => 'post_id'
+				)
+			),
+			array(
+				$text_field,
+				array(
+					'name'  => 'text_field',
+					'label' => 'Text'
 				)
 			),
 			array(

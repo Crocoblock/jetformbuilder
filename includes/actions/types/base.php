@@ -41,6 +41,10 @@ abstract class Base {
 	 */
 	abstract public function do_action( array $request, Action_Handler $handler );
 
+	public function dependence() {
+		return true;
+	}
+
 	public function messages() {
 		return array();
 	}

@@ -35,7 +35,7 @@ class File_Upload {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_upload_script' ) );
 
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'ajax_file_upload' ) );
-
+		add_action( 'wp_ajax_nopriv_' . $this->action, array( $this, 'ajax_file_upload' ) );
 	}
 
 	/**

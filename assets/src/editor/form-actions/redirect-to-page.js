@@ -72,7 +72,7 @@ window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction 
 					this.onChangeSetting( newVal, 'redirect_type' )
 				} }
 			/>
-			<SelectControl
+			{ 'static_page' === settings.redirect_type && <SelectControl
 				key='redirect_type'
 				className="full-width"
 				label={ this.data.labels.redirect_page }
@@ -82,7 +82,7 @@ window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction 
 				onChange={ newVal => {
 					this.onChangeSetting( newVal, 'redirect_page' )
 				} }
-			/>
+			/> }
 			{ 'custom_url' === settings.redirect_type && <TextControl
 				key='redirect_url_control'
 				label={ this.data.labels.redirect_url }

@@ -2526,4 +2526,66 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
     margin-left: 0.5em;
 }
 
+.jet-form-progress-pages, .jet-form-progress-pages__item--wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jet-form-progress-pages__item--wrapper:not(:last-child) {
+    flex: 1 1;
+}
+
+.jet-form-progress-pages__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5em 2em;
+}
+
+.jet-form-progress-pages__item--circle {
+    height: 2.5em;
+    width: 2.5em;
+    border: 1px solid grey;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jet-form-progress-pages__separator {
+    flex: 1 1;
+    height: 1px;
+    background: grey;
+}
+
+.jet-form-progress-pages__item--wrapper.passed-page {
+    color: coral;
+    font-weight: bold;
+}
+
+.jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item--circle {
+    border: 2px solid coral;
+}
+
+.jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
+    background-color: coral;
+    height: 3px;
+}
+
+.jet-form-progress-pages__item--wrapper.active-page {
+    color: green;
+    font-weight: bold;
+}
+
+.jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item--circle {
+    border: 2px solid green;
+}
+
+.jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
+    background-color: green;
+    height: 3px;
+}
+
+
 

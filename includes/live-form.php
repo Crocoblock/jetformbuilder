@@ -42,6 +42,9 @@ class Live_Form {
 	public $has_prev = false;
 	public $post;
 
+	// for progress
+	public $form_breaks;
+
 	/**
 	 * Instance.
 	 *
@@ -136,8 +139,29 @@ class Live_Form {
 		foreach ( $blocks as $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
 				$this->pages ++;
+				$this->form_breaks[] = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] ) ;
 			}
 		}
+	}
+
+	public function maybe_progress_pages() {
+		if ( 0 >= $this->pages ) {
+			return '';
+		}
+
+		ob_start();
+		include $this->get_global_template( 'common/progress-pages.php' );
+		return ob_get_clean();
+	}
+
+	public function get_progress_item_class( $index ) {
+		$classes = array( 'jet-form-progress-pages__item--wrapper' );
+
+		if ( $index === $this->page ) {
+			$classes[] = 'active-page';
+		}
+
+		return implode( ' ', $classes );
 	}
 
 

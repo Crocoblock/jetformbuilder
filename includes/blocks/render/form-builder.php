@@ -203,6 +203,8 @@ class Form_Builder {
 				'name'        => '_jet_engine_refer',
 			)
 		);
+		$form .= Live_Form::instance()->maybe_progress_pages();
+
 		$form .= Live_Form::instance()->maybe_start_page();
 
 		foreach ( $this->blocks as $block ) {

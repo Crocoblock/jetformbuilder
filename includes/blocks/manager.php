@@ -351,14 +351,15 @@ class Manager {
 			return;
 		}
 		$types = $this->get_form_editor_types();
+		$block_name = explode( 'jet-forms/', $block_name );
 
-		$field = isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
+		$field = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;
 
 		if ( ! $field ) {
 			return;
 		}
 
-		return $attributes;
+		return array_merge( $field->get_default_attributes(), $attributes );
 	}
 
 }

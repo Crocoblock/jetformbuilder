@@ -58,7 +58,9 @@ class Manager {
 	 * @return [type]       [description]
 	 */
 	public function register_action_type( $type ) {
-		$this->_types[ $type->get_id() ] = $type;
+		if ( $type->dependence() ) {
+			$this->_types[ $type->get_id() ] = $type;
+		}
 	}
 
 	/**

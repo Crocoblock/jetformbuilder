@@ -42,11 +42,11 @@ function DynamicPreset( {
 	}, [isSaveAction] );
 
 	return <>
-		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => data.options && <PresetRender.GlobalField
+		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
 			value={ stateValue }
 			index={ index }
 			data={ data }
-			options={ excludeOptions( data.options ) }
+			excludeOptions={ excludeOptions }
 			onChangeValue={ onChangeValue }
 			isVisible={ isVisible }
 		/> ) }

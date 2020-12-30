@@ -23,9 +23,10 @@ const PresetRender = {
 								value,
 								index,
 								onChangeValue,
-								options,
 								isVisible,
+								excludeOptions,
 							} ) {
+
 
 		switch ( data.type ) {
 			case 'text':
@@ -53,7 +54,7 @@ const PresetRender = {
 						<SelectControl
 							key={ data.name + index }
 							labelPosition="side"
-							options={ options }
+							options={ excludeOptions( data.options ) }
 							label={ data.label }
 							value={ value[ data.name ] }
 							onChange={ newVal => {

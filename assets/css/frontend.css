@@ -2560,30 +2560,30 @@ body[data-elementor-device-mode="mobile"] .jet-profile-menu.layout-mobile--verti
 }
 
 .jet-form-progress-pages__item--wrapper.passed-page {
-    color: coral;
+    color: #617BE5;
     font-weight: bold;
 }
 
 .jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item--circle {
-    border: 2px solid coral;
+    border: 2px solid #617BE5;
 }
 
 .jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
-    background-color: coral;
+    background-color: #617BE5;
     height: 3px;
 }
 
 .jet-form-progress-pages__item--wrapper.active-page {
-    color: green;
+    color: #34D7A1;
     font-weight: bold;
 }
 
 .jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item--circle {
-    border: 2px solid green;
+    border: 2px solid #34D7A1;
 }
 
 .jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
-    background-color: green;
+    background-color: #34D7A1;
     height: 3px;
 }
 

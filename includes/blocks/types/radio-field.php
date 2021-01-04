@@ -168,7 +168,7 @@ class Radio_Field extends Base {
 			],
 			'attributes'   => [
 				'default' => [
-					'value' => 10,
+					'value' => 0,
 				]
 			]
 		] );

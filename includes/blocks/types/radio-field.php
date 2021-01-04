@@ -146,7 +146,7 @@ class Radio_Field extends Base {
 			]
 		] );
 
-		$this->controls_manager->add_responsive_control( [
+		$this->controls_manager->add_control( [
 			'id'           => 'horisontal_layout_description',
 			'type'         => 'range',
 			'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),

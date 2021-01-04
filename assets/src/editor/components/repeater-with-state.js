@@ -1,3 +1,26 @@
+const { __ } = wp.i18n;
+
+const {
+	Button,
+	ButtonGroup,
+	Card,
+	CardBody,
+	CardHeader,
+	Panel,
+	PanelBody,
+	Draggable,
+	Icon,
+	DropZoneProvider,
+	DropZone,
+	Dashicon,
+} = wp.components;
+
+const {
+	useState,
+	useEffect
+} = wp.element;
+
+
 function RepeaterWithState( {
 								children,
 								ItemHeading,
@@ -10,22 +33,9 @@ function RepeaterWithState( {
 								onSaveItems,
 								onUnMount,
 								onAddNewItem,
-								onRemoveItem
+								onRemoveItem,
+								isSafeDeleting = false,
 							} ) {
-	const { __ } = wp.i18n;
-
-	const {
-		Button,
-		ButtonGroup,
-		Card,
-		CardBody,
-		CardHeader,
-	} = wp.components;
-
-	const {
-		useState,
-		useEffect
-	} = wp.element;
 
 	const classNames = ['jet-form-builder__repeater-component', ...repeaterClasses].join( ' ' );
 	const itemClassNames = ['jet-form-builder__repeater-component-item', ...repeaterItemClasses].join( ' ' );
@@ -55,13 +65,20 @@ function RepeaterWithState( {
 				...prev[ index ],
 				...valueToSet,
 			};
-			return [ ...prev ];
+			return [...prev];
 		} );
 	};
 
+	const onSaveDeleting = index => {
+		return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`, 'jet-form-builder' ) );
+	}
+
 	const removeOption = ( index ) => {
-		if ( onRemoveItem ) {
-			onRemoveItem( index, itemsData );
+		if (
+			isSafeDeleting && ! onSaveDeleting( index ) ||
+			onRemoveItem && ! onRemoveItem( index, itemsData )
+		) {
+			return;
 		}
 
 		setItemsData( prev => {
@@ -79,7 +96,7 @@ function RepeaterWithState( {
 		setItemsData( prev => [...prev, {
 			...value,
 			__visible: true,
-		} ] );
+		}] );
 	}
 
 	const cloneItem = ( index ) => {
@@ -89,17 +106,18 @@ function RepeaterWithState( {
 		} );
 	}
 
-	const moveUp = ( index ) => {
+	const moveRepeaterItem = ( { oldIndex, newIndex } ) => {
 		setItemsData( prev => {
-			[prev[ index - 1 ], prev[ index ]] = [prev[ index ], prev[ index - 1 ]];
+			[prev[ newIndex ], prev[ oldIndex ]] = [prev[ oldIndex ], prev[ newIndex ]];
 			return [...prev];
 		} );
 	}
+
+	const moveUp = ( index ) => {
+		moveRepeaterItem( { oldIndex: index, newIndex: index - 1 } );
+	}
 	const moveDown = ( index ) => {
-		setItemsData( prev => {
-			[prev[ index + 1 ], prev[ index ]] = [prev[ index ], prev[ index + 1 ]];
-			return [...prev];
-		} );
+		moveRepeaterItem( { oldIndex: index, newIndex: index + 1 } );
 	}
 
 	const isDisabledEnd = ( index ) => {
@@ -135,85 +153,90 @@ function RepeaterWithState( {
 		}
 	}, [isSaveAction] );
 
+	const getRepeaterItemId = index => `jet-form-builder-repeater__item_${ index }`;
+
+
+	const RepeaterItem = ( { currentItem, index } ) => <Card
+		isElevated={ true }
+		className={ itemClassNames }
+		key={ getRepeaterItemId( index ) }
+		id={ getRepeaterItemId( index ) }
+	>
+		<CardHeader className={ 'repeater__item__header' }>
+			<div>
+				<ButtonGroup className={ 'repeater-action-buttons' }>
+					<Button
+						isSmall
+						icon={ currentItem.__visible ? 'visibility' : 'hidden' }
+						onClick={ () => toggleVisible( index ) }
+						className={ 'repeater-action-button' }
+					/>
+					<Button
+						isSmall
+						isSecondary
+						disabled={ ! Boolean( index ) }
+						icon={ 'arrow-up-alt2' }
+						onClick={ () => moveUp( index ) }
+						className={ 'repeater-action-button' }
+					/>
+					<Button
+						isSmall
+						isSecondary
+						disabled={ isDisabledEnd( index ) }
+						icon={ 'arrow-down-alt2' }
+						onClick={ () => moveDown( index ) }
+						className={ 'repeater-action-button' }
+					/>
+				</ButtonGroup>
+				<span className={ 'repeater-item-title' }>
+							{ ItemHeading && <ItemHeading
+								currentItem={ currentItem }
+								index={ index }
+								changeCurrentItem={ data => changeCurrentItem( data, index ) }
+							/> }
+					{ ! ItemHeading && `#${ index + 1 }` }
+						</span>
+			</div>
+			<ButtonGroup>
+				<Button
+					isSmall
+					isSecondary
+					onClick={ () => cloneItem( index ) }
+				>
+					{ __( 'Clone', 'jet-form-builder' ) }
+				</Button>
+				<Button
+					isSmall
+					isSecondary
+					isDestructive
+					onClick={ () => removeOption( index ) }
+				>
+					{ __( 'Delete', 'jet-form-builder' ) }
+				</Button>
+			</ButtonGroup>
+		</CardHeader>
+		{ currentItem.__visible && <CardBody
+			className={ 'repeater-item__content' }
+		>
+			{ children && <React.Fragment
+				key={ `repeater-component__item_${ index }` }
+			>
+				{ 'function' === typeof children && children( {
+					currentItem,
+					changeCurrentItem: data => changeCurrentItem( data, index )
+				} ) }
+				{ 'function' !== typeof children && children }
+			</React.Fragment> }
+			{ ! children && 'Set up your Repeater Template, please.' }
+		</CardBody> }
+	</Card>;
 
 	return <div
 		className={ classNames }
 		key={ 'jet-form-builder-repeater' }
 	>
 		{ itemsData.map( ( currentItem, index ) => {
-			return <Card
-				isElevated={ true }
-				className={ itemClassNames }
-				key={ `jet-form-builder-repeater__item_${ index }` }
-			>
-				<CardHeader className={ 'repeater__item__header' }>
-					<div>
-						<ButtonGroup className={ 'repeater-action-buttons' }>
-							<Button
-								isSmall
-								icon={ currentItem.__visible ? 'visibility' : 'hidden' }
-								onClick={ () => toggleVisible( index ) }
-								className={ 'repeater-action-button' }
-							/>
-							<Button
-								isSmall
-								isSecondary
-								disabled={ ! Boolean( index ) }
-								icon={ 'arrow-up-alt2' }
-								onClick={ () => moveUp( index ) }
-								className={ 'repeater-action-button' }
-							/>
-							<Button
-								isSmall
-								isSecondary
-								disabled={ isDisabledEnd( index ) }
-								icon={ 'arrow-down-alt2' }
-								onClick={ () => moveDown( index ) }
-								className={ 'repeater-action-button' }
-							/>
-						</ButtonGroup>
-						<span className={'repeater-item-title'}>
-							{ ItemHeading && <ItemHeading
-								currentItem={ currentItem }
-								index={ index }
-								changeCurrentItem={ data => changeCurrentItem( data, index ) }
-							/> }
-							{ ! ItemHeading && `#${ index + 1 }` }
-						</span>
-					</div>
-					<ButtonGroup>
-						<Button
-							isSmall
-							isSecondary
-							onClick={ () => cloneItem( index ) }
-						>
-							{ __( 'Clone', 'jet-form-builder' ) }
-						</Button>
-						<Button
-							isSmall
-							isSecondary
-							isDestructive
-							onClick={ () => removeOption( index ) }
-						>
-							{ __( 'Delete', 'jet-form-builder' ) }
-						</Button>
-					</ButtonGroup>
-				</CardHeader>
-				{ currentItem.__visible && <CardBody
-					className={ 'repeater-item__content' }
-				>
-					{ children && <React.Fragment
-						key={ `repeater-component__item_${ index }` }
-					>
-						{ 'function' === typeof children && children( {
-							currentItem,
-							changeCurrentItem: data => changeCurrentItem( data, index )
-						} ) }
-						{ 'function' !== typeof children && children }
-					</React.Fragment> }
-					{ ! children && 'Set up your Repeater Template, please.' }
-				</CardBody> }
-			</Card>;
+			return RepeaterItem( { currentItem, index } );
 		} ) }
 		<Button
 			isSecondary

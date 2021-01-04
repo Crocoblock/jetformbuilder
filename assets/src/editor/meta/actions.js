@@ -308,6 +308,7 @@ function ActionsMeta() {
 							isSaveAction={ actionClick }
 							onSaveItems={ updateActionCondition }
 							addNewButtonLabel={ __( 'Add New Condition' ) }
+							isSafeDeleting
 						>
 							{ ( { currentItem, changeCurrentItem } ) => {
 								return <>

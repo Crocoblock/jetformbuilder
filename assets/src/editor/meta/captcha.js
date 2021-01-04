@@ -83,6 +83,9 @@ function Captcha() {
 							secret: newValue
 						} ) ) }
 					/>
+					<span>{ 'Register reCAPTCHA v3 keys ' }
+						<a href="https://www.google.com/recaptcha/admin/create" target="_blank">here</a>
+					</span>
 				</React.Fragment> }
 			</PluginDocumentSettingPanel>
 		)

@@ -25,7 +25,9 @@ function ArgsMeta() {
 
 	const DocumentSettingPanelArgs = () => {
 
-		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		const meta = useSelect( ( select ) => {
+			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		} );
 
 		const {
 			editPost

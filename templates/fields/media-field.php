@@ -4,7 +4,7 @@
  */
 use Jet_Form_Builder\File_Upload;
 
-$this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
+$this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] . '_input'  ) );
 $this->add_attribute( 'type', 'file' );
 $this->add_attribute( 'data-form_id', $this->form_id );
 $this->add_attribute( 'data-field', $args['name'] );

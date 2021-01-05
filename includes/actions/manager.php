@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
+use Jet_Form_Builder\Transformers\Jet_Engine_Transformer;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -48,6 +49,8 @@ class Manager {
 		}
 
 		do_action( 'jet-form-builder/actions/register', $this );
+
+		( new Jet_Engine_Transformer( 71 ) )->save_transformer();
 	}
 
 	/**
@@ -62,10 +65,19 @@ class Manager {
 	}
 
 	/**
+	 * @param string $type
+	 *
 	 * @return array
 	 */
-	public function get_actions() {
+	public function get_actions( $type = '' ) {
+		if ( $type ) {
+			return $this->_types[ $type ];
+		}
 		return $this->_types;
+	}
+
+	public function has_action_type( $type ) {
+		return isset( $this->_types[ $type ] );
 	}
 
 	/**

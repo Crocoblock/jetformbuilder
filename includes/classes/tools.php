@@ -244,4 +244,32 @@ class Tools {
 		       && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
+	public static function array_merge_intersect_key( $source, $arrays ) {
+		foreach ( $source as $index => $path ) {
+			$name = isset( $path[ 'path' ] ) ? $path[ 'path' ] : $path[ 'name' ];
+			$type = isset( $path['type'] ) ? $path['type'] : 'string';
+
+			$source[ $path[ 'name' ] ] = self::getDeepValue( $name, $arrays, $type );
+			unset( $source[ $index ] );
+		}
+
+		return $source;
+	}
+
+	public static function getDeepValue( $key, $source, $type ) {
+		$keys = explode( '/', $key );
+
+		return self::deep( $keys, current( $keys ), $source, $type );
+	}
+
+	private static function deep( $array, $key, $source, $type ) {
+		if ( isset( $source[ $key ] ) ) {
+			if ( is_array( $source[ $key ] ) && 'array' !== $type ) {
+				return self::deep( $array,  next( $array ), $source[ $key ], $type );
+			}
+			return $source[ $key ];
+		}
+		return false;
+	}
+
 }

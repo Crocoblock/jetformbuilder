@@ -92,5 +92,9 @@ abstract class Base {
 		}
 	}
 
+	public function action_attributes() {
+		return array();
+	}
+
 
 }

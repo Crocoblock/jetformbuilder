@@ -77,6 +77,16 @@ class Select_Field extends Base {
 			),
 		] );
 
+		$this->controls_manager->add_control( array(
+			'id'           => 'item_padding',
+			'type'         => 'dimensions',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+		) );
 
 		$this->controls_manager->add_control( [
 			'id'                  => 'item_typography',
@@ -96,7 +106,7 @@ class Select_Field extends Base {
 			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                               => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );

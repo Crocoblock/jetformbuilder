@@ -81,7 +81,10 @@ class Submit_Field extends Base {
 				'default' => array(
 					'value' => 'flex-start'
 				),
-			]
+			],
+			'condition' => array(
+				'add_prev' => false
+			)
 		] );
 
 		$this->controls_manager->add_control( [

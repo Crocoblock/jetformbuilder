@@ -90,6 +90,16 @@ class Select_Field extends Base {
 			],
 		] );
 
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_border',
+			'type'         => 'border',
+			'separator'    => 'after',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                               => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'item_normal_color',

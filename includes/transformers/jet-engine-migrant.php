@@ -8,6 +8,8 @@ use Jet_Form_Builder\Plugin;
 
 class Jet_Engine_Migrant extends Base_Transformer {
 
+	const BLOCKS_NAMESPACE = 'jet-forms/';
+
 	private $prepared_fields = array();
 	private $migrate_fields = array(
 		'media'          => 'media-field',
@@ -29,7 +31,7 @@ class Jet_Engine_Migrant extends Base_Transformer {
 	);
 
 	public $transform_compatibility = array(
-		'email' => 'send_email',
+		'email'          => 'send_email',
 		'activecampaign' => 'active_campaign'
 	);
 
@@ -141,13 +143,15 @@ class Jet_Engine_Migrant extends Base_Transformer {
 
 		$field_data = array(
 			'attrs'     => Tools::array_merge_intersect_key( $field_object->block_attributes( false ), $attrs ),
-			'blockName' => 'jet-forms/' . $field_type
+			'blockName' => self::BLOCKS_NAMESPACE . $field_type,
 		);
 
-		if ( ! $inner ) {
-			$this->prepared_fields[ $attrs['name'] ] = $field_data;
-		} else {
+		$field_data = $this->maybe_add_conditional( $current, $field_data );
+
+		if ( $inner ) {
 			$this->prepared_fields[ $inner ]['innerBlocks'][ $attrs['name'] ] = $field_data;
+		} else {
+			$this->prepared_fields[ $attrs['name'] ] = $field_data;
 		}
 	}
 
@@ -161,6 +165,20 @@ class Jet_Engine_Migrant extends Base_Transformer {
 		}
 
 		return false;
+	}
+
+	private function maybe_add_conditional( $current, $field_data ) {
+		if ( ! isset( $current['conditionals'] ) || empty( $current['conditionals'] ) ) {
+			return $field_data;
+		}
+
+		return array(
+			'attrs'     => array( 'conditions' => $current['conditionals'] ),
+			'blockName' => self::BLOCKS_NAMESPACE . 'conditional-block',
+			'innerBlocks' => array(
+				$current['settings']['name'] => $field_data
+			)
+		);
 	}
 
 	private function isset_field_type( $field ) {

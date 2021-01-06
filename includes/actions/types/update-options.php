@@ -24,6 +24,17 @@ class Update_Options extends Base {
 		return 'update_options';
 	}
 
+	public function action_attributes() {
+		return array(
+			'meta_fields_map' => array(
+				'default' => array(),
+			),
+			'options_page' => array(
+				'default' => '',
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
 		$options_data = array();

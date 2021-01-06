@@ -6,6 +6,7 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Transformers\Jet_Engine_Transformer;
+use Jet_Form_Builder\Transformers\Migrate_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -54,6 +55,8 @@ class Plugin {
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
+
+			new Migrate_Manager();
 		}
 	}
 

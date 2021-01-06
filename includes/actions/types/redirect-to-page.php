@@ -24,6 +24,26 @@ class Redirect_To_Page extends Base {
 		return 'redirect_to_page';
 	}
 
+	public function action_attributes() {
+		return array(
+			'redirect_type' => array(
+				'default' => '',
+			),
+			'redirect_page' => array(
+				'default' => '',
+			),
+			'redirect_hash' => array(
+				'default' => ''
+			),
+			'redirect_url' => array(
+				'default' => ''
+			),
+			'redirect_args' => array(
+				'default' => array(),
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
 

@@ -35,27 +35,20 @@ class Register_User extends Base {
 
 	public function action_attributes() {
 		return array(
-			array(
-				'name'    => 'fields_map',
+			'fields_map' => array(
 				'default' => array(),
-				'type'    => 'array'
 			),
-			array(
-				'name'    => 'meta_fields_map',
+			'log_in' => array(
 				'default' => array(),
-				'type'    => 'array'
 			),
-			array(
-				'name'    => 'log_in',
-				'default' => false,
+			'add_user_id' => array(
+				'default' => array(),
 			),
-			array(
-				'name'    => 'add_user_id',
-				'default' => false,
+			'meta_fields_map' => array(
+				'default' => array(),
 			),
-			array(
-				'name'    => 'user_role',
-				'default' => '',
+			'user_role' => array(
+				'default' => array(),
 			),
 		);
 	}

@@ -448,9 +448,12 @@ abstract class Base {
 	}
 
 	/**
-	 * Retruns attra from input array if not isset, get from defaults
+	 * Returns attra from input array if not isset, get from defaults
 	 *
-	 * @return [type] [description]
+	 * @param string $attr
+	 * @param array $all
+	 *
+	 * @return mixed|string [type] [description]
 	 */
 	public function get_attr( $attr = '', $all = array() ) {
 		if ( isset( $all[ $attr ] ) ) {
@@ -465,11 +468,13 @@ abstract class Base {
 	/**
 	 * Returns all block attributes list (custom + general + system)
 	 *
-	 * @return [type] [description]
+	 * @param bool $with_styles
+	 *
+	 * @return array [type] [description]
 	 */
-	public function block_attributes() {
+	public function block_attributes( $with_styles = true ) {
 
-		$attributes = array_merge( $this->get_attributes(), $this->style_attributes );
+		$attributes = $with_styles ? array_merge( $this->get_attributes(), $this->style_attributes ) : $this->get_attributes();
 
 		/**
 		 * Set default blocks attributes to avoid errors
@@ -494,6 +499,9 @@ abstract class Base {
 		return $attributes;
 
 	}
+
+
+
 
 	/**
 	 * Register blocks specific JS variables

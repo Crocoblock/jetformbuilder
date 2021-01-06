@@ -24,7 +24,7 @@ const PresetRender = {
 								index,
 								onChangeValue,
 								isVisible,
-								excludeOptions,
+								excludeOptions = options => options,
 							} ) {
 
 

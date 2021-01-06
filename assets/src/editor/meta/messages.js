@@ -68,7 +68,7 @@ function Messages() {
 				title={ 'General Messages Settings' }
 			>
 				{ Object.entries( messages ).map( ( [type, text], id ) => {
-					return <TextControl
+					return JetFormEditorData.messagesDefault[ type ] && <TextControl
 						key={ type + id }
 						label={ JetFormEditorData.messagesDefault[ type ].label }
 						value={ text }

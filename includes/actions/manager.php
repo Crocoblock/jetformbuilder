@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
-use Jet_Form_Builder\Transformers\Jet_Engine_Transformer;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -49,8 +48,6 @@ class Manager {
 		}
 
 		do_action( 'jet-form-builder/actions/register', $this );
-
-		( new Jet_Engine_Transformer( 71 ) )->save_transformer();
 	}
 
 	/**

@@ -39,52 +39,43 @@ class Send_Email extends Base {
 
 	public function action_attributes() {
 		return array(
-			array(
-				'name' => 'mail_to',
+			'mail_to' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'custom_email',
+			'custom_email' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'from_field',
+			'from_field' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'reply_to',
+			'reply_to' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'reply_to_email',
+			'reply_to_email' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'reply_from_field',
+			'reply_from_field' => array(
 				'default' => '',
 			),
-			array(
-				'name' => 'subject',
+			'subject' => array(
 				'default' => '',
 				'path'    => 'email/subject'
 			),
-			array(
-				'name' => 'from_name',
+			'from_name' => array(
 				'default' => '',
 				'path'    => 'email/from_name'
 			),
-			array(
-				'name' => 'from_address',
+			'from_address' => array(
 				'default' => '',
 				'path'    => 'email/from_address'
 			),
-			array(
-				'name' => 'content',
+			'content' => array(
 				'default' => '',
 				'path'    => 'email/content'
 			),
 		);
 	}
+
 
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->data = $request;

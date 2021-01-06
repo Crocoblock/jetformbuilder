@@ -6,12 +6,13 @@ use Jet_Form_Builder\Plugin;
 
 abstract class Base_Transformer {
 
+
 	protected $form_id;
 	protected $form_data;
+	protected $form_meta_data;
 
 	protected $fields = array();
 	protected $settings = array();
-	protected $actions = array();
 	protected $transformed_fields = array();
 	protected $transformed_settings = array();
 
@@ -20,20 +21,17 @@ abstract class Base_Transformer {
 		$this->_set_form_data();
 		$this->_set_source_fields();
 		$this->_set_source_settings();
-		$this->_set_source_actions();
 	}
 
 	public function _set_form_data() {
-		$this->form_data = $this->source_form_data();
+		$this->form_data      = $this->source_form_data();
+		$this->form_meta_data = $this->source_form_meta_data();
 	}
 
 	public function _set_source_fields() {
 		$this->fields = $this->source_fields();
 	}
 
-	public function _set_source_actions() {
-		$this->actions = $this->source_actions();
-	}
 
 	public function _set_source_settings() {
 		$this->settings = $this->source_settings();
@@ -47,11 +45,15 @@ abstract class Base_Transformer {
 
 	}
 
-	abstract public function source_form_data();
+	public function source_form_data() {
+		return get_post( $this->form_id );
+	}
+
+	public function source_form_meta_data() {
+		return get_post_meta( $this->form_id );
+	}
 
 	abstract public function source_fields();
-
-	abstract public function source_actions();
 
 	abstract public function source_settings();
 
@@ -59,5 +61,5 @@ abstract class Base_Transformer {
 
 	abstract public function transform_settings();
 
-	abstract public function save_transformer();
+	abstract public function migrate_form();
 }

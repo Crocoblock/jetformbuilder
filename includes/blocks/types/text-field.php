@@ -60,6 +60,16 @@ class Text_Field extends Base {
 			],
 		] );
 
+		$this->add_margin_padding(
+			$this->css_scheme['field'],
+			array(
+				'padding' => array(
+					'id'        => 'item_field_padding',
+					'separator' => 'after',
+				),
+			)
+		);
+
 		$this->controls_manager->add_control( [
 			'id'           => 'item_border',
 			'type'         => 'border',

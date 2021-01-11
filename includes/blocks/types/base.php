@@ -349,10 +349,7 @@ abstract class Base {
 			'name'        => array(
 				'type'    => 'string',
 				'default' => 'field_name',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Name', 'jet-form-builder' )
-				),
+				'general' => $this->general_field_name_params(),
 			),
 			'desc'        => array(
 				'type'    => 'string',
@@ -521,6 +518,14 @@ abstract class Base {
 		ob_start();
 		require $this->get_icon_path( $this->get_name() . '.php' );
 		return ob_get_clean();
+	}
+
+	public function general_field_name_params( $label = '', $help = '' ) {
+		return array(
+			'type'  => 'text',
+			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
+			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
+		);
 	}
 
 

@@ -152,10 +152,7 @@ class Media_Field extends Base {
 			'name'       => array(
 				'type'    => 'string',
 				'default' => 'field_name',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Name', 'jet-form-builder' )
-				),
+				'general' => $this->general_field_name_params(),
 			),
 			'desc'       => array(
 				'type'    => 'string',

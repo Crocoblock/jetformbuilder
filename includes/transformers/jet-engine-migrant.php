@@ -35,11 +35,19 @@ class Jet_Engine_Migrant extends Base_Transformer {
 		'activecampaign' => 'active_campaign'
 	);
 
+	private $raw_fields;
+
 	public function source_fields() {
 		$data = json_decode( wp_unslash( $this->form_meta_data['_form_data'][0] ), true );
 		unset( $this->form_meta_data['_form_data'] );
 
 		return $this->prepare_fields( $data );
+	}
+
+	public function prepare_fields( $data ) {
+		$this->raw_fields = $data;
+
+		$this->sort_raw_fields();
 	}
 
 
@@ -108,17 +116,18 @@ class Jet_Engine_Migrant extends Base_Transformer {
 		return wp_unslash( json_encode( $prepared_actions ) );
 	}
 
-	public function prepare_fields( $fields ) {
-		usort( $fields, function ( $first, $second ) {
+	public function sort_raw_fields() {
+
+		usort( $this->raw_fields, function ( $first, $second ) {
 			return $first['y'] - $second['y'];
 		} );
 
 		$column = false;
-		foreach ( $fields as $index => $current ) {
-			if ( ! isset( $fields[ $index + 1 ] ) ) {
+		foreach ( $this->raw_fields as $index => $current ) {
+			if ( ! isset( $this->raw_fields[ $index + 1 ] ) ) {
 				continue;
 			}
-			$next = $fields[ $index + 1 ];
+			$next             = $this->raw_fields[ $index + 1 ];
 			$not_child_column = $current['y'] !== $next['y'];
 
 			if ( $not_child_column ) {
@@ -128,31 +137,42 @@ class Jet_Engine_Migrant extends Base_Transformer {
 				$column = isset( $current['column_order'] ) ? $current['column_order'] : $index;
 			}
 
-			$current['column_order'] = $column;
-			$next['column_order'] = $column;
+			$current['column_width'] = $this->calc_field_width_degrees( $current );
+			$next['column_width']    = $this->calc_field_width_degrees( $next );
 
-			$current['column_width'] = $this->calc_filed_width_degrees( $current );
-			$next['column_width'] = $this->calc_filed_width_degrees( $next );
-
-			$fields[ $index ] = $current;
-			$fields[ $index + 1 ] = $next;
+			$this->add_field_in_column( $column, $current );
+			$this->add_field_in_column( $column, $next );
 		}
 
-		usort( $fields, function ( $first, $second ) {
-			if ( isset( $first['column_order'] ) && isset( $second['column_order'] ) ) {
-				return $first['x'] - $second['x'];
+		foreach ( $this->raw_fields as $index => $field ) {
+			if ( ! isset( $field['innerBlocks'] ) || empty( $field['innerBlocks'] ) ) {
+				continue;
 			}
-			return 0;
-		} );
+			ksort( $field['innerBlocks'], SORT_NUMERIC );
+
+			$this->raw_fields[ $index ] = $field;
+		}
 
 
-		var_dump( $fields );
 
+		$this->get_prepare_fields( $this->raw_fields );
+
+		var_dump( ( new Block_Generator( $this->prepared_fields ) )->generate() ); die;
+
+		//return ( new Block_Generator( $this->prepared_fields ) )->generate();
+	}
+
+	private function get_prepare_fields( $fields ) {
 		$inner = false;
 		foreach ( $fields as $index => $field ) {
 
+			if ( isset( $field['innerBlocks'] ) ) {
+				$this->prepare_field( $field, false );
+				continue;
+			}
+
 			if ( ! $inner && isset( $fields[ $index - 1 ] ) ) {
-				$prev = $fields[ $index - 1 ];
+				$prev = $this->raw_fields[ $index - 1 ];
 
 				$inner = 'repeater_start' === $prev['settings']['type'] ? $prev['settings']['name'] : false;
 
@@ -163,19 +183,38 @@ class Jet_Engine_Migrant extends Base_Transformer {
 
 			$this->prepare_field( $field, $inner );
 		}
-		die;
-
-		//return ( new Block_Generator( $this->prepared_fields ) )->generate();
 	}
 
-	private function calc_filed_width_degrees( $field ) {
+	private function add_field_in_column( $column_id, $field ) {
+		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'] ) ) {
+			$this->raw_fields[ $column_id ] = array(
+				'blockName' => 'columns'
+			);
+		}
+
+		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'][ $current['x'] ] ) ) {
+			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = array(
+				'attrs'     => array(
+					'width' => $field['column_width']
+				),
+				'blockName' => 'column',
+				'innerBlocks' => array( $field ),
+			);
+		}
+	}
+
+
+	private function calc_field_width_degrees( $field ) {
 		return isset( $field['column_width'] ) ? $field['column_width'] : ( $field['w'] * 100 ) / 12;
 	}
 
 	public function prepare_field( $current, $inner = false ) {
 		$attrs = $current['settings'];
 
-		if ( ! $this->isset_field_type( $attrs ) ) {
+		if ( isset( $current['innerBlocks'] ) && ! empty( $current['innerBlocks'] ) ) {
+			$this->prepared_fields[] = $current;
+			return;
+		} elseif ( ! $this->isset_field_type( $attrs ) ) {
 			return;
 		}
 		$field_type   = $this->get_field_type( $attrs );
@@ -193,8 +232,7 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			$this->prepared_fields[ $inner ]['innerBlocks'][] = $field_data;
 		} elseif ( 'repeater-field' === $field_type ) {
 			$this->prepared_fields[ $attrs['name'] ] = $field_data;
-		}
-		else {
+		} else {
 			$this->prepared_fields[] = $field_data;
 		}
 	}

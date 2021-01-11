@@ -173,6 +173,47 @@ class Checkbox_Field extends Base {
 		);
 
 		$this->controls_manager->add_control( [
+			'id'           => 'item_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_color',
+			'type'         => 'color-picker',
+			'separator'    => 'after',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_normal_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label']                                      => 'background-color: {{VALUE}}',
+
+			),
+		] );
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'checkbox_style',
+				'title' => __( 'Checkbox', 'jet-forms-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
 			'id'           => 'show_checkbox_decorator',
 			'type'         => 'toggle',
 			'separator'    => 'after',
@@ -214,45 +255,6 @@ class Checkbox_Field extends Base {
 			],
 		] );
 
-		$this->controls_manager->add_control( [
-			'id'           => 'item_typography',
-			'type'         => 'typography',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
-
-
-		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['option-label'] => 'color: {{VALUE}}',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
-				'{{WRAPPER}} ' . $this->css_scheme['option-label']                                      => 'background-color: {{VALUE}}',
-
-			),
-		] );
-
-		$this->controls_manager->end_section();
-
-		$this->controls_manager->start_section(
-			'style_controls',
-			[
-				'id'    => 'checkbox_style',
-				'title' => __( 'Checkbox', 'jet-forms-builder' )
-			]
-		);
-
 		$this->controls_manager->start_tabs(
 			'style_controls',
 			[
@@ -267,6 +269,17 @@ class Checkbox_Field extends Base {
 				'title' => __( 'Normal', 'jet-form-builder' ),
 			]
 		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'checkbox_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'checkbox_normal_background_color',
@@ -292,6 +305,17 @@ class Checkbox_Field extends Base {
 				'title' => __( 'Checked', 'jet-form-builder' ),
 			]
 		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'checkbox_checked_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['option-label'] . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'checkbox_checked_background_color',

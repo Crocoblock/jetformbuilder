@@ -184,50 +184,6 @@ class Radio_Field extends Base {
 			]
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'show_decorator',
-			'type'         => 'toggle',
-			'separator'    => 'after',
-			'label'        => __( 'Show Radio', 'jet-forms-builder' ),
-			'attributes'   => [
-				'default' => [
-					'value' => true
-				],
-			],
-			'unit'         => 'px',
-			'return_value' => [
-				'true'  => 'inline-block',
-				'false' => 'none',
-			],
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['radio']          => 'display: {{VALUE}};',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
-
-				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'display: {{VALUE}};',
-			],
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'item_size_decorator',
-			'type'         => 'range',
-			'label'        => __( 'Size Radio', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'units'        => [
-				[
-					'value'     => 'px',
-					'intervals' => [
-						'step' => 1,
-						'min'  => 0,
-						'max'  => 50,
-					]
-				],
-			],
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'font-size: {{VALUE}}{{UNIT}};',
-				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' input'              => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
-			],
-		] );
-
 
 		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
@@ -275,6 +231,50 @@ class Radio_Field extends Base {
 			]
 		);
 
+		$this->controls_manager->add_control( [
+			'id'           => 'show_decorator',
+			'type'         => 'toggle',
+			'separator'    => 'after',
+			'label'        => __( 'Show Radio', 'jet-forms-builder' ),
+			'attributes'   => [
+				'default' => [
+					'value' => true
+				],
+			],
+			'unit'         => 'px',
+			'return_value' => [
+				'true'  => 'inline-block',
+				'false' => 'none',
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['radio']          => 'display: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' span' => 'display: {{VALUE}};',
+
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'display: {{VALUE}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_size_decorator',
+			'type'         => 'range',
+			'label'        => __( 'Size Radio', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 0,
+						'max'  => 50,
+					]
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ' span::before' => 'font-size: {{VALUE}}{{UNIT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['item'] . ' input'              => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
+			],
+		] );
+
 		$this->controls_manager->start_tabs(
 			'style_controls',
 			[
@@ -289,6 +289,17 @@ class Radio_Field extends Base {
 				'title' => __( 'Normal', 'jet-form-builder' ),
 			]
 		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'radio_normal_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['radio']                           => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'radio_normal_background_color',
@@ -316,6 +327,17 @@ class Radio_Field extends Base {
 				'title' => __( 'Checked', 'jet-form-builder' ),
 			]
 		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'radio_checked_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['radio'] . ':checked'                       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'radio_checked_background_color',

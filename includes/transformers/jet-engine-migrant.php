@@ -113,6 +113,41 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			return $first['y'] - $second['y'];
 		} );
 
+		$column = false;
+		foreach ( $fields as $index => $current ) {
+			if ( ! isset( $fields[ $index + 1 ] ) ) {
+				continue;
+			}
+			$next = $fields[ $index + 1 ];
+			$not_child_column = $current['y'] !== $next['y'];
+
+			if ( $not_child_column ) {
+				$column = false;
+				continue;
+			} elseif ( ! $column ) {
+				$column = isset( $current['column_order'] ) ? $current['column_order'] : $index;
+			}
+
+			$current['column_order'] = $column;
+			$next['column_order'] = $column;
+
+			$current['column_width'] = $this->calc_filed_width_degrees( $current );
+			$next['column_width'] = $this->calc_filed_width_degrees( $next );
+
+			$fields[ $index ] = $current;
+			$fields[ $index + 1 ] = $next;
+		}
+
+		usort( $fields, function ( $first, $second ) {
+			if ( isset( $first['column_order'] ) && isset( $second['column_order'] ) ) {
+				return $first['x'] - $second['x'];
+			}
+			return 0;
+		} );
+
+
+		var_dump( $fields );
+
 		$inner = false;
 		foreach ( $fields as $index => $field ) {
 
@@ -128,8 +163,13 @@ class Jet_Engine_Migrant extends Base_Transformer {
 
 			$this->prepare_field( $field, $inner );
 		}
+		die;
 
-		return ( new Block_Generator( $this->prepared_fields ) )->generate();
+		//return ( new Block_Generator( $this->prepared_fields ) )->generate();
+	}
+
+	private function calc_filed_width_degrees( $field ) {
+		return isset( $field['column_width'] ) ? $field['column_width'] : ( $field['w'] * 100 ) / 12;
 	}
 
 	public function prepare_field( $current, $inner = false ) {
@@ -146,12 +186,16 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			'blockName' => self::BLOCKS_NAMESPACE . $field_type,
 		);
 
+		$field_data = $field_object->parse_exported_data( $field_data );
 		$field_data = $this->maybe_add_conditional( $current, $field_data );
 
 		if ( $inner ) {
-			$this->prepared_fields[ $inner ]['innerBlocks'][ $attrs['name'] ] = $field_data;
-		} else {
+			$this->prepared_fields[ $inner ]['innerBlocks'][] = $field_data;
+		} elseif ( 'repeater-field' === $field_type ) {
 			$this->prepared_fields[ $attrs['name'] ] = $field_data;
+		}
+		else {
+			$this->prepared_fields[] = $field_data;
 		}
 	}
 
@@ -172,13 +216,13 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			return $field_data;
 		}
 
-		return array(
+		$response                  = array(
 			'attrs'     => array( 'conditions' => $current['conditionals'] ),
 			'blockName' => self::BLOCKS_NAMESPACE . 'conditional-block',
-			'innerBlocks' => array(
-				$current['settings']['name'] => $field_data
-			)
 		);
+		$response['innerBlocks'][] = $field_data;
+
+		return $response;
 	}
 
 	private function isset_field_type( $field ) {

@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Blocks;
 
 class Block_Generator {
 
-	private $raw_blocks = array();
+	private $raw_blocks;
 	private $response = '';
 
 	public function __construct( $raw_blocks ) {
@@ -19,7 +19,7 @@ class Block_Generator {
 
 	private function add_block_attrs( $block ) {
 		if ( ! empty( $block['attrs'] ) ) {
-			$this->response .= wp_unslash( json_encode( $block['attrs'] ) ) . ' ';
+			$this->response .= json_encode( $block['attrs'] ) . ' ';
 		}
 	}
 

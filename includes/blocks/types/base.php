@@ -537,5 +537,23 @@ abstract class Base {
 		return ob_get_clean();
 	}
 
+	public function parse_exported_data( $field_data ) {
+		$field_attrs = $this->block_attributes( false );
+
+		foreach ( $field_data['attrs'] as $attribute => $value ) {
+			if ( ! isset( $field_attrs[ $attribute ] ) ) {
+				continue;
+			}
+
+			switch ( $field_attrs[ $attribute ]['type'] ) {
+				case 'number':
+					$field_data['attrs'][ $attribute ] = (float) $value;
+					break;
+			}
+		}
+
+		return $field_data;
+	}
+
 
 }

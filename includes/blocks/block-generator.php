@@ -24,10 +24,29 @@ class Block_Generator {
 	}
 
 	private function close_block_namespace( $block ) {
-		if ( empty( $block['innerBlocks'] ) ) {
+		if ( empty( $block['innerContent'] ) && empty( $block['innerBlocks'] ) ) {
 			$this->response .= '/';
 		}
 		$this->response .= "--> \n";
+	}
+
+	private function set_block_content( $block ) {
+		if ( empty( $block['innerContent'] ) && empty( $block['innerBlocks'] ) ) {
+			return;
+		}
+		elseif ( empty( $block['innerContent'] ) ) {
+			$this->maybe_set_inner_blocks( $block );
+			return;
+		}
+
+		if ( isset( $block['innerContent'][0] ) ) {
+			$this->response .= $block['innerContent'][0];
+		}
+		$this->maybe_set_inner_blocks( $block );
+
+		if ( isset( $block['innerContent'][1] ) ) {
+			$this->response .= $block['innerContent'][1];
+		}
 	}
 
 	private function maybe_set_inner_blocks( $block ) {
@@ -38,7 +57,7 @@ class Block_Generator {
 	}
 
 	private function maybe_close_block( $block ) {
-		if ( empty( $block['innerBlocks'] ) ) {
+		if ( empty( $block['innerContent'] ) && empty( $block['innerBlocks'] ) ) {
 			return;
 		}
 		$this->response .= "\n<!-- /wp:" . $block['blockName'] . " -->\n";
@@ -59,7 +78,7 @@ class Block_Generator {
 	public function generate_blocks( $source ) {
 		foreach ( $source as $block ) {
 			$this->open_block( $block );
-			$this->maybe_set_inner_blocks( $block );
+			$this->set_block_content( $block );
 			$this->maybe_close_block( $block );
 		}
 	}

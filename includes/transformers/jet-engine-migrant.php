@@ -47,7 +47,7 @@ class Jet_Engine_Migrant extends Base_Transformer {
 	public function prepare_fields( $data ) {
 		$this->raw_fields = $data;
 
-		$this->sort_raw_fields();
+		return $this->sort_raw_fields();
 	}
 
 
@@ -131,6 +131,7 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			$not_child_column = $current['y'] !== $next['y'];
 
 			if ( $not_child_column ) {
+				$this->raw_fields[ $index ]['single_column_width'] = $this->calc_field_width_degrees( $current );
 				$column = false;
 				continue;
 			} elseif ( ! $column ) {
@@ -138,10 +139,14 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			}
 
 			$current['column_width'] = $this->calc_field_width_degrees( $current );
-			$next['column_width']    = $this->calc_field_width_degrees( $next );
+			$next['column_width'] = $this->calc_field_width_degrees( $next );
 
 			$this->add_field_in_column( $column, $current );
 			$this->add_field_in_column( $column, $next );
+
+			unset(
+				$this->raw_fields[ $index + 1 ]
+			);
 		}
 
 		foreach ( $this->raw_fields as $index => $field ) {
@@ -153,24 +158,19 @@ class Jet_Engine_Migrant extends Base_Transformer {
 			$this->raw_fields[ $index ] = $field;
 		}
 
-
-
 		$this->get_prepare_fields( $this->raw_fields );
 
-		var_dump( ( new Block_Generator( $this->prepared_fields ) )->generate() ); die;
+		/*var_dump( $this->prepared_fields );
 
-		//return ( new Block_Generator( $this->prepared_fields ) )->generate();
+		var_dump( ( new Block_Generator( $this->prepared_fields ) )->generate() );
+		die;*/
+
+		return ( new Block_Generator( $this->prepared_fields ) )->generate();
 	}
 
 	private function get_prepare_fields( $fields ) {
 		$inner = false;
 		foreach ( $fields as $index => $field ) {
-
-			if ( isset( $field['innerBlocks'] ) ) {
-				$this->prepare_field( $field, false );
-				continue;
-			}
-
 			if ( ! $inner && isset( $fields[ $index - 1 ] ) ) {
 				$prev = $this->raw_fields[ $index - 1 ];
 
@@ -187,47 +187,79 @@ class Jet_Engine_Migrant extends Base_Transformer {
 
 	private function add_field_in_column( $column_id, $field ) {
 		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'] ) ) {
-			$this->raw_fields[ $column_id ] = array(
-				'blockName' => 'columns'
-			);
+			$this->raw_fields[ $column_id ] = $this->_get_columns();
 		}
 
 		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'][ $current['x'] ] ) ) {
-			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = array(
-				'attrs'     => array(
-					'width' => $field['column_width']
-				),
-				'blockName' => 'column',
-				'innerBlocks' => array( $field ),
+			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = $this->_get_child_column(
+				$field['column_width'],
+				array( $this->get_prepare_field( $field ) )
 			);
 		}
+	}
+
+	private function _get_columns( $innerColumns = array() ) {
+		$response = array(
+			'blockName'    => 'columns',
+			'innerContent' => array(
+				'<div class="wp-block-columns">',
+				'</div>'
+			)
+		);
+
+		return $innerColumns ? array_merge( $response, array( 'innerBlocks' => $innerColumns ) ) : $response;
+	}
+
+	private function _get_child_column( $width, $innerBlocks ) {
+		return array(
+			'attrs'        => array(
+				'width' => $width . '%'
+			),
+			'blockName'    => 'column',
+			'innerBlocks'  => $innerBlocks,
+			'innerContent' => array(
+				'<div class="wp-block-column" style="flex-basis:' . $width . '%">',
+				'</div>'
+			)
+		);
+	}
+
+	private function maybe_add_in_column( $field, $field_data ) {
+		if ( ! isset( $field['single_column_width'] ) || 100 === (int) $field['single_column_width'] ) {
+			return $field_data;
+		}
+
+		return $this->_get_columns( array(
+			$this->_get_child_column( $field['single_column_width'], array( $field_data ) )
+		) );
 	}
 
 
 	private function calc_field_width_degrees( $field ) {
-		return isset( $field['column_width'] ) ? $field['column_width'] : ( $field['w'] * 100 ) / 12;
+		return isset( $field['column_width'] )
+			? $field['column_width']
+			: number_format( ( $field['w'] * 100 ) / 12, 2 );
 	}
 
 	public function prepare_field( $current, $inner = false ) {
-		$attrs = $current['settings'];
+		if ( isset( $current['innerBlocks'] ) && isset( $current['blockName'] ) ) {
+			$this->save_prepare_field( $current, $inner );
 
-		if ( isset( $current['innerBlocks'] ) && ! empty( $current['innerBlocks'] ) ) {
-			$this->prepared_fields[] = $current;
-			return;
-		} elseif ( ! $this->isset_field_type( $attrs ) ) {
 			return;
 		}
-		$field_type   = $this->get_field_type( $attrs );
-		$field_object = Plugin::instance()->blocks->get_field_by_name( $field_type );
 
-		$field_data = array(
-			'attrs'     => Tools::array_merge_intersect_key( $field_object->block_attributes( false ), $attrs ),
-			'blockName' => self::BLOCKS_NAMESPACE . $field_type,
-		);
+		$attrs      = $current['settings'];
+		$field_type = $this->get_field_type( $attrs );
+		$field_data = $this->get_prepare_field( $current, $field_type );
 
-		$field_data = $field_object->parse_exported_data( $field_data );
-		$field_data = $this->maybe_add_conditional( $current, $field_data );
+		if ( is_null( $field_data ) ) {
+			return;
+		}
 
+		$this->save_prepare_field( $field_data, $inner, $attrs, $field_type );
+	}
+
+	private function save_prepare_field( $field_data, $inner, $attrs = array(), $field_type = null ) {
 		if ( $inner ) {
 			$this->prepared_fields[ $inner ]['innerBlocks'][] = $field_data;
 		} elseif ( 'repeater-field' === $field_type ) {
@@ -235,6 +267,32 @@ class Jet_Engine_Migrant extends Base_Transformer {
 		} else {
 			$this->prepared_fields[] = $field_data;
 		}
+	}
+
+	public function get_prepare_field( $current, $field_type = false ) {
+		$attrs = $current['settings'];
+
+		if ( isset( $current['innerBlocks'] ) && ! empty( $current['innerBlocks'] ) ) {
+			$this->prepared_fields[] = $current;
+
+			return;
+		} elseif ( ! $this->isset_field_type( $attrs ) ) {
+			return;
+		}
+		if ( ! $field_type ) {
+			$field_type = $this->get_field_type( $attrs );
+		}
+
+		$field_object = Plugin::instance()->blocks->get_field_by_name( $field_type );
+
+		$field_data = array(
+			'attrs'     => Tools::array_merge_intersect_key( $field_object->block_attributes( false ), $attrs ),
+			'blockName' => self::BLOCKS_NAMESPACE . $field_type,
+		);
+		$field_data = $field_object->parse_exported_data( $field_data );
+		$field_data = $this->maybe_add_conditional( $current, $field_data );
+
+		return $this->maybe_add_in_column( $current, $field_data );
 	}
 
 	public function get_action_type( $action ) {

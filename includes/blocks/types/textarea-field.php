@@ -52,21 +52,38 @@ class Textarea_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
 			'type'         => 'typography',
+			'separator'    => 'after',
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 
 			],
 		] );
 
+		$this->add_margin_padding(
+			$this->css_scheme['field'],
+			array(
+				'padding' => array(
+					'id'        => 'item_field_padding',
+					'separator' => 'after',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_border',
+			'type'         => 'border',
+			'separator'    => 'after',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
 		$this->controls_manager->add_control( [
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
+			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#000000'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'color: {{VALUE}}',
 			),
@@ -76,11 +93,6 @@ class Textarea_Field extends Base {
 			'id'           => 'item_normal_background_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'attributes'   => array(
-				'default' => array(
-					'value' => '#FFFFFF'
-				),
-			),
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'background-color: {{VALUE}}',
 			),

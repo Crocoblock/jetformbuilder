@@ -35,6 +35,7 @@ class Number_Field extends Base {
 	public function get_css_scheme() {
 		return array(
 			'field'       => '.jet-form-builder__field-wrap .components-input-control__input',
+			'backdrop'    => 'div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop',
 			'front-field' => '.jet-form-builder__field-wrap input',
 			'wrapper'     => '.jet-form-builder__field-wrap',
 		);
@@ -53,16 +54,47 @@ class Number_Field extends Base {
 		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
 			'type'         => 'typography',
+			'separator'    => 'after',
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'height: inherit; font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
+		$this->add_margin_padding(
+			$this->css_scheme['field'],
+			array(
+				'padding' => array(
+					'id'        => 'item_field_padding',
+					'separator' => 'after',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'item_border',
+			'type'         => 'border',
+			'separator'    => 'after',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['backdrop']    => 'border: unset;',
+			),
+			'attributes' => array(
+				'default' => array(
+					'value' => array(
+						'borderStyle' => 'solid'
+					)
+				)
+			)
+		] );
+
 		$this->controls_manager->add_control( [
 			'id'           => 'item_normal_color',
 			'type'         => 'color-picker',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
 			'css_selector' => array(
 				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'color: {{VALUE}}',
 				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'color: {{VALUE}}',

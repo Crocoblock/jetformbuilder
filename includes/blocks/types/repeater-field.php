@@ -133,6 +133,17 @@ class Repeater_Field extends Base {
 		] );
 
 		$this->controls_manager->add_control( [
+			'id'           => 'new_button_padding',
+			'type'         => 'dimensions',
+			'separator'    => 'after',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
 			'id'           => 'new_button_border',
 			'type'         => 'border',
 			'label'        => __( 'Border', 'jet-form-builder' ),
@@ -224,6 +235,17 @@ class Repeater_Field extends Base {
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_padding',
+			'type'         => 'dimensions',
+			'separator'    => 'after',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+			),
 		] );
 
 		$this->controls_manager->add_control( [

@@ -230,14 +230,6 @@ class Manager {
 	 */
 	public function register_frontend_assets() {
 
-		wp_enqueue_script(
-			'jet-form-builder-frontend',
-			Plugin::instance()->plugin_url( 'assets/js/frontend.js' ),
-			array( 'jquery' ),
-			Plugin::instance()->get_version(),
-			true
-		);
-
 		wp_enqueue_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),

@@ -543,7 +543,7 @@ class File_Upload {
 		wp_enqueue_script(
 			'jet-form-builder-file-upload',
 			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
-			array( 'jet-form-builder-frontend', 'jet-form-builder-sortable' ),
+			array( 'jet-form-builder-frontend-forms', 'jet-form-builder-sortable' ),
 			Plugin::instance()->get_version(),
 			true
 		);
@@ -570,7 +570,7 @@ class File_Upload {
 		jet_engine()->frontend->frontend_scripts();
 		$this->register_assets();
 		$this->enqueue_upload_script();
-		wp_scripts()->done[] = 'jet-form-builder-frontend';
+		wp_scripts()->done[] = 'jet-form-builder-frontend-forms';
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
 
 		return $content . ob_get_clean();

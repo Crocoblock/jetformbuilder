@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: JetFormBuilder
- * Plugin URI:  https://crocoblock.com/plugins/jetappointmentsbooking/
+ * Plugin URI:  https://crocoblock.com/
  * Description:
- * Version:     0.1
+ * Version:     1.0.0
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-form-builder
@@ -35,5 +35,3 @@ function jet_form_builder_init() {
 function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }
-
-

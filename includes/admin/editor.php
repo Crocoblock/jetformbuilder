@@ -438,7 +438,7 @@ class Editor {
 
 		wp_enqueue_script(
 			$handle,
-			JET_FORM_BUILDER_URL . 'assets/js/others.js',
+			JET_FORM_BUILDER_URL . 'assets/js/form-block.js',
 			array(
 				'wp-editor',
 				'wp-core-data',

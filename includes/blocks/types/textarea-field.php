@@ -50,6 +50,31 @@ class Textarea_Field extends Base {
 		);
 
 		$this->controls_manager->add_control( [
+			'id'           => 'item_textarea_height',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Height', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 20,
+						'max'  => 1000,
+					]
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 100
+				),
+			),
+		] );
+
+		$this->controls_manager->add_control( [
 			'id'           => 'item_typography',
 			'type'         => 'typography',
 			'separator'    => 'after',

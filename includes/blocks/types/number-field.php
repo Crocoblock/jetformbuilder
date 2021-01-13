@@ -61,15 +61,17 @@ class Number_Field extends Base {
 			],
 		] );
 
-		$this->add_margin_padding(
-			$this->css_scheme['field'],
-			array(
-				'padding' => array(
-					'id'        => 'item_field_padding',
-					'separator' => 'after',
-				),
-			)
-		);
+		$this->controls_manager->add_control( [
+			'id'           => 'item_field_padding',
+			'type'         => 'dimensions',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			),
+		] );
 
 		$this->controls_manager->add_control( [
 			'id'           => 'item_border',
@@ -81,7 +83,7 @@ class Number_Field extends Base {
 				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				'{{WRAPPER}} ' . $this->css_scheme['backdrop']    => 'border: unset;',
 			),
-			'attributes' => array(
+			'attributes'   => array(
 				'default' => array(
 					'value' => array(
 						'borderStyle' => 'solid'

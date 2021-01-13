@@ -70,7 +70,7 @@ class Group_Break_Field extends Base {
 			[
 				'id'          => 'break_style',
 				'initialOpen' => true,
-				'title'       => __( 'Group Break', 'jet-forms-builder' )
+				'title'       => __( 'Group Break', 'jet-form-builder' )
 			]
 		);
 

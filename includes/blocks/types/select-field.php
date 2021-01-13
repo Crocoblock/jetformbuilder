@@ -48,7 +48,7 @@ class Select_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'select_style',
-				'title' => __( 'Select', 'jet-forms-builder' )
+				'title' => __( 'Select', 'jet-form-builder' )
 			]
 		);
 

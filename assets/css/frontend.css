@@ -1905,6 +1905,11 @@ body[data-elementor-device-mode="mobile"] .grid-col-mobile-10 > .jet-listing-gri
     justify-content: space-between
 }
 
+button.jet-form-builder__submit {
+    display: inline-flex;
+    justify-content: flex-start;
+}
+
 .jet-form-builder__check-mark {
     display: -webkit-box;
     display: -ms-flexbox;

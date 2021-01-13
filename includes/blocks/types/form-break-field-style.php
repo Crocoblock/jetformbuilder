@@ -21,7 +21,7 @@ trait Form_Break_Field_Style {
 			'style_controls',
 			[
 				'id'    => 'break_buttons_style',
-				'title' => __( 'Form Break Row', 'jet-forms-builder' )
+				'title' => __( 'Form Break Row', 'jet-form-builder' )
 			]
 		);
 
@@ -78,7 +78,7 @@ trait Form_Break_Field_Style {
 			'style_controls',
 			[
 				'id'    => 'next_button_style',
-				'title' => __( 'Form Break Next Button', 'jet-forms-builder' ),
+				'title' => __( 'Form Break Next Button', 'jet-form-builder' ),
 
 			]
 		);
@@ -187,7 +187,7 @@ trait Form_Break_Field_Style {
 			'style_controls',
 			[
 				'id'    => 'prev_button_style',
-				'title' => __( 'Form Break Prev Button', 'jet-forms-builder' ),
+				'title' => __( 'Form Break Prev Button', 'jet-form-builder' ),
 			]
 		);
 
@@ -296,7 +296,7 @@ trait Form_Break_Field_Style {
 			'style_controls',
 			[
 				'id'    => 'disabled_message_style',
-				'title' => __( 'Form Break Disabled Message', 'jet-forms-builder' ),
+				'title' => __( 'Form Break Disabled Message', 'jet-form-builder' ),
 			]
 		);
 

@@ -47,7 +47,7 @@ class Number_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'field_style',
-				'title' => __( 'Number Input', 'jet-forms-builder' )
+				'title' => __( 'Number Input', 'jet-form-builder' )
 			]
 		);
 

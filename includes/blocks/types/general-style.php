@@ -175,7 +175,7 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'content_style',
-				'title' => __( 'Content', 'jet-forms-builder' )
+				'title' => __( 'Content', 'jet-form-builder' )
 			]
 		);
 
@@ -245,7 +245,7 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'label_style',
-				'title' => __( 'Label', 'jet-forms-builder' )
+				'title' => __( 'Label', 'jet-form-builder' )
 			]
 		);
 
@@ -333,7 +333,7 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'description_style',
-				'title' => __( 'Description', 'jet-forms-builder' ),
+				'title' => __( 'Description', 'jet-form-builder' ),
 				/*'condition' => array(
 					'desc' => true
 				),*/
@@ -424,7 +424,7 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'required_style',
-				'title' => __( 'Required Mark', 'jet-forms-builder' )
+				'title' => __( 'Required Mark', 'jet-form-builder' )
 			]
 		);
 
@@ -472,7 +472,7 @@ trait General_Style {
 			'style_controls',
 			[
 				'id'    => 'input_style',
-				'title' => __( 'Field', 'jet-forms-builder' )
+				'title' => __( 'Field', 'jet-form-builder' )
 			]
 		);
 

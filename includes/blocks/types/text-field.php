@@ -46,7 +46,7 @@ class Text_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'field_style',
-				'title' => __( 'Text Input', 'jet-forms-builder' )
+				'title' => __( 'Text Input', 'jet-form-builder' )
 			]
 		);
 

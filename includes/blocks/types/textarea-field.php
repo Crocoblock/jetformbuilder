@@ -45,7 +45,7 @@ class Textarea_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'field_style',
-				'title' => __( 'Textarea', 'jet-forms-builder' )
+				'title' => __( 'Textarea', 'jet-form-builder' )
 			]
 		);
 

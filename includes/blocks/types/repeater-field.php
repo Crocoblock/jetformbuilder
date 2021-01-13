@@ -68,7 +68,7 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'field_style',
-				'title' => __( 'Repeater Row', 'jet-forms-builder' )
+				'title' => __( 'Repeater Row', 'jet-form-builder' )
 			]
 		);
 
@@ -90,7 +90,7 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'new_button_style',
-				'title' => __( 'New Item Button', 'jet-forms-builder' )
+				'title' => __( 'New Item Button', 'jet-form-builder' )
 			]
 		);
 
@@ -224,7 +224,7 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'remove_button_style',
-				'title' => __( 'Remove Item Button', 'jet-forms-builder' )
+				'title' => __( 'Remove Item Button', 'jet-form-builder' )
 			]
 		);
 

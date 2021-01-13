@@ -40,13 +40,32 @@ class Submit_Field extends Base {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
-				'id'    => 'submit_style',
-				'title' => __( 'Submit Button', 'jet-forms-builder' )
+				'id'    => 'submit_wrap_style',
+				'title' => __( 'Submit Wrap', 'jet-form-builder' )
 			]
 		);
 
 		$this->add_margin_padding(
 			$this->css_scheme['wrap'],
+			array(
+				'padding' => array(
+					'id'  => 'submit_wrap_padding',
+				)
+			)
+		);
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'submit_style',
+				'title' => __( 'Submit Button', 'jet-form-builder' )
+			]
+		);
+
+		$this->add_margin_padding(
+			$this->css_scheme['button'],
 			array(
 				'padding' => array(
 					'id'        => 'submit_padding',
@@ -56,10 +75,35 @@ class Submit_Field extends Base {
 		);
 
 		$this->controls_manager->add_control( [
+			'id'           => 'button_width',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Button Width', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => '%',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 10,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 20
+				),
+			),
+		] );
+
+		$this->controls_manager->add_control( [
 			'id'           => 'submit_alignment',
 			'type'         => 'choose',
 			'separator'    => 'after',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
+			'label'        => __( 'Button Alignment', 'jet-form-builder' ),
 			'options'      => [
 				'flex-start' => [
 					'shortcut' => __( 'Left', 'jet-form-builder' ),
@@ -86,6 +130,36 @@ class Submit_Field extends Base {
 				'add_prev' => false
 			)
 		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_text_alignment',
+			'type'         => 'choose',
+			'separator'    => 'after',
+			'label'        => __( 'Text Alignment', 'jet-form-builder' ),
+			'options'      => [
+				'flex-start' => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center'     => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'flex-end'   => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'justify-content: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'flex-start'
+				),
+			],
+		] );
+
 
 		$this->controls_manager->add_control( [
 			'id'           => 'submit_typography',

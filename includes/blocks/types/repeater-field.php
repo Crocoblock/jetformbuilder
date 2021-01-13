@@ -229,10 +229,11 @@ class Repeater_Field extends Base {
 		);
 
 		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
+			'id'                 => 'remove_button_typography',
+			'type'               => 'typography',
+			'disable_decoration' => true,
+			'separator'          => 'after',
+			'css_selector'       => [
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );

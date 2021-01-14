@@ -58,10 +58,6 @@ class File_Upload {
 	 */
 	public function ajax_file_upload() {
 
-		if ( ! is_user_logged_in() ) {
-			return;
-		}
-
 		$nonce   = ! empty( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
 		$form_id = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : false;
 		$field   = ! empty( $_REQUEST['field'] ) ? $_REQUEST['field'] : false;
@@ -95,8 +91,17 @@ class File_Upload {
 
 		$cap = ! empty( $field_data['allowed_user_cap'] ) ? $field_data['allowed_user_cap'] : 'upload_files';
 
-		if ( 'all' !== $cap && ! current_user_can( $cap ) ) {
+		if ( 'any_user' !== $cap && ! is_user_logged_in() ) {
 			wp_send_json_error( __( 'You are not allowed to upload files', 'jet-form-builder' ) );
+		}
+
+		if ( ! in_array( $cap, array( 'all', 'any_user' ) ) && ! current_user_can( $cap ) ) {
+			wp_send_json_error( __( 'You are not allowed to upload files', 'jet-form-builder' ) );
+		}
+
+		// Prevent non logged-in users insert attachment
+		if ( ! is_user_logged_in() ) {
+			$field_data['insert_attachment'] = false;
 		}
 
 		$settings = array(

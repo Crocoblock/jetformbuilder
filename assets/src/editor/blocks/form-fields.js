@@ -54,3 +54,6 @@ import './group-break-field/save';
 
 import './conditional-block/edit';
 import './conditional-block/save';
+
+import './datetime-field/edit';
+import './datetime-field/save';

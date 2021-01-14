@@ -3,7 +3,6 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;

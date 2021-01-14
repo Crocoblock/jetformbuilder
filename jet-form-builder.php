@@ -2,7 +2,7 @@
 /**
  * Plugin Name: JetFormBuilder
  * Plugin URI:  https://crocoblock.com/
- * Description:
+ * Description: Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor
  * Version:     1.0.0
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
@@ -21,7 +21,7 @@ add_action( 'plugins_loaded', 'jet_form_builder_init' );
 
 function jet_form_builder_init() {
 
-	define( 'JET_FORM_BUILDER_VERSION', '1.1.1' );
+	define( 'JET_FORM_BUILDER_VERSION', '1.0.0' );
 
 	define( 'JET_FORM_BUILDER__FILE__', __FILE__ );
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );

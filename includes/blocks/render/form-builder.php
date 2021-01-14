@@ -125,6 +125,7 @@ class Form_Builder {
 		$this->add_attribute( 'action', $this->get_form_action_url() );
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
+		$this->add_attribute( 'data-layout', $this->args['fields_layout'] );
 
 		ob_start();
 		include $this->get_global_template( 'common/start-form.php' );

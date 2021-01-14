@@ -28,6 +28,9 @@ $editor    = array(
 );
 
 ?>
-<div class="jet-form-builder__field" data-editor="<?php echo htmlspecialchars( json_encode( $editor ) ); ?>"><?php
-	wp_editor( $args['default'], $editor_id, $editor );
-?></div>
+<div class="jet-form-builder__field-wrap">
+    <div class="jet-form-builder__field <?php echo $this->maybe_get_error_class( $args ); ?>" data-editor="<?php echo htmlspecialchars( json_encode( $editor ) ); ?>"><?php
+        wp_editor( $args['default'], $editor_id, $editor );
+    ?></div>
+    <?php echo $this->maybe_render_error( $args ); ?>
+</div>

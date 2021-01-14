@@ -33,7 +33,7 @@ $value = File_Upload::instance()->get_result_value( $args );
 $value = is_array( $value ) ? json_encode( $value ) : $value;
 
 ?>
-<div class="jet-form-builder-file-upload">
+<div class="jet-form-builder__field-wrap jet-form-builder-file-upload">
 	<div class="jet-form-builder-file-upload__content">
 		<?php echo File_Upload::instance()->get_loader(); ?>
 		<div class="jet-form-builder-file-upload__files" <?php echo File_Upload::instance()->get_files_data_args( $args ); ?>><?php
@@ -42,7 +42,8 @@ $value = is_array( $value ) ? json_encode( $value ) : $value;
 	</div>
 	<div class="jet-form-builder-file-upload__fields">
 		<input class="jet-form-builder-file-upload__value" type="hidden" name="<?php echo $this->block_type->get_field_name( $args['name'] ); ?>" data-field-name="<?php echo $args['name']; ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
-		<input class="jet-form-builder__field file-field jet-form-builder-file-upload__input"<?php $this->render_attributes_string(); ?>>
+		<input class="<?php echo $this->maybe_get_error_class( $args ); ?> jet-form-builder__field file-field jet-form-builder-file-upload__input"<?php $this->render_attributes_string(); ?>>
+		<?php echo $this->maybe_render_error( $args ); ?>
 	</div>
 	<div class="jet-form-builder-file-upload__message"><small><?php _e( 'Maximum file size', 'jet-engine' );?>: <?php echo size_format( $max_size ); ?></small></div>
 	<div class="jet-form-builder-file-upload__errors is-hidden"></div>

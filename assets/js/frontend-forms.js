@@ -437,11 +437,13 @@
 
 	var JetFormBuilder = {
 
+		pages: {},
 		calcFields: {},
 		repeaterCalcFields: {},
 		childrenCalcFields: {},
-
-		pages: {},
+		currentFieldWithError: {
+			length: 0
+		},
 
 		init: function() {
 
@@ -1238,8 +1240,7 @@
 			$form.addClass( 'is-loading' );
 			$this.attr( 'disabled', true );
 
-			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
-			$form.find( '.jet-form-builder__field-error' ).remove();
+			JetFormBuilder.clearFieldErrors( formID );
 
 			$.ajax({
 				url: JetFormBuilderSettings.ajaxurl,
@@ -1255,15 +1256,22 @@
 
 					case 'validation_failed':
 
-						$.each( response.fields, function( index, fieldName ) {
-							var $field = $form.find( '.jet-form-builder__field[name="' + fieldName + '"]:last' );
+						Object.entries( response.fields ).forEach( function( [ fieldName, fieldData ] ) {
+							var $field = JetFormBuilder.findFieldByName( $form, fieldName );
+
+							const afterMessage = `<div class="error-message">${ fieldData.message }</div>`;
+
+							$field.addClass( 'field-has-error' );
 
 							if ( $field.hasClass( 'checkradio-field' ) ) {
-								$field.closest( '.jet-form-builder__field-wrap' ).after( response.field_message );
+								$field.closest( '.jet-form-builder__field-wrap' ).after( afterMessage );
 							} else {
-								$field.after( response.field_message );
+								$field.after( afterMessage );
 							}
 
+							JetFormBuilder.currentFieldWithError = {
+								length: 0
+							};
 						});
 
 						break;
@@ -1287,13 +1295,47 @@
 
 		},
 
-		clearFieldErrors: function() {
+		clearFieldErrors: function( formID ) {
+			var $this  = $( this );
 
-			var $this  = $( this ),
-				formID = $this.closest( '.jet-form' ).data( 'form-id' );
 			$this.closest( '.jet-form-col' ).find( '.jet-form-builder__field-error' ).remove();
+
+			$( '.jet-form-builder__field.field-has-error' ).each( ( index, elem ) => {
+				$( elem ).removeClass( 'field-has-error' );
+				$( elem ).siblings( '.error-message' ).remove();
+			} );
+
 			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
 
+		},
+
+		findFieldByName: function ( form, fieldName ) {
+			const callbackFinders = [
+				'findInputDefault',
+				'findWysiwyg',
+			];
+
+			callbackFinders.forEach( function ( callback ) {
+				if ( ! JetFormBuilder.currentFieldWithError.length ) {
+					JetFormBuilder[ callback ]( form, fieldName );
+				}
+			} )
+
+			return JetFormBuilder.currentFieldWithError;
+		},
+
+		findInputDefault: function ( form, fieldName ) {
+			JetFormBuilder.currentFieldWithError = form.find( '.jet-form-builder__field[name="' + fieldName + '"]:last' );
+		},
+
+		findWysiwyg: function ( form, fieldName ) {
+
+			$( '.jet-form-builder__field[data-editor]' ).each( function ( index, editor ) {
+
+				if ( fieldName === $( editor ).data( 'editor' ).textarea_name ) {
+					JetFormBuilder.currentFieldWithError = $( editor );
+				}
+			} );
 		},
 
 	};

@@ -17,8 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Repeater_Field extends Base {
 
-	use General_Style;
-
 	public $manage_items;
 	public $items_field;
 	public $repeater_calc_type;

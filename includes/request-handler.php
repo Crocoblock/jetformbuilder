@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder;
 
-
+use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
@@ -143,7 +143,7 @@ class Request_Handler {
 			}
 
 
-			if ( 'repeater-field' === $type ) {
+			if ( 'repeater-field' === $type && isset( $settings['name'] ) ) {
 				$is_repeater                          = true;
 				$in_repeater                          = true;
 				$current_repeater                     = $name;
@@ -154,6 +154,7 @@ class Request_Handler {
 			}
 
 			if ( ! $is_repeater && $in_repeater ) {
+
 				if ( 'media' === $settings['type'] && ! empty( $data[ $current_repeater ] ) ) {
 					foreach ( $data[ $current_repeater ] as $index => $row ) {
 						if ( ! empty( $row[ $name ] ) ) {
@@ -192,24 +193,26 @@ class Request_Handler {
 			}
 
 			if ( 'wysiwyg-field' === $type ) {
-				$required = false;
 				$value    = Tools::sanitize_wysiwyg( $value );
 			}
 
 			if ( isset( $settings['field_type'] ) && 'text-field' === $type && 'email' === $settings['field_type'] && ! is_email( $value ) ) {
-				throw new Request_Exception( 'invalid_email' );
+				Error_Handler::instance()->add(
+					$type, array( 'name' => $name, 'params' => $settings )
+				);
 			}
 
-			/*if ( is_array( $value ) && ! $is_repeater ) {
-				$value = implode( ', ', $value );
-			}*/
-
 			if ( $required && empty( $value ) ) {
-				throw new Request_Exception( 'empty_field' );
+				Error_Handler::instance()->add(
+					$type, array( 'name' => $name, 'params' => $settings )
+				);
 			}
 
 			$data[ $name ] = $value;
+		}
 
+		if ( Error_Handler::instance()->has_errors() ) {
+			throw new Request_Exception( 'validation_failed', Error_Handler::instance()->errors() );
 		}
 
 		if ( ! Plugin::instance()->captcha->verify( $this->request['form_id'], $this->request['is_ajax'] ) ) {

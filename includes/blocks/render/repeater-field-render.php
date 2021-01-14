@@ -34,13 +34,16 @@ class Repeater_Field_Render extends Base {
 			$this->render_repeater_row( $wp_block, false )
 		);
 
-		$html = sprintf(
-			'<div class="jet-form-builder-repeater" data-repeater="1" 
+		$html = '<div class="jet-form-builder__field-wrap">';
+
+		$html .= sprintf(
+			'<div class="jet-form-builder-repeater jet-form-builder__field %5$s" data-repeater="1" 
             data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
 			$this->block_type->block_attrs['name'],
 			$this->block_type->settings,
 			$this->block_type->calc_dataset,
-			$template
+			$template,
+			$this->maybe_get_error_class( $this->block_type->block_attrs )
 		);
 
 		$html .= '<div class="jet-form-builder-repeater__items">';
@@ -66,6 +69,8 @@ class Repeater_Field_Render extends Base {
 			);
 		}
 
+		$html .= '</div>';
+		$html .= $this->maybe_render_error( $this->block_type->block_attrs );
 		$html .= '</div>';
 
 		$this->current_repeater = false;

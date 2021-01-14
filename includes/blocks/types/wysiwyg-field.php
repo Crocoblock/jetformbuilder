@@ -86,6 +86,14 @@ class Wysiwyg_Field extends Base {
 					'label' => __( 'Field Description', 'jet-form-builder' )
 				),
 			),
+			'required'    => array(
+				'type'    => 'boolean',
+				'default' => false,
+				'toolbar' => array(
+					'type'  => 'toggle',
+					'label' => __( 'Is Required', 'jet-form-builder' )
+				),
+			),
 			'default'    => array(
 				'type'    => 'string',
 				'default' => '',

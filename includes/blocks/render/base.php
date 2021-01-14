@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 
+use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
@@ -31,6 +32,8 @@ abstract class Base {
 	public $live_form;
 	public $preset;
 
+	const FIELD_ERROR_CLASS = 'field-has-error';
+
 
 	public function __construct( $block_type ) {
 		$this->form_id = Live_Form::instance()->form_id;
@@ -56,6 +59,30 @@ abstract class Base {
 
 	private function is_field( $needle ) {
 		return Plugin::instance()->form->is_field( $this->block_type->block_attrs['blockName'], $needle );
+	}
+
+	public function maybe_add_error_class( $args ) {
+		if ( $this->has_error( $args ) ) {
+			$this->add_attribute( 'class', self::FIELD_ERROR_CLASS );
+		}
+	}
+
+	public function maybe_render_error( $args ) {
+		if ( $this->has_error( $args ) ) {
+			return "<div class='error-message'>". Error_Handler::instance()->error_by_name( $args['name'] ) ."</div>";
+		}
+		return '';
+	}
+
+	public function maybe_get_error_class( $args ) {
+		if ( $this->has_error( $args ) ) {
+			return self::FIELD_ERROR_CLASS;
+		}
+		return '';
+	}
+
+	private function has_error( $args ) {
+		return Error_Handler::instance()->has_error_by_name( $args['name'] );
 	}
 
 
@@ -123,6 +150,8 @@ abstract class Base {
 		$args = wp_parse_args( $sanitized_args, $defaults );
 
 		$template_name = $this->get_name();
+
+		$this->maybe_add_error_class( $args );
 
 		if ( is_null( $template ) ) {
 			$template = $this->block_type->get_field_template( $template_name . '.php' );

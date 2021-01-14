@@ -62,4 +62,5 @@ $this->add_attribute( 'data-default-val', $default );
         }
 
     ?></select>
+	<?php echo $this->maybe_render_error( $args ); ?>
 </div>

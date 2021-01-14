@@ -61,5 +61,6 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input class="jet-form-builder__field text-field <?php echo $mask_class; ?>"<?php $this->render_attributes_string(); ?>>
+    <input class="jet-form-builder__field text-field <?php echo $mask_class; echo $this->maybe_get_error_class( $args ); ?> "<?php $this->render_attributes_string(); ?>>
+    <?php echo $this->maybe_render_error( $args ); ?>
 </div>

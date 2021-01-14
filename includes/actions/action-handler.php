@@ -71,7 +71,7 @@ class Action_Handler {
 				$available_actions[ $id ]->settings = $form_action['settings'];
 				$available_actions[ $id ]->conditions = $conditions;
 
-				$this->form_actions[ $id ] = $available_actions[ $id ];
+				$this->form_actions[] = $available_actions[ $id ];
 			}
 		}
 
@@ -87,11 +87,12 @@ class Action_Handler {
 	 * @return  void [description]
 	 */
 	public function unregister_action( $id ) {
-
-		if ( isset( $this->form_actions[ $id ] ) ) {
-			unset( $this->form_actions[ $id ] );
+		
+		foreach( $this->form_actions as $index => $action ) {
+			if ( $id === $action->get_id() ) {
+				unset( $this->form_actions[ $index ] );	
+			}
 		}
-
 	}
 
 	/**

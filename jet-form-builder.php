@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: JetFormBuilder
- * Plugin URI:  https://crocoblock.com/plugins/jetappointmentsbooking/
- * Description:
- * Version:     0.1
+ * Plugin URI:  https://crocoblock.com/
+ * Description: Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor
+ * Version:     1.0.0
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-form-builder
@@ -36,5 +36,3 @@ function jet_form_builder_init() {
 function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }
-
-

@@ -313,12 +313,10 @@ button.jet-form-builder__submit {
 .jet-form-builder-repeater__actions {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex
+    display: flex;
+    margin: 10px 0 0 0;
 }
 
-.jet-form-builder-repeater__new {
-    margin: 10px 0 0 0
-}
 
 .jet-form-builder-repeater__remove {
     margin: 0 0 0 10px;

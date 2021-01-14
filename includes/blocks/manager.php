@@ -257,7 +257,7 @@ class Manager {
 			true
 		);
 
-		wp_localize_script( 'jet-form-builder-frontend', 'JetFormBuilderSettings', array(
+		wp_localize_script( 'jet-form-builder-frontend-forms', 'JetFormBuilderSettings', array(
 			'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
 			'form_action' => Plugin::instance()->form_handler->hook_key
 		) );

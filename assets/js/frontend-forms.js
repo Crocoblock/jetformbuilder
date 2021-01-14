@@ -465,8 +465,23 @@
 				.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
-				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage );
+				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
+				.on( 'jet-form-builder/switch-page', self.updateProgress );
 
+		},
+
+		updateProgress: function ( event, $progress, $fromPage, $toPage ) {
+			const prevItem = $progress.find( `.jet-form-progress-pages__item--wrapper[data-page="${ $fromPage }"]` );
+			const currentItem = $progress.find( `.jet-form-progress-pages__item--wrapper[data-page="${ $toPage }"]` );
+
+			prevItem.removeClass( 'active-page' );
+			currentItem.addClass( 'active-page' );
+
+			if ( $fromPage < $toPage ) {
+				prevItem.addClass( 'passed-page' );
+			} else {
+				prevItem.removeClass( 'passed-page' );
+			}
 		},
 
 		removeRepeaterItem: function() {
@@ -939,13 +954,15 @@
 
 			var $form = $fromPage.closest( '.jet-form' );
 
+			const $progress = $form.find( '.jet-form-progress-pages' );
+
 			$fromPage.addClass( 'jet-form-page--hidden' );
 			$toPage.removeClass( 'jet-form-page--hidden' );
 
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
-
+			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ), $toPage.data( 'page' ) ] );
 		},
 
 		getFieldValue: function( $field ) {

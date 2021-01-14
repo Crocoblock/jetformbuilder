@@ -208,6 +208,7 @@ class Form_Builder {
 				'name'        => Plugin::instance()->form_handler->post_id_key,
 			)
 		);
+		$form .= Live_Form::instance()->maybe_progress_pages();
 
 		$form .= Live_Form::instance()->maybe_start_page();
 

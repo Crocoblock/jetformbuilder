@@ -68,7 +68,7 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'field_style',
-				'title' => __( 'Repeater Row', 'jet-forms-builder' )
+				'title' => __( 'Repeater Row', 'jet-form-builder' )
 			]
 		);
 
@@ -90,7 +90,7 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'new_button_style',
-				'title' => __( 'New Item Button', 'jet-forms-builder' )
+				'title' => __( 'New Item Button', 'jet-form-builder' )
 			]
 		);
 
@@ -130,6 +130,17 @@ class Repeater_Field extends Base {
 			'css_selector' => [
 				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'new_button_padding',
+			'type'         => 'dimensions',
+			'separator'    => 'after',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+			),
 		] );
 
 		$this->controls_manager->add_control( [
@@ -213,17 +224,29 @@ class Repeater_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'remove_button_style',
-				'title' => __( 'Remove Item Button', 'jet-forms-builder' )
+				'title' => __( 'Remove Item Button', 'jet-form-builder' )
 			]
 		);
 
 		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
+			'id'                 => 'remove_button_typography',
+			'type'               => 'typography',
+			'disable_decoration' => true,
+			'separator'          => 'after',
+			'css_selector'       => [
 				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'remove_button_padding',
+			'type'         => 'dimensions',
+			'separator'    => 'after',
+			'label'        => __( 'Padding', 'jet-form-builder' ),
+			'units'        => array( 'px', '%' ),
+			'css_selector' => array(
+				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+			),
 		] );
 
 		$this->controls_manager->add_control( [

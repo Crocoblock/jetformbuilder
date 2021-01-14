@@ -72,7 +72,7 @@ class Form extends Base {
 			'style_controls',
 			[
 				'id'    => 'form_row_style',
-				'title' => __( 'Form Row', 'jet-forms-builder' )
+				'title' => __( 'Form Row', 'jet-form-builder' )
 			]
 		);
 
@@ -140,7 +140,7 @@ class Form extends Base {
 			'style_controls',
 			[
 				'id'    => 'success_style',
-				'title' => __( 'Message Success', 'jet-forms-builder' )
+				'title' => __( 'Message Success', 'jet-form-builder' )
 			]
 		);
 
@@ -242,7 +242,7 @@ class Form extends Base {
 			'style_controls',
 			[
 				'id'    => 'error_style',
-				'title' => __( 'Message Error', 'jet-forms-builder' )
+				'title' => __( 'Message Error', 'jet-form-builder' )
 			]
 		);
 

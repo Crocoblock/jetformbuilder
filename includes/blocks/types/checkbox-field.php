@@ -168,7 +168,7 @@ class Checkbox_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'item_checkbox_style',
-				'title' => __( 'Item', 'jet-forms-builder' )
+				'title' => __( 'Item', 'jet-form-builder' )
 			]
 		);
 
@@ -209,7 +209,7 @@ class Checkbox_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'checkbox_style',
-				'title' => __( 'Checkbox', 'jet-forms-builder' )
+				'title' => __( 'Checkbox', 'jet-form-builder' )
 			]
 		);
 
@@ -217,7 +217,7 @@ class Checkbox_Field extends Base {
 			'id'           => 'show_checkbox_decorator',
 			'type'         => 'toggle',
 			'separator'    => 'after',
-			'label'        => __( 'Show Checkbox', 'jet-forms-builder' ),
+			'label'        => __( 'Show Checkbox', 'jet-form-builder' ),
 			'attributes'   => [
 				'default' => [
 					'value' => true

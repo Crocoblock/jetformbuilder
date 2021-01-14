@@ -180,7 +180,7 @@ class Radio_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'item_style',
-				'title' => __( 'Item', 'jet-forms-builder' )
+				'title' => __( 'Item', 'jet-form-builder' )
 			]
 		);
 
@@ -227,7 +227,7 @@ class Radio_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'radio_style',
-				'title' => __( 'Radio', 'jet-forms-builder' )
+				'title' => __( 'Radio', 'jet-form-builder' )
 			]
 		);
 
@@ -235,7 +235,7 @@ class Radio_Field extends Base {
 			'id'           => 'show_decorator',
 			'type'         => 'toggle',
 			'separator'    => 'after',
-			'label'        => __( 'Show Radio', 'jet-forms-builder' ),
+			'label'        => __( 'Show Radio', 'jet-form-builder' ),
 			'attributes'   => [
 				'default' => [
 					'value' => true

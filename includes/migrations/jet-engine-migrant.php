@@ -1,12 +1,12 @@
 <?php
 
-namespace Jet_Form_Builder\Transformers;
+namespace Jet_Form_Builder\Migrations;
 
 use Jet_Form_Builder\Blocks\Block_Generator;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
-class Jet_Engine_Migrant extends Base_Transformer {
+class Jet_Engine_Migrant extends Base_Migrant {
 
 	const BLOCKS_NAMESPACE = 'jet-forms/';
 

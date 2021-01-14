@@ -5,8 +5,7 @@ namespace Jet_Form_Builder;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
-use Jet_Form_Builder\Transformers\Jet_Engine_Transformer;
-use Jet_Form_Builder\Transformers\Migrate_Manager;
+use Jet_Form_Builder\Migrations\Migrate_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

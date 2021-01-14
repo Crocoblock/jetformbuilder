@@ -218,7 +218,7 @@ function ActionsMeta() {
 							<div/>
 							<Button
 								icon={ 'admin-generic' }
-								label={ 'Process & Manipulate' }
+								label={ 'Conditions' }
 								onClick={ () => {
 									setProcessedAction( () => ( { ...action } ) );
 								} }
@@ -296,7 +296,7 @@ function ActionsMeta() {
 				</ActionModal> }
 				{ isEditProcessAction && <ActionModal
 					classNames={ ['width-60'] }
-					title={ 'Edit Process Conditions & Data Manipulation' }
+					title={ 'Edit Action Conditions' }
 					onRequestClose={ () => setEditProcessAction( false ) }
 					onCancelClick={ () => setEditProcessAction( false ) }
 				>

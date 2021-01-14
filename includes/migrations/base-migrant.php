@@ -1,11 +1,10 @@
 <?php
 
-namespace Jet_Form_Builder\Transformers;
+namespace Jet_Form_Builder\Migrations;
 
 use Jet_Form_Builder\Plugin;
 
-abstract class Base_Transformer {
-
+abstract class Base_Migrant {
 
 	protected $form_id;
 	protected $form_data;

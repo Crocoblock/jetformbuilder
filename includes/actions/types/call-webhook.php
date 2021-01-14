@@ -23,6 +23,14 @@ class Call_Webhook extends Base {
 		return 'call_webhook';
 	}
 
+	public function action_attributes() {
+		return array(
+			'webhook_url' => array(
+				'default' => '',
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url( $this->settings['webhook_url'] ) : false;
 

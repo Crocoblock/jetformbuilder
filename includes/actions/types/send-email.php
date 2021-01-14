@@ -37,6 +37,46 @@ class Send_Email extends Base {
 		return 'send_email';
 	}
 
+	public function action_attributes() {
+		return array(
+			'mail_to' => array(
+				'default' => '',
+			),
+			'custom_email' => array(
+				'default' => '',
+			),
+			'from_field' => array(
+				'default' => '',
+			),
+			'reply_to' => array(
+				'default' => '',
+			),
+			'reply_to_email' => array(
+				'default' => '',
+			),
+			'reply_from_field' => array(
+				'default' => '',
+			),
+			'subject' => array(
+				'default' => '',
+				'path'    => 'email/subject'
+			),
+			'from_name' => array(
+				'default' => '',
+				'path'    => 'email/from_name'
+			),
+			'from_address' => array(
+				'default' => '',
+				'path'    => 'email/from_address'
+			),
+			'content' => array(
+				'default' => '',
+				'path'    => 'email/content'
+			),
+		);
+	}
+
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->data = $request;
 

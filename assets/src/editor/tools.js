@@ -1,5 +1,7 @@
 const { __ } = wp.i18n;
 
+const { withDispatch, useDispatch } = wp.data;
+
 class Tools {
 
 	static getHelpMessage( from, name ) {
@@ -26,34 +28,61 @@ class Tools {
 
 		let skipFields = ['submit', 'page_break', 'heading', 'group_break', ...exclude];
 
+		Tools.blocksRecursiveIterator( block => {
+			if ( block.name.includes( 'jet-forms/' )
+				&& block.attributes.name
+				&& ! skipFields.find( field => block.name.includes( field ) )
+			) {
+				formFields.push( {
+					blockName: block.name,
+					name: block.attributes.name,
+					label: block.attributes.label || block.attributes.name,
+					value: block.attributes.name,
+				} );
+			}
+		} );
+
+		return formFields;
+	}
+
+	static blocksRecursiveIterator( blockParserFunc ) {
 		const blocksRecursiveIterator = ( blocks ) => {
 
 			blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
 
-			blocks.map( ( block ) => {
-
-				if ( block.name.includes( 'jet-forms/' )
-					&& block.attributes.name
-					&& ! skipFields.find( field => block.name.includes( field ) )
-				) {
-					formFields.push( {
-						blockName: block.name,
-						name: block.attributes.name,
-						label: block.attributes.label || block.attributes.name,
-						value: block.attributes.name,
-					} );
-				}
+			blocks.map( block =>  {
+				blockParserFunc( block );
 
 				if ( block.innerBlocks.length ) {
 					blocksRecursiveIterator( block.innerBlocks );
 				}
-
 			} );
-
 		};
 
 		blocksRecursiveIterator();
+	}
+
+	static getFormFieldsBlocksInclude( include = [] ) {
+		const formFields = [];
+
+		Tools.blocksRecursiveIterator( block => {
+			if ( block.name.includes( 'jet-forms/' )
+				&& ( ! include.length || include.find( field => block.name.includes( field ) ) )
+			) {
+				formFields.push( {
+					clientId: block.clientId,
+					innerBlocks: block.innerBlocks,
+					label: block.attributes.label || block.attributes.name,
+					value: block.attributes.name,
+				} );
+			}
+		} );
+
 		return formFields;
+	}
+
+	static getInnerBlocks( clientId ) {
+		return wp.data.select("core/editor").getBlock( clientId ).innerBlocks;
 	}
 
 	static getFormFieldsBlocksWithPlaceholder( placeholder = '--' ) {
@@ -64,10 +93,7 @@ class Tools {
 	}
 
 	static getAvailableFields( exclude = [] ) {
-
 		let fields = [];
-
-
 		const blocks = this.getFormFieldsBlocks( exclude );
 
 		if ( blocks ) {
@@ -90,6 +116,33 @@ class Tools {
 	static isEmptyObject( object ) {
 		return 'object' === typeof object && Object.keys( object ).length === 0;
 	}
+
+	static getFuncCondition = ( nameFunction ) => {
+		return new Function( `return window.JetFormBuilderConditions[ '${ nameFunction }' ]` );
+	}
+
+	static addConditionForCondType = ( name, callable ) => {
+		window.JetFormBuilderConditions = window.JetFormBuilderConditions || {};
+		window.JetFormBuilderConditions[ name ] = callable;
+	}
+
+	static parseConditionsFunc = ( source ) => {
+		const types = [];
+
+		source.forEach( type => {
+			if ( type.condition ) {
+				if ( Tools.getFuncCondition( type.condition )()( type.value ) ) {
+					types.push( type );
+				}
+			} else {
+				types.push( type );
+			}
+		} );
+
+		return types;
+
+	}
+
 }
 
 export default Tools;

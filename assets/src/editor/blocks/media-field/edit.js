@@ -151,7 +151,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			
+
 			<FieldWrapper
 				block={ block }
 				attributes={ attributes }

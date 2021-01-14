@@ -34,6 +34,10 @@ class Form_Handler {
 	public $action_handler;
 	public $request_data;
 
+	public $form_key  = '_jet_engine_booking_form_id';
+	public $refer_key = '_jet_engine_refer';
+	public $post_id_key = '__queried_post_id';
+
 	/**
 	 * Constructor for the class
 	 */
@@ -75,20 +79,24 @@ class Form_Handler {
 	 * @return [type] [description]
 	 */
 	public function setup_form() {
-
-		$form_key  = '_jet_engine_booking_form_id';
-		$refer_key = '_jet_engine_refer';
+		global $post;
 
 		if ( ! $this->is_ajax ) {
-			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? $_REQUEST[ $form_key ] : false;
-			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? $_REQUEST[ $refer_key ] : false;
+			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? $_REQUEST[ $this->form_key ] : false;
+			$this->refer   = ! empty( $_REQUEST[ $this->refer_key ] ) ? $_REQUEST[ $this->refer_key ] : false;
+			$post = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
 		} else {
 
 			$values = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
 
 			foreach ( $values as $data ) {
-				if ( $data['name'] === $form_key ) {
-					$this->form_id = $data['value'];
+				switch ( $data['name'] ) {
+					case $this->form_key:
+						$this->form_id = $data['value'];
+						break;
+					case $this->post_id_key:
+						$post = get_post( $data['value'] );
+						break;
 				}
 			}
 

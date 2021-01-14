@@ -30,6 +30,35 @@ class Getresponse extends Integration_Base_Action {
 		return new Getresponse_Handler( $api_key );
 	}
 
+	public function action_attributes() {
+		return array(
+			'api_key' => array(
+				'default' => '',
+				'path'    => 'getresponse/api_key'
+			),
+			'data' => array(
+				'default' => '',
+				'path'    => 'getresponse/data'
+			),
+			'day_of_cycle' => array(
+				'default' => '',
+				'path'    => 'getresponse/day_of_cycle'
+			),
+			'fields_map' => array(
+				'default' => '',
+				'path'    => 'getresponse/fields_map'
+			),
+			'isValidAPI' => array(
+				'default' => '',
+				'path'    => 'mailchimp/isValidAPI'
+			),
+			'list_id' => array(
+				'default' => '',
+				'path'    => 'mailchimp/list_id'
+			),
+		);
+	}
+
 	/**
 	 * Run a hook notification
 	 *

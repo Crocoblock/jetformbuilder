@@ -24,6 +24,14 @@ class Call_Hook extends Base {
 		return 'call_hook';
 	}
 
+	public function action_attributes() {
+		return array(
+			'hook_name' => array(
+				'default' => '',
+			),
+		);
+	}
+
 	/**
 	 * Run a hook notification
 	 *

@@ -64,10 +64,19 @@ class Manager {
 	}
 
 	/**
+	 * @param string $type
+	 *
 	 * @return array
 	 */
-	public function get_actions() {
+	public function get_actions( $type = '' ) {
+		if ( $type ) {
+			return $this->_types[ $type ];
+		}
 		return $this->_types;
+	}
+
+	public function has_action_type( $type ) {
+		return isset( $this->_types[ $type ] );
 	}
 
 	/**

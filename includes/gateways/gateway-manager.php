@@ -2,16 +2,11 @@
 
 namespace Jet_Form_Builder\Gateways;
 
+use Jet_Form_Builder\Classes\Instance_Trait;
+
 class Gateway_Manager {
 
-	/**
-	 * A reference to an instance of this class.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 * @var    object
-	 */
-	private static $instance = null;
+	use Instance_Trait;
 
 	private $_gateways = false;
 
@@ -251,7 +246,7 @@ class Gateway_Manager {
 		);
 
 		wp_localize_script( 'jet-engine-forms-gateways', 'JetEngineGatewaysSettings', array(
-			'gateways' => $this->get_form_gateways(),
+			'gateways' => $this->get_gateways_for_js(),
 		) );
 
 	}
@@ -263,7 +258,7 @@ class Gateway_Manager {
 	 */
 	public function check_form_gateways( $res, $form_id ) {
 
-		$gateways = $this->get_form_gateways( $form_id );
+		$gateways = $this->get_gateways( $form_id );
 
 		if ( ! empty( $gateways ) && 'none' !== $gateways['gateway'] ) {
 			return true;
@@ -271,22 +266,6 @@ class Gateway_Manager {
 			return false;
 		}
 
-	}
-
-	/**
-	 * Returns the instance.
-	 *
-	 * @return object
-	 * @since  1.0.0
-	 * @access public
-	 */
-	public static function instance() {
-		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
 	}
 
 }

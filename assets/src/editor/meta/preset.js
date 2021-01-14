@@ -1,5 +1,5 @@
-import JetFormPresetEditor from '../blocks/controls/preset-editor';
 import Tools from '../tools';
+import GeneralPreset from "../components/presets/general-preset";
 
 function PresetMeta() {
 
@@ -65,7 +65,7 @@ function PresetMeta() {
 						} ) );
 					} }
 				/>
-				{ args.enabled && <JetFormPresetEditor
+				{ args.enabled && <GeneralPreset
 					value={ args }
 					onChange={ newVal => {
 						setArgs( ( prevArgs ) => ( {
@@ -74,8 +74,6 @@ function PresetMeta() {
 							enabled: prevArgs.enabled
 						} ) );
 					} }
-					decode={ false }
-					encode={ false }
 					availableFields={ formFields }
 				/> }
 			</PluginDocumentSettingPanel>

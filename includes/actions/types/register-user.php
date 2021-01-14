@@ -33,6 +33,26 @@ class Register_User extends Base {
 		return 'register_user';
 	}
 
+	public function action_attributes() {
+		return array(
+			'fields_map' => array(
+				'default' => array(),
+			),
+			'log_in' => array(
+				'default' => array(),
+			),
+			'add_user_id' => array(
+				'default' => array(),
+			),
+			'meta_fields_map' => array(
+				'default' => array(),
+			),
+			'user_role' => array(
+				'default' => array(),
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		if ( is_user_logged_in() ) {
 

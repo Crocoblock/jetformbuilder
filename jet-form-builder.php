@@ -21,13 +21,14 @@ add_action( 'plugins_loaded', 'jet_form_builder_init' );
 
 function jet_form_builder_init() {
 
-	define( 'JET_FORM_BUILDER_VERSION', '1.1.1' );
+	define( 'JET_FORM_BUILDER_VERSION', '1.0.0' );
 
 	define( 'JET_FORM_BUILDER__FILE__', __FILE__ );
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );
 	define( 'JET_FORM_BUILDER_PATH', plugin_dir_path( JET_FORM_BUILDER__FILE__ ) );
 	define( 'JET_FORM_BUILDER_URL', plugins_url( '/', JET_FORM_BUILDER__FILE__ ) );
 
+	require JET_FORM_BUILDER_PATH . 'includes/classes/instance-trait.php';
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
 
 }

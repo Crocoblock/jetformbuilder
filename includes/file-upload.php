@@ -2,6 +2,8 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Classes\Instance_Trait;
+
 /**
  * Class description
  *
@@ -17,18 +19,11 @@ if ( ! defined( 'WPINC' ) ) {
 
 class File_Upload {
 
+	use Instance_Trait;
+
 	private $nonce_key = 'jet-form-builder-file-upload-nonce-key';
 	private $action = 'jet-form-builder-upload-file';
 	private $errors = array();
-
-	/**
-	 * A reference to an instance of this class.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 * @var    object
-	 */
-	private static $instance = null;
 
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
@@ -574,22 +569,6 @@ class File_Upload {
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
 
 		return $content . ob_get_clean();
-	}
-
-	/**
-	 * Returns the instance.
-	 *
-	 * @return object
-	 * @since  1.0.0
-	 * @access public
-	 */
-	public static function instance() {
-		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
 	}
 
 }

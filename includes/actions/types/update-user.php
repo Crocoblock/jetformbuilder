@@ -24,6 +24,17 @@ class Update_User extends Base {
 		return 'update_user';
 	}
 
+	public function action_attributes() {
+		return array(
+			'fields_map' => array(
+				'default' => array(),
+			),
+			'user_role' => array(
+				'default' => '',
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
 		$fields_map = array_filter( $fields_map );

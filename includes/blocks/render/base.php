@@ -6,9 +6,10 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Presets\Form_Base_Preset;
+use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 
@@ -46,7 +47,7 @@ abstract class Base {
 	}
 
 	public function set_form_preset() {
-		$this->preset = Form_Preset::instance();
+		$this->preset = Preset_Manager::instance();
 	}
 
 	public function set_block_type( $block_type ) {
@@ -151,7 +152,7 @@ abstract class Base {
 			return $args['default'];
 		}
 
-		$preset_value = $this->preset->get_field_value( $args['name'], $args );
+		$preset_value = $this->preset->get_field_value( $args );
 		$result_value = '';
 
 		if ( ! $this->live_form->current_repeater ) {

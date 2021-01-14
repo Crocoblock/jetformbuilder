@@ -71,12 +71,12 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 			<BlockControls key={ keyControls + '-block' }>
 				<ToolbarGroup>
 					<Button
-								 isTertiary
-								 isSmall
-								 icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-								 onClick={ () => {
-									 this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
-								 } }
+						isTertiary
+						isSmall
+						icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
+						onClick={ () => {
+							this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+						} }
 					/>
 					{ this.state.showMacrosPopover && (
 						<Popover

@@ -156,6 +156,7 @@ class JetFieldsMapControl extends wp.element.Component {
 					style={ { width: '200px' } }
 				/> }
 				{ ( this.termsProp === this.state.type ) && <SelectControl
+					className='jet-control-without-label'
 					key={ 'field_tax_' + this.props.fieldName + this.index }
 					value={ this.props.fieldValue }
 					onChange={ this.onChangeValue }

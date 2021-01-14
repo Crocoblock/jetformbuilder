@@ -3,14 +3,13 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 
-use Jet_Form_Builder\Classes\Arguments_Trait;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
-use Jet_Form_Builder\Fields_Factory;
-use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Presets\Form_Base_Preset;
+use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 
@@ -193,16 +192,23 @@ class Form_Builder {
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
 				'field_value' => $this->form_id,
-				'name'        => '_jet_engine_booking_form_id',
+				'name'        => Plugin::instance()->form_handler->form_key,
 			)
 		);
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
 				'field_value' => $this->get_form_refer_url(),
-				'name'        => '_jet_engine_refer',
+				'name'        => Plugin::instance()->form_handler->refer_key,
 			)
 		);
+		$form .= Live_Form::force_render_field( 'hidden-field',
+			array(
+				'field_value' => Live_Form::instance()->post->ID,
+				'name'        => Plugin::instance()->form_handler->post_id_key,
+			)
+		);
+
 		$form .= Live_Form::instance()->maybe_start_page();
 
 		foreach ( $this->blocks as $block ) {
@@ -231,9 +237,9 @@ class Form_Builder {
 	}
 
 	public function preset() {
-		Form_Preset::instance()->set_form_id( $this->form_id );
+		Preset_Manager::instance()->set_form_id( $this->form_id );
 
-		return Form_Preset::instance();
+		return Preset_Manager::instance();
 	}
 
 }

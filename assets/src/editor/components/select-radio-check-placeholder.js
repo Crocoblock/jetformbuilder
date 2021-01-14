@@ -16,7 +16,8 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 			className={ 'jet-form-builder__field-wrap checkboxes-wrap' }
 			key={ `check_place_holder_block_${ label + index }` }
 			label={ label }
-			onChange={ () => {} }
+			onChange={ () => {
+			} }
 		/>;
 	}
 
@@ -26,7 +27,8 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 			//label={ source.label }
 			options={ options }
 			//help={ source.desc }
-			onChange={ () => {} }
+			onChange={ () => {
+			} }
 		/>;
 	}
 
@@ -36,7 +38,8 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 			//label={ source.label }
 			options={ options }
 			//help={ source.desc }
-			onChange={ () => {} }
+			onChange={ () => {
+			} }
 		/>;
 	}
 
@@ -132,16 +135,16 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 	}
 
 	return <FieldWrapper
-			key={ 'jet-form-builder-field-wrapper' }
-			attributes={ source }
-			block={ blockName }
-		>
+		key={ 'jet-form-builder-field-wrapper' }
+		attributes={ source }
+		block={ blockName }
+	>
 		<div className={ 'jet-form-builder__fields-group' }>
 			{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
-				getManualField( getFullLabel( scriptData, source ) ) || null
+			getManualField( getFullLabel( scriptData, source ) ) || null
 			}
 			{ 'manual_input' === source.field_options_from && source.field_options.length &&
-				getManualField() || null
+			getManualField() || null
 			}
 		</div>
 	</FieldWrapper>;

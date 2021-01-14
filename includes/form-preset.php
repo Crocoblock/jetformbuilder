@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 
 /**
@@ -18,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Preset {
 
-	public static $instance;
+	use Instance_Trait;
 
 	private $form_id = null;
 	private $data = null;
@@ -481,34 +482,6 @@ class Form_Preset {
 
 		return $value;
 
-	}
-
-	/**
-	 * Returns captcha settings for passed form ID
-	 *
-	 * @return [type] [description]
-	 */
-	public function set_data() {
-		$this->data = Plugin::instance()->post_type->get_preset( $this->form_id );
-	}
-
-	/**
-	 * Instance.
-	 *
-	 * Ensures only one instance of the plugin class is loaded or can be loaded.
-	 *
-	 * @return Form_Preset An instance of the class.
-	 * @since 1.0.0
-	 * @access public
-	 * @static
-	 */
-	public static function instance() {
-
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 
 }

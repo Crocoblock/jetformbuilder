@@ -27,6 +27,17 @@ class Update_Options extends Base {
 	public function dependence() {
 		return function_exists( 'jet_engine' );
 	}
+	
+	public function action_attributes() {
+		return array(
+			'meta_fields_map' => array(
+				'default' => array(),
+			),
+			'options_page' => array(
+				'default' => '',
+			),
+		);
+	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
 		$fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();

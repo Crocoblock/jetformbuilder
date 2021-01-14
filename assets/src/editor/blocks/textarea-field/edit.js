@@ -43,7 +43,6 @@ const {
 } = wp.components;
 
 
-
 let { NumberControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
@@ -123,15 +122,16 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 			</InspectorControls>
 		),
 		<FieldWrapper
-            block={ block }
-            attributes={ attributes }
-        >
-            <TextareaControl
-                key={ `place_holder_block_${ block }` }
+			block={ block }
+			attributes={ attributes }
+		>
+			<TextareaControl
+				key={ `place_holder_block_${ block }` }
 				placeholder={ attributes.placeholder }
-				onChange={ () => {} }
-            />
-        </FieldWrapper>
+				onChange={ () => {
+				} }
+			/>
+		</FieldWrapper>
 
 	];
 }

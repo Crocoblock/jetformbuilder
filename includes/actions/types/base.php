@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -25,6 +26,14 @@ abstract class Base {
 	 */
 	public $settings = array();
 
+	/**
+	 * Stores the action conditions
+	 * from the form meta field
+	 *
+	 * @var array
+	 */
+	public $conditions = array();
+
 	public function __construct() {
 		$this->set_action_messages();
 	}
@@ -44,6 +53,11 @@ abstract class Base {
 	public function dependence() {
 		return true;
 	}
+
+	public function condition( Action_Handler $handler ) {
+		new Condition_Helper( $this, $handler );
+	}
+
 
 	public function messages() {
 		return array();
@@ -80,6 +94,10 @@ abstract class Base {
 		} else {
 			return false;
 		}
+	}
+
+	public function action_attributes() {
+		return array();
 	}
 
 

@@ -1,3 +1,9 @@
+import Tools from "../tools";
+import ActionModal from "../components/action-modal";
+import FieldWithPreset from "../components/field-with-preset";
+import DynamicPreset from "../components/presets/dynamic-preset";
+import RepeaterWithState from "../components/repeater-with-state";
+
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
 }
@@ -11,40 +17,61 @@ const defaultActions = [{
 	}
 }];
 
+const newItemCondition = {
+	execute: false,
+	operator: '',
+	field: '',
+	default: '',
+};
+
+const conditionOperators = [
+	{ label: '--', value: '' },
+	{ label: 'Equal', value: 'equal' },
+	{ label: 'Greater than', value: 'greater' },
+	{ label: 'Less than', value: 'less' },
+	{ label: 'Between', value: 'between' },
+	{ label: 'In the list', value: 'one_of' },
+	{ label: 'Contain text', value: 'contain' },
+];
+
+const {
+	TextControl,
+	TextareaControl,
+	ToggleControl,
+	SelectControl,
+	Button,
+	ButtonGroup,
+	Card,
+	CardBody,
+	DropdownMenu,
+	Modal
+} = wp.components;
+
+const {
+	registerPlugin
+} = wp.plugins;
+
+const {
+	PluginDocumentSettingPanel
+} = wp.editPost;
+
+const {
+	useSelect,
+	useDispatch
+} = wp.data;
+
+const {
+	useState,
+	useEffect
+} = wp.element;
+
+const {
+	withState
+} = wp.compose;
+
+const { __ } = wp.i18n;
+
 function ActionsMeta() {
-
-	const {
-		TextControl,
-		SelectControl,
-		Button,
-		ButtonGroup,
-		Card,
-		CardBody,
-		DropdownMenu,
-		Modal
-	} = wp.components;
-
-	const {
-		registerPlugin
-	} = wp.plugins;
-
-	const {
-		PluginDocumentSettingPanel
-	} = wp.editPost;
-
-	const {
-		useSelect,
-		useDispatch
-	} = wp.data;
-
-	const {
-		useState,
-		useEffect
-	} = wp.element;
-
-	const {
-		withState
-	} = wp.compose;
 
 	const DocumentSettingPanelActions = () => {
 
@@ -112,6 +139,9 @@ function ActionsMeta() {
 		const [isEdit, setEdit] = useState( false );
 		const [editedAction, setEditedAction] = useState( {} );
 
+		const [isEditProcessAction, setEditProcessAction] = useState( false );
+		const [processedAction, setProcessedAction] = useState( {} );
+
 		const closeModal = () => {
 			setEdit( false )
 		};
@@ -132,9 +162,14 @@ function ActionsMeta() {
 			}
 		}
 
-		const updateActionFromModal = ( action ) => {
+		const updateActionSettings = action => {
 			updateAction( action.id, 'settings', action.settings );
 			closeModal();
+		}
+
+		const updateActionCondition = items => {
+			updateAction( processedAction.id, 'conditions', items );
+			setEditProcessAction( false );
 		}
 
 		useEffect( () => {
@@ -142,6 +177,14 @@ function ActionsMeta() {
 				setEdit( true );
 			}
 		}, [editedAction] );
+
+		useEffect( () => {
+			if ( processedAction.type ) {
+				setEditProcessAction( true );
+			}
+		}, [processedAction] );
+
+		const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
 
 		return (
 			<PluginDocumentSettingPanel
@@ -173,7 +216,13 @@ function ActionsMeta() {
 								} }
 							/>
 							<div/>
-
+							<Button
+								icon={ 'admin-generic' }
+								label={ 'Process & Manipulate' }
+								onClick={ () => {
+									setProcessedAction( () => ( { ...action } ) );
+								} }
+							/>
 							<DropdownMenu
 								icon={ 'ellipsis' }
 								label={ 'Edit, move or delete' }
@@ -226,61 +275,94 @@ function ActionsMeta() {
 				>
 					{ '+ New Action' }
 				</Button>
-				{ isEdit && (
-					<Modal
-						onRequestClose={ closeModal }
-						className={ 'jet-form-edit-modal' }
-						style={ { width: '60vw' } }
-						title={ 'Edit Action' }
-					>
-						{ ! Callback && <div
-							className="jet-form-edit-modal__content"
-						>{ 'Action callback is not found.' }</div> }
-						{ Callback && <div>
-							<div className="jet-form-edit-modal__content">
-								<Callback
-									settings={ editedAction.settings }
-									onChange={ ( data ) => {
-										setEditedAction( {
-											...editedAction,
-											settings: data
-										} );
-									} }
-								/>
-							</div>
-							<ButtonGroup
-								className="jet-form-edit-modal__actions"
-								style={ {
-									position: 'sticky',
-									bottom: '0',
-									margin: '20px -24px -24px',
-									padding: '18px 24px 20px',
-									backgroundColor: '#fff',
-									width: 'calc( 100% + 48px )',
-									borderTop: '1px solid #ddd',
-								} }
-							>
-								<Button
-									isPrimary
-									onClick={ () => {
-										updateActionFromModal( editedAction )
-									} }
-								>
-									Update
-								</Button>
-								<Button
-									isSecondary
-									style={ {
-										margin: '0 0 0 10px'
-									} }
-									onClick={ closeModal }
-								>
-									Cancel
-								</Button>
-							</ButtonGroup>
-						</div> }
-					</Modal>
-				) }
+				{ isEdit && <ActionModal
+					classNames={ ['width-60'] }
+					onRequestClose={ closeModal }
+					title={ 'Edit Action' }
+					onUpdateClick={ () => {
+						updateActionSettings( editedAction )
+					} }
+					onCancelClick={ closeModal }
+				>
+					<Callback
+						settings={ editedAction.settings }
+						onChange={ ( data ) => {
+							setEditedAction( {
+								...editedAction,
+								settings: data
+							} );
+						} }
+					/>
+				</ActionModal> }
+				{ isEditProcessAction && <ActionModal
+					classNames={ ['width-60'] }
+					title={ 'Edit Process Conditions & Data Manipulation' }
+					onRequestClose={ () => setEditProcessAction( false ) }
+					onCancelClick={ () => setEditProcessAction( false ) }
+				>
+					{ ( { actionClick, onRequestClose } ) => {
+						return <RepeaterWithState
+							items={ processedAction.conditions }
+							newItem={ newItemCondition }
+							onUnMount={ onRequestClose }
+							isSaveAction={ actionClick }
+							onSaveItems={ updateActionCondition }
+							addNewButtonLabel={ __( 'Add New Condition' ) }
+							isSafeDeleting
+						>
+							{ ( { currentItem, changeCurrentItem } ) => {
+								return <>
+									<ToggleControl
+										label={ __( 'Execute an action when the condition is met' ) }
+										checked={ currentItem.execute }
+										onChange={ newValue => {
+											changeCurrentItem( { execute: newValue } );
+										} }
+									/>
+									<SelectControl
+										label="Operator"
+										labelPosition="side"
+										value={ currentItem.operator }
+										options={ conditionOperators }
+										onChange={ newValue => {
+											changeCurrentItem( { operator: newValue } );
+										} }
+									/>
+									<SelectControl
+										label="Field"
+										labelPosition="side"
+										value={ currentItem.field }
+										options={ formFields }
+										onChange={ newValue => {
+											changeCurrentItem( { field: newValue } );
+										} }
+									/>
+									<FieldWithPreset
+										ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+											value={ currentItem.default }
+											isSaveAction={ actionClick }
+											onSavePreset={ newValue => {
+												changeCurrentItem( { default: newValue } );
+											} }
+											excludeSources={ [ 'query_var' ] }
+											onUnMount={ onRequestClose }
+										/> }
+										triggerClasses={ ['trigger__textarea'] }
+									>
+										<TextareaControl
+											label="Value to Compare"
+											value={ currentItem.default }
+											onChange={ newValue => {
+												changeCurrentItem( { default: newValue } );
+											} }
+										/>
+									</FieldWithPreset>
+								</>;
+							} }
+						</RepeaterWithState>;
+					} }
+
+				</ActionModal> }
 			</PluginDocumentSettingPanel>
 		)
 	};

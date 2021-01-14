@@ -50,7 +50,6 @@ window.jetFormDefaultActions[ 'call_hook' ] = class CallHookAction extends wp.el
 			/>
 			<BaseControl
 				key='help_message'
-				className={'erwerer35345345'}
 			>
 				<div className='jet-call-hook-instruction'>
 					{ __( 'Called hook names:' ) }

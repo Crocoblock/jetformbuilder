@@ -167,7 +167,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 
 						<SelectControl
 							key='repeater_calc_type'
-							label={ __( 'Manage repeater items count' ) }
+							label={ __( 'Calculate repeater row value' ) }
 							labelPosition='top'
 							value={ attributes.repeater_calc_type }
 							onChange={ newValue => {
@@ -212,35 +212,38 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						/>
 					</div>
 				</div> }
-				<BaseControl key={'repeater-fields-title'}>
+				<BaseControl key={ 'repeater-fields-title' }>
 					<BaseControl.VisualLabel>
 						<div className={ 'jet-form-builder__label' }>
 							{ label.name || 'Repeater field' }
-							{ attributes.required && <span className={'jet-form-builder__required'}>
+							{ attributes.required && <span className={ 'jet-form-builder__required' }>
 								{ label.mark ? label.mark : '*' }
 							</span> }
 						</div>
 					</BaseControl.VisualLabel>
-					<div className={ 'components-base-control__help jet-form-builder__desc' } style={ { marginTop: '0px' } }>{ attributes.desc }</div>
+					<div className={ 'components-base-control__help jet-form-builder__desc' }
+						 style={ { marginTop: '0px' } }>{ attributes.desc }</div>
 				</BaseControl>
 
 				<InnerBlocks
 					key={ 'repeater-fields' }
 					renderAppender={ () => (
-						<InnerBlocks.ButtonBlockAppender />
+						<InnerBlocks.ButtonBlockAppender/>
 					) }
 				/>
 				<Button
 					className={ 'jet-form-builder-repeater__remove' }
 					isSecondary
-					onClick={ () => {} }
+					onClick={ () => {
+					} }
 				>&times;</Button>
-				<div style={ { width: '100%', height: '0.7em' } } />
+				<div style={ { width: '100%', height: '0.7em' } }/>
 				<div className="jet-form-builder-repeater__actions">
 					<Button
 						className={ 'jet-form-builder-repeater__new' }
 						isSecondary
-						onClick={ () => {} }
+						onClick={ () => {
+						} }
 					>{ attributes.new_item_label || 'Add New' }</Button>
 				</div>
 

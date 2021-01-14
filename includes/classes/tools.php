@@ -12,6 +12,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Tools {
 
+	const EMPTY_DEEP_VALUE = self::class;
+
 	public static function is_editor() {
 		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
 
@@ -242,6 +244,43 @@ class Tools {
 		return ( ( string ) ( int ) $timestamp === $timestamp || ( int ) $timestamp === $timestamp )
 		       && ( $timestamp <= PHP_INT_MAX )
 		       && ( $timestamp >= ~PHP_INT_MAX );
+	}
+
+	public static function array_merge_intersect_key( $source, $arrays ) {
+		foreach ( $source as $index => $path ) {
+			$name = isset( $path['path'] ) ? $path['path'] : $index;
+
+			$deep_value = self::getDeepValue( $name, $arrays );
+
+			if ( self::EMPTY_DEEP_VALUE === $deep_value ) {
+				unset( $source[ $index ] );
+			} else {
+				$source[ $index ] = $deep_value;
+			}
+		}
+
+		return $source;
+	}
+
+	public static function getDeepValue( $key, $source ) {
+		$keys = explode( '/', $key );
+		$last = end( $keys );
+		reset( $keys );
+
+		return self::deep( $keys, current( $keys ), $last, $source );
+	}
+
+	private static function deep( $array, $key, $last, $source ) {
+
+		if ( isset( $source[ $key ] ) ) {
+			if ( $last !== $key ) {
+				return self::deep( $array, next( $array ), $last, $source[ $key ] );
+			}
+
+			return $source[ $key ];
+		}
+
+		return self::EMPTY_DEEP_VALUE;
 	}
 
 }

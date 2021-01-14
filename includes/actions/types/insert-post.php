@@ -38,6 +38,23 @@ class Insert_Post extends Base {
 		);
 	}
 
+	public function action_attributes() {
+		return array(
+			'post_type' => array(
+				'default' => '',
+			),
+			'post_status' => array(
+				'default' => '',
+			),
+			'fields_map' => array(
+				'default' => array(),
+			),
+			'default_meta' => array(
+				'default' => array(),
+			),
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
 

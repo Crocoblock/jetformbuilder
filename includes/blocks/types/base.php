@@ -445,9 +445,12 @@ abstract class Base {
 	}
 
 	/**
-	 * Retruns attra from input array if not isset, get from defaults
+	 * Returns attra from input array if not isset, get from defaults
 	 *
-	 * @return [type] [description]
+	 * @param string $attr
+	 * @param array $all
+	 *
+	 * @return mixed|string [type] [description]
 	 */
 	public function get_attr( $attr = '', $all = array() ) {
 		if ( isset( $all[ $attr ] ) ) {
@@ -462,11 +465,13 @@ abstract class Base {
 	/**
 	 * Returns all block attributes list (custom + general + system)
 	 *
-	 * @return [type] [description]
+	 * @param bool $with_styles
+	 *
+	 * @return array [type] [description]
 	 */
-	public function block_attributes() {
+	public function block_attributes( $with_styles = true ) {
 
-		$attributes = array_merge( $this->get_attributes(), $this->style_attributes );
+		$attributes = $with_styles ? array_merge( $this->get_attributes(), $this->style_attributes ) : $this->get_attributes();
 
 		/**
 		 * Set default blocks attributes to avoid errors
@@ -492,6 +497,9 @@ abstract class Base {
 
 	}
 
+
+
+
 	/**
 	 * Register blocks specific JS variables
 	 *
@@ -515,8 +523,14 @@ abstract class Base {
 	}
 
 	final public function get_field_icon() {
+		$icon = $this->get_icon_path( $this->get_name() . '.php' );
+
+		if ( ! file_exists( $icon ) ) {
+			$icon = $this->get_icon_path( 'empty-field.php' );
+		}
+
 		ob_start();
-		require $this->get_icon_path( $this->get_name() . '.php' );
+		require $icon;
 		return ob_get_clean();
 	}
 
@@ -526,6 +540,24 @@ abstract class Base {
 			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
 			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
 		);
+	}
+	
+	public function parse_exported_data( $field_data ) {
+		$field_attrs = $this->block_attributes( false );
+
+		foreach ( $field_data['attrs'] as $attribute => $value ) {
+			if ( ! isset( $field_attrs[ $attribute ] ) ) {
+				continue;
+			}
+
+			switch ( $field_attrs[ $attribute ]['type'] ) {
+				case 'number':
+					$field_data['attrs'][ $attribute ] = (float) $value;
+					break;
+			}
+		}
+
+		return $field_data;
 	}
 
 

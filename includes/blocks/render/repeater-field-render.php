@@ -3,8 +3,6 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Fields_Factory;
-use Jet_Form_Builder\Form_Preset;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 

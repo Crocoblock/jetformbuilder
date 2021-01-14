@@ -10,15 +10,15 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.getApiData = this.getApiData.bind( this );
 		this.getLists = this.getLists.bind( this );
 
-		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder(  );
+		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder();
 
 		this.state = {
-			className: [ this.getClassNameValidateButton() ],
+			className: [this.getclassNameValidateButton()],
 		};
 	}
 
 	validateAPIKey() {
-		this.setState( { className: [ 'loading' ] } );
+		this.setState( { className: ['loading'] } );
 
 		this.getApiData();
 	}
@@ -45,27 +45,27 @@ export default class IntegrationComponent extends BaseActionComponent {
 					self.onChangeSetting( true, 'isValidAPI' );
 					self.onChangeSetting( response.data, 'data' );
 
-					self.setState( { className: [ 'is-valid' ] } );
+					self.setState( { className: ['is-valid'] } );
 				} else {
 					self.onChangeSetting( false, 'isValidAPI' );
-					self.setState( { className: [ 'is-invalid' ] } );
+					self.setState( { className: ['is-invalid'] } );
 				}
 			},
 			error: function () {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.setState( { className: [ 'is-invalid' ] } );
+				self.setState( { className: ['is-invalid'] } );
 			}
 		} );
 
 
 	}
 
-	getClassNameValidateButton() {
+	getclassNameValidateButton() {
 		const settings = this.props.settings;
 
 		if ( true === settings.isValidAPI ) {
 			return 'is-valid';
-		} else if ( false === settings.isValidAPI) {
+		} else if ( false === settings.isValidAPI ) {
 			return 'is-invalid';
 		}
 	}

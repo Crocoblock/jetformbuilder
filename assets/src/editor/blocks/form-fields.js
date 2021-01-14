@@ -51,3 +51,6 @@ import './form-break-field/save';
 
 import './group-break-field/edit';
 import './group-break-field/save';
+
+import './conditional-block/edit';
+import './conditional-block/save';

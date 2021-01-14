@@ -32,6 +32,43 @@ class Mailchimp extends Integration_Base_Action {
 		return new MailChimp_Handler( $api_key );
 	}
 
+	public function action_attributes() {
+		return array(
+			'api_key' => array(
+				'default' => '',
+				'path'    => 'mailchimp/api_key'
+			),
+			'data' => array(
+				'default' => '',
+				'path'    => 'mailchimp/data'
+			),
+			'double_opt_in' => array(
+				'default' => '',
+				'path'    => 'mailchimp/double_opt_in'
+			),
+			'fields_map' => array(
+				'default' => '',
+				'path'    => 'mailchimp/fields_map'
+			),
+			'groups_ids' => array(
+				'default' => '',
+				'path'    => 'mailchimp/groups_ids'
+			),
+			'isValidAPI' => array(
+				'default' => '',
+				'path'    => 'mailchimp/isValidAPI'
+			),
+			'list_id' => array(
+				'default' => '',
+				'path'    => 'mailchimp/list_id'
+			),
+			'tags' => array(
+				'default' => '',
+				'path'    => 'mailchimp/tags'
+			),
+		);
+	}
+
 	/**
 	 * Run a hook notification
 	 *

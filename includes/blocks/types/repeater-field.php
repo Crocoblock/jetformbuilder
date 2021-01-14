@@ -395,7 +395,7 @@ class Repeater_Field extends Base {
 	}
 
 	public function set_new_repeater_label() {
-		$this->new_item_label = ! empty( $this->block_attrs['new_item_label'] ) ? $this->block_attrs['new_item_label'] : __( 'Add new', 'jet-engine' );
+		$this->new_item_label = ! empty( $this->block_attrs['new_item_label'] ) ? $this->block_attrs['new_item_label'] : __( 'Add new', 'jet-form-builder' );
 	}
 
 	public function set_settings() {

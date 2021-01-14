@@ -98,7 +98,7 @@ class MailChimp_Handler extends Integration_Base {
 	public function get_fields( $list_id ) {
 		$result = array(
 			'email' => array(
-				'label'    => esc_html__( 'Email', 'jet-engine' ),
+				'label'    => esc_html__( 'Email', 'jet-form-builder' ),
 				'required' => true,
 			)
 		);

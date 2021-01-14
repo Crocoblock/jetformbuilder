@@ -81,7 +81,7 @@ class Gateway_Manager {
 
 		add_meta_box(
 			'jet-engine-payment',
-			__( 'Payment settings', 'jet-engine' ),
+			__( 'Payment settings', 'jet-form-builder' ),
 			array( $this, 'render_meta_box' ),
 			get_post_type(),
 			'side',

@@ -22,9 +22,6 @@ class Form_Manager {
 	const   NAMESPACE_FIELDS = 'jet-forms/';
 
 	public function __construct() {
-		add_filter( 'jet-engine/forms/allow-gateways', '__return_true' );
-		add_filter( 'jet-engine/forms/gateways/paypal/sandbox-mode', '__return_true' );
-
 		if ( Plugin::instance()->post_type->allow_gateways ) {
 			Gateway_Manager::instance();
 		}

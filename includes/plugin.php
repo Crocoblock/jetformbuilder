@@ -56,6 +56,7 @@ class Plugin {
 			$this->editor = new Admin\Editor();
 
 			new Migrate_Manager();
+			new Gateways\Stripe\Controller();
 		}
 	}
 

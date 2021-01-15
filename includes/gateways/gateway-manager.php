@@ -3,6 +3,8 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Gateways\Stripe;
+use Jet_Form_Builder\Gateways\Paypal;
 
 class Gateway_Manager {
 
@@ -186,13 +188,10 @@ class Gateway_Manager {
 	public function get_gateways() {
 
 		if ( false === $this->_gateways ) {
-
-			$paypal = new Paypal();
-
 			$this->_gateways = array(
-				$paypal->get_id = $paypal,
+				new Paypal\Controller(),
+				new Stripe\Controller(),
 			);
-
 		}
 
 		return $this->_gateways;
@@ -211,44 +210,6 @@ class Gateway_Manager {
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Register gateways metabox
-	 *
-	 * @return [type] [description]
-	 */
-	public function register_gateways_tabpanel_data( $editor ) {
-
-		$gateways = $this->get_gateways();
-
-		ob_start();
-		include jet_engine()->get_template( 'forms/admin/gateways.php' );
-		$content = ob_get_clean();
-
-		$gateways_settings = apply_filters( 'jet-engine/forms/booking/messages-settings', array(
-			'_gateways' => array(
-				'type' => 'html',
-				'html' => $content,
-			)
-		) );
-
-	}
-
-	public function register_gateways_assets( $editor ) {
-
-		wp_enqueue_script(
-			'jet-engine-forms-gateways',
-			jet_engine()->plugin_url( 'assets/js/admin/forms-gateways.js' ),
-			array( 'jquery' ),
-			jet_engine()->get_version(),
-			true
-		);
-
-		wp_localize_script( 'jet-engine-forms-gateways', 'JetEngineGatewaysSettings', array(
-			'gateways' => $this->get_gateways_for_js(),
-		) );
-
 	}
 
 	/**

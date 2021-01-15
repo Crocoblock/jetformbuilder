@@ -41,7 +41,7 @@ class Post_Type {
 		/**
 		 * TODO: change FALSE to TRUE before release
 		 */
-		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
+		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', true );
 	}
 
 

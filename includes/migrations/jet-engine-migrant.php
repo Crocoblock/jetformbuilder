@@ -227,14 +227,14 @@ class Jet_Engine_Migrant extends Base_Migrant {
 		}
 
 		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'][ $current['x'] ] ) ) {
-			
+
 			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = $this->_get_child_column(
 				$field['column_width'],
-				array( 
+				array(
 					$this->get_prepare_field( $field )
 				),
 				array(
-					'columns' => $field['w'],
+					'columns'  => $field['w'],
 					'position' => $field['x']
 				),
 			);

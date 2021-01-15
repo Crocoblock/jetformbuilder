@@ -1,13 +1,14 @@
 <?php
 
-namespace Jet_Form_Builder\Gateways;
+namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Gateways\Base_Gateway;
 
-class Paypal {
+class Controller extends Base_Gateway {
 
 	private $options = array();
 	private $gateways_meta;

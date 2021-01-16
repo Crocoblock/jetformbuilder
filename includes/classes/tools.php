@@ -283,4 +283,17 @@ class Tools {
 		return self::EMPTY_DEEP_VALUE;
 	}
 
+	public static function run_callbacks( $callbacks = array(), ...$params ) {
+		if ( ! $callbacks ) {
+			return;
+		}
+
+		foreach ( $callbacks as $callback ) {
+			if ( ! is_callable( $callback ) ) {
+				continue;
+			}
+			call_user_func( $callback, ...$params );
+		}
+	}
+
 }

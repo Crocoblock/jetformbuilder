@@ -3,9 +3,11 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -108,16 +110,56 @@ class Action_Handler {
 	 * Send form notifications
 	 *
 	 * @return array [type] [description]
+	 * @throws Action_Exception
 	 */
 	public function do_actions() {
 
+		$this->before_run_actions();
+		$this->run_actions();
+		$this->after_run_actions();
+
+		return $this->response_data;
+	}
+
+	public function before_run_actions() {
+		$callbacks = array();
+
+		if ( Plugin::instance()->post_type->allow_gateways ) {
+			$callbacks[] = array(
+				Gateway_Manager::instance(),
+				Gateway_Manager::BEFORE_ACTIONS_CALLABLE
+			);
+		}
+
+		Tools::run_callbacks(
+			apply_filters( 'jet-form-builder/actions/before-send/callbacks', $callbacks ),
+			$this
+		);
+	}
+
+	public function after_run_actions() {
+		$callbacks = array();
+
+		if ( Plugin::instance()->post_type->allow_gateways ) {
+			$callbacks[] = array(
+				Gateway_Manager::instance(),
+				Gateway_Manager::AFTER_ACTIONS_CALLABLE
+			);
+		}
+
+		Tools::run_callbacks(
+			apply_filters( 'jet-form-builder/actions/after-send/callbacks', $callbacks ),
+			$this
+		);
+
+	}
+
+	public function run_actions() {
 		if ( empty( $this->form_actions ) ) {
 			throw new Action_Exception( 'failed' );
 		}
 
 		$this->size_all = sizeof( $this->form_actions );
-
-		do_action( 'jet-form-builder/actions/before-send', $this );
 
 		foreach ( $this->form_actions as $index => $action ) {
 
@@ -136,11 +178,9 @@ class Action_Handler {
 			 */
 			$action->do_action( $this->request_data, $this );
 		}
-
-		do_action( 'jet-form-builder/actions/after-send', $this );
-
-		return $this->response_data;
 	}
+
+
 
 
 }

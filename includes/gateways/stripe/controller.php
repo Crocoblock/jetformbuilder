@@ -9,11 +9,9 @@ use Jet_Form_Builder\Gateways\Stripe\Api_Methods\Checkout_Session;
 
 class Controller extends Base_Gateway {
 
-	private $auth = 'sk_test_51I9XJcAMNPQUZTQG19WARwUBpmHxB5jQYfqMulWgACA4pOqFbRuqVQsoQL0jNx3RKHWoWJ30m0nGryaod6eNOvT0001QLWwdmK';
-
 	public function __construct() {
 		//add_action( 'init', array( $this, 'request' ) );
-		//add_action( 'wp_enqueue_scripts', array( $this, 'add_stripe_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_stripe_scripts' ) );
 	}
 
 	public function get_id() {
@@ -24,8 +22,24 @@ class Controller extends Base_Gateway {
 		return __( 'Stripe Checkout', 'jet-form-builder' );
 	}
 
+	public function options_list() {
+		return array( 'public', 'secret', 'currency' );
+	}
+
+	public function on_success_payment() {
+
+	}
+
+	public function before_actions( $action_handler ) {
+		// TODO: Implement before_actions() method.
+	}
+
+	public function after_actions( $action_handler ) {
+		// TODO: Implement after_actions() method.
+	}
+
 	public function request() {
-		$checkout = new Checkout_Session( $this->auth );
+		$checkout = new Checkout_Session( '' );
 
 		$checkout->create( array(
 			'mode'                 => 'payment',
@@ -42,11 +56,13 @@ class Controller extends Base_Gateway {
 			),
 		) );
 
-		var_dump( $checkout->get_response( 'create' ) );
-		die;
+		return $checkout->get_response( 'create' );
 	}
 
 	public function add_stripe_scripts() {
-		wp_enqueue_script();
+		wp_enqueue_script(
+			'jet-form-builder-stripe-frontend',
+			'https://js.stripe.com/v3/',
+		);
 	}
 }

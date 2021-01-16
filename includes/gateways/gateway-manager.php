@@ -5,12 +5,17 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Gateways\Stripe;
 use Jet_Form_Builder\Gateways\Paypal;
+use Jet_Form_Builder\Plugin;
 
 class Gateway_Manager {
 
+	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
+	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
+
 	use Instance_Trait;
 
-	private $_gateways = false;
+	private $_gateways = array();
+	private $gateways_form_data = array();
 
 	public $message = null;
 	public $data = null;
@@ -20,18 +25,43 @@ class Gateway_Manager {
 	 */
 	public function __construct() {
 
-		add_action( 'jet-form-builder/editor/meta-boxes', array( $this, 'register_gateways_metabox' ) );
-		add_action( 'jet-form-builder/editor/assets', array( $this, 'register_gateways_assets' ) );
+		$this->register_gateways();
+		$this->catch_payment_result();
+	}
 
-		$this->get_gateways();
+	/**
+	 * Returns all registered gateways
+	 *
+	 * @return void [description]
+	 */
+	public function register_gateways() {
 
-		if ( isset( $_GET['jet_gateway'] ) ) {
-			add_action( 'wp_loaded', array( $this, 'catch_payment_result' ) );
+		$this->_gateways = array(
+			new Paypal\Controller(),
+			new Stripe\Controller(),
+		);
+	}
+
+	public function before_send_actions( $action_handler ) {
+		$gateways = $this->get_form_gateways_by_id( $action_handler->form_id );
+
+		$this->save_gateways_form_data( $gateways );
+
+		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
+			return;
 		}
 
-		add_action( 'add_meta_boxes', array( $this, 'maybe_register_gateway_meta' ) );
+		$this->get_gateway_controller( $gateways['gateway'] )->before_actions( $action_handler );
+	}
 
-		//add_filter( 'jet-engine/forms/handler/has-gateways', array( $this, 'check_form_gateways' ), 10, 2 );
+	public function after_send_actions( $action_handler ) {
+		$gateways = $this->gateways_form_data;
+
+		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
+			return;
+		}
+
+		$this->get_gateway_controller( $gateways['gateway'] )->after_actions( $action_handler );
 	}
 
 
@@ -62,34 +92,12 @@ class Gateway_Manager {
 
 	}
 
-	/**
-	 * Maybe register gateway meta box for order posts
-	 *
-	 * @return [type] [description]
-	 */
-	public function maybe_register_gateway_meta() {
-
-		$post_id = get_the_ID();
-		$data    = get_post_meta( $post_id, '_jet_gateway_data', true );
-
-		if ( empty( $data ) ) {
-			return;
-		}
-
-		add_meta_box(
-			'jet-engine-payment',
-			__( 'Payment settings', 'jet-engine' ),
-			array( $this, 'render_meta_box' ),
-			get_post_type(),
-			'side',
-			'default',
-			$data
-		);
-
-	}
-
 	public function add_data( $data ) {
 		$this->data = $data;
+	}
+
+	public function save_gateways_form_data( $data ) {
+		$this->gateways_form_data = $data;
 	}
 
 	public function add_message( $message ) {
@@ -112,97 +120,45 @@ class Gateway_Manager {
 	/**
 	 * Catch processed payment results
 	 *
-	 * @return [type] [description]
+	 * @return void [description]
 	 */
 	public function catch_payment_result() {
-		do_action( 'jet-form-builder/gateways/success/' . $_GET['jet_gateway'] );
-		$token = $_GET['token'];
-	}
-
-	/**
-	 * Render payment metabox
-	 *
-	 * @param  [type] $post_id [description]
-	 * @param  [type] $metabox [description]
-	 *
-	 * @return [type]          [description]
-	 */
-	public function render_meta_box( $post_id, $metabox ) {
-		$data = $metabox['args'];
-		echo '<table>';
-		$this->iterate_data( $data );
-		echo '</table>';
-	}
-
-	/**
-	 * Iterate array data to show in meta box
-	 *
-	 * @param  [type] $data [description]
-	 * @param string $tag [description]
-	 *
-	 * @return [type]       [description]
-	 */
-	public function iterate_data( $data, $tag = 'tr' ) {
-
-		$row   = ( 'tr' === $tag ) ? 'tr' : 'div';
-		$title = ( 'tr' === $tag ) ? 'td' : 'b';
-		$val   = ( 'tr' === $tag ) ? 'td' : 'span';
-		$sep   = ( 'tr' === $tag ) ? '' : ': ';
-
-		foreach ( $data as $key => $value ) {
-
-			if ( 'form_id' === $key ) {
-				$key   = 'form';
-				$url   = get_edit_post_link( $value );
-				$value = sprintf(
-					'<a href="%1$s" target="_blank">%2$s</a>',
-					$url,
-					get_the_title( $value )
-				);
-			}
-
-			echo '<' . $row . '>';
-			echo '<' . $title . ' valign="top">';
-			echo $key . $sep;
-			echo '</' . $title . '>';
-			echo '<' . $val . '>';
-			if ( ! is_array( $value ) ) {
-				if ( 'form_id' ) {
-					echo $value;
-				}
-			} else {
-				$this->iterate_data( $value, 'div' );
-			}
-			echo '</' . $val . '>';
-			echo '<' . $row . '>';
-
-		}
-	}
-
-
-	/**
-	 * Returns all registered gateways
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_gateways() {
-
-		if ( false === $this->_gateways ) {
-			$this->_gateways = array(
-				new Paypal\Controller(),
-				new Stripe\Controller(),
-			);
+		if ( ! isset( $_GET['jet_gateway'] ) ) {
+			return;
 		}
 
-		return $this->_gateways;
+		add_action( 'wp_loaded', function () {
+			$controller = $this->get_gateway_controller( $_GET['jet_gateway'] );
 
+			if ( ! ( $controller instanceof Base_Gateway ) ) {
+				return;
+			}
+
+			$controller->set_payment_id()
+			           ->set_data()
+			           ->on_success_payment();
+		} );
+	}
+
+
+	public function get_gateway_controller( $type = false ) {
+		if ( ! $type ) {
+			return false;
+		}
+
+		foreach ( $this->_gateways as $gateway ) {
+			if ( $gateway->get_id() === $type ) {
+				return $gateway;
+			}
+		}
+
+		return false;
 	}
 
 	public function get_gateways_for_js() {
-		$result   = [];
-		$gateways = $this->get_gateways();
+		$result = [];
 
-		foreach ( $gateways as $gateway ) {
+		foreach ( $this->_gateways as $gateway ) {
 			$result[] = array(
 				'value' => $gateway->get_id(),
 				'label' => $gateway->get_name()
@@ -213,13 +169,32 @@ class Gateway_Manager {
 	}
 
 	/**
+	 * Returns gatewyas config for current form
+	 *
+	 * @param  [type] $post_id [description]
+	 *
+	 * @return [type]          [description]
+	 */
+	public function get_form_gateways_by_id( $form_id = null ) {
+
+		if ( ! $form_id ) {
+			$form_id = get_the_ID();
+		}
+		$default = array( 'gateway' => 'none' );
+
+		$meta = Plugin::instance()->post_type->get_gateways( $form_id );
+
+		return is_array( $meta ) ? $meta : $default;
+	}
+
+	/**
 	 * Check form gateways
 	 *
 	 * @return [type] [description]
 	 */
 	public function check_form_gateways( $res, $form_id ) {
 
-		$gateways = $this->get_gateways( $form_id );
+		$gateways = $this->get_form_gateways_by_id( $form_id );
 
 		if ( ! empty( $gateways ) && 'none' !== $gateways['gateway'] ) {
 			return true;

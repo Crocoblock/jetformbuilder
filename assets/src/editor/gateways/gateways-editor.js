@@ -32,7 +32,7 @@ export default function GatewaysEditor( {
 
 	const gatewaysData = window.JetFormEditorData.gateways;
 
-	const [args, setArgs] = useState( gatewaysArgs );
+	const [gateway, setGateway] = useState( gatewaysArgs );
 
 	const formFields = Tools.getFormFieldsBlocks();
 
@@ -48,7 +48,7 @@ export default function GatewaysEditor( {
 	 * @param newValue
 	 */
 	const setValueInObject = ( when, type, newValue ) => {
-		setArgs( ( prevArgs ) => {
+		setGateway( ( prevArgs ) => {
 			if ( ! prevArgs[ when ] ) {
 				prevArgs[ when ] = {};
 			}
@@ -68,8 +68,8 @@ export default function GatewaysEditor( {
 	 * @returns {boolean|*}
 	 */
 	const getNotifications = ( when, type, isEmptyResult = false ) => {
-		if ( args[ when ] && args[ when ][ type ] ) {
-			return args[ when ][ type ];
+		if ( gateway[ when ] && gateway[ when ][ type ] ) {
+			return gateway[ when ][ type ];
 		}
 		return isEmptyResult;
 	};
@@ -108,18 +108,18 @@ export default function GatewaysEditor( {
 			if ( onSaveItems ) {
 
 				['notifications_before', 'notifications_failed', 'notifications_success'].forEach( name => {
-					if ( ! args[ name ] ) {
-						args[ name ] = {};
+					if ( ! gateway[ name ] ) {
+						gateway[ name ] = {};
 						return;
 					}
-					Object.entries( args[ name ] ).forEach( ( [action, isChecked] ) => {
+					Object.entries( gateway[ name ] ).forEach( ( [action, isChecked] ) => {
 						if ( ! isChecked ) {
-							delete args[ name ][ action ];
+							delete gateway[ name ][ action ];
 						}
 					} )
 				} );
 
-				onSaveItems( args );
+				onSaveItems( gateway );
 			}
 			onUnMount();
 		} else if ( false === isSaveAction ) {
@@ -128,26 +128,11 @@ export default function GatewaysEditor( {
 	}, [isSaveAction] );
 
 	return <>
-		<RadioControl
-			label={ __( 'If you want to process any payments on this form submission, please select payment gateway', 'jet-form-builder' ) }
-			key={ 'gateways_radio_control' }
-			selected={ args.gateway }
-			options={ [
-				{ label: 'None', value: 'none' },
-				...gatewaysData.list
-			] }
-			onChange={ newVal => {
-				setArgs( ( prevArgs ) => ( {
-					...prevArgs,
-					gateway: newVal
-				} ) );
-			} }
-		/>
-		{ 'paypal' === args.gateway && <PayPal
+		{ 'paypal' === gateway.gateway && <PayPal
 			setValueInObject={ setValueInObject }
 			getNotifications={ getNotifications }
 		/> }
-		{ 'stripe' === args.gateway && <Stripe
+		{ 'stripe' === gateway.gateway && <Stripe
 			setValueInObject={ setValueInObject }
 			getNotifications={ getNotifications }
 		/> }
@@ -212,10 +197,10 @@ export default function GatewaysEditor( {
 		<SelectControl
 			label={ __( 'Price/amount field', 'jet-form-builder' ) }
 			key={ 'form_fields_price_field' }
-			value={ args.price_field }
+			value={ gateway.price_field }
 			labelPosition='side'
 			onChange={ newVal => {
-				setArgs( ( prevArgs ) => ( {
+				setGateway( ( prevArgs ) => ( {
 					...prevArgs,
 					price_field: newVal
 				} ) );
@@ -249,10 +234,10 @@ export default function GatewaysEditor( {
 			activeActions.find( action => action.type === 'redirect_to_page' ) &&
 			<CheckboxControl
 				key="checkbox_block_redirect_to_page"
-				checked={ args.use_success_redirect }
+				checked={ gateway.use_success_redirect }
 				label={ __( 'Use redirect URL from Redirect notification', 'jet-form-builder' ) }
 				onChange={ value => {
-					setArgs( ( prevArgs ) => ( {
+					setGateway( ( prevArgs ) => ( {
 						...prevArgs,
 						use_success_redirect: value
 					} ) );

@@ -23,9 +23,8 @@ class Controller extends Base_Gateway {
 	public $redirect = false;
 
 	public function __construct() {
-		add_action( 'jet-form-builder/actions/before-send', array( $this, 'prevent_notifications' ) );
+		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_actions' ) );
 		add_action( 'jet-form-builder/actions/after-send', array( $this, 'process_payment' ) );
-		add_action( 'jet-form-builder/gateways/success/paypal', array( $this, 'process_payment_result' ) );
 	}
 
 	/**
@@ -46,14 +45,15 @@ class Controller extends Base_Gateway {
 		return __( 'PayPal Checkout', 'jet-form-builder' );
 	}
 
+	public function options_list() {
+		return array( 'client_id', 'secret', 'currency' );
+	}
+
 	/**
 	 * Store payment status into order and show success/failed message
 	 * @return [type] [description]
 	 */
-	public function process_payment_result() {
-
-		$token      = $_GET['token'];
-		$this->data = $this->get_form_by_payment( $token );
+	public function on_success_payment() {
 
 		if ( ! $this->set_gateway_data_on_result() ) {
 			return;
@@ -89,8 +89,8 @@ class Controller extends Base_Gateway {
 		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
 
 		try {
-			$this->set_paypal_options();
-			$this->set_token();
+			$this->set_current_gateway_options();
+			$this->set_api_token();
 			$this->set_payment_status();
 
 		} catch ( Gateway_Exception $exception ) {
@@ -146,11 +146,11 @@ class Controller extends Base_Gateway {
 
 		try {
 			$this->set_order_id();
-			$this->is_paypal_gateway();
+			$this->is_current_gateway();
 			$this->set_price_field();
 			$this->set_price_from_filed();
-			$this->set_paypal_options();
-			$this->set_token();
+			$this->set_current_gateway_options();
+			$this->set_api_token();
 
 		} catch ( Gateway_Exception $exception ) {
 			return false;
@@ -208,46 +208,13 @@ class Controller extends Base_Gateway {
 	}
 
 	/**
-	 * Returns form data by payment ID
-	 *
-	 * @param  [type] $payment [description]
-	 *
-	 * @return [type]          [description]
-	 */
-	public function get_form_by_payment( $payment = null ) {
-
-		if ( ! $payment ) {
-			return;
-		}
-
-		global $wpdb;
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key = '_jet_gateway_data' AND meta_value LIKE '%$payment%'", ARRAY_A );
-
-		if ( empty( $row ) ) {
-			return;
-		}
-
-		$data = $row['meta_value'];
-
-		return maybe_unserialize( $data );
-
-	}
-
-
-	/**
 	 * Prevent unnecessary notifications processing before form is send.
 	 *
 	 * @param  [type] $handler [description]
 	 *
 	 * @return [type]          [description]
 	 */
-	public function prevent_notifications( $action_handler ) {
-
-		$gateways = Plugin::instance()->post_type->get_gateways( $action_handler->form_id );
-
-		if ( empty( $gateways ) || empty( $gateways['gateway'] ) ) {
-			return;
-		}
+	public function before_actions( $action_handler ) {
 
 		$action_handler->unregister_action( 'redirect_to_page' );
 
@@ -288,7 +255,7 @@ class Controller extends Base_Gateway {
 		$this->order_id = $response['inserted_post_id'];
 	}
 
-	private function is_paypal_gateway() {
+	private function is_current_gateway() {
 		if ( ! isset( $this->gateways_meta['gateway'] ) ||
 		     empty( $this->gateways_meta['gateway'] ) ||
 		     $this->get_id() !== $this->gateways_meta['gateway'] ) {
@@ -319,10 +286,10 @@ class Controller extends Base_Gateway {
 		}
 	}
 
-	private function set_paypal_options() {
-		$gateway = $this->gateways_meta['paypal'];
+	private function set_current_gateway_options() {
+		$gateway = $this->gateways_meta[ $this->get_id() ];
 
-		foreach ( [ 'client_id', 'secret', 'currency' ] as $option ) {
+		foreach ( $this->options_list() as $option ) {
 			if ( ! isset( $gateway[ $option ] ) || empty( $gateway[ $option ] ) ) {
 				throw new Gateway_Exception( 'Invalid gateway options' );
 			}
@@ -330,7 +297,7 @@ class Controller extends Base_Gateway {
 		}
 	}
 
-	private function set_token() {
+	public function set_api_token() {
 		$this->token = $this->get_token(
 			$this->options['client_id'],
 			$this->options['secret']
@@ -348,7 +315,7 @@ class Controller extends Base_Gateway {
 	 *
 	 * @return void [type] [description]
 	 */
-	public function process_payment( $action_handler ) {
+	public function after_actions( $action_handler ) {
 		$this->action_handler = $action_handler;
 
 		if ( ! $this->set_gateway_data() ) {

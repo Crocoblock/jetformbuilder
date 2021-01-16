@@ -42,9 +42,13 @@ function Gateways() {
 		return;
 	}
 
+	const gatewaysData = window.JetFormEditorData.gateways;
+
 	const DocumentSettingPanelGateways = () => {
 
-		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		const meta = useSelect( ( select ) => {
+			return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		} );
 
 		const {
 			editPost
@@ -55,10 +59,16 @@ function Gateways() {
 			gatewaysArgs: JSON.parse( meta._jf_gateways || '{}' ),
 		};
 
+		const [gateway, setGateway] = useState( gatewaysProps.gatewaysArgs.gateway );
+
 		const [isEdit, setEdit] = useState( false );
 
 		const closeModal = () => {
 			setEdit( false );
+		};
+
+		const getGatewayLabel = ( type ) => {
+			return ( gatewaysData.list.find( el => el.value === type ).label );
 		};
 
 		const saveArgs = newArgs => {
@@ -70,44 +80,61 @@ function Gateways() {
 			} );
 		};
 
+		const saveGateway = type => {
+			gatewaysProps.gatewaysArgs.gateway = type;
+
+			editPost( {
+				meta: ( {
+					...meta,
+					_jf_gateways: JSON.stringify( gatewaysProps.gatewaysArgs )
+				} )
+			} );
+		}
+
+		useEffect( () => {
+			saveGateway( gateway );
+		} );
+
 		return (
 			<PluginDocumentSettingPanel
 				name={ 'jf-gateways' }
 				title={ 'Gateways Settings' }
 				key={ 'jf-gateways-panel' }
 			>
-				<div
-					key='jet-form/manage-gateways'
+				<RadioControl
+					key={ 'gateways_radio_control' }
+					selected={ gateway }
+					options={ [
+						{ label: 'None', value: 'none' },
+						...gatewaysData.list
+					] }
+					onChange={ setGateway }
+				/>
+				{ 'none' !== gateway && <Button
+					isSecondary
+					onClick={ () => setEdit( true ) }
+					icon={ 'admin-tools' }
 					style={ {
-						textAlign: 'center'
+						margin: '1em 0'
 					} }
 				>
-					<Button
-						isSecondary
-						onClick={ () => setEdit( true ) }
-						icon={ 'admin-tools' }
-						style={ {
-							marginBottom: '15px'
-						} }
+					{ __( 'Edit' ) }
+				</Button> }
+				{ isEdit && (
+					<ActionModal
+						classNames={ ['width-60'] }
+						onRequestClose={ closeModal }
+						title={ `Edit ${ getGatewayLabel( gateway ) } Settings` }
 					>
-						{ __( 'Manage Items' ) }
-					</Button>
-					{ isEdit && (
-						<ActionModal
-							classNames={ ['width-60'] }
-							onRequestClose={ closeModal }
-							title={ 'Edit Gateway Settings' }
-						>
-							{ ( { actionClick, onRequestClose } ) => <>
-								<GatewaysEditor
-									{ ...gatewaysProps }
-									isSaveAction={ actionClick }
-									onUnMount={ onRequestClose }
-									onSaveItems={ saveArgs }
-								/>
-							</> }
-						</ActionModal> ) }
-				</div>
+						{ ( { actionClick, onRequestClose } ) => <>
+							<GatewaysEditor
+								{ ...gatewaysProps }
+								isSaveAction={ actionClick }
+								onUnMount={ onRequestClose }
+								onSaveItems={ saveArgs }
+							/>
+						</> }
+					</ActionModal> ) }
 			</PluginDocumentSettingPanel>
 		)
 	};

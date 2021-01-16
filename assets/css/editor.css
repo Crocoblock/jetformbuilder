@@ -604,3 +604,7 @@ select.components-select-control__input {
     margin: unset;
     box-sizing: border-box;
 }
+
+.flex-column .components-base-control__field {
+    flex-direction: column;
+}

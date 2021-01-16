@@ -67,6 +67,10 @@ class Submit_Field extends Base {
 		$this->add_margin_padding(
 			$this->css_scheme['button'],
 			array(
+				'margin' => array(
+					'id'        => 'submit_margin',
+					'separator' => 'after',
+				),
 				'padding' => array(
 					'id'        => 'submit_padding',
 					'separator' => 'after',
@@ -119,16 +123,13 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'align-items: {{VALUE}};',
+				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'justify-content: {{VALUE}}; align-items: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
 					'value' => 'flex-start'
 				),
 			],
-			'condition' => array(
-				'add_prev' => false
-			)
 		] );
 
 		$this->controls_manager->add_control( [

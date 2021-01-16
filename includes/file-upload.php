@@ -69,9 +69,9 @@ class File_Upload {
 			return;
 		}
 
-		$nonce   = ! empty( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
+		$nonce   = ! empty( $_REQUEST['nonce'] ) ? esc_attr( $_REQUEST['nonce'] ) : false;
 		$form_id = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : false;
-		$field   = ! empty( $_REQUEST['field'] ) ? $_REQUEST['field'] : false;
+		$field   = ! empty( $_REQUEST['field'] ) ? esc_attr( $_REQUEST['field'] ) : false;
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, $this->nonce_key ) ) {
 			wp_send_json_error( __( 'You not allowed to do this', 'jet-form-builder' ) );

@@ -51,7 +51,7 @@ class Paypal {
 	 */
 	public function process_payment_result() {
 
-		$token      = $_GET['token'];
+		$token      = esc_attr( $_GET['token'] );
 		$this->data = $this->get_form_by_payment( $token );
 
 		if ( ! $this->set_gateway_data_on_result() ) {

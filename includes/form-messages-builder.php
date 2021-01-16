@@ -48,7 +48,7 @@ class Form_Messages_Builder {
 	 */
 	public function get_form_status() {
 		if ( ! $this->status ) {
-			$this->status = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : null;
+			$this->status = isset( $_REQUEST['status'] ) ? esc_attr( $_REQUEST['status'] ) : null;
 		}
 
 		return $this->status;

@@ -118,8 +118,7 @@ class Gateway_Manager {
 	 * @return [type] [description]
 	 */
 	public function catch_payment_result() {
-		do_action( 'jet-form-builder/gateways/success/' . $_GET['jet_gateway'] );
-		$token = $_GET['token'];
+		do_action( 'jet-form-builder/gateways/success/' . esc_attr( $_GET['jet_gateway'] ) );
 	}
 
 	/**

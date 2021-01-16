@@ -13,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Tools {
 
 	public static function is_editor() {
-		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
+		$action = ! empty( $_GET['context'] ) ? esc_attr( $_GET['context'] ) : '';
 
 		return in_array( $action, array( 'add', 'edit' ) );
 	}

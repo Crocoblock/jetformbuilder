@@ -4,6 +4,7 @@ namespace Jet_Form_Builder;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 
 /**
@@ -80,11 +81,11 @@ class Form_Handler {
 		$refer_key = '_jet_engine_refer';
 
 		if ( ! $this->is_ajax ) {
-			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? $_REQUEST[ $form_key ] : false;
-			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? $_REQUEST[ $refer_key ] : false;
+			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? absint( $_REQUEST[ $form_key ] ) : false;
+			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? esc_attr( $_REQUEST[ $refer_key ] ) : false;
 		} else {
 
-			$values = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
+			$values = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
 
 			foreach ( $values as $data ) {
 				if ( $data['name'] === $form_key ) {

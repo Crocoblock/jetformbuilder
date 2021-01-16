@@ -414,7 +414,7 @@ class Form_Preset {
 
 		switch ( $from ) {
 			case 'query_vars':
-				$source = $_GET;
+				$source = Tools::maybe_recursive_sanitize( $_GET );
 				break;
 
 			case 'user':
@@ -427,7 +427,7 @@ class Form_Preset {
 				} else {
 
 					$var     = ! empty( $data['query_var'] ) ? $data['query_var'] : $this->defaults['query_var'];
-					$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+					$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 
 					$source = get_user_by( 'ID', $user_id );
 
@@ -443,7 +443,7 @@ class Form_Preset {
 					$post_id = get_the_ID();
 				} else {
 					$var     = ! empty( $data['query_var'] ) ? $data['query_var'] : $this->defaults['query_var'];
-					$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+					$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 				}
 
 				if ( $post_id ) {
@@ -473,7 +473,7 @@ class Form_Preset {
 	public function maybe_adjust_value( $args ) {
 
 		$value       = isset( $args['default'] ) ? $args['default'] : false;
-		$request_val = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
+		$request_val = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
 
 		if ( ! empty( $request_val[ $args['name'] ] ) ) {
 			$value = $request_val[ $args['name'] ];

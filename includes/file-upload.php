@@ -2,6 +2,8 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Classes\Tools;
+
 /**
  * Class description
  *
@@ -155,9 +157,7 @@ class File_Upload {
 
 		$insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
 
-		if ( ! $files ) {
-			$files = $_FILES;
-		}
+		$files = Tools::sanitize_files( $files );
 
 		if ( empty( $files ) || ! is_array( $files ) ) {
 			return false;

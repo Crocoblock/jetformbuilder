@@ -1282,6 +1282,10 @@
 							window.location = response.redirect;
 						} else if ( response.reload ) {
 							window.location.reload();
+						} else if ( response.stripe_session_id && response.stripe_public_key ) {
+							const stripe = new Stripe( response.stripe_public_key );
+
+							stripe.redirectToCheckout({ sessionId: response.stripe_session_id });
 						}
 
 						$( document ).trigger( 'jet-form-builder/ajax/on-success', [ response, $form, data ] );

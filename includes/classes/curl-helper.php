@@ -32,10 +32,15 @@ class Curl_Helper {
 	private function set_options() {
 		$this->options += array(
 			CURLOPT_URL            => $this->url,
-			CURLOPT_POST           => true,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT        => 10,
 		);
+	}
+
+	public function set_post( $is_post = true ) {
+		$this->options[ CURLOPT_POST ] = $is_post;
+
+		return $this;
 	}
 
 	public function execute() {

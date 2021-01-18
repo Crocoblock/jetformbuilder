@@ -27,6 +27,7 @@ abstract class Base_Api_Method {
 		if ( false === $this->curl_instance ) {
 			$this->curl_instance = new Curl_Helper( $this->api_url( $endpoint ) );
 		}
+
 		return $this->curl_instance;
 	}
 
@@ -58,10 +59,12 @@ abstract class Base_Api_Method {
 	}
 
 
-	public function create( $fields ) {
-		$this->get_request()
+	public function create( $fields, $endpoint = '', $post = true ) {
+		$this->get_request( $endpoint )
+		     ->set_post( $post )
 		     ->set_auth( $this->token )
 		     ->set_post_fields( http_build_query( $fields ) );
+
 
 		$this->save_response( 'create' );
 	}

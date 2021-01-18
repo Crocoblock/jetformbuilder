@@ -2,7 +2,9 @@
 
 namespace Jet_Form_Builder\Gateways;
 
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Stripe;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
@@ -11,6 +13,8 @@ class Gateway_Manager {
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
 	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
+
+	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
 	use Instance_Trait;
 
@@ -51,7 +55,10 @@ class Gateway_Manager {
 			return;
 		}
 
-		$this->get_gateway_controller( $gateways['gateway'] )->before_actions( $action_handler );
+		$this->get_gateway_controller( $gateways['gateway'] )->before_actions(
+			$action_handler,
+			$this->get_actions_before( $action_handler )
+		);
 	}
 
 	public function after_send_actions( $action_handler ) {
@@ -123,21 +130,34 @@ class Gateway_Manager {
 	 * @return void [description]
 	 */
 	public function catch_payment_result() {
-		if ( ! isset( $_GET['jet_gateway'] ) ) {
+		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->post_type->allow_gateways ) {
 			return;
 		}
 
-		add_action( 'wp_loaded', function () {
-			$controller = $this->get_gateway_controller( $_GET['jet_gateway'] );
+		add_action( 'wp_loaded', array( $this, 'on_has_gateway_request' ) );
+	}
 
-			if ( ! ( $controller instanceof Base_Gateway ) ) {
-				return;
-			}
+	public function on_has_gateway_request() {
+		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
 
-			$controller->set_payment_id()
-			           ->set_data()
-			           ->on_success_payment();
-		} );
+		$controller = $this->get_gateway_controller( $gateway_type );
+
+		if ( ! ( $controller instanceof Base_Gateway ) ) {
+			return;
+		}
+
+		$this->try_run_gateway_controller( $controller );
+	}
+
+	public function try_run_gateway_controller( Base_Gateway $controller ) {
+		try {
+			$controller->set_payment_id();
+			$controller->set_data();
+			$controller->on_success_payment();
+
+		} catch ( Gateway_Exception $exception ) {
+			//
+		}
 	}
 
 
@@ -202,6 +222,22 @@ class Gateway_Manager {
 			return false;
 		}
 
+	}
+
+	public function gateways() {
+		return $this->gateways_form_data;
+	}
+
+	public function get_actions_before( Action_Handler $action_handler ) {
+		if ( empty( $this->gateways() ) || empty( $this->gateways()['notifications_before'] ) ) {
+			return array();
+		}
+
+		return apply_filters(
+			'jet-form-builder/gateways/notifications-before',
+			$this->gateways()['notifications_before'],
+			$action_handler->get_all()
+		);
 	}
 
 }

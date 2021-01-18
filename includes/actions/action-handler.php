@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Actions;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -180,7 +179,9 @@ class Action_Handler {
 		}
 	}
 
-
+	public function add_response( $values ) {
+		Plugin::instance()->form_handler->add_response_data( $values );
+	}
 
 
 }

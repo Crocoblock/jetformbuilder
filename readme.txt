@@ -35,10 +35,10 @@ JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field 
 
 **Integrations**
 
-**<a href="https://bit.ly/3oHeLI7" target="_blank">JetEngine</a>**
+**<a href="https://crocoblock.com/plugins/jetengine/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
 Use the JetEngine potential when developing a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically, and put the JetEngine-built custom post types into the dynamic settings. 
 
-**<a href="https://bit.ly/2XAACoN" target="_blank">JetStyleManager</a>**
+**<a href="https://crocoblock.com/plugins/jetstylemanager/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release">JetStyleManager</a>**
 We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.   
 
 More third-party plugin integrations are in the works.
@@ -47,6 +47,6 @@ More third-party plugin integrations are in the works.
 
 Learn every little thing about JetFormBuilder & put theory to practice:
 
-- <a href="https://bit.ly/2LOgnRH" target="_blank">JetFormBuilder: How to Create a Form</a>
-- <a href="https://bit.ly/3oFDH2B" target="_blank">JetFormBuilder: Form Fields Overview</a>
-- <a href="https://bit.ly/3i9I0kD" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-create-a-form/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Create a Form</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-form-fields-overview/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: Form Fields Overview</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-add-the-form-to-the-page/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>

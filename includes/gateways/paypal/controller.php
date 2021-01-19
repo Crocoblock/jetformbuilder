@@ -99,53 +99,6 @@ class Controller extends Base_Gateway {
 		}
 	}
 
-	/**
-	 * Process status notification and enqueue message
-	 *
-	 * @param string $type [description]
-	 * @param  [type] $form_id  [description]
-	 * @param array $settings [description]
-	 *
-	 * @return [type]           [description]
-	 */
-	public function process_status( $type = 'success' ) {
-
-		$settings = $this->gateways_meta;
-
-		$message       = ! empty( $settings[ $type . '_message' ] ) ? wp_kses_post( $settings[ $type . '_message' ] ) : null;
-		$notifications = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
-
-		if ( $message ) {
-			Gateway_Manager::instance()->add_message( $message );
-		}
-
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this->data, $settings );
-
-		if ( ! empty( $notifications ) ) {
-			$notifications = new Action_Handler(
-				$this->data['form_id'],
-				$this->data['form_data']
-			);
-
-			$notifications->unregister_action( 'redirect_to_page' );
-
-			$all        = $notifications->get_all();
-			$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
-
-			if ( empty( $all ) ) {
-				return;
-			}
-
-			foreach ( $all as $index => $notification ) {
-				if ( ! in_array( $notification->get_id(), $keep_these ) ) {
-					$notifications->unregister_action( $index );
-				}
-			}
-
-			$notifications->do_actions();
-		}
-
-	}
 
 	public function set_api_token() {
 		$this->token = $this->get_token(
@@ -249,7 +202,7 @@ class Controller extends Base_Gateway {
 
 		update_post_meta(
 			$this->order_id,
-			'_jet_gateway_data',
+			self::GATEWAY_META_KEY,
 			array(
 				'payment_id' => $pp_order_id,
 				'order_id'   => $this->order_id,

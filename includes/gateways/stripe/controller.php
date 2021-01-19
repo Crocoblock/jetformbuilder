@@ -15,7 +15,6 @@ use Jet_Form_Builder\Plugin;
 class Controller extends Base_Gateway {
 
 	public function __construct() {
-		//add_action( 'init', array( $this, 'request' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_stripe_scripts' ) );
 	}
 
@@ -41,30 +40,27 @@ class Controller extends Base_Gateway {
 
 		try {
 			$this->set_current_gateway_options();
-			$this->check_payment_status();
+			$this->set_payment_status();
 
 		} catch ( Gateway_Exception $exception ) {
-			var_dump( $exception->getMessage() );
 			return false;
 		}
 
 		return true;
 	}
 
-	protected function check_payment_status() {
+	protected function set_payment_status() {
 		$payment = $this->request( array(), '/' . $this->data['session_id'], false );
 
 		if ( isset( $payment['error'] ) ) {
 			throw new Gateway_Exception( $payment['error']['message'] );
 		}
 
-		$payment = json_decode( $payment, true );
-
 		if ( empty( $payment['payment_status'] ) ) {
 			throw new Gateway_Exception( 'Empty payment status' );
 		}
 
-		$this->is_fail_status( $payment['payment_status'] );
+		$this->data['status'] = $payment['payment_status'];
 	}
 
 	/**
@@ -79,11 +75,9 @@ class Controller extends Base_Gateway {
 		if ( ! $this->set_gateway_data( $action_handler ) ) {
 			return;
 		}
-		$refer = $action_handler->request_data['__refer'];
-
 		$session = $this->get_checkout_session( array(
-			'success_url' => $this->get_refer_url( 'success', $refer ),
-			'cancel_url'  => $this->get_refer_url( 'cancel', $refer ),
+			'success_url' => $this->get_refer_url( 'success', $action_handler ),
+			'cancel_url'  => $this->get_refer_url( 'cancel', $action_handler ),
 		) );
 
 		if ( ! $session || isset( $session['error'] ) ) {
@@ -94,9 +88,10 @@ class Controller extends Base_Gateway {
 			$this->order_id,
 			self::GATEWAY_META_KEY,
 			json_encode( array(
-				'session_id' => $session['id'],
-				'form_id'    => $action_handler->form_id,
-				'form_data'  => $action_handler->request_data,
+				'session_id'  => $session['id'],
+				'order_token' => $this->order_token,
+				'form_id'     => $action_handler->form_id,
+				'form_data'   => $action_handler->request_data,
 			) )
 		);
 
@@ -146,16 +141,5 @@ class Controller extends Base_Gateway {
 
 	protected function get_price( $price ) {
 		return absint( $price ) * 100;
-	}
-
-	public function get_payment_id() {
-		return esc_attr( $_GET['order_id'] );
-	}
-
-	public function get_form_data() {
-		return json_decode(
-			get_post_meta( $this->payment_id, self::GATEWAY_META_KEY, true ),
-			true
-		);
 	}
 }

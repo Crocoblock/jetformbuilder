@@ -1,10 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder;
+namespace Jet_Form_Builder\Form_Messages;
 
 
-class Form_Messages_Manager {
+use Jet_Form_Builder\Plugin;
+
+class Manager {
 
 	public $form_id;
 	public $actions;

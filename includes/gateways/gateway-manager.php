@@ -151,6 +151,7 @@ class Gateway_Manager {
 
 	public function try_run_gateway_controller( Base_Gateway $controller ) {
 		try {
+			$controller->set_payment_token();
 			$controller->set_payment_id();
 			$controller->set_data();
 			$controller->on_success_payment();

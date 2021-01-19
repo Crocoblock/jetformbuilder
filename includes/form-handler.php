@@ -6,6 +6,8 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Form_Messages;
+use Jet_Form_Builder\Form_Response;
 
 /**
  * Form builder class
@@ -35,11 +37,11 @@ class Form_Handler {
 	public $action_handler;
 	public $request_data;
 
-	public $form_key  = '_jet_engine_booking_form_id';
+	public $form_key = '_jet_engine_booking_form_id';
 	public $refer_key = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 
-	private $query_args = array();
+	private $response_manager;
 
 	/**
 	 * Constructor for the class
@@ -87,7 +89,7 @@ class Form_Handler {
 		if ( ! $this->is_ajax ) {
 			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? $_REQUEST[ $this->form_key ] : false;
 			$this->refer   = ! empty( $_REQUEST[ $this->refer_key ] ) ? $_REQUEST[ $this->refer_key ] : false;
-			$post = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
+			$post          = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
 		} else {
 
 			$values = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
@@ -102,10 +104,25 @@ class Form_Handler {
 						break;
 					case $this->refer_key:
 						$this->refer = esc_attr( $data['value'] );
+						// Clear form-related arguments
+						$this->refer = remove_query_arg( array( 'values', 'status', 'fields' ), $this->refer );
 						break;
 				}
 			}
 
+		}
+	}
+
+	private function get_response_manager() {
+		if ( $this->is_ajax ) {
+			return new Form_Response\Types\Ajax_Response( array(
+				'form_id' => $this->form_id,
+				'actions' => $this->action_handler->get_all(),
+			) );
+		} else {
+			return new Form_Response\Types\Reload_Response( array(
+				'refer' => $this->refer,
+			) );
 		}
 	}
 
@@ -189,6 +206,25 @@ class Form_Handler {
 		}
 	}
 
+	public function get_message_builder_data( $form_id ) {
+		$form_id = $this->form_id ? $this->form_id : $form_id;
+
+		if ( $this->action_handler && ! empty( $this->action_handler->form_actions ) ) {
+			$actions = $this->action_handler->form_actions;
+		} else {
+			$actions = ( new Action_Handler( $form_id ) )->get_all();
+		}
+
+		return ( object ) array(
+			'form_id' => $form_id,
+			'actions' => $actions
+		);
+	}
+
+	public function get_message_builder( $form_id ) {
+		return new Form_Messages\Builder( $this->get_message_builder_data( $form_id ) );
+	}
+
 	/**
 	 * Add new properties into response data
 	 *
@@ -198,110 +234,18 @@ class Form_Handler {
 		$this->response_data = array_merge( $this->response_data, $data );
 	}
 
-	public function get_message_builder( $form_id = null ) {
-
-		$form_id = $this->form_id ? $this->form_id : $form_id;
-
-		if ( $this->action_handler && ! empty( $this->action_handler->form_actions ) ) {
-			$actions = $this->action_handler->form_actions;
-		} else {
-			$actions = ( new Action_Handler( $form_id ) )->get_all();
-		}
-
-		$data = ( object ) array(
-			'form_id' => $form_id,
-			'actions' => $actions
-		);
-
-		return new Form_Messages_Builder( $data );
-	}
-
 	/**
 	 * Redirect back to refer
 	 *
 	 * @param array $args [description]
 	 *
-	 * @return [type]       [description]
+	 * @return void [description]
 	 */
 	public function send_response( $args = array() ) {
-
-		$args = wp_parse_args( $args, array(
-			'status' => 'success',
-			'errors' => array()
-		) );
-
-		$this->init_query_args( $args['status'] );
-
-		// Clear form-related arguments
-		$this->refer = remove_query_arg( array( 'values', 'status', 'fields' ), $this->refer );
-
-		$this->on_validation_failed( $args );
-		$this->maybe_send_values();
-		$this->maybe_parse_status();
-
-		if ( $this->is_ajax ) {
-
-			$messages = $this->get_message_builder()->set_form_status( $this->response_status );
-
-			ob_start();
-			$messages->render_messages();
-			$query_args['message'] = ob_get_clean();
-
-			if ( 'validation_failed' === $this->response_status ) {
-				ob_start();
-				$messages->render_empty_field_message();
-				$this->add_query_args( array( 'field_message' => ob_get_clean() ) );
-			}
-
-			wp_send_json( $this->query_args );
-		} else {
-			$redirect = add_query_arg( $this->query_args, $this->refer );
-			wp_redirect( $redirect );
-			die();
-		}
-	}
-
-	private function init_query_args( $status ) {
-		$this->response_status = $status;
-
-		$this->add_query_args( array( 'status' => $status ) );
-		$this->add_query_args( $this->response_data );
-	}
-
-	private function add_query_args( $args ) {
-		$this->query_args = array_merge( $this->query_args, $args );
-	}
-
-	private function on_validation_failed( $args ) {
-		if ( 'validation_failed' !== $this->response_status ) {
-			return;
-		}
-
-		$this->add_query_args( array(
-			'fields' => $this->is_ajax ? $args['errors'] : urlencode( json_encode( $args['errors'] ) )
-		) );
-	}
-
-	private function maybe_send_values() {
-		$error_statuses = array( 'validation_failed', 'invalid_email' );
-
-		$send_values = apply_filters( 'jet-form-builder/form-handler/send-values-on-error', true );
-
-		if ( ! $this->is_ajax && $send_values && in_array( $this->response_status, $error_statuses ) ) {
-			$this->add_query_args( array(
-				'values' => $this->form_data
-			) );
-		}
-	}
-
-	private function maybe_parse_status() {
-		if ( $this->is_ajax ) {
-			return;
-		}
-
-		$this->add_query_args( array(
-			'status' => urlencode( $this->response_status )
-		) );
+		( new Form_Response\Response(
+			$this->get_response_manager(),
+			array( 'response' => $this->response_data )
+		) )->init( $args )->send();
 	}
 
 }

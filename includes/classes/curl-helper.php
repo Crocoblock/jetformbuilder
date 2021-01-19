@@ -18,7 +18,9 @@ class Curl_Helper {
 	}
 
 	public function set_post_fields( $fields ) {
-		$this->options[ CURLOPT_POSTFIELDS ] = $fields;
+		if ( $fields ) {
+			$this->options[ CURLOPT_POSTFIELDS ] = $fields;
+		}
 
 		return $this;
 	}
@@ -38,7 +40,9 @@ class Curl_Helper {
 	}
 
 	public function set_post( $is_post = true ) {
-		$this->options[ CURLOPT_POST ] = $is_post;
+		if ( $is_post ) {
+			$this->options[ CURLOPT_POST ] = $is_post;
+		}
 
 		return $this;
 	}

@@ -82,7 +82,7 @@ class Form_Handler {
 
 		if ( ! $this->is_ajax ) {
 			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? absint( $_REQUEST[ $form_key ] ) : false;
-			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? esc_attr( $_REQUEST[ $refer_key ] ) : false;
+			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? esc_url( $_REQUEST[ $refer_key ] ) : false;
 		} else {
 
 			$values = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();

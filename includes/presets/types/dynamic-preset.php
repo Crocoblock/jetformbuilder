@@ -22,12 +22,12 @@ class Dynamic_Preset extends Base_Preset {
 			$this->field => array(
 				'prop' => ! empty( $this->data['current_field_prop'] ) ? $this->data['current_field_prop'] : '',
 				'key'  => ! empty( $this->data['current_field_key'] ) ? $this->data['current_field_key'] : '',
+				'other' => $this->data
 			),
 		);
 	}
 
 	public function get_preset_value() {
-
 		if ( ! $this->source->src ) {
 			return $this->result;
 		}

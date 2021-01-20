@@ -8,7 +8,6 @@ use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Presets\Form_Base_Preset;
 use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
@@ -174,13 +173,12 @@ class Form_Builder {
 	public function render_form( $echo = true ) {
 
 		if ( $this->pre_render() ) {
-			return;
+			return '';
 		}
 
 		if ( ! $this->preset()->sanitize_source() ) {
 			echo 'You are not permitted to submit this form!';
-
-			return;
+			return '';
 		}
 
 		$form = $this->start_form();

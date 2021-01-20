@@ -5,10 +5,8 @@ namespace Jet_Form_Builder\Gateways\Stripe;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Base_Gateway;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Stripe\Api_Methods\Checkout_Session;
 use Jet_Form_Builder\Plugin;
 
@@ -39,7 +37,6 @@ class Controller extends Base_Gateway {
 		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
 
 		try {
-			$this->set_current_gateway_options();
 			$this->set_payment_status();
 
 		} catch ( Gateway_Exception $exception ) {
@@ -121,11 +118,12 @@ class Controller extends Base_Gateway {
 	}
 
 	public function request( $params, $endpoint = '', $post = true ) {
-		if ( empty( $this->options['secret'] ) ) {
+		if ( empty( $this->gateways_meta[ $this->get_id() ]['secret'] ) ) {
 			return false;
 		}
+		$secret = $this->gateways_meta[ $this->get_id() ]['secret'];
 
-		$checkout = new Checkout_Session( $this->options['secret'] );
+		$checkout = new Checkout_Session( $secret );
 
 		$checkout->create( $params, $endpoint, $post );
 
@@ -135,7 +133,7 @@ class Controller extends Base_Gateway {
 	public function add_stripe_scripts() {
 		wp_enqueue_script(
 			'jet-form-builder-stripe-frontend',
-			'https://js.stripe.com/v3/',
+			'https://js.stripe.com/v3/'
 		);
 	}
 

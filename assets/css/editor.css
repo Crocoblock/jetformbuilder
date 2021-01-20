@@ -608,3 +608,12 @@ select.components-select-control__input {
 .flex-column .components-base-control__field {
     flex-direction: column;
 }
+
+.block-editor-block-inspector .components-input-control.components-number-control {
+    margin-bottom: 2em;
+}
+
+.repeater-item__left-heading {
+    max-width: 85%;
+    word-break: break-all;
+}

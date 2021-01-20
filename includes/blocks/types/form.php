@@ -486,6 +486,8 @@ class Form extends Base {
 
 		ob_start();
 
+		var_dump( 'dfdsfdsf' );
+
 		$builder->render_form();
 		$messages->render_messages();
 

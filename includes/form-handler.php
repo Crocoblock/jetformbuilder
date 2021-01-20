@@ -127,15 +127,6 @@ class Form_Handler {
 	}
 
 	/**
-	 * Check if current form has configured gateway
-	 *
-	 * @return boolean [description]
-	 */
-	public function has_gateway() {
-		return apply_filters( 'jet-form-builder/form-handler/has-gateways', false, $this->form_id );
-	}
-
-	/**
 	 * Process form with Ajax
 	 *
 	 * @return [type] [description]
@@ -242,10 +233,7 @@ class Form_Handler {
 	 * @return void [description]
 	 */
 	public function send_response( $args = array() ) {
-		( new Form_Response\Response(
-			$this->get_response_manager(),
-			array( 'response' => $this->response_data )
-		) )->init( $args )->send();
+		( new Form_Response\Response( $this->get_response_manager(), $this->response_data ) )->init( $args )->send();
 	}
 
 }

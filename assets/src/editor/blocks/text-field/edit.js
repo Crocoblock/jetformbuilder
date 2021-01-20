@@ -30,12 +30,14 @@ const {
 	SelectControl,
 	ToggleControl,
 	PanelBody,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
-	BaseControl,
+	__experimentalNumberControl,
 } = wp.components;
 
+let { NumberControl, InputControl } = wp.components;
+
+if ( typeof NumberControl === 'undefined' ) {
+	NumberControl = __experimentalNumberControl;
+}
 
 const keyControls = block + '-controls-edit';
 const keyPlaceHolder = block + '-placeholder-edit';
@@ -45,6 +47,12 @@ const localizeData = window.JetFormTextFieldData;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 	const attributes = props.attributes;
+
+	const changeNumberValue = ( key, newValue ) => {
+		const value = ( newValue && newValue > 0 ) ? parseInt( newValue ) : null;
+
+		props.setAttributes( { [ key ]: value } );
+	}
 
 	return [
 		( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length &&
@@ -85,6 +93,22 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 							props.setAttributes( { field_type: newValue } );
 						} }
 						options={ localizeData.field_types_list }
+					/>
+					<NumberControl
+						label={ __( 'Min length (symbols)' ) }
+						labelPosition='top'
+						key='minlength'
+						min={ 1 }
+						value={ attributes.minlength }
+						onChange={ ( newValue ) => changeNumberValue( 'minlength', newValue ) }
+					/>
+					<NumberControl
+						label={ __( 'Max length (symbols)' ) }
+						labelPosition='top'
+						key='maxlength'
+						min={ 1 }
+						value={ attributes.maxlength }
+						onChange={ ( newValue ) => changeNumberValue( 'maxlength', newValue ) }
 					/>
 					<ToggleControl
 						key={ 'enable_input_mask' }
@@ -168,8 +192,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 			<TextControl
 				placeholder={ attributes.placeholder }
 				key={ `place_holder_block_${ block }_control` }
-				onChange={ () => {
-				} }
+				onChange={ () => {} }
 			/>
 		</FieldWrapper>
 	];

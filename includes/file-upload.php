@@ -108,20 +108,10 @@ class File_Upload {
 			'max_size' => $this->get_max_size_for_field( $field_data ),
 		);
 
-		if ( ! empty( $field_data['allowed_mimes'] ) ) {
-			$settings['mime_types'] = $field_data['allowed_mimes'];
-		}
-
-		if ( ! empty( $field_data['max_files'] ) ) {
-			$settings['max_files'] = $field_data['max_files'];
-		}
-
-		if ( ! empty( $field_data['insert_attachment'] ) ) {
-			$settings['insert_attachment'] = $field_data['insert_attachment'];
-		}
-
 		$message_builder      = Plugin::instance()->form_handler->get_message_builder( $form_id );
 		$settings['messages'] = $message_builder->manager->get_messages();
+
+		$settings = array_merge( $field_data, $settings );
 
 		$result = $this->process_upload( $_FILES, $settings );
 
@@ -131,8 +121,8 @@ class File_Upload {
 
 		wp_send_json_success( array(
 			'files'  => $result,
-			'html'   => $this->get_result_html( $field_data, $result ),
-			'value'  => $this->get_result_value( $field_data, $result ),
+			'html'   => $this->get_result_html( $settings, $result ),
+			'value'  => $this->get_result_value( $settings, $result ),
 			'errors' => $this->get_errors_string(),
 		) );
 
@@ -237,6 +227,7 @@ class File_Upload {
 		} elseif ( ! empty( $upload['error'] ) ) {
 			$this->errors[] = $upload['error'];
 		}
+
 
 		remove_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
 
@@ -487,7 +478,12 @@ class File_Upload {
 	 * @return [type] [description]
 	 */
 	public function get_upload_dir() {
-		return $this->upload_base() . '/' . get_current_user_id();
+
+		$user_id       = get_current_user_id();
+		$user_dir_name = $user_id ? $user_id : 'guest';
+		$user_dir_name = apply_filters( 'jet-form-builder/file-upload/user-dir-name', $user_dir_name );
+
+		return $this->upload_base() . '/' . $user_dir_name;
 	}
 
 	/**

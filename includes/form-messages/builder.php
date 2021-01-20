@@ -19,7 +19,7 @@ class Builder {
 
 	private $form_id;
 	private $status;
-	private $success_statuses = array( 'success' );
+
 
 	public $manager;
 
@@ -31,18 +31,6 @@ class Builder {
 	public function __construct( $data ) {
 		$this->form_id = $data->form_id;
 		$this->manager = new Manager( $this->form_id, $data->actions );
-	}
-
-	private function is_success( $status ) {
-		return in_array( $status, $this->success_statuses );
-	}
-
-	public function add_success_statuses( $statuses ) {
-		$this->success_statuses = array_merge( $this->success_statuses, $statuses );
-	}
-
-	private function get_status_class( $status ) {
-		return $this->is_success( $status ) ? 'success' : 'error';
 	}
 
 	/**
@@ -70,7 +58,7 @@ class Builder {
 	}
 
 	public function render_empty_field_message() {
-		$message_content = $this->manager->get_message_text( 'empty_field' );
+		$message_content = $this->manager->get_message( 'empty_field' );
 
 		include $this->get_global_template( 'common/field-message.php' );
 	}
@@ -87,10 +75,10 @@ class Builder {
 			return;
 		}
 
-		$message_content = $this->manager->get_message_text( $status );
+		$message_content = $this->manager->get_message( $status );
 
 		$class = 'jet-form-message';
-		$class .= ' jet-form-message--' . $this->get_status_class( $status );
+		$class .= ' jet-form-message--' . $this->manager->get_status_class( $status );
 
 		include $this->get_global_template( 'common/messages.php' );
 	}

@@ -13,25 +13,10 @@ abstract class Base_Source {
 	protected $prop;
 	public $src = false;
 
+	abstract public function get_source();
+
 	public function __construct( Base_Preset $preset_type ) {
 		$this->preset_type = $preset_type;
-	}
-
-	public function get_source() {
-		$post_from = ! empty( $this->preset_type->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
-
-		if ( 'current_post' === $post_from ) {
-			$post_id = get_the_ID();
-		} else {
-			$var     = ! empty( $this->data['query_var'] ) ? $this->preset_type->data['query_var'] : $this->preset_type->defaults['query_var'];
-			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
-		}
-
-		if ( $post_id ) {
-			$this->src = get_post( $post_id );
-		}
-
-		return $this;
 	}
 
 	protected function can_get_preset() {
@@ -46,6 +31,7 @@ abstract class Base_Source {
 		} elseif ( isset( $source->data ) && isset( $source->data->$prop ) ) {
 			return $source->data->$prop;
 		}
+
 		return '';
 	}
 
@@ -59,12 +45,13 @@ abstract class Base_Source {
 
 	public function result() {
 		if ( ! $this->can_get_preset() ) {
-			var_dump(342342 );
 			return $this->preset_type->result;
 		}
 		$this->set_prop();
 
-		return $this->parse_result_value( $this->get_result_on_prop() );
+		$value = $this->parse_result_value( $this->get_result_on_prop() );
+
+		return $value;
 	}
 
 	public function parse_result_value( $value ) {

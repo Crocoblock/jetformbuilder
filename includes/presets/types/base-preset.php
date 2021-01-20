@@ -36,6 +36,13 @@ abstract class Base_Preset {
 
 	abstract public function get_preset_value();
 
+	public function clear_additional_data() {
+		$this->field_data = array();
+		$this->array_allowed = false;
+		$this->field = '__condition__';
+		$this->args = null;
+	}
+
 	public function is_active_preset( $args ) {
 		return false;
 	}
@@ -49,6 +56,8 @@ abstract class Base_Preset {
 	}
 
 	public function set_additional_data( $args = array() ) {
+		$this->clear_additional_data();
+
 		if ( ! empty( $args['name'] ) ) {
 			$this->field = $args['name'];
 		}
@@ -76,13 +85,13 @@ abstract class Base_Preset {
 	}
 
 	public function has_field_in_map() {
-		return ( isset( $this->fields_map[ $this->field ] ) && isset( $this->fields_map[ $this->field ]['prop'] ) && isset( $this->fields_map[ $this->field ]['key'] ) );
+		return ( isset( $this->fields_map[ $this->field ] ) &&  ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) ) );
 	}
 
 
 	public function set_source() {
 		$this->from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
-		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset-source-' );
+		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset_source_' );
 
 		$this->source = $from_manager->create_one( $this->from, $this )->get_source();
 	}

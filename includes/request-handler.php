@@ -180,13 +180,11 @@ class Request_Handler {
 			if ( 'media-field' === $type ) {
 				$value = json_decode( wp_unslash( $value ), true );
 
-				if ( ! empty( $settings['insert_attachment'] ) && (
-					( ! empty( $settings['value_format'] ) && 'id' === $settings['value_format'] )
-					|| ! isset( $settings['value_format'] )
-					) ) {
-					if ( ! is_array( $value ) ) {
+				if ( ! empty( $settings['insert_attachment'] ) && ! empty( $settings['value_format'] ) ) {
+
+					if ('id' === $settings['value_format'] ) {
 						$value = absint( $value );
-					} else {
+					} elseif ( is_array( $value ) ) {
 						$value = implode( ',', $value );
 					}
 				}

@@ -17,6 +17,23 @@ class Preset_Source_Post extends Base_Source {
 		return true;
 	}
 
+	public function get_source() {
+		$post_from = ! empty( $this->preset_type->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
+
+		if ( 'current_post' === $post_from ) {
+			$post_id = get_the_ID();
+		} else {
+			$var     = ! empty( $this->preset_type->data['query_var'] ) ? $this->preset_type->data['query_var'] : $this->preset_type->defaults['query_var'];
+			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+		}
+
+		if ( $post_id ) {
+			$this->src = get_post( $post_id );
+		}
+
+		return $this;
+	}
+
 	protected function can_get_preset() {
 		return ( absint( $this->src->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
 	}

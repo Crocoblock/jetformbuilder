@@ -7,8 +7,9 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Form_Response\Reload_Response;
+use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
+use Jet_Form_Builder\Form_Response\Types\Reload_Response;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 
 abstract class Base_Gateway {
@@ -26,6 +27,12 @@ abstract class Base_Gateway {
 	protected $options;
 	protected $redirect;
 	protected $order_token;
+
+	protected $removed_query_args_on_payment = array(
+		GM::PAYMENT_TYPE_PARAM,
+		'order_token',
+		'status'
+	);
 
 	/**
 	 * Returns current gateway ID
@@ -54,7 +61,6 @@ abstract class Base_Gateway {
 	 * @return [type] [description]
 	 */
 	public function on_success_payment() {
-
 		if ( ! $this->set_gateway_data_on_result() ) {
 			return;
 		}
@@ -65,6 +71,18 @@ abstract class Base_Gateway {
 		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, $this->data );
 
 		$this->try_do_actions();
+
+		$this->send_response( array(
+			'status' => $this->get_status_on_payment( $this->data['status'] ),
+		) );
+	}
+
+	public function get_status_on_payment( $status ) {
+		if ( in_array( $status, $this->failed_statuses() ) ) {
+			return Manager::DYNAMIC_FAILED_PREF . $this->gateways_meta['messages']['failed'];
+		}
+
+		return Manager::DYNAMIC_SUCCESS_PREF . $this->gateways_meta['messages']['success'];
 	}
 
 	/**
@@ -94,7 +112,8 @@ abstract class Base_Gateway {
 
 	private function get_response_manager() {
 		return new Reload_Response( array(
-			'refer' => $this->data['__refer']
+			'refer' => $this->data['form_data']['__refer'],
+			'remove_args' => $this->removed_query_args_on_payment,
 		) );
 	}
 
@@ -167,7 +186,7 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	final public function set_data() {
+	final public function set_gateways_meta() {
 		$this->data = $this->get_form_data();
 
 		return $this;
@@ -232,15 +251,17 @@ abstract class Base_Gateway {
 		}
 
 		global $wpdb;
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%'", ARRAY_A );
+		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
+
+		$row = $wpdb->get_row( $sql, ARRAY_A );
 
 		if ( empty( $row ) ) {
 			return;
 		}
 
-		$data = $row['meta_value'];
+		$data = json_decode( $row['meta_value'], true );
 
-		return json_decode( $data, true );
+		return $data ? $data : maybe_unserialize( $row['meta_value'] );
 
 	}
 

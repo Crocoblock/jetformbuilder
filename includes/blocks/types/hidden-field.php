@@ -48,6 +48,20 @@ class Hidden_Field extends Base {
 		return 'hidden-field';
 	}
 
+	public function parse_exported_data( $field_data ) {
+		$field_data = parent::parse_exported_data( $field_data );
+
+		[
+			$field_data['attrs']['field_value'],
+			$field_data['attrs']['hidden_value']
+		] = [
+			$field_data['attrs']['hidden_value'],
+			$field_data['attrs']['default']
+		];
+
+		return $field_data;
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -123,7 +137,7 @@ class Hidden_Field extends Base {
 			return null;
 		}
 
-		$key = ! empty( $params['hidden_value_field'] ) ? $params['hidden_value_field'] : '';
+		$key = ! empty( $this->block_attrs['hidden_value_field'] ) ? $this->block_attrs['hidden_value_field'] : '';
 
 		if ( ! $key ) {
 			return null;
@@ -138,7 +152,7 @@ class Hidden_Field extends Base {
 	 * @return string|void|null
 	 */
 	private function query_var( $params = array() ) {
-		$key = ! empty( $params['query_var_key'] ) ? $params['query_var_key'] : '';
+		$key = ! empty( $this->block_attrs['query_var_key'] ) ? $this->block_attrs['query_var_key'] : '';
 
 		if ( ! $key ) {
 			return null;
@@ -198,7 +212,7 @@ class Hidden_Field extends Base {
 	 * @return mixed|null
 	 */
 	private function user_meta( $params = array() ) {
-		$key = ! empty( $args['hidden_value_field'] ) ? $args['hidden_value_field'] : '';
+		$key = ! empty( $this->block_attrs['hidden_value_field'] ) ? $this->block_attrs['hidden_value_field'] : '';
 
 		if ( ! $key ) {
 			return null;
@@ -244,7 +258,7 @@ class Hidden_Field extends Base {
 	 * @return string
 	 */
 	private function current_date( $params = array() ) {
-		$format = ! empty( $params['date_format'] ) ? $params['date_format'] : get_option( 'date_format' );
+		$format = ! empty( $this->block_attrs['date_format'] ) ? $this->block_attrs['date_format'] : get_option( 'date_format' );
 
 		return date_i18n( $format );
 	}
@@ -312,6 +326,10 @@ class Hidden_Field extends Base {
 				array(
 					'value' => 'user_name',
 					'label' => __( 'Current User Name', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'user_meta',
+					'label' => __( 'Current User Meta', 'jet-form-builder' ),
 				),
 				array(
 					'value' => 'author_id',
@@ -390,6 +408,15 @@ class Hidden_Field extends Base {
 				'advanced' => array(
 					'type'  => 'text',
 					'label' => __( 'CSS Class Name', 'jet-form-builder' )
+				),
+			),
+			'default'     => array(
+				'type'    => 'string',
+				'default' => '',
+				'general' => array(
+					'type'  => 'dynamic_text',
+					'label' => __( 'Default Value', 'jet-form-builder' ),
+					'show'  => false,
 				),
 			),
 		);

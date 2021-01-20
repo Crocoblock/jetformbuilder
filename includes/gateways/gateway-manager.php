@@ -153,7 +153,7 @@ class Gateway_Manager {
 		try {
 			$controller->set_payment_token();
 			$controller->set_payment_id();
-			$controller->set_data();
+			$controller->set_gateways_meta();
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {

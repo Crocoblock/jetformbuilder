@@ -81,7 +81,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 							} }
 							options={ window.jetFormHiddenFieldData.values }
 						/>
-						{ 'post_meta' === attributes.field_value && <TextControl
+						{ ['post_meta', 'user_meta'].includes( attributes.field_value ) && <TextControl
 							key="hidden_value_field"
 							label="Meta Field to Get Value From"
 							value={ attributes.hidden_value_field }

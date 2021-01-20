@@ -58,11 +58,11 @@ class FromManualFields extends wp.element.Component {
 		return [...this.props.attributes.field_options];
 	}
 
-	onClickUpdate () {
+	onClickUpdate() {
 		this.setState( { isUpdate: true } )
 	};
 
-	onClickCancel () {
+	onClickCancel() {
 		this.setState( { isUpdate: false } )
 	};
 
@@ -90,9 +90,11 @@ class FromManualFields extends wp.element.Component {
 				{ this.state.showManualModal && <ActionModal
 					title={ 'Edit Manual Options' }
 					onRequestClose={ this.closeModal }
+					classNames={ ['width-60'] }
 				>
 					{ ( { actionClick, onRequestClose } ) => {
 						return <RepeaterWithState
+							isSafeDeleting
 							items={ this.getOptions() }
 							onSaveItems={ this.onUpdateOptions }
 							newItem={ addNewOption }
@@ -104,40 +106,32 @@ class FromManualFields extends wp.element.Component {
 							} }
 						>
 							{ ( { currentItem, changeCurrentItem } ) => {
-								return <div
-									className="jet-form-builder__flex-controls"
-								>
-									<div className='repeater-item-column'>
-										<TextControl
-											key='manual_label'
-											label={ __( 'Label' ) }
-											value={ currentItem.label }
-											onChange={ newValue => {
-												changeCurrentItem( { label: newValue } );
-											} }
-										/>
-									</div>
-									<div className='repeater-item-column'>
-										<TextControl
-											key='manual_value'
-											label={ __( 'Value' ) }
-											value={ currentItem.value }
-											onChange={ ( newValue ) => {
-												changeCurrentItem( { value: newValue } );
-											} }
-										/>
-									</div>
-									<div className='repeater-item-column'>
-										<TextControl
-											key='manual_calculate'
-											label={ __( 'Calculate' ) }
-											value={ currentItem.calculate }
-											onChange={ ( newValue ) => {
-												changeCurrentItem( { calculate: newValue } );
-											} }
-										/>
-									</div>
-								</div>;
+								return <>
+									<TextControl
+										key='manual_label'
+										label={ __( 'Label' ) }
+										value={ currentItem.label }
+										onChange={ newValue => {
+											changeCurrentItem( { label: newValue } );
+										} }
+									/>
+									<TextControl
+										key='manual_value'
+										label={ __( 'Value' ) }
+										value={ currentItem.value }
+										onChange={ ( newValue ) => {
+											changeCurrentItem( { value: newValue } );
+										} }
+									/>
+									<TextControl
+										key='manual_calculate'
+										label={ __( 'Calculate' ) }
+										value={ currentItem.calculate }
+										onChange={ ( newValue ) => {
+											changeCurrentItem( { calculate: newValue } );
+										} }
+									/>
+								</>;
 							} }
 						</RepeaterWithState>
 					} }

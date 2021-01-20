@@ -128,7 +128,7 @@ class Mailchimp extends Integration_Base_Action {
 		if ( isset( $response['status'] ) && ! in_array( $response['status'], $handler->success_statuses ) ) {
 
 			if ( isset( $response['title'] ) ) {
-				throw new Action_Exception( "dynamic|{$response['title']}" );
+				throw new Action_Exception( "derror|{$response['title']}" );
 			}
 
 			throw new Action_Exception( 'internal_error' );

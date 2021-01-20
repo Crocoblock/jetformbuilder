@@ -46,7 +46,11 @@ function withPreset( WrappedComponent ) {
 			if ( data.custom_condition ) {
 				switch ( data.custom_condition ) {
 					case 'query_var':
-						return ( ( 'post' === currentState.from && 'query_var' === currentState.post_from ) || ( 'user' === currentState.from && 'query_var' === currentState.user_from ) );
+						return (
+							( 'post' === currentState.from && 'query_var' === currentState.post_from )
+							|| ( 'user' === currentState.from && 'query_var' === currentState.user_from )
+							|| ( 'query_var' === currentState.from )
+						);
 				}
 			}
 

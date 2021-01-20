@@ -110,7 +110,7 @@ function Gateways() {
 					] }
 					onChange={ setGateway }
 				/>
-				{ 'none' !== gateway && <Button
+				{ ( gateway && 'none' !== gateway ) && <Button
 					isSecondary
 					onClick={ () => setEdit( true ) }
 					icon={ 'admin-tools' }

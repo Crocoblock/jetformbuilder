@@ -163,7 +163,7 @@ function RepeaterWithState( {
 		id={ getRepeaterItemId( index ) }
 	>
 		<CardHeader className={ 'repeater__item__header' }>
-			<div>
+			<div className='repeater-item__left-heading'>
 				<ButtonGroup className={ 'repeater-action-buttons' }>
 					<Button
 						isSmall

@@ -10,14 +10,44 @@ class Manager {
 
 	public $form_id;
 	public $actions;
-
 	protected $_types = array();
+	private $success_statuses = array( 'success' );
+
+	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
+	const DYNAMIC_FAILED_PREF = 'derror|';
+
 
 	public function __construct( $form_id, $actions = array() ) {
 		$this->form_id = $form_id;
 		$this->actions = $actions;
 
 		$this->set_messages();
+	}
+
+	private function is_success( $status ) {
+		$message = $this->parse_message( $status );
+
+		if ( $this->is_dynamic_message( $message ) ) {
+			return 'success' === $this->dynamic_types()[ $message[0] ]['type'];
+		}
+
+		return in_array( $message[0], $this->success_statuses );
+	}
+
+
+	public function get_status_class( $status ) {
+		return $this->is_success( $status ) ? 'success' : 'error';
+	}
+
+	public function dynamic_types() {
+		return array(
+			'dsuccess' => array(
+				'type' => 'success'
+			),
+			'derror'   => array(
+				'type' => 'failed'
+			),
+		);
 	}
 
 	public function set_messages() {
@@ -48,13 +78,13 @@ class Manager {
 	}
 
 
-	public function get_message_text( $type ) {
-		$message = explode( '|', $type );
+	public function get_message( $type ) {
+		$message = $this->parse_message( $type );
 
 		/**
 		 * Return dynamic message
 		 */
-		if ( $message[0] === 'dynamic' && isset( $message[1] ) && ! empty( $message[1] ) ) {
+		if ( $this->is_dynamic_message( $message ) ) {
 			return $message[1];
 		}
 
@@ -67,6 +97,14 @@ class Manager {
 
 	public function get_messages() {
 		return $this->_types;
+	}
+
+	private function parse_message( $status ) {
+		return explode( '|', $status );
+	}
+
+	private function is_dynamic_message( $message ) {
+		return isset( $this->dynamic_types()[ $message[0] ] ) && ! empty( $message[1] );
 	}
 
 }

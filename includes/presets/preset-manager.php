@@ -72,11 +72,11 @@ class Preset_Manager {
 	 * @return [type] [description]
 	 */
 	public function sanitize_source() {
-		$this->general->set_source();
-
 		if ( empty( $this->general->data['enabled'] ) ) {
 			return true;
 		}
+
+		$this->general->set_source();
 
 		if ( ! $this->general->source->src ) {
 			return true;
@@ -94,6 +94,7 @@ class Preset_Manager {
 	 */
 	public function get_field_value( $args = array() ) {
 		$field = $args['name'];
+		$this->manager_preset = null;
 
 		$result = array(
 			'rewrite' => false,

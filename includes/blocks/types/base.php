@@ -552,6 +552,8 @@ abstract class Base extends Base_Module {
 				case 'number':
 					$field_data['attrs'][ $attribute ] = (float) $value;
 					break;
+				case 'boolean':
+					$field_data['attrs'][ $attribute ] = (boolean) $value;
 			}
 		}
 

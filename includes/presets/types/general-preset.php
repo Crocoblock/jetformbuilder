@@ -18,7 +18,6 @@ class General_Preset extends Base_Preset {
 	}
 
 	public function get_preset_value() {
-
 		if ( empty( $this->data['enabled'] ) || ! $this->source->src || empty( $this->field_data ) ) {
 			return $this->result;
 		}

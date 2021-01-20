@@ -46,7 +46,7 @@ class Media_Field extends Base {
 
 	public function block_data( $editor, $handle ) {
 		wp_localize_script( $handle, 'jetFormMediaFieldData', array(
-			'user_access' => array(
+			'user_access' => Tools::with_placeholder( array(
 				array(
 					'value' => 'all',
 					'label' => __( 'Any registered user', 'jet-form-builder' ),
@@ -63,10 +63,10 @@ class Media_Field extends Base {
 					'value' => 'any_user',
 					'label' => __( 'Any user ( incl. Guest )', 'jet-form-builder' ),
 				),
-			),
+			) ),
 			'mime_types'  => Tools::get_allowed_mimes_list_for_js(),
 
-			'value_format' => array(
+			'value_format' => Tools::with_placeholder( array(
 				array(
 					'value' => 'id',
 					'label' => __( 'Attachment ID', 'jet-form-builder' )
@@ -79,7 +79,7 @@ class Media_Field extends Base {
 					'value' => 'both',
 					'label' => __( 'Array with attachment ID and URL', 'jet-form-builder' )
 				),
-			),
+			) ),
 
 			'help_messages' => array(
 				'insert_attachment' => __(
@@ -112,7 +112,7 @@ class Media_Field extends Base {
 		return array(
 			'allowed_user_cap'  => array(
 				'type'    => 'string',
-				'default' => 'all'
+				'default' => ''
 			),
 			'insert_attachment' => array(
 				'type'    => 'boolean',
@@ -120,7 +120,7 @@ class Media_Field extends Base {
 			),
 			'value_format'      => array(
 				'type'    => 'string',
-				'default' => 'id'
+				'default' => ''
 			),
 			'max_files'         => array(
 				'type'    => 'number',

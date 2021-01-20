@@ -27,7 +27,9 @@ class Jet_Engine_Migrant extends Base_Migrant {
 		'calculated'     => 'calculated-field',
 		'radio'          => 'radio-field',
 		'page_break'     => 'form-break-field',
-		'textarea'       => 'textarea-field'
+		'textarea'       => 'textarea-field',
+		'heading'        => 'heading-field',
+		'group_break'    => 'group-break-field',
 	);
 
 	public $transform_compatibility = array(
@@ -113,7 +115,7 @@ class Jet_Engine_Migrant extends Base_Migrant {
 			);
 		}
 
-		return wp_unslash( json_encode( $prepared_actions ) );
+		return json_encode( $prepared_actions );
 	}
 
 	public function sort_raw_fields() {
@@ -124,7 +126,6 @@ class Jet_Engine_Migrant extends Base_Migrant {
 
 		$column = false;
 
-		//var_dump( $this->raw_fields ); die;
 		foreach ( $this->raw_fields as $index => $current ) {
 			if ( ! isset( $this->raw_fields[ $index + 1 ] ) ) {
 				continue;
@@ -176,16 +177,10 @@ class Jet_Engine_Migrant extends Base_Migrant {
 
 		$this->get_prepare_fields( $this->raw_fields );
 
-		// var_dump( $this->prepared_fields );
-
-		// var_dump( ( new Block_Generator( $this->prepared_fields ) )->generate() );
-		// die;
-
 		return ( new Block_Generator( $this->prepared_fields ) )->generate();
 	}
 
 	private function get_beetween_column_width( $position, $next ) {
-		//var_dump( $next );
 		return $next ? ( $position - $this->get_field_right_border_position( $next ) ) : 0;
 	}
 

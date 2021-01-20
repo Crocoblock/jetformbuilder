@@ -87,7 +87,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 							} }
 							options={ localizeData.user_access }
 						/>
-						<ToggleControl
+						{ 'any_user' !== attributes.allowed_user_cap && <ToggleControl
 							key='insert_attachment'
 							label={ __( 'Insert attachment' ) }
 							checked={ attributes.insert_attachment }
@@ -95,7 +95,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.e
 							onChange={ ( newValue ) => {
 								props.setAttributes( { insert_attachment: Boolean( newValue ) } );
 							} }
-						/>
+						/> }
 						{ attributes.insert_attachment && <SelectControl
 							key='value_format'
 							label={ __( 'Field value' ) }

@@ -144,7 +144,7 @@ class Mailchimp extends Integration_Base_Action {
 			wp_send_json_error();
 		}
 
-		$handler = new MailChimp_Handler( $_REQUEST['api_key'] );
+		$handler = new MailChimp_Handler( sanitize_text_field( $_REQUEST['api_key'] ) );
 
 		if ( is_wp_error( $handler ) ) {
 			wp_send_json_error();

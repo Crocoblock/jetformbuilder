@@ -207,7 +207,7 @@ function ActionsMeta() {
 								} }
 							/>
 							<Button
-								icon={ 'edit' }
+								icon='edit'
 								label={ 'Edit Action' }
 								onClick={ () => {
 									setEditedAction( () => ( {
@@ -217,7 +217,7 @@ function ActionsMeta() {
 							/>
 							<div/>
 							<Button
-								icon={ 'admin-generic' }
+								icon='randomize'
 								label={ 'Conditions' }
 								onClick={ () => {
 									setProcessedAction( () => ( { ...action } ) );
@@ -308,12 +308,19 @@ function ActionsMeta() {
 							isSaveAction={ actionClick }
 							onSaveItems={ updateActionCondition }
 							addNewButtonLabel={ __( 'Add New Condition' ) }
-							isSafeDeleting
+							help={ {
+								helpVisible: conditions => conditions.length > 1,
+								helpSource: window.JetFormEditorData.helpForRepeaters,
+								helpKey: 'conditional_action'
+							} }
 						>
 							{ ( { currentItem, changeCurrentItem } ) => {
+								let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
+								executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
+
 								return <>
 									<ToggleControl
-										label={ __( 'Execute an action when the condition is met' ) }
+										label={ executeLabel }
 										checked={ currentItem.execute }
 										onChange={ newValue => {
 											changeCurrentItem( { execute: newValue } );

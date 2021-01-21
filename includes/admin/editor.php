@@ -231,6 +231,14 @@ class Editor {
 							'label' => __( 'Post Excerpt', 'jet-form-builder' ),
 						),
 						array(
+							'value' => 'post_date',
+							'label' => __( 'Post Date', 'jet-form-builder' )
+						),
+						array(
+							'value' => 'post_date_gmt',
+							'label' => __( 'Post Date GMT', 'jet-form-builder' )
+						),
+						array(
 							'value' => 'post_thumb',
 							'label' => __( 'Post Thumbnail', 'jet-form-builder' ),
 						),
@@ -389,16 +397,28 @@ class Editor {
 
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'allowedBlocks'   => $this->get_allowed_blocks(),
-			'action'          => $this->get_action(),
-			'itemID'          => $this->get_item_id(),
-			'presetConfig'    => $this->get_preset_config(),
-			'messagesDefault' => $this->get_messages_default(),
-			'recaptchaLabels' => $this->get_recaptcha_labels(),
-			'gateways'        => $this->get_gateways_data(),
+			'allowedBlocks'    => $this->get_allowed_blocks(),
+			'action'           => $this->get_action(),
+			'itemID'           => $this->get_item_id(),
+			'presetConfig'     => $this->get_preset_config(),
+			'messagesDefault'  => $this->get_messages_default(),
+			'recaptchaLabels'  => $this->get_recaptcha_labels(),
+			'gateways'         => $this->get_gateways_data(),
+			'helpForRepeaters' => $this->get_help_for_repeaters(),
 		) );
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );
+	}
+
+	private function get_help_for_repeaters() {
+		return array(
+			'conditional_block'   => array(
+				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' )
+			),
+			'conditional_action' => array(
+				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' )
+			),
+		);
 	}
 
 	private function get_gateways_data() {

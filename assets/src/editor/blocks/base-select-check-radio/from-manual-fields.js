@@ -73,6 +73,24 @@ class FromManualFields extends wp.element.Component {
 			calculate: ''
 		};
 
+		const itemHeading = ( { currentItem, index } ) => {
+			const leftPart = [ `#${ index + 1 }` ];
+			const rightPart = [];
+
+			if ( currentItem.label ) {
+				rightPart.push( `Label [${ currentItem.label }]` );
+			}
+			if ( currentItem.value ) {
+				rightPart.push( `Value [${ currentItem.value }]` );
+			}
+			if ( currentItem.calculate ) {
+				rightPart.push( `Calculate [${ currentItem.calculate }]` );
+			}
+			leftPart.push( rightPart.join( ' | ' ) )
+
+			return leftPart.join( ' ' );
+		};
+
 		return (
 			<div
 				key='jet-form/manage-manual-items'
@@ -94,16 +112,13 @@ class FromManualFields extends wp.element.Component {
 				>
 					{ ( { actionClick, onRequestClose } ) => {
 						return <RepeaterWithState
-							isSafeDeleting
 							items={ this.getOptions() }
 							onSaveItems={ this.onUpdateOptions }
 							newItem={ addNewOption }
 							onUnMount={ onRequestClose }
 							isSaveAction={ actionClick }
 							addNewButtonLabel={ __( 'Add New Option' ) }
-							ItemHeading={ ( { currentItem, index } ) => {
-								return `#${ index + 1 } ${ currentItem.label }`;
-							} }
+							ItemHeading={ itemHeading }
 						>
 							{ ( { currentItem, changeCurrentItem } ) => {
 								return <>

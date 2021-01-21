@@ -13,6 +13,7 @@ const {
 	DropZoneProvider,
 	DropZone,
 	Dashicon,
+	ToggleControl,
 } = wp.components;
 
 const {
@@ -34,7 +35,11 @@ function RepeaterWithState( {
 								onUnMount,
 								onAddNewItem,
 								onRemoveItem,
-								isSafeDeleting = false,
+								help = {
+									helpSource: {},
+									helpVisible: () => false,
+									helpKey: ''
+								}
 							} ) {
 
 	const classNames = ['jet-form-builder__repeater-component', ...repeaterClasses].join( ' ' );
@@ -58,6 +63,8 @@ function RepeaterWithState( {
 	}
 
 	const [itemsData, setItemsData] = useState( () => parsedItems() );
+
+	const [isSafeDeleting, setSafeDeleting] = useState( true );
 
 	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
@@ -231,13 +238,34 @@ function RepeaterWithState( {
 		</CardBody> }
 	</Card>;
 
+	const {
+		helpSource,
+		helpVisible,
+		helpKey,
+	} = help;
+
+	const isVisibleHelp = helpVisible( itemsData ) && helpSource && helpSource[ helpKey ];
+
 	return <div
 		className={ classNames }
 		key={ 'jet-form-builder-repeater' }
 	>
+		{ isVisibleHelp && <p>{ helpSource[ helpKey ].label }</p> }
+
+		{ 0 < itemsData.length && <ToggleControl
+			label={ __( 'Safe deleting' ) }
+			checked={ isSafeDeleting }
+			onChange={ setSafeDeleting }
+		/> }
 		{ itemsData.map( ( currentItem, index ) => {
 			return RepeaterItem( { currentItem, index } );
 		} ) }
+		{ 1 < itemsData.length && <ToggleControl
+			className='jet-control-clear'
+			label={ __( 'Safe deleting' ) }
+			checked={ isSafeDeleting }
+			onChange={ setSafeDeleting }
+		/> }
 		<Button
 			isSecondary
 			onClick={ () => addNewItem( newItem ) }

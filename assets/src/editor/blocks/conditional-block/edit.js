@@ -22,6 +22,7 @@ const {
 	ToolbarGroup,
 	TextareaControl,
 	SelectControl,
+	BaseControl,
 } = wp.components;
 
 const {
@@ -65,7 +66,6 @@ const conditionOperators = [
 	{ label: 'In the list', value: 'one_of' },
 	{ label: 'Contain text', value: 'contain' },
 ];
-
 
 
 function ConditionalBlockEdit( {
@@ -117,6 +117,11 @@ function ConditionalBlockEdit( {
 				newItem={ condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
 				addNewButtonLabel="New Condition"
+				help={ {
+					helpVisible: conditions => conditions.length > 1,
+					helpSource: window.JetFormEditorData.helpForRepeaters,
+					helpKey: 'conditional_block'
+				} }
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
 					<SelectControl
@@ -179,10 +184,11 @@ function ConditionalBlockEdit( {
 						triggerClasses={ ['trigger__textarea'] }
 					>
 						<TextareaControl
-							label="Value to Set"
+							label={ __( 'Value to Set', 'jet-form-builder' ) }
+							help={ __( 'Separate values with commas', 'jet-form-builder' ) }
 							value={ currentItem.set_value }
 							onChange={ newValue => {
-								changeCurrentItem( { value: newValue } );
+								changeCurrentItem( { set_value: newValue } );
 							} }
 						/>
 					</FieldWithPreset> }

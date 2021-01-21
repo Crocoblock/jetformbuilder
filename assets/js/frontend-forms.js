@@ -1,26 +1,26 @@
-( function( $ ) {
+( function ( $ ) {
 
 	"use strict";
 
 	window.JetFormBuilderMain = {
 
-		filters: ( function() {
+		filters: ( function () {
 
 			var callbacks = {};
 
 			return {
 
-				addFilter: function( name, callback ) {
+				addFilter: function ( name, callback ) {
 
 					if ( ! callbacks.hasOwnProperty( name ) ) {
-						callbacks[name] = [];
+						callbacks[ name ] = [];
 					}
 
-					callbacks[name].push(callback);
+					callbacks[ name ].push( callback );
 
 				},
 
-				applyFilters: function( name, value, args ) {
+				applyFilters: function ( name, value, args ) {
 
 					if ( ! callbacks.hasOwnProperty( name ) ) {
 						return value;
@@ -31,11 +31,11 @@
 					}
 
 					var container = callbacks[ name ];
-					var cbLen     = container.length;
+					var cbLen = container.length;
 
-					for (var i = 0; i < cbLen; i++) {
-						if (typeof container[i] === 'function') {
-							value = container[i](value, args);
+					for ( var i = 0; i < cbLen; i ++ ) {
+						if ( typeof container[ i ] === 'function' ) {
+							value = container[ i ]( value, args );
 						}
 					}
 
@@ -44,17 +44,17 @@
 
 			};
 
-		})()
+		} )()
 
 	};
 
-	$.fn.jetFormConditional = function( options ) {
+	$.fn.jetFormConditional = function ( options ) {
 
 		var settings = $.extend( {
 			hideJS: true
 		}, options );
 
-		var checkValue = function( $listenTo, listenFor, operator ) {
+		var checkValue = function ( $listenTo, listenFor, operator ) {
 
 			var val = '';
 			var checkResult = false;
@@ -76,7 +76,7 @@
 				val = $listenTo.val();
 			} else {
 
-				$listenTo.each( function() {
+				$listenTo.each( function () {
 
 					var $control = $( this );
 
@@ -91,7 +91,11 @@
 				} );
 			}
 
-			console.log( val, listenFor );
+			console.group();
+			console.log( 'val:', val );
+			console.log( 'listenFor: ', listenFor );
+			console.log( 'operator: ', operator );
+			console.groupEnd();
 
 			switch ( operator ) {
 				case 'equal':
@@ -124,8 +128,8 @@
 						checkResult = false;
 					} else {
 						if ( 2 <= listenFor.length ) {
-							let from = parseFloat( listenFor[0] );
-							let to = parseFloat( listenFor[1] );
+							let from = parseFloat( listenFor[ 0 ] );
+							let to = parseFloat( listenFor[ 1 ] );
 							val = parseFloat( val );
 							checkResult = ( from <= val && val <= to );
 						} else {
@@ -137,12 +141,7 @@
 
 				case 'one_of':
 					if ( val && val.constructor === Array ) {
-
-						var intersect = listenFor.filter( function( n ) {
-							return val.indexOf( n ) !== -1;
-						} );
-
-						checkResult = 0 < intersect.length;
+						checkResult = val.includes( listenFor );
 
 					} else if ( ! val ) {
 						checkResult = false;
@@ -159,8 +158,8 @@
 				case 'contain':
 					if ( val && val.constructor === Array ) {
 
-						var intersect = val.filter( function( n ) {
-							return n.indexOf( listenFor ) !== -1;
+						var intersect = val.filter( function ( n ) {
+							return n.indexOf( listenFor ) !== - 1;
 						} );
 
 						checkResult = 0 < intersect.length;
@@ -177,13 +176,11 @@
 			return checkResult;
 		};
 
-		var checkVisibilityCond = function( listenTo, listenFor, $section, operator, type ) {
+		var checkVisibilityCond = function ( listenTo, listenFor, $section, operator, type ) {
 
 			var checked = $section.data( 'checked' );
 			var $listenTo = $( listenTo );
 			var checkResult = checkValue( $listenTo, listenFor, operator );
-
-			console.log( checkResult );
 
 			type = type || 'show';
 
@@ -201,7 +198,7 @@
 
 		};
 
-		var checkSetValueCond = function( listenTo, listenFor, $section, operator, value, type ) {
+		var checkSetValueCond = function ( listenTo, listenFor, $section, operator, value, type ) {
 
 			var currentVal = $section.data( 'result_' + type );
 			var $listenTo = $( listenTo );
@@ -215,7 +212,7 @@
 
 		};
 
-		var setValue = function( $section ) {
+		var setValue = function ( $section ) {
 
 			var setVal = false;
 			var setCalcVal = false;
@@ -274,7 +271,7 @@
 
 			} else {
 
-				$field.each( function() {
+				$field.each( function () {
 
 					var $this = $( this );
 
@@ -301,7 +298,7 @@
 
 		};
 
-		var setVisibility = function( $section ) {
+		var setVisibility = function ( $section ) {
 
 			var checked = $section.data( 'checked' );
 			var $row = $section.closest( '.jet-form-builder-row' );
@@ -322,7 +319,7 @@
 				$section.show();
 				$row.show();
 
-				$section.find( '*[data-initial-type]' ).each( function() {
+				$section.find( '*[data-initial-type]' ).each( function () {
 					var $this = $( this );
 
 					$this.attr( 'type', $this.data( 'initial-type' ) );
@@ -339,16 +336,16 @@
 
 				$section.hide();
 
-				$section.find( '*[type="date"],*[type="time"],*[type="email"]' ).each( function() {
+				$section.find( '*[type="date"],*[type="time"],*[type="email"]' ).each( function () {
 					var $this = $( this ),
-						type  = $this.attr( 'type' );
+						type = $this.attr( 'type' );
 
 					$this.attr( 'data-initial-type', type );
 					$this.attr( 'type', 'text' );
 				} );
 
 				var $select = $section.find( 'select' );
-				var val     = 'is-hidden';
+				var val = 'is-hidden';
 
 				if ( $select.length ) {
 
@@ -367,7 +364,7 @@
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );
 
-				var $hiddenItems = $row.find( '>*' ).filter( function() {
+				var $hiddenItems = $row.find( '>*' ).filter( function () {
 					return $( this ).css( 'display' ) === 'none';
 				} );
 
@@ -378,7 +375,7 @@
 
 		};
 
-		return this.each( function() {
+		return this.each( function () {
 
 			var $section = $( this );
 			var conditions = $section.data( 'conditional' );
@@ -387,7 +384,7 @@
 				return;
 			}
 
-			for ( var i = 0; i < conditions.length; i++ ) {
+			for ( var i = 0; i < conditions.length; i ++ ) {
 
 				let condition = conditions[ i ];
 
@@ -395,14 +392,14 @@
 					continue;
 				}
 
-				let listenTo   = "[data-field-name=" + condition.field + "]";
-				let listenFor  = condition.value;
-				let operator   = condition.operator;
-				let type       = condition.type;
+				let listenTo = "[data-field-name=" + condition.field + "]";
+				let listenFor = condition.value;
+				let operator = condition.operator;
+				let type = condition.type;
 				let valueToSet = condition.set_value;
 
 				//Set up event listener
-				$( document ).on( 'change.JetFormBuilderMain', listenTo, function() {
+				$( document ).on( 'change.JetFormBuilderMain', listenTo, function () {
 
 					if ( 'show' === type || 'hide' === type ) {
 						checkVisibilityCond( listenTo, listenFor, $section, operator, type );
@@ -432,7 +429,7 @@
 			setValue( $section );
 			setVisibility( $section );
 
-		});
+		} );
 	};
 
 	var JetFormBuilder = {
@@ -445,13 +442,13 @@
 			length: 0
 		},
 
-		init: function() {
+		init: function () {
 
 			var self = JetFormBuilder;
 
-			$('.jet-form').each( function( index, value ) {
+			$( '.jet-form' ).each( function ( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
-			});
+			} );
 
 			$( document )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
@@ -486,7 +483,7 @@
 			}
 		},
 
-		removeRepeaterItem: function() {
+		removeRepeaterItem: function () {
 
 			var $this = $( this ),
 				$repeater = $this.closest( '.jet-form-builder-repeater' );
@@ -496,7 +493,7 @@
 
 		},
 
-		newRepeaterItem: function() {
+		newRepeaterItem: function () {
 
 			var $this = $( this ),
 				$repeater = $this.closest( '.jet-form-builder-repeater' ),
@@ -506,7 +503,7 @@
 				index = 0;
 
 			if ( $items.find( '.jet-form-builder-repeater__row' ).length ) {
-				$items.find( '.jet-form-builder-repeater__row' ).each( function() {
+				$items.find( '.jet-form-builder-repeater__row' ).each( function () {
 					var $this = $( this ),
 						currentIndex = parseInt( $this.data( 'index' ), 10 );
 
@@ -514,7 +511,7 @@
 						index = currentIndex;
 					}
 				} );
-				index++;
+				index ++;
 			}
 
 			$newVal = $newVal.replace( /__i__/g, index );
@@ -543,7 +540,7 @@
 
 		},
 
-		updateRepeaterItems: function( $repeater, $field ) {
+		updateRepeaterItems: function ( $repeater, $field ) {
 
 			var val = JetFormBuilder.getFieldValue( $field );
 
@@ -551,7 +548,7 @@
 				return;
 			}
 
-			for ( var i = 0; i < val; i++ ) {
+			for ( var i = 0; i < val; i ++ ) {
 
 				var $item = $repeater.find( '.jet-form-builder-repeater__row[data-index="' + i + '"]' );
 
@@ -559,16 +556,17 @@
 					JetFormBuilder.newRepeaterItem.call( $repeater );
 				}
 
-			};
+			}
+			;
 
 			var $rows = $repeater.find( '.jet-form-builder-repeater__row' );
 
 			if ( $rows.length ) {
-				$rows.each( function() {
+				$rows.each( function () {
 					var $row = $( this ),
 						index = parseInt( $row.data( 'index' ), 10 );
 
-					index++;
+					index ++;
 
 					if ( index > val ) {
 						$row.remove();
@@ -582,7 +580,7 @@
 
 		},
 
-		calculateRowValue: function( $row ) {
+		calculateRowValue: function ( $row ) {
 
 			var val = JetFormBuilder.calculateValue( $row );
 
@@ -591,9 +589,9 @@
 
 		},
 
-		calculateFieldsInRow: function( $row ) {
+		calculateFieldsInRow: function ( $row ) {
 
-			$row.find( '.jet-form-builder__calculated-field--child' ).each( function() {
+			$row.find( '.jet-form-builder__calculated-field--child' ).each( function () {
 
 				var $childCalculatedField = $( this ),
 					val = JetFormBuilder.calculateValue( $childCalculatedField )
@@ -609,7 +607,7 @@
 
 		},
 
-		initRepeaterListener: function( $scope ) {
+		initRepeaterListener: function ( $scope ) {
 
 			var $repeater = $scope.find( '.jet-form-builder-repeater' );
 
@@ -617,7 +615,7 @@
 				return;
 			}
 
-			$repeater.each( function() {
+			$repeater.each( function () {
 
 				var $this = $( this ),
 					settings = $this.data( 'settings' );
@@ -627,7 +625,7 @@
 
 					JetFormBuilder.updateRepeaterItems( $this, $itemsField );
 
-					$itemsField.on( 'change', function() {
+					$itemsField.on( 'change', function () {
 						JetFormBuilder.updateRepeaterItems( $this, $itemsField );
 					} );
 				}
@@ -648,13 +646,13 @@
 				}
 
 				var $initial = $this.find( '.jet-form-builder-repeater__initial' );
-					$initial = $( $initial.html() );
+				$initial = $( $initial.html() );
 
 				var $calcFields = $initial.find( '.jet-form-builder__calculated-field--child' );
 
 				if ( $calcFields.length ) {
 
-					$calcFields.each( function() {
+					$calcFields.each( function () {
 
 						var $childField = $( this );
 
@@ -664,27 +662,27 @@
 							'listenTo': $childField.data( 'listen_to' ),
 						};
 
-						$this.find( '.jet-form-builder-repeater__row' ).each( function() {
+						$this.find( '.jet-form-builder-repeater__row' ).each( function () {
 							JetFormBuilder.calculateRowValue( $( this ), $childField.data( 'precision' ) );
 						} );
 
-					});
+					} );
 				}
 
 			} );
 
 		},
 
-		simLabelClick: function( event ) {
+		simLabelClick: function ( event ) {
 			$( this ).next( '.jet-form-builder__field-label' ).trigger( 'click' );
 		},
 
-		maybeSwitchPage: function( event, $field, $page, disabled ) {
+		maybeSwitchPage: function ( event, $field, $page, disabled ) {
 
-			var $item     = $field[0],
-				isSwitch  = $field.data( 'switch' ),
-				value     = null,
-				$toPage   = null;
+			var $item = $field[ 0 ],
+				isSwitch = $field.data( 'switch' ),
+				value = null,
+				$toPage = null;
 
 			if ( ! isSwitch ) {
 				return;
@@ -714,35 +712,35 @@
 
 		},
 
-		changeActiveTemplateClass: function( event ) {
+		changeActiveTemplateClass: function ( event ) {
 
-			var $this     = $( this ),
+			var $this = $( this ),
 				$template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
 
 			if ( ! $template.length ) {
 				return;
 			}
 
-			if ( 'radio' === $this[0].type ) {
+			if ( 'radio' === $this[ 0 ].type ) {
 				$template
 					.closest( '.jet-form-builder__fields-group' )
 					.find( '.jet-form-builder__field-template--checked' )
 					.removeClass( 'jet-form-builder__field-template--checked' );
 			}
 
-			$template.toggleClass( 'jet-form-builder__field-template--checked', $this[0].checked );
+			$template.toggleClass( 'jet-form-builder__field-template--checked', $this[ 0 ].checked );
 
 		},
 
-		initConditions: function( $scope ) {
+		initConditions: function ( $scope ) {
 			$scope.find( '.jet-form-builder__conditional' ).jetFormConditional();
 		},
 
-		widgetBookingForm: function( $scope ) {
+		widgetBookingForm: function ( $scope ) {
 
 			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
 
-			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
+			$( document ).trigger( 'jet-form-builder/init', [$scope] );
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );
@@ -761,7 +759,7 @@
 
 				var editorDefaults = $editor.closest( '.jet-form-builder__field' ).data( 'editor' );
 
-				wp.editor.getDefaultSettings = function() {
+				wp.editor.getDefaultSettings = function () {
 					return editorDefaults;
 				}
 
@@ -776,9 +774,9 @@
 				return;
 			}
 
-			$( $calcFields ).each( function() {
+			$( $calcFields ).each( function () {
 
-				var $this      = $( this ),
+				var $this = $( this ),
 					calculated = null;
 
 				JetFormBuilder.calcFields[ $this.data( 'name' ) ] = {
@@ -791,19 +789,19 @@
 				$this.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( $this.data( 'precision' ) ) );
 				$this.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
 
-			});
+			} );
 
 		},
 
-		initFormPager: function( $scope ) {
+		initFormPager: function ( $scope ) {
 			var $pages = $scope.find( '.jet-form-page' ),
-				$form  = $scope.find( '.jet-form' );
+				$form = $scope.find( '.jet-form' );
 
 			if ( ! $pages.length ) {
 				return;
 			}
 
-			$pages.each( function() {
+			$pages.each( function () {
 
 				var $page = $( this );
 
@@ -811,15 +809,15 @@
 					JetFormBuilder.initSingleFormPage( $page, $form, false );
 				}
 
-			});
+			} );
 
 		},
 
-		initSingleFormPage: function( $page, $form, $changedField ) {
+		initSingleFormPage: function ( $page, $form, $changedField ) {
 
 			var $button = $page.find( '.jet-form-builder__next-page' ),
 				$msg = $page.find( '.jet-form-builder__next-page-msg' ),
-				requiredFields = $page[0].querySelectorAll( '.jet-form-builder__field[required]' ),
+				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
 				pageNum = parseInt( $page.data( 'page' ), 10 ),
 				disabled = false,
 				radioFields = {};
@@ -827,26 +825,26 @@
 			$changedField = $changedField || false;
 
 			if ( requiredFields.length ) {
-				for ( var i = 0; i < requiredFields.length; i++) {
+				for ( var i = 0; i < requiredFields.length; i ++ ) {
 
 					var $field = $( requiredFields[ i ] );
 					var val = null;
 					var isRadio = false;
 
-					if ( 'INPUT' === $field[0].nodeName ) {
+					if ( 'INPUT' === $field[ 0 ].nodeName ) {
 
 						if ( $field.length > 1 ) {
-							for( var j = 0; j < $field.length; j++ ){
-								if( $field[j].checked ){
-									val = $field[j].value;
+							for ( var j = 0; j < $field.length; j ++ ) {
+								if ( $field[ j ].checked ) {
+									val = $field[ j ].value;
 								}
 							}
-						} else if ( 'radio' === $field[0].type ) {
+						} else if ( 'radio' === $field[ 0 ].type ) {
 
 							isRadio = true;
 
-							if ( $field[0].checked ) {
-								radioFields[ $field[0].name ] = $field[0].value;
+							if ( $field[ 0 ].checked ) {
+								radioFields[ $field[ 0 ].name ] = $field[ 0 ].value;
 							}
 
 						} else {
@@ -854,11 +852,11 @@
 						}
 					}
 
-					if ( 'TEXTAREA' === $field[0].nodeName ) {
+					if ( 'TEXTAREA' === $field[ 0 ].nodeName ) {
 						val = $field.val();
 					}
 
-					if ( 'SELECT' === $field[0].nodeName ) {
+					if ( 'SELECT' === $field[ 0 ].nodeName ) {
 						val = $field.find( 'option:selected' ).val();
 					}
 
@@ -866,7 +864,7 @@
 						disabled = true;
 					}
 
-					if ( isRadio && radioFields[ $field[0].name ] ) {
+					if ( isRadio && radioFields[ $field[ 0 ].name ] ) {
 						disabled = false;
 					}
 
@@ -899,14 +897,14 @@
 			}
 
 			if ( $changedField ) {
-				$( document ).trigger( 'jet-form-builder/page/field-changed', [ $changedField, $page, disabled ] );
+				$( document ).trigger( 'jet-form-builder/page/field-changed', [$changedField, $page, disabled] );
 			}
 
 			if ( $page.hasClass( 'jet-form-page--initialized' ) ) {
 				return;
 			}
 
-			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function() {
+			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function () {
 				JetFormBuilder.initSingleFormPage( $page, $form, $( this ) );
 			} );
 
@@ -914,14 +912,14 @@
 
 		},
 
-		nextFormPage: function() {
+		nextFormPage: function () {
 
-			var $button     = $( this ),
-				$fromPage   = $button.closest( '.jet-form-page' ),
+			var $button = $( this ),
+				$fromPage = $button.closest( '.jet-form-page' ),
 				$pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
-				$toPage     = $fromPage.next();
+				$toPage = $fromPage.next();
 
-			if ( !JetFormBuilder.isFieldsValid( $pageFields ) ) {
+			if ( ! JetFormBuilder.isFieldsValid( $pageFields ) ) {
 				return;
 			}
 
@@ -929,20 +927,20 @@
 
 		},
 
-		prevFormPage: function() {
+		prevFormPage: function () {
 
-			var $button   = $( this ),
+			var $button = $( this ),
 				$fromPage = $button.closest( '.jet-form-page' ),
-				$toPage   = $fromPage.prev();
+				$toPage = $fromPage.prev();
 
 			JetFormBuilder.switchFormPage( $fromPage, $toPage );
 		},
 
-		isFieldsValid: function( $fields ) {
+		isFieldsValid: function ( $fields ) {
 			var isValid = true;
 
-			$fields.each( function( ind, field ) {
-				if ( !field.checkValidity() ) {
+			$fields.each( function ( ind, field ) {
+				if ( ! field.checkValidity() ) {
 					field.reportValidity();
 					isValid = false;
 					return false;
@@ -952,7 +950,7 @@
 			return isValid;
 		},
 
-		switchFormPage: function( $fromPage, $toPage ) {
+		switchFormPage: function ( $fromPage, $toPage ) {
 
 			var $form = $fromPage.closest( '.jet-form' );
 
@@ -964,30 +962,30 @@
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
-			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ), $toPage.data( 'page' ) ] );
+			$( document ).trigger( 'jet-form-builder/switch-page', [$progress, $fromPage.data( 'page' ), $toPage.data( 'page' )] );
 		},
 
-		getFieldValue: function( $field ) {
+		getFieldValue: function ( $field ) {
 
 			var val = 0;
 
 			if ( $field.length ) {
 
-				if ( 'INPUT' === $field[0].nodeName ) {
+				if ( 'INPUT' === $field[ 0 ].nodeName ) {
 					if ( $field.length > 1 ) {
 
-						for ( var i = 0; i < $field.length; i++ ) {
-							if ( $field[i].checked ) {
+						for ( var i = 0; i < $field.length; i ++ ) {
+							if ( $field[ i ].checked ) {
 
 								var itemVal = 0;
 
-								if ( undefined !== $field[i].dataset.calculate ) {
-									itemVal = $field[i].dataset.calculate;
+								if ( undefined !== $field[ i ].dataset.calculate ) {
+									itemVal = $field[ i ].dataset.calculate;
 								} else {
-									itemVal = $field[i].value;
+									itemVal = $field[ i ].value;
 								}
 
-								if ( 'checkbox' === $field[i].type ) {
+								if ( 'checkbox' === $field[ i ].type ) {
 									val += parseInt( itemVal, 10 );
 								} else {
 									val = itemVal;
@@ -997,12 +995,12 @@
 						}
 
 					} else {
-						if ( 'checkbox' === $field[0].type ) {
-							if ( $field[0].checked ) {
-								if ( undefined !== $field[0].dataset.calculate ) {
-									val = $field[0].dataset.calculate;
+						if ( 'checkbox' === $field[ 0 ].type ) {
+							if ( $field[ 0 ].checked ) {
+								if ( undefined !== $field[ 0 ].dataset.calculate ) {
+									val = $field[ 0 ].dataset.calculate;
 								} else {
-									val = $field[0].value;
+									val = $field[ 0 ].value;
 								}
 							}
 						} else {
@@ -1011,10 +1009,10 @@
 					}
 				}
 
-				if ( 'SELECT' === $field[0].nodeName ) {
+				if ( 'SELECT' === $field[ 0 ].nodeName ) {
 
 					var selectedOption = $field.find( 'option:selected' ),
-						calcValue      = selectedOption.data( 'calculate' );
+						calcValue = selectedOption.data( 'calculate' );
 
 					if ( undefined !== calcValue ) {
 						val = calcValue;
@@ -1024,12 +1022,12 @@
 
 				}
 
-				if ( 'DIV' === $field[0].nodeName ) {
+				if ( 'DIV' === $field[ 0 ].nodeName ) {
 
 					if ( $field.hasClass( 'jet-form-builder-repeater' ) ) {
 						var repeaterSettings = $field.data( 'settings' );
 						if ( repeaterSettings && 'custom' === repeaterSettings.calcType ) {
-							$field.find( '.jet-form-builder-repeater__row' ).each( function() {
+							$field.find( '.jet-form-builder-repeater__row' ).each( function () {
 								var $row = $( this ),
 									rowVal = JetFormBuilder.calculateValue( $row );
 
@@ -1057,12 +1055,12 @@
 
 		},
 
-		calculateValue: function( $scope ) {
+		calculateValue: function ( $scope ) {
 
-			var formula  = String( $scope.data( 'formula' ) ),
+			var formula = String( $scope.data( 'formula' ) ),
 				listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
-				regexp   = /%([a-zA-Z0-9-_]+)%/g,
-				func     = null;
+				regexp = /%([a-zA-Z0-9-_]+)%/g,
+				func = null;
 
 			if ( typeof formula === 'undefined' ) {
 				return null;
@@ -1096,10 +1094,10 @@
 
 		},
 
-		recalcFields: function( event ) {
+		recalcFields: function ( event ) {
 
-			var $this      = $( this ),
-				fieldName  = $this.attr( 'name' ),
+			var $this = $( this ),
+				fieldName = $this.attr( 'name' ),
 				fieldPrecision = 2,
 				calculated = null,
 				done = false;
@@ -1112,25 +1110,25 @@
 				return;
 			}
 
-			$.each( JetFormBuilder.calcFields, function( calcFieldName, field ) {
+			$.each( JetFormBuilder.calcFields, function ( calcFieldName, field ) {
 
 				fieldName = fieldName.replace( '[]', '' );
 
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
 
 					calculated = JetFormBuilder.calculateValue( field.el );
-					fieldPrecision  = field.el.data( 'precision' );
+					fieldPrecision = field.el.data( 'precision' );
 
 					field.el.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( fieldPrecision ) );
 					field.el.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( fieldPrecision ) ).trigger( 'change.JetFormBuilderMain' );
 
 				}
 
-			});
+			} );
 
 			if ( 'jet-form-builder/repeater-changed' !== event.type ) {
 
-				$.each( JetFormBuilder.repeaterCalcFields, function( calcFieldName, field ) {
+				$.each( JetFormBuilder.repeaterCalcFields, function ( calcFieldName, field ) {
 
 					fieldName = fieldName.replace( '[]', '' );
 
@@ -1144,7 +1142,7 @@
 
 			}
 
-			$.each( JetFormBuilder.childrenCalcFields, function( calcFieldName, field ) {
+			$.each( JetFormBuilder.childrenCalcFields, function ( calcFieldName, field ) {
 
 				fieldName = fieldName.replace( '[]', '' );
 
@@ -1157,22 +1155,22 @@
 
 		},
 
-		initRequiredCheckboxGroup: function( $scope ) {
+		initRequiredCheckboxGroup: function ( $scope ) {
 			var $group = $scope.find( '.jet-form-builder__fields-group' );
 
-			$group.each( function() {
+			$group.each( function () {
 				var $this = $( this ),
 					$checkboxes = $( '.checkboxes-group-required', $this );
 
 				if ( $checkboxes.length ) {
 					var isChecked = $checkboxes.is( ':checked' );
 
-					$checkboxes.prop( 'required', !isChecked );
+					$checkboxes.prop( 'required', ! isChecked );
 				}
 			} );
 		},
 
-		requiredCheckboxGroup: function( event ) {
+		requiredCheckboxGroup: function ( event ) {
 			var $this = $( event.target ),
 				$group = $this.closest( '.jet-form-builder__fields-group' ),
 				$checkboxes = $( '.checkboxes-field', $group );
@@ -1183,27 +1181,27 @@
 
 			var isChecked = $checkboxes.is( ':checked' );
 
-			$checkboxes.prop( 'required', !isChecked );
+			$checkboxes.prop( 'required', ! isChecked );
 		},
 
-		initRangeFields: function( $scope ) {
+		initRangeFields: function ( $scope ) {
 			var $rangeFields = $scope.find( '.jet-form-builder__field.range-field' );
 
 			if ( ! $rangeFields.length ) {
 				return;
 			}
 
-			$rangeFields.each( function() {
+			$rangeFields.each( function () {
 				JetFormBuilder.updateRangeField( { target: $( this ), firstInit: true } );
 			} );
 		},
 
-		updateRangeField: function( event ) {
+		updateRangeField: function ( event ) {
 			var $target = $( event.target ),
-				$wrap   = $target.closest( '.jet-form-builder__field-wrap' ),
+				$wrap = $target.closest( '.jet-form-builder__field-wrap' ),
 				$number = $wrap.find( '.jet-form-builder__field-value-number' ),
-				max     = $target.attr( 'max' ) || 100,
-				val     = $target.val();
+				max = $target.attr( 'max' ) || 100,
+				val = $target.val();
 
 			if ( event.firstInit ) {
 				$number.text( max );
@@ -1212,21 +1210,21 @@
 			$number.text( val );
 		},
 
-		reloadSubmitForm: function( event ) {
+		reloadSubmitForm: function ( event ) {
 			$( this ).find( '.jet-form-builder__submit' ).attr( 'disabled', true );
 		},
 
-		ajaxSubmitForm: function() {
+		ajaxSubmitForm: function () {
 
-			var $this  = $( this ),
-				$form  = $this.closest( '.jet-form' ),
+			var $this = $( this ),
+				$form = $this.closest( '.jet-form' ),
 				formID = $form.data( 'form-id' ),
-				data   = {
+				data = {
 					action: JetFormBuilderSettings.form_action,
 				};
 
-			if ( 'undefined' !== typeof $form[0].checkValidity && 'undefined' !== typeof $form[0].reportValidity && !$form[0].checkValidity() ) {
-				$form[0].reportValidity();
+			if ( 'undefined' !== typeof $form[ 0 ].checkValidity && 'undefined' !== typeof $form[ 0 ].reportValidity && ! $form[ 0 ].checkValidity() ) {
+				$form[ 0 ].reportValidity();
 				return;
 			}
 
@@ -1242,12 +1240,12 @@
 
 			JetFormBuilder.clearFieldErrors( formID );
 
-			$.ajax({
+			$.ajax( {
 				url: JetFormBuilderSettings.ajaxurl,
 				type: 'POST',
 				dataType: 'json',
 				data: data,
-			}).done( function( response ) {
+			} ).done( function ( response ) {
 
 				$form.removeClass( 'is-loading' );
 				$this.attr( 'disabled', false );
@@ -1256,7 +1254,7 @@
 
 					case 'validation_failed':
 
-						Object.entries( response.fields ).forEach( function( [ fieldName, fieldData ] ) {
+						Object.entries( response.fields ).forEach( function ( [fieldName, fieldData] ) {
 							var $field = JetFormBuilder.findFieldByName( $form, fieldName );
 
 							const afterMessage = `<div class="error-message">${ fieldData.message }</div>`;
@@ -1272,7 +1270,7 @@
 							JetFormBuilder.currentFieldWithError = {
 								length: 0
 							};
-						});
+						} );
 
 						break;
 
@@ -1285,10 +1283,10 @@
 						} else if ( response.stripe_session_id && response.stripe_public_key ) {
 							const stripe = new Stripe( response.stripe_public_key );
 
-							stripe.redirectToCheckout({ sessionId: response.stripe_session_id });
+							stripe.redirectToCheckout( { sessionId: response.stripe_session_id } );
 						}
 
-						$( document ).trigger( 'jet-form-builder/ajax/on-success', [ response, $form, data ] );
+						$( document ).trigger( 'jet-form-builder/ajax/on-success', [response, $form, data] );
 
 						break;
 				}
@@ -1299,8 +1297,8 @@
 
 		},
 
-		clearFieldErrors: function( formID ) {
-			var $this  = $( this );
+		clearFieldErrors: function ( formID ) {
+			var $this = $( this );
 
 			$this.closest( '.jet-form-col' ).find( '.jet-form-builder__field-error' ).remove();
 

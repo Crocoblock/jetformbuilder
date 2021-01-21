@@ -43,6 +43,18 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 		/>;
 	}
 
+	const getProp = ( of, propName, ifEmpty = '' ) => {
+		if ( 'undefined' !== typeof of && 'undefined' !== typeof of[ propName ] ) {
+			return of[ propName ];
+		}
+
+		return ifEmpty;
+	};
+
+	const getLabelProp = of => {
+		return getProp( of, 'label' );
+	};
+
 	const getFullLabel = () => {
 
 		const {
@@ -59,17 +71,17 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 		switch ( field_options_from ) {
 			case 'posts':
 				if ( field_options_post_type ) {
-					value.push( scriptData.post_types_list.find(
+					value.push( getLabelProp( scriptData.post_types_list.find(
 						option => option.value === field_options_post_type
-					).label );
+					) ) );
 				}
 				break;
 
 			case 'terms':
 				if ( field_options_tax ) {
-					value.push( scriptData.taxonomies_list.find(
+					value.push( getLabelProp( scriptData.taxonomies_list.find(
 						option => option.value === field_options_tax
-					).label )
+					) ) )
 				}
 				break;
 
@@ -81,9 +93,9 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 
 			case 'generate':
 				if ( generator_function ) {
-					value.push( scriptData.generators_list.find(
+					value.push( getLabelProp( scriptData.generators_list.find(
 						option => option.value === generator_function
-					).label )
+					) ) )
 				}
 				if ( generator_field ) {
 					value.push( generator_field );
@@ -91,7 +103,7 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 				break;
 
 		}
-		full_label.push( scriptData.options_from.find( option => option.value === field_options_from ).label );
+		full_label.push( getLabelProp( scriptData.options_from.find( option => option.value === field_options_from ) ) );
 
 		if ( value.length ) {
 			full_label.push( value.join( DELIMITER ) );

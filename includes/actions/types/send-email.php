@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Listing_Filter_Manager;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request_Handler;
 
@@ -39,37 +40,37 @@ class Send_Email extends Base {
 
 	public function action_attributes() {
 		return array(
-			'mail_to' => array(
+			'mail_to'          => array(
 				'default' => '',
 			),
-			'custom_email' => array(
+			'custom_email'     => array(
 				'default' => '',
 			),
-			'from_field' => array(
+			'from_field'       => array(
 				'default' => '',
 			),
-			'reply_to' => array(
+			'reply_to'         => array(
 				'default' => '',
 			),
-			'reply_to_email' => array(
+			'reply_to_email'   => array(
 				'default' => '',
 			),
 			'reply_from_field' => array(
 				'default' => '',
 			),
-			'subject' => array(
+			'subject'          => array(
 				'default' => '',
 				'path'    => 'email/subject'
 			),
-			'from_name' => array(
+			'from_name'        => array(
 				'default' => '',
 				'path'    => 'email/from_name'
 			),
-			'from_address' => array(
+			'from_address'     => array(
 				'default' => '',
 				'path'    => 'email/from_address'
 			),
-			'content' => array(
+			'content'          => array(
 				'default' => '',
 				'path'    => 'email/content'
 			),
@@ -376,7 +377,7 @@ class Send_Email extends Base {
 	public function action_data( $editor, $handle ) {
 
 		wp_localize_script( $handle, 'jetFormEmailData', array(
-			'mailTo'       => array(
+			'mailTo'       => Tools::with_placeholder( array(
 				array(
 					'value' => 'admin',
 					'label' => __( 'Admin email', 'jet-form-builder' ),
@@ -389,12 +390,8 @@ class Send_Email extends Base {
 					'value' => 'custom',
 					'label' => __( 'Custom email', 'jet-form-builder' ),
 				),
-			),
-			'replyTo'      => array(
-				array(
-					'value' => '',
-					'label' => __( 'Not selected', 'jet-form-builder' ),
-				),
+			) ),
+			'replyTo'      => Tools::with_placeholder( array(
 				array(
 					'value' => 'form',
 					'label' => __( 'Email from submitted form field', 'jet-form-builder' ),
@@ -403,7 +400,17 @@ class Send_Email extends Base {
 					'value' => 'custom',
 					'label' => __( 'Custom email', 'jet-form-builder' ),
 				),
-			),
+			) ),
+			'content_type' => Tools::with_placeholder( array(
+				array(
+					'value' => 'text/plain',
+					'label' => __( 'Plain text', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'text/html',
+					'label' => __( 'HTML', 'jet-form-builder' ),
+				),
+			) ),
 			'labels'       => array(
 				'mail_to'               => __( 'Mail To:', 'jet-form-builder' ),
 				'mail_to_help'          => false,
@@ -423,6 +430,7 @@ class Send_Email extends Base {
 				'from_name_help'        => false,
 				'from_address'          => __( 'From Email Address:', 'jet-form-builder' ),
 				'from_address_help'     => false,
+				'content_type'          => __( 'Content type:', 'jet-form-builder' ),
 				'content'               => __( 'Content:', 'jet-form-builder' ),
 				'content_help'          => false,
 			),

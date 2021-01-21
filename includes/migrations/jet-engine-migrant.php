@@ -21,6 +21,7 @@ class Jet_Engine_Migrant extends Base_Migrant {
 		'wysiwyg'        => 'wysiwyg-field',
 		'time'           => 'time-field',
 		'date'           => 'date-field',
+		'datetime-local' => 'datetime-field',
 		'number'         => 'number-field',
 		'select'         => 'select-field',
 		'checkboxes'     => 'checkbox-field',
@@ -34,7 +35,10 @@ class Jet_Engine_Migrant extends Base_Migrant {
 
 	public $transform_compatibility = array(
 		'email'          => 'send_email',
-		'activecampaign' => 'active_campaign'
+		'activecampaign' => 'active_campaign',
+		'webhook'        => 'call_webhook',
+		'hook'           => 'call_hook',
+		'redirect'       => 'redirect_to_page'
 	);
 
 	private $raw_fields;
@@ -223,15 +227,14 @@ class Jet_Engine_Migrant extends Base_Migrant {
 
 		if ( ! isset( $this->raw_fields[ $column_id ]['innerBlocks'][ $current['x'] ] ) ) {
 
-			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = $this->_get_child_column(
-				$field['column_width'],
+			$this->raw_fields[ $column_id ]['innerBlocks'][ $field['x'] ] = $this->_get_child_column( $field['column_width'],
 				array(
 					$this->get_prepare_field( $field )
 				),
 				array(
 					'columns'  => $field['w'],
 					'position' => $field['x']
-				),
+				)
 			);
 		}
 	}

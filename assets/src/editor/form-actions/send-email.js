@@ -145,6 +145,17 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 					onChangeValue( newValue, 'from_address' );
 				} }
 			/>
+			<SelectControl
+				key="content_type"
+				labelPosition="side"
+				className="full-width"
+				value={ settings.content_type }
+				options={ window.jetFormEmailData.content_type }
+				label={ window.jetFormEmailData.labels.content_type }
+				onChange={ ( newValue ) => {
+					onChangeValue( newValue, 'mail_to' );
+				} }
+			/>
 			<div className="jet-form-editor__macros-wrap">
 				<TextareaControl
 					key="content"

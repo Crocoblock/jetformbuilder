@@ -50,11 +50,11 @@ class Getresponse extends Integration_Base_Action {
 			),
 			'isValidAPI' => array(
 				'default' => '',
-				'path'    => 'mailchimp/isValidAPI'
+				'path'    => 'getresponse/isValidAPI'
 			),
 			'list_id' => array(
 				'default' => '',
-				'path'    => 'mailchimp/list_id'
+				'path'    => 'getresponse/list_id'
 			),
 		);
 	}

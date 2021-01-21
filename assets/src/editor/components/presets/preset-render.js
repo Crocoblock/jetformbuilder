@@ -90,7 +90,7 @@ const PresetRender = {
 		}
 
 		return <React.Fragment key={ `map_field_preset_${ field + index }` }>
-			<span>{ field }</span>
+			<span className='jet-label-overflow'>{ field }</span>
 			{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
 
 				switch ( data.type ) {

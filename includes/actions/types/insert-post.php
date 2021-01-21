@@ -35,18 +35,20 @@ class Insert_Post extends Base {
 			'post_title',
 			'post_content',
 			'post_excerpt',
+			'post_date',
+			'post_date_gmt',
 		);
 	}
 
 	public function action_attributes() {
 		return array(
-			'post_type' => array(
+			'post_type'    => array(
 				'default' => '',
 			),
-			'post_status' => array(
+			'post_status'  => array(
 				'default' => '',
 			),
-			'fields_map' => array(
+			'fields_map'   => array(
 				'default' => array(),
 			),
 			'default_meta' => array(
@@ -319,23 +321,32 @@ class Insert_Post extends Base {
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
 			array(
 				'value' => 'ID',
-				'label' => 'Post ID',
+				'label' => __( 'Post ID', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'post_title',
-				'label' => 'Post Title',
+				'label' => __( 'Post Title', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'post_content',
-				'label' => 'Post Content',
+				'label' => __( 'Post Content', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'post_excerpt',
-				'label' => 'Post Excerpt',
+				'label' => __( 'Post Excerpt', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'post_status',
-				'label' => 'Post Status',
+				'label' => __( 'Post Status', 'jet-form-builder' ),
+
+			),
+			array(
+				'value' => 'post_date',
+				'label' => __( 'Post Date', 'jet-form-builder' )
+			),
+			array(
+				'value' => 'post_date_gmt',
+				'label' => __( 'Post Date GMT', 'jet-form-builder' )
 			),
 		) ) );
 

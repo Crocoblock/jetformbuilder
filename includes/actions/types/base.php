@@ -42,6 +42,11 @@ abstract class Base {
 
 	abstract public function get_id();
 
+	public function clear() {
+		$this->settings = array();
+		$this->conditions = array();
+	}
+
 	/**
 	 * @param $request array - Form data
 	 * @param $handler Action_Handler

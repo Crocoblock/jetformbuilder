@@ -39,20 +39,20 @@ class Active_Campaign_Handler extends Integration_Base {
 		);
 
 		if ( ! $response || is_wp_error( $response ) ) {
-			throw new Action_Exception( 'internal_error' );
+			throw new Action_Exception( 'internal_error', $response );
 		}
 
 		$data = wp_remote_retrieve_body( $response );
 
 		if ( ! $data ) {
-			throw new Action_Exception( 'internal_error' );
+			throw new Action_Exception( 'internal_error', $data );
 		}
 
 		$data = json_decode( $data, true );
 
 		// Error response
 		if ( empty( $data['result_code'] ) ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $data );
 		}
 
 	}

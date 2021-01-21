@@ -35,7 +35,7 @@ class Call_Webhook extends Base {
 		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url( $this->settings['webhook_url'] ) : false;
 
 		if ( ! $webhook_url ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $this->settings );
 		}
 
 		$args = array(
@@ -52,7 +52,7 @@ class Call_Webhook extends Base {
 		$response = wp_remote_post( $webhook_url, $args );
 
 		if ( $response instanceof \WP_Error ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $response );
 		}
 		/**
 		 * Fires whe webhook response received

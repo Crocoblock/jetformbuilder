@@ -100,7 +100,7 @@ class Active_Campaign extends Integration_Base_Action {
 		}
 
 		if ( empty( $body_args['email'] ) ) {
-			throw new Action_Exception( 'empty_field' );
+			throw new Action_Exception( 'empty_field', $body_args['email'] );
 		}
 
 		$this->api_handler( $this->settings )->request( false, $body_args );

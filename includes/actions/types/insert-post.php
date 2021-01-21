@@ -61,9 +61,8 @@ class Insert_Post extends Base {
 		$post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
 
 		if ( ! $post_type || ! post_type_exists( $post_type ) ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $this->settings['post_type'] );
 		}
-
 
 		$fields_map    = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
 		$meta_input    = array();
@@ -177,7 +176,10 @@ class Insert_Post extends Base {
 			$post = get_post( (int) $postarr['ID'] );
 
 			if ( ! $post || ( absint( $post->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) ) {
-				throw new Action_Exception( 'failed' );
+				throw new Action_Exception( 'failed', array(
+					$post,
+					$post->post_author
+				) );
 			}
 
 			$post_id     = wp_update_post( $postarr );
@@ -193,7 +195,7 @@ class Insert_Post extends Base {
 		}
 
 		if ( ! $post_id ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $post_id );
 		}
 
 		$handler->response_data['inserted_post_id'] = $post_id;

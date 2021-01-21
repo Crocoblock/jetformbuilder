@@ -25,6 +25,7 @@ class Plugin {
 	public $form_handler;
 	public $editor;
 	public $captcha;
+	public $dev_manager;
 
 	public $is_activated_jet_sm;
 
@@ -50,7 +51,9 @@ class Plugin {
 		$this->form_handler = new Form_Handler();
 		$this->captcha      = new Forms_Captcha();
 
+		Dev_Mode\Manager::instance();
 		File_Upload::instance();
+
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
@@ -89,4 +92,5 @@ class Plugin {
 	}
 
 }
+
 Plugin::instance();

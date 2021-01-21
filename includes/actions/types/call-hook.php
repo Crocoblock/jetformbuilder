@@ -44,7 +44,7 @@ class Call_Hook extends Base {
 	public function do_action( array $request, Action_Handler $handler ) {
 
 		if ( empty( $this->settings['hook_name'] ) ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $this->settings );
 		}
 
 		/**

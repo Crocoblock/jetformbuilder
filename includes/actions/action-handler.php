@@ -72,7 +72,7 @@ class Action_Handler {
 				$available_actions[ $id ]->settings = $form_action['settings'];
 				$available_actions[ $id ]->conditions = $conditions;
 
-				$this->form_actions[] = $available_actions[ $id ];
+				$this->form_actions[] = clone $available_actions[ $id ];
 			}
 		}
 

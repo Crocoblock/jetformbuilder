@@ -115,45 +115,36 @@ trait General_Style {
 		);
 	}
 
-	public function get_default_margin_control( $selector ) {
+	public function _get_default_control( $selector ) {
 		return array(
-			'type'         => 'dimensions',
-			'label'        => __( 'Margin', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+			'padding' => array(
+				'type'         => 'dimensions',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
 			),
+			'margin'       => array(
+				'type'         => 'dimensions',
+				'label'        => __( 'Margin', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
+			)
 		);
 	}
 
-	public function get_default_padding_control( $selector ) {
-		return array(
-			'type'         => 'dimensions',
-			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-			),
-		);
-	}
+	public function add_margin_padding( $selector, $control_options, $responsive = array() ) {
+		foreach ( $control_options as $type => $options ) {
+			$options = $this->merge_controls_or_add_id( $this->_get_default_control( $selector )[ $type ], $options );
 
-	public function add_margin_padding( $selector, $control_options ) {
-		if ( isset( $control_options['margin'] ) ) {
-
-			$options = $this->merge_controls_or_add_id(
-				$this->get_default_margin_control( $selector ),
-				$control_options['margin']
-			);
-			$this->controls_manager->add_control( $options );
-		}
-
-		if ( isset( $control_options['padding'] ) ) {
-
-			$options = $this->merge_controls_or_add_id(
-				$this->get_default_padding_control( $selector ),
-				$control_options['padding']
-			);
-			$this->controls_manager->add_control( $options );
+			if ( in_array( $type, $responsive ) ) {
+				$this->controls_manager->add_responsive_control( $options );
+			} else {
+				$this->controls_manager->add_control( $options );
+			}
 		}
 	}
 
@@ -190,7 +181,8 @@ trait General_Style {
 					'id'        => 'field_padding',
 					'separator' => 'after',
 				)
-			)
+			),
+			array( 'padding', 'margin' )
 		);
 
 		$this->controls_manager->add_control( [

@@ -31,10 +31,16 @@ class Logger {
 	private function save_log( Handler_Exception $exception ) {
 		$this->logged[ get_class( $exception ) ][] = array(
 			'message' => $exception->getMessage(),
-			'file'    => $exception->getFile(),
+			'file'    => $this->make_pretty_filename( $exception->getFile() ),
 			'line'    => $exception->getLine(),
 			'data'    => $exception->get_additional()
 		);
+	}
+
+	private function make_pretty_filename( $file ) {
+		$path = explode( 'plugins\\', $file );
+
+		return isset( $path[1] ) ? $path[1] : explode( 'plugins/', $file )[1];
 	}
 
 

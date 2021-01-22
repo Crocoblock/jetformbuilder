@@ -64,7 +64,7 @@ class Action_Handler {
 			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
 
 			if ( isset( $available_actions[ $id ] ) ) {
-				$action = $available_actions[ $id ];
+				$action = clone $available_actions[ $id ];
 				/**
 				 * Save action settings to the class field,
 				 * it allows to not send action settings

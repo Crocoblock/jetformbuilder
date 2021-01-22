@@ -229,7 +229,7 @@ class Register_User extends Base {
 			}
 
 		} else {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $userarr );
 		}
 	}
 

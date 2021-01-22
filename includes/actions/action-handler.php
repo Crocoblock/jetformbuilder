@@ -64,15 +64,16 @@ class Action_Handler {
 			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
 
 			if ( isset( $available_actions[ $id ] ) ) {
+				$action = $available_actions[ $id ];
 				/**
 				 * Save action settings to the class field,
 				 * it allows to not send action settings
 				 * in action hook
 				 */
-				$available_actions[ $id ]->settings = $form_action['settings'];
-				$available_actions[ $id ]->conditions = $conditions;
+				$action->settings = $form_action['settings'];
+				$action->conditions = $conditions;
 
-				$this->form_actions[] = clone $available_actions[ $id ];
+				$this->form_actions[] = $action;
 			}
 		}
 

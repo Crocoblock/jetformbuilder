@@ -63,7 +63,7 @@ class Redirect_To_Page extends Base {
 		}
 
 		if ( ! $to_url ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $this->settings );
 		} else {
 
 			if ( ! empty( $this->settings['redirect_hash'] ) ) {

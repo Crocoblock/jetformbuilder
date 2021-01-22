@@ -135,9 +135,7 @@ class Send_Email extends Base {
 
 		$message = ! empty( $this->settings['content'] ) ? apply_filters( 'jet-form-builder/send-email/message_content', $this->settings['content'], $this ) : '';
 
-		if ( ! $this->send_mail( $email, $subject, $message ) ) {
-			throw new Action_Exception( 'failed' );
-		}
+		$this->send_mail( $email, $subject, $message );
 	}
 
 
@@ -174,30 +172,16 @@ class Send_Email extends Base {
 			$message = make_clickable( $message );
 		}
 
-		$message    = str_replace( '&#038;', '&amp;', $message );
-		$sent       = wp_mail( $to, $subject, $message, $this->get_headers() );
-		$log_errors = apply_filters( 'jet-form-builder/send-email/log-errors', true, $to, $subject, $message );
+		$message = str_replace( '&#038;', '&amp;', $message );
+		$sent    = wp_mail( $to, $subject, $message, $this->get_headers() );
 
-		// Test
-		$log_errors = false;
-
-		if ( ! $sent && true === $log_errors ) {
-
-			if ( is_array( $to ) ) {
-				$to = implode( ',', $to );
-			}
-
-			$log_message = sprintf(
-				__( "Email from JetEngine Booking Form failed to send.\nSend time: %s\nTo: %s\nSubject: %s\nContent: %s\n\n", 'jet-engine' ),
-				date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
-				$to,
-				$subject,
-				$message
-			);
-
-			error_log( $log_message );
-
-			throw new Action_Exception( 'failed' );
+		if ( ! $sent ) {
+			throw new Action_Exception( 'failed', array(
+				'to'      => $to,
+				'subject' => $subject,
+				'message' => $message,
+				'headers' => $this->get_headers()
+			) );
 		}
 
 		/**
@@ -206,9 +190,6 @@ class Send_Email extends Base {
 		 * @since 2.1
 		 */
 		do_action( 'jet-form-builder/send-email/send-after', $this );
-
-		return $sent;
-
 	}
 
 	/**

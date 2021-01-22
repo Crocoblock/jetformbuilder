@@ -96,7 +96,9 @@ class Mailchimp extends Integration_Base_Action {
 		$body_args = $this->get_body_args( $fields_map );
 
 		if ( empty( $body_args['email_address'] ) ) {
-			throw new Action_Exception( 'empty_field' );
+			throw new Action_Exception( 'empty_field', array(
+				'email_address' => $body_args['email_address']
+			) );
 		}
 
 		if ( ! empty( $this->settings['groups_ids'] ) && is_array( $this->settings['groups_ids'] ) ) {
@@ -136,7 +138,7 @@ class Mailchimp extends Integration_Base_Action {
 
 		// Error response
 		if ( empty( $response['id'] ) ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', $response );
 		}
 	}
 

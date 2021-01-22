@@ -22,11 +22,16 @@ class Condition_Helper {
 	}
 
 	public function check_all() {
+		$request = $this->action_handler->request_data;
+
 		foreach ( $this->conditions as $condition ) {
 			if ( ( $condition['execute'] && ! $this->check( $condition ) )
 			     || ( ! $condition['execute'] && $this->check( $condition ) )
 			) {
-				throw new Condition_Exception();
+				throw new Condition_Exception( '', array(
+					'condition' => $condition,
+					'field'     => isset( $request[ $condition['field'] ] ) ? $request[ $condition['field'] ] : null,
+				) );
 			}
 		}
 	}

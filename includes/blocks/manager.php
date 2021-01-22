@@ -2,32 +2,13 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-use Jet_Form_Builder\Blocks\Types\Calculated_Field;
-use Jet_Form_Builder\Blocks\Types\Checkbox_Field;
-use Jet_Form_Builder\Blocks\Types\Conditional_Block;
-use Jet_Form_Builder\Blocks\Types\Date_Field;
-use Jet_Form_Builder\Blocks\Types\Datetime_Field;
-use Jet_Form_Builder\Blocks\Types\Form_Break_Field;
-use Jet_Form_Builder\Blocks\Types\Group_Break_Field;
-use Jet_Form_Builder\Blocks\Types\Heading_Field;
-use Jet_Form_Builder\Blocks\Types\Hidden_Field;
-use Jet_Form_Builder\Blocks\Types\Media_Field;
-use Jet_Form_Builder\Blocks\Types\Number_Field;
-use Jet_Form_Builder\Blocks\Types\Radio_Field;
-use Jet_Form_Builder\Blocks\Types\Range_Field;
-use Jet_Form_Builder\Blocks\Types\Repeater_Field;
-use Jet_Form_Builder\Blocks\Types\Select_Field;
-use Jet_Form_Builder\Blocks\Types\Submit_Field;
-use Jet_Form_Builder\Blocks\Types\Text_Field;
-use Jet_Form_Builder\Blocks\Types\Textarea_Field;
-use Jet_Form_Builder\Blocks\Types\Time_Field;
-use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
-use Jet_Form_Builder\Blocks\Types\Form;
+use Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Types\Field_Interface;
+
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
+use Jet_Form_Builder\Dev_Mode;
 
 // If this file is called directly, abort.
 
@@ -133,27 +114,27 @@ class Manager {
 	public function register_block_types() {
 
 		$types = array(
-			new Form(),
-			new Select_Field(),
-			new Text_Field(),
-			new Hidden_Field(),
-			new Radio_Field(),
-			new Checkbox_Field(),
-			new Number_Field(),
-			new Date_Field(),
-			new Time_Field(),
-			new Calculated_Field(),
-			new Media_Field(),
-			new Wysiwyg_Field(),
-			new Range_Field(),
-			new Heading_Field(),
-			new Textarea_Field(),
-			new Submit_Field(),
-			new Repeater_Field(),
-			new Form_Break_Field(),
-			new Group_Break_Field(),
-			new Conditional_Block(),
-			new Datetime_Field(),
+			new Types\Form(),
+			new Types\Select_Field(),
+			new Types\Text_Field(),
+			new Types\Hidden_Field(),
+			new Types\Radio_Field(),
+			new Types\Checkbox_Field(),
+			new Types\Number_Field(),
+			new Types\Date_Field(),
+			new Types\Time_Field(),
+			new Types\Calculated_Field(),
+			new Types\Media_Field(),
+			new Types\Wysiwyg_Field(),
+			new Types\Range_Field(),
+			new Types\Heading_Field(),
+			new Types\Textarea_Field(),
+			new Types\Submit_Field(),
+			new Types\Repeater_Field(),
+			new Types\Form_Break_Field(),
+			new Types\Group_Break_Field(),
+			new Types\Conditional_Block(),
+			new Types\Datetime_Field(),
 		);
 
 		foreach ( $types as $type ) {
@@ -259,7 +240,8 @@ class Manager {
 
 		wp_localize_script( 'jet-form-builder-frontend-forms', 'JetFormBuilderSettings', array(
 			'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
-			'form_action' => Plugin::instance()->form_handler->hook_key
+			'form_action' => Plugin::instance()->form_handler->hook_key,
+			'devmode'     => Dev_Mode\Manager::instance()->active()
 		) );
 
 	}
@@ -346,7 +328,7 @@ class Manager {
 		if ( ! $block_name ) {
 			return;
 		}
-		$types = $this->get_form_editor_types();
+		$types      = $this->get_form_editor_types();
 		$block_name = explode( 'jet-forms/', $block_name );
 
 		$field = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;

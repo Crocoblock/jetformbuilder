@@ -76,9 +76,7 @@ class Preset_Manager {
 			return true;
 		}
 
-		$this->general->set_source();
-
-		if ( ! $this->general->source->src ) {
+		if ( ! $this->general->source->src() ) {
 			return true;
 		}
 
@@ -93,45 +91,19 @@ class Preset_Manager {
 	 * @return [type] [description]
 	 */
 	public function get_field_value( $args = array() ) {
-		$field = $args['name'];
 		$this->manager_preset = null;
 
-		$result = array(
-			'rewrite' => false,
-			'value'   => null,
-		);
-
-		if ( ! $field ) {
-			return $result;
+		if ( ! $args['name'] ) {
+			return '';
 		}
 
 		$this->set_preset_type_manager( $args );
 
 		if ( $this->manager_preset instanceof Base_Preset ) {
-			return $this->manager_preset->set_additional_data( $args )->get_preset_value();
+			return $this->manager_preset->set_additional_data( $args )->source->result();
 		}
 
 		return false;
 	}
 
-
-	/**
-	 * Try to get values from request if passed
-	 *
-	 * @param  [type] $args [description]
-	 *
-	 * @return [type]       [description]
-	 */
-	public function maybe_adjust_value( $args ) {
-
-		$value       = isset( $args['default'] ) ? $args['default'] : false;
-		$request_val = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
-
-		if ( ! empty( $request_val[ $args['name'] ] ) ) {
-			$value = $request_val[ $args['name'] ];
-		}
-
-		return $value;
-
-	}
 }

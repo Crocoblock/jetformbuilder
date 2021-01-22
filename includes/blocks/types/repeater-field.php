@@ -374,7 +374,6 @@ class Repeater_Field extends Base {
 		$this->set_repeater_calc_type();
 		$this->set_new_repeater_label();
 		$this->set_settings();
-		$this->set_default_value();
 		$this->set_calc_data();
 		$this->set_calc_dataset();
 
@@ -403,18 +402,6 @@ class Repeater_Field extends Base {
 			'itemsField'  => $this->items_field,
 			'calcType'    => $this->repeater_calc_type,
 		) ) );
-	}
-
-	public function set_default_value() {
-		$preset_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
-
-		if ( $preset_value['rewrite'] ) {
-			$args['default'] = $preset_value['value'];
-		} else {
-			$args['default'] = Preset_Manager::instance()->maybe_adjust_value( $this->block_attrs );
-		}
-
-		$this->default_value = array_merge( $this->block_attrs, $args );
 	}
 
 	public function set_calc_data() {

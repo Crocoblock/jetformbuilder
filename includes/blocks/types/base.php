@@ -7,6 +7,7 @@ use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Presets\Preset_Manager;
 use JET_SM\Gutenberg\Controls_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -200,6 +201,21 @@ abstract class Base extends Base_Module {
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
+		$this->block_attrs['default']   = $this->get_default_from_preset();
+	}
+
+	private function get_default_from_preset() {
+		$result_value = '';
+
+		if ( ! Live_Form::instance()->current_repeater ) {
+			$result_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
+
+		} elseif ( ! empty( Live_Form::instance()->current_repeater['values'] )
+		           && isset( Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ] ) ) {
+			$result_value = Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ];
+		}
+
+		return $result_value ? $result_value : '';
 	}
 
 	/**
@@ -496,8 +512,6 @@ abstract class Base extends Base_Module {
 	}
 
 
-
-
 	/**
 	 * Register blocks specific JS variables
 	 *
@@ -529,6 +543,7 @@ abstract class Base extends Base_Module {
 
 		ob_start();
 		require $icon;
+
 		return ob_get_clean();
 	}
 
@@ -539,7 +554,7 @@ abstract class Base extends Base_Module {
 			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
 		);
 	}
-	
+
 	public function parse_exported_data( $field_data ) {
 		$field_attrs = $this->block_attributes( false );
 

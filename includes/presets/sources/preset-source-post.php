@@ -6,123 +6,131 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 class Preset_Source_Post extends Base_Source {
 
+	private $array_allowed;
+
+	public function __construct( $field_data, $field_args, $preset_data ) {
+		parent::__construct( $field_data, $field_args, $preset_data );
+
+		$this->set_array_allowed();
+	}
+
+	private function set_array_allowed() {
+		if ( isset( $this->field_args['type'] ) && isset( $this->field_args['array_allowed'] ) ) {
+			$this->array_allowed = in_array( $this->field_args['type'], array( 'checkboxes' ) ) || ! empty( $this->field_args['array_allowed'] );
+		}
+	}
+
 	public function on_sanitize() {
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
 
-		if ( absint( $this->src->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) {
+		if ( absint( $this->src()->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) {
 			return false;
 		}
 		return true;
 	}
 
-	public function get_source() {
-		$post_from = ! empty( $this->preset_type->data['post_from'] ) ? $this->preset_type->data['post_from'] : $this->preset_type->defaults['post_from'];
+	public function query_source() {
+		$post_from = ! empty( $this->preset_data['post_from'] ) ? $this->preset_data['post_from'] : 'current_post';
 
 		if ( 'current_post' === $post_from ) {
 			$post_id = get_the_ID();
 		} else {
-			$var     = ! empty( $this->preset_type->data['query_var'] ) ? $this->preset_type->data['query_var'] : $this->preset_type->defaults['query_var'];
+			$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : '';
 			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
 		}
 
 		if ( $post_id ) {
-			$this->src = get_post( $post_id );
+			return get_post( $post_id );
 		}
-
-		return $this;
 	}
+
 
 	protected function can_get_preset() {
-		return ( absint( $this->src->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
+		return ( absint( $this->src()->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
 	}
 
-	public function post_meta() {
-		if ( ! empty( $field_data['key'] ) ) {
+	public function _source__post_meta() {
+		if ( empty( $this->field_data['key'] ) ) {
+			return self::EMPTY;
+		}
 
-			$value = get_post_meta( $this->src->ID, $field_data['key'], true );
+		$value = get_post_meta( $this->src()->ID, $this->field_data['key'], true );
 
-			if ( $this->is_repeater_val( $value ) ) {
+		if ( $this->is_repeater_val( $value ) ) {
 
-				$prepared_value = array();
+			$prepared_value = array();
 
-				foreach ( $value as $index => $row ) {
+			foreach ( $value as $index => $row ) {
 
-					$prepared_row = array();
+				$prepared_row = array();
 
-					foreach ( $row as $item_key => $item_value ) {
+				foreach ( $row as $item_key => $item_value ) {
 
-						$item_key = $this->get_key_from_map( $item_key );
+					$item_key = $this->get_key_from_map( $item_key );
 
-						$prepared_row[ $item_key ] = $item_value;
-					}
-
-					$prepared_value[] = $prepared_row;
-
-				}
-				$value = $prepared_value;
-			} else if ( function_exists( 'jet_engine' )
-			            && jet_engine()->relations
-			            && jet_engine()->relations->is_relation_key( $field_data['key'] ) ) {
-
-				$info = jet_engine()->relations->get_relation_info( $field_data['key'] );
-
-				if ( ! $info ) {
-					return $this->preset_type->result;
+					$prepared_row[ $item_key ] = $item_value;
 				}
 
-				$args = array(
-					'post_id'     => $this->src->ID,
-					'post_type_1' => $info['post_type_1'],
-					'post_type_2' => $info['post_type_2'],
-				);
+				$prepared_value[] = $prepared_row;
 
-				if ( $this->src->post_type === $info['post_type_1'] ) {
-					$args['from'] = $info['post_type_2'];
-				} else {
-					$args['from'] = $info['post_type_1'];
-				}
+			}
+			$value = $prepared_value;
+		} else if ( function_exists( 'jet_engine' )
+		            && jet_engine()->relations
+		            && jet_engine()->relations->is_relation_key( $this->field_data['key'] ) ) {
 
-				$value = jet_engine()->relations->get_related_posts( $args );
+			$info = jet_engine()->relations->get_relation_info( $this->field_data['key'] );
 
-			} else {
-				$value = get_post_meta( $this->src->ID, $field_data['key'], true );
+			if ( ! $info ) {
+				return self::EMPTY;
 			}
 
-			return $value;
+			$args = array(
+				'post_id'     => $this->src()->ID,
+				'post_type_1' => $info['post_type_1'],
+				'post_type_2' => $info['post_type_2'],
+			);
 
-		} else {
-			return $this->preset_type->result;
-		}
-	}
-
-	public function post_terms() {
-		if ( ! empty( $field_data['key'] ) ) {
-
-			$value = wp_get_post_terms( $this->src->ID, $field_data['key'] );
-
-			if ( empty( $value ) || is_wp_error( $value ) ) {
-				return $this->preset_type->result;
+			if ( $this->src()->post_type === $info['post_type_1'] ) {
+				$args['from'] = $info['post_type_2'];
 			} else {
-				if ( $this->preset_type->array_allowed ) {
-					$value = array_map( function ( $term ) {
-						return strval( $term->term_id );
-					}, $value );
-				} else {
-					$value = $value[0];
-					$value = $value->term_id;
-				}
+				$args['from'] = $info['post_type_1'];
 			}
 
-			return $value;
-		} else {
-			return $this->preset_type->result;
+			$value = jet_engine()->relations->get_related_posts( $args );
+
 		}
+
+		return $value;
 	}
 
-	public function post_thumb() {
-		return get_post_thumbnail_id( $this->src->ID );
+	public function _source__post_terms() {
+		if ( empty( $field_data['key'] ) ) {
+			return self::EMPTY;
+		}
+
+		$value = wp_get_post_terms( $this->src()->ID, $field_data['key'] );
+
+		if ( empty( $value ) || is_wp_error( $value ) ) {
+			return '';
+		} else {
+			if ( $this->array_allowed ) {
+				$value = array_map( function ( $term ) {
+					return strval( $term->term_id );
+				}, $value );
+			} else {
+				$value = $value[0];
+				$value = $value->term_id;
+			}
+		}
+
+		return $value;
+	}
+
+	public function _source__post_thumb() {
+		return get_post_thumbnail_id( $this->src()->ID );
 	}
 
 	public function is_repeater_val( $value ) {
@@ -137,13 +145,11 @@ class Preset_Source_Post extends Base_Source {
 
 	public function get_key_from_map( $repeater_key ) {
 
-		foreach ( $this->preset_type->fields_map as $field => $data ) {
+		foreach ( $this->fields_map as $field => $data ) {
 
-			$prop = ! empty( $this->preset_type->data['prop'] ) ? $this->preset_type->data['prop'] : 'post_title';
-
-			if ( 'post_meta' === $prop
-			     && ! empty( $this->preset_type->data['key'] )
-			     && $repeater_key == $this->preset_type->data['key'] )
+			if ( 'post_meta' === $this->prop
+			     && ! empty( $this->preset_data['key'] )
+			     && $repeater_key == $this->preset_data['key'] )
 			{
 				return $field;
 			}

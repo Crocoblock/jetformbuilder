@@ -34,14 +34,14 @@ class Factory {
 		return $classes;
 	}
 
-	public function create_one( $name, $params = array() ) {
+	public function create_one( $name, ...$params ) {
 		if ( empty( $this->namespace ) ) {
 			return false;
 		}
 		$class_name = $this->make_class_name( $this->prefix . $name . $this->suffix );
 		$class_name = $class_name ? $this->namespace . $class_name : '\stdClass';
 
-		return new $class_name( $params );
+		return new $class_name( ...$params );
 	}
 
 	public static function make_class_name( $action ) {

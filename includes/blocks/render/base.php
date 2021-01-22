@@ -29,7 +29,6 @@ abstract class Base {
 	public $block_type;
 	public $content;
 	public $live_form;
-	public $preset;
 
 	const FIELD_ERROR_CLASS = 'field-has-error';
 
@@ -39,17 +38,12 @@ abstract class Base {
 
 		$this->set_live_form();
 		$this->set_block_type( $block_type );
-		$this->set_form_preset();
 	}
 
 	abstract public function get_name();
 
 	public function set_live_form() {
 		$this->live_form = Live_Form::instance();
-	}
-
-	public function set_form_preset() {
-		$this->preset = Preset_Manager::instance();
 	}
 
 	public function set_block_type( $block_type ) {
@@ -160,8 +154,6 @@ abstract class Base {
 		$desc   = $this->get_field_desc();
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
-		$args['default'] = $this->get_default_from_preset( $args );
-
 		if ( 'column' === $layout ) {
 			ob_start();
 			include $this->block_type->get_common_template( 'field-column.php' );
@@ -173,37 +165,6 @@ abstract class Base {
 		}
 
 		return $result_field;
-	}
-
-	private function get_default_from_preset( $args ) {
-		if ( ! $this->preset ) {
-			return $args['default'];
-		}
-
-		$preset_value = $this->preset->get_field_value( $args );
-		$result_value = '';
-
-		if ( ! $this->live_form->current_repeater ) {
-
-			if ( $preset_value['rewrite'] ) {
-				$result_value = $preset_value['value'];
-			} elseif ( ! $this->is_field( 'hidden' ) ) {
-				$result_value = $this->preset->maybe_adjust_value( $args );
-			}
-
-		} elseif ( ! empty( $this->live_form->current_repeater['values'] )
-		           && isset( $this->live_form->current_repeater['values'][ $args['name'] ] ) ) {
-			$result_value = $this->live_form->current_repeater['values'][ $args['name'] ];
-		}
-
-
-		if ( $result_value ) {
-			return $result_value;
-		} elseif ( $preset_value['rewrite'] ) { // if default was set by dynamic preset (json format)
-			return '';
-		} else {
-			return $args['default'];
-		}
 	}
 
 	public function render_disabled_message_form_break( $args ) {

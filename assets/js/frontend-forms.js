@@ -2,6 +2,19 @@
 
 	"use strict";
 
+	const JetFormBuilderDev = {
+		log: function ( label = '', params = {} ) {
+			if ( ! window.JetFormBuilderSettings.devmode || ! params ) {
+				return;
+			}
+			console.group( label );
+			for ( const key in params ) {
+				console.log( `${ key }: ${ params[ key ] }` );
+			}
+			console.groupEnd();
+		}
+	}
+
 	window.JetFormBuilderMain = {
 
 		filters: ( function () {
@@ -91,11 +104,11 @@
 				} );
 			}
 
-			console.group();
-			console.log( 'val:', val );
-			console.log( 'listenFor: ', listenFor );
-			console.log( 'operator: ', operator );
-			console.groupEnd();
+			JetFormBuilderDev.log( 'Conditional', {
+				val,
+				listenFor,
+				operator
+			} );
 
 			switch ( operator ) {
 				case 'equal':
@@ -1341,6 +1354,8 @@
 		},
 
 	};
+
+	window.JetFormBuilderDev = JetFormBuilderDev;
 
 	$( document ).ready( JetFormBuilder.init );
 

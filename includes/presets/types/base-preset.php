@@ -10,38 +10,21 @@ abstract class Base_Preset {
 
 	const SOURCES_NAMESPACE = 'Jet_Form_Builder\\Presets\\Sources\\';
 
-	public $result = array(
-		'rewrite' => false,
-		'value'   => null,
-	);
 	public $source;
 	public $defaults = array(
 		'enabled'    => false,
-		'from'       => 'default',
+		'from'       => 'post',
 		'post_from'  => 'current_post',
 		'user_from'  => 'current_user',
 		'query_var'  => '_post_id',
 		'fields_map' => array(),
 	);
-	public $from;
 	public $fields_map;
-	public $field_data = array();
-	public $array_allowed = false;
-
 	public $data;
-	public $field = '__condition__';
-	public $args;
+
+	protected $field;
 
 	abstract public function get_fields_map();
-
-	abstract public function get_preset_value();
-
-	public function clear_additional_data() {
-		$this->field_data = array();
-		$this->array_allowed = false;
-		$this->field = '__condition__';
-		$this->args = null;
-	}
 
 	public function is_active_preset( $args ) {
 		return false;
@@ -56,60 +39,24 @@ abstract class Base_Preset {
 	}
 
 	public function set_additional_data( $args = array() ) {
-		$this->clear_additional_data();
-
-		if ( ! empty( $args['name'] ) ) {
-			$this->field = $args['name'];
-		}
-		if ( ! empty( $args ) ) {
-			$this->args = $args;
-		}
-		$this->set_source();
+		$this->field      = $args['name'];
 		$this->fields_map = $this->get_fields_map();
-		$this->set_field_data();
-		$this->set_array_allowed();
+		$this->source     = $this->get_source( $args );
 
 		return $this;
 	}
 
-	private function set_array_allowed() {
-		if ( isset( $this->args['type'] ) && isset( $args['array_allowed'] ) ) {
-			$this->array_allowed = in_array( $this->args['type'], array( 'checkboxes' ) ) || ! empty( $args['array_allowed'] );
-		}
-	}
 
-	private function set_field_data() {
-		if ( $this->has_field_in_map() ) {
-			$this->field_data = $this->fields_map[ $this->field ];
-		}
-	}
-
-	public function has_field_in_map() {
-		return ( isset( $this->fields_map[ $this->field ] ) &&  ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) ) );
-	}
-
-
-	public function set_source() {
-		$this->from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
+	public function get_source( $args ) {
+		$from         = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset_source_' );
 
-		$this->source = $from_manager->create_one( $this->from, $this )->get_source();
-	}
-
-	public function _get_values() {
-
-		if ( ! $this->field_data ) {
-			return $this->result;
-		}
-
-		$result = $this->source->result();
-
-
-		$this->args = array();
-		$this->field_data = array();
-		$this->result['value'] = null;
-
-		return $result;
+		return $from_manager->create_one(
+			$from,
+			$this->fields_map,
+			$args,
+			$this->data,
+		);
 	}
 
 }

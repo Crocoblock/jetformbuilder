@@ -5,22 +5,52 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Dev_Mode\Manager;
+use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 
 abstract class Base_Source {
 
-	protected $preset_type;
+	protected $fields_map;
+	protected $field_data = array();
+	protected $field_args;
+	protected $preset_data;
+	protected $field = '__condition__';
 	protected $prop;
-	public $src = false;
+	private $src;
 
-	abstract public function get_source();
+	const FUNC_PREFIX = '_source__';
+	const EMPTY = '';
 
-	public function __construct( Base_Preset $preset_type ) {
-		$this->preset_type = $preset_type;
+	abstract public function query_source();
+
+	public function __construct( $fields_map, $field_args, $preset_data ) {
+		$this->fields_map  = $fields_map;
+		$this->field_args  = $field_args;
+		$this->preset_data = $preset_data;
+		$this->field       = $this->field_args['name'];
+		$this->field_data  = $this->get_field_data();
+		$this->prop        = $this->get_prop();
+		$this->src         = $this->query_source();
+	}
+
+
+	protected function get_field_data() {
+		if ( $this->has_field_in_map() ) {
+			return $this->fields_map[ $this->field ];
+		}
+	}
+
+	public function has_field_in_map() {
+		return ( isset( $this->fields_map[ $this->field ] ) && ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) ) );
+	}
+
+	public function src() {
+		return $this->src;
 	}
 
 	protected function can_get_preset() {
-		return true;
+		return ( ! $this->src() && ! is_wp_error( $this->src() ) );
 	}
 
 	public function __call( string $prop, array $arguments ) {
@@ -32,40 +62,59 @@ abstract class Base_Source {
 			return $source->data->$prop;
 		}
 
-		return '';
+		return self::EMPTY;
 	}
 
-	protected function set_prop() {
-		$this->prop = ! empty( $this->preset_type->field_data['prop'] ) ? $this->preset_type->field_data['prop'] : 'post_title';
+	protected function get_prop() {
+		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : 'post_title' );
 	}
 
 	public function get_result_on_prop() {
+		$func_name = self::FUNC_PREFIX . $this->prop;
+
+		if ( is_callable( array( $this, $func_name ) ) ) {
+			return call_user_func( array( $this, $func_name ) );
+		}
+
 		return call_user_func( array( $this, $this->prop ) );
 	}
 
-	public function result() {
+	final public function result() {
 		if ( ! $this->can_get_preset() ) {
-			return $this->preset_type->result;
+			return self::EMPTY;
 		}
-		$this->set_prop();
 
-		$value = $this->parse_result_value( $this->get_result_on_prop() );
+		return $this->parse_result_value( $this->get_result_on_prop() );
+	}
+
+
+	/**
+	 * Try to get values from request if passed
+	 *
+	 * @param  [type] $args [description]
+	 *
+	 * @return [type]       [description]
+	 */
+	public function maybe_adjust_value() {
+
+		$value       = isset( $this->field_args['default'] ) ? $this->field_args['default'] : '';
+		$request_val = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
+
+		if ( isset( $request_val[ $this->field ] ) ) {
+			$value = $request_val[ $this->field ];
+		}
 
 		return $value;
+
 	}
 
 	public function parse_result_value( $value ) {
 		// Prepare value for date field
-		if ( 'date-field' === $this->preset_type->args['type'] && Tools::is_valid_timestamp( $value ) ) {
+		if ( 'date-field' === $this->field_args['type'] && Tools::is_valid_timestamp( $value ) ) {
 			$value = date_i18n( 'Y-m-d', $value );
 		}
 
-		if ( ! empty( $value ) ) {
-			$this->preset_type->result['rewrite'] = true;
-			$this->preset_type->result['value']   = $value;
-		}
-
-		return $this->preset_type->result;
+		return $value;
 	}
 
 }

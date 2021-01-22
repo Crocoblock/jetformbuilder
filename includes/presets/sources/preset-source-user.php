@@ -11,50 +11,45 @@ class Preset_Source_User extends Base_Source {
 			return false;
 		}
 
-		if ( get_current_user_id() !== $this->src->ID && ! current_user_can( 'edit_users' ) ) {
+		if ( get_current_user_id() !== $this->src()->ID && ! current_user_can( 'edit_users' ) ) {
 			return false;
 		}
+
 		return true;
 	}
 
-	public function get_source() {
-		$user_from = ! empty( $this->preset_type->data['user_from'] ) ? $this->preset_type->data['user_from'] : $this->preset_type->defaults['user_from'];
+	public function query_source() {
+		$user_from = ! empty( $this->preset_data['user_from'] ) ? $this->preset_data['user_from'] : 'current_user';
 
-		if ( 'current_user' === $user_from ) {
-			if ( is_user_logged_in() ) {
-				$this->src = wp_get_current_user();
-			}
-		} else {
-
-			$var     = ! empty( $this->preset_type->data['query_var'] ) ? $this->preset_type->data['query_var'] : $this->preset_type->defaults['query_var'];
-			$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
-
-			$this->src = get_user_by( 'ID', $user_id );
+		if ( 'current_user' === $user_from && is_user_logged_in() ) {
+			return wp_get_current_user();
 		}
 
-		return $this;
+		$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : 'user_id';
+		$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+
+		return get_user_by( 'ID', $user_id );
 	}
 
 	/**
 	 * @return mixed
 	 */
 	protected function can_get_preset() {
-		return (
-			( ! $this->src && ! is_wp_error( $this->src ) )
+		return ( parent::can_get_preset()
 			&& is_user_logged_in()
-			|| ( get_current_user_id() === $this->src->ID || current_user_can( 'edit_users' ) )
+			|| ( get_current_user_id() === $this->src()->ID || current_user_can( 'edit_users' ) )
 		);
 	}
 
-	public function user_meta() {
-		if ( ! empty( $this->preset_type->field_data['key'] ) ) {
-			return get_user_meta(
-				$this->src->ID,
-				$this->preset_type->field_data['key'],
-				true
-			);
-		} else {
-			return $this->preset_type->result;
+	public function _source__user_meta() {
+		if ( empty( $this->field_data['key'] ) ) {
+			return self::EMPTY;
 		}
+
+		return get_user_meta(
+			$this->src()->ID,
+			$this->field_data['key'],
+			true
+		);
 	}
 }

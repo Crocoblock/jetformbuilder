@@ -22,6 +22,10 @@ const {
 	useEffect
 } = wp.element;
 
+const parseActions = actions => {
+	return actions.filter( action => ! ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) );
+};
+
 export default function GatewaysEditor( {
 											gatewaysArgs,
 											activeActions,
@@ -30,6 +34,8 @@ export default function GatewaysEditor( {
 											onSaveItems
 										} ) {
 
+	const availableActions = parseActions( activeActions );
+	
 	const gatewaysData = window.JetFormEditorData.gateways;
 
 	const [gateway, setGateway] = useState( gatewaysArgs );
@@ -136,64 +142,62 @@ export default function GatewaysEditor( {
 			setValueInObject={ setValueInObject }
 			getNotifications={ getNotifications }
 		/> }
-		<BaseControl
-			label={ __( 'Before payment processed:', 'jet-form-builder' ) }
-			key="before_payment_base_control"
-		>
-			<div>
-				{ activeActions.map( ( action, index ) => {
-					if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
-						return;
-					}
-					return <CheckboxControl
-						className={ 'jet-forms-checkbox-field' }
-						key={ `place_holder_block_${ action.type + index }` }
-						checked={ getNotificationsBefore( action.type ) }
-						label={ getActionLabel( action.type ) }
-						onChange={ value => setNotificationsBefore( action.type, value ) }
-					/>;
-				} ) }
-			</div>
-		</BaseControl>
-		<BaseControl
-			label={ __( 'On successful payment:', 'jet-form-builder' ) }
-			key="success_payment_base_control"
-		>
-			<div>
-				{ activeActions.map( ( action, index ) => {
-					if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
-						return;
-					}
-					return <CheckboxControl
-						className={ 'jet-forms-checkbox-field' }
-						key={ `place_holder_block_${ action.type + index }` }
-						checked={ getNotificationsSuccess( action.type ) }
-						label={ getActionLabel( action.type ) }
-						onChange={ value => setNotificationsSuccess( action.type, value ) }
-					/>;
-				} ) }
-			</div>
-		</BaseControl>
-		<BaseControl
-			label={ __( 'On failed payment:', 'jet-form-builder' ) }
-			key="failed_payment_base_control"
-		>
-			<div>
-				{ activeActions.map( ( action, index ) => {
-					if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
-						return;
-					}
-					return <CheckboxControl
-						className={ 'jet-forms-checkbox-field' }
-						key={ `place_holder_block_${ action.type + index }` }
-						checked={ getNotificationsFailed( action.type ) }
-						label={ getActionLabel( action.type ) }
-						onChange={ value => setNotificationsFailed( action.type, value ) }
-					/>;
-				} ) }
-			</div>
-		</BaseControl>
-
+		{ Boolean( availableActions.length ) && <>
+			<BaseControl
+				label={ __( 'Before payment processed:', 'jet-form-builder' ) }
+				key="before_payment_base_control"
+			>
+				<div>
+					{ availableActions.map( ( action, index ) => {
+						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
+							return;
+						}
+						return <CheckboxControl
+							className={ 'jet-forms-checkbox-field' }
+							key={ `place_holder_block_${ action.type + index }` }
+							checked={ getNotificationsBefore( action.type ) }
+							label={ getActionLabel( action.type ) }
+							onChange={ value => setNotificationsBefore( action.type, value ) }
+						/>;
+					} ) }
+				</div>
+			</BaseControl>
+			<BaseControl
+				label={ __( 'On successful payment:', 'jet-form-builder' ) }
+				key="success_payment_base_control"
+			>
+				<div>
+					{ availableActions.map( ( action, index ) => {
+						return <CheckboxControl
+							className={ 'jet-forms-checkbox-field' }
+							key={ `place_holder_block_${ action.type + index }` }
+							checked={ getNotificationsSuccess( action.type ) }
+							label={ getActionLabel( action.type ) }
+							onChange={ value => setNotificationsSuccess( action.type, value ) }
+						/>;
+					} ) }
+				</div>
+			</BaseControl>
+			<BaseControl
+				label={ __( 'On failed payment:', 'jet-form-builder' ) }
+				key="failed_payment_base_control"
+			>
+				<div>
+					{ availableActions.map( ( action, index ) => {
+						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
+							return;
+						}
+						return <CheckboxControl
+							className={ 'jet-forms-checkbox-field' }
+							key={ `place_holder_block_${ action.type + index }` }
+							checked={ getNotificationsFailed( action.type ) }
+							label={ getActionLabel( action.type ) }
+							onChange={ value => setNotificationsFailed( action.type, value ) }
+						/>;
+					} ) }
+				</div>
+			</BaseControl>
+		</> }
 		<SelectControl
 			label={ __( 'Price/amount field', 'jet-form-builder' ) }
 			key={ 'form_fields_price_field' }

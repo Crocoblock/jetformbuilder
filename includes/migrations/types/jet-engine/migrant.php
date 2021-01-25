@@ -1,12 +1,13 @@
 <?php
 
-namespace Jet_Form_Builder\Migrations;
+namespace Jet_Form_Builder\Migrations\Types\Jet_Engine;
 
 use Jet_Form_Builder\Blocks\Block_Generator;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Migrations\Base_Migrant;
 use Jet_Form_Builder\Plugin;
 
-class Jet_Engine_Migrant extends Base_Migrant {
+class Migrant extends Base_Migrant {
 
 	const BLOCKS_NAMESPACE = 'jet-forms/';
 
@@ -33,14 +34,6 @@ class Jet_Engine_Migrant extends Base_Migrant {
 		'group_break'    => 'group-break-field',
 	);
 
-	public $transform_compatibility = array(
-		'email'          => 'send_email',
-		'activecampaign' => 'active_campaign',
-		'webhook'        => 'call_webhook',
-		'hook'           => 'call_hook',
-		'redirect'       => 'redirect_to_page'
-	);
-
 	private $raw_fields;
 
 	public function source_fields() {
@@ -58,32 +51,9 @@ class Jet_Engine_Migrant extends Base_Migrant {
 
 
 	public function source_settings() {
-		$preset   = json_encode( maybe_unserialize( $this->form_meta_data['_preset'][0] ) );
-		$messages = json_encode( maybe_unserialize( $this->form_meta_data['_messages'][0] ) );
-		$captcha  = json_encode( maybe_unserialize( $this->form_meta_data['_captcha'][0] ) );
-		$actions  = json_decode( wp_unslash( $this->form_meta_data['_notifications_data'][0] ), true );
+		$settings = new Settings_Manager( $this->form_meta_data );
 
-		unset(
-			$this->form_meta_data['_preset'],
-			$this->form_meta_data['_messages'],
-			$this->form_meta_data['_captcha'],
-			$this->form_meta_data['_notifications_data']
-		);
-
-		return array(
-			'_jf_preset'    => $preset,
-			'_jf_messages'  => $messages,
-			'_jf_recaptcha' => $captcha,
-			'_jf_actions'   => $this->prepare_actions( $actions ),
-		);
-	}
-
-	public function transform_fields() {
-		// TODO: Implement transform_fields() method.
-	}
-
-	public function transform_settings() {
-		// TODO: Implement transform_settings() method.
+		return $settings->parse_settings()->get_all();
 	}
 
 	public function migrate_form() {
@@ -97,29 +67,6 @@ class Jet_Engine_Migrant extends Base_Migrant {
 			'post_content' => $this->fields,
 			'meta_input'   => $this->settings,
 		) ) );
-	}
-
-	public function prepare_actions( $actions ) {
-		$prepared_actions = array();
-
-		foreach ( $actions as $index => $action ) {
-			$type = $this->get_action_type( $action );
-
-			if ( ! $type ) {
-				continue;
-			}
-
-			$prepared_actions[] = array(
-				'id'       => rand( 1000, 9999 ),
-				'type'     => $type,
-				'settings' => Tools::array_merge_intersect_key(
-					$this->get_action_attributes( $type ),
-					$action
-				)
-			);
-		}
-
-		return json_encode( $prepared_actions );
 	}
 
 	public function sort_raw_fields() {
@@ -332,18 +279,6 @@ class Jet_Engine_Migrant extends Base_Migrant {
 		$field_data = $this->maybe_add_conditional( $current, $field_data );
 
 		return $this->maybe_add_in_column( $current, $field_data );
-	}
-
-	public function get_action_type( $action ) {
-		$manager = Plugin::instance()->actions;
-
-		if ( $manager->has_action_type( $action['type'] ) ) {
-			return $action['type'];
-		} elseif ( isset( $this->transform_compatibility[ $action['type'] ] ) ) {
-			return $this->transform_compatibility[ $action['type'] ];
-		}
-
-		return false;
 	}
 
 	private function maybe_add_conditional( $current, $field_data ) {

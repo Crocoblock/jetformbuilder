@@ -23,6 +23,7 @@ function DynamicPreset( {
 							isVisible,
 						} ) {
 
+	const position = 'dynamic';
 	const [stateValue, setValue] = useState( () => parseValue( value ) );
 
 	const onChangeValue = ( newValue, name ) => {
@@ -49,15 +50,17 @@ function DynamicPreset( {
 			excludeOptions={ excludeOptions }
 			onChangeValue={ onChangeValue }
 			isVisible={ isVisible }
+			position={ position }
 		/> ) }
 
 		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
-				currentState={ stateValue }
-				value={ stateValue[ 'current_field_' + data.name ] }
-				index={ index }
-				data={ data }
-				onChangeValue={ onChangeValue }
-				isCurrentFieldVisible={ isCurrentFieldVisible }
+			currentState={ stateValue }
+			value={ stateValue[ 'current_field_' + data.name ] }
+			index={ index }
+			data={ data }
+			onChangeValue={ onChangeValue }
+			isCurrentFieldVisible={ isCurrentFieldVisible }
+			position={ position }
 		/> ) }
 	</>;
 }

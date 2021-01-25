@@ -50,7 +50,7 @@ abstract class Base_Source {
 	}
 
 	protected function can_get_preset() {
-		return ( ! $this->src() && ! is_wp_error( $this->src() ) );
+		return ( ! empty( $this->src() ) && ! is_wp_error( $this->src() ) );
 	}
 
 	public function __call( string $prop, array $arguments ) {

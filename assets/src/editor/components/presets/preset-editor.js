@@ -37,8 +37,12 @@ function withPreset( WrappedComponent ) {
 			return val;
 		}
 
-		const isVisible = ( currentState, data ) => {
+		const isVisible = ( currentState, data, position ) => {
+			return ( ( data.position && position === data.position )
+				|| ! data.position || 'query_var' !== currentState.from ) && isGlobalVisible( currentState, data );
+		};
 
+		const isGlobalVisible = ( currentState, data ) => {
 			if ( ! data.condition && ! data.custom_condition ) {
 				return true;
 			}
@@ -59,13 +63,15 @@ function withPreset( WrappedComponent ) {
 			}
 
 			return true;
+		}
 
-		};
-
-		const isCurrentFieldVisible = ( currentState, data ) => {
+		const isCurrentFieldVisible = ( currentState, data, position ) => {
 
 			if ( ! data.condition && ! data.parent_condition ) {
 				return true;
+			}
+			if ( data.position && position !== data.position ) {
+				return false;
 			}
 
 			if ( data.parent_condition && ! data.condition ) {
@@ -80,7 +86,6 @@ function withPreset( WrappedComponent ) {
 		}
 
 		const isMapFieldVisible = ( currentState, data, field ) => {
-
 
 			if ( ! data.condition && ! data.parent_condition ) {
 				return true;

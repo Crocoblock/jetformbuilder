@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Presets;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Presets\Sources\Base_Source;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use Jet_Form_Builder\Presets\Types\General_Preset;
@@ -76,7 +77,7 @@ class Preset_Manager {
 			return true;
 		}
 
-		if ( ! $this->general->source->src() ) {
+		if ( ! $this->general->source instanceof Base_Source || ! $this->general->source->src() ) {
 			return true;
 		}
 
@@ -93,7 +94,7 @@ class Preset_Manager {
 	public function get_field_value( $args = array() ) {
 		$this->manager_preset = null;
 
-		if ( ! $args['name'] ) {
+		if ( empty( $args['name'] ) ) {
 			return '';
 		}
 

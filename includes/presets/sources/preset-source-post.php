@@ -28,6 +28,7 @@ class Preset_Source_Post extends Base_Source {
 		if ( absint( $this->src()->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -48,7 +49,12 @@ class Preset_Source_Post extends Base_Source {
 
 
 	protected function can_get_preset() {
-		return ( absint( $this->src()->post_author ) === get_current_user_id() || current_user_can( 'edit_others_posts' ) );
+		return ( parent::can_get_preset() &&
+		         (
+			         absint( $this->src()->post_author ) === get_current_user_id()
+			         || current_user_can( 'edit_others_posts' )
+		         )
+		);
 	}
 
 	public function _source__post_meta() {
@@ -149,8 +155,7 @@ class Preset_Source_Post extends Base_Source {
 
 			if ( 'post_meta' === $this->prop
 			     && ! empty( $this->preset_data['key'] )
-			     && $repeater_key == $this->preset_data['key'] )
-			{
+			     && $repeater_key == $this->preset_data['key'] ) {
 				return $field;
 			}
 

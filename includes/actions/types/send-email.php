@@ -70,6 +70,10 @@ class Send_Email extends Base {
 				'default' => '',
 				'path'    => 'email/from_address'
 			),
+			'content_type'     => array(
+				'default' => '',
+				'path'    => 'email/content_type'
+			),
 			'content'          => array(
 				'default' => '',
 				'path'    => 'email/content'

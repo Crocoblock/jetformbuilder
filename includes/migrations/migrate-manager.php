@@ -26,8 +26,8 @@ class Migrate_Manager {
 		}
 		$form_id = absint( $_REQUEST['id'] );
 
-		$migrant = ( new Factory( 'Jet_Form_Builder\\Migrations\\' ) )
-			->suffix( '-migrant' )
+		$migrant = ( new Factory( 'Jet_Form_Builder\\Migrations\\Types\\' ) )
+			->suffix( '\\Migrant' )
 			->create_one( $type, $form_id );
 		
 		if ( ! $migrant instanceof Base_Migrant ) {

@@ -8,6 +8,7 @@ function GeneralPreset( {
 							isVisible,
 							onChange,
 						} ) {
+	const position = 'general';
 
 	const onChangeValue = ( newValue, name ) => {
 		onChange( { ...value, [ name ]: newValue } );
@@ -21,6 +22,7 @@ function GeneralPreset( {
 			options={ data.options }
 			onChangeValue={ onChangeValue }
 			isVisible={ isVisible }
+			position={ position }
 		/> ) }
 
 		{ value.from && (

@@ -197,6 +197,7 @@ class Editor {
 					'label'            => __( 'Query variable name:', 'jet-form-builder' ),
 					'type'             => 'text',
 					'custom_condition' => 'query_var',
+					'position'         => 'dynamic'
 				)
 			),
 			'map_fields'    => array(
@@ -204,9 +205,10 @@ class Editor {
 					'name'             => 'key',
 					'label'            => __( 'Query variable key', 'jet-form-builder' ),
 					'type'             => 'text',
+					'position'         => 'general',
 					'parent_condition' => array(
 						'field' => 'from',
-						'value' => 'query_vars'
+						'value' => 'query_var'
 					),
 				),
 				array(
@@ -412,7 +414,7 @@ class Editor {
 
 	private function get_help_for_repeaters() {
 		return array(
-			'conditional_block'   => array(
+			'conditional_block'  => array(
 				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' )
 			),
 			'conditional_action' => array(

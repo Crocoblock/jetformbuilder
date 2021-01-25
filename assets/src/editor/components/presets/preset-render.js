@@ -25,12 +25,13 @@ const PresetRender = {
 								onChangeValue,
 								isVisible,
 								excludeOptions = options => options,
+								position
 							} ) {
 
 
 		switch ( data.type ) {
 			case 'text':
-				return ( isVisible( value, data ) &&
+				return ( isVisible( value, data, position ) &&
 					<div
 						key={ 'field_' + data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -46,7 +47,7 @@ const PresetRender = {
 					</div>
 				);
 			case 'select':
-				return ( isVisible( value, data ) &&
+				return ( isVisible( value, data, position ) &&
 					<div
 						key={ 'field_' + data.name + index }
 						className={ 'jet-form-preset__row' }
@@ -89,17 +90,25 @@ const PresetRender = {
 			currentVal = {};
 		}
 
-		return <React.Fragment key={ `map_field_preset_${ field + index }` }>
+		const AvailableFieldWrapper = ( { field, name, index, fIndex, children } ) => <>
 			<span className='jet-label-overflow'>{ field }</span>
+			<div
+				key={ field + name + index + fIndex }
+				className={ 'jet-form-preset__fields-map-item' }
+			>
+				{ children }
+			</div>
+		</>;
+
+		return <React.Fragment key={ `map_field_preset_${ field + index }` }>
+
 			{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
+				const props = { field, name: data.name, index, fIndex };
 
 				switch ( data.type ) {
 					case 'text':
 						return ( isMapFieldVisible( value, data, field ) &&
-							<div
-								key={ field + data.name + index + fIndex }
-								className={ 'jet-form-preset__fields-map-item' }
-							>
+							<AvailableFieldWrapper { ...props }>
 								<TextControl
 									key={ 'control_' + field + data.name + index + fIndex }
 									placeholder={ data.label }
@@ -112,14 +121,11 @@ const PresetRender = {
 										}, 'fields_map' );
 									} }
 								/>
-							</div>
+							</AvailableFieldWrapper>
 						);
 					case 'select':
 						return ( isMapFieldVisible( value, data, field ) &&
-							<div
-								key={ field + data.name + index + fIndex }
-								className={ 'jet-form-preset__fields-map-item' }
-							>
+							<AvailableFieldWrapper { ...props }>
 								<SelectControl
 									key={ 'control_' + field + data.name + index + fIndex }
 									options={ data.options }
@@ -133,7 +139,7 @@ const PresetRender = {
 										}, 'fields_map' );
 									} }
 								/>
-							</div>
+							</AvailableFieldWrapper>
 						);
 				}
 			} ) }
@@ -146,7 +152,8 @@ const PresetRender = {
 							 index,
 							 currentState,
 							 onChangeValue,
-							 isCurrentFieldVisible
+							 isCurrentFieldVisible,
+							 position = 'general'
 						 } ) {
 
 		switch ( data.type ) {

@@ -36,14 +36,6 @@ abstract class Base_Migrant {
 		$this->settings = $this->source_settings();
 	}
 
-
-	public function get_action_attributes( $type ) {
-		$manager = Plugin::instance()->actions;
-
-		return $manager->get_actions( $type )->action_attributes();
-
-	}
-
 	public function source_form_data() {
 		return get_post( $this->form_id );
 	}
@@ -55,10 +47,6 @@ abstract class Base_Migrant {
 	abstract public function source_fields();
 
 	abstract public function source_settings();
-
-	abstract public function transform_fields();
-
-	abstract public function transform_settings();
 
 	abstract public function migrate_form();
 }

@@ -178,7 +178,7 @@
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 100;
+    z-index: 20;
 }
 
 .jet-form-dynamic-preset__trigger.trigger__textarea {
@@ -548,6 +548,7 @@
     background-color: #fff;
     width: calc(100% + 48px);
     border-top: 1px solid #ddd;
+    z-index: 100;
 }
 
 .jet-form-edit-modal.width-60 {

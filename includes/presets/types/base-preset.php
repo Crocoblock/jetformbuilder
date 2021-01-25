@@ -55,7 +55,7 @@ abstract class Base_Preset {
 			$from,
 			$this->fields_map,
 			$args,
-			$this->data,
+			$this->data
 		);
 	}
 

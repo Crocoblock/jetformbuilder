@@ -21,7 +21,7 @@ class Error_Handler {
 			new Checkboxes_Field_Error(),
 			new Media_Field_Error(),
 			new Wysiwyg_Field_Error(),
-			new Repeater_Field_Error(),
+			new Repeater_Field_Error()
 		);
 
 		foreach ( $types as $type ) {

@@ -46,7 +46,7 @@ class Checkbox_Field extends Base {
 			'option-label'    => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
 			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
-			'wrapper'         => '.jet-form-builder__fields-group',
+			'wrapper'         => '.jet-form-builder__fields-group'
 		);
 	}
 

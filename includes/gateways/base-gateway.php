@@ -79,10 +79,18 @@ abstract class Base_Gateway {
 
 	public function get_status_on_payment( $status ) {
 		if ( in_array( $status, $this->failed_statuses() ) ) {
-			return Manager::DYNAMIC_FAILED_PREF . $this->gateways_meta['messages']['failed'];
+			return Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
 		}
 
-		return Manager::DYNAMIC_SUCCESS_PREF . $this->gateways_meta['messages']['success'];
+		return Manager::dynamic_success( $this->get_meta_message( 'success' ) );
+	}
+
+	public function get_meta_message( $type ) {
+		if ( isset( $this->gateways_meta['messages'] ) && isset( $this->gateways_meta['messages'][ $type ] ) ) {
+			return $this->gateways_meta['messages'][ $type ];
+		}
+
+		return Gateway_Manager::instance()->get_default_messages()[ $type ];
 	}
 
 	/**
@@ -112,7 +120,7 @@ abstract class Base_Gateway {
 
 	private function get_response_manager() {
 		return new Reload_Response( array(
-			'refer' => $this->data['form_data']['__refer'],
+			'refer'       => $this->data['form_data']['__refer'],
 			'remove_args' => $this->removed_query_args_on_payment,
 		) );
 	}
@@ -215,8 +223,6 @@ abstract class Base_Gateway {
 	 */
 	public function before_actions( $action_handler, $keep_these ) {
 
-		$action_handler->unregister_action( 'redirect_to_page' );
-
 		if ( empty( $action_handler->get_all() ) ) {
 			return;
 		}
@@ -228,6 +234,7 @@ abstract class Base_Gateway {
 			}
 
 			if ( 'redirect_to_page' === $action->get_id() ) {
+				$action_handler->unregister_action( $action->get_id() );
 				$this->redirect = $action;
 			}
 
@@ -352,7 +359,6 @@ abstract class Base_Gateway {
 			array(
 				GM::PAYMENT_TYPE_PARAM => $this->get_id(),
 				'order_token'          => $this->order_token,
-
 			),
 			$refer
 		);

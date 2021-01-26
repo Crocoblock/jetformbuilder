@@ -190,7 +190,6 @@ class Form_Handler {
 			$this->is_success = true;
 
 		} catch ( Handler_Exception $exception ) {
-
 			$this->send_response( array(
 				'status' => $exception->get_form_status(),
 			) );

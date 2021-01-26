@@ -11,7 +11,7 @@ class Request_Exception extends Handler_Exception {
 	public function __construct( $message = "", $errors = array() ) {
 		$this->errors = $errors;
 
-		parent::__construct( $message, 0, null );
+		parent::__construct( $message, array() );
 	}
 
 	public function get_fields_errors() {

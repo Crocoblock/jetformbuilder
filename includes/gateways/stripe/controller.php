@@ -5,7 +5,9 @@ namespace Jet_Form_Builder\Gateways\Stripe;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 use Jet_Form_Builder\Gateways\Stripe\Api_Methods\Checkout_Session;
 use Jet_Form_Builder\Plugin;
@@ -65,7 +67,8 @@ class Controller extends Base_Gateway {
 	 *
 	 * @param $action_handler
 	 *
-	 * @return void [type] [description]
+	 * @return void [description]
+	 * @throws Action_Exception
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 
@@ -78,7 +81,7 @@ class Controller extends Base_Gateway {
 		) );
 
 		if ( ! $session || isset( $session['error'] ) ) {
-			return;
+			throw new Action_Exception( Manager::dynamic_error( $session['error']['message'] ) );
 		}
 
 		update_post_meta(

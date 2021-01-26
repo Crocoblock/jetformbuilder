@@ -60,7 +60,7 @@ class Register_User extends Base {
 				throw new Action_Exception( 'already_logged_in' );
 			}
 
-			if ( $this->settings['add_user_id'] ) {
+			if ( isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
 				$handler->response_data['user_id'] = get_current_user_id();
 			}
 

@@ -431,10 +431,7 @@ class Editor {
 		if ( $result['allowed'] ) {
 
 			$result['list']     = Gateway_Manager::instance()->get_gateways_for_js();
-			$result['messages'] = array(
-				'success' => 'Payment success message',
-				'failed'  => 'Payment failed message',
-			);
+			$result['messages'] = Gateway_Manager::instance()->get_default_messages();
 		}
 
 		return $result;

@@ -241,4 +241,11 @@ class Gateway_Manager {
 		);
 	}
 
+	public function get_default_messages() {
+		return array(
+			'success' => 'Payment success message',
+			'failed'  => 'Payment failed message',
+		);
+	}
+
 }

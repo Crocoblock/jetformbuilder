@@ -41,7 +41,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 		return this.name + '-general-edit';
 	};
 
-	const forms_list = window.JetFormData.forms_list;
+	const localize = window.JetFormData;
 
 	return [
 		isSelected && <InspectorControls
@@ -59,19 +59,13 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 					onChange={ newValue => {
 						setAttributes( { form_id: Number( newValue ) } );
 					} }
-					options={ [
-						{ label: __( 'Select form...' ), value: 0 },
-						...forms_list
-					] }
+					options={ localize.forms_list }
 				/>
 				{ Boolean( attributes.form_id ) && <React.Fragment>
 					<SelectControl
 						label={ 'Fields Layout' }
 						value={ attributes.fields_layout }
-						options={ [
-							{ value: 'column', label: 'Column' },
-							{ value: 'row', label: 'Row' }
-						] }
+						options={ localize.fields_layout }
 						onChange={ newValue => {
 							setAttributes( { fields_layout: newValue } );
 						} }
@@ -86,10 +80,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 					<SelectControl
 						label={ 'Submit Type' }
 						value={ attributes.submit_type }
-						options={ [
-							{ value: 'reload', label: 'Page Reload' },
-							{ value: 'ajax', label: 'AJAX' }
-						] }
+						options={ localize.submit_type }
 						onChange={ newValue => {
 							setAttributes( { submit_type: newValue } );
 						} }

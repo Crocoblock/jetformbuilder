@@ -4,8 +4,6 @@
 namespace Jet_Form_Builder\Form_Response;
 
 
-use Jet_Form_Builder\Dev_Mode\Logger;
-use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Form_Response\Types\Response_It;
 
 class Response {
@@ -25,11 +23,6 @@ class Response {
 	}
 
 	public function send() {
-		if ( Manager::instance()->active() ) {
-			$this->add_query_args( array(
-				'logger' => Logger::instance()->get_logs()
-			) );
-		}
 		$this->manager->send( $this->query_args );
 	}
 

@@ -91,6 +91,12 @@ function Gateways() {
 			} );
 		}
 
+		const issetActionType = type => {
+			return Boolean( gatewaysProps.activeActions.find( action => type === action.type ) );
+		};
+
+		const isDisabled = ! issetActionType( 'insert_post' );
+
 		useEffect( () => {
 			saveGateway( gateway );
 		} );
@@ -110,16 +116,20 @@ function Gateways() {
 					] }
 					onChange={ setGateway }
 				/>
-				{ ( gateway && 'none' !== gateway ) && <Button
-					isSecondary
-					onClick={ () => setEdit( true ) }
-					icon={ 'admin-tools' }
-					style={ {
-						margin: '1em 0'
-					} }
-				>
-					{ __( 'Edit' ) }
-				</Button> }
+				{ ( gateway && 'none' !== gateway ) && <>
+					<Button
+						onClick={ () => setEdit( true ) }
+						icon={ 'admin-tools' }
+						style={ {
+							margin: '1em 0'
+						} }
+						isSecondary
+						disabled={ isDisabled }
+					>
+						{ __( 'Edit' ) }
+					</Button>
+					{ isDisabled && <p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p> }
+				</> }
 				{ isEdit && (
 					<ActionModal
 						classNames={ ['width-60'] }

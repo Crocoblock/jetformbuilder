@@ -24,6 +24,14 @@ class Manager {
 		$this->set_messages();
 	}
 
+	public static function dynamic_success( $message ) {
+		return self::DYNAMIC_SUCCESS_PREF . $message;
+	}
+
+	public static function dynamic_error( $message ) {
+		return self::DYNAMIC_FAILED_PREF . $message;
+	}
+
 	private function is_success( $status ) {
 		$message = $this->parse_message( $status );
 
@@ -65,8 +73,8 @@ class Manager {
 		$messages = array();
 
 		foreach ( $this->actions as $action ) {
-			if ( isset( $action->settings['messages'] ) ) {
-				$messages = array_merge( $messages, $action->settings['messages'] );
+			if ( isset( $action->messages ) ) {
+				$messages = array_merge( $messages, $action->messages );
 			}
 		}
 
@@ -89,7 +97,9 @@ class Manager {
 		}
 
 		if ( $this->isset_message_type( $message[0] ) ) {
-			return $this->_types[ $message[0] ];
+			return is_array( $this->_types[ $message[0] ] )
+				? $this->_types[ $message[0] ]['value']
+				: $this->_types[ $message[0] ];
 		}
 
 		return '';

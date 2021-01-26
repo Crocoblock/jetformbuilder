@@ -6,6 +6,7 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Migrations\Migrate_Manager;
+use Jet_Form_Builder\Widgets\Elementor_Controller;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -53,6 +54,7 @@ class Plugin {
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
+		new Elementor_Controller();
 
 
 		if ( is_admin() ) {

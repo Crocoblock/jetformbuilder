@@ -152,16 +152,40 @@ class Tools {
 
 	/**
 	 * Returns pages list
-	 * @return [type] [description]
+	 *
+	 * @param bool $for_elementor
+	 *
+	 * @return array [description]
 	 */
-	public static function get_forms_list_for_js() {
+	public static function get_forms_list_for_js( $for_elementor = false ) {
 		$posts = get_posts( array(
 			'post_status'    => 'publish',
 			'posts_per_page' => - 1,
 			'post_type'      => jet_form_builder()->post_type->slug(),
 		) );
 
-		return self::prepare_list_for_js( $posts, 'ID', 'post_title' );
+		return self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
+	}
+
+	public static function get_form_settings_options( $for_elementor = false ) {
+		$submit_type   = array(
+			'reload' => 'Page Reload',
+			'ajax'   => 'AJAX',
+		);
+		$fields_layout = array(
+			'column' => 'Column',
+			'row'    => 'Row'
+		);
+
+		if ( ! $for_elementor ) {
+			$submit_type   = self::prepare_list_for_js( $submit_type );
+			$fields_layout = self::prepare_list_for_js( $fields_layout );
+		}
+
+		return array(
+			'submit_type'   => $submit_type,
+			'fields_layout' => $fields_layout
+		);
 	}
 
 	/**
@@ -190,7 +214,7 @@ class Tools {
 	 *
 	 * @return [type] [description]
 	 */
-	public static function prepare_list_for_js( $array = array(), $value_key = null, $label_key = null ) {
+	public static function prepare_list_for_js( $array = array(), $value_key = null, $label_key = null, $for_elementor = false ) {
 
 		$result = array();
 
@@ -214,10 +238,14 @@ class Tools {
 				$label = $item;
 			}
 
-			$result[] = array(
-				'value' => $value,
-				'label' => $label,
-			);
+			if ( $for_elementor ) {
+				$result[ $value ] = $label;
+			} else {
+				$result[] = array(
+					'value' => $value,
+					'label' => $label,
+				);
+			}
 		}
 
 		return $result;

@@ -456,8 +456,11 @@ class Form extends Base {
 	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'JetFormData', array(
-			'forms_list' => Tools::get_forms_list_for_js()
+		wp_localize_script( $handle, 'JetFormData', array_merge(
+			array(
+				'forms_list' => Tools::with_placeholder( Tools::get_forms_list_for_js() )
+			),
+			Tools::get_form_settings_options()
 		) );
 	}
 
@@ -489,7 +492,7 @@ class Form extends Base {
 		$builder->render_form();
 		$messages->render_messages();
 
-		if ( Tools::is_editor() ) {
+		if ( Tools::is_editor() || \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
 			$messages->render_messages_samples();
 		}
 

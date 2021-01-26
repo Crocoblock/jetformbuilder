@@ -38,10 +38,7 @@ class Post_Type {
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 
-		/**
-		 * TODO: change FALSE to TRUE before release
-		 */
-		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', true );
+		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 	}
 
 

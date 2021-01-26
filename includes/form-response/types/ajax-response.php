@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Form_Response\Types;
 
 
+use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Form_Messages;
 
 class Ajax_Response extends Response_It {
@@ -17,6 +19,10 @@ class Ajax_Response extends Response_It {
 	}
 
 	public function send( array $query_args ) {
+		if ( Manager::instance()->active() ) {
+			$query_args['__logger'] = Logger::instance()->get_logs();
+		}
+
 		$messages = $this->get_message_builder()->set_form_status( $query_args['status'] );
 
 		$query_args['message'] = $messages->get_rendered_messages();

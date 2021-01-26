@@ -286,10 +286,12 @@ class Manager {
 	}
 
 	/**
+	 * @param string $storage
+	 *
 	 * @return array
 	 */
-	public function get_form_editor_types() {
-		return $this->_types[ self::FORM_EDITOR_STORAGE ];
+	public function get_form_editor_types( $storage = self::FORM_EDITOR_STORAGE ) {
+		return $this->_types[ $storage ];
 	}
 
 	/**
@@ -313,11 +315,11 @@ class Manager {
 	}
 
 
-	public function get_field_by_name( $block_name ) {
+	public function get_field_by_name( $block_name, $storage = self::FORM_EDITOR_STORAGE ) {
 		if ( ! $block_name ) {
 			return;
 		}
-		$types = $this->get_form_editor_types();
+		$types = $this->get_form_editor_types( $storage );
 
 		return isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
 	}
@@ -338,6 +340,10 @@ class Manager {
 		}
 
 		return array_merge( $field->get_default_attributes(), $attributes );
+	}
+
+	public function get_form_class() {
+		return $this->get_field_by_name( 'form-block', self::OTHERS_STORAGE );
 	}
 
 }

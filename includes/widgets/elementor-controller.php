@@ -6,21 +6,17 @@ namespace Jet_Form_Builder\Widgets;
 
 use Jet_Form_Builder\Widgets\Types;
 
-class Controller {
+class Elementor_Controller {
 
 	private $_types = array();
 
 	public function __construct() {
-		$this->maybe_init();
+		add_action( 'elementor/init', array( $this, 'init_components' ) );
 	}
 
-	private function maybe_init() {
-		if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
-			return;
-		}
-
+	public function init_components() {
 		$this->setup_widgets();
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ), 20 );
+		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ), 11 );
 	}
 
 	private function widgets() {
@@ -39,7 +35,7 @@ class Controller {
 		$this->_types[ $widget->get_name() ] = $widget;
 	}
 
-	private function register_widgets( $manager ) {
+	public function register_widgets( $manager ) {
 		foreach ( $this->_types as $widget ) {
 			$manager->register_widget_type( $widget );
 		}

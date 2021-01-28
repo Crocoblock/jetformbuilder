@@ -96,19 +96,21 @@ class Redirect_To_Page extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormRedirectToPageData', array(
-			'pages'          => Tools::get_pages_list_for_js(),
-			'redirect_types' => $this->get_redirect_types(),
-			'labels'         => array(
-				'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
-				'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
-				'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-				'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-				'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
-			),
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormRedirectToPageData',
+			'object' => array(
+				'pages'          => Tools::get_pages_list_for_js(),
+				'redirect_types' => $this->get_redirect_types(),
+				'labels'         => array(
+					'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
+					'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
+					'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
+					'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
+					'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
+				),
+			)
+		);
 	}
 
 	public function get_redirect_types() {

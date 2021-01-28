@@ -233,10 +233,16 @@ class Gateway_Manager {
 		if ( empty( $this->gateways() ) || empty( $this->gateways()['notifications_before'] ) ) {
 			return array();
 		}
+		$actions_ids = array_filter(
+			$this->gateways()['notifications_before'],
+			function ( $action ) {
+				return $action['active'];
+			}
+		);
 
 		return apply_filters(
 			'jet-form-builder/gateways/notifications-before',
-			$this->gateways()['notifications_before'],
+			$actions_ids,
 			$action_handler->get_all()
 		);
 	}

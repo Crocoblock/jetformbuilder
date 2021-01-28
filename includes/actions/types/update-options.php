@@ -27,13 +27,13 @@ class Update_Options extends Base {
 	public function dependence() {
 		return function_exists( 'jet_engine' );
 	}
-	
+
 	public function action_attributes() {
 		return array(
 			'meta_fields_map' => array(
 				'default' => array(),
 			),
-			'options_page' => array(
+			'options_page'    => array(
 				'default' => '',
 			),
 		);
@@ -72,33 +72,21 @@ class Update_Options extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormUpdateOptionsData', array(
-			'optionsPages' => $this->get_pages(),
-			'labels'       => array(
-				'options_page' => __(
-					'Options Page:',
-					'jet-form-builder'
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormUpdateOptionsData',
+			'object' => array(
+				'optionsPages' => $this->get_pages(),
+				'labels'       => array(
+					'options_page' => __( 'Options Page:', 'jet-form-builder' ),
+					'options_map'  => __( 'Options Map:', 'jet-form-builder' ),
 				),
-				'options_map'  => __(
-					'Options Map:',
-					'jet-form-builder'
-				),
-			),
-		) );
+			)
+		);
 	}
 
 	private function get_pages() {
-		return array_merge(
-			array(
-				array(
-					'value' => '',
-					'label' => __( 'Select page...', 'jet-form-builder' )
-				),
-			),
-			Tools::get_options_pages_for_js()
-		);
+		return Tools::with_placeholder( Tools::get_options_pages_for_js() );
 	}
 
 

@@ -29,7 +29,7 @@ class Update_User extends Base {
 			'fields_map' => array(
 				'default' => array(),
 			),
-			'user_role' => array(
+			'user_role'  => array(
 				'default' => '',
 			),
 		);
@@ -174,23 +174,24 @@ class Update_User extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormUpdateUserData', array(
-			'userRoles'  => Tools::get_user_roles_for_js(),
-			'userFields' => $this->get_user_fields(),
-			'labels'     => array(
-				'fields_map' => __(
-					'Fields Map:',
-					'jet-form-builder'
-				),
-				'user_role'  => __(
-					'User Role:',
-					'jet-form-builder'
-				),
-			),
-			'messages'   => $this->messages()
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormUpdateUserData',
+			'object' => array(
+				'userRoles'  => Tools::get_user_roles_for_js(),
+				'userFields' => $this->get_user_fields(),
+				'labels'     => array(
+					'fields_map' => __(
+						'Fields Map:',
+						'jet-form-builder'
+					),
+					'user_role'  => __(
+						'User Role:',
+						'jet-form-builder'
+					),
+				)
+			)
+		);
 	}
 
 

@@ -64,15 +64,17 @@ class Call_Webhook extends Base {
 	/**
 	 * Regsiter custom action data for the editor
 	 *
-	 * @return [type] [description]
+	 * @return array [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormCallWebHookData', array(
-			'labels' => array(
-				'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' )
-			),
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormCallWebHookData',
+			'object' => array(
+				'labels' => array(
+					'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' )
+				),
+			)
+		);
 	}
 
 

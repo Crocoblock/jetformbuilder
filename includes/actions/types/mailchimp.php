@@ -203,25 +203,28 @@ class Mailchimp extends Integration_Base_Action {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetFormMailchimpData', array(
-			'action' => $this->action,
-			'labels' => array(
-				'api_key'          => __( 'API Key:', 'jet-form-builder' ),
-				'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
-				'list_id'          => __( 'Audience:', 'jet-form-builder' ),
-				'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
-				'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),
-				'tags'             => __( 'Tags:', 'jet-form-builder' ),
-				'double_opt_in'    => __( 'Double Opt-In:', 'jet-form-builder' ),
-				'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-			),
-			'help'   => array(
-				'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
-				'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
-				'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
-			),
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormMailchimpData',
+			'object' => array(
+				'action' => $this->action,
+				'labels' => array(
+					'api_key'          => __( 'API Key:', 'jet-form-builder' ),
+					'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+					'list_id'          => __( 'Audience:', 'jet-form-builder' ),
+					'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
+					'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),
+					'tags'             => __( 'Tags:', 'jet-form-builder' ),
+					'double_opt_in'    => __( 'Double Opt-In:', 'jet-form-builder' ),
+					'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+				),
+				'help'   => array(
+					'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
+					'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
+					'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
+				),
+			)
+		);
 	}
 
 

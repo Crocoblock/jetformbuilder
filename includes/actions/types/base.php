@@ -42,11 +42,6 @@ abstract class Base {
 
 	abstract public function get_id();
 
-	public function clear() {
-		$this->settings = array();
-		$this->conditions = array();
-	}
-
 	/**
 	 * @param $request array - Form data
 	 * @param $handler Action_Handler
@@ -68,6 +63,11 @@ abstract class Base {
 		return array();
 	}
 
+	public function visible_attributes_for_gateway_editor() {
+		return array();
+	}
+
+
 	public function set_action_messages() {
 
 		$this->messages = apply_filters(
@@ -79,19 +79,11 @@ abstract class Base {
 	/**
 	 * Register custom action data
 	 *
-	 * @param $editor
-	 * @param $handle
-	 *
-	 * @return void [type] [description]
+	 * @return array [description]
 	 */
-	public function action_data( $editor, $handle ) {
-	}
-
-
-	public function default_settings() {
+	public function action_data() {
 		return array();
 	}
-
 
 	public function is_repeater_val( $value ) {
 		if ( is_array( $value ) && ! empty( $value ) ) {

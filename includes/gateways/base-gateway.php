@@ -137,14 +137,9 @@ abstract class Base_Gateway {
 
 		$settings = $this->gateways_meta;
 
-		$message       = ! empty( $settings[ $type . '_message' ] ) ? wp_kses_post( $settings[ $type . '_message' ] ) : null;
-		$notifications = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
+		$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
-		if ( $message ) {
-			GM::instance()->add_message( $message );
-		}
-
-		if ( ! empty( $notifications ) ) {
+		if ( ! empty( $keep_these ) ) {
 			$notifications = new Action_Handler(
 				$this->data['form_id'],
 				$this->data['form_data']
@@ -152,19 +147,17 @@ abstract class Base_Gateway {
 
 			$notifications->unregister_action( 'redirect_to_page' );
 
-			$all        = $notifications->get_all();
-			$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
+			$all = $notifications->get_all();
 
 			if ( empty( $all ) ) {
 				return;
 			}
 
 			foreach ( $all as $index => $notification ) {
-				if ( ! in_array( $notification->get_id(), $keep_these ) ) {
+				if ( ! array_key_exists( $index, $keep_these ) ) {
 					$notifications->unregister_action( $index );
 				}
 			}
-
 			$notifications->run_actions();
 		}
 
@@ -238,7 +231,7 @@ abstract class Base_Gateway {
 				$this->redirect = $action;
 			}
 
-			if ( ! in_array( $index, $keep_these ) ) {
+			if ( ! array_key_exists( $index, $keep_these ) ) {
 				$action_handler->unregister_action( $index );
 			}
 		}

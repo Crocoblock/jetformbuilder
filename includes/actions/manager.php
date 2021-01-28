@@ -72,6 +72,7 @@ class Manager {
 		if ( $type ) {
 			return $this->_types[ $type ];
 		}
+
 		return $this->_types;
 	}
 
@@ -96,8 +97,20 @@ class Manager {
 				'callback' => false, // should be rewritten from JS
 			);
 
-			$type->action_data( $editor, $handle );
+			$action_localize = $type->action_data();
 
+			if ( ! empty( $action_localize ) && isset( $action_localize['name'] ) ) {
+				$object = isset( $action_localize['object'] ) ? $action_localize['object'] : array();
+
+				$object['gateway_attrs'] = $type->visible_attributes_for_gateway_editor();
+				$object['messages']      = $type->get_messages_default();
+
+				wp_localize_script(
+					$handle,
+					$action_localize['name'],
+					$object
+				);
+			}
 		}
 
 		wp_localize_script( $handle, 'jetFormActionTypes', $prepared_types );

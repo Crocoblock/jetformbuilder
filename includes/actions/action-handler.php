@@ -56,15 +56,15 @@ class Action_Handler {
 	 */
 	public function set_form_actions() {
 		$available_actions = Plugin::instance()->actions->get_actions();
-
 		$form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
 
 		foreach ( $form_actions as $form_action ) {
-			$id = $form_action['type'];
+			$id = $form_action['id'];
+			$type = $form_action['type'];
 			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
 
-			if ( isset( $available_actions[ $id ] ) ) {
-				$action = clone $available_actions[ $id ];
+			if ( isset( $available_actions[ $type ] ) ) {
+				$action = clone $available_actions[ $type ];
 				/**
 				 * Save action settings to the class field,
 				 * it allows to not send action settings
@@ -73,7 +73,7 @@ class Action_Handler {
 				$action->settings = $form_action['settings'];
 				$action->conditions = $conditions;
 
-				$this->form_actions[] = $action;
+				$this->form_actions[ $id ] = $action;
 			}
 		}
 
@@ -88,10 +88,13 @@ class Action_Handler {
 	 *
 	 * @return  void [description]
 	 */
-	public function unregister_action( $id ) {
-		
+	public function unregister_action( $key ) {
+		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
+			unset($this->form_actions[ $key ] );
+			return;
+		}
 		foreach( $this->form_actions as $index => $action ) {
-			if ( $id === $action->get_id() ) {
+			if ( $key === $action->get_id() ) {
 				unset( $this->form_actions[ $index ] );	
 			}
 		}
@@ -178,6 +181,7 @@ class Action_Handler {
 			 */
 			$action->do_action( $this->request_data, $this );
 		}
+
 	}
 
 	public function add_response( $values ) {

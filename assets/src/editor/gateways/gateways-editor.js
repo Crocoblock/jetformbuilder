@@ -35,7 +35,7 @@ export default function GatewaysEditor( {
 										} ) {
 
 	const availableActions = parseActions( activeActions );
-	
+
 	const gatewaysData = window.JetFormEditorData.gateways;
 
 	const [gateway, setGateway] = useState( gatewaysArgs );
@@ -52,8 +52,9 @@ export default function GatewaysEditor( {
 	 * @param when
 	 * @param type
 	 * @param newValue
+	 * @param isRemove
 	 */
-	const setValueInObject = ( when, type, newValue ) => {
+	const setValueInObject = ( when, type, newValue) => {
 		setGateway( ( prevArgs ) => {
 			if ( ! prevArgs[ when ] ) {
 				prevArgs[ when ] = {};
@@ -87,26 +88,29 @@ export default function GatewaysEditor( {
 		return getNotifications( 'messages', key, gatewaysData.messages[ key ] );
 	};
 
-	const setNotificationsBefore = ( type, newValue ) => {
-		setValueInObject( 'notifications_before', type, newValue );
+	const setNotificationsBefore = ( id, newValue ) => {
+		setValueInObject( 'notifications_before', id, newValue );
 	};
-	const getNotificationsBefore = ( type ) => {
-		return getNotifications( 'notifications_before', type );
+
+	const actionDefault = { active: false };
+
+	const getNotificationsBefore = id => {
+		return getNotifications( 'notifications_before', id, actionDefault );
 	};
 
 
 	const setNotificationsFailed = ( type, newValue ) => {
 		setValueInObject( 'notifications_failed', type, newValue );
 	};
-	const getNotificationsFailed = ( type ) => {
-		return getNotifications( 'notifications_failed', type );
+	const getNotificationsFailed = id => {
+		return getNotifications( 'notifications_failed', id, actionDefault );
 	};
 
-	const setNotificationsSuccess = ( type, newValue ) => {
-		setValueInObject( 'notifications_success', type, newValue );
+	const setNotificationsSuccess = ( id, newValue ) => {
+		setValueInObject( 'notifications_success', id, newValue );
 	};
-	const getNotificationsSuccess = ( type ) => {
-		return getNotifications( 'notifications_success', type );
+	const getNotificationsSuccess = id => {
+		return getNotifications( 'notifications_success', id, actionDefault );
 	};
 
 	useEffect( () => {
@@ -154,10 +158,13 @@ export default function GatewaysEditor( {
 						}
 						return <CheckboxControl
 							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.type + index }` }
-							checked={ getNotificationsBefore( action.type ) }
+							key={ `place_holder_block_${ action.id + index }` }
+							checked={ getNotificationsBefore( action.id ).active }
 							label={ getActionLabel( action.type ) }
-							onChange={ value => setNotificationsBefore( action.type, value ) }
+							onChange={ active => setNotificationsBefore( action.id, {
+								active,
+								type: action.type
+							} ) }
 						/>;
 					} ) }
 				</div>
@@ -170,10 +177,13 @@ export default function GatewaysEditor( {
 					{ availableActions.map( ( action, index ) => {
 						return <CheckboxControl
 							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.type + index }` }
-							checked={ getNotificationsSuccess( action.type ) }
+							key={ `place_holder_block_${ action.id + index }` }
+							checked={ getNotificationsSuccess( action.id ).active }
 							label={ getActionLabel( action.type ) }
-							onChange={ value => setNotificationsSuccess( action.type, value ) }
+							onChange={ active => setNotificationsSuccess( action.id, {
+								active,
+								type: action.type
+							} ) }
 						/>;
 					} ) }
 				</div>
@@ -189,10 +199,13 @@ export default function GatewaysEditor( {
 						}
 						return <CheckboxControl
 							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.type + index }` }
-							checked={ getNotificationsFailed( action.type ) }
+							key={ `place_holder_block_${ action.id + index }` }
+							checked={ getNotificationsFailed( action.id ).active }
 							label={ getActionLabel( action.type ) }
-							onChange={ value => setNotificationsFailed( action.type, value ) }
+							onChange={ active => setNotificationsFailed( action.id, {
+								active,
+								type: action.type
+							} ) }
 						/>;
 					} ) }
 				</div>

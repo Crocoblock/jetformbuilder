@@ -78,13 +78,15 @@ class Call_Hook extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormCallHookData', array(
-			'labels' => array(
-				'hook_name' => __( 'Hook Name:', 'jet-form-builder' )
-			),
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormCallHookData',
+			'object' => array(
+				'labels' => array(
+					'hook_name' => __( 'Hook Name:', 'jet-form-builder' )
+				),
+			)
+		);
 	}
 
 

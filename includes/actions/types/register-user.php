@@ -35,19 +35,19 @@ class Register_User extends Base {
 
 	public function action_attributes() {
 		return array(
-			'fields_map' => array(
+			'fields_map'      => array(
 				'default' => array(),
 			),
-			'log_in' => array(
+			'log_in'          => array(
 				'default' => array(),
 			),
-			'add_user_id' => array(
+			'add_user_id'     => array(
 				'default' => array(),
 			),
 			'meta_fields_map' => array(
 				'default' => array(),
 			),
-			'user_role' => array(
+			'user_role'       => array(
 				'default' => array(),
 			),
 		);
@@ -236,47 +236,45 @@ class Register_User extends Base {
 	/**
 	 * Regsiter custom action data for the editor
 	 *
-	 * @param $editor
-	 * @param $handle
-	 *
-	 * @return void [type] [description]
+	 * @return array [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-
-		wp_localize_script( $handle, 'jetFormRegisterUserData', array(
-			'userRoles'     => Tools::get_user_roles_for_js(),
-			'userFields'    => $this->get_user_fields(),
-			'labels'        => array(
-				'fields_map'  => __(
-					'Fields Map:',
-					'jet-form-builder'
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormRegisterUserData',
+			'object' => array(
+				'userRoles'     => Tools::get_user_roles_for_js(),
+				'userFields'    => $this->get_user_fields(),
+				'labels'        => array(
+					'fields_map'  => __(
+						'Fields Map:',
+						'jet-form-builder'
+					),
+					'user_role'   => __(
+						'User Role:',
+						'jet-form-builder'
+					),
+					'user_meta'   => __(
+						'User Meta:',
+						'jet-form-builder'
+					),
+					'log_in'      => __(
+						'Log In User after Register:',
+						'jet-form-builder'
+					),
+					'add_user_id' => __(
+						'Add User ID to form data:',
+						'jet-from-builder'
+					),
 				),
-				'user_role'   => __(
-					'User Role:',
-					'jet-form-builder'
-				),
-				'user_meta'   => __(
-					'User Meta:',
-					'jet-form-builder'
-				),
-				'log_in'      => __(
-					'Log In User after Register:',
-					'jet-form-builder'
-				),
-				'add_user_id' => __(
-					'Add User ID to form data:',
-					'jet-from-builder'
-				),
-			),
-			'messages'      => $this->messages(),
-			'help_messages' => array(
-				'add_user_id' => __(
-					'Registered user ID will be added to form data. If form is filled by logged 
+				'help_messages' => array(
+					'add_user_id' => __(
+						'Registered user ID will be added to form data. If form is filled by logged 
 			        in user - current user ID will be added to form data.',
-					'jet-form-builder'
+						'jet-form-builder'
+					),
 				),
-			),
-		) );
+			)
+		);
 	}
 
 	public function messages() {

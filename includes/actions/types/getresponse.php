@@ -32,11 +32,11 @@ class Getresponse extends Integration_Base_Action {
 
 	public function action_attributes() {
 		return array(
-			'api_key' => array(
+			'api_key'      => array(
 				'default' => '',
 				'path'    => 'getresponse/api_key'
 			),
-			'data' => array(
+			'data'         => array(
 				'default' => '',
 				'path'    => 'getresponse/data'
 			),
@@ -44,15 +44,15 @@ class Getresponse extends Integration_Base_Action {
 				'default' => '',
 				'path'    => 'getresponse/day_of_cycle'
 			),
-			'fields_map' => array(
+			'fields_map'   => array(
 				'default' => '',
 				'path'    => 'getresponse/fields_map'
 			),
-			'isValidAPI' => array(
+			'isValidAPI'   => array(
 				'default' => '',
 				'path'    => 'getresponse/isValidAPI'
 			),
-			'list_id' => array(
+			'list_id'      => array(
 				'default' => '',
 				'path'    => 'getresponse/list_id'
 			),
@@ -139,23 +139,26 @@ class Getresponse extends Integration_Base_Action {
 	 *
 	 * @return [type] [description]
 	 */
-	public function action_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetFormGetResponseData', array(
-			'action' => $this->action,
-			'labels' => array(
-				'api_key'          => __( 'API Key:', 'jet-form-builder' ),
-				'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
-				'list_id'          => __( 'List Id:', 'jet-form-builder' ),
-				'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
-				'day_of_cycle'     => __( 'Day Of Cycle:', 'jet-form-builder' ),
-				'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-			),
-			'help'   => array(
-				'api_key_link_prefix' => __( 'How to obtain your GetResponse API Key? More info', 'jet-form-builder' ),
-				'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
-				'api_key_link'        => 'https://app.getresponse.com/api',
-			),
-		) );
+	public function action_data() {
+		return array(
+			'name'   => 'jetFormGetResponseData',
+			'object' => array(
+				'action' => $this->action,
+				'labels' => array(
+					'api_key'          => __( 'API Key:', 'jet-form-builder' ),
+					'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+					'list_id'          => __( 'List Id:', 'jet-form-builder' ),
+					'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
+					'day_of_cycle'     => __( 'Day Of Cycle:', 'jet-form-builder' ),
+					'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+				),
+				'help'   => array(
+					'api_key_link_prefix' => __( 'How to obtain your GetResponse API Key? More info', 'jet-form-builder' ),
+					'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
+					'api_key_link'        => 'https://app.getresponse.com/api',
+				),
+			)
+		);
 	}
 
 

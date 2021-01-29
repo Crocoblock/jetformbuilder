@@ -1,7 +1,7 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../tools";
+import Tools from "../../helpers/tools";
 
 const block = 'jet-forms/form-break-field';
 

@@ -1,6 +1,8 @@
 import PayPal from "./paypal";
 import Stripe from "./stripe";
-import Tools from "../tools";
+import Tools from "../helpers/tools";
+import GatewayActionAttributes from "./gateway-action-attrubites";
+import gatewayActionAttributes from "./gateway-action-attrubites";
 
 const { __ } = wp.i18n;
 
@@ -54,7 +56,7 @@ export default function GatewaysEditor( {
 	 * @param newValue
 	 * @param isRemove
 	 */
-	const setValueInObject = ( when, type, newValue) => {
+	const setValueInObject = ( when, type, newValue ) => {
 		setGateway( ( prevArgs ) => {
 			if ( ! prevArgs[ when ] ) {
 				prevArgs[ when ] = {};
@@ -151,21 +153,24 @@ export default function GatewaysEditor( {
 				label={ __( 'Before payment processed:', 'jet-form-builder' ) }
 				key="before_payment_base_control"
 			>
-				<div>
+				<div className={ 'checkboxes-row' }>
 					{ availableActions.map( ( action, index ) => {
 						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
 							return;
 						}
-						return <CheckboxControl
-							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.id + index }` }
-							checked={ getNotificationsBefore( action.id ).active }
-							label={ getActionLabel( action.type ) }
-							onChange={ active => setNotificationsBefore( action.id, {
-								active,
-								type: action.type
-							} ) }
-						/>;
+						const label = `${ getActionLabel( action.type ) } (${ gatewayActionAttributes( action ) })`;
+						return <>
+							<CheckboxControl
+								className={ 'jet-forms-checkbox-field' }
+								key={ `place_holder_block_${ action.id + index }` }
+								checked={ getNotificationsBefore( action.id ).active }
+								label={ label }
+								onChange={ active => setNotificationsBefore( action.id, {
+									active,
+									type: action.type
+								} ) }
+							/>
+						</>;
 					} ) }
 				</div>
 			</BaseControl>

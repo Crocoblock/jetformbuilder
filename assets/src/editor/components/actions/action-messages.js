@@ -13,7 +13,6 @@ class ActionMessages extends wp.element.Component {
 	constructor( props ) {
 		super( props );
 
-		this.data = props.localizedData;
 		this.setMessages();
 	}
 
@@ -23,7 +22,7 @@ class ActionMessages extends wp.element.Component {
 		}
 		const messages = {};
 
-		Object.entries( this.data.messages ).forEach( ( [type, data] ) => {
+		Object.entries( this.props.source.__messages ).forEach( ( [type, data] ) => {
 			messages[ type ] = data.value;
 		} )
 
@@ -57,7 +56,7 @@ class ActionMessages extends wp.element.Component {
 	}
 
 	render() {
-		const settings = this.props.settings;
+		const { settings, messages } = this.props;
 
 		const onChangeMessage = ( value, nameField ) => {
 			const source = 'messages';
@@ -73,20 +72,18 @@ class ActionMessages extends wp.element.Component {
 		>
 			<div className='jet-user-meta-rows'>
 				{ settings.messages && Object.entries( settings.messages )
-					.map( ( [type, data], id ) => {
-
-						return <div
+					.map( ( [type, data], id ) => <div
 							className="jet-user-meta__row"
 							key={ 'message_' + type + id }
 						>
 							<TextControl
 								key={ type + id }
-								label={ this.data.messages[ type ].label }
+								label={ messages( type ).label }
 								value={ this.getMessage( type ) }
 								onChange={ newValue => onChangeMessage( newValue, type ) }
 							/>
-						</div>;
-					} ) }
+						</div>
+					) }
 			</div>
 		</BaseControl>;
 	}

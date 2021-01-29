@@ -234,6 +234,30 @@ class Insert_Post extends Base {
 		}
 	}
 
+	public function self_script_name() {
+		return 'jetFormInsertPostData';
+	}
+
+	public function editor_labels() {
+		return array(
+			'post_type'    => __( 'Post Type:', 'jet-form-builder' ),
+			'post_status'  => __( 'Post Status:', 'jet-form-builder' ),
+			'fields_map'   => __( 'Fields Map:', 'jet-form-builder' ),
+			'default_meta' => __( 'Default Fields:', 'jet-form-builder' )
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'fields_map'   => __( 'Set meta fields names or post properties to save appropriate form fields into', 'jet-form-builder' ),
+			'default_meta' => __( 'Set default meta values which should be set on post insert/update', 'jet-form-builder' ),
+		);
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array();
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -241,24 +265,11 @@ class Insert_Post extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormInsertPostData',
-			'object' => array(
-				'postTypes'        => Tools::get_post_types_for_js( array( 'label' => '--' ) ),
-				'taxonomies'       => Tools::get_taxonomies_for_js(),
-				'postStatuses'     => $this->get_post_statuses_for_options(),
-				'postFields'       => $this->get_post_fields_for_options(),
-				'fieldsMapOptions' => $this->get_fields_map_options(),
-				'labels'           => array(
-					'post_type'         => __( 'Post Type:', 'jet-form-builder' ),
-					'post_type_help'    => false,
-					'post_status'       => __( 'Post Status:', 'jet-form-builder' ),
-					'post_status_help'  => false,
-					'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
-					'fields_map_help'   => __( 'Set meta fields names or post properties to save appropriate form fields into', 'jet-form-builder' ),
-					'default_meta'      => __( 'Default Fields:', 'jet-form-builder' ),
-					'default_meta_help' => __( 'Set default meta values which should be set on post insert/update', 'jet-form-builder' ),
-				),
-			)
+			'postTypes'        => Tools::get_post_types_for_js(),
+			'taxonomies'       => Tools::get_taxonomies_for_js(),
+			'postStatuses'     => $this->get_post_statuses_for_options(),
+			'postFields'       => $this->get_post_fields_for_options(),
+			'fieldsMapOptions' => $this->get_fields_map_options(),
 		);
 	}
 

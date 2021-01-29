@@ -1,6 +1,7 @@
-import Tools from "../tools";
+import Tools from "../helpers/tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
-import ActionMessages from "../meta/action-messages";
+import ActionMessages from "../components/actions/action-messages";
+import { addAction } from "../helpers/action-helper";
 
 /**
  * Internal dependencies
@@ -18,39 +19,17 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends wp.element.Component {
+addAction( 'update_user', class UpdateUserAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.data = window.jetFormUpdateUserData;
-		this.userFields = this.getUserFieldsList();
-
 		this.metaOption = 'user_meta';
 
 		this.state = {
 			type: '',
 		};
-	}
-
-	getUserFieldsList() {
-		let formFieldsList = [{
-			value: '',
-			label: __( 'Select user property...' )
-		}];
-
-		this.data.userFields.forEach( field => {
-
-			formFieldsList.push( {
-				value: field.value,
-				label: field.label
-			} );
-		} );
-
-		return formFieldsList;
 	}
 
 	getFieldMap( name ) {
@@ -63,9 +42,7 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 	}
 
 	render() {
-
-		const settings = this.props.settings;
-		const onChange = this.props.onChange;
+		const { settings, onChange, source, label, help } = this.props;
 
 		const onChangeValue = ( value, key ) => {
 			onChange( {
@@ -77,7 +54,7 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="update_user">
 			<BaseControl
-				label={ this.data.labels.fields_map }
+				label={ label( 'fields_map' ) }
 				key='user_fields_map'
 			>
 				<div className='jet-user-meta-rows'>
@@ -96,7 +73,7 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 								index={ index }
 								metaProp='user_meta'
 								fieldsMap={ settings.fields_map }
-								fieldTypes={ this.userFields }
+								fieldTypes={ source.userFields }
 								onChange={ ( newValue ) => {
 									onChangeValue( newValue, 'fields_map' );
 								} }
@@ -106,22 +83,18 @@ window.jetFormDefaultActions[ 'update_user' ] = class UpdateUserAction extends w
 				</div>
 			</BaseControl>
 			<SelectControl
-				label={ this.data.labels.user_role }
+				label={ label( 'user_role' ) }
 				labelPosition="side"
 				key="user_role_list"
 				className="full-width"
 				value={ settings.user_role }
-				options={ this.data.userRoles }
-				onChange={ ( newValue ) => {
-					onChangeValue( newValue, 'user_role' );
-				} }
+				options={ source.userRoles }
+				onChange={ newValue => onChangeValue( newValue, 'user_role' ) }
 			/>
 			<ActionMessages
-				localizedData={ this.data }
 				{ ...this.props }
 			/>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-
-}
+} );

@@ -1,4 +1,5 @@
-import Tools from "../tools";
+import Tools from "../helpers/tools";
+import { addAction, getLocalizedFullPack } from "../helpers/action-helper";
 
 /**
  * Internal dependencies
@@ -17,15 +18,12 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction extends wp.element.Component {
+addAction( 'redirect_to_page', class RedirectToPageAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.data = window.jetFormRedirectToPageData;
 	}
 
 	isChecked( name ) {
@@ -57,42 +55,36 @@ window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction 
 
 
 	render() {
-		const settings = this.props.settings;
+		const { source, label, settings } = this.props;
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="redirect_to_page">
 			<SelectControl
 				className="full-width"
 				key='redirect_type'
-				label={ this.data.labels.redirect_type }
+				label={ label( 'redirect_type' ) }
 				labelPosition="side"
 				value={ settings.redirect_type }
-				options={ this.data.redirect_types }
-				onChange={ newVal => {
-					this.onChangeSetting( newVal, 'redirect_type' )
-				} }
+				options={ source.redirect_types }
+				onChange={ newVal => this.onChangeSetting( newVal, 'redirect_type' ) }
 			/>
 			{ 'static_page' === settings.redirect_type && <SelectControl
 				key='redirect_type'
 				className="full-width"
-				label={ this.data.labels.redirect_page }
+				label={ label( 'redirect_page' ) }
 				labelPosition="side"
 				value={ settings.redirect_page }
-				options={ this.data.pages }
-				onChange={ newVal => {
-					this.onChangeSetting( newVal, 'redirect_page' )
-				} }
+				options={ source.pages }
+				onChange={ newVal => this.onChangeSetting( newVal, 'redirect_page' ) }
 			/> }
 			{ 'custom_url' === settings.redirect_type && <TextControl
 				key='redirect_url_control'
-				label={ this.data.labels.redirect_url }
+				label={ label( 'redirect_url' ) }
 				value={ settings.redirect_url }
-				onChange={ newVal => {
-					this.onChangeSetting( newVal, 'redirect_url' )
-				} }
+				onChange={ newVal => this.onChangeSetting( newVal, 'redirect_url' ) }
 			/> }
 			<BaseControl
-				label={ this.data.labels.redirect_args }
+				label={ label( 'redirect_args' ) }
 				key="redirect_args_control"
 			>
 				<div className='redirect_args-control'>
@@ -100,23 +92,18 @@ window.jetFormDefaultActions[ 'redirect_to_page' ] = class RedirectToPageAction 
 							key={ `checkbox_args_${ name }_${ index }` }
 							label={ name }
 							checked={ this.isChecked( name ) }
-							onChange={ newVal => {
-								this.onChangeRedirectArgs( newVal, name )
-							} }
+							onChange={ newVal => this.onChangeRedirectArgs( newVal, name ) }
 						/>
 					) }
 				</div>
 			</BaseControl>
 			<TextControl
 				key='redirect_hash_control'
-				label={ this.data.labels.redirect_hash }
+				label={ label( 'redirect_hash' ) }
 				value={ settings.redirect_hash }
-				onChange={ newVal => {
-					this.onChangeSetting( newVal, 'redirect_hash' )
-				} }
+				onChange={ newVal => this.onChangeSetting( newVal, 'redirect_hash' ) }
 			/>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-
-}
+} );

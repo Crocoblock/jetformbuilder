@@ -50,6 +50,16 @@ abstract class Base {
 	 */
 	abstract public function do_action( array $request, Action_Handler $handler );
 
+	abstract public function visible_attributes_for_gateway_editor();
+
+	abstract public function self_script_name();
+
+	abstract public function editor_labels();
+
+	public function editor_labels_help() {
+		return array();
+	}
+
 	public function dependence() {
 		return true;
 	}
@@ -62,11 +72,6 @@ abstract class Base {
 	public function messages() {
 		return array();
 	}
-
-	public function visible_attributes_for_gateway_editor() {
-		return array();
-	}
-
 
 	public function set_action_messages() {
 

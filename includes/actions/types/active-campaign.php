@@ -106,6 +106,36 @@ class Active_Campaign extends Integration_Base_Action {
 		$this->api_handler( $this->settings )->request( false, $body_args );
 	}
 
+	public function self_script_name() {
+		return 'jetFormActiveCampaignData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'list_id' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'api_data'         => __( 'API Data', 'jet-form-builder' ),
+			'api_key'          => __( 'API Key', 'jet-form-builder' ),
+			'api_url'          => __( 'API URL', 'jet-form-builder' ),
+			'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+			'list_id'          => __( 'List Id:', 'jet-form-builder' ),
+			'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
+			'tags'             => __( 'Tags:', 'jet-form-builder' ),
+			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'api_key_link_prefix' => __( 'How to obtain your ActiveCampaign API URL and Key? More info', 'jet-form-builder' ),
+			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
+			'api_key_link'        => 'https://help.activecampaign.com/hc/en-us/articles/207317590-Getting-started-with-the-API',
+			'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' )
+		);
+	}
+
 	/**
 	 * Register custom action data for the editor
 	 *
@@ -113,26 +143,7 @@ class Active_Campaign extends Integration_Base_Action {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormActiveCampaignData',
-			'object' => array(
-				'activecampaign_fields' => $this->get_fields(),
-				'labels'                => array(
-					'api_data'         => __( 'API Data', 'jet-form-builder' ),
-					'api_key'          => __( 'API Key', 'jet-form-builder' ),
-					'api_url'          => __( 'API URL', 'jet-form-builder' ),
-					'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
-					'list_id'          => __( 'List Id:', 'jet-form-builder' ),
-					'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
-					'tags'             => __( 'Tags:', 'jet-form-builder' ),
-					'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-				),
-				'help'                  => array(
-					'api_key_link_prefix' => __( 'How to obtain your ActiveCampaign API URL and Key? More info', 'jet-form-builder' ),
-					'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
-					'api_key_link'        => 'https://help.activecampaign.com/hc/en-us/articles/207317590-Getting-started-with-the-API',
-					'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' )
-				),
-			)
+			'activecampaign_fields' => $this->get_fields(),
 		);
 	}
 

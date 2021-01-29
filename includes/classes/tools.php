@@ -50,8 +50,7 @@ class Tools {
 			}
 		}
 
-
-		return $post_types_list;
+		return self::with_placeholder( $post_types_list );
 	}
 
 	/**

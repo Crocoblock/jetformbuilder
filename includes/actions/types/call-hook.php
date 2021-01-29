@@ -72,23 +72,19 @@ class Call_Hook extends Base {
 		);
 	}
 
-
-	/**
-	 * Regsiter custom action data for the editor
-	 *
-	 * @return [type] [description]
-	 */
-	public function action_data() {
-		return array(
-			'name'   => 'jetFormCallHookData',
-			'object' => array(
-				'labels' => array(
-					'hook_name' => __( 'Hook Name:', 'jet-form-builder' )
-				),
-			)
-		);
+	public function self_script_name() {
+		return 'jetFormCallHookData';
 	}
 
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'hook_name' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'hook_name' => __( 'Hook Name:', 'jet-form-builder' )
+		);
+	}
 
 }
 

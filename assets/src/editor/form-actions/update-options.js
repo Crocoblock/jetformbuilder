@@ -1,4 +1,5 @@
-import Tools from "../tools";
+import Tools from "../helpers/tools";
+import { addAction } from "../helpers/action-helper";
 
 /**
  * Internal dependencies
@@ -16,15 +17,12 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction extends wp.element.Component {
+addAction( 'update_options', class UpdateOptionsAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
 		this.fields = Tools.getFormFieldsBlocks();
-		this.data = window.jetFormUpdateOptionsData;
 	}
 
 
@@ -56,10 +54,7 @@ window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction ext
 	}
 
 	render() {
-
-		const settings = this.props.settings;
-		const onChange = this.props.onChange;
-
+		const { settings, onChange, source, label, help } = this.props;
 
 		const onChangeMetaFieldMap = ( value, nameField ) => {
 			const source = 'meta_fields_map';
@@ -78,20 +73,19 @@ window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction ext
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="register_user">
-
 			<SelectControl
 				key="options_page_list"
 				className="full-width"
-				label={ this.data.labels.options_page }
+				label={ label( 'options_page' ) }
 				labelPosition="side"
 				value={ settings.options_page }
-				options={ this.data.optionsPages }
+				options={ source.optionsPages }
 				onChange={ ( newValue ) => {
 					onChangeSetting( newValue, 'options_page' );
 				} }
 			/>
 			<BaseControl
-				label={ this.data.labels.options_map }
+				label={ label( 'options_map' ) }
 				key='options_meta_list'
 			>
 				<div className='jet-user-meta-rows'>
@@ -109,5 +103,4 @@ window.jetFormDefaultActions[ 'update_options' ] = class UpdateOptionsAction ext
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-
-}
+} );

@@ -35,7 +35,7 @@ class Redirect_To_Page extends Base {
 			'redirect_hash' => array(
 				'default' => ''
 			),
-			'redirect_url' => array(
+			'redirect_url'  => array(
 				'default' => ''
 			),
 			'redirect_args' => array(
@@ -91,6 +91,24 @@ class Redirect_To_Page extends Base {
 		}
 	}
 
+	public function self_script_name() {
+		return 'jetFormRedirectToPageData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array();
+	}
+
+	public function editor_labels() {
+		return array(
+			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
+			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
+			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
+			'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
+			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
+		);
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -98,18 +116,8 @@ class Redirect_To_Page extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormRedirectToPageData',
-			'object' => array(
-				'pages'          => Tools::get_pages_list_for_js(),
-				'redirect_types' => $this->get_redirect_types(),
-				'labels'         => array(
-					'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
-					'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
-					'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-					'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-					'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
-				),
-			)
+			'pages'          => Tools::get_pages_list_for_js(),
+			'redirect_types' => $this->get_redirect_types(),
 		);
 	}
 

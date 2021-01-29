@@ -1,4 +1,4 @@
-import ActionModal from "./action-modal";
+import ActionModal from "./actions/action-modal";
 
 
 const {

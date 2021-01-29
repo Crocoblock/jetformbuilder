@@ -60,20 +60,17 @@ class Call_Webhook extends Base {
 		do_action( 'jet-form-builder/action/webhook/response', $response, $this->settings, $this );
 	}
 
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'webhook_url' );
+	}
 
-	/**
-	 * Regsiter custom action data for the editor
-	 *
-	 * @return array [description]
-	 */
-	public function action_data() {
+	public function self_script_name() {
+		return 'jetFormCallWebHookData';
+	}
+
+	public function editor_labels() {
 		return array(
-			'name'   => 'jetFormCallWebHookData',
-			'object' => array(
-				'labels' => array(
-					'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' )
-				),
-			)
+			'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' )
 		);
 	}
 

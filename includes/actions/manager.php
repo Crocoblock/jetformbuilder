@@ -81,9 +81,12 @@ class Manager {
 	}
 
 	/**
-	 * Regsiter action types data for the editor
+	 * Register action types data for the editor
 	 *
-	 * @return [type] [description]
+	 * @param $editor
+	 * @param $handle
+	 *
+	 * @return void [description]
 	 */
 	public function register_types_for_editor( $editor, $handle ) {
 
@@ -91,30 +94,31 @@ class Manager {
 
 		foreach ( $this->_types as $type ) {
 
+			$type_script_name = $type->self_script_name();
+
 			$prepared_types[] = array(
 				'id'       => $type->get_id(),
 				'name'     => $type->get_name(),
+				'self'     => $type_script_name,
 				'callback' => false, // should be rewritten from JS
 			);
+			$action_localize  = $type->action_data();
 
-			$action_localize = $type->action_data();
+			$action_localize['__messages']      = $type->get_messages_default();
+			$action_localize['__labels']        = $type->editor_labels();
+			$action_localize['__help_messages'] = $type->editor_labels_help();
+			$action_localize['__gateway_attrs'] = $type->visible_attributes_for_gateway_editor();
 
-			if ( ! empty( $action_localize ) && isset( $action_localize['name'] ) ) {
-				$object = isset( $action_localize['object'] ) ? $action_localize['object'] : array();
-
-				$object['gateway_attrs'] = $type->visible_attributes_for_gateway_editor();
-				$object['messages']      = $type->get_messages_default();
-
+			if ( ! empty( $action_localize ) && $type_script_name ) {
 				wp_localize_script(
 					$handle,
-					$action_localize['name'],
-					$object
+					$type->self_script_name(),
+					$action_localize
 				);
 			}
 		}
 
 		wp_localize_script( $handle, 'jetFormActionTypes', $prepared_types );
-
 	}
 
 }

@@ -169,6 +169,21 @@ class Update_User extends Base {
 		}
 	}
 
+	public function self_script_name() {
+		return 'jetFormUpdateUserData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'user_role' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'fields_map' => __( 'Fields Map:', 'jet-form-builder' ),
+			'user_role'  => __( 'User Role:', 'jet-form-builder' ),
+		);
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -176,21 +191,8 @@ class Update_User extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormUpdateUserData',
-			'object' => array(
-				'userRoles'  => Tools::get_user_roles_for_js(),
-				'userFields' => $this->get_user_fields(),
-				'labels'     => array(
-					'fields_map' => __(
-						'Fields Map:',
-						'jet-form-builder'
-					),
-					'user_role'  => __(
-						'User Role:',
-						'jet-form-builder'
-					),
-				)
-			)
+			'userRoles'  => Tools::get_user_roles_for_js(),
+			'userFields' => $this->get_user_fields()
 		);
 	}
 

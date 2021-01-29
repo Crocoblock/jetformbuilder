@@ -34,11 +34,11 @@ class Mailchimp extends Integration_Base_Action {
 
 	public function action_attributes() {
 		return array(
-			'api_key' => array(
+			'api_key'       => array(
 				'default' => '',
 				'path'    => 'mailchimp/api_key'
 			),
-			'data' => array(
+			'data'          => array(
 				'default' => '',
 				'path'    => 'mailchimp/data'
 			),
@@ -46,23 +46,23 @@ class Mailchimp extends Integration_Base_Action {
 				'default' => '',
 				'path'    => 'mailchimp/double_opt_in'
 			),
-			'fields_map' => array(
+			'fields_map'    => array(
 				'default' => '',
 				'path'    => 'mailchimp/fields_map'
 			),
-			'groups_ids' => array(
+			'groups_ids'    => array(
 				'default' => '',
 				'path'    => 'mailchimp/groups_ids'
 			),
-			'isValidAPI' => array(
+			'isValidAPI'    => array(
 				'default' => '',
 				'path'    => 'mailchimp/isValidAPI'
 			),
-			'list_id' => array(
+			'list_id'       => array(
 				'default' => '',
 				'path'    => 'mailchimp/list_id'
 			),
-			'tags' => array(
+			'tags'          => array(
 				'default' => '',
 				'path'    => 'mailchimp/tags'
 			),
@@ -198,6 +198,35 @@ class Mailchimp extends Integration_Base_Action {
 		wp_send_json_success( $data );
 	}
 
+	public function self_script_name() {
+		return 'jetFormMailchimpData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'list_id' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'api_key'          => __( 'API Key:', 'jet-form-builder' ),
+			'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+			'list_id'          => __( 'Audience:', 'jet-form-builder' ),
+			'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
+			'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),
+			'tags'             => __( 'Tags:', 'jet-form-builder' ),
+			'double_opt_in'    => __( 'Double Opt-In:', 'jet-form-builder' ),
+			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
+			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
+			'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
+		);
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -205,25 +234,7 @@ class Mailchimp extends Integration_Base_Action {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormMailchimpData',
-			'object' => array(
-				'action' => $this->action,
-				'labels' => array(
-					'api_key'          => __( 'API Key:', 'jet-form-builder' ),
-					'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
-					'list_id'          => __( 'Audience:', 'jet-form-builder' ),
-					'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
-					'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),
-					'tags'             => __( 'Tags:', 'jet-form-builder' ),
-					'double_opt_in'    => __( 'Double Opt-In:', 'jet-form-builder' ),
-					'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-				),
-				'help'   => array(
-					'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
-					'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
-					'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
-				),
-			)
+			'action' => $this->action,
 		);
 	}
 

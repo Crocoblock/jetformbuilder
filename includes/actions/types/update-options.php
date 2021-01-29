@@ -39,6 +39,21 @@ class Update_Options extends Base {
 		);
 	}
 
+	public function self_script_name() {
+		return 'jetFormUpdateOptionsData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'options_page' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'options_page' => __( 'Options Page:', 'jet-form-builder' ),
+			'options_map'  => __( 'Options Map:', 'jet-form-builder' )
+		);
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		$fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
 		$options_data = array();
@@ -74,14 +89,7 @@ class Update_Options extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormUpdateOptionsData',
-			'object' => array(
-				'optionsPages' => $this->get_pages(),
-				'labels'       => array(
-					'options_page' => __( 'Options Page:', 'jet-form-builder' ),
-					'options_map'  => __( 'Options Map:', 'jet-form-builder' ),
-				),
-			)
+			'optionsPages' => $this->get_pages()
 		);
 	}
 

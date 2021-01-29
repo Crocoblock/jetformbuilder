@@ -1,5 +1,5 @@
 import BaseActionComponent from "./base-action-component";
-import Tools from "../tools";
+import Tools from "../helpers/tools";
 
 export default class IntegrationComponent extends BaseActionComponent {
 

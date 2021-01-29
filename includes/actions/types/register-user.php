@@ -53,6 +53,24 @@ class Register_User extends Base {
 		);
 	}
 
+	public function self_script_name() {
+		return 'jetFormRegisterUserData';
+	}
+
+	public function editor_labels() {
+		return array(
+			'fields_map'  => __( 'Fields Map:', 'jet-form-builder' ),
+			'user_role'   => __( 'User Role:', 'jet-form-builder' ),
+			'user_meta'   => __( 'User Meta:', 'jet-form-builder' ),
+			'log_in'      => __( 'Log In User after Register:', 'jet-form-builder' ),
+			'add_user_id' => __( 'Add User ID to form data:', 'jet-from-builder' ),
+		);
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'user_role' );
+	}
+
 	public function do_action( array $request, Action_Handler $handler ) {
 		if ( is_user_logged_in() ) {
 
@@ -233,6 +251,13 @@ class Register_User extends Base {
 		}
 	}
 
+	public function editor_labels_help() {
+		return array(
+			'add_user_id' => __( 'Registered user ID will be added to form data. If form is filled by logged 
+			in user - current user ID will be added to form data.', 'jet-form-builder' ),
+		);
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -240,40 +265,8 @@ class Register_User extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormRegisterUserData',
-			'object' => array(
-				'userRoles'     => Tools::get_user_roles_for_js(),
-				'userFields'    => $this->get_user_fields(),
-				'labels'        => array(
-					'fields_map'  => __(
-						'Fields Map:',
-						'jet-form-builder'
-					),
-					'user_role'   => __(
-						'User Role:',
-						'jet-form-builder'
-					),
-					'user_meta'   => __(
-						'User Meta:',
-						'jet-form-builder'
-					),
-					'log_in'      => __(
-						'Log In User after Register:',
-						'jet-form-builder'
-					),
-					'add_user_id' => __(
-						'Add User ID to form data:',
-						'jet-from-builder'
-					),
-				),
-				'help_messages' => array(
-					'add_user_id' => __(
-						'Registered user ID will be added to form data. If form is filled by logged 
-			        in user - current user ID will be added to form data.',
-						'jet-form-builder'
-					),
-				),
-			)
+			'userRoles'  => Tools::get_user_roles_for_js(),
+			'userFields' => $this->get_user_fields(),
 		);
 	}
 

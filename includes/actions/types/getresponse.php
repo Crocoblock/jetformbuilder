@@ -134,6 +134,33 @@ class Getresponse extends Integration_Base_Action {
 
 	}
 
+	public function self_script_name() {
+		return 'jetFormGetResponseData';
+	}
+
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'list_id' );
+	}
+
+	public function editor_labels() {
+		return array(
+			'api_key'          => __( 'API Key:', 'jet-form-builder' ),
+			'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+			'list_id'          => __( 'List Id:', 'jet-form-builder' ),
+			'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
+			'day_of_cycle'     => __( 'Day Of Cycle:', 'jet-form-builder' ),
+			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'api_key_link_prefix' => __( 'How to obtain your GetResponse API Key? More info', 'jet-form-builder' ),
+			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
+			'api_key_link'        => 'https://app.getresponse.com/api',
+		);
+	}
+
 	/**
 	 * Regsiter custom action data for the editor
 	 *
@@ -141,23 +168,7 @@ class Getresponse extends Integration_Base_Action {
 	 */
 	public function action_data() {
 		return array(
-			'name'   => 'jetFormGetResponseData',
-			'object' => array(
-				'action' => $this->action,
-				'labels' => array(
-					'api_key'          => __( 'API Key:', 'jet-form-builder' ),
-					'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
-					'list_id'          => __( 'List Id:', 'jet-form-builder' ),
-					'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
-					'day_of_cycle'     => __( 'Day Of Cycle:', 'jet-form-builder' ),
-					'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-				),
-				'help'   => array(
-					'api_key_link_prefix' => __( 'How to obtain your GetResponse API Key? More info', 'jet-form-builder' ),
-					'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
-					'api_key_link'        => 'https://app.getresponse.com/api',
-				),
-			)
+			'action' => $this->action,
 		);
 	}
 

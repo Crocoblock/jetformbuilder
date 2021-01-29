@@ -1,5 +1,5 @@
-import Tools from "../tools";
-import ActionModal from "../components/action-modal";
+import Tools from "../helpers/tools";
+import ActionModal from "../components/actions/action-modal";
 import GatewaysEditor from "../gateways/gateways-editor";
 
 

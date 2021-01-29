@@ -1,9 +1,5 @@
 export default class BaseActionComponent extends wp.element.Component {
 
-	constructor( props ) {
-		super( props );
-	}
-
 	addPlaceholderForSelect( array, label = '--' ) {
 		return [
 			{ label },

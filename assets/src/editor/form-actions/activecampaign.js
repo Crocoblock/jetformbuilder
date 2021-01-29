@@ -1,5 +1,6 @@
-import Tools from "../tools";
+import Tools from "../helpers/tools";
 import IntegrationComponent from "./integration-component";
+import { addAction } from "../helpers/action-helper";
 
 /**
  * Internal dependencies
@@ -19,14 +20,11 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction extends IntegrationComponent {
+addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComponent {
 
 	constructor( props ) {
 		super( props );
 
-		this.data = window.jetFormActiveCampaignData;
 		this.validateActiveCampaignData = this.validateActiveCampaignData.bind( this );
 		this.getActiveCampaignData = this.getActiveCampaignData.bind( this );
 	}
@@ -103,31 +101,26 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 
 
 	render() {
-		const settings = this.props.settings;
-		const fields = Object.entries( this.data.activecampaign_fields );
+		const { settings, onChange, source, label, help } = this.props;
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="activecampaign">
 			<BaseControl
-				label={ this.data.labels.api_data }
+				label={ label( 'api_data' ) }
 				className='input-with-button with-wrap'
 				key={ 'activecampaign_input_key' }
 			>
 				<TextControl
 					key='api_url'
 					value={ settings.api_url }
-					help={ this.data.labels.api_url }
-					onChange={ newVal => {
-						this.onChangeSetting( newVal, 'api_url' )
-					} }
+					help={ label( 'api_url' ) }
+					onChange={ newVal => this.onChangeSetting( newVal, 'api_url' ) }
 				/>
 				<TextControl
 					key='api_key'
-					help={ this.data.labels.api_key }
+					help={ label( 'api_key' ) }
 					value={ settings.api_key }
-					onChange={ newVal => {
-						this.onChangeSetting( newVal, 'api_key' )
-					} }
+					onChange={ newVal => this.onChangeSetting( newVal, 'api_key' ) }
 				/>
 				{ ( settings.api_key && settings.api_url ) && <Button
 					key={ 'validate_api_key' }
@@ -136,11 +129,11 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 				>
 					<i className="dashicons"/>
-					{ this.data.labels.validate_api_key }
+					{ label( 'validate_api_key' ) }
 				</Button> }
 				<div/>
-				<div>{ this.data.help.api_key_link_prefix } <a
-					href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a>
+				<div>{ help( 'api_key_link_prefix' ) } <a
+					href={ help( 'api_key_link' ) }>{ help( 'api_key_link_suffix' ) }</a>
 				</div>
 			</BaseControl>
 			{ settings.isValidAPI && <React.Fragment>
@@ -151,12 +144,10 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 					<SelectControl
 						className="full-width"
 						key='activecampaign_select_lists'
-						label={ this.data.labels.list_id }
+						label={ label( 'list_id' ) }
 						labelPosition="side"
 						value={ settings.list_id }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'list_id' )
-						} }
+						onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
 						options={ this.getLists() }
 					/>
 					<Button
@@ -164,26 +155,23 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 						isPrimary
 						onClick={ this.getActiveCampaignData }
 					>
-						{ this.data.labels.update_list_ids }
+						{ label( 'update_list_ids' ) }
 					</Button>
 				</BaseControl>
 				<TextControl
 					key='activecampaign_tags'
-					label={ this.data.labels.tags }
+					label={ label( 'tags' ) }
 					value={ settings.tags }
-					help={ this.data.help.tags }
-					onChange={ newVal => {
-						this.onChangeSetting( newVal, 'tags' )
-					} }
+					help={ help( 'tags' ) }
+					onChange={ newVal => this.onChangeSetting( newVal, 'tags' ) }
 				/>
 				<BaseControl
-					label={ this.data.labels.fields_map }
+					label={ label( 'fields_map' ) }
 					key='activecampaign_fields_map'
 				>
 					<div className='jet-user-meta-rows'>
-						{ fields.map( ( [fieldName, fieldLabel], index ) => {
-
-							return <div
+						{ Object.entries( source.activecampaign_fields ).map(
+							( [fieldName, fieldLabel], index ) => <div
 								className="jet-user-meta__row"
 								key={ 'user_meta_' + fieldName + index }
 							>
@@ -193,13 +181,10 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 									label={ fieldLabel }
 									labelPosition="side"
 									value={ this.getFieldDefault( fieldName ) }
-									onChange={ value => {
-										this.onChangeFieldMap( value, fieldName )
-									} }
+									onChange={ value => this.onChangeFieldMap( value, fieldName ) }
 									options={ this.formFieldsList }
 								/>
-							</div>;
-						} ) }
+							</div> ) }
 					</div>
 				</BaseControl>
 
@@ -208,5 +193,4 @@ window.jetFormDefaultActions[ 'active_campaign' ] = class ActiveCampaignAction e
 		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-
-}
+} );

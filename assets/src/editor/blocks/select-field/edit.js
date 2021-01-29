@@ -7,7 +7,7 @@ import FromTermsFields from "../base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
 import FromManualFields from "../base-select-check-radio/from-manual-fields";
-import Tools from "../../tools";
+import Tools from "../../helpers/tools";
 import { SelectRadioCheckPlaceholder } from "../../components/select-radio-check-placeholder";
 
 const block = 'jet-forms/select-field';

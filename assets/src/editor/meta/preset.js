@@ -1,4 +1,4 @@
-import Tools from '../tools';
+import Tools from '../helpers/tools';
 import GeneralPreset from "../components/presets/general-preset";
 
 function PresetMeta() {

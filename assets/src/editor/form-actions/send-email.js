@@ -1,8 +1,9 @@
 /**
  * Internal dependencies
  */
-import Tools from "../tools";
+import Tools from "../helpers/tools";
 import MacrosInserter from "../components/macros-inserter";
+import { addAction } from "../helpers/action-helper";
 
 const {
 	TextControl,
@@ -20,9 +21,7 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.element.Component {
+addAction( 'send_email', class SendEmailAction extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -30,17 +29,13 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 	}
 
 	render() {
-
-		const settings = this.props.settings;
-		const onChange = this.props.onChange;
+		const { settings, onChange, source, label, help } = this.props;
 
 		const onChangeValue = ( value, key ) => {
-
 			onChange( {
 				...settings,
 				[ key ]: value
 			} );
-
 		};
 
 		const formFields = Tools.getFormFieldsBlocks();
@@ -57,9 +52,9 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				labelPosition="side"
 				className="full-width"
 				value={ settings.mail_to }
-				options={ window.jetFormEmailData.mailTo }
-				label={ window.jetFormEmailData.labels.mail_to }
-				help={ window.jetFormEmailData.labels.mail_to_help }
+				options={ source.mailTo }
+				label={ label( 'mail_to' ) }
+				help={ help( 'mail_to' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'mail_to' );
 				} }
@@ -67,8 +62,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			{ 'custom' === settings.mail_to && <TextControl
 				key="custom_email"
 				value={ settings.custom_email }
-				label={ window.jetFormEmailData.labels.custom_email }
-				help={ window.jetFormEmailData.labels.custom_email_help }
+				label={ label( 'custom_email' ) }
+				help={ help( 'custom_email' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'custom_email' );
 				} }
@@ -79,8 +74,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				className="full-width"
 				value={ settings.from_field }
 				options={ formFields }
-				label={ window.jetFormEmailData.labels.from_field }
-				help={ window.jetFormEmailData.labels.from_field_help }
+				label={ label( 'from_field' ) }
+				help={ help( 'from_field' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'from_field' );
 				} }
@@ -90,9 +85,9 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				labelPosition="side"
 				className="full-width"
 				value={ settings.reply_to }
-				options={ window.jetFormEmailData.replyTo }
-				label={ window.jetFormEmailData.labels.reply_to }
-				help={ window.jetFormEmailData.labels.reply_to_help }
+				options={ source.replyTo }
+				label={ label( 'reply_to' ) }
+				help={ help( 'reply_to' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'reply_to' );
 				} }
@@ -100,8 +95,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			{ 'custom' === settings.reply_to && <TextControl
 				key="reply_to_email"
 				value={ settings.reply_to_email }
-				label={ window.jetFormEmailData.labels.reply_to_email }
-				help={ window.jetFormEmailData.labels.reply_to_email_help }
+				label={ label( 'reply_to_email' ) }
+				help={ help( 'reply_to_email' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'reply_to_email' );
 				} }
@@ -112,8 +107,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				className="full-width"
 				value={ settings.reply_from_field }
 				options={ formFields }
-				label={ window.jetFormEmailData.labels.reply_from_field }
-				help={ window.jetFormEmailData.labels.reply_from_field_help }
+				label={ label( 'reply_from_field' ) }
+				help={ help( 'reply_from_field' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'reply_from_field' );
 				} }
@@ -121,8 +116,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			<TextControl
 				key="subject"
 				value={ settings.subject }
-				label={ window.jetFormEmailData.labels.subject }
-				help={ window.jetFormEmailData.labels.subject_help }
+				label={ label( 'subject' ) }
+				help={ help( 'subject' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'subject' );
 				} }
@@ -130,8 +125,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			<TextControl
 				key="from_name"
 				value={ settings.from_name }
-				label={ window.jetFormEmailData.labels.from_name }
-				help={ window.jetFormEmailData.labels.from_name_help }
+				label={ label( 'from_name' ) }
+				help={ help( 'from_name' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'from_name' );
 				} }
@@ -139,8 +134,8 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 			<TextControl
 				key="from_address"
 				value={ settings.from_address }
-				label={ window.jetFormEmailData.labels.from_address }
-				help={ window.jetFormEmailData.labels.from_address_help }
+				label={ label( 'from_address' ) }
+				help={ help( 'from_address' ) }
 				onChange={ ( newValue ) => {
 					onChangeValue( newValue, 'from_address' );
 				} }
@@ -150,18 +145,17 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				labelPosition="side"
 				className="full-width"
 				value={ settings.content_type }
-				options={ window.jetFormEmailData.content_type }
-				label={ window.jetFormEmailData.labels.content_type }
-				onChange={ ( newValue ) => {
-					onChangeValue( newValue, 'mail_to' );
-				} }
+				options={ source.content_type }
+				label={ label( 'content_type' ) }
+				help={ help( 'content_type' ) }
+				onChange={ ( newValue ) => onChangeValue( newValue, 'content_type' ) }
 			/>
 			<div className="jet-form-editor__macros-wrap">
 				<TextareaControl
 					key="content"
 					value={ settings.content }
-					label={ window.jetFormEmailData.labels.content }
-					help={ window.jetFormEmailData.labels.content_help }
+					label={ label( 'content' ) }
+					help={ help( 'content' ) }
 					onChange={ ( newValue ) => {
 						onChangeValue( newValue, 'content' );
 					} }
@@ -169,10 +163,10 @@ window.jetFormDefaultActions[ 'send_email' ] = class SendEmailAction extends wp.
 				<MacrosInserter
 					fields={ formFields }
 					onFieldClick={ insertMacros }
-					customMacros={ window.jetFormEmailData.customMacros }
+					customMacros={ source.customMacros }
 				/>
 			</div>
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-}
+} );

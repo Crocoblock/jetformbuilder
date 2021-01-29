@@ -1,6 +1,7 @@
-import Tools from "../tools";
+import Tools from "../helpers/tools";
 import IntegrationComponent from "./integration-component";
 import WrapperRequiredControl from "../components/wrapper-required-control";
+import { addAction } from "../helpers/action-helper";
 
 /**
  * Internal dependencies
@@ -26,15 +27,7 @@ const {
 	useState
 } = wp.element;
 
-window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-
-window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends IntegrationComponent {
-
-	constructor( props ) {
-		super( props );
-
-		this.data = window.jetFormGetResponseData;
-	}
+addAction( 'getresponse', class GetResponseAction extends IntegrationComponent {
 
 	getFields() {
 		const settings = this.props.settings;
@@ -70,7 +63,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 	}
 
 	render() {
-		const settings = this.props.settings;
+		const { settings, onChange, source, label, help } = this.props;
 		const fields = this.getFields();
 
 		/* eslint-disable jsx-a11y/no-onchange */
@@ -81,11 +74,9 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 			>
 				<TextControl
 					key='api_key'
-					label={ this.data.labels.api_key }
+					label={ label( 'api_key' ) }
 					value={ settings.api_key }
-					onChange={ newVal => {
-						this.onChangeSetting( newVal, 'api_key' )
-					} }
+					onChange={ newVal => this.onChangeSetting( newVal, 'api_key' ) }
 				/>
 				<Button
 					key={ 'validate_api_key' }
@@ -94,12 +85,12 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 				>
 					<i className="dashicons"/>
-					{ this.data.labels.validate_api_key }
+					{ label( 'validate_api_key' ) }
 				</Button>
 			</BaseControl>
 			<div/>
-			<div className='margin-bottom--small'>{ this.data.help.api_key_link_prefix } <a
-				href={ this.data.help.api_key_link }>{ this.data.help.api_key_link_suffix }</a>
+			<div className='margin-bottom--small'>{ help( 'api_key_link_prefix' ) } <a
+				href={ help( 'api_key_link' ) }>{ help( 'api_key_link_suffix' ) }</a>
 			</div>
 			{ settings.isValidAPI && <React.Fragment>
 				<BaseControl
@@ -109,12 +100,10 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 					<SelectControl
 						key='list_id'
 						className="full-width"
-						label={ this.data.labels.list_id }
+						label={ label( 'list_id' ) }
 						labelPosition="side"
 						value={ settings.list_id }
-						onChange={ newVal => {
-							this.onChangeSetting( newVal, 'list_id' )
-						} }
+						onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
 						options={ this.getLists() }
 					/>
 					<Button
@@ -122,7 +111,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 						isPrimary
 						onClick={ this.getApiData }
 					>
-						{ this.data.labels.update_list_ids }
+						{ label( 'update_list_ids' ) }
 					</Button>
 				</BaseControl>
 				<BaseControl
@@ -130,16 +119,14 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 				>
 					<NumberControl
 						key='day_of_cycle'
-						label={ this.data.labels.day_of_cycle }
+						label={ label( 'day_of_cycle' ) }
 						labelPosition="side"
 						value={ settings.day_of_cycle }
-						onChange={ newVal => {
-							this.onChangeSetting( Number( newVal ), 'day_of_cycle' )
-						} }
+						onChange={ newVal => this.onChangeSetting( Number( newVal ), 'day_of_cycle' ) }
 					/>
 				</BaseControl>
 				<BaseControl
-					label={ this.data.labels.fields_map }
+					label={ label( 'fields_map' ) }
 					key='getresponse_fields_map'
 				>
 					<div className='jet-user-fields-map__list'>
@@ -152,9 +139,7 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 									className="full-width"
 									key={ fieldName + index }
 									value={ this.getFieldDefault( fieldName ) }
-									onChange={ value => {
-										this.onChangeFieldMap( value, fieldName )
-									} }
+									onChange={ value => this.onChangeFieldMap( value, fieldName ) }
 									options={ this.formFieldsList }
 								/>
 							</WrapperRequiredControl>;
@@ -165,4 +150,4 @@ window.jetFormDefaultActions[ 'getresponse' ] = class GetResponseAction extends 
 		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-}
+} );

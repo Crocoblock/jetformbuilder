@@ -45,6 +45,8 @@ class Wysiwyg_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_editor();
+
 		return ( new Wysiwyg_Field_Render( $this ) )->render();
 	}
 

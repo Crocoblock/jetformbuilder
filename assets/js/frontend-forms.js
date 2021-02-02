@@ -468,10 +468,16 @@
 
 		removeRepeaterItem: function() {
 
-			var $this = $( this ),
-				$repeater = $this.closest( '.jet-form-builder-repeater' );
+			let $this = $( this ),
+				$repeater = $this.closest( '.jet-form-builder-repeater' ),
+				$repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
+				$editor = $repeaterItem.find( '.wp-editor-area' );
 
-			$this.closest( '.jet-form-builder-repeater__row' ).remove();
+			if ( $editor.length && window.wp && window.wp.editor ) {
+				window.wp.editor.remove( $editor.attr( 'id' ) );
+			}
+
+			$repeaterItem.remove();
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
 
 		},
@@ -752,7 +758,7 @@
 				}
 
 				var res = window.wp.editor.initialize(
-					$editor.attr( 'id' ),
+					editorID,
 					editorDefaults
 				);
 

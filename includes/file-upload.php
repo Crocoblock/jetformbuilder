@@ -33,11 +33,13 @@ class File_Upload {
 	private static $instance = null;
 
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_upload_script' ) );
-
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'ajax_file_upload' ) );
 		add_action( 'wp_ajax_nopriv_' . $this->action, array( $this, 'ajax_file_upload' ) );
+	}
+
+	public function enqueue_scripts() {
+		$this->register_assets();
+		$this->enqueue_upload_script();
 	}
 
 	/**

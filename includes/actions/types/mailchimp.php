@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Integrations\Integration_Base;
 use Jet_Form_Builder\Integrations\MailChimp_Handler;
@@ -125,7 +126,13 @@ class Mailchimp extends Integration_Base_Action {
 					$body_args['email_address'] = $this->request[ $field ];
 					break;
 				case 'BIRTHDAY':
-					$body_args['merge_fields'][ $param ] = mysql2date( 'm/d', $this->request[ $field ] );
+					$date_value = $this->request[ $field ];
+
+					if ( ! Tools::is_valid_timestamp( $date_value ) ) {
+						$date_value = strtotime( $date_value );
+					}
+					
+					$body_args['merge_fields'][ $param ] = date( 'm/d', $date_value );
 					break;
 				default:
 					$body_args['merge_fields'][ $param ] = $this->request[ $field ];

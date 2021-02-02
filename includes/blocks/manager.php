@@ -65,11 +65,6 @@ class Manager {
 			10, 2
 		);
 
-		add_action(
-			'wp_enqueue_scripts',
-			array( $this, 'register_frontend_assets' )
-		);
-
 		add_filter(
 			'jet-form-builder/post-type/args',
 			array( $this, 'add_default_fields_to_form' ),

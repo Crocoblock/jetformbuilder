@@ -14,6 +14,8 @@ use Jet_Form_Builder\Plugin;
 
 class Controller extends Base_Gateway {
 
+	protected $token_query_name = 'order_token';
+
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_stripe_scripts' ) );
 	}
@@ -34,12 +36,19 @@ class Controller extends Base_Gateway {
 		return array( 'unpaid' );
 	}
 
+	protected function retrieve_gateway_meta() {
+		return Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
+	}
+
+	protected function retrieve_payment_instance() {
+		return $this->request( array(), '/' . $this->data['payment_id'], false );
+	}
 
 	protected function set_gateway_data_on_result() {
-		$this->gateways_meta = Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
-
 		try {
 			$this->set_payment_status();
+			$this->set_amount();
+			$this->set_customer_details();
 
 		} catch ( Gateway_Exception $exception ) {
 			return false;
@@ -49,17 +58,24 @@ class Controller extends Base_Gateway {
 	}
 
 	protected function set_payment_status() {
-		$payment = $this->request( array(), '/' . $this->data['session_id'], false );
 
-		if ( isset( $payment['error'] ) ) {
-			throw new Gateway_Exception( $payment['error']['message'] );
+		if ( isset( $this->payment_instance['error'] ) ) {
+			throw new Gateway_Exception( $this->payment_instance['error']['message'] );
 		}
 
-		if ( empty( $payment['payment_status'] ) ) {
+		if ( empty( $this->payment_instance['payment_status'] ) ) {
 			throw new Gateway_Exception( 'Empty payment status' );
 		}
 
-		$this->data['status'] = $payment['payment_status'];
+		$this->data['status'] = $this->payment_instance['payment_status'];
+	}
+
+	private function set_amount() {
+		$this->data['amount'] = $this->payment_instance['amount_total'];
+	}
+
+	private function set_customer_details() {
+		$this->data['payer']['email'] = $this->payment_instance['customer_details']['email'];
 	}
 
 	/**
@@ -75,20 +91,22 @@ class Controller extends Base_Gateway {
 		if ( ! $this->set_gateway_data( $action_handler ) ) {
 			return;
 		}
-		$session = $this->get_checkout_session( array(
-			'success_url' => $this->get_refer_url( 'success', $action_handler ),
-			'cancel_url'  => $this->get_refer_url( 'cancel', $action_handler ),
+		$additional_args = array( 'order_token' => $this->order_token );
+
+		$payment = $this->get_checkout_session( array(
+			'success_url' => $this->get_refer_url( self::SUCCESS_TYPE, $additional_args ),
+			'cancel_url'  => $this->get_refer_url( self::FAILED_TYPE, $additional_args ),
 		) );
 
-		if ( ! $session || isset( $session['error'] ) ) {
-			throw new Action_Exception( Manager::dynamic_error( $session['error']['message'] ) );
+		if ( ! $payment || isset( $payment['error'] ) ) {
+			throw new Action_Exception( Manager::dynamic_error( $payment['error']['message'] ) );
 		}
 
 		update_post_meta(
 			$this->order_id,
 			self::GATEWAY_META_KEY,
 			json_encode( array(
-				'session_id'  => $session['id'],
+				'payment_id'  => $payment['id'],
 				'order_token' => $this->order_token,
 				'form_id'     => $action_handler->form_id,
 				'form_data'   => $action_handler->request_data,
@@ -96,7 +114,7 @@ class Controller extends Base_Gateway {
 		);
 
 		$action_handler->add_response( array(
-			'stripe_session_id' => $session['id'],
+			'stripe_session_id' => $payment['id'],
 			'stripe_public_key' => $this->options['public']
 		) );
 	}
@@ -142,5 +160,9 @@ class Controller extends Base_Gateway {
 
 	protected function get_price( $price ) {
 		return absint( $price ) * 100;
+	}
+
+	protected function query_order_token() {
+		return $this->order_id . '-' . md5( $this->order_id . $this->action_handler->form_id );
 	}
 }

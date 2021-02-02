@@ -16,6 +16,9 @@ abstract class Base_Gateway {
 
 	const GATEWAY_META_KEY = '_jet_gateway_data';
 
+	const SUCCESS_TYPE = 'success';
+	const FAILED_TYPE = 'cancel';
+
 	protected $payment_id;
 	protected $payment_token;
 	protected $data;
@@ -28,10 +31,14 @@ abstract class Base_Gateway {
 	protected $redirect;
 	protected $order_token;
 
+	protected $payment_instance = array();
+	protected $token_query_name;
+
 	protected $removed_query_args_on_payment = array(
 		GM::PAYMENT_TYPE_PARAM,
 		'order_token',
-		'status'
+		'status',
+		'PayerID'
 	);
 
 	/**
@@ -56,6 +63,14 @@ abstract class Base_Gateway {
 
 	abstract protected function failed_statuses();
 
+	abstract protected function retrieve_payment_instance();
+
+	abstract protected function retrieve_gateway_meta();
+
+	public function set_payment_instance() {
+		$this->payment_instance = $this->retrieve_payment_instance();
+	}
+
 	/**
 	 * Store payment status into order and show success/failed message
 	 * @return [type] [description]
@@ -68,7 +83,7 @@ abstract class Base_Gateway {
 
 		$this->data['gateway'] = $this->get_name();
 
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, $this->data );
+		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, json_encode( $this->data ) );
 
 		$this->try_do_actions();
 
@@ -99,8 +114,6 @@ abstract class Base_Gateway {
 	 * @return [type] [description]
 	 */
 	protected function try_do_actions() {
-		GM::instance()->add_data( $this->data );
-
 		try {
 			if ( in_array( $this->data['status'], $this->failed_statuses() ) ) {
 				$this->process_status( 'failed' );
@@ -164,7 +177,7 @@ abstract class Base_Gateway {
 	}
 
 	final public function set_payment_token() {
-		if ( empty( $_GET['order_token'] ) ) {
+		if ( empty( $this->token_query_name ) || empty( $_GET[ $this->token_query_name ] ) ) {
 			throw new Gateway_Exception( 'Empty payment token.' );
 		}
 
@@ -193,8 +206,18 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
+	final public function set_form_gateways_meta() {
+		$this->gateways_meta = $this->retrieve_gateway_meta();
+
+		return $this;
+	}
+
 	final protected function set_order_token() {
-		$this->order_token = $this->generate_query_order_id( $this->action_handler->form_id );
+		$this->order_token = $this->query_order_token();
+
+		if ( ! $this->order_token ) {
+			throw new Gateway_Exception( 'Invalid token', $this->order_token );
+		}
 	}
 
 	public function get_payment_token() {
@@ -309,7 +332,7 @@ abstract class Base_Gateway {
 		}
 	}
 
-	protected function set_gateway_data( $action_handler ) {
+	protected function set_gateway_data( Action_Handler $action_handler ) {
 		$this->gateways_meta  = GM::instance()->gateways();
 		$this->action_handler = $action_handler;
 
@@ -331,11 +354,11 @@ abstract class Base_Gateway {
 		return absint( $price );
 	}
 
-	protected function get_refer_url( $type, Action_Handler $action_handler ) {
+	protected function get_refer_url( $type, array $additional_args = array() ) {
 
 		$success_redirect = ! empty( $this->gateways_meta['use_success_redirect'] ) ? $this->gateways_meta['use_success_redirect'] : false;
 		$success_redirect = filter_var( $success_redirect, FILTER_VALIDATE_BOOLEAN );
-		$refer            = $action_handler->request_data['__refer'];
+		$refer            = $this->action_handler->request_data['__refer'];
 
 		if ( $success_redirect && $this->redirect && 'success' === $type ) {
 			$type = ! empty( $this->redirect['redirect_type'] ) ? $this->redirect['redirect_type'] : 'static_page';
@@ -349,17 +372,15 @@ abstract class Base_Gateway {
 		}
 
 		return add_query_arg(
-			array(
-				GM::PAYMENT_TYPE_PARAM => $this->get_id(),
-				'order_token'          => $this->order_token,
+			array_merge(
+				array( GM::PAYMENT_TYPE_PARAM => $this->get_id() ),
+				$additional_args
 			),
 			$refer
 		);
 	}
 
-	protected function generate_query_order_id( $form_id ) {
-		return $this->order_id . '-' . md5( $this->order_id . $form_id );
-	}
+	abstract protected function query_order_token();
 
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );

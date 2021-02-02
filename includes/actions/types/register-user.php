@@ -57,6 +57,10 @@ class Register_User extends Base {
 		return 'jetFormRegisterUserData';
 	}
 
+	public function visible_attributes_for_gateway_editor() {
+		return array( 'user_role' );
+	}
+
 	public function editor_labels() {
 		return array(
 			'fields_map'  => __( 'Fields Map:', 'jet-form-builder' ),
@@ -67,8 +71,11 @@ class Register_User extends Base {
 		);
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'user_role' );
+	public function editor_labels_help() {
+		return array(
+			'add_user_id' => __( 'Registered user ID will be added to form data. If form is filled by logged 
+			in user - current user ID will be added to form data.', 'jet-form-builder' ),
+		);
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
@@ -251,12 +258,7 @@ class Register_User extends Base {
 		}
 	}
 
-	public function editor_labels_help() {
-		return array(
-			'add_user_id' => __( 'Registered user ID will be added to form data. If form is filled by logged 
-			in user - current user ID will be added to form data.', 'jet-form-builder' ),
-		);
-	}
+
 
 	/**
 	 * Regsiter custom action data for the editor

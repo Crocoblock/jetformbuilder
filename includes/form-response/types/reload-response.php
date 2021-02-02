@@ -32,8 +32,14 @@ class Reload_Response extends Response_It {
 	public function send( array $query_args ) {
 		$this->maybe_remove_query_args();
 
-		$redirect = add_query_arg( $query_args, $this->additional->refer );
-		wp_redirect( $redirect );
+		wp_redirect( $this->get_redirect_url( $query_args ) );
 		die();
+	}
+
+	private function get_redirect_url( $query_args ) {
+		if ( ! empty( $query_args['redirect'] ) ) {
+			return $query_args['redirect'];
+		}
+		return add_query_arg( $query_args, $this->additional->refer );
 	}
 }

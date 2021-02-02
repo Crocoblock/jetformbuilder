@@ -158,19 +158,17 @@ export default function GatewaysEditor( {
 						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
 							return;
 						}
-						const label = `${ getActionLabel( action.type ) } (${ gatewayActionAttributes( action ) })`;
-						return <>
-							<CheckboxControl
-								className={ 'jet-forms-checkbox-field' }
-								key={ `place_holder_block_${ action.id + index }` }
-								checked={ getNotificationsBefore( action.id ).active }
-								label={ label }
-								onChange={ active => setNotificationsBefore( action.id, {
-									active,
-									type: action.type
-								} ) }
-							/>
-						</>;
+						return <CheckboxControl
+							className={ 'jet-forms-checkbox-field' }
+							key={ `place_holder_block_${ action.id + index }` }
+							checked={ getNotificationsBefore( action.id ).active }
+							label={ getActionLabel( action.type ) }
+							help={ gatewayActionAttributes( action ) }
+							onChange={ active => setNotificationsBefore( action.id, {
+								active,
+								type: action.type
+							} ) }
+						/>;
 					} ) }
 				</div>
 			</BaseControl>
@@ -185,6 +183,7 @@ export default function GatewaysEditor( {
 							key={ `place_holder_block_${ action.id + index }` }
 							checked={ getNotificationsSuccess( action.id ).active }
 							label={ getActionLabel( action.type ) }
+							help={ gatewayActionAttributes( action ) }
 							onChange={ active => setNotificationsSuccess( action.id, {
 								active,
 								type: action.type
@@ -207,6 +206,7 @@ export default function GatewaysEditor( {
 							key={ `place_holder_block_${ action.id + index }` }
 							checked={ getNotificationsFailed( action.id ).active }
 							label={ getActionLabel( action.type ) }
+							help={ gatewayActionAttributes( action ) }
 							onChange={ active => setNotificationsFailed( action.id, {
 								active,
 								type: action.type

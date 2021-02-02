@@ -644,3 +644,8 @@ select.components-select-control__input {
     padding: unset;
     border: unset;
 }
+
+.jet-forms-checkbox-field p.components-base-control__help{
+    margin-top: -33px;
+    margin-left: 10vw;
+}

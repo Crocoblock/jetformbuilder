@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Exceptions;
 
 
 use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Form_Messages\Manager;
 use Throwable;
 
 abstract class Handler_Exception extends \Exception {
@@ -13,12 +14,24 @@ abstract class Handler_Exception extends \Exception {
 
 	protected $additional_data;
 
-	public function __construct( $message = "", $additional_data = array() ) {
+	public function __construct( $message = "", ...$additional_data ) {
 		parent::__construct( $message, 0, null );
 
 		$this->additional_data = $additional_data;
 
 		Logger::instance()->log( $this );
+	}
+
+	public function dynamic_success() {
+		$this->message = Manager::dynamic_success( $this->message );
+
+		return $this;
+	}
+
+	public function dynamic_error() {
+		$this->message = Manager::dynamic_error( $this->message );
+
+		return $this;
 	}
 
 

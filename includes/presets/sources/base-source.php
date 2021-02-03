@@ -53,7 +53,7 @@ abstract class Base_Source {
 		return ( ! empty( $this->src() ) && ! is_wp_error( $this->src() ) );
 	}
 
-	public function __call( string $prop, array $arguments ) {
+	public function default_prop( string $prop ) {
 		$source = $this->src;
 
 		if ( isset( $source->$prop ) ) {
@@ -76,7 +76,7 @@ abstract class Base_Source {
 			return call_user_func( array( $this, $func_name ) );
 		}
 
-		return call_user_func( array( $this, $this->prop ) );
+		return $this->default_prop( $this->prop );
 	}
 
 	final public function result() {

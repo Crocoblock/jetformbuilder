@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -553,26 +554,6 @@ abstract class Base extends Base_Module {
 			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
 			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
 		);
-	}
-
-	public function parse_exported_data( $field_data ) {
-		$field_attrs = $this->block_attributes( false );
-
-		foreach ( $field_data['attrs'] as $attribute => $value ) {
-			if ( ! isset( $field_attrs[ $attribute ] ) ) {
-				continue;
-			}
-
-			switch ( $field_attrs[ $attribute ]['type'] ) {
-				case 'number':
-					$field_data['attrs'][ $attribute ] = (float) $value;
-					break;
-				case 'boolean':
-					$field_data['attrs'][ $attribute ] = (boolean) $value;
-			}
-		}
-
-		return $field_data;
 	}
 
 

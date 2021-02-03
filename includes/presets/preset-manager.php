@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Presets;
 
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
@@ -31,6 +32,8 @@ class Preset_Manager {
 	public $manager_preset;
 	private $general;
 
+	private $plain_default = false;
+
 
 	protected function __construct() {
 		$this->general = new General_Preset();
@@ -47,11 +50,15 @@ class Preset_Manager {
 		);
 	}
 
-
 	protected function set_preset_type_manager( $args ) {
 		foreach ( $this->preset_types() as $type ) {
-			if ( $type instanceof Base_Preset && $type->is_active_preset( $args ) ) {
-				$this->manager_preset = $type;
+			try {
+				if ( $type instanceof Base_Preset && $type->is_active_preset( $args ) ) {
+					$this->manager_preset = $type;
+					break;
+				}
+			} catch ( Plain_Default_Exception $exception ) {
+				$this->plain_default = $exception->getMessage();
 				break;
 			}
 		}
@@ -99,6 +106,10 @@ class Preset_Manager {
 		}
 
 		$this->set_preset_type_manager( $args );
+
+		if ( $this->plain_default ) {
+			return $this->plain_default;
+		}
 
 		if ( $this->manager_preset instanceof Base_Preset ) {
 			return $this->manager_preset->set_additional_data( $args )->source->result();

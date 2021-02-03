@@ -17,6 +17,10 @@ class Tools {
 	public static function is_editor() {
 		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
 
+		if ( isset( $_GET['action'] ) ) {
+			$action = $action ? $action : $_GET['action'];
+		}
+
 		return in_array( $action, array( 'add', 'edit' ) );
 	}
 

@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.6.0
 Requires PHP: 7.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,3 +50,18 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 - <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-create-a-form/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Create a Form</a>
 - <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-form-fields-overview/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: Form Fields Overview</a>
 - <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-add-the-form-to-the-page/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>
+
+== Screenshots ==
+1. Creating a form structure
+2. Adding new form fields
+3. Form Break field
+4. Post-submit Action setup
+5. Style settings
+
+== Changelog ==
+
+**1.0.1**
+ - Fixed: render wysiwyg on front-end
+ 
+**1.0.0**
+ - Initial release

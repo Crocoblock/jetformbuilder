@@ -4,5 +4,8 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.0.1
+* Fixed: render wysiwyg on front-end
+
 ## 1.0.0
 * Initial release

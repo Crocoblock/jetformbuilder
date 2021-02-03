@@ -5,18 +5,16 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Form_Messages\Manager;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
 class Controller extends Base_Gateway {
 
-	private $token;
-
 	public $data = false;
 	public $message = false;
 	public $redirect = false;
+
+	protected $token_query_name = 'token';
 
 	/**
 	 * Returns current gateway ID
@@ -36,8 +34,18 @@ class Controller extends Base_Gateway {
 		return __( 'PayPal Checkout', 'jet-form-builder' );
 	}
 
-	public function options_list() {
-		return array( 'client_id', 'secret', 'currency' );
+	protected function options_list() {
+		return array(
+			'client_id' => array(
+				'label' => __( 'Client ID', 'jet-form-builder' )
+			),
+			'secret'    => array(
+				'label' => __( 'Secret Key', 'jet-form-builder' )
+			),
+			'currency'  => array(
+				'label' => __( 'Currency Code', 'jet-form-builder' )
+			),
+		);
 	}
 
 	public function failed_statuses() {
@@ -49,11 +57,13 @@ class Controller extends Base_Gateway {
 	}
 
 	protected function retrieve_payment_instance() {
+		[ 'client_id' => $client_id, 'secret' => $secret ] = $this->gateways_meta[ $this->get_id() ];
+
 		$payment = $this->request(
-			'v2/checkout/orders/' . $this->data['payment_id'] . '/capture',
+			'v2/checkout/orders/' . $this->payment_token . '/capture',
 			array(),
 			null,
-			$this->token
+			$this->get_token( $client_id, $secret )
 		);
 
 		return json_decode( $payment, true );
@@ -184,6 +194,8 @@ class Controller extends Base_Gateway {
 	/**
 	 * Return API url
 	 *
+	 * @param $endpoint
+	 *
 	 * @return string
 	 */
 	public function api_url( $endpoint ) {
@@ -268,7 +280,7 @@ class Controller extends Base_Gateway {
 			$headers = array(
 				'Content-Type'    => 'application/json',
 				'Accept-Language' => get_locale(),
-				'Authorization'   => 'Bearer ' . $this->order_token,
+				'Authorization'   => 'Bearer ' . ( $token ? $token : $this->order_token ),
 			);
 		}
 

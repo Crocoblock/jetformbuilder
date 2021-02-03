@@ -323,4 +323,10 @@ class Tools {
 		}
 	}
 
+	public static function decode_unserializable( $value ) {
+		$data = json_decode( $value, true );
+
+		return $data ? $data : maybe_unserialize( $value );
+	}
+
 }

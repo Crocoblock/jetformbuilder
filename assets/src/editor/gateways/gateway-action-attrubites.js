@@ -5,7 +5,9 @@ function gatewayActionAttributes( action ) {
 	const { gatewayAttrs, label } = getLocalizedFullPack( action.type );
 	const actionSettings = getActionSettings( action.id );
 
-	const labelWithAttrs = gatewayAttrs().map( attr => ( `${ label( attr ) } ${ actionSettings[ attr ] }` ) );
+	const value = attr => actionSettings[ attr ] ? actionSettings[ attr ] : 'NULL';
+
+	const labelWithAttrs = gatewayAttrs().map( attr => ( `${ label( attr ) } ${ value( attr ) }` ) );
 
 	return labelWithAttrs.join( ', ' );
 }

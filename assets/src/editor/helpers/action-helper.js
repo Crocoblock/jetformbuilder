@@ -1,4 +1,31 @@
 import withActionLocalizeScript from "../components/actions/action-wrapper";
+import { useActions } from "./hooks-helper";
+import gatewayActionAttributes from "../gateways/gateway-action-attrubites";
+
+
+export const getActionLabel = ( type ) => {
+	return ( window.jetFormActionTypes.find( el => el.id === type ).name );
+};
+
+export const getActionsByType = type => {
+	const [actions] = useActions();
+
+	return actions.filter( action => type === action.type );
+};
+
+export const actionByTypeList = ( actionType, withDesc = false ) => {
+	return getActionsByType( actionType ).map( action => {
+		const newAction = {
+			value: action.id,
+			label: getActionLabel( action.type )
+		};
+		if ( withDesc ) {
+			newAction.label += ` (${ gatewayActionAttributes( action ) })`
+		}
+
+		return newAction;
+	} );
+};
 
 export const getLocalized = ( actionType, objectKey = '' ) => {
 	const preparedAction = window.jetFormActionTypes.find( action => actionType === action.id );

@@ -17,6 +17,7 @@ class Gateway_Manager {
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
 	use Instance_Trait;
+	use Gateways_Editor_Data;
 
 	private $_gateways = array();
 	private $gateways_form_data = array();
@@ -152,7 +153,6 @@ class Gateway_Manager {
 	public function try_run_gateway_controller( Base_Gateway $controller ) {
 		try {
 			$controller->set_payment_token();
-			$controller->set_payment_id();
 			$controller->set_gateways_meta();
 			$controller->set_form_gateways_meta();
 			$controller->set_payment_instance();
@@ -178,19 +178,6 @@ class Gateway_Manager {
 		return false;
 	}
 
-	public function get_gateways_for_js() {
-		$result = [];
-
-		foreach ( $this->_gateways as $gateway ) {
-			$result[] = array(
-				'value' => $gateway->get_id(),
-				'label' => $gateway->get_name()
-			);
-		}
-
-		return $result;
-	}
-
 	/**
 	 * Returns gatewyas config for current form
 	 *
@@ -208,23 +195,6 @@ class Gateway_Manager {
 		$meta = Plugin::instance()->post_type->get_gateways( $form_id );
 
 		return is_array( $meta ) ? $meta : $default;
-	}
-
-	/**
-	 * Check form gateways
-	 *
-	 * @return [type] [description]
-	 */
-	public function check_form_gateways( $res, $form_id ) {
-
-		$gateways = $this->get_form_gateways_by_id( $form_id );
-
-		if ( ! empty( $gateways ) && 'none' !== $gateways['gateway'] ) {
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 	public function gateways() {
@@ -246,13 +216,6 @@ class Gateway_Manager {
 			'jet-form-builder/gateways/notifications-before',
 			$actions_ids,
 			$action_handler->get_all()
-		);
-	}
-
-	public function get_default_messages() {
-		return array(
-			'success' => 'Payment success message',
-			'failed'  => 'Payment failed message',
 		);
 	}
 

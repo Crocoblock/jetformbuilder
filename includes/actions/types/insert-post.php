@@ -201,7 +201,7 @@ class Insert_Post extends Base {
 			) );
 		}
 
-		$handler->response_data['inserted_post_id'] = $post_id;
+		$this->add_inserted_post_id( $handler, $post_id );
 
 		/**
 		 * Perform any actions after post inserted/updated
@@ -234,6 +234,17 @@ class Insert_Post extends Base {
 		}
 	}
 
+	private function add_inserted_post_id( Action_Handler $handler, $post_id ) {
+		if ( empty( $handler->response_data['inserted_post_id'] ) ) {
+			$handler->response_data['inserted_post_id'] = $post_id;
+		} else {
+			$handler->response_data['inserted_posts'][] = array(
+				'post_id' => $post_id,
+				'action_id' => $this->_id,
+			);
+		}
+	}
+
 	public function self_script_name() {
 		return 'jetFormInsertPostData';
 	}
@@ -255,7 +266,7 @@ class Insert_Post extends Base {
 	}
 
 	public function visible_attributes_for_gateway_editor() {
-		return array();
+		return array( 'post_type', 'post_status' );
 	}
 
 	/**

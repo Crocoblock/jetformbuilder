@@ -3,6 +3,7 @@ import ActionModal from "../components/actions/action-modal";
 import FieldWithPreset from "../components/field-with-preset";
 import DynamicPreset from "../components/presets/dynamic-preset";
 import RepeaterWithState from "../components/repeater-with-state";
+import { useActions } from "../helpers/hooks-helper";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
@@ -75,37 +76,13 @@ function ActionsMeta() {
 
 	const DocumentSettingPanelActions = () => {
 
-		const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-
-		const {
-			editPost
-		} = useDispatch( 'core/editor' );
-
-
-		const [actions, setActions] = useState( JSON.parse( meta._jf_actions || '[]' ) );
-
-		const [userAction, setUserAction] = useState( 'load' );
+		const [actions, setActions] = useActions( true );
 
 		useEffect( () => {
-
-			editPost( {
-				meta: ( {
-					...meta,
-					_jf_actions: JSON.stringify( actions )
-				} )
-			} );
-
-			return () => {
-				if ( userAction === 'load' && actions.length === 0 ) {
-					setUserAction( 0 );
-					setActions( defaultActions );
-				}
-				if ( actions.length !== 0 ) {
-					setUserAction( 0 );
-				}
+			if ( 0 === actions.length ) {
+				setActions( defaultActions );
 			}
-		} );
-
+		}, [] );
 
 		const moveAction = ( fromIndex, toIndex ) => {
 

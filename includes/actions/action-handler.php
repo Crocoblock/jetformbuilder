@@ -56,11 +56,11 @@ class Action_Handler {
 	 */
 	public function set_form_actions() {
 		$available_actions = Plugin::instance()->actions->get_actions();
-		$form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
+		$form_actions      = Plugin::instance()->post_type->get_actions( $this->form_id );
 
 		foreach ( $form_actions as $form_action ) {
-			$id = $form_action['id'];
-			$type = $form_action['type'];
+			$id         = $form_action['id'];
+			$type       = $form_action['type'];
 			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
 
 			if ( isset( $available_actions[ $type ] ) ) {
@@ -70,7 +70,8 @@ class Action_Handler {
 				 * it allows to not send action settings
 				 * in action hook
 				 */
-				$action->settings = $form_action['settings'];
+				$action->_id        = $id;
+				$action->settings   = $form_action['settings'];
 				$action->conditions = $conditions;
 
 				$this->form_actions[ $id ] = $action;
@@ -90,12 +91,13 @@ class Action_Handler {
 	 */
 	public function unregister_action( $key ) {
 		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
-			unset($this->form_actions[ $key ] );
+			unset( $this->form_actions[ $key ] );
+
 			return;
 		}
-		foreach( $this->form_actions as $index => $action ) {
+		foreach ( $this->form_actions as $index => $action ) {
 			if ( $key === $action->get_id() ) {
-				unset( $this->form_actions[ $index ] );	
+				unset( $this->form_actions[ $index ] );
 			}
 		}
 	}
@@ -182,6 +184,22 @@ class Action_Handler {
 			$action->do_action( $this->request_data, $this );
 		}
 
+	}
+
+	public function get_inserted_post_id( $action_id = 0 ) {
+		if ( ! $action_id ) {
+			return absint( $this->response_data['inserted_post_id'] );
+		}
+
+		$action_id = absint( $action_id );
+
+		foreach ( $this->response_data['inserted_posts'] as $posts ) {
+			if ( $action_id === $posts['action_id'] ) {
+				return $posts['post_id'];
+			}
+		}
+
+		return absint( $this->response_data['inserted_post_id'] );
 	}
 
 	public function add_response( $values ) {

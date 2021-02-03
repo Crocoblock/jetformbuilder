@@ -642,7 +642,13 @@ select.components-select-control__input {
 
 .jet-control-clear .components-base-control__field{
     padding: unset;
-    border: unset;
+    border-top: unset;
+}
+
+.jet-control-clear-full .components-base-control__field {
+    display: block;
+    padding: unset;
+    border-top: unset;
 }
 
 .jet-forms-checkbox-field p.components-base-control__help{

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
@@ -55,7 +56,7 @@ abstract class Base_Gateway {
 	 */
 	abstract public function get_name();
 
-	abstract public function options_list();
+	abstract protected function options_list();
 
 	abstract public function after_actions( Action_Handler $action_handler );
 
@@ -190,18 +191,12 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	final public function set_payment_id() {
-		$this->payment_id = $this->get_payment_id();
-
-		if ( 0 === $this->payment_id ) {
-			throw new Gateway_Exception( 'Invalid payment id.' );
-		}
-
-		return $this;
-	}
 
 	final public function set_gateways_meta() {
-		$this->data = $this->get_form_data();
+		$row_data = $this->get_form_data();
+
+		$this->payment_id = $row_data['post_id'];
+		$this->data       = Tools::decode_unserializable( $row_data['meta_value'] );
 
 		return $this;
 	}
@@ -221,7 +216,7 @@ abstract class Base_Gateway {
 	}
 
 	public function get_payment_token() {
-		return esc_attr( $_GET['order_token'] );
+		return esc_attr( $_GET[ $this->token_query_name ] );
 	}
 
 	public function get_payment_id() {
@@ -276,26 +271,18 @@ abstract class Base_Gateway {
 		global $wpdb;
 		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
 
-		$row = $wpdb->get_row( $sql, ARRAY_A );
-
-		if ( empty( $row ) ) {
-			return;
-		}
-
-		$data = json_decode( $row['meta_value'], true );
-
-		return $data ? $data : maybe_unserialize( $row['meta_value'] );
-
+		return $wpdb->get_row( $sql, ARRAY_A );
 	}
 
 	protected function set_order_id() {
-		$response = $this->action_handler->response_data;
-		if ( ! isset( $response['inserted_post_id'] )
-		     || empty( $response['inserted_post_id'] ) ) {
+		$inserted_id = empty( $this->gateways_meta['action_order'] ) ? 0 : $this->gateways_meta['action_order'];
+		$inserted_id = $this->action_handler->get_inserted_post_id( $inserted_id );
 
+		if ( ! $inserted_id ) {
 			throw new Gateway_Exception( 'There is not inserted_post_id' );
 		}
-		$this->order_id = $response['inserted_post_id'];
+
+		$this->order_id = $inserted_id;
 	}
 
 
@@ -324,11 +311,11 @@ abstract class Base_Gateway {
 	protected function set_current_gateway_options() {
 		$gateway = $this->gateways_meta[ $this->get_id() ];
 
-		foreach ( $this->options_list() as $option ) {
-			if ( ! isset( $gateway[ $option ] ) || empty( $gateway[ $option ] ) ) {
+		foreach ( $this->options_list() as $name => $option ) {
+			if ( ! isset( $gateway[ $name ] ) || empty( $gateway[ $name ] ) ) {
 				throw new Gateway_Exception( 'Invalid gateway options' );
 			}
-			$this->options[ $option ] = esc_attr( $gateway[ $option ] );
+			$this->options[ $name ] = esc_attr( $gateway[ $name ] );
 		}
 	}
 
@@ -384,6 +371,19 @@ abstract class Base_Gateway {
 
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );
+	}
+
+	public function options( $param = false ) {
+		$labels = array();
+
+		if ( ! $param ) {
+			return $this->options_list();
+		}
+		foreach ( $this->options_list() as $name => $option ) {
+			$labels[ $name ] = $option[ $param ];
+		}
+
+		return $labels;
 	}
 
 

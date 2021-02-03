@@ -34,6 +34,12 @@ abstract class Base {
 	 */
 	public $conditions = array();
 
+	/**
+	 * Stores the unique id of action
+	 * @var integer
+	 */
+	public $_id;
+
 	public function __construct() {
 		$this->set_action_messages();
 	}

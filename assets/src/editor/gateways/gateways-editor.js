@@ -1,8 +1,9 @@
 import PayPal from "./paypal";
 import Stripe from "./stripe";
 import Tools from "../helpers/tools";
-import GatewayActionAttributes from "./gateway-action-attrubites";
 import gatewayActionAttributes from "./gateway-action-attrubites";
+import { gatewayAttr } from "../helpers/gateway-action-helper";
+import { actionByTypeList, getActionLabel } from "../helpers/action-helper";
 
 const { __ } = wp.i18n;
 
@@ -38,15 +39,12 @@ export default function GatewaysEditor( {
 
 	const availableActions = parseActions( activeActions );
 
-	const gatewaysData = window.JetFormEditorData.gateways;
+	const gatewaysData = gatewayAttr();
+	const label = gatewayAttr( 'labels' );
 
 	const [gateway, setGateway] = useState( gatewaysArgs );
 
 	const formFields = Tools.getFormFieldsBlocks();
-
-	const getActionLabel = ( type ) => {
-		return ( window.jetFormActionTypes.find( el => el.id === type ).name );
-	};
 
 	/**
 	 * Used for set notifications and gateway type settings
@@ -54,7 +52,6 @@ export default function GatewaysEditor( {
 	 * @param when
 	 * @param type
 	 * @param newValue
-	 * @param isRemove
 	 */
 	const setValueInObject = ( when, type, newValue ) => {
 		setGateway( ( prevArgs ) => {
@@ -139,6 +136,8 @@ export default function GatewaysEditor( {
 		}
 	}, [isSaveAction] );
 
+	const actionsList = actionByTypeList( 'insert_post', true );
+
 	return <>
 		{ 'paypal' === gateway.gateway && <PayPal
 			setValueInObject={ setValueInObject }
@@ -216,13 +215,32 @@ export default function GatewaysEditor( {
 				</div>
 			</BaseControl>
 		</> }
+
+		{ ( 1 < actionsList.length || gateway.action_order ) && <BaseControl
+			label={ label( 'action_order' ) }
+			key='gateway_action_order_base_control'
+		>
+			<RadioControl
+				className='jet-control-clear-full'
+				key='gateway_action_order'
+				options={ actionByTypeList( 'insert_post', true ) }
+				selected={ gateway.action_order }
+				onChange={ newVal => {
+					setGateway( prevArgs => ( {
+						...prevArgs,
+						action_order: Number( newVal )
+					} ) );
+				} }
+			/>
+		</BaseControl> }
+
 		<SelectControl
-			label={ __( 'Price/amount field', 'jet-form-builder' ) }
+			label={ label( 'price_field' ) }
 			key={ 'form_fields_price_field' }
 			value={ gateway.price_field }
 			labelPosition='side'
 			onChange={ newVal => {
-				setGateway( ( prevArgs ) => ( {
+				setGateway( prevArgs => ( {
 					...prevArgs,
 					price_field: newVal
 				} ) );
@@ -242,30 +260,27 @@ export default function GatewaysEditor( {
 
 		<TextareaControl
 			key="payment_result_message_success"
-			label={ __( 'Payment success message', 'jet-form-builder' ) }
+			label={ label( 'message_success' ) }
 			value={ getResultMessage( 'success' ) }
 			onChange={ newValue => setResultMessage( 'success', newValue ) }
 		/>
 		<TextareaControl
 			key="payment_result_message_failed"
-			label={ __( 'Payment failed message', 'jet-form-builder' ) }
+			label={ label( 'message_failed' ) }
 			value={ getResultMessage( 'failed' ) }
 			onChange={ newValue => setResultMessage( 'failed', newValue ) }
 		/>
-		{
-			activeActions.find( action => action.type === 'redirect_to_page' ) &&
-			<CheckboxControl
-				key="checkbox_block_redirect_to_page"
-				checked={ gateway.use_success_redirect }
-				label={ __( 'Use redirect URL from Redirect notification', 'jet-form-builder' ) }
-				onChange={ value => {
-					setGateway( ( prevArgs ) => ( {
-						...prevArgs,
-						use_success_redirect: value
-					} ) );
-				} }
-			/>
-		}
+		{ activeActions.find( action => action.type === 'redirect_to_page' ) && <CheckboxControl
+			key="checkbox_block_redirect_to_page"
+			checked={ gateway.use_success_redirect }
+			label={ label( 'use_success_redirect' ) }
+			onChange={ value => {
+				setGateway( prevArgs => ( {
+					...prevArgs,
+					use_success_redirect: value
+				} ) );
+			} }
+		/> }
 	</>;
 
 }

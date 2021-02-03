@@ -99,7 +99,7 @@ function Gateways() {
 
 		useEffect( () => {
 			saveGateway( gateway );
-		} );
+		}, [gateway] );
 
 		return (
 			<PluginDocumentSettingPanel

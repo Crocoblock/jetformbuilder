@@ -28,8 +28,18 @@ class Controller extends Base_Gateway {
 		return __( 'Stripe Checkout', 'jet-form-builder' );
 	}
 
-	public function options_list() {
-		return array( 'public', 'secret', 'currency' );
+	protected function options_list() {
+		return array(
+			'public' => array(
+				'label' => __( 'Public Key', 'jet-form-builder' )
+			),
+			'secret'    => array(
+				'label' => __( 'Secret Key', 'jet-form-builder' )
+			),
+			'currency'  => array(
+				'label' => __( 'Currency Code', 'jet-form-builder' )
+			),
+		);
 	}
 
 	protected function failed_statuses() {

@@ -405,7 +405,7 @@ class Editor {
 			'presetConfig'     => $this->get_preset_config(),
 			'messagesDefault'  => $this->get_messages_default(),
 			'recaptchaLabels'  => $this->get_recaptcha_labels(),
-			'gateways'         => $this->get_gateways_data(),
+			'gateways'         => Gateway_Manager::instance()->editor_data(),
 			'helpForRepeaters' => $this->get_help_for_repeaters(),
 		) );
 
@@ -421,20 +421,6 @@ class Editor {
 				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' )
 			),
 		);
-	}
-
-	private function get_gateways_data() {
-		$result = array(
-			'allowed' => Plugin::instance()->post_type->allow_gateways
-		);
-
-		if ( $result['allowed'] ) {
-
-			$result['list']     = Gateway_Manager::instance()->get_gateways_for_js();
-			$result['messages'] = Gateway_Manager::instance()->get_default_messages();
-		}
-
-		return $result;
 	}
 
 	public function enqueue_form_assets() {

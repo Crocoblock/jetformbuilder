@@ -10,6 +10,30 @@ use Jet_Form_Builder\Plugin;
 
 class Form extends Widget_Base {
 
+	public function __construct( $data = [], $args = null ) {
+		parent::__construct( $data, $args );
+
+		add_action(
+			'jet-engine/booking-form/register-controls',
+			array( $this, 'booking_form_register_controls' )
+		);
+
+		add_filter(
+			'jet-engine/forms/pre-render-form',
+			array( $this, 'booking_form_render' ), 10, 2
+		);
+
+		/*add_filter(
+			'jet-engine/booking-form/is-register-custom-style-controls',
+			'__return_true'
+		);
+
+		add_action(
+			'jet-engine/booking-form/register-custom-style-controls',
+			array( $this, 'booking_form_register_style_controls' )
+		);*/
+	}
+
 
 	/**
 	 * @return string
@@ -30,6 +54,80 @@ class Form extends Widget_Base {
 		return array( 'jet-listing-elements' );
 	}
 
+	private function jet_form_builder_slug() {
+		return jet_form_builder()->post_type->slug();
+	}
+
+	private function jet_engine_form_slug() {
+		return jet_engine()->forms->slug();
+	}
+
+	public function booking_form_register_controls( $booking_form ) {
+		$booking_form->remove_control( '_form_id' );
+
+		$booking_form->add_control(
+			'form_provider',
+			array(
+				'label'   => __( 'Choose Provider', 'jet-form-builder' ),
+				'type'    => Controls_Manager::CHOOSE,
+				'options' => array(
+					$this->jet_form_builder_slug() => array(
+						'title' => __( 'JetFormBuilder', 'jet-form-builder' ),
+						'icon'  => 'fa fa-align-left',
+					),
+					$this->jet_engine_form_slug()  => array(
+						'title' => __( 'JetEngine', 'jet-form-builder' ),
+						'icon'  => 'fa fa-align-center',
+					),
+				),
+				'default' => $this->jet_engine_form_slug(),
+			)
+		);
+
+		$booking_form->add_control(
+			'_form_id',
+			array(
+				'label'      => __( 'Select JetEngine form', 'jet-form-builder' ),
+				'type'       => 'jet-query',
+				'query_type' => 'post',
+				'query'      => array(
+					'post_type' => $this->jet_engine_form_slug(),
+				),
+				'condition'  => array( 'form_provider' => $this->jet_engine_form_slug() )
+			)
+		);
+
+		$booking_form->add_control(
+			'form_id',
+			array(
+				'label'      => __( 'Select JetForm', 'jet-form-builder' ),
+				'type'       => 'jet-query',
+				'query_type' => 'post',
+				'query'      => array(
+					'post_type' => $this->jet_form_builder_slug(),
+				),
+				'condition'  => array( 'form_provider' => $this->jet_form_builder_slug() )
+			)
+		);
+	}
+
+	public function booking_form_register_style_controls( $booking_form ) {
+
+	}
+
+	public function booking_form_render( $result, $settings ) {
+		$slug = $this->jet_form_builder_slug();
+
+		if ( empty( $settings['form_provider'] ) || $slug !== $settings['form_provider'] ) {
+			return false;
+		}
+		if ( empty( $settings['form_id'] ) ) {
+			return __( 'Please, select JetForm to show', 'jet-form-builder' );
+		}
+
+		return jet_fb_render_form( $settings );
+	}
+
 	/**
 	 * Register the widget controls.
 	 *
@@ -42,7 +140,7 @@ class Form extends Widget_Base {
 	protected function _register_controls() {
 
 		$options = Tools::get_form_settings_options( true );
-	    
+
 		$this->start_controls_section(
 			'section_form_settings',
 			[
@@ -105,7 +203,7 @@ class Form extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
-		echo Plugin::instance()->blocks->get_form_class()->render_callback_field( $settings );
+		echo jet_fb_render_form( $settings );
 	}
 
 

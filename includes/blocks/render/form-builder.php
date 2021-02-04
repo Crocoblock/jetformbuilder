@@ -30,7 +30,7 @@ class Form_Builder {
 	public $post;
 	public $args = array();
 
-	private $blocks;
+	private $form_content;
 
 	/**
 	 * Constructor for the class
@@ -51,7 +51,7 @@ class Form_Builder {
 			$this->post = get_post();
 		}
 
-		$this->blocks = Plugin::instance()->form->get_form_by_id( $form_id );
+		$this->form_content = Plugin::instance()->form->get_form_content( $form_id );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Form_Builder {
 
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
-		$this->add_attribute( 'class', 'jet-form' );
+		$this->add_attribute( 'class', 'jet-form-builder' );
 		$this->add_attribute( 'class', 'layout-' . $this->args['fields_layout'] );
 		$this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
 		$this->add_attribute( 'action', $this->get_form_action_url() );
@@ -186,7 +186,7 @@ class Form_Builder {
 		Live_Form::instance()
 		         ->set_form_id( $this->form_id )
 		         ->set_specific_data_for_render( $this->args )
-		         ->setup_fields( $this->blocks );
+		         ->setup_fields( $this->form_content );
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
@@ -211,9 +211,7 @@ class Form_Builder {
 
 		$form .= Live_Form::instance()->maybe_start_page();
 
-		foreach ( $this->blocks as $block ) {
-			$form .= render_block( $block );
-		}
+		$form .= do_blocks( $this->form_content );
 
 		$form .= Live_Form::instance()->maybe_end_page( true );
 		$form .= $this->end_form();

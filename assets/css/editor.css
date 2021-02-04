@@ -591,9 +591,10 @@
     margin-bottom: 0.7em;
 }
 
-select.components-select-control__input {
+select.components-select-control__input.components-select-control__input.components-select-control__input {
     max-width: 100vw;
     width: 100%;
+    line-height: 1.1;
 }
 
 .jet-form-builder__calculated-field {

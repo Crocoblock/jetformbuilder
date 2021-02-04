@@ -100,12 +100,18 @@ class Live_Form {
 		return Plugin::instance()->form->is_field( $block['blockName'], $needle );
 	}
 
+	public function get_fields( $content ) {
+		return Plugin::instance()->form->get_fields( $content );
+	}
+
 	/**
 	 * Setup fields prop
 	 *
-	 * @param $blocks
+	 * @param $content
 	 */
-	public function setup_fields( $blocks ) {
+	public function setup_fields( $content ) {
+		$blocks = $this->get_fields( $content );
+
 		foreach ( $blocks as $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
 				$this->pages ++;

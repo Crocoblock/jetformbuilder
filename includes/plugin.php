@@ -4,8 +4,8 @@ namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Form_Patterns;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
-use Jet_Form_Builder\Migrations\Migrate_Manager;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -55,7 +55,7 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
-
+		new Form_Patterns\Manager();
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();

@@ -22,9 +22,6 @@ class Form_Manager {
 	const   NAMESPACE_FIELDS = 'jet-forms/';
 
 	public function __construct() {
-		add_filter( 'jet-engine/forms/allow-gateways', '__return_true' );
-		add_filter( 'jet-engine/forms/gateways/paypal/sandbox-mode', '__return_true' );
-
 		if ( Plugin::instance()->post_type->allow_gateways ) {
 			Gateway_Manager::instance();
 		}
@@ -83,12 +80,12 @@ class Form_Manager {
 		return stristr( $block_name, $needle );
 	}
 
-	public function get_form_by_id( $form_id ) {
+	public function get_form_blocks( $form_id ) {
 		return $this->get_fields( get_post( $form_id )->post_content );
 	}
 
 	public function get_only_form_fields( $form_id ) {
-		$content = $this->get_form_by_id( $form_id );
+		$content = $this->get_form_blocks( $form_id );
 
 		$this->result_fields = array();
 		$this->get_inner_fields( $content );
@@ -132,6 +129,10 @@ class Form_Manager {
 
 	public function field_name( $blockName ) {
 		return explode( self::NAMESPACE_FIELDS, $blockName )[1];
+	}
+
+	public function get_form_content( $form_id ) {
+		return get_post( $form_id )->post_content;
 	}
 
 

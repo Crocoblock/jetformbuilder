@@ -58,8 +58,8 @@ class Form extends Base {
 	public function get_css_scheme() {
 		return array_merge(
 			array(
-				'success'  => '.jet-form-message--success',
-				'error'    => '.jet-form-message--error',
+				'success'  => '.jet-form-builder-message--success',
+				'error'    => '.jet-form-builder-message--error',
 				'form-row' => '.jet-form-builder-row'
 			),
 			$this->form_break_css_scheme()
@@ -492,7 +492,7 @@ class Form extends Base {
 		$builder->render_form();
 		$messages->render_messages();
 
-		if ( Tools::is_editor() || \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
+		if ( Tools::is_editor() ) {
 			$messages->render_messages_samples();
 		}
 

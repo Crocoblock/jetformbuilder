@@ -15,6 +15,10 @@ class Tools {
 	const EMPTY_DEEP_VALUE = self::class;
 
 	public static function is_editor() {
+		return self::is_block_editor() || self::is_elementor_editor();
+	}
+
+	public static function is_block_editor() {
 		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
 
 		if ( isset( $_GET['action'] ) ) {
@@ -22,6 +26,13 @@ class Tools {
 		}
 
 		return in_array( $action, array( 'add', 'edit' ) );
+	}
+
+	public static function is_elementor_editor() {
+		if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
+			return false;
+		}
+		return ( \Elementor\Plugin::instance()->editor->is_edit_mode() );
 	}
 
 	/**

@@ -3,8 +3,8 @@
  * Field label template
  */
 
-if ( isset( $args['type'] ) && 'heading' === $args['type'] ) {
-	$class = 'jet-form-builder__field-heading';
+if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
+	$class = 'jet-form-builder__heading';
 } else {
 	$class = 'jet-form-builder__label';
 }

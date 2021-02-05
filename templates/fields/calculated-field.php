@@ -31,7 +31,7 @@ if ( ! empty( $this->live_form->current_repeater ) ) {
         <div class="jet-form-builder__calculated-field-prefix"><?php echo $prefix; ?></div>
     <?php endif; ?>
 	<input type="hidden" name="<?php echo $name; ?>" value="<?php echo $default_value; ?>" class="jet-form-builder__calculated-field-input jet-form-builder__field" data-field-name="<?php echo $args['name']; ?>">
-	<div class="jet-form-builder__calculated-field-val"></div>
+	<div class="jet-form-builder__calculated-field-val"><?php echo $this->render_editor_placeholder(); ?></div>
 	<?php if ( false !== $suffix ) : ?>
         <div class="jet-form-builder__calculated-field-suffix"><?php echo $suffix; ?></div>
     <?php endif; ?>

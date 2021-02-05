@@ -2,7 +2,7 @@
 /**
  * Field description template
  */
-if ( isset( $args['type'] ) && 'heading' === $args['type'] ) {
+if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
 	$class = 'jet-form-builder__heading-desc';
 	$format   = '<div class="%1$s">%2$s</div>';
 } else {

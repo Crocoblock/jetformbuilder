@@ -3,7 +3,7 @@
     --jet-fb__range-field-range--height: 4px;
 }
 
-.jet-form.is-loading {
+.jet-form-builder.is-loading {
     opacity: .5;
     pointer-events: none
 }
@@ -433,18 +433,18 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
     border: none
 }
 
-.jet-form-message {
+.jet-form-builder-message {
     margin: 20px 0 0 0;
     text-align: center;
     padding: 20px
 }
 
-.jet-form-message--success {
+.jet-form-builder-message--success {
     border: 1px solid green;
     color: green
 }
 
-.jet-form-message--error {
+.jet-form-builder-message--error {
     border: 1px solid red;
     color: red
 }

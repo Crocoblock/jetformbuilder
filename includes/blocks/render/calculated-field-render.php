@@ -3,6 +3,8 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Tools;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -14,6 +16,10 @@ class Calculated_Field_Render extends Base {
 
 	public function get_name() {
 		return 'calculated-field';
+	}
+
+	public function render_editor_placeholder() {
+		return Tools::is_editor() ? '25.00' : '';
 	}
 
 	/**

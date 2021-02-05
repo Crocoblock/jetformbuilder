@@ -3,8 +3,11 @@
 	"use strict";
 
 	const JetFormBuilderDev = {
+		isActive: function () {
+			return Boolean( window.JetFormBuilderSettings.devmode );
+		},
 		log: function ( label = '', params = {} ) {
-			if ( ! window.JetFormBuilderSettings.devmode || ! params ) {
+			if ( ! this.isActive() || ! params ) {
 				return;
 			}
 			console.group( label );
@@ -12,8 +15,44 @@
 				console.log( `${ key }: ${ params[ key ] }` );
 			}
 			console.groupEnd();
+		},
+		hardLog: function ( label = '', params = {} ) {
+			this.log( label, params );
+			if ( this.isActive() ) {
+				debugger;
+			}
 		}
 	}
+
+	const getUrlParams = ( { url = '' } = {} ) => {
+		let sourceUrl = decodeURIComponent( url ? url : window.location.href );
+		const urlParts = sourceUrl.split( '?' );
+
+		if ( ! urlParts[ 1 ] || ! urlParts[ 1 ].length ) {
+			return {};
+		}
+		const arrParams = urlParts[ 1 ].split( '&' );
+		const response = {};
+
+		arrParams.forEach( param => {
+			const [key, value = ''] = param.split( '=' );
+			response[ key ] = value;
+		} );
+
+		return response;
+	};
+
+	const stripeRedirectToCheckout = requestParams => {
+		//JetFormBuilderDev.hardLog( 'Stripe', requestParams );
+
+		if ( requestParams.stripe_session_id && requestParams.stripe_public_key ) {
+			const stripe = new Stripe( requestParams.stripe_public_key );
+
+			stripe.redirectToCheckout( { sessionId: requestParams.stripe_session_id } );
+		}
+	}
+
+	stripeRedirectToCheckout( getUrlParams() );
 
 	window.JetFormBuilderMain = {
 
@@ -459,7 +498,7 @@
 
 			var self = JetFormBuilder;
 
-			$( '.jet-form' ).each( function ( index, value ) {
+			$( '.jet-form-builder' ).each( function ( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
 
@@ -808,7 +847,7 @@
 
 		initFormPager: function ( $scope ) {
 			var $pages = $scope.find( '.jet-form-page' ),
-				$form = $scope.find( '.jet-form' );
+				$form = $scope.find( '.jet-form-builder' );
 
 			if ( ! $pages.length ) {
 				return;
@@ -965,7 +1004,7 @@
 
 		switchFormPage: function ( $fromPage, $toPage ) {
 
-			var $form = $fromPage.closest( '.jet-form' );
+			var $form = $fromPage.closest( '.jet-form-builder' );
 
 			const $progress = $form.find( '.jet-form-progress-pages' );
 
@@ -974,7 +1013,7 @@
 
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
-			$( '.jet-form-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
+			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
 			$( document ).trigger( 'jet-form-builder/switch-page', [$progress, $fromPage.data( 'page' ), $toPage.data( 'page' )] );
 		},
 
@@ -1230,7 +1269,7 @@
 		ajaxSubmitForm: function () {
 
 			var $this = $( this ),
-				$form = $this.closest( '.jet-form' ),
+				$form = $this.closest( '.jet-form-builder' ),
 				formID = $form.data( 'form-id' ),
 				data = {
 					action: JetFormBuilderSettings.form_action,
@@ -1293,18 +1332,16 @@
 							window.location = response.redirect;
 						} else if ( response.reload ) {
 							window.location.reload();
-						} else if ( response.stripe_session_id && response.stripe_public_key ) {
-							const stripe = new Stripe( response.stripe_public_key );
-
-							stripe.redirectToCheckout( { sessionId: response.stripe_session_id } );
 						}
+
+						stripeRedirectToCheckout( response );
 
 						$( document ).trigger( 'jet-form-builder/ajax/on-success', [response, $form, data] );
 
 						break;
 				}
 
-				$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( response.message );
+				$( '.jet-form-builder-messages-wrap[data-form-id="' + formID + '"]' ).html( response.message );
 
 			} );
 
@@ -1320,7 +1357,7 @@
 				$( elem ).siblings( '.error-message' ).remove();
 			} );
 
-			$( '.jet-form-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
+			$( '.jet-form-builder-messages-wrap[data-form-id="' + formID + '"]' ).html( '' );
 
 		},
 

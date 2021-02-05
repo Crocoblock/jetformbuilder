@@ -5,10 +5,12 @@ namespace Jet_Form_Builder\Widgets\Types;
 
 use Elementor\Controls_Manager;
 use Elementor\Widget_Base;
+use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Plugin;
 
 class Form extends Widget_Base {
+
+	use General_Style_Functions;
 
 	public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
@@ -187,6 +189,50 @@ class Form extends Widget_Base {
 				'options' => $options['submit_type']
 			]
 		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_form_style',
+			array(
+				'label' => __( 'Form Row', 'jet-form-builder' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_responsive_control( 'form_row_gap_before', array(
+
+			'type'         => Controls_Manager::SLIDER,
+			'label'        => __( 'Gap Before', 'jet-form-builder' ),
+			'size_units'   => array( 'px' ),
+			'range'        => array(
+				'px' => array(
+					'min' => 0,
+					'max' => 100,
+				),
+			),
+			'selectors' => array(
+				$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
+			),
+		) );
+
+		$this->add_responsive_control( 'form_row_gap_after', array(
+
+			'type'         => Controls_Manager::SLIDER,
+			'label'        => __( 'Gap Before', 'jet-form-builder' ),
+			'size_units'   => array( 'px' ),
+			'range'        => array(
+				'px' => array(
+					'min' => 0,
+					'max' => 100,
+				),
+			),
+			'selectors' => array(
+				$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
+			),
+		) );
+
+
 
 		$this->end_controls_section();
 	}

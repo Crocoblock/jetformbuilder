@@ -58,9 +58,8 @@ class Form extends Base {
 	public function get_css_scheme() {
 		return array_merge(
 			array(
-				'success'  => '.jet-form-builder-message--success',
-				'error'    => '.jet-form-builder-message--error',
-				'form-row' => '.jet-form-builder-row'
+				'success'  => '-message--success',
+				'error'    => '-message--error',
 			),
 			$this->form_break_css_scheme()
 		);
@@ -91,7 +90,7 @@ class Form extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-top: {{VALUE}}{{UNIT}};',
+				$this->selector( '-row' ) => 'margin-top: {{VALUE}}{{UNIT}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -114,7 +113,7 @@ class Form extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['form-row'] => 'margin-bottom: {{VALUE}}{{UNIT}};',
+				$this->selector( '-row' ) => 'margin-bottom: {{VALUE}}{{UNIT}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -143,7 +142,7 @@ class Form extends Base {
 			]
 		);
 
-		$this->add_margin_padding( $this->css_scheme['success'], array(
+		$this->add_margin_padding( $this->selector( 'success' ), array(
 			'margin'  => array(
 				'id'        => 'success_margin',
 				'separator' => 'after',
@@ -174,7 +173,7 @@ class Form extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'text-align: {{VALUE}};',
+				$this->selector( 'success' ) => 'text-align: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -188,7 +187,7 @@ class Form extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'success' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 
 			],
 		] );
@@ -204,7 +203,7 @@ class Form extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'color: {{VALUE}}',
+				$this->selector( 'success' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -219,7 +218,7 @@ class Form extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'background-color: {{VALUE}}',
+				$this->selector( 'success' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -228,7 +227,7 @@ class Form extends Base {
 			'type'         => 'border',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['success'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'success' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -245,7 +244,7 @@ class Form extends Base {
 			]
 		);
 
-		$this->add_margin_padding( $this->css_scheme['error'], array(
+		$this->add_margin_padding( $this->selector( 'error' ), array(
 			'margin'  => array(
 				'id'        => 'error_margin',
 				'separator' => 'after',
@@ -276,7 +275,7 @@ class Form extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'text-align: {{VALUE}};',
+				$this->selector( 'error' ) => 'text-align: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -290,7 +289,7 @@ class Form extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'error' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 
 			],
 		] );
@@ -306,7 +305,7 @@ class Form extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'color: {{VALUE}}',
+				$this->selector( 'error' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -321,7 +320,7 @@ class Form extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'background-color: {{VALUE}}',
+				$this->selector( 'error' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -330,7 +329,7 @@ class Form extends Base {
 			'type'         => 'border',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['error'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'error' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 

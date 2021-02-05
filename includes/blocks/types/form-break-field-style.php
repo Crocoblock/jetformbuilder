@@ -8,10 +8,10 @@ trait Form_Break_Field_Style {
 
 	public function form_break_css_scheme() {
 		return array(
-			'next-button'      => 'button.jet-form-builder__next-page',
-			'prev-button'      => 'button.jet-form-builder__prev-page',
-			'disabled-message' => 'div.jet-form-builder__next-page-msg',
-			'wrap'             => 'div.jet-form-builder__next-page-wrap'
+			'next-button'      => '__next-page',
+			'prev-button'      => '__prev-page',
+			'disabled-message' => '__next-page-msg',
+			'break-wrap'       => '__next-page-wrap'
 		);
 	}
 
@@ -26,7 +26,7 @@ trait Form_Break_Field_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['wrap'],
+			$this->div_selector( 'break-wrap' ),
 			array(
 				'padding' => array(
 					'id'        => 'break_buttons_padding',
@@ -54,7 +54,7 @@ trait Form_Break_Field_Style {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'text-align: {{VALUE}};',
+				$this->div_selector( 'break-wrap' ) => 'text-align: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -68,7 +68,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'border',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->div_selector( 'break-wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -84,7 +84,7 @@ trait Form_Break_Field_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['next-button'],
+			$this->button_selector( 'next-button' ),
 			array(
 				'margin'  => array(
 					'id'        => 'next_button_margin',
@@ -101,7 +101,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->button_selector( 'next-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 		$this->controls_manager->add_control( [
@@ -110,7 +110,7 @@ trait Form_Break_Field_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->button_selector( 'next-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -135,7 +135,7 @@ trait Form_Break_Field_Style {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] => 'color: {{VALUE}}',
+				$this->button_selector( 'next-button' ) => 'color: {{VALUE}}',
 			),
 		] );
 		$this->controls_manager->add_control( [
@@ -143,7 +143,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] => 'background-color: {{VALUE}}',
+				$this->button_selector( 'next-button' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -163,7 +163,7 @@ trait Form_Break_Field_Style {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				$this->button_selector( 'next-button', ':hover:not(:disabled)' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -172,7 +172,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['next-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				$this->button_selector( 'next-button', ':hover:not(:disabled)' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -209,7 +209,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->button_selector( 'prev-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -219,7 +219,7 @@ trait Form_Break_Field_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->button_selector( 'prev-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -244,7 +244,7 @@ trait Form_Break_Field_Style {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] => 'color: {{VALUE}}',
+				$this->button_selector( 'prev-button' ) => 'color: {{VALUE}}',
 			),
 		] );
 		$this->controls_manager->add_control( [
@@ -252,7 +252,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] => 'background-color: {{VALUE}}',
+				$this->button_selector( 'prev-button' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -272,7 +272,7 @@ trait Form_Break_Field_Style {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				$this->button_selector( 'prev-button', ':hover:not(:disabled)' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -281,7 +281,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['prev-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				$this->button_selector( 'prev-button', ':hover:not(:disabled)' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -301,7 +301,7 @@ trait Form_Break_Field_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['disabled-message'],
+			$this->div_selector( 'disabled-message' ),
 			array(
 				'margin'  => array(
 					'id'        => 'disabled_message_margin',
@@ -318,7 +318,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['disabled-message'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->div_selector( 'disabled-message' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 		$this->controls_manager->add_control( [
@@ -326,7 +326,7 @@ trait Form_Break_Field_Style {
 			'type'         => 'border',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['disabled-message'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->div_selector( 'disabled-message' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 

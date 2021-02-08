@@ -7,6 +7,10 @@ abstract class Integration_Base {
 	protected $api_key = '';
 	protected $api_request_args = array();
 
+	public function __construct( $api_key ) {
+		$this->api_key = $api_key;
+	}
+
 	abstract public function get_all_data();
 
 	public function request( $end_point, $request_args = array() ) {

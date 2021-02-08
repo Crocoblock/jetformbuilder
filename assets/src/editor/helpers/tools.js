@@ -150,4 +150,8 @@ export const event = name => {
 	return () => document.dispatchEvent( initializeCallbacksEvent );
 };
 
+export const listen = ( name, func ) => {
+	document.addEventListener( name, func );
+}
+
 export default Tools;

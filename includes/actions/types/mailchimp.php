@@ -174,30 +174,6 @@ class Mailchimp extends Integration_Base_Action {
 		return $body_args;
 	}
 
-	/**
-	 * Get MailChimp data
-	 */
-	public function get_mailchimp_data() {
-
-		if ( empty( $_REQUEST['api_key'] ) ) {
-			wp_send_json_error();
-		}
-
-		$handler = new MailChimp_Handler( $_REQUEST['api_key'] );
-
-		if ( is_wp_error( $handler ) ) {
-			wp_send_json_error();
-		}
-
-		$data = $handler->get_all_data();
-
-		if ( empty( $data['lists'] ) ) {
-			wp_send_json_error();
-		}
-
-		wp_send_json_success( $data );
-	}
-
 	public function self_script_name() {
 		return 'jetFormMailchimpData';
 	}

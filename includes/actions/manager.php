@@ -53,11 +53,11 @@ class Manager {
 	/**
 	 * Register new action type
 	 *
-	 * @param  [type] $type [description]
+	 * @param Types\Base $type
 	 *
-	 * @return [type]       [description]
+	 * @return void [description]
 	 */
-	public function register_action_type( $type ) {
+	public function register_action_type( Types\Base $type ) {
 		if ( $type->dependence() ) {
 			$this->_types[ $type->get_id() ] = $type;
 		}

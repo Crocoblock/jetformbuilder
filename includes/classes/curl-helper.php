@@ -11,10 +11,22 @@ class Curl_Helper {
 	public $fields = array();
 	public $result;
 	public $options = array();
+	public $headers = array();
+
 
 	public function __construct( $url ) {
 		$this->curl = curl_init();
 		$this->url  = $url;
+	}
+
+	public function add_header( $name, $value ) {
+		$this->headers[] = "$name:$value";
+	}
+
+	public function set_headers( $headers ) {
+		foreach ( $headers as $name => $value ) {
+			$this->add_header( $name, $value );
+		}
 	}
 
 	public function set_post_fields( $fields ) {
@@ -51,6 +63,8 @@ class Curl_Helper {
 		$this->set_options();
 
 		curl_setopt_array( $this->curl, $this->options );
+		curl_setopt( $this->curl, CURLOPT_HTTPHEADER, $this->headers );
+
 		$this->result = curl_exec( $this->curl );
 
 		return $this->result;

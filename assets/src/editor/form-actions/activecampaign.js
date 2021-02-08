@@ -36,12 +36,10 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 
 	getActiveCampaignData( isValidate = false ) {
 		const self = this,
-			settings = this.props.settings,
 			lists = [],
-			api_url = settings.api_url,
-			api_key = settings.api_key,
 			endpoint = '/admin/api.php?api_action=list_list';
 
+		const { settings, api_url, api_key } = this.props.settings;
 
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 

@@ -81,3 +81,7 @@ export const addAction = ( actionType, actionInstance ) => {
 	window.jetFormDefaultActions = window.jetFormDefaultActions || {};
 	window.jetFormDefaultActions[ actionType ] = withActionLocalizeScript( actionType, actionInstance );
 };
+
+window.jetFBActions = {
+	addAction
+};

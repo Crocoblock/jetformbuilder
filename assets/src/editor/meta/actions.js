@@ -132,6 +132,7 @@ function ActionsMeta() {
 
 		var Callback = false;
 
+
 		for ( var i = 0; i < window.jetFormActionTypes.length; i ++ ) {
 
 			if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
@@ -175,7 +176,6 @@ function ActionsMeta() {
 						className={ 'jet-form-action' }
 					>
 						<CardBody>
-
 							<SelectControl
 								value={ action.type }
 								options={ actionTypes }
@@ -261,7 +261,7 @@ function ActionsMeta() {
 					} }
 					onCancelClick={ closeModal }
 				>
-					<Callback
+					{ Callback && <Callback
 						settings={ editedAction.settings }
 						onChange={ ( data ) => {
 							setEditedAction( {
@@ -269,7 +269,7 @@ function ActionsMeta() {
 								settings: data
 							} );
 						} }
-					/>
+					/> }
 				</ActionModal> }
 				{ isEditProcessAction && <ActionModal
 					classNames={ ['width-60'] }
@@ -328,7 +328,7 @@ function ActionsMeta() {
 											onSavePreset={ newValue => {
 												changeCurrentItem( { default: newValue } );
 											} }
-											excludeSources={ [ 'query_var' ] }
+											excludeSources={ ['query_var'] }
 											onUnMount={ onRequestClose }
 										/> }
 										triggerClasses={ ['trigger__textarea'] }

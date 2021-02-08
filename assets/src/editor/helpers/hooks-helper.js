@@ -33,3 +33,7 @@ export const useActions = ( withEditPostEffect = false ) => {
 
 	return [actions, setActions];
 };
+
+window.jetFBHooks = {
+	useActions
+};

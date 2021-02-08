@@ -26,14 +26,7 @@ addAction( 'call_webhook', class CallWebHookAction extends wp.element.Component 
 	}
 
 	render() {
-		const { settings, onChange, source, label, help } = this.props;
-
-		const onChangeSetting = ( value, key ) => {
-			onChange( {
-				...settings,
-				[ key ]: value
-			} );
-		};
+		const { settings, label, onChangeSetting } = this.props;
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return <TextControl

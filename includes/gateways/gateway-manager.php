@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Stripe;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
 
@@ -29,8 +28,8 @@ class Gateway_Manager {
 	 * Register gateways components
 	 */
 	public function __construct() {
+		add_action( 'init', array( $this, 'register_gateways' ) );
 
-		$this->register_gateways();
 		$this->catch_payment_result();
 	}
 
@@ -41,10 +40,19 @@ class Gateway_Manager {
 	 */
 	public function register_gateways() {
 
-		$this->_gateways = array(
+		$gateways = array(
 			new Paypal\Controller(),
-			new Stripe\Controller(),
 		);
+
+		foreach ( $gateways as $gateway ) {
+			$this->register_gateway( $gateway );
+		}
+
+		do_action( 'jet-form-builder/gateways/register', $this );
+	}
+
+	public function register_gateway( Base_Gateway $gateway ) {
+		$this->_gateways[] = $gateway;
 	}
 
 	public function before_send_actions( $action_handler ) {
@@ -56,10 +64,13 @@ class Gateway_Manager {
 			return;
 		}
 
-		$this->get_gateway_controller( $gateways['gateway'] )->before_actions(
-			$action_handler,
-			$this->get_actions_before( $action_handler )
-		);
+		$controller = $this->get_gateway_controller( $gateways['gateway'] );
+
+		if ( $controller ) {
+			$controller->before_actions( $action_handler,
+				$this->get_actions_before( $action_handler )
+			);
+		}
 	}
 
 	public function after_send_actions( $action_handler ) {
@@ -69,7 +80,11 @@ class Gateway_Manager {
 			return;
 		}
 
-		$this->get_gateway_controller( $gateways['gateway'] )->after_actions( $action_handler );
+		$controller = $this->get_gateway_controller( $gateways['gateway'] );
+
+		if ( $controller ) {
+			$controller->after_actions( $action_handler );
+		}
 	}
 
 
@@ -131,7 +146,7 @@ class Gateway_Manager {
 	 * @return void [description]
 	 */
 	public function catch_payment_result() {
-		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->post_type->allow_gateways ) {
+		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->allow_gateways ) {
 			return;
 		}
 

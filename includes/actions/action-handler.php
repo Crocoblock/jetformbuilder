@@ -129,7 +129,7 @@ class Action_Handler {
 	public function before_run_actions() {
 		$callbacks = array();
 
-		if ( Plugin::instance()->post_type->allow_gateways ) {
+		if ( Plugin::instance()->allow_gateways ) {
 			$callbacks[] = array(
 				Gateway_Manager::instance(),
 				Gateway_Manager::BEFORE_ACTIONS_CALLABLE
@@ -145,7 +145,7 @@ class Action_Handler {
 	public function after_run_actions() {
 		$callbacks = array();
 
-		if ( Plugin::instance()->post_type->allow_gateways ) {
+		if ( Plugin::instance()->allow_gateways ) {
 			$callbacks[] = array(
 				Gateway_Manager::instance(),
 				Gateway_Manager::AFTER_ACTIONS_CALLABLE
@@ -193,13 +193,15 @@ class Action_Handler {
 
 		$action_id = absint( $action_id );
 
+		if ( empty( $this->response_data['inserted_posts'] ) ) {
+			return absint( $this->response_data['inserted_post_id'] );
+		}
+
 		foreach ( $this->response_data['inserted_posts'] as $posts ) {
 			if ( $action_id === $posts['action_id'] ) {
 				return $posts['post_id'];
 			}
 		}
-
-		return absint( $this->response_data['inserted_post_id'] );
 	}
 
 	public function add_response( $values ) {

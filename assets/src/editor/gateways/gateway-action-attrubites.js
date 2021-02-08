@@ -1,4 +1,4 @@
-import { getActionSettings } from "../helpers/gateway-action-helper";
+import { getActionSettings } from "../helpers/gateway-helper";
 import { getLocalizedFullPack } from "../helpers/action-helper";
 
 function gatewayActionAttributes( action ) {

@@ -22,7 +22,7 @@ class Form_Manager {
 	const   NAMESPACE_FIELDS = 'jet-forms/';
 
 	public function __construct() {
-		if ( Plugin::instance()->post_type->allow_gateways ) {
+		if ( Plugin::instance()->allow_gateways ) {
 			Gateway_Manager::instance();
 		}
 	}

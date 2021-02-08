@@ -29,6 +29,7 @@ class Plugin {
 	public $dev_manager;
 
 	public $is_activated_jet_sm;
+	public $allow_gateways;
 
 	/**
 	 * Register autoloader.
@@ -44,6 +45,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function init_components() {
+		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 
 		$this->post_type    = new Post_Type();
 		$this->blocks       = new Blocks\Manager();
@@ -59,8 +61,6 @@ class Plugin {
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
-
-			new Gateways\Stripe\Controller();
 		}
 	}
 

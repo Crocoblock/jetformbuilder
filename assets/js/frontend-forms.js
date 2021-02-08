@@ -24,36 +24,6 @@
 		}
 	}
 
-	const getUrlParams = ( { url = '' } = {} ) => {
-		let sourceUrl = decodeURIComponent( url ? url : window.location.href );
-		const urlParts = sourceUrl.split( '?' );
-
-		if ( ! urlParts[ 1 ] || ! urlParts[ 1 ].length ) {
-			return {};
-		}
-		const arrParams = urlParts[ 1 ].split( '&' );
-		const response = {};
-
-		arrParams.forEach( param => {
-			const [key, value = ''] = param.split( '=' );
-			response[ key ] = value;
-		} );
-
-		return response;
-	};
-
-	const stripeRedirectToCheckout = requestParams => {
-		//JetFormBuilderDev.hardLog( 'Stripe', requestParams );
-
-		if ( requestParams.stripe_session_id && requestParams.stripe_public_key ) {
-			const stripe = new Stripe( requestParams.stripe_public_key );
-
-			stripe.redirectToCheckout( { sessionId: requestParams.stripe_session_id } );
-		}
-	}
-
-	stripeRedirectToCheckout( getUrlParams() );
-
 	window.JetFormBuilderMain = {
 
 		filters: ( function () {
@@ -1333,8 +1303,6 @@
 						} else if ( response.reload ) {
 							window.location.reload();
 						}
-
-						stripeRedirectToCheckout( response );
 
 						$( document ).trigger( 'jet-form-builder/ajax/on-success', [response, $form, data] );
 

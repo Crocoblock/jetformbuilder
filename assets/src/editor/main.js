@@ -18,6 +18,7 @@ import './form-actions/redirect-to-page';
 import './form-actions/mailchimp';
 import './form-actions/getresponse';
 import './form-actions/activecampaign';
+import { event } from "./helpers/tools";
 
 const {
 	registerBlockType
@@ -37,10 +38,7 @@ window.jetFormBuilderControls = {
 	advanced: {},
 };
 
-var initializeCallbacksEvent = new Event( 'jet-form-builder-initialize' );
-
-document.dispatchEvent( initializeCallbacksEvent );
-
+event( 'jet-form-builder-initialize' )();
 
 if ( window.jetFormBuilderBlocks && window.jetFormBuilderBlocks.length ) {
 

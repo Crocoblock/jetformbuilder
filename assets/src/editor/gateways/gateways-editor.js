@@ -1,9 +1,10 @@
-import PayPal from "./paypal";
-import Stripe from "./stripe";
-import Tools from "../helpers/tools";
+import { gatewayAttr, renderGateway } from "../helpers/gateway-helper";
+import Tools, { event } from "../helpers/tools";
 import gatewayActionAttributes from "./gateway-action-attrubites";
-import { gatewayAttr } from "../helpers/gateway-action-helper";
 import { actionByTypeList, getActionLabel } from "../helpers/action-helper";
+import PayPal from "./paypal";
+
+event( 'jet-fb-gateways/init' )();
 
 const { __ } = wp.i18n;
 
@@ -139,14 +140,7 @@ export default function GatewaysEditor( {
 	const actionsList = actionByTypeList( 'insert_post', true );
 
 	return <>
-		{ 'paypal' === gateway.gateway && <PayPal
-			setValueInObject={ setValueInObject }
-			getNotifications={ getNotifications }
-		/> }
-		{ 'stripe' === gateway.gateway && <Stripe
-			setValueInObject={ setValueInObject }
-			getNotifications={ getNotifications }
-		/> }
+		{ renderGateway( gateway.gateway, { setValueInObject, getNotifications } ) }
 		{ Boolean( availableActions.length ) && <>
 			<BaseControl
 				label={ __( 'Before payment processed:', 'jet-form-builder' ) }

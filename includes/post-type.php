@@ -37,8 +37,6 @@ class Post_Type {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
-
-		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 	}
 
 
@@ -155,7 +153,7 @@ class Post_Type {
 			),
 		);
 
-		if ( $this->allow_gateways ) {
+		if ( Plugin::instance()->allow_gateways ) {
 			$meta['_jf_gateways'] = array(
 				'type'    => 'string',
 				'default' => '{}',

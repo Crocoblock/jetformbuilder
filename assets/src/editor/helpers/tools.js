@@ -145,4 +145,9 @@ class Tools {
 
 }
 
+export const event = name => {
+	const initializeCallbacksEvent = new Event( name );
+	return () => document.dispatchEvent( initializeCallbacksEvent );
+};
+
 export default Tools;

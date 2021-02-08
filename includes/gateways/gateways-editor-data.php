@@ -56,7 +56,7 @@ trait Gateways_Editor_Data {
 
 	public function editor_data() {
 		$result = array(
-			'allowed' => Plugin::instance()->post_type->allow_gateways
+			'allowed' => Plugin::instance()->allow_gateways
 		);
 
 		if ( $result['allowed'] ) {

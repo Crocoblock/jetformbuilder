@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Blocks\Modules;
 
 trait General_Style_Functions {
 
+	private $namespace = 'jet-form-builder';
+
 	public function maybe_add_controls_type( $type ) {
 		if ( ! in_array( $type, $this->general_style_unregister() ) ) {
 
@@ -27,12 +29,12 @@ trait General_Style_Functions {
 
 	public function selector( $selector, $prefix_base = '', $additional = '' ) {
 		$result[] = '{{WRAPPER}}';
-		$base     = $prefix_base . '.jet-form-builder';
+		$base     = $prefix_base . ".$this->namespace";
 
 		if ( isset( $this->css_scheme[ $selector ] ) ) {
 			$result[] = $base . $this->css_scheme[ $selector ];
 		} else {
-			$result[] = $base . $selector;
+			$result[] = $base . sprintf( $selector, $this->namespace );
 		}
 		$result = implode( ' ', $result );
 

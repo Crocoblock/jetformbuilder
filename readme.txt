@@ -38,7 +38,7 @@ JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field 
 **<a href="https://crocoblock.com/plugins/jetengine/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
 Use the JetEngine potential when developing a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically, and put the JetEngine-built custom post types into the dynamic settings. 
 
-**<a href="https://crocoblock.com/plugins/jetstylemanager/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release">JetStyleManager</a>**
+**<a href="https://wordpress.org/plugins/jet-style-manager/">JetStyleManager</a>**
 We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.   
 
 More third-party plugin integrations are in the works.

@@ -484,7 +484,7 @@
 
 .jet-form-edit-modal .jet-post-field-control .components-base-control:nth-child(2) {
     position: absolute;
-    left: 105%;
+    left: 25em;
 }
 
 .jet-field-map__row-label .fields-map__required {

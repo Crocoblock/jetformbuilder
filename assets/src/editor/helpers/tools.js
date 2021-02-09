@@ -1,6 +1,6 @@
-const { __ } = wp.i18n;
+import { saveGlobalComponent } from "../components/manager";
 
-const { withDispatch, useDispatch } = wp.data;
+const { __ } = wp.i18n;
 
 class Tools {
 
@@ -26,7 +26,7 @@ class Tools {
 	static getFormFieldsBlocks( exclude = [] ) {
 		const formFields = [];
 
-		let skipFields = ['submit', 'page_break', 'heading', 'group_break', ...exclude];
+		let skipFields = [ 'submit', 'page_break', 'heading', 'group_break', ...exclude ];
 
 		Tools.blocksRecursiveIterator( block => {
 			if ( block.name.includes( 'jet-forms/' )
@@ -50,7 +50,7 @@ class Tools {
 
 			blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
 
-			blocks.map( block =>  {
+			blocks.map( block => {
 				blockParserFunc( block );
 
 				if ( block.innerBlocks.length ) {
@@ -82,7 +82,7 @@ class Tools {
 	}
 
 	static getInnerBlocks( clientId ) {
-		return wp.data.select("core/editor").getBlock( clientId ).innerBlocks;
+		return wp.data.select( 'core/block-editor' ).getBlock( clientId ).innerBlocks;
 	}
 
 	static getFormFieldsBlocksWithPlaceholder( placeholder = '--' ) {
@@ -103,7 +103,7 @@ class Tools {
 	}
 
 	static getAvailableFieldsString( blockName ) {
-		const fields = this.getAvailableFields( [blockName] );
+		const fields = this.getAvailableFields( [ blockName ] );
 
 		let fieldsString = [];
 		fields.forEach( function ( item ) {
@@ -155,3 +155,5 @@ export const listen = ( name, func ) => {
 }
 
 export default Tools;
+
+saveGlobalComponent( 'JetFBTools', { Tools } );

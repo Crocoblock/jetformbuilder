@@ -1,3 +1,7 @@
+import { saveGlobalComponent } from "../components/manager";
+import { ValidateButton } from "../components/validate-button";
+import { ActionFieldsMap } from  "../components/actions/action-fields-map";
+
 const {
 	useState,
 	useEffect
@@ -34,6 +38,26 @@ export const useActions = ( withEditPostEffect = false ) => {
 	return [actions, setActions];
 };
 
-window.jetFBHooks = {
-	useActions
-};
+export const useStateClasses = initialValid => {
+	const validClass = 'is-valid';
+	const invalidClass = 'is-invalid'
+	const initClasses = [ 'jet-form-validate-button' ];
+
+	const initStateClasses = () => {
+		if ( initialValid ) {
+			return [ ...initClasses, validClass ];
+		} else if( ! initialValid ) {
+			return [ ...initClasses, invalidClass ];
+		}
+	};
+
+	const [ classes, setClasses ] = useState( initStateClasses() );
+
+	const setValidClass = () => { setClasses( [ ...initClasses, validClass ] ) };
+	const setInvalidClass = () => { setClasses( [ ...initClasses, invalidClass ] ) };
+	const setLoadingClass = () => { setClasses( [ ...initClasses, 'loading' ] ) };
+
+	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
+}
+
+saveGlobalComponent( 'JetFBHooks', { useActions, useStateClasses } );

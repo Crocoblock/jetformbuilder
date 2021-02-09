@@ -1,6 +1,7 @@
 import IntegrationComponent from "./integration-component";
 import WrapperRequiredControl from "../components/wrapper-required-control";
 import { addAction } from "../helpers/action-helper";
+import { ActionFieldsMap } from "../components/actions/action-fields-map";
 
 /**
  * Internal dependencies
@@ -146,27 +147,23 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					checked={ settings.double_opt_in }
 					onChange={ newVal => this.onChangeSetting( Boolean( newVal ), 'double_opt_in' ) }
 				/>
-				<BaseControl
+				<ActionFieldsMap
 					label={ label( 'fields_map' ) }
-					key='mailchimp_fields_map'
+					key='mailchimp'
+					fields={ fields }
 				>
-					<div className='jet-user-fields-map__list'>
-						{ fields.map( ( [mcFieldId, mcFieldData], index ) => {
-
-							return <WrapperRequiredControl
-								field={ [mcFieldId, mcFieldData] }
-							>
-								<SelectControl
-									className="full-width"
-									key={ mcFieldId + index }
-									value={ this.getFieldDefault( mcFieldId ) }
-									onChange={ value => this.onChangeFieldMap( value, mcFieldId ) }
-									options={ this.formFieldsList }
-								/>
-							</WrapperRequiredControl>
-						} ) }
-					</div>
-				</BaseControl>
+					{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
+						field={ [fieldId, fieldData] }
+					>
+						<SelectControl
+							className="full-width"
+							key={ fieldId + index }
+							value={ this.getFieldDefault( fieldId ) }
+							onChange={ value => this.onChangeFieldMap( value, fieldId ) }
+							options={ this.formFieldsList }
+						/>
+					</WrapperRequiredControl> }
+				</ActionFieldsMap>
 			</React.Fragment> }
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */

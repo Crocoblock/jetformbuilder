@@ -1,4 +1,5 @@
 import { useActions } from "./hooks-helper";
+import { saveGlobalComponent } from "../components/manager";
 
 const {
 	useState,
@@ -51,9 +52,8 @@ export const renderGateway = ( id, props ) => {
 	return <GatewayComponent { ...props } />;
 };
 
-
-window.jetFBGateways = {
+saveGlobalComponent( 'JetFBGateways', {
 	gatewayAttr,
 	gatewayLabel,
 	registerGateway
-};
+} );

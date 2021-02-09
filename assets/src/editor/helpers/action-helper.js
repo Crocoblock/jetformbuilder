@@ -1,6 +1,7 @@
 import withActionLocalizeScript from "../components/actions/action-wrapper";
 import { useActions } from "./hooks-helper";
 import gatewayActionAttributes from "../gateways/gateway-action-attrubites";
+import { saveGlobalComponent } from "../components/manager";
 
 
 export const getActionLabel = ( type ) => {
@@ -82,6 +83,4 @@ export const addAction = ( actionType, actionInstance ) => {
 	window.jetFormDefaultActions[ actionType ] = withActionLocalizeScript( actionType, actionInstance );
 };
 
-window.jetFBActions = {
-	addAction
-};
+saveGlobalComponent( 'JetFBActions', { addAction } );

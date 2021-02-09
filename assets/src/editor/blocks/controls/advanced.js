@@ -1,3 +1,5 @@
+import { saveGlobalComponent } from "../../components/manager";
+
 /**
  * WordPress dependencies
  */
@@ -81,9 +83,6 @@ function JetFormAdvanced( {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-window.jetFormBuilderControlComponents = {
-	...window.jetFormBuilderControlComponents,
-	JetFormAdvanced
-};
+saveGlobalComponent( 'JetFBComponents', { JetFormAdvanced } );
 
 export default withInstanceId( JetFormAdvanced );

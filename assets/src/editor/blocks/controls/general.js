@@ -1,5 +1,7 @@
 import FieldWithPreset from "../../components/field-with-preset";
 import DynamicPreset from "../../components/presets/dynamic-preset";
+import { saveGlobalComponent } from "../../components/manager";
+import WrapperRequiredControl from "../../components/wrapper-required-control";
 
 /**
  * WordPress dependencies
@@ -82,9 +84,6 @@ const JetFormGeneral = class extends wp.element.Component {
 	}
 }
 
-window.jetFormBuilderControlComponents = {
-	...window.jetFormBuilderControlComponents,
-	JetFormGeneral
-};
+saveGlobalComponent( 'JetFBComponents', { JetFormGeneral } );
 
 export default withInstanceId( JetFormGeneral );

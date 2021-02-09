@@ -4,6 +4,10 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 
+use Jet_FB_MailerLite\Integration_Exception;
+use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Dev_Mode\Manager;
+
 abstract class Integration_Base_Action extends Base {
 	protected $action;
 
@@ -35,15 +39,29 @@ abstract class Integration_Base_Action extends Base {
 			wp_send_json_error();
 		}
 
-		$this->filter_result( $handler->get_all_data() );
+		$this->filter_result( $handler );
 	}
 
-	public function filter_result( $data ) {
-		if ( empty( $data ) || empty( $data['lists'] ) ) {
-			wp_send_json_error();
-		}
+	public function filter_result( $handler ) {
+		try {
+			$data = $handler->get_all_data();
 
-		wp_send_json_success( $data );
+			if ( empty( $data ) ) {
+				throw new Integration_Exception( 'Empty data' );
+			}
+
+			wp_send_json_success( $data );
+
+		} catch ( Integration_Exception $exception ) {
+			$data = array();
+
+			if ( Manager::instance()->active() ) {
+				$data['__logger'] = Logger::instance()->get_logs();
+			}
+
+			wp_send_json_error( $data );
+			die;
+		}
 	}
 
 }

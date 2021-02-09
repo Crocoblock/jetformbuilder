@@ -1,3 +1,5 @@
+import { saveGlobalComponent } from "../../components/manager";
+
 /**
  * WordPress dependencies
  */
@@ -55,9 +57,6 @@ function JetFormToolbar( {
 	</ToolbarGroup>;
 }
 
-window.jetFormBuilderControlComponents = {
-	...window.jetFormBuilderControlComponents,
-	JetFormToolbar
-};
+saveGlobalComponent( 'JetFBComponents', JetFormToolbar );
 
 export default withInstanceId( JetFormToolbar );

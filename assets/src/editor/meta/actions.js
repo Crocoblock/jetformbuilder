@@ -264,10 +264,10 @@ function ActionsMeta() {
 					{ Callback && <Callback
 						settings={ editedAction.settings }
 						onChange={ ( data ) => {
-							setEditedAction( {
-								...editedAction,
+							setEditedAction( prev => ( {
+								...prev,
 								settings: data
-							} );
+							} ) );
 						} }
 					/> }
 				</ActionModal> }

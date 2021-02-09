@@ -18,6 +18,8 @@ A functional yet handy Form Builder plugin that lets you create, edit, and style
 
 JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field blocks allow you to create a form from scratch or reassemble the existing one. Throw JetStyleManager into the mix and you’ll be able to style every form field. Create, customize, and style – all in Gutenberg.
 
+https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
+
 **Features**
 
 - **Single form builder.** Create forms using nothing else but Gutenberg.

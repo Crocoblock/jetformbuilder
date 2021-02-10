@@ -1,4 +1,4 @@
-﻿=== JetFormBuilder ===
+﻿=== JetFormBuilder — Form Builder for Gutenberg ===
 Contributors: crocoblock
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form
 Requires at least: 5.6

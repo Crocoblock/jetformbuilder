@@ -3,6 +3,7 @@ function ArgsMeta() {
 	const {
 		TextControl,
 		SelectControl,
+		ToggleControl,
 	} = wp.components;
 
 	const {
@@ -33,7 +34,7 @@ function ArgsMeta() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [args, setArgs] = useState( JSON.parse( meta._jf_args || '{}' ) );
+		const [ args, setArgs ] = useState( JSON.parse( meta._jf_args || '{}' ) );
 
 		useEffect( () => {
 
@@ -88,6 +89,18 @@ function ArgsMeta() {
 						setArgs( ( prevArgs ) => ( {
 							...prevArgs,
 							submit_type: newVal
+						} ) );
+					} }
+				/>
+
+				<ToggleControl
+					key={ 'enable_progress' }
+					label={ 'Enable form pages progress' }
+					checked={ args.enable_progress }
+					onChange={ newVal => {
+						setArgs( prev => ( {
+							...prev,
+							enable_progress: Boolean( newVal )
 						} ) );
 					} }
 				/>

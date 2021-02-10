@@ -285,6 +285,7 @@ class Post_Type {
 			'submit_type'   => '',
 			'required_mark' => '',
 			'fields_layout' => '',
+			'enable_progress' => null,
 		);
 	}
 

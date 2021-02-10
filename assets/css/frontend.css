@@ -694,24 +694,24 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     margin-left: 0.5em;
 }
 
-.jet-form-progress-pages, .jet-form-progress-pages__item--wrapper {
+.jet-form-builder-progress-pages, .jet-form-builder-progress-pages__item--wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.jet-form-progress-pages__item--wrapper:not(:last-child) {
+.jet-form-builder-progress-pages__item--wrapper:not(:last-child) {
     flex: 1 1;
 }
 
-.jet-form-progress-pages__item {
+.jet-form-builder-progress-pages__item {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0.5em 2em;
 }
 
-.jet-form-progress-pages__item--circle {
+.jet-form-builder-progress-pages__item--circle {
     height: 2.5em;
     width: 2.5em;
     border: 1px solid grey;
@@ -721,36 +721,36 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     align-items: center;
 }
 
-.jet-form-progress-pages__separator {
+.jet-form-builder-progress-pages__separator {
     flex: 1 1;
     height: 1px;
     background: grey;
 }
 
-.jet-form-progress-pages__item--wrapper.passed-page {
+.jet-form-builder-progress-pages__item--wrapper.passed-page {
     color: #617BE5;
     font-weight: bold;
 }
 
-.jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item--circle {
+.jet-form-builder-progress-pages__item--wrapper.passed-page .jet-form-builder-progress-pages__item--circle {
     border: 2px solid #617BE5;
 }
 
-.jet-form-progress-pages__item--wrapper.passed-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
+.jet-form-builder-progress-pages__item--wrapper.passed-page .jet-form-builder-progress-pages__item + .jet-form-builder-progress-pages__separator {
     background-color: #617BE5;
     height: 3px;
 }
 
-.jet-form-progress-pages__item--wrapper.active-page {
+.jet-form-builder-progress-pages__item--wrapper.active-page {
     color: #34D7A1;
     font-weight: bold;
 }
 
-.jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item--circle {
+.jet-form-builder-progress-pages__item--wrapper.active-page .jet-form-builder-progress-pages__item--circle {
     border: 2px solid #34D7A1;
 }
 
-.jet-form-progress-pages__item--wrapper.active-page .jet-form-progress-pages__item + .jet-form-progress-pages__separator {
+.jet-form-builder-progress-pages__item--wrapper.active-page .jet-form-builder-progress-pages__item + .jet-form-builder-progress-pages__separator {
     background-color: #34D7A1;
     height: 3px;
 }

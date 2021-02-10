@@ -35,8 +35,8 @@ class Text_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'field'   => '.jet-form-builder__field-wrap input',
-			'wrapper' => '.jet-form-builder__field-wrap',
+			'field'   => '__field-wrap input',
+			'wrapper' => '__field-wrap',
 		);
 	}
 
@@ -55,13 +55,13 @@ class Text_Field extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'field' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 
 			],
 		] );
 
 		$this->add_margin_padding(
-			$this->css_scheme['field'],
+			$this->selector( 'field' ),
 			array(
 				'padding' => array(
 					'id'        => 'item_field_padding',
@@ -76,7 +76,7 @@ class Text_Field extends Base {
 			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'field' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -91,7 +91,7 @@ class Text_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'color: {{VALUE}}',
+				$this->selector( 'field' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -105,7 +105,7 @@ class Text_Field extends Base {
 				),
 			),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['field'] => 'background-color: {{VALUE}}',
+				$this->selector( 'field' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 

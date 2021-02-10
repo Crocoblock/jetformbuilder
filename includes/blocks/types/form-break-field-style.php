@@ -7,11 +7,26 @@ namespace Jet_Form_Builder\Blocks\Types;
 trait Form_Break_Field_Style {
 
 	public function form_break_css_scheme() {
+		$wrapper = '-progress-pages__item--wrapper';
+		$item = '-progress-pages__item';
+
 		return array(
 			'next-button'      => '__next-page',
 			'prev-button'      => '__prev-page',
 			'disabled-message' => '__next-page-msg',
-			'break-wrap'       => '__next-page-wrap'
+			'break-wrap'       => '__next-page-wrap',
+
+			'active-wrapper'   => "$wrapper.active-page",
+			'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
+			'active-circle'    => "$wrapper.active-page .%s$item--circle",
+
+			'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
+			'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+			'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+
+			'prev-wrapper'   => "$wrapper.passed-page",
+			'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
+			'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
 		);
 	}
 
@@ -192,7 +207,7 @@ trait Form_Break_Field_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['prev-button'],
+			$this->button_selector( 'prev-button' ),
 			array(
 				'margin'  => array(
 					'id'        => 'prev_button_margin',
@@ -290,7 +305,7 @@ trait Form_Break_Field_Style {
 		$this->controls_manager->end_section();
 
 		/**
-		 * Prev button
+		 * Disabled Message
 		 */
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -330,6 +345,258 @@ trait Form_Break_Field_Style {
 			),
 		] );
 
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'form_pages__wrapper',
+				'title' => __( 'Form Progress - Wrapper', 'jet-form-builder' ),
+			]
+		);
+		$this->add_margin_padding(
+			$this->div_selector( '-progress-pages' ),
+			array(
+				'margin'  => array(
+					'id'        => 'field_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id'        => 'field_padding',
+					'separator' => 'after',
+				)
+			)
+		);
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_wrapper--typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				$this->selector( '-progress-pages' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_wrapper--border',
+			'type'         => 'border',
+			'separator'    => 'after',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( '-progress-pages' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_wrapper--color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				$this->selector( '-progress-pages' ) => 'color: {{VALUE}}',
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_wrapper--bg_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( '-progress-pages' ) => 'background-color: {{VALUE}}',
+			),
+		] );
+		$this->controls_manager->end_section();
+
+		/**
+		 * Progress Pages
+		 */
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'form_progress_pages_section',
+				'title' => __( 'Form Progress - Pages', 'jet-form-builder' ),
+			]
+		);
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id' => 'form_progress_pages_tabs',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'form_progress_pages_current_tab',
+				'title' => __( 'Current', 'jet-form-builder' ),
+			]
+		);
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__current--typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				$this->selector( 'active-wrapper' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__current_separator--height',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Separator Height', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				$this->selector( 'active-separator' ) => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 3
+				),
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__current_separator--bg_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Separator Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'active-separator' ) => 'background-color: {{VALUE}};',
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_current_circle--border',
+			'type'         => 'border',
+			'label'        => __( 'Circle Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'active-circle' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+		$this->controls_manager->end_tab();
+
+		/**
+		 *
+		 */
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'form_progress_pages_next_tab',
+				'title' => __( 'Next', 'jet-form-builder' ),
+			]
+		);
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__next--typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				$this->selector( 'next-wrapper' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__next_separator--height',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Separator Height', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				$this->selector( 'next-separator' ) => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 3
+				),
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__next_separator--bg_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Separator Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'next-separator' ) => 'background-color: {{VALUE}};',
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_next_circle--border',
+			'type'         => 'border',
+			'label'        => __( 'Circle Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'next-circle' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+		$this->controls_manager->end_tab();
+
+
+		/**
+		 *
+		 */
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'form_progress_pages_prev_tab',
+				'title' => __( 'Prev', 'jet-form-builder' ),
+			]
+		);
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__prev--typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				$this->selector( 'prev-wrapper' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__prev_separator--height',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Separator Height', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				$this->selector( 'prev-separator' ) => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 3
+				),
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages__prev_separator--bg_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Separator Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'prev-separator' ) => 'background-color: {{VALUE}};',
+			),
+		] );
+		$this->controls_manager->add_control( [
+			'id'           => 'form_progress_pages_prev_circle--border',
+			'type'         => 'border',
+			'label'        => __( 'Circle Border', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( 'prev-circle' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+		$this->controls_manager->end_tab();
 		$this->controls_manager->end_section();
 	}
 

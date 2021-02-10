@@ -1,3 +1,4 @@
+
 const {
 	registerBlockType,
 } = wp.blocks;
@@ -18,7 +19,8 @@ const {
 	Button,
 	ComboboxControl,
 	SelectControl,
-	TextControl
+	TextControl,
+	ToggleControl
 } = wp.components;
 
 const {
@@ -83,6 +85,14 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 						options={ localize.submit_type }
 						onChange={ newValue => {
 							setAttributes( { submit_type: newValue } );
+						} }
+					/>
+					<ToggleControl
+						key={ 'enable_progress' }
+						label={ __( 'Enable form pages progress' ) }
+						checked={ attributes.enable_progress }
+						onChange={ newVal => {
+							setAttributes( { enable_progress: Boolean( newVal ) } );
 						} }
 					/>
 				</React.Fragment> }

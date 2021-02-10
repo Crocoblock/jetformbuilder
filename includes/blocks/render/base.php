@@ -154,7 +154,12 @@ abstract class Base {
 		$desc   = $this->get_field_desc();
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
-		if ( 'column' === $layout ) {
+		if ( 'hidden-field' === $args['type'] ) {
+			ob_start();
+			include $template;
+			$result_field = ob_get_clean();
+
+		} else if ( 'column' === $layout ) {
 			ob_start();
 			include $this->block_type->get_common_template( 'field-column.php' );
 			$result_field = ob_get_clean();

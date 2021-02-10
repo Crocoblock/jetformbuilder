@@ -4,9 +4,10 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 
-use Jet_FB_MailerLite\Integration_Exception;
+
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
+use Jet_Form_Builder\Exceptions\Integration_Exception;
 
 abstract class Integration_Base_Action extends Base {
 	protected $action;

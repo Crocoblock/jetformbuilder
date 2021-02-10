@@ -492,8 +492,8 @@
 		},
 
 		updateProgress: function ( event, $progress, $fromPage, $toPage ) {
-			const prevItem = $progress.find( `.jet-form-progress-pages__item--wrapper[data-page="${ $fromPage }"]` );
-			const currentItem = $progress.find( `.jet-form-progress-pages__item--wrapper[data-page="${ $toPage }"]` );
+			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $fromPage }"]` );
+			const currentItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $toPage }"]` );
 
 			prevItem.removeClass( 'active-page' );
 			currentItem.addClass( 'active-page' );
@@ -976,7 +976,7 @@
 
 			var $form = $fromPage.closest( '.jet-form-builder' );
 
-			const $progress = $form.find( '.jet-form-progress-pages' );
+			const $progress = $form.find( '.jet-form-builder-progress-pages' );
 
 			$fromPage.addClass( 'jet-form-page--hidden' );
 			$toPage.removeClass( 'jet-form-page--hidden' );

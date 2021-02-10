@@ -128,7 +128,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['wrap'],
+			$this->selector( 'wrap' ),
 			array(
 				'margin'  => array(
 					'id'        => 'field_margin',
@@ -198,7 +198,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['label'],
+			$this->selector( 'label' ),
 			array(
 				'margin'  => array(
 					'id'        => 'label_margin',
@@ -289,7 +289,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['description'],
+			$this->selector( 'description' ),
 			array(
 				'margin'  => array(
 					'id'        => 'description_margin',
@@ -425,7 +425,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['input'],
+			$this->selector( 'input' ),
 			array(
 				'margin'  => array(
 					'id'        => 'input_margin',

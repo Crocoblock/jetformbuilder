@@ -30,8 +30,8 @@ class Submit_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'button' => 'button.jet-form-builder__submit',
-			'wrap'   => '.jet-form-builder__submit-wrap'
+			'button' => '__submit',
+			'wrap'   => '__submit-wrap'
 		);
 	}
 
@@ -46,7 +46,7 @@ class Submit_Field extends Base {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['wrap'],
+			$this->selector( '__submit-wrap' ),
 			array(
 				'padding' => array(
 					'id'  => 'submit_wrap_padding',
@@ -65,7 +65,7 @@ class Submit_Field extends Base {
 		);
 
 		$this->add_margin_padding(
-			$this->css_scheme['button'],
+			$this->selector( '__submit' ),
 			array(
 				'padding' => array(
 					'id'        => 'submit_padding',
@@ -90,7 +90,7 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+				$this->selector( '__submit' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
 			],
 			'attributes'   => array(
 				'default' => array(
@@ -119,7 +119,7 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'align-items: {{VALUE}};',
+				$this->selector( '__submit-wrap' ) => 'align-items: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -151,7 +151,7 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'justify-content: {{VALUE}};',
+				$this->selector( '__submit' ) => 'justify-content: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -166,7 +166,7 @@ class Submit_Field extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( '__submit' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -176,7 +176,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( '__submit' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -201,7 +201,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'color: {{VALUE}}',
+				$this->selector( '__submit' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -210,7 +210,7 @@ class Submit_Field extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] => 'background-color: {{VALUE}}',
+				$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -230,7 +230,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -239,7 +239,7 @@ class Submit_Field extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 			),
 		] );
 

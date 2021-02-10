@@ -82,9 +82,10 @@ class Live_Form {
 		$jf_default_args = Plugin::instance()->post_type->get_default_args();
 		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data  = array_diff( $jf_args, $jf_default_args );
+		$spec_data  = array_udiff( $jf_args, $jf_default_args, function ( $a, $b ) {
+			return ( $a !== $b );
+		} );
 		$attributes = array_merge( $jf_default_args, $attributes );
-
 		$spec_data = array_merge( $attributes, $spec_data );
 
 		$this->spec_data = ( object ) $spec_data;
@@ -115,23 +116,24 @@ class Live_Form {
 		foreach ( $blocks as $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
 				$this->pages ++;
-				$this->form_breaks[] = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] ) ;
+				$this->form_breaks[] = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
 			}
 		}
 	}
 
 	public function maybe_progress_pages() {
-		if ( 0 >= $this->pages ) {
+		if ( ! $this->spec_data->enable_progress || 1 >= $this->pages ) {
 			return '';
 		}
 
 		ob_start();
 		include $this->get_global_template( 'common/progress-pages.php' );
+
 		return ob_get_clean();
 	}
 
 	public function get_progress_item_class( $index ) {
-		$classes = array( 'jet-form-progress-pages__item--wrapper' );
+		$classes = array( 'jet-form-builder-progress-pages__item--wrapper' );
 
 		if ( $index === $this->page ) {
 			$classes[] = 'active-page';
@@ -142,7 +144,6 @@ class Live_Form {
 
 
 	public static function force_render_field( $name, $arguments = array() ) {
-
 		if ( empty( $name ) ) {
 			return;
 		}

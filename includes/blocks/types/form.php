@@ -58,8 +58,8 @@ class Form extends Base {
 	public function get_css_scheme() {
 		return array_merge(
 			array(
-				'success'  => '-message--success',
-				'error'    => '-message--error',
+				'success' => '-message--success',
+				'error'   => '-message--error',
 			),
 			$this->form_break_css_scheme()
 		);
@@ -439,17 +439,21 @@ class Form extends Base {
 				'default' => 0,
 			),
 
-			'submit_type'   => array(
+			'submit_type'     => array(
 				'type'    => 'string',
 				'default' => 'reload'
 			),
-			'required_mark' => array(
+			'required_mark'   => array(
 				'type'    => 'string',
 				'default' => '*'
 			),
-			'fields_layout' => array(
+			'fields_layout'   => array(
 				'type'    => 'string',
 				'default' => 'column'
+			),
+			'enable_progress' => array(
+				'type'    => 'boolean',
+				'default' => false
 			),
 		);
 	}

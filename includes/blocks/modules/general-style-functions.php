@@ -28,15 +28,13 @@ trait General_Style_Functions {
 	}
 
 	public function selector( $selector, $prefix_base = '', $additional = '' ) {
-		$result[] = '{{WRAPPER}}';
-		$base     = $prefix_base . ".$this->namespace";
+		$base = $prefix_base . ".$this->namespace";
 
 		if ( isset( $this->css_scheme[ $selector ] ) ) {
-			$result[] = $base . $this->css_scheme[ $selector ];
-		} else {
-			$result[] = $base . sprintf( $selector, $this->namespace );
+			$selector = $this->css_scheme[ $selector ];
 		}
-		$result = implode( ' ', $result );
+
+		$result = "{{WRAPPER}} $base" . sprintf( $selector, $this->namespace );
 
 		if ( $additional ) {
 			$result .= $additional;
@@ -71,7 +69,7 @@ trait General_Style_Functions {
 			'label'        => __( 'Padding', 'jet-form-builder' ),
 			'units'        => array( 'px', '%' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				$selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
 			),
 		);
 	}

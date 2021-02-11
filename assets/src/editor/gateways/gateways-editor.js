@@ -1,7 +1,7 @@
 import { gatewayAttr, renderGateway } from "../helpers/gateway-helper";
 import Tools, { event } from "../helpers/tools";
 import gatewayActionAttributes from "./gateway-action-attrubites";
-import { actionByTypeList, getActionLabel } from "../helpers/action-helper";
+import { actionByTypeList, fromLocalizeHelper } from "../helpers/action-helper";
 import PayPal from "./paypal";
 
 event( 'jet-fb-gateways/init' )();
@@ -138,6 +138,7 @@ export default function GatewaysEditor( {
 	}, [isSaveAction] );
 
 	const actionsList = actionByTypeList( 'insert_post', true );
+	const actionLabel = fromLocalizeHelper( 'getActionLabel' );
 
 	return <>
 		{ renderGateway( gateway.gateway, { setValueInObject, getNotifications } ) }
@@ -155,7 +156,7 @@ export default function GatewaysEditor( {
 							className={ 'jet-forms-checkbox-field' }
 							key={ `place_holder_block_${ action.id + index }` }
 							checked={ getNotificationsBefore( action.id ).active }
-							label={ getActionLabel( action.type ) }
+							label={ actionLabel( action.type ) }
 							help={ gatewayActionAttributes( action ) }
 							onChange={ active => setNotificationsBefore( action.id, {
 								active,
@@ -175,7 +176,7 @@ export default function GatewaysEditor( {
 							className={ 'jet-forms-checkbox-field' }
 							key={ `place_holder_block_${ action.id + index }` }
 							checked={ getNotificationsSuccess( action.id ).active }
-							label={ getActionLabel( action.type ) }
+							label={ actionLabel( action.type ) }
 							help={ gatewayActionAttributes( action ) }
 							onChange={ active => setNotificationsSuccess( action.id, {
 								active,
@@ -198,7 +199,7 @@ export default function GatewaysEditor( {
 							className={ 'jet-forms-checkbox-field' }
 							key={ `place_holder_block_${ action.id + index }` }
 							checked={ getNotificationsFailed( action.id ).active }
-							label={ getActionLabel( action.type ) }
+							label={ actionLabel( action.type ) }
 							help={ gatewayActionAttributes( action ) }
 							onChange={ active => setNotificationsFailed( action.id, {
 								active,

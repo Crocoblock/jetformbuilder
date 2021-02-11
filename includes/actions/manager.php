@@ -17,9 +17,12 @@ class Manager {
 
 	private $_types = array();
 
+	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
+
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_action_types' ), 99 );
 		add_action( 'jet-form-builder/editor-assets/after', array( $this, 'register_types_for_editor' ), 10, 2 );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_action_localize_helper' ) );
 	}
 
 	/**
@@ -89,10 +92,13 @@ class Manager {
 	 * @return void [description]
 	 */
 	public function register_types_for_editor( $editor, $handle ) {
+		self::localize_action_types( $this->_types, $handle );
+	}
 
+	public static function prepare_actions_data( $source, $handle ) {
 		$prepared_types = array();
 
-		foreach ( $this->_types as $type ) {
+		foreach ( $source as $type ) {
 
 			$type_script_name = $type->self_script_name();
 
@@ -118,7 +124,25 @@ class Manager {
 			}
 		}
 
-		wp_localize_script( $handle, 'jetFormActionTypes', $prepared_types );
+		return $prepared_types;
+	}
+
+	public static function register_action_localize_helper() {
+		wp_enqueue_script(
+			self::ENGINE_HANDLE,
+			JET_FORM_BUILDER_URL . 'assets/js/action-localize-helper.js',
+			array(),
+			JET_FORM_BUILDER_VERSION,
+		);
+	}
+
+	public static function localize_action_types( $types, $handle = '' ) {
+		$handle = $handle ? $handle : self::ENGINE_HANDLE;
+		wp_localize_script(
+			$handle,
+			'jetFormActionTypes',
+			self::prepare_actions_data( $types, $handle )
+		);
 	}
 
 }

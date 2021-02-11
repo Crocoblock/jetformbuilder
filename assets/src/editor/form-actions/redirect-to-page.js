@@ -1,5 +1,5 @@
 import Tools from "../helpers/tools";
-import { addAction, getLocalizedFullPack } from "../helpers/action-helper";
+import { addAction } from "../helpers/action-helper";
 
 /**
  * Internal dependencies

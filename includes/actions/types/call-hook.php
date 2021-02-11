@@ -89,16 +89,4 @@ class Call_Hook extends Base {
 }
 
 
-add_action(
-	'jet-form-builder/custom-action/custom_hook',
-	function ( array $request, Action_Handler $handler ) {
-		$handler->request_data['hidden_with_content'] = "{$request['post_id']}: {$request['post_title']}";
-	},
-	10, 2
-);
-
-
-
-
-
 

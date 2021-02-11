@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Action_Localize;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 
@@ -17,6 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base {
 
 	use Messages_Helper_Trait;
+	use Action_Localize;
 
 	/**
 	 * Stores the action settings
@@ -44,9 +46,6 @@ abstract class Base {
 		$this->set_action_messages();
 	}
 
-	abstract public function get_name();
-
-	abstract public function get_id();
 
 	/**
 	 * @param $request array - Form data
@@ -55,16 +54,6 @@ abstract class Base {
 	 * @return mixed
 	 */
 	abstract public function do_action( array $request, Action_Handler $handler );
-
-	abstract public function visible_attributes_for_gateway_editor();
-
-	abstract public function self_script_name();
-
-	abstract public function editor_labels();
-
-	public function editor_labels_help() {
-		return array();
-	}
 
 	public function dependence() {
 		return true;
@@ -85,15 +74,6 @@ abstract class Base {
 			'jet-form-builder/message-types/' . $this->get_id(),
 			$this->messages()
 		);
-	}
-
-	/**
-	 * Register custom action data
-	 *
-	 * @return array [description]
-	 */
-	public function action_data() {
-		return array();
 	}
 
 	public function is_repeater_val( $value ) {

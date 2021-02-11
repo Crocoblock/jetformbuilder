@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Classes;
 
 
 trait Messages_Helper_Trait {
-	public $messages;
+	public $messages = array();
 
 	public function get_messages_by_key( $key ) {
 		$messages = array();

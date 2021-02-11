@@ -1,7 +1,7 @@
-import { getLocalizedFullPack } from "../../helpers/action-helper";
+import { fromLocalizeHelper } from "../../helpers/action-helper";
 
 export default function withActionLocalizeScript( actionType, ActionInstance ) {
-	const localizedData = getLocalizedFullPack( actionType );
+	const localizedData = fromLocalizeHelper( 'getLocalizedFullPack' )( actionType );
 
 	return props => {
 		const onChangeSetting = ( value, key ) => {

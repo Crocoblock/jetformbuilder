@@ -1,8 +1,8 @@
 import { getActionSettings } from "../helpers/gateway-helper";
-import { getLocalizedFullPack } from "../helpers/action-helper";
+import { fromLocalizeHelper } from "../helpers/action-helper";
 
 function gatewayActionAttributes( action ) {
-	const { gatewayAttrs, label } = getLocalizedFullPack( action.type );
+	const { gatewayAttrs, label } = fromLocalizeHelper( 'getLocalizedFullPack' )( action.type );
 	const actionSettings = getActionSettings( action.id );
 
 	const value = attr => actionSettings[ attr ] ? actionSettings[ attr ] : 'NULL';

@@ -7,6 +7,7 @@ use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
+use Jet_Form_Builder\Shortcodes\Manager;
 
 
 // If this file is called directly, abort.
@@ -25,6 +26,8 @@ class Form_Manager {
 		if ( Plugin::instance()->post_type->allow_gateways ) {
 			Gateway_Manager::instance();
 		}
+
+		Manager::instance();
 	}
 
 	/**

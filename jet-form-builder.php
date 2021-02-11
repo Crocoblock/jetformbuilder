@@ -35,3 +35,9 @@ function jet_form_builder_init() {
 function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }
+
+if ( ! function_exists( 'jet_fb_render_form' ) ) {
+	function jet_fb_render_form( $settings ) {
+		return Jet_Form_Builder\Plugin::instance()->blocks->get_form_class()->render_callback_field( $settings );
+	}
+}

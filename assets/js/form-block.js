@@ -1,1 +1,100 @@
-!function(e){var t={};function r(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)r.d(n,o,function(t){return e[t]}.bind(null,o));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=23)}({23:function(e,t){function r(e){return function(e){if(Array.isArray(e))return n(e)}(e)||function(e){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(e))return Array.from(e)}(e)||function(e,t){if(!e)return;if("string"==typeof e)return n(e,t);var r=Object.prototype.toString.call(e).slice(8,-1);"Object"===r&&e.constructor&&(r=e.constructor.name);if("Map"===r||"Set"===r)return Array.from(e);if("Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return n(e,t)}(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function n(e,t){(null==t||t>e.length)&&(t=e.length);for(var r=0,n=new Array(t);r<t;r++)n[r]=e[r];return n}var o=wp.blocks.registerBlockType,l=wp.i18n.__,a=wp.blockEditor?wp.blockEditor:wp.editor,i=(a.ColorPalette,a.RichText,a.Editable,a.MediaUpload,a.BlockControls,a.InspectorControls),u=wp.components,c=u.PanelBody,s=(u.Button,u.ComboboxControl,u.SelectControl),m=u.TextControl,f=wp.serverSideRender,p=(wp.element.useState,!!window.jetFormBuilderBlocks&&window.jetFormBuilderBlocks[0]);o(p.blockName,{title:p.title,category:"layout",icon:wp.element.createElement("span",{dangerouslySetInnerHTML:{__html:p.icon}}),attributes:p.attributes,edit:function(e){var t=e.attributes,n=e.setAttributes,o=e.isSelected;this.name="jet-forms/form-block",this.keyControls=function(){return this.name+"-controls-edit"},this.keyGeneral=function(){return this.name+"-general-edit"};var a=window.JetFormData.forms_list;return[o&&wp.element.createElement(i,{key:this.keyControls()},wp.element.createElement(c,{title:l("Form Settings"),key:this.keyGeneral()},wp.element.createElement(s,{key:"form_id",label:l("Choose Form"),labelposition:"top",value:t.form_id,onChange:function(e){n({form_id:Number(e)})},options:[{label:l("Select form..."),value:0}].concat(r(a))}),Boolean(t.form_id)&&wp.element.createElement(React.Fragment,null,wp.element.createElement(s,{label:"Fields Layout",value:t.fields_layout,options:[{value:"column",label:"Column"},{value:"row",label:"Row"}],onChange:function(e){n({fields_layout:e})}}),wp.element.createElement(m,{label:"Required Mark",value:t.required_mark,onChange:function(e){n({required_mark:e})}}),wp.element.createElement(s,{label:"Submit Type",value:t.submit_type,options:[{value:"reload",label:"Page Reload"},{value:"ajax",label:"AJAX"}],onChange:function(e){n({submit_type:e})}})))),wp.element.createElement(f,{block:p.blockName,attributes:t,httpMethod:"POST"})]},save:function(e){return null},supports:{html:!1}})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./editor/form-block.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./editor/form-block.js":
+/*!******************************!*\
+  !*** ./editor/form-block.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }\n\nfunction _nonIterableSpread() { throw new TypeError(\"Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\n\nfunction _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === \"string\") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === \"Object\" && o.constructor) n = o.constructor.name; if (n === \"Map\" || n === \"Set\") return Array.from(o); if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }\n\nfunction _iterableToArray(iter) { if (typeof Symbol !== \"undefined\" && Symbol.iterator in Object(iter)) return Array.from(iter); }\n\nfunction _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }\n\nfunction _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }\n\nvar registerBlockType = wp.blocks.registerBlockType;\nvar __ = wp.i18n.__;\n\nvar _ref = wp.blockEditor ? wp.blockEditor : wp.editor,\n    ColorPalette = _ref.ColorPalette,\n    RichText = _ref.RichText,\n    Editable = _ref.Editable,\n    MediaUpload = _ref.MediaUpload,\n    BlockControls = _ref.BlockControls,\n    InspectorControls = _ref.InspectorControls;\n\nvar _wp$components = wp.components,\n    PanelBody = _wp$components.PanelBody,\n    Button = _wp$components.Button,\n    ComboboxControl = _wp$components.ComboboxControl,\n    SelectControl = _wp$components.SelectControl,\n    TextControl = _wp$components.TextControl;\nvar _wp = wp,\n    ServerSideRender = _wp.serverSideRender;\nvar useState = wp.element.useState;\nvar formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[0] : false;\n\nfunction FormEdit(_ref2) {\n  var attributes = _ref2.attributes,\n      setAttributes = _ref2.setAttributes,\n      isSelected = _ref2.isSelected;\n  this.name = 'jet-forms/form-block';\n\n  this.keyControls = function () {\n    return this.name + '-controls-edit';\n  };\n\n  this.keyGeneral = function () {\n    return this.name + '-general-edit';\n  };\n\n  var forms_list = window.JetFormData.forms_list;\n  return [isSelected && wp.element.createElement(InspectorControls, {\n    key: this.keyControls()\n  }, wp.element.createElement(PanelBody, {\n    title: __('Form Settings'),\n    key: this.keyGeneral()\n  }, wp.element.createElement(SelectControl, {\n    key: \"form_id\",\n    label: __('Choose Form'),\n    labelposition: \"top\",\n    value: attributes.form_id,\n    onChange: function onChange(newValue) {\n      setAttributes({\n        form_id: Number(newValue)\n      });\n    },\n    options: [{\n      label: __('Select form...'),\n      value: 0\n    }].concat(_toConsumableArray(forms_list))\n  }), Boolean(attributes.form_id) && wp.element.createElement(React.Fragment, null, wp.element.createElement(SelectControl, {\n    label: 'Fields Layout',\n    value: attributes.fields_layout,\n    options: [{\n      value: 'column',\n      label: 'Column'\n    }, {\n      value: 'row',\n      label: 'Row'\n    }],\n    onChange: function onChange(newValue) {\n      setAttributes({\n        fields_layout: newValue\n      });\n    }\n  }), wp.element.createElement(TextControl, {\n    label: 'Required Mark',\n    value: attributes.required_mark,\n    onChange: function onChange(newValue) {\n      setAttributes({\n        required_mark: newValue\n      });\n    }\n  }), wp.element.createElement(SelectControl, {\n    label: 'Submit Type',\n    value: attributes.submit_type,\n    options: [{\n      value: 'reload',\n      label: 'Page Reload'\n    }, {\n      value: 'ajax',\n      label: 'AJAX'\n    }],\n    onChange: function onChange(newValue) {\n      setAttributes({\n        submit_type: newValue\n      });\n    }\n  })))), wp.element.createElement(ServerSideRender, {\n    block: formBlock.blockName,\n    attributes: attributes,\n    httpMethod: 'POST'\n  })];\n}\n\nfunction FormSave(props) {\n  return null;\n}\n\nregisterBlockType(formBlock.blockName, {\n  title: formBlock.title,\n  category: 'layout',\n  icon: wp.element.createElement(\"span\", {\n    dangerouslySetInnerHTML: {\n      __html: formBlock.icon\n    }\n  }),\n  attributes: formBlock.attributes,\n  edit: FormEdit,\n  save: FormSave,\n  supports: {\n    html: false\n  }\n});\n\n//# sourceURL=webpack:///./editor/form-block.js?");
+
+/***/ })
+
+/******/ });

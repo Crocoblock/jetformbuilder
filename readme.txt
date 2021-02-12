@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.6.0
 Requires PHP: 7.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,9 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 5. Style settings
 
 == Changelog ==
+
+**1.0.2**
+ - Enhancement: added **`jet_fb_form`** shortcode. Example: `[jet_fb_form form_id="4338" submit_type="ajax" required_mark="***" fields_layout="row"]`
 
 **1.0.1**
  - Fixed: render wysiwyg on front-end

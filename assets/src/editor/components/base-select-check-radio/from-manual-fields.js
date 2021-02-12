@@ -1,5 +1,5 @@
-import RepeaterWithState from "../../components/repeater-with-state";
-import ActionModal from "../../components/actions/action-modal";
+import RepeaterWithState from "../repeater-with-state";
+import ActionModal from "../actions/action-modal";
 
 const {
 	Modal,

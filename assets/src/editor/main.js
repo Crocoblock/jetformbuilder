@@ -92,9 +92,7 @@ ActionsMeta();
 PresetMeta();
 MessagesMeta();
 
-var initializedEvent = new Event( 'jet-form-builder-initialized' );
-
-document.dispatchEvent( initializedEvent );
+event('jet-form-builder-initialized')();
 
 /**
  * Takes a target input element via ID and turns it into a block editor

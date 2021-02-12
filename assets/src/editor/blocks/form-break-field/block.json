@@ -1,0 +1,11 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/form-break-field",
+	"title": "Form break field",
+	"attributes": {
+		"page_break_disabled": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/conditional-block",
+	"title": "Conditional Block",
+	"attributes": {
+		"conditions": {
+			"type": "array",
+			"default": ""
+		}
+	}
+}

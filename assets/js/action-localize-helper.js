@@ -1,5 +1,8 @@
 const getLocalized = ( actionType, objectKey = '' ) => {
 	const preparedAction = window.jetFormActionTypes.find( action => actionType === action.id );
+	if ( ! preparedAction ) {
+		return false;
+	}
 	const actionSelfLocalized = window[ preparedAction.self ];
 
 	return ( objectKey && actionSelfLocalized[ objectKey ] ) ? actionSelfLocalized[ objectKey ] : actionSelfLocalized;
@@ -9,7 +12,17 @@ const getLocalizedWithFunc = ( { actionType = false, source = false },
 							   objectKey,
 							   ifEmptyReturn = '' ) => {
 
-	const action = ( source ? source : getLocalized( actionType ) )[ objectKey ];
+	let action = false;
+
+	if ( source && source[ objectKey ] ) {
+		action = source[ objectKey ];
+	} else if ( actionType ) {
+		action = ( getLocalized( actionType )[ objectKey ] );
+	}
+
+	if ( ! action ) {
+		return () => ifEmptyReturn;
+	}
 
 	return attr => {
 		if ( attr ) {
@@ -21,7 +34,8 @@ const getLocalizedWithFunc = ( { actionType = false, source = false },
 };
 
 const getActionLabel = ( type ) => {
-	return ( window.jetFormActionTypes.find( el => el.id === type ).name );
+	const action = window.jetFormActionTypes.find( el => el.id === type );
+	return action ? action.name : '';
 };
 
 const localizedLabel = settings => {
@@ -51,14 +65,12 @@ const getLocalizedFullPack = actionType => {
 	return { source, label, help, messages, gatewayAttrs };
 };
 
-( () => {
-	window.JetFBLocalizeHelper = {
-		getActionLabel,
-		getLocalizedWithFunc,
-		localizedLabel,
-		localizedHelp,
-		localizedGatewayAttrs,
-		localizedMessages,
-		getLocalizedFullPack
-	};
-} )()
+window.JetFBLocalizeHelper = {
+	getActionLabel,
+	getLocalizedWithFunc,
+	localizedLabel,
+	localizedHelp,
+	localizedGatewayAttrs,
+	localizedMessages,
+	getLocalizedFullPack
+};

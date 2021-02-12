@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/number-field",
+	"title": "Number field",
+	"attributes": {
+		"min": {
+			"type": "number",
+			"default": null
+		},
+		"max": {
+			"type": "number",
+			"default": null
+		},
+		"step": {
+			"type": "number",
+			"default": null
+		}
+	}
+}

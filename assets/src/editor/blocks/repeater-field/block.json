@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/repeater-field",
+	"title": "Repeater field",
+	"attributes": {
+		"calc_formula": {
+			"type": "string",
+			"default": ""
+		},
+		"manage_items_count": {
+			"type": "string",
+			"default": "manually"
+		},
+		"new_item_label": {
+			"type": "string",
+			"default": ""
+		},
+		"manage_items_count_field": {
+			"type": "string",
+			"default": ""
+		},
+		"repeater_calc_type": {
+			"type": "string",
+			"default": "default"
+		}
+	}
+}

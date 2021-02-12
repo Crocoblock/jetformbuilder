@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/range-field",
+	"title": "Range field",
+	"attributes": {
+		"min": {
+			"type": "number",
+			"default": null
+		},
+		"max": {
+			"type": "number",
+			"default": null
+		},
+		"step": {
+			"type": "number",
+			"default": null
+		},
+		"prefix": {
+			"type": "string",
+			"default": ""
+		},
+		"suffix": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

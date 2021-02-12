@@ -1,4 +1,3 @@
-import Tools from "../../helpers/tools";
 
 const {
 	PanelColor,

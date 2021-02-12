@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/calculated-field",
+	"title": "Calculated Field",
+	"attributes": {
+		"calc_formula": {
+			"type": "string",
+			"default": ""
+		},
+		"precision": {
+			"type": "number",
+			"default": 2
+		},
+		"calc_prefix": {
+			"type": "string",
+			"default": ""
+		},
+		"calc_suffix": {
+			"type": "string",
+			"default": ""
+		},
+		"calc_hidden": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

@@ -72,8 +72,8 @@ class Notifications_Manager {
 	}
 
 	public function localize_notifications_for_editor() {
-		Action_Manager::register_action_localize_helper();
 		Action_Manager::localize_action_types( $this->notifications );
+		Action_Manager::register_action_localize_helper();
 	}
 
 }

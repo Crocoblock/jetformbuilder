@@ -109,7 +109,7 @@ class Controller extends Base_Gateway {
 	}
 
 
-	protected function query_order_token() {
+	protected function query_order_token( $order_id, $form_id ) {
 		return $this->get_token(
 			$this->options['client_id'],
 			$this->options['secret']

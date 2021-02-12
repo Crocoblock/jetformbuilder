@@ -1,0 +1,8 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/radio-field",
+	"title": "Radio field",
+	"attributes": {
+		"checkbox-field": "inherit"
+	}
+}

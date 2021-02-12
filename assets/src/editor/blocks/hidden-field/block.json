@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/hidden-field",
+	"title": "Hidden field",
+	"attributes": {
+		"field_value": {
+			"type": "string",
+			"default": "post_id"
+		},
+		"hidden_value_field": {
+			"type": "string",
+			"default": ""
+		},
+		"query_var_key": {
+			"type": "string",
+			"default": ""
+		},
+		"date_format": {
+			"type": "string",
+			"default": ""
+		},
+		"hidden_value": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

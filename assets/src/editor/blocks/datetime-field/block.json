@@ -1,0 +1,11 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/date-field",
+	"title": "Date field",
+	"attributes": {
+		"is_timestamp": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

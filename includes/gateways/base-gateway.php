@@ -208,7 +208,7 @@ abstract class Base_Gateway {
 	}
 
 	final protected function set_order_token() {
-		$this->order_token = $this->query_order_token();
+		$this->order_token = $this->query_order_token( $this->order_id, $this->action_handler->form_id );
 
 		if ( ! $this->order_token ) {
 			throw new Gateway_Exception( 'Invalid token', $this->order_token );
@@ -367,7 +367,7 @@ abstract class Base_Gateway {
 		);
 	}
 
-	abstract protected function query_order_token();
+	abstract protected function query_order_token( $order_id, $form_id );
 
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );

@@ -1,0 +1,12 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/select-field",
+	"title": "Select field",
+	"attributes": {
+		"checkbox-field": "inherit",
+		"switch_on_change": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

@@ -132,11 +132,11 @@ function ActionsMeta() {
 
 		var Callback = false;
 
-
 		for ( var i = 0; i < window.jetFormActionTypes.length; i ++ ) {
 
 			if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
 				Callback = window.jetFormActionTypes[ i ].callback;
+				break;
 			}
 		}
 

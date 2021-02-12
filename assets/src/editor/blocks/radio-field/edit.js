@@ -3,10 +3,10 @@ import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
 
-import FromTermsFields from "../base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../base-select-check-radio/from-posts-fields";
-import FromGeneratorsFields from "../base-select-check-radio/from-generators-fields";
-import FromManualFields from "../base-select-check-radio/from-manual-fields";
+import FromTermsFields from "../../components/base-select-check-radio/from-terms-fields";
+import FromPostsFields from "../../components/base-select-check-radio/from-posts-fields";
+import FromGeneratorsFields from "../../components/base-select-check-radio/from-generators-fields";
+import FromManualFields from "../../components/base-select-check-radio/from-manual-fields";
 import { SelectRadioCheckPlaceholder } from "../../components/select-radio-check-placeholder";
 
 const block = 'jet-forms/radio-field';

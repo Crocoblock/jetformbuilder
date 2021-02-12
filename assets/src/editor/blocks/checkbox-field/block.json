@@ -1,0 +1,43 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/checkbox-field",
+	"title": "Checkbox Field",
+	"attributes": {
+		"field_options_from": {
+			"type": "string",
+			"default": "manual_input"
+		},
+		"field_options": {
+			"type": "array",
+			"default": []
+		},
+		"field_options_post_type": {
+			"type": "string",
+			"default": "post"
+		},
+		"field_options_tax": {
+			"type": "string",
+			"default": "category"
+		},
+		"field_options_key": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_function": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_field": {
+			"type": "string",
+			"default": ""
+		},
+		"calculated_value_from_key": {
+			"type": "string",
+			"default": ""
+		},
+		"value_from_key": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

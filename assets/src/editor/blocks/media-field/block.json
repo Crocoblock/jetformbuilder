@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "jet-form-builder/media-field",
+	"title": "Media field",
+	"attributes": {
+		"allowed_user_cap": {
+			"type": "string",
+			"default": ""
+		},
+		"insert_attachment": {
+			"type": "boolean",
+			"default": false
+		},
+		"max_files": {
+			"type": "number",
+			"default": null
+		},
+		"max_size": {
+			"type": "number",
+			"default": null
+		},
+		"allowed_mimes": {
+			"type": "array",
+			"default": []
+		}
+	}
+}

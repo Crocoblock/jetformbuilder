@@ -35,13 +35,16 @@ https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 - **Spam protection.** Add a Google reCAPTCHA to your form easily. 
 - **Native Gutenberg components.** Combine JetFormBuilder with Gutenberg functionality to create truly unique forms.
 
+**Demo**
+We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://crocoblock.com/plugins/jetformbuilder/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://crocoblock.com/plugins/jetformbuilder/</a>
+
 **Integrations**
 
-**<a href="https://crocoblock.com/plugins/jetengine/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
+**<a href="https://crocoblock.com/plugins/jetengine/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
 Use the JetEngine potential when developing a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically, and put the JetEngine-built custom post types into the dynamic settings. 
 
 **<a href="https://wordpress.org/plugins/jet-style-manager/">JetStyleManager</a>**
-We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.   
+We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.
 
 More third-party plugin integrations are in the works.
 

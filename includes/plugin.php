@@ -54,7 +54,6 @@ class Plugin {
 		$this->form_handler = new Form_Handler();
 		$this->captcha      = new Forms_Captcha();
 
-		Compatibility\Jet_Engine\Notifications_Manager::instance();
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();

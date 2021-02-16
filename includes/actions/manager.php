@@ -132,7 +132,7 @@ class Manager {
 			self::ENGINE_HANDLE,
 			JET_FORM_BUILDER_URL . 'assets/js/action-localize-helper.js',
 			array(),
-			JET_FORM_BUILDER_VERSION,
+			JET_FORM_BUILDER_VERSION
 		);
 	}
 

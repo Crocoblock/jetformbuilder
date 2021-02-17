@@ -34,7 +34,7 @@ abstract class Integration_Base_Action extends Base {
 			wp_send_json_error();
 		}
 
-		$handler = $this->api_handler( $_REQUEST['api_key'] );
+		$handler = $this->api_handler( sanitize_text_field( $_REQUEST['api_key'] ) );
 
 		if ( is_wp_error( $handler ) ) {
 			wp_send_json_error();

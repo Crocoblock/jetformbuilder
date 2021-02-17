@@ -117,6 +117,51 @@ trait General_Style {
 		);
 	}
 
+	public function _get_default_control( $selector ) {
+		return array(
+			'padding' => array(
+				'type'         => 'dimensions',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
+			),
+			'margin'       => array(
+				'type'         => 'dimensions',
+				'label'        => __( 'Margin', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
+			)
+		);
+	}
+
+	public function add_margin_padding( $selector, $control_options, $responsive = array() ) {
+		foreach ( $control_options as $type => $options ) {
+			$options = $this->merge_controls_or_add_id( $this->_get_default_control( $selector )[ $type ], $options );
+
+			if ( in_array( $type, $responsive ) ) {
+				$this->controls_manager->add_responsive_control( $options );
+			} else {
+				$this->controls_manager->add_control( $options );
+			}
+		}
+	}
+
+	public function merge_controls_or_add_id( $control, $options ) {
+		if ( is_array( $options ) ) {
+			return array_merge( $control, $options );
+
+		} elseif ( is_string( $options ) ) {
+
+			$control['id'] = $options;
+
+			return $control;
+		}
+	}
+
 
 	private function add_content_controls() {
 		$this->controls_manager->start_section(
@@ -138,7 +183,8 @@ trait General_Style {
 					'id'        => 'field_padding',
 					'separator' => 'after',
 				)
-			)
+			),
+			array( 'padding', 'margin' )
 		);
 
 		$this->controls_manager->add_control( [

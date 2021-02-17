@@ -69,7 +69,7 @@ class Post_Type {
 		$screen = get_current_screen();
 
 		if ( ! $screen->action ) {
-			$screen->action = ! empty( $_GET['action'] ) ? $_GET['action'] : '';
+			$screen->action = ! empty( $_GET['action'] ) ? esc_attr( $_GET['action'] ) : '';
 		}
 
 		$is_editor_page = in_array( $screen->action, array( 'add', 'edit' ) );

@@ -4,6 +4,7 @@ namespace Jet_Form_Builder;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Messages;
@@ -87,12 +88,11 @@ class Form_Handler {
 		global $post;
 
 		if ( ! $this->is_ajax ) {
-			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? $_REQUEST[ $this->form_key ] : false;
-			$this->refer   = ! empty( $_REQUEST[ $this->refer_key ] ) ? $_REQUEST[ $this->refer_key ] : false;
 			$post          = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
+			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? absint( $_REQUEST[ $form_key ] ) : false;
+			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? esc_url( $_REQUEST[ $refer_key ] ) : false;
 		} else {
-
-			$values = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
+			$values = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
 
 			foreach ( $values as $data ) {
 				switch ( $data['name'] ) {

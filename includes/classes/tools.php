@@ -342,6 +342,40 @@ class Tools {
 		$data = json_decode( $value, true );
 
 		return $data ? $data : maybe_unserialize( $value );
+	public static function maybe_recursive_sanitize( $source = null ) {
+		if ( ! is_array( $source ) ) {
+			return esc_attr( $source );
+		}
+
+		$result = array();
+		foreach ( $source as $key => $value ) {
+			$result[ $key ] = self::maybe_recursive_sanitize( $value );
+		}
+
+		return $result;
+	}
+
+	public static function sanitize_files( $source ) {
+		if ( ! is_array( $source ) ) {
+			return false;
+		}
+
+		$response = array();
+
+		foreach ( $source as $index => $item ) {
+			foreach ( $item as $key => $value ) {
+				switch ( $key ) {
+					case 'error':
+					case 'size':
+						$response[ $index ][ $key ] = absint( $value );
+						break;
+					default:
+						$response[ $index ][ $key ] = esc_attr( $value );
+				}
+			}
+		}
+
+		return $response;
 	}
 
 }

@@ -229,7 +229,6 @@
     flex-direction: row;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
-    justify-content: space-between
 }
 
 button.jet-form-builder__submit {

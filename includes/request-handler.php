@@ -39,7 +39,7 @@ class Request_Handler {
 		if ( $this->request['is_ajax'] ) {
 
 			$prepared = array();
-			$raw      = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
+			$raw      = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
 
 			if ( empty( $raw ) ) {
 				return $prepared;

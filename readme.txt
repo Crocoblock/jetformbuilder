@@ -1,10 +1,10 @@
-﻿=== JetFormBuilder ===
+﻿=== JetFormBuilder — Form Builder for Gutenberg ===
 Contributors: crocoblock
-Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form
+Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.6.0
-Requires PHP: 7.2
-Stable tag: 1.0.0
+Tested up to: 5.6.1
+Requires PHP: 7.0
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,8 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 A functional yet handy Form Builder plugin that lets you create, edit, and style any form type in the Gutenberg Editor. No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop a fully operative form.
 
 JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field blocks allow you to create a form from scratch or reassemble the existing one. Throw JetStyleManager into the mix and you’ll be able to style every form field. Create, customize, and style – all in Gutenberg.
+
+https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
 **Features**
 
@@ -33,13 +35,16 @@ JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field 
 - **Spam protection.** Add a Google reCAPTCHA to your form easily. 
 - **Native Gutenberg components.** Combine JetFormBuilder with Gutenberg functionality to create truly unique forms.
 
+**Demo**
+We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://crocoblock.com/plugins/jetformbuilder/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://crocoblock.com/plugins/jetformbuilder/</a>
+
 **Integrations**
 
-**<a href="https://bit.ly/3oHeLI7" target="_blank">JetEngine</a>**
+**<a href="https://crocoblock.com/plugins/jetengine/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
 Use the JetEngine potential when developing a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically, and put the JetEngine-built custom post types into the dynamic settings. 
 
-**<a href="https://bit.ly/2XAACoN" target="_blank">JetStyleManager</a>**
-We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.   
+**<a href="https://wordpress.org/plugins/jet-style-manager/">JetStyleManager</a>**
+We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.
 
 More third-party plugin integrations are in the works.
 
@@ -47,6 +52,24 @@ More third-party plugin integrations are in the works.
 
 Learn every little thing about JetFormBuilder & put theory to practice:
 
-- <a href="https://bit.ly/2LOgnRH" target="_blank">JetFormBuilder: How to Create a Form</a>
-- <a href="https://bit.ly/3oFDH2B" target="_blank">JetFormBuilder: Form Fields Overview</a>
-- <a href="https://bit.ly/3i9I0kD" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-create-a-form/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Create a Form</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-form-fields-overview/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: Form Fields Overview</a>
+- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-add-the-form-to-the-page/?utm_source=facebook_community&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>
+
+== Screenshots ==
+1. Creating a form structure
+2. Adding new form fields
+3. Form Break field
+4. Post-submit Action setup
+5. Style settings
+
+== Changelog ==
+
+**1.0.2**
+ - Enhancement: added **`jet_fb_form`** shortcode. Example: `[jet_fb_form form_id="4338" submit_type="ajax" required_mark="***" fields_layout="row"]`
+
+**1.0.1**
+ - Fixed: render wysiwyg on front-end
+ 
+**1.0.0**
+ - Initial release

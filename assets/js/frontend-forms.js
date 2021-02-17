@@ -507,10 +507,16 @@
 
 		removeRepeaterItem: function () {
 
-			var $this = $( this ),
-				$repeater = $this.closest( '.jet-form-builder-repeater' );
+			let $this = $( this ),
+				$repeater = $this.closest( '.jet-form-builder-repeater' ),
+				$repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
+				$editor = $repeaterItem.find( '.wp-editor-area' );
 
-			$this.closest( '.jet-form-builder-repeater__row' ).remove();
+			if ( $editor.length && window.wp && window.wp.editor ) {
+				window.wp.editor.remove( $editor.attr( 'id' ) );
+			}
+
+			$repeaterItem.remove();
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
 
 		},
@@ -767,26 +773,32 @@
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );
 			JetFormBuilder.initRepeaterListener( $scope );
+			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 			JetFormBuilder.initConditions( $scope );
 
 			if ( $.fn.inputmask ) {
-				$scope.find( '.jet-form-builder__masked-field' ).inputmask();
+				$scope.find( '.jet-form-builder__masked-field' ).inputmask( {
+					removeMaskOnSubmit: true,
+				} );
 			}
-
-			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
 			var $editor = $scope.find( '.wp-editor-area' );
 
 			if ( $editor.length && window.wp && window.wp.editor ) {
 
-				var editorDefaults = $editor.closest( '.jet-form-builder__field' ).data( 'editor' );
+				var editorID = $editor.attr( 'id' ),
+					editorDefaults = $editor.closest( '.jet-form-builder__field' ).data( 'editor' );
 
-				wp.editor.getDefaultSettings = function () {
+				/*wp.editor.getDefaultSettings = function() {
 					return editorDefaults;
+				}*/
+
+				if ( window.tinymce && window.tinymce.get( editorID ) ) {
+					window.wp.editor.remove( editorID );
 				}
 
 				var res = window.wp.editor.initialize(
-					$editor.attr( 'id' ),
+					editorID,
 					editorDefaults
 				);
 

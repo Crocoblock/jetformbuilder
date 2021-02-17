@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 
 /**
  * Class description
@@ -26,11 +27,13 @@ class File_Upload {
 	private $errors = array();
 
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_upload_script' ) );
-
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'ajax_file_upload' ) );
 		add_action( 'wp_ajax_nopriv_' . $this->action, array( $this, 'ajax_file_upload' ) );
+	}
+
+	public function enqueue_scripts() {
+		$this->register_assets();
+		$this->enqueue_upload_script();
 	}
 
 	/**
@@ -60,7 +63,7 @@ class File_Upload {
 
 		$nonce   = ! empty( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
 		$form_id = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : false;
-		$field   = ! empty( $_REQUEST['field'] ) ? $_REQUEST['field'] : false;
+		$field   = ! empty( $_REQUEST['field'] ) ? sanitize_key( $_REQUEST['field'] ) : false;
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, $this->nonce_key ) ) {
 			wp_send_json_error( __( 'You not allowed to do this', 'jet-form-builder' ) );
@@ -145,9 +148,7 @@ class File_Upload {
 
 		$insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
 
-		if ( ! $files ) {
-			$files = $_FILES;
-		}
+		$files = Tools::sanitize_files( $files );
 
 		if ( empty( $files ) || ! is_array( $files ) ) {
 			return false;

@@ -37,17 +37,7 @@ class Forms_Captcha {
 			return true;
 		}
 
-		if ( ! $is_ajax ) {
-			$request = $_REQUEST;
-		} else {
-
-			$raw     = $_REQUEST['values'];
-			$request = array();
-
-			foreach ( $raw as $field ) {
-				$request[ $field['name'] ] = $field['value'];
-			}
-		}
+		$request = $this->sanitize_token_from_request( $is_ajax );
 
 		if ( empty( $request[ $this->field_key ] ) ) {
 			return false;
@@ -71,6 +61,23 @@ class Forms_Captcha {
 		}
 
 	}
+
+	private function sanitize_token_from_request( $is_ajax ) {
+	    $response = array();
+
+		if ( ! $is_ajax && isset( $_POST[ $this->field_key ] ) ) {
+            $response[ $this->field_key ] = sanitize_text_field( $_POST[ $this->field_key ] );
+
+		} else {
+			foreach ( $_REQUEST['values'] as $field ) {
+			    if ( $field['name'] === $this->field_key ) {
+
+			        $response[ $field['name'] ] = esc_attr( $field['value'] );
+			    }
+			}
+		}
+	    return $response;
+    }
 
 	/**
 	 * Returns captcha settings for passed form ID

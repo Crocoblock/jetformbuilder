@@ -48,11 +48,6 @@ class Manager {
 			10, 2
 		);
 
-		add_action(
-			'wp_enqueue_scripts',
-			array( $this, 'register_frontend_assets' )
-		);
-
 		add_filter(
 			'jet-form-builder/post-type/args',
 			array( $this, 'add_default_fields_to_form' ),
@@ -340,6 +335,10 @@ class Manager {
 		}
 
 		return array_merge( $field->get_default_attributes(), $attributes );
+	}
+
+	public function get_form_class() {
+		return $this->get_field_by_name( 'form-block', self::OTHERS_STORAGE );
 	}
 
 	public function get_form_class() {

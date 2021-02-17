@@ -67,6 +67,10 @@ class Submit_Field extends Base {
 		$this->add_margin_padding(
 			$this->selector( '__submit' ),
 			array(
+				'margin' => array(
+					'id'        => 'submit_margin',
+					'separator' => 'after',
+				),
 				'padding' => array(
 					'id'        => 'submit_padding',
 					'separator' => 'after',
@@ -126,9 +130,6 @@ class Submit_Field extends Base {
 					'value' => 'flex-start'
 				),
 			],
-			'condition' => array(
-				'add_prev' => false
-			)
 		] );
 
 		$this->controls_manager->add_control( [

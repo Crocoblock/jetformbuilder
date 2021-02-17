@@ -221,7 +221,7 @@ class Form extends Widget_Base {
 		$this->add_responsive_control( 'form_row_gap_after', array(
 
 			'type'         => Controls_Manager::SLIDER,
-			'label'        => __( 'Gap Before', 'jet-form-builder' ),
+			'label'        => __( 'Gap After', 'jet-form-builder' ),
 			'size_units'   => array( 'px' ),
 			'range'        => array(
 				'px' => array(
@@ -617,7 +617,7 @@ class Form extends Widget_Base {
 				'label'       => __( 'Alignment', 'jet-form-builder' ),
 				'type'        => Controls_Manager::CHOOSE,
 				'label_block' => false,
-				'default'     => 'left',
+				'default'     => 'center',
 				'separator'   => 'before',
 				'options'     => array(
 					'left'   => array(
@@ -716,7 +716,7 @@ class Form extends Widget_Base {
 				'label'       => __( 'Alignment', 'jet-form-builder' ),
 				'type'        => Controls_Manager::CHOOSE,
 				'label_block' => false,
-				'default'     => 'left',
+				'default'     => 'center',
 				'separator'   => 'before',
 				'options'     => array(
 					'left'   => array(

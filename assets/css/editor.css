@@ -274,9 +274,6 @@
     -webkit-transition: .3s all;
     -o-transition: .3s all;
     transition: .3s all;
-    -webkit-transform: translateY(-6px);
-    -ms-transform: translateY(-6px);
-    transform: translateY(-6px);
 }
 
 

@@ -41,23 +41,23 @@ trait General_Style {
 	}
 
 	public function get_label_selector() {
-		return 'div.jet-form-builder__label';
+		return '__label.%1$s__label.%1$s__label';
 	}
 
 	public function get_required_selector() {
-		return '.jet-form-builder__label span.jet-form-builder__required';
+		return '__label span.%1$s__required.%1$s__required.%1$s__required';
 	}
 
 	public function get_description_selector() {
-		return 'div.jet-form-builder__desc';
+		return '__desc.%1$s__desc.%1$s__desc';
 	}
 
 	public function get_field_wrap() {
-		return 'div.jet-form-builder-row';
+		return '-row.%1$s-row.%1$s-row.%1$s-row';
 	}
 
 	public function get_field_input() {
-		return 'div.jet-form-builder-row input';
+		return '-row.%1$s-row.%1$s-row input';
 	}
 
 
@@ -124,7 +124,7 @@ trait General_Style {
 				'label'        => __( 'Padding', 'jet-form-builder' ),
 				'units'        => array( 'px', '%' ),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+					$selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
 				),
 			),
 			'margin'       => array(
@@ -132,7 +132,7 @@ trait General_Style {
 				'label'        => __( 'Margin', 'jet-form-builder' ),
 				'units'        => array( 'px', '%' ),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+					$selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
 				),
 			)
 		);
@@ -207,7 +207,7 @@ trait General_Style {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'text-align: {{VALUE}};',
+				$this->selector( 'wrap' ) => 'text-align: {{VALUE}};',
 			],
 		] );
 
@@ -218,7 +218,7 @@ trait General_Style {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -227,7 +227,7 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['wrap'] => 'background-color: {{VALUE}}',
+				$this->selector( 'wrap' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -277,7 +277,7 @@ trait General_Style {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'text-align: {{VALUE}};',
+				$this->selector( 'label' ) => 'text-align: {{VALUE}};',
 			],
 		] );
 
@@ -286,7 +286,7 @@ trait General_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -296,7 +296,7 @@ trait General_Style {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'label' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -306,7 +306,7 @@ trait General_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'color: {{VALUE}}',
+				$this->selector( 'label' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -315,7 +315,7 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['label'] => 'background-color: {{VALUE}}',
+				$this->selector( 'label' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -368,7 +368,7 @@ trait General_Style {
 				],
 			],
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['description'] => 'text-align: {{VALUE}};',
+				$this->selector( 'description' ) => 'text-align: {{VALUE}};',
 			],
 		] );
 
@@ -378,7 +378,7 @@ trait General_Style {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['description'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'description' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -387,7 +387,7 @@ trait General_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['description'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'description' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -397,7 +397,7 @@ trait General_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['description'] => 'color: {{VALUE}}',
+				$this->selector( 'description' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -406,7 +406,7 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['description'] => 'background-color: {{VALUE}}',
+				$this->selector( 'description' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -434,7 +434,7 @@ trait General_Style {
 			'separator'              => 'after',
 			'type'                   => 'typography',
 			'css_selector'           => [
-				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'required' ) => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -444,7 +444,7 @@ trait General_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'color: {{VALUE}}',
+				$this->selector( 'required' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -453,7 +453,7 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['required'] => 'background-color: {{VALUE}}',
+				$this->selector( 'required' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -505,7 +505,7 @@ trait General_Style {
 					],
 				],
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['input'] => 'text-align: {{VALUE}};',
+					$this->selector( 'input' ) => 'text-align: {{VALUE}};',
 				),
 			),
 			$this->get_additional_styles( 'input_alignment' )
@@ -516,7 +516,7 @@ trait General_Style {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['input'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( 'input' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -526,7 +526,7 @@ trait General_Style {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['input'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( 'input' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -536,7 +536,7 @@ trait General_Style {
 			'separator'    => 'after',
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['input'] => 'color: {{VALUE}}',
+				$this->selector( 'input' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -545,7 +545,7 @@ trait General_Style {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['input'] => 'background-color: {{VALUE}}',
+				$this->selector( 'input' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 

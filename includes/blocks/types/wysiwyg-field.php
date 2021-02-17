@@ -33,7 +33,7 @@ class Wysiwyg_Field extends Base {
 	}
 
 	public function general_style_unregister() {
-		return array( 'required', 'input' );
+		return array( 'input' );
 	}
 
 

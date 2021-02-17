@@ -342,6 +342,8 @@ class Tools {
 		$data = json_decode( $value, true );
 
 		return $data ? $data : maybe_unserialize( $value );
+	}
+
 	public static function maybe_recursive_sanitize( $source = null ) {
 		if ( ! is_array( $source ) ) {
 			return esc_attr( $source );

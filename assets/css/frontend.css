@@ -680,7 +680,9 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 }
 
 .jet-form-builder__field-wrap.checkradio-wrap span {
-    display: contents;
+    /*display: contents;*/
+    display: flex;
+    align-items: center;
 }
 
 .rtl .jet-form-builder-row,

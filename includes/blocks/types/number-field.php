@@ -34,10 +34,11 @@ class Number_Field extends Base {
 
 	public function get_css_scheme() {
 		return array(
-			'field'       => '.jet-form-builder__field-wrap .components-input-control__input',
-			'backdrop'    => 'div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop',
-			'front-field' => '.jet-form-builder__field-wrap input',
-			'wrapper'     => '.jet-form-builder__field-wrap',
+			'field'              => '.jet-form-builder__field-wrap .components-input-control__input',
+			'backdrop'           => 'div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop',
+			'container_backdrop' => '.components-input-control__container.components-input-control__container',
+			'front-field'        => '.jet-form-builder__field-wrap input',
+			'wrapper'            => '.jet-form-builder__field-wrap',
 		);
 	}
 
@@ -79,9 +80,10 @@ class Number_Field extends Base {
 			'separator'    => 'after',
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['field']       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} ' . $this->css_scheme['backdrop']    => 'border: unset;',
+				'{{WRAPPER}} ' . $this->css_scheme['front-field']        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['field']              => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				'{{WRAPPER}} ' . $this->css_scheme['backdrop']           => 'border: unset;',
+				'{{WRAPPER}} ' . $this->css_scheme['container_backdrop'] => 'border-radius:{{RADIUS}};'
 			),
 			'attributes'   => array(
 				'default' => array(

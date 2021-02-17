@@ -597,6 +597,7 @@ trait Form_Break_Field_Style {
 			),
 		] );
 		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
 		$this->controls_manager->end_section();
 	}
 

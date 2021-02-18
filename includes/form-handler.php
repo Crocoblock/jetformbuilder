@@ -9,6 +9,7 @@ use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Response;
+use Jet_Form_Builder\Request\Request_Handler;
 
 /**
  * Form builder class
@@ -42,7 +43,6 @@ class Form_Handler {
 	public $refer_key = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 
-	private $response_manager;
 
 	/**
 	 * Constructor for the class
@@ -89,8 +89,8 @@ class Form_Handler {
 
 		if ( ! $this->is_ajax ) {
 			$post          = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
-			$this->form_id = ! empty( $_REQUEST[ $form_key ] ) ? absint( $_REQUEST[ $form_key ] ) : false;
-			$this->refer   = ! empty( $_REQUEST[ $refer_key ] ) ? esc_url( $_REQUEST[ $refer_key ] ) : false;
+			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? absint( $_REQUEST[ $this->form_key ] ) : false;
+			$this->refer   = ! empty( $_REQUEST[ $this->refer_key ] ) ? esc_url( $_REQUEST[ $this->refer_key ] ) : false;
 		} else {
 			$values = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
 
@@ -171,6 +171,7 @@ class Form_Handler {
 				'is_ajax' => $this->is_ajax,
 				'refer'   => $this->refer
 			);
+			$this->action_handler = new Action_Handler( $this->form_id );
 			$this->request_data = ( new Request_Handler( $request ) )->get_form_data();
 
 		} catch ( Request_Exception $exception ) {
@@ -184,7 +185,7 @@ class Form_Handler {
 
 	public function try_to_do_actions() {
 		try {
-			$this->action_handler = new Action_Handler( $this->form_id, $this->request_data );
+			$this->action_handler->add_request( $this->request_data );
 
 			$this->add_response_data( $this->action_handler->do_actions() );
 			$this->is_success = true;

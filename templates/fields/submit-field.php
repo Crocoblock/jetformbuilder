@@ -13,7 +13,12 @@ if ( $has_class )  {
     $classes[] = $args['class_name'];
 }
 $this->add_attribute( 'class', 'jet-form-builder__submit' );
-$this->add_attribute( 'class', 'submit-type-' . $this->live_form->spec_data->submit_type );
+
+// prevent submit form in editor
+if ( ! \Jet_Form_Builder\Classes\Tools::is_editor() ) {
+	$this->add_attribute( 'class', 'submit-type-' . $this->live_form->spec_data->submit_type );
+}
+
 $has_class ? $this->add_attribute( 'class', $args['class_name'] ) : '';
 
 if ( isset( $this->live_form->spec_data->submit_type ) && 'reload' === $this->live_form->spec_data->submit_type ) {

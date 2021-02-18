@@ -8,10 +8,10 @@ class Request_Exception extends Handler_Exception {
 
 	private $errors;
 
-	public function __construct( $message = "", $errors = array() ) {
+	public function __construct( $message = "", ...$errors ) {
 		$this->errors = $errors;
 
-		parent::__construct( $message, array() );
+		parent::__construct( $message, $errors );
 	}
 
 	public function get_fields_errors() {

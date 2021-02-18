@@ -27,7 +27,7 @@ class Repeater_Field_Render extends Base {
 			return;
 		}
 
-		$this->current_repeater = array( 'default' => $this->block_type->block_attrs['default'] );
+		$this->current_repeater = $this->block_type->block_attrs;
 
 		$template = sprintf(
 			'<template class="jet-form-builder-repeater__initial">%1$s</template>',

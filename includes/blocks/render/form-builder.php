@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -154,6 +155,9 @@ class Form_Builder {
 		}
 
 		include $this->get_global_template( 'common/end-form.php' );
+
+		Plugin::instance()->blocks->register_frontend_assets();
+		File_Upload::instance()->enqueue_scripts();
 
 		$end_form .= ob_get_clean();
 

@@ -82,13 +82,8 @@ class Live_Form {
 		$jf_default_args = Plugin::instance()->post_type->get_default_args();
 		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data  = array_udiff( $jf_args, $jf_default_args, function ( $a, $b ) {
-			return ( $a !== $b );
-		} );
-		$attributes = array_merge( $jf_default_args, $attributes );
-		$spec_data = array_merge( $attributes, $spec_data );
-
-		$this->spec_data = ( object ) $spec_data;
+		$spec_data  = array_diff( $jf_args, $jf_default_args );
+		$this->spec_data = ( object ) array_merge( $jf_default_args, $attributes, $spec_data );;
 
 		return $this;
 	}
@@ -351,8 +346,7 @@ class Live_Form {
 
 		//Find some solution for the repeater field
 		if ( $this->current_repeater ) {
-
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
+			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : '_undefined_repeater_name';
 			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
 
 			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );

@@ -762,3 +762,7 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 .jet-form-builder__field.field-has-error + .error-message {
     color: red;
 }
+
+.jet-form-builder-file-upload__value[value*="."] + input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
+    color: transparent;
+}

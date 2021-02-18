@@ -87,24 +87,30 @@ class Form_Manager {
 		return $this->get_fields( get_post( $form_id )->post_content );
 	}
 
-	public function get_only_form_fields( $form_id ) {
+	public function prepare_fields_names( $block_name ) {
+		return "jet-forms/$block_name";
+	}
+
+	public function get_only_form_fields( $form_id, $exclude = array(), $recursive = true ) {
 		$content = $this->get_form_blocks( $form_id );
+		$exclude = array_map( array( $this, 'prepare_fields_names' ), $exclude );
 
 		$this->result_fields = array();
-		$this->get_inner_fields( $content );
+		$this->get_inner_fields( $content, $exclude, $recursive );
 
 		return $this->result_fields;
 	}
 
-	function get_inner_fields( $source ) {
+
+	private function get_inner_fields( $source, $exclude, $recursive = true ) {
 		foreach ( $source as $block ) {
 
-			if ( ! $this->is_not_field( $block['blockName'] ) ) {
+			if ( ! $this->is_not_field( $block['blockName'] ) && ! in_array( $block['blockName'], $exclude ) ) {
 				$this->result_fields[] = $block;
 			}
 
-			if ( ! empty( $block['innerBlocks'] ) ) {
-				$this->get_inner_fields( $block['innerBlocks'] );
+			if ( $recursive && ! empty( $block['innerBlocks'] ) ) {
+				$this->get_inner_fields( $block['innerBlocks'], $exclude, true );
 			}
 		}
 	}

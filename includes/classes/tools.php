@@ -74,12 +74,7 @@ class Tools {
 	 * @return array
 	 */
 	public static function get_post_types_for_options() {
-
-		return self::get_post_types_for_js(
-			array( 'label' => '--' ),
-			array( 'public' => true )
-		);
-
+		return self::get_post_types_for_js( false, array( 'public' => true ) );
 	}
 
 	/**

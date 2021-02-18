@@ -82,7 +82,7 @@ class Update_User extends Base {
 		unset( $data_map['ID'] );
 
 		if ( ! $updated_user || is_wp_error( $updated_user ) ) {
-			throw new Action_Exception( 'internal_error' );
+			throw new Action_Exception( 'internal_error', $user['ID'] );
 		}
 
 		if ( get_current_user_id() !== $user['ID'] && ! current_user_can( 'edit_users' ) ) {
@@ -203,7 +203,7 @@ class Update_User extends Base {
 	 * @return array
 	 */
 	public function get_user_fields() {
-		return array(
+		return Tools::with_placeholder( array(
 			array(
 				'value' => 'ID',
 				'label' => __( 'User ID (will update this user)', 'jet-form-builder' ),
@@ -236,7 +236,7 @@ class Update_User extends Base {
 				'value' => 'user_meta',
 				'label' => __( 'User Meta', 'jet-form-builder' ),
 			),
-		);
+		) );
 	}
 
 

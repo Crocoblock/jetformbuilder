@@ -40,12 +40,15 @@ class Action_Handler {
 	 * @param $form_id
 	 * @param array $request_data
 	 */
-	function __construct( $form_id, $request_data = array() ) {
-
+	public function __construct( $form_id, $request_data = array() ) {
 		$this->form_id      = $form_id;
-		$this->request_data = $request_data;
-
 		$this->set_form_actions();
+	}
+
+	public function add_request( $request ) {
+		$this->request_data = $request;
+
+		return $this;
 	}
 
 	/**

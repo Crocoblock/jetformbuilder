@@ -100,8 +100,8 @@ class Error_Handler {
 		return true;
 	}
 
-	public function has_errors() {
-		return ( ! empty( $this->_errors ) );
+	public function empty_errors() {
+		return empty( $this->_errors );
 	}
 
 	public function has_error_by_name( $name ) {

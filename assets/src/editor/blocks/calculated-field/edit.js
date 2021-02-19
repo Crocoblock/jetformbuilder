@@ -1,14 +1,10 @@
-import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../helpers/tools";
 import FieldWrapper from "../../components/field-wrapper";
+import { AdvancedFields, GeneralFields } from "../controls/field-control";
 
 const block = 'jet-forms/calculated-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
 
 const { __ } = wp.i18n;
 
@@ -20,6 +16,7 @@ const {
 	ServerSideRender,
 	BlockControls,
 	InspectorControls,
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
@@ -42,139 +39,126 @@ const {
 
 const NumberControl = __experimentalNumberControl;
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
+const { useState, useEffect } = wp.element;
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends wp.element.Component {
+export default function EditCalculated( props ) {
+	const blockProps = useBlockProps();
 
-	constructor( props ) {
-		super( props );
+	const {
+		attributes,
+		setAttributes,
+		fieldCustom: { formFields, help, uniqKey }
+	} = props;
 
-		this.data = window.jetFormCalculatedFieldData;
-		this.state = { showMacrosPopover: false };
-	}
+	const insertMacros = ( macros ) => {
+		setAttributes( {
+			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`
+		} );
+	};
 
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+	const [ showMacros, setShowMacros ] = useState( false );
 
-		const formFields = Tools.getAvailableFields( [block] );
+	return [
+		<BlockControls key={ uniqKey() }>
+			<ToolbarGroup key={ uniqKey() }>
+				<Button
+					key={ uniqKey() }
+					isTertiary
+					isSmall
+					icon={ showMacros ? 'no-alt' : 'admin-tools' }
+					onClick={ () => setShowMacros( toggle => ! toggle ) }
+				/>
+				{ showMacros && <Popover
+					key={ uniqKey() }
+					position={ 'bottom left' }
+				>
+					{ formFields.length && <PanelBody title={ 'Form Fields' }>
+						{ formFields.map( ( field, index ) => <div key={ uniqKey( 'formFields', index ) }>
+								<Button
+									isLink
+									onClick={ () => {
+										insertMacros( field )
+									} }
+								>{ '%FIELD::' + field + '%' }</Button>
+							</div>
+						) }
+					</PanelBody> }
+				</Popover> }
+			</ToolbarGroup>
+		</BlockControls>,
+		props.isSelected && (
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
+			>
+				<GeneralFields
+					key={ uniqKey( 'JetFormGeneral' ) }
+					attributes={ attributes }
+					onChange={ setAttributes }
+					isSelected={ props.isSelected }
+				/>
+				<PanelBody
+					title={ __( 'Field Settings' ) }
+				>
+					<div className="jet-form-editor__row-notice">
+						{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
+						{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
+						%FIELD::quantity%*%META::price%<br/><br/>
+						{ __( 'Where:', 'jet-form-builder' ) }<br/>
+						-
+						{ __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+						-
+						{ __( '%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+					</div>
 
-		const insertMacros = ( macros ) => {
-			const formula = attributes.calc_formula || '';
-			props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
-		}
-
-		return [
-			<BlockControls key={ keyControls + '-block' }>
-				<ToolbarGroup>
-					<Button
-						isTertiary
-						isSmall
-						icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
-						onClick={ () => {
-							this.setState( { showMacrosPopover: ! this.state.showMacrosPopover } );
+					<NumberControl
+						label={ __( 'Decimal Places Number' ) }
+						labelPosition='top'
+						key='precision'
+						value={ attributes.precision }
+						onChange={ ( newValue ) => {
+							setAttributes( { precision: parseInt( newValue ) } );
 						} }
 					/>
-					{ this.state.showMacrosPopover && (
-						<Popover
-							position={ 'bottom left' }
-						>
-							{ formFields.length && <PanelBody title={ 'Form Fields' }>
-								{ formFields.map( field => {
-									return <div key={ 'field_' + field }>
-										<Button
-											isLink
-											onClick={ () => {
-												insertMacros( field )
-											} }
-										>{ '%FIELD::' + field + '%' }</Button>
-									</div>;
-								} ) }
-							</PanelBody> }
-						</Popover>
-					) }
-				</ToolbarGroup>
-			</BlockControls>,
-			props.isSelected && (
-				<InspectorControls
-					key={ keyControls }
-				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						key={ keyGeneral }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					<TextControl
+						key='calc_prefix'
+						label={ __( 'Calculated Value Prefix' ) }
+						value={ attributes.calc_prefix }
+						help={ __( 'For space before or after text use: &nbsp;' ) }
+						onChange={ ( newValue ) => {
+							setAttributes( { calc_prefix: newValue } );
 						} }
-					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-					>
-						<div className="jet-form-editor__row-notice">
-							{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
-							{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
-							%FIELD::quantity%*%META::price%<br/><br/>
-							{ __( 'Where:', 'jet-form-builder' ) }<br/>
-							-
-							{ __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
-							-
-							{ __( '%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
-						</div>
-
-						<NumberControl
-							label={ __( 'Decimal Places Number' ) }
-							labelPosition='top'
-							key='precision'
-							value={ attributes.precision }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { precision: parseInt( newValue ) } );
-							} }
-						/>
-						<TextControl
-							key='calc_prefix'
-							label={ __( 'Calculated Value Prefix' ) }
-							value={ attributes.calc_prefix }
-							help={ __( 'For space before or after text use: &nbsp;' ) }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { calc_prefix: newValue } );
-							} }
-						/>
-						<TextControl
-							key='calc_suffix'
-							label={ __( 'Calculated Value Suffix' ) }
-							value={ attributes.calc_suffix }
-							help={ __( 'For space before or after text use: &nbsp;' ) }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { calc_suffix: newValue } );
-							} }
-						/>
-						<ToggleControl
-							key={ 'calc_hidden' }
-							label={ __( 'Hidden' ) }
-							checked={ attributes.calc_hidden }
-							help={ Tools.getHelpMessage( this.data, 'calc_hidden' ) }
-							onChange={ newVal => {
-								props.setAttributes( {
-									calc_hidden: Boolean( newVal ),
-								} );
-							} }
-						/>
-
-					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					/>
+					<TextControl
+						key='calc_suffix'
+						label={ __( 'Calculated Value Suffix' ) }
+						value={ attributes.calc_suffix }
+						help={ __( 'For space before or after text use: &nbsp;' ) }
+						onChange={ ( newValue ) => {
+							setAttributes( { calc_suffix: newValue } );
 						} }
-					/> }
-				</InspectorControls>
-			),
+					/>
+					<ToggleControl
+						key={ 'calc_hidden' }
+						label={ __( 'Hidden' ) }
+						checked={ attributes.calc_hidden }
+						help={ help.calc_hidden }
+						onChange={ newVal => {
+							setAttributes( {
+								calc_hidden: Boolean( newVal ),
+							} );
+						} }
+					/>
+
+				</PanelBody>
+				<AdvancedFields
+					key={ uniqKey( 'JetFormAdvanced' ) }
+					attributes={ attributes }
+					onChange={ setAttributes }
+					isSelected={ props.isSelected }
+				/>
+			</InspectorControls>
+		),
+		<div { ...blockProps } key={ uniqKey( 'view' ) }>
 			<FieldWrapper
 				block={ block }
 				attributes={ attributes }
@@ -193,6 +177,6 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
 				</div>
 			</FieldWrapper>
-		];
-	}
+		</div>
+	];
 }

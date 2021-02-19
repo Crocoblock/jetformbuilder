@@ -1,6 +1,4 @@
 import { saveGlobalComponent } from "../components/manager";
-import { ValidateButton } from "../components/validate-button";
-import { ActionFieldsMap } from  "../components/actions/action-fields-map";
 
 const {
 	useState,
@@ -12,6 +10,11 @@ const {
 	useDispatch,
 } = wp.data;
 
+const {
+	createHooks
+} = wp.hooks;
+
+export const jfbHooks = createHooks();
 
 export const useActions = ( withEditPostEffect = false ) => {
 	const meta = useSelect( ( select ) => {
@@ -59,5 +62,6 @@ export const useStateClasses = initialValid => {
 
 	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
 }
+
 
 saveGlobalComponent( 'JetFBHooks', { useActions, useStateClasses } );

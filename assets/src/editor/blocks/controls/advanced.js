@@ -38,7 +38,7 @@ function JetFormAdvanced( {
 	;
 
 	/* eslint-disable jsx-a11y/no-onchange */
-	return <PanelBody title={ __( 'Advanced' ) } initialOpen={ false }>
+	return <PanelBody title={ __( 'Advanced' ) } initialOpen={ false } key={ instanceId }>
 		{ controls.map( ( data, index ) => {
 
 			var condition = true;

@@ -20,6 +20,7 @@ import './form-actions/getresponse';
 import './form-actions/activecampaign';
 import { event } from "./helpers/tools";
 
+
 const {
 	registerBlockType
 } = wp.blocks;

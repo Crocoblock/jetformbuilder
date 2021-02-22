@@ -3,6 +3,10 @@ import DynamicPreset from "../../components/presets/dynamic-preset";
 import FieldWithPreset from "../../components/field-with-preset";
 
 const {
+	BlockControls
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
+
+const {
 	TextControl,
 	SelectControl,
 	PanelBody,
@@ -13,54 +17,32 @@ const {
 
 const { useEffect, useState } = wp.element;
 
-function FieldControl( { type, onChange, attributes } ) {
+function FieldControl( { type, setAttributes, attributes } ) {
 	const currentControl = controlsSettings[ type ];
 
-	/*const [ result, setResult ] = useState( { ...attributes } );
-
 	const onChangeValue = ( value, key ) => {
-		setResult( prev => ( {
-			...prev,
-			[ key ]: value
-		} ) );
+		setAttributes( { [ key ]: value } );
 	};
-
-	useEffect( () => {
-		onChange( result );
-	}, [result] );*/
-
-	const result = {};
-
-	const onChangeValue = ( value, key ) => {
-		result[ key ] = value;
-		onChange( result );
-	};
-
-	for ( const attributesKey in attributes ) {
-		result[ attributesKey ] = attributes[ attributesKey ];
-	}
-
 
 	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
-		if ( ! attrName in attributes ) {
+		if ( ( ! attrName in attributes ) || 'condition' in attr && ! attributes[ attr.condition ] ) {
 			return null;
 		}
-		const keyControl = ( suffix = '' ) => `${ type }-${ attr.type }-${ attrName }-${ suffix }`;
 
 		switch ( attr.type ) {
 			case 'text':
 				return <TextControl
-					key={ keyControl() }
+					key={ `${ attr.type }-${ attrName }-TextControl` }
 					label={ label }
 					help={ help }
-					value={ result[ attrName ] }
+					value={ attributes[ attrName ] }
 					onChange={ newVal => {
 						onChangeValue( newVal, attrName )
 					} }
 				/>;
 			case 'dynamic_text':
 				return <FieldWithPreset
-					key={ keyControl( 'FieldWithPreset' ) }
+					key={ `${ attr.type }-${ attrName }-FieldWithPreset` }
 					ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 						value={ attributes[ attrName ] }
 						isSaveAction={ actionClick }
@@ -71,7 +53,7 @@ function FieldControl( { type, onChange, attributes } ) {
 					/> }
 				>
 					<TextControl
-						key={ keyControl() }
+						key={ `${ attr.type }-${ attrName }-TextControlDynamic` }
 						label={ label }
 						help={ help }
 						value={ attributes[ attrName ] }
@@ -82,7 +64,7 @@ function FieldControl( { type, onChange, attributes } ) {
 				</FieldWithPreset>;
 			case 'select':
 				return <SelectControl
-					key={ keyControl() }
+					key={ `${ attr.type }-${ attrName }-SelectControl` }
 					label={ attr.label }
 					value={ attributes[ attrName ] }
 					options={ attr.options }
@@ -92,7 +74,7 @@ function FieldControl( { type, onChange, attributes } ) {
 				/>;
 			case 'toggle':
 				return <ToggleControl
-					key={ keyControl() }
+					key={ `${ attr.type }-${ attrName }-ToggleControl` }
 					label={ attr.label }
 					checked={ attributes[ attrName ] }
 					onChange={ newVal => {
@@ -120,7 +102,7 @@ function GeneralFields( props ) {
 function AdvancedFields( props ) {
 	const currentControl = controlsSettings.advanced;
 
-	return <PanelBody title={ currentControl.label } key={ 'jet-form-advanced-fields' }>
+	return <PanelBody title={ currentControl.label } key={ 'jet-form-advanced-fields' } initialOpen={ false }>
 		<FieldControl
 			type='advanced'
 			key={ 'jet-form-advanced-fields-component' }
@@ -132,19 +114,23 @@ function AdvancedFields( props ) {
 
 function ToolBarFields( props ) {
 
-	return <ToolbarGroup>
-		<Flex
-			align={ 'center' }
-			justify={ 'center' }
-			className={ 'jet-form-toggle-box' }
-		>
-			<FieldControl
-				type='toolbar'
-				key={ 'jet-form-toolbar-fields-component' }
-				{ ...props }
-			/>
-		</Flex>
-	</ToolbarGroup>;
+	const { editProps: { uniqKey } } = props;
+
+	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
+		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
+			<Flex
+				align={ 'center' }
+				justify={ 'center' }
+				className={ 'jet-form-toggle-box' }
+			>
+				<FieldControl
+					type='toolbar'
+					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }
+					{ ...props }
+				/>
+			</Flex>
+		</ToolbarGroup>
+	</BlockControls>;
 }
 
 export { GeneralFields, ToolBarFields, AdvancedFields };

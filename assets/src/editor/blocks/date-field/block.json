@@ -1,0 +1,24 @@
+{
+	"apiVersion": 2,
+	"name": "jet-forms/date-field",
+	"category": "jet-form-builder-fields",
+	"keywords": [
+		"jet",
+		"form",
+		"builder",
+		"jetformbuilder",
+		"field",
+		"date"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false
+	},
+	"attributes": {
+		"is_timestamp": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

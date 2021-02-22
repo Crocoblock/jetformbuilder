@@ -102,6 +102,10 @@ class Tools {
 		return fields;
 	}
 
+	static getFormFieldsByBlock( blockExclude ) {
+		return () => Tools.getFormFieldsBlocks( [ blockExclude.name ] );
+	}
+
 	static getAvailableFieldsString( blockName ) {
 		const fields = this.getAvailableFields( [ blockName ] );
 

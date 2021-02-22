@@ -4,17 +4,13 @@ import RepeaterWithState from "../../components/repeater-with-state";
 import FieldWithPreset from "../../components/field-with-preset";
 import DynamicPreset from "../../components/presets/dynamic-preset";
 
-const block = 'jet-forms/conditional-block';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
 const { __ } = wp.i18n;
 
 const {
 	BlockControls,
 	InspectorControls,
 	InnerBlocks,
+	useBlockProps
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
@@ -29,8 +25,6 @@ const {
 	useState,
 	useEffect
 } = wp.element;
-
-const keyControls = block + '-controls-edit';
 
 const condition = {
 	type: 'hide',
@@ -68,25 +62,29 @@ const conditionOperators = [
 ];
 
 
-function ConditionalBlockEdit( {
-								   isSelected,
-								   setAttributes,
-								   attributes,
-								   clientId
-							   } ) {
+export default function ConditionalBlockEdit( props ) {
+
+	const blockProps = useBlockProps();
+
+	const {
+		setAttributes,
+		attributes,
+		clientId,
+		editProps: { uniqKey, getFormFields }
+	} = props;
 
 	Tools.addConditionForCondType( 'isSingleField', () => {
 		return 1 === Tools.getInnerBlocks( clientId ).length;
 	} )
 
 	const getConditionTypes = Tools.parseConditionsFunc( conditionTypes );
-	const [showModal, setShowModal] = useState( false );
+	const [ showModal, setShowModal ] = useState( false );
 
-	const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
+	const formFields = [ { value: '', label: '--' }, ...getFormFields() ];
 
 	return [
-		<BlockControls key={ keyControls + '-block' }>
-			<ToolbarGroup>
+		<BlockControls key={ uniqKey( 'BlockControls' ) }>
+			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
 					isTertiary
 					isSmall
@@ -95,22 +93,19 @@ function ConditionalBlockEdit( {
 				/>
 			</ToolbarGroup>
 		</BlockControls>,
-		isSelected && (
-			<InspectorControls
-				key={ keyControls }
-			>
-			</InspectorControls>
-		),
-		<InnerBlocks
-			key={ 'conditional-fields' }
-			renderAppender={ () => <InnerBlocks.ButtonBlockAppender/> }
-		/>,
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
+			<InnerBlocks
+				key={ uniqKey( 'conditional-fields' ) }
+				renderAppender={ () => <InnerBlocks.ButtonBlockAppender/> }
+			/>
+		</div>,
 		showModal && <ActionModal
-			classNames={ ['width-60'] }
+			classNames={ [ 'width-60' ] }
 			onRequestClose={ () => setShowModal( false ) }
 			title="Conditional Logic"
 		>
 			{ ( { actionClick, onRequestClose } ) => <RepeaterWithState
+				key={ uniqKey( 'RepeaterWithState' ) }
 				items={ attributes.conditions }
 				isSaveAction={ actionClick }
 				onUnMount={ onRequestClose }
@@ -125,6 +120,7 @@ function ConditionalBlockEdit( {
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-type' ) }
 						label="Type"
 						labelPosition="side"
 						value={ currentItem.type }
@@ -134,6 +130,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-field' ) }
 						label="Field"
 						labelPosition="side"
 						value={ currentItem.field }
@@ -143,6 +140,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-operator' ) }
 						label="Operator"
 						labelPosition="side"
 						value={ currentItem.operator }
@@ -152,7 +150,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<FieldWithPreset
-						key="value_to_compare"
+						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							value={ currentItem.value }
 							isSaveAction={ actionClick }
@@ -161,9 +159,10 @@ function ConditionalBlockEdit( {
 							} }
 							onUnMount={ onRequestClose }
 						/> }
-						triggerClasses={ ['trigger__textarea'] }
+						triggerClasses={ [ 'trigger__textarea' ] }
 					>
 						<TextareaControl
+							key={ uniqKey( 'TextareaControl-value' ) }
 							label="Value to Compare"
 							value={ currentItem.value }
 							onChange={ newValue => {
@@ -181,9 +180,10 @@ function ConditionalBlockEdit( {
 							} }
 							onUnMount={ onRequestClose }
 						/> }
-						triggerClasses={ ['trigger__textarea'] }
+						triggerClasses={ [ 'trigger__textarea' ] }
 					>
 						<TextareaControl
+							key={ uniqKey( 'TextareaControl-set_value' ) }
 							label={ __( 'Value to Set', 'jet-form-builder' ) }
 							help={ __( 'Separate values with commas', 'jet-form-builder' ) }
 							value={ currentItem.set_value }
@@ -197,5 +197,3 @@ function ConditionalBlockEdit( {
 		</ActionModal>
 	];
 }
-
-window.jetFormBuilderBlockCallbacks[ block ].edit = ConditionalBlockEdit;

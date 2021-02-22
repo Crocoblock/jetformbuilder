@@ -1,4 +1,4 @@
-import EditCalculated from "./edit";
+import CheckboxEdit from "./edit";
 import metadata from "./block.json";
 
 const { __ } = wp.i18n;
@@ -12,11 +12,10 @@ const { name, icon } = metadata;
  *  - blockName
  */
 const settings = {
-	title: __( 'Calculated Field' ),
-	description: __( 'Calculate and display your number values' ),
+	title: __( 'Checkbox Field' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	edit: EditCalculated,
-	useEditProps: [ 'getFormFields', 'uniqKey' ],
+	edit: CheckboxEdit,
+	useEditProps: [ 'uniqKey', 'blockName' ],
 };
 
 export { metadata, name, settings };

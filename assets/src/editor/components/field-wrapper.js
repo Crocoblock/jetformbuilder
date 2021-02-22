@@ -1,6 +1,12 @@
 import Tools from "../helpers/tools";
 
-export default function FieldWrapper( { attributes, block, children, wrapClasses = [], valueIfEmptyLabel = '' } ) {
+export default function FieldWrapper( {
+										  attributes,
+										  editProps: { uniqKey },
+										  children,
+										  wrapClasses = [],
+										  valueIfEmptyLabel = ''
+} ) {
 	const {
 		BaseControl,
 	} = wp.components;
@@ -16,7 +22,7 @@ export default function FieldWrapper( { attributes, block, children, wrapClasses
 	const label = Tools.getLabel( meta, attributes );
 
 	return (
-		<BaseControl key={ `place_holder_block_${ block }_label` }
+		<BaseControl key={ uniqKey( 'placeHolder_block' ) }
 					 className={ `jet-form-builder__field-wrap jet-form-builder-row ${ wrapClasses.join( ' ' ) }` }>
 			<BaseControl.VisualLabel>
 				<div className={ 'jet-form-builder__label' }>

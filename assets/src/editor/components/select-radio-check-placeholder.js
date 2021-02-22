@@ -9,7 +9,13 @@ const {
 const DELIMITER = ' - ';
 
 
-export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } ) {
+export function SelectRadioCheckPlaceholder( props ) {
+
+	const {
+		editProps: { blockName, uniqKey },
+		scriptData,
+		attributes
+	} = props;
 
 	const getCheckbox = ( label, index = 1 ) => {
 		return <CheckboxControl
@@ -23,10 +29,10 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 
 	const getSelect = ( { options, index } ) => {
 		return <SelectControl
-			key={ `select_place_holder_block_${ source.name + index }` }
-			//label={ source.label }
+			key={ `select_place_holder_block_${ attributes.name + index }` }
+			//label={ attributes.label }
 			options={ options }
-			//help={ source.desc }
+			//help={ attributes.desc }
 			onChange={ () => {
 			} }
 		/>;
@@ -35,9 +41,9 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 	const getRadio = ( { options, label, index } ) => {
 		return <RadioControl
 			key={ `radio_place_holder_block_${ label + index }` }
-			//label={ source.label }
+			//label={ attributes.label }
 			options={ options }
-			//help={ source.desc }
+			//help={ attributes.desc }
 			onChange={ () => {
 			} }
 		/>;
@@ -64,7 +70,7 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 			field_options_key,
 			generator_function,
 			generator_field
-		} = source;
+		} = attributes;
 
 		let full_label = [];
 		let value = [];
@@ -117,45 +123,44 @@ export function SelectRadioCheckPlaceholder( { blockName, scriptData, source } )
 			if ( label ) {
 				return getCheckbox( label );
 			}
-			return source.field_options.map( ( { label: checkLabel }, index ) => {
+			return attributes.field_options.map( ( { label: checkLabel }, index ) => {
 				return getCheckbox( checkLabel, index )
 			} );
 
 		} else if ( blockName.includes( 'select' ) ) {
 			if ( label ) {
 				return getSelect( {
-					source,
+					attributes,
 					options: [{ label }]
 				} );
 			}
 			return getSelect( {
-				source,
-				options: source.field_options
+				attributes,
+				options: attributes.field_options
 			} );
 		} else if ( blockName.includes( 'radio' ) ) {
 			if ( label ) {
 				return getRadio( {
-					source,
+					attributes,
 					options: [{ label }]
 				} );
 			}
 			return getRadio( {
-				source,
-				options: source.field_options
+				attributes,
+				options: attributes.field_options
 			} );
 		}
 	}
 
 	return <FieldWrapper
 		key={ 'jet-form-builder-field-wrapper' }
-		attributes={ source }
-		block={ blockName }
+		{ ...props }
 	>
 		<div className={ 'jet-form-builder__fields-group' }>
-			{ ( 'manual_input' !== source.field_options_from || ! source.field_options.length ) &&
-			getManualField( getFullLabel( scriptData, source ) ) || null
+			{ ( 'manual_input' !== attributes.field_options_from || ! attributes.field_options.length ) &&
+			getManualField( getFullLabel( scriptData, attributes ) ) || null
 			}
-			{ 'manual_input' === source.field_options_from && source.field_options.length &&
+			{ 'manual_input' === attributes.field_options_from && attributes.field_options.length &&
 			getManualField() || null
 			}
 		</div>

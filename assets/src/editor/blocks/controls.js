@@ -37,6 +37,7 @@ export const controlsSettings = {
 		]
 	},
 	"advanced": {
+		label: __( 'Advanced' ),
 		attrs: [
 			{
 				"attrName": "placeholder",

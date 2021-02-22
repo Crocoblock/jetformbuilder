@@ -57,17 +57,6 @@ class Date_Field extends Base {
 		return ( new Date_Field_Render( $this ) )->render();
 	}
 
-	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetFormDateFieldData', array(
-			'help_messages' => array(
-				'is_timestamp' => __(
-					'Check this if you want to send value of this field as timestamp instead of plain date',
-					'jet-form-builder'
-				),
-			),
-		) );
-	}
-
 	/**
 	 * Return attributes array
 	 *

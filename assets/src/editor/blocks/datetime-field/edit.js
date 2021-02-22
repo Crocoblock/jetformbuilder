@@ -36,11 +36,9 @@ const {
 	Disabled,
 } = wp.components;
 
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
-const keyControls = block + '-controls-edit';
-const keyGeneral = block + '-general-edit';
-
-window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.element.Component {
+window.jetFormBuilderBlockCallbacks[ block ].edit = class DateTimeEdit extends wp.element.Component {
 	render() {
 		const props = this.props;
 		const attributes = props.attributes;
@@ -48,8 +46,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 
 		return [
 			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -60,11 +59,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -86,6 +85,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 					</PanelBody>
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -95,6 +95,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.el
 				</InspectorControls>
 			),
 			<FieldWrapper
+				key={ uniqKey( 'FieldWrapper' ) }
 				block={ block }
 				attributes={ attributes }
 			>

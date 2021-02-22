@@ -40,10 +40,6 @@ const {
 	Disabled,
 } = wp.components;
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
-
 window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends wp.element.Component {
 
 	constructor( props ) {
@@ -57,11 +53,13 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
 		const attributes = props.attributes;
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
+		const uniqKey = suffix => `${ block }-${ suffix }`;
 
 		return [
 			hasToolbar && (
-				<BlockControls>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -72,11 +70,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -86,6 +84,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CheckboxEdit extends w
 
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {

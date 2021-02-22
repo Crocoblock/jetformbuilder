@@ -42,10 +42,6 @@ const {
 
 const NumberControl = __experimentalNumberControl;
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
-
 window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends wp.element.Component {
 
 	constructor( props ) {
@@ -56,9 +52,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 	}
 
 	render() {
+		const uniqKey = suffix => `${ block }-${ suffix }`;
+
 		const props = this.props;
 		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
 		const formFields = Tools.getAvailableFields( [block] );
 
@@ -68,9 +65,10 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 		}
 
 		return [
-			<BlockControls key={ keyControls + '-block' }>
-				<ToolbarGroup>
+			<BlockControls key={ uniqKey( 'BlockControls' ) }>
+				<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 					<Button
+						key={ uniqKey( 'ButtonToolbar' ) }
 						isTertiary
 						isSmall
 						icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
@@ -81,10 +79,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					{ this.state.showMacrosPopover && (
 						<Popover
 							position={ 'bottom left' }
+							key={ uniqKey( 'Popover' ) }
 						>
 							{ formFields.length && <PanelBody title={ 'Form Fields' }>
 								{ formFields.map( field => {
-									return <div key={ 'field_' + field }>
+									return <div key={ uniqKey( 'field_' + field ) }>
 										<Button
 											isLink
 											onClick={ () => {
@@ -100,11 +99,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 			</BlockControls>,
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -113,6 +112,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
+						key={ uniqKey( 'PanelBody' ) }
 					>
 						<div className="jet-form-editor__row-notice">
 							{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
@@ -167,6 +167,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 					</PanelBody>
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -179,6 +180,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class CalculatedEdit extends
 				block={ block }
 				attributes={ attributes }
 				valueIfEmptyLabel={ 'Calculated Field' }
+				key={ uniqKey( 'FieldWrapper' ) }
 			>
 				{ props.isSelected && <TextareaControl
 					key="calc_formula"

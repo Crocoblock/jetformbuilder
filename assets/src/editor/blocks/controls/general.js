@@ -58,7 +58,9 @@ const JetFormGeneral = class extends wp.element.Component {
 						/>;
 					case 'dynamic_text':
 						return <FieldWithPreset
+							key={ `FieldWithPreset-dynamic_text-${ data.key }` }
 							ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+								key={ `DynamicPreset-dynamic_text-${ data.key }` }
 								value={ result[ data.key ] }
 								isSaveAction={ actionClick }
 								onSavePreset={ newVal => {

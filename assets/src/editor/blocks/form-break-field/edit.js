@@ -31,9 +31,7 @@ const {
 	Button,
 } = wp.components;
 
-
-const keyControls = block + '-controls-edit';
-const keyGeneral = block + '-general-edit';
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends wp.element.Component {
 
@@ -50,11 +48,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 		return [
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -63,6 +61,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
+						key={ uniqKey( 'PanelBody' ) }
 					>
 						<TextareaControl
 							key="page_break_disabled"
@@ -77,6 +76,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -85,7 +85,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 					/> }
 				</InspectorControls>
 			),
-			<div className={ 'jet-form-builder__next-page-wrap' }>
+			<div className={ 'jet-form-builder__next-page-wrap' } key={ uniqKey( 'next-page-wrap' ) }>
 				<Button
 					isSecondary
 					key="next_page_button"

@@ -30,8 +30,6 @@ const {
 	useEffect
 } = wp.element;
 
-const keyControls = block + '-controls-edit';
-
 const condition = {
 	type: 'hide',
 	field: '',
@@ -84,9 +82,11 @@ function ConditionalBlockEdit( {
 
 	const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
 
+	const uniqKey = suffix => `${ block }-${ suffix }`;
+
 	return [
-		<BlockControls key={ keyControls + '-block' }>
-			<ToolbarGroup>
+		<BlockControls key={ uniqKey( 'BlockControls' ) }>
+			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
 					isTertiary
 					isSmall
@@ -95,22 +95,18 @@ function ConditionalBlockEdit( {
 				/>
 			</ToolbarGroup>
 		</BlockControls>,
-		isSelected && (
-			<InspectorControls
-				key={ keyControls }
-			>
-			</InspectorControls>
-		),
 		<InnerBlocks
-			key={ 'conditional-fields' }
+			key={ uniqKey( 'InnerBlocks' ) }
 			renderAppender={ () => <InnerBlocks.ButtonBlockAppender/> }
 		/>,
 		showModal && <ActionModal
+			key={ uniqKey( 'ActionModal' ) }
 			classNames={ ['width-60'] }
 			onRequestClose={ () => setShowModal( false ) }
 			title="Conditional Logic"
 		>
 			{ ( { actionClick, onRequestClose } ) => <RepeaterWithState
+				key={ uniqKey( 'RepeaterWithState' ) }
 				items={ attributes.conditions }
 				isSaveAction={ actionClick }
 				onUnMount={ onRequestClose }
@@ -125,6 +121,7 @@ function ConditionalBlockEdit( {
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-type' ) }
 						label="Type"
 						labelPosition="side"
 						value={ currentItem.type }
@@ -134,6 +131,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-field' ) }
 						label="Field"
 						labelPosition="side"
 						value={ currentItem.field }
@@ -143,6 +141,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<SelectControl
+						key={ uniqKey( 'SelectControl-operator' ) }
 						label="Operator"
 						labelPosition="side"
 						value={ currentItem.operator }
@@ -152,7 +151,7 @@ function ConditionalBlockEdit( {
 						} }
 					/>
 					<FieldWithPreset
-						key="value_to_compare"
+						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							value={ currentItem.value }
 							isSaveAction={ actionClick }
@@ -164,6 +163,7 @@ function ConditionalBlockEdit( {
 						triggerClasses={ ['trigger__textarea'] }
 					>
 						<TextareaControl
+							key={ uniqKey( 'TextareaControl-value' ) }
 							label="Value to Compare"
 							value={ currentItem.value }
 							onChange={ newValue => {
@@ -172,7 +172,7 @@ function ConditionalBlockEdit( {
 						/>
 					</FieldWithPreset>
 					{ 'set_value' === currentItem.type && <FieldWithPreset
-						key="value_to_set"
+						key={ uniqKey( 'FieldWithPreset-set_value' ) }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							value={ currentItem.set_value }
 							isSaveAction={ actionClick }
@@ -184,6 +184,7 @@ function ConditionalBlockEdit( {
 						triggerClasses={ ['trigger__textarea'] }
 					>
 						<TextareaControl
+							key={ uniqKey( 'TextareaControl-set_value' ) }
 							label={ __( 'Value to Set', 'jet-form-builder' ) }
 							help={ __( 'Separate values with commas', 'jet-form-builder' ) }
 							value={ currentItem.set_value }

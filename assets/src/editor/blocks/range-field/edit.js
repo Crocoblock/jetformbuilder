@@ -49,10 +49,7 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
-
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.element.Component {
 
@@ -72,8 +69,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 
 		return [
 			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -84,11 +82,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -97,6 +95,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
+						key={ uniqKey( 'PanelBody' ) }
 					>
 						<NumberControl
 							label={ __( 'Min Value' ) }
@@ -147,6 +146,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 					</PanelBody>
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -156,6 +156,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RangeEdit extends wp.e
 				</InspectorControls>
 			),
 			<FieldWrapper
+				key={ uniqKey( 'FieldWrapper' ) }
 				attributes={ attributes }
 				block={ block }
 				wrapClasses={ [

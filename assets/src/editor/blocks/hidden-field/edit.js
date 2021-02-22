@@ -33,9 +33,7 @@ const {
 	Disabled,
 } = wp.components;
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.element.Component {
 	render() {
@@ -46,8 +44,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 
 		return [
 			hasToolbar && (
-				<BlockControls>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -58,10 +57,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -70,6 +70,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
+						key={ uniqKey( 'PanelBody' ) }
 					>
 						<SelectControl
 							key='field_value'
@@ -116,6 +117,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 					</PanelBody>
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -125,7 +127,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.
 				</InspectorControls>
 			),
 			<JetFieldPlaceholder
-				key={ keyPlaceHolder }
+				key={ uniqKey( 'JetFieldPlaceholder' ) }
 				title={ 'Hidden Field' }
 				subtitle={ [attributes.name] }
 				isRequired={ attributes.required }

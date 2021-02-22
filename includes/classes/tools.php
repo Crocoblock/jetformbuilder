@@ -165,9 +165,11 @@ class Tools {
 	/**
 	 * Returns all registered user roles
 	 *
-	 * @return [type] [description]
+	 * @param string[] $exclude
+	 *
+	 * @return array [type] [description]
 	 */
-	public static function get_user_roles() {
+	public static function get_user_roles( $exclude = array( 'administrator' ) ) {
 
 		if ( ! function_exists( 'get_editable_roles' ) ) {
 			return array();
@@ -176,9 +178,10 @@ class Tools {
 			$result = array();
 
 			foreach ( $roles as $role => $data ) {
-				$result[ $role ] = $data['name'];
+				if ( ! in_array( $role, $exclude ) ) {
+					$result[ $role ] = $data['name'];
+				}
 			}
-
 			return $result;
 		}
 	}

@@ -53,7 +53,7 @@ class Manager {
 		$response = array();
 
 		foreach ( $arguments as $name => $value ) {
-			$response[] = "$name=\"$value\"";
+			$response[] = "$name='$value'";
 		}
 
 		return implode( ' ', $response );

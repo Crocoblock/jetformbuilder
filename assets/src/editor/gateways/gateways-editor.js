@@ -3,6 +3,7 @@ import Tools, { event } from "../helpers/tools";
 import gatewayActionAttributes from "./gateway-action-attrubites";
 import { actionByTypeList, fromLocalizeHelper } from "../helpers/action-helper";
 import PayPal from "./paypal";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 event( 'jet-fb-gateways/init' )();
 
@@ -45,7 +46,7 @@ export default function GatewaysEditor( {
 
 	const [gateway, setGateway] = useState( gatewaysArgs );
 
-	const formFields = Tools.getFormFieldsBlocks();
+	const formFields = getFormFieldsBlocks();
 
 	/**
 	 * Used for set notifications and gateway type settings

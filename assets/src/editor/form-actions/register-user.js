@@ -4,6 +4,7 @@ import BaseActionComponent from "./base-action-component";
 
 import WrapperRequiredControl from "../components/wrapper-required-control";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -26,8 +27,8 @@ addAction( 'register_user', class RegisterUserAction extends BaseActionComponent
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
-		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder( '--' );
+		this.fields = getFormFieldsBlocks();
+		this.formFieldsList = [ { value: '', label: '--' }, ...this.fields ];
 	}
 
 	render() {
@@ -44,10 +45,10 @@ addAction( 'register_user', class RegisterUserAction extends BaseActionComponent
 				<div className="jet-user-fields-map__list">
 					<span
 						className={ 'description-controls' }>{ __( 'Set form fields names to to get user data from', 'jet-form-builder' ) }</span>
-					{ userFields.map( ( [value, data] ) => {
+					{ userFields.map( ( [ value, data ] ) => {
 
 						return <WrapperRequiredControl
-							field={ [value, data] }
+							field={ [ value, data ] }
 						>
 							<SelectControl
 								className="full-width"

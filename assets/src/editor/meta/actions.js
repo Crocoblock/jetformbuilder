@@ -4,19 +4,20 @@ import FieldWithPreset from "../components/field-with-preset";
 import DynamicPreset from "../components/presets/dynamic-preset";
 import RepeaterWithState from "../components/repeater-with-state";
 import { useActions } from "../helpers/hooks-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 function getRandomID() {
 	return Math.floor( Math.random() * 8999 ) + 1000;
 }
 
-const defaultActions = [{
+const defaultActions = [ {
 	type: 'send_email',
 	id: getRandomID(),
 	settings: {
 		subject: 'New order on website',
 		content: 'Hi admin!\n\nThere are new order on your website.\n\nOrder details:\n- Post ID: %post_id%'
 	}
-}];
+} ];
 
 const newItemCondition = {
 	execute: false,
@@ -76,7 +77,7 @@ function ActionsMeta() {
 
 	const DocumentSettingPanelActions = () => {
 
-		const [actions, setActions] = useActions( true );
+		const [ actions, setActions ] = useActions( true );
 
 		useEffect( () => {
 			if ( 0 === actions.length ) {
@@ -92,13 +93,13 @@ function ActionsMeta() {
 			actions.splice( toIndex, 1, item );
 			actions.splice( fromIndex, 1, replacedItem );
 
-			setActions( [...actions] );
+			setActions( [ ...actions ] );
 
 		};
 
 		const deleteAction = ( index ) => {
 			actions.splice( index, 1 );
-			setActions( [...actions] );
+			setActions( [ ...actions ] );
 		};
 
 		const updateAction = ( id, key, value ) => {
@@ -113,11 +114,11 @@ function ActionsMeta() {
 			} ) );
 		};
 
-		const [isEdit, setEdit] = useState( false );
-		const [editedAction, setEditedAction] = useState( {} );
+		const [ isEdit, setEdit ] = useState( false );
+		const [ editedAction, setEditedAction ] = useState( {} );
 
-		const [isEditProcessAction, setEditProcessAction] = useState( false );
-		const [processedAction, setProcessedAction] = useState( {} );
+		const [ isEditProcessAction, setEditProcessAction ] = useState( false );
+		const [ processedAction, setProcessedAction ] = useState( {} );
 
 		const closeModal = () => {
 			setEdit( false )
@@ -154,15 +155,15 @@ function ActionsMeta() {
 			if ( editedAction.type ) {
 				setEdit( true );
 			}
-		}, [editedAction] );
+		}, [ editedAction ] );
 
 		useEffect( () => {
 			if ( processedAction.type ) {
 				setEditProcessAction( true );
 			}
-		}, [processedAction] );
+		}, [ processedAction ] );
 
-		const formFields = Tools.getFormFieldsBlocksWithPlaceholder();
+		const formFields = getFormFieldsBlocks( [], '--' );
 
 		return (
 			<PluginDocumentSettingPanel
@@ -253,7 +254,7 @@ function ActionsMeta() {
 					{ '+ New Action' }
 				</Button>
 				{ isEdit && <ActionModal
-					classNames={ ['width-60'] }
+					classNames={ [ 'width-60' ] }
 					onRequestClose={ closeModal }
 					title={ 'Edit Action' }
 					onUpdateClick={ () => {
@@ -272,7 +273,7 @@ function ActionsMeta() {
 					/> }
 				</ActionModal> }
 				{ isEditProcessAction && <ActionModal
-					classNames={ ['width-60'] }
+					classNames={ [ 'width-60' ] }
 					title={ 'Edit Action Conditions' }
 					onRequestClose={ () => setEditProcessAction( false ) }
 					onCancelClick={ () => setEditProcessAction( false ) }
@@ -328,10 +329,10 @@ function ActionsMeta() {
 											onSavePreset={ newValue => {
 												changeCurrentItem( { default: newValue } );
 											} }
-											excludeSources={ ['query_var'] }
+											excludeSources={ [ 'query_var' ] }
 											onUnMount={ onRequestClose }
 										/> }
-										triggerClasses={ ['trigger__textarea'] }
+										triggerClasses={ [ 'trigger__textarea' ] }
 									>
 										<TextareaControl
 											label="Value to Compare"

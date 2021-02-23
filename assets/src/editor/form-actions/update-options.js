@@ -1,5 +1,6 @@
 import Tools from "../helpers/tools";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -22,7 +23,7 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
+		this.fields = getFormFieldsBlocks();
 	}
 
 

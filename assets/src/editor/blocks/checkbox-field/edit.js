@@ -1,6 +1,4 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
+
 
 import FromTermsFields from "../../components/base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../../components/base-select-check-radio/from-posts-fields";
@@ -46,7 +44,7 @@ export default function CheckboxEdit( props ) {
 		attributes,
 		setAttributes,
 		isSelected,
-		editProps: { blockName, uniqKey }
+		editProps: { uniqKey }
 	} = props;
 
 	const localized = window.JetFormCheckboxFieldData;
@@ -61,13 +59,11 @@ export default function CheckboxEdit( props ) {
 		>
 			<GeneralFields
 				key={ uniqKey( 'JetForm-general' ) }
-				attributes={ attributes }
-				onChange={ setAttributes }
+				{ ...props }
 			/>
 			<AdvancedFields
 				key={ uniqKey( 'JetForm-advanced' ) }
-				attributes={ attributes }
-				onChange={ setAttributes }
+				{ ...props }
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
@@ -78,7 +74,7 @@ export default function CheckboxEdit( props ) {
 					labelPosition='top'
 					value={ attributes.field_options_from }
 					onChange={ ( newValue ) => {
-						props.setAttributes( { field_options_from: newValue } );
+						setAttributes( { field_options_from: newValue } );
 					} }
 					options={ localized.options_from }
 				/>
@@ -105,7 +101,7 @@ export default function CheckboxEdit( props ) {
 					label='Meta field to get value from'
 					value={ attributes.field_options_key }
 					onChange={ ( newValue ) => {
-						props.setAttributes( { field_options_key: newValue } );
+						setAttributes( { field_options_key: newValue } );
 					} }
 				/> }
 

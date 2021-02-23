@@ -1,6 +1,5 @@
-import ConditionalBlockEdit from "./edit";
+import GroupBreakEdit from "./edit";
 import metadata from "./block.json";
-import ConditionalSave from "./save";
 
 const { __ } = wp.i18n;
 
@@ -14,10 +13,9 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Conditional Block' ),
+	title: __( 'Group Break Field' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	edit: ConditionalBlockEdit,
-	save: ConditionalSave,
+	edit: GroupBreakEdit,
 	useEditProps: [ 'uniqKey' ],
 };
 

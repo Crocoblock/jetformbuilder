@@ -3,6 +3,7 @@ import ActionModal from "../../components/actions/action-modal";
 import RepeaterWithState from "../../components/repeater-with-state";
 import FieldWithPreset from "../../components/field-with-preset";
 import DynamicPreset from "../../components/presets/dynamic-preset";
+import { getFormFieldsBlocks, getInnerBlocks } from "../../helpers/blocks-helper";
 
 const { __ } = wp.i18n;
 
@@ -70,22 +71,23 @@ export default function ConditionalBlockEdit( props ) {
 		setAttributes,
 		attributes,
 		clientId,
-		editProps: { uniqKey, getFormFields }
+		editProps: { uniqKey }
 	} = props;
 
 	Tools.addConditionForCondType( 'isSingleField', () => {
-		return 1 === Tools.getInnerBlocks( clientId ).length;
+		return 1 === getInnerBlocks( clientId ).length;
 	} )
 
 	const getConditionTypes = Tools.parseConditionsFunc( conditionTypes );
 	const [ showModal, setShowModal ] = useState( false );
 
-	const formFields = [ { value: '', label: '--' }, ...getFormFields() ];
+	const formFields = getFormFieldsBlocks( [], '--' );
 
 	return [
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
+					key={ uniqKey( 'randomize' ) }
 					isTertiary
 					isSmall
 					icon='randomize'
@@ -96,7 +98,7 @@ export default function ConditionalBlockEdit( props ) {
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<InnerBlocks
 				key={ uniqKey( 'conditional-fields' ) }
-				renderAppender={ () => <InnerBlocks.ButtonBlockAppender/> }
+				renderAppender={ () => <InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/> }
 			/>
 		</div>,
 		showModal && <ActionModal
@@ -111,7 +113,7 @@ export default function ConditionalBlockEdit( props ) {
 				onUnMount={ onRequestClose }
 				newItem={ condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
-				addNewButtonLabel="New Condition"
+				addNewButtonLabel={ __( "New Condition" ) }
 				help={ {
 					helpVisible: conditions => conditions.length > 1,
 					helpSource: window.JetFormEditorData.helpForRepeaters,
@@ -152,6 +154,7 @@ export default function ConditionalBlockEdit( props ) {
 					<FieldWithPreset
 						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+							key={ uniqKey( 'DynamicPreset-value_to_compare' ) }
 							value={ currentItem.value }
 							isSaveAction={ actionClick }
 							onSavePreset={ newValue => {
@@ -171,8 +174,9 @@ export default function ConditionalBlockEdit( props ) {
 						/>
 					</FieldWithPreset>
 					{ 'set_value' === currentItem.type && <FieldWithPreset
-						key="value_to_set"
+						key={ uniqKey( 'FieldWithPreset-value_to_set' ) }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+							key={ uniqKey( 'DynamicPreset-value_to_set' ) }
 							value={ currentItem.set_value }
 							isSaveAction={ actionClick }
 							onSavePreset={ newValue => {

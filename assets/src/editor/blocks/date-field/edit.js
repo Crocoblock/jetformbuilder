@@ -1,6 +1,4 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
+
 import Tools from "../../helpers/tools";
 import FieldWrapper from '../../components/field-wrapper';
 import { ToolBarFields, GeneralFields, AdvancedFields } from "../controls/field-control";
@@ -40,9 +38,6 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
-const help = {
-	is_timestamp: __( 'Check this if you want to send value of this field as timestamp instead of plain date' )
-};
 
 export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
@@ -51,7 +46,7 @@ export default function DateEdit( props ) {
 		attributes,
 		isSelected,
 		setAttributes,
-		editProps: { uniqKey, blockName }
+		editProps: { uniqKey, blockName, attrHelp }
 	} = props;
 
 	return [
@@ -74,7 +69,7 @@ export default function DateEdit( props ) {
 					key='is_timestamp'
 					label={ __( 'Is Timestamp' ) }
 					checked={ attributes.is_timestamp }
-					help={ help.is_timestamp }
+					help={ attrHelp( 'is_timestamp' ) }
 					onChange={ ( newValue ) => {
 						setAttributes( { is_timestamp: Boolean( newValue ) } );
 					} }

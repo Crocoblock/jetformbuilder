@@ -1,7 +1,3 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../helpers/tools";
 import FieldWrapper from "../../components/field-wrapper";
 
 const block = 'jet-forms/textarea-field';

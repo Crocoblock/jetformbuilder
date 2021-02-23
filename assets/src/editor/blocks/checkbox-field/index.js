@@ -10,6 +10,7 @@ const { name, icon } = metadata;
  *  - uniqKey
  *  - formFields
  *  - blockName
+ *  - attrHelp
  */
 const settings = {
 	title: __( 'Checkbox Field' ),

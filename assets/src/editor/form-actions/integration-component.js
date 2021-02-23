@@ -1,5 +1,5 @@
 import BaseActionComponent from "./base-action-component";
-import Tools from "../helpers/tools";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 export default class IntegrationComponent extends BaseActionComponent {
 
@@ -10,7 +10,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.getApiData = this.getApiData.bind( this );
 		this.getLists = this.getLists.bind( this );
 
-		this.formFieldsList = Tools.getFormFieldsBlocksWithPlaceholder();
+		this.formFieldsList = getFormFieldsBlocks( [], '--' );
 
 		this.state = {
 			className: [this.getclassNameValidateButton()],

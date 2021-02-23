@@ -1,5 +1,6 @@
 import Tools from '../helpers/tools';
 import GeneralPreset from "../components/presets/general-preset";
+import { getAvailableFields } from "../helpers/blocks-helper";
 
 function PresetMeta() {
 
@@ -46,7 +47,7 @@ function PresetMeta() {
 
 		} );
 
-		const formFields = Tools.getAvailableFields();
+		const formFields = getAvailableFields();
 
 		return (
 			<PluginDocumentSettingPanel

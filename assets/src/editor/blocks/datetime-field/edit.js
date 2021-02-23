@@ -1,109 +1,75 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../helpers/tools";
 import FieldWrapper from '../../components/field-wrapper';
-
-const block = 'jet-forms/datetime-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
+import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
-	BlockControls,
 	InspectorControls,
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
 	TextareaControl,
 	SelectControl,
 	ToggleControl,
 	PanelBody,
-	Button,
-	RangeControl,
-	CheckboxControl,
-	DateTimePicker,
-	Disabled,
 } = wp.components;
 
 
-const keyControls = block + '-controls-edit';
-const keyGeneral = block + '-general-edit';
+export default function DateTimeEdit( props ) {
+	const blockProps = useBlockProps();
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class DateEdit extends wp.element.Component {
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+	const {
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp }
+	} = props;
 
-		return [
-			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
-					<JetFormToolbar
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.toolbar[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+	return [
+		<ToolBarFields
+			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
+		/>,
+		isSelected && (
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
+			>
+				<GeneralFields
+					key={ uniqKey( 'JetForm-general' ) }
+					{ ...props }
+				/>
+				<PanelBody
+					title={ __( 'Field Settings' ) }
+				>
+					<ToggleControl
+						key={ uniqKey( 'is_timestamp' ) }
+						label={ __( 'Is Timestamp' ) }
+						checked={ attributes.is_timestamp }
+						help={ attrHelp( 'is_timestamp' ) }
+						onChange={ newValue => {
+							setAttributes( { is_timestamp: Boolean( newValue ) } );
 						} }
 					/>
-				</BlockControls>
-			),
-			props.isSelected && (
-				<InspectorControls
-					key={ keyControls }
-				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						key={ keyGeneral }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-					>
-						<ToggleControl
-							key='is_timestamp'
-							label={ __( 'Is Timestamp' ) }
-							checked={ attributes.is_timestamp }
-							help={ Tools.getHelpMessage( window.jetFormDatetimeFieldData, 'is_timestamp' ) }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { is_timestamp: Boolean( newValue ) } );
-							} }
-						/>
-					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-				</InspectorControls>
-			),
+				</PanelBody>
+				<AdvancedFields
+					key={ uniqKey( 'JetForm-advanced' ) }
+					{ ...props }
+				/>
+			</InspectorControls>
+		),
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
-				block={ block }
-				attributes={ attributes }
+				key={ uniqKey( 'FieldWrapper' ) }
+				{ ...props }
 			>
 				<TextControl
 					onChange={ () => {} }
-					key={ `place_holder_block_${ block }` }
+					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ 'Input type="datetime-local"' }
 				/>
 			</FieldWrapper>
-		];
-	}
+		</div>
+	];
 }

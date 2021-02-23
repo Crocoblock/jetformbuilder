@@ -1,7 +1,7 @@
 function JetFieldPlaceholder( {
 								  title,
 								  subtitle,
-								  isRequired
+								  isRequired = false
 							  } ) {
 
 	subtitle = subtitle.filter( part => Boolean( part ) );

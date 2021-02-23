@@ -1,135 +1,99 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
 import JetFieldPlaceholder from '../controls/placeholder';
-
-const block = 'jet-forms/hidden-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
+import { AdvancedFields, GeneralFields } from "../controls/field-control";
+import { hiddenValues } from "./options";
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
 	BlockControls,
 	InspectorControls,
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
-	TextareaControl,
 	SelectControl,
-	ToggleControl,
 	PanelBody,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
 } = wp.components;
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
+export default function HiddenEdit( props ) {
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class HiddenEdit extends wp.element.Component {
-	render() {
+	const {
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey }
+	} = props;
 
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+	const blockProps = useBlockProps();
 
-		return [
-			hasToolbar && (
-				<BlockControls>
-					<JetFormToolbar
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.toolbar[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/>
-				</BlockControls>
-			),
-			props.isSelected && (
-				<InspectorControls
-					key={ keyControls }
+	return [
+		isSelected && (
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
+			>
+				<GeneralFields
+					key={ uniqKey( 'GeneralFields' ) }
+					{ ...props }
+				/>
+				<PanelBody
+					title={ __( 'Field Settings' ) }
 				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					<SelectControl
+						key='field_value'
+						label="Field Value"
+						labelPosition="top"
+						value={ attributes.field_value }
+						onChange={ newValue => {
+							setAttributes( { field_value: newValue } );
+						} }
+						options={ hiddenValues }
+					/>
+					{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
+						key="hidden_value_field"
+						label="Meta Field to Get Value From"
+						value={ attributes.hidden_value_field }
+						onChange={ newValue => {
+							setAttributes( { hidden_value_field: newValue } );
 						} }
 					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-					>
-						<SelectControl
-							key='field_value'
-							label="Field Value"
-							labelPosition="top"
-							value={ attributes.field_value }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { field_value: newValue } );
-							} }
-							options={ window.jetFormHiddenFieldData.values }
-						/>
-						{ ['post_meta', 'user_meta'].includes( attributes.field_value ) && <TextControl
-							key="hidden_value_field"
-							label="Meta Field to Get Value From"
-							value={ attributes.hidden_value_field }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { hidden_value_field: newValue } );
-							} }
-						/> }
-						{ 'query_var' === attributes.field_value && <TextControl
-							key="query_var_key"
-							label="Query Variable Key"
-							value={ attributes.query_var_key }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { query_var_key: newValue } );
-							} }
-						/> }
-						{ 'current_date' === attributes.field_value && <TextControl
-							key="date_format"
-							label="Format"
-							value={ attributes.date_format }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { date_format: newValue } );
-							} }
-						/> }
-						{ 'manual_input' === attributes.field_value && <TextControl
-							key="hidden_value"
-							label="Value"
-							value={ attributes.hidden_value }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { hidden_value: newValue } );
-							} }
-						/> }
-					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					{ 'query_var' === attributes.field_value && <TextControl
+						key="query_var_key"
+						label="Query Variable Key"
+						value={ attributes.query_var_key }
+						onChange={ newValue => {
+							setAttributes( { query_var_key: newValue } );
 						} }
 					/> }
-				</InspectorControls>
-			),
+					{ 'current_date' === attributes.field_value && <TextControl
+						key="date_format"
+						label="Format"
+						value={ attributes.date_format }
+						onChange={ newValue => {
+							setAttributes( { date_format: newValue } );
+						} }
+					/> }
+					{ 'manual_input' === attributes.field_value && <TextControl
+						key="hidden_value"
+						label="Value"
+						value={ attributes.hidden_value }
+						onChange={ newValue => {
+							setAttributes( { hidden_value: newValue } );
+						} }
+					/> }
+				</PanelBody>
+				<AdvancedFields
+					key={ uniqKey( 'AdvancedFields' ) }
+					{ ...props }
+				/>
+			</InspectorControls>
+		),
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<JetFieldPlaceholder
-				key={ keyPlaceHolder }
+				key={ uniqKey( 'JetFieldPlaceholder' ) }
 				title={ 'Hidden Field' }
-				subtitle={ [attributes.name] }
-				isRequired={ attributes.required }
+				subtitle={ [ attributes.name ] }
 			/>
-		];
-	}
+		</div>
+	];
 };

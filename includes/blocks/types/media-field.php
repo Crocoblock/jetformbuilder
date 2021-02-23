@@ -46,40 +46,8 @@ class Media_Field extends Base {
 
 	public function block_data( $editor, $handle ) {
 		wp_localize_script( $handle, 'jetFormMediaFieldData', array(
-			'user_access' => Tools::with_placeholder( array(
-				array(
-					'value' => 'all',
-					'label' => __( 'Any registered user', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'upload_files',
-					'label' => __( 'Any user, who allowed to upload files', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'edit_posts',
-					'label' => __( 'Any user, who allowed to edit posts', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'any_user',
-					'label' => __( 'Any user ( incl. Guest )', 'jet-form-builder' ),
-				),
-			) ),
 			'mime_types'  => Tools::get_allowed_mimes_list_for_js(),
 
-			'value_format' => Tools::with_placeholder( array(
-				array(
-					'value' => 'id',
-					'label' => __( 'Attachment ID', 'jet-form-builder' )
-				),
-				array(
-					'value' => 'url',
-					'label' => __( 'Attachment URL', 'jet-form-builder' )
-				),
-				array(
-					'value' => 'both',
-					'label' => __( 'Array with attachment ID and URL', 'jet-form-builder' )
-				),
-			) ),
 
 			'help_messages' => array(
 				'insert_attachment' => __(

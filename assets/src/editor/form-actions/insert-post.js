@@ -2,6 +2,7 @@ import JetFieldsMapControl from '../blocks/controls/fields-map';
 import Tools from "../helpers/tools";
 import JetDefaultMetaControl from "../blocks/controls/default-meta";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -49,7 +50,7 @@ addAction( 'insert_post', class InsertPostAction extends wp.element.Component {
 			} );
 		};
 
-		const formFields = Tools.getFormFieldsBlocks();
+		const formFields = getFormFieldsBlocks();
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="insert_post">

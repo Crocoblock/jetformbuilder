@@ -1,8 +1,3 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
-
 import FromTermsFields from "../../components/base-select-check-radio/from-terms-fields";
 import FromPostsFields from "../../components/base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../../components/base-select-check-radio/from-generators-fields";

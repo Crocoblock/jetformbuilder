@@ -10,12 +10,13 @@ const { name, icon = '' } = metadata;
  *  - uniqKey
  *  - formFields
  *  - blockName
+ *  - attrHelp
  */
 const settings = {
 	title: __( 'Date field' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: DateEdit,
-	useEditProps: [ 'uniqKey' ],
+	useEditProps: [ 'uniqKey', 'attrHelp' ],
 };
 
 export { metadata, name, settings };

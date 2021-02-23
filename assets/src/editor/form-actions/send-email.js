@@ -4,6 +4,7 @@
 import Tools from "../helpers/tools";
 import MacrosInserter from "../components/macros-inserter";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 const {
 	TextControl,
@@ -20,7 +21,7 @@ addAction( 'send_email', function SendEmailAction( {
 												   } ) {
 
 
-	const formFields = Tools.getFormFieldsBlocks();
+	const formFields = getFormFieldsBlocks( [], '--' );
 
 	const insertMacros = ( macros ) => {
 		const content = settings.content || '' + '%' + macros + '%';

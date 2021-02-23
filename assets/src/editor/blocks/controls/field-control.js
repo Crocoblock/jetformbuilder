@@ -25,7 +25,7 @@ function FieldControl( { type, setAttributes, attributes } ) {
 	};
 
 	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
-		if ( ( ! attrName in attributes ) || 'condition' in attr && ! attributes[ attr.condition ] ) {
+		if ( ( ! ( attrName in attributes ) ) || ( 'condition' in attr && ! attributes[ attr.condition ] ) ) {
 			return null;
 		}
 
@@ -65,7 +65,7 @@ function FieldControl( { type, setAttributes, attributes } ) {
 			case 'select':
 				return <SelectControl
 					key={ `${ attr.type }-${ attrName }-SelectControl` }
-					label={ attr.label }
+					label={ label }
 					value={ attributes[ attrName ] }
 					options={ attr.options }
 					onChange={ newVal => {
@@ -75,7 +75,7 @@ function FieldControl( { type, setAttributes, attributes } ) {
 			case 'toggle':
 				return <ToggleControl
 					key={ `${ attr.type }-${ attrName }-ToggleControl` }
-					label={ attr.label }
+					label={ label }
 					checked={ attributes[ attrName ] }
 					onChange={ newVal => {
 						onChangeValue( newVal, attrName )

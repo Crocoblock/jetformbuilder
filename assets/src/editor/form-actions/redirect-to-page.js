@@ -1,5 +1,6 @@
 import Tools from "../helpers/tools";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -23,7 +24,7 @@ addAction( 'redirect_to_page', class RedirectToPageAction extends wp.element.Com
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
+		this.fields = getFormFieldsBlocks();
 	}
 
 	isChecked( name ) {

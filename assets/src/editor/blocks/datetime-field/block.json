@@ -1,11 +1,65 @@
 {
 	"apiVersion": 2,
-	"name": "jet-form-builder/date-field",
-	"title": "Date field",
+	"name": "jet-forms/datetime-field",
+	"category": "jet-form-builder-fields",
+	"keywords": [
+		"jet",
+		"form",
+		"builder",
+		"jetformbuilder",
+		"field",
+		"date"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false
+	},
+	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"64\" height=\"64\" fill=\"white\"/><rect x=\"1\" y=\"15\" width=\"62\" height=\"26\" rx=\"3\" fill=\"white\" stroke=\"#162B40\" stroke-width=\"2\"/><rect x=\"31\" y=\"32.2\" width=\"26\" height=\"28.8\" rx=\"3\" fill=\"white\" stroke=\"#162B40\" stroke-width=\"2\"/><path d=\"M31 35.2C31 33.5431 32.3431 32.2 34 32.2H54C55.6569 32.2 57 33.5431 57 35.2V43.4H31V35.2Z\" fill=\"#4AF3BA\" stroke=\"#162B40\" stroke-width=\"2\"/><path d=\"M36.4615 30C36.4615 29.4477 36.9092 29 37.4615 29H37.6154C38.1676 29 38.6154 29.4477 38.6154 30V34.6C38.6154 35.1523 38.1676 35.6 37.6154 35.6H37.4615C36.9092 35.6 36.4615 35.1523 36.4615 34.6V30Z\" fill=\"#162B40\"/><path d=\"M49.3846 30C49.3846 29.4477 49.8323 29 50.3846 29H50.5384C51.0907 29 51.5384 29.4477 51.5384 30V34.6C51.5384 35.1523 51.0907 35.6 50.5384 35.6H50.3846C49.8323 35.6 49.3846 35.1523 49.3846 34.6V30Z\" fill=\"#162B40\"/></svg>",
 	"attributes": {
 		"is_timestamp": {
 			"type": "boolean",
 			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"name": {
+			"type": "string",
+			"default": "field_name"
+		},
+		"desc": {
+			"type": "string",
+			"default": ""
+		},
+		"default": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "string",
+			"default": ""
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"add_prev": {
+			"type": "boolean",
+			"default": false
+		},
+		"prev_label": {
+			"type": "string",
+			"default": ""
+		},
+		"visibility": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
 		}
 	}
 }

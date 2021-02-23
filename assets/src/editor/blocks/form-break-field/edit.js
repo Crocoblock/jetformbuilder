@@ -1,12 +1,4 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../helpers/tools";
-
-const block = 'jet-forms/form-break-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
+import { AdvancedFields, GeneralFields } from "../controls/field-control";
 
 const { __ } = wp.i18n;
 
@@ -18,6 +10,7 @@ const {
 	ServerSideRender,
 	BlockControls,
 	InspectorControls,
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
@@ -32,59 +25,43 @@ const {
 } = wp.components;
 
 
-const keyControls = block + '-controls-edit';
-const keyGeneral = block + '-general-edit';
+export default function FormBreakEdit( props ) {
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends wp.element.Component {
+	const blockProps = useBlockProps();
 
-	constructor( props ) {
-		super( props );
+	const {
+		attributes,
+		setAttributes,
+		editProps: { uniqKey, attrHelp }
+	} = props;
 
-		this.data = window.jetFormBreakFieldData;
-	}
-
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-
-		return [
-			props.isSelected && (
-				<InspectorControls
-					key={ keyControls }
-				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						key={ keyGeneral }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-					>
-						<TextareaControl
-							key="page_break_disabled"
-							value={ attributes.page_break_disabled }
-							label={ __( 'Disabled message' ) }
-							help={ Tools.getHelpMessage( this.data, 'page_break_disabled' ) }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { page_break_disabled: newValue } );
-							} }
-						/>
-					</PanelBody>
-
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-				</InspectorControls>
-			),
+	return [
+		props.isSelected && <InspectorControls
+			key={ uniqKey( 'InspectorControls' ) }
+		>
+			<GeneralFields
+				key={ uniqKey( 'GeneralFields' ) }
+				{ ...props }
+			/>
+			<PanelBody
+				title={ __( 'Field Settings' ) }
+			>
+				<TextareaControl
+					key="page_break_disabled"
+					value={ attributes.page_break_disabled }
+					label={ __( 'Disabled message' ) }
+					help={ attrHelp( 'page_break_disabled' ) }
+					onChange={ ( newValue ) => {
+						setAttributes( { page_break_disabled: newValue } );
+					} }
+				/>
+			</PanelBody>
+			<AdvancedFields
+				key={ uniqKey( 'AdvancedFields' ) }
+				{ ...props }
+			/>
+		</InspectorControls>,
+		<div { ...blockProps }>
 			<div className={ 'jet-form-builder__next-page-wrap' }>
 				<Button
 					isSecondary
@@ -98,6 +75,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 					className="jet-form-builder__prev-page"
 				>{ attributes.prev_label || 'Prev' }</Button> }
 			</div>
-		];
-	}
+		</div>
+	];
+
 }

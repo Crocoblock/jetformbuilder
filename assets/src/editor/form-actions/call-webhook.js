@@ -1,5 +1,6 @@
 import Tools from "../helpers/tools";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -22,7 +23,7 @@ addAction( 'call_webhook', class CallWebHookAction extends wp.element.Component 
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
+		this.fields = getFormFieldsBlocks();
 	}
 
 	render() {

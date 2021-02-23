@@ -10,13 +10,14 @@ const { name, icon } = metadata;
  *  - uniqKey
  *  - formFields
  *  - blockName
+ *  - attrHelp
  */
 const settings = {
 	title: __( 'Calculated Field' ),
 	description: __( 'Calculate and display your number values' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditCalculated,
-	useEditProps: [ 'getFormFields', 'uniqKey' ],
+	useEditProps: [ 'uniqKey', 'blockName' ],
 };
 
 export { metadata, name, settings };

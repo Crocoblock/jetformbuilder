@@ -1,8 +1,5 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../helpers/tools";
+import { getAvailableFields, getFormFieldsBlocks } from "../../helpers/blocks-helper";
 
 const block = 'jet-forms/repeater-field';
 
@@ -68,7 +65,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 		const attributes = props.attributes;
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
-		const formFields = Tools.getAvailableFields( [block] );
+		const formFields = getAvailableFields( [block] );
 		const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		const label = Tools.getLabel( meta, attributes );
@@ -159,10 +156,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 							onChange={ newValue => {
 								props.setAttributes( { manage_items_count_field: newValue } );
 							} }
-							options={ [
-								{ label: __( 'Select field...' ) },
-								...Tools.getFormFieldsBlocks( [block] )
-							] }
+							options={ getFormFieldsBlocks( [block], '--' ) }
 						/> }
 
 						<SelectControl

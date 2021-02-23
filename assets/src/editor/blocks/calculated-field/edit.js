@@ -1,8 +1,6 @@
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import Tools from "../../helpers/tools";
 import FieldWrapper from "../../components/field-wrapper";
 import { AdvancedFields, GeneralFields } from "../controls/field-control";
+import { getFieldsWithoutCurrent, getFormFieldsBlocks } from "../../helpers/blocks-helper";
 
 const block = 'jet-forms/calculated-field';
 
@@ -52,41 +50,44 @@ export default function EditCalculated( props ) {
 		attributes,
 		setAttributes,
 		isSelected,
-		editProps: { getFormFields, uniqKey }
+		editProps: { uniqKey }
 	} = props;
-
-	const formFields = getFormFields();
 
 	const insertMacros = ( macros ) => {
 		setAttributes( {
 			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`
 		} );
 	};
+	const togglePopover = () => {
+		setFormFields( getFieldsWithoutCurrent() );
+		setShowMacros( toggle => ! toggle );
+	};
 
+	const [ formFields, setFormFields ] = useState( [] );
 	const [ showMacros, setShowMacros ] = useState( false );
 
 	return [
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
-					key={ uniqKey() }
+					key={ uniqKey( 'show-popover' ) }
 					isTertiary
 					isSmall
 					icon={ showMacros ? 'no-alt' : 'admin-tools' }
-					onClick={ () => setShowMacros( toggle => ! toggle ) }
+					onClick={ togglePopover }
 				/>
 				{ showMacros && <Popover
 					key={ uniqKey( 'Popover' ) }
 					position={ 'bottom left' }
 				>
 					{ formFields.length && <PanelBody title={ 'Form Fields' }>
-						{ formFields.map( ( field, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
+						{ formFields.map( ( { value }, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
 								<Button
 									isLink
 									onClick={ () => {
-										insertMacros( field )
+										insertMacros( value )
 									} }
-								>{ '%FIELD::' + field + '%' }</Button>
+								>{ '%FIELD::' + value + '%' }</Button>
 							</div>
 						) }
 					</PanelBody> }
@@ -98,9 +99,7 @@ export default function EditCalculated( props ) {
 		>
 			<GeneralFields
 				key={ uniqKey( 'JetForm-general' ) }
-				attributes={ attributes }
-				onChange={ setAttributes }
-				isSelected={ props.isSelected }
+				{ ...props }
 			/>
 			<PanelBody
 				title={ __( 'Field Settings' ) }
@@ -158,9 +157,7 @@ export default function EditCalculated( props ) {
 			</PanelBody>
 			<AdvancedFields
 				key={ uniqKey( 'JetForm-advanced' ) }
-				attributes={ attributes }
-				onChange={ setAttributes }
-				isSelected={ props.isSelected }
+				{ ...props }
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
@@ -173,7 +170,7 @@ export default function EditCalculated( props ) {
 					key="calc_formula"
 					value={ attributes.calc_formula }
 					onChange={ ( newValue ) => {
-						props.setAttributes( { calc_formula: newValue } );
+						setAttributes( { calc_formula: newValue } );
 					} }
 				/> }
 				<div className={ 'jet-form-builder__calculated-field' }>

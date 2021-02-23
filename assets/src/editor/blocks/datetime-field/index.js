@@ -1,6 +1,5 @@
-import ConditionalBlockEdit from "./edit";
+import DateTimeEdit from "./edit";
 import metadata from "./block.json";
-import ConditionalSave from "./save";
 
 const { __ } = wp.i18n;
 
@@ -14,11 +13,10 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Conditional Block' ),
+	title: __( 'Datetime field' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	edit: ConditionalBlockEdit,
-	save: ConditionalSave,
-	useEditProps: [ 'uniqKey' ],
+	edit: DateTimeEdit,
+	useEditProps: [ 'uniqKey', 'attrHelp' ],
 };
 
 export { metadata, name, settings };

@@ -1,6 +1,6 @@
 import baseMetaData from "./base-block.json";
-import Tools from "../helpers/tools";
 import { jfbHooks } from "../helpers/hooks-helper";
+import { getHelpInstance } from "./help-messages";
 
 const editProps = jfbHooks.applyFilters( 'jet.fb.register.editProps', [
 	{
@@ -8,12 +8,12 @@ const editProps = jfbHooks.applyFilters( 'jet.fb.register.editProps', [
 		callable: block => ( suffix =>`${ block.name }/${ suffix }` )
 	},
 	{
-		name: 'getFormFields',
-		callable: Tools.getFormFieldsByBlock
-	},
-	{
 		name: 'blockName',
 		callable: block => block.name
+	},
+	{
+		name: 'attrHelp',
+		callable: getHelpInstance
 	}
 ] );
 

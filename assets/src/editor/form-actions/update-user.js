@@ -2,6 +2,7 @@ import Tools from "../helpers/tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
 import ActionMessages from "../components/actions/action-messages";
 import { addAction } from "../helpers/action-helper";
+import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
 /**
  * Internal dependencies
@@ -24,7 +25,7 @@ addAction( 'update_user', class UpdateUserAction extends wp.element.Component {
 	constructor( props ) {
 		super( props );
 
-		this.fields = Tools.getFormFieldsBlocks();
+		this.fields = getFormFieldsBlocks();
 		this.metaOption = 'user_meta';
 
 		this.state = {

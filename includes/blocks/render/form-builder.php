@@ -23,9 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Builder {
 
 	use Attributes_Trait;
-
 	use Get_Template_Trait;
-
 
 	public $form_id;
 	public $post;

@@ -57,10 +57,9 @@ class Post_Type {
 			return;
 		}
 		$arguments = json_decode( get_post_meta( $form_id, '_jf_args', true ), true );
-		$arguments = array_merge(
-			array( 'form_id' => $form_id ),
-			array_intersect_key( $arguments, Plugin::instance()->post_type->get_default_args() )
-		);
+		$arguments = array_diff( $arguments, $this->get_default_args() );
+		$arguments = array_merge( array( 'form_id' => $form_id ), $this->get_default_args_on_render(), $arguments );
+
 		$format = '<input type="text" style="width: 25vw" onclick="this.select()" value="%s"/>';
 
 		echo sprintf(

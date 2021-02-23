@@ -114,6 +114,9 @@ class Live_Form {
 				$this->form_breaks[] = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
 			}
 		}
+		if ( ! empty( $this->form_breaks ) ) {
+			$this->form_breaks[] = array( 'label' => __( 'Last Page' ) );
+		}
 	}
 
 	public function maybe_progress_pages() {

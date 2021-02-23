@@ -18,8 +18,17 @@ class Form extends Widget_Base {
 		parent::__construct( $data, $args );
 
 		add_action(
-			'jet-engine/booking-form/register-controls',
-			array( $this, 'booking_form_register_controls' )
+			'jet-engine/booking-form/register-controls/content/before',
+			array( $this, 'booking_form_register_content_before' )
+		);
+		add_action(
+			'jet-engine/booking-form/register-controls/content/after',
+			array( $this, 'booking_form_register_content_after' )
+		);
+
+		add_action(
+			'jet-engine/booking-form/register-controls/style/after',
+			array( $this, 'booking_form_register_style_after' )
 		);
 
 		add_filter(
@@ -27,15 +36,6 @@ class Form extends Widget_Base {
 			array( $this, 'booking_form_render' ), 10, 2
 		);
 
-		/*add_filter(
-			'jet-engine/booking-form/is-register-custom-style-controls',
-			'__return_true'
-		);
-
-		add_action(
-			'jet-engine/booking-form/register-custom-style-controls',
-			array( $this, 'booking_form_register_style_controls' )
-		);*/
 	}
 
 
@@ -66,7 +66,7 @@ class Form extends Widget_Base {
 		return jet_engine()->forms->slug();
 	}
 
-	public function booking_form_register_controls( $booking_form ) {
+	public function booking_form_register_content_before( $booking_form ) {
 		$booking_form->remove_control( '_form_id' );
 
 		$booking_form->add_control(
@@ -113,10 +113,37 @@ class Form extends Widget_Base {
 				'condition'  => array( 'form_provider' => $this->jet_form_builder_slug() )
 			)
 		);
+
+
 	}
 
-	public function booking_form_register_style_controls( $booking_form ) {
+	public function booking_form_register_content_after( $booking_form ) {
+		$booking_form->add_control(
+			'enable_progress',
+			array(
+				'label'        => __( 'Enable form pages progress', 'jet-form-builder' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Yes', 'jet-form-builder' ),
+				'label_off'    => __( 'No', 'jet-form-builder' ),
+				'return_value' => true,
+				'default'      => false,
+				'condition'  => array( 'form_provider' => $this->jet_form_builder_slug() )
+			)
+		);
+	}
 
+	public function booking_form_register_style_after( $booking_form ) {
+		$this->add_responsive_control(
+			'fields_margin',
+			array(
+				'label'      => __( 'Margin', 'jet-engine' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px' ),
+				'selectors'  => array(
+					$booking_form->css_selector_jfb( '-progress-pages' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
 	}
 
 	public function booking_form_render( $result, $settings ) {

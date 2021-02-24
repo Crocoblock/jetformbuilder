@@ -73,16 +73,10 @@ class Form extends Widget_Base {
 			'form_provider',
 			array(
 				'label'   => __( 'Choose Provider', 'jet-form-builder' ),
-				'type'    => Controls_Manager::CHOOSE,
+				'type'    => Controls_Manager::SELECT,
 				'options' => array(
-					$this->jet_form_builder_slug() => array(
-						'title' => __( 'JetFormBuilder', 'jet-form-builder' ),
-						'icon'  => 'fa fa-align-left',
-					),
-					$this->jet_engine_form_slug()  => array(
-						'title' => __( 'JetEngine', 'jet-form-builder' ),
-						'icon'  => 'fa fa-align-center',
-					),
+					$this->jet_form_builder_slug() => __( 'JetFormBuilder', 'jet-form-builder' ),
+					$this->jet_engine_form_slug()  =>  __( 'JetEngine', 'jet-form-builder' ),
 				),
 				'default' => $this->jet_engine_form_slug(),
 			)
@@ -165,6 +159,7 @@ class Form extends Widget_Base {
 						'icon'  => 'fa fa-times',
 					),
 				),
+				'default' => 'inline-block',
 				'selectors' => array(
 					$booking_form->css_selector_jfb( '__field-wrap .for-checkbox span::before' ) => 'display:{{VALUE}};'
 				)
@@ -258,6 +253,7 @@ class Form extends Widget_Base {
 			array(
 				'label'     => __( 'Show Radio' ),
 				'type'      => Controls_Manager::CHOOSE,
+				'default' => 'inline-block',
 				'options'   => array(
 					'inline-block' => array(
 						'title' => __( 'Yes', 'jet-engine' ),

@@ -31,10 +31,6 @@ class File_Upload {
 		add_action( 'wp_ajax_nopriv_' . $this->action, array( $this, 'ajax_file_upload' ) );
 	}
 
-	public function enqueue_scripts() {
-		$this->register_assets();
-		$this->enqueue_upload_script();
-	}
 
 	/**
 	 * Returns data arguments for files wrapper
@@ -527,31 +523,9 @@ class File_Upload {
 	 *
 	 * @return void
 	 */
-	public function register_assets() {
-
-		wp_enqueue_script(
-			'jet-form-builder-sortable',
-			Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
-			array(),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-		wp_enqueue_script(
-			'jet-form-builder-file-upload',
-			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
-			array( 'jet-form-builder-frontend-forms', 'jet-form-builder-sortable' ),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-	}
-
-	/**
-	 * Enqueue upload file JS
-	 * @return void
-	 */
-	public function enqueue_upload_script() {
+	public function enqueue_scripts() {
+		wp_enqueue_script( 'jet-form-builder-sortable' );
+		wp_enqueue_script( 'jet-form-builder-file-upload' );
 
 		wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
 			'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
@@ -559,14 +533,12 @@ class File_Upload {
 			'nonce'           => wp_create_nonce( $this->nonce_key ),
 			'max_upload_size' => wp_max_upload_size(),
 		) );
-
 	}
 
 	public function ensure_media_js( $content, $popup_data = array() ) {
 		ob_start();
 		jet_engine()->frontend->frontend_scripts();
-		$this->register_assets();
-		$this->enqueue_upload_script();
+		$this->enqueue_scripts();
 		wp_scripts()->done[] = 'jet-form-builder-frontend-forms';
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
 

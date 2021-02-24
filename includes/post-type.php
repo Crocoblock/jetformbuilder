@@ -325,14 +325,6 @@ class Post_Type {
 		);
 	}
 
-	public function get_default_args_on_render() {
-		return array(
-			'submit_type'   => 'reload',
-			'required_mark' => '*',
-			'fields_layout' => 'column',
-		);
-	}
-
 	public function set_default_messages() {
 		$this->messages = apply_filters( 'jet-form-builder/message-types', array(
 			'success'           => array(

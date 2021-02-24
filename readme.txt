@@ -65,6 +65,9 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 
 == Changelog ==
 
+**1.0.4**
+ - Added: displaying a shortcode for each form
+
 **1.0.3**
  - Fixed: creating a user with administrator role.
 

@@ -4,6 +4,8 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.0.4
+* Added: displaying a shortcode for each form
 
 ## 1.0.3
 * Fixed: creating a user with administrator role.

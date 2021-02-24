@@ -6,6 +6,7 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Shortcodes\Manager;
 
 // If this file is called directly, abort.
 
@@ -42,8 +43,34 @@ class Post_Type {
 		 * TODO: change FALSE to TRUE before release
 		 */
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
+
+		add_filter( "manage_{$this->slug()}_posts_columns", array( $this, 'filter_columns' ) );
+		add_action( "manage_{$this->slug()}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
 	}
 
+	public function filter_columns( $columns ) {
+		$after = array( 'date' => $columns['date'] );
+		unset( $columns['date'] );
+
+		$columns['jfb_shortcode'] = __( 'Shortcode', 'jet-form-builder' );
+
+		return array_merge( $columns, $after );
+	}
+
+	public function add_admin_column_content( $column, $form_id ) {
+		if ( 'jfb_shortcode' !== $column ) {
+			return;
+		}
+		$arguments = json_decode( get_post_meta( $form_id, '_jf_args', true ), true );
+		$arguments = array_diff( $arguments, $this->get_default_args() );
+		$arguments = array_merge( array( 'form_id' => $form_id ), $this->get_default_args_on_render(), $arguments );
+
+		printf(
+			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
+			esc_attr( Manager::get_shortcode( 'jet_fb_form', $arguments ) ),
+			'width: 100%'
+		);
+	}
 
 	/**
 	 * Register admin assets
@@ -293,6 +320,13 @@ class Post_Type {
 		);
 	}
 
+	public function get_default_args_on_render() {
+		return array(
+			'submit_type'   => 'reload',
+			'required_mark' => '*',
+			'fields_layout' => 'column',
+		);
+	}
 
 	public function set_default_messages() {
 		$this->messages = apply_filters( 'jet-form-builder/message-types', array(

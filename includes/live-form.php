@@ -6,6 +6,7 @@ use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -82,7 +83,7 @@ class Live_Form {
 		$jf_default_args = Plugin::instance()->post_type->get_default_args();
 		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data  = array_diff( $jf_args, $jf_default_args );
+		$spec_data       = array_diff( $jf_args, $jf_default_args );
 		$this->spec_data = ( object ) array_merge( $jf_default_args, $attributes, $spec_data );;
 
 		return $this;
@@ -115,6 +116,10 @@ class Live_Form {
 			}
 		}
 		if ( ! empty( $this->form_breaks ) ) {
+			if ( Tools::is_editor() ) {
+				$this->form_breaks[ -1 ] = array( 'label' => __( 'Previous Page' ) );
+				asort( $this->form_breaks );
+			}
 			$this->form_breaks[] = array( 'label' => __( 'Last Page' ) );
 		}
 	}
@@ -135,6 +140,8 @@ class Live_Form {
 
 		if ( $index === $this->page ) {
 			$classes[] = 'active-page';
+		} elseif ( -1 === $index ) {
+			$classes[] = 'passed-page';
 		}
 
 		return implode( ' ', $classes );

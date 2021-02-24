@@ -60,14 +60,12 @@ class Post_Type {
 		$arguments = array_diff( $arguments, $this->get_default_args() );
 		$arguments = array_merge( array( 'form_id' => $form_id ), $this->get_default_args_on_render(), $arguments );
 
-		$format = '<input type="text" style="width: 25vw" onclick="this.select()" value="%s"/>';
-
-		echo sprintf(
-			$format,
-			Manager::get_shortcode( 'jet_fb_form', $arguments )
+		printf(
+			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
+			esc_attr( Manager::get_shortcode( 'jet_fb_form', $arguments ) ),
+			'width: 100%'
 		);
 	}
-
 
 	/**
 	 * Register admin assets
@@ -327,6 +325,13 @@ class Post_Type {
 		);
 	}
 
+	public function get_default_args_on_render() {
+		return array(
+			'submit_type'   => 'reload',
+			'required_mark' => '*',
+			'fields_layout' => 'column',
+		);
+	}
 
 	public function set_default_messages() {
 		$this->messages = apply_filters( 'jet-form-builder/message-types', array(

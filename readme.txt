@@ -1,10 +1,10 @@
 ﻿=== JetFormBuilder — Form Builder for Gutenberg ===
-Contributors: crocoblock
+Contributors: crocoblock, mjhead
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
 Tested up to: 5.6.1
 Requires PHP: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,12 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 5. Style settings
 
 == Changelog ==
+
+**1.0.4**
+ - Added: displaying a shortcode for each form
+
+**1.0.3**
+ - Fixed: creating a user with administrator role.
 
 **1.0.2**
  - Enhancement: added **`jet_fb_form`** shortcode. Example: `[jet_fb_form form_id="4338" submit_type="ajax" required_mark="***" fields_layout="row"]`

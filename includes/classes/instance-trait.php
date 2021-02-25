@@ -26,4 +26,8 @@ trait Instance_Trait {
 
 		return self::$instance;
 	}
+
+	public static function clear() {
+		self::$instance = null;
+	}
 }

@@ -356,79 +356,87 @@ class Form extends Widget_Base {
 		$booking_form->end_controls_tabs();
 		$booking_form->end_controls_section();
 
+		$this->run_form_progress_controls(
+			$booking_form,
+			array( $booking_form, 'css_selector_jfb' ),
+			array( $this, 'on_fb' )
+		);
+	}
 
-		$booking_form->start_controls_section(
+
+	public function run_form_progress_controls( $instance, $selector_callable, $add_section_condition ) {
+		$instance->start_controls_section(
 			'jet_fb_progress_wrapper_section',
-			$this->on_fb( array(
-				'label' => __( 'JetForm Progress - Wrapper', 'jet-engine' ),
+			$add_section_condition( array(
+				'label' => __( 'Form Progress - Wrapper', 'jet-form-builder' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			) )
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_wrapper_margin',
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( '-progress-pages' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( '-progress-pages' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_wrapper_padding',
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( '-progress-pages' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( '-progress-pages' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_group_control(
+		$instance->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'jet_fb_progress_wrapper_typography',
-				'selector' => $booking_form->css_selector_jfb( '-progress-pages' ),
+				'selector' => $selector_callable( '-progress-pages' ),
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_wrapper_border',
-			$booking_form->css_selector_jfb( '-progress-pages' )
+			$selector_callable( '-progress-pages' )
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_wrapper_color',
 			array(
 				'label'     => __( 'Text Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( '-progress-pages' ) => 'color: {{VALUE}}',
+					$selector_callable( '-progress-pages' ) => 'color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_wrapper_bg_color',
 			array(
 				'label'     => __( 'Background Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( '-progress-pages' ) => 'background-color: {{VALUE}}',
+					$selector_callable( '-progress-pages' ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->end_controls_section();
+		$instance->end_controls_section();
 
 
-		$booking_form->start_controls_section(
+		$instance->start_controls_section(
 			'jet_fb_progress_pages_section',
-			$this->on_fb( array(
-				'label' => __( 'JetForm Progress - Pages', 'jet-form-builder' ),
+			$add_section_condition( array(
+				'label' => __( 'Form Progress - Pages', 'jet-form-builder' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			) )
 		);
-		$booking_form->start_controls_tabs( 'jet_fb_progress_pages_tabs' );
+		$instance->start_controls_tabs( 'jet_fb_progress_pages_tabs' );
 
 		/**
 		 *
@@ -456,67 +464,67 @@ class Form extends Widget_Base {
 		/**
 		 *
 		 */
-		$booking_form->start_controls_tab(
+		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--current',
 			array(
 				'label' => esc_html__( 'Current', 'jet-form-builder' ),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--current_padding',
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['active-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['active-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--current_margin',
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['active-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['active-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_group_control(
+		$instance->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'jet_fb_progress_pages_tab--current_typography',
-				'selector' => $booking_form->css_selector_jfb( $scheme['active-item'] ),
+				'selector' => $selector_callable( $scheme['active-item'] ),
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--current_item_border',
-			$booking_form->css_selector_jfb( $scheme['active-item'] )
+			$selector_callable( $scheme['active-item'] )
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--current_color',
 			array(
 				'label'     => __( 'Text Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['active-item'] ) => 'color: {{VALUE}}',
+					$selector_callable( $scheme['active-item'] ) => 'color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--current_bg_color',
 			array(
 				'label'     => __( 'Background Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['active-item'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['active-item'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_active_separator',
 			array(
 				'label'     => esc_html__( 'Separator', 'jet-form-builder' ),
@@ -524,7 +532,7 @@ class Form extends Widget_Base {
 				'separator' => 'before',
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--current_separator_height',
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
@@ -537,21 +545,21 @@ class Form extends Widget_Base {
 					),
 				),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['active-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['active-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--current_separator_color',
 			array(
 				'label'     => __( 'Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['active-separator'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['active-separator'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_active_circle',
 			array(
 				'label'     => esc_html__( 'Circle', 'jet-form-builder' ),
@@ -560,74 +568,74 @@ class Form extends Widget_Base {
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--current_separator_border',
-			$booking_form->css_selector_jfb( $scheme['active-circle'] )
+			$selector_callable( $scheme['active-circle'] )
 		);
-		$booking_form->end_controls_tab();
+		$instance->end_controls_tab();
 
 
-		$booking_form->start_controls_tab(
+		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--next',
 			array(
 				'label' => esc_html__( 'Next', 'jet-form-builder' ),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--next_padding',
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['next-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['next-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--next_margin',
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['next-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['next-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_group_control(
+		$instance->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'jet_fb_progress_pages_tab--next_typography',
-				'selector' => $booking_form->css_selector_jfb( $scheme['next-item'] ),
+				'selector' => $selector_callable( $scheme['next-item'] ),
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--next_item_border',
-			$booking_form->css_selector_jfb( $scheme['next-item'] )
+			$selector_callable( $scheme['next-item'] )
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--next_color',
 			array(
 				'label'     => __( 'Text Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['next-item'] ) => 'color: {{VALUE}}',
+					$selector_callable( $scheme['next-item'] ) => 'color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--next_bg_color',
 			array(
 				'label'     => __( 'Background Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['next-item'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['next-item'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_next_separator',
 			array(
 				'label'     => esc_html__( 'Separator', 'jet-form-builder' ),
@@ -635,7 +643,7 @@ class Form extends Widget_Base {
 				'separator' => 'before',
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--next_separator_height',
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
@@ -648,21 +656,21 @@ class Form extends Widget_Base {
 					),
 				),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['next-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['next-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--next_separator_color',
 			array(
 				'label'     => __( 'Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['next-separator'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['next-separator'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_next_circle',
 			array(
 				'label'     => esc_html__( 'Circle', 'jet-form-builder' ),
@@ -671,74 +679,74 @@ class Form extends Widget_Base {
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--next_separator_border',
-			$booking_form->css_selector_jfb( $scheme['next-circle'] )
+			$selector_callable( $scheme['next-circle'] )
 		);
-		$booking_form->end_controls_tab();
+		$instance->end_controls_tab();
 
 
-		$booking_form->start_controls_tab(
+		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--prev',
 			array(
 				'label' => esc_html__( 'Prev', 'jet-form-builder' ),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--prev_padding',
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['prev-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['prev-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--prev_margin',
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px' ),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['prev-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$selector_callable( $scheme['prev-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
 			)
 		);
-		$booking_form->add_group_control(
+		$instance->add_group_control(
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'jet_fb_progress_pages_tab--prev_typography',
-				'selector' => $booking_form->css_selector_jfb( $scheme['prev-item'] ),
+				'selector' => $selector_callable( $scheme['prev-item'] ),
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--prev_item_border',
-			$booking_form->css_selector_jfb( $scheme['prev-item'] )
+			$selector_callable( $scheme['prev-item'] )
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--prev_color',
 			array(
 				'label'     => __( 'Text Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['prev-item'] ) => 'color: {{VALUE}}',
+					$selector_callable( $scheme['prev-item'] ) => 'color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--prev_bg_color',
 			array(
 				'label'     => __( 'Background Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['prev-item'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['prev-item'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_prev_separator',
 			array(
 				'label'     => esc_html__( 'Separator', 'jet-form-builder' ),
@@ -746,7 +754,7 @@ class Form extends Widget_Base {
 				'separator' => 'before',
 			)
 		);
-		$booking_form->add_responsive_control(
+		$instance->add_responsive_control(
 			'jet_fb_progress_pages_tab--prev_separator_height',
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
@@ -759,21 +767,21 @@ class Form extends Widget_Base {
 					),
 				),
 				'selectors'  => array(
-					$booking_form->css_selector_jfb( $scheme['prev-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['prev-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_progress_pages_tab--prev_separator_color',
 			array(
 				'label'     => __( 'Color', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$booking_form->css_selector_jfb( $scheme['prev-separator'] ) => 'background-color: {{VALUE}}',
+					$selector_callable( $scheme['prev-separator'] ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
-		$booking_form->add_control(
+		$instance->add_control(
 			'jet_fb_separator_prev_circle',
 			array(
 				'label'     => esc_html__( 'Circle', 'jet-form-builder' ),
@@ -782,13 +790,13 @@ class Form extends Widget_Base {
 			)
 		);
 		$this->add_border(
-			$booking_form,
+			$instance,
 			'jet_fb_progress_pages_tab--prev_separator_border',
-			$booking_form->css_selector_jfb( $scheme['prev-circle'] )
+			$selector_callable( $scheme['prev-circle'] )
 		);
-		$booking_form->end_controls_tab();
-		$booking_form->end_controls_tabs();
-		$booking_form->end_controls_section();
+		$instance->end_controls_tab();
+		$instance->end_controls_tabs();
+		$instance->end_controls_section();
 	}
 
 	public function booking_form_render( $result, $settings ) {
@@ -1234,6 +1242,12 @@ class Form extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+
+		$this->run_form_progress_controls(
+			$this,
+			array( $this, 'selector' ),
+			function ( $args ) { return $args; }
+		);
 
 		$this->start_controls_section(
 			'section_message_success_style',

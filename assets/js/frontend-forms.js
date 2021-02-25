@@ -474,7 +474,7 @@
 
 			const widgets = {
 				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
-				'jet-form-builder-form.default' : JetFormBuilder.widgetBookingForm,
+				'jet-form-builder-form.default': JetFormBuilder.widgetBookingForm,
 			};
 
 			$.each( widgets, function ( widget, callback ) {
@@ -509,6 +509,7 @@
 
 			prevItem.removeClass( 'active-page' );
 			currentItem.addClass( 'active-page' );
+			currentItem.removeClass( 'passed-page' );
 
 			if ( $fromPage < $toPage ) {
 				prevItem.addClass( 'passed-page' );

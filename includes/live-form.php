@@ -125,7 +125,7 @@ class Live_Form {
 	}
 
 	public function maybe_progress_pages() {
-		if ( ! $this->spec_data->enable_progress || 1 >= $this->pages ) {
+		if ( ! $this->spec_data->enable_progress || 0 === $this->pages ) {
 			return '';
 		}
 

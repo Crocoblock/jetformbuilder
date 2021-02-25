@@ -463,7 +463,6 @@
 		currentFieldWithError: {
 			length: 0
 		},
-		hasInitialized: false,
 
 		initCommon: function () {
 			$( '.jet-form-builder' ).each( function ( index, value ) {
@@ -472,6 +471,7 @@
 		},
 
 		initElementor: function () {
+
 			const widgets = {
 				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
 				'jet-form-builder-form.default' : JetFormBuilder.widgetBookingForm,
@@ -534,9 +534,6 @@
 		},
 
 		newRepeaterItem: function () {
-			console.log( 'debugger' );
-			debugger;
-
 			var $this = $( this ),
 				$repeater = $this.closest( '.jet-form-builder-repeater' ),
 				$initial = $repeater.find( '.jet-form-builder-repeater__initial' ),
@@ -1389,7 +1386,7 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( document ).ready( JetFormBuilder.init );
+	$( document ).ready( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	JetFormBuilder.addHandlersInit();

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Widgets;
 
 
+use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Widgets\Types;
 
 class Elementor_Controller {
@@ -17,6 +18,11 @@ class Elementor_Controller {
 	public function init_components() {
 		$this->setup_widgets();
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ), 11 );
+		add_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_assets' ) );
+	}
+
+	public function enqueue_form_assets() {
+		Plugin::instance()->blocks->enqueue_frontend_assets();
 	}
 
 	private function widgets() {

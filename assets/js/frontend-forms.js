@@ -350,9 +350,9 @@
 				$section.find( 'select option[data-is-hidden="1"]' ).remove();
 
 				$section
-					.find( '*[data-required="1"]' )
-					.val( '' )
-					.attr( 'required', true );
+				.find( '*[data-required="1"]' )
+				.val( '' )
+				.attr( 'required', true );
 
 			} else {
 
@@ -382,9 +382,9 @@
 				}
 
 				$section.find( '*[required="required"]' )
-					.val( val )
-					.removeAttr( 'required' )
-					.attr( 'data-required', 1 );
+				.val( val )
+				.removeAttr( 'required' )
+				.attr( 'data-required', 1 );
 
 				var $hiddenItems = $row.find( '>*' ).filter( function () {
 					return $( this ).css( 'display' ) === 'none';
@@ -464,31 +464,43 @@
 			length: 0
 		},
 
-		init: function () {
-
-			var self = JetFormBuilder;
-
+		initCommon: function () {
 			$( '.jet-form-builder' ).each( function ( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
+		},
+
+		initElementor: function () {
+
+			const widgets = {
+				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
+				'jet-form-builder-form.default': JetFormBuilder.widgetBookingForm,
+			};
+
+			$.each( widgets, function ( widget, callback ) {
+				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
+			} );
+		},
+
+		addHandlersInit: function () {
+			var self = JetFormBuilder;
 
 			$( document )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
-				.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
-				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
-				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
-				.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
-				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
-				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
-				.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
-				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
-				.on( 'jet-form-builder/switch-page', self.updateProgress );
-
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
+			.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
+			.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
+			.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
+			.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
+			.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
+			.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
+			.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
+			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
+			.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
+			.on( 'jet-form-builder/switch-page', self.updateProgress );
 		},
 
 		updateProgress: function ( event, $progress, $fromPage, $toPage ) {
@@ -497,6 +509,7 @@
 
 			prevItem.removeClass( 'active-page' );
 			currentItem.addClass( 'active-page' );
+			currentItem.removeClass( 'passed-page' );
 
 			if ( $fromPage < $toPage ) {
 				prevItem.addClass( 'passed-page' );
@@ -522,7 +535,6 @@
 		},
 
 		newRepeaterItem: function () {
-
 			var $this = $( this ),
 				$repeater = $this.closest( '.jet-form-builder-repeater' ),
 				$initial = $repeater.find( '.jet-form-builder-repeater__initial' ),
@@ -751,9 +763,9 @@
 
 			if ( 'radio' === $this[ 0 ].type ) {
 				$template
-					.closest( '.jet-form-builder__fields-group' )
-					.find( '.jet-form-builder__field-template--checked' )
-					.removeClass( 'jet-form-builder__field-template--checked' );
+				.closest( '.jet-form-builder__fields-group' )
+				.find( '.jet-form-builder__field-template--checked' )
+				.removeClass( 'jet-form-builder__field-template--checked' );
 			}
 
 			$template.toggleClass( 'jet-form-builder__field-template--checked', $this[ 0 ].checked );
@@ -768,7 +780,7 @@
 
 			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
 
-			$( document ).trigger( 'jet-form-builder/init', [$scope] );
+			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );
@@ -931,7 +943,7 @@
 			}
 
 			if ( $changedField ) {
-				$( document ).trigger( 'jet-form-builder/page/field-changed', [$changedField, $page, disabled] );
+				$( document ).trigger( 'jet-form-builder/page/field-changed', [ $changedField, $page, disabled ] );
 			}
 
 			if ( $page.hasClass( 'jet-form-page--initialized' ) ) {
@@ -996,7 +1008,7 @@
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
-			$( document ).trigger( 'jet-form-builder/switch-page', [$progress, $fromPage.data( 'page' ), $toPage.data( 'page' )] );
+			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ), $toPage.data( 'page' ) ] );
 		},
 
 		getFieldValue: function ( $field ) {
@@ -1288,7 +1300,7 @@
 
 					case 'validation_failed':
 
-						Object.entries( response.fields ).forEach( function ( [fieldName, fieldData] ) {
+						Object.entries( response.fields ).forEach( function ( [ fieldName, fieldData ] ) {
 							var $field = JetFormBuilder.findFieldByName( $form, fieldName );
 
 							const afterMessage = `<div class="error-message">${ fieldData.message }</div>`;
@@ -1316,7 +1328,7 @@
 							window.location.reload();
 						}
 
-						$( document ).trigger( 'jet-form-builder/ajax/on-success', [response, $form, data] );
+						$( document ).trigger( 'jet-form-builder/ajax/on-success', [ response, $form, data ] );
 
 						break;
 				}
@@ -1373,9 +1385,11 @@
 	};
 
 	window.JetFormBuilderDev = JetFormBuilderDev;
-
-	$( document ).ready( JetFormBuilder.init );
-
 	window.JetFormBuilder = JetFormBuilder;
 
-}( jQuery ) );
+	$( document ).ready( JetFormBuilder.initCommon );
+	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
+
+	JetFormBuilder.addHandlersInit();
+
+} )( jQuery );

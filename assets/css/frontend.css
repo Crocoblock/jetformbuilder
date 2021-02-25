@@ -756,13 +756,14 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     height: 3px;
 }
 
-.jet-form-builder__field.field-has-error {
-    background-color: rgba( 255, 0, 0, 0.25 );
-}
 .jet-form-builder__field.field-has-error + .error-message {
     color: red;
 }
 
 .jet-form-builder-file-upload__value[value*="."] + input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     color: transparent;
+}
+
+.block-editor-block-list__block[data-type^="jet-forms/"] {
+    max-width: 100%;
 }

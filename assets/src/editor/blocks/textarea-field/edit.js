@@ -45,9 +45,7 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props ) {
 
@@ -62,8 +60,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 
 	return [
 		hasToolbar && (
-			<BlockControls key={ keyControls + '-block' }>
+			<BlockControls key={ uniqKey( 'BlockControls' ) }>
 				<JetFormToolbar
+					key={ uniqKey( 'JetFormToolbar' ) }
 					values={ attributes }
 					controls={ window.jetFormBuilderControls.toolbar[ block ] }
 					onChange={ ( newValues ) => {
@@ -74,11 +73,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 		),
 		props.isSelected && (
 			<InspectorControls
-				key={ keyControls }
+				key={ uniqKey( 'InspectorControls' ) }
 			>
 				{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 				<JetFormGeneral
-					key={ keyGeneral }
+					key={ uniqKey( 'JetFormGeneral' ) }
 					values={ attributes }
 					controls={ window.jetFormBuilderControls.general[ block ] }
 					onChange={ ( newValues ) => {
@@ -87,8 +86,8 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 				/> }
 				<PanelBody
 					title={ __( 'Field Settings' ) }
+					key={ uniqKey( 'PanelBody' ) }
 				>
-
 					<NumberControl
 						label={ __( 'Min length (symbols)' ) }
 						labelPosition='top'
@@ -109,6 +108,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 				</PanelBody>
 				{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 				<JetFormAdvanced
+					key={ uniqKey( 'JetFormAdvanced' ) }
 					values={ attributes }
 					controls={ window.jetFormBuilderControls.advanced[ block ] }
 					onChange={ ( newValues ) => {
@@ -118,6 +118,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextareaEdit( props
 			</InspectorControls>
 		),
 		<FieldWrapper
+			key={ uniqKey( 'FieldWrapper' ) }
 			block={ block }
 			attributes={ attributes }
 		>

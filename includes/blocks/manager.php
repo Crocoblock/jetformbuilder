@@ -57,6 +57,7 @@ class Manager {
 		add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );
 	}
 
 	public function add_category( $categories, $post ) {
@@ -219,25 +220,12 @@ class Manager {
 	 * Register form JS
 	 * @return [type] [description]
 	 */
-	public function register_frontend_assets() {
+	public function enqueue_frontend_assets() {
 
 		$this->enqueue_frontend_styles();
 
-		wp_enqueue_script(
-			'jet-form-builder-frontend-forms',
-			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
-			array( 'jquery' ),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-		wp_enqueue_script(
-			'jet-form-builder-inputmask',
-			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-			array( 'jquery', 'jet-form-builder-frontend-forms' ),
-			Plugin::instance()->get_version(),
-			true
-		);
+		wp_enqueue_script( 'jet-form-builder-frontend-forms' );
+		wp_enqueue_script( 'jet-form-builder-inputmask' );
 
 		wp_localize_script( 'jet-form-builder-frontend-forms', 'JetFormBuilderSettings', array(
 			'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
@@ -245,6 +233,40 @@ class Manager {
 			'devmode'     => Dev_Mode\Manager::instance()->active()
 		) );
 
+	}
+
+	public function register_form_scripts() {
+		wp_register_script(
+			'jet-form-builder-frontend-forms',
+			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
+			array( 'jquery' ),
+			Plugin::instance()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			'jet-form-builder-inputmask',
+			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
+			array( 'jquery', 'jet-form-builder-frontend-forms' ),
+			Plugin::instance()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			'jet-form-builder-sortable',
+			Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
+			array(),
+			Plugin::instance()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			'jet-form-builder-file-upload',
+			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
+			array( 'jet-form-builder-frontend-forms', 'jet-form-builder-sortable' ),
+			Plugin::instance()->get_version(),
+			true
+		);
 	}
 
 	/**

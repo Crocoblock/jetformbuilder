@@ -48,19 +48,6 @@ class Hidden_Field extends Base {
 		return 'hidden-field';
 	}
 
-	public function parse_exported_data( $field_data ) {
-		$field_data = parent::parse_exported_data( $field_data );
-
-		[
-			$field_data['attrs']['field_value'],
-			$field_data['attrs']['hidden_value']
-		] = [
-			$field_data['attrs']['hidden_value'],
-			$field_data['attrs']['default']
-		];
-
-		return $field_data;
-	}
 
 	/**
 	 * Returns current block render instatnce

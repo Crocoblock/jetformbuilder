@@ -16,15 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Register_User extends Base {
 
-	public function __construct() {
-		add_filter(
-			'editable_roles',
-			array( $this, 'hide_roles' )
-		);
-
-		parent::__construct();
-	}
-
 	public function get_name() {
 		return __( 'Register User', 'jet-form-builder' );
 	}
@@ -307,12 +298,6 @@ class Register_User extends Base {
 				'value' => 'You already logged in.',
 			),
 		);
-	}
-
-	public function hide_roles( $all_roles ) {
-		unset( $all_roles['administrator'] );
-
-		return $all_roles;
 	}
 
 	/**

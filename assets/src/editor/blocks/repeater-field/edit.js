@@ -47,9 +47,7 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends wp.element.Component {
 
@@ -77,8 +75,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 
 		return [
 			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -86,6 +85,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						} }
 					>
 						{ 'custom' === attributes.repeater_calc_type && <Button
+							key={ uniqKey( 'Button' ) }
 							isTertiary
 							isSmall
 							icon={ this.state.showMacrosPopover ? 'no-alt' : 'admin-tools' }
@@ -96,10 +96,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						{ this.state.showMacrosPopover && (
 							<Popover
 								position={ 'bottom left' }
+								key={ uniqKey( 'Popover' ) }
 							>
 								{ formFields.length && <PanelBody title={ 'Form Fields' }>
 									{ formFields.map( field => {
-										return <div key={ 'field_' + field }>
+										return <div key={ uniqKey( 'field_' + field ) }>
 											<Button
 												isLink
 												onClick={ () => {
@@ -116,11 +117,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ keyControls }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -129,6 +130,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 					/> }
 					<PanelBody
 						title={ __( 'Field Settings' ) }
+						key={ uniqKey( 'PanelBody' ) }
 					>
 						<SelectControl
 							key='manage_items_count'
@@ -184,6 +186,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 					</PanelBody>
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -192,7 +195,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 					/> }
 				</InspectorControls>
 			),
-			<React.Fragment>
+			<React.Fragment key={ uniqKey( 'Fragment' ) }>
 				{ 'custom' === attributes.repeater_calc_type && <div className="jet-forms__calc-formula-editor">
 					<div className="jet-form-editor__macros-wrap">
 						<TextareaControl
@@ -206,7 +209,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 						/>
 					</div>
 				</div> }
-				<BaseControl key={ 'repeater-fields-title' }>
+				<BaseControl key={ uniqKey( 'repeater-fields-title' ) }>
 					<BaseControl.VisualLabel>
 						<div className={ 'jet-form-builder__label' }>
 							{ label.name || 'Repeater field' }
@@ -220,9 +223,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RepeaterEdit extends w
 				</BaseControl>
 
 				<InnerBlocks
-					key={ 'repeater-fields' }
+					key={ uniqKey( 'repeater-fields' ) }
 					renderAppender={ () => (
-						<InnerBlocks.ButtonBlockAppender/>
+						<InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/>
 					) }
 				/>
 				<Button

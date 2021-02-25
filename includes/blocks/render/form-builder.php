@@ -23,9 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Builder {
 
 	use Attributes_Trait;
-
 	use Get_Template_Trait;
-
 
 	public $form_id;
 	public $post;
@@ -156,7 +154,7 @@ class Form_Builder {
 
 		include $this->get_global_template( 'common/end-form.php' );
 
-		Plugin::instance()->blocks->register_frontend_assets();
+		Plugin::instance()->blocks->enqueue_frontend_assets();
 		File_Upload::instance()->enqueue_scripts();
 
 		$end_form .= ob_get_clean();

@@ -653,3 +653,6 @@ select.components-select-control__input.components-select-control__input.compone
     margin-top: -33px;
     margin-left: 10vw;
 }
+.block-editor-block-list__block[data-type] {
+    max-width: 100%;
+}

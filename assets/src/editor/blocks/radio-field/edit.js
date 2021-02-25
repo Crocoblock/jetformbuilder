@@ -36,8 +36,7 @@ const {
 	Disabled,
 } = wp.components;
 
-const keyControls = () => block + '-controls-edit';
-const keyGeneral = block + '-general-edit';
+const uniqKey = suffix => `${ block }-${ suffix }`;
 
 window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
 
@@ -54,8 +53,9 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 
 		return [
 			hasToolbar && (
-				<BlockControls key={ keyControls() }>
+				<BlockControls key={ uniqKey( 'BlockControls' ) }>
 					<JetFormToolbar
+						key={ uniqKey( 'JetFormToolbar' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.toolbar[ block ] }
 						onChange={ ( newValues ) => {
@@ -66,11 +66,11 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 			),
 			props.isSelected && (
 				<InspectorControls
-					key={ 'inspector' }
+					key={ uniqKey( 'InspectorControls' ) }
 				>
 					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
 					<JetFormGeneral
-						key={ keyGeneral }
+						key={ uniqKey( 'JetFormGeneral' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.general[ block ] }
 						onChange={ ( newValues ) => {
@@ -80,6 +80,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 
 					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
 					<JetFormAdvanced
+						key={ uniqKey( 'JetFormAdvanced' ) }
 						values={ attributes }
 						controls={ window.jetFormBuilderControls.advanced[ block ] }
 						onChange={ ( newValues ) => {
@@ -88,7 +89,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 					/> }
 				</InspectorControls>
 			),
-			<React.Fragment>
+			<React.Fragment key={ uniqKey( 'Fragment' ) }>
 				{ props.isSelected && <div className='inside-block-options'>
 					<SelectControl
 						key='field_options_from'
@@ -136,6 +137,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 				</div> }
 
 				<SelectRadioCheckPlaceholder
+					key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
 					blockName={ block }
 					scriptData={ this.data }
 					source={ attributes }

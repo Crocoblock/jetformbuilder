@@ -137,7 +137,7 @@ export default function MediaEdit( props ) {
 				{ ...props }
 			>
 				<InputControl
-					key={ uniqKey( 'place_holder_block' ) }
+					key={ uniqKey( 'place_holder_block_new' ) }
 					type={ 'file' }
 					disabled={ true }
 				/>

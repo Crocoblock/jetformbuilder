@@ -465,11 +465,20 @@
 		},
 		hasInitialized: false,
 
-		init: function ( place ) {
-			console.error( place );
+		initCommon: function () {
 			$( '.jet-form-builder' ).each( function ( index, value ) {
-				console.error( 'TEEEEST' );
 				JetFormBuilder.widgetBookingForm( $( value ) );
+			} );
+		},
+
+		initElementor: function () {
+			const widgets = {
+				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
+				'jet-form-builder-form.default' : JetFormBuilder.widgetBookingForm,
+			};
+
+			$.each( widgets, function ( widget, callback ) {
+				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
 			} );
 		},
 
@@ -1380,9 +1389,9 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( window ).on( 'elementor/frontend/init', () => JetFormBuilder.init( 'elementor/frontend/init' ) );
-	$( document ).ready(  () => JetFormBuilder.init( '$( document ).ready' ) );
+	$( document ).ready( JetFormBuilder.init );
+	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	JetFormBuilder.addHandlersInit();
 
-})( jQuery );
+} )( jQuery );

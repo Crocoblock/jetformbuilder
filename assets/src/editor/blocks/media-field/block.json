@@ -1,7 +1,22 @@
 {
 	"apiVersion": 2,
-	"name": "jet-form-builder/media-field",
-	"title": "Media field",
+	"name": "jet-forms/media-field",
+	"category": "jet-form-builder-fields",
+	"keywords": [
+		"jet",
+		"form",
+		"builder",
+		"jetformbuilder",
+		"field",
+		"media",
+		"image",
+		"file"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false
+	},
 	"attributes": {
 		"allowed_user_cap": {
 			"type": "string",
@@ -22,6 +37,38 @@
 		"allowed_mimes": {
 			"type": "array",
 			"default": []
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"name": {
+			"type": "string",
+			"default": "field_name"
+		},
+		"desc": {
+			"type": "string",
+			"default": ""
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"add_prev": {
+			"type": "boolean",
+			"default": false
+		},
+		"prev_label": {
+			"type": "string",
+			"default": ""
+		},
+		"visibility": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
 		}
 	}
 }

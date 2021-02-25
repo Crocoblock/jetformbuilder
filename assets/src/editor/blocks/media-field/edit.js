@@ -1,19 +1,12 @@
-import JetFormToolbar from '../controls/toolbar';
-import JetFormGeneral from '../controls/general';
-import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../helpers/tools";
 import FieldWrapper from '../../components/field-wrapper';
-
-const block = 'jet-forms/media-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
+import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
+import { userAccess, valueFormats, mimeTypes } from "./options";
 
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
+	useBlockProps,
 	InspectorControls,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
@@ -35,133 +28,120 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
-const keyControls = block + '-controls-edit';
-const keyPlaceHolder = block + '-placeholder-edit';
-const keyGeneral = block + '-general-edit';
 
 const localizeData = window.jetFormMediaFieldData;
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class MediaEdit extends wp.element.Component {
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+console.error( mimeTypes );
 
-		return [
-			hasToolbar && (
-				<BlockControls key={ keyControls + '-block' }>
-					<JetFormToolbar
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.toolbar[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+export default function MediaEdit( props ) {
+
+	const blockProps = useBlockProps();
+
+	const {
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp }
+	} = props;
+
+	return [
+		<ToolBarFields
+			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
+		/>,
+		isSelected && (
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
+			>
+				<GeneralFields
+					key={ uniqKey( 'GeneralFields' ) }
+					{ ...props }
+				/>
+				<PanelBody
+					title={ __( 'Field Settings' ) }
+					className='jet-form-media-fields'
+				>
+					<SelectControl
+						key='allowed_user_cap'
+						label={ __( 'User access' ) }
+						labelPosition='top'
+						value={ attributes.allowed_user_cap }
+						onChange={ ( newValue ) => {
+							setAttributes( { allowed_user_cap: newValue } );
+						} }
+						options={ userAccess }
+					/>
+					{ 'any_user' !== attributes.allowed_user_cap && <ToggleControl
+						key='insert_attachment'
+						label={ __( 'Insert attachment' ) }
+						checked={ attributes.insert_attachment }
+						help={ attrHelp( 'insert_attachment' ) }
+						onChange={ ( newValue ) => {
+							setAttributes( { insert_attachment: Boolean( newValue ) } );
+						} }
+					/> }
+					{ attributes.insert_attachment && <SelectControl
+						key='value_format'
+						label={ __( 'Field value' ) }
+						labelPosition='top'
+						value={ attributes.value_format }
+						onChange={ ( newValue ) => {
+							props.setAttributes( { value_format: newValue } );
+						} }
+						options={ valueFormats }
+					/> }
+					<NumberControl
+						key='max_files'
+						label={ __( 'Maximum allowed files to upload' ) }
+						labelPosition='top'
+						help={ attrHelp( 'max_files' ) }
+						value={ attributes.max_files }
+						onChange={ ( newValue ) => {
+							props.setAttributes( { max_files: parseInt( newValue ) } );
 						} }
 					/>
-				</BlockControls>
-			),
-			props.isSelected && (
-				<InspectorControls
-					key={ keyControls }
-				>
-
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						key={ keyGeneral }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					<NumberControl
+						label={ __( 'Maximum size in Mb' ) }
+						labelPosition='top'
+						key='max_size'
+						help={ attrHelp( 'max_size' ) }
+						value={ attributes.max_size }
+						onChange={ ( newValue ) => {
+							props.setAttributes( { max_size: parseInt( newValue ) } );
 						} }
-					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-						className='jet-form-media-fields'
-					>
-						<SelectControl
-							key='allowed_user_cap'
-							label={ __( 'User access' ) }
-							labelPosition='top'
-							value={ attributes.allowed_user_cap }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { allowed_user_cap: newValue } );
-							} }
-							options={ localizeData.user_access }
-						/>
-						{ 'any_user' !== attributes.allowed_user_cap && <ToggleControl
-							key='insert_attachment'
-							label={ __( 'Insert attachment' ) }
-							checked={ attributes.insert_attachment }
-							help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'insert_attachment' ) }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { insert_attachment: Boolean( newValue ) } );
-							} }
-						/> }
-						{ attributes.insert_attachment && <SelectControl
-							key='value_format'
-							label={ __( 'Field value' ) }
-							labelPosition='top'
-							value={ attributes.value_format }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { value_format: newValue } );
-							} }
-							options={ localizeData.value_format }
-						/> }
-						<NumberControl
-							key='max_files'
-							label={ __( 'Maximum allowed files to upload' ) }
-							labelPosition='top'
-							help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'max_files' ) }
-							value={ attributes.max_files }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { max_files: parseInt( newValue ) } );
-							} }
-						/>
-						<NumberControl
-							label={ __( 'Maximum size in Mb' ) }
-							labelPosition='top'
-							key='max_size'
-							help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'max_size' ) }
-							value={ attributes.max_size }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { max_size: parseInt( newValue ) } );
-							} }
-						/>
-						<SelectControl
-							multiple
-							className='field-mime-types'
-							key='allowed_mimes'
-							label={ __( 'Allow MIME types' ) }
-							labelPosition='top'
-							help={ Tools.getHelpMessage( window.jetFormMediaFieldData, 'allowed_mimes' ) }
-							value={ attributes.allowed_mimes }
-							onChange={ ( newValue ) => {
-								props.setAttributes( { allowed_mimes: newValue } );
-							} }
-							options={ localizeData.mime_types }
-						/>
-
-					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
+					/>
+					<SelectControl
+						multiple
+						className='field-mime-types'
+						key='allowed_mimes'
+						label={ __( 'Allow MIME types' ) }
+						labelPosition='top'
+						help={ attrHelp( 'allowed_mimes' ) }
+						value={ attributes.allowed_mimes }
+						onChange={ ( newValue ) => {
+							props.setAttributes( { allowed_mimes: newValue } );
 						} }
-					/> }
-				</InspectorControls>
-			),
+						options={ localizeData.mime_types }
+					/>
 
+				</PanelBody>
+				<AdvancedFields
+					key={ uniqKey( 'AdvancedFields' ) }
+					{ ...props }
+				/>
+			</InspectorControls>
+		),
+		<div { ...blockProps }>
 			<FieldWrapper
-				block={ block }
-				attributes={ attributes }
+				key={ uniqKey( 'FieldWrapper' ) }
+				{ ...props }
 			>
 				<InputControl
-					key={ `place_holder_block_${ block }` }
+					key={ uniqKey( 'place_holder_block' ) }
 					type={ 'file' }
 					disabled={ true }
 				/>
 			</FieldWrapper>
-		];
-	}
+		</div>
+	];
 }

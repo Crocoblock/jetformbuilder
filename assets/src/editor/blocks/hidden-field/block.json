@@ -1,6 +1,6 @@
 {
 	"apiVersion": 2,
-	"name": "jet-form-builder/hidden-field",
+	"name": "jet-forms/hidden-field",
 	"category": "jet-form-builder-fields",
 	"keywords": [
 		"jet",

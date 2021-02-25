@@ -34,4 +34,6 @@ const valueFormats = Tools.withPlaceholder( [
 	}
 ] );
 
-export { userAccess, valueFormats };
+const mimeTypes = wp.data.select( 'core/block-editor' ).getSettings().allowedMimeTypes;
+
+export { userAccess, valueFormats, mimeTypes };

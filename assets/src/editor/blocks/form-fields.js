@@ -3,7 +3,6 @@ import * as select from './select-field';
 import * as radio from './radio-field';
 import * as number from './number-field';
 import * as time from './time-field';
-import * as media from './media-field';
 import * as wysiwyg from './wysiwyg-field';
 import * as range from './range-field';
 import * as textarea from './textarea-field';
@@ -19,6 +18,7 @@ import * as formBreak from './form-break-field';
 import * as groupBreak from './group-break-field';
 import * as heading from './heading-field';
 import * as hidden from './hidden-field';
+import * as media from './media-field';
 
 import * as wrappers from "./block-wrappers";
 import { jfbHooks } from "../helpers/hooks-helper";
@@ -37,6 +37,7 @@ const fields = jfbHooks.applyFilters( 'jet.fb.register.fields', [
 	groupBreak,
 	heading,
 	hidden,
+	media,
 
 	/*
 	text,
@@ -44,7 +45,6 @@ const fields = jfbHooks.applyFilters( 'jet.fb.register.fields', [
 	radio,
 	number,
 	time,
-	media,
 	wysiwyg,
 	range,
 	textarea,

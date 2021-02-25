@@ -36,6 +36,11 @@ class Form extends Widget_Base {
 			array( $this, 'booking_form_render' ), 10, 2
 		);
 
+		add_filter(
+			'jet-engine/booking-form/filtering-controls/content',
+			array( $this, 'on_jet_engine' )
+		);
+
 	}
 
 
@@ -131,6 +136,14 @@ class Form extends Widget_Base {
 			'condition' => array(
 				'form_provider' => jet_form_builder()->post_type->slug(),
 			)
+		) );
+	}
+
+	public function on_jet_engine( $args ) {
+		return array_merge_recursive( $args, array(
+			'condition' => array(
+				'form_provider' => jet_engine()->forms->slug(),
+			),
 		) );
 	}
 

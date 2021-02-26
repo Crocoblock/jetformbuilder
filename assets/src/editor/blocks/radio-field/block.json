@@ -1,8 +1,78 @@
 {
 	"apiVersion": 2,
-	"name": "jet-form-builder/radio-field",
-	"title": "Radio field",
+	"name": "jet-forms/radio-field",
 	"attributes": {
-		"checkbox-field": "inherit"
+		"field_options_from": {
+			"type": "string",
+			"default": "manual_input"
+		},
+		"field_options": {
+			"type": "array",
+			"default": []
+		},
+		"field_options_post_type": {
+			"type": "string",
+			"default": "post"
+		},
+		"field_options_tax": {
+			"type": "string",
+			"default": "category"
+		},
+		"field_options_key": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_function": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_field": {
+			"type": "string",
+			"default": ""
+		},
+		"calculated_value_from_key": {
+			"type": "string",
+			"default": ""
+		},
+		"value_from_key": {
+			"type": "string",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"name": {
+			"type": "string",
+			"default": "field_name"
+		},
+		"desc": {
+			"type": "string",
+			"default": ""
+		},
+		"default": {
+			"type": "string",
+			"default": ""
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"add_prev": {
+			"type": "boolean",
+			"default": false
+		},
+		"prev_label": {
+			"type": "string",
+			"default": ""
+		},
+		"visibility": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
+		}
 	}
 }

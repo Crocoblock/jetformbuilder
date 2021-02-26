@@ -61,7 +61,7 @@ export default function FormBreakEdit( props ) {
 				{ ...props }
 			/>
 		</InspectorControls>,
-		<div { ...blockProps }>
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<div className={ 'jet-form-builder__next-page-wrap' }>
 				<Button
 					isSecondary

@@ -1,40 +1,25 @@
 
-
-import FromTermsFields from "../../components/base-select-check-radio/from-terms-fields";
-import FromPostsFields from "../../components/base-select-check-radio/from-posts-fields";
 import FromGeneratorsFields from "../../components/base-select-check-radio/from-generators-fields";
 import FromManualFields from "../../components/base-select-check-radio/from-manual-fields";
 import { SelectRadioCheckPlaceholder } from "../../components/select-radio-check-placeholder";
 import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
+import { listFrom } from "../select-radio-chekc-options";
+import FromPostTermsFields from "../../components/base-select-check-radio/from-post-terms-fields";
 
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
-	BlockControls,
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
-	TextareaControl,
 	SelectControl,
-	ToggleControl,
-	PanelBody,
-	Button,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
 } = wp.components;
 
+const localized = window.JetFormCheckboxFieldData;
 
 export default function CheckboxEdit( props ) {
 
@@ -47,7 +32,7 @@ export default function CheckboxEdit( props ) {
 		editProps: { uniqKey }
 	} = props;
 
-	const localized = window.JetFormCheckboxFieldData;
+	const { field_options_from } = attributes;
 
 	return [
 		<ToolBarFields
@@ -72,31 +57,22 @@ export default function CheckboxEdit( props ) {
 					key='field_options_from'
 					label='Fill Options From'
 					labelPosition='top'
-					value={ attributes.field_options_from }
+					value={ field_options_from }
 					onChange={ ( newValue ) => {
 						setAttributes( { field_options_from: newValue } );
 					} }
-					options={ localized.options_from }
+					options={ listFrom }
 				/>
-				{ 'manual_input' === attributes.field_options_from && <FromManualFields
+				{ 'manual_input' === field_options_from && <FromManualFields
 					key='from_manual'
 					attributes={ attributes }
 					parentProps={ props }
 				/> }
-				{ 'posts' === attributes.field_options_from && <FromPostsFields
-					key='form_posts'
-					attributes={ attributes }
-					parentProps={ props }
-					localizeData={ localized }
+				{ ['posts', 'terms'].includes( field_options_from ) && <FromPostTermsFields
+					key='form_posts_terms'
+					{ ...props }
 				/> }
-				{ 'terms' === attributes.field_options_from && <FromTermsFields
-					key='form_terms'
-					attributes={ attributes }
-					parentProps={ props }
-					localizeData={ localized }
-				/> }
-
-				{ 'meta_field' === attributes.field_options_from && <TextControl
+				{ 'meta_field' === field_options_from && <TextControl
 					key='field_options_key'
 					label='Meta field to get value from'
 					value={ attributes.field_options_key }
@@ -105,7 +81,7 @@ export default function CheckboxEdit( props ) {
 					} }
 				/> }
 
-				{ 'generate' === attributes.field_options_from && <FromGeneratorsFields
+				{ 'generate' === field_options_from && <FromGeneratorsFields
 					key='form_generators'
 					attributes={ attributes }
 					parentProps={ props }

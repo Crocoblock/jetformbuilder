@@ -1,35 +1,17 @@
 import FieldWrapper from "../../components/field-wrapper";
+import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
 
-const block = 'jet-forms/number-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
 	BlockControls,
 	InspectorControls,
+	useBlockProps
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	ToggleControl,
 	PanelBody,
-	Button,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
-	BaseControl,
 	__experimentalInputControl,
 	__experimentalNumberControl,
 } = wp.components;
@@ -44,98 +26,78 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
-const uniqKey = suffix => `${ block }-${ suffix }`;
+export default function NumberEdit( props ) {
+	const blockProps = useBlockProps();
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.element.Component {
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+	const {
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey }
+	} = props;
 
-		const changeNumberValue = ( key, newValue ) => {
-			props.setAttributes( { [ key ]: newValue ? parseInt( newValue ) : null } );
-		}
+	const changeNumberValue = ( key, newValue ) => {
+		props.setAttributes( { [ key ]: newValue ? parseInt( newValue ) : '' } );
+	}
 
-
-		return [
-			hasToolbar && (
-				<BlockControls key={ uniqKey( 'BlockControls' ) }>
-					<JetFormToolbar
-						key={ uniqKey( 'JetFormToolbar' ) }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.toolbar[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/>
-				</BlockControls>
-			),
-			props.isSelected && (
-				<InspectorControls
-					key={ uniqKey( 'InspectorControls' ) }
+	return [
+		<ToolBarFields
+			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
+		/>,
+		isSelected && (
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
+			>
+				<GeneralFields
+					key={ uniqKey( 'GeneralFields' ) }
+					{ ...props }
+				/>
+				<PanelBody
+					key={ uniqKey( 'PanelBody' ) }
+					title={ __( 'Field Settings' ) }
 				>
-					{ window.jetFormBuilderControls.general[ block ] && window.jetFormBuilderControls.general[ block ].length &&
-					<JetFormGeneral
-						key={ uniqKey( 'JetFormGeneral' ) }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.general[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-					<PanelBody
-						title={ __( 'Field Settings' ) }
-						key={ uniqKey( 'PanelBody' ) }
-					>
-
-						<NumberControl
-							label={ __( 'Min Value' ) }
-							labelPosition='top'
-							key='min'
-							value={ attributes.min }
-							onChange={ newValue => changeNumberValue( 'min', newValue ) }
-						/>
-						<NumberControl
-							label={ __( 'Max Value' ) }
-							labelPosition='top'
-							key='max'
-							value={ attributes.max }
-							onChange={ newValue => changeNumberValue( 'max', newValue ) }
-						/>
-						<NumberControl
-							label={ __( 'Step' ) }
-							labelPosition='top'
-							key='step'
-							value={ attributes.step }
-							onChange={ newValue => changeNumberValue( 'step', newValue ) }
-						/>
-
-
-					</PanelBody>
-					{ window.jetFormBuilderControls.advanced[ block ] && window.jetFormBuilderControls.advanced[ block ].length &&
-					<JetFormAdvanced
-						key={ uniqKey( 'JetFormAdvanced' ) }
-						values={ attributes }
-						controls={ window.jetFormBuilderControls.advanced[ block ] }
-						onChange={ ( newValues ) => {
-							props.setAttributes( newValues );
-						} }
-					/> }
-				</InspectorControls>
-			),
+					<NumberControl
+						label={ __( 'Min Value' ) }
+						labelPosition='top'
+						key='min'
+						value={ attributes.min }
+						onChange={ newValue => changeNumberValue( 'min', newValue ) }
+					/>
+					<NumberControl
+						label={ __( 'Max Value' ) }
+						labelPosition='top'
+						key='max'
+						value={ attributes.max }
+						onChange={ newValue => changeNumberValue( 'max', newValue ) }
+					/>
+					<NumberControl
+						label={ __( 'Step' ) }
+						labelPosition='top'
+						key='step'
+						value={ attributes.step }
+						onChange={ newValue => changeNumberValue( 'step', newValue ) }
+					/>
+				</PanelBody>
+				<AdvancedFields
+					key={ uniqKey( 'AdvancedFields' ) }
+					{ ...props }
+				/>
+			</InspectorControls>
+		),
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				block={ block }
-				attributes={ attributes }
+				{ ...props }
 			>
 				<NumberControl
 					placeholder={ attributes.placeholder }
-					key={ `place_holder_block_${ block }_control` }
+					key={ uniqKey( 'place_holder_block' ) }
 					min={ attributes.min || 0 }
 					max={ attributes.max || 1000 }
 					step={ attributes.step || 1 }
 				/>
 			</FieldWrapper>
-		];
-	}
+		</div>
+	];
 }

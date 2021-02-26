@@ -25,7 +25,7 @@ export default function HeadingEdit( props ) {
 				{ ...props }
 			/>
 		</InspectorControls>,
-		<div { ...blockProps }>
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				valueIfEmptyLabel={ 'Heading' }

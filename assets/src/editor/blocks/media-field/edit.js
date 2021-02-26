@@ -1,7 +1,6 @@
-import Tools from "../../helpers/tools";
 import FieldWrapper from '../../components/field-wrapper';
 import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
-import { userAccess, valueFormats, mimeTypes } from "./options";
+import { userAccess, valueFormats } from "./options";
 
 const { __ } = wp.i18n;
 
@@ -30,8 +29,6 @@ if ( typeof InputControl === 'undefined' ) {
 
 
 const localizeData = window.jetFormMediaFieldData;
-
-console.error( mimeTypes );
 
 export default function MediaEdit( props ) {
 
@@ -131,7 +128,7 @@ export default function MediaEdit( props ) {
 				/>
 			</InspectorControls>
 		),
-		<div { ...blockProps }>
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }

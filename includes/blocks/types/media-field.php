@@ -47,27 +47,6 @@ class Media_Field extends Base {
 	public function block_data( $editor, $handle ) {
 		wp_localize_script( $handle, 'jetFormMediaFieldData', array(
 			'mime_types'  => Tools::get_allowed_mimes_list_for_js(),
-
-
-			'help_messages' => array(
-				'insert_attachment' => __(
-					'If checked new attachment will be inserted for uploaded file. Note: work only for logged-in users!',
-					'jet-form-builder'
-				),
-				'max_files'         => __(
-					'If not set allow to upload 1 file',
-					'jet-form-builder'
-				),
-				'max_size'          => __(
-					'Mb',
-					'jet-form-builder'
-				),
-				'allowed_mimes'     => __(
-					'If no MIME type selected will allow all types.
-                    Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.',
-					'jet-form-builder'
-				)
-			),
 		) );
 	}
 

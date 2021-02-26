@@ -4,52 +4,28 @@ import FromGeneratorsFields from "../../components/base-select-check-radio/from-
 import FromManualFields from "../../components/base-select-check-radio/from-manual-fields";
 import { SelectRadioCheckPlaceholder } from "../../components/select-radio-check-placeholder";
 
-const block = 'jet-forms/radio-field';
-
-window.jetFormBuilderBlockCallbacks = window.jetFormBuilderBlockCallbacks || {};
-window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbacks[ block ] || {};
-
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
 	BlockControls,
 	InspectorControls,
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
-	TextareaControl,
 	SelectControl,
-	ToggleControl,
-	PanelBody,
-	RadioControl,
-	Button,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
 } = wp.components;
 
-const uniqKey = suffix => `${ block }-${ suffix }`;
+const local = window.JetFormRadioFieldData;
 
-window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.element.Component {
+export default function RadioEdit( props ) {
 
-	constructor( props ) {
-		super( props );
-
-		this.data = window.JetFormRadioFieldData;
-	}
-
-	render() {
-		const props = this.props;
-		const attributes = props.attributes;
-		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
+		const {
+			attributes,
+			setAttributes,
+			editProps: { uniqKey }
+		} = props;
 
 		return [
 			hasToolbar && (
@@ -144,5 +120,4 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class RadioEdit extends wp.e
 				/>
 			</React.Fragment>
 		];
-	}
 }

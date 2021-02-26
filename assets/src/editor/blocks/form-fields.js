@@ -1,7 +1,6 @@
 /*import * as text from './text-field';
 import * as select from './select-field';
 import * as radio from './radio-field';
-import * as number from './number-field';
 import * as time from './time-field';
 import * as wysiwyg from './wysiwyg-field';
 import * as range from './range-field';
@@ -19,6 +18,7 @@ import * as groupBreak from './group-break-field';
 import * as heading from './heading-field';
 import * as hidden from './hidden-field';
 import * as media from './media-field';
+import * as number from './number-field';
 
 import * as wrappers from "./block-wrappers";
 import { jfbHooks } from "../helpers/hooks-helper";
@@ -38,12 +38,12 @@ const fields = jfbHooks.applyFilters( 'jet.fb.register.fields', [
 	heading,
 	hidden,
 	media,
+	number,
 
 	/*
 	text,
 	select,
 	radio,
-	number,
 	time,
 	wysiwyg,
 	range,

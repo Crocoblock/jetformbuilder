@@ -7,7 +7,7 @@ $fullwidth = ' content-fullwidth';
 
 ?>
 <?php if ( $label || $desc ) : ?>
-<div class="jet-form-col__start"><?php
+<div class="jet-form-builder-col__start"><?php
 
 	echo $label;
 	echo $desc;
@@ -17,7 +17,7 @@ $fullwidth = ' content-fullwidth';
 
 ?></div>
 <?php endif; ?>
-<div class="jet-form-col__end<?php echo $fullwidth; ?>"><?php
+<div class="jet-form-builder-col__end<?php echo $fullwidth; ?>"><?php
 	if ( $template ) {
 		if ( is_readable( $template ) ) {
 			include $template;

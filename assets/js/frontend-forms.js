@@ -1342,7 +1342,7 @@
 		clearFieldErrors: function ( formID ) {
 			var $this = $( this );
 
-			$this.closest( '.jet-form-col' ).find( '.jet-form-builder__field-error' ).remove();
+			$this.closest( '.jet-form-builder-col' ).find( '.jet-form-builder__field-error' ).remove();
 
 			$( '.jet-form-builder__field.field-has-error' ).each( ( index, elem ) => {
 				$( elem ).removeClass( 'field-has-error' );

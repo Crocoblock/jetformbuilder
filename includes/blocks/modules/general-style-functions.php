@@ -27,10 +27,10 @@ trait General_Style_Functions {
 		return isset( $styles[ $id ] ) ? $styles[ $id ] : array();
 	}
 
-	public function selector( $selector, $prefix_base = '', $additional = '' ) {
+	public function selector( $selector = '', $prefix_base = '', $additional = '' ) {
 		$base = $prefix_base . ".$this->namespace";
 
-		if ( isset( $this->css_scheme[ $selector ] ) ) {
+		if ( $selector && isset( $this->css_scheme[ $selector ] ) ) {
 			$selector = $this->css_scheme[ $selector ];
 		}
 

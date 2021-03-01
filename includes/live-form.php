@@ -116,10 +116,6 @@ class Live_Form {
 			}
 		}
 		if ( ! empty( $this->form_breaks ) ) {
-			if ( Tools::is_editor() ) {
-				$this->form_breaks[ -1 ] = array( 'label' => __( 'Previous Page' ) );
-				asort( $this->form_breaks );
-			}
 			$this->form_breaks[] = array( 'label' => __( 'Last Page' ) );
 		}
 	}

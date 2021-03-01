@@ -10,6 +10,7 @@ use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
+use function Crontrol\Schedule\delete;
 
 // If this file is called directly, abort.
 
@@ -217,6 +218,8 @@ class Form_Builder {
 
 		$form .= Live_Form::instance()->maybe_end_page( true );
 		$form .= $this->end_form();
+
+		Live_Form::clear();
 
 		if ( $echo ) {
 			echo $form;

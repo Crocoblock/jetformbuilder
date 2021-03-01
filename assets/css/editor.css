@@ -657,3 +657,9 @@ select.components-select-control__input.components-select-control__input.compone
     max-width: 100%;
 }
 
+.editor-styles-wrapper p.components-base-control__help {
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+

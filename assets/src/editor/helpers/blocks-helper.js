@@ -42,7 +42,6 @@ const getFormFieldsBlocks = ( exclude = [], placeholder = false ) => {
 }
 
 const getFieldsWithoutCurrent = ( placeholder = false ) => {
-	console.log( new Date().getTime() );
 
 	const skipFields = [ 'submit', 'form-break', 'heading', 'group-break' ];
 	const formFields = [];

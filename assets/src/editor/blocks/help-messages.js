@@ -8,6 +8,8 @@ const DATETIME = 'jet-forms/datetime-field';
 const RADIO = 'jet-forms/radio-field';
 const CHECKBOX = 'jet-forms/checkbox-field';
 const SELECT = 'jet-forms/select-field';
+const RANGE = 'jet-forms/range-field';
+const REPEATER = 'jet-forms/repeater-field';
 
 
 const messagesConfig = [
@@ -52,20 +54,33 @@ const messagesConfig = [
 		set meta field name to use its value as form field value` )
 	},
 	{
-		attribute: 'calc_value_from_meta',
+		attribute: 'calculated_value_from_key',
 		to: [ RADIO, CHECKBOX, SELECT ],
 		message: __( `Here you can set meta field name to use its value 
 		as calculated value for current form field` )
 	},
 	{
-		attribute: 'num_range',
+		attribute: 'generator_field',
 		to: [ RADIO, CHECKBOX, SELECT ],
-		message: __( `For Numbers range generator set field with max range value` )
+		message: __( `For Numbers range generator set field with max range value` ),
+		conditions: {
+			generator_function: 'num_range'
+		}
 	},
 	{
 		attribute: 'switch_on_change',
 		to: [ SELECT ],
 		message: __( `Check this to switch page to next on current value change` )
+	},
+	{
+		attribute: 'prefix_suffix',
+		to: [ RANGE ],
+		message: __( 'For space before or after text use: &nbsp;' )
+	},
+	{
+		attribute: 'calc_hidden',
+		to: [ REPEATER ],
+		message: __( 'Check this to hide calculated field' )
 	}
 ];
 
@@ -74,11 +89,25 @@ const getHelpInstance = block => {
 
 	messagesConfig.forEach( msg => {
 		if ( msg.to.includes( block.name ) && msg.message ) {
-			messages[ msg.attribute ] = msg.message;
+			messages[ msg.attribute ] = msg;
 		}
 	} );
 
-	return attribute => ( attribute in messages ) ? messages[ attribute ] : 'Undefined help';
+	return ( attribute, attributes = {} ) => {
+		if ( ! ( attribute in messages ) ) {
+			return 'Undefined help';
+		}
+		const item = messages[ attribute ];
+
+		if ( 'conditions' in item ) {
+			for ( const attrName in item.conditions ) {
+				if ( ! ( attrName in attributes ) || item.conditions[ attrName ] !== attributes[ attrName ] ) {
+					return;
+				}
+			}
+		}
+		return item.message;
+	}
 };
 
 export { getHelpInstance };

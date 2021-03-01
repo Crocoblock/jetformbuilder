@@ -133,7 +133,7 @@ function RepeaterWithState( {
 
 	const toggleVisible = ( index ) => {
 		setItemsData( prev => {
-			prev[ index ].__visible = ! prev[ index ].__visible;
+			prev[ index ].__visible = ! ( prev[ index ].__visible );
 			return [...prev];
 		} );
 	}
@@ -143,11 +143,11 @@ function RepeaterWithState( {
 			const cloneItems = [...itemsData];
 
 			if ( onSaveItems ) {
-				cloneItems.forEach( item => {
+				cloneItems.forEach( ( item, index ) => {
 
 					for ( const itemKey in item ) {
 						if ( itemKey.startsWith( '__' ) ) {
-							delete item[ itemKey ];
+							delete cloneItems[ index ][ itemKey ];
 						}
 					}
 				} );

@@ -114,7 +114,7 @@ function AdvancedFields( props ) {
 
 function ToolBarFields( props ) {
 
-	const { editProps: { uniqKey } } = props;
+	const { editProps: { uniqKey }, children = [] } = props;
 
 	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
 		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
@@ -128,6 +128,7 @@ function ToolBarFields( props ) {
 					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }
 					{ ...props }
 				/>
+				{ children }
 			</Flex>
 		</ToolbarGroup>
 	</BlockControls>;

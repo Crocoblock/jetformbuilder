@@ -65,8 +65,7 @@ export default function CheckboxEdit( props ) {
 				/>
 				{ 'manual_input' === field_options_from && <FromManualFields
 					key='from_manual'
-					attributes={ attributes }
-					parentProps={ props }
+					{ ...props }
 				/> }
 				{ ['posts', 'terms'].includes( field_options_from ) && <FromPostTermsFields
 					key='form_posts_terms'
@@ -80,12 +79,9 @@ export default function CheckboxEdit( props ) {
 						setAttributes( { field_options_key: newValue } );
 					} }
 				/> }
-
 				{ 'generate' === field_options_from && <FromGeneratorsFields
 					key='form_generators'
-					attributes={ attributes }
-					parentProps={ props }
-					localizeData={ localized }
+					{ ...props }
 				/> }
 			</div> }
 			<SelectRadioCheckPlaceholder

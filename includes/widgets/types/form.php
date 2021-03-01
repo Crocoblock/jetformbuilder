@@ -172,10 +172,6 @@ class Form extends Widget_Base {
 			array(
 				'label'        => __( 'Enable form pages progress', 'jet-form-builder' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'jet-form-builder' ),
-				'label_off'    => __( 'No', 'jet-form-builder' ),
-				'return_value' => true,
-				'default'      => false,
 				'condition'    => array( 'form_provider' => $this->jet_form_builder_slug() )
 			)
 		);

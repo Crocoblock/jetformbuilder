@@ -19,14 +19,6 @@
     overflow: hidden;
 }
 
-.jet-form-builder-row:last-child {
-    padding-bottom: 0;
-}
-
-.jet-form-builder-row--first-visible {
-    padding-top: 0 !important
-}
-
 .jet-form-builder-row.jet-form-builder-row--hidden {
     margin: 0 !important;
     padding: 0 !important

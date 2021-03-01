@@ -86,11 +86,11 @@ class Form extends Widget_Base {
 	}
 
 	public function get_icon() {
-		return 'jet-engine-icon-forms';
+		return 'jet-form-builder-icon--form';
 	}
 
 	public function get_categories() {
-		return array( 'jet-listing-elements' );
+		return array( 'jet-form-builder' );
 	}
 
 	private function jet_form_builder_slug() {

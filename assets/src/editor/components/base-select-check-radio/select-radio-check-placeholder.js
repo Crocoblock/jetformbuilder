@@ -1,4 +1,4 @@
-import FieldWrapper from './field-wrapper';
+import FieldWrapper from '../field-wrapper';
 
 const {
 	CheckboxControl,
@@ -127,22 +127,24 @@ export function SelectRadioCheckPlaceholder( props ) {
 				return getCheckbox( checkLabel, index )
 			} );
 
-		} else if ( blockName.includes( 'select' ) ) {
+		}
+		else if ( blockName.includes( 'select' ) ) {
 			if ( label ) {
 				return getSelect( {
 					attributes,
-					options: [{ label }]
+					options: [ { label } ]
 				} );
 			}
 			return getSelect( {
 				attributes,
 				options: attributes.field_options
 			} );
-		} else if ( blockName.includes( 'radio' ) ) {
+		}
+		else if ( blockName.includes( 'radio' ) ) {
 			if ( label ) {
 				return getRadio( {
 					attributes,
-					options: [{ label }]
+					options: [ { label } ]
 				} );
 			}
 			return getRadio( {

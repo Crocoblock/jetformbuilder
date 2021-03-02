@@ -1,7 +1,13 @@
-import { gatewayAttr, renderGateway } from "../helpers/gateway-helper";
+import {
+	gatewayAttr,
+	renderGateway
+} from "../helpers/gateway-helper";
 import Tools, { event } from "../helpers/tools";
 import gatewayActionAttributes from "./gateway-action-attrubites";
-import { actionByTypeList, fromLocalizeHelper } from "../helpers/action-helper";
+import {
+	actionByTypeList,
+	fromLocalizeHelper
+} from "../helpers/action-helper";
 import PayPal from "./paypal";
 import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
@@ -44,7 +50,7 @@ export default function GatewaysEditor( {
 	const gatewaysData = gatewayAttr();
 	const label = gatewayAttr( 'labels' );
 
-	const [gateway, setGateway] = useState( gatewaysArgs );
+	const [ gateway, setGateway ] = useState( gatewaysArgs );
 
 	const formFields = getFormFieldsBlocks();
 
@@ -118,12 +124,12 @@ export default function GatewaysEditor( {
 		if ( true === isSaveAction ) {
 			if ( onSaveItems ) {
 
-				['notifications_before', 'notifications_failed', 'notifications_success'].forEach( name => {
+				[ 'notifications_before', 'notifications_failed', 'notifications_success' ].forEach( name => {
 					if ( ! gateway[ name ] ) {
 						gateway[ name ] = {};
 						return;
 					}
-					Object.entries( gateway[ name ] ).forEach( ( [action, isChecked] ) => {
+					Object.entries( gateway[ name ] ).forEach( ( [ action, isChecked ] ) => {
 						if ( ! isChecked ) {
 							delete gateway[ name ][ action ];
 						}
@@ -133,10 +139,11 @@ export default function GatewaysEditor( {
 				onSaveItems( gateway );
 			}
 			onUnMount();
-		} else if ( false === isSaveAction ) {
+		}
+		else if ( false === isSaveAction ) {
 			onUnMount();
 		}
-	}, [isSaveAction] );
+	}, [ isSaveAction ] );
 
 	const actionsList = actionByTypeList( 'insert_post', true );
 	const actionLabel = fromLocalizeHelper( 'getActionLabel' );

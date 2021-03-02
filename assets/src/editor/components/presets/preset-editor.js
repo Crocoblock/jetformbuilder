@@ -22,7 +22,8 @@ function withPreset( WrappedComponent ) {
 
 			if ( 'object' === typeof props.value ) {
 				val = { ...props.value };
-			} else if ( props.value && 'string' === typeof props.value ) {
+			}
+			else if ( props.value && 'string' === typeof props.value ) {
 				try {
 					val = JSON.parse( props.value );
 					if ( 'number' === typeof val ) {
@@ -76,9 +77,11 @@ function withPreset( WrappedComponent ) {
 
 			if ( data.parent_condition && ! data.condition ) {
 				return currentState[ data.parent_condition.field ] === data.parent_condition.value;
-			} else if ( data.parent_condition && data.condition ) {
+			}
+			else if ( data.parent_condition && data.condition ) {
 				return currentState[ 'current_field_' + data.condition.field ] === data.condition.value && currentState[ data.parent_condition.field ] === data.parent_condition.value;
-			} else if ( ! data.parent_condition && data.condition ) {
+			}
+			else if ( ! data.parent_condition && data.condition ) {
 				return currentState[ 'current_field_' + data.condition.field ] === data.condition.value;
 			}
 
@@ -93,16 +96,20 @@ function withPreset( WrappedComponent ) {
 
 			if ( data.parent_condition && ! data.condition ) {
 				return currentState[ data.parent_condition.field ] === data.parent_condition.value;
-			} else if ( data.parent_condition && data.condition ) {
+			}
+			else if ( data.parent_condition && data.condition ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
-				} else {
+				}
+				else {
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value && currentState[ data.parent_condition.field ] === data.parent_condition.value;
 				}
-			} else if ( ! data.parent_condition && data.condition ) {
+			}
+			else if ( ! data.parent_condition && data.condition ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
-				} else {
+				}
+				else {
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value;
 				}
 			}

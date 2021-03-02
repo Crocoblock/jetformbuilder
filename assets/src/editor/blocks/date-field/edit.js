@@ -1,7 +1,10 @@
-
 import Tools from "../../helpers/tools";
 import FieldWrapper from '../../components/field-wrapper';
-import { ToolBarFields, GeneralFields, AdvancedFields } from "../controls/field-control";
+import {
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields
+} from "../controls/field-control";
 
 const { __ } = wp.i18n;
 

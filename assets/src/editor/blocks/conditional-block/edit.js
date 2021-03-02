@@ -3,7 +3,10 @@ import ActionModal from "../../components/actions/action-modal";
 import RepeaterWithState from "../../components/repeater-with-state";
 import FieldWithPreset from "../../components/field-with-preset";
 import DynamicPreset from "../../components/presets/dynamic-preset";
-import { getFormFieldsBlocks, getInnerBlocks } from "../../helpers/blocks-helper";
+import {
+	getFormFieldsBlocks,
+	getInnerBlocks
+} from "../../helpers/blocks-helper";
 
 const { __ } = wp.i18n;
 

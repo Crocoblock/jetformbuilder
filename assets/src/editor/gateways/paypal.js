@@ -12,9 +12,9 @@ const {
 const label = gatewayLabel( 'paypal' );
 
 export default function PayPal( {
-					 setValueInObject,
-					 getNotifications
-				 } ) {
+									setValueInObject,
+									getNotifications
+								} ) {
 
 	const setSetting = ( key, value ) => {
 		setValueInObject( 'paypal', key, value );

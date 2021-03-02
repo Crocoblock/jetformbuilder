@@ -30,7 +30,7 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 	}
 
 	validateActiveCampaignData() {
-		this.setState( { className: ['loading'] } );
+		this.setState( { className: [ 'loading' ] } );
 		this.getActiveCampaignData( true );
 	}
 
@@ -44,32 +44,33 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 
 		jQuery.getJSON( url )
-			.success( function ( data ) {
-				if ( undefined !== data.result_code && data.result_code ) {
+		.success( function ( data ) {
+			if ( undefined !== data.result_code && data.result_code ) {
 
-					for ( var prop in data ) {
-						if ( undefined === data[ prop ].id ) {
-							continue;
-						}
-						lists.push( {
-							value: data[ prop ].id,
-							label: data[ prop ].name
-						} );
+				for ( var prop in data ) {
+					if ( undefined === data[ prop ].id ) {
+						continue;
 					}
-
-					self.onChangeSetting( lists, 'data' );
-					self.onChangeSetting( true, 'isValidAPI' );
-					self.setState( { className: ['is-valid'] } );
-
-				} else {
-					self.onChangeSetting( false, 'isValidAPI' );
-					self.setState( { className: ['is-invalid'] } );
+					lists.push( {
+						value: data[ prop ].id,
+						label: data[ prop ].name
+					} );
 				}
-			} )
-			.error( function () {
+
+				self.onChangeSetting( lists, 'data' );
+				self.onChangeSetting( true, 'isValidAPI' );
+				self.setState( { className: [ 'is-valid' ] } );
+
+			}
+			else {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.setState( { className: ['is-invalid'] } );
-			} );
+				self.setState( { className: [ 'is-invalid' ] } );
+			}
+		} )
+		.error( function () {
+			self.onChangeSetting( false, 'isValidAPI' );
+			self.setState( { className: [ 'is-invalid' ] } );
+		} );
 	}
 
 	getLists() {
@@ -90,11 +91,11 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [value, label] ) => {
+		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
 			return { value, label };
 		} );
 
-		return isNeedPlaceholder ? [placeholder, ...options] : options;
+		return isNeedPlaceholder ? [ placeholder, ...options ] : options;
 	}
 
 
@@ -169,7 +170,7 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 				>
 					<div className='jet-user-meta-rows'>
 						{ Object.entries( source.activecampaign_fields ).map(
-							( [fieldName, fieldLabel], index ) => <div
+							( [ fieldName, fieldLabel ], index ) => <div
 								className="jet-user-meta__row"
 								key={ 'user_meta_' + fieldName + index }
 							>

@@ -1,6 +1,13 @@
 import FieldWrapper from '../../components/field-wrapper';
-import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
-import { userAccess, valueFormats } from "./options";
+import {
+	AdvancedFields,
+	GeneralFields,
+	ToolBarFields
+} from "../controls/field-control";
+import {
+	userAccess,
+	valueFormats
+} from "./options";
 
 const { __ } = wp.i18n;
 

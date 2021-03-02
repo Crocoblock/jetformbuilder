@@ -1,7 +1,18 @@
 import Tools from "../../helpers/tools";
-import { getAvailableFields, getFieldsWithoutCurrent, getFormFieldsBlocks } from "../../helpers/blocks-helper";
-import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
-import { calcType, manageItemsCount } from "./options";
+import {
+	getAvailableFields,
+	getFieldsWithoutCurrent,
+	getFormFieldsBlocks
+} from "../../helpers/blocks-helper";
+import {
+	AdvancedFields,
+	GeneralFields,
+	ToolBarFields
+} from "../controls/field-control";
+import {
+	calcType,
+	manageItemsCount
+} from "./options";
 
 const { __ } = wp.i18n;
 
@@ -50,7 +61,6 @@ export default function RepeaterEdit( props ) {
 	} = props;
 
 	const formFields = getFieldsWithoutCurrent();
-	console.log( formFields );
 
 	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	const label = Tools.getLabel( meta, attributes );
@@ -194,7 +204,8 @@ export default function RepeaterEdit( props ) {
 			<Button
 				className={ 'jet-form-builder-repeater__remove' }
 				isSecondary
-				onClick={ () => {} }
+				onClick={ () => {
+				} }
 			>&times;</Button>
 			<div style={ { width: '100%', height: '0.7em' } }/>
 			<div className="jet-form-builder-repeater__actions">

@@ -10,6 +10,7 @@ const CHECKBOX = 'jet-forms/checkbox-field';
 const SELECT = 'jet-forms/select-field';
 const RANGE = 'jet-forms/range-field';
 const REPEATER = 'jet-forms/repeater-field';
+const TEXT = 'jet-forms/text-field';
 
 
 const messagesConfig = [
@@ -81,7 +82,18 @@ const messagesConfig = [
 		attribute: 'calc_hidden',
 		to: [ REPEATER ],
 		message: __( 'Check this to hide calculated field' )
-	}
+	},
+	{
+		attribute: 'input_mask_default',
+		to: [ TEXT ],
+		message: __( `Examples: (999) 999-9999 - static mask, 9-a{1,3}9{1,3} - mask with dynamic syntax 
+		Default masking definitions: 9 - numeric, a - alphabetical, * - alphanumeric` )
+	},
+	{
+		attribute: 'input_mask_datetime_link',
+		to: [ TEXT ],
+		message: __( `https://github.com/RobinHerbots/Inputmask/blob/5.x/README_date.md` )
+	},
 ];
 
 const getHelpInstance = block => {

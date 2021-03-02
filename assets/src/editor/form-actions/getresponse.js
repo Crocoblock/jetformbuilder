@@ -55,11 +55,11 @@ addAction( 'getresponse', class GetResponseAction extends IntegrationComponent {
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [value, label] ) => {
+		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
 			return { value, label };
 		} );
 
-		return isNeedPlaceholder ? [placeholder, ...options] : options;
+		return isNeedPlaceholder ? [ placeholder, ...options ] : options;
 	}
 
 	render() {
@@ -130,10 +130,10 @@ addAction( 'getresponse', class GetResponseAction extends IntegrationComponent {
 					key='getresponse_fields_map'
 				>
 					<div className='jet-user-fields-map__list'>
-						{ fields.map( ( [fieldName, fieldData], index ) => {
+						{ fields.map( ( [ fieldName, fieldData ], index ) => {
 
 							return <WrapperRequiredControl
-								field={ [fieldName, fieldData] }
+								field={ [ fieldName, fieldData ] }
 							>
 								<SelectControl
 									className="full-width"

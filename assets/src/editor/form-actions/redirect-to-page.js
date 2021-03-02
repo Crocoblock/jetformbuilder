@@ -40,7 +40,8 @@ addAction( 'redirect_to_page', class RedirectToPageAction extends wp.element.Com
 			const field_id = args_fields.indexOf( field_name );
 
 			args_fields.splice( field_id, 1 );
-		} else {
+		}
+		else {
 			args_fields.push( field_name );
 		}
 

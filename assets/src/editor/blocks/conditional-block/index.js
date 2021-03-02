@@ -21,4 +21,8 @@ const settings = {
 	useEditProps: [ 'uniqKey' ],
 };
 
-export { metadata, name, settings };
+export {
+	metadata,
+	name,
+	settings
+};

@@ -42,29 +42,30 @@ function RepeaterWithState( {
 								}
 							} ) {
 
-	const classNames = ['jet-form-builder__repeater-component', ...repeaterClasses].join( ' ' );
-	const itemClassNames = ['jet-form-builder__repeater-component-item', ...repeaterItemClasses].join( ' ' );
+	const classNames = [ 'jet-form-builder__repeater-component', ...repeaterClasses ].join( ' ' );
+	const itemClassNames = [ 'jet-form-builder__repeater-component-item', ...repeaterItemClasses ].join( ' ' );
 
 	const parsedItems = () => {
 		if ( items && items.length > 0 ) {
-			const cloneItems = [...items];
+			const cloneItems = [ ...items ];
 
 			cloneItems.forEach( item => {
 				item.__visible = false;
 			} );
 
 			return cloneItems;
-		} else {
-			return [{
+		}
+		else {
+			return [ {
 				...newItem,
 				__visible: true,
-			}];
+			} ];
 		}
 	}
 
-	const [itemsData, setItemsData] = useState( () => parsedItems() );
+	const [ itemsData, setItemsData ] = useState( () => parsedItems() );
 
-	const [isSafeDeleting, setSafeDeleting] = useState( true );
+	const [ isSafeDeleting, setSafeDeleting ] = useState( true );
 
 	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
@@ -72,7 +73,7 @@ function RepeaterWithState( {
 				...prev[ index ],
 				...valueToSet,
 			};
-			return [...prev];
+			return [ ...prev ];
 		} );
 	};
 
@@ -89,7 +90,7 @@ function RepeaterWithState( {
 		}
 
 		setItemsData( prev => {
-			const clonePrev = [...prev];
+			const clonePrev = [ ...prev ];
 			clonePrev.splice( index, 1 );
 
 			return clonePrev;
@@ -100,23 +101,23 @@ function RepeaterWithState( {
 		if ( onAddNewItem ) {
 			onAddNewItem( value, itemsData );
 		}
-		setItemsData( prev => [...prev, {
+		setItemsData( prev => [ ...prev, {
 			...value,
 			__visible: true,
-		}] );
+		} ] );
 	}
 
 	const cloneItem = ( index ) => {
 		setItemsData( prev => {
-			const [before, after] = [prev.slice( 0, index + 1 ), prev.slice( index + 1 )];
-			return [...before, lodash.assign( {}, prev[ index ] ), ...after];
+			const [ before, after ] = [ prev.slice( 0, index + 1 ), prev.slice( index + 1 ) ];
+			return [ ...before, lodash.assign( {}, prev[ index ] ), ...after ];
 		} );
 	}
 
 	const moveRepeaterItem = ( { oldIndex, newIndex } ) => {
 		setItemsData( prev => {
-			[prev[ newIndex ], prev[ oldIndex ]] = [prev[ oldIndex ], prev[ newIndex ]];
-			return [...prev];
+			[ prev[ newIndex ], prev[ oldIndex ] ] = [ prev[ oldIndex ], prev[ newIndex ] ];
+			return [ ...prev ];
 		} );
 	}
 
@@ -134,13 +135,13 @@ function RepeaterWithState( {
 	const toggleVisible = ( index ) => {
 		setItemsData( prev => {
 			prev[ index ].__visible = ! ( prev[ index ].__visible );
-			return [...prev];
+			return [ ...prev ];
 		} );
 	}
 
 	useEffect( () => {
 		if ( true === isSaveAction ) {
-			const cloneItems = [...itemsData];
+			const cloneItems = [ ...itemsData ];
 
 			if ( onSaveItems ) {
 				cloneItems.forEach( ( item, index ) => {
@@ -155,10 +156,11 @@ function RepeaterWithState( {
 				onSaveItems( cloneItems );
 			}
 			onUnMount();
-		} else if ( false === isSaveAction ) {
+		}
+		else if ( false === isSaveAction ) {
 			onUnMount();
 		}
-	}, [isSaveAction] );
+	}, [ isSaveAction ] );
 
 	const getRepeaterItemId = index => `jet-form-builder-repeater__item_${ index }`;
 

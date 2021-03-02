@@ -51,7 +51,8 @@ class Tools {
 				if ( Tools.getFuncCondition( type.condition )()( type.value ) ) {
 					types.push( type );
 				}
-			} else {
+			}
+			else {
 				types.push( type );
 			}
 		} );

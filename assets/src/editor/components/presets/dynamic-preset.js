@@ -24,7 +24,7 @@ function DynamicPreset( {
 						} ) {
 
 	const position = 'dynamic';
-	const [stateValue, setValue] = useState( () => parseValue( value ) );
+	const [ stateValue, setValue ] = useState( () => parseValue( value ) );
 
 	const onChangeValue = ( newValue, name ) => {
 		setValue( prev => ( { ...prev, [ name ]: newValue } ) );
@@ -37,10 +37,11 @@ function DynamicPreset( {
 			}
 			onUnMount();
 
-		} else if ( false === isSaveAction ) {
+		}
+		else if ( false === isSaveAction ) {
 			onUnMount();
 		}
-	}, [isSaveAction] );
+	}, [ isSaveAction ] );
 
 	return <>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField

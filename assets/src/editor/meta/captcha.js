@@ -33,7 +33,7 @@ function Captcha() {
 			editPost
 		} = useDispatch( 'core/editor' );
 
-		const [args, setArgs] = useState( JSON.parse( meta._jf_recaptcha || '{}' ) );
+		const [ args, setArgs ] = useState( JSON.parse( meta._jf_recaptcha || '{}' ) );
 
 		useEffect( () => {
 

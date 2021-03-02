@@ -75,7 +75,8 @@ class JetFieldsMapControl extends wp.element.Component {
 
 		if ( this.termsProp === fieldType || this.metaProp === fieldType ) {
 			return value;
-		} else {
+		}
+		else {
 			return '';
 		}
 
@@ -100,7 +101,8 @@ class JetFieldsMapControl extends wp.element.Component {
 
 		if ( value.includes( this.taxPrefix ) ) {
 			return this.termsProp;
-		} else {
+		}
+		else {
 			return this.metaProp;
 		}
 

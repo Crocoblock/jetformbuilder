@@ -8,7 +8,10 @@ const {
 	Button,
 } = wp.components;
 
-export const ActionFieldsMap = ( { fields = [], label = '[Empty label]', children = () => {} } ) => {
+export const ActionFieldsMap = ( {
+									 fields = [], label = '[Empty label]', children = () => {
+	}
+								 } ) => {
 
 	return <BaseControl
 		label={ label }

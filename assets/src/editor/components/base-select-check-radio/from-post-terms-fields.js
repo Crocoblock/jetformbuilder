@@ -29,7 +29,7 @@ function FromPostTermsFields( props ) {
 			key='calculated_value_from_key'
 			label={ __( 'Calculated value from meta field' ) }
 			value={ attributes.calculated_value_from_key }
-			help={ attrHelp( 'calc_value_from_meta' ) }
+			help={ attrHelp( 'calculated_value_from_key' ) }
 			onChange={ ( newValue ) => {
 				setAttributes( { calculated_value_from_key: newValue } );
 			} }

@@ -13,11 +13,15 @@ const {
 export const RequestButton = ( {
 								   label,
 								   ajaxArgs = {},
-								   onSuccessRequest = () => {},
-								   onFailRequest = () => {},
-								   onLoading = () => {},
+								   onSuccessRequest = () => {
+								   },
+								   onFailRequest = () => {
+								   },
+								   onLoading = () => {
+								   },
 								   className = '',
-								   children = () => {}
+								   children = () => {
+								   }
 							   } ) => {
 
 	const defaultValidate = () => {

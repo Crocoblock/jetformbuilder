@@ -59,9 +59,9 @@ function Gateways() {
 			gatewaysArgs: JSON.parse( meta._jf_gateways || '{}' ),
 		};
 
-		const [gateway, setGateway] = useState( gatewaysProps.gatewaysArgs.gateway );
+		const [ gateway, setGateway ] = useState( gatewaysProps.gatewaysArgs.gateway );
 
-		const [isEdit, setEdit] = useState( false );
+		const [ isEdit, setEdit ] = useState( false );
 
 		const closeModal = () => {
 			setEdit( false );
@@ -99,7 +99,7 @@ function Gateways() {
 
 		useEffect( () => {
 			saveGateway( gateway );
-		}, [gateway] );
+		}, [ gateway ] );
 
 		return (
 			<PluginDocumentSettingPanel
@@ -132,7 +132,7 @@ function Gateways() {
 				</> }
 				{ isEdit && (
 					<ActionModal
-						classNames={ ['width-60'] }
+						classNames={ [ 'width-60' ] }
 						onRequestClose={ closeModal }
 						title={ `Edit ${ getGatewayLabel( gateway ) } Settings` }
 					>

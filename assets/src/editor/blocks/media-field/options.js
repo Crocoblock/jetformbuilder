@@ -34,4 +34,7 @@ const valueFormats = Tools.withPlaceholder( [
 	}
 ] );
 
-export { userAccess, valueFormats };
+export {
+	userAccess,
+	valueFormats
+};

@@ -1,4 +1,3 @@
-
 const {
 	registerBlockType,
 } = wp.blocks;

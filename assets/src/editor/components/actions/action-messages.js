@@ -22,7 +22,7 @@ class ActionMessages extends wp.element.Component {
 		}
 		const messages = {};
 
-		Object.entries( this.props.source.__messages ).forEach( ( [type, data] ) => {
+		Object.entries( this.props.source.__messages ).forEach( ( [ type, data ] ) => {
 			messages[ type ] = data.value;
 		} )
 
@@ -72,18 +72,18 @@ class ActionMessages extends wp.element.Component {
 		>
 			<div className='jet-user-meta-rows'>
 				{ settings.messages && Object.entries( settings.messages )
-					.map( ( [type, data], id ) => <div
-							className="jet-user-meta__row"
-							key={ 'message_' + type + id }
-						>
-							<TextControl
-								key={ type + id }
-								label={ messages( type ).label }
-								value={ this.getMessage( type ) }
-								onChange={ newValue => onChangeMessage( newValue, type ) }
-							/>
-						</div>
-					) }
+				.map( ( [ type, data ], id ) => <div
+						className="jet-user-meta__row"
+						key={ 'message_' + type + id }
+					>
+						<TextControl
+							key={ type + id }
+							label={ messages( type ).label }
+							value={ this.getMessage( type ) }
+							onChange={ newValue => onChangeMessage( newValue, type ) }
+						/>
+					</div>
+				) }
 			</div>
 		</BaseControl>;
 	}

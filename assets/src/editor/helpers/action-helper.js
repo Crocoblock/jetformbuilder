@@ -4,7 +4,7 @@ import gatewayActionAttributes from "../gateways/gateway-action-attrubites";
 import { saveGlobalComponent } from "../components/manager";
 
 export const getActionsByType = type => {
-	const [actions] = useActions();
+	const [ actions ] = useActions();
 
 	return actions.filter( action => type === action.type );
 };

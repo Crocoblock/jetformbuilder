@@ -108,7 +108,8 @@ function ActionsMeta() {
 					var newAction = JSON.parse( JSON.stringify( action ) );
 					newAction[ key ] = value;
 					return newAction;
-				} else {
+				}
+				else {
 					return action;
 				}
 			} ) );

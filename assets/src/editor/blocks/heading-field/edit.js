@@ -1,5 +1,8 @@
 import FieldWrapper from "../../components/field-wrapper";
-import { AdvancedFields, GeneralFields } from "../controls/field-control";
+import {
+	AdvancedFields,
+	GeneralFields
+} from "../controls/field-control";
 
 const {
 	InspectorControls,

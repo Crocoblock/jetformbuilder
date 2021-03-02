@@ -5,7 +5,7 @@ import { getHelpInstance } from "./help-messages";
 const editProps = jfbHooks.applyFilters( 'jet.fb.register.editProps', [
 	{
 		name: 'uniqKey',
-		callable: block => ( suffix =>`${ block.name }/${ suffix }` )
+		callable: block => ( suffix => `${ block.name }/${ suffix }` )
 	},
 	{
 		name: 'blockName',

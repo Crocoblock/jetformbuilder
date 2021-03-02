@@ -13,12 +13,12 @@ export default class IntegrationComponent extends BaseActionComponent {
 		this.formFieldsList = getFormFieldsBlocks( [], '--' );
 
 		this.state = {
-			className: [this.getclassNameValidateButton()],
+			className: [ this.getclassNameValidateButton() ],
 		};
 	}
 
 	validateAPIKey() {
-		this.setState( { className: ['loading'] } );
+		this.setState( { className: [ 'loading' ] } );
 
 		this.getApiData();
 	}
@@ -45,15 +45,16 @@ export default class IntegrationComponent extends BaseActionComponent {
 					self.onChangeSetting( true, 'isValidAPI' );
 					self.onChangeSetting( response.data, 'data' );
 
-					self.setState( { className: ['is-valid'] } );
-				} else {
+					self.setState( { className: [ 'is-valid' ] } );
+				}
+				else {
 					self.onChangeSetting( false, 'isValidAPI' );
-					self.setState( { className: ['is-invalid'] } );
+					self.setState( { className: [ 'is-invalid' ] } );
 				}
 			},
 			error: function () {
 				self.onChangeSetting( false, 'isValidAPI' );
-				self.setState( { className: ['is-invalid'] } );
+				self.setState( { className: [ 'is-invalid' ] } );
 			}
 		} );
 
@@ -65,7 +66,8 @@ export default class IntegrationComponent extends BaseActionComponent {
 
 		if ( true === settings.isValidAPI ) {
 			return 'is-valid';
-		} else if ( false === settings.isValidAPI ) {
+		}
+		else if ( false === settings.isValidAPI ) {
 			return 'is-invalid';
 		}
 	}

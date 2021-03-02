@@ -62,11 +62,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [value, label] ) => {
+		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
 			return { value, label };
 		} );
 
-		return [placeholder, ...options];
+		return [ placeholder, ...options ];
 	}
 
 
@@ -153,7 +153,7 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					fields={ fields }
 				>
 					{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
-						field={ [fieldId, fieldData] }
+						field={ [ fieldId, fieldData ] }
 					>
 						<SelectControl
 							className="full-width"

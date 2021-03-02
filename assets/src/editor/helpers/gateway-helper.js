@@ -11,7 +11,7 @@ const {
 } = wp.data;
 
 export const getActionSettings = actionId => {
-	const [actions] = useActions();
+	const [ actions ] = useActions();
 	const action = actions.find( action => actionId === action.id );
 
 	return ( action && action.settings ) ? action.settings : false;

@@ -22,4 +22,7 @@ const manageItemsCount = [
 	}
 ];
 
-export { calcType, manageItemsCount };
+export {
+	calcType,
+	manageItemsCount
+};

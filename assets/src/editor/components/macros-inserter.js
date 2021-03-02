@@ -17,9 +17,10 @@ function MacrosInserter( {
 							 children,
 							 fields,
 							 onFieldClick,
-							 customMacros, } ) {
+							 customMacros,
+						 } ) {
 
-	const [showPopover, setPopoverState] = useState( () => false );
+	const [ showPopover, setPopoverState ] = useState( () => false );
 
 	return <div className="jet-form-editor__macros-inserter">
 		<Button

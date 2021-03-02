@@ -18,9 +18,9 @@ export default function ActionModal( {
 		useEffect
 	} = wp.element;
 
-	const modalClasses = ['jet-form-edit-modal', ...classNames].join( ' ' );
+	const modalClasses = [ 'jet-form-edit-modal', ...classNames ].join( ' ' );
 
-	const [actionClick, setActionClick] = useState( null );
+	const [ actionClick, setActionClick ] = useState( null );
 
 	const updateClick = () => {
 		if ( onUpdateClick ) {

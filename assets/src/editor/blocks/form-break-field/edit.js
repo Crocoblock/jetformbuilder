@@ -1,4 +1,7 @@
-import { AdvancedFields, GeneralFields } from "../controls/field-control";
+import {
+	AdvancedFields,
+	GeneralFields
+} from "../controls/field-control";
 
 const { __ } = wp.i18n;
 

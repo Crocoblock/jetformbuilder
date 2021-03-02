@@ -20,4 +20,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName' ],
 };
 
-export { metadata, name, settings };
+export {
+	metadata,
+	name,
+	settings
+};

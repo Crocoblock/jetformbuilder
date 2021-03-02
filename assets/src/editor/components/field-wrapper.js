@@ -6,7 +6,7 @@ export default function FieldWrapper( {
 										  children,
 										  wrapClasses = [],
 										  valueIfEmptyLabel = ''
-} ) {
+									  } ) {
 	const {
 		BaseControl,
 	} = wp.components;

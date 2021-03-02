@@ -7,8 +7,10 @@ export const ValidateButton = ( {
 									initialValid,
 									label,
 									ajaxArgs = {},
-									onValid = () => {},
-									onInvalid = () => {},
+									onValid = () => {
+									},
+									onInvalid = () => {
+									},
 								} ) => {
 
 	const [

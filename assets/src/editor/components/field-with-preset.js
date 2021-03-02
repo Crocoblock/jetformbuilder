@@ -25,7 +25,7 @@ function FieldWithPreset( {
 							  triggerClasses = [],
 						  } ) {
 
-	const [modalState, setModalState] = useState( false );
+	const [ modalState, setModalState ] = useState( false );
 
 	const changeModalState = () => {
 		setModalState( prev => ! prev );
@@ -48,7 +48,7 @@ function FieldWithPreset( {
 		{ modalState && (
 			<ActionModal
 				onRequestClose={ changeModalState }
-				classNames={ ['width-60'] }
+				classNames={ [ 'width-60' ] }
 				title={ 'Edit Preset' }
 			>
 				{ modalProps => <ModalEditor

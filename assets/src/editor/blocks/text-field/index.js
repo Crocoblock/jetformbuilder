@@ -1,9 +1,9 @@
-import CheckboxEdit from "./edit";
+import TextEdit from "./edit";
 import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 
-const { name, icon } = metadata;
+const { name, icon = '' } = metadata;
 
 /**
  * Available items for `useEditProps`:
@@ -13,10 +13,10 @@ const { name, icon } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Checkbox Field' ),
+	title: __( 'Text Field' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	edit: CheckboxEdit,
-	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
+	edit: TextEdit,
+	useEditProps: [ 'uniqKey', 'attrHelp' ],
 };
 
 export {

@@ -1,6 +1,12 @@
 import FieldWrapper from "../../components/field-wrapper";
-import { AdvancedFields, GeneralFields } from "../controls/field-control";
-import { getFieldsWithoutCurrent, getFormFieldsBlocks } from "../../helpers/blocks-helper";
+import {
+	AdvancedFields,
+	GeneralFields
+} from "../controls/field-control";
+import {
+	getFieldsWithoutCurrent,
+	getFormFieldsBlocks
+} from "../../helpers/blocks-helper";
 
 const block = 'jet-forms/calculated-field';
 

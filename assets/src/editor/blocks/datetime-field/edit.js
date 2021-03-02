@@ -1,5 +1,9 @@
 import FieldWrapper from '../../components/field-wrapper';
-import { AdvancedFields, GeneralFields, ToolBarFields } from "../controls/field-control";
+import {
+	AdvancedFields,
+	GeneralFields,
+	ToolBarFields
+} from "../controls/field-control";
 
 const { __ } = wp.i18n;
 
@@ -65,7 +69,8 @@ export default function DateTimeEdit( props ) {
 				{ ...props }
 			>
 				<TextControl
-					onChange={ () => {} }
+					onChange={ () => {
+					} }
 					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ 'Input type="datetime-local"' }
 				/>

@@ -1,5 +1,8 @@
 import JetFieldPlaceholder from '../controls/placeholder';
-import { AdvancedFields, GeneralFields } from "../controls/field-control";
+import {
+	AdvancedFields,
+	GeneralFields
+} from "../controls/field-control";
 import { hiddenValues } from "./options";
 
 const { __ } = wp.i18n;

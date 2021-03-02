@@ -6,7 +6,7 @@ export default function WrapperRequiredControl( {
 													labelKey = 'label',
 													requiredKey = 'required'
 												} ) {
-	const [name, data] = field;
+	const [ name, data ] = field;
 
 	return (
 		<div

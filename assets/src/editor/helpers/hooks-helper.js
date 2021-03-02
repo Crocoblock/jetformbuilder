@@ -25,7 +25,7 @@ export const useActions = ( withEditPostEffect = false ) => {
 		editPost
 	} = useDispatch( 'core/editor' );
 
-	const [actions, setActions] = useState( JSON.parse( meta._jf_actions || '[]' ) );
+	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
 
 	useEffect( () => {
 		if ( withEditPostEffect ) {
@@ -36,9 +36,9 @@ export const useActions = ( withEditPostEffect = false ) => {
 				} )
 			} );
 		}
-	}, [actions] );
+	}, [ actions ] );
 
-	return [actions, setActions];
+	return [ actions, setActions ];
 };
 
 export const useStateClasses = initialValid => {
@@ -49,16 +49,23 @@ export const useStateClasses = initialValid => {
 	const initStateClasses = () => {
 		if ( initialValid ) {
 			return [ ...initClasses, validClass ];
-		} else if( ! initialValid ) {
+		}
+		else if ( ! initialValid ) {
 			return [ ...initClasses, invalidClass ];
 		}
 	};
 
 	const [ classes, setClasses ] = useState( initStateClasses() );
 
-	const setValidClass = () => { setClasses( [ ...initClasses, validClass ] ) };
-	const setInvalidClass = () => { setClasses( [ ...initClasses, invalidClass ] ) };
-	const setLoadingClass = () => { setClasses( [ ...initClasses, 'loading' ] ) };
+	const setValidClass = () => {
+		setClasses( [ ...initClasses, validClass ] )
+	};
+	const setInvalidClass = () => {
+		setClasses( [ ...initClasses, invalidClass ] )
+	};
+	const setLoadingClass = () => {
+		setClasses( [ ...initClasses, 'loading' ] )
+	};
 
 	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
 }

@@ -43,7 +43,7 @@ function Messages() {
 			return defaults;
 		}
 
-		const [messages, setMessages] = useState( () => {
+		const [ messages, setMessages ] = useState( () => {
 			const metaMessages = JSON.parse( meta._jf_messages || '{}' );
 			return Tools.isEmptyObject( metaMessages ) ? getDefaultMessagesValues() : metaMessages;
 		} );
@@ -67,7 +67,7 @@ function Messages() {
 				name={ 'jf-messages' }
 				title={ 'General Messages Settings' }
 			>
-				{ Object.entries( messages ).map( ( [type, text], id ) => {
+				{ Object.entries( messages ).map( ( [ type, text ], id ) => {
 					return JetFormEditorData.messagesDefault[ type ] && <TextControl
 						key={ type + id }
 						label={ JetFormEditorData.messagesDefault[ type ].label }

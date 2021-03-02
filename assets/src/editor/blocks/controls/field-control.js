@@ -17,7 +17,12 @@ const {
 
 const { useEffect, useState } = wp.element;
 
-function FieldControl( { type, setAttributes, attributes } ) {
+function FieldControl( {
+						   type,
+						   setAttributes,
+						   attributes,
+						   attrsSettings = {},
+					   } ) {
 	const currentControl = controlsSettings[ type ];
 
 	const onChangeValue = ( value, key ) => {
@@ -25,7 +30,20 @@ function FieldControl( { type, setAttributes, attributes } ) {
 	};
 
 	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
-		if ( ( ! ( attrName in attributes ) ) || ( 'condition' in attr && ! attributes[ attr.condition ] ) ) {
+		if (
+			(
+				! ( attrName in attributes )
+			)
+			|| (
+				'condition' in attr
+				&& ! attributes[ attr.condition ]
+			)
+			|| (
+				attrName in attrsSettings
+				&& 'show' in attrsSettings[ attrName ]
+				&& false === attrsSettings[ attrName ].show
+			)
+		) {
 			return null;
 		}
 
@@ -134,4 +152,8 @@ function ToolBarFields( props ) {
 	</BlockControls>;
 }
 
-export { GeneralFields, ToolBarFields, AdvancedFields };
+export {
+	GeneralFields,
+	ToolBarFields,
+	AdvancedFields
+};

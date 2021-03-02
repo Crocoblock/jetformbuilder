@@ -35,4 +35,4 @@ ActionsMeta();
 PresetMeta();
 MessagesMeta();
 
-event('jet-form-builder-initialized')();
+event( 'jet-form-builder-initialized' )();

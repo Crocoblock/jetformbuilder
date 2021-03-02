@@ -1,7 +1,6 @@
 import JetFormToolbar from '../controls/toolbar';
 import JetFormGeneral from '../controls/general';
 import JetFormAdvanced from '../controls/advanced';
-import JetFieldPlaceholder from '../controls/placeholder';
 import Tools from "../../helpers/tools";
 import FieldWrapper from "../../components/field-wrapper";
 
@@ -13,11 +12,6 @@ window.jetFormBuilderBlockCallbacks[ block ] = window.jetFormBuilderBlockCallbac
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
 	BlockControls,
 	InspectorControls,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;

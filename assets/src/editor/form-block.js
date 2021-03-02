@@ -1,3 +1,9 @@
+import metadata from "./blocks/form-block/block.json"
+import {
+	fieldsLayout,
+	submitTypes
+} from "./blocks/form-block/options";
+
 const {
 	registerBlockType,
 } = wp.blocks;
@@ -5,18 +11,12 @@ const {
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	BlockControls,
 	InspectorControls,
+	useBlockProps
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	PanelBody,
-	Button,
-	ComboboxControl,
 	SelectControl,
 	TextControl,
 	ToggleControl
@@ -26,31 +26,20 @@ const {
 	serverSideRender: ServerSideRender
 } = wp;
 
-const { useState } = wp.element;
-
-const formBlock = window.jetFormBuilderBlocks ? window.jetFormBuilderBlocks[ 0 ] : false;
+const uniqKey = suffix => `${ metadata.name }/${ suffix }`;
 
 function FormEdit( { attributes, setAttributes, isSelected } ) {
-	this.name = 'jet-forms/form-block';
-
-	this.keyControls = function () {
-
-		return this.name + '-controls-edit';
-	};
-	this.keyGeneral = function () {
-
-		return this.name + '-general-edit';
-	};
 
 	const localize = window.JetFormData;
+	const blockProps = useBlockProps();
 
 	return [
 		isSelected && <InspectorControls
-			key={ this.keyControls() }
+			key={ uniqKey( 'InspectorControls' ) }
 		>
 			<PanelBody
 				title={ __( 'Form Settings' ) }
-				key={ this.keyGeneral() }
+				key={ uniqKey( 'PanelBody' ) }
 			>
 				<SelectControl
 					key='form_id'
@@ -66,7 +55,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 					<SelectControl
 						label={ 'Fields Layout' }
 						value={ attributes.fields_layout }
-						options={ localize.fields_layout }
+						options={ fieldsLayout }
 						onChange={ newValue => {
 							setAttributes( { fields_layout: newValue } );
 						} }
@@ -81,7 +70,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 					<SelectControl
 						label={ 'Submit Type' }
 						value={ attributes.submit_type }
-						options={ localize.submit_type }
+						options={ submitTypes }
 						onChange={ newValue => {
 							setAttributes( { submit_type: newValue } );
 						} }
@@ -97,29 +86,24 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 				</React.Fragment> }
 			</PanelBody>
 		</InspectorControls>,
-		<ServerSideRender
-			block={ formBlock.blockName }
-			attributes={ attributes }
-			httpMethod={ 'POST' }
-		/>
+		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
+			<ServerSideRender
+				block={ metadata.name }
+				attributes={ attributes }
+				httpMethod={ 'POST' }
+			/>
+		</div>
 	];
-
-}
-
-function FormSave( props ) {
-	return null;
 }
 
 registerBlockType(
-	formBlock.blockName, {
-
-		title: formBlock.title,
+	metadata.name,
+	{
+		title: __( 'JetForm' ),
 		category: 'layout',
-		icon: <span dangerouslySetInnerHTML={ { __html: formBlock.icon } }></span>,
-		attributes: formBlock.attributes,
+		icon: <span dangerouslySetInnerHTML={ { __html: metadata.icon } }></span>,
+		attributes: metadata.attributes,
 		edit: FormEdit,
-		save: FormSave,
-
 		supports: {
 			html: false,
 		},

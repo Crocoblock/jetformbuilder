@@ -18,27 +18,6 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
-	public function __construct() {
-
-		$this->unregister_attributes(
-			array(
-				'required',
-				'label',
-				'name',
-				'desc',
-				'default',
-				'placeholder',
-				'required',
-				'add_prev',
-				'prev_label',
-				'visibility',
-				'class_name',
-			)
-		);
-
-		parent::__construct();
-	}
-
 	public function get_label_selector() {
 		return '.jet-form-builder__label';
 	}
@@ -427,43 +406,10 @@ class Form extends Base {
 		return false;
 	}
 
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'form_id' => array(
-				'type'    => 'number',
-				'default' => 0,
-			),
-
-			'submit_type'     => array(
-				'type'    => 'string',
-				'default' => 'reload'
-			),
-			'required_mark'   => array(
-				'type'    => 'string',
-				'default' => '*'
-			),
-			'fields_layout'   => array(
-				'type'    => 'string',
-				'default' => 'column'
-			),
-			'enable_progress' => array(
-				'type'    => 'boolean',
-				'default' => false
-			),
-		);
-	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'JetFormData', array_merge(
-			array(
-				'forms_list' => Tools::with_placeholder( Tools::get_forms_list_for_js() )
-			),
-			Tools::get_form_settings_options()
+		wp_localize_script( $handle, 'JetFormData', array(
+			'forms_list' => Tools::with_placeholder( Tools::get_forms_list_for_js() )
 		) );
 	}
 

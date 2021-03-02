@@ -75,6 +75,10 @@ class Plugin {
 		return JET_FORM_BUILDER_URL . $path;
 	}
 
+	public function plugin_dir( $path = '' ) {
+		return JET_FORM_BUILDER_PATH . $path;
+	}
+
 	/**
 	 * Returns plugin version
 	 */

@@ -14,17 +14,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Calculated_Field extends Base {
 
-	public function __construct() {
-		$this->unregister_attributes(
-			array(
-				'required',
-				'placeholder',
-			)
-		);
-
-		parent::__construct();
-	}
-
 	public function general_style_unregister() {
 		return array( 'required' );
 	}
@@ -59,14 +48,6 @@ class Calculated_Field extends Base {
 		);
 	}
 
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Calculated Field';
-	}
 
 	/**
 	 * Returns block name
@@ -86,47 +67,6 @@ class Calculated_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		return ( new Calculated_Field_Render( $this ) )->render();
-	}
-
-	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetFormCalculatedFieldData', array(
-			'help_messages' => array(
-				'calc_hidden' => __(
-					'Check this to hide calculated field',
-					'jet-form-builder'
-				),
-			),
-		) );
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'calc_formula' => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'precision'    => array(
-				'type'    => 'number',
-				'default' => 2
-			),
-			'calc_prefix'  => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'calc_suffix'  => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'calc_hidden'  => array(
-				'type'    => 'boolean',
-				'default' => false
-			),
-		);
 	}
 
 }

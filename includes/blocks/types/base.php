@@ -28,6 +28,7 @@ abstract class Base extends Base_Module {
 
 	public $block_attrs = array();
 	public $block_content;
+	public $block;
 
 	public $error_data = false;
 
@@ -64,34 +65,11 @@ abstract class Base extends Base_Module {
 	}
 
 	/**
-	 * Returns block title
-	 *
-	 * @return string
-	 */
-	abstract public function get_title();
-
-	/**
 	 * Returns block name/slug
 	 *
 	 * @return string
 	 */
 	abstract public function get_name();
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	abstract public function get_attributes();
-
-	/**
-	 * Retruns block icon WP dashicon class name without prefix, for example 'edit-large' or custom SVG component code
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_icon() {
-		return $this->get_field_icon();
-	}
 
 	/**
 	 * Returns renderer class instance for current block
@@ -102,16 +80,23 @@ abstract class Base extends Base_Module {
 	 */
 	abstract public function get_block_renderer( $wp_block = null );
 
-	public function get_supports() {
-		return array();
+	public function get_path_metadata_block() {
+		$path_parts = array( 'assets', 'src', 'editor', 'blocks', $this->get_name() );
+		$path = implode( DIRECTORY_SEPARATOR, $path_parts );
+
+		return jet_form_builder()->plugin_dir( $path );
 	}
 
-
 	private function _register_block() {
-		register_block_type(
-			$this->block_name(),
-			$this->block_params()
+		$this->block = register_block_type_from_metadata(
+			$this->get_path_metadata_block(),
+			array(
+				'render_callback' => array( $this, 'render_callback_field' )
+			)
 		);
+
+		echo '<pre>';
+		var_dump( $this->block->attributes ); die;
 	}
 
 	private function maybe_init_style_manager() {
@@ -143,13 +128,6 @@ abstract class Base extends Base_Module {
 		$this->controls_manager = new Controls_Manager( $this->block_name() );
 
 		return $this;
-	}
-
-	public function block_params() {
-		return array(
-			'attributes'      => $this->block_attributes(),
-			'render_callback' => array( $this, 'render_callback_field' )
-		);
 	}
 
 	public function get_storage_name() {

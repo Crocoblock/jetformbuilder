@@ -2,12 +2,6 @@ import PresetRender from "./preset-render";
 import withPreset from "./preset-editor";
 
 const {
-	TextControl,
-	SelectControl,
-	Modal
-} = wp.components;
-
-const {
 	useState,
 	useEffect
 } = wp.element;
@@ -45,6 +39,7 @@ function DynamicPreset( {
 
 	return <>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
+			key={ `current_field_${ data.name }_${ index }` }
 			value={ stateValue }
 			index={ index }
 			data={ data }
@@ -55,6 +50,7 @@ function DynamicPreset( {
 		/> ) }
 
 		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
+			key={ `current_field_${ data.name }_${ index }` }
 			currentState={ stateValue }
 			value={ stateValue[ 'current_field_' + data.name ] }
 			index={ index }

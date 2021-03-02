@@ -3,9 +3,6 @@
 	"name": "jet-forms/datetime-field",
 	"category": "jet-form-builder-fields",
 	"keywords": [
-		"jet",
-		"form",
-		"builder",
 		"jetformbuilder",
 		"field",
 		"date"

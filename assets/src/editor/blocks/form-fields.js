@@ -1,9 +1,4 @@
-/*
-import * as text from './text-field';
-import * as time from './time-field';
-import * as wysiwyg from './wysiwyg-field';
-import * as textarea from './textarea-field';
-*/
+
 import * as calculated from './calculated-field';
 import * as checkbox from './checkbox-field';
 import * as conditional from './conditional-block';
@@ -20,6 +15,10 @@ import * as range from './range-field';
 import * as repeater from './repeater-field';
 import * as select from './select-field';
 import * as submit from './submit-field';
+import * as text from './text-field';
+import * as textarea from './textarea-field';
+import * as time from './time-field';
+import * as wysiwyg from './wysiwyg-field';
 
 import * as wrappers from "./block-wrappers";
 import { jfbHooks } from "../helpers/hooks-helper";
@@ -45,12 +44,12 @@ const fields = jfbHooks.applyFilters( 'jet.fb.register.fields', [
 	repeater,
 	select,
 	submit,
-
-	/*
 	text,
+	textarea,
 	time,
 	wysiwyg,
-	textarea,
+
+	/*
 	*/
 ] );
 

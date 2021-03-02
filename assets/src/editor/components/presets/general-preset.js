@@ -16,6 +16,7 @@ function GeneralPreset( {
 
 	return <>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
+			key={ data.name + index }
 			value={ value }
 			index={ index }
 			data={ data }
@@ -27,6 +28,7 @@ function GeneralPreset( {
 
 		{ value.from && (
 			availableFields.map( ( field, index ) => <PresetRender.AvailableMapField
+				key={ field + index }
 				fieldsMap={ value.fields_map }
 				field={ field }
 				index={ index }

@@ -22,6 +22,7 @@ function FieldControl( {
 						   setAttributes,
 						   attributes,
 						   attrsSettings = {},
+						   editProps: { attrHelp = () => '' }
 					   } ) {
 	const currentControl = controlsSettings[ type ];
 
@@ -73,7 +74,7 @@ function FieldControl( {
 					<TextControl
 						key={ `${ attr.type }-${ attrName }-TextControlDynamic` }
 						label={ label }
-						help={ help }
+						help={ help || attrHelp( attrName ) }
 						value={ attributes[ attrName ] }
 						onChange={ newVal => {
 							onChangeValue( newVal, attrName )

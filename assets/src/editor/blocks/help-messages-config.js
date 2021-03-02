@@ -1,6 +1,5 @@
 const { __ } = wp.i18n;
 
-
 const MEDIA = 'jet-forms/media-field';
 const FORM_BREAK = 'jet-forms/form-break-field';
 const DATE = 'jet-forms/date-field';
@@ -11,6 +10,7 @@ const SELECT = 'jet-forms/select-field';
 const RANGE = 'jet-forms/range-field';
 const REPEATER = 'jet-forms/repeater-field';
 const TEXT = 'jet-forms/text-field';
+const TIME = 'jet-forms/time-field';
 
 
 const messagesConfig = [
@@ -19,6 +19,16 @@ const messagesConfig = [
 		to: [ DATE, DATETIME ],
 		message: __( `Check this if you want to send value of this 
 		field as timestamp instead of plain datetime` )
+	},
+	{
+		attribute: 'default',
+		to: [ DATE ],
+		message: __( 'Plain date should be in yyyy-mm-dd format' )
+	},
+	{
+		attribute: 'default',
+		to: [ DATETIME ],
+		message: __( 'Plain datetime should be in yyyy-MM-ddThh:mm format' )
 	},
 	{
 		attribute: 'page_break_disabled',
@@ -94,32 +104,12 @@ const messagesConfig = [
 		to: [ TEXT ],
 		message: __( `https://github.com/RobinHerbots/Inputmask/blob/5.x/README_date.md` )
 	},
+	{
+		attribute: 'default',
+		to: [ TIME ],
+		message: __( 'Plain time should be in hh:mm:ss format' )
+	}
 ];
 
-const getHelpInstance = block => {
-	const messages = {};
 
-	messagesConfig.forEach( msg => {
-		if ( msg.to.includes( block.name ) && msg.message ) {
-			messages[ msg.attribute ] = msg;
-		}
-	} );
-
-	return ( attribute, attributes = {} ) => {
-		if ( ! ( attribute in messages ) ) {
-			return 'Undefined help';
-		}
-		const item = messages[ attribute ];
-
-		if ( 'conditions' in item ) {
-			for ( const attrName in item.conditions ) {
-				if ( ! ( attrName in attributes ) || item.conditions[ attrName ] !== attributes[ attrName ] ) {
-					return;
-				}
-			}
-		}
-		return item.message;
-	}
-};
-
-export { getHelpInstance };
+export { messagesConfig };

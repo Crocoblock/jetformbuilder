@@ -105,12 +105,13 @@ const PresetRender = {
 			{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
 				const props = { field, name: data.name, index, fIndex };
 
+				const uniqKey = 'control_' + field + data.name + index + fIndex;
+
 				switch ( data.type ) {
 					case 'text':
 						return ( isMapFieldVisible( value, data, field ) &&
-							<AvailableFieldWrapper { ...props }>
+							<AvailableFieldWrapper { ...props } key={ uniqKey }>
 								<TextControl
-									key={ 'control_' + field + data.name + index + fIndex }
 									placeholder={ data.label }
 									value={ currentVal[ data.name ] }
 									onChange={ newVal => {
@@ -125,9 +126,8 @@ const PresetRender = {
 						);
 					case 'select':
 						return ( isMapFieldVisible( value, data, field ) &&
-							<AvailableFieldWrapper { ...props }>
+							<AvailableFieldWrapper { ...props } key={ uniqKey }>
 								<SelectControl
-									key={ 'control_' + field + data.name + index + fIndex }
 									options={ data.options }
 									//label={ data.label }
 									value={ currentVal[ data.name ] }

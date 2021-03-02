@@ -6,7 +6,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 ## 1.1.0
 * ADD: Gutenberg blocks: **Conditional Block**, **Datetime Field** 
-* ADD: Elementor widgets: **JetForm**
+* ADD: Elementor widget: **JetForm**
 * ADD: Form Progress with multiple pages
 * ADD: Post submit actions Conditions
 * ADD: New preset sources for post-type: Post Date, Post Date GMT

@@ -99,6 +99,10 @@ abstract class Base extends Base_Module {
 	}
 
 	private function _register_block() {
+		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
+			return;
+		}
+
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
@@ -109,8 +113,6 @@ abstract class Base extends Base_Module {
 		if ( $block ) {
 			$this->attrs = $block->attributes;
 		}
-
-		//var_dump( $this->attrs ); die;
 	}
 
 	private function maybe_init_style_manager() {

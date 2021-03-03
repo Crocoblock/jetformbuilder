@@ -1,3 +1,6 @@
+import { saveGlobalComponent } from "../components/manager";
+import Tools from "./tools";
+
 const { __ } = wp.i18n;
 
 const blocksRecursiveIterator = ( blockParserFunc ) => {
@@ -101,6 +104,7 @@ const getFormFieldsByBlock = ( blockExclude ) => {
 	return () => getFormFieldsBlocks( [ blockExclude.name ] );
 }
 
+
 export {
 	getFormFieldsByBlock,
 	getInnerBlocks,
@@ -109,3 +113,12 @@ export {
 	getFormFieldsBlocks,
 	getFieldsWithoutCurrent,
 };
+
+saveGlobalComponent( 'JetFBBlocksHelper', {
+	getFormFieldsByBlock,
+	getInnerBlocks,
+	getAvailableFieldsString,
+	getAvailableFields,
+	getFormFieldsBlocks,
+	getFieldsWithoutCurrent,
+} );

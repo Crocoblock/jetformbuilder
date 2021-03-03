@@ -34,16 +34,16 @@ class Tools {
 		return 'object' === typeof object && Object.keys( object ).length === 0;
 	}
 
-	static getFuncCondition = ( nameFunction ) => {
+	static getFuncCondition( nameFunction ) {
 		return new Function( `return window.JetFormBuilderConditions[ '${ nameFunction }' ]` );
 	}
 
-	static addConditionForCondType = ( name, callable ) => {
+	static addConditionForCondType( name, callable ) {
 		window.JetFormBuilderConditions = window.JetFormBuilderConditions || {};
 		window.JetFormBuilderConditions[ name ] = callable;
 	}
 
-	static parseConditionsFunc = ( source ) => {
+	static parseConditionsFunc( source ) {
 		const types = [];
 
 		source.forEach( type => {

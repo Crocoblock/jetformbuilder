@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.6.1
+Tested up to: 5.6.2
 Requires PHP: 7.0
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,17 +65,28 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 
 == Changelog ==
 
+## 1.1.0
+ - ADD: Gutenberg blocks: **Conditional Block**, **Datetime Field**
+ - ADD: Elementor widgets: **JetForm**
+ - ADD: Form Progress with multiple pages
+ - ADD: Post submit actions Conditions
+ - ADD: New preset sources for post-type: Post Date, Post Date GMT
+ - ADD: Integration with Paypal
+ - ADD: Compatibility with **JetEngine** widget Form
+ - ADD: Compatibility with **JetFormBuilder Converter**
+ - Improvement: The form builder and the form block full-width in the editor
+
 **1.0.4**
- - Added: displaying a shortcode for each form
+ - ADD: displaying a shortcode for each form
 
 **1.0.3**
- - Fixed: creating a user with administrator role.
+ - FIX: creating a user with administrator role.
 
 **1.0.2**
  - Enhancement: added **`jet_fb_form`** shortcode. Example: `[jet_fb_form form_id="4338" submit_type="ajax" required_mark="***" fields_layout="row"]`
 
 **1.0.1**
- - Fixed: render wysiwyg on front-end
+ - FiX: render wysiwyg on front-end
  
 **1.0.0**
  - Initial release

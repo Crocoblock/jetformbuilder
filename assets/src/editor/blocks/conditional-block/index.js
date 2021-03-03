@@ -15,6 +15,7 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	title: __( 'Conditional Block' ),
+	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,

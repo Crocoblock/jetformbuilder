@@ -1,12 +1,24 @@
-const submitTypes = {
-	reload: "Page Reload",
-	ajax: "AJAX"
-}
+const submitTypes = [
+	{
+		value: 'reload',
+		label: 'Page Reload'
+	},
+	{
+		value: 'ajax',
+		label: 'AJAX'
+	}
+]
 
-const fieldsLayout = {
-	column: "Column",
-	row: "Row"
-};
+const fieldsLayout = [
+	{
+		value: 'column',
+		label: 'Column'
+	},
+	{
+		value: 'row',
+		label: 'Row'
+	}
+];
 
 export {
 	submitTypes,

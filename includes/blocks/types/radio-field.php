@@ -16,20 +16,6 @@ class Radio_Field extends Base {
 
 	use Base_Select_Radio_Check;
 
-	public function __construct() {
-		$this->unregister_attribute( 'placeholder' );
-
-		parent::__construct();
-	}
-
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Radio Field';
-	}
 
 	/**
 	 * Returns block name
@@ -57,7 +43,7 @@ class Radio_Field extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -361,40 +347,6 @@ class Radio_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'filters_position'               => [
-				'type' => 'object',
-			],
-			'horisontal_layout_description'  => [
-				'type' => 'object',
-			],
-			'filters_list_alignment'         => [
-				'type' => 'object',
-			],
-			'items_space_between'            => [
-				'type' => 'object',
-			],
-			'show_decorator'                 => [
-				'type' => 'object',
-			],
-			'item_typography'                => [
-				'type' => 'object',
-			],
-			'item_normal_color'              => [
-				'type' => 'object',
-			],
-			'item_normal_background_color'   => [
-				'type' => 'object',
-			],
-			'radio_normal_background_color'  => array(
-				'type' => 'object'
-			),
-			'radio_checked_background_color' => array(
-				'type' => 'object'
-			),
-		);
-	}
 
 	/**
 	 * Returns current block render instatnce
@@ -422,15 +374,6 @@ class Radio_Field extends Base {
 			'JetFormRadioFieldData',
 			$this->get_local_data_check_radio_select()
 		);
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return $this->get_attributes_check_radio_select();
 	}
 
 }

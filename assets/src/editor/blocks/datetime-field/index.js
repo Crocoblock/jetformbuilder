@@ -14,6 +14,7 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	title: __( 'Datetime field' ),
+	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: DateTimeEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],

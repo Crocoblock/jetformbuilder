@@ -17,14 +17,6 @@ class Range_Field extends Base {
 	const CSS_VAR_SLIDER_SIZE = '--jet-fb__range-field-slider--size';
 	const CSS_VAR_RANGE_HEIGHT = '--jet-fb__range-field-range--height';
 
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Range Field';
-	}
 
 	public function get_css_scheme() {
 		return array(
@@ -47,46 +39,6 @@ class Range_Field extends Base {
 		return 'range-field';
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'range_width'  => array(
-				'type' => 'object'
-			),
-			'range_height' => array(
-				'type' => 'object'
-			),
-
-			'slider_size' => array(
-				'type' => 'object'
-			),
-
-
-			'slider_border'           => array(
-				'type' => 'object'
-			),
-			'slider_background_color' => [
-				'type' => 'object',
-			],
-
-
-			'values_typography' => [
-				'type' => 'object',
-			],
-			'values_color'      => [
-				'type'    => 'string',
-				'default' => '',
-			],
-			'values_margin'     => [
-				'type'    => 'object',
-				'default' => '',
-			],
-			'values_alignment'  => [
-				'type'    => 'string',
-				'default' => 'left',
-			],
-		);
-	}
-
 	public function style_slider( $style_line ) {
 		return array(
 			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => $style_line,
@@ -104,7 +56,7 @@ class Range_Field extends Base {
 	}
 
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -285,123 +237,6 @@ class Range_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		return ( new Range_Field_Render( $this ) )->render();
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'min'    => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'max'    => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'step'   => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'prefix' => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'suffix' => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-		);
-	}
-
-	/**
-	 * Returns global attributes list
-	 * P.S. here was removed `placeholder` & `required`
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_global_attributes() {
-		return array(
-			'label'      => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Label', 'jet-form-builder' )
-				),
-			),
-			'name'       => array(
-				'type'    => 'string',
-				'default' => 'field_name',
-				'general' => $this->general_field_name_params(),
-			),
-			'desc'       => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Description', 'jet-form-builder' )
-				),
-			),
-			'default'    => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'dynamic_text',
-					'label' => __( 'Default Value', 'jet-form-builder' )
-				),
-			),
-			'add_prev'   => array(
-				'type'     => 'boolean',
-				'default'  => false,
-				'advanced' => array(
-					'type'  => 'toggle',
-					'label' => __( 'Add Prev Page Button', 'jet-form-builder' )
-				),
-			),
-			'prev_label' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'      => 'text',
-					'label'     => __( 'Prev Page Button Label', 'jet-form-builder' ),
-					'condition' => 'add_prev'
-				),
-			),
-			'visibility' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'    => 'select',
-					'label'   => __( 'Field Visibility', 'jet-form-builder' ),
-					'options' => array(
-						array(
-							'value' => 'all',
-							'label' => __( 'For all', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'logged_id',
-							'label' => __( 'Only for logged in users', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'not_logged_in',
-							'label' => __( 'Only for NOT-logged in users', 'jet-form-builder' ),
-						),
-					),
-				),
-			),
-			'class_name' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'  => 'text',
-					'label' => __( 'CSS Class Name', 'jet-form-builder' )
-				),
-			),
-		);
 	}
 
 }

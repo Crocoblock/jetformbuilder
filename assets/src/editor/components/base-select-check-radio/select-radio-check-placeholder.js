@@ -1,4 +1,5 @@
 import FieldWrapper from '../field-wrapper';
+import { listFrom } from "../../blocks/select-radio-chekc-options";
 
 const {
 	CheckboxControl,
@@ -109,7 +110,7 @@ export function SelectRadioCheckPlaceholder( props ) {
 				break;
 
 		}
-		full_label.push( getLabelProp( scriptData.options_from.find( option => option.value === field_options_from ) ) );
+		full_label.push( getLabelProp( listFrom.find( option => option.value === field_options_from ) ) );
 
 		if ( value.length ) {
 			full_label.push( value.join( DELIMITER ) );

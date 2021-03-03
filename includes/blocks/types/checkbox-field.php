@@ -16,20 +16,6 @@ class Checkbox_Field extends Base {
 
 	use Base_Select_Radio_Check;
 
-	public function __construct() {
-		$this->unregister_attribute( 'placeholder' );
-
-		parent::__construct();
-	}
-
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Checkbox Field';
-	}
 
 	/**
 	 * Returns block name
@@ -50,7 +36,7 @@ class Checkbox_Field extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -338,41 +324,6 @@ class Checkbox_Field extends Base {
 
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'filters_position'                  => [
-				'type' => 'object',
-			],
-			'horisontal_layout_description'     => [
-				'type' => 'object',
-			],
-			'filters_list_alignment'            => [
-				'type' => 'object',
-			],
-			'items_space_between'               => [
-				'type' => 'object',
-			],
-			'show_checkbox_decorator'           => [
-				'type' => 'object',
-			],
-			'item_typography'                   => [
-				'type' => 'object',
-			],
-			'item_normal_color'                 => [
-				'type' => 'object',
-			],
-			'item_normal_background_color'      => [
-				'type' => 'object',
-			],
-			'checkbox_normal_background_color'  => array(
-				'type' => 'object'
-			),
-			'checkbox_checked_background_color' => array(
-				'type' => 'object'
-			),
-		);
-	}
-
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -401,13 +352,5 @@ class Checkbox_Field extends Base {
 		);
 	}
 
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return $this->get_attributes_check_radio_select();
-	}
 
 }

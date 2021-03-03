@@ -14,6 +14,7 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	title: __( 'Hidden Field' ),
+	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: HeadingEdit,
 	useEditProps: [ 'uniqKey' ],

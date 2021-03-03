@@ -14,6 +14,7 @@ const { name, icon } = metadata;
  */
 const settings = {
 	title: __( 'Calculated Field' ),
+	className: name.replace( '/', '-' ),
 	description: __( 'Calculate and display your number values' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditCalculated,

@@ -27,21 +27,6 @@ class Repeater_Field extends Base {
 	public $calc_data = array();
 	public $calc_dataset = '';
 
-	public function __construct() {
-		$this->unregister_attribute( 'placeholder' );
-
-		parent::__construct();
-	}
-
-	/**
-	 * Returns block title
-	 *
-	 * @return string [type] [description]
-	 */
-	public function get_title() {
-		return 'Repeater Field';
-	}
-
 	/**
 	 * Returns block name
 	 *
@@ -61,7 +46,7 @@ class Repeater_Field extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -326,41 +311,6 @@ class Repeater_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'repeater_row_padding'           => array(
-				'type' => 'object',
-			),
-			'new_button_typography'          => array(
-				'type' => 'object',
-			),
-			'new_button_typography_color'    => array(
-				'type' => 'object',
-			),
-			'new_button_background_color'    => array(
-				'type' => 'object',
-			),
-			'new_button_border'              => array(
-				'type' => 'object',
-			),
-			'new_button_alignment'           => array(
-				'type' => 'object',
-			),
-			'remove_button_typography'       => array(
-				'type' => 'object',
-			),
-			'remove_button_typography_color' => array(
-				'type' => 'object',
-			),
-			'remove_button_background_color' => array(
-				'type' => 'object',
-			),
-			'remove_button_border'           => array(
-				'type' => 'object',
-			),
-		);
-	}
-
 	/**
 	 * Returns current block render
 	 *
@@ -471,68 +421,6 @@ class Repeater_Field extends Base {
 			'formula'       => $formula,
 			'listen_fields' => $listen_fields,
 			'listen_to'     => $listen_fields,
-		);
-	}
-
-
-	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetRepeaterFieldData', array(
-			'manage_items_count' => array(
-				array(
-					'value' => 'manually',
-					'label' => __( 'Manually', 'jet-form-builder' )
-				),
-				array(
-					'value' => 'dynamically',
-					'label' => __( 'Dynamically (get count from form field)', 'jet-form-builder' )
-				),
-			),
-			'repeater_calc_type' => array(
-				array(
-					'value' => 'default',
-					'label' => __( 'Default (returns rows count)', 'jet-form-builder' )
-				),
-				array(
-					'value' => 'custom',
-					'label' => __( 'Custom (calculate custom value for each row)', 'jet-form-builder' )
-				),
-			),
-			'help_messages'      => array(
-				'calc_hidden' => __(
-					'Check this to hide calculated field',
-					'jet-form-builder'
-				),
-			),
-		) );
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'calc_formula'             => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'manage_items_count'       => array(
-				'type'    => 'string',
-				'default' => 'manually'
-			),
-			'new_item_label'           => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'manage_items_count_field' => array(
-				'type'    => 'string',
-				'default' => ''
-			),
-			'repeater_calc_type'       => array(
-				'type'    => 'string',
-				'default' => 'default'
-			),
 		);
 	}
 

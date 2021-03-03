@@ -99,13 +99,10 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 registerBlockType(
 	metadata.name,
 	{
+		...metadata,
 		title: __( 'JetForm' ),
-		category: 'layout',
 		icon: <span dangerouslySetInnerHTML={ { __html: metadata.icon } }></span>,
 		attributes: metadata.attributes,
 		edit: FormEdit,
-		supports: {
-			html: false,
-		},
 	}
 );

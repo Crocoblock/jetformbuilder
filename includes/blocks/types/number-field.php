@@ -15,15 +15,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Number_Field extends Base {
 
 	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Number Field';
-	}
-
-	/**
 	 * Returns block name
 	 *
 	 * @return [type] [description]
@@ -42,7 +33,7 @@ class Number_Field extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -120,20 +111,6 @@ class Number_Field extends Base {
 
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'item_typography'              => [
-				'type' => 'object',
-			],
-			'item_normal_color'            => [
-				'type' => 'object',
-			],
-			'item_normal_background_color' => [
-				'type' => 'object',
-			],
-		);
-	}
-
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -151,28 +128,6 @@ class Number_Field extends Base {
 	public function get_field_attrs() {
 		return array(
 			'field_type' => 'number'
-		);
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'min'  => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'max'  => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'step' => array(
-				'type'    => 'number',
-				'default' => ''
-			),
 		);
 	}
 

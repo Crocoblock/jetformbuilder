@@ -26,9 +26,28 @@ abstract class Base extends Base_Module {
 	protected $css_scheme;
 	public $style_attributes = array();
 
+	/**
+	 * Block attributes on render
+	 * @var array
+	 */
 	public $block_attrs = array();
+	/**
+	 * Block content on render
+	 * @var string
+	 */
 	public $block_content;
-	public $block;
+
+	/**
+	 * Block attributes on register
+	 * @var array
+	 */
+	public $attrs = array();
+
+	/**
+	 * Set to `false` if your block should not be styled
+	 * @var bool
+	 */
+	public $use_style_manager = true;
 
 	public $error_data = false;
 
@@ -47,18 +66,10 @@ abstract class Base extends Base_Module {
 	/**
 	 * Override this method to set you style controls
 	 */
-	protected function add_style_manager_options() {
+	protected function _jsm_register_controls() {
 		//
 	}
 
-	/**
-	 * Return style controls attributes
-	 *
-	 * @return array
-	 */
-	public function get_style_attributes() {
-		return array();
-	}
 
 	public function get_css_scheme() {
 		return array();
@@ -82,40 +93,39 @@ abstract class Base extends Base_Module {
 
 	public function get_path_metadata_block() {
 		$path_parts = array( 'assets', 'src', 'editor', 'blocks', $this->get_name() );
-		$path = implode( DIRECTORY_SEPARATOR, $path_parts );
+		$path       = implode( DIRECTORY_SEPARATOR, $path_parts );
 
 		return jet_form_builder()->plugin_dir( $path );
 	}
 
 	private function _register_block() {
-		$this->block = register_block_type_from_metadata(
+		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
 				'render_callback' => array( $this, 'render_callback_field' )
 			)
 		);
 
-		echo '<pre>';
-		var_dump( $this->block->attributes ); die;
+		if ( $block ) {
+			$this->attrs = $block->attributes;
+		}
+
+		//var_dump( $this->attrs ); die;
 	}
 
 	private function maybe_init_style_manager() {
-
-		if ( Jet_Style_Manager::is_activated() ) {
-			$this->style_attributes = array_merge( $this->general_style_attributes(), $this->get_style_attributes() );
-			$this->css_scheme       = array_merge( $this->general_css_scheme(), $this->_get_css_scheme() );
-
-			if ( ! empty( $this->style_attributes ) && ! empty( $this->css_scheme ) ) {
-				$this->set_style_manager_instance()->add_style_manager_options();
-				$this->general_style_manager_options();
-			}
+		if ( Jet_Style_Manager::is_activated() && $this->use_style_manager ) {
+			$this->css_scheme = array_merge( $this->general_css_scheme(), $this->_get_css_scheme() );
+			$this->set_style_manager_instance()->_jsm_register_controls();
+			$this->general_style_manager_options();
 		}
 	}
 
 	private function _get_css_scheme() {
 		return apply_filters(
-			"jet-form-builder/{$this->get_name()}/css-scheme",
-			$this->get_css_scheme()
+			"jet-form-builder/block/css-scheme",
+			$this->get_css_scheme(),
+			$this->get_name()
 		);
 	}
 
@@ -324,114 +334,14 @@ abstract class Base extends Base_Module {
 		return $fields_path . $path;
 	}
 
-	/**
-	 * Returns global attributes list
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_global_attributes() {
-		return array(
-			'label'       => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Label', 'jet-form-builder' )
-				),
-			),
-			'name'        => array(
-				'type'    => 'string',
-				'default' => 'field_name',
-				'general' => $this->general_field_name_params(),
-			),
-			'desc'        => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'text',
-					'label' => __( 'Field Description', 'jet-form-builder' )
-				),
-			),
-			'default'     => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'dynamic_text',
-					'label' => __( 'Default Value', 'jet-form-builder' )
-				),
-			),
-			'placeholder' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'  => 'text',
-					'label' => __( 'Placeholder', 'jet-form-builder' )
-				),
-			),
-			'required'    => array(
-				'type'    => 'boolean',
-				'default' => false,
-				'toolbar' => array(
-					'type'  => 'toggle',
-					'label' => __( 'Is Required', 'jet-form-builder' )
-				),
-			),
-			'add_prev'    => array(
-				'type'     => 'boolean',
-				'default'  => false,
-				'advanced' => array(
-					'type'  => 'toggle',
-					'label' => __( 'Add Prev Page Button', 'jet-form-builder' )
-				),
-			),
-			'prev_label'  => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'      => 'text',
-					'label'     => __( 'Prev Page Button Label', 'jet-form-builder' ),
-					'condition' => 'add_prev'
-				),
-			),
-			'visibility'  => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'    => 'select',
-					'label'   => __( 'Field Visibility', 'jet-form-builder' ),
-					'options' => array(
-						array(
-							'value' => 'all',
-							'label' => __( 'For all', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'logged_id',
-							'label' => __( 'Only for logged in users', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'not_logged_in',
-							'label' => __( 'Only for NOT-logged in users', 'jet-form-builder' ),
-						),
-					),
-				),
-			),
-			'class_name'  => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'  => 'text',
-					'label' => __( 'CSS Class Name', 'jet-form-builder' )
-				),
-			),
-		);
-	}
 
 	public function get_default_attributes() {
-		$attributes = array_merge( $this->get_attributes(), $this->get_global_attributes() );
-		$default    = array();
+		$default = array();
 
-		foreach ( $attributes as $name => $value ) {
-			$default[ $name ] = $value['default'];
+		foreach ( $this->attrs as $name => $value ) {
+			if ( isset( $value['default'] ) ) {
+				$default[ $name ] = $value['default'];
+			}
 		}
 
 		return $default;
@@ -462,31 +372,23 @@ abstract class Base extends Base_Module {
 	 *
 	 * @return array [type] [description]
 	 */
-	public function block_attributes( $with_styles = true ) {
-
-		$attributes = $with_styles ? array_merge( $this->get_attributes(), $this->style_attributes ) : $this->get_attributes();
+	public function block_attributes() {
 
 		/**
 		 * Set default blocks attributes to avoid errors
 		 */
-		$attributes['className'] = array(
+		$this->attrs['className'] = array(
 			'type'    => 'string',
 			'default' => '',
 		);
 
-		$global_attributes = $this->get_global_attributes();
-
-		if ( ! empty( $global_attributes ) ) {
-			$attributes = array_merge( $attributes, $global_attributes );
-		}
-
 		if ( ! empty( $this->_unregistered ) ) {
 			foreach ( $this->_unregistered as $key ) {
-				unset( $attributes[ $key ] );
+				unset( $this->attrs[ $key ] );
 			}
 		}
 
-		return $attributes;
+		return $this->attrs;
 
 	}
 

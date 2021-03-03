@@ -44,7 +44,7 @@ class Form extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			[
@@ -314,72 +314,6 @@ class Form extends Base {
 
 		$this->controls_manager->end_section();
 
-	}
-
-	public function get_style_attributes() {
-		return array(
-			'form_row_gap_after'  => array(
-				'type' => 'object'
-			),
-			'form_row_gap_before' => array(
-				'type' => 'object'
-			),
-
-
-			'success_padding'          => array(
-				'type' => 'object'
-			),
-			'success_margin'           => array(
-				'type' => 'object'
-			),
-			'success_alignment'        => array(
-				'type' => 'object'
-			),
-			'success_typography'       => array(
-				'type' => 'object'
-			),
-			'success_color'            => array(
-				'type' => 'object'
-			),
-			'success_background_color' => array(
-				'type' => 'object'
-			),
-			'success_border'           => array(
-				'type' => 'object'
-			),
-
-
-			'error_padding'          => array(
-				'type' => 'object'
-			),
-			'error_margin'           => array(
-				'type' => 'object'
-			),
-			'error_typography'       => array(
-				'type' => 'object'
-			),
-			'error_color'            => array(
-				'type' => 'object'
-			),
-			'error_background_color' => array(
-				'type' => 'object'
-			),
-			'error_alignment'        => array(
-				'type' => 'object'
-			),
-			'error_border'           => array(
-				'type' => 'object'
-			),
-		);
-	}
-
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Form';
 	}
 
 	/**

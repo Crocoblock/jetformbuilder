@@ -14,6 +14,7 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	title: __( 'Submit Field' ),
+	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: SubmitEdit,
 	useEditProps: [ 'uniqKey' ],

@@ -14,14 +14,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Textarea_Field extends Base {
 
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Textarea Field';
-	}
 
 	/**
 	 * Returns block name
@@ -39,7 +31,7 @@ class Textarea_Field extends Base {
 		);
 	}
 
-	public function add_style_manager_options() {
+	public function _jsm_register_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -127,21 +119,6 @@ class Textarea_Field extends Base {
 
 	}
 
-	public function get_style_attributes() {
-		return array(
-			'item_typography'              => [
-				'type' => 'object',
-			],
-			'item_normal_color'            => [
-				'type' => 'object',
-			],
-			'item_normal_background_color' => [
-				'type' => 'object',
-			],
-
-		);
-	}
-
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -151,24 +128,6 @@ class Textarea_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		return ( new Textarea_Field_Render( $this ) )->render();
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'minlength' => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-			'maxlength' => array(
-				'type'    => 'number',
-				'default' => ''
-			),
-		);
 	}
 
 }

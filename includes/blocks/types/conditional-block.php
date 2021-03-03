@@ -15,14 +15,18 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Conditional_Block extends Base {
 
-	public function block_params() {
-		return array(
-			'attributes'      => $this->block_attributes(),
-			'render_callback' => array( $this, 'render_field__conditional' )
-		);
+	public $use_style_manager = false;
+
+	/**
+	 * Returns block name
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_name() {
+		return 'conditional-block';
 	}
 
-	public function render_field__conditional( array $attrs, $content = null ) {
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
 		$this->set_block_data( $attrs, $content );
 
 		return ( new Conditional_Block_Render( $this ) )->render();
@@ -53,31 +57,6 @@ class Conditional_Block extends Base {
 		return array_map( 'trim', $value_in_array );
 	}
 
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Conditional Block';
-	}
-
-	/**
-	 * Returns block name
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_name() {
-		return 'conditional-block';
-	}
-
-	public function general_style_attributes() {
-		return array();
-	}
-
-	public function general_style_manager_options() {
-	}
-
 
 	/**
 	 * Returns current block render instance
@@ -88,28 +67,5 @@ class Conditional_Block extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		return '';
-	}
-
-
-	/**
-	 * Returns global attributes list
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_global_attributes() {
-		return array();
-	}
-
-
-	/**
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'conditions' => array(
-				'type'    => 'array',
-				'default' => array()
-			),
-		);
 	}
 }

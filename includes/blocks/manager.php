@@ -152,37 +152,9 @@ class Manager {
 	 * @return void [type] [description]
 	 */
 	public function register_block_types_for_form_editor( $editor, $handle ) {
-
-		$prepared_types = array();
-
 		foreach ( $this->_types[ self::FORM_EDITOR_STORAGE ] as $type ) {
-			$prepared_types[] = $this->register_block_data_for_js( $type );
-
 			$type->block_data( $editor, $handle );
-
 		}
-
-		wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );
-
-	}
-
-	public function register_block_data_for_js( $type ) {
-		$attributes = $type->block_attributes();
-
-		return array(
-			'blockName'  => $type->block_name(),
-			'title'      => $type->get_title(),
-			'icon'       => $type->get_icon(),
-			'attributes' => $attributes,
-			'controls'   => array(
-				'toolbar'  => $this->get_controls_list( $attributes, 'toolbar' ),
-				'general'  => $this->get_controls_list( $attributes, 'general' ),
-				'advanced' => $this->get_controls_list( $attributes, 'advanced' ),
-			),
-			'className'  => $type->block_class_name(),
-			'slug'       => $type->get_name(),
-			'supports'   => $type->get_supports()
-		);
 	}
 
 	/**
@@ -194,17 +166,9 @@ class Manager {
 	 * @return void [type] [description]
 	 */
 	public function register_block_types_for_others( $editor, $handle ) {
-
-		$prepared_types = array();
-
 		foreach ( $this->_types[ self::OTHERS_STORAGE ] as $type ) {
-			$prepared_types[] = $this->register_block_data_for_js( $type );
-
 			$type->block_data( $editor, $handle );
 		}
-
-		wp_localize_script( $handle, 'jetFormBuilderBlocks', $prepared_types );
-
 	}
 
 	public function enqueue_frontend_styles() {

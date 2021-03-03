@@ -15,28 +15,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Hidden_Field extends Base {
 
+	public $use_style_manager = false;
+
 	private function current_post() {
 		if ( ! Live_Form::instance()->post ) {
 			Live_Form::instance()->post = get_post();
 		}
 
 		return Live_Form::instance()->post;
-	}
-
-	public function general_style_attributes() {
-		return array();
-	}
-
-	public function general_style_manager_options() {
-	}
-
-	/**
-	 * Returns block title
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_title() {
-		return 'Hidden Field';
 	}
 
 	/**
@@ -268,71 +254,9 @@ class Hidden_Field extends Base {
 	}
 
 	private function get_default_field_value() {
-		$field = $this->get_attributes()['field_value'];
+		$field = $this->attrs['field_value'];
 
 		return isset( $field['default'] ) ? $field['default'] : '';
-	}
-
-	/**
-	 * Return attributes array
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		return array(
-			'field_value'        => array(
-				'type'    => 'string',
-				'default' => 'post_id',
-			),
-			'hidden_value_field' => array(
-				'type'    => 'string',
-				'default' => '',
-			),
-			'query_var_key'      => array(
-				'type'    => 'string',
-				'default' => '',
-			),
-			'date_format'        => array(
-				'type'    => 'string',
-				'default' => get_option( 'date_format' ),
-			),
-			'hidden_value'       => array(
-				'type'    => 'string',
-				'default' => '',
-			),
-		);
-	}
-
-	/**
-	 * Returns global attributes list
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_global_attributes() {
-		return array(
-			'name'       => array(
-				'type'    => 'string',
-				'default' => 'hidden_field_name',
-				'general' => $this->general_field_name_params(),
-			),
-			'class_name' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'  => 'text',
-					'label' => __( 'CSS Class Name', 'jet-form-builder' )
-				),
-			),
-			'default'     => array(
-				'type'    => 'string',
-				'default' => '',
-				'general' => array(
-					'type'  => 'dynamic_text',
-					'label' => __( 'Default Value', 'jet-form-builder' ),
-					'show'  => false,
-				),
-			),
-		);
 	}
 
 }

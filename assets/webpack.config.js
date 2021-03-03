@@ -50,5 +50,10 @@ module.exports = {
 				exclude: /node_modules/
 			}
 		]
+	},
+	performance: {
+		hints: false,
+		maxEntrypointSize: 512000,
+		maxAssetSize: 512000
 	}
 }

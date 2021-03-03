@@ -20,6 +20,31 @@ const settings = {
 	edit: RepeaterEdit,
 	save: RepeaterSave,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Multiple fields',
+			description: 'Field description...',
+		},
+		innerBlocks: [
+			{
+				name: 'jet-forms/text-field',
+				attributes: {
+					label: 'Item Title'
+				}
+			},
+			{
+				name: 'jet-forms/radio-field',
+				attributes: {
+					label: 'Item Radio',
+					field_options: [
+						{ label: 'First Option', value: '' },
+						{ label: 'Second Option', value: '' },
+						{ label: 'Third Option', value: '' },
+					]
+				}
+			}
+		]
+	}
 };
 
 export {

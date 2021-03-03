@@ -18,6 +18,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: WysiwygEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Wysiwyg Field',
+			description: 'Field description...'
+		}
+	}
 };
 
 export {

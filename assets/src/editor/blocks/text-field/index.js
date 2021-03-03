@@ -18,6 +18,13 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: TextEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Text Field',
+			placeholder: 'Input your text...',
+			description: 'Field description...'
+		}
+	}
 };
 
 export {

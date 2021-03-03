@@ -18,6 +18,13 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: NumberEdit,
 	useEditProps: [ 'uniqKey' ],
+	example: {
+		attributes: {
+			label: 'Number Field',
+			description: 'Field description...',
+			placeholder: 'Input your number...'
+		}
+	}
 };
 
 export {

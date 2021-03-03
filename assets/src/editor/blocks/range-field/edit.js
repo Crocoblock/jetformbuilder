@@ -19,6 +19,8 @@ const {
 	__experimentalInputControl
 } = wp.components;
 
+const { useState } = wp.element;
+
 let { NumberControl, InputControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
@@ -44,6 +46,7 @@ export default function RangeEdit( props ) {
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
 		/>,
 		props.isSelected && (
 			<InspectorControls

@@ -19,6 +19,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditCalculated,
 	useEditProps: [ 'uniqKey', 'blockName' ],
+	example: {
+		attributes: {
+			label: 'Calculated Field',
+			description: 'Field description...',
+		}
+	}
 };
 
 export {

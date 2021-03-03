@@ -18,6 +18,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: TextareaEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Textarea Field',
+			description: 'Field description...'
+		}
+	}
 };
 
 export {

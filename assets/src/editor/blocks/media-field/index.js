@@ -18,6 +18,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: MediaEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Thumbnail & file',
+			description: 'Field description...',
+		}
+	}
 };
 
 export {

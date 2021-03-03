@@ -9,7 +9,6 @@ import {
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
 	InspectorControls,
 	useBlockProps
 } = wp.blockEditor ? wp.blockEditor : wp.editor;

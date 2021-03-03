@@ -18,7 +18,7 @@ const {
 
 export default function WysiwygEdit( props ) {
 
-	const { editProps: { uniqKey } } = props;
+	const { editProps: { uniqKey }, isSelected } = props;
 	const blockProps = useBlockProps();
 
 	return [

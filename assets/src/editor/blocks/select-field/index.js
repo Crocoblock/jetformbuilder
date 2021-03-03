@@ -18,6 +18,15 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: SelectEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
+	example: {
+		attributes: {
+			label: 'Select Field',
+			description: 'Field description...',
+			field_options: [
+				{ label: 'Choose option...', value: '' },
+			]
+		}
+	}
 };
 
 export {

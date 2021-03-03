@@ -13,11 +13,17 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Date field' ),
+	title: __( 'Date Field' ),
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: DateEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Date Field',
+			description: 'Field description...',
+		}
+	}
 };
 
 export {

@@ -18,6 +18,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: HeadingEdit,
 	useEditProps: [ 'uniqKey' ],
+	example: {
+		attributes: {
+			label: 'Heading Field',
+			description: 'Field description...',
+		}
+	}
 };
 
 export {

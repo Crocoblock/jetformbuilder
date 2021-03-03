@@ -18,6 +18,13 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: RangeEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Range Field',
+			prefix: 'price: ',
+			suffix: '$'
+		}
+	}
 };
 
 export {

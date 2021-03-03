@@ -18,6 +18,12 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: TimeEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	example: {
+		attributes: {
+			label: 'Time Field',
+			description: 'Field description...'
+		}
+	}
 };
 
 export {

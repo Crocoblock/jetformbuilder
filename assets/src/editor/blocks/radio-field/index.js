@@ -18,6 +18,16 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: RadioEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
+	example: {
+		attributes: {
+			label: 'Radio Field',
+			field_options: [
+				{ label: 'First Option', value: '' },
+				{ label: 'Second Option', value: '' },
+				{ label: 'Third Option', value: '' },
+			]
+		},
+	}
 };
 
 export {

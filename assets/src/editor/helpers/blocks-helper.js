@@ -93,7 +93,8 @@ const getAvailableFieldsString = ( blockName ) => {
 
 
 const getInnerBlocks = ( clientId ) => {
-	return wp.data.select( 'core/block-editor' ).getBlock( clientId ).innerBlocks;
+	const block = wp.data.select( 'core/block-editor' ).getBlock( clientId );
+	return block ? block.innerBlocks : [];
 }
 
 const getFormFieldsByBlock = ( blockExclude ) => {

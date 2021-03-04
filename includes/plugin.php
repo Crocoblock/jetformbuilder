@@ -57,7 +57,6 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
-		new Form_Patterns\Manager();
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();

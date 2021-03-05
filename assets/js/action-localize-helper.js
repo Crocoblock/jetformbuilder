@@ -54,8 +54,10 @@ const localizedMessages = settings => {
 	return getLocalizedWithFunc( settings, '__messages', {} );
 };
 
-const getLocalizedFullPack = actionType => {
-	const source = getLocalized( actionType );
+const getLocalizedFullPack = ( actionType, source = false ) => {
+	if ( ! source ) {
+		source = getLocalized( actionType );
+	}
 
 	const label = localizedLabel( { source } );
 	const help = localizedHelp( { source } );

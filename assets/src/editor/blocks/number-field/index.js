@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Number Field',
-			description: 'Field description...',
+			desc: 'Field description...',
 			placeholder: 'Input your number...'
 		}
 	}

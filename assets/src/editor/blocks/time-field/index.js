@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Time Field',
-			description: 'Field description...'
+			desc: 'Field description...'
 		}
 	}
 };

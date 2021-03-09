@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Heading Field',
-			description: 'Field description...',
+			desc: 'Field description...',
 		}
 	}
 };

@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Checkbox Field',
-			description: 'Field description...',
+			desc: 'Field description...',
 			field_options: [
 				{ label: 'First Option', value: '' },
 				{ label: 'Second Option', value: '' },

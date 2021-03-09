@@ -22,7 +22,7 @@ const settings = {
 		attributes: {
 			label: 'Text Field',
 			placeholder: 'Input your text...',
-			description: 'Field description...'
+			desc: 'Field description...'
 		}
 	}
 };

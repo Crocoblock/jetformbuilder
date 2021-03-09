@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Thumbnail & file',
-			description: 'Field description...',
+			desc: 'Field description...',
 		}
 	}
 };

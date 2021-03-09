@@ -21,7 +21,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Select Field',
-			description: 'Field description...',
+			desc: 'Field description...',
 			field_options: [
 				{ label: 'Choose option...', value: '' },
 			]

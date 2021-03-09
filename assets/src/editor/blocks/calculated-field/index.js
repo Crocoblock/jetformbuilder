@@ -22,7 +22,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Calculated Field',
-			description: 'Field description...',
+			desc: 'Field description...',
 		}
 	}
 };

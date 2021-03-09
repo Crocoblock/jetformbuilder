@@ -23,7 +23,7 @@ const settings = {
 	example: {
 		attributes: {
 			label: 'Multiple fields',
-			description: 'Field description...',
+			desc: 'Field description...',
 		},
 		innerBlocks: [
 			{

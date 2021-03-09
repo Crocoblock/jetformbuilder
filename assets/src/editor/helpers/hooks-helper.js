@@ -16,6 +16,29 @@ const {
 
 export const jfbHooks = createHooks();
 
+export const useMetaState = ( key, ifEmpty = '{}' ) => {
+	const meta = useSelect( ( select ) => {
+		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+	} );
+
+	const {
+		editPost
+	} = useDispatch( 'core/editor' );
+
+	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
+
+	useEffect( () => {
+		editPost( {
+			meta: ( {
+				...meta,
+				[ key ]: JSON.stringify( metaStateValue )
+			} )
+		} );
+	}, [ metaStateValue ] );
+
+	return [ metaStateValue, setMetaStateValue ];
+};
+
 export const useActions = ( withEditPostEffect = false ) => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
@@ -71,4 +94,11 @@ export const useStateClasses = initialValid => {
 }
 
 
-saveGlobalComponent( 'JetFBHooks', { useActions, useStateClasses } );
+saveGlobalComponent(
+	'JetFBHooks',
+	{
+		useActions,
+		useStateClasses,
+		useMetaState
+	}
+);

@@ -1,10 +1,3 @@
-import ArgsMeta from './meta/arguments';
-import ActionsMeta from './meta/actions';
-import PresetMeta from './meta/preset';
-import MessagesMeta from './meta/messages';
-import Captcha from "./meta/captcha";
-import Gateways from "./meta/gateways";
-
 import './blocks/form-fields';
 import './form-actions/send-email';
 import './form-actions/insert-post';
@@ -28,11 +21,6 @@ window.jetFormActionTypes.forEach( function ( action, index ) {
 	}
 } );
 
-ArgsMeta();
-Captcha();
-Gateways();
-ActionsMeta();
-PresetMeta();
-MessagesMeta();
+import './plugins/manager';
 
 event( 'jet-form-builder-initialized' )();

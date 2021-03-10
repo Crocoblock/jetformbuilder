@@ -660,3 +660,7 @@ select.components-select-control__input.components-select-control__input.compone
 .components-button.has-icon:not(.has-text) .dashicon.dashicon {
     margin: unset;
 }
+
+.jet-form-builder-repeater__remove {
+    margin-top: 10px;
+}

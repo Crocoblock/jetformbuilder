@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.1.1
+* FIX: Wordpress 5.7 compatibility
+ 
 ## 1.1.0
 * ADD: Gutenberg blocks: **Conditional Block**, **Datetime Field** 
 * ADD: Elementor widget: **JetForm**

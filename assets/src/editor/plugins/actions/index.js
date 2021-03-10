@@ -1,6 +1,11 @@
 import PluginActions from "./render";
 
-const id = 'jf-actions-panel';
+const { __ } = wp.i18n;
+
+const base = {
+	name: 'jf-actions-panel',
+	title: __( 'Post Submit Actions' )
+};
 
 const settings = {
 	render: PluginActions,
@@ -8,6 +13,6 @@ const settings = {
 };
 
 export {
-	id,
+	base,
 	settings
 };

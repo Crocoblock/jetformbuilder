@@ -28,6 +28,7 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
 
 	useEffect( () => {
+		console.log( metaStateValue );
 		editPost( {
 			meta: ( {
 				...meta,

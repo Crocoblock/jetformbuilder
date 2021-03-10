@@ -24,10 +24,6 @@ const {
 } = wp.components;
 
 const {
-	PluginDocumentSettingPanel
-} = wp.editPost;
-
-const {
 	useState,
 	useEffect
 } = wp.element;
@@ -125,188 +121,183 @@ export default function PluginActions() {
 
 	const formFields = getFormFieldsBlocks( [], '--' );
 
-	return (
-		<PluginDocumentSettingPanel
-			name={ 'jf-actions' }
-			title={ 'Post Submit Actions' }
-		>
-			{ actions && actions.map( ( action, index ) => {
-				return <Card
-					key={ action.id }
-					size={ 'extraSmall' }
-					className={ 'jet-form-action' }
-				>
-					<CardBody>
-						<SelectControl
-							value={ action.type }
-							options={ actionTypes }
-							onChange={ ( newType ) => {
-								updateAction( action.id, 'type', newType );
-							} }
-						/>
-						<Button
-							icon='edit'
-							label={ 'Edit Action' }
-							onClick={ () => {
-								setEditedAction( () => ( {
-									...action
-								} ) );
-							} }
-						/>
-						<div/>
-						<Button
-							icon='randomize'
-							label={ 'Conditions' }
-							onClick={ () => {
-								setProcessedAction( () => ( { ...action } ) );
-							} }
-						/>
-						<DropdownMenu
-							icon={ 'ellipsis' }
-							label={ 'Edit, move or delete' }
-							controls={ [
-								{
-									title: 'Up',
-									icon: 'arrow-up',
-									disabled: true,
-									onClick: () => {
-										if ( 0 !== index ) {
-											moveAction( index, index - 1 );
-										}
-									}
-								},
-								{
-									title: 'Down',
-									icon: 'arrow-down',
-									disabled: index === actions.length,
-									onClick: () => {
-										if ( ( actions.length - 1 ) !== index ) {
-											moveAction( index, index + 1 );
-										}
-									}
-								},
-								{
-									title: 'Delete',
-									icon: 'trash',
-									onClick: () => {
-										deleteAction( index );
+	return <>
+		{ actions && actions.map( ( action, index ) => {
+			return <Card
+				key={ action.id }
+				size={ 'extraSmall' }
+				className={ 'jet-form-action' }
+			>
+				<CardBody>
+					<SelectControl
+						value={ action.type }
+						options={ actionTypes }
+						onChange={ ( newType ) => {
+							updateAction( action.id, 'type', newType );
+						} }
+					/>
+					<Button
+						icon='edit'
+						label={ 'Edit Action' }
+						onClick={ () => {
+							setEditedAction( () => ( {
+								...action
+							} ) );
+						} }
+					/>
+					<div/>
+					<Button
+						icon='randomize'
+						label={ 'Conditions' }
+						onClick={ () => {
+							setProcessedAction( () => ( { ...action } ) );
+						} }
+					/>
+					<DropdownMenu
+						icon={ 'ellipsis' }
+						label={ 'Edit, move or delete' }
+						controls={ [
+							{
+								title: 'Up',
+								icon: 'arrow-up',
+								disabled: true,
+								onClick: () => {
+									if ( 0 !== index ) {
+										moveAction( index, index - 1 );
 									}
 								}
-							] }
-						/>
+							},
+							{
+								title: 'Down',
+								icon: 'arrow-down',
+								disabled: index === actions.length,
+								onClick: () => {
+									if ( ( actions.length - 1 ) !== index ) {
+										moveAction( index, index + 1 );
+									}
+								}
+							},
+							{
+								title: 'Delete',
+								icon: 'trash',
+								onClick: () => {
+									deleteAction( index );
+								}
+							}
+						] }
+					/>
 
-					</CardBody>
-				</Card>
-			} ) }
-			<Button
-				isPrimary
-				onClick={ () => {
-					setActions( [
-						...actions,
-						{
-							type: 'send_email',
-							id: getRandomID(),
-							settings: {},
-						}
-					] );
+				</CardBody>
+			</Card>
+		} ) }
+		<Button
+			isPrimary
+			onClick={ () => {
+				setActions( [
+					...actions,
+					{
+						type: 'send_email',
+						id: getRandomID(),
+						settings: {},
+					}
+				] );
+			} }
+		>
+			{ '+ New Action' }
+		</Button>
+		{ isEdit && <ActionModal
+			classNames={ [ 'width-60' ] }
+			onRequestClose={ closeModal }
+			title={ 'Edit Action' }
+			onUpdateClick={ () => {
+				updateActionSettings( editedAction )
+			} }
+			onCancelClick={ closeModal }
+		>
+			{ Callback && <Callback
+				settings={ editedAction.settings }
+				onChange={ ( data ) => {
+					setEditedAction( prev => ( {
+						...prev,
+						settings: data
+					} ) );
 				} }
-			>
-				{ '+ New Action' }
-			</Button>
-			{ isEdit && <ActionModal
-				classNames={ [ 'width-60' ] }
-				onRequestClose={ closeModal }
-				title={ 'Edit Action' }
-				onUpdateClick={ () => {
-					updateActionSettings( editedAction )
-				} }
-				onCancelClick={ closeModal }
-			>
-				{ Callback && <Callback
-					settings={ editedAction.settings }
-					onChange={ ( data ) => {
-						setEditedAction( prev => ( {
-							...prev,
-							settings: data
-						} ) );
+			/> }
+		</ActionModal> }
+		{ isEditProcessAction && <ActionModal
+			classNames={ [ 'width-60' ] }
+			title={ 'Edit Action Conditions' }
+			onRequestClose={ () => setEditProcessAction( false ) }
+			onCancelClick={ () => setEditProcessAction( false ) }
+		>
+			{ ( { actionClick, onRequestClose } ) => {
+				return <RepeaterWithState
+					items={ processedAction.conditions }
+					newItem={ newItemCondition }
+					onUnMount={ onRequestClose }
+					isSaveAction={ actionClick }
+					onSaveItems={ updateActionCondition }
+					addNewButtonLabel={ __( 'Add New Condition' ) }
+					help={ {
+						helpVisible: conditions => conditions.length > 1,
+						helpSource: window.JetFormEditorData.helpForRepeaters,
+						helpKey: 'conditional_action'
 					} }
-				/> }
-			</ActionModal> }
-			{ isEditProcessAction && <ActionModal
-				classNames={ [ 'width-60' ] }
-				title={ 'Edit Action Conditions' }
-				onRequestClose={ () => setEditProcessAction( false ) }
-				onCancelClick={ () => setEditProcessAction( false ) }
-			>
-				{ ( { actionClick, onRequestClose } ) => {
-					return <RepeaterWithState
-						items={ processedAction.conditions }
-						newItem={ newItemCondition }
-						onUnMount={ onRequestClose }
-						isSaveAction={ actionClick }
-						onSaveItems={ updateActionCondition }
-						addNewButtonLabel={ __( 'Add New Condition' ) }
-						help={ {
-							helpVisible: conditions => conditions.length > 1,
-							helpSource: window.JetFormEditorData.helpForRepeaters,
-							helpKey: 'conditional_action'
-						} }
-					>
-						{ ( { currentItem, changeCurrentItem } ) => {
-							let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
-							executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
+				>
+					{ ( { currentItem, changeCurrentItem } ) => {
+						let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
+						executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
 
-							return <>
-								<ToggleControl
-									label={ executeLabel }
-									checked={ currentItem.execute }
+						return <>
+							<ToggleControl
+								label={ executeLabel }
+								checked={ currentItem.execute }
+								onChange={ newValue => {
+									changeCurrentItem( { execute: newValue } );
+								} }
+							/>
+							<SelectControl
+								label="Operator"
+								labelPosition="side"
+								value={ currentItem.operator }
+								options={ conditionOperators }
+								onChange={ newValue => {
+									changeCurrentItem( { operator: newValue } );
+								} }
+							/>
+							<SelectControl
+								label="Field"
+								labelPosition="side"
+								value={ currentItem.field }
+								options={ formFields }
+								onChange={ newValue => {
+									changeCurrentItem( { field: newValue } );
+								} }
+							/>
+							<FieldWithPreset
+								ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+									value={ currentItem.default }
+									isSaveAction={ actionClick }
+									onSavePreset={ newValue => {
+										changeCurrentItem( { default: newValue } );
+									} }
+									excludeSources={ [ 'query_var' ] }
+									onUnMount={ onRequestClose }
+								/> }
+								triggerClasses={ [ 'trigger__textarea' ] }
+							>
+								<TextareaControl
+									label="Value to Compare"
+									value={ currentItem.default }
 									onChange={ newValue => {
-										changeCurrentItem( { execute: newValue } );
+										changeCurrentItem( { default: newValue } );
 									} }
 								/>
-								<SelectControl
-									label="Operator"
-									labelPosition="side"
-									value={ currentItem.operator }
-									options={ conditionOperators }
-									onChange={ newValue => {
-										changeCurrentItem( { operator: newValue } );
-									} }
-								/>
-								<SelectControl
-									label="Field"
-									labelPosition="side"
-									value={ currentItem.field }
-									options={ formFields }
-									onChange={ newValue => {
-										changeCurrentItem( { field: newValue } );
-									} }
-								/>
-								<FieldWithPreset
-									ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-										value={ currentItem.default }
-										isSaveAction={ actionClick }
-										onSavePreset={ newValue => {
-											changeCurrentItem( { default: newValue } );
-										} }
-										excludeSources={ [ 'query_var' ] }
-										onUnMount={ onRequestClose }
-									/> }
-									triggerClasses={ [ 'trigger__textarea' ] }
-								>
-									<TextareaControl
-										label="Value to Compare"
-										value={ currentItem.default }
-										onChange={ newValue => {
-											changeCurrentItem( { default: newValue } );
-										} }
-									/>
-								</FieldWithPreset>
-							</>;
-						} }
-					</RepeaterWithState>;
-				} }
-			</ActionModal> }
-		</PluginDocumentSettingPanel>
-	)
+							</FieldWithPreset>
+						</>;
+					} }
+				</RepeaterWithState>;
+			} }
+		</ActionModal> }
+	</>
 };

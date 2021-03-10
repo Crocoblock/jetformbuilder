@@ -1,7 +1,6 @@
 /**
  * Internal dependencies
  */
-import Tools from "../helpers/tools";
 import MacrosInserter from "../components/macros-inserter";
 import { addAction } from "../helpers/action-helper";
 import { getFormFieldsBlocks } from "../helpers/blocks-helper";
@@ -24,8 +23,7 @@ addAction( 'send_email', function SendEmailAction( {
 	const formFields = getFormFieldsBlocks( [], '--' );
 
 	const insertMacros = ( macros ) => {
-		const content = settings.content || '' + '%' + macros + '%';
-
+		const content = ( settings.content || '' ) + '%' + macros + '%';
 		onChangeSetting( content, 'content' );
 	}
 

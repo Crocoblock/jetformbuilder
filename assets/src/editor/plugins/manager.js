@@ -1,19 +1,55 @@
 import * as actions from "./actions";
-import { jfbHooks } from "../helpers/hooks-helper";
+import * as args from "./arguments";
 
-const jfbPlugins = jfbHooks.applyFilters( 'jet.fb.register.plugins', [
-	actions
-] );
+const {
+	applyFilters
+} = wp.hooks;
 
 const {
 	registerPlugin
 } = wp.plugins;
 
-const registerJfbPlugin = plugin => {
-	const { id, settings } = plugin;
+const {
+	PluginDocumentSettingPanel
+} = wp.editPost;
 
-	registerPlugin( id, settings );
+const withPluginProps = ( settings, base ) => {
+	const PluginRender = settings.render;
+	return () => <PluginDocumentSettingPanel { ...base }>
+		<PluginRender/>
+	</PluginDocumentSettingPanel>;
+}
+
+const registerJfbPlugin = plugin => {
+	const { base, settings } = plugin;
+
+	settings.render = withPluginProps( settings, base );
+
+	registerPlugin( base.name, settings );
 };
 
-jfbPlugins.forEach( registerJfbPlugin );
+export default function RegisterPlugins() {
+	const sortedPlugins = [];
+	const jfbPlugins = applyFilters( 'jet.fb.register.plugins', [
+		actions,
+		args
+	] );
+
+	jfbPlugins.forEach( plugin => {
+		const { base: { name } } = plugin;
+
+		const beforePlugin = applyFilters( `jet.fb.register.plugin.${ name }.before`, [] );
+		if ( beforePlugin ) {
+			sortedPlugins.push( ...beforePlugin );
+		}
+		sortedPlugins.push( plugin );
+
+		const afterPlugin = applyFilters( `jet.fb.register.plugin.${ name }.after`, [] );
+		if ( afterPlugin ) {
+			sortedPlugins.push( ...afterPlugin );
+		}
+	} );
+
+	sortedPlugins.forEach( registerJfbPlugin );
+}
 

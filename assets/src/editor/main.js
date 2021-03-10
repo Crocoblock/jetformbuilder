@@ -10,6 +10,7 @@ import './form-actions/redirect-to-page';
 import './form-actions/mailchimp';
 import './form-actions/getresponse';
 import './form-actions/activecampaign';
+import RegisterPlugins from "./plugins/manager";
 import { event } from "./helpers/tools";
 
 
@@ -21,6 +22,6 @@ window.jetFormActionTypes.forEach( function ( action, index ) {
 	}
 } );
 
-import './plugins/manager';
+RegisterPlugins();
 
 event( 'jet-form-builder-initialized' )();

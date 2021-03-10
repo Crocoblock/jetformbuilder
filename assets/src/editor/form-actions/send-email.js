@@ -23,7 +23,7 @@ addAction( 'send_email', function SendEmailAction( {
 	const formFields = Tools.getFormFieldsBlocks();
 
 	const insertMacros = ( macros ) => {
-		const content = settings.content || '' + '%' + macros + '%';
+		const content = ( settings.content || '' ) + '%' + macros + '%';
 
 		onChangeSetting( content, 'content' );
 	}

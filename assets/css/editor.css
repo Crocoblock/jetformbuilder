@@ -592,6 +592,7 @@ select.components-select-control__input.components-select-control__input.compone
     max-width: 100vw;
     width: 100%;
     line-height: 1.1;
+    padding: 1px 8px;
 }
 
 .jet-form-builder__calculated-field {
@@ -653,7 +654,7 @@ select.components-select-control__input.components-select-control__input.compone
     margin-top: -33px;
     margin-left: 10vw;
 }
-.block-editor-block-list__block[data-type], .block-list-appender.wp-block {
+.editor-styles-wrapper .wp-block.wp-block {
     max-width: 100%;
 }
 

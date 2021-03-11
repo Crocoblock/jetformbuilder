@@ -759,3 +759,7 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 .block-editor-block-list__block[data-type^="jet-forms/"] {
     max-width: 100%;
 }
+
+.components-button.has-icon:not(.has-text) .dashicon.dashicon {
+    margin: unset;
+}

@@ -2,7 +2,7 @@
 Contributors: crocoblock, mjhead
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.6.2
+Tested up to: 5.7.0
 Requires PHP: 7.0
 Stable tag: 1.1.0
 License: GPLv2 or later
@@ -64,6 +64,10 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 5. Style settings
 
 == Changelog ==
+
+**1.1.1**
+ - FIX: Wordpress 5.7 compatibility
+ - Improvement: Triggering conditional logic when typing in a text and textarea fields
 
 **1.1.0**
  - ADD: Gutenberg blocks: **Conditional Block**, **Datetime Field**

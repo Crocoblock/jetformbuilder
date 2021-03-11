@@ -86,7 +86,8 @@
 
 			if ( $listenTo.is( 'input[type=checkbox]' ) ) {
 				controlType = 'checkbox';
-			} else if ( $listenTo.is( 'input[type=radio]' ) ) {
+			}
+			else if ( $listenTo.is( 'input[type=radio]' ) ) {
 				controlType = 'radio';
 			}
 
@@ -96,7 +97,8 @@
 
 			if ( 'plain' === controlType ) {
 				val = $listenTo.val();
-			} else {
+			}
+			else {
 
 				$listenTo.each( function () {
 
@@ -105,7 +107,8 @@
 					if ( $control.is( ':checked' ) ) {
 						if ( 'checkbox' === controlType ) {
 							val.push( $control.val() );
-						} else {
+						}
+						else {
 							val = $control.val();
 						}
 					}
@@ -123,7 +126,8 @@
 				case 'equal':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					} else {
+					}
+					else {
 						checkResult = ( val == listenFor );
 					}
 					break;
@@ -131,7 +135,8 @@
 				case 'greater':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					} else {
+					}
+					else {
 						checkResult = ( parseFloat( val ) > parseFloat( listenFor ) );
 					}
 					break;
@@ -139,7 +144,8 @@
 				case 'less':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					} else {
+					}
+					else {
 						checkResult = ( parseFloat( val ) < parseFloat( listenFor ) );
 					}
 					break;
@@ -148,13 +154,15 @@
 
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					} else {
+					}
+					else {
 						if ( 2 <= listenFor.length ) {
 							let from = parseFloat( listenFor[ 0 ] );
 							let to = parseFloat( listenFor[ 1 ] );
 							val = parseFloat( val );
 							checkResult = ( from <= val && val <= to );
-						} else {
+						}
+						else {
 							checkResult = false;
 						}
 					}
@@ -165,12 +173,15 @@
 					if ( val && val.constructor === Array ) {
 						checkResult = val.includes( listenFor );
 
-					} else if ( ! val ) {
+					}
+					else if ( ! val ) {
 						checkResult = false;
-					} else {
+					}
+					else {
 						if ( listenFor.length ) {
 							checkResult = 0 <= listenFor.indexOf( val );
-						} else {
+						}
+						else {
 							checkResult = false;
 						}
 					}
@@ -186,10 +197,12 @@
 
 						checkResult = 0 < intersect.length;
 
-					} else if ( ! val ) {
+					}
+					else if ( ! val ) {
 						checkResult = false;
-					} else {
-						checkResult = 0 <= listenFor.indexOf( val );
+					}
+					else {
+						checkResult = 0 <= val.indexOf( listenFor );
 					}
 
 					break;
@@ -212,7 +225,8 @@
 
 			if ( 'show' === type ) {
 				checked[ listenTo ] = checkResult;
-			} else {
+			}
+			else {
 				checked[ listenTo ] = ! checkResult;
 			}
 
@@ -276,7 +290,8 @@
 					}
 				}
 
-			} else if ( $field.is( ':not( input[type=checkbox], input[type=radio] )' ) ) {
+			}
+			else if ( $field.is( ':not( input[type=checkbox], input[type=radio] )' ) ) {
 
 				if ( setVal ) {
 					$field.val( setVal ).trigger( 'change.JetFormBuilderMain' );
@@ -291,7 +306,8 @@
 					}
 				}
 
-			} else {
+			}
+			else {
 
 				$field.each( function () {
 
@@ -354,7 +370,8 @@
 				.val( '' )
 				.attr( 'required', true );
 
-			} else {
+			}
+			else {
 
 				$section.hide();
 
@@ -425,7 +442,8 @@
 
 					if ( 'show' === type || 'hide' === type ) {
 						checkVisibilityCond( listenTo, listenFor, $section, operator, type );
-					} else {
+					}
+					else {
 						checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
 					}
 
@@ -442,7 +460,8 @@
 				//Show based on current value on page load
 				if ( 'show' === type || 'hide' === type ) {
 					checkVisibilityCond( listenTo, listenFor, $section, operator, type );
-				} else {
+				}
+				else {
 					checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
 				}
 
@@ -500,7 +519,12 @@
 			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
 			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
 			.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
-			.on( 'jet-form-builder/switch-page', self.updateProgress );
+			.on( 'jet-form-builder/switch-page', self.updateProgress )
+			.on( 'input.JetFormBuilderMain', '.jet-form-builder__field.text-field, .jet-form-builder__field.textarea-field', self.inputTextFields )
+		},
+
+		inputTextFields: function() {
+			$( this ).trigger( 'change.JetFormBuilderMain' );
 		},
 
 		updateProgress: function ( event, $progress, $fromPage, $toPage ) {
@@ -513,7 +537,8 @@
 
 			if ( $fromPage < $toPage ) {
 				prevItem.addClass( 'passed-page' );
-			} else {
+			}
+			else {
 				prevItem.removeClass( 'passed-page' );
 			}
 		},
@@ -885,7 +910,8 @@
 									val = $field[ j ].value;
 								}
 							}
-						} else if ( 'radio' === $field[ 0 ].type ) {
+						}
+						else if ( 'radio' === $field[ 0 ].type ) {
 
 							isRadio = true;
 
@@ -893,7 +919,8 @@
 								radioFields[ $field[ 0 ].name ] = $field[ 0 ].value;
 							}
 
-						} else {
+						}
+						else {
 							val = $field.val();
 						}
 					}
@@ -924,7 +951,8 @@
 				}
 
 				$button.attr( 'disabled', true );
-			} else {
+			}
+			else {
 
 				if ( $msg.length ) {
 					$msg.removeClass( 'jet-form-builder__next-page-msg--visible' );
@@ -938,7 +966,8 @@
 					page: $page,
 					disabled: disabled,
 				};
-			} else {
+			}
+			else {
 				JetFormBuilder.pages[ pageNum ].disabled = disabled;
 			}
 
@@ -1027,29 +1056,34 @@
 
 								if ( undefined !== $field[ i ].dataset.calculate ) {
 									itemVal = $field[ i ].dataset.calculate;
-								} else {
+								}
+								else {
 									itemVal = $field[ i ].value;
 								}
 
 								if ( 'checkbox' === $field[ i ].type ) {
 									val += parseInt( itemVal, 10 );
-								} else {
+								}
+								else {
 									val = itemVal;
 								}
 
 							}
 						}
 
-					} else {
+					}
+					else {
 						if ( 'checkbox' === $field[ 0 ].type ) {
 							if ( $field[ 0 ].checked ) {
 								if ( undefined !== $field[ 0 ].dataset.calculate ) {
 									val = $field[ 0 ].dataset.calculate;
-								} else {
+								}
+								else {
 									val = $field[ 0 ].value;
 								}
 							}
-						} else {
+						}
+						else {
 							val = $field.val();
 						}
 					}
@@ -1062,7 +1096,8 @@
 
 					if ( undefined !== calcValue ) {
 						val = calcValue;
-					} else {
+					}
+					else {
 						val = $field.find( 'option:selected' ).val();
 					}
 
@@ -1082,7 +1117,8 @@
 								val += rowVal;
 							} );
 
-						} else {
+						}
+						else {
 							val = $field.find( '.jet-form-builder-repeater__row' ).length;
 						}
 					}
@@ -1120,11 +1156,14 @@
 
 				if ( $scope.data( 'repeater' ) ) {
 					object = $scope;
-				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
+				}
+				else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
 					object = $scope.closest( '.jet-form-builder-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
-				} else if ( $scope.data( 'repeater-row' ) ) {
+				}
+				else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
-				} else {
+				}
+				else {
 					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
 				}
 
@@ -1309,7 +1348,8 @@
 
 							if ( $field.hasClass( 'checkradio-field' ) ) {
 								$field.closest( '.jet-form-builder__field-wrap' ).after( afterMessage );
-							} else {
+							}
+							else {
 								$field.after( afterMessage );
 							}
 
@@ -1324,7 +1364,8 @@
 
 						if ( response.redirect ) {
 							window.location = response.redirect;
-						} else if ( response.reload ) {
+						}
+						else if ( response.reload ) {
 							window.location.reload();
 						}
 

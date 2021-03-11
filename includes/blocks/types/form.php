@@ -365,6 +365,13 @@ class Form extends Base {
 			return 'Please select form to show';
 		}
 
+		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
+
+		if ( $custom_form ) {
+			echo $custom_form;
+			return;
+		}
+
 		$builder  = new Form_Builder( $form_id, false, $attrs );
 		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
 

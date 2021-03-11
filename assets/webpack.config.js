@@ -20,12 +20,8 @@ module.exports = {
 		],
 		extensions: ['.js'],
 		alias: {
-			'@': path.resolve(__dirname, 'src'),
-			'bases': path.resolve(__dirname, 'src/js/bases/'),
-			'filters': path.resolve(__dirname, 'src/js/filters/'),
-			'modules': path.resolve(__dirname, 'src/js/modules/'),
-			'includes': path.resolve(__dirname, 'src/js/includes/'),
-			'blocks': path.resolve(__dirname, 'src/js/blocks/')
+			'@': path.resolve(__dirname, 'src/editor'),
+			'@helpers': path.resolve(__dirname, 'src/editor/helpers'),
 		}
 	},
 	externals: {

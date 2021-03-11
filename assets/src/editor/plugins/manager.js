@@ -1,5 +1,6 @@
 import * as actions from "./actions";
 import * as args from "./arguments";
+import * as captcha from "./captcha";
 
 const {
 	applyFilters
@@ -31,8 +32,9 @@ const registerJfbPlugin = plugin => {
 export default function RegisterPlugins() {
 	const sortedPlugins = [];
 	const jfbPlugins = applyFilters( 'jet.fb.register.plugins', [
+		args,
 		actions,
-		args
+		captcha,
 	] );
 
 	jfbPlugins.forEach( plugin => {

@@ -349,14 +349,6 @@ class Editor {
 		return Plugin::instance()->post_type->get_messages_default();
 	}
 
-	public function get_recaptcha_labels() {
-		return array(
-			'enabled' => __( 'Enable reCAPTCHA v3 form verification', 'jet-form-builder' ),
-			'key'     => __( 'Site Key:', 'jet-form-builder' ),
-			'secret'  => __( 'Secret Key:', 'jet-form-builder' ),
-		);
-	}
-
 	/**
 	 * Enqueue editor assets
 	 *
@@ -404,7 +396,6 @@ class Editor {
 			'itemID'           => $this->get_item_id(),
 			'presetConfig'     => $this->get_preset_config(),
 			'messagesDefault'  => $this->get_messages_default(),
-			'recaptchaLabels'  => $this->get_recaptcha_labels(),
 			'gateways'         => Gateway_Manager::instance()->editor_data(),
 			'helpForRepeaters' => $this->get_help_for_repeaters(),
 		) );

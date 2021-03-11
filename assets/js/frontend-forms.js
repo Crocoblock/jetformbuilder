@@ -70,7 +70,7 @@
 
 	};
 
-	$.fn.jetFormConditional = function ( options ) {
+	$.fn.jetFormBuilderConditional = function ( options ) {
 
 		var settings = $.extend( {
 			hideJS: true
@@ -469,7 +469,6 @@
 
 			setValue( $section );
 			setVisibility( $section );
-
 		} );
 	};
 
@@ -484,7 +483,7 @@
 		},
 
 		initCommon: function () {
-			$( '.jet-form-builder' ).each( function ( index, value ) {
+			$( '.jet-form-builder__form-wrapper' ).each( function ( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
 		},
@@ -798,7 +797,7 @@
 		},
 
 		initConditions: function ( $scope ) {
-			$scope.find( '.jet-form-builder__conditional' ).jetFormConditional();
+			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 
 		widgetBookingForm: function ( $scope ) {

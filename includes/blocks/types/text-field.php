@@ -260,11 +260,11 @@ class Text_Field extends Base {
 				'default' => '_',
 			),
 			'minlength'         => array(
-				'type'    => 'string',
+				'type'    => 'number',
 				'default' => '',
 			),
 			'maxlength'         => array(
-				'type'    => 'string',
+				'type'    => 'number',
 				'default' => '',
 			),
 		);

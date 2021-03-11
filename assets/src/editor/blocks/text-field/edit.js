@@ -94,7 +94,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 						key='minlength'
 						min={ 1 }
 						value={ attributes.minlength }
-						onChange={ ( newValue ) => changeNumberValue( 'minlength', newValue ) }
+						onChange={ newValue => changeNumberValue( 'minlength', newValue ) }
 					/>
 					<NumberControl
 						label={ __( 'Max length (symbols)' ) }
@@ -102,7 +102,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = function TextEdit( props ) {
 						key='maxlength'
 						min={ 1 }
 						value={ attributes.maxlength }
-						onChange={ ( newValue ) => changeNumberValue( 'maxlength', newValue ) }
+						onChange={ newValue => changeNumberValue( 'maxlength', newValue ) }
 					/>
 					<ToggleControl
 						key={ 'enable_input_mask' }

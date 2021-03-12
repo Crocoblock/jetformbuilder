@@ -1,8 +1,8 @@
 {
-	"name": "jet-smart-filters",
-	"description": "Plugin For Elementor",
-	"version": "1.0.0",
-	"author": "Sargas <serjko87@gmail.com>",
+	"name": "jet-form-builder",
+	"description": "Plugin For Gutenberg & Elementor",
+	"version": "1.2.0",
+	"author": "hug.reed <sanko200065@gmail.com>",
 	"license": "MIT",
 	"private": true,
 	"scripts": {

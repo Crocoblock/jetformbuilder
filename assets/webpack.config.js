@@ -22,6 +22,7 @@ module.exports = {
 		alias: {
 			'@': path.resolve(__dirname, 'src/editor'),
 			'@helpers': path.resolve(__dirname, 'src/editor/helpers'),
+			'@components': path.resolve(__dirname, 'src/editor/components'),
 		}
 	},
 	externals: {

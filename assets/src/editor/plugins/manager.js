@@ -1,6 +1,9 @@
 import * as actions from "./actions";
 import * as args from "./arguments";
 import * as captcha from "./captcha";
+import * as gateways from "./gateways";
+import * as preset from "./preset";
+import * as messages from "./messages";
 
 const {
 	applyFilters
@@ -33,12 +36,19 @@ export default function RegisterPlugins() {
 	const sortedPlugins = [];
 	const jfbPlugins = applyFilters( 'jet.fb.register.plugins', [
 		args,
-		actions,
 		captcha,
+		gateways,
+		actions,
+		preset,
+		messages
 	] );
 
 	jfbPlugins.forEach( plugin => {
-		const { base: { name } } = plugin;
+		const { base: { name, condition = true } } = plugin;
+
+		if ( ! condition ) {
+			return false;
+		}
 
 		const beforePlugin = applyFilters( `jet.fb.register.plugin.${ name }.before`, [] );
 		if ( beforePlugin ) {

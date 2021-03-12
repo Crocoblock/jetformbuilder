@@ -40,15 +40,15 @@ class Form extends Base {
 	}
 
 	public function get_label_selector() {
-		return '.jet-form-builder__label';
+		return '__label';
 	}
 
 	public function get_required_selector() {
-		return '.jet-form-builder__label-text .jet-form-builder__required';
+		return '__label-text .%1$s__required';
 	}
 
 	public function get_description_selector() {
-		return '.jet-form-builder__desc';
+		return '__desc';
 	}
 
 	public function general_style_unregister() {

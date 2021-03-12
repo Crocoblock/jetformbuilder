@@ -114,10 +114,16 @@ class Form_Handler {
 	}
 
 	private function get_response_manager() {
+		if ( ! $this->form_id ) {
+			$this->setup_form();
+		}
+
+		$action_handler = $this->action_handler ? $this->action_handler : new Action_Handler( $this->form_id );
+
 		if ( $this->is_ajax ) {
 			return new Form_Response\Types\Ajax_Response( array(
 				'form_id' => $this->form_id,
-				'actions' => $this->action_handler->get_all(),
+				'actions' => $action_handler->get_all(),
 			) );
 		} else {
 			return new Form_Response\Types\Reload_Response( array(

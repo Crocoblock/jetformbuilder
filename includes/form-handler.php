@@ -87,6 +87,10 @@ class Form_Handler {
 	public function setup_form() {
 		global $post;
 
+		if ( $this->form_id ) {
+			return;
+		}
+
 		if ( ! $this->is_ajax ) {
 			$post          = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
 			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? absint( $_REQUEST[ $this->form_key ] ) : false;

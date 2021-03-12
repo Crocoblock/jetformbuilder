@@ -368,8 +368,7 @@ class Form extends Base {
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
-			echo $custom_form;
-			return;
+			return $custom_form;
 		}
 
 		$builder  = new Form_Builder( $form_id, false, $attrs );

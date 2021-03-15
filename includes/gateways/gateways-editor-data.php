@@ -24,7 +24,7 @@ trait Gateways_Editor_Data {
 		);
 	}
 
-	private function default_messages() {
+	public function default_messages() {
 		return array(
 			'success' => 'Payment success message',
 			'failed'  => 'Payment failed message',

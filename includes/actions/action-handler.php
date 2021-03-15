@@ -38,9 +38,8 @@ class Action_Handler {
 	 * Constructor for the class
 	 *
 	 * @param $form_id
-	 * @param array $request_data
 	 */
-	public function __construct( $form_id, $request_data = array() ) {
+	public function __construct( $form_id ) {
 		$this->form_id      = $form_id;
 		$this->set_form_actions();
 	}

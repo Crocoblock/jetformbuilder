@@ -44,10 +44,6 @@ export default function RangeEdit( props ) {
 	} = props;
 
 	return [
-		<ToolBarFields
-			key={ uniqKey( 'ToolBarFields' ) }
-			{ ...props }
-		/>,
 		props.isSelected && (
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }

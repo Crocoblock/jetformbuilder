@@ -203,9 +203,9 @@ class Controller extends Base_Gateway {
 		$sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
 
 		if ( $sandbox ) {
-			$url = 'https://api.sandbox.paypal.com/';
+			$url = 'https://api-m.sandbox.paypal.com/';
 		} else {
-			$url = 'https://api.paypal.com/';
+			$url = 'https://api-m.paypal.com/';
 		}
 
 		return esc_url( $url . $endpoint );

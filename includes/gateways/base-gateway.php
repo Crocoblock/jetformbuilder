@@ -106,7 +106,7 @@ abstract class Base_Gateway {
 			return $this->gateways_meta['messages'][ $type ];
 		}
 
-		return Gateway_Manager::instance()->get_default_messages()[ $type ];
+		return Gateway_Manager::instance()->default_messages()[ $type ];
 	}
 
 	/**
@@ -154,10 +154,8 @@ abstract class Base_Gateway {
 		$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
 		if ( ! empty( $keep_these ) ) {
-			$notifications = new Action_Handler(
-				$this->data['form_id'],
-				$this->data['form_data']
-			);
+			$notifications = new Action_Handler( $this->data['form_id'] );
+			$notifications->add_request( $this->data['form_data'] );
 
 			$notifications->unregister_action( 'redirect_to_page' );
 

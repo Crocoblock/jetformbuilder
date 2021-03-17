@@ -12,12 +12,10 @@ import {
 } from "./options";
 
 const {
-	TextControl,
 	TextareaControl,
 	ToggleControl,
 	SelectControl,
 	Button,
-	ButtonGroup,
 	Card,
 	CardBody,
 	DropdownMenu,

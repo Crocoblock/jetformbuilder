@@ -256,7 +256,7 @@ export default function GatewaysEditor( {
 			<h4>
 				{ __( 'Available macros list: ', 'jet-form-builder' ) }<br/>
 				{ __( '%gateway_amount% - payment amount returned from gateway template;', 'jet-form-builder' ) }<br/>
-				{ __( '%gateway_status% - payemnt status returned from payment gateway;', 'jet-form-builder' ) }<br/>
+				{ __( '%gateway_status% - payment status returned from payment gateway;', 'jet-form-builder' ) }<br/>
 				{ __( '%field_name% - replace "field_name" with any field name from the form;', 'jet-form-builder' ) }<br/>
 			</h4>
 		</BaseControl>

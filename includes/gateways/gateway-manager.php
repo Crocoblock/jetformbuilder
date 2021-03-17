@@ -87,34 +87,6 @@ class Gateway_Manager {
 		}
 	}
 
-
-	/**
-	 * Apply macros in string
-	 *
-	 * @return [type] [description]
-	 */
-	public function apply_macros( $string = null ) {
-
-		return preg_replace_callback( '/%(.*?)%/', function ( $matches ) {
-			switch ( $matches[1] ) {
-				case 'gateway_amount':
-					$amount = ! empty( $this->data['amount'] ) ? $this->data['amount'] : false;
-
-					return ! empty( $amount ) ? $amount['value'] . ' ' . $amount['currency_code'] : '';
-
-				case 'gateway_status':
-					return ! empty( $this->data['status'] ) ? $this->data['status'] : '';
-
-				default:
-					$form_data = ! empty( $this->data['form_data'] ) ? $this->data['form_data'] : array();
-
-					return ! empty( $form_data[ $matches[1] ] ) ? $form_data[ $matches[1] ] : '';
-			}
-
-		}, $string );
-
-	}
-
 	public function add_data( $data ) {
 		$this->data = $data;
 	}

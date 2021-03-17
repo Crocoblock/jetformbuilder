@@ -114,6 +114,7 @@ Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 == Changelog ==
 
 **1.1.2**
+ - FIX: Duplicating a plain preset in fields
  - FIX: Applying macros to a message after paying with PayPal
  - FIX: Retrieving form data after Paypal payment
  - FIX: Styling Form-block with JetStyleManager

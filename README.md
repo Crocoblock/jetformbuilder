@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.1.2
+* FIX: Applying macros to a message after paying with PayPal
+* FIX: Retrieving form data after Paypal payment
+* FIX: Styling Form-block with JetStyleManager
+* FIX: Compatibility with Twenty Twenty-One theme
+* FIX: Compatibility with JetEngine on initializing the conditions
+* FIX: Saving character limitation in Text Field settings
+
 ## 1.1.1
 * FIX: Wordpress 5.7 compatibility
 * Improvement: Triggering conditional logic when typing in a text and textarea fields

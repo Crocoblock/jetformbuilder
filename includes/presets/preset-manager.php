@@ -108,7 +108,7 @@ class Preset_Manager {
 		$this->set_preset_type_manager( $args );
 
 		if ( $this->plain_default ) {
-			return $this->plain_default;
+			return $this->get_plain_default();
 		}
 
 		if ( $this->manager_preset instanceof Base_Preset ) {
@@ -116,6 +116,13 @@ class Preset_Manager {
 		}
 
 		return false;
+	}
+
+	public function get_plain_default() {
+		$value = $this->plain_default;
+		$this->plain_default = false;
+
+		return $value;
 	}
 
 }

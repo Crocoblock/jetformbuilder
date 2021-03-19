@@ -6,17 +6,14 @@ namespace Jet_Form_Builder\Widgets\Types;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Typography;
-use Elementor\Widget_Base;
 use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
 use Jet_Form_Builder\Classes\Tools;
 
-class Form extends Widget_Base {
+class Form extends Jfb_Widget_Base {
 
 	use General_Style_Functions;
 
-	public function __construct( $data = [], $args = null ) {
-		parent::__construct( $data, $args );
-
+	public function init_hooks() {
 		add_filter(
 			'jet-engine/booking-form/combine-selector',
 			array( $this, 'combine_selector' ), 10, 3
@@ -70,7 +67,6 @@ class Form extends Widget_Base {
 			'elementor/element/jet-engine-booking-form/form_prev_page_style/after_section_end',
 			array( $this, 'after_form_prev_page_style' ), 10, 2
 		);
-
 	}
 
 

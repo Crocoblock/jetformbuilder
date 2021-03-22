@@ -592,7 +592,7 @@ select.components-select-control__input.components-select-control__input.compone
     max-width: 100vw;
     width: 100%;
     line-height: 1.1;
-    padding: 1px 8px;
+    padding: 1px 24px 1px 8px;
 }
 
 .jet-form-builder__calculated-field {

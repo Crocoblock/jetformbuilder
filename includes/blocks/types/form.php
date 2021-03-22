@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -364,11 +366,11 @@ class Form extends Base {
 		if ( ! $form_id ) {
 			return 'Please select form to show';
 		}
-
+		$styles = $this->maybe_render_styles_block( $form_id );
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
-			return $custom_form;
+			return ( $styles . $custom_form );
 		}
 
 		$builder  = new Form_Builder( $form_id, false, $attrs );
@@ -377,7 +379,7 @@ class Form extends Base {
 		Error_Handler::instance();
 
 		ob_start();
-
+		echo $styles;
 		$builder->render_form();
 		$messages->render_messages();
 
@@ -386,6 +388,16 @@ class Form extends Base {
 		}
 
 		return ob_get_clean();
+	}
+
+	private function maybe_render_styles_block( $form_id ) {
+		if ( ! Jet_Style_Manager::is_activated() ) {
+			return '';
+		}
+		$result = '<div id="jet-sm-gb-style--fb"><style>';
+		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $form_id );
+
+		return $result . '</style></div>';
 	}
 
 }

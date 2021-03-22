@@ -619,7 +619,7 @@ select.components-select-control__input.components-select-control__input.compone
     flex-direction: column;
 }
 
-.block-editor-block-inspector .components-input-control.components-number-control {
+.edit-post-sidebar .components-input-control.components-number-control {
     margin-bottom: 2em;
 }
 
@@ -670,4 +670,8 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-form-builder-repeater__remove {
     margin-top: 10px;
+}
+
+.interface-complementary-area-header.components-panel__header {
+    z-index: 100;
 }

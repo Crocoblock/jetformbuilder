@@ -229,16 +229,6 @@ class Form_Builder {
 
 	}
 
-	private function maybe_render_styles_block() {
-		if ( ! Jet_Style_Manager::is_activated() ) {
-			return '';
-		}
-		$result = '<div id="jet-sm-gb-style--fb"><style>';
-		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id );
-
-		return $result . '</style></div>';
-	}
-
 	public function preset() {
 		Preset_Manager::instance()->set_form_id( $this->form_id );
 

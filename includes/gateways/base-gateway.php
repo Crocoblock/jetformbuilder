@@ -346,13 +346,15 @@ abstract class Base_Gateway {
 		$refer            = $this->action_handler->request_data['__refer'];
 
 		if ( $success_redirect && $this->redirect && 'success' === $type ) {
-			$type = ! empty( $this->redirect['redirect_type'] ) ? $this->redirect['redirect_type'] : 'static_page';
+			$settings = $this->redirect->settings;
+
+			$type = ! empty( $settings['redirect_type'] ) ? $settings['redirect_type'] : 'static_page';
 
 			if ( 'static_page' === $type ) {
-				$to_page = ! empty( $this->redirect['redirect_page'] ) ? $this->redirect['redirect_page'] : false;
+				$to_page = ! empty( $settings['redirect_page'] ) ? $settings['redirect_page'] : false;
 				$refer   = ! empty( $to_page ) ? get_permalink( $to_page ) : false;
 			} else {
-				$refer = ! empty( $this->redirect['redirect_url'] ) ? $this->redirect['redirect_url'] : false;
+				$refer = ! empty( $settings['redirect_url'] ) ? $settings['redirect_url'] : false;
 			}
 		}
 

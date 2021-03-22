@@ -58,7 +58,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 		const hasToolbar = Boolean( window.jetFormBuilderControls.toolbar[ block ] && window.jetFormBuilderControls.toolbar[ block ].length );
 
 		const changeNumberValue = ( key, newValue ) => {
-			props.setAttributes( { [ key ]: newValue ? parseInt( newValue ) : null } );
+			props.setAttributes( { [ key ]: newValue ? parseFloat( newValue ) : null } );
 		}
 
 
@@ -111,6 +111,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class NumberEdit extends wp.
 							label={ __( 'Step' ) }
 							labelPosition='top'
 							key='step'
+							step={ 0.01 }
 							value={ attributes.step }
 							onChange={ newValue => changeNumberValue( 'step', newValue ) }
 						/>

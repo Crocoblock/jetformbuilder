@@ -3,6 +3,8 @@
  * input[type="hidden"] template
  */
 
+$this->add_attribute( 'class', 'jet-form-builder__field select-field' );
+$this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $this->block_type->get_required_val( $args ) );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
@@ -19,7 +21,7 @@ $this->add_attribute( 'data-default-val', $default );
 
 ?>
 <div class="jet-form-builder__field-wrap">
-    <select class="jet-form-builder__field select-field"<?php $this->render_attributes_string(); ?>><?php
+    <select <?php $this->render_attributes_string(); ?>><?php
 
         if ( $placeholder ) {
             $selected_placeholder = '';

@@ -39,12 +39,14 @@ trait Attributes_Trait {
 	 * @return void
 	 */
 	public function render_attributes_string() {
+		$this->render_attributes_string_save();
+		$this->attrs = array();
+	}
 
+	public function render_attributes_string_save() {
 		foreach ( $this->attrs as $attr => $value ) {
 			printf( ' %1$s="%2$s"', $attr, $value );
 		}
-
-		$this->attrs = array();
 	}
 
 

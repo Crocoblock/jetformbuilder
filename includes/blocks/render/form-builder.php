@@ -127,8 +127,6 @@ class Form_Builder {
 		$this->add_attribute( 'data-layout', $this->args['fields_layout'] );
 
 		ob_start();
-		echo $this->maybe_render_styles_block();
-
 		include $this->get_global_template( 'common/start-form.php' );
 		$start_form .= ob_get_clean();
 

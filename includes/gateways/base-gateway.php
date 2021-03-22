@@ -336,7 +336,7 @@ abstract class Base_Gateway {
 	}
 
 	protected function get_price( $price ) {
-		return absint( $price );
+		return (float) $price;
 	}
 
 	protected function get_refer_url( $type, array $additional_args = array() ) {

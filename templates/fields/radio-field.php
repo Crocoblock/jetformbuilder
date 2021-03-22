@@ -7,6 +7,8 @@ $required = $this->block_type->get_required_val( $args );
 $name        = $this->block_type->get_field_name( $args['name'] );
 $default     = ! empty( $args['default'] ) ? $args['default'] : false;
 $data_switch = '';
+$this->add_attribute( 'class', 'jet-form-builder__field radio-field checkradio-field' );
+$this->add_attribute( 'class', $args['class_name'] );
 
 if ( ! empty( $args['switch_on_change'] ) ) {
 	$data_switch = ' data-switch="1"';
@@ -52,7 +54,7 @@ if ( ! empty( $args['field_options'] ) ) {
 				<input
 					type="radio"
 					name="<?php echo $name; ?>"
-					class="jet-form-builder__field radio-field checkradio-field"
+					<?php $this->render_attributes_string_save(); ?>
 					value="<?php echo $val; ?>"
 					data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>

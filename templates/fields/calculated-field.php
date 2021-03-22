@@ -14,19 +14,20 @@ $prefix        = ! empty( $args['calc_prefix'] ) ? $args['calc_prefix'] : false;
 $suffix        = ! empty( $args['calc_suffix'] ) ? $args['calc_suffix'] : false;
 $precision     = isset( $args['precision'] ) ? $args['precision'] : 0;
 
+$this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-formula', $calc_data['formula'] );
 $this->add_attribute( 'data-name', $args['name'] );
 $this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
 
 if ( ! empty( $this->live_form->current_repeater ) ) {
-	$class_name = 'jet-form-builder__calculated-field--child';
+	$this->add_attribute( 'class', 'jet-form-builder__calculated-field--child' );
 } else {
-	$class_name = 'jet-form-builder__calculated-field';
+	$this->add_attribute( 'class', 'jet-form-builder__calculated-field' );
 }
 
 ?>
-<div class="<?php echo $class_name; ?>"<?php $this->render_attributes_string(); ?>>
+<div <?php $this->render_attributes_string(); ?>>
 	<?php if ( false !== $prefix ) : ?>
         <div class="jet-form-builder__calculated-field-prefix"><?php echo $prefix; ?></div>
     <?php endif; ?>

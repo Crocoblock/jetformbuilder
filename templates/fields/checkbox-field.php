@@ -2,10 +2,11 @@
 /**
  * input[type="hidden"] template
  */
-$required      = $this->block_type->get_required_val( $args );
-$name          = $this->block_type->get_field_name( $args['name'] );
-$default       = ! empty( $args['default'] ) ? $args['default'] : false;
-$field_classes = array( 'jet-form-builder__field', 'checkboxes-field', 'checkradio-field' );
+$required = $this->block_type->get_required_val( $args );
+$name     = $this->block_type->get_field_name( $args['name'] );
+$default  = ! empty( $args['default'] ) ? $args['default'] : false;
+$this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
+$this->add_attribute( 'class', $args['class_name'] );
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -16,7 +17,7 @@ if ( ! empty( $args['field_options'] ) ) {
 	}
 
 	if ( 1 < count( $args['field_options'] ) && ! empty( $required ) ) {
-		$field_classes[] = 'checkboxes-group-required';
+		$this->add_attribute( 'class', 'checkboxes-group-required' );
 	}
 
 	echo '<div class="jet-form-builder__fields-group checkradio-wrap">';
@@ -53,24 +54,24 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		?>
-		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
+        <div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php if ( $custom_template ) {
 				echo $custom_template;
 			} ?>
-			<label class="jet-form-builder__field-label for-checkbox">
-				<input
-					type="checkbox"
-					name="<?php echo $name . $name_suffix; ?>"
-					class="<?php echo join( ' ', $field_classes ); ?>"
-					value="<?php echo $val; ?>"
-					data-field-name="<?php echo $args['name']; ?>"
+            <label class="jet-form-builder__field-label for-checkbox">
+                <input
+                        type="checkbox"
+                        name="<?php echo $name . $name_suffix; ?>"
+                        <?php $this->render_attributes_string_save(); ?>
+                        value="<?php echo $val; ?>"
+                        data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>
 					<?php echo $required; ?>
 					<?php echo $calc; ?>
-				>
+                >
                 <span><?php echo $label; ?></span>
-			</label>
-		</div>
+            </label>
+        </div>
 		<?php
 
 	}

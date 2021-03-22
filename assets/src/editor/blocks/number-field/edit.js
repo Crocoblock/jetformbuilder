@@ -38,9 +38,9 @@ export default function NumberEdit( props ) {
 		isSelected,
 		editProps: { uniqKey }
 	} = props;
-
+	
 	const changeNumberValue = ( key, newValue ) => {
-		props.setAttributes( { [ key ]: newValue ? parseInt( newValue ) : '' } );
+		props.setAttributes( { [ key ]: newValue ? parseFloat( newValue ) : null } );
 	}
 
 	return [
@@ -78,6 +78,7 @@ export default function NumberEdit( props ) {
 						label={ __( 'Step' ) }
 						labelPosition='top'
 						key='step'
+						step={ 0.01 }
 						value={ attributes.step }
 						onChange={ newValue => changeNumberValue( 'step', newValue ) }
 					/>

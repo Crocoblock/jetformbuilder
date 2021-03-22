@@ -375,7 +375,7 @@
 
 				$section.hide();
 
-				$section.find( '*[type="date"],*[type="time"],*[type="email"]' ).each( function () {
+				$section.find( '*[type="date"],*[type="time"],*[type="email"],*[type="url"]' ).each( function () {
 					var $this = $( this ),
 						type = $this.attr( 'type' );
 

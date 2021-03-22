@@ -52,7 +52,7 @@ export default function GatewaysEditor( {
 
 	const [ gateway, setGateway ] = useState( gatewaysArgs );
 
-	const formFields = getFormFieldsBlocks();
+	const formFields = getFormFieldsBlocks( [], '--' );
 
 	/**
 	 * Used for set notifications and gateway type settings

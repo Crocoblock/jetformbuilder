@@ -70,6 +70,7 @@ class Elementor_Controller {
 	}
 
 	private function setup_widget( $widget ) {
+		$widget->init_hooks();
 		$this->_types[ $widget->get_name() ] = $widget;
 	}
 

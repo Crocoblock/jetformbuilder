@@ -10,19 +10,15 @@ $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] )
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'type', $args['field_type'] );
 $this->add_attribute( 'data-field-name', $args['name'] );
+$this->add_attribute( 'class', 'jet-form-builder__field text-field' );
+$this->add_attribute( 'class', $args['class_name'] );
+$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
+$this->add_attribute( 'minlength', $args['minlength'] );
+$this->add_attribute( 'maxlength', $args['maxlength'] );
 
-if ( ! empty( $args['minlength'] ) ) {
-	$this->add_attribute( 'minlength', $args['minlength'] );
-}
-
-if ( ! empty( $args['maxlength'] ) ) {
-	$this->add_attribute( 'maxlength', $args['maxlength'] );
-}
-
-$mask_class = '';
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
-	$mask_class = 'jet-form-builder__masked-field';
+	$this->add_attribute( 'class', 'jet-form-builder__masked-field' );
 
 	$mask_type = ! empty( $args['mask_type'] ) ? $args['mask_type'] : '';
 
@@ -58,9 +54,8 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 	}
 
 }
-
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input class="jet-form-builder__field text-field <?php echo $mask_class; echo $this->maybe_get_error_class( $args ); ?> "<?php $this->render_attributes_string(); ?>>
-    <?php echo $this->maybe_render_error( $args ); ?>
+    <input <?php $this->render_attributes_string(); ?>>
+	<?php echo $this->maybe_render_error( $args ); ?>
 </div>

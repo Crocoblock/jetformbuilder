@@ -4,6 +4,9 @@
  */
 use Jet_Form_Builder\File_Upload;
 
+$this->add_attribute( 'class', 'jet-form-builder__field file-field jet-form-builder-file-upload__input' );
+$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
+$this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] . '_input'  ) );
 $this->add_attribute( 'type', 'file' );
 $this->add_attribute( 'data-form_id', $this->form_id );
@@ -42,7 +45,7 @@ $value = is_array( $value ) ? json_encode( $value ) : $value;
 	</div>
 	<div class="jet-form-builder-file-upload__fields">
 		<input class="jet-form-builder-file-upload__value" type="hidden" name="<?php echo $this->block_type->get_field_name( $args['name'] ); ?>" data-field-name="<?php echo $args['name']; ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
-		<input class="<?php echo $this->maybe_get_error_class( $args ); ?> jet-form-builder__field file-field jet-form-builder-file-upload__input"<?php $this->render_attributes_string(); ?>>
+		<input <?php $this->render_attributes_string(); ?>>
 		<?php echo $this->maybe_render_error( $args ); ?>
 	</div>
 	<div class="jet-form-builder-file-upload__message"><small><?php _e( 'Maximum file size', 'jet-engine' );?>: <?php echo size_format( $max_size ); ?></small></div>

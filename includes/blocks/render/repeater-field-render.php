@@ -28,6 +28,9 @@ class Repeater_Field_Render extends Base {
 		}
 
 		$this->current_repeater = $this->block_type->block_attrs;
+		$this->add_attribute( 'class', 'jet-form-builder-repeater jet-form-builder__field' );
+		$this->add_attribute( 'class', $this->maybe_get_error_class( $this->block_type->block_attrs ) );
+		$this->add_attribute( 'class', $this->block_type->block_attrs['class_name'] );
 
 		$template = sprintf(
 			'<template class="jet-form-builder-repeater__initial">%1$s</template>',
@@ -37,13 +40,13 @@ class Repeater_Field_Render extends Base {
 		$html = '<div class="jet-form-builder__field-wrap">';
 
 		$html .= sprintf(
-			'<div class="jet-form-builder-repeater jet-form-builder__field %5$s" data-repeater="1" 
+			'<div %5$s data-repeater="1" 
             data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
 			$this->block_type->block_attrs['name'],
 			$this->block_type->settings,
 			$this->block_type->calc_dataset,
 			$template,
-			$this->maybe_get_error_class( $this->block_type->block_attrs )
+			$this->get_attributes_string_save()
 		);
 
 		$html .= '<div class="jet-form-builder-repeater__items">';

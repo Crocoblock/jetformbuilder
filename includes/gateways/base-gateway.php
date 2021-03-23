@@ -133,8 +133,10 @@ abstract class Base_Gateway {
 	}
 
 	private function get_response_manager() {
+		global $wp;
+
 		return new Reload_Response( array(
-			'refer'       => $this->data['form_data']['__refer'],
+			'refer'       => home_url( $wp->request ),
 			'remove_args' => $this->removed_query_args_on_payment,
 		) );
 	}

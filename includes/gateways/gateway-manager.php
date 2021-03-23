@@ -122,7 +122,7 @@ class Gateway_Manager {
 			return;
 		}
 
-		add_action( 'wp_loaded', array( $this, 'on_has_gateway_request' ) );
+		add_action( 'parse_request', array( $this, 'on_has_gateway_request' ) );
 	}
 
 	public function on_has_gateway_request() {

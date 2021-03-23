@@ -11,7 +11,7 @@ class Reload_Response extends Response_It {
 	}
 
 	public function parse_status( $status ) {
-		return urlencode( $status );
+		return urlencode( str_replace( '\'', '`', $status ) );
 	}
 
 	public function additional_fields() {

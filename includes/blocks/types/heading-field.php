@@ -128,14 +128,6 @@ class Heading_Field extends Base {
 					),
 				),
 			),
-			'class_name' => array(
-				'type'     => 'string',
-				'default'  => '',
-				'advanced' => array(
-					'type'  => 'text',
-					'label' => __( 'CSS Class Name', 'jet-form-builder' )
-				),
-			),
 		);
 	}
 

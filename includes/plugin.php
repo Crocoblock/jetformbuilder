@@ -60,6 +60,7 @@ class Plugin {
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
+			// new Form_Admin_Actions
 		}
 	}
 

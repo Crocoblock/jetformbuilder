@@ -16,7 +16,6 @@
     flex-wrap: wrap;
     margin: 0;
     padding: 5px 0;
-    overflow: hidden;
 }
 
 .jet-form-builder-row.jet-form-builder-row--hidden {
@@ -149,7 +148,8 @@
     width: 100%;
     -webkit-box-flex: 0;
     -ms-flex: 0 1 100%;
-    flex: 0 1 100%
+    flex: 0 1 100%;
+    margin: unset;
 }
 
 .layout-row .jet-form-builder__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {

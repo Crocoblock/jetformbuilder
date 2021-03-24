@@ -4,7 +4,7 @@ namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Form_Patterns;
+use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
 
@@ -60,7 +60,7 @@ class Plugin {
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
-			// new Form_Admin_Actions
+			new Form_Actions_Manager();
 		}
 	}
 

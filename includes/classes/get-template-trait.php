@@ -13,7 +13,7 @@ trait Get_Template_Trait {
 	 * @return [type]       [description]
 	 */
 	public function get_global_template( $path = '' ) {
-		return JET_FORM_BUILDER_PATH . 'templates/' . $path;
+		return JET_FORM_BUILDER_PATH . 'templates' . DIRECTORY_SEPARATOR . $path;
 	}
 
 }

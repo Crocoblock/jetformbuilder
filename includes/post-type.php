@@ -31,6 +31,8 @@ class Post_Type {
 	 */
 	public $is_form_editor;
 
+	public $screen;
+
 	/**
 	 * Constructor for the class
 	 */
@@ -93,20 +95,24 @@ class Post_Type {
 
 
 	public function set_current_screen() {
-		$screen = get_current_screen();
+		$this->screen = get_current_screen();
 
-		if ( ! $screen->action ) {
-			$screen->action = ! empty( $_GET['action'] ) ? esc_attr( $_GET['action'] ) : '';
+		if ( ! $this->screen->action ) {
+			$this->screen->action = ! empty( $_GET['action'] ) ? esc_attr( $_GET['action'] ) : '';
 		}
 
-		$is_editor_page = in_array( $screen->action, array( 'add', 'edit' ) );
+		$is_editor_page = in_array( $this->screen->action, array( 'add', 'edit' ) );
 
-		if ( $this->slug() === $screen->id && $is_editor_page ) {
+		if ( $this->slug() === $this->screen->id && $is_editor_page ) {
 			$this->is_form_editor = true;
 
-		} elseif ( $this->slug() !== $screen->id && $is_editor_page ) {
+		} elseif ( $this->slug() !== $this->screen->id && $is_editor_page ) {
 			$this->is_form_editor = false;
 		}
+	}
+
+	public function is_form_list_page() {
+		return ( "edit-{$this->slug()}" === $this->screen->id );
 	}
 
 	/**

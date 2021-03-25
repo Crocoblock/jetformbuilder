@@ -1,5 +1,3 @@
-import { saveGlobalComponent } from "../components/manager";
-
 const {
 	useState,
 	useEffect
@@ -87,12 +85,3 @@ export const useStateClasses = initialValid => {
 	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
 }
 
-
-saveGlobalComponent(
-	'JetFBHooks',
-	{
-		useActions,
-		useStateClasses,
-		useMetaState
-	}
-);

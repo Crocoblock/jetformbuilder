@@ -1,7 +1,12 @@
-import { ValidateButton } from "../components/validate-button";
 import IntegrationComponent from "./integration-component";
-import WrapperRequiredControl from "../components/wrapper-required-control";
-import { addAction } from "../helpers/action-helper";
+
+const {
+	addAction,
+} = JFBFunctions;
+
+const {
+	WrapperRequiredControl,
+} = JFBComponents;
 
 /**
  * Internal dependencies

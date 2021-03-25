@@ -1,12 +1,3 @@
-/**
- * External dependencies
- */
-const { isEmpty } = window.lodash;
-
-/**
- * WordPress dependencies
- */
-const { withInstanceId } = wp.compose;
 
 /**
  * Internal dependencies
@@ -15,11 +6,6 @@ const {
 	SelectControl,
 	TextControl
 } = wp.components;
-
-const {
-	useState,
-	useEffect
-} = wp.element;
 
 
 class JetFieldsMapControl extends wp.element.Component {

@@ -1,28 +1,18 @@
 const { __ } = wp.i18n;
 
 const {
-	TextControl,
-	BaseControl,
 	Button,
 } = wp.components;
 
-const {
-	useState
-} = wp.element;
-
-export const RequestButton = ( {
-								   label,
-								   ajaxArgs = {},
-								   onSuccessRequest = () => {
-								   },
-								   onFailRequest = () => {
-								   },
-								   onLoading = () => {
-								   },
-								   className = '',
-								   children = () => {
-								   }
-							   } ) => {
+function RequestButton( {
+							label,
+							ajaxArgs = {},
+							onSuccessRequest = () => {},
+							onFailRequest = () => {},
+							onLoading = () => {},
+							className = '',
+							children = () => {}
+						} ) {
 
 	const defaultValidate = () => {
 		return jQuery.ajax( { url: ajaxurl, type: 'POST', data: ajaxArgs } );
@@ -45,4 +35,6 @@ export const RequestButton = ( {
 		{ children && children }
 		{ label }
 	</Button>;
-};
+}
+
+export default RequestButton;

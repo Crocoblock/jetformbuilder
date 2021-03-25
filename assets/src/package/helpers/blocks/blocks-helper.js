@@ -1,5 +1,3 @@
-import { saveGlobalComponent } from "../components/manager";
-import Tools from "./tools";
 
 const { __ } = wp.i18n;
 
@@ -114,11 +112,3 @@ export {
 	getFieldsWithoutCurrent,
 };
 
-saveGlobalComponent( 'JetFBBlocksHelper', {
-	getFormFieldsByBlock,
-	getInnerBlocks,
-	getAvailableFieldsString,
-	getAvailableFields,
-	getFormFieldsBlocks,
-	getFieldsWithoutCurrent,
-} );

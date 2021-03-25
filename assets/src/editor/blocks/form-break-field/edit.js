@@ -1,28 +1,17 @@
-import {
+const {
+	GeneralFields,
 	AdvancedFields,
-	GeneralFields
-} from "../controls/field-control";
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
-	BlockControls,
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
-	TextControl,
 	TextareaControl,
-	SelectControl,
-	ToggleControl,
 	PanelBody,
 	Button,
 } = wp.components;

@@ -1,10 +1,11 @@
-import Tools from "../helpers/tools";
 import ActionMessages from "../components/actions/action-messages";
 import BaseActionComponent from "./base-action-component";
 
-import WrapperRequiredControl from "../components/wrapper-required-control";
-import { addAction } from "../helpers/action-helper";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
+const { WrapperRequiredControl } = JFBComponents;
+const {
+	addAction,
+	getFormFieldsBlocks
+} = JFBFunctions;
 
 /**
  * Internal dependencies

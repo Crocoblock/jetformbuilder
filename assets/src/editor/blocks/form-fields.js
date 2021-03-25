@@ -1,4 +1,3 @@
-
 import * as calculated from './calculated-field';
 import * as checkbox from './checkbox-field';
 import * as conditional from './conditional-block';
@@ -19,7 +18,6 @@ import * as text from './text-field';
 import * as textarea from './textarea-field';
 import * as time from './time-field';
 import * as wysiwyg from './wysiwyg-field';
-
 import * as wrappers from "./block-wrappers";
 
 const {
@@ -51,9 +49,6 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	textarea,
 	time,
 	wysiwyg,
-
-	/*
-	*/
 ] );
 
 const registerFormField = block => {
@@ -69,7 +64,6 @@ const registerFormField = block => {
 		...settings
 	} );
 };
-
 
 export const registerFormFields = ( blocks = fields ) => {
 	blocks.forEach( applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );

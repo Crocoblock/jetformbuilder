@@ -1,7 +1,5 @@
 const {
 	TextControl,
-	ToggleControl,
-	SelectControl,
 	BaseControl
 } = wp.components;
 

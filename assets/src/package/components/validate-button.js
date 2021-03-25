@@ -1,17 +1,13 @@
-import { RequestButton } from "./request-button";
-import { useStateClasses } from "../helpers/hooks-helper";
-import { saveGlobalComponent } from "./manager";
+import RequestButton from "./request-button";
+import { useStateClasses } from "../helpers/hooks/hooks-helper";
 
-
-export const ValidateButton = ( {
-									initialValid,
-									label,
-									ajaxArgs = {},
-									onValid = () => {
-									},
-									onInvalid = () => {
-									},
-								} ) => {
+function ValidateButton( {
+							 initialValid,
+							 label,
+							 ajaxArgs = {},
+							 onValid = () => {},
+							 onInvalid = () => {},
+						 } ) {
 
 	const [
 		className,
@@ -42,4 +38,4 @@ export const ValidateButton = ( {
 	</RequestButton>;
 };
 
-saveGlobalComponent( 'JetFBComponents', { RequestButton, ValidateButton } );
+export default ValidateButton;

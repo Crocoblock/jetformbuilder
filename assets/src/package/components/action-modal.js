@@ -1,4 +1,4 @@
-export default function ActionModal( {
+function ActionModal( {
 										 onRequestClose,
 										 children,
 										 title,
@@ -68,3 +68,5 @@ export default function ActionModal( {
 		</div> }
 	</Modal>;
 }
+
+export default ActionModal;

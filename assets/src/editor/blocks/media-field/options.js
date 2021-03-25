@@ -1,4 +1,4 @@
-import Tools from "../../helpers/tools";
+const { Tools } = JFBFunctions;
 
 const userAccess = Tools.withPlaceholder( [
 	{

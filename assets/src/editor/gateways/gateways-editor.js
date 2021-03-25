@@ -1,31 +1,21 @@
-import {
-	gatewayAttr,
-	renderGateway
-} from "../helpers/gateway-helper";
-import Tools, { event } from "../helpers/tools";
-import gatewayActionAttributes from "./gateway-action-attrubites";
-import {
-	actionByTypeList,
-	fromLocalizeHelper
-} from "../helpers/action-helper";
-import PayPal from "./paypal";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
 
-event( 'jet-fb-gateways/init' )();
+const {
+	actionByTypeList,
+	fromLocalizeHelper,
+	getFormFieldsBlocks,
+	gatewayAttr,
+	renderGateway,
+	gatewayActionAttributes,
+} = JFBFunctions;
 
 const { __ } = wp.i18n;
 
 const {
-	ToggleControl,
 	TextareaControl,
-	TextControl,
 	CheckboxControl,
 	SelectControl,
 	BaseControl,
 	RadioControl,
-	Button,
-	Modal,
-	Text,
 } = wp.components;
 
 const {

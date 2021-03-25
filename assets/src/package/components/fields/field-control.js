@@ -1,6 +1,6 @@
-import { controlsSettings } from "../controls";
-import DynamicPreset from "../../components/presets/dynamic-preset";
-import FieldWithPreset from "../../components/field-with-preset";
+import { controlsSettings } from "./controls";
+import FieldWithPreset from "./field-with-preset";
+import DynamicPreset from "../presets/dynamic-preset";
 
 const {
 	BlockControls
@@ -14,8 +14,6 @@ const {
 	ToolbarGroup,
 	Flex,
 } = wp.components;
-
-const { useEffect, useState } = wp.element;
 
 function FieldControl( {
 						   type,

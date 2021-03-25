@@ -21,6 +21,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
+	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
+
 	public static $index = 0;
 
 	public $allowed_blocks = null;
@@ -355,14 +358,11 @@ class Editor {
 	 * @return void
 	 */
 	public function enqueue_assets() {
-
-		$handle = 'jet-form-builder';
-
-		do_action( 'jet-form-builder/editor-assets/before', $this, $handle );
+		do_action( 'jet-form-builder/editor-package/before', $this, self::EDITOR_PACKAGE_HANDLE );
 
 		wp_enqueue_script(
-			$handle,
-			JET_FORM_BUILDER_URL . 'assets/js/editor.js',
+			self::EDITOR_PACKAGE_HANDLE,
+			JET_FORM_BUILDER_URL . 'assets/js/package.js',
 			array(
 				'wp-editor',
 				'wp-core-data',
@@ -375,8 +375,18 @@ class Editor {
 			true
 		);
 
+		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
+
+		wp_enqueue_script(
+			self::EDITOR_HANDLE,
+			JET_FORM_BUILDER_URL . 'assets/js/editor.js',
+			array(),
+			JET_FORM_BUILDER_VERSION,
+			true
+		);
+
 		wp_enqueue_style(
-			$handle,
+			self::EDITOR_HANDLE,
 			JET_FORM_BUILDER_URL . 'assets/css/editor.css',
 			array(
 				'media',
@@ -389,8 +399,7 @@ class Editor {
 			'all'
 		);
 
-
-		wp_localize_script( $handle, 'JetFormEditorData', array(
+		wp_localize_script( self::EDITOR_PACKAGE_HANDLE, 'JetFormEditorData', array(
 			'allowedBlocks'    => $this->get_allowed_blocks(),
 			'action'           => $this->get_action(),
 			'itemID'           => $this->get_item_id(),
@@ -400,7 +409,7 @@ class Editor {
 			'helpForRepeaters' => $this->get_help_for_repeaters(),
 		) );
 
-		do_action( 'jet-form-builder/editor-assets/after', $this, $handle );
+		do_action( 'jet-form-builder/editor-assets/after', $this, self::EDITOR_HANDLE );
 	}
 
 	private function get_help_for_repeaters() {

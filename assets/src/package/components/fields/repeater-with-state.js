@@ -6,13 +6,6 @@ const {
 	Card,
 	CardBody,
 	CardHeader,
-	Panel,
-	PanelBody,
-	Draggable,
-	Icon,
-	DropZoneProvider,
-	DropZone,
-	Dashicon,
 	ToggleControl,
 } = wp.components;
 

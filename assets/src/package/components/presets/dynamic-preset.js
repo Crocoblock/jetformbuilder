@@ -1,5 +1,8 @@
-import PresetRender from "./preset-render";
 import withPreset from "./preset-editor";
+import {
+	GlobalField,
+	MapField
+} from "./preset-render";
 
 const {
 	useState,
@@ -38,7 +41,7 @@ function DynamicPreset( {
 	}, [ isSaveAction ] );
 
 	return <>
-		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
+		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <GlobalField
 			key={ `current_field_${ data.name }_${ index }` }
 			value={ stateValue }
 			index={ index }
@@ -49,7 +52,7 @@ function DynamicPreset( {
 			position={ position }
 		/> ) }
 
-		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <PresetRender.MapField
+		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, index ) => <MapField
 			key={ `current_field_${ data.name }_${ index }` }
 			currentState={ stateValue }
 			value={ stateValue[ 'current_field_' + data.name ] }

@@ -1,5 +1,9 @@
-import PresetRender from "./preset-render";
-import withPreset from "./preset-editor";
+const {
+	GlobalField,
+	AvailableMapField
+} = JFBComponents;
+
+const { withPreset } = JFBFunctions;
 
 function GeneralPreset( {
 							value,
@@ -15,7 +19,7 @@ function GeneralPreset( {
 	}
 
 	return <>
-		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <PresetRender.GlobalField
+		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <GlobalField
 			key={ data.name + index }
 			value={ value }
 			index={ index }
@@ -27,7 +31,7 @@ function GeneralPreset( {
 		/> ) }
 
 		{ value.from && (
-			availableFields.map( ( field, index ) => <PresetRender.AvailableMapField
+			availableFields.map( ( field, index ) => <AvailableMapField
 				key={ field + index }
 				fieldsMap={ value.fields_map }
 				field={ field }

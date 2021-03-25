@@ -1,37 +1,21 @@
-import Tools from "../../helpers/tools";
-import FieldWrapper from '../../components/field-wrapper';
-import {
+const {
 	ToolBarFields,
 	GeneralFields,
-	AdvancedFields
-} from "../controls/field-control";
+	AdvancedFields,
+	FieldWrapper
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
-	BlockControls,
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
-	TextareaControl,
-	SelectControl,
 	ToggleControl,
 	PanelBody,
-	Button,
-	RangeControl,
-	CheckboxControl,
-	DateTimePicker,
-	Disabled,
 	__experimentalInputControl,
 } = wp.components;
 
@@ -40,7 +24,6 @@ let { InputControl } = wp.components;
 if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
-
 
 export default function DateEdit( props ) {
 	const blockProps = useBlockProps();

@@ -1,15 +1,16 @@
-import FieldWrapper from "../../components/field-wrapper";
-import {
-	AdvancedFields,
-	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
 import {
 	fieldTypesList,
 	maskPlaceholdersList,
 	maskTypesList,
 	maskVisibilitiesList
 } from "./options";
+
+const {
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+	FieldWrapper,
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 
@@ -26,7 +27,7 @@ const {
 	__experimentalNumberControl,
 } = wp.components;
 
-let { NumberControl, InputControl } = wp.components;
+let { NumberControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;

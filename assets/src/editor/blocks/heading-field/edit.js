@@ -1,8 +1,8 @@
-import FieldWrapper from "../../components/field-wrapper";
-import {
+const {
+	GeneralFields,
 	AdvancedFields,
-	GeneralFields
-} from "../controls/field-control";
+	FieldWrapper,
+} = JFBComponents;
 
 const {
 	InspectorControls,

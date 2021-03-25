@@ -102,7 +102,7 @@ const messagesConfig = [
 	{
 		attribute: 'input_mask_datetime_link',
 		to: [ TEXT ],
-		message: __( `https://github.com/RobinHerbots/Inputmask/blob/5.x/README_date.md` )
+		message: `https://github.com/RobinHerbots/Inputmask/blob/5.x/README_date.md`
 	},
 	{
 		attribute: 'default',

@@ -1,8 +1,10 @@
 import JetFieldsMapControl from '../blocks/controls/fields-map';
-import Tools from "../helpers/tools";
 import JetDefaultMetaControl from "../blocks/controls/default-meta";
-import { addAction } from "../helpers/action-helper";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
+
+const {
+	addAction,
+	getFormFieldsBlocks
+} = JFBFunctions;
 
 /**
  * Internal dependencies

@@ -1,5 +1,8 @@
-import FieldWrapper from '../field-wrapper';
 import { listFrom } from "../../blocks/select-radio-chekc-options";
+
+const {
+	FieldWrapper,
+} = JFBComponents;
 
 const {
 	CheckboxControl,

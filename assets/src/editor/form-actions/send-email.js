@@ -1,9 +1,15 @@
 /**
  * Internal dependencies
  */
-import MacrosInserter from "../components/macros-inserter";
-import { addAction } from "../helpers/action-helper";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
+
+const {
+	MacrosInserter
+} = JFBComponents;
+
+const {
+	addAction,
+	getFormFieldsBlocks
+} = JFBFunctions;
 
 const {
 	TextControl,

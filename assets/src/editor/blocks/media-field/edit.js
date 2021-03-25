@@ -1,9 +1,10 @@
-import FieldWrapper from '../../components/field-wrapper';
-import {
-	AdvancedFields,
+const {
+	ToolBarFields,
 	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
+	AdvancedFields,
+	FieldWrapper,
+} = JFBComponents;
+
 import {
 	userAccess,
 	valueFormats

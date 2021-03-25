@@ -1,49 +1,36 @@
-import FieldWrapper from "../../components/field-wrapper";
-import {
-	AdvancedFields,
-	GeneralFields
-} from "../controls/field-control";
-import {
-	getFieldsWithoutCurrent,
-	getFormFieldsBlocks
-} from "../../helpers/blocks-helper";
 
-const block = 'jet-forms/calculated-field';
+const {
+	AdvancedFields,
+	GeneralFields,
+	FieldWrapper
+} = JFBComponents;
+
+const {
+	getFieldsWithoutCurrent,
+} = JFBFunctions;
 
 const { __ } = wp.i18n;
 
 const {
-	ColorPalette,
-	RichText,
-	Editable,
-	MediaUpload,
-	ServerSideRender,
 	BlockControls,
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelColor,
-	IconButton,
 	TextControl,
 	TextareaControl,
-	SelectControl,
 	ToggleControl,
 	PanelBody,
 	Button,
 	Popover,
-	RangeControl,
-	CheckboxControl,
-	Disabled,
 	ToolbarGroup,
-	ToolbarItem,
 	__experimentalNumberControl,
 } = wp.components;
 
 const NumberControl = __experimentalNumberControl;
 
-const { useState, useEffect } = wp.element;
+const { useState } = wp.element;
 
 const help = {
 	calc_hidden: __( 'Check this to hide calculated field' )

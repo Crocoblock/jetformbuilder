@@ -1,4 +1,4 @@
-import ActionModal from "../../components/actions/action-modal";
+
 import GatewaysEditor from "../../gateways/gateways-editor";
 
 const { __ } = wp.i18n;

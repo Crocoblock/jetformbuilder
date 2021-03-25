@@ -1,5 +1,7 @@
-import RepeaterWithState from "../repeater-with-state";
-import ActionModal from "../actions/action-modal";
+const {
+	RepeaterWithState,
+	ActionModal,
+} = JFBComponents;
 
 const {
 	Button,

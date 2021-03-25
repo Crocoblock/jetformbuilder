@@ -1,18 +1,22 @@
-import Tools from "../../helpers/tools";
-import ActionModal from "../../components/actions/action-modal";
-import RepeaterWithState from "../../components/repeater-with-state";
-import FieldWithPreset from "../../components/field-with-preset";
-import DynamicPreset from "../../components/presets/dynamic-preset";
-import {
+import { options } from "./options";
+
+const {
+	RepeaterWithState,
+	ActionModal,
+	FieldWithPreset,
+	DynamicPreset,
+} = JFBComponents;
+
+const {
 	getFormFieldsBlocks,
-	getInnerBlocks
-} from "../../helpers/blocks-helper";
+	getInnerBlocks,
+	Tools
+} = JFBFunctions;
 
 const { __ } = wp.i18n;
 
 const {
 	BlockControls,
-	InspectorControls,
 	InnerBlocks,
 	useBlockProps
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
@@ -22,49 +26,11 @@ const {
 	ToolbarGroup,
 	TextareaControl,
 	SelectControl,
-	BaseControl,
 } = wp.components;
 
 const {
 	useState,
-	useEffect
 } = wp.element;
-
-const condition = {
-	type: 'hide',
-	field: '',
-	operator: '',
-	value: '',
-	set_value: '',
-};
-
-const conditionTypes = [
-	{ label: '--', value: '' },
-	{
-		label: 'Hide this field if...',
-		value: 'hide'
-	},
-	{
-		label: 'Show this field if...',
-		value: 'show'
-	},
-	{
-		label: 'Set value for this field if...',
-		value: 'set_value',
-		condition: 'isSingleField',
-	},
-];
-
-const conditionOperators = [
-	{ label: '--', value: '' },
-	{ label: 'Equal', value: 'equal' },
-	{ label: 'Greater than', value: 'greater' },
-	{ label: 'Less than', value: 'less' },
-	{ label: 'Between', value: 'between' },
-	{ label: 'In the list', value: 'one_of' },
-	{ label: 'Contain text', value: 'contain' },
-];
-
 
 export default function ConditionalBlockEdit( props ) {
 
@@ -81,7 +47,7 @@ export default function ConditionalBlockEdit( props ) {
 		return 1 === getInnerBlocks( clientId ).length;
 	} )
 
-	const getConditionTypes = Tools.parseConditionsFunc( conditionTypes );
+	const getConditionTypes = Tools.parseConditionsFunc( options.conditionTypes );
 	const [ showModal, setShowModal ] = useState( false );
 
 	const formFields = getFormFieldsBlocks( [], '--' );
@@ -114,7 +80,7 @@ export default function ConditionalBlockEdit( props ) {
 				items={ attributes.conditions }
 				isSaveAction={ actionClick }
 				onUnMount={ onRequestClose }
-				newItem={ condition }
+				newItem={ options.condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
 				addNewButtonLabel={ __( "New Condition" ) }
 				help={ {
@@ -149,7 +115,7 @@ export default function ConditionalBlockEdit( props ) {
 						label="Operator"
 						labelPosition="side"
 						value={ currentItem.operator }
-						options={ conditionOperators }
+						options={ options.conditionOperators }
 						onChange={ newValue => {
 							changeCurrentItem( { operator: newValue } );
 						} }

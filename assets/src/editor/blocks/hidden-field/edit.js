@@ -1,14 +1,14 @@
 import JetFieldPlaceholder from '../controls/placeholder';
-import {
-	AdvancedFields,
-	GeneralFields
-} from "../controls/field-control";
 import { hiddenValues } from "./options";
 
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
+	GeneralFields,
+	AdvancedFields,
+} = JFBComponents;
+
+const {
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;

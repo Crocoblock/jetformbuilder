@@ -1,15 +1,16 @@
-import Tools from "../helpers/tools";
 import JetFieldsMapControl from "../blocks/controls/fields-map";
 import ActionMessages from "../components/actions/action-messages";
-import { addAction } from "../helpers/action-helper";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
+
+const {
+	addAction,
+	getFormFieldsBlocks
+} = JFBFunctions;
+
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
 	SelectControl,
 	BaseControl
 } = wp.components;

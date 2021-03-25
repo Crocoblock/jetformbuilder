@@ -1,8 +1,7 @@
-import { useMetaState } from "@helpers/hooks-helper";
 import { labels } from "./options";
 
 const { __ } = wp.i18n;
-
+const { useMetaState } = JFBHooks;
 const {
 	ToggleControl,
 	TextControl,

@@ -1,7 +1,6 @@
 import IntegrationComponent from "./integration-component";
-import WrapperRequiredControl from "../components/wrapper-required-control";
-import { addAction } from "../helpers/action-helper";
-import { ActionFieldsMap } from "../components/actions/action-fields-map";
+
+const { addAction } = JFBFunctions;
 
 /**
  * Internal dependencies
@@ -13,6 +12,11 @@ const {
 	BaseControl,
 	Button,
 } = wp.components;
+
+const {
+	ActionFieldsMap,
+	WrapperRequiredControl
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 

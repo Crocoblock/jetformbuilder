@@ -1,6 +1,6 @@
-import Tools from "../helpers/tools";
 import IntegrationComponent from "./integration-component";
-import { addAction } from "../helpers/action-helper";
+
+const { addAction } = JFBFunctions;
 
 /**
  * Internal dependencies

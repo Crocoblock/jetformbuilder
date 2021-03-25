@@ -1,16 +1,11 @@
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
 	Button,
 	Popover,
 	PanelBody,
-	PanelRow
 } = wp.components;
 
 const {
 	useState,
-	useEffect
 } = wp.element;
 
 function MacrosInserter( {

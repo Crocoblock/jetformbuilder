@@ -1,18 +1,8 @@
-import { saveGlobalComponent } from "../components/manager";
+
 
 const { __ } = wp.i18n;
 
 class Tools {
-
-	static getHelpMessage( from, name ) {
-		if ( typeof from.help_messages[ name ] !== 'undefined' ) {
-			return from.help_messages[ name ];
-		}
-
-		if ( typeof from.help_messages[ attributes.generator_function ] === 'object' ) {
-			return from.help_messages[ attributes.generator_function ][ name ];
-		}
-	}
 
 	static getLabel( meta, attrs ) {
 		const label = {};
@@ -72,5 +62,3 @@ export const listen = ( name, func ) => {
 }
 
 export default Tools;
-
-saveGlobalComponent( 'JetFBTools', { Tools } );

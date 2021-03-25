@@ -1,5 +1,3 @@
-import { saveGlobalComponent } from "./manager";
-
 export default function WrapperRequiredControl( {
 													field,
 													children,
@@ -25,4 +23,3 @@ export default function WrapperRequiredControl( {
 		</div>
 	);
 }
-saveGlobalComponent( 'JetFBComponents', { WrapperRequiredControl } );

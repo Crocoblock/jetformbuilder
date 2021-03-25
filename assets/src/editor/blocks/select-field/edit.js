@@ -1,12 +1,13 @@
 import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-radio/select-radio-check-placeholder";
-import {
-	AdvancedFields,
-	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
 import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
 
 const { __ } = wp.i18n;
+
+const {
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+} = JFBComponents;
 
 const {
 	BlockControls,

@@ -1,5 +1,7 @@
-import { getActionSettings } from "../helpers/gateway-helper";
-import { fromLocalizeHelper } from "../helpers/action-helper";
+import {
+	fromLocalizeHelper,
+	getActionSettings
+} from "../actions/action-helper";
 
 function gatewayActionAttributes( action ) {
 	const { gatewayAttrs, label } = fromLocalizeHelper( 'getLocalizedFullPack' )( action.type );

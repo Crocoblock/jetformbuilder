@@ -1,10 +1,11 @@
 import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-radio/select-radio-check-placeholder";
-import {
+import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
+
+const {
 	AdvancedFields,
 	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
-import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
+	ToolBarFields,
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 
@@ -12,7 +13,6 @@ const {
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
-
 
 const localized = window.JetFormCheckboxFieldData;
 
@@ -26,8 +26,6 @@ export default function CheckboxEdit( props ) {
 		isSelected,
 		editProps: { uniqKey }
 	} = props;
-
-	const { field_options_from } = attributes;
 
 	return [
 		<ToolBarFields

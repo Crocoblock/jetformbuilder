@@ -1,9 +1,8 @@
-import FieldWrapper from '../../components/field-wrapper';
-import {
-	AdvancedFields,
+const {
 	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
+	AdvancedFields,
+	FieldWrapper,
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 

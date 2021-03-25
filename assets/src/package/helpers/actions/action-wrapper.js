@@ -1,4 +1,4 @@
-import { fromLocalizeHelper } from "../../helpers/action-helper";
+import { fromLocalizeHelper } from "./action-helper";
 
 export default function withActionLocalizeScript( actionType, ActionInstance ) {
 	const localizedData = fromLocalizeHelper( 'getLocalizedFullPack' )( actionType );

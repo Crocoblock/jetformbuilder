@@ -1,7 +1,7 @@
-import {
+const {
+	GeneralFields,
 	AdvancedFields,
-	GeneralFields
-} from "../controls/field-control";
+} = JFBComponents;
 
 const { __ } = wp.i18n;
 

@@ -1,19 +1,3 @@
-/**
- * Internal dependencies
- */
-import PresetRender from "./preset-render";
-
-const {
-	TextControl,
-	SelectControl,
-	Modal
-} = wp.components;
-
-const {
-	useState,
-	useEffect
-} = wp.element;
-
 function withPreset( WrappedComponent ) {
 	return function JetFormPresetEditor( props ) {
 

@@ -1,8 +1,9 @@
-import { useMetaState } from "../../helpers/hooks-helper";
 import {
 	fieldsLayout,
 	submitTypes
 } from "./options";
+
+const { useMetaState } = JFBHooks;
 
 const {
 	TextControl,

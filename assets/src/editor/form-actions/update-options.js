@@ -1,6 +1,7 @@
-import Tools from "../helpers/tools";
-import { addAction } from "../helpers/action-helper";
-import { getFormFieldsBlocks } from "../helpers/blocks-helper";
+const {
+	getFormFieldsBlocks,
+	addAction,
+} = JFBFunctions;
 
 /**
  * Internal dependencies

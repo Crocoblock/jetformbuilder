@@ -1,15 +1,22 @@
-import { useActions } from "../../helpers/hooks-helper";
-import { getFormFieldsBlocks } from "../../helpers/blocks-helper";
-import ActionModal from "../../components/actions/action-modal";
-import RepeaterWithState from "../../components/repeater-with-state";
-import FieldWithPreset from "../../components/field-with-preset";
-import DynamicPreset from "../../components/presets/dynamic-preset";
 import {
 	conditionOperators,
 	defaultActions,
 	getRandomID,
 	newItemCondition
 } from "./options";
+
+const {
+	getFormFieldsBlocks
+} = JFBFunctions;
+
+const {
+	ActionModal,
+	RepeaterWithState,
+	FieldWithPreset,
+	DynamicPreset
+} = JFBComponents;
+
+const { useActions } = JFBHooks;
 
 const {
 	TextareaControl,

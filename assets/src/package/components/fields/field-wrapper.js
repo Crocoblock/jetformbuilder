@@ -1,6 +1,6 @@
-import Tools from "../helpers/tools";
+import Tools from "../../helpers/tools";
 
-export default function FieldWrapper( {
+function FieldWrapper( {
 										  attributes,
 										  editProps: { uniqKey },
 										  children,
@@ -40,3 +40,5 @@ export default function FieldWrapper( {
 		</BaseControl>
 	);
 }
+
+export default FieldWrapper;

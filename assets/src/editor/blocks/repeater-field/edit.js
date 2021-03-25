@@ -1,23 +1,23 @@
-import Tools from "../../helpers/tools";
-import {
-	getAvailableFields,
-	getFieldsWithoutCurrent,
-	getFormFieldsBlocks
-} from "../../helpers/blocks-helper";
-import {
-	AdvancedFields,
-	GeneralFields,
-	ToolBarFields
-} from "../controls/field-control";
 import {
 	calcType,
 	manageItemsCount
 } from "./options";
 
+const {
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+} = JFBComponents;
+
+const {
+	getFieldsWithoutCurrent,
+	Tools
+} = JFBFunctions;
+
+
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
 	InspectorControls,
 	InnerBlocks,
 	useBlockProps

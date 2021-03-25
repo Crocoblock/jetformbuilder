@@ -1,17 +1,13 @@
-import { saveGlobalComponent } from "../manager";
 
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
 	BaseControl,
-	Button,
 } = wp.components;
 
-export const ActionFieldsMap = ( {
-									 fields = [], label = '[Empty label]', children = () => {
-	}
-								 } ) => {
+export default function ActionFieldsMap( {
+									 fields = [],
+									 label = '[Empty label]',
+									 children = () => {}
+								 } ) {
 
 	return <BaseControl
 		label={ label }
@@ -27,4 +23,3 @@ export const ActionFieldsMap = ( {
 	</BaseControl>
 };
 
-saveGlobalComponent( 'JetFBComponents', { ActionFieldsMap } );

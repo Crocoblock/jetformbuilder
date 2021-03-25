@@ -1,7 +1,6 @@
-import withActionLocalizeScript from "../components/actions/action-wrapper";
-import { useActions } from "./hooks-helper";
+import { useActions } from "../hooks/hooks-helper";
 import gatewayActionAttributes from "../gateways/gateway-action-attrubites";
-import { saveGlobalComponent } from "../components/manager";
+
 
 export const getActionsByType = type => {
 	const [ actions ] = useActions();
@@ -27,9 +26,10 @@ export const actionByTypeList = ( actionType, withDesc = false ) => {
 	} );
 };
 
-export const addAction = ( actionType, actionInstance ) => {
-	window.jetFormDefaultActions = window.jetFormDefaultActions || {};
-	window.jetFormDefaultActions[ actionType ] = withActionLocalizeScript( actionType, actionInstance );
+export const getActionSettings = actionId => {
+	const [ actions ] = useActions();
+	const action = actions.find( action => actionId === action.id );
+
+	return ( action && action.settings ) ? action.settings : false;
 };
 
-saveGlobalComponent( 'JetFBActions', { addAction } );

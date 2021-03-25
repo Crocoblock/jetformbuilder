@@ -10,12 +10,6 @@ const {
 	useDispatch,
 } = wp.data;
 
-const {
-	createHooks
-} = wp.hooks;
-
-export const jfbHooks = createHooks();
-
 export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};

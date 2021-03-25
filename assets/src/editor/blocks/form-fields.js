@@ -21,13 +21,16 @@ import * as time from './time-field';
 import * as wysiwyg from './wysiwyg-field';
 
 import * as wrappers from "./block-wrappers";
-import { jfbHooks } from "../helpers/hooks-helper";
 
 const {
 	registerBlockType
 } = wp.blocks;
 
-const fields = jfbHooks.applyFilters( 'jet.fb.register.fields', [
+const {
+	applyFilters
+} = wp.hooks;
+
+const fields = applyFilters( 'jet.fb.register.fields', [
 	calculated,
 	checkbox,
 	conditional,
@@ -69,7 +72,7 @@ const registerFormField = block => {
 
 
 export const registerFormFields = ( blocks = fields ) => {
-	blocks.forEach( jfbHooks.applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
+	blocks.forEach( applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
 }
 
 registerFormFields();

@@ -1,5 +1,8 @@
-import { jfbHooks } from "../helpers/hooks-helper";
 import { messagesConfig } from "./help-messages-config";
+
+const {
+	applyFilters
+} = wp.hooks;
 
 export function withCustomProps( block ) {
 	const { edit: EditComponent } = block.settings;
@@ -49,7 +52,7 @@ const getHelpInstance = block => {
 	}
 };
 
-const editProps = jfbHooks.applyFilters( 'jet.fb.register.editProps', [
+const editProps = applyFilters( 'jet.fb.register.editProps', [
 	{
 		name: 'uniqKey',
 		callable: block => ( suffix => `${ block.name }/${ suffix }` )

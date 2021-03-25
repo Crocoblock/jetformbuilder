@@ -11,6 +11,7 @@ import './form-actions/mailchimp';
 import './form-actions/getresponse';
 import './form-actions/activecampaign';
 import RegisterPlugins from "./plugins/manager";
+import RegisterFormFields from "./blocks/form-fields";
 
 const { event } = JFBFunctions;
 
@@ -23,5 +24,6 @@ window.jetFormActionTypes.forEach( function ( action, index ) {
 } );
 
 RegisterPlugins();
+RegisterFormFields();
 
 event( 'jet-form-builder-initialized' )();

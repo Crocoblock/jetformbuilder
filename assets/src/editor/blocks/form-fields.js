@@ -65,8 +65,16 @@ const registerFormField = block => {
 	} );
 };
 
-export const registerFormFields = ( blocks = fields ) => {
-	blocks.forEach( applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
+function sortBlocks( { settings: { title: a } },
+					 { settings: { title: b } } ) {
+	try {
+		return a.localeCompare( b );
+	} catch ( e ) {
+		return 0;
+	}
 }
 
-registerFormFields();
+export default function RegisterFormFields( blocks = fields ) {
+	blocks.sort( sortBlocks );
+	blocks.forEach( applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
+}

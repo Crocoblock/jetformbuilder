@@ -27,9 +27,9 @@ class Export_Action extends Base_Form_Action {
 
 	public function do_admin_action() {
 		$form_id = $this->get_post_id_from_request();
-		[ $post, $for_encoding ] = $this->get_from_data( $form_id );
+		$form_data = $this->get_from_data( $form_id );
 
-		$this->file_download( $post->post_name . '.json', json_encode( $for_encoding ) );
+		$this->file_download( $form_data[0]->post_name . '.json', json_encode( $form_data[1] ) );
 	}
 
 

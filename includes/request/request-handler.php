@@ -115,8 +115,7 @@ class Request_Handler {
 	public function init_form_data() {
 		$this->_fields = Plugin::instance()->form->get_only_form_fields(
 			$this->request['form_id'],
-			array( 'submit-field', 'form-break-field', 'heading-field', 'group-break-field' ),
-			false
+			array( 'submit-field', 'form-break-field', 'heading-field', 'group-break-field' )
 		);
 
 		$this->_request_values = $this->get_values_from_request();

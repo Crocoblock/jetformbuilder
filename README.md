@@ -4,11 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.1.4
+* FIX: CSS Compatibility with Twenty Twenty-One theme
+* FIX: Parsing form fields from content when processing a request 
+
 ## 1.1.3
-* FIX: render Form Break button if there is no name for it, entering settings for Number Field with floating-point
-* FIX: render CSS classes in fields
-* FIX: initializing controls for widget Form in JetEngine
-* FIX: minor fixes in the editor
+* FIX: Render Form Break button if there is no name for it, entering settings for Number Field with floating-point
+* FIX: Render CSS classes in fields
+* FIX: Initializing controls for widget Form in JetEngine
+* FIX: Minor fixes in the editor
 
 ## 1.1.2
 * FIX: Duplicating a plain preset in fields

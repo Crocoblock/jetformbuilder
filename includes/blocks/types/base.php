@@ -110,9 +110,7 @@ abstract class Base extends Base_Module {
 			)
 		);
 
-		if ( $block ) {
-			$this->attrs = $block->attributes;
-		}
+		$this->attrs = $block->attributes;
 	}
 
 	private function maybe_init_style_manager() {

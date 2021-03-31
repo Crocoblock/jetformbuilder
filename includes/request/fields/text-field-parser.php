@@ -17,6 +17,7 @@ class Text_Field_Parser extends Field_Data_Parser {
 		return (
 			isset( $this->settings['field_type'] )
 			&& 'email' === $this->settings['field_type']
+			&& ! empty( $value )
 			&& ! is_email( $this->value )
 		);
 	}

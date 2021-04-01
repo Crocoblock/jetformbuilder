@@ -5,11 +5,10 @@
 
 if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
 	$this->add_attribute( 'class', 'jet-form-builder__heading' );
-
+	$this->add_attribute( 'class', $args['class_name'] );
 } else {
 	$this->add_attribute( 'class', 'jet-form-builder__label' );
 }
-$this->add_attribute( 'class', $args['class_name'] );
 
 ?>
 <div <?php $this->render_attributes_string(); ?>>

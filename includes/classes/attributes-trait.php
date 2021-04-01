@@ -59,5 +59,12 @@ trait Attributes_Trait {
 		return $response;
 	}
 
+	public function get_attributes_string() {
+		$response    = $this->get_attributes_string_save();
+		$this->attrs = array();
+
+		return $response;
+	}
+
 
 }

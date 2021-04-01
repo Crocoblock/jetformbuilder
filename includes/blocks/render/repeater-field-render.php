@@ -46,7 +46,7 @@ class Repeater_Field_Render extends Base {
 			$this->block_type->settings,
 			$this->block_type->calc_dataset,
 			$template,
-			$this->get_attributes_string_save()
+			$this->get_attributes_string()
 		);
 
 		$html .= '<div class="jet-form-builder-repeater__items">';
@@ -56,7 +56,7 @@ class Repeater_Field_Render extends Base {
 			foreach ( $this->current_repeater['default'] as $item ) {
 				$this->current_repeater['values'] = $item;
 				$html                             .= $this->render_repeater_row( $wp_block, $i );
-				$i++;
+				$i ++;
 			}
 			$this->current_repeater['values'] = false;
 		}

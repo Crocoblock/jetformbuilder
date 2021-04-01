@@ -1,5 +1,5 @@
 import RequestButton from "./request-button";
-import { useStateClasses } from "../helpers/hooks/hooks-helper";
+import { useStateValidClasses } from "../helpers/hooks/hooks-helper";
 
 function ValidateButton( {
 							 initialValid,
@@ -14,7 +14,7 @@ function ValidateButton( {
 		setValidClass,
 		setInvalidClass,
 		setLoadingClass
-	] = useStateClasses( initialValid || false );
+	] = useStateValidClasses( initialValid || false );
 
 	const setValid = response => {
 		setValidClass();
@@ -36,6 +36,6 @@ function ValidateButton( {
 	>
 		<i className="dashicons"/>
 	</RequestButton>;
-};
+}
 
 export default ValidateButton;

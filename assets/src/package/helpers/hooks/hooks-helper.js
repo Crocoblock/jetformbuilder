@@ -55,11 +55,11 @@ export const useActions = ( withEditPostEffect = false ) => {
 
 	return [ actions, setActions ];
 };
+const initClasses = [ 'jet-form-validate-button' ];
 
-export const useStateClasses = initialValid => {
+export const useStateValidClasses = initialValid => {
 	const validClass = 'is-valid';
 	const invalidClass = 'is-invalid'
-	const initClasses = [ 'jet-form-validate-button' ];
 
 	const initStateClasses = () => {
 		if ( initialValid ) {
@@ -85,3 +85,15 @@ export const useStateClasses = initialValid => {
 	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
 }
 
+export const useStateLoadingClasses = () => {
+	const [ classes, setClasses ] = useState( [ ...initClasses ] );
+
+	const setLoadingClass = () => {
+		setClasses( [ ...initClasses, 'loading' ] )
+	};
+	const clearLoadingClass = () => {
+		setClasses( initClasses );
+	}
+
+	return [ classes.join( ' ' ), setLoadingClass, clearLoadingClass ];
+}

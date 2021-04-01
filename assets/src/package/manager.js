@@ -30,7 +30,8 @@ import {
 import {
 	useActions,
 	useMetaState,
-	useStateClasses
+	useStateValidClasses,
+	useStateLoadingClasses
 } from "./helpers/hooks/hooks-helper";
 import FieldWrapper from "./components/fields/field-wrapper";
 import MacrosInserter from "./components/fields/macros-inserter";
@@ -43,12 +44,14 @@ import {
 } from "./components/fields/field-control";
 import PlaceholderMessage from "./components/actions/placeholder-message";
 import HorizontalLine from "./components/horizontal-line";
+import RequestLoadingButton from "./components/request-loading-button";
 
 window.JFBComponents = {
 	ActionFieldsMap,
 	ActionModal,
 	RequestButton,
 	ValidateButton,
+	RequestLoadingButton,
 	WrapperRequiredControl,
 	DynamicPreset,
 	JetFieldsMapControl,
@@ -85,7 +88,8 @@ window.JFBFunctions = {
 
 window.JFBHooks = {
 	useActions,
-	useStateClasses,
-	useMetaState
+	useMetaState,
+	useStateValidClasses,
+	useStateLoadingClasses,
 };
 

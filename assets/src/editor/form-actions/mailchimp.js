@@ -22,6 +22,8 @@ const {
 
 addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 
+	data = window.jetFormMailchimpData;
+
 	getFields() {
 		const { settings } = this.props;
 
@@ -56,17 +58,18 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 
 	formatEntriesArray( entries = [] ) {
 		const placeholder = {
-			label: '--'
+			label: '--',
+			value: '',
 		};
 		if ( ! entries ) {
 			return [];
 		}
 
-		const options = Object.entries( entries ).map( ( [value, label] ) => {
+		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
 			return { value, label };
 		} );
 
-		return [placeholder, ...options];
+		return [ placeholder, ...options ];
 	}
 
 
@@ -124,46 +127,47 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 						{ label( 'update_list_ids' ) }
 					</Button>
 				</BaseControl>
-
-				<SelectControl
-					key='groups_ids'
-					className="full-width"
-					label={ label( 'groups_ids' ) }
-					labelPosition="side"
-					value={ settings.groups_ids }
-					onChange={ newVal => this.onChangeSetting( newVal, 'groups_ids' ) }
-					options={ this.getGroups() }
-				/>
-				<TextControl
-					key='mailchimp_tags'
-					value={ settings.tags }
-					label={ label( 'tags' ) }
-					help={ help( 'tags' ) }
-					onChange={ newVal => this.onChangeSetting( newVal, 'tags' ) }
-				/>
-				<ToggleControl
-					key={ 'double_opt_in' }
-					label={ label( 'double_opt_in' ) }
-					checked={ settings.double_opt_in }
-					onChange={ newVal => this.onChangeSetting( Boolean( newVal ), 'double_opt_in' ) }
-				/>
-				<ActionFieldsMap
-					label={ label( 'fields_map' ) }
-					key='mailchimp'
-					fields={ fields }
-				>
-					{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
-						field={ [fieldId, fieldData] }
+				{ Boolean( settings.list_id ) && <>
+					<SelectControl
+						key='groups_ids'
+						className="full-width"
+						label={ label( 'groups_ids' ) }
+						labelPosition="side"
+						value={ settings.groups_ids }
+						onChange={ newVal => this.onChangeSetting( newVal, 'groups_ids' ) }
+						options={ this.getGroups() }
+					/>
+					<TextControl
+						key='mailchimp_tags'
+						value={ settings.tags }
+						label={ label( 'tags' ) }
+						help={ help( 'tags' ) }
+						onChange={ newVal => this.onChangeSetting( newVal, 'tags' ) }
+					/>
+					<ToggleControl
+						key={ 'double_opt_in' }
+						label={ label( 'double_opt_in' ) }
+						checked={ settings.double_opt_in }
+						onChange={ newVal => this.onChangeSetting( Boolean( newVal ), 'double_opt_in' ) }
+					/>
+					<ActionFieldsMap
+						label={ label( 'fields_map' ) }
+						key='mailchimp'
+						fields={ fields }
 					>
-						<SelectControl
-							className="full-width"
-							key={ fieldId + index }
-							value={ this.getFieldDefault( fieldId ) }
-							onChange={ value => this.onChangeFieldMap( value, fieldId ) }
-							options={ this.formFieldsList }
-						/>
-					</WrapperRequiredControl> }
-				</ActionFieldsMap>
+						{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
+							field={ [ fieldId, fieldData ] }
+						>
+							<SelectControl
+								className="full-width"
+								key={ fieldId + index }
+								value={ this.getFieldDefault( fieldId ) }
+								onChange={ value => this.onChangeFieldMap( value, fieldId ) }
+								options={ this.formFieldsList }
+							/>
+						</WrapperRequiredControl> }
+					</ActionFieldsMap>
+				</> }
 			</React.Fragment> }
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */

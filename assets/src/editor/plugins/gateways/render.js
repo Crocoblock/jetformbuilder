@@ -1,4 +1,3 @@
-
 import GatewaysEditor from "../../gateways/gateways-editor";
 
 const { __ } = wp.i18n;
@@ -17,6 +16,8 @@ const {
 	useState,
 	useEffect
 } = wp.element;
+
+const { ActionModal } = JFBComponents;
 
 function PluginGateways() {
 	const gatewaysData = window.JetFormEditorData.gateways;

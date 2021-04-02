@@ -4,7 +4,10 @@ import WrapperRequiredControl from "./components/wrapper-required-control";
 import RequestButton from "./components/request-button";
 import ValidateButton from "./components/validate-button";
 import addAction from "./helpers/actions/action-manager";
-import Tools, { event, listen } from "./helpers/tools";
+import Tools, {
+	event,
+	listen
+} from "./helpers/tools";
 import DynamicPreset from "./components/presets/dynamic-preset";
 import JetFieldsMapControl from "../editor/blocks/controls/fields-map";
 import FieldWithPreset from "./components/fields/field-with-preset";
@@ -25,7 +28,8 @@ import {
 import {
 	gatewayAttr,
 	gatewayLabel,
-	registerGateway
+	registerGateway,
+	renderGateway
 } from "./helpers/gateways/gateway-helper";
 import {
 	useActions,
@@ -45,6 +49,12 @@ import {
 import PlaceholderMessage from "./components/actions/placeholder-message";
 import HorizontalLine from "./components/horizontal-line";
 import RequestLoadingButton from "./components/request-loading-button";
+import {
+	actionByTypeList,
+	fromLocalizeHelper,
+	getActionSettings
+} from "./helpers/actions/action-helper";
+import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 
 window.JFBComponents = {
 	ActionFieldsMap,
@@ -83,7 +93,12 @@ window.JFBFunctions = {
 	registerGateway,
 	Tools,
 	event,
-	listen
+	listen,
+	actionByTypeList,
+	getActionSettings,
+	fromLocalizeHelper,
+	renderGateway,
+	gatewayActionAttributes
 };
 
 window.JFBHooks = {

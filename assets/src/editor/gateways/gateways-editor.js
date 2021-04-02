@@ -1,3 +1,4 @@
+import PayPal from "./paypal";
 
 const {
 	actionByTypeList,

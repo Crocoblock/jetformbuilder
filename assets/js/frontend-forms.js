@@ -522,7 +522,7 @@
 			.on( 'input.JetFormBuilderMain', '.jet-form-builder__field.text-field, .jet-form-builder__field.textarea-field', self.inputTextFields )
 		},
 
-		inputTextFields: function() {
+		inputTextFields: function () {
 			$( this ).trigger( 'change.JetFormBuilderMain' );
 		},
 
@@ -621,7 +621,6 @@
 				}
 
 			}
-			;
 
 			var $rows = $repeater.find( '.jet-form-builder-repeater__row' );
 
@@ -1401,25 +1400,28 @@
 
 			callbackFinders.forEach( function ( callback ) {
 				if ( ! JetFormBuilder.currentFieldWithError.length ) {
-					JetFormBuilder[ callback ]( form, fieldName );
+					JetFormBuilder.currentFieldWithError = JetFormBuilder[ callback ]( form, fieldName );
 				}
-			} )
+			} );
 
 			return JetFormBuilder.currentFieldWithError;
 		},
 
 		findInputDefault: function ( form, fieldName ) {
-			JetFormBuilder.currentFieldWithError = form.find( '.jet-form-builder__field[name="' + fieldName + '"]:last' );
+			return form.find( `.jet-form-builder__field[name="${ fieldName }"]:last` );
 		},
 
 		findWysiwyg: function ( form, fieldName ) {
+			let field;
 
-			$( '.jet-form-builder__field[data-editor]' ).each( function ( index, editor ) {
+			form.find( '.jet-form-builder__field[data-editor]' ).each( function ( index, editor ) {
 
 				if ( fieldName === $( editor ).data( 'editor' ).textarea_name ) {
-					JetFormBuilder.currentFieldWithError = $( editor );
+					 field = $( editor );
 				}
 			} );
+
+			return field;
 		},
 
 	};

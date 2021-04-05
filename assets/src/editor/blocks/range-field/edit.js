@@ -2,7 +2,7 @@ const {
 	GeneralFields,
 	AdvancedFields,
 	FieldWrapper,
-} = JFBComponents;
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 

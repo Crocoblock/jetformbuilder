@@ -7,16 +7,16 @@ import {
 
 const {
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 const {
 	ActionModal,
 	RepeaterWithState,
 	FieldWithPreset,
 	DynamicPreset
-} = JFBComponents;
+} = JetFBComponents;
 
-const { useActions } = JFBHooks;
+const { useActions } = JetFBHooks;
 
 const {
 	TextareaControl,

@@ -56,7 +56,8 @@ import {
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 
-window.JFBComponents = {
+// JFBComponents
+window.JetFBComponents = {
 	ActionFieldsMap,
 	ActionModal,
 	RequestButton,
@@ -79,7 +80,8 @@ window.JFBComponents = {
 	HorizontalLine
 };
 
-window.JFBFunctions = {
+// JFBFunctions
+window.JetFBActions = {
 	addAction,
 	withPreset,
 	getFormFieldsByBlock,
@@ -101,7 +103,8 @@ window.JFBFunctions = {
 	gatewayActionAttributes
 };
 
-window.JFBHooks = {
+// JFBHooks
+window.JetFBHooks = {
 	useActions,
 	useMetaState,
 	useStateValidClasses,

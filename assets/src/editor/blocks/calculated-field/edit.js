@@ -3,11 +3,11 @@ const {
 	AdvancedFields,
 	GeneralFields,
 	FieldWrapper
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	getFieldsWithoutCurrent,
-} = JFBFunctions;
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 

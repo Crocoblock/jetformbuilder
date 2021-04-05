@@ -6,7 +6,7 @@ const { __ } = wp.i18n;
 const {
 	GeneralFields,
 	AdvancedFields,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	InspectorControls,

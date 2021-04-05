@@ -1,11 +1,11 @@
 import ActionMessages from "../components/actions/action-messages";
 import BaseActionComponent from "./base-action-component";
 
-const { WrapperRequiredControl } = JFBComponents;
+const { WrapperRequiredControl } = JetFBComponents;
 const {
 	addAction,
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 /**
  * Internal dependencies

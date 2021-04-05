@@ -7,7 +7,7 @@ const {
 	gatewayAttr,
 	renderGateway,
 	gatewayActionAttributes,
-} = JFBFunctions;
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 

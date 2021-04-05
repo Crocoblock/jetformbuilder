@@ -1,6 +1,6 @@
 import IntegrationComponent from "./integration-component";
 
-const { addAction } = JFBFunctions;
+const { addAction } = JetFBActions;
 
 /**
  * Internal dependencies

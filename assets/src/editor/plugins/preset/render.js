@@ -1,7 +1,7 @@
 import GeneralPreset from "@components/presets/general-preset";
 
-const { useMetaState } = JFBHooks;
-const { getAvailableFields } = JFBFunctions;
+const { useMetaState } = JetFBHooks;
+const { getAvailableFields } = JetFBActions;
 
 function PluginPreset() {
 

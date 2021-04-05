@@ -1,9 +1,9 @@
 const {
 	GlobalField,
 	AvailableMapField
-} = JFBComponents;
+} = JetFBComponents;
 
-const { withPreset } = JFBFunctions;
+const { withPreset } = JetFBActions;
 
 function GeneralPreset( {
 							value,

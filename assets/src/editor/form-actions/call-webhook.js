@@ -2,7 +2,7 @@ const {
 	Tools,
 	addAction,
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 /**
  * Internal dependencies

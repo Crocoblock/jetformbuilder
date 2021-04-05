@@ -2,11 +2,11 @@ import IntegrationComponent from "./integration-component";
 
 const {
 	addAction,
-} = JFBFunctions;
+} = JetFBActions;
 
 const {
 	WrapperRequiredControl,
-} = JFBComponents;
+} = JetFBComponents;
 
 /**
  * Internal dependencies

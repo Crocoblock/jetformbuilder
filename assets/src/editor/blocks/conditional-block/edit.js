@@ -5,13 +5,13 @@ const {
 	ActionModal,
 	FieldWithPreset,
 	DynamicPreset,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	getFormFieldsBlocks,
 	getInnerBlocks,
 	Tools
-} = JFBFunctions;
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 

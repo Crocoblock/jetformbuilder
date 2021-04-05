@@ -1,4 +1,4 @@
-const { Tools } = JFBFunctions;
+const { Tools } = JetFBActions;
 
 const {
 	useSelect,

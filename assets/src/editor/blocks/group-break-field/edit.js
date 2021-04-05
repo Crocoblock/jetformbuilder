@@ -1,6 +1,6 @@
 const {
 	AdvancedFields,
-} = JFBComponents;
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 

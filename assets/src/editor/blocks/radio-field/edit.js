@@ -5,7 +5,7 @@ const {
 	ToolBarFields,
 	GeneralFields,
 	AdvancedFields,
-} = JFBComponents;
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 

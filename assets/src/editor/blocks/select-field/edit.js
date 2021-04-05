@@ -7,7 +7,7 @@ const {
 	ToolBarFields,
 	GeneralFields,
 	AdvancedFields,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	BlockControls,

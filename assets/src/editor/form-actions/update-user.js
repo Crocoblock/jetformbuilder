@@ -4,7 +4,7 @@ import ActionMessages from "../components/actions/action-messages";
 const {
 	addAction,
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 
 /**

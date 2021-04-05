@@ -7,7 +7,7 @@ const {
 const {
 	registerGateway,
 	gatewayLabel
-} = JFBFunctions;
+} = JetFBActions;
 
 const label = gatewayLabel( 'paypal' );
 

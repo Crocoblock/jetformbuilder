@@ -17,7 +17,7 @@ const {
 	useEffect
 } = wp.element;
 
-const { ActionModal } = JFBComponents;
+const { ActionModal } = JetFBComponents;
 
 function PluginGateways() {
 	const gatewaysData = window.JetFormEditorData.gateways;

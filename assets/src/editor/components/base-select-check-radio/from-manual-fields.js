@@ -1,7 +1,7 @@
 const {
 	RepeaterWithState,
 	ActionModal,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	Button,

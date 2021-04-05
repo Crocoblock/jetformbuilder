@@ -1,6 +1,6 @@
 import IntegrationComponent from "./integration-component";
 
-const { addAction } = JFBFunctions;
+const { addAction } = JetFBActions;
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ const {
 const {
 	ActionFieldsMap,
 	WrapperRequiredControl
-} = JFBComponents;
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 

@@ -4,12 +4,12 @@
 
 const {
 	MacrosInserter
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	addAction,
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 const {
 	TextControl,

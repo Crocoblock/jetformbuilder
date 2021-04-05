@@ -1,5 +1,5 @@
 import BaseActionComponent from "./base-action-component";
-const { getFormFieldsBlocks } = JFBFunctions;
+const { getFormFieldsBlocks } = JetFBActions;
 
 export default class IntegrationComponent extends BaseActionComponent {
 

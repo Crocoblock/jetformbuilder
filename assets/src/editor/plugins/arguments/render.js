@@ -3,7 +3,7 @@ import {
 	submitTypes
 } from "./options";
 
-const { useMetaState } = JFBHooks;
+const { useMetaState } = JetFBHooks;
 
 const {
 	TextControl,

@@ -13,7 +13,7 @@ import './form-actions/activecampaign';
 import RegisterPlugins from "./plugins/manager";
 import RegisterFormFields from "./blocks/form-fields";
 
-const { event } = JFBFunctions;
+const { event } = JetFBActions;
 
 event( 'jet-form-builder-initialize' )();
 

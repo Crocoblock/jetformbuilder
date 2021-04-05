@@ -3,7 +3,7 @@ const {
 	GeneralFields,
 	AdvancedFields,
 	FieldWrapper,
-} = JFBComponents;
+} = JetFBComponents;
 
 import {
 	userAccess,

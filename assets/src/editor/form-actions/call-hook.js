@@ -1,5 +1,5 @@
 
-const { Tools, addAction } = JFBFunctions;
+const { Tools, addAction } = JetFBActions;
 
 /**
  * Internal dependencies

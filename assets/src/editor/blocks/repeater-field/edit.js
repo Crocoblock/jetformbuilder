@@ -7,12 +7,12 @@ const {
 	ToolBarFields,
 	GeneralFields,
 	AdvancedFields,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	getFieldsWithoutCurrent,
 	Tools
-} = JFBFunctions;
+} = JetFBActions;
 
 
 const { __ } = wp.i18n;

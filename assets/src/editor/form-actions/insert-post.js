@@ -4,7 +4,7 @@ import JetDefaultMetaControl from "../blocks/controls/default-meta";
 const {
 	addAction,
 	getFormFieldsBlocks
-} = JFBFunctions;
+} = JetFBActions;
 
 /**
  * Internal dependencies

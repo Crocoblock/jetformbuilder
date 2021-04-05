@@ -2,7 +2,7 @@ import { listFrom } from "../../blocks/select-radio-chekc-options";
 
 const {
 	FieldWrapper,
-} = JFBComponents;
+} = JetFBComponents;
 
 const {
 	CheckboxControl,

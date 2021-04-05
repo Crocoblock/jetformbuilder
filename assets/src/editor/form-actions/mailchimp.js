@@ -9,6 +9,7 @@ const {
 	TextControl,
 	ToggleControl,
 	SelectControl,
+	CheckboxControl,
 	BaseControl,
 	Button,
 } = wp.components;
@@ -21,6 +22,8 @@ const {
 const { __ } = wp.i18n;
 
 addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
+
+	data = window.jetFormMailchimpData;
 
 	getFields() {
 		const { settings } = this.props;
@@ -47,9 +50,8 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 		const settings = this.props.settings;
 
 		if ( settings.data
-			&& settings.data.groups
-			&& settings.list_id ) {
-			return this.formatEntriesArray( settings.data.groups[ settings.list_id ] );
+			&& settings.data.groups ) {
+			return settings.data.groups[ settings.list_id ];
 		}
 		return [];
 	}
@@ -66,6 +68,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 		return [ { label: '--', value: '' }, ...options ];
 	}
 
+	isCheckedGroup( value ) {
+		const settings = this.props.settings;
+
+		return ( value && settings.groups_ids && settings.groups_ids[ value ] ) ? settings.groups_ids[ value ] : false;
+	}
 
 	render() {
 		const { settings, source, label, help } = this.props;
@@ -122,15 +129,21 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					</Button>
 				</BaseControl>
 				{ Boolean( settings.list_id ) && <>
-					<SelectControl
-						key='groups_ids'
-						className="full-width"
+					<BaseControl
 						label={ label( 'groups_ids' ) }
-						labelPosition="side"
-						value={ settings.groups_ids }
-						onChange={ newVal => this.onChangeSetting( newVal, 'groups_ids' ) }
-						options={ this.getGroups() }
-					/>
+					>
+						<div>
+							{ this.getGroups().map( group => <CheckboxControl
+								key={ `groups_ids_${ group.value }` }
+								checked={ this.isCheckedGroup( group.value ) }
+								label={ group.label }
+								onChange={ active => this.onChangeSetting( {
+									...( settings.groups_ids || {} ),
+									[ group.value ]: active
+								}, 'groups_ids' ) }
+							/> ) }
+						</div>
+					</BaseControl>
 					<TextControl
 						key='mailchimp_tags'
 						value={ settings.tags }

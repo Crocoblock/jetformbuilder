@@ -103,9 +103,7 @@ class Mailchimp extends Integration_Base_Action {
 		}
 
 		if ( ! empty( $this->settings['groups_ids'] ) && is_array( $this->settings['groups_ids'] ) ) {
-			foreach ( $this->settings['groups_ids'] as $groups_id ) {
-				$body_args['interests'][ $groups_id ] = true;
-			}
+			$body_args['interests'] = $this->settings['groups_ids'];
 		}
 
 		if ( ! empty( $this->settings['tags'] ) ) {

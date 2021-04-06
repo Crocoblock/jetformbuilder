@@ -366,6 +366,7 @@ class Form extends Base {
 		if ( ! $form_id ) {
 			return 'Please select form to show';
 		}
+
 		$styles = $this->maybe_render_styles_block( $form_id );
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 

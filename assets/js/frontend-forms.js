@@ -1399,7 +1399,7 @@
 			];
 
 			callbackFinders.forEach( function ( callback ) {
-				if ( ! JetFormBuilder.currentFieldWithError.length ) {
+				if ( JetFormBuilder.currentFieldWithError && ! JetFormBuilder.currentFieldWithError.length ) {
 					JetFormBuilder.currentFieldWithError = JetFormBuilder[ callback ]( form, fieldName );
 				}
 			} );

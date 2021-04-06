@@ -218,6 +218,7 @@ class Form_Builder {
 		$form .= $this->end_form();
 
 		Live_Form::clear();
+		Preset_Manager::clear();
 
 		if ( $echo ) {
 			echo $form;

@@ -22,7 +22,15 @@ abstract class Shortcode {
 		$result = array();
 
 		foreach ( $attrs as $name => $attr ) {
-			$result[ $name ] = $attr['default'];
+			if ( in_array( $name, array(
+				'form_id',
+				'submit_type',
+				'required_mark',
+				'fields_layout',
+				'enable_progress'
+			) ) ) {
+				$result[ $name ] = $attr['default'];
+			}
 		}
 
 		return $result;

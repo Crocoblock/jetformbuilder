@@ -436,5 +436,9 @@ abstract class Base extends Base_Module {
 		);
 	}
 
+	public function get_attributes() {
+		return $this->attrs;
+	}
+
 
 }

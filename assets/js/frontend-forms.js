@@ -817,25 +817,33 @@
 				} );
 			}
 
-			var $editor = $scope.find( '.wp-editor-area' );
+			var $editors = $scope.find( '.wp-editor-area' );
 
-			if ( $editor.length && window.wp && window.wp.editor ) {
 
-				var editorID = $editor.attr( 'id' ),
-					editorDefaults = $editor.closest( '.jet-form-builder__field' ).data( 'editor' );
+			if ( $editors.length && window.wp && window.wp.editor ) {
 
-				/*wp.editor.getDefaultSettings = function() {
-					return editorDefaults;
-				}*/
+				$editors.each( function () {
+					const self = $( this ),
+						editorID = self.attr( 'id' ),
+						field = self.closest( '.jet-form-builder__field' );
 
-				if ( window.tinymce && window.tinymce.get( editorID ) ) {
-					window.wp.editor.remove( editorID );
-				}
+					if ( window.tinymce && window.tinymce.get( editorID ) ) {
+						window.wp.editor.remove( editorID );
+					}
 
-				var res = window.wp.editor.initialize(
-					editorID,
-					editorDefaults
-				);
+					window.wp.editor.initialize(
+						editorID,
+						field.data( 'editor' )
+					);
+
+					const callable = function ( e ) {
+						field.trigger( 'change.JetFormBuilderMain', [ this ] );
+					};
+
+					tinymce.get( editorID )
+					.on( 'input', callable )
+					.on( 'change', callable );
+				} );
 
 			}
 
@@ -859,6 +867,8 @@
 				$this.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
 
 			} );
+
+			$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
 
 		},
 
@@ -1417,7 +1427,7 @@
 			form.find( '.jet-form-builder__field[data-editor]' ).each( function ( index, editor ) {
 
 				if ( fieldName === $( editor ).data( 'editor' ).textarea_name ) {
-					 field = $( editor );
+					field = $( editor );
 				}
 			} );
 

@@ -20,6 +20,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"label_progress" : {
+			"type": "string",
+			"default": ""
+		},
 		"label": {
 			"type": "string",
 			"default": ""

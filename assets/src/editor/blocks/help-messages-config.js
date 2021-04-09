@@ -108,7 +108,12 @@ const messagesConfig = [
 		attribute: 'default',
 		to: [ TIME ],
 		message: __( 'Plain time should be in hh:mm:ss format' )
-	}
+	},
+	{
+		attribute: 'label_progress',
+		to: [ FORM_BREAK ],
+		message: __( `To set/change a last progress name add a Form Break Field at the very end of the form.` )
+	},
 ];
 
 

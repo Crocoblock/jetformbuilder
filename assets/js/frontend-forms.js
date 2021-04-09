@@ -799,6 +799,16 @@
 			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 
+		addTriggerForWysiwyg: function ( editorId ) {
+			const callable = function ( e ) {
+				field.trigger( 'change.JetFormBuilderMain', [ this ] );
+			};
+
+			tinymce.get( editorId )
+			.on( 'input', callable )
+			.on( 'change', callable );
+		},
+
 		widgetBookingForm: function ( $scope ) {
 
 			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
@@ -836,13 +846,7 @@
 						field.data( 'editor' )
 					);
 
-					const callable = function ( e ) {
-						field.trigger( 'change.JetFormBuilderMain', [ this ] );
-					};
-
-					tinymce.get( editorID )
-					.on( 'input', callable )
-					.on( 'change', callable );
+					JetFormBuilder.addTriggerForWysiwyg( editorID )
 				} );
 
 			}

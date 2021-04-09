@@ -108,15 +108,24 @@ class Live_Form {
 	 */
 	public function setup_fields( $content ) {
 		$blocks = $this->get_fields( $content );
+		$count_blocks = count( $blocks );
+		$break_after_submit = false;
 
-		foreach ( $blocks as $field ) {
+		foreach ( $blocks as $index => $field ) {
 			if ( $this->is_field( $field, 'form-break' ) ) {
+				$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
+
+				if ( $index + 1 === $count_blocks ) {
+					$break_after_submit = $form_break;
+					continue;
+				}
+
 				$this->pages ++;
-				$this->form_breaks[] = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
+				$this->form_breaks[] = $form_break;
 			}
 		}
 		if ( ! empty( $this->form_breaks ) ) {
-			$this->form_breaks[] = array( 'label' => __( 'Last Page' ) );
+			$this->form_breaks[] = $break_after_submit ? $break_after_submit : array( 'label' => __( 'Last Page' ) );
 		}
 	}
 

@@ -91,6 +91,10 @@ class Form_Break_Field extends Base {
 				'type'    => 'string',
 				'default' => ''
 			),
+			'label_progress' => array(
+				'type' => 'string',
+				'default' => ''
+			)
 		);
 	}
 

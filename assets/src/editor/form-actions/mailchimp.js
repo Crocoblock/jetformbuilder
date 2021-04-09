@@ -23,8 +23,6 @@ const {
 
 addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 
-	data = window.jetFormMailchimpData;
-
 	getFields() {
 		const { settings } = this.props;
 

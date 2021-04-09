@@ -37,7 +37,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				'action': this.data.action,
+				'action': this.props.source.action,
 				'api_key': settings.api_key
 			},
 			success: function ( response ) {

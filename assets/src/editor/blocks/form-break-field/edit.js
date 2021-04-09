@@ -66,7 +66,7 @@ window.jetFormBuilderBlockCallbacks[ block ].edit = class FormBreakEdit extends 
 						<TextControl
 							label={ __( 'Label of progress form break' ) }
 							value={ attributes.label_progress }
-							help={ __( 'To set/change a last step of progress name add a Form Break Field at the very end of the form.' ) }
+							help={ __( 'To set/change a last progress name add a Form Break Field at the very end of the form.' ) }
 							onChange={ ( newValue ) => {
 								props.setAttributes( { label_progress: newValue } );
 							} }

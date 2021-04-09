@@ -705,8 +705,8 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 }
 
 .jet-form-builder-progress-pages__item--circle {
-    height: 2.5em;
-    width: 2.5em;
+    height: 1.5rem;
+    width: 1.5rem;
     border: 1px solid grey;
     border-radius: 50%;
     display: flex;

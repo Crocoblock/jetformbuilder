@@ -107,8 +107,8 @@ class Live_Form {
 	 * @param $content
 	 */
 	public function setup_fields( $content ) {
-		$blocks = $this->get_fields( $content );
-		$count_blocks = count( $blocks );
+		$blocks             = parse_blocks( $content );
+		$count_blocks       = count( $blocks );
 		$break_after_submit = false;
 
 		foreach ( $blocks as $index => $field ) {
@@ -117,6 +117,7 @@ class Live_Form {
 
 				if ( $index + 1 === $count_blocks ) {
 					$break_after_submit = $form_break;
+					unset( $blocks[ $index ] );
 					continue;
 				}
 
@@ -127,6 +128,8 @@ class Live_Form {
 		if ( ! empty( $this->form_breaks ) ) {
 			$this->form_breaks[] = $break_after_submit ? $break_after_submit : array( 'label' => __( 'Last Page' ) );
 		}
+
+		return $blocks;
 	}
 
 	public function maybe_progress_pages() {
@@ -145,7 +148,7 @@ class Live_Form {
 
 		if ( $index === $this->page ) {
 			$classes[] = 'active-page';
-		} elseif ( -1 === $index ) {
+		} elseif ( - 1 === $index ) {
 			$classes[] = 'passed-page';
 		}
 

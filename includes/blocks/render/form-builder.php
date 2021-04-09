@@ -181,15 +181,16 @@ class Form_Builder {
 
 		if ( ! $this->preset()->sanitize_source() ) {
 			echo 'You are not permitted to submit this form!';
+
 			return '';
 		}
 
 		$form = $this->start_form();
 
-		Live_Form::instance()
-		         ->set_form_id( $this->form_id )
-		         ->set_specific_data_for_render( $this->args )
-		         ->setup_fields( $this->form_content );
+		$this->form_content = Live_Form::instance()
+		                               ->set_form_id( $this->form_id )
+		                               ->set_specific_data_for_render( $this->args )
+		                               ->setup_fields( $this->form_content );
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
@@ -214,7 +215,9 @@ class Form_Builder {
 
 		$form .= Live_Form::instance()->maybe_start_page();
 
-		$form .= do_blocks( $this->form_content );
+		foreach ( $this->form_content as $block ) {
+			$form .= render_block( $block );
+		}
 
 		$form .= Live_Form::instance()->maybe_end_page( true );
 		$form .= $this->end_form();

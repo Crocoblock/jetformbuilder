@@ -38,6 +38,14 @@ export default function FormBreakEdit( props ) {
 			<PanelBody
 				title={ __( 'Field Settings' ) }
 			>
+				<TextControl
+							label={ __( 'Label of progress' ) }
+							value={ attributes.label_progress }
+							help={ __( 'To set/change a last progress name add a Form Break Field at the very end of the form.' ) }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { label_progress: newValue } );
+							} }
+						/>
 				<TextareaControl
 					key="page_break_disabled"
 					value={ attributes.page_break_disabled }

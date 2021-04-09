@@ -9,7 +9,7 @@
         <div class="<?= $this->get_progress_item_class( $index ) ?>" data-page="<?= $index + 1 ?>">
             <div class="jet-form-builder-progress-pages__item">
                 <div class="jet-form-builder-progress-pages__item--circle"><?= $index + 1 ?></div>
-                <div class="jet-form-builder-progress-pages__item--label"><?= $break['label'] ?></div>
+                <div class="jet-form-builder-progress-pages__item--label"><?= empty( $break['label_progress'] ) ? $break['label'] : $break['label_progress']; ?></div>
             </div>
             <?php if ( $index + 1 !== $breaks ): ?>
                 <div class="jet-form-builder-progress-pages__separator"></div>

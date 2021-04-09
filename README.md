@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.1.6
+* ADD: `Label of progress` for Form Break Field
+* FIX: Errors when editing actions such as MailChimp, GetResponse
+
 ## 1.1.5
 * FIX: Trying to access array offset on value of type null on php 7.4
 * FIX: Rendering repeater attributes

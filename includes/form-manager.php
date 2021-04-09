@@ -93,12 +93,20 @@ class Form_Manager {
 
 	public function get_only_form_fields( $form_id, $exclude = array(), $recursive = true ) {
 		$content = $this->get_form_blocks( $form_id );
+
+		return $this->only_form_fields( $content, $exclude, $recursive );
+	}
+
+	public function only_form_fields( $content, $exclude = array(), $recursive = true ) {
 		$exclude = array_map( array( $this, 'prepare_fields_names' ), $exclude );
 
 		$this->result_fields = array();
 		$this->get_inner_fields( $content, $exclude, $recursive );
 
-		return $this->result_fields;
+		$response = $this->result_fields;
+		$this->result_fields = array();
+
+		return $response;
 	}
 
 

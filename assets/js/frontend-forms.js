@@ -549,6 +549,8 @@
 				$repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
 				$editor = $repeaterItem.find( '.wp-editor-area' );
 
+			$this.trigger( 'jet-form-builder/on-remove-repeater-item' );
+
 			if ( $editor.length && window.wp && window.wp.editor ) {
 				window.wp.editor.remove( $editor.attr( 'id' ) );
 			}
@@ -587,15 +589,23 @@
 
 			$items.append( $newVal );
 
-			var $editor = $newVal.find( '.wp-editor-area' );
+			var $editors = $newVal.find( '.wp-editor-area' );
 
-			if ( $editor.length && window.wp && window.wp.editor ) {
 
-				var res = window.wp.editor.initialize(
-					$editor.attr( 'id' ),
-					$editor.closest( '.jet-form-builder__field' ).data( 'editor' )
-				);
+			if ( $editors.length && window.wp && window.wp.editor ) {
+				$editors.each( function () {
+					const self = $( this ),
+						editorID = self.attr( 'id' ),
+						field = self.closest( '.jet-form-builder__field' );
 
+
+					window.wp.editor.initialize(
+						editorID,
+						field.data( 'editor' )
+					);
+
+					JetFormBuilder.addTriggerForWysiwyg( field, editorID )
+				} );
 			}
 
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
@@ -799,7 +809,7 @@
 			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 
-		addTriggerForWysiwyg: function ( editorId ) {
+		addTriggerForWysiwyg: function ( field, editorId ) {
 			const callable = function ( e ) {
 				field.trigger( 'change.JetFormBuilderMain', [ this ] );
 			};
@@ -829,7 +839,6 @@
 
 			var $editors = $scope.find( '.wp-editor-area' );
 
-
 			if ( $editors.length && window.wp && window.wp.editor ) {
 
 				$editors.each( function () {
@@ -846,7 +855,7 @@
 						field.data( 'editor' )
 					);
 
-					JetFormBuilder.addTriggerForWysiwyg( editorID )
+					JetFormBuilder.addTriggerForWysiwyg( field, editorID )
 				} );
 
 			}

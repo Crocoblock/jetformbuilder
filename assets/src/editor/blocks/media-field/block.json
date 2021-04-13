@@ -24,6 +24,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"value_format": {
+			"type": "string",
+			"default": ""
+		},
 		"max_files": {
 			"type": "number",
 			"default": null

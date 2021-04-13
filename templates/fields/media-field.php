@@ -35,11 +35,13 @@ if ( $required ) {
 $value = File_Upload::instance()->get_result_value( $args );
 $value = is_array( $value ) ? json_encode( $value ) : $value;
 
+//var_dump( $this->block_type->block_attrs, $args ); die;
+
 ?>
 <div class="jet-form-builder__field-wrap jet-form-builder-file-upload">
 	<div class="jet-form-builder-file-upload__content">
 		<?php echo File_Upload::instance()->get_loader(); ?>
-		<div class="jet-form-builder-file-upload__files" <?php echo File_Upload::instance()->get_files_data_args( $args ); ?>><?php
+		<div class="jet-form-builder-file-upload__files" <?php echo File_Upload::instance()->get_files_data_args( $this->block_type->block_attrs ); ?>><?php
 			echo File_Upload::instance()->get_result_html( $args );
 		?></div>
 	</div>

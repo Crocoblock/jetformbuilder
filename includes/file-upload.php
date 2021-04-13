@@ -246,11 +246,7 @@ class File_Upload {
 		$value = ! empty( $field['default'] ) ? $field['default'] : array();
 
 		if ( ! is_array( $value ) ) {
-			if ( 'both' !== $format ) {
-				$value = explode( ',', str_replace( ', ', ',', $value ) );
-			} else {
-				return $files;
-			}
+			$value = explode( ',', str_replace( ', ', ',', $value ) );
 		}
 
 		foreach ( $value as $val ) {
@@ -258,29 +254,12 @@ class File_Upload {
 			switch ( $format ) {
 
 				case 'id':
-
+				case 'url':
+				case 'both':
 					$files[] = array(
 						'url'        => wp_get_attachment_url( $val ),
 						'attachment' => $val,
 					);
-
-					break;
-
-				case 'url':
-
-					$files[] = array(
-						'url' => $val,
-					);
-
-					break;
-
-				case 'both':
-					if ( is_array( $val ) && isset( $val['url'] ) && isset( $val['id'] ) ) {
-						$files[] = array(
-							'url'        => $val['url'],
-							'attachment' => $val['id'],
-						);
-					}
 
 					break;
 			}

@@ -702,6 +702,7 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     flex-direction: column;
     align-items: center;
     padding: 0.5em 2em;
+    position: relative;
 }
 
 .jet-form-builder-progress-pages__item--circle {
@@ -712,6 +713,13 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.jet-form-builder-progress-pages__item--label {
+    position: absolute;
+    top: 100%;
+    max-width: 300px;
+    text-align: center;
 }
 
 .jet-form-builder-progress-pages__separator {

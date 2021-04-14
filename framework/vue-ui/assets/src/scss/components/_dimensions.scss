@@ -1,0 +1,75 @@
+.cx-vui-dimensions {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+
+	&__units {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin: 0 42px 5px 0;
+		.rtl & {
+			margin: 0 0 5px 42px;
+		}
+
+		span {
+			color: #7B7E81;
+			cursor: pointer;
+			margin: 0 0 0 2px;
+			.rtl & {
+				margin: 0 2px 0 0;
+			}
+
+			&:first-child {
+				margin: 0;
+			}
+
+			&.active {
+				color: $color__accent;
+			}
+		}
+	}
+
+	&__inputs {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+
+		.cx-vui-component-raw {
+			flex: 1 1 100px;
+			margin: 0 0 0 5px;
+			.rtl & {
+				margin: 0 5px 0 0;
+			}
+
+			&:first-child {
+				margin: 0;
+			}
+		}
+	}
+
+	&__link {
+		width: 32px;
+		height: 32px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-shrink: 0;
+		margin: 0 0 0 10px;
+		cursor: pointer;
+		.rtl & {
+			margin: 0 10px 0 0;
+		}
+	}
+
+	&.size-default {
+		max-width: 100%;
+		width: 442px;
+	}
+
+	&.size-fullwidth {
+		max-width: 100%;
+		width: 100%;
+	}
+}

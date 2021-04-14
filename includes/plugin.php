@@ -7,6 +7,7 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Pages\Settings_Page;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
+use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
 
@@ -30,6 +31,7 @@ class Plugin {
 
 	public $is_activated_jet_sm;
 	public $allow_gateways;
+	public $framework;
 
 	public static $instance;
 
@@ -91,6 +93,15 @@ class Plugin {
 		}
 	}
 
+	public function init_framework() {
+		require $this->plugin_dir( 'framework/loader.php' );
+
+		$this->framework = new CX_Loader( array(
+			$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
+		) );
+	}
+
+
 	/**
 	 * Returns url to file or dir inside plugin folder
 	 *
@@ -121,6 +132,8 @@ class Plugin {
 		$this->register_autoloader();
 
 		add_action( 'after_setup_theme', array( $this, 'init_components' ), 0 );
+
+		$this->init_framework();
 	}
 
 }

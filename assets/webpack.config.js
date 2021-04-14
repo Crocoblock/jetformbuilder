@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { VueLoaderPlugin } = require( 'vue-loader' );
 
 module.exports = {
 	name: 'js_bundle',
@@ -7,7 +8,8 @@ module.exports = {
 	entry: {
 		'editor.js': './editor/main.js',
 		'form-block.js': './editor/form-block.js',
-		'package.js': './package/manager.js'
+		'package.js': './package/manager.js',
+		'admin.js': './admin/main.js'
 	},
 	output: {
 		path: path.resolve( __dirname, 'js' ),
@@ -19,7 +21,7 @@ module.exports = {
 			path.resolve(__dirname, 'src'),
 			'node_modules'
 		],
-		extensions: ['.js'],
+		extensions: [ '.js', '.vue' ],
 		alias: {
 			'@': path.resolve(__dirname, 'src/editor'),
 			'@helpers': path.resolve(__dirname, 'src/editor/helpers'),
@@ -30,10 +32,7 @@ module.exports = {
 		jquery: 'jQuery'
 	},
 	plugins: [
-		new webpack.ProvidePlugin({
-			jQuery: 'jquery',
-			$: 'jquery'
-		})
+		new VueLoaderPlugin()
 	],
 	optimization: {
 		splitChunks: {
@@ -46,7 +45,11 @@ module.exports = {
 				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/
-			}
+			},
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader'
+			},
 		]
 	},
 	performance: {

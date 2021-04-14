@@ -1,0 +1,25 @@
+.cx-vui-tooltip {
+	background: $color__heading;
+	box-shadow: 0px 1px 4px rgba(35, 40, 45, 0.24);
+	border-radius: 3px;
+	padding: 5px 15px;
+	font-size: 12px;
+	line-height: 15px;
+	color: #fff;
+	bottom: 100%;
+	position: absolute;
+	margin: 0 0 10px;
+	text-align: center;
+	&:after {
+		top: 100%;
+		left: 50%;
+		margin: 0 0 0 -4px;
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 4px 4px 0 4px;
+		border-color: $color__heading transparent transparent transparent;
+		content: "";
+		position: absolute;
+	}
+}

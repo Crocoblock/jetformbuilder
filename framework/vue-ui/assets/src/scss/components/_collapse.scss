@@ -1,0 +1,25 @@
+.cx-vui-collapse {
+	border-bottom: 1px solid $color__border-off-panel;
+	&:last-child {
+		border-bottom: none;
+	}
+	&__heading {
+		display: flex;
+		padding: 20px 0;
+		align-items: center;
+		cursor: pointer;
+		&-icon {
+			font-size: 18px;
+			margin: 0 5px 0 0;
+			.rtl & {
+				margin: 0 0 0 5px;
+				transform: scaleX(-1);
+			}
+		}
+	}
+	&__content {
+		.cx-vui-collapse--collapsed & {
+			display: none;
+		}
+	}
+}

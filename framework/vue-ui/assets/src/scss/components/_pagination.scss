@@ -1,0 +1,64 @@
+.cx-vui-pagination {
+
+	&-items {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	&-item {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 32px;
+		height: 32px;
+		margin: 0 3px;
+		padding: 4px 8px;
+		position: relative;
+		text-decoration: none;
+		border: 1px solid #E8E8E8;
+		border-radius: 2px;
+		text-shadow: none;
+		font-weight: 600;
+		font-size: 13px;
+		line-height: normal;
+		color: #7B7E81;
+		background: transparent;
+		cursor: pointer;
+
+		&:first-child {
+			margin-left: 0;
+			.rtl & {
+				margin-left: 3px;
+				margin-right: 0;
+			}
+		}
+
+		&:last-child {
+			margin-right: 0;
+			.rtl & {
+				margin-left: 0;
+				margin-right: 3px;
+			}
+		}
+
+		&-active {
+			color: $color__accent;
+			border: 1px solid $color__accent;
+		}
+	}
+
+	&-disabled {
+		cursor: not-allowed;
+		opacity: .5;
+	}
+
+	&-prev,
+	&-next {
+		svg {
+			.rtl & {
+				transform: scale(-1);
+			}
+		}
+	}
+}

@@ -23,7 +23,7 @@ abstract class Base_Page {
 	 * Page render function
 	 */
 	public function render(): void {
-		printf( '<div id="%s"></div>', $this->slug() );
+		printf( '<div id="%s"></div>', 'jet-form-builder_page_' . $this->slug() );
 	}
 
 	/**
@@ -35,6 +35,13 @@ abstract class Base_Page {
 	 * Page specific assets
 	 */
 	public function assets(): void {
+		wp_enqueue_script(
+			$this->slug(),
+			Plugin::instance()->plugin_url( 'assets/js/admin.js' ),
+			array(),
+			Plugin::instance()->get_version(),
+			true
+		);
 	}
 
 	/**

@@ -1,0 +1,44 @@
+$color__switcher-panel-off: #ECECEC;
+$color__switcher-panel-on: $color__accent-light;
+
+$color__switcher-trigger-off: #fff;
+$color__switcher-trigger-on: $color__accent;
+
+.cx-vui-switcher {
+	width: 36px;
+	position: relative;
+	cursor: pointer;
+	padding: 3px 0;
+	&__panel {
+		width: 100%;
+		height: 12px;
+		border-radius: 6px;
+		background: $color__switcher-panel-off;
+		transition: all 150ms linear;
+		.cx-vui-switcher--on & {
+			background: $color__switcher-panel-on;
+		}
+	}
+	&__trigger {
+		width: 18px;
+		height: 18px;
+		left: 0;
+		top: 50%;
+		margin-top: -9px;
+		box-shadow: 0px 1px 4px rgba(35, 40, 45, 0.24);
+		transition: all 150ms linear;
+		background: $color__switcher-trigger-off;
+		border-radius: 100%;
+		position: absolute;
+		.cx-vui-switcher--on & {
+			background: $color__switcher-trigger-on;
+			left: calc( 100% - 18px );
+		}
+		.cx-vui-switcher--in-focus & {
+			box-shadow: 0px 1px 4px rgba(35, 40, 45, 0.24), 0 0 0 9px rgba(166,167,168, .2);
+		}
+		.cx-vui-switcher--on.cx-vui-switcher--in-focus & {
+			box-shadow: 0px 1px 4px rgba(35, 40, 45, 0.24), 0 0 0 9px rgba(0,124,186, .2);
+		}
+	}
+}

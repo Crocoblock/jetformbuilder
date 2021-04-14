@@ -1,0 +1,74 @@
+.cx-vui-popup {
+	position: fixed;
+	z-index: 999;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&__overlay {
+		background: $color__heading;
+		opacity: .5;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		z-index: 1;
+	}
+	&__body {
+		background: $color__bg-panel;
+		box-shadow: 0px 2px 6px rgba( 35, 40, 45, 0.07 );
+		border-radius: 6px;
+		font-family: $font_family;
+		position: relative;
+		z-index: 2;
+		padding: 30px 40px 40px;
+	}
+	&__header {
+		padding: 0 0 10px;
+	}
+	&__content {
+		font-size: 13px;
+		line-height: 20px;
+		color: $color__text;
+		p {
+			font-size: 13px;
+			line-height: 20px;
+			color: $color__text;
+			margin: 0;
+			padding: 0 0 20px;
+		}
+	}
+	&__footer {
+		padding: 20px 0 0;
+		display: flex;
+		align-items: center;
+		.cx-vui-button + .cx-vui-button {
+			margin: 0 0 0 10px;
+			.rtl & {
+				margin: 0 10px 0 0;
+			}
+		}
+	}
+	&__close {
+		position: absolute;
+		right: 12px;
+		top: 15px;
+		cursor: pointer;
+		.rtl & {
+			left: 12px;
+			right: auto;
+		}
+		path {
+			fill: $color__border-off-panel;
+		}
+		&:hover {
+			path {
+				fill: $color__text;
+			}
+		}
+	}
+}

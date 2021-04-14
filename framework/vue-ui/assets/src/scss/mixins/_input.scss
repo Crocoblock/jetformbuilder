@@ -1,0 +1,42 @@
+@mixin input() {
+	font-size: 13px;
+	line-height: 20px;
+	border-radius: 4px;
+	background-color: $color__bg-input;
+	border: none;
+	color: $color__text;
+	padding: 6px 12px;
+	box-shadow: none;
+	outline: none;
+	box-sizing: border-box;
+	max-width: 100%;
+	margin: 0;
+	&:focus {
+		box-shadow: 0 0 0 2px $color__accent-border inset;
+		background-color: #fff;
+		color: $color__heading;
+	}
+	&.has-error {
+		box-shadow: 0 0 0 2px $color__error-border inset;
+		color: $color__error;
+	}
+	&.size-fullwidth {
+		width: 100%;
+	}
+
+	&::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+		color: $color__input-placeholder;
+	}
+
+	&::-moz-placeholder { /* Firefox 19+ */
+		color: $color__input-placeholder;
+	}
+
+	&:-ms-input-placeholder { /* IE 10+ */
+		color: $color__input-placeholder;
+	}
+
+	&:-moz-placeholder { /* Firefox 18- */
+		color: $color__input-placeholder;
+	}
+}

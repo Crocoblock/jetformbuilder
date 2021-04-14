@@ -1,0 +1,100 @@
+.cx-vui-f-select {
+	&__select-tag {
+		display: none;
+	}
+	&__input {
+		&.cx-vui-input {
+			&--in-focus {
+				box-shadow: 0 0 0 2px $color__accent-border inset;
+				background: #fff;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+	&__control {
+		position: relative;
+	}
+	&__results {
+		top: 100%;
+		left: 0;
+		right: 0;
+		z-index: 999;
+		position: absolute;
+		border: 1px solid $color__accent-border;
+		box-sizing: border-box;
+		box-shadow: 0px 4px 20px rgba(35, 40, 45, 0.24);
+		border-radius: 0px 0px 4px 4px;
+		background: $color__bg-panel;
+		padding: 10px 0;
+		margin: -1px 0 0 0;
+		&-message,
+		&-loading {
+			padding: 0 10px;
+			color: $color__text;
+		}
+	}
+	&__result {
+		color: $color__text;
+		font-size: 13px;
+		line-height: 17px;
+		padding: 3px 12px 4px;
+		cursor: pointer;
+		transition: all 150ms linear;
+		&.is-selected {
+			background: $color__accent-lighter;
+		}
+		&:hover,
+		&.in-focus {
+			color: #fff;
+			background: $color__accent;
+		}
+	}
+	&__selected {
+		display: flex;
+		flex-wrap: wrap;
+		&-not-empty {
+			margin: 0 0 15px;
+		}
+		&-option {
+			padding: 5px 11px 5px 5px;
+			display: flex;
+			align-items: center;
+			background: $color__accent-lighter;
+			cursor: pointer;
+			color: $color__text;
+			margin: 0 5px 5px 0;
+			white-space: nowrap;
+			.rtl & {
+				padding: 5px 5px 5px 11px;
+				margin: 0 0 5px 5px;
+			}
+			&-icon {
+				width: 22px;
+				height: 22px;
+				background: $color__bg-panel;
+				border-radius: 1px;
+				transition: all 150ms liear;
+				margin: 0 6px 0 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				.rtl & {
+					margin: 0 0 0 6px;
+				}
+				path {
+					transition: all 150ms liear;
+					fill: $color__text;
+				}
+			}
+			&:hover {
+				.cx-vui-f-select__selected-option-icon {
+					background: $color__accent;
+					path {
+						fill: #fff;
+					}
+				}
+			}
+		}
+	}
+}

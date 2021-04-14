@@ -1,0 +1,98 @@
+.cx-vui-colorpicker {
+	display: inline-block;
+	position: relative;
+
+	&__preview {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		border-radius: 4px;
+		border: 1px solid #DCDCDD;
+		cursor: pointer;
+	}
+
+	&__color {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 18px;
+		height: 18px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+		border-radius: 2px;
+		position: relative;
+
+		span {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	&__clear {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 0 0 10px;
+		.rtl & {
+			margin: 0 10px 0 0;
+		}
+
+		&:hover {
+			svg {
+				fill: #C92C2C;
+			}
+		}
+	}
+
+	&__dropdown {
+		position: absolute;
+		top: 38px;
+		left: 0;
+		z-index: 999;
+		.rtl & {
+			left: auto;
+			right: 0;
+
+			.vc-chrome-toggle-btn {
+				text-align: left;
+			}
+		}
+	}
+
+	&.size-small {
+		.cx-vui-colorpicker__preview {
+			padding: 5px;
+		}
+		.cx-vui-colorpicker__color {
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	&.size-default {
+		.cx-vui-colorpicker__preview {
+			padding: 7px;
+		}
+		.cx-vui-colorpicker__color {
+			width: 18px;
+			height: 18px;
+		}
+	}
+
+	&.size-large {
+		.cx-vui-colorpicker__preview {
+			padding: 10px;
+		}
+		.cx-vui-colorpicker__color {
+			width: 24px;
+			height: 24px;
+		}
+		.cx-vui-colorpicker__clear {
+			svg {
+				width: 14px;
+				height: 14px;
+			}
+		}
+	}
+}

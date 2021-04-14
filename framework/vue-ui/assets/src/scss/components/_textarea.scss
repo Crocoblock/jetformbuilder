@@ -1,0 +1,4 @@
+textarea.cx-vui-textarea {
+	@include input();
+	resize: vertical;
+}

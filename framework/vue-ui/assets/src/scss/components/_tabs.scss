@@ -1,0 +1,77 @@
+.cx-vui-tabs {
+	&.cx-vui-tabs--layout-vertical {
+		display: flex;
+		align-items: stretch;
+	}
+	&__nav {
+		background: $color__bg-canvas;
+		.cx-vui-tabs--layout-vertical > & {
+			width: 20%;
+			flex: 0 0 20%;
+			max-width: 220px;
+			padding: 0 0 40px;
+		}
+		.cx-vui-tabs--layout-horizontal > & {
+			display: flex;
+			padding: 0 40px;
+		}
+		.cx-vui-tabs--invert > & {
+			background: $color__bg-panel;
+		}
+		&-item {
+			cursor: pointer;
+			padding: 14px 20px;
+			font-weight: 500;
+			font-size: 15px;
+			line-height: 20px;
+			color: $color__heading;
+			border: 1px solid transparent;
+			.cx-vui-tabs--layout-vertical & {
+				border-bottom: 1px solid $color__border-off-panel;
+			}
+			&:hover {
+				color: $color__accent;
+			}
+			.cx-vui-tabs:not(.cx-vui-tabs--in-panel) & {
+				border-top: none;
+			}
+			&--active {
+				color: $color__accent;
+				position: relative;
+				z-index: 3;
+				background: $color__bg-panel;
+				.cx-vui-tabs--layout-horizontal & {
+					border: 1px solid $color__border-off-panel;
+					border-bottom: none;
+				}
+				.cx-vui-tabs--in-panel & {
+					border-radius: 4px 4px 0 0;
+				}
+				.cx-vui-tabs--invert & {
+					background: $color__bg-canvas;
+				}
+			}
+		}
+	}
+	&__content {
+		padding: 40px;
+		.cx-vui-tabs--invert > & {
+			background: $color__bg-canvas;
+		}
+		.cx-vui-tabs--layout-horizontal > & {
+			border-top: 1px solid $color__border-off-panel;
+			margin: -1px 0 0 0;
+		}
+		.cx-vui-tabs--layout-vertical > & {
+			flex: 1 1 auto;
+			border-left: 1px solid $color__border-off-panel;
+			margin: 0 0 0 -1px;
+			padding: 15px 40px;
+			.rtl & {
+				border-left: none;
+				border-right: 1px solid $color__border-off-panel;
+				margin: 0 -1px 0 0;
+			}
+		}
+	}
+}

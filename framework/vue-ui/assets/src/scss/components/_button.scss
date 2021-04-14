@@ -1,0 +1,185 @@
+.cx-vui-button {
+	cursor: pointer;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	border: none;
+	box-shadow: 0px 4px 4px rgba(35, 40, 45, 0.24);
+	border-radius: 4px;
+	transition: all 150ms linear;
+	font-weight: 500;
+	font-family: $font_family;
+	outline: none;
+	position: relative;
+	box-sizing: border-box;
+	text-decoration: none;
+	&__content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.cx-vui-button--loading & {
+			opacity: 0;
+		}
+	}
+	&--style {
+		&-default {
+			background: $color__bg-input;
+			color: $color__accent;
+			&:hover {
+				box-shadow: none;
+				color: $color__accent;
+				background: $color__bg-input-hover;
+			}
+		}
+		&-accent {
+			background: $color__accent;
+			color: #fff;
+			&:hover {
+				box-shadow: none;
+				color: #fff;
+				background: $color__accent-hover;
+			}
+		}
+		&-default-border {
+			border: 1px solid $color__border-off-panel;
+			background: transparent;
+			color: $color__text;
+			box-shadow: none;
+			&:hover {
+				border: 1px solid $color__border-off-panel;
+				color: $color__text;
+				background: #f3f5f6;
+			}
+		}
+		&-accent-border {
+			border: 1px solid $color__accent;
+			background: transparent;
+			color: $color__accent;
+			box-shadow: none;
+			&:hover {
+				border: 1px solid $color__accent-hover;
+				color: $color__accent-hover;
+				background: #f3f5f6;
+			}
+		}
+		&-link-accent {
+			color: $color__accent;
+			background: none;
+			box-shadow: none;
+			path {
+				fill: $color__accent;
+			}
+			&:hover {
+				color: $color__accent-hover;
+				path {
+					fill: $color__accent-hover;
+				}
+			}
+		}
+		&-link-error {
+			color: $color__error;
+			background: none;
+			box-shadow: none;
+			path {
+				fill: $color__error;
+			}
+			&:hover {
+				color: $color__error;
+			}
+		}
+	}
+	&--size {
+		&-default {
+			font-size: 15px;
+			line-height: 21px;
+			padding: 12px 25px 13px;
+			.cx-vui-button__content {
+				.dashicons {
+					margin: 0 5px 0 -8px;
+					.rtl & {
+						margin: 0 -8px 0 5px;
+					}
+				}
+				span + .dashicons {
+					margin: -8px 0 0 5px;
+					.rtl & {
+						margin: -8px 5px 0 0;
+					}
+				}
+			}
+		}
+		&-link {
+			font-size: 15px;
+			line-height: 18px;
+			.cx-vui-button__content {
+				svg {
+					margin: 0 5px 1px 0;
+					.rtl & {
+						margin: 0 0 1px 5px;
+					}
+				}
+				span + svg {
+					margin: 0 0 1px 5px;
+					.rtl & {
+						margin: 0 5px 1px 0;
+					}
+				}
+			}
+		}
+		&-mini {
+			font-size: 13px;
+			line-height: 19px;
+			padding: 6px 14px 7px;
+			.cx-vui-button__content {
+				.dashicons {
+					margin: 0 4px 0 -5px;
+					.rtl & {
+						margin: 0 -5px 0 4px;
+					}
+				}
+				span + .dashicons {
+					margin: -5px 0 0 4px;
+					.rtl & {
+						margin: -5px 4px 0 0;
+					}
+				}
+			}
+
+		}
+	}
+	&--disabled {
+		cursor: default;
+		opacity: .3;
+		pointer-events: none;
+	}
+	&--loading {
+		cursor: default;
+	}
+	&__loader {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.loader-icon {
+			animation: spin 1200ms infinite linear;
+			path {
+				fill: currentColor;
+			}
+		}
+		@keyframes spin {
+			from {
+				transform:rotate(0deg);
+			}
+			to {
+				transform:rotate(360deg);
+			}
+		}
+	}
+	&.fullwidth {
+		width: 100%;
+	}
+}

@@ -15,7 +15,6 @@ class Page_Config {
 	 * @param Base_Page $page
 	 */
 	public function __construct( Base_Page $page ) {
-		$this->handle = $page->slug();
 		$this->config = apply_filters( 'jet-msg/admin/helpers/page-config/config', $page->page_config() );
 	}
 
@@ -28,7 +27,7 @@ class Page_Config {
 
 	public function render_config(): void {
 		if ( $this->is_set() ) {
-			wp_localize_script( $this->handle, 'JetFBPageConfig', $this->config );
+			wp_localize_script( 'cx-vue', 'JetFBPageConfig', $this->config );
 		}
 	}
 

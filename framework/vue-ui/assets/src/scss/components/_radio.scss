@@ -1,0 +1,58 @@
+.cx-vui-radio {
+	display: inline-flex;
+	align-items: center;
+	margin: 0 0 10px;
+	&--disabled {
+		pointer-events: none;
+	}
+	.cx-vui-radiogroup--single-item & {
+		margin: 0;
+	}
+	&__input {
+		visibility: hidden;
+		position: absolute;
+		left: -999em;
+	}
+	&__mark {
+		box-sizing: border-box;
+		width: 18px;
+		height: 18px;
+		border-radius: 100%;
+		border: 2px solid $color__text;
+		margin: 0 10px 0 0;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.rtl & {
+			margin: 0 0 0 10px;
+		}
+		&:before {
+			content: "";
+			width: 10px;
+			height: 10px;
+			border-radius: 100%;
+		}
+		&--focused {
+			border-color: $color__accent-border;
+		}
+		&--checked {
+			border-color: $color__accent;
+			&:before {
+				background: $color__accent;
+			}
+		}
+		&--disabled {
+			pointer-events: none;
+			opacity: .5;
+			cursor: default;
+		}
+	}
+	&__label {
+		color: $color__text;
+		cursor: pointer;
+		.cx-vui-radio--disabled & {
+			cursor: default;
+		}
+	}
+}

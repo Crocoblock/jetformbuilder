@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Admin\Pages;
 
 
+use Jet_Form_Builder\Plugin;
+
 class Pages_Manager {
 
 	private $pages = array();
@@ -59,19 +61,14 @@ class Pages_Manager {
 	 * @return [type]       [description]
 	 */
 	public function assets(): void {
-
-		if ( ! function_exists( 'jet_engine' ) ) {
-			return;
-		}
-
-		$ui_data = jet_engine()->framework->get_included_module_data( 'cherry-x-vue-ui.php' );
-		$ui      = new \CX_Vue_UI( $ui_data );
-
-		$ui->enqueue_assets();
-
-		$this->current_page->assets();
+		$ui_data = Plugin::instance()->framework->get_included_module_data( 'cherry-x-vue-ui.php' );
+		( new \CX_Vue_UI( $ui_data ) )->enqueue_assets();
 
 		( new Page_Config( $this->current_page ) )->render_config();
+
+		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
+
+		$this->current_page->assets();
 
 		add_action( 'admin_footer', array( $this, 'render_vue_templates' ) );
 

@@ -1,0 +1,13 @@
+.cx-vui-panel {
+	background: $color__bg-panel;
+	box-shadow: 0px 2px 6px rgba( 35, 40, 45, 0.07 );
+	border-radius: 6px;
+	margin-bottom: 30px;
+	font-family: $font_family;
+}
+
+.cx-vui-inner-panel {
+	background: $color__bg-canvas;
+	border-radius: 4px;
+	padding: 30px;
+}

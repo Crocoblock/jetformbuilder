@@ -1,0 +1,80 @@
+@import '~vue2-timepicker/dist/VueTimepicker.css';
+
+.wp-admin .cx-vui-time {
+	height: auto;
+	-webkit-appearance:none;
+	input[type="text"]{
+		box-shadow: 0 0 0 transparent;
+		border-radius: 4px;
+		border: 1px solid #7e8993;
+		background-color: #fff;
+		color: #32373c;
+	}
+	&--size {
+		&-default {
+			font-size: 15px;
+			line-height: 21px;
+			padding: 12px 25px 13px;
+			.cx-vui-button__content {
+				.dashicons {
+					margin: 0 5px 0 -8px;
+					.rtl & {
+						margin: 0 -8px 0 5px;
+					}
+				}
+				span + .dashicons {
+					margin: -8px 0 0 5px;
+					.rtl & {
+						margin: -8px 5px 0 0;
+					}
+				}
+			}
+		}
+		&-link {
+			font-size: 15px;
+			line-height: 18px;
+			.cx-vui-button__content {
+				svg {
+					margin: 0 5px 1px 0;
+					.rtl & {
+						margin: 0 0 1px 5px;
+					}
+				}
+				span + svg {
+					margin: 0 0 1px 5px;
+					.rtl & {
+						margin: 0 5px 1px 0;
+					}
+				}
+			}
+		}
+		&-mini {
+			font-size: 13px;
+			line-height: 19px;
+			padding: 6px 14px 7px;
+			.cx-vui-button__content {
+				.dashicons {
+					margin: 0 4px 0 -5px;
+					.rtl & {
+						margin: 0 -5px 0 4px;
+					}
+				}
+				span + .dashicons {
+					margin: -5px 0 0 4px;
+					.rtl & {
+						margin: -5px 4px 0 0;
+					}
+				}
+			}
+
+		}
+		&-fullwidth {
+			width: 100%;
+		}
+	}
+	&--disabled {
+		cursor: default;
+		opacity: .3;
+		pointer-events: none;
+	}
+}

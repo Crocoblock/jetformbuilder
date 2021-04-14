@@ -1,0 +1,111 @@
+.cx-vui-iconpicker {
+	position: relative;
+	&__fieldgroup {
+		display: flex;
+	}
+	&__input {
+		flex: 1 0 auto;
+	}
+	&__preview {
+		width: 32px;
+		height: 32px;
+		flex:  0 0 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: $color__bg-input;
+		border-radius: 4px;
+		margin: 0 5px 0 0;
+		.rtl & {
+			margin: 0 0 0 5px;
+		}
+	}
+	&__canvas {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		margin: 20px 0 0 0;
+		box-shadow: 0px 4px 20px rgba(35, 40, 45, 0.24);
+		border-radius: 4px;
+		border: 1px solid $color__accent-border;
+		background: $color__bg-panel;
+		z-index: 999;
+		max-width: 100%;
+		width: 311px;
+		&-content {
+			padding: 10px;
+			border-radius: 4px;
+			max-height: 312px;
+			overflow-y: scroll;
+		}
+		&:before {
+			position: absolute;
+			left: 9px;
+			top: -7px;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 0 7px 7px 7px;
+			border-color: transparent transparent $color__accent-border transparent;
+			content: "";
+			z-index: 1;
+			.rtl & {
+				left: auto;
+				right: 9px;
+			}
+		}
+		&:after {
+			position: absolute;
+			left: 10px;
+			top: -6px;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 0 6px 6px 6px;
+			z-index: 2;
+			border-color: transparent transparent $color__bg-panel transparent;
+			content: "";
+			.rtl & {
+				left: auto;
+				right: 10px;
+			}
+		}
+		&-list {
+			display: flex;
+			flex-wrap: wrap;
+			margin: 6px -3px;
+		}
+		&-icon {
+			width: 48px;
+			height: 48px;
+			margin: 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			box-sizing: border-box;
+			border-radius: 4px;
+			border: 1px solid $color__border-in-panel;
+			transition: all 150ms linear;
+			i {
+				color: $color__text;
+			}
+			&--selected {
+				border-color: $color__accent-border;
+				background: $color__accent-lighter;
+				i {
+					color: $color__accent;
+				}
+			}
+			&:hover,
+			&:focus {
+				background: $color__accent;
+				border-color: $color__accent;
+				i {
+					color: #fff;
+				}
+			}
+		}
+	}
+}

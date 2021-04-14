@@ -1,0 +1,132 @@
+.cx-vui-media {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: wrap;
+
+	&__attachment {
+		display: inline-block;
+		border-radius: 5px;
+		overflow: hidden;
+		position: relative;
+		margin: 0 5px 5px 0;
+		background-color: #f4f4f5;
+		.rtl & {
+			margin: 0 0 5px 5px;
+		}
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+
+		&:hover {
+			.cx-vui-media__attachment-controls {
+				visibility: visible;
+				pointer-events: all;
+			}
+		}
+
+		&.attachment-type-image {
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+	}
+
+	&__control {
+		position: absolute;
+		filter: drop-shadow( 1px 1px 1px rgba(35, 40, 45, 0.5) );
+		z-index: 1;
+
+		&-remove {
+			top: 3px;
+			right: 3px;
+			cursor: pointer;
+			.rtl & {
+				left: 3px;
+				right: auto;
+			}
+		}
+	}
+
+	&__attachment-controls {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: rgba(0,0,0,.3);
+		z-index: 1;
+		visibility: hidden;
+		pointer-events: none;
+
+		svg {
+			cursor: pointer;
+		}
+	}
+
+	&__add-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 58px;
+		height: 58px;
+		background: #fff;
+		border: 1px dashed $color__border-off-panel;
+		border-radius: 5px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+		transition: border-color .2s ease;
+
+		&:hover {
+			border: 1px dashed $color__accent;
+		}
+	}
+
+	&.size-small {
+
+		.cx-vui-media__attachment {
+			width: 50px;
+			height: 50px;
+		}
+
+		.cx-vui-media__add-button {
+			width: 48px;
+			height: 48px;
+		}
+	}
+
+	&.size-default {
+
+		.cx-vui-media__attachment {
+			width: 80px;
+			height: 80px;
+		}
+
+		.cx-vui-media__add-button {
+			width: 78px;
+			height: 78px;
+		}
+	}
+
+	&.size-large {
+
+		.cx-vui-media__attachment {
+			width: 120px;
+			height: 120px;
+		}
+
+		.cx-vui-media__add-button {
+			width: 118px;
+			height: 118px;
+		}
+	}
+}

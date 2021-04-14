@@ -1,0 +1,52 @@
+.cx-vui-checkbox {
+	display: inline-flex;
+	align-items: center;
+	margin: 0 0 10px;
+	&--disabled {
+		pointer-events: none;
+	}
+	.cx-vui-checkgroup--single-item & {
+		margin: 0;
+	}
+	&__check {
+		box-sizing: border-box;
+		width: 18px;
+		height: 18px;
+		border-radius: 4px;
+		border: 2px solid $color__text;
+		margin: -1px 10px 0 0;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.rtl & {
+			margin: -1px 0 0 10px;
+		}
+
+		&--focused {
+			border-color: $color__accent-border;
+		}
+		&--checked {
+			border-color: $color__accent;
+			background: $color__accent;
+			path {
+				fill: #fff;
+			}
+		}
+		&--disabled {
+			pointer-events: none;
+			opacity: .5;
+			cursor: default;
+		}
+	}
+	&__label {
+		color: $color__text;
+		cursor: pointer;
+		.cx-vui-checkbox--disabled & {
+			cursor: default;
+		}
+	}
+	&__input[type="checkbox"] {
+		display: none;
+	}
+}

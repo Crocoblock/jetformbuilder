@@ -10,7 +10,7 @@ class Settings_Page extends Base_Page {
 	 * Page slug
 	 */
 	public function slug(): string {
-		return 'jet-form-builder-settings';
+		return 'settings';
 	}
 
 	/**
@@ -25,6 +25,8 @@ class Settings_Page extends Base_Page {
 	 * Return page config array
 	 */
 	public function page_config(): array {
-		return array();
+		return array(
+			'test' => 123
+		);
 	}
 }

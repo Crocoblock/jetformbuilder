@@ -1,0 +1,38 @@
+.cx-vui-text {
+	font-size: 13px;
+	line-height: 20px;
+	color: $color__text;
+	padding: 15px 0;
+	font-family: $font_family;
+}
+
+.cx-vui-hr {
+	display: block;
+	width: 100%;
+	height: 0;
+	border-top: 1px solid $color__border-off-panel;
+	margin: 30px 0;
+}
+
+.cx-vui-notice {
+	padding: 20px;
+	color: $color__text;
+	font-size: 15px;
+	line-height: 23px;
+	&--error {
+		background: $color__error-light;
+	}
+	&--success {
+		background: $color__success-light;
+	}
+}
+
+.cx-vui-inline-notice {
+	font-weight: bold;
+	&--error {
+		color: $color__error;
+	}
+	&--success {
+		color: $color__success;
+	}
+}

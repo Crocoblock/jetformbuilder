@@ -8,6 +8,7 @@ use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Plugin;
+use JET_SM\Gutenberg\Style_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -367,11 +368,13 @@ class Form extends Base {
 			return 'Please select form to show';
 		}
 
-		$styles = $this->maybe_render_styles_block( $form_id );
+		$style_manager = $this->maybe_render_styles_block( $form_id );
+		$style_manager .= $this->maybe_render_fonts_block( $form_id );
+
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
-			return ( $styles . $custom_form );
+			return ( $style_manager . $custom_form );
 		}
 
 		$builder  = new Form_Builder( $form_id, false, $attrs );
@@ -380,7 +383,7 @@ class Form extends Base {
 		Error_Handler::instance();
 
 		ob_start();
-		echo $styles;
+		echo $style_manager;
 		$builder->render_form();
 		$messages->render_messages();
 
@@ -400,5 +403,22 @@ class Form extends Base {
 
 		return $result . '</style></div>';
 	}
+
+	private function maybe_render_fonts_block( $form_id ) {
+		if ( ! Jet_Style_Manager::is_activated() ) {
+			return '';
+		}
+		$fonts = Style_Manager::get_instance()->get_blocks_fonts( $form_id );
+
+		if ( $fonts ) {
+			$fonts = trim( $fonts, '"' );
+			$fonts = wp_unslash( $fonts );
+
+			return wp_kses( $fonts, [ 'link' => [ 'href' => true, 'rel' => true ] ] );
+		}
+
+		return '';
+	}
+
 
 }

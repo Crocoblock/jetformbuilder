@@ -720,6 +720,7 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     top: 100%;
     max-width: 300px;
     text-align: center;
+    white-space: nowrap;
 }
 
 .jet-form-builder-progress-pages__separator {

@@ -10,7 +10,7 @@ use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use function Crontrol\Schedule\delete;
+use JET_SM\Gutenberg\Style_Manager;
 
 // If this file is called directly, abort.
 
@@ -128,6 +128,7 @@ class Form_Builder {
 
 		ob_start();
 		echo $this->maybe_render_styles_block();
+		echo $this->maybe_render_fonts_block();
 
 		include $this->get_global_template( 'common/start-form.php' );
 		$start_form .= ob_get_clean();
@@ -238,8 +239,25 @@ class Form_Builder {
 		}
 		$result = '<div id="jet-sm-gb-style--fb"><style>';
 		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id );
+		$result .= '</style></div>';
 
-		return $result . '</style></div>';
+		return $result;
+	}
+
+	private function maybe_render_fonts_block() {
+		if ( ! Jet_Style_Manager::is_activated() ) {
+			return '';
+		}
+		$fonts = Style_Manager::get_instance()->get_blocks_fonts( $this->form_id );
+
+		if ( $fonts ) {
+			$fonts = trim( $fonts, '"' );
+			$fonts = wp_unslash( $fonts );
+
+			return wp_kses( $fonts, [ 'link' => [ 'href' => true, 'rel' => true ] ] );
+		}
+
+		return '';
 	}
 
 	public function preset() {

@@ -28,7 +28,6 @@ function jet_form_builder_init() {
 	define( 'JET_FORM_BUILDER_PATH', plugin_dir_path( JET_FORM_BUILDER__FILE__ ) );
 	define( 'JET_FORM_BUILDER_URL', plugins_url( '/', JET_FORM_BUILDER__FILE__ ) );
 
-	require JET_FORM_BUILDER_PATH . 'includes/classes/instance-trait.php';
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
 
 }

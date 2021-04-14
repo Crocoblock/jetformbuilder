@@ -405,7 +405,10 @@ class Form extends Base {
 	}
 
 	private function maybe_render_fonts_block( $form_id ) {
-		if ( ! Jet_Style_Manager::is_activated() ) {
+		if (
+			! Jet_Style_Manager::is_activated()
+			|| ! method_exists( Style_Manager::get_instance(), 'get_blocks_fonts' )
+		) {
 			return '';
 		}
 		$fonts = Style_Manager::get_instance()->get_blocks_fonts( $form_id );

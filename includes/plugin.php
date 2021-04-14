@@ -3,6 +3,8 @@
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
+use Jet_Form_Builder\Admin\Pages\Settings_Page;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
@@ -17,8 +19,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Plugin {
 
-	use Instance_Trait;
-
 	public $post_type;
 	public $blocks;
 	public $actions;
@@ -30,6 +30,30 @@ class Plugin {
 
 	public $is_activated_jet_sm;
 	public $allow_gateways;
+
+	public static $instance;
+
+	/**
+	 * Instance.
+	 *
+	 * Ensures only one instance of the plugin class is loaded or can be loaded.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @static
+	 */
+	public static function instance() {
+
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	public static function clear() {
+		self::$instance = null;
+	}
 
 	/**
 	 * Register autoloader.
@@ -61,6 +85,9 @@ class Plugin {
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
 			new Form_Actions_Manager();
+			new Pages_Manager( array(
+				new Settings_Page()
+			) );
 		}
 	}
 

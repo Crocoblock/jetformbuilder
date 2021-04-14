@@ -10,7 +10,7 @@ use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use function Crontrol\Schedule\delete;
+use JET_SM\Gutenberg\Style_Manager;
 
 // If this file is called directly, abort.
 

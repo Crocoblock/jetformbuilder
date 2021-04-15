@@ -6,6 +6,9 @@ const label = {
 };
 
 const help = {
+	apiPref: __( 'Register reCAPTCHA v3 keys' ),
+	apiLinkLabel: __( 'here' ),
+	apiLink: 'https://www.google.com/recaptcha/admin/create'
 };
 
 export { label, help };

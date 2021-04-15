@@ -69,9 +69,6 @@ class Pages_Manager {
 		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
 
 		$this->current_page->assets();
-
-		add_action( 'admin_footer', array( $this, 'render_vue_templates' ) );
-
 	}
 
 	public function get_url_of( $page_slug ): string {
@@ -82,14 +79,6 @@ class Pages_Manager {
 		return $this->pages[ $page_slug ]->get_url();
 	}
 
-	/**
-	 * Render vue templates set for current page
-	 *
-	 * @return [type] [description]
-	 */
-	public function render_vue_templates(): void {
-		$this->current_page->render_vue_templates();
-	}
 
 	/**
 	 * Check if passed page is currently displayed

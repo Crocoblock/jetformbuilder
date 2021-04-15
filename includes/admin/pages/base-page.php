@@ -44,55 +44,6 @@ abstract class Base_Page {
 		);
 	}
 
-	/**
-	 * Page components templates
-	 */
-	public function vue_templates(): array {
-		return array();
-	}
-
-	/**
-	 * Render vue templates
-	 */
-	public function render_vue_templates(): void {
-		foreach ( $this->vue_templates() as $template ) {
-			if ( is_array( $template ) ) {
-				$this->render_vue_template( $template['file'], $template['dir'] );
-			} else {
-				$this->render_vue_template( $template );
-			}
-		}
-	}
-
-	/**
-	 * Render vue template
-	 *
-	 * @param string $template
-	 * @param string|null $path
-	 */
-	public function render_vue_template( string $template, string $path = null ): void {
-
-		if ( ! $path ) {
-			$path = $this->slug();
-		}
-
-		$file = Plugin::instance()->plugin_dir() . "templates/admin/{$path}/{$template}.php";
-
-		if ( ! is_readable( $file ) ) {
-			return;
-		}
-
-		ob_start();
-		include $file;
-		$content = ob_get_clean();
-
-		printf(
-			'<script type="text/x-template" id="jet-fb-%1$s">%2$s</script>',
-			$template,
-			$content
-		);
-
-	}
 
 	/**
 	 * Enqueue script

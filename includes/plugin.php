@@ -5,6 +5,7 @@ namespace Jet_Form_Builder;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Pages\Settings_Page;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Framework\CX_Loader;
@@ -90,6 +91,7 @@ class Plugin {
 			new Pages_Manager( array(
 				new Settings_Page()
 			) );
+			Tab_Handler_Manager::instance();
 		}
 	}
 

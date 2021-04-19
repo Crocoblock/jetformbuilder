@@ -1,6 +1,9 @@
 import IntegrationComponent from "./integration-component";
 
-const { addAction } = JetFBActions;
+const {
+	addAction,
+	globalTab
+} = JetFBActions;
 
 /**
  * Internal dependencies
@@ -75,9 +78,18 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 	render() {
 		const { settings, source, label, help } = this.props;
 		const fields = this.getFields();
+		const currentTab = globalTab( { slug: 'mailchimp-tab' } );
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <div key="mailchimp">
+			<ToggleControl
+				key={ 'use_global' }
+				label={ label( 'use_global' ) }
+				checked={ settings.use_global }
+				onChange={ use_global => {
+					this.onChangeSetting( Boolean( use_global ), 'use_global' )
+				} }
+			/>
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
 				className="input-with-button"
@@ -85,7 +97,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 				<TextControl
 					key='api_key'
 					label={ label( 'api_key' ) }
-					value={ settings.api_key }
+					disabled={ settings.use_global }
+					value={ settings.use_global
+						? currentTab.api_key
+						: settings.api_key
+					}
 					onChange={ newVal => {
 						this.onChangeSetting( newVal, 'api_key' )
 					} }
@@ -93,7 +109,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 				<Button
 					key={ 'validate_api_key' }
 					isPrimary
-					onClick={ this.validateAPIKey }
+					onClick={ () => {
+						settings.use_global
+							? this.validateAPIKey( currentTab.api_key )
+							: this.validateAPIKey()
+					} }
 					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 				>
 					<i className="dashicons"/>
@@ -121,7 +141,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					<Button
 						key={ 'update_list_ids' }
 						isPrimary
-						onClick={ this.getApiData }
+						onClick={ () => {
+							settings.use_global
+								? this.getApiData( settings.api_key )
+								: this.getApiData( currentTab.api_key )
+						} }
 					>
 						{ label( 'update_list_ids' ) }
 					</Button>

@@ -12,11 +12,11 @@ class Captcha_Handler extends Base_Handler {
 
 	public function on_get_request(): void {
 		$secret = sanitize_text_field( $_POST['secret'] );
-		$site   = sanitize_text_field( $_POST['site'] );
+		$key   = sanitize_text_field( $_POST['key'] );
 
 		$result = $this->update_options( array(
 			'secret' => $secret,
-			'site'   => $site
+			'key'   => $key
 		) );
 
 		$result ? wp_send_json_success( array(
@@ -28,7 +28,7 @@ class Captcha_Handler extends Base_Handler {
 
 	public function on_load(): array {
 		return $this->get_options( array(
-			'site'   => '',
+			'key'   => '',
 			'secret' => ''
 		) );
 	}

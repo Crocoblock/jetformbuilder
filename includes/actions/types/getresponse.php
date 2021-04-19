@@ -69,11 +69,16 @@ class Getresponse extends Integration_Base_Action {
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		if ( empty( $this->settings['api_key'] ) || empty( $this->settings['list_id'] ) ) {
+		$api = $this->global_settings( array(
+			'api_url' => '',
+			'api_key' => ''
+		) );
+
+		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
 		}
 
-		$handler = $this->api_handler( $this->settings['api_key'] );
+		$handler = $this->api_handler( $api['api_key'] );
 
 		if ( is_wp_error( $handler ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
@@ -150,6 +155,7 @@ class Getresponse extends Integration_Base_Action {
 			'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
 			'day_of_cycle'     => __( 'Day Of Cycle:', 'jet-form-builder' ),
 			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+			'use_global'       => __( 'Use Global Settings', 'jet-form-builder' ),
 		);
 	}
 

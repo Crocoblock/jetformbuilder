@@ -23,11 +23,23 @@ function PluginCaptcha() {
 				} ) );
 			} }
 		/>
+		<ToggleControl
+			key={ 'use_global' }
+			label={ labels.use_global }
+			checked={ args.use_global }
+			onChange={ use_global => {
+				setArgs( prevArgs => ( {
+					...prevArgs,
+					use_global: Boolean( use_global )
+				} ) );
+			} }
+		/>
 		{ args.enabled && <>
 			<TextControl
 				key={ 'site_key' }
 				label={ labels.key }
 				value={ args.key }
+				disabled={ args.use_global }
 				onChange={ newValue => setArgs( ( prevArgs ) => ( {
 					...prevArgs,
 					key: newValue
@@ -37,6 +49,7 @@ function PluginCaptcha() {
 				key={ 'secret_key' }
 				label={ labels.secret }
 				value={ args.secret }
+				disabled={ args.use_global }
 				onChange={ newValue => setArgs( ( prevArgs ) => ( {
 					...prevArgs,
 					secret: newValue
@@ -47,7 +60,7 @@ function PluginCaptcha() {
 					</span>
 		</> }
 	</>
-};
+}
 
 
 export default PluginCaptcha;

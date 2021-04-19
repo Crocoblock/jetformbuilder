@@ -1,4 +1,5 @@
 import BaseActionComponent from "./base-action-component";
+
 const { getFormFieldsBlocks } = JetFBActions;
 
 export default class IntegrationComponent extends BaseActionComponent {
@@ -17,17 +18,21 @@ export default class IntegrationComponent extends BaseActionComponent {
 		};
 	}
 
-	validateAPIKey() {
+	validateAPIKey( customApiKey = false ) {
 		this.setState( { className: [ 'loading' ] } );
 
-		this.getApiData();
+		if ( customApiKey && 'string' === typeof customApiKey ) {
+			this.getApiData( customApiKey );
+			return;
+		}
+		const settings = this.props.settings;
+		this.getApiData( settings.api_key );
 	}
 
-	getApiData( event ) {
+	getApiData( apiKey ) {
 		const self = this;
-		const settings = self.props.settings;
 
-		if ( ! settings.api_key ) {
+		if ( ! apiKey ) {
 			self.onChangeSetting( null, 'isValidAPI' );
 			self.setState( { className: [] } );
 			return;
@@ -38,7 +43,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 			type: 'POST',
 			data: {
 				'action': this.props.source.action,
-				'api_key': settings.api_key
+				'api_key': apiKey
 			},
 			success: function ( response ) {
 				if ( response.success ) {

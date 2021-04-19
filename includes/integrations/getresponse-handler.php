@@ -41,9 +41,12 @@ class Getresponse_Handler extends Integration_Base {
 
 
 	public function get_all_data() {
-		return array(
-			'lists'  => $this->get_lists(),
-			'fields' => $this->get_fields(),
+		$lists  = $this->get_lists();
+		$fields = $this->get_fields();
+
+		return ( empty( $lists ) && empty( $fields ) ) ? array() : array(
+			'lists'  => $lists,
+			'fields' => $fields,
 		);
 	}
 

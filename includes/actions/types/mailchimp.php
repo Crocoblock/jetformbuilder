@@ -21,6 +21,8 @@ class Mailchimp extends Integration_Base_Action {
 	protected $action = 'jet_form_builder_get_mailchimp_data';
 	private $request;
 
+	public $option_name = 'mailchimp-tab';
+
 	public function get_name() {
 		return __( 'MailChimp', 'jet-form-builder' );
 	}
@@ -82,11 +84,16 @@ class Mailchimp extends Integration_Base_Action {
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->request = $request;
 
-		if ( empty( $this->settings['api_key'] ) || empty( $this->settings['list_id'] ) ) {
+		$api = $this->global_settings( array(
+			'api_url' => '',
+			'api_key' => ''
+		) );
+
+		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
 		}
 
-		$handler = $this->api_handler( $this->settings['api_key'] );
+		$handler = $this->api_handler( $api['api_key'] );
 
 		if ( is_wp_error( $handler ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
@@ -197,6 +204,7 @@ class Mailchimp extends Integration_Base_Action {
 			'tags'             => __( 'Tags:', 'jet-form-builder' ),
 			'double_opt_in'    => __( 'Double Opt-In:', 'jet-form-builder' ),
 			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+			'use_global'       => __( 'Use Global Settings', 'jet-form-builder' ),
 		);
 	}
 

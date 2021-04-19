@@ -17,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Active_Campaign extends Integration_Base_Action {
 	protected $action = 'jet_form_builder_get_activecampaign_data';
 
+	public $option_name = 'active-campaign-tab';
+
 	public function get_name() {
 		return __( 'ActiveCampaign', 'jet-form-builder' );
 	}
@@ -72,7 +74,13 @@ class Active_Campaign extends Integration_Base_Action {
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		if ( empty( $this->settings['api_url'] ) || empty( $this->settings['api_key'] ) ) {
+
+		$settings = $this->global_settings( array(
+			'api_url' => '',
+			'api_key' => ''
+		) );
+
+		if ( empty( $settings['api_url'] ) || empty( $settings['api_key'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
 		}
 
@@ -103,7 +111,7 @@ class Active_Campaign extends Integration_Base_Action {
 			throw new Action_Exception( 'empty_field', $body_args['email'] );
 		}
 
-		$this->api_handler( $this->settings )->request( false, $body_args );
+		$this->api_handler( $settings )->request( false, $body_args );
 	}
 
 	public function self_script_name() {
@@ -124,6 +132,7 @@ class Active_Campaign extends Integration_Base_Action {
 			'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
 			'tags'             => __( 'Tags:', 'jet-form-builder' ),
 			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
+			'use_global'       => __( 'Use Global Settings', 'jet-form-builder' ),
 		);
 	}
 

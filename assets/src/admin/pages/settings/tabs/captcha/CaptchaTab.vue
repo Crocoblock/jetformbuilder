@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<cx-vui-input
-			:label="label.site"
+			:label="label.key"
 			:wrapper-css="[ 'equalwidth' ]"
 			:size="'fullwidth'"
-			v-model="site"
+			v-model="key"
 		></cx-vui-input>
 		<cx-vui-input
 			:label="label.secret"
@@ -34,20 +34,20 @@ export default {
 	data() {
 		return {
 			label, help,
-			site: '',
+			key: '',
 			secret: ''
 		};
 	},
 	created() {
-		this.site = this.incoming.site || ''
-		this.secret = this.incoming.secret || ''
+		this.key = this.incoming.key || '';
+		this.secret = this.incoming.secret || '';
 	},
 	methods: {
 		getRequestOnSave() {
 			return {
 				data: {
 					secret: this.secret,
-					site: this.site
+					key: this.key
 				}
 			};
 		}

@@ -55,6 +55,7 @@ import {
 	getActionSettings
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
+import { globalTab } from "./helpers/settings/helper";
 
 // JFBComponents
 window.JetFBComponents = {
@@ -100,7 +101,8 @@ window.JetFBActions = {
 	getActionSettings,
 	fromLocalizeHelper,
 	renderGateway,
-	gatewayActionAttributes
+	gatewayActionAttributes,
+	globalTab
 };
 
 // JFBHooks

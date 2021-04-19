@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Action_Localize;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 
@@ -41,6 +42,12 @@ abstract class Base {
 	 * @var integer
 	 */
 	public $_id;
+
+	/**
+	 * Define this variable to get the option set globally
+	 * @var string
+	 */
+	public $option_name;
 
 	public function __construct() {
 		$this->set_action_messages();
@@ -86,6 +93,31 @@ abstract class Base {
 
 	public function action_attributes() {
 		return array();
+	}
+
+	public function global_settings( $keys = array() ) {
+		$response_values = array();
+
+		foreach ( $keys as $key => $empty ) {
+			$response_values[ $key ] = isset( $this->settings[ $key ] ) ? $this->settings[ $key ] : $empty;
+		}
+		if ( ! isset( $this->settings['use_global'] ) || ! $this->settings['use_global'] ) {
+			return $response_values;
+		}
+
+		if ( ! $this->option_name ) {
+			_doing_it_wrong(
+				__FUNCTION__,
+				'Please define the `option_name`',
+				jet_form_builder()->get_version()
+			);
+		}
+		$options = Tab_Handler_Manager::instance()->options( $this->option_name );
+
+		foreach ( $keys as $key => $empty ) {
+			$response_values[ $key ] = isset( $options[ $key ] ) ? $options[ $key ] : $empty;
+		}
+		return $response_values;
 	}
 
 

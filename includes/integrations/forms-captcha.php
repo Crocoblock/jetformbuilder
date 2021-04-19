@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Integrations;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Plugin;
 
 /**
@@ -97,6 +98,12 @@ class Forms_Captcha {
 		if ( ! $captcha || ! is_array( $captcha ) ) {
 			return $this->defaults;
 		} else {
+		    if ( $captcha['use_global'] ) {
+		        return Tab_Handler_Manager::instance()->options(
+		                'captcha-tab',
+                        array( 'enabled' => $captcha['enabled'] )
+                );
+            }
 			return wp_parse_args( $captcha, $this->defaults );
 		}
 

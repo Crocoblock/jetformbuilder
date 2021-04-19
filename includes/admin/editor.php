@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Admin;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
@@ -399,15 +400,20 @@ class Editor {
 			'all'
 		);
 
-		wp_localize_script( self::EDITOR_PACKAGE_HANDLE, 'JetFormEditorData', array(
-			'allowedBlocks'    => $this->get_allowed_blocks(),
-			'action'           => $this->get_action(),
-			'itemID'           => $this->get_item_id(),
-			'presetConfig'     => $this->get_preset_config(),
-			'messagesDefault'  => $this->get_messages_default(),
-			'gateways'         => Gateway_Manager::instance()->editor_data(),
-			'helpForRepeaters' => $this->get_help_for_repeaters(),
-		) );
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
+			'JetFormEditorData',
+			array(
+				'allowedBlocks'    => $this->get_allowed_blocks(),
+				'action'           => $this->get_action(),
+				'itemID'           => $this->get_item_id(),
+				'presetConfig'     => $this->get_preset_config(),
+				'messagesDefault'  => $this->get_messages_default(),
+				'gateways'         => Gateway_Manager::instance()->editor_data(),
+				'helpForRepeaters' => $this->get_help_for_repeaters(),
+				'global_settings'  => Tab_Handler_Manager::instance()->all()
+			)
+		);
 
 		do_action( 'jet-form-builder/editor-assets/after', $this, self::EDITOR_HANDLE );
 	}

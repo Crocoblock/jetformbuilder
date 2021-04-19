@@ -72,4 +72,19 @@ class Tab_Handler_Manager {
 		}
 	}
 
+	public function all( $default_tabs = array() ): array {
+		$response = array();
+
+		foreach ( $this->_tabs as $slug => $tab ) {
+			$default = array();
+			if ( isset( $default_tabs[ $slug ] ) ) {
+				$default = $default_tabs[ $slug ];
+			}
+
+			$response[ $slug ] = $tab->get_options( $default );
+		}
+
+		return $response;
+	}
+
 }

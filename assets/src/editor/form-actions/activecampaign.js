@@ -1,6 +1,9 @@
 import IntegrationComponent from "./integration-component";
 
-const { addAction } = JetFBActions;
+const {
+	addAction,
+	globalTab
+} = JetFBActions;
 
 /**
  * Internal dependencies
@@ -29,17 +32,15 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 		this.getActiveCampaignData = this.getActiveCampaignData.bind( this );
 	}
 
-	validateActiveCampaignData() {
+	validateActiveCampaignData( api_key = '', api_url = '' ) {
 		this.setState( { className: [ 'loading' ] } );
-		this.getActiveCampaignData( true );
+		this.getActiveCampaignData( true, { api_key, api_url } );
 	}
 
-	getActiveCampaignData( isValidate = false ) {
+	getActiveCampaignData( isValidate = false, { api_key = '', api_url = '' } ) {
 		const self = this,
 			lists = [],
 			endpoint = '/admin/api.php?api_action=list_list';
-
-		const { settings, api_url, api_key } = this.props.settings;
 
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 
@@ -101,9 +102,18 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 
 	render() {
 		const { settings, onChange, source, label, help } = this.props;
+		const currentTab = globalTab( { slug: 'active-campaign-tab' } )
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="activecampaign">
+			<ToggleControl
+				key={ 'use_global' }
+				label={ label( 'use_global' ) }
+				checked={ settings.use_global }
+				onChange={ use_global => {
+					this.onChangeSetting( Boolean( use_global ), 'use_global' )
+				} }
+			/>
 			<BaseControl
 				label={ label( 'api_data' ) }
 				className='input-with-button with-wrap'
@@ -111,20 +121,35 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 			>
 				<TextControl
 					key='api_url'
-					value={ settings.api_url }
 					help={ label( 'api_url' ) }
+					className='jet-control-clear'
+					disabled={ settings.use_global }
+					value={ settings.use_global
+						? currentTab.api_url
+						: settings.api_url
+					}
 					onChange={ newVal => this.onChangeSetting( newVal, 'api_url' ) }
 				/>
 				<TextControl
 					key='api_key'
 					help={ label( 'api_key' ) }
-					value={ settings.api_key }
+					className='jet-control-clear'
+					disabled={ settings.use_global }
+					value={ settings.use_global
+						? currentTab.api_key
+						: settings.api_key
+					}
 					onChange={ newVal => this.onChangeSetting( newVal, 'api_key' ) }
 				/>
 				{ ( settings.api_key && settings.api_url ) && <Button
 					key={ 'validate_api_key' }
 					isPrimary
-					onClick={ this.validateActiveCampaignData }
+					onClick={ () => {
+						settings.use_global
+							? this.validateActiveCampaignData( currentTab.api_key, currentTab.api_url )
+							: this.validateActiveCampaignData( settings.api_key, settings.api_url )
+
+					} }
 					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
 				>
 					<i className="dashicons"/>
@@ -152,7 +177,11 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 					<Button
 						key={ 'update_list_ids' }
 						isPrimary
-						onClick={ this.getActiveCampaignData }
+						onClick={ () => {
+							settings.use_global
+								? this.getActiveCampaignData( false, currentTab )
+								: this.getActiveCampaignData( false, settings )
+						} }
 					>
 						{ label( 'update_list_ids' ) }
 					</Button>

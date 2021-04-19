@@ -64,21 +64,22 @@ class Forms_Captcha {
 	}
 
 	private function sanitize_token_from_request( $is_ajax ) {
-	    $response = array();
+		$response = array();
 
 		if ( ! $is_ajax && isset( $_POST[ $this->field_key ] ) ) {
-            $response[ $this->field_key ] = sanitize_text_field( $_POST[ $this->field_key ] );
+			$response[ $this->field_key ] = sanitize_text_field( $_POST[ $this->field_key ] );
 
 		} elseif ( isset( $_REQUEST['values'] ) ) {
 			foreach ( $_REQUEST['values'] as $field ) {
-			    if ( $field['name'] === $this->field_key ) {
+				if ( $field['name'] === $this->field_key ) {
 
-			        $response[ $field['name'] ] = esc_attr( $field['value'] );
-			    }
+					$response[ $field['name'] ] = esc_attr( $field['value'] );
+				}
 			}
 		}
-	    return $response;
-    }
+
+		return $response;
+	}
 
 	/**
 	 * Returns captcha settings for passed form ID
@@ -97,13 +98,13 @@ class Forms_Captcha {
 
 		if ( ! $captcha || ! is_array( $captcha ) ) {
 			return $this->defaults;
+		} elseif ( isset( $captcha['use_global'] ) && $captcha['use_global'] ) {
+			return Tab_Handler_Manager::instance()->options(
+				'captcha-tab',
+				array( 'enabled' => $captcha['enabled'] )
+			);
+
 		} else {
-		    if ( $captcha['use_global'] ) {
-		        return Tab_Handler_Manager::instance()->options(
-		                'captcha-tab',
-                        array( 'enabled' => $captcha['enabled'] )
-                );
-            }
 			return wp_parse_args( $captcha, $this->defaults );
 		}
 
@@ -139,7 +140,8 @@ class Forms_Captcha {
 
 					if ( window.JetEngineFormToken ) {
 						$cpField.val( window.JetEngineFormToken );
-					} else if ( window.grecaptcha ) {
+					}
+					else if ( window.grecaptcha ) {
 						window.grecaptcha.ready( function () {
 							grecaptcha.execute(
 								'<?php echo $key; ?>',

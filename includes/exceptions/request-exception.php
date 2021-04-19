@@ -9,7 +9,7 @@ class Request_Exception extends Handler_Exception {
 	private $errors;
 
 	public function __construct( $message = "", ...$errors ) {
-		$this->errors = $errors[0];
+		$this->errors = isset( $errors[0] ) ? $errors[0] : false;
 
 		parent::__construct( $message, $errors );
 	}

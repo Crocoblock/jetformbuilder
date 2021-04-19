@@ -17,6 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Getresponse extends Integration_Base_Action {
 
 	protected $action = 'jet_form_builder_get_getresponse_data';
+	public $option_name = 'get-response-tab';
 
 	public function get_name() {
 		return __( 'Getresponse', 'jet-form-builder' );
@@ -70,7 +71,6 @@ class Getresponse extends Integration_Base_Action {
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
 		$api = $this->global_settings( array(
-			'api_url' => '',
 			'api_key' => ''
 		) );
 

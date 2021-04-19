@@ -85,7 +85,6 @@ class Mailchimp extends Integration_Base_Action {
 		$this->request = $request;
 
 		$api = $this->global_settings( array(
-			'api_url' => '',
 			'api_key' => ''
 		) );
 

@@ -84,6 +84,8 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
+		Tab_Handler_Manager::instance();
+
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
@@ -91,7 +93,6 @@ class Plugin {
 			new Pages_Manager( array(
 				new Settings_Page()
 			) );
-			Tab_Handler_Manager::instance();
 		}
 	}
 

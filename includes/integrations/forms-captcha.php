@@ -69,7 +69,7 @@ class Forms_Captcha {
 		if ( ! $is_ajax && isset( $_POST[ $this->field_key ] ) ) {
             $response[ $this->field_key ] = sanitize_text_field( $_POST[ $this->field_key ] );
 
-		} else {
+		} elseif ( isset( $_REQUEST['values'] ) ) {
 			foreach ( $_REQUEST['values'] as $field ) {
 			    if ( $field['name'] === $this->field_key ) {
 

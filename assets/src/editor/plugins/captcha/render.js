@@ -23,18 +23,18 @@ function PluginCaptcha() {
 				} ) );
 			} }
 		/>
-		<ToggleControl
-			key={ 'use_global' }
-			label={ labels.use_global }
-			checked={ args.use_global }
-			onChange={ use_global => {
-				setArgs( prevArgs => ( {
-					...prevArgs,
-					use_global: Boolean( use_global )
-				} ) );
-			} }
-		/>
 		{ args.enabled && <>
+			<ToggleControl
+				key={ 'use_global' }
+				label={ labels.use_global }
+				checked={ args.use_global }
+				onChange={ use_global => {
+					setArgs( prevArgs => ( {
+						...prevArgs,
+						use_global: Boolean( use_global )
+					} ) );
+				} }
+			/>
 			<TextControl
 				key={ 'site_key' }
 				label={ labels.key }

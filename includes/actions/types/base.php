@@ -107,7 +107,7 @@ abstract class Base {
 
 		if ( ! $this->option_name ) {
 			_doing_it_wrong(
-				__FUNCTION__,
+				static::class . '::global_settings',
 				'Please define the `option_name`',
 				jet_form_builder()->get_version()
 			);

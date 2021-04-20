@@ -5,7 +5,10 @@ const { useMetaState } = JetFBHooks;
 const {
 	ToggleControl,
 	TextControl,
-} = wp.components;
+} = wp.components
+
+const { globalTab } = JetFBActions;
+const currentTab = globalTab( { slug: 'captcha-tab' } );
 
 function PluginCaptcha() {
 
@@ -38,7 +41,7 @@ function PluginCaptcha() {
 			<TextControl
 				key={ 'site_key' }
 				label={ labels.key }
-				value={ args.key }
+				value={ args.use_global ? currentTab.key : args.key }
 				disabled={ args.use_global }
 				onChange={ newValue => setArgs( ( prevArgs ) => ( {
 					...prevArgs,
@@ -48,7 +51,7 @@ function PluginCaptcha() {
 			<TextControl
 				key={ 'secret_key' }
 				label={ labels.secret }
-				value={ args.secret }
+				value={ args.use_global ? currentTab.secret : args.secret }
 				disabled={ args.use_global }
 				onChange={ newValue => setArgs( ( prevArgs ) => ( {
 					...prevArgs,

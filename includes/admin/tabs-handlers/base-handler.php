@@ -14,6 +14,10 @@ abstract class Base_Handler {
 
 	abstract public function on_load(): array;
 
+	public function __construct() {
+		add_action( 'jet-fb/admin-pages/before-assets/jfb-settings', array( $this, 'before_assets' ) );
+	}
+
 	public function get_options( $default = array() ): array {
 		$response = get_option( $this->prefix . $this->slug(), false );
 
@@ -28,5 +32,8 @@ abstract class Base_Handler {
 		$options = json_encode( $options );
 
 		return update_option( $this->prefix . $this->slug(), $options );
+	}
+
+	public function before_assets(): void {
 	}
 }

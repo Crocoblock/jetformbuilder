@@ -30,6 +30,11 @@ $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'data-editor', htmlspecialchars( json_encode( $editor ) ) );
+
+if ( is_rtl() ) {
+	$editor['tinymce']['plugins']  = $editor['tinymce']['plugins'] . ',directionality';
+	$editor['tinymce']['toolbar1'] = $editor['tinymce']['toolbar1'] . ',ltr';
+}
 ?>
 <div class="jet-form-builder__field-wrap">
     <div <?php $this->render_attributes_string(); ?>><?php

@@ -40,7 +40,7 @@ class Action_Handler {
 	 * @param $form_id
 	 */
 	public function __construct( $form_id ) {
-		$this->form_id      = $form_id;
+		$this->form_id = $form_id;
 		$this->set_form_actions();
 	}
 
@@ -73,8 +73,9 @@ class Action_Handler {
 				 * in action hook
 				 */
 				$action->_id        = $id;
-				$action->settings   = $form_action['settings'];
 				$action->conditions = $conditions;
+				$action->settings   = isset( $form_action['settings'][ $type ] )
+					? $form_action['settings'][ $type ] : $form_action['settings'];
 
 				$this->form_actions[ $id ] = $action;
 			}

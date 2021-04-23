@@ -7,8 +7,10 @@ const defaultActions = [ {
 	type: 'send_email',
 	id: getRandomID(),
 	settings: {
-		subject: 'New order on website',
-		content: 'Hi admin!\n\nThere are new order on your website.\n\nOrder details:\n- Post ID: %post_id%'
+		send_email: {
+			subject: 'New order on website',
+			content: 'Hi admin!\n\nThere are new order on your website.\n\nOrder details:\n- Post ID: %post_id%'
+		},
 	}
 } ];
 

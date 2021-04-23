@@ -220,11 +220,14 @@ export default function PluginActions() {
 			onCancelClick={ closeModal }
 		>
 			{ Callback && <Callback
-				settings={ editedAction.settings }
+				settings={ editedAction.settings[ editedAction.type ] || editedAction.settings }
 				onChange={ ( data ) => {
 					setEditedAction( prev => ( {
 						...prev,
-						settings: data
+						settings: {
+							...prev.settings,
+							[ editedAction.type ]: data
+						}
 					} ) );
 				} }
 			/> }
@@ -305,4 +308,4 @@ export default function PluginActions() {
 			} }
 		</ActionModal> }
 	</>
-};
+}

@@ -216,7 +216,11 @@ abstract class Base extends Base_Module {
 			$result_value = Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ];
 		}
 
-		return $result_value ? $result_value : '';
+		return $result_value ? $result_value : (
+		isset( $this->block_attrs['default'] )
+			? $this->block_attrs['default']
+			: ''
+		);
 	}
 
 	/**

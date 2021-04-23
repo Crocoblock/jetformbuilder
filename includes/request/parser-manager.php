@@ -36,20 +36,23 @@ class Parser_Manager {
 		$this->_parsers = apply_filters( 'jet-form-builder/parsers-request/register', $this->_parsers );
 	}
 
-	public function get_values_fields( $fields, $request ) {
+	public function get_values_fields( $request_handler ) {
 		$response = array();
+
+		$fields = $request_handler->_fields;
+		$request = $request_handler->_request_values;
 
 		foreach ( $fields as $field ) {
 			$settings = $field['attrs'];
 			$name     = isset( $settings['name'] ) ? $settings['name'] : 'field_name';
 
-			$response[ $name ] = $this->get_parsed_value( $field, $request, $name );
+			$response[ $name ] = $this->get_parsed_value( $field, $request, $name, $request_handler );
 		}
 
 		return $response;
 	}
 
-	public function get_parsed_value( $field, $request, $name ) {
+	public function get_parsed_value( $field, $request, $name, $request_handler = null ) {
 
 		if ( ! $this->is_field_visible( $field['attrs'] ) ) {
 			return null;
@@ -61,6 +64,7 @@ class Parser_Manager {
 
 		if ( $parser instanceof Field_Data_Parser ) {
 			$parser->init( $value, $field );
+			$parser->set_request_handler( $request_handler );
 
 			return $this->get_parser_response( $parser );
 		}

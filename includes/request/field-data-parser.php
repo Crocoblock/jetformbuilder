@@ -14,6 +14,7 @@ abstract class Field_Data_Parser {
 	protected $block;
 	protected $settings;
 	protected $inner;
+	protected $request_handler;
 
 	abstract public function type();
 
@@ -57,6 +58,10 @@ abstract class Field_Data_Parser {
 		Error_Handler::instance()->add(
 			$this->type(), array( 'name' => $this->name, 'params' => $this->settings )
 		);
+	}
+
+	public function set_request_handler( $request_handler ) {
+		$this->request_handler = $request_handler;
 	}
 
 

@@ -17,9 +17,9 @@ class Request_Handler {
 
 	private $repeaters = array();
 
-	private $_fields = array();
-	private $_request_values;
-	private $_response_data;
+	public $_fields = array();
+	public $_request_values;
+	public $_response_data;
 
 	const REPEATERS_SETTINGS = '__repeaters_settings';
 
@@ -133,7 +133,7 @@ class Request_Handler {
 
 		$this->init_form_data();
 
-		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->_request_values );
+		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this );
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
 			throw new Request_Exception( 'validation_failed',
@@ -149,6 +149,10 @@ class Request_Handler {
 		$data = apply_filters( 'jet-form-builder/form-handler/form-data', $this->_response_data, $this );
 
 		return $this->merge_with_base_request( $data );
+	}
+
+	public function save_repeater( $name, $value ) {
+		$this->repeaters[ $name ] = $value;
 	}
 
 }

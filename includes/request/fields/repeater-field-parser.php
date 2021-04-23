@@ -18,6 +18,7 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 			return array();
 		}
 		$response = array();
+		$this->request_handler->save_repeater( $this->name, $this->value );
 
 		foreach ( $this->value as $index => $row ) {
 			foreach ( $row as $field_name => $field_value ) {

@@ -7,7 +7,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Listing_Filter_Manager;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Request_Handler;
+use Jet_Form_Builder\Request\Request_Handler;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -238,8 +238,7 @@ class Send_Email extends Base {
 		$content_type = $this->get_content_type();
 		$subject      = $this->parse_macros( $subject );
 		$message      = $this->parse_macros( $message );
-
-
+		
 		if ( 'text/html' === $content_type ) {
 			$message = wpautop( $message );
 			$message = make_clickable( $message );

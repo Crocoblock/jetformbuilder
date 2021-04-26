@@ -40,7 +40,7 @@ class File_Upload {
 		$data_args = array(
 			'max_files'         => 1,
 			'insert_attachment' => false,
-			'value_format'      => 'id',
+			'value_format'      => 'url',
 		);
 
 		foreach ( $data_args as $key => $value ) {

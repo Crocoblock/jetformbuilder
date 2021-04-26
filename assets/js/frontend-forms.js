@@ -814,7 +814,9 @@
 				field.trigger( 'change.JetFormBuilderMain', [ this ] );
 			};
 
-			tinymce.get( editorId )
+			const editor = tinymce.get( editorId );
+
+			editor
 			.on( 'input', callable )
 			.on( 'change', callable );
 		},
@@ -861,6 +863,7 @@
 			}
 
 			if ( ! $calcFields.length ) {
+				$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
 				return;
 			}
 

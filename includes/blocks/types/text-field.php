@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Text_Field_Render;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -136,6 +137,14 @@ class Text_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script(
+			'jet-form-builder-inputmask',
+			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
+			array( 'jquery', 'jet-form-builder-frontend-forms' ),
+			Plugin::instance()->get_version(),
+			true
+		);
+
 		return ( new Text_Field_Render( $this ) )->render();
 	}
 

@@ -65,12 +65,9 @@
 				$errors = $upload.find( '.jet-form-builder-file-upload__errors' ),
 				format  = $file.data( 'format' );
 
-
 			if ( ! $errors.hasClass( 'is-hidden' ) ) {
 				$errors.html( '' ).addClass( 'is-hidden' );
 			}
-
-			$file.remove();
 
 			if ( ! val ) {
 				return;
@@ -127,6 +124,8 @@
 			if ( val ) {
 				val = JSON.stringify( val )
 			}
+
+			$value.trigger( 'jet-form-builder/on-remove-media-item', [ fileURL, fileID ] );
 
 			$value.val( val ).trigger( 'change.JetFormBuilderMain' );
 
@@ -292,6 +291,7 @@
 
 			limit = parseInt( limit, 10 );
 
+			debugger;
 			if ( 1 === limit ) {
 				$filesContainer.html( responseData.html );
 				$input.val( JSON.stringify( responseData.value ) ).trigger( 'change.JetFormBuilderMain' );
@@ -310,7 +310,7 @@
 					values.push( responseData.value[ i ] );
 				};
 
-				$input.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain' );
+				$input.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain', [ JSON.parse( inputValues ) ] );
 
 				$filesContainer.append( responseData.html );
 				$filesContainer.sortable( 'destroy' );

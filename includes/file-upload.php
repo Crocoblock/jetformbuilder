@@ -328,7 +328,7 @@ class File_Upload {
 	public function get_result_value( $field = array(), $files = array() ) {
 
 		if ( ! empty( $field['insert_attachment'] ) ) {
-			$format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'id';
+			$format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'url';
 		} else {
 			$format = 'url';
 		}

@@ -291,7 +291,6 @@
 
 			limit = parseInt( limit, 10 );
 
-			debugger;
 			if ( 1 === limit ) {
 				$filesContainer.html( responseData.html );
 				$input.val( JSON.stringify( responseData.value ) ).trigger( 'change.JetFormBuilderMain' );
@@ -321,6 +320,7 @@
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
+			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value ] )
 		}
 
 	};

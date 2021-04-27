@@ -609,6 +609,7 @@
 			}
 
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
+			$this.trigger( 'jet-form-builder/repeater-add-new', [ index ] );
 
 			JetFormBuilder.calculateRowValue( $newVal );
 

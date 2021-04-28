@@ -1,12 +1,12 @@
-( function ( $ ) {
+( function( $ ) {
 
-	"use strict";
+	'use strict';
 
 	const JetFormBuilderDev = {
-		isActive: function () {
+		isActive: function() {
 			return Boolean( window.JetFormBuilderSettings.devmode );
 		},
-		log: function ( label = '', params = {} ) {
+		log: function( label = '', params = {} ) {
 			if ( ! this.isActive() || ! params ) {
 				return;
 			}
@@ -16,23 +16,23 @@
 			}
 			console.groupEnd();
 		},
-		hardLog: function ( label = '', params = {} ) {
+		hardLog: function( label = '', params = {} ) {
 			this.log( label, params );
 			if ( this.isActive() ) {
 				debugger;
 			}
-		}
+		},
 	}
 
 	window.JetFormBuilderMain = {
 
-		filters: ( function () {
+		filters: ( function() {
 
 			var callbacks = {};
 
 			return {
 
-				addFilter: function ( name, callback ) {
+				addFilter: function( name, callback ) {
 
 					if ( ! callbacks.hasOwnProperty( name ) ) {
 						callbacks[ name ] = [];
@@ -42,7 +42,7 @@
 
 				},
 
-				applyFilters: function ( name, value, args ) {
+				applyFilters: function( name, value, args ) {
 
 					if ( ! callbacks.hasOwnProperty( name ) ) {
 						return value;
@@ -55,28 +55,28 @@
 					var container = callbacks[ name ];
 					var cbLen = container.length;
 
-					for ( var i = 0; i < cbLen; i ++ ) {
+					for ( var i = 0; i < cbLen; i++ ) {
 						if ( typeof container[ i ] === 'function' ) {
 							value = container[ i ]( value, args );
 						}
 					}
 
 					return value;
-				}
+				},
 
 			};
 
-		} )()
+		} )(),
 
 	};
 
-	$.fn.jetFormBuilderConditional = function ( options ) {
+	$.fn.jetFormBuilderConditional = function( options ) {
 
 		var settings = $.extend( {
-			hideJS: true
+			hideJS: true,
 		}, options );
 
-		var checkValue = function ( $listenTo, listenFor, operator ) {
+		var checkValue = function( $listenTo, listenFor, operator ) {
 
 			var val = '';
 			var checkResult = false;
@@ -86,8 +86,7 @@
 
 			if ( $listenTo.is( 'input[type=checkbox]' ) ) {
 				controlType = 'checkbox';
-			}
-			else if ( $listenTo.is( 'input[type=radio]' ) ) {
+			} else if ( $listenTo.is( 'input[type=radio]' ) ) {
 				controlType = 'radio';
 			}
 
@@ -97,18 +96,16 @@
 
 			if ( 'plain' === controlType ) {
 				val = $listenTo.val();
-			}
-			else {
+			} else {
 
-				$listenTo.each( function () {
+				$listenTo.each( function() {
 
 					var $control = $( this );
 
 					if ( $control.is( ':checked' ) ) {
 						if ( 'checkbox' === controlType ) {
 							val.push( $control.val() );
-						}
-						else {
+						} else {
 							val = $control.val();
 						}
 					}
@@ -119,15 +116,14 @@
 			JetFormBuilderDev.log( 'Conditional', {
 				val,
 				listenFor,
-				operator
+				operator,
 			} );
 
 			switch ( operator ) {
 				case 'equal':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						checkResult = ( val == listenFor );
 					}
 					break;
@@ -135,8 +131,7 @@
 				case 'greater':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						checkResult = ( parseFloat( val ) > parseFloat( listenFor ) );
 					}
 					break;
@@ -144,8 +139,7 @@
 				case 'less':
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						checkResult = ( parseFloat( val ) < parseFloat( listenFor ) );
 					}
 					break;
@@ -154,15 +148,13 @@
 
 					if ( val && val.constructor === Array ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						if ( 2 <= listenFor.length ) {
 							let from = parseFloat( listenFor[ 0 ] );
 							let to = parseFloat( listenFor[ 1 ] );
 							val = parseFloat( val );
 							checkResult = ( from <= val && val <= to );
-						}
-						else {
+						} else {
 							checkResult = false;
 						}
 					}
@@ -173,15 +165,12 @@
 					if ( val && val.constructor === Array ) {
 						checkResult = val.includes( listenFor );
 
-					}
-					else if ( ! val ) {
+					} else if ( ! val ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						if ( listenFor.length ) {
 							checkResult = 0 <= listenFor.indexOf( val );
-						}
-						else {
+						} else {
 							checkResult = false;
 						}
 					}
@@ -191,17 +180,15 @@
 				case 'contain':
 					if ( val && val.constructor === Array ) {
 
-						var intersect = val.filter( function ( n ) {
-							return n.indexOf( listenFor ) !== - 1;
+						var intersect = val.filter( function( n ) {
+							return n.indexOf( listenFor ) !== -1;
 						} );
 
 						checkResult = 0 < intersect.length;
 
-					}
-					else if ( ! val ) {
+					} else if ( ! val ) {
 						checkResult = false;
-					}
-					else {
+					} else {
 						checkResult = 0 <= val.indexOf( listenFor );
 					}
 
@@ -211,7 +198,7 @@
 			return checkResult;
 		};
 
-		var checkVisibilityCond = function ( listenTo, listenFor, $section, operator, type ) {
+		var checkVisibilityCond = function( listenTo, listenFor, $section, operator, type ) {
 
 			var checked = $section.data( 'checked' );
 			var $listenTo = $( listenTo );
@@ -225,8 +212,7 @@
 
 			if ( 'show' === type ) {
 				checked[ listenTo ] = checkResult;
-			}
-			else {
+			} else {
 				checked[ listenTo ] = ! checkResult;
 			}
 
@@ -234,7 +220,7 @@
 
 		};
 
-		var checkSetValueCond = function ( listenTo, listenFor, $section, operator, value, type ) {
+		var checkSetValueCond = function( listenTo, listenFor, $section, operator, value, type ) {
 
 			var currentVal = $section.data( 'result_' + type );
 			var $listenTo = $( listenTo );
@@ -248,7 +234,7 @@
 
 		};
 
-		var setValue = function ( $section ) {
+		var setValue = function( $section ) {
 
 			var setVal = false;
 			var setCalcVal = false;
@@ -290,8 +276,7 @@
 					}
 				}
 
-			}
-			else if ( $field.is( ':not( input[type=checkbox], input[type=radio] )' ) ) {
+			} else if ( $field.is( ':not( input[type=checkbox], input[type=radio] )' ) ) {
 
 				if ( setVal ) {
 					$field.val( setVal ).trigger( 'change.JetFormBuilderMain' );
@@ -306,10 +291,9 @@
 					}
 				}
 
-			}
-			else {
+			} else {
 
-				$field.each( function () {
+				$field.each( function() {
 
 					var $this = $( this );
 
@@ -336,7 +320,7 @@
 
 		};
 
-		var setVisibility = function ( $section ) {
+		var setVisibility = function( $section ) {
 
 			var checked = $section.data( 'checked' );
 			var $row = $section.closest( '.jet-form-builder-row' );
@@ -357,7 +341,7 @@
 				$section.show();
 				$row.show();
 
-				$section.find( '*[data-initial-type]' ).each( function () {
+				$section.find( '*[data-initial-type]' ).each( function() {
 					var $this = $( this );
 
 					$this.attr( 'type', $this.data( 'initial-type' ) );
@@ -366,18 +350,17 @@
 				$section.find( 'select option[data-is-hidden="1"]' ).remove();
 
 				$section
-				.find( '*[data-required="1"]' )
-				.val( '' )
-				.attr( 'required', true );
+					.find( '*[data-required="1"]' )
+					.val( '' )
+					.attr( 'required', true );
 
-			}
-			else {
+			} else {
 
 				$section.hide();
 
-				$section.find( '*[type="date"],*[type="time"],*[type="email"],*[type="url"]' ).each( function () {
+				$section.find( '*[type="date"],*[type="time"],*[type="email"],*[type="url"]' ).each( function() {
 					var $this = $( this ),
-						type = $this.attr( 'type' );
+					    type  = $this.attr( 'type' );
 
 					$this.attr( 'data-initial-type', type );
 					$this.attr( 'type', 'text' );
@@ -399,11 +382,11 @@
 				}
 
 				$section.find( '*[required="required"]' )
-				.val( val )
-				.removeAttr( 'required' )
-				.attr( 'data-required', 1 );
+					.val( val )
+					.removeAttr( 'required' )
+					.attr( 'data-required', 1 );
 
-				var $hiddenItems = $row.find( '>*' ).filter( function () {
+				var $hiddenItems = $row.find( '>*' ).filter( function() {
 					return $( this ).css( 'display' ) === 'none';
 				} );
 
@@ -414,7 +397,7 @@
 
 		};
 
-		return this.each( function () {
+		return this.each( function() {
 
 			var $section = $( this );
 			var conditions = $section.data( 'conditional' );
@@ -423,7 +406,7 @@
 				return;
 			}
 
-			for ( var i = 0; i < conditions.length; i ++ ) {
+			for ( var i = 0; i < conditions.length; i++ ) {
 
 				let condition = conditions[ i ];
 
@@ -431,19 +414,18 @@
 					continue;
 				}
 
-				let listenTo = "[data-field-name=" + condition.field + "]";
+				let listenTo = '[data-field-name=' + condition.field + ']';
 				let listenFor = condition.value;
 				let operator = condition.operator;
 				let type = condition.type;
 				let valueToSet = condition.set_value;
 
 				//Set up event listener
-				$( document ).on( 'change.JetFormBuilderMain', listenTo, function () {
+				$( document ).on( 'change.JetFormBuilderMain', listenTo, function() {
 
 					if ( 'show' === type || 'hide' === type ) {
 						checkVisibilityCond( listenTo, listenFor, $section, operator, type );
-					}
-					else {
+					} else {
 						checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
 					}
 
@@ -460,8 +442,7 @@
 				//Show based on current value on page load
 				if ( 'show' === type || 'hide' === type ) {
 					checkVisibilityCond( listenTo, listenFor, $section, operator, type );
-				}
-				else {
+				} else {
 					checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
 				}
 
@@ -479,54 +460,54 @@
 		repeaterCalcFields: {},
 		childrenCalcFields: {},
 		currentFieldWithError: {
-			length: 0
+			length: 0,
 		},
 
-		initCommon: function () {
-			$( '.jet-form-builder__form-wrapper' ).each( function ( index, value ) {
+		initCommon: function() {
+			$( '.jet-form-builder__form-wrapper' ).each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
 		},
 
-		initElementor: function () {
+		initElementor: function() {
 
 			const widgets = {
 				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
 				'jet-form-builder-form.default': JetFormBuilder.widgetBookingForm,
 			};
 
-			$.each( widgets, function ( widget, callback ) {
+			$.each( widgets, function( widget, callback ) {
 				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
 			} );
 		},
 
-		addHandlersInit: function () {
+		addHandlersInit: function() {
 			var self = JetFormBuilder;
 
 			$( document )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
-			.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
-			.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
-			.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
-			.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
-			.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
-			.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
-			.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
-			.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
-			.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
-			.on( 'jet-form-builder/switch-page', self.updateProgress )
-			.on( 'input.JetFormBuilderMain', '.jet-form-builder__field.text-field, .jet-form-builder__field.textarea-field', self.inputTextFields )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
+				.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
+				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
+				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
+				.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
+				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
+				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
+				.on( 'input.JetFormBuilderMain/range', '.jet-form-builder__field.range-field', self.updateRangeField )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__new', self.newRepeaterItem )
+				.on( 'click.JetFormBuilderMain', '.jet-form-builder-repeater__remove', self.removeRepeaterItem )
+				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
+				.on( 'jet-form-builder/switch-page', self.updateProgress )
+				.on( 'input.JetFormBuilderMain', '.jet-form-builder__field.text-field, .jet-form-builder__field.textarea-field', self.inputTextFields )
 		},
 
-		inputTextFields: function () {
+		inputTextFields: function() {
 			$( this ).trigger( 'change.JetFormBuilderMain' );
 		},
 
-		updateProgress: function ( event, $progress, $fromPage, $toPage ) {
+		updateProgress: function( event, $progress, $fromPage, $toPage ) {
 			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $fromPage }"]` );
 			const currentItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $toPage }"]` );
 
@@ -536,18 +517,17 @@
 
 			if ( $fromPage < $toPage ) {
 				prevItem.addClass( 'passed-page' );
-			}
-			else {
+			} else {
 				prevItem.removeClass( 'passed-page' );
 			}
 		},
 
-		removeRepeaterItem: function () {
+		removeRepeaterItem: function() {
 
-			let $this = $( this ),
-				$repeater = $this.closest( '.jet-form-builder-repeater' ),
-				$repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
-				$editor = $repeaterItem.find( '.wp-editor-area' );
+			let $this         = $( this ),
+			    $repeater     = $this.closest( '.jet-form-builder-repeater' ),
+			    $repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
+			    $editor       = $repeaterItem.find( '.wp-editor-area' );
 
 			$this.trigger( 'jet-form-builder/on-remove-repeater-item' );
 
@@ -560,24 +540,24 @@
 
 		},
 
-		newRepeaterItem: function () {
-			var $this = $( this ),
-				$repeater = $this.closest( '.jet-form-builder-repeater' ),
-				$initial = $repeater.find( '.jet-form-builder-repeater__initial' ),
-				$items = $repeater.find( '.jet-form-builder-repeater__items' ),
-				$newVal = $initial.html(),
-				index = 0;
+		newRepeaterItem: function() {
+			var $this     = $( this ),
+			    $repeater = $this.closest( '.jet-form-builder-repeater' ),
+			    $initial  = $repeater.find( '.jet-form-builder-repeater__initial' ),
+			    $items    = $repeater.find( '.jet-form-builder-repeater__items' ),
+			    $newVal   = $initial.html(),
+			    index     = 0;
 
 			if ( $items.find( '.jet-form-builder-repeater__row' ).length ) {
-				$items.find( '.jet-form-builder-repeater__row' ).each( function () {
-					var $this = $( this ),
-						currentIndex = parseInt( $this.data( 'index' ), 10 );
+				$items.find( '.jet-form-builder-repeater__row' ).each( function() {
+					var $this        = $( this ),
+					    currentIndex = parseInt( $this.data( 'index' ), 10 );
 
 					if ( currentIndex > index ) {
 						index = currentIndex;
 					}
 				} );
-				index ++;
+				index++;
 			}
 
 			$newVal = $newVal.replace( /__i__/g, index );
@@ -591,20 +571,9 @@
 
 			var $editors = $newVal.find( '.wp-editor-area' );
 
-
 			if ( $editors.length && window.wp && window.wp.editor ) {
-				$editors.each( function () {
-					const self = $( this ),
-						editorID = self.attr( 'id' ),
-						field = self.closest( '.jet-form-builder__field' );
-
-
-					window.wp.editor.initialize(
-						editorID,
-						field.data( 'editor' )
-					);
-
-					JetFormBuilder.addTriggerForWysiwyg( field, editorID )
+				$editors.each( function() {
+					JetFormBuilder.wysiwygInitWithTriggers( this, true );
 				} );
 			}
 
@@ -615,7 +584,7 @@
 
 		},
 
-		updateRepeaterItems: function ( $repeater, $field ) {
+		updateRepeaterItems: function( $repeater, $field ) {
 
 			var val = JetFormBuilder.getFieldValue( $field );
 
@@ -623,7 +592,7 @@
 				return;
 			}
 
-			for ( var i = 0; i < val; i ++ ) {
+			for ( var i = 0; i < val; i++ ) {
 
 				var $item = $repeater.find( '.jet-form-builder-repeater__row[data-index="' + i + '"]' );
 
@@ -636,11 +605,11 @@
 			var $rows = $repeater.find( '.jet-form-builder-repeater__row' );
 
 			if ( $rows.length ) {
-				$rows.each( function () {
-					var $row = $( this ),
-						index = parseInt( $row.data( 'index' ), 10 );
+				$rows.each( function() {
+					var $row  = $( this ),
+					    index = parseInt( $row.data( 'index' ), 10 );
 
-					index ++;
+					index++;
 
 					if ( index > val ) {
 						$row.remove();
@@ -654,7 +623,7 @@
 
 		},
 
-		calculateRowValue: function ( $row ) {
+		calculateRowValue: function( $row ) {
 
 			var val = JetFormBuilder.calculateValue( $row );
 
@@ -663,12 +632,12 @@
 
 		},
 
-		calculateFieldsInRow: function ( $row ) {
+		calculateFieldsInRow: function( $row ) {
 
-			$row.find( '.jet-form-builder__calculated-field--child' ).each( function () {
+			$row.find( '.jet-form-builder__calculated-field--child' ).each( function() {
 
 				var $childCalculatedField = $( this ),
-					val = JetFormBuilder.calculateValue( $childCalculatedField )
+				    val                   = JetFormBuilder.calculateValue( $childCalculatedField )
 
 				if ( ! val ) {
 					val = 0;
@@ -681,7 +650,7 @@
 
 		},
 
-		initRepeaterListener: function ( $scope ) {
+		initRepeaterListener: function( $scope ) {
 
 			var $repeater = $scope.find( '.jet-form-builder-repeater' );
 
@@ -689,17 +658,17 @@
 				return;
 			}
 
-			$repeater.each( function () {
+			$repeater.each( function() {
 
-				var $this = $( this ),
-					settings = $this.data( 'settings' );
+				var $this    = $( this ),
+				    settings = $this.data( 'settings' );
 
 				if ( 'dynamically' === settings.manageItems && settings.itemsField ) {
 					var $itemsField = $scope.find( '[data-field-name="' + settings.itemsField + '"]' );
 
 					JetFormBuilder.updateRepeaterItems( $this, $itemsField );
 
-					$itemsField.on( 'change', function () {
+					$itemsField.on( 'change', function() {
 						JetFormBuilder.updateRepeaterItems( $this, $itemsField );
 					} );
 				}
@@ -726,7 +695,7 @@
 
 				if ( $calcFields.length ) {
 
-					$calcFields.each( function () {
+					$calcFields.each( function() {
 
 						var $childField = $( this );
 
@@ -736,7 +705,7 @@
 							'listenTo': $childField.data( 'listen_to' ),
 						};
 
-						$this.find( '.jet-form-builder-repeater__row' ).each( function () {
+						$this.find( '.jet-form-builder-repeater__row' ).each( function() {
 							JetFormBuilder.calculateRowValue( $( this ), $childField.data( 'precision' ) );
 						} );
 
@@ -747,16 +716,16 @@
 
 		},
 
-		simLabelClick: function ( event ) {
+		simLabelClick: function( event ) {
 			$( this ).next( '.jet-form-builder__field-label' ).trigger( 'click' );
 		},
 
-		maybeSwitchPage: function ( event, $field, $page, disabled ) {
+		maybeSwitchPage: function( event, $field, $page, disabled ) {
 
-			var $item = $field[ 0 ],
-				isSwitch = $field.data( 'switch' ),
-				value = null,
-				$toPage = null;
+			var $item    = $field[ 0 ],
+			    isSwitch = $field.data( 'switch' ),
+			    value    = null,
+			    $toPage  = null;
 
 			if ( ! isSwitch ) {
 				return;
@@ -786,10 +755,10 @@
 
 		},
 
-		changeActiveTemplateClass: function ( event ) {
+		changeActiveTemplateClass: function( event ) {
 
-			var $this = $( this ),
-				$template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
+			var $this     = $( this ),
+			    $template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
 
 			if ( ! $template.length ) {
 				return;
@@ -797,34 +766,29 @@
 
 			if ( 'radio' === $this[ 0 ].type ) {
 				$template
-				.closest( '.jet-form-builder__fields-group' )
-				.find( '.jet-form-builder__field-template--checked' )
-				.removeClass( 'jet-form-builder__field-template--checked' );
+					.closest( '.jet-form-builder__fields-group' )
+					.find( '.jet-form-builder__field-template--checked' )
+					.removeClass( 'jet-form-builder__field-template--checked' );
 			}
 
 			$template.toggleClass( 'jet-form-builder__field-template--checked', $this[ 0 ].checked );
 
 		},
 
-		initConditions: function ( $scope ) {
+		initConditions: function( $scope ) {
 			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 
-		addTriggerForWysiwyg: function ( field, editorId ) {
-			const callable = function ( e ) {
-				field.trigger( 'change.JetFormBuilderMain', [ this ] );
-			};
-
-			const editor = tinymce.get( editorId );
-
-			editor
-			.on( 'input', callable )
-			.on( 'change', callable );
-		},
-
-		widgetBookingForm: function ( $scope ) {
+		widgetBookingForm: function( $scope ) {
 
 			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
+			var $editors = $scope.find( '.wp-editor-area' );
+
+			if ( $editors.length && window.wp && window.wp.editor ) {
+				$editors.each( function() {
+					JetFormBuilder.wysiwygInitWithTriggers( this, true );
+				} );
+			}
 
 			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
 
@@ -840,38 +804,14 @@
 				} );
 			}
 
-			var $editors = $scope.find( '.wp-editor-area' );
-
-			if ( $editors.length && window.wp && window.wp.editor ) {
-
-				$editors.each( function () {
-					const self = $( this ),
-						editorID = self.attr( 'id' ),
-						field = self.closest( '.jet-form-builder__field' );
-
-					if ( window.tinymce && window.tinymce.get( editorID ) ) {
-						window.wp.editor.remove( editorID );
-					}
-
-					window.wp.editor.initialize(
-						editorID,
-						field.data( 'editor' )
-					);
-
-					JetFormBuilder.addTriggerForWysiwyg( field, editorID )
-				} );
-
-			}
-
 			if ( ! $calcFields.length ) {
-				$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
 				return;
 			}
 
-			$( $calcFields ).each( function () {
+			$( $calcFields ).each( function() {
 
-				var $this = $( this ),
-					calculated = null;
+				var $this      = $( this ),
+				    calculated = null;
 
 				JetFormBuilder.calcFields[ $this.data( 'name' ) ] = {
 					'el': $this,
@@ -884,20 +824,17 @@
 				$this.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
 
 			} );
-
-			$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
-
 		},
 
-		initFormPager: function ( $scope ) {
+		initFormPager: function( $scope ) {
 			var $pages = $scope.find( '.jet-form-page' ),
-				$form = $scope.find( '.jet-form-builder' );
+			    $form  = $scope.find( '.jet-form-builder' );
 
 			if ( ! $pages.length ) {
 				return;
 			}
 
-			$pages.each( function () {
+			$pages.each( function() {
 
 				var $page = $( this );
 
@@ -909,19 +846,19 @@
 
 		},
 
-		initSingleFormPage: function ( $page, $form, $changedField ) {
+		initSingleFormPage: function( $page, $form, $changedField ) {
 
-			var $button = $page.find( '.jet-form-builder__next-page' ),
-				$msg = $page.find( '.jet-form-builder__next-page-msg' ),
-				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
-				pageNum = parseInt( $page.data( 'page' ), 10 ),
-				disabled = false,
-				radioFields = {};
+			var $button        = $page.find( '.jet-form-builder__next-page' ),
+			    $msg           = $page.find( '.jet-form-builder__next-page-msg' ),
+			    requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
+			    pageNum        = parseInt( $page.data( 'page' ), 10 ),
+			    disabled       = false,
+			    radioFields    = {};
 
 			$changedField = $changedField || false;
 
 			if ( requiredFields.length ) {
-				for ( var i = 0; i < requiredFields.length; i ++ ) {
+				for ( var i = 0; i < requiredFields.length; i++ ) {
 
 					var $field = $( requiredFields[ i ] );
 					var val = null;
@@ -930,13 +867,12 @@
 					if ( 'INPUT' === $field[ 0 ].nodeName ) {
 
 						if ( $field.length > 1 ) {
-							for ( var j = 0; j < $field.length; j ++ ) {
+							for ( var j = 0; j < $field.length; j++ ) {
 								if ( $field[ j ].checked ) {
 									val = $field[ j ].value;
 								}
 							}
-						}
-						else if ( 'radio' === $field[ 0 ].type ) {
+						} else if ( 'radio' === $field[ 0 ].type ) {
 
 							isRadio = true;
 
@@ -944,8 +880,7 @@
 								radioFields[ $field[ 0 ].name ] = $field[ 0 ].value;
 							}
 
-						}
-						else {
+						} else {
 							val = $field.val();
 						}
 					}
@@ -976,8 +911,7 @@
 				}
 
 				$button.attr( 'disabled', true );
-			}
-			else {
+			} else {
 
 				if ( $msg.length ) {
 					$msg.removeClass( 'jet-form-builder__next-page-msg--visible' );
@@ -991,8 +925,7 @@
 					page: $page,
 					disabled: disabled,
 				};
-			}
-			else {
+			} else {
 				JetFormBuilder.pages[ pageNum ].disabled = disabled;
 			}
 
@@ -1004,7 +937,7 @@
 				return;
 			}
 
-			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function () {
+			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function() {
 				JetFormBuilder.initSingleFormPage( $page, $form, $( this ) );
 			} );
 
@@ -1012,12 +945,12 @@
 
 		},
 
-		nextFormPage: function () {
+		nextFormPage: function() {
 
-			var $button = $( this ),
-				$fromPage = $button.closest( '.jet-form-page' ),
-				$pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
-				$toPage = $fromPage.next();
+			var $button     = $( this ),
+			    $fromPage   = $button.closest( '.jet-form-page' ),
+			    $pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
+			    $toPage     = $fromPage.next();
 
 			if ( ! JetFormBuilder.isFieldsValid( $pageFields ) ) {
 				return;
@@ -1027,19 +960,19 @@
 
 		},
 
-		prevFormPage: function () {
+		prevFormPage: function() {
 
-			var $button = $( this ),
-				$fromPage = $button.closest( '.jet-form-page' ),
-				$toPage = $fromPage.prev();
+			var $button   = $( this ),
+			    $fromPage = $button.closest( '.jet-form-page' ),
+			    $toPage   = $fromPage.prev();
 
 			JetFormBuilder.switchFormPage( $fromPage, $toPage );
 		},
 
-		isFieldsValid: function ( $fields ) {
+		isFieldsValid: function( $fields ) {
 			var isValid = true;
 
-			$fields.each( function ( ind, field ) {
+			$fields.each( function( ind, field ) {
 				if ( ! field.checkValidity() ) {
 					field.reportValidity();
 					isValid = false;
@@ -1050,7 +983,7 @@
 			return isValid;
 		},
 
-		switchFormPage: function ( $fromPage, $toPage ) {
+		switchFormPage: function( $fromPage, $toPage ) {
 
 			var $form = $fromPage.closest( '.jet-form-builder' );
 
@@ -1062,10 +995,11 @@
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
-			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ), $toPage.data( 'page' ) ] );
+			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ),
+				$toPage.data( 'page' ) ] );
 		},
 
-		getFieldValue: function ( $field ) {
+		getFieldValue: function( $field ) {
 
 			var val = 0;
 
@@ -1074,41 +1008,36 @@
 				if ( 'INPUT' === $field[ 0 ].nodeName ) {
 					if ( $field.length > 1 ) {
 
-						for ( var i = 0; i < $field.length; i ++ ) {
+						for ( var i = 0; i < $field.length; i++ ) {
 							if ( $field[ i ].checked ) {
 
 								var itemVal = 0;
 
 								if ( undefined !== $field[ i ].dataset.calculate ) {
 									itemVal = $field[ i ].dataset.calculate;
-								}
-								else {
+								} else {
 									itemVal = $field[ i ].value;
 								}
 
 								if ( 'checkbox' === $field[ i ].type ) {
 									val += parseInt( itemVal, 10 );
-								}
-								else {
+								} else {
 									val = itemVal;
 								}
 
 							}
 						}
 
-					}
-					else {
+					} else {
 						if ( 'checkbox' === $field[ 0 ].type ) {
 							if ( $field[ 0 ].checked ) {
 								if ( undefined !== $field[ 0 ].dataset.calculate ) {
 									val = $field[ 0 ].dataset.calculate;
-								}
-								else {
+								} else {
 									val = $field[ 0 ].value;
 								}
 							}
-						}
-						else {
+						} else {
 							val = $field.val();
 						}
 					}
@@ -1117,12 +1046,11 @@
 				if ( 'SELECT' === $field[ 0 ].nodeName ) {
 
 					var selectedOption = $field.find( 'option:selected' ),
-						calcValue = selectedOption.data( 'calculate' );
+					    calcValue      = selectedOption.data( 'calculate' );
 
 					if ( undefined !== calcValue ) {
 						val = calcValue;
-					}
-					else {
+					} else {
 						val = $field.find( 'option:selected' ).val();
 					}
 
@@ -1133,17 +1061,16 @@
 					if ( $field.hasClass( 'jet-form-builder-repeater' ) ) {
 						var repeaterSettings = $field.data( 'settings' );
 						if ( repeaterSettings && 'custom' === repeaterSettings.calcType ) {
-							$field.find( '.jet-form-builder-repeater__row' ).each( function () {
-								var $row = $( this ),
-									rowVal = JetFormBuilder.calculateValue( $row );
+							$field.find( '.jet-form-builder-repeater__row' ).each( function() {
+								var $row   = $( this ),
+								    rowVal = JetFormBuilder.calculateValue( $row );
 
 								$row.data( 'value', rowVal );
 
 								val += rowVal;
 							} );
 
-						}
-						else {
+						} else {
 							val = $field.find( '.jet-form-builder-repeater__row' ).length;
 						}
 					}
@@ -1162,12 +1089,12 @@
 
 		},
 
-		calculateValue: function ( $scope ) {
+		calculateValue: function( $scope ) {
 
-			var formula = String( $scope.data( 'formula' ) ),
-				listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
-				regexp = /%([a-zA-Z0-9-_]+)%/g,
-				func = null;
+			var formula  = String( $scope.data( 'formula' ) ),
+			    listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
+			    regexp   = /%([a-zA-Z0-9-_]+)%/g,
+			    func     = null;
 
 			if ( typeof formula === 'undefined' ) {
 				return null;
@@ -1175,20 +1102,17 @@
 
 			formula = JetFormBuilderMain.filters.applyFilters( 'forms/calculated-formula-before-value', formula, $scope );
 
-			formula = formula.replace( regexp, function ( match1, match2 ) {
+			formula = formula.replace( regexp, function( match1, match2 ) {
 
 				var object = null;
 
 				if ( $scope.data( 'repeater' ) ) {
 					object = $scope;
-				}
-				else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
+				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
 					object = $scope.closest( '.jet-form-builder-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
-				}
-				else if ( $scope.data( 'repeater-row' ) ) {
+				} else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
-				}
-				else {
+				} else {
 					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
 				}
 
@@ -1204,13 +1128,13 @@
 
 		},
 
-		recalcFields: function ( event ) {
+		recalcFields: function( event ) {
 
-			var $this = $( this ),
-				fieldName = $this.attr( 'name' ),
-				fieldPrecision = 2,
-				calculated = null,
-				done = false;
+			var $this          = $( this ),
+			    fieldName      = $this.attr( 'name' ),
+			    fieldPrecision = 2,
+			    calculated     = null,
+			    done           = false;
 
 			if ( $this.data( 'field-name' ) ) {
 				fieldName = $this.data( 'field-name' );
@@ -1220,7 +1144,7 @@
 				return;
 			}
 
-			$.each( JetFormBuilder.calcFields, function ( calcFieldName, field ) {
+			$.each( JetFormBuilder.calcFields, function( calcFieldName, field ) {
 
 				fieldName = fieldName.replace( '[]', '' );
 
@@ -1238,7 +1162,7 @@
 
 			if ( 'jet-form-builder/repeater-changed' !== event.type ) {
 
-				$.each( JetFormBuilder.repeaterCalcFields, function ( calcFieldName, field ) {
+				$.each( JetFormBuilder.repeaterCalcFields, function( calcFieldName, field ) {
 
 					fieldName = fieldName.replace( '[]', '' );
 
@@ -1252,7 +1176,7 @@
 
 			}
 
-			$.each( JetFormBuilder.childrenCalcFields, function ( calcFieldName, field ) {
+			$.each( JetFormBuilder.childrenCalcFields, function( calcFieldName, field ) {
 
 				fieldName = fieldName.replace( '[]', '' );
 
@@ -1265,12 +1189,12 @@
 
 		},
 
-		initRequiredCheckboxGroup: function ( $scope ) {
+		initRequiredCheckboxGroup: function( $scope ) {
 			var $group = $scope.find( '.jet-form-builder__fields-group' );
 
-			$group.each( function () {
-				var $this = $( this ),
-					$checkboxes = $( '.checkboxes-group-required', $this );
+			$group.each( function() {
+				var $this       = $( this ),
+				    $checkboxes = $( '.checkboxes-group-required', $this );
 
 				if ( $checkboxes.length ) {
 					var isChecked = $checkboxes.is( ':checked' );
@@ -1280,10 +1204,10 @@
 			} );
 		},
 
-		requiredCheckboxGroup: function ( event ) {
-			var $this = $( event.target ),
-				$group = $this.closest( '.jet-form-builder__fields-group' ),
-				$checkboxes = $( '.checkboxes-field', $group );
+		requiredCheckboxGroup: function( event ) {
+			var $this       = $( event.target ),
+			    $group      = $this.closest( '.jet-form-builder__fields-group' ),
+			    $checkboxes = $( '.checkboxes-field', $group );
 
 			if ( $checkboxes.length < 2 ) {
 				return;
@@ -1294,24 +1218,24 @@
 			$checkboxes.prop( 'required', ! isChecked );
 		},
 
-		initRangeFields: function ( $scope ) {
+		initRangeFields: function( $scope ) {
 			var $rangeFields = $scope.find( '.jet-form-builder__field.range-field' );
 
 			if ( ! $rangeFields.length ) {
 				return;
 			}
 
-			$rangeFields.each( function () {
+			$rangeFields.each( function() {
 				JetFormBuilder.updateRangeField( { target: $( this ), firstInit: true } );
 			} );
 		},
 
-		updateRangeField: function ( event ) {
+		updateRangeField: function( event ) {
 			var $target = $( event.target ),
-				$wrap = $target.closest( '.jet-form-builder__field-wrap' ),
-				$number = $wrap.find( '.jet-form-builder__field-value-number' ),
-				max = $target.attr( 'max' ) || 100,
-				val = $target.val();
+			    $wrap   = $target.closest( '.jet-form-builder__field-wrap' ),
+			    $number = $wrap.find( '.jet-form-builder__field-value-number' ),
+			    max     = $target.attr( 'max' ) || 100,
+			    val     = $target.val();
 
 			if ( event.firstInit ) {
 				$number.text( max );
@@ -1320,18 +1244,18 @@
 			$number.text( val );
 		},
 
-		reloadSubmitForm: function ( event ) {
+		reloadSubmitForm: function( event ) {
 			$( this ).find( '.jet-form-builder__submit' ).attr( 'disabled', true );
 		},
 
-		ajaxSubmitForm: function () {
+		ajaxSubmitForm: function() {
 
-			var $this = $( this ),
-				$form = $this.closest( '.jet-form-builder' ),
-				formID = $form.data( 'form-id' ),
-				data = {
-					action: JetFormBuilderSettings.form_action,
-				};
+			var $this  = $( this ),
+			    $form  = $this.closest( '.jet-form-builder' ),
+			    formID = $form.data( 'form-id' ),
+			    data   = {
+				    action: JetFormBuilderSettings.form_action,
+			    };
 
 			if ( 'undefined' !== typeof $form[ 0 ].checkValidity && 'undefined' !== typeof $form[ 0 ].reportValidity && ! $form[ 0 ].checkValidity() ) {
 				$form[ 0 ].reportValidity();
@@ -1355,7 +1279,7 @@
 				type: 'POST',
 				dataType: 'json',
 				data: data,
-			} ).done( function ( response ) {
+			} ).done( function( response ) {
 
 				$form.removeClass( 'is-loading' );
 				$this.attr( 'disabled', false );
@@ -1364,7 +1288,7 @@
 
 					case 'validation_failed':
 
-						Object.entries( response.fields ).forEach( function ( [ fieldName, fieldData ] ) {
+						Object.entries( response.fields ).forEach( function( [ fieldName, fieldData ] ) {
 							var $field = JetFormBuilder.findFieldByName( $form, fieldName );
 
 							const afterMessage = `<div class="error-message">${ fieldData.message }</div>`;
@@ -1373,13 +1297,12 @@
 
 							if ( $field.hasClass( 'checkradio-field' ) ) {
 								$field.closest( '.jet-form-builder__field-wrap' ).after( afterMessage );
-							}
-							else {
+							} else {
 								$field.after( afterMessage );
 							}
 
 							JetFormBuilder.currentFieldWithError = {
-								length: 0
+								length: 0,
 							};
 						} );
 
@@ -1389,8 +1312,7 @@
 
 						if ( response.redirect ) {
 							window.location = response.redirect;
-						}
-						else if ( response.reload ) {
+						} else if ( response.reload ) {
 							window.location.reload();
 						}
 
@@ -1405,7 +1327,7 @@
 
 		},
 
-		clearFieldErrors: function ( formID ) {
+		clearFieldErrors: function( formID ) {
 			var $this = $( this );
 
 			$this.closest( '.jet-form-builder-col' ).find( '.jet-form-builder__field-error' ).remove();
@@ -1419,13 +1341,13 @@
 
 		},
 
-		findFieldByName: function ( form, fieldName ) {
+		findFieldByName: function( form, fieldName ) {
 			const callbackFinders = [
 				'findInputDefault',
 				'findWysiwyg',
 			];
 
-			callbackFinders.forEach( function ( callback ) {
+			callbackFinders.forEach( function( callback ) {
 				if ( JetFormBuilder.currentFieldWithError && ! JetFormBuilder.currentFieldWithError.length ) {
 					JetFormBuilder.currentFieldWithError = JetFormBuilder[ callback ]( form, fieldName );
 				}
@@ -1434,14 +1356,14 @@
 			return JetFormBuilder.currentFieldWithError;
 		},
 
-		findInputDefault: function ( form, fieldName ) {
+		findInputDefault: function( form, fieldName ) {
 			return form.find( `.jet-form-builder__field[name="${ fieldName }"]:last` );
 		},
 
-		findWysiwyg: function ( form, fieldName ) {
+		findWysiwyg: function( form, fieldName ) {
 			let field;
 
-			form.find( '.jet-form-builder__field[data-editor]' ).each( function ( index, editor ) {
+			form.find( '.jet-form-builder__field[data-editor]' ).each( function( index, editor ) {
 
 				if ( fieldName === $( editor ).data( 'editor' ).textarea_name ) {
 					field = $( editor );
@@ -1449,6 +1371,39 @@
 			} );
 
 			return field;
+		},
+
+		addTriggersWysiwyg: function( field, editorId ) {
+			const callable = function( e ) {
+				field.trigger( 'change.JetFormBuilderMain', [ this ] );
+			};
+
+			const editor = tinymce.get( editorId );
+
+			editor
+				.on( 'input', callable )
+				.on( 'change', callable );
+		},
+		wysiwygInit: function( closure, replace = false ) {
+			const self     = $( closure ),
+			      editorID = self.attr( 'id' ),
+			      field    = self.closest( '.jet-form-builder__field' );
+
+			if ( replace && window.tinymce && window.tinymce.get( editorID ) ) {
+				window.wp.editor.remove( editorID );
+			}
+
+			window.wp.editor.initialize(
+				editorID,
+				field.data( 'editor' ),
+			);
+
+			return { editorID, field };
+		},
+		wysiwygInitWithTriggers: function( closure, replace = false ) {
+			const { editorID, field } = JetFormBuilder.wysiwygInit( closure, replace );
+
+			JetFormBuilder.addTriggersWysiwyg( field, editorID );
 		},
 
 	};

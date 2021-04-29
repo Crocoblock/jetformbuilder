@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.1.7
+* ADD: RTL compatibility to Wysiwyg Field
+* ADD: Compatibility with JetStyleManager 1.2.0 and older versions
+* ADD: Styles for Form Progress circle
+* FIX: Send email without correct headers, added initial padding-bottom for progress items
+* FIX: Render script jet-form-builder-inputmask only when rendering Text Field
+* FIX: Plain default value in repeater fields
+* FIX: Wysiwyg field is RTL compliant
+* FIX: Positioning of progress item label
+* FIX: Rendering last form-break field in form
+
 ## 1.1.6
 * ADD: `Label of progress` for Form Break Field
 * FIX: Errors when editing actions such as MailChimp, GetResponse

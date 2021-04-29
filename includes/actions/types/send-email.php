@@ -25,9 +25,6 @@ class Send_Email extends Base {
 		parent::__construct();
 
 		$this->filter = ( new Listing_Filter_Manager() )->manager;
-
-		add_action( 'jet-form-builder/send-email/send-before', array( $this, 'send_before' ) );
-		add_action( 'jet-form-builder/send-email/send-after', array( $this, 'send_after' ) );
 	}
 
 	public function get_name() {
@@ -233,6 +230,7 @@ class Send_Email extends Base {
 		/**
 		 * Hooks before the email is sent
 		 */
+		$this->send_before();
 		do_action( 'jet-form-builder/send-email/send-before', $this );
 
 		$content_type = $this->get_content_type();
@@ -261,6 +259,7 @@ class Send_Email extends Base {
 		 *
 		 * @since 2.1
 		 */
+		$this->send_after();
 		do_action( 'jet-form-builder/send-email/send-after', $this );
 	}
 
@@ -339,7 +338,6 @@ class Send_Email extends Base {
 	 * @since 2.1
 	 */
 	public function get_headers() {
-
 		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";

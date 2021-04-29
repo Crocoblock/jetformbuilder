@@ -1,10 +1,10 @@
 ﻿=== JetFormBuilder — Form Builder for Gutenberg ===
-Contributors: crocoblock, mjhead
+Contributors: crocoblock, mjhead, hugreed
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.7.0
+Tested up to: 5.7.1
 Requires PHP: 7.0
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,17 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.1.7**
+ - ADD: RTL compatibility to Wysiwyg Field
+ - ADD: Compatibility with JetStyleManager 1.2.0 and older versions
+ - ADD: Styles for Form Progress circle
+ - FIX: Send email without correct headers, added initial padding-bottom for progress items
+ - FIX: Render script jet-form-builder-inputmask only when rendering Text Field
+ - FIX: Plain default value in repeater fields
+ - FIX: Wysiwyg field is RTL compliant
+ - FIX: Positioning of progress item label
+ - FIX: Rendering last form-break field in form
 
 **1.1.6**
  - ADD: `Label of progress` for Form Break Field

@@ -264,7 +264,7 @@ class Live_Form {
 		$hidden_class = '';
 
 		if ( 1 < $this->page ) {
-			$hidden_class = 'jet-form-page--hidden';
+			$hidden_class = 'jet-form-builder-page--hidden';
 		}
 
 		include $this->get_global_template( 'common/start-page.php' );

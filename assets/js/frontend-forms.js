@@ -507,9 +507,11 @@
 			$( this ).trigger( 'change.JetFormBuilderMain' );
 		},
 
-		updateProgress: function( event, $progress, $fromPage, $toPage ) {
-			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $fromPage }"]` );
-			const currentItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ $toPage }"]` );
+		updateProgress: function( event, $fromPage, $toPage, $progress ) {
+			const [ from, to ] = [ $fromPage.data( 'page' ), $toPage.data( 'page' ) ];
+
+			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ from }"]` );
+			const currentItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ to }"]` );
 
 			prevItem.removeClass( 'active-page' );
 			currentItem.addClass( 'active-page' );
@@ -827,7 +829,7 @@
 		},
 
 		initFormPager: function( $scope ) {
-			var $pages = $scope.find( '.jet-form-page' ),
+			var $pages = $scope.find( '.jet-form-builder-page' ),
 			    $form  = $scope.find( '.jet-form-builder' );
 
 			if ( ! $pages.length ) {
@@ -838,7 +840,7 @@
 
 				var $page = $( this );
 
-				if ( ! $page.hasClass( '.jet-form-page--hidden' ) ) {
+				if ( ! $page.hasClass( '.jet-form-builder-page--hidden' ) ) {
 					JetFormBuilder.initSingleFormPage( $page, $form, false );
 				}
 
@@ -933,7 +935,7 @@
 				$( document ).trigger( 'jet-form-builder/page/field-changed', [ $changedField, $page, disabled ] );
 			}
 
-			if ( $page.hasClass( 'jet-form-page--initialized' ) ) {
+			if ( $page.hasClass( 'jet-form-builder-page--initialized' ) ) {
 				return;
 			}
 
@@ -941,14 +943,14 @@
 				JetFormBuilder.initSingleFormPage( $page, $form, $( this ) );
 			} );
 
-			$page.addClass( 'jet-form-page--initialized' );
+			$page.addClass( 'jet-form-builder-page--initialized' );
 
 		},
 
 		nextFormPage: function() {
 
 			var $button     = $( this ),
-			    $fromPage   = $button.closest( '.jet-form-page' ),
+			    $fromPage   = $button.closest( '.jet-form-builder-page' ),
 			    $pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
 			    $toPage     = $fromPage.next();
 
@@ -963,7 +965,7 @@
 		prevFormPage: function() {
 
 			var $button   = $( this ),
-			    $fromPage = $button.closest( '.jet-form-page' ),
+			    $fromPage = $button.closest( '.jet-form-builder-page' ),
 			    $toPage   = $fromPage.prev();
 
 			JetFormBuilder.switchFormPage( $fromPage, $toPage );
@@ -989,14 +991,13 @@
 
 			const $progress = $form.find( '.jet-form-builder-progress-pages' );
 
-			$fromPage.addClass( 'jet-form-page--hidden' );
-			$toPage.removeClass( 'jet-form-page--hidden' );
+			$fromPage.addClass( 'jet-form-builder-page--hidden' );
+			$toPage.removeClass( 'jet-form-builder-page--hidden' );
 
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
-			$( document ).trigger( 'jet-form-builder/switch-page', [ $progress, $fromPage.data( 'page' ),
-				$toPage.data( 'page' ) ] );
+			$( document ).trigger( 'jet-form-builder/switch-page', [ $fromPage, $toPage, $progress ] );
 		},
 
 		getFieldValue: function( $field ) {

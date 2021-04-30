@@ -18,9 +18,9 @@ function RequestLoadingButton( {
 		ajaxArgs={ ajaxArgs }
 		label={ label }
 		onLoading={ setLoadingClass }
-		onSuccessRequest={ () => {
+		onSuccessRequest={ response => {
 			clearLoadingClass();
-			onSuccessRequest()
+			onSuccessRequest( response )
 		} }
 		onFailRequest={ () => {
 			clearLoadingClass();

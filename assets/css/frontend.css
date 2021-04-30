@@ -687,6 +687,9 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     margin-left: 0.5em;
 }
 
+.jet-form-builder-progress-pages {
+    padding-bottom: 1.5em;
+}
 .jet-form-builder-progress-pages, .jet-form-builder-progress-pages__item--wrapper {
     display: flex;
     justify-content: space-between;

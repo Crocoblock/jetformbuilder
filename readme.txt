@@ -20,6 +20,8 @@ JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field 
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
+https://www.youtube.com/watch?v=GTWeLrZspoA
+
 == Features ==
 
 = VARIOUS FIELD TYPES =
@@ -64,8 +66,10 @@ Accept all kinds of payments securely via any of your WordPress-created forms be
 - **Form validation.** Check if the entered user data is correct and whether to let them proceed with the form submission or not. 
 - **Form templates.** Coming soon.
 
+<a href="https://jetformbuilder.com/" target="_blank">Read more about all JetFormBuilder features here</a>
+
 == Demo ==
-We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://crocoblock.com/plugins/jetformbuilder/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://crocoblock.com/plugins/jetformbuilder/</a>
+We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://jetformbuilder.com/demo/</a>
 
 == Integrations ==
 

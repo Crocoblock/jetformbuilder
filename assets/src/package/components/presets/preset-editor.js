@@ -113,6 +113,7 @@ function withPreset( WrappedComponent ) {
 		};
 
 		return <WrappedComponent
+			key='wrapped-preset-editor'
 			{ ...props }
 			parseValue={ parseValue }
 			isVisible={ isVisible }

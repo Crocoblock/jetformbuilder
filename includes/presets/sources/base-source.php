@@ -31,9 +31,14 @@ abstract class Base_Source {
 		$this->field       = $this->field_args['name'];
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
-		$this->src         = $this->query_source();
+		$this->src         = $this->_query_source();
 	}
 
+	public function _query_source() {
+		if ( $this->prop ) {
+			return $this->query_source();
+		}
+	}
 
 	protected function get_field_data() {
 		if ( $this->has_field_in_map() ) {
@@ -66,7 +71,7 @@ abstract class Base_Source {
 	}
 
 	protected function get_prop() {
-		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : 'post_title' );
+		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : false );
 	}
 
 	public function get_result_on_prop() {

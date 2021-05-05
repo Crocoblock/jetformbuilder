@@ -26,6 +26,7 @@ function PluginPreset() {
 			} }
 		/>
 		{ args.enabled && <GeneralPreset
+			key={ '_jf_preset_general' }
 			value={ args }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {

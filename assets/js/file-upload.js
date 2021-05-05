@@ -291,6 +291,8 @@
 
 			limit = parseInt( limit, 10 );
 
+			const oldInputVal = $input.val();
+
 			if ( 1 === limit ) {
 				$filesContainer.html( responseData.html );
 				$input.val( JSON.stringify( responseData.value ) ).trigger( 'change.JetFormBuilderMain' );
@@ -307,7 +309,7 @@
 
 				for ( var i = 0; i < responseData.value.length; i++ ) {
 					values.push( responseData.value[ i ] );
-				};
+				}
 
 				$input.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain', [ JSON.parse( inputValues ) ] );
 
@@ -320,7 +322,7 @@
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
-			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value ] )
+			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value, JSON.parse( oldInputVal ) ] )
 		}
 
 	};

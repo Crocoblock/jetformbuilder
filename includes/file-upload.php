@@ -141,6 +141,7 @@ class File_Upload {
 			'max_files'         => 1,
 			'insert_attachment' => false,
 		) );
+		$settings['max_files'] = $settings['max_files'] ? $settings['max_files'] : 1;
 
 		$insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
 

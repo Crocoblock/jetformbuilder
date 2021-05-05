@@ -19,8 +19,8 @@ const {
 
 const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;
-	return () => <PluginDocumentSettingPanel { ...base }>
-		<PluginRender/>
+	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
+		<PluginRender key={ `plugin-render-${ base.name }` }/>
 	</PluginDocumentSettingPanel>;
 }
 

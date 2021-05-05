@@ -784,7 +784,7 @@
 		widgetBookingForm: function( $scope ) {
 
 			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
-			var $editors = $scope.find( '.wp-editor-area' );
+			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );
 
 			if ( $editors.length && window.wp && window.wp.editor ) {
 				$editors.each( function() {

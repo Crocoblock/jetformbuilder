@@ -141,10 +141,6 @@
 			try {
 				JetFormBuilderFileUpload.uploadFiles( files, event.target );
 			} catch ( error ) {
-				/**
-				 *
-				 */
-				return;
 
 				if ( window.JetFormBuilderFileUploadConfig.errors[ error ] ) {
 					$errors.html( window.JetFormBuilderFileUploadConfig.errors[ error ] ).removeClass( 'is-hidden' );

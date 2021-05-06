@@ -136,7 +136,7 @@ class File_Upload {
 	 */
 	public function process_upload( $files = false, $settings = array() ) {
 
-		$settings = wp_parse_args( $settings, array(
+		$settings              = wp_parse_args( $settings, array(
 			'max_size'          => wp_max_upload_size(),
 			'max_files'         => 1,
 			'insert_attachment' => false,
@@ -247,24 +247,45 @@ class File_Upload {
 		$value = ! empty( $field['default'] ) ? $field['default'] : array();
 
 		if ( ! is_array( $value ) ) {
-			$value = explode( ',', str_replace( ', ', ',', $value ) );
+			if ( 'both' !== $format ) {
+				$value = explode( ',', str_replace( ', ', ',', $value ) );
+			} else {
+				if ( false !== strpos( $value, '{' ) ) {
+					$value = json_decode( $value, true );
+				} else {
+					return $files;
+				}
+			}
+		}
+
+		if ( 'both' === $format ) {
+			$value = isset( $value['id'] ) ? array( $value ) : $value;
 		}
 
 		foreach ( $value as $val ) {
-
 			switch ( $format ) {
-
 				case 'id':
-				case 'url':
-				case 'both':
 					$files[] = array(
 						'url'        => wp_get_attachment_url( $val ),
 						'attachment' => $val,
 					);
+					break;
 
+				case 'url':
+					$files[] = array(
+						'url' => $val,
+					);
+					break;
+
+				case 'both':
+					if ( is_array( $val ) && isset( $val['url'] ) && isset( $val['id'] ) ) {
+						$files[] = array(
+							'url'        => $val['url'],
+							'attachment' => $val['id'],
+						);
+					}
 					break;
 			}
-
 		}
 
 		return $files;
@@ -278,10 +299,11 @@ class File_Upload {
 	public function get_result_html( $field = array(), $files = array() ) {
 
 		if ( ! empty( $field['insert_attachment'] ) ) {
-			$result_format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'id';
+			$result_format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'url';
 		} else {
-			$result_format = 'id';
+			$result_format = 'url';
 		}
+
 
 		if ( empty( $files ) ) {
 			$files = $this->get_files_from_field( $field, $result_format );
@@ -507,11 +529,21 @@ class File_Upload {
 		wp_enqueue_script( 'jet-form-builder-sortable' );
 		wp_enqueue_script( 'jet-form-builder-file-upload' );
 
+		$message_builder = Plugin::instance()->form_handler->get_message_builder( Live_Form::instance()->form_id );
+		$messages        = $message_builder->manager->get_messages();
+
 		wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
 			'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
 			'action'          => $this->action,
 			'nonce'           => wp_create_nonce( $this->nonce_key ),
 			'max_upload_size' => wp_max_upload_size(),
+			'errors'          => array(
+				'upload_limit' => $messages['upload_max_files'],
+				'file_type'    => $messages['upload_mime_types'],
+				'file_size'    => $messages['upload_max_size'],
+				'internal'     => $messages['internal_error'],
+
+			),
 		) );
 	}
 

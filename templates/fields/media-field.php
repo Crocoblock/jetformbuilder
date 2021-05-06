@@ -32,8 +32,15 @@ if ( $required ) {
 	$required = 'required="required"';
 }
 
+if ( ! empty( $args['insert_attachment'] ) ) {
+	$format = ! empty( $args['value_format'] ) ? $args['value_format'] : 'url';
+} else {
+	$format = 'url';
+}
+
 $value = File_Upload::instance()->get_result_value( $args );
 $value = is_array( $value ) ? json_encode( $value ) : $value;
+$value = is_array( $value ) || ( 'url' === $format ) ? json_encode( $value ) : $value;
 ?>
 <div class="jet-form-builder__field-wrap jet-form-builder-file-upload">
 	<div class="jet-form-builder-file-upload__content">

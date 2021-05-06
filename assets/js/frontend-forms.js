@@ -791,13 +791,13 @@
 					JetFormBuilder.wysiwygInitWithTriggers( this, true );
 				} );
 			}
+			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
 			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );
 			JetFormBuilder.initRepeaterListener( $scope );
-			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 			JetFormBuilder.initConditions( $scope );
 
 			if ( $.fn.inputmask ) {

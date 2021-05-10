@@ -764,7 +764,7 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     color: red;
 }
 
-.jet-form-builder-file-upload__value[value*="."] + input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
+.jet-form-builder-file-upload__value:not([value*=""]) + input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
     color: transparent;
 }
 

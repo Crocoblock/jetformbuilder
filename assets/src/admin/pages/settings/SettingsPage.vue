@@ -19,6 +19,7 @@
 					</keep-alive>
 					<cx-vui-button
 						button-style="accent"
+						:loading="loadingTab"
 						@click="onSaveTab( index, tab.component.name )"
 					>
 						<span slot="label">Save</span>
@@ -46,11 +47,12 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 ] )
 
 export default {
-	name: 'jfb-settings',
+	name:    'jfb-settings',
 	data() {
 		return {
-			activeTabSlug: settingTabs[0].component.name,
-			tabs: settingTabs,
+			activeTabSlug: settingTabs[ 0 ].component.name,
+			tabs:          settingTabs,
+			loadingTab:    false,
 		};
 	},
 	methods: {
@@ -60,55 +62,58 @@ export default {
 
 			const ajaxRequest = {
 				...{
-					url: window.ajaxurl,
-					type: 'POST',
+					url:      window.ajaxurl,
+					type:     'POST',
 					dataType: 'json',
 				},
-				...currentTab.getRequestOnSave()
+				...currentTab.getRequestOnSave(),
 			};
 			ajaxRequest.data = {
 				action: `jet_fb_save_tab__${ tabSlug }`,
-				...ajaxRequest.data
+				...ajaxRequest.data,
 			};
 
+			self.loadingTab = true;
+
 			jQuery.ajax( ajaxRequest )
-			.done( function ( response ) {
+			.done( function( response ) {
 
 				if ( 'function' === typeof currentTab.onSaveDone ) {
 					currentTab.onSaveDone( response );
-				}
-				else {
+				} else {
 					if ( response.success ) {
 						self.$CXNotice.add( {
-							message: response.data.message,
-							type: 'success',
+							message:  response.data.message,
+							type:     'success',
 							duration: 5000,
 						} );
-					}
-					else {
+					} else {
 						self.$CXNotice.add( {
-							message: response.data.message,
-							type: 'error',
+							message:  response.data.message,
+							type:     'error',
 							duration: 10000,
 						} );
 					}
 				}
+
+				self.loadingTab = false;
 			} )
-			.fail( function ( jqXHR, textStatus, errorThrown ) {
+			.fail( function( jqXHR, textStatus, errorThrown ) {
 				if ( 'function' === typeof currentTab.onSaveFail ) {
 					currentTab.onSaveFail( jqXHR, textStatus, errorThrown );
-					return;
+				} else {
+					self.$CXNotice.add( {
+						message:  errorThrown,
+						type:     'error',
+						duration: 10000,
+					} );
 				}
-				self.$CXNotice.add( {
-					message: errorThrown,
-					type: 'error',
-					duration: 10000,
-				} );
+				self.loadingTab = false;
 			} );
 		},
 		getIncoming( tabName ) {
 			return window.JetFBPageConfig[ tabName ];
-		}
-	}
+		},
+	},
 }
 </script>

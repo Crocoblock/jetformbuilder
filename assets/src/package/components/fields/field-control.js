@@ -1,48 +1,80 @@
-import { controlsSettings } from "./controls";
+import { ControlsSettings } from "./controls";
 import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
+import HorizontalLine from '../horizontal-line';
 
 const {
-	BlockControls
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  BlockControls,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	SelectControl,
-	PanelBody,
-	ToggleControl,
-	ToolbarGroup,
-	Flex,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  PanelBody,
+		  ToggleControl,
+		  ToolbarGroup,
+		  Flex,
+	  } = wp.components;
 
 function FieldControl( {
 						   type,
 						   setAttributes,
 						   attributes,
 						   attrsSettings = {},
-						   editProps: { attrHelp = () => '' }
+						   editProps: {
+										  attrHelp = () => '',
+										  blockName = '',
+									  },
 					   } ) {
-	const currentControl = controlsSettings[ type ];
+	const controls = ControlsSettings();
+
+	if ( ! controls[ type ] ) {
+		return null;
+	}
+
+	const currentControl = controls[ type ];
 
 	const onChangeValue = ( value, key ) => {
 		setAttributes( { [ key ]: value } );
 	};
 
-	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
+	const isValidCondition = ( attr ) => {
+		if ( ! attr.condition ) {
+			return true;
+		}
+
+		if ( blockName && attr.condition.blockName ) {
+			if ( 'string' === typeof attr.condition.blockName && blockName !== attr.condition.blockName ) {
+				return false;
+			}
+			if ( 'object' === typeof attr.condition.blockName
+				&& attr.condition.blockName.length
+				&& ! attr.condition.blockName.includes( blockName )
+			) {
+				return false;
+			}
+		}
 		if (
-			(
-				! ( attrName in attributes )
-			)
-			|| (
-				'condition' in attr
-				&& ! attributes[ attr.condition ]
-			)
-			|| (
-				attrName in attrsSettings
-				&& 'show' in attrsSettings[ attrName ]
-				&& false === attrsSettings[ attrName ].show
-			)
+			( attr.condition.attr && ! attributes[ attr.condition.attr ] )
+			|| ( 'string' === typeof attr.condition && ! attributes[ attr.condition ] )
 		) {
+			return false;
+		}
+
+		return true;
+	};
+
+	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
+
+		const isRegisterAttribute = ( attrName in attributes );
+		const validCondition = isValidCondition( attr );
+		const isHidden = (
+			attrName in attrsSettings
+			&& 'show' in attrsSettings[ attrName ]
+			&& false === attrsSettings[ attrName ].show
+		);
+
+		if ( ! isRegisterAttribute || ! validCondition || isHidden ) {
 			return null;
 		}
 
@@ -83,6 +115,7 @@ function FieldControl( {
 				return <SelectControl
 					key={ `${ attr.type }-${ attrName }-SelectControl` }
 					label={ label }
+					help={ help || attrHelp( attrName ) }
 					value={ attributes[ attrName ] }
 					options={ attr.options }
 					onChange={ newVal => {
@@ -93,6 +126,7 @@ function FieldControl( {
 				return <ToggleControl
 					key={ `${ attr.type }-${ attrName }-ToggleControl` }
 					label={ label }
+					help={ help || attrHelp( attrName ) }
 					checked={ attributes[ attrName ] }
 					onChange={ newVal => {
 						onChangeValue( newVal, attrName )
@@ -105,7 +139,7 @@ function FieldControl( {
 }
 
 function GeneralFields( props ) {
-	const currentControl = controlsSettings.general;
+	const currentControl = ControlsSettings().general;
 
 	return <PanelBody title={ currentControl.label } key={ 'jet-form-general-fields' }>
 		<FieldControl
@@ -113,11 +147,16 @@ function GeneralFields( props ) {
 			key={ 'jet-form-general-fields-component' }
 			{ ...props }
 		/>
+		<FieldControl
+			type='custom_general'
+			key={ 'jet-form-general-custom-fields-component' }
+			{ ...props }
+		/>
 	</PanelBody>;
 }
 
 function AdvancedFields( props ) {
-	const currentControl = controlsSettings.advanced;
+	const currentControl = ControlsSettings().advanced;
 
 	return <PanelBody title={ currentControl.label } key={ 'jet-form-advanced-fields' } initialOpen={ false }>
 		<FieldControl
@@ -125,9 +164,13 @@ function AdvancedFields( props ) {
 			key={ 'jet-form-advanced-fields-component' }
 			{ ...props }
 		/>
+		<FieldControl
+			type='custom_advanced'
+			key={ 'jet-form-advanced-custom-fields-component' }
+			{ ...props }
+		/>
 	</PanelBody>;
 }
-
 
 function ToolBarFields( props ) {
 
@@ -154,5 +197,6 @@ function ToolBarFields( props ) {
 export {
 	GeneralFields,
 	ToolBarFields,
-	AdvancedFields
+	AdvancedFields,
+	FieldControl,
 };

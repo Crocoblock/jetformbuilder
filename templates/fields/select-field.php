@@ -1,7 +1,12 @@
 <?php
 /**
  * input[type="hidden"] template
+ *
+ * @var Base $this
+ * @var array $args
  */
+
+use Jet_Form_Builder\Blocks\Render\Base;
 
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
 $this->add_attribute( 'class', $args['class_name'] );
@@ -18,51 +23,52 @@ $placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : false;
 $default     = isset( $args['default'] ) ? $args['default'] : false;
 
 $this->add_attribute( 'data-default-val', $default );
+//$this->add_attribute( 'multiple', 'multiple' );
 
 ?>
 <div class="jet-form-builder__field-wrap">
     <select <?php $this->render_attributes_string(); ?>><?php
 
-        if ( $placeholder ) {
-            $selected_placeholder = '';
+		if ( $placeholder ) {
+			$selected_placeholder = '';
 
-            if ( ! $default ){
-                $selected_placeholder = 'selected';
-            }
+			if ( ! $default ) {
+				$selected_placeholder = 'selected';
+			}
 
-            printf( '<option value="" %1$s>%2$s</option>', $selected_placeholder, $placeholder );
-        }
+			printf( '<option value="" %1$s>%2$s</option>', $selected_placeholder, $placeholder );
+		}
 
-        if ( ! empty( $args['field_options'] ) ) {
+		if ( ! empty( $args['field_options'] ) ) {
 
-            foreach ( $args['field_options'] as $value => $option ) {
+			foreach ( $args['field_options'] as $value => $option ) {
 
-                $selected = '';
-                $calc     = '';
+				$selected = '';
+				$calc     = '';
 
 
-                if ( is_array( $option ) ) {
-                    $val   = isset( $option['value'] ) ? $option['value'] : $value;
-                    $label = isset( $option['label'] ) ? $option['label'] : $val;
-                } else {
-                    $val   = $value;
-                    $label = $option;
-                }
+				if ( is_array( $option ) ) {
+					$val   = isset( $option['value'] ) ? $option['value'] : $value;
+					$label = isset( $option['label'] ) ? $option['label'] : $val;
+				} else {
+					$val   = $value;
+					$label = $option;
+				}
 
-                if ( $default ) {
-                    $selected = selected( $default, $val, false );
-                }
+				if ( $default ) {
+					$selected = selected( $default, $val, false );
+				}
 
-                if ( is_array( $option ) && isset( $option['calculate'] ) ) {
-                    $calc = ' data-calculate="' . $option['calculate'] . '"';
-                }
+				if ( is_array( $option ) && isset( $option['calculate'] ) ) {
+					$calc = ' data-calculate="' . $option['calculate'] . '"';
+				}
 
-                printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );
+				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );
 
-            }
+			}
 
-        }
+		}
 
-    ?></select>
+		?></select>
 	<?php echo $this->maybe_render_error( $args ); ?>
 </div>

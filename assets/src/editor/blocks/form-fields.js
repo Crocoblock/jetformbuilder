@@ -21,12 +21,12 @@ import * as wysiwyg from './wysiwyg-field';
 import * as wrappers from "./block-wrappers";
 
 const {
-	registerBlockType
-} = wp.blocks;
+		  registerBlockType,
+	  } = wp.blocks;
 
 const {
-	applyFilters
-} = wp.hooks;
+		  applyFilters,
+	  } = wp.hooks;
 
 const fields = applyFilters( 'jet.fb.register.fields', [
 	calculated,
@@ -61,7 +61,7 @@ const registerFormField = block => {
 
 	registerBlockType( name, {
 		...metadata,
-		...settings
+		...settings,
 	} );
 };
 

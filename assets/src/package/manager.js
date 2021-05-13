@@ -44,7 +44,8 @@ import withPreset from "./components/presets/preset-editor";
 import {
 	AdvancedFields,
 	GeneralFields,
-	ToolBarFields
+	ToolBarFields,
+	FieldControl
 } from "./components/fields/field-control";
 import PlaceholderMessage from "./components/actions/placeholder-message";
 import HorizontalLine from "./components/horizontal-line";
@@ -77,6 +78,7 @@ window.JetFBComponents = {
 	AdvancedFields,
 	GeneralFields,
 	ToolBarFields,
+	FieldControl,
 	PlaceholderMessage,
 	HorizontalLine
 };

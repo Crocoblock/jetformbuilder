@@ -294,12 +294,15 @@ class Manager {
 
 
 	public function get_field_by_name( $block_name, $storage = self::FORM_EDITOR_STORAGE ) {
-		if ( ! $block_name ) {
-			return;
-		}
 		$types = $this->get_form_editor_types( $storage );
+		$block = isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
 
-		return isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
+		if ( ! $block ) {
+			$block_name = explode( Plugin::instance()->form::NAMESPACE_FIELDS, $block_name );
+			$block      = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;
+		}
+
+		return $block;
 	}
 
 

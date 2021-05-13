@@ -13,8 +13,12 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+
 /**
- * Main file
+ * @method static Live_Form instance()
+ *
+ * Class Live_Form
+ * @package Jet_Form_Builder
  */
 class Live_Form {
 

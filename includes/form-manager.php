@@ -152,5 +152,34 @@ class Form_Manager {
 		return get_post( $form_id )->post_content;
 	}
 
+	public function get_field_by_name( $form_id, $field_name, $blocks = array() ): array {
+		if ( ! $blocks ) {
+			$blocks = $this->get_only_form_fields( $form_id );
+		}
+		return $this->_get_field_by_name( $field_name, $blocks );
+	}
+
+	private function _get_field_by_name( $field_name, $blocks ): array {
+		foreach ( $blocks as $block ) {
+			$name = isset( $block['attrs']['name'] ) && $block['attrs']['name']
+				? $block['attrs']['name']
+				: '';
+
+			if ( ! $name ) {
+				continue;
+			}
+
+			if ( $name === $field_name ) {
+				return $block;
+			}
+
+			if ( 0 < count( $block['innerBlocks'] ) ) {
+				return $this->_get_field_by_name( $field_name, $block['innerBlocks'] );
+			}
+		}
+
+		return array();
+	}
+
 
 }

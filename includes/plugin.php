@@ -3,10 +3,11 @@
 namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Pages\Settings_Page;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
@@ -17,7 +18,16 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Main file
+ * @property Post_Type $post_type
+ * @property BlocksManager $blocks
+ * @property ActionsManager $actions
+ * @property Form_Manager $form
+ * @property Form_Handler $form_handler
+ * @property Forms_Captcha $captcha
+ * @property Admin\Editor $editor;
+ *
+ * Class Plugin
+ * @package Jet_Form_Builder
  */
 class Plugin {
 

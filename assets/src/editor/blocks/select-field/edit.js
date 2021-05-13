@@ -2,11 +2,14 @@ import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-
 import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
 
 const { __ } = wp.i18n;
+const { applyFilters } = wp.hooks;
 
 const {
 	ToolBarFields,
 	GeneralFields,
 	AdvancedFields,
+	FieldControl,
+	HorizontalLine
 } = JetFBComponents;
 
 const {
@@ -57,6 +60,11 @@ export default function SelectEdit( props ) {
 					onChange={ ( newValue ) => {
 						setAttributes( { switch_on_change: Boolean( newValue ) } );
 					} }
+				/>
+				<FieldControl
+					type='custom_settings'
+					key={ uniqKey( 'customSettingsFields' ) }
+					{ ...props }
 				/>
 			</SelectRadioCheck>
 			<SelectRadioCheckPlaceholder

@@ -12,6 +12,16 @@ use Jet_Form_Builder\Presets\Types\Base_Preset;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use Jet_Form_Builder\Presets\Types\General_Preset;
 
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/**
+ * @method static Preset_Manager instance()
+ *
+ * Class Preset_Manager
+ * @package Jet_Form_Builder\Presets
+ */
 class Preset_Manager {
 
 	use Instance_Trait;

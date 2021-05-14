@@ -3,6 +3,7 @@ const {
 	GeneralFields,
 	AdvancedFields,
 	FieldWrapper,
+	FieldSettingsWrapper,
 } = JetFBComponents;
 
 const { __ } = wp.i18n;
@@ -44,9 +45,7 @@ export default function DateTimeEdit( props ) {
 					key={ uniqKey( 'JetForm-general' ) }
 					{ ...props }
 				/>
-				<PanelBody
-					title={ __( 'Field Settings' ) }
-				>
+				<FieldSettingsWrapper { ...props }>
 					<ToggleControl
 						key={ uniqKey( 'is_timestamp' ) }
 						label={ __( 'Is Timestamp' ) }
@@ -56,7 +55,7 @@ export default function DateTimeEdit( props ) {
 							setAttributes( { is_timestamp: Boolean( newValue ) } );
 						} }
 					/>
-				</PanelBody>
+				</FieldSettingsWrapper>
 				<AdvancedFields
 					key={ uniqKey( 'JetForm-advanced' ) }
 					{ ...props }

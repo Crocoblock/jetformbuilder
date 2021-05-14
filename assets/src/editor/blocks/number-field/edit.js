@@ -1,23 +1,23 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
-
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	PanelBody,
-	__experimentalInputControl,
-	__experimentalNumberControl,
-} = wp.components;
+		  PanelBody,
+		  __experimentalInputControl,
+		  __experimentalNumberControl,
+	  } = wp.components;
 
 let { InputControl, NumberControl } = wp.components;
 
@@ -33,12 +33,12 @@ export default function NumberEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
-	
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey },
+		  } = props;
+
 	const changeNumberValue = ( key, newValue ) => {
 		props.setAttributes( { [ key ]: newValue ? parseFloat( newValue ) : null } );
 	}
@@ -56,10 +56,7 @@ export default function NumberEdit( props ) {
 					key={ uniqKey( 'GeneralFields' ) }
 					{ ...props }
 				/>
-				<PanelBody
-					key={ uniqKey( 'PanelBody' ) }
-					title={ __( 'Field Settings' ) }
-				>
+				<FieldSettingsWrapper { ...props }>
 					<NumberControl
 						label={ __( 'Min Value' ) }
 						labelPosition='top'
@@ -82,7 +79,7 @@ export default function NumberEdit( props ) {
 						value={ attributes.step }
 						onChange={ newValue => changeNumberValue( 'step', newValue ) }
 					/>
-				</PanelBody>
+				</FieldSettingsWrapper>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }
@@ -102,6 +99,6 @@ export default function NumberEdit( props ) {
 					step={ attributes.step || 1 }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

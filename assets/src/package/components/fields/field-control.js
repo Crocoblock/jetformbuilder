@@ -1,7 +1,6 @@
 import { ControlsSettings } from "./controls";
 import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
-import HorizontalLine from '../horizontal-line';
 
 const {
 		  BlockControls,
@@ -14,7 +13,15 @@ const {
 		  ToggleControl,
 		  ToolbarGroup,
 		  Flex,
+		  BaseControl,
+		  __experimentalNumberControl,
 	  } = wp.components;
+
+let { NumberControl } = wp.components;
+
+if ( typeof NumberControl === 'undefined' ) {
+	NumberControl = __experimentalNumberControl;
+}
 
 function FieldControl( {
 						   type,
@@ -54,9 +61,47 @@ function FieldControl( {
 				return false;
 			}
 		}
-		if (
-			( attr.condition.attr && ! attributes[ attr.condition.attr ] )
-			|| ( 'string' === typeof attr.condition && ! attributes[ attr.condition ] )
+
+		const objectNotMatch = (function() {
+			if ( 'object' !== typeof attr.condition.attr ) {
+				return true;
+			}
+			const { operator = 'and', items = {} } = attr.condition.attr
+
+			if ( 'or' === operator.toLowerCase() ) {
+				for ( const attrToCompare in items ) {
+					const valueCompare = items[ attrToCompare ];
+
+					if ( valueCompare === attributes[ attrToCompare ] ) {
+						return true;
+					}
+				}
+			}
+
+			if ( 'and' === operator.toLowerCase() ) {
+				return (function() {
+					for ( const attrToCompare in items ) {
+						if ( items[ attrToCompare ] !== attributes[ attrToCompare ] ) {
+							return false;
+						}
+					}
+					return true;
+				})()
+			}
+
+			return true;
+		})()
+
+		if ( ! objectNotMatch
+			|| (
+				'string' === typeof attr.condition.attr
+				&& attr.condition.attr
+				&& ! attributes[ attr.condition.attr ]
+			)
+			|| (
+				'string' === typeof attr.condition
+				&& ! attributes[ attr.condition ]
+			)
 		) {
 			return false;
 		}
@@ -132,6 +177,23 @@ function FieldControl( {
 						onChangeValue( newVal, attrName )
 					} }
 				/>;
+			case 'number':
+				return <BaseControl
+					key={ `${ attr.type }-${ attrName }-BaseControl` }
+					label={ label }
+				>
+					<NumberControl
+						key={ `${ attr.type }-${ attrName }-NumberControl` }
+						value={ attributes[ attrName ] }
+						onChange={ newVal => {
+							onChangeValue( Number( newVal ), attrName )
+						} }
+					/>
+					<p className={ 'components-base-control__help' }
+					   style={ {
+						   color: 'rgb(117, 117, 117)',
+					   } }>{ help || attrHelp( attrName ) }</p>
+				</BaseControl>;
 		}
 
 	} );

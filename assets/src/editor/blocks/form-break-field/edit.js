@@ -1,6 +1,7 @@
 const {
 	GeneralFields,
 	AdvancedFields,
+	FieldSettingsWrapper
 } = JetFBComponents;
 
 const { __ } = wp.i18n;
@@ -36,9 +37,7 @@ export default function FormBreakEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			<PanelBody
-				title={ __( 'Field Settings' ) }
-			>
+			<FieldSettingsWrapper { ...props }>
 				<TextControl
 					label={ __( 'Label of progress' ) }
 					value={ attributes.label_progress }
@@ -56,7 +55,7 @@ export default function FormBreakEdit( props ) {
 						setAttributes( { page_break_disabled: newValue } );
 					} }
 				/>
-			</PanelBody>
+			</FieldSettingsWrapper>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }

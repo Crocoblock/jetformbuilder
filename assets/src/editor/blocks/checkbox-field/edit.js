@@ -5,6 +5,7 @@ const {
 	AdvancedFields,
 	GeneralFields,
 	ToolBarFields,
+	FieldControl,
 } = JetFBComponents;
 
 const { __ } = wp.i18n;
@@ -45,7 +46,13 @@ export default function CheckboxEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<SelectRadioCheck { ...props } />
+			<SelectRadioCheck { ...props }>
+				<FieldControl
+					type='custom_settings'
+					key={ uniqKey( 'customSettingsFields' ) }
+					{ ...props }
+				/>
+			</SelectRadioCheck>
 			<SelectRadioCheckPlaceholder
 				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
 				scriptData={ localized }

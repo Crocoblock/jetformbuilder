@@ -2,30 +2,31 @@ import {
 	fieldTypesList,
 	maskPlaceholdersList,
 	maskTypesList,
-	maskVisibilitiesList
+	maskVisibilitiesList,
 } from "./options";
 
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	SelectControl,
-	ToggleControl,
-	PanelBody,
-	__experimentalNumberControl,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  ToggleControl,
+		  PanelBody,
+		  __experimentalNumberControl,
+	  } = wp.components;
 
 let { NumberControl } = wp.components;
 
@@ -35,11 +36,11 @@ if ( typeof NumberControl === 'undefined' ) {
 
 export default function TextEdit( props ) {
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	const changeNumberValue = ( key, newValue ) => {
 		const value = ( newValue && newValue > 0 ) ? parseInt( newValue ) : null;
@@ -61,7 +62,7 @@ export default function TextEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			<PanelBody title={ __( 'Field Settings' ) }>
+			<FieldSettingsWrapper { ...props }>
 				<SelectControl
 					key='field_type'
 					label={ __( 'Field Type' ) }
@@ -148,7 +149,7 @@ export default function TextEdit( props ) {
 						options={ maskPlaceholdersList }
 					/>
 				</React.Fragment> }
-			</PanelBody>
+			</FieldSettingsWrapper>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }
@@ -166,6 +167,6 @@ export default function TextEdit( props ) {
 					} }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 };

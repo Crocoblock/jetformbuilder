@@ -6,6 +6,7 @@ const { __ } = wp.i18n;
 const {
 	GeneralFields,
 	AdvancedFields,
+	FieldSettingsWrapper,
 } = JetFBComponents;
 
 const {
@@ -39,9 +40,7 @@ export default function HiddenEdit( props ) {
 					key={ uniqKey( 'GeneralFields' ) }
 					{ ...props }
 				/>
-				<PanelBody
-					title={ __( 'Field Settings' ) }
-				>
+				<FieldSettingsWrapper { ...props }>
 					<SelectControl
 						key='field_value'
 						label="Field Value"
@@ -84,7 +83,7 @@ export default function HiddenEdit( props ) {
 							setAttributes( { hidden_value: newValue } );
 						} }
 					/> }
-				</PanelBody>
+				</FieldSettingsWrapper>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }

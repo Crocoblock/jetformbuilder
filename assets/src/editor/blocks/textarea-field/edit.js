@@ -1,23 +1,23 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextareaControl,
-	PanelBody,
-	__experimentalNumberControl,
-} = wp.components;
-
+		  TextareaControl,
+		  PanelBody,
+		  __experimentalNumberControl,
+	  } = wp.components;
 
 let { NumberControl } = wp.components;
 
@@ -28,11 +28,11 @@ if ( typeof NumberControl === 'undefined' ) {
 export default function TextareaEdit( props ) {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	const blockProps = useBlockProps();
 
@@ -51,10 +51,7 @@ export default function TextareaEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			<PanelBody
-				title={ __( 'Field Settings' ) }
-				key={ uniqKey( 'PanelBody' ) }
-			>
+			<FieldSettingsWrapper { ...props }>
 				<NumberControl
 					label={ __( 'Min length (symbols)' ) }
 					labelPosition='top'
@@ -71,8 +68,7 @@ export default function TextareaEdit( props ) {
 					value={ attributes.maxlength }
 					onChange={ ( newValue ) => changeNumberValue( 'maxlength', newValue ) }
 				/>
-
-			</PanelBody>
+			</FieldSettingsWrapper>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }
@@ -86,9 +82,10 @@ export default function TextareaEdit( props ) {
 				<TextareaControl
 					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ attributes.placeholder }
-					onChange={ () => {} }
+					onChange={ () => {
+					} }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

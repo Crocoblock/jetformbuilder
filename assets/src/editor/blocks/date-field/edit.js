@@ -1,23 +1,24 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper
-} = JetFBComponents;
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	ToggleControl,
-	PanelBody,
-	__experimentalInputControl,
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  PanelBody,
+		  __experimentalInputControl,
+	  } = wp.components;
 
 let { InputControl } = wp.components;
 
@@ -29,11 +30,11 @@ export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		isSelected,
-		setAttributes,
-		editProps: { uniqKey, blockName, attrHelp }
-	} = props;
+			  attributes,
+			  isSelected,
+			  setAttributes,
+			  editProps: { uniqKey, blockName, attrHelp },
+		  } = props;
 
 	return [
 		<ToolBarFields
@@ -47,10 +48,7 @@ export default function DateEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			<PanelBody
-				title={ __( 'Field Settings' ) }
-				key={ uniqKey( 'PanelBody' ) }
-			>
+			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
 					key='is_timestamp'
 					label={ __( 'Is Timestamp' ) }
@@ -60,7 +58,7 @@ export default function DateEdit( props ) {
 						setAttributes( { is_timestamp: Boolean( newValue ) } );
 					} }
 				/>
-			</PanelBody>
+			</FieldSettingsWrapper>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }
@@ -78,6 +76,6 @@ export default function DateEdit( props ) {
 					placeholder={ 'Input type="date"' }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

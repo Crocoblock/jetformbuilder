@@ -6,7 +6,7 @@ import ValidateButton from "./components/validate-button";
 import addAction from "./helpers/actions/action-manager";
 import Tools, {
 	event,
-	listen
+	listen,
 } from "./helpers/tools";
 import DynamicPreset from "./components/presets/dynamic-preset";
 import JetFieldsMapControl from "../editor/blocks/controls/fields-map";
@@ -14,7 +14,7 @@ import FieldWithPreset from "./components/fields/field-with-preset";
 import {
 	GlobalField,
 	AvailableMapField,
-	MapField
+	MapField,
 } from "./components/presets/preset-render";
 
 import {
@@ -23,19 +23,19 @@ import {
 	getFieldsWithoutCurrent,
 	getFormFieldsBlocks,
 	getFormFieldsByBlock,
-	getInnerBlocks
+	getInnerBlocks,
 } from "./helpers/blocks/blocks-helper";
 import {
 	gatewayAttr,
 	gatewayLabel,
 	registerGateway,
-	renderGateway
+	renderGateway,
 } from "./helpers/gateways/gateway-helper";
 import {
 	useActions,
 	useMetaState,
 	useStateValidClasses,
-	useStateLoadingClasses
+	useStateLoadingClasses,
 } from "./helpers/hooks/hooks-helper";
 import FieldWrapper from "./components/fields/field-wrapper";
 import MacrosInserter from "./components/fields/macros-inserter";
@@ -45,7 +45,7 @@ import {
 	AdvancedFields,
 	GeneralFields,
 	ToolBarFields,
-	FieldControl
+	FieldControl,
 } from "./components/fields/field-control";
 import PlaceholderMessage from "./components/actions/placeholder-message";
 import HorizontalLine from "./components/horizontal-line";
@@ -53,10 +53,11 @@ import RequestLoadingButton from "./components/request-loading-button";
 import {
 	actionByTypeList,
 	fromLocalizeHelper,
-	getActionSettings
+	getActionSettings,
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
+import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -80,7 +81,8 @@ window.JetFBComponents = {
 	ToolBarFields,
 	FieldControl,
 	PlaceholderMessage,
-	HorizontalLine
+	HorizontalLine,
+	FieldSettingsWrapper,
 };
 
 // JFBFunctions
@@ -104,7 +106,7 @@ window.JetFBActions = {
 	fromLocalizeHelper,
 	renderGateway,
 	gatewayActionAttributes,
-	globalTab
+	globalTab,
 };
 
 // JFBHooks

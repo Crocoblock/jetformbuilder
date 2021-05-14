@@ -1,29 +1,30 @@
-const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
-
 import {
 	userAccess,
-	valueFormats
+	valueFormats,
 } from "./options";
+
+const {
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	useBlockProps,
-	InspectorControls,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  useBlockProps,
+		  InspectorControls,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	SelectControl,
-	ToggleControl,
-	PanelBody,
-	__experimentalNumberControl,
-	__experimentalInputControl,
-} = wp.components;
+		  SelectControl,
+		  ToggleControl,
+		  PanelBody,
+		  __experimentalNumberControl,
+		  __experimentalInputControl,
+	  } = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
 
@@ -35,7 +36,6 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
-
 const localizeData = window.jetFormMediaFieldData;
 
 export default function MediaEdit( props ) {
@@ -43,11 +43,11 @@ export default function MediaEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	return [
 		<ToolBarFields
@@ -62,10 +62,7 @@ export default function MediaEdit( props ) {
 					key={ uniqKey( 'GeneralFields' ) }
 					{ ...props }
 				/>
-				<PanelBody
-					title={ __( 'Field Settings' ) }
-					className='jet-form-media-fields'
-				>
+				<FieldSettingsWrapper { ...props }>
 					<SelectControl
 						key='allowed_user_cap'
 						label={ __( 'User access' ) }
@@ -128,8 +125,7 @@ export default function MediaEdit( props ) {
 						} }
 						options={ localizeData.mime_types }
 					/>
-
-				</PanelBody>
+				</FieldSettingsWrapper>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }
@@ -147,6 +143,6 @@ export default function MediaEdit( props ) {
 					disabled={ true }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

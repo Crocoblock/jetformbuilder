@@ -1,54 +1,54 @@
+const {
+		  AdvancedFields,
+		  GeneralFields,
+		  FieldWrapper,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const {
-	AdvancedFields,
-	GeneralFields,
-	FieldWrapper
-} = JetFBComponents;
-
-const {
-	getFieldsWithoutCurrent,
-} = JetFBActions;
+		  getFieldsWithoutCurrent,
+	  } = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  BlockControls,
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	TextareaControl,
-	ToggleControl,
-	PanelBody,
-	Button,
-	Popover,
-	ToolbarGroup,
-	__experimentalNumberControl,
-} = wp.components;
+		  TextControl,
+		  TextareaControl,
+		  ToggleControl,
+		  PanelBody,
+		  Button,
+		  Popover,
+		  ToolbarGroup,
+		  __experimentalNumberControl,
+	  } = wp.components;
 
 const NumberControl = __experimentalNumberControl;
 
 const { useState } = wp.element;
 
 const help = {
-	calc_hidden: __( 'Check this to hide calculated field' )
+	calc_hidden: __( 'Check this to hide calculated field' ),
 };
 
 export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey },
+		  } = props;
 
 	const insertMacros = ( macros ) => {
 		setAttributes( {
-			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`
+			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`,
 		} );
 	};
 	const togglePopover = () => {
@@ -81,7 +81,7 @@ export default function EditCalculated( props ) {
 										insertMacros( value )
 									} }
 								>{ '%FIELD::' + value + '%' }</Button>
-							</div>
+							</div>,
 						) }
 					</PanelBody> }
 				</Popover> }
@@ -94,9 +94,7 @@ export default function EditCalculated( props ) {
 				key={ uniqKey( 'JetForm-general' ) }
 				{ ...props }
 			/>
-			<PanelBody
-				title={ __( 'Field Settings' ) }
-			>
+			<FieldSettingsWrapper { ...props }>
 				<div className="jet-form-editor__row-notice">
 					{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
 					{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
@@ -107,7 +105,6 @@ export default function EditCalculated( props ) {
 					-
 					{ __( '%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
 				</div>
-
 				<NumberControl
 					label={ __( 'Decimal Places Number' ) }
 					labelPosition='top'
@@ -146,8 +143,7 @@ export default function EditCalculated( props ) {
 						} );
 					} }
 				/>
-
-			</PanelBody>
+			</FieldSettingsWrapper>
 			<AdvancedFields
 				key={ uniqKey( 'JetForm-advanced' ) }
 				{ ...props }
@@ -172,6 +168,6 @@ export default function EditCalculated( props ) {
 					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
 				</div>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

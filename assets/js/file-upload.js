@@ -319,7 +319,7 @@
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
-			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value, JSON.parse( oldInputVal ) ] )
+			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value, JSON.parse( oldInputVal || '{}' ) ] )
 		},
 
 	};

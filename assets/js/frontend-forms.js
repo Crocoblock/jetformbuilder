@@ -360,7 +360,7 @@
 
 				$section.find( '*[type="date"],*[type="time"],*[type="email"],*[type="url"]' ).each( function() {
 					var $this = $( this ),
-					    type  = $this.attr( 'type' );
+						type  = $this.attr( 'type' );
 
 					$this.attr( 'data-initial-type', type );
 					$this.attr( 'type', 'text' );
@@ -455,6 +455,7 @@
 
 	var JetFormBuilder = {
 
+		initialized: false,
 		pages: {},
 		calcFields: {},
 		repeaterCalcFields: {},
@@ -464,13 +465,19 @@
 		},
 
 		initCommon: function() {
+			if ( JetFormBuilder.initialized ) {
+				return;
+			}
 			$( '.jet-form-builder__form-wrapper' ).each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
+			JetFormBuilder.initialized = true;
 		},
 
 		initElementor: function() {
-
+			if ( JetFormBuilder.initialized ) {
+				return;
+			}
 			const widgets = {
 				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
 				'jet-form-builder-form.default': JetFormBuilder.widgetBookingForm,
@@ -479,6 +486,7 @@
 			$.each( widgets, function( widget, callback ) {
 				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
 			} );
+			JetFormBuilder.initialized = true;
 		},
 
 		addHandlersInit: function() {
@@ -527,9 +535,9 @@
 		removeRepeaterItem: function() {
 
 			let $this         = $( this ),
-			    $repeater     = $this.closest( '.jet-form-builder-repeater' ),
-			    $repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
-			    $editor       = $repeaterItem.find( '.wp-editor-area' );
+				$repeater     = $this.closest( '.jet-form-builder-repeater' ),
+				$repeaterItem = $this.closest( '.jet-form-builder-repeater__row' ),
+				$editor       = $repeaterItem.find( '.wp-editor-area' );
 
 			$this.trigger( 'jet-form-builder/on-remove-repeater-item' );
 
@@ -544,16 +552,16 @@
 
 		newRepeaterItem: function() {
 			var $this     = $( this ),
-			    $repeater = $this.closest( '.jet-form-builder-repeater' ),
-			    $initial  = $repeater.find( '.jet-form-builder-repeater__initial' ),
-			    $items    = $repeater.find( '.jet-form-builder-repeater__items' ),
-			    $newVal   = $initial.html(),
-			    index     = 0;
+				$repeater = $this.closest( '.jet-form-builder-repeater' ),
+				$initial  = $repeater.find( '.jet-form-builder-repeater__initial' ),
+				$items    = $repeater.find( '.jet-form-builder-repeater__items' ),
+				$newVal   = $initial.html(),
+				index     = 0;
 
 			if ( $items.find( '.jet-form-builder-repeater__row' ).length ) {
 				$items.find( '.jet-form-builder-repeater__row' ).each( function() {
 					var $this        = $( this ),
-					    currentIndex = parseInt( $this.data( 'index' ), 10 );
+						currentIndex = parseInt( $this.data( 'index' ), 10 );
 
 					if ( currentIndex > index ) {
 						index = currentIndex;
@@ -609,7 +617,7 @@
 			if ( $rows.length ) {
 				$rows.each( function() {
 					var $row  = $( this ),
-					    index = parseInt( $row.data( 'index' ), 10 );
+						index = parseInt( $row.data( 'index' ), 10 );
 
 					index++;
 
@@ -639,7 +647,7 @@
 			$row.find( '.jet-form-builder__calculated-field--child' ).each( function() {
 
 				var $childCalculatedField = $( this ),
-				    val                   = JetFormBuilder.calculateValue( $childCalculatedField )
+					val                   = JetFormBuilder.calculateValue( $childCalculatedField )
 
 				if ( ! val ) {
 					val = 0;
@@ -663,7 +671,7 @@
 			$repeater.each( function() {
 
 				var $this    = $( this ),
-				    settings = $this.data( 'settings' );
+					settings = $this.data( 'settings' );
 
 				if ( 'dynamically' === settings.manageItems && settings.itemsField ) {
 					var $itemsField = $scope.find( '[data-field-name="' + settings.itemsField + '"]' );
@@ -725,9 +733,9 @@
 		maybeSwitchPage: function( event, $field, $page, disabled ) {
 
 			var $item    = $field[ 0 ],
-			    isSwitch = $field.data( 'switch' ),
-			    value    = null,
-			    $toPage  = null;
+				isSwitch = $field.data( 'switch' ),
+				value    = null,
+				$toPage  = null;
 
 			if ( ! isSwitch ) {
 				return;
@@ -760,7 +768,7 @@
 		changeActiveTemplateClass: function( event ) {
 
 			var $this     = $( this ),
-			    $template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
+				$template = $this.closest( '.jet-form-builder__field-wrap' ).find( '.jet-form-builder__field-template' );
 
 			if ( ! $template.length ) {
 				return;
@@ -813,7 +821,7 @@
 			$( $calcFields ).each( function() {
 
 				var $this      = $( this ),
-				    calculated = null;
+					calculated = null;
 
 				JetFormBuilder.calcFields[ $this.data( 'name' ) ] = {
 					'el': $this,
@@ -830,7 +838,7 @@
 
 		initFormPager: function( $scope ) {
 			var $pages = $scope.find( '.jet-form-builder-page' ),
-			    $form  = $scope.find( '.jet-form-builder' );
+				$form  = $scope.find( '.jet-form-builder' );
 
 			if ( ! $pages.length ) {
 				return;
@@ -851,11 +859,11 @@
 		initSingleFormPage: function( $page, $form, $changedField ) {
 
 			var $button        = $page.find( '.jet-form-builder__next-page' ),
-			    $msg           = $page.find( '.jet-form-builder__next-page-msg' ),
-			    requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
-			    pageNum        = parseInt( $page.data( 'page' ), 10 ),
-			    disabled       = false,
-			    radioFields    = {};
+				$msg           = $page.find( '.jet-form-builder__next-page-msg' ),
+				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
+				pageNum        = parseInt( $page.data( 'page' ), 10 ),
+				disabled       = false,
+				radioFields    = {};
 
 			$changedField = $changedField || false;
 
@@ -950,9 +958,9 @@
 		nextFormPage: function() {
 
 			var $button     = $( this ),
-			    $fromPage   = $button.closest( '.jet-form-builder-page' ),
-			    $pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
-			    $toPage     = $fromPage.next();
+				$fromPage   = $button.closest( '.jet-form-builder-page' ),
+				$pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
+				$toPage     = $fromPage.next();
 
 			if ( ! JetFormBuilder.isFieldsValid( $pageFields ) ) {
 				return;
@@ -965,8 +973,8 @@
 		prevFormPage: function() {
 
 			var $button   = $( this ),
-			    $fromPage = $button.closest( '.jet-form-builder-page' ),
-			    $toPage   = $fromPage.prev();
+				$fromPage = $button.closest( '.jet-form-builder-page' ),
+				$toPage   = $fromPage.prev();
 
 			JetFormBuilder.switchFormPage( $fromPage, $toPage );
 		},
@@ -1047,7 +1055,7 @@
 				if ( 'SELECT' === $field[ 0 ].nodeName ) {
 
 					var selectedOption = $field.find( 'option:selected' ),
-					    calcValue      = selectedOption.data( 'calculate' );
+						calcValue      = selectedOption.data( 'calculate' );
 
 					if ( undefined !== calcValue ) {
 						val = calcValue;
@@ -1064,7 +1072,7 @@
 						if ( repeaterSettings && 'custom' === repeaterSettings.calcType ) {
 							$field.find( '.jet-form-builder-repeater__row' ).each( function() {
 								var $row   = $( this ),
-								    rowVal = JetFormBuilder.calculateValue( $row );
+									rowVal = JetFormBuilder.calculateValue( $row );
 
 								$row.data( 'value', rowVal );
 
@@ -1093,9 +1101,9 @@
 		calculateValue: function( $scope ) {
 
 			var formula  = String( $scope.data( 'formula' ) ),
-			    listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
-			    regexp   = /%([a-zA-Z0-9-_]+)%/g,
-			    func     = null;
+				listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
+				regexp   = /%([a-zA-Z0-9-_]+)%/g,
+				func     = null;
 
 			if ( typeof formula === 'undefined' ) {
 				return null;
@@ -1132,10 +1140,10 @@
 		recalcFields: function( event ) {
 
 			var $this          = $( this ),
-			    fieldName      = $this.attr( 'name' ),
-			    fieldPrecision = 2,
-			    calculated     = null,
-			    done           = false;
+				fieldName      = $this.attr( 'name' ),
+				fieldPrecision = 2,
+				calculated     = null,
+				done           = false;
 
 			if ( $this.data( 'field-name' ) ) {
 				fieldName = $this.data( 'field-name' );
@@ -1195,7 +1203,7 @@
 
 			$group.each( function() {
 				var $this       = $( this ),
-				    $checkboxes = $( '.checkboxes-group-required', $this );
+					$checkboxes = $( '.checkboxes-group-required', $this );
 
 				if ( $checkboxes.length ) {
 					var isChecked = $checkboxes.is( ':checked' );
@@ -1207,8 +1215,8 @@
 
 		requiredCheckboxGroup: function( event ) {
 			var $this       = $( event.target ),
-			    $group      = $this.closest( '.jet-form-builder__fields-group' ),
-			    $checkboxes = $( '.checkboxes-field', $group );
+				$group      = $this.closest( '.jet-form-builder__fields-group' ),
+				$checkboxes = $( '.checkboxes-field', $group );
 
 			if ( $checkboxes.length < 2 ) {
 				return;
@@ -1233,10 +1241,10 @@
 
 		updateRangeField: function( event ) {
 			var $target = $( event.target ),
-			    $wrap   = $target.closest( '.jet-form-builder__field-wrap' ),
-			    $number = $wrap.find( '.jet-form-builder__field-value-number' ),
-			    max     = $target.attr( 'max' ) || 100,
-			    val     = $target.val();
+				$wrap   = $target.closest( '.jet-form-builder__field-wrap' ),
+				$number = $wrap.find( '.jet-form-builder__field-value-number' ),
+				max     = $target.attr( 'max' ) || 100,
+				val     = $target.val();
 
 			if ( event.firstInit ) {
 				$number.text( max );
@@ -1252,11 +1260,11 @@
 		ajaxSubmitForm: function() {
 
 			var $this  = $( this ),
-			    $form  = $this.closest( '.jet-form-builder' ),
-			    formID = $form.data( 'form-id' ),
-			    data   = {
-				    action: JetFormBuilderSettings.form_action,
-			    };
+				$form  = $this.closest( '.jet-form-builder' ),
+				formID = $form.data( 'form-id' ),
+				data   = {
+					action: JetFormBuilderSettings.form_action,
+				};
 
 			if ( 'undefined' !== typeof $form[ 0 ].checkValidity && 'undefined' !== typeof $form[ 0 ].reportValidity && ! $form[ 0 ].checkValidity() ) {
 				$form[ 0 ].reportValidity();
@@ -1387,8 +1395,8 @@
 		},
 		wysiwygInit: function( closure, replace = false ) {
 			const self     = $( closure ),
-			      editorID = self.attr( 'id' ),
-			      field    = self.closest( '.jet-form-builder__field' );
+				  editorID = self.attr( 'id' ),
+				  field    = self.closest( '.jet-form-builder__field' );
 
 			if ( replace && window.tinymce && window.tinymce.get( editorID ) ) {
 				window.wp.editor.remove( editorID );
@@ -1416,5 +1424,4 @@
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	JetFormBuilder.addHandlersInit();
-
 } )( jQuery );

@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.7.1
 Requires PHP: 7.0
-Stable tag: 1.1.7
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,16 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.0**
+ - ADD: Examples (preview) for Jet Form Fields in Gutenberg
+ - ADD: Global settings for actions, additional sidebar plugins, for example `reCAPTCHA v3`
+ - ADD: The ability to use global settings in `Mailchimp`, `GetResponse` & `ActiveCampaign` actions
+ - ADD: PHP action `jet-form-builder/render/{field_type}` to control the rendering of the field
+ - ADD: JS hook `jet.fb.register.fields.controls` for registering & manage block-fields controls
+ - ADD: JS hook `jet.fb.register.plugins` for registering custom sidebar-plugins
+ - ADD: JS hook `jet.fb.register.fields` for registering custom form fields
+ - Updated: `apiVersion:2` of blocks registration in Gutenberg
 
 **1.1.7**
  - ADD: RTL compatibility to Wysiwyg Field

@@ -2,36 +2,36 @@ import {
 	conditionOperators,
 	defaultActions,
 	getRandomID,
-	newItemCondition
+	newItemCondition,
 } from "./options";
 
 const {
-	getFormFieldsBlocks
-} = JetFBActions;
+		  getFormFieldsBlocks,
+	  } = JetFBActions;
 
 const {
-	ActionModal,
-	RepeaterWithState,
-	FieldWithPreset,
-	DynamicPreset
-} = JetFBComponents;
+		  ActionModal,
+		  RepeaterWithState,
+		  FieldWithPreset,
+		  DynamicPreset,
+	  } = JetFBComponents;
 
 const { useActions } = JetFBHooks;
 
 const {
-	TextareaControl,
-	ToggleControl,
-	SelectControl,
-	Button,
-	Card,
-	CardBody,
-	DropdownMenu,
-} = wp.components;
+		  TextareaControl,
+		  ToggleControl,
+		  SelectControl,
+		  Button,
+		  Card,
+		  CardBody,
+		  DropdownMenu,
+	  } = wp.components;
 
 const {
-	useState,
-	useEffect
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 const { __ } = wp.i18n;
 
@@ -47,7 +47,7 @@ export default function PluginActions() {
 
 	const moveAction = ( fromIndex, toIndex ) => {
 
-		var item = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
+		var item         = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
 			replacedItem = JSON.parse( JSON.stringify( actions[ toIndex ] ) );
 
 		actions.splice( toIndex, 1, item );
@@ -68,8 +68,7 @@ export default function PluginActions() {
 				var newAction = JSON.parse( JSON.stringify( action ) );
 				newAction[ key ] = value;
 				return newAction;
-			}
-			else {
+			} else {
 				return action;
 			}
 		} ) );
@@ -85,7 +84,7 @@ export default function PluginActions() {
 		setEdit( false )
 	};
 
-	const actionTypes = window.jetFormActionTypes.map( function ( action ) {
+	const actionTypes = window.jetFormActionTypes.map( function( action ) {
 		return {
 			value: action.id,
 			label: action.name,
@@ -94,7 +93,7 @@ export default function PluginActions() {
 
 	var Callback = false;
 
-	for ( var i = 0; i < window.jetFormActionTypes.length; i ++ ) {
+	for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
 
 		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
 			Callback = window.jetFormActionTypes[ i ].callback;
@@ -126,6 +125,10 @@ export default function PluginActions() {
 
 	const formFields = getFormFieldsBlocks( [], '--' );
 
+	const getMergedSettings = () => {
+		return editedAction.settings[ editedAction.type ] || editedAction.settings;
+	};
+
 	return <>
 		{ actions && actions.map( ( action, index ) => {
 			return <Card
@@ -146,7 +149,7 @@ export default function PluginActions() {
 						label={ 'Edit Action' }
 						onClick={ () => {
 							setEditedAction( () => ( {
-								...action
+								...action,
 							} ) );
 						} }
 					/>
@@ -170,7 +173,7 @@ export default function PluginActions() {
 									if ( 0 !== index ) {
 										moveAction( index, index - 1 );
 									}
-								}
+								},
 							},
 							{
 								title: 'Down',
@@ -180,15 +183,15 @@ export default function PluginActions() {
 									if ( ( actions.length - 1 ) !== index ) {
 										moveAction( index, index + 1 );
 									}
-								}
+								},
 							},
 							{
 								title: 'Delete',
 								icon: 'trash',
 								onClick: () => {
 									deleteAction( index );
-								}
-							}
+								},
+							},
 						] }
 					/>
 
@@ -204,7 +207,7 @@ export default function PluginActions() {
 						type: 'send_email',
 						id: getRandomID(),
 						settings: {},
-					}
+					},
 				] );
 			} }
 		>
@@ -220,14 +223,14 @@ export default function PluginActions() {
 			onCancelClick={ closeModal }
 		>
 			{ Callback && <Callback
-				settings={ editedAction.settings[ editedAction.type ] || editedAction.settings }
+				settings={ getMergedSettings() }
 				onChange={ ( data ) => {
 					setEditedAction( prev => ( {
 						...prev,
 						settings: {
 							...prev.settings,
-							[ editedAction.type ]: data
-						}
+							[ editedAction.type ]: data,
+						},
 					} ) );
 				} }
 			/> }
@@ -249,7 +252,7 @@ export default function PluginActions() {
 					help={ {
 						helpVisible: conditions => conditions.length > 1,
 						helpSource: window.JetFormEditorData.helpForRepeaters,
-						helpKey: 'conditional_action'
+						helpKey: 'conditional_action',
 					} }
 				>
 					{ ( { currentItem, changeCurrentItem } ) => {

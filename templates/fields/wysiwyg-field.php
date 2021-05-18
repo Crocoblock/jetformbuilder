@@ -1,7 +1,11 @@
 <?php
 /**
+ * @var Base $this
  * WYSIWIG field template
  */
+
+use Jet_Form_Builder\Blocks\Render\Base;
+
 if ( empty( $args['default'] ) ) {
 	$args['default'] = '';
 }
@@ -20,7 +24,7 @@ $editor    = array(
 		'paste_remove_styles'           => true,
 		'paste_remove_styles_if_webkit' => true,
 		'paste_strip_class_attributes'  => true,
-		'toolbar1'                      => 'bold,italic,|,bullist,numlist,|,link,unlink,|,undo,redo',
+		'toolbar1'                      => 'bold,italic,|,formatselect,|,bullist,numlist,|,link,unlink,|,undo,redo',
 		'toolbar2'                      => '',
 		'toolbar3'                      => '',
 		'toolbar4'                      => ''
@@ -38,7 +42,7 @@ if ( is_rtl() ) {
 ?>
 <div class="jet-form-builder__field-wrap">
     <div <?php $this->render_attributes_string(); ?>><?php
-        wp_editor( $args['default'], $editor_id, $editor );
-    ?></div>
-    <?php echo $this->maybe_render_error( $args ); ?>
+		wp_editor( $args['default'], $editor_id, $editor );
+		?></div>
+	<?php echo $this->maybe_render_error( $args ); ?>
 </div>

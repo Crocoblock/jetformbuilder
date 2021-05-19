@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Admin\Pages;
 
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Plugin;
 
 class Settings_Page extends Base_Page {

@@ -1,19 +1,22 @@
 const { __ } = wp.i18n;
 
 const {
-	TextControl,
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+	  } = wp.components;
 
 const {
-	registerGateway,
-	gatewayLabel
-} = JetFBActions;
+		  registerGateway,
+		  gatewayLabel,
+		  globalTab,
+	  } = JetFBActions;
 
 const label = gatewayLabel( 'paypal' );
+const currentTab = globalTab( { slug: 'paypal' } );
 
 export default function PayPal( {
 									setValueInObject,
-									getNotifications
+									getNotifications,
 								} ) {
 
 	const setSetting = ( key, value ) => {
@@ -23,18 +26,34 @@ export default function PayPal( {
 		return getNotifications( 'paypal', key, '' );
 	};
 
+	const isGlobal = getNotifications( 'paypal', 'use_global', false );
+
+	const getManualOrGlobal = key => {
+		return isGlobal
+			? currentTab[ key ]
+			: getSetting( key );
+	};
+
 	return <>
+		<ToggleControl
+			key={ 'use_global' }
+			label={ __( 'Use Global Settings' ) }
+			checked={ getSetting( 'use_global' ) }
+			onChange={ newVal => setSetting( 'use_global', newVal ) }
+		/>
 		<TextControl
 			label={ label( 'client_id' ) }
 			key='paypal_client_id_setting'
-			value={ getSetting( 'client_id' ) }
+			value={ getManualOrGlobal( 'client_id' ) }
 			onChange={ newVal => setSetting( 'client_id', newVal ) }
+			disabled={ isGlobal }
 		/>
 		<TextControl
 			label={ label( 'secret' ) }
 			key='paypal_secret_setting'
-			value={ getSetting( 'secret' ) }
+			value={ getManualOrGlobal( 'secret' ) }
 			onChange={ newVal => setSetting( 'secret', newVal ) }
+			disabled={ isGlobal }
 		/>
 		<TextControl
 			label={ label( 'currency' ) }

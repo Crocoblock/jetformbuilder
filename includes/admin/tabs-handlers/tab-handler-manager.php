@@ -10,6 +10,8 @@ class Tab_Handler_Manager {
 
 	public static $instance;
 	private $_tabs = array();
+	private $_tabs_options = array();
+	private $_visible_tabs = array();
 
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
@@ -29,22 +31,44 @@ class Tab_Handler_Manager {
 			new Mailchimp_Handler(),
 			new Active_Campaign_Handler(),
 			new Get_Response_Handler(),
+			new Paypal_Handler()
 		) );
+
+		$tabs[] = new Advanced_Handler();
 
 		foreach ( $tabs as $tab ) {
 			if ( $tab instanceof Base_Handler ) {
 				$this->register_tab( $tab );
 			}
 		}
+
+		foreach ( $this->_tabs as $tab ) {
+			$this->register_hooks_for_tab( $tab );
+		}
 	}
 
-	public function register_tab( $tab ) {
+	/**
+	 * @param Base_Handler $tab
+	 */
+	public function register_tab( Base_Handler $tab ) {
+		$default_options = $tab->save_global_default();
+
+		if ( ! empty( $default_options ) && is_array( $default_options ) ) {
+			$this->save_options_tab( $tab->slug(), $tab->get_options( $default_options ) );
+		}
 		$this->_tabs[ $tab->slug() ] = $tab;
+	}
+
+	private function register_hooks_for_tab( Base_Handler $tab ) {
+		$this->_visible_tabs[ $tab->slug() ] = $tab->is_visible( $this->get_options_tab( 'advanced' ) );
 
 		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_get_request' ) );
 
 		add_filter( 'jet-form-builder/page-config/jfb-settings', function ( $page_config ) use ( $tab ) {
-			$page_config[ $tab->slug() ] = call_user_func( array( $tab, 'on_load' ) );
+			$page_config[ $tab->slug() ] = apply_filters(
+				"jet-form-builder/tab-config/{$tab->slug()}",
+				$tab->on_load()
+			);
 
 			return $page_config;
 		} );
@@ -85,6 +109,21 @@ class Tab_Handler_Manager {
 		}
 
 		return $response;
+	}
+
+	public function save_options_tab( $slug, $options ) {
+		if ( isset( $this->_tabs_options[ $slug ] ) && $this->_tabs_options[ $slug ] ) {
+			return;
+		}
+		$this->_tabs_options[ $slug ] = $options;
+	}
+
+	public function get_options_tab( $slug ) {
+		return $this->_tabs_options[ $slug ];
+	}
+
+	public function get_visible_tabs() {
+		return array( '__visible' => $this->_visible_tabs );
 	}
 
 }

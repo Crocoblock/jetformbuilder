@@ -1,56 +1,58 @@
 <template>
-	<div>
+	<section>
 		<cx-vui-input
-			:label="label.key"
+			:label="label.client_id"
 			:wrapper-css="[ 'equalwidth' ]"
 			:size="'fullwidth'"
-			v-model="key"
+			v-model="storage.client_id"
 		></cx-vui-input>
 		<cx-vui-input
 			:label="label.secret"
 			:wrapper-css="[ 'equalwidth' ]"
 			:size="'fullwidth'"
-			v-model="secret"
+			v-model="storage.secret"
 		></cx-vui-input>
-		<p class="fb-description">{{ help.apiPref }} <a :href="help.apiLink" target="_blank">{{ help.apiLinkLabel }}</a>
-		</p>
-	</div>
+	</section>
 </template>
 
 <script>
+
 import {
-	label,
 	help,
+	label,
 } from "./source";
 
 export default {
-	name: 'captcha-tab',
+	name: 'paypal',
 	props: {
 		incoming: {
 			type: Object,
-			default: {},
+			default() {
+				return {};
+			},
 		},
 	},
 	data() {
 		return {
 			label, help,
-			key: '',
-			secret: '',
+			storage: {},
 		};
 	},
 	created() {
-		this.key = this.incoming.key || '';
-		this.secret = this.incoming.secret || '';
+		this.storage = JSON.parse( JSON.stringify( this.incoming ) );
+
+		jfbEventBus.$on( 'change-tab-advanced', this.onChangeTab.bind( this ) )
 	},
 	methods: {
+		onChangeTab( value ) {
+			jfbEventBus.$emit( 'change-show', this.$options.name, Boolean( value.use_gateways ) );
+		},
 		getRequestOnSave() {
 			return {
-				data: {
-					secret: this.secret,
-					key: this.key,
-				},
+				data: { ...this.storage },
 			};
 		},
 	},
 }
+
 </script>

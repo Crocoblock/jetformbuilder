@@ -16,27 +16,30 @@
 			@input="changeVal( 'enable_test_mode', $event )"
 		></cx-vui-switcher>
 		<template v-if="storage.use_gateways">
-			<CxVuiCollapseMini
-				v-for="( tab, index ) in gateways"
-				:desc="tab.desc || ''"
-				:label="tab.title"
-				:key="tab.component.name"
-			>
-				<keep-alive>
-					<component
-						v-bind:is="tab.component"
-						ref="gateways"
-						:incoming="getIncoming( tab.component.name )"
-					/>
-				</keep-alive>
-				<cx-vui-button
-					button-style="accent"
-					:loading="loadingGateways[ tab.component.name ]"
-					@click="onSaveGateway( index, tab.component.name )"
+			<div class="cx-vui-inner-panel">
+				<CxVuiCollapseMini
+					with-panel
+					v-for="( tab, index ) in gateways"
+					:desc="tab.desc || ''"
+					:label="tab.title"
+					:key="tab.component.name"
 				>
-					<span slot="label">Save</span>
-				</cx-vui-button>
-			</CxVuiCollapseMini>
+					<keep-alive>
+						<component
+							v-bind:is="tab.component"
+							ref="gateways"
+							:incoming="getIncoming( tab.component.name )"
+						/>
+					</keep-alive>
+					<cx-vui-button
+						button-style="accent"
+						:loading="loadingGateways[ tab.component.name ]"
+						@click="onSaveGateway( index, tab.component.name )"
+					>
+						<span slot="label">Save</span>
+					</cx-vui-button>
+				</CxVuiCollapseMini>
+			</div>
 		</template>
 	</section>
 </template>
@@ -57,7 +60,8 @@ const gatewaysTabs = applyFilters( 'jet.fb.register.gateways', [
 	paypal,
 ] );
 
-let requestFunc = () => {};
+let requestFunc = () => {
+};
 
 export default {
 	name: 'payments-gateways',

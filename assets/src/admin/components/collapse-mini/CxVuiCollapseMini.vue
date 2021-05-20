@@ -1,5 +1,6 @@
 <template>
 	<div :class="{
+		'cx-vui-panel': withPanel,
 		'cx-vui-collapse-mini__item': true,
 		'cx-vui-collapse-mini__item--active': isActive,
 	}">
@@ -36,22 +37,26 @@
 export default {
 	name: 'cx-vui-collapse-mini',
 	props: {
+		withPanel: {
+			type: Boolean,
+			default: false,
+		},
 		initialActive: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		label: {
 			type: String,
-			default: 'Collapse Mini'
+			default: 'Collapse Mini',
 		},
 		desc: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 	data() {
 		return {
-			isActive: false
+			isActive: false,
 		};
 	},
 	created() {
@@ -60,7 +65,7 @@ export default {
 	methods: {
 		collapse() {
 			this.isActive = ! this.isActive;
-		}
-	}
+		},
+	},
 }
 </script>

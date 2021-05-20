@@ -11,7 +11,6 @@ class Tab_Handler_Manager {
 	public static $instance;
 	private $_tabs = array();
 	private $_tabs_options = array();
-	private $_visible_tabs = array();
 
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
@@ -22,7 +21,8 @@ class Tab_Handler_Manager {
 	}
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_tabs' ), 999 );
+		//add_action( 'init', array( $this, 'register_tabs' ), 999 );
+		$this->register_tabs();
 	}
 
 	public function register_tabs() {
@@ -31,10 +31,10 @@ class Tab_Handler_Manager {
 			new Mailchimp_Handler(),
 			new Active_Campaign_Handler(),
 			new Get_Response_Handler(),
-			new Paypal_Handler()
+			new Paypal_Handler(),
+			new Payments_Gateways_Handler()
 		) );
 
-		$tabs[] = new Advanced_Handler();
 
 		foreach ( $tabs as $tab ) {
 			if ( $tab instanceof Base_Handler ) {
@@ -60,8 +60,6 @@ class Tab_Handler_Manager {
 	}
 
 	private function register_hooks_for_tab( Base_Handler $tab ) {
-		$this->_visible_tabs[ $tab->slug() ] = $tab->is_visible( $this->get_options_tab( 'advanced' ) );
-
 		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_get_request' ) );
 
 		add_filter( 'jet-form-builder/page-config/jfb-settings', function ( $page_config ) use ( $tab ) {
@@ -74,6 +72,11 @@ class Tab_Handler_Manager {
 		} );
 	}
 
+	/**
+	 * @param $slug
+	 *
+	 * @return Base_Handler
+	 */
 	public function tab( $slug ) {
 		$this->isset_tab( $slug );
 
@@ -122,8 +125,5 @@ class Tab_Handler_Manager {
 		return $this->_tabs_options[ $slug ];
 	}
 
-	public function get_visible_tabs() {
-		return array( '__visible' => $this->_visible_tabs );
-	}
 
 }

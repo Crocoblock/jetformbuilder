@@ -116,7 +116,7 @@ class Text_Field extends Base {
 		wp_enqueue_script(
 			'jet-form-builder-inputmask',
 			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-			array( 'jquery', 'jet-form-builder-frontend-forms' ),
+			array( 'jquery' ),
 			Plugin::instance()->get_version(),
 			true
 		);

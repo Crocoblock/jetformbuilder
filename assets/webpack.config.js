@@ -26,6 +26,7 @@ module.exports = {
 			'@': path.resolve(__dirname, 'src/editor'),
 			'@helpers': path.resolve(__dirname, 'src/editor/helpers'),
 			'@components': path.resolve(__dirname, 'src/editor/components'),
+			'@admin': path.resolve(__dirname, 'src/admin')
 		}
 	},
 	externals: {

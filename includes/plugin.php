@@ -83,6 +83,7 @@ class Plugin {
 	 */
 	public function init_components() {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
+		$this->maybe_enable_gateways();
 
 		$this->post_type    = new Post_Type();
 		$this->blocks       = new Blocks\Manager();
@@ -94,7 +95,6 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
-		Tab_Handler_Manager::instance();
 
 
 		if ( is_admin() ) {
@@ -112,6 +112,21 @@ class Plugin {
 		$this->framework = new CX_Loader( array(
 			$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
 		) );
+	}
+
+	public function maybe_enable_gateways() {
+		Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->save_global_options();
+		$gateways = Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->get_global_options();
+
+		if ( isset( $gateways['enable_test_mode'] ) ) {
+			add_filter( 'jet-form-builder/gateways/paypal/sandbox-mode', function () use ( $gateways ) {
+				return $gateways['enable_test_mode'];
+			} );
+		}
+
+		if ( isset( $gateways['use_gateways'] ) ) {
+			$this->allow_gateways = $gateways['use_gateways'];
+		}
 	}
 
 

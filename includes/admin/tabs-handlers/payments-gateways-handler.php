@@ -4,17 +4,10 @@
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
 
-class Advanced_Handler extends Base_Handler {
+class Payments_Gateways_Handler extends Base_Handler {
 
 	public function slug(): string {
-		return 'advanced';
-	}
-
-	public function save_global_default() {
-		return array(
-			'use_gateways'     => false,
-			'enable_test_mode' => false
-		);
+		return 'payments-gateways';
 	}
 
 	public function on_get_request(): void {
@@ -34,8 +27,9 @@ class Advanced_Handler extends Base_Handler {
 	}
 
 	public function on_load(): array {
-		$options = $this->get_global_options();
-
-		return array_merge( $options, Tab_Handler_Manager::instance()->get_visible_tabs() );
+		return array_merge( array(
+			'use_gateways'     => false,
+			'enable_test_mode' => false,
+		), $this->get_global_options() );
 	}
 }

@@ -45,6 +45,9 @@ class Controller extends Base_Gateway {
 			'currency'  => array(
 				'label' => __( 'Currency Code', 'jet-form-builder' )
 			),
+			'use_global' => array(
+				'label' => __( 'Use Global Settings', 'jet-form-builder' )
+			)
 		);
 	}
 

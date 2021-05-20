@@ -4,6 +4,7 @@
 			name="use_gateways"
 			:wrapper-css="[ 'equalwidth' ]"
 			:label="label.use_gateways"
+			:description="help.use_gateways"
 			:value="storage.use_gateways"
 			@input="changeVal( 'use_gateways', $event )"
 		></cx-vui-switcher>
@@ -11,6 +12,7 @@
 			v-if="storage.use_gateways"
 			name="enable_test_mode"
 			:wrapper-css="[ 'equalwidth' ]"
+			:description="help.enable_test_mode"
 			:label="label.enable_test_mode"
 			:value="storage.enable_test_mode"
 			@input="changeVal( 'enable_test_mode', $event )"

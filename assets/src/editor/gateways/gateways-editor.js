@@ -1,42 +1,38 @@
 import PayPal from "./paypal";
 
 const {
-	actionByTypeList,
-	fromLocalizeHelper,
-	getFormFieldsBlocks,
-	gatewayAttr,
-	renderGateway,
-	gatewayActionAttributes,
-} = JetFBActions;
+		  actionByTypeList,
+		  fromLocalizeHelper,
+		  getFormFieldsBlocks,
+		  gatewayAttr,
+		  renderGateway,
+		  gatewayActionAttributes,
+	  } = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-	TextareaControl,
-	CheckboxControl,
-	SelectControl,
-	BaseControl,
-	RadioControl,
-} = wp.components;
+		  TextareaControl,
+		  CheckboxControl,
+		  SelectControl,
+		  BaseControl,
+		  RadioControl,
+	  } = wp.components;
 
 const {
-	useState,
-	useEffect
-} = wp.element;
-
-const parseActions = actions => {
-	return actions.filter( action => ! ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) );
-};
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 export default function GatewaysEditor( {
 											gatewaysArgs,
 											activeActions,
 											onUnMount,
 											isSaveAction,
-											onSaveItems
+											onSaveItems,
 										} ) {
 
-	const availableActions = parseActions( activeActions );
+	const availableActions = activeActions.filter( action => action.type !== 'redirect_to_page' );
 
 	const gatewaysData = gatewayAttr();
 	const label = gatewayAttr( 'labels' );
@@ -96,7 +92,6 @@ export default function GatewaysEditor( {
 		return getNotifications( 'notifications_before', id, actionDefault );
 	};
 
-
 	const setNotificationsFailed = ( type, newValue ) => {
 		setValueInObject( 'notifications_failed', type, newValue );
 	};
@@ -130,8 +125,7 @@ export default function GatewaysEditor( {
 				onSaveItems( gateway );
 			}
 			onUnMount();
-		}
-		else if ( false === isSaveAction ) {
+		} else if ( false === isSaveAction ) {
 			onUnMount();
 		}
 	}, [ isSaveAction ] );
@@ -147,22 +141,17 @@ export default function GatewaysEditor( {
 				key="before_payment_base_control"
 			>
 				<div className={ 'checkboxes-row' }>
-					{ availableActions.map( ( action, index ) => {
-						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
-							return;
-						}
-						return <CheckboxControl
-							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.id + index }` }
-							checked={ getNotificationsBefore( action.id ).active }
-							label={ actionLabel( action.type ) }
-							help={ gatewayActionAttributes( action ) }
-							onChange={ active => setNotificationsBefore( action.id, {
-								active,
-								type: action.type
-							} ) }
-						/>;
-					} ) }
+					{ activeActions.map( ( action, index ) => <CheckboxControl
+						className={ 'jet-forms-checkbox-field' }
+						key={ `place_holder_block_${ action.id + index }` }
+						checked={ getNotificationsBefore( action.id ).active }
+						label={ actionLabel( action.type ) }
+						help={ gatewayActionAttributes( action ) }
+						onChange={ active => setNotificationsBefore( action.id, {
+							active,
+							type: action.type,
+						} ) }
+					/> ) }
 				</div>
 			</BaseControl>
 			<BaseControl
@@ -170,19 +159,17 @@ export default function GatewaysEditor( {
 				key="success_payment_base_control"
 			>
 				<div>
-					{ availableActions.map( ( action, index ) => {
-						return <CheckboxControl
-							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.id + index }` }
-							checked={ getNotificationsSuccess( action.id ).active }
-							label={ actionLabel( action.type ) }
-							help={ gatewayActionAttributes( action ) }
-							onChange={ active => setNotificationsSuccess( action.id, {
-								active,
-								type: action.type
-							} ) }
-						/>;
-					} ) }
+					{ availableActions.map( ( action, index ) => <CheckboxControl
+						className={ 'jet-forms-checkbox-field' }
+						key={ `place_holder_block_${ action.id + index }` }
+						checked={ getNotificationsSuccess( action.id ).active }
+						label={ actionLabel( action.type ) }
+						help={ gatewayActionAttributes( action ) }
+						onChange={ active => setNotificationsSuccess( action.id, {
+							active,
+							type: action.type,
+						} ) }
+					/> ) }
 				</div>
 			</BaseControl>
 			<BaseControl
@@ -190,22 +177,17 @@ export default function GatewaysEditor( {
 				key="failed_payment_base_control"
 			>
 				<div>
-					{ availableActions.map( ( action, index ) => {
-						if ( action.type === 'insert_post' || action.type === 'redirect_to_page' ) {
-							return;
-						}
-						return <CheckboxControl
-							className={ 'jet-forms-checkbox-field' }
-							key={ `place_holder_block_${ action.id + index }` }
-							checked={ getNotificationsFailed( action.id ).active }
-							label={ actionLabel( action.type ) }
-							help={ gatewayActionAttributes( action ) }
-							onChange={ active => setNotificationsFailed( action.id, {
-								active,
-								type: action.type
-							} ) }
-						/>;
-					} ) }
+					{ availableActions.map( ( action, index ) => <CheckboxControl
+						className={ 'jet-forms-checkbox-field' }
+						key={ `place_holder_block_${ action.id + index }` }
+						checked={ getNotificationsFailed( action.id ).active }
+						label={ actionLabel( action.type ) }
+						help={ gatewayActionAttributes( action ) }
+						onChange={ active => setNotificationsFailed( action.id, {
+							active,
+							type: action.type,
+						} ) }
+					/> ) }
 				</div>
 			</BaseControl>
 		</> }
@@ -222,7 +204,7 @@ export default function GatewaysEditor( {
 				onChange={ newVal => {
 					setGateway( prevArgs => ( {
 						...prevArgs,
-						action_order: Number( newVal )
+						action_order: Number( newVal ),
 					} ) );
 				} }
 			/>
@@ -236,7 +218,7 @@ export default function GatewaysEditor( {
 			onChange={ newVal => {
 				setGateway( prevArgs => ( {
 					...prevArgs,
-					price_field: newVal
+					price_field: newVal,
 				} ) );
 			} }
 			options={ formFields }
@@ -271,7 +253,7 @@ export default function GatewaysEditor( {
 			onChange={ value => {
 				setGateway( prevArgs => ( {
 					...prevArgs,
-					use_success_redirect: value
+					use_success_redirect: value,
 				} ) );
 			} }
 		/> }

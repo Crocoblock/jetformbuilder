@@ -9,6 +9,12 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
 
+/**
+ * @method static Gateway_Manager instance()
+ *
+ * Class Gateway_Manager
+ * @package Jet_Form_Builder\Gateways
+ */
 class Gateway_Manager {
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';

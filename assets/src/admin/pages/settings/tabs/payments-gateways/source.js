@@ -1,7 +1,7 @@
 const { __ } = wp.i18n;
 
 const label = {
-	use_gateways: __( 'Use Gateways', 'jet-form-builder' ),
+	use_gateways: __( 'Enable Gateways', 'jet-form-builder' ),
 	enable_test_mode: __( 'Enable Test Mode', 'jet-form-builder' ),
 };
 

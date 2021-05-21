@@ -15,6 +15,7 @@ import SettingsPage from "./pages/settings/SettingsPage";
 
 	pages.forEach( page => {
 		const pageName = ( pref + page.pageName );
+
 		if ( window.pagenow === pageName ) {
 			new Vue( {
 				el: '#' + pref + page.pageName,

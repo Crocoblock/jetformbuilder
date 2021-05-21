@@ -8,7 +8,14 @@ use Jet_Form_Builder\Plugin;
 
 class Pages_Manager {
 
+	/**
+	 * @var array
+	 */
 	private $pages = array();
+
+	/**
+	 * @var
+	 */
 	private $current_page;
 
 	/**
@@ -26,6 +33,11 @@ class Pages_Manager {
 		}
 	}
 
+	/**
+	 * Register admin pages
+	 *
+	 * @param $pages
+	 */
 	public function register_pages( $pages ) {
 		foreach ( $pages as $page ) {
 			$this->pages[ $page->slug() ] = $page;
@@ -49,6 +61,9 @@ class Pages_Manager {
 
 	}
 
+	/**
+	 * Set current admin page
+	 */
 	public function set_current_page(): void {
 		$this->current_page = $this->pages[ esc_attr( $_GET['page'] ) ];
 	}
@@ -71,14 +86,19 @@ class Pages_Manager {
 		$this->current_page->assets();
 	}
 
+	/**
+	 * @param $page_slug
+	 *
+	 * @return string
+	 */
 	public function get_url_of( $page_slug ): string {
+
 		if ( ! isset( $this->pages[ $page_slug ] ) ) {
 			return '';
 		}
 
 		return $this->pages[ $page_slug ]->get_url();
 	}
-
 
 	/**
 	 * Check if passed page is currently displayed
@@ -88,6 +108,7 @@ class Pages_Manager {
 	 * @return bool
 	 */
 	public function is_page_now( Base_Page $page ): bool {
+
 		if ( ! $this->is_dashboard_page() ) {
 			return false;
 		}

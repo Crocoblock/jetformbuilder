@@ -40,13 +40,8 @@ export default {
 	},
 	created() {
 		this.storage = JSON.parse( JSON.stringify( this.incoming ) );
-
-		jfbEventBus.$on( 'change-tab-advanced', this.onChangeTab.bind( this ) )
 	},
 	methods: {
-		onChangeTab( value ) {
-			jfbEventBus.$emit( 'change-show', this.$options.name, Boolean( value.use_gateways ) );
-		},
 		getRequestOnSave() {
 			return {
 				data: { ...this.storage },

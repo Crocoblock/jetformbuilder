@@ -1,0 +1,52 @@
+.jet-fb-settings-page {
+	p.fb-description {
+		font-size: 13px;
+		color: #7b7e81;
+		margin: 0 0 1.5rem 0;
+	}
+
+	.cx-vui-collapse-mini {
+		&__wrap {
+			padding: 0 0 20px;
+		}
+		&__item {
+			&:first-child {
+				border-top: 1px solid #ECECEC;
+			}
+			&:last-child {
+				margin-bottom: unset;
+			}
+			&--active svg {
+				transform: rotate(90deg);
+			}
+			border-bottom: 1px solid #ECECEC;
+		}
+		&__header {
+			padding: 1.2rem;
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			&-label {
+				font-weight: 500;
+				font-size: 15px;
+				line-height: 23px;
+				color: #007CBA;
+				margin: 0 25px 0 0;
+				display: flex;
+				align-items: center;
+			}
+			&-desc {
+				font-size: 15px;
+				line-height: 23px;
+				color: #7B7E81;
+			}
+			&-label svg {
+				margin: -1px 8px 0 0;
+				transition: 0.3s;
+			}
+		}
+		&__content {
+			padding: 0 1.5rem 1.5rem;
+		}
+	}
+}

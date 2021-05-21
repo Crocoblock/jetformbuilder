@@ -8,28 +8,28 @@
 				layout="vertical"
 			>
 				<cx-vui-tabs-panel
-					v-for="( tab, index ) in activeTabs"
-					:name="tab.module.component.name"
-					:label="tab.module.title"
-					:key="tab.module.component.name"
+					v-for="( { displayButton = true, ...tab }, index ) in tabs"
+					:name="tab.component.name"
+					:label="tab.title"
+					:key="tab.component.name"
 				>
 					<keep-alive>
 						<component
-							v-bind:is="tab.module.component"
-							:incoming="getIncoming( tab.module.component.name )"
+							v-bind:is="tab.component"
+							:incoming="getIncoming( tab.component.name )"
 							ref="tabComponents"
 						/>
 					</keep-alive>
 					<cx-vui-button
+						v-if="displayButton"
 						button-style="accent"
-						:loading="loadingTab"
-						@click="onSaveTab( index, tab.module.component.name )"
+						:loading="loadingTab[ tab.component.name ]"
+						@click="onSaveTab( index, tab.component.name )"
 					>
 						<template #label>
 							<span>Save</span>
 						</template>
 					</cx-vui-button>
-
 				</cx-vui-tabs-panel>
 			</cx-vui-tabs>
 		</div>
@@ -41,16 +41,16 @@ import * as captcha from './tabs/captcha'
 import * as mailchimp from './tabs/mailchimp'
 import * as getResponse from './tabs/getresponse'
 import * as activecampaign from './tabs/activecampaign'
-import * as advanced from './tabs/advanced'
-import * as paypal from './tabs/paypal';
+import * as paymentGateways from './tabs/payments-gateways'
+import SaveTabByAjax from '@admin/mixins/SaveTabByAjax';
+import GetIncoming from '@admin/mixins/GetIncoming';
 
 const { applyFilters, doAction } = wp.hooks;
 
 window.jfbEventBus = new Vue();
 
 const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
-	advanced,
-	paypal,
+	paymentGateways,
 	captcha,
 	mailchimp,
 	getResponse,
@@ -62,95 +62,22 @@ export default {
 	data() {
 		return {
 			activeTabSlug: settingTabs[ 0 ].component.name,
-			tabs: [],
-			loadingTab: false,
+			tabs: settingTabs,
+			loadingTab: {},
 		};
 	},
+	mixins: [ SaveTabByAjax, GetIncoming ],
 	created() {
-		const { __visible: enables } = this.getIncoming( 'advanced' );
-
-		jfbEventBus.$on( 'change-show', this.onChangeShow.bind( this ) )
-
-		this.tabs = settingTabs.map( tab => {
-			return { module: tab, visible: enables[ tab.component.name ] || true }
+		jfbEventBus.$on( 'request-state', props => {
+			const { state, slug } = props;
+			this.$set( this.loadingTab, slug, state === 'begin' );
 		} );
 	},
-	computed: {
-		activeTabs() {
-			return this.tabs.filter( ( { visible } ) => visible );
-		},
-	},
 	methods: {
-		onChangeShow( slug, isVisibleTab ) {
-			this.tabs.forEach( ( tab, index ) => {
-				if ( slug === tab.module.component.name ) {
-					this.$set( this.tabs[ index ], 'visible', isVisibleTab );
-				}
-			} );
-		},
 		onSaveTab( indexTab, tabSlug ) {
 			const currentTab = this.$refs.tabComponents[ indexTab ];
-			const self = this;
 
-			const ajaxRequest = {
-				...{
-					url: window.ajaxurl,
-					type: 'POST',
-					dataType: 'json',
-				},
-				...currentTab.getRequestOnSave(),
-			};
-			ajaxRequest.data = {
-				action: `jet_fb_save_tab__${ tabSlug }`,
-				...ajaxRequest.data,
-			};
-
-			self.loadingTab = true;
-
-			jQuery.ajax( ajaxRequest )
-				.done( function( response ) {
-
-					if ( 'function' === typeof currentTab.onSaveDone ) {
-						currentTab.onSaveDone( response );
-					} else {
-						if ( response.success ) {
-							self.$CXNotice.add( {
-								message: response.data.message,
-								type: 'success',
-								duration: 5000,
-							} );
-							if ( 'function' === typeof currentTab.onSaveDoneSuccess ) {
-								currentTab.onSaveDoneSuccess( response );
-							}
-						} else {
-							self.$CXNotice.add( {
-								message: response.data.message,
-								type: 'error',
-								duration: 5000,
-							} );
-							if ( 'function' === typeof currentTab.onSaveDoneError ) {
-								currentTab.onSaveDoneError( response );
-							}
-						}
-					}
-
-					self.loadingTab = false;
-				} )
-				.fail( function( jqXHR, textStatus, errorThrown ) {
-					if ( 'function' === typeof currentTab.onSaveFail ) {
-						currentTab.onSaveFail( jqXHR, textStatus, errorThrown );
-					} else {
-						self.$CXNotice.add( {
-							message: errorThrown,
-							type: 'error',
-							duration: 5000,
-						} );
-					}
-					self.loadingTab = false;
-				} );
-		},
-		getIncoming( tabName ) {
-			return window.JetFBPageConfig[ tabName ];
+			this.saveByAjax( currentTab, tabSlug );
 		},
 	},
 }

@@ -37,7 +37,7 @@ export default function PayPal( {
 	return <>
 		<ToggleControl
 			key={ 'use_global' }
-			label={ __( 'Use Global Settings' ) }
+			label={ label( 'use_global' ) }
 			checked={ getSetting( 'use_global' ) }
 			onChange={ newVal => setSetting( 'use_global', newVal ) }
 		/>

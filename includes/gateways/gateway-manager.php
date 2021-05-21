@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
@@ -58,11 +59,10 @@ class Gateway_Manager {
 	public function before_send_actions( $action_handler ) {
 		$gateways = $this->get_form_gateways_by_id( $action_handler->form_id );
 
-		$this->save_gateways_form_data( $gateways );
-
 		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
 			return;
 		}
+		$this->save_gateways_form_data( $gateways );
 
 		$controller = $this->get_gateway_controller( $gateways['gateway'] );
 
@@ -74,13 +74,11 @@ class Gateway_Manager {
 	}
 
 	public function after_send_actions( $action_handler ) {
-		$gateways = $this->gateways_form_data;
-
-		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
+		if ( empty( $this->gateways_form_data ) ) {
 			return;
 		}
 
-		$controller = $this->get_gateway_controller( $gateways['gateway'] );
+		$controller = $this->get_gateway_controller( $this->gateways_form_data['gateway'] );
 
 		if ( $controller ) {
 			$controller->after_actions( $action_handler );
@@ -92,6 +90,12 @@ class Gateway_Manager {
 	}
 
 	public function save_gateways_form_data( $data ) {
+		$id = $data['gateway'];
+
+		if ( isset( $data[ $id ]['use_global'] ) && $data[ $id ]['use_global'] ) {
+			$data[ $id ] = array_merge( $data[ $id ], Tab_Handler_Manager::instance()->tab( $id )->on_load() );
+		}
+
 		$this->gateways_form_data = $data;
 	}
 
@@ -127,7 +131,6 @@ class Gateway_Manager {
 
 	public function on_has_gateway_request() {
 		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
-
 		$controller = $this->get_gateway_controller( $gateway_type );
 
 		if ( ! ( $controller instanceof Base_Gateway ) ) {
@@ -146,7 +149,7 @@ class Gateway_Manager {
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			//
+			do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
 		}
 	}
 

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
@@ -77,9 +78,7 @@ abstract class Base_Gateway {
 	 * @return [type] [description]
 	 */
 	public function on_success_payment() {
-		if ( ! $this->set_gateway_data_on_result() ) {
-			return;
-		}
+		$this->set_gateway_data_on_result();
 		$this->data['date'] = date_i18n( 'F j, Y, H:i' );
 
 		$this->data['gateway'] = $this->get_name();
@@ -202,7 +201,13 @@ abstract class Base_Gateway {
 	}
 
 	final public function set_form_gateways_meta() {
-		$this->gateways_meta = $this->retrieve_gateway_meta();
+		$data = $this->retrieve_gateway_meta();
+
+		if ( isset( $data[ $this->get_id() ]['use_global'] ) && $data[ $this->get_id() ]['use_global'] ) {
+			$data[ $this->get_id() ] = array_merge( $data[ $this->get_id() ], Tab_Handler_Manager::instance()->tab( $this->get_id() )->on_load() );
+		}
+
+		$this->gateways_meta = $data;
 
 		return $this;
 	}

@@ -12,7 +12,7 @@ const help = {
 		'jet-form-builder',
 	),
 	use_gateways: __(
-		`Activate payment getaways for the forms. This option takes precedence over the 
+		`Activate payment gateways for the forms. This option takes precedence over the 
 		<code>jet-form-builder/allow-gateways</code> filter`,
 		'jet-form-builder',
 	),

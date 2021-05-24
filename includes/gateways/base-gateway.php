@@ -99,11 +99,13 @@ abstract class Base_Gateway {
 	}
 
 	public function get_status_on_payment( $status ) {
-		if ( in_array( $status, $this->failed_statuses() ) ) {
-			return Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
+		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
+			$message = Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
+		} else {
+			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
 		}
 
-		return Manager::dynamic_success( $this->get_meta_message( 'success' ) );
+		return stripcslashes( $message );
 	}
 
 	public function get_meta_message( $type ) {

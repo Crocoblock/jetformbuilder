@@ -155,7 +155,7 @@ class Gateway_Manager {
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
 		}
 	}
 

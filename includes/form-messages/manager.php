@@ -92,8 +92,11 @@ class Manager {
 		/**
 		 * Return dynamic message
 		 */
+
 		if ( $this->is_dynamic_message( $message ) ) {
-			return $message[1];
+			unset( $message[0] );
+
+			return implode('|', $message );
 		}
 
 		if ( $this->isset_message_type( $message[0] ) ) {
@@ -102,7 +105,7 @@ class Manager {
 				: $this->_types[ $message[0] ];
 		}
 
-		return '';
+		return 'Undefined error';
 	}
 
 	public function get_messages() {

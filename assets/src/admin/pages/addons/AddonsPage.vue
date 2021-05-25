@@ -99,11 +99,15 @@ export default {
 			let slug      = data.slug,
 				addonData = data.addonData;
 
+			console.log(data);
+			console.log(slug);
+			console.log(addonData);
+
 			this.allAddons[ slug ] = Object.assign( {}, this.allAddons[ slug ], addonData );
 			this.proccesingState = true;
 
 			setTimeout( function() {
-				window.location.reload();
+			//	window.location.reload();
 			}, 1000 );
 		},
 
@@ -205,3 +209,7 @@ export default {
 	},
 }
 </script>
+
+<style lang="sass">
+
+</style>

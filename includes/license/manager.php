@@ -197,6 +197,32 @@ class Manager {
 	}
 
 	/**
+	 * @param false $plugin_slug
+	 *
+	 * @return false|string
+	 */
+	public function package_url( $plugin_slug = false ) {
+
+		$license_key = $this->get_license_key();
+
+		if ( ! $license_key ) {
+			return false;
+		}
+
+		$plugin_slug = explode('/', $plugin_slug )[0];
+
+		return add_query_arg(
+			array(
+				'ct_api_action' => 'get_plugin',
+				'license'       => $license_key,
+				'slug'          => $plugin_slug,
+				'url'           => urlencode( $this->get_site_url() ),
+			),
+			$this->api_url
+		);
+	}
+
+	/**
 	 * [get_plugin_license_key description]
 	 * @param  boolean $setting [description]
 	 * @param  boolean $value   [description]
@@ -398,9 +424,342 @@ class Manager {
 	}
 
 	/**
+	 * Plugin Action Handler
+	 */
+	public function plugin_action() {
+
+		$data = ( ! empty( $_POST['data'] ) ) ? $_POST['data'] : false;
+
+		if ( ! $data ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		$action  = $data['action'];
+		$plugin  = $data['plugin'];
+
+		switch ( $action ) {
+
+			case 'activate':
+				$this->activate_plugin( $plugin );
+				break;
+
+			case 'deactivate':
+				$this->deactivate_plugin( $plugin );
+				break;
+
+			case 'install':
+				$this->install_plugin( $plugin );
+				break;
+
+			case 'update':
+				//$this->update_plugin( $plugin );
+				break;
+		}
+
+		wp_send_json( [
+			'success' => true,
+			'message' => __( 'Success', 'jet-form-builder' ),
+			'data'    => [],
+		] );
+	}
+
+	/**
+	 * @param $plugin_file
+	 *
+	 * @return array
+	 */
+	public function get_plugin_data( $plugin_file ) {
+
+		if ( ! $this->user_installed_plugins ) {
+
+			if ( ! function_exists( 'get_plugins' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+
+			$this->user_installed_plugins = get_plugins();
+		}
+
+		$plugin_data = $this->user_installed_plugins[ $plugin_file ];
+
+		$current_version = $plugin_data['Version'];
+
+		$latest_version = $this->get_latest_version( $plugin_file );
+
+		return [
+			'version'         => $latest_version,
+			'currentVersion'  => $current_version,
+			'updateAvaliable' => version_compare( $latest_version, $current_version, '>' ),
+			'isActivated'     => is_plugin_active( $plugin_file ),
+			'isInstalled'     => true,
+		];
+	}
+
+	/**
+	 * @param $plugin_file
+	 */
+	public function activate_plugin( $plugin_file ) {
+
+		$status = [];
+
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		$activate = null;
+
+		if ( ! is_plugin_active( $plugin_file ) ) {
+			$activate = activate_plugin( $plugin_file );
+		}
+
+		if ( is_wp_error( $activate ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => $activate->get_error_message(),
+				'data'    => [],
+			] );
+		}
+
+		wp_send_json( [
+			'success'  => true,
+			'message' => __( 'The plugin has been activated', 'jet-form-builder' ),
+			'data'    => $this->get_plugin_data( $plugin_file ),
+		] );
+	}
+
+	/**
+	 * @param $plugin_file
+	 */
+	public function deactivate_plugin( $plugin_file ) {
+
+		$status = [];
+
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json( [
+				'success' => false,
+				'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		$deactivate_handler = null;
+
+		if ( is_plugin_active( $plugin_file ) ) {
+			$deactivate_handler = deactivate_plugins( $plugin_file );
+		}
+
+		if ( is_wp_error( $deactivate_handler ) ) {
+			wp_send_json( [
+				'success' => false,
+				'message' => $deactivate_handler->get_error_message(),
+				'data'    => [],
+			] );
+		}
+
+		wp_send_json( [
+			'success'  => true,
+			'message' => __( 'The plugin has been deactivated', 'jet-form-builder' ),
+			'data'    => $this->get_plugin_data( $plugin_file ),
+		] );
+	}
+
+	/**
+	 * @param $plugin_file
+	 * @param false $plugin_url
+	 */
+	public function install_plugin( $plugin_file, $plugin_url = false ) {
+
+		$status = [];
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		if ( ! $plugin_url ) {
+			$package = $this->package_url( $plugin_file );
+		} else {
+			$package = $plugin_url;
+		}
+
+		include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+
+		$skin     = new \WP_Ajax_Upgrader_Skin();
+		$upgrader = new \Plugin_Upgrader( $skin );
+		$result   = $upgrader->install( $package );
+
+		if ( is_wp_error( $result ) ) {
+			$status['errorCode']    = $result->get_error_code();
+			$status['errorMessage'] = $result->get_error_message();
+
+			wp_send_json( [
+				'success' => false,
+				'message' => $result->get_error_message(),
+				'data'    => [],
+			] );
+		} elseif ( is_wp_error( $skin->result ) ) {
+			$status['errorCode']    = $skin->result->get_error_code();
+			$status['errorMessage'] = $skin->result->get_error_message();
+
+			wp_send_json( [
+				'success' => false,
+				'message' => $skin->result->get_error_message(),
+				'data'    => [],
+			] );
+		} elseif ( $skin->get_errors()->get_error_code() ) {
+			$status['errorMessage'] = $skin->get_error_messages();
+
+			wp_send_json( [
+				'success' => false,
+				'message' => $skin->get_error_messages(),
+				'data'    => [],
+			] );
+		} elseif ( is_null( $result ) ) {
+			global $wp_filesystem;
+
+			$status['errorMessage'] = 'Unable to connect to the filesystem. Please confirm your credentials.';
+
+			// Pass through the error from WP_Filesystem if one was raised.
+			if ( $wp_filesystem instanceof \WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+				$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
+			}
+
+			wp_send_json( [
+				'success' => false,
+				'message' => $status['errorMessage'],
+				'data'    => [],
+			] );
+		}
+
+		wp_send_json( [
+			'success' => true,
+			'message' => __( 'The plugin has been Installed', 'jet-form-builder' ),
+			'data'    => $this->get_plugin_data( $plugin_file ),
+		] );
+	}
+
+	/**
+	 * @param $plugin_file
+	 */
+	public function update_plugin( $plugin_file ) {
+
+		$plugin = plugin_basename( sanitize_text_field( wp_unslash( $plugin_file ) ) );
+		$slug   = dirname( $plugin );
+
+		$status = [
+			'update'     => 'plugin',
+			'slug'       => $slug,
+			'oldVersion' => '',
+			'newVersion' => '',
+		];
+
+		if ( ! current_user_can( 'update_plugins' ) || 0 !== validate_file( $plugin ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => __( 'Sorry, you are not allowed to update plugins on this site.', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+
+		include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+
+		wp_update_plugins();
+
+		$skin     = new \WP_Ajax_Upgrader_Skin();
+		$upgrader = new \Plugin_Upgrader( $skin );
+		$result   = $upgrader->bulk_upgrade( [ $plugin ] );
+
+		$upgrade_messages = [];
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$upgrade_messages = $skin->get_upgrade_messages();
+		}
+
+		if ( is_wp_error( $skin->result ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => $skin->result->get_error_message(),
+				'data'    => [],
+				'debug'   => $upgrade_messages,
+			] );
+		} elseif ( $skin->get_errors()->get_error_code() ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => $skin->get_error_message(),
+				'data'    => [],
+				'debug'   => $upgrade_messages,
+			] );
+
+		} elseif ( is_array( $result ) && ! empty( $result[ $plugin ] ) ) {
+			$plugin_update_data = current( $result );
+
+			/*
+			 * If the `update_plugins` site transient is empty (e.g. when you update
+			 * two plugins in quick succession before the transient repopulates),
+			 * this may be the return.
+			 *
+			 * Preferably something can be done to ensure `update_plugins` isn't empty.
+			 * For now, surface some sort of error here.
+			 */
+			if ( true === $plugin_update_data ) {
+				wp_send_json( [
+					'success' => false,
+					'message' => __( 'Plugin update failed.', 'jet-form-builder' ),
+					'data'    => [],
+					'debug'   => $upgrade_messages,
+				] );
+			}
+
+			$plugin_data = get_plugins( '/' . $result[ $plugin ]['destination_name'] );
+			$plugin_data = reset( $plugin_data );
+
+			wp_send_json( [
+				'success' => true,
+				'message' => __( 'The plugin has been updated', 'jet-form-builder' ),
+				'data'    => $this->get_plugin_data( $plugin_file ),
+			] );
+
+		} elseif ( false === $result ) {
+			global $wp_filesystem;
+
+			$errorMessage = 'Unable to connect to the filesystem. Please confirm your credentials.';
+
+			// Pass through the error from WP_Filesystem if one was raised.
+			if ( $wp_filesystem instanceof \WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+				$errorMessage = esc_html( $wp_filesystem->errors->get_error_message() );
+			}
+
+			wp_send_json( [
+				'success' => false,
+				'message' => $errorMessage,
+				'data'    => [],
+			] );
+		}
+
+		wp_send_json( [
+			'success' => false,
+			'message' => __( 'Plugin update failed.', 'jet-form-builder' ),
+			'data'    => [],
+		] );
+	}
+
+	/**
 	 * Manager constructor.
 	 */
 	public function __construct() {
 		add_action( 'wp_ajax_jfb_license_action', array( $this, 'license_action' ) );
+		add_action( 'wp_ajax_jet_fb_addon_action', array( $this, 'plugin_action' ) );
 	}
 }

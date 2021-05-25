@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="jfb-addons__item"
-		:class="{ 'update-avaliable': updateAvaliable, 'activate-avaliable': activateAvaliable }"
+		:class="{ 'update-avaliable': updateActionAvaliable, 'activate-avaliable': activateActionAvaliable }"
 	>
 		<div
 			class="jfb-addons__item-inner"
@@ -20,8 +20,8 @@
 				<div
 					class="jfb-addons__item-update"
 				>
-					<div v-if="!updateAvaliable">Your plugin is up to date</div>
-					<div v-if="updateAvaliable">
+					<div v-if="!updateActionAvaliable">Your plugin is up to date</div>
+					<div v-if="updateActionAvaliable">
 						Version <span class="latest-version">{{ addonData.version }}</span> available
 						<cx-vui-button
 							button-style="link-accent"
@@ -38,10 +38,22 @@
 				<div class="jfb-addons__item-actions">
 					<cx-vui-button
 						class="cx-vui-button--style-default"
-						button-style="default"
-						size="mini"
+						button-style="link-accent"
+						size="link"
+						v-if="installActionAvaliable"
 						:loading="actionPluginProcessed"
-						v-if="activateAvaliable"
+						@click="installPlugin"
+					>
+						<span slot="label">
+							<span>Install Plugin</span>
+						</span>
+					</cx-vui-button>
+					<cx-vui-button
+						class="cx-vui-button--style-default"
+						button-style="link-accent"
+						size="link"
+						:loading="actionPluginProcessed"
+						v-if="activateActionAvaliable"
 						@click="activatePlugin"
 					>
 						<span slot="label">
@@ -50,10 +62,10 @@
 					</cx-vui-button>
 					<cx-vui-button
 						class="cx-vui-button--style-default"
-						button-style="default"
-						size="mini"
+						button-style="link-accent"
+						size="link"
 						:loading="actionPluginProcessed"
-						v-if="deactivateAvaliable"
+						v-if="deactivateActionAvaliable"
 						@click="deactivatePlugin"
 					>
 						<span slot="label">
@@ -91,15 +103,19 @@ export default {
 			];
 		},
 
-		deactivateAvaliable: function() {
-			return ( this.addonData['isInstalled'] && this.addonData['isActivated'] ) ? true : false;
+		installActionAvaliable: function() {
+			return ( ! this.addonData['isInstalled'] ) ? true : false;
 		},
 
-		activateAvaliable: function() {
+		activateActionAvaliable: function() {
 			return ( this.addonData['isInstalled'] && ! this.addonData['isActivated'] ) ? true : false;
 		},
 
-		updateAvaliable: function() {
+		deactivateActionAvaliable: function() {
+			return ( this.addonData['isInstalled'] && this.addonData['isActivated'] ) ? true : false;
+		},
+
+		updateActionAvaliable: function() {
 			return ( this.addonData['updateAvaliable'] ) ? true : false;
 		},
 
@@ -109,6 +125,12 @@ export default {
 
 	},
 	methods: {
+
+		installPlugin: function() {
+			this.actionPlugin = 'install';
+			this.pluginAction();
+		},
+
 		deactivatePlugin: function() {
 			this.actionPlugin = 'deactivate';
 			this.pluginAction();
@@ -126,7 +148,6 @@ export default {
 				this.actionPlugin = 'update';
 				this.pluginAction();
 			}
-
 		},
 
 		pluginAction: function() {
@@ -140,7 +161,7 @@ export default {
 					action: 'jet_fb_addon_action',
 					data: {
 						action: self.actionPlugin,
-						plugin: self.pluginData['slug']
+						plugin: self.addonData['slug']
 					}
 				},
 				beforeSend: function( jqXHR, ajaxSettings ) {
@@ -149,44 +170,28 @@ export default {
 						self.actionPluginRequest.abort();
 					}
 
-					switch( self.actionPlugin ) {
-
-						case 'activate':
-						case 'deactivate':
-							self.actionPluginProcessed = true;
-							break;
-
-						case 'update':
-							self.updatePluginProcessed = true;
-							break;
-
-					}
+					self.actionPluginProcessed = true;
 				},
 				success: function( responce, textStatus, jqXHR ) {
 
-					switch(  self.actionPlugin ) {
+					self.actionPluginProcessed = false;
 
-						case 'activate':
-						case 'deactivate':
-							self.actionPluginProcessed = false;
-							break;
-
-						case 'update':
-							self.updatePluginProcessed = false;
-							break;
-					}
-
-					self.$CXNotice.add( {
-						message: responce.message,
-						type: responce.status,
-						duration: 3000,
-					} );
-
-					if ( 'success' === responce.status ) {
+					if ( responce.success ) {
+						self.$CXNotice.add( {
+							message: responce.message,
+							type: 'success',
+							duration: 4000,
+						} );
 
 						window.jfbEventBus.$emit( 'updateAddonData', {
-							'slug': self.pluginData['slug'],
-							'addonsData': responce.data,
+							'slug': self.addonData['slug'],
+							'addonData': responce.data,
+						} );
+					} else {
+						self.$CXNotice.add( {
+							message: responce.message,
+							type: 'error',
+							duration: 4000,
 						} );
 					}
 				}

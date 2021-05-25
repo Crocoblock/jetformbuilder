@@ -411,7 +411,8 @@ class Editor {
 				'messagesDefault'  => $this->get_messages_default(),
 				'gateways'         => Gateway_Manager::instance()->editor_data(),
 				'helpForRepeaters' => $this->get_help_for_repeaters(),
-				'global_settings'  => Tab_Handler_Manager::instance()->all()
+				'global_settings'  => Tab_Handler_Manager::instance()->all(),
+				'jetEngineVersion' => Tools::get_jet_engine_version()
 			)
 		);
 
@@ -483,12 +484,12 @@ class Editor {
 		?>
         <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
         <script>
-			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
+			document.addEventListener( 'jet-form-builder-initialized', function( event ) {
 				window.JetFormEditor(
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo html_entity_decode( esc_js( $content ) ); ?>',
-					'<?php echo esc_js( $form_name ); ?>'
+					'<?php echo esc_js( $form_name ); ?>',
 				);
 			} );
         </script>

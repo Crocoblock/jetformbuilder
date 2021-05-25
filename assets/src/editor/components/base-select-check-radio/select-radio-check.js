@@ -4,18 +4,23 @@ import FromPostTermsFields from "./from-post-terms-fields";
 import FromGeneratorsFields from "./from-generators-fields";
 
 const {
-	TextControl,
-	SelectControl,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+	  } = wp.components;
+
+const { jetEngineVersion } = window.JetFormEditorData;
+const { versionCompare } = JetFBActions;
+
+const canRenderGlossaries = false !== jetEngineVersion && versionCompare( jetEngineVersion, '2.7.4', '>=' );
 
 function SelectRadioCheck( props ) {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		children = []
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  children = [],
+		  } = props;
 
 	const { field_options_from } = attributes;
 
@@ -49,6 +54,17 @@ function SelectRadioCheck( props ) {
 		{ 'generate' === field_options_from && <FromGeneratorsFields
 			key='form_generators'
 			{ ...props }
+		/> }
+		{ ( 'glossary' === field_options_from && canRenderGlossaries ) && <SelectControl
+			key='select_glossary'
+			label='Select Glossary'
+			labelPosition='top'
+			value={ attributes.glossary_id }
+			onChange={ glossary_id => setAttributes( { glossary_id } ) }
+			options={ [
+				{ value: '', label: '--' },
+				...window.JetFormSelectFieldData.glossaries_list,
+			] }
 		/> }
 		{ children }
 	</div>;

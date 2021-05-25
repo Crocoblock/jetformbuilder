@@ -18,11 +18,26 @@ trait Base_Select_Radio_Check {
 	 * @return array
 	 */
 	public function get_local_data_check_radio_select( $merged = array() ) {
-		return array_merge( array(
+		$options = array(
 			'post_types_list' => Tools::get_post_types_for_options(),
 			'taxonomies_list' => Tools::get_taxonomies_for_js(),
 			'generators_list' => Tools::get_generators_list_for_js(),
-		), $merged );
+		);
+
+		$options['glossaries_list'] = false !== Tools::get_jet_engine_version()
+			? $this->get_glossaries_list()
+			: array();
+
+		return array_merge( $options, $merged );
+	}
+
+	private function get_glossaries_list() {
+		return array_map( function ( $glossary ) {
+			return array(
+				'label' => $glossary['name'],
+				'value' => $glossary['id']
+			);
+		}, jet_engine()->glossaries->settings->get() );
 	}
 
 
@@ -205,6 +220,19 @@ trait Base_Select_Radio_Check {
 				return $generated;
 			}
 
+		} elseif ( 'glossary' === $options_from ) {
+			if ( ! empty( $args['glossary_id'] )
+			     && false !== Tools::get_jet_engine_version()
+			     && isset( jet_engine()->glossaries )
+			) {
+				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
+
+				if ( ! empty( $glossary ) && ! empty( $glossary['fields'] ) ) {
+					$options = $glossary['fields'];
+				}
+			}
+
+			return $options;
 		} else {
 
 			$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';

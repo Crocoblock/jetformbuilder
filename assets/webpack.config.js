@@ -35,11 +35,6 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin()
 	],
-	optimization: {
-		splitChunks: {
-			chunks: 'all'
-		}
-	},
 	module: {
 		rules: [
 			{
@@ -51,6 +46,24 @@ module.exports = {
 				test: /\.vue$/,
 				loader: 'vue-loader'
 			},
+			{
+				test: /\.css$/,
+				use: [
+					'vue-style-loader',
+					'css-loader'
+				],
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					'vue-style-loader',
+					{
+						loader: 'css-loader',
+						options: { modules: true }
+					},
+					'sass-loader'
+				]
+			}
 		]
 	},
 	performance: {

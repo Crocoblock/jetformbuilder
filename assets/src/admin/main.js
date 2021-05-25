@@ -1,4 +1,5 @@
 import SettingsPage from "./pages/settings/SettingsPage";
+import AddonsPage from "./pages/addons/AddonsPage";
 
 ( () => {
 	const pref = 'jet-form-builder_page_';
@@ -10,6 +11,11 @@ import SettingsPage from "./pages/settings/SettingsPage";
 			pageName: SettingsPage.name,
 			template: '<SettingsPage/>',
 			components: { SettingsPage }
+		},
+		{
+			pageName: AddonsPage.name,
+			template: '<AddonsPage/>',
+			components: { AddonsPage }
 		}
 	] )
 

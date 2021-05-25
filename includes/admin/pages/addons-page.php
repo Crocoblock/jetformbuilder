@@ -1,10 +1,6 @@
 <?php
-
-
 namespace Jet_Form_Builder\Admin\Pages;
 
-
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Plugin;
 
 class Addons_Page extends Base_Page {
@@ -23,6 +19,9 @@ class Addons_Page extends Base_Page {
 		return __( 'Addons', 'jet-form-builder' );
 	}
 
+	/**
+	 * Page Assets
+	 */
 	public function assets(): void {
 		parent::assets();
 
@@ -34,11 +33,17 @@ class Addons_Page extends Base_Page {
 		);
 	}
 
-
 	/**
 	 * Return page config array
 	 */
 	public function page_config(): array {
-		return array();
+
+		//array_values( Utils::get_license_list() )
+		return array(
+			'ajaxUrl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'allAddons'   => Plugin::instance()->license_manager->get_plugin_data_list(),
+			'licenseKey'  => Plugin::instance()->license_manager->get_license_key(),
+			'licenseList' => Plugin::instance()->license_manager->get_license_data(),
+		);
 	}
 }

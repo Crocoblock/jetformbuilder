@@ -9,12 +9,12 @@ use Jet_Form_Builder\Plugin;
 class Pages_Manager {
 
 	/**
-	 * @var array
+	 * @var Base_Page[]
 	 */
 	private $pages = array();
 
 	/**
-	 * @var
+	 * @var Base_Page
 	 */
 	private $current_page;
 

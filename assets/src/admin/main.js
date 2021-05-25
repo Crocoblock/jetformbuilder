@@ -7,26 +7,17 @@ import AddonsPage from "./pages/addons/AddonsPage";
 	const { applyFilters } = wp.hooks;
 
 	const pages = applyFilters( 'jet.fb.register.admin-pages', [
-		{
-			pageName: SettingsPage.name,
-			template: '<SettingsPage/>',
-			components: { SettingsPage }
-		},
-		{
-			pageName: AddonsPage.name,
-			template: '<AddonsPage/>',
-			components: { AddonsPage }
-		}
+		SettingsPage,
+		AddonsPage
 	] )
 
-	pages.forEach( page => {
-		const pageName = ( pref + page.pageName );
+	pages.forEach( PageComponent => {
+		const pageName = ( pref + PageComponent.name );
 
 		if ( window.pagenow === pageName ) {
 			new Vue( {
-				el: '#' + pref + page.pageName,
-				template: page.template,
-				components: page.components
+				el: '#' + pref + PageComponent.name,
+				render: h => h( PageComponent )
 			} );
 		}
 	} )

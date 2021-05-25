@@ -104,8 +104,9 @@ abstract class Base_Gateway {
 		} else {
 			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
 		}
+		$message = stripcslashes( $message );
 
-		return stripcslashes( $message );
+		return $message;
 	}
 
 	public function get_meta_message( $type ) {
@@ -175,10 +176,13 @@ abstract class Base_Gateway {
 			}
 
 			foreach ( $all as $index => $notification ) {
-				if ( ! array_key_exists( $index, $keep_these ) ) {
-					$notifications->unregister_action( $index );
-				}
+				$this->maybe_unregister_action( $notifications, $index, $keep_these );
 			}
+
+			if ( empty( $notifications->form_actions ) ) {
+				return;
+			}
+
 			$notifications->run_actions();
 		}
 
@@ -267,6 +271,7 @@ abstract class Base_Gateway {
 			if ( ! array_key_exists( $index, $keep_these ) ) {
 				$action_handler->unregister_action( $index );
 			}
+			$this->maybe_unregister_action( $action_handler, $index, $keep_these );
 		}
 	}
 
@@ -427,8 +432,15 @@ abstract class Base_Gateway {
 			}
 
 		}, $string );
-
 	}
 
+	private function maybe_unregister_action( Action_Handler $handler, $index, $keep_these ) {
+		if ( ! array_key_exists( $index, $keep_these )
+		     || ! isset( $keep_these[ $index ]['active'] )
+		     || ! $keep_these[ $index ]['active']
+		) {
+			$handler->unregister_action( $index );
+		}
+	}
 
 }

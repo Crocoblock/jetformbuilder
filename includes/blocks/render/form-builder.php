@@ -119,12 +119,12 @@ class Form_Builder {
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
 		$this->add_attribute( 'class', 'jet-form-builder' );
-		$this->add_attribute( 'class', 'layout-' . $this->args['fields_layout'] );
-		$this->add_attribute( 'class', 'submit-type-' . $this->args['submit_type'] );
+		$this->add_attribute( 'class', 'layout-' . Live_Form::instance()->spec_data->fields_layout );
+		$this->add_attribute( 'class', 'submit-type-' . Live_Form::instance()->spec_data->submit_type );
 		$this->add_attribute( 'action', $this->get_form_action_url() );
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
-		$this->add_attribute( 'data-layout', $this->args['fields_layout'] );
+		$this->add_attribute( 'data-layout', Live_Form::instance()->spec_data->fields_layout );
 
 		ob_start();
 		include $this->get_global_template( 'common/start-form.php' );
@@ -183,12 +183,12 @@ class Form_Builder {
 			return '';
 		}
 
-		$form = $this->start_form();
-
 		$this->form_content = Live_Form::instance()
 		                               ->set_form_id( $this->form_id )
 		                               ->set_specific_data_for_render( $this->args )
 		                               ->setup_fields( $this->form_content );
+
+		$form = $this->start_form();
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(

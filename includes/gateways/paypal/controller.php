@@ -178,7 +178,7 @@ class Controller extends Base_Gateway {
 				'order_id'   => $this->order_id,
 				'form_id'    => $action_handler->form_id,
 				'form_data'  => $action_handler->request_data,
-			) )
+			), JSON_UNESCAPED_UNICODE )
 		);
 
 		$this->maybe_redirect_to_checkout( $order );

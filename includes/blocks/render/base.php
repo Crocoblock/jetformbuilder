@@ -62,8 +62,9 @@ abstract class Base {
 
 	public function maybe_render_error( $args ) {
 		if ( $this->has_error( $args ) ) {
-			return "<div class='error-message'>". Error_Handler::instance()->error_by_name( $args['name'] ) ."</div>";
+			return "<div class='error-message'>" . Error_Handler::instance()->error_by_name( $args['name'] ) . "</div>";
 		}
+
 		return '';
 	}
 
@@ -71,6 +72,7 @@ abstract class Base {
 		if ( $this->has_error( $args ) ) {
 			return self::FIELD_ERROR_CLASS;
 		}
+
 		return '';
 	}
 
@@ -154,7 +156,7 @@ abstract class Base {
 		$desc   = $this->get_field_desc();
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
-		do_action( "jet-form-builder/render/{$args['type']}", $args, $this );
+		$args = apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
 
 		if ( 'hidden-field' === $args['type'] ) {
 			ob_start();

@@ -9,6 +9,12 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
 
+/**
+ * @method static Gateway_Manager instance()
+ *
+ * Class Gateway_Manager
+ * @package Jet_Form_Builder\Gateways
+ */
 class Gateway_Manager {
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
@@ -149,7 +155,7 @@ class Gateway_Manager {
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
 		}
 	}
 

@@ -3,9 +3,11 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -108,7 +110,7 @@ class Action_Handler {
 	/**
 	 * Returns all registered notifications
 	 *
-	 * @return array [description]
+	 * @return Base[] [description]
 	 */
 	public function get_all() {
 		return $this->form_actions;
@@ -175,6 +177,8 @@ class Action_Handler {
 
 			/**
 			 * Check conditions for action
+			 *
+			 * @var Base $action
 			 */
 			try {
 				$action->condition( $this );
@@ -190,14 +194,16 @@ class Action_Handler {
 	}
 
 	public function get_inserted_post_id( $action_id = 0 ) {
+		$default_post_id = absint( $this->response_data['inserted_post_id'] );
+
 		if ( ! $action_id ) {
-			return absint( $this->response_data['inserted_post_id'] );
+			return $default_post_id;
 		}
 
 		$action_id = absint( $action_id );
 
 		if ( empty( $this->response_data['inserted_posts'] ) ) {
-			return absint( $this->response_data['inserted_post_id'] );
+			return $default_post_id;
 		}
 
 		foreach ( $this->response_data['inserted_posts'] as $posts ) {
@@ -205,6 +211,8 @@ class Action_Handler {
 				return $posts['post_id'];
 			}
 		}
+
+		return $default_post_id;
 	}
 
 	public function add_response( $values ) {

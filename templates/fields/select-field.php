@@ -23,8 +23,6 @@ $placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : false;
 $default     = isset( $args['default'] ) ? $args['default'] : false;
 
 $this->add_attribute( 'data-default-val', $default );
-//$this->add_attribute( 'multiple', 'multiple' );
-
 ?>
 <div class="jet-form-builder__field-wrap">
     <select <?php $this->render_attributes_string(); ?>><?php

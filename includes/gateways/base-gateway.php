@@ -14,6 +14,12 @@ use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 
+/**
+ * @property Action_Handler action_handler
+ *
+ * Class Base_Gateway
+ * @package Jet_Form_Builder\Gateways
+ */
 abstract class Base_Gateway {
 
 	const GATEWAY_META_KEY = '_jet_gateway_data';
@@ -93,11 +99,13 @@ abstract class Base_Gateway {
 	}
 
 	public function get_status_on_payment( $status ) {
-		if ( in_array( $status, $this->failed_statuses() ) ) {
-			return Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
+		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
+			$message = Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
+		} else {
+			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
 		}
 
-		return Manager::dynamic_success( $this->get_meta_message( 'success' ) );
+		return stripcslashes( $message );
 	}
 
 	public function get_meta_message( $type ) {
@@ -237,15 +245,17 @@ abstract class Base_Gateway {
 	 *
 	 * @return void [description]
 	 */
-	public function before_actions( $action_handler, $keep_these ) {
+	public function before_actions( Action_Handler $action_handler, $keep_these ) {
 
 		if ( empty( $action_handler->get_all() ) ) {
 			return;
 		}
+		$meta = Gateway_Manager::instance()->gateways();
 
 		foreach ( $action_handler->get_all() as $index => $action ) {
+			$action_order = isset( $meta['action_order'] ) ? (int) $meta['action_order'] : 0;
 
-			if ( 'insert_post' === $action->get_id() ) {
+			if ( 'insert_post' === $action->get_id() && $action_order === $action->_id ) {
 				continue;
 			}
 

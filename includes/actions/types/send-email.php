@@ -236,7 +236,7 @@ class Send_Email extends Base {
 		$content_type = $this->get_content_type();
 		$subject      = $this->parse_macros( $subject );
 		$message      = $this->parse_macros( $message );
-		
+
 		if ( 'text/html' === $content_type ) {
 			$message = wpautop( $message );
 			$message = make_clickable( $message );
@@ -272,7 +272,7 @@ class Send_Email extends Base {
 	 */
 	public function parse_macros( $content ) {
 
-		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)_-]+))?%/', function ( $match ) {
+		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/', function ( $match ) {
 
 			if ( isset( $this->data[ $match[1] ] ) ) {
 

@@ -1396,10 +1396,18 @@
 		wysiwygInit: function( closure, replace = false ) {
 			const self     = $( closure ),
 				  editorID = self.attr( 'id' ),
-				  field    = self.closest( '.jet-form-builder__field' );
+				  field    = self.closest( '.jet-form-builder__field' ),
+				  tools    = $( '.wp-editor-tools, link', field );
 
 			if ( replace && window.tinymce && window.tinymce.get( editorID ) ) {
 				window.wp.editor.remove( editorID );
+			}
+
+			if ( tools.length ) {
+				const wrapper = $( '<div class="wp-core-ui wp-editor-wrap tmce-active"></div>' );
+
+				wrapper.append( tools );
+				field.prepend( wrapper );
 			}
 
 			window.wp.editor.initialize(

@@ -375,7 +375,7 @@ class Send_Email extends Base {
 	 */
 	public function get_from_name() {
 		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-
+		$name = $this->parse_macros( $name );
 		return apply_filters( 'jet-form-builder/send-email/from-name', wp_specialchars_decode( $name ), $this );
 	}
 
@@ -402,6 +402,7 @@ class Send_Email extends Base {
 	public function get_from_address() {
 
 		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
+		$address = $this->parse_macros( $address );
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = get_option( 'admin_email' );

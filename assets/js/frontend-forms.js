@@ -494,7 +494,7 @@
 
 			$( document )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
-				.on( 'submit.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-reload', self.reloadSubmitForm )
+				.on( 'submit.JetFormBuilderMain', 'form.jet-form-builder.submit-type-reload', self.reloadSubmitForm )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
 				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
@@ -809,9 +809,7 @@
 			JetFormBuilder.initConditions( $scope );
 
 			if ( $.fn.inputmask ) {
-				$scope.find( '.jet-form-builder__masked-field' ).inputmask( {
-					removeMaskOnSubmit: true,
-				} );
+				$scope.find( '.jet-form-builder__masked-field' ).inputmask();
 			}
 
 			if ( ! $calcFields.length ) {
@@ -1254,7 +1252,20 @@
 		},
 
 		reloadSubmitForm: function( event ) {
-			$( this ).find( '.jet-form-builder__submit' ).attr( 'disabled', true );
+			const $target = $( event.target );
+			const $maskedFields = $target.find( '.jet-form-builder__masked-field' );
+
+			if ( $maskedFields && $maskedFields.length ) {
+				$maskedFields.each( function() {
+					const $maskedField = $( this );
+
+					// Remove mask if empty value
+					if ( !$maskedField.val() && $maskedField.inputmask ) {
+						$maskedField.inputmask( 'remove' );
+					}
+				} );
+			}
+			$target.find( '.jet-form-builder__submit' ).attr( 'disabled', true );
 		},
 
 		ajaxSubmitForm: function() {

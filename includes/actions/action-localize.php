@@ -10,11 +10,17 @@ trait Action_Localize {
 
 	abstract public function get_name();
 
-	abstract public function visible_attributes_for_gateway_editor();
+	public function visible_attributes_for_gateway_editor() {
+		return array();
+	}
 
-	abstract public function self_script_name();
+	public function self_script_name() {
+		return '';
+	}
 
-	abstract public function editor_labels();
+	public function editor_labels() {
+		return array();
+	}
 
 	public function editor_labels_help() {
 		return array();

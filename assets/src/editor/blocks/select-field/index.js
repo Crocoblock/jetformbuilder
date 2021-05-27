@@ -1,5 +1,5 @@
 import SelectEdit from "./edit";
-import metadata from "@blocks/select-field/block.json";
+import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 

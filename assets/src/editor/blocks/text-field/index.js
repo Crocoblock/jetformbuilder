@@ -1,5 +1,5 @@
 import TextEdit from "./edit";
-import metadata from "@blocks/text-field/block.json";
+import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 

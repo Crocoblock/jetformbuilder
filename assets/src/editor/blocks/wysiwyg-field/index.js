@@ -1,5 +1,5 @@
 import WysiwygEdit from "./edit";
-import metadata from "@blocks/wysiwyg-field/block.json";
+import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 

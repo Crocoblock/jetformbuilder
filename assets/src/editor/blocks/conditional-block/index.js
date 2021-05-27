@@ -1,5 +1,5 @@
 import ConditionalBlockEdit from "./edit";
-import metadata from "@blocks/conditional-block/block.json";
+import metadata from "./block.json";
 import ConditionalSave from "./save";
 
 const { __ } = wp.i18n;

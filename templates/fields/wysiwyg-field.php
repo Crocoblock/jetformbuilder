@@ -11,7 +11,7 @@ if ( empty( $args['default'] ) ) {
 }
 
 $editor_id = 'wp_editor_' . $this->block_type->get_field_id( $args['name'] );
-$editor    = apply_filters( 'jet-form-builder/fields/wysiwyg-field/config', array(
+$editor    = array(
 	'textarea_name' => $this->block_type->get_field_name( $args['name'] ),
 	'media_buttons' => false,
 	'textarea_rows' => 8,
@@ -29,7 +29,7 @@ $editor    = apply_filters( 'jet-form-builder/fields/wysiwyg-field/config', arra
 		'toolbar3'                      => '',
 		'toolbar4'                      => ''
 	),
-) );
+);
 $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );

@@ -19,7 +19,6 @@ module.exports = {
 	resolve: {
 		modules: [
 			path.resolve(__dirname, 'src'),
-			path.resolve(__dirname, 'blocks-src'),
 			'node_modules'
 		],
 		extensions: [ '.js', '.vue' ],
@@ -27,8 +26,7 @@ module.exports = {
 			'@': path.resolve(__dirname, 'src/editor'),
 			'@helpers': path.resolve(__dirname, 'src/editor/helpers'),
 			'@components': path.resolve(__dirname, 'src/editor/components'),
-			'@admin': path.resolve(__dirname, 'src/admin'),
-			'@blocks': path.resolve(__dirname, 'blocks-src'),
+			'@admin': path.resolve(__dirname, 'src/admin')
 		}
 	},
 	externals: {

@@ -1,5 +1,5 @@
 import MediaEdit from "./edit";
-import metadata from "@blocks/media-field/block.json";
+import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 

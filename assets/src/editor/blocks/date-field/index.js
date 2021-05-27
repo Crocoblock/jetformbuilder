@@ -1,5 +1,5 @@
 import DateEdit from "./edit";
-import metadata from "@blocks/date-field/block.json";
+import metadata from "./block.json";
 
 const { __ } = wp.i18n;
 

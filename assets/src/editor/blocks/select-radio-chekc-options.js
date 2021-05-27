@@ -1,36 +1,26 @@
 const { __ } = wp.i18n;
 
-const { jetEngineVersion } = window.JetFormEditorData;
-const { versionCompare } = JetFBActions;
-
 const listFrom = [
 	{
 		"value": "manual_input",
-		"label": __( 'Manual Input', 'jet-form-builder' ),
+		"label": __( 'Manual Input' )
 	},
 	{
 		"value": "posts",
-		"label": __( 'Posts', 'jet-form-builder' ),
+		"label": __( 'Posts' )
 	},
 	{
 		"value": "terms",
-		"label": __( 'Terms', 'jet-form-builder' ),
+		"label": __( 'Terms' )
 	},
 	{
 		"value": "meta_field",
-		"label": __( 'Meta Field', 'jet-form-builder' ),
+		"label": __( 'Meta Field' )
 	},
 	{
 		"value": "generate",
-		"label": __( 'Generate Dynamically', 'jet-form-builder' ),
-	},
+		"label": __( 'Generate Dynamically' )
+	}
 ];
-
-if ( false !== jetEngineVersion && versionCompare( jetEngineVersion, '2.7.4', '>=' ) ) {
-	listFrom.push( {
-		"value": "glossary",
-		"label": __( 'Glossary', 'jet-form-builder' ),
-	} )
-}
 
 export { listFrom };

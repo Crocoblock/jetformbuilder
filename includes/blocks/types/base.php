@@ -92,7 +92,7 @@ abstract class Base extends Base_Module {
 	abstract public function get_block_renderer( $wp_block = null );
 
 	public function get_path_metadata_block() {
-		$path_parts = array( 'assets', 'blocks-src', $this->get_name() );
+		$path_parts = array( 'assets', 'src', 'editor', 'blocks', $this->get_name() );
 		$path       = implode( DIRECTORY_SEPARATOR, $path_parts );
 
 		return jet_form_builder()->plugin_dir( $path );

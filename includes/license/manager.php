@@ -529,7 +529,7 @@ class Manager {
 
 		wp_send_json( [
 			'success'  => true,
-			'message' => __( 'The plugin has been activated', 'jet-form-builder' ),
+			'message' => __( 'The addon has been activated', 'jet-form-builder' ),
 			'data'    => $this->get_plugin_data( $plugin_file ),
 		] );
 	}
@@ -565,7 +565,7 @@ class Manager {
 
 		wp_send_json( [
 			'success'  => true,
-			'message' => __( 'The plugin has been deactivated', 'jet-form-builder' ),
+			'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
 			'data'    => $this->get_plugin_data( $plugin_file ),
 		] );
 	}
@@ -643,7 +643,7 @@ class Manager {
 
 		wp_send_json( [
 			'success' => true,
-			'message' => __( 'The plugin has been Installed', 'jet-form-builder' ),
+			'message' => __( 'The addon has been Installed', 'jet-form-builder' ),
 			'data'    => $this->get_plugin_data( $plugin_file ),
 		] );
 	}
@@ -716,7 +716,7 @@ class Manager {
 			if ( true === $plugin_update_data ) {
 				wp_send_json( [
 					'success' => false,
-					'message' => __( 'Plugin update failed.', 'jet-form-builder' ),
+					'message' => __( 'Addon update failed.', 'jet-form-builder' ),
 					'data'    => [],
 					'debug'   => $upgrade_messages,
 				] );
@@ -727,7 +727,7 @@ class Manager {
 
 			wp_send_json( [
 				'success' => true,
-				'message' => __( 'The plugin has been updated', 'jet-form-builder' ),
+				'message' => __( 'The addon has been updated', 'jet-form-builder' ),
 				'data'    => $this->get_plugin_data( $plugin_file ),
 			] );
 
@@ -756,10 +756,53 @@ class Manager {
 	}
 
 	/**
+	 * License service action
+	 */
+	public function license_service_action() {
+
+		$data = ( ! empty( $_POST['data'] ) ) ? $_POST['data'] : false;
+
+		if ( ! $data || ! isset( $data['action'] ) ) {
+			wp_send_json( [
+				'success'  => false,
+				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
+				'data'    => [],
+			] );
+		}
+
+		$action = $data['action'];
+
+		switch ( $action ) {
+
+			case 'check-plugin-update':
+				set_site_transient( 'update_plugins', null );
+
+				wp_send_json( [
+					'success'  => true,
+					'message' => __( 'Addons Update Checked', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+
+				break;
+
+			default:
+				wp_send_json( [
+					'success'  => false,
+					'message' => __( 'Service action Not Found', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+				break;
+		}
+
+		exit;
+	}
+
+	/**
 	 * Manager constructor.
 	 */
 	public function __construct() {
 		add_action( 'wp_ajax_jfb_license_action', array( $this, 'license_action' ) );
-		add_action( 'wp_ajax_jet_fb_addon_action', array( $this, 'plugin_action' ) );
+		add_action( 'wp_ajax_jfb_license_service_action', array( $this, 'license_service_action' ) );
+		add_action( 'wp_ajax_jfb_addon_action', array( $this, 'plugin_action' ) );
 	}
 }

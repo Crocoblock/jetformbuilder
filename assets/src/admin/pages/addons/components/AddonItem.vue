@@ -1,7 +1,10 @@
 <template>
 	<div
 		class="jfb-addons__item"
-		:class="{ 'update-avaliable': updateActionAvaliable, 'activate-avaliable': activateActionAvaliable }"
+		:class="{
+			'activated': addonData.isActivated,
+			'update-avaliable': updateActionAvaliable,
+		}"
 	>
 		<div
 			class="jfb-addons__item-inner"
@@ -35,9 +38,25 @@
 						</cx-vui-button>
 					</div>
 				</div>
+				<div
+					class="jfb-addons__item-desc"
+					v-html="addonData.desc"
+				></div>
 				<div class="jfb-addons__item-actions">
+
 					<cx-vui-button
-						class="cx-vui-button--style-default"
+						button-style="link-accent"
+						size="link"
+						v-if="learnMoreAvaliable"
+						:url="addonData.demo"
+						tag-name="a"
+						target="_blank"
+					>
+						<span slot="label">
+							<span>Learn More</span>
+						</span>
+					</cx-vui-button>
+					<cx-vui-button
 						button-style="link-accent"
 						size="link"
 						v-if="installActionAvaliable"
@@ -49,7 +68,6 @@
 						</span>
 					</cx-vui-button>
 					<cx-vui-button
-						class="cx-vui-button--style-default"
 						button-style="link-accent"
 						size="link"
 						:loading="actionPluginProcessed"
@@ -61,7 +79,6 @@
 						</span>
 					</cx-vui-button>
 					<cx-vui-button
-						class="cx-vui-button--style-default"
 						button-style="link-accent"
 						size="link"
 						:loading="actionPluginProcessed"
@@ -103,23 +120,27 @@ export default {
 			];
 		},
 
-		installActionAvaliable: function() {
-			return ( ! this.addonData['isInstalled'] ) ? true : false;
+		learnMoreAvaliable() {
+			return ( ! this.$parent.isLicenseActivated ) ? true : false;
 		},
 
-		activateActionAvaliable: function() {
+		installActionAvaliable() {
+			return ( ! this.addonData['isInstalled'] && this.$parent.isLicenseActivated ) ? true : false;
+		},
+
+		activateActionAvaliable() {
 			return ( this.addonData['isInstalled'] && ! this.addonData['isActivated'] ) ? true : false;
 		},
 
-		deactivateActionAvaliable: function() {
+		deactivateActionAvaliable() {
 			return ( this.addonData['isInstalled'] && this.addonData['isActivated'] ) ? true : false;
 		},
 
-		updateActionAvaliable: function() {
+		updateActionAvaliable() {
 			return ( this.addonData['updateAvaliable'] ) ? true : false;
 		},
 
-		proccesingState: function() {
+		proccesingState() {
 			return this.actionPluginProcessed || this.updatePluginProcessed;
 		}
 
@@ -144,7 +165,6 @@ export default {
 		updatePlugin: function() {
 
 			if ( this.updateActionAvaliable ) {
-
 				this.actionPlugin = 'update';
 				this.pluginAction();
 			}
@@ -158,7 +178,7 @@ export default {
 				url: window.JetFBPageConfig.ajaxUrl,
 				dataType: 'json',
 				data: {
-					action: 'jet_fb_addon_action',
+					action: 'jfb_addon_action',
 					data: {
 						action: self.actionPlugin,
 						plugin: self.addonData['slug']
@@ -200,3 +220,99 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+
+.jfb-addons {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(4, auto);
+	gap: 20px;
+
+	@media (max-width: 1140px) {
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(2, auto);
+	}
+
+	&__item {
+		&.activated {
+			.jfb-addons__item-info {
+				background-color: white;
+			}
+		}
+	}
+
+	&__item-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		height: 100%;
+	}
+
+	&__item-thumb {
+		border-radius: 10px 10px 0 0;
+		line-height: 0;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	&__item-info {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		flex: 1 1 auto;
+		padding: 20px;
+		border-radius: 0 0 10px 10px;
+		border-width: 0 1px 1px 1px;
+		border-color: #DCDCDD;
+		border-style: solid;
+		background-color: #efefef;
+	}
+
+	&__item-name {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 10px;
+
+		.label {
+			font-size: 20px;
+			font-weight: 700;
+			line-height: 1.25;
+		}
+
+		.version {
+			padding: 3px 8px;
+			border-radius: 4px;
+			color: white;
+			background-color: #46B450;
+			margin-left: 10px;
+		}
+	}
+
+	&__item-update {
+		color: #7b7e81;
+		margin-bottom: 10px;
+	}
+
+	&__item-desc {
+		flex: 1 1 auto;
+		margin-bottom: 20px;
+	}
+
+	&__item-actions {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		.cx-vui-button {
+			margin-right: 10px;
+		}
+	}
+}
+
+</style>

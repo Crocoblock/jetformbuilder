@@ -1,5 +1,5 @@
 import RangeEdit from "./edit";
-import metadata from "./block.json";
+import metadata from "@blocks/range-field/block.json";
 
 const { __ } = wp.i18n;
 

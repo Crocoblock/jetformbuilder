@@ -236,7 +236,7 @@ class Send_Email extends Base {
 		$content_type = $this->get_content_type();
 		$subject      = $this->parse_macros( $subject );
 		$message      = $this->parse_macros( $message );
-		
+
 		if ( 'text/html' === $content_type ) {
 			$message = wpautop( $message );
 			$message = make_clickable( $message );
@@ -272,7 +272,7 @@ class Send_Email extends Base {
 	 */
 	public function parse_macros( $content ) {
 
-		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)_-]+))?%/', function ( $match ) {
+		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/', function ( $match ) {
 
 			if ( isset( $this->data[ $match[1] ] ) ) {
 
@@ -375,7 +375,7 @@ class Send_Email extends Base {
 	 */
 	public function get_from_name() {
 		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-
+		$name = $this->parse_macros( $name );
 		return apply_filters( 'jet-form-builder/send-email/from-name', wp_specialchars_decode( $name ), $this );
 	}
 
@@ -402,6 +402,7 @@ class Send_Email extends Base {
 	public function get_from_address() {
 
 		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
+		$address = $this->parse_macros( $address );
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = get_option( 'admin_email' );

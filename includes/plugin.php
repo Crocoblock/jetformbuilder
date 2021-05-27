@@ -26,8 +26,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Form_Manager $form
  * @property Form_Handler $form_handler
  * @property Forms_Captcha $captcha
- * @property Admin\Editor $editor;
- *
+ * @property Admin\Editor $editor
+ * @property LicenseManager $license_manager
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -45,6 +45,7 @@ class Plugin {
 	public $is_activated_jet_sm;
 	public $allow_gateways;
 	public $framework;
+	public $license_manager;
 
 	public static $instance;
 

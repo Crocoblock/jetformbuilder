@@ -32,6 +32,7 @@ class Tools {
 		if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
 			return false;
 		}
+
 		return ( \Elementor\Plugin::instance()->editor->is_edit_mode() );
 	}
 
@@ -217,6 +218,7 @@ class Tools {
 					$result[ $role ] = $data['name'];
 				}
 			}
+
 			return $result;
 		}
 	}
@@ -376,6 +378,12 @@ class Tools {
 		}
 
 		return $response;
+	}
+
+	public static function get_jet_engine_version() {
+		return function_exists( 'jet_engine' )
+			? jet_engine()->get_version()
+			: false;
 	}
 
 }

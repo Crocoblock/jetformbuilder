@@ -2,7 +2,7 @@
 	"apiVersion": 2,
 	"name": "jet-forms/form-block",
 	"keywords": [
-		"jetformbuilder"
+		"jetform", "form", "builder", "crocoblock"
 	],
 	"textdomain": "jet-form-builder",
 	"supports": {

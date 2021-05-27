@@ -1,0 +1,50 @@
+{
+	"apiVersion": 2,
+	"name": "jet-forms/hidden-field",
+	"category": "jet-form-builder-fields",
+	"keywords": [
+		"jetformbuilder",
+		"field",
+		"hidden"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false
+	},
+	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"64\" height=\"64\" fill=\"white\"/><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4 16H60C61.1046 16 62 16.8954 62 18V38C62 39.1046 61.1046 40 60 40H57V42H60C62.2091 42 64 40.2091 64 38V18C64 15.7909 62.2091 14 60 14H4C1.79086 14 0 15.7909 0 18V38C0 40.2091 1.79086 42 4 42H28V40H4C2.89543 40 2 39.1046 2 38V18C2 16.8954 2.89543 16 4 16Z\" fill=\"#162B40\"/><path d=\"M42.5 32.5C36.9592 32.5 31.9346 35.5314 28.2269 40.4552C27.9244 40.8586 27.9244 41.4222 28.2269 41.8256C31.9346 46.7553 36.9592 49.7867 42.5 49.7867C48.0408 49.7867 53.0654 46.7553 56.7731 41.8315C57.0756 41.4281 57.0756 40.8645 56.7731 40.4611C53.0654 35.5314 48.0408 32.5 42.5 32.5ZM42.8975 47.2299C39.2194 47.4612 36.1821 44.4298 36.4135 40.7459C36.6033 37.7086 39.0652 35.2466 42.1025 35.0568C45.7806 34.8255 48.8179 37.8569 48.5865 41.5408C48.3908 44.5722 45.9289 47.0341 42.8975 47.2299Z\" fill=\"#4AF3BA\" stroke=\"#162B40\" stroke-width=\"2\"/><rect x=\"54.0909\" y=\"27.5858\" width=\"3.5\" height=\"34.7076\" rx=\"1.75\" transform=\"rotate(44.914 54.0909 27.5858)\" fill=\"#4AF3BA\" stroke=\"#162B40\" stroke-width=\"2\"/></svg>",
+	"attributes": {
+		"field_value": {
+			"type": "string",
+			"default": "post_id"
+		},
+		"hidden_value_field": {
+			"type": "string",
+			"default": ""
+		},
+		"query_var_key": {
+			"type": "string",
+			"default": ""
+		},
+		"date_format": {
+			"type": "string",
+			"default": ""
+		},
+		"hidden_value": {
+			"type": "string",
+			"default": ""
+		},
+		"name": {
+			"type": "string",
+			"default": "hidden_field_name"
+		},
+		"default": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

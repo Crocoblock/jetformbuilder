@@ -1,4 +1,4 @@
-import metadata from "./blocks/form-block/block.json"
+import metadata from "@blocks/form-block/block.json"
 import {
 	fieldsLayout,
 	submitTypes

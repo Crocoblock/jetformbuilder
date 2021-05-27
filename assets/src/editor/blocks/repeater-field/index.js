@@ -1,4 +1,4 @@
-import metadata from "./block.json";
+import metadata from "@blocks/repeater-field/block.json";
 import RepeaterEdit from "./edit";
 import RepeaterSave from "./save";
 

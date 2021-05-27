@@ -1,5 +1,5 @@
 import HeadingEdit from "./edit";
-import metadata from "./block.json";
+import metadata from "@blocks/hidden-field/block.json";
 
 const { __ } = wp.i18n;
 

@@ -60,7 +60,6 @@
 						button-style="link-accent"
 						size="link"
 						v-if="installActionAvaliable"
-						:loading="actionPluginProcessed"
 						@click="installPlugin"
 					>
 						<span slot="label">
@@ -70,7 +69,6 @@
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
-						:loading="actionPluginProcessed"
 						v-if="activateActionAvaliable"
 						@click="activatePlugin"
 					>
@@ -81,7 +79,6 @@
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
-						:loading="actionPluginProcessed"
 						v-if="deactivateActionAvaliable"
 						@click="deactivatePlugin"
 					>
@@ -239,6 +236,23 @@ export default {
 			.jfb-addons__item-info {
 				background-color: white;
 			}
+		}
+
+		&.update-avaliable {
+			.jfb-addons__item-name {
+				.version {
+					background-color: #D6336C;
+				}
+			}
+			.jfb-addons__item-update {
+				.latest-version {
+					color: white;
+					background-color: #46B450;
+					padding: 1px 5px;
+					border-radius: 4px;
+				}
+			}
+
 		}
 	}
 

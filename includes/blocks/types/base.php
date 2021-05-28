@@ -207,14 +207,15 @@ abstract class Base extends Base_Module {
 			$result_value = Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ];
 		}
 
-		if ( $result_value ) {
+		if ( '' !== $result_value ) {
 			return $result_value;
 		}
 
 		if ( isset( $this->block_attrs['default'] )
-		     && ! empty( $this->block_attrs['default'] )
+		     && '' !== $this->block_attrs['default']
 		     && null === json_decode( $this->block_attrs['default'] )
 		) {
+
 			return $this->block_attrs['default'];
 		}
 

@@ -36,13 +36,13 @@ class Controller extends Base_Gateway {
 
 	protected function options_list() {
 		return array(
-			'client_id' => array(
+			'client_id'  => array(
 				'label' => __( 'Client ID', 'jet-form-builder' )
 			),
-			'secret'    => array(
+			'secret'     => array(
 				'label' => __( 'Secret Key', 'jet-form-builder' )
 			),
-			'currency'  => array(
+			'currency'   => array(
 				'label' => __( 'Currency Code', 'jet-form-builder' )
 			),
 			'use_global' => array(
@@ -60,7 +60,9 @@ class Controller extends Base_Gateway {
 	}
 
 	protected function retrieve_payment_instance() {
-		[ 'client_id' => $client_id, 'secret' => $secret ] = $this->gateways_meta[ $this->get_id() ];
+		$meta      = $this->gateways_meta[ $this->get_id() ];
+		$client_id = $meta['client_id'];
+		$secret    = $meta['secret'];
 
 		$payment = $this->request(
 			'v2/checkout/orders/' . $this->payment_token . '/capture',

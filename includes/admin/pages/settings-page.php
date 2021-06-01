@@ -23,7 +23,7 @@ class Settings_Page extends Base_Page {
 		return __( 'Settings', 'jet-form-builder' );
 	}
 
-	public function assets(): void {
+	public function assets() {
 		parent::assets();
 
 		wp_enqueue_style(

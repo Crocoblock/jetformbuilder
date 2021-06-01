@@ -64,18 +64,14 @@ class Pages_Manager {
 	/**
 	 * Set current admin page
 	 */
-	public function set_current_page(): void {
+	public function set_current_page() {
 		$this->current_page = $this->pages[ esc_attr( $_GET['page'] ) ];
 	}
 
 	/**
 	 * Dashboard assets
-	 *
-	 * @param  [type] $hook [description]
-	 *
-	 * @return [type]       [description]
 	 */
-	public function assets(): void {
+	public function assets() {
 		$ui_data = Plugin::instance()->framework->get_included_module_data( 'cherry-x-vue-ui.php' );
 		( new \CX_Vue_UI( $ui_data ) )->enqueue_assets();
 
@@ -119,9 +115,8 @@ class Pages_Manager {
 
 	/**
 	 * Register appointments
-	 * @return void
 	 */
-	public function add_pages(): void {
+	public function add_pages() {
 		$parent = 'edit.php?post_type=' . jet_form_builder()->post_type->slug();
 
 		foreach ( $this->pages as $page ) {

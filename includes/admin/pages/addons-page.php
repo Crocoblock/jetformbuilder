@@ -22,7 +22,7 @@ class Addons_Page extends Base_Page {
 	/**
 	 * Page Assets
 	 */
-	public function assets(): void {
+	public function assets() {
 		parent::assets();
 
 		wp_enqueue_style(

@@ -10,7 +10,7 @@ class Active_Campaign_Handler extends Base_Handler {
 		return 'active-campaign-tab';
 	}
 
-	public function on_get_request(): void {
+	public function on_get_request() {
 		$key = sanitize_text_field( $_POST['api_key'] );
 		$url = sanitize_text_field( $_POST['api_url'] );
 

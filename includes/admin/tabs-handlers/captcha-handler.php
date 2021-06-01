@@ -10,7 +10,7 @@ class Captcha_Handler extends Base_Handler {
 		return 'captcha-tab';
 	}
 
-	public function on_get_request(): void {
+	public function on_get_request() {
 		$secret = sanitize_text_field( $_POST['secret'] );
 		$key   = sanitize_text_field( $_POST['key'] );
 

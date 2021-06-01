@@ -10,7 +10,7 @@ class Paypal_Handler extends Base_Handler {
 		return 'paypal';
 	}
 
-	public function on_get_request(): void {
+	public function on_get_request() {
 		$secret    = sanitize_text_field( $_POST['secret'] );
 		$client_id = sanitize_text_field( $_POST['client_id'] );
 

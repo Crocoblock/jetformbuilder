@@ -39,51 +39,59 @@
 					</div>
 				</div>
 				<div
+					class="jfb-addons__item-license"
+				>
+					<span>License not activated</span>
+					<cx-vui-button
+						button-style="link-accent"
+						size="link"
+						v-if="activateLicenceActionAvaliable"
+						@click="activateLicense"
+					>
+						<span slot="label">
+							<span>Activate Now</span>
+						</span>
+					</cx-vui-button>
+				</div>
+				<div
 					class="jfb-addons__item-desc"
-					v-html="addonData.desc"
-				></div>
+				>
+					<span v-html="addonData.desc"></span>
+					<a :href="addonData.demo" target="_blank">Learn More</a>
+				</div>
 				<div class="jfb-addons__item-actions">
 
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
-						v-if="learnMoreAvaliable"
-						:url="addonData.demo"
-						tag-name="a"
-						target="_blank"
-					>
-						<span slot="label">
-							<span>Learn More</span>
-						</span>
-					</cx-vui-button>
-					<cx-vui-button
-						button-style="link-accent"
-						size="link"
+						:loading="actionPluginProcessed"
 						v-if="installActionAvaliable"
 						@click="installPlugin"
 					>
 						<span slot="label">
-							<span>Install Plugin</span>
+							<span>Install Addon</span>
 						</span>
 					</cx-vui-button>
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
+						:loading="actionPluginProcessed"
 						v-if="activateActionAvaliable"
 						@click="activatePlugin"
 					>
 						<span slot="label">
-							<span>Activate Plugin</span>
+							<span>Activate Addon</span>
 						</span>
 					</cx-vui-button>
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
+						:loading="actionPluginProcessed"
 						v-if="deactivateActionAvaliable"
 						@click="deactivatePlugin"
 					>
 						<span slot="label">
-							<span>Deactivate Plugin</span>
+							<span>Deactivate Addon</span>
 						</span>
 					</cx-vui-button>
 				</div>
@@ -121,6 +129,10 @@ export default {
 			return ( ! this.$parent.isLicenseActivated ) ? true : false;
 		},
 
+		activateLicenceActionAvaliable() {
+			return ( ! this.$parent.isLicenseActivated ) ? true : false;
+		},
+
 		installActionAvaliable() {
 			return ( ! this.addonData['isInstalled'] && this.$parent.isLicenseActivated ) ? true : false;
 		},
@@ -144,22 +156,26 @@ export default {
 	},
 	methods: {
 
-		installPlugin: function() {
+		activateLicense() {
+			window.jfbEventBus.$emit( 'showLicensePopup' );
+		},
+
+		installPlugin() {
 			this.actionPlugin = 'install';
 			this.pluginAction();
 		},
 
-		deactivatePlugin: function() {
+		deactivatePlugin() {
 			this.actionPlugin = 'deactivate';
 			this.pluginAction();
 		},
 
-		activatePlugin: function() {
+		activatePlugin() {
 			this.actionPlugin = 'activate';
 			this.pluginAction();
 		},
 
-		updatePlugin: function() {
+		updatePlugin() {
 
 			if ( this.updateActionAvaliable ) {
 				this.actionPlugin = 'update';
@@ -187,11 +203,29 @@ export default {
 						self.actionPluginRequest.abort();
 					}
 
-					self.actionPluginProcessed = true;
+					switch ( self.actionPlugin ) {
+						case 'install':
+						case 'activate':
+						case 'deactivate':
+							self.actionPluginProcessed = true;
+							break;
+						case 'update':
+							self.updatePluginProcessed = true;
+							break;
+					}
 				},
 				success: function( responce, textStatus, jqXHR ) {
 
-					self.actionPluginProcessed = false;
+					switch ( self.actionPlugin ) {
+						case 'install':
+						case 'activate':
+						case 'deactivate':
+							self.actionPluginProcessed = false;
+							break;
+						case 'update':
+							self.updatePluginProcessed = false;
+							break;
+					}
 
 					if ( responce.success ) {
 						self.$CXNotice.add( {
@@ -201,9 +235,11 @@ export default {
 						} );
 
 						window.jfbEventBus.$emit( 'updateAddonData', {
-							'slug': self.addonData['slug'],
-							'addonData': responce.data,
+							slug: self.addonData['slug'],
+							addonData: responce.data,
+							action: self.actionPlugin,
 						} );
+
 					} else {
 						self.$CXNotice.add( {
 							message: responce.message,
@@ -221,17 +257,32 @@ export default {
 <style lang="scss">
 
 .jfb-addons {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: repeat(4, auto);
-	gap: 20px;
+	margin-bottom: 50px;
 
-	@media (max-width: 1140px) {
-		grid-template-columns: repeat(2, 1fr);
-		grid-template-rows: repeat(2, auto);
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	a {
+		color: #007cba;
+	}
+
+	&__header {
+		margin-bottom: 20px;
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 20px;
+
+		@media (max-width: 1140px) {
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 
 	&__item {
+
 		&.activated {
 			.jfb-addons__item-info {
 				background-color: white;
@@ -313,18 +364,36 @@ export default {
 		margin-bottom: 10px;
 	}
 
+	&__item-license {
+		margin-bottom: 10px;
+		color: #7b7e81;
+
+		.cx-vui-button {
+			margin-left: 3px;
+		}
+	}
+
 	&__item-desc {
 		flex: 1 1 auto;
-		margin-bottom: 20px;
+
+		a {
+			text-decoration: none;
+		}
 	}
 
 	&__item-actions {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
+		flex-wrap: wrap;
+		margin-top: 20px;
+
+		&:empty {
+			display: none;
+		}
 
 		.cx-vui-button {
-			margin-right: 10px;
+			margin-right: 20px;
 		}
 	}
 }

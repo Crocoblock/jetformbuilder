@@ -24,7 +24,7 @@
 					<cx-vui-button
 						button-style="accent"
 						size="mini"
-						@click="licensePopupVisible = true"
+						@click="showLicensePopup"
 					>
 					<span slot="label">
 						<svg class="button-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,12 +36,31 @@
 					</cx-vui-button>
 				</div>
 			</div>
+
 			<div class="jfb-addons">
-				<AddonItem
-					v-for="( addonData, index ) in allAddons"
-					:key="index"
-					:addon-data="addonData"
-				></AddonItem>
+				<div class="jfb-addons__header">
+					<span class="cx-vui-subtitle">Your Installed Addons</span>
+				</div>
+				<div class="jfb-addons__list">
+					<AddonItem
+						v-for="( addonData, index ) in installedAddonList"
+						:key="index"
+						:addon-data="addonData"
+					></AddonItem>
+				</div>
+			</div>
+
+			<div class="jfb-addons">
+				<div class="jfb-addons__header">
+					<span class="cx-vui-subtitle">All available Addons</span>
+				</div>
+				<div class="jfb-addons__list">
+					<AddonItem
+						v-for="( addonData, index ) in availableAddonList"
+						:key="index"
+						:addon-data="addonData"
+					></AddonItem>
+				</div>
 			</div>
 		</div>
 
@@ -117,30 +136,77 @@ export default {
 	},
 	mounted: function() {
 		window.jfbEventBus.$on( 'updateAddonData', this.updateAddonData );
+		window.jfbEventBus.$on( 'showLicensePopup', this.showLicensePopup );
 	},
 	computed: {
 		isLicenseActivated() {
 			return 0 !== this.licenseList.length;
 		},
+
 		licenseActionType() {
 			return ! this.isLicenseActivated ? 'activate_license' : 'deactivate_license';
+		},
+
+		installedAddonList() {
+			let installedAddonsList = {};
+
+			for ( let addonSlug in this.allAddons ) {
+
+				if ( this.allAddons[ addonSlug ][ 'isInstalled' ] ) {
+					installedAddonsList[ addonSlug ] = this.allAddons[ addonSlug ];
+				}
+			}
+
+			return installedAddonsList;
+		},
+
+		availableAddonList() {
+			let availableAddonList = {};
+
+			for ( let addonSlug in this.allAddons ) {
+
+				if ( ! this.allAddons[ addonSlug ][ 'isInstalled' ] ) {
+					availableAddonList[ addonSlug ] = this.allAddons[ addonSlug ];
+				}
+			}
+
+			return availableAddonList;
 		}
 	},
 	methods: {
+		showLicensePopup() {
+			this.licensePopupVisible = true;
+		},
+
 		updateAddonData( data ) {
-			let slug      = data.slug,
-				addonData = data.addonData;
+			let slug = data.slug,
+				addonData = data.addonData,
+				pluginAction = data.action,
+				reloadActionMap = [ 'activate', 'deactivate', 'update' ];
 
 			this.allAddons[ slug ] = Object.assign( {}, this.allAddons[ slug ], addonData );
-			this.proccesingState = true;
 
-			setTimeout( function() {
-				window.location.reload();
-			}, 1000 );
+			if ( reloadActionMap.includes( pluginAction ) ) {
+				this.proccesingState = true;
+
+				setTimeout( function() {
+					window.location.reload();
+				}, 1000 );
+			}
 		},
 
 		licenseAction() {
 			var self = this;
+
+			if ( '' === this.licenseKey ) {
+				self.$CXNotice.add( {
+					message: 'Empty key is missing',
+					type: 'error',
+					duration: 4000,
+				} );
+
+				return false;
+			}
 
 			this.licenseProccesingState = true;
 
@@ -189,6 +255,8 @@ export default {
 								self.licenseKey = '';
 								break;
 						}
+
+						self.licensePopupVisible = false;
 					} else {
 						self.$CXNotice.add( {
 							message: responce.message,
@@ -293,15 +361,16 @@ export default {
 }
 
 .jfb-addons-page {
+
 	&__inner {
 		padding: 30px;
 		height: 100%;
 	}
 
 	&__header {
-		padding-bottom: 20px;
+		padding-bottom: 15px;
 		border-bottom: 1px solid #DCDCDD;
-		margin-bottom: 20px;
+		margin-bottom: 30px;
 	}
 
 	&__header-controls {

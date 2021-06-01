@@ -411,7 +411,7 @@ class Manager {
 			$this->user_installed_plugins = get_plugins();
 		}
 
-		$plugin_list = array();
+		$plugin_list = [];
 
 		if ( $this->user_installed_plugins ) {
 
@@ -448,14 +448,13 @@ class Manager {
 
 		$no_update = isset( $this->update_plugins->no_update ) ? $this->update_plugins->no_update : false;
 		$to_update = isset( $this->update_plugins->response ) ? $this->update_plugins->response : false;
-		$remote_plugin_data = $this->get_jfb_remote_plugin_data( $plugin_file );
 
 		if ( $to_update && ! empty( $to_update ) && array_key_exists( $plugin_file, $to_update ) ) {
 			return $to_update[ $plugin_file ]->new_version;
 		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) ) {
 			return $no_update[ $plugin_file ]->new_version;
-		} elseif ( $remote_plugin_data ) {
-			return $remote_plugin_data['version'];
+		} elseif ( array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
+			return $this->user_installed_plugins[ $plugin_file ]['Version'];
 		} else {
 			return '1.0.0';
 		}
@@ -778,9 +777,6 @@ class Manager {
 				] );
 			}
 
-			$plugin_data = get_plugins( '/' . $result[ $plugin ]['destination_name'] );
-			$plugin_data = reset( $plugin_data );
-
 			wp_send_json( [
 				'success' => true,
 				'message' => __( 'The addon has been updated', 'jet-form-builder' ),
@@ -866,9 +862,16 @@ class Manager {
 
 		foreach ( $available_addons_data as $key => $addon_info ) {
 
-			$addon_data = $this->get_addon_data( $addon_info['slug'] );
+			$addon_slug = $addon_info['slug'];
+			$installed_user_plugins = $this->get_user_plugins();
 
-			if ( filter_var( $addon_data['updateAvaliable'], FILTER_VALIDATE_BOOLEAN ) ) {
+			if ( ! isset( $installed_user_plugins[ $addon_slug ] ) ) {
+				continue;
+			}
+
+			$current_version = $installed_user_plugins[ $addon_slug ]['currentVersion'];
+
+			if ( version_compare( $current_version, $addon_info['version'], '<' ) ) {
 
 				$plugin_file = $addon_info['slug'];
 				$plugin_slug = $this->get_addon_slug_by_filename( $plugin_file );
@@ -959,8 +962,6 @@ class Manager {
 				break;
 			}
 		}
-
-		//var_dump($registered_plugin_data);
 
 		if ( ! $registered_plugin_data ) {
 			return $_data;

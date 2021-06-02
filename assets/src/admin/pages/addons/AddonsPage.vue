@@ -37,7 +37,10 @@
 				</div>
 			</div>
 
-			<div class="jfb-addons">
+			<div
+				class="jfb-addons"
+				v-if="0!==Object.keys(installedAddonList).length"
+			>
 				<div class="jfb-addons__header">
 					<span class="cx-vui-subtitle">Your Installed Addons</span>
 				</div>
@@ -50,9 +53,12 @@
 				</div>
 			</div>
 
-			<div class="jfb-addons">
+			<div
+				class="jfb-addons"
+				v-if="0!==Object.keys(availableAddonList).length"
+			>
 				<div class="jfb-addons__header">
-					<span class="cx-vui-subtitle">All available Addons</span>
+					<span class="cx-vui-subtitle">All Available Addons</span>
 				</div>
 				<div class="jfb-addons__list">
 					<AddonItem
@@ -121,7 +127,7 @@ export default {
 		return {
 			allAddons: window.JetFBPageConfig.allAddons || {},
 			licenseList: window.JetFBPageConfig.licenseList || [],
-			licenseKey: window.JetFBPageConfig.licenseKey || '3505c79bf1765c293ae96e5dde177d77',
+			licenseKey: window.JetFBPageConfig.licenseKey || '',
 
 			licenseActivated: false,
 			licensePopupVisible: false,

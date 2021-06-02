@@ -1,8 +1,5 @@
 const { __ } = wp.i18n;
 
-const { jetEngineVersion } = window.JetFormEditorData;
-const { versionCompare } = JetFBActions;
-
 const listFrom = [
 	{
 		"value": "manual_input",
@@ -25,12 +22,5 @@ const listFrom = [
 		"label": __( 'Generate Dynamically', 'jet-form-builder' ),
 	},
 ];
-
-if ( false !== jetEngineVersion && versionCompare( jetEngineVersion, '2.7.4', '>=' ) ) {
-	listFrom.push( {
-		"value": "glossary",
-		"label": __( 'Glossary', 'jet-form-builder' ),
-	} )
-}
 
 export { listFrom };

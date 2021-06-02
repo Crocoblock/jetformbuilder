@@ -7,7 +7,6 @@ import addAction from "./helpers/actions/action-manager";
 import Tools, {
 	event,
 	listen,
-	versionCompare,
 } from "./helpers/tools";
 import DynamicPreset from "./components/presets/dynamic-preset";
 import JetFieldsMapControl from "../editor/blocks/controls/fields-map";
@@ -108,7 +107,6 @@ window.JetFBActions = {
 	renderGateway,
 	gatewayActionAttributes,
 	globalTab,
-	versionCompare,
 };
 
 // JFBHooks

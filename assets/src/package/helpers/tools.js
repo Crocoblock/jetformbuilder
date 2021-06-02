@@ -1,3 +1,5 @@
+
+
 const { __ } = wp.i18n;
 
 class Tools {
@@ -14,7 +16,7 @@ class Tools {
 	static withPlaceholder( source, label = '--', value = '' ) {
 		return [
 			{ label, value },
-			...source,
+			...source
 		];
 	}
 
@@ -39,7 +41,8 @@ class Tools {
 				if ( Tools.getFuncCondition( type.condition )()( type.value ) ) {
 					types.push( type );
 				}
-			} else {
+			}
+			else {
 				types.push( type );
 			}
 		} );
@@ -56,23 +59,6 @@ export const event = name => {
 
 export const listen = ( name, func ) => {
 	document.addEventListener( name, func );
-}
-
-export function versionCompare( version1, version2, operator ) {
-	if ( 'string' === typeof version1 ) {
-		version1 = +( version1.split( '.' ).join( '' ) );
-	}
-	if ( 'string' === typeof version2 ) {
-		version2 = +( version2.split( '.' ).join( '' ) );
-	}
-	if ( 0 >= version1 || 0 >= version2 ) {
-		throw new Error( 'Invalid arguments: version1 or version2' );
-	}
-
-	if ( [ '>', '<', '===', '==', '>=', '<=' ].includes( operator ) ) {
-		return new Function( `return ${ version1 } ${ operator } ${ version2 }` )();
-	}
-	throw new Error( 'Invalid arguments: operator' );
 }
 
 export default Tools;

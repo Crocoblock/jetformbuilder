@@ -10,7 +10,7 @@ class Get_Response_Handler extends Base_Handler {
 		return 'get-response-tab';
 	}
 
-	public function on_get_request(): void {
+	public function on_get_request() {
 		$api_key = sanitize_text_field( $_POST['api_key'] );
 
 		$result = $this->update_options( array(

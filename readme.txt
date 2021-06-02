@@ -2,7 +2,7 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.7.1
+Tested up to: 5.7.2
 Requires PHP: 7.0
 Stable tag: 1.2.0
 License: GPLv2 or later

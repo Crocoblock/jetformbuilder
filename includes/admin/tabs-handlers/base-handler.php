@@ -10,7 +10,7 @@ abstract class Base_Handler {
 
 	abstract public function slug(): string;
 
-	abstract public function on_get_request(): void;
+	abstract public function on_get_request();
 
 	abstract public function on_load(): array;
 
@@ -51,7 +51,7 @@ abstract class Base_Handler {
 		return update_option( $this->prefix . $this->slug(), $options );
 	}
 
-	public function before_assets(): void {
+	public function before_assets() {
 	}
 
 	public function save_global_options( $default = array() ) {

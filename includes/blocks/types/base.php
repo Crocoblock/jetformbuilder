@@ -92,7 +92,7 @@ abstract class Base extends Base_Module {
 	abstract public function get_block_renderer( $wp_block = null );
 
 	public function get_path_metadata_block() {
-		$path_parts = array( 'assets', 'blocks-src', $this->get_name() );
+		$path_parts = array( 'assets', 'src', 'editor', 'blocks', $this->get_name() );
 		$path       = implode( DIRECTORY_SEPARATOR, $path_parts );
 
 		return jet_form_builder()->plugin_dir( $path );
@@ -193,6 +193,9 @@ abstract class Base extends Base_Module {
 		$this->block_attrs['default']   = $this->get_default_from_preset();
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_default_from_preset() {
 		$result_value = '';
 
@@ -204,11 +207,19 @@ abstract class Base extends Base_Module {
 			$result_value = Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ];
 		}
 
-		return $result_value ? $result_value : (
-		isset( $this->block_attrs['default'] )
-			? $this->block_attrs['default']
-			: ''
-		);
+		if ( '' !== $result_value ) {
+			return $result_value;
+		}
+
+		if ( isset( $this->block_attrs['default'] )
+		     && '' !== $this->block_attrs['default']
+		     && null === json_decode( $this->block_attrs['default'] )
+		) {
+
+			return $this->block_attrs['default'];
+		}
+
+		return '';
 	}
 
 	/**

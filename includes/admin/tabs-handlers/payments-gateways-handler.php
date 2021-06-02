@@ -10,7 +10,7 @@ class Payments_Gateways_Handler extends Base_Handler {
 		return 'payments-gateways';
 	}
 
-	public function on_get_request(): void {
+	public function on_get_request() {
 		$use_gateways     = $_POST['use_gateways'] === 'true';
 		$enable_test_mode = $_POST['enable_test_mode'] === 'true';
 

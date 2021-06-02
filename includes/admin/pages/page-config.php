@@ -24,7 +24,7 @@ class Page_Config {
 		return ( ! empty( $this->config ) );
 	}
 
-	public function render_config(): void {
+	public function render_config() {
 		if ( $this->is_set() ) {
 			wp_localize_script( 'cx-vue', 'JetFBPageConfig', $this->config );
 		}

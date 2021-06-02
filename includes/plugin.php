@@ -94,7 +94,7 @@ class Plugin {
 		$this->form            = new Form_Manager();
 		$this->form_handler    = new Form_Handler();
 		$this->captcha         = new Forms_Captcha();
-		//$this->license_manager = new LicenseManager();
+		$this->license_manager = new LicenseManager();
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
@@ -106,7 +106,7 @@ class Plugin {
 			new Form_Actions_Manager();
 			new Pages_Manager( array(
 				new Settings_Page(),
-				//new Addons_Page()
+				new Addons_Page()
 			) );
 		}
 	}

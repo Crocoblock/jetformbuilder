@@ -1,7 +1,12 @@
 <?php
 /**
  * input[type="hidden"] template
+ *
+ * @var Base $this
+ * @var array $args
  */
+
+use Jet_Form_Builder\Blocks\Render\Base;
 
 $this->add_attribute( 'placeholder', $args['placeholder'] );
 $this->add_attribute( 'value', $args['default'] );

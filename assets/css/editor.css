@@ -530,6 +530,7 @@
 
 .jet-form-builder-row {
     overflow: hidden;
+    display: block;
 }
 
 .rtl .jet-form-editor__macros-inserter {
@@ -660,7 +661,7 @@ select.components-select-control__input.components-select-control__input.compone
     margin-left: 10vw;
 }
 
-.editor-styles-wrapper .wp-block.wp-block {
+.editor-styles-wrapper .wp-block.wp-block.wp-block {
     max-width: 100%;
 }
 

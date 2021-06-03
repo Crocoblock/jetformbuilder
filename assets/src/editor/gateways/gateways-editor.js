@@ -141,7 +141,7 @@ export default function GatewaysEditor( {
 				key="before_payment_base_control"
 			>
 				<div className={ 'checkboxes-row' }>
-					{ activeActions.map( ( action, index ) => <CheckboxControl
+					{ availableActions.map( ( action, index ) => <CheckboxControl
 						className={ 'jet-forms-checkbox-field' }
 						key={ `place_holder_block_${ action.id + index }` }
 						checked={ getNotificationsBefore( action.id ).active }

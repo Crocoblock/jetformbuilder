@@ -22,7 +22,7 @@
 					</cx-vui-button>
 
 					<cx-vui-button
-						button-style="accent"
+						:button-style="!isLicenseActivated ? 'accent' : 'danger'"
 						size="mini"
 						@click="showLicensePopup"
 					>
@@ -402,9 +402,28 @@ export default {
 			color: #007cba;
 			box-shadow: inset 0 0 0 1px #007cba;
 
+			&:hover {
+				background-color: #007cba12;
+			}
+
 			.button-icon {
 				path {
 					fill: #007cba;
+				}
+			}
+		}
+
+		&--style-danger {
+			color: #d6336c;
+			box-shadow: inset 0 0 0 1px #d6336c;
+
+			&:hover {
+				background-color: #d6336c12;
+			}
+
+			.button-icon {
+				path {
+					fill: #d6336c;
 				}
 			}
 		}

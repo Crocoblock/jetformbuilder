@@ -1017,8 +1017,6 @@ class Manager {
 		return $response;
 	}
 
-
-
 	/**
 	 * Manager constructor.
 	 */

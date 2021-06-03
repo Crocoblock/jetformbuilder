@@ -106,7 +106,7 @@ abstract class Base extends Base_Module {
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
-				'render_callback' => array( $this, 'render_callback_field' )
+				'render_callback' => Plugin::instance()->blocks->render_callback( $this )
 			)
 		);
 

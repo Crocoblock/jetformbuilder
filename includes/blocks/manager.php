@@ -327,4 +327,10 @@ class Manager {
 		return $this->get_field_by_name( 'form-block', self::OTHERS_STORAGE );
 	}
 
+	public function render_callback( $instance ) {
+		return function ( array $attrs, $content = null, $wp_block = null ) use ( $instance ) {
+			return call_user_func( array( clone $instance, 'render_callback_field' ), $attrs, $content, $wp_block );
+		};
+	}
+
 }

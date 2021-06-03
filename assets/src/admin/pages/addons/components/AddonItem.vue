@@ -44,12 +44,12 @@
 				</div>
 				<div
 					class="jfb-addons__item-license"
+					v-if="activateLicenceActionAvaliable"
 				>
 					<span>License not activated</span>
 					<cx-vui-button
 						button-style="link-accent"
 						size="link"
-						v-if="activateLicenceActionAvaliable"
 						@click="activateLicense"
 					>
 						<span slot="label">

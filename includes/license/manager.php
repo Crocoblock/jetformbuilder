@@ -77,6 +77,15 @@ class Manager {
 		$responce_data = $this->license_action_query( $license_action, $license_key );
 
 		if ( ! $responce_data['success'] ) {
+
+			if ( 'invalid' === $responce_data['license'] ) {
+				wp_send_json( [
+					'success'  => false,
+					'message' => __( 'Invalid license key', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+			}
+
 			wp_send_json( [
 				'success'  => false,
 				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
@@ -85,6 +94,8 @@ class Manager {
 		}
 
 		set_site_transient( 'update_plugins', null );
+
+
 
 		switch ( $license_action ) {
 			case 'activate_license':
@@ -397,10 +408,9 @@ class Manager {
 	}
 
 	/**
-	 * [get_addon_data description]
-	 * @return [type] [description]
+	 * @return array[]|bool
 	 */
-	public function get_user_plugins() {
+	public function get_user_installed_plugins() {
 
 		if ( ! $this->user_installed_plugins ) {
 
@@ -411,11 +421,22 @@ class Manager {
 			$this->user_installed_plugins = get_plugins();
 		}
 
+		return $this->user_installed_plugins;
+	}
+
+	/**
+	 * [get_addon_data description]
+	 * @return [type] [description]
+	 */
+	public function get_user_plugins() {
+
+		$user_installed_plugins = $this->get_user_installed_plugins();
+
 		$plugin_list = [];
 
-		if ( $this->user_installed_plugins ) {
+		if ( $user_installed_plugins ) {
 
-			foreach ( $this->user_installed_plugins as $plugin_file => $plugin_data ) {
+			foreach ( $user_installed_plugins as $plugin_file => $plugin_data ) {
 
 				$current_version = $plugin_data['Version'];
 				$latest_version = $this->get_latest_version( $plugin_file );
@@ -527,20 +548,13 @@ class Manager {
 	 */
 	public function get_addon_data( $plugin_file ) {
 
-		if ( ! $this->user_installed_plugins ) {
+		$user_installed_plugins = $this->get_user_installed_plugins();
 
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-
-			$this->user_installed_plugins = get_plugins();
-		}
-
-		if ( empty( $this->user_installed_plugins[ $plugin_file ] )) {
+		if ( empty( $user_installed_plugins[ $plugin_file ] )) {
 			return false;
 		}
 
-		$plugin_data = $this->user_installed_plugins[ $plugin_file ];
+		$plugin_data = $user_installed_plugins[ $plugin_file ];
 
 		$current_version = $plugin_data['Version'];
 
@@ -947,6 +961,7 @@ class Manager {
 		}
 
 		$available_addons_data = $this->get_jfb_remote_plugin_list();
+		$user_installed_plugins = $this->get_user_installed_plugins();
 
 		$registered_plugin_data = false;
 
@@ -958,6 +973,17 @@ class Manager {
 				$registered_plugin_data = $addon_data;
 				$registered_plugin_data['plugin_slug'] = $addon_slug;
 				$registered_plugin_data['transient_key'] = $addon_slug . '_addon_info_data';
+				$registered_plugin_data['banners'] = [
+					'high' => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
+					'low'  => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
+				];
+
+				if ( ! empty( $user_installed_plugins[ $addon_data['slug'] ] ) ) {
+					$installed_plugin_data = $user_installed_plugins[ $addon_data['slug'] ];
+
+					$registered_plugin_data['author'] = $installed_plugin_data['Author'];
+					$registered_plugin_data['plugin_url'] = $installed_plugin_data['PluginURI'];
+				}
 
 				break;
 			}
@@ -986,9 +1012,9 @@ class Manager {
 			$plugin_api_data->tested   = $registered_plugin_data['tested'];
 			$plugin_api_data->banners  = $registered_plugin_data['banners'];
 			$plugin_api_data->version  = $changelog_remote_response->current_version;
-			$plugin_api_data->sections = array(
+			$plugin_api_data->sections = [
 				'changelog' => $changelog_remote_response->changelog,
-			);
+			];
 
 			// Expires in 1 day
 			set_site_transient( $registered_plugin_data['transient_key'], $plugin_api_data, DAY_IN_SECONDS );

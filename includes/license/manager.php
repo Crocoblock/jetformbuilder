@@ -93,10 +93,6 @@ class Manager {
 			] );
 		}
 
-		set_site_transient( 'update_plugins', null );
-
-
-
 		switch ( $license_action ) {
 			case 'activate_license':
 				$this->add_license_data( $license_key, $responce_data );

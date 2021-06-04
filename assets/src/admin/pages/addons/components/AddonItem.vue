@@ -309,7 +309,7 @@ export default {
 				.latest-version {
 					color: white;
 					background-color: #46B450;
-					padding: 1px 8px;
+					padding: 2px 8px;
 					border-radius: 4px;
 				}
 			}

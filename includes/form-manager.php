@@ -152,14 +152,14 @@ class Form_Manager {
 		return get_post( $form_id )->post_content;
 	}
 
-	public function get_field_by_name( $form_id, $field_name, $blocks = array() ): array {
+	public function get_field_by_name( $form_id, $field_name, $blocks = array() ) {
 		if ( ! $blocks ) {
 			$blocks = $this->get_only_form_fields( $form_id );
 		}
 		return $this->_get_field_by_name( $field_name, $blocks );
 	}
 
-	private function _get_field_by_name( $field_name, $blocks ): array {
+	private function _get_field_by_name( $field_name, $blocks ) {
 		foreach ( $blocks as $block ) {
 			$name = isset( $block['attrs']['name'] ) && $block['attrs']['name']
 				? $block['attrs']['name']

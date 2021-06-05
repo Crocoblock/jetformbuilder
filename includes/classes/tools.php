@@ -32,6 +32,7 @@ class Tools {
 		if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
 			return false;
 		}
+
 		return ( \Elementor\Plugin::instance()->editor->is_edit_mode() );
 	}
 
@@ -217,6 +218,7 @@ class Tools {
 					$result[ $role ] = $data['name'];
 				}
 			}
+
 			return $result;
 		}
 	}
@@ -376,6 +378,10 @@ class Tools {
 		}
 
 		return $response;
+	}
+
+	public static function is_readable( string $filename ) {
+		return strlen( $filename ) <= PHP_MAXPATHLEN && is_readable( $filename );
 	}
 
 }

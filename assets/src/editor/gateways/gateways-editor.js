@@ -141,7 +141,7 @@ export default function GatewaysEditor( {
 				key="before_payment_base_control"
 			>
 				<div className={ 'checkboxes-row' }>
-					{ activeActions.map( ( action, index ) => <CheckboxControl
+					{ availableActions.map( ( action, index ) => <CheckboxControl
 						className={ 'jet-forms-checkbox-field' }
 						key={ `place_holder_block_${ action.id + index }` }
 						checked={ getNotificationsBefore( action.id ).active }
@@ -191,8 +191,7 @@ export default function GatewaysEditor( {
 				</div>
 			</BaseControl>
 		</> }
-
-		{ ( 1 < actionsList.length || gateway.action_order ) && <BaseControl
+		<BaseControl
 			label={ label( 'action_order' ) }
 			key='gateway_action_order_base_control'
 		>
@@ -208,7 +207,7 @@ export default function GatewaysEditor( {
 					} ) );
 				} }
 			/>
-		</BaseControl> }
+		</BaseControl>
 
 		<SelectControl
 			label={ label( 'price_field' ) }

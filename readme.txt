@@ -117,6 +117,22 @@ Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
 
+**1.2.2**
+ - ADD: better parse macros in the Send Email action
+ - ADD: filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
+ - UPD: parse macros in From Name & From Address fields in Send Email action
+ - FIX: dynamic preset with empty result value
+ - FIX: CSS compatibility gutenberg-addons
+ - FIX: compatibility with php 7.0
+ - FIX: hiding a calculated field
+ - FIX: duplicate calc formula in each repeater
+ - FIX: displaying redirect action in gateways editor
+ - FIX: duplicating form
+ - FIX: remove mask from empty input on submit the Form
+
+**1.2.1**
+ - FIX: blocks initialization.
+
 **1.2.0**
  - ADD: Examples (preview) for Jet Form Fields in Gutenberg
  - ADD: Global settings for actions, additional sidebar plugins, for example `reCAPTCHA v3`

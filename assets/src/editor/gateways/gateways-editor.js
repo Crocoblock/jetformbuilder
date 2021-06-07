@@ -191,8 +191,7 @@ export default function GatewaysEditor( {
 				</div>
 			</BaseControl>
 		</> }
-
-		{ ( 1 < actionsList.length || gateway.action_order ) && <BaseControl
+		<BaseControl
 			label={ label( 'action_order' ) }
 			key='gateway_action_order_base_control'
 		>
@@ -208,7 +207,7 @@ export default function GatewaysEditor( {
 					} ) );
 				} }
 			/>
-		</BaseControl> }
+		</BaseControl>
 
 		<SelectControl
 			label={ label( 'price_field' ) }

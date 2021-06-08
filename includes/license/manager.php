@@ -337,6 +337,7 @@ class Manager {
 			}
 		}
 
+
 		return $plugins_list;
 	}
 
@@ -463,6 +464,18 @@ class Manager {
 			$this->update_plugins = get_site_transient( 'update_plugins' );
 		}
 
+		$available_addons_data = $this->get_jfb_remote_plugin_list();
+
+		if ( ! empty( $available_addons_data ) && array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
+
+			foreach ( $available_addons_data as $key => $addon_info ) {
+
+				if ( $plugin_file === $addon_info['slug'] && version_compare( $this->user_installed_plugins[ $plugin_file ]['Version'], $addon_info['version'], '<' ) ) {
+					return $addon_info['version'];
+				}
+			}
+		}
+
 		$no_update = isset( $this->update_plugins->no_update ) ? $this->update_plugins->no_update : false;
 		$to_update = isset( $this->update_plugins->response ) ? $this->update_plugins->response : false;
 
@@ -471,7 +484,9 @@ class Manager {
 		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) ) {
 			return $no_update[ $plugin_file ]->new_version;
 		} elseif ( array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
-			return $this->user_installed_plugins[ $plugin_file ]['Version'];
+			$current_version = $this->user_installed_plugins[ $plugin_file ]['Version'];
+
+			return $current_version;
 		} else {
 			return '1.0.0';
 		}
@@ -551,9 +566,7 @@ class Manager {
 		}
 
 		$plugin_data = $user_installed_plugins[ $plugin_file ];
-
 		$current_version = $plugin_data['Version'];
-
 		$latest_version = $this->get_latest_version( $plugin_file );
 
 		return [

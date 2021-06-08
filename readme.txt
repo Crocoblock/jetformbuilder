@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.7.2
 Requires PHP: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,20 +118,21 @@ Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 == Changelog ==
 
 **1.2.2**
- - ADD: better parse macros in the Send Email action
- - ADD: filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
- - UPD: parse macros in From Name & From Address fields in Send Email action
- - FIX: dynamic preset with empty result value
+ - ADD: Addon management via Dashboard
+ - ADD: Better parse macros in the Send Email action
+ - ADD: Filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
+ - UPD: Parse macros in From Name & From Address fields in Send Email action
+ - FIX: Dynamic preset with empty result value
  - FIX: CSS compatibility gutenberg-addons
- - FIX: compatibility with php 7.0
- - FIX: hiding a calculated field
- - FIX: duplicate calc formula in each repeater
- - FIX: displaying redirect action in gateways editor
- - FIX: duplicating form
- - FIX: remove mask from empty input on submit the Form
+ - FIX: Compatibility with php 7.0
+ - FIX: Hiding a calculated field
+ - FIX: Duplicate calc formula in each repeater
+ - FIX: Displaying redirect action in gateways editor
+ - FIX: Duplicating form
+ - FIX: Remove mask from empty input on submit the Form
 
 **1.2.1**
- - FIX: blocks initialization.
+ - FIX: Blocks initialization.
 
 **1.2.0**
  - ADD: Examples (preview) for Jet Form Fields in Gutenberg

@@ -5,6 +5,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 # ChangeLog
 
 ## 1.2.2
+* ADD: addon management via dashboard
 * ADD: better parse macros in the Send Email action
 * ADD: filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
 * UPD: parse macros in From Name & From Address fields in Send Email action

@@ -837,7 +837,8 @@ class Manager {
 		switch ( $action ) {
 
 			case 'check-plugin-update':
-				set_site_transient( 'update_plugins', null );
+				//set_site_transient( 'update_plugins', null );
+				wp_clean_update_cache();
 
 				wp_send_json( [
 					'success'  => true,

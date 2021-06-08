@@ -87,6 +87,15 @@ class Manager {
 			}
 
 			if ( 'failed' === $responce_data['license'] ) {
+
+				$license_list = $this->get_license_data();
+
+				$license_list = array_filter( $license_list, function ( $license_data ) use ( $license_key ) {
+					return $license_data['license_key'] !== $license_key;
+				} );
+
+				update_option( $this->license_data_key, $license_list );
+				
 				wp_send_json( [
 					'success'  => true,
 					'message' => __( 'The license for this site is already activated', 'jet-form-builder' ),

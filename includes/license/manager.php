@@ -86,6 +86,14 @@ class Manager {
 				] );
 			}
 
+			if ( 'failed' === $responce_data['license'] ) {
+				wp_send_json( [
+					'success'  => true,
+					'message' => __( 'The license for this site is already activated', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+			}
+
 			wp_send_json( [
 				'success'  => false,
 				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),

@@ -28,13 +28,14 @@
 					class="jfb-addons__item-update"
 				>
 					<div v-if="!updateActionAvaliable">Your plugin is up to date</div>
-					<div v-if="updateActionAvaliable && !activateLicenceActionAvaliable">
+					<div v-if="updateActionAvaliable">
 						Version <span class="latest-version">{{ addonData.version }}</span> available
 						<cx-vui-button
 							button-style="link-accent"
 							size="link"
 							:loading="updatePluginProcessed"
 							@click="updatePlugin"
+							v-if="!activateLicenceActionAvaliable"
 						>
 							<span slot="label">
 								<span>Update Now</span>

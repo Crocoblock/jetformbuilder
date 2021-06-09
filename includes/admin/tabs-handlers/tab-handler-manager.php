@@ -99,7 +99,7 @@ class Tab_Handler_Manager {
 		}
 	}
 
-	public function all( $default_tabs = array() ): array {
+	public function all( $default_tabs = array() ) {
 		$response = array();
 
 		foreach ( $this->_tabs as $slug => $tab ) {

@@ -8,11 +8,11 @@ abstract class Base_Handler {
 
 	private $prefix = 'jet_form_builder_settings__';
 
-	abstract public function slug(): string;
+	abstract public function slug();
 
 	abstract public function on_get_request();
 
-	abstract public function on_load(): array;
+	abstract public function on_load();
 
 	public function __construct() {
 		add_action( 'jet-fb/admin-pages/before-assets/jfb-settings', array( $this, 'before_assets' ) );
@@ -35,8 +35,8 @@ abstract class Base_Handler {
 		return true;
 	}
 
-	public function get_options( $default = array() ): array {
-		$response = get_option( $this->prefix . $this->slug(), false );
+	public function get_options( $default = array() ) {
+		$response = get_option( $this->option_name(), false );
 
 		$response = $response
 			? json_decode( $response, true )
@@ -45,10 +45,10 @@ abstract class Base_Handler {
 		return array_merge( $default, $response );
 	}
 
-	public function update_options( $options ): bool {
+	public function update_options( $options ) {
 		$options = json_encode( $options );
 
-		return update_option( $this->prefix . $this->slug(), $options );
+		return update_option( $this->option_name(), $options );
 	}
 
 	public function before_assets() {
@@ -63,5 +63,9 @@ abstract class Base_Handler {
 
 	public function get_global_options() {
 		return Tab_Handler_Manager::instance()->get_options_tab( $this->slug() );
+	}
+
+	public function option_name() {
+		return $this->prefix . $this->slug();
 	}
 }

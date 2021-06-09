@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
 class Mailchimp_Handler extends Base_Handler {
 
-	public function slug(): string {
+	public function slug() {
 		return 'mailchimp-tab';
 	}
 
@@ -18,13 +18,13 @@ class Mailchimp_Handler extends Base_Handler {
 		) );
 
 		$result ? wp_send_json_success( array(
-			'message' => __( 'Saved successfully!', 'jet-fom-builder' )
+			'message' => __( 'Saved successfully!', 'jet-form-builder' )
 		) ) : wp_send_json_error( array(
 			'message' => __( 'Unsuccessful save.', 'jet-form-builder' )
 		) );
 	}
 
-	public function on_load(): array {
+	public function on_load() {
 		return $this->get_options( array(
 			'api_key' => '',
 		) );

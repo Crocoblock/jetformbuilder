@@ -385,5 +385,9 @@ class Tools {
 			? jet_engine()->get_version()
 			: false;
 	}
+	
+	public static function is_readable( string $filename ) {
+		return strlen( $filename ) <= PHP_MAXPATHLEN && is_readable( $filename );
+	}
 
 }

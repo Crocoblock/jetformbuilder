@@ -77,14 +77,38 @@ class Manager {
 		$responce_data = $this->license_action_query( $license_action, $license_key );
 
 		if ( ! $responce_data['success'] ) {
+
+			if ( 'invalid' === $responce_data['license'] ) {
+				wp_send_json( [
+					'success'  => false,
+					'message' => __( 'Invalid license key', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+			}
+
+			if ( 'failed' === $responce_data['license'] ) {
+
+				$license_list = $this->get_license_data();
+
+				$license_list = array_filter( $license_list, function ( $license_data ) use ( $license_key ) {
+					return $license_data['license_key'] !== $license_key;
+				} );
+
+				update_option( $this->license_data_key, $license_list );
+				
+				wp_send_json( [
+					'success'  => true,
+					'message' => __( 'The license for this site is already activated', 'jet-form-builder' ),
+					'data'    => [],
+				] );
+			}
+
 			wp_send_json( [
 				'success'  => false,
 				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
 				'data'    => [],
 			] );
 		}
-
-		set_site_transient( 'update_plugins', null );
 
 		switch ( $license_action ) {
 			case 'activate_license':
@@ -330,6 +354,7 @@ class Manager {
 			}
 		}
 
+
 		return $plugins_list;
 	}
 
@@ -397,10 +422,9 @@ class Manager {
 	}
 
 	/**
-	 * [get_addon_data description]
-	 * @return [type] [description]
+	 * @return array[]|bool
 	 */
-	public function get_user_plugins() {
+	public function get_user_installed_plugins() {
 
 		if ( ! $this->user_installed_plugins ) {
 
@@ -411,11 +435,22 @@ class Manager {
 			$this->user_installed_plugins = get_plugins();
 		}
 
+		return $this->user_installed_plugins;
+	}
+
+	/**
+	 * [get_addon_data description]
+	 * @return [type] [description]
+	 */
+	public function get_user_plugins() {
+
+		$user_installed_plugins = $this->get_user_installed_plugins();
+
 		$plugin_list = [];
 
-		if ( $this->user_installed_plugins ) {
+		if ( $user_installed_plugins ) {
 
-			foreach ( $this->user_installed_plugins as $plugin_file => $plugin_data ) {
+			foreach ( $user_installed_plugins as $plugin_file => $plugin_data ) {
 
 				$current_version = $plugin_data['Version'];
 				$latest_version = $this->get_latest_version( $plugin_file );
@@ -446,6 +481,18 @@ class Manager {
 			$this->update_plugins = get_site_transient( 'update_plugins' );
 		}
 
+		$available_addons_data = $this->get_jfb_remote_plugin_list();
+
+		if ( ! empty( $available_addons_data ) && array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
+
+			foreach ( $available_addons_data as $key => $addon_info ) {
+
+				if ( $plugin_file === $addon_info['slug'] && version_compare( $this->user_installed_plugins[ $plugin_file ]['Version'], $addon_info['version'], '<' ) ) {
+					return $addon_info['version'];
+				}
+			}
+		}
+
 		$no_update = isset( $this->update_plugins->no_update ) ? $this->update_plugins->no_update : false;
 		$to_update = isset( $this->update_plugins->response ) ? $this->update_plugins->response : false;
 
@@ -454,7 +501,9 @@ class Manager {
 		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) ) {
 			return $no_update[ $plugin_file ]->new_version;
 		} elseif ( array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
-			return $this->user_installed_plugins[ $plugin_file ]['Version'];
+			$current_version = $this->user_installed_plugins[ $plugin_file ]['Version'];
+
+			return $current_version;
 		} else {
 			return '1.0.0';
 		}
@@ -527,23 +576,14 @@ class Manager {
 	 */
 	public function get_addon_data( $plugin_file ) {
 
-		if ( ! $this->user_installed_plugins ) {
+		$user_installed_plugins = $this->get_user_installed_plugins();
 
-			if ( ! function_exists( 'get_plugins' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-
-			$this->user_installed_plugins = get_plugins();
-		}
-
-		if ( empty( $this->user_installed_plugins[ $plugin_file ] )) {
+		if ( empty( $user_installed_plugins[ $plugin_file ] )) {
 			return false;
 		}
 
-		$plugin_data = $this->user_installed_plugins[ $plugin_file ];
-
+		$plugin_data = $user_installed_plugins[ $plugin_file ];
 		$current_version = $plugin_data['Version'];
-
 		$latest_version = $this->get_latest_version( $plugin_file );
 
 		return [
@@ -827,7 +867,8 @@ class Manager {
 		switch ( $action ) {
 
 			case 'check-plugin-update':
-				set_site_transient( 'update_plugins', null );
+				//set_site_transient( 'update_plugins', null );
+				wp_clean_update_cache();
 
 				wp_send_json( [
 					'success'  => true,
@@ -947,6 +988,7 @@ class Manager {
 		}
 
 		$available_addons_data = $this->get_jfb_remote_plugin_list();
+		$user_installed_plugins = $this->get_user_installed_plugins();
 
 		$registered_plugin_data = false;
 
@@ -958,6 +1000,17 @@ class Manager {
 				$registered_plugin_data = $addon_data;
 				$registered_plugin_data['plugin_slug'] = $addon_slug;
 				$registered_plugin_data['transient_key'] = $addon_slug . '_addon_info_data';
+				$registered_plugin_data['banners'] = [
+					'high' => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
+					'low'  => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
+				];
+
+				if ( ! empty( $user_installed_plugins[ $addon_data['slug'] ] ) ) {
+					$installed_plugin_data = $user_installed_plugins[ $addon_data['slug'] ];
+
+					$registered_plugin_data['author'] = $installed_plugin_data['Author'];
+					$registered_plugin_data['plugin_url'] = $installed_plugin_data['PluginURI'];
+				}
 
 				break;
 			}
@@ -986,9 +1039,9 @@ class Manager {
 			$plugin_api_data->tested   = $registered_plugin_data['tested'];
 			$plugin_api_data->banners  = $registered_plugin_data['banners'];
 			$plugin_api_data->version  = $changelog_remote_response->current_version;
-			$plugin_api_data->sections = array(
+			$plugin_api_data->sections = [
 				'changelog' => $changelog_remote_response->changelog,
-			);
+			];
 
 			// Expires in 1 day
 			set_site_transient( $registered_plugin_data['transient_key'], $plugin_api_data, DAY_IN_SECONDS );
@@ -1016,8 +1069,6 @@ class Manager {
 
 		return $response;
 	}
-
-
 
 	/**
 	 * Manager constructor.

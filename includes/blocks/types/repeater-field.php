@@ -364,6 +364,7 @@ class Repeater_Field extends Base {
 		if ( ! $this->calc_data ) {
 			return;
 		}
+		$this->calc_dataset = '';
 
 		foreach ( $this->calc_data as $data_key => $data_value ) {
 

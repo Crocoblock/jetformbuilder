@@ -4,6 +4,23 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.2.2
+* ADD: Addon management via Dashboard
+* ADD: Better parse macros in the Send Email action
+* ADD: Filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
+* UPD: Parse macros in From Name & From Address fields in Send Email action
+* FIX: Dynamic preset with empty result value
+* FIX: CSS compatibility gutenberg-addons
+* FIX: Compatibility with php 7.0
+* FIX: Hiding a calculated field
+* FIX: Duplicate calc formula in each repeater
+* FIX: Displaying redirect action in gateways editor
+* FIX: Duplicating form
+* FIX: Remove mask from empty input on submit the Form
+
+## 1.2.1
+* FIX: Blocks initialization.
+
 ## 1.2.0
 * ADD: Examples (preview) for Jet Form Fields in Gutenberg
 * ADD: Global settings for actions, additional sidebar plugins, for example `reCAPTCHA v3`

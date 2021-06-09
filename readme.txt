@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.7.2
 Requires PHP: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,42 @@ Accept all kinds of payments securely via any of your WordPress-created forms be
 
 <a href="https://jetformbuilder.com/" target="_blank">Read more about all JetFormBuilder features here</a>
 
+== JetFormBuilder Pro Addons — Go Farther, Get More ==
+
+Meet the Pro version of JetFormBuilder allows you to go far beyond the ordinary forms. It comes with a pack of powerful addons, which will become a game changing experience. Automate your marketing campaigns, optimize leads generation, enjoy the simplicity of autocomplete, and much more.
+Check addons categories to find the appropriate one:
+
+= FORM FEATURES =
+Create complex forms with specific features to improve the user experience. Add autocomplete fields, make a long-form multistep, and help visitors not to lose filled-in data after page reload. 
+
+- <a href="https://jetformbuilder.com/addons/save-form-progress/" target="_blank">Save Form Progress</a>. A tweak to autosave the form progress and inputted data if the filling process was interrupted. 
+- <a href="https://jetformbuilder.com/addons/address-autocomplete/" target="_blank">Address Autocomplete</a>. A dynamic addon that suggests up to 5 places to auto-fill the Address field.
+- <a href="https://jetformbuilder.com/addons/limit-form-responses/" target="_blank">Limit Form Responses</a>. A lightweight addon to control the overall number of form submissions and those per user.
+- <a href="https://jetformbuilder.com/addons/select-autocomplete/" target="_blank">Select Field Autocomplete</a>. A tweak to auto-fill the values dynamically in the Select field type. 
+- <a href="https://jetformbuilder.com/addons/schedule-forms/" target="_blank">Schedule Forms</a>. A supplementary plugin that lets you set the form availability time frame.
+
+= EMAIL MARKETING =
+Collect and manage data the way you like the most. Grab subscribers using the catching form and organize your mailing lists with the help of the preferred email marketing tool.
+
+- <a href="https://jetformbuilder.com/addons/mailerlite-action/" target="_blank">MailerLite Action</a>. A top-notch addon to bring your email marketing to the next level.
+- <a href="https://jetformbuilder.com/addons/mailpoet/" target="_blank">MailPoet</a>. A form addon for more effective visitor data management and newsletter sending.
+- <a href="https://jetformbuilder.com/addons/convertkit-action/" target="_blank">ConvertKit</a>. An email marketing addon to ensure higher audience reach and income from mailing lists.
+
+= MARKETING AUTOMATION =
+Looking for a way to automate your email marketing campaign? Pick the favorite integration that would ease the subscribers' management.
+
+- <a href="https://jetformbuilder.com/addons/moosend/" target="_blank">Moosend</a>. A form extension to effectively manage subscribers and automate email marketing.
+
+= CRM & SALES =
+Link your fetching form with the mighty CRMs to generate leads more than ever! Get all the data you need from the visitors and handle it in a convenient database with lots of options. 
+
+- <a href="https://jetformbuilder.com/addons/hubspot/" target="_blank">HubSpot</a>. A mailing list addon that lets you alter the existing contacts and easily add new ones. 
+
+= PAYMENTS =
+Pick the payment methods you and your clients use the most, add them to your forms, and spice them up with the actions before and after payment. Get your site ready for e-commerce smoothly. 
+
+- <a href="https://jetformbuilder.com/addons/stripe-payments/" target="_blank">Stripe Payments</a>. A supplementary software to integrate your forms and Stripe payment system.
+
 == Demo ==
 We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://jetformbuilder.com/demo/</a>
 
@@ -116,6 +152,23 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.2**
+ - ADD: Addon management via Dashboard
+ - ADD: Better parse macros in the Send Email action
+ - ADD: Filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
+ - UPD: Parse macros in From Name & From Address fields in Send Email action
+ - FIX: Dynamic preset with empty result value
+ - FIX: CSS compatibility gutenberg-addons
+ - FIX: Compatibility with php 7.0
+ - FIX: Hiding a calculated field
+ - FIX: Duplicate calc formula in each repeater
+ - FIX: Displaying redirect action in gateways editor
+ - FIX: Duplicating form
+ - FIX: Remove mask from empty input on submit the Form
+
+**1.2.1**
+ - FIX: Blocks initialization.
 
 **1.2.0**
  - ADD: Examples (preview) for Jet Form Fields in Gutenberg

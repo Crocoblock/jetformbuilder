@@ -87,7 +87,7 @@
     display: block
 }
 
-.jet-form-builder__calculated-field {
+.jet-form-builder__calculated-field, .jet-form-builder__calculated-field--child {
     display: flex;
     width: 100%;
 }

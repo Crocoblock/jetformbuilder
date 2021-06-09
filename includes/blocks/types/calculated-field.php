@@ -20,7 +20,7 @@ class Calculated_Field extends Base {
 
 
 	public function get_field_input() {
-		return 'div.jet-form-builder-row .jet-form-builder__calculated-field';
+		return '-row .jet-form-builder__calculated-field, {{WRAPPER}} .%s-row .jet-form-builder__calculated-field--child';
 	}
 
 	public function additional_selectors_for_controls() {

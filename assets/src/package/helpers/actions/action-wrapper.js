@@ -1,5 +1,7 @@
 import { fromLocalizeHelper } from "./action-helper";
 
+const { applyFilters } = wp.hooks;
+
 export default function withActionLocalizeScript( actionType, ActionInstance ) {
 	const localizedData = fromLocalizeHelper( 'getLocalizedFullPack' )( actionType );
 
@@ -7,7 +9,7 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 		const onChangeSetting = ( value, key ) => {
 			props.onChange( {
 				...props.settings,
-				[ key ]: value
+				[ key ]: value,
 			} );
 		};
 
@@ -28,16 +30,16 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 
 			props.onChange( {
 				...props.settings,
-				[ source ]: fieldsMap
+				[ source ]: fieldsMap,
 			} );
 		}
 
 		const additionalProps = { onChangeSetting, getMapField, setMapField };
+		const resultProps = { ...props, ...localizedData, ...additionalProps };
 
-		return <ActionInstance
-			{ ...props }
-			{ ...localizedData }
-			{ ...additionalProps }
-		/>
+		return <>
+			<ActionInstance { ...resultProps } />
+			{ applyFilters( `jet.fb.render.action.${ actionType }`, <></>, resultProps ) }
+		</>
 	};
 }

@@ -21,12 +21,32 @@ abstract class Base {
 	/**
 	 * Returns generated options list
 	 *
+	 * @param array $args
+	 *
 	 * @return array
 	 */
-	abstract public function generate( $field );
+	abstract public function generate( array $args );
 
 	public function can_generate() {
 		return true;
+	}
+
+	public function incoming_args() {
+		return array(
+			'generator_field' => function ( $value ) {
+				return $value;
+			}
+		);
+	}
+
+	public function get_values( $args ) {
+		$fields = array();
+
+		foreach ( $this->incoming_args() as $name => $parse_callable ) {
+			$fields[ $name ] = ! empty( $args[ $name ] ) ? call_user_func( $parse_callable, $args[ $name ] ) : false;
+		}
+
+		return $this->generate( $fields );
 	}
 
 }

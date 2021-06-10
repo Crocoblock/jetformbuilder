@@ -168,7 +168,6 @@ trait Base_Select_Radio_Check {
 		} elseif ( 'generate' === $options_from ) {
 
 			$generator = ! empty( $args['generator_function'] ) ? $args['generator_function'] : false;
-			$field     = ! empty( $args['generator_field'] ) ? $args['generator_field'] : false;
 
 			if ( ! $generator ) {
 				return $options;
@@ -178,14 +177,16 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$generators         = Plugin::instance()->form->get_options_generators();
+			$generators = Plugin::instance()->form->get_options_generators();
+
+			/** @var \Jet_Form_Builder\Generators\Base $generator_instance */
 			$generator_instance = isset( $generators[ $generator ] ) ? $generators[ $generator ] : false;
 
 			if ( ! $generator_instance ) {
 				return $options;
 			}
 
-			$generated = $generator_instance->generate( $field );
+			$generated = $generator_instance->get_values( $args );
 			$result    = array();
 
 			if ( ! empty( $value_from || ! empty( $calc_from ) ) ) {

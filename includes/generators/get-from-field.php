@@ -29,10 +29,13 @@ class Get_From_Field extends Base {
 	/**
 	 * Returns generated options list
 	 *
+	 * @param $args
+	 *
 	 * @return array
 	 */
-	public function generate( $field ) {
+	public function generate( $args ) {
 
+		$field = $args['generator_field'];
 		$all_fields  = jet_engine()->meta_boxes->get_registered_fields();
 		$found_field = null;
 		$result      = array();

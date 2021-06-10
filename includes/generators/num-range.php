@@ -19,23 +19,25 @@ class Num_Range extends Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return __( 'Numbers range', 'jet-engine' );
+		return __( 'Numbers range by meta value', 'jet-form-builder' );
 	}
 
 	/**
 	 * Returns generated options list
 	 *
+	 * @param $args
+	 *
 	 * @return array
 	 */
-	public function generate( $field ) {
+	public function generate( $args ) {
 
 		$result = array();
 
-		if ( ! $field ) {
+		if ( ! $args['generator_field'] ) {
 			return $result;
 		}
 
-		$meta_value = get_post_meta( get_the_ID(), $field, true );
+		$meta_value = get_post_meta( get_the_ID(), $args['generator_field'], true );
 		$meta_value = absint( $meta_value );
 
 		if ( ! $meta_value ) {

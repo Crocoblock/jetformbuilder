@@ -7,6 +7,7 @@ use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
+use Jet_Form_Builder\Generators\Num_Range_Manual;
 use Jet_Form_Builder\Shortcodes\Manager;
 
 
@@ -41,6 +42,7 @@ class Form_Manager {
 
 			$instances = array(
 				new Num_Range(),
+				new Num_Range_Manual(),
 				new Get_From_DB(),
 				new Get_From_Field(),
 			);
@@ -103,7 +105,7 @@ class Form_Manager {
 		$this->result_fields = array();
 		$this->get_inner_fields( $content, $exclude, $recursive );
 
-		$response = $this->result_fields;
+		$response            = $this->result_fields;
 		$this->result_fields = array();
 
 		return $response;
@@ -156,6 +158,7 @@ class Form_Manager {
 		if ( ! $blocks ) {
 			$blocks = $this->get_only_form_fields( $form_id );
 		}
+
 		return $this->_get_field_by_name( $field_name, $blocks );
 	}
 

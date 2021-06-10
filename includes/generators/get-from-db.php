@@ -25,13 +25,16 @@ class Get_From_DB extends Base {
 	/**
 	 * Returns generated options list
 	 *
+	 * @param $args
+	 *
 	 * @return array
 	 */
-	public function generate( $field ) {
+	public function generate( $args ) {
 
 		global $wpdb;
 
 		$result = array();
+		$field  = $args['generator_field'];
 		$table  = $wpdb->postmeta;
 		$rows   = $wpdb->get_results(
 			$wpdb->prepare( "SELECT `meta_value` FROM `$table` WHERE `meta_key` = '%s'", $field ),

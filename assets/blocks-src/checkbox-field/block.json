@@ -46,6 +46,18 @@
 			"type": "string",
 			"default": ""
 		},
+		"generator_numbers_min": {
+			"type": "number",
+			"default": ""
+		},
+		"generator_numbers_max": {
+			"type": "number",
+			"default": ""
+		},
+		"generator_numbers_step": {
+			"type": "number",
+			"default": ""
+		},
 		"calculated_value_from_key": {
 			"type": "string",
 			"default": ""

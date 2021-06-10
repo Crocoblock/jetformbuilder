@@ -682,3 +682,7 @@ select.components-select-control__input.components-select-control__input.compone
 .interface-complementary-area-header.components-panel__header {
     z-index: 100;
 }
+
+.jet-form-edit-modal .jet-inline-radio .components-radio-control__option:not(:nth-child(1)):not(:nth-child(2)) {
+    margin-left: 1em;
+}

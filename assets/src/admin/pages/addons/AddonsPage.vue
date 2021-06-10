@@ -36,6 +36,25 @@
 						</span>
 					</cx-vui-button>
 				</div>
+				<div
+					class="go-pro-banner"
+					v-if="!isLicenseActivated"
+				>
+					<div class="go-pro-banner__subtitle">Features & Integrations </div>
+					<div class="go-pro-banner__title">Extend functionality with PRO Addons</div>
+					<cx-vui-button
+						class="go-pro-banner__button"
+						button-style="default"
+						size="mini"
+						:url="goProLink"
+						tag-name="a"
+						target="_blank"
+					>
+						<span slot="label">
+							<span>Go Pro</span>
+						</span>
+					</cx-vui-button>
+				</div>
 			</div>
 
 			<div
@@ -129,6 +148,8 @@ export default {
 			allAddons: window.JetFBPageConfig.allAddons || {},
 			licenseList: window.JetFBPageConfig.licenseList || [],
 			licenseKey: window.JetFBPageConfig.licenseKey || '',
+			themeInfo: window.JetFBPageConfig.themeInfo || false,
+			miscInfo: window.JetFBPageConfig.miscInfo || false,
 
 			licenseActivated: false,
 			licensePopupVisible: false,
@@ -178,6 +199,17 @@ export default {
 			}
 
 			return availableAddonList;
+		},
+
+		goProLink() {
+			let pricingPageUrl = this.miscInfo.pricingPageUrl,
+				utmParams = this.getUtmParamsString( {
+					utm_source: `dashboard/jet-form-builder-addons-page`,
+					utm_medium: `crocoblock-license/${ this.themeInfo.theme }`,
+					utm_campaign: 'go-pro-button',
+				} );
+
+			return `${ pricingPageUrl }?${ utmParams }`;
 		}
 	},
 	methods: {
@@ -356,6 +388,20 @@ export default {
 				window.location.reload();
 			}, 500 );
 		},
+
+		getUtmParamsString( data = {} ) {
+			let utmString = false;
+
+			if ( 0 === Object.keys( data ).length ) {
+				return utmString;
+			}
+
+			utmString = Object.keys( data ).map( ( key ) => {
+				return [ key, data[ key ] ].map( encodeURIComponent ).join( '=' );
+			} ).join( '&' );
+
+			return utmString;
+		}
 	},
 }
 </script>
@@ -375,8 +421,6 @@ export default {
 	}
 
 	&__header {
-		padding-bottom: 15px;
-		border-bottom: 1px solid #DCDCDD;
 		margin-bottom: 30px;
 	}
 
@@ -384,6 +428,8 @@ export default {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #DCDCDD;
 
 		> .cx-vui-button {
 			margin-left: 10px;
@@ -470,6 +516,36 @@ export default {
 
 	&__license-input {
 		margin-bottom: 10px;
+	}
+
+	.go-pro-banner {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 24px 0;
+		border-bottom: 1px solid #DCDCDD;
+
+		&__subtitle {
+			font-size: 18px;
+			line-height: 1.25;
+			font-weight: 500;
+			color: #007CBA;
+			margin-bottom: 5px;
+		}
+
+		&__title {
+			font-size: 24px;
+			line-height: 1.25;
+			font-weight: 500;
+			color: #23282D;
+			margin-bottom: 20px;
+		}
+
+		&__button {
+			color: white;
+			background-color: #007CBA;
+		}
 	}
 }
 

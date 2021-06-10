@@ -1071,6 +1071,22 @@ class Manager {
 	}
 
 	/**
+	 * [get_theme_info description]
+	 * @return [type] [description]
+	 */
+	public function get_theme_info() {
+		$style_parent_theme = wp_get_theme( get_template() );
+
+		return apply_filters( 'jfb-addons-page/theme-info', array(
+			'name'       => $style_parent_theme->get('Name'),
+			'theme'      => strtolower( preg_replace('/\s+/', '', $style_parent_theme->get('Name') ) ),
+			'version'    => $style_parent_theme->get('Version'),
+			'author'     => $style_parent_theme->get('Author'),
+			'authorSlug' => strtolower( preg_replace('/\s+/', '', $style_parent_theme->get('Author') ) ),
+		) );
+	}
+
+	/**
 	 * Manager constructor.
 	 */
 	public function __construct() {

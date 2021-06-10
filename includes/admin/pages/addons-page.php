@@ -38,12 +38,16 @@ class Addons_Page extends Base_Page {
 	 */
 	public function page_config(): array {
 
-		//array_values( Utils::get_license_list() )
 		return array(
 			'ajaxUrl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
 			'allAddons'   => Plugin::instance()->license_manager->get_plugin_data_list(),
 			'licenseKey'  => Plugin::instance()->license_manager->get_license_key(),
 			'licenseList' => Plugin::instance()->license_manager->get_license_data(),
+			'themeInfo'   => Plugin::instance()->license_manager->get_theme_info(),
+			'miscInfo'    => [
+				'mainSiteUrl'    => 'https://jetformbuilder.com/',
+				'pricingPageUrl' => 'https://jetformbuilder.com/pricing/'
+			]
 		);
 	}
 }

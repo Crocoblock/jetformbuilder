@@ -1011,328 +1011,343 @@ class Form extends Jfb_Widget_Base {
 
 		$options = Tools::get_form_settings_options( true );
 
-		$this->start_controls_section(
-			'section_form_settings',
-			[
-				'label' => __( 'Form Settings', 'jet-form-builder' ),
-			]
-		);
+		/** Form Settings */
+		$closure = function () use ( $options ) {
+			$this->start_controls_section(
+				'section_ form_settings',
+				[
+					'label' => __( 'Form Settings', 'jet-form-builder' ),
+				]
+			);
 
-		$this->add_control(
-			'form_id',
-			array(
-				'label'       => __( 'Choose Form', 'jet-form-builder' ),
-				'type'        => Controls_Manager::SELECT2,
-				'default'     => '',
-				'label_block' => true,
-				'options'     => Tools::get_forms_list_for_js( true ),
-			)
-		);
+			$this->add_control(
+				'form_id',
+				array(
+					'label'       => __( 'Choose Form', 'jet-form-builder' ),
+					'type'        => Controls_Manager::SELECT2,
+					'default'     => '',
+					'label_block' => true,
+					'options'     => Tools::get_forms_list_for_js( true ),
+				)
+			);
 
-		$this->add_control(
-			'fields_layout',
-			[
-				'label'   => __( 'Fields Layout', 'jet-form-builder' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => __( 'column', 'jet-form-builder' ),
-				'options' => $options['fields_layout']
-			]
-		);
+			$this->add_control(
+				'fields_layout',
+				[
+					'label'   => __( 'Fields Layout', 'jet-form-builder' ),
+					'type'    => Controls_Manager::SELECT,
+					'default' => __( 'column', 'jet-form-builder' ),
+					'options' => $options['fields_layout']
+				]
+			);
 
-		$this->add_control(
-			'required_mark',
-			[
-				'label'   => __( 'Required Mark', 'jet-form-builder' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => __( '*', 'jet-form-builder' ),
-			]
-		);
+			$this->add_control(
+				'required_mark',
+				[
+					'label'   => __( 'Required Mark', 'jet-form-builder' ),
+					'type'    => Controls_Manager::TEXT,
+					'default' => __( '*', 'jet-form-builder' ),
+				]
+			);
 
-		$this->add_control(
-			'submit_type',
-			[
-				'label'   => __( 'Submit Type', 'jet-form-builder' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => __( 'reload', 'jet-form-builder' ),
-				'options' => $options['submit_type']
-			]
-		);
+			$this->add_control(
+				'submit_type',
+				[
+					'label'   => __( 'Submit Type', 'jet-form-builder' ),
+					'type'    => Controls_Manager::SELECT,
+					'default' => __( 'reload', 'jet-form-builder' ),
+					'options' => $options['submit_type']
+				]
+			);
 
-		$this->add_control(
-			'enable_progress',
-			array(
-				'label'        => __( 'Enable form pages progress', 'jet-form-builder' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'jet-form-builder' ),
-				'label_off'    => __( 'No', 'jet-form-builder' ),
-				'return_value' => true,
-				'default'      => false,
-			)
-		);
+			$this->add_control(
+				'enable_progress',
+				array(
+					'label'        => __( 'Enable form pages progress', 'jet-form-builder' ),
+					'type'         => Controls_Manager::SWITCHER,
+					'label_on'     => __( 'Yes', 'jet-form-builder' ),
+					'label_off'    => __( 'No', 'jet-form-builder' ),
+					'return_value' => true,
+					'default'      => false,
+				)
+			);
 
-		$this->end_controls_section();
+			$this->end_controls_section();
+		};
+		$closure();
 
-		$this->start_controls_section(
-			'section_label_style',
-			array(
-				'label' => __( 'Label', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-		$this->add_responsive_control(
-			'form_label_margin',
-			array(
-				'label'      => __( 'Margin', 'jet-form-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
+		/** Form Row */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_form_style',
+				array(
+					'label' => __( 'Form Row', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+
+			$this->add_responsive_control( 'form_row_gap_before', array(
+
+				'type'       => Controls_Manager::SLIDER,
+				'label'      => __( 'Gap Before', 'jet-form-builder' ),
 				'size_units' => array( 'px' ),
-				'selectors'  => array(
-					$this->selector( '__label' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
 				),
-			)
-		);
+				'selectors'  => array(
+					$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
+				),
+			) );
 
-		$this->add_responsive_control(
-			'form_label_padding',
-			array(
-				'label'      => __( 'Padding', 'jet-form-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
+			$this->add_responsive_control( 'form_row_gap_after', array(
+
+				'type'       => Controls_Manager::SLIDER,
+				'label'      => __( 'Gap After', 'jet-form-builder' ),
 				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
 				'selectors'  => array(
-					$this->selector( '__label' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
 				),
-			)
-		);
+			) );
 
-		$this->add_responsive_control(
-			'form_label_alignment',
-			array(
-				'label'       => __( 'Alignment', 'jet-form-builder' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'default'     => 'left',
-				'separator'   => 'before',
-				'options'     => array(
-					'left'   => array(
-						'title' => __( 'Left', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-left',
+			$this->end_controls_section();
+		};
+		$closure();
+
+		/** Label */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_label_style',
+				array(
+					'label' => __( 'Label', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+
+			$this->add_responsive_control(
+				'form_label_margin',
+				array(
+					'label'      => __( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__label' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
-					'center' => array(
-						'title' => __( 'Center', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-center',
+				)
+			);
+
+			$this->add_responsive_control(
+				'form_label_padding',
+				array(
+					'label'      => __( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__label' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
-					'right'  => array(
-						'title' => __( 'Right', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-right',
+				)
+			);
+
+			$this->add_responsive_control(
+				'form_label_alignment',
+				array(
+					'label'       => __( 'Alignment', 'jet-form-builder' ),
+					'type'        => Controls_Manager::CHOOSE,
+					'label_block' => false,
+					'default'     => 'left',
+					'separator'   => 'before',
+					'options'     => array(
+						'left'   => array(
+							'title' => __( 'Left', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-left',
+						),
+						'center' => array(
+							'title' => __( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'right'  => array(
+							'title' => __( 'Right', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-right',
+						),
 					),
-				),
-				'selectors'   => array(
-					$this->selector( '__label' ) => 'text-align: {{VALUE}};',
-				),
-			)
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'form_label_typography',
-				'selector' => $this->selector( '__label' ),
-			)
-		);
-
-		$this->add_control(
-			'form_label_color',
-			array(
-				'label'     => __( 'Color', 'jet-form-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					$this->selector( '__label' ) => 'color: {{VALUE}};',
-				),
-			)
-		);
-		$this->add_control(
-			'form_label_bg_color',
-			array(
-				'label'     => __( 'Background Color', 'jet-form-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					$this->selector( '__label' ) => 'background-color: {{VALUE}};',
-				),
-			)
-		);
-		$this->add_border(
-			$this,
-			'form_label_border',
-			$this->selector( '__label' )
-		);
-
-		$this->add_control(
-			'divider__label__required_mark',
-			[
-				'label'     => __( 'Required Mark', 'jet-form-builder' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'form_required_typography',
-				'selector' => $this->selector( '__label .%s__required' ),
-			)
-		);
-		$this->add_control(
-			'form_required_color',
-			array(
-				'label'     => __( 'Color', 'jet-form-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					$this->selector( '__label .%s__required' ) => 'color: {{VALUE}};',
-				),
-			)
-		);
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_description_style',
-			array(
-				'label' => __( 'Description', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-		$this->add_responsive_control(
-			'form_description_margin',
-			array(
-				'label'      => __( 'Margin', 'jet-form-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
-				'selectors'  => array(
-					$this->selector( '__desc' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'form_description_padding',
-			array(
-				'label'      => __( 'Padding', 'jet-form-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
-				'selectors'  => array(
-					$this->selector( '__desc' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'form_description_alignment',
-			array(
-				'label'       => __( 'Alignment', 'jet-form-builder' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'default'     => 'left',
-				'separator'   => 'before',
-				'options'     => array(
-					'left'   => array(
-						'title' => __( 'Left', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-left',
+					'selectors'   => array(
+						$this->selector( '__label' ) => 'text-align: {{VALUE}};',
 					),
-					'center' => array(
-						'title' => __( 'Center', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-center',
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_label_typography',
+					'selector' => $this->selector( '__label' ),
+				)
+			);
+
+			$this->add_control(
+				'form_label_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__label' ) => 'color: {{VALUE}};',
 					),
-					'right'  => array(
-						'title' => __( 'Right', 'jet-form-builder' ),
-						'icon'  => 'eicon-h-align-right',
+				)
+			);
+			$this->add_control(
+				'form_label_bg_color',
+				array(
+					'label'     => __( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__label' ) => 'background-color: {{VALUE}};',
 					),
-				),
-				'selectors'   => array(
-					$this->selector( '__desc' ) => 'text-align: {{VALUE}};',
-				),
-			)
-		);
+				)
+			);
+			$this->add_border(
+				$this,
+				'form_label_border',
+				$this->selector( '__label' )
+			);
 
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'form_description_typography',
-				'selector' => $this->selector( '__desc' ),
-			)
-		);
+			$this->add_control(
+				'divider__label__required_mark',
+				[
+					'label'     => __( 'Required Mark', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				]
+			);
 
-		$this->add_control(
-			'form_description_color',
-			array(
-				'label'     => __( 'Color', 'jet-form-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					$this->selector( '__desc' ) => 'color: {{VALUE}};',
-				),
-			)
-		);
-		$this->add_control(
-			'form_description_bg_color',
-			array(
-				'label'     => __( 'Background Color', 'jet-form-builder' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					$this->selector( '__desc' ) => 'background-color: {{VALUE}};',
-				),
-			)
-		);
-		$this->add_border(
-			$this,
-			'form_description_border',
-			$this->selector( '__desc' )
-		);
-		$this->end_controls_section();
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_required_typography',
+					'selector' => $this->selector( '__label .%s__required' ),
+				)
+			);
+			$this->add_control(
+				'form_required_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__label .%s__required' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+			$this->end_controls_section();
+		};
+		$closure();
 
-		$this->start_controls_section(
-			'section_form_style',
-			array(
-				'label' => __( 'Form Row', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
+		/** Description */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_description_style',
+				array(
+					'label' => __( 'Description', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+			$this->add_responsive_control(
+				'form_description_margin',
+				array(
+					'label'      => __( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__desc' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
 
-		$this->add_responsive_control( 'form_row_gap_before', array(
+			$this->add_responsive_control(
+				'form_description_padding',
+				array(
+					'label'      => __( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__desc' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
 
-			'type'       => Controls_Manager::SLIDER,
-			'label'      => __( 'Gap Before', 'jet-form-builder' ),
-			'size_units' => array( 'px' ),
-			'range'      => array(
-				'px' => array(
-					'min' => 0,
-					'max' => 100,
-				),
-			),
-			'selectors'  => array(
-				$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
-			),
-		) );
+			$this->add_responsive_control(
+				'form_description_alignment',
+				array(
+					'label'       => __( 'Alignment', 'jet-form-builder' ),
+					'type'        => Controls_Manager::CHOOSE,
+					'label_block' => false,
+					'default'     => 'left',
+					'separator'   => 'before',
+					'options'     => array(
+						'left'   => array(
+							'title' => __( 'Left', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-left',
+						),
+						'center' => array(
+							'title' => __( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'right'  => array(
+							'title' => __( 'Right', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-right',
+						),
+					),
+					'selectors'   => array(
+						$this->selector( '__desc' ) => 'text-align: {{VALUE}};',
+					),
+				)
+			);
 
-		$this->add_responsive_control( 'form_row_gap_after', array(
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_description_typography',
+					'selector' => $this->selector( '__desc' ),
+				)
+			);
 
-			'type'       => Controls_Manager::SLIDER,
-			'label'      => __( 'Gap After', 'jet-form-builder' ),
-			'size_units' => array( 'px' ),
-			'range'      => array(
-				'px' => array(
-					'min' => 0,
-					'max' => 100,
-				),
-			),
-			'selectors'  => array(
-				$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
-			),
-		) );
-
-
-		$this->end_controls_section();
+			$this->add_control(
+				'form_description_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__desc' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+			$this->add_control(
+				'form_description_bg_color',
+				array(
+					'label'     => __( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__desc' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+			$this->add_border(
+				$this,
+				'form_description_border',
+				$this->selector( '__desc' )
+			);
+			$this->end_controls_section();
+		};
+		$closure();
 
 		/** Checkbox & Radio Fields */
 		$closure = function () {
-
 			$this->start_controls_section(
 				'section_checkradio_fields_style',
 				array(
@@ -1559,7 +1574,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field)' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1571,7 +1586,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field)' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1582,7 +1597,7 @@ class Form extends Jfb_Widget_Base {
 					'name'        => 'fields_border',
 					'label'       => __( 'Border', 'jet-form-builder' ),
 					'placeholder' => '1px',
-					'selector'    => $this->selector( '__field:not(.checkradio-field):not(.range-field)' ),
+					'selector'    => $this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ),
 				)
 			);
 
@@ -1593,7 +1608,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field)' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1602,7 +1617,7 @@ class Form extends Jfb_Widget_Base {
 				Group_Control_Box_Shadow::get_type(),
 				array(
 					'name'     => 'fields_box_shadow',
-					'selector' => $this->selector( '__field:not(.checkradio-field):not(.range-field)' ),
+					'selector' => $this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ),
 				)
 			);
 
@@ -1619,7 +1634,7 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field)' ) => 'max-width: {{SIZE}}{{UNIT}};width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
+						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'max-width: {{SIZE}}{{UNIT}};width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1644,6 +1659,989 @@ class Form extends Jfb_Widget_Base {
 
 			$this->end_controls_section();
 
+		};
+		$closure();
+
+		/** Calculated Fields */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_calc_fields_style',
+				array(
+					'label'      => __( 'Calculated Fields', 'jet-form-builder' ),
+					'tab'        => Controls_Manager::TAB_STYLE,
+					'show_label' => false,
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'calc_fields_typography',
+					'selector' => $this->selector( '__calculated-field' ),
+				)
+			);
+
+			$this->add_control(
+				'calc_fields_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__calculated-field' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'calc_fields_prefix_color',
+				array(
+					'label'     => __( 'Prefix Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__calculated-field-prefix' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'calc_fields_prefix_size',
+				array(
+					'label'      => __( 'Prefix size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 10,
+							'max' => 50,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__calculated-field-prefix' ) => 'font-size: {{SIZE}}px;',
+					),
+				)
+			);
+
+			$this->add_control(
+				'calc_fields_suffix_color',
+				array(
+					'label'     => __( 'Suffix Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__calculated-field-suffix' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'calc_fields_suffix_size',
+				array(
+					'label'      => __( 'Suffix size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 10,
+							'max' => 50,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__calculated-field-suffix' ) => 'font-size: {{SIZE}}px;',
+					),
+				)
+			);
+
+			$this->add_control(
+				'calc_fields_background_color',
+				array(
+					'label'     => __( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__calculated-field' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'calc_fields_padding',
+				array(
+					'label'      => __( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__calculated-field' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'calc_fields_margin',
+				array(
+					'label'      => __( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__calculated-field' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'        => 'calc_fields_border',
+					'label'       => __( 'Border', 'jet-form-builder' ),
+					'placeholder' => '1px',
+					'selector'    => $this->selector( '__calculated-field' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'calc_fields_border_radius',
+				array(
+					'label'      => __( 'Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '__calculated-field' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->end_controls_section();
+		};
+		$closure();
+
+		/** Range Fields */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_range_fields_style',
+				array(
+					'label' => __( 'Range Fields', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+
+			$this->add_control(
+				'range_max_width',
+				array(
+					'label'      => esc_html__( 'Max Width', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px', '%' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 1,
+							'max' => 1000,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__field-wrap.range-wrap' ) => 'max-width: {{SIZE}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'range_slider_heading',
+				array(
+					'label'     => esc_html__( 'Slider', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->add_control(
+				'track_height',
+				array(
+					'label'      => esc_html__( 'Track Height', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 1,
+							'max' => 20,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( ' .range-field::-webkit-slider-runnable-track' ) => 'height: {{SIZE}}{{UNIT}};',
+						$this->selector( ' .range-field::-moz-range-track' )              => 'height: {{SIZE}}{{UNIT}};',
+						$this->selector( ' .range-field::-ms-track' )                     => 'height: {{SIZE}}{{UNIT}};',
+						$this->selector( ' .range-field::-webkit-slider-thumb' )          => 'margin-top: calc( (18px - {{SIZE}}{{UNIT}})/-2 )',
+					),
+				)
+			);
+
+			$this->add_control(
+				'thumb_size',
+				array(
+					'label'      => esc_html__( 'Thumb Size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 1,
+							'max' => 50,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__field.range-field' )                       => 'min-height: {{SIZE}}{{UNIT}};',
+						$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; margin-top: calc( ({{SIZE}}{{UNIT}} - 4px)/-2 )',
+						$this->selector( '__field.range-field::-moz-range-thumb' )     => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+						$this->selector( '__field.range-field::-ms-thumb' )            => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'thumb_indent',
+				array(
+					'type'      => Controls_Manager::HIDDEN,
+					'default'   => 'style',
+					'selectors' => array(
+						$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'margin-top: calc( ({{thumb_size.SIZE}}{{thumb_size.UNIT}} - {{track_height.SIZE}}{{track_height.UNIT}})/-2 )',
+					),
+				)
+			);
+
+			$this->add_control(
+				'track_border_radius',
+				array(
+					'label'      => esc_html__( 'Track Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '__field.range-field::-webkit-slider-runnable-track' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field.range-field::-moz-range-track' )              => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field.range-field::-ms-track' )                     => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'thumb_border_radius',
+				array(
+					'label'      => esc_html__( 'Thumb Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field.range-field::-moz-range-thumb' )     => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__field.range-field::-ms-thumb' )            => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'track_bg_color',
+				array(
+					'label'     => esc_html__( 'Track Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field.range-field::-webkit-slider-runnable-track' ) => 'background-color: {{VALUE}};',
+						$this->selector( '__field.range-field::-moz-range-track' )              => 'background-color: {{VALUE}};',
+						$this->selector( '__field.range-field::-ms-track' )                     => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'thumb_bg_color',
+				array(
+					'label'     => esc_html__( 'Thumb Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'background-color: {{VALUE}};',
+						$this->selector( '__field.range-field::-moz-range-thumb' )     => 'background-color: {{VALUE}};',
+						$this->selector( '__field.range-field::-ms-thumb' )            => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'range_value_heading',
+				array(
+					'label'     => esc_html__( 'Value', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'range_value_typography',
+					'selector' => $this->selector( '__field-value.range-value' ),
+				)
+			);
+
+			$this->add_control(
+				'range_value_color',
+				array(
+					'label'     => esc_html__( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-value.range-value' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'range_prefix_value_size',
+				array(
+					'label'      => __( 'Prefix size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px', 'em', 'rem' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 10,
+							'max' => 50,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__field-value.range-value .%s__field-value-prefix' ) => 'font-size: {{SIZE}}px;',
+					),
+					'separator'  => 'before',
+				)
+			);
+
+			$this->add_control(
+				'range_prefix_value_color',
+				array(
+					'label'     => __( 'Prefix Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-value.range-value .%s__field-value-prefix' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'range_suffix_value_size',
+				array(
+					'label'      => __( 'Suffix size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px', 'em', 'rem' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 10,
+							'max' => 50,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '__field-value.range-value .%s__field-value-suffix' ) => 'font-size: {{SIZE}}px;',
+					),
+					'separator'  => 'before',
+				)
+			);
+
+			$this->add_control(
+				'range_suffix_value_color',
+				array(
+					'label'     => __( 'Suffix Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-value.range-value .%s__field-value-suffix' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_section();
+		};
+		$closure();
+
+		/** Repeater */
+		$closure = function () {
+			$this->start_controls_section(
+				'section_repeater_style',
+				array(
+					'label'      => __( 'Repeater', 'jet-form-builder' ),
+					'tab'        => Controls_Manager::TAB_STYLE,
+					'show_label' => false,
+				)
+			);
+
+			$this->add_control(
+				'field_repeater_row_desc',
+				array(
+					'label'     => esc_html__( 'Repeater row', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_row_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__row' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'field_repeater_new_desc',
+				array(
+					'label'     => esc_html__( 'New item button', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->start_controls_tabs( 'tabs_booking_form_repeater_style' );
+
+			$this->start_controls_tab(
+				'booking_form_repeater_normal',
+				array(
+					'label' => esc_html__( 'Normal', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_bg_color',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__new' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_color',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__new' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'booking_form_repeater_hover',
+				array(
+					'label' => esc_html__( 'Hover', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_bg_color_hover',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__new:hover' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_color_hover',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__new:hover' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_hover_border_color',
+				array(
+					'label'     => esc_html__( 'Border Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'condition' => array(
+						'booking_form_repeater_border_border!' => '',
+					),
+					'selectors' => array(
+						$this->selector( '-repeater__new:hover' ) => 'border-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->end_controls_tabs();
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'           => 'booking_form_repeater_typography',
+					'selector'       => $this->selector( '-repeater__new' ),
+					'fields_options' => array(
+						'typography' => array(
+							'separator' => 'before',
+						),
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__new' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_margin',
+				array(
+					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__new' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'        => 'booking_form_repeater_border',
+					'label'       => esc_html__( 'Border', 'jet-form-builder' ),
+					'placeholder' => '1px',
+					'selector'    => $this->selector( '-repeater__new' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_border_radius',
+				array(
+					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__new' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Box_Shadow::get_type(),
+				array(
+					'name'     => 'booking_form_repeater_box_shadow',
+					'selector' => $this->selector( '-repeater__new' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_alignment',
+				array(
+					'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
+					'type'      => Controls_Manager::CHOOSE,
+					'default'   => 'flex-start',
+					'options'   => array(
+						'flex-start' => array(
+							'title' => esc_html__( 'Start', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'eicon-h-align-left' : 'eicon-h-align-right',
+						),
+						'center'     => array(
+							'title' => esc_html__( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'flex-end'   => array(
+							'title' => esc_html__( 'End', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'eicon-h-align-right' : 'eicon-h-align-left',
+						),
+					),
+					'selectors' => array(
+						$this->selector( '-repeater__actions' ) => 'justify-content: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'field_repeater_del_desc',
+				array(
+					'label'     => esc_html__( 'Remove item button', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->start_controls_tabs( 'tabs_booking_form_repeater_del_style' );
+
+			$this->start_controls_tab(
+				'booking_form_repeater_del_normal',
+				array(
+					'label' => esc_html__( 'Normal', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_bg_color',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__remove' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_color',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__remove' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'booking_form_repeater_del_hover',
+				array(
+					'label' => esc_html__( 'Hover', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_bg_color_hover',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__remove:hover' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_color_hover',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '-repeater__remove:hover' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_hover_border_color',
+				array(
+					'label'     => esc_html__( 'Border Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'condition' => array(
+						'booking_form_repeater_del_border_border!' => '',
+					),
+					'selectors' => array(
+						$this->selector( '-repeater__remove:hover' ) => 'border-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->end_controls_tabs();
+
+			$this->add_responsive_control(
+				'booking_form_repeater_del_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'separator'  => 'before',
+					'selectors'  => array(
+						$this->selector( '-repeater__remove' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_del_margin',
+				array(
+					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__remove' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'        => 'booking_form_repeater_del_border',
+					'label'       => esc_html__( 'Border', 'jet-form-builder' ),
+					'placeholder' => '1px',
+					'selector'    => $this->selector( '-repeater__remove' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_del_border_radius',
+				array(
+					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '-repeater__remove' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_repeater_del_size',
+				array(
+					'label'      => esc_html__( 'Icon Size', 'jet-form-builder' ),
+					'type'       => Controls_Manager::SLIDER,
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 12,
+							'max' => 90,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '-repeater__remove' ) => 'font-size: {{SIZE}}{{UNIT}};line-height: {{SIZE}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Box_Shadow::get_type(),
+				array(
+					'name'     => 'booking_form_repeater_del_box_shadow',
+					'selector' => $this->selector( '-repeater__remove' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_repeater_del_alignment',
+				array(
+					'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
+					'type'      => Controls_Manager::CHOOSE,
+					'default'   => 'flex-start',
+					'options'   => array(
+						'flex-start' => array(
+							'title' => esc_html__( 'Top', 'jet-form-builder' ),
+							'icon'  => 'eicon-v-align-top',
+						),
+						'center'     => array(
+							'title' => esc_html__( 'Middle', 'jet-form-builder' ),
+							'icon'  => 'eicon-v-align-middle',
+						),
+						'flex-end'   => array(
+							'title' => esc_html__( 'Bottom', 'jet-form-builder' ),
+							'icon'  => 'eicon-v-align-bottom',
+						),
+					),
+					'selectors' => array(
+						$this->selector( '-repeater__row-remove' ) => 'align-self: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_section();
+		};
+		$closure();
+
+		/** Submit */
+		$closure = function () {
+			$this->start_controls_section(
+				'form_submit_style',
+				array(
+					'label'      => esc_html__( 'Submit', 'jet-form-builder' ),
+					'tab'        => Controls_Manager::TAB_STYLE,
+					'show_label' => false,
+				)
+			);
+
+			$this->start_controls_tabs( 'tabs_booking_form_submit_style' );
+
+			$this->start_controls_tab(
+				'booking_form_submit_normal',
+				array(
+					'label' => esc_html__( 'Normal', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_bg_color',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_color',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__submit' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'booking_form_submit_hover',
+				array(
+					'label' => esc_html__( 'Hover', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_bg_color_hover',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__submit:hover' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_color_hover',
+				array(
+					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__submit:hover' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_hover_border_color',
+				array(
+					'label'     => esc_html__( 'Border Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'condition' => array(
+						'booking_form_submit_border_border!' => '',
+					),
+					'selectors' => array(
+						$this->selector( '__submit:hover' ) => 'border-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->end_controls_tabs();
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'           => 'booking_form_submit_typography',
+					'selector'       => $this->selector( '__submit' ),
+					'fields_options' => array(
+						'typography' => array(
+							'separator' => 'after',
+						),
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_submit_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '__submit' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_submit_margin',
+				array(
+					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '__submit' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'        => 'booking_form_submit_border',
+					'label'       => esc_html__( 'Border', 'jet-form-builder' ),
+					'placeholder' => '1px',
+					'selector'    => $this->selector( '__submit' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_submit_border_radius',
+				array(
+					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '__submit' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Box_Shadow::get_type(),
+				array(
+					'name'     => 'booking_form_submit_box_shadow',
+					'selector' => $this->selector( '__submit' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_submit_alignment',
+				array(
+					'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
+					'type'      => Controls_Manager::CHOOSE,
+					'default'   => 'flex-start',
+					'options'   => array(
+						'flex-start' => array(
+							'title' => esc_html__( 'Start', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'fa fa-align-left' : 'fa fa-align-right',
+						),
+						'center'     => array(
+							'title' => esc_html__( 'Center', 'jet-form-builder' ),
+							'icon'  => 'fa fa-align-center',
+						),
+						'flex-end'   => array(
+							'title' => esc_html__( 'End', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'fa fa-align-right' : 'fa fa-align-left',
+						),
+						'stretch'    => array(
+							'title' => esc_html__( 'Fullwidth', 'jet-form-builder' ),
+							'icon'  => 'fa fa-align-justify',
+						),
+					),
+					'selectors' => array(
+						$this->selector( '__submit-wrap' ) => 'justify-content: {{VALUE}}; align-items: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_section();
 		};
 		$closure();
 
@@ -1708,13 +2706,22 @@ class Form extends Jfb_Widget_Base {
 		};
 		$closure();
 
-		/** Form Break Next Button */
+		/** Form Break Buttons */
 		$closure = function () {
 			$this->start_controls_section(
 				'section_form_break_next_style',
 				array(
-					'label' => __( 'Form Break Next Button', 'jet-form-builder' ),
+					'label' => __( 'Form Break Buttons', 'jet-form-builder' ),
 					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			);
+
+			$this->add_control(
+				'form_break_next_button__error_heading',
+				array(
+					'label'     => __( 'Next Button', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'after',
 				)
 			);
 
@@ -1819,17 +2826,13 @@ class Form extends Jfb_Widget_Base {
 
 			$this->end_controls_tab();
 			$this->end_controls_tabs();
-			$this->end_controls_section();
-		};
-		$closure();
 
-		/** Form Break Prev Button */
-		$closure = function () {
-			$this->start_controls_section(
-				'section_form_break_prev_style',
+			$this->add_control(
+				'form_break_prev_button__error_heading',
 				array(
-					'label' => __( 'Form Break Prev Button', 'jet-form-builder' ),
-					'tab'   => Controls_Manager::TAB_STYLE,
+					'label'     => __( 'Prev Button', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
 				)
 			);
 
@@ -1934,6 +2937,7 @@ class Form extends Jfb_Widget_Base {
 
 			$this->end_controls_tab();
 			$this->end_controls_tabs();
+
 			$this->end_controls_section();
 		};
 		$closure();
@@ -2001,7 +3005,7 @@ class Form extends Jfb_Widget_Base {
 		/** Messages */
 		$closure = function () {
 			$this->start_controls_section(
-				'section_message_success_style',
+				'section_message_error_style',
 				array(
 					'label' => __( 'Messages', 'jet-form-builder' ),
 					'tab'   => Controls_Manager::TAB_STYLE,

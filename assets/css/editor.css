@@ -230,7 +230,8 @@
 }
 
 .jet-user-fields-map__list {
-    flex: 0 0 35%;
+    flex: 0 0 40%;
+    padding-top: 0.5em;
 }
 
 .jet-user-fields-map__list .components-flex__item {
@@ -681,4 +682,9 @@ select.components-select-control__input.components-select-control__input.compone
 
 .interface-complementary-area-header.components-panel__header {
     z-index: 100;
+}
+
+.jet-control-full {
+    padding: 12px 0 5px;
+    border-top: 1px solid #ddd;
 }

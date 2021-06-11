@@ -16,13 +16,13 @@ if ( ! defined( 'WPINC' ) ) {
 class Manager {
 
 	private $_types = array();
+	private $localized_actions = array();
 
 	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_action_types' ), 99 );
-		add_action( 'jet-form-builder/editor-assets/after', array( $this, 'register_types_for_editor' ), 10, 2 );
-		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_action_localize_helper' ) );
+		add_action( 'jet-form-builder/editor-package/before', array( $this, 'register_assets' ), 10, 2 );
 	}
 
 	/**
@@ -83,19 +83,7 @@ class Manager {
 		return isset( $this->_types[ $type ] );
 	}
 
-	/**
-	 * Register action types data for the editor
-	 *
-	 * @param $editor
-	 * @param $handle
-	 *
-	 * @return void [description]
-	 */
-	public function register_types_for_editor( $editor, $handle ) {
-		self::localize_action_types( $this->_types, $handle );
-	}
-
-	public static function prepare_actions_data( $source, $handle ) {
+	public function prepare_actions_data( $source ) {
 		$prepared_types = array();
 
 		foreach ( $source as $type ) {
@@ -116,33 +104,39 @@ class Manager {
 			$action_localize['__gateway_attrs'] = $type->visible_attributes_for_gateway_editor();
 
 			if ( ! empty( $action_localize ) && $type_script_name ) {
-				wp_localize_script(
-					$handle,
-					$type->self_script_name(),
-					$action_localize
-				);
+				$this->localized_actions[ $type->self_script_name() ] = $action_localize;
 			}
 		}
 
 		return $prepared_types;
 	}
 
-	public static function register_action_localize_helper() {
+	public function register_action_types_assets( $handle ) {
+		foreach ( $this->localized_actions as $name => $localized_action ) {
+			wp_localize_script(
+				$handle,
+				$name,
+				$localized_action
+			);
+		}
+	}
+
+	public function register_assets( $editor, $handle ) {
 		wp_enqueue_script(
 			self::ENGINE_HANDLE,
 			JET_FORM_BUILDER_URL . 'assets/js/action-localize-helper.js',
 			array(),
 			JET_FORM_BUILDER_VERSION
 		);
-	}
+		$data = self::prepare_actions_data( $this->_types );
 
-	public static function localize_action_types( $types, $handle = '' ) {
-		$handle = $handle ? $handle : self::ENGINE_HANDLE;
 		wp_localize_script(
-			$handle,
+			self::ENGINE_HANDLE,
 			'jetFormActionTypes',
-			self::prepare_actions_data( $types, $handle )
+			$data
 		);
+
+		$this->register_action_types_assets( self::ENGINE_HANDLE );
 	}
 
 }

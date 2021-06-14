@@ -3,7 +3,7 @@
 		class="jfb-addons-page wrap"
 		:class="{ 'proccesing-state': proccesingState }"
 	>
-		<h1 class="cs-vui-title">{{ 'JetForms Addons' }}</h1>
+		<h1 class="cs-vui-title">{{ 'JetFormBuilder Addons' }}</h1>
 		<div class="jfb-addons-page__inner cx-vui-panel">
 			<div class="jfb-addons-page__header">
 				<div class="jfb-addons-page__header-controls">

@@ -1,6 +1,6 @@
 <template>
 	<div class="jet-fb-settings-page wrap">
-		<h1 class="cs-vui-title">{{ 'JetForms Settings' }}</h1>
+		<h1 class="cs-vui-title">{{ 'JetFormBuilder Settings' }}</h1>
 		<div class="cx-vui-panel">
 			<cx-vui-tabs
 				:in-panel="false"

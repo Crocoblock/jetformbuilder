@@ -135,7 +135,7 @@ class Post_Type {
 				'not_found'          => __( 'No Forms Found', 'jet-form-builder' ),
 				'not_found_in_trash' => __( 'No Forms Found In Trash', 'jet-form-builder' ),
 				'singular_name'      => __( 'JetForm', 'jet-form-builder' ),
-				'menu_name'          => __( 'JetForms', 'jet-form-builder' ),
+				'menu_name'          => __( 'JetFormBuilder', 'jet-form-builder' ),
 			),
 			'public'              => true,
 			'show_ui'             => true,
@@ -315,18 +315,18 @@ class Post_Type {
 
 	public function get_default_args() {
 		return array(
-			'submit_type'   => '',
-			'required_mark' => '',
-			'fields_layout' => '',
+			'submit_type'     => '',
+			'required_mark'   => '',
+			'fields_layout'   => '',
 			'enable_progress' => null,
 		);
 	}
 
 	public function get_default_args_on_render() {
 		return array(
-			'submit_type'   => 'reload',
-			'required_mark' => '*',
-			'fields_layout' => 'column',
+			'submit_type'     => 'reload',
+			'required_mark'   => '*',
+			'fields_layout'   => 'column',
 			'enable_progress' => false,
 		);
 	}

@@ -137,7 +137,7 @@ class Gateway_Manager {
 
 	public function on_has_gateway_request() {
 		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
-		$controller = $this->get_gateway_controller( $gateway_type );
+		$controller   = $this->get_gateway_controller( $gateway_type );
 
 		if ( ! ( $controller instanceof Base_Gateway ) ) {
 			return;
@@ -213,6 +213,16 @@ class Gateway_Manager {
 			$actions_ids,
 			$action_handler->get_all()
 		);
+	}
+
+	public function has_gateway( $form_id ) {
+		$gateways = $this->get_form_gateways_by_id( $form_id );
+
+		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

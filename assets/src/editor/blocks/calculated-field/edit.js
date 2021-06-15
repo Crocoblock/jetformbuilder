@@ -31,6 +31,7 @@ const {
 const NumberControl = __experimentalNumberControl;
 
 const { useState } = wp.element;
+const { applyFilters } = wp.hooks;
 
 const help = {
 	calc_hidden: __( 'Check this to hide calculated field' ),
@@ -48,11 +49,13 @@ export default function EditCalculated( props ) {
 
 	const insertMacros = ( macros ) => {
 		setAttributes( {
-			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`,
+			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
 		} );
 	};
 	const togglePopover = () => {
-		setFormFields( getFieldsWithoutCurrent() );
+		const fields = getFieldsWithoutCurrent().map( ( { value } ) => ( '%FIELD::' + value + '%' ) );
+
+		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields', fields ) );
 		setShowMacros( toggle => ! toggle );
 	};
 
@@ -74,13 +77,13 @@ export default function EditCalculated( props ) {
 					position={ 'bottom left' }
 				>
 					{ formFields.length && <PanelBody title={ 'Form Fields' }>
-						{ formFields.map( ( { value }, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
+						{ formFields.map( ( value, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
 								<Button
 									isLink
 									onClick={ () => {
 										insertMacros( value )
 									} }
-								>{ '%FIELD::' + value + '%' }</Button>
+								>{ value }</Button>
 							</div>,
 						) }
 					</PanelBody> }

@@ -62,7 +62,7 @@
 					class="jfb-addons__item-desc"
 				>
 					<span v-html="addonData.desc"></span>
-					<a :href="addonData.demo" target="_blank">Learn More</a>
+					<a :href="learnMoreUrl" target="_blank">Learn More</a>
 				</div>
 				<div class="jfb-addons__item-actions">
 
@@ -156,6 +156,17 @@ export default {
 
 		proccesingState() {
 			return this.actionPluginProcessed || this.updatePluginProcessed;
+		},
+
+		learnMoreUrl() {
+			let demoUrl = this.addonData.demo,
+				utmParams = this.$parent.getUtmParamsString( {
+					utm_source: `dashboard/jet-form-builder-addons-page`,
+					utm_medium: `crocoblock-license/${ this.$parent.themeInfo.theme }`,
+					utm_campaign: 'addon-learn-more',
+				} );
+
+			return `${ demoUrl }?${ utmParams }`;
 		}
 
 	},

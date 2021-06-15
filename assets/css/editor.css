@@ -230,7 +230,8 @@
 }
 
 .jet-user-fields-map__list {
-    flex: 0 0 35%;
+    flex: 0 0 40%;
+    padding-top: 0.5em;
 }
 
 .jet-user-fields-map__list .components-flex__item {
@@ -686,3 +687,8 @@ select.components-select-control__input.components-select-control__input.compone
 .jet-form-edit-modal .jet-inline-radio .components-radio-control__option:not(:nth-child(1)):not(:nth-child(2)) {
     margin-left: 1em;
 }
+.jet-control-full {
+    padding: 12px 0 5px;
+    border-top: 1px solid #ddd;
+}
+

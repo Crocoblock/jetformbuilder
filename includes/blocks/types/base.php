@@ -198,7 +198,7 @@ abstract class Base extends Base_Module {
 
 		if ( ! Live_Form::instance()->current_repeater
 		     || ( ! empty( Live_Form::instance()->current_repeater )
-		     && empty( Live_Form::instance()->current_repeater['values'] ) )
+		          && empty( Live_Form::instance()->current_repeater['values'] ) )
 		) {
 			$result_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
 

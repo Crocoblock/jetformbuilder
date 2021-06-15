@@ -31,6 +31,7 @@ const {
 const NumberControl = __experimentalNumberControl;
 
 const { useState } = wp.element;
+const { applyFilters } = wp.hooks;
 
 const help = {
 	calc_hidden: __( 'Check this to hide calculated field' ),
@@ -48,11 +49,13 @@ export default function EditCalculated( props ) {
 
 	const insertMacros = ( macros ) => {
 		setAttributes( {
-			calc_formula: `${ attributes.calc_formula || '' }%FIELD::${ macros }%`,
+			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
 		} );
 	};
 	const togglePopover = () => {
-		setFormFields( getFieldsWithoutCurrent() );
+		const fields = getFieldsWithoutCurrent().map( ( { value } ) => ( '%FIELD::' + value + '%' ) );
+
+		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields', fields ) );
 		setShowMacros( toggle => ! toggle );
 	};
 
@@ -74,13 +77,13 @@ export default function EditCalculated( props ) {
 					position={ 'bottom left' }
 				>
 					{ formFields.length && <PanelBody title={ 'Form Fields' }>
-						{ formFields.map( ( { value }, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
+						{ formFields.map( ( value, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
 								<Button
 									isLink
 									onClick={ () => {
 										insertMacros( value )
 									} }
-								>{ '%FIELD::' + value + '%' }</Button>
+								>{ value }</Button>
 							</div>,
 						) }
 					</PanelBody> }
@@ -95,16 +98,11 @@ export default function EditCalculated( props ) {
 				{ ...props }
 			/>
 			<FieldSettingsWrapper { ...props }>
-				<div className="jet-form-editor__row-notice">
-					{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
-					{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
-					%FIELD::quantity%*%META::price%<br/><br/>
-					{ __( 'Where:', 'jet-form-builder' ) }<br/>
-					-
-					{ __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
-					-
-					{ __( '%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
-				</div>
+				<p
+					className={ 'components-base-control__help' }
+					style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
+					dangerouslySetInnerHTML={ { __html: JetFormCalculatedField.field_desc } }
+				/>
 				<NumberControl
 					label={ __( 'Decimal Places Number' ) }
 					labelPosition='top'
@@ -155,13 +153,15 @@ export default function EditCalculated( props ) {
 				valueIfEmptyLabel={ 'Calculated Field' }
 				{ ...props }
 			>
-				{ props.isSelected && <TextareaControl
-					key="calc_formula"
-					value={ attributes.calc_formula }
-					onChange={ ( newValue ) => {
-						setAttributes( { calc_formula: newValue } );
-					} }
-				/> }
+				{ props.isSelected && <>
+					<TextareaControl
+						key="calc_formula"
+						value={ attributes.calc_formula }
+						onChange={ ( newValue ) => {
+							setAttributes( { calc_formula: newValue } );
+						} }
+					/>
+				</> }
 				<div className={ 'jet-form-builder__calculated-field' }>
 					<div className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
 					<div className={ 'calc-formula' }>{ attributes.calc_formula }</div>

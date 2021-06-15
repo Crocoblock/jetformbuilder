@@ -129,10 +129,12 @@ class Manager {
 			array(),
 			JET_FORM_BUILDER_VERSION
 		);
+		$data = self::prepare_actions_data( $this->_types );
+
 		wp_localize_script(
 			self::ENGINE_HANDLE,
 			'jetFormActionTypes',
-			self::prepare_actions_data( $this->_types )
+			$data
 		);
 
 		$this->register_action_types_assets( self::ENGINE_HANDLE );

@@ -196,6 +196,7 @@ class Live_Form {
 		do_action( 'jet-form-builder/before-start-form-row', $this );
 
 		$this->add_attribute( 'class', 'jet-form-builder-row' );
+		$this->add_attribute( 'class', 'field-type-' . $field['type'] );
 
 		if ( $this->is_hidden_row ) {
 			$this->add_attribute( 'class', 'jet-form-builder-row--hidden' );

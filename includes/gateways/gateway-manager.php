@@ -198,9 +198,18 @@ class Gateway_Manager {
 	}
 
 	public function get_actions_before( Action_Handler $action_handler ) {
+		$withFilter = function ( $actions = array() ) use ( $action_handler ) {
+			return apply_filters(
+				'jet-form-builder/gateways/notifications-before',
+				$actions,
+				$action_handler->get_all()
+			);
+		};
+
 		if ( empty( $this->gateways() ) || empty( $this->gateways()['notifications_before'] ) ) {
-			return array();
+			return $withFilter();
 		}
+
 		$actions_ids = array_filter(
 			$this->gateways()['notifications_before'],
 			function ( $action ) {
@@ -208,11 +217,7 @@ class Gateway_Manager {
 			}
 		);
 
-		return apply_filters(
-			'jet-form-builder/gateways/notifications-before',
-			$actions_ids,
-			$action_handler->get_all()
-		);
+		return $withFilter( $actions_ids );
 	}
 
 	public function has_gateway( $form_id ) {

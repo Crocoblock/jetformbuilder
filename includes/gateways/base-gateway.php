@@ -163,6 +163,8 @@ abstract class Base_Gateway {
 
 		$keep_these = isset( $settings[ 'notifications_' . $type ] ) ? $settings[ 'notifications_' . $type ] : array();
 
+		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
+
 		if ( ! empty( $keep_these ) ) {
 			$notifications = new Action_Handler( $this->data['form_id'] );
 			$notifications->add_request( $this->data['form_data'] );
@@ -250,7 +252,6 @@ abstract class Base_Gateway {
 	 * @return void [description]
 	 */
 	public function before_actions( Action_Handler $action_handler, $keep_these ) {
-
 		if ( empty( $action_handler->get_all() ) ) {
 			return;
 		}
@@ -441,6 +442,10 @@ abstract class Base_Gateway {
 		) {
 			$handler->unregister_action( $index );
 		}
+	}
+
+	public function property( $prop ) {
+		return $this->$prop;
 	}
 
 }

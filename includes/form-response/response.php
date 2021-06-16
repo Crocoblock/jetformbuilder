@@ -8,9 +8,9 @@ use Jet_Form_Builder\Form_Response\Types\Response_It;
 
 class Response {
 
-	private $manager;
+	public $manager;
 	private $query_args = array();
-	private $args = array();
+	public $args = array();
 
 	public $default_args = array(
 		'status' => 'success',
@@ -23,7 +23,9 @@ class Response {
 	}
 
 	public function send() {
-		$this->manager->send( $this->query_args );
+		$this->manager->send(
+			apply_filters( 'jet-fb/response-handler/query-args', $this->query_args, $this )
+		);
 	}
 
 	private function init_query_args() {

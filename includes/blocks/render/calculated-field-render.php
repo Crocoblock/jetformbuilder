@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Live_Form;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -41,14 +42,12 @@ class Calculated_Field_Render extends Base {
 
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
-
 						$listen_fields[] = $matches[2];
 
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
-
-						return get_post_meta( $this->post->ID, $matches[2], true );
+						return get_post_meta( Live_Form::instance()->post->ID, $matches[2], true );
 
 					default:
 						$macros_name = $matches[1];

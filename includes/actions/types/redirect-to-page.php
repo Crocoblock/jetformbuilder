@@ -75,7 +75,7 @@ class Redirect_To_Page extends Base {
 				$redirect_args = array();
 
 				foreach ( $this->settings['redirect_args'] as $arg ) {
-					$redirect_args[ $arg ] = ! empty( $this->data[ $arg ] ) ? $request[ $arg ] : 0;
+					$redirect_args[ $arg ] = ! empty( $request[ $arg ] ) ? $request[ $arg ] : 0;
 				}
 
 				$to_url = add_query_arg( $redirect_args, $to_url );

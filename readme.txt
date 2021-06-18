@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.7.2
 Requires PHP: 7.0
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,6 +152,16 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.3**
+ - ADD: Go Pro banner & link
+ - FIX: Redirect Action with GET args
+ - FIX: Get calculated value from post meta
+ - Tweak: Localize actions data on `jet-form-builder/editor-package/before`
+ - Tweak: Add class `field-type-{id}` for each field
+ - Tweak: Add `Gateway_Manager::has_gateway`
+ - Tweak: Add php filter `jet-form-builder/field-data/calculated-field`
+ - Tweak: Add js filter `jet.fb.calculated.field.available.fields`
 
 **1.2.2**
  - ADD: Addon management via Dashboard

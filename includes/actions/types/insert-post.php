@@ -237,9 +237,10 @@ class Insert_Post extends Base {
 	private function add_inserted_post_id( Action_Handler $handler, $post_id ) {
 		if ( empty( $handler->response_data['inserted_post_id'] ) ) {
 			$handler->response_data['inserted_post_id'] = $post_id;
+			$handler->request_data['inserted_post_id']  = $post_id;
 		} else {
 			$handler->response_data['inserted_posts'][] = array(
-				'post_id' => $post_id,
+				'post_id'   => $post_id,
 				'action_id' => $this->_id,
 			);
 		}

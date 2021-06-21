@@ -8,7 +8,8 @@ const {
 
 const {
 	addAction,
-	getFormFieldsBlocks
+	getFormFieldsBlocks,
+	Tools: { withPlaceholder }
 } = JetFBActions;
 
 const {
@@ -16,6 +17,11 @@ const {
 	TextareaControl,
 	SelectControl,
 } = wp.components;
+
+const {
+	useState,
+	useEffect,
+} = wp.element;
 
 addAction( 'send_email', function SendEmailAction( {
 													   settings,
@@ -26,7 +32,11 @@ addAction( 'send_email', function SendEmailAction( {
 												   } ) {
 
 
-	const formFields = getFormFieldsBlocks( [], '--' );
+	const [ formFields, setFormFields ] = useState( [] );
+
+	useEffect( () => {
+		setFormFields( getFormFieldsBlocks() );
+	}, [] );
 
 	const insertMacros = ( macros ) => {
 		const content = ( settings.content || '' ) + '%' + macros + '%';
@@ -61,7 +71,7 @@ addAction( 'send_email', function SendEmailAction( {
 			labelPosition="side"
 			className="full-width"
 			value={ settings.from_field }
-			options={ formFields }
+			options={ withPlaceholder( formFields ) }
 			label={ label( 'from_field' ) }
 			help={ help( 'from_field' ) }
 			onChange={ ( newValue ) => {
@@ -94,7 +104,7 @@ addAction( 'send_email', function SendEmailAction( {
 			labelPosition="side"
 			className="full-width"
 			value={ settings.reply_from_field }
-			options={ formFields }
+			options={ withPlaceholder( formFields ) }
 			label={ label( 'reply_from_field' ) }
 			help={ help( 'reply_from_field' ) }
 			onChange={ ( newValue ) => {

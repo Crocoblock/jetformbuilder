@@ -647,7 +647,7 @@ select.components-select-control__input.components-select-control__input.compone
 }
 
 .jet-control-clear .components-base-control__field {
-    padding: unset;
+    padding-top: unset;
     border-top: unset;
 }
 
@@ -690,5 +690,9 @@ select.components-select-control__input.components-select-control__input.compone
 .jet-control-full {
     padding: 12px 0 5px;
     border-top: 1px solid #ddd;
+}
+
+.jet-border-unset.components-base-control div.components-base-control__field.components-base-control__field {
+    border-top: unset;
 }
 

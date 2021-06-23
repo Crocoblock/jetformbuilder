@@ -228,7 +228,7 @@ button.jet-form-builder__submit {
     justify-content: flex-start;
 }
 
-.jet-form-builder__check-mark {
+.jet-form__check-mark {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -240,7 +240,7 @@ button.jet-form-builder__submit {
     justify-content: center
 }
 
-.jet-form-builder__check-mark__icon.is-svg-icon svg {
+.jet-form__check-mark__icon.is-svg-icon svg {
     display: block
 }
 
@@ -256,7 +256,7 @@ button.jet-form-builder__submit {
     justify-content: center
 }
 
-.jet-form-builder__field-template--checked .jet-form-builder__check-mark--default {
+.jet-form-builder__field-template--checked .jet-form__check-mark--default {
     display: none
 }
 
@@ -270,7 +270,7 @@ button.jet-form-builder__submit {
     justify-content: center
 }
 
-.jet-form-builder__field-template--checked .jet-form-builder__check-mark--checked {
+.jet-form-builder__field-template--checked .jet-form__check-mark--checked {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex

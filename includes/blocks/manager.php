@@ -31,6 +31,10 @@ class Manager {
 
 	const FORM_EDITOR_STORAGE = 'form_editor';
 	const OTHERS_STORAGE = 'others';
+	/**
+	 * @var bool
+	 */
+	private $_registered_scripts = false;
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
@@ -58,6 +62,7 @@ class Manager {
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'register_form_scripts' ) );
 	}
 
 	public function add_category( $categories, $post ) {
@@ -185,7 +190,7 @@ class Manager {
 	 * @return [type] [description]
 	 */
 	public function enqueue_frontend_assets() {
-
+		$this->register_form_scripts();
 		$this->enqueue_frontend_styles();
 
 		wp_enqueue_script( 'jet-form-builder-frontend-forms' );
@@ -199,6 +204,9 @@ class Manager {
 	}
 
 	public function register_form_scripts() {
+		if ( $this->_registered_scripts ) {
+			return;
+		}
 		wp_register_script(
 			'jet-form-builder-frontend-forms',
 			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
@@ -222,6 +230,7 @@ class Manager {
 			Plugin::instance()->get_version(),
 			true
 		);
+		$this->_registered_scripts = true;
 	}
 
 	/**

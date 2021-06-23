@@ -464,14 +464,23 @@
 			length: 0,
 		},
 
+		notSafeInit: function() {
+			const wrappers = $( '.jet-form-builder__form-wrapper' );
+
+			wrappers.each( function( index, value ) {
+				JetFormBuilder.widgetBookingForm( $( value ) );
+			} );
+		},
 		initCommon: function() {
 			if ( JetFormBuilder.initialized ) {
 				return;
 			}
-			$( '.jet-form-builder__form-wrapper' ).each( function( index, value ) {
+			const wrappers = $( '.jet-form-builder__form-wrapper' );
+
+			wrappers.each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
+				JetFormBuilder.initialized = true;
 			} );
-			JetFormBuilder.initialized = true;
 		},
 
 		initElementor: function() {
@@ -1433,6 +1442,8 @@
 
 	$( document ).ready( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
+
+	document.addEventListener( 'jet-fb.render.form-block', JetFormBuilder.notSafeInit )
 
 	JetFormBuilder.addHandlersInit();
 } )( jQuery );

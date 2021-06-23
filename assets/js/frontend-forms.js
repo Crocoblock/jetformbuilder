@@ -1431,7 +1431,7 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( document ).ready( JetFormBuilder.initCommon );
+	$( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	JetFormBuilder.addHandlersInit();

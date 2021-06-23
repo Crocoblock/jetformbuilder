@@ -1440,7 +1440,7 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( document ).ready( JetFormBuilder.initCommon );
+	$( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	document.addEventListener( 'jet-fb.render.form-block', JetFormBuilder.notSafeInit )

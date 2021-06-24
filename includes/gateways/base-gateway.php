@@ -329,12 +329,19 @@ abstract class Base_Gateway {
 		}
 	}
 
+	/**
+	 * @throws Gateway_Exception
+	 */
 	protected function set_current_gateway_options() {
 		$gateway = $this->gateways_meta[ $this->get_id() ];
 
 		foreach ( $this->options_list() as $name => $option ) {
-			if ( ! isset( $gateway[ $name ] ) || empty( $gateway[ $name ] ) ) {
-				throw new Gateway_Exception( 'Invalid gateway options' );
+			$is_required = isset( $option['required'] )
+				? filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
+				: true;
+
+			if ( $is_required && ( ! isset( $gateway[ $name ] ) || empty( $gateway[ $name ] ) ) ) {
+				throw new Gateway_Exception( 'Invalid gateway options', $name );
 			}
 			$this->options[ $name ] = esc_attr( $gateway[ $name ] );
 		}

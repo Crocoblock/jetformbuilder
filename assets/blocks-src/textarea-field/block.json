@@ -61,6 +61,10 @@
 		"class_name": {
 			"type": "string",
 			"default": ""
+		},
+		"className": {
+			"type": "string",
+			"default": ""
 		}
 	}
 }

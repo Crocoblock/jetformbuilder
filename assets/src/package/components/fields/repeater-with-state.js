@@ -169,7 +169,7 @@ function RepeaterWithState( {
 				<ButtonGroup className={ 'repeater-action-buttons' }>
 					<Button
 						isSmall
-						icon={ currentItem.__visible ? 'visibility' : 'hidden' }
+						icon={ currentItem.__visible ? 'no-alt' : 'edit' }
 						onClick={ () => toggleVisible( index ) }
 						className={ 'repeater-action-button' }
 					/>

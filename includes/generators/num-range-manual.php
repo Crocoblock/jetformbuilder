@@ -33,11 +33,11 @@ class Num_Range_Manual extends Base {
 	/**
 	 * Returns generated options list
 	 *
-	 * @param array $args
+	 * @param $args
 	 *
 	 * @return array
 	 */
-	public function generate( array $args ) {
+	public function generate( $args ) {
 		$result = array();
 
 		if ( $args['generator_numbers_min'] >= $args['generator_numbers_max'] ) {

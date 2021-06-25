@@ -21,11 +21,11 @@ abstract class Base {
 	/**
 	 * Returns generated options list
 	 *
-	 * @param array $args
+	 * @param $args
 	 *
 	 * @return array
 	 */
-	abstract public function generate( array $args );
+	abstract public function generate( $args );
 
 	public function can_generate() {
 		return true;

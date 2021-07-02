@@ -44,7 +44,8 @@ class Manager {
 			new Types\Redirect_To_Page(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
-			new Types\Active_Campaign()
+			new Types\Active_Campaign(),
+			new Types\Redirect_To_Checkout()
 		);
 
 		foreach ( $actions as $action ) {

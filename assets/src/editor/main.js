@@ -10,6 +10,7 @@ import './form-actions/redirect-to-page';
 import './form-actions/mailchimp';
 import './form-actions/getresponse';
 import './form-actions/activecampaign';
+import './form-actions/redirect-to-checkout';
 import RegisterPlugins from "./plugins/manager";
 import RegisterFormFields from "./blocks/form-fields";
 

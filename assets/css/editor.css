@@ -70,10 +70,6 @@
     margin-bottom: 10px;
 }
 
-.jet-form-action:first-child {
-    margin-top: 15px;
-}
-
 .jet-form-action .components-base-control__field {
     margin: 0;
 }
@@ -605,16 +601,6 @@ select.components-select-control__input.components-select-control__input.compone
 .jet-form-builder__calculated-field {
     display: flex;
     width: 100%;
-}
-
-.jet-form-action .components-card__body {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.jet-form-action .components-card__body div:first-child {
-    flex: 0 0 50%;
 }
 
 .components-text-control__input {

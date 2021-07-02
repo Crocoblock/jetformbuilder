@@ -26,6 +26,7 @@ const {
 		  Card,
 		  CardBody,
 		  DropdownMenu,
+		  Flex,
 	  } = wp.components;
 
 const {
@@ -144,56 +145,57 @@ export default function PluginActions() {
 							updateAction( action.id, 'type', newType );
 						} }
 					/>
-					<Button
-						icon='edit'
-						label={ 'Edit Action' }
-						onClick={ () => {
-							setEditedAction( () => ( {
-								...action,
-							} ) );
-						} }
-					/>
-					<div/>
-					<Button
-						icon='randomize'
-						label={ 'Conditions' }
-						onClick={ () => {
-							setProcessedAction( () => ( { ...action } ) );
-						} }
-					/>
-					<DropdownMenu
-						icon={ 'ellipsis' }
-						label={ 'Edit, move or delete' }
-						controls={ [
-							{
-								title: 'Up',
-								icon: 'arrow-up',
-								disabled: true,
-								onClick: () => {
-									if ( 0 !== index ) {
-										moveAction( index, index - 1 );
-									}
+					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
+						<Button
+							icon='edit'
+							label={ 'Edit Action' }
+							onClick={ () => {
+								setEditedAction( () => ( {
+									...action,
+								} ) );
+							} }
+						/>
+						<Button
+							icon='randomize'
+							label={ 'Conditions' }
+							onClick={ () => {
+								setProcessedAction( () => ( { ...action } ) );
+							} }
+						/>
+						<DropdownMenu
+							icon={ 'ellipsis' }
+							label={ 'Edit, move or delete' }
+							controls={ [
+								{
+									title: 'Up',
+									icon: 'arrow-up',
+									disabled: true,
+									onClick: () => {
+										if ( 0 !== index ) {
+											moveAction( index, index - 1 );
+										}
+									},
 								},
-							},
-							{
-								title: 'Down',
-								icon: 'arrow-down',
-								disabled: index === actions.length,
-								onClick: () => {
-									if ( ( actions.length - 1 ) !== index ) {
-										moveAction( index, index + 1 );
-									}
+								{
+									title: 'Down',
+									icon: 'arrow-down',
+									disabled: index === actions.length,
+									onClick: () => {
+										if ( ( actions.length - 1 ) !== index ) {
+											moveAction( index, index + 1 );
+										}
+									},
 								},
-							},
-							{
-								title: 'Delete',
-								icon: 'trash',
-								onClick: () => {
-									deleteAction( index );
+								{
+									title: 'Delete',
+									icon: 'trash',
+									onClick: () => {
+										deleteAction( index );
+									},
 								},
-							},
-						] }
-					/>
+							] }
+						/>
+					</Flex>
 
 				</CardBody>
 			</Card>

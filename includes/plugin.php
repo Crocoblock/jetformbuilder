@@ -12,6 +12,7 @@ use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
+use Jet_Form_Builder\Integrations\Wc_Integration;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
 use Jet_Form_Builder\License\Manager as LicenseManager;
 
@@ -28,6 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
  * @property LicenseManager $license_manager
+ * @property Wc_Integration wc
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -46,6 +48,7 @@ class Plugin {
 	public $allow_gateways;
 	public $framework;
 	public $license_manager;
+	public $wc;
 
 	public static $instance;
 
@@ -95,6 +98,7 @@ class Plugin {
 		$this->form_handler    = new Form_Handler();
 		$this->captcha         = new Forms_Captcha();
 		$this->license_manager = new LicenseManager();
+		$this->wc              = new Wc_Integration();
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();

@@ -6,6 +6,10 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 class Preset_Source_User extends Base_Source {
 
+	public function get_id() {
+		return 'user';
+	}
+
 	public function on_sanitize() {
 		if ( ! is_user_logged_in() ) {
 			return false;

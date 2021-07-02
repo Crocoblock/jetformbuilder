@@ -24,7 +24,9 @@ abstract class Base_Source {
 
 	abstract public function query_source();
 
-	public function __construct( $fields_map, $field_args, $preset_data ) {
+	abstract public function get_id();
+
+	public function init_source( $fields_map, $field_args, $preset_data ) {
 		$this->fields_map  = $fields_map;
 		$this->field_args  = $field_args;
 		$this->preset_data = $preset_data;
@@ -32,6 +34,13 @@ abstract class Base_Source {
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
 		$this->src         = $this->_query_source();
+
+		$this->after_init();
+
+		return $this;
+	}
+
+	public function after_init() {
 	}
 
 	public function _query_source() {

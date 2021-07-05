@@ -42,6 +42,10 @@ class Form_Handler {
 	public $form_key = '_jet_engine_booking_form_id';
 	public $refer_key = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
+	/**
+	 * @var Request_Handler
+	 */
+	public $request_handler;
 
 
 	/**
@@ -176,13 +180,14 @@ class Form_Handler {
 
 	public function try_set_data() {
 		try {
-			$request            = array(
+			$request               = array(
 				'form_id' => $this->form_id,
 				'is_ajax' => $this->is_ajax,
 				'refer'   => $this->refer
 			);
-			$this->action_handler = new Action_Handler( $this->form_id );
-			$this->request_data = ( new Request_Handler( $request ) )->get_form_data();
+			$this->action_handler  = new Action_Handler( $this->form_id );
+			$this->request_handler = new Request_Handler( $request );
+			$this->request_data    = $this->request_handler->get_form_data();
 
 		} catch ( Request_Exception $exception ) {
 			$this->send_response( array(

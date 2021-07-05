@@ -4,18 +4,15 @@
 namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
-use Jet_Form_Builder\Classes\Factory;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Request\Fields\Date_Field_Parser;
-use Jet_Form_Builder\Request\Fields\Repeater_Field_Parser;
 
 class Request_Handler {
 	public $request;
 	public $errors;
 
-	private $repeaters = array();
+	public $repeaters = array();
 
 	public $_fields = array();
 	public $_request_values;
@@ -153,6 +150,29 @@ class Request_Handler {
 
 	public function save_repeater( $name, $value ) {
 		$this->repeaters[ $name ] = $value;
+	}
+
+	public function get_field_attrs_by_name( $field_name, $attr_name = '', $default_val = '' ) {
+		foreach ( $this->_fields as $field ) {
+			if ( empty( $field['attrs'] )
+			     || ! isset( $field['attrs']['name'] )
+			     || $field_name !== $field['attrs']['name']
+			) {
+				continue;
+			}
+			$attrs = $field['attrs'];
+
+			if ( ! $attr_name ) {
+				return $attrs;
+			}
+			if ( ! isset( $attrs[ $attr_name ] ) ) {
+				return $default_val;
+			}
+
+			return $attrs[ $attr_name ];
+		}
+
+		return $default_val;
 	}
 
 }

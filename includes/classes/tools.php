@@ -390,4 +390,15 @@ class Tools {
 		return strlen( $filename ) <= PHP_MAXPATHLEN && is_readable( $filename );
 	}
 
+	/**
+	 * Returns template path
+	 *
+	 * @param  [type] $path [description]
+	 *
+	 * @return [type]       [description]
+	 */
+	public static function get_global_template( $path = '' ) {
+		return JET_FORM_BUILDER_PATH . 'templates/' . $path;
+	}
+
 }

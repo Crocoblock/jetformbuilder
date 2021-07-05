@@ -37,7 +37,8 @@ class Redirect_To_Checkout extends Base {
 		if ( ! isset( $this->settings['product_id_from'] ) ) {
 			throw new Action_Exception( 'failed' );
 		}
-		$product_id = absint( $this->get_product_id( $request ) );
+		$product_id = $this->get_product_id( $request );
+		$product_id = apply_filters( "jet-form-builder/action/{$this->get_id()}/product-id", absint( $product_id ) );
 
 		if ( ! $product_id ) {
 			throw ( new Action_Exception( 'Undefined product ID' ) )->dynamic_error();
@@ -48,19 +49,46 @@ class Redirect_To_Checkout extends Base {
 		}
 
 		$cart_item_data = array(
-			Plugin::instance()->wc->form_data_key => $request,
-			Plugin::instance()->wc->form_id_key   => $handler->form_id
+			Plugin::instance()->wc->form_data_key       => $request,
+			Plugin::instance()->wc->form_id_key         => $handler->form_id,
+			Plugin::instance()->wc->action_settings_key => $this->settings
 		);
 
 		WC()->cart->empty_cart();
 
 		try {
 			WC()->cart->add_to_cart( ...apply_filters(
-				"jet-form-builder/action/{$this->get_id()}/add-to-cart",
-				$product_id, 1, 0, array(), $cart_item_data
-			) );
+				"jet-form-builder/action/{$this->get_id()}/add-to-cart", array(
+				$product_id,
+				1,
+				0,
+				array(),
+				$cart_item_data
+			) ) );
 		} catch ( \Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage() ) )->dynamic_error();
+		}
+
+		$checkout_fields_map = apply_filters( "jet-form-builder/action/{$this->get_id()}/fields-map", array() );
+
+		foreach ( $this->settings as $key => $value ) {
+			if ( false !== strpos( $key, 'wc_fields_map__' ) && ! empty( $value ) ) {
+				$checkout_fields_map[ str_replace( 'wc_fields_map__', '', $key ) ] = $value;
+			}
+		}
+
+		if ( ! empty( $checkout_fields_map ) ) {
+			$checkout_fields = array();
+
+			foreach ( $checkout_fields_map as $checkout_field => $form_field ) {
+				if ( isset( $request[ $form_field ] ) ) {
+					$checkout_fields[ $checkout_field ] = $request[ $form_field ];
+				}
+			}
+
+			if ( ! empty( $checkout_fields ) ) {
+				WC()->session->set( Plugin::instance()->wc->checkout_fields_session, $checkout_fields );
+			}
 		}
 
 		$checkout = wc_get_checkout_url();
@@ -69,7 +97,9 @@ class Redirect_To_Checkout extends Base {
 			wp_safe_redirect( $checkout );
 			die();
 		} else {
-			$handler->response_data['redirect'] = $checkout;
+			$handler->add_response( array(
+				'redirect' => $checkout
+			) );
 		}
 
 	}
@@ -86,7 +116,7 @@ class Redirect_To_Checkout extends Base {
 				}
 		}
 
-		return false;
+		return 0;
 	}
 
 	public function self_script_name() {

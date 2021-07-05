@@ -118,6 +118,11 @@ addAction(
 				onChange={ val => onChangeSetting( val, 'wc_price' ) }
 				options={ formFields }
 			/>
+			<TextControl
+				label={ label( 'wc_heading_order_details' ) }
+				value={ settings.product_id_manual }
+				onChange={ val => onChangeSetting( val, 'product_id_manual' ) }
+			/>
 			<BaseControl
 				label={ label( 'wc_order_details' ) }
 				help={ help( 'wc_order_details' ) }

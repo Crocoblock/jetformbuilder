@@ -1,3 +1,6 @@
+import GroupedSelectControl from '../grouped-select-control';
+
+
 const {
 		  TextControl,
 		  SelectControl,
@@ -151,6 +154,23 @@ function AvailableMapField( {
 								value={ data.options.find( option => option.key === currentVal[ data.name ] ) }
 							/>
 						</AvailableFieldWrapper> );
+				case 'grouped_select':
+					return ( isMapFieldVisible( value, data, field ) &&
+						<AvailableFieldWrapper { ...props } key={ uniqKey }>
+							<GroupedSelectControl
+								options={ data.options }
+								//label={ data.label }
+								labelPosition="top"
+								value={ currentVal[ data.name ] }
+								onChange={ newVal => {
+									currentVal[ data.name ] = newVal;
+									onChangeValue( {
+										...fieldsMap,
+										[ field ]: currentVal,
+									}, 'fields_map' );
+								} }
+							/>
+						</AvailableFieldWrapper> );
 			}
 		} ) }
 	</React.Fragment>;
@@ -216,6 +236,22 @@ function MapField( {
 							onChangeValue( value, 'current_field_' + data.name )
 						} }
 						value={ data.options.find( option => option.key === value ) }
+					/>
+				</div> );
+		case 'grouped_select':
+			return ( isCurrentFieldVisible( currentState, data ) &&
+				<div
+					key={ data.name + index }
+					className={ 'jet-form-preset__row' }
+				>
+					<GroupedSelectControl
+						options={ data.options }
+						label={ data.label }
+						labelPosition="side"
+						value={ value }
+						onChange={ newVal => {
+							onChangeValue( newVal, 'current_field_' + data.name )
+						} }
 					/>
 				</div> );
 	}

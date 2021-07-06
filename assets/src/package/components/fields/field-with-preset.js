@@ -40,6 +40,7 @@ function FieldWithPreset( {
 				onRequestClose={ changeModalState }
 				classNames={ [ 'width-60' ] }
 				title={ 'Edit Preset' }
+				fixedHeight='75vh'
 			>
 				{ modalProps => <ModalEditor
 					{ ...modalProps }

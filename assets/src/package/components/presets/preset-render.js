@@ -1,17 +1,21 @@
 const {
-	TextControl,
-	SelectControl,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  CustomSelectControl,
+		  Card,
+		  CardBody,
+		  CardHeader,
+	  } = wp.components;
 
 function GlobalField( {
-								 data,
-								 value,
-								 index,
-								 onChangeValue,
-								 isVisible,
-								 excludeOptions = options => options,
-								 position
-							 } ) {
+						  data,
+						  value,
+						  index,
+						  onChangeValue,
+						  isVisible,
+						  excludeOptions = options => options,
+						  position,
+					  } ) {
 
 	switch ( data.type ) {
 		case 'text':
@@ -50,18 +54,17 @@ function GlobalField( {
 			);
 	}
 
-
 	return null;
 }
 
 function AvailableMapField( {
-									   fieldsMap,
-									   field,
-									   index,
-									   value,
-									   onChangeValue,
-									   isMapFieldVisible
-								   } ) {
+								fieldsMap,
+								field,
+								index,
+								value,
+								onChangeValue,
+								isMapFieldVisible,
+							} ) {
 
 	let currentVal = null;
 
@@ -71,19 +74,25 @@ function AvailableMapField( {
 
 	currentVal = fieldsMap[ field ];
 
-	if ( ! currentVal ) {
+	if ( ! currentVal || 'object' !== typeof currentVal ) {
 		currentVal = {};
 	}
 
-	const AvailableFieldWrapper = ( { field, name, index, fIndex, children } ) => <>
-		<span className='jet-label-overflow'>{ field }</span>
-		<div
+	const AvailableFieldWrapper = ( { field, name, index, fIndex, children } ) => <Card
+		key={ field + name + index + fIndex }
+		size={ 'extraSmall' }
+		style={ { marginBottom: '10px' } }
+	>
+		<CardHeader>
+			<span className='jet-label-overflow'>{ field }</span>
+		</CardHeader>
+		<CardBody
 			key={ field + name + index + fIndex }
 			className={ 'jet-form-preset__fields-map-item' }
 		>
 			{ children }
-		</div>
-	</>;
+		</CardBody>
+	</Card>;
 
 	return <React.Fragment key={ `map_field_preset_${ field + index }` }>
 
@@ -103,7 +112,7 @@ function AvailableMapField( {
 									currentVal[ data.name ] = newVal;
 									onChangeValue( {
 										...fieldsMap,
-										[ field ]: currentVal
+										[ field ]: currentVal,
 									}, 'fields_map' );
 								} }
 							/>
@@ -115,31 +124,47 @@ function AvailableMapField( {
 							<SelectControl
 								options={ data.options }
 								//label={ data.label }
+								labelPosition="top"
 								value={ currentVal[ data.name ] }
 								onChange={ newVal => {
 									currentVal[ data.name ] = newVal;
 									onChangeValue( {
 										...fieldsMap,
-										[ field ]: currentVal
+										[ field ]: currentVal,
 									}, 'fields_map' );
 								} }
 							/>
 						</AvailableFieldWrapper>
 					);
+				case 'custom_select':
+					return ( isMapFieldVisible( value, data, field ) &&
+						<AvailableFieldWrapper { ...props } key={ uniqKey }>
+							<CustomSelectControl
+								options={ data.options }
+								onChange={ ( { selectedItem } ) => {
+									currentVal[ data.name ] = selectedItem.key;
+									onChangeValue( {
+										...fieldsMap,
+										[ field ]: currentVal,
+									}, 'fields_map' );
+								} }
+								value={ data.options.find( option => option.key === currentVal[ data.name ] ) }
+							/>
+						</AvailableFieldWrapper> );
 			}
 		} ) }
 	</React.Fragment>;
 }
 
 function MapField( {
-							  data,
-							  value,
-							  index,
-							  currentState,
-							  onChangeValue,
-							  isCurrentFieldVisible,
-							  position = 'general'
-						  } ) {
+					   data,
+					   value,
+					   index,
+					   currentState,
+					   onChangeValue,
+					   isCurrentFieldVisible,
+					   position = 'general',
+				   } ) {
 
 	switch ( data.type ) {
 		case 'text':
@@ -176,6 +201,23 @@ function MapField( {
 					/>
 				</div>
 			);
+		case 'custom_select':
+			return ( isCurrentFieldVisible( currentState, data ) &&
+				<div
+					key={ data.name + index }
+					className={ 'jet-form-preset__row' }
+				>
+					<CustomSelectControl
+						className='jet-custom-select-control'
+						label={ data.label }
+						options={ data.options }
+						onChange={ ( { selectedItem } ) => {
+							value = selectedItem.key;
+							onChangeValue( value, 'current_field_' + data.name )
+						} }
+						value={ data.options.find( option => option.key === value ) }
+					/>
+				</div> );
 	}
 	return null;
 }
@@ -183,5 +225,5 @@ function MapField( {
 export {
 	GlobalField,
 	AvailableMapField,
-	MapField
+	MapField,
 };

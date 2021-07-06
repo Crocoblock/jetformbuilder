@@ -9,6 +9,7 @@ function ActionModal( {
 						  updateBtnProps = {},
 						  cancelBtnProps = {},
 						  cancelBtnLabel = 'Cancel',
+						  fixedHeight = '',
 					  } ) {
 
 	const {
@@ -22,7 +23,7 @@ function ActionModal( {
 			  useEffect,
 		  } = wp.element;
 
-	const modalClasses = [ 'jet-form-edit-modal', ...classNames ].join( ' ' );
+	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
 
 	const [ actionClick, setActionClick ] = useState( null );
 
@@ -39,17 +40,24 @@ function ActionModal( {
 		setActionClick( false );
 	}
 
+	let style = {}
+	if ( fixedHeight ) {
+		style = { height: fixedHeight };
+		modalClasses.push( 'jet-modal-fixed-height' )
+	}
+
 	return <Modal
 		onRequestClose={ onRequestClose }
-		className={ modalClasses }
+		className={ modalClasses.join( ' ' ) }
 		title={ title }
+		style={ style }
 	>
 		{ ! children && <div
 			className="jet-form-edit-modal__content"
 		>
 			{ 'Action callback is not found.' }
 		</div> }
-		{ children && <div>
+		{ children && <div className='jet-form-edit-modal__wrapper'>
 			<div className="jet-form-edit-modal__content">
 				{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
 				{ 'function' !== typeof children && children }

@@ -687,6 +687,7 @@ select.components-select-control__input.components-select-control__input.compone
 .jet-form-edit-modal .jet-inline-radio .components-radio-control__option:not(:nth-child(1)):not(:nth-child(2)) {
     margin-left: 1em;
 }
+
 .jet-control-full {
     padding: 12px 0 5px;
     border-top: 1px solid #ddd;
@@ -694,5 +695,20 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-border-unset.components-base-control div.components-base-control__field.components-base-control__field {
     border-top: unset;
+}
+
+.jet-modal-fixed-height .jet-form-edit-modal__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 86px);
+    justify-content: space-between;
+}
+
+.jet-custom-select-control {
+    display: flex;
+}
+
+.jet-custom-select-control .components-custom-select-control__label {
+    margin-right: 7.7em;
 }
 

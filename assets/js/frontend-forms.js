@@ -1377,7 +1377,7 @@
 			];
 
 			callbackFinders.forEach( function( callback ) {
-				if ( JetFormBuilder.currentFieldWithError && ! JetFormBuilder.currentFieldWithError.length ) {
+				if ( ! JetFormBuilder.currentFieldWithError || ! JetFormBuilder.currentFieldWithError.length ) {
 					JetFormBuilder.currentFieldWithError = JetFormBuilder[ callback ]( form, fieldName );
 				}
 			} );
@@ -1386,7 +1386,7 @@
 		},
 
 		findInputDefault: function( form, fieldName ) {
-			return form.find( `.jet-form-builder__field[name="${ fieldName }"]:last` );
+			return form.find( `.jet-form-builder-row [data-field-name="${ fieldName }"]:last` );
 		},
 
 		findWysiwyg: function( form, fieldName ) {

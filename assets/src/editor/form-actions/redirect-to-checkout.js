@@ -120,8 +120,8 @@ addAction(
 			/>
 			<TextControl
 				label={ label( 'wc_heading_order_details' ) }
-				value={ settings.product_id_manual }
-				onChange={ val => onChangeSetting( val, 'product_id_manual' ) }
+				value={ settings.wc_heading_order_details }
+				onChange={ val => onChangeSetting( val, 'wc_heading_order_details' ) }
 			/>
 			<BaseControl
 				label={ label( 'wc_order_details' ) }

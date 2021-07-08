@@ -1,75 +1,56 @@
 const {
-	TextControl,
-	BaseControl
-} = wp.components;
+		  TextControl,
+		  BaseControl,
+	  } = wp.components;
+
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 const { __ } = wp.i18n;
 
+function ActionMessages( props ) {
 
-class ActionMessages extends wp.element.Component {
+	const {
+			  settings,
+			  source,
+			  getMapField,
+			  setMapField,
+			  messages,
+			  onChangeSetting,
+		  } = props;
 
-	constructor( props ) {
-		super( props );
+	useEffect( () => {
+		if ( ! settings || ! settings.messages ) {
+			const messages = {};
 
-		this.setMessages();
-	}
+			Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
+				messages[ type ] = data.value;
+			} )
 
-	setMessages() {
-		if ( this.props.settings && this.props.settings.messages ) {
-			return;
+			onChangeSetting( messages, 'messages' );
 		}
-		const messages = {};
+	} );
 
-		Object.entries( this.props.source.__messages ).forEach( ( [ type, data ] ) => {
-			messages[ type ] = data.value;
-		} )
+	const setMessage = ( value, nameField ) => {
+		const source = 'messages';
 
-		this.props.onChange( {
-			...this.props.settings,
-			messages: messages
-		} );
-	}
+		setMapField( { value, nameField, source } );
+	};
 
-	getMessage( name ) {
-		const settings = this.props.settings;
+	const getMessage = name => {
+		const source = 'messages';
 
-		if ( settings[ 'messages' ] && settings[ 'messages' ][ name ] ) {
-			return settings[ 'messages' ][ name ];
-		}
-		return '';
-	}
+		return getMapField( { name, source } )
+	};
 
-
-	changeFieldsMap( { source, nameField, value } ) {
-		const fieldsMap = Object.assign(
-			{},
-			this.props.settings[ source ],
-			{ [ nameField ]: value }
-		);
-
-		this.props.onChange( {
-			...this.props.settings,
-			[ source ]: fieldsMap
-		} );
-	}
-
-	render() {
-		const { settings, messages } = this.props;
-
-		const onChangeMessage = ( value, nameField ) => {
-			const source = 'messages';
-
-			this.changeFieldsMap(
-				{ value, nameField, source }
-			);
-		};
-
-		return <BaseControl
-			label={ __( 'Messages Settings:' ) }
-			key='messages_settings_fields'
-		>
-			<div className='jet-user-meta-rows'>
-				{ settings.messages && Object.entries( settings.messages )
+	return <BaseControl
+		label={ __( 'Messages Settings:' ) }
+		key='messages_settings_fields'
+	>
+		<div className='jet-user-fields-map__list'>
+			{ settings.messages && Object.entries( settings.messages )
 				.map( ( [ type, data ], id ) => <div
 						className="jet-user-meta__row"
 						key={ 'message_' + type + id }
@@ -77,14 +58,14 @@ class ActionMessages extends wp.element.Component {
 						<TextControl
 							key={ type + id }
 							label={ messages( type ).label }
-							value={ this.getMessage( type ) }
-							onChange={ newValue => onChangeMessage( newValue, type ) }
+							value={ getMessage( type ) }
+							onChange={ newValue => setMessage( newValue, type ) }
 						/>
-					</div>
+					</div>,
 				) }
-			</div>
-		</BaseControl>;
-	}
+
+		</div>
+	</BaseControl>;
 }
 
 export default ActionMessages;

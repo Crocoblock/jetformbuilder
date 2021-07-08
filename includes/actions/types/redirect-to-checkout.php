@@ -171,17 +171,18 @@ class Redirect_To_Checkout extends Base {
 	 */
 	public function editor_labels() {
 		return array(
-			'product_id_from'         => __( 'Get product ID from', 'jet-form-builder' ),
-			'product_id_manual'       => __( 'Input product ID', 'jet-form-builder' ),
-			'product_id_field'        => __( 'Product ID field', 'jet-form-builder' ),
-			'wc_price'                => __( 'WooCommerce Price field', 'jet-form-builder' ),
-			'wc_order_details'        => __( 'WooCommerce order details', 'jet-form-builder' ),
-			'wc_fields_map'           => __( 'WooCommerce checkout fields map', 'jet-form-builder' ),
-			'wc_details__type'        => __( 'Type', 'jet-form-builder' ),
-			'wc_details__label'       => __( 'Label', 'jet-form-builder' ),
-			'wc_details__date_format' => __( 'Date format', 'jet-form-builder' ),
-			'wc_details__field'       => __( 'Select form field', 'jet-form-builder' ),
-			'wc_details__link_label'  => __( 'Link text', 'jet-form-builder' ),
+			'product_id_from'          => __( 'Get product ID from', 'jet-form-builder' ),
+			'product_id_manual'        => __( 'Input product ID', 'jet-form-builder' ),
+			'product_id_field'         => __( 'Product ID field', 'jet-form-builder' ),
+			'wc_price'                 => __( 'WooCommerce Price field', 'jet-form-builder' ),
+			'wc_order_details'         => __( 'WooCommerce order details', 'jet-form-builder' ),
+			'wc_fields_map'            => __( 'WooCommerce checkout fields map', 'jet-form-builder' ),
+			'wc_details__type'         => __( 'Type', 'jet-form-builder' ),
+			'wc_details__label'        => __( 'Label', 'jet-form-builder' ),
+			'wc_details__date_format'  => __( 'Date format', 'jet-form-builder' ),
+			'wc_details__field'        => __( 'Select form field', 'jet-form-builder' ),
+			'wc_details__link_label'   => __( 'Link text', 'jet-form-builder' ),
+			'wc_heading_order_details' => __( 'Heading for Order Details', 'jet-form-builder' )
 		);
 	}
 }

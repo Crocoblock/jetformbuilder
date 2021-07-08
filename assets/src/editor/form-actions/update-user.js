@@ -1,102 +1,132 @@
-import JetFieldsMapControl from "../blocks/controls/fields-map";
 import ActionMessages from "../components/actions/action-messages";
 
 const {
-	addAction,
-	getFormFieldsBlocks
-} = JetFBActions;
+		  addAction,
+		  getFormFieldsBlocks,
+		  convertListToFieldsMap,
+		  Tools: { withPlaceholder },
+	  } = JetFBActions;
 
+const {
+		  ActionFieldsMap,
+		  WrapperRequiredControl,
+	  } = JetFBComponents;
 
 /**
  * Internal dependencies
  */
 const {
-	SelectControl,
-	BaseControl
-} = wp.components;
+		  SelectControl,
+		  BaseControl,
+		  TextControl,
+	  } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
-addAction( 'update_user', class UpdateUserAction extends wp.element.Component {
+addAction( 'update_user', function UpdateUserAction( props ) {
 
-	constructor( props ) {
-		super( props );
+	const fields = convertListToFieldsMap( getFormFieldsBlocks() );
+	const {
+			  settings,
+			  onChangeSetting,
+			  source,
+			  label,
+			  getMapField,
+			  setMapField,
+		  } = props;
 
-		this.fields = getFormFieldsBlocks();
-		this.metaOption = 'user_meta';
+	const [ fieldType, setTypeField ] = useState( {} );
 
-		this.state = {
-			type: '',
-		};
-	}
+	useEffect( () => {
+		setTypeField( settings.fields_map || {} );
+	}, [] );
 
-	getFieldMap( name ) {
-		const settings = this.props.settings;
+	/* eslint-disable jsx-a11y/no-onchange */
+	return ( <div key="update_user">
+		{/*<BaseControl
 
-		if ( settings && settings.fields_map && settings.fields_map[ name ] ) {
-			return settings.fields_map[ name ];
-		}
-		return '';
-	}
+		>
+			<div className='jet-user-meta-rows'>
+				{ map( ( field, index ) => {
 
-	render() {
-		const { settings, onChange, source, label, help } = this.props;
+					const fieldData = getMapField( field.name );
 
-		const onChangeValue = ( value, key ) => {
-			onChange( {
-				...settings,
-				[ key ]: value
-			} );
-		};
-
-		/* eslint-disable jsx-a11y/no-onchange */
-		return ( <div key="update_user">
-			<BaseControl
-				label={ label( 'fields_map' ) }
-				key='user_fields_map'
+					return <div
+						className="jet-user-meta__row"
+						key={ 'user_meta_' + field.name + index }
+					>
+						<JetFieldsMapControl
+							key={ field.name + index }
+							fieldValue={ fieldData }
+							fieldName={ field.name }
+							index={ index }
+							metaProp='user_meta'
+							fieldsMap={ settings.fields_map }
+							fieldTypes={ source.userFields }
+							onChange={ ( newValue ) => {
+								onChangeSetting( newValue, 'fields_map' );
+							} }
+						/>
+					</div>;
+				} ) }
+			</div>
+		</BaseControl>*/ }
+		<ActionFieldsMap
+			label={ label( 'fields_map' ) }
+			key='user_fields_map'
+			fields={ fields }
+		>
+			{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
+				field={ [ fieldId, fieldData ] }
 			>
-				<div className='jet-user-meta-rows'>
-					{ this.fields.map( ( field, index ) => {
-
-						const fieldData = this.getFieldMap( field.name );
-
-						return <div
-							className="jet-user-meta__row"
-							key={ 'user_meta_' + field.name + index }
-						>
-							<JetFieldsMapControl
-								key={ field.name + index }
-								fieldValue={ fieldData }
-								fieldName={ field.name }
-								index={ index }
-								metaProp='user_meta'
-								fieldsMap={ settings.fields_map }
-								fieldTypes={ source.userFields }
-								onChange={ ( newValue ) => {
-									onChangeValue( newValue, 'fields_map' );
-								} }
-							/>
-						</div>;
-					} ) }
-				</div>
-			</BaseControl>
-			<SelectControl
-				label={ label( 'user_role' ) }
-				labelPosition="side"
-				key="user_role_list"
-				className="full-width"
-				value={ settings.user_role }
-				options={ source.userRoles }
-				onChange={ newValue => onChangeValue( newValue, 'user_role' ) }
-			/>
-			<ActionMessages
-				{ ...this.props }
-			/>
-		</div> );
-		/* eslint-enable jsx-a11y/no-onchange */
-	}
+				{ 'user_meta' === fieldType[ fieldId ] && <div className='components-base-control'>
+					<SelectControl
+						key={ fieldId + index }
+						value={ fieldType ? fieldType[ fieldId ] : '' }
+						onChange={ value => {
+							setTypeField( prev => ( {
+								...prev,
+								[ fieldId ]: value,
+							} ) );
+							setMapField( { nameField: fieldId, value } )
+						} }
+						options={ source.userFields }
+					/>
+					<TextControl
+						key={ fieldId + index + '_text' }
+						value={ getMapField( { name: fieldId } ) }
+						onChange={ value => setMapField( { nameField: fieldId, value } ) }
+					/>
+				</div> }
+				{ 'user_meta' !== fieldType[ fieldId ] && <SelectControl
+					key={ fieldId + index }
+					value={ fieldType ? fieldType[ fieldId ] : '' }
+					onChange={ value => {
+						setTypeField( prev => ( {
+							...prev,
+							[ fieldId ]: value,
+						} ) );
+						setMapField( { nameField: fieldId, value } )
+					} }
+					options={ withPlaceholder( source.userFields ) }
+				/> }
+			</WrapperRequiredControl> }
+		</ActionFieldsMap>
+		<SelectControl
+			label={ label( 'user_role' ) }
+			labelPosition="side"
+			key="user_role_list"
+			className="full-width"
+			value={ settings.user_role }
+			options={ source.userRoles }
+			onChange={ newValue => onChangeSetting( newValue, 'user_role' ) }
+		/>
+		<ActionMessages { ...props } />
+	</div> );
+	/* eslint-enable jsx-a11y/no-onchange */
 } );

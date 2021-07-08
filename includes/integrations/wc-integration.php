@@ -181,15 +181,13 @@ class Wc_Integration {
 			return array();
 		}
 
-		$form_id   = ! empty( $meta['form_id'] ) ? $meta['form_id'] : false;
-		$form_data = ! empty( $meta['form_data'] ) ? $meta['form_data'] : array();
-
+		$form_id = ! empty( $meta['form_id'] ) ? $meta['form_id'] : false;
 
 		if ( ! $form_id ) {
 			return array();
 		}
 
-		return $this->prepare_order_details( $form_id, $form_data );
+		return $this->prepare_order_details( $form_id, $meta );
 	}
 
 
@@ -201,7 +199,7 @@ class Wc_Integration {
 	 *
 	 * @return array
 	 */
-	public function prepare_order_details( $form_id = null, $form_data = array() ) {
+	public function prepare_order_details( $form_id = null, $meta = array() ) {
 
 		$details = $this->get_details_schema( $form_id );
 
@@ -209,13 +207,13 @@ class Wc_Integration {
 			return array();
 		}
 
-		$result = array();
+		$form_data = ! empty( $meta['form_data'] ) ? $meta['form_data'] : array();
+		$settings  = ! empty( $meta['settings'] ) ? $meta['settings'] : array();
+		$result    = array();
 
 		foreach ( $details as $item ) {
-
 			switch ( $item['type'] ) {
 				case 'field':
-
 					$field = isset( $item['field'] ) ? $item['field'] : false;
 
 					if ( $field ) {
@@ -231,21 +229,12 @@ class Wc_Integration {
 						);
 					}
 					break;
-
-				default:
-
-					if ( ! empty( $appointment[ $item['type'] ] ) ) {
-						$result[] = array(
-							'key'     => $item['label'],
-							'display' => $appointment[ $item['type'] ],
-						);
-					}
-
-					break;
-
 			}
-
 		}
+
+		$result['heading'] = ! empty( $settings['wc_heading_order_details'] )
+			? $settings['wc_heading_order_details']
+			: __( 'Order Details', 'jet-form-builder' );
 
 		return $result;
 	}

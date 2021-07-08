@@ -8,7 +8,7 @@ export default function WrapperRequiredControl( {
 
 	return (
 		<div
-			className="jet-user-meta__row fields-map-control"
+			className="jet-user-meta__row"
 			key={ 'user_meta_' + name }
 		>
 			<div className="jet-field-map__row-label">

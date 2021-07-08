@@ -5,9 +5,12 @@
  * @var array $details
  */
 ?>
-<?php _e( 'Order Details', 'jet-form-builder' ); ?>
+<?php echo $details['heading']; ?>
 <?php
-	foreach ( $details as $item ) {
+	foreach ( $details as $index => $item ) {
+		if ( ! is_int( $index ) ) {
+			continue;
+		}
 		echo '- ';
 			if ( ! empty( $item['key'] ) ) {
 				echo $item['key'] . ': ';

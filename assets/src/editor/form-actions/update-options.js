@@ -1,23 +1,23 @@
 const {
-	getFormFieldsBlocks,
-	addAction,
-} = JetFBActions;
+		  getFormFieldsBlocks,
+		  addAction,
+	  } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	BaseControl
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  SelectControl,
+		  BaseControl,
+	  } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 addAction( 'update_options', class UpdateOptionsAction extends wp.element.Component {
 
@@ -26,7 +26,6 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 
 		this.fields = getFormFieldsBlocks();
 	}
-
 
 	getFieldByName( { source, name } ) {
 		const settings = this.props.settings;
@@ -40,7 +39,7 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 	getFieldMeta( name ) {
 		return this.getFieldByName( {
 			source: 'meta_fields_map',
-			name
+			name,
 		} );
 	}
 
@@ -51,7 +50,7 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 
 		this.props.onChange( {
 			...this.props.settings,
-			[ source ]: fieldsMap
+			[ source ]: fieldsMap,
 		} );
 	}
 
@@ -62,14 +61,14 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 			const source = 'meta_fields_map';
 
 			this.changeFieldsMap(
-				{ value, nameField, source }
+				{ value, nameField, source },
 			);
 		};
 
 		const onChangeSetting = ( value, key ) => {
 			onChange( {
 				...settings,
-				[ key ]: value
+				[ key ]: value,
 			} );
 		};
 
@@ -90,15 +89,17 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 				label={ label( 'options_map' ) }
 				key='options_meta_list'
 			>
-				<div className='jet-user-meta-rows'>
-					{ this.fields.map( ( { name }, index ) => <TextControl
+				<div className='jet-user-fields-map__list'>
+					{ this.fields.map( ( { name }, index ) => <div
+						className="jet-user-meta__row"
 						key={ 'options_meta_' + name + index }
-						label={ name }
-						value={ this.getFieldMeta( name ) }
-						onChange={ newVal => {
-							onChangeMetaFieldMap( newVal, name )
-						} }
-					/> ) }
+					>
+						<TextControl
+							label={ name }
+							value={ this.getFieldMeta( name ) }
+							onChange={ newVal => onChangeMetaFieldMap( newVal, name ) }
+						/>
+					</div> ) }
 				</div>
 			</BaseControl>
 

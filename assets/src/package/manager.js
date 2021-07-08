@@ -53,6 +53,7 @@ import HorizontalLine from "./components/horizontal-line";
 import RequestLoadingButton from "./components/request-loading-button";
 import {
 	actionByTypeList,
+	convertListToFieldsMap,
 	fromLocalizeHelper,
 	getActionSettings,
 } from "./helpers/actions/action-helper";
@@ -109,6 +110,7 @@ window.JetFBActions = {
 	gatewayActionAttributes,
 	globalTab,
 	versionCompare,
+	convertListToFieldsMap
 };
 
 // JFBHooks

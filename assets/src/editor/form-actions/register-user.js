@@ -77,7 +77,7 @@ addAction( 'register_user', class RegisterUserAction extends BaseActionComponent
 				label={ label( 'user_meta' ) }
 				key='user_meta_list'
 			>
-				<div className='jet-user-meta-rows'>
+				<div className='jet-user-fields-map__list'>
 					<span
 						className={ 'description-controls' }>{ __( 'Set user meta fields to save appropriate form fields into', 'jet-form-builder' ) }</span>
 					{ this.fields.map( ( { name }, index ) => {

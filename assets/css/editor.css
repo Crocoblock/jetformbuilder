@@ -89,9 +89,10 @@
     display: none;
 }
 
-.jet-form-edit-modal .fields-map-control .components-base-control__field {
+.jet-form-edit-modal .jet-user-meta__row .components-base-control__field {
     border: none;
-    padding: 0 0 5px 0;
+    padding: 0;
+    margin: 0;
 }
 
 .jet-form-edit-modal .components-base-control:first-child .components-base-control__field {
@@ -119,14 +120,22 @@
 
 .jet-form-edit-modal .jet-user-meta__row {
     display: flex;
+    padding: 1em;
+    border: 1px solid #ccc;
+    margin-bottom: 1em;
+    align-items: center;
+    border-radius: 3px;
 }
 
 .jet-form-edit-modal .jet-user-meta__row .jet-field-map__row-label {
-    flex: 1 1 30%;
+    flex: 1;
+    min-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .jet-form-edit-modal .jet-user-meta__row .components-base-control {
-    flex: 1 1 40%;
+    flex: 1;
 }
 
 .jet-form-editor__macros-trigger {
@@ -226,7 +235,7 @@
 }
 
 .jet-user-fields-map__list {
-    flex: 0 0 40%;
+    flex: 1;
     padding-top: 0.5em;
 }
 
@@ -680,5 +689,13 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-border-unset.components-base-control div.components-base-control__field.components-base-control__field {
     border-top: unset;
+}
+
+.jet-user-meta__row .components-flex.components-select-control {
+    display: block;
+}
+
+.jet-user-meta__row:nth-child(odd) {
+    background-color: #eeeeee;
 }
 

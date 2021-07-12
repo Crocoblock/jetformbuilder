@@ -83,10 +83,13 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$posts = get_posts( array(
-				'post_status'    => 'publish',
-				'posts_per_page' => - 1,
-				'post_type'      => $post_type,
+			$posts = get_posts( apply_filters(
+				'jet-form-builder/render-choice/query-options/posts',
+				array(
+					'post_status'    => 'publish',
+					'posts_per_page' => - 1,
+					'post_type'      => $post_type,
+				)
 			) );
 
 			if ( empty( $posts ) ) {
@@ -100,7 +103,7 @@ trait Base_Select_Radio_Check {
 
 				$item = array(
 					'value' => $post->ID,
-					'label' => $post->post_title,
+					'label' => apply_filters( 'jet-form-builder/render-choice/label/posts', $post->post_title, $post ),
 				);
 
 				if ( ! empty( $value_from ) ) {
@@ -133,9 +136,12 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$terms = get_terms( array(
-				'taxonomy'   => $tax,
-				'hide_empty' => false,
+			$terms = get_terms( apply_filters(
+				'jet-form-builder/render-choice/query-options/terms',
+				array(
+					'taxonomy'   => $tax,
+					'hide_empty' => false,
+				)
 			) );
 
 			if ( empty( $terms ) || is_wp_error( $terms ) ) {
@@ -148,7 +154,7 @@ trait Base_Select_Radio_Check {
 
 				$item = array(
 					'value' => $term->term_id,
-					'label' => $term->name,
+					'label' => apply_filters( 'jet-form-builder/render-choice/label/terms', $term->name, $term )
 				);
 
 				if ( ! empty( $value_from ) ) {

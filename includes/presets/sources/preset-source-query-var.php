@@ -6,6 +6,10 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 class Preset_Source_Query_Var extends Base_Source {
 
+	public function get_id() {
+		return 'query_var';
+	}
+
 	public function query_source() {
 		return $_GET;
 	}

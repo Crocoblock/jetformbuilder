@@ -20,7 +20,7 @@ class Calculated_Field extends Base {
 
 
 	public function get_field_input() {
-		return '-row .jet-form-builder__calculated-field, {{WRAPPER}} .%s-row .jet-form-builder__calculated-field--child';
+		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child';
 	}
 
 	public function additional_selectors_for_controls() {
@@ -41,7 +41,7 @@ class Calculated_Field extends Base {
 					],
 				],
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['input'] => 'justify-content: {{VALUE}};',
+					$this->selector( 'input' ) => 'justify-content: {{VALUE}};',
 				),
 
 			)

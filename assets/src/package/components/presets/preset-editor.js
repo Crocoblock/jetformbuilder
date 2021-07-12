@@ -1,3 +1,5 @@
+const { applyFilters } = wp.hooks;
+
 function withPreset( WrappedComponent ) {
 	return function JetFormPresetEditor( props ) {
 
@@ -40,6 +42,8 @@ function withPreset( WrappedComponent ) {
 							|| ( 'user' === currentState.from && 'query_var' === currentState.user_from )
 							|| ( 'query_var' === currentState.from )
 						);
+					default:
+						return applyFilters( 'jet.fb.preset.editor.custom.condition', false, data.custom_condition, currentState );
 				}
 			}
 

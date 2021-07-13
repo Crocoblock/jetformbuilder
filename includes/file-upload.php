@@ -5,19 +5,20 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
+ * @method static File_Upload instance()
+ *
  * Class description
  *
  * @package   package_name
  * @author    Cherry Team
  * @license   GPL-2.0+
  */
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
-
 class File_Upload {
 
 	use Instance_Trait;

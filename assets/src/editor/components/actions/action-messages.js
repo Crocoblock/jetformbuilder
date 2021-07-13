@@ -31,7 +31,7 @@ function ActionMessages( props ) {
 
 			onChangeSetting( messages, 'messages' );
 		}
-	} );
+	}, [] );
 
 	const setMessage = ( value, nameField ) => {
 		const source = 'messages';

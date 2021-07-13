@@ -6,6 +6,8 @@ const {
 		  BlockControls,
 	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
+const { useState } = wp.element;
+
 const {
 		  TextControl,
 		  SelectControl,
@@ -15,6 +17,8 @@ const {
 		  Flex,
 		  BaseControl,
 		  __experimentalNumberControl,
+		  Card,
+		  ClipboardButton,
 	  } = wp.components;
 
 let { NumberControl } = wp.components;
@@ -29,9 +33,9 @@ function FieldControl( {
 						   attributes,
 						   attrsSettings = {},
 						   editProps: {
-										  attrHelp = () => '',
-										  blockName = '',
-									  },
+							   attrHelp = () => '',
+							   blockName = '',
+						   },
 					   } ) {
 	const controls = ControlsSettings();
 
@@ -62,7 +66,7 @@ function FieldControl( {
 			}
 		}
 
-		const objectNotMatch = (function() {
+		const objectNotMatch = ( function() {
 			if ( 'object' !== typeof attr.condition.attr ) {
 				return true;
 			}
@@ -79,18 +83,18 @@ function FieldControl( {
 			}
 
 			if ( 'and' === operator.toLowerCase() ) {
-				return (function() {
+				return ( function() {
 					for ( const attrToCompare in items ) {
 						if ( items[ attrToCompare ] !== attributes[ attrToCompare ] ) {
 							return false;
 						}
 					}
 					return true;
-				})()
+				} )()
 			}
 
 			return true;
-		})()
+		} )()
 
 		if ( ! objectNotMatch
 			|| (
@@ -236,7 +240,14 @@ function AdvancedFields( props ) {
 
 function ToolBarFields( props ) {
 
-	const { editProps: { uniqKey }, children = [] } = props;
+	const {
+			  editProps: { uniqKey },
+			  children    = [],
+			  displayName = true,
+			  attributes,
+		  } = props;
+
+	const [ hasCopied, setHasCopied ] = useState( false );
 
 	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
 		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
@@ -245,6 +256,16 @@ function ToolBarFields( props ) {
 				justify={ 'center' }
 				className={ 'jet-form-toggle-box' }
 			>
+				<ClipboardButton
+					icon='admin-page'
+					showTooltip
+					shortcut='Copy name'
+					text={ attributes.name }
+					onCopy={ () => setHasCopied( true ) }
+					onFinishCopy={ () => setHasCopied( false ) }
+				>
+					{ attributes.name }
+				</ClipboardButton>
 				<FieldControl
 					type='toolbar'
 					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }

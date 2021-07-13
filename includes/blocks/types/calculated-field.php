@@ -78,7 +78,7 @@ class Calculated_Field extends Base {
 			Where:<br/>
 			- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>
 			- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>
-		", 'jet-booking' )
+		", 'jet-form-builder' )
 		) ) );
 	}
 

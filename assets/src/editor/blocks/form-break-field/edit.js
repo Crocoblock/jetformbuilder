@@ -1,33 +1,33 @@
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldSettingsWrapper
-} = JetFBComponents;
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+		  RichText,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextareaControl,
-	TextControl,
-	PanelBody,
-	Button,
-} = wp.components;
-
+		  TextareaControl,
+		  TextControl,
+		  PanelBody,
+		  Button,
+	  } = wp.components;
 
 export default function FormBreakEdit( props ) {
 
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	return [
 		props.isSelected && <InspectorControls
@@ -35,6 +35,7 @@ export default function FormBreakEdit( props ) {
 		>
 			<GeneralFields
 				key={ uniqKey( 'GeneralFields' ) }
+				autoCompleteLabel={ false }
 				{ ...props }
 			/>
 			<FieldSettingsWrapper { ...props }>
@@ -67,15 +68,29 @@ export default function FormBreakEdit( props ) {
 					isSecondary
 					key="next_page_button"
 					className="jet-form-builder__next-page"
-				>{ attributes.label || 'Next' }</Button>
+				>
+					<RichText
+						placeholder='Next...'
+						allowedFormats={ [] }
+						value={ attributes.label }
+						onChange={ label => setAttributes( { label } ) }
+					/>
+				</Button>
 
 				{ attributes.add_prev && <Button
 					isSecondary
 					key="prev_page_button"
 					className="jet-form-builder__prev-page"
-				>{ attributes.prev_label || 'Prev' }</Button> }
+				>
+					<RichText
+						placeholder='Prev...'
+						allowedFormats={ [] }
+						value={ attributes.prev_label }
+						onChange={ prev_label => setAttributes( { prev_label } ) }
+					/>
+				</Button> }
 			</div>
-		</div>
+		</div>,
 	];
 
 }

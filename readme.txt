@@ -1,10 +1,10 @@
 ﻿=== JetFormBuilder — Form Builder for Gutenberg ===
 Contributors: crocoblock, mjhead, hugreed
-Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
+Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 5.7.2
+Tested up to: 5.8.0
 Requires PHP: 7.0
-Stable tag: 1.2.5
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,118 +14,179 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 **JetFormBuilder — Form Builder plugin for Gutenberg**
 
-A functional yet handy Form Builder plugin that lets you create, edit, and style any form type in the Gutenberg Editor. No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop a fully operative form.
-
-JetFormBuilder allows you to build any kind of form nice and easy. Its 18 field blocks allow you to create a form from scratch or reassemble the existing one. Throw JetStyleManager into the mix and you’ll be able to style every form field. Create, customize, and style – all in Gutenberg.
+A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the Gutenberg Editor. No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
+<a href="https://jetformbuilder.com/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">JetFormBuilder</a> lets you build any kind of form nice and easy. Its **21+ field blocks** allow creating forms from scratch or reassembling the existing ones. Throw JetStyleManager into the mix, and you’ll be able to adjust every form field’s fonts and style settings. Create form types, customize, and style – all in WordPress default blocks editor.
+
+> At first, I thought this was just another free form builder for Gutenberg, but I was wrong. I wanted to share what got me so excited about it after only the first 5 minutes.
+
+– Paul Charlton from WPTuts.
+
 https://www.youtube.com/watch?v=GTWeLrZspoA
 
-== Features ==
+= WORDPRESS FORMS YOU CAN CREATE =
+
+JetFormBuilder is a user-friendly form creator that lets you create new forms and add them to the form page. From a simple form to multi-step form design – you can nail down any form type:
+
+- Signup form
+- User profile form
+- Quick contact form
+- Subscription form
+- Online survey form
+- Appointment form
+- Application form
+- Booking form
+- Event registration form
+- Multi-Page Form with a progress bar
+- WordPress Post Submission Form
+- Request a Quote Form
+- Feedback Survey Contact Form
+- Make a Suggestion Contact Form
+- Change Request Forms
+- Maintenance Request Contact Form
+- Scholarship Application Form
+- Make a Referral Contact Form
+- Volunteer Registration Contact Form
+- Credit Card Payment
+- Make a Donation Form
+- Product Purchase Form
+- Newsletter Signup Form
+- Online Petitions
+
+== BASIC FEATURES ==
 
 = VARIOUS FIELD TYPES =
-Find inside a total of 18 JetFormBuilder blocks colored to stand out from the crowd. You can mix and match them freely until you achieve a unique row or column layout.
+Find inside 21+ JetFormBuilder blocks colored to stand out from the crowd. You can mix and match them freely until you achieve a unique row or column layout.
 
 = POST SUBMIT ACTIONS =
-Choose from 11 available actions and set any you want to be performed after the form submitted on the frontend. From basic Send Email, Insert/Update Post, Register User, Update User, and Update Options to advanced Call Hook/Webhook, Redirect to Page, MailChimp, ActiveCampaign, and GetResponse.
+Choose from 11 available actions and set any you want to be performed after the form is submitted on the frontend:
 
-= CONDITIONAL LOGIC =
-You can adjust the visibility conditions of any form field. Just use the corresponding JetFormBuilder block and decide which field will be shown and when. Besides that, there’s a chance to fine-tune the way Post Submit Actions perform. You set the conditions according to which the Actions will be executed or not.
+- Send Email;
+- Insert/Update Post;
+- Register User;
+- Update User;
+- Update Options;
+- Call Hook/Webhook;
+- Redirect to Page;
+- MailChimp;
+- ActiveCampaign;
+- GetResponse;
+- And more.
 
 = MULTI-STEP FORM & FORM BREAK BLOCK =
-Form Break allows you to tell apart the form fields creating a step-by-step frontend layout. Add a Form Progress bar that indicates the first and last form steps and shows which step the user is currently taking. 
+Use **Form Break** to build multi-step WordPress forms. Divide the fields and place them into separate tabs. Add a customizable “**Apply**” button to proceed to the next step. Enable file uploads if desired. By adding a **Form Progress** bar, you’ll indicate the form’s first, current, and last steps.
+
+= CUSTOM FIELD STYLES =
+We integrated JetStyleManager & Gutenberg to make it possible for you to <a href="https://jetformbuilder.com/features/style-overview/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">style the form fields</a> as desired. Style settings can be applied to anything in the text box, form description, required mark, and content label, too.
+
+= BEGINNER-FRIENDLY & VISUAL =
+No more confusing field rows and additional styling. Because Gutenberg is a visual editor, you can monitor the form creation process as if you were on the frontend. All field types can be found in the JetForm Fields block in the WordPress dashboard.
+
+= PAYMENT METHODS INTEGRATION =
+Accept all kinds of payments securely via any of your forms, be it one-off, recurring, fixed, variable fees, or user-entered amounts. JetFormBuilder supports WooCommerce, [Stripe, and PayPal integrations](https://jetformbuilder.com/features/how-to-configure-payment-gateways/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder).
+
+https://www.youtube.com/watch?v=LPVzsnl5XQI
+
+== ADVANCED JETFORMBUILDER FEATURES ==
+
+= CONDITIONAL LOGIC =
+You can adjust the visibility conditions of any form field. Just use the corresponding JetFormBuilder block and decide which field will be shown and when. Besides that, there’s a chance to fine-tune the way **Post Submit Actions** perform on the backend. You set the conditions according to which the Actions will be executed or not.
 
 = CALCULATED CONTENT =
-Build dedicated Calculator forms or add extra functionality to any other form type. The Calculated field type will carry out basic and complex calculations real quick. 
+Build dedicated Calculator and Order forms or add extra functionality to any other form type. The Calculated field type will carry out basic and complex calculations real quick.
 
 = REPEATER FIELD =
 Repeater creates an interface to add and remove a repeatable group of input elements. You can use a Repeater field to add a group of fields any number of times. Create Repeater groups to display custom data smoothly.
 
 = HIDDEN FIELDS =
-Can’t decide what to do with system fields that were not meant for users to be seen? It’s simple. Hide them. JetFormBuilder’s functionality allows you to make certain fields invisible on the frontend. 
-
-= CUSTOM FIELD STYLES =
-We integrated JetStyleManager & Gutenberg to make it possible for you to style the form fields as desired. Style settings can be applied to text, form description, required mark, and content label, too.
-
-= BEGINNER-FRIENDLY & VISUAL =
-No more confusing field rows and additional styling. Because Gutenberg is a visual editor, you can monitor the form creation process as if you were on the frontend. All field types can be found in the same place – the JetForm Fields block. And now you can add any content you want into the from layout - headings, images, sections etc.
-
-= PAYMENT METHODS INTEGRATION =
-Accept all kinds of payments securely via any of your WordPress-created forms be it one-off, recurring, fixed, variable payments, or user-entered amounts. JetFormBuilder allows linking your forms to PayPal or Stripe checkout.
+Can’t decide what to do with system fields that were not meant for users to be seen? It’s simple. Hide them. JetFormBuilder’s functionality allows you to make a form field invisible on the frontend.
 
 == More JetFormBuilder Features ==
 
 - **Field Value Generator Function.** Three available functions help you generate the field values dynamically.
-- **Editable post-submit messages.** Use the default message texts or input your own ones. 
-- **Spam protection.** Add a Google reCAPTCHA to your form easily. 
+- **JetEngine Forms migration.** Duplicate all the forms you created through JetEngine to Gutenberg in one click.
+- **Editable post-submit messages.** Use the default message texts or input those you see fit.
+- **Spam filtering & protection.** Add a Google reCAPTCHA to your form easily.
 - **File uploads.** Decide which users you would authorize to attach files to your website forms: registered, not-registered, or all users.
 - **Form submit type.** Choose between the page reload and AJAX options.
 - **Drag-and-drop editor.** Grab the form block and place it where you want in a matter of seconds. 
-- **Input mask.** Three mask types are available – numeric, alphabetical, and alphanumeric.
+- **Input mask.** Three mask types are available – numeric, alphabetical, and alphanumeric. Just copy and paste the needed one to make it work.
+- **Numbers range generator.** Dynamically generate a range of numbers to be used in Checkbox, Select & Radio Fields.
+- **Inline fields editing.** Edit the field labels and descriptions in-place.
 - **Form validation.** Check if the entered user data is correct and whether to let them proceed with the form submission or not. 
-- **Form templates.** Coming soon.
+- **Form patterns.** Save time while creating a form layout? It’s possible! JetFormBuilder grants access to Form Patterns, which you can use to build contact, login & register, application, profile, booking, and subscription forms.
 
-<a href="https://jetformbuilder.com/" target="_blank">Read more about all JetFormBuilder features here</a>
+<a href="https://jetformbuilder.com/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Read more about all JetFormBuilder features here</a>
 
-== JetFormBuilder Pro Addons — Go Farther, Get More ==
+== JETFORMBUILDER PRO ADDONS — GO FARTHER, GET MORE ==
 
-Meet the Pro version of JetFormBuilder allows you to go far beyond the ordinary forms. It comes with a pack of powerful addons, which will become a game changing experience. Automate your marketing campaigns, optimize leads generation, enjoy the simplicity of autocomplete, and much more.
-Check addons categories to find the appropriate one:
+JetFormBuilder PRO version allows you to go far beyond the ordinary forms. Its pack of mighty addons gives a second-to-none form-building experience.
+Buy the <a href="https://jetformbuilder.com/pricing/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">PRO addons</a> and see how easy it will be to:
+
+- automate marketing campaigns;
+- optimize lead generation process;
+- enjoy the autocomplete functionality;
+- integrate payment methods;
+- and much more.
 
 = FORM FEATURES =
-Create complex forms with specific features to improve the user experience. Add autocomplete fields, make a long-form multistep, and help visitors not to lose filled-in data after page reload. 
+Build a form easily, be it simple or complex. Such specific features as autocomplete fields, form availability setup, form responses limitation, and form progress saving will improve the user experience.
 
-- <a href="https://jetformbuilder.com/addons/save-form-progress/" target="_blank">Save Form Progress</a>. A tweak to autosave the form progress and inputted data if the filling process was interrupted. 
-- <a href="https://jetformbuilder.com/addons/address-autocomplete/" target="_blank">Address Autocomplete</a>. A dynamic addon that suggests up to 5 places to auto-fill the Address field.
-- <a href="https://jetformbuilder.com/addons/limit-form-responses/" target="_blank">Limit Form Responses</a>. A lightweight addon to control the overall number of form submissions and those per user.
-- <a href="https://jetformbuilder.com/addons/select-autocomplete/" target="_blank">Select Field Autocomplete</a>. A tweak to auto-fill the values dynamically in the Select field type. 
-- <a href="https://jetformbuilder.com/addons/schedule-forms/" target="_blank">Schedule Forms</a>. A supplementary plugin that lets you set the form availability time frame.
+- <a href="https://jetformbuilder.com/addons/save-form-progress/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Save Form Progress</a>. This addon autosaves the form progress and data provided by the user whenever the filling process went wrong.
+- <a href="https://jetformbuilder.com/addons/address-autocomplete/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Address Autocomplete</a>. Once the user starts typing in the Address field, this addon can suggest up to 5 places to auto-fill the field.
+- <a href="https://jetformbuilder.com/addons/limit-form-responses/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Limit Form Responses</a>. This addon controls the general number of form submissions and impedes the same user from submitting repeatedly.
+- <a href="https://jetformbuilder.com/addons/select-autocomplete/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Select Field Autocomplete</a>. Use this addon for the Select field type; it allows you to auto-fill it dynamically.
+- <a href="https://jetformbuilder.com/addons/schedule-forms/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Schedule Forms</a>. This functionality allows you to set up the form availability by indicating its open and close dates.
+- <a href="https://jetformbuilder.com/addons/user-login/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">User Login</a>. This addon allows you to configure the Login User post-submit action. Add it to the login form and let users log in with their credentials.
+- <a href="https://jetformbuilder.com/addons/advanced-color-picker/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Advanced Color Picker</a>. Use this addon to activate the advanced color picker feature and fine-tune the color opacity in the frontend form fields.
 
 = EMAIL MARKETING =
-Collect and manage data the way you like the most. Grab subscribers using the catching form and organize your mailing lists with the help of the preferred email marketing tool.
+Create contact forms for collecting user data and managing it the way you like. Garner more subscribers and add them to your mailing lists using the right email marketing tool.
 
-- <a href="https://jetformbuilder.com/addons/mailerlite-action/" target="_blank">MailerLite Action</a>. A top-notch addon to bring your email marketing to the next level.
-- <a href="https://jetformbuilder.com/addons/mailpoet/" target="_blank">MailPoet</a>. A form addon for more effective visitor data management and newsletter sending.
-- <a href="https://jetformbuilder.com/addons/convertkit-action/" target="_blank">ConvertKit</a>. An email marketing addon to ensure higher audience reach and income from mailing lists.
+- <a href="https://jetformbuilder.com/addons/mailerlite-action/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">MailerLite Action</a>. Use this extension to manage subscriber groups and add a handy “autoresponder” that’ll cover newsletters.
+- <a href="https://jetformbuilder.com/addons/mailpoet/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">MailPoet</a>. This addon allows you to generate new leads, manage subscriber data, and automate email notification sending.
+- <a href="https://jetformbuilder.com/addons/convertkit-action/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">ConvertKit</a>. Install this email marketing addon to grow your audience reach and generate more income from subscription lists.
 
 = MARKETING AUTOMATION =
-Looking for a way to automate your email marketing campaign? Pick the favorite integration that would ease the subscribers' management.
+Want to automate email marketing campaigns? Select the most convenient integration that is sure to facilitate subscriber management.
 
-- <a href="https://jetformbuilder.com/addons/moosend/" target="_blank">Moosend</a>. A form extension to effectively manage subscribers and automate email marketing.
+- <a href="https://jetformbuilder.com/addons/moosend/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Moosend</a>. This addon creates a connection between your WordPress site and Moosend email marketing software. Thanks to it, you will be able to collect email addresses and manage subscribers to the fullest.
 
 = CRM & SALES =
-Link your fetching form with the mighty CRMs to generate leads more than ever! Get all the data you need from the visitors and handle it in a convenient database with lots of options. 
+Integrate JetFormBuilder-created forms and the mighty CRMs. It will help you boost lead gen tremendously. Obtain the necessary visitor data and manipulate it in a database using numerous options.
 
-- <a href="https://jetformbuilder.com/addons/hubspot/" target="_blank">HubSpot</a>. A mailing list addon that lets you alter the existing contacts and easily add new ones. 
+- <a href="https://jetformbuilder.com/addons/hubspot/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">HubSpot</a>. Use this mailing list addon to collect leads, create new contacts, edit the existing subscribers, and send email notifications centrally. It supports authorization by API key and OAuth 2.0.
 
 = PAYMENTS =
-Pick the payment methods you and your clients use the most, add them to your forms, and spice them up with the actions before and after payment. Get your site ready for e-commerce smoothly. 
+Get your site eCommerce-ready. Choose the preferred payment method, add its gateway to the form, and decide which actions will be executed before/after the payment is processed.
 
-- <a href="https://jetformbuilder.com/addons/stripe-payments/" target="_blank">Stripe Payments</a>. A supplementary software to integrate your forms and Stripe payment system.
+- <a href="https://jetformbuilder.com/addons/stripe-payments/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Stripe Payments</a>. With the help of this addon, you add a Stripe payment gateway to the JetFormBuilder forms, which allows you to carry out payments.
+- <a href="https://jetformbuilder.com/addons/woocommerce-cart-checkout-action/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">WooCommerce Cart & Checkout Action</a>. This addon allows adding one product to the cart and redirecting users to WooCommerce checkout once they submit the form.
 
 == Demo ==
-We’ve prepared a tell-all JetFormBuilder demo page to illustrate the functionality you get. Explore it now: <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">https://jetformbuilder.com/demo/</a>
+Check out the JetFormBuilder demo page and figure out what functionality you get. Explore the <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">demo</a> now.
 
 == Integrations ==
 
-**<a href="https://crocoblock.com/plugins/jetengine/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetEngine</a>**
-Use the JetEngine potential when developing a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically, and put the JetEngine-built custom post types into the dynamic settings. 
-
-**<a href="https://wordpress.org/plugins/jet-style-manager/">JetStyleManager</a>**
-We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Just hit the brush icon and do the necessary styling in the Block Style section.
+- **<a href="https://bit.ly/3sttCJ1" target="_blank">JetEngine</a>**
+Use the JetEngine potential when setting up a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically and put the JetEngine-built custom post types into the dynamic settings.
+- **<a href="https://bit.ly/3st6hHj">JetStyleManager</a>**
+We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Hit the brush icon on the WordPress admin panel and do the necessary styling in the Block Style section.
+- **<a href="https://bit.ly/3AXi83h">JetBooking</a>**
+Create a user-friendly booking form with the JetFormBuilder. Extend your form with advanced features, as calculated content, smart notifications, etc. Add page breakers to make the multi-step form for your users.
+- **<a href="https://bit.ly/3meQPNW">JetAppointment</a>**
+Combine the JetAppointment features with JetFormBuilder to create a fully-fledged appointment website for any needs.
 
 More third-party plugin integrations are in the works.
 
 == Documentation ==
 
-Learn every little thing about JetFormBuilder & put theory to practice:
+Learn every little thing about the JetFormBuilder WordPress plugin & put theory to practice:
 
-- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-create-a-form/?utm_source=wporg&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Create a Form</a>
-- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-form-fields-overview/?utm_source=wporg&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: Form Fields Overview</a>
-- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-add-the-form-to-the-page/?utm_source=wporg&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Add the Form to the Page</a>
-- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-post-submit-actions-overview/?utm_source=wporg&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: Post Submit Actions Overview</a>
-- <a href="https://crocoblock.com/knowledge-base/articles/jetformbuilder-how-to-combine-hidden-and-repeater-fields-with-the-calculated-field/?utm_source=wporg&utm_medium=referral&utm_campaign=jetformbuilder_plugin&utm_content=demo_release" target="_blank">JetFormBuilder: How to Combine Hidden and Repeater Fields with the Calculated Field</a>
+- <a href="https://www.youtube.com/watch?v=WB0B3QLhZK0&list=PL26jaHWVtLFwcxXItL9J9qNJ8pWzKUuGg" target="_blank">JetFormBuilder tutorials</a>
+- <a href="https://jetformbuilder.com/features/overview/" target="_blank">JetFormBuilder documentation</a>
 
 == Screenshots ==
 1. Creating a form structure
@@ -136,22 +197,90 @@ Learn every little thing about JetFormBuilder & put theory to practice:
 
 == Frequently Asked Questions ==
 
+= What page builders is JetFormBuilder compatible with? =
+JetFormBuilder uses the WordPress native blocks editor, also known as Gutenberg, for creating forms. Apart from Gutenberg, JetFormBuilder is compatible with Elementor. You can output a form on the frontend using the **JetForm** widget and style its looks, as well. As to the remaining page builders (like Divi, Oxygen, etc.), the form can be displayed via a shortcode only. To style its fields, you’ll need **<a href="https://crocoblock.com/plugins/jetstylemanager/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">JetStyleManager</a>**.
+
 = Is it possible to create a form that allows adding/editing posts on the frontend? =
-Yes. You can use the **Insert/Update Post** post-submit Action to add and edit the posts of any type from the frontend. Besides that, you’re able to assign and modify any metadata of the given post.
+Yes. You can use the **Insert/Update Post** post-submit Action to add and edit posts of any type from the frontend. Besides that, you’re able to assign and modify any metadata of the given post.
 
 = Can I create a user registration form? =
 Absolutely. You can use the **Register User** post-submit Action to create a custom registration form. This post-submit action allows you to set user metadata, as well. 
 
 = Can the form be integrated with Zapier, Integromat, or similar third-party services? =
-Sure. You can create a script that runs on a webhook in either Zapier or Integromat and then use the **Call Webhook** post-submit Action to launch it when the form is being submitted. 
+Sure. You can create a script that runs on a webhook in either Zapier or Integromat and then use the **Call Webhook** post-submit Action to launch it when the form is being submitted.
 
 = Is it possible to send emails through a JetFormBuilder form? =
-It is, any form created by JetFormBuilder can be usede as regular **contact form**. Thanks to the Send Email post-submit Action, you can send any number of emails you want during any form submit. For instance, you’re able to send an e-mail to a pre-defined address, the site administrator’s email, or the email address specified in one of the fields of the submitted form.
+It is. Thanks to the <a href="https://jetformbuilder.com/features/send-email/" target="_blank">**Send Email** post-submit Action</a>, you can send any number of emails you want during any form submission. For instance, you’re able to send an email to a predefined address, the site administrator’s email, or the email address specified in one of the submitted form fields.
 
-= Is JetFormBuilder compatible with ACF?=
+= Is JetFormBuilder compatible with ACF? =
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
+= Can I transfer JetEngine Forms to Gutenberg? =
+If desired, you can transfer all JetEngine Forms to Gutenberg using a special addon – **JetFormBuilder Converter**.
+
+= What field types are available in JetFormBuilder? =
+JetFormBuilder currently embraces **21 field blocks**, but the number is to grow eventually.
+
+- **Select Field** – Creates a drop-down list, where the user can choose one option.
+- **Text Field** – Adds a single narrow text bar to the form and collects short text information.
+- **Hidden Field** – Invisible on the frontend and can store values for further calculations.
+- **Radio Field** – Creates a list of options where only a single variant can be picked.
+- **Checkbox Field** – A  multi-optional field that allows choosing several variants at once.
+- **Conditional Block** – Stores conditions and fields on which Conditional Visibility is based.
+- **Number Field** – Sets either a separate bar to be filled with numbers or a range thereof.
+- **DateTime Field** – Merges the Date and Time Fields into one.
+- **Date Field** – Allows setting the date manually or choosing it from a drop-down calendar.
+- **Time Field** – Allows setting the time manually or choosing it from a drop-down timer.
+- **Calculated Field** – Takes the values from meta and form fields and uses them to calculate a formula.
+- **Color Picker Field** – Allows selecting custom colors in the form field on the frontend.
+- **Media Field** – Allows the users to upload a media file from their PC to the website.
+- **Wysiwyg Field** – Allows adding some styled text, HTML coding, etc., to the form.
+- **Range Field** – Creates a range with a slider that can be moved back and forth.
+- **Heading Field** – Allows you to add a heading to the whole form or its parts.
+- **Textarea Field** – Creates a text area where the data can be placed in several lines.
+- **Submit Field** – Adds a “Submit” button to the end of the form.
+- **Repeater Field** – Creates a repeatable block, which includes as many fields as needed.
+- **Form Break Field** – Adds a “Next page” button to the multi-step form.
+- **Group Break Field** – Adds a single line that divides one part of the form from another.
+
+= Is it possible to get JetFormBuilder PRO for Free? =
+It is, actually. If you’ve already purchased either an All-Inclusive or Lifetime Crocoblock package, all JetFormBuilder PRO Addons are available to you for free. For those of you who got a Custom subscription, there’s always a chance to <a href="https://crocoblock.com/upgrade/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">upgrade</a>. In this case, you’ll have to pay the difference between your current plan and that you choose.
+
+= Can I Import/Export/Duplicate forms? =
+Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
+
 == Changelog ==
+
+**1.3.0**
+ - ADD: UI/UX improvements
+ - ADD: Color Picker Field
+ - ADD: Form Patterns **JetForms**
+ - ADD: Allow creating new users by existing users (in Register User action)
+ - ADD: Numbers range by manual input (generator function)
+ - ADD: Changing the separator for a fractional number in a calculate field
+ - ADD: Styling a Conditional Block
+ - FIX: Range Field UI in editor
+ - FIX: reCaptcha Uncaught SyntaxError unexpected end of input
+
+**1.2.7**
+ - FIX: Initialize input mask for new repeater items
+ - FIX: Preset Hidden Field
+ - FIX: Upload attachments
+ - FIX: Hidden-field preset
+ - FIX: Sanitize wysiwyg
+ - UPD: Disable edit action button, if callback undefined
+ - Tweak: Editor UI
+ - Tweak: Media Field UI settings
+
+**1.2.6**
+ - UPD: Changed the logic for processing required fields inside the Conditional Block
+ - ADD: Switch page on change Radio Field
+ - ADD: Styles in gutenberg for Datetime Field
+ - FIX: Execution of a query for ActiveCampaign with global settings
+ - FIX: Removed escaping slashes in send email action
+ - FIX: Adding class to passed page
+ - FIX: Preset post-terms in checkbox
+ - FIX: Loss of focus when editing a text field in the global preset
 
 **1.2.5**
  - FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block

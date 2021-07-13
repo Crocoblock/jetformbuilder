@@ -17,6 +17,10 @@
 		"conditions": {
 			"type": "array",
 			"default": []
+		},
+		"className": {
+			"type": "string",
+			"default": ""
 		}
 	}
 }

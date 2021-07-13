@@ -42,7 +42,7 @@ class Form_Manager {
 
 			$instances = array(
 				new Num_Range(),
-				//new Num_Range_Manual(),
+				new Num_Range_Manual(),
 				new Get_From_DB(),
 				new Get_From_Field(),
 			);
@@ -147,7 +147,9 @@ class Form_Manager {
 	}
 
 	public function field_name( $blockName ) {
-		return explode( self::NAMESPACE_FIELDS, $blockName )[1];
+		$parts = explode( self::NAMESPACE_FIELDS, $blockName );
+
+		return isset( $parts[1] ) ? $parts[1] : '';
 	}
 
 	public function get_form_content( $form_id ) {

@@ -8,6 +8,12 @@ const getLocalized = ( actionType, objectKey = '' ) => {
 	return ( objectKey && actionSelfLocalized[ objectKey ] ) ? actionSelfLocalized[ objectKey ] : actionSelfLocalized;
 };
 
+const getSourceObjectName = actionType => {
+	const preparedAction = window.jetFormActionTypes.find( action => actionType === action.id );
+
+	return preparedAction ? preparedAction.self : false;
+};
+
 const getLocalizedWithFunc = ( { actionType = false, source = false },
 							   objectKey,
 							   ifEmptyReturn = '' ) => {
@@ -59,12 +65,26 @@ const getLocalizedFullPack = ( actionType, source = false ) => {
 		source = getLocalized( actionType );
 	}
 
+	function setSource( props = {} ) {
+		const name = getSourceObjectName( actionType );
+
+		if ( ! name || ! window[ name ] ) {
+			return false;
+		}
+		window[ name ] = {
+			...window[ name ],
+			...props,
+		};
+
+		return true;
+	}
+
 	const label = localizedLabel( { source } );
 	const help = localizedHelp( { source } );
 	const messages = localizedMessages( { source } );
 	const gatewayAttrs = localizedGatewayAttrs( { source } );
 
-	return { source, label, help, messages, gatewayAttrs };
+	return { source, label, help, messages, gatewayAttrs, setSource };
 };
 
 window.JetFBLocalizeHelper = {
@@ -74,5 +94,5 @@ window.JetFBLocalizeHelper = {
 	localizedHelp,
 	localizedGatewayAttrs,
 	localizedMessages,
-	getLocalizedFullPack
+	getLocalizedFullPack,
 };

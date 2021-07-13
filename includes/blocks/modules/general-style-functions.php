@@ -43,6 +43,10 @@ trait General_Style_Functions {
 		return $result;
 	}
 
+	public function selector_no_space( $selector = '' ) {
+		return ( "{{WRAPPER}}" . sprintf( $selector, $this->namespace ) );
+	}
+
 	public function button_selector( $selector, $additional = '' ) {
 		return $this->selector( $selector, 'button', $additional );
 	}

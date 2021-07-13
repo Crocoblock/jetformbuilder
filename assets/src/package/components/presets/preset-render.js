@@ -1,6 +1,5 @@
 import GroupedSelectControl from '../grouped-select-control';
 
-
 const {
 		  TextControl,
 		  SelectControl,
@@ -97,6 +96,24 @@ function AvailableMapField( {
 		</CardBody>
 	</Card>;
 
+	function AvailableFieldWrapperFunc( { field, name, index, fIndex }, children ) {
+		return <Card
+			key={ field + name + index + fIndex }
+			size={ 'extraSmall' }
+			style={ { marginBottom: '10px' } }
+		>
+			<CardHeader>
+				<span className='jet-label-overflow'>{ field }</span>
+			</CardHeader>
+			<CardBody
+				key={ field + name + index + fIndex }
+				className={ 'jet-form-preset__fields-map-item' }
+			>
+				{ children }
+			</CardBody>
+		</Card>;
+	}
+
 	return <React.Fragment key={ `map_field_preset_${ field + index }` }>
 
 		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
@@ -107,19 +124,18 @@ function AvailableMapField( {
 			switch ( data.type ) {
 				case 'text':
 					return ( isMapFieldVisible( value, data, field ) &&
-						<AvailableFieldWrapper { ...props } key={ uniqKey }>
-							<TextControl
-								placeholder={ data.label }
-								value={ currentVal[ data.name ] }
-								onChange={ newVal => {
-									currentVal[ data.name ] = newVal;
-									onChangeValue( {
-										...fieldsMap,
-										[ field ]: currentVal,
-									}, 'fields_map' );
-								} }
-							/>
-						</AvailableFieldWrapper>
+						AvailableFieldWrapperFunc( props, <TextControl
+							key={ uniqKey + 'TextControl' }
+							placeholder={ data.label }
+							value={ currentVal[ data.name ] }
+							onChange={ newVal => {
+								currentVal[ data.name ] = newVal;
+								onChangeValue( {
+									...fieldsMap,
+									[ field ]: currentVal,
+								}, 'fields_map' );
+							} }
+						/> )
 					);
 				case 'select':
 					return ( isMapFieldVisible( value, data, field ) &&

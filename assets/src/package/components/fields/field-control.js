@@ -1,10 +1,22 @@
 import { ControlsSettings } from "./controls";
 import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
+import { getConvertedName } from '../../helpers/tools';
+import { useSuccessNotice } from '../../helpers/hooks/hooks-helper';
 
 const {
 		  BlockControls,
+		  RichText,
 	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
+
+const {
+		  useDispatch,
+	  } = wp.data;
 
 const {
 		  TextControl,
@@ -15,6 +27,8 @@ const {
 		  Flex,
 		  BaseControl,
 		  __experimentalNumberControl,
+		  ClipboardButton,
+		  Snackbar,
 	  } = wp.components;
 
 let { NumberControl } = wp.components;
@@ -23,27 +37,22 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
-function FieldControl( {
-						   type,
-						   setAttributes,
-						   attributes,
-						   attrsSettings = {},
-						   editProps: {
-										  attrHelp = () => '',
-										  blockName = '',
-									  },
-					   } ) {
+function filterFieldControls( {
+								  type,
+								  attributes,
+								  attrsSettings = {},
+								  editProps: {
+									  attrHelp = () => '',
+									  blockName = '',
+								  },
+							  } ) {
 	const controls = ControlsSettings();
 
 	if ( ! controls[ type ] ) {
-		return null;
+		return [];
 	}
 
 	const currentControl = controls[ type ];
-
-	const onChangeValue = ( value, key ) => {
-		setAttributes( { [ key ]: value } );
-	};
 
 	const isValidCondition = ( attr ) => {
 		if ( ! attr.condition ) {
@@ -62,7 +71,7 @@ function FieldControl( {
 			}
 		}
 
-		const objectNotMatch = (function() {
+		const objectNotMatch = ( function() {
 			if ( 'object' !== typeof attr.condition.attr ) {
 				return true;
 			}
@@ -79,18 +88,18 @@ function FieldControl( {
 			}
 
 			if ( 'and' === operator.toLowerCase() ) {
-				return (function() {
+				return ( function() {
 					for ( const attrToCompare in items ) {
 						if ( items[ attrToCompare ] !== attributes[ attrToCompare ] ) {
 							return false;
 						}
 					}
 					return true;
-				})()
+				} )()
 			}
 
 			return true;
-		})()
+		} )()
 
 		if ( ! objectNotMatch
 			|| (
@@ -109,8 +118,7 @@ function FieldControl( {
 		return true;
 	};
 
-	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
-
+	return currentControl.attrs.filter( ( { help = '', attrName, label, ...attr } ) => {
 		const isRegisterAttribute = ( attrName in attributes );
 		const validCondition = isValidCondition( attr );
 		const isHidden = (
@@ -119,10 +127,31 @@ function FieldControl( {
 			&& false === attrsSettings[ attrName ].show
 		);
 
-		if ( ! isRegisterAttribute || ! validCondition || isHidden ) {
-			return null;
-		}
+		return ( isRegisterAttribute && validCondition && ! isHidden )
+	} );
+}
 
+function FieldControl( props ) {
+	let {
+			setAttributes,
+			attributes,
+			editProps: {
+				attrHelp  = () => '',
+				blockName = '',
+			},
+			fieldControls = [],
+			autoCompleteLabel = true
+		} = props;
+
+	if ( ! fieldControls.length ) {
+		fieldControls = filterFieldControls( props );
+	}
+
+	const onChangeValue = ( value, key ) => {
+		setAttributes( { [ key ]: value } );
+	};
+
+	return fieldControls.map( ( { help = '', attrName, label, ...attr } ) => {
 		switch ( attr.type ) {
 			case 'text':
 				return <TextControl
@@ -130,8 +159,15 @@ function FieldControl( {
 					label={ label }
 					help={ help }
 					value={ attributes[ attrName ] }
-					onChange={ newVal => {
-						onChangeValue( newVal, attrName )
+					onChange={ newVal => onChangeValue( newVal, attrName ) }
+					onBlur={ () => {
+						if ( 'label' === attrName
+							&& 1 < attributes.label.length
+							&& ( ! attributes.name || 'field_name' === attributes.name )
+							&& autoCompleteLabel
+						) {
+							onChangeValue( getConvertedName( attributes.label ), 'name' );
+						}
 					} }
 				/>;
 			case 'dynamic_text':
@@ -236,7 +272,15 @@ function AdvancedFields( props ) {
 
 function ToolBarFields( props ) {
 
-	const { editProps: { uniqKey }, children = [] } = props;
+	const {
+			  editProps: { uniqKey },
+			  children    = [],
+			  displayName = true,
+			  attributes,
+			  setAttributes,
+		  } = props;
+
+	const displayNotice = useSuccessNotice( `Copied "${ attributes.name }" to clipboard.` );
 
 	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
 		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
@@ -245,6 +289,21 @@ function ToolBarFields( props ) {
 				justify={ 'center' }
 				className={ 'jet-form-toggle-box' }
 			>
+				{ displayName && <div className={'jet-input-with-button'}>
+					<ClipboardButton
+						isSmall
+						icon='admin-page'
+						showTooltip
+						shortcut='Copy name'
+						text={ attributes.name }
+						onCopy={ () => displayNotice( true ) }
+						onFinishCopy={ () => displayNotice( false ) }
+					/>
+					<TextControl
+						value={ attributes.name }
+						onChange={ name => setAttributes( { name } ) }
+					/>
+				</div> }
 				<FieldControl
 					type='toolbar'
 					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }
@@ -261,4 +320,5 @@ export {
 	ToolBarFields,
 	AdvancedFields,
 	FieldControl,
+	filterFieldControls
 };

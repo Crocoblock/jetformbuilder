@@ -1,46 +1,47 @@
 import {
 	calcType,
-	manageItemsCount
+	manageItemsCount,
 } from "./options";
 
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-} = JetFBComponents;
+		  ToolBarFields,
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldWrapper,
+	  } = JetFBComponents;
 
 const {
-	getFieldsWithoutCurrent,
-	Tools
-} = JetFBActions;
-
+		  getFieldsWithoutCurrent,
+		  Tools,
+	  } = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	InnerBlocks,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  InnerBlocks,
+		  useBlockProps,
+		  RichText,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	select,
-} = wp.data;
+		  select,
+	  } = wp.data;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	PanelBody,
-	Button,
-	Popover,
-	BaseControl,
-	__experimentalNumberControl,
-} = wp.components;
+		  TextControl,
+		  TextareaControl,
+		  SelectControl,
+		  PanelBody,
+		  Button,
+		  Popover,
+		  BaseControl,
+		  __experimentalNumberControl,
+	  } = wp.components;
 
 let { NumberControl } = wp.components;
 
@@ -54,11 +55,11 @@ export default function RepeaterEdit( props ) {
 	const [ showMacros, setShowMacros ] = useState( false );
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	const formFields = getFieldsWithoutCurrent();
 
@@ -182,40 +183,40 @@ export default function RepeaterEdit( props ) {
 					/>
 				</div>
 			</div> }
-			<BaseControl key={ uniqKey( 'repeater-fields-title' ) }>
-				<BaseControl.VisualLabel>
-					<div className={ 'jet-form-builder__label' }>
-						{ label.name || 'Repeater field' }
-						{ attributes.required && <span className={ 'jet-form-builder__required' }>
-								{ label.mark ? label.mark : '*' }
-							</span> }
-					</div>
-				</BaseControl.VisualLabel>
-				<div className={ 'components-base-control__help jet-form-builder__desc' }
-					 style={ { marginTop: '0px' } }>{ attributes.desc }</div>
-			</BaseControl>
-
-			<InnerBlocks
-				key={ uniqKey( 'repeater-fields' ) }
-				renderAppender={ () => (
-					<InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/>
-				) }
-			/>
-			<Button
-				className={ 'jet-form-builder-repeater__remove' }
-				isSecondary
-				onClick={ () => {
-				} }
-			>&times;</Button>
-			<div style={ { width: '100%', height: '0.7em' } }/>
-			<div className="jet-form-builder-repeater__actions">
+			<FieldWrapper
+				key={ uniqKey( 'FieldWrapper' ) }
+				childrenPosition='bottom'
+				{ ...props }
+			>
+				<InnerBlocks
+					key={ uniqKey( 'repeater-fields' ) }
+					renderAppender={ () => (
+						<InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/>
+					) }
+				/>
 				<Button
-					className={ 'jet-form-builder-repeater__new' }
+					className={ 'jet-form-builder-repeater__remove' }
 					isSecondary
 					onClick={ () => {
 					} }
-				>{ attributes.new_item_label || 'Add New' }</Button>
-			</div>
-		</div>
+				>&times;</Button>
+				<div style={ { width: '100%', height: '0.7em' } }/>
+				<div className="jet-form-builder-repeater__actions">
+					<Button
+						className={ 'jet-form-builder-repeater__new' }
+						isSecondary
+						onClick={ () => {
+						} }
+					>
+						<RichText
+							placeholder='Add New'
+							allowedFormats={ [] }
+							value={ attributes.new_item_label }
+							onChange={ new_item_label => setAttributes( { new_item_label } ) }
+						/>
+					</Button>
+				</div>
+			</FieldWrapper>
+		</div>,
 	];
 }

@@ -5,8 +5,11 @@ import RequestButton from "./components/request-button";
 import ValidateButton from "./components/validate-button";
 import addAction from "./helpers/actions/action-manager";
 import Tools, {
+	classnames,
 	event,
+	getConvertedName,
 	listen,
+	maybeCyrToLatin,
 	versionCompare,
 } from "./helpers/tools";
 import DynamicPreset from "./components/presets/dynamic-preset";
@@ -21,6 +24,7 @@ import {
 import {
 	getAvailableFields,
 	getAvailableFieldsString,
+	getBlocksByName,
 	getFieldsWithoutCurrent,
 	getFormFieldsBlocks,
 	getFormFieldsByBlock,
@@ -37,6 +41,7 @@ import {
 	useMetaState,
 	useStateValidClasses,
 	useStateLoadingClasses,
+	useSuccessNotice,
 } from "./helpers/hooks/hooks-helper";
 import FieldWrapper from "./components/fields/field-wrapper";
 import MacrosInserter from "./components/fields/macros-inserter";
@@ -54,14 +59,18 @@ import HorizontalLine from "./components/horizontal-line";
 import RequestLoadingButton from "./components/request-loading-button";
 import {
 	actionByTypeList,
+	convertListToFieldsMap,
 	fromLocalizeHelper,
 	getActionSettings,
-	convertListToFieldsMap,
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
 import GroupedSelectControl from './components/grouped-select-control';
+import {
+	getBlockControls,
+} from './components/fields/controls';
+import BaseHelp from './components/controls/base-help';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -89,6 +98,7 @@ window.JetFBComponents = {
 	FieldSettingsWrapper,
 	ActionMessages,
 	GroupedSelectControl,
+	BaseHelp,
 };
 
 // JFBFunctions
@@ -115,6 +125,11 @@ window.JetFBActions = {
 	globalTab,
 	versionCompare,
 	convertListToFieldsMap,
+	maybeCyrToLatin,
+	getConvertedName,
+	getBlockControls,
+	classnames,
+	getBlocksByName,
 };
 
 // JFBHooks
@@ -123,5 +138,6 @@ window.JetFBHooks = {
 	useMetaState,
 	useStateValidClasses,
 	useStateLoadingClasses,
+	useSuccessNotice,
 };
 

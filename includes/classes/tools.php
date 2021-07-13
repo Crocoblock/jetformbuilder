@@ -86,18 +86,21 @@ class Tools {
 	 * @return string
 	 */
 	public static function sanitize_wysiwyg( $input ) {
-		$input = wpautop( $input );
+		$input = wp_kses_post( $input );
+		$input = wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
 
-		return wp_kses_post( $input );
+		return $input;
 	}
 
 	/**
 	 * Return all taxonomies list to use in JS components
 	 *
-	 * @return [type] [description]
+	 * @param array $args
+	 *
+	 * @return array
 	 */
-	public static function get_taxonomies_for_js() {
-		$taxonomies = get_taxonomies( array(), 'objects' );
+	public static function get_taxonomies_for_js( $args = array() ) {
+		$taxonomies = get_taxonomies( $args, 'objects' );
 
 		return self::with_placeholder( self::prepare_list_for_js( $taxonomies, 'name', 'label' ) );
 	}
@@ -125,9 +128,9 @@ class Tools {
 	/**
 	 * Returns all registeredroles for JS
 	 */
-	public static function get_user_roles_for_js() {
+	public static function get_user_roles_for_js( $exclude = array( 'administrator' ) ) {
 
-		$roles  = self::get_user_roles();
+		$roles  = self::get_user_roles( $exclude );
 		$result = array();
 
 		foreach ( $roles as $role => $label ) {
@@ -226,9 +229,23 @@ class Tools {
 	/**
 	 * Prepare passed array for using in JS options
 	 *
-	 * @return [type] [description]
+	 * @param array $array
+	 * @param null $value_key
+	 * @param null $label_key
+	 * @param bool $for_elementor
+	 *
+	 * Only if $for_elementor === false
+	 * @param array $additional_attrs
+	 *
+	 * @return array [type] [description]
 	 */
-	public static function prepare_list_for_js( $array = array(), $value_key = null, $label_key = null, $for_elementor = false ) {
+	public static function prepare_list_for_js(
+		$array = array(),
+		$value_key = null,
+		$label_key = null,
+		$for_elementor = false,
+		$additional_attrs = array()
+	) {
 
 		$result = array();
 
@@ -241,24 +258,26 @@ class Tools {
 			$value = null;
 			$label = null;
 
-			if ( is_object( $item ) ) {
-				$value = $item->$value_key;
-				$label = $item->$label_key;
-			} elseif ( is_array( $item ) ) {
-				$value = $item[ $value_key ];
-				$label = $item[ $label_key ];
-			} else {
+			if ( is_scalar( $item ) ) {
 				$value = $key;
 				$label = $item;
+			} else {
+				$value = self::get_property( $item, $value_key );
+				$label = self::get_property( $item, $label_key );
 			}
 
 			if ( $for_elementor ) {
 				$result[ $value ] = $label;
 			} else {
-				$result[] = array(
+				$prepared = array(
 					'value' => $value,
 					'label' => $label,
 				);
+				foreach ( $additional_attrs as $attr ) {
+					$prepared[ $attr ] = self::get_property( $item, $attr );
+				}
+
+				$result[] = $prepared;
 			}
 		}
 
@@ -385,9 +404,45 @@ class Tools {
 			? jet_engine()->get_version()
 			: false;
 	}
-	
+
 	public static function is_readable( string $filename ) {
 		return strlen( $filename ) <= PHP_MAXPATHLEN && is_readable( $filename );
+	}
+
+	/**
+	 * Returns template path
+	 *
+	 * @param  [type] $path [description]
+	 *
+	 * @return [type]       [description]
+	 */
+	public static function get_global_template( $path = '' ) {
+		return JET_FORM_BUILDER_PATH . 'templates/' . $path;
+	}
+
+	public static function array_merge_recursive_distinct( array &$array1, array &$array2 ) {
+		$merged = $array1;
+
+		foreach ( $array2 as $key => &$value ) {
+			if ( is_array( $value )
+			     && isset ( $merged [ $key ] )
+			     && is_array( $merged [ $key ] )
+			) {
+				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
+			} else {
+				$merged [ $key ] = $value;
+			}
+		}
+
+		return $merged;
+	}
+
+	public static function get_property( $source, $name, $if_not_exist = '' ) {
+		if ( is_object( $source ) ) {
+			return $source->{$name} ?? $if_not_exist;
+		}
+
+		return $source[ $name ] ?? $if_not_exist;
 	}
 
 }

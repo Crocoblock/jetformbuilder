@@ -9,7 +9,8 @@ module.exports = {
 		'editor.js': './editor/main.js',
 		'form-block.js': './editor/form-block.js',
 		'package.js': './package/manager.js',
-		'admin.js': './admin/main.js'
+		'admin.js': './admin/main.js',
+		'admin-package.js': './admin-package/manager.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'js' ),

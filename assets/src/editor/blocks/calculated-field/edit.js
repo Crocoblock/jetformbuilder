@@ -3,6 +3,7 @@ const {
 		  GeneralFields,
 		  FieldWrapper,
 		  FieldSettingsWrapper,
+		  BaseHelp,
 	  } = JetFBComponents;
 
 const {
@@ -30,7 +31,7 @@ const {
 
 const NumberControl = __experimentalNumberControl;
 
-const { useState } = wp.element;
+const { useState, RawHTML } = wp.element;
 const { applyFilters } = wp.hooks;
 
 const help = {
@@ -113,6 +114,18 @@ export default function EditCalculated( props ) {
 					} }
 				/>
 				<TextControl
+					key='calc_separate_decimals'
+					label={ __( 'Decimals separator' ) }
+					value={ attributes.separate_decimals }
+					onChange={ separate_decimals => setAttributes( { separate_decimals } ) }
+				/>
+				<TextControl
+					key='calc_separate_thousands'
+					label={ __( 'Thousands separator' ) }
+					value={ attributes.separate_thousands }
+					onChange={ separate_thousands => setAttributes( { separate_thousands } ) }
+				/>
+				<TextControl
 					key='calc_prefix'
 					label={ __( 'Calculated Value Prefix' ) }
 					value={ attributes.calc_prefix }
@@ -150,7 +163,6 @@ export default function EditCalculated( props ) {
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				valueIfEmptyLabel={ 'Calculated Field' }
 				{ ...props }
 			>
 				{ props.isSelected && <>

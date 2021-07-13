@@ -1,9 +1,11 @@
 const {
-	GlobalField,
-	AvailableMapField
-} = JetFBComponents;
+		  GlobalField,
+		  AvailableMapField,
+	  } = JetFBComponents;
 
 const { withPreset } = JetFBActions;
+
+const { Fragment } = wp.element;
 
 function GeneralPreset( {
 							value,
@@ -18,7 +20,7 @@ function GeneralPreset( {
 		onChange( { ...value, [ name ]: newValue } );
 	}
 
-	return <>
+	return <Fragment key={ 'jfb-general-preset-main-wrapper' }>
 		{ window.JetFormEditorData.presetConfig.global_fields.map( ( data, index ) => <GlobalField
 			key={ data.name + index }
 			value={ value }
@@ -41,7 +43,7 @@ function GeneralPreset( {
 				value={ value }
 			/> )
 		) }
-	</>;
+	</Fragment>;
 }
 
 export default withPreset( GeneralPreset );

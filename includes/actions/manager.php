@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
-use Jet_Form_Builder\Admin\Editor;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

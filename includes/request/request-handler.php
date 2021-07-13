@@ -20,6 +20,7 @@ class Request_Handler {
 	public $_response_data;
 
 	const REPEATERS_SETTINGS = '__repeaters_settings';
+	const WP_NONCE_KEY = '_wpnonce';
 
 	public function __construct( $request ) {
 		$this->request = $request;
@@ -114,13 +115,12 @@ class Request_Handler {
 	 * @throws Request_Exception
 	 */
 	public function init_form_data() {
-		$this->_fields = Plugin::instance()->form->get_only_form_fields(
-			$this->request['form_id'],
-			array( 'submit-field', 'form-break-field', 'heading-field', 'group-break-field' )
-		);
-
+		$this->_fields         = Plugin::instance()->form->get_form_blocks( $this->request['form_id'] );
 		$this->_request_values = $this->get_values_from_request();
-		$nonce                 = isset( $this->_request_values['_wpnonce'] ) ? $this->_request_values['_wpnonce'] : '';
+
+		$nonce = isset( $this->_request_values[ self::WP_NONCE_KEY ] )
+			? $this->_request_values[ self::WP_NONCE_KEY ]
+			: '';
 
 		Live_Form::instance()->set_form_id( $this->request['form_id'] );
 
@@ -141,7 +141,7 @@ class Request_Handler {
 
 		$this->init_form_data();
 
-		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this );
+		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->_request_values );
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
 			throw new Request_Exception( 'validation_failed',
@@ -164,11 +164,23 @@ class Request_Handler {
 	}
 
 	public function get_field_attrs_by_name( $field_name, $attr_name = '', $default_val = '' ) {
-		foreach ( $this->_fields as $field ) {
+		return $this->_get_field_attrs_by_name( $this->_fields, $field_name, $attr_name, $default_val );
+	}
+
+	public function _get_field_attrs_by_name( $source, $field_name, $attr_name = '', $default_val = '' ) {
+		foreach ( $source as $field ) {
 			if ( empty( $field['attrs'] )
 			     || ! isset( $field['attrs']['name'] )
 			     || $field_name !== $field['attrs']['name']
 			) {
+				if ( ! empty( $field['innerBlocks'] ) ) {
+					return $this->_get_field_attrs_by_name(
+						$field['innerBlocks'],
+						$field_name,
+						$attr_name,
+						$default_val
+					);
+				}
 				continue;
 			}
 			$attrs = $field['attrs'];
@@ -185,5 +197,6 @@ class Request_Handler {
 
 		return $default_val;
 	}
+
 
 }

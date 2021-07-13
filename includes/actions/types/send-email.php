@@ -238,12 +238,13 @@ class Send_Email extends Base {
 		$message      = $this->parse_macros( $message );
 
 		if ( 'text/html' === $content_type ) {
-			$message = wpautop( $message );
-			$message = make_clickable( $message );
+			$message = make_clickable( wpautop( $message ) );
 		}
 
 		$message = str_replace( '&#038;', '&amp;', $message );
-		$sent    = wp_mail( $to, $subject, $message, $this->get_headers() );
+		$message = stripcslashes( $message );
+
+		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
 
 		if ( ! $sent ) {
 			throw new Action_Exception( 'failed', array(

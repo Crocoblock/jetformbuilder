@@ -4,6 +4,37 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.3.0
+* ADD: UI/UX improvements
+* ADD: Color Picker Field
+* ADD: Form Patterns **JetForms**
+* ADD: Allow creating new users by existing users (in Register User action)
+* ADD: Numbers range by manual input (generator function)
+* ADD: Changing the separator for a fractional number in a calculate field
+* ADD: Styling a Conditional Block
+* FIX: Range Field UI in editor
+* FIX: reCaptcha Uncaught SyntaxError unexpected end of input
+
+## 1.2.7
+* FIX: Initialize input mask for new repeater items
+* FIX: Preset Hidden Field
+* FIX: Upload attachments
+* FIX: Hidden-field preset
+* FIX: Sanitize wysiwyg
+* UPD: Disable edit action button, if callback undefined
+* Tweak: Editor UI
+* Tweak: Media Field UI settings
+
+## 1.2.6
+* UPD: Changed the logic for processing required fields inside the Conditional Block
+* ADD: Switch page on change Radio Field
+* ADD: Styles in gutenberg for Datetime Field
+* FIX: Execution of a query for ActiveCampaign with global settings
+* FIX: Removed escaping slashes in send email action
+* FIX: Adding class to passed page
+* FIX: Preset post-terms in checkbox
+* FIX: Loss of focus when editing a text field in the global preset
+
 ## 1.2.5
 * FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block
 * FIX: Saving `max_size` attribute for media-field in float

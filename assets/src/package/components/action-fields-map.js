@@ -1,16 +1,14 @@
-
 const {
-	BaseControl,
-} = wp.components;
-
+		  BaseControl,
+	  } = wp.components;
 
 export default function ActionFieldsMap( {
-									 fields = [],
-									 label = '[Empty label]',
-									 children = () => {},
-									 plainHelp = '',
-									customHelp = false
-								 } ) {
+											 fields = [],
+											 label = '[Empty label]',
+											 children = () => {},
+											 plainHelp = '',
+											 customHelp = false,
+										 } ) {
 
 	return <BaseControl
 		label={ label }

@@ -1,3 +1,14 @@
+const {
+		  Button,
+		  ButtonGroup,
+		  Modal,
+	  } = wp.components;
+
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
+
 function ActionModal( {
 						  onRequestClose,
 						  children,
@@ -11,17 +22,6 @@ function ActionModal( {
 						  cancelBtnLabel = 'Cancel',
 						  fixedHeight = '',
 					  } ) {
-
-	const {
-			  Button,
-			  ButtonGroup,
-			  Modal,
-		  } = wp.components;
-
-	const {
-			  useState,
-			  useEffect,
-		  } = wp.element;
 
 	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
 

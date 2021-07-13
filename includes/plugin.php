@@ -4,16 +4,17 @@ namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
+use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Pages\Settings_Page;
-use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
+use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
-use Jet_Form_Builder\Widgets\Elementor_Controller;
 use Jet_Form_Builder\License\Manager as LicenseManager;
+use Jet_Form_Builder\Widgets\Elementor_Controller;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -28,6 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
  * @property LicenseManager $license_manager
+ * @property \Jet_Admin_Bar $admin_bar
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -46,6 +48,7 @@ class Plugin {
 	public $allow_gateways;
 	public $framework;
 	public $license_manager;
+	public $admin_bar;
 
 	public static $instance;
 
@@ -88,6 +91,7 @@ class Plugin {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
 
+		$this->admin_bar       = \Jet_Admin_Bar::get_instance();
 		$this->post_type       = new Post_Type();
 		$this->blocks          = new Blocks\Manager();
 		$this->actions         = new Actions\Manager();
@@ -100,7 +104,6 @@ class Plugin {
 		File_Upload::instance();
 		new Elementor_Controller();
 
-
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
 			new Form_Actions_Manager();
@@ -108,6 +111,8 @@ class Plugin {
 				new Settings_Page(),
 				new Addons_Page()
 			) );
+
+			new PatternsManager();
 		}
 	}
 
@@ -116,6 +121,7 @@ class Plugin {
 
 		$this->framework = new CX_Loader( array(
 			$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
+			$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
 		) );
 	}
 
@@ -164,7 +170,13 @@ class Plugin {
 
 		$this->register_autoloader();
 
-		add_action( 'after_setup_theme', array( $this, 'init_components' ), 0 );
+		add_action( 'after_setup_theme', function () {
+			do_action( 'jet-form-builder/before-init' );
+
+			$this->init_components();
+
+			do_action( 'jet-form-builder/after-init' );
+		}, 0 );
 
 		$this->init_framework();
 	}

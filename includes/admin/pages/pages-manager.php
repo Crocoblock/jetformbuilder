@@ -77,6 +77,14 @@ class Pages_Manager {
 
 		( new Page_Config( $this->current_page ) )->render_config();
 
+		wp_enqueue_script(
+			'jet-form-builder-admin-package',
+			Plugin::instance()->plugin_url( 'assets/js/admin-package.js' ),
+			array(),
+			Plugin::instance()->get_version(),
+			true
+		);
+
 		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
 
 		$this->current_page->assets();

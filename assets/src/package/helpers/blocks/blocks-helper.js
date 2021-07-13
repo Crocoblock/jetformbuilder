@@ -1,5 +1,5 @@
-
 const { __ } = wp.i18n;
+const { applyFilters } = wp.hooks;
 
 const blocksRecursiveIterator = ( blockParserFunc ) => {
 	const blocksRecursiveIterator = ( blocks ) => {
@@ -18,10 +18,9 @@ const blocksRecursiveIterator = ( blockParserFunc ) => {
 	blocksRecursiveIterator();
 }
 
-const getFormFieldsBlocks = ( exclude = [], placeholder = false ) => {
-	const formFields = [];
-
-	let skipFields = [ 'submit', 'form-break', 'heading', 'group-break', ...exclude ];
+const getFormFieldsBlocks = ( exclude = [], placeholder = false, suppressFilter = false ) => {
+	let formFields = [];
+	let skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional', ...exclude ];
 
 	blocksRecursiveIterator( block => {
 		if ( block.name.includes( 'jet-forms/' )
@@ -37,15 +36,17 @@ const getFormFieldsBlocks = ( exclude = [], placeholder = false ) => {
 		}
 	} );
 
-	return placeholder
+	formFields = placeholder
 		? [ { value: '', label: placeholder }, ...formFields ]
 		: formFields;
+
+	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields );
 }
 
-const getFieldsWithoutCurrent = ( placeholder = false ) => {
+const getFieldsWithoutCurrent = ( placeholder = false, suppressFilter = false ) => {
 
-	const skipFields = [ 'submit', 'form-break', 'heading', 'group-break' ];
-	const formFields = [];
+	const skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional' ];
+	let formFields = [];
 
 	const current = wp.data.select( 'core/block-editor' ).getSelectedBlock();
 
@@ -66,10 +67,12 @@ const getFieldsWithoutCurrent = ( placeholder = false ) => {
 		}
 	} );
 
-	return placeholder
+	formFields = placeholder
 		? [ { value: '', label: placeholder }, ...formFields ]
 		: formFields;
-};
+
+	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields );
+}
 
 const getAvailableFields = ( exclude = [] ) => {
 	let fields = [];
@@ -85,13 +88,12 @@ const getAvailableFieldsString = ( blockName ) => {
 	const fields = getAvailableFields( [ blockName ] );
 
 	let fieldsString = [];
-	fields.forEach( function ( item ) {
+	fields.forEach( function( item ) {
 		fieldsString.push( '%FIELD::' + item + '%' );
 	} );
 
 	return __( 'Available fields: ' ) + fieldsString.join( ', ' );
 }
-
 
 const getInnerBlocks = ( clientId ) => {
 	const block = wp.data.select( 'core/block-editor' ).getBlock( clientId );
@@ -102,6 +104,18 @@ const getFormFieldsByBlock = ( blockExclude ) => {
 	return () => getFormFieldsBlocks( [ blockExclude.name ] );
 }
 
+const getBlocksByName = blockNames => {
+	const blocks = [];
+
+	blocksRecursiveIterator( block => {
+		if ( ! blockNames.includes( block.name ) ) {
+			return;
+		}
+		blocks.push( block );
+	} );
+
+	return blocks;
+};
 
 export {
 	getFormFieldsByBlock,
@@ -110,5 +124,6 @@ export {
 	getAvailableFields,
 	getFormFieldsBlocks,
 	getFieldsWithoutCurrent,
+	getBlocksByName,
 };
 

@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Classes;
 
 
+use Jet_Form_Builder\Blocks\Render\Base;
+
 trait Attributes_Trait {
 	public $attrs = array();
 
@@ -49,7 +51,17 @@ trait Attributes_Trait {
 
 	public function get_attributes_string_save() {
 		$response = '';
-		foreach ( $this->attrs as $attr => $value ) {
+		$attrs    = $this->attrs;
+
+		if ( $this instanceof Base ) {
+			$attrs = apply_filters(
+				"jet-form-builder/render/{$this->get_name()}/attributes",
+				$attrs,
+				$this
+			);
+		}
+
+		foreach ( $attrs as $attr => $value ) {
 			if ( is_array( $value ) ) {
 				$value = implode( ' ', $value );
 			}

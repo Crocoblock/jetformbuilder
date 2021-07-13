@@ -14,6 +14,14 @@
 		"html": false
 	},
 	"attributes": {
+		"separate_decimals": {
+			"type": "string",
+			"default": "."
+		},
+		"separate_thousands": {
+			"type": "string",
+			"default": ""
+		},
 		"calc_formula": {
 			"type": "string",
 			"default": ""

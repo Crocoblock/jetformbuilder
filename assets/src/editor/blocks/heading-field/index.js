@@ -17,7 +17,7 @@ const settings = {
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: HeadingEdit,
-	useEditProps: [ 'uniqKey' ],
+	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
 		attributes: {
 			label: 'Heading Field',

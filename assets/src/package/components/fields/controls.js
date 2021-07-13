@@ -2,38 +2,38 @@ const { __ } = wp.i18n;
 const { applyFilters } = wp.hooks;
 
 export const ControlsSettings = () => applyFilters( 'jet.fb.register.fields.controls', {
-	"general":  {
+	"general": {
 		label: __( 'General' ),
 		attrs: [
 			{
 				"attrName": "label",
-				"type":     "text",
-				"label":    __( "Field Label" ),
+				"type": "text",
+				"label": __( "Field Label" ),
 			},
 			{
 				"attrName": "name",
-				"type":     "text",
-				"label":    __( "Form field name" ),
-				"help":     __( "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case" ),
+				"type": "text",
+				"label": __( "Form field name" ),
+				"help": __( "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case" ),
 			},
 			{
 				"attrName": "desc",
-				"type":     "text",
-				"label":    __( "Field Description" ),
+				"type": "text",
+				"label": __( "Field Description" ),
 			},
 			{
 				"attrName": "default",
-				"type":     "dynamic_text",
-				"label":    __( "Default Value" ),
+				"type": "dynamic_text",
+				"label": __( "Default Value" ),
 			},
 		],
 	},
-	"toolbar":  {
+	"toolbar": {
 		attrs: [
 			{
 				"attrName": "required",
-				"type":     "toggle",
-				"label":    __( "Is Required" ),
+				"type": "toggle",
+				"label": __( "Is Required" ),
 			},
 		],
 	},
@@ -42,25 +42,25 @@ export const ControlsSettings = () => applyFilters( 'jet.fb.register.fields.cont
 		attrs: [
 			{
 				"attrName": "placeholder",
-				"type":     "text",
-				"label":    __( "Placeholder" ),
+				"type": "text",
+				"label": __( "Placeholder" ),
 			},
 			{
 				"attrName": "add_prev",
-				"type":     "toggle",
-				"label":    __( "Add Prev Page Button" ),
+				"type": "toggle",
+				"label": __( "Add Prev Page Button" ),
 			},
 			{
-				"attrName":  "prev_label",
-				"type":      "text",
-				"label":     __( "Prev Page Button Label" ),
+				"attrName": "prev_label",
+				"type": "text",
+				"label": __( "Prev Page Button Label" ),
 				"condition": "add_prev",
 			},
 			{
 				"attrName": "visibility",
-				"label":    __( "Field Visibility" ),
-				"type":     "select",
-				"options":  [
+				"label": __( "Field Visibility" ),
+				"type": "select",
+				"options": [
 					{
 						"value": "all",
 						"label": __( "For all" ),
@@ -77,9 +77,30 @@ export const ControlsSettings = () => applyFilters( 'jet.fb.register.fields.cont
 			},
 			{
 				"attrName": "class_name",
-				"type":     "text",
-				"label":    __( "CSS Class Name" ),
+				"type": "text",
+				"label": __( "CSS Class Name" ),
 			},
 		],
 	},
 } )
+
+export function getBlockControls( type = 'all' ) {
+	if ( ! type ) {
+		return false;
+	}
+	const controls = ControlsSettings();
+
+	if ( 'all' === type ) {
+		return controls;
+	}
+
+	if ( controls[ type ]
+		&& controls[ type ].attrs
+		&& Array.isArray( controls[ type ].attrs )
+		&& 0 < controls[ type ].attrs.length
+	) {
+		return controls[ type ].attrs;
+	}
+
+	return false;
+}

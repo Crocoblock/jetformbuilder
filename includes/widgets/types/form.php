@@ -2453,6 +2453,86 @@ class Form extends Jfb_Widget_Base {
 		};
 		$closure();
 
+		/** Conditional block */
+		$closure = function () {
+			$this->start_controls_section(
+				'conditional_style',
+				array(
+					'label'      => esc_html__( 'Conditional block', 'jet-form-builder' ),
+					'tab'        => Controls_Manager::TAB_STYLE,
+					'show_label' => false,
+				)
+			);
+
+			$this->add_responsive_control(
+				'conditional_padding',
+				array(
+					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '__conditional' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'conditional_margin',
+				array(
+					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%', 'em' ),
+					'selectors'  => array(
+						$this->selector( '__conditional' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Border::get_type(),
+				array(
+					'name'        => 'conditional_border',
+					'label'       => esc_html__( 'Border', 'jet-form-builder' ),
+					'placeholder' => '1px',
+					'selector'    => $this->selector( '__conditional' ),
+				)
+			);
+
+			$this->add_responsive_control(
+				'conditional_border_radius',
+				array(
+					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px', '%' ),
+					'selectors'  => array(
+						$this->selector( '__conditional' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Box_Shadow::get_type(),
+				array(
+					'name'     => 'conditional_box_shadow',
+					'selector' => $this->selector( '__conditional' ),
+				)
+			);
+
+			$this->add_control(
+				'conditional_bg_color',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->end_controls_section();
+		};
+		$closure();
+
 		/** Submit */
 		$closure = function () {
 			$this->start_controls_section(

@@ -96,11 +96,11 @@ class Form_Handler {
 		}
 
 		if ( ! $this->is_ajax ) {
-			$post          = ! empty( $_REQUEST[ $this->post_id_key ] ) ? get_post( $_REQUEST[ $this->post_id_key ] ) : null;
-			$this->form_id = ! empty( $_REQUEST[ $this->form_key ] ) ? absint( $_REQUEST[ $this->form_key ] ) : false;
-			$this->refer   = ! empty( $_REQUEST[ $this->refer_key ] ) ? esc_url( $_REQUEST[ $this->refer_key ] ) : false;
+			$post          = ! empty( $_POST[ $this->post_id_key ] ) ? get_post( $_POST[ $this->post_id_key ] ) : null;
+			$this->form_id = ! empty( $_POST[ $this->form_key ] ) ? absint( $_POST[ $this->form_key ] ) : false;
+			$this->refer   = ! empty( $_POST[ $this->refer_key ] ) ? esc_url( $_POST[ $this->refer_key ] ) : false;
 		} else {
-			$values = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
+			$values = ! empty( $_POST['values'] ) ? Tools::maybe_recursive_sanitize( $_POST['values'] ) : array();
 
 			foreach ( $values as $data ) {
 				switch ( $data['name'] ) {
@@ -117,8 +117,8 @@ class Form_Handler {
 						break;
 				}
 			}
-
 		}
+		$this->refer = wp_validate_redirect( $this->refer );
 	}
 
 	private function get_response_manager() {
@@ -126,9 +126,9 @@ class Form_Handler {
 			$this->setup_form();
 		}
 
-		$action_handler = $this->action_handler ? $this->action_handler : new Action_Handler( $this->form_id );
-
 		if ( $this->is_ajax ) {
+			$action_handler = $this->action_handler ? $this->action_handler : new Action_Handler( $this->form_id );
+
 			return new Form_Response\Types\Ajax_Response( array(
 				'form_id' => $this->form_id,
 				'actions' => $action_handler->get_all(),
@@ -158,6 +158,16 @@ class Form_Handler {
 	public function process_form() {
 
 		$this->setup_form();
+
+		if ( ! $this->form_id || ! $this->refer ) {
+			$this->add_response_data( array(
+				'reload' => true,
+			) );
+
+			$this->send_response( array(
+				'status' => 'failed',
+			) );
+		}
 
 		$this->try_set_data();
 

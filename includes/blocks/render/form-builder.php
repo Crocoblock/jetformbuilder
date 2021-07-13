@@ -5,12 +5,10 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use JET_SM\Gutenberg\Style_Manager;
 
 // If this file is called directly, abort.
 
@@ -194,21 +192,24 @@ class Form_Builder {
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
-				'field_value' => $this->form_id,
-				'name'        => Plugin::instance()->form_handler->form_key,
+				'field_value'   => $this->form_id,
+				'name'          => Plugin::instance()->form_handler->form_key,
+				'_static_value' => true,
 			)
 		);
 
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
-				'field_value' => $this->get_form_refer_url(),
-				'name'        => Plugin::instance()->form_handler->refer_key,
+				'field_value'   => $this->get_form_refer_url(),
+				'name'          => Plugin::instance()->form_handler->refer_key,
+				'_static_value' => true,
 			)
 		);
 		$form .= Live_Form::force_render_field( 'hidden-field',
 			array(
-				'field_value' => Live_Form::instance()->post->ID,
-				'name'        => Plugin::instance()->form_handler->post_id_key,
+				'field_value'   => Live_Form::instance()->post->ID,
+				'name'          => Plugin::instance()->form_handler->post_id_key,
+				'_static_value' => true,
 			)
 		);
 		$form .= Live_Form::instance()->maybe_progress_pages();

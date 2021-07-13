@@ -15,7 +15,9 @@ class Text_Field_Error extends Base_Field_Error {
 	}
 
 	public function error() {
-		switch ( $this->params['field_type'] ) {
+		$type = isset( $this->params['field_type'] ) ? $this->params['field_type'] : 'text';
+
+		switch ( $type ) {
 			case 'email':
 				return 'Invalid email.';
 			default:

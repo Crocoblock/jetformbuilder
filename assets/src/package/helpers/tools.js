@@ -1,4 +1,5 @@
 const { __ } = wp.i18n;
+const { applyFilters } = wp.hooks;
 
 class Tools {
 
@@ -73,6 +74,86 @@ export function versionCompare( version1, version2, operator ) {
 		return new Function( `return ${ version1 } ${ operator } ${ version2 }` )();
 	}
 	throw new Error( 'Invalid arguments: operator' );
+}
+
+const convertSymbols = applyFilters( 'jet.fb.tools.convertSymbols', {
+	checkCyrRegex: /[а-яёїєґі]/i,
+	cyrRegex: /[а-яёїєґі]/gi,
+	charsMap: {
+		'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+		'е': 'e', 'ё': 'io', 'ж': 'zh', 'з': 'z', 'и': 'i',
+		'й': 'i', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+		'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+		'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch',
+		'ш': 'sh', 'щ': 'shch', 'ы': 'y', 'э': 'e', 'ю': 'iu',
+		'я': 'ia', 'ї': 'i', 'є': 'ie', 'ґ': 'g', 'і': 'i',
+	},
+} );
+
+export function maybeCyrToLatin( str ) {
+	if ( convertSymbols.checkCyrRegex.test( str ) ) {
+		str = str.replace( convertSymbols.cyrRegex, function( match ) {
+
+			if ( undefined === convertSymbols.charsMap[ match ] ) {
+				return '';
+			}
+
+			return convertSymbols.charsMap[ match ];
+		} );
+	}
+
+	return str;
+}
+
+export function getConvertedName( valueToChange ) {
+	var regex = /\s+/g,
+		slug  = valueToChange.toLowerCase().replace( regex, '_' );
+
+	// Replace accents
+	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" );
+
+	// Replace cyrillic
+	slug = maybeCyrToLatin( slug );
+
+	if ( 20 < slug.length ) {
+		// 34 - Lionel Messi's age when he left Barcelona
+		slug = slug.substr( 0, 34 );
+
+		if ( '-' === slug.slice( -1 ) ) {
+			slug = slug.slice( 0, -1 );
+		}
+	}
+
+	return slug;
+}
+
+export function classnames( ...additional ) {
+	const result = []
+
+	const parseValues = source => {
+		source.forEach( itemClass => {
+			if ( ! itemClass ) {
+				return;
+			}
+			if ( Array.isArray( itemClass ) ) {
+				parseValues( itemClass );
+			}
+			if ( 'string' === typeof itemClass ) {
+				result.push( itemClass.trim() )
+			}
+			if ( 'object' === typeof itemClass ) {
+				for ( const itemClassKey in itemClass ) {
+					if ( itemClass[ itemClassKey ] ) {
+						result.push( (itemClassKey + "").trim() )
+					}
+				}
+			}
+		} )
+	};
+
+	parseValues( additional );
+	
+	return result.join( ' ' );
 }
 
 export default Tools;

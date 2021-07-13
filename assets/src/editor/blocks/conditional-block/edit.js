@@ -1,47 +1,47 @@
 import { options } from "./options";
 
 const {
-	RepeaterWithState,
-	ActionModal,
-	FieldWithPreset,
-	DynamicPreset,
-} = JetFBComponents;
+		  RepeaterWithState,
+		  ActionModal,
+		  FieldWithPreset,
+		  DynamicPreset,
+	  } = JetFBComponents;
 
 const {
-	getFormFieldsBlocks,
-	getInnerBlocks,
-	Tools
-} = JetFBActions;
+		  getFormFieldsBlocks,
+		  getInnerBlocks,
+		  Tools,
+	  } = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
-	InnerBlocks,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  BlockControls,
+		  InnerBlocks,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	Button,
-	ToolbarGroup,
-	TextareaControl,
-	SelectControl,
-} = wp.components;
+		  Button,
+		  ToolbarGroup,
+		  TextareaControl,
+		  SelectControl,
+	  } = wp.components;
 
 const {
-	useState,
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 export default function ConditionalBlockEdit( props ) {
 
 	const blockProps = useBlockProps();
 
 	const {
-		setAttributes,
-		attributes,
-		clientId,
-		editProps: { uniqKey }
-	} = props;
+			  setAttributes,
+			  attributes,
+			  clientId,
+			  editProps: { uniqKey },
+		  } = props;
 
 	Tools.addConditionForCondType( 'isSingleField', () => {
 		return 1 === getInnerBlocks( clientId ).length;
@@ -65,10 +65,12 @@ export default function ConditionalBlockEdit( props ) {
 			</ToolbarGroup>
 		</BlockControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<InnerBlocks
-				key={ uniqKey( 'conditional-fields' ) }
-				renderAppender={ () => <InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/> }
-			/>
+			<div className='jet-form-builder__conditional'>
+				<InnerBlocks
+					key={ uniqKey( 'conditional-fields' ) }
+					renderAppender={ () => <InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/> }
+				/>
+			</div>
 		</div>,
 		showModal && <ActionModal
 			classNames={ [ 'width-60' ] }
@@ -86,7 +88,7 @@ export default function ConditionalBlockEdit( props ) {
 				help={ {
 					helpVisible: conditions => conditions.length > 1,
 					helpSource: window.JetFormEditorData.helpForRepeaters,
-					helpKey: 'conditional_block'
+					helpKey: 'conditional_block',
 				} }
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
@@ -122,6 +124,9 @@ export default function ConditionalBlockEdit( props ) {
 					/>
 					<FieldWithPreset
 						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
+						baseControlProps={ {
+							label: "Value to Compare",
+						} }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							key={ uniqKey( 'DynamicPreset-value_to_compare' ) }
 							value={ currentItem.value }
@@ -135,7 +140,7 @@ export default function ConditionalBlockEdit( props ) {
 					>
 						<TextareaControl
 							key={ uniqKey( 'TextareaControl-value' ) }
-							label="Value to Compare"
+							className={ 'jet-control-clear jet-user-fields-map__list' }
 							value={ currentItem.value }
 							onChange={ newValue => {
 								changeCurrentItem( { value: newValue } );
@@ -144,6 +149,10 @@ export default function ConditionalBlockEdit( props ) {
 					</FieldWithPreset>
 					{ 'set_value' === currentItem.type && <FieldWithPreset
 						key={ uniqKey( 'FieldWithPreset-value_to_set' ) }
+						baseControlProps={ {
+							label: __( 'Value to Set', 'jet-form-builder' ),
+							help: __( 'Separate values with commas', 'jet-form-builder' ),
+						} }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							key={ uniqKey( 'DynamicPreset-value_to_set' ) }
 							value={ currentItem.set_value }
@@ -157,8 +166,7 @@ export default function ConditionalBlockEdit( props ) {
 					>
 						<TextareaControl
 							key={ uniqKey( 'TextareaControl-set_value' ) }
-							label={ __( 'Value to Set', 'jet-form-builder' ) }
-							help={ __( 'Separate values with commas', 'jet-form-builder' ) }
+							className={ 'jet-control-clear jet-user-fields-map__list' }
 							value={ currentItem.set_value }
 							onChange={ newValue => {
 								changeCurrentItem( { set_value: newValue } );
@@ -167,6 +175,6 @@ export default function ConditionalBlockEdit( props ) {
 					</FieldWithPreset> }
 				</> }
 			</RepeaterWithState> }
-		</ActionModal>
+		</ActionModal>,
 	];
 }

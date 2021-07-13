@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Blocks\Render\Hidden_Field_Render;
+use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Live_Form;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -43,18 +43,36 @@ class Hidden_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Hidden_Field_Render( $this ) )->render();
+		return ( new class( $this ) extends RenderBase {
+			public function get_name() {
+				return 'hidden-field';
+			}
+		} )->render();
 	}
 
-	public function get_field_value( $value, $params = array() ) {
+	public function set_block_data( $attributes, $content = null ) {
+		parent::set_block_data( $attributes, $content );
+		$this->set_preset();
 
-		if ( is_callable( array( $this, $value ) ) ) {
-			return $this->$value( $params );
-		} elseif ( ! empty( $params['default'] ) ) {
-			return $params['default'];
+		$this->block_attrs['field_value'] = $this->get_field_value();
+	}
+
+	public function get_field_value() {
+		$call_field_value = $this->block_attrs['field_value'] ?? false;
+		$static_value     = $this->block_attrs['_static_value'] ?? false;
+
+		if ( $static_value ) {
+			return $call_field_value;
 		}
 
-		return $value;
+		$value = '';
+		if ( is_callable( array( $this, $call_field_value ) ) ) {
+			$value = call_user_func( array( $this, $call_field_value ) );
+		}
+
+		return ( ! $this->is_empty( $value ) )
+			? $value
+			: $this->block_attrs['default'];
 	}
 
 	private function manual_input() {
@@ -257,6 +275,10 @@ class Hidden_Field extends Base {
 		$field = $this->attrs['field_value'];
 
 		return isset( $field['default'] ) ? $field['default'] : '';
+	}
+
+	private function is_empty( $value ) {
+		return ( "" === $value || is_null( $value ) || false === $value );
 	}
 
 }

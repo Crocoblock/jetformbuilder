@@ -8,6 +8,12 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
+/**
+ * @property array block_attrs
+ *
+ * Trait Base_Select_Radio_Check
+ * @package Jet_Form_Builder\Blocks\Types
+ */
 trait Base_Select_Radio_Check {
 
 	/**

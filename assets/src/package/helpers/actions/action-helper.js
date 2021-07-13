@@ -47,4 +47,3 @@ export const convertListToFieldsMap = ( ...sources ) => {
 	return response;
 };
 
-

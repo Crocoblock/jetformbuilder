@@ -10,8 +10,59 @@ const {
 
 const { jetEngineVersion } = window.JetFormEditorData;
 const { versionCompare } = JetFBActions;
+const { applyFilters } = wp.hooks;
 
 const canRenderGlossaries = "" !== jetEngineVersion;
+
+function getFieldOptionsForm( optionsFrom, props ) {
+	const {
+			  attributes,
+			  setAttributes,
+		  } = props;
+
+	switch ( optionsFrom ) {
+		case 'manual_input':
+			return <FromManualFields
+				key='from_manual'
+				{ ...props }
+			/>;
+		case 'posts':
+		case 'terms':
+			return <FromPostTermsFields
+				key='form_posts_terms'
+				{ ...props }
+			/>;
+		case 'meta_field':
+			return <TextControl
+				key='field_options_key'
+				label='Meta field to get value from'
+				value={ attributes.field_options_key }
+				onChange={ ( newValue ) => {
+					setAttributes( { field_options_key: newValue } );
+				} }
+			/>;
+		case 'generate':
+			return <FromGeneratorsFields
+				key='form_generators'
+				{ ...props }
+			/>;
+		case 'glossary':
+			return canRenderGlossaries && <SelectControl
+				key='select_glossary'
+				label='Select Glossary'
+				labelPosition='top'
+				value={ attributes.glossary_id }
+				onChange={ glossary_id => setAttributes( { glossary_id } ) }
+				options={ [
+					{ value: '', label: '--' },
+					...window.JetFormSelectFieldData.glossaries_list,
+				] }
+			/>;
+		default:
+			return applyFilters( 'jet.fb.select.radio.check.controls', null, optionsFrom, props );
+
+	}
+}
 
 function SelectRadioCheck( props ) {
 
@@ -35,37 +86,7 @@ function SelectRadioCheck( props ) {
 			} }
 			options={ listFrom }
 		/>
-		{ 'manual_input' === field_options_from && <FromManualFields
-			key='from_manual'
-			{ ...props }
-		/> }
-		{ [ 'posts', 'terms' ].includes( field_options_from ) && <FromPostTermsFields
-			key='form_posts_terms'
-			{ ...props }
-		/> }
-		{ 'meta_field' === field_options_from && <TextControl
-			key='field_options_key'
-			label='Meta field to get value from'
-			value={ attributes.field_options_key }
-			onChange={ ( newValue ) => {
-				setAttributes( { field_options_key: newValue } );
-			} }
-		/> }
-		{ 'generate' === field_options_from && <FromGeneratorsFields
-			key='form_generators'
-			{ ...props }
-		/> }
-		{ ( 'glossary' === field_options_from && canRenderGlossaries ) && <SelectControl
-			key='select_glossary'
-			label='Select Glossary'
-			labelPosition='top'
-			value={ attributes.glossary_id }
-			onChange={ glossary_id => setAttributes( { glossary_id } ) }
-			options={ [
-				{ value: '', label: '--' },
-				...window.JetFormSelectFieldData.glossaries_list,
-			] }
-		/> }
+		{ getFieldOptionsForm( field_options_from, props ) }
 		{ children }
 	</div>;
 }

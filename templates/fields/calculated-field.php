@@ -20,6 +20,8 @@ $this->add_attribute( 'data-formula', $calc_data['formula'] );
 $this->add_attribute( 'data-name', $args['name'] );
 $this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
+$this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
+$this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 
 if ( ! empty( $this->live_form->current_repeater ) ) {
 	$this->add_attribute( 'class', 'jet-form-builder__calculated-field--child' );

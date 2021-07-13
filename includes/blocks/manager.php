@@ -3,12 +3,11 @@
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types;
-
-
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
-use Jet_Form_Builder\Dev_Mode;
+
 
 // If this file is called directly, abort.
 
@@ -145,6 +144,7 @@ class Manager {
 			new Types\Group_Break_Field(),
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
+			new Types\Color_Picker_Field()
 		);
 
 		foreach ( $types as $type ) {
@@ -275,7 +275,7 @@ class Manager {
 	 *
 	 * @return [type]             [description]
 	 */
-	public function register_block_type( $block_type ) {
+	public function register_block_type( Types\Base $block_type ) {
 		$this->_types[ $block_type->get_storage_name() ][ $block_type->get_name() ] = $block_type;
 	}
 
@@ -311,7 +311,7 @@ class Manager {
 
 	public function get_field_by_name( $block_name, $storage = self::FORM_EDITOR_STORAGE ) {
 		$types = $this->get_form_editor_types( $storage );
-		$block = isset( $types[ $block_name ] ) ? $types[ $block_name ] : false;
+		$block = isset( $types[ $block_name ] ) ? clone $types[ $block_name ] : false;
 
 		if ( ! $block ) {
 			$block_name = explode( Plugin::instance()->form::NAMESPACE_FIELDS, $block_name );

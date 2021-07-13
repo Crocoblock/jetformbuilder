@@ -18,6 +18,7 @@ import * as text from './text-field';
 import * as textarea from './textarea-field';
 import * as time from './time-field';
 import * as wysiwyg from './wysiwyg-field';
+import * as colorPicker from './color-picker-field';
 import * as wrappers from "./block-wrappers";
 
 const {
@@ -49,6 +50,7 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	textarea,
 	time,
 	wysiwyg,
+	colorPicker,
 ] );
 
 const registerFormField = block => {

@@ -153,6 +153,7 @@ addAction( 'send_email', function SendEmailAction( {
 				fields={ formFields }
 				onFieldClick={ insertMacros }
 				customMacros={ source.customMacros }
+				zIndex={ 10000000 }
 			/>
 		</div>*/}
 	</>;

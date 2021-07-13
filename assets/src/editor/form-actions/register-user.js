@@ -1,27 +1,29 @@
-import ActionMessages from "../components/actions/action-messages";
 import BaseActionComponent from "./base-action-component";
 
-const { WrapperRequiredControl } = JetFBComponents;
 const {
-	addAction,
-	getFormFieldsBlocks
-} = JetFBActions;
+		  WrapperRequiredControl,
+		  ActionMessages,
+	  } = JetFBComponents;
+const {
+		  addAction,
+		  getFormFieldsBlocks,
+	  } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	BaseControl
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  SelectControl,
+		  BaseControl,
+	  } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 addAction( 'register_user', class RegisterUserAction extends BaseActionComponent {
 

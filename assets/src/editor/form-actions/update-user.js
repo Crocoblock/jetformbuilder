@@ -1,5 +1,3 @@
-import ActionMessages from "../components/actions/action-messages";
-
 const {
 		  addAction,
 		  getFormFieldsBlocks,
@@ -10,6 +8,7 @@ const {
 const {
 		  ActionFieldsMap,
 		  WrapperRequiredControl,
+		  ActionMessages,
 	  } = JetFBComponents;
 
 /**
@@ -101,7 +100,8 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 			{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
 				field={ [ fieldId, fieldData ] }
 			>
-				{ 'user_meta' === fieldType[ fieldId ] && <div className='components-base-control jet-margin-bottom-wrapper'>
+				{ 'user_meta' === fieldType[ fieldId ] &&
+				<div className='components-base-control jet-margin-bottom-wrapper'>
 					{ getFieldSelect( fieldId, index ) }
 					<TextControl
 						key={ fieldId + index + '_text' }

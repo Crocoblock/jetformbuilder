@@ -1,26 +1,26 @@
 import IntegrationComponent from "./integration-component";
 
 const {
-	addAction,
-	globalTab
-} = JetFBActions;
+		  addAction,
+		  globalTab,
+	  } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	CheckboxControl,
-	BaseControl,
-	Button,
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  SelectControl,
+		  CheckboxControl,
+		  BaseControl,
+		  Button,
+	  } = wp.components;
 
 const {
-	ActionFieldsMap,
-	WrapperRequiredControl
-} = JetFBComponents;
+		  ActionFieldsMap,
+		  WrapperRequiredControl,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
@@ -93,10 +93,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
 				className="input-with-button"
+				label={ label( 'api_key' ) }
 			>
 				<TextControl
 					key='api_key'
-					label={ label( 'api_key' ) }
+					className='jet-control-clear-full'
 					disabled={ settings.use_global }
 					value={ settings.use_global
 						? currentTab.api_key
@@ -128,16 +129,20 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 				<BaseControl
 					key={ 'mailchimp_select_lists' }
 					className="input-with-button"
+					label={ label( 'list_id' ) }
 				>
-					<SelectControl
-						key='list_id'
-						className="full-width"
-						label={ label( 'list_id' ) }
-						labelPosition="side"
-						value={ settings.list_id }
-						onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
-						options={ this.getLists() }
-					/>
+					<BaseControl
+						key={ 'mailchimp_select_lists_select' }
+						className="jet-control-clear-full"
+					>
+						<SelectControl
+							key='list_id'
+							labelPosition='top'
+							value={ settings.list_id }
+							onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
+							options={ this.getLists() }
+						/>
+					</BaseControl>
 					<Button
 						key={ 'update_list_ids' }
 						isPrimary
@@ -154,14 +159,14 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					<BaseControl
 						label={ label( 'groups_ids' ) }
 					>
-						<div>
+						<div className='jet-user-fields-map__list'>
 							{ this.getGroups().map( group => <CheckboxControl
 								key={ `groups_ids_${ group.value }` }
 								checked={ this.isCheckedGroup( group.value ) }
 								label={ group.label }
 								onChange={ active => this.onChangeSetting( {
 									...( settings.groups_ids || {} ),
-									[ group.value ]: active
+									[ group.value ]: active,
 								}, 'groups_ids' ) }
 							/> ) }
 						</div>

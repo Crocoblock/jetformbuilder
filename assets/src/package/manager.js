@@ -53,6 +53,7 @@ import {
 	FieldControl,
 } from "./components/fields/field-control";
 import PlaceholderMessage from "./components/actions/placeholder-message";
+import ActionMessages from "./components/actions/action-messages";
 import HorizontalLine from "./components/horizontal-line";
 import RequestLoadingButton from "./components/request-loading-button";
 import {
@@ -60,6 +61,7 @@ import {
 	convertListToFieldsMap,
 	fromLocalizeHelper,
 	getActionSettings,
+	convertListToFieldsMap,
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
@@ -99,12 +101,8 @@ window.JetFBComponents = {
 	PlaceholderMessage,
 	HorizontalLine,
 	FieldSettingsWrapper,
+	ActionMessages,
 	GroupedSelectControl,
-	BaseHelp,
-	BaseControl,
-	TextControl,
-	SelectControl,
-	TextareaControl
 };
 
 
@@ -136,7 +134,6 @@ window.JetFBActions = {
 	getConvertedName,
 	getBlockControls,
 	classnames,
-	controlWithFlex
 };
 
 

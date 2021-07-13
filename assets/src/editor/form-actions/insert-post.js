@@ -4,24 +4,20 @@ const {
 		  addAction,
 		  getFormFieldsBlocks,
 		  convertListToFieldsMap,
-		  controlWithFlex,
 	  } = JetFBActions;
 
-let {
-		ActionFieldsMap,
-		WrapperRequiredControl,
-		TextControl,
-		SelectControl,
-	} = JetFBComponents;
-
-TextControl = controlWithFlex( TextControl );
-SelectControl = controlWithFlex( SelectControl );
+const {
+		  ActionFieldsMap,
+		  WrapperRequiredControl,
+	  } = JetFBComponents;
 
 /**
  * Internal dependencies
  */
 const {
 		  BaseControl,
+		  TextControl,
+		  SelectControl,
 	  } = wp.components;
 
 const { __ } = wp.i18n;

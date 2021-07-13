@@ -35,8 +35,11 @@ class Manager {
 	 * @var bool
 	 */
 	private $_registered_scripts = false;
+	private $_added_category = false;
 
 	public function __construct() {
+		global $wp_version;
+
 		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
 		add_action( 'init', array( $this, 'register_block_types' ) );
 
@@ -58,7 +61,11 @@ class Manager {
 			99
 		);
 
-		add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );
+		if ( class_exists( 'WP_Block_Editor_Context' ) ) {
+			add_filter( 'block_categories_all', array( $this, 'add_category' ), 10, 2 );
+		} else {
+			add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );
+		}
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );

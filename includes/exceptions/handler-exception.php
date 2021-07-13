@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Exceptions;
 
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Form_Messages\Manager;
-use Throwable;
 
 abstract class Handler_Exception extends \Exception {
 	protected $default_type_message = 'failed';

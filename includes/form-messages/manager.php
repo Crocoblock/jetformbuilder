@@ -10,7 +10,7 @@ class Manager {
 
 	public $form_id;
 	public $actions;
-	protected $_types = array();
+	public $_types = array();
 	private $success_statuses = array( 'success' );
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
@@ -74,7 +74,10 @@ class Manager {
 
 		foreach ( $this->actions as $action ) {
 			if ( isset( $action->messages ) ) {
-				$messages = array_merge( $messages, $action->messages );
+				$default_action_messages = wp_list_pluck( $action->messages, 'value' );
+				$action_messages         = isset( $action->settings['messages'] ) ? $action->settings['messages'] : array();
+
+				$messages = array_merge( $messages, $default_action_messages, $action_messages );
 			}
 		}
 
@@ -96,7 +99,7 @@ class Manager {
 		if ( $this->is_dynamic_message( $message ) ) {
 			unset( $message[0] );
 
-			return implode('|', $message );
+			return implode( '|', $message );
 		}
 
 		if ( $this->isset_message_type( $message[0] ) ) {

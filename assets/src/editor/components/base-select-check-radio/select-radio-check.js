@@ -11,7 +11,7 @@ const {
 const { jetEngineVersion } = window.JetFormEditorData;
 const { versionCompare } = JetFBActions;
 
-const canRenderGlossaries = false !== jetEngineVersion && versionCompare( jetEngineVersion, '2.7.4', '>=' );
+const canRenderGlossaries = "" !== jetEngineVersion;
 
 function SelectRadioCheck( props ) {
 

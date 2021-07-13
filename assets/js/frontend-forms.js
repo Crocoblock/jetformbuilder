@@ -352,7 +352,7 @@
 				$section
 					.find( '*[data-required="1"]' )
 					.val( '' )
-					.attr( 'required', true );
+					.attr( 'required', 'required' );
 
 			} else {
 
@@ -381,7 +381,7 @@
 
 				}
 
-				$section.find( '*[required="required"]' )
+				$section.find( '*[required]' )
 					.val( val )
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );
@@ -662,9 +662,7 @@
 					val = 0;
 				}
 
-				$childCalculatedField.find( '.jet-form-builder__calculated-field-val' ).text( val.toFixed( $childCalculatedField.data( 'precision' ) ) );
-				$childCalculatedField.find( '.jet-form-builder__calculated-field-input' ).val( val.toFixed( $childCalculatedField.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
-
+				JetFormBuilder.setCalculatedValue( val, $childCalculatedField );
 			} );
 
 		},
@@ -837,9 +835,7 @@
 
 				calculated = JetFormBuilder.calculateValue( $this );
 
-				$this.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( $this.data( 'precision' ) ) );
-				$this.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( $this.data( 'precision' ) ) ).trigger( 'change.JetFormBuilderMain' );
-
+				JetFormBuilder.setCalculatedValue( calculated, $this );
 			} );
 		},
 
@@ -1036,7 +1032,7 @@
 								}
 
 								if ( 'checkbox' === $field[ i ].type ) {
-									val += parseInt( itemVal, 10 );
+									val += parseFloat( itemVal );
 								} else {
 									val = itemVal;
 								}
@@ -1144,13 +1140,19 @@
 
 		},
 
+		setCalculatedValue: function( calculatedValue, calcField ) {
+			const fieldPrecision = calcField.data( 'precision' );
+			const number = calculatedValue.toFixed( fieldPrecision );
+
+			calcField.find( '.jet-form-builder__calculated-field-val' ).text( number );
+			calcField.find( '.jet-form-builder__calculated-field-input' ).val( number ).trigger( 'change.JetFormBuilderMain' );
+		},
+
 		recalcFields: function( event ) {
 
-			var $this          = $( this ),
-				fieldName      = $this.attr( 'name' ),
-				fieldPrecision = 2,
-				calculated     = null,
-				done           = false;
+			var $this      = $( this ),
+				fieldName  = $this.attr( 'name' ),
+				calculated = null;
 
 			if ( $this.data( 'field-name' ) ) {
 				fieldName = $this.data( 'field-name' );
@@ -1165,13 +1167,9 @@
 				fieldName = fieldName.replace( '[]', '' );
 
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-
 					calculated = JetFormBuilder.calculateValue( field.el );
-					fieldPrecision = field.el.data( 'precision' );
 
-					field.el.find( '.jet-form-builder__calculated-field-val' ).text( calculated.toFixed( fieldPrecision ) );
-					field.el.find( '.jet-form-builder__calculated-field-input' ).val( calculated.toFixed( fieldPrecision ) ).trigger( 'change.JetFormBuilderMain' );
-
+					JetFormBuilder.setCalculatedValue( calculated, field.el )
 				}
 
 			} );

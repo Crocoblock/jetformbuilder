@@ -24,6 +24,10 @@ class Datetime_Field extends Base {
 		return 'datetime-field';
 	}
 
+	public function general_style_unregister() {
+		return array();
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *

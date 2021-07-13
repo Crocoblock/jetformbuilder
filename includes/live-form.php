@@ -386,5 +386,9 @@ class Live_Form {
 
 	}
 
+	public function get_nonce_id() {
+		return "jet-form-builder-wp-nonce-{$this->form_id}";
+	}
+
 
 }

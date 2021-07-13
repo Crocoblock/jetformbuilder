@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Request;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
 class Request_Handler {
@@ -109,6 +110,9 @@ class Request_Handler {
 
 	}
 
+	/**
+	 * @throws Request_Exception
+	 */
 	public function init_form_data() {
 		$this->_fields = Plugin::instance()->form->get_only_form_fields(
 			$this->request['form_id'],
@@ -117,6 +121,14 @@ class Request_Handler {
 		);
 
 		$this->_request_values = $this->get_values_from_request();
+		$nonce                 = isset( $this->_request_values['_wpnonce'] ) ? $this->_request_values['_wpnonce'] : '';
+
+		Live_Form::instance()->set_form_id( $this->request['form_id'] );
+
+		if ( ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() ) ) {
+			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
+		}
+
 	}
 
 

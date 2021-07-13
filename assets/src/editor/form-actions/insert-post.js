@@ -1,125 +1,187 @@
-import JetFieldsMapControl from '../blocks/controls/fields-map';
 import JetDefaultMetaControl from "../blocks/controls/default-meta";
 
 const {
-	addAction,
-	getFormFieldsBlocks
-} = JetFBActions;
+		  addAction,
+		  getFormFieldsBlocks,
+		  convertListToFieldsMap,
+	  } = JetFBActions;
+
+const {
+		  ActionFieldsMap,
+		  WrapperRequiredControl,
+	  } = JetFBComponents;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	Button,
-	Popover,
-	PanelBody,
-	PanelRow,
-	BaseControl
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  BaseControl,
+	  } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
-addAction( 'insert_post', class InsertPostAction extends wp.element.Component {
+function taxPrefix( suffix = '' ) {
+	return 'jet_tax__' + suffix;
+}
 
-	getFieldMap( name ) {
-		const settings = this.props.settings;
+addAction( 'insert_post', function InsertPostAction( props ) {
 
-		if ( settings && settings.fields_map && settings.fields_map[ name ] ) {
-			return settings.fields_map[ name ];
+	const {
+			  settings,
+			  onChangeSetting,
+			  source,
+			  help,
+			  label,
+			  getMapField,
+			  setMapField,
+		  } = props;
+
+	const [ fieldType, setTypeField ] = useState( {} );
+	const [ taxonomies, setTaxonomies ] = useState( [] );
+
+	function getPreparedTaxonomies() {
+		const preparedTaxes = [];
+		if ( ! source.taxonomies.length ) {
+			return [];
 		}
-		return '';
-	}
 
-	isRenderHelp( fields ) {
-		const { help } = this.props;
-		return help( 'fields_map' ) && ! fields.length;
-	}
-
-	render() {
-		const { settings, onChange, source, label, help } = this.props;
-
-		const onChangeValue = ( value, key ) => {
-			onChange( {
-				...settings,
-				[ key ]: value
+		for ( const taxonomy of source.taxonomies ) {
+			preparedTaxes.push( {
+				...taxonomy,
+				value: taxPrefix( taxonomy.value ),
 			} );
-		};
+		}
 
-		const formFields = getFormFieldsBlocks();
-
-		/* eslint-disable jsx-a11y/no-onchange */
-		return ( <div key="insert_post">
-			<SelectControl
-				key="post_type"
-				className="full-width"
-				labelPosition="side"
-				value={ settings.post_type }
-				options={ source.postTypes }
-				label={ label( 'post_type' ) }
-				help={ help( 'post_type' ) }
-				onChange={ newValue => onChangeValue( newValue, 'post_type' ) }
-			/>
-			<SelectControl
-				key="post_status"
-				className="full-width"
-				labelPosition="side"
-				value={ settings.post_status }
-				options={ source.postStatuses }
-				label={ label( 'post_status' ) }
-				help={ help( 'post_status' ) }
-				onChange={ newValue => onChangeValue( newValue, 'post_status' ) }
-			/>
-			<BaseControl
-				label={ label( 'fields_map' ) }
-				key="fields_map"
-			>
-				{ this.isRenderHelp( formFields ) &&
-				<div className="jet-fields-map__help">
-					{ help( 'fields_map' ) }
-				</div>
-				}
-				<div className="jet-fields-map__list">
-					{ formFields && formFields.map( ( field, index ) => {
-
-						const fieldData = this.getFieldMap( field.name );
-
-						return <div
-							className="jet-fields-map__row"
-							key={ 'field_map_' + field.name + index }
-						>
-							<JetFieldsMapControl
-								key={ field.name + index }
-								fieldValue={ fieldData }
-								fieldName={ field.name }
-								index={ index }
-								fieldsMap={ settings.fields_map }
-								taxonomiesList={ source.taxonomies }
-								fieldTypes={ source.fieldsMapOptions }
-								onChange={ ( newValue ) => {
-									onChangeValue( newValue, 'fields_map' );
-								} }
-							/>
-						</div>;
-					} ) }
-				</div>
-			</BaseControl>
-			<BaseControl
-				label={ label( 'default_meta' ) }
-				key="default_meta"
-			>
-				<JetDefaultMetaControl
-					defaultMeta={ settings.default_meta }
-					onChange={ newValue => onChangeValue( newValue, 'default_meta' ) }
-				/>
-			</BaseControl>
-		</div> );
-		/* eslint-enable jsx-a11y/no-onchange */
+		return preparedTaxes
 	}
+
+	useEffect( () => {
+		setTypeField( () => {
+			const result = {};
+
+			for ( const fieldsMapKey in settings.fields_map ) {
+				result[ fieldsMapKey ] = getTypeFieldValue( settings.fields_map[ fieldsMapKey ] );
+			}
+
+			return result;
+		} );
+		setTaxonomies( getPreparedTaxonomies() );
+	}, [] );
+
+	const formFields = convertListToFieldsMap( getFormFieldsBlocks() );
+
+	const isRenderHelp = fields => ( help( 'fields_map' ) && ! fields.length );
+
+	function getTypeFieldValue( value ) {
+		let resultValue = 'post_meta';
+
+		for ( const fieldsMapOption of source.fieldsMapOptions ) {
+			if ( value === fieldsMapOption.value ) {
+				resultValue = value;
+				break;
+			}
+		}
+
+		if ( value.includes( taxPrefix() ) ) {
+			resultValue = 'post_terms';
+		}
+
+		return resultValue;
+	}
+
+	function setTypeFieldValue( prev, fieldID, value ) {
+		const resultValue = getTypeFieldValue( value );
+
+		if ( [ 'post_meta', 'post_terms' ].includes( resultValue ) ) {
+			setMapField( { nameField: fieldID, value: '' } )
+		} else {
+			setMapField( { nameField: fieldID, value: resultValue } )
+		}
+
+		return {
+			...prev,
+			[ fieldID ]: resultValue,
+		};
+	}
+
+	/* eslint-disable jsx-a11y/no-onchange */
+
+	const getFieldSelect = ( fieldId, index ) => ( <SelectControl
+		key={ fieldId + index }
+		value={ fieldType[ fieldId ] }
+		onChange={ value => {
+			setTypeField( prev => setTypeFieldValue( prev, fieldId, value ) );
+		} }
+		options={ source.fieldsMapOptions }
+	/> );
+
+	return ( <>
+		<SelectControl
+			key="post_type"
+			className="full-width"
+			labelPosition="side"
+			value={ settings.post_type }
+			options={ source.postTypes }
+			label={ label( 'post_type' ) }
+			help={ help( 'post_type' ) }
+			onChange={ newValue => onChangeSetting( newValue, 'post_type' ) }
+		/>
+		<SelectControl
+			key="post_status"
+			className="full-width"
+			labelPosition="side"
+			value={ settings.post_status }
+			options={ source.postStatuses }
+			label={ label( 'post_status' ) }
+			help={ help( 'post_status' ) }
+			onChange={ newValue => onChangeSetting( newValue, 'post_status' ) }
+		/>
+		<ActionFieldsMap
+			label={ label( 'fields_map' ) }
+			key='user_fields_map'
+			fields={ formFields }
+		>
+			{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
+				field={ [ fieldId, fieldData ] }
+			>
+				{ 'post_meta' === fieldType[ fieldId ] &&
+				<div className='components-base-control jet-margin-bottom-wrapper'>
+					{ getFieldSelect( fieldId, index ) }
+					<TextControl
+						key={ fieldId + index + '_text' }
+						value={ getMapField( { name: fieldId } ) }
+						onChange={ value => setMapField( { nameField: fieldId, value } ) }
+					/>
+				</div> }
+				{ 'post_terms' === fieldType[ fieldId ] &&
+				<div className='components-base-control jet-margin-bottom-wrapper'>
+					{ getFieldSelect( fieldId, index ) }
+					<SelectControl
+						key={ fieldId + index + '_text' }
+						value={ getMapField( { name: fieldId } ) }
+						onChange={ value => setMapField( { nameField: fieldId, value } ) }
+						options={ taxonomies }
+					/>
+				</div> }
+				{ ! [ 'post_meta', 'post_terms' ].includes( fieldType[ fieldId ] ) && getFieldSelect( fieldId, index ) }
+			</WrapperRequiredControl> }
+		</ActionFieldsMap>
+		<BaseControl
+			label={ label( 'default_meta' ) }
+			key="default_meta"
+		>
+			<JetDefaultMetaControl
+				defaultMeta={ settings.default_meta }
+				onChange={ newValue => onChangeSetting( newValue, 'default_meta' ) }
+			/>
+		</BaseControl>
+	</> );
+	/* eslint-enable jsx-a11y/no-onchange */
 } );

@@ -43,39 +43,56 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 	const [ fieldType, setTypeField ] = useState( {} );
 
 	useEffect( () => {
-		setTypeField( settings.fields_map || {} );
+		setTypeField( () => {
+			const result = {};
+
+			for ( const fieldsMapKey in settings.fields_map ) {
+				result[ fieldsMapKey ] = getTypeFieldValue( settings.fields_map[ fieldsMapKey ] );
+			}
+
+			return result;
+		} );
 	}, [] );
+
+	function getTypeFieldValue( value ) {
+		let resultValue = 'user_meta';
+
+		for ( const userField of source.userFields ) {
+			if ( value === userField.value ) {
+				resultValue = value;
+				break;
+			}
+		}
+
+		return resultValue;
+	}
+
+	function setTypeFieldValue( prev, fieldID, value ) {
+		const resultValue = getTypeFieldValue( value );
+
+		if ( 'user_meta' === resultValue ) {
+			setMapField( { nameField: fieldID, value: '' } )
+		} else {
+			setMapField( { nameField: fieldID, value: resultValue } )
+		}
+
+		return {
+			...prev,
+			[ fieldID ]: resultValue,
+		};
+	}
+
+	const getFieldSelect = ( fieldId, index ) => ( <SelectControl
+		key={ fieldId + index }
+		value={ fieldType[ fieldId ] }
+		onChange={ value => {
+			setTypeField( prev => setTypeFieldValue( prev, fieldId, value ) );
+		} }
+		options={ source.userFields }
+	/> );
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return ( <div key="update_user">
-		{/*<BaseControl
-
-		>
-			<div className='jet-user-meta-rows'>
-				{ map( ( field, index ) => {
-
-					const fieldData = getMapField( field.name );
-
-					return <div
-						className="jet-user-meta__row"
-						key={ 'user_meta_' + field.name + index }
-					>
-						<JetFieldsMapControl
-							key={ field.name + index }
-							fieldValue={ fieldData }
-							fieldName={ field.name }
-							index={ index }
-							metaProp='user_meta'
-							fieldsMap={ settings.fields_map }
-							fieldTypes={ source.userFields }
-							onChange={ ( newValue ) => {
-								onChangeSetting( newValue, 'fields_map' );
-							} }
-						/>
-					</div>;
-				} ) }
-			</div>
-		</BaseControl>*/ }
 		<ActionFieldsMap
 			label={ label( 'fields_map' ) }
 			key='user_fields_map'
@@ -84,37 +101,15 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 			{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
 				field={ [ fieldId, fieldData ] }
 			>
-				{ 'user_meta' === fieldType[ fieldId ] && <div className='components-base-control'>
-					<SelectControl
-						key={ fieldId + index }
-						value={ fieldType ? fieldType[ fieldId ] : '' }
-						onChange={ value => {
-							setTypeField( prev => ( {
-								...prev,
-								[ fieldId ]: value,
-							} ) );
-							setMapField( { nameField: fieldId, value } )
-						} }
-						options={ source.userFields }
-					/>
+				{ 'user_meta' === fieldType[ fieldId ] && <div className='components-base-control jet-margin-bottom-wrapper'>
+					{ getFieldSelect( fieldId, index ) }
 					<TextControl
 						key={ fieldId + index + '_text' }
 						value={ getMapField( { name: fieldId } ) }
 						onChange={ value => setMapField( { nameField: fieldId, value } ) }
 					/>
 				</div> }
-				{ 'user_meta' !== fieldType[ fieldId ] && <SelectControl
-					key={ fieldId + index }
-					value={ fieldType ? fieldType[ fieldId ] : '' }
-					onChange={ value => {
-						setTypeField( prev => ( {
-							...prev,
-							[ fieldId ]: value,
-						} ) );
-						setMapField( { nameField: fieldId, value } )
-					} }
-					options={ withPlaceholder( source.userFields ) }
-				/> }
+				{ 'user_meta' !== fieldType[ fieldId ] && getFieldSelect( fieldId, index ) }
 			</WrapperRequiredControl> }
 		</ActionFieldsMap>
 		<SelectControl

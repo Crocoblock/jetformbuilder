@@ -36,6 +36,23 @@ const {
 
 const { __ } = wp.i18n;
 
+const actionTypes = window.jetFormActionTypes.map( function( action ) {
+	return {
+		value: action.id,
+		label: action.name,
+	};
+} );
+
+function getActionCallback( editedAction ) {
+	for ( let i = 0; i < window.jetFormActionTypes.length; i++ ) {
+		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
+			return window.jetFormActionTypes[ i ].callback;
+		}
+	}
+
+	return false;
+}
+
 export default function PluginActions() {
 
 	const [ actions, setActions ] = useActions( true );
@@ -85,22 +102,7 @@ export default function PluginActions() {
 		setEdit( false )
 	};
 
-	const actionTypes = window.jetFormActionTypes.map( function( action ) {
-		return {
-			value: action.id,
-			label: action.name,
-		};
-	} );
-
-	var Callback = false;
-
-	for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
-
-		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
-			Callback = window.jetFormActionTypes[ i ].callback;
-			break;
-		}
-	}
+	var Callback = getActionCallback( editedAction );
 
 	const updateActionSettings = action => {
 		updateAction( action.id, 'settings', action.settings );
@@ -111,6 +113,21 @@ export default function PluginActions() {
 		updateAction( processedAction.id, 'conditions', items );
 		setEditProcessAction( false );
 	}
+
+	const updateActionType = ( id, type ) => {
+		setActions( prev => prev.map( prevItem => {
+			if ( prevItem.id === id ) {
+				var newAction = JSON.parse( JSON.stringify( prevItem ) );
+				newAction.type = type;
+				newAction.settings = newAction.settings || {};
+				newAction.settings[ type ] = newAction.settings[ type ] || {};
+
+				return newAction;
+			} else {
+				return prevItem;
+			}
+		} ) );
+	};
 
 	useEffect( () => {
 		if ( editedAction.type ) {
@@ -141,9 +158,7 @@ export default function PluginActions() {
 					<SelectControl
 						value={ action.type }
 						options={ actionTypes }
-						onChange={ ( newType ) => {
-							updateAction( action.id, 'type', newType );
-						} }
+						onChange={ newType => updateActionType( action.id, newType ) }
 					/>
 					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
 						<Button

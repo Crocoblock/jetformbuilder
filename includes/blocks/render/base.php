@@ -9,7 +9,7 @@ use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Presets\Preset_Manager;
+use Jet_Form_Builder\Blocks\Types\Base as Block_Base;
 
 // If this file is called directly, abort.
 
@@ -26,6 +26,8 @@ abstract class Base {
 	use Get_Template_Trait;
 
 	public $form_id;
+
+	/** @var Block_Base */
 	public $block_type;
 	public $content;
 	public $live_form;

@@ -4,8 +4,14 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 
-use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Blocks\Types\Base_Select_Radio_Check as SRC_Base;
 
+/**
+ * @property SRC_Base block_type
+ *
+ * Class Base_Select_Radio_Check
+ * @package Jet_Form_Builder\Blocks\Render
+ */
 abstract class Base_Select_Radio_Check extends Base {
 
 	public function set_options() {

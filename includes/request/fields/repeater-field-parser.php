@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Request\Fields;
 
-use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Request\Field_Data_Parser;
 use Jet_Form_Builder\Request\Parser_Manager;
@@ -14,29 +13,18 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 		return 'repeater-field';
 	}
 
-	public function save_response() {
-		return false;
-	}
-
-	public function after_init() {
+	public function get_response() {
 		if ( ! is_array( $this->value ) ) {
-			return;
+			return array();
 		}
-		Parser_Manager::instance()->request()->save_repeater( $this->name, $this->value );
+		$response = array();
+		Plugin::instance()->form_handler->request_handler->save_repeater( $this->name, $this->value );
 
 		foreach ( $this->value as $index => $row ) {
-			Parser_Manager::instance()->save_parsers_or_get_response( $this->inner, $row, $this->name, $index );
-		}
-	}
-
-	protected function find_inner_block_by_name( $field_name ) {
-		foreach ( $this->inner as $block ) {
-			if ( isset( $block['attrs']['name'] ) && $field_name === $block['attrs']['name'] ) {
-				return $block;
-			}
+			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $row );
 		}
 
-		return false;
+		return $response;
 	}
 
 }

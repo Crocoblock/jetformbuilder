@@ -17,8 +17,8 @@ class Preset_Source_Post extends Base_Source {
 	}
 
 	private function set_array_allowed() {
-		if ( isset( $this->field_args['type'] ) && isset( $this->field_args['array_allowed'] ) ) {
-			$this->array_allowed = in_array( $this->field_args['type'], array( 'checkboxes' ) ) || ! empty( $this->field_args['array_allowed'] );
+		if ( isset( $this->field_args['type'] ) ) {
+			$this->array_allowed = 'checkbox-field' === $this->field_args['type'];
 		}
 	}
 
@@ -115,11 +115,11 @@ class Preset_Source_Post extends Base_Source {
 	}
 
 	public function _source__post_terms() {
-		if ( empty( $field_data['key'] ) ) {
+		if ( empty( $this->field_data['key'] ) ) {
 			return self::EMPTY;
 		}
 
-		$value = wp_get_post_terms( $this->src()->ID, $field_data['key'] );
+		$value = wp_get_post_terms( $this->src()->ID, $this->field_data['key'] );
 
 		if ( empty( $value ) || is_wp_error( $value ) ) {
 			return '';

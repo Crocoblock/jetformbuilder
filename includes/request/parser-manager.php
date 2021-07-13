@@ -5,8 +5,6 @@ namespace Jet_Form_Builder\Request;
 
 
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Request\Fields;
 
@@ -19,9 +17,8 @@ use Jet_Form_Builder\Request\Fields;
 class Parser_Manager {
 
 	private $_parsers;
-	private $_current;
-	private $response = array();
-	private $request_handler;
+	private $response;
+	public $inside_conditional = false;
 
 	use Instance_Trait;
 
@@ -42,69 +39,65 @@ class Parser_Manager {
 		foreach ( $parsers as $parser ) {
 			$this->_parsers[ $parser->type() ] = $parser;
 		}
-
-		$this->_current = new Current_Parsers();
 	}
 
-	public function save_parsers_or_get_response( $source_fields, $request, $parent_name = '', $index = false ) {
-		foreach ( $source_fields as $field ) {
-			if ( ! $this->is_field_visible( $field['attrs'] ) ) {
+	public function get_values_fields( $fields, $request, $inside_conditional = false ) {
+		$response = array();
+
+		foreach ( $fields as $field ) {
+			if ( empty( $field['blockName'] ) ) {
 				continue;
 			}
-			$name         = $this->get_field_name( $field );
-			$parser_value = $this->get_value_or_parser( $field, $request, $name, $parent_name, $index );
+			if ( ! empty( $field['innerBlocks'] ) && ! $this->isset_parser_by_block_name( $field['blockName'] ) ) {
+				if ( strpos( $field['blockName'], 'conditional-block' ) ) {
+					$inside_conditional = true;
+				}
 
-			if ( $parser_value instanceof Field_Data_Parser ) {
-				$this->current()->add_parser( $parser_value );
+				$response = array_merge( $response, $this->get_values_fields(
+					$field['innerBlocks'],
+					$request,
+					$inside_conditional
+				) );
 
-			} elseif ( $parent_name && false !== $index ) {
-				$this->response( array(
-					$parent_name => array(
-						$index => array(
-							$name => $parser_value
-						)
-					)
-				), true );
-			} else {
-				$this->response( array( $name => $parser_value ) );
+				continue;
 			}
+
+			$settings = $field['attrs'];
+			$name     = isset( $settings['name'] ) ? $settings['name'] : 'field_name';
+
+			$response[ $name ] = $this->get_parsed_value( $field, $request, $name, $inside_conditional );
 		}
+
+		return $response;
 	}
 
-	/**
-	 * Main method, which called outside this class
-	 *
-	 * @param $request_handler
-	 *
-	 * @return array
-	 */
-	public function get_values_fields( $request_handler ) {
-		$fields  = $request_handler->_fields;
-		$request = $request_handler->_request_values;
+	public function get_parsed_value( $field, $request, $name, $inside_conditional ) {
 
-		$this->set_request_handler( $request_handler );
-		$this->save_parsers_or_get_response( $fields, $request );
-
-		foreach ( $this->current()->get_all() as $parser ) {
-			$parser->response();
+		if ( ! $this->is_field_visible( $field['attrs'] ) ) {
+			return null;
 		}
-		$this->current()->clear();
-
-		return $this->clear_response();
-	}
-
-	public function get_value_or_parser( $field, $source_request, $name, $parent_name = '', $index = false ) {
-		$value  = isset( $source_request[ $name ] ) ? $source_request[ $name ] : '';
-		$type   = Plugin::instance()->form->field_name( $field['blockName'] );
-		$parser = $this->get_parser( $type );
+		$value  = isset( $request[ $name ] ) ? $request[ $name ] : '';
+		$parser = $this->get_parser_by_block_name( $field['blockName'] );
 
 		if ( $parser instanceof Field_Data_Parser ) {
-			$parser->init( $value, $field, $parent_name, $index );
+			$parser->init( $value, $field, $inside_conditional );
 
-			return $parser;
+			return $parser->response();
 		}
 
 		return $value;
+	}
+
+	private function isset_parser_by_block_name( $block_name ) {
+		$type = Plugin::instance()->form->field_name( $block_name );
+
+		return isset( $this->_parsers[ $type ] );
+	}
+
+	private function get_parser_by_block_name( $block_name ) {
+		$type = Plugin::instance()->form->field_name( $block_name );
+
+		return $this->get_parser( $type );
 	}
 
 	private function get_parser( $type ) {
@@ -142,48 +135,6 @@ class Parser_Manager {
 
 		return false;
 
-	}
-
-	private function get_field_name( $field ) {
-		$settings = $field['attrs'];
-
-		return isset( $settings['name'] ) ? $settings['name'] : 'field_name';
-	}
-
-	public function set_request_handler( $request_handler ) {
-		$this->request_handler = $request_handler;
-	}
-
-	/**
-	 * @return Request_Handler
-	 */
-	public function request() {
-		return $this->request_handler;
-	}
-
-	/**
-	 * @return Current_Parsers
-	 */
-	public function current() {
-		return $this->_current;
-	}
-
-	public function response( $value = null, $recursively = false ) {
-		if ( empty( $value ) ) {
-			return $this->response;
-		}
-		if ( $recursively ) {
-			$this->response = Tools::array_merge_recursive_distinct( $this->response, $value );
-		} else {
-			$this->response = array_merge( $this->response, $value );
-		}
-	}
-
-	public function clear_response() {
-		$response       = $this->response();
-		$this->response = array();
-
-		return $response;
 	}
 
 }

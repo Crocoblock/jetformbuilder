@@ -351,7 +351,6 @@
 
 				$section
 					.find( '*[data-required="1"]' )
-					.val( '' )
 					.attr( 'required', 'required' );
 
 			} else {
@@ -367,22 +366,12 @@
 				} );
 
 				var $select = $section.find( 'select' );
-				var val = 'is-hidden';
 
 				if ( $select.length ) {
-
-					var defaultVal = $select.data( 'default-val' );
-
-					if ( defaultVal || 0 === defaultVal ) {
-						val = defaultVal;
-					}
-
-					$select.append( '<option value="' + val + '" data-is-hidden="1"></option>' );
-
+					$select.append( '<option value="" data-is-hidden="1"></option>' );
 				}
 
 				$section.find( '*[required]' )
-					.val( val )
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );
 
@@ -534,7 +523,7 @@
 			currentItem.addClass( 'active-page' );
 			currentItem.removeClass( 'passed-page' );
 
-			if ( $fromPage < $toPage ) {
+			if ( from < to ) {
 				prevItem.addClass( 'passed-page' );
 			} else {
 				prevItem.removeClass( 'passed-page' );

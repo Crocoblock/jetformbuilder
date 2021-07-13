@@ -4,6 +4,16 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.2.6
+* UPD: Changed the logic for processing required fields inside the Conditional Block
+* ADD: Switch page on change Radio Field
+* ADD: Styles in gutenberg for Datetime Field
+* FIX: Execution of a query for ActiveCampaign with global settings
+* FIX: Removed escaping slashes in send email action
+* FIX: Adding class to passed page
+* FIX: Preset post-terms in checkbox
+* FIX: Loss of focus when editing a text field in the global preset
+
 ## 1.2.5
 * FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block
 * FIX: Saving `max_size` attribute for media-field in float

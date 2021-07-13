@@ -6,6 +6,12 @@ namespace Jet_Form_Builder\Dev_Mode;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 
+/**
+ * @method static Manager instance()
+ *
+ * Class Manager
+ * @package Jet_Form_Builder\Dev_Mode
+ */
 class Manager {
 
 	use Instance_Trait;

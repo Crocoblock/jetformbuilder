@@ -4,8 +4,18 @@
 namespace Jet_Form_Builder\Presets\Types;
 
 
-use Jet_Form_Builder\Classes\Factory;
+use Jet_Form_Builder\Presets\Preset_Manager;
+use Jet_Form_Builder\Presets\Sources\Base_Source;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Query_Var;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
 
+/**
+ * @property Base_Source source
+ *
+ * Class Base_Preset
+ * @package Jet_Form_Builder\Presets\Types
+ */
 abstract class Base_Preset {
 
 	const SOURCES_NAMESPACE = 'Jet_Form_Builder\\Presets\\Sources\\';
@@ -48,11 +58,12 @@ abstract class Base_Preset {
 
 
 	public function get_source( $args ) {
-		$from         = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
-		$from_manager = ( new Factory( self::SOURCES_NAMESPACE ) )->prefix( 'preset_source_' );
+		$from   = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 
-		return $from_manager->create_one(
-			$from,
+		/** @var Base_Source $source */
+		$source = Preset_Manager::instance()->get_source_by_type( $from );
+
+		return $source->init_source(
 			$this->fields_map,
 			$args,
 			$this->data

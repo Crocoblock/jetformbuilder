@@ -252,7 +252,7 @@ class File_Upload {
 				$value = explode( ',', str_replace( ', ', ',', $value ) );
 			} else {
 				if ( false !== strpos( $value, '{' ) ) {
-					$value = json_decode( $value, true );
+					$value = json_decode( wp_unslash( $value ), true );
 				} else {
 					return $files;
 				}

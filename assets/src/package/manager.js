@@ -61,6 +61,7 @@ import {
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
+import GroupedSelectControl from './components/grouped-select-control';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -86,7 +87,8 @@ window.JetFBComponents = {
 	PlaceholderMessage,
 	HorizontalLine,
 	FieldSettingsWrapper,
-	ActionMessages
+	ActionMessages,
+	GroupedSelectControl,
 };
 
 // JFBFunctions

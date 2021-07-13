@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.7.2
 Requires PHP: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,7 +52,7 @@ We integrated JetStyleManager & Gutenberg to make it possible for you to style t
 No more confusing field rows and additional styling. Because Gutenberg is a visual editor, you can monitor the form creation process as if you were on the frontend. All field types can be found in the same place – the JetForm Fields block. And now you can add any content you want into the from layout - headings, images, sections etc.
 
 = PAYMENT METHODS INTEGRATION =
-Accept all kinds of payments securely via any of your WordPress-created forms be it one-off, recurring, fixed, variable payments, or user-entered amounts. JetFormBuilder allows linking your forms to PayPal, Stripe, or WooCommerce checkout. 
+Accept all kinds of payments securely via any of your WordPress-created forms be it one-off, recurring, fixed, variable payments, or user-entered amounts. JetFormBuilder allows linking your forms to PayPal or Stripe checkout.
 
 == More JetFormBuilder Features ==
 
@@ -152,6 +152,17 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.4**
+ - ADD: JetEngine Glossaries compatible
+ - ADD: New styling sections for the JetForm widget in Elementor
+ - ADD: `jet-form-builder/render-choice/query-options/posts` & `jet-form-builder/render-choice/label/posts` php hooks and the same for terms, instead of 'posts' - 'terms'
+ - FIX: Send submit status with messages from action settings
+ - FIX: Missing JetStyleManager wrapper on blocks
+ - FIX: Price formatting for PayPal gateway request
+ - FIX: Alignment calculated field
+ - FIX: UI errors in editor
+ - Tweak: Change Repeater component header icons
 
 **1.2.3**
  - ADD: Go Pro banner & link

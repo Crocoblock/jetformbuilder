@@ -26,7 +26,7 @@ const listFrom = [
 	},
 ];
 
-if ( false !== jetEngineVersion && versionCompare( jetEngineVersion, '2.7.4', '>=' ) ) {
+if ( "" !== jetEngineVersion ) {
 	listFrom.push( {
 		"value": "glossary",
 		"label": __( 'Glossary', 'jet-form-builder' ),

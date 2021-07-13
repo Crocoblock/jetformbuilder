@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.2.4
+* ADD: JetEngine Glossaries compatible
+* ADD: New styling sections for the JetForm widget in Elementor
+* ADD: `jet-form-builder/render-choice/query-options/posts` & `jet-form-builder/render-choice/label/posts` php hooks and the same for terms, instead of 'posts' - 'terms'
+* FIX: Send submit status with messages from action settings
+* FIX: Missing JetStyleManager wrapper on blocks
+* FIX: Price formatting for PayPal gateway request
+* FIX: Alignment calculated field
+* FIX: UI errors in editor
+* Tweak: Change Repeater component header icons
+
 ## 1.2.3
 * ADD: Go Pro banner & link
 * FIX: Redirect with GET args

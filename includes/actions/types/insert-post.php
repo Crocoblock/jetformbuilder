@@ -62,7 +62,7 @@ class Insert_Post extends Base {
 
 		if ( ! $post_type || ! post_type_exists( $post_type ) ) {
 			throw new Action_Exception( 'failed', array(
-				'post_type' => $this->settings['post_type']
+				'post_type' => $post_type
 			) );
 		}
 

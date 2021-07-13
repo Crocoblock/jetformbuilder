@@ -13,6 +13,13 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 			} );
 		};
 
+		const onChangeSettingObj = ( value ) => {
+			props.onChange( {
+				...props.settings,
+				...value,
+			} );
+		};
+
 		const getMapField = ( { source = 'fields_map', name } ) => {
 			const settings = props.settings;
 
@@ -34,7 +41,7 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 			} );
 		}
 
-		const additionalProps = { onChangeSetting, getMapField, setMapField };
+		const additionalProps = { onChangeSetting, getMapField, setMapField, onChangeSettingObj };
 		const resultProps = { ...props, ...localizedData, ...additionalProps };
 
 		return <>

@@ -11,6 +11,8 @@ const {
 		  WrapperRequiredControl,
 	  } = JetFBComponents;
 
+const { useRequestFields, withRequestFields } = JetFBHooks;
+
 /**
  * Internal dependencies
  */
@@ -27,11 +29,13 @@ const {
 		  useEffect,
 	  } = wp.element;
 
+const { withSelect } = wp.data;
+
 function taxPrefix( suffix = '' ) {
 	return 'jet_tax__' + suffix;
 }
 
-addAction( 'insert_post', function InsertPostAction( props ) {
+function InsertPostAction( props ) {
 
 	const {
 			  settings,
@@ -41,10 +45,12 @@ addAction( 'insert_post', function InsertPostAction( props ) {
 			  label,
 			  getMapField,
 			  setMapField,
+			  requestFields,
 		  } = props;
 
 	const [ fieldType, setTypeField ] = useState( {} );
 	const [ taxonomies, setTaxonomies ] = useState( [] );
+	const [ formFields, setFormFields ] = useState( [] );
 
 	function getPreparedTaxonomies() {
 		const preparedTaxes = [];
@@ -73,11 +79,11 @@ addAction( 'insert_post', function InsertPostAction( props ) {
 			return result;
 		} );
 		setTaxonomies( getPreparedTaxonomies() );
+		onChangeSetting( [ source.requestFields.inserted_post_id ], 'requestFields' );
+		setFormFields(
+			convertListToFieldsMap( getFormFieldsBlocks(), requestFields )
+		);
 	}, [] );
-
-	const formFields = convertListToFieldsMap( getFormFieldsBlocks() );
-
-	const isRenderHelp = fields => ( help( 'fields_map' ) && ! fields.length );
 
 	function getTypeFieldValue( value ) {
 		let resultValue = 'post_meta';
@@ -148,30 +154,34 @@ addAction( 'insert_post', function InsertPostAction( props ) {
 			key='user_fields_map'
 			fields={ formFields }
 		>
-			{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
-				field={ [ fieldId, fieldData ] }
-			>
-				{ 'post_meta' === fieldType[ fieldId ] &&
-				<div className='components-base-control jet-margin-bottom-wrapper'>
-					{ getFieldSelect( fieldId, index ) }
-					<TextControl
-						key={ fieldId + index + '_text' }
-						value={ getMapField( { name: fieldId } ) }
-						onChange={ value => setMapField( { nameField: fieldId, value } ) }
-					/>
-				</div> }
-				{ 'post_terms' === fieldType[ fieldId ] &&
-				<div className='components-base-control jet-margin-bottom-wrapper'>
-					{ getFieldSelect( fieldId, index ) }
-					<SelectControl
-						key={ fieldId + index + '_text' }
-						value={ getMapField( { name: fieldId } ) }
-						onChange={ value => setMapField( { nameField: fieldId, value } ) }
-						options={ taxonomies }
-					/>
-				</div> }
-				{ ! [ 'post_meta', 'post_terms' ].includes( fieldType[ fieldId ] ) && getFieldSelect( fieldId, index ) }
-			</WrapperRequiredControl> }
+			{ ( { fieldId, fieldData, index } ) => {
+				return <WrapperRequiredControl
+					field={ [ fieldId, fieldData ] }
+				>
+
+					{ 'post_meta' === fieldType[ fieldId ] &&
+					<div className='components-base-control jet-margin-bottom-wrapper'>
+						{ getFieldSelect( fieldId, index ) }
+						<TextControl
+							key={ fieldId + index + '_text' }
+							value={ getMapField( { name: fieldId } ) }
+							onChange={ value => setMapField( { nameField: fieldId, value } ) }
+						/>
+					</div> }
+					{ 'post_terms' === fieldType[ fieldId ] &&
+					<div className='components-base-control jet-margin-bottom-wrapper'>
+						{ getFieldSelect( fieldId, index ) }
+						<SelectControl
+							key={ fieldId + index + '_text' }
+							value={ getMapField( { name: fieldId } ) }
+							onChange={ value => setMapField( { nameField: fieldId, value } ) }
+							options={ taxonomies }
+						/>
+					</div> }
+					{ ! [ 'post_meta',
+						'post_terms' ].includes( fieldType[ fieldId ] ) && getFieldSelect( fieldId, index ) }
+				</WrapperRequiredControl>
+			} }
 		</ActionFieldsMap>
 		<BaseControl
 			label={ label( 'default_meta' ) }
@@ -184,4 +194,6 @@ addAction( 'insert_post', function InsertPostAction( props ) {
 		</BaseControl>
 	</> );
 	/* eslint-enable jsx-a11y/no-onchange */
-} );
+}
+
+addAction( 'insert_post', withSelect( withRequestFields )( InsertPostAction ) );

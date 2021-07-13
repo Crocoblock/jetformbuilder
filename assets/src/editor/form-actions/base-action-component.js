@@ -3,14 +3,21 @@ export default class BaseActionComponent extends wp.element.Component {
 	addPlaceholderForSelect( array, label = '--' ) {
 		return [
 			{ label },
-			...array
+			...array,
 		];
 	}
 
 	onChangeSetting( value, key ) {
 		this.props.onChange( {
 			...this.props.settings,
-			[ key ]: value
+			[ key ]: value,
+		} );
+	};
+
+	onChangeSettingObj( value ) {
+		this.props.onChange( {
+			...this.props.settings,
+			...value,
 		} );
 	};
 
@@ -18,7 +25,7 @@ export default class BaseActionComponent extends wp.element.Component {
 		const source = 'fields_map';
 
 		return this.getFieldByName(
-			{ name, source }
+			{ name, source },
 		);
 	}
 
@@ -26,7 +33,7 @@ export default class BaseActionComponent extends wp.element.Component {
 		const source = 'meta_fields_map';
 
 		return this.getFieldByName(
-			{ name, source }
+			{ name, source },
 		);
 	}
 
@@ -43,7 +50,7 @@ export default class BaseActionComponent extends wp.element.Component {
 		const source = 'fields_map';
 
 		this.changeFieldsMap(
-			{ value, nameField, source }
+			{ value, nameField, source },
 		);
 	};
 
@@ -51,21 +58,20 @@ export default class BaseActionComponent extends wp.element.Component {
 		const source = 'meta_fields_map';
 
 		this.changeFieldsMap(
-			{ value, nameField, source }
+			{ value, nameField, source },
 		);
 	};
-
 
 	changeFieldsMap( { source, nameField, value } ) {
 		const fieldsMap = Object.assign(
 			{},
 			this.props.settings[ source ],
-			{ [ nameField ]: value }
+			{ [ nameField ]: value },
 		);
 
 		this.props.onChange( {
 			...this.props.settings,
-			[ source ]: fieldsMap
+			[ source ]: fieldsMap,
 		} );
 	}
 

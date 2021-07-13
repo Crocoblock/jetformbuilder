@@ -1,5 +1,6 @@
 import {
 	conditionOperators,
+	defaultAction,
 	defaultActions,
 	getRandomID,
 	newItemCondition,
@@ -39,6 +40,9 @@ const { __ } = wp.i18n;
 
 const { applyFilters } = wp.hooks;
 
+const { withDispatch, useDispatch } = wp.data;
+const { compose } = wp.compose;
+
 const actionTypes = window.jetFormActionTypes.map( function( action ) {
 	return {
 		value: action.id,
@@ -56,7 +60,7 @@ function getActionCallback( editedAction ) {
 	return false;
 }
 
-export default function PluginActions() {
+function PluginActions( { setCurrentAction } ) {
 
 	const [ actions, setActions ] = useActions( true );
 
@@ -95,6 +99,18 @@ export default function PluginActions() {
 		} ) );
 	};
 
+	const updateActionObj = ( id, props ) => {
+		setActions( actions => actions.map( current => {
+			if ( id !== current.id ) {
+				return current;
+			}
+			return {
+				...JSON.parse( JSON.stringify( current ) ),
+				...props,
+			};
+		} ) )
+	};
+
 	const [ isEdit, setEdit ] = useState( false );
 	const [ editedAction, setEditedAction ] = useState( {} );
 
@@ -102,13 +118,16 @@ export default function PluginActions() {
 	const [ processedAction, setProcessedAction ] = useState( {} );
 
 	const closeModal = () => {
-		setEdit( false )
+		setEdit( false );
+		setCurrentAction( {} );
 	};
 
 	var Callback = getActionCallback( editedAction );
 
 	const updateActionSettings = action => {
-		updateAction( action.id, 'settings', action.settings );
+		updateActionObj( action.id, {
+			settings: action.settings,
+		} )
 		closeModal();
 	}
 
@@ -176,6 +195,7 @@ export default function PluginActions() {
 								setEditedAction( () => ( {
 									...action,
 								} ) );
+								setCurrentAction( { ...action, index } );
 							} }
 						/>
 						<Button
@@ -229,9 +249,8 @@ export default function PluginActions() {
 				setActions( [
 					...actions,
 					{
-						type: 'send_email',
+						...JSON.parse( JSON.stringify( defaultAction ) ),
 						id: getRandomID(),
-						settings: {},
 					},
 				] );
 			} }
@@ -249,6 +268,7 @@ export default function PluginActions() {
 		>
 			{ Callback && <Callback
 				settings={ getMergedSettings() }
+				actionId={ editedAction.id }
 				onChange={ ( data ) => {
 					setEditedAction( prev => ( {
 						...prev,
@@ -337,3 +357,13 @@ export default function PluginActions() {
 		</ActionModal> }
 	</>
 }
+
+export default compose(
+	withDispatch( dispatch => {
+		return {
+			setCurrentAction( action ) {
+				dispatch( 'jet-forms/actions' ).setCurrentAction( action )
+			},
+		};
+	} ),
+)( PluginActions );

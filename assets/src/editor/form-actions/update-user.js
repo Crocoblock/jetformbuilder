@@ -11,6 +11,10 @@ const {
 		  ActionMessages,
 	  } = JetFBComponents;
 
+const { withRequestFields } = JetFBHooks;
+
+const { withSelect } = wp.data;
+
 /**
  * Internal dependencies
  */
@@ -27,9 +31,9 @@ const {
 		  useEffect,
 	  } = wp.element;
 
-addAction( 'update_user', function UpdateUserAction( props ) {
+function UpdateUserAction( props ) {
 
-	const fields = convertListToFieldsMap( getFormFieldsBlocks() );
+	const [ fields, setFields ] = useState( [] );
 	const {
 			  settings,
 			  onChangeSetting,
@@ -37,6 +41,7 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 			  label,
 			  getMapField,
 			  setMapField,
+			  requestFields,
 		  } = props;
 
 	const [ fieldType, setTypeField ] = useState( {} );
@@ -51,6 +56,8 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 
 			return result;
 		} );
+
+		setFields( convertListToFieldsMap( getFormFieldsBlocks(), requestFields ) )
 	}, [] );
 
 	function getTypeFieldValue( value ) {
@@ -124,4 +131,6 @@ addAction( 'update_user', function UpdateUserAction( props ) {
 		<ActionMessages { ...props } />
 	</div> );
 	/* eslint-enable jsx-a11y/no-onchange */
-} );
+}
+
+addAction( 'update_user', withSelect( withRequestFields )( UpdateUserAction ) );

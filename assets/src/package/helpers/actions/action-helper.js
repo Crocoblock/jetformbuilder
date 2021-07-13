@@ -32,13 +32,19 @@ export const getActionSettings = actionId => {
 	return ( action && action.settings ) ? action.settings : false;
 };
 
-export const convertListToFieldsMap = source => {
-	return source.map( item => {
-		const id = item.value;
-		delete item.value;
+export const convertListToFieldsMap = ( ...sources ) => {
+	const response = [];
 
-		return [ id, item ];
-	} );
+	for ( const source of sources ) {
+		response.push( ...source.map( item => {
+			const id = item.value;
+			delete item.value;
+
+			return [ id, item ];
+		} ) );
+	}
+
+	return response;
 };
 
 

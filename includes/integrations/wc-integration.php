@@ -164,7 +164,16 @@ class Wc_Integration {
 		$details = $this->get_order_details( $order_id );
 		$details = apply_filters( 'jet-form-builder/wc-integration/order-details', $details, $order_id );
 
-		include Tools::get_global_template( 'wc-integration/' . $template . '.php' );
+		$custom_template = apply_filters(
+			'jet-form-builder/wc-integration/order-details-template',
+			'', $details, $order_id, $template
+		);
+
+		if ( $custom_template ) {
+			echo $custom_template;
+		} else {
+			include Tools::get_global_template( 'wc-integration/' . $template . '.php' );
+		}
 	}
 
 	/**

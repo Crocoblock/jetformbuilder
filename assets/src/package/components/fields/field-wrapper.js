@@ -1,4 +1,4 @@
-import Tools from '../../helpers/tools';
+import Tools, { getConvertedName } from '../../helpers/tools';
 
 const {
 		  BaseControl,
@@ -36,14 +36,24 @@ function FieldWrapper( props ) {
 
 	const label = Tools.getLabel( meta, attributes );
 
+	const setDynamicName = () => {
+		if ( 1 < attributes.label.length
+			&& ( ! attributes.name || 'field_name' === attributes.name )
+		) {
+			setAttributes( { name: getConvertedName( attributes.label ) } )
+		}
+	};
+
 	return (
 		<BaseControl key={ uniqKey( 'placeHolder_block' ) }
 					 className={ `jet-form-builder__field-wrap jet-form-builder-row ${ wrapClasses.join( ' ' ) }` }>
 			{ 'top' === childrenPosition && children }
 			<BaseControl.VisualLabel>
 				<Tooltip text="Input Label" position="top right">
-					<div className='jet-form-builder__label'>
+					<div onBlur={ setDynamicName }>
 						<RichText
+							isSelected
+							className='jet-form-builder__label'
 							placeholder='Field Label...'
 							allowedFormats={ [] }
 							value={ attributes.label ? attributes.label : valueIfEmptyLabel }
@@ -66,6 +76,7 @@ function FieldWrapper( props ) {
 							value={ attributes.desc }
 							onChange={ desc => setAttributes( { desc } ) }
 							style={ { marginTop: '0px' } }
+							onBlur={ () => console.log( 'desc' ) }
 						/>
 					</div>
 				</Tooltip>

@@ -1,5 +1,8 @@
+import Tools from '../../helpers/tools';
+
 const {
 		  BaseControl,
+		  Tooltip,
 	  } = wp.components;
 
 const {
@@ -10,9 +13,10 @@ const {
 		  RichText,
 	  } = wp.blockEditor;
 
-const { useState } = wp.element;
-
-const { useMetaState } = JetFBHooks;
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 function FieldWrapper( props ) {
 
@@ -23,41 +27,50 @@ function FieldWrapper( props ) {
 			  wrapClasses       = [],
 			  valueIfEmptyLabel = '',
 			  setAttributes,
+			  childrenPosition  = 'between',
 		  } = props;
 
-	/*const meta = useSelect( ( select ) => {
+	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );*/
+	} );
 
-	const [ formArgs, setFormArgs ] = useMetaState( '_jf_args' );
-
-	//const label = Tools.getLabel( meta, attributes );
+	const label = Tools.getLabel( meta, attributes );
 
 	return (
 		<BaseControl key={ uniqKey( 'placeHolder_block' ) }
 					 className={ `jet-form-builder__field-wrap jet-form-builder-row ${ wrapClasses.join( ' ' ) }` }>
+			{ 'top' === childrenPosition && children }
 			<BaseControl.VisualLabel>
-				<RichText
-					className='jet-form-builder__label'
-					placeholder='Field Name'
-					allowedFormats={ [] }
-					value={ attributes.label ? attributes.label : valueIfEmptyLabel }
-					onChange={ newLabel => setAttributes( { label: newLabel } ) }
-				/>
-				{ attributes.required && <RichText
-					tagName='span'
-					className='jet-form-builder__required'
-					placeholder='(required)'
-					allowedFormats={ [] }
-					value={ formArgs.required_mark }
-					onChange={ required_mark => setFormArgs( prevArgs => ( { ...prevArgs, required_mark } ) ) }
-				/> }
+				<Tooltip text="Input Label" position="top right">
+					<div className='jet-form-builder__label'>
+						<RichText
+							placeholder='Field Label...'
+							allowedFormats={ [] }
+							value={ attributes.label ? attributes.label : valueIfEmptyLabel }
+							onChange={ newLabel => setAttributes( { label: newLabel } ) }
+						/>
+					</div>
+				</Tooltip>
+				{ attributes.required && <span className={ 'jet-form-builder__required' }>
+					{ label.mark ? label.mark : '*' }
+				</span> }
 			</BaseControl.VisualLabel>
-			{ children }
+			{ 'between' === childrenPosition && children }
 			<BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
-				<small className={ 'components-base-control__help' }
-					   style={ { marginTop: '0px' } }>{ attributes.desc }</small>
+				<Tooltip text="Input Description" position="top right">
+					<div className='components-base-control__help'>
+						<RichText
+							tagName='small'
+							placeholder='Description...'
+							allowedFormats={ [] }
+							value={ attributes.desc }
+							onChange={ desc => setAttributes( { desc } ) }
+							style={ { marginTop: '0px' } }
+						/>
+					</div>
+				</Tooltip>
 			</BaseControl>
+			{ 'bottom' === childrenPosition && children }
 		</BaseControl>
 	);
 }

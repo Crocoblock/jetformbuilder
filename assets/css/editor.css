@@ -723,3 +723,24 @@ select.components-select-control__input.components-select-control__input.compone
     margin-bottom: 1.2em;
 }
 
+.jet-form-builder-row .components-base-control__label {
+    display: flex;
+}
+
+.jet-form-builder__label::after {
+    content: ' ';
+}
+
+.jet-form-builder__desc {
+    display: flex;
+}
+
+.jet-form-toggle-box .components-clipboard-button.has-icon {
+    position: absolute;
+    transform: translateX(23px);
+}
+
+.jet-form-toggle-box input.components-text-control__input {
+    padding-right: 2.5em;
+}
+

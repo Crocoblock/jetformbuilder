@@ -6,7 +6,9 @@ import ValidateButton from "./components/validate-button";
 import addAction from "./helpers/actions/action-manager";
 import Tools, {
 	event,
+	getConvertedName,
 	listen,
+	maybeCyrToLatin,
 	versionCompare,
 } from "./helpers/tools";
 import DynamicPreset from "./components/presets/dynamic-preset";
@@ -86,7 +88,7 @@ window.JetFBComponents = {
 	PlaceholderMessage,
 	HorizontalLine,
 	FieldSettingsWrapper,
-	GroupedSelectControl
+	GroupedSelectControl,
 };
 
 // JFBFunctions
@@ -112,7 +114,9 @@ window.JetFBActions = {
 	gatewayActionAttributes,
 	globalTab,
 	versionCompare,
-	convertListToFieldsMap
+	convertListToFieldsMap,
+	maybeCyrToLatin,
+	getConvertedName
 };
 
 // JFBHooks

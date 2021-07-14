@@ -1,27 +1,31 @@
 const {
-	GeneralFields,
-	AdvancedFields,
-} = JetFBComponents;
+		  GeneralFields,
+		  AdvancedFields,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	Button,
-} = wp.components;
+		  Button,
+	  } = wp.components;
+
+const {
+		  RichText,
+	  } = wp.blockEditor;
 
 export default function SubmitEdit( props ) {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey },
+		  } = props;
 
 	const blockProps = useBlockProps( { className: 'jet-form-builder__submit-wrap' } );
 
@@ -33,7 +37,7 @@ export default function SubmitEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 				attrsSettings={ {
-					name: { show: false }
+					name: { show: false },
 				} }
 			/>
 			<AdvancedFields
@@ -47,8 +51,14 @@ export default function SubmitEdit( props ) {
 				className={ 'jet-form-builder__submit' }
 				key={ uniqKey( 'place_holder_block' ) }
 			>
-				{ attributes.label || 'Submit' }
+				{ /*attributes.label || 'Submit'*/ }
+				<RichText
+					placeholder='Input Submit label...'
+					allowedFormats={ [] }
+					value={ attributes.label }
+					onChange={ label => setAttributes( { label } ) }
+				/>
 			</Button>
-		</div>
+		</div>,
 	];
 }

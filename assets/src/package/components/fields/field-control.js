@@ -1,12 +1,24 @@
 import { ControlsSettings } from "./controls";
 import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
+import {
+	getConvertedName,
+	maybeCyrToLatin,
+} from '../../helpers/tools';
 
 const {
 		  BlockControls,
+		  RichText,
 	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
-const { useState } = wp.element;
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
+
+const {
+		  useDispatch,
+	  } = wp.data;
 
 const {
 		  TextControl,
@@ -17,8 +29,8 @@ const {
 		  Flex,
 		  BaseControl,
 		  __experimentalNumberControl,
-		  Card,
 		  ClipboardButton,
+		  Snackbar,
 	  } = wp.components;
 
 let { NumberControl } = wp.components;
@@ -134,8 +146,14 @@ function FieldControl( {
 					label={ label }
 					help={ help }
 					value={ attributes[ attrName ] }
-					onChange={ newVal => {
-						onChangeValue( newVal, attrName )
+					onChange={ newVal => onChangeValue( newVal, attrName ) }
+					onBlur={ () => {
+						if ( 'label' === attrName
+							&& 1 < attributes.label.length
+							&& ( ! attributes.name || 'field_name' === attributes.name )
+						) {
+							onChangeValue( getConvertedName( attributes.label ), 'name' );
+						}
 					} }
 				/>;
 			case 'dynamic_text':
@@ -245,9 +263,20 @@ function ToolBarFields( props ) {
 			  children    = [],
 			  displayName = true,
 			  attributes,
+			  setAttributes,
 		  } = props;
 
 	const [ hasCopied, setHasCopied ] = useState( false );
+	const noticeStore = useDispatch( wp.notices.store );
+
+	useEffect( () => {
+		if ( hasCopied ) {
+			noticeStore.createSuccessNotice(
+				`Copied "${ attributes.name }" to clipboard.`,
+				{ type: 'snackbar' },
+			);
+		}
+	}, [ hasCopied ] );
 
 	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
 		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
@@ -256,16 +285,35 @@ function ToolBarFields( props ) {
 				justify={ 'center' }
 				className={ 'jet-form-toggle-box' }
 			>
-				<ClipboardButton
-					icon='admin-page'
-					showTooltip
-					shortcut='Copy name'
-					text={ attributes.name }
-					onCopy={ () => setHasCopied( true ) }
-					onFinishCopy={ () => setHasCopied( false ) }
-				>
-					{ attributes.name }
-				</ClipboardButton>
+				{ displayName && <>
+					<ClipboardButton
+						isSmall
+						icon='admin-page'
+						showTooltip
+						shortcut='Copy name'
+						text={ attributes.name }
+						onCopy={ () => setHasCopied( true ) }
+						onFinishCopy={ () => setHasCopied( false ) }
+					/>
+					{/*<Icon
+						icon='admin-page'
+						onClick={ () => console.log( 'click icon' ) }
+					/>*/ }
+					{/*<Card>
+						<CardBody>
+							<RichText
+								placeholder='field_name'
+								allowedFormats={ [] }
+								value={ attributes.name }
+								onChange={ name => setAttributes( { name } ) }
+							/>
+						</CardBody>
+					</Card>*/ }
+					<TextControl
+						value={ attributes.name }
+						onChange={ name => setAttributes( { name } ) }
+					/>
+				</> }
 				<FieldControl
 					type='toolbar'
 					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }

@@ -1,35 +1,63 @@
-import JetFieldPlaceholder from '../controls/placeholder';
 import { hiddenValues } from "./options";
 
 const { __ } = wp.i18n;
 
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldSettingsWrapper,
-} = JetFBComponents;
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
+
+const { getConvertedName } = JetFBActions;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+		  RichText,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	SelectControl,
-	PanelBody,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  PanelBody,
+		  Card,
+		  CardHeader,
+		  CardBody,
+		  BaseControl,
+	  } = wp.components;
 
 export default function HiddenEdit( props ) {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey },
+		  } = props;
 
 	const blockProps = useBlockProps();
+
+	const setDynamicName = newValue => {
+		if ( newValue
+			&& ( ! attributes.name || 'hidden_field_name' === attributes.name )
+		) {
+			setAttributes( { name: newValue } )
+		}
+	};
+
+	const checkFieldValueInput = () => <SelectControl
+		key='field_value'
+		label="Field Value"
+		labelPosition="top"
+		value={ attributes.field_value }
+		onChange={ newValue => {
+			setAttributes( { field_value: newValue } );
+			setDynamicName( newValue )
+		} }
+		options={ hiddenValues }
+	/>;
+
+	const { label = 'Please set `Field Value`' } = hiddenValues.find( option => option.value === attributes.field_value );
 
 	return [
 		isSelected && (
@@ -41,16 +69,7 @@ export default function HiddenEdit( props ) {
 					{ ...props }
 				/>
 				<FieldSettingsWrapper { ...props }>
-					<SelectControl
-						key='field_value'
-						label="Field Value"
-						labelPosition="top"
-						value={ attributes.field_value }
-						onChange={ newValue => {
-							setAttributes( { field_value: newValue } );
-						} }
-						options={ hiddenValues }
-					/>
+					{ checkFieldValueInput() }
 					{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
 						key="hidden_value_field"
 						label="Meta Field to Get Value From"
@@ -91,11 +110,20 @@ export default function HiddenEdit( props ) {
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<JetFieldPlaceholder
-				key={ uniqKey( 'JetFieldPlaceholder' ) }
-				title={ 'Hidden Field' }
-				subtitle={ [ attributes.name ] }
-			/>
-		</div>
+			<Card isElevated>
+				<CardHeader>
+					<RichText
+						placeholder='hidden_field_name...'
+						allowedFormats={ [] }
+						value={ attributes.name }
+						onChange={ name => setAttributes( { name } ) }
+					/>
+				</CardHeader>
+				<CardBody>
+					{ isSelected && checkFieldValueInput() }
+					{ ! isSelected && label }
+				</CardBody>
+			</Card>
+		</div>,
 	];
 };

@@ -52,7 +52,7 @@ We integrated JetStyleManager & Gutenberg to make it possible for you to style t
 No more confusing field rows and additional styling. Because Gutenberg is a visual editor, you can monitor the form creation process as if you were on the frontend. All field types can be found in the same place – the JetForm Fields block. And now you can add any content you want into the from layout - headings, images, sections etc.
 
 = PAYMENT METHODS INTEGRATION =
-Accept all kinds of payments securely via any of your WordPress-created forms be it one-off, recurring, fixed, variable payments, or user-entered amounts. JetFormBuilder allows linking your forms to PayPal, Stripe, or WooCommerce checkout. 
+Accept all kinds of payments securely via any of your WordPress-created forms be it one-off, recurring, fixed, variable payments, or user-entered amounts. JetFormBuilder allows linking your forms to PayPal or Stripe checkout.
 
 == More JetFormBuilder Features ==
 

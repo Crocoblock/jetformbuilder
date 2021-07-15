@@ -360,12 +360,7 @@ class Form extends Base {
 	 *
 	 * @return false|string [type]             [description]
 	 */
-	public function render_callback_field( array $attrs, $content = null, $wp_block = null, $test = '' ) {
-
-		//echo '<pre>';
-		return var_export( [ $content, $wp_block, $test], true );
-
-
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
 		$form_id = $attrs['form_id'];
 
 		if ( ! $form_id ) {

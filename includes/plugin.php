@@ -29,7 +29,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
  * @property LicenseManager $license_manager
- * @property Wc_Integration wc
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -98,12 +97,10 @@ class Plugin {
 		$this->form_handler    = new Form_Handler();
 		$this->captcha         = new Forms_Captcha();
 		$this->license_manager = new LicenseManager();
-		$this->wc              = new Wc_Integration();
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
-
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();

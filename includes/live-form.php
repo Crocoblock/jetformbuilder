@@ -77,18 +77,25 @@ class Live_Form {
 
 	/**
 	 * It turns out the inheritance of such an image
-	 * Individual Form Arguments (if not) ->  General Form Attributes (if not) -> Default Values
+	 * Incoming Form Attributes (from block/widget/shortcode)
+	 * (if not) -> Individual Form Arguments
+	 * (if not) -> Default PHP Values
 	 *
-	 * @param array $attributes
+	 * @param array $incoming_attributes
 	 *
 	 * @return $this
 	 */
-	public function set_specific_data_for_render( $attributes = array() ) {
+	public function set_specific_data_for_render( $incoming_attributes = array() ) {
 		$jf_default_args = Plugin::instance()->post_type->get_default_args();
 		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
-		$spec_data       = array_diff( $jf_args, $jf_default_args );
-		$this->spec_data = ( object ) array_merge( $jf_default_args, $attributes, $spec_data );;
+		$attributes_from_post_type = array_diff( $jf_args, $jf_default_args );
+
+		$render_attributes = array_merge( ...apply_filters(
+			'jet-form-builder/form-render/attributes',
+			array( $attributes_from_post_type, $incoming_attributes )
+		) );
+		$this->spec_data = ( object ) array_merge( $jf_default_args, $render_attributes );
 
 		return $this;
 	}

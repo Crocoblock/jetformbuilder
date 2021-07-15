@@ -87,7 +87,7 @@ class Form extends Jfb_Widget_Base {
 	}
 
 	public function get_categories() {
-		return array( 'general' );
+		return array( 'jet-form-builder' );
 	}
 
 	private function jet_form_builder_slug() {

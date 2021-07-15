@@ -16,6 +16,7 @@ class Elementor_Controller {
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ), 11 );
 		add_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_assets' ) );
+		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
 	}
 
 	public function enqueue_form_assets() {
@@ -25,6 +26,24 @@ class Elementor_Controller {
 	private function widgets() {
 		return array(
 			new Types\Form()
+		);
+	}
+
+	/**
+	 * Register category for elementor if not exists
+	 *
+	 * @return void
+	 */
+	public function register_category() {
+
+		$elements_manager = \Elementor\Plugin::instance()->elements_manager;
+
+		$elements_manager->add_category(
+			'jet-form-builder',
+			array(
+				'title' => esc_html__( 'JetFormBuilder', 'jet-form-builder' ),
+				'icon'  => 'font',
+			)
 		);
 	}
 

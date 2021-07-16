@@ -39,6 +39,7 @@ import {
 	useMetaState,
 	useStateValidClasses,
 	useStateLoadingClasses,
+	useSuccessNotice,
 } from "./helpers/hooks/hooks-helper";
 import FieldWrapper from "./components/fields/field-wrapper";
 import MacrosInserter from "./components/fields/macros-inserter";
@@ -116,7 +117,7 @@ window.JetFBActions = {
 	versionCompare,
 	convertListToFieldsMap,
 	maybeCyrToLatin,
-	getConvertedName
+	getConvertedName,
 };
 
 // JFBHooks
@@ -125,5 +126,6 @@ window.JetFBHooks = {
 	useMetaState,
 	useStateValidClasses,
 	useStateLoadingClasses,
+	useSuccessNotice,
 };
 

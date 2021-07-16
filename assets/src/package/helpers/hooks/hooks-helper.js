@@ -1,12 +1,12 @@
 const {
-	useState,
-	useEffect
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 const {
-	useSelect,
-	useDispatch,
-} = wp.data;
+		  useSelect,
+		  useDispatch,
+	  } = wp.data;
 
 export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	const meta = useSelect( ( select ) => {
@@ -14,8 +14,8 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	} );
 
 	const {
-		editPost
-	} = useDispatch( 'core/editor' );
+			  editPost,
+		  } = useDispatch( 'core/editor' );
 
 	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
 
@@ -23,8 +23,8 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 		editPost( {
 			meta: ( {
 				...meta,
-				[ key ]: JSON.stringify( metaStateValue )
-			} )
+				[ key ]: JSON.stringify( metaStateValue ),
+			} ),
 		} );
 	}, [ metaStateValue ] );
 
@@ -37,8 +37,8 @@ export const useActions = ( withEditPostEffect = false ) => {
 	} );
 
 	const {
-		editPost
-	} = useDispatch( 'core/editor' );
+			  editPost,
+		  } = useDispatch( 'core/editor' );
 
 	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
 
@@ -47,8 +47,8 @@ export const useActions = ( withEditPostEffect = false ) => {
 			editPost( {
 				meta: ( {
 					...meta,
-					_jf_actions: JSON.stringify( actions )
-				} )
+					_jf_actions: JSON.stringify( actions ),
+				} ),
 			} );
 		}
 	}, [ actions ] );
@@ -64,8 +64,7 @@ export const useStateValidClasses = initialValid => {
 	const initStateClasses = () => {
 		if ( initialValid ) {
 			return [ ...initClasses, validClass ];
-		}
-		else if ( ! initialValid ) {
+		} else if ( ! initialValid ) {
 			return [ ...initClasses, invalidClass ];
 		}
 	};
@@ -97,3 +96,16 @@ export const useStateLoadingClasses = () => {
 
 	return [ classes.join( ' ' ), setLoadingClass, clearLoadingClass ];
 }
+
+export const useSuccessNotice = ( text, options = {} ) => {
+	const [ hasCopied, setHasCopied ] = useState( false );
+	const noticeStore = useDispatch( wp.notices.store );
+
+	useEffect( () => {
+		if ( hasCopied ) {
+			noticeStore.createWarningNotice( text, { type: 'snackbar', ...options } );
+		}
+	}, [ hasCopied ] );
+
+	return setHasCopied;
+};

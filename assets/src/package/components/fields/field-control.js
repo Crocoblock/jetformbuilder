@@ -3,8 +3,8 @@ import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
 import {
 	getConvertedName,
-	maybeCyrToLatin,
 } from '../../helpers/tools';
+import { useSuccessNotice } from '../../helpers/hooks/hooks-helper';
 
 const {
 		  BlockControls,
@@ -266,17 +266,7 @@ function ToolBarFields( props ) {
 			  setAttributes,
 		  } = props;
 
-	const [ hasCopied, setHasCopied ] = useState( false );
-	const noticeStore = useDispatch( wp.notices.store );
-
-	useEffect( () => {
-		if ( hasCopied ) {
-			noticeStore.createSuccessNotice(
-				`Copied "${ attributes.name }" to clipboard.`,
-				{ type: 'snackbar' },
-			);
-		}
-	}, [ hasCopied ] );
+	const displayNotice = useSuccessNotice( `Copied "${ attributes.name }" to clipboard.` );
 
 	return <BlockControls key={ uniqKey( 'ToolBarFields-BlockControls' ) }>
 		<ToolbarGroup key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }>
@@ -292,23 +282,9 @@ function ToolBarFields( props ) {
 						showTooltip
 						shortcut='Copy name'
 						text={ attributes.name }
-						onCopy={ () => setHasCopied( true ) }
-						onFinishCopy={ () => setHasCopied( false ) }
+						onCopy={ () => displayNotice( true ) }
+						onFinishCopy={ () => displayNotice( false ) }
 					/>
-					{/*<Icon
-						icon='admin-page'
-						onClick={ () => console.log( 'click icon' ) }
-					/>*/ }
-					{/*<Card>
-						<CardBody>
-							<RichText
-								placeholder='field_name'
-								allowedFormats={ [] }
-								value={ attributes.name }
-								onChange={ name => setAttributes( { name } ) }
-							/>
-						</CardBody>
-					</Card>*/ }
 					<TextControl
 						value={ attributes.name }
 						onChange={ name => setAttributes( { name } ) }

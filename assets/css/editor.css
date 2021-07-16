@@ -83,6 +83,7 @@
 .jet-form-edit-modal .components-flex__item {
     flex: 0 0 150px;
     max-width: 150px;
+    margin-right: 8px;
 }
 
 .jet-form-edit-modal .jet-post-field-control .components-base-control:nth-child(2) .components-select-control .components-flex__item {

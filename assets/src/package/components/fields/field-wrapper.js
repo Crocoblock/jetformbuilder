@@ -49,7 +49,7 @@ function FieldWrapper( props ) {
 					 className={ `jet-form-builder__field-wrap jet-form-builder-row ${ wrapClasses.join( ' ' ) }` }>
 			{ 'top' === childrenPosition && children }
 			<BaseControl.VisualLabel>
-				<Tooltip text="Input Label" position="top right">
+				<Tooltip text="Input label" position="top right">
 					<div onBlur={ setDynamicName }>
 						<RichText
 							isSelected
@@ -67,7 +67,7 @@ function FieldWrapper( props ) {
 			</BaseControl.VisualLabel>
 			{ 'between' === childrenPosition && children }
 			<BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
-				<Tooltip text="Input Description" position="top right">
+				<Tooltip text="Input description" position="top right">
 					<div className='components-base-control__help'>
 						<RichText
 							tagName='small'
@@ -76,7 +76,6 @@ function FieldWrapper( props ) {
 							value={ attributes.desc }
 							onChange={ desc => setAttributes( { desc } ) }
 							style={ { marginTop: '0px' } }
-							onBlur={ () => console.log( 'desc' ) }
 						/>
 					</div>
 				</Tooltip>

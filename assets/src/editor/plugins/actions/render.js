@@ -25,6 +25,7 @@ const {
 		  Button,
 		  Card,
 		  CardBody,
+		  CardHeader,
 		  DropdownMenu,
 		  Flex,
 	  } = wp.components;
@@ -35,6 +36,8 @@ const {
 	  } = wp.element;
 
 const { __ } = wp.i18n;
+
+const { applyFilters } = wp.hooks;
 
 const actionTypes = window.jetFormActionTypes.map( function( action ) {
 	return {
@@ -149,17 +152,22 @@ export default function PluginActions() {
 
 	return <>
 		{ actions && actions.map( ( action, index ) => {
+			const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action, actions );
 			return <Card
 				key={ action.id }
 				size={ 'extraSmall' }
 				className={ 'jet-form-action' }
 			>
+				{ header && <CardHeader>
+					{ header }
+				</CardHeader> }
 				<CardBody>
 					<SelectControl
 						value={ action.type }
 						options={ actionTypes }
 						onChange={ newType => updateActionType( action.id, newType ) }
 					/>
+					{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
 					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
 						<Button
 							icon='edit'

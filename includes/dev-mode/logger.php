@@ -6,8 +6,13 @@ namespace Jet_Form_Builder\Dev_Mode;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
-use Jet_Form_Builder\Plugin;
 
+/**
+ * @method static Logger instance()
+ *
+ * Class Logger
+ * @package Jet_Form_Builder\Dev_Mode
+ */
 class Logger {
 
 	private $logged = array();

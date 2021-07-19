@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Request;
 
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Request\Fields;
@@ -63,7 +64,7 @@ class Parser_Manager {
 							$name => $parser_value
 						)
 					)
-				) );
+				), true );
 			} else {
 				$this->response( array( $name => $parser_value ) );
 			}
@@ -172,7 +173,7 @@ class Parser_Manager {
 			return $this->response;
 		}
 		if ( $recursively ) {
-			$this->response = array_merge_recursive( $this->response, $value );
+			$this->response = Tools::array_merge_recursive_distinct( $this->response, $value );
 		} else {
 			$this->response = array_merge( $this->response, $value );
 		}

@@ -74,12 +74,11 @@ abstract class Field_Data_Parser {
 
 	public function init( $value, $block, $parent_name, $index ) {
 		$this->value        = $value;
-		$this->block        = $block;
 		$this->parent_name  = $parent_name;
 		$this->parent_index = $index;
 
-		$this->settings    = $this->block['attrs'];
-		$this->inner       = $this->block['innerBlocks'];
+		$this->settings    = $block['attrs'];
+		$this->inner       = $block['innerBlocks'];
 		$this->is_required = isset( $this->settings['required'] ) ? $this->settings['required'] : false;
 		$this->name        = isset( $this->settings['name'] ) ? $this->settings['name'] : 'field_name';
 

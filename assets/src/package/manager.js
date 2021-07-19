@@ -64,6 +64,9 @@ import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubite
 import { globalTab } from "./helpers/settings/helper";
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
 import GroupedSelectControl from './components/grouped-select-control';
+import {
+	getBlockControls,
+} from './components/fields/controls';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -118,6 +121,7 @@ window.JetFBActions = {
 	convertListToFieldsMap,
 	maybeCyrToLatin,
 	getConvertedName,
+	getBlockControls
 };
 
 // JFBHooks

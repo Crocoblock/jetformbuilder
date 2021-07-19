@@ -138,6 +138,7 @@ class Manager {
 			new Types\Group_Break_Field(),
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
+			new Types\Color_Picker_Field(),
 		);
 
 		foreach ( $types as $type ) {
@@ -268,7 +269,7 @@ class Manager {
 	 *
 	 * @return [type]             [description]
 	 */
-	public function register_block_type( $block_type ) {
+	public function register_block_type( Types\Base $block_type ) {
 		$this->_types[ $block_type->get_storage_name() ][ $block_type->get_name() ] = $block_type;
 	}
 

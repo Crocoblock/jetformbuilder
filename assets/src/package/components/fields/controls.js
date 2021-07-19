@@ -83,3 +83,20 @@ export const ControlsSettings = () => applyFilters( 'jet.fb.register.fields.cont
 		],
 	},
 } )
+
+export function getBlockControls( type = 'all' ) {
+	if ( ! type ) {
+		return false;
+	}
+	const controls = ControlsSettings();
+
+	if ( 'all' === type ) {
+		return controls;
+	}
+
+	if ( Array.isArray( controls[ type ] ) && 0 < controls[ type ].length ) {
+		return controls[ type ];
+	}
+
+	return false;
+}

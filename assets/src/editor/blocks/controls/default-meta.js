@@ -51,14 +51,14 @@ class JetDefaultMetaControl extends wp.element.Component {
 	render() {
 
 		return <div
-			className="jet-default-meta__row"
+			className="jet-user-fields-map__list"
 		>
 			{ this.getDefaultMeta().map( ( currentItem, index ) => {
 				return <div
-					className="jet-form-builder__flex-controls"
+					className="jet-user-meta__row"
 					key={ 'jet-form-builder-repeater-item-' + index }
 				>
-					<div className='repeater-item-column'>
+					<div className='repeater-item-column jet-margin-bottom-wrapper'>
 						<TextControl
 							key='meta_key'
 							label={ __( 'Meta Key' ) }
@@ -71,8 +71,6 @@ class JetDefaultMetaControl extends wp.element.Component {
 								} );
 							} }
 						/>
-					</div>
-					<div className='repeater-item-column'>
 						<TextControl
 							key='meta_value'
 							label={ __( 'Meta Value' ) }

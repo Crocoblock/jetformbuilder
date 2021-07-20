@@ -197,7 +197,7 @@ addAction( 'active_campaign', class ActiveCampaignAction extends IntegrationComp
 					label={ label( 'fields_map' ) }
 					key='activecampaign_fields_map'
 				>
-					<div className='jet-user-meta-rows'>
+					<div className='jet-user-fields-map__list'>
 						{ Object.entries( source.activecampaign_fields ).map(
 							( [ fieldName, fieldLabel ], index ) => <div
 								className="jet-user-meta__row"

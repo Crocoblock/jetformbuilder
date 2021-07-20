@@ -1,26 +1,26 @@
 import IntegrationComponent from "./integration-component";
 
 const {
-	addAction,
-	globalTab
-} = JetFBActions;
+		  addAction,
+		  globalTab,
+	  } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	CheckboxControl,
-	BaseControl,
-	Button,
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  SelectControl,
+		  CheckboxControl,
+		  BaseControl,
+		  Button,
+	  } = wp.components;
 
 const {
-	ActionFieldsMap,
-	WrapperRequiredControl
-} = JetFBComponents;
+		  ActionFieldsMap,
+		  WrapperRequiredControl,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
@@ -154,14 +154,14 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 					<BaseControl
 						label={ label( 'groups_ids' ) }
 					>
-						<div>
+						<div className='jet-user-fields-map__list'>
 							{ this.getGroups().map( group => <CheckboxControl
 								key={ `groups_ids_${ group.value }` }
 								checked={ this.isCheckedGroup( group.value ) }
 								label={ group.label }
 								onChange={ active => this.onChangeSetting( {
 									...( settings.groups_ids || {} ),
-									[ group.value ]: active
+									[ group.value ]: active,
 								}, 'groups_ids' ) }
 							/> ) }
 						</div>

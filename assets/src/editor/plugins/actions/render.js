@@ -25,7 +25,9 @@ const {
 		  Button,
 		  Card,
 		  CardBody,
+		  CardHeader,
 		  DropdownMenu,
+		  Flex,
 	  } = wp.components;
 
 const {
@@ -34,6 +36,25 @@ const {
 	  } = wp.element;
 
 const { __ } = wp.i18n;
+
+const { applyFilters } = wp.hooks;
+
+const actionTypes = window.jetFormActionTypes.map( function( action ) {
+	return {
+		value: action.id,
+		label: action.name,
+	};
+} );
+
+function getActionCallback( editedAction ) {
+	for ( let i = 0; i < window.jetFormActionTypes.length; i++ ) {
+		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
+			return window.jetFormActionTypes[ i ].callback;
+		}
+	}
+
+	return false;
+}
 
 export default function PluginActions() {
 
@@ -84,22 +105,7 @@ export default function PluginActions() {
 		setEdit( false )
 	};
 
-	const actionTypes = window.jetFormActionTypes.map( function( action ) {
-		return {
-			value: action.id,
-			label: action.name,
-		};
-	} );
-
-	var Callback = false;
-
-	for ( var i = 0; i < window.jetFormActionTypes.length; i++ ) {
-
-		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
-			Callback = window.jetFormActionTypes[ i ].callback;
-			break;
-		}
-	}
+	var Callback = getActionCallback( editedAction );
 
 	const updateActionSettings = action => {
 		updateAction( action.id, 'settings', action.settings );
@@ -110,6 +116,21 @@ export default function PluginActions() {
 		updateAction( processedAction.id, 'conditions', items );
 		setEditProcessAction( false );
 	}
+
+	const updateActionType = ( id, type ) => {
+		setActions( prev => prev.map( prevItem => {
+			if ( prevItem.id === id ) {
+				var newAction = JSON.parse( JSON.stringify( prevItem ) );
+				newAction.type = type;
+				newAction.settings = newAction.settings || {};
+				newAction.settings[ type ] = newAction.settings[ type ] || {};
+
+				return newAction;
+			} else {
+				return prevItem;
+			}
+		} ) );
+	};
 
 	useEffect( () => {
 		if ( editedAction.type ) {
@@ -131,69 +152,73 @@ export default function PluginActions() {
 
 	return <>
 		{ actions && actions.map( ( action, index ) => {
+			const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action, actions );
 			return <Card
 				key={ action.id }
 				size={ 'extraSmall' }
 				className={ 'jet-form-action' }
 			>
+				{ header && <CardHeader>
+					{ header }
+				</CardHeader> }
 				<CardBody>
 					<SelectControl
 						value={ action.type }
 						options={ actionTypes }
-						onChange={ ( newType ) => {
-							updateAction( action.id, 'type', newType );
-						} }
+						onChange={ newType => updateActionType( action.id, newType ) }
 					/>
-					<Button
-						icon='edit'
-						label={ 'Edit Action' }
-						onClick={ () => {
-							setEditedAction( () => ( {
-								...action,
-							} ) );
-						} }
-					/>
-					<div/>
-					<Button
-						icon='randomize'
-						label={ 'Conditions' }
-						onClick={ () => {
-							setProcessedAction( () => ( { ...action } ) );
-						} }
-					/>
-					<DropdownMenu
-						icon={ 'ellipsis' }
-						label={ 'Edit, move or delete' }
-						controls={ [
-							{
-								title: 'Up',
-								icon: 'arrow-up',
-								disabled: true,
-								onClick: () => {
-									if ( 0 !== index ) {
-										moveAction( index, index - 1 );
-									}
+					{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
+					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
+						<Button
+							icon='edit'
+							label={ 'Edit Action' }
+							onClick={ () => {
+								setEditedAction( () => ( {
+									...action,
+								} ) );
+							} }
+						/>
+						<Button
+							icon='randomize'
+							label={ 'Conditions' }
+							onClick={ () => {
+								setProcessedAction( () => ( { ...action } ) );
+							} }
+						/>
+						<DropdownMenu
+							icon={ 'ellipsis' }
+							label={ 'Edit, move or delete' }
+							controls={ [
+								{
+									title: 'Up',
+									icon: 'arrow-up',
+									disabled: true,
+									onClick: () => {
+										if ( 0 !== index ) {
+											moveAction( index, index - 1 );
+										}
+									},
 								},
-							},
-							{
-								title: 'Down',
-								icon: 'arrow-down',
-								disabled: index === actions.length,
-								onClick: () => {
-									if ( ( actions.length - 1 ) !== index ) {
-										moveAction( index, index + 1 );
-									}
+								{
+									title: 'Down',
+									icon: 'arrow-down',
+									disabled: index === actions.length,
+									onClick: () => {
+										if ( ( actions.length - 1 ) !== index ) {
+											moveAction( index, index + 1 );
+										}
+									},
 								},
-							},
-							{
-								title: 'Delete',
-								icon: 'trash',
-								onClick: () => {
-									deleteAction( index );
+								{
+									title: 'Delete',
+									icon: 'trash',
+									onClick: () => {
+										deleteAction( index );
+									},
 								},
-							},
-						] }
-					/>
+							] }
+						/>
+					</Flex>
 
 				</CardBody>
 			</Card>

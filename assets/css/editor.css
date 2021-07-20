@@ -745,3 +745,6 @@ select.components-select-control__input.components-select-control__input.compone
     padding-right: 2.5em;
 }
 
+div.components-modal__screen-overlay {
+    z-index: 1000099;
+}

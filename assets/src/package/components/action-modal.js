@@ -27,10 +27,6 @@ function ActionModal( {
 
 	const [ actionClick, setActionClick ] = useState( null );
 
-	useEffect( () => {
-		wp.data.dispatch( 'core/block-editor' ).clearSelectedBlock();
-	}, [] )
-
 	const updateClick = () => {
 		if ( onUpdateClick ) {
 			onUpdateClick();

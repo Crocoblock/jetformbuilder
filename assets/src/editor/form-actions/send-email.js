@@ -3,34 +3,41 @@
  */
 
 const {
-	MacrosInserter
-} = JetFBComponents;
+		  addAction,
+		  getFormFieldsBlocks,
+		  Tools: { withPlaceholder },
+		  controlWithFlex,
+	  } = JetFBActions;
+
+let {
+		MacrosInserter,
+		TextControl,
+		SelectControl,
+		TextareaControl,
+	} = JetFBComponents;
+
+TextControl = controlWithFlex( TextControl );
+SelectControl = controlWithFlex( SelectControl );
+TextareaControl = controlWithFlex( TextareaControl );
 
 const {
-	addAction,
-	getFormFieldsBlocks,
-	Tools: { withPlaceholder }
-} = JetFBActions;
+		  //TextControl,
+		  //TextareaControl,
+		  //SelectControl,
+	  } = wp.components;
 
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-} = wp.components;
-
-const {
-	useState,
-	useEffect,
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 addAction( 'send_email', function SendEmailAction( {
 													   settings,
 													   source,
 													   label,
 													   help,
-													   onChangeSetting
+													   onChangeSetting,
 												   } ) {
-
 
 	const [ formFields, setFormFields ] = useState( [] );
 
@@ -47,8 +54,6 @@ addAction( 'send_email', function SendEmailAction( {
 	return <>
 		<SelectControl
 			key="mail_to"
-			labelPosition="side"
-			className="full-width"
 			value={ settings.mail_to }
 			options={ source.mailTo }
 			label={ label( 'mail_to' ) }
@@ -58,18 +63,12 @@ addAction( 'send_email', function SendEmailAction( {
 			} }
 		/>
 		{ 'custom' === settings.mail_to && <TextControl
-			key="custom_email"
 			value={ settings.custom_email }
 			label={ label( 'custom_email' ) }
 			help={ help( 'custom_email' ) }
-			onChange={ ( newValue ) => {
-				onChangeSetting( newValue, 'custom_email' );
-			} }
+			onChange={ newValue => onChangeSetting( newValue, 'custom_email' ) }
 		/> }
 		{ 'form' === settings.mail_to && <SelectControl
-			key="from_field"
-			labelPosition="side"
-			className="full-width"
 			value={ settings.from_field }
 			options={ withPlaceholder( formFields ) }
 			label={ label( 'from_field' ) }
@@ -79,9 +78,6 @@ addAction( 'send_email', function SendEmailAction( {
 			} }
 		/> }
 		<SelectControl
-			key="reply_to"
-			labelPosition="side"
-			className="full-width"
 			value={ settings.reply_to }
 			options={ source.replyTo }
 			label={ label( 'reply_to' ) }
@@ -101,8 +97,6 @@ addAction( 'send_email', function SendEmailAction( {
 		/> }
 		{ 'form' === settings.reply_to && <SelectControl
 			key="reply_from_field"
-			labelPosition="side"
-			className="full-width"
 			value={ settings.reply_from_field }
 			options={ withPlaceholder( formFields ) }
 			label={ label( 'reply_from_field' ) }
@@ -140,17 +134,14 @@ addAction( 'send_email', function SendEmailAction( {
 		/>
 		<SelectControl
 			key="content_type"
-			labelPosition="side"
-			className="full-width"
 			value={ settings.content_type }
 			options={ source.content_type }
 			label={ label( 'content_type' ) }
 			help={ help( 'content_type' ) }
 			onChange={ ( newValue ) => onChangeSetting( newValue, 'content_type' ) }
 		/>
-		<div className="jet-form-editor__macros-wrap">
+		{/*<div className="jet-form-editor__macros-wrap">*/}
 			<TextareaControl
-				key="content"
 				value={ settings.content }
 				label={ label( 'content' ) }
 				help={ help( 'content' ) }
@@ -158,12 +149,12 @@ addAction( 'send_email', function SendEmailAction( {
 					onChangeSetting( newValue, 'content' );
 				} }
 			/>
-			<MacrosInserter
+			{/*<MacrosInserter
 				fields={ formFields }
 				onFieldClick={ insertMacros }
 				customMacros={ source.customMacros }
 			/>
-		</div>
+		</div>*/}
 	</>;
 	/* eslint-enable jsx-a11y/no-onchange */
 } );

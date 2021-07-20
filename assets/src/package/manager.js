@@ -5,6 +5,7 @@ import RequestButton from "./components/request-button";
 import ValidateButton from "./components/validate-button";
 import addAction from "./helpers/actions/action-manager";
 import Tools, {
+	classnames,
 	event,
 	getConvertedName,
 	listen,
@@ -67,6 +68,12 @@ import GroupedSelectControl from './components/grouped-select-control';
 import {
 	getBlockControls,
 } from './components/fields/controls';
+import BaseHelp from './components/controls/base-help';
+import BaseControl from './components/controls/base-control';
+import TextControl from './components/controls/text-control';
+import SelectControl from './components/controls/select-control';
+import controlWithFlex from './helpers/actions/control-with-flex';
+import TextareaControl from './components/controls/textarea-control';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -93,7 +100,13 @@ window.JetFBComponents = {
 	HorizontalLine,
 	FieldSettingsWrapper,
 	GroupedSelectControl,
+	BaseHelp,
+	BaseControl,
+	TextControl,
+	SelectControl,
+	TextareaControl
 };
+
 
 // JFBFunctions
 window.JetFBActions = {
@@ -121,8 +134,11 @@ window.JetFBActions = {
 	convertListToFieldsMap,
 	maybeCyrToLatin,
 	getConvertedName,
-	getBlockControls
+	getBlockControls,
+	classnames,
+	controlWithFlex
 };
+
 
 // JFBHooks
 window.JetFBHooks = {

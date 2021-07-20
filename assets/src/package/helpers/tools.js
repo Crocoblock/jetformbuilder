@@ -126,4 +126,33 @@ export function getConvertedName( valueToChange ) {
 	return slug;
 }
 
+export function classnames( ...additional ) {
+	const result = []
+
+	const parseValues = source => {
+		source.forEach( itemClass => {
+			if ( ! itemClass ) {
+				return;
+			}
+			if ( Array.isArray( itemClass ) ) {
+				parseValues( itemClass );
+			}
+			if ( 'string' === typeof itemClass ) {
+				result.push( itemClass.trim() )
+			}
+			if ( 'object' === typeof itemClass ) {
+				for ( const itemClassKey in itemClass ) {
+					if ( itemClass[ itemClassKey ] ) {
+						result.push( (itemClassKey + "").trim() )
+					}
+				}
+			}
+		} )
+	};
+
+	parseValues( additional );
+	
+	return result.join( ' ' );
+}
+
 export default Tools;

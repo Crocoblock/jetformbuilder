@@ -108,8 +108,9 @@ export default function MediaEdit( props ) {
 						key='max_size'
 						help={ attrHelp( 'max_size' ) }
 						value={ attributes.max_size }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { max_size: parseInt( newValue ) } );
+						step={ 0.01 }
+						onChange={ newValue => {
+							props.setAttributes( { max_size: Number( newValue ) } );
 						} }
 					/>
 					<SelectControl

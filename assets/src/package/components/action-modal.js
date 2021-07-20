@@ -1,3 +1,14 @@
+const {
+		  Button,
+		  ButtonGroup,
+		  Modal,
+	  } = wp.components;
+
+const {
+		  useState,
+		  useEffect,
+	  } = wp.element;
+
 function ActionModal( {
 						  onRequestClose,
 						  children,
@@ -12,20 +23,13 @@ function ActionModal( {
 						  fixedHeight = '',
 					  } ) {
 
-	const {
-			  Button,
-			  ButtonGroup,
-			  Modal,
-		  } = wp.components;
-
-	const {
-			  useState,
-			  useEffect,
-		  } = wp.element;
-
 	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
 
 	const [ actionClick, setActionClick ] = useState( null );
+
+	useEffect( () => {
+		wp.data.dispatch( 'core/block-editor' ).clearSelectedBlock();
+	}, [] )
 
 	const updateClick = () => {
 		if ( onUpdateClick ) {

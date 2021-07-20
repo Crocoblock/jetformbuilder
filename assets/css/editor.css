@@ -84,7 +84,7 @@
     border-top: 1px solid #ddd;
 }
 
-.jet-form-edit-modal .components-flex__item {
+.jet-form-edit-modal .components-flex-item, .jet-form-edit-modal .components-flex__item {
     flex: 0 0 150px;
     max-width: 150px;
 }

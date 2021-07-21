@@ -80,7 +80,8 @@
     border-top: 1px solid #ddd;
 }
 
-.jet-form-edit-modal .components-flex-item, .jet-form-edit-modal .components-flex__item {
+.jet-form-edit-modal .components-flex-item,
+.jet-form-edit-modal .components-flex__item {
     flex: 1;
 }
 
@@ -350,7 +351,7 @@
 
 /* Range */
 .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .components-input-control {
-    margin-right: auto;
+    flex: 1;
 }
 
 /* Range Values */
@@ -732,10 +733,6 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-form-builder__label::after {
     content: ' ';
-}
-
-.jet-form-builder__desc {
-    display: flex;
 }
 
 .jet-form-toggle-box .components-clipboard-button.has-icon {

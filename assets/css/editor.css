@@ -772,3 +772,8 @@ div.components-modal__screen-overlay {
     flex: 3;
 }
 
+.jet-form-edit-modal .components-base-control__label + select.components-select-control__input {
+    flex: 3;
+    margin-left: 6px;
+}
+

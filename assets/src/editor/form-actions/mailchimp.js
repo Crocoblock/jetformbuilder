@@ -93,10 +93,11 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
 				className="input-with-button"
+				label={ label( 'api_key' ) }
 			>
 				<TextControl
 					key='api_key'
-					label={ label( 'api_key' ) }
+					className='jet-control-clear-full'
 					disabled={ settings.use_global }
 					value={ settings.use_global
 						? currentTab.api_key
@@ -128,16 +129,20 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 				<BaseControl
 					key={ 'mailchimp_select_lists' }
 					className="input-with-button"
+					label={ label( 'list_id' ) }
 				>
-					<SelectControl
-						key='list_id'
-						className="full-width"
-						label={ label( 'list_id' ) }
-						labelPosition="side"
-						value={ settings.list_id }
-						onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
-						options={ this.getLists() }
-					/>
+					<BaseControl
+						key={ 'mailchimp_select_lists_select' }
+						className="jet-control-clear-full"
+					>
+						<SelectControl
+							key='list_id'
+							labelPosition='top'
+							value={ settings.list_id }
+							onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
+							options={ this.getLists() }
+						/>
+					</BaseControl>
 					<Button
 						key={ 'update_list_ids' }
 						isPrimary

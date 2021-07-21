@@ -61,7 +61,7 @@ class Manager {
 			99
 		);
 
-		if ( version_compare( $wp_version, '5.7.3', '>=' ) ) {
+		if ( class_exists( 'WP_Block_Editor_Context' ) ) {
 			add_filter( 'block_categories_all', array( $this, 'add_category' ), 10, 2 );
 		} else {
 			add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );

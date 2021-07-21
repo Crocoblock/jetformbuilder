@@ -27,6 +27,14 @@ class Heading_Field extends Base {
 		return array( 'required', 'input' );
 	}
 
+	public function get_label_selector() {
+		return '__heading.%1$s__heading';
+	}
+
+	public function get_description_selector() {
+		return '__heading-desc.%1$s__heading-desc';
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *

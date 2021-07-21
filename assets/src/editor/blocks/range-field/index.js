@@ -17,7 +17,7 @@ const settings = {
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: RangeEdit,
-	useEditProps: [ 'uniqKey', 'attrHelp' ],
+	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
 			label: 'Range Field',

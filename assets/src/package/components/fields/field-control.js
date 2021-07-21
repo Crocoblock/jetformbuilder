@@ -135,6 +135,8 @@ function FieldControl( {
 			&& false === attrsSettings[ attrName ].show
 		);
 
+
+
 		if ( ! isRegisterAttribute || ! validCondition || isHidden ) {
 			return null;
 		}

@@ -776,3 +776,6 @@ div.components-modal__screen-overlay {
     margin-left: 6px;
 }
 
+.jet-form-builder-row__flex .components-base-control__field {
+    display: flex;
+}

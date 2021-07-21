@@ -109,3 +109,7 @@ export const useSuccessNotice = ( text, options = {} ) => {
 
 	return setHasCopied;
 };
+
+export const withJfbMeta = (callable) => {
+
+};

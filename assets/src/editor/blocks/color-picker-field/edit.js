@@ -49,13 +49,6 @@ function ColorPickerEdit( props ) {
 			  editProps: { uniqKey },
 		  } = props;
 
-	const fieldComponent = applyFilters( 'jet.fb.color.picker.view', <InputControl
-		type='color'
-		key={ uniqKey( 'place_holder_block' ) }
-		onChange={ () => {
-		} }
-	/>, props );
-
 	const customControls = getBlockControls( 'custom_settings' );
 
 	return [
@@ -81,7 +74,12 @@ function ColorPickerEdit( props ) {
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				{ fieldComponent }
+				<InputControl
+					type='color'
+					key={ 'color_picker_place_holder_block' }
+					onChange={ () => {
+					} }
+				/>
 			</FieldWrapper>
 		</div>,
 	];

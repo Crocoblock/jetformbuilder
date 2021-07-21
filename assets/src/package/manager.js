@@ -61,7 +61,6 @@ import {
 	convertListToFieldsMap,
 	fromLocalizeHelper,
 	getActionSettings,
-	convertListToFieldsMap,
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
@@ -70,12 +69,6 @@ import GroupedSelectControl from './components/grouped-select-control';
 import {
 	getBlockControls,
 } from './components/fields/controls';
-import BaseHelp from './components/controls/base-help';
-import BaseControl from './components/controls/base-control';
-import TextControl from './components/controls/text-control';
-import SelectControl from './components/controls/select-control';
-import controlWithFlex from './helpers/actions/control-with-flex';
-import TextareaControl from './components/controls/textarea-control';
 
 // JFBComponents
 window.JetFBComponents = {

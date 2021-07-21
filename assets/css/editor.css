@@ -664,7 +664,7 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-forms-checkbox-field p.components-base-control__help {
     margin-top: -33px;
-    margin-left: 10vw;
+    margin-left: 15vw;
 }
 
 .editor-styles-wrapper .wp-block.wp-block.wp-block {
@@ -771,3 +771,4 @@ div.components-modal__screen-overlay {
 .jet-form-edit-modal .components-textarea-control__input {
     flex: 3;
 }
+

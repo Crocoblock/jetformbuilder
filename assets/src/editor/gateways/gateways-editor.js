@@ -140,7 +140,7 @@ export default function GatewaysEditor( {
 				label={ __( 'Before payment processed:', 'jet-form-builder' ) }
 				key="before_payment_base_control"
 			>
-				<div className={ 'checkboxes-row' }>
+				<div className={ 'jet-user-fields-map__list' }>
 					{ availableActions.map( ( action, index ) => <CheckboxControl
 						className={ 'jet-forms-checkbox-field' }
 						key={ `place_holder_block_${ action.id + index }` }
@@ -158,7 +158,7 @@ export default function GatewaysEditor( {
 				label={ __( 'On successful payment:', 'jet-form-builder' ) }
 				key="success_payment_base_control"
 			>
-				<div>
+				<div className='jet-user-fields-map__list'>
 					{ availableActions.map( ( action, index ) => <CheckboxControl
 						className={ 'jet-forms-checkbox-field' }
 						key={ `place_holder_block_${ action.id + index }` }
@@ -176,7 +176,7 @@ export default function GatewaysEditor( {
 				label={ __( 'On failed payment:', 'jet-form-builder' ) }
 				key="failed_payment_base_control"
 			>
-				<div>
+				<div className='jet-user-fields-map__list'>
 					{ availableActions.map( ( action, index ) => <CheckboxControl
 						className={ 'jet-forms-checkbox-field' }
 						key={ `place_holder_block_${ action.id + index }` }
@@ -196,7 +196,7 @@ export default function GatewaysEditor( {
 			key='gateway_action_order_base_control'
 		>
 			<RadioControl
-				className='jet-control-clear-full'
+				className='jet-control-clear-full jet-user-fields-map__list'
 				key='gateway_action_order'
 				options={ actionByTypeList( 'insert_post', true ) }
 				selected={ gateway.action_order }

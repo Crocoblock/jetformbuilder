@@ -40,12 +40,6 @@ function FieldWrapper( props ) {
 			  _jf_args,
 		  } = props;
 
-	/*const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
-
-	const label = Tools.getLabel( meta, attributes );*/
-
 	const setDynamicName = () => {
 		if ( 1 < attributes.label.length
 			&& ( ! attributes.name || 'field_name' === attributes.name )

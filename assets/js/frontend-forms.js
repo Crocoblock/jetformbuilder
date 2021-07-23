@@ -1269,7 +1269,7 @@
 					const $maskedField = $( this );
 
 					// Remove mask if empty value
-					if ( !$maskedField.val() && $maskedField.inputmask ) {
+					if ( ! $maskedField.val() && $maskedField.inputmask ) {
 						$maskedField.inputmask( 'remove' );
 					}
 				} );

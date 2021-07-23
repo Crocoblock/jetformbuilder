@@ -2,19 +2,34 @@ export default {
 	methods: {
 		saveByAjax( currentTab, tabSlug ) {
 			const self = this;
+			let ajaxRequest = {};
 
-			const ajaxRequest = {
-				...{
-					url: window.ajaxurl,
-					type: 'POST',
-					dataType: 'json',
-				},
-				...currentTab.getRequestOnSave(),
-			};
-			ajaxRequest.data = {
-				action: `jet_fb_save_tab__${ tabSlug }`,
-				...ajaxRequest.data,
-			};
+			try {
+				ajaxRequest = this.getAjaxObject( currentTab, tabSlug );
+			} catch ( error ) {
+				if ( ! error ) {
+					return;
+				}
+
+				if ( 'object' === typeof error.noticeOptions ) {
+					self.$CXNotice.add( {
+						message: 'Invalid request data.',
+						type: 'error',
+						duration: 2000,
+						...error.noticeOptions,
+					} );
+
+					return;
+				}
+
+				self.$CXNotice.add( {
+					message: error,
+					type: 'error',
+					duration: 2000,
+				} );
+
+				return;
+			}
 
 			jfbEventBus.$emit( 'request-state', { state: 'begin', slug: tabSlug } );
 
@@ -58,6 +73,21 @@ export default {
 					}
 					jfbEventBus.$emit( 'request-state', { state: 'end', slug: tabSlug } );
 				} );
-		}
-	}
+		},
+
+		getAjaxObject( currentTab, tabSlug ) {
+			const ajaxRequest = {
+				url: window.ajaxurl,
+				type: 'POST',
+				dataType: 'json',
+				...currentTab.getRequestOnSave(),
+			};
+			ajaxRequest.data = {
+				action: `jet_fb_save_tab__${ tabSlug }`,
+				...ajaxRequest.data,
+			};
+
+			return ajaxRequest;
+		},
+	},
 }

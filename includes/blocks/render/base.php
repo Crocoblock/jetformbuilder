@@ -26,6 +26,10 @@ abstract class Base {
 	use Get_Template_Trait;
 
 	public $form_id;
+
+	/**
+	 * @var \Jet_Form_Builder\Blocks\Types\Base
+	 */
 	public $block_type;
 	public $content;
 	public $live_form;
@@ -199,9 +203,10 @@ abstract class Base {
 	/**
 	 * Render custom form item template
 	 *
-	 * @param int|string  $object_id Object ID
-	 * @param array       $args      Field arguments
+	 * @param int|string $object_id Object ID
+	 * @param array $args Field arguments
 	 * @param bool|string $checked
+	 *
 	 * @return string
 	 */
 	public function get_custom_template( $object_id, $args, $checked = false ) {

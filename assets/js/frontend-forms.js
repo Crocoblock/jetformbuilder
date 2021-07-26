@@ -352,7 +352,7 @@
 				$section
 					.find( '*[data-required="1"]' )
 					.val( '' )
-					.attr( 'required', true );
+					.attr( 'required', 'required' );
 
 			} else {
 
@@ -381,7 +381,7 @@
 
 				}
 
-				$section.find( '*[required="required"]' )
+				$section.find( '*[required]' )
 					.val( val )
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );
@@ -1269,7 +1269,7 @@
 					const $maskedField = $( this );
 
 					// Remove mask if empty value
-					if ( !$maskedField.val() && $maskedField.inputmask ) {
+					if ( ! $maskedField.val() && $maskedField.inputmask ) {
 						$maskedField.inputmask( 'remove' );
 					}
 				} );

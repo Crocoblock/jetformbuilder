@@ -774,3 +774,12 @@ div.components-modal__screen-overlay {
     margin-left: 6px;
 }
 
+.jet-d-flex-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.jet-d-flex-between > div {
+    flex: 0.95;
+}
+

@@ -3,7 +3,14 @@
 
 namespace Jet_Form_Builder\Blocks\Modules;
 
+use JET_SM\Gutenberg\Controls_Manager;
 
+/**
+ * @property Controls_Manager controls_manager
+ *
+ * Trait General_Style
+ * @package Jet_Form_Builder\Blocks\Modules
+ */
 trait General_Style {
 
 	use General_Style_Functions;

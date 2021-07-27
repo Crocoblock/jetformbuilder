@@ -22,6 +22,9 @@ abstract class Base extends Base_Module {
 
 	private $_unregistered = array();
 
+	/**
+	 * @var Controls_Manager
+	 */
 	protected $controls_manager;
 	protected $css_scheme;
 	public $style_attributes = array();

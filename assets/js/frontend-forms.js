@@ -381,7 +381,7 @@
 
 				}
 
-				$section.find( '*[required="required"]' )
+				$section.find( '*[required]' )
 					.val( val )
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );

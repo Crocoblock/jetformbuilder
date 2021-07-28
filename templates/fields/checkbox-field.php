@@ -1,12 +1,15 @@
 <?php
 /**
  * input[type="hidden"] template
+ * @var array $args
+ * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
-$required = $this->block_type->get_required_val( $args );
+$required = $this->block_type->get_required_val();
 $name     = $this->block_type->get_field_name( $args['name'] );
 $default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
+$this->add_attribute( 'required', $required );
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -62,11 +65,10 @@ if ( ! empty( $args['field_options'] ) ) {
                 <input
                         type="checkbox"
                         name="<?php echo $name . $name_suffix; ?>"
-                        <?php $this->render_attributes_string_save(); ?>
+					<?php $this->render_attributes_string_save(); ?>
                         value="<?php echo $val; ?>"
                         data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>
-					<?php echo $required; ?>
 					<?php echo $calc; ?>
                 >
                 <span><?php echo $label; ?></span>

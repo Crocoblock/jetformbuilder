@@ -91,7 +91,7 @@ addAction( 'redirect_to_page', class RedirectToPageAction extends wp.element.Com
 				label={ label( 'redirect_args' ) }
 				key="redirect_args_control"
 			>
-				<div className='redirect_args-control'>
+				<div className='jet-user-fields-map__list'>
 					{ this.fields.map( ( { name }, index ) => <CheckboxControl
 							key={ `checkbox_args_${ name }_${ index }` }
 							label={ name }

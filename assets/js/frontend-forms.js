@@ -352,7 +352,7 @@
 				$section
 					.find( '*[data-required="1"]' )
 					.val( '' )
-					.attr( 'required', true );
+					.attr( 'required', 'required' );
 
 			} else {
 
@@ -1036,7 +1036,7 @@
 								}
 
 								if ( 'checkbox' === $field[ i ].type ) {
-									val += parseInt( itemVal, 10 );
+									val += parseFloat( itemVal );
 								} else {
 									val = itemVal;
 								}
@@ -1269,7 +1269,7 @@
 					const $maskedField = $( this );
 
 					// Remove mask if empty value
-					if ( !$maskedField.val() && $maskedField.inputmask ) {
+					if ( ! $maskedField.val() && $maskedField.inputmask ) {
 						$maskedField.inputmask( 'remove' );
 					}
 				} );

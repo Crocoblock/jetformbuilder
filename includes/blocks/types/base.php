@@ -323,6 +323,16 @@ abstract class Base extends Base_Module {
 		return '';
 	}
 
+	public function get_required_attr() {
+		$required = $this->get_required_val();
+
+		if ( $required ) {
+			return "required=\"$required\"";
+		}
+
+		return '';
+	}
+
 	/**
 	 * Returns template path
 	 *

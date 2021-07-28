@@ -1,18 +1,20 @@
 const {
-	Button,
-	Popover,
-	PanelBody,
-} = wp.components;
+		  Button,
+		  Popover,
+		  PanelBody,
+	  } = wp.components;
 
 const {
-	useState,
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 function MacrosInserter( {
 							 children,
 							 fields,
 							 onFieldClick,
 							 customMacros,
+							 zIndex = 1000000,
+							 ...popoverProps
 						 } ) {
 
 	const [ showPopover, setPopoverState ] = useState( () => false );
@@ -30,7 +32,9 @@ function MacrosInserter( {
 		/>
 		{ showPopover && (
 			<Popover
+				style={ { zIndex } }
 				position={ 'bottom left' }
+				{ ...popoverProps }
 			>
 				{ fields.length && <PanelBody title={ 'Form Fields' }>
 					{ fields.map( field => {

@@ -1,7 +1,6 @@
 import { useActions } from "../hooks/hooks-helper";
 import gatewayActionAttributes from "../gateways/gateway-action-attrubites";
 
-
 export const getActionsByType = type => {
 	const [ actions ] = useActions();
 
@@ -16,7 +15,7 @@ export const actionByTypeList = ( actionType, withDesc = false ) => {
 	return getActionsByType( actionType ).map( action => {
 		const newAction = {
 			value: action.id,
-			label: fromLocalizeHelper( 'getActionLabel' )( action.type )
+			label: fromLocalizeHelper( 'getActionLabel' )( action.type ),
 		};
 		if ( withDesc ) {
 			newAction.label += ` (${ gatewayActionAttributes( action ) })`
@@ -32,4 +31,14 @@ export const getActionSettings = actionId => {
 
 	return ( action && action.settings ) ? action.settings : false;
 };
+
+export const convertListToFieldsMap = source => {
+	return source.map( item => {
+		const id = item.value;
+		delete item.value;
+
+		return [ id, item ];
+	} );
+};
+
 

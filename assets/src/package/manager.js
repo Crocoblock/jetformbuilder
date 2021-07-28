@@ -49,16 +49,19 @@ import {
 	FieldControl,
 } from "./components/fields/field-control";
 import PlaceholderMessage from "./components/actions/placeholder-message";
+import ActionMessages from "./components/actions/action-messages";
 import HorizontalLine from "./components/horizontal-line";
 import RequestLoadingButton from "./components/request-loading-button";
 import {
 	actionByTypeList,
 	fromLocalizeHelper,
 	getActionSettings,
+	convertListToFieldsMap,
 } from "./helpers/actions/action-helper";
 import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
 import { globalTab } from "./helpers/settings/helper";
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
+import GroupedSelectControl from './components/grouped-select-control';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -84,6 +87,8 @@ window.JetFBComponents = {
 	PlaceholderMessage,
 	HorizontalLine,
 	FieldSettingsWrapper,
+	ActionMessages,
+	GroupedSelectControl,
 };
 
 // JFBFunctions
@@ -109,6 +114,7 @@ window.JetFBActions = {
 	gatewayActionAttributes,
 	globalTab,
 	versionCompare,
+	convertListToFieldsMap,
 };
 
 // JFBHooks

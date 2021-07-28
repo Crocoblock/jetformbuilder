@@ -8,9 +8,11 @@ class Preset_Source_Post extends Base_Source {
 
 	private $array_allowed;
 
-	public function __construct( $field_data, $field_args, $preset_data ) {
-		parent::__construct( $field_data, $field_args, $preset_data );
+	public function get_id() {
+		return 'post';
+	}
 
+	public function after_init() {
 		$this->set_array_allowed();
 	}
 

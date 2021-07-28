@@ -8,6 +8,9 @@ use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Query_Var;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use Jet_Form_Builder\Presets\Types\General_Preset;
@@ -41,12 +44,15 @@ class Preset_Manager {
 	public $_preset_types;
 	public $manager_preset;
 	private $general;
+	private $_source_types;
+
 
 	private $plain_default = false;
 
 
 	protected function __construct() {
-		$this->general = new General_Preset();
+		$this->general       = new General_Preset();
+		$this->_source_types = $this->get_source_types();
 	}
 
 	protected function set_data() {
@@ -58,6 +64,26 @@ class Preset_Manager {
 			new Dynamic_Preset(),
 			$this->general,
 		);
+	}
+
+	public function get_source_types() {
+		/** @var Base_Source[] $types */
+
+		$types = apply_filters( 'jet-form-builder/preset/source-types', array(
+			new Preset_Source_Post(),
+			new Preset_Source_User(),
+			new Preset_Source_Query_Var()
+		) );
+
+		$prepared_types = array();
+
+		foreach ( $types as $type ) {
+			if ( $type instanceof Base_Source ) {
+				$prepared_types[ $type->get_id() ] = $type;
+			}
+		}
+
+		return $prepared_types;
 	}
 
 	protected function set_preset_type_manager( $args ) {
@@ -129,10 +155,22 @@ class Preset_Manager {
 	}
 
 	public function get_plain_default() {
-		$value = $this->plain_default;
+		$value               = $this->plain_default;
 		$this->plain_default = false;
 
 		return $value;
+	}
+
+	public function get_source_by_type( $type ) {
+		if ( ! isset( $this->_source_types[ $type ] ) ) {
+			_doing_it_wrong(
+				__METHOD__,
+				"Undefined preset source type: {$type}",
+				'1.2.4'
+			);
+		}
+
+		return clone $this->_source_types[ $type ];
 	}
 
 }

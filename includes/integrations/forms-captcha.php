@@ -126,45 +126,62 @@ class Forms_Captcha {
 
 		if ( ! self::$script_rendered ) {
 			self::$script_rendered = true;
-			printf( '<script src="https://www.google.com/recaptcha/api.js?render=%s"></script>', $key );
+			printf( '<script id="jet-form-builder-recaptcha-js" src="https://www.google.com/recaptcha/api.js?render=%s"></script>', $key );
 		}
 
 		?>
         <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
         <script>
 
-			if ( ! window.JetEngineFormCaptcha ) {
-				window.JetEngineFormCaptcha = function ( formID ) {
+			if ( ! window.JetFormBuilderCaptcha ) {
+				window.JetFormBuilderCaptcha = function( formID ) {
+					var $script  = document.querySelector( 'script#jet-form-builder-recaptcha-js' ),
+						$cpField = jQuery( 'form[data-form-id="' + formID + '"]' ).find( '.captcha-token' );
 
-					var $cpField = jQuery( 'form[data-form-id="' + formID + '"]' ).find( '.captcha-token' );
-
-					if ( window.JetEngineFormToken ) {
-						$cpField.val( window.JetEngineFormToken );
-					}
-					else if ( window.grecaptcha ) {
-						window.grecaptcha.ready( function () {
-							grecaptcha.execute(
-								'<?php echo $key; ?>',
-								{
-									action: 'submit_form'
-								}
-							).then( function ( token ) {
-								$cpField.val( token );
-								window.JetEngineFormToken = token;
+					function setFormToken() {
+						if ( window.JetFormBuilderToken ) {
+							$cpField.val( window.JetFormBuilderToken );
+						} else if ( window.grecaptcha ) {
+							window.grecaptcha.ready( function() {
+								grecaptcha.execute(
+									'<?php echo $key; ?>',
+									{
+										action: 'submit_form',
+									},
+								).then( function( token ) {
+									$cpField.val( token );
+									window.JetFormBuilderToken = token;
+								} );
 							} );
-						} );
+						}
+					}
+
+					if ( ! $script ) {
+
+						$script = document.createElement( 'script' );
+
+						$script.id  = 'jet-form-builder-recaptcha-js';
+						$script.src = 'https://www.google.com/recaptcha/api.js?render=<?php echo $key; ?>';
+
+						$cpField.parentNode.insertBefore( $script, $cpField );
+
+						$script.onload = function() {
+							setFormToken();
+						};
+
+					} else {
+						setFormToken();
 					}
 
 				}
-			}
 
-			window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
+				window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
 
-			jQuery( window ).on( 'jet-popup/show-event/after-show', function () {
+				jQuery( window ).on( 'jet-popup/show-event/after-show', function() {
 
-				window.JetEngineFormCaptcha( <?php echo $form_id; ?> );
+					window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
 
-			} );
+				} );
         </script>
 		<?php
 

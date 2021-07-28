@@ -1,27 +1,29 @@
-import ActionMessages from "../components/actions/action-messages";
 import BaseActionComponent from "./base-action-component";
 
-const { WrapperRequiredControl } = JetFBComponents;
 const {
-	addAction,
-	getFormFieldsBlocks
-} = JetFBActions;
+		  WrapperRequiredControl,
+		  ActionMessages,
+	  } = JetFBComponents;
+const {
+		  addAction,
+		  getFormFieldsBlocks,
+	  } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	BaseControl
-} = wp.components;
+		  TextControl,
+		  ToggleControl,
+		  SelectControl,
+		  BaseControl,
+	  } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState
-} = wp.element;
+		  useState,
+	  } = wp.element;
 
 addAction( 'register_user', class RegisterUserAction extends BaseActionComponent {
 
@@ -77,7 +79,7 @@ addAction( 'register_user', class RegisterUserAction extends BaseActionComponent
 				label={ label( 'user_meta' ) }
 				key='user_meta_list'
 			>
-				<div className='jet-user-meta-rows'>
+				<div className='jet-user-fields-map__list'>
 					<span
 						className={ 'description-controls' }>{ __( 'Set user meta fields to save appropriate form fields into', 'jet-form-builder' ) }</span>
 					{ this.fields.map( ( { name }, index ) => {

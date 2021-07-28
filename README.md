@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.2.5
+* FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block
+* FIX: Saving `max_size` attribute for media-field in float
+* FIX: UI compatibility with Gutenberg Editor in WP 5.8  
+* Tweak: added `jet-form-builder/preset/source-types` php filter 
+
 ## 1.2.4
 * ADD: JetEngine Glossaries compatible
 * ADD: New styling sections for the JetForm widget in Elementor

@@ -1036,7 +1036,7 @@
 								}
 
 								if ( 'checkbox' === $field[ i ].type ) {
-									val += parseInt( itemVal, 10 );
+									val += parseFloat( itemVal );
 								} else {
 									val = itemVal;
 								}

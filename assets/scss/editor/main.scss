@@ -740,7 +740,7 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-form-toggle-box .components-clipboard-button.has-icon {
 	position: absolute;
-	transform: translateX(23px);
+	transform: translateX(26px);
 }
 
 .jet-form-toggle-box input.components-text-control__input {
@@ -777,7 +777,7 @@ div.components-modal__screen-overlay {
 	margin-left: 6px;
 }
 
-.jet-form-builder-row__flex .components-base-control__field {
+.jet-form-builder-row__flex > .components-base-control__field {
 	display: flex;
 }
 

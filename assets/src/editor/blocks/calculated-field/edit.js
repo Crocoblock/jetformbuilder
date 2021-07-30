@@ -3,6 +3,7 @@ const {
 		  GeneralFields,
 		  FieldWrapper,
 		  FieldSettingsWrapper,
+		  BaseHelp,
 	  } = JetFBComponents;
 
 const {
@@ -30,7 +31,7 @@ const {
 
 const NumberControl = __experimentalNumberControl;
 
-const { useState } = wp.element;
+const { useState, RawHTML } = wp.element;
 const { applyFilters } = wp.hooks;
 
 const help = {
@@ -112,6 +113,15 @@ export default function EditCalculated( props ) {
 						setAttributes( { precision: parseInt( newValue ) } );
 					} }
 				/>
+				<TextControl
+					key='calc_locale'
+					label={ __( 'Value Locale String' ) }
+					value={ attributes.locale }
+					onChange={ locale => setAttributes( { locale } ) }
+				/>
+				<BaseHelp style={ { marginTop: '-10px' } }>
+					<RawHTML>{ JetFormCalculatedField.locales_help }</RawHTML>
+				</BaseHelp>
 				<TextControl
 					key='calc_prefix'
 					label={ __( 'Calculated Value Prefix' ) }

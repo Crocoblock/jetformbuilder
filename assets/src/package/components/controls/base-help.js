@@ -8,6 +8,7 @@ function BaseHelp( {
 			fontSize: '12px',
 			fontStyle: 'normal',
 			color: 'rgb(117, 117, 117)',
+			marginTop: '0px',
 			...style,
 		} }
 	>

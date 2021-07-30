@@ -42,7 +42,7 @@ class Form_Manager {
 
 			$instances = array(
 				new Num_Range(),
-				//new Num_Range_Manual(),
+				new Num_Range_Manual(),
 				new Get_From_DB(),
 				new Get_From_Field(),
 			);

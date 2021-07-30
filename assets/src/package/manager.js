@@ -69,6 +69,7 @@ import GroupedSelectControl from './components/grouped-select-control';
 import {
 	getBlockControls,
 } from './components/fields/controls';
+import BaseHelp from './components/controls/base-help';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -96,8 +97,8 @@ window.JetFBComponents = {
 	FieldSettingsWrapper,
 	ActionMessages,
 	GroupedSelectControl,
+	BaseHelp,
 };
-
 
 // JFBFunctions
 window.JetFBActions = {
@@ -128,7 +129,6 @@ window.JetFBActions = {
 	getBlockControls,
 	classnames,
 };
-
 
 // JFBHooks
 window.JetFBHooks = {

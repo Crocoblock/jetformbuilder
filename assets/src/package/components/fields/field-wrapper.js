@@ -50,15 +50,18 @@ function FieldWrapper( props ) {
 
 	function renderLabel() {
 		return <BaseControl.VisualLabel>
-			<div onBlur={ setDynamicName }>
+			<div onBlur={ setDynamicName } style={ { display: 'flex' } }>
 				<RichText
-					isSelected
+					key={ uniqKey( 'rich-label' ) }
 					className='jet-form-builder__label'
 					placeholder='Field Label...'
 					allowedFormats={ [] }
 					value={ attributes.label ? attributes.label : valueIfEmptyLabel }
 					onChange={ newLabel => setAttributes( { label: newLabel } ) }
 				/>
+				{ attributes.required && <span className={ 'jet-form-builder__required' }>
+					{ _jf_args.required_mark ? _jf_args.required_mark : '*' }
+				</span> }
 				{ isSelected && <Popover
 					position='middle right'
 					noArrow={ false }
@@ -73,9 +76,6 @@ function FieldWrapper( props ) {
 					</div>
 				</Popover> }
 			</div>
-			{ attributes.required && <span className={ 'jet-form-builder__required' }>
-					{ _jf_args.required_mark ? _jf_args.required_mark : '*' }
-				</span> }
 		</BaseControl.VisualLabel>;
 	}
 
@@ -83,7 +83,7 @@ function FieldWrapper( props ) {
 		return <BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
 			<div className='components-base-control__help'>
 				<RichText
-					isSelected
+					key={ uniqKey( 'rich-description' ) }
 					tagName='small'
 					placeholder='Description...'
 					allowedFormats={ [] }

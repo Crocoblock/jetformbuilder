@@ -1144,7 +1144,7 @@
 			const fieldPrecision = calcField.data( 'precision' );
 			const number = calculatedValue.toFixed( fieldPrecision );
 
-			calcField.find( '.jet-form-builder__calculated-field-val' ).text( visibleNumber );
+			calcField.find( '.jet-form-builder__calculated-field-val' ).text( number );
 			calcField.find( '.jet-form-builder__calculated-field-input' ).val( number ).trigger( 'change.JetFormBuilderMain' );
 		},
 

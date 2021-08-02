@@ -5,11 +5,9 @@ import Tools, {
 
 const {
 		  BaseControl,
-		  Popover,
 	  } = wp.components;
 
 const {
-		  //useSelect,
 		  withSelect,
 	  } = wp.data;
 
@@ -17,14 +15,16 @@ const {
 		  RichText,
 	  } = wp.blockEditor;
 
-const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
-
 const { __ } = wp.i18n;
 
-const { applyFilters } = wp.hooks;
+function RichDescription( content ) {
+	return <small style={ {
+		whiteSpace: 'nowrap',
+		padding: '0.2em 0.8em 0 0',
+	} }>
+		<i>{ content }</i>
+	</small>;
+}
 
 function FieldWrapper( props ) {
 
@@ -50,10 +50,10 @@ function FieldWrapper( props ) {
 
 	function renderLabel() {
 		return <BaseControl.VisualLabel>
-			<div onBlur={ setDynamicName } style={ { display: 'flex' } }>
+			{ RichDescription( __( 'input label:', 'jet-form-builder' ) ) }
+			<div onBlur={ setDynamicName } className='jet-form-builder__label'>
 				<RichText
 					key={ uniqKey( 'rich-label' ) }
-					className='jet-form-builder__label'
 					placeholder='Field Label...'
 					allowedFormats={ [] }
 					value={ attributes.label ? attributes.label : valueIfEmptyLabel }
@@ -62,50 +62,27 @@ function FieldWrapper( props ) {
 				{ attributes.required && <span className={ 'jet-form-builder__required' }>
 					{ _jf_args.required_mark ? _jf_args.required_mark : '*' }
 				</span> }
-				{ isSelected && <Popover
-					position='middle right'
-					noArrow={ false }
-				>
-					<div
-						style={ {
-							padding: '0.3em 0.5em',
-							whiteSpace: 'nowrap',
-						} }
-					>
-						{ __( 'Input Label', 'jet-form-builder' ) }
-					</div>
-				</Popover> }
 			</div>
 		</BaseControl.VisualLabel>;
 	}
 
 	function renderDescription() {
-		return <BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
-			<div className='components-base-control__help'>
-				<RichText
-					key={ uniqKey( 'rich-description' ) }
-					tagName='small'
-					placeholder='Description...'
-					allowedFormats={ [] }
-					value={ attributes.desc }
-					onChange={ desc => setAttributes( { desc } ) }
-					style={ { marginTop: '0px' } }
-				/>
-				{ isSelected && <Popover
-					position='bottom center'
-					noArrow={ false }
-				>
-					<div
-						style={ {
-							padding: '0.3em 0.5em',
-							whiteSpace: 'nowrap',
-						} }
-					>
-						{ __( 'Input Description', 'jet-form-builder' ) }
-					</div>
-				</Popover> }
-			</div>
-		</BaseControl>;
+		return <div style={ { display: 'flex' } }>
+			{ RichDescription( __( 'input description:', 'jet-form-builder' ) ) }
+			<BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
+				<div className='components-base-control__help'>
+					<RichText
+						key={ uniqKey( 'rich-description' ) }
+						tagName='small'
+						placeholder='Description...'
+						allowedFormats={ [] }
+						value={ attributes.desc }
+						onChange={ desc => setAttributes( { desc } ) }
+						style={ { marginTop: '0px' } }
+					/>
+				</div>
+			</BaseControl>
+		</div>;
 	}
 
 	if ( 'row' === _jf_args.fields_layout ) {

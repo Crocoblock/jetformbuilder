@@ -1143,8 +1143,9 @@
 		setCalculatedValue: function( calculatedValue, calcField ) {
 			const fieldPrecision = calcField.data( 'precision' );
 			const number = calculatedValue.toFixed( fieldPrecision );
+			const visibleNumber = ( new Intl.NumberFormat( calcField.data( 'locale' ) ) ).format( number );
 
-			calcField.find( '.jet-form-builder__calculated-field-val' ).text( number );
+			calcField.find( '.jet-form-builder__calculated-field-val' ).text( visibleNumber );
 			calcField.find( '.jet-form-builder__calculated-field-input' ).val( number ).trigger( 'change.JetFormBuilderMain' );
 		},
 

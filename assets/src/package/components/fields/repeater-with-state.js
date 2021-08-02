@@ -1,19 +1,18 @@
 const { __ } = wp.i18n;
 
 const {
-	Button,
-	ButtonGroup,
-	Card,
-	CardBody,
-	CardHeader,
-	ToggleControl,
-} = wp.components;
+		  Button,
+		  ButtonGroup,
+		  Card,
+		  CardBody,
+		  CardHeader,
+		  ToggleControl,
+	  } = wp.components;
 
 const {
-	useState,
-	useEffect
-} = wp.element;
-
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
 function RepeaterWithState( {
 								children,
@@ -31,8 +30,8 @@ function RepeaterWithState( {
 								help = {
 									helpSource: {},
 									helpVisible: () => false,
-									helpKey: ''
-								}
+									helpKey: '',
+								},
 							} ) {
 
 	const classNames = [ 'jet-form-builder__repeater-component', ...repeaterClasses ].join( ' ' );
@@ -40,15 +39,12 @@ function RepeaterWithState( {
 
 	const parsedItems = () => {
 		if ( items && items.length > 0 ) {
-			const cloneItems = [ ...items ];
-
-			cloneItems.forEach( item => {
+			return items.map( item => {
 				item.__visible = false;
-			} );
 
-			return cloneItems;
-		}
-		else {
+				return item;
+			} );
+		} else {
 			return [ {
 				...newItem,
 				__visible: true,
@@ -56,17 +52,23 @@ function RepeaterWithState( {
 		}
 	}
 
-	const [ itemsData, setItemsData ] = useState( () => parsedItems() );
+	const [ itemsData, setItemsData ] = useState( [] );
+
+	useEffect( () => {
+		setItemsData( parsedItems() );
+	}, [] );
 
 	const [ isSafeDeleting, setSafeDeleting ] = useState( true );
 
 	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
-			prev[ index ] = {
+			const prevClone = JSON.parse( JSON.stringify( prev ) );
+
+			prevClone[ index ] = {
 				...prev[ index ],
 				...valueToSet,
 			};
-			return [ ...prev ];
+			return prevClone;
 		} );
 	};
 
@@ -83,10 +85,10 @@ function RepeaterWithState( {
 		}
 
 		setItemsData( prev => {
-			const clonePrev = [ ...prev ];
-			clonePrev.splice( index, 1 );
+			const prevClone = JSON.parse( JSON.stringify( prev ) );
+			prevClone.splice( index, 1 );
 
-			return clonePrev;
+			return prevClone;
 		} );
 	}
 
@@ -102,15 +104,20 @@ function RepeaterWithState( {
 
 	const cloneItem = ( index ) => {
 		setItemsData( prev => {
-			const [ before, after ] = [ prev.slice( 0, index + 1 ), prev.slice( index + 1 ) ];
-			return [ ...before, lodash.assign( {}, prev[ index ] ), ...after ];
+			const prevClone = JSON.parse( JSON.stringify( prev ) );
+			const [ before, after ] = [ prevClone.slice( 0, index + 1 ), prevClone.slice( index + 1 ) ];
+
+			return [ ...before, prevClone[ index ], ...after ];
 		} );
 	}
 
 	const moveRepeaterItem = ( { oldIndex, newIndex } ) => {
 		setItemsData( prev => {
-			[ prev[ newIndex ], prev[ oldIndex ] ] = [ prev[ oldIndex ], prev[ newIndex ] ];
-			return [ ...prev ];
+			const prevClone = JSON.parse( JSON.stringify( prev ) );
+
+			[ prevClone[ newIndex ], prevClone[ oldIndex ] ] = [ prevClone[ oldIndex ], prevClone[ newIndex ] ];
+
+			return prevClone;
 		} );
 	}
 
@@ -125,119 +132,38 @@ function RepeaterWithState( {
 		return ! ( index < itemsData.length - 1 );
 	}
 
-	const toggleVisible = ( index ) => {
+	const toggleVisible = index => {
 		setItemsData( prev => {
-			prev[ index ].__visible = ! ( prev[ index ].__visible );
-			return [ ...prev ];
+			const prevClone = JSON.parse( JSON.stringify( prev ) );
+			prevClone[ index ].__visible = ! ( prevClone[ index ].__visible );
+
+			return prevClone;
 		} );
-	}
+	};
 
 	useEffect( () => {
 		if ( true === isSaveAction ) {
-			const cloneItems = [ ...itemsData ];
-
-			if ( onSaveItems ) {
-				cloneItems.forEach( ( item, index ) => {
-
-					for ( const itemKey in item ) {
-						if ( itemKey.startsWith( '__' ) ) {
-							delete cloneItems[ index ][ itemKey ];
-						}
+			for ( const itemsDataKey in itemsData ) {
+				for ( const itemKey in itemsData[ itemsDataKey ] ) {
+					if ( itemKey.startsWith( '__' ) ) {
+						delete itemsData[ itemsDataKey ][ itemKey ];
 					}
-				} );
-
-				onSaveItems( cloneItems );
+				}
 			}
+			onSaveItems( itemsData );
 			onUnMount();
-		}
-		else if ( false === isSaveAction ) {
+		} else if ( false === isSaveAction ) {
 			onUnMount();
 		}
 	}, [ isSaveAction ] );
 
 	const getRepeaterItemId = index => `jet-form-builder-repeater__item_${ index }`;
 
-
-	const RepeaterItem = ( { currentItem, index } ) => <Card
-		isElevated={ true }
-		className={ itemClassNames }
-		key={ getRepeaterItemId( index ) }
-		id={ getRepeaterItemId( index ) }
-	>
-		<CardHeader className={ 'repeater__item__header' }>
-			<div className='repeater-item__left-heading'>
-				<ButtonGroup className={ 'repeater-action-buttons' }>
-					<Button
-						isSmall
-						icon={ currentItem.__visible ? 'no-alt' : 'edit' }
-						onClick={ () => toggleVisible( index ) }
-						className={ 'repeater-action-button' }
-					/>
-					<Button
-						isSmall
-						isSecondary
-						disabled={ ! Boolean( index ) }
-						icon={ 'arrow-up-alt2' }
-						onClick={ () => moveUp( index ) }
-						className={ 'repeater-action-button' }
-					/>
-					<Button
-						isSmall
-						isSecondary
-						disabled={ isDisabledEnd( index ) }
-						icon={ 'arrow-down-alt2' }
-						onClick={ () => moveDown( index ) }
-						className={ 'repeater-action-button' }
-					/>
-				</ButtonGroup>
-				<span className={ 'repeater-item-title' }>
-							{ ItemHeading && <ItemHeading
-								currentItem={ currentItem }
-								index={ index }
-								changeCurrentItem={ data => changeCurrentItem( data, index ) }
-							/> }
-					{ ! ItemHeading && `#${ index + 1 }` }
-						</span>
-			</div>
-			<ButtonGroup>
-				<Button
-					isSmall
-					isSecondary
-					onClick={ () => cloneItem( index ) }
-				>
-					{ __( 'Clone', 'jet-form-builder' ) }
-				</Button>
-				<Button
-					isSmall
-					isSecondary
-					isDestructive
-					onClick={ () => removeOption( index ) }
-				>
-					{ __( 'Delete', 'jet-form-builder' ) }
-				</Button>
-			</ButtonGroup>
-		</CardHeader>
-		{ currentItem.__visible && <CardBody
-			className={ 'repeater-item__content' }
-		>
-			{ children && <React.Fragment
-				key={ `repeater-component__item_${ index }` }
-			>
-				{ 'function' === typeof children && children( {
-					currentItem,
-					changeCurrentItem: data => changeCurrentItem( data, index )
-				} ) }
-				{ 'function' !== typeof children && children }
-			</React.Fragment> }
-			{ ! children && 'Set up your Repeater Template, please.' }
-		</CardBody> }
-	</Card>;
-
 	const {
-		helpSource,
-		helpVisible,
-		helpKey,
-	} = help;
+			  helpSource,
+			  helpVisible,
+			  helpKey,
+		  } = help;
 
 	const isVisibleHelp = helpVisible( itemsData ) && helpSource && helpSource[ helpKey ];
 
@@ -252,9 +178,79 @@ function RepeaterWithState( {
 			checked={ isSafeDeleting }
 			onChange={ setSafeDeleting }
 		/> }
-		{ itemsData.map( ( currentItem, index ) => {
-			return RepeaterItem( { currentItem, index } );
-		} ) }
+		{ itemsData.map( ( currentItem, index ) => <Card
+			isElevated={ true }
+			className={ itemClassNames }
+			key={ getRepeaterItemId( index ) }
+		>
+			<CardHeader className={ 'repeater__item__header' }>
+				<div className='repeater-item__left-heading'>
+					<ButtonGroup className={ 'repeater-action-buttons' }>
+						<Button
+							isSmall
+							icon={ currentItem.__visible ? 'no-alt' : 'edit' }
+							onClick={ () => toggleVisible( index ) }
+							className={ 'repeater-action-button' }
+						/>
+						<Button
+							isSmall
+							isSecondary
+							disabled={ ! Boolean( index ) }
+							icon={ 'arrow-up-alt2' }
+							onClick={ () => moveUp( index ) }
+							className={ 'repeater-action-button' }
+						/>
+						<Button
+							isSmall
+							isSecondary
+							disabled={ isDisabledEnd( index ) }
+							icon={ 'arrow-down-alt2' }
+							onClick={ () => moveDown( index ) }
+							className={ 'repeater-action-button' }
+						/>
+					</ButtonGroup>
+					<span className={ 'repeater-item-title' }>
+							{ ItemHeading && <ItemHeading
+								currentItem={ currentItem }
+								index={ index }
+								changeCurrentItem={ data => changeCurrentItem( data, index ) }
+							/> }
+						{ ! ItemHeading && `#${ index + 1 }` }
+						</span>
+				</div>
+				<ButtonGroup>
+					<Button
+						isSmall
+						isSecondary
+						onClick={ () => cloneItem( index ) }
+					>
+						{ __( 'Clone', 'jet-form-builder' ) }
+					</Button>
+					<Button
+						isSmall
+						isSecondary
+						isDestructive
+						onClick={ () => removeOption( index ) }
+					>
+						{ __( 'Delete', 'jet-form-builder' ) }
+					</Button>
+				</ButtonGroup>
+			</CardHeader>
+			{ currentItem.__visible && <CardBody
+				className={ 'repeater-item__content' }
+			>
+				{ children && <React.Fragment
+					key={ `repeater-component__item_${ index }` }
+				>
+					{ 'function' === typeof children && children( {
+						currentItem,
+						changeCurrentItem: data => changeCurrentItem( data, index ),
+					} ) }
+					{ 'function' !== typeof children && children }
+				</React.Fragment> }
+				{ ! children && 'Set up your Repeater Template, please.' }
+			</CardBody> }
+		</Card> ) }
 		{ 1 < itemsData.length && <ToggleControl
 			className='jet-control-clear'
 			label={ __( 'Safe deleting' ) }

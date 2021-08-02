@@ -534,7 +534,7 @@
 			currentItem.addClass( 'active-page' );
 			currentItem.removeClass( 'passed-page' );
 
-			if ( $fromPage < $toPage ) {
+			if ( from < to ) {
 				prevItem.addClass( 'passed-page' );
 			} else {
 				prevItem.removeClass( 'passed-page' );

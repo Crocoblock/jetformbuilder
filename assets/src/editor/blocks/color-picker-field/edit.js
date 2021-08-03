@@ -5,6 +5,8 @@
 	types,
 } from '@/source';*/
 
+import { classnames } from '../../../package/helpers/tools';
+
 const {
 		  AdvancedFields,
 		  GeneralFields,
@@ -75,6 +77,7 @@ function ColorPickerEdit( props ) {
 				{ ...props }
 			>
 				<InputControl
+					className='jet-form-builder__field-wrap'
 					type='color'
 					key={ 'color_picker_place_holder_block' }
 					onChange={ () => {

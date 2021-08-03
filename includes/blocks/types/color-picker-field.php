@@ -17,6 +17,45 @@ class Color_Picker_Field extends Base {
 		return 'color-picker-field';
 	}
 
+	protected function _jsm_register_controls() {
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'field_section',
+				'title' => __( 'Color Picker Field', 'jet-form-builder' )
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'field_width',
+			'type'         => 'range',
+			'label'        => __( 'Width', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => 'px',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 1000,
+					]
+				],
+				[
+					'value'     => '%',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 1,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				$this->selector( '__field-wrap.%s__field-wrap' ) => 'width: {{VALUE}}{{UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->end_section();
+	}
+
 	/**
 	 * Returns current block render instance
 	 *

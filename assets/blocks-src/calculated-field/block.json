@@ -14,7 +14,11 @@
 		"html": false
 	},
 	"attributes": {
-		"locale": {
+		"separate_decimals": {
+			"type": "string",
+			"default": "."
+		},
+		"separate_thousands": {
 			"type": "string",
 			"default": ""
 		},

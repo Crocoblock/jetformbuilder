@@ -114,14 +114,17 @@ export default function EditCalculated( props ) {
 					} }
 				/>
 				<TextControl
-					key='calc_locale'
-					label={ __( 'Value Locale String' ) }
-					value={ attributes.locale }
-					onChange={ locale => setAttributes( { locale } ) }
+					key='calc_separate_decimals'
+					label={ __( 'Decimals separator' ) }
+					value={ attributes.separate_decimals }
+					onChange={ separate_decimals => setAttributes( { separate_decimals } ) }
 				/>
-				<BaseHelp style={ { marginTop: '-10px' } }>
-					<RawHTML>{ JetFormCalculatedField.locales_help }</RawHTML>
-				</BaseHelp>
+				<TextControl
+					key='calc_separate_thousands'
+					label={ __( 'Thousands separator' ) }
+					value={ attributes.separate_thousands }
+					onChange={ separate_thousands => setAttributes( { separate_thousands } ) }
+				/>
 				<TextControl
 					key='calc_prefix'
 					label={ __( 'Calculated Value Prefix' ) }

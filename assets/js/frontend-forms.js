@@ -1140,10 +1140,22 @@
 
 		},
 
+		convertCalcValue: function( value, sepDecimal, sepThousands ) {
+			const parts = value.toString().split( '.' );
+			parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, sepThousands );
+			
+			return parts.join( sepDecimal );
+		},
+
 		setCalculatedValue: function( calculatedValue, calcField ) {
 			const fieldPrecision = calcField.data( 'precision' );
 			const number = calculatedValue.toFixed( fieldPrecision );
-			const visibleNumber = ( new Intl.NumberFormat( calcField.data( 'locale' ) ) ).format( number );
+
+			const visibleNumber = JetFormBuilder.convertCalcValue(
+				number,
+				calcField.data( 'sep-decimal' ),
+				calcField.data( 'sep-thousands' ),
+			);
 
 			calcField.find( '.jet-form-builder__calculated-field-val' ).text( visibleNumber );
 			calcField.find( '.jet-form-builder__calculated-field-input' ).val( number ).trigger( 'change.JetFormBuilderMain' );

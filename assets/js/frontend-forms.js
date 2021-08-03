@@ -1143,7 +1143,7 @@
 		convertCalcValue: function( value, sepDecimal, sepThousands ) {
 			const parts = value.toString().split( '.' );
 			parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, sepThousands );
-			
+
 			return parts.join( sepDecimal );
 		},
 

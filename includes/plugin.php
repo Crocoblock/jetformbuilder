@@ -4,17 +4,17 @@ namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
+use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Pages\Settings_Page;
-use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
+use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
-use Jet_Form_Builder\Integrations\Wc_Integration;
-use Jet_Form_Builder\Widgets\Elementor_Controller;
 use Jet_Form_Builder\License\Manager as LicenseManager;
+use Jet_Form_Builder\Widgets\Elementor_Controller;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -109,6 +109,8 @@ class Plugin {
 				new Settings_Page(),
 				new Addons_Page()
 			) );
+
+			new PatternsManager();
 		}
 	}
 

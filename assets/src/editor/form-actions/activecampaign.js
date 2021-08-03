@@ -147,7 +147,7 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 					className={ `${ buttonClass } jet-form-validate-button` }
 				>
 					<i className="dashicons"/>
-					{ label( 'validate_api_key' ) }
+					{ settings.isValidAPI ? label( 'retry_request' ) : label( 'validate_api_key' ) }
 				</Button>
 			</div>
 

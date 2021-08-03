@@ -121,7 +121,6 @@ class Preset_Source_Post extends Base_Source {
 
 		$value = wp_get_post_terms( $this->src()->ID, $this->field_data['key'] );
 
-
 		if ( empty( $value ) || is_wp_error( $value ) ) {
 			return '';
 		} else {
@@ -134,7 +133,6 @@ class Preset_Source_Post extends Base_Source {
 				$value = $value->term_id;
 			}
 		}
-		do_action( 'qm/debug', $value );
 
 		return $value;
 	}

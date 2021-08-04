@@ -57,7 +57,7 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 	}, [] )
 
 	function getAPI( prop ) {
-		return settings.use_global ? currentTab[ prop ] : settings[ prop ];
+		return settings.use_global ? currentTab[ prop ] : ( settings[ prop ] || "" );
 	}
 
 	function validateActiveCampaignData() {
@@ -70,6 +70,13 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 	}
 
 	function getActiveCampaignData( isValidate = false, { api_key = '', api_url = '' } ) {
+		if ( ! api_key || ! api_url ) {
+			onChangeSetting( false, 'isValidAPI' );
+			setButtonClass( 'is-invalid' );
+
+			return;
+		}
+
 		const endpoint = '/admin/api.php?api_action=list_list';
 		const url = api_url + endpoint + '&api_key=' + api_key + '&ids=all&api_output=json';
 

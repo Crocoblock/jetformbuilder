@@ -28,20 +28,18 @@ class Parser_Manager {
 	}
 
 	private function register_request_parsers() {
-		$parsers = array(
+		$parsers = apply_filters( 'jet-form-builder/parsers-request/register', array(
 			new Fields\Date_Field_Parser(),
 			new Fields\Repeater_Field_Parser(),
 			new Fields\Wysiwyg_Field_Parser(),
 			new Fields\Text_Field_Parser(),
 			new Fields\Repeater_Field_Parser(),
 			new Fields\Media_Field_Parser(),
-		);
+		) );
 
 		foreach ( $parsers as $parser ) {
 			$this->_parsers[ $parser->type() ] = $parser;
 		}
-
-		$this->_parsers = apply_filters( 'jet-form-builder/parsers-request/register', $this->_parsers );
 	}
 
 	public function get_values_fields( $fields, $request, $inside_conditional = false ) {

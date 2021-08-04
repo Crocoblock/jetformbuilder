@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
-use Jet_Form_Builder\Admin\Editor;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -44,7 +43,7 @@ class Manager {
 			new Types\Redirect_To_Page(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
-			new Types\Active_Campaign(),
+			new Types\Active_Campaign()
 		);
 
 		foreach ( $actions as $action ) {

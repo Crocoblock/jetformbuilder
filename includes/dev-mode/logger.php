@@ -50,7 +50,8 @@ class Logger {
 			'message' => $exception->getMessage(),
 			'file'    => $this->make_pretty_filename( $exception->getFile() ),
 			'line'    => $exception->getLine(),
-			'data'    => $exception->get_additional()
+			'data'    => $exception->get_additional(),
+			'version' => jet_form_builder()->get_version()
 		);
 	}
 

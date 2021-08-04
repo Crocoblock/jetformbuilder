@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, multi-step form, user registration form, custom form
 Requires at least: 5.6
-Tested up to: 5.7.2
+Tested up to: 5.8.0
 Requires PHP: 7.0
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,6 +152,16 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.6**
+ - UPD: Changed the logic for processing required fields inside the Conditional Block
+ - ADD: Switch page on change Radio Field
+ - ADD: Styles in gutenberg for Datetime Field
+ - FIX: Execution of a query for ActiveCampaign with global settings
+ - FIX: Removed escaping slashes in send email action
+ - FIX: Adding class to passed page
+ - FIX: Preset post-terms in checkbox
+ - FIX: Loss of focus when editing a text field in the global preset
 
 **1.2.5**
  - FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block

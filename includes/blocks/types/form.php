@@ -367,6 +367,12 @@ class Form extends Base {
 			return 'Please select form to show';
 		}
 
+		Plugin::instance()->admin_bar->register_item( $form_id, array(
+			'title'     => get_the_title( $form_id ),
+			'sub_title' => __( 'JetForm', 'jet-form-builder' ),
+			'href'      => get_edit_post_link( $form_id ),
+		) );
+
 		$style_manager = $this->maybe_render_styles_block( $form_id );
 		$style_manager .= $this->maybe_render_fonts_block( $form_id );
 

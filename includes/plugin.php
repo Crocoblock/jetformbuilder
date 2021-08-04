@@ -28,6 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
  * @property LicenseManager $license_manager
+ * @property \Jet_Admin_Bar $admin_bar
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -46,6 +47,7 @@ class Plugin {
 	public $allow_gateways;
 	public $framework;
 	public $license_manager;
+	public $admin_bar;
 
 	public static $instance;
 
@@ -88,6 +90,7 @@ class Plugin {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
 
+		$this->admin_bar       = \Jet_Admin_Bar::get_instance();
 		$this->post_type       = new Post_Type();
 		$this->blocks          = new Blocks\Manager();
 		$this->actions         = new Actions\Manager();
@@ -99,7 +102,6 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
-
 
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
@@ -116,6 +118,7 @@ class Plugin {
 
 		$this->framework = new CX_Loader( array(
 			$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
+			$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
 		) );
 	}
 
@@ -164,7 +167,13 @@ class Plugin {
 
 		$this->register_autoloader();
 
-		add_action( 'after_setup_theme', array( $this, 'init_components' ), 0 );
+		add_action( 'after_setup_theme', function () {
+			do_action( 'jet-form-builder/before-init' );
+
+			$this->init_components();
+
+			do_action( 'jet-form-builder/after-init' );
+		}, 0 );
 
 		$this->init_framework();
 	}

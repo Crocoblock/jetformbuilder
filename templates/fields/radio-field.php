@@ -3,7 +3,7 @@
  * input[type="hidden"] template
  */
 
-$required = $this->block_type->get_required_attr();
+$required    = $this->block_type->get_required_attr();
 $name        = $this->block_type->get_field_name( $args['name'] );
 $default     = ! empty( $args['default'] ) ? $args['default'] : false;
 $data_switch = '';
@@ -46,25 +46,25 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		?>
-		<div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
+        <div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
 			<?php if ( $custom_template ) {
 				echo $custom_template;
 			} ?>
-			<label class="jet-form-builder__field-label for-radio">
-				<input
-					type="radio"
-					name="<?php echo $name; ?>"
+            <label class="jet-form-builder__field-label for-radio">
+                <input
+                        type="radio"
+                        name="<?php echo $name; ?>"
 					<?php $this->render_attributes_string_save(); ?>
-					value="<?php echo $val; ?>"
-					data-field-name="<?php echo $args['name']; ?>"
+                        value="<?php echo $val; ?>"
+                        data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>
 					<?php echo $required; ?>
 					<?php echo $calc; ?>
 					<?php echo $data_switch; ?>
-				>
-				 <span><?php echo $label; ?></span>
-			</label>
-		</div>
+                >
+                <span><?php echo $label; ?></span>
+            </label>
+        </div>
 		<?php
 
 	}

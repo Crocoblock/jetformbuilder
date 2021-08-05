@@ -103,27 +103,9 @@ return array(
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:jet-forms/form-break-field {"label_progress":"Additional information","add_prev":true} /-->
-
-<!-- wp:paragraph {"fontSize":"large"} -->
-<p class="has-large-font-size">Payment Information</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column {"width":"33.33%"} -->
-<div class="wp-block-column" style="flex-basis:33.33%"><!-- wp:jet-forms/checkbox-field {"field_options":[{"label":"September 1-3","value":"sep-1-3","calculate":""},{"label":"September 15-18","value":"sep-15-18","calculate":""},{"label":"October 1-3","value":"oct-1-3","calculate":""},{"label":"October 15-18","value":"oct-15-18","calculate":""},{"label":"November 1-3","value":"nov-1-3","calculate":""},{"label":"November 15-18","value":"nov-15-18","calculate":""}],"label":"Workshop Dates","name":"workshop-dates","className":" jet-sm-gb-wrapper jet-sm-gb-04004d1a-8d6a-43b4-9c85-464f17e02653","blockID":"jet-sm-gb-04004d1a-8d6a-43b4-9c85-464f17e02653"} /--></div>
-<!-- /wp:column -->
-
-<!-- wp:column {"width":"66.66%"} -->
-<div class="wp-block-column" style="flex-basis:66.66%"><!-- wp:jet-forms/radio-field {"field_options":[{"label":"Yes","value":"1","calculate":""},{"label":"No","value":"0","calculate":""}],"label":"Virtual Workshop Payment","name":"virtual-workshop-pay","className":" jet-sm-gb-wrapper jet-sm-gb-0e473fca-e47f-4002-b80b-99450dc938fa","blockID":"jet-sm-gb-0e473fca-e47f-4002-b80b-99450dc938fa"} /-->
-
-<!-- wp:jet-forms/calculated-field {"calc_formula":"0.345","calc_prefix":"Total:        \u0026nbsp;","className":" jet-sm-gb-wrapper jet-sm-gb-af81bb8d-c464-4315-a98e-0d3e513d628f","blockID":"jet-sm-gb-af81bb8d-c464-4315-a98e-0d3e513d628f"} /--></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns -->
-
 <!-- wp:jet-forms/submit-field {"add_prev":true,"className":" jet-sm-gb-wrapper jet-sm-gb-3c47d378-79e8-4f96-a1f7-c4cce1aeb085","blockID":"jet-sm-gb-3c47d378-79e8-4f96-a1f7-c4cce1aeb085"} /-->
 
-<!-- wp:jet-forms/form-break-field {"label_progress":"Payment Information"} /-->'
+<!-- wp:jet-forms/form-break-field {"label_progress":"Additional information"} /-->'
 	),
 
 

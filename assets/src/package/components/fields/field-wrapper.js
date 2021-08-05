@@ -1,4 +1,4 @@
-import Tools, {
+import {
 	classnames,
 	getConvertedName,
 } from '../../helpers/tools';
@@ -21,8 +21,9 @@ function RichDescription( content ) {
 	return <small style={ {
 		whiteSpace: 'nowrap',
 		padding: '0.2em 0.8em 0 0',
+		color: '#8e8a8a',
 	} }>
-		<i>{ content }</i>
+		{ content }
 	</small>;
 }
 
@@ -54,7 +55,7 @@ function FieldWrapper( props ) {
 			<div onBlur={ setDynamicName } className='jet-form-builder__label'>
 				<RichText
 					key={ uniqKey( 'rich-label' ) }
-					placeholder='Field Label...'
+					placeholder='Label...'
 					allowedFormats={ [] }
 					value={ attributes.label ? attributes.label : valueIfEmptyLabel }
 					onChange={ newLabel => setAttributes( { label: newLabel } ) }

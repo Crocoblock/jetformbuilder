@@ -7,6 +7,8 @@ const {
 		  CardBody,
 		  CardHeader,
 		  ToggleControl,
+		  Flex,
+		  FlexItem,
 	  } = wp.components;
 
 const {
@@ -173,11 +175,38 @@ function RepeaterWithState( {
 	>
 		{ isVisibleHelp && <p>{ helpSource[ helpKey ].label }</p> }
 
-		{ 0 < itemsData.length && <ToggleControl
-			label={ __( 'Safe deleting' ) }
-			checked={ isSafeDeleting }
-			onChange={ setSafeDeleting }
-		/> }
+		{ 0 < itemsData.length && <>
+			<Flex>
+				<FlexItem>
+					<ToggleControl
+						label={ __( 'Safe deleting' ) }
+						checked={ isSafeDeleting }
+						onChange={ setSafeDeleting }
+					/>
+				</FlexItem>
+				<FlexItem style={ {
+					flex: 'unset',
+					marginBottom: '1em',
+				} }>
+					{/*<ButtonGroup>
+						<Button
+							isSecondary
+							onClick={ () => {
+							} }
+						>
+							{ __( 'Copy items to clipboard', 'jet-from-builder' ) }
+						</Button>
+						<Button
+							isSecondary
+							onClick={ () => {
+							} }
+						>
+							{ __( 'Import items from clipboard', 'jet-from-builder' ) }
+						</Button>
+					</ButtonGroup>*/}
+				</FlexItem>
+			</Flex>
+		</> }
 		{ itemsData.map( ( currentItem, index ) => <Card
 			isElevated={ true }
 			className={ itemClassNames }

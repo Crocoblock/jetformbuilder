@@ -586,8 +586,8 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 .jet-form-builder__field-label > span::before {
     content: '';
     display: inline-block;
-    width: 0.8em;
-    height: 0.8em;
+    width: 1.2em;
+    height: 1.2em;
     flex-shrink: 0;
     flex-grow: 0;
     border: 1px solid #adb5bd;

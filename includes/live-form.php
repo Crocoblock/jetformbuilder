@@ -6,7 +6,6 @@ use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -169,14 +168,15 @@ class Live_Form {
 
 	public static function force_render_field( $name, $arguments = array() ) {
 		if ( empty( $name ) ) {
-			return;
+			return '';
 		}
 		$field = jet_form_builder()->blocks->get_field_by_name( $name );
 
 		if ( ! $field instanceof Block_Type_Base ) {
-			return;
+			return '';
 		}
-		$field->set_block_data( $arguments );
+
+		$field->set_block_data( $arguments, null );
 
 		return $field->get_block_renderer();
 	}

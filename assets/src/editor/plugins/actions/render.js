@@ -170,6 +170,7 @@ export default function PluginActions() {
 					{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
 					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
 						<Button
+							disabled={ ! getActionCallback( action ) }
 							icon='edit'
 							label={ 'Edit Action' }
 							onClick={ () => {

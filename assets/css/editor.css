@@ -161,13 +161,15 @@
 }
 
 .jet-form-dynamic-preset {
-    display: flex;
-    align-items: flex-start;
     position: relative;
 }
 
 .jet-form-dynamic-preset .components-base-control {
-    width: 100%;
+    flex: 3;
+}
+
+.jet-form-dynamic-preset .components-base-control .components-base-control__field {
+    border-top: unset;
 }
 
 .jet-form-dynamic-preset .components-base-control__field textarea {
@@ -201,7 +203,7 @@
     border-radius: 0 0 0 5px;
     border-width: 0 0 1px 1px;
     background-color: white;
-    top: 1px;
+    top: 20px;
     right: 1px;
 }
 
@@ -246,7 +248,7 @@
 .jet-user-fields-map__list {
     flex: 3;
     padding-top: 0.5em;
-    margin-left: -8px;
+    margin-left: -6px;
 }
 
 .jet-user-fields-map__list .components-flex__item {

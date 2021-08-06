@@ -312,6 +312,9 @@ export default function PluginActions() {
 								} }
 							/>
 							<FieldWithPreset
+								baseControlProps={ {
+									label: "Value to Compare",
+								} }
 								ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 									value={ currentItem.default }
 									isSaveAction={ actionClick }
@@ -324,7 +327,7 @@ export default function PluginActions() {
 								triggerClasses={ [ 'trigger__textarea' ] }
 							>
 								<TextareaControl
-									label="Value to Compare"
+									className={ 'jet-control-clear jet-user-fields-map__list' }
 									value={ currentItem.default }
 									onChange={ newValue => {
 										changeCurrentItem( { default: newValue } );

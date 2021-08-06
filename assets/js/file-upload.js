@@ -308,13 +308,17 @@
 					values.push( responseData.value[ i ] );
 				}
 
-				$input.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain', [ JSON.parse( inputValues ) ] );
+				$input.val( JSON.stringify( values ) );
+
+				if ( inputValues ) {
+					$input.trigger( 'change.JetFormBuilderMain', [ JSON.parse( inputValues ) ] );
+				}
 
 				$filesContainer.append( responseData.html );
 				$filesContainer.sortable( 'destroy' );
 
 				$filesContainer.sortable( {
-					items:                '.jet-form-builder-file-upload__file',
+					items: '.jet-form-builder-file-upload__file',
 					forcePlaceholderSize: true,
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}

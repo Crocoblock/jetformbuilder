@@ -58,13 +58,20 @@ class Hidden_Field extends Base {
 
 	public function get_field_value() {
 		$call_field_value = $this->block_attrs['field_value'] ?? false;
+		$static_value     = $this->block_attrs['_static_value'] ?? false;
+
+		if ( $static_value ) {
+			return $call_field_value;
+		}
 
 		$value = '';
 		if ( is_callable( array( $this, $call_field_value ) ) ) {
 			$value = call_user_func( array( $this, $call_field_value ) );
 		}
 
-		return "" !== $value ? $value : $this->block_attrs['default'];
+		return ( ! $this->is_empty( $value ) )
+			? $value
+			: $this->block_attrs['default'];
 	}
 
 	private function manual_input() {
@@ -267,6 +274,10 @@ class Hidden_Field extends Base {
 		$field = $this->attrs['field_value'];
 
 		return isset( $field['default'] ) ? $field['default'] : '';
+	}
+
+	private function is_empty( $value ) {
+		return ( "" === $value || is_null( $value ) || false === $value );
 	}
 
 }

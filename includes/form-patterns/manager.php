@@ -22,6 +22,13 @@ class Manager {
 		$this->register_block_patterns();
 	}
 
+	public function get_patterns() {
+		return apply_filters(
+			'jet-form-builder/form-patterns',
+			require_once Plugin::instance()->plugin_dir( 'includes/form-patterns/source-patterns.php' )
+		);
+	}
+
 	public function register_block_patterns() {
 		register_block_pattern_category(
 			$this->namespace(),
@@ -30,24 +37,12 @@ class Manager {
 			)
 		);
 
-		$form = new \WP_Query( array(
-			'post_type'      => $this->namespace(),
-			'posts_per_page' => 1
-		) );
 
-		if ( empty( $form->posts ) || empty( $form->posts[0] ) ) {
-			return;
+		foreach ( $this->get_patterns() as $pattern_name => $pattern ) {
+			$pattern['categories'] = array( $this->namespace() );
+
+			register_block_pattern( $this->pattern_name( $pattern_name ), $pattern );
 		}
-
-		register_block_pattern(
-			$this->pattern_name( 'test-form' ),
-			array(
-				'title'       => __( 'Jet Form X', 'jet-form-builder' ),
-				'description' => _x( 'Two horizontal buttons, the left button is filled in, and the right button is outlined.', 'Block pattern description', 'jet-form-builder' ),
-				'content'     => $form->posts[0]->post_content,
-				'categories'  => array( $this->namespace() )
-			)
-		);
 	}
 
 	private function pattern_name( $name ) {

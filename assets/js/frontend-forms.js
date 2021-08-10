@@ -585,6 +585,10 @@
 				} );
 			}
 
+			if ( $.fn.inputmask ) {
+				$newVal.find( '.jet-form-builder__masked-field' ).inputmask();
+			}
+
 			$repeater.trigger( 'jet-form-builder/repeater-changed' );
 			$this.trigger( 'jet-form-builder/repeater-add-new', [ index ] );
 

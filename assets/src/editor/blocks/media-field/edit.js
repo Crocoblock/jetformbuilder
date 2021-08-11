@@ -82,7 +82,7 @@ export default function MediaEdit( props ) {
 							setAttributes( { insert_attachment: Boolean( newValue ) } );
 						} }
 					/> }
-					{ attributes.insert_attachment && <SelectControl
+					{ ( 'any_user' !== attributes.allowed_user_cap && attributes.insert_attachment ) && <SelectControl
 						key='value_format'
 						label={ __( 'Field value' ) }
 						labelPosition='top'

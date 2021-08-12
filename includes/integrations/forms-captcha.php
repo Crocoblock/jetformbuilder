@@ -160,7 +160,7 @@ class Forms_Captcha {
 
 						$script = document.createElement( 'script' );
 
-						$script.id  = 'jet-form-builder-recaptcha-js';
+						$script.id = 'jet-form-builder-recaptcha-js';
 						$script.src = 'https://www.google.com/recaptcha/api.js?render=<?php echo $key; ?>';
 
 						$cpField.parentNode.insertBefore( $script, $cpField );
@@ -172,16 +172,16 @@ class Forms_Captcha {
 					} else {
 						setFormToken();
 					}
-
 				}
+			}
+
+			window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
+
+			jQuery( window ).on( 'jet-popup/show-event/after-show', function() {
 
 				window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
 
-				jQuery( window ).on( 'jet-popup/show-event/after-show', function() {
-
-					window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
-
-				} );
+			} );
         </script>
 		<?php
 

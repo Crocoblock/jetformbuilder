@@ -4,6 +4,16 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.2.7
+* FIX: Initialize input mask for new repeater items
+* FIX: Preset Hidden Field
+* FIX: Upload attachments
+* FIX: Hidden-field preset
+* FIX: Sanitize wysiwyg
+* UPD: Disable edit action button, if callback undefined
+* Tweak: Editor UI
+* Tweak: Media Field UI settings
+
 ## 1.2.6
 * UPD: Changed the logic for processing required fields inside the Conditional Block
 * ADD: Switch page on change Radio Field

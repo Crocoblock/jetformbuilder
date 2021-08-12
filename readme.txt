@@ -4,7 +4,7 @@ Tags: forms, blocks, gutenberg, form builder, contact form, subscribe form, mult
 Requires at least: 5.6
 Tested up to: 5.8.0
 Requires PHP: 7.0
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,6 +152,16 @@ It is, any form created by JetFormBuilder can be usede as regular **contact form
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 == Changelog ==
+
+**1.2.7**
+ - FIX: Initialize input mask for new repeater items
+ - FIX: Preset Hidden Field
+ - FIX: Upload attachments
+ - FIX: Hidden-field preset
+ - FIX: Sanitize wysiwyg
+ - UPD: Disable edit action button, if callback undefined
+ - Tweak: Editor UI
+ - Tweak: Media Field UI settings
 
 **1.2.6**
  - UPD: Changed the logic for processing required fields inside the Conditional Block

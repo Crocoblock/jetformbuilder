@@ -169,7 +169,7 @@ return array(
 
 <!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:jet-forms/text-field {"label":"Location","name":"location","placeholder":"German","className":" jet-sm-gb-wrapper jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8","blockID":"jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8"} /-->
+<div class="wp-block-column"><!-- wp:jet-forms/text-field {"label":"Location","name":"location","placeholder":"Germany","className":" jet-sm-gb-wrapper jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8","blockID":"jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8"} /-->
 
 <!-- wp:jet-forms/text-field {"field_type":"email","label":"Email","name":"email","placeholder":"demo@link.com","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8","blockID":"jet-sm-gb-6db423dd-8368-4c33-9e2a-c5ae7147d1c8"} /--></div>
 <!-- /wp:column -->
@@ -197,8 +197,8 @@ return array(
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:jet-forms/submit-field {"label":"Update","className":" jet-sm-gb-wrapper jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899","blockID":"jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899"} /-->'),
-
+<!-- wp:jet-forms/submit-field {"label":"Update","className":" jet-sm-gb-wrapper jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899","blockID":"jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899"} /-->'
+	),
 
 
 	'demo_form' => array(

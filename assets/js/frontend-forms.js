@@ -1146,8 +1146,8 @@
 
 			const visibleNumber = JetFormBuilder.convertCalcValue(
 				number,
-				calcField.data( 'sep-decimal' ),
-				calcField.data( 'sep-thousands' ),
+				calcField.data( 'sep-decimal' ) || '.',
+				calcField.data( 'sep-thousands' ) || '',
 			);
 
 			calcField.find( '.jet-form-builder__calculated-field-val' ).text( visibleNumber );

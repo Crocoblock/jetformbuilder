@@ -9,6 +9,7 @@ const { __ } = wp.i18n;
 const {
 	InspectorControls,
 	useBlockProps,
+	RichText,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
@@ -67,13 +68,27 @@ export default function FormBreakEdit( props ) {
 					isSecondary
 					key="next_page_button"
 					className="jet-form-builder__next-page"
-				>{ attributes.label || 'Next' }</Button>
+				>
+					<RichText
+						placeholder='Next...'
+						allowedFormats={ [] }
+						value={ attributes.label }
+						onChange={ label => setAttributes( { label } ) }
+					/>
+				</Button>
 
 				{ attributes.add_prev && <Button
 					isSecondary
 					key="prev_page_button"
 					className="jet-form-builder__prev-page"
-				>{ attributes.prev_label || 'Prev' }</Button> }
+				>
+					<RichText
+						placeholder='Prev...'
+						allowedFormats={ [] }
+						value={ attributes.prev_label }
+						onChange={ prev_label => setAttributes( { prev_label } ) }
+					/>
+				</Button> }
 			</div>
 		</div>
 	];

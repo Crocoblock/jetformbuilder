@@ -163,7 +163,6 @@ export default function EditCalculated( props ) {
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				valueIfEmptyLabel={ 'Calculated Field' }
 				{ ...props }
 			>
 				{ props.isSelected && <>

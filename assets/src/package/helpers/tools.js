@@ -116,7 +116,8 @@ export function getConvertedName( valueToChange ) {
 	slug = maybeCyrToLatin( slug );
 
 	if ( 20 < slug.length ) {
-		slug = slug.substr( 0, 20 );
+		// 34 - Lionel Messi's age when he left Barcelona
+		slug = slug.substr( 0, 34 );
 
 		if ( '-' === slug.slice( -1 ) ) {
 			slug = slug.slice( 0, -1 );

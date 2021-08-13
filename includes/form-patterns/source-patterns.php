@@ -97,7 +97,7 @@ return array(
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:jet-forms/radio-field {"field_options":[{"label":"Yes","value":"1","calculate":""},{"label":"No","value":"0","calculate":""}],"label":"Looking for a mentor","name":"looking-for-a-mentor","className":" jet-sm-gb-wrapper jet-sm-gb-59319fd9-177e-4d9e-87ae-13595b5cdca6","blockID":"jet-sm-gb-59319fd9-177e-4d9e-87ae-13595b5cdca6"} /-->
 
-<!-- wp:jet-forms/checkbox-field {"field_options":[{"label":"Friend","value":"friend","calculate":""},{"label":"Event","value":"event","calculate":""},{"label":"Internet","value":"internet","calculate":""},{"label":"Other","value":"other","calculate":""}],"label":"How did you learn from us?","name":"how-did-you-learn-from-us","className":" jet-sm-gb-wrapper jet-sm-gb-8bbf3680-3b95-454a-b16d-26687b5aa025","blockID":"jet-sm-gb-8bbf3680-3b95-454a-b16d-26687b5aa025"} /-->
+<!-- wp:jet-forms/checkbox-field {"field_options":[{"label":"Friend","value":"friend","calculate":""},{"label":"Event","value":"event","calculate":""},{"label":"Internet","value":"internet","calculate":""},{"label":"Other","value":"other","calculate":""}],"label":"How did you hear about us?","name":"how-did-you-learn-from-us","className":" jet-sm-gb-wrapper jet-sm-gb-8bbf3680-3b95-454a-b16d-26687b5aa025","blockID":"jet-sm-gb-8bbf3680-3b95-454a-b16d-26687b5aa025"} /-->
 
 <!-- wp:jet-forms/radio-field {"field_options":[{"label":"Yes","value":"1","calculate":""},{"label":"No","value":"0","calculate":""}],"label":"Interested in receiving newsletter","name":"interested-in-receiving-newsletter","className":" jet-sm-gb-wrapper jet-sm-gb-59319fd9-177e-4d9e-87ae-13595b5cdca6","blockID":"jet-sm-gb-59319fd9-177e-4d9e-87ae-13595b5cdca6"} /--></div>
 <!-- /wp:column --></div>

@@ -45,19 +45,70 @@ export default function HiddenEdit( props ) {
 		}
 	};
 
-	const checkFieldValueInput = () => <SelectControl
-		key='field_value'
-		label="Field Value"
-		labelPosition="top"
-		value={ attributes.field_value }
-		onChange={ newValue => {
-			setAttributes( { field_value: newValue } );
-			setDynamicName( newValue )
-		} }
-		options={ hiddenValues }
-	/>;
+	const checkFieldValueInput = () => <>
+		<SelectControl
+			key='field_value'
+			label="Field Value"
+			labelPosition="top"
+			value={ attributes.field_value }
+			onChange={ newValue => {
+				setAttributes( { field_value: newValue } );
+				setDynamicName( newValue )
+			} }
+			options={ hiddenValues }
+		/>
+		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
+			key="hidden_value_field"
+			label="Meta Field to Get Value From"
+			value={ attributes.hidden_value_field }
+			onChange={ newValue => {
+				setAttributes( { hidden_value_field: newValue } );
+			} }
+		/> }
+		{ 'query_var' === attributes.field_value && <TextControl
+			key="query_var_key"
+			label="Query Variable Key"
+			value={ attributes.query_var_key }
+			onChange={ newValue => {
+				setAttributes( { query_var_key: newValue } );
+			} }
+		/> }
+		{ 'current_date' === attributes.field_value && <TextControl
+			key="date_format"
+			label="Format"
+			value={ attributes.date_format }
+			onChange={ newValue => {
+				setAttributes( { date_format: newValue } );
+			} }
+		/> }
+		{ 'manual_input' === attributes.field_value && <TextControl
+			key="hidden_value"
+			label="Value"
+			value={ attributes.hidden_value }
+			onChange={ newValue => {
+				setAttributes( { hidden_value: newValue } );
+			} }
+		/> }
+	</>;
 
 	const { label = 'Please set `Field Value`' } = hiddenValues.find( option => option.value === attributes.field_value );
+	const resultLabel = [ label ];
+
+	switch ( attributes.field_value ) {
+		case 'post_meta':
+		case 'user_meta':
+			resultLabel.push( attributes.hidden_value_field );
+			break;
+		case 'query_var':
+			resultLabel.push( attributes.query_var_key );
+			break;
+		case 'current_date':
+			resultLabel.push( attributes.date_format );
+			break;
+		case 'manual_input':
+			resultLabel.push( attributes.hidden_value );
+			break;
+	}
 
 	return [
 		isSelected && (
@@ -70,38 +121,6 @@ export default function HiddenEdit( props ) {
 				/>
 				<FieldSettingsWrapper { ...props }>
 					{ checkFieldValueInput() }
-					{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
-						key="hidden_value_field"
-						label="Meta Field to Get Value From"
-						value={ attributes.hidden_value_field }
-						onChange={ newValue => {
-							setAttributes( { hidden_value_field: newValue } );
-						} }
-					/> }
-					{ 'query_var' === attributes.field_value && <TextControl
-						key="query_var_key"
-						label="Query Variable Key"
-						value={ attributes.query_var_key }
-						onChange={ newValue => {
-							setAttributes( { query_var_key: newValue } );
-						} }
-					/> }
-					{ 'current_date' === attributes.field_value && <TextControl
-						key="date_format"
-						label="Format"
-						value={ attributes.date_format }
-						onChange={ newValue => {
-							setAttributes( { date_format: newValue } );
-						} }
-					/> }
-					{ 'manual_input' === attributes.field_value && <TextControl
-						key="hidden_value"
-						label="Value"
-						value={ attributes.hidden_value }
-						onChange={ newValue => {
-							setAttributes( { hidden_value: newValue } );
-						} }
-					/> }
 				</FieldSettingsWrapper>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
@@ -121,7 +140,7 @@ export default function HiddenEdit( props ) {
 				</CardHeader>
 				<CardBody>
 					{ isSelected && checkFieldValueInput() }
-					{ ! isSelected && label }
+					{ ! isSelected && resultLabel.join( ': ' ) }
 				</CardBody>
 			</Card>
 		</div>,

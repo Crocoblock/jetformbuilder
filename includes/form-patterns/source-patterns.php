@@ -201,8 +201,8 @@ return array(
 	),
 
 
-	'demo_form' => array(
-		'title'   => __( 'Demo form', 'jet-form-builder' ),
+	'booking_form' => array(
+		'title'   => __( 'Booking form', 'jet-form-builder' ),
 		'content' => '<!-- wp:jet-forms/hidden-field {"name":"post_id"} /-->
 
 <!-- wp:heading {"level":3} -->

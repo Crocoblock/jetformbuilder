@@ -725,8 +725,31 @@ select.components-select-control__input.components-select-control__input.compone
 	margin-bottom: 1.2em;
 }
 
-.jet-form-builder-row .components-base-control__label {
+.jet-form-builder-row {
+	.components-base-control__label {
+		display: flex;
+	}
+	&.jet-form-builder-row__flex .components-base-control__label {
+		display: block;
+	}
+}
+
+.jet-form-builder__desc--wrapper {
 	display: flex;
+	.jet-form-builder-row__flex & {
+		display: block;
+	}
+}
+
+.jet-form-builder-row__flex--label {
+	flex: 1 1 0;
+	.components-base-control__label {
+		margin-bottom: 1em;
+	}
+}
+
+.jet-form-builder-row__flex--content {
+	flex: 3 1 0;
 }
 
 .components-base-control__label .jet-form-builder__label {
@@ -794,3 +817,4 @@ div.components-modal__screen-overlay {
 .jet-d-flex-between > div {
 	flex: 0.9;
 }
+

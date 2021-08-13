@@ -30,7 +30,6 @@ function RichDescription( content ) {
 function FieldWrapper( props ) {
 
 	const {
-			  isSelected,
 			  attributes,
 			  editProps: { uniqKey, blockName = '' },
 			  children,
@@ -68,7 +67,7 @@ function FieldWrapper( props ) {
 	}
 
 	function renderDescription() {
-		return <div style={ { display: 'flex' } }>
+		return <div className='jet-form-builder__desc--wrapper'>
 			{ RichDescription( __( 'input description:', 'jet-form-builder' ) ) }
 			<BaseControl key={ 'custom_help_description' } className={ 'jet-form-builder__desc' }>
 				<div className='components-base-control__help'>
@@ -107,11 +106,11 @@ function FieldWrapper( props ) {
 				{ 'bottom' === childrenPosition && children }
 			</> }
 			{ 'row' === _jf_args.fields_layout && <>
-				<div style={ { flex: 1 } }>
+				<div className='jet-form-builder-row__flex--label'>
 					{ renderLabel() }
 					{ renderDescription() }
 				</div>
-				<div style={ { flex: 3 } }>{ children }</div>
+				<div className='jet-form-builder-row__flex--content'>{ children }</div>
 			</> }
 		</BaseControl>
 	);

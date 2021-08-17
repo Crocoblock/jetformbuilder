@@ -1,12 +1,3 @@
-/*import {
-	countriesList,
-	labels,
-	help,
-	types,
-} from '@/source';*/
-
-import { classnames } from '../../../package/helpers/tools';
-
 const {
 		  AdvancedFields,
 		  GeneralFields,
@@ -16,19 +7,12 @@ const {
 	  } = JetFBComponents;
 
 const {
-		  getBlockControls,
-	  } = JetFBActions;
-
-const {
 		  TextControl,
 		  __experimentalInputControl,
 	  } = wp.components;
 
 const { __ } = wp.i18n;
 
-const {
-		  applyFilters,
-	  } = wp.hooks;
 
 const {
 		  InspectorControls,
@@ -51,8 +35,6 @@ function ColorPickerEdit( props ) {
 			  editProps: { uniqKey },
 		  } = props;
 
-	const customControls = getBlockControls( 'custom_settings' );
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -65,7 +47,10 @@ function ColorPickerEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			{ customControls && <FieldSettingsWrapper { ...props } /> }
+			<FieldSettingsWrapper
+				key={ uniqKey( 'FieldSettingsWrapper' ) }
+				{ ...props }
+			/>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }

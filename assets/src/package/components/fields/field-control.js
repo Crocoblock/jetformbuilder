@@ -1,9 +1,7 @@
 import { ControlsSettings } from "./controls";
 import FieldWithPreset from "./field-with-preset";
 import DynamicPreset from "../presets/dynamic-preset";
-import {
-	getConvertedName,
-} from '../../helpers/tools';
+import { getConvertedName } from '../../helpers/tools';
 import { useSuccessNotice } from '../../helpers/hooks/hooks-helper';
 
 const {
@@ -39,27 +37,22 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
-function FieldControl( {
-						   type,
-						   setAttributes,
-						   attributes,
-						   attrsSettings = {},
-						   editProps: {
-							   attrHelp = () => '',
-							   blockName = '',
-						   },
-					   } ) {
+function filterFieldControls( {
+								  type,
+								  attributes,
+								  attrsSettings = {},
+								  editProps: {
+									  attrHelp = () => '',
+									  blockName = '',
+								  },
+							  } ) {
 	const controls = ControlsSettings();
 
 	if ( ! controls[ type ] ) {
-		return null;
+		return [];
 	}
 
 	const currentControl = controls[ type ];
-
-	const onChangeValue = ( value, key ) => {
-		setAttributes( { [ key ]: value } );
-	};
 
 	const isValidCondition = ( attr ) => {
 		if ( ! attr.condition ) {
@@ -125,8 +118,7 @@ function FieldControl( {
 		return true;
 	};
 
-	return currentControl.attrs.map( ( { help = '', attrName, label, ...attr } ) => {
-
+	return currentControl.attrs.filter( ( { help = '', attrName, label, ...attr } ) => {
 		const isRegisterAttribute = ( attrName in attributes );
 		const validCondition = isValidCondition( attr );
 		const isHidden = (
@@ -135,12 +127,30 @@ function FieldControl( {
 			&& false === attrsSettings[ attrName ].show
 		);
 
+		return ( isRegisterAttribute && validCondition && ! isHidden )
+	} );
+}
 
+function FieldControl( props ) {
+	let {
+			setAttributes,
+			attributes,
+			editProps: {
+				attrHelp  = () => '',
+				blockName = '',
+			},
+			fieldControls = [],
+		} = props;
 
-		if ( ! isRegisterAttribute || ! validCondition || isHidden ) {
-			return null;
-		}
+	if ( ! fieldControls.length ) {
+		fieldControls = filterFieldControls( props );
+	}
 
+	const onChangeValue = ( value, key ) => {
+		setAttributes( { [ key ]: value } );
+	};
+
+	return fieldControls.map( ( { help = '', attrName, label, ...attr } ) => {
 		switch ( attr.type ) {
 			case 'text':
 				return <TextControl
@@ -308,4 +318,5 @@ export {
 	ToolBarFields,
 	AdvancedFields,
 	FieldControl,
+	filterFieldControls
 };

@@ -126,9 +126,9 @@ class Tools {
 	/**
 	 * Returns all registeredroles for JS
 	 */
-	public static function get_user_roles_for_js() {
+	public static function get_user_roles_for_js( $exclude = array( 'administrator' ) ) {
 
-		$roles  = self::get_user_roles();
+		$roles  = self::get_user_roles( $exclude );
 		$result = array();
 
 		foreach ( $roles as $role => $label ) {

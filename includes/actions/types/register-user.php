@@ -54,11 +54,13 @@ class Register_User extends Base {
 
 	public function editor_labels() {
 		return array(
-			'fields_map'  => __( 'Fields Map:', 'jet-form-builder' ),
-			'user_role'   => __( 'User Role:', 'jet-form-builder' ),
-			'user_meta'   => __( 'User Meta:', 'jet-form-builder' ),
-			'log_in'      => __( 'Log In User after Register:', 'jet-form-builder' ),
-			'add_user_id' => __( 'Add User ID to form data:', 'jet-from-builder' ),
+			'allow_register'    => __( 'Allow create new users by existing users', 'jet-form-builder' ),
+			'role_can_register' => __( 'Who can register?', 'jet-form-builder' ),
+			'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
+			'user_role'         => __( 'User Role:', 'jet-form-builder' ),
+			'user_meta'         => __( 'User Meta:', 'jet-form-builder' ),
+			'log_in'            => __( 'Log In User after Register:', 'jet-form-builder' ),
+			'add_user_id'       => __( 'Add User ID to form data:', 'jet-from-builder' ),
 		);
 	}
 
@@ -69,18 +71,39 @@ class Register_User extends Base {
 		);
 	}
 
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
 	public function do_action( array $request, Action_Handler $handler ) {
+		$allow_register    = $this->settings['allow_register'] ?? false;
+		$role_can_register = $this->settings['role_can_register'] ?? false;
+
+		if ( $allow_register && ! $role_can_register ) {
+			throw new Action_Exception( 'failed', '`role_can_register` is empty' );
+		}
+
 		if ( is_user_logged_in() ) {
 
-			if ( 1 === $handler->size_all ) {
+			if ( $allow_register && ! current_user_can( $role_can_register ) ) {
+				throw new Action_Exception( 'not_enough_cap' );
+			}
+
+			if ( ! $allow_register && 1 === $handler->size_all ) {
 				throw new Action_Exception( 'already_logged_in' );
 			}
 
-			if ( isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
+			if ( ! $allow_register && isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
 				$handler->response_data['user_id'] = get_current_user_id();
+
+				return;
 			}
 
-			return;
+		} elseif ( $allow_register ) {
+			throw new Action_Exception( 'not_logged_in' );
 		}
 
 		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
@@ -258,8 +281,9 @@ class Register_User extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'userRoles'  => Tools::get_user_roles_for_js(),
-			'userFields' => $this->get_user_fields(),
+			'userRoles'    => Tools::get_user_roles_for_js(),
+			'allUserRoles' => Tools::get_user_roles_for_js( array() ),
+			'userFields'   => $this->get_user_fields(),
 		);
 	}
 
@@ -297,6 +321,14 @@ class Register_User extends Base {
 				'label' => __( 'Logged in (appears only if register user is only notification)', 'jet-form-builder' ),
 				'value' => 'You already logged in.',
 			),
+			'not_logged_in'     => array(
+				'label' => __( "Not Logged in (appears only when the \"{$this->editor_labels()['allow_register']}\" option is enabled)", 'jet-form-builder' ),
+				'value' => 'You are not logged in.',
+			),
+			'not_enough_cap'    => array(
+				'label' => __( 'Not enough capabilities' ),
+				'value' => 'Not enough capabilities to register a user.'
+			)
 		);
 	}
 

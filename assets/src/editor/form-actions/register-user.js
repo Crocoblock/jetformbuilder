@@ -41,6 +41,24 @@ addAction( 'register_user', class RegisterUserAction extends BaseActionComponent
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return ( <React.Fragment key="register_user">
+			<ToggleControl
+				key='allow_register'
+				label={ label( 'allow_register' ) }
+				checked={ settings.allow_register }
+				onChange={ newValue => {
+					this.onChangeSetting( newValue, 'allow_register' );
+				} }
+			/>
+			{ settings.allow_register && <SelectControl
+				key="role_can_register"
+				label={ label( 'role_can_register' ) }
+				labelPosition="side"
+				value={ settings.role_can_register }
+				options={ source.allUserRoles }
+				onChange={ ( newValue ) => {
+					this.onChangeSetting( newValue, 'role_can_register' );
+				} }
+			/> }
 			<BaseControl
 				label={ label( 'fields_map' ) }
 				key="user_fields_map"

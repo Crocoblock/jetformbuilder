@@ -22,14 +22,17 @@ function ActionMessages( props ) {
 		  } = props;
 
 	useEffect( () => {
-		if ( ! settings || ! settings.messages ) {
-			const messages = {};
+		const oldMessages = settings.messages || {};
+		const messages = {};
 
-			Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
+		Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
+			if ( ! oldMessages[ type ] ) {
 				messages[ type ] = data.value;
-			} )
+			}
+		} )
 
-			onChangeSetting( messages, 'messages' );
+		if ( messages ) {
+			onChangeSetting( { ...oldMessages, ...messages }, 'messages' );
 		}
 	}, [] );
 

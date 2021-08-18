@@ -326,7 +326,7 @@ class Register_User extends Base {
 				'value' => 'You are not logged in.',
 			),
 			'not_enough_cap'    => array(
-				'label' => __( 'Not enough capabilities' ),
+				'label' => __( 'Not enough capabilities', 'jet-form-builder' ),
 				'value' => 'Not enough capabilities to register a user.'
 			)
 		);

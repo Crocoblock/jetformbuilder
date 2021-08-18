@@ -54,8 +54,8 @@ class Register_User extends Base {
 
 	public function editor_labels() {
 		return array(
-			'allow_register'    => __( 'Allow create new users by existing users', 'jet-form-builder' ),
-			'role_can_register' => __( 'Who can register?', 'jet-form-builder' ),
+			'allow_register'    => __( 'Allow creating new users by existing users', 'jet-form-builder' ),
+			'role_can_register' => __( 'Who can add new user?', 'jet-form-builder' ),
 			'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
 			'user_role'         => __( 'User Role:', 'jet-form-builder' ),
 			'user_meta'         => __( 'User Meta:', 'jet-form-builder' ),

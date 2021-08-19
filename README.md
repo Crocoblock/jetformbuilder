@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.3.0
+* ADD: UI/UX improvements
+* ADD: Color Picker Field
+* ADD: Form Patterns **JetForms**
+* ADD: Allow creating new users by existing users (in Register User action)
+* ADD: Numbers range by manual input (generator function)
+* ADD: Changing the separator for a fractional number in a calculate field
+* ADD: Styling a Conditional Block
+* FIX: Range Field UI in editor
+* FIX: reCaptcha Uncaught SyntaxError unexpected end of input
+
 ## 1.2.7
 * FIX: Initialize input mask for new repeater items
 * FIX: Preset Hidden Field

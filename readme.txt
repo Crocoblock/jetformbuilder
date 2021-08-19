@@ -4,7 +4,7 @@ Tags: blocks, form builder, contact form, gutenberg, gutenberg forms, multi step
 Requires at least: 5.6
 Tested up to: 5.8.0
 Requires PHP: 7.0
-Stable tag: 1.2.7
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,17 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.3.0**
+ - ADD: UI/UX improvements
+ - ADD: Color Picker Field
+ - ADD: Form Patterns **JetForms**
+ - ADD: Allow creating new users by existing users (in Register User action)
+ - ADD: Numbers range by manual input (generator function)
+ - ADD: Changing the separator for a fractional number in a calculate field
+ - ADD: Styling a Conditional Block
+ - FIX: Range Field UI in editor
+ - FIX: reCaptcha Uncaught SyntaxError unexpected end of input
 
 **1.2.7**
  - FIX: Initialize input mask for new repeater items

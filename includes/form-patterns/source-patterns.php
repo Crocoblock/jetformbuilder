@@ -11,7 +11,7 @@ return array(
 <!-- /wp:column -->
 
 <!-- wp:column -->
-<div class="wp-block-column"><!-- wp:jet-forms/text-field {"field_type":"tel","label":"Phone","name":"phone","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-582e3284-467f-41dc-a95b-801961ae40ba","blockID":"jet-sm-gb-582e3284-467f-41dc-a95b-801961ae40ba"} /--></div>
+<div class="wp-block-column"><!-- wp:jet-forms/text-field {"field_type":"tel","enable_input_mask":true,"input_mask":"+99(999)999-99-99","label":"Phone","name":"phone","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-582e3284-467f-41dc-a95b-801961ae40ba","blockID":"jet-sm-gb-582e3284-467f-41dc-a95b-801961ae40ba"} /--></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
@@ -69,7 +69,7 @@ return array(
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:jet-forms/text-field {"label":"Last Name","name":"last-name","className":" jet-sm-gb-wrapper jet-sm-gb-d59e5f80-5707-4a99-ae18-c1d066b91404","blockID":"jet-sm-gb-d59e5f80-5707-4a99-ae18-c1d066b91404"} /-->
 
-<!-- wp:jet-forms/text-field {"field_type":"tel","label":"Phone Number","name":"phone-number","className":" jet-sm-gb-wrapper jet-sm-gb-a7759893-2128-4b26-b4eb-f2acfeb893c7","blockID":"jet-sm-gb-a7759893-2128-4b26-b4eb-f2acfeb893c7"} /-->
+<!-- wp:jet-forms/text-field {"field_type":"tel","enable_input_mask":true,"input_mask":"+99(999)999-99-99","label":"Phone Number","name":"phone-number","className":" jet-sm-gb-wrapper jet-sm-gb-a7759893-2128-4b26-b4eb-f2acfeb893c7","blockID":"jet-sm-gb-a7759893-2128-4b26-b4eb-f2acfeb893c7"} /-->
 
 <!-- wp:jet-forms/text-field {"label":"City","name":"city","className":" jet-sm-gb-wrapper jet-sm-gb-b4128c80-2a3f-4746-9b16-5ad9f3ac12e3","blockID":"jet-sm-gb-b4128c80-2a3f-4746-9b16-5ad9f3ac12e3"} /--></div>
 <!-- /wp:column --></div>
@@ -255,7 +255,7 @@ return array(
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:jet-forms/text-field {"label":"Name","name":"name","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb","blockID":"jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb"} /-->
 
-<!-- wp:jet-forms/text-field {"field_type":"tel","label":"Phone","name":"phone","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb","blockID":"jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb"} /--></div>
+<!-- wp:jet-forms/text-field {"field_type":"tel","enable_input_mask":true,"input_mask":"+99(999)999-99-99","label":"Phone","name":"phone","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb","blockID":"jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb"} /--></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->
@@ -276,7 +276,7 @@ return array(
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:jet-forms/text-field {"label":"Name","name":"rep_name","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb","blockID":"jet-sm-gb-afe342da-9827-45c0-aca3-c15fa1728adb"} /-->
 
-<!-- wp:jet-forms/number-field {"label":"Phone","name":"rep_phone","required":true,"blockID":"jet-sm-gb-0646c1df-2f9b-49f8-a632-d4a327c2793a"} /--></div>
+<!-- wp:jet-forms/text-field {"field_type":"tel","enable_input_mask":true,"input_mask":"+99(999)999-99-99","label":"Phone","name":"rep_phone","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-89bc92d9-eb86-45f2-b5da-acd7ae1aea7f","blockID":"jet-sm-gb-89bc92d9-eb86-45f2-b5da-acd7ae1aea7f"} /--></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->

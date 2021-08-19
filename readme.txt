@@ -1,6 +1,6 @@
 ﻿=== JetFormBuilder — Form Builder for Gutenberg ===
 Contributors: crocoblock, mjhead, hugreed
-Tags: blocks, form builder, contact form, gutenberg, gutenberg forms, multi step form.
+Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
 Tested up to: 5.8.0
 Requires PHP: 7.0

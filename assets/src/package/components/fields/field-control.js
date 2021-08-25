@@ -287,7 +287,7 @@ function ToolBarFields( props ) {
 				justify={ 'center' }
 				className={ 'jet-form-toggle-box' }
 			>
-				{ displayName && <>
+				{ displayName && <div className={'jet-input-with-button'}>
 					<ClipboardButton
 						isSmall
 						icon='admin-page'
@@ -301,7 +301,7 @@ function ToolBarFields( props ) {
 						value={ attributes.name }
 						onChange={ name => setAttributes( { name } ) }
 					/>
-				</> }
+				</div> }
 				<FieldControl
 					type='toolbar'
 					key={ uniqKey( 'jet-form-toolbar-fields-component' ) }

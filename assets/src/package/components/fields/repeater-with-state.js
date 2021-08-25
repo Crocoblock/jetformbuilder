@@ -274,6 +274,7 @@ function RepeaterWithState( {
 					{ 'function' === typeof children && children( {
 						currentItem,
 						changeCurrentItem: data => changeCurrentItem( data, index ),
+						currentIndex: index
 					} ) }
 					{ 'function' !== typeof children && children }
 				</React.Fragment> }

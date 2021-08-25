@@ -95,10 +95,12 @@ class Tools {
 	/**
 	 * Return all taxonomies list to use in JS components
 	 *
-	 * @return [type] [description]
+	 * @param array $args
+	 *
+	 * @return array
 	 */
-	public static function get_taxonomies_for_js() {
-		$taxonomies = get_taxonomies( array(), 'objects' );
+	public static function get_taxonomies_for_js( $args = array() ) {
+		$taxonomies = get_taxonomies( $args, 'objects' );
 
 		return self::with_placeholder( self::prepare_list_for_js( $taxonomies, 'name', 'label' ) );
 	}
@@ -227,9 +229,23 @@ class Tools {
 	/**
 	 * Prepare passed array for using in JS options
 	 *
-	 * @return [type] [description]
+	 * @param array $array
+	 * @param null $value_key
+	 * @param null $label_key
+	 * @param bool $for_elementor
+	 *
+	 * Only if $for_elementor === false
+	 * @param array $additional_attrs
+	 *
+	 * @return array [type] [description]
 	 */
-	public static function prepare_list_for_js( $array = array(), $value_key = null, $label_key = null, $for_elementor = false ) {
+	public static function prepare_list_for_js(
+		$array = array(),
+		$value_key = null,
+		$label_key = null,
+		$for_elementor = false,
+		$additional_attrs = array()
+	) {
 
 		$result = array();
 
@@ -242,24 +258,26 @@ class Tools {
 			$value = null;
 			$label = null;
 
-			if ( is_object( $item ) ) {
-				$value = $item->$value_key;
-				$label = $item->$label_key;
-			} elseif ( is_array( $item ) ) {
-				$value = $item[ $value_key ];
-				$label = $item[ $label_key ];
-			} else {
+			if ( is_scalar( $item ) ) {
 				$value = $key;
 				$label = $item;
+			} else {
+				$value = self::get_property( $item, $value_key );
+				$label = self::get_property( $item, $label_key );
 			}
 
 			if ( $for_elementor ) {
 				$result[ $value ] = $label;
 			} else {
-				$result[] = array(
+				$prepared = array(
 					'value' => $value,
 					'label' => $label,
 				);
+				foreach ( $additional_attrs as $attr ) {
+					$prepared[ $attr ] = self::get_property( $item, $attr );
+				}
+
+				$result[] = $prepared;
 			}
 		}
 
@@ -417,6 +435,14 @@ class Tools {
 		}
 
 		return $merged;
+	}
+
+	public static function get_property( $source, $name, $if_not_exist = '' ) {
+		if ( is_object( $source ) ) {
+			return $source->{$name} ?? $if_not_exist;
+		}
+
+		return $source[ $name ] ?? $if_not_exist;
 	}
 
 }

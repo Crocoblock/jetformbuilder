@@ -113,12 +113,6 @@
 				} );
 			}
 
-			JetFormBuilderDev.log( 'Conditional', {
-				val,
-				listenFor,
-				operator,
-			} );
-
 			switch ( operator ) {
 				case 'equal':
 					if ( val && val.constructor === Array ) {
@@ -460,13 +454,7 @@
 			} );
 		},
 		initCommon: function( $scope = false ) {
-			if ( JetFormBuilder.initialized ) {
-				return;
-			}
-			if ( ! $scope ) {
-				$scope = $( document );
-			}
-			const wrappers = $scope.find( '.jet-form-builder__form-wrapper' );
+			let wrappers = $( '.jet-form-builder__form-wrapper', $scope );
 
 			wrappers.each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
@@ -1439,7 +1427,7 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( JetFormBuilder.initCommon );
+	$( () => JetFormBuilder.initCommon() );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
 
 	$( document ).on( 'elementor/popup/show', function( event, id, instance ) {

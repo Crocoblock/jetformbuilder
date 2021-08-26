@@ -323,7 +323,7 @@
 		var setVisibility = function( $section ) {
 
 			var checked = $section.data( 'checked' );
-			var $row = $section.closest( '.jet-form-builder-row' );
+			//var $row = $section.closest( '.jet-form-builder-row' );
 			var res = true;
 
 			if ( ! checked ) {
@@ -339,7 +339,7 @@
 			if ( res ) {
 
 				$section.show();
-				$row.show();
+				//$row.show();
 
 				$section.find( '*[data-initial-type]' ).each( function() {
 					var $this = $( this );
@@ -375,13 +375,13 @@
 					.removeAttr( 'required' )
 					.attr( 'data-required', 1 );
 
-				var $hiddenItems = $row.find( '>*' ).filter( function() {
+				/*var $hiddenItems = $row.find( '>*' ).filter( function() {
 					return $( this ).css( 'display' ) === 'none';
 				} );
 
 				if ( $row.find( '>*' ).length === $hiddenItems.length ) {
 					$row.hide();
-				}
+				}*/
 			}
 
 		};
@@ -444,7 +444,6 @@
 
 	var JetFormBuilder = {
 
-		initialized: false,
 		pages: {},
 		calcFields: {},
 		repeaterCalcFields: {},
@@ -460,22 +459,21 @@
 				JetFormBuilder.widgetBookingForm( $( value ) );
 			} );
 		},
-		initCommon: function() {
+		initCommon: function( $scope = false ) {
 			if ( JetFormBuilder.initialized ) {
 				return;
 			}
-			const wrappers = $( '.jet-form-builder__form-wrapper' );
+			if ( ! $scope ) {
+				$scope = $( document );
+			}
+			const wrappers = $scope.find( '.jet-form-builder__form-wrapper' );
 
 			wrappers.each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
-				JetFormBuilder.initialized = true;
 			} );
 		},
 
 		initElementor: function() {
-			if ( JetFormBuilder.initialized ) {
-				return;
-			}
 			const widgets = {
 				'jet-engine-booking-form.default': JetFormBuilder.widgetBookingForm,
 				'jet-form-builder-form.default': JetFormBuilder.widgetBookingForm,
@@ -484,7 +482,6 @@
 			$.each( widgets, function( widget, callback ) {
 				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
 			} );
-			JetFormBuilder.initialized = true;
 		},
 
 		addHandlersInit: function() {
@@ -1444,6 +1441,12 @@
 
 	$( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
+
+	$( document ).on( 'elementor/popup/show', function( event, id, instance ) {
+		const $modal = $( '#elementor-popup-modal-' + id );
+
+		JetFormBuilder.initCommon( $modal );
+	} );
 
 	document.addEventListener( 'jet-fb.render.form-block', JetFormBuilder.notSafeInit )
 

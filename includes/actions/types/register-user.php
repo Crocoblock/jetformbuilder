@@ -87,8 +87,9 @@ class Register_User extends Base {
 		}
 
 		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
 
-			if ( $allow_register && ! current_user_can( $role_can_register ) ) {
+			if ( $allow_register && ! in_array( $role_can_register, $user->roles ) ) {
 				throw new Action_Exception( 'not_enough_cap' );
 			}
 

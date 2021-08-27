@@ -98,7 +98,7 @@ class Register_User extends Base {
 			}
 
 			if ( ! $allow_register && isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
-				$handler->response_data['user_id'] = get_current_user_id();
+				$handler->response_data['user_id'] = (int) $user->ID;
 
 				return;
 			}

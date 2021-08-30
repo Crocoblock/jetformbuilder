@@ -129,11 +129,6 @@ abstract class Base {
 	}
 
 	public function render( $wp_block = null, $template = null ) {
-
-		if ( ! $this->live_form->form_id ) {
-			return;
-		}
-
 		$defaults = array(
 			'default'     => '',
 			'name'        => '',

@@ -157,7 +157,11 @@ abstract class Base extends Base_Module {
 	 * @return string
 	 */
 	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+		if ( ! Live_Form::instance()->form_id ) {
+			return '';
+		}
 		$this->set_block_data( $attrs, $content );
+		$this->set_preset();
 
 		$form = Live_Form::instance();
 
@@ -192,34 +196,29 @@ abstract class Base extends Base_Module {
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
-		$this->block_attrs['default']   = $this->get_default_from_preset();
+	}
+
+	protected function set_preset() {
+		$this->block_attrs['default'] = $this->get_default_from_preset();
 	}
 
 	private function get_default_from_preset() {
 		$result_value = '';
+		list( $name, $default ) = array( $this->block_attrs['name'], $this->block_attrs['default'] ?? '' );
 
-		if ( ! Live_Form::instance()->current_repeater
-		     || ( ! empty( Live_Form::instance()->current_repeater )
-		          && empty( Live_Form::instance()->current_repeater['values'] ) )
-		) {
+		if ( empty( Live_Form::instance()->current_repeater['values'] ) ) {
 			$result_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
 
-		} elseif ( ! empty( Live_Form::instance()->current_repeater['values'] )
-		           && isset( Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ] ) ) {
-
-			$result_value = Live_Form::instance()->current_repeater['values'][ $this->block_attrs['name'] ];
+		} elseif ( isset( Live_Form::instance()->current_repeater['values'][ $name ] ) ) {
+			$result_value = Live_Form::instance()->current_repeater['values'][ $name ];
 		}
 
 		if ( '' !== $result_value ) {
 			return $result_value;
 		}
 
-		if ( isset( $this->block_attrs['default'] )
-		     && '' !== $this->block_attrs['default']
-		     && null === json_decode( $this->block_attrs['default'] )
-		) {
-
-			return $this->block_attrs['default'];
+		if ( '' !== $default && null === json_decode( $default ) ) {
+			return $default;
 		}
 
 		return '';

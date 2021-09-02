@@ -1,34 +1,33 @@
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldSettingsWrapper
-} = JetFBComponents;
+		  GeneralFields,
+		  AdvancedFields,
+		  FieldSettingsWrapper,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-	RichText,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+		  RichText,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextareaControl,
-	TextControl,
-	PanelBody,
-	Button,
-} = wp.components;
-
+		  TextareaControl,
+		  TextControl,
+		  PanelBody,
+		  Button,
+	  } = wp.components;
 
 export default function FormBreakEdit( props ) {
 
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  editProps: { uniqKey, attrHelp },
+		  } = props;
 
 	return [
 		props.isSelected && <InspectorControls
@@ -36,6 +35,7 @@ export default function FormBreakEdit( props ) {
 		>
 			<GeneralFields
 				key={ uniqKey( 'GeneralFields' ) }
+				autoCompleteLabel={ false }
 				{ ...props }
 			/>
 			<FieldSettingsWrapper { ...props }>
@@ -90,7 +90,7 @@ export default function FormBreakEdit( props ) {
 					/>
 				</Button> }
 			</div>
-		</div>
+		</div>,
 	];
 
 }

@@ -107,7 +107,7 @@ export function maybeCyrToLatin( str ) {
 
 export function getConvertedName( valueToChange ) {
 	var regex = /\s+/g,
-		slug  = valueToChange.toLowerCase().replace( regex, '-' );
+		slug  = valueToChange.toLowerCase().replace( regex, '_' );
 
 	// Replace accents
 	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" );

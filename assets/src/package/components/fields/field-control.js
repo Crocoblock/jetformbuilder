@@ -140,6 +140,7 @@ function FieldControl( props ) {
 				blockName = '',
 			},
 			fieldControls = [],
+			autoCompleteLabel = true
 		} = props;
 
 	if ( ! fieldControls.length ) {
@@ -163,6 +164,7 @@ function FieldControl( props ) {
 						if ( 'label' === attrName
 							&& 1 < attributes.label.length
 							&& ( ! attributes.name || 'field_name' === attributes.name )
+							&& autoCompleteLabel
 						) {
 							onChangeValue( getConvertedName( attributes.label ), 'name' );
 						}

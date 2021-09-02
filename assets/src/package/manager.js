@@ -24,6 +24,7 @@ import {
 import {
 	getAvailableFields,
 	getAvailableFieldsString,
+	getBlocksByName,
 	getFieldsWithoutCurrent,
 	getFormFieldsBlocks,
 	getFormFieldsByBlock,
@@ -128,6 +129,7 @@ window.JetFBActions = {
 	getConvertedName,
 	getBlockControls,
 	classnames,
+	getBlocksByName,
 };
 
 // JFBHooks

@@ -751,6 +751,10 @@ select.components-select-control__input.components-select-control__input.compone
 	width: 100%;
 }
 
+.has-fixed-toolbar .jet-form-toggle-box{
+	padding: 1px 12px 0 12px;
+}
+
 .jet-form-toggle-box {
 	padding: 0 12px;
 	.components-clipboard-button.has-icon {

@@ -29,11 +29,15 @@ if ( typeof NumberControl === 'undefined' ) {
 
 const { __ } = wp.i18n;
 
-const {
-	useState
-} = wp.element;
+const { withRequestFields } = JetFBHooks;
+const { withSelect } = wp.data;
 
-addAction( 'getresponse', class GetResponseAction extends IntegrationComponent {
+class GetResponseAction extends IntegrationComponent {
+	constructor( props ) {
+		super( props );
+
+		this.formFieldsList = [ ...this.formFieldsList, ...this.props.requestFields ];
+	}
 
 	getFields() {
 		const settings = this.props.settings;
@@ -177,4 +181,6 @@ addAction( 'getresponse', class GetResponseAction extends IntegrationComponent {
 		</React.Fragment> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-} );
+}
+
+addAction( 'getresponse', withSelect( withRequestFields )( GetResponseAction ) )

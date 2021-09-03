@@ -22,7 +22,6 @@ const {
 		  Button,
 	  } = wp.components;
 
-
 const { __ } = wp.i18n;
 
 const {
@@ -30,7 +29,10 @@ const {
 		  useEffect,
 	  } = wp.element;
 
-addAction( 'active_campaign', function ActiveCampaignAction( props ) {
+const { withRequestFields } = JetFBHooks;
+const { withSelect } = wp.data;
+
+function ActiveCampaignAction( props ) {
 
 	const {
 			  settings,
@@ -41,6 +43,7 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 			  source,
 			  label,
 			  help,
+			  requestFields,
 		  } = props;
 
 	const currentTab = globalTab( { slug: 'active-campaign-tab' } )
@@ -53,7 +56,7 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 	);
 
 	useEffect( () => {
-		setFormFields( getFormFieldsBlocks( [], '--' ) );
+		setFormFields( [ ...getFormFieldsBlocks( [], '--' ), ...requestFields ] );
 	}, [] )
 
 	function getAPI( prop ) {
@@ -199,4 +202,6 @@ addAction( 'active_campaign', function ActiveCampaignAction( props ) {
 		</React.Fragment> }
 	</>;
 	/* eslint-enable jsx-a11y/no-onchange */
-} );
+}
+
+addAction( 'active_campaign', withSelect( withRequestFields )( ActiveCampaignAction ) )

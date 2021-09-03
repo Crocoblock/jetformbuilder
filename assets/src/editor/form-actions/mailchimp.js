@@ -24,7 +24,17 @@ const {
 
 const { __ } = wp.i18n;
 
-addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
+const { withRequestFields } = JetFBHooks;
+
+const { withSelect } = wp.data;
+
+class MailChimpAction extends IntegrationComponent {
+
+	constructor( props ) {
+		super( props );
+
+		this.formFieldsList = [ ...this.formFieldsList, ...this.props.requestFields ];
+	}
 
 	getFields() {
 		const { settings } = this.props;
@@ -206,4 +216,6 @@ addAction( 'mailchimp', class MailChimpAction extends IntegrationComponent {
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-} );
+}
+
+addAction( 'mailchimp', withSelect( withRequestFields )( MailChimpAction ) )

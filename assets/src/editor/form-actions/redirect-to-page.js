@@ -107,7 +107,6 @@ function RedirectToPageAction( props ) {
 	</div> );
 	/* eslint-enable jsx-a11y/no-onchange */
 }
-}
 
 addAction( 'redirect_to_page', withSelect( withRequestFields )( RedirectToPageAction ) );
 

@@ -3,39 +3,43 @@
  */
 
 const {
-	MacrosInserter
-} = JetFBComponents;
+		  MacrosInserter,
+	  } = JetFBComponents;
 
 const {
-	addAction,
-	getFormFieldsBlocks,
-	Tools: { withPlaceholder }
-} = JetFBActions;
+		  addAction,
+		  getFormFieldsBlocks,
+		  Tools: { withPlaceholder },
+	  } = JetFBActions;
 
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-} = wp.components;
+		  TextControl,
+		  TextareaControl,
+		  SelectControl,
+	  } = wp.components;
 
 const {
-	useState,
-	useEffect,
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
 
-addAction( 'send_email', function SendEmailAction( {
-													   settings,
-													   source,
-													   label,
-													   help,
-													   onChangeSetting
-												   } ) {
+const { withRequestFields } = JetFBHooks;
 
+const { withSelect } = wp.data;
+
+function SendEmailAction( {
+							  settings,
+							  source,
+							  label,
+							  help,
+							  onChangeSetting,
+							  requestFields,
+						  } ) {
 
 	const [ formFields, setFormFields ] = useState( [] );
 
 	useEffect( () => {
-		setFormFields( getFormFieldsBlocks() );
+		setFormFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
 	}, [] );
 
 	const insertMacros = ( macros ) => {
@@ -167,4 +171,6 @@ addAction( 'send_email', function SendEmailAction( {
 		</div>
 	</>;
 	/* eslint-enable jsx-a11y/no-onchange */
-} );
+}
+
+addAction( 'send_email', withSelect( withRequestFields )( SendEmailAction ) )

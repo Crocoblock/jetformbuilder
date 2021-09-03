@@ -22,6 +22,10 @@ const {
 		  useEffect,
 	  } = wp.element;
 
+const { withRequestFields } = JetFBHooks;
+
+const { withSelect } = wp.data;
+
 function RedirectToPageAction( props ) {
 
 	const {
@@ -30,12 +34,13 @@ function RedirectToPageAction( props ) {
 			  settings,
 			  onChangeSetting,
 			  onChangeSettingObj,
+			  requestFields,
 		  } = props;
 
 	const [ fields, setFields ] = useState( [] );
 
 	useEffect( () => {
-		setFields( getFormFieldsBlocks() );
+		setFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
 	}, [] );
 
 	const isChecked = function( name ) {

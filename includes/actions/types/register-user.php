@@ -265,6 +265,7 @@ class Register_User extends Base {
 			}
 
 			if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
+				$handler->request_data['user_id']  = $user_id;
 				$handler->response_data['user_id'] = $user_id;
 			}
 
@@ -282,9 +283,15 @@ class Register_User extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'userRoles'    => Tools::get_user_roles_for_js(),
-			'allUserRoles' => Tools::get_user_roles_for_js( array() ),
-			'userFields'   => $this->get_user_fields(),
+			'userRoles'     => Tools::get_user_roles_for_js(),
+			'allUserRoles'  => Tools::get_user_roles_for_js( array() ),
+			'userFields'    => $this->get_user_fields(),
+			'requestFields' => array(
+				'user_id' => array(
+					'name' => 'user_id',
+					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' )
+				)
+			)
 		);
 	}
 

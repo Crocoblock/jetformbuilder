@@ -1,12 +1,12 @@
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	useState,
+	useEffect
+} = wp.element;
 
 const {
-		  useSelect,
-		  useDispatch,
-	  } = wp.data;
+	useSelect,
+	useDispatch,
+} = wp.data;
 
 export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	const meta = useSelect( ( select ) => {
@@ -14,8 +14,8 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	} );
 
 	const {
-			  editPost,
-		  } = useDispatch( 'core/editor' );
+		editPost
+	} = useDispatch( 'core/editor' );
 
 	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
 
@@ -23,8 +23,8 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 		editPost( {
 			meta: ( {
 				...meta,
-				[ key ]: JSON.stringify( metaStateValue ),
-			} ),
+				[ key ]: JSON.stringify( metaStateValue )
+			} )
 		} );
 	}, [ metaStateValue ] );
 
@@ -37,8 +37,8 @@ export const useActions = ( withEditPostEffect = false ) => {
 	} );
 
 	const {
-			  editPost,
-		  } = useDispatch( 'core/editor' );
+		editPost
+	} = useDispatch( 'core/editor' );
 
 	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
 
@@ -47,8 +47,8 @@ export const useActions = ( withEditPostEffect = false ) => {
 			editPost( {
 				meta: ( {
 					...meta,
-					_jf_actions: JSON.stringify( actions ),
-				} ),
+					_jf_actions: JSON.stringify( actions )
+				} )
 			} );
 		}
 	}, [ actions ] );
@@ -64,7 +64,8 @@ export const useStateValidClasses = initialValid => {
 	const initStateClasses = () => {
 		if ( initialValid ) {
 			return [ ...initClasses, validClass ];
-		} else if ( ! initialValid ) {
+		}
+		else if ( ! initialValid ) {
 			return [ ...initClasses, invalidClass ];
 		}
 	};
@@ -110,6 +111,54 @@ export const useSuccessNotice = ( text, options = {} ) => {
 	return setHasCopied;
 };
 
-export const withJfbMeta = (callable) => {
+export const getRequestFields = actions => {
+	const requestFields = [];
 
+	for ( const action of actions ) {
+		const {
+				  [ action.type ]: current = {},
+			  } = action.settings;
+
+		if ( ! current.requestFields ) {
+			continue;
+		}
+
+		for ( const requestField of current.requestFields ) {
+			const index = requestFields.findIndex( field => field.value === requestField.name );
+
+			if ( -1 !== index ) {
+				continue;
+			}
+
+			requestFields.push( {
+				from: action.type,
+				id: action.id,
+				label: requestField.name,
+				value: requestField.name,
+				name: requestField.name,
+				help: requestField.help,
+			} )
+		}
+	}
+
+	return requestFields;
+};
+
+export const useRequestFields = ( options = {} ) => {
+	const meta = useSelect( ( select ) => {
+		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+	} );
+	const actions = JSON.parse( meta._jf_actions || '[]' );
+
+	return getRequestFields( actions );
+};
+
+export const withRequestFields = select => {
+	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+	const actions = JSON.parse( meta._jf_actions || '[]' );
+	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
+
+	actions.splice( currentAction.index );
+
+	return { requestFields: getRequestFields( actions ) };
 };

@@ -42,6 +42,8 @@ import {
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,
+	useRequestFields,
+	withRequestFields,
 } from "./helpers/hooks/hooks-helper";
 import FieldWrapper from "./components/fields/field-wrapper";
 import MacrosInserter from "./components/fields/macros-inserter";
@@ -71,6 +73,7 @@ import {
 	getBlockControls,
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
+import './stores/action-store';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -139,5 +142,7 @@ window.JetFBHooks = {
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,
+	withRequestFields,
+	useRequestFields,
 };
 

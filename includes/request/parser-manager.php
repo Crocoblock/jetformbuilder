@@ -34,6 +34,7 @@ class Parser_Manager {
 			new Fields\Text_Field_Parser(),
 			new Fields\Repeater_Field_Parser(),
 			new Fields\Media_Field_Parser(),
+			new Fields\Datetime_Field_Parser()
 		) );
 
 		foreach ( $parsers as $parser ) {

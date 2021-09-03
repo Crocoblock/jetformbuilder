@@ -37,6 +37,7 @@ class Insert_Post extends Base {
 			'post_excerpt',
 			'post_date',
 			'post_date_gmt',
+			'post_author',
 		);
 	}
 
@@ -282,7 +283,7 @@ class Insert_Post extends Base {
 			'postStatuses'     => $this->get_post_statuses_for_options(),
 			'postFields'       => $this->get_post_fields_for_options(),
 			'fieldsMapOptions' => $this->get_fields_map_options(),
-			'requestFields' => array(
+			'requestFields'    => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',
 					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' )
@@ -384,6 +385,10 @@ class Insert_Post extends Base {
 				'value' => 'post_date_gmt',
 				'label' => __( 'Post Date GMT', 'jet-form-builder' )
 			),
+			array(
+				'value' => 'post_author',
+				'label' => __( 'Post Author', 'jet-form-builder' ),
+			)
 		) ) );
 
 	}

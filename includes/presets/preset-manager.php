@@ -151,7 +151,7 @@ class Preset_Manager {
 			return $this->manager_preset->set_additional_data( $args )->source->result();
 		}
 
-		return false;
+		return '';
 	}
 
 	public function get_plain_default() {

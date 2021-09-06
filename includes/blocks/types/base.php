@@ -217,7 +217,7 @@ abstract class Base extends Base_Module {
 			return $result_value;
 		}
 
-		if ( '' !== $default && null === json_decode( $default ) ) {
+		if ( '' !== $default && ( null === json_decode( $default ) || is_int( (int) $default ) ) ) {
 			return $default;
 		}
 

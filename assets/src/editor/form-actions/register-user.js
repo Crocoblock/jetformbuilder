@@ -48,7 +48,7 @@ function RegisterUserAction( props ) {
 
 	useEffect( () => {
 		const _fields = getFormFieldsBlocks();
-		setFields( _fields )
+		setFields( [ ..._fields, ...requestFields ] );
 		setFieldsWithRequest( convertListToFieldsMap( _fields, requestFields ) );
 
 		if ( settings.add_user_id ) {
@@ -88,7 +88,7 @@ function RegisterUserAction( props ) {
 					>
 						<SelectControl
 							className="full-width"
-							key={ `form_fields_${ value }` }
+							key={ `user_fields_${ value }` }
 							value={ getMapField( { name: value } ) }
 							options={ withPlaceholder( fields ) }
 							onChange={ newValue => setMapField( { nameField: value, value: newValue } ) }
@@ -117,11 +117,9 @@ function RegisterUserAction( props ) {
 					return <WrapperRequiredControl
 						field={ [ name, data ] }
 					>
-						<SelectControl
-							className="full-width"
+						<TextControl
 							key={ `form_fields_${ name }` }
 							value={ getMapField( { source: 'meta_fields_map', name } ) }
-							options={ withPlaceholder( fields ) }
 							onChange={ newVal => setMapField( {
 								nameField: name,
 								value: newVal,

@@ -202,11 +202,16 @@ class Manager {
 
 		wp_enqueue_script( 'jet-form-builder-frontend-forms' );
 
-		wp_localize_script( 'jet-form-builder-frontend-forms', 'JetFormBuilderSettings', array(
-			'ajaxurl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
-			'form_action' => Plugin::instance()->form_handler->hook_key,
-			'devmode'     => Dev_Mode\Manager::instance()->active()
-		) );
+		wp_localize_script(
+			'jet-form-builder-frontend-forms',
+			'JetFormBuilderSettings',
+			apply_filters( 'jet-form-builder/frontend-settings', array(
+				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'form_action'  => Plugin::instance()->form_handler->hook_key,
+				'devmode'      => Dev_Mode\Manager::instance()->active(),
+				'scrollOffset' => - 50
+			) )
+		);
 
 	}
 

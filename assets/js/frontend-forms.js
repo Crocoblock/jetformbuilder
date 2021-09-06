@@ -983,6 +983,8 @@
 			$fromPage.addClass( 'jet-form-builder-page--hidden' );
 			$toPage.removeClass( 'jet-form-builder-page--hidden' );
 
+			window.scrollTo( 0, $toPage.offset().top + ( +JetFormBuilderSettings.scrollOffset ) );
+
 			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
 
 			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );

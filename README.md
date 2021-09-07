@@ -4,6 +4,21 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.3.1
+* ADD: Auto scrolling for multi-step form. 
+* ADD: Computed fields from actions (Register User, Insert Post) functionality  
+* ADD: Post Author to Insert/Update Post action
+* FIX: Error when email field not required && empty
+* FIX: Auto-complete label in Form Break field & improve package
+* FIX: Execution of the form via GET parameters and with a dummy refer
+* FIX: Elementor's popup compatibility
+* Tweak: Optimized preset && render field
+* Tweak: php filter: `jet-form-builder/frontend-settings`. 
+Through it you can change the size of the indent for auto scrolling
+* Tweak: php filter: `jet-form-builder/file-upload/custom-html`
+Through it, you can add a custom html to the preview of the loaded image 
+through the Media Field
+
 ## 1.3.0
 * ADD: UI/UX improvements
 * ADD: Color Picker Field

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 5.8.0
 Requires PHP: 7.0
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,21 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.3.1**
+ - ADD: Auto scrolling for multi-step form.
+ - ADD: Computed fields from actions (Register User, Insert Post) functionality
+ - ADD: Post Author to Insert/Update Post action
+ - FIX: Error when email field not required && empty
+ - FIX: Auto-complete label in Form Break field & improve package
+ - FIX: Execution of the form via GET parameters and with a dummy refer
+ - FIX: Elementor's popup compatibility
+ - Tweak: Optimized preset && render field
+ - Tweak: php filter: `jet-form-builder/frontend-settings`.
+Through it you can change the size of the indent for auto scrolling
+ - Tweak: php filter: `jet-form-builder/file-upload/custom-html`
+Through it, you can add a custom html to the preview of the loaded image
+through the Media Field
 
 **1.3.0**
  - ADD: UI/UX improvements

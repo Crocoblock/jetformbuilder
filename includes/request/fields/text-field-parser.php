@@ -11,14 +11,4 @@ class Text_Field_Parser extends Field_Data_Parser {
 		return 'text-field';
 	}
 
-	public function _is_custom_check() {
-		if ( empty( $this->settings['field_type'] ) ) {
-			return false;
-		}
-
-		return 'email' === $this->settings['field_type']
-			? empty( $this->value ) || ! is_email( $this->value )
-			: false;
-	}
-
 }

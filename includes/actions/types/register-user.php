@@ -99,6 +99,7 @@ class Register_User extends Base {
 
 			if ( ! $allow_register && isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
 				$handler->response_data['user_id'] = (int) $user->ID;
+				$handler->request_data['user_id']  = (int) $user->ID;
 
 				return;
 			}
@@ -273,7 +274,6 @@ class Register_User extends Base {
 			throw new Action_Exception( 'failed', $userarr );
 		}
 	}
-
 
 
 	/**

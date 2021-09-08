@@ -1,5 +1,9 @@
 const submitTypes = [
 	{
+		value: '',
+		label: '--',
+	},
+	{
 		value: 'reload',
 		label: 'Page Reload'
 	},
@@ -10,6 +14,10 @@ const submitTypes = [
 ]
 
 const fieldsLayout = [
+	{
+		value: '',
+		label: '--',
+	},
 	{
 		value: 'column',
 		label: 'Column'

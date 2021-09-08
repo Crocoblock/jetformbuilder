@@ -89,12 +89,18 @@ class Live_Form {
 		$jf_args         = Plugin::instance()->post_type->get_args( $this->form_id );
 
 		$attributes_from_post_type = array_diff( $jf_args, $jf_default_args );
+		$form_block_or_widget      = array_diff( $incoming_attributes, $jf_default_args );
 
 		$render_attributes = array_merge( ...apply_filters(
 			'jet-form-builder/form-render/attributes',
-			array( $attributes_from_post_type, $incoming_attributes )
+			array(
+				Plugin::instance()->post_type->get_default_args_on_render(),
+				$attributes_from_post_type,
+				$form_block_or_widget
+			)
 		) );
-		$this->spec_data = ( object ) array_merge( $jf_default_args, $render_attributes );
+
+		$this->spec_data = ( object ) $render_attributes;
 
 		return $this;
 	}

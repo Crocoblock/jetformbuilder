@@ -182,10 +182,12 @@ class Tools {
 
 	public static function get_form_settings_options( $for_elementor = false ) {
 		$submit_type   = array(
+			''       => '--',
 			'reload' => 'Page Reload',
 			'ajax'   => 'AJAX',
 		);
 		$fields_layout = array(
+			''       => '--',
 			'column' => 'Column',
 			'row'    => 'Row'
 		);

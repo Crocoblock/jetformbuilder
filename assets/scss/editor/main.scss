@@ -726,15 +726,20 @@ select.components-select-control__input.components-select-control__input.compone
 	}
 }
 
-.jet-form-builder-row__flex--label {
-	flex: 1 1 0;
-	.components-base-control__label {
-		margin-bottom: 1em;
+.jet-form-builder-row__flex {
+	&--label {
+		flex: 1 1 0;
+		.components-base-control__label {
+			margin-bottom: 1em;
+		}
 	}
-}
+	&--content {
+		flex: 3 1 0;
 
-.jet-form-builder-row__flex--content {
-	flex: 3 1 0;
+		.components-input-control {
+			display: block;
+		}
+	}
 }
 
 .components-base-control__label .jet-form-builder__label {

@@ -203,22 +203,14 @@ abstract class Base extends Base_Module {
 	}
 
 	private function get_default_from_preset() {
-		$result_value = '';
-		list( $name, $default ) = array( $this->block_attrs['name'], $this->block_attrs['default'] ?? '' );
+		$name = $this->block_attrs['name'] ?? '';
 
 		if ( empty( Live_Form::instance()->current_repeater['values'] ) ) {
-			$result_value = Preset_Manager::instance()->get_field_value( $this->block_attrs );
-
-		} elseif ( isset( Live_Form::instance()->current_repeater['values'][ $name ] ) ) {
-			$result_value = Live_Form::instance()->current_repeater['values'][ $name ];
+			return Preset_Manager::instance()->get_field_value( $this->block_attrs );
 		}
 
-		if ( '' !== $result_value ) {
-			return $result_value;
-		}
-
-		if ( '' !== $default && ( null === json_decode( $default ) || is_int( (int) $default ) ) ) {
-			return $default;
+		if ( isset( Live_Form::instance()->current_repeater['values'][ $name ] ) ) {
+			return Live_Form::instance()->current_repeater['values'][ $name ];
 		}
 
 		return '';

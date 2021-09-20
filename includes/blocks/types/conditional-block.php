@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
+use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 // If this file is called directly, abort.
@@ -82,6 +83,9 @@ class Conditional_Block extends Base {
 	}
 
 	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+		if ( ! Live_Form::instance()->form_id ) {
+			return '';
+		}
 		$this->set_block_data( $attrs, $content );
 
 		return sprintf( '<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',

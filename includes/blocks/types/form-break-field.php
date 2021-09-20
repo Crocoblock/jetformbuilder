@@ -18,6 +18,9 @@ class Form_Break_Field extends Base {
 	public $use_style_manager = false;
 
 	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+		if ( ! Live_Form::instance()->form_id ) {
+			return '';
+		}
 		$result = array();
 		$this->set_block_data( $attrs, $content );
 

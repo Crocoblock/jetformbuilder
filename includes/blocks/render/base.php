@@ -128,7 +128,27 @@ abstract class Base {
 		return true;
 	}
 
-	public function render( $wp_block = null, $template = null ) {
+	public function render_without_layout( $template = null, $args = array() ) {
+		$template_name = $this->get_name();
+
+		if ( empty( $args ) ) {
+			$args = $this->get_default_args_with_filter();
+		}
+
+		if ( is_null( $template ) ) {
+			$template = $this->block_type->get_field_template( $template_name . '.php' );
+		}
+
+		if ( Tools::is_readable( $template ) ) {
+			ob_start();
+			include $template;
+			$template = ob_get_clean();
+		}
+
+		return $template;
+	}
+
+	public function get_default_args() {
 		$defaults = array(
 			'default'     => '',
 			'name'        => '',
@@ -141,28 +161,27 @@ abstract class Base {
 		foreach ( $this->block_type->block_attrs as $key => $value ) {
 			$sanitized_args[ $key ] = $value;
 		}
-		$args = wp_parse_args( $sanitized_args, $defaults );
 
-		$template_name = $this->get_name();
+		return wp_parse_args( $sanitized_args, $defaults );
+	}
+
+	public function get_default_args_with_filter() {
+		$args = $this->get_default_args();
+
+		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
+	}
+
+	public function render( $wp_block = null, $template = null ) {
+		$args     = $this->get_default_args_with_filter();
+		$template = $this->render_without_layout( $template, $args );
 
 		$this->maybe_add_error_class( $args );
-
-		if ( is_null( $template ) ) {
-			$template = $this->block_type->get_field_template( $template_name . '.php' );
-		}
 
 		$label  = $this->get_field_label();
 		$desc   = $this->get_field_desc();
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
-		$args = apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
-
-		if ( 'hidden-field' === $args['type'] ) {
-			ob_start();
-			include $template;
-			$result_field = ob_get_clean();
-
-		} else if ( 'column' === $layout ) {
+		if ( 'column' === $layout ) {
 			ob_start();
 			include $this->block_type->get_common_template( 'field-column.php' );
 			$result_field = ob_get_clean();

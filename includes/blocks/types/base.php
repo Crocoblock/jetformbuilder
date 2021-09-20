@@ -163,15 +163,10 @@ abstract class Base extends Base_Module {
 		$this->set_block_data( $attrs, $content );
 		$this->set_preset();
 
-		$form = Live_Form::instance();
-
-		$form->is_hidden_row = false;
-		$form->is_submit_row = false;
-
 		$result   = array();
-		$result[] = $form->start_form_row( $this->block_attrs );
+		$result[] = $this->start_form_row();
 
-		if ( $form->is_field_visible( $this->block_attrs ) ) {
+		if ( $this->is_field_visible() ) {
 
 			/**
 			 * $wp_block should not save in $this,
@@ -182,7 +177,7 @@ abstract class Base extends Base_Module {
 			$result[]     = $this->get_block_renderer( $parsed_block );
 		}
 
-		$result[] = $form->end_form_row( $this->block_attrs );
+		$result[] = $this->end_form_row();
 
 		return implode( "\n", $result );
 	}
@@ -258,6 +253,19 @@ abstract class Base extends Base_Module {
 	 */
 	public function common_templates_path() {
 		return false;
+	}
+
+	/**
+	 * You can rewrite this method
+	 * so as not to display an additional html wrapper.
+	 *
+	 * Or you can add it yourself under some condition
+	 * using the Base::start_form_row & Base::end_form_row methods
+	 *
+	 * @return bool
+	 */
+	public function render_row_layout() {
+		return true;
 	}
 
 	/**
@@ -457,6 +465,88 @@ abstract class Base extends Base_Module {
 
 	public function get_attributes() {
 		return $this->attrs;
+	}
+
+	/**
+	 * Open form wrapper
+	 *
+	 * @param bool $force
+	 *
+	 * @return false|string [type] [description]
+	 */
+	public function start_form_row( $force = false ) {
+		if ( ! $force && ! $this->render_row_layout() ) {
+			return '';
+		}
+
+		ob_start();
+
+		do_action( 'jet-form-builder/before-start-form-row', $this );
+
+		$this->add_attribute( 'class', 'jet-form-builder-row' );
+		$this->add_attribute( 'class', 'field-type-' . $this->get_name() );
+
+		include $this->get_global_template( 'common/start-form-row.php' );
+
+		do_action( 'jet-form-builder/after-start-form-row', $this );
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Close form wrapper
+	 *
+	 * @param bool $force
+	 *
+	 * @return false|string [type] [description]
+	 */
+	public function end_form_row( $force = false ) {
+		if ( ! $force && ! $this->render_row_layout() ) {
+			return '';
+		}
+
+		ob_start();
+		do_action( 'jet-form-builder/before-end-form-row', $this );
+
+		include $this->get_global_template( 'common/end-form-row.php' );
+
+		do_action( 'jet-form-builder/after-end-form-row', $this );
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Returns true if field is visible
+	 *
+	 * @param $field
+	 *
+	 * @return boolean        [description]
+	 */
+	public function is_field_visible() {
+		$visibility = $this->block_attrs['visibility'] ?? false;
+
+		// For backward compatibility and hidden fields
+		if ( empty( $visibility ) ) {
+			return true;
+		}
+
+		// If is visible for all - show field
+		if ( 'all' === $visibility ) {
+			return true;
+		}
+
+		// If is visible for logged in users and user is logged in - show field
+		if ( 'logged_id' === $visibility && is_user_logged_in() ) {
+			return true;
+		}
+
+		// If is visible for not logged in users and user is not logged in - show field
+		if ( 'not_logged_in' === $visibility && ! is_user_logged_in() ) {
+			return true;
+		}
+
+		return false;
+
 	}
 
 

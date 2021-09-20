@@ -187,76 +187,6 @@ class Live_Form {
 		return $field->get_block_renderer();
 	}
 
-	/**
-	 * Open form wrapper
-	 *
-	 * @param $field
-	 *
-	 * @return false|string [type] [description]
-	 */
-	public function start_form_row( $field ) {
-
-		if ( $this->is_field( $field, 'hidden' ) ) {
-			return '';
-		}
-
-		if ( ! $this->is_hidden_row ) {
-			$this->rendered_rows ++;
-		}
-
-		ob_start();
-
-		do_action( 'jet-form-builder/before-start-form-row', $this );
-
-		$this->add_attribute( 'class', 'jet-form-builder-row' );
-		$this->add_attribute( 'class', 'field-type-' . $field['type'] );
-
-		if ( $this->is_hidden_row ) {
-			$this->add_attribute( 'class', 'jet-form-builder-row--hidden' );
-		}
-
-		if ( $this->is_field( $field, 'submit' ) ) {
-			$this->add_attribute( 'class', 'jet-form-builder-row--submit' );
-		}
-
-		if ( $this->is_field( $field, 'form-break' ) ) {
-			$this->add_attribute( 'class', 'jet-form-builder-row--page-break' );
-		}
-
-		if ( 1 === $this->rendered_rows ) {
-			$this->add_attribute( 'class', 'jet-form-builder-row--first-visible' );
-		}
-
-		include $this->get_global_template( 'common/start-form-row.php' );
-
-		do_action( 'jet-form-builder/after-start-form-row', $this );
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Close form wrapper
-	 *
-	 * @param $field
-	 *
-	 * @return false|string [type] [description]
-	 */
-	public function end_form_row( $field ) {
-
-		if ( $this->is_field( $field, 'hidden' ) ) {
-			return '';
-		}
-
-		ob_start();
-		do_action( 'jet-form-builder/before-end-form-row', $this );
-
-		include $this->get_global_template( 'common/end-form-row.php' );
-
-		do_action( 'jet-form-builder/after-end-form-row', $this );
-
-		return ob_get_clean();
-	}
-
 
 	/**
 	 * Maybe start new page
@@ -321,39 +251,6 @@ class Live_Form {
 		do_action( 'jet-form-builder/after-page-end', $this );
 
 		return ob_get_clean();
-	}
-
-	/**
-	 * Returns true if field is visible
-	 *
-	 * @param $field
-	 *
-	 * @return boolean        [description]
-	 */
-	public function is_field_visible( $field ) {
-
-		// For backward compatibility and hidden fields
-		if ( empty( $field['visibility'] ) ) {
-			return true;
-		}
-
-		// If is visible for all - show field
-		if ( 'all' === $field['visibility'] ) {
-			return true;
-		}
-
-		// If is visible for logged in users and user is logged in - show field
-		if ( 'logged_id' === $field['visibility'] && is_user_logged_in() ) {
-			return true;
-		}
-
-		// If is visible for not logged in users and user is not logged in - show field
-		if ( 'not_logged_in' === $field['visibility'] && ! is_user_logged_in() ) {
-			return true;
-		}
-
-		return false;
-
 	}
 
 	/**

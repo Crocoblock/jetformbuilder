@@ -46,6 +46,11 @@ export default function CheckboxEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
+			<SelectRadioCheckPlaceholder
+				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
+				scriptData={ localized }
+				{ ...props }
+			/>
 			<SelectRadioCheck { ...props }>
 				<FieldControl
 					type='custom_settings'
@@ -53,11 +58,6 @@ export default function CheckboxEdit( props ) {
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-			<SelectRadioCheckPlaceholder
-				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
-				scriptData={ localized }
-				{ ...props }
-			/>
 		</div>
 	];
 }

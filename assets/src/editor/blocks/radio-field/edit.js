@@ -46,6 +46,11 @@ export default function RadioEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
+			<SelectRadioCheckPlaceholder
+				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
+				scriptData={ window.JetFormRadioFieldData }
+				{ ...props }
+			/>
 			<SelectRadioCheck { ...props }>
 				<ToggleControl
 					key='switch_on_change'
@@ -62,11 +67,6 @@ export default function RadioEdit( props ) {
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-			<SelectRadioCheckPlaceholder
-				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
-				scriptData={ window.JetFormRadioFieldData }
-				{ ...props }
-			/>
 		</div>
 	];
 }

@@ -49,7 +49,15 @@ class Form_Break_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Form_Break_Field_Render( $this ) )->render();
+		return ( new class( $this ) extends \Jet_Form_Builder\Blocks\Render\Base {
+			public function get_name() {
+				return 'form-break-field';
+			}
+
+			public function label_allowed() {
+				return false;
+			}
+		} )->render();
 	}
 
 }

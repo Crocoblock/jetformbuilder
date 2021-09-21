@@ -32,6 +32,10 @@ abstract class Base {
 	 */
 	public $block_type;
 	public $content;
+
+	/**
+	 * @var Live_Form
+	 */
 	public $live_form;
 
 	const FIELD_ERROR_CLASS = 'field-has-error';

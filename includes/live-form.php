@@ -49,7 +49,7 @@ class Live_Form {
 	public $post;
 
 	// for progress
-	public $form_breaks;
+	public $form_break;
 
 	/**
 	 * Create form instance
@@ -123,52 +123,18 @@ class Live_Form {
 	 * @param $content
 	 */
 	public function setup_fields( $content ) {
-		$blocks             = parse_blocks( $content );
-		$count_blocks       = count( $blocks );
-		$break_after_submit = false;
-
-		foreach ( $blocks as $index => $field ) {
-			if ( $this->is_field( $field, 'form-break' ) ) {
-				$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
-
-				if ( $index + 1 === $count_blocks ) {
-					$break_after_submit = $form_break;
-					unset( $blocks[ $index ] );
-					continue;
-				}
-
-				$this->pages ++;
-				$this->form_breaks[] = $form_break;
-			}
-		}
-		if ( ! empty( $this->form_breaks ) ) {
-			$this->form_breaks[] = $break_after_submit ? $break_after_submit : array( 'label' => __( 'Last Page' ) );
-		}
+		$blocks = parse_blocks( $content );
+		$this->get_form_break()->set_pages( $blocks );
 
 		return $blocks;
 	}
 
 	public function maybe_progress_pages() {
-		if ( ! $this->spec_data->enable_progress || 0 === $this->pages ) {
+		if ( ! $this->spec_data->enable_progress || 0 === $this->get_form_break()->get_pages() ) {
 			return '';
 		}
 
-		ob_start();
-		include $this->get_global_template( 'common/progress-pages.php' );
-
-		return ob_get_clean();
-	}
-
-	public function get_progress_item_class( $index ) {
-		$classes = array( 'jet-form-builder-progress-pages__item--wrapper' );
-
-		if ( $index === $this->page ) {
-			$classes[] = 'active-page';
-		} elseif ( - 1 === $index ) {
-			$classes[] = 'passed-page';
-		}
-
-		return implode( ' ', $classes );
+		return $this->get_form_break()->render_progress();
 	}
 
 
@@ -194,32 +160,7 @@ class Live_Form {
 	 * @return false|string|void
 	 */
 	public function maybe_start_page() {
-
-		if ( 0 >= $this->pages ) {
-			return '';
-		}
-
-		if ( false === $this->start_new_page ) {
-			return '';
-		}
-
-		$this->start_new_page = false;
-		$this->page ++;
-
-		ob_start();
-		do_action( 'jet-form-builder/before-page-start', $this );
-
-		$hidden_class = '';
-
-		if ( 1 < $this->page ) {
-			$hidden_class = 'jet-form-builder-page--hidden';
-		}
-
-		include $this->get_global_template( 'common/start-page.php' );
-
-		do_action( 'jet-form-builder/after-page-start', $this );
-
-		return ob_get_clean();
+		return $this->get_form_break()->maybe_start_page();
 	}
 
 	/**
@@ -231,26 +172,7 @@ class Live_Form {
 	 * @return false|string|void [type] [description]
 	 */
 	public function maybe_end_page( $is_last = false, $field = false ) {
-
-		if ( 0 >= $this->pages ) {
-			return;
-		}
-
-		if ( ! $is_last && ! $this->is_field( $field, 'form-break' ) ) {
-			return;
-		}
-
-		$this->start_new_page = true;
-		$this->has_prev       = true;
-
-		ob_start();
-		do_action( 'jet-form-builder/before-page-end', $this );
-
-		include $this->get_global_template( 'common/end-page.php' );
-
-		do_action( 'jet-form-builder/after-page-end', $this );
-
-		return ob_get_clean();
+		return $this->get_form_break()->maybe_end_page( $is_last, $field );
 	}
 
 	/**
@@ -291,6 +213,17 @@ class Live_Form {
 
 	public function get_nonce_id() {
 		return "jet-form-builder-wp-nonce-{$this->form_id}";
+	}
+
+	/**
+	 * @return Form_Break
+	 */
+	public function get_form_break() {
+		if ( ! $this->form_break ) {
+			$this->form_break = new Form_Break();
+		}
+
+		return $this->form_break;
 	}
 
 

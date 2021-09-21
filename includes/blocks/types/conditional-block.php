@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
+use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
@@ -88,8 +89,11 @@ class Conditional_Block extends Base {
 		}
 		$this->set_block_data( $attrs, $content );
 
+		$break = new Form_Break();
+		$break->set_pages( $wp_block->parsed_block['innerBlocks'] );
+
 		return sprintf( '<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',
-			$this->block_content,
+			$break->maybe_start_page() . $this->block_content . $break->maybe_end_page( true ),
 			$this->get_conditions()
 		);
 	}

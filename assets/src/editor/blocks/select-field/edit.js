@@ -51,6 +51,10 @@ export default function SelectEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
+			<SelectRadioCheckPlaceholder
+				scriptData={ window.JetFormSelectFieldData }
+				{ ...props }
+			/>
 			<SelectRadioCheck { ...props }>
 				<ToggleControl
 					key='switch_on_change'
@@ -67,10 +71,6 @@ export default function SelectEdit( props ) {
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-			<SelectRadioCheckPlaceholder
-				scriptData={ window.JetFormSelectFieldData }
-				{ ...props }
-			/>
 		</div>
 	];
 }

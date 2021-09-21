@@ -33,15 +33,15 @@ class Dynamic_Preset extends Base_Preset {
 	 */
 	public function is_active_preset( $args ) {
 
-		if ( empty( $args[ $this->json_value_key ] ) || is_array( $args[ $this->json_value_key ] ) ) {
+		if ( ! isset( $args[ $this->json_value_key ] ) || is_array( $args[ $this->json_value_key ] ) ) {
 			return false;
 		}
-		$source = $args[ $this->json_value_key ];
+		$source = (string) $args[ $this->json_value_key ];
 
 		$dynamic_preset = json_decode( $source, true );
 
-		if ( empty( $dynamic_preset['jet_preset'] ) && $source ) {
-			throw new Plain_Default_Exception( $source );
+		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {
+			throw new Plain_Default_Exception( $this->prepare_result( $args['type'], $source ) );
 		}
 
 		if ( empty( $dynamic_preset['jet_preset'] ) ) {

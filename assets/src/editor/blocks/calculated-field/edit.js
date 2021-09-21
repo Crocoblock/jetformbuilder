@@ -165,6 +165,11 @@ export default function EditCalculated( props ) {
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
+				<div className={ 'jet-form-builder__calculated-field' }>
+					<div className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
+					<div className={ 'calc-formula' }>{ attributes.calc_formula }</div>
+					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
+				</div>
 				{ props.isSelected && <>
 					<TextareaControl
 						key="calc_formula"
@@ -174,11 +179,6 @@ export default function EditCalculated( props ) {
 						} }
 					/>
 				</> }
-				<div className={ 'jet-form-builder__calculated-field' }>
-					<div className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
-					<div className={ 'calc-formula' }>{ attributes.calc_formula }</div>
-					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
-				</div>
 			</FieldWrapper>
 		</div>,
 	];

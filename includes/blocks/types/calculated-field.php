@@ -58,6 +58,10 @@ class Calculated_Field extends Base {
 		return 'calculated-field';
 	}
 
+	public function render_row_layout() {
+		return false;
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -66,7 +70,19 @@ class Calculated_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Calculated_Field_Render( $this ) )->render();
+		$is_hidden = $this->block_attrs['calc_hidden'] ?? false;
+
+		if ( $is_hidden ) {
+			return ( new Calculated_Field_Render( $this ) )->render_without_layout();
+		}
+
+		return implode( "\n",
+			array(
+				$this->start_form_row( true ),
+				( new Calculated_Field_Render( $this ) )->render(),
+				$this->end_form_row( true )
+			)
+		);
 	}
 
 	public function block_data( $editor, $handle ) {

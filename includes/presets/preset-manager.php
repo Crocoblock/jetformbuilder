@@ -42,6 +42,10 @@ class Preset_Manager {
 	);
 
 	public $_preset_types;
+
+	/**
+	 * @var Base_Preset
+	 */
 	public $manager_preset;
 	private $general;
 	private $_source_types;
@@ -142,9 +146,10 @@ class Preset_Manager {
 		}
 
 		$this->set_preset_type_manager( $args );
+		$plain = $this->get_plain_default();
 
-		if ( $this->plain_default ) {
-			return $this->get_plain_default();
+		if ( false !== $plain ) {
+			return $plain;
 		}
 
 		if ( $this->manager_preset instanceof Base_Preset ) {

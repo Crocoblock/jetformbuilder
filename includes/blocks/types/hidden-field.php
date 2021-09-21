@@ -34,6 +34,9 @@ class Hidden_Field extends Base {
 		return 'hidden-field';
 	}
 
+	public function render_row_layout() {
+		return false;
+	}
 
 	/**
 	 * Returns current block render instatnce
@@ -47,7 +50,7 @@ class Hidden_Field extends Base {
 			public function get_name() {
 				return 'hidden-field';
 			}
-		} )->render();
+		} )->render_without_layout();
 	}
 
 	public function set_block_data( $attributes, $content = null ) {

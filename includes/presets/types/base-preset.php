@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Presets\Types;
 
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
@@ -68,6 +69,26 @@ abstract class Base_Preset {
 			$args,
 			$this->data
 		);
+	}
+
+	public function prepare_result( $field_type, $value ) {
+		// Prepare value for date field
+		switch ( $field_type ) {
+			case 'date-field':
+				if ( ! Tools::is_valid_timestamp( $value ) ) {
+					return $value;
+				}
+
+				return date_i18n( 'Y-m-d', $value );
+			case 'datetime-field':
+				if ( ! Tools::is_valid_timestamp( $value ) ) {
+					return $value;
+				}
+
+				return date_i18n( 'Y-m-d\TH:i', $value );
+			default:
+				return apply_filters( 'jet-form-builder/preset/parse-value', $value, $this );
+		}
 	}
 
 }

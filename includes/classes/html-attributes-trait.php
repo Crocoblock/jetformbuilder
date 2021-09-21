@@ -4,30 +4,29 @@
 namespace Jet_Form_Builder\Classes;
 
 
-trait Attributes_Trait {
+trait Html_Attributes_Trait {
 
 	use Base_Attributes_Trait;
 
-	public $attrs = array();
+	public $html_attrs = array();
 
 	public function add_attribute( $attr, $value = null ) {
 		if ( '' === $value ) {
 			return;
 		}
-		if ( ! isset( $this->attrs[ $attr ] ) ) {
-			$this->attrs[ $attr ] = $value;
+		if ( ! isset( $this->html_attrs[ $attr ] ) ) {
+			$this->html_attrs[ $attr ] = $value;
 		} else {
-			$this->attrs[ $attr ] .= ' ' . $value;
+			$this->html_attrs[ $attr ] .= ' ' . $value;
 		}
 	}
 
 	public function reset_attributes() {
-		$this->attrs = array();
+		$this->html_attrs = array();
 	}
 
 	public function get_all_attrs() {
-		return $this->attrs;
+		return $this->html_attrs;
 	}
-
 
 }

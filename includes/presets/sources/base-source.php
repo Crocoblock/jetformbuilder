@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Presets\Sources;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
+use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 
 abstract class Base_Source {
@@ -123,12 +124,9 @@ abstract class Base_Source {
 	}
 
 	public function parse_result_value( $value ) {
-		// Prepare value for date field
-		if ( 'date-field' === $this->field_args['type'] && Tools::is_valid_timestamp( $value ) ) {
-			$value = date_i18n( 'Y-m-d', $value );
-		}
-
-		return $value;
+		return Preset_Manager::instance()
+			->manager_preset
+			->prepare_result( $this->field_args['type'], $value );
 	}
 
 }

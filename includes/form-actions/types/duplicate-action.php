@@ -22,7 +22,8 @@ class Duplicate_Action extends Base_Form_Action {
 	}
 
 	public function parse_form_data( $data ) {
-		$data['post_title'] = "{$data['post_title']} (copy)";
+		$data['post_title']   = "{$data['post_title']} (copy)";
+		$data['post_content'] = wp_slash( $data['post_content'] );
 
 		return $data;
 	}

@@ -42,6 +42,10 @@ class Preset_Manager {
 	);
 
 	public $_preset_types;
+
+	/**
+	 * @var Base_Preset
+	 */
 	public $manager_preset;
 	private $general;
 	private $_source_types;

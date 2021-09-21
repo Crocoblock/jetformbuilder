@@ -194,7 +194,7 @@ class Action_Handler {
 	}
 
 	public function get_inserted_post_id( $action_id = 0 ) {
-		$default_post_id = absint( $this->response_data['inserted_post_id'] );
+		$default_post_id = absint( $this->response_data['inserted_post_id'] ?? 0 );
 
 		if ( ! $action_id ) {
 			return $default_post_id;

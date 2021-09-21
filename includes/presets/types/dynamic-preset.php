@@ -41,7 +41,7 @@ class Dynamic_Preset extends Base_Preset {
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {
-			throw new Plain_Default_Exception( $source );
+			throw new Plain_Default_Exception( $this->prepare_result( $args['type'], $source ) );
 		}
 
 		if ( empty( $dynamic_preset['jet_preset'] ) ) {

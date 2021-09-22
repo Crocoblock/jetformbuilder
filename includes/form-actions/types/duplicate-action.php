@@ -25,6 +25,10 @@ class Duplicate_Action extends Base_Form_Action {
 		$data['post_title']   = "{$data['post_title']} (copy)";
 		$data['post_content'] = wp_slash( $data['post_content'] );
 
+		foreach ( $data['meta_input'] as &$meta_value ) {
+			$meta_value = maybe_unserialize( $meta_value );
+		}
+
 		return $data;
 	}
 

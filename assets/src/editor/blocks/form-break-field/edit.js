@@ -17,6 +17,7 @@ const {
 		  TextControl,
 		  PanelBody,
 		  Button,
+		  ToggleControl,
 	  } = wp.components;
 
 export default function FormBreakEdit( props ) {
@@ -40,6 +41,13 @@ export default function FormBreakEdit( props ) {
 				{ ...props }
 			/>
 			<FieldSettingsWrapper { ...props }>
+				<ToggleControl
+					key={ uniqKey( 'add_next_button' ) }
+					label={ __( 'Render "Next" Button' ) }
+					checked={ attributes.add_next_button }
+					help={ attrHelp( 'add_next_button' ) }
+					onChange={ add_next_button => setAttributes( { add_next_button } ) }
+				/>
 				<TextControl
 					label={ __( 'Label of progress' ) }
 					value={ attributes.label_progress }

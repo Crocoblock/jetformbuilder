@@ -56,16 +56,9 @@ abstract class Base extends Base_Module {
 
 	public $error_data = false;
 
-	public function __construct() {
-
+	public function register_block_type() {
 		$this->maybe_init_style_manager();
 		$this->_register_block();
-
-		add_filter( 'jet-form-builder/editor/allowed-blocks', function ( $blocks ) {
-			$blocks[] = $this->block_name();
-
-			return $blocks;
-		} );
 	}
 
 	/**
@@ -78,6 +71,10 @@ abstract class Base extends Base_Module {
 
 	public function get_css_scheme() {
 		return array();
+	}
+
+	public function use_preset() {
+		return true;
 	}
 
 	/**
@@ -203,6 +200,9 @@ abstract class Base extends Base_Module {
 	}
 
 	protected function set_preset() {
+		if ( ! $this->use_preset() ) {
+			return;
+		}
 		$this->block_attrs['default'] = $this->get_default_from_preset();
 	}
 

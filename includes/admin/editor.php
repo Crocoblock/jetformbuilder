@@ -77,45 +77,6 @@ class Editor {
 	}
 
 	/**
-	 * Retuns allowed blocks list
-	 *
-	 * @return array
-	 */
-	public function get_allowed_blocks() {
-
-		if ( empty( $this->allowed_blocks ) ) {
-
-			$this->allowed_blocks = apply_filters( 'jet-form-builder/editor/allowed-blocks', array(
-				'core/paragraph',
-				'core/image',
-				'core/heading',
-				'core/verse',
-				'core/freeform',
-				'core/spacer',
-				'core/subhead',
-				'core/pullquote',
-				'core/preformatted',
-				'core/shortcode',
-				'core/code',
-				'core/quote',
-				'core/list',
-				'core/heading',
-				'core/separator',
-				'core/text-columns',
-				'core/embed',
-				'core-embed/youtube',
-				'core-embed/twitter',
-				'core-embed/vimeo',
-				'core/columns',
-				'core/column',
-			) );
-
-		}
-
-		return $this->allowed_blocks;
-	}
-
-	/**
 	 * Returns taxonomies list for the config
 	 * @return [type] [description]
 	 */
@@ -404,7 +365,6 @@ class Editor {
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
-				'allowedBlocks'    => $this->get_allowed_blocks(),
 				'action'           => $this->get_action(),
 				'itemID'           => $this->get_item_id(),
 				'presetConfig'     => $this->get_preset_config(),
@@ -459,7 +419,6 @@ class Editor {
 		);
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'allowedBlocks' => $this->get_allowed_blocks(),
 			'action'        => $this->get_action(),
 			'itemID'        => $this->get_item_id(),
 			'presetConfig'  => $this->get_preset_config(),

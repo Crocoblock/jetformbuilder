@@ -14,7 +14,7 @@ class Form_Break {
 	private $pages = 0;
 	private $form_breaks = array();
 	private $count_form_breaks = 0;
-	private $current_page = 0;
+	private $current_page = 1;
 
 	public function get_pages() {
 		return $this->pages;
@@ -82,15 +82,21 @@ class Form_Break {
 	/**
 	 * Maybe start new page
 	 *
+	 * @param bool $force_first
+	 *
 	 * @return string
 	 */
-	public function maybe_start_page() {
+	public function maybe_start_page( $force_first = false ) {
 
 		if ( 0 >= $this->pages ) {
 			return '';
 		}
 
-		$this->current_page ++;
+		if ( $force_first ) {
+			$this->current_page = 1;
+		} else {
+			$this->current_page ++;
+		}
 
 		ob_start();
 		do_action( 'jet-form-builder/before-page-start', $this );

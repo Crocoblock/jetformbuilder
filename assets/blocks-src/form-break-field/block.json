@@ -20,7 +20,7 @@
 			"type": "string",
 			"default": ""
 		},
-		"label_progress" : {
+		"label_progress": {
 			"type": "string",
 			"default": ""
 		},
@@ -40,5 +40,8 @@
 			"type": "string",
 			"default": ""
 		}
-	}
+	},
+	"usesContext": [
+		"jet-forms/conditional-block--name"
+	]
 }

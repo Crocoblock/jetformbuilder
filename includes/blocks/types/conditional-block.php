@@ -87,13 +87,19 @@ class Conditional_Block extends Base {
 		if ( ! Live_Form::instance()->form_id ) {
 			return '';
 		}
-		$this->set_block_data( $attrs, $content );
+		$this->set_block_data( $attrs, $content, $wp_block );
 
-		$break = new Form_Break();
-		$break->set_pages( $wp_block->parsed_block['innerBlocks'] );
+		$content = $this->block_content;
+		$name    = $this->block_attrs['name'] ?? '';
+
+		if ( Live_Form::instance()->isset_form_break( $name ) ) {
+			$break = Live_Form::instance()->get_form_break( $name );
+
+			$content = $break->maybe_start_page( true ) . $content . $break->maybe_end_page( true );
+		}
 
 		return sprintf( '<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',
-			$break->maybe_start_page() . $this->block_content . $break->maybe_end_page( true ),
+			$content,
 			$this->get_conditions()
 		);
 	}

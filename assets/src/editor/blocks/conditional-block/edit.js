@@ -30,6 +30,7 @@ const {
 
 const {
 		  useState,
+		  useEffect,
 	  } = wp.element;
 
 export default function ConditionalBlockEdit( props ) {
@@ -42,6 +43,12 @@ export default function ConditionalBlockEdit( props ) {
 			  clientId,
 			  editProps: { uniqKey },
 		  } = props;
+
+	useEffect( () => {
+		if ( ! attributes.name ) {
+			setAttributes( { name: clientId } )
+		}
+	}, [] );
 
 	Tools.addConditionForCondType( 'isSingleField', () => {
 		return 1 === getInnerBlocks( clientId ).length;

@@ -1,6 +1,8 @@
 <?php
 /**
  * submit button template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
 $this->add_attribute( 'class', 'jet-form-builder__submit' );
@@ -20,7 +22,7 @@ if ( isset( $this->live_form->spec_data->submit_type ) && 'reload' === $this->li
 $wrap_classes = array( 'jet-form-builder__submit-wrap' );
 
 
-if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $this->live_form->page ) {
+if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $this->live_form->get_form_break()->get_current() ) {
 	$wrap_classes[] = 'has-prev';
 }
 

@@ -32,7 +32,6 @@ class Live_Form {
 	private $field_name;
 	private $current_field_data;
 	private $start_new_page = true;
-	public $pages = 0;
 	public $rendered_rows = 0;
 
 	public $is_hidden_row;
@@ -43,10 +42,9 @@ class Live_Form {
 	public $current_repeater_i;
 	public $preset;
 	public $spec_data;
-
-	public $page = 0;
-	public $has_prev = false;
 	public $post;
+	public $_conditional_blocks = array();
+	public $blocks = array();
 
 	// for progress
 	public $form_break;
@@ -123,10 +121,10 @@ class Live_Form {
 	 * @param $content
 	 */
 	public function setup_fields( $content ) {
-		$blocks = parse_blocks( $content );
-		$this->get_form_break()->set_pages( $blocks );
+		$this->blocks = parse_blocks( $content );
+		$this->get_form_break()->set_pages( $this->blocks );
 
-		return $blocks;
+		return $this->blocks;
 	}
 
 	public function maybe_progress_pages() {
@@ -157,10 +155,12 @@ class Live_Form {
 	/**
 	 * Maybe start new page
 	 *
+	 * @param bool $force_first
+	 *
 	 * @return false|string|void
 	 */
-	public function maybe_start_page() {
-		return $this->get_form_break()->maybe_start_page();
+	public function maybe_start_page( $force_first = false ) {
+		return $this->get_form_break()->maybe_start_page( $force_first );
 	}
 
 	/**
@@ -216,14 +216,23 @@ class Live_Form {
 	}
 
 	/**
+	 * @param string $name
+	 *
 	 * @return Form_Break
 	 */
-	public function get_form_break() {
-		if ( ! $this->form_break ) {
+	public function get_form_break( $name = '' ) {
+		if ( ! $name && ! $this->form_break ) {
 			$this->form_break = new Form_Break();
 		}
+		if ( $name && ! $this->isset_form_break( $name ) ) {
+			$this->_conditional_blocks[ $name ] = array( 'break' => new Form_Break() );
+		}
 
-		return $this->form_break;
+		return $name ? $this->_conditional_blocks[ $name ]['break'] : $this->form_break;
+	}
+
+	public function isset_form_break( $name ) {
+		return isset( $this->_conditional_blocks[ $name ] );
 	}
 
 

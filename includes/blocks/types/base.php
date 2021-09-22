@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -38,6 +39,8 @@ abstract class Base extends Base_Module {
 	 * @var string
 	 */
 	public $block_content;
+
+	public $block_context = array();
 
 	/**
 	 * Block attributes on register
@@ -160,7 +163,7 @@ abstract class Base extends Base_Module {
 		if ( ! Live_Form::instance()->form_id ) {
 			return '';
 		}
-		$this->set_block_data( $attrs, $content );
+		$this->set_block_data( $attrs, $content, $wp_block );
 		$this->set_preset();
 
 		$result   = array();
@@ -182,12 +185,18 @@ abstract class Base extends Base_Module {
 		return implode( "\n", $result );
 	}
 
-	public function set_block_data( $attributes, $content = null ) {
+	/**
+	 * @param $attributes
+	 * @param null $content
+	 * @param \WP_Block $wp_block
+	 */
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		$this->block_content = $content;
 		$this->block_attrs   = array_merge(
 			$this->get_default_attributes(),
 			$attributes
 		);
+		$this->block_context = $wp_block->context ?? array();
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
@@ -547,6 +556,27 @@ abstract class Base extends Base_Module {
 
 		return false;
 
+	}
+
+	/**
+	 * @return Form_Break
+	 */
+	public function get_current_form_break() {
+		$context_name = 'jet-forms/conditional-block--name';
+
+		if ( ! isset( $this->block_context[ $context_name ] ) ) {
+			return Live_Form::instance()->get_form_break();
+		}
+		$name  = $this->block_context[ $context_name ];
+		$break = Live_Form::instance()->get_form_break( $name );
+
+		if ( ! $break->get_pages() ) {
+			$conditional = Plugin::instance()->form->get_field_by_name( 0, $name, Live_Form::instance()->blocks );
+
+			$break->set_pages( $conditional['innerBlocks'] );
+		}
+
+		return $break;
 	}
 
 

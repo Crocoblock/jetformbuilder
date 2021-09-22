@@ -214,7 +214,7 @@ class Form_Builder {
 		);
 		$form .= Live_Form::instance()->maybe_progress_pages();
 
-		$form .= Live_Form::instance()->maybe_start_page();
+		$form .= Live_Form::instance()->maybe_start_page( true );
 
 		foreach ( $this->form_content as $block ) {
 			$form .= render_block( $block );

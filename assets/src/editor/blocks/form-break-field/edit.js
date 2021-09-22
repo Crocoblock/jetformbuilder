@@ -27,6 +27,7 @@ export default function FormBreakEdit( props ) {
 			  attributes,
 			  setAttributes,
 			  editProps: { uniqKey, attrHelp },
+			  context,
 		  } = props;
 
 	return [

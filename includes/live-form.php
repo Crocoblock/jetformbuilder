@@ -119,10 +119,12 @@ class Live_Form {
 	 * Setup fields prop
 	 *
 	 * @param $content
+	 *
+	 * @return array[]
 	 */
 	public function setup_fields( $content ) {
-		$this->blocks = parse_blocks( $content );
-		$this->get_form_break()->set_pages( $this->blocks );
+		$blocks       = parse_blocks( $content );
+		$this->blocks = $this->get_form_break()->set_pages( $blocks );
 
 		return $this->blocks;
 	}

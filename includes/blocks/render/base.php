@@ -175,8 +175,14 @@ abstract class Base {
 		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
 	}
 
+	public function before_render( $args ) {
+	}
+
 	public function render( $wp_block = null, $template = null ) {
-		$args     = $this->get_default_args_with_filter();
+		$args = $this->get_default_args_with_filter();
+
+		$this->before_render( $args );
+
 		$template = $this->render_without_layout( $template, $args );
 
 		$this->maybe_add_error_class( $args );

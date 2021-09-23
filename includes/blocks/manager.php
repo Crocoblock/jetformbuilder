@@ -145,7 +145,8 @@ class Manager {
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
 			new Types\Color_Picker_Field(),
-			new Types\Action_Button()
+			new Types\Action_Button(),
+			new Types\Progress_Bar(),
 		);
 
 		foreach ( $types as $type ) {

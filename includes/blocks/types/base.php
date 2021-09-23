@@ -573,6 +573,7 @@ abstract class Base extends Base_Module {
 		if ( ! $break->get_pages() ) {
 			$conditional = Plugin::instance()->form->get_field_by_name( 0, $name, Live_Form::instance()->blocks );
 
+
 			$break->set_pages( $conditional['innerBlocks'] );
 		}
 

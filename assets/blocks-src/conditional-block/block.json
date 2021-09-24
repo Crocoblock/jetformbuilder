@@ -18,6 +18,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"last_page_name": {
+			"type": "string",
+			"default": ""
+		},
 		"conditions": {
 			"type": "array",
 			"default": []
@@ -28,6 +32,7 @@
 		}
 	},
 	"providesContext": {
-		"jet-forms/conditional-block--name": "name"
+		"jet-forms/conditional-block--name": "name",
+		"jet-forms/conditional-block--last_page_name": "last_page_name"
 	}
 }

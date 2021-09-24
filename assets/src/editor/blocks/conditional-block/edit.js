@@ -5,6 +5,7 @@ const {
 		  ActionModal,
 		  FieldWithPreset,
 		  DynamicPreset,
+		  FieldSettingsWrapper,
 	  } = JetFBComponents;
 
 const {
@@ -19,6 +20,7 @@ const {
 		  BlockControls,
 		  InnerBlocks,
 		  useBlockProps,
+		  InspectorControls,
 	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
@@ -26,6 +28,7 @@ const {
 		  ToolbarGroup,
 		  TextareaControl,
 		  SelectControl,
+		  TextControl,
 	  } = wp.components;
 
 const {
@@ -60,6 +63,20 @@ export default function ConditionalBlockEdit( props ) {
 	const formFields = getFormFieldsBlocks( [], '--' );
 
 	return [
+		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
+			<FieldSettingsWrapper
+				key={ uniqKey( 'FieldSettingsWrapper' ) }
+				{ ...props }
+			>
+				<TextControl
+					label={ __( 'Last Page Name', 'jet-form-builder' ) }
+					key={ uniqKey( 'last_page_name' ) }
+					value={ attributes.last_page_name }
+					help={ __( 'The value of this field will be set as the name of the last page with the "Progress Bar" block.', 'jet-form-builder' ) }
+					onChange={ last_page_name => setAttributes( { last_page_name } ) }
+				/>
+			</FieldSettingsWrapper>
+		</InspectorControls>,
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button

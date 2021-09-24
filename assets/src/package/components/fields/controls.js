@@ -49,6 +49,9 @@ export const ControlsSettings = () => applyFilters( 'jet.fb.register.fields.cont
 				"attrName": "add_prev",
 				"type": "toggle",
 				"label": __( "Add Prev Page Button" ),
+				help: __( `Instead of this option, we recommend using 
+				the "Action Button" block with the "Go to Prev Page" type, 
+				due to this you can build a more flexible layout`, 'jet-from-builder' ),
 			},
 			{
 				"attrName": "prev_label",

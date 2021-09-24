@@ -18,8 +18,6 @@ class Form_Break {
 	private $current_form_break = 0;
 	private $is_editor = false;
 	private $progress_type = 'default';
-	private $last_progress_step = array();
-	private $last_break;
 
 	public function get_pages() {
 		return $this->pages;
@@ -72,21 +70,16 @@ class Form_Break {
 		return $this;
 	}
 
-
-	public function last_page_from_break( $mode ) {
-		$this->get_last_page_from_break = $mode;
+	public function add_progress( $last_progress ) {
+		$this->form_breaks[] = $last_progress;
 
 		return $this;
 	}
 
-	public function before_get( Blocks\Types\Base $instance ) {
-		if ( 'progress-bar' !== $instance->get_name() ) {
-			return;
-		}
-	}
 
-	public function set_pages( $blocks ) {
+	public function set_pages( $blocks, $last_page_from_blocks = true ) {
 		$count_blocks = count( $blocks );
+		$last_break   = false;
 
 		foreach ( $blocks as $index => $field ) {
 			if ( ! Live_Form::instance()->is_field( $field, 'form-break' ) ) {
@@ -94,8 +87,8 @@ class Form_Break {
 			}
 			$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
 
-			if ( $index + 1 === $count_blocks ) {
-				$this->last_break = $form_break;
+			if ( $last_page_from_blocks && $index + 1 === $count_blocks ) {
+				$last_break = $form_break;
 				unset( $blocks[ $index ] );
 				continue;
 			}
@@ -103,22 +96,12 @@ class Form_Break {
 			$this->pages ++;
 			$this->form_breaks[] = $form_break;
 		}
+		if ( $last_page_from_blocks && ! empty( $this->form_breaks ) ) {
+			$this->form_breaks[] = $last_break ? $last_break : array( 'label' => __( 'Last Page' ) );
+		}
 		$this->count_form_breaks = count( $this->form_breaks );
 
 		return $blocks;
-	}
-
-	public function set_last_page( $last_page ) {
-		if ( empty( $this->form_breaks ) ) {
-			return;
-		}
-
-		if ( $this->get_last_page_from_break ) {
-			$this->form_breaks[] = $this->last_break ? $this->last_break : array( 'label' => __( 'Last Page' ) );
-		} elseif ( $last_page ) {
-			$this->form_breaks[] = $last_page;
-		}
-
 	}
 
 	public function with_progress_wrapper( $content ) {
@@ -130,8 +113,9 @@ class Form_Break {
 		);
 
 		return sprintf(
-			'<div class="%1$s">%2$s</div>',
+			'<div class="%1$s" data-type="%2$s">%3$s</div>',
 			implode( ' ', $classes ),
+			$type,
 			$content
 		);
 	}

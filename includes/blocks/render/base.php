@@ -139,6 +139,8 @@ abstract class Base {
 			$args = $this->get_default_args_with_filter();
 		}
 
+		$this->before_render( $args );
+
 		if ( is_null( $template ) ) {
 			$template = $this->block_type->get_field_template( $template_name . '.php' );
 		}

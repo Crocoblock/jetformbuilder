@@ -31,6 +31,7 @@
 		}
 	},
 	"usesContext": [
-		"jet-forms/conditional-block--name"
+		"jet-forms/conditional-block--name",
+		"jet-forms/conditional-block--last_page_name"
 	]
 }

@@ -1,11 +1,12 @@
 <?php
 /**
- * next page button template
+ * submit button template
  *
- * @var \Jet_Form_Builder\Blocks\Render\Base $this
+ * @var \Jet_Form_Builder\Blocks\Render\Action_Button_Render $this
  */
 
-
 ?>
-<button<?php $this->render_attributes_string(); ?>><?php echo $args['label'] ? $args['label'] : 'Action Label'; ?></button>
-
+<div <?php $this->wrapper->render_attributes_string() ?>>
+	<?php include $this->get_global_template( 'common/prev-page-button.php' ); ?>
+	<button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
+</div>

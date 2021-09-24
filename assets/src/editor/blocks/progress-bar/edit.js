@@ -2,7 +2,7 @@ const { FieldSettingsWrapper } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
-const { SelectControl } = wp.components;
+const { SelectControl, TextControl } = wp.components;
 
 const {
 		  InspectorControls,
@@ -42,7 +42,7 @@ export default function ProgressBar( props ) {
 	}, [] )
 
 	return [
-		<InspectorControls key={ uniqKey() }>
+		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
 			<FieldSettingsWrapper
 				key={ uniqKey( 'FieldSettingsWrapper' ) }
 				{ ...props }

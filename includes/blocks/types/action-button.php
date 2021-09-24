@@ -2,10 +2,12 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Action_Buttons_Manager;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Prev;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Submit;
 use Jet_Form_Builder\Blocks\Render\Action_Button_Render;
-use Jet_Form_Builder\Blocks\Render\Base as BaseRender;
 use Jet_Form_Builder\Classes\Tools;
-
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -17,124 +19,243 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Button extends Base {
 
-	private $button_types = array();
+	use Action_Buttons_Manager;
+
+	public function general_style_manager_options() {
+	}
 
 	public function register_block_type() {
 		parent::register_block_type();
 
-		$this->add_button_type( 'prev', array(
-			'label'        => __( 'Go to Prev Page', 'jet-form-builder' ),
-			'button_class' => 'jet-form-builder__prev-page',
-			'preset_label' => 'Prev Page'
-		) );
-		$this->add_button_type( 'next', array(
-			'label'        => __( 'Go to Next Page', 'jet-form-builder' ),
-			'button_class' => 'jet-form-builder__next-page',
-			'preset_label' => 'Next Page'
-		) );
+		$this->set_button_type( new Button_Submit() );
+		$this->set_button_type( new Button_Prev() );
+		$this->set_button_type( new Button_Next() );
 
 		do_action( "jet-form-builder/{$this->get_name()}/on-register", $this );
 	}
 
-	public function general_style_unregister() {
-		return array( 'input', 'label', 'description', 'required' );
+	public function get_css_scheme() {
+		return array(
+			'button' => '__submit',
+			'wrap'   => '__submit-wrap'
+		);
 	}
 
-	/**
-	 * @return array
-	 */
-	public function get_button_types() {
-		return $this->button_types;
+	public function _jsm_register_controls() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'submit_wrap_style',
+				'title' => __( 'Submit Wrap', 'jet-form-builder' )
+			]
+		);
+
+		$this->add_margin_padding(
+			$this->selector( '__submit-wrap' ),
+			array(
+				'padding' => array(
+					'id' => 'submit_wrap_padding',
+				)
+			)
+		);
+
+		$this->controls_manager->end_section();
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			[
+				'id'    => 'submit_style',
+				'title' => __( 'Submit Button', 'jet-form-builder' )
+			]
+		);
+
+		$this->add_margin_padding(
+			$this->selector( '__submit' ),
+			array(
+				'margin'  => array(
+					'id'        => 'submit_margin',
+					'separator' => 'after',
+				),
+				'padding' => array(
+					'id'        => 'submit_padding',
+					'separator' => 'after',
+				)
+			)
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'button_width',
+			'type'         => 'range',
+			'separator'    => 'after',
+			'label'        => __( 'Button Width', 'jet-form-builder' ),
+			'units'        => [
+				[
+					'value'     => '%',
+					'intervals' => [
+						'step' => 1,
+						'min'  => 10,
+						'max'  => 100,
+					]
+				],
+			],
+			'css_selector' => [
+				$this->selector( '__submit' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => 20
+				),
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_alignment',
+			'type'         => 'choose',
+			'separator'    => 'after',
+			'label'        => __( 'Button Alignment', 'jet-form-builder' ),
+			'options'      => [
+				'flex-start' => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center'     => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'flex-end'   => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				$this->selector( '__submit-wrap' ) => 'align-items: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'flex-start'
+				),
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_text_alignment',
+			'type'         => 'choose',
+			'separator'    => 'after',
+			'label'        => __( 'Text Alignment', 'jet-form-builder' ),
+			'options'      => [
+				'flex-start' => [
+					'shortcut' => __( 'Left', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignleft',
+				],
+				'center'     => [
+					'shortcut' => __( 'Center', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-aligncenter',
+				],
+				'flex-end'   => [
+					'shortcut' => __( 'Right', 'jet-form-builder' ),
+					'icon'     => 'dashicons-editor-alignright',
+				],
+			],
+			'css_selector' => [
+				$this->selector( '__submit' ) => 'justify-content: {{VALUE}};',
+			],
+			'attributes'   => [
+				'default' => array(
+					'value' => 'flex-start'
+				),
+			],
+		] );
+
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_typography',
+			'type'         => 'typography',
+			'separator'    => 'after',
+			'css_selector' => [
+				$this->selector( '__submit' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+			],
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_border',
+			'type'         => 'border',
+			'label'        => __( 'Border', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				$this->selector( '__submit' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+			),
+		] );
+
+		$this->controls_manager->start_tabs(
+			'style_controls',
+			[
+				'id' => 'submit_style_tabs',
+			]
+		);
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'submit_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				$this->selector( '__submit' ) => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+
+		$this->controls_manager->start_tab(
+			'style_controls',
+			[
+				'id'    => 'submit_hover_styles',
+				'title' => __( 'Hover', 'jet-form-builder' ),
+			]
+		);
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_hover_typography_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Text Color', 'jet-form-builder' ),
+			'separator'    => 'after',
+			'css_selector' => array(
+				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->add_control( [
+			'id'           => 'submit_hover_background_color',
+			'type'         => 'color-picker',
+			'label'        => __( 'Background Color', 'jet-form-builder' ),
+			'css_selector' => array(
+				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+			),
+		] );
+
+		$this->controls_manager->end_tab();
+		$this->controls_manager->end_tabs();
+
+		$this->controls_manager->end_section();
 	}
 
-	/**
-	 * @param $slug
-	 * @param $button_data
-	 */
-	public function add_button_type( $slug, $button_data ) {
-		if ( $this->get_button_type( $slug ) ) {
-			return;
-		}
-
-		$attrs = array( 'value', 'label', 'preset_label' );
-
-		foreach ( $attrs as $attr ) {
-			if ( ! isset( $button_data[ $attr ] ) ) {
-				$button_data[ $attr ] = $slug;
-			}
-		}
-
-		$this->button_types[] = $button_data;
-	}
-
-	/**
-	 * @param $slug
-	 *
-	 * @param string $property
-	 *
-	 * @return array
-	 */
-	public function get_button_type( $slug ) {
-		foreach ( $this->get_button_types() as $button ) {
-			if ( $button['value'] === $slug ) {
-				return $button;
-			}
-		}
-
-		return array();
-	}
-
-	public function get_button_prop( $slug, $prop, $if_not = false ) {
-		$button = $this->get_button_type( $slug );
-
-		if ( ! $button ) {
-			return $if_not;
-		}
-
-		return $button[ $prop ] ?? $if_not;
-	}
-
-	/**
-	 * @param $slug
-	 *
-	 * @param string $property
-	 *
-	 * @return array
-	 */
-	public function get_button_type_with_index( $slug, $property = '' ) {
-		foreach ( $this->get_button_types() as $index => $button ) {
-			if ( $button['value'] === $slug ) {
-				return array( $index, $button );
-			}
-		}
-
-		return array( false, false );
-	}
-
-	public function update_button_type( $slug, $new_data ) {
-		list( $index, $button ) = $this->get_button_type_with_index( $slug );
-
-		if ( false === $index ) {
-			return false;
-		}
-
-		unset( $new_data['value'] );
-		$this->button_types[ $index ] = array_merge( $button, $new_data );
-
-		return true;
-	}
-
-	public function delete_button_type( $slug ) {
-		list( $index ) = $this->get_button_type_with_index( $slug );
-
-		if ( false === $index ) {
-			return false;
-		}
-
-		unset( $this->button_types[ $index ] );
-
-		return true;
-	}
 
 	/**
 	 * Returns block name
@@ -142,11 +263,7 @@ class Action_Button extends Base {
 	 * @return [type] [description]
 	 */
 	public function get_name() {
-		return 'action-button';
-	}
-
-	public function use_preset() {
-		return false;
+		return 'submit-field';
 	}
 
 	/**
@@ -157,7 +274,7 @@ class Action_Button extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Action_Button_Render( $this ) )->render();
+		return ( new Action_Button_Render( $this ) )->render_without_layout();
 	}
 
 	public function block_data( $editor, $handle ) {
@@ -166,9 +283,7 @@ class Action_Button extends Base {
 			'JetFormActionButton',
 			apply_filters(
 				"jet-form-builder/field-data/{$this->get_name()}",
-				array(
-					'actions' => Tools::with_placeholder( $this->get_button_types() )
-				)
+				array( 'actions' => $this->get_button_types_for_js() )
 			)
 		);
 	}

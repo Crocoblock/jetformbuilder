@@ -138,14 +138,13 @@ class Manager {
 			new Types\Range_Field(),
 			new Types\Heading_Field(),
 			new Types\Textarea_Field(),
-			new Types\Submit_Field(),
+			new Types\Action_Button(),
 			new Types\Repeater_Field(),
 			new Types\Form_Break_Field(),
 			new Types\Group_Break_Field(),
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
 			new Types\Color_Picker_Field(),
-			new Types\Action_Button(),
 			new Types\Progress_Bar(),
 		);
 

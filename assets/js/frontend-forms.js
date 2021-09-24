@@ -499,6 +499,9 @@
 		},
 
 		updateProgress: function( event, $fromPage, $toPage, $progress ) {
+			if ( 'default' !== $progress.data( 'type' ) ) {
+				return;
+			}
 			const [ from, to ] = [ $fromPage.data( 'page' ), $toPage.data( 'page' ) ];
 
 			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ from }"]` );

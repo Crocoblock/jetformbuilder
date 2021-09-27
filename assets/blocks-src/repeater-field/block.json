@@ -74,5 +74,8 @@
 			"type": "string",
 			"default": ""
 		}
+	},
+	"providesContext": {
+		"jet-forms/repeater-field--name": "name"
 	}
 }

@@ -66,12 +66,12 @@ class Action_Button extends Base {
 			'style_controls',
 			[
 				'id'    => 'submit_style',
-				'title' => __( 'Submit Button', 'jet-form-builder' )
+				'title' => __( 'Action Button', 'jet-form-builder' )
 			]
 		);
 
 		$this->add_margin_padding(
-			$this->selector( '__submit' ),
+			$this->selector( '__action-button' ),
 			array(
 				'margin'  => array(
 					'id'        => 'submit_margin',
@@ -100,7 +100,7 @@ class Action_Button extends Base {
 				],
 			],
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+				$this->selector( '__action-button' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
 			],
 			'attributes'   => array(
 				'default' => array(
@@ -158,7 +158,7 @@ class Action_Button extends Base {
 				],
 			],
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'justify-content: {{VALUE}};',
+				$this->selector( '__action-button' ) => 'justify-content: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -173,7 +173,7 @@ class Action_Button extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( '__action-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -183,7 +183,7 @@ class Action_Button extends Base {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( '__action-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -208,7 +208,7 @@ class Action_Button extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'color: {{VALUE}}',
+				$this->selector( '__action-button' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -217,7 +217,7 @@ class Action_Button extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
+				$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -237,7 +237,7 @@ class Action_Button extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -246,7 +246,7 @@ class Action_Button extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 			),
 		] );
 

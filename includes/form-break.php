@@ -13,7 +13,7 @@ class Form_Break {
 
 	private $pages = 0;
 	private $form_breaks = array();
-	private $count_form_breaks = 0;
+	private $count_form_breaks = null;
 	private $current_page = 1;
 	private $current_form_break = 0;
 	private $is_editor = false;
@@ -28,6 +28,9 @@ class Form_Break {
 	}
 
 	public function get_count_breaks() {
+		if ( is_null( $this->count_form_breaks ) ) {
+			$this->count_form_breaks = count( $this->form_breaks );
+		}
 		return $this->count_form_breaks;
 	}
 
@@ -65,7 +68,6 @@ class Form_Break {
 				'label' => 'Last Page'
 			),
 		);
-		$this->count_form_breaks = count( $this->form_breaks );
 
 		return $this;
 	}
@@ -99,7 +101,6 @@ class Form_Break {
 		if ( $last_page_from_blocks && ! empty( $this->form_breaks ) ) {
 			$this->form_breaks[] = $last_break ? $last_break : array( 'label' => __( 'Last Page' ) );
 		}
-		$this->count_form_breaks = count( $this->form_breaks );
 
 		return $blocks;
 	}

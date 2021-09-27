@@ -61,7 +61,7 @@ export default function RangeEdit( props ) {
 						key='min'
 						value={ attributes.min }
 						onChange={ ( newValue ) => {
-							setAttributes( { min: parseInt( newValue ) } );
+							setAttributes( { min: parseFloat( newValue ) } );
 						} }
 					/>
 					<NumberControl
@@ -70,7 +70,7 @@ export default function RangeEdit( props ) {
 						key='max'
 						value={ attributes.max }
 						onChange={ ( newValue ) => {
-							setAttributes( { max: parseInt( newValue ) } );
+							setAttributes( { max: parseFloat( newValue ) } );
 						} }
 					/>
 					<NumberControl
@@ -79,7 +79,7 @@ export default function RangeEdit( props ) {
 						key='step'
 						value={ attributes.step }
 						onChange={ ( newValue ) => {
-							setAttributes( { step: parseInt( newValue ) } );
+							setAttributes( { step: parseFloat( newValue ) } );
 						} }
 					/>
 					<TextControl

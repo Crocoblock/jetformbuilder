@@ -289,7 +289,7 @@ class Register_User extends Base {
 			'requestFields' => array(
 				'user_id' => array(
 					'name' => 'user_id',
-					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' )
+					'help' => sprintf( __( "A computed field from the %s action.", 'jet-form-builder' ), "<b>{$this->get_name()}</b>" )
 				)
 			)
 		);

@@ -336,6 +336,9 @@ class Editor {
 			JET_FORM_BUILDER_VERSION,
 			true
 		);
+		wp_set_script_translations( self::EDITOR_PACKAGE_HANDLE, 'jet-form-builder' );
+
+		//wp_enqueue_script( self::EDITOR_PACKAGE_HANDLE );
 
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 
@@ -419,9 +422,9 @@ class Editor {
 		);
 
 		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'action'        => $this->get_action(),
-			'itemID'        => $this->get_item_id(),
-			'presetConfig'  => $this->get_preset_config(),
+			'action'       => $this->get_action(),
+			'itemID'       => $this->get_item_id(),
+			'presetConfig' => $this->get_preset_config(),
 		) );
 
 		do_action( 'jet-form-builder/other-editor-assets/after', $this, $handle );

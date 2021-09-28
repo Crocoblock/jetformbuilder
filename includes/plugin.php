@@ -140,6 +140,16 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * Loads the translation files.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function init_lang() {
+		load_plugin_textdomain( 'jet-form-builder', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
 
 	/**
 	 * Returns url to file or dir inside plugin folder
@@ -169,6 +179,7 @@ class Plugin {
 	private function __construct() {
 
 		$this->register_autoloader();
+		$this->init_lang();
 
 		add_action( 'after_setup_theme', function () {
 			do_action( 'jet-form-builder/before-init' );

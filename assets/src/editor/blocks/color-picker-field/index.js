@@ -13,7 +13,7 @@ const { name, icon } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Color Picker Field' ),
+	title: __( 'Color Picker Field','jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: BlockEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],

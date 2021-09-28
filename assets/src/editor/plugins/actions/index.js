@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-actions-panel',
-	title: __( 'Post Submit Actions' )
+	title: __( 'Post Submit Actions', 'jet-form-builder' )
 };
 
 const settings = {

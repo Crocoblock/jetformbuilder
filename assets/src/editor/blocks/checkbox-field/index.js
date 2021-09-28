@@ -13,7 +13,7 @@ const { name, icon } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Checkbox Field' ),
+	title: __( 'Checkbox Field', 'jet-form-builder' ),
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: CheckboxEdit,

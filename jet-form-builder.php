@@ -17,7 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-
 function jet_form_builder_init() {
 
 	define( 'JET_FORM_BUILDER_VERSION', '1.3.1' );
@@ -28,6 +27,8 @@ function jet_form_builder_init() {
 	define( 'JET_FORM_BUILDER_URL', plugins_url( '/', JET_FORM_BUILDER__FILE__ ) );
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
+
+	__( 'Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor', 'jet-form-builder' );
 
 	add_filter( 'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE, function ( $links ) {
 		$url = 'https://jetformbuilder.com/pricing/';

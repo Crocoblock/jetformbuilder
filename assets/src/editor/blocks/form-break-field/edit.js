@@ -43,13 +43,13 @@ export default function FormBreakEdit( props ) {
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
 					key={ uniqKey( 'add_next_button' ) }
-					label={ __( 'Disable "Next" Button' ) }
+					label={ __( 'Disable "Next" Button', 'jet-form-builder' ) }
 					checked={ attributes.add_next_button }
 					help={ attrHelp( 'add_next_button' ) }
 					onChange={ add_next_button => setAttributes( { add_next_button } ) }
 				/>
 				<TextControl
-					label={ __( 'Label of progress' ) }
+					label={ __( 'Label of progress', 'jet-form-builder' ) }
 					value={ attributes.label_progress }
 					help={ attrHelp( 'label_progress' ) }
 					onChange={ ( newValue ) => {
@@ -59,7 +59,7 @@ export default function FormBreakEdit( props ) {
 				<TextareaControl
 					key="page_break_disabled"
 					value={ attributes.page_break_disabled }
-					label={ __( 'Validation message' ) }
+					label={ __( 'Validation message', 'jet-form-builder' ) }
 					help={ attrHelp( 'page_break_disabled' ) }
 					onChange={ ( newValue ) => {
 						setAttributes( { page_break_disabled: newValue } );
@@ -85,7 +85,7 @@ export default function FormBreakEdit( props ) {
 						onChange={ label => setAttributes( { label } ) }
 					/>
 				</Button> : <span>
-					{ __( 'Form Break' ) }
+					{ __( 'Form Break', 'jet-form-builder' ) }
 				</span> }
 				{ attributes.add_prev && <Button
 					isSecondary

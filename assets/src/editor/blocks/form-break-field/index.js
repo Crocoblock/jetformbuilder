@@ -13,7 +13,7 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Form Break Field' ),
+	title: __( 'Form Break Field', 'jet-form-builder' ),
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: FormBreakEdit,

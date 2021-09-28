@@ -101,7 +101,7 @@ const getAvailableFieldsString = ( blockName ) => {
 		fieldsString.push( '%FIELD::' + item + '%' );
 	} );
 
-	return __( 'Available fields: ' ) + fieldsString.join( ', ' );
+	return __( 'Available fields: ', 'jet-form-builder' ) + fieldsString.join( ', ' );
 }
 
 const getInnerBlocks = ( clientId ) => {

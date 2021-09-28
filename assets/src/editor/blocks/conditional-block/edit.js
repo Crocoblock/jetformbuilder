@@ -108,7 +108,7 @@ export default function ConditionalBlockEdit( props ) {
 				onUnMount={ onRequestClose }
 				newItem={ options.condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
-				addNewButtonLabel={ __( "New Condition" ) }
+				addNewButtonLabel={ __( "New Condition", 'jet-form-builder' ) }
 				help={ {
 					helpVisible: conditions => conditions.length > 1,
 					helpSource: window.JetFormEditorData.helpForRepeaters,

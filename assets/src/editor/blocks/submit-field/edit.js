@@ -84,7 +84,7 @@ export default function ActionButtonEdit( props ) {
 			<FieldSettingsWrapper { ...props } key={ uniqKey( 'FieldSettingsWrapper' ) }>
 				<SelectControl
 					key={ uniqKey( 'action_type' ) }
-					label={ __( 'Button Action Type' ) }
+					label={ __( 'Button Action Type', 'jet-form-builder' ) }
 					value={ attributes.action_type }
 					options={ JetFormActionButton.actions }
 					onChange={ action_type => setAttributes( { action_type } ) }

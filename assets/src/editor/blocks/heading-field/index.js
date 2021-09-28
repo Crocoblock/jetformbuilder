@@ -13,7 +13,7 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Heading Field' ),
+	title: __( 'Heading Field', 'jet-form-builder' ),
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: HeadingEdit,

@@ -56,10 +56,10 @@ class Hidden_Field extends Base {
 	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		parent::set_block_data( $attributes, $content, $wp_block );
 
-		$this->block_attrs['field_value'] = $this->get_field_value();
+		$this->block_attrs['field_value'] = $this->get_hidden_field_value();
 	}
 
-	public function get_field_value() {
+	public function get_hidden_field_value() {
 		$call_field_value = $this->block_attrs['field_value'] ?? false;
 		$static_value     = $this->block_attrs['_static_value'] ?? false;
 

@@ -124,6 +124,9 @@ abstract class Base_Source {
 	}
 
 	public function parse_result_value( $value ) {
+		if ( ! isset( $this->field_args['type'] ) ) {
+			do_action( 'qm/debug', $this->field_args );
+		}
 		return Preset_Manager::instance()
 			->manager_preset
 			->prepare_result( $this->field_args['type'], $value );

@@ -44,6 +44,7 @@ class Live_Form {
 	public $spec_data;
 	public $post;
 	public $_conditional_blocks = array();
+	public $_repeaters = array();
 	public $blocks = array();
 
 	// for progress
@@ -60,14 +61,6 @@ class Live_Form {
 
 	public function set_form_id( $form_id ) {
 		$this->form_id = $form_id;
-
-		return $this;
-	}
-
-
-	public function set_repeater( $item, $count = false ) {
-		$this->current_repeater   = $item;
-		$this->current_repeater_i = $count;
 
 		return $this;
 	}
@@ -177,42 +170,6 @@ class Live_Form {
 		return $this->get_form_break()->maybe_end_page( $is_last, $field );
 	}
 
-	/**
-	 * Returns field ID with repeater prefix if needed
-	 */
-	public function get_field_id( $name ) {
-
-		if ( is_array( $name ) ) {
-			$name = $name['name'];
-		}
-		//Find some solution for the repeater field
-
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
-			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
-			$name          = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
-		}
-
-		return $name;
-	}
-
-	/**
-	 * Returns field name with repeater prefix if needed
-	 */
-	public function get_field_name( $name ) {
-
-		//Find some solution for the repeater field
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : '_undefined_repeater_name';
-			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
-
-			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
-		}
-
-		return $name;
-
-	}
-
 	public function get_nonce_id() {
 		return "jet-form-builder-wp-nonce-{$this->form_id}";
 	}
@@ -235,6 +192,14 @@ class Live_Form {
 
 	public function isset_form_break( $name ) {
 		return isset( $this->_conditional_blocks[ $name ] );
+	}
+
+	public function get_repeater( $name ) {
+		return $this->_repeaters[ $name ] ?? array();
+	}
+
+	public function set_repeater( $name, $attrs ) {
+		$this->_repeaters[ $name ] = array_merge( $this->_repeaters[ $name ] ?? array(), $attrs );
 	}
 
 

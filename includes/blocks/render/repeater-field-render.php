@@ -3,8 +3,8 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -24,17 +24,16 @@ class Repeater_Field_Render extends Base {
 
 	public function render( $wp_block = null, $template = null ) {
 		if ( empty( $wp_block['innerBlocks'] ) ) {
-			return;
+			return '';
 		}
 
-		$this->current_repeater = $this->block_type->block_attrs;
 		$this->add_attribute( 'class', 'jet-form-builder-repeater jet-form-builder__field' );
 		$this->add_attribute( 'class', $this->maybe_get_error_class( $this->block_type->block_attrs ) );
 		$this->add_attribute( 'class', $this->block_type->block_attrs['class_name'] );
 
 		$template = sprintf(
 			'<template class="jet-form-builder-repeater__initial">%1$s</template>',
-			$this->render_repeater_row( $wp_block, false )
+			$this->with_repeater_row_wrapper( $this->block_type->block_content )
 		);
 
 		$html = '<div class="jet-form-builder__field-wrap">';
@@ -49,19 +48,12 @@ class Repeater_Field_Render extends Base {
 			$this->get_attributes_string()
 		);
 
-		$html .= '<div class="jet-form-builder-repeater__items">';
+		do_action( 'qm/debug', 'before_render_rows' );
 
-		if ( ! empty( $this->current_repeater['default'] ) && is_array( $this->current_repeater['default'] ) ) {
-			$i = 0;
-			foreach ( $this->current_repeater['default'] as $item ) {
-				$this->current_repeater['values'] = $item;
-				$html                             .= $this->render_repeater_row( $wp_block, $i );
-				$i ++;
-			}
-			$this->current_repeater['values'] = false;
-		}
-
-		$html .= '</div>';
+		$html .= sprintf(
+			'<div class="jet-form-builder-repeater__items">%s</div>',
+			$this->maybe_render_rows( $wp_block )
+		);
 
 		if ( 'manually' === $this->block_type->manage_items ) {
 			$html .= sprintf(
@@ -76,39 +68,60 @@ class Repeater_Field_Render extends Base {
 		$html .= $this->maybe_render_error( $this->block_type->block_attrs );
 		$html .= '</div>';
 
-		$this->current_repeater = false;
-
 		return parent::render( null, $html );
+	}
+
+	public function maybe_render_rows( $wp_block ) {
+		$values   = $this->block_type->get_current_repeater( 'values' );
+		$response = '';
+
+		if ( empty( $values ) || ! is_array( $values ) ) {
+			return $response;
+		}
+
+		for ( $i = 0; $i < count( $values ); $i ++ ) {
+			$response .= $this->render_repeater_row( $wp_block, $i );
+		}
+
+		$this->block_type->set_current_repeater( array(
+			'index' => false
+		) );
+
+		return $response;
 	}
 
 	/**
 	 * Render current repeater row
 	 *
 	 * @param $wp_block
-	 * @param bool $index
+	 * @param int $index
 	 *
 	 * @return string
 	 */
-	public function render_repeater_row( $wp_block, $index = false ) {
+	public function render_repeater_row( $wp_block, $index = 0 ) {
+		$html = '';
 
-		if ( false !== $index ) {
-			$this->current_repeater_i = $index;
-		} else {
-			$index = 0;
-		}
-
-		$html = '<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $this->block_type->calc_dataset . '>';
-		$html .= '<div class="jet-form-builder-repeater__row-fields">';
-
-		Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );
+		$this->block_type->set_current_repeater( array(
+			'index' => $index
+		) );
 
 		foreach ( $wp_block['innerBlocks'] as $block ) {
-			$html .= render_block( $block );
+			$html .= Tools::render_block_with_context( $block, array(
+				'jet-forms/repeater-field--name' => $this->block_type->parent_repeater_name()
+			) );
 		}
 
-		$html .= '</div>';
+		return $this->with_repeater_row_wrapper( $html, $index );
+	}
 
-		Live_Form::instance()->set_repeater( false );
+	public function with_repeater_row_wrapper( $content, $index = 0 ) {
+		$html = sprintf(
+			'<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="%1$s" %2$s>',
+			$index,
+			$this->block_type->calc_dataset
+		);
+
+		$html .= sprintf( '<div class="jet-form-builder-repeater__row-fields">%s</div>', $content );
 
 		if ( 'manually' === $this->block_type->manage_items ) {
 			$html .= '<div class="jet-form-builder-repeater__row-remove">';

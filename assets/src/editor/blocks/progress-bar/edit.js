@@ -47,7 +47,7 @@ export default function ProgressBar( props ) {
 				key={ uniqKey( 'FieldSettingsWrapper' ) }
 				{ ...props }
 			>
-				<SelectControl
+				{ 1 < JetFormProgressBar.progress_types.length && <SelectControl
 					key={ uniqKey( 'progress_type' ) }
 					label={ __( 'Progress Bar Type', 'jet-form-builder' ) }
 					value={ attributes.progress_type }
@@ -56,10 +56,10 @@ export default function ProgressBar( props ) {
 						setProgressHtml( getProgressTypeHtml( progress_type ) );
 					} }
 					options={ JetFormProgressBar.progress_types }
-				/>
+				/> }
 			</FieldSettingsWrapper>
 		</InspectorControls>,
-		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
+		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
 			<RawHTML>{ progressHtml }</RawHTML>
 		</div>,
 	];

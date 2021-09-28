@@ -207,32 +207,53 @@ abstract class Base extends Base_Module {
 	}
 
 	private function get_default_from_preset() {
+		if ( ! $this->parent_repeater_name() ) {
+			return $this->get_field_value();
+		}
+
+		if ( ! $this->get_current_repeater() ) {
+			$this->set_current_repeater( array(
+				'index'  => false,
+				'values' => $this->load_current_repeater_preset() ?: array()
+			) );
+		}
+
+		$repeater = $this->get_current_repeater();
+
+		if ( false === $repeater['index'] ) {
+			return $this->get_field_value();
+		}
+
 		$name = $this->block_attrs['name'] ?? '';
+		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
 
-		if ( empty( Live_Form::instance()->current_repeater['values'] ) ) {
-			return Preset_Manager::instance()->get_field_value( $this->block_attrs );
-		}
-
-		if ( isset( Live_Form::instance()->current_repeater['values'][ $name ] ) ) {
-			return Live_Form::instance()->current_repeater['values'][ $name ];
-		}
-
-		return '';
+		return ( $row[ $name ] ?? $this->get_field_value() ) ?: '';
 	}
-
-	/**
-	 * <Easy access to Live_Form functions>
-	 */
 
 	/**
 	 * Returns field ID with repeater prefix if needed
 	 *
-	 * @param $name
+	 * @param string $name
 	 *
-	 * @return string
+	 * @return mixed|string
 	 */
-	public function get_field_id( $name ) {
-		return Live_Form::instance()->get_field_id( $name );
+	public function get_field_id( $name = '' ) {
+		if ( $name && is_array( $name ) ) {
+			$name = $name['name'];
+		}
+		if ( ! $name ) {
+			$name = $this->block_attrs['name'] ?? '';
+		}
+
+		if ( $this->parent_repeater_name() ) {
+			$name = sprintf(
+				'%1$s_%2$s_%3$s',
+				$this->parent_repeater_name(),
+				$this->get_current_repeater_index(),
+				$name );
+		}
+
+		return $name;
 	}
 
 	/**
@@ -242,8 +263,20 @@ abstract class Base extends Base_Module {
 	 *
 	 * @return string
 	 */
-	public function get_field_name( $name ) {
-		return Live_Form::instance()->get_field_name( $name );
+	public function get_field_name( $name = '' ) {
+		if ( ! $name ) {
+			$name = $this->block_attrs['name'] ?? '';
+		}
+		if ( $this->parent_repeater_name() ) {
+			$name = sprintf(
+				'%1$s[%2$s][%3$s]',
+				$this->parent_repeater_name(),
+				$this->get_current_repeater_index(),
+				$name
+			);
+		}
+
+		return $name;
 	}
 
 	/**
@@ -582,6 +615,56 @@ abstract class Base extends Base_Module {
 		}
 
 		return $break;
+	}
+
+	public function get_current_repeater( $prop = '', $if_empty = false ) {
+		$repeater = Live_Form::instance()->get_repeater( $this->parent_repeater_name() );
+
+		return $prop ? ( $repeater[ $prop ] ?? $if_empty ) : $repeater;
+	}
+
+	public function get_current_repeater_index() {
+		$index = $this->get_current_repeater( 'index' );
+
+		return false !== $index ? $index : '__i__';
+	}
+
+	public function parent_repeater_name() {
+		$context = 'jet-forms/repeater-field--name';
+
+		return $this->block_context[ $context ] ?? '';
+	}
+
+	public function load_current_repeater_preset() {
+		$repeater_block = Plugin::instance()->form->get_field_by_name(
+			0,
+			$this->parent_repeater_name(),
+			Live_Form::instance()->blocks
+		);
+
+		if ( ! $repeater_block ) {
+			return '';
+		}
+
+		return array_values( $this->get_field_value( array_merge(
+			$repeater_block['attrs'],
+			array(
+				'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+				'blockName' => $repeater_block['blockName']
+			)
+		) ) ?: array() );
+	}
+
+	public function get_field_value( $attributes = array() ) {
+		if ( ! $attributes ) {
+			$attributes = $this->block_attrs;
+		}
+
+		return Preset_Manager::instance()->get_field_value( $attributes );
+	}
+
+	public function set_current_repeater( $attrs ) {
+		Live_Form::instance()->set_repeater( $this->parent_repeater_name(), $attrs );
 	}
 
 

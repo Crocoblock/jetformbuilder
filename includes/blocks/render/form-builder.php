@@ -152,7 +152,6 @@ class Form_Builder {
 		include $this->get_global_template( 'common/end-form.php' );
 
 		Plugin::instance()->blocks->enqueue_frontend_assets();
-		File_Upload::instance()->enqueue_scripts();
 
 		$end_form .= ob_get_clean();
 

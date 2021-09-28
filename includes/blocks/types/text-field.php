@@ -15,6 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Text_Field extends Base {
 
+	public $enable_mask = false;
 
 	/**
 	 * Returns block name
@@ -113,13 +114,17 @@ class Text_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		wp_enqueue_script(
-			'jet-form-builder-inputmask',
-			Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-			array( 'jquery' ),
-			Plugin::instance()->get_version(),
-			true
-		);
+		$this->enable_mask = ! empty( $this->block_attrs['enable_input_mask'] ) && ! empty( $this->block_attrs['input_mask'] );
+
+		if ( $this->enable_mask ) {
+			wp_enqueue_script(
+				'jet-form-builder-inputmask',
+				Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
+				array( 'jquery' ),
+				Plugin::instance()->get_version(),
+				true
+			);
+		}
 
 		return ( new Text_Field_Render( $this ) )->render();
 	}

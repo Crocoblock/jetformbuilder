@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Media_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\File_Upload;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -33,12 +34,14 @@ class Media_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		File_Upload::instance()->enqueue_scripts();
+
 		return ( new Media_Field_Render( $this ) )->render();
 	}
 
 	public function block_data( $editor, $handle ) {
 		wp_localize_script( $handle, 'jetFormMediaFieldData', array(
-			'mime_types'  => Tools::get_allowed_mimes_list_for_js(),
+			'mime_types' => Tools::get_allowed_mimes_list_for_js(),
 		) );
 	}
 

@@ -1,0 +1,1466 @@
+{
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);",
+                "lang": "ru"
+            },
+            "JetFormBuilder": [
+                ""
+            ],
+            "https://jetformbuilder.com/": [
+                ""
+            ],
+            "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor": [
+                ""
+            ],
+            "Crocoblock": [
+                ""
+            ],
+            "https://crocoblock.com/": [
+                ""
+            ],
+            "ActiveCampaign": [
+                ""
+            ],
+            "API Data": [
+                ""
+            ],
+            "API Key": [
+                ""
+            ],
+            "API URL": [
+                ""
+            ],
+            "Validate API Key": [
+                ""
+            ],
+            "Retry request": [
+                ""
+            ],
+            "List Id:": [
+                ""
+            ],
+            "Update List": [
+                ""
+            ],
+            "Tags:": [
+                ""
+            ],
+            "Fields Map:": [
+                ""
+            ],
+            "Use Global Settings": [
+                ""
+            ],
+            "How to obtain your ActiveCampaign API URL and Key? More info": [
+                ""
+            ],
+            "here": [
+                ""
+            ],
+            "Add as many tags as you want, comma separated.": [
+                ""
+            ],
+            "Email": [
+                ""
+            ],
+            "First Name": [
+                ""
+            ],
+            "Last Name": [
+                ""
+            ],
+            "Phone": [
+                ""
+            ],
+            "Organization": [
+                ""
+            ],
+            "Call Hook": [
+                ""
+            ],
+            "Hook Name:": [
+                ""
+            ],
+            "Call Webhook": [
+                ""
+            ],
+            "Webhook URL:": [
+                ""
+            ],
+            "Getresponse": [
+                ""
+            ],
+            "API Key:": [
+                ""
+            ],
+            "Day Of Cycle:": [
+                ""
+            ],
+            "How to obtain your GetResponse API Key? More info": [
+                ""
+            ],
+            "Insert/Update Post": [
+                ""
+            ],
+            "Post Type:": [
+                ""
+            ],
+            "Post Status:": [
+                ""
+            ],
+            "Default Fields:": [
+                ""
+            ],
+            "Set meta fields names or post properties to save appropriate form fields into": [
+                ""
+            ],
+            "Set default meta values which should be set on post insert/update": [
+                ""
+            ],
+            "Post ID": [
+                ""
+            ],
+            "Post Title": [
+                ""
+            ],
+            "Post Content": [
+                ""
+            ],
+            "Post Excerpt": [
+                ""
+            ],
+            "Post Status": [
+                ""
+            ],
+            "Post Date": [
+                ""
+            ],
+            "Post Date GMT": [
+                ""
+            ],
+            "Post Author": [
+                ""
+            ],
+            "MailChimp": [
+                ""
+            ],
+            "Audience:": [
+                ""
+            ],
+            "Update Audience List": [
+                ""
+            ],
+            "Groups:": [
+                ""
+            ],
+            "Double Opt-In:": [
+                ""
+            ],
+            "How to obtain your MailChimp API Key? More info": [
+                ""
+            ],
+            "Redirect to Page": [
+                ""
+            ],
+            "Redirect to:": [
+                ""
+            ],
+            "Select page:": [
+                ""
+            ],
+            "Redirect URL:": [
+                ""
+            ],
+            "Add query arguments to the redirect URL:": [
+                ""
+            ],
+            "Add hash to the redirect URL:": [
+                ""
+            ],
+            "Register User": [
+                ""
+            ],
+            "Allow creating new users by existing users": [
+                ""
+            ],
+            "Who can add new user?": [
+                ""
+            ],
+            "User Role:": [
+                ""
+            ],
+            "User Meta:": [
+                ""
+            ],
+            "Log In User after Register:": [
+                ""
+            ],
+            "Registered user ID will be added to form data. If form is filled by logged \r\n\t\t\tin user - current user ID will be added to form data.": [
+                ""
+            ],
+            "A computed field from the %s action.": [
+                ""
+            ],
+            "Passwords mismatch": [
+                ""
+            ],
+            "Username exists": [
+                ""
+            ],
+            "Email exists": [
+                ""
+            ],
+            "Incorrect username": [
+                ""
+            ],
+            "Empty username": [
+                ""
+            ],
+            "Empty email": [
+                ""
+            ],
+            "Empty password": [
+                ""
+            ],
+            "Logged in (appears only if register user is only notification)": [
+                ""
+            ],
+            "Not enough capabilities": [
+                ""
+            ],
+            "User Login": [
+                ""
+            ],
+            "Password": [
+                ""
+            ],
+            "Confirm Password": [
+                ""
+            ],
+            "User URL": [
+                ""
+            ],
+            "Send Email": [
+                ""
+            ],
+            "Mail To:": [
+                ""
+            ],
+            "Email Address:": [
+                ""
+            ],
+            "From Field:": [
+                ""
+            ],
+            "Reply To:": [
+                ""
+            ],
+            "Reply to Email Address:": [
+                ""
+            ],
+            "Reply To Email From Field:": [
+                ""
+            ],
+            "Subject:": [
+                ""
+            ],
+            "From Name:": [
+                ""
+            ],
+            "From Email Address:": [
+                ""
+            ],
+            "Content type:": [
+                ""
+            ],
+            "Content:": [
+                ""
+            ],
+            "Admin email": [
+                ""
+            ],
+            "Email from submitted form field": [
+                ""
+            ],
+            "Custom email": [
+                ""
+            ],
+            "Plain text": [
+                ""
+            ],
+            "HTML": [
+                ""
+            ],
+            "Form on %s Submitted": [
+                ""
+            ],
+            "Update Options": [
+                ""
+            ],
+            "Options Page:": [
+                ""
+            ],
+            "Options Map:": [
+                ""
+            ],
+            "Update User": [
+                ""
+            ],
+            "User ID (will update this user)": [
+                ""
+            ],
+            "User Meta": [
+                ""
+            ],
+            "Source:": [
+                ""
+            ],
+            "Post": [
+                ""
+            ],
+            "User": [
+                ""
+            ],
+            "URL Query Variable": [
+                ""
+            ],
+            "Get post ID from:": [
+                ""
+            ],
+            "Current post": [
+                ""
+            ],
+            "Get user ID from:": [
+                ""
+            ],
+            "Current user": [
+                ""
+            ],
+            "Query variable name:": [
+                ""
+            ],
+            "Query variable key": [
+                ""
+            ],
+            "Post property": [
+                ""
+            ],
+            "Post Thumbnail": [
+                ""
+            ],
+            "Post Meta": [
+                ""
+            ],
+            "Post Terms": [
+                ""
+            ],
+            "Taxonomy": [
+                ""
+            ],
+            "Meta field key": [
+                ""
+            ],
+            "User field": [
+                ""
+            ],
+            "User ID": [
+                ""
+            ],
+            "With many conditions for the block, they are checked with the AND operator": [
+                ""
+            ],
+            "With many conditions for the action, they are checked with the AND operator": [
+                ""
+            ],
+            "Addons": [
+                ""
+            ],
+            "Settings": [
+                ""
+            ],
+            "Saved successfully!": [
+                ""
+            ],
+            "Unsuccessful save.": [
+                ""
+            ],
+            "Jet Form Fields": [
+                ""
+            ],
+            "Submit": [
+                ""
+            ],
+            "Margin": [
+                ""
+            ],
+            "Padding": [
+                ""
+            ],
+            "Content": [
+                ""
+            ],
+            "Alignment": [
+                ""
+            ],
+            "Left": [
+                ""
+            ],
+            "Center": [
+                ""
+            ],
+            "Right": [
+                ""
+            ],
+            "Border": [
+                ""
+            ],
+            "Background Color": [
+                ""
+            ],
+            "Label": [
+                ""
+            ],
+            "Text Color": [
+                ""
+            ],
+            "Description": [
+                ""
+            ],
+            "Required Mark": [
+                ""
+            ],
+            "Field": [
+                ""
+            ],
+            "Submit Wrap": [
+                ""
+            ],
+            "Action Button": [
+                ""
+            ],
+            "Button Width": [
+                ""
+            ],
+            "Button Alignment": [
+                ""
+            ],
+            "Text Alignment": [
+                ""
+            ],
+            "Normal": [
+                ""
+            ],
+            "Hover": [
+                ""
+            ],
+            "Form field name": [
+                ""
+            ],
+            "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case": [
+                ""
+            ],
+            "\r\n\t\t\tSet math formula to calculate field value.<br/>\r\n\t\t\tFor example:<br/><br/>\r\n\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n\t\t\tWhere:<br/>\r\n\t\t\t- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>\r\n\t\t\t- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n\t\t": [
+                ""
+            ],
+            "Items": [
+                ""
+            ],
+            "Filters Position": [
+                ""
+            ],
+            "Line": [
+                ""
+            ],
+            "Column": [
+                ""
+            ],
+            "Space Between": [
+                ""
+            ],
+            "Horizontal Offset": [
+                ""
+            ],
+            "Horizontal Offset control works only with Line Filters Position": [
+                ""
+            ],
+            "Item": [
+                ""
+            ],
+            "Checkbox": [
+                ""
+            ],
+            "Show Checkbox": [
+                ""
+            ],
+            "Size Checkbox": [
+                ""
+            ],
+            "Checked": [
+                ""
+            ],
+            "Color Picker Field": [
+                ""
+            ],
+            "Width": [
+                ""
+            ],
+            "Wrapper": [
+                ""
+            ],
+            "Form Break Row": [
+                ""
+            ],
+            "Form Break Next Button": [
+                ""
+            ],
+            "Form Break Prev Button": [
+                ""
+            ],
+            "Form Break Disabled Message": [
+                ""
+            ],
+            "Form Progress - Wrapper": [
+                ""
+            ],
+            "Form Progress - Pages": [
+                ""
+            ],
+            "Current": [
+                ""
+            ],
+            "Item Border": [
+                ""
+            ],
+            "Item Text Color": [
+                ""
+            ],
+            "Item Background Color": [
+                ""
+            ],
+            "Separator Height": [
+                ""
+            ],
+            "Separator Color": [
+                ""
+            ],
+            "Next": [
+                ""
+            ],
+            "Item Color": [
+                ""
+            ],
+            "Prev": [
+                ""
+            ],
+            "Form Progress - Figure": [
+                ""
+            ],
+            "Form Row": [
+                ""
+            ],
+            "Gap Before": [
+                ""
+            ],
+            "Gap After": [
+                ""
+            ],
+            "Message Success": [
+                ""
+            ],
+            "Message Error": [
+                ""
+            ],
+            "JetForm": [
+                ""
+            ],
+            "Group Break": [
+                ""
+            ],
+            "Height": [
+                ""
+            ],
+            "Color": [
+                ""
+            ],
+            "Number Input": [
+                ""
+            ],
+            "Default": [
+                ""
+            ],
+            "Radio": [
+                ""
+            ],
+            "Show Radio": [
+                ""
+            ],
+            "Size Radio": [
+                ""
+            ],
+            "Range": [
+                ""
+            ],
+            "Range Height": [
+                ""
+            ],
+            "Slider": [
+                ""
+            ],
+            "Size": [
+                ""
+            ],
+            "Values": [
+                ""
+            ],
+            "Repeater Row": [
+                ""
+            ],
+            "New Item Button": [
+                ""
+            ],
+            "Remove Item Button": [
+                ""
+            ],
+            "Add new": [
+                ""
+            ],
+            "Select": [
+                ""
+            ],
+            "Select Width": [
+                ""
+            ],
+            "Text Input": [
+                ""
+            ],
+            "Textarea": [
+                ""
+            ],
+            "Please install JetEngine": [
+                ""
+            ],
+            "Please select template": [
+                ""
+            ],
+            "You not allowed to do this": [
+                ""
+            ],
+            "Required parameters not found in request": [
+                ""
+            ],
+            "Form data not found": [
+                ""
+            ],
+            "Requested field not found": [
+                ""
+            ],
+            "You are not allowed to upload files": [
+                ""
+            ],
+            "Internal error. Plaese check uploaded files and try again.": [
+                ""
+            ],
+            "Duplicate": [
+                ""
+            ],
+            "Export": [
+                ""
+            ],
+            "Import Form": [
+                ""
+            ],
+            "Start Import": [
+                ""
+            ],
+            "Select function...": [
+                ""
+            ],
+            "JetForms": [
+                ""
+            ],
+            "Contact Us Form": [
+                ""
+            ],
+            "Register Form": [
+                ""
+            ],
+            "Application Form": [
+                ""
+            ],
+            "Subscribe Form": [
+                ""
+            ],
+            "Profile form": [
+                ""
+            ],
+            "Booking form": [
+                ""
+            ],
+            "Before payment processed:": [
+                ""
+            ],
+            "On successful payment:": [
+                ""
+            ],
+            "On failed payment:": [
+                ""
+            ],
+            "Price/amount field": [
+                ""
+            ],
+            "Payment success message": [
+                ""
+            ],
+            "Payment failed message": [
+                ""
+            ],
+            "Use redirect URL from Redirect notification": [
+                ""
+            ],
+            "Create payment order notification:": [
+                ""
+            ],
+            "PayPal Checkout": [
+                ""
+            ],
+            "Client ID": [
+                ""
+            ],
+            "Secret Key": [
+                ""
+            ],
+            "Currency Code": [
+                ""
+            ],
+            "Get values list from JetEngine field options": [
+                ""
+            ],
+            "Numbers range by manual input": [
+                ""
+            ],
+            "Numbers range by meta value": [
+                ""
+            ],
+            "Name": [
+                ""
+            ],
+            "Server error. Please, try again later": [
+                ""
+            ],
+            "Invalid license key": [
+                ""
+            ],
+            "The license for this site is already activated": [
+                ""
+            ],
+            "The license has been successfully activated": [
+                ""
+            ],
+            "The license has been successfully deactivated": [
+                ""
+            ],
+            "Success": [
+                ""
+            ],
+            "Sorry, you are not allowed to install plugins on this site.": [
+                ""
+            ],
+            "The addon has been activated": [
+                ""
+            ],
+            "The addon has been deactivated": [
+                ""
+            ],
+            "The addon has been Installed": [
+                ""
+            ],
+            "Sorry, you are not allowed to update plugins on this site.": [
+                ""
+            ],
+            "Addon update failed.": [
+                ""
+            ],
+            "The addon has been updated": [
+                ""
+            ],
+            "Plugin update failed.": [
+                ""
+            ],
+            "Addons Update Checked": [
+                ""
+            ],
+            "Service action Not Found": [
+                ""
+            ],
+            "More information about %s": [
+                ""
+            ],
+            "View details": [
+                ""
+            ],
+            "Shortcode": [
+                ""
+            ],
+            "Forms": [
+                ""
+            ],
+            "Add New": [
+                ""
+            ],
+            "Add New Form": [
+                ""
+            ],
+            "Edit Form": [
+                ""
+            ],
+            "New Form": [
+                ""
+            ],
+            "View Form": [
+                ""
+            ],
+            "Search Form": [
+                ""
+            ],
+            "No Forms Found": [
+                ""
+            ],
+            "No Forms Found In Trash": [
+                ""
+            ],
+            "Form successfully submitted.": [
+                ""
+            ],
+            "Submit failed.": [
+                ""
+            ],
+            "Validation error": [
+                ""
+            ],
+            "Captcha validation failed": [
+                ""
+            ],
+            "Entered an invalid email": [
+                ""
+            ],
+            "Required field is empty": [
+                ""
+            ],
+            "Internal server error": [
+                ""
+            ],
+            "Media Specific: Max files limit": [
+                ""
+            ],
+            "Media Specific: Max size reached": [
+                ""
+            ],
+            "Media Specific: File type error": [
+                ""
+            ],
+            "Choose Provider": [
+                ""
+            ],
+            "JetEngine": [
+                ""
+            ],
+            "Select JetForm": [
+                ""
+            ],
+            "Enable form pages progress": [
+                ""
+            ],
+            "Checkbox Size": [
+                ""
+            ],
+            "JetForm Radio": [
+                ""
+            ],
+            "Yes": [
+                ""
+            ],
+            "No": [
+                ""
+            ],
+            "Radio Size": [
+                ""
+            ],
+            "Separator": [
+                ""
+            ],
+            "Circle": [
+                ""
+            ],
+            "Please, select JetForm to show": [
+                ""
+            ],
+            "Form Settings": [
+                ""
+            ],
+            "Choose Form": [
+                ""
+            ],
+            "Fields Layout": [
+                ""
+            ],
+            "column": [
+                ""
+            ],
+            "*": [
+                ""
+            ],
+            "Submit Type": [
+                ""
+            ],
+            "reload": [
+                ""
+            ],
+            "Checkbox & Radio Fields": [
+                ""
+            ],
+            "Layout": [
+                ""
+            ],
+            "Horizontal": [
+                ""
+            ],
+            "Vertical": [
+                ""
+            ],
+            "Gap between control and label": [
+                ""
+            ],
+            "Control Size": [
+                ""
+            ],
+            "Background color": [
+                ""
+            ],
+            "Input Fields": [
+                ""
+            ],
+            "Placeholder Color": [
+                ""
+            ],
+            "Border Radius": [
+                ""
+            ],
+            "Fields width": [
+                ""
+            ],
+            "Textarea Height": [
+                ""
+            ],
+            "Calculated Fields": [
+                ""
+            ],
+            "Prefix Color": [
+                ""
+            ],
+            "Prefix size": [
+                ""
+            ],
+            "Suffix Color": [
+                ""
+            ],
+            "Suffix size": [
+                ""
+            ],
+            "Range Fields": [
+                ""
+            ],
+            "Max Width": [
+                ""
+            ],
+            "Track Height": [
+                ""
+            ],
+            "Thumb Size": [
+                ""
+            ],
+            "Track Border Radius": [
+                ""
+            ],
+            "Thumb Border Radius": [
+                ""
+            ],
+            "Track Color": [
+                ""
+            ],
+            "Thumb Color": [
+                ""
+            ],
+            "Value": [
+                ""
+            ],
+            "Repeater": [
+                ""
+            ],
+            "Repeater row": [
+                ""
+            ],
+            "New item button": [
+                ""
+            ],
+            "Border Color": [
+                ""
+            ],
+            "Start": [
+                ""
+            ],
+            "End": [
+                ""
+            ],
+            "Remove item button": [
+                ""
+            ],
+            "Icon Size": [
+                ""
+            ],
+            "Top": [
+                ""
+            ],
+            "Middle": [
+                ""
+            ],
+            "Bottom": [
+                ""
+            ],
+            "Conditional block": [
+                ""
+            ],
+            "Fullwidth": [
+                ""
+            ],
+            "Gap": [
+                ""
+            ],
+            "Form Break Buttons": [
+                ""
+            ],
+            "Next Button": [
+                ""
+            ],
+            "Prev Button": [
+                ""
+            ],
+            "Messages": [
+                ""
+            ],
+            "Success Message": [
+                ""
+            ],
+            "Error Message": [
+                ""
+            ],
+            "<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version \">= 7.0\"": [
+                ""
+            ],
+            "Back": [
+                ""
+            ],
+            "Captcha Settings": [
+                ""
+            ],
+            "MailChimp API": [
+                ""
+            ],
+            "GetResponse API": [
+                ""
+            ],
+            "ActiveCampaign API": [
+                ""
+            ],
+            "PayPal Gateway API": [
+                ""
+            ],
+            "Payments Gateways": [
+                ""
+            ],
+            "Post Submit Actions": [
+                ""
+            ],
+            "Preset Settings": [
+                ""
+            ],
+            "Site Key": [
+                ""
+            ],
+            "Enable Gateways": [
+                ""
+            ],
+            "Enable Test Mode": [
+                ""
+            ],
+            "Calculated Field": [
+                ""
+            ],
+            "Calculate and display your number values": [
+                ""
+            ],
+            "Checkbox Field": [
+                ""
+            ],
+            "Last Page Name": [
+                ""
+            ],
+            "The value of this field will be set as the name of the last page with the \"Progress Bar\" block.": [
+                ""
+            ],
+            "New Condition": [
+                ""
+            ],
+            "Value to Set": [
+                ""
+            ],
+            "Separate values with commas": [
+                ""
+            ],
+            "Meta Key": [
+                ""
+            ],
+            "Meta Value": [
+                ""
+            ],
+            "Is Timestamp": [
+                ""
+            ],
+            "Disable \"Next\" Button": [
+                ""
+            ],
+            "Label of progress": [
+                ""
+            ],
+            "Validation message": [
+                ""
+            ],
+            "Form Break": [
+                ""
+            ],
+            "Form Break Field": [
+                ""
+            ],
+            "Group Break Field": [
+                ""
+            ],
+            "Heading Field": [
+                ""
+            ],
+            "Hidden Field": [
+                ""
+            ],
+            "Current Post ID": [
+                ""
+            ],
+            "Current Post Title": [
+                ""
+            ],
+            "Current Post/Page URL": [
+                ""
+            ],
+            "Current Post Meta": [
+                ""
+            ],
+            "Current User ID": [
+                ""
+            ],
+            "Current User Email": [
+                ""
+            ],
+            "Current User Name": [
+                ""
+            ],
+            "Current User Meta": [
+                ""
+            ],
+            "Current Post Author ID": [
+                ""
+            ],
+            "Current Post Author Email": [
+                ""
+            ],
+            "Current Post Author Name": [
+                ""
+            ],
+            "Current Date": [
+                ""
+            ],
+            "Manual Input": [
+                ""
+            ],
+            "Media Field": [
+                ""
+            ],
+            "Progress Bar Type": [
+                ""
+            ],
+            "Progress Bar": [
+                ""
+            ],
+            "Set math formula to calculate field value.": [
+                ""
+            ],
+            "For example:": [
+                ""
+            ],
+            "Where:": [
+                ""
+            ],
+            "%FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from": [
+                ""
+            ],
+            "%META::price% - macros for current post meta value. \"price\" - is a meta key to get value from": [
+                ""
+            ],
+            "Select Field": [
+                ""
+            ],
+            "Posts": [
+                ""
+            ],
+            "Terms": [
+                ""
+            ],
+            "Meta Field": [
+                ""
+            ],
+            "Generate Dynamically": [
+                ""
+            ],
+            "Glossary": [
+                ""
+            ],
+            "Button Action Type": [
+                ""
+            ],
+            "Examples:": [
+                ""
+            ],
+            "More info - ": [
+                ""
+            ],
+            "Text Field": [
+                ""
+            ],
+            "Wysiwyg Field": [
+                ""
+            ],
+            "Start of range": [
+                ""
+            ],
+            "End of range": [
+                ""
+            ],
+            "Step": [
+                ""
+            ],
+            "Set form fields names to to get user data from": [
+                ""
+            ],
+            "Set user meta fields to save appropriate form fields into": [
+                ""
+            ],
+            "Available macros list: ": [
+                ""
+            ],
+            "%gateway_amount% - payment amount returned from gateway template;": [
+                ""
+            ],
+            "%gateway_status% - payment status returned from payment gateway;": [
+                ""
+            ],
+            "%field_name% - replace \"field_name\" with any field name from the form;": [
+                ""
+            ],
+            "To fulfill this condition, the result of the check must be": [
+                ""
+            ],
+            "Enable reCAPTCHA v3 form verification": [
+                ""
+            ],
+            "Site Key:": [
+                ""
+            ],
+            "Secret Key:": [
+                ""
+            ],
+            "Please add `Insert/Update Post` action": [
+                ""
+            ],
+            "General": [
+                ""
+            ],
+            "Field Label": [
+                ""
+            ],
+            "Field Description": [
+                ""
+            ],
+            "Default Value": [
+                ""
+            ],
+            "Is Required": [
+                ""
+            ],
+            "Advanced": [
+                ""
+            ],
+            "Placeholder": [
+                ""
+            ],
+            "Add Prev Page Button": [
+                ""
+            ],
+            "Prev Page Button Label": [
+                ""
+            ],
+            "Field Visibility": [
+                ""
+            ],
+            "For all": [
+                ""
+            ],
+            "Only for logged in users": [
+                ""
+            ],
+            "Only for NOT-logged in users": [
+                ""
+            ],
+            "CSS Class Name": [
+                ""
+            ],
+            "input label:": [
+                ""
+            ],
+            "input description:": [
+                ""
+            ],
+            "Clone": [
+                ""
+            ],
+            "Delete": [
+                ""
+            ],
+            "Available fields: ": [
+                ""
+            ],
+            "block keyword\u0004jetformbuilder": [
+                ""
+            ],
+            "block keyword\u0004field": [
+                ""
+            ],
+            "block keyword\u0004calculated": [
+                ""
+            ],
+            "block keyword\u0004checkbox": [
+                ""
+            ],
+            "block keyword\u0004colorpicker": [
+                ""
+            ],
+            "block keyword\u0004picker": [
+                ""
+            ],
+            "block keyword\u0004input": [
+                ""
+            ],
+            "block keyword\u0004block": [
+                ""
+            ],
+            "block keyword\u0004conditonal": [
+                ""
+            ],
+            "block keyword\u0004date": [
+                ""
+            ],
+            "block keyword\u0004jetform": [
+                ""
+            ],
+            "block keyword\u0004form": [
+                ""
+            ],
+            "block keyword\u0004builder": [
+                ""
+            ],
+            "block keyword\u0004crocoblock": [
+                ""
+            ],
+            "block keyword\u0004break": [
+                ""
+            ],
+            "block keyword\u0004pagebreak": [
+                ""
+            ],
+            "block keyword\u0004formbreak": [
+                ""
+            ],
+            "block keyword\u0004heading": [
+                ""
+            ],
+            "block keyword\u0004hidden": [
+                ""
+            ],
+            "block keyword\u0004media": [
+                ""
+            ],
+            "block keyword\u0004image": [
+                ""
+            ],
+            "block keyword\u0004file": [
+                ""
+            ],
+            "block keyword\u0004progress": [
+                ""
+            ],
+            "block keyword\u0004steps": [
+                ""
+            ],
+            "block keyword\u0004bar": [
+                ""
+            ],
+            "block keyword\u0004radio": [
+                ""
+            ],
+            "block keyword\u0004range": [
+                ""
+            ],
+            "block keyword\u0004select": [
+                ""
+            ],
+            "block keyword\u0004submit": [
+                ""
+            ],
+            "block keyword\u0004next": [
+                ""
+            ],
+            "block keyword\u0004prev": [
+                ""
+            ],
+            "block keyword\u0004action": [
+                ""
+            ],
+            "block keyword\u0004button": [
+                ""
+            ],
+            "block keyword\u0004text": [
+                ""
+            ],
+            "block keyword\u0004textarea": [
+                ""
+            ],
+            "block keyword\u0004time": [
+                ""
+            ],
+            "block keyword\u0004wysiwyg": [
+                ""
+            ],
+            "block title\u0004JetForm": [
+                ""
+            ]
+        }
+    }
+}

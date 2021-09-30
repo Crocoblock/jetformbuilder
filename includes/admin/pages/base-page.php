@@ -42,6 +42,12 @@ abstract class Base_Page {
 			Plugin::instance()->get_version(),
 			true
 		);
+
+		wp_set_script_translations(
+			$this->slug(),
+			'jet-form-builder',
+			Plugin::instance()->plugin_dir( 'languages' )
+		);
 	}
 
 

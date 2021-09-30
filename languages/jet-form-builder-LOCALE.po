@@ -1,22 +1,24 @@
+# Copyright (C) 2021 Crocoblock
+# This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
 "Project-Id-Version: JetFormBuilder 1.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jetformbuilder\n"
-"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-28T17:56:28+03:00\n"
-"PO-Revision-Date: 2021-09-28 18:00+0300\n"
-"Language: uk\n"
+"POT-Creation-Date: 2021-09-30T11:41:21+03:00\n"
+"PO-Revision-Date: 2021-09-30 12:10+0300\n"
 "X-Generator: Poedit 3.0\n"
 "X-Domain: jet-form-builder\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: ru\n"
 
 #. Plugin Name of the plugin
-#: includes/post-type.php:138
-#: includes/widgets/elementor-controller.php:44
+#: includes/post-type.php:138 includes/widgets/elementor-controller.php:44
 #: includes/widgets/types/form.php:127
 msgid "JetFormBuilder"
 msgstr ""
@@ -27,7 +29,9 @@ msgstr ""
 
 #. Description of the plugin
 #: jet-form-builder.php:31
-msgid "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor"
+msgid ""
+"Advanced form builder plugin for Gutenberg. Create forms from the ground up, "
+"customize the existing ones, and style them up – all in one editor"
 msgstr ""
 
 #. Author of the plugin
@@ -117,8 +121,7 @@ msgstr ""
 
 #: includes/actions/types/active-campaign.php:167
 #: includes/actions/types/register-user.php:355
-#: includes/actions/types/update-user.php:213
-#: includes/admin/editor.php:268
+#: includes/actions/types/update-user.php:213 includes/admin/editor.php:268
 #: includes/integrations/getresponse-handler.php:76
 #: includes/integrations/mailchimp-handler.php:97
 msgid "Email"
@@ -126,15 +129,13 @@ msgstr ""
 
 #: includes/actions/types/active-campaign.php:168
 #: includes/actions/types/register-user.php:366
-#: includes/actions/types/update-user.php:225
-#: includes/admin/editor.php:276
+#: includes/actions/types/update-user.php:225 includes/admin/editor.php:276
 msgid "First Name"
 msgstr ""
 
 #: includes/actions/types/active-campaign.php:169
 #: includes/actions/types/register-user.php:367
-#: includes/actions/types/update-user.php:229
-#: includes/admin/editor.php:280
+#: includes/actions/types/update-user.php:229 includes/admin/editor.php:280
 msgid "Last Name"
 msgstr ""
 
@@ -196,30 +197,27 @@ msgid "Default Fields:"
 msgstr ""
 
 #: includes/actions/types/insert-post.php:265
-msgid "Set meta fields names or post properties to save appropriate form fields into"
+msgid ""
+"Set meta fields names or post properties to save appropriate form fields into"
 msgstr ""
 
 #: includes/actions/types/insert-post.php:266
 msgid "Set default meta values which should be set on post insert/update"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:361
-#: includes/admin/editor.php:186
+#: includes/actions/types/insert-post.php:361 includes/admin/editor.php:186
 msgid "Post ID"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:365
-#: includes/admin/editor.php:190
+#: includes/actions/types/insert-post.php:365 includes/admin/editor.php:190
 msgid "Post Title"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:369
-#: includes/admin/editor.php:194
+#: includes/actions/types/insert-post.php:369 includes/admin/editor.php:194
 msgid "Post Content"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:373
-#: includes/admin/editor.php:198
+#: includes/actions/types/insert-post.php:373 includes/admin/editor.php:198
 msgid "Post Excerpt"
 msgstr ""
 
@@ -227,13 +225,11 @@ msgstr ""
 msgid "Post Status"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:382
-#: includes/admin/editor.php:202
+#: includes/actions/types/insert-post.php:382 includes/admin/editor.php:202
 msgid "Post Date"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:386
-#: includes/admin/editor.php:206
+#: includes/actions/types/insert-post.php:386 includes/admin/editor.php:206
 msgid "Post Date GMT"
 msgstr ""
 
@@ -316,7 +312,8 @@ msgstr ""
 
 #: includes/actions/types/register-user.php:69
 msgid ""
-"Registered user ID will be added to form data. If form is filled by logged \r\n"
+"Registered user ID will be added to form data. If form is filled by logged "
+"\r\n"
 "\t\t\tin user - current user ID will be added to form data."
 msgstr ""
 
@@ -368,14 +365,12 @@ msgstr ""
 msgid "Not enough capabilities"
 msgstr ""
 
-#: includes/actions/types/register-user.php:351
-#: includes/admin/editor.php:264
+#: includes/actions/types/register-user.php:351 includes/admin/editor.php:264
 msgid "User Login"
 msgstr ""
 
 #: includes/actions/types/register-user.php:359
-#: includes/actions/types/update-user.php:217
-#: includes/admin/editor.php:272
+#: includes/actions/types/update-user.php:217 includes/admin/editor.php:272
 msgid "Password"
 msgstr ""
 
@@ -385,8 +380,7 @@ msgid "Confirm Password"
 msgstr ""
 
 #: includes/actions/types/register-user.php:368
-#: includes/actions/types/update-user.php:233
-#: includes/admin/editor.php:284
+#: includes/actions/types/update-user.php:233 includes/admin/editor.php:284
 msgid "User URL"
 msgstr ""
 
@@ -484,8 +478,7 @@ msgstr ""
 msgid "User ID (will update this user)"
 msgstr ""
 
-#: includes/actions/types/update-user.php:237
-#: includes/admin/editor.php:288
+#: includes/actions/types/update-user.php:237 includes/admin/editor.php:288
 msgid "User Meta"
 msgstr ""
 
@@ -501,8 +494,7 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: includes/admin/editor.php:118
-#: includes/admin/editor.php:133
+#: includes/admin/editor.php:118 includes/admin/editor.php:133
 #: includes/admin/editor.php:152
 #: assets/src/editor/blocks/hidden-field/options.js:52
 msgid "URL Query Variable"
@@ -552,8 +544,7 @@ msgstr ""
 msgid "Taxonomy"
 msgstr ""
 
-#: includes/admin/editor.php:242
-#: includes/admin/editor.php:298
+#: includes/admin/editor.php:242 includes/admin/editor.php:298
 msgid "Meta field key"
 msgstr ""
 
@@ -565,12 +556,14 @@ msgstr ""
 msgid "User ID"
 msgstr ""
 
-#: includes/admin/editor.php:388
-msgid "With many conditions for the block, they are checked with the AND operator"
+#: includes/admin/editor.php:391
+msgid ""
+"With many conditions for the block, they are checked with the AND operator"
 msgstr ""
 
-#: includes/admin/editor.php:391
-msgid "With many conditions for the action, they are checked with the AND operator"
+#: includes/admin/editor.php:394
+msgid ""
+"With many conditions for the action, they are checked with the AND operator"
 msgstr ""
 
 #: includes/admin/pages/addons-page.php:19
@@ -603,29 +596,20 @@ msgstr ""
 msgid "Jet Form Fields"
 msgstr ""
 
-#: includes/blocks/manager.php:105
-#: includes/widgets/types/form.php:2541
+#: includes/blocks/manager.php:105 includes/widgets/types/form.php:2541
 msgid "Submit"
 msgstr ""
 
 #: includes/blocks/modules/general-style-functions.php:62
 #: includes/blocks/modules/general-style.php:139
-#: includes/widgets/types/form.php:564
-#: includes/widgets/types/form.php:673
-#: includes/widgets/types/form.php:784
-#: includes/widgets/types/form.php:895
-#: includes/widgets/types/form.php:1138
-#: includes/widgets/types/form.php:1263
-#: includes/widgets/types/form.php:1585
-#: includes/widgets/types/form.php:1779
-#: includes/widgets/types/form.php:2199
-#: includes/widgets/types/form.php:2369
-#: includes/widgets/types/form.php:2482
-#: includes/widgets/types/form.php:2655
-#: includes/widgets/types/form.php:2811
-#: includes/widgets/types/form.php:2922
-#: includes/widgets/types/form.php:3038
-#: includes/widgets/types/form.php:3104
+#: includes/widgets/types/form.php:564 includes/widgets/types/form.php:673
+#: includes/widgets/types/form.php:784 includes/widgets/types/form.php:895
+#: includes/widgets/types/form.php:1138 includes/widgets/types/form.php:1263
+#: includes/widgets/types/form.php:1585 includes/widgets/types/form.php:1779
+#: includes/widgets/types/form.php:2199 includes/widgets/types/form.php:2369
+#: includes/widgets/types/form.php:2482 includes/widgets/types/form.php:2655
+#: includes/widgets/types/form.php:2811 includes/widgets/types/form.php:2922
+#: includes/widgets/types/form.php:3038 includes/widgets/types/form.php:3104
 #: includes/widgets/types/form.php:3206
 msgid "Margin"
 msgstr ""
@@ -637,24 +621,15 @@ msgstr ""
 #: includes/blocks/types/repeater-field.php:123
 #: includes/blocks/types/repeater-field.php:229
 #: includes/blocks/types/select-field.php:75
-#: includes/widgets/types/form.php:575
-#: includes/widgets/types/form.php:662
-#: includes/widgets/types/form.php:773
-#: includes/widgets/types/form.php:884
-#: includes/widgets/types/form.php:1150
-#: includes/widgets/types/form.php:1275
-#: includes/widgets/types/form.php:1573
-#: includes/widgets/types/form.php:1767
-#: includes/widgets/types/form.php:2073
-#: includes/widgets/types/form.php:2187
-#: includes/widgets/types/form.php:2356
-#: includes/widgets/types/form.php:2470
-#: includes/widgets/types/form.php:2643
-#: includes/widgets/types/form.php:2823
-#: includes/widgets/types/form.php:2934
-#: includes/widgets/types/form.php:3050
-#: includes/widgets/types/form.php:3116
-#: includes/widgets/types/form.php:3218
+#: includes/widgets/types/form.php:575 includes/widgets/types/form.php:662
+#: includes/widgets/types/form.php:773 includes/widgets/types/form.php:884
+#: includes/widgets/types/form.php:1150 includes/widgets/types/form.php:1275
+#: includes/widgets/types/form.php:1573 includes/widgets/types/form.php:1767
+#: includes/widgets/types/form.php:2073 includes/widgets/types/form.php:2187
+#: includes/widgets/types/form.php:2356 includes/widgets/types/form.php:2470
+#: includes/widgets/types/form.php:2643 includes/widgets/types/form.php:2823
+#: includes/widgets/types/form.php:2934 includes/widgets/types/form.php:3050
+#: includes/widgets/types/form.php:3116 includes/widgets/types/form.php:3218
 msgid "Padding"
 msgstr ""
 
@@ -668,18 +643,13 @@ msgstr ""
 #: includes/blocks/modules/general-style.php:498
 #: includes/blocks/types/checkbox-field.php:77
 #: includes/blocks/types/form-break-field-style.php:59
-#: includes/blocks/types/form.php:141
-#: includes/blocks/types/form.php:243
+#: includes/blocks/types/form.php:141 includes/blocks/types/form.php:243
 #: includes/blocks/types/radio-field.php:85
 #: includes/blocks/types/repeater-field.php:85
-#: includes/widgets/types/form.php:1162
-#: includes/widgets/types/form.php:1287
-#: includes/widgets/types/form.php:2241
-#: includes/widgets/types/form.php:2429
-#: includes/widgets/types/form.php:2697
-#: includes/widgets/types/form.php:2754
-#: includes/widgets/types/form.php:3128
-#: includes/widgets/types/form.php:3230
+#: includes/widgets/types/form.php:1162 includes/widgets/types/form.php:1287
+#: includes/widgets/types/form.php:2241 includes/widgets/types/form.php:2429
+#: includes/widgets/types/form.php:2697 includes/widgets/types/form.php:2754
+#: includes/widgets/types/form.php:3128 includes/widgets/types/form.php:3230
 msgid "Alignment"
 msgstr ""
 
@@ -692,14 +662,11 @@ msgstr ""
 #: includes/blocks/types/calculated-field.php:31
 #: includes/blocks/types/checkbox-field.php:81
 #: includes/blocks/types/form-break-field-style.php:62
-#: includes/blocks/types/form.php:145
-#: includes/blocks/types/form.php:247
+#: includes/blocks/types/form.php:145 includes/blocks/types/form.php:247
 #: includes/blocks/types/radio-field.php:89
 #: includes/blocks/types/repeater-field.php:88
-#: includes/widgets/types/form.php:1169
-#: includes/widgets/types/form.php:1294
-#: includes/widgets/types/form.php:2761
-#: includes/widgets/types/form.php:3135
+#: includes/widgets/types/form.php:1169 includes/widgets/types/form.php:1294
+#: includes/widgets/types/form.php:2761 includes/widgets/types/form.php:3135
 #: includes/widgets/types/form.php:3237
 msgid "Left"
 msgstr ""
@@ -713,16 +680,12 @@ msgstr ""
 #: includes/blocks/types/calculated-field.php:35
 #: includes/blocks/types/checkbox-field.php:85
 #: includes/blocks/types/form-break-field-style.php:66
-#: includes/blocks/types/form.php:149
-#: includes/blocks/types/form.php:251
+#: includes/blocks/types/form.php:149 includes/blocks/types/form.php:251
 #: includes/blocks/types/radio-field.php:93
 #: includes/blocks/types/repeater-field.php:92
-#: includes/widgets/types/form.php:1173
-#: includes/widgets/types/form.php:1298
-#: includes/widgets/types/form.php:2250
-#: includes/widgets/types/form.php:2706
-#: includes/widgets/types/form.php:2765
-#: includes/widgets/types/form.php:3139
+#: includes/widgets/types/form.php:1173 includes/widgets/types/form.php:1298
+#: includes/widgets/types/form.php:2250 includes/widgets/types/form.php:2706
+#: includes/widgets/types/form.php:2765 includes/widgets/types/form.php:3139
 #: includes/widgets/types/form.php:3241
 msgid "Center"
 msgstr ""
@@ -736,14 +699,11 @@ msgstr ""
 #: includes/blocks/types/calculated-field.php:39
 #: includes/blocks/types/checkbox-field.php:89
 #: includes/blocks/types/form-break-field-style.php:70
-#: includes/blocks/types/form.php:153
-#: includes/blocks/types/form.php:255
+#: includes/blocks/types/form.php:153 includes/blocks/types/form.php:255
 #: includes/blocks/types/radio-field.php:97
 #: includes/blocks/types/repeater-field.php:96
-#: includes/widgets/types/form.php:1177
-#: includes/widgets/types/form.php:1302
-#: includes/widgets/types/form.php:2769
-#: includes/widgets/types/form.php:3143
+#: includes/widgets/types/form.php:1177 includes/widgets/types/form.php:1302
+#: includes/widgets/types/form.php:2769 includes/widgets/types/form.php:3143
 #: includes/widgets/types/form.php:3245
 msgid "Right"
 msgstr ""
@@ -764,8 +724,7 @@ msgstr ""
 #: includes/blocks/types/form-break-field-style.php:754
 #: includes/blocks/types/form-break-field-style.php:806
 #: includes/blocks/types/form-break-field-style.php:858
-#: includes/blocks/types/form.php:210
-#: includes/blocks/types/form.php:312
+#: includes/blocks/types/form.php:210 includes/blocks/types/form.php:312
 #: includes/blocks/types/number-field.php:72
 #: includes/blocks/types/radio-field.php:282
 #: includes/blocks/types/radio-field.php:320
@@ -775,12 +734,9 @@ msgstr ""
 #: includes/blocks/types/select-field.php:99
 #: includes/blocks/types/text-field.php:70
 #: includes/blocks/types/textarea-field.php:93
-#: includes/widgets/types/form.php:1598
-#: includes/widgets/types/form.php:1792
-#: includes/widgets/types/form.php:2212
-#: includes/widgets/types/form.php:2382
-#: includes/widgets/types/form.php:2495
-#: includes/widgets/types/form.php:2668
+#: includes/widgets/types/form.php:1598 includes/widgets/types/form.php:1792
+#: includes/widgets/types/form.php:2212 includes/widgets/types/form.php:2382
+#: includes/widgets/types/form.php:2495 includes/widgets/types/form.php:2668
 #: includes/widgets/types/form.php:3302
 msgid "Border"
 msgstr ""
@@ -804,8 +760,7 @@ msgstr ""
 #: includes/blocks/types/form-break-field-style.php:770
 #: includes/blocks/types/form-break-field-style.php:822
 #: includes/blocks/types/form-break-field-style.php:874
-#: includes/blocks/types/form.php:195
-#: includes/blocks/types/form.php:297
+#: includes/blocks/types/form.php:195 includes/blocks/types/form.php:297
 #: includes/blocks/types/number-field.php:103
 #: includes/blocks/types/radio-field.php:199
 #: includes/blocks/types/radio-field.php:293
@@ -817,32 +772,19 @@ msgstr ""
 #: includes/blocks/types/select-field.php:119
 #: includes/blocks/types/text-field.php:94
 #: includes/blocks/types/textarea-field.php:112
-#: includes/widgets/types/form.php:306
-#: includes/widgets/types/form.php:331
-#: includes/widgets/types/form.php:409
-#: includes/widgets/types/form.php:433
-#: includes/widgets/types/form.php:608
-#: includes/widgets/types/form.php:706
-#: includes/widgets/types/form.php:817
-#: includes/widgets/types/form.php:928
-#: includes/widgets/types/form.php:1208
-#: includes/widgets/types/form.php:1333
-#: includes/widgets/types/form.php:1477
-#: includes/widgets/types/form.php:1501
-#: includes/widgets/types/form.php:1562
-#: includes/widgets/types/form.php:1756
-#: includes/widgets/types/form.php:2103
-#: includes/widgets/types/form.php:2134
-#: includes/widgets/types/form.php:2285
-#: includes/widgets/types/form.php:2316
-#: includes/widgets/types/form.php:2524
-#: includes/widgets/types/form.php:2559
-#: includes/widgets/types/form.php:2590
-#: includes/widgets/types/form.php:2869
-#: includes/widgets/types/form.php:2899
-#: includes/widgets/types/form.php:2980
-#: includes/widgets/types/form.php:3010
-#: includes/widgets/types/form.php:3174
+#: includes/widgets/types/form.php:306 includes/widgets/types/form.php:331
+#: includes/widgets/types/form.php:409 includes/widgets/types/form.php:433
+#: includes/widgets/types/form.php:608 includes/widgets/types/form.php:706
+#: includes/widgets/types/form.php:817 includes/widgets/types/form.php:928
+#: includes/widgets/types/form.php:1208 includes/widgets/types/form.php:1333
+#: includes/widgets/types/form.php:1477 includes/widgets/types/form.php:1501
+#: includes/widgets/types/form.php:1562 includes/widgets/types/form.php:1756
+#: includes/widgets/types/form.php:2103 includes/widgets/types/form.php:2134
+#: includes/widgets/types/form.php:2285 includes/widgets/types/form.php:2316
+#: includes/widgets/types/form.php:2524 includes/widgets/types/form.php:2559
+#: includes/widgets/types/form.php:2590 includes/widgets/types/form.php:2869
+#: includes/widgets/types/form.php:2899 includes/widgets/types/form.php:2980
+#: includes/widgets/types/form.php:3010 includes/widgets/types/form.php:3174
 #: includes/widgets/types/form.php:3276
 msgid "Background Color"
 msgstr ""
@@ -867,8 +809,7 @@ msgstr ""
 #: includes/blocks/types/form-break-field-style.php:762
 #: includes/blocks/types/form-break-field-style.php:814
 #: includes/blocks/types/form-break-field-style.php:866
-#: includes/blocks/types/form.php:180
-#: includes/blocks/types/form.php:282
+#: includes/blocks/types/form.php:180 includes/blocks/types/form.php:282
 #: includes/blocks/types/number-field.php:91
 #: includes/blocks/types/radio-field.php:189
 #: includes/blocks/types/repeater-field.php:158
@@ -878,16 +819,11 @@ msgstr ""
 #: includes/blocks/types/select-field.php:110
 #: includes/blocks/types/text-field.php:80
 #: includes/blocks/types/textarea-field.php:103
-#: includes/widgets/types/form.php:598
-#: includes/widgets/types/form.php:696
-#: includes/widgets/types/form.php:807
-#: includes/widgets/types/form.php:918
-#: includes/widgets/types/form.php:2114
-#: includes/widgets/types/form.php:2145
-#: includes/widgets/types/form.php:2296
-#: includes/widgets/types/form.php:2327
-#: includes/widgets/types/form.php:2570
-#: includes/widgets/types/form.php:2601
+#: includes/widgets/types/form.php:598 includes/widgets/types/form.php:696
+#: includes/widgets/types/form.php:807 includes/widgets/types/form.php:918
+#: includes/widgets/types/form.php:2114 includes/widgets/types/form.php:2145
+#: includes/widgets/types/form.php:2296 includes/widgets/types/form.php:2327
+#: includes/widgets/types/form.php:2570 includes/widgets/types/form.php:2601
 msgid "Text Color"
 msgstr ""
 
@@ -897,8 +833,8 @@ msgid "Description"
 msgstr ""
 
 #: includes/blocks/modules/general-style.php:428
-#: includes/widgets/types/form.php:1047
-#: includes/widgets/types/form.php:1224
+#: includes/widgets/types/form.php:1047 includes/widgets/types/form.php:1224
+#: assets/src/editor/plugins/arguments/render.js:33
 msgid "Required Mark"
 msgstr ""
 
@@ -934,14 +870,10 @@ msgstr ""
 #: includes/blocks/types/radio-field.php:275
 #: includes/blocks/types/repeater-field.php:151
 #: includes/blocks/types/repeater-field.php:257
-#: includes/widgets/types/form.php:294
-#: includes/widgets/types/form.php:398
-#: includes/widgets/types/form.php:1464
-#: includes/widgets/types/form.php:2096
-#: includes/widgets/types/form.php:2278
-#: includes/widgets/types/form.php:2552
-#: includes/widgets/types/form.php:2851
-#: includes/widgets/types/form.php:2962
+#: includes/widgets/types/form.php:294 includes/widgets/types/form.php:398
+#: includes/widgets/types/form.php:1464 includes/widgets/types/form.php:2096
+#: includes/widgets/types/form.php:2278 includes/widgets/types/form.php:2552
+#: includes/widgets/types/form.php:2851 includes/widgets/types/form.php:2962
 msgid "Normal"
 msgstr ""
 
@@ -950,10 +882,8 @@ msgstr ""
 #: includes/blocks/types/form-break-field-style.php:283
 #: includes/blocks/types/repeater-field.php:180
 #: includes/blocks/types/repeater-field.php:286
-#: includes/widgets/types/form.php:2127
-#: includes/widgets/types/form.php:2309
-#: includes/widgets/types/form.php:2583
-#: includes/widgets/types/form.php:2882
+#: includes/widgets/types/form.php:2127 includes/widgets/types/form.php:2309
+#: includes/widgets/types/form.php:2583 includes/widgets/types/form.php:2882
 #: includes/widgets/types/form.php:2993
 msgid "Hover"
 msgstr ""
@@ -965,7 +895,9 @@ msgstr ""
 
 #: includes/blocks/types/base.php:504
 #: assets/src/package/components/fields/controls.js:17
-msgid "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case"
+msgid ""
+"Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only "
+"lower case"
 msgstr ""
 
 #: includes/blocks/types/calculated-field.php:90
@@ -975,8 +907,10 @@ msgid ""
 "\t\t\tFor example:<br/><br/>\r\n"
 "\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n"
 "\t\t\tWhere:<br/>\r\n"
-"\t\t\t- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>\r\n"
-"\t\t\t- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n"
+"\t\t\t- %FIELD::quantity% - macros for form field value. \"quantity\" - is a "
+"field name to get value from<br/>\r\n"
+"\t\t\t- %META::price% - macros for current post meta value. \"price\" - is a "
+"meta key to get value from<br/><br/>\r\n"
 "\t\t"
 msgstr ""
 
@@ -1034,8 +968,7 @@ msgstr ""
 
 #: includes/blocks/types/checkbox-field.php:291
 #: includes/blocks/types/radio-field.php:313
-#: includes/widgets/types/form.php:319
-#: includes/widgets/types/form.php:422
+#: includes/widgets/types/form.php:319 includes/widgets/types/form.php:422
 #: includes/widgets/types/form.php:1490
 msgid "Checked"
 msgstr ""
@@ -1137,8 +1070,7 @@ msgstr ""
 msgid "Form Progress - Figure"
 msgstr ""
 
-#: includes/blocks/types/form.php:55
-#: includes/widgets/types/form.php:1084
+#: includes/blocks/types/form.php:55 includes/widgets/types/form.php:1084
 msgid "Form Row"
 msgstr ""
 
@@ -1162,8 +1094,7 @@ msgstr ""
 msgid "Message Error"
 msgstr ""
 
-#: includes/blocks/types/form.php:372
-#: includes/post-type.php:137
+#: includes/blocks/types/form.php:372 includes/post-type.php:137
 #: includes/widgets/types/form.php:82
 msgid "JetForm"
 msgstr ""
@@ -1174,8 +1105,7 @@ msgstr ""
 
 #: includes/blocks/types/group-break-field.php:52
 #: includes/blocks/types/textarea-field.php:48
-#: includes/widgets/types/form.php:724
-#: includes/widgets/types/form.php:835
+#: includes/widgets/types/form.php:724 includes/widgets/types/form.php:835
 #: includes/widgets/types/form.php:946
 msgid "Height"
 msgstr ""
@@ -1184,22 +1114,14 @@ msgstr ""
 #: includes/blocks/types/range-field.php:131
 #: includes/blocks/types/range-field.php:181
 #: includes/blocks/types/range-field.php:221
-#: includes/widgets/types/form.php:741
-#: includes/widgets/types/form.php:852
-#: includes/widgets/types/form.php:963
-#: includes/widgets/types/form.php:1198
-#: includes/widgets/types/form.php:1240
-#: includes/widgets/types/form.php:1323
-#: includes/widgets/types/form.php:1438
-#: includes/widgets/types/form.php:1537
-#: includes/widgets/types/form.php:1687
-#: includes/widgets/types/form.php:1978
-#: includes/widgets/types/form.php:2858
-#: includes/widgets/types/form.php:2889
-#: includes/widgets/types/form.php:2969
-#: includes/widgets/types/form.php:3000
-#: includes/widgets/types/form.php:3164
-#: includes/widgets/types/form.php:3266
+#: includes/widgets/types/form.php:741 includes/widgets/types/form.php:852
+#: includes/widgets/types/form.php:963 includes/widgets/types/form.php:1198
+#: includes/widgets/types/form.php:1240 includes/widgets/types/form.php:1323
+#: includes/widgets/types/form.php:1438 includes/widgets/types/form.php:1537
+#: includes/widgets/types/form.php:1687 includes/widgets/types/form.php:1978
+#: includes/widgets/types/form.php:2858 includes/widgets/types/form.php:2889
+#: includes/widgets/types/form.php:2969 includes/widgets/types/form.php:3000
+#: includes/widgets/types/form.php:3164 includes/widgets/types/form.php:3266
 msgid "Color"
 msgstr ""
 
@@ -1300,8 +1222,7 @@ msgstr ""
 msgid "Requested field not found"
 msgstr ""
 
-#: includes/file-upload.php:95
-#: includes/file-upload.php:99
+#: includes/file-upload.php:95 includes/file-upload.php:99
 msgid "You are not allowed to upload files"
 msgstr ""
 
@@ -1427,10 +1348,8 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: includes/license/manager.php:65
-#: includes/license/manager.php:108
-#: includes/license/manager.php:147
-#: includes/license/manager.php:524
+#: includes/license/manager.php:65 includes/license/manager.php:108
+#: includes/license/manager.php:147 includes/license/manager.php:524
 #: includes/license/manager.php:860
 msgid "Server error. Please, try again later"
 msgstr ""
@@ -1455,8 +1374,7 @@ msgstr ""
 msgid "Success"
 msgstr ""
 
-#: includes/license/manager.php:608
-#: includes/license/manager.php:644
+#: includes/license/manager.php:608 includes/license/manager.php:644
 #: includes/license/manager.php:681
 msgid "Sorry, you are not allowed to install plugins on this site."
 msgstr ""
@@ -1509,8 +1427,7 @@ msgstr ""
 msgid "Shortcode"
 msgstr ""
 
-#: includes/post-type.php:127
-#: includes/post-type.php:128
+#: includes/post-type.php:127 includes/post-type.php:128
 msgid "Forms"
 msgstr ""
 
@@ -1558,8 +1475,7 @@ msgstr ""
 msgid "Validation error"
 msgstr ""
 
-#: includes/post-type.php:349
-#: includes/post-type.php:350
+#: includes/post-type.php:349 includes/post-type.php:350
 msgid "Captcha validation failed"
 msgstr ""
 
@@ -1599,8 +1515,7 @@ msgstr ""
 msgid "Select JetForm"
 msgstr ""
 
-#: includes/widgets/types/form.php:170
-#: includes/widgets/types/form.php:1066
+#: includes/widgets/types/form.php:170 includes/widgets/types/form.php:1066
 msgid "Enable form pages progress"
 msgstr ""
 
@@ -1612,13 +1527,11 @@ msgstr ""
 msgid "JetForm Radio"
 msgstr ""
 
-#: includes/widgets/types/form.php:358
-#: includes/widgets/types/form.php:1068
+#: includes/widgets/types/form.php:358 includes/widgets/types/form.php:1068
 msgid "Yes"
 msgstr ""
 
-#: includes/widgets/types/form.php:362
-#: includes/widgets/types/form.php:1069
+#: includes/widgets/types/form.php:362 includes/widgets/types/form.php:1069
 msgid "No"
 msgstr ""
 
@@ -1626,14 +1539,12 @@ msgstr ""
 msgid "Radio Size"
 msgstr ""
 
-#: includes/widgets/types/form.php:716
-#: includes/widgets/types/form.php:827
+#: includes/widgets/types/form.php:716 includes/widgets/types/form.php:827
 #: includes/widgets/types/form.php:938
 msgid "Separator"
 msgstr ""
 
-#: includes/widgets/types/form.php:751
-#: includes/widgets/types/form.php:862
+#: includes/widgets/types/form.php:751 includes/widgets/types/form.php:862
 #: includes/widgets/types/form.php:973
 msgid "Circle"
 msgstr ""
@@ -1651,6 +1562,7 @@ msgid "Choose Form"
 msgstr ""
 
 #: includes/widgets/types/form.php:1037
+#: assets/src/editor/plugins/arguments/render.js:22
 msgid "Fields Layout"
 msgstr ""
 
@@ -1663,6 +1575,7 @@ msgid "*"
 msgstr ""
 
 #: includes/widgets/types/form.php:1056
+#: assets/src/editor/plugins/arguments/render.js:43
 msgid "Submit Type"
 msgstr ""
 
@@ -1706,12 +1619,9 @@ msgstr ""
 msgid "Placeholder Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1607
-#: includes/widgets/types/form.php:1801
-#: includes/widgets/types/form.php:2221
-#: includes/widgets/types/form.php:2391
-#: includes/widgets/types/form.php:2504
-#: includes/widgets/types/form.php:2677
+#: includes/widgets/types/form.php:1607 includes/widgets/types/form.php:1801
+#: includes/widgets/types/form.php:2221 includes/widgets/types/form.php:2391
+#: includes/widgets/types/form.php:2504 includes/widgets/types/form.php:2677
 #: includes/widgets/types/form.php:3310
 msgid "Border Radius"
 msgstr ""
@@ -1728,23 +1638,19 @@ msgstr ""
 msgid "Calculated Fields"
 msgstr ""
 
-#: includes/widgets/types/form.php:1698
-#: includes/widgets/types/form.php:2008
+#: includes/widgets/types/form.php:1698 includes/widgets/types/form.php:2008
 msgid "Prefix Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1709
-#: includes/widgets/types/form.php:1989
+#: includes/widgets/types/form.php:1709 includes/widgets/types/form.php:1989
 msgid "Prefix size"
 msgstr ""
 
-#: includes/widgets/types/form.php:1727
-#: includes/widgets/types/form.php:2038
+#: includes/widgets/types/form.php:1727 includes/widgets/types/form.php:2038
 msgid "Suffix Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1738
-#: includes/widgets/types/form.php:2019
+#: includes/widgets/types/form.php:1738 includes/widgets/types/form.php:2019
 msgid "Suffix size"
 msgstr ""
 
@@ -1796,19 +1702,16 @@ msgstr ""
 msgid "New item button"
 msgstr ""
 
-#: includes/widgets/types/form.php:2156
-#: includes/widgets/types/form.php:2338
+#: includes/widgets/types/form.php:2156 includes/widgets/types/form.php:2338
 #: includes/widgets/types/form.php:2612
 msgid "Border Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:2246
-#: includes/widgets/types/form.php:2702
+#: includes/widgets/types/form.php:2246 includes/widgets/types/form.php:2702
 msgid "Start"
 msgstr ""
 
-#: includes/widgets/types/form.php:2254
-#: includes/widgets/types/form.php:2710
+#: includes/widgets/types/form.php:2254 includes/widgets/types/form.php:2710
 msgid "End"
 msgstr ""
 
@@ -1860,8 +1763,7 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
-#: includes/widgets/types/form.php:3098
-#: includes/widgets/types/form.php:3191
+#: includes/widgets/types/form.php:3098 includes/widgets/types/form.php:3191
 msgid "Success Message"
 msgstr ""
 
@@ -1870,12 +1772,411 @@ msgid "Error Message"
 msgstr ""
 
 #: jet-form-builder.php:69
-msgid "<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version \">= 7.0\""
+msgid ""
+"<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version \">= 7.0\""
 msgstr ""
 
 #: templates/common/prev-page-button.php:11
 #: templates/common/prev-page-button.php:19
 msgid "Back"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/blocks-src/editor.js:1
+#: assets/js/admin.js:1 assets/js/editor.js:1
+#: assets/src/admin/pages/settings/tabs/captcha/index.js:5
+#: assets/src/editor/plugins/captcha/index.js:7
+msgid "Captcha Settings"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/js/admin.js:1
+#: assets/src/admin/pages/settings/tabs/mailchimp/index.js:5
+msgid "MailChimp API"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/js/admin.js:1
+#: assets/src/admin/pages/settings/tabs/getresponse/index.js:5
+msgid "GetResponse API"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/js/admin.js:1
+#: assets/src/admin/pages/settings/tabs/activecampaign/index.js:5
+msgid "ActiveCampaign API"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/js/admin.js:1
+#: assets/src/admin/pages/settings/gateways/paypal/index.js:5
+msgid "PayPal Gateway API"
+msgstr ""
+
+#: assets/blocks-src/admin.js:1 assets/js/admin.js:1
+#: assets/src/admin/pages/settings/tabs/payments-gateways/index.js:5
+msgid "Payments Gateways"
+msgstr ""
+
+#: assets/blocks-src/editor.js:1 assets/js/editor.js:1
+#: assets/src/editor/plugins/actions/index.js:7
+msgid "Post Submit Actions"
+msgstr ""
+
+#: assets/blocks-src/editor.js:1 assets/js/editor.js:1
+#: assets/src/editor/plugins/preset/index.js:7
+msgid "Preset Settings"
+msgstr ""
+
+#: assets/src/admin/pages/settings/tabs/captcha/source.js:4
+msgid "Site Key"
+msgstr ""
+
+#: assets/src/admin/pages/settings/tabs/payments-gateways/source.js:4
+msgid "Enable Gateways"
+msgstr ""
+
+#: assets/src/admin/pages/settings/tabs/payments-gateways/source.js:5
+msgid "Enable Test Mode"
+msgstr ""
+
+#: assets/src/editor/blocks/calculated-field/index.js:16
+msgid "Calculated Field"
+msgstr ""
+
+#: assets/src/editor/blocks/calculated-field/index.js:18
+msgid "Calculate and display your number values"
+msgstr ""
+
+#: assets/src/editor/blocks/checkbox-field/index.js:16
+msgid "Checkbox Field"
+msgstr ""
+
+#: assets/src/editor/blocks/conditional-block/edit.js:72
+msgid "Last Page Name"
+msgstr ""
+
+#: assets/src/editor/blocks/conditional-block/edit.js:75
+msgid ""
+"The value of this field will be set as the name of the last page with the "
+"\"Progress Bar\" block."
+msgstr ""
+
+#: assets/src/editor/blocks/conditional-block/edit.js:111
+msgid "New Condition"
+msgstr ""
+
+#: assets/src/editor/blocks/conditional-block/edit.js:177
+msgid "Value to Set"
+msgstr ""
+
+#: assets/src/editor/blocks/conditional-block/edit.js:178
+msgid "Separate values with commas"
+msgstr ""
+
+#: assets/src/editor/blocks/controls/default-meta.js:64
+msgid "Meta Key"
+msgstr ""
+
+#: assets/src/editor/blocks/controls/default-meta.js:76
+msgid "Meta Value"
+msgstr ""
+
+#: assets/src/editor/blocks/datetime-field/edit.js:51
+msgid "Is Timestamp"
+msgstr ""
+
+#: assets/src/editor/blocks/form-break-field/edit.js:46
+msgid "Disable \"Next\" Button"
+msgstr ""
+
+#: assets/src/editor/blocks/form-break-field/edit.js:52
+msgid "Label of progress"
+msgstr ""
+
+#: assets/src/editor/blocks/form-break-field/edit.js:62
+msgid "Validation message"
+msgstr ""
+
+#: assets/src/editor/blocks/form-break-field/edit.js:88
+msgid "Form Break"
+msgstr ""
+
+#: assets/src/editor/blocks/form-break-field/index.js:16
+msgid "Form Break Field"
+msgstr ""
+
+#: assets/src/editor/blocks/group-break-field/index.js:16
+msgid "Group Break Field"
+msgstr ""
+
+#: assets/src/editor/blocks/heading-field/index.js:16
+msgid "Heading Field"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/index.js:16
+msgid "Hidden Field"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:8
+msgid "Current Post ID"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:12
+msgid "Current Post Title"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:16
+msgid "Current Post/Page URL"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:20
+msgid "Current Post Meta"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:24
+msgid "Current User ID"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:28
+msgid "Current User Email"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:32
+msgid "Current User Name"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:36
+msgid "Current User Meta"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:40
+msgid "Current Post Author ID"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:44
+msgid "Current Post Author Email"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:48
+msgid "Current Post Author Name"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:56
+msgid "Current Date"
+msgstr ""
+
+#: assets/src/editor/blocks/hidden-field/options.js:60
+#: assets/src/editor/blocks/select-radio-chekc-options.js:9
+msgid "Manual Input"
+msgstr ""
+
+#: assets/src/editor/blocks/media-field/index.js:16
+msgid "Media Field"
+msgstr ""
+
+#: assets/src/editor/blocks/progress-bar/edit.js:52
+msgid "Progress Bar Type"
+msgstr ""
+
+#: assets/src/editor/blocks/progress-bar/index.js:16
+msgid "Progress Bar"
+msgstr ""
+
+#: assets/src/editor/blocks/repeater-field/edit.js:155
+msgid "Set math formula to calculate field value."
+msgstr ""
+
+#: assets/src/editor/blocks/repeater-field/edit.js:156
+msgid "For example:"
+msgstr ""
+
+#: assets/src/editor/blocks/repeater-field/edit.js:158
+msgid "Where:"
+msgstr ""
+
+#: assets/src/editor/blocks/repeater-field/edit.js:160
+msgid ""
+"%FIELD::quantity% - macros for form field value. \"quantity\" - is a field "
+"name to get value from"
+msgstr ""
+
+#: assets/src/editor/blocks/repeater-field/edit.js:162
+msgid ""
+"%META::price% - macros for current post meta value. \"price\" - is a meta "
+"key to get value from"
+msgstr ""
+
+#: assets/src/editor/blocks/select-field/index.js:16
+msgid "Select Field"
+msgstr ""
+
+#: assets/src/editor/blocks/select-radio-chekc-options.js:13
+msgid "Posts"
+msgstr ""
+
+#: assets/src/editor/blocks/select-radio-chekc-options.js:17
+msgid "Terms"
+msgstr ""
+
+#: assets/src/editor/blocks/select-radio-chekc-options.js:21
+msgid "Meta Field"
+msgstr ""
+
+#: assets/src/editor/blocks/select-radio-chekc-options.js:25
+msgid "Generate Dynamically"
+msgstr ""
+
+#: assets/src/editor/blocks/select-radio-chekc-options.js:32
+msgid "Glossary"
+msgstr ""
+
+#: assets/src/editor/blocks/submit-field/edit.js:87
+msgid "Button Action Type"
+msgstr ""
+
+#: assets/src/editor/blocks/text-field/edit.js:125
+msgid "Examples:"
+msgstr ""
+
+#: assets/src/editor/blocks/text-field/edit.js:126
+msgid "More info - "
+msgstr ""
+
+#: assets/src/editor/blocks/text-field/index.js:16
+msgid "Text Field"
+msgstr ""
+
+#: assets/src/editor/blocks/wysiwyg-field/index.js:16
+msgid "Wysiwyg Field"
+msgstr ""
+
+#: assets/src/editor/components/base-select-check-radio/from-generators-fields.js:28
+msgid "Start of range"
+msgstr ""
+
+#: assets/src/editor/components/base-select-check-radio/from-generators-fields.js:40
+msgid "End of range"
+msgstr ""
+
+#: assets/src/editor/components/base-select-check-radio/from-generators-fields.js:52
+msgid "Step"
+msgstr ""
+
+#: assets/src/editor/form-actions/register-user.js:83
+msgid "Set form fields names to to get user data from"
+msgstr ""
+
+#: assets/src/editor/form-actions/register-user.js:115
+msgid "Set user meta fields to save appropriate form fields into"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:229
+msgid "Available macros list: "
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:230
+msgid "%gateway_amount% - payment amount returned from gateway template;"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:231
+msgid "%gateway_status% - payment status returned from payment gateway;"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:232
+msgid ""
+"%field_name% - replace \"field_name\" with any field name from the form;"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:305
+msgid "To fulfill this condition, the result of the check must be"
+msgstr ""
+
+#: assets/src/editor/plugins/captcha/options.js:4
+msgid "Enable reCAPTCHA v3 form verification"
+msgstr ""
+
+#: assets/src/editor/plugins/captcha/options.js:5
+msgid "Site Key:"
+msgstr ""
+
+#: assets/src/editor/plugins/captcha/options.js:6
+msgid "Secret Key:"
+msgstr ""
+
+#: assets/src/editor/plugins/gateways/render.js:102
+msgid "Please add `Insert/Update Post` action"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:6
+msgid "General"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:11
+msgid "Field Label"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:22
+msgid "Field Description"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:27
+msgid "Default Value"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:36
+msgid "Is Required"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:41
+msgid "Advanced"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:46
+msgid "Placeholder"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:51
+msgid "Add Prev Page Button"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:58
+msgid "Prev Page Button Label"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:63
+msgid "Field Visibility"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:68
+msgid "For all"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:72
+msgid "Only for logged in users"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:76
+msgid "Only for NOT-logged in users"
+msgstr ""
+
+#: assets/src/package/components/fields/controls.js:83
+msgid "CSS Class Name"
+msgstr ""
+
+#: assets/src/package/components/fields/field-wrapper.js:53
+msgid "input label:"
+msgstr ""
+
+#: assets/src/package/components/fields/field-wrapper.js:71
+msgid "input description:"
+msgstr ""
+
+#: assets/src/package/components/fields/repeater-with-state.js:256
+msgid "Clone"
+msgstr ""
+
+#: assets/src/package/components/fields/repeater-with-state.js:264
+msgid "Delete"
+msgstr ""
+
+#: assets/src/package/helpers/blocks/blocks-helper.js:104
+msgid "Available fields: "
 msgstr ""
 
 #: assets/blocks-src/calculated-field/block.json

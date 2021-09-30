@@ -336,9 +336,12 @@ class Editor {
 			JET_FORM_BUILDER_VERSION,
 			true
 		);
-		wp_set_script_translations( self::EDITOR_PACKAGE_HANDLE, 'jet-form-builder' );
 
-		//wp_enqueue_script( self::EDITOR_PACKAGE_HANDLE );
+		wp_set_script_translations(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jet-form-builder',
+			Plugin::instance()->plugin_dir( 'languages' )
+		);
 
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 

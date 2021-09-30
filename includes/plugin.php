@@ -148,7 +148,11 @@ class Plugin {
 	 * @return void
 	 */
 	public function init_lang() {
-		load_plugin_textdomain( 'jet-form-builder', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain(
+			'jet-form-builder',
+			false,
+			dirname( plugin_basename( JET_FORM_BUILDER__FILE__ ) ) . '/languages'
+		);
 	}
 
 	/**

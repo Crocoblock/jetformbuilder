@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-28T17:56:28+03:00\n"
+"POT-Creation-Date: 2021-09-30T11:41:21+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: jet-form-builder\n"
@@ -565,11 +565,11 @@ msgstr ""
 msgid "User ID"
 msgstr ""
 
-#: includes/admin/editor.php:388
+#: includes/admin/editor.php:391
 msgid "With many conditions for the block, they are checked with the AND operator"
 msgstr ""
 
-#: includes/admin/editor.php:391
+#: includes/admin/editor.php:394
 msgid "With many conditions for the action, they are checked with the AND operator"
 msgstr ""
 
@@ -899,6 +899,7 @@ msgstr ""
 #: includes/blocks/modules/general-style.php:428
 #: includes/widgets/types/form.php:1047
 #: includes/widgets/types/form.php:1224
+#: assets/src/editor/plugins/arguments/render.js:33
 msgid "Required Mark"
 msgstr ""
 
@@ -1651,6 +1652,7 @@ msgid "Choose Form"
 msgstr ""
 
 #: includes/widgets/types/form.php:1037
+#: assets/src/editor/plugins/arguments/render.js:22
 msgid "Fields Layout"
 msgstr ""
 
@@ -1663,6 +1665,7 @@ msgid "*"
 msgstr ""
 
 #: includes/widgets/types/form.php:1056
+#: assets/src/editor/plugins/arguments/render.js:43
 msgid "Submit Type"
 msgstr ""
 
@@ -1878,6 +1881,8 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
+#: assets/blocks-src/editor.js:1
 #: assets/js/admin.js:1
 #: assets/js/editor.js:1
 #: assets/src/admin/pages/settings/tabs/captcha/index.js:5
@@ -1885,36 +1890,43 @@ msgstr ""
 msgid "Captcha Settings"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/mailchimp/index.js:5
 msgid "MailChimp API"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/getresponse/index.js:5
 msgid "GetResponse API"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/activecampaign/index.js:5
 msgid "ActiveCampaign API"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/gateways/paypal/index.js:5
 msgid "PayPal Gateway API"
 msgstr ""
 
+#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/payments-gateways/index.js:5
 msgid "Payments Gateways"
 msgstr ""
 
+#: assets/blocks-src/editor.js:1
 #: assets/js/editor.js:1
 #: assets/src/editor/plugins/actions/index.js:7
 msgid "Post Submit Actions"
 msgstr ""
 
+#: assets/blocks-src/editor.js:1
 #: assets/js/editor.js:1
 #: assets/src/editor/plugins/preset/index.js:7
 msgid "Preset Settings"

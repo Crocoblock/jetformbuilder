@@ -19,7 +19,7 @@ class Text_Field_Error extends Base_Field_Error {
 
 		switch ( $type ) {
 			case 'email':
-				return 'Invalid email.';
+				return $this->get_manager()->get_message( 'invalid_email' );
 			default:
 				return parent::error();
 		}

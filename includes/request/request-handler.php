@@ -22,7 +22,7 @@ class Request_Handler {
 	const REPEATERS_SETTINGS = '__repeaters_settings';
 	const WP_NONCE_KEY = '_wpnonce';
 
-	public function __construct( $request ) {
+	public function set_request( $request ) {
 		$this->request = $request;
 
 		Parser_Manager::instance();

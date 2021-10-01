@@ -38,12 +38,27 @@ class Action_Handler {
 
 	/**
 	 * Constructor for the class
-	 *
-	 * @param $form_id
 	 */
-	public function __construct( $form_id ) {
+	public function __construct() {
+	}
+
+	public function get_form_id() {
+		return (int) $this->form_id;
+	}
+
+	/**
+	 * @param $form_id
+	 *
+	 * @return Action_Handler
+	 */
+	public function set_form_id( $form_id ) {
+		if ( ! $form_id || $form_id === $this->form_id ) {
+			return $this;
+		}
 		$this->form_id = $form_id;
 		$this->set_form_actions();
+
+		return $this;
 	}
 
 	public function add_request( $request ) {

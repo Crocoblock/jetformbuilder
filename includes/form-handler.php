@@ -7,7 +7,6 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
-use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Request_Handler;
 
@@ -36,7 +35,11 @@ class Form_Handler {
 	public $form_id;
 	public $refer;
 	public $manager;
+
+	/** @var Action_Handler */
 	public $action_handler;
+
+	/** @var Request_Handler */
 	public $request_data;
 
 	public $form_key = '_jet_engine_booking_form_id';
@@ -52,6 +55,8 @@ class Form_Handler {
 	 * Constructor for the class
 	 */
 	function __construct() {
+		$this->action_handler  = new Action_Handler();
+		$this->request_handler = new Request_Handler();
 
 		if ( wp_doing_ajax() ) {
 
@@ -86,7 +91,7 @@ class Form_Handler {
 	/**
 	 * Setup form data
 	 *
-	 * @return [type] [description]
+	 * @return void [description]
 	 */
 	public function setup_form() {
 		global $post;
@@ -127,11 +132,11 @@ class Form_Handler {
 		}
 
 		if ( $this->is_ajax ) {
-			$action_handler = $this->action_handler ? $this->action_handler : new Action_Handler( $this->form_id );
+			$this->action_handler->set_form_id( $this->form_id );
 
 			return new Form_Response\Types\Ajax_Response( array(
 				'form_id' => $this->form_id,
-				'actions' => $action_handler->get_all(),
+				'actions' => $this->action_handler->get_all(),
 			) );
 		} else {
 			return new Form_Response\Types\Reload_Response( array(
@@ -190,14 +195,15 @@ class Form_Handler {
 
 	public function try_set_data() {
 		try {
-			$request               = array(
+			$request = array(
 				'form_id' => $this->form_id,
 				'is_ajax' => $this->is_ajax,
 				'refer'   => $this->refer
 			);
-			$this->action_handler  = new Action_Handler( $this->form_id );
-			$this->request_handler = new Request_Handler( $request );
-			$this->request_data    = $this->request_handler->get_form_data();
+			$this->action_handler->set_form_id( $this->form_id );
+			$this->request_handler->set_request( $request );
+
+			$this->request_data = $this->request_handler->get_form_data();
 
 		} catch ( Request_Exception $exception ) {
 			$this->send_response( array(
@@ -222,24 +228,6 @@ class Form_Handler {
 		}
 	}
 
-	public function get_message_builder_data( $form_id ) {
-		$form_id = $this->form_id ? $this->form_id : $form_id;
-
-		if ( $this->action_handler && ! empty( $this->action_handler->form_actions ) ) {
-			$actions = $this->action_handler->form_actions;
-		} else {
-			$actions = ( new Action_Handler( $form_id ) )->get_all();
-		}
-
-		return ( object ) array(
-			'form_id' => $form_id,
-			'actions' => $actions
-		);
-	}
-
-	public function get_message_builder( $form_id ) {
-		return new Form_Messages\Builder( $this->get_message_builder_data( $form_id ) );
-	}
 
 	/**
 	 * Add new properties into response data

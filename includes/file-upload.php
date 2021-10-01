@@ -108,15 +108,16 @@ class File_Upload {
 			'max_size' => $this->get_max_size_for_field( $field_data ),
 		);
 
-		$message_builder      = Plugin::instance()->form_handler->get_message_builder( $form_id );
-		$settings['messages'] = $message_builder->manager->get_messages();
+		$settings['messages'] = jet_form_builder()->msg_router->get_manager( array(
+			'form_id' => $form_id
+		) );
 
 		$settings = array_merge( $field_data, $settings );
 
 		$result = $this->process_upload( $_FILES, $settings );
 
 		if ( ! $result ) {
-			wp_send_json_error( __( 'Internal error. Plaese check uploaded files and try again.', 'jet-form-builder' ) );
+			wp_send_json_error( $settings['messages']['internal'] );
 		}
 
 		wp_send_json_success( array(
@@ -536,22 +537,23 @@ class File_Upload {
 		wp_enqueue_script( 'jet-form-builder-sortable' );
 		wp_enqueue_script( 'jet-form-builder-file-upload' );
 
-		$message_builder = Plugin::instance()->form_handler->get_message_builder( Live_Form::instance()->form_id );
-		$messages        = $message_builder->manager->get_messages();
+		$messages = wp_json_encode( jet_form_builder()->msg_router->get_manager()->get_messages() );
+		$form_id  = (int) Live_Form::instance()->form_id;
+
 
 		wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
 			'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
 			'action'          => $this->action,
 			'nonce'           => wp_create_nonce( $this->nonce_key ),
-			'max_upload_size' => wp_max_upload_size(),
-			'errors'          => array(
-				'upload_limit' => $messages['upload_max_files'],
-				'file_type'    => $messages['upload_mime_types'],
-				'file_size'    => $messages['upload_max_size'],
-				'internal'     => $messages['internal_error'],
-
-			),
+			'max_upload_size' => wp_max_upload_size()
 		) );
+
+		wp_add_inline_script( 'jet-form-builder-file-upload', "
+			window.JetFormBuilderFileUploadConfig = window.JetFormBuilderFileUploadConfig || {};
+			window.JetFormBuilderFileUploadConfig.errors = window.JetFormBuilderFileUploadConfig.errors || {};
+			
+			window.JetFormBuilderFileUploadConfig.errors[ $form_id ] = $messages;  
+		" );
 	}
 
 	public function ensure_media_js( $content, $popup_data = array() ) {

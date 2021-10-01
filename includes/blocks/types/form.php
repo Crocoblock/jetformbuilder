@@ -376,24 +376,27 @@ class Form extends Base {
 		$style_manager = $this->maybe_render_styles_block( $form_id );
 		$style_manager .= $this->maybe_render_fonts_block( $form_id );
 
+		jet_form_builder()->msg_router->set_up( array(
+			'form_id' => $form_id
+		) );
+
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
 			return ( $style_manager . $custom_form );
 		}
 
-		$builder  = new Form_Builder( $form_id, false, $attrs );
-		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
+		$builder = new Form_Builder( $form_id, false, $attrs );
 
 		Error_Handler::instance();
 
 		ob_start();
 		echo $style_manager;
 		$builder->render_form();
-		$messages->render_messages();
+		jet_form_builder()->msg_router->get_builder()->render_messages();
 
 		if ( Tools::is_editor() ) {
-			$messages->render_messages_samples();
+			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
 		}
 
 		return ob_get_clean();

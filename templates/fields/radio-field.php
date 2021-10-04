@@ -1,6 +1,8 @@
 <?php
 /**
  * input[type="hidden"] template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Radio_Field_Render $this
  */
 
 $required    = $this->block_type->get_required_attr();
@@ -68,6 +70,7 @@ if ( ! empty( $args['field_options'] ) ) {
 		<?php
 
 	}
+	$this->reset_attributes();
 
 	if ( $custom_template ) {
 		wp_reset_postdata();

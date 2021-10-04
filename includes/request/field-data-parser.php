@@ -53,11 +53,11 @@ abstract class Field_Data_Parser {
 		}
 	}
 
-	private function _is_required() {
+	protected function _is_required() {
 		return ( ! $this->inside_conditional && $this->is_required && empty( $this->value ) );
 	}
 
-	private function save_error() {
+	protected function save_error() {
 		Error_Handler::instance()->add(
 			$this->type(), array( 'name' => $this->name, 'params' => $this->settings )
 		);

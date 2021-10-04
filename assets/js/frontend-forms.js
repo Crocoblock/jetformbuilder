@@ -778,8 +778,6 @@
 		},
 
 		widgetBookingForm: function( $scope ) {
-
-			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
 			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );
 
 			if ( $editors.length && window.wp && window.wp.editor ) {
@@ -799,6 +797,12 @@
 			if ( $.fn.inputmask ) {
 				$scope.find( '.jet-form-builder__masked-field' ).inputmask();
 			}
+			JetFormBuilder.initCalcFields( $scope );
+			JetFormBuilder.initReplaceValues( $scope );
+		},
+
+		initCalcFields: function( $scope ) {
+			const $calcFields = $scope.find( '.jet-form-builder__calculated-field' );
 
 			if ( ! $calcFields.length ) {
 				return;
@@ -817,6 +821,148 @@
 				calculated = JetFormBuilder.calculateValue( $this );
 
 				JetFormBuilder.setCalculatedValue( calculated, $this );
+			} );
+		},
+
+		initReplaceValues: function( $scope ) {
+			const $form = $scope.find( 'form.jet-form-builder' );
+
+			const getFieldMask = function( name ) {
+				return '%JFB_FIELD::' + name + '%';
+			}
+
+			const replaceAttrs = window.JetFormBuilderSettings.replaceAttrs || [];
+			const replaceStack = {};
+
+			const isRadio = function( $field ) {
+				if ( 'INPUT' !== $field.prop( 'tagName' ) ) {
+					return false;
+				}
+
+				return [ 'checkbox', 'radio' ].includes( $field.attr( 'type' ) );
+			}
+
+			const insertStack = function( type, formID, { field, fieldName, el, initialValue, ...other } ) {
+				replaceStack[ formID ] = [
+					...( replaceStack[ formID ] || [] ),
+					{
+						fieldName,
+						isRadio: isRadio( field ),
+						initialValue,
+						el,
+						type,
+						...other,
+					},
+				];
+
+				return replaceStack;
+			}
+
+			const fillAttrsStack = function( $field, fieldName, mask, formID ) {
+				const querySelector = [];
+
+				for ( var i = 0; i < replaceAttrs.length; i++ ) {
+					querySelector.push( '[' + replaceAttrs[ i ] + '*="' + mask + '"]' );
+				}
+
+				let $matchedNodes = $form.find( querySelector.join( ', ' ) );
+
+				if ( ! $matchedNodes.length ) {
+					return;
+				}
+
+				$matchedNodes.each( function( index, el ) {
+
+					$.each( el.attributes, function() {
+						if ( ! this.value.includes( mask ) ) {
+							return;
+						}
+
+						insertStack( 'attr', formID, {
+							fieldName,
+							field: $field,
+							initialValue: this.value,
+							el, attr: this.name,
+						} );
+
+						this.value = this.value.replace( mask, $field.val() );
+					} );
+				} );
+			};
+
+			const fillContentStack = function( $field, fieldName, mask, formID ) {
+				let $matchedNodes = $form.find( '*:contains(' + mask + ')' );
+
+				if ( ! $matchedNodes.length ) {
+					return;
+				}
+
+				$matchedNodes.each( function( index, el ) {
+					if ( el.children.length || ! el.innerText.includes( mask ) ) {
+						return;
+					}
+					insertStack( 'content', formID, {
+						fieldName,
+						field: $field,
+						initialValue: el.innerText,
+						el,
+					} );
+					el.innerText = el.innerText.replace( getFieldMask( fieldName ), $field.val() );
+				} );
+			}
+
+			const fillStack = function( $field, formID ) {
+
+				const fieldName = $field.attr( 'name' );
+				const mask = getFieldMask( fieldName );
+
+				// Replace attrs
+				fillAttrsStack( $field, fieldName, mask, formID );
+
+				// Replace content
+				fillContentStack( $field, fieldName, mask, formID );
+			}
+
+			const replaceFieldValues = function( $field ) {
+
+				const fieldName = $field.attr( 'name' );
+				const $form = $field.closest( 'form.jet-form-builder' );
+
+				const stack = replaceStack[ $form.data( 'form-id' ) ] || [];
+
+				for ( let i = 0; i < stack.length; i++ ) {
+
+					if ( fieldName !== stack[ i ].fieldName ) {
+						continue;
+					}
+
+					let value = stack[ i ].initialValue;
+
+					value = value.replace( getFieldMask( fieldName ), $field.val() );
+
+					if ( 'attr' === stack[ i ].type ) {
+						$( stack[ i ].el ).attr( stack[ i ].attr, value );
+					} else {
+						stack[ i ].el.innerText = value;
+					}
+				}
+			};
+
+			$scope.find( '.jet-form-builder__field' ).each( function() {
+				const $this = $( this );
+
+				fillStack( $this, $form.data( 'form-id' ) );
+				const is_Radio = isRadio( $this );
+
+				if ( is_Radio && $this.attr( 'checked' ) ) {
+					replaceFieldValues( $this );
+				} else if ( ! is_Radio ) {
+					replaceFieldValues( $this );
+				}
+			} );
+
+			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
+				replaceFieldValues( $( this ) );
 			} );
 		},
 

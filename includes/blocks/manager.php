@@ -195,7 +195,7 @@ class Manager {
 
 	/**
 	 * Register form JS
-	 * @return [type] [description]
+	 * @return void [description]
 	 */
 	public function enqueue_frontend_assets() {
 		$this->register_form_scripts();
@@ -210,10 +210,16 @@ class Manager {
 				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'form_action'  => Plugin::instance()->form_handler->hook_key,
 				'devmode'      => Dev_Mode\Manager::instance()->active(),
-				'scrollOffset' => - 50
+				'scrollOffset' => - 50,
+				'replaceAttrs' => array(
+					'href',
+					'class',
+					'src',
+					'alt',
+					'title',
+				)
 			) )
 		);
-
 	}
 
 	public function register_form_scripts() {

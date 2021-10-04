@@ -1,6 +1,8 @@
 <?php
 /**
  * Calculated field template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render $this
  */
 $calc_data = $this->get_calculated_data( $args );
 
@@ -23,15 +25,12 @@ $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 
-if ( ! empty( $this->live_form->current_repeater ) ) {
-	$this->add_attribute( 'class', 'jet-form-builder__calculated-field--child' );
-} else {
-	$this->add_attribute( 'class', 'jet-form-builder__calculated-field' );
-}
+$this->add_attribute( 'class', empty( $this->block_type->get_current_repeater() )
+	? 'jet-form-builder__calculated-field'
+	: 'jet-form-builder__calculated-field--child'
+);
 
-if ( $is_hidden ) {
-	$this->add_attribute( 'class', 'jet-form-builder__calculated-field--hidden' );
-}
+$this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field--hidden' : '' );
 
 ?>
 <div <?php $this->render_attributes_string(); ?>>

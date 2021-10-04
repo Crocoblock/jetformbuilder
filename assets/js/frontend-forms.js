@@ -861,7 +861,7 @@
 			const fillAttrsStack = function( $field, fieldName, mask, formID ) {
 				const querySelector = [];
 
-				for ( var i = 0; i < replaceAttrs.length; i++ ) {
+				for ( let i = 0; i < replaceAttrs.length; i++ ) {
 					querySelector.push( '[' + replaceAttrs[ i ] + '*="' + mask + '"]' );
 				}
 
@@ -912,8 +912,15 @@
 			}
 
 			const fillStack = function( $field, formID ) {
+				let fieldName = $field.attr( 'name' );
 
-				const fieldName = $field.attr( 'name' );
+				if ( $field.data( 'field-name' ) ) {
+					fieldName = $field.data( 'field-name' );
+				}
+
+				if ( ! fieldName ) {
+					return;
+				}
 				const mask = getFieldMask( fieldName );
 
 				// Replace attrs
@@ -1232,14 +1239,19 @@
 
 		calculateValue: function( $scope ) {
 
-			var formula  = String( $scope.data( 'formula' ) ),
-				listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
-				regexp   = /%([a-zA-Z0-9-_]+)%/g,
-				func     = null;
+			var formula = String( $scope.data( 'formula' ) ),
+				//listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
+				regexp  = /%([a-zA-Z0-9-_]+)%/g,
+				func    = null,
+				$form   = $scope.closest( 'form' );
 
-			if ( typeof formula === 'undefined' ) {
-				return null;
+			if ( typeof formula === 'undefined' || ! $form.length ) {
+				return 0;
 			}
+
+			const getGlobalObj = name => {
+				return $form.find( '[name="' + name + '"], [name="' + name + '[]"]' )
+			};
 
 			formula = JetFormBuilderMain.filters.applyFilters( 'forms/calculated-formula-before-value', formula, $scope );
 
@@ -1251,10 +1263,15 @@
 					object = $scope;
 				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
 					object = $scope.closest( '.jet-form-builder-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
+
+					if ( ! object.length ) {
+						object = getGlobalObj( match2 );
+					}
+
 				} else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
 				} else {
-					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
+					object = getGlobalObj( match2 );
 				}
 
 				return JetFormBuilder.getFieldValue( object );
@@ -1303,44 +1320,37 @@
 			if ( ! fieldName ) {
 				return;
 			}
+			fieldName = fieldName.replace( '[]', '' );
 
 			$.each( JetFormBuilder.calcFields, function( calcFieldName, field ) {
 
-				fieldName = fieldName.replace( '[]', '' );
-
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					calculated = JetFormBuilder.calculateValue( field.el );
+					calculated = JetFormBuilder.calculateValue( $( field.el ) );
 
-					JetFormBuilder.setCalculatedValue( calculated, field.el )
+					JetFormBuilder.setCalculatedValue( calculated, $( field.el ) )
 				}
-
 			} );
 
 			if ( 'jet-form-builder/repeater-changed' !== event.type ) {
-
 				$.each( JetFormBuilder.repeaterCalcFields, function( calcFieldName, field ) {
-
-					fieldName = fieldName.replace( '[]', '' );
-
 					if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-
 						field.el.trigger( 'jet-form-builder/repeater-changed' );
-
 					}
-
 				} );
-
 			}
 
 			$.each( JetFormBuilder.childrenCalcFields, function( calcFieldName, field ) {
 
-				fieldName = fieldName.replace( '[]', '' );
-
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					var $row = $this.closest( '.jet-form-builder-repeater__row' );
-					JetFormBuilder.calculateFieldsInRow( $row );
-				}
+					/**
+					 * todo
+					 */
+					field.parentEl.find( '.jet-form-builder-repeater__row' ).each( function() {
+						const $row = $( this );
 
+						JetFormBuilder.calculateFieldsInRow( $row )
+					} );
+				}
 			} );
 
 		},

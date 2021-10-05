@@ -1,19 +1,20 @@
 import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-radio/select-radio-check-placeholder";
 import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
+import CustomTemplateControls from '../../components/base-select-check-radio/custom-template';
 
 const {
-	AdvancedFields,
-	GeneralFields,
-	ToolBarFields,
-	FieldControl,
-} = JetFBComponents;
+		  AdvancedFields,
+		  GeneralFields,
+		  ToolBarFields,
+		  FieldControl,
+	  } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+		  InspectorControls,
+		  useBlockProps,
+	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const localized = window.JetFormCheckboxFieldData;
 
@@ -22,11 +23,11 @@ export default function CheckboxEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
+			  attributes,
+			  setAttributes,
+			  isSelected,
+			  editProps: { uniqKey },
+		  } = props;
 
 	return [
 		<ToolBarFields
@@ -52,12 +53,16 @@ export default function CheckboxEdit( props ) {
 				{ ...props }
 			/>
 			<SelectRadioCheck { ...props }>
+				<CustomTemplateControls
+					listingTypes={ localized.listings_list }
+					{ ...props }
+				/>
 				<FieldControl
 					type='custom_settings'
 					key={ uniqKey( 'customSettingsFields' ) }
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-		</div>
+		</div>,
 	];
 }

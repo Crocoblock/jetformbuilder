@@ -75,8 +75,8 @@ if ( ! empty( $args['field_options'] ) ) {
             </label>
         </div>
 		<?php
-
 	}
+	$this->reset_attributes();
 
 	if ( $custom_template ) {
 		wp_reset_postdata();

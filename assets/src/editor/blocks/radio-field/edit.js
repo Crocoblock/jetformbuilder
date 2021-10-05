@@ -1,5 +1,6 @@
 import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-radio/select-radio-check-placeholder";
 import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
+import CustomTemplateControls from '../../components/base-select-check-radio/custom-template';
 
 const {
 		  ToolBarFields,
@@ -52,6 +53,10 @@ export default function RadioEdit( props ) {
 				{ ...props }
 			/>
 			<SelectRadioCheck { ...props }>
+				<CustomTemplateControls
+					listingTypes={ window.JetFormRadioFieldData.listings_list }
+					{ ...props }
+				/>
 				<ToggleControl
 					key='switch_on_change'
 					label={ __( 'Switch page on change' ) }

@@ -127,7 +127,9 @@ class Live_Form {
 			return '';
 		}
 
-		return $this->get_form_break()->render_progress();
+		return $this->get_form_break()->render_progress( 'default', array(
+			'jet-form-builder-progress-pages--global'
+		) );
 	}
 
 

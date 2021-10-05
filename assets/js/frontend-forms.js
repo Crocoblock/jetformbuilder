@@ -499,7 +499,7 @@
 		},
 
 		updateProgress: function( event, $fromPage, $toPage, $progress ) {
-			if ( 'default' !== $progress.data( 'type' ) ) {
+			if ( ! $progress || 'default' !== $progress.data( 'type' ) ) {
 				return;
 			}
 			const [ from, to ] = [ $fromPage.data( 'page' ), $toPage.data( 'page' ) ];
@@ -1131,10 +1131,13 @@
 		},
 
 		switchFormPage: function( $fromPage, $toPage ) {
+			const $form = $fromPage.closest( '.jet-form-builder' );
+			const $conditional = $fromPage.closest( '.jet-form-builder__conditional' );
+			let $progress = null;
 
-			var $form = $fromPage.closest( '.jet-form-builder' );
-
-			const $progress = $form.find( '.jet-form-builder-progress-pages' );
+			if ( ! $conditional.length ) {
+				$progress = $form.find( '.jet-form-builder-progress-pages--global' );
+			}
 
 			$fromPage.addClass( 'jet-form-builder-page--hidden' );
 			$toPage.removeClass( 'jet-form-builder-page--hidden' );

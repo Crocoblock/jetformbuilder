@@ -31,6 +31,7 @@ class Form_Break {
 		if ( is_null( $this->count_form_breaks ) ) {
 			$this->count_form_breaks = count( $this->form_breaks );
 		}
+
 		return $this->count_form_breaks;
 	}
 
@@ -55,9 +56,9 @@ class Form_Break {
 			return $this;
 		}
 
-		$this->is_editor         = true;
-		$this->pages             = 2;
-		$this->form_breaks       = array(
+		$this->is_editor   = true;
+		$this->pages       = 2;
+		$this->form_breaks = array(
 			array(
 				'label' => 'Start Page'
 			),
@@ -105,13 +106,13 @@ class Form_Break {
 		return $blocks;
 	}
 
-	public function with_progress_wrapper( $content ) {
+	public function with_progress_wrapper( $content, $additional_classes = array() ) {
 		$type = $this->progress_type ?: 'default';
 
-		$classes = array(
+		$classes = array_merge( array(
 			"jet-form-builder-progress-pages",
 			"jfb-progress-type--$type"
-		);
+		), $additional_classes );
 
 		return sprintf(
 			'<div class="%1$s" data-type="%2$s">%3$s</div>',
@@ -128,7 +129,7 @@ class Form_Break {
 		return ob_get_clean();
 	}
 
-	public function render_progress( $type = '' ) {
+	public function render_progress( $type = '', $additional_classes = array() ) {
 		if ( $type ) {
 			$this->set_progress_type( $type );
 		}
@@ -142,7 +143,7 @@ class Form_Break {
 				break;
 		}
 
-		return $this->with_progress_wrapper( $content );
+		return $this->with_progress_wrapper( $content, $additional_classes );
 	}
 
 	public function get_progress_item_class( $index ) {
@@ -157,7 +158,7 @@ class Form_Break {
 			}
 		} elseif ( $index === $this->current_form_break ) {
 			$classes[] = 'active-page';
-		} elseif ( - 1 === $index ) {
+		} elseif ( $index < $this->current_form_break ) {
 			$classes[] = 'passed-page';
 		}
 
@@ -178,11 +179,13 @@ class Form_Break {
 		}
 
 		if ( $force_first ) {
-			$this->current_page = 1;
+			$this->current_page       = 1;
+			$this->current_form_break = 0;
 		} else {
 			$this->current_page ++;
+			$this->current_form_break ++;
 		}
-		$this->current_form_break ++;
+
 
 		ob_start();
 		do_action( 'jet-form-builder/before-page-start', $this );

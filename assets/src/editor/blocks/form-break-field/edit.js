@@ -43,7 +43,7 @@ export default function FormBreakEdit( props ) {
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
 					key={ uniqKey( 'add_next_button' ) }
-					label={ __( 'Disable "Next" Button', 'jet-form-builder' ) }
+					label={ __( 'Enable "Next" Button', 'jet-form-builder' ) }
 					checked={ attributes.add_next_button }
 					help={ attrHelp( 'add_next_button' ) }
 					onChange={ add_next_button => setAttributes( { add_next_button } ) }

@@ -26,6 +26,8 @@ const { withRequestFields } = JetFBHooks;
 
 const { withSelect } = wp.data;
 
+const { applyFilters } = wp.hooks;
+
 function RedirectToPageAction( props ) {
 
 	const {
@@ -37,9 +39,22 @@ function RedirectToPageAction( props ) {
 			  requestFields,
 		  } = props;
 
+	const [ typePages, setTypePages ] = useState( source.redirect_types );
 	const [ fields, setFields ] = useState( [] );
 
 	useEffect( () => {
+		const hasInserted = requestFields.findIndex( field => 'inserted_post_id' === field.value );
+
+		if ( -1 === hasInserted ) {
+			setTypePages( prev => prev.filter( type => 'inserted_post' !== type.value ) );
+		}
+
+		const filterTypes = applyFilters( 'jet.fb.redirect_to_page.types', [], props );
+
+		if ( filterTypes.length ) {
+			setTypePages( prev => ( [ ...prev, ...filterTypes ] ) );
+		}
+
 		setFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
 	}, [] );
 
@@ -71,11 +86,11 @@ function RedirectToPageAction( props ) {
 			label={ label( 'redirect_type' ) }
 			labelPosition="side"
 			value={ settings.redirect_type }
-			options={ source.redirect_types }
+			options={ typePages }
 			onChange={ redirect_type => onChangeSettingObj( { redirect_type } ) }
 		/>
 		{ 'static_page' === settings.redirect_type && <SelectControl
-			key='redirect_type'
+			key='redirect_type_page'
 			className="full-width"
 			label={ label( 'redirect_page' ) }
 			labelPosition="side"

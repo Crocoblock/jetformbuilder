@@ -192,6 +192,7 @@ class Insert_Post extends Base {
 				$postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
 			}
 
+
 			$post_id     = wp_insert_post( $postarr );
 			$post_action = 'insert';
 		}
@@ -203,6 +204,16 @@ class Insert_Post extends Base {
 		}
 
 		$this->add_inserted_post_id( $handler, $post_id );
+
+		$this->add_context_once( array(
+			$this->get_context_post_key( $post_id ) => array_merge(
+				array(
+					'__action' => $post_action,
+					'ID'       => $post_id
+				),
+				$postarr
+			)
+		) );
 
 		/**
 		 * Perform any actions after post inserted/updated
@@ -245,6 +256,17 @@ class Insert_Post extends Base {
 				'action_id' => $this->_id,
 			);
 		}
+	}
+
+	public function get_inserted_post_context( $post_id = false ) {
+		$handler = $this->get_action_handler();
+		$post_id = $post_id ?: $handler->get_inserted_post_id();
+
+		return $handler->get_context( 'insert_post', $this->get_context_post_key( $post_id ) );
+	}
+
+	public function get_context_post_key( $post_id ) {
+		return "post-id-{$post_id}";
 	}
 
 	public function self_script_name() {

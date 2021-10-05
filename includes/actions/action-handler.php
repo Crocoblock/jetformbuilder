@@ -35,6 +35,8 @@ class Action_Handler {
 	public $current_position;
 	public $response_data = array();
 
+	public $context = array();
+
 
 	/**
 	 * Constructor for the class
@@ -233,6 +235,51 @@ class Action_Handler {
 	public function add_response( $values ) {
 		Plugin::instance()->form_handler->add_response_data( $values );
 	}
+
+	public function get_context( $action_slug, $property = '' ) {
+		$context = $this->context[ $action_slug ] ?? array();
+
+		return $property ? $context[ $property ] ?? false : $context;
+	}
+
+	public function add_context( $action_slug, $context ) {
+		$this->context[ $action_slug ] = array_merge( $this->get_context( $action_slug ), $context );
+
+		return $this;
+	}
+
+	public function add_context_once( $action_slug, $context ) {
+		$action_context = $this->get_context( $action_slug );
+
+		if ( ! $action_context ) {
+			$this->add_context( $action_slug, $context );
+
+			return $this;
+		}
+
+		foreach ( $context as $name => $value ) {
+			if ( isset( $action_context[ $name ] ) ) {
+				unset( $context[ $name ] );
+			}
+		}
+		$this->add_context( $action_slug, $context );
+
+		return $this;
+	}
+
+	/*public function get_action( $slug, $id = false ) {
+		foreach ( $this->form_actions as $action ) {
+			/** @var Base $action */
+	/*
+			if ( $action->get_id() !== $slug ) {
+				continue;
+			}
+
+			if ( false === $id || ( (int) $action->_id === (int) $id ) ) {
+				return $action;
+			}
+		}
+	}*/
 
 
 }

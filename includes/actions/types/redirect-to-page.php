@@ -44,8 +44,16 @@ class Redirect_To_Page extends Base {
 		);
 	}
 
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
+		$type   = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
+		$to_url = false;
 
 		switch ( $type ) {
 			case 'static_page':
@@ -57,13 +65,33 @@ class Redirect_To_Page extends Base {
 				$to_url = $request['__refer'];
 				break;
 
+			case 'inserted_post':
+				/** @var Insert_Post $insert_instance */
+				$insert_instance = jet_form_builder()->actions->get_actions( 'insert_post' );
+
+				$context = $insert_instance->get_inserted_post_context();
+
+				if ( ! $context ) {
+					break;
+				}
+
+				if ( 'insert' === $context['__action'] && 'publish' === $context['post_status'] ) {
+					$to_url = get_permalink( $context['ID'] );
+				}
+
+				break;
+
 			default:
 				$to_url = ! empty( $this->settings['redirect_url'] ) ? $this->settings['redirect_url'] : false;
+				$to_url = apply_filters(
+					"jet-form-builder/action/{$this->get_id()}/redirect/{$type}",
+					$to_url, $this, $handler
+				);
 				break;
 		}
 
 		if ( ! $to_url ) {
-			throw new Action_Exception( 'failed', $this->settings );
+			throw new Action_Exception( 'failed', $this->settings, $handler->context );
 		} else {
 
 			if ( ! empty( $this->settings['redirect_hash'] ) ) {
@@ -115,30 +143,34 @@ class Redirect_To_Page extends Base {
 	 * @return [type] [description]
 	 */
 	public function action_data() {
-		return array(
+		return apply_filters( "jet-form-builder/action/{$this->get_id()}/editor-data", array(
 			'pages'          => Tools::get_pages_list_for_js(),
 			'redirect_types' => $this->get_redirect_types(),
-		);
+		) );
 	}
 
 	public function get_redirect_types() {
 		return array(
 			array(
 				'value' => '',
-				'label' => 'Select redirect to...',
+				'label' => __( 'Select redirect to...', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'static_page',
-				'label' => 'Static Page',
+				'label' => __( 'Static Page', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'custom_url',
-				'label' => 'Custom URL',
+				'label' => __( 'Custom URL', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'current_page',
-				'label' => 'Current Page',
+				'label' => __( 'Current Page', 'jet-form-builder' ),
 			),
+			array(
+				'value' => 'inserted_post',
+				'label' => __( 'Inserted post', 'jet-form-builder' )
+			)
 		);
 	}
 

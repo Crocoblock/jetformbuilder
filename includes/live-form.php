@@ -199,7 +199,7 @@ class Live_Form {
 	}
 
 	public function set_repeater( $name, $attrs ) {
-		$this->_repeaters[ $name ] = array_merge( $this->_repeaters[ $name ] ?? array(), $attrs );
+		$this->_repeaters[ $name ] = array_merge( $this->get_repeater( $name ), $attrs );
 	}
 
 

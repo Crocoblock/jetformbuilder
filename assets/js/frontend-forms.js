@@ -1342,9 +1342,6 @@
 			$.each( JetFormBuilder.childrenCalcFields, function( calcFieldName, field ) {
 
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					/**
-					 * todo
-					 */
 					field.parentEl.find( '.jet-form-builder-repeater__row' ).each( function() {
 						const $row = $( this );
 

@@ -180,6 +180,21 @@
             "Add hash to the redirect URL:": [
                 ""
             ],
+            "Select redirect to...": [
+                ""
+            ],
+            "Static Page": [
+                ""
+            ],
+            "Custom URL": [
+                ""
+            ],
+            "Current Page": [
+                ""
+            ],
+            "Inserted post": [
+                ""
+            ],
             "Register User": [
                 ""
             ],
@@ -660,9 +675,6 @@
             "You are not allowed to upload files": [
                 ""
             ],
-            "Internal error. Plaese check uploaded files and try again.": [
-                ""
-            ],
             "Duplicate": [
                 ""
             ],
@@ -1086,6 +1098,9 @@
             "Preset Settings": [
                 ""
             ],
+            "Unknown error.": [
+                ""
+            ],
             "Site Key": [
                 ""
             ],
@@ -1128,7 +1143,7 @@
             "Is Timestamp": [
                 ""
             ],
-            "Disable \"Next\" Button": [
+            "Enable \"Next\" Button": [
                 ""
             ],
             "Label of progress": [
@@ -1246,6 +1261,12 @@
                 ""
             ],
             "Wysiwyg Field": [
+                ""
+            ],
+            "Use custom template": [
+                ""
+            ],
+            "Choose custom template": [
                 ""
             ],
             "Start of range": [

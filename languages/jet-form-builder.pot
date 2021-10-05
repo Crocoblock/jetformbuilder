@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-30T11:41:21+03:00\n"
+"POT-Creation-Date: 2021-10-05T17:13:20+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: jet-form-builder\n"
@@ -85,7 +85,7 @@ msgstr ""
 
 #: includes/actions/types/active-campaign.php:135
 #: includes/actions/types/getresponse.php:157
-#: includes/actions/types/insert-post.php:258
+#: includes/actions/types/insert-post.php:280
 #: includes/actions/types/mailchimp.php:205
 #: includes/actions/types/register-user.php:59
 #: includes/actions/types/update-user.php:182
@@ -183,61 +183,61 @@ msgstr ""
 msgid "Insert/Update Post"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:256
+#: includes/actions/types/insert-post.php:278
 msgid "Post Type:"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:257
+#: includes/actions/types/insert-post.php:279
 msgid "Post Status:"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:259
+#: includes/actions/types/insert-post.php:281
 msgid "Default Fields:"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:265
+#: includes/actions/types/insert-post.php:287
 msgid "Set meta fields names or post properties to save appropriate form fields into"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:266
+#: includes/actions/types/insert-post.php:288
 msgid "Set default meta values which should be set on post insert/update"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:361
+#: includes/actions/types/insert-post.php:383
 #: includes/admin/editor.php:186
 msgid "Post ID"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:365
+#: includes/actions/types/insert-post.php:387
 #: includes/admin/editor.php:190
 msgid "Post Title"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:369
+#: includes/actions/types/insert-post.php:391
 #: includes/admin/editor.php:194
 msgid "Post Content"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:373
+#: includes/actions/types/insert-post.php:395
 #: includes/admin/editor.php:198
 msgid "Post Excerpt"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:377
+#: includes/actions/types/insert-post.php:399
 msgid "Post Status"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:382
+#: includes/actions/types/insert-post.php:404
 #: includes/admin/editor.php:202
 msgid "Post Date"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:386
+#: includes/actions/types/insert-post.php:408
 #: includes/admin/editor.php:206
 msgid "Post Date GMT"
 msgstr ""
 
-#: includes/actions/types/insert-post.php:390
+#: includes/actions/types/insert-post.php:412
 msgid "Post Author"
 msgstr ""
 
@@ -269,24 +269,44 @@ msgstr ""
 msgid "Redirect to Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:104
+#: includes/actions/types/redirect-to-page.php:132
 msgid "Redirect to:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:105
+#: includes/actions/types/redirect-to-page.php:133
 msgid "Select page:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:106
+#: includes/actions/types/redirect-to-page.php:134
 msgid "Redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:107
+#: includes/actions/types/redirect-to-page.php:135
 msgid "Add query arguments to the redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:108
+#: includes/actions/types/redirect-to-page.php:136
 msgid "Add hash to the redirect URL:"
+msgstr ""
+
+#: includes/actions/types/redirect-to-page.php:156
+msgid "Select redirect to..."
+msgstr ""
+
+#: includes/actions/types/redirect-to-page.php:160
+msgid "Static Page"
+msgstr ""
+
+#: includes/actions/types/redirect-to-page.php:164
+msgid "Custom URL"
+msgstr ""
+
+#: includes/actions/types/redirect-to-page.php:168
+msgid "Current Page"
+msgstr ""
+
+#: includes/actions/types/redirect-to-page.php:172
+msgid "Inserted post"
 msgstr ""
 
 #: includes/actions/types/register-user.php:20
@@ -1306,10 +1326,6 @@ msgstr ""
 msgid "You are not allowed to upload files"
 msgstr ""
 
-#: includes/file-upload.php:119
-msgid "Internal error. Plaese check uploaded files and try again."
-msgstr ""
-
 #: includes/form-actions/types/duplicate-action.php:21
 msgid "Duplicate"
 msgstr ""
@@ -1881,8 +1897,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
-#: assets/blocks-src/editor.js:1
 #: assets/js/admin.js:1
 #: assets/js/editor.js:1
 #: assets/src/admin/pages/settings/tabs/captcha/index.js:5
@@ -1890,46 +1904,43 @@ msgstr ""
 msgid "Captcha Settings"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/mailchimp/index.js:5
 msgid "MailChimp API"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/getresponse/index.js:5
 msgid "GetResponse API"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/activecampaign/index.js:5
 msgid "ActiveCampaign API"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/gateways/paypal/index.js:5
 msgid "PayPal Gateway API"
 msgstr ""
 
-#: assets/blocks-src/admin.js:1
 #: assets/js/admin.js:1
 #: assets/src/admin/pages/settings/tabs/payments-gateways/index.js:5
 msgid "Payments Gateways"
 msgstr ""
 
-#: assets/blocks-src/editor.js:1
 #: assets/js/editor.js:1
 #: assets/src/editor/plugins/actions/index.js:7
 msgid "Post Submit Actions"
 msgstr ""
 
-#: assets/blocks-src/editor.js:1
 #: assets/js/editor.js:1
 #: assets/src/editor/plugins/preset/index.js:7
 msgid "Preset Settings"
+msgstr ""
+
+#: assets/js/file-upload.js:146
+msgid "Unknown error."
 msgstr ""
 
 #: assets/src/admin/pages/settings/tabs/captcha/source.js:4
@@ -1989,7 +2000,7 @@ msgid "Is Timestamp"
 msgstr ""
 
 #: assets/src/editor/blocks/form-break-field/edit.js:46
-msgid "Disable \"Next\" Button"
+msgid "Enable \"Next\" Button"
 msgstr ""
 
 #: assets/src/editor/blocks/form-break-field/edit.js:52
@@ -2147,6 +2158,14 @@ msgstr ""
 
 #: assets/src/editor/blocks/wysiwyg-field/index.js:16
 msgid "Wysiwyg Field"
+msgstr ""
+
+#: assets/src/editor/components/base-select-check-radio/custom-template.js:24
+msgid "Use custom template"
+msgstr ""
+
+#: assets/src/editor/components/base-select-check-radio/custom-template.js:31
+msgid "Choose custom template"
 msgstr ""
 
 #: assets/src/editor/components/base-select-check-radio/from-generators-fields.js:28

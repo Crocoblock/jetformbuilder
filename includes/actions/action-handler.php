@@ -82,19 +82,22 @@ class Action_Handler {
 		foreach ( $form_actions as $form_action ) {
 			$id         = $form_action['id'];
 			$type       = $form_action['type'];
-			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
+			$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
+			$conditions = $form_action['conditions'] ?? array();
+			$operator   = $form_action['condition_operator'] ?? 'and';
 
 			if ( isset( $available_actions[ $type ] ) ) {
+				/** @var Base $action */
 				$action = clone $available_actions[ $type ];
 				/**
 				 * Save action settings to the class field,
 				 * it allows to not send action settings
 				 * in action hook
 				 */
-				$action->_id        = $id;
-				$action->conditions = $conditions;
-				$action->settings   = isset( $form_action['settings'][ $type ] )
-					? $form_action['settings'][ $type ] : $form_action['settings'];
+				$action->_id      = $id;
+				$action->settings = $settings;
+				$action->condition->set_conditions( $conditions );
+				$action->condition->set_condition_operator( $operator );
 
 				$this->form_actions[ $id ] = $action;
 			}
@@ -107,7 +110,7 @@ class Action_Handler {
 	/**
 	 * Unregister notification by id
 	 *
-	 * @param   $id [description]
+	 * @param $key
 	 *
 	 * @return  void [description]
 	 */
@@ -181,6 +184,9 @@ class Action_Handler {
 
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function run_actions() {
 		if ( empty( $this->form_actions ) ) {
 			throw new Action_Exception( 'failed' );
@@ -198,7 +204,7 @@ class Action_Handler {
 			 * @var Base $action
 			 */
 			try {
-				$action->condition( $this );
+				$action->condition->check_all();
 			} catch ( Condition_Exception $exception ) {
 				continue;
 			}
@@ -267,19 +273,33 @@ class Action_Handler {
 		return $this;
 	}
 
-	/*public function get_action( $slug, $id = false ) {
+	/**
+	 * @param $id
+	 *
+	 * @return false|Base
+	 */
+	public function get_action_by_id( $id ) {
+		return $this->form_actions[ $id ] ?? false;
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return false|Base
+	 */
+	public function get_action_by_slug( $slug ) {
 		foreach ( $this->form_actions as $action ) {
 			/** @var Base $action */
-	/*
+
 			if ( $action->get_id() !== $slug ) {
 				continue;
 			}
 
-			if ( false === $id || ( (int) $action->_id === (int) $id ) ) {
-				return $action;
-			}
+			return $action;
 		}
-	}*/
+
+		return false;
+	}
 
 
 }

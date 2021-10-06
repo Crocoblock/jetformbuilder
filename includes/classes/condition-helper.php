@@ -12,77 +12,128 @@ use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 class Condition_Helper {
 
 	private $conditions;
-	private $action_handler;
+	private $operator;
 
-	public function __construct( Base $action, Action_Handler $action_handler ) {
-		$this->conditions     = $action->conditions;
-		$this->action_handler = $action_handler;
+	public function set_conditions( array $conditions ) {
+		$this->conditions = $conditions;
 
-		$this->check_all();
+		return $this;
 	}
 
+	public function set_condition_operator( string $operator ) {
+		$this->operator = $operator;
+
+		return $this;
+	}
+
+	/**
+	 * @throws Condition_Exception
+	 */
 	public function check_all() {
-		$request = $this->action_handler->request_data;
+		$is_correct     = false;
+		$last_condition = array();
 
-		foreach ( $this->conditions as $condition ) {
-			if ( ( $condition['execute'] && ! $this->check( $condition ) )
-			     || ( ! $condition['execute'] && $this->check( $condition ) )
-			) {
-				throw new Condition_Exception( '', array(
-					'condition' => $condition,
-					'field'     => isset( $request[ $condition['field'] ] ) ? $request[ $condition['field'] ] : null,
-				) );
+		try {
+			foreach ( $this->conditions as $condition ) {
+				$is_correct = $this->is_correct( $condition );
+
+				if ( 'or' === $this->operator ) {
+					if ( $is_correct ) {
+						break;
+					}
+					$last_condition = $condition;
+					continue;
+				}
+
+				if ( 'and' === $this->operator ) {
+					if ( ! $is_correct ) {
+						$last_condition = $condition;
+						break;
+					}
+				}
 			}
+		} catch ( Condition_Exception $exception ) {
+			throw new Condition_Exception( $exception->getMessage(), $exception->get_additional() );
 		}
+
+		if ( ! $is_correct ) {
+			throw new Condition_Exception( 'the condition was not met', array(
+				'condition' => $last_condition,
+				'field'     => $this->get_field( $last_condition ),
+			) );
+		}
+
 	}
 
+	/**
+	 * @param $condition
+	 *
+	 * @return mixed
+	 * @throws Condition_Exception
+	 */
+	public function get_field( $condition ) {
+		$handler = jet_form_builder()->form_handler->action_handler;
+
+		if ( isset( $handler->request_data[ $condition['field'] ] ) ) {
+			return $handler->request_data[ $condition['field'] ];
+		}
+
+		throw new Condition_Exception( "empty_field::{$condition['field']}" );
+	}
+
+	/**
+	 * @param $condition
+	 * @param null $result
+	 *
+	 * @return bool|null
+	 * @throws Condition_Exception
+	 */
+	public function is_correct( $condition, $result = null ) {
+		if ( is_null( $result ) ) {
+			$result = $this->check( $condition );
+		}
+		$execute = $condition['execute'] ?? true;
+
+		return $execute ? $result : ! $result;
+	}
+
+	/**
+	 * @param $condition
+	 *
+	 * @return bool
+	 * @throws Condition_Exception
+	 */
 	public function check( $condition ) {
-		$request = $this->action_handler->request_data;
 		$compare = $this->get_parsed_value( $condition );
 
 		switch ( $condition['operator'] ) {
 			case 'equal':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] == $compare;
-				}
-				break;
+				return $this->get_field( $condition ) == $compare;
 			case 'greater':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] > $compare;
-				}
-				break;
+				return $this->get_field( $condition ) > $compare;
 			case 'less':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					return $request[ $condition['field'] ] < $compare;
-				}
-				break;
+				return $this->get_field( $condition ) < $compare;
+
 			case 'between':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					$compare_values = array_map( 'trim', explode( ',', $compare ) );
+				$field          = $this->get_field( $condition );
+				$compare_values = array_map( 'trim', explode( ',', $compare ) );
 
-					if ( count( $compare_values ) != 2 ) {
-						return false;
-					}
-
-					return ( $compare_values[0] < $request[ $condition['field'] ] && $compare_values[1] > $request[ $condition['field'] ] );
+				if ( count( $compare_values ) != 2 ) {
+					return false;
 				}
-				break;
+
+				return ( $compare_values[0] < $field && $compare_values[1] > $field );
 			case 'one_of':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					$compare_values = array_map( 'trim', explode( ',', $compare ) );
+				$field          = $this->get_field( $condition );
+				$compare_values = array_map( 'trim', explode( ',', $compare ) );
 
-					if ( ! is_array( $compare_values ) ) {
-						return false;
-					}
-
-					return ( in_array( $request[ $condition['field'] ], $compare_values ) );
+				if ( ! is_array( $compare_values ) ) {
+					return false;
 				}
-				break;
+
+				return ( in_array( $field, $compare_values ) );
 			case 'contain':
-				if ( isset( $request[ $condition['field'] ] ) ) {
-					return ( strpos( $request[ $condition['field'] ], $compare ) !== false );
-				}
-				break;
+				return ( strpos( $this->get_field( $condition ), $compare ) !== false );
 		}
 
 		return false;

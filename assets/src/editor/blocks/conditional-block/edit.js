@@ -59,8 +59,13 @@ export default function ConditionalBlockEdit( props ) {
 
 	const getConditionTypes = Tools.parseConditionsFunc( options.conditionTypes );
 	const [ showModal, setShowModal ] = useState( false );
+	const [ formFields, setFormFields ] = useState( [] );
 
-	const formFields = getFormFieldsBlocks( [], '--' );
+	useEffect( () => {
+		if ( showModal ) {
+			setFormFields( getFormFieldsBlocks( [], '--' ) );
+		}
+	}, [ showModal ] );
 
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
@@ -109,11 +114,6 @@ export default function ConditionalBlockEdit( props ) {
 				newItem={ options.condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
 				addNewButtonLabel={ __( "New Condition", 'jet-form-builder' ) }
-				help={ {
-					helpVisible: conditions => conditions.length > 1,
-					helpSource: window.JetFormEditorData.helpForRepeaters,
-					helpKey: 'conditional_block',
-				} }
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
 					<SelectControl

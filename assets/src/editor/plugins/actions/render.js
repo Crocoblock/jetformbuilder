@@ -60,7 +60,14 @@ function getActionCallback( editedAction ) {
 	return false;
 }
 
-function PluginActions( { setCurrentAction } ) {
+const operators = [
+	{ value: 'and', label: __( 'AND (ALL conditions must be met)', 'jet-form-builder' ) },
+	{ value: 'or', label: __( 'OR (at least ONE condition must be met)', 'jet-form-builder' ) },
+];
+
+const operatorLabel = __( 'Condition Operator', 'jet-form-builder' );
+
+let PluginActions = ( { setCurrentAction } ) => {
 
 	const [ actions, setActions ] = useActions( true );
 
@@ -117,6 +124,8 @@ function PluginActions( { setCurrentAction } ) {
 	const [ isEditProcessAction, setEditProcessAction ] = useState( false );
 	const [ processedAction, setProcessedAction ] = useState( {} );
 
+	const [ formFields, setFormFields ] = useState( [] );
+
 	const closeModal = () => {
 		setEdit( false );
 		setCurrentAction( {} );
@@ -160,10 +169,9 @@ function PluginActions( { setCurrentAction } ) {
 	useEffect( () => {
 		if ( processedAction.type ) {
 			setEditProcessAction( true );
+			setFormFields( getFormFieldsBlocks( [], '--' ) );
 		}
 	}, [ processedAction ] );
-
-	const formFields = getFormFieldsBlocks( [], '--' );
 
 	const getMergedSettings = () => {
 		return editedAction.settings[ editedAction.type ] || editedAction.settings;
@@ -283,7 +291,7 @@ function PluginActions( { setCurrentAction } ) {
 		</ActionModal> }
 		{ isEditProcessAction && <ActionModal
 			classNames={ [ 'width-60' ] }
-			title={ 'Edit Action Conditions' }
+			title={ __( 'Edit Action Conditions', 'jet-form-builder' ) }
 			onRequestClose={ () => setEditProcessAction( false ) }
 			onCancelClick={ () => setEditProcessAction( false ) }
 		>
@@ -293,13 +301,24 @@ function PluginActions( { setCurrentAction } ) {
 					newItem={ newItemCondition }
 					onUnMount={ onRequestClose }
 					isSaveAction={ actionClick }
-					onSaveItems={ updateActionCondition }
-					addNewButtonLabel={ __( 'Add New Condition' ) }
-					help={ {
-						helpVisible: conditions => conditions.length > 1,
-						helpSource: window.JetFormEditorData.helpForRepeaters,
-						helpKey: 'conditional_action',
+					onSaveItems={ conditions => {
+						updateActionObj( processedAction.id, {
+							conditions,
+							condition_operator: processedAction.condition_operator
+						} )
+						setProcessedAction( false );
 					} }
+					addNewButtonLabel={ __( 'Add New Condition', 'jet-form-builder' ) }
+					additionalControls={ <SelectControl
+						key={ 'SelectControl-operator' }
+						label={ operatorLabel }
+						labelPosition="side"
+						value={ processedAction.condition_operator || 'and' }
+						options={ operators }
+						onChange={ condition_operator => {
+							setProcessedAction( prev => ( { ...prev, condition_operator } ) );
+						} }
+					/> }
 				>
 					{ ( { currentItem, changeCurrentItem } ) => {
 						let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
@@ -362,7 +381,7 @@ function PluginActions( { setCurrentAction } ) {
 	</>
 }
 
-export default compose(
+PluginActions = compose(
 	withDispatch( dispatch => {
 		return {
 			setCurrentAction( action ) {
@@ -371,3 +390,5 @@ export default compose(
 		};
 	} ),
 )( PluginActions );
+
+export default PluginActions;

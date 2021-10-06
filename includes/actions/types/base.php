@@ -33,9 +33,9 @@ abstract class Base {
 	 * Stores the action conditions
 	 * from the form meta field
 	 *
-	 * @var array
+	 * @var Condition_Helper
 	 */
-	public $conditions = array();
+	public $condition;
 
 	/**
 	 * Stores the unique id of action
@@ -66,8 +66,10 @@ abstract class Base {
 		return true;
 	}
 
-	public function condition( Action_Handler $handler ) {
-		new Condition_Helper( $this, $handler );
+	public function install_condition_obj( Condition_Helper $condition_helper ) {
+		$this->condition = $condition_helper;
+
+		return $this;
 	}
 
 
@@ -76,7 +78,6 @@ abstract class Base {
 	}
 
 	public function set_action_messages() {
-
 		$this->messages = apply_filters(
 			'jet-form-builder/message-types/' . $this->get_id(),
 			$this->messages()

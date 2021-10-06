@@ -390,8 +390,14 @@ class Editor {
 			'conditional_block'  => array(
 				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' )
 			),
+			'conditional_block_or'  => array(
+				'label' => __( 'With many conditions for the block, they are checked with the OR operator', 'jet-form-builder' )
+			),
 			'conditional_action' => array(
 				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' )
+			),
+			'conditional_action_or' => array(
+				'label' => __( 'With many conditions for the action, they are checked with the OR operator', 'jet-form-builder' )
 			),
 		);
 	}

@@ -955,22 +955,42 @@
 				}
 			};
 
-			$scope.find( '.jet-form-builder__field' ).each( function() {
-				const $this = $( this );
+			const init = function( scope, form ) {
+				fillStack( scope, form.data( 'form-id' ) );
+				const is_Radio = isRadio( scope );
 
-				fillStack( $this, $form.data( 'form-id' ) );
-				const is_Radio = isRadio( $this );
-
-				if ( is_Radio && $this.attr( 'checked' ) ) {
-					replaceFieldValues( $this );
+				if ( is_Radio && scope.attr( 'checked' ) ) {
+					replaceFieldValues( scope );
 				} else if ( ! is_Radio ) {
-					replaceFieldValues( $this );
+					replaceFieldValues( scope );
 				}
-			} );
+			};
+
+			const initInScope = ( scope, form = null ) => {
+				form = form ? form : scope.closest( 'form.jet-form-builder' );
+
+				form.find( '.jet-form-builder__field' ).each( function() {
+					init( $( this ), form );
+				} );
+			}
 
 			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
 				replaceFieldValues( $( this ) );
 			} );
+
+			const initRepeater = function( e ) {
+				const repeater = $( e.target ).closest( '.jet-form-builder-repeater' );
+
+				initInScope( $( '.jet-form-builder-repeater__row:last', repeater ) )
+			}
+
+			$( document ).on(
+				'jet-form-builder/repeater-add-new',
+				'.jet-form-builder-repeater__new',
+				e => initRepeater( e ),
+			);
+
+			initInScope( $scope, $form );
 		},
 
 		initFormPager: function( $scope ) {

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-10-05T17:13:20+03:00\n"
+"POT-Creation-Date: 2021-10-06T15:06:44+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: jet-form-builder\n"
@@ -590,7 +590,15 @@ msgid "With many conditions for the block, they are checked with the AND operato
 msgstr ""
 
 #: includes/admin/editor.php:394
+msgid "With many conditions for the block, they are checked with the OR operator"
+msgstr ""
+
+#: includes/admin/editor.php:397
 msgid "With many conditions for the action, they are checked with the AND operator"
+msgstr ""
+
+#: includes/admin/editor.php:400
+msgid "With many conditions for the action, they are checked with the OR operator"
 msgstr ""
 
 #: includes/admin/pages/addons-page.php:19
@@ -1967,15 +1975,15 @@ msgstr ""
 msgid "Checkbox Field"
 msgstr ""
 
-#: assets/src/editor/blocks/conditional-block/edit.js:72
+#: assets/src/editor/blocks/conditional-block/edit.js:77
 msgid "Last Page Name"
 msgstr ""
 
-#: assets/src/editor/blocks/conditional-block/edit.js:75
+#: assets/src/editor/blocks/conditional-block/edit.js:80
 msgid "The value of this field will be set as the name of the last page with the \"Progress Bar\" block."
 msgstr ""
 
-#: assets/src/editor/blocks/conditional-block/edit.js:111
+#: assets/src/editor/blocks/conditional-block/edit.js:116
 msgid "New Condition"
 msgstr ""
 
@@ -2204,7 +2212,27 @@ msgstr ""
 msgid "%field_name% - replace \"field_name\" with any field name from the form;"
 msgstr ""
 
-#: assets/src/editor/plugins/actions/render.js:305
+#: assets/src/editor/plugins/actions/render.js:64
+msgid "AND (ALL conditions must be met)"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:65
+msgid "OR (at least ONE condition must be met)"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:68
+msgid "Condition Operator"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:294
+msgid "Edit Action Conditions"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:311
+msgid "Add New Condition"
+msgstr ""
+
+#: assets/src/editor/plugins/actions/render.js:324
 msgid "To fulfill this condition, the result of the check must be"
 msgstr ""
 
@@ -2288,11 +2316,15 @@ msgstr ""
 msgid "input description:"
 msgstr ""
 
-#: assets/src/package/components/fields/repeater-with-state.js:256
+#: assets/src/package/components/fields/repeater-with-state.js:183
+msgid "Safe deleting"
+msgstr ""
+
+#: assets/src/package/components/fields/repeater-with-state.js:258
 msgid "Clone"
 msgstr ""
 
-#: assets/src/package/components/fields/repeater-with-state.js:264
+#: assets/src/package/components/fields/repeater-with-state.js:266
 msgid "Delete"
 msgstr ""
 

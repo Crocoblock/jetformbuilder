@@ -387,7 +387,13 @@
             "With many conditions for the block, they are checked with the AND operator": [
                 ""
             ],
+            "With many conditions for the block, they are checked with the OR operator": [
+                ""
+            ],
             "With many conditions for the action, they are checked with the AND operator": [
+                ""
+            ],
+            "With many conditions for the action, they are checked with the OR operator": [
                 ""
             ],
             "Addons": [
@@ -1296,6 +1302,21 @@
             "%field_name% - replace \"field_name\" with any field name from the form;": [
                 ""
             ],
+            "AND (ALL conditions must be met)": [
+                ""
+            ],
+            "OR (at least ONE condition must be met)": [
+                ""
+            ],
+            "Condition Operator": [
+                ""
+            ],
+            "Edit Action Conditions": [
+                ""
+            ],
+            "Add New Condition": [
+                ""
+            ],
             "To fulfill this condition, the result of the check must be": [
                 ""
             ],
@@ -1357,6 +1378,9 @@
                 ""
             ],
             "input description:": [
+                ""
+            ],
+            "Safe deleting": [
                 ""
             ],
             "Clone": [

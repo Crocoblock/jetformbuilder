@@ -30,6 +30,10 @@ class Condition_Helper {
 	 * @throws Condition_Exception
 	 */
 	public function check_all() {
+		if ( empty( $this->conditions ) ) {
+			return;
+		}
+
 		$is_correct     = false;
 		$last_condition = array();
 
@@ -73,12 +77,13 @@ class Condition_Helper {
 	 */
 	public function get_field( $condition ) {
 		$handler = jet_form_builder()->form_handler->action_handler;
+		$field   = $condition['field'] ?? '';
 
-		if ( isset( $handler->request_data[ $condition['field'] ] ) ) {
-			return $handler->request_data[ $condition['field'] ];
+		if ( isset( $handler->request_data[ $field ] ) ) {
+			return $handler->request_data[ $field ];
 		}
 
-		throw new Condition_Exception( "empty_field::{$condition['field']}" );
+		throw new Condition_Exception( "empty_field::{$field}" );
 	}
 
 	/**

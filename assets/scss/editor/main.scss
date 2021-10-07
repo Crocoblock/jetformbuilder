@@ -153,62 +153,72 @@
 
 .jet-form-dynamic-preset {
 	position: relative;
-}
 
-.jet-form-dynamic-preset .components-base-control {
-	flex: 3;
-}
+	.components-base-control {
+		flex: 3;
 
-.jet-form-dynamic-preset .components-base-control .components-base-control__field {
-	border-top: unset;
-}
+		.components-base-control__field {
+			border-top: unset;
 
-.jet-form-dynamic-preset .components-base-control__field textarea {
-	padding-right: 36px;
-	width: calc(100% - 31px);
-}
+			textarea {
+				padding-right: 36px;
+				width: calc(100% - 31px);
+			}
 
-.jet-form-dynamic-preset .components-base-control__field input {
-	padding-right: 28px;
-}
+			input {
+				padding-right: 28px;
+			}
+		}
+	}
 
-.jet-form-dynamic-preset__trigger {
-	width: 31px;
-	height: 31px;
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 0 2px 2px 0;
-	border: 1px solid #757575;
-	margin: 26px 0 0 0;
-	cursor: pointer;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 20;
-}
+	.jet-control-with-dynamic .components-base-control__field input {
+		margin-left: 6px;
+	}
 
-.jet-form-dynamic-preset__trigger.trigger__textarea {
-	margin-top: unset;
-	border-radius: 0 0 0 5px;
-	border-width: 0 0 1px 1px;
-	background-color: white;
-	top: 20px;
-	right: 1px;
-}
+	&__trigger {
+		width: 31px;
+		height: 31px;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0 2px 2px 0;
+		border: 1px solid #757575;
+		margin: 26px 0 0 0;
+		cursor: pointer;
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 20;
+	}
 
-.jet-form-dynamic-preset__trigger:not(.trigger__textarea) {
-	border-left-width: 0;
-}
-
-.jet-form-dynamic-preset__trigger:hover svg path {
-	fill: #007cba;
-	fill: var(--wp-admin-theme-color);
-}
-
-.jet-form-dynamic-preset__trigger svg {
-	width: 50%;
+	&__trigger {
+		&.trigger__textarea {
+			margin-top: unset;
+			border-radius: 0 0 0 5px;
+			border-width: 0 0 1px 1px;
+			background-color: white;
+			top: 20px;
+			right: 1px;
+		}
+		&.trigger__text-control {
+			margin: 0;
+			border-width: 0 1px 1px 1px;
+			top: 14px;
+			right: 0;
+			border-left: unset;
+		}
+		&:not(.trigger__textarea) {
+			border-left-width: 0;
+		}
+		&:hover svg path {
+			fill: #007cba;
+			fill: var(--wp-admin-theme-color);
+		}
+		svg {
+			width: 50%;
+		}
+	}
 }
 
 .jet-form-builder__flex-controls {
@@ -818,6 +828,8 @@ div.components-modal__screen-overlay {
 .jet-d-flex-between > div {
 	flex: 0.9;
 }
+
+
 
 .jet-input-with-button {
 	position: relative;

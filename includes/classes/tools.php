@@ -447,6 +447,10 @@ class Tools {
 		return $source[ $name ] ?? $if_not_exist;
 	}
 
+	public static function get_property_recursive() {
+		
+	}
+
 	public static function render_block_with_context( $block, $context ) {
 		return ( new \WP_Block( $block, $context ) )->render();
 	}

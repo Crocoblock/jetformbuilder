@@ -215,13 +215,7 @@ abstract class Base_Gateway {
 	}
 
 	final public function set_form_gateways_meta() {
-		$data = $this->retrieve_gateway_meta();
-
-		if ( isset( $data[ $this->get_id() ]['use_global'] ) && $data[ $this->get_id() ]['use_global'] ) {
-			$data[ $this->get_id() ] = array_merge( $data[ $this->get_id() ], Tab_Handler_Manager::instance()->tab( $this->get_id() )->on_load() );
-		}
-
-		$this->gateways_meta = $data;
+		$this->gateways_meta = $this->with_global_settings();
 
 		return $this;
 	}
@@ -251,7 +245,7 @@ abstract class Base_Gateway {
 	 *
 	 * @return void [description]
 	 */
-	public function before_actions( Action_Handler $action_handler, $keep_these ) {
+	public function before_actions( $keep_these ) {
 		if ( empty( $action_handler->get_all() ) ) {
 			return;
 		}
@@ -426,7 +420,7 @@ abstract class Base_Gateway {
 		return preg_replace_callback( '/%(.*?)%/', function ( $matches ) {
 			switch ( $matches[1] ) {
 				case 'gateway_amount':
-					$amount = ! empty( $this->data['amount'] ) ? $this->data['amount'] : false;
+					$amount = $this->get_queried_data('amount');
 
 					return ! empty( $amount ) ? $amount['value'] . ' ' . $amount['currency_code'] : 0;
 
@@ -453,6 +447,33 @@ abstract class Base_Gateway {
 
 	public function property( $prop ) {
 		return $this->$prop;
+	}
+
+	public function try_run_on_catch() {
+		try {
+			$this->set_payment_token();
+			$this->set_gateways_meta();
+			$this->set_form_gateways_meta();
+			$this->set_payment_instance();
+			$this->on_success_payment();
+
+		} catch ( Gateway_Exception $exception ) {
+			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+		}
+	}
+
+	public function with_global_settings() {
+		return Gateway_Manager::instance()->with_global_settings( $this->retrieve_gateway_meta(), $this->get_id() );
+	}
+
+	public function get_queried_data( $prop = '', $if_empty = false ) {
+		return $prop ? ( $this->data[ $prop ] ?? $if_empty ) : $this->data;
+	}
+
+	public function set_queried_data( $prop, $value = '' ) {
+		$this->data[ $prop ] = $value;
+
+		return $this;
 	}
 
 }

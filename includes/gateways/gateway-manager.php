@@ -62,64 +62,32 @@ class Gateway_Manager {
 		$this->_gateways[] = $gateway;
 	}
 
-	public function before_send_actions( $action_handler ) {
-		$gateways = $this->get_form_gateways_by_id( $action_handler->form_id );
+	public function before_send_actions() {
+		$this->set_gateways_options_by_form_id( $this->get_actions_handler()->form_id );
 
-		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
-			return;
-		}
-		$this->save_gateways_form_data( $gateways );
-
-		$controller = $this->get_gateway_controller( $gateways['gateway'] );
+		$controller = $this->get_current_gateway_controller();
 
 		if ( $controller ) {
-			$controller->before_actions( $action_handler,
-				$this->get_actions_before( $action_handler )
-			);
+			$controller->before_actions( $this->get_actions_before() );
 		}
 	}
 
-	public function after_send_actions( $action_handler ) {
+	public function after_send_actions() {
 		if ( empty( $this->gateways_form_data ) ) {
 			return;
 		}
 
-		$controller = $this->get_gateway_controller( $this->gateways_form_data['gateway'] );
+		$controller = $this->get_current_gateway_controller();
 
 		if ( $controller ) {
-			$controller->after_actions( $action_handler );
+			$controller->after_actions( $this->get_actions_before() );
 		}
-	}
-
-	public function add_data( $data ) {
-		$this->data = $data;
 	}
 
 	public function save_gateways_form_data( $data ) {
 		$id = $data['gateway'];
 
-		if ( isset( $data[ $id ]['use_global'] ) && $data[ $id ]['use_global'] ) {
-			$data[ $id ] = array_merge( $data[ $id ], Tab_Handler_Manager::instance()->tab( $id )->on_load() );
-		}
-
-		$this->gateways_form_data = $data;
-	}
-
-	public function add_message( $message ) {
-
-		$this->message = $message;
-
-		if ( ! $this->data || ! isset( $this->data['form_id'] ) ) {
-			return;
-		}
-
-		$form_id = $this->data['form_id'];
-
-		add_filter( 'jet-form-builder/pre-render/' . $form_id, function ( $res ) use ( $form_id ) {
-			echo $this->apply_macros( $this->message );
-
-			return true;
-		} );
+		$this->gateways_form_data = $this->with_global_settings( $data, $id );
 	}
 
 	/**
@@ -143,22 +111,8 @@ class Gateway_Manager {
 			return;
 		}
 
-		$this->try_run_gateway_controller( $controller );
+		$controller->try_run_on_catch();
 	}
-
-	public function try_run_gateway_controller( Base_Gateway $controller ) {
-		try {
-			$controller->set_payment_token();
-			$controller->set_gateways_meta();
-			$controller->set_form_gateways_meta();
-			$controller->set_payment_instance();
-			$controller->on_success_payment();
-
-		} catch ( Gateway_Exception $exception ) {
-			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
-		}
-	}
-
 
 	public function get_gateway_controller( $type = false ) {
 		if ( ! $type ) {
@@ -172,6 +126,10 @@ class Gateway_Manager {
 		}
 
 		return false;
+	}
+
+	public function get_current_gateway_controller() {
+		return $this->get_gateway_controller( $this->get_gateway_id() );
 	}
 
 	/**
@@ -193,25 +151,25 @@ class Gateway_Manager {
 		return is_array( $meta ) ? $meta : $default;
 	}
 
-	public function gateways() {
-		return $this->gateways_form_data;
+	public function gateways( $prop = '', $if_empty = false ) {
+		return $prop ? ( $this->gateways_form_data[ $prop ] ?? $if_empty ) : $this->gateways_form_data;
 	}
 
-	public function get_actions_before( Action_Handler $action_handler ) {
-		$withFilter = function ( $actions = array() ) use ( $action_handler ) {
+	public function get_actions_before() {
+		$withFilter = function ( $actions = array() ) {
 			return apply_filters(
 				'jet-form-builder/gateways/notifications-before',
 				$actions,
-				$action_handler->get_all()
+				$this->get_actions_handler()->get_all()
 			);
 		};
 
-		if ( empty( $this->gateways() ) || empty( $this->gateways()['notifications_before'] ) ) {
+		if ( ! $this->gateways( 'notifications_before' ) ) {
 			return $withFilter();
 		}
 
 		$actions_ids = array_filter(
-			$this->gateways()['notifications_before'],
+			$this->gateways( 'notifications_before' ),
 			function ( $action ) {
 				return $action['active'];
 			}
@@ -221,13 +179,40 @@ class Gateway_Manager {
 	}
 
 	public function has_gateway( $form_id ) {
-		$gateways = $this->get_form_gateways_by_id( $form_id );
+		$this->set_gateways_options_by_form_id( $form_id );
 
-		if ( empty( $gateways ) || empty( $gateways['gateway'] ) || 'none' === $gateways['gateway'] ) {
-			return false;
+		return $this->get_gateway_id( false );
+	}
+
+	public function get_actions_handler() {
+		return jet_form_builder()->form_handler->action_handler;
+	}
+
+	public function with_global_settings( $gateways_data, $gateway_id ) {
+		if ( ! isset( $gateways_data[ $gateway_id ] ) ) {
+			return array();
+		}
+		$gateway = &$gateways_data[ $gateway_id ];
+
+		if ( ! empty( $gateway['use_global'] ) ) {
+			$gateway = array_merge( $gateway, Tab_Handler_Manager::instance()->tab( $gateway_id )->on_load() );
 		}
 
-		return true;
+		return $gateways_data;
+	}
+
+	public function get_gateway_id( $if_empty = 'none' ) {
+		return $this->gateways_form_data['gateway'] ?? $if_empty;
+	}
+
+
+	public function set_gateways_options_by_form_id( $form_id ) {
+		$gateways = $this->get_form_gateways_by_id( $form_id );
+
+		if ( 'none' === $gateways['gateway'] ?? 'none' ) {
+			return;
+		}
+		$this->save_gateways_form_data( $gateways );
 	}
 
 }

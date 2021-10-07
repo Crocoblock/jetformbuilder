@@ -48,8 +48,6 @@ class Repeater_Field_Render extends Base {
 			$this->get_attributes_string()
 		);
 
-		do_action( 'qm/debug', 'before_render_rows' );
-
 		$html .= sprintf(
 			'<div class="jet-form-builder-repeater__items">%s</div>',
 			$this->maybe_render_rows( $wp_block )

@@ -166,7 +166,7 @@ abstract class Base_Gateway {
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
 
 		if ( ! empty( $keep_these ) ) {
-			$notifications = new Action_Handler( $this->data['form_id'] );
+			$notifications = ( new Action_Handler() )->set_form_id( $this->data['form_id'] );
 			$notifications->add_request( $this->data['form_data'] );
 
 			$notifications->unregister_action( 'redirect_to_page' );

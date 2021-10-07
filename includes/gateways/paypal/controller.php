@@ -46,7 +46,8 @@ class Controller extends Base_Gateway {
 				'label' => __( 'Currency Code', 'jet-form-builder' )
 			),
 			'use_global' => array(
-				'label' => __( 'Use Global Settings', 'jet-form-builder' )
+				'label'    => __( 'Use Global Settings', 'jet-form-builder' ),
+				'required' => false
 			)
 		);
 	}
@@ -293,7 +294,7 @@ class Controller extends Base_Gateway {
 
 			if ( version_compare( phpversion(), '7.1', '>=' ) ) {
 				ini_set( 'precision', 17 );
-				ini_set( 'serialize_precision', -1 );
+				ini_set( 'serialize_precision', - 1 );
 			}
 
 			$body = json_encode( $body );

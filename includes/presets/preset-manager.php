@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Presets;
 
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
@@ -176,6 +177,26 @@ class Preset_Manager {
 		}
 
 		return clone $this->_source_types[ $type ];
+	}
+
+	public function prepare_result( $field_type, $value ) {
+		// Prepare value for date field
+		switch ( $field_type ) {
+			case 'date-field':
+				if ( ! Tools::is_valid_timestamp( $value ) ) {
+					return $value;
+				}
+
+				return date_i18n( 'Y-m-d', $value );
+			case 'datetime-field':
+				if ( ! Tools::is_valid_timestamp( $value ) ) {
+					return $value;
+				}
+
+				return date_i18n( 'Y-m-d\TH:i', $value );
+			default:
+				return apply_filters( 'jet-form-builder/preset/parse-value', $value, $this );
+		}
 	}
 
 }

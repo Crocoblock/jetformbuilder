@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Presets\Types;
 
 
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
+use Jet_Form_Builder\Presets\Preset_Manager;
 
 class Dynamic_Preset extends Base_Preset {
 
@@ -41,7 +42,11 @@ class Dynamic_Preset extends Base_Preset {
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {
-			throw new Plain_Default_Exception( $this->prepare_result( $args['type'], $source ) );
+			$result = isset( $args['type'] )
+				? Preset_Manager::instance()->prepare_result( $args['type'], $source )
+				: $source;
+
+			throw new Plain_Default_Exception( $result );
 		}
 
 		if ( empty( $dynamic_preset['jet_preset'] ) ) {

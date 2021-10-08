@@ -31,7 +31,7 @@ abstract class Base_Source {
 		$this->fields_map  = $fields_map;
 		$this->field_args  = $field_args;
 		$this->preset_data = $preset_data;
-		$this->field       = $this->field_args['name'];
+		$this->field       = $this->field_args['name'] ?? '';
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
 		$this->src         = $this->_query_source();
@@ -124,9 +124,11 @@ abstract class Base_Source {
 	}
 
 	public function parse_result_value( $value ) {
-		return Preset_Manager::instance()
-			->manager_preset
-			->prepare_result( $this->field_args['type'], $value );
+		if ( ! isset( $this->field_args['type'] ) ) {
+			return $value;
+		}
+
+		return Preset_Manager::instance()->prepare_result( $this->field_args['type'], $value );
 	}
 
 }

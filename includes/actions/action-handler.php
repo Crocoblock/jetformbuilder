@@ -112,19 +112,21 @@ class Action_Handler {
 	 *
 	 * @param $key
 	 *
-	 * @return  void [description]
+	 * @return Action_Handler [description]
 	 */
 	public function unregister_action( $key ) {
 		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
 			unset( $this->form_actions[ $key ] );
 
-			return;
+			return $this;
 		}
 		foreach ( $this->form_actions as $index => $action ) {
 			if ( $key === $action->get_id() ) {
 				unset( $this->form_actions[ $index ] );
 			}
 		}
+
+		return $this;
 	}
 
 	/**
@@ -182,6 +184,21 @@ class Action_Handler {
 			$this
 		);
 
+	}
+
+	/**
+	 * Doesn't throw an exception if there are no actions
+	 *
+	 * @return $this
+	 * @throws Action_Exception
+	 */
+	public function soft_run_actions() {
+		if ( ! empty( $this->form_actions ) ) {
+			return $this;
+		}
+		$this->run_actions();
+
+		return $this;
 	}
 
 	/**
@@ -299,6 +316,10 @@ class Action_Handler {
 		}
 
 		return false;
+	}
+
+	public function get_refer() {
+		return $this->request_data['__refer'] ?? '';
 	}
 
 

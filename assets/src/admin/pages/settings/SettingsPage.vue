@@ -17,6 +17,7 @@
 						<component
 							v-bind:is="tab.component"
 							:incoming="getIncoming( tab.component.name )"
+							:inner-slugs="activeTabInnerSlugs || []"
 							ref="tabComponents"
 						/>
 					</keep-alive>
@@ -57,11 +58,25 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	activecampaign,
 ] );
 
+const getActiveTab = () => {
+	const first = settingTabs[ 0 ].component.name;
+
+	if ( ! window.location.hash ) {
+		return first;
+	}
+	let [ hash, ...others ] = window.location.hash.replace( '#', '' ).split( '__' );
+	let tab = settingTabs.find( tab => tab.component.name === hash );
+
+	return tab ? [ tab.component.name, others ] : [ first ];
+};
+
 export default {
 	name: 'jfb-settings',
 	data() {
+		const [ tabSlug, others ] = getActiveTab();
 		return {
-			activeTabSlug: settingTabs[ 0 ].component.name,
+			activeTabSlug: tabSlug,
+			activeTabInnerSlugs: others,
 			tabs: settingTabs,
 			loadingTab: {},
 		};

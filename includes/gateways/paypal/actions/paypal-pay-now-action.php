@@ -1,0 +1,65 @@
+<?php
+
+
+namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+
+
+use Jet_Form_Builder\Gateways\Gateway_Manager;
+
+class Paypal_Pay_Now_Action extends Paypal_Base_Action {
+
+	const SLUG = 'PAY_NOW';
+
+	private $app_context = array();
+	private $units = array();
+
+	public function action_slug() {
+		return self::SLUG;
+	}
+
+	public function action_endpoint() {
+		return 'v2/checkout/orders';
+	}
+
+	public function action_headers() {
+		return array();
+	}
+
+	public function action_body() {
+		return array(
+			'intent'              => 'CAPTURE',
+			'application_context' => $this->get_app_context(),
+			'purchase_units'      => $this->get_units(),
+		);
+	}
+
+	public function set_units( array $amounts ) {
+		foreach ( $amounts as $order_id => $amount ) {
+			$this->units[] = array(
+				'custom_id' => Gateway_Manager::instance()->get_actions_handler()->get_form_id() . '-' . $order_id,
+				'amount'    => $amount
+			);
+		}
+
+		return $this;
+	}
+
+	public function get_units() {
+		return $this->units;
+	}
+
+
+	public function set_app_context( array $context ) {
+		$this->app_context = array_merge( $this->app_context, array(
+			'landing_page' => 'BILLING',
+			'user_action'  => $this->action_slug(),
+			'brand_name'   => get_option( 'blogname' ),
+		), $context );
+
+		return $this;
+	}
+
+	public function get_app_context() {
+		return $this->app_context;
+	}
+}

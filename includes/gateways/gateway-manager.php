@@ -27,6 +27,7 @@ class Gateway_Manager {
 
 	private $_gateways = array();
 	private $gateways_form_data = array();
+	private $form_id;
 
 	public $message = null;
 	public $data = null;
@@ -80,7 +81,7 @@ class Gateway_Manager {
 		$controller = $this->get_current_gateway_controller();
 
 		if ( $controller ) {
-			$controller->after_actions( $this->get_actions_before() );
+			$controller->after_actions( $this->get_actions_handler() );
 		}
 	}
 
@@ -128,6 +129,9 @@ class Gateway_Manager {
 		return false;
 	}
 
+	/**
+	 * @return false|Base_Gateway
+	 */
 	public function get_current_gateway_controller() {
 		return $this->get_gateway_controller( $this->get_gateway_id() );
 	}
@@ -190,7 +194,7 @@ class Gateway_Manager {
 
 	public function with_global_settings( $gateways_data, $gateway_id ) {
 		if ( ! isset( $gateways_data[ $gateway_id ] ) ) {
-			return array();
+			return $gateways_data;
 		}
 		$gateway = &$gateways_data[ $gateway_id ];
 
@@ -205,9 +209,22 @@ class Gateway_Manager {
 		return $this->gateways_form_data['gateway'] ?? $if_empty;
 	}
 
+	public function set_form_id( $form_id ) {
+		$this->form_id = (int) $form_id;
+
+		return $this;
+	}
+
+	public function get_form_id() {
+		return $this->form_id;
+	}
 
 	public function set_gateways_options_by_form_id( $form_id ) {
-		$gateways = $this->get_form_gateways_by_id( $form_id );
+		if ( (int) $form_id === $this->get_form_id() ) {
+			return;
+		}
+		$this->set_form_id( $form_id );
+		$gateways = $this->get_form_gateways_by_id( $this->get_form_id() );
 
 		if ( 'none' === $gateways['gateway'] ?? 'none' ) {
 			return;

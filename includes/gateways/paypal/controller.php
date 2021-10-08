@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Pay_Now_Action;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
@@ -31,23 +32,42 @@ class Controller extends Base_Gateway {
 	 * @return [type] [description]
 	 */
 	public function get_name() {
-		return __( 'PayPal Checkout', 'jet-form-builder' );
+		return __( 'PayPal Checkout', 'Paypal gateways editor data', 'jet-form-builder' );
 	}
 
 	protected function options_list() {
 		return array(
-			'client_id'  => array(
-				'label' => __( 'Client ID', 'jet-form-builder' )
+			'client_id'    => array(
+				'label' => __( 'Client ID', 'Paypal gateways editor data', 'jet-form-builder' )
 			),
-			'secret'     => array(
-				'label' => __( 'Secret Key', 'jet-form-builder' )
+			'secret'       => array(
+				'label' => __( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' )
 			),
-			'currency'   => array(
-				'label' => __( 'Currency Code', 'jet-form-builder' )
+			'currency'     => array(
+				'label' => __( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' )
 			),
-			'use_global' => array(
-				'label'    => __( 'Use Global Settings', 'jet-form-builder' ),
+			'use_global'   => array(
+				'label'    => __( 'Use Global Settings', 'Paypal gateways editor data', 'jet-form-builder' ),
 				'required' => false
+			),
+			'gateway_type' => array(
+				'label'   => __( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
+				'default' => Paypal_Pay_Now_Action::SLUG
+			)
+		);
+	}
+
+	public function additional_editor_data() {
+		return array(
+			'gateway_types' => array(
+				array(
+					'value' => Paypal_Pay_Now_Action::SLUG,
+					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' )
+				),
+				array(
+					'value' => 'SUBSCRIBE_NOW',
+					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' )
+				)
 			)
 		);
 	}
@@ -57,19 +77,18 @@ class Controller extends Base_Gateway {
 	}
 
 	protected function retrieve_gateway_meta() {
-		return Plugin::instance()->post_type->get_gateways( $this->data['form_id'] );
+		return Plugin::instance()->post_type->get_gateways( $this->data['form_id'] ?? 0 );
 	}
 
 	protected function retrieve_payment_instance() {
-		$meta      = $this->gateways_meta[ $this->get_id() ];
-		$client_id = $meta['client_id'];
-		$secret    = $meta['secret'];
-
 		$payment = $this->request(
 			'v2/checkout/orders/' . $this->payment_token . '/capture',
 			array(),
 			null,
-			$this->get_token( $client_id, $secret )
+			$this->get_token(
+				$this->current_gateway( 'client_id' ),
+				$this->current_gateway( 'secret' )
+			)
 		);
 
 		return json_decode( $payment, true );
@@ -89,29 +108,36 @@ class Controller extends Base_Gateway {
 		return true;
 	}
 
+	/**
+	 * @throws Gateway_Exception
+	 */
 	private function set_payment_status() {
 		if ( empty( $this->payment_instance['status'] ) ) {
 			throw new Gateway_Exception( 'Empty payment status' );
 		}
 
-		$this->data['status'] = $this->payment_instance['status'];
+		$this->set_post_meta( 'status', $this->payment_instance['status'] );
 	}
 
 	private function set_payer() {
-		if ( ! empty( $this->payment_instance['payer'] ) ) {
-			$this->data['payer'] = array(
-				'first_name' => $this->payment_instance['payer']['name']['given_name'],
-				'last_name'  => $this->payment_instance['payer']['name']['surname'],
-				'email'      => $this->payment_instance['payer']['email_address'],
-			);
+		if ( empty( $this->payment_instance['payer'] ) ) {
+			return;
 		}
+		$this->set_post_meta( 'payer', array(
+			'first_name' => $this->payment_instance['payer']['name']['given_name'] ?? '',
+			'last_name'  => $this->payment_instance['payer']['name']['surname'] ?? '',
+			'email'      => $this->payment_instance['payer']['email_address'] ?? '',
+		) );
 	}
 
 	private function set_payment_amount() {
-		if ( ! empty( $this->payment_instance['purchase_units'][0]['payments']['captures'] ) ) {
-			$payment_unit         = $this->payment_instance['purchase_units'][0]['payments']['captures'][0];
-			$this->data['amount'] = $payment_unit['amount'];
+		if ( empty( $this->payment_instance['purchase_units'][0]['payments']['captures'] ) ) {
+			return;
 		}
+		$this->set_post_meta(
+			'amount',
+			$this->payment_instance['purchase_units'][0]['payments']['captures'][0]['amount'] ?? 0
+		);
 	}
 
 
@@ -128,46 +154,26 @@ class Controller extends Base_Gateway {
 	 * @param $action_handler
 	 *
 	 * @return void [type] [description]
+	 * @throws Action_Exception
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 
-		if ( ! $this->set_gateway_data( $action_handler ) ) {
+		if ( ! $this->set_gateway_data() ) {
 			return;
 		}
 
-		$order = $this->request(
-			'v2/checkout/orders',
-			array(),
-			array(
-				'intent'              => 'CAPTURE',
-				'application_context' => array(
-					'landing_page' => 'BILLING',
-					'user_action'  => 'PAY_NOW',
-					'brand_name'   => get_option( 'blogname' ),
-					'return_url'   => $this->get_refer_url( self::SUCCESS_TYPE ),
-					'cancel_url'   => $this->get_refer_url( self::FAILED_TYPE ),
-				),
-				'purchase_units'      => array(
-					array(
-						'custom_id' => $action_handler->form_id . '-' . $this->order_id,
-						'amount'    => array(
-							'currency_code' => $this->options['currency'],
-							'value'         => $this->price,
-						),
-					),
-				),
-			)
-		);
-
-		if ( empty( $order ) || is_wp_error( $order ) ) {
-			return;
-		}
-
-		$order = json_decode( $order, true );
-
-		if ( ! $order ) {
-			return;
-		}
+		$order = ( new Paypal_Pay_Now_Action() )
+			->set_token( $this->order_token )
+			->set_app_context( array(
+				'return_url' => $this->get_refer_url( self::SUCCESS_TYPE ),
+				'cancel_url' => $this->get_refer_url( self::FAILED_TYPE ),
+			) )
+			->set_units( array(
+				$this->order_id => array(
+					'currency_code' => $this->options['currency'],
+					'value'         => $this->price,
+				)
+			) );
 
 		if ( empty( $order['id'] ) ) {
 			throw ( new Action_Exception( $order['message'], $order ) )->dynamic_error();
@@ -189,32 +195,15 @@ class Controller extends Base_Gateway {
 
 	private function maybe_redirect_to_checkout( $order ) {
 		foreach ( $order['links'] as $link ) {
-			if ( ! empty( $link['rel'] ) && 'approve' === $link['rel'] ) {
-				$this->action_handler->add_response( array(
-					'redirect' => $link['href']
-				) );
+			if ( empty( $link['rel'] ) || 'approve' !== $link['rel'] ) {
+				continue;
 			}
+
+			$this->get_action_handler()->add_response( array(
+				'redirect' => $link['href']
+			) );
+			break;
 		}
-	}
-
-	/**
-	 * Return API url
-	 *
-	 * @param $endpoint
-	 *
-	 * @return string
-	 */
-	public function api_url( $endpoint ) {
-
-		$sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
-
-		if ( $sandbox ) {
-			$url = 'https://api-m.sandbox.paypal.com/';
-		} else {
-			$url = 'https://api-m.paypal.com/';
-		}
-
-		return esc_url( $url . $endpoint );
 	}
 
 	/**
@@ -258,62 +247,10 @@ class Controller extends Base_Gateway {
 
 		$token = $response['access_token'];
 
-		set_transient( $hash, $token, 3 * HOUR_IN_SECONDS );
+		set_transient( $hash, $token, 7 * HOUR_IN_SECONDS );
 
 		return $token;
 
-	}
-
-	/**
-	 * Make a request
-	 *
-	 * @param null $endpoint
-	 * @param array $headers [description]
-	 * @param array $body [description]
-	 *
-	 * @param bool $token
-	 * @param string $method
-	 *
-	 * @return string [type]           [description]
-	 * @throws Action_Exception
-	 */
-	public function request( $endpoint = null, $headers = array(), $body = array(), $token = false, $method = 'post' ) {
-
-		$url = $this->api_url( $endpoint );
-
-		if ( empty( $headers ) ) {
-
-			$headers = array(
-				'Content-Type'    => 'application/json',
-				'Accept-Language' => get_locale(),
-				'Authorization'   => 'Bearer ' . ( $token ? $token : $this->order_token ),
-			);
-		}
-
-		if ( is_array( $body ) ) {
-
-			if ( version_compare( phpversion(), '7.1', '>=' ) ) {
-				ini_set( 'precision', 17 );
-				ini_set( 'serialize_precision', - 1 );
-			}
-
-			$body = json_encode( $body );
-		}
-
-		$args = array(
-			'timeout' => 45,
-			'headers' => $headers,
-		);
-
-		if ( 'post' === $method ) {
-			$args['method'] = 'POST';
-			$args['body']   = $body;
-			$response       = wp_remote_post( $url, $args );
-		} else {
-			$response = wp_remote_get( $url, $args );
-		}
-
-		return wp_remote_retrieve_body( $response );
 	}
 
 }

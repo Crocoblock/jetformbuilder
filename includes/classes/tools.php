@@ -447,8 +447,24 @@ class Tools {
 		return $source[ $name ] ?? $if_not_exist;
 	}
 
-	public static function get_property_recursive() {
-		
+	public static function get_property_recursive( $source, $props_string, $delimiter = '.', $if_empty = false ) {
+		if( ! $props_string ) {
+			return empty( $source ) ? $if_empty : $source;
+		}
+
+		$props = explode( $delimiter, $props_string );
+		$changed = false;
+
+		foreach ( $props as $prop_item ) {
+			if ( ! isset( $source[ $prop_item ] ) ) {
+				break;
+			}
+			$source = $source[ $prop_item ];
+			$changed = $prop_item;
+		}
+		$last = end( $props );
+
+		return $last === $changed ? $source : $if_empty;
 	}
 
 	public static function render_block_with_context( $block, $context ) {

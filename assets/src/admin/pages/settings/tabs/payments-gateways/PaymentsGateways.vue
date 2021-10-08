@@ -25,6 +25,7 @@
 					:desc="tab.desc || ''"
 					:label="tab.title"
 					:key="tab.component.name"
+					:initial-active="isActive( tab.component.name )"
 				>
 					<keep-alive>
 						<component
@@ -74,6 +75,7 @@ export default {
 				return {};
 			},
 		},
+		innerSlugs: Array,
 	},
 	components: { CxVuiCollapseMini },
 	mixins: [ SaveTabByAjax, GetIncoming ],
@@ -96,6 +98,9 @@ export default {
 		}, 1000 );
 	},
 	methods: {
+		isActive( tabName ) {
+			return Boolean( this.innerSlugs.length && this.innerSlugs.includes( tabName ) );
+		},
 		changeVal( name, value ) {
 			this.$set( this.storage, name, value );
 

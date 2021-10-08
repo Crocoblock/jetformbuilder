@@ -3,16 +3,20 @@ const { __ } = wp.i18n;
 const {
 		  TextControl,
 		  ToggleControl,
+		  SelectControl,
 	  } = wp.components;
 
 const {
 		  registerGateway,
 		  gatewayLabel,
 		  globalTab,
+		  gatewayAttr,
 	  } = JetFBActions;
 
 const label = gatewayLabel( 'paypal' );
 const currentTab = globalTab( { slug: 'paypal' } );
+
+const additional = gatewayAttr( 'additional' )( 'paypal' );
 
 export default function PayPal( {
 									setValueInObject,
@@ -60,6 +64,13 @@ export default function PayPal( {
 			key='paypal_currency_code_setting'
 			value={ getSetting( 'currency' ) }
 			onChange={ newVal => setSetting( 'currency', newVal ) }
+		/>
+		<SelectControl
+			labelPosition='side'
+			label={ label( 'gateway_type' ) }
+			value={ getSetting( 'gateway_type' ) }
+			onChange={ newVal => setSetting( 'gateway_type', newVal ) }
+			options={ additional.gateway_types }
 		/>
 	</>;
 }

@@ -46,26 +46,17 @@ class Redirect_To_Page extends Base {
 		);
 	}
 
-	/**
-	 * @param array $request
-	 * @param Action_Handler $handler
-	 *
-	 * @return mixed|void
-	 * @throws Action_Exception
-	 */
-	public function do_action( array $request, Action_Handler $handler ) {
-		$type   = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
-		$to_url = false;
+	public function get_redirect_url() {
+		$type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
 
 		switch ( $type ) {
 			case 'static_page':
-				$to_page = ! empty( $this->settings['redirect_page'] ) ? $this->settings['redirect_page'] : false;
-				$to_url  = ! empty( $to_page ) ? get_permalink( $to_page ) : false;
-				break;
+				$to_page = $this->settings['redirect_page'] ?? '';
+
+				return empty( $to_page ) ? false : get_permalink( $to_page );
 
 			case 'current_page':
-				$to_url = $request['__refer'];
-				break;
+				return $this->get_action_handler()->get_refer();
 
 			case 'inserted_post':
 				/** @var Insert_Post $insert_instance */
@@ -74,53 +65,78 @@ class Redirect_To_Page extends Base {
 				$context = $insert_instance->get_inserted_post_context();
 
 				if ( ! $context ) {
-					break;
+					return false;
 				}
 
 				if ( 'insert' === $context['__action'] && 'publish' === $context['post_status'] ) {
-					$to_url = get_permalink( $context['ID'] );
+					return get_permalink( $context['ID'] );
 				}
 
-				break;
+				return false;
 
 			default:
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
 
 				$to_url = ( new Dynamic_Preset( 'redirect_url' ) )->parse_value( $this->settings );
-				$to_url = apply_filters(
-					"jet-form-builder/action/{$this->get_id()}/redirect/{$type}",
-					$to_url, $this, $handler
-				);
 
-				break;
+				return apply_filters(
+					"jet-form-builder/action/{$this->get_id()}/redirect/{$type}",
+					$to_url, $this
+				);
+		}
+	}
+
+	public function get_url_with_hash( $url ) {
+		if ( empty( $this->settings['redirect_hash'] ) ) {
+			return $url;
 		}
 
+		return trailingslashit( $url ) . '#' . $this->settings['redirect_hash'];
+	}
+
+	public function get_url_with_args( $url ) {
+		if ( empty( $this->settings['redirect_args'] ) ) {
+			return $url;
+		}
+		$redirect_args = array();
+
+		foreach ( $this->settings['redirect_args'] as $arg ) {
+			$redirect_args[ $arg ] = ! empty( $request[ $arg ] ) ? $request[ $arg ] : 0;
+		}
+
+		return add_query_arg( $redirect_args, $url );
+	}
+
+	public function get_completed_redirect_url( $url = '' ) {
+		if ( ! $url ) {
+			$url = $this->get_redirect_url();
+		}
+		$url = $this->get_url_with_hash( $url );
+
+		return $this->get_url_with_args( $url );
+	}
+
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
+	public function do_action( array $request, Action_Handler $handler ) {
+		$to_url = $this->get_redirect_url();
+
 		if ( ! $to_url ) {
-			throw new Action_Exception( 'failed', $this->settings, $handler->context );
+			throw new Action_Exception( 'failed', $this->settings );
+		}
+
+		$to_url = $this->get_completed_redirect_url( $to_url );
+
+		if ( ! $request['__is_ajax'] ) {
+			wp_safe_redirect( $to_url );
+			die();
 		} else {
-
-			if ( ! empty( $this->settings['redirect_hash'] ) ) {
-				$to_url = trailingslashit( $to_url ) . '#' . $this->settings['redirect_hash'];
-			}
-
-			if ( ! empty( $this->settings['redirect_args'] ) ) {
-
-				$redirect_args = array();
-
-				foreach ( $this->settings['redirect_args'] as $arg ) {
-					$redirect_args[ $arg ] = ! empty( $request[ $arg ] ) ? $request[ $arg ] : 0;
-				}
-
-				$to_url = add_query_arg( $redirect_args, $to_url );
-
-			}
-
-			if ( ! $request['__is_ajax'] ) {
-				wp_safe_redirect( $to_url );
-				die();
-			} else {
-				$handler->response_data['redirect'] = $to_url;
-			}
+			$handler->response_data['redirect'] = $to_url;
 		}
 	}
 

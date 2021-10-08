@@ -50,7 +50,7 @@ abstract class Base_Preset {
 	}
 
 	public function set_additional_data( $args = array() ) {
-		$this->field      = $args['name'];
+		$this->field      = $args['name'] ?? '';
 		$this->fields_map = $this->get_fields_map();
 		$this->source     = $this->get_source( $args );
 
@@ -69,26 +69,6 @@ abstract class Base_Preset {
 			$args,
 			$this->data
 		);
-	}
-
-	public function prepare_result( $field_type, $value ) {
-		// Prepare value for date field
-		switch ( $field_type ) {
-			case 'date-field':
-				if ( ! Tools::is_valid_timestamp( $value ) ) {
-					return $value;
-				}
-
-				return date_i18n( 'Y-m-d', $value );
-			case 'datetime-field':
-				if ( ! Tools::is_valid_timestamp( $value ) ) {
-					return $value;
-				}
-
-				return date_i18n( 'Y-m-d\TH:i', $value );
-			default:
-				return apply_filters( 'jet-form-builder/preset/parse-value', $value, $this );
-		}
 	}
 
 }

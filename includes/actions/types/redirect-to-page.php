@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
+use phpDocumentor\Reflection\Types\False_;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -82,11 +84,14 @@ class Redirect_To_Page extends Base {
 				break;
 
 			default:
-				$to_url = ! empty( $this->settings['redirect_url'] ) ? $this->settings['redirect_url'] : false;
+				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
+
+				$to_url = ( new Dynamic_Preset( 'redirect_url' ) )->parse_value( $this->settings );
 				$to_url = apply_filters(
 					"jet-form-builder/action/{$this->get_id()}/redirect/{$type}",
 					$to_url, $this, $handler
 				);
+
 				break;
 		}
 

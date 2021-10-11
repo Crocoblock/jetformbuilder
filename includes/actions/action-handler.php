@@ -193,7 +193,7 @@ class Action_Handler {
 	 * @throws Action_Exception
 	 */
 	public function soft_run_actions() {
-		if ( ! empty( $this->form_actions ) ) {
+		if ( empty( $this->form_actions ) ) {
 			return $this;
 		}
 		$this->run_actions();
@@ -206,7 +206,7 @@ class Action_Handler {
 	 */
 	public function run_actions() {
 		if ( empty( $this->form_actions ) ) {
-			throw new Action_Exception( 'failed' );
+			throw new Action_Exception( 'failed', 'Empty actions' );
 		}
 
 		$this->size_all = sizeof( $this->form_actions );

@@ -5,12 +5,14 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
 use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 class Paypal_Pay_Now_Action extends Paypal_Base_Action {
 
+	use Paypal_App_Context_Trait;
+
 	const SLUG = 'PAY_NOW';
 
-	private $app_context = array();
 	private $units = array();
 
 	public function action_slug() {
@@ -48,18 +50,4 @@ class Paypal_Pay_Now_Action extends Paypal_Base_Action {
 		return $this->units;
 	}
 
-
-	public function set_app_context( array $context ) {
-		$this->app_context = array_merge( $this->app_context, array(
-			'landing_page' => 'BILLING',
-			'user_action'  => $this->action_slug(),
-			'brand_name'   => get_option( 'blogname' ),
-		), $context );
-
-		return $this;
-	}
-
-	public function get_app_context() {
-		return $this->app_context;
-	}
 }

@@ -5,16 +5,14 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Gateways\Paypal\Actions_Manager;
+use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 abstract class Paypal_Base_Action {
 
-	protected $token;
-	protected $sandbox;
+	protected $auth;
 	protected $method = 'POST';
-
-	public function __construct() {
-		$this->set_sandbox( apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false ) );
-	}
 
 	abstract public function action_slug();
 
@@ -32,16 +30,39 @@ abstract class Paypal_Base_Action {
 		return $this->method;
 	}
 
-	public function get_token() {
-		return $this->token;
+	public function get_auth() {
+		return $this->auth;
+	}
+
+	public function set_bearer_auth( $token ) {
+		$this->set_auth( "Bearer $token" );
+
+		return $this;
+	}
+
+	public function set_basic_auth( $token ) {
+		$this->set_auth( "Basic $token" );
+
+		return $this;
+	}
+
+	public function set_auth( $auth_str ) {
+		$this->auth = $auth_str;
+
+		return $this;
 	}
 
 	public function get_headers() {
-		return array_merge( array(
+		$args = array(
 			'Content-Type'    => 'application/json',
 			'Accept-Language' => get_locale(),
-			'Authorization'   => 'Bearer ' . $this->get_token()
-		), $this->action_headers() );
+		);
+
+		if ( $this->get_auth() ) {
+			$args['Authorization'] = $this->get_auth();
+		}
+
+		return array_merge( $args, $this->action_headers() );
 	}
 
 	public function get_body() {
@@ -70,21 +91,12 @@ abstract class Paypal_Base_Action {
 		}
 
 		$args['method'] = $this->get_method();
-		$args['body']   = $this->get_body();
+
+		if ( $this->action_body() ) {
+			$args['body'] = $this->get_body();
+		}
 
 		return $args;
-	}
-
-	public function set_token( $token ) {
-		$this->token = $token;
-
-		return $this;
-	}
-
-	public function set_sandbox( $mode ) {
-		$this->sandbox = $mode;
-
-		return $this;
 	}
 
 	public function set_method( $method ) {
@@ -93,12 +105,10 @@ abstract class Paypal_Base_Action {
 		return $this;
 	}
 
-	public function is_sandbox() {
-		return $this->sandbox;
-	}
-
 	public function base_url() {
-		return $this->is_sandbox() ? 'https://api-m.sandbox.paypal.com/' : 'https://api-m.paypal.com/';
+		return Gateway_Manager::instance()->is_sandbox
+			? 'https://api-m.sandbox.paypal.com/'
+			: 'https://api-m.paypal.com/';
 	}
 
 	/**
@@ -137,7 +147,7 @@ abstract class Paypal_Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function get_request() {
+	public function send_request() {
 		$response = $this->request();
 
 		if ( empty( $response ) ) {
@@ -157,6 +167,10 @@ abstract class Paypal_Base_Action {
 		}
 
 		return $parsed_response;
+	}
+
+	public function set_for_main_scenario( Controller $paypal ) {
+		return $this;
 	}
 
 

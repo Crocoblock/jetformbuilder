@@ -5,7 +5,14 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Capture_Payment_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Pay_Now_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Subscribe_Now_Action;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
@@ -38,21 +45,22 @@ class Controller extends Base_Gateway {
 	protected function options_list() {
 		return array(
 			'client_id'    => array(
-				'label' => __( 'Client ID', 'Paypal gateways editor data', 'jet-form-builder' )
+				'label' => _x( 'Client ID', 'Paypal gateways editor data', 'jet-form-builder' )
 			),
 			'secret'       => array(
-				'label' => __( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' )
+				'label' => _x( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' )
 			),
 			'currency'     => array(
-				'label' => __( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' )
+				'label'    => _x( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' ),
+				'required' => false
 			),
 			'use_global'   => array(
-				'label'    => __( 'Use Global Settings', 'Paypal gateways editor data', 'jet-form-builder' ),
+				'label'    => _x( 'Use Global Settings', 'Paypal gateways editor data', 'jet-form-builder' ),
 				'required' => false
 			),
 			'gateway_type' => array(
-				'label'   => __( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
-				'default' => Paypal_Pay_Now_Action::SLUG
+				'label'   => _x( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
+				'default' => Scenario_Pay_Now::SLUG,
 			)
 		);
 	}
@@ -61,11 +69,11 @@ class Controller extends Base_Gateway {
 		return array(
 			'gateway_types' => array(
 				array(
-					'value' => Paypal_Pay_Now_Action::SLUG,
+					'value' => Scenario_Pay_Now::SLUG,
 					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' )
 				),
 				array(
-					'value' => 'SUBSCRIBE_NOW',
+					'value' => Scenario_Subscribe::SLUG,
 					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' )
 				)
 			)
@@ -80,22 +88,39 @@ class Controller extends Base_Gateway {
 		return Plugin::instance()->post_type->get_gateways( $this->data['form_id'] ?? 0 );
 	}
 
-	protected function retrieve_payment_instance() {
-		$payment = $this->request(
-			'v2/checkout/orders/' . $this->payment_token . '/capture',
-			array(),
-			null,
-			$this->get_token(
-				$this->current_gateway( 'client_id' ),
-				$this->current_gateway( 'secret' )
-			)
-		);
+	/**
+	 * @return string|void
+	 * @throws Gateway_Exception
+	 */
+	public function get_payment_token() {
+		try {
+			return Scenarios_Manager::instance()->query_scenario()->get_queried_token();
 
-		return json_decode( $payment, true );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
+	protected function retrieve_payment_instance() {
+		try {
+			return Scenarios_Manager::instance()
+			                        ->query_scenario()
+			                        ->install( $this )
+			                        ->process_after();
+
+		} catch ( Handler_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
 	}
 
 	protected function set_gateway_data_on_result() {
 		try {
+			//var_dump( $this->payment_instance ); die;
+
 			$this->set_current_gateway_options();
 			$this->set_payment_status();
 			$this->set_payment_amount();
@@ -162,18 +187,14 @@ class Controller extends Base_Gateway {
 			return;
 		}
 
-		$order = ( new Paypal_Pay_Now_Action() )
-			->set_token( $this->order_token )
-			->set_app_context( array(
-				'return_url' => $this->get_refer_url( self::SUCCESS_TYPE ),
-				'cancel_url' => $this->get_refer_url( self::FAILED_TYPE ),
-			) )
-			->set_units( array(
-				$this->order_id => array(
-					'currency_code' => $this->options['currency'],
-					'value'         => $this->price,
-				)
-			) );
+		try {
+			$order = Scenarios_Manager::instance()
+			                          ->scenario_install( $this )
+			                          ->process_before();
+
+		} catch ( Handler_Exception $exception ) {
+			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
+		}
 
 		if ( empty( $order['id'] ) ) {
 			throw ( new Action_Exception( $order['message'], $order ) )->dynamic_error();
@@ -226,20 +247,14 @@ class Controller extends Base_Gateway {
 		if ( ! $client_id || ! $secret ) {
 			return;
 		}
+		try {
+			$response = ( new Paypal_Get_Token() )
+				->set_credentials( $client_id, $secret )
+				->send_request();
 
-		$key = base64_encode( $client_id . ':' . $secret );
-
-		$response = $this->request(
-			'v1/oauth2/token',
-			array(
-				'Accept'          => 'application/json',
-				'Accept-Language' => get_locale(),
-				'Authorization'   => 'Basic ' . $key,
-			),
-			'grant_type=client_credentials'
-		);
-
-		$response = json_decode( $response, true );
+		} catch ( Gateway_Exception $exception ) {
+			throw ( new Action_Exception( $exception->getMessage() ) )->dynamic_error();
+		}
 
 		if ( empty( $response['access_token'] ) ) {
 			throw ( new Action_Exception( $response['error_description'] ) )->dynamic_error();

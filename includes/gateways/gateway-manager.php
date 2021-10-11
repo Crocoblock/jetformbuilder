@@ -31,6 +31,7 @@ class Gateway_Manager {
 
 	public $message = null;
 	public $data = null;
+	public $is_sandbox;
 
 	/**
 	 * Register gateways components
@@ -47,6 +48,7 @@ class Gateway_Manager {
 	 * @return void [description]
 	 */
 	public function register_gateways() {
+		$this->is_sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
 
 		$gateways = array(
 			new Paypal\Controller(),

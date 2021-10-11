@@ -30,7 +30,6 @@ abstract class Base_Gateway {
 	protected $payment_id;
 	protected $payment_token;
 	protected $data;
-	protected $action_handler;
 	protected $order_id;
 	protected $gateways_meta;
 	protected $price_field;
@@ -192,7 +191,7 @@ abstract class Base_Gateway {
 	 * @return $this
 	 * @throws Gateway_Exception
 	 */
-	final public function set_payment_token() {
+	public function set_payment_token() {
 		if ( empty( $this->token_query_name ) || empty( $_GET[ $this->token_query_name ] ) ) {
 			throw new Gateway_Exception( 'Empty payment token.' );
 		}
@@ -233,6 +232,11 @@ abstract class Base_Gateway {
 		}
 	}
 
+	public function get_order_token() {
+		return $this->order_token;
+	}
+
+
 	public function get_payment_token() {
 		return esc_attr( $_GET[ $this->token_query_name ] );
 	}
@@ -252,6 +256,7 @@ abstract class Base_Gateway {
 		if ( empty( $this->get_action_handler()->get_all() ) ) {
 			return;
 		}
+		$this->gateways_meta = GM::instance()->gateways();
 
 		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
 			if ( 'insert_post' === $action->get_id()
@@ -311,6 +316,10 @@ abstract class Base_Gateway {
 		$this->order_id = $this->get_insert_post_action_id();
 	}
 
+	public function get_order_id() {
+		return $this->order_id;
+	}
+
 
 	/**
 	 * @throws Gateway_Exception
@@ -340,6 +349,10 @@ abstract class Base_Gateway {
 		}
 	}
 
+	public function get_price_var() {
+		return $this->price;
+	}
+
 	/**
 	 * @throws Gateway_Exception
 	 */
@@ -349,15 +362,22 @@ abstract class Base_Gateway {
 				? filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
 				: true;
 
-			if ( $is_required && ! $this->current_gateway( $name ) ) {
+			$default_val = $option['default'] ?? false;
+
+			if ( $is_required && ! $this->current_gateway( $name ) && false === $default_val ) {
 				throw new Gateway_Exception( 'Invalid gateway options', $name );
 			}
-			$this->options[ $name ] = esc_attr( $this->current_gateway( $name ) );
+
+			$this->options[ $name ] = $this->isset_current_gateway( $name )
+				? esc_attr( $this->current_gateway( $name ) )
+				: $default_val;
 		}
 	}
 
 	protected function set_gateway_data() {
-		$this->gateways_meta = GM::instance()->gateways();
+		if ( ! $this->gateways_meta ) {
+			$this->gateways_meta = GM::instance()->gateways();
+		}
 
 		try {
 			$this->set_order_id();
@@ -383,7 +403,7 @@ abstract class Base_Gateway {
 		return (float) $price;
 	}
 
-	protected function get_refer_url( $type, array $additional_args = array() ) {
+	public function get_refer_url( $type, array $additional_args = array() ) {
 		$success_redirect = filter_var( $this->gateway( 'use_success_redirect' ), FILTER_VALIDATE_BOOLEAN );
 		$refer            = $this->get_action_handler()->get_refer();
 
@@ -463,7 +483,7 @@ abstract class Base_Gateway {
 			$this->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+			//var_dump( $exception ); die;
 		}
 	}
 
@@ -485,14 +505,32 @@ abstract class Base_Gateway {
 		return GM::instance()->get_actions_handler();
 	}
 
+	public function get_current_gateway( $if_empty = false ) {
+		return $this->gateway( $this->get_id(), $if_empty );
+	}
+
 	public function current_gateway( $prop = '', $if_empty = false ) {
-		$gateway = $this->gateway( $this->get_id(), $if_empty );
+		$gateway = $this->get_current_gateway( $if_empty );
 
 		return $prop ? $gateway[ $prop ] ?? $if_empty : $gateway;
 	}
 
+	public function isset_current_gateway( $prop ) {
+		$gateway = $this->get_current_gateway( false );
+
+		return isset( $gateway[ $prop ] );
+	}
+
 	public function gateway( $prop = '', $if_empty = false ) {
 		return $this->gateways_meta[ $prop ] ?? $if_empty;
+	}
+
+	public function isset_gateway( $prop ) {
+		return isset( $this->gateways_meta[ $prop ] );
+	}
+
+	public function property( $prop ) {
+		return $this->$prop ?? false;
 	}
 
 }

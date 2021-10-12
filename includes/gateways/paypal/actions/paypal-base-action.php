@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
-use Jet_Form_Builder\Gateways\Paypal\Actions_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 abstract class Paypal_Base_Action {
@@ -167,10 +166,6 @@ abstract class Paypal_Base_Action {
 		}
 
 		return $parsed_response;
-	}
-
-	public function set_for_main_scenario( Controller $paypal ) {
-		return $this;
 	}
 
 

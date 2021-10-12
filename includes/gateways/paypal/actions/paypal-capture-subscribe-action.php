@@ -26,10 +26,7 @@ class Paypal_Capture_Subscribe_Action extends Paypal_Base_Action {
 	}
 
 	public function action_body() {
-		return array(
-			'plan_id'             => $this->get_plan_id(),
-			'application_context' => $this->get_app_context(),
-		);
+		return array();
 	}
 	
 

@@ -213,7 +213,6 @@ class Manager {
 				'scrollOffset' => - 50,
 				'replaceAttrs' => array(
 					'href',
-					'class',
 					'src',
 					'alt',
 					'title',

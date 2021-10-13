@@ -184,8 +184,8 @@ class Controller extends Base_Gateway {
 	 * @throws Action_Exception
 	 */
 	public function get_token() {
-		$client_id = $this->options['client_id'] ?? '';
-		$secret    = $this->options['secret'] ?? '';
+		$client_id = $this->current_gateway('client_id' );
+		$secret    = $this->current_gateway('secret' );
 
 		if ( ! $client_id || ! $secret ) {
 			return;

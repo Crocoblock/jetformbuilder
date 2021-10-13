@@ -42,8 +42,12 @@ class Scenario_Subscribe extends Scenario_Base {
 	 */
 	public function process_after() {
 		return ( new Paypal_Show_Subscription_Details_Action() )
-			->set_bearer_auth( $this->controller->get_bearer_token() )
+			->set_bearer_auth( $this->controller->get_token() )
 			->set_subscription_id( $this->get_queried_token() )
 			->send_request();
+	}
+
+	public function process_save() {
+		// TODO: Implement process_save() method.
 	}
 }

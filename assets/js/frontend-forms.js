@@ -864,7 +864,7 @@
 					for ( let i = 0; i < replaceAttrs.length; i++ ) {
 						const attr = elem[ replaceAttrs[ i ] ] || "";
 
-						if ( ! attr.includes( macrosPrefix() ) ) {
+						if ( ! attr.toLowerCase().includes( macrosPrefix().toLowerCase() ) ) {
 							continue;
 						}
 

@@ -46,7 +46,7 @@ if ( ! empty( $args['field_options'] ) ) {
 			}
 		}
 
-		if ( is_array( $option ) && isset( $option['calculate'] ) ) {
+		if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
 			$calc = ' data-calculate="' . $option['calculate'] . '"';
 		}
 

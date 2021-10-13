@@ -53,6 +53,9 @@ abstract class Base {
 		$this->set_action_messages();
 	}
 
+	public function __clone() {
+		$this->install_condition_obj( clone $this->condition );
+	}
 
 	/**
 	 * @param $request array - Form data

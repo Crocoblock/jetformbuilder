@@ -827,12 +827,58 @@
 		initReplaceValues: function( $scope ) {
 			const $form = $scope.find( 'form.jet-form-builder' );
 
-			const getFieldMask = function( name ) {
-				return '%JFB_FIELD::' + name + '%';
-			}
+			const macrosPrefix = ( suffix = '' ) => 'JFB_FIELD::' + suffix;
 
 			const replaceAttrs = window.JetFormBuilderSettings.replaceAttrs || [];
-			const replaceStack = {};
+			JetFormBuilder.replaceStack = JetFormBuilder.replaceStack || {};
+
+			const getAllComments = rootElem => {
+				const comments = [];
+				// Fourth argument, which is actually obsolete according to the DOM4 standard, is required in IE 11
+				const iterator = document.createNodeIterator( rootElem, NodeFilter.SHOW_COMMENT, () => NodeFilter.FILTER_ACCEPT, false );
+				let curNode;
+
+				const timestamp = Date.now();
+				let counter = 0;
+
+				const uniqId = () => {
+					return ++counter + '_' + timestamp;
+				}
+
+				while ( curNode = iterator.nextNode() ) {
+					if ( curNode.textContent.includes( macrosPrefix() ) ) {
+						curNode.nodeValue = curNode.nodeValue.trim();
+
+						comments.push( { id: uniqId(), node: curNode } );
+					}
+				}
+				const querySelector = [];
+
+				for ( let i = 0; i < replaceAttrs.length; i++ ) {
+					querySelector.push( `[${ replaceAttrs[ i ] }*="${ macrosPrefix() }"]` );
+				}
+
+				const elements = Array.from( rootElem.querySelectorAll( querySelector.join( ', ' ) ) );
+
+				elements.forEach( elem => {
+					for ( let i = 0; i < replaceAttrs.length; i++ ) {
+						const attr = elem[ replaceAttrs[ i ] ] || "";
+
+						if ( ! attr.includes( macrosPrefix() ) ) {
+							continue;
+						}
+
+						comments.push( {
+							id: uniqId(),
+							attr: replaceAttrs[ i ],
+							value: decodeURIComponent( attr ),
+							node: elem,
+						} );
+					}
+				} )
+
+				return comments;
+			}
 
 			const isRadio = function( $field ) {
 				if ( 'INPUT' !== $field.prop( 'tagName' ) ) {
@@ -842,155 +888,143 @@
 				return [ 'checkbox', 'radio' ].includes( $field.attr( 'type' ) );
 			}
 
-			const insertStack = function( type, formID, { field, fieldName, el, initialValue, ...other } ) {
-				replaceStack[ formID ] = [
-					...( replaceStack[ formID ] || [] ),
-					{
-						fieldName,
-						isRadio: isRadio( field ),
-						initialValue,
-						el,
-						type,
-						...other,
-					},
-				];
-
-				return replaceStack;
-			}
-
-			const fillAttrsStack = function( $field, fieldName, mask, formID ) {
-				const querySelector = [];
-
-				for ( let i = 0; i < replaceAttrs.length; i++ ) {
-					querySelector.push( '[' + replaceAttrs[ i ] + '*="' + mask + '"]' );
-				}
-
-				let $matchedNodes = $form.find( querySelector.join( ', ' ) );
-
-				if ( ! $matchedNodes.length ) {
-					return;
-				}
-
-				$matchedNodes.each( function( index, el ) {
-
-					$.each( el.attributes, function() {
-						if ( ! this.value.includes( mask ) ) {
-							return;
-						}
-
-						insertStack( 'attr', formID, {
-							fieldName,
-							field: $field,
-							initialValue: this.value,
-							el, attr: this.name,
-						} );
-
-						this.value = this.value.replace( mask, $field.val() );
-					} );
-				} );
+			const getFieldNames = ( macrosValue, withBrackets = true ) => {
+				return withBrackets
+					? macrosValue.match( /(?<=<!\-{2}\s*JFB_FIELD::)([\w\-]+)\s*(?=\-{2}>)/gi )
+					: macrosValue.match( /(?<=\s*JFB_FIELD::)([\w\-]+)\s*/gi );
 			};
 
-			const fillContentStack = function( $field, fieldName, mask, formID ) {
-				let $matchedNodes = $form.find( '*:contains(' + mask + ')' );
+			const replaceMacros = ( replaceFrom, fieldName, fieldValue, withBrackets = true ) => {
+				const regExp = withBrackets
+					? new RegExp( `<!--\\s*JFB_FIELD::${ fieldName }\\s*-->`, 'gi' )
+					: new RegExp( `\\s*JFB_FIELD::${ fieldName }\\s*`, 'gi' );
 
-				if ( ! $matchedNodes.length ) {
-					return;
+				return replaceFrom.replace( regExp, fieldValue );
+			};
+
+			const getValueFromField = field => {
+				const is_radio = isRadio( field );
+
+				if ( ! is_radio ) {
+					return field.val();
 				}
 
-				$matchedNodes.each( function( index, el ) {
-					if ( el.children.length || ! el.innerText.includes( mask ) ) {
-						return;
+				const checked = [];
+				for ( const radioInput of Array.from( field ) ) {
+					if ( radioInput.checked ) {
+						checked.push( radioInput.value );
 					}
-					insertStack( 'content', formID, {
-						fieldName,
-						field: $field,
-						initialValue: el.innerText,
-						el,
-					} );
-					el.innerText = el.innerText.replace( getFieldMask( fieldName ), $field.val() );
-				} );
-			}
-
-			const fillStack = function( $field, formID ) {
-				let fieldName = $field.attr( 'name' );
-
-				if ( $field.data( 'field-name' ) ) {
-					fieldName = $field.data( 'field-name' );
 				}
 
-				if ( ! fieldName ) {
+				return checked.join( ', ' );
+			}
+
+			const prepareValueFromMacros = function( scope, initialValue, withBrackets = true ) {
+				const fieldNames = getFieldNames( initialValue, withBrackets );
+
+				fieldNames.forEach( name => {
+					const fieldValue = getValueFromField( scope.find( `[data-field-name="${ name }"]` ) );
+
+					initialValue = replaceMacros( initialValue, name, fieldValue, withBrackets );
+				} );
+
+				return initialValue;
+			}
+
+			const replaceAttr = ( macros, scope ) => {
+				const replacement = prepareValueFromMacros( scope, macros.value );
+
+				if ( replacement !== macros.node[ macros.attr ] ) {
+					macros.node[ macros.attr ] = replacement;
+				}
+			};
+
+			const insertText = ( macros, scope ) => {
+				let currentValue = prepareValueFromMacros( scope, macros.node.nodeValue, false );
+
+				let prevSibling = Array.from( macros.node.parentNode.childNodes ).find(
+					node => node.JFB_macros_id === macros.id,
+				);
+
+				if ( ! prevSibling ) {
+					prevSibling = macros.node.parentNode.insertBefore( document.createTextNode( currentValue ), macros.node );
+					prevSibling.JFB_macros_id = macros.id;
+
 					return;
 				}
-				const mask = getFieldMask( fieldName );
 
-				// Replace attrs
-				fillAttrsStack( $field, fieldName, mask, formID );
+				if ( prevSibling.textContent === currentValue ) {
+					return;
+				}
 
-				// Replace content
-				fillContentStack( $field, fieldName, mask, formID );
-			}
+				prevSibling.textContent = currentValue;
+			};
 
-			const replaceFieldValues = function( $field ) {
+			const replaceFieldValues = scope => {
+				const currentFormId = scope.data( 'form-id' );
 
-				const fieldName = $field.attr( 'name' );
-				const $form = $field.closest( 'form.jet-form-builder' );
-
-				const stack = replaceStack[ $form.data( 'form-id' ) ] || [];
-
-				for ( let i = 0; i < stack.length; i++ ) {
-
-					if ( fieldName !== stack[ i ].fieldName ) {
+				for ( const formID in JetFormBuilder.replaceStack ) {
+					if ( +formID !== currentFormId ) {
 						continue;
 					}
+					const multiMacros = JetFormBuilder.replaceStack[ currentFormId ].macros;
 
-					let value = stack[ i ].initialValue;
-
-					value = value.replace( getFieldMask( fieldName ), $field.val() );
-
-					if ( 'attr' === stack[ i ].type ) {
-						$( stack[ i ].el ).attr( stack[ i ].attr, value );
-					} else {
-						stack[ i ].el.innerText = value;
-					}
+					multiMacros.forEach( macros => {
+						if ( macros.attr ) {
+							replaceAttr( macros, scope );
+						} else if ( macros.node.nodeName === '#comment' ) {
+							insertText( macros, scope );
+						}
+					} );
 				}
 			};
-
-			const init = function( scope, form ) {
-				fillStack( scope, form.data( 'form-id' ) );
-				const is_Radio = isRadio( scope );
-
-				if ( is_Radio && scope.attr( 'checked' ) ) {
-					replaceFieldValues( scope );
-				} else if ( ! is_Radio ) {
-					replaceFieldValues( scope );
-				}
-			};
-
-			const initInScope = ( scope, form = null ) => {
-				form = form ? form : scope.closest( 'form.jet-form-builder' );
-
-				form.find( '.jet-form-builder__field' ).each( function() {
-					init( $( this ), form );
-				} );
-			}
 
 			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
-				replaceFieldValues( $( this ) );
+				replaceFieldValues( $( this ).closest( 'form.jet-form-builder' ) );
 			} );
 
 			const initRepeater = function( e ) {
 				const repeater = $( e.target ).closest( '.jet-form-builder-repeater' );
+				const $form = $( e.target ).closest( 'form.jet-form-builder' );
 
-				initInScope( $( '.jet-form-builder-repeater__row:last', repeater ) )
+				const formID = $form.data( 'form-id' );
+				const repeaterName = repeater.data( 'field-name' );
+
+				let repeaterRowsList = JetFormBuilder.replaceStack[ formID ].repeaters[ repeaterName ] || [];
+				let [ scope ] = $( '.jet-form-builder-repeater__row:last', repeater );
+
+				if ( ! repeaterRowsList.includes( +scope.dataset.index ) ) {
+					pushRepeaterRowIndex( formID, repeaterName, +scope.dataset.index );
+					pushStack( formID, getAllComments( scope ) );
+				}
+
+				replaceFieldValues( $form );
 			}
+
+			JetFormBuilder.replaceStack[ $form.data( 'form-id' ) ] = {
+				macros: [],
+				repeaters: {},
+			};
+
+			const pushStack = function( formId, stack ) {
+				JetFormBuilder.replaceStack[ formId ].macros.push( ...stack );
+			};
+
+			const pushRepeaterRowIndex = function( formId, repeaterName, index ) {
+				const repeater = JetFormBuilder.replaceStack[ formId ].repeaters[ repeaterName ] || [];
+				repeater.push( index );
+
+				JetFormBuilder.replaceStack[ formId ].repeaters[ repeaterName ] = repeater;
+			}
+
+			pushStack( $form.data( 'form-id' ), getAllComments( $form[ 0 ] ) );
+			replaceFieldValues( $form );
 
 			$( document ).on(
 				'jet-form-builder/repeater-add-new',
 				'.jet-form-builder-repeater__new',
 				e => initRepeater( e ),
 			);
-
-			initInScope( $scope, $form );
 		},
 
 		initFormPager: function( $scope ) {

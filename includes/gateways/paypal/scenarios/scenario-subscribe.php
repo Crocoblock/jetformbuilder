@@ -4,7 +4,9 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 
 
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Show_Subscription_Details_Action;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Subscribe_Now_Action;
 
 class Scenario_Subscribe extends Scenario_Base {
@@ -34,7 +36,14 @@ class Scenario_Subscribe extends Scenario_Base {
 			->send_request();
 	}
 
+	/**
+	 * @return mixed
+	 * @throws Gateway_Exception|Action_Exception
+	 */
 	public function process_after() {
-		// TODO: Implement process_after() method.
+		return ( new Paypal_Show_Subscription_Details_Action() )
+			->set_bearer_auth( $this->controller->get_bearer_token() )
+			->set_subscription_id( $this->get_queried_token() )
+			->send_request();
 	}
 }

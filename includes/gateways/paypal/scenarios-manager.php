@@ -45,8 +45,8 @@ class Scenarios_Manager {
 	 * @return Scenario_Base
 	 * @throws Repository_Exception
 	 */
-	public function scenario_install( Controller $paypal ) {
-		return $this->rep_get_item( $paypal->current_gateway( 'gateway_type' ) )->install( $paypal );
+	public function get_scenario( Controller $paypal ) {
+		return $this->rep_get_item( $paypal->current_gateway( 'gateway_type' ) );
 	}
 
 	/**

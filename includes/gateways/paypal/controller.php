@@ -93,12 +93,7 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function get_payment_token() {
-		try {
-			return Scenarios_Manager::instance()->query_scenario()->get_queried_token();
-
-		} catch ( Repository_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		}
+		return $this->query_scenario()->get_queried_token();
 	}
 
 	/**
@@ -107,10 +102,7 @@ class Controller extends Base_Gateway {
 	 */
 	protected function retrieve_payment_instance() {
 		try {
-			return Scenarios_Manager::instance()
-			                        ->query_scenario()
-			                        ->install( $this )
-			                        ->process_after();
+			return $this->query_scenario()->process_after();
 
 		} catch ( Handler_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
@@ -119,8 +111,6 @@ class Controller extends Base_Gateway {
 
 	protected function set_gateway_data_on_result() {
 		try {
-			//var_dump( $this->payment_instance ); die;
-
 			$this->set_current_gateway_options();
 			$this->set_payment_status();
 			$this->set_payment_amount();
@@ -166,7 +156,22 @@ class Controller extends Base_Gateway {
 	}
 
 
+	/**
+	 * @param $order_id
+	 * @param $form_id
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
 	protected function query_order_token( $order_id, $form_id ) {
+		return $this->get_bearer_token();
+	}
+
+	/**
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
+	public function get_bearer_token() {
 		return $this->get_token(
 			$this->options['client_id'],
 			$this->options['secret']
@@ -188,9 +193,7 @@ class Controller extends Base_Gateway {
 		}
 
 		try {
-			$order = Scenarios_Manager::instance()
-			                          ->scenario_install( $this )
-			                          ->process_before();
+			$order = $this->get_scenario()->process_before();
 
 		} catch ( Handler_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
@@ -237,6 +240,9 @@ class Controller extends Base_Gateway {
 	 * @throws Action_Exception
 	 */
 	public function get_token( $client_id = false, $secret = false ) {
+		if ( ! $client_id || ! $secret ) {
+			return;
+		}
 		$hash  = md5( $client_id . $secret );
 		$token = get_transient( $hash );
 
@@ -244,9 +250,6 @@ class Controller extends Base_Gateway {
 			return $token;
 		}
 
-		if ( ! $client_id || ! $secret ) {
-			return;
-		}
 		try {
 			$response = ( new Paypal_Get_Token() )
 				->set_credentials( $client_id, $secret )
@@ -265,7 +268,30 @@ class Controller extends Base_Gateway {
 		set_transient( $hash, $token, 7 * HOUR_IN_SECONDS );
 
 		return $token;
+	}
 
+	/**
+	 * @return Scenarios\Scenario_Base
+	 * @throws Gateway_Exception
+	 */
+	public function get_scenario() {
+		try {
+			return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
+	}
+
+	/**
+	 * @return Scenarios\Scenario_Base
+	 * @throws Gateway_Exception
+	 */
+	public function query_scenario() {
+		try {
+			return Scenarios_Manager::instance()->query_scenario()->install( $this );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
 	}
 
 }

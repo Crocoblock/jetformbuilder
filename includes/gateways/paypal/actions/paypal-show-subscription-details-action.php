@@ -6,19 +6,16 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
-class Paypal_Capture_Subscribe_Action extends Paypal_Base_Action {
+class Paypal_Show_Subscription_Details_Action extends Paypal_Base_Action {
 
-	use Paypal_App_Context_Trait;
-
-	private $plan_id;
 	private $subscription_id;
 
 	public function action_slug() {
-		return 'CAPTURE_SUBSCRIPTION';
+		return 'SHOW_SUBSCRIPTION_DETAILS';
 	}
 
 	public function action_endpoint() {
-		return "v1/billing/subscriptions/{$this->get_subscription_id()}/capture";
+		return "v1/billing/subscriptions/{$this->get_subscription_id()}";
 	}
 
 	public function action_headers() {
@@ -44,8 +41,8 @@ class Paypal_Capture_Subscribe_Action extends Paypal_Base_Action {
 	 * @throws Gateway_Exception
 	 */
 	public function before_make_request() {
-		if ( ! $this->get_subscription_id() || ! $this->get_plan_id() ) {
-			throw new Gateway_Exception( 'order_id is not set.' );
+		if ( ! $this->get_subscription_id()  ) {
+			throw new Gateway_Exception( '`subscription_id` is not set.' );
 		}
 	}
 }

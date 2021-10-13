@@ -46,7 +46,9 @@ abstract class Scenario_Base {
 	}
 
 	public function install( Controller $paypal ) {
-		$this->controller = $paypal;
+		if ( ! $this->controller ) {
+			$this->controller = $paypal;
+		}
 
 		return $this;
 	}

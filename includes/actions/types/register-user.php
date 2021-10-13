@@ -72,13 +72,9 @@ class Register_User extends Base {
 	}
 
 	/**
-	 * @param array $request
-	 * @param Action_Handler $handler
-	 *
-	 * @return mixed|void
 	 * @throws Action_Exception
 	 */
-	public function do_action( array $request, Action_Handler $handler ) {
+	public function can_register() {
 		$allow_register    = $this->settings['allow_register'] ?? false;
 		$role_can_register = $this->settings['role_can_register'] ?? false;
 
@@ -93,19 +89,35 @@ class Register_User extends Base {
 				throw new Action_Exception( 'not_enough_cap' );
 			}
 
-			if ( ! $allow_register && 1 === $handler->size_all ) {
+			if ( ! $allow_register ) {
+				if ( isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
+					$this->get_action_handler()->response_data['user_id'] = (int) $user->ID;
+					$this->get_action_handler()->request_data['user_id']  = (int) $user->ID;
+
+					return false;
+				}
+
 				throw new Action_Exception( 'already_logged_in' );
 			}
 
-			if ( ! $allow_register && isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
-				$handler->response_data['user_id'] = (int) $user->ID;
-				$handler->request_data['user_id']  = (int) $user->ID;
-
-				return;
-			}
 
 		} elseif ( $allow_register ) {
 			throw new Action_Exception( 'not_logged_in' );
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
+	public function do_action( array $request, Action_Handler $handler ) {
+		if ( ! $this->can_register() ) {
+			return;
 		}
 
 		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();

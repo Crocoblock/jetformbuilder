@@ -904,15 +904,19 @@
 
 			const getValueFromField = field => {
 				const is_radio = isRadio( field );
-				const checked = field.attr( 'checked' );
 
-				if ( is_radio && checked ) {
-					return field.val();
-				} else if ( ! is_radio ) {
+				if ( ! is_radio ) {
 					return field.val();
 				}
 
-				return '';
+				const checked = [];
+				for ( const radioInput of Array.from( field ) ) {
+					if ( radioInput.checked ) {
+						checked.push( radioInput.value );
+					}
+				}
+
+				return checked.join( ', ' );
 			}
 
 			const prepareValueFromMacros = function( scope, initialValue, withBrackets = true ) {

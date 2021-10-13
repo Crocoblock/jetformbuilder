@@ -7,10 +7,7 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Capture_Payment_Action;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Get_Token;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Pay_Now_Action;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Subscribe_Now_Action;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
 use Jet_Form_Builder\Plugin;
@@ -109,50 +106,11 @@ class Controller extends Base_Gateway {
 		}
 	}
 
-	protected function set_gateway_data_on_result() {
-		try {
-			$this->set_current_gateway_options();
-			$this->set_payment_status();
-			$this->set_payment_amount();
-			$this->set_payer();
-
-		} catch ( Gateway_Exception $exception ) {
-			return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * @throws Gateway_Exception
 	 */
-	private function set_payment_status() {
-		if ( empty( $this->payment_instance['status'] ) ) {
-			throw new Gateway_Exception( 'Empty payment status' );
-		}
-
-		$this->set_post_meta( 'status', $this->payment_instance['status'] );
-	}
-
-	private function set_payer() {
-		if ( empty( $this->payment_instance['payer'] ) ) {
-			return;
-		}
-		$this->set_post_meta( 'payer', array(
-			'first_name' => $this->payment_instance['payer']['name']['given_name'] ?? '',
-			'last_name'  => $this->payment_instance['payer']['name']['surname'] ?? '',
-			'email'      => $this->payment_instance['payer']['email_address'] ?? '',
-		) );
-	}
-
-	private function set_payment_amount() {
-		if ( empty( $this->payment_instance['purchase_units'][0]['payments']['captures'] ) ) {
-			return;
-		}
-		$this->set_post_meta(
-			'amount',
-			$this->payment_instance['purchase_units'][0]['payments']['captures'][0]['amount'] ?? 0
-		);
+	protected function set_gateway_data_on_result() {
+		$this->query_scenario()->process_save();
 	}
 
 
@@ -164,18 +122,7 @@ class Controller extends Base_Gateway {
 	 * @throws Action_Exception
 	 */
 	protected function query_order_token( $order_id, $form_id ) {
-		return $this->get_bearer_token();
-	}
-
-	/**
-	 * @return mixed|void
-	 * @throws Action_Exception
-	 */
-	public function get_bearer_token() {
-		return $this->get_token(
-			$this->options['client_id'],
-			$this->options['secret']
-		);
+		return $this->get_token();
 	}
 
 	/**
@@ -233,13 +180,13 @@ class Controller extends Base_Gateway {
 	/**
 	 * Returns auth token for current client_id and secret combination
 	 *
-	 * @param bool $client_id
-	 * @param bool $secret
-	 *
 	 * @return mixed|void [description]
 	 * @throws Action_Exception
 	 */
-	public function get_token( $client_id = false, $secret = false ) {
+	public function get_token() {
+		$client_id = $this->options['client_id'] ?? '';
+		$secret    = $this->options['secret'] ?? '';
+
 		if ( ! $client_id || ! $secret ) {
 			return;
 		}

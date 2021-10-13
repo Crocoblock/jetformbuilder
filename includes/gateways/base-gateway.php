@@ -76,8 +76,12 @@ abstract class Base_Gateway {
 
 	abstract protected function retrieve_gateway_meta();
 
-	public function set_payment_instance() {
+	protected function set_payment() {
 		$this->payment_instance = $this->retrieve_payment_instance();
+	}
+
+	public function get_payment() {
+		return $this->payment_instance;
 	}
 
 	public function additional_editor_data() {
@@ -87,9 +91,12 @@ abstract class Base_Gateway {
 	/**
 	 * Store payment status into order and show success/failed message
 	 * @return void [description]
+	 * @throws Gateway_Exception
 	 */
 	public function on_success_payment() {
+		$this->set_current_gateway_options();
 		$this->set_gateway_data_on_result();
+
 		$this->data['date'] = date_i18n( 'F j, Y, H:i' );
 
 		$this->data['gateway'] = $this->get_name();
@@ -357,6 +364,10 @@ abstract class Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	protected function set_current_gateway_options() {
+		if ( ! empty( $this->options ) ) {
+			return $this;
+		}
+
 		foreach ( $this->options_list() as $name => $option ) {
 			$is_required = isset( $option['required'] )
 				? filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
@@ -372,9 +383,11 @@ abstract class Base_Gateway {
 				? esc_attr( $this->current_gateway( $name ) )
 				: $default_val;
 		}
+
+		return $this;
 	}
 
-	protected function set_gateway_data() {
+	protected function set_gateway_data(  ) {
 		if ( ! $this->gateways_meta ) {
 			$this->gateways_meta = GM::instance()->gateways();
 		}
@@ -479,7 +492,7 @@ abstract class Base_Gateway {
 			$this->set_payment_token();
 			$this->set_gateway_from_post_meta();
 			$this->set_form_gateways_meta();
-			$this->set_payment_instance();
+			$this->set_payment();
 			$this->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {

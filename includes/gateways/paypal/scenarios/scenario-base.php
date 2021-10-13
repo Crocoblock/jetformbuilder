@@ -21,6 +21,8 @@ abstract class Scenario_Base {
 
 	abstract public function process_after();
 
+	abstract public function process_save();
+
 	abstract protected function query_token();
 
 	public function get_queried_token() {

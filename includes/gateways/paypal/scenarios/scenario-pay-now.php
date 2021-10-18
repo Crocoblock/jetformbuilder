@@ -11,6 +11,8 @@ use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Pay_Now_Action;
 
 class Scenario_Pay_Now extends Scenario_Base {
 
+	use Scenario_Set_Status_Trait;
+
 	const SLUG = 'PAY_NOW';
 
 	public function rep_item_id() {
@@ -19,6 +21,10 @@ class Scenario_Pay_Now extends Scenario_Base {
 
 	protected function query_token() {
 		return $_GET['token'] ?? false;
+	}
+
+	public function get_failed_statuses() {
+		return array( 'VOIDED' );
 	}
 
 	/**
@@ -44,7 +50,6 @@ class Scenario_Pay_Now extends Scenario_Base {
 	/**
 	 * @return mixed
 	 * @throws Gateway_Exception
-	 * @throws Action_Exception
 	 */
 	public function process_after() {
 		return ( new Paypal_Capture_Payment_Action() )
@@ -61,19 +66,6 @@ class Scenario_Pay_Now extends Scenario_Base {
 		$this->set_payment_status();
 		$this->set_payment_amount();
 		$this->set_payer();
-	}
-
-	/**
-	 * @throws Gateway_Exception
-	 */
-	private function set_payment_status() {
-		$payment = $this->controller->get_payment();
-
-		if ( empty( $payment['status'] ) ) {
-			throw new Gateway_Exception( 'Empty payment status' );
-		}
-
-		$this->controller->set_post_meta( 'status', $payment['status'] );
 	}
 
 	private function set_payment_amount() {

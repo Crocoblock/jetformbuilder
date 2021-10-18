@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
@@ -36,7 +37,11 @@ class Gateway_Manager {
 	/**
 	 * Register gateways components
 	 */
-	public function __construct() {
+
+	public function set_up() {
+		if ( ! Plugin::instance()->allow_gateways ) {
+			return;
+		}
 		add_action( 'init', array( $this, 'register_gateways' ) );
 
 		$this->catch_payment_result();
@@ -75,6 +80,9 @@ class Gateway_Manager {
 		}
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function after_send_actions() {
 		if ( empty( $this->gateways_form_data ) ) {
 			return;
@@ -82,8 +90,12 @@ class Gateway_Manager {
 
 		$controller = $this->get_current_gateway_controller();
 
-		if ( $controller ) {
-			$controller->after_actions( $this->get_actions_handler() );
+		try {
+			if ( $controller ) {
+				$controller->after_actions( $this->get_actions_handler() );
+			}
+		} catch ( Gateway_Exception $exception ) {
+			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
 		}
 	}
 

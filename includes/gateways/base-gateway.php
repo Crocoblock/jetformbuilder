@@ -66,6 +66,12 @@ abstract class Base_Gateway {
 
 	abstract protected function options_list();
 
+	/**
+	 * @param Action_Handler $action_handler
+	 *
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
 	abstract public function after_actions( Action_Handler $action_handler );
 
 	abstract protected function set_gateway_data_on_result();
@@ -387,22 +393,21 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	protected function set_gateway_data(  ) {
+	/**
+	 * @throws Gateway_Exception
+	 */
+	protected function set_gateway_data() {
 		if ( ! $this->gateways_meta ) {
 			$this->gateways_meta = GM::instance()->gateways();
 		}
 
-		try {
-			$this->set_order_id();
-			$this->set_price_field();
-			$this->set_price_from_filed();
-			$this->set_current_gateway_options();
-			$this->set_order_token();
+		$this->set_order_id();
+		$this->set_price_field();
+		$this->set_price_from_filed();
+		$this->set_current_gateway_options();
+		$this->set_order_token();
 
-		} catch ( Gateway_Exception $exception ) {
-			return false;
-		}
-
+		/** for backward compatibility */
 		return true;
 	}
 

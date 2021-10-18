@@ -72,10 +72,10 @@ trait Gateways_Editor_Data {
 		);
 
 		if ( $result['allowed'] ) {
-			$result['labels']        = $this->labels();
-			$result['list']          = $this->gateways_for_js();
-			$result['messages']      = $this->default_messages();
-			$result['additional']    = $this->gateways_additional();
+			$result['labels']     = $this->labels();
+			$result['list']       = $this->gateways_for_js();
+			$result['messages']   = $this->default_messages();
+			$result['additional'] = $this->gateways_additional();
 		}
 
 		return apply_filters( 'jet-form-builder/gateways/editor-data', $result );

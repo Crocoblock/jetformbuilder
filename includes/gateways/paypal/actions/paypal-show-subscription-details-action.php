@@ -25,7 +25,7 @@ class Paypal_Show_Subscription_Details_Action extends Paypal_Base_Action {
 	public function action_body() {
 		return array();
 	}
-	
+
 
 	public function set_subscription_id( $subscription_id ) {
 		$this->subscription_id = $subscription_id;
@@ -41,7 +41,7 @@ class Paypal_Show_Subscription_Details_Action extends Paypal_Base_Action {
 	 * @throws Gateway_Exception
 	 */
 	public function before_make_request() {
-		if ( ! $this->get_subscription_id()  ) {
+		if ( ! $this->get_subscription_id() ) {
 			throw new Gateway_Exception( '`subscription_id` is not set.' );
 		}
 	}

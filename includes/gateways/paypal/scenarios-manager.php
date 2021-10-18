@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Base;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
@@ -43,21 +44,29 @@ class Scenarios_Manager {
 	 * @param Controller $paypal
 	 *
 	 * @return Scenario_Base
-	 * @throws Repository_Exception
+	 * @throws Gateway_Exception
 	 */
 	public function get_scenario( Controller $paypal ) {
-		return $this->rep_get_item( $paypal->current_gateway( 'gateway_type' ) );
+		try {
+			return $this->rep_get_item( $paypal->current_gateway( 'gateway_type' ) );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
 	}
 
 	/**
 	 * @return Scenario_Base
-	 * @throws Repository_Exception
+	 * @throws Gateway_Exception
 	 */
 	public function query_scenario() {
-		if ( ! $this->queried_scenario ) {
-			$scenario = $_GET[ self::QUERY_VAR ] ?? false;
+		try {
+			if ( ! $this->queried_scenario ) {
+				$scenario = $_GET[ self::QUERY_VAR ] ?? false;
 
-			$this->queried_scenario = $this->rep_get_item( $scenario );
+				$this->queried_scenario = $this->rep_get_item( $scenario );
+			}
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
 		}
 
 		return $this->queried_scenario;

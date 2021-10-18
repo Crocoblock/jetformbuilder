@@ -13,6 +13,7 @@ use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\License\Manager as LicenseManager;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
@@ -142,14 +143,16 @@ class Plugin {
 		if ( isset( $gateways['use_gateways'] ) ) {
 			$this->allow_gateways = $gateways['use_gateways'];
 		}
+
+		Gateway_Manager::instance()->set_up();
 	}
 
 	/**
 	 * Loads the translation files.
 	 *
+	 * @return void
 	 * @since 1.0.0
 	 * @access public
-	 * @return void
 	 */
 	public function init_lang() {
 		load_plugin_textdomain(

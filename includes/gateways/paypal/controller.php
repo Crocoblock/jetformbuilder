@@ -5,21 +5,26 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
 class Controller extends Base_Gateway {
+
+	const WEBHOOKS_OPTIONS = '_jfb_paypal_webhooks';
 
 	public $data = false;
 	public $message = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
+
+	public function __construct() {
+		( new Rest_Api_Controller() )->rest_api_init();
+	}
 
 	/**
 	 * Returns current gateway ID
@@ -77,8 +82,14 @@ class Controller extends Base_Gateway {
 		);
 	}
 
+	// statuses from scenario
+
+	/**
+	 * @return array
+	 * @throws Gateway_Exception
+	 */
 	public function failed_statuses() {
-		return array( 'VOIDED' );
+		return $this->query_scenario()->get_failed_statuses();
 	}
 
 	protected function retrieve_gateway_meta() {
@@ -98,12 +109,7 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	protected function retrieve_payment_instance() {
-		try {
-			return $this->query_scenario()->process_after();
-
-		} catch ( Handler_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		}
+		return $this->query_scenario()->process_after();
 	}
 
 	/**
@@ -113,13 +119,12 @@ class Controller extends Base_Gateway {
 		$this->query_scenario()->process_save();
 	}
 
-
 	/**
 	 * @param $order_id
 	 * @param $form_id
 	 *
 	 * @return mixed|void
-	 * @throws Action_Exception
+	 * @throws Gateway_Exception
 	 */
 	protected function query_order_token( $order_id, $form_id ) {
 		return $this->get_token();
@@ -131,23 +136,14 @@ class Controller extends Base_Gateway {
 	 * @param $action_handler
 	 *
 	 * @return void [type] [description]
-	 * @throws Action_Exception
+	 * @throws Gateway_Exception
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
-
-		if ( ! $this->set_gateway_data() ) {
-			return;
-		}
-
-		try {
-			$order = $this->get_scenario()->process_before();
-
-		} catch ( Handler_Exception $exception ) {
-			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
-		}
+		$this->set_gateway_data();
+		$order = $this->get_scenario()->process_before();
 
 		if ( empty( $order['id'] ) ) {
-			throw ( new Action_Exception( $order['message'], $order ) )->dynamic_error();
+			throw new Gateway_Exception( $order['message'], $order );
 		}
 
 		update_post_meta(
@@ -181,11 +177,11 @@ class Controller extends Base_Gateway {
 	 * Returns auth token for current client_id and secret combination
 	 *
 	 * @return mixed|void [description]
-	 * @throws Action_Exception
+	 * @throws Gateway_Exception
 	 */
 	public function get_token() {
-		$client_id = $this->current_gateway('client_id' );
-		$secret    = $this->current_gateway('secret' );
+		$client_id = $this->current_gateway( 'client_id' );
+		$secret    = $this->current_gateway( 'secret' );
 
 		if ( ! $client_id || ! $secret ) {
 			return;
@@ -197,22 +193,17 @@ class Controller extends Base_Gateway {
 			return $token;
 		}
 
-		try {
-			$response = ( new Paypal_Get_Token() )
-				->set_credentials( $client_id, $secret )
-				->send_request();
-
-		} catch ( Gateway_Exception $exception ) {
-			throw ( new Action_Exception( $exception->getMessage() ) )->dynamic_error();
-		}
+		$response = ( new Paypal_Get_Token() )
+			->set_credentials( $client_id, $secret )
+			->send_request();
 
 		if ( empty( $response['access_token'] ) ) {
-			throw ( new Action_Exception( $response['error_description'] ) )->dynamic_error();
+			throw new Gateway_Exception( $response['error_description'] );
 		}
 
 		$token = $response['access_token'];
 
-		set_transient( $hash, $token, 7 * HOUR_IN_SECONDS );
+		set_transient( $hash, $token, $response['expires_in'] * 0.9 );
 
 		return $token;
 	}
@@ -222,11 +213,7 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function get_scenario() {
-		try {
-			return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
-		} catch ( Repository_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		}
+		return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
 	}
 
 	/**
@@ -234,11 +221,11 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function query_scenario() {
-		try {
-			return Scenarios_Manager::instance()->query_scenario()->install( $this );
-		} catch ( Repository_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		}
+		return Scenarios_Manager::instance()->query_scenario()->install( $this );
+	}
+
+	public function get_webhooks() {
+		return json_decode( get_option( self::WEBHOOKS_OPTIONS, '{}' ), true );
 	}
 
 }

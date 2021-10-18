@@ -25,6 +25,8 @@ abstract class Scenario_Base {
 
 	abstract protected function query_token();
 
+	abstract public function get_failed_statuses();
+
 	public function get_queried_token() {
 		if ( ! $this->queried_token ) {
 			$this->queried_token = $this->query_token();

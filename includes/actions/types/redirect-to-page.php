@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
@@ -86,11 +87,10 @@ class Redirect_To_Page extends Base {
 			default:
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
 
+				$parser = ( new Macros_Parser() )->set_replacements( $request );
 				$to_url = ( new Dynamic_Preset( 'redirect_url' ) )->parse_value( $this->settings );
-				$to_url = apply_filters(
-					"jet-form-builder/action/{$this->get_id()}/redirect/{$type}",
-					$to_url, $this, $handler
-				);
+
+				$to_url = $parser->parse_macros( $to_url );
 
 				break;
 		}

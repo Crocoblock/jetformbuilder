@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Listing_Filter_Manager;
+use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request\Request_Handler;
@@ -18,14 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Send_Email extends Base {
 
-	private $data;
-	private $filter;
-
-	public function __construct() {
-		parent::__construct();
-
-		$this->filter = ( new Listing_Filter_Manager() )->manager;
-	}
+	private $parser;
 
 	public function get_name() {
 		return __( 'Send Email', 'jet-form-builder' );
@@ -147,22 +141,25 @@ class Send_Email extends Base {
 		);
 	}
 
-
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return mixed|void
+	 * @throws Action_Exception
+	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$this->data = $request;
-
 		$mail_to     = ! empty( $this->settings['mail_to'] ) ? $this->settings['mail_to'] : 'admin';
 		$reply_to    = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : 'form';
 		$email       = false;
 		$reply_email = false;
 
-
 		switch ( $mail_to ) {
 			case 'form':
 				$field = ! empty( $this->settings['from_field'] ) ? $this->settings['from_field'] : '';
 
-				if ( $field && ! empty( $this->data[ $field ] ) ) {
-					$email = $this->data[ $field ];
+				if ( $field && ! empty( $request[ $field ] ) ) {
+					$email = $request[ $field ];
 				}
 
 				break;
@@ -182,8 +179,8 @@ class Send_Email extends Base {
 			case 'form':
 				$field = ! empty( $this->settings['reply_from_field'] ) ? $this->settings['reply_from_field'] : '';
 
-				if ( $field && ! empty( $this->data[ $field ] ) ) {
-					$this->settings['reply_email'] = $this->data[ $field ];
+				if ( $field && ! empty( $request[ $field ] ) ) {
+					$this->settings['reply_email'] = $request[ $field ];
 				}
 
 				break;
@@ -197,6 +194,7 @@ class Send_Email extends Base {
 			throw new Action_Exception( 'invalid_email' );
 		}
 
+		$this->parser = ( new Macros_Parser() )->set_replacements( $request );
 
 		$subject = ! empty( $this->settings['subject'] ) ? $this->settings['subject'] : sprintf(
 			__( 'Form on %s Submitted', 'jet-form-builder' ),
@@ -222,7 +220,7 @@ class Send_Email extends Base {
 	 * The body of the email to send.
 	 * @param $message
 	 *
-	 * @return bool
+	 * @return void
 	 * @throws Action_Exception
 	 */
 	public function send_mail( $to, $subject, $message ) {
@@ -234,8 +232,8 @@ class Send_Email extends Base {
 		do_action( 'jet-form-builder/send-email/send-before', $this );
 
 		$content_type = $this->get_content_type();
-		$subject      = $this->parse_macros( $subject );
-		$message      = $this->parse_macros( $message );
+		$subject      = $this->parser->parse_macros( $subject );
+		$message      = $this->parser->parse_macros( $message );
 
 		if ( 'text/html' === $content_type ) {
 			$message = make_clickable( wpautop( $message ) );
@@ -262,74 +260,6 @@ class Send_Email extends Base {
 		 */
 		$this->send_after();
 		do_action( 'jet-form-builder/send-email/send-after', $this );
-	}
-
-	/**
-	 * Parse macros in content
-	 *
-	 * @param  [type] $content [description]
-	 *
-	 * @return [type]          [description]
-	 */
-	public function parse_macros( $content ) {
-
-		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/', function ( $match ) {
-
-			if ( isset( $this->data[ $match[1] ] ) ) {
-
-				if ( ! empty( $match[3] ) ) {
-					return $this->filter->apply_filters(
-						$this->data[ $match[1] ], $match[3]
-					);
-				} else {
-					if ( is_array( $this->data[ $match[1] ] ) ) {
-						if ( ! empty( $this->data[ Request_Handler::REPEATERS_SETTINGS ][ $match[1] ] ) ) {
-							return $this->verbose_repeater( $this->data[ $match[1] ] );
-						} else {
-							return implode( ', ', $this->data[ $match[1] ] );
-						}
-					} else {
-						return $this->data[ $match[1] ];
-					}
-				}
-			} else {
-				return $match[0];
-			}
-		}, $content );
-
-	}
-
-	/**
-	 * Verbose repeater items array
-	 *
-	 * @param array $items
-	 *
-	 * @return string
-	 */
-	public function verbose_repeater( $items = array() ) {
-
-		$result = '';
-		$index  = 1;
-
-		foreach ( $items as $item ) {
-			$item_data = array();
-
-			foreach ( $item as $key => $value ) {
-				$item_data[] = sprintf( '%1$s: %2$s', $key, $this->maybe_parse_if_array( $value ) );
-			}
-			$result .= $index ++ . ') ' . implode( ', ', $item_data ) . ';<br>';
-		}
-
-		return $result;
-
-	}
-
-	private function maybe_parse_if_array( $value ) {
-		if ( is_array( $value ) ) {
-			return implode( ', ', $value );
-		}
-
-		return $value;
 	}
 
 
@@ -376,7 +306,8 @@ class Send_Email extends Base {
 	 */
 	public function get_from_name() {
 		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-		$name = $this->parse_macros( $name );
+		$name = $this->parser->parse_macros( $name );
+
 		return apply_filters( 'jet-form-builder/send-email/from-name', wp_specialchars_decode( $name ), $this );
 	}
 
@@ -403,7 +334,7 @@ class Send_Email extends Base {
 	public function get_from_address() {
 
 		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
-		$address = $this->parse_macros( $address );
+		$address = $this->parser->parse_macros( $address );
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = get_option( 'admin_email' );

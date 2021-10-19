@@ -1374,7 +1374,7 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'   => array(
-						$this->selector( '__field-wrap.checkboxes-wrap' ) => 'display: {{VALUE}};',
+						$this->selector( '__field-wrap.checkradio-wrap' ) => 'display: {{VALUE}};',
 					),
 				)
 			);
@@ -1400,8 +1400,8 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'  => array(
-						'body:not(.rtl) ' . $this->selector( '__field-wrap.checkboxes-wrap' ) => 'margin-right: {{SIZE}}px;',
-						'body.rtl ' . $this->selector( '__field-wrap.checkboxes-wrap' )       => 'margin-left: {{SIZE}}px;',
+						'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap' ) => 'margin-right: {{SIZE}}px;',
+						'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap' )       => 'margin-left: {{SIZE}}px;',
 					),
 				)
 			);
@@ -1515,6 +1515,8 @@ class Form extends Jfb_Widget_Base {
 		/** Input Fields */
 		$closure = function () {
 
+			$simple_input = '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater):not(.wysiwyg-field)';
+
 			$this->start_controls_section(
 				'section_form_input_fields',
 				array(
@@ -1527,7 +1529,7 @@ class Form extends Jfb_Widget_Base {
 				Group_Control_Typography::get_type(),
 				array(
 					'name'     => 'fields_typography',
-					'selector' => $this->selector( '__field:not(.checkradio-field):not(.range-field)' ),
+					'selector' => $this->selector( $simple_input ),
 				)
 			);
 
@@ -1537,7 +1539,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => __( 'Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field)' ) => 'color: {{VALUE}};',
+						$this->selector( $simple_input ) => 'color: {{VALUE}};',
 					),
 				)
 			);
@@ -1562,7 +1564,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => __( 'Background Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'background-color: {{VALUE}};',
+						$this->selector( $simple_input ) => 'background-color: {{VALUE}};',
 					),
 				)
 			);
@@ -1574,7 +1576,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1586,7 +1588,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1597,7 +1599,7 @@ class Form extends Jfb_Widget_Base {
 					'name'        => 'fields_border',
 					'label'       => __( 'Border', 'jet-form-builder' ),
 					'placeholder' => '1px',
-					'selector'    => $this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ),
+					'selector'    => $this->selector( $simple_input ),
 				)
 			);
 
@@ -1608,7 +1610,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%' ),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -1617,7 +1619,7 @@ class Form extends Jfb_Widget_Base {
 				Group_Control_Box_Shadow::get_type(),
 				array(
 					'name'     => 'fields_box_shadow',
-					'selector' => $this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ),
+					'selector' => $this->selector( $simple_input ),
 				)
 			);
 
@@ -1634,7 +1636,7 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater)' ) => 'max-width: {{SIZE}}{{UNIT}};width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'max-width: {{SIZE}}{{UNIT}};width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
 					),
 				)
 			);

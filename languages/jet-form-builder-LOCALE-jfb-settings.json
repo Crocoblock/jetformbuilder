@@ -1014,6 +1014,12 @@
             "Value": [
                 ""
             ],
+            "Heading": [
+                ""
+            ],
+            "Gap": [
+                ""
+            ],
             "Repeater": [
                 ""
             ],
@@ -1051,9 +1057,6 @@
                 ""
             ],
             "Fullwidth": [
-                ""
-            ],
-            "Gap": [
                 ""
             ],
             "Form Break Buttons": [

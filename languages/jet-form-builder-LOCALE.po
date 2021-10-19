@@ -8,8 +8,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-10-06T15:06:44+03:00\n"
-"PO-Revision-Date: 2021-10-06 15:07+0300\n"
+"POT-Creation-Date: 2021-10-19T09:45:52+03:00\n"
+"PO-Revision-Date: 2021-10-19 09:48+0300\n"
 "X-Generator: Poedit 3.0\n"
 "X-Domain: jet-form-builder\n"
 "Last-Translator: \n"
@@ -120,7 +120,7 @@ msgid "Add as many tags as you want, comma separated."
 msgstr ""
 
 #: includes/actions/types/active-campaign.php:167
-#: includes/actions/types/register-user.php:355
+#: includes/actions/types/register-user.php:367
 #: includes/actions/types/update-user.php:213 includes/admin/editor.php:268
 #: includes/integrations/getresponse-handler.php:76
 #: includes/integrations/mailchimp-handler.php:97
@@ -128,13 +128,13 @@ msgid "Email"
 msgstr ""
 
 #: includes/actions/types/active-campaign.php:168
-#: includes/actions/types/register-user.php:366
+#: includes/actions/types/register-user.php:378
 #: includes/actions/types/update-user.php:225 includes/admin/editor.php:276
 msgid "First Name"
 msgstr ""
 
 #: includes/actions/types/active-campaign.php:169
-#: includes/actions/types/register-user.php:367
+#: includes/actions/types/register-user.php:379
 #: includes/actions/types/update-user.php:229 includes/admin/editor.php:280
 msgid "Last Name"
 msgstr ""
@@ -261,47 +261,47 @@ msgstr ""
 msgid "How to obtain your MailChimp API Key? More info"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:20
+#: includes/actions/types/redirect-to-page.php:23
 msgid "Redirect to Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:132
+#: includes/actions/types/redirect-to-page.php:137
 msgid "Redirect to:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:133
+#: includes/actions/types/redirect-to-page.php:138
 msgid "Select page:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:134
+#: includes/actions/types/redirect-to-page.php:139
 msgid "Redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:135
+#: includes/actions/types/redirect-to-page.php:140
 msgid "Add query arguments to the redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:136
+#: includes/actions/types/redirect-to-page.php:141
 msgid "Add hash to the redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:156
+#: includes/actions/types/redirect-to-page.php:161
 msgid "Select redirect to..."
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:160
+#: includes/actions/types/redirect-to-page.php:165
 msgid "Static Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:164
+#: includes/actions/types/redirect-to-page.php:169
 msgid "Custom URL"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:168
+#: includes/actions/types/redirect-to-page.php:173
 msgid "Current Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:172
+#: includes/actions/types/redirect-to-page.php:177
 msgid "Inserted post"
 msgstr ""
 
@@ -337,144 +337,144 @@ msgid ""
 "\t\t\tin user - current user ID will be added to form data."
 msgstr ""
 
-#: includes/actions/types/register-user.php:292
+#: includes/actions/types/register-user.php:304
 msgid "A computed field from the %s action."
 msgstr ""
 
-#: includes/actions/types/register-user.php:301
+#: includes/actions/types/register-user.php:313
 #: includes/actions/types/update-user.php:246
 msgid "Passwords mismatch"
 msgstr ""
 
-#: includes/actions/types/register-user.php:305
+#: includes/actions/types/register-user.php:317
 #: includes/actions/types/update-user.php:250
 msgid "Username exists"
 msgstr ""
 
-#: includes/actions/types/register-user.php:309
+#: includes/actions/types/register-user.php:321
 #: includes/actions/types/update-user.php:254
 msgid "Email exists"
 msgstr ""
 
-#: includes/actions/types/register-user.php:313
+#: includes/actions/types/register-user.php:325
 #: includes/actions/types/update-user.php:258
 msgid "Incorrect username"
 msgstr ""
 
-#: includes/actions/types/register-user.php:317
+#: includes/actions/types/register-user.php:329
 #: includes/actions/types/update-user.php:262
 msgid "Empty username"
 msgstr ""
 
-#: includes/actions/types/register-user.php:321
+#: includes/actions/types/register-user.php:333
 #: includes/actions/types/update-user.php:266
 msgid "Empty email"
 msgstr ""
 
-#: includes/actions/types/register-user.php:325
+#: includes/actions/types/register-user.php:337
 #: includes/actions/types/update-user.php:270
 msgid "Empty password"
 msgstr ""
 
-#: includes/actions/types/register-user.php:329
+#: includes/actions/types/register-user.php:341
 #: includes/actions/types/update-user.php:274
 msgid "Logged in (appears only if register user is only notification)"
 msgstr ""
 
-#: includes/actions/types/register-user.php:337
+#: includes/actions/types/register-user.php:349
 msgid "Not enough capabilities"
 msgstr ""
 
-#: includes/actions/types/register-user.php:351 includes/admin/editor.php:264
+#: includes/actions/types/register-user.php:363 includes/admin/editor.php:264
 msgid "User Login"
 msgstr ""
 
-#: includes/actions/types/register-user.php:359
+#: includes/actions/types/register-user.php:371
 #: includes/actions/types/update-user.php:217 includes/admin/editor.php:272
 msgid "Password"
 msgstr ""
 
-#: includes/actions/types/register-user.php:363
+#: includes/actions/types/register-user.php:375
 #: includes/actions/types/update-user.php:221
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/actions/types/register-user.php:368
+#: includes/actions/types/register-user.php:380
 #: includes/actions/types/update-user.php:233 includes/admin/editor.php:284
 msgid "User URL"
 msgstr ""
 
-#: includes/actions/types/send-email.php:31
+#: includes/actions/types/send-email.php:25
 msgid "Send Email"
 msgstr ""
 
-#: includes/actions/types/send-email.php:48
+#: includes/actions/types/send-email.php:42
 msgid "Mail To:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:49
+#: includes/actions/types/send-email.php:43
 msgid "Email Address:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:50
+#: includes/actions/types/send-email.php:44
 msgid "From Field:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:51
+#: includes/actions/types/send-email.php:45
 msgid "Reply To:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:52
+#: includes/actions/types/send-email.php:46
 msgid "Reply to Email Address:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:53
+#: includes/actions/types/send-email.php:47
 msgid "Reply To Email From Field:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:54
+#: includes/actions/types/send-email.php:48
 msgid "Subject:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:55
+#: includes/actions/types/send-email.php:49
 msgid "From Name:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:56
+#: includes/actions/types/send-email.php:50
 msgid "From Email Address:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:57
+#: includes/actions/types/send-email.php:51
 msgid "Content type:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:58
+#: includes/actions/types/send-email.php:52
 msgid "Content:"
 msgstr ""
 
-#: includes/actions/types/send-email.php:115
+#: includes/actions/types/send-email.php:109
 msgid "Admin email"
 msgstr ""
 
-#: includes/actions/types/send-email.php:119
-#: includes/actions/types/send-email.php:129
+#: includes/actions/types/send-email.php:113
+#: includes/actions/types/send-email.php:123
 msgid "Email from submitted form field"
 msgstr ""
 
-#: includes/actions/types/send-email.php:123
-#: includes/actions/types/send-email.php:133
+#: includes/actions/types/send-email.php:117
+#: includes/actions/types/send-email.php:127
 msgid "Custom email"
 msgstr ""
 
-#: includes/actions/types/send-email.php:139
+#: includes/actions/types/send-email.php:133
 msgid "Plain text"
 msgstr ""
 
-#: includes/actions/types/send-email.php:143
+#: includes/actions/types/send-email.php:137
 msgid "HTML"
 msgstr ""
 
-#: includes/actions/types/send-email.php:202
+#: includes/actions/types/send-email.php:200
 msgid "Form on %s Submitted"
 msgstr ""
 
@@ -626,7 +626,7 @@ msgstr ""
 msgid "Jet Form Fields"
 msgstr ""
 
-#: includes/blocks/manager.php:105 includes/widgets/types/form.php:2541
+#: includes/blocks/manager.php:105 includes/widgets/types/form.php:2637
 msgid "Submit"
 msgstr ""
 
@@ -635,12 +635,12 @@ msgstr ""
 #: includes/widgets/types/form.php:564 includes/widgets/types/form.php:673
 #: includes/widgets/types/form.php:784 includes/widgets/types/form.php:895
 #: includes/widgets/types/form.php:1138 includes/widgets/types/form.php:1263
-#: includes/widgets/types/form.php:1585 includes/widgets/types/form.php:1779
-#: includes/widgets/types/form.php:2199 includes/widgets/types/form.php:2369
-#: includes/widgets/types/form.php:2482 includes/widgets/types/form.php:2655
-#: includes/widgets/types/form.php:2811 includes/widgets/types/form.php:2922
-#: includes/widgets/types/form.php:3038 includes/widgets/types/form.php:3104
-#: includes/widgets/types/form.php:3206
+#: includes/widgets/types/form.php:1587 includes/widgets/types/form.php:1781
+#: includes/widgets/types/form.php:2295 includes/widgets/types/form.php:2465
+#: includes/widgets/types/form.php:2578 includes/widgets/types/form.php:2751
+#: includes/widgets/types/form.php:2907 includes/widgets/types/form.php:3018
+#: includes/widgets/types/form.php:3134 includes/widgets/types/form.php:3200
+#: includes/widgets/types/form.php:3302
 msgid "Margin"
 msgstr ""
 
@@ -654,12 +654,12 @@ msgstr ""
 #: includes/widgets/types/form.php:575 includes/widgets/types/form.php:662
 #: includes/widgets/types/form.php:773 includes/widgets/types/form.php:884
 #: includes/widgets/types/form.php:1150 includes/widgets/types/form.php:1275
-#: includes/widgets/types/form.php:1573 includes/widgets/types/form.php:1767
-#: includes/widgets/types/form.php:2073 includes/widgets/types/form.php:2187
-#: includes/widgets/types/form.php:2356 includes/widgets/types/form.php:2470
-#: includes/widgets/types/form.php:2643 includes/widgets/types/form.php:2823
-#: includes/widgets/types/form.php:2934 includes/widgets/types/form.php:3050
-#: includes/widgets/types/form.php:3116 includes/widgets/types/form.php:3218
+#: includes/widgets/types/form.php:1575 includes/widgets/types/form.php:1769
+#: includes/widgets/types/form.php:2169 includes/widgets/types/form.php:2283
+#: includes/widgets/types/form.php:2452 includes/widgets/types/form.php:2566
+#: includes/widgets/types/form.php:2739 includes/widgets/types/form.php:2919
+#: includes/widgets/types/form.php:3030 includes/widgets/types/form.php:3146
+#: includes/widgets/types/form.php:3212 includes/widgets/types/form.php:3314
 msgid "Padding"
 msgstr ""
 
@@ -677,9 +677,9 @@ msgstr ""
 #: includes/blocks/types/radio-field.php:85
 #: includes/blocks/types/repeater-field.php:85
 #: includes/widgets/types/form.php:1162 includes/widgets/types/form.php:1287
-#: includes/widgets/types/form.php:2241 includes/widgets/types/form.php:2429
-#: includes/widgets/types/form.php:2697 includes/widgets/types/form.php:2754
-#: includes/widgets/types/form.php:3128 includes/widgets/types/form.php:3230
+#: includes/widgets/types/form.php:2337 includes/widgets/types/form.php:2525
+#: includes/widgets/types/form.php:2793 includes/widgets/types/form.php:2850
+#: includes/widgets/types/form.php:3224 includes/widgets/types/form.php:3326
 msgid "Alignment"
 msgstr ""
 
@@ -696,8 +696,8 @@ msgstr ""
 #: includes/blocks/types/radio-field.php:89
 #: includes/blocks/types/repeater-field.php:88
 #: includes/widgets/types/form.php:1169 includes/widgets/types/form.php:1294
-#: includes/widgets/types/form.php:2761 includes/widgets/types/form.php:3135
-#: includes/widgets/types/form.php:3237
+#: includes/widgets/types/form.php:2857 includes/widgets/types/form.php:3231
+#: includes/widgets/types/form.php:3333
 msgid "Left"
 msgstr ""
 
@@ -714,9 +714,9 @@ msgstr ""
 #: includes/blocks/types/radio-field.php:93
 #: includes/blocks/types/repeater-field.php:92
 #: includes/widgets/types/form.php:1173 includes/widgets/types/form.php:1298
-#: includes/widgets/types/form.php:2250 includes/widgets/types/form.php:2706
-#: includes/widgets/types/form.php:2765 includes/widgets/types/form.php:3139
-#: includes/widgets/types/form.php:3241
+#: includes/widgets/types/form.php:2346 includes/widgets/types/form.php:2802
+#: includes/widgets/types/form.php:2861 includes/widgets/types/form.php:3235
+#: includes/widgets/types/form.php:3337
 msgid "Center"
 msgstr ""
 
@@ -733,8 +733,8 @@ msgstr ""
 #: includes/blocks/types/radio-field.php:97
 #: includes/blocks/types/repeater-field.php:96
 #: includes/widgets/types/form.php:1177 includes/widgets/types/form.php:1302
-#: includes/widgets/types/form.php:2769 includes/widgets/types/form.php:3143
-#: includes/widgets/types/form.php:3245
+#: includes/widgets/types/form.php:2865 includes/widgets/types/form.php:3239
+#: includes/widgets/types/form.php:3341
 msgid "Right"
 msgstr ""
 
@@ -764,10 +764,10 @@ msgstr ""
 #: includes/blocks/types/select-field.php:99
 #: includes/blocks/types/text-field.php:70
 #: includes/blocks/types/textarea-field.php:93
-#: includes/widgets/types/form.php:1598 includes/widgets/types/form.php:1792
-#: includes/widgets/types/form.php:2212 includes/widgets/types/form.php:2382
-#: includes/widgets/types/form.php:2495 includes/widgets/types/form.php:2668
-#: includes/widgets/types/form.php:3302
+#: includes/widgets/types/form.php:1600 includes/widgets/types/form.php:1794
+#: includes/widgets/types/form.php:2308 includes/widgets/types/form.php:2478
+#: includes/widgets/types/form.php:2591 includes/widgets/types/form.php:2764
+#: includes/widgets/types/form.php:3398
 msgid "Border"
 msgstr ""
 
@@ -808,19 +808,19 @@ msgstr ""
 #: includes/widgets/types/form.php:817 includes/widgets/types/form.php:928
 #: includes/widgets/types/form.php:1208 includes/widgets/types/form.php:1333
 #: includes/widgets/types/form.php:1477 includes/widgets/types/form.php:1501
-#: includes/widgets/types/form.php:1562 includes/widgets/types/form.php:1756
-#: includes/widgets/types/form.php:2103 includes/widgets/types/form.php:2134
-#: includes/widgets/types/form.php:2285 includes/widgets/types/form.php:2316
-#: includes/widgets/types/form.php:2524 includes/widgets/types/form.php:2559
-#: includes/widgets/types/form.php:2590 includes/widgets/types/form.php:2869
-#: includes/widgets/types/form.php:2899 includes/widgets/types/form.php:2980
-#: includes/widgets/types/form.php:3010 includes/widgets/types/form.php:3174
-#: includes/widgets/types/form.php:3276
+#: includes/widgets/types/form.php:1564 includes/widgets/types/form.php:1758
+#: includes/widgets/types/form.php:2199 includes/widgets/types/form.php:2230
+#: includes/widgets/types/form.php:2381 includes/widgets/types/form.php:2412
+#: includes/widgets/types/form.php:2620 includes/widgets/types/form.php:2655
+#: includes/widgets/types/form.php:2686 includes/widgets/types/form.php:2965
+#: includes/widgets/types/form.php:2995 includes/widgets/types/form.php:3076
+#: includes/widgets/types/form.php:3106 includes/widgets/types/form.php:3270
+#: includes/widgets/types/form.php:3372
 msgid "Background Color"
 msgstr ""
 
 #: includes/blocks/modules/general-style.php:249
-#: includes/widgets/types/form.php:1130
+#: includes/widgets/types/form.php:1130 includes/widgets/types/form.php:2065
 msgid "Label"
 msgstr ""
 
@@ -851,14 +851,14 @@ msgstr ""
 #: includes/blocks/types/textarea-field.php:103
 #: includes/widgets/types/form.php:598 includes/widgets/types/form.php:696
 #: includes/widgets/types/form.php:807 includes/widgets/types/form.php:918
-#: includes/widgets/types/form.php:2114 includes/widgets/types/form.php:2145
-#: includes/widgets/types/form.php:2296 includes/widgets/types/form.php:2327
-#: includes/widgets/types/form.php:2570 includes/widgets/types/form.php:2601
+#: includes/widgets/types/form.php:2210 includes/widgets/types/form.php:2241
+#: includes/widgets/types/form.php:2392 includes/widgets/types/form.php:2423
+#: includes/widgets/types/form.php:2666 includes/widgets/types/form.php:2697
 msgid "Text Color"
 msgstr ""
 
 #: includes/blocks/modules/general-style.php:337
-#: includes/widgets/types/form.php:1256
+#: includes/widgets/types/form.php:1256 includes/widgets/types/form.php:2105
 msgid "Description"
 msgstr ""
 
@@ -901,9 +901,9 @@ msgstr ""
 #: includes/blocks/types/repeater-field.php:151
 #: includes/blocks/types/repeater-field.php:257
 #: includes/widgets/types/form.php:294 includes/widgets/types/form.php:398
-#: includes/widgets/types/form.php:1464 includes/widgets/types/form.php:2096
-#: includes/widgets/types/form.php:2278 includes/widgets/types/form.php:2552
-#: includes/widgets/types/form.php:2851 includes/widgets/types/form.php:2962
+#: includes/widgets/types/form.php:1464 includes/widgets/types/form.php:2192
+#: includes/widgets/types/form.php:2374 includes/widgets/types/form.php:2648
+#: includes/widgets/types/form.php:2947 includes/widgets/types/form.php:3058
 msgid "Normal"
 msgstr ""
 
@@ -912,9 +912,9 @@ msgstr ""
 #: includes/blocks/types/form-break-field-style.php:283
 #: includes/blocks/types/repeater-field.php:180
 #: includes/blocks/types/repeater-field.php:286
-#: includes/widgets/types/form.php:2127 includes/widgets/types/form.php:2309
-#: includes/widgets/types/form.php:2583 includes/widgets/types/form.php:2882
-#: includes/widgets/types/form.php:2993
+#: includes/widgets/types/form.php:2223 includes/widgets/types/form.php:2405
+#: includes/widgets/types/form.php:2679 includes/widgets/types/form.php:2978
+#: includes/widgets/types/form.php:3089
 msgid "Hover"
 msgstr ""
 
@@ -1018,7 +1018,7 @@ msgid "Wrapper"
 msgstr ""
 
 #: includes/blocks/types/form-break-field-style.php:42
-#: includes/widgets/types/form.php:2734
+#: includes/widgets/types/form.php:2830
 msgid "Form Break Row"
 msgstr ""
 
@@ -1031,7 +1031,7 @@ msgid "Form Break Prev Button"
 msgstr ""
 
 #: includes/blocks/types/form-break-field-style.php:317
-#: includes/widgets/types/form.php:3030
+#: includes/widgets/types/form.php:3126
 msgid "Form Break Disabled Message"
 msgstr ""
 
@@ -1147,11 +1147,12 @@ msgstr ""
 #: includes/widgets/types/form.php:741 includes/widgets/types/form.php:852
 #: includes/widgets/types/form.php:963 includes/widgets/types/form.php:1198
 #: includes/widgets/types/form.php:1240 includes/widgets/types/form.php:1323
-#: includes/widgets/types/form.php:1438 includes/widgets/types/form.php:1537
-#: includes/widgets/types/form.php:1687 includes/widgets/types/form.php:1978
-#: includes/widgets/types/form.php:2858 includes/widgets/types/form.php:2889
-#: includes/widgets/types/form.php:2969 includes/widgets/types/form.php:3000
-#: includes/widgets/types/form.php:3164 includes/widgets/types/form.php:3266
+#: includes/widgets/types/form.php:1438 includes/widgets/types/form.php:1539
+#: includes/widgets/types/form.php:1689 includes/widgets/types/form.php:1980
+#: includes/widgets/types/form.php:2082 includes/widgets/types/form.php:2122
+#: includes/widgets/types/form.php:2954 includes/widgets/types/form.php:2985
+#: includes/widgets/types/form.php:3065 includes/widgets/types/form.php:3096
+#: includes/widgets/types/form.php:3260 includes/widgets/types/form.php:3362
 msgid "Color"
 msgstr ""
 
@@ -1184,7 +1185,7 @@ msgid "Range Height"
 msgstr ""
 
 #: includes/blocks/types/range-field.php:148
-#: includes/widgets/types/form.php:1845
+#: includes/widgets/types/form.php:1847
 msgid "Slider"
 msgstr ""
 
@@ -1637,163 +1638,168 @@ msgstr ""
 msgid "Background color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1521
+#: includes/widgets/types/form.php:1523
 msgid "Input Fields"
 msgstr ""
 
-#: includes/widgets/types/form.php:1548
+#: includes/widgets/types/form.php:1550
 msgid "Placeholder Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1607 includes/widgets/types/form.php:1801
-#: includes/widgets/types/form.php:2221 includes/widgets/types/form.php:2391
-#: includes/widgets/types/form.php:2504 includes/widgets/types/form.php:2677
-#: includes/widgets/types/form.php:3310
+#: includes/widgets/types/form.php:1609 includes/widgets/types/form.php:1803
+#: includes/widgets/types/form.php:2317 includes/widgets/types/form.php:2487
+#: includes/widgets/types/form.php:2600 includes/widgets/types/form.php:2773
+#: includes/widgets/types/form.php:3406
 msgid "Border Radius"
 msgstr ""
 
-#: includes/widgets/types/form.php:1627
+#: includes/widgets/types/form.php:1629
 msgid "Fields width"
 msgstr ""
 
-#: includes/widgets/types/form.php:1645
+#: includes/widgets/types/form.php:1647
 msgid "Textarea Height"
 msgstr ""
 
-#: includes/widgets/types/form.php:1670
+#: includes/widgets/types/form.php:1672
 msgid "Calculated Fields"
 msgstr ""
 
-#: includes/widgets/types/form.php:1698 includes/widgets/types/form.php:2008
+#: includes/widgets/types/form.php:1700 includes/widgets/types/form.php:2010
 msgid "Prefix Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1709 includes/widgets/types/form.php:1989
+#: includes/widgets/types/form.php:1711 includes/widgets/types/form.php:1991
 msgid "Prefix size"
 msgstr ""
 
-#: includes/widgets/types/form.php:1727 includes/widgets/types/form.php:2038
+#: includes/widgets/types/form.php:1729 includes/widgets/types/form.php:2040
 msgid "Suffix Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1738 includes/widgets/types/form.php:2019
+#: includes/widgets/types/form.php:1740 includes/widgets/types/form.php:2021
 msgid "Suffix size"
 msgstr ""
 
-#: includes/widgets/types/form.php:1819
+#: includes/widgets/types/form.php:1821
 msgid "Range Fields"
 msgstr ""
 
-#: includes/widgets/types/form.php:1827
+#: includes/widgets/types/form.php:1829
 msgid "Max Width"
 msgstr ""
 
-#: includes/widgets/types/form.php:1854
+#: includes/widgets/types/form.php:1856
 msgid "Track Height"
 msgstr ""
 
-#: includes/widgets/types/form.php:1875
+#: includes/widgets/types/form.php:1877
 msgid "Thumb Size"
 msgstr ""
 
-#: includes/widgets/types/form.php:1907
+#: includes/widgets/types/form.php:1909
 msgid "Track Border Radius"
 msgstr ""
 
-#: includes/widgets/types/form.php:1921
+#: includes/widgets/types/form.php:1923
 msgid "Thumb Border Radius"
 msgstr ""
 
-#: includes/widgets/types/form.php:1935
+#: includes/widgets/types/form.php:1937
 msgid "Track Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1948
+#: includes/widgets/types/form.php:1950
 msgid "Thumb Color"
 msgstr ""
 
-#: includes/widgets/types/form.php:1961
+#: includes/widgets/types/form.php:1963
 msgid "Value"
 msgstr ""
 
-#: includes/widgets/types/form.php:2055
-msgid "Repeater"
+#: includes/widgets/types/form.php:2056
+msgid "Heading"
 msgstr ""
 
-#: includes/widgets/types/form.php:2064
-msgid "Repeater row"
-msgstr ""
-
-#: includes/widgets/types/form.php:2085
-msgid "New item button"
-msgstr ""
-
-#: includes/widgets/types/form.php:2156 includes/widgets/types/form.php:2338
-#: includes/widgets/types/form.php:2612
-msgid "Border Color"
-msgstr ""
-
-#: includes/widgets/types/form.php:2246 includes/widgets/types/form.php:2702
-msgid "Start"
-msgstr ""
-
-#: includes/widgets/types/form.php:2254 includes/widgets/types/form.php:2710
-msgid "End"
-msgstr ""
-
-#: includes/widgets/types/form.php:2267
-msgid "Remove item button"
-msgstr ""
-
-#: includes/widgets/types/form.php:2403
-msgid "Icon Size"
-msgstr ""
-
-#: includes/widgets/types/form.php:2434
-msgid "Top"
-msgstr ""
-
-#: includes/widgets/types/form.php:2438
-msgid "Middle"
-msgstr ""
-
-#: includes/widgets/types/form.php:2442
-msgid "Bottom"
-msgstr ""
-
-#: includes/widgets/types/form.php:2461
-msgid "Conditional block"
-msgstr ""
-
-#: includes/widgets/types/form.php:2714
-msgid "Fullwidth"
-msgstr ""
-
-#: includes/widgets/types/form.php:2742
+#: includes/widgets/types/form.php:2093 includes/widgets/types/form.php:2133
+#: includes/widgets/types/form.php:2838
 msgid "Gap"
 msgstr ""
 
-#: includes/widgets/types/form.php:2794
+#: includes/widgets/types/form.php:2151
+msgid "Repeater"
+msgstr ""
+
+#: includes/widgets/types/form.php:2160
+msgid "Repeater row"
+msgstr ""
+
+#: includes/widgets/types/form.php:2181
+msgid "New item button"
+msgstr ""
+
+#: includes/widgets/types/form.php:2252 includes/widgets/types/form.php:2434
+#: includes/widgets/types/form.php:2708
+msgid "Border Color"
+msgstr ""
+
+#: includes/widgets/types/form.php:2342 includes/widgets/types/form.php:2798
+msgid "Start"
+msgstr ""
+
+#: includes/widgets/types/form.php:2350 includes/widgets/types/form.php:2806
+msgid "End"
+msgstr ""
+
+#: includes/widgets/types/form.php:2363
+msgid "Remove item button"
+msgstr ""
+
+#: includes/widgets/types/form.php:2499
+msgid "Icon Size"
+msgstr ""
+
+#: includes/widgets/types/form.php:2530
+msgid "Top"
+msgstr ""
+
+#: includes/widgets/types/form.php:2534
+msgid "Middle"
+msgstr ""
+
+#: includes/widgets/types/form.php:2538
+msgid "Bottom"
+msgstr ""
+
+#: includes/widgets/types/form.php:2557
+msgid "Conditional block"
+msgstr ""
+
+#: includes/widgets/types/form.php:2810
+msgid "Fullwidth"
+msgstr ""
+
+#: includes/widgets/types/form.php:2890
 msgid "Form Break Buttons"
 msgstr ""
 
-#: includes/widgets/types/form.php:2802
+#: includes/widgets/types/form.php:2898
 msgid "Next Button"
 msgstr ""
 
-#: includes/widgets/types/form.php:2913
+#: includes/widgets/types/form.php:3009
 msgid "Prev Button"
 msgstr ""
 
-#: includes/widgets/types/form.php:3090
+#: includes/widgets/types/form.php:3186
 msgid "Messages"
 msgstr ""
 
-#: includes/widgets/types/form.php:3098 includes/widgets/types/form.php:3191
+#: includes/widgets/types/form.php:3194 includes/widgets/types/form.php:3287
 msgid "Success Message"
 msgstr ""
 
-#: includes/widgets/types/form.php:3200
+#: includes/widgets/types/form.php:3296
 msgid "Error Message"
 msgstr ""
 

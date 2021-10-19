@@ -2049,6 +2049,100 @@ class Form extends Jfb_Widget_Base {
 		};
 		$closure();
 
+		$closure = function () {
+			$this->start_controls_section(
+				'section_headings_style',
+				array(
+					'label'      => __( 'Heading', 'jet-form-builder' ),
+					'tab'        => Controls_Manager::TAB_STYLE,
+					'show_label' => false,
+				)
+			);
+
+			$this->add_control(
+				'field_heading_styles_heading',
+				array(
+					'label'     => esc_html__( 'Label', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'field_heading_typography',
+					'selector' => $this->selector( '__heading' ),
+				)
+			);
+
+			$this->add_control(
+				'fields_heading_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__heading' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'fields_heading_gap',
+				array(
+					'label'      => __( 'Gap', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__heading' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'field_heading_styles_desc',
+				array(
+					'label'     => esc_html__( 'Description', 'jet-form-builder' ),
+					'type'      => Controls_Manager::HEADING,
+					'separator' => 'before',
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'field_desc_typography',
+					'selector' => $this->selector( '__heading-desc' ),
+				)
+			);
+
+			$this->add_control(
+				'fields_desc_color',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__heading-desc' ) => 'color: {{VALUE}}',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'fields_heading_desc_gap',
+				array(
+					'label'      => __( 'Gap', 'jet-form-builder' ),
+					'type'       => Controls_Manager::DIMENSIONS,
+					'size_units' => array( 'px' ),
+					'selectors'  => array(
+						$this->selector( '__heading-desc' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->end_controls_section();
+		};
+		$closure();
+
 		/** Repeater */
 		$closure = function () {
 			$this->start_controls_section(

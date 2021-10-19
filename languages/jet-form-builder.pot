@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-10-19T09:45:52+03:00\n"
+"POT-Creation-Date: 2021-10-19T09:52:24+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: jet-form-builder\n"
@@ -95,7 +95,6 @@ msgstr ""
 #: includes/actions/types/active-campaign.php:136
 #: includes/actions/types/getresponse.php:158
 #: includes/actions/types/mailchimp.php:206
-#: includes/gateways/paypal/controller.php:49
 #: assets/src/editor/plugins/captcha/options.js:7
 msgid "Use Global Settings"
 msgstr ""
@@ -269,43 +268,43 @@ msgstr ""
 msgid "Redirect to Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:137
+#: includes/actions/types/redirect-to-page.php:154
 msgid "Redirect to:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:138
+#: includes/actions/types/redirect-to-page.php:155
 msgid "Select page:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:139
+#: includes/actions/types/redirect-to-page.php:156
 msgid "Redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:140
+#: includes/actions/types/redirect-to-page.php:157
 msgid "Add query arguments to the redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:141
+#: includes/actions/types/redirect-to-page.php:158
 msgid "Add hash to the redirect URL:"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:161
+#: includes/actions/types/redirect-to-page.php:178
 msgid "Select redirect to..."
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:165
+#: includes/actions/types/redirect-to-page.php:182
 msgid "Static Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:169
+#: includes/actions/types/redirect-to-page.php:186
 msgid "Custom URL"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:173
+#: includes/actions/types/redirect-to-page.php:190
 msgid "Current Page"
 msgstr ""
 
-#: includes/actions/types/redirect-to-page.php:177
+#: includes/actions/types/redirect-to-page.php:194
 msgid "Inserted post"
 msgstr ""
 
@@ -1354,7 +1353,7 @@ msgstr ""
 msgid "Start Import"
 msgstr ""
 
-#: includes/form-manager.php:138
+#: includes/form-manager.php:134
 msgid "Select function..."
 msgstr ""
 
@@ -1386,58 +1385,39 @@ msgstr ""
 msgid "Booking form"
 msgstr ""
 
-#: includes/gateways/gateways-editor-data.php:14
-#: assets/src/editor/gateways/gateways-editor.js:140
-msgid "Before payment processed:"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:15
-#: assets/src/editor/gateways/gateways-editor.js:158
-msgid "On successful payment:"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:16
-#: assets/src/editor/gateways/gateways-editor.js:176
-msgid "On failed payment:"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:17
-msgid "Price/amount field"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:18
-msgid "Payment success message"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:19
-msgid "Payment failed message"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:20
-msgid "Use redirect URL from Redirect notification"
-msgstr ""
-
-#: includes/gateways/gateways-editor-data.php:21
-msgid "Create payment order notification:"
-msgstr ""
-
-#: includes/gateways/paypal/controller.php:34
-msgid "PayPal Checkout"
-msgstr ""
-
-#: includes/gateways/paypal/controller.php:40
-#: assets/src/admin/pages/settings/gateways/paypal/source.js:4
+#: includes/gateways/paypal/controller.php:50
+msgctxt "Paypal gateways editor data"
 msgid "Client ID"
 msgstr ""
 
-#: includes/gateways/paypal/controller.php:43
-#: assets/src/admin/pages/settings/gateways/paypal/source.js:5
-#: assets/src/admin/pages/settings/tabs/captcha/source.js:5
+#: includes/gateways/paypal/controller.php:53
+msgctxt "Paypal gateways editor data"
 msgid "Secret Key"
 msgstr ""
 
-#: includes/gateways/paypal/controller.php:46
+#: includes/gateways/paypal/controller.php:56
+msgctxt "Paypal gateways editor data"
 msgid "Currency Code"
+msgstr ""
+
+#: includes/gateways/paypal/controller.php:60
+msgctxt "Paypal gateways editor data"
+msgid "Use Global Settings"
+msgstr ""
+
+#: includes/gateways/paypal/controller.php:64
+msgctxt "Paypal gateways editor data"
+msgid "Gateway Action"
+msgstr ""
+
+#: includes/gateways/paypal/controller.php:75
+msgctxt "Paypal gateway editor data"
+msgid "Pay Now"
+msgstr ""
+
+#: includes/gateways/paypal/controller.php:79
+msgctxt "Paypal gateway editor data"
+msgid "Create a subscription"
 msgstr ""
 
 #: includes/generators/get-from-field.php:22
@@ -1961,6 +1941,15 @@ msgstr ""
 msgid "Unknown error."
 msgstr ""
 
+#: assets/src/admin/pages/settings/gateways/paypal/source.js:4
+msgid "Client ID"
+msgstr ""
+
+#: assets/src/admin/pages/settings/gateways/paypal/source.js:5
+#: assets/src/admin/pages/settings/tabs/captcha/source.js:5
+msgid "Secret Key"
+msgstr ""
+
 #: assets/src/admin/pages/settings/tabs/captcha/source.js:4
 msgid "Site Key"
 msgstr ""
@@ -2204,6 +2193,18 @@ msgstr ""
 
 #: assets/src/editor/form-actions/register-user.js:115
 msgid "Set user meta fields to save appropriate form fields into"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:140
+msgid "Before payment processed:"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:158
+msgid "On successful payment:"
+msgstr ""
+
+#: assets/src/editor/gateways/gateways-editor.js:176
+msgid "On failed payment:"
 msgstr ""
 
 #: assets/src/editor/gateways/gateways-editor.js:229

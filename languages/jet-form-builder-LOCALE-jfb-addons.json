@@ -717,42 +717,6 @@
             "Booking form": [
                 ""
             ],
-            "Before payment processed:": [
-                ""
-            ],
-            "On successful payment:": [
-                ""
-            ],
-            "On failed payment:": [
-                ""
-            ],
-            "Price/amount field": [
-                ""
-            ],
-            "Payment success message": [
-                ""
-            ],
-            "Payment failed message": [
-                ""
-            ],
-            "Use redirect URL from Redirect notification": [
-                ""
-            ],
-            "Create payment order notification:": [
-                ""
-            ],
-            "PayPal Checkout": [
-                ""
-            ],
-            "Client ID": [
-                ""
-            ],
-            "Secret Key": [
-                ""
-            ],
-            "Currency Code": [
-                ""
-            ],
             "Get values list from JetEngine field options": [
                 ""
             ],
@@ -1110,6 +1074,12 @@
             "Unknown error.": [
                 ""
             ],
+            "Client ID": [
+                ""
+            ],
+            "Secret Key": [
+                ""
+            ],
             "Site Key": [
                 ""
             ],
@@ -1293,6 +1263,15 @@
             "Set user meta fields to save appropriate form fields into": [
                 ""
             ],
+            "Before payment processed:": [
+                ""
+            ],
+            "On successful payment:": [
+                ""
+            ],
+            "On failed payment:": [
+                ""
+            ],
             "Available macros list: ": [
                 ""
             ],
@@ -1393,6 +1372,27 @@
                 ""
             ],
             "Available fields: ": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004Client ID": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004Secret Key": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004Currency Code": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004Use Global Settings": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004Gateway Action": [
+                ""
+            ],
+            "Paypal gateway editor data\u0004Pay Now": [
+                ""
+            ],
+            "Paypal gateway editor data\u0004Create a subscription": [
                 ""
             ],
             "block keyword\u0004jetformbuilder": [

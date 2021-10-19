@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
-class Paypal_Get_Token extends Paypal_Base_Action {
+class Get_Token extends Base_Action {
 
 	const SLUG = 'GET_ACCESS_TOKEN';
 

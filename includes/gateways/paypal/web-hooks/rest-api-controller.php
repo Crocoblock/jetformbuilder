@@ -8,7 +8,7 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 
 	public function routes() {
 		return array(
-			new Billing_Subscription_Expired_Endpoint()
+			new Paypal_Subscription_Endpoint()
 		);
 	}
 }

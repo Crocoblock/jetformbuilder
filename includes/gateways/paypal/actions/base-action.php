@@ -8,18 +8,23 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 
-abstract class Paypal_Base_Action {
+abstract class Base_Action {
 
 	protected $auth;
 	protected $method = 'POST';
+	protected $body = array();
 
 	abstract public function action_slug();
 
 	abstract public function action_endpoint();
 
-	abstract public function action_headers();
+	public function action_headers() {
+		return array();
+	}
 
-	abstract public function action_body();
+	public function action_body() {
+		return array();
+	}
 
 	public function get_url() {
 		return $this->api_url( $this->action_endpoint() );
@@ -51,6 +56,18 @@ abstract class Paypal_Base_Action {
 		return $this;
 	}
 
+	public function set_body( $content ) {
+		if ( is_string( $content ) ) {
+			$this->body = $content;
+		}
+
+		if ( is_array( $content ) ) {
+			$this->body = array_merge( $this->body, $content );
+		}
+
+		return $this;
+	}
+
 	public function get_headers() {
 		$args = array(
 			'Content-Type'    => 'application/json',
@@ -65,10 +82,8 @@ abstract class Paypal_Base_Action {
 	}
 
 	public function get_body() {
-		$body = $this->action_body();
-
-		if ( ! is_array( $body ) ) {
-			return $body;
+		if ( ! is_array( $this->body ) ) {
+			return $this->body;
 		}
 
 		if ( version_compare( phpversion(), '7.1', '>=' ) ) {
@@ -76,7 +91,7 @@ abstract class Paypal_Base_Action {
 			ini_set( 'serialize_precision', - 1 );
 		}
 
-		return wp_json_encode( $body );
+		return wp_json_encode( $this->body );
 	}
 
 	public function get_request_args() {
@@ -91,8 +106,10 @@ abstract class Paypal_Base_Action {
 
 		$args['method'] = $this->get_method();
 
-		if ( $this->action_body() ) {
-			$args['body'] = $this->get_body();
+		$this->set_body( $this->action_body() );
+
+		if ( ! empty( $this->body ) ) {
+			$args['body'] = wp_unslash( $this->get_body() );
 		}
 
 		return $args;

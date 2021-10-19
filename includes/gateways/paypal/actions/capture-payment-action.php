@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
-class Paypal_Capture_Payment_Action extends Paypal_Base_Action {
+class Capture_Payment_Action extends Base_Action {
 
 	const SLUG = 'CAPTURE_PAYMENT';
 

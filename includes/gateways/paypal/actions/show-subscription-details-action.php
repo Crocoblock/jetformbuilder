@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
-class Paypal_Show_Subscription_Details_Action extends Paypal_Base_Action {
+class Show_Subscription_Details_Action extends Base_Action {
 
 	private $subscription_id;
 

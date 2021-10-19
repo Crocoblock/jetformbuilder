@@ -7,9 +7,9 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 
-class Paypal_Pay_Now_Action extends Paypal_Base_Action {
+class Pay_Now_Action extends Base_Action {
 
-	use Paypal_App_Context_Trait;
+	use App_Context_Trait;
 
 	const SLUG = 'PAY_NOW';
 

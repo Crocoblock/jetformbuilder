@@ -5,10 +5,10 @@ namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
 /**
- * Trait Paypal_App_Context_Trait
+ * Trait App_Context_Trait
  * @package Jet_Form_Builder\Gateways\Paypal\Actions
  */
-trait Paypal_App_Context_Trait {
+trait App_Context_Trait {
 
 	private $app_context = array();
 

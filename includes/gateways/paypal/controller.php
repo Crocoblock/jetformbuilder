@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Get_Token;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
@@ -193,7 +193,7 @@ class Controller extends Base_Gateway {
 			return $token;
 		}
 
-		$response = ( new Paypal_Get_Token() )
+		$response = ( new Get_Token() )
 			->set_credentials( $client_id, $secret )
 			->send_request();
 

@@ -25,12 +25,20 @@ abstract class Rest_Api_Controller_Base {
 					'args'                => $route->get_common_args()
 				);
 
-			register_rest_route(
+			$result = register_rest_route(
 				$route->get_namespace(),
 				"/{$route->get_rest_base()}",
 				$endpoint_args,
 				$route->get_override()
 			);
+
+			if ( ! $result ) {
+				_doing_it_wrong(
+					__METHOD__,
+					"Error on register REST API route: {$route->get_namespace()}/{$route->get_rest_base()}",
+					'1.4.0'
+				);
+			}
 		}
 	}
 

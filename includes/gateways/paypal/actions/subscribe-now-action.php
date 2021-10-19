@@ -4,11 +4,10 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
-use Jet_Form_Builder\Gateways\Paypal\Controller;
 
-class Paypal_Subscribe_Now_Action extends Paypal_Base_Action {
+class Subscribe_Now_Action extends Base_Action {
 
-	use Paypal_App_Context_Trait;
+	use App_Context_Trait;
 
 	private $plan_id;
 

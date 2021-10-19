@@ -6,8 +6,8 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Capture_Payment_Action;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Paypal_Pay_Now_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Capture_Payment_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions\Pay_Now_Action;
 
 class Scenario_Pay_Now extends Scenario_Base {
 
@@ -32,7 +32,7 @@ class Scenario_Pay_Now extends Scenario_Base {
 	 * @throws Gateway_Exception
 	 */
 	public function process_before() {
-		return ( new Paypal_Pay_Now_Action() )
+		return ( new Pay_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
 			->set_app_context( array(
 				'return_url' => $this->get_success_url(),
@@ -52,7 +52,7 @@ class Scenario_Pay_Now extends Scenario_Base {
 	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
-		return ( new Paypal_Capture_Payment_Action() )
+		return ( new Capture_Payment_Action() )
 			->set_bearer_auth( $this->controller->get_token() )
 			->set_order_id( $this->get_queried_token() )
 			->send_request();

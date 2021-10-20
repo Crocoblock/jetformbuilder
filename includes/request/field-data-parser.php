@@ -36,8 +36,12 @@ abstract class Field_Data_Parser {
 		return $this->get_response();
 	}
 
+	public function parse_value( $value ) {
+		return $value;
+	}
+
 	public function init( $value, $block, $inside_conditional ) {
-		$this->value = $value;
+		$this->value = $this->parse_value( $value );
 		$this->block = $block;
 
 		$this->inside_conditional = $inside_conditional;

@@ -128,7 +128,7 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	protected function query_order_token( $order_id, $form_id ) {
-		return $this->get_token();
+		return $this->get_current_token();
 	}
 
 	/**
@@ -175,19 +175,6 @@ class Controller extends Base_Gateway {
 	}
 
 	/**
-	 * Returns auth token for current client_id and secret combination
-	 *
-	 * @return mixed|void [description]
-	 * @throws Gateway_Exception
-	 */
-	public function get_token() {
-		$client_id = $this->current_gateway( 'client_id' );
-		$secret    = $this->current_gateway( 'secret' );
-
-		return self::get_token_with_credits( $client_id, $secret );
-	}
-
-	/**
 	 * @return Scenarios\Scenario_Base
 	 * @throws Gateway_Exception
 	 */
@@ -208,13 +195,55 @@ class Controller extends Base_Gateway {
 	}
 
 	/**
+	 * Returns auth token for current client_id and secret combination
+	 *
+	 * @return mixed|void [description]
+	 * @throws Gateway_Exception
+	 */
+	public function get_current_token() {
+		$client_id = $this->current_gateway( 'client_id' );
+		$secret    = $this->current_gateway( 'secret' );
+
+		return self::get_token_with_credits( $client_id, $secret );
+	}
+
+	/**
+	 * @param $form_id
+	 *
+	 * @return mixed|string
+	 * @throws Gateway_Exception
+	 */
+	public static function get_token_by_form_id( $form_id ) {
+		$paypal = Gateway_Manager::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+
+		if ( empty( $paypal['secret'] ) || empty( $paypal['client_id'] ) ) {
+			return self::get_token_global();
+		}
+
+		return self::get_token_with_credits( $paypal['secret'], $paypal['client_id'] );
+	}
+
+	/**
+	 * @return mixed|string
+	 * @throws Gateway_Exception
+	 */
+	public static function get_token_global() {
+		$credits = self::get_credentials();
+
+		$secret    = $credits['secret'] ?? false;
+		$client_id = $credits['client_id'] ?? false;
+
+		return self::get_token_with_credits( $client_id, $secret );
+	}
+
+	/**
 	 * @param $client_id
 	 * @param $secret
 	 *
 	 * @return mixed|string
 	 * @throws Gateway_Exception
 	 */
-	public function get_token_with_credits( $client_id, $secret ) {
+	public static function get_token_with_credits( $client_id, $secret ) {
 		if ( ! $client_id || ! $secret ) {
 			return '';
 		}

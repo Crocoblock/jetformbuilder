@@ -53,7 +53,7 @@ class Scenario_Pay_Now extends Scenario_Base {
 	 */
 	public function process_after() {
 		return ( new Capture_Payment_Action() )
-			->set_bearer_auth( $this->controller->get_token() )
+			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_order_id( $this->get_queried_token() )
 			->send_request();
 	}

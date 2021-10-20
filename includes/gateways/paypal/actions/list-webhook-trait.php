@@ -11,12 +11,14 @@ trait List_Webhook_Trait {
 	/**
 	 * @param $compared_url
 	 *
+	 * @param bool $token
+	 *
 	 * @return false|mixed
 	 * @throws Gateway_Exception
 	 */
-	public function get_webhook_id_by_url( $compared_url ) {
+	public function get_webhook_id_by_endpoint( $compared_url, $token ) {
 		$response = ( new List_Webhooks() )
-			->set_bearer_auth( $this->controller->get_token() )
+			->set_bearer_auth( $token )
 			->send_request();
 
 		if ( ! isset( $response['webhooks'] ) ) {
@@ -31,7 +33,7 @@ trait List_Webhook_Trait {
 		foreach ( $webhooks as $webhook ) {
 			$url = $webhook['url'] ?? '';
 
-			if ( $url === $endpoint ) {
+			if ( 1 === preg_match( "#$endpoint#", $url ) ) {
 				return $webhook['id'];
 			}
 		}

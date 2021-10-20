@@ -60,6 +60,7 @@ class Parser_Manager {
 					$inside_conditional
 				) );
 
+				$inside_conditional = false;
 				continue;
 			}
 

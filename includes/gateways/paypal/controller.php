@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
@@ -13,6 +14,8 @@ use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
 class Controller extends Base_Gateway {
+
+	const ID = 'paypal';
 
 	public $data = false;
 	public $message = false;
@@ -30,7 +33,7 @@ class Controller extends Base_Gateway {
 	 * @return [type] [description]
 	 */
 	public function get_id() {
-		return 'paypal';
+		return self::ID;
 	}
 
 	/**
@@ -181,8 +184,39 @@ class Controller extends Base_Gateway {
 		$client_id = $this->current_gateway( 'client_id' );
 		$secret    = $this->current_gateway( 'secret' );
 
+		return self::get_token_with_credits( $client_id, $secret );
+	}
+
+	/**
+	 * @return Scenarios\Scenario_Base
+	 * @throws Gateway_Exception
+	 */
+	public function get_scenario() {
+		return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
+	}
+
+	/**
+	 * @return Scenarios\Scenario_Base
+	 * @throws Gateway_Exception
+	 */
+	public function query_scenario() {
+		return Scenarios_Manager::instance()->query_scenario()->install( $this );
+	}
+
+	public static function get_credentials() {
+		return Gateway_Manager::instance()->get_global_settings( self::ID );
+	}
+
+	/**
+	 * @param $client_id
+	 * @param $secret
+	 *
+	 * @return mixed|string
+	 * @throws Gateway_Exception
+	 */
+	public function get_token_with_credits( $client_id, $secret ) {
 		if ( ! $client_id || ! $secret ) {
-			return;
+			return '';
 		}
 		$hash  = md5( $client_id . $secret );
 		$token = get_transient( $hash );
@@ -204,22 +238,6 @@ class Controller extends Base_Gateway {
 		set_transient( $hash, $token, $response['expires_in'] * 0.9 );
 
 		return $token;
-	}
-
-	/**
-	 * @return Scenarios\Scenario_Base
-	 * @throws Gateway_Exception
-	 */
-	public function get_scenario() {
-		return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
-	}
-
-	/**
-	 * @return Scenarios\Scenario_Base
-	 * @throws Gateway_Exception
-	 */
-	public function query_scenario() {
-		return Scenarios_Manager::instance()->query_scenario()->install( $this );
 	}
 
 }

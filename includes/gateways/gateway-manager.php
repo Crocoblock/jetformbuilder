@@ -206,6 +206,10 @@ class Gateway_Manager {
 		return jet_form_builder()->form_handler->action_handler;
 	}
 
+	public function get_global_settings( $gateway_id ) {
+		return Tab_Handler_Manager::instance()->tab( $gateway_id )->on_load();
+	}
+
 	public function with_global_settings( $gateways_data, $gateway_id ) {
 		if ( ! isset( $gateways_data[ $gateway_id ] ) ) {
 			return $gateways_data;
@@ -213,7 +217,7 @@ class Gateway_Manager {
 		$gateway = &$gateways_data[ $gateway_id ];
 
 		if ( ! empty( $gateway['use_global'] ) ) {
-			$gateway = array_merge( $gateway, Tab_Handler_Manager::instance()->tab( $gateway_id )->on_load() );
+			$gateway = array_merge( $gateway, $this->get_global_settings( $gateway_id ) );
 		}
 
 		return $gateways_data;

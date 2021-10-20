@@ -8,6 +8,7 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Create_Webhook;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Delete_Webhook;
+use Jet_Form_Builder\Gateways\Paypal\Actions\List_Webhook_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Actions\List_Webhooks;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Show_Subscription_Details_Action;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Subscribe_Now_Action;
@@ -17,6 +18,7 @@ use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Paypal_Subscription_Endpoint;
 class Scenario_Subscribe extends Scenario_Base {
 
 	use Scenario_Set_Status_Trait;
+	use List_Webhook_Trait;
 
 	const SLUG = 'SUBSCRIBE_NOW';
 
@@ -71,21 +73,10 @@ class Scenario_Subscribe extends Scenario_Base {
 	 * @throws Gateway_Exception
 	 */
 	private function maybe_create_webhooks() {
-		if ( $this->controller->get_webhooks() ) {
-			return;
-		}
-		$response = ( new List_Webhooks() )
-			->set_bearer_auth( $this->controller->get_token() )
-			->send_request();
-
-		if ( ! isset( $response['webhooks'] ) ) {
-			throw new Gateway_Exception( 'Can\'t get webhooks list', $response );
-		}
-
-		$webhooks = $response['webhooks'] ?? array();
 		$endpoint = Paypal_Subscription_Endpoint::rest_url();
+		$webhook_id = $this->get_webhook_id_by_url( $endpoint );
 
-		if ( $this->search_webhook_by_url( $webhooks, $endpoint ) ) {
+		if ( $webhook_id ) {
 			return;
 		}
 
@@ -101,15 +92,5 @@ class Scenario_Subscribe extends Scenario_Base {
 
 	}
 
-	public function search_webhook_by_url( $webhooks, $endpoint ) {
-		foreach ( $webhooks as $webhook ) {
-			$url = $webhook['url'] ?? '';
 
-			if ( $url === $endpoint ) {
-				return $webhook['id'];
-			}
-		}
-
-		return false;
-	}
 }

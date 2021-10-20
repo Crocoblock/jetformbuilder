@@ -18,7 +18,7 @@ class Paypal_Subscription_Endpoint extends Rest_Api_Endpoint_Base {
 		update_option(
 			'rest_api_jfb_test',
 			wp_json_encode(
-				array( date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ), $_POST )
+				array( date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ), $request->get_headers(), $request->get_body() )
 			)
 		);
 

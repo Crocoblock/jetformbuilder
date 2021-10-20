@@ -14,8 +14,6 @@ use Jet_Form_Builder\Gateways\Base_Gateway;
 
 class Controller extends Base_Gateway {
 
-	const WEBHOOKS_OPTIONS = '_jfb_paypal_webhooks';
-
 	public $data = false;
 	public $message = false;
 	public $redirect = false;
@@ -222,10 +220,6 @@ class Controller extends Base_Gateway {
 	 */
 	public function query_scenario() {
 		return Scenarios_Manager::instance()->query_scenario()->install( $this );
-	}
-
-	public function get_webhooks() {
-		return json_decode( get_option( self::WEBHOOKS_OPTIONS, '{}' ), true );
 	}
 
 }

@@ -16,10 +16,6 @@ class Paypal_Subscription_Global_Endpoint extends Rest_Api_Endpoint_Base {
 		return 'paypal-subscription';
 	}
 
-	public function get_methods() {
-		return \WP_REST_Server::READABLE;
-	}
-
 	/**
 	 * @param \WP_REST_Request $request
 	 *

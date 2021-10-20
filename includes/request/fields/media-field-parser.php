@@ -12,23 +12,26 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return 'media-field';
 	}
 
-	public function get_response() {
-		$string_value = wp_unslash( wp_specialchars_decode( $this->value, ENT_COMPAT ) );
-		$value = json_decode( $string_value, true );
+	public function parse_value( $value ) {
+		$string_value = wp_unslash( wp_specialchars_decode( $value, ENT_COMPAT ) );
 
+		return json_decode( $string_value, true );
+	}
+
+	public function get_response() {
 		if ( $this->is_value_format( 'id' ) ) {
-			if ( ! is_array( $value ) ) {
-				$value = ! empty( $value ) ? absint( $value ) : null;
+			if ( ! is_array( $this->value ) ) {
+				$this->value = ! empty( $this->value ) ? absint( $this->value ) : null;
 			} else {
-				$value = implode( ',', $value );
+				$this->value = implode( ',', $this->value );
 			}
 		}
 
-		if ( is_array( $value ) && $this->is_value_format( 'url' ) ) {
-			$value = implode( ', ', $value );
+		if ( is_array( $this->value ) && $this->is_value_format( 'url' ) ) {
+			$this->value = implode( ', ', $this->value );
 		}
 
-		return $value;
+		return $this->value;
 	}
 
 	private function is_value_format( $format ) {

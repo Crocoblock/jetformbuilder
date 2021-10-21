@@ -4,19 +4,17 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 
 
-use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Capture_Payment_Action;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Pay_Now_Action;
 
-class Scenario_Pay_Now extends Scenario_Base {
+class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_It {
 
 	use Scenario_Set_Status_Trait;
 
-	const SLUG = 'PAY_NOW';
-
-	public function rep_item_id() {
-		return self::SLUG;
+	public static function scenario_id() {
+		return 'PAY_NOW';
 	}
 
 	protected function query_token() {
@@ -28,11 +26,29 @@ class Scenario_Pay_Now extends Scenario_Base {
 	}
 
 	/**
-	 * @return array
+	 * @return void
 	 * @throws Gateway_Exception
 	 */
 	public function process_before() {
-		return ( new Pay_Now_Action() )
+		$payment = $this->create_resource();
+
+		/**
+		 * By default save payment id & form data to inserted post meta
+		 */
+		$this->save_resource( $payment );
+
+		/**
+		 * Redirect to Paypal checkout for approve payment
+		 */
+		$this->redirect_to_checkout( $payment );
+	}
+
+	/**
+	 * @return array
+	 * @throws Gateway_Exception
+	 */
+	public function create_resource() {
+		$payment = ( new Pay_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
 			->set_app_context( array(
 				'return_url' => $this->get_success_url(),
@@ -45,6 +61,26 @@ class Scenario_Pay_Now extends Scenario_Base {
 				)
 			) )
 			->send_request();
+
+		if ( empty( $payment['id'] ) ) {
+			throw new Gateway_Exception( $payment['message'], $payment );
+		}
+
+		return $payment;
+	}
+
+	public function save_resource( $payment ) {
+		update_post_meta(
+			$this->controller->get_order_id(),
+			Paypal\Controller::GATEWAY_META_KEY,
+			json_encode( array(
+				'payment_id' => $payment['id'],
+				'scenario'   => $this->rep_item_id(),
+				'order_id'   => $this->controller->get_order_id(),
+				'form_id'    => $this->get_action_handler()->form_id,
+				'form_data'  => $this->get_action_handler()->request_data,
+			), JSON_UNESCAPED_UNICODE )
+		);
 	}
 
 	/**

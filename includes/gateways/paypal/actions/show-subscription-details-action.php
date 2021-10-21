@@ -8,6 +8,7 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 class Show_Subscription_Details_Action extends Base_Action {
 
+	protected $method = 'GET';
 	private $subscription_id;
 
 	public function action_slug() {
@@ -25,7 +26,6 @@ class Show_Subscription_Details_Action extends Base_Action {
 	public function action_body() {
 		return array();
 	}
-
 
 	public function set_subscription_id( $subscription_id ) {
 		$this->subscription_id = $subscription_id;

@@ -10,12 +10,20 @@ abstract class Event_Handler_Base {
 
 	use Repository_Item_Trait;
 
-	public function rep_item_id() {
-		return $this->get_event_type();
+	public static function rep_item_id() {
+		return static::get_event_type();
 	}
 
-	abstract public function get_event_type();
+	abstract public static function get_event_type();
 
-	abstract public function on_catch_event();
+	public function on_catch_event( $webhook_event ) {
+		update_option(
+			"rest_api_jfb_test_{$this->get_event_type()}",
+			wp_json_encode( array(
+				date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
+				$webhook_event
+			) )
+		);
+	}
 
 }

@@ -41,6 +41,14 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 		}
 	}
 
+	public function set_webhook_event( $event ) {
+		$this->set_body( array(
+			'webhook_event' => $event
+		) );
+
+		return $this;
+	}
+
 	/**
 	 * @param \WP_REST_Request $request
 	 *
@@ -69,7 +77,6 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 			'cert_url'          => $cert_url,
 			'auth_algo'         => $auth_algo,
 			'transmission_sig'  => $transmission_sig,
-			'webhook_event'     => $request->get_json_params()
 		) );
 
 		return $this;

@@ -10,7 +10,4 @@ class Billing_Plan_Deactivated extends Event_Handler_Base {
 		return 'BILLING.PLAN.DEACTIVATED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

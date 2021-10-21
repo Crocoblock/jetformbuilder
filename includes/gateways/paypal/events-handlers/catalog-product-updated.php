@@ -10,7 +10,4 @@ class Catalog_Product_Updated extends Event_Handler_Base {
 		return 'CATALOG.PRODUCT.UPDATED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

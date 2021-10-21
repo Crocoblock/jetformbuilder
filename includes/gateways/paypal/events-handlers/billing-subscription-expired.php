@@ -10,7 +10,4 @@ class Billing_Subscription_Expired extends Event_Handler_Base {
 		return 'BILLING.SUBSCRIPTION.EXPIRED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

@@ -57,11 +57,6 @@ class Events_Listeners_Manager {
 	}
 
 	public function get_events_types_list() {
-		return array_map( function ( $event ) {
-
-			/** @var Events_Handlers\Event_Handler_Base $event */
-			return $event->get_event_type();
-
-		}, $this->rep_get_items() );
+		return $this->rep_get_items_keys();
 	}
 }

@@ -10,7 +10,4 @@ class Catalog_Product_Created extends Event_Handler_Base {
 		return 'CATALOG.PRODUCT.CREATED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

@@ -10,7 +10,4 @@ class Billing_Subscription_Payment_Failed extends Event_Handler_Base {
 		return 'BILLING.SUBSCRIPTION.PAYMENT.FAILED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

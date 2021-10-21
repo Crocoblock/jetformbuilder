@@ -8,7 +8,7 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 trait Repository_Pattern_Trait {
 
-	protected $_repository = array();
+	private $__repository = array();
 
 	abstract public function rep_instances(): array;
 
@@ -20,11 +20,15 @@ trait Repository_Pattern_Trait {
 		} catch ( Repository_Exception $exception ) {
 			_doing_it_wrong(
 				__METHOD__,
-				'PLease check all your scenarios for Paypal gateway.',
+				$exception->getMessage(),
 				'1.4.0'
 			);
 		}
 
+	}
+
+	public function allow_rewrite() {
+		return false;
 	}
 
 	/**
@@ -36,13 +40,23 @@ trait Repository_Pattern_Trait {
 	public function rep_install_item( $item_trait ) {
 		$this->rep_item_check( $item_trait );
 
-		$this->_repository[ $item_trait->rep_item_id() ] = $item_trait;
+		if ( $this->rep_isset_item( $item_trait::rep_item_id() ) && ! $this->allow_rewrite() ) {
+			throw new Repository_Exception(
+				"You can't rewrite instance: " . $item_trait::rep_item_id()
+			);
+		}
+
+		$this->__repository[ $item_trait::rep_item_id() ] = $item_trait;
 
 		return $this;
 	}
 
 	public function rep_get_items() {
-		return $this->_repository;
+		return $this->__repository;
+	}
+
+	public function rep_get_items_keys() {
+		return array_keys( $this->__repository );
 	}
 
 	/**
@@ -55,11 +69,11 @@ trait Repository_Pattern_Trait {
 		if ( ! $this->rep_isset_item( $slug ) ) {
 			throw new Repository_Exception( "Undefined item: {$slug}" );
 		}
-		$item = $this->_repository[ $slug ];
+		$item = $this->__repository[ $slug ];
 
 		$this->rep_item_check( $item, $slug );
 
-		return clone $this->_repository[ $slug ];
+		return clone $this->__repository[ $slug ];
 	}
 
 	/**
@@ -76,7 +90,7 @@ trait Repository_Pattern_Trait {
 	}
 
 	public function rep_isset_item( $slug ) {
-		return isset( $this->_repository[ $slug ] );
+		return isset( $this->__repository[ $slug ] );
 	}
 
 }

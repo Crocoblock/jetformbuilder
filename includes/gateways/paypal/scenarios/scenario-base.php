@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 use Jet_Form_Builder\Classes\Repository_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
+use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
 
 abstract class Scenario_Base {
 
@@ -16,6 +17,8 @@ abstract class Scenario_Base {
 	protected $controller;
 
 	protected $queried_token;
+
+	abstract public static function scenario_id();
 
 	abstract public function process_before();
 
@@ -27,6 +30,10 @@ abstract class Scenario_Base {
 
 	abstract public function get_failed_statuses();
 
+	public static function rep_item_id() {
+		return static::scenario_id();
+	}
+
 	public function get_queried_token() {
 		if ( ! $this->queried_token ) {
 			$this->queried_token = $this->query_token();
@@ -35,9 +42,13 @@ abstract class Scenario_Base {
 		return $this->queried_token;
 	}
 
+	public function get_action_handler() {
+		return $this->controller->get_action_handler();
+	}
+
 	public function get_additional_args() {
 		return array(
-			Scenarios_Manager::QUERY_VAR => $this->rep_item_id()
+			Scenarios_Manager::QUERY_VAR => static::scenario_id()
 		);
 	}
 
@@ -55,6 +66,19 @@ abstract class Scenario_Base {
 		}
 
 		return $this;
+	}
+
+	public function redirect_to_checkout( $order ) {
+		foreach ( $order['links'] as $link ) {
+			if ( empty( $link['rel'] ) || 'approve' !== $link['rel'] ) {
+				continue;
+			}
+
+			$this->get_action_handler()->add_response( array(
+				'redirect' => $link['href']
+			) );
+			break;
+		}
 	}
 
 }

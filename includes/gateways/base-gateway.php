@@ -105,9 +105,10 @@ abstract class Base_Gateway {
 
 		$this->data['date'] = date_i18n( 'F j, Y, H:i' );
 
-		$this->data['gateway'] = $this->get_name();
+		$this->data['gateway']    = $this->get_name();
+		$this->data['gateway_id'] = $this->get_id();
 
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, json_encode( $this->data ) );
+		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, wp_json_encode( $this->data ) );
 
 		$this->try_do_actions();
 

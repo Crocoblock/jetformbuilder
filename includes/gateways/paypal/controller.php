@@ -141,37 +141,8 @@ class Controller extends Base_Gateway {
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 		$this->set_gateway_data();
-		$order = $this->get_scenario()->process_before();
 
-		if ( empty( $order['id'] ) ) {
-			throw new Gateway_Exception( $order['message'], $order );
-		}
-
-		update_post_meta(
-			$this->order_id,
-			self::GATEWAY_META_KEY,
-			json_encode( array(
-				'payment_id' => $order['id'],
-				'order_id'   => $this->order_id,
-				'form_id'    => $action_handler->form_id,
-				'form_data'  => $action_handler->request_data,
-			), JSON_UNESCAPED_UNICODE )
-		);
-
-		$this->maybe_redirect_to_checkout( $order );
-	}
-
-	private function maybe_redirect_to_checkout( $order ) {
-		foreach ( $order['links'] as $link ) {
-			if ( empty( $link['rel'] ) || 'approve' !== $link['rel'] ) {
-				continue;
-			}
-
-			$this->get_action_handler()->add_response( array(
-				'redirect' => $link['href']
-			) );
-			break;
-		}
+		$this->get_scenario()->process_before();
 	}
 
 	/**

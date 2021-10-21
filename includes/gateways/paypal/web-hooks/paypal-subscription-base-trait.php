@@ -5,7 +5,9 @@ namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Verify_Webhook_Signature_Action;
+use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
 
 trait Paypal_Subscription_Base_Trait {
 
@@ -17,14 +19,18 @@ trait Paypal_Subscription_Base_Trait {
 
 	public function get_callback( \WP_REST_Request $request ) {
 		try {
-			$token      = $this->get_token( $request );
-			$webhook_id = $this->get_webhook_id_by_endpoint( self::get_rest_base(), $token );
+			$token         = $this->get_token( $request );
+			$webhook_id    = $this->get_webhook_id_by_endpoint( self::get_rest_base(), $token );
+			$webhook_event = $request->get_json_params();
 
 			( new Verify_Webhook_Signature_Action() )
 				->set_bearer_auth( $token )
 				->set_webhook_id( $webhook_id )
+				->set_webhook_event( $webhook_event )
 				->set_params_from_request( $request )
 				->is_success();
+
+			$this->run_event( $webhook_event );
 
 		} catch ( Gateway_Exception $exception ) {
 			update_option(
@@ -43,7 +49,25 @@ trait Paypal_Subscription_Base_Trait {
 			);
 		}
 
-		return rest_ensure_response( array( $webhook_id ) );
+		return rest_ensure_response( true );
+	}
+
+	/**
+	 * @param $webhook_event
+	 *
+	 * @throws Gateway_Exception
+	 */
+	private function run_event( $webhook_event ) {
+		$event_type = $webhook_event['event_type'] ?? false;
+
+		try {
+			Events_Listeners_Manager::instance()->get_event( $event_type )->on_catch_event( $webhook_event );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception(
+				"Undefined event type: $event_type",
+				Events_Listeners_Manager::instance()->get_events_types_list()
+			);
+		}
 	}
 
 }

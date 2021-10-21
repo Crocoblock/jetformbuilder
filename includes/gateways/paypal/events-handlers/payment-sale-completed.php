@@ -10,7 +10,4 @@ class Payment_Sale_Completed extends Event_Handler_Base {
 		return 'PAYMENT.SALE.COMPLETED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

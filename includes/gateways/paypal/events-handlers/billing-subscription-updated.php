@@ -10,7 +10,4 @@ class Billing_Subscription_Updated extends Event_Handler_Base {
 		return 'BILLING.SUBSCRIPTION.UPDATED';
 	}
 
-	public function on_catch_event() {
-		// TODO: Implement on_catch_event() method.
-	}
 }

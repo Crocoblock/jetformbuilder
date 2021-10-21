@@ -30,6 +30,11 @@ class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_I
 	 * @throws Gateway_Exception
 	 */
 	public function process_before() {
+		$this->set_gateway_data();
+
+		/**
+		 * Create payment by /v2/checkout/orders
+		 */
 		$payment = $this->create_resource();
 
 		/**
@@ -79,6 +84,8 @@ class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_I
 				'order_id'   => $this->controller->get_order_id(),
 				'form_id'    => $this->get_action_handler()->form_id,
 				'form_data'  => $this->get_action_handler()->request_data,
+				'resource'   => $payment,
+				'provider'   => 'jet-form-builder'
 			), JSON_UNESCAPED_UNICODE )
 		);
 	}

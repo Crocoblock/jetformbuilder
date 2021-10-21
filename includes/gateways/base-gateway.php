@@ -238,7 +238,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	final protected function set_order_token() {
+	public function set_order_token() {
 		$this->order_token = $this->query_order_token( $this->order_id, $this->get_action_handler()->form_id );
 
 		if ( ! $this->order_token ) {
@@ -294,9 +294,10 @@ abstract class Base_Gateway {
 	/**
 	 * Returns form data by payment ID
 	 *
-	 * @param  [type] $payment [description]
+	 * @param null $payment
 	 *
-	 * @return [type]          [description]
+	 * @return array|object|void|null [description]
+	 * @deprecated since 1.4.0
 	 */
 	public function get_form_by_payment_token( $payment = null ) {
 
@@ -322,7 +323,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	protected function set_order_id() {
+	public function set_order_id() {
 		if ( ! $this->get_insert_post_action_id() ) {
 			throw new Gateway_Exception( 'There is not inserted_post_id' );
 		}
@@ -338,7 +339,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	protected function set_price_field() {
+	public function set_price_field() {
 		$this->price_field = esc_attr( $this->gateway( 'price_field', '' ) );
 
 		$this->price_field = apply_filters(
@@ -355,7 +356,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	protected function set_price_from_filed() {
+	public function set_price_from_filed() {
 		$this->price = $this->get_price_from_request();
 
 		if ( ! $this->price ) {
@@ -370,7 +371,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	protected function set_current_gateway_options() {
+	public function set_current_gateway_options() {
 		if ( ! empty( $this->options ) ) {
 			return $this;
 		}
@@ -397,7 +398,7 @@ abstract class Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	protected function set_gateway_data() {
+	public function set_gateway_data() {
 		if ( ! $this->gateways_meta ) {
 			$this->gateways_meta = GM::instance()->gateways();
 		}

@@ -112,10 +112,7 @@ class Plugin {
 		if ( is_admin() ) {
 			$this->editor = new Admin\Editor();
 			new Form_Actions_Manager();
-			new Pages_Manager( array(
-				new Settings_Page(),
-				new Addons_Page()
-			) );
+			new Pages_Manager();
 
 			new PatternsManager();
 		}

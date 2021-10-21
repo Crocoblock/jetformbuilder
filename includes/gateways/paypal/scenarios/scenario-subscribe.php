@@ -36,31 +36,21 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 	 * @throws Gateway_Exception
 	 */
 	public function process_before() {
-		$subscription = ( new Subscribe_Now_Action() )
-			->set_bearer_auth( $this->controller->get_order_token() )
-			->set_app_context( array(
-				'return_url' => $this->get_success_url(),
-				'cancel_url' => $this->get_failed_url()
-			) )
-			->set_plan_id( 'P-2RW14005CT679391XMFPMEWI' )
-			->send_request();
+		$this->set_gateway_data();
 
-		if ( empty( $subscription['id'] ) ) {
-			throw new Gateway_Exception( $subscription['message'], $subscription );
-		}
+		/**
+		 * Create subscription by /v1/billing/subscriptions
+		 */
+		$subscription = $this->create_resource();
 
-		update_post_meta(
-			$this->controller->get_order_id(),
-			Paypal\Controller::GATEWAY_META_KEY,
-			json_encode( array(
-				'subscription_id' => $subscription['id'],
-				'scenario'        => self::rep_item_id(),
-				'order_id'        => $this->controller->get_order_id(),
-				'form_id'         => $this->get_action_handler()->form_id,
-				'form_data'       => $this->get_action_handler()->request_data,
-			), JSON_UNESCAPED_UNICODE )
-		);
+		/**
+		 * By default save subscription id & form data to inserted post meta
+		 */
+		$this->save_resource( $subscription );
 
+		/**
+		 * Redirect to Paypal for agree and subscribe
+		 */
 		$this->redirect_to_checkout( $subscription );
 	}
 
@@ -79,6 +69,22 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 		}
 
 		return $subscription;
+	}
+
+	public function save_resource( $subscription ) {
+		update_post_meta(
+			$this->controller->get_order_id(),
+			Paypal\Controller::GATEWAY_META_KEY,
+			json_encode( array(
+				'subscription_id' => $subscription['id'],
+				'scenario'        => self::scenario_id(),
+				'order_id'        => $this->controller->get_order_id(),
+				'form_id'         => $this->get_action_handler()->form_id,
+				'form_data'       => $this->get_action_handler()->request_data,
+				'resource'        => $subscription,
+				'provider'        => 'jet-form-builder'
+			), JSON_UNESCAPED_UNICODE )
+		);
 	}
 
 

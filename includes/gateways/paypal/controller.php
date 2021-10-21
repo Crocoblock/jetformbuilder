@@ -63,7 +63,7 @@ class Controller extends Base_Gateway {
 			),
 			'gateway_type' => array(
 				'label'   => _x( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
-				'default' => Scenario_Pay_Now::SLUG,
+				'default' => Scenario_Pay_Now::scenario_id(),
 			)
 		);
 	}
@@ -72,11 +72,11 @@ class Controller extends Base_Gateway {
 		return array(
 			'gateway_types' => array(
 				array(
-					'value' => Scenario_Pay_Now::SLUG,
+					'value' => Scenario_Pay_Now::scenario_id(),
 					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' )
 				),
 				array(
-					'value' => Scenario_Subscribe::SLUG,
+					'value' => Scenario_Subscribe::scenario_id(),
 					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' )
 				)
 			)
@@ -106,21 +106,6 @@ class Controller extends Base_Gateway {
 	}
 
 	/**
-	 * @return mixed
-	 * @throws Gateway_Exception
-	 */
-	protected function retrieve_payment_instance() {
-		return $this->query_scenario()->process_after();
-	}
-
-	/**
-	 * @throws Gateway_Exception
-	 */
-	protected function set_gateway_data_on_result() {
-		$this->query_scenario()->process_save();
-	}
-
-	/**
 	 * @param $order_id
 	 * @param $form_id
 	 *
@@ -140,9 +125,22 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
-		$this->set_gateway_data();
-
 		$this->get_scenario()->process_before();
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
+	protected function retrieve_payment_instance() {
+		return $this->query_scenario()->process_after();
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	protected function set_gateway_data_on_result() {
+		$this->query_scenario()->process_save();
 	}
 
 	/**

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 
 
 use Jet_Form_Builder\Classes\Repository_Item_Trait;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
@@ -32,6 +33,13 @@ abstract class Scenario_Base {
 
 	public static function rep_item_id() {
 		return static::scenario_id();
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	public function set_gateway_data() {
+		$this->controller->set_gateway_data();
 	}
 
 	public function get_queried_token() {

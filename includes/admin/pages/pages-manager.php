@@ -23,8 +23,8 @@ class Pages_Manager {
 	 *
 	 * @param array $pages [description]
 	 */
-	public function __construct( $pages = array() ) {
-		$this->register_pages( $pages );
+	public function __construct() {
+		$this->register_pages();
 		add_action( 'admin_menu', array( $this, 'add_pages' ) );
 
 		if ( $this->is_dashboard_page() ) {
@@ -35,10 +35,14 @@ class Pages_Manager {
 
 	/**
 	 * Register admin pages
-	 *
-	 * @param $pages
 	 */
-	public function register_pages( $pages ) {
+	public function register_pages() {
+		$pages = apply_filters( 'jet-form-builder/admin/pages', array(
+			new Settings_Page(),
+			new Addons_Page(),
+			new Paypal_Entries()
+		), $this );
+
 		foreach ( $pages as $page ) {
 			$this->pages[ $page->slug() ] = $page;
 		}

@@ -6,6 +6,7 @@
 				:in-panel="false"
 				:value="activeTabSlug"
 				layout="vertical"
+				@input="onChangeActiveTab"
 			>
 				<cx-vui-tabs-panel
 					v-for="( { displayButton = true, ...tab }, index ) in tabs"
@@ -48,7 +49,7 @@ import GetIncoming from '@admin/mixins/GetIncoming';
 
 const { applyFilters, doAction } = wp.hooks;
 
-window.jfbEventBus = new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue();
 
 const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	paymentGateways,
@@ -58,16 +59,29 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	activecampaign,
 ] );
 
+const changeHash = hash => {
+	window.location.hash = '#' + hash;
+};
+
 const getActiveTab = () => {
 	const first = settingTabs[ 0 ].component.name;
 
 	if ( ! window.location.hash ) {
-		return first;
+		changeHash( first );
+
+		return [ first ];
 	}
 	let [ hash, ...others ] = window.location.hash.replace( '#', '' ).split( '__' );
 	let tab = settingTabs.find( tab => tab.component.name === hash );
 
-	return tab ? [ tab.component.name, others ] : [ first ];
+	if ( ! tab ) {
+		changeHash( first );
+
+		return [ first ];
+	}
+	changeHash( [ tab.component.name, ...others ].join( '__' ) );
+
+	return [ tab.component.name, others ];
 };
 
 export default {
@@ -89,6 +103,14 @@ export default {
 		} );
 	},
 	methods: {
+		onChangeActiveTab( activeTab ) {
+			const currentUrl = new URL( document.URL );
+			currentUrl.hash = '#' + activeTab;
+
+			document.location.href = currentUrl.href;
+
+			jfbEventBus.$emit( 'change-tab', { slug: activeTab } );
+		},
 		onSaveTab( indexTab, tabSlug ) {
 			const currentTab = this.$refs.tabComponents[ indexTab ];
 

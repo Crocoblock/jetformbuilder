@@ -65,6 +65,7 @@ export default {
 	methods: {
 		collapse() {
 			this.isActive = ! this.isActive;
+			this.$emit( 'change', this.isActive );
 		},
 	},
 }

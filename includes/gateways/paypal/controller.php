@@ -90,11 +90,9 @@ class Controller extends Base_Gateway {
 	}
 
 	private function set_payment_status() {
-		if ( empty( $this->payment_instance['status'] ) ) {
-			throw new Gateway_Exception( 'Empty payment status' );
-		}
+		list( $default_status ) = $this->failed_statuses();
 
-		$this->data['status'] = $this->payment_instance['status'];
+		$this->data['status'] = $this->payment_instance['status'] ?? $default_status;
 	}
 
 	private function set_payer() {

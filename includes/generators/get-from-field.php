@@ -34,16 +34,26 @@ class Get_From_Field extends Base {
 	 * @return array
 	 */
 	public function generate( $args ) {
-
-		$field = $args['generator_field'];
+		$field       = $args['generator_field'] ?? '';
 		$all_fields  = jet_engine()->meta_boxes->get_registered_fields();
 		$found_field = null;
 		$result      = array();
+		$parse_field = explode( '|', $field );
+		$field       = $parse_field[0];
+		$sub_field   = isset( $parse_field[1] ) ? $parse_field[1] : false;
 
 		foreach ( $all_fields as $object => $fields ) {
 			foreach ( $fields as $field_data ) {
 				if ( ! empty( $field_data['name'] ) && $field === $field_data['name'] ) {
 					$found_field = $field_data;
+				}
+			}
+		}
+
+		if ( ! empty( $sub_field ) && ! empty( $found_field['repeater-fields'] ) ) {
+			foreach ( $found_field['repeater-fields'] as $repeater_field_data ) {
+				if ( ! empty( $repeater_field_data['name'] ) && $sub_field === $repeater_field_data['name'] ) {
+					$found_field = $repeater_field_data;
 				}
 			}
 		}

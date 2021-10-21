@@ -60,6 +60,7 @@ class Parser_Manager {
 					$inside_conditional
 				) );
 
+				$inside_conditional = false;
 				continue;
 			}
 
@@ -77,7 +78,7 @@ class Parser_Manager {
 		if ( ! $this->is_field_visible( $field['attrs'] ) ) {
 			return null;
 		}
-		$value  = isset( $request[ $name ] ) ? $request[ $name ] : '';
+		$value  = $request[ $name ] ?? '';
 		$parser = $this->get_parser_by_block_name( $field['blockName'] );
 
 		if ( $parser instanceof Field_Data_Parser ) {

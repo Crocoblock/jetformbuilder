@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks;
 
 
 use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 
 /**
  * CRUD
@@ -17,7 +18,7 @@ trait Action_Buttons_Manager {
 	/**
 	 * @return Button_Type_Base[]
 	 */
-	private $button_types;
+	private $button_types = array();
 
 	public function get_button_types() {
 		return $this->button_types;

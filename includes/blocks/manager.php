@@ -3,8 +3,10 @@
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Dev_Mode;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
 
@@ -20,25 +22,17 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
-	private $_types = array();
-	public $base_control;
-
-	/**
-	 * @var Block_Manager
-	 */
-	public $jet_sm__block_manager;
-
 	const FORM_EDITOR_STORAGE = 'form_editor';
 	const OTHERS_STORAGE = 'others';
 	/**
 	 * @var bool
 	 */
 	private $_registered_scripts = false;
-	private $_added_category = false;
+
+	private $_builder_blocks_repository;
+	private $_default_blocks_repository;
 
 	public function __construct() {
-		global $wp_version;
-
 		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
 		add_action( 'init', array( $this, 'register_block_types' ) );
 
@@ -70,6 +64,47 @@ class Manager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_form_scripts' ) );
 	}
+
+	public function init_jet_sm_block_manager() {
+		if ( Jet_Style_Manager::is_activated() ) {
+			Block_Manager::get_instance();
+		}
+	}
+
+	/**
+	 * Register block types
+	 *
+	 * @return void
+	 */
+	public function register_block_types() {
+		$this->default_repository()->rep_install();
+		$this->builder_repository()->rep_install();
+
+		do_action( 'jet-form-builder/blocks/register', $this );
+	}
+
+	/**
+	 * Register new block type
+	 *
+	 * @param Types\Base $block_type
+	 *
+	 * @return void
+	 */
+	public function register_block_type( Types\Base $block_type ) {
+		$this->builder_repository()->rep_install_item_soft( $block_type );
+	}
+
+	/**
+	 * Register new block type
+	 *
+	 * @param Types\Base $block_type
+	 *
+	 * @return void
+	 */
+	public function register_default_block_type( Types\Base $block_type ) {
+		$this->default_repository()->rep_install_item_soft( $block_type );
+	}
+
 
 	public function add_category( $categories, $post ) {
 		$categories[] = array(
@@ -109,53 +144,6 @@ class Manager {
 		return $arguments;
 	}
 
-	public function init_jet_sm_block_manager() {
-		if ( Jet_Style_Manager::is_activated() ) {
-			$this->jet_sm__block_manager = Block_Manager::get_instance();
-		}
-	}
-
-	/**
-	 * Register block types
-	 *
-	 * @return [type] [description]
-	 */
-	public function register_block_types() {
-
-		$types = array(
-			new Types\Form(),
-			new Types\Select_Field(),
-			new Types\Text_Field(),
-			new Types\Hidden_Field(),
-			new Types\Radio_Field(),
-			new Types\Checkbox_Field(),
-			new Types\Number_Field(),
-			new Types\Date_Field(),
-			new Types\Time_Field(),
-			new Types\Calculated_Field(),
-			new Types\Media_Field(),
-			new Types\Wysiwyg_Field(),
-			new Types\Range_Field(),
-			new Types\Heading_Field(),
-			new Types\Textarea_Field(),
-			new Types\Action_Button(),
-			new Types\Repeater_Field(),
-			new Types\Form_Break_Field(),
-			new Types\Group_Break_Field(),
-			new Types\Conditional_Block(),
-			new Types\Datetime_Field(),
-			new Types\Color_Picker_Field(),
-			new Types\Progress_Bar(),
-		);
-
-		foreach ( $types as $type ) {
-			$this->register_block_type( $type );
-		}
-
-		do_action( 'jet-form-builder/blocks/register', $this );
-
-	}
-
 	/**
 	 * Register block types for editor
 	 *
@@ -165,7 +153,7 @@ class Manager {
 	 * @return void [type] [description]
 	 */
 	public function register_block_types_for_form_editor( $editor, $handle ) {
-		foreach ( $this->_types[ self::FORM_EDITOR_STORAGE ] as $type ) {
+		foreach ( $this->builder_repository()->rep_get_items() as $type ) {
 			$type->block_data( $editor, $handle );
 		}
 	}
@@ -179,7 +167,7 @@ class Manager {
 	 * @return void [type] [description]
 	 */
 	public function register_block_types_for_others( $editor, $handle ) {
-		foreach ( $this->_types[ self::OTHERS_STORAGE ] as $type ) {
+		foreach ( $this->default_repository()->rep_get_items() as $type ) {
 			$type->block_data( $editor, $handle );
 		}
 	}
@@ -266,12 +254,12 @@ class Manager {
 					'key'       => $key,
 					'type'      => $data[ $context ]['type'],
 					'label'     => $data[ $context ]['label'],
-					'options'   => isset( $data[ $context ]['options'] ) ? $data[ $context ]['options'] : array(),
-					'condition' => isset( $data[ $context ]['condition'] ) ? $data[ $context ]['condition'] : false,
+					'options'   => $data[ $context ]['options'] ?? array(),
+					'condition' => $data[ $context ]['condition'] ?? false,
 					// for Submit field name
-					'show'      => isset( $data[ $context ]['show'] ) ? $data[ $context ]['show'] : true,
+					'show'      => $data[ $context ]['show'] ?? true,
 					// for Date and Time field
-					'help'      => isset( $data[ $context ]['help'] ) ? $data[ $context ]['help'] : '',
+					'help'      => $data[ $context ]['help'] ?? '',
 				);
 			}
 		}
@@ -279,87 +267,86 @@ class Manager {
 		return $result;
 	}
 
-	/**
-	 * Register new block type
-	 *
-	 * @param Types\Base $block_type
-	 *
-	 * @return void
-	 */
-	public function register_block_type( Types\Base $block_type ) {
-		$block_type->register_block_type();
-
-		$this->_types[ $block_type->get_storage_name() ][ $block_type->get_name() ] = $block_type;
-	}
 
 	/**
-	 * @param string $storage
+	 * @param $block_name
 	 *
-	 * @return array
+	 * @return false|mixed
 	 */
-	public function get_form_editor_types( $storage = self::FORM_EDITOR_STORAGE ) {
-		return $this->_types[ $storage ];
+	public function get_field_by_name( $block_name ) {
+		$block_id = $this->explode_block_name( $block_name );
+
+		try {
+			return $this->builder_repository()->rep_get_clone( $block_id );
+		} catch ( Repository_Exception $exception ) {
+		}
+
+		return false;
 	}
+
 
 	/**
-	 * Returns block attributes list
+	 * @param $block_name
+	 * @param $attributes
+	 *
+	 * @return array|false
 	 */
-	public function get_block_atts( $block = null ) {
-
-		if ( ! $block ) {
-			return array();
-		}
-		$types = $this->get_form_editor_types();
-
-		$type = isset( $types[ $block ] ) ? $types[ $block ] : false;
-
-		if ( ! $type ) {
-			return array();
-		}
-
-		return $type->get_attributes();
-
-	}
-
-
-	public function get_field_by_name( $block_name, $storage = self::FORM_EDITOR_STORAGE ) {
-		$types = $this->get_form_editor_types( $storage );
-		$block = isset( $types[ $block_name ] ) ? clone $types[ $block_name ] : false;
-
-		if ( ! $block ) {
-			$block_name = explode( Plugin::instance()->form::NAMESPACE_FIELDS, $block_name );
-			$block      = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;
-		}
-
-		return $block;
-	}
-
-
 	public function get_field_attrs( $block_name, $attributes ) {
-
 		if ( ! $block_name ) {
-			return;
+			return false;
 		}
-		$types      = $this->get_form_editor_types();
-		$block_name = explode( 'jet-forms/', $block_name );
+		$block_id = $this->explode_block_name( $block_name );
 
-		$field = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;
+		try {
+			$field = $this->builder_repository()->rep_get_item( $block_id );
 
-		if ( ! $field ) {
-			return;
+			return array_merge( $field->get_default_attributes(), $attributes );
+
+		} catch ( Repository_Exception $exception ) {
 		}
 
-		return array_merge( $field->get_default_attributes(), $attributes );
+		return false;
 	}
 
+
+	/**
+	 * @return Types\Form|bool
+	 */
 	public function get_form_class() {
-		return $this->get_field_by_name( 'form-block', self::OTHERS_STORAGE );
+		try {
+			return $this->default_repository()->rep_get_item( 'form-block' );
+		} catch ( Repository_Exception $exception ) {
+		}
+
+		return false;
 	}
 
 	public function render_callback( $instance ) {
 		return function ( array $attrs, $content = null, $wp_block = null ) use ( $instance ) {
 			return call_user_func( array( clone $instance, 'render_callback_field' ), $attrs, $content, $wp_block );
 		};
+	}
+
+	public function builder_repository(): Form_Builder_Blocks_Repository {
+		if ( ! $this->_builder_blocks_repository ) {
+			$this->_builder_blocks_repository = new Form_Builder_Blocks_Repository();
+		}
+
+		return $this->_builder_blocks_repository;
+	}
+
+	public function default_repository(): Default_Blocks_Repository {
+		if ( ! $this->_default_blocks_repository ) {
+			$this->_default_blocks_repository = new Default_Blocks_Repository();
+		}
+
+		return $this->_default_blocks_repository;
+	}
+
+	public function explode_block_name( $block_name ): string {
+		$block_name_parts = explode( Plugin::instance()->form::NAMESPACE_FIELDS, $block_name );
+
+		return $block_name_parts[1] ?? $block_name_parts[0];
 	}
 
 }

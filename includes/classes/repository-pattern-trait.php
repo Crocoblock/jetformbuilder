@@ -11,8 +11,13 @@ trait Repository_Pattern_Trait {
 	use Repository_Aborts_Trait;
 
 	private $__repository = array();
+	private $__failed_installs = array();
 
 	abstract public function rep_instances(): array;
+
+	public function rep_save_fails() {
+		return false;
+	}
 
 	public function rep_install() {
 		try {
@@ -20,6 +25,8 @@ trait Repository_Pattern_Trait {
 				$this->rep_install_item( $instance );
 			}
 		} catch ( Repository_Exception $exception ) {
+			$this->_rep_save_fail( $exception );
+
 			switch ( $exception->getCode() ) {
 
 				case $this->_rep_abort_and_die_code():
@@ -39,18 +46,11 @@ trait Repository_Pattern_Trait {
 	public function rep_install_item_soft( $item_trait ) {
 		try {
 			$this->rep_item_check( $item_trait );
-		} catch ( Repository_Exception $e ) {
-			return;
-		}
-
-		if ( $this->rep_isset_item( $item_trait->rep_item_id() ) && ! $this->rep_allow_rewrite() ) {
-			return;
-		}
-
-		try {
+			$this->rep_throw_if_cant_rewrite( $item_trait );
 			$this->rep_run_install_flow( $item_trait );
+
 		} catch ( Repository_Exception $exception ) {
-			return;
+			$this->_rep_save_fail( $exception );
 		}
 	}
 
@@ -73,16 +73,13 @@ trait Repository_Pattern_Trait {
 	 */
 	public function rep_install_item( $item_trait ) {
 		$this->rep_item_check( $item_trait );
-
-		if ( $this->rep_isset_item( $item_trait->rep_item_id() ) && ! $this->rep_allow_rewrite() ) {
-			throw new Repository_Exception(
-				"You can't rewrite instance: " . $item_trait->rep_item_id()
-			);
-		}
+		$this->rep_throw_if_cant_rewrite( $item_trait );
 
 		try {
 			$this->rep_run_install_flow( $item_trait );
 		} catch ( Repository_Exception $exception ) {
+			$this->_rep_save_fail( $exception );
+
 			switch ( $exception->getCode() ) {
 
 				case $this->_rep_abort_all_code():
@@ -179,6 +176,32 @@ trait Repository_Pattern_Trait {
 		if ( ! $this->rep_isset_item( $slug ) ) {
 			throw new Repository_Exception( "Undefined item: {$slug}" );
 		}
+	}
+
+	/**
+	 * @param $item_trait
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function rep_throw_if_cant_rewrite( $item_trait ) {
+		if ( $this->rep_isset_item( $item_trait->rep_item_id() ) && ! $this->rep_allow_rewrite() ) {
+			throw new Repository_Exception(
+				"You can't rewrite instance: " . $item_trait->rep_item_id()
+			);
+		}
+	}
+
+	public function _rep_save_fail( Repository_Exception $exception ) {
+		if ( $this->rep_save_failes() ) {
+			$this->__failed_installs[] = $exception->getMessage();
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function _rep_get_fails(): array {
+		return $this->__failed_installs;
 	}
 
 }

@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -64,7 +65,7 @@ class Action_Handler {
 	}
 
 	public function add_request( $request ) {
-		$this->request_data = $request;
+		$this->request_data = array_merge( $this->request_data, $request );
 
 		return $this;
 	}
@@ -73,37 +74,51 @@ class Action_Handler {
 	 * Set form actions,
 	 * which were saved in form meta
 	 *
-	 * @return $this
+	 * @return Action_Handler
 	 */
 	public function set_form_actions() {
-		$available_actions = Plugin::instance()->actions->get_actions();
-		$form_actions      = Plugin::instance()->post_type->get_actions( $this->form_id );
+		$form_actions = Plugin::instance()->post_type->get_actions( $this->form_id );
 
 		foreach ( $form_actions as $form_action ) {
-			$id         = $form_action['id'];
-			$type       = $form_action['type'];
-			$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
-			$conditions = $form_action['conditions'] ?? array();
-			$operator   = $form_action['condition_operator'] ?? 'and';
-
-			if ( isset( $available_actions[ $type ] ) ) {
-				/** @var Base $action */
-				$action = clone $available_actions[ $type ];
-				/**
-				 * Save action settings to the class field,
-				 * it allows to not send action settings
-				 * in action hook
-				 */
-				$action->_id      = $id;
-				$action->settings = $settings;
-				$action->condition->set_conditions( $conditions );
-				$action->condition->set_condition_operator( $operator );
-
-				$this->form_actions[ $id ] = $action;
+			try {
+				$this->save_form_action( $form_action );
+			} catch ( Repository_Exception $exception ) {
 			}
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param $form_action
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function save_form_action( $form_action ) {
+		$actions_manager = jet_form_builder()->actions;
+		$type            = $form_action['type'];
+
+		$actions_manager->rep_throw_if_undefined( $type );
+
+		$id         = $form_action['id'];
+		$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
+		$conditions = $form_action['conditions'] ?? array();
+		$operator   = $form_action['condition_operator'] ?? 'and';
+
+		/** @var Base $action */
+		$action = $actions_manager->get_action_clone( $type );
+
+		/**
+		 * Save action settings to the class field,
+		 * it allows to not send action settings
+		 * in action hook
+		 */
+		$action->_id      = $id;
+		$action->settings = $settings;
+		$action->condition->set_conditions( $conditions );
+		$action->condition->set_condition_operator( $operator );
+
+		$this->form_actions[ $id ] = $action;
 	}
 
 

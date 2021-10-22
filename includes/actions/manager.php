@@ -87,16 +87,16 @@ class Manager {
 	 * @return array
 	 */
 	public function get_actions( $type = '' ) {
+		if ( ! $type ) {
+			return $this->rep_get_items();
+		}
+
 		try {
-			if ( $type ) {
-				return $this->get_action( $type );
-			}
+			return $this->get_action( $type );
+
 		} catch ( Repository_Exception $exception ) {
 			return array();
 		}
-
-
-		return $this->rep_get_items();
 	}
 
 	/**

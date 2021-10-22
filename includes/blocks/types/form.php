@@ -328,10 +328,6 @@ class Form extends Base {
 		return 'form-block';
 	}
 
-	public function get_storage_name() {
-		return jet_form_builder()->blocks::OTHERS_STORAGE;
-	}
-
 	/**
 	 * Returns current block render instatnce
 	 *

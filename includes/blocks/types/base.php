@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
+use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
@@ -18,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-abstract class Base extends Base_Module {
+abstract class Base extends Base_Module implements Repository_Item_Instance_Trait {
 
 	private $_unregistered = array();
 
@@ -75,6 +76,10 @@ abstract class Base extends Base_Module {
 
 	public function use_preset() {
 		return true;
+	}
+
+	public function rep_item_id() {
+		return $this->get_name();
 	}
 
 	/**
@@ -140,10 +145,6 @@ abstract class Base extends Base_Module {
 		$this->controls_manager = new Controls_Manager( $this->block_name() );
 
 		return $this;
-	}
-
-	public function get_storage_name() {
-		return jet_form_builder()->blocks::FORM_EDITOR_STORAGE;
 	}
 
 	/**

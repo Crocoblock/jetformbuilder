@@ -22,8 +22,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
-	const FORM_EDITOR_STORAGE = 'form_editor';
-	const OTHERS_STORAGE = 'others';
 	/**
 	 * @var bool
 	 */

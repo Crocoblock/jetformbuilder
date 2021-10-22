@@ -15,7 +15,7 @@ trait Repository_Pattern_Trait {
 
 	abstract public function rep_instances(): array;
 
-	public function rep_save_fails() {
+	public function rep_save_fails(): bool {
 		return false;
 	}
 
@@ -192,7 +192,7 @@ trait Repository_Pattern_Trait {
 	}
 
 	public function _rep_save_fail( Repository_Exception $exception ) {
-		if ( $this->rep_save_failes() ) {
+		if ( $this->rep_save_fails() ) {
 			$this->__failed_installs[] = $exception->getMessage();
 		}
 	}

@@ -1,5 +1,6 @@
 import SettingsPage from "./pages/settings/SettingsPage";
 import AddonsPage from "./pages/addons/AddonsPage";
+import PaypalEntries from './pages/paypal-entries/PaypalEntries';
 
 ( () => {
 	const pref = 'jet-form-builder_page_';
@@ -8,7 +9,8 @@ import AddonsPage from "./pages/addons/AddonsPage";
 
 	const pages = applyFilters( 'jet.fb.register.admin-pages', [
 		SettingsPage,
-		AddonsPage
+		AddonsPage,
+		PaypalEntries,
 	] )
 
 	pages.forEach( PageComponent => {
@@ -17,9 +19,9 @@ import AddonsPage from "./pages/addons/AddonsPage";
 		if ( window.pagenow === pageName ) {
 			new Vue( {
 				el: '#' + pref + PageComponent.name,
-				render: h => h( PageComponent )
+				render: h => h( PageComponent ),
 			} );
 		}
 	} )
 
-})()
+} )()

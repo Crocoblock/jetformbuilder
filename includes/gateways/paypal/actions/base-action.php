@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
@@ -176,7 +177,7 @@ abstract class Base_Action {
 			) );
 		}
 
-		$parsed_response = json_decode( $response, true );
+		$parsed_response = Tools::decode_json( $response );
 
 		if ( is_null( $parsed_response ) ) {
 			throw new Gateway_Exception( 'invalid_json', $parsed_response );
@@ -184,6 +185,8 @@ abstract class Base_Action {
 
 		return $parsed_response;
 	}
+
+
 
 
 }

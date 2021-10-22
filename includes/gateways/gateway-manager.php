@@ -5,8 +5,10 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
 
@@ -18,15 +20,14 @@ use Jet_Form_Builder\Plugin;
  */
 class Gateway_Manager {
 
-	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
-	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
-
-	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
-
 	use Instance_Trait;
 	use Gateways_Editor_Data;
+	use Repository_Pattern_Trait;
 
-	private $_gateways = array();
+	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
+	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
+	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
+
 	private $gateways_form_data = array();
 	private $form_id;
 
@@ -47,6 +48,12 @@ class Gateway_Manager {
 		$this->catch_payment_result();
 	}
 
+	public function rep_instances(): array {
+		return array(
+			new Paypal\Controller()
+		);
+	}
+
 	/**
 	 * Returns all registered gateways
 	 *
@@ -55,28 +62,26 @@ class Gateway_Manager {
 	public function register_gateways() {
 		$this->is_sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
 
-		$gateways = array(
-			new Paypal\Controller(),
-		);
-
-		foreach ( $gateways as $gateway ) {
-			$this->register_gateway( $gateway );
-		}
+		$this->rep_install();
 
 		do_action( 'jet-form-builder/gateways/register', $this );
 	}
 
+	/**
+	 * @param Base_Gateway $gateway
+	 *
+	 * @throws Repository_Exception
+	 */
 	public function register_gateway( Base_Gateway $gateway ) {
-		$this->_gateways[] = $gateway;
+		$this->rep_install_item( $gateway );
 	}
 
 	public function before_send_actions() {
 		$this->set_gateways_options_by_form_id( $this->get_actions_handler()->form_id );
 
-		$controller = $this->get_current_gateway_controller();
-
-		if ( $controller ) {
-			$controller->before_actions( $this->get_actions_before() );
+		try {
+			$this->get_current_gateway_controller()->before_actions( $this->get_actions_before() );
+		} catch ( Repository_Exception $exception ) {
 		}
 	}
 
@@ -88,14 +93,12 @@ class Gateway_Manager {
 			return;
 		}
 
-		$controller = $this->get_current_gateway_controller();
-
 		try {
-			if ( $controller ) {
-				$controller->after_actions( $this->get_actions_handler() );
-			}
+			$this->get_current_gateway_controller()->after_actions( $this->get_actions_handler() );
+
 		} catch ( Gateway_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
+		} catch ( Repository_Exception $exception ) {
 		}
 	}
 
@@ -120,34 +123,42 @@ class Gateway_Manager {
 
 	public function on_has_gateway_request() {
 		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
-		$controller   = $this->get_gateway_controller( $gateway_type );
 
-		if ( ! ( $controller instanceof Base_Gateway ) ) {
-			return;
+		try {
+			$this->get_gateway_controller( $gateway_type )->try_run_on_catch();
+		} catch ( Repository_Exception $exception ) {
 		}
-
-		$controller->try_run_on_catch();
 	}
 
+	/**
+	 * @param false $type
+	 *
+	 * @return Base_Gateway
+	 * @throws Repository_Exception
+	 */
 	public function get_gateway_controller( $type = false ) {
-		if ( ! $type ) {
-			return false;
-		}
-
-		foreach ( $this->_gateways as $gateway ) {
-			if ( $gateway->get_id() === $type ) {
-				return $gateway;
-			}
-		}
-
-		return false;
+		return $this->rep_get_item( $type );
 	}
 
 	/**
 	 * @return false|Base_Gateway
+	 * @throws Repository_Exception
 	 */
 	public function get_current_gateway_controller() {
 		return $this->get_gateway_controller( $this->get_gateway_id() );
+	}
+
+	/**
+	 * @param $gateway_id
+	 *
+	 * @return Base_Gateway
+	 */
+	public function controller( $gateway_id ) {
+		try {
+			return Gateway_Manager::instance()->get_gateway_controller( $gateway_id );
+		} catch ( Repository_Exception $exception ) {
+			_doing_it_wrong( __METHOD__, "Undefined gateway: {$gateway_id}", '1.4.0' );
+		}
 	}
 
 	/**

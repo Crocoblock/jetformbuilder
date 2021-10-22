@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Classes\Condition_Helper;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -16,7 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
-	private $_types = array();
+	use Repository_Pattern_Trait;
+
 	private $localized_actions = array();
 
 	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
@@ -26,14 +29,8 @@ class Manager {
 		add_action( 'jet-form-builder/editor-package/before', array( $this, 'register_assets' ), 10, 2 );
 	}
 
-	/**
-	 * Register allowed action types
-	 *
-	 * @return [type] [description]
-	 */
-	public function register_action_types() {
-
-		$actions = array(
+	public function rep_instances(): array {
+		return array(
 			new Types\Send_Email(),
 			new Types\Insert_Post(),
 			new Types\Register_User(),
@@ -46,26 +43,43 @@ class Manager {
 			new Types\Getresponse(),
 			new Types\Active_Campaign()
 		);
+	}
 
-		foreach ( $actions as $action ) {
-			$this->register_action_type( $action );
-		}
+	/**
+	 * Register allowed action types
+	 *
+	 * @return void
+	 */
+	public function register_action_types() {
+		$this->rep_install();
 
 		do_action( 'jet-form-builder/actions/register', $this );
 	}
 
 	/**
-	 * Register new action type
+	 * @param $type
 	 *
-	 * @param Types\Base $type
-	 *
-	 * @return void [description]
+	 * @return $this
 	 */
-	public function register_action_type( Types\Base $type ) {
-		if ( $type->dependence() ) {
-			$this->_types[ $type->get_id() ] = $type->install_condition_obj( new Condition_Helper() );
-		}
+	public function register_action_type( $type ) {
+		$this->rep_install_item_soft( $type );
+
+		return $this;
 	}
+
+	/**
+	 * @param $type
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function rep_before_install_item( $type ) {
+		if ( ! $type->dependence() ) {
+			$this->_rep_abort_this();
+		}
+
+		$type->install_condition_obj( new Condition_Helper() );
+	}
+
 
 	/**
 	 * @param string $type
@@ -73,15 +87,40 @@ class Manager {
 	 * @return array
 	 */
 	public function get_actions( $type = '' ) {
-		if ( $type ) {
-			return $this->_types[ $type ];
+		try {
+			if ( $type ) {
+				return $this->get_action( $type );
+			}
+		} catch ( Repository_Exception $exception ) {
+			return array();
 		}
 
-		return $this->_types;
+
+		return $this->rep_get_items();
+	}
+
+	/**
+	 * @param $type
+	 *
+	 * @return mixed
+	 * @throws Repository_Exception
+	 */
+	public function get_action( $type ) {
+		return $this->rep_get_item( $type );
+	}
+
+	/**
+	 * @param $type
+	 *
+	 * @return mixed
+	 * @throws Repository_Exception
+	 */
+	public function get_action_clone( $type ) {
+		return $this->rep_get_clone( $type );
 	}
 
 	public function has_action_type( $type ) {
-		return isset( $this->_types[ $type ] );
+		return $this->rep_isset_item( $type );
 	}
 
 	public function prepare_actions_data( $source ) {
@@ -129,7 +168,7 @@ class Manager {
 			array(),
 			JET_FORM_BUILDER_VERSION
 		);
-		$data = self::prepare_actions_data( $this->_types );
+		$data = self::prepare_actions_data( $this->rep_get_items() );
 
 		wp_localize_script(
 			self::ENGINE_HANDLE,

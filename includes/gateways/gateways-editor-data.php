@@ -34,7 +34,7 @@ trait Gateways_Editor_Data {
 	private function options_labels() {
 		$result = array();
 
-		foreach ( $this->_gateways as $gateway ) {
+		foreach ( $this->rep_get_items() as $gateway ) {
 			/** @var Base_Gateway $gateway */
 			$result[ $gateway->get_id() ] = $gateway->options( 'label' );
 		}
@@ -45,7 +45,7 @@ trait Gateways_Editor_Data {
 	private function gateways_additional() {
 		$result = array();
 
-		foreach ( $this->_gateways as $gateway ) {
+		foreach ( $this->rep_get_items() as $gateway ) {
 			/** @var Base_Gateway $gateway */
 			$result[ $gateway->get_id() ] = $gateway->additional_editor_data();
 		}
@@ -56,7 +56,7 @@ trait Gateways_Editor_Data {
 	private function gateways_for_js() {
 		$result = array();
 
-		foreach ( $this->_gateways as $gateway ) {
+		foreach ( $this->rep_get_items() as $gateway ) {
 			$result[] = array(
 				'value' => $gateway->get_id(),
 				'label' => $gateway->get_name()

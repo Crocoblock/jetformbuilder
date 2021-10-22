@@ -50,6 +50,10 @@ abstract class Base_Gateway {
 		'PayerID'
 	);
 
+	public function rep_item_id() {
+		return $this->get_id();
+	}
+
 	/**
 	 * Returns current gateway ID
 	 *
@@ -103,18 +107,29 @@ abstract class Base_Gateway {
 		$this->set_current_gateway_options();
 		$this->set_gateway_data_on_result();
 
-		$this->data['date'] = date_i18n( 'F j, Y, H:i' );
-
-		$this->data['gateway']    = $this->get_name();
-		$this->data['gateway_id'] = $this->get_id();
-
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, wp_json_encode( $this->data ) );
-
 		$this->try_do_actions();
+
+		/**
+		 * By default save 'data' property to  payment/subscription post meta
+		 */
+		$this->save_gateway_before_send_response();
 
 		$this->send_response( array(
 			'status' => $this->get_status_on_payment( $this->data['status'] ),
 		) );
+	}
+
+	public function save_gateway_before_send_response() {
+		$this->data['date']       = date_i18n( 'F j, Y, H:i' );
+		$this->data['gateway']    = $this->get_name();
+		$this->data['gateway_id'] = $this->get_id();
+
+		/**
+		 * JSON_UNESCAPED_UNICODE - for valid encode cyrillic
+		 */
+		$json = wp_json_encode( $this->data, JSON_UNESCAPED_UNICODE );
+
+		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, $json );
 	}
 
 	public function get_status_on_payment( $status ) {
@@ -289,26 +304,6 @@ abstract class Base_Gateway {
 			}
 			$this->maybe_unregister_action( $index, $keep_these );
 		}
-	}
-
-	/**
-	 * Returns form data by payment ID
-	 *
-	 * @param null $payment
-	 *
-	 * @return array|object|void|null [description]
-	 * @deprecated since 1.4.0
-	 */
-	public function get_form_by_payment_token( $payment = null ) {
-
-		if ( ! $payment ) {
-			return;
-		}
-
-		global $wpdb;
-		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
-
-		return $wpdb->get_row( $sql, ARRAY_A );
 	}
 
 	public function get_initialize_action_id() {
@@ -551,6 +546,51 @@ abstract class Base_Gateway {
 
 	public function property( $prop ) {
 		return $this->$prop ?? false;
+	}
+
+	/**
+	 * Returns form data by payment ID
+	 *
+	 * @param null $payment
+	 *
+	 * @return array|object|void|null [description]
+	 * @deprecated since 1.4.0
+	 */
+	public function get_form_by_payment_token( $payment = null ) {
+
+		if ( ! $payment ) {
+			return;
+		}
+
+		global $wpdb;
+		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
+
+		return $wpdb->get_row( $sql, ARRAY_A );
+	}
+
+	public function get_gateway_entries( $properties = array() ) {
+		$compare    = array(
+			"1=1",
+			sprintf( "`meta_key` = '%s'", self::GATEWAY_META_KEY ),
+		);
+		$properties = array_merge(
+			array( 'gateway_id' => $this->get_id() ),
+			$properties
+		);
+
+		foreach ( $properties as $property => $value ) {
+			$value     = sprintf( '"%1$s":"%2$s"', (string) $property, (string) $value );
+			$compare[] = "`meta_value` LIKE '%$value%'";
+		}
+		global $wpdb;
+
+		$sql = "SELECT * FROM $wpdb->postmeta WHERE " . implode( "\n\rAND ", $compare ) . ';';
+		$meta = $wpdb->get_results( $sql, ARRAY_A );
+
+		//return ;
+		return array_map( function ( $item ) {
+			return Tools::decode_json( $item['meta_value'] ?? '[]' );
+		}, $meta );
 	}
 
 }

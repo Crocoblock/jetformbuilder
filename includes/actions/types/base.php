@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Action_Localize;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
+use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -16,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-abstract class Base {
+abstract class Base implements Repository_Item_Instance_Trait {
 
 	use Messages_Helper_Trait;
 	use Action_Localize;
@@ -55,6 +56,10 @@ abstract class Base {
 
 	public function __clone() {
 		$this->install_condition_obj( clone $this->condition );
+	}
+
+	public function rep_item_id() {
+		return $this->get_id();
 	}
 
 	/**

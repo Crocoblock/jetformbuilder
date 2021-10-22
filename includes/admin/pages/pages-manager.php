@@ -4,27 +4,24 @@
 namespace Jet_Form_Builder\Admin\Pages;
 
 
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 
 class Pages_Manager {
 
-	/**
-	 * @var Base_Page[]
-	 */
-	private $pages = array();
+	use Repository_Pattern_Trait;
 
 	/**
 	 * @var Base_Page
 	 */
 	private $current_page;
 
-	/**
-	 * [__construct description]
-	 *
-	 * @param array $pages [description]
-	 */
+
 	public function __construct() {
-		$this->register_pages();
+		/** Register pages */
+		$this->rep_install();
+
 		add_action( 'admin_menu', array( $this, 'add_pages' ) );
 
 		if ( $this->is_dashboard_page() ) {
@@ -36,16 +33,22 @@ class Pages_Manager {
 	/**
 	 * Register admin pages
 	 */
-	public function register_pages() {
-		$pages = apply_filters( 'jet-form-builder/admin/pages', array(
+	public function rep_instances(): array {
+		return apply_filters( 'jet-form-builder/admin/pages', array(
 			new Settings_Page(),
 			new Addons_Page(),
 			new Paypal_Entries()
-		), $this );
+		) );
+	}
 
-		foreach ( $pages as $page ) {
-			$this->pages[ $page->slug() ] = $page;
-		}
+	/**
+	 * @param $slug
+	 *
+	 * @return Base_Page
+	 * @throws Repository_Exception
+	 */
+	public function get_page( $slug ) {
+		return $this->rep_get_item( $slug );
 	}
 
 	/**
@@ -54,22 +57,19 @@ class Pages_Manager {
 	 * @return boolean [description]
 	 */
 	public function is_dashboard_page() {
-
 		$page = ! empty( $_GET['page'] ) ? esc_attr( $_GET['page'] ) : false;
 
-		if ( ! $page ) {
-			return false;
-		} else {
-			return isset( $this->pages[ $page ] );
-		}
-
+		return $this->rep_isset_item( $page );
 	}
 
 	/**
 	 * Set current admin page
 	 */
 	public function set_current_page() {
-		$this->current_page = $this->pages[ esc_attr( $_GET['page'] ) ];
+		try {
+			$this->current_page = $this->get_page( esc_attr( $_GET['page'] ) );
+		} catch ( Repository_Exception $exception ) {
+		}
 	}
 
 	/**
@@ -100,12 +100,11 @@ class Pages_Manager {
 	 * @return string
 	 */
 	public function get_url_of( $page_slug ): string {
-
-		if ( ! isset( $this->pages[ $page_slug ] ) ) {
+		try {
+			return $this->get_page( $page_slug )->get_url();
+		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
-
-		return $this->pages[ $page_slug ]->get_url();
 	}
 
 	/**
@@ -131,7 +130,7 @@ class Pages_Manager {
 	public function add_pages() {
 		$parent = 'edit.php?post_type=' . jet_form_builder()->post_type->slug();
 
-		foreach ( $this->pages as $page ) {
+		foreach ( $this->rep_get_items() as $page ) {
 			add_submenu_page(
 				$parent,
 				$page->title(),

@@ -360,9 +360,17 @@ class Tools {
 	}
 
 	public static function decode_unserializable( $value ) {
-		$data = json_decode( $value, true );
+		$data = self::decode_json( $value );
 
-		return $data ? $data : maybe_unserialize( $value );
+		return $data ?: maybe_unserialize( $value );
+	}
+
+	public static function decode_json( $json ) {
+		if ( defined( 'JSON_INVALID_UTF8_IGNORE' ) ) {
+			return json_decode( $json, true, 512, JSON_INVALID_UTF8_IGNORE );
+		}
+
+		return json_decode( $json, true );
 	}
 
 	public static function maybe_recursive_sanitize( $source = null ) {
@@ -448,18 +456,18 @@ class Tools {
 	}
 
 	public static function get_property_recursive( $source, $props_string, $delimiter = '.', $if_empty = false ) {
-		if( ! $props_string ) {
+		if ( ! $props_string ) {
 			return empty( $source ) ? $if_empty : $source;
 		}
 
-		$props = explode( $delimiter, $props_string );
+		$props   = explode( $delimiter, $props_string );
 		$changed = false;
 
 		foreach ( $props as $prop_item ) {
 			if ( ! isset( $source[ $prop_item ] ) ) {
 				break;
 			}
-			$source = $source[ $prop_item ];
+			$source  = $source[ $prop_item ];
 			$changed = $prop_item;
 		}
 		$last = end( $props );

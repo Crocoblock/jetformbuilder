@@ -2,12 +2,17 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Plugin;
 
 /**
  * Base dashboard page
  */
-abstract class Base_Page {
+abstract class Base_Page implements Repository_Item_Instance_Trait {
+
+	public function rep_item_id() {
+		return $this->slug();
+	}
 
 	/**
 	 * Page slug

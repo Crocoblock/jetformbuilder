@@ -21,6 +21,12 @@ abstract class Handler_Exception extends \Exception {
 		Logger::instance()->log( $this );
 	}
 
+	public function set_code( $code ) {
+		$this->code = $code;
+
+		return $this;
+	}
+
 	public function dynamic_success() {
 		$this->message = Manager::dynamic_success( $this->message );
 

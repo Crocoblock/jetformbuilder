@@ -104,7 +104,14 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 	 */
 	public function process_save() {
 		$this->set_payment_status();
+		$this->set_resource();
 		$this->maybe_create_webhooks();
+	}
+
+	public function set_resource() {
+		$payment = $this->controller->get_payment();
+
+		$this->controller->data['resource'] = $payment;
 	}
 
 	/**

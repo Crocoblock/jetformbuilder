@@ -4,15 +4,13 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
 
 
-use Jet_Form_Builder\Classes\Repository_Item_Trait;
+use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
-use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
 
-abstract class Scenario_Base {
+abstract class Scenario_Base implements Repository_Static_Item_Trait {
 
-	use Repository_Item_Trait;
 
 	/** @var Controller */
 	protected $controller;
@@ -87,6 +85,10 @@ abstract class Scenario_Base {
 			) );
 			break;
 		}
+	}
+
+	public function prepare_status_for_view( $record ) {
+		return $record['resource']['status'] ?? 'NONE';
 	}
 
 }

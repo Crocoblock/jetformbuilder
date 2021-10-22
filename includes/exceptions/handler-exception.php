@@ -18,7 +18,13 @@ abstract class Handler_Exception extends \Exception {
 
 		$this->additional_data = $additional_data;
 
-		Logger::instance()->log( $this );
+		if ( $this->save_exception_to_logger() ) {
+			Logger::instance()->log( $this );
+		}
+	}
+
+	public function save_exception_to_logger() {
+		return true;
 	}
 
 	public function dynamic_success() {

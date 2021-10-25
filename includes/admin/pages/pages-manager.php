@@ -51,7 +51,7 @@ class Pages_Manager {
 	 */
 	public function is_dashboard_page() {
 
-		$page = ! empty( $_GET['page'] ) ? esc_attr( $_GET['page'] ) : false;
+		$page = ! empty( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : false;
 
 		if ( ! $page ) {
 			return false;
@@ -65,7 +65,7 @@ class Pages_Manager {
 	 * Set current admin page
 	 */
 	public function set_current_page() {
-		$this->current_page = $this->pages[ esc_attr( $_GET['page'] ) ];
+		$this->current_page = $this->pages[ sanitize_key( $_GET['page'] ) ];
 	}
 
 	/**

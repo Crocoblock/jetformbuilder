@@ -445,6 +445,7 @@
 		currentFieldWithError: {
 			length: 0,
 		},
+		installed: [],
 
 		notSafeInit: function() {
 			const wrappers = $( '.jet-form-builder__form-wrapper' );
@@ -483,6 +484,7 @@
 				.on( 'focus.JetFormBuilderMain', '.jet-form-builder__field', self.clearFieldErrors )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__field-template', self.simLabelClick )
 				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.recalcFields )
+				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', self.maybeInitSinglePage )
 				.on( 'jet-form-builder/repeater-changed', '.jet-form-builder-repeater', self.recalcFields )
 				.on( 'change.JetFormBuilderMain', '.jet-form-builder__field.checkboxes-group-required', self.requiredCheckboxGroup )
 				.on( 'change.JetFormBuilderMain', '.checkradio-field', self.changeActiveTemplateClass )
@@ -492,6 +494,18 @@
 				.on( 'jet-form-builder/page/field-changed', self.maybeSwitchPage )
 				.on( 'jet-form-builder/switch-page', self.updateProgress )
 				.on( 'input.JetFormBuilderMain', '.jet-form-builder__field.text-field, .jet-form-builder__field.textarea-field', self.inputTextFields )
+		},
+
+		maybeInitSinglePage: function () {
+			const self = $( this ),
+				$page = self.closest( '.jet-form-builder-page' );
+
+			if ( ! $page.length ) {
+			    return
+            }
+			const $form = self.closest( 'form.jet-form-builder' );
+
+			JetFormBuilder.initSingleFormPage( $page, $form, self );
 		},
 
 		inputTextFields: function() {
@@ -923,17 +937,6 @@
 			if ( $changedField ) {
 				$( document ).trigger( 'jet-form-builder/page/field-changed', [ $changedField, $page, disabled ] );
 			}
-
-			if ( $page.hasClass( 'jet-form-builder-page--initialized' ) ) {
-				return;
-			}
-
-			$page.on( 'change.JetFormBuilderMain', '.jet-form-builder__field', function() {
-				JetFormBuilder.initSingleFormPage( $page, $form, $( this ) );
-			} );
-
-			$page.addClass( 'jet-form-builder-page--initialized' );
-
 		},
 
 		nextFormPage: function() {

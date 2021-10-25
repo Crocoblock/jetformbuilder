@@ -68,7 +68,7 @@ class Gallery {
 		$slider_atts = apply_filters( 'jet-form-builder/gallery/slider/atts', $slider_atts );
 		$slider_atts = htmlspecialchars( json_encode( $slider_atts ) );
 
-		echo '<div class="jet-engine-gallery-slider" data-atts="' . $slider_atts . '">';
+		echo '<div class="jet-engine-gallery-slider" data-atts="' . esc_attr( $slider_atts ) . '">';
 
 		$gallery_id = self::get_gallery_id();
 
@@ -84,14 +84,14 @@ class Gallery {
 			echo '<div class="jet-engine-gallery-slider__item">';
 
 			if ( $args['lightbox'] ) {
-				echo '<a href="' . $img_full . '" class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . $gallery_id . '">';
+				echo '<a href="' . esc_attr( $img_full ) . '" class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . esc_attr( $gallery_id ) . '">';
 			} else {
 				echo '<span class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap">';
 			}
 
 			$alt = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
 
-			echo '<img src="' . $img_url . '" alt="' . $alt . '" class="jet-engine-gallery-slider__item-img">';
+			echo '<img src="' . esc_attr( $img_url ) . '" alt="' . esc_attr( $alt ) . '" class="jet-engine-gallery-slider__item-img">';
 
 			if ( $args['lightbox'] ) {
 				echo '</a>';

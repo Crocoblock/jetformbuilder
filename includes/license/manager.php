@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\License;
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -57,7 +58,7 @@ class Manager {
 	 */
 	public function license_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? $_POST['data'] : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -95,7 +96,7 @@ class Manager {
 				} );
 
 				update_option( $this->license_data_key, $license_list );
-				
+
 				wp_send_json( [
 					'success'  => true,
 					'message' => __( 'The license for this site is already activated', 'jet-form-builder' ),
@@ -516,7 +517,7 @@ class Manager {
 	 */
 	public function plugin_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? $_POST['data'] : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -852,7 +853,7 @@ class Manager {
 	 */
 	public function license_service_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? $_POST['data'] : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
 
 		if ( ! $data || ! isset( $data['action'] ) ) {
 			wp_send_json( [

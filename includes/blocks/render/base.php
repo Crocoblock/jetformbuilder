@@ -173,12 +173,20 @@ abstract class Base {
 
 	public function render( $wp_block = null, $template = null ) {
 		$args     = $this->get_default_args_with_filter();
-		$template = $this->render_without_layout( $template, $args );
+
+		$render_template = function () use ( $template, $args ) {
+			echo $this->render_without_layout( $template, $args );
+		};
 
 		$this->maybe_add_error_class( $args );
 
-		$label  = $this->get_field_label();
-		$desc   = $this->get_field_desc();
+		$render_label = function () {
+			echo $this->get_field_label();
+		};
+		$render_desc = function () {
+			echo $this->get_field_desc();
+		};
+
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
 		if ( 'column' === $layout ) {

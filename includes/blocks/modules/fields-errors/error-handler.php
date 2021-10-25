@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Blocks\Modules\Fields_Errors;
 
 
 
+use Jet_Form_Builder\Classes\Tools;
+
 class Error_Handler {
 
 	private static $instance = null;
@@ -36,7 +38,7 @@ class Error_Handler {
 		if ( empty( $_REQUEST ) || ! isset( $_REQUEST['fields'] ) ) {
 			return;
 		}
-		$request = stripslashes( $_REQUEST['fields'] );
+		$request = stripslashes( Tools::maybe_recursive_sanitize( $_REQUEST['fields'] ) );
 
 		if ( is_array( json_decode( $request, true ) ) && json_last_error() == JSON_ERROR_NONE ) {
 

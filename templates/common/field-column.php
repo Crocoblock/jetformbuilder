@@ -1,18 +1,16 @@
 <?php
-use Jet_Form_Builder\Classes\Tools;
+
+use Jet_Form_Builder\Blocks\Render\Base;
 
 /**
- * Row-layout field template
+ * Column-layout field template
+ *
+ * @var $render_template
+ * @var $render_label
+ * @var $render_desc
+ * @var Base $this
  */
 
-echo $label;
-
-if ( $template ) {
-	if ( Tools::is_readable( $template ) ) {
-		include $template;
-	} else {
-		echo $template;
-	}
-}
-
-echo $desc;
+call_user_func( $render_label );
+call_user_func( $render_template );
+call_user_func( $render_desc );

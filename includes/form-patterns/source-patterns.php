@@ -29,7 +29,7 @@ return array(
 		'content' => '<!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:image {"align":"center","width":563,"height":563,"sizeSlug":"large"} -->
-<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img src="https://edgepharm.com/wp-content/uploads/2020/01/image-placeholder.jpg" alt="" width="563" height="563"/></figure></div>
+<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img src="' . jet_form_builder()->plugin_url( 'assets/img/image-placeholder.jpg' ) . '" alt="" width="563" height="563"/></figure></div>
 <!-- /wp:image --></div>
 <!-- /wp:column -->
 
@@ -115,7 +115,7 @@ return array(
 		'content' => '<!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:image {"align":"center","width":563,"height":563,"sizeSlug":"large"} -->
-<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img src="https://edgepharm.com/wp-content/uploads/2020/01/image-placeholder.jpg" alt="" width="563" height="563"/></figure></div>
+<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img src="' . jet_form_builder()->plugin_url( 'assets/img/image-placeholder.jpg' ) . '" alt="" width="563" height="563"/></figure></div>
 <!-- /wp:image --></div>
 <!-- /wp:column -->
 

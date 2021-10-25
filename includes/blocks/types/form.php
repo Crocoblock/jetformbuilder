@@ -350,6 +350,10 @@ class Form extends Base {
 		) );
 	}
 
+	private function get_style_manager_html( $form_id ): string {
+		return $this->maybe_render_styles_block( $form_id ) . $this->maybe_render_fonts_block( $form_id );
+	}
+
 	/**
 	 * Render callback for the block
 	 *
@@ -373,13 +377,10 @@ class Form extends Base {
 			'href'      => get_edit_post_link( $form_id ),
 		) );
 
-		$style_manager = $this->maybe_render_styles_block( $form_id );
-		$style_manager .= $this->maybe_render_fonts_block( $form_id );
-
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
-			return ( $style_manager . $custom_form );
+			return ( $this->get_style_manager_html( $form_id ) . $custom_form );
 		}
 
 		$builder  = new Form_Builder( $form_id, false, $attrs );
@@ -388,7 +389,7 @@ class Form extends Base {
 		Error_Handler::instance();
 
 		ob_start();
-		echo $style_manager;
+		echo $this->get_style_manager_html( $form_id );
 		$builder->render_form();
 		$messages->render_messages();
 

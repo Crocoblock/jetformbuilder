@@ -210,13 +210,9 @@ class Post_Type {
 	}
 
 	private function get_post_type_icon() {
-		$path = $this->get_icon_path( 'post-type.txt' );
+		$path = $this->get_icon_path( 'post-type.php' );
 
-		if ( file_exists( $path ) && is_readable( $path ) ) {
-			return file_get_contents( $path );
-		}
-
-		return 'dashicons-text-page';
+		return include_once $path;
 	}
 
 	public function get_form_meta( $meta_key, $form_id ) {

@@ -37,7 +37,7 @@ class Pages_Manager {
 		return apply_filters( 'jet-form-builder/admin/pages', array(
 			new Settings_Page(),
 			new Addons_Page(),
-			new Paypal_Entries()
+			new Paypal_Subscriptions_Entries()
 		) );
 	}
 

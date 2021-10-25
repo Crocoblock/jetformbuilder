@@ -1,24 +1,21 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
+namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Capture_Payment_Action;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Pay_Now_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 
-class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_It {
+class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
-	use Scenario_Set_Status_Trait;
-
-	public static function scenario_id() {
-		return 'PAY_NOW';
-	}
+	use Set_Status_Trait;
+	use Scenarios_Connectors\Pay_Now;
 
 	protected function query_token() {
-		return $_GET['token'] ?? false;
+		return esc_attr( $_GET['token'] ?? '' );
 	}
 
 	public function get_failed_statuses() {
@@ -53,7 +50,7 @@ class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_I
 	 * @throws Gateway_Exception
 	 */
 	public function create_resource() {
-		$payment = ( new Pay_Now_Action() )
+		$payment = ( new Actions\Pay_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
 			->set_app_context( array(
 				'return_url' => $this->get_success_url(),
@@ -95,7 +92,7 @@ class Scenario_Pay_Now extends Scenario_Base implements Scenario_With_Resource_I
 	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
-		return ( new Capture_Payment_Action() )
+		return ( new Actions\Capture_Payment_Action() )
 			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_order_id( $this->get_queried_token() )
 			->send_request();

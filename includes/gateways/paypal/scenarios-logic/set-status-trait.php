@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
+namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
-trait Scenario_Set_Status_Trait {
+trait Set_Status_Trait {
 
 	/**
 	 * @throws Gateway_Exception

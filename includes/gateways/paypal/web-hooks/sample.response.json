@@ -1,110 +1,106 @@
 {
-	"subscription_id": "I-30MV9LK9H4GG",
-	"scenario": "SUBSCRIBE_NOW",
-	"order_id": 1481,
-	"form_id": "1284",
-	"form_data": {
-		"manual_input": "1336",
-		"test_action_conditions": "Prewwdsf",
-		"euye_sfds": "234234",
-		"sruslishchchuy": "",
-		"test_radio_macros": "",
-		"field_name": "",
-		"my_repeater": [],
-		"__form_id": "1284",
-		"__is_ajax": true,
-		"__refer": "https://192.168.4.45/develop/jet-form/",
-		"__repeaters_settings": [],
-		"inserted_post_id": 1481
-	},
-	"resource": {
-		"status": "ACTIVE",
-		"status_update_time": "2021-10-22T08:25:56Z",
-		"id": "I-30MV9LK9H4GG",
-		"plan_id": "P-2RW14005CT679391XMFPMEWI",
-		"start_time": "2021-10-22T08:25:15Z",
-		"quantity": "1",
-		"shipping_amount": {
-			"currency_code": "USD",
-			"value": "0.0"
-		},
-		"subscriber": {
-			"email_address": "sanko200065@gmail.com",
-			"payer_id": "VFG6LG948GRRL",
-			"name": {
-				"given_name": "Олександр",
-				"surname": "Іваненко"
-			},
-			"shipping_address": {
-				"address": {
-					"address_line_1": "Rumina",
-					"admin_area_2": "Mykolaiv",
-					"admin_area_1": "MYKOLAIVSKA OBL",
-					"postal_code": "54000",
-					"country_code": "UA"
-				}
-			}
-		},
-		"billing_info": {
-			"outstanding_balance": {
-				"currency_code": "USD",
-				"value": "0.0"
-			},
-			"cycle_executions": [
-				{
-					"tenure_type": "REGULAR",
-					"sequence": 1,
-					"cycles_completed": 1,
-					"cycles_remaining": 2,
-					"current_pricing_scheme_version": 1,
-					"total_cycles": 3
-				}
-			],
-			"last_payment": {
-				"amount": {
-					"currency_code": "USD",
-					"value": "100.0"
-				},
-				"time": "2021-10-22T08:25:55Z"
-			},
-			"next_billing_time": "2021-10-23T10:00:00Z",
-			"final_payment_time": "2021-10-24T10:00:00Z",
-			"failed_payments_count": 0
-		},
-		"create_time": "2021-10-22T08:25:54Z",
-		"update_time": "2021-10-22T08:25:56Z",
-		"plan_overridden": false,
-		"links": [
-			{
-				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-30MV9LK9H4GG/cancel",
-				"rel": "cancel",
-				"method": "POST"
-			},
-			{
-				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-30MV9LK9H4GG",
-				"rel": "edit",
-				"method": "PATCH"
-			},
-			{
-				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-30MV9LK9H4GG",
-				"rel": "self",
-				"method": "GET"
-			},
-			{
-				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-30MV9LK9H4GG/suspend",
-				"rel": "suspend",
-				"method": "POST"
-			},
-			{
-				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-30MV9LK9H4GG/capture",
-				"rel": "capture",
-				"method": "POST"
-			}
-		]
-	},
-	"provider": "jet-form-builder",
-	"status": "ACTIVE",
-	"date": "October 22, 2021, 08:31",
-	"gateway": "PayPal Checkout",
-	"gateway_id": "paypal"
+  "subscription_id": "I-17SBYS7KS71U",
+  "scenario": "SUBSCRIBE_NOW",
+  "order_id": 52,
+  "form_id": "5",
+  "form_data": {
+    "post_id": "9",
+    "text_field": "some text 3333",
+    "field_name": "",
+    "__form_id": "5",
+    "__is_ajax": true,
+    "__refer": "http://develop.home.com/home",
+    "__repeaters_settings": [],
+    "inserted_post_id": 52
+  },
+  "resource": {
+    "status": "ACTIVE",
+    "status_update_time": "2021-10-25T07:15:28Z",
+    "id": "I-17SBYS7KS71U",
+    "plan_id": "P-2RW14005CT679391XMFPMEWI",
+    "start_time": "2021-10-25T07:14:41Z",
+    "quantity": "1",
+    "shipping_amount": {
+      "currency_code": "USD",
+      "value": "0.0"
+    },
+    "subscriber": {
+      "email_address": "sanko200065@gmail.com",
+      "payer_id": "VFG6LG948GRRL",
+      "name": {
+        "given_name": "Олександр",
+        "surname": "Іваненко"
+      },
+      "shipping_address": {
+        "address": {
+          "address_line_1": "Rumina",
+          "admin_area_2": "Mykolaiv",
+          "admin_area_1": "MYKOLAIVSKA OBL",
+          "postal_code": "54000",
+          "country_code": "UA"
+        }
+      }
+    },
+    "billing_info": {
+      "outstanding_balance": {
+        "currency_code": "USD",
+        "value": "0.0"
+      },
+      "cycle_executions": [
+        {
+          "tenure_type": "REGULAR",
+          "sequence": 1,
+          "cycles_completed": 1,
+          "cycles_remaining": 2,
+          "current_pricing_scheme_version": 1,
+          "total_cycles": 3
+        }
+      ],
+      "last_payment": {
+        "amount": {
+          "currency_code": "USD",
+          "value": "100.0"
+        },
+        "time": "2021-10-25T07:15:27Z"
+      },
+      "next_billing_time": "2021-10-26T10:00:00Z",
+      "final_payment_time": "2021-10-27T10:00:00Z",
+      "failed_payments_count": 0
+    },
+    "create_time": "2021-10-25T07:15:26Z",
+    "update_time": "2021-10-25T07:15:28Z",
+    "plan_overridden": false,
+    "links": [
+      {
+        "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-17SBYS7KS71U/cancel",
+        "rel": "cancel",
+        "method": "POST"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-17SBYS7KS71U",
+        "rel": "edit",
+        "method": "PATCH"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-17SBYS7KS71U",
+        "rel": "self",
+        "method": "GET"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-17SBYS7KS71U/suspend",
+        "rel": "suspend",
+        "method": "POST"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-17SBYS7KS71U/capture",
+        "rel": "capture",
+        "method": "POST"
+      }
+    ]
+  },
+  "provider": "jet-form-builder",
+  "status": "ACTIVE",
+  "date": "October 25, 2021, 07:15",
+  "gateway": "PayPal Checkout",
+  "gateway_id": "paypal"
 }

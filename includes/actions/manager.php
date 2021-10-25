@@ -116,7 +116,7 @@ class Manager {
 	 * @throws Repository_Exception
 	 */
 	public function get_action_clone( $type ) {
-		return $this->rep_get_clone( $type );
+		return $this->rep_clone_item( $type );
 	}
 
 	public function has_action_type( $type ) {

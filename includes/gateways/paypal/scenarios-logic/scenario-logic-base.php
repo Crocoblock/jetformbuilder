@@ -1,23 +1,21 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
+namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 
 use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
+use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
-abstract class Scenario_Base implements Repository_Static_Item_Trait {
-
+abstract class Scenario_Logic_Base extends Scenario_Item_Base {
 
 	/** @var Controller */
 	protected $controller;
 
 	protected $queried_token;
-
-	abstract public static function scenario_id();
 
 	abstract public function process_before();
 
@@ -28,10 +26,6 @@ abstract class Scenario_Base implements Repository_Static_Item_Trait {
 	abstract protected function query_token();
 
 	abstract public function get_failed_statuses();
-
-	public static function rep_item_id() {
-		return static::scenario_id();
-	}
 
 	/**
 	 * @throws Gateway_Exception
@@ -85,10 +79,6 @@ abstract class Scenario_Base implements Repository_Static_Item_Trait {
 			) );
 			break;
 		}
-	}
-
-	public function prepare_status_for_view( $record ) {
-		return $record['resource']['status'] ?? 'NONE';
 	}
 
 }

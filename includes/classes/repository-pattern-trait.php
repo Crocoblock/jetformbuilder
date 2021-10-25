@@ -124,15 +124,7 @@ trait Repository_Pattern_Trait {
 		return array_keys( $this->__repository );
 	}
 
-	/**
-	 * @param $slug
-	 *
-	 * @return mixed
-	 * @throws Repository_Exception
-	 */
-	public function rep_get_item( $slug ) {
-		$this->rep_throw_if_undefined( $slug );
-
+	private function _rep_get_item( $slug ) {
 		return $this->__repository[ $slug ];
 	}
 
@@ -142,10 +134,38 @@ trait Repository_Pattern_Trait {
 	 * @return mixed
 	 * @throws Repository_Exception
 	 */
-	public function rep_get_clone( $slug ) {
+	public function rep_get_item( $slug ) {
 		$this->rep_throw_if_undefined( $slug );
 
-		return clone $this->__repository[ $slug ];
+		return $this->_rep_get_item( $slug );
+	}
+
+	public function rep_get_item_or_die( $slug ) {
+		if ( ! $this->rep_isset_item( $slug ) ) {
+			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '1.4.0' );
+		}
+
+		return $this->_rep_get_item( $slug );
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return mixed
+	 * @throws Repository_Exception
+	 */
+	public function rep_clone_item( $slug ) {
+		$this->rep_throw_if_undefined( $slug );
+
+		return clone $this->_rep_get_item( $slug );
+	}
+
+	public function rep_clone_item_or_die( $slug ) {
+		if ( ! $this->rep_isset_item( $slug ) ) {
+			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '1.4.0' );
+		}
+
+		return clone $this->_rep_get_item( $slug );
 	}
 
 	/**

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
+namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
-interface Scenario_With_Resource_It {
+interface With_Resource_It {
 
 	/**
 	 * @return array

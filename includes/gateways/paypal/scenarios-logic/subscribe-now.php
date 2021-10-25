@@ -1,30 +1,24 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios;
+namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Create_Webhook;
-use Jet_Form_Builder\Gateways\Paypal\Actions\List_Webhook_Trait;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Show_Subscription_Details_Action;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Subscribe_Now_Action;
+use Jet_Form_Builder\Gateways\Paypal\Actions;
 use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Paypal_Subscription_Form_Id_Endpoint;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Paypal_Subscription_Global_Endpoint;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 
-class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource_It {
+class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 
-	use Scenario_Set_Status_Trait;
-	use List_Webhook_Trait;
-
-	public static function scenario_id() {
-		return 'SUBSCRIBE_NOW';
-	}
+	use Set_Status_Trait;
+	use Actions\List_Webhook_Trait;
+	use Scenarios_Connectors\Subscribe_Now;
 
 	protected function query_token() {
-		return $_GET['subscription_id'] ?? false;
+		return esc_attr( $_GET['subscription_id'] ?? '' );
 	}
 
 	public function get_failed_statuses() {
@@ -55,7 +49,7 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 	}
 
 	public function create_resource() {
-		$subscription = ( new Subscribe_Now_Action() )
+		$subscription = ( new Actions\Subscribe_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
 			->set_app_context( array(
 				'return_url' => $this->get_success_url(),
@@ -93,7 +87,7 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
-		return ( new Show_Subscription_Details_Action() )
+		return ( new Actions\Show_Subscription_Details_Action() )
 			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_subscription_id( $this->get_queried_token() )
 			->send_request();
@@ -126,9 +120,9 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 			return;
 		}
 
-		$response = ( new Create_Webhook() )
+		$response = ( new Actions\Create_Webhook() )
 			->set_bearer_auth( $this->controller->get_current_token() )
-			->set_param_url( Paypal_Subscription_Global_Endpoint::rest_url() )
+			->set_param_url( Web_Hooks\Paypal_Subscription_Global_Endpoint::rest_url() )
 			->set_param_event_types( Events_Listeners_Manager::instance()->get_events_types_list() )
 			->send_request();
 
@@ -140,10 +134,10 @@ class Scenario_Subscribe extends Scenario_Base implements Scenario_With_Resource
 
 	private function get_rest_api_endpoint() {
 		if ( $this->controller->current_gateway( 'use_global' ) ) {
-			return Paypal_Subscription_Global_Endpoint::get_rest_base();
+			return Web_Hooks\Paypal_Subscription_Global_Endpoint::get_rest_base();
 		}
 
-		return Paypal_Subscription_Form_Id_Endpoint::get_rest_base();
+		return Web_Hooks\Paypal_Subscription_Form_Id_Endpoint::get_rest_base();
 	}
 
 

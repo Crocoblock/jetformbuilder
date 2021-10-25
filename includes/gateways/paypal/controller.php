@@ -7,8 +7,6 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
-use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Pay_Now;
-use Jet_Form_Builder\Gateways\Paypal\Scenarios\Scenario_Subscribe;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
@@ -63,7 +61,7 @@ class Controller extends Base_Gateway {
 			),
 			'gateway_type' => array(
 				'label'   => _x( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
-				'default' => Scenario_Pay_Now::scenario_id(),
+				'default' => Scenarios_Logic\Pay_Now::scenario_id(),
 			)
 		);
 	}
@@ -72,11 +70,11 @@ class Controller extends Base_Gateway {
 		return array(
 			'gateway_types' => array(
 				array(
-					'value' => Scenario_Pay_Now::scenario_id(),
+					'value' => Scenarios_Logic\Pay_Now::scenario_id(),
 					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' )
 				),
 				array(
-					'value' => Scenario_Subscribe::scenario_id(),
+					'value' => Scenarios_Logic\Subscribe_Now::scenario_id(),
 					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' )
 				)
 			)
@@ -144,19 +142,19 @@ class Controller extends Base_Gateway {
 	}
 
 	/**
-	 * @return Scenarios\Scenario_Base
+	 * @return Scenarios_Logic\Scenario_Logic_Base
 	 * @throws Gateway_Exception
 	 */
 	public function get_scenario() {
-		return Scenarios_Manager::instance()->get_scenario( $this )->install( $this );
+		return Scenarios_Manager::instance()->get_logic( $this )->install( $this );
 	}
 
 	/**
-	 * @return Scenarios\Scenario_Base
+	 * @return Scenarios_Logic\Scenario_Logic_Base
 	 * @throws Gateway_Exception
 	 */
 	public function query_scenario() {
-		return Scenarios_Manager::instance()->query_scenario()->install( $this );
+		return Scenarios_Manager::instance()->query_logic()->install( $this );
 	}
 
 	public static function get_credentials() {

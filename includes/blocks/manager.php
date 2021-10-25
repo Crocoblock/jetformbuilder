@@ -275,7 +275,7 @@ class Manager {
 		$block_id = $this->explode_block_name( $block_name );
 
 		try {
-			return $this->builder_repository()->rep_get_clone( $block_id );
+			return $this->builder_repository()->rep_clone_item( $block_id );
 		} catch ( Repository_Exception $exception ) {
 		}
 

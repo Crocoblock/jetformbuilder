@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Integrations;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
 
 /**
@@ -18,6 +19,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Forms_Captcha class
  */
 class Forms_Captcha {
+
+	const CAPTCHA_ACTION_PREFIX = 'jet_form_builder_captcha__';
 
 	public static $script_rendered = false;
 
@@ -38,7 +41,7 @@ class Forms_Captcha {
 			return true;
 		}
 
-		$request = $this->sanitize_token_from_request( $is_ajax );
+		$request = $this->sanitize_token_from_request();
 
 		if ( empty( $request[ $this->field_key ] ) ) {
 			return false;
@@ -60,25 +63,19 @@ class Forms_Captcha {
 
 		if ( ! $body || empty( $body['success'] ) ) {
 			return false;
-		} else {
+		} elseif ( ! empty( $body['action'] ) && ( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] ) {
+
 			return $body['success'];
 		}
 
 	}
 
-	private function sanitize_token_from_request( $is_ajax ) {
+	private function sanitize_token_from_request(): array {
 		$response = array();
+		$request  = jet_form_builder()->form_handler->request_handler->get_request();
 
-		if ( ! $is_ajax && isset( $_POST[ $this->field_key ] ) ) {
-			$response[ $this->field_key ] = sanitize_text_field( $_POST[ $this->field_key ] );
-
-		} elseif ( isset( $_REQUEST['values'] ) ) {
-			foreach ( $_REQUEST['values'] as $field ) {
-				if ( $field['name'] === $this->field_key ) {
-
-					$response[ $field['name'] ] = esc_attr( $field['value'] );
-				}
-			}
+		if ( isset( $request[ $this->field_key ] ) ) {
+			$response[ $this->field_key ] = sanitize_text_field( $request[ $this->field_key ] );
 		}
 
 		return $response;
@@ -137,40 +134,41 @@ class Forms_Captcha {
 		?>
 		<input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
 		<script>
+			window.JetFormBuilderToken = window.JetFormBuilderToken || {};
 
-			if ( ! window.JetFormBuilderCaptcha ) {
-				window.JetFormBuilderCaptcha = function( formID ) {
-					var $script  = document.querySelector( 'script#jet-form-builder-recaptcha-js' ),
-						$cpField = jQuery( 'form[data-form-id="' + formID + '"]' ).find( '.captcha-token' );
+			if (!window.JetFormBuilderCaptcha) {
+				window.JetFormBuilderCaptcha = function (formID, captchaKey, actionPrefix) {
+					var $script = document.querySelector('script#jet-form-builder-recaptcha-js'),
+						$cpField = jQuery('form[data-form-id="' + formID + '"]').find('.captcha-token');
 
 					function setFormToken() {
-						if ( window.JetFormBuilderToken ) {
-							$cpField.val( window.JetFormBuilderToken );
-						} else if ( window.grecaptcha ) {
-							window.grecaptcha.ready( function() {
+						if (window.JetFormBuilderToken[formID]) {
+							$cpField.val(window.JetFormBuilderToken[formID]);
+						} else if (window.grecaptcha) {
+							window.grecaptcha.ready(function () {
 								grecaptcha.execute(
-									'<?php echo $key; ?>',
+									captchaKey,
 									{
-										action: 'submit_form',
+										action: actionPrefix + formID,
 									},
-								).then( function( token ) {
-									$cpField.val( token );
-									window.JetFormBuilderToken = token;
-								} );
-							} );
+								).then(function (token) {
+									$cpField.val(token);
+									window.JetFormBuilderToken[formID] = token;
+								});
+							});
 						}
 					}
 
-					if ( ! $script ) {
+					if (!$script) {
 
-						$script = document.createElement( 'script' );
+						$script = document.createElement('script');
 
 						$script.id = 'jet-form-builder-recaptcha-js';
-						$script.src = 'https://www.google.com/recaptcha/api.js?render=<?php echo $key; ?>';
+						$script.src = 'https://www.google.com/recaptcha/api.js?render=' + captchaKey;
 
-						$cpField.parentNode.insertBefore( $script, $cpField );
+						$cpField.parentNode.insertBefore($script, $cpField);
 
-						$script.onload = function() {
+						$script.onload = function () {
 							setFormToken();
 						};
 
@@ -180,13 +178,13 @@ class Forms_Captcha {
 				}
 			}
 
-			window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
+			window.JetFormBuilderCaptcha( <?php echo $form_id; ?>, '<?php echo $key; ?>', '<?php echo self::CAPTCHA_ACTION_PREFIX; ?>');
 
-			jQuery( window ).on( 'jet-popup/show-event/after-show', function() {
+			jQuery(window).on('jet-popup/show-event/after-show', function () {
 
-				window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
+				window.JetFormBuilderCaptcha( <?php echo $form_id; ?>, '<?php echo $key; ?>', '<?php echo self::CAPTCHA_ACTION_PREFIX; ?>');
 
-			} );
+			});
 		</script>
 		<?php
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

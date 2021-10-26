@@ -3,8 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Types;
 
-
-
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Integration_Exception;

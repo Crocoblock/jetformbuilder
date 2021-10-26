@@ -1,18 +1,17 @@
 <?php
-use Jet_Form_Builder\Classes\Tools;
-
 /**
- * Row-layout field template
+ * Column-layout field template
+ *
+ * @var $template
+ * @var $label
+ * @var $desc
+ * @var Base $this
  */
 
+use Jet_Form_Builder\Blocks\Render\Base;
+
+//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 echo $label;
-
-if ( $template ) {
-	if ( Tools::is_readable( $template ) ) {
-		include $template;
-	} else {
-		echo $template;
-	}
-}
-
+echo $template;
 echo $desc;
+//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

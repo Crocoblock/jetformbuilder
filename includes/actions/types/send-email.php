@@ -75,23 +75,23 @@ class Send_Email extends Base {
 			),
 			'subject'          => array(
 				'default' => '',
-				'path'    => 'email/subject'
+				'path'    => 'email/subject',
 			),
 			'from_name'        => array(
 				'default' => '',
-				'path'    => 'email/from_name'
+				'path'    => 'email/from_name',
 			),
 			'from_address'     => array(
 				'default' => '',
-				'path'    => 'email/from_address'
+				'path'    => 'email/from_address',
 			),
 			'content_type'     => array(
 				'default' => '',
-				'path'    => 'email/content_type'
+				'path'    => 'email/content_type',
 			),
 			'content'          => array(
 				'default' => '',
-				'path'    => 'email/content'
+				'path'    => 'email/content',
 			),
 		);
 	}
@@ -103,41 +103,47 @@ class Send_Email extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'mailTo'       => Tools::with_placeholder( array(
+			'mailTo'       => Tools::with_placeholder(
 				array(
-					'value' => 'admin',
-					'label' => __( 'Admin email', 'jet-form-builder' ),
-				),
+					array(
+						'value' => 'admin',
+						'label' => __( 'Admin email', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'form',
+						'label' => __( 'Email from submitted form field', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'custom',
+						'label' => __( 'Custom email', 'jet-form-builder' ),
+					),
+				)
+			),
+			'replyTo'      => Tools::with_placeholder(
 				array(
-					'value' => 'form',
-					'label' => __( 'Email from submitted form field', 'jet-form-builder' ),
-				),
+					array(
+						'value' => 'form',
+						'label' => __( 'Email from submitted form field', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'custom',
+						'label' => __( 'Custom email', 'jet-form-builder' ),
+					),
+				)
+			),
+			'content_type' => Tools::with_placeholder(
 				array(
-					'value' => 'custom',
-					'label' => __( 'Custom email', 'jet-form-builder' ),
-				),
-			) ),
-			'replyTo'      => Tools::with_placeholder( array(
-				array(
-					'value' => 'form',
-					'label' => __( 'Email from submitted form field', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'custom',
-					'label' => __( 'Custom email', 'jet-form-builder' ),
-				),
-			) ),
-			'content_type' => Tools::with_placeholder( array(
-				array(
-					'value' => 'text/plain',
-					'label' => __( 'Plain text', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'text/html',
-					'label' => __( 'HTML', 'jet-form-builder' ),
-				),
-			) ),
-			'customMacros' => apply_filters( 'jet-form-builder/actions/send-email/custom-macros', false )
+					array(
+						'value' => 'text/plain',
+						'label' => __( 'Plain text', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'text/html',
+						'label' => __( 'HTML', 'jet-form-builder' ),
+					),
+				)
+			),
+			'customMacros' => apply_filters( 'jet-form-builder/actions/send-email/custom-macros', false ),
 		);
 	}
 
@@ -245,12 +251,15 @@ class Send_Email extends Base {
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
 
 		if ( ! $sent ) {
-			throw new Action_Exception( 'failed', array(
-				'to'      => $to,
-				'subject' => $subject,
-				'message' => $message,
-				'headers' => $this->get_headers()
-			) );
+			throw new Action_Exception(
+				'failed',
+				array(
+					'to'      => $to,
+					'subject' => $subject,
+					'message' => $message,
+					'headers' => $this->get_headers(),
+				)
+			);
 		}
 
 		/**
@@ -269,7 +278,7 @@ class Send_Email extends Base {
 	 * @since 2.1
 	 */
 	public function get_headers() {
-		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
+		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 

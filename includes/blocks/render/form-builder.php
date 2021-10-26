@@ -2,7 +2,6 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
-
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\File_Upload;
@@ -189,7 +188,8 @@ class Form_Builder {
 
 		$form .= wp_nonce_field( Live_Form::instance()->get_nonce_id() );
 
-		$form .= Live_Form::force_render_field( 'hidden-field',
+		$form .= Live_Form::force_render_field(
+			'hidden-field',
 			array(
 				'field_value'   => $this->form_id,
 				'name'          => Plugin::instance()->form_handler->form_key,
@@ -197,14 +197,16 @@ class Form_Builder {
 			)
 		);
 
-		$form .= Live_Form::force_render_field( 'hidden-field',
+		$form .= Live_Form::force_render_field(
+			'hidden-field',
 			array(
 				'field_value'   => $this->get_form_refer_url(),
 				'name'          => Plugin::instance()->form_handler->refer_key,
 				'_static_value' => true,
 			)
 		);
-		$form .= Live_Form::force_render_field( 'hidden-field',
+		$form .= Live_Form::force_render_field(
+			'hidden-field',
 			array(
 				'field_value'   => Live_Form::instance()->post->ID,
 				'name'          => Plugin::instance()->form_handler->post_id_key,
@@ -226,6 +228,7 @@ class Form_Builder {
 		Preset_Manager::clear();
 
 		if ( $echo ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $form;
 		} else {
 			return $form;

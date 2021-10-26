@@ -48,7 +48,7 @@ class Update_User extends Base {
 			}
 		}
 
-		//$data_map  = array_filter( $data_map );
+		// $data_map  = array_filter( $data_map );
 		$user_meta = array();
 		$user      = array(
 			'user_nicename' => false,
@@ -129,10 +129,9 @@ class Update_User extends Base {
 				$user['user_pass'] = wp_check_invalid_utf8( $data_map['password'], true );
 				unset( $data_map['password'] );
 			}
-
 		}
 
-		//$user = array_filter( $user );
+		// $user = array_filter( $user );
 
 		wp_update_user( $user );
 
@@ -192,7 +191,7 @@ class Update_User extends Base {
 	public function action_data() {
 		return array(
 			'userRoles'  => Tools::get_user_roles_for_js(),
-			'userFields' => $this->get_user_fields()
+			'userFields' => $this->get_user_fields(),
 		);
 	}
 
@@ -203,40 +202,42 @@ class Update_User extends Base {
 	 * @return array
 	 */
 	public function get_user_fields() {
-		return Tools::with_placeholder( array(
+		return Tools::with_placeholder(
 			array(
-				'value' => 'ID',
-				'label' => __( 'User ID (will update this user)', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'email',
-				'label' => __( 'Email', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'password',
-				'label' => __( 'Password', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'confirm_password',
-				'label' => __( 'Confirm Password', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'first_name',
-				'label' => __( 'First Name', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'last_name',
-				'label' => __( 'Last Name', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'user_url',
-				'label' => __( 'User URL', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'user_meta',
-				'label' => __( 'User Meta', 'jet-form-builder' ),
-			),
-		) );
+				array(
+					'value' => 'ID',
+					'label' => __( 'User ID (will update this user)', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'email',
+					'label' => __( 'Email', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'password',
+					'label' => __( 'Password', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'confirm_password',
+					'label' => __( 'Confirm Password', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'first_name',
+					'label' => __( 'First Name', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'last_name',
+					'label' => __( 'Last Name', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'user_url',
+					'label' => __( 'User URL', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'user_meta',
+					'label' => __( 'User Meta', 'jet-form-builder' ),
+				),
+			)
+		);
 	}
 
 

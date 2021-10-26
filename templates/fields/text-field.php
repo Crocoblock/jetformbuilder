@@ -57,10 +57,11 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 			$this->add_attribute( 'data-inputmask-clearmaskonlostfocus', 'false' );
 			break;
 	}
-
 }
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input <?php $this->render_attributes_string(); ?>>
+	<input <?php $this->render_attributes_string(); ?>>
 	<?php echo $this->maybe_render_error( $args ); ?>
 </div>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

@@ -46,6 +46,7 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 
 		/**
 		 * [$assets_enqueued description]
+		 *
 		 * @var boolean
 		 */
 		protected $assets_enqueued = false;
@@ -120,38 +121,41 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 		 * @return array
 		 */
 		public function components_list() {
-			return apply_filters( 'cx-vue-ui/components-list', array(
+			return apply_filters(
+				'cx-vue-ui/components-list',
+				array(
 
-				// Layout elements
-				'title',
-				'collapse',
-				'component-wrapper',
-				'button',
-				'repeater',
-				'repeater-item',
-				'popup',
-				'list-table',
-				'list-table-heading',
-				'list-table-item',
-				'tabs',
-				'tabs-panel',
-				'pagination',
-				'notice',
+					// Layout elements
+					'title',
+					'collapse',
+					'component-wrapper',
+					'button',
+					'repeater',
+					'repeater-item',
+					'popup',
+					'list-table',
+					'list-table-heading',
+					'list-table-item',
+					'tabs',
+					'tabs-panel',
+					'pagination',
+					'notice',
 
-				// Form elements
-				'input',
-				'time',
-				'textarea',
-				'switcher',
-				'iconpicker',
-				'select',
-				'f-select',
-				'checkbox',
-				'radio',
-				'colorpicker',
-				'wp-media',
-				'dimensions',
-			) );
+					// Form elements
+					'input',
+					'time',
+					'textarea',
+					'switcher',
+					'iconpicker',
+					'select',
+					'f-select',
+					'checkbox',
+					'radio',
+					'colorpicker',
+					'wp-media',
+					'dimensions',
+				)
+			);
 		}
 
 		/**

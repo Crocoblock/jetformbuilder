@@ -39,35 +39,35 @@ class Mailchimp extends Integration_Base_Action {
 		return array(
 			'api_key'       => array(
 				'default' => '',
-				'path'    => 'mailchimp/api_key'
+				'path'    => 'mailchimp/api_key',
 			),
 			'data'          => array(
 				'default' => '',
-				'path'    => 'mailchimp/data'
+				'path'    => 'mailchimp/data',
 			),
 			'double_opt_in' => array(
 				'default' => '',
-				'path'    => 'mailchimp/double_opt_in'
+				'path'    => 'mailchimp/double_opt_in',
 			),
 			'fields_map'    => array(
 				'default' => '',
-				'path'    => 'mailchimp/fields_map'
+				'path'    => 'mailchimp/fields_map',
 			),
 			'groups_ids'    => array(
 				'default' => '',
-				'path'    => 'mailchimp/groups_ids'
+				'path'    => 'mailchimp/groups_ids',
 			),
 			'isValidAPI'    => array(
 				'default' => '',
-				'path'    => 'mailchimp/isValidAPI'
+				'path'    => 'mailchimp/isValidAPI',
 			),
 			'list_id'       => array(
 				'default' => '',
-				'path'    => 'mailchimp/list_id'
+				'path'    => 'mailchimp/list_id',
 			),
 			'tags'          => array(
 				'default' => '',
-				'path'    => 'mailchimp/tags'
+				'path'    => 'mailchimp/tags',
 			),
 		);
 	}
@@ -75,7 +75,7 @@ class Mailchimp extends Integration_Base_Action {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
@@ -84,9 +84,11 @@ class Mailchimp extends Integration_Base_Action {
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->request = $request;
 
-		$api = $this->global_settings( array(
-			'api_key' => ''
-		) );
+		$api = $this->global_settings(
+			array(
+				'api_key' => '',
+			)
+		);
 
 		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
@@ -103,9 +105,12 @@ class Mailchimp extends Integration_Base_Action {
 		$body_args = $this->get_body_args( $fields_map );
 
 		if ( empty( $body_args['email_address'] ) ) {
-			throw new Action_Exception( 'empty_field', array(
-				'email_address' => $body_args['email_address']
-			) );
+			throw new Action_Exception(
+				'empty_field',
+				array(
+					'email_address' => $body_args['email_address'],
+				)
+			);
 		}
 
 		if ( ! empty( $this->settings['groups_ids'] ) && is_array( $this->settings['groups_ids'] ) ) {
@@ -174,7 +179,7 @@ class Mailchimp extends Integration_Base_Action {
 					if ( ! Tools::is_valid_timestamp( $date_value ) ) {
 						$date_value = strtotime( $date_value );
 					}
-					
+
 					$body_args['merge_fields'][ $param ] = date( 'm/d', $date_value );
 					break;
 				default:

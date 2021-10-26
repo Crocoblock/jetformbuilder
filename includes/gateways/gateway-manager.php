@@ -18,18 +18,18 @@ use Jet_Form_Builder\Plugin;
 class Gateway_Manager {
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
-	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
+	const AFTER_ACTIONS_CALLABLE  = 'after_send_actions';
 
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
 	use Instance_Trait;
 	use Gateways_Editor_Data;
 
-	private $_gateways = array();
+	private $_gateways          = array();
 	private $gateways_form_data = array();
 
 	public $message = null;
-	public $data = null;
+	public $data    = null;
 
 	/**
 	 * Register gateways components
@@ -73,7 +73,8 @@ class Gateway_Manager {
 		$controller = $this->get_gateway_controller( $gateways['gateway'] );
 
 		if ( $controller ) {
-			$controller->before_actions( $action_handler,
+			$controller->before_actions(
+				$action_handler,
 				$this->get_actions_before( $action_handler )
 			);
 		}
@@ -115,11 +116,15 @@ class Gateway_Manager {
 
 		$form_id = $this->data['form_id'];
 
-		add_filter( 'jet-form-builder/pre-render/' . $form_id, function ( $res ) use ( $form_id ) {
-			echo $this->apply_macros( $this->message );
+		add_filter(
+			'jet-form-builder/pre-render/' . $form_id,
+			function ( $res ) use ( $form_id ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $this->apply_macros( $this->message );
 
-			return true;
-		} );
+				return true;
+			}
+		);
 	}
 
 	/**
@@ -155,7 +160,7 @@ class Gateway_Manager {
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			//do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+			// do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
 		}
 	}
 

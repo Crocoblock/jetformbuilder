@@ -2,7 +2,6 @@
 
 namespace Jet_Form_Builder;
 
-
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -25,12 +24,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key = 'jet_form_builder_submit';
-	public $hook_val = 'submit';
-	public $form_data = array();
-	public $response_data = array();
-	public $is_ajax = false;
-	public $is_success = false;
+	public $hook_key        = 'jet_form_builder_submit';
+	public $hook_val        = 'submit';
+	public $form_data       = array();
+	public $response_data   = array();
+	public $is_ajax         = false;
+	public $is_success      = false;
 	public $response_status = 'failed';
 
 	public $form_id;
@@ -39,8 +38,8 @@ class Form_Handler {
 	public $action_handler;
 	public $request_data;
 
-	public $form_key = '_jet_engine_booking_form_id';
-	public $refer_key = '_jet_engine_refer';
+	public $form_key    = '_jet_engine_booking_form_id';
+	public $refer_key   = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
@@ -129,14 +128,18 @@ class Form_Handler {
 		if ( $this->is_ajax ) {
 			$action_handler = $this->action_handler ? $this->action_handler : new Action_Handler( $this->form_id );
 
-			return new Form_Response\Types\Ajax_Response( array(
-				'form_id' => $this->form_id,
-				'actions' => $action_handler->get_all(),
-			) );
+			return new Form_Response\Types\Ajax_Response(
+				array(
+					'form_id' => $this->form_id,
+					'actions' => $action_handler->get_all(),
+				)
+			);
 		} else {
-			return new Form_Response\Types\Reload_Response( array(
-				'refer' => $this->refer,
-			) );
+			return new Form_Response\Types\Reload_Response(
+				array(
+					'refer' => $this->refer,
+				)
+			);
 		}
 	}
 
@@ -160,13 +163,17 @@ class Form_Handler {
 		$this->setup_form();
 
 		if ( ! $this->form_id || ! $this->refer ) {
-			$this->add_response_data( array(
-				'reload' => true,
-			) );
+			$this->add_response_data(
+				array(
+					'reload' => true,
+				)
+			);
 
-			$this->send_response( array(
-				'status' => 'failed',
-			) );
+			$this->send_response(
+				array(
+					'status' => 'failed',
+				)
+			);
 		}
 
 		$this->try_set_data();
@@ -178,13 +185,17 @@ class Form_Handler {
 		do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 
 		if ( true === $this->is_success ) {
-			$this->send_response( array(
-				'status' => 'success',
-			) );
+			$this->send_response(
+				array(
+					'status' => 'success',
+				)
+			);
 		} else {
-			$this->send_response( array(
-				'status' => 'failed',
-			) );
+			$this->send_response(
+				array(
+					'status' => 'failed',
+				)
+			);
 		}
 	}
 
@@ -193,17 +204,19 @@ class Form_Handler {
 			$request               = array(
 				'form_id' => $this->form_id,
 				'is_ajax' => $this->is_ajax,
-				'refer'   => $this->refer
+				'refer'   => $this->refer,
 			);
 			$this->action_handler  = new Action_Handler( $this->form_id );
 			$this->request_handler = new Request_Handler( $request );
 			$this->request_data    = $this->request_handler->get_form_data();
 
 		} catch ( Request_Exception $exception ) {
-			$this->send_response( array(
-				'status' => $exception->get_form_status(),
-				'errors' => $exception->get_fields_errors()
-			) );
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+					'errors' => $exception->get_fields_errors(),
+				)
+			);
 		}
 	}
 
@@ -216,9 +229,11 @@ class Form_Handler {
 			$this->is_success = true;
 
 		} catch ( Handler_Exception $exception ) {
-			$this->send_response( array(
-				'status' => $exception->get_form_status(),
-			) );
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
 		}
 	}
 
@@ -231,9 +246,9 @@ class Form_Handler {
 			$actions = ( new Action_Handler( $form_id ) )->get_all();
 		}
 
-		return ( object ) array(
+		return (object) array(
 			'form_id' => $form_id,
-			'actions' => $actions
+			'actions' => $actions,
 		);
 	}
 

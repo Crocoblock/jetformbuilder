@@ -28,6 +28,10 @@ class Request_Handler {
 		Parser_Manager::instance();
 	}
 
+	public function get_request() {
+		return $this->_request_values;
+	}
+
 	private function merge_with_base_request( $data ) {
 		foreach ( $this->request as $name => $field ) {
 			$data[ '__' . $name ] = $field;

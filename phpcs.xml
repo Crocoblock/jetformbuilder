@@ -10,5 +10,11 @@
     <exclude-pattern>\.idea/*</exclude-pattern>
 
     <!-- Rules -->
-    <rule ref="WordPress" />
+    <rule ref="WordPress">
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
+        <exclude name="Squiz.Commenting.VariableComment.Missing" />
+        <exclude name="Squiz.Commenting.FunctionComment.Missing" />
+        <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores" />
+    </rule>
+
 </ruleset>

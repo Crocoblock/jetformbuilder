@@ -168,7 +168,7 @@ abstract class Base {
 	public function get_default_args_with_filter() {
 		$args = $this->get_default_args();
 
-		//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
 	}
 

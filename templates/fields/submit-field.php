@@ -23,9 +23,10 @@ $wrap_classes = array( 'jet-form-builder__submit-wrap' );
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $this->live_form->page ) {
 	$wrap_classes[] = 'has-prev';
 }
-
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
-<div class="<?php echo implode( ' ', $wrap_classes ) ?>">
-	<?php include $this->get_global_template( 'common/prev-page-button.php' ); ?>
+<div class="<?php echo implode( ' ', $wrap_classes ); ?>">
+	<?php require $this->get_global_template( 'common/prev-page-button.php' ); ?>
 	<button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
 </div>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

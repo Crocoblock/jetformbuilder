@@ -97,7 +97,7 @@ class Post_Type {
 		$this->screen = get_current_screen();
 
 		if ( ! $this->screen->action ) {
-			//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$this->screen->action = ! empty( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : '';
 		}
 
@@ -157,7 +157,7 @@ class Post_Type {
 
 		$post_type = register_post_type(
 			$this->slug(),
-			//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			apply_filters( 'jet-form-builder/post-type/args', $args )
 		);
 
@@ -334,7 +334,7 @@ class Post_Type {
 
 	public function set_default_messages() {
 		$this->messages = apply_filters(
-			//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			'jet-form-builder/message-types',
 			array(
 				'success'           => array(

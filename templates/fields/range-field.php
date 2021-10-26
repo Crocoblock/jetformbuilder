@@ -13,16 +13,18 @@ $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] )
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap range-wrap">
 	<input type="range" <?php $this->render_attributes_string(); ?>>
 	<div class="jet-form-builder__field-value range-value">
-		<?php if ( ! empty( $args['prefix'] ) ): ?>
+		<?php if ( ! empty( $args['prefix'] ) ) : ?>
 			<span class="jet-form-builder__field-value-prefix"><?php echo $args['prefix']; ?></span>
 		<?php endif; ?>
 		<span class="jet-form-builder__field-value-number"></span>
-		<?php if ( ! empty( $args['suffix'] ) ): ?>
+		<?php if ( ! empty( $args['suffix'] ) ) : ?>
 			<span class="jet-form-builder__field-value-suffix"><?php echo $args['suffix']; ?></span>
 		<?php endif; ?>
 	</div>
 </div>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

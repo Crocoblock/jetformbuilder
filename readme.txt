@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 5.8.0
+Tested up to: 5.8.1
 Requires PHP: 7.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,24 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.3.2**
+ - ADD: Getting the child field of the repeater for the "Get values list from JetEngine field options" generator
+ - ADD: CSS Controls for JetForm Elementor widget for Heading Field
+ - ADD: Add dynamic for custom url in Redirect to Page action
+ - FIX: Switch page in Elementor Popup
+ - FIX: Parse fields with conditional logic
+ - FIX: Parsing media field value
+ - FIX: Failed process Paypal gateway
+ - FIX: Output Radio & Checkbox Fields label
+ - FIX: Enqueue Media Field & Text Field scripts
+ - FIX: Float attributes in edit Range Field
+ - FIX: Usage preset in datetime field in timestamp format
+ - FIX: Duplicate form errors
+ - FIX: Displaying a hidden calculating field only through a hidden field
+ - FIX: Dynamic preset when value is missing
+ - Tweak: UI/UX Select, Radio, Checkbox fields
+ - Tweak: Added a placeholder for form block/widget attributes
 
 **1.3.1**
  - ADD: Auto scrolling for multi-step form.

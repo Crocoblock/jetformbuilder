@@ -3,7 +3,7 @@
  * Plugin Name: JetFormBuilder
  * Plugin URI:  https://jetformbuilder.com/
  * Description: Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor
- * Version:     1.3.1
+ * Version:     1.3.2
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-form-builder
@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 function jet_form_builder_init() {
 
-	define( 'JET_FORM_BUILDER_VERSION', '1.3.1' );
+	define( 'JET_FORM_BUILDER_VERSION', '1.3.2' );
 
 	define( 'JET_FORM_BUILDER__FILE__', __FILE__ );
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );
@@ -29,25 +29,31 @@ function jet_form_builder_init() {
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
 
-	add_filter( 'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE, function ( $links ) {
-		$url = 'https://jetformbuilder.com/pricing/';
-		$url = add_query_arg( array(
-			'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
-			'utm_medium'   => 'crocoblock-license/theme-author',
-			'utm_campaign' => 'go-pro-button'
-		), $url );
+	add_filter(
+		'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
+		function ( $links ) {
+			$url = 'https://jetformbuilder.com/pricing/';
+			$url = add_query_arg(
+				array(
+					'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
+					'utm_medium'   => 'crocoblock-license/theme-author',
+					'utm_campaign' => 'go-pro-button',
+				),
+				$url
+			);
 
-		wp_enqueue_style(
-			'jet-fb-admin',
-			JET_FORM_BUILDER_URL . 'assets/css/admin/plugins.css',
-			array(),
-			JET_FORM_BUILDER_VERSION
-		);
+			wp_enqueue_style(
+				'jet-fb-admin',
+				JET_FORM_BUILDER_URL . 'assets/css/admin/plugins.css',
+				array(),
+				JET_FORM_BUILDER_VERSION
+			);
 
-		$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">Go Pro</a>";
+			$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">Go Pro</a>";
 
-		return $links;
-	} );
+			return $links;
+		}
+	);
 }
 
 if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
@@ -63,17 +69,23 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		}
 	}
 } else {
-	add_action( 'admin_notices', function () {
-		$class   = 'notice notice-error';
-		$message = __(
-			'<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version ">= 7.0"',
-			'jet-form-builder'
-		);
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), wp_kses_post( $message ) );
-	} );
+	add_action(
+		'admin_notices',
+		function () {
+			$class   = 'notice notice-error';
+			$message = __(
+				'<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version ">= 7.0"',
+				'jet-form-builder'
+			);
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), wp_kses_post( $message ) );
+		}
+	);
 
-	add_action( 'admin_init', function () {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-	} );
+	add_action(
+		'admin_init',
+		function () {
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
+	);
 }
 

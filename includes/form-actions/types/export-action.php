@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Actions\Types;
 
-
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Get_Form_Data;
 
@@ -26,10 +25,10 @@ class Export_Action extends Base_Form_Action {
 	}
 
 	public function do_admin_action() {
-		$form_id = $this->get_post_id_from_request();
+		$form_id   = $this->get_post_id_from_request();
 		$form_data = $this->get_from_data( $form_id );
 
-		$this->file_download( $form_data[0]->post_name . '.json', json_encode( $form_data[1] ) );
+		$this->file_download( $form_data[0]->post_name . '.json', wp_json_encode( $form_data[1] ) );
 	}
 
 
@@ -45,6 +44,7 @@ class Export_Action extends Base_Form_Action {
 
 		set_time_limit( 0 );
 
+		// phpcs:disable
 		@session_write_close();
 
 		if ( function_exists( 'apache_setenv' ) ) {
@@ -67,6 +67,7 @@ class Export_Action extends Base_Form_Action {
 		header( "Content-Length: " . strlen( $file ) );
 
 		echo $file;
+		// phpcs:enable
 		die();
 
 	}

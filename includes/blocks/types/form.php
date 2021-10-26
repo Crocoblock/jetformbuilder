@@ -412,7 +412,7 @@ class Form extends Base {
 			)
 		);
 
-		//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
@@ -425,7 +425,7 @@ class Form extends Base {
 		Error_Handler::instance();
 
 		ob_start();
-		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_style_manager_html( $form_id );
 		$builder->render_form();
 		$messages->render_messages();

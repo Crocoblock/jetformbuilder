@@ -47,34 +47,36 @@ if ( ! empty( $args['field_options'] ) ) {
 			$custom_template = $this->get_custom_template( $val, $args );
 		}
 
+		//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
-        <div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
-			<?php if ( $custom_template ) {
+		<div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
+			<?php
+			if ( $custom_template ) {
 				echo $custom_template;
-			} ?>
-            <label class="jet-form-builder__field-label for-radio">
-                <input
-                        type="radio"
-                        name="<?php echo $name; ?>"
+			}
+			?>
+			<label class="jet-form-builder__field-label for-radio">
+				<input
+						type="radio"
+						name="<?php echo $name; ?>"
 					<?php $this->render_attributes_string_save(); ?>
-                        value="<?php echo $val; ?>"
-                        data-field-name="<?php echo $args['name']; ?>"
+						value="<?php echo $val; ?>"
+						data-field-name="<?php echo $args['name']; ?>"
 					<?php echo $checked; ?>
 					<?php echo $required; ?>
 					<?php echo $calc; ?>
 					<?php echo $data_switch; ?>
-                >
-                <span><?php echo $label; ?></span>
-            </label>
-        </div>
+				>
+				<span><?php echo $label; ?></span>
+			</label>
+		</div>
 		<?php
-
+		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	$this->reset_attributes();
 
 	if ( $custom_template ) {
 		wp_reset_postdata();
-		wp_reset_query();
 	}
 
 	echo '</div>';

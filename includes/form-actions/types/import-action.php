@@ -63,7 +63,7 @@ class Import_Action extends Base_Form_Action {
 
 		$form_id = $this->import_form( $content );
 
-		//phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( get_edit_post_link( $form_id, 'url' ) );
 		die();
 	}
@@ -79,7 +79,7 @@ class Import_Action extends Base_Form_Action {
 		include $this->get_global_template( 'admin/import-form.php' );
 		$import_template = ob_get_clean();
 
-		//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		ob_start();
 		?>
 		( function( $ ) {
@@ -99,7 +99,7 @@ class Import_Action extends Base_Form_Action {
 
 		}( jQuery ) );
 		<?php
-		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		$script = ob_get_clean();
 

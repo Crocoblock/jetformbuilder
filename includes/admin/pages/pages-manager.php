@@ -50,7 +50,7 @@ class Pages_Manager {
 	 * @return boolean [description]
 	 */
 	public function is_dashboard_page() {
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$page = ! empty( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : false;
 
 		if ( ! $page ) {
@@ -65,7 +65,7 @@ class Pages_Manager {
 	 * Set current admin page
 	 */
 	public function set_current_page() {
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$slug = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : false;
 
 		if ( $slug ) {
@@ -90,7 +90,7 @@ class Pages_Manager {
 			true
 		);
 
-		//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
 
 		$this->current_page->assets();

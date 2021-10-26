@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Request;
 
-
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
@@ -11,7 +10,7 @@ abstract class Field_Data_Parser {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name = 'field_name';
+	protected $name        = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;
@@ -48,7 +47,6 @@ abstract class Field_Data_Parser {
 		$this->settings           = $this->block['attrs'];
 		$this->inner              = $this->block['innerBlocks'];
 
-
 		if ( isset( $this->settings['required'] ) ) {
 			$this->is_required = $this->settings['required'];
 		}
@@ -63,7 +61,11 @@ abstract class Field_Data_Parser {
 
 	private function save_error() {
 		Error_Handler::instance()->add(
-			$this->type(), array( 'name' => $this->name, 'params' => $this->settings )
+			$this->type(),
+			array(
+				'name'   => $this->name,
+				'params' => $this->settings,
+			)
 		);
 	}
 

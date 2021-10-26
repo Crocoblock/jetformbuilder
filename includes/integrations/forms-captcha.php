@@ -22,8 +22,8 @@ class Forms_Captcha {
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
-	private $api = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults = array(
+	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
+	private $defaults  = array(
 		'enabled' => false,
 		'key'     => '',
 		'secret'  => '',
@@ -45,12 +45,15 @@ class Forms_Captcha {
 		}
 
 		$token    = esc_attr( $request[ $this->field_key ] );
-		$response = wp_remote_post( $this->api, array(
-			'body' => array(
-				'secret'   => $captcha['secret'],
-				'response' => $token,
-			),
-		) );
+		$response = wp_remote_post(
+			$this->api,
+			array(
+				'body' => array(
+					'secret'   => $captcha['secret'],
+					'response' => $token,
+				),
+			)
+		);
 
 		$body = wp_remote_retrieve_body( $response );
 		$body = json_decode( $body, true );
@@ -124,14 +127,16 @@ class Forms_Captcha {
 			return;
 		}
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( ! self::$script_rendered ) {
 			self::$script_rendered = true;
+			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 			printf( '<script id="jet-form-builder-recaptcha-js" src="https://www.google.com/recaptcha/api.js?render=%s"></script>', $key );
 		}
 
 		?>
-        <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
-        <script>
+		<input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
+		<script>
 
 			if ( ! window.JetFormBuilderCaptcha ) {
 				window.JetFormBuilderCaptcha = function( formID ) {
@@ -182,8 +187,9 @@ class Forms_Captcha {
 				window.JetFormBuilderCaptcha( <?php echo $form_id; ?> );
 
 			} );
-        </script>
+		</script>
 		<?php
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

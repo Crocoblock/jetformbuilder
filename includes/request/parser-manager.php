@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Request;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -18,10 +17,10 @@ use Jet_Form_Builder\Request\Fields;
  */
 class Parser_Manager {
 
-	const EMPTY_BLOCK_ERROR = '0';
+	const EMPTY_BLOCK_ERROR   = '0';
 	const NOT_FIELD_HAS_INNER = '1';
-	const FIELD_HAS_INNER = '2';
-	const IS_CONDITIONAL = '3';
+	const FIELD_HAS_INNER     = '2';
+	const IS_CONDITIONAL      = '3';
 
 	private $_parsers;
 	private $response;
@@ -34,15 +33,18 @@ class Parser_Manager {
 	}
 
 	private function register_request_parsers() {
-		$parsers = apply_filters( 'jet-form-builder/parsers-request/register', array(
-			new Fields\Date_Field_Parser(),
-			new Fields\Repeater_Field_Parser(),
-			new Fields\Wysiwyg_Field_Parser(),
-			new Fields\Text_Field_Parser(),
-			new Fields\Repeater_Field_Parser(),
-			new Fields\Media_Field_Parser(),
-			new Fields\Datetime_Field_Parser()
-		) );
+		$parsers = apply_filters(
+			'jet-form-builder/parsers-request/register',
+			array(
+				new Fields\Date_Field_Parser(),
+				new Fields\Repeater_Field_Parser(),
+				new Fields\Wysiwyg_Field_Parser(),
+				new Fields\Text_Field_Parser(),
+				new Fields\Repeater_Field_Parser(),
+				new Fields\Media_Field_Parser(),
+				new Fields\Datetime_Field_Parser(),
+			)
+		);
 
 		foreach ( $parsers as $parser ) {
 			$this->_parsers[ $parser->type() ] = $parser;
@@ -158,22 +160,22 @@ class Parser_Manager {
 	 */
 	public function is_field_visible( $field = array() ) {
 
-		// For backward compatibility and hidden fields
+		// For backward compatibility and hidden fields.
 		if ( empty( $field['visibility'] ) ) {
 			return true;
 		}
 
-		// If is visible for all - show field
+		// If is visible for all - show field.
 		if ( 'all' === $field['visibility'] ) {
 			return true;
 		}
 
-		// If is visible for logged in users and user is logged in - show field
+		// If is visible for logged in users and user is logged in - show field.
 		if ( 'logged_id' === $field['visibility'] && is_user_logged_in() ) {
 			return true;
 		}
 
-		// If is visible for not logged in users and user is not logged in - show field
+		// If is visible for not logged in users and user is not logged in - show field.
 		if ( 'not_logged_in' === $field['visibility'] && ! is_user_logged_in() ) {
 			return true;
 		}

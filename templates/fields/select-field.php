@@ -25,7 +25,8 @@ $default     = isset( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'data-default-val', $default );
 ?>
 <div class="jet-form-builder__field-wrap">
-    <select <?php $this->render_attributes_string(); ?>><?php
+	<select <?php $this->render_attributes_string(); ?>>
+		<?php
 
 		if ( $placeholder ) {
 			$selected_placeholder = '';
@@ -33,7 +34,7 @@ $this->add_attribute( 'data-default-val', $default );
 			if ( ! $default ) {
 				$selected_placeholder = 'selected';
 			}
-
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			printf( '<option value="" %1$s>%2$s</option>', $selected_placeholder, $placeholder );
 		}
 
@@ -64,9 +65,10 @@ $this->add_attribute( 'data-default-val', $default );
 				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );
 
 			}
-
 		}
 
-		?></select>
+		?>
+	</select>
 	<?php echo $this->maybe_render_error( $args ); ?>
 </div>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

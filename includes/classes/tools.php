@@ -19,10 +19,10 @@ class Tools {
 	}
 
 	public static function is_block_editor() {
-		$action = ! empty( $_GET['context'] ) ? $_GET['context'] : '';
+		$action = ! empty( $_GET['context'] ) ? esc_attr( $_GET['context'] ) : '';
 
 		if ( isset( $_GET['action'] ) ) {
-			$action = $action ? $action : $_GET['action'];
+			$action = $action ?: esc_attr( $_GET['action'] );
 		}
 
 		return in_array( $action, array( 'add', 'edit' ) );
@@ -376,6 +376,19 @@ class Tools {
 	public static function maybe_recursive_sanitize( $source = null ) {
 		if ( ! is_array( $source ) ) {
 			return esc_attr( $source );
+		}
+
+		$result = array();
+		foreach ( $source as $key => $value ) {
+			$result[ $key ] = self::maybe_recursive_sanitize( $value );
+		}
+
+		return $result;
+	}
+
+	public static function recursive_wp_kses( $source, $allowed_html = 'strip' ) {
+		if ( ! is_array( $source ) ) {
+			return wp_kses( $source, $allowed_html );
 		}
 
 		$result = array();

@@ -2,7 +2,6 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
-
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -70,7 +69,7 @@ abstract class Base {
 
 	public function maybe_render_error( $args ) {
 		if ( $this->has_error( $args ) ) {
-			return "<div class='error-message'>" . Error_Handler::instance()->error_by_name( $args['name'] ) . "</div>";
+			return '<div class="error-message">' . Error_Handler::instance()->error_by_name( $args['name'] ) . '</div>';
 		}
 
 		return '';
@@ -174,17 +173,21 @@ abstract class Base {
 	public function get_default_args_with_filter() {
 		$args = $this->get_default_args();
 
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
 	}
 
 	public function before_render( $args ) {
 	}
 
+	/**
+	 * @param null $wp_block
+	 * @param null $template
+	 *
+	 * @return false|string
+	 */
 	public function render( $wp_block = null, $template = null ) {
-		$args = $this->get_default_args_with_filter();
-
-		$this->before_render( $args );
-
+		$args     = $this->get_default_args_with_filter();
 		$template = $this->render_without_layout( $template, $args );
 
 		$this->maybe_add_error_class( $args );
@@ -229,8 +232,8 @@ abstract class Base {
 	/**
 	 * Render custom form item template
 	 *
-	 * @param int|string $object_id Object ID
-	 * @param array $args Field arguments
+	 * @param int|string  $object_id Object ID.
+	 * @param array       $args Field arguments.
 	 * @param bool|string $checked
 	 *
 	 * @return string

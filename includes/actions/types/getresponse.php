@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Getresponse extends Integration_Base_Action {
 
-	protected $action = 'jet_form_builder_get_getresponse_data';
+	protected $action   = 'jet_form_builder_get_getresponse_data';
 	public $option_name = 'get-response-tab';
 
 	public function get_name() {
@@ -35,27 +35,27 @@ class Getresponse extends Integration_Base_Action {
 		return array(
 			'api_key'      => array(
 				'default' => '',
-				'path'    => 'getresponse/api_key'
+				'path'    => 'getresponse/api_key',
 			),
 			'data'         => array(
 				'default' => '',
-				'path'    => 'getresponse/data'
+				'path'    => 'getresponse/data',
 			),
 			'day_of_cycle' => array(
 				'default' => '',
-				'path'    => 'getresponse/day_of_cycle'
+				'path'    => 'getresponse/day_of_cycle',
 			),
 			'fields_map'   => array(
 				'default' => '',
-				'path'    => 'getresponse/fields_map'
+				'path'    => 'getresponse/fields_map',
 			),
 			'isValidAPI'   => array(
 				'default' => '',
-				'path'    => 'getresponse/isValidAPI'
+				'path'    => 'getresponse/isValidAPI',
 			),
 			'list_id'      => array(
 				'default' => '',
-				'path'    => 'getresponse/list_id'
+				'path'    => 'getresponse/list_id',
 			),
 		);
 	}
@@ -63,16 +63,18 @@ class Getresponse extends Integration_Base_Action {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$api = $this->global_settings( array(
-			'api_key' => ''
-		) );
+		$api = $this->global_settings(
+			array(
+				'api_key' => '',
+			)
+		);
 
 		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
@@ -116,9 +118,12 @@ class Getresponse extends Integration_Base_Action {
 		}
 
 		if ( empty( $body_args['email'] ) ) {
-			throw new Action_Exception( 'empty_field', array(
-				'email' => $body_args['email']
-			) );
+			throw new Action_Exception(
+				'empty_field',
+				array(
+					'email' => $body_args['email'],
+				)
+			);
 		}
 
 		$request_args = array(

@@ -1,29 +1,35 @@
 <?php
-use Jet_Form_Builder\Classes\Tools;
 /**
  * Row-layout field template
+ *
+ * @var $template
+ * @var $label
+ * @var $desc
+ * @var Base $this
  */
+
+use Jet_Form_Builder\Blocks\Render\Base;
 
 $fullwidth = ' content-fullwidth';
 
+//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
-<?php if ( $label || $desc ) : ?>
-<div class="jet-form-builder-col__start"><?php
+<?php if ( $this->get_field_label() || $this->get_field_desc() ) : ?>
+	<div class="jet-form-builder-col__start">
+		<?php
 
-	echo $label;
-	echo $desc;
+		echo $label;
+		echo $desc;
 
-	// Reset fullwidth content if we have label or description for field
-	$fullwidth = '';
+		// Reset fullwidth content if we have label or description for field.
+		$fullwidth = '';
 
-?></div>
+		?>
+	</div>
 <?php endif; ?>
-<div class="jet-form-builder-col__end<?php echo $fullwidth; ?>"><?php
-	if ( $template ) {
-		if ( Tools::is_readable( $template ) ) {
-			include $template;
-		} else {
-			echo $template;
-		}
-	}
-?></div>
+<div class="jet-form-builder-col__end<?php echo esc_attr( $fullwidth ); ?>">
+	<?php
+	echo $template;
+	//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	?>
+</div>

@@ -46,7 +46,10 @@ class Call_Webhook extends Base {
 		 * Filter webhook arguments
 		 */
 		$args = apply_filters(
-			'jet-form-builder/action/webhook/request-args', $args, $this->settings, $this
+			'jet-form-builder/action/webhook/request-args',
+			$args,
+			$this->settings,
+			$this
 		);
 
 		$response = wp_remote_post( $webhook_url, $args );
@@ -70,7 +73,7 @@ class Call_Webhook extends Base {
 
 	public function editor_labels() {
 		return array(
-			'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' )
+			'webhook_url' => __( 'Webhook URL:', 'jet-form-builder' ),
 		);
 	}
 

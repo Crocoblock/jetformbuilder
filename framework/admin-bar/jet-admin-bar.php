@@ -63,7 +63,7 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 
 			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 
-			add_action( 'init',           array( $this, 'register_default_items' ) );
+			add_action( 'init', array( $this, 'register_default_items' ) );
 			add_action( 'admin_bar_menu', array( $this, 'register_items' ), 99 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_inline_style' ) );
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 					continue;
 				}
 
-				$_parent_args = $parent_args;
+				$_parent_args       = $parent_args;
 				$_parent_args['id'] = $parent_id;
 
 				unset( $_parent_args['children'] );
@@ -106,7 +106,7 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 
 				foreach ( $parent_args['children'] as $child_id => $child_args ) {
 					$child_args['id'] = $child_id;
-					$child_args = $this->prepare_child_item_args( $child_args );
+					$child_args       = $this->prepare_child_item_args( $child_args );
 					$wp_admin_bar->add_menu( $child_args );
 				}
 			}
@@ -120,7 +120,15 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 		 * @return array
 		 */
 		public function sort_children_items( $children ) {
-			$children = wp_list_sort( $children, array( 'priority' => 'ASC', 'sub_title' => 'ASC' ), null, true );
+			$children = wp_list_sort(
+				$children,
+				array(
+					'priority'  => 'ASC',
+					'sub_title' => 'ASC',
+				),
+				null,
+				true
+			);
 			return $children;
 		}
 
@@ -131,7 +139,7 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 		 * @param array  $args
 		 */
 		public function register_parent_item( $id = null, $args = array() ) {
-			$args['id'] = $id;
+			$args['id']         = $id;
 			$this->items[ $id ] = $args;
 		}
 

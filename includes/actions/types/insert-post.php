@@ -62,9 +62,12 @@ class Insert_Post extends Base {
 		$post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
 
 		if ( ! $post_type || ! post_type_exists( $post_type ) ) {
-			throw new Action_Exception( 'failed', array(
-				'post_type' => $post_type
-			) );
+			throw new Action_Exception(
+				'failed',
+				array(
+					'post_type' => $post_type,
+				)
+			);
 		}
 
 		$fields_map    = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
@@ -85,7 +88,6 @@ class Insert_Post extends Base {
 				}
 			}
 		}
-
 
 		foreach ( $request as $key => $value ) {
 			$key_found_in_map = false;
@@ -114,11 +116,10 @@ class Insert_Post extends Base {
 					} else {
 						$terms_input[ $tax ] = array_merge( $terms_input[ $tax ], array_map( 'absint', $value ) );
 					}
-
 				} else {
 					if ( function_exists( 'jet_engine' )
-					     && jet_engine()->relations
-					     && jet_engine()->relations->is_relation_key( $key ) ) {
+						 && jet_engine()->relations
+						 && jet_engine()->relations->is_relation_key( $key ) ) {
 						$rels_input[ $key ] = $value;
 					} else {
 						if ( $this->is_repeater_val( $value ) ) {
@@ -142,22 +143,18 @@ class Insert_Post extends Base {
 							if ( $key_found_in_map ) {
 								$meta_input[ $key ] = $prepared_value;
 							}
-
 						} elseif ( $key_found_in_map ) {
 							$meta_input[ $key ] = $value;
 						}
 					}
 				}
-
 			} else {
 				$postarr[ $key ] = $value;
 
 				if ( 'post_title' === $key ) {
 					$has_title = true;
 				}
-
 			}
-
 		}
 
 		$post_status = ! empty( $this->settings['post_status'] ) ? $this->settings['post_status'] : '';
@@ -179,9 +176,12 @@ class Insert_Post extends Base {
 			$post = get_post( (int) $postarr['ID'] );
 
 			if ( ! $post || ( absint( $post->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) ) {
-				throw new Action_Exception( 'failed', array(
-					'post' => $post,
-				) );
+				throw new Action_Exception(
+					'failed',
+					array(
+						'post' => $post,
+					)
+				);
 			}
 
 			$post_id     = wp_update_post( $postarr );
@@ -198,9 +198,12 @@ class Insert_Post extends Base {
 		}
 
 		if ( ! $post_id ) {
-			throw new Action_Exception( 'failed', array(
-				'post_id' => $post_id
-			) );
+			throw new Action_Exception(
+				'failed',
+				array(
+					'post_id' => $post_id,
+				)
+			);
 		}
 
 		$this->add_inserted_post_id( $handler, $post_id );
@@ -220,7 +223,6 @@ class Insert_Post extends Base {
 		 */
 		do_action( 'jet-form-builder/action/after-post-' . $post_action, $this, $handler );
 
-
 		if ( ! empty( $terms_input ) ) {
 
 			foreach ( $terms_input as $tax => $terms ) {
@@ -232,10 +234,12 @@ class Insert_Post extends Base {
 
 			$title = $post_type_obj->labels->singular_name . ' #' . $post_id;
 
-			wp_update_post( array(
-				'ID'         => $post_id,
-				'post_title' => $title,
-			) );
+			wp_update_post(
+				array(
+					'ID'         => $post_id,
+					'post_title' => $title,
+				)
+			);
 
 		}
 
@@ -278,7 +282,7 @@ class Insert_Post extends Base {
 			'post_type'    => __( 'Post Type:', 'jet-form-builder' ),
 			'post_status'  => __( 'Post Status:', 'jet-form-builder' ),
 			'fields_map'   => __( 'Fields Map:', 'jet-form-builder' ),
-			'default_meta' => __( 'Default Fields:', 'jet-form-builder' )
+			'default_meta' => __( 'Default Fields:', 'jet-form-builder' ),
 		);
 	}
 
@@ -308,9 +312,9 @@ class Insert_Post extends Base {
 			'requestFields'    => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',
-					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' )
-				)
-			)
+					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' ),
+				),
+			),
 		);
 	}
 
@@ -377,41 +381,46 @@ class Insert_Post extends Base {
 	 */
 	public function get_post_fields_for_options() {
 
-		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-fields', array(
-			array(
-				'value' => 'ID',
-				'label' => __( 'Post ID', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'post_title',
-				'label' => __( 'Post Title', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'post_content',
-				'label' => __( 'Post Content', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'post_excerpt',
-				'label' => __( 'Post Excerpt', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'post_status',
-				'label' => __( 'Post Status', 'jet-form-builder' ),
+		return Tools::with_placeholder(
+			apply_filters(
+				'jet-form-builder/actions/insert-post/allowed-post-fields',
+				array(
+					array(
+						'value' => 'ID',
+						'label' => __( 'Post ID', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_title',
+						'label' => __( 'Post Title', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_content',
+						'label' => __( 'Post Content', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_excerpt',
+						'label' => __( 'Post Excerpt', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_status',
+						'label' => __( 'Post Status', 'jet-form-builder' ),
 
-			),
-			array(
-				'value' => 'post_date',
-				'label' => __( 'Post Date', 'jet-form-builder' )
-			),
-			array(
-				'value' => 'post_date_gmt',
-				'label' => __( 'Post Date GMT', 'jet-form-builder' )
-			),
-			array(
-				'value' => 'post_author',
-				'label' => __( 'Post Author', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_date',
+						'label' => __( 'Post Date', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_date_gmt',
+						'label' => __( 'Post Date GMT', 'jet-form-builder' ),
+					),
+					array(
+						'value' => 'post_author',
+						'label' => __( 'Post Author', 'jet-form-builder' ),
+					),
+				)
 			)
-		) ) );
+		);
 
 	}
 

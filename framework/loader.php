@@ -147,7 +147,6 @@ class CX_Loader {
 				require_once $path;
 
 			}
-
 		}
 
 		return true;
@@ -206,9 +205,12 @@ class CX_Loader {
 			$modules_data[ $slug ] = array();
 		}
 
-		$filedata = get_file_data( $module_path, array(
-			'version' => 'Version',
-		) );
+		$filedata = get_file_data(
+			$module_path,
+			array(
+				'version' => 'Version',
+			)
+		);
 
 		if ( empty( $filedata['version'] ) ) {
 			// If version not passed in file header, so module defined not correctly and not be included

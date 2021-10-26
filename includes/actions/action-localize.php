@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions;
 
-
 trait Action_Localize {
 
 	abstract public function get_id();

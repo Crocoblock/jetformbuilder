@@ -20,12 +20,16 @@ class Request_Handler {
 	public $_response_data;
 
 	const REPEATERS_SETTINGS = '__repeaters_settings';
-	const WP_NONCE_KEY = '_wpnonce';
+	const WP_NONCE_KEY       = '_wpnonce';
 
 	public function set_request( $request ) {
 		$this->request = $request;
 
 		Parser_Manager::instance();
+	}
+
+	public function get_request() {
+		return $this->_request_values;
 	}
 
 	private function merge_with_base_request( $data ) {
@@ -48,7 +52,10 @@ class Request_Handler {
 		if ( $this->request['is_ajax'] ) {
 
 			$prepared = array();
-			$raw      = ! empty( $_REQUEST['values'] ) ? Tools::maybe_recursive_sanitize( $_REQUEST['values'] ) : array();
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$raw = ! empty( $_POST['values'] ) ? Tools::maybe_recursive_sanitize( wp_unslash( $_POST['values'] ) ) : array();
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 			if ( empty( $raw ) ) {
 				return $prepared;
@@ -86,7 +93,6 @@ class Request_Handler {
 					} else {
 						$prepared[ $name ][ $index ][ $key ] = $value;
 					}
-
 				} elseif ( false !== strpos( $name, '[]' ) ) {
 
 					$name = str_replace( '[]', '', $name );
@@ -100,13 +106,13 @@ class Request_Handler {
 				} else {
 					$prepared[ $name ] = $value;
 				}
-
 			}
 
 			return $prepared;
 
 		} else {
-			return $_REQUEST;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return $_POST;
 		}
 
 	}
@@ -144,7 +150,8 @@ class Request_Handler {
 		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->_request_values );
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
-			throw new Request_Exception( 'validation_failed',
+			throw new Request_Exception(
+				'validation_failed',
 				Error_Handler::instance()->errors(),
 				$this->_response_data
 			);
@@ -170,8 +177,8 @@ class Request_Handler {
 	public function _get_field_attrs_by_name( $source, $field_name, $attr_name = '', $default_val = '' ) {
 		foreach ( $source as $field ) {
 			if ( empty( $field['attrs'] )
-			     || ! isset( $field['attrs']['name'] )
-			     || $field_name !== $field['attrs']['name']
+				 || ! isset( $field['attrs']['name'] )
+				 || $field_name !== $field['attrs']['name']
 			) {
 				if ( ! empty( $field['innerBlocks'] ) ) {
 					return $this->_get_field_attrs_by_name(

@@ -21,13 +21,13 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id = null;
+	public $form_id 	 = null;
 	public $request_data = array();
-	public $manager = null;
+	public $manager 	 = null;
 
 
 	public $form_actions = array();
-	public $is_ajax = false;
+	public $is_ajax      = false;
 
 	/**
 	 * Data for actions
@@ -174,7 +174,7 @@ class Action_Handler {
 		if ( Plugin::instance()->allow_gateways ) {
 			$callbacks[] = array(
 				Gateway_Manager::instance(),
-				Gateway_Manager::BEFORE_ACTIONS_CALLABLE
+				Gateway_Manager::BEFORE_ACTIONS_CALLABLE,
 			);
 		}
 
@@ -190,7 +190,7 @@ class Action_Handler {
 		if ( Plugin::instance()->allow_gateways ) {
 			$callbacks[] = array(
 				Gateway_Manager::instance(),
-				Gateway_Manager::AFTER_ACTIONS_CALLABLE
+				Gateway_Manager::AFTER_ACTIONS_CALLABLE,
 			);
 		}
 

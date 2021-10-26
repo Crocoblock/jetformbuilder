@@ -57,7 +57,8 @@ class Pages_Manager {
 	 * @return boolean [description]
 	 */
 	public function is_dashboard_page() {
-		$page = ! empty( $_GET['page'] ) ? esc_attr( $_GET['page'] ) : false;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = ! empty( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : false;
 
 		return $this->rep_isset_item( $page );
 	}
@@ -67,7 +68,8 @@ class Pages_Manager {
 	 */
 	public function set_current_page() {
 		try {
-			$this->current_page = $this->get_page( esc_attr( $_GET['page'] ) );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->current_page = $this->get_page( sanitize_key( $_GET['page'] ) );
 		} catch ( Repository_Exception $exception ) {
 		}
 	}
@@ -89,6 +91,7 @@ class Pages_Manager {
 			true
 		);
 
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
 
 		$this->current_page->assets();

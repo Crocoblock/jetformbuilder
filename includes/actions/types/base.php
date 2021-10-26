@@ -40,12 +40,14 @@ abstract class Base implements Repository_Item_Instance_Trait {
 
 	/**
 	 * Stores the unique id of action
+	 *
 	 * @var integer
 	 */
 	public $_id;
 
 	/**
 	 * Define this variable to get the option set globally
+	 *
 	 * @var string
 	 */
 	public $option_name;

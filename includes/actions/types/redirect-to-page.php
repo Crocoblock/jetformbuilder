@@ -36,10 +36,10 @@ class Redirect_To_Page extends Base {
 				'default' => '',
 			),
 			'redirect_hash' => array(
-				'default' => ''
+				'default' => '',
 			),
 			'redirect_url'  => array(
-				'default' => ''
+				'default' => '',
 			),
 			'redirect_args' => array(
 				'default' => array(),
@@ -155,23 +155,26 @@ class Redirect_To_Page extends Base {
 			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
 			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
 			'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
+			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' ),
 		);
 	}
 
 	/**
-	 * Regsiter custom action data for the editor
+	 * Register custom action data for the editor
 	 *
-	 * @return [type] [description]
+	 * @return mixed|void [description]
 	 */
 	public function action_data() {
-		return apply_filters( "jet-form-builder/action/{$this->get_id()}/editor-data", array(
-			'pages'          => Tools::get_pages_list_for_js(),
-			'redirect_types' => $this->get_redirect_types(),
-		) );
+		return apply_filters(
+			"jet-form-builder/action/{$this->get_id()}/editor-data",
+			array(
+				'pages'          => Tools::get_pages_list_for_js(),
+				'redirect_types' => $this->get_redirect_types(),
+			)
+		);
 	}
 
-	public function get_redirect_types() {
+	public function get_redirect_types(): array {
 		return array(
 			array(
 				'value' => '',
@@ -191,8 +194,8 @@ class Redirect_To_Page extends Base {
 			),
 			array(
 				'value' => 'inserted_post',
-				'label' => __( 'Inserted post', 'jet-form-builder' )
-			)
+				'label' => __( 'Inserted post', 'jet-form-builder' ),
+			),
 		);
 	}
 

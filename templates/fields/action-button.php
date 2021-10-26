@@ -7,11 +7,16 @@
 
 $render_wrapper = false;
 
-if ( ! empty( $this->wrapper->attrs ) ): $render_wrapper = true; ?>
-    <div <?php $this->wrapper->render_attributes_string() ?>>
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+if ( ! empty( $this->wrapper->attrs ) ) :
+	$render_wrapper = true; ?>
+	<div <?php $this->wrapper->render_attributes_string(); ?>>
 <?php endif; ?>
-<?php include $this->get_global_template( 'common/prev-page-button.php' ); ?>
-    <button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
-<?php if ( $render_wrapper ): ?>
-    </div>
-<?php endif; ?>
+<?php require $this->get_global_template( 'common/prev-page-button.php' ); ?>
+	<button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
+<?php if ( $render_wrapper ) : ?>
+	</div>
+	<?php
+endif;
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+

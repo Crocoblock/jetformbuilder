@@ -34,6 +34,7 @@ trait Base_Attributes_Trait {
 	}
 
 	public function render_attributes_string_save() {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_attributes_string_save();
 	}
 

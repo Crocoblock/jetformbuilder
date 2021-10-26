@@ -35,7 +35,7 @@ class Call_Hook extends Base {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
@@ -82,7 +82,7 @@ class Call_Hook extends Base {
 
 	public function editor_labels() {
 		return array(
-			'hook_name' => __( 'Hook Name:', 'jet-form-builder' )
+			'hook_name' => __( 'Hook Name:', 'jet-form-builder' ),
 		);
 	}
 

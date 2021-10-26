@@ -66,13 +66,16 @@ class Register_User extends Base {
 
 	public function editor_labels_help() {
 		return array(
-			'add_user_id' => __( 'Registered user ID will be added to form data. If form is filled by logged 
-			in user - current user ID will be added to form data.', 'jet-form-builder' ),
+			'add_user_id' => __(
+				'Registered user ID will be added to form data. If form is filled by logged 
+			in user - current user ID will be added to form data.',
+				'jet-form-builder'
+			),
 		);
 	}
 
 	/**
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void
@@ -103,7 +106,6 @@ class Register_User extends Base {
 
 				return;
 			}
-
 		} elseif ( $allow_register ) {
 			throw new Action_Exception( 'not_logged_in' );
 		}
@@ -179,7 +181,6 @@ class Register_User extends Base {
 			if ( $confirm_password !== $password ) {
 				throw new Action_Exception( 'password_mismatch' );
 			}
-
 		}
 		// password - ok
 
@@ -253,23 +254,23 @@ class Register_User extends Base {
 
 			if ( ! empty( $this->settings['log_in'] ) ) {
 
-				wp_signon( array(
-					'user_login'    => $username,
-					'user_password' => $password,
-				) );
+				wp_signon(
+					array(
+						'user_login'    => $username,
+						'user_password' => $password,
+					)
+				);
 
 				// If form submitted by AJAX - we need to reload page to ensure user is logged in
 				if ( $request['__is_ajax'] ) {
 					$handler->response_data['reload'] = true;
 				}
-
 			}
 
 			if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
 				$handler->request_data['user_id']  = $user_id;
 				$handler->response_data['user_id'] = $user_id;
 			}
-
 		} else {
 			throw new Action_Exception( 'failed', $userarr );
 		}
@@ -289,9 +290,9 @@ class Register_User extends Base {
 			'requestFields' => array(
 				'user_id' => array(
 					'name' => 'user_id',
-					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' )
-				)
-			)
+					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' ),
+				),
+			),
 		);
 	}
 
@@ -335,8 +336,8 @@ class Register_User extends Base {
 			),
 			'not_enough_cap'    => array(
 				'label' => __( 'Not enough capabilities', 'jet-form-builder' ),
-				'value' => 'Not enough capabilities to register a user.'
-			)
+				'value' => 'Not enough capabilities to register a user.',
+			),
 		);
 	}
 
@@ -349,19 +350,19 @@ class Register_User extends Base {
 		return array(
 			'login'            => array(
 				'label'    => __( 'User Login', 'jet-form-builder' ),
-				'required' => true
+				'required' => true,
 			),
 			'email'            => array(
 				'label'    => __( 'Email', 'jet-form-builder' ),
-				'required' => true
+				'required' => true,
 			),
 			'password'         => array(
 				'label'    => __( 'Password', 'jet-form-builder' ),
-				'required' => true
+				'required' => true,
 			),
 			'confirm_password' => array(
 				'label'    => __( 'Confirm Password', 'jet-form-builder' ),
-				'required' => true
+				'required' => true,
 			),
 			'first_name'       => __( 'First Name', 'jet-form-builder' ),
 			'last_name'        => __( 'Last Name', 'jet-form-builder' ),

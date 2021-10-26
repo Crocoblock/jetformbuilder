@@ -3,13 +3,12 @@
 
 namespace Jet_Form_Builder\Form_Actions\Types;
 
-
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
 
 class Import_Action extends Base_Form_Action {
 
-    use Import_Form_Trait;
+	use Import_Form_Trait;
 
 	public function __construct() {
 		parent::__construct();
@@ -64,6 +63,7 @@ class Import_Action extends Base_Form_Action {
 
 		$form_id = $this->import_form( $content );
 
+		//phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( get_edit_post_link( $form_id, 'url' ) );
 		die();
 	}
@@ -79,27 +79,29 @@ class Import_Action extends Base_Form_Action {
 		include $this->get_global_template( 'admin/import-form.php' );
 		$import_template = ob_get_clean();
 
+		//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		ob_start();
 		?>
-        ( function( $ ) {
-        console.log( $( '.page-title-action' ) );
-            document.addEventListener( 'DOMContentLoaded', function() {
-                var $newFormButton = $( '.page-title-action' );
+		( function( $ ) {
+		console.log( $( '.page-title-action' ) );
+			document.addEventListener( 'DOMContentLoaded', function() {
+				var $newFormButton = $( '.page-title-action' );
 
 
-                if ( $newFormButton.length ) {
-                    $newFormButton.after( '<?= $import_template; ?>' );
-                }
-            });
+				if ( $newFormButton.length ) {
+					$newFormButton.after( '<?php echo $import_template; ?>' );
+				}
+			});
 
-            $( document ).on( 'click', '#<?= $this->get_id(); ?>-trigger', function() {
-                $( '#<?= $this->get_id(); ?>' ).css( 'display', 'inline-flex' );
-            } );
+			$( document ).on( 'click', '#<?php echo $this->get_id(); ?>-trigger', function() {
+				$( '#<?php echo $this->get_id(); ?>' ).css( 'display', 'inline-flex' );
+			} );
 
-        }( jQuery ) );
+		}( jQuery ) );
 		<?php
+		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
-        $script = ob_get_clean();
+		$script = ob_get_clean();
 
 		wp_add_inline_script( 'jquery', $script );
 	}

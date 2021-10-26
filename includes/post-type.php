@@ -2,7 +2,6 @@
 
 namespace Jet_Form_Builder;
 
-
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
@@ -98,10 +97,11 @@ class Post_Type {
 		$this->screen = get_current_screen();
 
 		if ( ! $this->screen->action ) {
-			$this->screen->action = ! empty( $_GET['action'] ) ? esc_attr( $_GET['action'] ) : '';
+			//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->screen->action = ! empty( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : '';
 		}
 
-		$is_editor_page = in_array( $this->screen->action, array( 'add', 'edit' ) );
+		$is_editor_page = in_array( $this->screen->action, array( 'add', 'edit' ), true );
 
 		if ( $this->slug() === $this->screen->id && $is_editor_page ) {
 			$this->is_form_editor = true;
@@ -157,6 +157,7 @@ class Post_Type {
 
 		$post_type = register_post_type(
 			$this->slug(),
+			//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			apply_filters( 'jet-form-builder/post-type/args', $args )
 		);
 
@@ -165,22 +166,22 @@ class Post_Type {
 		$meta = array(
 			'_jf_args'      => array(
 				'type'    => 'string',
-				'default' => json_encode( $this->get_default_args() ),
+				'default' => wp_json_encode( $this->get_default_args() ),
 			),
 			'_jf_recaptcha' => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
 
-			'_jf_actions'  => array(
+			'_jf_actions'   => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages' => array(
+			'_jf_messages'  => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'   => array(
+			'_jf_preset'    => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -195,13 +196,16 @@ class Post_Type {
 
 		foreach ( $meta as $key => $args ) {
 
-			$args = array_merge( $args, array(
-				'show_in_rest'  => true,
-				'single'        => true,
-				'auth_callback' => function ( $res, $key, $post_id, $user_id, $cap ) {
-					return user_can( $user_id, 'edit_post', $post_id );
-				}
-			) );
+			$args = array_merge(
+				$args,
+				array(
+					'show_in_rest'  => true,
+					'single'        => true,
+					'auth_callback' => function ( $res, $key, $post_id, $user_id, $cap ) {
+						return user_can( $user_id, 'edit_post', $post_id );
+					},
+				)
+			);
 
 			register_post_meta( $this->slug(), $key, $args );
 
@@ -216,11 +220,12 @@ class Post_Type {
 	}
 
 	public function get_form_meta( $meta_key, $form_id ) {
-		return json_decode( get_post_meta(
-			$form_id,
-			$meta_key,
-			true
-		),
+		return json_decode(
+			get_post_meta(
+				$form_id,
+				$meta_key,
+				true
+			),
 			true
 		);
 	}
@@ -328,48 +333,52 @@ class Post_Type {
 	}
 
 	public function set_default_messages() {
-		$this->messages = apply_filters( 'jet-form-builder/message-types', array(
-			'success'           => array(
-				'label' => __( 'Form successfully submitted.', 'jet-form-builder' ),
-				'value' => 'Form successfully submitted.',
-			),
-			'failed'            => array(
-				'label' => __( 'Submit failed.', 'jet-form-builder' ),
-				'value' => 'There was an error trying to submit form. Please try again later.',
-			),
-			'validation_failed' => array(
-				'label' => __( 'Validation error', 'jet-form-builder' ),
-				'value' => 'One or more fields have an error. Please check and try again.',
-			),
-			'captcha_failed'    => array(
-				'label' => __( 'Captcha validation failed', 'jet-form-builder' ),
-				'value' => __( 'Captcha validation failed', 'jet-form-builder' ),
-			),
-			'invalid_email'     => array(
-				'label' => __( 'Entered an invalid email', 'jet-form-builder' ),
-				'value' => 'The e-mail address entered is invalid.',
-			),
-			'empty_field'       => array(
-				'label' => __( 'Required field is empty', 'jet-form-builder' ),
-				'value' => 'The field is required.',
-			),
-			'internal_error'    => array(
-				'label' => __( 'Internal server error', 'jet-form-builder' ),
-				'value' => 'Internal server error. Please try again later.',
-			),
-			'upload_max_files'  => array(
-				'label' => __( 'Media Specific: Max files limit', 'jet-form-builder' ),
-				'value' => 'Maximum upload files limit is reached.',
-			),
-			'upload_max_size'   => array(
-				'label' => __( 'Media Specific: Max size reached', 'jet-form-builder' ),
-				'value' => 'Upload max size exceeded.',
-			),
-			'upload_mime_types' => array(
-				'label' => __( 'Media Specific: File type error', 'jet-form-builder' ),
-				'value' => 'File type is not allowed.',
-			),
-		) );
+		$this->messages = apply_filters(
+			//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			'jet-form-builder/message-types',
+			array(
+				'success'           => array(
+					'label' => __( 'Form successfully submitted.', 'jet-form-builder' ),
+					'value' => 'Form successfully submitted.',
+				),
+				'failed'            => array(
+					'label' => __( 'Submit failed.', 'jet-form-builder' ),
+					'value' => 'There was an error trying to submit form. Please try again later.',
+				),
+				'validation_failed' => array(
+					'label' => __( 'Validation error', 'jet-form-builder' ),
+					'value' => 'One or more fields have an error. Please check and try again.',
+				),
+				'captcha_failed'    => array(
+					'label' => __( 'Captcha validation failed', 'jet-form-builder' ),
+					'value' => __( 'Captcha validation failed', 'jet-form-builder' ),
+				),
+				'invalid_email'     => array(
+					'label' => __( 'Entered an invalid email', 'jet-form-builder' ),
+					'value' => 'The e-mail address entered is invalid.',
+				),
+				'empty_field'       => array(
+					'label' => __( 'Required field is empty', 'jet-form-builder' ),
+					'value' => 'The field is required.',
+				),
+				'internal_error'    => array(
+					'label' => __( 'Internal server error', 'jet-form-builder' ),
+					'value' => 'Internal server error. Please try again later.',
+				),
+				'upload_max_files'  => array(
+					'label' => __( 'Media Specific: Max files limit', 'jet-form-builder' ),
+					'value' => 'Maximum upload files limit is reached.',
+				),
+				'upload_max_size'   => array(
+					'label' => __( 'Media Specific: Max size reached', 'jet-form-builder' ),
+					'value' => 'Upload max size exceeded.',
+				),
+				'upload_mime_types' => array(
+					'label' => __( 'Media Specific: File type error', 'jet-form-builder' ),
+					'value' => 'File type is not allowed.',
+				),
+			)
+		);
 	}
 
 }

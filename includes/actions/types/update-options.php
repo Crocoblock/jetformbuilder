@@ -50,7 +50,7 @@ class Update_Options extends Base {
 	public function editor_labels() {
 		return array(
 			'options_page' => __( 'Options Page:', 'jet-form-builder' ),
-			'options_map'  => __( 'Options Map:', 'jet-form-builder' )
+			'options_map'  => __( 'Options Map:', 'jet-form-builder' ),
 		);
 	}
 
@@ -89,7 +89,7 @@ class Update_Options extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'optionsPages' => $this->get_pages()
+			'optionsPages' => $this->get_pages(),
 		);
 	}
 

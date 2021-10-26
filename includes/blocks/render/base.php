@@ -66,7 +66,7 @@ abstract class Base {
 
 	public function maybe_render_error( $args ) {
 		if ( $this->has_error( $args ) ) {
-			return "<div class='error-message'>" . Error_Handler::instance()->error_by_name( $args['name'] ) . "</div>";
+			return '<div class="error-message">' . Error_Handler::instance()->error_by_name( $args['name'] ) . '</div>';
 		}
 
 		return '';
@@ -168,25 +168,24 @@ abstract class Base {
 	public function get_default_args_with_filter() {
 		$args = $this->get_default_args();
 
+		//phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
 	}
 
+	/**
+	 * @param null $wp_block
+	 * @param null $template
+	 *
+	 * @return false|string
+	 */
 	public function render( $wp_block = null, $template = null ) {
 		$args     = $this->get_default_args_with_filter();
-
-		$render_template = function () use ( $template, $args ) {
-			echo $this->render_without_layout( $template, $args );
-		};
+		$template = $this->render_without_layout( $template, $args );
 
 		$this->maybe_add_error_class( $args );
 
-		$render_label = function () {
-			echo $this->get_field_label();
-		};
-		$render_desc = function () {
-			echo $this->get_field_desc();
-		};
-
+		$label  = $this->get_field_label();
+		$desc   = $this->get_field_desc();
 		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
 		if ( 'column' === $layout ) {

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+    <description>JetFormBuilder dev PHP_CodeSniffer ruleset.</description>
+
+    <file>.</file>
+
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>assets/*</exclude-pattern>
+    <exclude-pattern>\.idea/*</exclude-pattern>
+
+    <!-- Rules -->
+    <rule ref="WordPress" />
+</ruleset>

@@ -1,6 +1,7 @@
 <?php
 /**
  * input[type="hidden"] template
+ *
  * @var array $args
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
@@ -40,7 +41,7 @@ if ( ! empty( $args['field_options'] ) ) {
 
 		if ( $default ) {
 			if ( is_array( $default ) ) {
-				$checked = in_array( $val, $default ) ? 'checked' : '';
+				$checked = in_array( $val, $default, true ) ? 'checked' : '';
 			} else {
 				$checked = checked( $default, $val, false );
 			}
@@ -57,31 +58,34 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		?>
-        <div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
-			<?php if ( $custom_template ) {
+		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
+			<?php
+			//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+			if ( $custom_template ) {
 				echo $custom_template;
-			} ?>
-            <label class="jet-form-builder__field-label for-checkbox">
-                <input
-                        type="checkbox"
-                        name="<?php echo $name . $name_suffix; ?>"
+			}
+			?>
+			<label class="jet-form-builder__field-label for-checkbox">
+				<input
+						type="checkbox"
+						name="<?php echo $name . $name_suffix; ?>"
 					<?php $this->render_attributes_string_save(); ?>
-                        value="<?php echo $val; ?>"
-                        data-field-name="<?php echo $args['name']; ?>"
+						value="<?php echo esc_attr( $val ); ?>"
+						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
 					<?php echo $checked; ?>
 					<?php echo $calc; ?>
-                >
-                <span><?php echo $label; ?></span>
-            </label>
-        </div>
+				>
+				<span><?php echo $label; ?></span>
+			</label>
+		</div>
 		<?php
+		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 	$this->reset_attributes();
 
 	if ( $custom_template ) {
 		wp_reset_postdata();
-		wp_reset_query();
 	}
 
 	echo '</div>';

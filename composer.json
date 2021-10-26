@@ -1,0 +1,16 @@
+{
+    "name": "crocoblock/jetformbuilder",
+    "description": "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up \u0000 all in one editor",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Sasha Ivanenko",
+            "email": "46720998+girafffee@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "wp-coding-standards/wpcs": "dev-develop"
+    }
+}

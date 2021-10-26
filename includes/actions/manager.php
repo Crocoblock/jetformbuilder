@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
-	private $_types = array();
+	private $_types            = array();
 	private $localized_actions = array();
 
 	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
@@ -43,7 +43,7 @@ class Manager {
 			new Types\Redirect_To_Page(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
-			new Types\Active_Campaign()
+			new Types\Active_Campaign(),
 		);
 
 		foreach ( $actions as $action ) {

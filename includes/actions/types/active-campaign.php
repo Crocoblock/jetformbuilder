@@ -35,31 +35,31 @@ class Active_Campaign extends Integration_Base_Action {
 		return array(
 			'api_key'    => array(
 				'default' => '',
-				'path'    => 'activecampaign/api_key'
+				'path'    => 'activecampaign/api_key',
 			),
 			'api_url'    => array(
 				'default' => '',
-				'path'    => 'activecampaign/api_url'
+				'path'    => 'activecampaign/api_url',
 			),
 			'lists'      => array(
 				'default' => '',
-				'path'    => 'activecampaign/lists'
+				'path'    => 'activecampaign/lists',
 			),
 			'fields_map' => array(
 				'default' => '',
-				'path'    => 'activecampaign/fields_map'
+				'path'    => 'activecampaign/fields_map',
 			),
 			'isValidAPI' => array(
 				'default' => '',
-				'path'    => 'activecampaign/isValidAPI'
+				'path'    => 'activecampaign/isValidAPI',
 			),
 			'list_id'    => array(
 				'default' => '',
-				'path'    => 'activecampaign/list_id'
+				'path'    => 'activecampaign/list_id',
 			),
 			'tags'       => array(
 				'default' => '',
-				'path'    => 'activecampaign/tags'
+				'path'    => 'activecampaign/tags',
 			),
 		);
 	}
@@ -67,7 +67,7 @@ class Active_Campaign extends Integration_Base_Action {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
@@ -75,10 +75,12 @@ class Active_Campaign extends Integration_Base_Action {
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
 
-		$settings = $this->global_settings( array(
-			'api_url' => '',
-			'api_key' => ''
-		) );
+		$settings = $this->global_settings(
+			array(
+				'api_url' => '',
+				'api_key' => '',
+			)
+		);
 
 		if ( empty( $settings['api_url'] ) || empty( $settings['api_key'] ) ) {
 			throw new Action_Exception( 'invalid_api_key' );
@@ -142,7 +144,7 @@ class Active_Campaign extends Integration_Base_Action {
 			'api_key_link_prefix' => __( 'How to obtain your ActiveCampaign API URL and Key? More info', 'jet-form-builder' ),
 			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
 			'api_key_link'        => 'https://help.activecampaign.com/hc/en-us/articles/207317590-Getting-started-with-the-API',
-			'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' )
+			'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' ),
 		);
 	}
 
@@ -163,13 +165,16 @@ class Active_Campaign extends Integration_Base_Action {
 	 * @return array
 	 */
 	private function get_fields() {
-		return apply_filters( 'jet-form-builder/action/activecampaign/fields', array(
-			'email'              => __( 'Email', 'jet-form-builder' ),
-			'first_name'         => __( 'First Name', 'jet-form-builder' ),
-			'last_name'          => __( 'Last Name', 'jet-form-builder' ),
-			'phone'              => __( 'Phone', 'jet-form-builder' ),
-			'customer_acct_name' => __( 'Organization', 'jet-form-builder' ),
-		) );
+		return apply_filters(
+			'jet-form-builder/action/activecampaign/fields',
+			array(
+				'email'              => __( 'Email', 'jet-form-builder' ),
+				'first_name'         => __( 'First Name', 'jet-form-builder' ),
+				'last_name'          => __( 'Last Name', 'jet-form-builder' ),
+				'phone'              => __( 'Phone', 'jet-form-builder' ),
+				'customer_acct_name' => __( 'Organization', 'jet-form-builder' ),
+			)
+		);
 	}
 
 

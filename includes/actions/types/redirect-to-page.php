@@ -35,10 +35,10 @@ class Redirect_To_Page extends Base {
 				'default' => '',
 			),
 			'redirect_hash' => array(
-				'default' => ''
+				'default' => '',
 			),
 			'redirect_url'  => array(
-				'default' => ''
+				'default' => '',
 			),
 			'redirect_args' => array(
 				'default' => array(),
@@ -109,7 +109,7 @@ class Redirect_To_Page extends Base {
 			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
 			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
 			'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' )
+			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' ),
 		);
 	}
 

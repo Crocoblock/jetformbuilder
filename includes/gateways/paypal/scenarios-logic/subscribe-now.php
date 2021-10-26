@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
-
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions;
@@ -51,10 +50,12 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 	public function create_resource() {
 		$subscription = ( new Actions\Subscribe_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
-			->set_app_context( array(
-				'return_url' => $this->get_success_url(),
-				'cancel_url' => $this->get_failed_url()
-			) )
+			->set_app_context(
+				array(
+					'return_url' => $this->get_success_url(),
+					'cancel_url' => $this->get_failed_url(),
+				)
+			)
 			->set_plan_id( 'P-2RW14005CT679391XMFPMEWI' )
 			->send_request();
 
@@ -69,15 +70,18 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 		update_post_meta(
 			$this->controller->get_order_id(),
 			Paypal\Controller::GATEWAY_META_KEY,
-			json_encode( array(
-				'subscription_id' => $subscription['id'],
-				'scenario'        => self::scenario_id(),
-				'order_id'        => $this->controller->get_order_id(),
-				'form_id'         => $this->get_action_handler()->form_id,
-				'form_data'       => $this->get_action_handler()->request_data,
-				'resource'        => $subscription,
-				'provider'        => 'jet-form-builder'
-			), JSON_UNESCAPED_UNICODE )
+			json_encode(
+				array(
+					'subscription_id' => $subscription['id'],
+					'scenario'        => self::scenario_id(),
+					'order_id'        => $this->controller->get_order_id(),
+					'form_id'         => $this->get_action_handler()->form_id,
+					'form_data'       => $this->get_action_handler()->request_data,
+					'resource'        => $subscription,
+					'provider'        => 'jet-form-builder',
+				),
+				JSON_UNESCAPED_UNICODE
+			)
 		);
 	}
 

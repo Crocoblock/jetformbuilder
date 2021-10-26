@@ -68,7 +68,7 @@ class Builder {
 
 		$message_content = $this->get_manager()->get_message( $status );
 
-		$class = 'jet-form-builder-message';
+		$class  = 'jet-form-builder-message';
 		$class .= ' jet-form-builder-message--' . $this->get_manager()->get_status_class( $status );
 
 		include $this->get_global_template( 'common/messages.php' );

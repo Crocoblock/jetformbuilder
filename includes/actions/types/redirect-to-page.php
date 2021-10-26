@@ -118,7 +118,7 @@ class Redirect_To_Page extends Base {
 	}
 
 	/**
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void

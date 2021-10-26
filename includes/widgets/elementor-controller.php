@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Widgets;
 
-
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Widgets\Types;
 
@@ -25,7 +24,7 @@ class Elementor_Controller {
 
 	private function widgets() {
 		return array(
-			new Types\Form()
+			new Types\Form(),
 		);
 	}
 

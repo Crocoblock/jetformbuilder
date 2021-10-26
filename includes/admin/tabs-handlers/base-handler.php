@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
-
 abstract class Base_Handler {
 
 	private $prefix = 'jet_form_builder_settings__';

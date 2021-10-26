@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Presets;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
@@ -31,8 +30,8 @@ class Preset_Manager {
 	use Instance_Trait;
 
 	private $form_id;
-	protected $data = null;
-	protected $source = null;
+	protected $data     = null;
+	protected $source   = null;
 	protected $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -74,11 +73,14 @@ class Preset_Manager {
 	public function get_source_types() {
 		/** @var Base_Source[] $types */
 
-		$types = apply_filters( 'jet-form-builder/preset/source-types', array(
-			new Preset_Source_Post(),
-			new Preset_Source_User(),
-			new Preset_Source_Query_Var()
-		) );
+		$types = apply_filters(
+			'jet-form-builder/preset/source-types',
+			array(
+				new Preset_Source_Post(),
+				new Preset_Source_User(),
+				new Preset_Source_Query_Var(),
+			)
+		);
 
 		$prepared_types = array();
 

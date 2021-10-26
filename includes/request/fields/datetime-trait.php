@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Request\Fields;
 
-
 trait Datetime_Trait {
 
 	public function get_response() {

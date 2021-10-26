@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
@@ -61,10 +60,13 @@ class Condition_Helper {
 		}
 
 		if ( ! $is_correct ) {
-			throw new Condition_Exception( 'the condition was not met', array(
-				'condition' => $last_condition,
-				'field'     => $this->get_field( $last_condition ),
-			) );
+			throw new Condition_Exception(
+				'the condition was not met',
+				array(
+					'condition' => $last_condition,
+					'field'     => $this->get_field( $last_condition ),
+				)
+			);
 		}
 
 	}
@@ -88,7 +90,7 @@ class Condition_Helper {
 
 	/**
 	 * @param $condition
-	 * @param null $result
+	 * @param null      $result
 	 *
 	 * @return bool|null
 	 * @throws Condition_Exception
@@ -145,7 +147,7 @@ class Condition_Helper {
 	}
 
 	private function get_parsed_value( $condition ) {
-		return ( new Dynamic_Preset )->parse_value( $condition );
+		return ( new Dynamic_Preset() )->parse_value( $condition );
 	}
 
 

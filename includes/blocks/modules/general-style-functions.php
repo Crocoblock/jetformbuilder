@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Modules;
 
-
 trait General_Style_Functions {
 
 	private $namespace = 'jet-form-builder';
@@ -12,7 +11,7 @@ trait General_Style_Functions {
 		if ( ! in_array( $type, $this->general_style_unregister() ) ) {
 
 			if ( is_callable( $this->general_controls_callbacks()[ $type ] ) ) {
-				$this->general_controls_callbacks()[$type]();
+				$this->general_controls_callbacks()[ $type ]();
 			}
 		}
 	}
@@ -44,7 +43,7 @@ trait General_Style_Functions {
 	}
 
 	public function selector_no_space( $selector = '' ) {
-		return ( "{{WRAPPER}}" . sprintf( $selector, $this->namespace ) );
+		return ( '{{WRAPPER}}' . sprintf( $selector, $this->namespace ) );
 	}
 
 	public function button_selector( $selector, $additional = '' ) {

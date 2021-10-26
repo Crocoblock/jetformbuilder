@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Response\Types;
 
-
 class Reload_Response extends Response_It {
 
 	public function get_field_errors( $errors ) {

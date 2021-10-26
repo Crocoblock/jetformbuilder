@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Exceptions;
 
-
 class Parse_Exception extends Handler_Exception {
 
 	public function get_inner() {

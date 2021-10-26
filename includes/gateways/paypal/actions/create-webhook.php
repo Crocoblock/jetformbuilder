@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 class Create_Webhook extends Base_Action {
 
 	public function action_slug() {
@@ -15,21 +14,28 @@ class Create_Webhook extends Base_Action {
 	}
 
 	public function set_param_url( $url ) {
-		$this->set_body( array(
-			'url' => $url
-		) );
+		$this->set_body(
+			array(
+				'url' => $url,
+			)
+		);
 
 		return $this;
 	}
 
 	public function set_param_event_types( $types ) {
-		$types = array_map( function ( $type ) {
-			return array( 'name' => $type );
-		}, $types );
+		$types = array_map(
+			function ( $type ) {
+				return array( 'name' => $type );
+			},
+			$types
+		);
 
-		$this->set_body( array(
-			'event_types' => $types
-		) );
+		$this->set_body(
+			array(
+				'event_types' => $types,
+			)
+		);
 
 		return $this;
 	}

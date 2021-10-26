@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
@@ -13,7 +12,7 @@ abstract class Base_Action {
 
 	protected $auth;
 	protected $method = 'POST';
-	protected $body = array();
+	protected $body   = array();
 
 	abstract public function action_slug();
 
@@ -172,9 +171,12 @@ abstract class Base_Action {
 		}
 		if ( is_wp_error( $response ) ) {
 			/** @var \WP_Error $response */
-			throw new Gateway_Exception( 'wp_error', $response->get_error_message(
-				$response->get_error_code()
-			) );
+			throw new Gateway_Exception(
+				'wp_error',
+				$response->get_error_message(
+					$response->get_error_code()
+				)
+			);
 		}
 
 		$parsed_response = Tools::decode_json( $response );

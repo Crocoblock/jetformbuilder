@@ -36,7 +36,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 
 	private function is_value_format( $format ) {
 		return ( ! empty( $this->settings['insert_attachment'] )
-		         && ! empty( $this->settings['value_format'] )
-		         && $format === $this->settings['value_format'] );
+				 && ! empty( $this->settings['value_format'] )
+				 && $format === $this->settings['value_format'] );
 	}
 }

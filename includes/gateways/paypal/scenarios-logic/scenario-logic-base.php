@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
-
 use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
@@ -48,7 +47,7 @@ abstract class Scenario_Logic_Base extends Scenario_Item_Base {
 
 	public function get_additional_args() {
 		return array(
-			Scenarios_Manager::QUERY_VAR => static::scenario_id()
+			Scenarios_Manager::QUERY_VAR => static::scenario_id(),
 		);
 	}
 
@@ -74,9 +73,11 @@ abstract class Scenario_Logic_Base extends Scenario_Item_Base {
 				continue;
 			}
 
-			$this->get_action_handler()->add_response( array(
-				'redirect' => $link['href']
-			) );
+			$this->get_action_handler()->add_response(
+				array(
+					'redirect' => $link['href'],
+				)
+			);
 			break;
 		}
 	}

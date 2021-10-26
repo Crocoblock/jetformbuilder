@@ -14,6 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Define text field renderer class
+ *
  * @property Action_Button $block_type
  */
 class Action_Button_Render extends Base {

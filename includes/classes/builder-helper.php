@@ -12,7 +12,7 @@ class Builder_Helper {
 	/**
 	 * @param $object_id
 	 * @param $args
-	 * @param false $checked
+	 * @param false     $checked
 	 *
 	 * @return string
 	 */
@@ -54,7 +54,7 @@ class Builder_Helper {
 		jet_engine()->frontend->set_listing( $listing_id );
 
 		ob_start();
-		$content = jet_engine()->frontend->get_listing_item( $object );
+		$content  = jet_engine()->frontend->get_listing_item( $object );
 		$content .= ob_get_clean();
 
 		$result = sprintf(

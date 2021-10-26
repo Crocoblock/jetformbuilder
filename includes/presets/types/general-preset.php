@@ -3,8 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-
-
 use Jet_Form_Builder\Plugin;
 
 class General_Preset extends Base_Preset {

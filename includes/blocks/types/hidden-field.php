@@ -280,7 +280,7 @@ class Hidden_Field extends Base {
 	}
 
 	private function is_empty( $value ) {
-		return ( "" === $value || is_null( $value ) || false === $value );
+		return ( '' === $value || is_null( $value ) || false === $value );
 	}
 
 }

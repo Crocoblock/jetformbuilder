@@ -133,11 +133,11 @@ class Form_Handler {
 		if ( $this->is_ajax ) {
 			$this->action_handler->set_form_id( $this->form_id );
 
-			return new Form_Response\Types\Ajax_Response( 
+			return new Form_Response\Types\Ajax_Response(
 				array(
 					'form_id' => $this->form_id,
 					'actions' => $this->action_handler->get_all(),
-				) 
+				)
 			);
 		} else {
 			return new Form_Response\Types\Reload_Response(

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
-
 class Msg_Router {
 
 	/** @var Builder */
@@ -76,7 +75,8 @@ class Msg_Router {
 			return false;
 		}
 
-		$this->set_actions( jet_form_builder()
+		$this->set_actions(
+			jet_form_builder()
 			->form_handler
 			->action_handler
 			->set_form_id( $this->form_id )

@@ -26,25 +26,25 @@ class Calculated_Field extends Base {
 	public function additional_selectors_for_controls() {
 		return array(
 			'input_alignment' => array(
-				'options'      => [
-					'flex-start' => [
+				'options'      => array(
+					'flex-start' => array(
 						'shortcut' => __( 'Left', 'jet-form-builder' ),
 						'icon'     => 'dashicons-editor-alignleft',
-					],
-					'center'     => [
+					),
+					'center'     => array(
 						'shortcut' => __( 'Center', 'jet-form-builder' ),
 						'icon'     => 'dashicons-editor-aligncenter',
-					],
-					'flex-end'   => [
+					),
+					'flex-end'   => array(
 						'shortcut' => __( 'Right', 'jet-form-builder' ),
 						'icon'     => 'dashicons-editor-alignright',
-					],
-				],
+					),
+				),
 				'css_selector' => array(
 					$this->selector( 'input' ) => 'justify-content: {{VALUE}};',
 				),
 
-			)
+			),
 		);
 	}
 
@@ -76,26 +76,43 @@ class Calculated_Field extends Base {
 			return ( new Calculated_Field_Render( $this ) )->render_without_layout();
 		}
 
-		return implode( "\n",
+		return implode(
+			"\n",
 			array(
 				$this->start_form_row( true ),
 				( new Calculated_Field_Render( $this ) )->render(),
-				$this->end_form_row( true )
+				$this->end_form_row( true ),
 			)
 		);
 	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'JetFormCalculatedField', apply_filters( "jet-form-builder/field-data/{$this->get_name()}", array(
-			'field_desc' => __( "
-			Set math formula to calculate field value.<br/>
-			For example:<br/><br/>
-			%FIELD::quantity%*%META::price%<br/><br/>
-			Where:<br/>
-			- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>
-			- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>
-		", 'jet-form-builder' )
-		) ) );
+		wp_localize_script(
+			$handle,
+			'JetFormCalculatedField',
+			apply_filters(
+				"jet-form-builder/field-data/{$this->get_name()}",
+				array(
+					'field_desc' => __(
+						'
+		            Set math formula to calculate field value.<br/>
+		            For example:<br/><br/>
+		            %1$FIELD::quantity%*%META::price%<br/><br/>
+		            Where:<br/>
+		            - %2$FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from<br/>
+		            - %META::price% - macros for current post meta value. "price" - is a meta key to get value from<br/><br/>
+		            Set math formula to calculate field value . < br / >
+					for example: <br/><br/>
+					%FIELD::quantity% * %META::price% <br/><br/>
+					Where: <br/>
+					- % FIELD::quantity % - macros for form field value . \'quantity" - is a field name to get value from<br/>
+					- %META::price% - macros for current post meta value. "price" - is a meta key to get value from<br/><br/>
+					',
+						'jet-form-builder'
+					),
+				)
+			)
+		);
 	}
 
 }

@@ -29,7 +29,7 @@ trait General_Style {
 			'label'       => $this->get_label_selector(),
 			'input'       => $this->get_field_input(),
 			'required'    => $this->get_required_selector(),
-			'description' => $this->get_description_selector()
+			'description' => $this->get_description_selector(),
 		);
 	}
 
@@ -71,55 +71,55 @@ trait General_Style {
 	public function general_style_attributes() {
 		return array(
 			'label_margin'                 => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_padding'                => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_typography'             => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_color'                  => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_border'                 => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_alignment'              => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'label_background_color'       => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_margin'           => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_padding'          => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_typography'       => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_color'            => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_background_color' => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_border'           => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'description_alignment'        => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'required_color'               => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'required_background_color'    => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 			'required_typography'          => array(
-				'type' => 'object'
+				'type' => 'object',
 			),
 		);
 	}
@@ -134,14 +134,14 @@ trait General_Style {
 					$selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
 				),
 			),
-			'margin'       => array(
+			'margin'  => array(
 				'type'         => 'dimensions',
 				'label'        => __( 'Margin', 'jet-form-builder' ),
 				'units'        => array( 'px', '%' ),
 				'css_selector' => array(
 					$selector => 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
 				),
-			)
+			),
 		);
 	}
 
@@ -173,10 +173,10 @@ trait General_Style {
 	private function add_content_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'content_style',
-				'title' => __( 'Content', 'jet-form-builder' )
-			]
+				'title' => __( 'Content', 'jet-form-builder' ),
+			)
 		);
 
 		$this->add_margin_padding(
@@ -189,54 +189,59 @@ trait General_Style {
 				'padding' => array(
 					'id'        => 'field_padding',
 					'separator' => 'after',
-				)
+				),
 			),
 			array( 'padding', 'margin' )
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'field_alignment',
-			'type'         => 'choose',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'options'      => [
-				'left'   => [
-					'shortcut' => __( 'Left', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignleft',
-				],
-				'center' => [
-					'shortcut' => __( 'Center', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-aligncenter',
-				],
-				'right'  => [
-					'shortcut' => __( 'Right', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignright',
-				],
-			],
-			'css_selector' => [
-				$this->selector( 'wrap' ) => 'text-align: {{VALUE}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'field_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => array(
+					'left'   => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center' => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'right'  => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'wrap' ) => 'text-align: {{VALUE}};',
+				),
+			)
+		);
 
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'field_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'field_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				$this->selector( 'wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
-
-		$this->controls_manager->add_control( [
-			'id'           => 'field_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'wrap' ) => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'field_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'wrap' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -244,10 +249,10 @@ trait General_Style {
 	private function add_label_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'label_style',
-				'title' => __( 'Label', 'jet-form-builder' )
-			]
+				'title' => __( 'Label', 'jet-form-builder' ),
+			)
 		);
 
 		$this->add_margin_padding(
@@ -260,71 +265,81 @@ trait General_Style {
 				'padding' => array(
 					'id'        => 'label_padding',
 					'separator' => 'after',
-				)
+				),
 			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'label_alignment',
-			'type'         => 'choose',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'options'      => [
-				'left'   => [
-					'shortcut' => __( 'Left', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignleft',
-				],
-				'center' => [
-					'shortcut' => __( 'Center', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-aligncenter',
-				],
-				'right'  => [
-					'shortcut' => __( 'Right', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignright',
-				],
-			],
-			'css_selector' => [
-				$this->selector( 'label' ) => 'text-align: {{VALUE}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'label_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => array(
+					'left'   => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center' => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'right'  => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'label' ) => 'text-align: {{VALUE}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'label_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				$this->selector( 'label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'label_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'label_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				$this->selector( 'label' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'label_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'label' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'label_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'label' ) => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'label_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'label' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'label_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'label' ) => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'label_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'label' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -332,13 +347,14 @@ trait General_Style {
 	private function add_description_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'description_style',
 				'title' => __( 'Description', 'jet-form-builder' ),
-				/*'condition' => array(
+				/*
+				'condition' => array(
 					'desc' => true
 				),*/
-			]
+			)
 		);
 
 		$this->add_margin_padding(
@@ -351,71 +367,81 @@ trait General_Style {
 				'padding' => array(
 					'id'        => 'description_padding',
 					'separator' => 'after',
-				)
+				),
 			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'description_alignment',
-			'type'         => 'choose',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'options'      => [
-				'left'   => [
-					'shortcut' => __( 'Left', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignleft',
-				],
-				'center' => [
-					'shortcut' => __( 'Center', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-aligncenter',
-				],
-				'right'  => [
-					'shortcut' => __( 'Right', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignright',
-				],
-			],
-			'css_selector' => [
-				$this->selector( 'description' ) => 'text-align: {{VALUE}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'description_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => array(
+					'left'   => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center' => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'right'  => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'description' ) => 'text-align: {{VALUE}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'description_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				$this->selector( 'description' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'description_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'description' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'description_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				$this->selector( 'description' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'description_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'description' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'description_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'description' ) => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'description_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'description' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'description_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'description' ) => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'description_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'description' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -423,47 +449,52 @@ trait General_Style {
 	private function add_required_mark_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'required_style',
-				'title' => __( 'Required Mark', 'jet-form-builder' )
-			]
+				'title' => __( 'Required Mark', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id' => 'required_typography',
+		$this->controls_manager->add_control(
+			array(
+				'id'                     => 'required_typography',
 
-			'disable_line_height'    => true,
-			'disable_family'         => true,
-			'disable_transform'      => true,
-			'disable_style'          => true,
-			'disable_decoration'     => true,
-			'disable_letter_spacing' => true,
-			'separator'              => 'after',
-			'type'                   => 'typography',
-			'css_selector'           => [
-				$this->selector( 'required' ) => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+				'disable_line_height'    => true,
+				'disable_family'         => true,
+				'disable_transform'      => true,
+				'disable_style'          => true,
+				'disable_decoration'     => true,
+				'disable_letter_spacing' => true,
+				'separator'              => 'after',
+				'type'                   => 'typography',
+				'css_selector'           => array(
+					$this->selector( 'required' ) => 'font-weight: {{WEIGHT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'required_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'required' ) => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'required_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'required' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'required_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'required' ) => 'background-color: {{VALUE}}',
-			),
-		] );
-
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'required_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'required' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -471,10 +502,10 @@ trait General_Style {
 	private function add_input_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'input_style',
-				'title' => __( 'Field', 'jet-form-builder' )
-			]
+				'title' => __( 'Field', 'jet-form-builder' ),
+			)
 		);
 
 		$this->add_margin_padding(
@@ -487,74 +518,84 @@ trait General_Style {
 				'padding' => array(
 					'id'        => 'input_padding',
 					'separator' => 'after',
-				)
+				),
 			)
 		);
 
-		$this->controls_manager->add_control( $this->merge_controls_or_add_id(
-			array(
-				'id'           => 'input_alignment',
-				'type'         => 'choose',
-				'label'        => __( 'Alignment', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'options'      => [
-					'left'   => [
-						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
-					],
-					'center' => [
-						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
-					],
-					'right'  => [
-						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
-					],
-				],
-				'css_selector' => array(
-					$this->selector( 'input' ) => 'text-align: {{VALUE}};',
+		$this->controls_manager->add_control(
+			$this->merge_controls_or_add_id(
+				array(
+					'id'           => 'input_alignment',
+					'type'         => 'choose',
+					'label'        => __( 'Alignment', 'jet-form-builder' ),
+					'separator'    => 'after',
+					'options'      => array(
+						'left'   => array(
+							'shortcut' => __( 'Left', 'jet-form-builder' ),
+							'icon'     => 'dashicons-editor-alignleft',
+						),
+						'center' => array(
+							'shortcut' => __( 'Center', 'jet-form-builder' ),
+							'icon'     => 'dashicons-editor-aligncenter',
+						),
+						'right'  => array(
+							'shortcut' => __( 'Right', 'jet-form-builder' ),
+							'icon'     => 'dashicons-editor-alignright',
+						),
+					),
+					'css_selector' => array(
+						$this->selector( 'input' ) => 'text-align: {{VALUE}};',
+					),
 				),
-			),
-			$this->get_additional_styles( 'input_alignment' )
-		) );
+				$this->get_additional_styles( 'input_alignment' )
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'input_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				$this->selector( 'input' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'input_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'input' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'input_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				$this->selector( 'input' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'input_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'input' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'input_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'input' ) => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'input_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'input' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'input_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( 'input' ) => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'input_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'input' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}

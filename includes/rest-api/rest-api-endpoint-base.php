@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-
 abstract class Rest_Api_Endpoint_Base {
 
 	public static function get_namespace() {
@@ -41,7 +40,7 @@ abstract class Rest_Api_Endpoint_Base {
 	}
 
 	public static function rest_url( $args = '' ) {
-		return rest_url( '/'. static::get_namespace() . '/' . static::get_rest_base() . $args, 'https' );
+		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base() . $args, 'https' );
 	}
 
 }

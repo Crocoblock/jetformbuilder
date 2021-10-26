@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 trait Instance_Trait {
 
 	public static $instance;

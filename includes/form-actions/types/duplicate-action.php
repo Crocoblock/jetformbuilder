@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Actions\Types;
 
-
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Get_Form_Data;
 use Jet_Form_Builder\Form_Actions\Import_Form_Trait;

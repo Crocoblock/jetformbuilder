@@ -81,9 +81,11 @@ class Repeater_Field_Render extends Base {
 			$response .= $this->render_repeater_row( $wp_block, $i );
 		}
 
-		$this->block_type->set_current_repeater( array(
-			'index' => false
-		) );
+		$this->block_type->set_current_repeater(
+			array(
+				'index' => false,
+			)
+		);
 
 		return $response;
 	}
@@ -92,21 +94,26 @@ class Repeater_Field_Render extends Base {
 	 * Render current repeater row
 	 *
 	 * @param $wp_block
-	 * @param int $index
+	 * @param int      $index
 	 *
 	 * @return string
 	 */
 	public function render_repeater_row( $wp_block, $index = 0 ) {
 		$html = '';
 
-		$this->block_type->set_current_repeater( array(
-			'index' => $index
-		) );
+		$this->block_type->set_current_repeater(
+			array(
+				'index' => $index,
+			)
+		);
 
 		foreach ( $wp_block['innerBlocks'] as $block ) {
-			$html .= Tools::render_block_with_context( $block, array(
-				'jet-forms/repeater-field--name' => $this->block_type->parent_repeater_name()
-			) );
+			$html .= Tools::render_block_with_context(
+				$block,
+				array(
+					'jet-forms/repeater-field--name' => $this->block_type->parent_repeater_name(),
+				)
+			);
 		}
 
 		return $this->with_repeater_row_wrapper( $html, $index );

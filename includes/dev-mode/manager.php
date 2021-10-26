@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Dev_Mode;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 
 /**

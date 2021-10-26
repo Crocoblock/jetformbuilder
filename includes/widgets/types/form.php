@@ -17,56 +17,78 @@ class Form extends Jfb_Widget_Base {
 	public function init_hooks() {
 		add_filter(
 			'jet-engine/booking-form/combine-selector',
-			array( $this, 'combine_selector' ), 10, 3
+			array( $this, 'combine_selector' ),
+			10,
+			3
 		);
 
 		add_filter(
 			'jet-engine/forms/pre-render-form',
-			array( $this, 'booking_form_render' ), 10, 2
+			array( $this, 'booking_form_render' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_general/after_section_start',
-			array( $this, 'after_general_section_start' ), 10, 2
+			array( $this, 'after_general_section_start' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_general/before_section_end',
-			array( $this, 'update_general_form_controls' ), 10, 2
+			array( $this, 'update_general_form_controls' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_range_fields_style/before_section_end',
-			array( $this, 'update_section_range_fields_style' ), 10, 2
+			array( $this, 'update_section_range_fields_style' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/form_submit_style/before_section_end',
-			array( $this, 'update_form_submit_style' ), 10, 2
+			array( $this, 'update_form_submit_style' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_rows_style/before_section_end',
-			array( $this, 'update_section_rows_style' ), 10, 2
+			array( $this, 'update_section_rows_style' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_fields_style/before_section_end',
-			array( $this, 'update_section_fields_style' ), 10, 2
+			array( $this, 'update_section_fields_style' ),
+			10,
+			2
 		);
 
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_checkradio_fields_style/before_section_end',
-			array( $this, 'update_section_checkradio_fields_style' ), 10, 2
+			array( $this, 'update_section_checkradio_fields_style' ),
+			10,
+			2
 		);
 		add_action(
 			'elementor/element/jet-engine-booking-form/section_checkradio_fields_style/after_section_end',
-			array( $this, 'after_section_checkradio_fields_style' ), 10, 2
+			array( $this, 'after_section_checkradio_fields_style' ),
+			10,
+			2
 		);
-		//form_prev_page_style
+		// form_prev_page_style
 		add_action(
 			'elementor/element/jet-engine-booking-form/form_prev_page_style/after_section_end',
-			array( $this, 'after_form_prev_page_style' ), 10, 2
+			array( $this, 'after_form_prev_page_style' ),
+			10,
+			2
 		);
 	}
 
@@ -140,7 +162,7 @@ class Form extends Jfb_Widget_Base {
 				'query'      => array(
 					'post_type' => $this->jet_form_builder_slug(),
 				),
-				'condition'  => array( 'form_provider' => $this->jet_form_builder_slug() )
+				'condition'  => array( 'form_provider' => $this->jet_form_builder_slug() ),
 			)
 		);
 	}
@@ -149,19 +171,19 @@ class Form extends Jfb_Widget_Base {
 		$element->update_control(
 			'_form_id',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			)
 		);
 		$element->update_control(
 			'fields_label_tag',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			)
 		);
 		$element->update_control(
 			'cache_form',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			)
 		);
 		$element->add_control(
@@ -169,7 +191,7 @@ class Form extends Jfb_Widget_Base {
 			array(
 				'label'     => __( 'Enable form pages progress', 'jet-form-builder' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'condition' => array( 'form_provider' => $this->jet_form_builder_slug() )
+				'condition' => array( 'form_provider' => $this->jet_form_builder_slug() ),
 			)
 		);
 	}
@@ -178,20 +200,20 @@ class Form extends Jfb_Widget_Base {
 		$element->update_control(
 			'rows_divider',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			)
 		);
 		$element->update_control(
 			'rows_divider_height',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			),
 			array( 'recursive' => true )
 		);
 		$element->update_control(
 			'rows_divider_color',
 			array(
-				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() )
+				'condition' => array( 'form_provider' => $this->jet_engine_form_slug() ),
 			),
 			array( 'recursive' => true )
 		);
@@ -199,8 +221,8 @@ class Form extends Jfb_Widget_Base {
 			'cols_gap',
 			array(
 				'selectors' => array(
-					$this->selector( ' .wp-block-column:not(:first-child)' ) => 'margin-left: {{SIZE}}{{UNIT}};'
-				)
+					$this->selector( ' .wp-block-column:not(:first-child)' ) => 'margin-left: {{SIZE}}{{UNIT}};',
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -215,7 +237,7 @@ class Form extends Jfb_Widget_Base {
 					$this->selector( ' ::-ms-input-placeholder' )     => 'color: {{VALUE}};',
 					$this->selector( ' ::-moz-placeholder' )          => 'color: {{VALUE}};',
 					$this->selector( ' :-moz-placeholder' )           => 'color: {{VALUE}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -227,8 +249,8 @@ class Form extends Jfb_Widget_Base {
 			array(
 				'selectors' => array(
 					'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap span::before' ) => 'margin-right: {{SIZE}}px;',
-					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}px;'
-				)
+					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}px;',
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -237,10 +259,12 @@ class Form extends Jfb_Widget_Base {
 	public function after_section_checkradio_fields_style( $booking_form, $args ) {
 		$booking_form->start_controls_section(
 			'builder__checkbox_field_style_section',
-			$this->on_fb( array(
-				'label' => __( 'JetForm Checkbox', 'jet-engine' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			) )
+			$this->on_fb(
+				array(
+					'label' => __( 'JetForm Checkbox', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			)
 		);
 
 		$booking_form->add_control(
@@ -250,18 +274,18 @@ class Form extends Jfb_Widget_Base {
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => array(
 					'inline-block' => array(
-						'title' => __( 'Yes', 'jet-engine' ),
+						'title' => __( 'Yes', 'jet-form-builder' ),
 						'icon'  => 'fa fa-check',
 					),
 					'none'         => array(
-						'title' => __( 'No', 'jet-engine' ),
+						'title' => __( 'No', 'jet-form-builder' ),
 						'icon'  => 'fa fa-times',
 					),
 				),
 				'default'   => 'inline-block',
 				'selectors' => array(
-					$this->selector( '__field-wrap .for-checkbox span::before' ) => 'display:{{VALUE}};'
-				)
+					$this->selector( '__field-wrap .for-checkbox span::before' ) => 'display:{{VALUE}};',
+				),
 			)
 		);
 
@@ -342,10 +366,12 @@ class Form extends Jfb_Widget_Base {
 
 		$booking_form->start_controls_section(
 			'builder__radio_field_style_section',
-			$this->on_fb( array(
-				'label' => __( 'JetForm Radio', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			) )
+			$this->on_fb(
+				array(
+					'label' => __( 'JetForm Radio', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			)
 		);
 		$booking_form->add_control(
 			'builder__radio_show_decorator',
@@ -364,8 +390,8 @@ class Form extends Jfb_Widget_Base {
 					),
 				),
 				'selectors' => array(
-					$this->selector( '__field-wrap .for-radio span::before' ) => 'display:{{VALUE}};'
-				)
+					$this->selector( '__field-wrap .for-radio span::before' ) => 'display:{{VALUE}};',
+				),
 			)
 		);
 
@@ -459,7 +485,7 @@ class Form extends Jfb_Widget_Base {
 			array(
 				'selectors' => array(
 					$this->selector() => $range_obj::CSS_VAR_RANGE_HEIGHT . ': {{SIZE}}{{UNIT}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -468,7 +494,7 @@ class Form extends Jfb_Widget_Base {
 			array(
 				'selectors' => array(
 					$this->selector() => $range_obj::CSS_VAR_SLIDER_SIZE . ': {{SIZE}}{{UNIT}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -480,7 +506,7 @@ class Form extends Jfb_Widget_Base {
 					$this->selector( '__field.range-field::-webkit-slider-runnable-track' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					$this->selector( '__field.range-field::-moz-range-track' )              => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					$this->selector( '__field.range-field::-ms-track' )                     => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -491,7 +517,7 @@ class Form extends Jfb_Widget_Base {
 					$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					$this->selector( '__field.range-field::-moz-range-thumb' )     => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					$this->selector( '__field.range-field::-ms-thumb' )            => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -503,7 +529,7 @@ class Form extends Jfb_Widget_Base {
 					$this->selector( '__field.range-field::-webkit-slider-runnable-track' ) => 'background-color: {{VALUE}};',
 					$this->selector( '__field.range-field::-moz-range-track' )              => 'background-color: {{VALUE}};',
 					$this->selector( '__field.range-field::-ms-track' )                     => 'background-color: {{VALUE}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -514,7 +540,7 @@ class Form extends Jfb_Widget_Base {
 					$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'background-color: {{VALUE}};',
 					$this->selector( '__field.range-field::-moz-range-thumb' )     => 'background-color: {{VALUE}};',
 					$this->selector( '__field.range-field::-ms-thumb' )            => 'background-color: {{VALUE}};',
-				)
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -525,8 +551,8 @@ class Form extends Jfb_Widget_Base {
 			'booking_form_submit_alignment',
 			array(
 				'selectors' => array(
-					$this->selector( '__submit' ) => 'justify-content: center;'
-				)
+					$this->selector( '__submit' ) => 'justify-content: center;',
+				),
 			),
 			array( 'recursive' => true )
 		);
@@ -534,29 +560,37 @@ class Form extends Jfb_Widget_Base {
 
 
 	private function on_fb( $args ) {
-		return array_merge( $args, array(
-			'condition' => array(
-				'form_provider' => jet_form_builder()->post_type->slug(),
+		return array_merge(
+			$args,
+			array(
+				'condition' => array(
+					'form_provider' => jet_form_builder()->post_type->slug(),
+				),
 			)
-		) );
+		);
 	}
 
 	public function on_jet_engine( $args ) {
-		return array_merge_recursive( $args, array(
-			'condition' => array(
-				'form_provider' => jet_engine()->forms->slug(),
-			),
-		) );
+		return array_merge_recursive(
+			$args,
+			array(
+				'condition' => array(
+					'form_provider' => jet_engine()->forms->slug(),
+				),
+			)
+		);
 	}
 
 
 	public function run_form_progress_controls( $instance, $selector_callable, $add_section_condition ) {
 		$instance->start_controls_section(
 			'jet_fb_progress_wrapper_section',
-			$add_section_condition( array(
-				'label' => __( 'Form Progress - Wrapper', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			) )
+			$add_section_condition(
+				array(
+					'label' => __( 'Form Progress - Wrapper', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			)
 		);
 		$instance->add_responsive_control(
 			'jet_fb_progress_wrapper_margin',
@@ -614,13 +648,14 @@ class Form extends Jfb_Widget_Base {
 		);
 		$instance->end_controls_section();
 
-
 		$instance->start_controls_section(
 			'jet_fb_progress_pages_section',
-			$add_section_condition( array(
-				'label' => __( 'Form Progress - Pages', 'jet-form-builder' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			) )
+			$add_section_condition(
+				array(
+					'label' => __( 'Form Progress - Pages', 'jet-form-builder' ),
+					'tab'   => Controls_Manager::TAB_STYLE,
+				)
+			)
 		);
 		$instance->start_controls_tabs( 'jet_fb_progress_pages_tabs' );
 
@@ -636,15 +671,15 @@ class Form extends Jfb_Widget_Base {
 			'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
 			'active-circle'    => "$wrapper.active-page .%s$item--circle",
 
-			'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
-			'next-item'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
-			'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
-			'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+			'next-wrapper'     => "$wrapper:not(.passed-page):not(.active-page)",
+			'next-item'        => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
+			'next-separator'   => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+			'next-circle'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
 
-			'prev-wrapper'   => "$wrapper.passed-page",
-			'prev-item'      => "$wrapper.passed-page .%s$item",
-			'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
-			'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
+			'prev-wrapper'     => "$wrapper.passed-page",
+			'prev-item'        => "$wrapper.passed-page .%s$item",
+			'prev-separator'   => "$wrapper.passed-page .%s-progress-pages__separator",
+			'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
 		);
 
 		/**
@@ -760,7 +795,6 @@ class Form extends Jfb_Widget_Base {
 		);
 		$instance->end_controls_tab();
 
-
 		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--next',
 			array(
@@ -870,7 +904,6 @@ class Form extends Jfb_Widget_Base {
 			$selector_callable( $scheme['next-circle'] )
 		);
 		$instance->end_controls_tab();
-
 
 		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--prev',
@@ -1015,9 +1048,9 @@ class Form extends Jfb_Widget_Base {
 		$closure = function () use ( $options ) {
 			$this->start_controls_section(
 				'section_ form_settings',
-				[
+				array(
 					'label' => __( 'Form Settings', 'jet-form-builder' ),
-				]
+				)
 			);
 
 			$this->add_control(
@@ -1033,31 +1066,31 @@ class Form extends Jfb_Widget_Base {
 
 			$this->add_control(
 				'fields_layout',
-				[
+				array(
 					'label'   => __( 'Fields Layout', 'jet-form-builder' ),
 					'type'    => Controls_Manager::SELECT,
 					'default' => __( 'column', 'jet-form-builder' ),
-					'options' => $options['fields_layout']
-				]
+					'options' => $options['fields_layout'],
+				)
 			);
 
 			$this->add_control(
 				'required_mark',
-				[
+				array(
 					'label'   => __( 'Required Mark', 'jet-form-builder' ),
 					'type'    => Controls_Manager::TEXT,
 					'default' => __( '*', 'jet-form-builder' ),
-				]
+				)
 			);
 
 			$this->add_control(
 				'submit_type',
-				[
+				array(
 					'label'   => __( 'Submit Type', 'jet-form-builder' ),
 					'type'    => Controls_Manager::SELECT,
 					'default' => __( 'reload', 'jet-form-builder' ),
-					'options' => $options['submit_type']
-				]
+					'options' => $options['submit_type'],
+				)
 			);
 
 			$this->add_control(
@@ -1086,37 +1119,43 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
-			$this->add_responsive_control( 'form_row_gap_before', array(
+			$this->add_responsive_control(
+				'form_row_gap_before',
+				array(
 
-				'type'       => Controls_Manager::SLIDER,
-				'label'      => __( 'Gap Before', 'jet-form-builder' ),
-				'size_units' => array( 'px' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 100,
+					'type'       => Controls_Manager::SLIDER,
+					'label'      => __( 'Gap Before', 'jet-form-builder' ),
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 0,
+							'max' => 100,
+						),
 					),
-				),
-				'selectors'  => array(
-					$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
-				),
-			) );
-
-			$this->add_responsive_control( 'form_row_gap_after', array(
-
-				'type'       => Controls_Manager::SLIDER,
-				'label'      => __( 'Gap After', 'jet-form-builder' ),
-				'size_units' => array( 'px' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 100,
+					'selectors'  => array(
+						$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
 					),
-				),
-				'selectors'  => array(
-					$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
-				),
-			) );
+				)
+			);
+
+			$this->add_responsive_control(
+				'form_row_gap_after',
+				array(
+
+					'type'       => Controls_Manager::SLIDER,
+					'label'      => __( 'Gap After', 'jet-form-builder' ),
+					'size_units' => array( 'px' ),
+					'range'      => array(
+						'px' => array(
+							'min' => 0,
+							'max' => 100,
+						),
+					),
+					'selectors'  => array(
+						$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
+					),
+				)
+			);
 
 			$this->end_controls_section();
 		};
@@ -1220,11 +1259,11 @@ class Form extends Jfb_Widget_Base {
 
 			$this->add_control(
 				'divider__label__required_mark',
-				[
+				array(
 					'label'     => __( 'Required Mark', 'jet-form-builder' ),
 					'type'      => Controls_Manager::HEADING,
 					'separator' => 'before',
-				]
+				)
 			);
 
 			$this->add_group_control(
@@ -1425,11 +1464,11 @@ class Form extends Jfb_Widget_Base {
 
 			$this->add_control(
 				'checkradio_fields_option_label_heading',
-				[
-					'label'     => __( 'Option label', 'plugin-name' ),
+				array(
+					'label'     => __( 'Option label', 'jet-form-builder' ),
 					'type'      => Controls_Manager::HEADING,
 					'separator' => 'before',
-				]
+				)
 			);
 
 			$this->add_control(
@@ -1454,9 +1493,12 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
-			$this->start_controls_tabs( 'tab__checkradio_tabs_items', array(
-				'separator' => 'before'
-			) );
+			$this->start_controls_tabs(
+				'tab__checkradio_tabs_items',
+				array(
+					'separator' => 'before',
+				)
+			);
 
 			$this->start_controls_tab(
 				'tab__checkradio_control_color__normal',
@@ -3190,9 +3232,12 @@ class Form extends Jfb_Widget_Base {
 
 			$this->start_controls_tabs( 'section_messages_tabs' );
 
-			$this->start_controls_tab( 'messages_success_tab', array(
-				'label' => __( 'Success Message', 'jet-form-builder' ),
-			) );
+			$this->start_controls_tab(
+				'messages_success_tab',
+				array(
+					'label' => __( 'Success Message', 'jet-form-builder' ),
+				)
+			);
 
 			$this->add_responsive_control(
 				'form_success_margin',
@@ -3292,9 +3337,12 @@ class Form extends Jfb_Widget_Base {
 
 			$this->end_controls_tab();
 
-			$this->start_controls_tab( 'messages_error_tab', array(
-				'label' => __( 'Error Message', 'jet-form-builder' ),
-			) );
+			$this->start_controls_tab(
+				'messages_error_tab',
+				array(
+					'label' => __( 'Error Message', 'jet-form-builder' ),
+				)
+			);
 
 			$this->add_responsive_control(
 				'form_error_margin',

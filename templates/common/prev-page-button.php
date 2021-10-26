@@ -1,11 +1,15 @@
 <?php
-use Jet_Form_Builder\Classes\Tools;
 /**
  * Prev page button template
+ *
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
+
+use Jet_Form_Builder\Classes\Tools;
+
 $break = $this->block_type->get_current_form_break();
 
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $break->get_current() ) {
 
 	$prev_label = ! empty( $args['prev_label'] ) ? $args['prev_label'] : __( 'Back', 'jet-form-builder' );
@@ -15,7 +19,7 @@ if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $break->get_current(
 		$prev_label,
 		$break->get_current() - 1
 	);
-} elseif( Tools::is_editor() && $args['type'] === 'form-break-field' ) {
+} elseif ( Tools::is_editor() && 'form-break-field' === $args['type'] ) {
 	$prev_label = ! empty( $args['prev_label'] ) ? $args['prev_label'] : __( 'Back', 'jet-form-builder' );
 
 	printf(
@@ -23,3 +27,5 @@ if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $break->get_current(
 		$prev_label
 	);
 }
+// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+

@@ -38,89 +38,101 @@ class Select_Field extends Base {
 
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'select_style',
-				'title' => __( 'Select', 'jet-form-builder' )
-			]
+				'title' => __( 'Select', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'select_width',
-			'type'         => 'range',
-			'separator'    => 'after',
-			'label'        => __( 'Select Width', 'jet-form-builder' ),
-			'units'        => [
-				[
-					'value'     => '%',
-					'intervals' => [
-						'step' => 1,
-						'min'  => 10,
-						'max'  => 100,
-					]
-				],
-			],
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
-			],
-			'attributes'   => array(
-				'default' => array(
-					'value' => 50
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'select_width',
+				'type'         => 'range',
+				'separator'    => 'after',
+				'label'        => __( 'Select Width', 'jet-form-builder' ),
+				'units'        => array(
+					array(
+						'value'     => '%',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 10,
+							'max'  => 100,
+						),
+					),
 				),
-			),
-		] );
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+				),
+				'attributes'   => array(
+					'default' => array(
+						'value' => 50,
+					),
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( array(
-			'id'           => 'item_padding',
-			'type'         => 'dimensions',
-			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-				'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-			),
-		) );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_padding',
+				'type'         => 'dimensions',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+					'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'                  => 'item_typography',
-			'type'                => 'typography',
-			'separator'           => 'after',
-			'disable_line_height' => true,
-			'css_selector'        => [
-				'{{WRAPPER}} ' . $this->css_scheme['select']         => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-				// for editor
-				'{{WRAPPER}} .components-base-control__field select' => 'min-height: 2em;'
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'                  => 'item_typography',
+				'type'                => 'typography',
+				'separator'           => 'after',
+				'disable_line_height' => true,
+				'css_selector'        => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select']         => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					// for editor
+					'{{WRAPPER}} .components-base-control__field select' => 'min-height: 2em;',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_border',
-			'type'         => 'border',
-			'separator'    => 'after',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_normal_border',
+				'type'         => 'border',
+				'separator'    => 'after',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select']                                                                                                             => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} .jet-form-builder__field-wrap div.components-input-control__backdrop.components-input-control__backdrop.components-input-control__backdrop' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_color',
-			'type'         => 'color-picker',
-			'separator'    => 'after',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_normal_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select'] => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'item_normal_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_normal_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}

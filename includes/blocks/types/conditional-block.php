@@ -45,40 +45,47 @@ class Conditional_Block extends Base {
 	protected function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'conditional_wrapper_section',
-				'title' => __( 'Wrapper', 'jet-form-builder' )
-			]
-		);
-		$this->add_margin_padding( $this->selector( '__conditional' ), array(
-			'padding' => array(
-				'id'        => 'style_padding',
-				'separator' => 'after',
-			),
-			'margin'  => array(
-				'id'        => 'style_margin',
-				'separator' => 'after',
+				'title' => __( 'Wrapper', 'jet-form-builder' ),
 			)
-		) );
+		);
+		$this->add_margin_padding(
+			$this->selector( '__conditional' ),
+			array(
+				'padding' => array(
+					'id'        => 'style_padding',
+					'separator' => 'after',
+				),
+				'margin'  => array(
+					'id'        => 'style_margin',
+					'separator' => 'after',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'style_border',
-			'type'         => 'border',
-			'separator'    => 'after',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( '__conditional' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'style_border',
+				'type'         => 'border',
+				'separator'    => 'after',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__conditional' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'style_bg_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'style_bg_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -98,7 +105,8 @@ class Conditional_Block extends Base {
 			$content = $break->maybe_start_page( true ) . $content . $break->maybe_end_page( true );
 		}
 
-		return sprintf( '<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',
+		return sprintf(
+			'<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',
 			$content,
 			$this->get_conditions()
 		);

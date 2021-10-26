@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
-
 class Form_Shortcode extends Shortcode {
 
 	/**

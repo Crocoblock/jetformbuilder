@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -34,11 +33,14 @@ class Pages_Manager {
 	 * Register admin pages
 	 */
 	public function rep_instances(): array {
-		return apply_filters( 'jet-form-builder/admin/pages', array(
-			new Settings_Page(),
-			new Addons_Page(),
-			new Paypal_Subscriptions_Entries()
-		) );
+		return apply_filters(
+			'jet-form-builder/admin/pages',
+			array(
+				new Settings_Page(),
+				new Addons_Page(),
+				new Paypal_Subscriptions_Entries(),
+			)
+		);
 	}
 
 	/**

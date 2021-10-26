@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
@@ -35,8 +34,8 @@ class Button_Submit extends Button_Type_Base {
 			'type'  => 'reload' === $submit_type ? 'submit' : 'button',
 			'class' => array(
 				'button'  => $button,
-				'wrapper' => "jet-form-builder__{$this->slug()}-wrap"
-			)
+				'wrapper' => "jet-form-builder__{$this->slug()}-wrap",
+			),
 		);
 	}
 

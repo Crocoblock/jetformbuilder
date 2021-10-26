@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 
 abstract class Blocks_Repository_Base {

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 trait Repository_Aborts_Trait {

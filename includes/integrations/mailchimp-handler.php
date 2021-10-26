@@ -96,7 +96,7 @@ class MailChimp_Handler extends Integration_Base {
 			'email' => array(
 				'label'    => esc_html__( 'Email', 'jet-form-builder' ),
 				'required' => true,
-			)
+			),
 		);
 
 		$merge_fields = $this->request( 'lists/' . $list_id . '/merge-fields?count=999' );

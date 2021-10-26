@@ -3,15 +3,13 @@
 
 namespace Jet_Form_Builder\Blocks\Modules\Fields_Errors;
 
-
-
 use Jet_Form_Builder\Classes\Tools;
 
 class Error_Handler {
 
 	private static $instance = null;
 
-	private $_types = array();
+	private $_types  = array();
 	private $_errors = array();
 
 	private function register_field_types() {
@@ -23,7 +21,7 @@ class Error_Handler {
 			new Checkboxes_Field_Error(),
 			new Media_Field_Error(),
 			new Wysiwyg_Field_Error(),
-			new Repeater_Field_Error()
+			new Repeater_Field_Error(),
 		);
 
 		foreach ( $types as $type ) {
@@ -62,7 +60,6 @@ class Error_Handler {
 	 * @since 1.0.0
 	 * @access public
 	 * @static
-	 *
 	 */
 	public static function instance() {
 
@@ -85,18 +82,21 @@ class Error_Handler {
 		}
 		$field = $this->_types[ $type ];
 
-		$arguments = array_merge( array(
-			'name'      => 'field_name',
-			'message'   => false,
-			'params' => array()
-		), $args );
+		$arguments = array_merge(
+			array(
+				'name'    => 'field_name',
+				'message' => false,
+				'params'  => array(),
+			),
+			$args
+		);
 
 		$field->set_params( $arguments );
 
 		$message = $arguments['message'] ? $arguments['message'] : $field->error();
 
 		$this->_errors[ $arguments['name'] ] = array(
-			'message' => $message
+			'message' => $message,
 		);
 
 		return true;

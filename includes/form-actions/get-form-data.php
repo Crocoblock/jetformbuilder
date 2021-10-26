@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Actions;
 
-
 trait Get_Form_Data {
 
 	/**
@@ -41,11 +40,13 @@ trait Get_Form_Data {
 			array( '_edit_lock' )
 		);
 
-		$for_encoding = $this->parse_form_data( array(
-			'post_title'   => $post->post_title,
-			'post_content' => $post->post_content,
-			'meta_input'   => $meta_value,
-		) );
+		$for_encoding = $this->parse_form_data(
+			array(
+				'post_title'   => $post->post_title,
+				'post_content' => $post->post_content,
+				'meta_input'   => $meta_value,
+			)
+		);
 
 		return array( $post, $for_encoding );
 	}

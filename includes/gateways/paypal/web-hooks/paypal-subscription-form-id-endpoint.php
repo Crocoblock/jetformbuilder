@@ -19,8 +19,8 @@ class Paypal_Subscription_Form_Id_Endpoint extends Rest_Api_Endpoint_Base {
 		return array(
 			'id' => array(
 				'type'     => 'integer',
-				'required' => true
-			)
+				'required' => true,
+			),
 		);
 	}
 

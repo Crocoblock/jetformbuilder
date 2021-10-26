@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations;
 
-
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 class Active_Campaign_Handler extends Integration_Base {

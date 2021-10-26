@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 class Listing_Filter {
 	/**
 	 * Return available macros list
@@ -11,60 +10,63 @@ class Listing_Filter {
 	 * @return [type] [description]
 	 */
 	public function get_all() {
-		return apply_filters( 'jet-form-builder/filters-list', array(
-			'img_url_by_id'       => array(
-				'cb'   => array( $this, 'get_img_url' ),
-				'args' => 'full',
-			),
-			'img_alt_by_id'       => array(
-				'cb'   => array( $this, 'get_img_alt' ),
-				'args' => false,
-			),
-			'file_url_by_id'      => array(
-				'cb'   => array( $this, 'get_file_url' ),
-				'args' => 'full',
-			),
-			'post_url_by_id'      => array(
-				'cb'   => array( $this, 'get_post_url' ),
-				'args' => false,
-			),
-			'post_title_by_id'    => array(
-				'cb'   => array( $this, 'get_post_title' ),
-				'args' => false,
-			),
-			'post_titles_by_ids'  => array(
-				'cb'   => array( $this, 'render_post_titles' ),
-				'args' => false,
-			),
-			'post_link_by_id'     => array(
-				'cb'   => array( $this, 'get_post_link' ),
-				'args' => false,
-			),
-			'img_gallery_grid'    => array(
-				'cb'   => array( $this, 'img_gallery_grid' ),
-				'args' => 'full',
-			),
-			'render_acf_checkbox' => array(
-				'cb'   => array( $this, 'render_acf_checkbox_values' ),
-				'args' => false,
-			),
-			'embed_url'           => array(
-				'cb'   => 'wp_oembed_get',
-				'args' => false,
-			),
-			'format_date'         => array(
-				'cb'   => array( $this, 'format_date' ),
-				'args' => false,
-			),
-			'term_title_by_id'    => array(
-				'cb'   => array( $this, 'get_term_title' ),
-				'args' => false,
-			),
-			'term_titles_by_ids'  => array(
-				'cb'   => array( $this, 'get_term_titles' ),
-				'args' => false,
-			),
-		) );
+		return apply_filters(
+			'jet-form-builder/filters-list',
+			array(
+				'img_url_by_id'       => array(
+					'cb'   => array( $this, 'get_img_url' ),
+					'args' => 'full',
+				),
+				'img_alt_by_id'       => array(
+					'cb'   => array( $this, 'get_img_alt' ),
+					'args' => false,
+				),
+				'file_url_by_id'      => array(
+					'cb'   => array( $this, 'get_file_url' ),
+					'args' => 'full',
+				),
+				'post_url_by_id'      => array(
+					'cb'   => array( $this, 'get_post_url' ),
+					'args' => false,
+				),
+				'post_title_by_id'    => array(
+					'cb'   => array( $this, 'get_post_title' ),
+					'args' => false,
+				),
+				'post_titles_by_ids'  => array(
+					'cb'   => array( $this, 'render_post_titles' ),
+					'args' => false,
+				),
+				'post_link_by_id'     => array(
+					'cb'   => array( $this, 'get_post_link' ),
+					'args' => false,
+				),
+				'img_gallery_grid'    => array(
+					'cb'   => array( $this, 'img_gallery_grid' ),
+					'args' => 'full',
+				),
+				'render_acf_checkbox' => array(
+					'cb'   => array( $this, 'render_acf_checkbox_values' ),
+					'args' => false,
+				),
+				'embed_url'           => array(
+					'cb'   => 'wp_oembed_get',
+					'args' => false,
+				),
+				'format_date'         => array(
+					'cb'   => array( $this, 'format_date' ),
+					'args' => false,
+				),
+				'term_title_by_id'    => array(
+					'cb'   => array( $this, 'get_term_title' ),
+					'args' => false,
+				),
+				'term_titles_by_ids'  => array(
+					'cb'   => array( $this, 'get_term_titles' ),
+					'args' => false,
+				),
+			)
+		);
 	}
 
 	/**
@@ -113,7 +115,7 @@ class Listing_Filter {
 	/**
 	 * Return post titles from post IDs array as string with passed delimiter
 	 *
-	 * @param null $value
+	 * @param null   $value
 	 * @param string $delimiter
 	 *
 	 * @return [type]            [description]
@@ -150,7 +152,7 @@ class Listing_Filter {
 	/**
 	 * Return term titles from terms IDs array as a string with passed delimiter
 	 *
-	 * @param array $ids
+	 * @param array  $ids
 	 * @param string $delimiter
 	 *
 	 * @return mixed
@@ -170,7 +172,7 @@ class Listing_Filter {
 	/**
 	 * Return checkbox values as string with passed delimiter
 	 *
-	 * @param null $value
+	 * @param null   $value
 	 * @param string $delimiter
 	 *
 	 * @return [type]            [description]
@@ -188,7 +190,7 @@ class Listing_Filter {
 	 * Format date
 	 *
 	 * @param int|string $date
-	 * @param string $date_format
+	 * @param string     $date_format
 	 *
 	 * @return string
 	 */
@@ -248,7 +250,7 @@ class Listing_Filter {
 	/**
 	 * Returns image url by ID
 	 *
-	 * @param int $img_id
+	 * @param int    $img_id
 	 * @param string $size
 	 *
 	 * @return string

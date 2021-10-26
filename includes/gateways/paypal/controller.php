@@ -15,8 +15,8 @@ class Controller extends Base_Gateway {
 
 	const ID = 'paypal';
 
-	public $data = false;
-	public $message = false;
+	public $data     = false;
+	public $message  = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
@@ -46,23 +46,23 @@ class Controller extends Base_Gateway {
 	protected function options_list() {
 		return array(
 			'client_id'    => array(
-				'label' => _x( 'Client ID', 'Paypal gateways editor data', 'jet-form-builder' )
+				'label' => _x( 'Client ID', 'Paypal gateways editor data', 'jet-form-builder' ),
 			),
 			'secret'       => array(
-				'label' => _x( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' )
+				'label' => _x( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' ),
 			),
 			'currency'     => array(
 				'label'    => _x( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' ),
-				'required' => false
+				'required' => false,
 			),
 			'use_global'   => array(
 				'label'    => _x( 'Use Global Settings', 'Paypal gateways editor data', 'jet-form-builder' ),
-				'required' => false
+				'required' => false,
 			),
 			'gateway_type' => array(
 				'label'   => _x( 'Gateway Action', 'Paypal gateways editor data', 'jet-form-builder' ),
 				'default' => Scenarios_Logic\Pay_Now::scenario_id(),
-			)
+			),
 		);
 	}
 
@@ -71,13 +71,13 @@ class Controller extends Base_Gateway {
 			'gateway_types' => array(
 				array(
 					'value' => Scenarios_Logic\Pay_Now::scenario_id(),
-					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' )
+					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' ),
 				),
 				array(
 					'value' => Scenarios_Logic\Subscribe_Now::scenario_id(),
-					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' )
-				)
-			)
+					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' ),
+				),
+			),
 		);
 	}
 

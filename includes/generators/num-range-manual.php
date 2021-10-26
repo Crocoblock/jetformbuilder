@@ -26,7 +26,7 @@ class Num_Range_Manual extends Base {
 		return array(
 			'generator_numbers_min'  => 'floatval',
 			'generator_numbers_max'  => 'floatval',
-			'generator_numbers_step' => 'floatval'
+			'generator_numbers_step' => 'floatval',
 		);
 	}
 
@@ -54,7 +54,6 @@ class Num_Range_Manual extends Base {
 				'label' => $i,
 			);
 		}
-
 
 		return $result;
 	}

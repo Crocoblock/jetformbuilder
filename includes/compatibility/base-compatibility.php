@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Compatibility;
 
-
 abstract class Base_Compatibility {
 	public static $is_activated = null;
 

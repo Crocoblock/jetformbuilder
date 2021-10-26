@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -21,7 +20,7 @@ class Dynamic_Preset extends Base_Preset {
 			$this->field => array(
 				'prop'  => ! empty( $this->data['current_field_prop'] ) ? $this->data['current_field_prop'] : '',
 				'key'   => ! empty( $this->data['current_field_key'] ) ? $this->data['current_field_key'] : '',
-				'other' => $this->data
+				'other' => $this->data,
 			),
 		);
 	}

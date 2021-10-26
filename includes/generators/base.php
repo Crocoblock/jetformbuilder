@@ -35,7 +35,7 @@ abstract class Base {
 		return array(
 			'generator_field' => function ( $value ) {
 				return $value;
-			}
+			},
 		);
 	}
 

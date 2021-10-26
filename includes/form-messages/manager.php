@@ -3,16 +3,15 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
-
 use Jet_Form_Builder\Plugin;
 
 class Manager {
 
-	public $_types = array();
+	public $_types            = array();
 	private $success_statuses = array( 'success' );
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
-	const DYNAMIC_FAILED_PREF = 'derror|';
+	const DYNAMIC_FAILED_PREF  = 'derror|';
 
 
 	public static function dynamic_success( $message ) {
@@ -41,10 +40,10 @@ class Manager {
 	public function dynamic_types() {
 		return array(
 			'dsuccess' => array(
-				'type' => 'success'
+				'type' => 'success',
 			),
 			'derror'   => array(
-				'type' => 'failed'
+				'type' => 'failed',
 			),
 		);
 	}

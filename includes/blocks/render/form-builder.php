@@ -32,8 +32,8 @@ class Form_Builder {
 	/**
 	 * Constructor for the class
 	 *
-	 * @param null $form_id
-	 * @param bool $post
+	 * @param null  $form_id
+	 * @param bool  $post
 	 * @param array $args
 	 */
 	function __construct( $form_id = null, $post = false, $args = array() ) {
@@ -180,9 +180,9 @@ class Form_Builder {
 		}
 
 		$this->form_content = Live_Form::instance()
-		                               ->set_form_id( $this->form_id )
-		                               ->set_specific_data_for_render( $this->args )
-		                               ->setup_fields( $this->form_content );
+									   ->set_form_id( $this->form_id )
+									   ->set_specific_data_for_render( $this->args )
+									   ->setup_fields( $this->form_content );
 
 		$form = $this->start_form();
 

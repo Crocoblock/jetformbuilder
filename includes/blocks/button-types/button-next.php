@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
-
 class Button_Next extends Button_Type_Base {
 
 	public function slug(): string {
@@ -21,7 +20,7 @@ class Button_Next extends Button_Type_Base {
 	public function html_attrs() {
 		return array(
 			'class' => array(
-				'button' => "jet-form-builder__next-page",
+				'button' => 'jet-form-builder__next-page',
 			),
 		);
 	}

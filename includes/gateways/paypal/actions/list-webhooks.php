@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 class List_Webhooks extends Base_Action {
 
 	protected $method = 'GET';

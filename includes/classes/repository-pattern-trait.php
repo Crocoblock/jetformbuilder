@@ -3,14 +3,13 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 trait Repository_Pattern_Trait {
 
 	use Repository_Aborts_Trait;
 
-	private $__repository = array();
+	private $__repository      = array();
 	private $__failed_installs = array();
 
 	abstract public function rep_instances(): array;
@@ -86,26 +85,21 @@ trait Repository_Pattern_Trait {
 					$item_class = get_class( $item_trait );
 
 					throw ( new Repository_Exception(
-
 						"The installation was aborted on the item: {$item_class}",
 						$exception->getMessage(),
 						...$exception->get_additional()
-
 					) )->set_code( $exception->getCode() );
 
 				case $this->_rep_abort_and_die_code():
 					$item_class = get_class( $item_trait );
 
 					throw ( new Repository_Exception(
-
 						"The installation was aborted and died on the item: {$item_class}",
 						$exception->getMessage(),
 						...$exception->get_additional()
-
 					) )->set_code( $exception->getCode() );
 			}
 		}
-
 
 		return $this;
 	}

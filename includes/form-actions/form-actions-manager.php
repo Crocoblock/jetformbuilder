@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Actions;
 
-
 use Jet_Form_Builder\Form_Actions\Types\Duplicate_Action;
 use Jet_Form_Builder\Form_Actions\Types\Export_Action;
 use Jet_Form_Builder\Form_Actions\Types\Import_Action;
@@ -24,11 +23,14 @@ class Form_Actions_Manager {
 
 	public function register_actions() {
 
-		$actions = apply_filters( 'jet-form-builder/form-actions/register', array(
-			new Export_Action(),
-			new Import_Action(),
-			new Duplicate_Action(),
-		) );
+		$actions = apply_filters(
+			'jet-form-builder/form-actions/register',
+			array(
+				new Export_Action(),
+				new Import_Action(),
+				new Duplicate_Action(),
+			)
+		);
 
 		foreach ( $actions as $action ) {
 			$this->register_action( $action );

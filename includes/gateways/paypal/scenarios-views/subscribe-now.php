@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 
 class Subscribe_Now extends Scenario_View_Base {
@@ -14,7 +13,7 @@ class Subscribe_Now extends Scenario_View_Base {
 		return array(
 			'id'                 => array(
 				'value' => array( $this, 'get_related_id' ),
-				'type'  => 'integer'
+				'type'  => 'integer',
 			),
 			'record_id'          => array(
 				'value' => array( $this, 'get_item_id' ),
@@ -24,16 +23,16 @@ class Subscribe_Now extends Scenario_View_Base {
 			),
 			'subscriber'         => array(
 				'value' => array( $this, 'get_subscriber_info' ),
-				'type'  => 'array'
+				'type'  => 'array',
 			),
 			'plan_info'          => array(
 				'value' => array( $this, 'get_plan_info' ),
 			),
 			'status_update_time' => array(
-				'value' => array( $this, 'get_status_update_time' )
+				'value' => array( $this, 'get_status_update_time' ),
 			),
 			'create_time'        => array(
-				'value' => array( $this, 'get_create_time' )
+				'value' => array( $this, 'get_create_time' ),
 			),
 		);
 	}
@@ -50,7 +49,7 @@ class Subscribe_Now extends Scenario_View_Base {
 				'label' => __( 'Status', 'jet-form-builder' ),
 			),
 			'subscriber'         => array(
-				'label' => __( 'Subscriber Info' ),
+				'label' => __( 'Subscriber Info', 'jet-form-builder' ),
 			),
 			'plan_info'          => array(
 				'label' => __( 'Plan Info', 'jet-form-builder' ),

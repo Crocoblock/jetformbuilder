@@ -37,13 +37,15 @@ class Manager {
 		add_action(
 			'jet-form-builder/editor-assets/after',
 			array( $this, 'register_block_types_for_form_editor' ),
-			10, 2
+			10,
+			2
 		);
 
 		add_action(
 			'jet-form-builder/other-editor-assets/after',
 			array( $this, 'register_block_types_for_others' ),
-			10, 2
+			10,
+			2
 		);
 
 		add_filter(
@@ -123,20 +125,20 @@ class Manager {
 				$hidden_post_id,
 				array(
 					'name'        => 'post_id',
-					'field_value' => 'post_id'
-				)
+					'field_value' => 'post_id',
+				),
 			),
 			array(
 				$text_field,
 				array(
 					'name'  => 'text_field',
-					'label' => 'Text'
-				)
+					'label' => 'Text',
+				),
 			),
 			array(
 				$submit_post_id,
-				array( 'label' => __( 'Submit', 'jet-form-builder' ) )
-			)
+				array( 'label' => __( 'Submit', 'jet-form-builder' ) ),
+			),
 		);
 
 		return $arguments;
@@ -181,6 +183,7 @@ class Manager {
 
 	/**
 	 * Register form JS
+	 *
 	 * @return void [description]
 	 */
 	public function enqueue_frontend_assets() {
@@ -192,18 +195,21 @@ class Manager {
 		wp_localize_script(
 			'jet-form-builder-frontend-forms',
 			'JetFormBuilderSettings',
-			apply_filters( 'jet-form-builder/frontend-settings', array(
-				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
-				'form_action'  => Plugin::instance()->form_handler->hook_key,
-				'devmode'      => Dev_Mode\Manager::instance()->active(),
-				'scrollOffset' => - 50,
-				'replaceAttrs' => array(
-					'href',
-					'src',
-					'alt',
-					'title',
+			apply_filters(
+				'jet-form-builder/frontend-settings',
+				array(
+					'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'form_action'  => Plugin::instance()->form_handler->hook_key,
+					'devmode'      => Dev_Mode\Manager::instance()->active(),
+					'scrollOffset' => - 50,
+					'replaceAttrs' => array(
+						'href',
+						'src',
+						'alt',
+						'title',
+					),
 				)
-			) )
+			)
 		);
 	}
 

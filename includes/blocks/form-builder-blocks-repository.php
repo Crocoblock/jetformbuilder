@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-
 class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 
 	public function rep_instances(): array {
@@ -29,7 +28,7 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
 			new Types\Color_Picker_Field(),
-			new Types\Progress_Bar()
+			new Types\Progress_Bar(),
 		);
 	}
 

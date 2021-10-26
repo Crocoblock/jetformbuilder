@@ -3,18 +3,17 @@
 
 namespace Jet_Form_Builder\Form_Response;
 
-
 use Jet_Form_Builder\Form_Response\Types\Response_It;
 
 class Response {
 
 	public $manager;
 	private $query_args = array();
-	public $args = array();
+	public $args        = array();
 
 	public $default_args = array(
 		'status' => 'success',
-		'errors' => array()
+		'errors' => array(),
 	);
 
 	public function __construct( Response_It $instance, $query_args = array() ) {
@@ -56,9 +55,11 @@ class Response {
 	}
 
 	public function on_validation_failed() {
-		$this->add_query_args( array(
-			'fields' => $this->manager->get_field_errors( $this->args['errors'] )
-		) );
+		$this->add_query_args(
+			array(
+				'fields' => $this->manager->get_field_errors( $this->args['errors'] ),
+			)
+		);
 	}
 
 

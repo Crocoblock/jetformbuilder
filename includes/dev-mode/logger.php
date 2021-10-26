@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Dev_Mode;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 
@@ -20,18 +19,23 @@ class Logger {
 	use Instance_Trait;
 
 	private function __construct() {
-		//$this->run_engine_debugger();
+		// $this->run_engine_debugger();
 	}
 
 	public function run_engine_debugger() {
-		add_action( 'jet-engine/forms/handler/query-args', function ( $query_args, $args, $handler ) {
-			if ( ! $handler->is_ajax() ) {
-				return $query_args;
-			}
-			$query_args['__jfb_logger'] = $this->get_logs();
+		add_action(
+			'jet-engine/forms/handler/query-args',
+			function ( $query_args, $args, $handler ) {
+				if ( ! $handler->is_ajax() ) {
+					return $query_args;
+				}
+				$query_args['__jfb_logger'] = $this->get_logs();
 
-			return $query_args;
-		}, 10, 3 );
+				return $query_args;
+			},
+			10,
+			3
+		);
 	}
 
 	public function log( Handler_Exception $exception ) {
@@ -51,7 +55,7 @@ class Logger {
 			'file'    => $this->make_pretty_filename( $exception->getFile() ),
 			'line'    => $exception->getLine(),
 			'data'    => $exception->get_additional(),
-			'version' => jet_form_builder()->get_version()
+			'version' => jet_form_builder()->get_version(),
 		);
 	}
 

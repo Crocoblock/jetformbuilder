@@ -50,7 +50,6 @@ class Form_Manager {
 					$this->generators[ $instance->get_id() ] = $instance;
 				}
 			}
-
 		}
 
 		return $this->generators;

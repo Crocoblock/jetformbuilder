@@ -21,9 +21,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id 	 = null;
+	public $form_id      = null;
 	public $request_data = array();
-	public $manager 	 = null;
+	public $manager      = null;
 
 
 	public $form_actions = array();

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-
 use Jet_Form_Builder\Plugin;
 
 trait Gateways_Editor_Data {
@@ -18,7 +17,7 @@ trait Gateways_Editor_Data {
 				'message_success'       => __( 'Payment success message', 'Gateways editor data', 'jet-form-builder' ),
 				'message_failed'        => __( 'Payment failed message', 'Gateways editor data', 'jet-form-builder' ),
 				'use_success_redirect'  => __( 'Use redirect URL from Redirect notification', 'Gateways editor data', 'jet-form-builder' ),
-				'action_order'          => __( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' )
+				'action_order'          => __( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' ),
 			),
 			$this->options_labels()
 		);
@@ -59,7 +58,7 @@ trait Gateways_Editor_Data {
 		foreach ( $this->rep_get_items() as $gateway ) {
 			$result[] = array(
 				'value' => $gateway->get_id(),
-				'label' => $gateway->get_name()
+				'label' => $gateway->get_name(),
 			);
 		}
 
@@ -68,7 +67,7 @@ trait Gateways_Editor_Data {
 
 	public function editor_data() {
 		$result = array(
-			'allowed' => Plugin::instance()->allow_gateways
+			'allowed' => Plugin::instance()->allow_gateways,
 		);
 
 		if ( $result['allowed'] ) {

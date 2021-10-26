@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;

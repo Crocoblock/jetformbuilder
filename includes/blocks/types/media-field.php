@@ -40,9 +40,13 @@ class Media_Field extends Base {
 	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'jetFormMediaFieldData', array(
-			'mime_types' => Tools::get_allowed_mimes_list_for_js(),
-		) );
+		wp_localize_script(
+			$handle,
+			'jetFormMediaFieldData',
+			array(
+				'mime_types' => Tools::get_allowed_mimes_list_for_js(),
+			)
+		);
 	}
 
 

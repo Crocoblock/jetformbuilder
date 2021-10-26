@@ -16,5 +16,5 @@ $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input type="number" <?php $this->render_attributes_string(); ?>>
+	<input type="number" <?php $this->render_attributes_string(); ?>>
 </div>

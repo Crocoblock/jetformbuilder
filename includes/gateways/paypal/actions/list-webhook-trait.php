@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 trait List_Webhook_Trait {
@@ -11,7 +10,7 @@ trait List_Webhook_Trait {
 	/**
 	 * @param $compared_url
 	 *
-	 * @param bool $token
+	 * @param bool         $token
 	 *
 	 * @return false|mixed
 	 * @throws Gateway_Exception

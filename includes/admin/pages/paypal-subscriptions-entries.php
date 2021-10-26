@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
@@ -17,7 +16,6 @@ class Paypal_Subscriptions_Entries extends Base_Page {
 		return __( 'Paypal Entries', 'jet-form-builder' );
 	}
 
-
 	public function page_config(): array {
 		$scenario = Scenarios_Logic\Subscribe_Now::scenario_id();
 
@@ -26,7 +24,7 @@ class Paypal_Subscriptions_Entries extends Base_Page {
 		return array(
 			'list'     => $list,
 			'columns'  => $columns,
-			'scenario' => $scenario
+			'scenario' => $scenario,
 		);
 	}
 

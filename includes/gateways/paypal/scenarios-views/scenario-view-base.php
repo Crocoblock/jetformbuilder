@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
 
 abstract class Scenario_View_Base extends Scenario_Item_Base {

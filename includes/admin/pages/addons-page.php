@@ -44,10 +44,10 @@ class Addons_Page extends Base_Page {
 			'licenseKey'  => Plugin::instance()->license_manager->get_license_key(),
 			'licenseList' => Plugin::instance()->license_manager->get_license_data(),
 			'themeInfo'   => Plugin::instance()->license_manager->get_theme_info(),
-			'miscInfo'    => [
+			'miscInfo'    => array(
 				'mainSiteUrl'    => 'https://jetformbuilder.com/',
-				'pricingPageUrl' => 'https://jetformbuilder.com/pricing/'
-			]
+				'pricingPageUrl' => 'https://jetformbuilder.com/pricing/',
+			),
 		);
 	}
 }

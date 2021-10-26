@@ -1,7 +1,7 @@
 export default {
 	methods: {
 		getIncoming( tabName ) {
-			return window.JetFBPageConfig[ tabName ];
+			return tabName ? window.JetFBPageConfig[ tabName ] : window.JetFBPageConfig;
 		},
 	}
 }

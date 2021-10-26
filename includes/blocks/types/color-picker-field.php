@@ -20,38 +20,40 @@ class Color_Picker_Field extends Base {
 	protected function _jsm_register_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'field_section',
-				'title' => __( 'Color Picker Field', 'jet-form-builder' )
-			]
+				'title' => __( 'Color Picker Field', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'field_width',
-			'type'         => 'range',
-			'label'        => __( 'Width', 'jet-form-builder' ),
-			'units'        => [
-				[
-					'value'     => 'px',
-					'intervals' => [
-						'step' => 1,
-						'min'  => 1,
-						'max'  => 1000,
-					]
-				],
-				[
-					'value'     => '%',
-					'intervals' => [
-						'step' => 1,
-						'min'  => 1,
-						'max'  => 100,
-					]
-				],
-			],
-			'css_selector' => [
-				$this->selector( '__field-wrap.%s__field-wrap' ) => 'width: {{VALUE}}{{UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'field_width',
+				'type'         => 'range',
+				'label'        => __( 'Width', 'jet-form-builder' ),
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 1,
+							'max'  => 1000,
+						),
+					),
+					array(
+						'value'     => '%',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 1,
+							'max'  => 100,
+						),
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__field-wrap.%s__field-wrap' ) => 'width: {{VALUE}}{{UNIT}};',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 	}
@@ -76,7 +78,6 @@ class Color_Picker_Field extends Base {
 				return 'color-picker-field';
 			}
 		} );
-
 
 		return $color_render->render();
 	}

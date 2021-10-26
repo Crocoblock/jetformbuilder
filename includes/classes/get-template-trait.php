@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 trait Get_Template_Trait {
 	/**
 	 * Returns template path

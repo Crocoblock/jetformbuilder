@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Response\Types;
 
-
 abstract class Response_It {
 
 	protected $additional;

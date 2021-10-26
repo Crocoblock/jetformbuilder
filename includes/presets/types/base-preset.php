@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
@@ -59,7 +58,7 @@ abstract class Base_Preset {
 
 
 	public function get_source( $args ) {
-		$from   = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
+		$from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 
 		/** @var Base_Source $source */
 		$source = Preset_Manager::instance()->get_source_by_type( $from );

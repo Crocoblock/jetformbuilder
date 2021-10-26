@@ -2,6 +2,7 @@
 /**
  * Media field template
  */
+
 use Jet_Form_Builder\File_Upload;
 
 $this->add_attribute( 'class', 'jet-form-builder__field file-field jet-form-builder-file-upload__input' );

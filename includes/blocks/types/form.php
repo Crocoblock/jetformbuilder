@@ -408,9 +408,11 @@ class Form extends Base {
 			)
 		);
 
-		jet_form_builder()->msg_router->set_up( array(
-			'form_id' => $form_id
-		) );
+		jet_form_builder()->msg_router->set_up(
+			array(
+				'form_id' => $form_id,
+			)
+		);
 
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );

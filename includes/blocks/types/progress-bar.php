@@ -42,9 +42,11 @@ class Progress_Bar extends Base {
 		$context_last_name = 'jet-forms/conditional-block--last_page_name';
 		$last_name         = $this->block_context[ $context_last_name ] ?? '';
 
-		$break->add_progress( array(
-			'label' => $last_name ?: 'Last Page'
-		) );
+		$break->add_progress(
+			array(
+				'label' => $last_name ?: 'Last Page',
+			)
+		);
 	}
 
 	/**
@@ -85,10 +87,11 @@ class Progress_Bar extends Base {
 						array(
 							'value' => 'default',
 							'label' => __( 'Default', 'jet-form-builder' ),
-							'html'  => $break->render_progress()
-						)
-					)
-				), $break
+							'html'  => $break->render_progress(),
+						),
+					),
+				),
+				$break
 			)
 		);
 	}

@@ -148,7 +148,7 @@ class Send_Email extends Base {
 	}
 
 	/**
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void

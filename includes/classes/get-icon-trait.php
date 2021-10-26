@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 trait Get_Icon_Trait {
 	use Get_Template_Trait;
 

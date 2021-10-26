@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Classes\Tools;
@@ -18,6 +17,7 @@ use Jet_Form_Builder\Dev_Mode;
 /**
  *
  * Class Base_Gateway
+ *
  * @package Jet_Form_Builder\Gateways
  */
 abstract class Base_Gateway {
@@ -25,7 +25,7 @@ abstract class Base_Gateway {
 	const GATEWAY_META_KEY = '_jet_gateway_data';
 
 	const SUCCESS_TYPE = 'success';
-	const FAILED_TYPE = 'cancel';
+	const FAILED_TYPE  = 'cancel';
 
 	protected $payment_id;
 	protected $payment_token;
@@ -47,7 +47,7 @@ abstract class Base_Gateway {
 		GM::PAYMENT_TYPE_PARAM,
 		'order_token',
 		'status',
-		'PayerID'
+		'PayerID',
 	);
 
 	public function rep_item_id() {
@@ -100,6 +100,7 @@ abstract class Base_Gateway {
 
 	/**
 	 * Store payment status into order and show success/failed message
+	 *
 	 * @return void [description]
 	 * @throws Gateway_Exception
 	 */
@@ -114,9 +115,11 @@ abstract class Base_Gateway {
 		 */
 		$this->save_gateway_before_send_response();
 
-		$this->send_response( array(
-			'status' => $this->get_status_on_payment( $this->data['status'] ),
-		) );
+		$this->send_response(
+			array(
+				'status' => $this->get_status_on_payment( $this->data['status'] ),
+			)
+		);
 	}
 
 	public function save_gateway_before_send_response() {
@@ -163,9 +166,11 @@ abstract class Base_Gateway {
 				$this->process_status( 'success' );
 			}
 		} catch ( Action_Exception $exception ) {
-			$this->send_response( array(
-				'status' => $exception->get_form_status(),
-			) );
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
 		}
 	}
 
@@ -176,10 +181,12 @@ abstract class Base_Gateway {
 	private function get_response_manager() {
 		global $wp;
 
-		return new Reload_Response( array(
-			'refer'       => home_url( $wp->request ),
-			'remove_args' => $this->removed_query_args_on_payment,
-		) );
+		return new Reload_Response(
+			array(
+				'refer'       => home_url( $wp->request ),
+				'remove_args' => $this->removed_query_args_on_payment,
+			)
+		);
 	}
 
 	/**
@@ -201,10 +208,10 @@ abstract class Base_Gateway {
 		}
 
 		$all = $this->get_action_handler()
-		            ->set_form_id( $this->data['form_id'] )
-		            ->add_request( $this->data['form_data'] )
-		            ->unregister_action( 'redirect_to_page' )
-		            ->get_all();
+					->set_form_id( $this->data['form_id'] )
+					->add_request( $this->data['form_data'] )
+					->unregister_action( 'redirect_to_page' )
+					->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -289,7 +296,7 @@ abstract class Base_Gateway {
 
 		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
 			if ( 'insert_post' === $action->get_id()
-			     && $this->get_initialize_action_id() === $action->_id
+				 && $this->get_initialize_action_id() === $action->_id
 			) {
 				continue;
 			}
@@ -312,7 +319,7 @@ abstract class Base_Gateway {
 
 	public function get_insert_post_action_id() {
 		return GM::instance()->get_actions_handler()
-		         ->get_inserted_post_id( $this->get_initialize_action_id() );
+				 ->get_inserted_post_id( $this->get_initialize_action_id() );
 	}
 
 	/**
@@ -462,28 +469,32 @@ abstract class Base_Gateway {
 	 * @return string [description]
 	 */
 	public function apply_macros( $string = null ) {
-		return preg_replace_callback( '/%(.*?)%/', function ( $matches ) {
-			switch ( $matches[1] ) {
-				case 'gateway_amount':
-					if ( empty( $this->data['amount'] ) ) {
-						return 0;
-					}
+		return preg_replace_callback(
+			'/%(.*?)%/',
+			function ( $matches ) {
+				switch ( $matches[1] ) {
+					case 'gateway_amount':
+						if ( empty( $this->data['amount'] ) ) {
+							return 0;
+						}
 
-					return $this->data['amount']['value'] ?? 0 . ' ' . $this->data['amount']['currency_code'] ?? '';
+						return $this->data['amount']['value'] ?? 0 . ' ' . $this->data['amount']['currency_code'] ?? '';
 
-				case 'gateway_status':
-					return $this->data['status'] ?? '';
+					case 'gateway_status':
+						return $this->data['status'] ?? '';
 
-				default:
-					return $this->data['form_data'][ $matches[1] ] ?? '';
-			}
-		}, $string );
+					default:
+						return $this->data['form_data'][ $matches[1] ] ?? '';
+				}
+			},
+			$string
+		);
 	}
 
 	private function maybe_unregister_action( $index, $keep_these ) {
 		if ( ! array_key_exists( $index, $keep_these )
-		     || ! isset( $keep_these[ $index ]['active'] )
-		     || ! $keep_these[ $index ]['active']
+			 || ! isset( $keep_these[ $index ]['active'] )
+			 || ! $keep_these[ $index ]['active']
 		) {
 			$this->get_action_handler()->unregister_action( $index );
 		}
@@ -498,7 +509,7 @@ abstract class Base_Gateway {
 			$this->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			//var_dump( $exception ); die;
+			// var_dump( $exception ); die;
 		}
 	}
 
@@ -570,7 +581,7 @@ abstract class Base_Gateway {
 
 	public function get_gateway_entries( $properties = array() ) {
 		$compare    = array(
-			"1=1",
+			'1=1',
 			sprintf( "`meta_key` = '%s'", self::GATEWAY_META_KEY ),
 		);
 		$properties = array_merge(
@@ -584,13 +595,16 @@ abstract class Base_Gateway {
 		}
 		global $wpdb;
 
-		$sql = "SELECT * FROM $wpdb->postmeta WHERE " . implode( "\n\rAND ", $compare ) . ';';
+		$sql  = "SELECT * FROM $wpdb->postmeta WHERE " . implode( "\n\rAND ", $compare ) . ';';
 		$meta = $wpdb->get_results( $sql, ARRAY_A );
 
-		//return ;
-		return array_map( function ( $item ) {
-			return Tools::decode_json( $item['meta_value'] ?? '[]' );
-		}, $meta );
+		// return ;
+		return array_map(
+			function ( $item ) {
+				return Tools::decode_json( $item['meta_value'] ?? '[]' );
+			},
+			$meta
+		);
 	}
 
 }

@@ -25,20 +25,20 @@ class Gateway_Manager {
 	use Repository_Pattern_Trait;
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
-	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
-	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
+	const AFTER_ACTIONS_CALLABLE  = 'after_send_actions';
+	const PAYMENT_TYPE_PARAM      = 'jet_form_gateway';
 
 	private $gateways_form_data = array();
 	private $form_id;
 
 	public $message = null;
-	public $data = null;
+	public $data    = null;
 	public $is_sandbox;
+	private $current_gateway_type;
 
 	/**
 	 * Register gateways components
 	 */
-
 	public function set_up() {
 		if ( ! Plugin::instance()->allow_gateways ) {
 			return;
@@ -50,7 +50,7 @@ class Gateway_Manager {
 
 	public function rep_instances(): array {
 		return array(
-			new Paypal\Controller()
+			new Paypal\Controller(),
 		);
 	}
 
@@ -114,19 +114,22 @@ class Gateway_Manager {
 	 * @return void [description]
 	 */
 	public function catch_payment_result() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->allow_gateways ) {
 			return;
 		}
+
+		$this->current_gateway_type = wp_unslash( sanitize_key( $_GET[ self::PAYMENT_TYPE_PARAM ] ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		add_action( 'parse_request', array( $this, 'on_has_gateway_request' ) );
 	}
 
 	public function on_has_gateway_request() {
-		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
-
 		try {
-			$this->get_gateway_controller( $gateway_type )->try_run_on_catch();
+			$this->get_gateway_controller( $this->current_gateway() )->try_run_on_catch();
 		} catch ( Repository_Exception $exception ) {
+			/** Just do nothing */
 		}
 	}
 
@@ -155,9 +158,9 @@ class Gateway_Manager {
 	 */
 	public function controller( $gateway_id ) {
 		try {
-			return Gateway_Manager::instance()->get_gateway_controller( $gateway_id );
+			return self::instance()->get_gateway_controller( $gateway_id );
 		} catch ( Repository_Exception $exception ) {
-			_doing_it_wrong( __METHOD__, "Undefined gateway: {$gateway_id}", '1.4.0' );
+			_doing_it_wrong( __METHOD__, esc_html( "Undefined gateway: {$gateway_id}" ), '1.4.0' );
 		}
 	}
 
@@ -185,7 +188,7 @@ class Gateway_Manager {
 	}
 
 	public function get_actions_before() {
-		$withFilter = function ( $actions = array() ) {
+		$with_filter = function ( $actions = array() ) {
 			return apply_filters(
 				'jet-form-builder/gateways/notifications-before',
 				$actions,
@@ -194,7 +197,7 @@ class Gateway_Manager {
 		};
 
 		if ( ! $this->gateways( 'notifications_before' ) ) {
-			return $withFilter();
+			return $with_filter();
 		}
 
 		$actions_ids = array_filter(
@@ -204,7 +207,7 @@ class Gateway_Manager {
 			}
 		);
 
-		return $withFilter( $actions_ids );
+		return $with_filter( $actions_ids );
 	}
 
 	public function has_gateway( $form_id ) {
@@ -259,6 +262,10 @@ class Gateway_Manager {
 			return;
 		}
 		$this->save_gateways_form_data( $gateways );
+	}
+
+	public function current_gateway() {
+		return $this->current_gateway_type;
 	}
 
 }

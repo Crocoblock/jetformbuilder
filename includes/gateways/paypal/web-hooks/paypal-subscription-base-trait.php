@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Verify_Webhook_Signature_Action;
@@ -35,11 +34,13 @@ trait Paypal_Subscription_Base_Trait {
 		} catch ( Gateway_Exception $exception ) {
 			update_option(
 				'rest_api_jfb_test_error',
-				wp_json_encode( array(
-					date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
-					$exception->getMessage(),
-					$exception->get_additional()
-				) )
+				wp_json_encode(
+					array(
+						date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
+						$exception->getMessage(),
+						$exception->get_additional(),
+					)
+				)
 			);
 
 			return new \WP_Error(

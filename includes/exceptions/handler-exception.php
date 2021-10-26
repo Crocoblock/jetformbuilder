@@ -3,17 +3,16 @@
 
 namespace Jet_Form_Builder\Exceptions;
 
-
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Form_Messages\Manager;
 
 abstract class Handler_Exception extends \Exception {
 	protected $default_type_message = 'failed';
-	protected $dynamic_message = '';
+	protected $dynamic_message      = '';
 
 	protected $additional_data;
 
-	public function __construct( $message = "", ...$additional_data ) {
+	public function __construct( $message = '', ...$additional_data ) {
 		parent::__construct( $message, 0, null );
 
 		$this->additional_data = $additional_data;

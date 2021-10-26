@@ -121,10 +121,12 @@ class Plugin {
 	public function init_framework() {
 		require $this->plugin_dir( 'framework/loader.php' );
 
-		$this->framework = new CX_Loader( array(
-			$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
-			$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
-		) );
+		$this->framework = new CX_Loader(
+			array(
+				$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
+				$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
+			)
+		);
 	}
 
 	public function maybe_enable_gateways() {
@@ -132,9 +134,12 @@ class Plugin {
 		$gateways = Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->get_global_options();
 
 		if ( isset( $gateways['enable_test_mode'] ) ) {
-			add_filter( 'jet-form-builder/gateways/paypal/sandbox-mode', function () use ( $gateways ) {
-				return $gateways['enable_test_mode'];
-			} );
+			add_filter(
+				'jet-form-builder/gateways/paypal/sandbox-mode',
+				function () use ( $gateways ) {
+					return $gateways['enable_test_mode'];
+				}
+			);
 		}
 
 		if ( isset( $gateways['use_gateways'] ) ) {
@@ -189,13 +194,17 @@ class Plugin {
 		$this->register_autoloader();
 		$this->init_lang();
 
-		add_action( 'after_setup_theme', function () {
-			do_action( 'jet-form-builder/before-init' );
+		add_action(
+			'after_setup_theme',
+			function () {
+				do_action( 'jet-form-builder/before-init' );
 
-			$this->init_components();
+				$this->init_components();
 
-			do_action( 'jet-form-builder/after-init' );
-		}, 0 );
+				do_action( 'jet-form-builder/after-init' );
+			},
+			0
+		);
 
 		$this->init_framework();
 	}

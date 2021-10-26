@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -42,7 +41,7 @@ class Events_Listeners_Manager {
 			new Events_Handlers\Catalog_Product_Updated(),
 			new Events_Handlers\Payment_Sale_Completed(),
 			new Events_Handlers\Payment_Sale_Refunded(),
-			new Events_Handlers\Payment_Sale_Reversed()
+			new Events_Handlers\Payment_Sale_Reversed(),
 		);
 	}
 

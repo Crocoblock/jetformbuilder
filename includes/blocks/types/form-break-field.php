@@ -20,8 +20,8 @@ class Form_Break_Field extends Base {
 	public $use_style_manager = false;
 
 	/**
-	 * @param array $attrs
-	 * @param null $content
+	 * @param array     $attrs
+	 * @param null      $content
 	 * @param \WP_Block $wp_block
 	 *
 	 * @return string

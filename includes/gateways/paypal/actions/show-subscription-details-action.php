@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 class Show_Subscription_Details_Action extends Base_Action {

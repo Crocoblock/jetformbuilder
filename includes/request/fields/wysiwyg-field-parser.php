@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Request\Fields;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Request\Field_Data_Parser;
 

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request\Request_Handler;
 
@@ -66,29 +65,34 @@ class Macros_Parser {
 	 */
 	public function macros_replace() {
 
-		return preg_replace_callback( '/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/', function ( $match ) {
+		return preg_replace_callback(
+			'/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/',
+			function ( $match ) {
 
-			if ( isset( $this->replacements[ $match[1] ] ) ) {
+				if ( isset( $this->replacements[ $match[1] ] ) ) {
 
-				if ( ! empty( $match[3] ) ) {
-					return $this->filter->apply_filters(
-						$this->replacements[ $match[1] ], $match[3]
-					);
-				} else {
-					if ( is_array( $this->replacements[ $match[1] ] ) ) {
-						if ( ! empty( $this->replacements[ Request_Handler::REPEATERS_SETTINGS ][ $match[1] ] ) ) {
-							return $this->verbose_repeater( $this->replacements[ $match[1] ] );
-						} else {
-							return implode( ', ', $this->replacements[ $match[1] ] );
-						}
+					if ( ! empty( $match[3] ) ) {
+						return $this->filter->apply_filters(
+							$this->replacements[ $match[1] ],
+							$match[3]
+						);
 					} else {
-						return $this->replacements[ $match[1] ];
+						if ( is_array( $this->replacements[ $match[1] ] ) ) {
+							if ( ! empty( $this->replacements[ Request_Handler::REPEATERS_SETTINGS ][ $match[1] ] ) ) {
+								return $this->verbose_repeater( $this->replacements[ $match[1] ] );
+							} else {
+								return implode( ', ', $this->replacements[ $match[1] ] );
+							}
+						} else {
+							return $this->replacements[ $match[1] ];
+						}
 					}
+				} else {
+					return $match[0];
 				}
-			} else {
-				return $match[0];
-			}
-		}, $this->content );
+			},
+			$this->content
+		);
 
 	}
 

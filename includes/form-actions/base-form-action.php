@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Actions;
 
-
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 
 abstract class Base_Form_Action {

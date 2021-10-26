@@ -3,8 +3,8 @@
 namespace Jet_Form_Builder\Integrations;
 
 abstract class Integration_Base {
-	protected $api_base_url = '';
-	protected $api_key = '';
+	protected $api_base_url     = '';
+	protected $api_key          = '';
 	protected $api_request_args = array();
 
 	public function __construct( $api_key ) {

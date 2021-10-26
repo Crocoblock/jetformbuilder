@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 use Jet_Form_Builder\Blocks\Render\Base;
 
 trait Base_Attributes_Trait {

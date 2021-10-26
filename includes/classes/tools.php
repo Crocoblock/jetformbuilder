@@ -39,9 +39,9 @@ class Tools {
 	/**
 	 * Returns all post types list to use in JS components
 	 *
-	 * @param bool $placeholder
+	 * @param bool   $placeholder
 	 *
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $operator
 	 *
 	 * @return array [type] [description]
@@ -118,7 +118,7 @@ class Tools {
 		foreach ( $mimes as $mime ) {
 			$mimes_list[] = array(
 				'label' => $mime,
-				'value' => $mime
+				'value' => $mime,
 			);
 		}
 
@@ -155,6 +155,7 @@ class Tools {
 
 	/**
 	 * Returns pages list
+	 *
 	 * @return [type] [description]
 	 */
 	public static function get_pages_list_for_js() {
@@ -171,11 +172,13 @@ class Tools {
 	 * @return array [description]
 	 */
 	public static function get_forms_list_for_js( $for_elementor = false ) {
-		$posts = get_posts( array(
-			'post_status'    => 'publish',
-			'posts_per_page' => - 1,
-			'post_type'      => jet_form_builder()->post_type->slug(),
-		) );
+		$posts = get_posts(
+			array(
+				'post_status'    => 'publish',
+				'posts_per_page' => - 1,
+				'post_type'      => jet_form_builder()->post_type->slug(),
+			)
+		);
 
 		return self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
 	}
@@ -189,7 +192,7 @@ class Tools {
 		$fields_layout = array(
 			''       => '--',
 			'column' => 'Column',
-			'row'    => 'Row'
+			'row'    => 'Row',
 		);
 
 		if ( ! $for_elementor ) {
@@ -199,7 +202,7 @@ class Tools {
 
 		return array(
 			'submit_type'   => $submit_type,
-			'fields_layout' => $fields_layout
+			'fields_layout' => $fields_layout,
 		);
 	}
 
@@ -232,9 +235,9 @@ class Tools {
 	 * Prepare passed array for using in JS options
 	 *
 	 * @param array $array
-	 * @param null $value_key
-	 * @param null $label_key
-	 * @param bool $for_elementor
+	 * @param null  $value_key
+	 * @param null  $label_key
+	 * @param bool  $for_elementor
 	 *
 	 * Only if $for_elementor === false
 	 * @param array $additional_attrs
@@ -304,9 +307,9 @@ class Tools {
 	 * @return boolean
 	 */
 	public static function is_valid_timestamp( $timestamp ) {
-		return ( ( string ) ( int ) $timestamp === $timestamp || ( int ) $timestamp === $timestamp )
-		       && ( $timestamp <= PHP_INT_MAX )
-		       && ( $timestamp >= ~PHP_INT_MAX );
+		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
+			   && ( $timestamp <= PHP_INT_MAX )
+			   && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
@@ -448,8 +451,8 @@ class Tools {
 
 		foreach ( $array2 as $key => &$value ) {
 			if ( is_array( $value )
-			     && isset ( $merged [ $key ] )
-			     && is_array( $merged [ $key ] )
+				 && isset( $merged [ $key ] )
+				 && is_array( $merged [ $key ] )
 			) {
 				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
 			} else {

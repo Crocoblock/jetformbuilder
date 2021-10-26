@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-
 use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 
@@ -11,6 +10,7 @@ use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
  * CRUD
  *
  * Trait Action_Buttons_Manager
+ *
  * @package Jet_Form_Builder\Blocks
  */
 trait Action_Buttons_Manager {
@@ -42,7 +42,7 @@ trait Action_Buttons_Manager {
 
 	/**
 	 * @param Button_Type_Base $button
-	 * @param bool $update
+	 * @param bool             $update
 	 */
 	public function set_button_type( Button_Type_Base $button, $update = false ) {
 		if ( ! $update && $this->isset_button_type( $button->slug() ) ) {

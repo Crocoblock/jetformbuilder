@@ -35,7 +35,6 @@ class Autoloader {
 	 * @since 1.6.0
 	 * @access private
 	 * @static
-	 *
 	 */
 	private static function load_class( $class_name ) {
 
@@ -58,7 +57,6 @@ class Autoloader {
 	 * @since 1.6.0
 	 * @access private
 	 * @static
-	 *
 	 */
 	private static function autoload( $class ) {
 

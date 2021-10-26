@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
@@ -21,7 +20,7 @@ abstract class Base_Source {
 	private $src;
 
 	const FUNC_PREFIX = '_source__';
-	const EMPTY = '';
+	const EMPTY       = '';
 
 	abstract public function query_source();
 

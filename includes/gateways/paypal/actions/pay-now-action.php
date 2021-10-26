@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 
@@ -39,7 +38,7 @@ class Pay_Now_Action extends Base_Action {
 		foreach ( $amounts as $order_id => $amount ) {
 			$this->units[] = array(
 				'custom_id' => Gateway_Manager::instance()->get_actions_handler()->get_form_id() . '-' . $order_id,
-				'amount'    => $amount
+				'amount'    => $amount,
 			);
 		}
 

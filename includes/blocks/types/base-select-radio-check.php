@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -44,20 +43,23 @@ trait Base_Select_Radio_Check {
 	}
 
 	private function get_glossaries_list() {
-		return array_map( function ( $glossary ) {
-			return array(
-				'label' => $glossary['name'],
-				'value' => $glossary['id']
-			);
-		}, jet_engine()->glossaries->settings->get() );
+		return array_map(
+			function ( $glossary ) {
+				return array(
+					'label' => $glossary['name'],
+					'value' => $glossary['id'],
+				);
+			},
+			jet_engine()->glossaries->settings->get()
+		);
 	}
 
 
 	/*
-   * Returns field options list
-   *
-   * @return array
-   */
+	* Returns field options list
+	*
+	* @return array
+	*/
 	public function get_field_options() {
 		$args = $this->block_attrs;
 
@@ -65,7 +67,6 @@ trait Base_Select_Radio_Check {
 		$options      = array();
 		$value_from   = ! empty( $args['value_from_key'] ) ? $args['value_from_key'] : false;
 		$calc_from    = ! empty( $args['calculated_value_from_key'] ) ? $args['calculated_value_from_key'] : false;
-
 
 		if ( 'manual_input' === $options_from ) {
 
@@ -84,9 +85,7 @@ trait Base_Select_Radio_Check {
 
 					$options[] = $item;
 				}
-
 			}
-
 		} elseif ( 'posts' === $options_from ) {
 
 			$post_type = ! empty( $args['field_options_post_type'] ) ? $args['field_options_post_type'] : false;
@@ -95,14 +94,16 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$posts = get_posts( apply_filters(
-				'jet-form-builder/render-choice/query-options/posts',
-				array(
-					'post_status'    => 'publish',
-					'posts_per_page' => - 1,
-					'post_type'      => $post_type,
+			$posts = get_posts(
+				apply_filters(
+					'jet-form-builder/render-choice/query-options/posts',
+					array(
+						'post_status'    => 'publish',
+						'posts_per_page' => - 1,
+						'post_type'      => $post_type,
+					)
 				)
-			) );
+			);
 
 			if ( empty( $posts ) ) {
 				return $options;
@@ -148,13 +149,15 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$terms = get_terms( apply_filters(
-				'jet-form-builder/render-choice/query-options/terms',
-				array(
-					'taxonomy'   => $tax,
-					'hide_empty' => false,
+			$terms = get_terms(
+				apply_filters(
+					'jet-form-builder/render-choice/query-options/terms',
+					array(
+						'taxonomy'   => $tax,
+						'hide_empty' => false,
+					)
 				)
-			) );
+			);
 
 			if ( empty( $terms ) || is_wp_error( $terms ) ) {
 				return $options;
@@ -166,7 +169,7 @@ trait Base_Select_Radio_Check {
 
 				$item = array(
 					'value' => $term->term_id,
-					'label' => apply_filters( 'jet-form-builder/render-choice/label/terms', $term->name, $term )
+					'label' => apply_filters( 'jet-form-builder/render-choice/label/terms', $term->name, $term ),
 				);
 
 				if ( ! empty( $value_from ) ) {
@@ -238,11 +241,10 @@ trait Base_Select_Radio_Check {
 			} else {
 				return $generated;
 			}
-
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-			     && false !== Tools::get_jet_engine_version()
-			     && isset( jet_engine()->glossaries )
+				 && false !== Tools::get_jet_engine_version()
+				 && isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 
@@ -260,7 +262,6 @@ trait Base_Select_Radio_Check {
 				$options = get_post_meta( Live_Form::instance()->post->ID, $key, true );
 				$options = $this->maybe_parse_repeater_options( $options );
 			}
-
 		}
 
 		return $options;
@@ -343,7 +344,6 @@ trait Base_Select_Radio_Check {
 					'label' => $label,
 				);
 			}
-
 		}
 
 		return $result;

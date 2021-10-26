@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 class Delete_Webhook extends Base_Action {

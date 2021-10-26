@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
-
 class Preset_Source_Post extends Base_Source {
 
 	private $array_allowed;
@@ -52,10 +51,10 @@ class Preset_Source_Post extends Base_Source {
 
 	protected function can_get_preset() {
 		return ( parent::can_get_preset() &&
-		         (
-			         absint( $this->src()->post_author ) === get_current_user_id()
-			         || current_user_can( 'edit_others_posts' )
-		         )
+				 (
+					 absint( $this->src()->post_author ) === get_current_user_id()
+					 || current_user_can( 'edit_others_posts' )
+				 )
 		);
 	}
 
@@ -85,9 +84,9 @@ class Preset_Source_Post extends Base_Source {
 
 			}
 			$value = $prepared_value;
-		} else if ( function_exists( 'jet_engine' )
-		            && jet_engine()->relations
-		            && jet_engine()->relations->is_relation_key( $this->field_data['key'] ) ) {
+		} elseif ( function_exists( 'jet_engine' )
+					&& jet_engine()->relations
+					&& jet_engine()->relations->is_relation_key( $this->field_data['key'] ) ) {
 
 			$info = jet_engine()->relations->get_relation_info( $this->field_data['key'] );
 
@@ -125,9 +124,12 @@ class Preset_Source_Post extends Base_Source {
 			return '';
 		} else {
 			if ( $this->array_allowed ) {
-				$value = array_map( function ( $term ) {
-					return strval( $term->term_id );
-				}, $value );
+				$value = array_map(
+					function ( $term ) {
+						return strval( $term->term_id );
+					},
+					$value
+				);
 			} else {
 				$value = $value[0];
 				$value = $value->term_id;
@@ -156,11 +158,10 @@ class Preset_Source_Post extends Base_Source {
 		foreach ( $this->fields_map as $field => $data ) {
 
 			if ( 'post_meta' === $this->prop
-			     && ! empty( $this->preset_data['key'] )
-			     && $repeater_key == $this->preset_data['key'] ) {
+				 && ! empty( $this->preset_data['key'] )
+				 && $repeater_key == $this->preset_data['key'] ) {
 				return $field;
 			}
-
 		}
 
 		return $repeater_key;

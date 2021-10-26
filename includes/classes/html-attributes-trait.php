@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 trait Html_Attributes_Trait {
 
 	use Base_Attributes_Trait;

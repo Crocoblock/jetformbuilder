@@ -32,11 +32,13 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	/**
 	 * Block attributes on render
+	 *
 	 * @var array
 	 */
 	public $block_attrs = array();
 	/**
 	 * Block content on render
+	 *
 	 * @var string
 	 */
 	public $block_content;
@@ -45,12 +47,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	/**
 	 * Block attributes on register
+	 *
 	 * @var array
 	 */
 	public $attrs = array();
 
 	/**
 	 * Set to `false` if your block should not be styled
+	 *
 	 * @var bool
 	 */
 	public $use_style_manager = true;
@@ -66,7 +70,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * Override this method to set you style controls
 	 */
 	protected function _jsm_register_controls() {
-		//
 	}
 
 
@@ -113,7 +116,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
-				'render_callback' => Plugin::instance()->blocks->render_callback( $this )
+				'render_callback' => Plugin::instance()->blocks->render_callback( $this ),
 			)
 		);
 
@@ -130,7 +133,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	private function _get_css_scheme() {
 		return apply_filters(
-			"jet-form-builder/block/css-scheme",
+			'jet-form-builder/block/css-scheme',
 			$this->get_css_scheme(),
 			$this->get_name()
 		);
@@ -150,10 +153,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	/**
 	 * Render callback for the block
 	 *
-	 * @param array $attrs
+	 * @param array   $attrs
 	 * @param $content
 	 *
-	 * @param null $wp_block
+	 * @param null    $wp_block
 	 *
 	 * @return string
 	 */
@@ -185,8 +188,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	/**
 	 * @param $attributes
-	 * @param null $content
-	 * @param \WP_Block $wp_block
+	 * @param null       $content
+	 * @param \WP_Block  $wp_block
 	 */
 	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		$this->block_content = $content;
@@ -213,10 +216,12 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		if ( ! $this->get_current_repeater() ) {
-			$this->set_current_repeater( array(
-				'index'  => false,
-				'values' => $this->load_current_repeater_preset() ?: array()
-			) );
+			$this->set_current_repeater(
+				array(
+					'index'  => false,
+					'values' => $this->load_current_repeater_preset() ?: array(),
+				)
+			);
 		}
 
 		$repeater = $this->get_current_repeater();
@@ -251,7 +256,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 				'%1$s_%2$s_%3$s',
 				$this->parent_repeater_name(),
 				$this->get_current_repeater_index(),
-				$name );
+				$name
+			);
 		}
 
 		return $name;
@@ -283,6 +289,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function fields_templates_path() {
@@ -292,6 +299,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function common_templates_path() {
@@ -421,7 +429,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * Returns attra from input array if not isset, get from defaults
 	 *
 	 * @param string $attr
-	 * @param array $all
+	 * @param array  $all
 	 *
 	 * @return mixed|string [type] [description]
 	 */
@@ -502,7 +510,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return array(
 			'type'  => 'text',
 			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
-			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
+			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' ),
 		);
 	}
 
@@ -647,13 +655,17 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			return '';
 		}
 
-		return array_values( $this->get_field_value( array_merge(
-			$repeater_block['attrs'],
-			array(
-				'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
-				'blockName' => $repeater_block['blockName']
-			)
-		) ) ?: array() );
+		return array_values(
+			$this->get_field_value(
+				array_merge(
+					$repeater_block['attrs'],
+					array(
+						'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+						'blockName' => $repeater_block['blockName'],
+					)
+				)
+			) ?: array()
+		);
 	}
 
 	public function get_field_value( $attributes = array() ) {

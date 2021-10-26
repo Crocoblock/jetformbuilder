@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
-
 class Manager {
 
 	private $_types;
@@ -25,7 +24,7 @@ class Manager {
 
 	private function register_shortcodes() {
 		$types = array(
-			new Form_Shortcode()
+			new Form_Shortcode(),
 		);
 
 		foreach ( $types as $type ) {

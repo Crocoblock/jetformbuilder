@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 class Verify_Webhook_Signature_Action extends Base_Action {
@@ -17,9 +16,11 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 	}
 
 	public function set_webhook_id( $webhook_id ) {
-		$this->set_body( array(
-			'webhook_id' => $webhook_id
-		) );
+		$this->set_body(
+			array(
+				'webhook_id' => $webhook_id,
+			)
+		);
 
 		return $this;
 	}
@@ -42,9 +43,11 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 	}
 
 	public function set_webhook_event( $event ) {
-		$this->set_body( array(
-			'webhook_event' => $event
-		) );
+		$this->set_body(
+			array(
+				'webhook_event' => $event,
+			)
+		);
 
 		return $this;
 	}
@@ -63,21 +66,23 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 		$transmission_time = $request->get_header( 'PAYPAL-TRANSMISSION-TIME' );
 
 		if ( ! $auth_algo
-		     || ! $cert_url
-		     || ! $transmission_id
-		     || ! $transmission_time
-		     || ! $transmission_sig
+			 || ! $cert_url
+			 || ! $transmission_id
+			 || ! $transmission_time
+			 || ! $transmission_sig
 		) {
 			throw new Gateway_Exception( 'Not enough Paypal headers', $request->get_headers() );
 		}
 
-		$this->set_body( array(
-			'transmission_id'   => $transmission_id,
-			'transmission_time' => $transmission_time,
-			'cert_url'          => $cert_url,
-			'auth_algo'         => $auth_algo,
-			'transmission_sig'  => $transmission_sig,
-		) );
+		$this->set_body(
+			array(
+				'transmission_id'   => $transmission_id,
+				'transmission_time' => $transmission_time,
+				'cert_url'          => $cert_url,
+				'auth_algo'         => $auth_algo,
+				'transmission_sig'  => $transmission_sig,
+			)
+		);
 
 		return $this;
 	}

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
-
 abstract class Shortcode {
 
 	public function __construct() {
@@ -22,13 +21,16 @@ abstract class Shortcode {
 		$result = array();
 
 		foreach ( $attrs as $name => $attr ) {
-			if ( in_array( $name, array(
-				'form_id',
-				'submit_type',
-				'required_mark',
-				'fields_layout',
-				'enable_progress'
-			) ) ) {
+			if ( in_array(
+				$name,
+				array(
+					'form_id',
+					'submit_type',
+					'required_mark',
+					'fields_layout',
+					'enable_progress',
+				)
+			) ) {
 				$result[ $name ] = $attr['default'];
 			}
 		}

@@ -192,7 +192,6 @@ class Insert_Post extends Base {
 				$postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
 			}
 
-
 			$post_id     = wp_insert_post( $postarr );
 			$post_action = 'insert';
 		}
@@ -208,15 +207,17 @@ class Insert_Post extends Base {
 
 		$this->add_inserted_post_id( $handler, $post_id );
 
-		$this->add_context_once( array(
-			$this->get_context_post_key( $post_id ) => array_merge(
-				array(
-					'__action' => $post_action,
-					'ID'       => $post_id
+		$this->add_context_once(
+			array(
+				$this->get_context_post_key( $post_id ) => array_merge(
+					array(
+						'__action' => $post_action,
+						'ID'       => $post_id,
+					),
+					$postarr
 				),
-				$postarr
 			)
-		) );
+		);
 
 		/**
 		 * Perform any actions after post inserted/updated

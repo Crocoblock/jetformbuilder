@@ -5,6 +5,7 @@
  * @var array $args
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
+
 $required = $this->block_type->get_required_val();
 $name     = $this->block_type->get_field_name( $args['name'] );
 $default  = ! empty( $args['default'] ) ? $args['default'] : false;

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-
 class Page_Config {
 
 	private $config;

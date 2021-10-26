@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-
 trait Messages_Helper_Trait {
 	public $messages = array();
 

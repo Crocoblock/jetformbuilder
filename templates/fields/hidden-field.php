@@ -1,7 +1,9 @@
 <?php
 /**
+ * Field Template
  * input[type="hidden"] template
  */
+
 $this->add_attribute( 'class', 'jet-form-builder__field hidden-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

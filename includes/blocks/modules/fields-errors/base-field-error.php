@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Modules\Fields_Errors;
 
-
 abstract class Base_Field_Error {
 
 	protected $name;
@@ -14,9 +13,9 @@ abstract class Base_Field_Error {
 	abstract public function get_title();
 
 	public function set_params( $params = array() ) {
-		$this->name = $params['name'];
+		$this->name    = $params['name'];
 		$this->message = $params['message'];
-		$this->params = $params['params'];
+		$this->params  = $params['params'];
 	}
 
 	public function get_manager( $data = array() ) {

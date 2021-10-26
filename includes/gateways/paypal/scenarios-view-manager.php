@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
@@ -11,6 +10,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
 /**
  * Class Scenarios_View_Manager
+ *
  * @package Jet_Form_Builder\Gateways\Paypal
  */
 class Scenarios_View_Manager {
@@ -20,9 +20,12 @@ class Scenarios_View_Manager {
 	use Repository_Pattern_Trait;
 
 	public function rep_instances(): array {
-		return apply_filters( 'jet-form-builder/gateways/paypal/scenarios-view', array(
-			new Scenarios_Views\Subscribe_Now(),
-		) );
+		return apply_filters(
+			'jet-form-builder/gateways/paypal/scenarios-view',
+			array(
+				new Scenarios_Views\Subscribe_Now(),
+			)
+		);
 	}
 
 	/**
@@ -102,7 +105,7 @@ class Scenarios_View_Manager {
 	public function prepare_list_with_columns( $list ): array {
 		return array(
 			$this->prepare_list( $list ),
-			$this->get_current_view()->get_columns_headings()
+			$this->get_current_view()->get_columns_headings(),
 		);
 	}
 
@@ -114,9 +117,11 @@ class Scenarios_View_Manager {
 	public function load_scenario( $scenario_id ): array {
 		$paypal = Gateway_Manager::instance()->controller( Controller::ID );
 
-		$entries = $paypal->get_gateway_entries( array(
-			'scenario' => $scenario_id
-		) );
+		$entries = $paypal->get_gateway_entries(
+			array(
+				'scenario' => $scenario_id,
+			)
+		);
 
 		return $this->set_current_view_soft( $scenario_id )->prepare_list_with_columns( $entries );
 	}

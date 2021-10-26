@@ -33,10 +33,9 @@ class Manager {
 		register_block_pattern_category(
 			$this->namespace(),
 			array(
-				'label' => __( 'JetForms', 'jet-form-builder' )
+				'label' => __( 'JetForms', 'jet-form-builder' ),
 			)
 		);
-
 
 		foreach ( $this->get_patterns() as $pattern_name => $pattern ) {
 			$pattern['categories'] = array( $this->namespace() );

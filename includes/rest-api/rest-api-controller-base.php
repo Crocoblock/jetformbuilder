@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-
 abstract class Rest_Api_Controller_Base {
 
 	public function rest_api_init() {
@@ -22,7 +21,7 @@ abstract class Rest_Api_Controller_Base {
 					'methods'             => $route->get_methods(),
 					'callback'            => array( $route, 'get_callback' ),
 					'permission_callback' => array( $route, 'get_permission_callback' ),
-					'args'                => $route->get_common_args()
+					'args'                => $route->get_common_args(),
 				);
 
 			$result = register_rest_route(

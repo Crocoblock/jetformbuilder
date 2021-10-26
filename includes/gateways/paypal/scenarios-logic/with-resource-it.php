@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
 interface With_Resource_It {

@@ -2,8 +2,11 @@
 /**
  * Calculated field template
  *
- * @var \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render $this
+ * @var Calculated_Field_Render $this
  */
+
+use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
+
 $calc_data = $this->get_calculated_data( $args );
 
 if ( empty( $calc_data['formula'] ) ) {
@@ -20,27 +23,29 @@ $is_hidden     = isset( $args['calc_hidden'] ) ? filter_var( $args['calc_hidden'
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-formula', $calc_data['formula'] );
 $this->add_attribute( 'data-name', $args['name'] );
-$this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_data['listen_fields'] ) ) );
+$this->add_attribute( 'data-listen_to', htmlspecialchars( wp_json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 
-$this->add_attribute( 'class', empty( $this->block_type->get_current_repeater() )
+$this->add_attribute(
+	'class',
+	empty( $this->block_type->get_current_repeater() )
 	? 'jet-form-builder__calculated-field'
 	: 'jet-form-builder__calculated-field--child'
 );
 
 $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field--hidden' : '' );
 
-// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found
 ?>
 <div <?php $this->render_attributes_string(); ?>>
 	<?php if ( false !== $prefix ) : ?>
 		<div class="jet-form-builder__calculated-field-prefix"><?php echo $prefix; ?></div>
 	<?php endif; ?>
 	<input type="hidden"
-           name="<?php echo $name; ?>"
-           value="<?php echo $default_value; ?>"
+		   name="<?php echo $name; ?>"
+		   value="<?php echo $default_value; ?>"
 		   class="jet-form-builder__calculated-field-input jet-form-builder__field"
 		   data-field-name="<?php echo $args['name']; ?>" />
 	<div class="jet-form-builder__calculated-field-val"><?php echo $this->render_editor_placeholder(); ?></div>
@@ -48,4 +53,4 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo $suffix; ?></div>
 	<?php endif; ?>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found

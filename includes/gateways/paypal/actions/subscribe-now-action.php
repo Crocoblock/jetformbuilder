@@ -3,8 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
-
-
 class Subscribe_Now_Action extends Base_Action {
 
 	use App_Context_Trait;

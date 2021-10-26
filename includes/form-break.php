@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder;
 
-
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
 
@@ -11,13 +10,13 @@ class Form_Break {
 
 	use Get_Template_Trait;
 
-	private $pages = 0;
-	private $form_breaks = array();
-	private $count_form_breaks = null;
-	private $current_page = 1;
+	private $pages              = 0;
+	private $form_breaks        = array();
+	private $count_form_breaks  = null;
+	private $current_page       = 1;
 	private $current_form_break = 0;
-	private $is_editor = false;
-	private $progress_type = 'default';
+	private $is_editor          = false;
+	private $progress_type      = 'default';
 
 	public function get_pages() {
 		return $this->pages;
@@ -60,13 +59,13 @@ class Form_Break {
 		$this->pages       = 2;
 		$this->form_breaks = array(
 			array(
-				'label' => 'Start Page'
+				'label' => 'Start Page',
 			),
 			array(
-				'label' => 'Second Page'
+				'label' => 'Second Page',
 			),
 			array(
-				'label' => 'Last Page'
+				'label' => 'Last Page',
 			),
 		);
 
@@ -109,10 +108,13 @@ class Form_Break {
 	public function with_progress_wrapper( $content, $additional_classes = array() ) {
 		$type = $this->progress_type ?: 'default';
 
-		$classes = array_merge( array(
-			"jet-form-builder-progress-pages",
-			"jfb-progress-type--$type"
-		), $additional_classes );
+		$classes = array_merge(
+			array(
+				'jet-form-builder-progress-pages',
+				"jfb-progress-type--$type",
+			),
+			$additional_classes
+		);
 
 		return sprintf(
 			'<div class="%1$s" data-type="%2$s">%3$s</div>',
@@ -185,7 +187,6 @@ class Form_Break {
 			$this->current_page ++;
 			$this->current_form_break ++;
 		}
-
 
 		ob_start();
 		do_action( 'jet-form-builder/before-page-start', $this );

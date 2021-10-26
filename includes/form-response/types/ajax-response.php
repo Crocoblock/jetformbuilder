@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Form_Response\Types;
 
-
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Form_Messages;
@@ -35,10 +34,12 @@ class Ajax_Response extends Response_It {
 	}
 
 	public function get_message_builder() {
-		return jet_form_builder()->msg_router->get_builder( array(
-			'form_id' => $this->additional->form_id ?? false,
-			'actions' => $this->additional->actions ?? false
-		) );
+		return jet_form_builder()->msg_router->get_builder(
+			array(
+				'form_id' => $this->additional->form_id ?? false,
+				'actions' => $this->additional->actions ?? false,
+			)
+		);
 	}
 
 }

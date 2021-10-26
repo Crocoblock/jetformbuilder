@@ -166,7 +166,9 @@ class Forms_Captcha {
 						$script.id = 'jet-form-builder-recaptcha-js';
 						$script.src = 'https://www.google.com/recaptcha/api.js?render=' + captchaKey;
 
-						$cpField.parentNode.insertBefore($script, $cpField);
+						const currentInput = $cpField[$cpField.length - 1];
+
+						currentInput.parentNode.insertBefore($script, currentInput);
 
 						$script.onload = function () {
 							setFormToken();

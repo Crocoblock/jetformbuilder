@@ -15,6 +15,13 @@
         <exclude name="Squiz.Commenting.VariableComment.Missing" />
         <exclude name="Squiz.Commenting.FunctionComment.Missing" />
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores" />
+        <exclude name="Generic.Commenting.DocComment.MissingShort" />
+    </rule>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="jet-form-builder" />
+        </properties>
     </rule>
 
 </ruleset>

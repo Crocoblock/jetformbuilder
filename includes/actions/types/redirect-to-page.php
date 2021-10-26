@@ -48,7 +48,7 @@ class Redirect_To_Page extends Base {
 	}
 
 	/**
-	 * @param array $request
+	 * @param array          $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void
@@ -143,18 +143,21 @@ class Redirect_To_Page extends Base {
 	}
 
 	/**
-	 * Regsiter custom action data for the editor
+	 * Register custom action data for the editor
 	 *
-	 * @return [type] [description]
+	 * @return mixed|void [description]
 	 */
 	public function action_data() {
-		return apply_filters( "jet-form-builder/action/{$this->get_id()}/editor-data", array(
-			'pages'          => Tools::get_pages_list_for_js(),
-			'redirect_types' => $this->get_redirect_types(),
-		) );
+		return apply_filters(
+			"jet-form-builder/action/{$this->get_id()}/editor-data",
+			array(
+				'pages'          => Tools::get_pages_list_for_js(),
+				'redirect_types' => $this->get_redirect_types(),
+			)
+		);
 	}
 
-	public function get_redirect_types() {
+	public function get_redirect_types(): array {
 		return array(
 			array(
 				'value' => '',
@@ -174,8 +177,8 @@ class Redirect_To_Page extends Base {
 			),
 			array(
 				'value' => 'inserted_post',
-				'label' => __( 'Inserted post', 'jet-form-builder' )
-			)
+				'label' => __( 'Inserted post', 'jet-form-builder' ),
+			),
 		);
 	}
 

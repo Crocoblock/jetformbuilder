@@ -15,8 +15,11 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 		$prepared = array();
 
 		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {
-			$value   = $column_attrs['value'] ?? false;
-			$default = $this->prepare_record_value_type( $column_attrs['default'] ?? false, $record );
+			$value                   = $column_attrs['value'] ?? false;
+			$column_attrs['type']    = $column_attrs['type'] ?? 'string';
+			$column_attrs['default'] = $column_attrs['default'] ?? false;
+
+			$default = $this->prepare_record_value_type( $column_attrs['default'], $column_attrs );
 
 			if ( ! is_callable( $value ) ) {
 				$column_attrs['value'] = $value ?: $default;

@@ -44,10 +44,10 @@ import * as mailchimp from './tabs/mailchimp'
 import * as getResponse from './tabs/getresponse'
 import * as activecampaign from './tabs/activecampaign'
 import * as paymentGateways from './tabs/payments-gateways'
-import SaveTabByAjax from '@admin/mixins/SaveTabByAjax';
-import GetIncoming from '@admin/mixins/GetIncoming';
 
 const { applyFilters, doAction } = wp.hooks;
+
+const { SaveTabByAjax, GetIncoming } = window.JetFBMixins;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 

@@ -87,8 +87,8 @@ class Scenarios_View_Manager {
 		$prepared = array();
 
 		try {
-			foreach ( $list as $record ) {
-				$prepared[] = $this->get_current_view()->prepare_record( $record );
+			foreach ( $list as $item_id => $record ) {
+				$prepared[ $item_id ] = $this->get_current_view()->prepare_record( $record );
 			}
 		} catch ( Repository_Exception $exception ) {
 			return $prepared;

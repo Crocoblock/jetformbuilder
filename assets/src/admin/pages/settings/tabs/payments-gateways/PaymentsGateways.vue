@@ -49,16 +49,16 @@
 </template>
 
 <script>
-import CxVuiCollapseMini from '@admin/components/collapse-mini/CxVuiCollapseMini';
 import {
 	help,
 	label,
 } from "./source";
-import SaveTabByAjax from '@admin/mixins/SaveTabByAjax';
-import GetIncoming from '@admin/mixins/GetIncoming';
 import * as paypal from '../../gateways/paypal';
 
 const { applyFilters } = wp.hooks;
+
+const { SaveTabByAjax, GetIncoming } = window.JetFBMixins;
+const { CxVuiCollapseMini } = window.JetFBComponents;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 

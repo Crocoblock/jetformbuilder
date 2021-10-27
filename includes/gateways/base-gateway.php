@@ -598,13 +598,13 @@ abstract class Base_Gateway {
 		$sql  = "SELECT * FROM $wpdb->postmeta WHERE " . implode( "\n\rAND ", $compare ) . ';';
 		$meta = $wpdb->get_results( $sql, ARRAY_A );
 
-		// return ;
-		return array_map(
-			function ( $item ) {
-				return Tools::decode_json( $item['meta_value'] ?? '[]' );
-			},
-			$meta
-		);
+		$results = array();
+
+		foreach ( $meta as $row ) {
+			$results[ $row['meta_id'] ] = Tools::decode_json( $row['meta_value'] ?? '[]' );
+		}
+
+		return $results;
 	}
 
 }

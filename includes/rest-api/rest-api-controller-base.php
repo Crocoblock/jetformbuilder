@@ -12,7 +12,7 @@ abstract class Rest_Api_Controller_Base {
 	/**
 	 * @return Rest_Api_Endpoint_Base[]
 	 */
-	abstract public function routes();
+	abstract public function routes(): array;
 
 	public function register_routes() {
 		foreach ( $this->routes() as $route ) {

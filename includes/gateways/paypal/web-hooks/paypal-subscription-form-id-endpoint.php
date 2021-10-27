@@ -11,11 +11,11 @@ class Paypal_Subscription_Form_Id_Endpoint extends Rest_Api_Endpoint_Base {
 	use Paypal\Actions\List_Webhook_Trait;
 	use Paypal_Subscription_Base_Trait;
 
-	public static function get_rest_base() {
+	public static function get_rest_base(): string {
 		return 'paypal-subscription/(?P<id>[\d]+)';
 	}
 
-	public function get_common_args() {
+	public function get_common_args(): array {
 		return array(
 			'id' => array(
 				'type'     => 'integer',

@@ -25,8 +25,8 @@ class Forms_Captcha {
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
-	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults  = array(
+	private $api = 'https://www.google.com/recaptcha/api/siteverify';
+	private $defaults = array(
 		'enabled' => false,
 		'key'     => '',
 		'secret'  => '',
@@ -118,7 +118,8 @@ class Forms_Captcha {
 			return;
 		}
 
-		$key = esc_attr( $captcha['key'] );
+		$key           = esc_attr( $captcha['key'] );
+		$action_prefix = self::CAPTCHA_ACTION_PREFIX;
 
 		if ( ! $key ) {
 			return;
@@ -131,63 +132,24 @@ class Forms_Captcha {
 			printf( '<script id="jet-form-builder-recaptcha-js" src="https://www.google.com/recaptcha/api.js?render=%s"></script>', $key );
 		}
 
+		wp_enqueue_script(
+			'jet-form-builder-recaptcha-handler',
+			jet_form_builder()->plugin_url( 'assets/js/re-captcha-v3.js' ),
+			array( 'jquery' ),
+			jet_form_builder()->get_version(),
+			true
+		);
+		wp_add_inline_script(
+			'jet-form-builder-recaptcha-handler',
+			"
+		    window.JetFormBuilderReCaptchaConfig = window.JetFormBuilderReCaptchaConfig || {};
+		    window.JetFormBuilderReCaptchaConfig[ $form_id ] = { key: '$key', action_prefix: '$action_prefix' };
+		",
+			'before'
+		);
+
 		?>
-		<input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
-		<script>
-			window.JetFormBuilderToken = window.JetFormBuilderToken || {};
-
-			if (!window.JetFormBuilderCaptcha) {
-				window.JetFormBuilderCaptcha = function (formID, captchaKey, actionPrefix) {
-					var $script = document.querySelector('script#jet-form-builder-recaptcha-js'),
-						$cpField = jQuery('form[data-form-id="' + formID + '"]').find('.captcha-token');
-
-					function setFormToken() {
-						if (window.JetFormBuilderToken[formID]) {
-							$cpField.val(window.JetFormBuilderToken[formID]);
-						} else if (window.grecaptcha) {
-							window.grecaptcha.ready(function () {
-								grecaptcha.execute(
-									captchaKey,
-									{
-										action: actionPrefix + formID,
-									},
-								).then(function (token) {
-									$cpField.val(token);
-									window.JetFormBuilderToken[formID] = token;
-								});
-							});
-						}
-					}
-
-					if (!$script) {
-
-						$script = document.createElement('script');
-
-						$script.id = 'jet-form-builder-recaptcha-js';
-						$script.src = 'https://www.google.com/recaptcha/api.js?render=' + captchaKey;
-
-						const currentInput = $cpField[$cpField.length - 1];
-
-						currentInput.parentNode.insertBefore($script, currentInput);
-
-						$script.onload = function () {
-							setFormToken();
-						};
-
-					} else {
-						setFormToken();
-					}
-				}
-			}
-
-			window.JetFormBuilderCaptcha( <?php echo $form_id; ?>, '<?php echo $key; ?>', '<?php echo self::CAPTCHA_ACTION_PREFIX; ?>');
-
-			jQuery(window).on('jet-popup/show-event/after-show', function () {
-
-				window.JetFormBuilderCaptcha( <?php echo $form_id; ?>, '<?php echo $key; ?>', '<?php echo self::CAPTCHA_ACTION_PREFIX; ?>');
-
-			});
-		</script>
+        <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
 		<?php
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 

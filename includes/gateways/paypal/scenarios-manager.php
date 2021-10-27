@@ -68,7 +68,7 @@ class Scenarios_Manager {
 	 * @throws Repository_Exception
 	 */
 	public function get_view( $slug ): Scenario_View_Base {
-		return $this->view()->rep_get_item( $slug );
+		return $this->view()->get_view( $slug );
 	}
 
 	/**

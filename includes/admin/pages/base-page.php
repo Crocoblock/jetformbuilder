@@ -10,7 +10,7 @@ use Jet_Form_Builder\Plugin;
  */
 abstract class Base_Page implements Repository_Item_Instance_Trait {
 
-	public function rep_item_id() {
+	public function rep_item_id(): string {
 		return $this->slug();
 	}
 
@@ -40,19 +40,8 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 	 * Page specific assets
 	 */
 	public function assets() {
-		wp_enqueue_script(
-			$this->slug(),
-			Plugin::instance()->plugin_url( 'assets/js/admin.js' ),
-			array(),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-		wp_set_script_translations(
-			$this->slug(),
-			'jet-form-builder',
-			Plugin::instance()->plugin_dir( 'languages' )
-		);
+		wp_enqueue_script( 'jet-form-builder-admin-package' );
+		wp_enqueue_script( $this->slug() );
 	}
 
 

@@ -85,7 +85,30 @@ class Pages_Manager {
 
 		( new Page_Config( $this->current_page ) )->render_config();
 
-		wp_enqueue_script(
+		$this->register_scripts();
+
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
+
+		$this->current_page->assets();
+	}
+
+	public function register_scripts() {
+		$suffix = '.min';
+
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$suffix = '';
+		}
+
+		wp_register_script(
+			'jet-form-builder-admin-vuex',
+			Plugin::instance()->plugin_url( 'assets/lib/vuex' . $suffix . '.js' ),
+			array(),
+			'3.6.2',
+			true
+		);
+
+		wp_register_script(
 			'jet-form-builder-admin-package',
 			Plugin::instance()->plugin_url( 'assets/js/admin-package.js' ),
 			array(),
@@ -93,10 +116,19 @@ class Pages_Manager {
 			true
 		);
 
-		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-		do_action( "jet-fb/admin-pages/before-assets/{$this->current_page->slug()}", $this );
+		wp_register_script(
+			$this->current_page->slug(),
+			Plugin::instance()->plugin_url( 'assets/js/admin.js' ),
+			array(),
+			Plugin::instance()->get_version(),
+			true
+		);
 
-		$this->current_page->assets();
+		wp_set_script_translations(
+			$this->current_page->slug(),
+			'jet-form-builder',
+			Plugin::instance()->plugin_dir( 'languages' )
+		);
 	}
 
 	/**

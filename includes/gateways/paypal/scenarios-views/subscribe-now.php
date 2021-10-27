@@ -11,27 +11,29 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'                 => array(
+			self::COLUMN_CHOOSE => array(
 				'value' => array( $this, 'get_related_id' ),
 				'type'  => 'integer',
 			),
-			'record_id'          => array(
+			'id'                => array(
+				'value' => array( $this, 'get_related_id' ),
+				'type'  => 'integer',
+			),
+			'record_id'         => array(
 				'value' => array( $this, 'get_item_id' ),
 			),
-			'status'             => array(
-				'value' => array( $this, 'get_status' ),
+			'status'            => array(
+				'value' => array( $this, 'get_status_info' ),
+				'type'  => 'array',
 			),
-			'subscriber'         => array(
+			'subscriber'        => array(
 				'value' => array( $this, 'get_subscriber_info' ),
 				'type'  => 'array',
 			),
-			'plan_info'          => array(
+			'plan_info'         => array(
 				'value' => array( $this, 'get_plan_info' ),
 			),
-			'status_update_time' => array(
-				'value' => array( $this, 'get_status_update_time' ),
-			),
-			'create_time'        => array(
+			'create_time'       => array(
 				'value' => array( $this, 'get_create_time' ),
 			),
 		);
@@ -39,25 +41,25 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'id'                 => array(
+			self::COLUMN_CHOOSE => array(
+				'label' => '',
+			),
+			'id'                => array(
 				'label' => __( 'ID', 'jet-form-builder' ),
 			),
-			'record_id'          => array(
+			'record_id'         => array(
 				'label' => __( 'Record ID', 'jet-form-builder' ),
 			),
-			'status'             => array(
-				'label' => __( 'Status', 'jet-form-builder' ),
+			'status'            => array(
+				'label' => __( 'Status Info', 'jet-form-builder' ),
 			),
-			'subscriber'         => array(
+			'subscriber'        => array(
 				'label' => __( 'Subscriber Info', 'jet-form-builder' ),
 			),
-			'plan_info'          => array(
+			'plan_info'         => array(
 				'label' => __( 'Plan Info', 'jet-form-builder' ),
 			),
-			'status_update_time' => array(
-				'label' => __( 'Status update time', 'jet-form-builder' ),
-			),
-			'create_time'        => array(
+			'create_time'       => array(
 				'label' => __( 'Create time', 'jet-form-builder' ),
 			),
 		);
@@ -94,8 +96,11 @@ class Subscribe_Now extends Scenario_View_Base {
 	 * - CANCELLED. The subscription is cancelled.
 	 * - EXPIRED. The subscription is expired.
 	 */
-	public function get_status( $record, $undefined ) {
-		return $record['resource']['status'] ?? $undefined;
+	public function get_status_info( $record, $undefined ): array {
+		return array(
+			'status'             => $record['resource']['status'] ?? $undefined,
+			'status_update_time' => $record['resource']['status_update_time'] ?? __( 'Not updated yet.', 'jet-form-builder' ),
+		);
 	}
 
 
@@ -111,26 +116,26 @@ class Subscribe_Now extends Scenario_View_Base {
 	/**
 	 * Possible value in $record['resource']['subscriber'] :
 	 *
-	array (
-		'email_address' => 'sanko200065@gmail.com',
-		'payer_id' => 'VFG6LG948GIRL',
-		'name' =>
-			array (
-				'given_name' => 'Олександр',
-				'surname' => 'Іваненко',
-			),
-		'shipping_address' =>
-			array (
-				'address' =>
-				array (
-					'address_line_1' => 'Rumina',
-					'admin_area_2' => 'Mykolaiv',
-					'admin_area_1' => 'MYKOLAIVSKA OBL',
-					'postal_code' => '54000',
-					'country_code' => 'UA',
-				),
-		),
-	)
+	 * array (
+	 * 'email_address' => 'sanko200065@gmail.com',
+	 * 'payer_id' => 'VFG6LG948GIRL',
+	 * 'name' =>
+	 * array (
+	 * 'given_name' => 'Олександр',
+	 * 'surname' => 'Іваненко',
+	 * ),
+	 * 'shipping_address' =>
+	 * array (
+	 * 'address' =>
+	 * array (
+	 * 'address_line_1' => 'Rumina',
+	 * 'admin_area_2' => 'Mykolaiv',
+	 * 'admin_area_1' => 'MYKOLAIVSKA OBL',
+	 * 'postal_code' => '54000',
+	 * 'country_code' => 'UA',
+	 * ),
+	 * ),
+	 * )
 	 */
 	public function get_subscriber_info( $record, $undefined ) {
 		return $record['resource']['subscriber'] ?? $undefined;

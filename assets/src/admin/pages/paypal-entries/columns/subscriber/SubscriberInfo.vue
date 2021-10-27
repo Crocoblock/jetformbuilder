@@ -4,8 +4,8 @@
 
 <script>
 export default {
-	name: 'subscriber',
-	props: [ 'value', 'entry' ],
+	name: 'subscriber--item',
+	props: [ 'value', 'full-entry' ],
 	data() {
 		return {
 			isset: false,

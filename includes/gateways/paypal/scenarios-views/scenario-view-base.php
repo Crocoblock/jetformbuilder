@@ -3,13 +3,53 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
+use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
 
 abstract class Scenario_View_Base extends Scenario_Item_Base {
 
+	const COLUMN_CHOOSE  = 'choose';
+	const COLUMN_ACTIONS = 'actions';
+
 	abstract public function get_columns_handlers(): array;
 
 	abstract public function get_columns_headings(): array;
+
+	public function get_list(): array {
+		$paypal = Gateway_Manager::instance()->controller( Controller::ID );
+
+		return $paypal->get_gateway_entries(
+			array(
+				'scenario' => static::scenario_id(),
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	final public function load_view(): array {
+		return array(
+			$this->prepare_list(),
+			$this->get_columns_headings(),
+		);
+	}
+
+	public function prepare_list(): array {
+		$list = $this->get_list();
+
+		if ( ! $list || ! is_array( $list ) ) {
+			return array();
+		}
+		$prepared = array();
+
+		foreach ( $list as $item_id => $record ) {
+			$prepared[ $item_id ] = $this->prepare_record( $record );
+		}
+
+		return $prepared;
+	}
 
 	public function prepare_record( $record ): array {
 		$prepared = array();

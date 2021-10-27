@@ -25,8 +25,8 @@ class Forms_Captcha {
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
-	private $api = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults = array(
+	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
+	private $defaults  = array(
 		'enabled' => false,
 		'key'     => '',
 		'secret'  => '',
@@ -149,7 +149,7 @@ class Forms_Captcha {
 		);
 
 		?>
-        <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
+		<input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
 		<?php
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 

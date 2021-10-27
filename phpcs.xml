@@ -25,6 +25,7 @@
         <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
         <exclude name="Generic.Commenting.DocComment.ShortNotCapital" />
         <exclude name="Squiz.Commenting.FileComment.Missing" />
+        <exclude name="Squiz.Commenting.FunctionComment" />
     </rule>
 
     <rule ref="WordPress-Extra">

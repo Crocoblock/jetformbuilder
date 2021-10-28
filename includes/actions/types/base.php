@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Action_Localize;
+use Jet_Form_Builder\Actions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
@@ -33,9 +34,9 @@ abstract class Base {
 	 * Stores the action conditions
 	 * from the form meta field
 	 *
-	 * @var array
+	 * @var Condition_Manager
 	 */
-	public $conditions = array();
+	public $conditions;
 
 	/**
 	 * Stores the unique id of action
@@ -55,7 +56,6 @@ abstract class Base {
 		$this->set_action_messages();
 	}
 
-
 	/**
 	 * @param $request array - Form data
 	 * @param $handler Action_Handler
@@ -68,11 +68,6 @@ abstract class Base {
 		return true;
 	}
 
-	public function condition( Action_Handler $handler ) {
-		new Condition_Helper( $this, $handler );
-	}
-
-
 	public function messages() {
 		return array();
 	}
@@ -83,6 +78,12 @@ abstract class Base {
 			'jet-form-builder/message-types/' . $this->get_id(),
 			$this->messages()
 		);
+	}
+
+	public function set_condition_manager( Condition_Manager $manager ) {
+		$this->condition = $manager;
+
+		return $this;
 	}
 
 	public function is_repeater_val( $value ) {

@@ -7,7 +7,6 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -35,9 +34,30 @@ class Action_Handler {
 	public $current_position;
 	public $response_data = array();
 
+	public $context = array();
+	private $conditions;
+
 
 	/**
 	 * Constructor for the class
+	 */
+	public function __construct() {
+	}
+
+	public function condition_manager(): Condition_Manager {
+		if ( ! $this->conditions ) {
+			$this->conditions = new Condition_Manager();
+		}
+
+		return $this->conditions;
+	}
+
+	public function get_form_id() {
+		return (int) $this->form_id;
+	}
+
+	/**
+	 * @param $form_id
 	 *
 	 * @param $form_id
 	 */
@@ -74,10 +94,14 @@ class Action_Handler {
 				 * it allows to not send action settings
 				 * in action hook
 				 */
-				$action->_id        = $id;
-				$action->conditions = $conditions;
-				$action->settings   = isset( $form_action['settings'][ $type ] )
-					? $form_action['settings'][ $type ] : $form_action['settings'];
+				$action->_id      = $id;
+				$action->settings = $settings;
+
+				$condition = clone $this->condition_manager();
+				$condition->set_conditions( $conditions );
+				$condition->set_condition_operator( $operator );
+
+				$action->set_condition_manager( $condition );
 
 				$this->form_actions[ $id ] = $action;
 			}

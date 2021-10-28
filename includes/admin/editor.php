@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
@@ -85,30 +86,33 @@ class Editor {
 
 		if ( empty( $this->allowed_blocks ) ) {
 
-			$this->allowed_blocks = apply_filters( 'jet-form-builder/editor/allowed-blocks', array(
-				'core/paragraph',
-				'core/image',
-				'core/heading',
-				'core/verse',
-				'core/freeform',
-				'core/spacer',
-				'core/subhead',
-				'core/pullquote',
-				'core/preformatted',
-				'core/shortcode',
-				'core/code',
-				'core/quote',
-				'core/list',
-				'core/heading',
-				'core/separator',
-				'core/text-columns',
-				'core/embed',
-				'core-embed/youtube',
-				'core-embed/twitter',
-				'core-embed/vimeo',
-				'core/columns',
-				'core/column',
-			) );
+			$this->allowed_blocks = apply_filters(
+				'jet-form-builder/editor/allowed-blocks',
+				array(
+					'core/paragraph',
+					'core/image',
+					'core/heading',
+					'core/verse',
+					'core/freeform',
+					'core/spacer',
+					'core/subhead',
+					'core/pullquote',
+					'core/preformatted',
+					'core/shortcode',
+					'core/code',
+					'core/quote',
+					'core/list',
+					'core/heading',
+					'core/separator',
+					'core/text-columns',
+					'core/embed',
+					'core-embed/youtube',
+					'core-embed/twitter',
+					'core-embed/vimeo',
+					'core/columns',
+					'core/column',
+				)
+			);
 
 		}
 
@@ -117,6 +121,7 @@ class Editor {
 
 	/**
 	 * Returns taxonomies list for the config
+	 *
 	 * @return [type] [description]
 	 */
 	public function get_taxonomies_list() {
@@ -137,220 +142,240 @@ class Editor {
 	}
 
 	public function get_preset_config() {
-		return apply_filters( 'jet-form-builder/editor/preset-config', array(
-			'global_fields' => array(
-				array(
-					'name'    => 'from',
-					'label'   => __( 'Source:', 'jet-form-builder' ),
-					'type'    => 'select',
-					'options' => Tools::with_placeholder( array(
-						array(
+		return apply_filters(
+			'jet-form-builder/editor/preset-config',
+			array(
+				'global_fields' => array(
+					array(
+						'name'    => 'from',
+						'label'   => __( 'Source:', 'jet-form-builder' ),
+						'type'    => 'select',
+						'options' => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'post',
+									'label' => __( 'Post', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'user',
+									'label' => __( 'User', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'query_var',
+									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+								),
+							)
+						),
+					),
+					array(
+						'name'      => 'post_from',
+						'label'     => __( 'Get post ID from:', 'jet-form-builder' ),
+						'type'      => 'select',
+						'options'   => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'current_post',
+									'label' => __( 'Current post', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'query_var',
+									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+								),
+							)
+						),
+						'condition' => array(
+							'field' => 'from',
 							'value' => 'post',
-							'label' => __( 'Post', 'jet-form-builder' ),
 						),
-						array(
+					),
+					array(
+						'name'      => 'user_from',
+						'label'     => __( 'Get user ID from:', 'jet-form-builder' ),
+						'type'      => 'select',
+						'options'   => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'current_user',
+									'label' => __( 'Current user', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'query_var',
+									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+								),
+							)
+						),
+						'condition' => array(
+							'field' => 'from',
 							'value' => 'user',
-							'label' => __( 'User', 'jet-form-builder' ),
 						),
-						array(
-							'value' => 'query_var',
-							'label' => __( 'URL Query Variable', 'jet-form-builder' ),
-						),
-					) ),
-				),
-				array(
-					'name'      => 'post_from',
-					'label'     => __( 'Get post ID from:', 'jet-form-builder' ),
-					'type'      => 'select',
-					'options'   => Tools::with_placeholder( array(
-						array(
-							'value' => 'current_post',
-							'label' => __( 'Current post', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'query_var',
-							'label' => __( 'URL Query Variable', 'jet-form-builder' ),
-						),
-					) ),
-					'condition' => array(
-						'field' => 'from',
-						'value' => 'post',
+					),
+					array(
+						'name'             => 'query_var',
+						'label'            => __( 'Query variable name:', 'jet-form-builder' ),
+						'type'             => 'text',
+						'custom_condition' => 'query_var',
+						'position'         => 'dynamic',
 					),
 				),
-				array(
-					'name'      => 'user_from',
-					'label'     => __( 'Get user ID from:', 'jet-form-builder' ),
-					'type'      => 'select',
-					'options'   => Tools::with_placeholder( array(
-						array(
-							'value' => 'current_user',
-							'label' => __( 'Current user', 'jet-form-builder' ),
-						),
-						array(
+				'map_fields'    => array(
+					array(
+						'name'             => 'key',
+						'label'            => __( 'Query variable key', 'jet-form-builder' ),
+						'type'             => 'text',
+						'position'         => 'general',
+						'parent_condition' => array(
+							'field' => 'from',
 							'value' => 'query_var',
-							'label' => __( 'URL Query Variable', 'jet-form-builder' ),
 						),
-					) ),
-					'condition' => array(
-						'field' => 'from',
-						'value' => 'user',
 					),
-				),
-				array(
-					'name'             => 'query_var',
-					'label'            => __( 'Query variable name:', 'jet-form-builder' ),
-					'type'             => 'text',
-					'custom_condition' => 'query_var',
-					'position'         => 'dynamic'
-				)
-			),
-			'map_fields'    => array(
-				array(
-					'name'             => 'key',
-					'label'            => __( 'Query variable key', 'jet-form-builder' ),
-					'type'             => 'text',
-					'position'         => 'general',
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'query_var'
+					array(
+						'name'             => 'prop',
+						'label'            => __( 'Post property', 'jet-form-builder' ),
+						'type'             => 'select',
+						'options'          => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'ID',
+									'label' => __( 'Post ID', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_title',
+									'label' => __( 'Post Title', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_content',
+									'label' => __( 'Post Content', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_excerpt',
+									'label' => __( 'Post Excerpt', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_date',
+									'label' => __( 'Post Date', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_date_gmt',
+									'label' => __( 'Post Date GMT', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_thumb',
+									'label' => __( 'Post Thumbnail', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_meta',
+									'label' => __( 'Post Meta', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'post_terms',
+									'label' => __( 'Post Terms', 'jet-form-builder' ),
+								),
+							)
+						),
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'post',
+						),
 					),
-				),
-				array(
-					'name'             => 'prop',
-					'label'            => __( 'Post property', 'jet-form-builder' ),
-					'type'             => 'select',
-					'options'          => Tools::with_placeholder( array(
-						array(
-							'value' => 'ID',
-							'label' => __( 'Post ID', 'jet-form-builder' ),
+					array(
+						'name'             => 'key',
+						'label'            => __( 'Taxonomy', 'jet-form-builder' ),
+						'type'             => 'select',
+						'options'          => Tools::with_placeholder( $this->get_taxonomies_list() ),
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'post',
 						),
-						array(
-							'value' => 'post_title',
-							'label' => __( 'Post Title', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'post_content',
-							'label' => __( 'Post Content', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'post_excerpt',
-							'label' => __( 'Post Excerpt', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'post_date',
-							'label' => __( 'Post Date', 'jet-form-builder' )
-						),
-						array(
-							'value' => 'post_date_gmt',
-							'label' => __( 'Post Date GMT', 'jet-form-builder' )
-						),
-						array(
-							'value' => 'post_thumb',
-							'label' => __( 'Post Thumbnail', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'post_meta',
-							'label' => __( 'Post Meta', 'jet-form-builder' ),
-						),
-						array(
+						'condition'        => array(
+							'field' => 'prop',
 							'value' => 'post_terms',
-							'label' => __( 'Post Terms', 'jet-form-builder' ),
 						),
-					) ),
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'post'
 					),
-				),
-				array(
-					'name'             => 'key',
-					'label'            => __( 'Taxonomy', 'jet-form-builder' ),
-					'type'             => 'select',
-					'options'          => Tools::with_placeholder( $this->get_taxonomies_list() ),
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'post'
+					array(
+						'name'             => 'key',
+						'label'            => __( 'Meta field key', 'jet-form-builder' ),
+						'type'             => 'text',
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'post',
+						),
+						'condition'        => array(
+							'field' => 'prop',
+							'value' => 'post_meta',
+						),
 					),
-					'condition'        => array(
-						'field' => 'prop',
-						'value' => 'post_terms'
+					array(
+						'name'             => 'prop',
+						'label'            => __( 'User field', 'jet-form-builder' ),
+						'type'             => 'select',
+						'options'          => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'ID',
+									'label' => __( 'User ID', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'user_login',
+									'label' => __( 'User Login', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'user_email',
+									'label' => __( 'Email', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'password',
+									'label' => __( 'Password', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'first_name',
+									'label' => __( 'First Name', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'last_name',
+									'label' => __( 'Last Name', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'user_url',
+									'label' => __( 'User URL', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'user_meta',
+									'label' => __( 'User Meta', 'jet-form-builder' ),
+								),
+							)
+						),
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'user',
+						),
 					),
-				),
-				array(
-					'name'             => 'key',
-					'label'            => __( 'Meta field key', 'jet-form-builder' ),
-					'type'             => 'text',
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'post'
-					),
-					'condition'        => array(
-						'field' => 'prop',
-						'value' => 'post_meta'
-					),
-				),
-				array(
-					'name'             => 'prop',
-					'label'            => __( 'User field', 'jet-form-builder' ),
-					'type'             => 'select',
-					'options'          => Tools::with_placeholder( array(
-						array(
-							'value' => 'ID',
-							'label' => __( 'User ID', 'jet-form-builder' ),
+					array(
+						'name'             => 'key',
+						'label'            => __( 'Meta field key', 'jet-form-builder' ),
+						'type'             => 'text',
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'user',
 						),
-						array(
-							'value' => 'user_login',
-							'label' => __( 'User Login', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'user_email',
-							'label' => __( 'Email', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'password',
-							'label' => __( 'Password', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'first_name',
-							'label' => __( 'First Name', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'last_name',
-							'label' => __( 'Last Name', 'jet-form-builder' ),
-						),
-						array(
-							'value' => 'user_url',
-							'label' => __( 'User URL', 'jet-form-builder' ),
-						),
-						array(
+						'condition'        => array(
+							'field' => 'prop',
 							'value' => 'user_meta',
-							'label' => __( 'User Meta', 'jet-form-builder' ),
 						),
-					) ),
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'user'
 					),
 				),
-				array(
-					'name'             => 'key',
-					'label'            => __( 'Meta field key', 'jet-form-builder' ),
-					'type'             => 'text',
-					'parent_condition' => array(
-						'field' => 'from',
-						'value' => 'user'
-					),
-					'condition'        => array(
-						'field' => 'prop',
-						'value' => 'user_meta'
-					),
-				),
-			),
-		) );
+			)
+		);
 	}
 
 	public function get_messages_default() {
 		return Plugin::instance()->post_type->get_messages_default();
+	}
+
+	public function get_action_condition_settings() {
+		return apply_filters(
+			'jet-form-builder/register/action-condition-settings',
+            ( new Condition_Helper() )->get_settings();
+		);
 	}
 
 	/**
@@ -404,15 +429,16 @@ class Editor {
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
-				'allowedBlocks'    => $this->get_allowed_blocks(),
-				'action'           => $this->get_action(),
-				'itemID'           => $this->get_item_id(),
-				'presetConfig'     => $this->get_preset_config(),
-				'messagesDefault'  => $this->get_messages_default(),
-				'gateways'         => Gateway_Manager::instance()->editor_data(),
-				'helpForRepeaters' => $this->get_help_for_repeaters(),
-				'global_settings'  => Tab_Handler_Manager::instance()->all(),
-				'jetEngineVersion' => Tools::get_jet_engine_version()
+				'allowedBlocks'           => $this->get_allowed_blocks(),
+				'action'                  => $this->get_action(),
+				'itemID'                  => $this->get_item_id(),
+				'presetConfig'            => $this->get_preset_config(),
+				'messagesDefault'         => $this->get_messages_default(),
+				'gateways'                => Gateway_Manager::instance()->editor_data(),
+				'helpForRepeaters'        => $this->get_help_for_repeaters(),
+				'global_settings'         => Tab_Handler_Manager::instance()->all(),
+				'jetEngineVersion'        => Tools::get_jet_engine_version(),
+				'actionConditionSettings' => $this->get_action_condition_settings(),
 			)
 		);
 
@@ -422,10 +448,10 @@ class Editor {
 	private function get_help_for_repeaters() {
 		return array(
 			'conditional_block'  => array(
-				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' )
+				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' ),
 			),
 			'conditional_action' => array(
-				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' )
+				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -458,12 +484,16 @@ class Editor {
 			Plugin::instance()->get_version()
 		);
 
-		wp_localize_script( $handle, 'JetFormEditorData', array(
-			'allowedBlocks' => $this->get_allowed_blocks(),
-			'action'        => $this->get_action(),
-			'itemID'        => $this->get_item_id(),
-			'presetConfig'  => $this->get_preset_config(),
-		) );
+		wp_localize_script(
+			$handle,
+			'JetFormEditorData',
+			array(
+				'allowedBlocks' => $this->get_allowed_blocks(),
+				'action'        => $this->get_action(),
+				'itemID'        => $this->get_item_id(),
+				'presetConfig'  => $this->get_preset_config(),
+			)
+		);
 
 		do_action( 'jet-form-builder/other-editor-assets/after', $this, $handle );
 
@@ -484,7 +514,7 @@ class Editor {
 		?>
         <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
         <script>
-			document.addEventListener( 'jet-form-builder-initialized', function( event ) {
+			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
 				window.JetFormEditor(
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo esc_js( $input_name ); ?>',

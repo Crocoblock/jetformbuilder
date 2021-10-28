@@ -1,40 +1,39 @@
 import {
-	conditionOperators,
+	conditionSettings,
 	defaultAction,
 	defaultActions,
 	getRandomID,
-	newItemCondition,
-} from "./options";
+} from './options';
 
 const {
-		  getFormFieldsBlocks,
-	  } = JetFBActions;
+	getFormFieldsBlocks,
+} = JetFBActions;
 
 const {
-		  ActionModal,
-		  RepeaterWithState,
-		  FieldWithPreset,
-		  DynamicPreset,
-	  } = JetFBComponents;
+	ActionModal,
+	RepeaterWithState,
+	FieldWithPreset,
+	DynamicPreset,
+} = JetFBComponents;
 
 const { useActions } = JetFBHooks;
 
 const {
-		  TextareaControl,
-		  ToggleControl,
-		  SelectControl,
-		  Button,
-		  Card,
-		  CardBody,
-		  CardHeader,
-		  DropdownMenu,
-		  Flex,
-	  } = wp.components;
+	TextareaControl,
+	ToggleControl,
+	SelectControl,
+	Button,
+	Card,
+	CardBody,
+	CardHeader,
+	DropdownMenu,
+	Flex,
+} = wp.components;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	useState,
+	useEffect,
+} = wp.element;
 
 const { __ } = wp.i18n;
 
@@ -43,7 +42,7 @@ const { applyFilters } = wp.hooks;
 const { withDispatch, useDispatch } = wp.data;
 const { compose } = wp.compose;
 
-const actionTypes = window.jetFormActionTypes.map( function( action ) {
+const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	return {
 		value: action.id,
 		label: action.name,
@@ -51,13 +50,25 @@ const actionTypes = window.jetFormActionTypes.map( function( action ) {
 } );
 
 function getActionCallback( editedAction ) {
-	for ( let i = 0; i < window.jetFormActionTypes.length; i++ ) {
+	for ( let i = 0; i < window.jetFormActionTypes.length; i ++ ) {
 		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
 			return window.jetFormActionTypes[ i ].callback;
 		}
 	}
 
 	return false;
+}
+
+function getHelpForOperator( operator ) {
+	const operatorItem = conditionSettings.operators.find( item => item.value === operator );
+
+	return operatorItem ? (
+		operatorItem.help || ''
+	) : '';
+}
+
+function getHelpForConditionOption( option_name ) {
+	return conditionSettings.help[ option_name ] || '';
 }
 
 function PluginActions( { setCurrentAction } ) {
@@ -72,7 +83,7 @@ function PluginActions( { setCurrentAction } ) {
 
 	const moveAction = ( fromIndex, toIndex ) => {
 
-		var item         = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
+		var item = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
 			replacedItem = JSON.parse( JSON.stringify( actions[ toIndex ] ) );
 
 		actions.splice( toIndex, 1, item );
@@ -108,7 +119,7 @@ function PluginActions( { setCurrentAction } ) {
 				...JSON.parse( JSON.stringify( current ) ),
 				...props,
 			};
-		} ) )
+		} ) );
 	};
 
 	const [ isEdit, setEdit ] = useState( false );
@@ -127,14 +138,14 @@ function PluginActions( { setCurrentAction } ) {
 	const updateActionSettings = action => {
 		updateActionObj( action.id, {
 			settings: action.settings,
-		} )
+		} );
 		closeModal();
-	}
+	};
 
 	const updateActionCondition = items => {
 		updateAction( processedAction.id, 'conditions', items );
 		setEditProcessAction( false );
-	}
+	};
 
 	const updateActionType = ( id, type ) => {
 		setActions( prev => prev.map( prevItem => {
@@ -193,9 +204,11 @@ function PluginActions( { setCurrentAction } ) {
 							icon='edit'
 							label={ 'Edit Action' }
 							onClick={ () => {
-								setEditedAction( () => ( {
-									...action,
-								} ) );
+								setEditedAction( () => (
+									{
+										...action,
+									}
+								) );
 								setCurrentAction( { ...action, index } );
 							} }
 						/>
@@ -203,7 +216,9 @@ function PluginActions( { setCurrentAction } ) {
 							icon='randomize'
 							label={ 'Conditions' }
 							onClick={ () => {
-								setProcessedAction( () => ( { ...action } ) );
+								setProcessedAction( () => (
+									{ ...action }
+								) );
 							} }
 						/>
 						<DropdownMenu
@@ -225,7 +240,9 @@ function PluginActions( { setCurrentAction } ) {
 									icon: 'arrow-down',
 									disabled: index === actions.length,
 									onClick: () => {
-										if ( ( actions.length - 1 ) !== index ) {
+										if ( (
+											     actions.length - 1
+										     ) !== index ) {
 											moveAction( index, index + 1 );
 										}
 									},
@@ -242,7 +259,7 @@ function PluginActions( { setCurrentAction } ) {
 					</Flex>
 
 				</CardBody>
-			</Card>
+			</Card>;
 		} ) }
 		<Button
 			isPrimary
@@ -263,7 +280,7 @@ function PluginActions( { setCurrentAction } ) {
 			onRequestClose={ closeModal }
 			title={ 'Edit Action' }
 			onUpdateClick={ () => {
-				updateActionSettings( editedAction )
+				updateActionSettings( editedAction );
 			} }
 			onCancelClick={ closeModal }
 		>
@@ -271,13 +288,15 @@ function PluginActions( { setCurrentAction } ) {
 				settings={ getMergedSettings() }
 				actionId={ editedAction.id }
 				onChange={ ( data ) => {
-					setEditedAction( prev => ( {
-						...prev,
-						settings: {
-							...prev.settings,
-							[ editedAction.type ]: data,
-						},
-					} ) );
+					setEditedAction( prev => (
+						{
+							...prev,
+							settings: {
+								...prev.settings,
+								[ editedAction.type ]: data,
+							},
+						}
+					) );
 				} }
 			/> }
 		</ActionModal> }
@@ -290,7 +309,7 @@ function PluginActions( { setCurrentAction } ) {
 			{ ( { actionClick, onRequestClose } ) => {
 				return <RepeaterWithState
 					items={ processedAction.conditions }
-					newItem={ newItemCondition }
+					newItem={ conditionSettings.item }
 					onUnMount={ onRequestClose }
 					isSaveAction={ actionClick }
 					onSaveItems={ updateActionCondition }
@@ -316,8 +335,9 @@ function PluginActions( { setCurrentAction } ) {
 							<SelectControl
 								label="Operator"
 								labelPosition="side"
+								help={ getHelpForOperator( currentItem.operator ) }
 								value={ currentItem.operator }
-								options={ conditionOperators }
+								options={ conditionSettings.operators }
 								onChange={ newValue => {
 									changeCurrentItem( { operator: newValue } );
 								} }
@@ -325,15 +345,33 @@ function PluginActions( { setCurrentAction } ) {
 							<SelectControl
 								label="Field"
 								labelPosition="side"
+								help={ getHelpForConditionOption( 'field' ) }
 								value={ currentItem.field }
 								options={ formFields }
 								onChange={ newValue => {
 									changeCurrentItem( { field: newValue } );
 								} }
 							/>
+							<SelectControl
+								label={ __( 'Compare value format', 'jet-form-builder' ) }
+								labelPosition="side"
+								help={ getHelpForConditionOption( 'compare_value_format' ) }
+								value={ currentItem.compare_value_format }
+								options={ conditionSettings.compare_value_formats }
+								onChange={ newValue => {
+									changeCurrentItem( { compare_value_format: newValue } );
+								} }
+							/>
+							{ 'custom' === currentItem.compare_value_format && <TextControl
+								value={ currentItem.compare_value_format_custom }
+								label={ __( 'Input compare value format', 'jet-form-builder' ) }
+								onChange={ compare_value_format_custom => {
+									changeCurrentItem( { compare_value_format_custom } );
+								} }
+							/> }
 							<FieldWithPreset
 								baseControlProps={ {
-									label: "Value to Compare",
+									label: 'Value to Compare',
 								} }
 								ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 									value={ currentItem.default }
@@ -359,14 +397,14 @@ function PluginActions( { setCurrentAction } ) {
 				</RepeaterWithState>;
 			} }
 		</ActionModal> }
-	</>
+	</>;
 }
 
 export default compose(
 	withDispatch( dispatch => {
 		return {
 			setCurrentAction( action ) {
-				dispatch( 'jet-forms/actions' ).setCurrentAction( action )
+				dispatch( 'jet-forms/actions' ).setCurrentAction( action );
 			},
 		};
 	} ),

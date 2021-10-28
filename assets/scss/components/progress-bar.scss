@@ -1,0 +1,73 @@
+@mixin center-flex() {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+$passedColor: #617BE5;
+$activeColor: #34D7A1;
+.jfb-progress-type--default {
+	padding-bottom: 1.5em;
+	flex-wrap: wrap;
+	@include center-flex();
+	.jet-form-builder-progress-pages {
+		&__item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 0.5em 2em;
+			position: relative;
+			&--circle {
+				width: 2.5rem;
+				border: 1px solid grey;
+				border-radius: 50%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			&--label {
+				position: absolute;
+				top: 100%;
+				max-width: 300px;
+				text-align: center;
+				white-space: nowrap;
+			}
+			&--wrapper.passed-page .jet-form-builder-progress-pages__item--circle {
+				border: 2px solid $passedColor;
+			}
+			&--wrapper.active-page .jet-form-builder-progress-pages__item--circle {
+				border: 2px solid $activeColor;
+			}
+			&--wrapper {
+				@include center-flex();
+				margin-bottom: 1.5em;
+				&:not(:last-child) {
+					flex: 1 1;
+				}
+				&.passed-page {
+					color: $passedColor;
+					font-weight: bold;
+				}
+				&.active-page {
+					color: $activeColor;
+					font-weight: bold;
+				}
+			}
+		}
+		&__separator {
+			flex: 1 1;
+			height: 1px;
+			background: grey;
+		}
+		&__item--wrapper.passed-page .jet-form-builder-progress-pages__item + .jet-form-builder-progress-pages__separator {
+			background-color: $passedColor;
+			height: 3px;
+		}
+		&__item--wrapper.active-page .jet-form-builder-progress-pages__item + .jet-form-builder-progress-pages__separator {
+			background-color: $activeColor;
+			height: 3px;
+		}
+	}
+}
+
+

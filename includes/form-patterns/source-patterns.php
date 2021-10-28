@@ -25,7 +25,7 @@ return array(
 
 
 	'login_register_form' => array(
-		'title'   => __( 'Login & Register', 'jet-form-builder' ),
+		'title'   => __( 'Register Form', 'jet-form-builder' ),
 		'content' => '<!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:image {"align":"center","width":563,"height":563,"sizeSlug":"large"} -->

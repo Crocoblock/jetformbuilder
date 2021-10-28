@@ -2,15 +2,17 @@
 
 	"use strict";
 
+	const { __ } = wp.i18n;
+
 	var JetFormBuilderFileUpload = {
 
 		init: function() {
 			$( document )
-			.on( 'change', '.jet-form-builder-file-upload__input', JetFormBuilderFileUpload.processUpload )
-			.on( 'click', '.jet-form-builder-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
+				.on( 'change', '.jet-form-builder-file-upload__input', JetFormBuilderFileUpload.processUpload )
+				.on( 'click', '.jet-form-builder-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
 
 			$( '.jet-form-builder-file-upload__files' ).sortable( {
-				items:                '.jet-form-builder-file-upload__file',
+				items: '.jet-form-builder-file-upload__file',
 				forcePlaceholderSize: true,
 			} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 		},
@@ -38,7 +40,7 @@
 
 					case 'both':
 						values.push( {
-							id:  $file.data( 'id' ),
+							id: $file.data( 'id' ),
 							url: $file.data( 'file' ),
 						} );
 						break;
@@ -132,19 +134,36 @@
 
 		},
 
+		issetMessage: function( formId, status ) {
+			if ( ! window.JetFormBuilderFileUploadConfig.errors[ formId ] ) {
+				return false;
+			}
+
+			return window.JetFormBuilderFileUploadConfig.errors[ formId ][ status ];
+		},
+
+		getMessage: function( formId, status ) {
+			const unknown = __( 'Unknown error.', 'jet-form-builder' );
+			const message = JetFormBuilderFileUpload.issetMessage( formId, status );
+
+			return message || unknown;
+		},
+
 		processUpload: function( event ) {
+			const self = JetFormBuilderFileUpload;
 
 			var files   = event.target.files,
-				$errors = $( event.target ).closest( '.jet-form-builder-file-upload' ).find( '.jet-form-builder-file-upload__errors' );
+				$errors = $( event.target ).closest( '.jet-form-builder-file-upload' ).find( '.jet-form-builder-file-upload__errors' ),
+				formId  = +$( event.target ).closest( 'form' ).data( 'form-id' );
 
 			$errors.html( '' ).addClass( 'is-hidden' );
 
 			try {
-				JetFormBuilderFileUpload.uploadFiles( files, event.target );
+				self.uploadFiles( files, event.target, formId );
 			} catch ( error ) {
 
-				if ( window.JetFormBuilderFileUploadConfig.errors[ error ] ) {
-					$errors.html( window.JetFormBuilderFileUploadConfig.errors[ error ] ).removeClass( 'is-hidden' );
+				if ( self.issetMessage( formId, error ) ) {
+					$errors.html( self.getMessage( formId, error ) ).removeClass( 'is-hidden' );
 				} else {
 					$errors.html( error ).removeClass( 'is-hidden' );
 				}
@@ -173,7 +192,8 @@
 
 		},
 
-		uploadFiles: function( files, input ) {
+		uploadFiles: function( files, input, formId ) {
+			const self = JetFormBuilderFileUpload;
 
 			if ( ! files.length ) {
 				return;
@@ -199,13 +219,13 @@
 				currentVal = JSON.parse( currentVal );
 
 				if ( Array.isArray( currentVal ) && currentVal.length && limit < ( files.length + currentVal.length ) ) {
-					throw 'upload_limit';
+					throw 'upload_max_files';
 				}
 
 			}
 
 			if ( limit < files.length ) {
-				throw 'upload_limit';
+				throw 'upload_max_files';
 			}
 
 			formData = new FormData();
@@ -220,11 +240,11 @@
 				file = files.item( i );
 
 				if ( allowedTypes && 0 > allowedTypes.indexOf( file.type ) ) {
-					throw 'file_type';
+					throw 'upload_mime_types';
 				}
 
 				if ( file[ 'size' ] > maxSize ) {
-					throw 'file_size';
+					throw 'upload_mime_types';
 				}
 
 				formData.append( 'file_' + i, file );
@@ -249,7 +269,7 @@
 					try {
 						response = JSON.parse( response );
 					} catch ( e ) {
-						$errors.html( window.JetFormBuilderFileUploadConfig.errors.internal ).removeClass( 'is-hidden' );
+						$errors.html( self.getMessage( formId, 'internal_error' ) ).removeClass( 'is-hidden' );
 						return false;
 					}
 
@@ -323,7 +343,8 @@
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
-			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value, JSON.parse( oldInputVal || '{}' ) ] )
+			$input.trigger( 'jet-form-builder/on-upload-media', [ responseData.value,
+				JSON.parse( oldInputVal || '{}' ) ] )
 		},
 
 	};

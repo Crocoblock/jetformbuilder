@@ -17,7 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-
 function jet_form_builder_init() {
 
 	define( 'JET_FORM_BUILDER_VERSION', '1.3.2' );

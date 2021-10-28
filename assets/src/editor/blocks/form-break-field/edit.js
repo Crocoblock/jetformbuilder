@@ -17,6 +17,7 @@ const {
 		  TextControl,
 		  PanelBody,
 		  Button,
+		  ToggleControl,
 	  } = wp.components;
 
 export default function FormBreakEdit( props ) {
@@ -27,6 +28,7 @@ export default function FormBreakEdit( props ) {
 			  attributes,
 			  setAttributes,
 			  editProps: { uniqKey, attrHelp },
+			  context,
 		  } = props;
 
 	return [
@@ -39,8 +41,15 @@ export default function FormBreakEdit( props ) {
 				{ ...props }
 			/>
 			<FieldSettingsWrapper { ...props }>
+				<ToggleControl
+					key={ uniqKey( 'add_next_button' ) }
+					label={ __( 'Enable "Next" Button', 'jet-form-builder' ) }
+					checked={ attributes.add_next_button }
+					help={ attrHelp( 'add_next_button' ) }
+					onChange={ add_next_button => setAttributes( { add_next_button } ) }
+				/>
 				<TextControl
-					label={ __( 'Label of progress' ) }
+					label={ __( 'Label of progress', 'jet-form-builder' ) }
 					value={ attributes.label_progress }
 					help={ attrHelp( 'label_progress' ) }
 					onChange={ ( newValue ) => {
@@ -50,7 +59,7 @@ export default function FormBreakEdit( props ) {
 				<TextareaControl
 					key="page_break_disabled"
 					value={ attributes.page_break_disabled }
-					label={ __( 'Disabled message' ) }
+					label={ __( 'Validation message', 'jet-form-builder' ) }
 					help={ attrHelp( 'page_break_disabled' ) }
 					onChange={ ( newValue ) => {
 						setAttributes( { page_break_disabled: newValue } );
@@ -64,7 +73,7 @@ export default function FormBreakEdit( props ) {
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<div className={ 'jet-form-builder__next-page-wrap' }>
-				<Button
+				{ attributes.add_next_button ? <Button
 					isSecondary
 					key="next_page_button"
 					className="jet-form-builder__next-page"
@@ -75,8 +84,9 @@ export default function FormBreakEdit( props ) {
 						value={ attributes.label }
 						onChange={ label => setAttributes( { label } ) }
 					/>
-				</Button>
-
+				</Button> : <span>
+					{ __( 'Form Break', 'jet-form-builder' ) }
+				</span> }
 				{ attributes.add_prev && <Button
 					isSecondary
 					key="prev_page_button"

@@ -73,7 +73,6 @@ abstract class Base {
 	}
 
 	public function set_action_messages() {
-
 		$this->messages = apply_filters(
 			'jet-form-builder/message-types/' . $this->get_id(),
 			$this->messages()
@@ -120,7 +119,24 @@ abstract class Base {
 		foreach ( $keys as $key => $empty ) {
 			$response_values[ $key ] = isset( $options[ $key ] ) ? $options[ $key ] : $empty;
 		}
+
 		return $response_values;
+	}
+
+	public function get_action_handler() {
+		return jet_form_builder()->form_handler->action_handler;
+	}
+
+	public function get_context( $property = '' ) {
+		return $this->get_action_handler()->get_context( $this->get_id(), $property );
+	}
+
+	public function add_context( $context ) {
+		return $this->get_action_handler()->add_context( $this->get_id(), $context );
+	}
+
+	public function add_context_once( $context ) {
+		return $this->get_action_handler()->add_context_once( $this->get_id(), $context );
 	}
 
 

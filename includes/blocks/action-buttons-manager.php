@@ -1,0 +1,79 @@
+<?php
+
+
+namespace Jet_Form_Builder\Blocks;
+
+
+use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
+
+/**
+ * CRUD
+ *
+ * Trait Action_Buttons_Manager
+ * @package Jet_Form_Builder\Blocks
+ */
+trait Action_Buttons_Manager {
+
+	/**
+	 * @return Button_Type_Base[]
+	 */
+	private $button_types;
+
+	public function get_button_types() {
+		return $this->button_types;
+	}
+
+	public function get_button_types_for_js() {
+		$prepared = array();
+
+		/** @var Button_Type_Base $type */
+		foreach ( $this->get_button_types() as $type ) {
+			$prepared[] = array(
+				'value'         => $type->slug(),
+				'label'         => $type->label(),
+				'button_class'  => $type->get_class( 'button' ),
+				'wrapper_class' => $type->get_class( 'wrapper' ),
+			);
+		}
+
+		return $prepared;
+	}
+
+	/**
+	 * @param Button_Type_Base $button
+	 * @param bool $update
+	 */
+	public function set_button_type( Button_Type_Base $button, $update = false ) {
+		if ( ! $update && $this->isset_button_type( $button->slug() ) ) {
+			return;
+		}
+		$this->button_types[ $button->slug() ] = $button;
+	}
+
+	public function update_button_type( Button_Type_Base $button ) {
+		$this->set_button_type( $button, true );
+	}
+
+	public function isset_button_type( string $slug ) {
+		return isset( $this->button_types[ $slug ] );
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return Button_Type_Base
+	 */
+	public function get_button_type( $slug ) {
+		return $this->button_types[ $slug ];
+	}
+
+	public function delete_button_type( $slug ) {
+		if ( ! $this->isset_button_type( $slug ) ) {
+			return false;
+		}
+		unset( $this->button_types[ $slug ] );
+
+		return true;
+	}
+
+}

@@ -2,7 +2,6 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
-
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -32,6 +31,10 @@ abstract class Base {
 	 */
 	public $block_type;
 	public $content;
+
+	/**
+	 * @var Live_Form
+	 */
 	public $live_form;
 
 	const FIELD_ERROR_CLASS = 'field-has-error';
@@ -135,6 +138,8 @@ abstract class Base {
 			$args = $this->get_default_args_with_filter();
 		}
 
+		$this->before_render( $args );
+
 		if ( is_null( $template ) ) {
 			$template = $this->block_type->get_field_template( $template_name . '.php' );
 		}
@@ -170,6 +175,9 @@ abstract class Base {
 
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		return apply_filters( "jet-form-builder/render/{$args['type']}", $args, $this );
+	}
+
+	public function before_render( $args ) {
 	}
 
 	/**
@@ -224,8 +232,8 @@ abstract class Base {
 	/**
 	 * Render custom form item template
 	 *
-	 * @param int|string $object_id Object ID
-	 * @param array $args Field arguments
+	 * @param int|string  $object_id Object ID.
+	 * @param array       $args Field arguments.
 	 * @param bool|string $checked
 	 *
 	 * @return string

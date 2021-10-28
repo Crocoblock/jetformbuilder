@@ -59,11 +59,16 @@ class Action_Handler {
 	/**
 	 * @param $form_id
 	 *
-	 * @param $form_id
+	 * @return Action_Handler
 	 */
-	public function __construct( $form_id ) {
+	public function set_form_id( $form_id ) {
+		if ( ! $form_id || $form_id === $this->form_id ) {
+			return $this;
+		}
 		$this->form_id = $form_id;
 		$this->set_form_actions();
+
+		return $this;
 	}
 
 	public function add_request( $request ) {
@@ -85,9 +90,12 @@ class Action_Handler {
 		foreach ( $form_actions as $form_action ) {
 			$id         = $form_action['id'];
 			$type       = $form_action['type'];
-			$conditions = isset( $form_action['conditions'] ) ? $form_action['conditions'] : array();
+			$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
+			$conditions = $form_action['conditions'] ?? array();
+			$operator   = $form_action['condition_operator'] ?? 'and';
 
 			if ( isset( $available_actions[ $type ] ) ) {
+				/** @var Base $action */
 				$action = clone $available_actions[ $type ];
 				/**
 				 * Save action settings to the class field,
@@ -114,7 +122,7 @@ class Action_Handler {
 	/**
 	 * Unregister notification by id
 	 *
-	 * @param   $id [description]
+	 * @param $key
 	 *
 	 * @return  void [description]
 	 */
@@ -188,6 +196,9 @@ class Action_Handler {
 
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function run_actions() {
 		if ( empty( $this->form_actions ) ) {
 			throw new Action_Exception( 'failed' );
@@ -205,7 +216,7 @@ class Action_Handler {
 			 * @var Base $action
 			 */
 			try {
-				$action->condition( $this );
+				$action->condition->check_all();
 			} catch ( Condition_Exception $exception ) {
 				continue;
 			}
@@ -241,6 +252,65 @@ class Action_Handler {
 
 	public function add_response( $values ) {
 		Plugin::instance()->form_handler->add_response_data( $values );
+	}
+
+	public function get_context( $action_slug, $property = '' ) {
+		$context = $this->context[ $action_slug ] ?? array();
+
+		return $property ? $context[ $property ] ?? false : $context;
+	}
+
+	public function add_context( $action_slug, $context ) {
+		$this->context[ $action_slug ] = array_merge( $this->get_context( $action_slug ), $context );
+
+		return $this;
+	}
+
+	public function add_context_once( $action_slug, $context ) {
+		$action_context = $this->get_context( $action_slug );
+
+		if ( ! $action_context ) {
+			$this->add_context( $action_slug, $context );
+
+			return $this;
+		}
+
+		foreach ( $context as $name => $value ) {
+			if ( isset( $action_context[ $name ] ) ) {
+				unset( $context[ $name ] );
+			}
+		}
+		$this->add_context( $action_slug, $context );
+
+		return $this;
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return false|Base
+	 */
+	public function get_action_by_id( $id ) {
+		return $this->form_actions[ $id ] ?? false;
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return false|Base
+	 */
+	public function get_action_by_slug( $slug ) {
+		foreach ( $this->form_actions as $action ) {
+			/** @var Base $action */
+
+			if ( $action->get_id() !== $slug ) {
+				continue;
+			}
+
+			return $action;
+		}
+
+		return false;
 	}
 
 

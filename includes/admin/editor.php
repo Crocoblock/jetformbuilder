@@ -23,14 +23,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE = 'jet-form-builder-editor';
+	const EDITOR_HANDLE         = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public static $index = 0;
 
 	public $allowed_blocks = null;
-	public $action = null;
-	public $item_id = null;
+	public $action         = null;
+	public $item_id        = null;
 
 	/**
 	 * Set up editor instatnce props
@@ -75,48 +75,6 @@ class Editor {
 	 */
 	public function get_item_id() {
 		return $this->item_id;
-	}
-
-	/**
-	 * Retuns allowed blocks list
-	 *
-	 * @return array
-	 */
-	public function get_allowed_blocks() {
-
-		if ( empty( $this->allowed_blocks ) ) {
-
-			$this->allowed_blocks = apply_filters(
-				'jet-form-builder/editor/allowed-blocks',
-				array(
-					'core/paragraph',
-					'core/image',
-					'core/heading',
-					'core/verse',
-					'core/freeform',
-					'core/spacer',
-					'core/subhead',
-					'core/pullquote',
-					'core/preformatted',
-					'core/shortcode',
-					'core/code',
-					'core/quote',
-					'core/list',
-					'core/heading',
-					'core/separator',
-					'core/text-columns',
-					'core/embed',
-					'core-embed/youtube',
-					'core-embed/twitter',
-					'core-embed/vimeo',
-					'core/columns',
-					'core/column',
-				)
-			);
-
-		}
-
-		return $this->allowed_blocks;
 	}
 
 	/**
@@ -401,6 +359,12 @@ class Editor {
 			true
 		);
 
+		wp_set_script_translations(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jet-form-builder',
+			Plugin::instance()->plugin_dir( 'languages' )
+		);
+
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 
 		wp_enqueue_script(
@@ -429,7 +393,6 @@ class Editor {
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
-				'allowedBlocks'           => $this->get_allowed_blocks(),
 				'action'                  => $this->get_action(),
 				'itemID'                  => $this->get_item_id(),
 				'presetConfig'            => $this->get_preset_config(),
@@ -447,11 +410,17 @@ class Editor {
 
 	private function get_help_for_repeaters() {
 		return array(
-			'conditional_block'  => array(
+			'conditional_block'     => array(
 				'label' => __( 'With many conditions for the block, they are checked with the AND operator', 'jet-form-builder' ),
 			),
-			'conditional_action' => array(
+			'conditional_block_or'  => array(
+				'label' => __( 'With many conditions for the block, they are checked with the OR operator', 'jet-form-builder' ),
+			),
+			'conditional_action'    => array(
 				'label' => __( 'With many conditions for the action, they are checked with the AND operator', 'jet-form-builder' ),
+			),
+			'conditional_action_or' => array(
+				'label' => __( 'With many conditions for the action, they are checked with the OR operator', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -488,10 +457,9 @@ class Editor {
 			$handle,
 			'JetFormEditorData',
 			array(
-				'allowedBlocks' => $this->get_allowed_blocks(),
-				'action'        => $this->get_action(),
-				'itemID'        => $this->get_item_id(),
-				'presetConfig'  => $this->get_preset_config(),
+				'action'       => $this->get_action(),
+				'itemID'       => $this->get_item_id(),
+				'presetConfig' => $this->get_preset_config(),
 			)
 		);
 
@@ -522,7 +490,7 @@ class Editor {
 					'<?php echo esc_js( $form_name ); ?>',
 				);
 			} );
-        </script>
+		</script>
 		<?php
 	}
 

@@ -2655,7 +2655,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
+						$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 					),
 				)
 			);
@@ -2666,7 +2666,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__submit' ) => 'color: {{VALUE}}',
+						$this->selector( '__action-button' ) => 'color: {{VALUE}}',
 					),
 				)
 			);
@@ -2686,7 +2686,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__submit:hover' ) => 'background-color: {{VALUE}}',
+						$this->selector( '__action-button:hover' ) => 'background-color: {{VALUE}}',
 					),
 				)
 			);
@@ -2697,7 +2697,7 @@ class Form extends Jfb_Widget_Base {
 					'label'     => esc_html__( 'Text Color', 'jet-form-builder' ),
 					'type'      => Controls_Manager::COLOR,
 					'selectors' => array(
-						$this->selector( '__submit:hover' ) => 'color: {{VALUE}}',
+						$this->selector( '__action-button:hover' ) => 'color: {{VALUE}}',
 					),
 				)
 			);
@@ -2711,7 +2711,7 @@ class Form extends Jfb_Widget_Base {
 						'booking_form_submit_border_border!' => '',
 					),
 					'selectors' => array(
-						$this->selector( '__submit:hover' ) => 'border-color: {{VALUE}};',
+						$this->selector( '__action-button:hover' ) => 'border-color: {{VALUE}};',
 					),
 				)
 			);
@@ -2724,7 +2724,7 @@ class Form extends Jfb_Widget_Base {
 				Group_Control_Typography::get_type(),
 				array(
 					'name'           => 'booking_form_submit_typography',
-					'selector'       => $this->selector( '__submit' ),
+					'selector'       => $this->selector( '__action-button' ),
 					'fields_options' => array(
 						'typography' => array(
 							'separator' => 'after',
@@ -2740,7 +2740,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%', 'em' ),
 					'selectors'  => array(
-						$this->selector( '__submit' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__action-button' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -2752,7 +2752,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%', 'em' ),
 					'selectors'  => array(
-						$this->selector( '__submit' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__action-button' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -2763,7 +2763,7 @@ class Form extends Jfb_Widget_Base {
 					'name'        => 'booking_form_submit_border',
 					'label'       => esc_html__( 'Border', 'jet-form-builder' ),
 					'placeholder' => '1px',
-					'selector'    => $this->selector( '__submit' ),
+					'selector'    => $this->selector( '__action-button' ),
 				)
 			);
 
@@ -2774,7 +2774,7 @@ class Form extends Jfb_Widget_Base {
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%' ),
 					'selectors'  => array(
-						$this->selector( '__submit' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+						$this->selector( '__action-button' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
@@ -2783,7 +2783,7 @@ class Form extends Jfb_Widget_Base {
 				Group_Control_Box_Shadow::get_type(),
 				array(
 					'name'     => 'booking_form_submit_box_shadow',
-					'selector' => $this->selector( '__submit' ),
+					'selector' => $this->selector( '__action-button' ),
 				)
 			);
 

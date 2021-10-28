@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-preset-panel',
-	title: __( 'Preset Settings' ),
+	title: __( 'Preset Settings', 'jet-form-builder' ),
 };
 
 const settings = {

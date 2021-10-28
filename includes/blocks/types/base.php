@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -39,6 +40,8 @@ abstract class Base extends Base_Module {
 	 */
 	public $block_content;
 
+	public $block_context = array();
+
 	/**
 	 * Block attributes on register
 	 * @var array
@@ -53,16 +56,9 @@ abstract class Base extends Base_Module {
 
 	public $error_data = false;
 
-	public function __construct() {
-
+	public function register_block_type() {
 		$this->maybe_init_style_manager();
 		$this->_register_block();
-
-		add_filter( 'jet-form-builder/editor/allowed-blocks', function ( $blocks ) {
-			$blocks[] = $this->block_name();
-
-			return $blocks;
-		} );
 	}
 
 	/**
@@ -75,6 +71,10 @@ abstract class Base extends Base_Module {
 
 	public function get_css_scheme() {
 		return array();
+	}
+
+	public function use_preset() {
+		return true;
 	}
 
 	/**
@@ -160,7 +160,7 @@ abstract class Base extends Base_Module {
 		if ( ! Live_Form::instance()->form_id ) {
 			return '';
 		}
-		$this->set_block_data( $attrs, $content );
+		$this->set_block_data( $attrs, $content, $wp_block );
 		$this->set_preset();
 
 		$result   = array();
@@ -182,48 +182,78 @@ abstract class Base extends Base_Module {
 		return implode( "\n", $result );
 	}
 
-	public function set_block_data( $attributes, $content = null ) {
+	/**
+	 * @param $attributes
+	 * @param null $content
+	 * @param \WP_Block $wp_block
+	 */
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		$this->block_content = $content;
 		$this->block_attrs   = array_merge(
 			$this->get_default_attributes(),
 			$attributes
 		);
+		$this->block_context = $wp_block->context ?? array();
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
 	}
 
 	protected function set_preset() {
+		if ( ! $this->use_preset() ) {
+			return;
+		}
 		$this->block_attrs['default'] = $this->get_default_from_preset();
 	}
 
 	private function get_default_from_preset() {
+		if ( ! $this->parent_repeater_name() ) {
+			return $this->get_field_value();
+		}
+
+		if ( ! $this->get_current_repeater() ) {
+			$this->set_current_repeater( array(
+				'index'  => false,
+				'values' => $this->load_current_repeater_preset() ?: array()
+			) );
+		}
+
+		$repeater = $this->get_current_repeater();
+
+		if ( false === $repeater['index'] ) {
+			return $this->get_field_value();
+		}
+
 		$name = $this->block_attrs['name'] ?? '';
+		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
 
-		if ( empty( Live_Form::instance()->current_repeater['values'] ) ) {
-			return Preset_Manager::instance()->get_field_value( $this->block_attrs );
-		}
-
-		if ( isset( Live_Form::instance()->current_repeater['values'][ $name ] ) ) {
-			return Live_Form::instance()->current_repeater['values'][ $name ];
-		}
-
-		return '';
+		return ( $row[ $name ] ?? $this->get_field_value() ) ?: '';
 	}
-
-	/**
-	 * <Easy access to Live_Form functions>
-	 */
 
 	/**
 	 * Returns field ID with repeater prefix if needed
 	 *
-	 * @param $name
+	 * @param string $name
 	 *
-	 * @return string
+	 * @return mixed|string
 	 */
-	public function get_field_id( $name ) {
-		return Live_Form::instance()->get_field_id( $name );
+	public function get_field_id( $name = '' ) {
+		if ( $name && is_array( $name ) ) {
+			$name = $name['name'];
+		}
+		if ( ! $name ) {
+			$name = $this->block_attrs['name'] ?? '';
+		}
+
+		if ( $this->parent_repeater_name() ) {
+			$name = sprintf(
+				'%1$s_%2$s_%3$s',
+				$this->parent_repeater_name(),
+				$this->get_current_repeater_index(),
+				$name );
+		}
+
+		return $name;
 	}
 
 	/**
@@ -233,8 +263,20 @@ abstract class Base extends Base_Module {
 	 *
 	 * @return string
 	 */
-	public function get_field_name( $name ) {
-		return Live_Form::instance()->get_field_name( $name );
+	public function get_field_name( $name = '' ) {
+		if ( ! $name ) {
+			$name = $this->block_attrs['name'] ?? '';
+		}
+		if ( $this->parent_repeater_name() ) {
+			$name = sprintf(
+				'%1$s[%2$s][%3$s]',
+				$this->parent_repeater_name(),
+				$this->get_current_repeater_index(),
+				$name
+			);
+		}
+
+		return $name;
 	}
 
 	/**
@@ -547,6 +589,82 @@ abstract class Base extends Base_Module {
 
 		return false;
 
+	}
+
+	public function after_set_pages( Form_Break $break ) {
+	}
+
+
+	/**
+	 * @return Form_Break
+	 */
+	public function get_current_form_break() {
+		$context_name = 'jet-forms/conditional-block--name';
+
+		if ( ! isset( $this->block_context[ $context_name ] ) ) {
+			return Live_Form::instance()->get_form_break();
+		}
+		$name  = $this->block_context[ $context_name ];
+		$break = Live_Form::instance()->get_form_break( $name );
+
+		if ( ! $break->get_pages() ) {
+			$conditional = Plugin::instance()->form->get_field_by_name( 0, $name, Live_Form::instance()->blocks );
+
+			$break->set_pages( $conditional['innerBlocks'], false );
+			$this->after_set_pages( $break );
+		}
+
+		return $break;
+	}
+
+	public function get_current_repeater( $prop = '', $if_empty = false ) {
+		$repeater = Live_Form::instance()->get_repeater( $this->parent_repeater_name() );
+
+		return $prop ? ( $repeater[ $prop ] ?? $if_empty ) : $repeater;
+	}
+
+	public function get_current_repeater_index() {
+		$index = $this->get_current_repeater( 'index' );
+
+		return false !== $index ? $index : '__i__';
+	}
+
+	public function parent_repeater_name() {
+		$context = 'jet-forms/repeater-field--name';
+
+		return $this->block_context[ $context ] ?? '';
+	}
+
+	public function load_current_repeater_preset() {
+		$repeater_block = Plugin::instance()->form->get_field_by_name(
+			0,
+			$this->parent_repeater_name(),
+			Live_Form::instance()->blocks
+		);
+
+		if ( ! $repeater_block ) {
+			return '';
+		}
+
+		return array_values( $this->get_field_value( array_merge(
+			$repeater_block['attrs'],
+			array(
+				'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+				'blockName' => $repeater_block['blockName']
+			)
+		) ) ?: array() );
+	}
+
+	public function get_field_value( $attributes = array() ) {
+		if ( ! $attributes ) {
+			$attributes = $this->block_attrs;
+		}
+
+		return Preset_Manager::instance()->get_field_value( $attributes );
+	}
+
+	public function set_current_repeater( $attrs ) {
+		Live_Form::instance()->set_repeater( $this->parent_repeater_name(), $attrs );
 	}
 
 

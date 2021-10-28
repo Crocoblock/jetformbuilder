@@ -1,15 +1,17 @@
 import {
 	fieldsLayout,
-	submitTypes
+	submitTypes,
 } from "./options";
 
 const { useMetaState } = JetFBHooks;
 
 const {
-	TextControl,
-	SelectControl,
-	ToggleControl,
-} = wp.components;
+		  TextControl,
+		  SelectControl,
+		  ToggleControl,
+	  } = wp.components;
+
+const { __ } = wp.i18n;
 
 export default function PluginArgs() {
 
@@ -17,46 +19,46 @@ export default function PluginArgs() {
 
 	return <>
 		<SelectControl
-			label={ 'Fields Layout' }
+			label={ __( 'Fields Layout', 'jet-form-builder' ) }
 			value={ args.fields_layout }
 			options={ fieldsLayout }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {
 					...prevArgs,
-					fields_layout: newVal
+					fields_layout: newVal,
 				} ) );
 			} }
 		/>
 		<TextControl
-			label={ 'Required Mark' }
+			label={ __( 'Required Mark', 'jet-form-builder' ) }
 			value={ args.required_mark }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {
 					...prevArgs,
-					required_mark: newVal
+					required_mark: newVal,
 				} ) );
 			} }
 		/>
 		<SelectControl
-			label={ 'Submit Type' }
+			label={ __( 'Submit Type', 'jet-form-builder' ) }
 			value={ args.submit_type }
 			options={ submitTypes }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {
 					...prevArgs,
-					submit_type: newVal
+					submit_type: newVal,
 				} ) );
 			} }
 		/>
 
 		<ToggleControl
 			key={ 'enable_progress' }
-			label={ 'Enable form pages progress' }
+			label={ __( 'Enable form pages progress', 'jet-from-builder' ) }
 			checked={ args.enable_progress }
 			onChange={ newVal => {
 				setArgs( prev => ( {
 					...prev,
-					enable_progress: Boolean( newVal )
+					enable_progress: Boolean( newVal ),
 				} ) );
 			} }
 		/>

@@ -61,7 +61,7 @@ class JetDefaultMetaControl extends wp.element.Component {
 					<div className='repeater-item-column jet-margin-bottom-wrapper'>
 						<TextControl
 							key='meta_key'
-							label={ __( 'Meta Key' ) }
+							label={ __( 'Meta Key', 'jet-form-builder' ) }
 							value={ currentItem.key }
 							onChange={ ( newValue ) => {
 								this.onChangeValue( {
@@ -73,7 +73,7 @@ class JetDefaultMetaControl extends wp.element.Component {
 						/>
 						<TextControl
 							key='meta_value'
-							label={ __( 'Meta Value' ) }
+							label={ __( 'Meta Value', 'jet-form-builder' ) }
 							value={ currentItem.value }
 							onChange={ ( newValue ) => {
 								this.onChangeValue( {

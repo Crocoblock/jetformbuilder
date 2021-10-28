@@ -56,9 +56,9 @@ class Logger {
 	}
 
 	private function make_pretty_filename( $file ) {
-		$path = explode( 'plugins\\', $file );
+		$path = explode( 'wp-content\\', $file );
 
-		return isset( $path[1] ) ? $path[1] : explode( 'plugins/', $file )[1];
+		return isset( $path[1] ) ? $path[1] : explode( 'wp-content/', $file )[1];
 	}
 
 

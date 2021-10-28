@@ -34,6 +34,7 @@ function RepeaterWithState( {
 									helpVisible: () => false,
 									helpKey: '',
 								},
+								additionalControls = null,
 							} ) {
 
 	const classNames = [ 'jet-form-builder__repeater-component', ...repeaterClasses ].join( ' ' );
@@ -179,7 +180,7 @@ function RepeaterWithState( {
 			<Flex>
 				<FlexItem>
 					<ToggleControl
-						label={ __( 'Safe deleting' ) }
+						label={ __( 'Safe deleting', 'jet-form-builder' ) }
 						checked={ isSafeDeleting }
 						onChange={ setSafeDeleting }
 					/>
@@ -203,10 +204,11 @@ function RepeaterWithState( {
 						>
 							{ __( 'Import items from clipboard', 'jet-from-builder' ) }
 						</Button>
-					</ButtonGroup>*/}
+					</ButtonGroup>*/ }
 				</FlexItem>
 			</Flex>
 		</> }
+		{ additionalControls }
 		{ itemsData.map( ( currentItem, index ) => <Card
 			isElevated={ true }
 			className={ itemClassNames }
@@ -274,19 +276,22 @@ function RepeaterWithState( {
 					{ 'function' === typeof children && children( {
 						currentItem,
 						changeCurrentItem: data => changeCurrentItem( data, index ),
-						currentIndex: index
+						currentIndex: index,
 					} ) }
 					{ 'function' !== typeof children && children }
 				</React.Fragment> }
 				{ ! children && 'Set up your Repeater Template, please.' }
 			</CardBody> }
 		</Card> ) }
-		{ 1 < itemsData.length && <ToggleControl
-			className='jet-control-clear'
-			label={ __( 'Safe deleting' ) }
-			checked={ isSafeDeleting }
-			onChange={ setSafeDeleting }
-		/> }
+		{ 1 < itemsData.length && <>
+			{ additionalControls }
+			<ToggleControl
+				className='jet-control-clear'
+				label={ __( 'Safe deleting' ) }
+				checked={ isSafeDeleting }
+				onChange={ setSafeDeleting }
+			/>
+		</> }
 		<Button
 			isSecondary
 			onClick={ () => addNewItem( newItem ) }

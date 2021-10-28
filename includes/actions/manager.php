@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
+use Jet_Form_Builder\Classes\Condition_Helper;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -62,7 +63,7 @@ class Manager {
 	 */
 	public function register_action_type( Types\Base $type ) {
 		if ( $type->dependence() ) {
-			$this->_types[ $type->get_id() ] = $type;
+			$this->_types[ $type->get_id() ] = $type->install_condition_obj( new Condition_Helper() );
 		}
 	}
 

@@ -1,4 +1,4 @@
-import SubmitEdit from "./edit";
+import ActionButtonEdit from "./edit";
 import metadata from "@blocks/submit-field/block.json";
 
 const { __ } = wp.i18n;
@@ -13,14 +13,13 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Submit Field' ),
-	className: name.replace( '/', '-' ),
+	title: __( 'Action Button', 'jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	edit: SubmitEdit,
-	useEditProps: [ 'uniqKey' ],
+	edit: ActionButtonEdit,
+	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Submit'
+			label: 'Action Button'
 		}
 	}
 };

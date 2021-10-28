@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Form_Messages;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -17,21 +18,7 @@ class Builder {
 
 	use Get_Template_Trait;
 
-	private $form_id;
 	private $status;
-
-
-	public $manager;
-
-	/**
-	 * Class constructor
-	 *
-	 * @param $data
-	 */
-	public function __construct( $data ) {
-		$this->form_id = $data->form_id;
-		$this->manager = new Manager( $this->form_id, $data->actions );
-	}
 
 	/**
 	 * Set form submittion status
@@ -46,6 +33,10 @@ class Builder {
 		return $this;
 	}
 
+	public function get_manager( $data = array() ) {
+		return jet_form_builder()->msg_router->get_manager( $data );
+	}
+
 	/**
 	 * Get form submitting status
 	 */
@@ -58,7 +49,7 @@ class Builder {
 	}
 
 	public function render_empty_field_message() {
-		$message_content = $this->manager->get_message( 'empty_field' );
+		$message_content = $this->get_manager()->get_message( 'empty_field' );
 
 		include $this->get_global_template( 'common/field-message.php' );
 	}
@@ -75,10 +66,10 @@ class Builder {
 			return;
 		}
 
-		$message_content = $this->manager->get_message( $status );
+		$message_content = $this->get_manager()->get_message( $status );
 
 		$class = 'jet-form-builder-message';
-		$class .= ' jet-form-builder-message--' . $this->manager->get_status_class( $status );
+		$class .= ' jet-form-builder-message--' . $this->get_manager()->get_status_class( $status );
 
 		include $this->get_global_template( 'common/messages.php' );
 	}
@@ -105,6 +96,7 @@ class Builder {
 	public function get_rendered_messages() {
 		ob_start();
 		$this->render_messages();
+
 		return ob_get_clean();
 	}
 

@@ -2,8 +2,12 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Render\Heading_Field_Render;
-use Jet_Form_Builder\Blocks\Render\Submit_Field_Render;
+use Jet_Form_Builder\Blocks\Action_Buttons_Manager;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Prev;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Submit;
+use Jet_Form_Builder\Blocks\Render\Action_Button_Render;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -13,9 +17,21 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Submit_Field extends Base {
+class Action_Button extends Base {
+
+	use Action_Buttons_Manager;
 
 	public function general_style_manager_options() {
+	}
+
+	public function register_block_type() {
+		parent::register_block_type();
+
+		$this->set_button_type( new Button_Submit() );
+		$this->set_button_type( new Button_Prev() );
+		$this->set_button_type( new Button_Next() );
+
+		do_action( "jet-form-builder/{$this->get_name()}/on-register", $this );
 	}
 
 	public function get_css_scheme() {
@@ -39,7 +55,7 @@ class Submit_Field extends Base {
 			$this->selector( '__submit-wrap' ),
 			array(
 				'padding' => array(
-					'id'  => 'submit_wrap_padding',
+					'id' => 'submit_wrap_padding',
 				)
 			)
 		);
@@ -50,14 +66,14 @@ class Submit_Field extends Base {
 			'style_controls',
 			[
 				'id'    => 'submit_style',
-				'title' => __( 'Submit Button', 'jet-form-builder' )
+				'title' => __( 'Action Button', 'jet-form-builder' )
 			]
 		);
 
 		$this->add_margin_padding(
-			$this->selector( '__submit' ),
+			$this->selector( '__action-button' ),
 			array(
-				'margin' => array(
+				'margin'  => array(
 					'id'        => 'submit_margin',
 					'separator' => 'after',
 				),
@@ -84,7 +100,7 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+				$this->selector( '__action-button' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
 			],
 			'attributes'   => array(
 				'default' => array(
@@ -142,7 +158,7 @@ class Submit_Field extends Base {
 				],
 			],
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'justify-content: {{VALUE}};',
+				$this->selector( '__action-button' ) => 'justify-content: {{VALUE}};',
 			],
 			'attributes'   => [
 				'default' => array(
@@ -157,7 +173,7 @@ class Submit_Field extends Base {
 			'type'         => 'typography',
 			'separator'    => 'after',
 			'css_selector' => [
-				$this->selector( '__submit' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				$this->selector( '__action-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 			],
 		] );
 
@@ -167,7 +183,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Border', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				$this->selector( '__action-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 			),
 		] );
 
@@ -192,7 +208,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'color: {{VALUE}}',
+				$this->selector( '__action-button' ) => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -201,7 +217,7 @@ class Submit_Field extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				$this->selector( '__submit' ) => 'background-color: {{VALUE}}',
+				$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -221,7 +237,7 @@ class Submit_Field extends Base {
 			'label'        => __( 'Text Color', 'jet-form-builder' ),
 			'separator'    => 'after',
 			'css_selector' => array(
-				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 			),
 		] );
 
@@ -230,7 +246,7 @@ class Submit_Field extends Base {
 			'type'         => 'color-picker',
 			'label'        => __( 'Background Color', 'jet-form-builder' ),
 			'css_selector' => array(
-				$this->selector( '__submit' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 			),
 		] );
 
@@ -258,7 +274,18 @@ class Submit_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Submit_Field_Render( $this ) )->render();
+		return ( new Action_Button_Render( $this ) )->render_without_layout();
+	}
+
+	public function block_data( $editor, $handle ) {
+		wp_localize_script(
+			$handle,
+			'JetFormActionButton',
+			apply_filters(
+				"jet-form-builder/field-data/{$this->get_name()}",
+				array( 'actions' => $this->get_button_types_for_js() )
+			)
+		);
 	}
 
 }

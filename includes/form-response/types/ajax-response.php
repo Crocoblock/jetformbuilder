@@ -35,7 +35,10 @@ class Ajax_Response extends Response_It {
 	}
 
 	public function get_message_builder() {
-		return new Form_Messages\Builder( $this->additional );
+		return jet_form_builder()->msg_router->get_builder( array(
+			'form_id' => $this->additional->form_id ?? false,
+			'actions' => $this->additional->actions ?? false
+		) );
 	}
 
 }

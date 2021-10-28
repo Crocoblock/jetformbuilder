@@ -13,9 +13,9 @@ const { name, icon } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Calculated Field' ),
+	title: __( 'Calculated Field', 'jet-form-builder' ),
 	className: name.replace( '/', '-' ),
-	description: __( 'Calculate and display your number values' ),
+	description: __( 'Calculate and display your number values', 'jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditCalculated,
 	useEditProps: [ 'uniqKey', 'blockName' ],

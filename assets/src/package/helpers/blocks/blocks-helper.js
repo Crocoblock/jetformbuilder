@@ -1,10 +1,15 @@
 const { __ } = wp.i18n;
+
 const { applyFilters } = wp.hooks;
+
+const { select } = wp.data;
+
+const { store: blocksStore } = wp.blocks;
 
 const blocksRecursiveIterator = ( blockParserFunc ) => {
 	const blocksRecursiveIterator = ( blocks ) => {
 
-		blocks = blocks || wp.data.select( 'core/block-editor' ).getBlocks();
+		blocks = blocks || select( 'core/block-editor' ).getBlocks();
 
 		blocks.map( block => {
 			blockParserFunc( block );
@@ -27,11 +32,15 @@ const getFormFieldsBlocks = ( exclude = [], placeholder = false, suppressFilter 
 			&& block.attributes.name
 			&& ! skipFields.find( field => block.name.includes( field ) )
 		) {
+
+			/*const blockType = select( blocksStore ).getBlockType( block.name );*/
+
 			formFields.push( {
 				blockName: block.name,
 				name: block.attributes.name,
 				label: block.attributes.label || block.attributes.name,
 				value: block.attributes.name,
+				//icon: blockType.icon.src,
 			} );
 		}
 	} );
@@ -92,7 +101,7 @@ const getAvailableFieldsString = ( blockName ) => {
 		fieldsString.push( '%FIELD::' + item + '%' );
 	} );
 
-	return __( 'Available fields: ' ) + fieldsString.join( ', ' );
+	return __( 'Available fields: ', 'jet-form-builder' ) + fieldsString.join( ', ' );
 }
 
 const getInnerBlocks = ( clientId ) => {

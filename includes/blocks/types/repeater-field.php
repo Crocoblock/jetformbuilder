@@ -311,6 +311,14 @@ class Repeater_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
+	public function parent_repeater_name() {
+		return $this->block_attrs['name'] ?? '';
+	}
+
+	public function use_preset() {
+		return false;
+	}
+
 	/**
 	 * Returns current block render
 	 *

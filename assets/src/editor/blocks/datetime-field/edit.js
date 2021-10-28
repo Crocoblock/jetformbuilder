@@ -48,7 +48,7 @@ export default function DateTimeEdit( props ) {
 				<FieldSettingsWrapper { ...props }>
 					<ToggleControl
 						key={ uniqKey( 'is_timestamp' ) }
-						label={ __( 'Is Timestamp' ) }
+						label={ __( 'Is Timestamp', 'jet-form-builder' ) }
 						checked={ attributes.is_timestamp }
 						help={ attrHelp( 'is_timestamp' ) }
 						onChange={ newValue => {

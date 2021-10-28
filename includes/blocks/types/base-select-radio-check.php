@@ -30,8 +30,14 @@ trait Base_Select_Radio_Check {
 			'generators_list' => Tools::get_generators_list_for_js(),
 		);
 
-		$options['glossaries_list'] = false !== Tools::get_jet_engine_version()
+		$active_jet_engine = false !== Tools::get_jet_engine_version();
+
+		$options['glossaries_list'] = $active_jet_engine
 			? $this->get_glossaries_list()
+			: array();
+
+		$options['listings_list'] = $active_jet_engine
+			? jet_engine()->listings->get_listings_for_options( 'blocks' )
 			: array();
 
 		return array_merge( $options, $merged );

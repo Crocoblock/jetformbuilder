@@ -170,16 +170,16 @@ class Form_Manager {
 				? $block['attrs']['name']
 				: '';
 
-			if ( ! $name ) {
-				continue;
-			}
-
 			if ( $name === $field_name ) {
 				return $block;
 			}
 
 			if ( 0 < count( $block['innerBlocks'] ) ) {
-				return $this->_get_field_by_name( $field_name, $block['innerBlocks'] );
+				$find = $this->_get_field_by_name( $field_name, $block['innerBlocks'] );
+
+				if ( $find ) {
+					return $find;
+				}
 			}
 		}
 

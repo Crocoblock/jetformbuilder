@@ -86,5 +86,8 @@
 			"type": "string",
 			"default": ""
 		}
-	}
+	},
+	"usesContext": [
+		"jet-forms/repeater-field--name"
+	]
 }

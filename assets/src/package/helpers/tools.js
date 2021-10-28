@@ -1,3 +1,8 @@
+const semverGt = require( 'semver/functions/gt' )
+const semverLt = require( 'semver/functions/lt' )
+const semverGte = require( 'semver/functions/gte' )
+const semverLte = require( 'semver/functions/lte' )
+
 const { __ } = wp.i18n;
 const { applyFilters } = wp.hooks;
 
@@ -59,21 +64,27 @@ export const listen = ( name, func ) => {
 	document.addEventListener( name, func );
 }
 
-export function versionCompare( version1, version2, operator ) {
-	if ( 'string' === typeof version1 ) {
-		version1 = +( version1.split( '.' ).join( '' ) );
-	}
-	if ( 'string' === typeof version2 ) {
-		version2 = +( version2.split( '.' ).join( '' ) );
-	}
-	if ( 0 >= version1 || 0 >= version2 ) {
-		throw new Error( 'Invalid arguments: version1 or version2' );
+function getSemVerFunc( operator ) {
+	switch ( operator ) {
+		case '>':
+			return semverGt;
+		case '>=':
+			return semverGte;
+		case '<':
+			return semverLt;
+		case '<=':
+			return semverLte;
 	}
 
-	if ( [ '>', '<', '===', '==', '>=', '<=' ].includes( operator ) ) {
-		return new Function( `return ${ version1 } ${ operator } ${ version2 }` )();
+	return () => false;
+}
+
+export function versionCompare( version1, version2, operator ) {
+	try {
+		return getSemVerFunc( operator )( version1, version2 );
+	} catch ( te ) {
+		return false;
 	}
-	throw new Error( 'Invalid arguments: operator' );
 }
 
 const convertSymbols = applyFilters( 'jet.fb.tools.convertSymbols', {
@@ -144,7 +155,7 @@ export function classnames( ...additional ) {
 			if ( 'object' === typeof itemClass ) {
 				for ( const itemClassKey in itemClass ) {
 					if ( itemClass[ itemClassKey ] ) {
-						result.push( (itemClassKey + "").trim() )
+						result.push( ( itemClassKey + "" ).trim() )
 					}
 				}
 			}
@@ -152,7 +163,7 @@ export function classnames( ...additional ) {
 	};
 
 	parseValues( additional );
-	
+
 	return result.join( ' ' );
 }
 

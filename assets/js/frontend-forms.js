@@ -513,6 +513,9 @@
 		},
 
 		updateProgress: function( event, $fromPage, $toPage, $progress ) {
+			if ( ! $progress || 'default' !== $progress.data( 'type' ) ) {
+				return;
+			}
 			const [ from, to ] = [ $fromPage.data( 'page' ), $toPage.data( 'page' ) ];
 
 			const prevItem = $progress.find( `.jet-form-builder-progress-pages__item--wrapper[data-page="${ from }"]` );
@@ -789,8 +792,6 @@
 		},
 
 		widgetBookingForm: function( $scope ) {
-
-			var $calcFields = $.find( '.jet-form-builder__calculated-field' );
 			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );
 
 			if ( $editors.length && window.wp && window.wp.editor ) {
@@ -810,6 +811,12 @@
 			if ( $.fn.inputmask ) {
 				$scope.find( '.jet-form-builder__masked-field' ).inputmask();
 			}
+			JetFormBuilder.initCalcFields( $scope );
+			JetFormBuilder.initReplaceValues( $scope );
+		},
+
+		initCalcFields: function( $scope ) {
+			const $calcFields = $scope.find( '.jet-form-builder__calculated-field' );
 
 			if ( ! $calcFields.length ) {
 				return;
@@ -829,6 +836,209 @@
 
 				JetFormBuilder.setCalculatedValue( calculated, $this );
 			} );
+		},
+
+		initReplaceValues: function( $scope ) {
+			const $form = $scope.find( 'form.jet-form-builder' );
+
+			const macrosPrefix = ( suffix = '' ) => 'JFB_FIELD::' + suffix;
+
+			const replaceAttrs = window.JetFormBuilderSettings.replaceAttrs || [];
+			JetFormBuilder.replaceStack = JetFormBuilder.replaceStack || {};
+
+			const getAllComments = rootElem => {
+				const comments = [];
+				// Fourth argument, which is actually obsolete according to the DOM4 standard, is required in IE 11
+				const iterator = document.createNodeIterator( rootElem, NodeFilter.SHOW_COMMENT, () => NodeFilter.FILTER_ACCEPT, false );
+				let curNode;
+
+				const timestamp = Date.now();
+				let counter = 0;
+
+				const uniqId = () => {
+					return ++counter + '_' + timestamp;
+				}
+
+				while ( curNode = iterator.nextNode() ) {
+					if ( curNode.textContent.includes( macrosPrefix() ) ) {
+						curNode.nodeValue = curNode.nodeValue.trim();
+
+						comments.push( { id: uniqId(), node: curNode } );
+					}
+				}
+				const querySelector = [];
+
+				for ( let i = 0; i < replaceAttrs.length; i++ ) {
+					querySelector.push( `[${ replaceAttrs[ i ] }*="${ macrosPrefix() }"]` );
+				}
+
+				const elements = Array.from( rootElem.querySelectorAll( querySelector.join( ', ' ) ) );
+
+				elements.forEach( elem => {
+					for ( let i = 0; i < replaceAttrs.length; i++ ) {
+						const attr = elem[ replaceAttrs[ i ] ] || "";
+
+						if ( ! attr.toLowerCase().includes( macrosPrefix().toLowerCase() ) ) {
+							continue;
+						}
+
+						comments.push( {
+							id: uniqId(),
+							attr: replaceAttrs[ i ],
+							value: decodeURIComponent( attr ),
+							node: elem,
+						} );
+					}
+				} )
+
+				return comments;
+			}
+
+			const isRadio = function( $field ) {
+				if ( 'INPUT' !== $field.prop( 'tagName' ) ) {
+					return false;
+				}
+
+				return [ 'checkbox', 'radio' ].includes( $field.attr( 'type' ) );
+			}
+
+			const getFieldNames = ( macrosValue, withBrackets = true ) => {
+				return withBrackets
+					? macrosValue.match( /(?<=<!\-{2}\s*JFB_FIELD::)([\w\-]+)\s*(?=\-{2}>)/gi )
+					: macrosValue.match( /(?<=\s*JFB_FIELD::)([\w\-]+)\s*/gi );
+			};
+
+			const replaceMacros = ( replaceFrom, fieldName, fieldValue, withBrackets = true ) => {
+				const regExp = withBrackets
+					? new RegExp( `<!--\\s*JFB_FIELD::${ fieldName }\\s*-->`, 'gi' )
+					: new RegExp( `\\s*JFB_FIELD::${ fieldName }\\s*`, 'gi' );
+
+				return replaceFrom.replace( regExp, fieldValue );
+			};
+
+			const getValueFromField = field => {
+				const is_radio = isRadio( field );
+
+				if ( ! is_radio ) {
+					return field.val();
+				}
+
+				const checked = [];
+				for ( const radioInput of Array.from( field ) ) {
+					if ( radioInput.checked ) {
+						checked.push( radioInput.value );
+					}
+				}
+
+				return checked.join( ', ' );
+			}
+
+			const prepareValueFromMacros = function( scope, initialValue, withBrackets = true ) {
+				const fieldNames = getFieldNames( initialValue, withBrackets );
+
+				fieldNames.forEach( name => {
+					const fieldValue = getValueFromField( scope.find( `[data-field-name="${ name }"]` ) );
+
+					initialValue = replaceMacros( initialValue, name, fieldValue, withBrackets );
+				} );
+
+				return initialValue;
+			}
+
+			const replaceAttr = ( macros, scope ) => {
+				const replacement = prepareValueFromMacros( scope, macros.value );
+
+				if ( replacement !== macros.node[ macros.attr ] ) {
+					macros.node[ macros.attr ] = replacement;
+				}
+			};
+
+			const insertText = ( macros, scope ) => {
+				let currentValue = prepareValueFromMacros( scope, macros.node.nodeValue, false );
+
+				let prevSibling = Array.from( macros.node.parentNode.childNodes ).find(
+					node => node.JFB_macros_id === macros.id,
+				);
+
+				if ( ! prevSibling ) {
+					prevSibling = macros.node.parentNode.insertBefore( document.createTextNode( currentValue ), macros.node );
+					prevSibling.JFB_macros_id = macros.id;
+
+					return;
+				}
+
+				if ( prevSibling.textContent === currentValue ) {
+					return;
+				}
+
+				prevSibling.textContent = currentValue;
+			};
+
+			const replaceFieldValues = scope => {
+				const currentFormId = scope.data( 'form-id' );
+
+				for ( const formID in JetFormBuilder.replaceStack ) {
+					if ( +formID !== currentFormId ) {
+						continue;
+					}
+					const multiMacros = JetFormBuilder.replaceStack[ currentFormId ].macros;
+
+					multiMacros.forEach( macros => {
+						if ( macros.attr ) {
+							replaceAttr( macros, scope );
+						} else if ( macros.node.nodeName === '#comment' ) {
+							insertText( macros, scope );
+						}
+					} );
+				}
+			};
+
+			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
+				replaceFieldValues( $( this ).closest( 'form.jet-form-builder' ) );
+			} );
+
+			const initRepeater = function( e ) {
+				const repeater = $( e.target ).closest( '.jet-form-builder-repeater' );
+				const $form = $( e.target ).closest( 'form.jet-form-builder' );
+
+				const formID = $form.data( 'form-id' );
+				const repeaterName = repeater.data( 'field-name' );
+
+				let repeaterRowsList = JetFormBuilder.replaceStack[ formID ].repeaters[ repeaterName ] || [];
+				let [ scope ] = $( '.jet-form-builder-repeater__row:last', repeater );
+
+				if ( ! repeaterRowsList.includes( +scope.dataset.index ) ) {
+					pushRepeaterRowIndex( formID, repeaterName, +scope.dataset.index );
+					pushStack( formID, getAllComments( scope ) );
+				}
+
+				replaceFieldValues( $form );
+			}
+
+			JetFormBuilder.replaceStack[ $form.data( 'form-id' ) ] = {
+				macros: [],
+				repeaters: {},
+			};
+
+			const pushStack = function( formId, stack ) {
+				JetFormBuilder.replaceStack[ formId ].macros.push( ...stack );
+			};
+
+			const pushRepeaterRowIndex = function( formId, repeaterName, index ) {
+				const repeater = JetFormBuilder.replaceStack[ formId ].repeaters[ repeaterName ] || [];
+				repeater.push( index );
+
+				JetFormBuilder.replaceStack[ formId ].repeaters[ repeaterName ] = repeater;
+			}
+
+			pushStack( $form.data( 'form-id' ), getAllComments( $form[ 0 ] ) );
+			replaceFieldValues( $form );
+
+			$( document ).on(
+				'jet-form-builder/repeater-add-new',
+				'.jet-form-builder-repeater__new',
+				e => initRepeater( e ),
+			);
 		},
 
 		initFormPager: function( $scope ) {
@@ -978,10 +1188,13 @@
 		},
 
 		switchFormPage: function( $fromPage, $toPage ) {
+			const $form = $fromPage.closest( '.jet-form-builder' );
+			const $conditional = $fromPage.closest( '.jet-form-builder__conditional' );
+			let $progress = null;
 
-			var $form = $fromPage.closest( '.jet-form-builder' );
-
-			const $progress = $form.find( '.jet-form-builder-progress-pages' );
+			if ( ! $conditional.length ) {
+				$progress = $form.find( '.jet-form-builder-progress-pages--global' );
+			}
 
 			$fromPage.addClass( 'jet-form-builder-page--hidden' );
 			$toPage.removeClass( 'jet-form-builder-page--hidden' );
@@ -1086,14 +1299,19 @@
 
 		calculateValue: function( $scope ) {
 
-			var formula  = String( $scope.data( 'formula' ) ),
-				listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
-				regexp   = /%([a-zA-Z0-9-_]+)%/g,
-				func     = null;
+			var formula = String( $scope.data( 'formula' ) ),
+				//listenTo = $( '[name^="' + $scope.data( 'listen_to' ) + '"]', $scope.closest( 'form' ) ),
+				regexp  = /%([a-zA-Z0-9-_]+)%/g,
+				func    = null,
+				$form   = $scope.closest( 'form' );
 
-			if ( typeof formula === 'undefined' ) {
-				return null;
+			if ( typeof formula === 'undefined' || ! $form.length ) {
+				return 0;
 			}
+
+			const getGlobalObj = name => {
+				return $form.find( '[name="' + name + '"], [name="' + name + '[]"]' )
+			};
 
 			formula = JetFormBuilderMain.filters.applyFilters( 'forms/calculated-formula-before-value', formula, $scope );
 
@@ -1105,10 +1323,15 @@
 					object = $scope;
 				} else if ( $scope.hasClass( 'jet-form-builder__calculated-field--child' ) ) {
 					object = $scope.closest( '.jet-form-builder-repeater__row' ).find( '[data-field-name="' + match2 + '"]' );
+
+					if ( ! object.length ) {
+						object = getGlobalObj( match2 );
+					}
+
 				} else if ( $scope.data( 'repeater-row' ) ) {
 					object = $scope.find( '[data-field-name="' + match2 + '"]' );
 				} else {
-					object = $scope.closest( 'form' ).find( '[name="' + match2 + '"], [name="' + match2 + '[]"]' );
+					object = getGlobalObj( match2 );
 				}
 
 				return JetFormBuilder.getFieldValue( object );
@@ -1157,44 +1380,34 @@
 			if ( ! fieldName ) {
 				return;
 			}
+			fieldName = fieldName.replace( '[]', '' );
 
 			$.each( JetFormBuilder.calcFields, function( calcFieldName, field ) {
 
-				fieldName = fieldName.replace( '[]', '' );
-
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					calculated = JetFormBuilder.calculateValue( field.el );
+					calculated = JetFormBuilder.calculateValue( $( field.el ) );
 
-					JetFormBuilder.setCalculatedValue( calculated, field.el )
+					JetFormBuilder.setCalculatedValue( calculated, $( field.el ) )
 				}
-
 			} );
 
 			if ( 'jet-form-builder/repeater-changed' !== event.type ) {
-
 				$.each( JetFormBuilder.repeaterCalcFields, function( calcFieldName, field ) {
-
-					fieldName = fieldName.replace( '[]', '' );
-
 					if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-
 						field.el.trigger( 'jet-form-builder/repeater-changed' );
-
 					}
-
 				} );
-
 			}
 
 			$.each( JetFormBuilder.childrenCalcFields, function( calcFieldName, field ) {
 
-				fieldName = fieldName.replace( '[]', '' );
-
 				if ( 0 <= $.inArray( fieldName, field.listenTo ) ) {
-					var $row = $this.closest( '.jet-form-builder-repeater__row' );
-					JetFormBuilder.calculateFieldsInRow( $row );
-				}
+					field.parentEl.find( '.jet-form-builder-repeater__row' ).each( function() {
+						const $row = $( this );
 
+						JetFormBuilder.calculateFieldsInRow( $row )
+					} );
+				}
 			} );
 
 		},

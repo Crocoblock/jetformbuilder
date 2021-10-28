@@ -8,21 +8,12 @@ use Jet_Form_Builder\Plugin;
 
 class Manager {
 
-	public $form_id;
-	public $actions;
 	public $_types = array();
 	private $success_statuses = array( 'success' );
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
 	const DYNAMIC_FAILED_PREF = 'derror|';
 
-
-	public function __construct( $form_id, $actions = array() ) {
-		$this->form_id = $form_id;
-		$this->actions = $actions;
-
-		$this->set_messages();
-	}
 
 	public static function dynamic_success( $message ) {
 		return self::DYNAMIC_SUCCESS_PREF . $message;
@@ -58,27 +49,39 @@ class Manager {
 		);
 	}
 
-	public function set_messages() {
-		if ( ! $this->form_id ) {
-			return;
+	/**
+	 * @return Manager
+	 */
+	public function set_up() {
+		if ( ! jet_form_builder()->msg_router->get_form_id() || $this->get_messages() ) {
+			return $this;
 		}
+
 		$this->_types = array_merge(
-			Plugin::instance()->post_type->get_messages( $this->form_id ),
+			$this->get_form_types_messages(),
 			$this->get_action_types_messages()
 		);
 
+		return $this;
+	}
+
+	public function get_form_types_messages() {
+		return Plugin::instance()->post_type->get_messages(
+			jet_form_builder()->msg_router->get_form_id()
+		);
 	}
 
 	public function get_action_types_messages() {
 		$messages = array();
 
-		foreach ( $this->actions as $action ) {
-			if ( isset( $action->messages ) ) {
-				$default_action_messages = wp_list_pluck( $action->messages, 'value' );
-				$action_messages         = isset( $action->settings['messages'] ) ? $action->settings['messages'] : array();
-
-				$messages = array_merge( $messages, $default_action_messages, $action_messages );
+		foreach ( jet_form_builder()->msg_router->get_actions() as $action ) {
+			if ( ! isset( $action->messages ) ) {
+				continue;
 			}
+			$default_action_messages = wp_list_pluck( $action->messages, 'value' );
+			$action_messages         = isset( $action->settings['messages'] ) ? $action->settings['messages'] : array();
+
+			$messages = array_merge( $messages, $default_action_messages, $action_messages );
 		}
 
 		return $messages;

@@ -138,13 +138,14 @@ class Manager {
 			new Types\Range_Field(),
 			new Types\Heading_Field(),
 			new Types\Textarea_Field(),
-			new Types\Submit_Field(),
+			new Types\Action_Button(),
 			new Types\Repeater_Field(),
 			new Types\Form_Break_Field(),
 			new Types\Group_Break_Field(),
 			new Types\Conditional_Block(),
 			new Types\Datetime_Field(),
-			new Types\Color_Picker_Field()
+			new Types\Color_Picker_Field(),
+			new Types\Progress_Bar(),
 		);
 
 		foreach ( $types as $type ) {
@@ -194,7 +195,7 @@ class Manager {
 
 	/**
 	 * Register form JS
-	 * @return [type] [description]
+	 * @return void [description]
 	 */
 	public function enqueue_frontend_assets() {
 		$this->register_form_scripts();
@@ -209,10 +210,15 @@ class Manager {
 				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'form_action'  => Plugin::instance()->form_handler->hook_key,
 				'devmode'      => Dev_Mode\Manager::instance()->active(),
-				'scrollOffset' => - 50
+				'scrollOffset' => - 50,
+				'replaceAttrs' => array(
+					'href',
+					'src',
+					'alt',
+					'title',
+				)
 			) )
 		);
-
 	}
 
 	public function register_form_scripts() {
@@ -222,7 +228,7 @@ class Manager {
 		wp_register_script(
 			'jet-form-builder-frontend-forms',
 			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
-			array( 'jquery' ),
+			array( 'jquery', 'wp-i18n' ),
 			Plugin::instance()->get_version(),
 			true
 		);
@@ -276,11 +282,13 @@ class Manager {
 	/**
 	 * Register new block type
 	 *
-	 * @param  [type] $block_type [description]
+	 * @param Types\Base $block_type
 	 *
-	 * @return [type]             [description]
+	 * @return void
 	 */
 	public function register_block_type( Types\Base $block_type ) {
+		$block_type->register_block_type();
+
 		$this->_types[ $block_type->get_storage_name() ][ $block_type->get_name() ] = $block_type;
 	}
 

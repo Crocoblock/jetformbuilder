@@ -14,6 +14,14 @@ trait Attributes_Trait {
 		if ( '' === $value ) {
 			return;
 		}
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $item ) {
+				$this->add_attribute( $attr, $item );
+			}
+			return;
+		}
+
 		if ( ! isset( $this->attrs[ $attr ] ) ) {
 			$this->attrs[ $attr ] = $value;
 		} else {

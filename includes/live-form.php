@@ -32,7 +32,6 @@ class Live_Form {
 	private $field_name;
 	private $current_field_data;
 	private $start_new_page = true;
-	public $pages = 0;
 	public $rendered_rows = 0;
 
 	public $is_hidden_row;
@@ -43,13 +42,13 @@ class Live_Form {
 	public $current_repeater_i;
 	public $preset;
 	public $spec_data;
-
-	public $page = 0;
-	public $has_prev = false;
 	public $post;
+	public $_conditional_blocks = array();
+	public $_repeaters = array();
+	public $blocks = array();
 
 	// for progress
-	public $form_breaks;
+	public $form_break;
 
 	/**
 	 * Create form instance
@@ -62,14 +61,6 @@ class Live_Form {
 
 	public function set_form_id( $form_id ) {
 		$this->form_id = $form_id;
-
-		return $this;
-	}
-
-
-	public function set_repeater( $item, $count = false ) {
-		$this->current_repeater   = $item;
-		$this->current_repeater_i = $count;
 
 		return $this;
 	}
@@ -121,54 +112,24 @@ class Live_Form {
 	 * Setup fields prop
 	 *
 	 * @param $content
+	 *
+	 * @return array[]
 	 */
 	public function setup_fields( $content ) {
-		$blocks             = parse_blocks( $content );
-		$count_blocks       = count( $blocks );
-		$break_after_submit = false;
+		$blocks       = parse_blocks( $content );
+		$this->blocks = $this->get_form_break()->set_pages( $blocks );
 
-		foreach ( $blocks as $index => $field ) {
-			if ( $this->is_field( $field, 'form-break' ) ) {
-				$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
-
-				if ( $index + 1 === $count_blocks ) {
-					$break_after_submit = $form_break;
-					unset( $blocks[ $index ] );
-					continue;
-				}
-
-				$this->pages ++;
-				$this->form_breaks[] = $form_break;
-			}
-		}
-		if ( ! empty( $this->form_breaks ) ) {
-			$this->form_breaks[] = $break_after_submit ? $break_after_submit : array( 'label' => __( 'Last Page' ) );
-		}
-
-		return $blocks;
+		return $this->blocks;
 	}
 
 	public function maybe_progress_pages() {
-		if ( ! $this->spec_data->enable_progress || 0 === $this->pages ) {
+		if ( ! $this->spec_data->enable_progress || 0 === $this->get_form_break()->get_pages() ) {
 			return '';
 		}
 
-		ob_start();
-		include $this->get_global_template( 'common/progress-pages.php' );
-
-		return ob_get_clean();
-	}
-
-	public function get_progress_item_class( $index ) {
-		$classes = array( 'jet-form-builder-progress-pages__item--wrapper' );
-
-		if ( $index === $this->page ) {
-			$classes[] = 'active-page';
-		} elseif ( - 1 === $index ) {
-			$classes[] = 'passed-page';
-		}
-
-		return implode( ' ', $classes );
+		return $this->get_form_break()->render_progress( 'default', array(
+			'jet-form-builder-progress-pages--global'
+		) );
 	}
 
 
@@ -191,35 +152,12 @@ class Live_Form {
 	/**
 	 * Maybe start new page
 	 *
+	 * @param bool $force_first
+	 *
 	 * @return false|string|void
 	 */
-	public function maybe_start_page() {
-
-		if ( 0 >= $this->pages ) {
-			return '';
-		}
-
-		if ( false === $this->start_new_page ) {
-			return '';
-		}
-
-		$this->start_new_page = false;
-		$this->page ++;
-
-		ob_start();
-		do_action( 'jet-form-builder/before-page-start', $this );
-
-		$hidden_class = '';
-
-		if ( 1 < $this->page ) {
-			$hidden_class = 'jet-form-builder-page--hidden';
-		}
-
-		include $this->get_global_template( 'common/start-page.php' );
-
-		do_action( 'jet-form-builder/after-page-start', $this );
-
-		return ob_get_clean();
+	public function maybe_start_page( $force_first = false ) {
+		return $this->get_form_break()->maybe_start_page( $force_first );
 	}
 
 	/**
@@ -231,66 +169,39 @@ class Live_Form {
 	 * @return false|string|void [type] [description]
 	 */
 	public function maybe_end_page( $is_last = false, $field = false ) {
-
-		if ( 0 >= $this->pages ) {
-			return;
-		}
-
-		if ( ! $is_last && ! $this->is_field( $field, 'form-break' ) ) {
-			return;
-		}
-
-		$this->start_new_page = true;
-		$this->has_prev       = true;
-
-		ob_start();
-		do_action( 'jet-form-builder/before-page-end', $this );
-
-		include $this->get_global_template( 'common/end-page.php' );
-
-		do_action( 'jet-form-builder/after-page-end', $this );
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Returns field ID with repeater prefix if needed
-	 */
-	public function get_field_id( $name ) {
-
-		if ( is_array( $name ) ) {
-			$name = $name['name'];
-		}
-		//Find some solution for the repeater field
-
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : 'repeater';
-			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
-			$name          = sprintf( '%1$s_%2$s_%3$s', $repeater_name, $index, $name );
-		}
-
-		return $name;
-	}
-
-	/**
-	 * Returns field name with repeater prefix if needed
-	 */
-	public function get_field_name( $name ) {
-
-		//Find some solution for the repeater field
-		if ( $this->current_repeater ) {
-			$repeater_name = ! empty( $this->current_repeater['name'] ) ? $this->current_repeater['name'] : '_undefined_repeater_name';
-			$index         = ( false !== $this->current_repeater_i ) ? $this->current_repeater_i : '__i__';
-
-			$name = sprintf( '%1$s[%2$s][%3$s]', $repeater_name, $index, $name );
-		}
-
-		return $name;
-
+		return $this->get_form_break()->maybe_end_page( $is_last, $field );
 	}
 
 	public function get_nonce_id() {
 		return "jet-form-builder-wp-nonce-{$this->form_id}";
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return Form_Break
+	 */
+	public function get_form_break( $name = '' ) {
+		if ( ! $name && ! $this->form_break ) {
+			$this->form_break = new Form_Break();
+		}
+		if ( $name && ! $this->isset_form_break( $name ) ) {
+			$this->_conditional_blocks[ $name ] = array( 'break' => new Form_Break() );
+		}
+
+		return $name ? $this->_conditional_blocks[ $name ]['break'] : $this->form_break;
+	}
+
+	public function isset_form_break( $name ) {
+		return isset( $this->_conditional_blocks[ $name ] );
+	}
+
+	public function get_repeater( $name ) {
+		return $this->_repeaters[ $name ] ?? array();
+	}
+
+	public function set_repeater( $name, $attrs ) {
+		$this->_repeaters[ $name ] = array_merge( $this->get_repeater( $name ), $attrs );
 	}
 
 

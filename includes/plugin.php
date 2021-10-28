@@ -10,6 +10,7 @@ use Jet_Form_Builder\Admin\Pages\Settings_Page;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
+use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
@@ -30,6 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Admin\Editor $editor
  * @property LicenseManager $license_manager
  * @property \Jet_Admin_Bar $admin_bar
+ * @property Form_Messages\Msg_Router $msg_router
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -49,6 +51,7 @@ class Plugin {
 	public $framework;
 	public $license_manager;
 	public $admin_bar;
+	public $msg_router;
 
 	public static $instance;
 
@@ -92,6 +95,7 @@ class Plugin {
 		$this->maybe_enable_gateways();
 
 		$this->admin_bar       = \Jet_Admin_Bar::get_instance();
+		$this->msg_router      = new Form_Messages\Msg_Router();
 		$this->post_type       = new Post_Type();
 		$this->blocks          = new Blocks\Manager();
 		$this->actions         = new Actions\Manager();
@@ -140,6 +144,20 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * Loads the translation files.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function init_lang() {
+		load_plugin_textdomain(
+			'jet-form-builder',
+			false,
+			dirname( plugin_basename( JET_FORM_BUILDER__FILE__ ) ) . '/languages'
+		);
+	}
 
 	/**
 	 * Returns url to file or dir inside plugin folder
@@ -169,6 +187,7 @@ class Plugin {
 	private function __construct() {
 
 		$this->register_autoloader();
+		$this->init_lang();
 
 		add_action( 'after_setup_theme', function () {
 			do_action( 'jet-form-builder/before-init' );

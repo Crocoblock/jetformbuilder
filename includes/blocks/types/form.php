@@ -412,6 +412,10 @@ class Form extends Base {
 			)
 		);
 
+		jet_form_builder()->msg_router->set_up( array(
+			'form_id' => $form_id
+		) );
+
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
@@ -419,8 +423,7 @@ class Form extends Base {
 			return ( $this->get_style_manager_html( $form_id ) . $custom_form );
 		}
 
-		$builder  = new Form_Builder( $form_id, false, $attrs );
-		$messages = jet_form_builder()->form_handler->get_message_builder( $form_id );
+		$builder = new Form_Builder( $form_id, false, $attrs );
 
 		Error_Handler::instance();
 
@@ -428,10 +431,10 @@ class Form extends Base {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_style_manager_html( $form_id );
 		$builder->render_form();
-		$messages->render_messages();
+		jet_form_builder()->msg_router->get_builder()->render_messages();
 
 		if ( Tools::is_editor() ) {
-			$messages->render_messages_samples();
+			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
 		}
 
 		return ob_get_clean();

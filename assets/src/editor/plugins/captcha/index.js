@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-captcha-panel',
-	title: __( 'Captcha Settings' )
+	title: __( 'Captcha Settings', 'jet-form-builder' )
 };
 
 const settings = {

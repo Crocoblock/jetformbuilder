@@ -19,8 +19,12 @@ abstract class Base_Field_Error {
 		$this->params = $params['params'];
 	}
 
+	public function get_manager( $data = array() ) {
+		return jet_form_builder()->msg_router->get_manager( $data );
+	}
+
 	public function error() {
-		return 'This field is required.';
+		return $this->get_manager()->get_message( 'empty_field' );
 	}
 
 }

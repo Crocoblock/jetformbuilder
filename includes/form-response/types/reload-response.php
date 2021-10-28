@@ -15,7 +15,7 @@ class Reload_Response extends Response_It {
 	}
 
 	public function additional_fields() {
-		return array( 'refer', 'response' );
+		return array( 'refer', 'response', 'remove_args' );
 	}
 
 	private function maybe_remove_query_args() {

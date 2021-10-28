@@ -47,7 +47,7 @@ if ( ! empty( $args['field_options'] ) ) {
 			}
 		}
 
-		if ( is_array( $option ) && isset( $option['calculate'] ) ) {
+		if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
 			$calc = ' data-calculate="' . $option['calculate'] . '"';
 		}
 
@@ -80,7 +80,6 @@ if ( ! empty( $args['field_options'] ) ) {
 		</div>
 		<?php
 		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-
 	}
 	$this->reset_attributes();
 

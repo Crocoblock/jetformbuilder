@@ -8,8 +8,8 @@ use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;
 
 class Condition_Manager {
 
-	const THROW_IF_ONE_MATCH          = 'throw_out_if_at_least_one_match';
-	const THROW_IF_ONE_WRONG          = 'throw_out_if_at_least_one_wrong';
+	const THROW_IF_ONE_MATCH = 'throw_out_if_at_least_one_match';
+	const THROW_IF_ONE_WRONG = 'throw_out_if_at_least_one_wrong';
 	const TRANSFORM_DATE_TO_TIMESTAMP = 'date_to_timestamp';
 
 	private $conditions;
@@ -18,7 +18,7 @@ class Condition_Manager {
 
 	private function settings(): array {
 		return array(
-			'item'                  => array(
+			'item'                       => array(
 				'execute'                     => true,
 				'operator'                    => '',
 				'field'                       => '',
@@ -26,7 +26,7 @@ class Condition_Manager {
 				'compare_value_format_type'   => '',
 				'compare_value_format_custom' => '',
 			),
-			'compare_value_formats' => array(
+			'compare_value_formats'      => array(
 				array(
 					'label' => '--',
 					'value' => '',
@@ -43,7 +43,8 @@ class Condition_Manager {
 					),
 				),
 			),
-			'operators'             => array(
+			'help_for_exploding_compare' => __( 'List the values separated by commas', 'jet-form-builder' ),
+			'operators'                  => array(
 				array(
 					'label' => '--',
 					'value' => '',

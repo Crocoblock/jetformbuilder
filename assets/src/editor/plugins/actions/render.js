@@ -59,18 +59,20 @@ function getActionCallback( editedAction ) {
 	return false;
 }
 
-function getHelpForOperator( operator ) {
-	const operatorItem = conditionSettings.operators.find( item => item.value === operator );
+function getConditionOptionFrom( from, value ) {
+	const option = conditionSettings[ from ].find( item => item.value === value );
 
-	return operatorItem ? (
-		operatorItem.help || ''
-	) : '';
+	return ( optionName, ifNot = '' ) => option ? (
+		option[ optionName ] || ifNot
+	) : ifNot;
 }
 
-function getHelpForTransformer( value ) {
-	const option = conditionSettings.compare_value_formats.find( item => item.value === value );
+function getOperatorOption( operator ) {
+	return getConditionOptionFrom( 'operators', operator );
+}
 
-	return option ? ( option.help || '' ) : '';
+function getTransformerOption( value ) {
+	return getConditionOptionFrom( 'compare_value_formats', value );
 }
 
 const operators = [
@@ -325,8 +327,8 @@ let PluginActions = ( { setCurrentAction } ) => {
 					onSaveItems={ conditions => {
 						updateActionObj( processedAction.id, {
 							conditions,
-							condition_operator: processedAction.condition_operator
-						} )
+							condition_operator: processedAction.condition_operator,
+						} );
 						setProcessedAction( false );
 					} }
 					addNewButtonLabel={ __( 'Add New Condition', 'jet-form-builder' ) }
@@ -337,7 +339,9 @@ let PluginActions = ( { setCurrentAction } ) => {
 						value={ processedAction.condition_operator || 'and' }
 						options={ operators }
 						onChange={ condition_operator => {
-							setProcessedAction( prev => ( { ...prev, condition_operator } ) );
+							setProcessedAction( prev => (
+								{ ...prev, condition_operator }
+							) );
 						} }
 					/> }
 				>
@@ -345,7 +349,8 @@ let PluginActions = ( { setCurrentAction } ) => {
 						let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
 						executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
 
-						const htmlHelpForTransformer = getHelpForTransformer( currentItem.compare_value_format );
+						const transformerOption = getTransformerOption( currentItem.compare_value_format );
+						const operatorOption = getOperatorOption( currentItem.operator );
 
 						return <>
 							<ToggleControl
@@ -358,7 +363,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 							<SelectControl
 								label="Operator"
 								labelPosition="side"
-								help={ getHelpForOperator( currentItem.operator ) }
+								help={ operatorOption( 'help' ) }
 								value={ currentItem.operator }
 								options={ conditionSettings.operators }
 								onChange={ operator => changeCurrentItem( { operator } ) }
@@ -379,10 +384,10 @@ let PluginActions = ( { setCurrentAction } ) => {
 									changeCurrentItem( { compare_value_format } );
 								} }
 							/>
-							{ htmlHelpForTransformer.length > 0 && <p
+							{ transformerOption( 'help' ).length > 0 && <p
 								className={ 'components-base-control__help' }
 								style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
-								dangerouslySetInnerHTML={ { __html: htmlHelpForTransformer } }
+								dangerouslySetInnerHTML={ { __html: transformerOption( 'help' ) } }
 							/> }
 							<FieldWithPreset
 								baseControlProps={ {
@@ -402,6 +407,9 @@ let PluginActions = ( { setCurrentAction } ) => {
 								<TextareaControl
 									className={ 'jet-control-clear jet-user-fields-map__list' }
 									value={ currentItem.default }
+									help={ operatorOption( 'need_explode' )
+										? conditionSettings.help_for_exploding_compare
+										: '' }
 									onChange={ newValue => {
 										changeCurrentItem( { default: newValue } );
 									} }
@@ -413,7 +421,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 			} }
 		</ActionModal> }
 	</>;
-}
+};
 
 PluginActions = compose(
 	withDispatch( dispatch => {

@@ -232,7 +232,8 @@ class Condition_Instance {
 					return false;
 				}
 
-				return in_array( (string) $field, $compare_values, true );
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+				return in_array( $field, $compare_values );
 			case 'contain':
 				return ( strpos( $this->get_field_value(), $this->get_compare() ) !== false );
 			default:

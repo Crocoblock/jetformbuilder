@@ -31,14 +31,6 @@ abstract class Base {
 	public $settings = array();
 
 	/**
-	 * Stores the action conditions
-	 * from the form meta field
-	 *
-	 * @var Condition_Manager
-	 */
-	public $conditions;
-
-	/**
 	 * Stores the unique id of action
 	 *
 	 * @var integer
@@ -77,12 +69,6 @@ abstract class Base {
 			'jet-form-builder/message-types/' . $this->get_id(),
 			$this->messages()
 		);
-	}
-
-	public function set_condition_manager( Condition_Manager $manager ) {
-		$this->condition = $manager;
-
-		return $this;
 	}
 
 	public function is_repeater_val( $value ) {

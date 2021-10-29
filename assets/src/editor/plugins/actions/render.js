@@ -67,8 +67,10 @@ function getHelpForOperator( operator ) {
 	) : '';
 }
 
-function getHelpForConditionOption( option_name ) {
-	return conditionSettings.help[ option_name ] || '';
+function getHelpForTransformer( value ) {
+	const option = conditionSettings.compare_value_formats.find( item => item.value === value );
+
+	return option ? ( option.help || '' ) : '';
 }
 
 const operators = [
@@ -343,6 +345,8 @@ let PluginActions = ( { setCurrentAction } ) => {
 						let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
 						executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
 
+						const htmlHelpForTransformer = getHelpForTransformer( currentItem.compare_value_format );
+
 						return <>
 							<ToggleControl
 								label={ executeLabel }
@@ -357,36 +361,28 @@ let PluginActions = ( { setCurrentAction } ) => {
 								help={ getHelpForOperator( currentItem.operator ) }
 								value={ currentItem.operator }
 								options={ conditionSettings.operators }
-								onChange={ newValue => {
-									changeCurrentItem( { operator: newValue } );
-								} }
+								onChange={ operator => changeCurrentItem( { operator } ) }
 							/>
 							<SelectControl
 								label="Field"
 								labelPosition="side"
-								help={ getHelpForConditionOption( 'field' ) }
 								value={ currentItem.field }
 								options={ formFields }
-								onChange={ newValue => {
-									changeCurrentItem( { field: newValue } );
-								} }
+								onChange={ field => changeCurrentItem( { field } ) }
 							/>
 							<SelectControl
-								label={ __( 'Compare value format', 'jet-form-builder' ) }
+								label={ __( 'Type transform comparing value', 'jet-form-builder' ) }
 								labelPosition="side"
-								help={ getHelpForConditionOption( 'compare_value_format' ) }
 								value={ currentItem.compare_value_format }
 								options={ conditionSettings.compare_value_formats }
-								onChange={ newValue => {
-									changeCurrentItem( { compare_value_format: newValue } );
+								onChange={ compare_value_format => {
+									changeCurrentItem( { compare_value_format } );
 								} }
 							/>
-							{ 'custom' === currentItem.compare_value_format && <TextControl
-								value={ currentItem.compare_value_format_custom }
-								label={ __( 'Input compare value format', 'jet-form-builder' ) }
-								onChange={ compare_value_format_custom => {
-									changeCurrentItem( { compare_value_format_custom } );
-								} }
+							{ htmlHelpForTransformer.length > 0 && <p
+								className={ 'components-base-control__help' }
+								style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
+								dangerouslySetInnerHTML={ { __html: htmlHelpForTransformer } }
 							/> }
 							<FieldWithPreset
 								baseControlProps={ {

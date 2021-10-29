@@ -23,14 +23,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE         = 'jet-form-builder-editor';
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public static $index = 0;
 
 	public $allowed_blocks = null;
-	public $action         = null;
-	public $item_id        = null;
+	public $action = null;
+	public $item_id = null;
 
 	/**
 	 * Set up editor instatnce props
@@ -329,13 +329,6 @@ class Editor {
 		return Plugin::instance()->post_type->get_messages_default();
 	}
 
-	public function get_action_condition_settings() {
-		return apply_filters(
-			'jet-form-builder/register/action-condition-settings',
-            ( new Condition_Helper() )->get_settings();
-		);
-	}
-
 	/**
 	 * Enqueue editor assets
 	 *
@@ -389,6 +382,8 @@ class Editor {
 			'all'
 		);
 
+		$conditions_settings = jet_form_builder()->form_handler->action_handler->condition_manager()->get_settings();
+
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
@@ -401,7 +396,7 @@ class Editor {
 				'helpForRepeaters'        => $this->get_help_for_repeaters(),
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
-				'actionConditionSettings' => $this->get_action_condition_settings(),
+				'actionConditionSettings' => $conditions_settings,
 			)
 		);
 
@@ -490,7 +485,7 @@ class Editor {
 					'<?php echo esc_js( $form_name ); ?>',
 				);
 			} );
-		</script>
+        </script>
 		<?php
 	}
 

@@ -254,7 +254,6 @@ class Action_Handler {
 				continue;
 			}
 
-			throw new Action_Exception( $action->get_id() );
 			/**
 			 * Process single action
 			 */

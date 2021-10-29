@@ -76,8 +76,6 @@ class Manager {
 		if ( ! $type->dependence() ) {
 			$this->_rep_abort_this();
 		}
-
-		$type->install_condition_obj( new Condition_Helper() );
 	}
 
 

@@ -9,7 +9,7 @@ class Parse_Exception extends Handler_Exception {
 		return $this->get_additional()[0] ?? array();
 	}
 
-	public function save_exception_to_logger() {
+	public function save_exception(): bool {
 		return false;
 	}
 

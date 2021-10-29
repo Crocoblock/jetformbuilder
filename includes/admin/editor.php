@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
@@ -22,14 +23,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE         = 'jet-form-builder-editor';
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public static $index = 0;
 
 	public $allowed_blocks = null;
-	public $action         = null;
-	public $item_id        = null;
+	public $action = null;
+	public $item_id = null;
 
 	/**
 	 * Set up editor instatnce props
@@ -381,18 +382,21 @@ class Editor {
 			'all'
 		);
 
+		$conditions_settings = jet_form_builder()->form_handler->action_handler->condition_manager()->get_settings();
+
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
-				'action'           => $this->get_action(),
-				'itemID'           => $this->get_item_id(),
-				'presetConfig'     => $this->get_preset_config(),
-				'messagesDefault'  => $this->get_messages_default(),
-				'gateways'         => Gateway_Manager::instance()->editor_data(),
-				'helpForRepeaters' => $this->get_help_for_repeaters(),
-				'global_settings'  => Tab_Handler_Manager::instance()->all(),
-				'jetEngineVersion' => Tools::get_jet_engine_version(),
+				'action'                  => $this->get_action(),
+				'itemID'                  => $this->get_item_id(),
+				'presetConfig'            => $this->get_preset_config(),
+				'messagesDefault'         => $this->get_messages_default(),
+				'gateways'                => Gateway_Manager::instance()->editor_data(),
+				'helpForRepeaters'        => $this->get_help_for_repeaters(),
+				'global_settings'         => Tab_Handler_Manager::instance()->all(),
+				'jetEngineVersion'        => Tools::get_jet_engine_version(),
+				'actionConditionSettings' => $conditions_settings,
 			)
 		);
 
@@ -471,9 +475,9 @@ class Editor {
 		}
 
 		?>
-		<input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
-		<script>
-			document.addEventListener( 'jet-form-builder-initialized', function( event ) {
+        <input name="<?php echo esc_attr( $input_name ); ?>" id="<?php echo esc_attr( $input_name ); ?>" type="hidden"/>
+        <script>
+			document.addEventListener( 'jet-form-builder-initialized', function ( event ) {
 				window.JetFormEditor(
 					'<?php echo esc_js( $input_name ); ?>',
 					'<?php echo esc_js( $input_name ); ?>',
@@ -481,7 +485,7 @@ class Editor {
 					'<?php echo esc_js( $form_name ); ?>',
 				);
 			} );
-		</script>
+        </script>
 		<?php
 	}
 

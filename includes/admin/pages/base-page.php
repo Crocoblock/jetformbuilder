@@ -87,4 +87,8 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 		);
 	}
 
+	public function base_script_url(): string {
+		return Plugin::instance()->plugin_url( "assets/js/admin/pages/{$this->slug()}.js" );
+	}
+
 }

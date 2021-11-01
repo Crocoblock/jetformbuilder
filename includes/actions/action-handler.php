@@ -105,18 +105,15 @@ class Action_Handler {
 	 * @throws Repository_Exception
 	 */
 	public function save_form_action( $form_action ) {
-		$actions_manager = jet_form_builder()->actions;
-		$type            = $form_action['type'];
+		$type = $form_action['type'];
 
-		$actions_manager->rep_throw_if_undefined( $type );
+		/** @var Base $action */
+		$action = jet_form_builder()->actions->get_action_clone( $type );
 
 		$id         = $form_action['id'];
 		$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
 		$conditions = $form_action['conditions'] ?? array();
 		$operator   = $form_action['condition_operator'] ?? 'and';
-
-		/** @var Base $action */
-		$action = $actions_manager->get_action_clone( $type );
 
 		/**
 		 * Save action settings to the class field,

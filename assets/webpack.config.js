@@ -1,17 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require( 'vue-loader' );
+const { getAllEntries } = require( './webpack.helper' );
 
 module.exports = {
 	name: 'js_bundle',
 	context: path.resolve(__dirname, 'src'),
-	entry: {
-		'editor.js': './editor/main.js',
-		'form-block.js': './editor/form-block.js',
-		'package.js': './package/manager.js',
-		'admin.js': './admin/main.js',
-		'admin-package.js': './admin-package/manager.js',
-	},
+	entry: getAllEntries(),
 	output: {
 		path: path.resolve( __dirname, 'js' ),
 		filename: '[name]'

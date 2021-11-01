@@ -9,7 +9,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 class Paypal_Subscriptions_Entries extends Base_Page {
 
 	public function slug(): string {
-		return 'paypal-entries';
+		return 'jfb-paypal-entries';
 	}
 
 	public function title(): string {

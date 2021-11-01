@@ -8,8 +8,8 @@ use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;
 
 class Condition_Manager {
 
-	const THROW_IF_ONE_MATCH = 'throw_out_if_at_least_one_match';
-	const THROW_IF_ONE_WRONG = 'throw_out_if_at_least_one_wrong';
+	const THROW_IF_ONE_MATCH          = 'throw_out_if_at_least_one_match';
+	const THROW_IF_ONE_WRONG          = 'throw_out_if_at_least_one_wrong';
 	const TRANSFORM_DATE_TO_TIMESTAMP = 'date_to_timestamp';
 
 	private $conditions;

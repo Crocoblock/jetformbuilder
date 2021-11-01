@@ -42,7 +42,8 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function get_columns_headings(): array {
 		return array(
 			self::COLUMN_CHOOSE => array(
-				'label' => '',
+				'label'           => '',
+				'show_in_details' => false,
 			),
 			'id'                => array(
 				'label' => __( 'ID', 'jet-form-builder' ),
@@ -51,10 +52,65 @@ class Subscribe_Now extends Scenario_View_Base {
 				'label' => __( 'Record ID', 'jet-form-builder' ),
 			),
 			'status'            => array(
-				'label' => __( 'Status Info', 'jet-form-builder' ),
+				'label'    => __( 'Status Info', 'jet-form-builder' ),
+				'children' => array(
+					'status'             => array(
+						'label' => __( 'Status', 'jet-form-builder' ),
+					),
+					'status_update_time' => array(
+						'label' => __( 'Last update date', 'jet-form-builder' ),
+					),
+				),
 			),
 			'subscriber'        => array(
-				'label' => __( 'Subscriber Info', 'jet-form-builder' ),
+				'label'    => __( 'Subscriber Info', 'jet-form-builder' ),
+				'children' => array(
+					'email_address'    => array(
+						'label' => __( 'Email', 'jet-form-builder' ),
+					),
+					'payer_id'         => array(
+						'label' => __( 'Payer ID', 'jet-form-builder' ),
+					),
+					'name'             => array(
+						'label'    => __( 'Name', 'jet-form-builder' ),
+						'children' => array(
+							'given_name' => array(
+								'label' => __( 'Given Name', 'jet-form-builder' ),
+							),
+							'surname'    => array(
+								'label' => __( 'Surname', 'jet-form-builder' ),
+							),
+						),
+					),
+					'shipping_address' => array(
+						'skip_level' => true,
+						'children'   => array(
+							'address' => array(
+								'label'    => __( 'Address', 'jet-form-builder' ),
+								'children' => array(
+									'address_line_1' => array(
+										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+										'label' => sprintf( __( 'Address Line %s', 'jet-form-builder' ), '#1' ),
+									),
+									'admin_area_2'   => array(
+										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+										'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#2' ),
+									),
+									'admin_area_1'   => array(
+										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+										'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#1' ),
+									),
+									'postal_code'    => array(
+										'label' => __( 'Postal Code', 'jet-form-builder' ),
+									),
+									'country_code'   => array(
+										'label' => __( 'Country Code', 'jet-form-builder' ),
+									),
+								),
+							),
+						),
+					),
+				),
 			),
 			'plan_info'         => array(
 				'label' => __( 'Plan Info', 'jet-form-builder' ),
@@ -99,7 +155,7 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function get_status_info( $record, $undefined ): array {
 		return array(
 			'status'             => $record['resource']['status'] ?? $undefined,
-			'status_update_time' => $record['resource']['status_update_time'] ?? __( 'Not updated yet.', 'jet-form-builder' ),
+			'status_update_time' => $this->format_datetime( $record['resource']['status_update_time'] ),
 		);
 	}
 
@@ -156,7 +212,13 @@ class Subscribe_Now extends Scenario_View_Base {
 	 * - 2021-10-25T07:15:28Z
 	 */
 	public function get_create_time( $record, $undefined ) {
-		return $record['resource']['create_time'] ?? $undefined;
+		return $this->format_datetime( $record['resource']['create_time'] );
+	}
+
+	protected function format_datetime( $datetime ) {
+		$update_time = date( 'Y-m-d H:i:s', strtotime( $datetime ) );
+
+		return get_date_from_gmt( $update_time );
 	}
 
 }

@@ -1,7 +1,5 @@
 import PaypalEntries from './PaypalEntries';
 
-const component = PaypalEntries;
-
 Vue.use( Vuex );
 
 const options = {
@@ -46,4 +44,6 @@ const options = {
 	} ),
 };
 
-export { component, options };
+const { renderCurrentPage } = window.JetFBActions;
+
+renderCurrentPage( PaypalEntries, options );

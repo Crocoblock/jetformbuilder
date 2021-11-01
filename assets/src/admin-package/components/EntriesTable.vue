@@ -27,6 +27,7 @@
 					:key="entryID"
 					v-for="( entry, entryID ) in entries"
 					:class="classEntry( entryID )"
+					@dblclick="$emit( 'dblclick-row', entryID )"
 				>
 					<div
 						v-for="column in columnsIDs"
@@ -52,6 +53,7 @@
 
 <script>
 import * as ChooseColumn from '../entries-table-columns/choose';
+import GetColumnComponent from '../mixins/GetColumnComponent';
 
 const defaultColumns = {
 	choose: ChooseColumn,
@@ -68,26 +70,17 @@ export default {
 			type: Object,
 			required: true,
 		},
-		columnsComponents: {
-			type: Array,
-			required: false,
-			default() {
-				return [];
-			},
-		},
 	},
 	data() {
 		return {
 			columnsIDs: [],
 			entries: {},
-			componentsCols: [],
 		};
 	},
+	mixins: [ GetColumnComponent ],
 	created() {
 		this.columnsIDs = Object.keys( this.columns );
 		this.entries = JSON.parse( JSON.stringify( this.entriesList ) );
-
-		this.componentsCols = [ ...this.columnsComponents ];
 
 		for ( const columnName in defaultColumns ) {
 			if ( ! this.columnsIDs.includes( columnName ) ) {
@@ -104,23 +97,10 @@ export default {
 			};
 		},
 		getHeadingComponent( column ) {
-			const index = this.componentsCols.findIndex( comp => comp?.head?.name === (
-				column + '--head'
-			) );
-
-			return (
-				- 1 === index
-			) ? false : this.componentsCols[ index ].head;
-
+			return this.getColumnComponentByPrefix( column, 'head' );
 		},
 		getItemComponent( column ) {
-			const index = this.componentsCols.findIndex( comp => comp?.item?.name === (
-				column + '--item'
-			) );
-
-			return (
-				- 1 === index
-			) ? false : this.componentsCols[ index ].item;
+			return this.getColumnComponentByPrefix( column, 'item' );
 		},
 	},
 };

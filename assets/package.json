@@ -30,6 +30,7 @@
     "write": "^2.0.0"
   },
   "dependencies": {
-    "semver": "^7.3.5"
+    "semver": "^7.3.5",
+    "vue-clipboard2": "^0.3.3"
   }
 }

@@ -118,7 +118,7 @@ class Pages_Manager {
 
 		wp_register_script(
 			$this->current_page->slug(),
-			Plugin::instance()->plugin_url( 'assets/js/admin.js' ),
+			$this->current_page->base_script_url(),
 			array(),
 			Plugin::instance()->get_version(),
 			true

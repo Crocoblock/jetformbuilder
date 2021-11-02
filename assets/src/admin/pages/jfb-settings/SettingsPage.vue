@@ -1,5 +1,5 @@
 <template>
-	<div class="jet-fb-settings-page wrap">
+	<div class="jet-form-builder-page jet-form-builder-page--settings wrap">
 		<h1 class="cs-vui-title">{{ 'JetFormBuilder Settings' }}</h1>
 		<div class="cx-vui-panel">
 			<cx-vui-tabs
@@ -44,6 +44,8 @@ import * as mailchimp from './tabs/mailchimp'
 import * as getResponse from './tabs/getresponse'
 import * as activecampaign from './tabs/activecampaign'
 import * as paymentGateways from './tabs/payments-gateways'
+
+import '../../../../scss/admin/default.scss';
 
 const { applyFilters, doAction } = wp.hooks;
 

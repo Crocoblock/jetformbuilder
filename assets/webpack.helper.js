@@ -24,7 +24,6 @@ function getAdminPagesEntries() {
 }
 
 module.exports = {
-
 	getAllEntries() {
 		return {
 			'editor.js': './editor/main.js',

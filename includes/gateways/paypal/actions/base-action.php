@@ -10,13 +10,24 @@ use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 abstract class Base_Action {
 
+	const CODE_OK         = 200;
+	const CODE_CREATED    = 201;
+	const CODE_NO_CONTENT = 204;
+
 	protected $auth;
 	protected $method = 'POST';
 	protected $body   = array();
+	protected $response;
+	protected $response_body;
+	protected $response_code;
 
 	abstract public function action_slug();
 
 	abstract public function action_endpoint();
+
+	public function accept_code(): int {
+		return self::CODE_OK;
+	}
 
 	public function action_headers() {
 		return array();
@@ -26,11 +37,11 @@ abstract class Base_Action {
 		return array();
 	}
 
-	public function get_url() {
+	public function get_url(): string {
 		return $this->api_url( $this->action_endpoint() );
 	}
 
-	public function get_method() {
+	public function get_method(): string {
 		return $this->method;
 	}
 
@@ -38,25 +49,25 @@ abstract class Base_Action {
 		return $this->auth;
 	}
 
-	public function set_bearer_auth( $token ) {
+	public function set_bearer_auth( $token ): Base_Action {
 		$this->set_auth( "Bearer $token" );
 
 		return $this;
 	}
 
-	public function set_basic_auth( $token ) {
+	public function set_basic_auth( $token ): Base_Action {
 		$this->set_auth( "Basic $token" );
 
 		return $this;
 	}
 
-	public function set_auth( $auth_str ) {
+	public function set_auth( $auth_str ): Base_Action {
 		$this->auth = $auth_str;
 
 		return $this;
 	}
 
-	public function set_body( $content ) {
+	public function set_body( $content ): Base_Action {
 		if ( is_string( $content ) ) {
 			$this->body = $content;
 		}
@@ -68,7 +79,7 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	public function get_headers() {
+	public function get_headers(): array {
 		$args = array(
 			'Content-Type'    => 'application/json',
 			'Accept-Language' => get_locale(),
@@ -151,25 +162,45 @@ abstract class Base_Action {
 
 	/**
 	 * Make a request
-	 *
-	 * @return string
 	 */
-	public function request() {
+	public function request(): Base_Action {
 		$this->before_make_request();
 
-		return wp_remote_retrieve_body( $this->get_response() );
+		$response = $this->get_response();
+
+		$this->response_body = wp_remote_retrieve_body( $response );
+		$this->response_code = (int) wp_remote_retrieve_response_code( $response );
+
+		return $this;
+	}
+
+	private function get_response_body() {
+		return $this->response_body;
+	}
+
+	private function get_response_code() {
+		return $this->response_code;
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	public function check_response_code() {
+		if ( $this->accept_code() !== $this->get_response_code() ) {
+			throw new Gateway_Exception( "Invalid code. ({$this->get_response_code()})" );
+		}
 	}
 
 	/**
 	 * @throws Gateway_Exception
 	 */
 	public function send_request() {
-		$response = $this->request();
+		$this->request();
 
-		if ( empty( $response ) ) {
+		if ( empty( $this->get_response_body() ) ) {
 			throw new Gateway_Exception( 'empty_response' );
 		}
-		if ( is_wp_error( $response ) ) {
+		if ( is_wp_error( $this->get_response_body() ) ) {
 			/** @var \WP_Error $response */
 			throw new Gateway_Exception(
 				'wp_error',
@@ -179,7 +210,7 @@ abstract class Base_Action {
 			);
 		}
 
-		$parsed_response = Tools::decode_json( $response );
+		$parsed_response = Tools::decode_json( $this->get_response_body() );
 
 		if ( is_null( $parsed_response ) ) {
 			throw new Gateway_Exception( 'invalid_json', $parsed_response );
@@ -187,8 +218,6 @@ abstract class Base_Action {
 
 		return $parsed_response;
 	}
-
-
 
 
 }

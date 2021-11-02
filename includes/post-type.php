@@ -4,6 +4,7 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Shortcodes\Manager;
 
@@ -173,15 +174,15 @@ class Post_Type {
 				'default' => '{}',
 			),
 
-			'_jf_actions'   => array(
+			'_jf_actions'  => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages'  => array(
+			'_jf_messages' => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'    => array(
+			'_jf_preset'   => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -220,13 +221,12 @@ class Post_Type {
 	}
 
 	public function get_form_meta( $meta_key, $form_id ) {
-		return json_decode(
+		return Tools::decode_json(
 			get_post_meta(
 				$form_id,
 				$meta_key,
 				true
-			),
-			true
+			)
 		);
 	}
 
@@ -334,7 +334,7 @@ class Post_Type {
 
 	public function set_default_messages() {
 		$this->messages = apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			'jet-form-builder/message-types',
 			array(
 				'success'           => array(

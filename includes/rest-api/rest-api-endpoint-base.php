@@ -11,11 +11,9 @@ abstract class Rest_Api_Endpoint_Base {
 
 	abstract public static function get_rest_base();
 
-	abstract public function get_methods();
+	abstract static public function get_methods();
 
-	public function get_callback( \WP_REST_Request $request ) {
-		return array();
-	}
+	abstract public function run_callback( \WP_REST_Request $request );
 
 	public function get_common_args(): array {
 		return array();
@@ -39,8 +37,8 @@ abstract class Rest_Api_Endpoint_Base {
 		return true;
 	}
 
-	public static function rest_url( $args = '' ) {
-		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base() . $args, 'https' );
+	public static function rest_url() {
+		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base(), 'https' );
 	}
 
 }

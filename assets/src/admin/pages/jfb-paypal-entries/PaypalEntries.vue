@@ -1,13 +1,14 @@
 <template>
 	<div :class="{
 		'wrap': true,
-		'jet-fb-paypal-entries-page': true,
+		'jet-form-builder-page': true,
+		'jet-form-builder-page--paypal-entries': true,
 		['jfb-paypal-scenario--' + scenario]: true
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
 		<EntriesTable
 			:entries-list="list"
-			:columns="columns"
+			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 			@dblclick-row="openPopup"
 		/>
@@ -20,23 +21,16 @@
 			<template #content>
 				<h3>{{ __( 'Subscription Information', 'jet-form-builder' ) }}</h3>
 				<div class="cx-vui-inner-panel">
-					<DetailsTable
-						:source="currentPopupData"
-						:columns="columns"
-					/>
+					<DetailsTableWithStore />
 				</div>
 				<h3>{{ __( 'Subscription Actions', 'jet-form-builder' ) }}</h3>
 				<div class="cx-vui-inner-panel">
-					<cx-vui-button
-						button-style="link-error"
-					>
-						<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
-					</cx-vui-button>
-					<cx-vui-button
-						button-style="link-error"
-					>
-						<template #label>{{ __( 'Suspend', 'jet-form-builder' ) }}</template>
-					</cx-vui-button>
+					<SubscriptionActionPanel
+						v-for="( actionOptions, actionSlug ) in actions"
+						:key="actionSlug"
+						:type="actionSlug"
+						v-bind="actionOptions"
+					/>
 				</div>
 			</template>
 		</cx-vui-popup>
@@ -46,13 +40,16 @@
 <script>
 import * as subscriber from './columns/subscriber';
 import * as status from './columns/status';
+import SubscriptionActionPanel from './SubscriptionActionPanel';
+
+import '../../../../scss/admin/default.scss';
 
 Vue.config.devtools = true;
 
 const { applyFilters } = wp.hooks;
 
 const { GetIncoming, i18n } = window.JetFBMixins;
-const { EntriesTable, DetailsTable } = window.JetFBComponents;
+const { EntriesTable, DetailsTableWithStore } = window.JetFBComponents;
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	subscriber,
@@ -61,38 +58,41 @@ const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns'
 
 export default {
 	name: 'jfb-paypal-entries',
-	components: { DetailsTable, EntriesTable },
+	components: { DetailsTableWithStore, SubscriptionActionPanel, EntriesTable },
 	data() {
 		return {
 			list: [],
-			columns: {},
 			scenario: '',
 			settings: {},
+			actions: {},
 			columnsComponents,
 			isShowPopup: false,
-			currentPopupData: {},
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
 	created() {
-		const { list = [], columns = {}, scenario = '', settings = {} } = this.getIncoming();
+		const { list = [], columns = {}, scenario = '', actions = {} } = this.getIncoming();
 
 		this.list = JSON.parse( JSON.stringify( list ) );
-		this.columns = JSON.parse( JSON.stringify( columns ) );
+		this.actions = JSON.parse( JSON.stringify( actions ) );
 		this.scenario = scenario;
+
+		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
+	},
+	computed: {
+		columnsFromStore() {
+			return this.$store.getters.getColumns;
+		},
 	},
 	methods: {
-
 		openPopup( entryID ) {
-			this.currentPopupData = this.list[ entryID ] || {};
+			this.$store.commit( 'setCurrent', this.list[ entryID ] || {} );
+
 			this.isShowPopup = true;
 		},
 		closePopup() {
 			this.isShowPopup = false;
-			this.currentPopupData = {};
-		},
-		getCurrentValueInPopup( columnName ) {
-			return this.currentPopupData[ columnName ]?.value;
+			this.$store.commit( 'clearCurrent' );
 		},
 	},
 };
@@ -104,6 +104,13 @@ export default {
 .cx-vui-button--style-link-error {
 	background: #ffffff;
 	box-shadow: 0 4px 4px rgb(201 44 44 / 50%);
+}
+
+.cx-vui-component--fullwidth-label {
+	.cx-vui-component__meta {
+		justify-content: center;
+		flex: 1;
+	}
 }
 
 .cx-vue-list-table {

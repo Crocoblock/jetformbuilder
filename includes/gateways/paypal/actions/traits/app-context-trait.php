@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
 
 /**
  * Trait App_Context_Trait

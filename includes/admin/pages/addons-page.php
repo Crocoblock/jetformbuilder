@@ -20,20 +20,6 @@ class Addons_Page extends Base_Page {
 	}
 
 	/**
-	 * Page Assets
-	 */
-	public function assets() {
-		parent::assets();
-
-		wp_enqueue_style(
-			$this->slug(),
-			Plugin::instance()->plugin_url( 'assets/css/admin/settings.css' ),
-			array(),
-			Plugin::instance()->get_version()
-		);
-	}
-
-	/**
 	 * Return page config array
 	 */
 	public function page_config(): array {

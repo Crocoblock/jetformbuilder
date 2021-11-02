@@ -18,15 +18,15 @@ abstract class Rest_Api_Controller_Base {
 		foreach ( $this->routes() as $route ) {
 			$endpoint_args = $route->get_overridden_args()
 				?: array(
-					'methods'             => $route->get_methods(),
-					'callback'            => array( $route, 'get_callback' ),
+					'methods'             => $route::get_methods(),
+					'callback'            => array( $route, 'run_callback' ),
 					'permission_callback' => array( $route, 'get_permission_callback' ),
 					'args'                => $route->get_common_args(),
 				);
 
 			$result = register_rest_route(
-				$route->get_namespace(),
-				"/{$route->get_rest_base()}",
+				$route::get_namespace(),
+				"/{$route::get_rest_base()}",
 				$endpoint_args,
 				$route->get_override()
 			);
@@ -34,7 +34,7 @@ abstract class Rest_Api_Controller_Base {
 			if ( ! $result ) {
 				_doing_it_wrong(
 					__METHOD__,
-					"Error on register REST API route: {$route->get_namespace()}/{$route->get_rest_base()}",
+					"Error on register REST API route: {$route::get_namespace()}/{$route::get_rest_base()}",
 					'1.4.0'
 				);
 			}

@@ -181,6 +181,10 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public static function get_token_by_form_id( $form_id ) {
+		if ( ! $form_id ) {
+			return self::get_token_global();
+		}
+
 		$paypal = Gateway_Manager::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
 
 		if ( empty( $paypal['secret'] ) || empty( $paypal['client_id'] ) ) {

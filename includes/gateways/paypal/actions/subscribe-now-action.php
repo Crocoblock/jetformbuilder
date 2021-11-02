@@ -3,9 +3,11 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Actions;
 
+use Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+
 class Subscribe_Now_Action extends Base_Action {
 
-	use App_Context_Trait;
+	use Traits\App_Context_Trait;
 
 	private $plan_id;
 

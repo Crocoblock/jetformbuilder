@@ -3,16 +3,12 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
-class Paypal_Subscription_Form_Id_Endpoint extends Rest_Api_Endpoint_Base {
-
-	use Paypal\Actions\List_Webhook_Trait;
-	use Paypal_Subscription_Base_Trait;
+class Event_Subscription_Form_Id_Endpoint extends Event_Subscription_Base {
 
 	public static function get_rest_base(): string {
-		return 'paypal-subscription/(?P<id>[\d]+)';
+		return 'event-subscription/(?P<id>[\d]+)';
 	}
 
 	public function get_common_args(): array {

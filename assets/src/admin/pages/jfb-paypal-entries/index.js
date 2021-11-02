@@ -7,13 +7,30 @@ const options = {
 		state: {
 			checked: [],
 			idList: [],
+			currentPopupData: {},
+			columns: {}
 		},
 		getters: {
 			isChecked: state => id => {
 				return state.checked.includes( id );
 			},
+			getCurrent: state => {
+				return state.currentPopupData;
+			},
+			getColumns: state => {
+				return state.columns;
+			}
 		},
 		mutations: {
+			setColumns( state, columns ) {
+				state.columns = columns;
+			},
+			setCurrent( state, current ) {
+				state.currentPopupData = current;
+			},
+			clearCurrent( state ) {
+				state.currentPopupData = {};
+			},
 			addToStore( state, { id } ) {
 				state.idList.push( id );
 			},

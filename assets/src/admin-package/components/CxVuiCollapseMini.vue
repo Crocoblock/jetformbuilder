@@ -22,13 +22,24 @@
 			>
 				{{ desc }}
 			</div>
+			<div
+				v-if="$slots.description"
+				class="cx-vui-collapse-mini__header-custom-description"
+			>
+				<slot name="description"></slot>
+			</div>
 		</div>
-		<div
-			v-show="isActive"
-			class="cx-vui-collapse-mini__content"
-		>
-			<slot>Collapse content...</slot>
-		</div>
+		<template v-if="this.$slots.default">
+			<div
+				v-show="isActive"
+				class="cx-vui-collapse-mini__content"
+			>
+				<slot></slot>
+			</div>
+		</template>
+		<template v-else>
+			<slot name="custom" :state="{ isActive }"></slot>
+		</template>
 	</div>
 </template>
 
@@ -68,5 +79,5 @@ export default {
 			this.$emit( 'change', this.isActive );
 		},
 	},
-}
+};
 </script>

@@ -22,17 +22,6 @@ class Settings_Page extends Base_Page {
 		return __( 'Settings', 'jet-form-builder' );
 	}
 
-	public function assets() {
-		parent::assets();
-
-		wp_enqueue_style(
-			$this->slug(),
-			Plugin::instance()->plugin_url( 'assets/css/admin/settings.css' ),
-			array(),
-			Plugin::instance()->get_version()
-		);
-	}
-
 
 	/**
 	 * Return page config array

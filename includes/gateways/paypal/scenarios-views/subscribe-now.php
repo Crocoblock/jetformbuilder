@@ -4,10 +4,33 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Cancel_Subscription;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Suspend_Subscription;
 
 class Subscribe_Now extends Scenario_View_Base {
 
 	use Scenarios_Connectors\Subscribe_Now;
+
+	public function get_single_actions(): array {
+		return array(
+			'cancel'  => array(
+				'label'  => __( 'Cancel subscription', 'jet-form-builder' ),
+				'reason' => array(
+					'label'   => __( 'Reason', 'jet-form-builder' ),
+					'desc'    => __( 'The reason for the cancellation of a subscription.', 'jet-form-builder' ),
+					'default' => 'Not satisfied with the service.',
+				),
+			),
+			'suspend' => array(
+				'label'  => __( 'Suspend subscription', 'jet-form-builder' ),
+				'reason' => array(
+					'label'   => __( 'Reason', 'jet-form-builder' ),
+					'desc'    => __( 'The reason for suspenson of the subscription.', 'jet-form-builder' ),
+					'default' => 'Item out of stock.',
+				),
+			),
+		);
+	}
 
 	public function get_columns_handlers(): array {
 		return array(
@@ -35,6 +58,14 @@ class Subscribe_Now extends Scenario_View_Base {
 			),
 			'create_time'       => array(
 				'value' => array( $this, 'get_create_time' ),
+			),
+			'links'             => array(
+				'value' => array( $this, 'get_links' ),
+				'type'  => 'array',
+			),
+			'_FORM_ID'          => array(
+				'value' => array( $this, 'get_form_id' ),
+				'type'  => 'integer',
 			),
 		);
 	}
@@ -132,6 +163,10 @@ class Subscribe_Now extends Scenario_View_Base {
 		return $record['order_id'] ?? $undefined;
 	}
 
+	public function get_form_id( $record, $default ) {
+		return $record['form_id'];
+	}
+
 	/**
 	 * Possible values in $record['resource']['id'] :
 	 * - I-17SAYS7KS71U
@@ -140,6 +175,19 @@ class Subscribe_Now extends Scenario_View_Base {
 	 */
 	public function get_item_id( $record, $undefined ) {
 		return $record['resource']['id'] ?? $undefined;
+	}
+
+	public function get_links( $record, $default ) {
+		return array(
+			'cancel'  => array(
+				'method' => Action_Cancel_Subscription::get_methods(),
+				'url'    => Action_Cancel_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+			),
+			'suspend' => array(
+				'method' => Action_Suspend_Subscription::get_methods(),
+				'url'    => Action_Suspend_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+			),
+		);
 	}
 
 	/**

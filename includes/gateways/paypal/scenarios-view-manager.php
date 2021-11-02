@@ -52,7 +52,7 @@ class Scenarios_View_Manager {
 		try {
 			return $this->get_view( $scenario_id )->load_view();
 		} catch ( Repository_Exception $exception ) {
-			return array( false, false );
+			return array();
 		}
 	}
 }

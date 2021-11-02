@@ -13,10 +13,11 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 	use Set_Status_Trait;
-	use Actions\List_Webhook_Trait;
+	use Actions\Traits\List_Webhook_Trait;
 	use Scenarios_Connectors\Subscribe_Now;
 
 	protected function query_token() {
+		// phpcs:ignore WordPress.Security
 		return esc_attr( $_GET['subscription_id'] ?? '' );
 	}
 
@@ -126,7 +127,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 		$response = ( new Actions\Create_Webhook() )
 			->set_bearer_auth( $this->controller->get_current_token() )
-			->set_param_url( Web_Hooks\Paypal_Subscription_Global_Endpoint::rest_url() )
+			->set_param_url( Web_Hooks\Event_Subscription_Global_Endpoint::rest_url() )
 			->set_param_event_types( Events_Listeners_Manager::instance()->get_events_types_list() )
 			->send_request();
 
@@ -138,10 +139,10 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 	private function get_rest_api_endpoint() {
 		if ( $this->controller->current_gateway( 'use_global' ) ) {
-			return Web_Hooks\Paypal_Subscription_Global_Endpoint::get_rest_base();
+			return Web_Hooks\Event_Subscription_Global_Endpoint::get_rest_base();
 		}
 
-		return Web_Hooks\Paypal_Subscription_Form_Id_Endpoint::get_rest_base();
+		return Web_Hooks\Event_Subscription_Form_Id_Endpoint::get_rest_base();
 	}
 
 

@@ -7,13 +7,10 @@ use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
 
-class Paypal_Subscription_Global_Endpoint extends Rest_Api_Endpoint_Base {
-
-	use Paypal\Actions\List_Webhook_Trait;
-	use Paypal_Subscription_Base_Trait;
+class Event_Subscription_Global_Endpoint extends Event_Subscription_Base {
 
 	public static function get_rest_base() {
-		return 'paypal-subscription';
+		return 'event-subscription';
 	}
 
 	/**

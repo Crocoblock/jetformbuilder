@@ -7,19 +7,23 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Verify_Webhook_Signature_Action;
 use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
+use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+use Jet_Form_Builder\Gateways\Paypal;
 
-trait Paypal_Subscription_Base_Trait {
+abstract class Event_Subscription_Base extends  Rest_Api_Endpoint_Base {
+
+	use Paypal\Actions\Traits\List_Webhook_Trait;
 
 	abstract public function get_token( \WP_REST_Request $request );
 
-	public function get_methods() {
+	public static function get_methods() {
 		return \WP_REST_Server::CREATABLE;
 	}
 
-	public function get_callback( \WP_REST_Request $request ) {
+	public function run_callback( \WP_REST_Request $request ) {
 		try {
 			$token         = $this->get_token( $request );
-			$webhook_id    = $this->get_webhook_id_by_endpoint( self::get_rest_base(), $token );
+			$webhook_id    = $this->get_webhook_id_by_endpoint( static::get_rest_base(), $token );
 			$webhook_event = $request->get_json_params();
 
 			( new Verify_Webhook_Signature_Action() )

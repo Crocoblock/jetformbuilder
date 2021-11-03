@@ -22,10 +22,10 @@
 					</cx-vui-button>
 
 					<cx-vui-button
-
 						:class="[ !isLicenseActivated ? 'cx-vui-button--style-accent' : 'cx-vui-button--style-danger' ]"
 						size="mini"
 						@click="showLicensePopup"
+						v-if="isLicenseMode"
 					>
 						<span slot="label">
 							<svg class="button-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,6 +167,10 @@ export default {
 		window.jfbEventBus.$on( 'showLicensePopup', this.showLicensePopup );
 	},
 	computed: {
+		isLicenseMode() {
+			return '' !== window.JetFBPageConfig.licenseMode ? true : false;
+		},
+
 		isLicenseActivated() {
 			return 0 !== this.licenseList.length;
 		},

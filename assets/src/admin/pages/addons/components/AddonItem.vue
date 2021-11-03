@@ -135,7 +135,7 @@ export default {
 		},
 
 		activateLicenceActionAvaliable() {
-			return ( ! this.$parent.isLicenseActivated ) ? true : false;
+			return ( ! this.$parent.isLicenseActivated && this.$parent.isLicenseMode  ) ? true : false;
 		},
 
 		installActionAvaliable() {

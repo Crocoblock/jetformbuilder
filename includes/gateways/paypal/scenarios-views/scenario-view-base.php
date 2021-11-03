@@ -3,13 +3,14 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-use Jet_Form_Builder\Gateways\Gateway_Manager;
-use Jet_Form_Builder\Gateways\Paypal\Controller;
+use Jet_Form_Builder\Db_Queries\Query_Builder;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Paypal\Query_Views\Paypal_Subscriptions_View;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
 
 abstract class Scenario_View_Base extends Scenario_Item_Base {
 
-	const COLUMN_CHOOSE = 'choose';
+	const COLUMN_CHOOSE  = 'choose';
 	const COLUMN_ACTIONS = 'actions';
 
 	abstract public function get_columns_handlers(): array;
@@ -20,15 +21,7 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 		return array();
 	}
 
-	public function get_list(): array {
-		$paypal = Gateway_Manager::instance()->controller( Controller::ID );
-
-		return $paypal->get_gateway_entries(
-			array(
-				'scenario' => static::scenario_id(),
-			)
-		);
-	}
+	abstract public function get_list(): array;
 
 	/**
 	 * @return array

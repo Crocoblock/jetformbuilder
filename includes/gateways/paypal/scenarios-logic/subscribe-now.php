@@ -67,6 +67,11 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 		return $subscription;
 	}
 
+	/**
+	 * @param $subscription
+	 *
+	 * @return void
+	 */
 	public function save_resource( $subscription ) {
 		update_post_meta(
 			$this->controller->get_order_id(),

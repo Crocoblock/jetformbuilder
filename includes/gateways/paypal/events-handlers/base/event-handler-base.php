@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Events_Handlers;
+namespace Jet_Form_Builder\Gateways\Paypal\Events_Handlers\Base;
 
 use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
 

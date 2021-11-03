@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 
-class Event_Subscription_Form_Id_Endpoint extends Event_Subscription_Base {
+class Event_Subscription_Form_Id_Endpoint extends Base\Event_Subscription_Base {
 
 	public static function get_rest_base(): string {
 		return 'event-subscription/(?P<id>[\d]+)';

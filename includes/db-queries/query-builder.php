@@ -3,32 +3,31 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
+use Jet_Form_Builder\Db_Queries\Traits\With_View;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
+
+/**
+ * @method Query_Builder set_view( View_Base $view )
+ *
+ * Class Query_Builder
+ * @package Jet_Form_Builder\Db_Queries
+ */
 class Query_Builder {
 
+	use With_View;
+
 	protected $sql;
-	protected $select;
-	protected $where;
+	protected $select = '';
+	protected $where  = '';
+	protected $limit  = '';
 
-	private $view;
+	protected $debug = false;
 
-	public function set_view( View_Base $view ): Query_Builder {
-		$this->view = $view;
+	public function debug(): Query_Builder {
+		$this->debug = ! $this->debug;
 
 		return $this;
-	}
-
-	/**
-	 * @return View_Base
-	 * @throws Query_Builder_Exception
-	 */
-	public function view(): View_Base {
-		if ( ! $this->view ) {
-			throw new Query_Builder_Exception( 'Undefined view' );
-		}
-
-		return $this->view;
 	}
 
 	/**
@@ -40,11 +39,11 @@ class Query_Builder {
 		$columns      = array();
 
 		foreach ( $this->view()->select_columns() as $column ) {
-			$columns[] = sprintf( '`%s`.`%s`', $this->view()->table(), $column );
+			$columns[] = $this->view()->column( $column );
 		}
 
 		$this->select .= " \r\n\t" . implode( ", \r\n\t", $columns );
-		$this->select .= "\r\n FROM `{$this->view()->table()}`";
+		$this->select .= "\r\nFROM `{$this->view()->table()}`";
 
 		return $this;
 	}
@@ -66,43 +65,108 @@ class Query_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function prepare_where(): Query_Builder {
-		$this->where = 'WHERE';
-		$conditions  = array_merge(
-			array(
-				array(
-					'type'   => 'equal',
-					'values' => array( 1, 1 ),
-				),
-			),
-			$this->view()->conditions()
-		);
-
-		foreach ( $conditions as $condition ) {
-			$this->is_correct_condition( $condition );
-
-		}
+		$this->where = ( new Query_Conditions_Builder() )
+			->set_view( $this->view() )
+			->result();
 
 		return $this;
 	}
 
 	/**
-	 * @param $condition
-	 *
+	 * @return $this
 	 * @throws Query_Builder_Exception
 	 */
-	private function is_correct_condition( $condition ) {
-		$type = $condition['type'] ?? false;
-
-		if ( ! $type || ! in_array( $type, $this->condition_types, true ) ) {
-			throw new Query_Builder_Exception( "Undefined condition type: $type" );
+	public function maybe_prepare_where(): Query_Builder {
+		if ( $this->where ) {
+			return $this;
 		}
+
+		return $this->prepare_where();
+	}
+
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	public function prepare_limit(): Query_Builder {
+		if ( ! $this->view()->limit() ) {
+			return $this;
+		}
+		$this->limit = 'LIMIT ' . implode( ', ', $this->view()->limit() );
+
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 * @throws Query_Builder_Exception
+	 */
+	public function maybe_prepare_limit(): Query_Builder {
+		if ( $this->limit ) {
+			return $this;
+		}
+
+		return $this->prepare_limit();
+	}
+
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	public function prepare_sql(): Query_Builder {
+		$this->maybe_prepare_select();
+		$this->maybe_prepare_where();
+		$this->maybe_prepare_limit();
+
+		$this->sql = "{$this->select}\r\n{$this->where}\r\n{$this->limit};";
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Query_Builder_Exception
+	 */
+	public function sql() {
+		$this->prepare_sql();
+
+		if ( $this->debug ) {
+			do_action( 'qm/debug', $this->sql );
+		}
+
+		return $this->sql;
 	}
 
 	/**
 	 * @throws Query_Builder_Exception
 	 */
-	public function to_sql() {
-		$this->maybe_prepare_select();
+	public function query_all(): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( $this->sql(), ARRAY_A );
+
+		$response = array();
+
+		foreach ( $rows as $row ) {
+			$prepared = $this->view()->get_prepared_row( $row );
+
+			$response[ $prepared['key'] ] = $prepared['value'];
+		}
+
+		return $response;
+	}
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	public function query_one(): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB
+		$row = $wpdb->get_row( $this->sql(), ARRAY_A );
+
+		return $this->view()->get_prepared_row( $row );
 	}
 
 }

@@ -3,13 +3,26 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Cancel_Subscription;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Suspend_Subscription;
+use Jet_Form_Builder\Db_Queries\Query_Builder;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Paypal;
 
 class Subscribe_Now extends Scenario_View_Base {
 
-	use Scenarios_Connectors\Subscribe_Now;
+	use Paypal\Scenarios_Connectors\Subscribe_Now;
+
+	public function get_list(): array {
+		try {
+
+			return ( new Query_Builder() )
+				->set_view( new Paypal\Query_Views\Paypal_Subscriptions_View() )
+				->debug()
+				->query_all();
+
+		} catch ( Query_Builder_Exception $exception ) {
+			return array();
+		}
+	}
 
 	public function get_single_actions(): array {
 		return array(
@@ -180,12 +193,12 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function get_links( $record, $default ) {
 		return array(
 			'cancel'  => array(
-				'method' => Action_Cancel_Subscription::get_methods(),
-				'url'    => Action_Cancel_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+				'method' => Paypal\Web_Hooks\Action_Cancel_Subscription::get_methods(),
+				'url'    => Paypal\Web_Hooks\Action_Cancel_Subscription::dynamic_rest_base( $record['resource']['id'] ),
 			),
 			'suspend' => array(
-				'method' => Action_Suspend_Subscription::get_methods(),
-				'url'    => Action_Suspend_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+				'method' => Paypal\Web_Hooks\Action_Suspend_Subscription::get_methods(),
+				'url'    => Paypal\Web_Hooks\Action_Suspend_Subscription::dynamic_rest_base( $record['resource']['id'] ),
 			),
 		);
 	}

@@ -71,7 +71,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 		update_post_meta(
 			$this->controller->get_order_id(),
 			Paypal\Controller::GATEWAY_META_KEY,
-			json_encode(
+			wp_json_encode(
 				array(
 					'subscription_id' => $subscription['id'],
 					'scenario'        => self::scenario_id(),

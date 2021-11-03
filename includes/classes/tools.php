@@ -39,9 +39,9 @@ class Tools {
 	/**
 	 * Returns all post types list to use in JS components
 	 *
-	 * @param bool   $placeholder
+	 * @param bool $placeholder
 	 *
-	 * @param array  $args
+	 * @param array $args
 	 * @param string $operator
 	 *
 	 * @return array [type] [description]
@@ -235,9 +235,9 @@ class Tools {
 	 * Prepare passed array for using in JS options
 	 *
 	 * @param array $array
-	 * @param null  $value_key
-	 * @param null  $label_key
-	 * @param bool  $for_elementor
+	 * @param null $value_key
+	 * @param null $label_key
+	 * @param bool $for_elementor
 	 *
 	 * Only if $for_elementor === false
 	 * @param array $additional_attrs
@@ -308,8 +308,8 @@ class Tools {
 	 */
 	public static function is_valid_timestamp( $timestamp ) {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
-			   && ( $timestamp <= PHP_INT_MAX )
-			   && ( $timestamp >= ~PHP_INT_MAX );
+		       && ( $timestamp <= PHP_INT_MAX )
+		       && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
@@ -451,8 +451,8 @@ class Tools {
 
 		foreach ( $array2 as $key => &$value ) {
 			if ( is_array( $value )
-				 && isset( $merged [ $key ] )
-				 && is_array( $merged [ $key ] )
+			     && isset( $merged [ $key ] )
+			     && is_array( $merged [ $key ] )
 			) {
 				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
 			} else {
@@ -493,6 +493,10 @@ class Tools {
 
 	public static function render_block_with_context( $block, $context ) {
 		return ( new \WP_Block( $block, $context ) )->render();
+	}
+
+	public static function get_site_host() {
+		return str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 	}
 
 }

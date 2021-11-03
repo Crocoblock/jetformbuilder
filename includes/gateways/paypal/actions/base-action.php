@@ -20,6 +20,7 @@ abstract class Base_Action {
 	protected $response;
 	protected $response_body;
 	protected $response_code;
+	protected $response_message;
 
 	abstract public function action_slug();
 
@@ -168,42 +169,83 @@ abstract class Base_Action {
 
 		$response = $this->get_response();
 
-		$this->response_body = wp_remote_retrieve_body( $response );
-		$this->response_code = (int) wp_remote_retrieve_response_code( $response );
+		$this->set_response_body( wp_remote_retrieve_body( $response ) );
+		$this->set_response_code( (int) wp_remote_retrieve_response_code( $response ) );
+		$this->set_response_message( wp_remote_retrieve_response_message( $response ) );
 
 		return $this;
+	}
+
+	private function set_response_message( $message ) {
+		$this->response_message = $message;
+
+		return $this;
+	}
+
+	public function get_response_message() {
+		return $this->response_message;
 	}
 
 	private function get_response_body() {
 		return $this->response_body;
 	}
 
+	private function set_response_body( $body ): Base_Action {
+		$this->response_body = $body;
+
+		return $this;
+	}
+
 	private function get_response_code() {
 		return $this->response_code;
 	}
 
-	/**
-	 * @throws Gateway_Exception
-	 */
-	public function check_response_code() {
-		if ( $this->accept_code() !== $this->get_response_code() ) {
-			throw new Gateway_Exception( "Invalid code. ({$this->get_response_code()})" );
-		}
+
+	private function set_response_code( $code ): Base_Action {
+		$this->response_code = $code;
+
+		return $this;
+	}
+
+	public function response_message( $base_message ): string {
+		return $base_message . "\r\n" . sprintf(
+			'%d: %s',
+			$this->get_response_code(),
+			$this->get_response_message()
+		);
 	}
 
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function send_request() {
-		$this->request();
+	public function check_response_code(): Base_Action {
+		if ( $this->accept_code() === $this->get_response_code() ) {
+			return $this;
+		}
+		$this->response_body_as_array();
+
+		throw new Gateway_Exception(
+			$this->response_message( 'Invalid HTTP code.' ),
+			$this->get_response_body()
+		);
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	public function response_body_as_array(): Base_Action {
+
+		if ( is_array( $this->get_response_body() ) ) {
+			return $this;
+		}
 
 		if ( empty( $this->get_response_body() ) ) {
-			throw new Gateway_Exception( 'empty_response' );
+			throw new Gateway_Exception( $this->response_message( 'Empty response.' ) );
 		}
 		if ( is_wp_error( $this->get_response_body() ) ) {
 			/** @var \WP_Error $response */
 			throw new Gateway_Exception(
-				'wp_error',
+				$this->response_message( 'Internal error.' ),
 				$response->get_error_message(
 					$response->get_error_code()
 				)
@@ -213,10 +255,26 @@ abstract class Base_Action {
 		$parsed_response = Tools::decode_json( $this->get_response_body() );
 
 		if ( is_null( $parsed_response ) ) {
-			throw new Gateway_Exception( 'invalid_json', $parsed_response );
+			throw new Gateway_Exception(
+				$this->response_message( 'Invalid JSON.' ),
+				$this->get_response_body()
+			);
 		}
 
-		return $parsed_response;
+		$this->set_response_body( $parsed_response );
+
+		return $this;
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	public function send_request() {
+		$this->request();
+
+		$this->response_body_as_array();
+
+		return $this->get_response_body();
 	}
 
 

@@ -29,7 +29,7 @@ class Action_Cancel_Subscription extends Rest_Api_Endpoint_Base {
 		$body = $request->get_json_params();
 
 		try {
-			( new Cancel_Subscription_Action() )
+			$action = ( new Cancel_Subscription_Action() )
 				->set_bearer_auth( Paypal\Controller::get_token_by_form_id( $body['form_id'] ?? false ) )
 				->set_body(
 					array(
@@ -44,6 +44,7 @@ class Action_Cancel_Subscription extends Rest_Api_Endpoint_Base {
 			return new \WP_REST_Response(
 				array(
 					'message' => $exception->getMessage(),
+					'data'    => $exception->get_additional(),
 				),
 				500
 			);
@@ -51,7 +52,9 @@ class Action_Cancel_Subscription extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'message' => __( 'Successfully cancelled subscription!', 'jet-form-builder' ),
+				'message' => $action->response_message(
+					__( 'Successfully cancelled subscription!', 'jet-form-builder' )
+				),
 			)
 		);
 	}

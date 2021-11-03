@@ -148,7 +148,7 @@ class Send_Email extends Base {
 	}
 
 	/**
-	 * @param array          $request
+	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void
@@ -330,7 +330,7 @@ class Send_Email extends Base {
 		$address = ! empty( $this->settings['reply_email'] ) ? $this->settings['reply_email'] : '';
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
-			$address = $this->get_from_address();
+			$address = 'noreply@' . Tools::get_site_host();
 		}
 
 		return apply_filters( 'jet-form-builder/send-email/reply-to', $address, $this );

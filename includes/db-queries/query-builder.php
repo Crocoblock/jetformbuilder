@@ -19,15 +19,19 @@ class Query_Builder {
 
 	protected $sql;
 	protected $select = '';
-	protected $where  = '';
-	protected $limit  = '';
+	protected $where = '';
+	protected $limit = '';
+	protected $order_by = '';
 
 	protected $debug = false;
 
-	public function debug(): Query_Builder {
-		$this->debug = ! $this->debug;
-
-		return $this;
+	public function prepare_parts_callbacks(): array {
+		return array(
+			'select'   => array( $this, 'prepare_select' ),
+			'where'    => array( $this, 'prepare_where' ),
+			'order_by' => array( $this, 'prepare_order_by' ),
+			'limit'    => array( $this, 'prepare_limit' ),
+		);
 	}
 
 	/**
@@ -48,17 +52,6 @@ class Query_Builder {
 		return $this;
 	}
 
-	/**
-	 * @return $this
-	 * @throws Query_Builder_Exception
-	 */
-	public function maybe_prepare_select(): Query_Builder {
-		if ( $this->select ) {
-			return $this;
-		}
-
-		return $this->prepare_select();
-	}
 
 	/**
 	 * @return $this
@@ -73,19 +66,6 @@ class Query_Builder {
 	}
 
 	/**
-	 * @return $this
-	 * @throws Query_Builder_Exception
-	 */
-	public function maybe_prepare_where(): Query_Builder {
-		if ( $this->where ) {
-			return $this;
-		}
-
-		return $this->prepare_where();
-	}
-
-
-	/**
 	 * @throws Query_Builder_Exception
 	 */
 	public function prepare_limit(): Query_Builder {
@@ -98,41 +78,84 @@ class Query_Builder {
 	}
 
 	/**
-	 * @return $this
+	 * @return Query_Builder
 	 * @throws Query_Builder_Exception
 	 */
-	public function maybe_prepare_limit(): Query_Builder {
-		if ( $this->limit ) {
+	public function prepare_order_by(): Query_Builder {
+		if ( ! $this->view()->order_by() ) {
 			return $this;
 		}
+		$columns = array();
 
-		return $this->prepare_limit();
+		foreach ( $this->view()->order_by() as $column ) {
+			$name = $this->view()->column( $column );
+			$sort = $column['sort'] ?? '';
+
+			$columns[] = trim( "$name $sort" );
+		}
+
+		$this->order_by = 'ORDER BY ' . " \r\n\t" . implode( ", \r\n\t", $columns );
+
+		return $this;
 	}
 
+	public function maybe_prepare_parts() {
+		foreach ( $this->prepare_parts_callbacks() as $part_name => $callback ) {
+			if ( ! empty( $this->$part_name ) ) {
+				continue;
+			}
 
-	/**
-	 * @throws Query_Builder_Exception
-	 */
+			call_user_func( $callback );
+		}
+	}
+
+	public function get_parts(): array {
+		$parts = array();
+
+		foreach ( $this->prepare_parts_callbacks() as $part_name => $callback ) {
+			if ( empty( $this->$part_name ) ) {
+				continue;
+			}
+			$parts[] = $this->$part_name;
+		}
+
+		return $parts;
+	}
+
+	public function debug(): Query_Builder {
+		$this->debug = ! $this->debug;
+
+		return $this;
+	}
+
+	private function log( ...$something ) {
+		if ( ! $this->debug ) {
+			return;
+		}
+		if ( 1 === count( $something ) ) {
+			do_action( 'qm/debug', $something[0] );
+
+			return;
+		}
+
+		do_action( 'qm/debug', $something );
+	}
+
 	public function prepare_sql(): Query_Builder {
-		$this->maybe_prepare_select();
-		$this->maybe_prepare_where();
-		$this->maybe_prepare_limit();
+		$this->maybe_prepare_parts();
 
-		$this->sql = "{$this->select}\r\n{$this->where}\r\n{$this->limit};";
+		$this->sql = implode( "\r\n", $this->get_parts() ) . ';';
 
 		return $this;
 	}
 
 	/**
-	 * @return mixed
-	 * @throws Query_Builder_Exception
+	 * @return string
 	 */
-	public function sql() {
+	public function sql(): string {
 		$this->prepare_sql();
 
-		if ( $this->debug ) {
-			do_action( 'qm/debug', $this->sql );
-		}
+		$this->log( $this->sql );
 
 		return $this->sql;
 	}
@@ -149,9 +172,7 @@ class Query_Builder {
 		$response = array();
 
 		foreach ( $rows as $row ) {
-			$prepared = $this->view()->get_prepared_row( $row );
-
-			$response[ $prepared['key'] ] = $prepared['value'];
+			$response[] = $this->view()->get_prepared_row( $row );
 		}
 
 		return $response;

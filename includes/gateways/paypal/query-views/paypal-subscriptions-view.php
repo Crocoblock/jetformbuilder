@@ -35,10 +35,16 @@ class Paypal_Subscriptions_View extends View_Base {
 		);
 	}
 
-	public function prepare_row( $row ): array {
+	public function order_by(): array {
 		return array(
-			'key'   => $row['meta_id'],
-			'value' => Tools::decode_json( $row['meta_value'] ?? '[]' ),
+			array(
+				'column' => 'post_id',
+				'sort'   => self::FROM_HIGH_TO_LOW,
+			),
 		);
+	}
+
+	public function prepare_row( $row ): array {
+		return Tools::decode_json( $row['meta_value'] ?? '[]' );
 	}
 }

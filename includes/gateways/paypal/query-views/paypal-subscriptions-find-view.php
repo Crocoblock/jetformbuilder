@@ -24,6 +24,10 @@ class Paypal_Subscriptions_Find_View extends Paypal_Subscriptions_View {
 		);
 	}
 
+	public function order_by(): array {
+		return array();
+	}
+
 	protected function empty_message(): string {
 		return __( 'Undefined subscription.', 'jet-form-builder' );
 	}

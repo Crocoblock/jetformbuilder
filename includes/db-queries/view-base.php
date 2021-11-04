@@ -7,11 +7,10 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 abstract class View_Base {
 
-	abstract public function table(): string;
+	const FROM_HIGH_TO_LOW = 'DESC';
+	const FROM_LOW_TO_HIGH = 'ASC';
 
-	public function column( $name ): string {
-		return "`{$this->table()}`.`{$name}`";
-	}
+	abstract public function table(): string;
 
 	public function select_columns(): array {
 		return array( '*' );
@@ -19,6 +18,25 @@ abstract class View_Base {
 
 	public function conditions(): array {
 		return array();
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function limit(): array {
+		return array();
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function order_by(): array {
+		return array(
+			array(
+				'column' => 'id',
+				'sort'   => self::FROM_HIGH_TO_LOW,
+			),
+		);
 	}
 
 	/**
@@ -31,11 +49,35 @@ abstract class View_Base {
 		return sprintf( '"%1$s":"%2$s"', (string) $key, (string) $value );
 	}
 
+	/**
+	 * Get the column name with table prefix
+	 *
+	 * @param $column
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function column( $column ): string {
+		if ( is_string( $column ) ) {
+			return "`{$this->table()}`.`{$column}`";
+		}
+
+		if ( isset( $column['as'] ) ) {
+			return $column['as'];
+		}
+
+		$name  = $column['column'] ?? false;
+		$table = empty( $column['table'] ) ? $this->table() : $column['table'];
+
+		if ( ! $name ) {
+			throw new Query_Builder_Exception( 'Please set the column name.', $column );
+		}
+
+		return "`{$table}`.`{$name}`";
+	}
+
 	protected function prepare_row( $row ): array {
-		return array(
-			'key'   => $row['id'],
-			'value' => $row,
-		);
+		return $row;
 	}
 
 	/**
@@ -47,11 +89,7 @@ abstract class View_Base {
 	public function get_prepared_row( $row ): array {
 		$prepared = $this->prepare_row( $row );
 
-		if ( ! isset( $prepared['key'] ) || ! isset( $prepared['value'] ) ) {
-			throw new Query_Builder_Exception( 'Invalid ' . get_class( $this ) . '::prepare_row' );
-		}
-
-		if ( empty( $prepared['key'] ) || empty( $prepared['value'] ) ) {
+		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception( $this->empty_message(), $row );
 		}
 
@@ -62,11 +100,5 @@ abstract class View_Base {
 		return __( 'Empty row.', 'jet-form-builder' );
 	}
 
-	/**
-	 * @return int[]
-	 */
-	public function limit(): array {
-		return array();
-	}
 
 }

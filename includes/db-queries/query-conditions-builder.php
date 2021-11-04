@@ -65,6 +65,10 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function result(): string {
+		if ( ! $this->conditions ) {
+			return '';
+		}
+
 		return 'WHERE ' . $this->prepare_conditions();
 	}
 

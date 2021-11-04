@@ -40,12 +40,6 @@ class Manager {
 	public $update_plugins = false;
 
 	/**
-	 * Proccesing subscribe form ajax
-	 *
-	 * @return void
-	 */
-
-	/**
 	 * @param false $addon_filename
 	 *
 	 * @return string
@@ -53,8 +47,7 @@ class Manager {
 	public function get_addon_slug_by_filename( $addon_filename = false ) {
 		return explode('/', $addon_filename )[0];
 	}
-
-
+	
 	/**
 	 * @return array
 	 */

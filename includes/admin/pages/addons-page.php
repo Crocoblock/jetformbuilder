@@ -24,16 +24,17 @@ class Addons_Page extends Base_Page {
 	 */
 	public function page_config(): array {
 
-		return array(
-			'ajaxUrl'     => esc_url( admin_url( 'admin-ajax.php' ) ),
-			'allAddons'   => Plugin::instance()->license_manager->get_plugin_data_list(),
-			'licenseKey'  => Plugin::instance()->license_manager->get_license_key(),
-			'licenseList' => Plugin::instance()->license_manager->get_license_data(),
-			'themeInfo'   => Plugin::instance()->license_manager->get_theme_info(),
-			'miscInfo'    => array(
+		return apply_filters( 'jfb-addons-page/page-localize-data', [
+			'ajaxUrl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'allAddons'      => Plugin::instance()->addons_manager->get_plugin_data_list(),
+			'licenseMode'    => false,
+			'licenseKey'     => '',
+			'licenseList'    => [],
+			'themeInfo'      => Plugin::instance()->addons_manager->get_theme_info(),
+			'miscInfo'       => [
 				'mainSiteUrl'    => 'https://jetformbuilder.com/',
-				'pricingPageUrl' => 'https://jetformbuilder.com/pricing/',
-			),
-		);
+				'pricingPageUrl' => 'https://jetformbuilder.com/pricing/'
+			]
+		] );
 	}
 }

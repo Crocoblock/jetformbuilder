@@ -25,7 +25,13 @@ class Duplicate_Action extends Base_Form_Action {
 		$data['post_content'] = wp_slash( $data['post_content'] );
 
 		foreach ( $data['meta_input'] as &$meta_value ) {
-			$meta_value = maybe_unserialize( $meta_value );
+			$unserialized = maybe_unserialize( $meta_value );
+
+			if ( $unserialized !== $meta_value ) {
+				$meta_value = $unserialized;
+				continue;
+			}
+			$meta_value = wp_slash( $meta_value );
 		}
 
 		return $data;

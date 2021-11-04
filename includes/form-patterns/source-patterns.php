@@ -15,7 +15,7 @@ return array(
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:jet-forms/radio-field {"field_options":[{"label":"Email","value":"email","calculate":"","__visible":false},{"label":"Phone","value":"phone","calculate":"","__visible":false}],"label":"Preffered method of communication","name":"preffered-method-of-communication","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4","blockID":"jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4"} /-->
+<!-- wp:jet-forms/radio-field {"field_options":[{"label":"Email","value":"email","calculate":"","__visible":false},{"label":"Phone","value":"phone","calculate":"","__visible":false}],"label":"Preferred method of communication","name":"preferred-method-of-communication","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4","blockID":"jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4"} /-->
 
 <!-- wp:jet-forms/textarea-field {"label":"Message","name":"message","className":" jet-sm-gb-wrapper jet-sm-gb-729cb67e-3122-4a5a-a170-95a51ba95881","blockID":"jet-sm-gb-729cb67e-3122-4a5a-a170-95a51ba95881"} /-->
 

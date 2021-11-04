@@ -3,7 +3,7 @@
 		class="jfb-addons__item"
 		:class="{
 			'activated': addonData.isActivated,
-			'update-avaliable': updateActionAvaliable,
+			'update-avaliable': updateAvaliable,
 		}"
 	>
 		<div
@@ -27,15 +27,15 @@
 				<div
 					class="jfb-addons__item-update"
 				>
-					<div v-if="!updateActionAvaliable">Your plugin is up to date</div>
-					<div v-if="updateActionAvaliable">
+					<div v-if="!updateAvaliable">Your plugin is up to date</div>
+					<div v-if="updateAvaliable">
 						Version <span class="latest-version">{{ addonData.version }}</span> available
 						<cx-vui-button
 							button-style="link-accent"
 							size="link"
 							:loading="updatePluginProcessed"
 							@click="updatePlugin"
-							v-if="!activateLicenceActionAvaliable"
+							v-if="!activateLicenceActionAvaliable && isLicenseMode"
 						>
 							<span slot="label">
 								<span>Update Now</span>
@@ -135,7 +135,7 @@ export default {
 		},
 
 		activateLicenceActionAvaliable() {
-			return ( ! this.$parent.isLicenseActivated && this.$parent.isLicenseMode  ) ? true : false;
+			return ( ! this.$parent.isLicenseActivated && this.$parent.isLicenseMode ) ? true : false;
 		},
 
 		installActionAvaliable() {
@@ -150,8 +150,12 @@ export default {
 			return ( this.addonData['isInstalled'] && this.addonData['isActivated'] ) ? true : false;
 		},
 
-		updateActionAvaliable() {
+		updateAvaliable() {
 			return ( this.addonData['updateAvaliable'] ) ? true : false;
+		},
+
+		isLicenseMode() {
+			return this.$parent.isLicenseMode;
 		},
 
 		proccesingState() {
@@ -193,7 +197,7 @@ export default {
 
 		updatePlugin() {
 
-			if ( this.updateActionAvaliable ) {
+			if ( this.updateAvaliable ) {
 				this.actionPlugin = 'update';
 				this.pluginAction();
 			}

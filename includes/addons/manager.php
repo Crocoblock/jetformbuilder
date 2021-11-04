@@ -47,7 +47,7 @@ class Manager {
 	public function get_addon_slug_by_filename( $addon_filename = false ) {
 		return explode('/', $addon_filename )[0];
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -495,16 +495,15 @@ class Manager {
 				$registered_plugin_data = $addon_data;
 				$registered_plugin_data['plugin_slug'] = $addon_slug;
 				$registered_plugin_data['transient_key'] = $addon_slug . '_addon_info_data';
-				$registered_plugin_data['banners'] = [
-					'high' => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
-					'low'  => sprintf( 'https://account.jetformbuilder.com/free-download/images/addon-banners/%s.png', $addon_slug ),
-				];
+				$registered_plugin_data['banners'] = [];
 
 				if ( ! empty( $user_installed_plugins[ $addon_data['slug'] ] ) ) {
 					$installed_plugin_data = $user_installed_plugins[ $addon_data['slug'] ];
 
 					$registered_plugin_data['author'] = $installed_plugin_data['Author'];
 					$registered_plugin_data['plugin_url'] = $installed_plugin_data['PluginURI'];
+					$registered_plugin_data['requires'] = $installed_plugin_data['RequiresWP'];
+					$registered_plugin_data['tested'] = $installed_plugin_data['RequiresPHP'];
 				}
 
 				break;

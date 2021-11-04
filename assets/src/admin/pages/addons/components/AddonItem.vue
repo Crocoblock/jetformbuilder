@@ -207,9 +207,8 @@ export default {
 				url: window.JetFBPageConfig.ajaxUrl,
 				dataType: 'json',
 				data: {
-					action: 'jfb_addon_action',
+					action: `jfb_addon_${ self.actionPlugin }_action`,
 					data: {
-						action: self.actionPlugin,
 						plugin: self.addonData['slug']
 					}
 				},

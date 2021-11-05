@@ -1,6 +1,3 @@
 <div class="jet-form-builder__field-error">
-	<?php
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo $message_content;
-	?>
+	<?php echo wp_kses_post( $message_content ); ?>
 </div>

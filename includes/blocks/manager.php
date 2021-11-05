@@ -184,7 +184,7 @@ class Manager {
 	}
 
 	public function enqueue_frontend_styles() {
-		wp_enqueue_style(
+		wp_register_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
 			array(),

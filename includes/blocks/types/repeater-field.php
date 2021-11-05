@@ -2,10 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
-use Jet_Form_Builder\Presets\Form_Base_Preset;
-use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -24,7 +21,7 @@ class Repeater_Field extends Base {
 	public $settings;
 	public $default_value;
 
-	public $calc_data = array();
+	public $calc_data    = array();
 	public $calc_dataset = '';
 
 	/**
@@ -42,7 +39,7 @@ class Repeater_Field extends Base {
 			'repeater-row'        => '.jet-form-builder-repeater__row',
 			'remove-button'       => 'button.jet-form-builder-repeater__remove',
 			'new-button'          => 'button.jet-form-builder-repeater__new',
-			'actions'             => '.jet-form-builder-repeater__actions'
+			'actions'             => '.jet-form-builder-repeater__actions',
 		);
 	}
 
@@ -50,155 +47,172 @@ class Repeater_Field extends Base {
 
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'field_style',
-				'title' => __( 'Repeater Row', 'jet-form-builder' )
-			]
+				'title' => __( 'Repeater Row', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'repeater_row_padding',
-			'type'         => 'dimensions',
-			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['repeater-row']        => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-				'{{WRAPPER}} ' . $this->css_scheme['repeater-row-editor'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
-			),
-		] );
-
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'repeater_row_padding',
+				'type'         => 'dimensions',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['repeater-row']        => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+					'{{WRAPPER}} ' . $this->css_scheme['repeater-row-editor'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',
+				),
+			)
+		);
 
 		$this->controls_manager->end_section();
 
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'new_button_style',
-				'title' => __( 'New Item Button', 'jet-form-builder' )
-			]
+				'title' => __( 'New Item Button', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_alignment',
-			'type'         => 'choose',
-			'separator'    => 'after',
-			'label'        => __( 'Alignment', 'jet-form-builder' ),
-			'options'      => [
-				'flex-start' => [
-					'shortcut' => __( 'Left', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignleft',
-				],
-				'center'     => [
-					'shortcut' => __( 'Center', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-aligncenter',
-				],
-				'flex-end'   => [
-					'shortcut' => __( 'Right', 'jet-form-builder' ),
-					'icon'     => 'dashicons-editor-alignright',
-				],
-			],
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['actions'] => 'justify-content: {{VALUE}};',
-			],
-			'attributes'   => [
-				'default' => array(
-					'value' => 'left'
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_alignment',
+				'type'         => 'choose',
+				'separator'    => 'after',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'options'      => array(
+					'flex-start' => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center'     => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'flex-end'   => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
 				),
-			]
-		] );
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['actions'] => 'justify-content: {{VALUE}};',
+				),
+				'attributes'   => array(
+					'default' => array(
+						'value' => 'left',
+					),
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_typography',
-			'type'         => 'typography',
-			'separator'    => 'after',
-			'css_selector' => [
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_padding',
-			'type'         => 'dimensions',
-			'separator'    => 'after',
-			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_padding',
+				'type'         => 'dimensions',
+				'separator'    => 'after',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_border',
-			'type'         => 'border',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
 		$this->controls_manager->start_tabs(
 			'style_controls',
-			[
+			array(
 				'id' => 'new_button_style_tabs',
-			]
+			)
 		);
 
 		$this->controls_manager->start_tab(
 			'style_controls',
-			[
+			array(
 				'id'    => 'new_button_normal_styles',
 				'title' => __( 'Normal', 'jet-form-builder' ),
-			]
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_typography_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_tab();
 
 		$this->controls_manager->start_tab(
 			'style_controls',
-			[
+			array(
 				'id'    => 'new_button_hover_styles',
 				'title' => __( 'Hover', 'jet-form-builder' ),
-			]
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_hover_typography_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_hover_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'new_button_hover_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'new_button_hover_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_tab();
 		$this->controls_manager->end_tabs();
@@ -206,105 +220,119 @@ class Repeater_Field extends Base {
 
 		$this->controls_manager->start_section(
 			'style_controls',
-			[
+			array(
 				'id'    => 'remove_button_style',
-				'title' => __( 'Remove Item Button', 'jet-form-builder' )
-			]
+				'title' => __( 'Remove Item Button', 'jet-form-builder' ),
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'                 => 'remove_button_typography',
-			'type'               => 'typography',
-			'disable_decoration' => true,
-			'separator'          => 'after',
-			'css_selector'       => [
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-			],
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'                 => 'remove_button_typography',
+				'type'               => 'typography',
+				'disable_decoration' => true,
+				'separator'          => 'after',
+				'css_selector'       => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_padding',
-			'type'         => 'dimensions',
-			'separator'    => 'after',
-			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_padding',
+				'type'         => 'dimensions',
+				'separator'    => 'after',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_border',
-			'type'         => 'border',
-			'separator'    => 'after',
-			'label'        => __( 'Border', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_border',
+				'type'         => 'border',
+				'separator'    => 'after',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
 
 		$this->controls_manager->start_tabs(
 			'style_controls',
-			[
+			array(
 				'id' => 'remove_button_style_tabs',
-			]
+			)
 		);
 
 		$this->controls_manager->start_tab(
 			'style_controls',
-			[
+			array(
 				'id'    => 'remove_button_normal_styles',
 				'title' => __( 'Normal', 'jet-form-builder' ),
-			]
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_typography_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_tab();
 
 		$this->controls_manager->start_tab(
 			'style_controls',
-			[
+			array(
 				'id'    => 'remove_button_hover_styles',
 				'title' => __( 'Hover', 'jet-form-builder' ),
-			]
+			)
 		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_hover_typography_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Text Color', 'jet-form-builder' ),
-			'separator'    => 'after',
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_hover_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				),
+			)
+		);
 
-		$this->controls_manager->add_control( [
-			'id'           => 'remove_button_hover_background_color',
-			'type'         => 'color-picker',
-			'label'        => __( 'Background Color', 'jet-form-builder' ),
-			'css_selector' => array(
-				'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
-			),
-		] );
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'remove_button_hover_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
 
 		$this->controls_manager->end_tab();
 		$this->controls_manager->end_tabs();
@@ -347,11 +375,15 @@ class Repeater_Field extends Base {
 	}
 
 	public function set_settings() {
-		$this->settings = htmlspecialchars( wp_json_encode( array(
-			'manageItems' => $this->manage_items,
-			'itemsField'  => $this->items_field,
-			'calcType'    => $this->repeater_calc_type,
-		) ) );
+		$this->settings = htmlspecialchars(
+			wp_json_encode(
+				array(
+					'manageItems' => $this->manage_items,
+					'itemsField'  => $this->items_field,
+					'calcType'    => $this->repeater_calc_type,
+				)
+			)
+		);
 	}
 
 	public function set_calc_data() {
@@ -394,14 +426,18 @@ class Repeater_Field extends Base {
 
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
-
 						$listen_fields[] = $matches[2];
 
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
+						$post = get_post();
 
-						return get_post_meta( $this->post->ID, $matches[2], true );
+						if ( ! isset( $post->ID ) ) {
+							return '';
+						}
+
+						return get_post_meta( $post->ID, $matches[2], true );
 
 					default:
 						$macros_name = $matches[1];

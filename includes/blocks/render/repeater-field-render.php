@@ -24,7 +24,7 @@ class Repeater_Field_Render extends Base {
 
 	public function render( $wp_block = null, $template = null ) {
 		if ( empty( $wp_block['innerBlocks'] ) ) {
-			return;
+			return '';
 		}
 
 		$this->current_repeater = $this->block_type->block_attrs;
@@ -42,7 +42,7 @@ class Repeater_Field_Render extends Base {
 		$html .= sprintf(
 			'<div %5$s data-repeater="1" 
             data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
-			$this->block_type->block_attrs['name'],
+			esc_attr( $this->block_type->block_attrs['name'] ),
 			$this->block_type->settings,
 			$this->block_type->calc_dataset,
 			$template,
@@ -55,7 +55,7 @@ class Repeater_Field_Render extends Base {
 			$i = 0;
 			foreach ( $this->current_repeater['default'] as $item ) {
 				$this->current_repeater['values'] = $item;
-				$html                             .= $this->render_repeater_row( $wp_block, $i );
+				$html                            .= $this->render_repeater_row( $wp_block, $i );
 				$i ++;
 			}
 			$this->current_repeater['values'] = false;
@@ -68,7 +68,7 @@ class Repeater_Field_Render extends Base {
 				'<div class="jet-form-builder-repeater__actions">
                 <button type="button" class="jet-form-builder-repeater__new">%1$s</button>
                 </div>',
-				$this->block_type->new_item_label
+				wp_kses_post( $this->block_type->new_item_label )
 			);
 		}
 
@@ -85,7 +85,7 @@ class Repeater_Field_Render extends Base {
 	 * Render current repeater row
 	 *
 	 * @param $wp_block
-	 * @param bool $index
+	 * @param bool     $index
 	 *
 	 * @return string
 	 */
@@ -97,7 +97,7 @@ class Repeater_Field_Render extends Base {
 			$index = 0;
 		}
 
-		$html = '<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="' . $index . '"' . $this->block_type->calc_dataset . '>';
+		$html  = '<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="' . absint( $index ) . '"' . $this->block_type->calc_dataset . '>';
 		$html .= '<div class="jet-form-builder-repeater__row-fields">';
 
 		Live_Form::instance()->set_repeater( $this->current_repeater, $this->current_repeater_i );

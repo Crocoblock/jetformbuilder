@@ -28,8 +28,8 @@ $fullwidth = ' content-fullwidth';
 	<div class="jet-form-builder-col__start">
 		<?php
 		// Read the comment above.
-		echo wp_kses_post( $label );
-		echo wp_kses_post( $desc );
+		echo $label;
+		echo $desc;
 
 		// Reset fullwidth content if we have label or description for field.
 		$fullwidth = '';

@@ -47,7 +47,7 @@ class Forms_Captcha {
 			return false;
 		}
 
-		$token    = esc_attr( $request[ $this->field_key ] );
+		$token    = sanitize_text_field( $request[ $this->field_key ] );
 		$response = wp_remote_post(
 			$this->api,
 			array(

@@ -29,7 +29,7 @@ abstract class Base_Form_Action {
 	}
 
 	public function action_url( $post = null ) {
-		$admin_url = esc_url( admin_url( 'admin.php' ) );
+		$admin_url = esc_url_raw( admin_url( 'admin.php' ) );
 
 		$args = array(
 			'action' => $this->action_id(),

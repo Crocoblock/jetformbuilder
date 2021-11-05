@@ -151,7 +151,8 @@ class Hidden_Field extends Base {
 		if ( ! $key ) {
 			return null;
 		} else {
-			return isset( $_GET[ $key ] ) ? esc_attr( $_GET[ $key ] ) : null;
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return isset( $_GET[ $key ] ) ? sanitize_key( $_GET[ $key ] ) : null;
 		}
 	}
 

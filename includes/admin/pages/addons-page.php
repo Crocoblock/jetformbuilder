@@ -39,7 +39,7 @@ class Addons_Page extends Base_Page {
 	public function page_config(): array {
 
 		return apply_filters( 'jfb-addons-page/page-localize-data', [
-			'ajaxUrl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'ajaxUrl'        => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 			'allAddons'      => Plugin::instance()->addons_manager->get_plugin_data_list(),
 			'licenseMode'    => false,
 			'licenseKey'     => '',

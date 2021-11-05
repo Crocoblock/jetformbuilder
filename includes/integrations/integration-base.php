@@ -3,8 +3,8 @@
 namespace Jet_Form_Builder\Integrations;
 
 abstract class Integration_Base {
-	protected $api_base_url = '';
-	protected $api_key = '';
+	protected $api_base_url     = '';
+	protected $api_key          = '';
 	protected $api_request_args = array();
 
 	public function __construct( $api_key ) {
@@ -14,8 +14,10 @@ abstract class Integration_Base {
 	abstract public function get_all_data();
 
 	public function request( $end_point, $request_args = array() ) {
-		$args     = array_merge_recursive( $this->api_request_args, $request_args );
-		$response = wp_remote_request( $this->api_base_url . $end_point, $args );
+		$args = array_merge_recursive( $this->api_request_args, $request_args );
+		$url  = esc_url_raw( $this->api_base_url . $end_point );
+
+		$response = wp_remote_request( $url, $args );
 
 		if ( ! $response || is_wp_error( $response ) ) {
 			return false;

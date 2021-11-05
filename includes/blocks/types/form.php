@@ -21,6 +21,10 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
+	public function get_placeholder(): string {
+		return __( 'Please select form to show', 'jet-form-builder' );
+	}
+
 	public function get_label_selector() {
 		return '__label';
 	}
@@ -377,7 +381,10 @@ class Form extends Base {
 			$handle,
 			'JetFormData',
 			array(
-				'forms_list' => Tools::with_placeholder( Tools::get_forms_list_for_js() ),
+				'forms_list' => Tools::with_placeholder(
+					Tools::get_forms_list_for_js(),
+					$this->get_placeholder()
+				),
 			)
 		);
 	}
@@ -391,8 +398,8 @@ class Form extends Base {
 	 *
 	 * @param array $attrs [description]
 	 *
-	 * @param null  $content
-	 * @param null  $wp_block
+	 * @param null $content
+	 * @param null $wp_block
 	 *
 	 * @return false|string [type]             [description]
 	 */
@@ -400,7 +407,7 @@ class Form extends Base {
 		$form_id = $attrs['form_id'];
 
 		if ( ! $form_id ) {
-			return 'Please select form to show';
+			return $this->get_placeholder();
 		}
 
 		Plugin::instance()->admin_bar->register_item(
@@ -441,7 +448,7 @@ class Form extends Base {
 		if ( ! Jet_Style_Manager::is_activated() ) {
 			return '';
 		}
-		$result  = '<div id="jet-sm-gb-style--fb"><style>';
+		$result = '<div id="jet-sm-gb-style--fb"><style>';
 		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $form_id );
 
 		return $result . '</style></div>';

@@ -267,7 +267,7 @@ class Manager {
 	 */
 	public function addon_activate_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -293,7 +293,7 @@ class Manager {
 	 */
 	public function addon_deactivate_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -391,7 +391,7 @@ class Manager {
 	 */
 	public function service_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data || ! isset( $data['action'] ) ) {
 			wp_send_json( [
@@ -455,7 +455,7 @@ class Manager {
 			$plugin_slug = $this->get_addon_slug_by_filename( $plugin_data['slug'] );
 
 			$plugin_meta['view-details'] = sprintf( '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
-				esc_url( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
+				esc_url_raw( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
 				esc_attr( sprintf( __( 'More information about %s', 'jet-form-builder' ), $plugin_data['name'] ) ),
 				esc_attr( $plugin_data['name'] ),
 				__( 'View details', 'jet-form-builder' )

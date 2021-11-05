@@ -83,7 +83,7 @@ abstract class Base_Page {
 	public function get_url(): string {
 		return add_query_arg(
 			array( 'page' => $this->slug() ),
-			esc_url( admin_url( 'admin.php' ) )
+			esc_url_raw( admin_url( 'admin.php' ) )
 		);
 	}
 

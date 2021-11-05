@@ -206,7 +206,7 @@ class Manager {
 			'jet-form-builder-frontend-forms',
 			'JetFormBuilderSettings',
 			apply_filters( 'jet-form-builder/frontend-settings', array(
-				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'ajaxurl'      => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 				'form_action'  => Plugin::instance()->form_handler->hook_key,
 				'devmode'      => Dev_Mode\Manager::instance()->active(),
 				'scrollOffset' => - 50

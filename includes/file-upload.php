@@ -540,7 +540,7 @@ class File_Upload {
 		$messages        = $message_builder->manager->get_messages();
 
 		wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
-			'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'ajaxurl'         => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 			'action'          => $this->action,
 			'nonce'           => wp_create_nonce( $this->nonce_key ),
 			'max_upload_size' => wp_max_upload_size(),

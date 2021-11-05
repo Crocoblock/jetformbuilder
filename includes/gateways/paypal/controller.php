@@ -212,7 +212,7 @@ class Controller extends Base_Gateway {
 			$url = 'https://api-m.paypal.com/';
 		}
 
-		return esc_url( $url . $endpoint );
+		return esc_url_raw( $url . $endpoint );
 	}
 
 	/**

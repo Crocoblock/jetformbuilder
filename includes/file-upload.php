@@ -48,7 +48,7 @@ class File_Upload {
 			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
 		}
 
-		return sprintf( ' data-args="%s"', htmlspecialchars( json_encode( $data_args ) ) );
+		return sprintf( ' data-args="%s"', htmlspecialchars( wp_json_encode( $data_args ) ) );
 	}
 
 	/**

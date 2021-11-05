@@ -128,7 +128,7 @@ class Getresponse extends Integration_Base_Action {
 
 		$request_args = array(
 			'method' => 'POST',
-			'body'   => json_encode( $body_args ),
+			'body'   => wp_json_encode( $body_args ),
 		);
 
 		$response = $handler->request( 'contacts', $request_args );

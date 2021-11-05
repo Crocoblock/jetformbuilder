@@ -174,7 +174,7 @@ class Controller extends Base_Gateway {
 		update_post_meta(
 			$this->order_id,
 			self::GATEWAY_META_KEY,
-			json_encode( array(
+			wp_json_encode( array(
 				'payment_id' => $order['id'],
 				'order_id'   => $this->order_id,
 				'form_id'    => $action_handler->form_id,
@@ -290,12 +290,14 @@ class Controller extends Base_Gateway {
 
 		if ( is_array( $body ) ) {
 
+			// phpcs:disable WordPress.PHP.IniSet.Risky
 			if ( version_compare( phpversion(), '7.1', '>=' ) ) {
 				ini_set( 'precision', 17 );
 				ini_set( 'serialize_precision', - 1 );
 			}
+			// phpcs:enable WordPress.PHP.IniSet.Risky
 
-			$body = json_encode( $body );
+			$body = wp_json_encode( $body );
 		}
 
 		$args = array(

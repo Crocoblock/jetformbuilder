@@ -46,7 +46,7 @@ abstract class Base_Handler {
 	}
 
 	public function update_options( $options ) {
-		$options = json_encode( $options );
+		$options = wp_json_encode( $options );
 
 		return update_option( $this->option_name(), $options );
 	}

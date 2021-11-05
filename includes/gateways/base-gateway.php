@@ -89,7 +89,7 @@ abstract class Base_Gateway {
 
 		$this->data['gateway'] = $this->get_name();
 
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, json_encode( $this->data ) );
+		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, wp_json_encode( $this->data ) );
 
 		$this->try_do_actions();
 

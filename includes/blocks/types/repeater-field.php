@@ -347,7 +347,7 @@ class Repeater_Field extends Base {
 	}
 
 	public function set_settings() {
-		$this->settings = htmlspecialchars( json_encode( array(
+		$this->settings = htmlspecialchars( wp_json_encode( array(
 			'manageItems' => $this->manage_items,
 			'itemsField'  => $this->items_field,
 			'calcType'    => $this->repeater_calc_type,
@@ -369,7 +369,7 @@ class Repeater_Field extends Base {
 		foreach ( $this->calc_data as $data_key => $data_value ) {
 
 			if ( is_array( $data_value ) ) {
-				$data_value = json_encode( $data_value );
+				$data_value = wp_json_encode( $data_value );
 			}
 			$this->calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
 		}

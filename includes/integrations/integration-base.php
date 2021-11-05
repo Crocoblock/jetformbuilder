@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Integrations;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 abstract class Integration_Base {
-	protected $api_base_url = '';
-	protected $api_key = '';
+	protected $api_base_url     = '';
+	protected $api_key          = '';
 	protected $api_request_args = array();
 
 	public function __construct( $api_key ) {
@@ -48,8 +48,9 @@ abstract class Integration_Base {
 
 	public function base_request( $end_point, $request_args = array() ) {
 		$args = array_merge_recursive( $this->api_request_args, $request_args );
+		$url  = esc_url_raw( $this->api_base_url . $end_point );
 
-		return wp_remote_request( $this->api_base_url . $end_point, $args );
+		return wp_remote_request( $url, $args );
 	}
 
 }

@@ -19,13 +19,17 @@ class Tools {
 	}
 
 	public static function is_block_editor() {
-		$action = ! empty( $_GET['context'] ) ? esc_attr( $_GET['context'] ) : '';
+		$allowed_actions = array( 'add', 'edit' );
 
-		if ( isset( $_GET['action'] ) ) {
-			$action = $action ?: esc_attr( $_GET['action'] );
-		}
+		return (
+			in_array( self::sanitize_get_param( 'context' ), $allowed_actions, true )
+			|| in_array( self::sanitize_get_param( 'action' ), $allowed_actions, true )
+		);
+	}
 
-		return in_array( $action, array( 'add', 'edit' ) );
+	public static function sanitize_get_param( $param_name ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return ! empty( $_GET[ $param_name ] ) ? sanitize_key( $_GET[ $param_name ] ) : '';
 	}
 
 	public static function is_elementor_editor() {
@@ -365,17 +369,43 @@ class Tools {
 		return $data ? $data : maybe_unserialize( $value );
 	}
 
-	public static function maybe_recursive_sanitize( $source = null ) {
+	public static function sanitize_recursive( $source = null ) {
 		if ( ! is_array( $source ) ) {
-			return esc_attr( $source );
+			return self::sanitize( $source );
 		}
 
 		$result = array();
+
 		foreach ( $source as $key => $value ) {
-			$result[ $key ] = self::maybe_recursive_sanitize( $value );
+			$result[ $key ] = self::sanitize_recursive( $value );
 		}
 
 		return $result;
+	}
+
+	public static function sanitize( $source ) {
+		if ( self::is_url( $source ) ) {
+			return esc_url_raw( $source );
+		}
+
+		if ( is_numeric( $source ) ) {
+			return (float) $source;
+		}
+
+		return self::sanitize_text_field( $source );
+	}
+
+	public static function is_url( $url ) {
+		return wp_http_validate_url( $url );
+	}
+
+	public static function sanitize_text_field( $source ) {
+		$str = (string) $source;
+
+		$filtered = wp_check_invalid_utf8( $str );
+		$filtered = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $filtered );
+
+		return trim( $filtered );
 	}
 
 	public static function recursive_wp_kses( $source, $allowed_html = 'strip' ) {
@@ -385,7 +415,7 @@ class Tools {
 
 		$result = array();
 		foreach ( $source as $key => $value ) {
-			$result[ $key ] = self::maybe_recursive_sanitize( $value );
+			$result[ $key ] = self::sanitize_recursive( $value );
 		}
 
 		return $result;
@@ -405,8 +435,15 @@ class Tools {
 					case 'size':
 						$response[ $index ][ $key ] = absint( $value );
 						break;
-					default:
-						$response[ $index ][ $key ] = esc_attr( $value );
+					case 'name':
+						$response[ $index ][ $key ] = sanitize_file_name( $value );
+						break;
+					case 'type':
+						$response[ $index ][ $key ] = sanitize_mime_type( $value );
+						break;
+					case 'tmp_name':
+						$response[ $index ][ $key ] = sanitize_text_field( $value );
+						break;
 				}
 			}
 		}

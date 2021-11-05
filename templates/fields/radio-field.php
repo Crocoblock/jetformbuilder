@@ -38,7 +38,7 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		if ( is_array( $option ) && isset( $option['calculate'] ) ) {
-			$calc = ' data-calculate="' . $option['calculate'] . '"';
+			$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
 		}
 
 		$custom_template = false;
@@ -58,16 +58,16 @@ if ( ! empty( $args['field_options'] ) ) {
 			<label class="jet-form-builder__field-label for-radio">
 				<input
 						type="radio"
-						name="<?php echo $name; ?>"
+						name="<?php echo esc_attr( $name ); ?>"
 					<?php $this->render_attributes_string_save(); ?>
-						value="<?php echo $val; ?>"
-						data-field-name="<?php echo $args['name']; ?>"
+						value="<?php echo esc_attr( $val ); ?>"
+						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
 					<?php echo $checked; ?>
 					<?php echo $required; ?>
 					<?php echo $calc; ?>
 					<?php echo $data_switch; ?>
 				>
-				<span><?php echo $label; ?></span>
+				<span><?php echo wp_kses_post( $label ); ?></span>
 			</label>
 		</div>
 		<?php

@@ -27,6 +27,6 @@ if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $this->live_form->pa
 ?>
 <div class="<?php echo implode( ' ', $wrap_classes ); ?>">
 	<?php require $this->get_global_template( 'common/prev-page-button.php' ); ?>
-	<button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
+	<button <?php $this->render_attributes_string(); ?>><?php echo wp_kses_post( $args['label'] ); ?></button>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

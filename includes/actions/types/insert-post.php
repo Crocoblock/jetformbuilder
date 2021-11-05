@@ -93,7 +93,7 @@ class Insert_Post extends Base {
 			$key_found_in_map = false;
 
 			if ( ! empty( $fields_map[ $key ] ) ) {
-				$key              = esc_attr( $fields_map[ $key ] );
+				$key              = sanitize_key( $fields_map[ $key ] );
 				$key_found_in_map = true;
 			}
 
@@ -101,7 +101,7 @@ class Insert_Post extends Base {
 				continue;
 			}
 
-			if ( ! in_array( $key, $object_fields ) ) {
+			if ( ! in_array( $key, $object_fields, true ) ) {
 
 				if ( false !== strpos( $key, 'jet_tax__' ) ) {
 
@@ -132,7 +132,7 @@ class Insert_Post extends Base {
 
 								foreach ( $row as $item_key => $item_value ) {
 
-									$item_key = ! empty( $fields_map[ $item_key ] ) ? esc_attr( $fields_map[ $item_key ] ) : $item_key;
+									$item_key = ! empty( $fields_map[ $item_key ] ) ? sanitize_key( $fields_map[ $item_key ] ) : $item_key;
 
 									$prepared_row[ $item_key ] = $item_value;
 								}

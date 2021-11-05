@@ -92,7 +92,7 @@ class Register_User extends Base {
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
 
-			if ( $allow_register && ! in_array( $role_can_register, $user->roles ) ) {
+			if ( $allow_register && ! in_array( $role_can_register, $user->roles, true ) ) {
 				throw new Action_Exception( 'not_enough_cap' );
 			}
 
@@ -237,7 +237,7 @@ class Register_User extends Base {
 
 							foreach ( $row as $item_key => $item_value ) {
 
-								$item_key = ! empty( $metafields_map[ $item_key ] ) ? esc_attr( $metafields_map[ $item_key ] ) : $item_key;
+								$item_key = ! empty( $metafields_map[ $item_key ] ) ? sanitize_key( $metafields_map[ $item_key ] ) : $item_key;
 
 								$prepared_row[ $item_key ] = $item_value;
 							}

@@ -141,7 +141,8 @@ class Gateway_Manager {
 	}
 
 	public function on_has_gateway_request() {
-		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$gateway_type = sanitize_key( wp_unslash( $_GET[ self::PAYMENT_TYPE_PARAM ] ?? '' ) );
 		$controller   = $this->get_gateway_controller( $gateway_type );
 
 		if ( ! ( $controller instanceof Base_Gateway ) ) {

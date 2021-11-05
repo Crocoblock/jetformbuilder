@@ -54,7 +54,7 @@ class Request_Handler {
 			$prepared = array();
 			// phpcs:disable WordPress.Security.NonceVerification.Missing
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$raw = ! empty( $_POST['values'] ) ? Tools::maybe_recursive_sanitize( wp_unslash( $_POST['values'] ) ) : array();
+			$raw = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( wp_unslash( $_POST['values'] ) ) : array();
 			// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 			if ( empty( $raw ) ) {

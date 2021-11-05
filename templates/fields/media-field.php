@@ -52,7 +52,7 @@ $value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) 
 		</div>
 	</div>
 	<div class="jet-form-builder-file-upload__fields">
-		<input class="jet-form-builder-file-upload__value" type="hidden" name="<?php echo $this->block_type->get_field_name( $args['name'] ); ?>" data-field-name="<?php echo $args['name']; ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
+		<input class="jet-form-builder-file-upload__value" type="hidden" name="<?php echo esc_attr( $this->block_type->get_field_name( $args['name'] ) ); ?>" data-field-name="<?php echo esc_attr( $args['name'] ); ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
 		<input <?php $this->render_attributes_string(); ?>>
 		<?php echo $this->maybe_render_error( $args ); ?>
 	</div>

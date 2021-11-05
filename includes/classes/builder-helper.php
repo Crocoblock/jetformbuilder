@@ -12,7 +12,7 @@ class Builder_Helper {
 	/**
 	 * @param $object_id
 	 * @param $args
-	 * @param false $checked
+	 * @param false     $checked
 	 *
 	 * @return string
 	 */
@@ -54,12 +54,12 @@ class Builder_Helper {
 		jet_engine()->frontend->set_listing( $listing_id );
 
 		ob_start();
-		$content = jet_engine()->frontend->get_listing_item( $object );
+		$content  = jet_engine()->frontend->get_listing_item( $object );
 		$content .= ob_get_clean();
 
 		$result = sprintf(
 			'<div class="%3$s" data-value="%1$d">%2$s</div>',
-			$object_id,
+			esc_attr( $object_id ),
 			apply_filters( 'jet-form-builder/custom-template-content', $content, $object_id, $listing_id ),
 			join( ' ', $classes )
 		);

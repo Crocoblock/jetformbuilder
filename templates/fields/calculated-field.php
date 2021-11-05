@@ -18,7 +18,7 @@ $is_hidden     = isset( $args['calc_hidden'] ) ? filter_var( $args['calc_hidden'
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-formula', $calc_data['formula'] );
 $this->add_attribute( 'data-name', $args['name'] );
-$this->add_attribute( 'data-listen_to', htmlspecialchars( json_encode( $calc_data['listen_fields'] ) ) );
+$this->add_attribute( 'data-listen_to', htmlspecialchars( wp_json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
@@ -36,16 +36,16 @@ if ( $is_hidden ) {
 ?>
 <div <?php $this->render_attributes_string(); ?>>
 	<?php if ( false !== $prefix ) : ?>
-		<div class="jet-form-builder__calculated-field-prefix"><?php echo $prefix; ?></div>
+		<div class="jet-form-builder__calculated-field-prefix"><?php echo wp_kses_post( $prefix ); ?></div>
 	<?php endif; ?>
 	<input type="hidden"
-           name="<?php echo $name; ?>"
-           value="<?php echo $default_value; ?>"
+           name="<?php echo esc_attr( $name ); ?>"
+           value="<?php echo esc_attr( $default_value ); ?>"
 		   class="jet-form-builder__calculated-field-input jet-form-builder__field"
-		   data-field-name="<?php echo $args['name']; ?>" />
-	<div class="jet-form-builder__calculated-field-val"><?php echo $this->render_editor_placeholder(); ?></div>
+		   data-field-name="<?php echo esc_attr( $args['name'] ); ?>" />
+	<div class="jet-form-builder__calculated-field-val"><?php echo wp_kses_post( $this->render_editor_placeholder() ); ?></div>
 	<?php if ( false !== $suffix ) : ?>
-		<div class="jet-form-builder__calculated-field-suffix"><?php echo $suffix; ?></div>
+		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>
 	<?php endif; ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

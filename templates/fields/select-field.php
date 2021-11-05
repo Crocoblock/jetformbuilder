@@ -10,7 +10,7 @@ use Jet_Form_Builder\Blocks\Render\Base;
 
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
 $this->add_attribute( 'class', $args['class_name'] );
-$this->add_attribute( 'required', $this->block_type->get_required_val( $args ) );
+$this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
@@ -59,7 +59,7 @@ $this->add_attribute( 'data-default-val', $default );
 				}
 
 				if ( is_array( $option ) && isset( $option['calculate'] ) ) {
-					$calc = ' data-calculate="' . $option['calculate'] . '"';
+					$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
 				}
 
 				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );

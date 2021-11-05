@@ -23,7 +23,7 @@ abstract class Base_Page {
 	 * Page render function
 	 */
 	public function render() {
-		printf( '<div id="%s"></div>', 'jet-form-builder_page_' . $this->slug() );
+		printf( '<div id="%s"></div>', esc_attr( 'jet-form-builder_page_' . $this->slug() ) );
 	}
 
 	/**

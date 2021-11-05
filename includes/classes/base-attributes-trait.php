@@ -54,7 +54,7 @@ trait Base_Attributes_Trait {
 			if ( is_array( $value ) ) {
 				$value = implode( ' ', $value );
 			}
-			$response .= sprintf( ' %1$s="%2$s"', $attr, $value );
+			$response .= sprintf( ' %1$s="%2$s"', $attr, esc_attr( $value ) );
 		}
 
 		return $response;

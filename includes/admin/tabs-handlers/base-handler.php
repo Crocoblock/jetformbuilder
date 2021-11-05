@@ -68,4 +68,24 @@ abstract class Base_Handler {
 	public function option_name() {
 		return $this->prefix . $this->slug();
 	}
+
+	public function get_success_response_data() {
+		return array(
+			'message' => __( 'Saved successfully!', 'jet-form-builder' ),
+		);
+	}
+
+	public function get_failed_response_data() {
+		return array(
+			'message' => __( 'Unsuccessful save.', 'jet-form-builder' ),
+		);
+	}
+
+	public function send_response( $result ) {
+		if ( $result ) {
+			wp_send_json_success( $this->get_success_response_data() );
+		}
+
+		wp_send_json_error( $this->get_failed_response_data() );
+	}
 }

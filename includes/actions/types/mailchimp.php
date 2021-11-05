@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Integrations\Integration_Base;
 use Jet_Form_Builder\Integrations\MailChimp_Handler;
 
@@ -122,13 +123,28 @@ class Mailchimp extends Integration_Base_Action {
 
 		$subscriber = $this->get_api_handler()->request(
 			$this->get_endpoint( 'lists/%s/members/%s' ),
-			$this->get_request_args()
+			$this->get_request_args( 'PUT' )
 		);
 
 		$this->throw_if_has_error( $subscriber );
 
 		if ( empty( $this->get_tags() ) ) {
 			return;
+		}
+
+		$endpoint        = $this->get_endpoint( 'lists/%s/members/%s/tags' );
+		$this->body_args = array( 'tags' => $this->prepare_tags( $subscriber ) );
+
+		try {
+			$this->get_api_handler()->request_with_code(
+				$endpoint,
+				$this->get_request_args( 'POST' )
+			);
+		} catch ( Silence_Exception $exception ) {
+			if ( ! $exception->getMessage() ) {
+				throw new Action_Exception( 'internal_error' );
+			}
+			throw ( new Action_Exception( $exception->getMessage() ) )->dynamic_error();
 		}
 	}
 
@@ -193,9 +209,9 @@ class Mailchimp extends Integration_Base_Action {
 	/**
 	 * @throws Action_Exception
 	 */
-	private function get_request_args(): array {
+	private function get_request_args( $method ): array {
 		return array(
-			'method'  => 'PUT',
+			'method'  => $method,
 			'body'    => wp_json_encode( $this->body_args ),
 			'headers' => array(
 				'Content-Type' => 'application/json; charset=utf-8',
@@ -220,7 +236,7 @@ class Mailchimp extends Integration_Base_Action {
 	}
 
 	private function get_tags_difference( $subscriber ): array {
-		$subscriber_tags = wp_list_pluck( $subscriber, 'name' );
+		$subscriber_tags = wp_list_pluck( $subscriber['tags'] ?? array(), 'name' );
 
 		$tags_inactive = array_diff( $subscriber_tags, $this->get_tags() );
 		$tags_active   = array_diff( $this->get_tags(), $subscriber_tags );
@@ -231,21 +247,28 @@ class Mailchimp extends Integration_Base_Action {
 	private function prepare_tags( $subscriber ) {
 		list ( $tags_inactive, $tags_active ) = $this->get_tags_difference( $subscriber );
 
-		$tags_active = array_map(
-			function ( $tag ) {
-				return array( 'status' => 'active', 'name' => $tag );
-			},
-			$tags_active
+		return array_merge(
+			$this->get_tags_with_status( $tags_inactive, 'inactive' ),
+			$this->get_tags_with_status( $tags_active, 'active' )
 		);
+	}
 
-		$tags_inactive = array_map(
-			function ( $tag ) {
-				return array( 'status' => 'inactive', 'name' => $tag );
+	private function get_tags_with_status( $tags, $status ): array {
+		$status = in_array( $status, array( 'active', 'inactive' ), true ) ? $status : false;
+
+		if ( false === $status ) {
+			return array();
+		}
+
+		return array_map(
+			function ( $tag ) use ( $status ) {
+				return array(
+					'status' => $status,
+					'name'   => $tag,
+				);
 			},
-			$tags_active
+			$tags
 		);
-
-		return array_merge( $tags_inactive, $tags_active );
 	}
 
 	private function get_body_args( $fields_map ) {

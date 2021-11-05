@@ -3,10 +3,11 @@
 namespace Jet_Form_Builder\Integrations;
 
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 abstract class Integration_Base {
-	protected $api_base_url     = '';
-	protected $api_key          = '';
+	protected $api_base_url = '';
+	protected $api_key = '';
 	protected $api_request_args = array();
 
 	public function __construct( $api_key ) {
@@ -37,12 +38,20 @@ abstract class Integration_Base {
 		return $data;
 	}
 
+	/**
+	 * @param $end_point
+	 * @param array $request_args
+	 *
+	 * @throws Silence_Exception
+	 */
 	public function request_with_code( $end_point, $request_args = array() ) {
 		$response = $this->base_request( $end_point, $request_args );
-		$code = (int) wp_remote_retrieve_response_code( $response );
+		$code     = (int) wp_remote_retrieve_response_code( $response );
 
 		if ( ! in_array( $code, $this->success_codes(), true ) ) {
-			throw new Action_Exception();
+			$message = wp_remote_retrieve_response_message( $response );
+
+			throw new Silence_Exception( $message );
 		}
 	}
 

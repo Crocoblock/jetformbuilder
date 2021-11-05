@@ -335,6 +335,7 @@ class Mailchimp extends Integration_Base_Action {
 			'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
 			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
 			'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
+			'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' ),
 		);
 	}
 

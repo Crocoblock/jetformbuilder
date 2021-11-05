@@ -37,18 +37,15 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 	public function prepare_list(): array {
 		$list = $this->get_list();
 
+		do_action( 'qm/debug', $list );
+
 		if ( ! $list || ! is_array( $list ) ) {
 			return array();
 		}
 		$prepared = array();
 
 		foreach ( $list as $item_id => $record ) {
-			$prepared[ $item_id ] = array_merge(
-				$this->prepare_record( $record ),
-				array(
-					'_ENTRY_ID' => $item_id,
-				)
-			);
+			$prepared[ $item_id ] = $this->prepare_record( $record );
 		}
 
 		return $prepared;

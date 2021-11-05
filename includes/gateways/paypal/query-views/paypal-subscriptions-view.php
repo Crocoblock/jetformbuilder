@@ -45,6 +45,8 @@ class Paypal_Subscriptions_View extends View_Base {
 	}
 
 	public function prepare_row( $row ): array {
-		return Tools::decode_json( $row['meta_value'] ?? '[]' );
+		$value = Tools::decode_json( $row['meta_value'] ?? '[]' );
+
+		return array_merge( array( '_ROW_ID' => $row['meta_id'] ), $value );
 	}
 }

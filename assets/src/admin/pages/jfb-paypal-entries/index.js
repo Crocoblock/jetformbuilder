@@ -8,7 +8,8 @@ const options = {
 			checked: [],
 			idList: [],
 			currentPopupData: {},
-			columns: {}
+			columns: {},
+			rowsList: [],
 		},
 		getters: {
 			isChecked: state => id => {

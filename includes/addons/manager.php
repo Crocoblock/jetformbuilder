@@ -1,18 +1,21 @@
 <?php
-
 namespace Jet_Form_Builder\Addons;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
+
+/**
+ * This class required to get actual JetFormBuilder addons list and changelog for these addons from account.jetformbuilder.com.
+ * The data retrieved from the account.jetformbuilder.com contains only information about addons and required to show Addons admin page.
+ * This class don't send any data from client website to account.jetformbuilder.com,
+ * so it absolutely secure and cant'b used to retrieve any data from client site.
+ */
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * Define Manager class
- */
 class Manager {
 
 	/**

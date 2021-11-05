@@ -32,6 +32,9 @@ class Forms_Captcha {
 		'secret'  => '',
 	);
 
+	private function api_front_url( $key ): string {
+		return esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
+	}
 
 	public function verify( $form_id = null, $is_ajax = false ) {
 
@@ -114,23 +117,19 @@ class Forms_Captcha {
 
 		$captcha = $this->get_data( $form_id );
 
-		if ( empty( $captcha['enabled'] ) ) {
+		if ( empty( $captcha['enabled'] ) || empty( $captcha['key'] ) ) {
 			return;
 		}
 
-		$key           = esc_attr( $captcha['key'] );
-		$action_prefix = self::CAPTCHA_ACTION_PREFIX;
+		$key = esc_attr( $captcha['key'] );
 
-		if ( ! $key ) {
-			return;
-		}
-
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-		if ( ! self::$script_rendered ) {
-			self::$script_rendered = true;
-			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-			printf( '<script id="jet-form-builder-recaptcha-js" src="https://www.google.com/recaptcha/api.js?render=%s"></script>', $key );
-		}
+		wp_enqueue_script(
+			'jet-form-builder-recaptcha',
+			$this->api_front_url( $key ),
+			array(),
+			jet_form_builder()->get_version(),
+			true
+		);
 
 		wp_enqueue_script(
 			'jet-form-builder-recaptcha-handler',
@@ -139,6 +138,9 @@ class Forms_Captcha {
 			jet_form_builder()->get_version(),
 			true
 		);
+
+		$action_prefix = self::CAPTCHA_ACTION_PREFIX;
+
 		wp_add_inline_script(
 			'jet-form-builder-recaptcha-handler',
 			"
@@ -149,10 +151,8 @@ class Forms_Captcha {
 		);
 
 		?>
-        <input type="hidden" class="captcha-token" name="<?php echo $this->field_key; ?>" value="">
+        <input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
 		<?php
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-
 	}
 
 }

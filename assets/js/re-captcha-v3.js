@@ -61,6 +61,11 @@
 			$( window ).on( 'jet-popup/show-event/after-show', function () {
 				setUpCaptcha();
 			} );
+
+			$( document ).on( 'elementor/popup/show', function() {
+				setUpCaptcha();
+			} );
+
 		};
 
 		$( setUpMain );

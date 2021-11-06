@@ -7,8 +7,8 @@ use Jet_Form_Builder\Plugin;
 /**
  * This class required to get actual JetFormBuilder addons list and changelog for these addons from account.jetformbuilder.com.
  * The data retrieved from the account.jetformbuilder.com contains only information about addons and required to show Addons admin page.
- * This class don't send any data from client website to account.jetformbuilder.com,
- * so it absolutely secure and cant'b used to retrieve any data from client site.
+ * This class don't send any sensetive data from client website to account.jetformbuilder.com, just technical information required webservers to communicate between each other
+ * like IP or server URI, there is no user personal data send with this requests
  */
 
 // If this file is called directly, abort.

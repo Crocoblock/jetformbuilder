@@ -10,7 +10,8 @@ class Mailchimp_Handler extends Base_Handler {
 	}
 
 	public function on_get_request() {
-		$api_key = sanitize_text_field( $_POST['api_key'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$api_key = sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) );
 
 		$result = $this->update_options(
 			array(
@@ -18,15 +19,7 @@ class Mailchimp_Handler extends Base_Handler {
 			)
 		);
 
-		$result ? wp_send_json_success(
-			array(
-				'message' => __( 'Saved successfully!', 'jet-form-builder' ),
-			)
-		) : wp_send_json_error(
-			array(
-				'message' => __( 'Unsuccessful save.', 'jet-form-builder' ),
-			)
-		);
+		$this->send_response( $result );
 	}
 
 	public function on_load() {

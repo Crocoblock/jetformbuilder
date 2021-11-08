@@ -20,7 +20,6 @@ class Tab_Handler_Manager {
 	}
 
 	public function __construct() {
-		// add_action( 'init', array( $this, 'register_tabs' ), 999 );
 		$this->register_tabs();
 	}
 
@@ -97,8 +96,8 @@ class Tab_Handler_Manager {
 		if ( ! isset( $this->_tabs[ $slug ] ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				'Undefined tab: ' . var_export( $slug, true ),
-				Plugin::instance()->get_version()
+				esc_html( "Undefined tab: $slug" ),
+				esc_html( Plugin::instance()->get_version() )
 			);
 		}
 	}

@@ -42,7 +42,8 @@ class Builder {
 	 */
 	public function get_form_status() {
 		if ( ! $this->status ) {
-			$this->status = isset( $_REQUEST['status'] ) ? esc_attr( $_REQUEST['status'] ) : null;
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->status = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : null;
 		}
 
 		return $this->status;

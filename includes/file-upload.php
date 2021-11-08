@@ -48,7 +48,7 @@ class File_Upload {
 			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
 		}
 
-		return sprintf( ' data-args="%s"', htmlspecialchars( json_encode( $data_args ) ) );
+		return sprintf( ' data-args="%s"', htmlspecialchars( wp_json_encode( $data_args ) ) );
 	}
 
 	/**
@@ -548,7 +548,7 @@ class File_Upload {
 			'jet-form-builder-file-upload',
 			'JetFormBuilderFileUploadConfig',
 			array(
-				'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+				'ajaxurl'         => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 				'action'          => $this->action,
 				'nonce'           => wp_create_nonce( $this->nonce_key ),
 				'max_upload_size' => wp_max_upload_size(),

@@ -36,7 +36,7 @@ class Error_Handler {
 		if ( empty( $_REQUEST ) || ! isset( $_REQUEST['fields'] ) ) {
 			return;
 		}
-		$request = stripslashes( Tools::maybe_recursive_sanitize( $_REQUEST['fields'] ) );
+		$request = stripslashes( Tools::sanitize_recursive( $_REQUEST['fields'] ) );
 
 		if ( is_array( json_decode( $request, true ) ) && json_last_error() == JSON_ERROR_NONE ) {
 

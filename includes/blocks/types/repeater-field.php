@@ -3,8 +3,6 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
-use Jet_Form_Builder\Presets\Form_Base_Preset;
-use Jet_Form_Builder\Presets\Preset_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -386,7 +384,7 @@ class Repeater_Field extends Base {
 
 	public function set_settings() {
 		$this->settings = htmlspecialchars(
-			json_encode(
+			wp_json_encode(
 				array(
 					'manageItems' => $this->manage_items,
 					'itemsField'  => $this->items_field,
@@ -411,7 +409,7 @@ class Repeater_Field extends Base {
 		foreach ( $this->calc_data as $data_key => $data_value ) {
 
 			if ( is_array( $data_value ) ) {
-				$data_value = json_encode( $data_value );
+				$data_value = wp_json_encode( $data_value );
 			}
 			$this->calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
 		}
@@ -441,7 +439,13 @@ class Repeater_Field extends Base {
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
-						return get_post_meta( $this->post->ID, $matches[2], true );
+						$post = get_post();
+
+						if ( ! isset( $post->ID ) ) {
+							return '';
+						}
+
+						return get_post_meta( $post->ID, $matches[2], true );
 
 					default:
 						$macros_name = $matches[1];

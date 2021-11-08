@@ -1,18 +1,21 @@
 <?php
-
 namespace Jet_Form_Builder\Addons;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
+
+/**
+ * This class required to get actual JetFormBuilder addons list and changelog for these addons from account.jetformbuilder.com.
+ * The data retrieved from the account.jetformbuilder.com contains only information about addons and required to show Addons admin page.
+ * This class don't send any sensetive data from client website to account.jetformbuilder.com, just technical information required webservers to communicate between each other
+ * like IP or server URI, there is no user personal data send with this requests
+ */
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * Define Manager class
- */
 class Manager {
 
 	/**
@@ -277,7 +280,7 @@ class Manager {
 	 */
 	public function addon_activate_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -303,7 +306,7 @@ class Manager {
 	 */
 	public function addon_deactivate_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
 			wp_send_json( [
@@ -401,7 +404,7 @@ class Manager {
 	 */
 	public function service_action() {
 
-		$data = ( ! empty( $_POST['data'] ) ) ? Tools::maybe_recursive_sanitize( $_POST['data'] ) : false;
+		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data || ! isset( $data['action'] ) ) {
 			wp_send_json(
@@ -470,9 +473,8 @@ class Manager {
 
 			$plugin_slug = $this->get_addon_slug_by_filename( $plugin_data['slug'] );
 
-			$plugin_meta['view-details'] = sprintf(
-				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
-				esc_url( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
+			$plugin_meta['view-details'] = sprintf( '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+				esc_url_raw( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
 				esc_attr( sprintf( __( 'More information about %s', 'jet-form-builder' ), $plugin_data['name'] ) ),
 				esc_attr( $plugin_data['name'] ),
 				__( 'View details', 'jet-form-builder' )

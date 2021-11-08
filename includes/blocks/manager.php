@@ -173,7 +173,7 @@ class Manager {
 	}
 
 	public function enqueue_frontend_styles() {
-		wp_enqueue_style(
+		wp_register_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
 			array(),
@@ -184,7 +184,7 @@ class Manager {
 	/**
 	 * Register form JS
 	 *
-	 * @return void [description]
+	 * @return void
 	 */
 	public function enqueue_frontend_assets() {
 		$this->register_form_scripts();
@@ -198,7 +198,7 @@ class Manager {
 			apply_filters(
 				'jet-form-builder/frontend-settings',
 				array(
-					'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'ajaxurl'      => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 					'form_action'  => Plugin::instance()->form_handler->hook_key,
 					'devmode'      => Dev_Mode\Manager::instance()->active(),
 					'scrollOffset' => - 50,
@@ -260,9 +260,9 @@ class Manager {
 					'label'     => $data[ $context ]['label'],
 					'options'   => $data[ $context ]['options'] ?? array(),
 					'condition' => $data[ $context ]['condition'] ?? false,
-					// for Submit field name
+					// for Submit field name.
 					'show'      => $data[ $context ]['show'] ?? true,
-					// for Date and Time field
+					// for Date and Time field.
 					'help'      => $data[ $context ]['help'] ?? '',
 				);
 			}
@@ -282,30 +282,6 @@ class Manager {
 
 		try {
 			return $this->builder_repository()->rep_clone_item( $block_id );
-		} catch ( Repository_Exception $exception ) {
-		}
-
-		return false;
-	}
-
-
-	/**
-	 * @param $block_name
-	 * @param $attributes
-	 *
-	 * @return array|false
-	 */
-	public function get_field_attrs( $block_name, $attributes ) {
-		if ( ! $block_name ) {
-			return false;
-		}
-		$block_id = $this->explode_block_name( $block_name );
-
-		try {
-			$field = $this->builder_repository()->rep_get_item( $block_id );
-
-			return array_merge( $field->get_default_attributes(), $attributes );
-
 		} catch ( Repository_Exception $exception ) {
 		}
 

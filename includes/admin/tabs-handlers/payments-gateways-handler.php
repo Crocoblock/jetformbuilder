@@ -10,8 +10,10 @@ class Payments_Gateways_Handler extends Base_Handler {
 	}
 
 	public function on_get_request() {
-		$use_gateways     = $_POST['use_gateways'] === 'true';
-		$enable_test_mode = $_POST['enable_test_mode'] === 'true';
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$use_gateways     = 'true' === sanitize_key( $_POST['use_gateways'] ?? '' );
+		$enable_test_mode = 'true' === sanitize_key( $_POST['enable_test_mode'] ?? '' );
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$result = $this->update_options(
 			array(
@@ -20,15 +22,7 @@ class Payments_Gateways_Handler extends Base_Handler {
 			)
 		);
 
-		$result ? wp_send_json_success(
-			array(
-				'message' => __( 'Saved successfully!', 'jet-form-builder' ),
-			)
-		) : wp_send_json_error(
-			array(
-				'message' => __( 'Unsuccessful save.', 'jet-form-builder' ),
-			)
-		);
+		$this->send_response( $result );
 	}
 
 	public function on_load() {

@@ -21,6 +21,10 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
+	public function get_placeholder(): string {
+		return __( 'Please select form to show', 'jet-form-builder' );
+	}
+
 	public function get_label_selector() {
 		return '__label';
 	}
@@ -373,13 +377,12 @@ class Form extends Base {
 			$handle,
 			'JetFormData',
 			array(
-				'forms_list' => Tools::with_placeholder( Tools::get_forms_list_for_js() ),
+				'forms_list' => Tools::with_placeholder(
+					Tools::get_forms_list_for_js(),
+					$this->get_placeholder()
+				),
 			)
 		);
-	}
-
-	private function get_style_manager_html( $form_id ): string {
-		return $this->maybe_render_styles_block( $form_id ) . $this->maybe_render_fonts_block( $form_id );
 	}
 
 	/**
@@ -387,8 +390,8 @@ class Form extends Base {
 	 *
 	 * @param array $attrs [description]
 	 *
-	 * @param null  $content
-	 * @param null  $wp_block
+	 * @param null $content
+	 * @param null $wp_block
 	 *
 	 * @return false|string [type]             [description]
 	 */
@@ -396,7 +399,7 @@ class Form extends Base {
 		$form_id = $attrs['form_id'];
 
 		if ( ! $form_id ) {
-			return 'Please select form to show';
+			return $this->get_placeholder();
 		}
 
 		Plugin::instance()->admin_bar->register_item(
@@ -418,7 +421,7 @@ class Form extends Base {
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
 		if ( $custom_form ) {
-			return ( $this->get_style_manager_html( $form_id ) . $custom_form );
+			return $custom_form;
 		}
 
 		$builder = new Form_Builder( $form_id, false, $attrs );
@@ -427,7 +430,6 @@ class Form extends Base {
 
 		ob_start();
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $this->get_style_manager_html( $form_id );
 		$builder->render_form();
 		jet_form_builder()->msg_router->get_builder()->render_messages();
 
@@ -436,43 +438,6 @@ class Form extends Base {
 		}
 
 		return ob_get_clean();
-	}
-
-	private function maybe_render_styles_block( $form_id ) {
-		if ( ! Jet_Style_Manager::is_activated() ) {
-			return '';
-		}
-		$result  = '<div id="jet-sm-gb-style--fb"><style>';
-		$result .= Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $form_id );
-
-		return $result . '</style></div>';
-	}
-
-	private function maybe_render_fonts_block( $form_id ) {
-		if (
-			! Jet_Style_Manager::is_activated()
-			|| ! method_exists( Style_Manager::get_instance(), 'get_blocks_fonts' )
-		) {
-			return '';
-		}
-		$fonts = Style_Manager::get_instance()->get_blocks_fonts( $form_id );
-
-		if ( $fonts ) {
-			$fonts = trim( $fonts, '"' );
-			$fonts = wp_unslash( $fonts );
-
-			return wp_kses(
-				$fonts,
-				array(
-					'link' => array(
-						'href' => true,
-						'rel'  => true,
-					),
-				)
-			);
-		}
-
-		return '';
 	}
 
 

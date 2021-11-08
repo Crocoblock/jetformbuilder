@@ -1,5 +1,3 @@
-<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-<div class="<?php echo $class; ?>">
-	<?php echo $message_content; ?>
+<div class="<?php echo esc_attr( $class ); ?>">
+	<?php echo wp_kses_post( $message_content ); ?>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

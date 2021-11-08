@@ -32,7 +32,7 @@ class Call_Webhook extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
-		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url( $this->settings['webhook_url'] ) : false;
+		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url_raw( $this->settings['webhook_url'] ) : false;
 
 		if ( ! $webhook_url ) {
 			throw new Action_Exception( 'failed', $this->settings );

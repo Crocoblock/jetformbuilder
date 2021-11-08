@@ -11,5 +11,4 @@ if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
 	$format = '<div class="%1$s"><small>%2$s</small></div>';
 }
 
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-printf( $format, $class, $args['desc'] );
+printf( $format, esc_attr( $class ), wp_kses_post( $args['desc'] ) );

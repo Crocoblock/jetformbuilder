@@ -59,7 +59,7 @@ class Builder_Helper {
 
 		$result = sprintf(
 			'<div class="%3$s" data-value="%1$d">%2$s</div>',
-			$object_id,
+			esc_attr( $object_id ),
 			apply_filters( 'jet-form-builder/custom-template-content', $content, $object_id, $listing_id ),
 			join( ' ', $classes )
 		);

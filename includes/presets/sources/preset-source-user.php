@@ -29,7 +29,7 @@ class Preset_Source_User extends Base_Source {
 		}
 
 		$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : 'user_id';
-		$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+		$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 
 		return get_user_by( 'ID', $user_id );
 	}

@@ -10,8 +10,10 @@ class Active_Campaign_Handler extends Base_Handler {
 	}
 
 	public function on_get_request() {
-		$key = sanitize_text_field( $_POST['api_key'] );
-		$url = sanitize_text_field( $_POST['api_url'] );
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$key = sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) );
+		$url = sanitize_text_field( wp_unslash( $_POST['api_url'] ?? '' ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$result = $this->update_options(
 			array(
@@ -20,15 +22,7 @@ class Active_Campaign_Handler extends Base_Handler {
 			)
 		);
 
-		$result ? wp_send_json_success(
-			array(
-				'message' => __( 'Saved successfully!', 'jet-form-builder' ),
-			)
-		) : wp_send_json_error(
-			array(
-				'message' => __( 'Unsuccessful save.', 'jet-form-builder' ),
-			)
-		);
+		$this->send_response( $result );
 	}
 
 	public function on_load() {

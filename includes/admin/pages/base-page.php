@@ -28,7 +28,7 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 	 * Page render function
 	 */
 	public function render() {
-		printf( '<div id="%s"></div>', 'jet-form-builder_page_' . $this->slug() );
+		printf( '<div id="%s"></div>', esc_attr( 'jet-form-builder_page_' . $this->slug() ) );
 	}
 
 	/**
@@ -83,7 +83,7 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 	public function get_url(): string {
 		return add_query_arg(
 			array( 'page' => $this->slug() ),
-			esc_url( admin_url( 'admin.php' ) )
+			esc_url_raw( admin_url( 'admin.php' ) )
 		);
 	}
 

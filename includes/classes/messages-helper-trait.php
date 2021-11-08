@@ -20,7 +20,7 @@ trait Messages_Helper_Trait {
 	}
 
 	public function get_default_messages_values_json() {
-		return json_encode( $this->get_messages_by_key( 'value' ) );
+		return wp_json_encode( $this->get_messages_by_key( 'value' ) );
 	}
 
 	public function get_default_messages_values() {

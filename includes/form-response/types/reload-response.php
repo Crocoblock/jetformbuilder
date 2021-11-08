@@ -6,11 +6,11 @@ namespace Jet_Form_Builder\Form_Response\Types;
 class Reload_Response extends Response_It {
 
 	public function get_field_errors( $errors ) {
-		return urlencode( json_encode( $errors ) );
+		return rawurlencode( wp_json_encode( $errors ) );
 	}
 
 	public function parse_status( $status ) {
-		return urlencode( str_replace( '\'', '`', $status ) );
+		return rawurlencode( str_replace( '\'', '`', $status ) );
 	}
 
 	public function additional_fields() {

@@ -228,6 +228,7 @@ abstract class Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function set_payment_token() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $this->token_query_name ) || empty( $_GET[ $this->token_query_name ] ) ) {
 			throw new Gateway_Exception( 'Empty payment token.' );
 		}
@@ -274,7 +275,8 @@ abstract class Base_Gateway {
 
 
 	public function get_payment_token() {
-		return esc_attr( $_GET[ $this->token_query_name ] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return sanitize_text_field( wp_unslash( $_GET[ $this->token_query_name ] ?? '' ) );
 	}
 
 	public function get_payment_id() {
@@ -342,7 +344,7 @@ abstract class Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function set_price_field() {
-		$this->price_field = esc_attr( $this->gateway( 'price_field', '' ) );
+		$this->price_field = sanitize_key( $this->gateway( 'price_field', '' ) );
 
 		$this->price_field = apply_filters(
 			'jet-form-builder/gateways/price-field',
@@ -390,7 +392,7 @@ abstract class Base_Gateway {
 			}
 
 			$this->options[ $name ] = $this->isset_current_gateway( $name )
-				? esc_attr( $this->current_gateway( $name ) )
+				? sanitize_text_field( $this->current_gateway( $name ) )
 				: $default_val;
 		}
 

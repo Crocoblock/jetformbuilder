@@ -101,27 +101,6 @@ abstract class Base_Source {
 		return $this->parse_result_value( $this->get_result_on_prop() );
 	}
 
-
-	/**
-	 * Try to get values from request if passed
-	 *
-	 * @param  [type] $args [description]
-	 *
-	 * @return [type]       [description]
-	 */
-	public function maybe_adjust_value() {
-
-		$value       = isset( $this->field_args['default'] ) ? $this->field_args['default'] : '';
-		$request_val = ! empty( $_REQUEST['values'] ) ? $_REQUEST['values'] : array();
-
-		if ( isset( $request_val[ $this->field ] ) ) {
-			$value = $request_val[ $this->field ];
-		}
-
-		return $value;
-
-	}
-
 	public function parse_result_value( $value ) {
 		if ( ! isset( $this->field_args['type'] ) ) {
 			return $value;

@@ -24,7 +24,7 @@ class Active_Campaign_Handler extends Integration_Base {
 				'api_key'    => $this->api_key,
 				'api_output' => 'json',
 			),
-			esc_url( rtrim( $settings['api_url'], '/' ) . '/admin/api.php' )
+			esc_url_raw( rtrim( $settings['api_url'], '/' ) . '/admin/api.php' )
 		);
 	}
 

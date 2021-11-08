@@ -125,7 +125,7 @@ export default {
 	}
 
 	.cell--id {
-		width: 4%;
+		width: 6%;
 	}
 
 	.cell--record_id {

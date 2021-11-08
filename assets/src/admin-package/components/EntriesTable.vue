@@ -18,7 +18,12 @@
 								/>
 							</keep-alive>
 						</template>
-						<template v-else>{{ columns[ column ] ? columns[ column ].label : '' }}</template>
+						<template v-else>
+							{{ columns[ column ] ? columns[ column ].label : '' }}
+						</template>
+						<svg v-if="columns[ column ].sortable" width="10"
+							 height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
+							d="M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z" fill="#7B7E81"/></svg>
             		</span>
 				</cx-vui-list-table-heading>
 			</template>
@@ -44,7 +49,6 @@
 						</template>
 						<template v-else>{{ entry[ column ] ? entry[ column ].value : '' }}</template>
 					</div>
-
 				</div>
 			</template>
 		</cx-vui-list-table>
@@ -106,6 +110,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+
+.list-table-heading__cell > span {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+}
 
 </style>

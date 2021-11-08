@@ -90,7 +90,8 @@ class Subscribe_Now extends Scenario_View_Base {
 				'show_in_details' => false,
 			),
 			'id'                => array(
-				'label' => __( 'ID', 'jet-form-builder' ),
+				'label'    => __( 'ID', 'jet-form-builder' ),
+				'sortable' => true,
 			),
 			'record_id'         => array(
 				'label' => __( 'Record ID', 'jet-form-builder' ),

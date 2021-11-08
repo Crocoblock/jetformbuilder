@@ -68,7 +68,7 @@ export default {
 			return this.current?.status?.value?.status;
 		},
 		compareStatus() {
-			return this.must_have_statuses.includes( this.getCurrentStatus );
+			return ! this.must_have_statuses.includes( this.getCurrentStatus );
 		},
 	},
 	methods: {

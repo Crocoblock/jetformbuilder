@@ -34,7 +34,7 @@ class Subscribe_Now extends Scenario_View_Base {
 					'desc'    => __( 'The reason for the cancellation of a subscription.', 'jet-form-builder' ),
 					'default' => 'Not satisfied with the service.',
 				),
-				'must_have_statuses' => array( 'ACTIVE1' ),
+				'must_have_statuses' => array( 'ACTIVE' ),
 			),
 			'suspend' => array(
 				'label'              => __( 'Suspend subscription', 'jet-form-builder' ),

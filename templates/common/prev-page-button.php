@@ -8,8 +8,6 @@ use Jet_Form_Builder\Classes\Tools;
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
-use Jet_Form_Builder\Classes\Tools;
-
 $break = $this->block_type->get_current_form_break();
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

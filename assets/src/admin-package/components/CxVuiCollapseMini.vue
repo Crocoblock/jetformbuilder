@@ -1,8 +1,9 @@
 <template>
 	<div :class="{
 		'cx-vui-panel': withPanel,
+		'cx-vui-collapse-mini--disabled': disabled,
 		'cx-vui-collapse-mini__item': true,
-		'cx-vui-collapse-mini__item--active': isActive,
+		'cx-vui-collapse-mini__item--active': isActive
 	}">
 		<div
 			class="cx-vui-collapse-mini__header"
@@ -29,16 +30,18 @@
 				<slot name="description"></slot>
 			</div>
 		</div>
-		<template v-if="this.$slots.default">
-			<div
-				v-show="isActive"
-				class="cx-vui-collapse-mini__content"
-			>
-				<slot></slot>
-			</div>
-		</template>
-		<template v-else>
-			<slot name="custom" :state="{ isActive }"></slot>
+		<template v-if="!disabled">
+			<template v-if="this.$slots.default">
+				<div
+					v-show="isActive"
+					class="cx-vui-collapse-mini__content"
+				>
+					<slot></slot>
+				</div>
+			</template>
+			<template v-else>
+				<slot name="custom" :state="{ isActive }"></slot>
+			</template>
 		</template>
 	</div>
 </template>
@@ -64,6 +67,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -75,9 +82,76 @@ export default {
 	},
 	methods: {
 		collapse() {
+			if ( this.disabled ) {
+				return;
+			}
 			this.isActive = ! this.isActive;
 			this.$emit( 'change', this.isActive );
 		},
 	},
 };
 </script>
+
+<style lang="scss">
+.cx-vui-collapse-mini {
+	&__wrap {
+		padding: 0 0 20px;
+	}
+
+	&__item {
+		&:first-child {
+			border-top: 1px solid #ECECEC;
+		}
+
+		&:last-child {
+			margin-bottom: unset;
+		}
+
+		&--active svg {
+			transform: rotate(90deg);
+		}
+
+		border-bottom: 1px solid #ECECEC;
+	}
+
+	&__header {
+		padding: 1.2rem;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+
+		&-label {
+			font-weight: 500;
+			font-size: 15px;
+			line-height: 23px;
+			color: #007CBA;
+			margin: 0 25px 0 0;
+			display: flex;
+			align-items: center;
+		}
+
+		&-desc {
+			font-size: 15px;
+			line-height: 23px;
+			color: #7B7E81;
+		}
+
+		&-label svg {
+			margin: -1px 8px 0 0;
+			transition: 0.3s;
+		}
+	}
+
+	&--disabled {
+		opacity: 0.5;
+
+		.cx-vui-collapse-mini__header {
+			cursor: not-allowed;
+		}
+	}
+
+	&__content {
+		padding: 0 1.5rem 1.5rem;
+	}
+}
+</style>

@@ -10,7 +10,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
 
 abstract class Scenario_View_Base extends Scenario_Item_Base {
 
-	const COLUMN_CHOOSE  = 'choose';
+	const COLUMN_CHOOSE = 'choose';
 	const COLUMN_ACTIONS = 'actions';
 
 	abstract public function get_columns_handlers(): array;
@@ -36,8 +36,6 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 
 	public function prepare_list(): array {
 		$list = $this->get_list();
-
-		do_action( 'qm/debug', $list );
 
 		if ( ! $list || ! is_array( $list ) ) {
 			return array();
@@ -86,8 +84,11 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 				return (float) $value;
 			case 'array':
 				return (array) $value;
-			default:
+			case 'string':
 				return (string) $value;
+			case 'rawArray':
+			default:
+				return $value;
 		}
 	}
 

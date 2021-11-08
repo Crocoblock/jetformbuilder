@@ -2,6 +2,7 @@
 	<CxVuiCollapseMini
 		with-panel
 		:label="label"
+		:disabled="compareStatus"
 	>
 		<template #description>
 			<cx-vui-button
@@ -9,6 +10,7 @@
 				size="mini"
 				@click="runAction"
 				:loading="loading"
+				:disabled="compareStatus"
 			>
 				<template #label>{{ __( 'Run', 'jet-form-builder' ) }}</template>
 			</cx-vui-button>
@@ -46,6 +48,7 @@ export default {
 		label: String,
 		reason: Object,
 		type: String,
+		must_have_statuses: Array,
 	},
 	mixins: [ i18n ],
 	created() {
@@ -60,7 +63,13 @@ export default {
 	computed: {
 		current() {
 			return this.$store.getters.getCurrent;
-		}
+		},
+		getCurrentStatus() {
+			return this.current?.status?.value?.status;
+		},
+		compareStatus() {
+			return this.must_have_statuses.includes( this.getCurrentStatus );
+		},
 	},
 	methods: {
 		runAction() {

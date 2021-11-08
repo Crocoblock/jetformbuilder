@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
+use DateTime;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
@@ -27,20 +28,22 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function get_single_actions(): array {
 		return array(
 			'cancel'  => array(
-				'label'  => __( 'Cancel subscription', 'jet-form-builder' ),
-				'reason' => array(
+				'label'              => __( 'Cancel subscription', 'jet-form-builder' ),
+				'reason'             => array(
 					'label'   => __( 'Reason', 'jet-form-builder' ),
 					'desc'    => __( 'The reason for the cancellation of a subscription.', 'jet-form-builder' ),
 					'default' => 'Not satisfied with the service.',
 				),
+				'must_have_statuses' => array( 'ACTIVE1' ),
 			),
 			'suspend' => array(
-				'label'  => __( 'Suspend subscription', 'jet-form-builder' ),
-				'reason' => array(
+				'label'              => __( 'Suspend subscription', 'jet-form-builder' ),
+				'reason'             => array(
 					'label'   => __( 'Reason', 'jet-form-builder' ),
 					'desc'    => __( 'The reason for suspenson of the subscription.', 'jet-form-builder' ),
 					'default' => 'Item out of stock.',
 				),
+				'must_have_statuses' => array( 'ACTIVE' ),
 			),
 		);
 	}
@@ -60,11 +63,11 @@ class Subscribe_Now extends Scenario_View_Base {
 			),
 			'status'            => array(
 				'value' => array( $this, 'get_status_info' ),
-				'type'  => 'array',
+				'type'  => 'rawArray',
 			),
 			'subscriber'        => array(
 				'value' => array( $this, 'get_subscriber_info' ),
-				'type'  => 'array',
+				'type'  => 'rawArray',
 			),
 			'plan_info'         => array(
 				'value' => array( $this, 'get_plan_info' ),
@@ -74,7 +77,7 @@ class Subscribe_Now extends Scenario_View_Base {
 			),
 			'links'             => array(
 				'value' => array( $this, 'get_links' ),
-				'type'  => 'array',
+				'type'  => 'rawArray',
 			),
 			'_FORM_ID'          => array(
 				'value' => array( $this, 'get_form_id' ),
@@ -217,7 +220,7 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function get_status_info( $record, $undefined ): array {
 		return array(
 			'status'             => $record['resource']['status'] ?? $undefined,
-			'status_update_time' => $this->format_datetime( $record['resource']['status_update_time'] ),
+			'status_update_time' => $this->format_datetime( $record['resource']['status_update_time'] ?? false ),
 		);
 	}
 
@@ -260,24 +263,18 @@ class Subscribe_Now extends Scenario_View_Base {
 	}
 
 	/**
-	 * Possible value in $record['resource']['status_update_time']:
-	 *
-	 * - 2021-10-25T07:15:28Z
-	 */
-	public function get_status_update_time( $record, $undefined ) {
-		return $record['resource']['status_update_time'] ?? $undefined;
-	}
-
-	/**
 	 * Possible value in $record['resource']['create_time']:
 	 *
 	 * - 2021-10-25T07:15:28Z
 	 */
 	public function get_create_time( $record, $undefined ) {
-		return $this->format_datetime( $record['resource']['create_time'] );
+		return $this->format_datetime( $record['resource']['create_time'] ?? false );
 	}
 
 	protected function format_datetime( $datetime ) {
+		if ( false === $datetime ) {
+			return '0000-00-00 00:00:00';
+		}
 		$update_time = date( 'Y-m-d H:i:s', strtotime( $datetime ) );
 
 		return get_date_from_gmt( $update_time );

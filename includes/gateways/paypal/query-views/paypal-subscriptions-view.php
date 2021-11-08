@@ -15,6 +15,15 @@ class Paypal_Subscriptions_View extends View_Base {
 		return $wpdb->postmeta;
 	}
 
+	public function select_columns(): array {
+		return array(
+			'meta_id',
+			'post_id',
+			'meta_key',
+			'meta_value',
+		);
+	}
+
 	public function conditions(): array {
 		return array(
 			array(

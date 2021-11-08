@@ -46,6 +46,10 @@ class MailChimp_Handler extends Integration_Base {
 		$groups = array();
 		$fields = array();
 
+		if ( ! $lists ) {
+			return array();
+		}
+
 		foreach ( $lists as $list_id => $list_name ) {
 			$groups[ $list_id ] = $this->get_groups( $list_id );
 			$fields[ $list_id ] = $this->get_fields( $list_id );

@@ -320,6 +320,7 @@ class Mailchimp extends Integration_Base_Action {
 		return array(
 			'api_key'          => __( 'API Key:', 'jet-form-builder' ),
 			'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+			'retry_request'    => __( 'Retry request', 'jet-form-builder' ),
 			'list_id'          => __( 'Audience:', 'jet-form-builder' ),
 			'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
 			'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),

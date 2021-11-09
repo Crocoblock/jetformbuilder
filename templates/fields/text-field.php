@@ -7,6 +7,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 $this->add_attribute( 'placeholder', $args['placeholder'] );
 $this->add_attribute( 'value', $args['default'] );
@@ -62,6 +63,6 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 ?>
 <div class="jet-form-builder__field-wrap">
 	<input <?php $this->render_attributes_string(); ?>>
-	<?php echo $this->maybe_render_error( $args ); ?>
+	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

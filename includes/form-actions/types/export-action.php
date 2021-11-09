@@ -10,6 +10,8 @@ class Export_Action extends Base_Form_Action {
 
 	use Get_Form_Data;
 
+	private $_file;
+
 	/**
 	 * @return string
 	 */
@@ -28,19 +30,21 @@ class Export_Action extends Base_Form_Action {
 		$form_id   = $this->get_post_id_from_request();
 		$form_data = $this->get_from_data( $form_id );
 
-		$this->file_download( $form_data[0]->post_name . '.json', wp_json_encode( $form_data[1] ) );
+		$this->_file = wp_json_encode( $form_data[1] );
+
+		$this->file_download( $form_data[0]->post_name . '.json' );
 	}
 
 
 	/**
 	 * Process
 	 *
-	 * @param  [type] $filename [description]
-	 * @param string $file [description]
+	 * @param $filename
+	 * @param string $type
 	 *
-	 * @return [type]           [description]
+	 * @return void
 	 */
-	public function file_download( $filename = null, $file = '', $type = 'application/json' ) {
+	public function file_download( $filename = null, $type = 'application/json' ) {
 
 		set_time_limit( 0 );
 
@@ -64,11 +68,16 @@ class Export_Action extends Base_Form_Action {
 		header( "Content-Transfer-Encoding: binary" );
 
 		// Set the file size header
-		header( "Content-Length: " . strlen( $file ) );
+		header( "Content-Length: " . strlen( $this->_file ) );
 
-		echo $file;
-		// phpcs:enable
+		echo $this->send_file();
+
 		die();
 
+		// phpcs:enable
+	}
+
+	private function send_file() {
+		return apply_filters( 'jet-form-builder/export-form/content', $this->_file );
 	}
 }

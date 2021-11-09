@@ -40,18 +40,6 @@ if ( ! empty( $args['field_options'] ) ) {
 			$label = $option;
 		}
 
-		if ( $default ) {
-			if ( is_array( $default ) ) {
-				$checked = in_array( $val, $default, true ) ? 'checked' : '';
-			} else {
-				$checked = checked( $default, $val, false );
-			}
-		}
-
-		if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
-			$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
-		}
-
 		$custom_template = false;
 
 		if ( ! empty( $args['custom_item_template'] ) ) {
@@ -61,7 +49,6 @@ if ( ! empty( $args['field_options'] ) ) {
 		?>
 		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php
-			//phpcs:disable 1WordPress.Security.EscapeOutput.OutputNotEscaped
 			if ( $custom_template ) {
 				echo $custom_template;
 			}
@@ -73,8 +60,18 @@ if ( ! empty( $args['field_options'] ) ) {
 					<?php $this->render_attributes_string_save(); ?>
 						value="<?php echo esc_attr( $val ); ?>"
 						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
-					<?php echo $checked; ?>
-					<?php echo $calc; ?>
+					<?php
+					if ( $default ) {
+						if ( is_array( $default ) ) {
+							echo in_array( $val, $default, true ) ? 'checked' : '';
+						} else {
+							checked( $default, $val );
+						}
+					}
+					if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
+						echo ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
+					}
+					?>
 				>
 				<span><?php echo wp_kses_post( $label ); ?></span>
 			</label>
@@ -83,10 +80,6 @@ if ( ! empty( $args['field_options'] ) ) {
 		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	$this->reset_attributes();
-
-	if ( $custom_template ) {
-		wp_reset_postdata();
-	}
 
 	echo '</div>';
 

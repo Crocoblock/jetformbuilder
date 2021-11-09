@@ -214,7 +214,7 @@ class Form_Builder {
 	 *
 	 * @return false|string [type] [description]
 	 */
-	public function render_form( $echo = true ) {
+	public function render_form() {
 
 		if ( $this->pre_render() ) {
 			return '';
@@ -233,7 +233,7 @@ class Form_Builder {
 
 		$form = $this->start_form();
 
-		$form .= wp_nonce_field( Live_Form::instance()->get_nonce_id() );
+		$form .= wp_nonce_field( Live_Form::instance()->get_nonce_id(), '_wpnonce', true, false );
 
 		$form .= Live_Form::force_render_field(
 			'hidden-field',
@@ -274,13 +274,7 @@ class Form_Builder {
 		Live_Form::clear();
 		Preset_Manager::clear();
 
-		if ( $echo ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo $form;
-		} else {
-			return $form;
-		}
-
+		return $form;
 	}
 
 	public function preset() {

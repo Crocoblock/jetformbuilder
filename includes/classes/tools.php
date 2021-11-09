@@ -82,6 +82,14 @@ class Tools {
 		return self::get_post_types_for_js( false, array( 'public' => true ) );
 	}
 
+	private static function get_escape_func( $type ) {
+		switch ( $type ) {
+			case 'template':
+			default:
+				return array( self::class, 'esc_template' );
+		}
+	}
+
 	/**
 	 * Sanitize WYSIWYG field
 	 *
@@ -419,6 +427,16 @@ class Tools {
 		return trim( $filtered );
 	}
 
+	/**
+	 * @param $type
+	 * @param mixed ...$values
+	 *
+	 * @return mixed
+	 */
+	private static function call_escape_func( $type, ...$values ) {
+		return call_user_func( self::get_escape_func( $type ), ...$values );
+	}
+
 	public static function recursive_wp_kses( $source, $allowed_html = 'strip' ) {
 		if ( ! is_array( $source ) ) {
 			return wp_kses( $source, $allowed_html );
@@ -460,6 +478,15 @@ class Tools {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * @param $source
+	 *
+	 * @return string
+	 */
+	private static function esc_template( $source ): string {
+		return self::sanitize_text_field( $source );
 	}
 
 	public static function get_jet_engine_version() {
@@ -535,6 +562,10 @@ class Tools {
 
 	public static function get_site_host() {
 		return str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
+	}
+
+	public static function esc_template_string( $source ) {
+		return self::call_escape_func( 'template', $source );
 	}
 
 }

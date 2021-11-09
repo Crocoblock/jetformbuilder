@@ -10,7 +10,7 @@ use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
-abstract class Event_Subscription_Base extends  Rest_Api_Endpoint_Base {
+abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 
 	use Paypal\Actions\Traits\List_Webhook_Trait;
 
@@ -21,6 +21,16 @@ abstract class Event_Subscription_Base extends  Rest_Api_Endpoint_Base {
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
+		update_option(
+			'rest_api_jfb_test_welcome',
+			wp_json_encode(
+				array(
+					date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
+					$request->get_json_params()
+				)
+			)
+		);
+
 		try {
 			$token         = $this->get_token( $request );
 			$webhook_id    = $this->get_webhook_id_by_endpoint( static::get_rest_base(), $token );

@@ -214,7 +214,7 @@ class Form_Builder {
 	 *
 	 * @return false|string [type] [description]
 	 */
-	public function render_form( $echo = true ) {
+	public function render_form() {
 
 		if ( $this->pre_render() ) {
 			return '';
@@ -274,13 +274,7 @@ class Form_Builder {
 		Live_Form::clear();
 		Preset_Manager::clear();
 
-		if ( $echo ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo $form;
-		} else {
-			return $form;
-		}
-
+		return $form;
 	}
 
 	public function preset() {

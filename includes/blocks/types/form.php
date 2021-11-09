@@ -427,16 +427,17 @@ class Form extends Base {
 
 		Error_Handler::instance();
 
+		$form = $builder->render_form();
+
 		ob_start();
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		$builder->render_form();
 		$messages->render_messages();
 
 		if ( Tools::is_editor() ) {
 			$messages->render_messages_samples();
 		}
 
-		return ob_get_clean();
+		return ( $form . ob_get_clean() );
 	}
 
 

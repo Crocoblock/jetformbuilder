@@ -5,6 +5,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 if ( empty( $args['default'] ) ) {
 	$args['default'] = '';
@@ -51,6 +52,6 @@ if ( is_rtl() ) {
 	</div>
 <?php
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo $this->maybe_render_error( $args );
+	echo Tools::esc_template_string( $this->maybe_render_error( $args ) );
 ?>
 </div>

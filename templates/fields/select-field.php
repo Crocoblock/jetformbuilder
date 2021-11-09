@@ -7,6 +7,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
 $this->add_attribute( 'class', $args['class_name'] );
@@ -69,6 +70,6 @@ $this->add_attribute( 'data-default-val', $default );
 
 		?>
 	</select>
-	<?php echo $this->maybe_render_error( $args ); ?>
+	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

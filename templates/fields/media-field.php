@@ -3,6 +3,7 @@
  * Media field template
  */
 use Jet_Form_Builder\File_Upload;
+use Jet_Form_Builder\Classes\Tools;
 
 $this->add_attribute( 'class', 'jet-form-builder__field file-field jet-form-builder-file-upload__input' );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
@@ -28,10 +29,6 @@ $this->add_attribute( 'data-max_size', $max_size );
 
 $required = $this->block_type->get_required_val( $args );
 
-if ( $required ) {
-	$required = 'required="required"';
-}
-
 if ( ! empty( $args['insert_attachment'] ) ) {
 	$format = ! empty( $args['value_format'] ) ? $args['value_format'] : 'url';
 } else {
@@ -52,9 +49,19 @@ $value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) 
 		</div>
 	</div>
 	<div class="jet-form-builder-file-upload__fields">
-		<input class="jet-form-builder-file-upload__value" type="hidden" name="<?php echo esc_attr( $this->block_type->get_field_name( $args['name'] ) ); ?>" data-field-name="<?php echo esc_attr( $args['name'] ); ?>" value="<?php echo htmlspecialchars( $value ); ?>" <?php echo $required; ?>>
+		<input class="jet-form-builder-file-upload__value"
+			   type="hidden"
+			   name="<?php echo esc_attr( $this->block_type->get_field_name( $args['name'] ) ); ?>"
+			   data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
+			   value="<?php echo htmlspecialchars( $value ); ?>"
+			<?php
+			if ( $required ) {
+				echo ' required="required"';
+			}
+			?>
+		>
 		<input <?php $this->render_attributes_string(); ?>>
-		<?php echo $this->maybe_render_error( $args ); ?>
+		<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 	</div>
 	<div class="jet-form-builder-file-upload__message"><small><?php echo __( 'Maximum file size', 'jet-form-builder' ); ?>: <?php echo size_format( $max_size ); ?></small></div>
 	<div class="jet-form-builder-file-upload__errors is-hidden"></div>

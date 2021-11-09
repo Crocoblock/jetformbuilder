@@ -9,6 +9,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 //phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -20,8 +21,8 @@ use Jet_Form_Builder\Blocks\Render\Base;
  * $desc     - './field-description.php'
  * $template - '../fields/{$field_type}.php' ( takes place at the level of a separate field template )
  */
-echo $label;
-echo $template;
-echo $desc;
+echo Tools::esc_template_string( $label );
+echo Tools::esc_template_string( $template );
+echo Tools::esc_template_string( $desc );
 
 //phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

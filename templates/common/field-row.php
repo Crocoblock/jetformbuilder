@@ -9,6 +9,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 $fullwidth = ' content-fullwidth';
 
@@ -28,8 +29,8 @@ $fullwidth = ' content-fullwidth';
 	<div class="jet-form-builder-col__start">
 		<?php
 		// Read the comment above.
-		echo $label;
-		echo $desc;
+		echo Tools::esc_template_string( $label );
+		echo Tools::esc_template_string( $desc );
 
 		// Reset fullwidth content if we have label or description for field.
 		$fullwidth = '';
@@ -40,7 +41,7 @@ $fullwidth = ' content-fullwidth';
 <div class="jet-form-builder-col__end<?php echo esc_attr( $fullwidth ); ?>">
 	<?php
 	// Read the comment above.
-	echo $template;
+	echo Tools::esc_template_string( $template );
 
 	//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	?>

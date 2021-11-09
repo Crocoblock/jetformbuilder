@@ -48,10 +48,10 @@ class Events_Listeners_Manager {
 	/**
 	 * @param $event_type
 	 *
-	 * @return Events_Handlers\Event_Handler_Base
+
 	 * @throws Repository_Exception
 	 */
-	public function get_event( $event_type ): Events_Handlers\Event_Handler_Base {
+	public function get_event( $event_type ): Events_Handlers\Base\Event_Handler_Base {
 		return $this->rep_get_item( $event_type );
 	}
 

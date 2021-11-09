@@ -271,6 +271,29 @@ class Manager {
 		return $result;
 	}
 
+	/**
+	 * @param $block_name
+	 * @param $attributes
+	 *
+	 * @return array|false
+	 */
+	public function get_field_attrs( $block_name, $attributes ) {
+		if ( ! $block_name ) {
+			return false;
+		}
+		$block_id = $this->explode_block_name( $block_name );
+
+		try {
+			$field = $this->builder_repository()->rep_get_item( $block_id );
+
+			return array_merge( $field->get_default_attributes(), $attributes );
+
+		} catch ( Repository_Exception $exception ) {
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * @param $block_name

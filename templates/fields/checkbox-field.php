@@ -46,6 +46,7 @@ if ( ! empty( $args['field_options'] ) ) {
 			$custom_template = $this->get_custom_template( $val, $args );
 		}
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php

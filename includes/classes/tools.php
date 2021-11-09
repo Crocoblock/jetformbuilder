@@ -469,7 +469,8 @@ class Tools {
 	}
 
 	public static function is_readable( string $filename ) {
-		return strlen( $filename ) <= PHP_MAXPATHLEN && is_readable( $filename );
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		return strlen( $filename ) <= PHP_MAXPATHLEN && @is_readable( $filename );
 	}
 
 	/**

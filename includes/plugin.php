@@ -45,9 +45,6 @@ class Plugin {
 	public $form_handler;
 	public $editor;
 	public $captcha;
-	public $dev_manager;
-
-	public $is_activated_jet_sm;
 	public $allow_gateways;
 	public $framework;
 	public $addons_manager;
@@ -95,15 +92,15 @@ class Plugin {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
 
-		$this->admin_bar       = \Jet_Admin_Bar::get_instance();
-		$this->msg_router      = new Form_Messages\Msg_Router();
-		$this->post_type       = new Post_Type();
-		$this->blocks          = new Blocks\Manager();
-		$this->actions         = new Actions\Manager();
-		$this->form            = new Form_Manager();
-		$this->form_handler    = new Form_Handler();
-		$this->captcha         = new Forms_Captcha();
-		$this->addons_manager  = new AddonsManager();
+		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
+		$this->msg_router     = new Form_Messages\Msg_Router();
+		$this->post_type      = new Post_Type();
+		$this->blocks         = new Blocks\Manager();
+		$this->actions        = new Actions\Manager();
+		$this->form           = new Form_Manager();
+		$this->form_handler   = new Form_Handler();
+		$this->captcha        = new Forms_Captcha();
+		$this->addons_manager = new AddonsManager();
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();

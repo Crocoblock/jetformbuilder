@@ -9,21 +9,24 @@ use Jet_Form_Builder\Gateways\Paypal;
 
 abstract class Billing_Subscription_Change extends Event_Handler_Base {
 
-	public function on_catch_event( $webhook_event ) {
+	public function on_catch_event( $webhook_event ): \WP_REST_Response {
 		// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		$subscription_id = $webhook_event['resource']['id'] ?? false;
 
 		if ( ! $subscription_id ) {
-			parent::on_catch_event( $webhook_event );
-
-			return;
+			return parent::on_catch_event( $webhook_event );
 		}
 
 		$version = $webhook_event['resource_version'] ?? false;
 
 		if ( '2.0' !== $version ) {
-			error_log( static::class . '::' . __METHOD__ . ': Invalid version.' );
-			return;
+			return new \WP_REST_Response(
+				'Fail',
+				503,
+				array(
+					'X-JFB-Paypal-Webhook-Response' => "Invalid resource version! ({$version})",
+				)
+			);
 		}
 
 		try {
@@ -36,8 +39,13 @@ abstract class Billing_Subscription_Change extends Event_Handler_Base {
 				->query_one();
 
 		} catch ( Query_Builder_Exception $exception ) {
-			error_log( static::class . '::' . __METHOD__ . ': ' . $exception->getMessage() );
-			return;
+			return new \WP_REST_Response(
+				'Fail',
+				503,
+				array(
+					'X-JFB-Paypal-Webhook-Response' => $exception->getMessage(),
+				)
+			);
 		}
 
 		$subscription['resource'] = $webhook_event['resource'];
@@ -48,7 +56,13 @@ abstract class Billing_Subscription_Change extends Event_Handler_Base {
 			wp_json_encode( $subscription, JSON_UNESCAPED_UNICODE )
 		);
 
-		// phpcs:enable WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		return new \WP_REST_Response(
+			'Success',
+			200,
+			array(
+				'X-JFB-Paypal-Webhook-Response' => 'Catch!',
+			)
+		);
 	}
 
 }

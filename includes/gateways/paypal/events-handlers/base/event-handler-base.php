@@ -13,14 +13,12 @@ abstract class Event_Handler_Base implements Repository_Static_Item_Trait {
 
 	abstract public static function get_event_type();
 
-	public function on_catch_event( $webhook_event ) {
-		update_option(
-			"rest_api_jfb_test_{$this->get_event_type()}",
-			wp_json_encode(
-				array(
-					date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
-					$webhook_event,
-				)
+	public function on_catch_event( $webhook_event ): \WP_REST_Response {
+		return new \WP_REST_Response(
+			'Success',
+			200,
+			array(
+				'X-JFB-Paypal-Webhook-Response' => 'Successfully catch!',
 			)
 		);
 	}

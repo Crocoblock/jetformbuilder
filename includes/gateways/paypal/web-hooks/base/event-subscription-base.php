@@ -21,16 +21,6 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
-		update_option(
-			'rest_api_jfb_test_welcome',
-			wp_json_encode(
-				array(
-					date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
-					$request->get_json_params()
-				)
-			)
-		);
-
 		try {
 			$token         = $this->get_token( $request );
 			$webhook_id    = $this->get_webhook_id_by_endpoint( static::get_rest_base(), $token );
@@ -43,28 +33,17 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 				->set_params_from_request( $request )
 				->is_success();
 
-			$this->run_event( $webhook_event );
+			return $this->run_event( $webhook_event );
 
 		} catch ( Gateway_Exception $exception ) {
-			update_option(
-				'rest_api_jfb_test_error',
-				wp_json_encode(
-					array(
-						date( 'Y-m-d H:i:s', time() + 3 * HOUR_IN_SECONDS ),
-						$exception->getMessage(),
-						$exception->get_additional(),
-					)
+			return new \WP_REST_Response(
+				$exception->getMessage(),
+				500,
+				array(
+					'X-JFB-Paypal-Webhook-Response' => $exception->getMessage(),
 				)
 			);
-
-			return new \WP_Error(
-				'paypal_token_empty',
-				$exception->getMessage(),
-				array( static::class . '::' . __FUNCTION__ )
-			);
 		}
-
-		return rest_ensure_response( true );
 	}
 
 	/**
@@ -72,11 +51,11 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 	 *
 	 * @throws Gateway_Exception
 	 */
-	private function run_event( $webhook_event ) {
+	private function run_event( $webhook_event ): \WP_REST_Response {
 		$event_type = $webhook_event['event_type'] ?? false;
 
 		try {
-			Events_Listeners_Manager::instance()->get_event( $event_type )->on_catch_event( $webhook_event );
+			return Events_Listeners_Manager::instance()->get_event( $event_type )->on_catch_event( $webhook_event );
 		} catch ( Repository_Exception $exception ) {
 			throw new Gateway_Exception(
 				"Undefined event type: $event_type",

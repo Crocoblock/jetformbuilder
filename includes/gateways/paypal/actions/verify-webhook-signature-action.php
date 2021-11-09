@@ -38,7 +38,7 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 		$result = 'SUCCESS' === $response['verification_status'];
 
 		if ( ! $result ) {
-			throw new Gateway_Exception( 'Failure.', $response, $this->get_request_args() );
+			throw new Gateway_Exception( 'Failed verification.', $response, $this->get_request_args() );
 		}
 	}
 

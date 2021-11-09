@@ -16,12 +16,14 @@ const {
 const label = gatewayLabel( 'paypal' );
 const currentTab = globalTab( { slug: 'paypal' } );
 
-const additional = gatewayAttr( 'additional' )( 'paypal' );
+let callableGateway = gatewayAttr( 'additional' );
 
 export default function PayPal( {
 									setValueInObject,
 									getNotifications,
 								} ) {
+
+	const additional = callableGateway( 'paypal' );
 
 	const setSetting = ( key, value ) => {
 		setValueInObject( 'paypal', key, value );

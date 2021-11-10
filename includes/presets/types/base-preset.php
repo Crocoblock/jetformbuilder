@@ -3,13 +3,9 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_Query_Var;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
 
 /**
  * @property Base_Source source

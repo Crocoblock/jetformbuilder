@@ -62,7 +62,7 @@ export const event = name => {
 
 export const listen = ( name, func ) => {
 	document.addEventListener( name, func );
-}
+};
 
 function getSemVerFunc( operator ) {
 	switch ( operator ) {
@@ -103,7 +103,7 @@ const convertSymbols = applyFilters( 'jet.fb.tools.convertSymbols', {
 
 export function maybeCyrToLatin( str ) {
 	if ( convertSymbols.checkCyrRegex.test( str ) ) {
-		str = str.replace( convertSymbols.cyrRegex, function( match ) {
+		str = str.replace( convertSymbols.cyrRegex, function ( match ) {
 
 			if ( undefined === convertSymbols.charsMap[ match ] ) {
 				return '';
@@ -118,10 +118,10 @@ export function maybeCyrToLatin( str ) {
 
 export function getConvertedName( valueToChange ) {
 	var regex = /\s+/g,
-		slug  = valueToChange.toLowerCase().replace( regex, '_' );
+		slug = valueToChange.toLowerCase().replace( regex, '_' );
 
 	// Replace accents
-	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, "" );
+	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, '' );
 
 	// Replace cyrillic
 	slug = maybeCyrToLatin( slug );
@@ -130,8 +130,8 @@ export function getConvertedName( valueToChange ) {
 		// 34 - Lionel Messi's age when he left Barcelona
 		slug = slug.substr( 0, 34 );
 
-		if ( '-' === slug.slice( -1 ) ) {
-			slug = slug.slice( 0, -1 );
+		if ( '-' === slug.slice( - 1 ) ) {
+			slug = slug.slice( 0, - 1 );
 		}
 	}
 
@@ -139,7 +139,7 @@ export function getConvertedName( valueToChange ) {
 }
 
 export function classnames( ...additional ) {
-	const result = []
+	const result = [];
 
 	const parseValues = source => {
 		source.forEach( itemClass => {
@@ -150,21 +150,41 @@ export function classnames( ...additional ) {
 				parseValues( itemClass );
 			}
 			if ( 'string' === typeof itemClass ) {
-				result.push( itemClass.trim() )
+				result.push( itemClass.trim() );
 			}
 			if ( 'object' === typeof itemClass ) {
 				for ( const itemClassKey in itemClass ) {
 					if ( itemClass[ itemClassKey ] ) {
-						result.push( ( itemClassKey + "" ).trim() )
+						result.push( (
+							itemClassKey + ''
+						).trim() );
 					}
 				}
 			}
-		} )
+		} );
 	};
 
 	parseValues( additional );
 
 	return result.join( ' ' );
+}
+
+export function convertObjectToOptionsList( entries = [], {
+	usePlaceholder = true,
+	label = '--',
+	value = '',
+} = {} ) {
+	const placeholder = { label, value };
+
+	if ( ! entries ) {
+		return usePlaceholder ? [ placeholder ] : [];
+	}
+
+	const options = Object.entries( entries ).map( ( [ value, label ] ) => {
+		return { value, label };
+	} );
+
+	return usePlaceholder ? [ placeholder, ...options ] : options;
 }
 
 export default Tools;

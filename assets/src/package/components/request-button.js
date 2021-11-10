@@ -5,14 +5,19 @@ const {
 } = wp.components;
 
 function RequestButton( {
-							label,
-							ajaxArgs = {},
-							onSuccessRequest = () => {},
-							onFailRequest = () => {},
-							onLoading = () => {},
-							className = '',
-							children = () => {}
-						} ) {
+	label,
+	ajaxArgs = {},
+	onSuccessRequest = () => {
+	},
+	onFailRequest = () => {
+	},
+	onLoading = () => {
+	},
+	className = '',
+	children = () => {
+	},
+	disabled = false,
+} ) {
 
 	const defaultValidate = () => {
 		return jQuery.ajax( { url: ajaxurl, type: 'POST', data: ajaxArgs } );
@@ -21,12 +26,11 @@ function RequestButton( {
 	const request = () => {
 		onLoading();
 
-		defaultValidate()
-		.done( response => response.success ? onSuccessRequest( response ) : onFailRequest() )
-		.fail( () => onFailRequest() );
+		defaultValidate().done( response => response.success ? onSuccessRequest( response ) : onFailRequest() ).fail( () => onFailRequest() );
 	};
 
 	return <Button
+		disabled={ disabled }
 		key={ 'validate_api_key' }
 		isPrimary
 		onClick={ request }

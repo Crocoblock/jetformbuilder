@@ -1,9 +1,9 @@
-import ActionFieldsMap from "./components/action-fields-map";
-import ActionModal from "./components/action-modal";
-import WrapperRequiredControl from "./components/wrapper-required-control";
-import RequestButton from "./components/request-button";
-import ValidateButton from "./components/validate-button";
-import addAction from "./helpers/actions/action-manager";
+import ActionFieldsMap from './components/action-fields-map';
+import ActionModal from './components/action-modal';
+import WrapperRequiredControl from './components/wrapper-required-control';
+import RequestButton from './components/request-button';
+import ValidateButton from './components/validate-button';
+import addAction from './helpers/actions/action-manager';
 import Tools, {
 	classnames,
 	event,
@@ -11,15 +11,16 @@ import Tools, {
 	listen,
 	maybeCyrToLatin,
 	versionCompare,
-} from "./helpers/tools";
-import DynamicPreset from "./components/presets/dynamic-preset";
-import JetFieldsMapControl from "../editor/blocks/controls/fields-map";
-import FieldWithPreset from "./components/fields/field-with-preset";
+	convertObjectToOptionsList,
+} from './helpers/tools';
+import DynamicPreset from './components/presets/dynamic-preset';
+import JetFieldsMapControl from '../editor/blocks/controls/fields-map';
+import FieldWithPreset from './components/fields/field-with-preset';
 import {
 	GlobalField,
 	AvailableMapField,
 	MapField,
-} from "./components/presets/preset-render";
+} from './components/presets/preset-render';
 
 import {
 	getAvailableFields,
@@ -29,13 +30,13 @@ import {
 	getFormFieldsBlocks,
 	getFormFieldsByBlock,
 	getInnerBlocks,
-} from "./helpers/blocks/blocks-helper";
+} from './helpers/blocks/blocks-helper';
 import {
 	gatewayAttr,
 	gatewayLabel,
 	registerGateway,
 	renderGateway,
-} from "./helpers/gateways/gateway-helper";
+} from './helpers/gateways/gateway-helper';
 import {
 	useActions,
 	useMetaState,
@@ -43,30 +44,30 @@ import {
 	useStateLoadingClasses,
 	useSuccessNotice,
 	useRequestFields,
-	withRequestFields,
-} from "./helpers/hooks/hooks-helper";
-import FieldWrapper from "./components/fields/field-wrapper";
-import MacrosInserter from "./components/fields/macros-inserter";
-import RepeaterWithState from "./components/fields/repeater-with-state";
-import withPreset from "./components/presets/preset-editor";
+	withRequestFields, withLoading, withLoadingSelect,
+} from './helpers/hooks/hooks-helper';
+import FieldWrapper from './components/fields/field-wrapper';
+import MacrosInserter from './components/fields/macros-inserter';
+import RepeaterWithState from './components/fields/repeater-with-state';
+import withPreset from './components/presets/preset-editor';
 import {
 	AdvancedFields,
 	GeneralFields,
 	ToolBarFields,
 	FieldControl,
-} from "./components/fields/field-control";
-import PlaceholderMessage from "./components/actions/placeholder-message";
-import ActionMessages from "./components/actions/action-messages";
-import HorizontalLine from "./components/horizontal-line";
-import RequestLoadingButton from "./components/request-loading-button";
+} from './components/fields/field-control';
+import PlaceholderMessage from './components/actions/placeholder-message';
+import ActionMessages from './components/actions/action-messages';
+import HorizontalLine from './components/horizontal-line';
+import RequestLoadingButton from './components/request-loading-button';
 import {
 	actionByTypeList,
 	convertListToFieldsMap,
 	fromLocalizeHelper,
 	getActionSettings,
-} from "./helpers/actions/action-helper";
-import gatewayActionAttributes from "./helpers/gateways/gateway-action-attrubites";
-import { globalTab } from "./helpers/settings/helper";
+} from './helpers/actions/action-helper';
+import gatewayActionAttributes from './helpers/gateways/gateway-action-attrubites';
+import { globalTab } from './helpers/settings/helper';
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
 import GroupedSelectControl from './components/grouped-select-control';
 import {
@@ -74,6 +75,7 @@ import {
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
 import './stores/action-store';
+import ValidateButtonWithStore from './components/validate-button-with-store';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -102,6 +104,7 @@ window.JetFBComponents = {
 	ActionMessages,
 	GroupedSelectControl,
 	BaseHelp,
+	ValidateButtonWithStore,
 };
 
 // JFBFunctions
@@ -133,6 +136,7 @@ window.JetFBActions = {
 	getBlockControls,
 	classnames,
 	getBlocksByName,
+	convertObjectToOptionsList,
 };
 
 // JFBHooks
@@ -144,5 +148,6 @@ window.JetFBHooks = {
 	useSuccessNotice,
 	withRequestFields,
 	useRequestFields,
+	withLoadingSelect,
 };
 

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 5.8.1
 Requires PHP: 7.0
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,10 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.3.3**
+ - FIX: Compatibility with add-ons
+ - FIX: Insert post insteadof Update post
 
 **1.3.2**
  - ADD: Getting the child field of the repeater for the "Get values list from JetEngine field options" generator

@@ -35,7 +35,7 @@ trait Base_Attributes_Trait {
 
 	public function render_attributes_string_save() {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $this->get_attributes_string_save();
+		echo Tools::esc_template_string( $this->get_attributes_string_save() );
 	}
 
 	public function get_attributes_string_save() {
@@ -54,7 +54,7 @@ trait Base_Attributes_Trait {
 			if ( is_array( $value ) ) {
 				$value = implode( ' ', $value );
 			}
-			$response .= sprintf( ' %1$s="%2$s"', $attr, $value );
+			$response .= sprintf( ' %1$s="%2$s"', $attr, esc_attr( $value ) );
 		}
 
 		return $response;

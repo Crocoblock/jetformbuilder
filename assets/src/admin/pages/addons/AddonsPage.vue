@@ -6,7 +6,7 @@
 		<h1 class="cs-vui-title">{{ 'JetFormBuilder Addons' }}</h1>
 		<div class="jfb-addons-page__inner cx-vui-panel">
 			<div class="jfb-addons-page__header">
-				<div class="jfb-addons-page__header-controls">
+				<div class="jfb-addons-page__header-controls" v-if="isLicenseMode">
 					<cx-vui-button
 						button-style="accent"
 						size="mini"
@@ -22,7 +22,6 @@
 					</cx-vui-button>
 
 					<cx-vui-button
-
 						:class="[ !isLicenseActivated ? 'cx-vui-button--style-accent' : 'cx-vui-button--style-danger' ]"
 						size="mini"
 						@click="showLicensePopup"
@@ -167,6 +166,10 @@ export default {
 		window.jfbEventBus.$on( 'showLicensePopup', this.showLicensePopup );
 	},
 	computed: {
+		isLicenseMode() {
+			return '' !== window.JetFBPageConfig.licenseMode ? true : false;
+		},
+
 		isLicenseActivated() {
 			return 0 !== this.licenseList.length;
 		},

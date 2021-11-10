@@ -484,19 +484,6 @@ abstract class Base extends Base_Module {
 		return $attributes;
 	}
 
-	final public function get_field_icon() {
-		$icon = $this->get_icon_path( $this->get_name() . '.php' );
-
-		if ( ! file_exists( $icon ) ) {
-			$icon = $this->get_icon_path( 'empty-field.php' );
-		}
-
-		ob_start();
-		require $icon;
-
-		return ob_get_clean();
-	}
-
 	public function general_field_name_params( $label = '', $help = '' ) {
 		return array(
 			'type'  => 'text',

@@ -131,8 +131,6 @@ class Update_User extends Base {
 			}
 		}
 
-		// $user = array_filter( $user );
-
 		wp_update_user( $user );
 
 		if ( ! empty( $this->settings['user_role'] ) && 'administrator' !== $this->settings['user_role'] ) {
@@ -152,7 +150,7 @@ class Update_User extends Base {
 
 						foreach ( $row as $item_key => $item_value ) {
 
-							$item_key = ! empty( $fields_map[ $item_key ] ) ? esc_attr( $fields_map[ $item_key ] ) : $item_key;
+							$item_key = ! empty( $fields_map[ $item_key ] ) ? sanitize_key( $fields_map[ $item_key ] ) : $item_key;
 
 							$prepared_row[ $item_key ] = $item_value;
 						}

@@ -109,7 +109,7 @@ class Conditional_Block extends Base {
 			$this->parse_condition( $condition, $index );
 		}
 
-		return htmlspecialchars( json_encode( $this->block_attrs['conditions'] ) );
+		return htmlspecialchars( wp_json_encode( $this->block_attrs['conditions'] ) );
 	}
 
 	private function parse_condition( $condition, $index ) {

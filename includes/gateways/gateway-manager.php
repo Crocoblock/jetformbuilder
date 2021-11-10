@@ -106,33 +106,13 @@ class Gateway_Manager {
 		$this->gateways_form_data = $data;
 	}
 
-	public function add_message( $message ) {
-
-		$this->message = $message;
-
-		if ( ! $this->data || ! isset( $this->data['form_id'] ) ) {
-			return;
-		}
-
-		$form_id = $this->data['form_id'];
-
-		add_filter(
-			'jet-form-builder/pre-render/' . $form_id,
-			function ( $res ) use ( $form_id ) {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo $this->apply_macros( $this->message );
-
-				return true;
-			}
-		);
-	}
-
 	/**
 	 * Catch processed payment results
 	 *
 	 * @return void [description]
 	 */
 	public function catch_payment_result() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->allow_gateways ) {
 			return;
 		}
@@ -141,7 +121,8 @@ class Gateway_Manager {
 	}
 
 	public function on_has_gateway_request() {
-		$gateway_type = esc_attr( $_GET[ self::PAYMENT_TYPE_PARAM ] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$gateway_type = sanitize_key( wp_unslash( $_GET[ self::PAYMENT_TYPE_PARAM ] ?? '' ) );
 		$controller   = $this->get_gateway_controller( $gateway_type );
 
 		if ( ! ( $controller instanceof Base_Gateway ) ) {
@@ -160,7 +141,7 @@ class Gateway_Manager {
 			$controller->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			// do_action( 'qm/debug', var_export( [ $exception->getMessage(), $exception->getTraceAsString() ], true ) );
+			return;
 		}
 	}
 

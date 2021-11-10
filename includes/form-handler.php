@@ -4,6 +4,7 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
@@ -70,6 +71,7 @@ class Form_Handler {
 
 		} else {
 
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( ! isset( $_REQUEST[ $this->hook_key ] ) || $this->hook_val !== $_REQUEST[ $this->hook_key ] ) {
 				return;
 			}
@@ -99,29 +101,32 @@ class Form_Handler {
 			return;
 		}
 
+		// phpcs:disable WordPress
 		if ( ! $this->is_ajax ) {
-			$post          = ! empty( $_POST[ $this->post_id_key ] ) ? get_post( $_POST[ $this->post_id_key ] ) : null;
+			$post          = ! empty( $_POST[ $this->post_id_key ] ) ? get_post( absint( $_POST[ $this->post_id_key ] ) ) : null;
 			$this->form_id = ! empty( $_POST[ $this->form_key ] ) ? absint( $_POST[ $this->form_key ] ) : false;
-			$this->refer   = ! empty( $_POST[ $this->refer_key ] ) ? esc_url( $_POST[ $this->refer_key ] ) : false;
+			$this->refer   = ! empty( $_POST[ $this->refer_key ] ) ? esc_url_raw( $_POST[ $this->refer_key ] ) : false;
 		} else {
-			$values = ! empty( $_POST['values'] ) ? Tools::maybe_recursive_sanitize( $_POST['values'] ) : array();
+			$values = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( $_POST['values'] ) : array();
 
 			foreach ( $values as $data ) {
 				switch ( $data['name'] ) {
 					case $this->form_key:
-						$this->form_id = $data['value'];
+						$this->form_id = absint( $data['value'] );
 						break;
 					case $this->post_id_key:
-						$post = get_post( $data['value'] );
+						$post = get_post( absint( $data['value'] ) );
 						break;
 					case $this->refer_key:
-						$this->refer = esc_attr( $data['value'] );
-						// Clear form-related arguments
+						$this->refer = esc_url_raw( $data['value'] );
+						// Clear form-related arguments.
 						$this->refer = remove_query_arg( array( 'values', 'status', 'fields' ), $this->refer );
 						break;
 				}
 			}
 		}
+		// phpcs:enable WordPress
+
 		$this->refer = wp_validate_redirect( $this->refer );
 	}
 

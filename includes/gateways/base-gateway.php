@@ -89,7 +89,7 @@ abstract class Base_Gateway {
 
 		$this->data['gateway'] = $this->get_name();
 
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, json_encode( $this->data ) );
+		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, wp_json_encode( $this->data ) );
 
 		$this->try_do_actions();
 
@@ -191,6 +191,7 @@ abstract class Base_Gateway {
 	}
 
 	final public function set_payment_token() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $this->token_query_name ) || empty( $_GET[ $this->token_query_name ] ) ) {
 			throw new Gateway_Exception( 'Empty payment token.' );
 		}
@@ -235,7 +236,8 @@ abstract class Base_Gateway {
 	}
 
 	public function get_payment_token() {
-		return esc_attr( $_GET[ $this->token_query_name ] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return sanitize_text_field( wp_unslash( $_GET[ $this->token_query_name ] ?? '' ) );
 	}
 
 	public function get_payment_id() {
@@ -309,7 +311,7 @@ abstract class Base_Gateway {
 
 	protected function set_price_field() {
 		if ( isset( $this->gateways_meta['price_field'] ) && ! empty( $this->gateways_meta['price_field'] ) ) {
-			$this->price_field = esc_attr( $this->gateways_meta['price_field'] );
+			$this->price_field = sanitize_key( $this->gateways_meta['price_field'] );
 		}
 
 		$this->price_field = apply_filters( 'jet-form-builder/gateways/price-field', $this->price_field, $this->action_handler );
@@ -343,7 +345,7 @@ abstract class Base_Gateway {
 			if ( $is_required && ( ! isset( $gateway[ $name ] ) || empty( $gateway[ $name ] ) ) ) {
 				throw new Gateway_Exception( 'Invalid gateway options', $name );
 			}
-			$this->options[ $name ] = esc_attr( $gateway[ $name ] );
+			$this->options[ $name ] = sanitize_text_field( $gateway[ $name ] );
 		}
 	}
 

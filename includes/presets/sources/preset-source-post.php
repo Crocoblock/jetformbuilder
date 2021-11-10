@@ -41,7 +41,7 @@ class Preset_Source_Post extends Base_Source {
 			$post_id = get_the_ID();
 		} else {
 			$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : '';
-			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? $_REQUEST[ $var ] : false;
+			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 		}
 
 		if ( $post_id ) {

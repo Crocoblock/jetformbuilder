@@ -16,5 +16,5 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input <?php $this->render_attributes_string(); ?>>
+	<input <?php $this->render_attributes_string(); ?>>
 </div>

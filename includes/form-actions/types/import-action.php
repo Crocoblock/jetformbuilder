@@ -79,30 +79,21 @@ class Import_Action extends Base_Form_Action {
 		include $this->get_global_template( 'admin/import-form.php' );
 		$import_template = ob_get_clean();
 
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-		ob_start();
-		?>
-		( function( $ ) {
-		console.log( $( '.page-title-action' ) );
-			document.addEventListener( 'DOMContentLoaded', function() {
-				var $newFormButton = $( '.page-title-action' );
+		wp_enqueue_script(
+			'jet-form-builder-import-form',
+			jet_form_builder()->plugin_url( 'assets/js/import-form.js' ),
+			array( 'jquery' ),
+			jet_form_builder()->get_version(),
+			true
+		);
 
-
-				if ( $newFormButton.length ) {
-					$newFormButton.after( '<?php echo $import_template; ?>' );
-				}
-			});
-
-			$( document ).on( 'click', '#<?php echo $this->get_id(); ?>-trigger', function() {
-				$( '#<?php echo $this->get_id(); ?>' ).css( 'display', 'inline-flex' );
-			} );
-
-		}( jQuery ) );
-		<?php
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		$script = ob_get_clean();
-
-		wp_add_inline_script( 'jquery', $script );
+		wp_localize_script(
+			'jet-form-builder-import-form',
+			'JetFormBuilderImportForm',
+			array(
+				'id'       => $this->get_id(),
+				'template' => $import_template,
+			)
+		);
 	}
 }

@@ -23,35 +23,29 @@ class Manager {
 	private $_types = array();
 	public $base_control;
 
-	/**
-	 * @var Block_Manager
-	 */
-	public $jet_sm__block_manager;
-
 	const FORM_EDITOR_STORAGE = 'form_editor';
-	const OTHERS_STORAGE = 'others';
+	const OTHERS_STORAGE      = 'others';
 	/**
 	 * @var bool
 	 */
 	private $_registered_scripts = false;
-	private $_added_category = false;
 
 	public function __construct() {
-		global $wp_version;
-
 		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
 		add_action( 'init', array( $this, 'register_block_types' ) );
 
 		add_action(
 			'jet-form-builder/editor-assets/after',
 			array( $this, 'register_block_types_for_form_editor' ),
-			10, 2
+			10,
+			2
 		);
 
 		add_action(
 			'jet-form-builder/other-editor-assets/after',
 			array( $this, 'register_block_types_for_others' ),
-			10, 2
+			10,
+			2
 		);
 
 		add_filter(
@@ -90,20 +84,20 @@ class Manager {
 				$hidden_post_id,
 				array(
 					'name'        => 'post_id',
-					'field_value' => 'post_id'
-				)
+					'field_value' => 'post_id',
+				),
 			),
 			array(
 				$text_field,
 				array(
 					'name'  => 'text_field',
-					'label' => 'Text'
-				)
+					'label' => 'Text',
+				),
 			),
 			array(
 				$submit_post_id,
-				array( 'label' => __( 'Submit', 'jet-form-builder' ) )
-			)
+				array( 'label' => __( 'Submit', 'jet-form-builder' ) ),
+			),
 		);
 
 		return $arguments;
@@ -111,14 +105,14 @@ class Manager {
 
 	public function init_jet_sm_block_manager() {
 		if ( Jet_Style_Manager::is_activated() ) {
-			$this->jet_sm__block_manager = Block_Manager::get_instance();
+			Block_Manager::get_instance();
 		}
 	}
 
 	/**
 	 * Register block types
 	 *
-	 * @return [type] [description]
+	 * @return void
 	 */
 	public function register_block_types() {
 
@@ -153,7 +147,6 @@ class Manager {
 		}
 
 		do_action( 'jet-form-builder/blocks/register', $this );
-
 	}
 
 	/**
@@ -185,7 +178,7 @@ class Manager {
 	}
 
 	public function enqueue_frontend_styles() {
-		wp_enqueue_style(
+		wp_register_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
 			array(),
@@ -195,7 +188,8 @@ class Manager {
 
 	/**
 	 * Register form JS
-	 * @return void [description]
+	 *
+	 * @return void
 	 */
 	public function enqueue_frontend_assets() {
 		$this->register_form_scripts();
@@ -206,18 +200,21 @@ class Manager {
 		wp_localize_script(
 			'jet-form-builder-frontend-forms',
 			'JetFormBuilderSettings',
-			apply_filters( 'jet-form-builder/frontend-settings', array(
-				'ajaxurl'      => esc_url( admin_url( 'admin-ajax.php' ) ),
-				'form_action'  => Plugin::instance()->form_handler->hook_key,
-				'devmode'      => Dev_Mode\Manager::instance()->active(),
-				'scrollOffset' => - 50,
-				'replaceAttrs' => array(
-					'href',
-					'src',
-					'alt',
-					'title',
+			apply_filters(
+				'jet-form-builder/frontend-settings',
+				array(
+					'ajaxurl'      => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
+					'form_action'  => Plugin::instance()->form_handler->hook_key,
+					'devmode'      => Dev_Mode\Manager::instance()->active(),
+					'scrollOffset' => - 50,
+					'replaceAttrs' => array(
+						'href',
+						'src',
+						'alt',
+						'title',
+					)
 				)
-			) )
+			)
 		);
 	}
 
@@ -266,12 +263,12 @@ class Manager {
 					'key'       => $key,
 					'type'      => $data[ $context ]['type'],
 					'label'     => $data[ $context ]['label'],
-					'options'   => isset( $data[ $context ]['options'] ) ? $data[ $context ]['options'] : array(),
-					'condition' => isset( $data[ $context ]['condition'] ) ? $data[ $context ]['condition'] : false,
-					// for Submit field name
-					'show'      => isset( $data[ $context ]['show'] ) ? $data[ $context ]['show'] : true,
-					// for Date and Time field
-					'help'      => isset( $data[ $context ]['help'] ) ? $data[ $context ]['help'] : '',
+					'options'   => $data[ $context ]['options'] ?? array(),
+					'condition' => $data[ $context ]['condition'] ?? false,
+					// for Submit field name.
+					'show'      => $data[ $context ]['show'] ?? true,
+					// for Date and Time field.
+					'help'      => $data[ $context ]['help'] ?? '',
 				);
 			}
 		}
@@ -301,26 +298,6 @@ class Manager {
 		return $this->_types[ $storage ];
 	}
 
-	/**
-	 * Returns block attributes list
-	 */
-	public function get_block_atts( $block = null ) {
-
-		if ( ! $block ) {
-			return array();
-		}
-		$types = $this->get_form_editor_types();
-
-		$type = isset( $types[ $block ] ) ? $types[ $block ] : false;
-
-		if ( ! $type ) {
-			return array();
-		}
-
-		return $type->get_attributes();
-
-	}
-
 
 	public function get_field_by_name( $block_name, $storage = self::FORM_EDITOR_STORAGE ) {
 		$types = $this->get_form_editor_types( $storage );
@@ -336,9 +313,8 @@ class Manager {
 
 
 	public function get_field_attrs( $block_name, $attributes ) {
-
 		if ( ! $block_name ) {
-			return;
+			return array();
 		}
 		$types      = $this->get_form_editor_types();
 		$block_name = explode( 'jet-forms/', $block_name );
@@ -346,7 +322,7 @@ class Manager {
 		$field = isset( $types[ $block_name[1] ] ) ? $types[ $block_name[1] ] : false;
 
 		if ( ! $field ) {
-			return;
+			return array();
 		}
 
 		return array_merge( $field->get_default_attributes(), $attributes );

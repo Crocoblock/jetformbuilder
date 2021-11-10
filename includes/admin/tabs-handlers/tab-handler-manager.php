@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
-
 use Jet_Form_Builder\Plugin;
 
 class Tab_Handler_Manager {
@@ -21,20 +20,21 @@ class Tab_Handler_Manager {
 	}
 
 	public function __construct() {
-		//add_action( 'init', array( $this, 'register_tabs' ), 999 );
 		$this->register_tabs();
 	}
 
 	public function register_tabs() {
-		$tabs = apply_filters( 'jet-form-builder/register-tabs-handlers', array(
-			new Captcha_Handler(),
-			new Mailchimp_Handler(),
-			new Active_Campaign_Handler(),
-			new Get_Response_Handler(),
-			new Paypal_Handler(),
-			new Payments_Gateways_Handler()
-		) );
-
+		$tabs = apply_filters(
+			'jet-form-builder/register-tabs-handlers',
+			array(
+				new Captcha_Handler(),
+				new Mailchimp_Handler(),
+				new Active_Campaign_Handler(),
+				new Get_Response_Handler(),
+				new Paypal_Handler(),
+				new Payments_Gateways_Handler(),
+			)
+		);
 
 		foreach ( $tabs as $tab ) {
 			if ( $tab instanceof Base_Handler ) {
@@ -62,14 +62,17 @@ class Tab_Handler_Manager {
 	private function register_hooks_for_tab( Base_Handler $tab ) {
 		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_get_request' ) );
 
-		add_filter( 'jet-form-builder/page-config/jfb-settings', function ( $page_config ) use ( $tab ) {
-			$page_config[ $tab->slug() ] = apply_filters(
-				"jet-form-builder/tab-config/{$tab->slug()}",
-				$tab->on_load()
-			);
+		add_filter(
+			'jet-form-builder/page-config/jfb-settings',
+			function ( $page_config ) use ( $tab ) {
+				$page_config[ $tab->slug() ] = apply_filters(
+					"jet-form-builder/tab-config/{$tab->slug()}",
+					$tab->on_load()
+				);
 
-			return $page_config;
-		} );
+				return $page_config;
+			}
+		);
 	}
 
 	/**
@@ -93,8 +96,8 @@ class Tab_Handler_Manager {
 		if ( ! isset( $this->_tabs[ $slug ] ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				'Undefined tab: ' . var_export( $slug, true ),
-				Plugin::instance()->get_version()
+				esc_html( "Undefined tab: $slug" ),
+				esc_html( Plugin::instance()->get_version() )
 			);
 		}
 	}

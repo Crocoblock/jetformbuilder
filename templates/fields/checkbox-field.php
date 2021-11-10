@@ -11,6 +11,7 @@ $default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $required );
+$custom_template = false;
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -39,43 +40,39 @@ if ( ! empty( $args['field_options'] ) ) {
 			$label = $option;
 		}
 
-		if ( $default ) {
-			if ( is_array( $default ) ) {
-				$checked = in_array( $val, $default, true ) ? 'checked' : '';
-			} else {
-				$checked = checked( $default, $val, false );
-			}
-		}
-
-		if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
-			$calc = ' data-calculate="' . $option['calculate'] . '"';
-		}
-
-		$custom_template = false;
-
 		if ( ! empty( $args['custom_item_template'] ) ) {
 			$custom_template = $this->get_custom_template( $val, $args );
 		}
 
+		//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php
-			//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			if ( $custom_template ) {
-				echo $custom_template;
-			}
+				if ( $custom_template ) {
+					echo $custom_template;
+				}
 			?>
 			<label class="jet-form-builder__field-label for-checkbox">
 				<input
 						type="checkbox"
-						name="<?php echo $name . $name_suffix; ?>"
+						name="<?php echo esc_attr( $name . $name_suffix ); ?>"
 					<?php $this->render_attributes_string_save(); ?>
 						value="<?php echo esc_attr( $val ); ?>"
 						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
-					<?php echo $checked; ?>
-					<?php echo $calc; ?>
+					<?php
+					if ( $default ) {
+						if ( is_array( $default ) ) {
+							echo in_array( $val, $default, true ) ? 'checked' : '';
+						} else {
+							checked( $default, $val );
+						}
+					}
+					if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
+						echo ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
+					}
+					?>
 				>
-				<span><?php echo $label; ?></span>
+				<span><?php echo wp_kses_post( $label ); ?></span>
 			</label>
 		</div>
 		<?php

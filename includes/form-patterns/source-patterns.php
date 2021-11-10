@@ -15,11 +15,11 @@ return array(
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:jet-forms/radio-field {"field_options":[{"label":"Email","value":"email","calculate":"","__visible":false},{"label":"Phone","value":"phone","calculate":"","__visible":false}],"label":"Preffered method of communication","name":"preffered-method-of-communication","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4","blockID":"jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4"} /-->
+<!-- wp:jet-forms/radio-field {"field_options":[{"label":"Email","value":"email","calculate":"","__visible":false},{"label":"Phone","value":"phone","calculate":"","__visible":false}],"label":"Preferred method of communication","name":"preferred-method-of-communication","required":true,"className":" jet-sm-gb-wrapper jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4","blockID":"jet-sm-gb-42aac671-fc51-437b-a9fc-7530c9207bb4"} /-->
 
 <!-- wp:jet-forms/textarea-field {"label":"Message","name":"message","className":" jet-sm-gb-wrapper jet-sm-gb-729cb67e-3122-4a5a-a170-95a51ba95881","blockID":"jet-sm-gb-729cb67e-3122-4a5a-a170-95a51ba95881"} /-->
 
-<!-- wp:jet-forms/submit-field {"className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /-->'
+<!-- wp:jet-forms/submit-field {"className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /-->',
 	),
 
 
@@ -46,7 +46,7 @@ return array(
 
 <!-- wp:jet-forms/submit-field {"label":"Sing Up","className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /--></div>
 <!-- /wp:column --></div>
-<!-- /wp:columns -->'
+<!-- /wp:columns -->',
 	),
 
 
@@ -105,7 +105,7 @@ return array(
 
 <!-- wp:jet-forms/submit-field {"add_prev":true,"className":" jet-sm-gb-wrapper jet-sm-gb-3c47d378-79e8-4f96-a1f7-c4cce1aeb085","blockID":"jet-sm-gb-3c47d378-79e8-4f96-a1f7-c4cce1aeb085"} /-->
 
-<!-- wp:jet-forms/form-break-field {"label_progress":"Additional information"} /-->'
+<!-- wp:jet-forms/form-break-field {"label_progress":"Additional information"} /-->',
 	),
 
 
@@ -134,7 +134,7 @@ return array(
 
 <!-- wp:jet-forms/submit-field {"label":"Subscribe","className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /--></div>
 <!-- /wp:column --></div>
-<!-- /wp:columns -->'
+<!-- /wp:columns -->',
 	),
 
 
@@ -197,11 +197,11 @@ return array(
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
-<!-- wp:jet-forms/submit-field {"label":"Update","className":" jet-sm-gb-wrapper jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899","blockID":"jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899"} /-->'
+<!-- wp:jet-forms/submit-field {"label":"Update","className":" jet-sm-gb-wrapper jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899","blockID":"jet-sm-gb-89322a2a-6eff-48b3-b984-d4d4e498e899"} /-->',
 	),
 
 
-	'booking_form' => array(
+	'booking_form'        => array(
 		'title'   => __( 'Booking form', 'jet-form-builder' ),
 		'content' => '<!-- wp:jet-forms/hidden-field {"name":"post_id"} /-->
 
@@ -299,6 +299,6 @@ return array(
 
 <!-- wp:jet-forms/media-field {"max_files":1,"max_size":10,"allowed_mimes":["image/jpeg","image/gif","image/png","image/bmp","image/tiff","image/x-icon","image/heic"],"name":"choose-file","blockID":"jet-sm-gb-f54ed2ac-0da4-4808-acdb-433dcd3b5c91"} /-->
 
-<!-- wp:jet-forms/submit-field {"label":"Submit Form","add_prev":true,"prev_label":"Previous","class_name":"form-button","blockID":"jet-sm-gb-7337b51f-3699-4240-acb5-6048350f62b8"} /-->'
-	)
+<!-- wp:jet-forms/submit-field {"label":"Submit Form","add_prev":true,"prev_label":"Previous","class_name":"form-button","blockID":"jet-sm-gb-7337b51f-3699-4240-acb5-6048350f62b8"} /-->',
+	),
 );

@@ -24,8 +24,8 @@ class File_Upload {
 	use Instance_Trait;
 
 	private $nonce_key = 'jet-form-builder-file-upload-nonce-key';
-	private $action = 'jet-form-builder-upload-file';
-	private $errors = array();
+	private $action    = 'jet-form-builder-upload-file';
+	private $errors    = array();
 
 	public function __construct() {
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'ajax_file_upload' ) );
@@ -48,7 +48,7 @@ class File_Upload {
 			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
 		}
 
-		return sprintf( ' data-args="%s"', htmlspecialchars( json_encode( $data_args ) ) );
+		return sprintf( ' data-args="%s"', htmlspecialchars( wp_json_encode( $data_args ) ) );
 	}
 
 	/**
@@ -58,9 +58,9 @@ class File_Upload {
 	 */
 	public function ajax_file_upload() {
 
-		$nonce   = ! empty( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
-		$form_id = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : false;
-		$field   = ! empty( $_REQUEST['field'] ) ? sanitize_key( $_REQUEST['field'] ) : false;
+		$nonce   = sanitize_text_field( wp_unslash( $_POST['nonce'] ?? '' ) );
+		$form_id = absint( wp_unslash( $_POST['form_id'] ?? 0 ) );
+		$field   = sanitize_text_field( wp_unslash( $_POST['field'] ?? '' ) );
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, $this->nonce_key ) ) {
 			wp_send_json_error( __( 'You not allowed to do this', 'jet-form-builder' ) );
@@ -120,13 +120,14 @@ class File_Upload {
 			wp_send_json_error( $settings['messages']['internal'] );
 		}
 
-		wp_send_json_success( array(
-			'files'  => $result,
-			'html'   => $this->get_result_html( $settings, $result ),
-			'value'  => $this->get_result_value( $settings, $result ),
-			'errors' => $this->get_errors_string(),
-		) );
-
+		wp_send_json_success(
+			array(
+				'files'  => $result,
+				'html'   => $this->get_result_html( $settings, $result ),
+				'value'  => $this->get_result_value( $settings, $result ),
+				'errors' => $this->get_errors_string(),
+			)
+		);
 	}
 
 	/**
@@ -138,11 +139,14 @@ class File_Upload {
 	 */
 	public function process_upload( $files = false, $settings = array() ) {
 
-		$settings              = wp_parse_args( $settings, array(
-			'max_size'          => wp_max_upload_size(),
-			'max_files'         => 1,
-			'insert_attachment' => false,
-		) );
+		$settings              = wp_parse_args(
+			$settings,
+			array(
+				'max_size'          => wp_max_upload_size(),
+				'max_files'         => 1,
+				'insert_attachment' => false,
+			)
+		);
 		$settings['max_files'] = $settings['max_files'] ? $settings['max_files'] : 1;
 
 		$insert_attachment = filter_var( $settings['insert_attachment'], FILTER_VALIDATE_BOOLEAN );
@@ -208,7 +212,7 @@ class File_Upload {
 					'post_mime_type' => $upload['type'],
 					'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filepath ) ),
 					'post_content'   => '',
-					'post_status'    => 'publish'
+					'post_status'    => 'publish',
 				),
 				$filepath,
 				0,
@@ -228,7 +232,6 @@ class File_Upload {
 			$this->errors[] = $upload['error'];
 		}
 
-
 		remove_filter( 'upload_dir', array( $this, 'apply_upload_dir' ) );
 
 		return $upload;
@@ -238,7 +241,7 @@ class File_Upload {
 	/**
 	 * Try to get files array from field data
 	 *
-	 * @param array $field [description]
+	 * @param array  $field [description]
 	 * @param string $format [description]
 	 *
 	 * @return [type]         [description]
@@ -306,13 +309,12 @@ class File_Upload {
 			$result_format = 'url';
 		}
 
-
 		if ( empty( $files ) ) {
 			$files = $this->get_files_from_field( $field, $result_format );
 		}
 
 		if ( empty( $files ) ) {
-			return;
+			return '';
 		}
 
 		$format = '<div class="jet-form-builder-file-upload__file" data-file="%1$s" data-id="%2$s" data-format="%3$s"><img src="%1$s" alt=""><div class="jet-form-builder-file-upload__file-remove"><svg width="22" height="22" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.375 7H6.125V12.25H4.375V7ZM7.875 7H9.625V12.25H7.875V7ZM10.5 1.75C10.5 1.51302 10.4134 1.30794 10.2402 1.13477C10.0762 0.961589 9.87109 0.875 9.625 0.875H4.375C4.12891 0.875 3.91927 0.961589 3.74609 1.13477C3.58203 1.30794 3.5 1.51302 3.5 1.75V3.5H0V5.25H0.875V14C0.875 14.237 0.957031 14.4421 1.12109 14.6152C1.29427 14.7884 1.50391 14.875 1.75 14.875H12.25C12.4961 14.875 12.7012 14.7884 12.8652 14.6152C13.0384 14.4421 13.125 14.237 13.125 14V5.25H14V3.5H10.5V1.75ZM5.25 2.625H8.75V3.5H5.25V2.625ZM11.375 5.25V13.125H2.625V5.25H11.375Z"></path></svg></div>%4$s</div>';
@@ -343,9 +345,9 @@ class File_Upload {
 
 	public function get_loader() {
 		return '<div class="jet-form-builder-file-upload__loader">' . apply_filters(
-				'jet-form-builder/file-upload/loader',
-				'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
-			) . '</div>';
+			'jet-form-builder/file-upload/loader',
+			'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
+		) . '</div>';
 	}
 
 	/**
@@ -471,7 +473,6 @@ class File_Upload {
 			if ( $field_max_size > $max_size ) {
 				$field_max_size = $max_size;
 			}
-
 		}
 
 		return $field_max_size;
@@ -542,7 +543,7 @@ class File_Upload {
 
 
 		wp_localize_script( 'jet-form-builder-file-upload', 'JetFormBuilderFileUploadConfig', array(
-			'ajaxurl'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'ajaxurl'         => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 			'action'          => $this->action,
 			'nonce'           => wp_create_nonce( $this->nonce_key ),
 			'max_upload_size' => wp_max_upload_size()

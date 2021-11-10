@@ -131,6 +131,8 @@ Buy the <a href="https://jetformbuilder.com/pricing/?utm_source=wp_org&utm_mediu
 - integrate payment methods;
 - and much more.
 
+**Please note:** Our server will be contacted for updating any Pro add-on you have installed on your website. More info you can find on the <a href="https://jetformbuilder.com/privacy-policy/" target="_blank">Privacy Policy page</a>
+
 = FORM FEATURES =
 Build a form easily, be it simple or complex. Such specific features as autocomplete fields, form availability setup, form responses limitation, and form progress saving will improve the user experience.
 

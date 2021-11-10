@@ -152,7 +152,7 @@ class Hidden_Field extends Base {
 			return null;
 		} else {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return isset( $_GET[ $key ] ) ? sanitize_key( $_GET[ $key ] ) : null;
+			return isset( $_GET[ $key ] ) ? sanitize_text_field( $_GET[ $key ] ) : null;
 		}
 	}
 

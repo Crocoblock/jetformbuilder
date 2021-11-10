@@ -3,11 +3,7 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Dev_Mode\Manager;
-use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use Jet_Form_Builder\Presets\Types\Base_Preset;
 
 abstract class Base_Source {
 
@@ -26,6 +22,10 @@ abstract class Base_Source {
 
 	abstract public function get_id();
 
+	public function condition(): bool {
+		return true;
+	}
+
 	public function init_source( $fields_map, $field_args, $preset_data ) {
 		$this->fields_map  = $fields_map;
 		$this->field_args  = $field_args;
@@ -33,7 +33,7 @@ abstract class Base_Source {
 		$this->field       = $this->field_args['name'] ?? '';
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
-		$this->src         = $this->_query_source();
+		$this->src         = $this->maybe_query_source();
 
 		$this->after_init();
 
@@ -43,7 +43,10 @@ abstract class Base_Source {
 	public function after_init() {
 	}
 
-	public function _query_source() {
+	public function after_register() {
+	}
+
+	public function maybe_query_source() {
 		if ( $this->prop ) {
 			return $this->query_source();
 		}

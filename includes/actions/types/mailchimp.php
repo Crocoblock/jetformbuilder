@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Integrations\Integration_Base;
 use Jet_Form_Builder\Integrations\MailChimp_Handler;
 
@@ -21,6 +22,13 @@ class Mailchimp extends Integration_Base_Action {
 	protected $action = 'jet_form_builder_get_mailchimp_data';
 	private $request;
 
+	/**
+	 * @var MailChimp_Handler
+	 */
+	private $api_handler;
+	private $body_args = array();
+	private $tags = false;
+
 	public $option_name = 'mailchimp-tab';
 
 	public function get_name() {
@@ -33,6 +41,33 @@ class Mailchimp extends Integration_Base_Action {
 
 	public function api_handler( $api_key ) {
 		return new MailChimp_Handler( $api_key );
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	private function get_api_handler(): MailChimp_Handler {
+		if ( $this->api_handler ) {
+			return $this->api_handler;
+		}
+
+		$api = $this->global_settings(
+			array(
+				'api_key' => '',
+			)
+		);
+
+		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
+			throw new Action_Exception( 'invalid_api_key' );
+		}
+
+		$this->api_handler = $this->api_handler( $api['api_key'] );
+
+		if ( is_wp_error( $this->api_handler ) ) {
+			throw new Action_Exception( 'invalid_api_key' );
+		}
+
+		return $this->api_handler;
 	}
 
 	public function action_attributes() {
@@ -75,7 +110,7 @@ class Mailchimp extends Integration_Base_Action {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array          $request
+	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
@@ -84,60 +119,48 @@ class Mailchimp extends Integration_Base_Action {
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->request = $request;
 
-		$api = $this->global_settings(
-			array(
-				'api_key' => '',
-			)
+		$this->set_body_args();
+
+		$subscriber = $this->get_api_handler()->request(
+			$this->get_endpoint( 'lists/%s/members/%s' ),
+			$this->get_request_args( 'PUT' )
 		);
 
-		if ( empty( $api['api_key'] ) || empty( $this->settings['list_id'] ) ) {
-			throw new Action_Exception( 'invalid_api_key' );
+		$this->throw_if_has_error( $subscriber );
+
+		if ( empty( $this->get_tags() ) ) {
+			return;
 		}
 
-		$handler = $this->api_handler( $api['api_key'] );
+		$endpoint        = $this->get_endpoint( 'lists/%s/members/%s/tags' );
+		$this->body_args = array( 'tags' => $this->prepare_tags( $subscriber ) );
 
-		if ( is_wp_error( $handler ) ) {
-			throw new Action_Exception( 'invalid_api_key' );
-		}
-
-		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
-
-		$body_args = $this->get_body_args( $fields_map );
-
-		if ( empty( $body_args['email_address'] ) ) {
-			throw new Action_Exception(
-				'empty_field',
-				array(
-					'email_address' => $body_args['email_address'],
-				)
+		try {
+			$this->get_api_handler()->request_with_code(
+				$endpoint,
+				$this->get_request_args( 'POST' )
 			);
+		} catch ( Silence_Exception $exception ) {
+			if ( ! $exception->getMessage() ) {
+				throw new Action_Exception( 'internal_error' );
+			}
+			throw ( new Action_Exception( $exception->getMessage() ) )->dynamic_error();
 		}
+	}
 
-		if ( ! empty( $this->settings['groups_ids'] ) && is_array( $this->settings['groups_ids'] ) ) {
-			$body_args['interests'] = $this->settings['groups_ids'];
-		}
-
-		if ( ! empty( $this->settings['tags'] ) ) {
-			$body_args['tags'] = explode( ',', trim( $this->settings['tags'] ) );
-		}
-
-		$end_point = sprintf( 'lists/%1$s/members/%2$s', $this->settings['list_id'], md5( strtolower( $body_args['email_address'] ) ) );
-
-		$request_args = array(
-			'method'  => 'PUT',
-			'body'    => wp_json_encode( $body_args ),
-			'headers' => array(
-				'Content-Type' => 'application/json; charset=utf-8',
-			),
-		);
-
-		$response = $handler->request( $end_point, $request_args );
-
+	/**
+	 * @param $response
+	 *
+	 * @throws Action_Exception
+	 */
+	private function throw_if_has_error( $response ) {
 		if ( false === $response ) {
 			throw new Action_Exception( 'internal_error' );
 		}
 
-		if ( isset( $response['status'] ) && ! in_array( $response['status'], $handler->success_statuses ) ) {
+		$status = $response['status'] ?? '';
+
+		if ( ! in_array( $status, $this->get_api_handler()->success_statuses, true ) ) {
 
 			if ( isset( $response['title'] ) ) {
 				throw new Action_Exception( "derror|{$response['title']}" );
@@ -152,8 +175,103 @@ class Mailchimp extends Integration_Base_Action {
 		}
 	}
 
-	private function get_body_args( $fields_map ) {
+	private function set_body_args() {
+		$fields_map      = $this->settings['fields_map'] ?? array();
+		$this->body_args = $this->get_body_args( $fields_map );
 
+		if ( ! empty( $this->settings['groups_ids'] ) && is_array( $this->settings['groups_ids'] ) ) {
+			$this->body_args['interests'] = $this->settings['groups_ids'];
+		}
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Action_Exception
+	 */
+	private function get_email_address() {
+		if ( ! empty( $this->body_args['email_address'] ) ) {
+			return $this->body_args['email_address'];
+		}
+
+		throw new Action_Exception( 'empty_field', $this->body_args );
+	}
+
+	/**
+	 * @return string
+	 * @throws Action_Exception
+	 */
+	private function get_endpoint( $format ) {
+		$email = $this->get_email_address();
+
+		return sprintf( $format, $this->settings['list_id'], md5( strtolower( $email ) ) );
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	private function get_request_args( $method ): array {
+		return array(
+			'method'  => $method,
+			'body'    => wp_json_encode( $this->body_args ),
+			'headers' => array(
+				'Content-Type' => 'application/json; charset=utf-8',
+			),
+		);
+	}
+
+	private function get_tags() {
+		if ( false !== $this->tags ) {
+			return $this->tags;
+		}
+
+		if ( empty( $this->settings['tags'] ) ) {
+			$this->tags = array();
+
+			return $this->tags;
+		}
+
+		$this->tags = array_map( 'trim', explode( ',', $this->settings['tags'] ) );
+
+		return $this->tags;
+	}
+
+	private function get_tags_difference( $subscriber ): array {
+		$subscriber_tags = wp_list_pluck( $subscriber['tags'] ?? array(), 'name' );
+
+		$tags_inactive = array_diff( $subscriber_tags, $this->get_tags() );
+		$tags_active   = array_diff( $this->get_tags(), $subscriber_tags );
+
+		return array( $tags_inactive, $tags_active );
+	}
+
+	private function prepare_tags( $subscriber ) {
+		list ( $tags_inactive, $tags_active ) = $this->get_tags_difference( $subscriber );
+
+		return array_merge(
+			$this->get_tags_with_status( $tags_inactive, 'inactive' ),
+			$this->get_tags_with_status( $tags_active, 'active' )
+		);
+	}
+
+	private function get_tags_with_status( $tags, $status ): array {
+		$status = in_array( $status, array( 'active', 'inactive' ), true ) ? $status : false;
+
+		if ( false === $status ) {
+			return array();
+		}
+
+		return array_map(
+			function ( $tag ) use ( $status ) {
+				return array(
+					'status' => $status,
+					'name'   => $tag,
+				);
+			},
+			$tags
+		);
+	}
+
+	private function get_body_args( $fields_map ) {
 		$status_if_new = isset( $this->settings['double_opt_in'] ) && filter_var(
 			$this->settings['double_opt_in'],
 			FILTER_VALIDATE_BOOLEAN
@@ -202,6 +320,7 @@ class Mailchimp extends Integration_Base_Action {
 		return array(
 			'api_key'          => __( 'API Key:', 'jet-form-builder' ),
 			'validate_api_key' => __( 'Validate API Key', 'jet-form-builder' ),
+			'retry_request'    => __( 'Retry request', 'jet-form-builder' ),
 			'list_id'          => __( 'Audience:', 'jet-form-builder' ),
 			'update_list_ids'  => __( 'Update Audience List', 'jet-form-builder' ),
 			'groups_ids'       => __( 'Groups:', 'jet-form-builder' ),
@@ -217,6 +336,7 @@ class Mailchimp extends Integration_Base_Action {
 			'api_key_link_prefix' => __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
 			'api_key_link_suffix' => __( 'here', 'jet-form-builder' ),
 			'api_key_link'        => 'https://mailchimp.com/help/about-api-keys/',
+			'tags'                => __( 'Add as many tags as you want, comma separated.', 'jet-form-builder' ),
 		);
 	}
 

@@ -8,12 +8,12 @@
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
 
-$required    = $this->block_type->get_required_val();
-$name        = $this->block_type->get_field_name( $args['name'] );
-$default     = ! empty( $args['default'] ) ? $args['default'] : false;
-$data_switch = '';
+$required = $this->block_type->get_required_val();
+$name     = $this->block_type->get_field_name( $args['name'] );
+$default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field radio-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
+$custom_template = false;
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -28,8 +28,6 @@ if ( ! empty( $args['field_options'] ) ) {
 			$val   = $value;
 			$label = $option;
 		}
-
-		$custom_template = false;
 
 		if ( ! empty( $args['custom_item_template'] ) ) {
 			$custom_template = $this->get_custom_template( $val, $args );
@@ -69,9 +67,13 @@ if ( ! empty( $args['field_options'] ) ) {
 			</label>
 		</div>
 		<?php
-		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	$this->reset_attributes();
+
+	if ( $custom_template ) {
+		wp_reset_postdata();
+	}
 
 	echo '</div>';
 

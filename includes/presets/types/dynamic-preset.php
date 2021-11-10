@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Presets\Types;
 
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
+use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 
 class Dynamic_Preset extends Base_Preset {
@@ -67,7 +68,11 @@ class Dynamic_Preset extends Base_Preset {
 			return $exception->getMessage();
 		}
 
-		return $this->set_additional_data()->source->result();
+		try {
+			return $this->set_additional_data()->source->result();
+		} catch ( Preset_Exception $exception ) {
+			return '';
+		}
 	}
 
 }

@@ -16,6 +16,7 @@ use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
+use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -107,6 +108,8 @@ class Plugin {
 		new Elementor_Controller();
 
 		if ( is_admin() ) {
+			Preset_Manager::instance();
+
 			$this->editor = new Admin\Editor();
 			new Form_Actions_Manager();
 			new Pages_Manager();

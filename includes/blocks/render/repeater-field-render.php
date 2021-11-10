@@ -94,7 +94,7 @@ class Repeater_Field_Render extends Base {
 	 * Render current repeater row
 	 *
 	 * @param $wp_block
-	 * @param int      $index
+	 * @param int $index
 	 *
 	 * @return string
 	 */

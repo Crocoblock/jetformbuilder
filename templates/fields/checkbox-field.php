@@ -12,6 +12,7 @@ $default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $required );
+$custom_template = false;
 
 if ( ! empty( $args['field_options'] ) ) {
 
@@ -29,9 +30,6 @@ if ( ! empty( $args['field_options'] ) ) {
 
 	foreach ( $args['field_options'] as $value => $option ) {
 
-		$checked = '';
-		$calc    = '';
-
 		if ( is_array( $option ) ) {
 			$val   = isset( $option['value'] ) ? $option['value'] : $value;
 			$label = isset( $option['label'] ) ? $option['label'] : $val;
@@ -39,8 +37,6 @@ if ( ! empty( $args['field_options'] ) ) {
 			$val   = $value;
 			$label = $option;
 		}
-
-		$custom_template = false;
 
 		if ( ! empty( $args['custom_item_template'] ) ) {
 			$custom_template = $this->get_custom_template( $val, $args );
@@ -78,9 +74,13 @@ if ( ! empty( $args['field_options'] ) ) {
 			</label>
 		</div>
 		<?php
-		//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	$this->reset_attributes();
+
+	if ( $custom_template ) {
+		wp_reset_postdata();
+	}
 
 	echo '</div>';
 

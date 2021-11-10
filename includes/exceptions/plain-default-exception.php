@@ -3,10 +3,7 @@
 
 namespace Jet_Form_Builder\Exceptions;
 
-class Plain_Default_Exception extends Handler_Exception {
 
-	public function save_exception(): bool {
-		return false;
-	}
+class Plain_Default_Exception extends Silence_Exception {
 
 }

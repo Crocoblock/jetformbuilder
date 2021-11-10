@@ -8,9 +8,9 @@
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
 
-$required    = $this->block_type->get_required_val();
-$name        = $this->block_type->get_field_name( $args['name'] );
-$default     = ! empty( $args['default'] ) ? $args['default'] : false;
+$required = $this->block_type->get_required_val();
+$name     = $this->block_type->get_field_name( $args['name'] );
+$default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field radio-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $custom_template = false;
@@ -37,9 +37,9 @@ if ( ! empty( $args['field_options'] ) ) {
 		?>
 		<div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap">
 			<?php
-				if ( $custom_template ) {
-					echo $custom_template;
-				}
+			if ( $custom_template ) {
+				echo $custom_template;
+			}
 			?>
 			<label class="jet-form-builder__field-label for-radio">
 				<input

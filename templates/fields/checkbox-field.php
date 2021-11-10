@@ -29,9 +29,6 @@ if ( ! empty( $args['field_options'] ) ) {
 
 	foreach ( $args['field_options'] as $value => $option ) {
 
-		$checked = '';
-		$calc    = '';
-
 		if ( is_array( $option ) ) {
 			$val   = isset( $option['value'] ) ? $option['value'] : $value;
 			$label = isset( $option['label'] ) ? $option['label'] : $val;
@@ -48,9 +45,9 @@ if ( ! empty( $args['field_options'] ) ) {
 		?>
 		<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">
 			<?php
-				if ( $custom_template ) {
-					echo $custom_template;
-				}
+			if ( $custom_template ) {
+				echo $custom_template;
+			}
 			?>
 			<label class="jet-form-builder__field-label for-checkbox">
 				<input

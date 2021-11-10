@@ -311,7 +311,7 @@ abstract class Base_Gateway {
 
 	protected function set_price_field() {
 		if ( isset( $this->gateways_meta['price_field'] ) && ! empty( $this->gateways_meta['price_field'] ) ) {
-			$this->price_field = sanitize_key( $this->gateways_meta['price_field'] );
+			$this->price_field = Tools::sanitize_text_field( $this->gateways_meta['price_field'] );
 		}
 
 		$this->price_field = apply_filters( 'jet-form-builder/gateways/price-field', $this->price_field, $this->action_handler );

@@ -248,7 +248,7 @@ class Register_User extends Base {
 
 							foreach ( $row as $item_key => $item_value ) {
 
-								$item_key = ! empty( $metafields_map[ $item_key ] ) ? sanitize_key( $metafields_map[ $item_key ] ) : $item_key;
+								$item_key = ! empty( $metafields_map[ $item_key ] ) ? Tools::sanitize_text_field( $metafields_map[ $item_key ] ) : $item_key;
 
 								$prepared_row[ $item_key ] = $item_value;
 							}

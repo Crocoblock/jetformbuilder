@@ -150,7 +150,7 @@ class Update_User extends Base {
 
 						foreach ( $row as $item_key => $item_value ) {
 
-							$item_key = ! empty( $fields_map[ $item_key ] ) ? sanitize_key( $fields_map[ $item_key ] ) : $item_key;
+							$item_key = ! empty( $fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $fields_map[ $item_key ] ) : $item_key;
 
 							$prepared_row[ $item_key ] = $item_value;
 						}

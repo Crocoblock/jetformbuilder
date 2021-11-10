@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE = 'jet-form-builder-editor';
+	const EDITOR_HANDLE         = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	/**

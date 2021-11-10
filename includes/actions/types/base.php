@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Action_Localize;
+use Jet_Form_Builder\Actions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
@@ -30,14 +31,6 @@ abstract class Base {
 	public $settings = array();
 
 	/**
-	 * Stores the action conditions
-	 * from the form meta field
-	 *
-	 * @var Condition_Helper
-	 */
-	public $condition;
-
-	/**
 	 * Stores the unique id of action
 	 *
 	 * @var integer
@@ -55,10 +48,6 @@ abstract class Base {
 		$this->set_action_messages();
 	}
 
-	public function __clone() {
-		$this->install_condition_obj( clone $this->condition );
-	}
-
 	/**
 	 * @param $request array - Form data
 	 * @param $handler Action_Handler
@@ -70,13 +59,6 @@ abstract class Base {
 	public function dependence() {
 		return true;
 	}
-
-	public function install_condition_obj( Condition_Helper $condition_helper ) {
-		$this->condition = $condition_helper;
-
-		return $this;
-	}
-
 
 	public function messages() {
 		return array();

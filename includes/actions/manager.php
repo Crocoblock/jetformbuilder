@@ -63,7 +63,7 @@ class Manager {
 	 */
 	public function register_action_type( Types\Base $type ) {
 		if ( $type->dependence() ) {
-			$this->_types[ $type->get_id() ] = $type->install_condition_obj( new Condition_Helper() );
+			$this->_types[ $type->get_id() ] = $type;
 		}
 	}
 

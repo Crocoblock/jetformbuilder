@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
@@ -22,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE         = 'jet-form-builder-editor';
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	/**
@@ -330,16 +331,19 @@ class Editor {
 			'all'
 		);
 
+		$conditions_settings = jet_form_builder()->form_handler->action_handler->condition_manager()->get_settings();
+
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
-				'presetConfig'     => $this->get_preset_config(),
-				'messagesDefault'  => $this->get_messages_default(),
-				'gateways'         => Gateway_Manager::instance()->editor_data(),
-				'helpForRepeaters' => $this->get_help_for_repeaters(),
-				'global_settings'  => Tab_Handler_Manager::instance()->all(),
-				'jetEngineVersion' => Tools::get_jet_engine_version(),
+				'presetConfig'            => $this->get_preset_config(),
+				'messagesDefault'         => $this->get_messages_default(),
+				'gateways'                => Gateway_Manager::instance()->editor_data(),
+				'helpForRepeaters'        => $this->get_help_for_repeaters(),
+				'global_settings'         => Tab_Handler_Manager::instance()->all(),
+				'jetEngineVersion'        => Tools::get_jet_engine_version(),
+				'actionConditionSettings' => $conditions_settings,
 			)
 		);
 

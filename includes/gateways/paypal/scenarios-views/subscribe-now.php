@@ -198,11 +198,11 @@ class Subscribe_Now extends Scenario_View_Base {
 		return array(
 			'cancel'  => array(
 				'method' => Paypal\Web_Hooks\Action_Cancel_Subscription::get_methods(),
-				'url'    => Paypal\Web_Hooks\Action_Cancel_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+				'url'    => Paypal\Web_Hooks\Action_Cancel_Subscription::dynamic_rest_url( $record['resource']['id'] ),
 			),
 			'suspend' => array(
 				'method' => Paypal\Web_Hooks\Action_Suspend_Subscription::get_methods(),
-				'url'    => Paypal\Web_Hooks\Action_Suspend_Subscription::dynamic_rest_base( $record['resource']['id'] ),
+				'url'    => Paypal\Web_Hooks\Action_Suspend_Subscription::dynamic_rest_url( $record['resource']['id'] ),
 			),
 		);
 	}

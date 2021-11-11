@@ -388,6 +388,10 @@ class Tools {
 		return json_decode( $json, true );
 	}
 
+	public static function encode_json( $json ) {
+		return wp_json_encode( $json, JSON_UNESCAPED_UNICODE );
+	}
+
 	public static function sanitize_recursive( $source = null ) {
 		if ( ! is_array( $source ) ) {
 			return self::sanitize( $source );

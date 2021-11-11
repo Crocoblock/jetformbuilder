@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Base;
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Verify_Webhook_Signature_Action;
@@ -22,25 +23,25 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 
 	public function run_callback( \WP_REST_Request $request ) {
 		try {
-			$token         = $this->get_token( $request );
-			$webhook_id    = $this->get_webhook_id_by_endpoint( static::get_rest_base(), $token );
-			$webhook_event = $request->get_json_params();
+			$token      = $this->get_token( $request );
+			$webhook_id = $this->get_webhook_id_by_endpoint( static::get_rest_base(), $token );
 
 			( new Verify_Webhook_Signature_Action() )
 				->set_bearer_auth( $token )
-				->set_webhook_id( $webhook_id )
-				->set_webhook_event( $webhook_event )
 				->set_params_from_request( $request )
+				->set_webhook_id( $webhook_id )
+				->set_webhook_event( file_get_contents('php://input') )
 				->is_success();
 
-			return $this->run_event( $webhook_event );
+			return $this->run_event( $request->get_json_params() );
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
 				$exception->getMessage(),
-				500,
+				503,
 				array(
-					'X-JFB-Paypal-Webhook-Response' => $exception->getMessage(),
+					'X-JFB-Paypal-Webhook-Message' => $exception->getMessage(),
+					'X-JFB-Paypal-Webhook-Args'    => $exception->get_additional()[2],
 				)
 			);
 		}

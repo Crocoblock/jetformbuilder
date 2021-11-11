@@ -10,17 +10,20 @@ use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 abstract class Base_Action {
 
-	const CODE_OK         = 200;
-	const CODE_CREATED    = 201;
+	const CODE_OK = 200;
+	const CODE_CREATED = 201;
 	const CODE_NO_CONTENT = 204;
 
 	protected $auth;
 	protected $method = 'POST';
-	protected $body   = array();
+	protected $body = array();
+	protected $raw_body_to_json = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
 	protected $response_message;
+	protected $response_headers;
+	protected $is_body_set = false;
 
 	abstract public function action_slug();
 
@@ -69,12 +72,24 @@ abstract class Base_Action {
 	}
 
 	public function set_body( $content ): Base_Action {
+		if ( ! $content ) {
+			return $this;
+		}
+
 		if ( is_string( $content ) ) {
 			$this->body = $content;
 		}
 
 		if ( is_array( $content ) ) {
 			$this->body = array_merge( $this->body, $content );
+		}
+
+		return $this;
+	}
+
+	public function set_json_body( $content ): Base_Action {
+		if ( is_array( $content ) ) {
+			$this->raw_body_to_json = array_merge( $this->raw_body_to_json, $content );
 		}
 
 		return $this;
@@ -94,7 +109,9 @@ abstract class Base_Action {
 	}
 
 	public function get_body() {
-		if ( ! is_array( $this->body ) ) {
+		$this->parse_raw_json_body();
+
+		if ( $this->is_body_set ) {
 			return $this->body;
 		}
 
@@ -103,10 +120,32 @@ abstract class Base_Action {
 			ini_set( 'serialize_precision', - 1 );
 		}
 
-		return wp_json_encode( $this->body );
+		$this->body        = wp_unslash( Tools::encode_json( $this->body ) );
+		$this->is_body_set = true;
+
+		return $this->body;
 	}
 
-	public function get_request_args() {
+	public function parse_raw_json_body() {
+		if ( ! empty( $this->body ) || empty( $this->raw_body_to_json ) ) {
+			return;
+		}
+
+		$props = array();
+		foreach ( $this->raw_body_to_json as $field => $value ) {
+			$props[] = sprintf( '"%s":"%s"', $field, $value );
+		}
+		$props = $this->before_close_raw_body( $props );
+
+		$this->body        = '{' . implode( ',', $props ) . '}';
+		$this->is_body_set = true;
+	}
+
+	protected function before_close_raw_body( $props ): array {
+		return $props;
+	}
+
+	public function get_request_args(): array {
 		$args = array(
 			'timeout' => 45,
 			'headers' => $this->get_headers(),
@@ -121,7 +160,7 @@ abstract class Base_Action {
 		$this->set_body( $this->action_body() );
 
 		if ( ! empty( $this->body ) ) {
-			$args['body'] = wp_unslash( $this->get_body() );
+			$args['body'] = $this->get_body();
 		}
 
 		return $args;
@@ -172,11 +211,22 @@ abstract class Base_Action {
 		$this->set_response_body( wp_remote_retrieve_body( $response ) );
 		$this->set_response_code( (int) wp_remote_retrieve_response_code( $response ) );
 		$this->set_response_message( wp_remote_retrieve_response_message( $response ) );
+		$this->set_response_headers( wp_remote_retrieve_headers( $response ) );
 
 		return $this;
 	}
 
-	private function set_response_message( $message ) {
+	public function get_response_headers() {
+		return $this->response_headers;
+	}
+
+	private function set_response_headers( $headers ): Base_Action {
+		$this->response_headers = $headers;
+
+		return $this;
+	}
+
+	private function set_response_message( $message ): Base_Action {
 		$this->response_message = $message;
 
 		return $this;
@@ -196,7 +246,7 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	private function get_response_code() {
+	public function get_response_code() {
 		return $this->response_code;
 	}
 
@@ -209,10 +259,10 @@ abstract class Base_Action {
 
 	public function response_message( $base_message ): string {
 		return $base_message . "\r\n" . sprintf(
-			'%d: %s',
-			$this->get_response_code(),
-			$this->get_response_message()
-		);
+				'%d: %s',
+				$this->get_response_code(),
+				$this->get_response_message()
+			);
 	}
 
 	/**

@@ -20,7 +20,7 @@ class Elementor_Controller {
 	}
 
 	public function enqueue_form_assets() {
-		Plugin::instance()->blocks->enqueue_frontend_assets();
+		wp_enqueue_style( 'jet-form-builder-frontend' );
 	}
 
 	private function widgets() {
@@ -53,7 +53,6 @@ class Elementor_Controller {
 	 * @return void
 	 */
 	public function editor_styles() {
-
 		wp_enqueue_style(
 			'jet-form-builder-icons',
 			jet_form_builder()->plugin_url( 'assets/css/icons.css' ),

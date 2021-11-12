@@ -2049,6 +2049,7 @@ class Form extends Jfb_Widget_Base {
 		};
 		$closure();
 
+		/** Heading Fields */
 		$closure = function () {
 			$this->start_controls_section(
 				'section_headings_style',
@@ -2796,23 +2797,49 @@ class Form extends Jfb_Widget_Base {
 					'options'   => array(
 						'flex-start' => array(
 							'title' => esc_html__( 'Start', 'jet-form-builder' ),
-							'icon'  => ! is_rtl() ? 'fa fa-align-left' : 'fa fa-align-right',
+							'icon'  => ! is_rtl() ? 'eicon-h-align-left' : 'eicon-h-align-right',
 						),
 						'center'     => array(
 							'title' => esc_html__( 'Center', 'jet-form-builder' ),
-							'icon'  => 'fa fa-align-center',
+							'icon'  => 'eicon-h-align-center',
 						),
 						'flex-end'   => array(
 							'title' => esc_html__( 'End', 'jet-form-builder' ),
-							'icon'  => ! is_rtl() ? 'fa fa-align-right' : 'fa fa-align-left',
+							'icon'  => ! is_rtl() ? 'eicon-h-align-right' : 'eicon-h-align-left',
 						),
 						'stretch'    => array(
 							'title' => esc_html__( 'Fullwidth', 'jet-form-builder' ),
-							'icon'  => 'fa fa-align-justify',
+							'icon'  => 'eicon-h-align-stretch',
 						),
 					),
 					'selectors' => array(
 						$this->selector( '__submit-wrap' ) => 'justify-content: {{VALUE}}; align-items: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'booking_form_submit_alignment_text',
+				array(
+					'label'     => esc_html__( 'Button Text Alignment', 'jet-form-builder' ),
+					'type'      => Controls_Manager::CHOOSE,
+					'default'   => 'flex-start',
+					'options'   => array(
+						'flex-start' => array(
+							'title' => esc_html__( 'Start', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'eicon-h-align-left' : 'eicon-h-align-right',
+						),
+						'center'     => array(
+							'title' => esc_html__( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'flex-end'   => array(
+							'title' => esc_html__( 'End', 'jet-form-builder' ),
+							'icon'  => ! is_rtl() ? 'eicon-h-align-right' : 'eicon-h-align-left',
+						),
+					),
+					'selectors' => array(
+						$this->selector( '__submit' ) => 'justify-content: {{VALUE}};',
 					),
 				)
 			);
@@ -2925,6 +2952,16 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
+			$this->start_controls_tabs( 'form_break_next_styles' );
+
+
+			$this->start_controls_tab(
+				'form_break_next--normal',
+				array(
+					'label' => __( 'Normal', 'jet-form-builder' ),
+				)
+			);
+
 			$this->add_group_control(
 				Group_Control_Typography::get_type(),
 				array(
@@ -2937,15 +2974,6 @@ class Form extends Jfb_Widget_Base {
 				$this,
 				'form_break_next_border',
 				$this->selector( '__next-page' )
-			);
-
-			$this->start_controls_tabs( 'form_break_next_styles' );
-
-			$this->start_controls_tab(
-				'form_break_next--normal',
-				array(
-					'label' => __( 'Normal', 'jet-form-builder' ),
-				)
 			);
 
 			$this->add_control(
@@ -2977,6 +3005,20 @@ class Form extends Jfb_Widget_Base {
 				array(
 					'label' => __( 'Hover', 'jet-form-builder' ),
 				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_break_next_typography--hover',
+					'selector' => $this->selector( '__next-page:hover' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'form_break_next_border--hover',
+				$this->selector( '__next-page:hover' )
 			);
 
 			$this->add_control(
@@ -3036,6 +3078,15 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
+			$this->start_controls_tabs( 'form_break_prev_styles' );
+
+			$this->start_controls_tab(
+				'form_break_prev--normal',
+				array(
+					'label' => __( 'Normal', 'jet-form-builder' ),
+				)
+			);
+
 			$this->add_group_control(
 				Group_Control_Typography::get_type(),
 				array(
@@ -3048,15 +3099,6 @@ class Form extends Jfb_Widget_Base {
 				$this,
 				'form_break_prev_border',
 				$this->selector( '__prev-page' )
-			);
-
-			$this->start_controls_tabs( 'form_break_prev_styles' );
-
-			$this->start_controls_tab(
-				'form_break_prev--normal',
-				array(
-					'label' => __( 'Normal', 'jet-form-builder' ),
-				)
 			);
 
 			$this->add_control(
@@ -3088,6 +3130,20 @@ class Form extends Jfb_Widget_Base {
 				array(
 					'label' => __( 'Hover', 'jet-form-builder' ),
 				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_break_prev_typography--hover',
+					'selector' => $this->selector( '__prev-page:hover' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'form_break_prev_border--hover',
+				$this->selector( '__prev-page:hover' )
 			);
 
 			$this->add_control(

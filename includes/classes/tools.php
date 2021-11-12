@@ -406,6 +406,10 @@ class Tools {
 		return $result;
 	}
 
+	public static function maybe_recursive_sanitize( $source = null ) {
+		return self::sanitize_recursive( $source );
+	}
+
 	public static function sanitize( $source ) {
 		if ( self::is_url( $source ) ) {
 			return esc_url_raw( $source );

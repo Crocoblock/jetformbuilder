@@ -41,7 +41,7 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 				503,
 				array(
 					'X-JFB-Paypal-Webhook-Message' => $exception->getMessage(),
-					'X-JFB-Paypal-Webhook-Args'    => $exception->get_additional()[2],
+					'X-JFB-Paypal-Webhook-Args'    => wp_json_encode( $exception->get_additional() ),
 				)
 			);
 		}

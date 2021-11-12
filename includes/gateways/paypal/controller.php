@@ -216,7 +216,7 @@ class Controller extends Base_Gateway {
 	 */
 	public static function get_token_with_credits( $client_id, $secret ) {
 		if ( ! $client_id || ! $secret ) {
-			return '';
+			throw new Gateway_Exception( 'Empty `client_id` or `secret_key`.' );
 		}
 		$hash  = md5( $client_id . $secret );
 		$token = get_transient( $hash );

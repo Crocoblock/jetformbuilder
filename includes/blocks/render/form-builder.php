@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
@@ -165,13 +166,14 @@ class Form_Builder {
 	}
 
 	private function render_styles() {
-		if ( ! Jet_Style_Manager::is_activated() ) {
-			wp_enqueue_style( 'jet-form-builder-frontend' );
-
+		if ( Tools::is_elementor_editor() ) {
 			return;
 		}
-
 		wp_enqueue_style( 'jet-form-builder-frontend' );
+
+		if ( ! Jet_Style_Manager::is_activated() ) {
+			return;
+		}
 
 		wp_add_inline_style(
 			'jet-form-builder-frontend',

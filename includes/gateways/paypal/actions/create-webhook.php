@@ -13,6 +13,12 @@ class Create_Webhook extends Base_Action {
 		return 'v1/notifications/webhooks';
 	}
 
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
+
 	public function set_param_url( $url ) {
 		$this->set_body(
 			array(

@@ -19,4 +19,10 @@ class Show_Subscription_Details_Action extends Base_Action {
 	public function action_endpoint() {
 		return "v1/billing/subscriptions/{$this->get_subscription_id()}";
 	}
+
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
 }

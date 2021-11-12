@@ -17,7 +17,6 @@ abstract class Base_Action {
 	protected $auth;
 	protected $method = 'POST';
 	protected $body = array();
-	protected $raw_body_to_json = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
@@ -97,7 +96,6 @@ abstract class Base_Action {
 
 	public function get_headers(): array {
 		$args = array(
-			'Content-Type'    => 'application/json',
 			'Accept-Language' => get_locale(),
 		);
 
@@ -109,8 +107,6 @@ abstract class Base_Action {
 	}
 
 	public function get_body() {
-		$this->parse_raw_json_body();
-
 		if ( $this->is_body_set ) {
 			return $this->body;
 		}
@@ -120,29 +116,14 @@ abstract class Base_Action {
 			ini_set( 'serialize_precision', - 1 );
 		}
 
-		$this->body        = wp_unslash( Tools::encode_json( $this->body ) );
+		$this->body        = $this->to_json( $this->body );
 		$this->is_body_set = true;
 
 		return $this->body;
 	}
 
-	public function parse_raw_json_body() {
-		if ( ! empty( $this->body ) || empty( $this->raw_body_to_json ) ) {
-			return;
-		}
-
-		$props = array();
-		foreach ( $this->raw_body_to_json as $field => $value ) {
-			$props[] = sprintf( '"%s":"%s"', $field, $value );
-		}
-		$props = $this->before_close_raw_body( $props );
-
-		$this->body        = '{' . implode( ',', $props ) . '}';
-		$this->is_body_set = true;
-	}
-
-	protected function before_close_raw_body( $props ): array {
-		return $props;
+	protected function to_json( $body ) {
+		return wp_unslash( Tools::encode_json( $body ) );
 	}
 
 	public function get_request_args(): array {
@@ -276,7 +257,8 @@ abstract class Base_Action {
 
 		throw new Gateway_Exception(
 			$this->response_message( 'Invalid HTTP code.' ),
-			$this->get_response_body()
+			$this->get_response_body(),
+			$this->get_body()
 		);
 	}
 

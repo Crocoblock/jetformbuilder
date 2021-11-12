@@ -17,6 +17,12 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 		return 'v1/notifications/verify-webhook-signature';
 	}
 
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
+
 	/**
 	 * @param $webhook_id
 	 *
@@ -28,7 +34,7 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 			throw new Gateway_Exception( 'Invalid webhook id.' );
 		}
 
-		$this->set_json_body(
+		$this->set_body(
 			array(
 				'webhook_id' => $webhook_id,
 			)
@@ -97,7 +103,7 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 			throw new Gateway_Exception( 'Not enough Paypal headers', $request->get_headers() );
 		}
 
-		$this->set_json_body(
+		$this->set_body(
 			array(
 				'auth_algo'         => $auth_algo,
 				'transmission_id'   => $transmission_id,
@@ -110,9 +116,14 @@ class Verify_Webhook_Signature_Action extends Base_Action {
 		return $this;
 	}
 
-	protected function before_close_raw_body( $props ): array {
+	protected function to_json( $body ): string {
+		$props = array();
+		foreach ( $body as $field => $value ) {
+			$props[] = sprintf( '"%s":"%s"', $field, $value );
+		}
 		$props[] = sprintf( '"webhook_event":%s', $this->webhook_event );
 
-		return $props;
+		return '{' . implode( ',', $props ) . '}';
 	}
+
 }

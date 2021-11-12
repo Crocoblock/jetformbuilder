@@ -15,12 +15,14 @@ class Get_Token extends Base_Action {
 		return 'v1/oauth2/token';
 	}
 
-	public function action_headers() {
-		return array();
-	}
-
 	public function action_body() {
 		return 'grant_type=client_credentials';
+	}
+
+	public function action_headers() {
+		return array(
+			'Accept' => 'application/json',
+		);
 	}
 
 	public function set_credentials( $client_id, $secret ) {

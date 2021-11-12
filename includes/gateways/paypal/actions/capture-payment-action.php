@@ -20,7 +20,9 @@ class Capture_Payment_Action extends Base_Action {
 	}
 
 	public function action_headers() {
-		return array();
+		return array(
+			'Content-Type' => 'application/json',
+		);
 	}
 
 	public function action_body() {

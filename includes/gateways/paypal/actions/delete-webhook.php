@@ -18,6 +18,12 @@ class Delete_Webhook extends Base_Action {
 		return "v1/notifications/webhooks/{$this->webhook_id}";
 	}
 
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
+
 	public function set_webhook_id( $id ) {
 		$this->webhook_id = $id;
 

@@ -225,12 +225,13 @@ class Controller extends Base_Gateway {
 			return $token;
 		}
 
-		$response = ( new Get_Token() )
-			->set_credentials( $client_id, $secret )
-			->send_request();
+		$request = ( new Get_Token() )
+			->set_credentials( $client_id, $secret );
+
+		$response = $request->send_request();
 
 		if ( empty( $response['access_token'] ) ) {
-			throw new Gateway_Exception( $response['error_description'] );
+			throw new Gateway_Exception( $response['error_description'], $response, $request->get_request_args() );
 		}
 
 		$token = $response['access_token'];

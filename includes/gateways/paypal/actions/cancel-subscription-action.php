@@ -19,6 +19,12 @@ class Cancel_Subscription_Action extends Base_Action {
 		return "v1/billing/subscriptions/{$this->get_subscription_id()}/cancel";
 	}
 
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
+
 	public function accept_code(): int {
 		return self::CODE_NO_CONTENT;
 	}

@@ -15,5 +15,11 @@ class List_Webhooks extends Base_Action {
 		return 'v1/notifications/webhooks';
 	}
 
+	public function action_headers() {
+		return array(
+			'Content-Type' => 'application/json',
+		);
+	}
+
 
 }

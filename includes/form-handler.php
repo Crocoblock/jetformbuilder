@@ -39,7 +39,6 @@ class Form_Handler {
 	/** @var Action_Handler */
 	public $action_handler;
 
-	/** @var Request_Handler */
 	public $request_data;
 
 	public $form_key    = '_jet_engine_booking_form_id';

@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.3.3
+* FIX: Compatibility with add-ons
+* FIX: Insert post insteadof Update post
+
 ## 1.3.2
 * ADD: Getting the child field of the repeater for the "Get values list from JetEngine field options" generator
 * ADD: CSS Controls for JetForm Elementor widget for Heading Field

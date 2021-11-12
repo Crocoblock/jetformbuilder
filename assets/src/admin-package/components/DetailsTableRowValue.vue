@@ -4,6 +4,7 @@
 			v-for="( itemValue, itemName ) in value"
 			:key="itemName"
 			class="jfb-recursive-details-row"
+			v-if="isHiddenLevel( itemName )"
 		>
 			<template v-if="isSkipLevel( itemName )">
 				<DetailsTableRowValue
@@ -105,6 +106,9 @@ export default {
 		},
 		isSkipLevel( columnName ) {
 			return this.columns[ columnName ]?.skip_level;
+		},
+		isHiddenLevel( columnName ) {
+			return ( ! this.columns[ columnName ]?.hide );
 		},
 	},
 };

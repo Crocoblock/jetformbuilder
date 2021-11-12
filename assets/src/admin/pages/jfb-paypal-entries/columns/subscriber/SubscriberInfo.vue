@@ -1,12 +1,12 @@
 <template>
-	<span>{{ info.email_address }}</span>
+	<span>{{ parsedJson.email_address }}</span>
 </template>
 
 <script>
-import SubscriberMixin from './SubscriberMixin';
+import ParseIncomingValueMixin from '../../ParseIncomingValueMixin';
 
 export default {
 	name: 'subscriber--item',
-	mixins: [ SubscriberMixin ]
+	mixins: [ ParseIncomingValueMixin ]
 };
 </script>

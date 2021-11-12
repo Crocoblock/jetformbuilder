@@ -30,7 +30,7 @@ abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 				->set_bearer_auth( $token )
 				->set_params_from_request( $request )
 				->set_webhook_id( $webhook_id )
-				->set_webhook_event( file_get_contents('php://input') )
+				->set_webhook_event( $request->get_body() )
 				->is_success();
 
 			return $this->run_event( $request->get_json_params() );

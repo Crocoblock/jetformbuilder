@@ -40,6 +40,8 @@
 <script>
 import * as subscriber from './columns/subscriber';
 import * as status from './columns/status';
+import * as billing from './columns/billing-info';
+
 import SubscriptionActionPanel from './SubscriptionActionPanel';
 
 import '../../../../scss/admin/default.scss';
@@ -54,6 +56,7 @@ const { EntriesTable, DetailsTableWithStore } = window.JetFBComponents;
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	subscriber,
 	status,
+	billing
 ] );
 
 export default {
@@ -120,10 +123,6 @@ export default {
 		overflow: hidden;
 	}
 
-	.cell--choose {
-		width: 4%;
-	}
-
 	.cell--id {
 		width: 6%;
 	}
@@ -133,19 +132,23 @@ export default {
 	}
 
 	.cell--status {
-		width: 11%;
+		width: 8%;
 	}
 
 	.cell--subscriber {
-		width: 24%;
+		width: 20%;
+	}
+
+	.cell--billing_info {
+		width: 12%;
 	}
 
 	.cell--plan_info {
-		width: 27%;
+		width: 24%;
 	}
 
 	.cell--create_time {
-		width: 15%;
+		width: 12%;
 	}
 }
 </style>

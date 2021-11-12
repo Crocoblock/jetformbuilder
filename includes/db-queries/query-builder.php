@@ -18,9 +18,9 @@ class Query_Builder {
 	use With_View;
 
 	protected $sql;
-	protected $select = '';
-	protected $where = '';
-	protected $limit = '';
+	protected $select   = '';
+	protected $where    = '';
+	protected $limit    = '';
 	protected $order_by = '';
 
 	protected $debug = false;
@@ -165,6 +165,7 @@ class Query_Builder {
 	 */
 	public function query_all(): array {
 		global $wpdb;
+
 
 		// phpcs:ignore WordPress.DB
 		$rows = $wpdb->get_results( $this->sql(), ARRAY_A );

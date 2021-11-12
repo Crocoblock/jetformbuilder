@@ -48,7 +48,6 @@ class Events_Listeners_Manager {
 	/**
 	 * @param $event_type
 	 *
-
 	 * @throws Repository_Exception
 	 */
 	public function get_event( $event_type ): Events_Handlers\Base\Event_Handler_Base {

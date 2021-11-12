@@ -35,13 +35,12 @@ abstract class Billing_Subscription_Change extends Event_Handler_Base {
 					( new Paypal\Query_Views\Paypal_Subscriptions_Find_View() )
 						->find_by( 'subscription_id', $subscription_id )
 				)
-				->debug()
 				->query_one();
 
 		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
 				'Fail',
-				503,
+				404,
 				array(
 					'X-JFB-Paypal-Webhook-Response' => $exception->getMessage(),
 				)

@@ -1,31 +1,13 @@
 <template>
-	<span>{{ status }}</span>
+	<span>{{ parsedJson.status }}</span>
 </template>
 
 <script>
+import ParseIncomingValueMixin from '../../ParseIncomingValueMixin';
+
 export default {
 	name: 'status--item',
-	props: [ 'value', 'full-entry' ],
-	data() {
-		return {
-			status: '',
-			otherInfo: {},
-		};
-	},
-	created() {
-		let info;
-
-		try {
-			info = JSON.parse( JSON.stringify( this.value ) );
-		} catch ( e ) {
-			return false;
-		}
-
-		this.status = info.status;
-		delete info.status;
-
-		this.otherInfo = info;
-	},
+	mixins: [ ParseIncomingValueMixin ]
 };
 </script>
 

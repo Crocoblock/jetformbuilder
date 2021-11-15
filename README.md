@@ -4,6 +4,24 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.4.0
+* ADD: Submit Field migrated to **Action Button** with backward compatibility.
+* ADD: **Progress Bar** - new block. To display steps in multistep form.
+* ADD: Ability to use **Form Break** inside **Conditional Block**, in combination with **Progress Bar** and **Action Button**. 
+* ADD: Ability to display options for Radio and Checkbox fields through dynamic templates (only with **JetEngine**).
+* ADD: Preset support with Options Pages (only with **JetEngine**).  
+* ADD: `<!--JFB_FIELD::field_name-->` macro for displaying values from fields.
+* ADD: Support for localization files, see `languages/readme.md` for details.
+* ADD: Possibility redirecting to the created post via the Redirect to Pаge action.
+* ADD: Support for `%field_name%` macros in custom url in Redirect to Page action.
+* ADD: `Condition Operator` for *Action Conditions* (`AND` & `OR`).
+* ADD: The ability to compare dates based on Unix timestamps in *Action Conditions*.
+* FIX: UI/UX for Select, Radio & Checkbox fields
+* FIX: Calculated field set as Hidden should not take any space in the grafic
+* FIX: A calculated field set as hidden takes up space.
+* FIX: Enqueueing styles in Elementor editor.
+* UPD: Preset logic for the Repeater field.
+
 ## 1.3.3
 * FIX: Compatibility with add-ons
 * FIX: Insert post insteadof Update post

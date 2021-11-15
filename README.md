@@ -18,7 +18,6 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * ADD: The ability to compare dates based on Unix timestamps in *Action Conditions*.
 * FIX: Ability to update member's Mailchimp tags.
 * FIX: UI/UX for Select, Radio & Checkbox fields
-* FIX: Calculated field set as Hidden should not take any space in the grafic
 * FIX: A calculated field set as hidden takes up space.
 * FIX: Enqueueing styles in Elementor editor.
 * UPD: Preset logic for the Repeater field.

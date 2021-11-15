@@ -4,35 +4,26 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Query_Views;
 
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Db_Queries\View_Base;
+use Jet_Form_Builder\Db_Queries\Views\Post_Meta_View;
 use Jet_Form_Builder\Gateways\Paypal;
 
-class Paypal_Subscriptions_View extends View_Base {
-
-	public function table(): string {
-		global $wpdb;
-
-		return $wpdb->postmeta;
-	}
-
-	public function select_columns(): array {
-		return array(
-			'meta_id',
-			'post_id',
-			'meta_key',
-			'meta_value',
-		);
-	}
+class Paypal_Subscriptions_View extends Post_Meta_View {
 
 	public function conditions(): array {
 		return array(
 			array(
 				'type'   => 'equal_column',
-				'values' => array( 'meta_key', Paypal\Controller::GATEWAY_META_KEY ),
+				'values' => array(
+					'meta_key',
+					Paypal\Controller::GATEWAY_META_KEY,
+				),
 			),
 			array(
 				'type'   => 'like',
-				'values' => array( 'meta_value', $this->json_pair( 'gateway_id', Paypal\Controller::ID ) ),
+				'values' => array(
+					'meta_value',
+					$this->json_pair( 'gateway_id', Paypal\Controller::ID ),
+				),
 			),
 			array(
 				'type'   => 'like',

@@ -7,7 +7,7 @@ use Jet_Form_Builder\Db_Queries\Traits\With_View;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 /**
- * @method Query_Conditions_Builder set_view( View_Base $view )
+ * @method Query_Conditions_Builder set_view( Views\View_Base $view )
  *
  * Class Query_Conditions_Builder
  * @package Jet_Form_Builder\Db_Queries

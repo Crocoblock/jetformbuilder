@@ -10,7 +10,7 @@ trait Set_Status_Trait {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	private function set_payment_status() {
+	protected function set_payment_status() {
 		$payment = $this->controller->get_payment();
 
 		if ( empty( $payment['status'] ) ) {

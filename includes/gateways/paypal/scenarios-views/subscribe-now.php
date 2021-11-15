@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-use DateTime;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;

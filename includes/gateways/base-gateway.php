@@ -123,9 +123,8 @@ abstract class Base_Gateway {
 	}
 
 	public function save_gateway_before_send_response() {
-		$this->data['date']       = date_i18n( 'F j, Y, H:i' );
-		$this->data['gateway']    = $this->get_name();
-		$this->data['gateway_id'] = $this->get_id();
+		$this->data['date']    = date_i18n( 'F j, Y, H:i' );
+		$this->data['gateway'] = $this->get_name();
 
 		/**
 		 * JSON_UNESCAPED_UNICODE - for valid encode cyrillic

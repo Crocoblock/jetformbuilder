@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Db_Queries;
+namespace Jet_Form_Builder\Db_Queries\Views;
 
 
 abstract class View_Base_Custom_Table extends View_Base {

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Db_Queries\Traits\With_View;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 

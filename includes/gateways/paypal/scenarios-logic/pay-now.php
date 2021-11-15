@@ -14,7 +14,8 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	use Scenarios_Connectors\Pay_Now;
 
 	protected function query_token() {
-		return esc_attr( $_GET['token'] ?? '' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return sanitize_text_field( wp_unslash( $_GET['token'] ?? '' ) );
 	}
 
 	public function get_failed_statuses() {
@@ -78,7 +79,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		update_post_meta(
 			$this->controller->get_order_id(),
 			Paypal\Controller::GATEWAY_META_KEY,
-			json_encode(
+			wp_json_encode(
 				array(
 					'payment_id' => $payment['id'],
 					'scenario'   => $this->rep_item_id(),
@@ -87,6 +88,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'form_data'  => $this->get_action_handler()->request_data,
 					'resource'   => $payment,
 					'provider'   => 'jet-form-builder',
+					'gateway_id' => $this->controller->get_id(),
 				),
 				JSON_UNESCAPED_UNICODE
 			)

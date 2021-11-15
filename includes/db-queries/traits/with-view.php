@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Db_Queries\Traits;
 
 
-use Jet_Form_Builder\Db_Queries\View_Base;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 trait With_View {

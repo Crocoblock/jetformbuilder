@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Db_Queries;
+namespace Jet_Form_Builder\Db_Queries\Views;
 
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 

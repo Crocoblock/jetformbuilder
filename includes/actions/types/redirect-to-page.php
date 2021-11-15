@@ -72,6 +72,10 @@ class Redirect_To_Page extends Base {
 				/** @var Insert_Post $insert_instance */
 				$insert_instance = jet_form_builder()->actions->get_actions( 'insert_post' );
 
+				if ( ! $insert_instance ) {
+					break;
+				}
+
 				$context = $insert_instance->get_inserted_post_context();
 
 				if ( ! $context ) {

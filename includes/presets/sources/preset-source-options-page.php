@@ -102,14 +102,15 @@ class Preset_Source_Options_Page extends Base_Source {
 					);
 				}
 			}
+			if ( ! empty( $blocks_group ) ) {
+				$result[] = array(
+					'label'  => $data['label'],
+					'values' => $blocks_group,
+				);
+			}
 		}
 
-		if ( ! empty( $blocks_group ) ) {
-			$result[] = array(
-				'label'  => $data['label'],
-				'values' => $blocks_group,
-			);
-		}
+
 
 		return $result;
 

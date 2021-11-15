@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
-	private $_types            = array();
+	private $_types = array();
 	private $localized_actions = array();
 
 	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
@@ -74,7 +74,7 @@ class Manager {
 	 */
 	public function get_actions( $type = '' ) {
 		if ( $type ) {
-			return $this->_types[ $type ];
+			return $this->_types[ $type ] ?? array();
 		}
 
 		return $this->_types;

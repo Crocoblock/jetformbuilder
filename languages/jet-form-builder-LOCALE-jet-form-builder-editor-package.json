@@ -21,6 +21,33 @@
             "https://crocoblock.com/": [
                 ""
             ],
+            "String to Timestamp": [
+                ""
+            ],
+            "Useful when comparing dates. See more here: %1$sstrtotime%2$s": [
+                ""
+            ],
+            "List the values separated by commas": [
+                ""
+            ],
+            "Equal": [
+                ""
+            ],
+            "Greater than": [
+                ""
+            ],
+            "Less than": [
+                ""
+            ],
+            "Between": [
+                ""
+            ],
+            "In the list": [
+                ""
+            ],
+            "Contain text": [
+                ""
+            ],
             "ActiveCampaign": [
                 ""
             ],
@@ -243,6 +270,9 @@
             "Logged in (appears only if register user is only notification)": [
                 ""
             ],
+            "Not Logged in (appears only when the \"%s\" option is enabled)": [
+                ""
+            ],
             "Not enough capabilities": [
                 ""
             ],
@@ -328,6 +358,33 @@
                 ""
             ],
             "User Meta": [
+                ""
+            ],
+            "Server error. Please, try again later": [
+                ""
+            ],
+            "Success": [
+                ""
+            ],
+            "Sorry, you are not allowed to install plugins on this site.": [
+                ""
+            ],
+            "The addon has been activated": [
+                ""
+            ],
+            "The addon has been deactivated": [
+                ""
+            ],
+            "Addons Update Checked": [
+                ""
+            ],
+            "Service action Not Found": [
+                ""
+            ],
+            "More information about %s": [
+                ""
+            ],
+            "View details": [
                 ""
             ],
             "Source:": [
@@ -579,6 +636,9 @@
             "Form Progress - Figure": [
                 ""
             ],
+            "Please select form to show": [
+                ""
+            ],
             "Form Row": [
                 ""
             ],
@@ -729,60 +789,6 @@
             "Name": [
                 ""
             ],
-            "Server error. Please, try again later": [
-                ""
-            ],
-            "Invalid license key": [
-                ""
-            ],
-            "The license for this site is already activated": [
-                ""
-            ],
-            "The license has been successfully activated": [
-                ""
-            ],
-            "The license has been successfully deactivated": [
-                ""
-            ],
-            "Success": [
-                ""
-            ],
-            "Sorry, you are not allowed to install plugins on this site.": [
-                ""
-            ],
-            "The addon has been activated": [
-                ""
-            ],
-            "The addon has been deactivated": [
-                ""
-            ],
-            "The addon has been Installed": [
-                ""
-            ],
-            "Sorry, you are not allowed to update plugins on this site.": [
-                ""
-            ],
-            "Addon update failed.": [
-                ""
-            ],
-            "The addon has been updated": [
-                ""
-            ],
-            "Plugin update failed.": [
-                ""
-            ],
-            "Addons Update Checked": [
-                ""
-            ],
-            "Service action Not Found": [
-                ""
-            ],
-            "More information about %s": [
-                ""
-            ],
-            "View details": [
-                ""
-            ],
             "Shortcode": [
                 ""
             ],
@@ -841,6 +847,12 @@
                 ""
             ],
             "Media Specific: File type error": [
+                ""
+            ],
+            "Option Page": [
+                ""
+            ],
+            "Option Value": [
                 ""
             ],
             "Choose Provider": [
@@ -1023,6 +1035,9 @@
             "Fullwidth": [
                 ""
             ],
+            "Button Text Alignment": [
+                ""
+            ],
             "Form Break Buttons": [
                 ""
             ],
@@ -1045,6 +1060,9 @@
                 ""
             ],
             "Back": [
+                ""
+            ],
+            "Maximum file size": [
                 ""
             ],
             "Captcha Settings": [
@@ -1300,6 +1318,9 @@
                 ""
             ],
             "To fulfill this condition, the result of the check must be": [
+                ""
+            ],
+            "Type transform comparing value": [
                 ""
             ],
             "Enable reCAPTCHA v3 form verification": [

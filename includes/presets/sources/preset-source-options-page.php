@@ -73,7 +73,7 @@ class Preset_Source_Options_Page extends Base_Source {
 			'label'            => __( 'Option Value', 'jet-form-builder' ),
 			'type'             => 'grouped_select',
 			'options'          => Tools::with_placeholder(
-				jet_engine()->options_pages->get_options_for_select( 'all', 'blocks' )
+				$this->get_options_fields_for_select()
 			),
 			'parent_condition' => array(
 				'field' => 'from',
@@ -82,6 +82,38 @@ class Preset_Source_Options_Page extends Base_Source {
 		);
 
 		return $config;
+	}
+
+	public function get_options_fields_for_select(): array {
+		$result = array();
+
+		foreach ( jet_engine()->options_pages->options_list as $slug => $data ) {
+			$blocks_group = array();
+
+			foreach ( $data['options'] as $name => $field_data ) {
+				$black_list = array( 'html', 'tab', 'accordion', 'endpoint' );
+
+				if ( ! in_array( $field_data['type'], $black_list, true ) ) {
+					$group[ $name ] = $field_data['title'];
+
+					$blocks_group[] = array(
+						'value' => $name,
+						'label' => $field_data['title'],
+					);
+				}
+			}
+			if ( ! empty( $blocks_group ) ) {
+				$result[] = array(
+					'label'  => $data['label'],
+					'values' => $blocks_group,
+				);
+			}
+		}
+
+
+
+		return $result;
+
 	}
 
 }

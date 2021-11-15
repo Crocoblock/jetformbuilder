@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 5.8.1
+Tested up to: 5.8.2
 Requires PHP: 7.0
-Stable tag: 1.3.3
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,24 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.4.0**
+ - ADD: Submit Field migrated to **Action Button** with backward compatibility.
+ - ADD: **Progress Bar** - new block. To display steps in multistep form.
+ - ADD: Ability to use **Form Break** inside **Conditional Block**, in combination with **Progress Bar** and **Action Button**.
+ - ADD: Ability to display options for Radio and Checkbox fields through dynamic templates (only with **JetEngine**).
+ - ADD: Preset support with Options Pages (only with **JetEngine**).
+ - ADD: `<!--JFB_FIELD::field_name-->` macro for displaying values from fields.
+ - ADD: Support for localization files, see `languages/readme.md` for details.
+ - ADD: Possibility redirecting to the created post via the Redirect to Pаge action.
+ - ADD: Support for `%field_name%` macros in custom url in Redirect to Page action.
+ - ADD: `Condition Operator` for *Action Conditions* (`AND` & `OR`).
+ - ADD: The ability to compare dates based on Unix timestamps in *Action Conditions*.
+ - FIX: UI/UX for Select, Radio & Checkbox fields
+ - FIX: Calculated field set as Hidden should not take any space in the grafic
+ - FIX: A calculated field set as hidden takes up space.
+ - FIX: Enqueueing styles in Elementor editor.
+ - UPD: Preset logic for the Repeater field.
 
 **1.3.3**
  - FIX: Compatibility with add-ons

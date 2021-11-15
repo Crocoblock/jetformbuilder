@@ -75,8 +75,6 @@ class Preset_Manager {
 	public function register_source_types() {
 		/** @var Base_Source[] $types */
 
-		do_action( 'qm/debug', self::class );
-
 		$types = apply_filters(
 			'jet-form-builder/preset/source-types',
 			array(

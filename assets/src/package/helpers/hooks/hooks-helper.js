@@ -199,3 +199,36 @@ export const withLoadingDispatch = dispatch => {
 		},
 	};
 };
+
+export const withDispatchMeta = ( metaSlug, callbackName ) => ( dispatch, ownProps, { select } ) => {
+	const allMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+
+	const {
+		editPost,
+	} = dispatch( 'core/editor' );
+
+	const change = newState => editPost( {
+		meta: (
+			{
+				...allMeta,
+				[ metaSlug ]: JSON.stringify( newState ),
+			}
+		),
+	} );
+
+	return {
+		[ callbackName ]: change,
+	};
+};
+
+export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
+	const allMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+
+	const current = JSON.parse( allMeta[ metaSlug ] || '{}' );
+
+	return {
+		[ metaSlug ]: (
+			current || ifEmpty
+		),
+	};
+};

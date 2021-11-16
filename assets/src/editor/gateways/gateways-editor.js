@@ -1,43 +1,57 @@
-import PayPal from "./paypal";
+import PayPal from './paypal';
 
 const {
-		  actionByTypeList,
-		  fromLocalizeHelper,
-		  getFormFieldsBlocks,
-		  gatewayAttr,
-		  renderGateway,
-		  gatewayActionAttributes,
-	  } = JetFBActions;
+	actionByTypeList,
+	fromLocalizeHelper,
+	getFormFieldsBlocks,
+	gatewayAttr,
+	renderGateway,
+	gatewayActionAttributes,
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-		  TextareaControl,
-		  CheckboxControl,
-		  SelectControl,
-		  BaseControl,
-		  RadioControl,
-	  } = wp.components;
+	TextareaControl,
+	CheckboxControl,
+	SelectControl,
+	BaseControl,
+	RadioControl,
+} = wp.components;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	useState,
+	useEffect,
+} = wp.element;
 
-export default function GatewaysEditor( {
-											gatewaysArgs,
-											activeActions,
-											onUnMount,
-											isSaveAction,
-											onSaveItems,
-										} ) {
 
-	const availableActions = activeActions.filter( action => action.type !== 'redirect_to_page' );
+const {
+	withDispatch,
+	withSelect,
+} = wp.data;
 
-	const gatewaysData = gatewayAttr();
-	const label = gatewayAttr( 'labels' );
+const { compose } = wp.compose;
 
-	const [ gateway, setGateway ] = useState( gatewaysArgs );
+const {
+	withDispatchMeta,
+	withSelectMeta,
+} = JetFBHooks;
+
+const gatewaysData = gatewayAttr();
+const label = gatewayAttr( 'labels' );
+
+function GatewaysEditor( {
+	_jf_gateways: GatewaysMeta,
+	_jf_actions: ActionsMeta,
+	ChangeGateway,
+	onUnMount,
+	isSaveAction,
+	onSaveItems,
+} ) {
+
+	const availableActions = ActionsMeta.filter( action => action.type !== 'redirect_to_page' );
+
+	const [ gateway, setGateway ] = useState( GatewaysMeta );
 
 	const formFields = getFormFieldsBlocks( [], '--' );
 
@@ -56,7 +70,7 @@ export default function GatewaysEditor( {
 			prevArgs[ when ][ type ] = newValue;
 			return {
 				...prevArgs,
-			}
+			};
 		} );
 	};
 
@@ -119,7 +133,7 @@ export default function GatewaysEditor( {
 						if ( ! isChecked ) {
 							delete gateway[ name ][ action ];
 						}
-					} )
+					} );
 				} );
 
 				onSaveItems( gateway );
@@ -130,7 +144,6 @@ export default function GatewaysEditor( {
 		}
 	}, [ isSaveAction ] );
 
-	const actionsList = actionByTypeList( 'insert_post', true );
 	const actionLabel = fromLocalizeHelper( 'getActionLabel' );
 
 	return <>
@@ -201,10 +214,12 @@ export default function GatewaysEditor( {
 				options={ actionByTypeList( 'insert_post', true ) }
 				selected={ gateway.action_order }
 				onChange={ newVal => {
-					setGateway( prevArgs => ( {
-						...prevArgs,
-						action_order: Number( newVal ),
-					} ) );
+					setGateway( prevArgs => (
+						{
+							...prevArgs,
+							action_order: Number( newVal ),
+						}
+					) );
 				} }
 			/>
 		</BaseControl>
@@ -215,10 +230,12 @@ export default function GatewaysEditor( {
 			value={ gateway.price_field }
 			labelPosition='side'
 			onChange={ newVal => {
-				setGateway( prevArgs => ( {
-					...prevArgs,
-					price_field: newVal,
-				} ) );
+				setGateway( prevArgs => (
+					{
+						...prevArgs,
+						price_field: newVal,
+					}
+				) );
 			} }
 			options={ formFields }
 		/>
@@ -245,17 +262,23 @@ export default function GatewaysEditor( {
 			value={ getResultMessage( 'failed' ) }
 			onChange={ newValue => setResultMessage( 'failed', newValue ) }
 		/>
-		{ activeActions.find( action => action.type === 'redirect_to_page' ) && <CheckboxControl
+		{ ActionsMeta.find( action => action.type === 'redirect_to_page' ) && <CheckboxControl
 			key="checkbox_block_redirect_to_page"
 			checked={ gateway.use_success_redirect }
 			label={ label( 'use_success_redirect' ) }
 			onChange={ value => {
-				setGateway( prevArgs => ( {
-					...prevArgs,
-					use_success_redirect: value,
-				} ) );
+				setGateway( prevArgs => (
+					{
+						...prevArgs,
+						use_success_redirect: value,
+					}
+				) );
 			} }
 		/> }
 	</>;
-
 }
+
+export default compose(
+	withSelect( withSelectMeta( '_jf_gateways' ) ),
+	withSelect( withSelectMeta( '_jf_actions' ) ),
+)( GatewaysEditor );

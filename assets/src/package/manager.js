@@ -44,7 +44,10 @@ import {
 	useStateLoadingClasses,
 	useSuccessNotice,
 	useRequestFields,
-	withRequestFields, withLoading, withLoadingSelect,
+	withRequestFields,
+	withLoadingSelect,
+	withDispatchMeta,
+	withSelectMeta,
 } from './helpers/hooks/hooks-helper';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
@@ -149,5 +152,7 @@ window.JetFBHooks = {
 	withRequestFields,
 	useRequestFields,
 	withLoadingSelect,
+	withDispatchMeta,
+	withSelectMeta,
 };
 

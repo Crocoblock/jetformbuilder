@@ -8,6 +8,8 @@ const {
 	useDispatch,
 } = wp.data;
 
+const { applyFilters } = wp.hooks;
+
 export const useMetaState = ( key, ifEmpty = '{}' ) => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
@@ -114,6 +116,20 @@ export const useSuccessNotice = ( text, options = {} ) => {
 	return setHasCopied;
 };
 
+export const withNotice = ( dispatch ) => {
+	return {
+		createNotice: ( text, options = {} ) => {
+			dispatch( wp.notices.store ).createNotice(
+				text, {
+					type: 'default',
+					status: 'info',
+					...options,
+				},
+			);
+		},
+	};
+};
+
 export const getRequestFields = actions => {
 	const requestFields = [];
 
@@ -156,6 +172,16 @@ export const useRequestFields = ( options = {} ) => {
 	return getRequestFields( actions );
 };
 
+const selectPostMeta = select => {
+	return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+};
+
+const selectParsedPostMeta = ( select, name ) => {
+	const allMeta = selectPostMeta( select );
+
+	return JSON.parse( allMeta[ name ] || '{}' );
+};
+
 export const withCurrentAction = select => {
 	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
 
@@ -172,13 +198,13 @@ export const withRequestFields = select => {
 	return { requestFields: getRequestFields( actions ) };
 };
 
-export const withLoadingSelect = select => {
+export const withSelectActionLoading = select => {
 	const loadingState = select( 'jet-forms/actions' ).getCurrentLoading();
 
 	return { loadingState };
 };
 
-export const withLoadingDispatch = dispatch => {
+export const withDispatchActionLoading = dispatch => {
 	return {
 		setLoading( actionId ) {
 			dispatch( 'jet-forms/actions' ).setLoading( { actionId } );
@@ -201,7 +227,7 @@ export const withLoadingDispatch = dispatch => {
 };
 
 export const withDispatchMeta = ( metaSlug, callbackName ) => ( dispatch, ownProps, { select } ) => {
-	const allMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+	const allMeta = selectPostMeta( select );
 
 	const {
 		editPost,
@@ -222,13 +248,99 @@ export const withDispatchMeta = ( metaSlug, callbackName ) => ( dispatch, ownPro
 };
 
 export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
-	const allMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-
-	const current = JSON.parse( allMeta[ metaSlug ] || '{}' );
+	const current = selectParsedPostMeta( select, metaSlug );
 
 	return {
 		[ metaSlug ]: (
 			current || ifEmpty
 		),
+	};
+};
+
+export const withSelectGateways = select => {
+	const store = select( 'jet-forms/gateways' );
+
+	return {
+		gatewayGeneral: store.getGateway(),
+		gatewaySpecific: store.getGatewaySpecific(),
+		gatewayRequestId: store.getCurrentRequestId(),
+		gatewayRequest: store.getCurrentRequest(),
+	};
+};
+export const withSelectGatewaysLoading = select => {
+	const { gatewayRequestId, ...other } = withSelectGateways( select );
+
+	const loadingGateway = select( 'jet-forms/actions' ).getLoading( gatewayRequestId );
+
+	return {
+		loadingGateway,
+		gatewayRequestId,
+		...other,
+	};
+};
+
+export const withDispatchGateways = ( dispatch, ownProps, { select } ) => {
+	return {
+		setGatewayRequest( item ) {
+			const { gatewayGeneral } = withSelectGateways( select );
+			item.id = gatewayGeneral.gateway + '/' + item?.id;
+
+			dispatch( 'jet-forms/gateways' ).setRequest( item );
+		},
+		setGateway( item ) {
+			dispatch( 'jet-forms/gateways' ).setGateway( item );
+		},
+		setGatewayInner( item ) {
+			dispatch( 'jet-forms/gateways' ).setGatewayInner( item );
+		},
+		setGatewaySpecific( item ) {
+			dispatch( 'jet-forms/gateways' ).setGatewaySpecific( item );
+		},
+	};
+};
+
+const getFormFields = ( blockParserFunc, blocks ) => {
+	blocks.map( block => {
+		blockParserFunc( block );
+
+		if ( block.innerBlocks.length ) {
+			getFormFields( blockParserFunc, block.innerBlocks );
+		}
+	} );
+};
+
+export const withSelectFormFields = (
+	exclude = [],
+	placeholder = false,
+	suppressFilter = false,
+) => select => {
+
+	let formFields = [];
+	let skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional', ...exclude ];
+
+	getFormFields( block => {
+		if ( block.name.includes( 'jet-forms/' )
+		     && block.attributes.name
+		     && ! skipFields.find( field => block.name.includes( field ) )
+		) {
+
+			/*const blockType = select( blocksStore ).getBlockType( block.name );*/
+
+			formFields.push( {
+				blockName: block.name,
+				name: block.attributes.name,
+				label: block.attributes.label || block.attributes.name,
+				value: block.attributes.name,
+				//icon: blockType.icon.src,
+			} );
+		}
+	}, select( 'core/block-editor' ).getBlocks() );
+
+	formFields = placeholder
+		? [ { value: '', label: placeholder }, ...formFields ]
+		: formFields;
+
+	return {
+		formFields: suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields ),
 	};
 };

@@ -33,7 +33,7 @@ abstract class Rest_Api_Endpoint_Base {
 	/**
 	 * @return bool
 	 */
-	public function get_permission_callback() {
+	public function check_permission(): bool {
 		return true;
 	}
 

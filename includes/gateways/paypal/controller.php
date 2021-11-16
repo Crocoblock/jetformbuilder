@@ -3,10 +3,11 @@
 namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Pay_Now_Editor;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Subscribe_Now_Editor;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
@@ -40,7 +41,7 @@ class Controller extends Base_Gateway {
 	 * @return [type] [description]
 	 */
 	public function get_name() {
-		return __( 'PayPal Checkout', 'Paypal gateways editor data', 'jet-form-builder' );
+		return _x( 'PayPal Checkout', 'Paypal gateways editor data', 'jet-form-builder' );
 	}
 
 	protected function options_list() {
@@ -68,6 +69,17 @@ class Controller extends Base_Gateway {
 
 	public function additional_editor_data() {
 		return array(
+			'version'       => 1,
+			'fetch'         => array(
+				Scenarios_Logic\Pay_Now::scenario_id() => array(
+					'method' => Fetch_Pay_Now_Editor::get_methods(),
+					'url'    => Fetch_Pay_Now_Editor::rest_url(),
+				),
+				Scenarios_Logic\Subscribe_Now::scenario_id() => array(
+					'method' => Fetch_Subscribe_Now_Editor::get_methods(),
+					'url'    => Fetch_Subscribe_Now_Editor::rest_url(),
+				),
+			),
 			'gateway_types' => array(
 				array(
 					'value' => Scenarios_Logic\Pay_Now::scenario_id(),

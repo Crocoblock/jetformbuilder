@@ -1,5 +1,5 @@
-import RequestButton from './request-button';
-import { withLoadingSelect, withLoadingDispatch, withCurrentAction } from '../helpers/hooks/hooks-helper';
+import { withCurrentAction } from '../helpers/hooks/hooks-helper';
+import FetchAjaxButton from './fetch-ajax-button';
 
 const { compose } = wp.compose;
 
@@ -10,43 +10,16 @@ const {
 
 
 function ValidateButtonWithStore( {
-	initialLabel = 'Valid',
-	label = 'InValid',
-	ajaxArgs = {},
-	loadingState,
-	setLoading,
 	currentAction,
-	setResultSuccess,
-	setResultFail,
+	...props
 } ) {
 
-	const getLabel = () => {
-		if ( - 1 === loadingState.id && initialLabel ) {
-			return initialLabel;
-		}
-
-		return label;
-	};
-
-	return <RequestButton
-		disabled={ loadingState.loading }
-		ajaxArgs={ ajaxArgs }
-		label={ getLabel() }
-		onLoading={ () => {
-			setLoading( currentAction.id );
-		} }
-		onSuccessRequest={ response => {
-			setResultSuccess( currentAction.id, response );
-		} }
-		onFailRequest={ () => setResultFail( currentAction.id ) }
-		className={ loadingState.buttonClassName }
-	>
-		<i className="dashicons"/>
-	</RequestButton>;
+	return <FetchAjaxButton
+		id={ currentAction.id }
+		{ ...props }
+	/>;
 }
 
 export default compose(
-	withSelect( withLoadingSelect ),
 	withSelect( withCurrentAction ),
-	withDispatch( withLoadingDispatch ),
 )( ValidateButtonWithStore );

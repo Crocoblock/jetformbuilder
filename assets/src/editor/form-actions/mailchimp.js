@@ -25,7 +25,7 @@ const { convertObjectToOptionsList, getFormFieldsBlocks } = JetFBActions;
 
 const { __ } = wp.i18n;
 
-const { withRequestFields, withLoadingSelect } = JetFBHooks;
+const { withRequestFields, withSelectActionLoading } = JetFBHooks;
 
 const {
 	withSelect,
@@ -210,5 +210,5 @@ function MailChimpAction( props ) {
 
 addAction( 'mailchimp', compose(
 	withSelect( withRequestFields ),
-	withSelect( withLoadingSelect ),
+	withSelect( withSelectActionLoading ),
 )( MailChimpAction ) );

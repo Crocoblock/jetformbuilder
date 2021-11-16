@@ -7,6 +7,7 @@ const {
 	gatewayAttr,
 	renderGateway,
 	gatewayActionAttributes,
+	renderGatewayWithPlaceholder,
 } = JetFBActions;
 
 const { __ } = wp.i18n;
@@ -17,6 +18,7 @@ const {
 	SelectControl,
 	BaseControl,
 	RadioControl,
+	ToggleControl,
 } = wp.components;
 
 const {
@@ -26,34 +28,34 @@ const {
 
 
 const {
-	withDispatch,
 	withSelect,
+	withDispatch,
 } = wp.data;
 
 const { compose } = wp.compose;
 
 const {
-	withDispatchMeta,
 	withSelectMeta,
+	withSelectGateways,
+	withDispatchGateways,
+	withSelectFormFields,
 } = JetFBHooks;
 
 const gatewaysData = gatewayAttr();
 const label = gatewayAttr( 'labels' );
+const callableGateway = gatewayAttr( 'additional' );
 
 function GatewaysEditor( {
-	_jf_gateways: GatewaysMeta,
 	_jf_actions: ActionsMeta,
-	ChangeGateway,
-	onUnMount,
-	isSaveAction,
-	onSaveItems,
+	setGateway,
+	gatewayGeneral,
+	setGatewayInner,
+	formFields,
 } ) {
 
 	const availableActions = ActionsMeta.filter( action => action.type !== 'redirect_to_page' );
 
-	const [ gateway, setGateway ] = useState( GatewaysMeta );
-
-	const formFields = getFormFieldsBlocks( [], '--' );
+	const additional = callableGateway( gatewayGeneral.gateway );
 
 	/**
 	 * Used for set notifications and gateway type settings
@@ -63,14 +65,11 @@ function GatewaysEditor( {
 	 * @param newValue
 	 */
 	const setValueInObject = ( when, type, newValue ) => {
-		setGateway( ( prevArgs ) => {
-			if ( ! prevArgs[ when ] ) {
-				prevArgs[ when ] = {};
-			}
-			prevArgs[ when ][ type ] = newValue;
-			return {
-				...prevArgs,
-			};
+		setGatewayInner( {
+			key: when,
+			value: {
+				[ type ]: newValue,
+			},
 		} );
 	};
 
@@ -83,8 +82,8 @@ function GatewaysEditor( {
 	 * @returns {boolean|*}
 	 */
 	const getNotifications = ( when, type, isEmptyResult = false ) => {
-		if ( gateway[ when ] && gateway[ when ][ type ] ) {
-			return gateway[ when ][ type ];
+		if ( gatewayGeneral[ when ] && gatewayGeneral[ when ][ type ] ) {
+			return gatewayGeneral[ when ][ type ];
 		}
 		return isEmptyResult;
 	};
@@ -120,34 +119,10 @@ function GatewaysEditor( {
 		return getNotifications( 'notifications_success', id, actionDefault );
 	};
 
-	useEffect( () => {
-		if ( true === isSaveAction ) {
-			if ( onSaveItems ) {
-
-				[ 'notifications_before', 'notifications_failed', 'notifications_success' ].forEach( name => {
-					if ( ! gateway[ name ] ) {
-						gateway[ name ] = {};
-						return;
-					}
-					Object.entries( gateway[ name ] ).forEach( ( [ action, isChecked ] ) => {
-						if ( ! isChecked ) {
-							delete gateway[ name ][ action ];
-						}
-					} );
-				} );
-
-				onSaveItems( gateway );
-			}
-			onUnMount();
-		} else if ( false === isSaveAction ) {
-			onUnMount();
-		}
-	}, [ isSaveAction ] );
-
 	const actionLabel = fromLocalizeHelper( 'getActionLabel' );
 
 	return <>
-		{ renderGateway( gateway.gateway, { setValueInObject, getNotifications } ) }
+		{ renderGateway( gatewayGeneral.gateway, { setValueInObject, getNotifications } ) }
 		{ Boolean( availableActions.length ) && <>
 			<BaseControl
 				label={ __( 'Before payment processed:', 'jet-form-builder' ) }
@@ -204,42 +179,43 @@ function GatewaysEditor( {
 				</div>
 			</BaseControl>
 		</> }
-		<BaseControl
-			label={ label( 'action_order' ) }
-			key='gateway_action_order_base_control'
-		>
-			<RadioControl
-				className='jet-control-clear-full jet-user-fields-map__list'
-				key='gateway_action_order'
-				options={ actionByTypeList( 'insert_post', true ) }
-				selected={ gateway.action_order }
-				onChange={ newVal => {
-					setGateway( prevArgs => (
-						{
-							...prevArgs,
-							action_order: Number( newVal ),
-						}
-					) );
-				} }
-			/>
-		</BaseControl>
 
-		<SelectControl
-			label={ label( 'price_field' ) }
-			key={ 'form_fields_price_field' }
-			value={ gateway.price_field }
-			labelPosition='side'
-			onChange={ newVal => {
-				setGateway( prevArgs => (
-					{
-						...prevArgs,
-						price_field: newVal,
-					}
-				) );
+		{ ActionsMeta.find( action => action.type === 'redirect_to_page' ) && <ToggleControl
+			key='checkbox_block_redirect_to_page'
+			checked={ gatewayGeneral.use_success_redirect }
+			label={ label( 'use_success_redirect' ) }
+			onChange={ use_success_redirect => {
+				setGateway( { use_success_redirect } );
 			} }
-			options={ formFields }
-		/>
-		<BaseControl
+		/> }
+		{ 1 !== additional.version && <>
+			<BaseControl
+				label={ label( 'action_order' ) }
+				key='gateway_action_order_base_control'
+			>
+				<RadioControl
+					className='jet-control-clear-full jet-user-fields-map__list'
+					key='gateway_action_order'
+					options={ actionByTypeList( 'insert_post', true ) }
+					selected={ gatewayGeneral.action_order }
+					onChange={ newVal => {
+						setGateway( { action_order: Number( newVal ) } );
+					} }
+				/>
+			</BaseControl>
+
+			<SelectControl
+				label={ label( 'price_field' ) }
+				key={ 'form_fields_price_field' }
+				value={ gatewayGeneral.price_field }
+				labelPosition='side'
+				onChange={ price_field => {
+					setGateway( { price_field } );
+				} }
+				options={ formFields }
+			/>
+		</> }
+		{ renderGatewayWithPlaceholder( gatewayGeneral.gateway, {}, 'macrosList', <BaseControl
 			key="payment_result_macros_base_control"
 		>
 			<h4>
@@ -248,8 +224,7 @@ function GatewaysEditor( {
 				{ __( '%gateway_status% - payment status returned from payment gateway;', 'jet-form-builder' ) }<br/>
 				{ __( '%field_name% - replace "field_name" with any field name from the form;', 'jet-form-builder' ) }<br/>
 			</h4>
-		</BaseControl>
-
+		</BaseControl> ) }
 		<TextareaControl
 			key="payment_result_message_success"
 			label={ label( 'message_success' ) }
@@ -262,23 +237,12 @@ function GatewaysEditor( {
 			value={ getResultMessage( 'failed' ) }
 			onChange={ newValue => setResultMessage( 'failed', newValue ) }
 		/>
-		{ ActionsMeta.find( action => action.type === 'redirect_to_page' ) && <CheckboxControl
-			key="checkbox_block_redirect_to_page"
-			checked={ gateway.use_success_redirect }
-			label={ label( 'use_success_redirect' ) }
-			onChange={ value => {
-				setGateway( prevArgs => (
-					{
-						...prevArgs,
-						use_success_redirect: value,
-					}
-				) );
-			} }
-		/> }
 	</>;
 }
 
 export default compose(
-	withSelect( withSelectMeta( '_jf_gateways' ) ),
 	withSelect( withSelectMeta( '_jf_actions' ) ),
+	withSelect( withSelectGateways ),
+	withSelect( withSelectFormFields( [], '--' ) ),
+	withDispatch( withDispatchGateways ),
 )( GatewaysEditor );

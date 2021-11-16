@@ -36,6 +36,7 @@ import {
 	gatewayLabel,
 	registerGateway,
 	renderGateway,
+	renderGatewayWithPlaceholder,
 } from './helpers/gateways/gateway-helper';
 import {
 	useActions,
@@ -45,9 +46,14 @@ import {
 	useSuccessNotice,
 	useRequestFields,
 	withRequestFields,
-	withLoadingSelect,
+	withSelectActionLoading,
 	withDispatchMeta,
 	withSelectMeta,
+	withNotice,
+	withSelectGatewaysLoading,
+	withSelectFormFields,
+	withSelectGateways,
+	withDispatchGateways,
 } from './helpers/hooks/hooks-helper';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
@@ -78,7 +84,9 @@ import {
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
 import './stores/action-store';
+import './stores/gateways-store';
 import ValidateButtonWithStore from './components/validate-button-with-store';
+import GatewayFetchButton from './components/gateway-fetch-button';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -108,7 +116,10 @@ window.JetFBComponents = {
 	GroupedSelectControl,
 	BaseHelp,
 	ValidateButtonWithStore,
+	GatewayFetchButton,
 };
+
+
 
 // JFBFunctions
 window.JetFBActions = {
@@ -130,6 +141,7 @@ window.JetFBActions = {
 	getActionSettings,
 	fromLocalizeHelper,
 	renderGateway,
+	renderGatewayWithPlaceholder,
 	gatewayActionAttributes,
 	globalTab,
 	versionCompare,
@@ -151,8 +163,13 @@ window.JetFBHooks = {
 	useSuccessNotice,
 	withRequestFields,
 	useRequestFields,
-	withLoadingSelect,
+	withSelectActionLoading,
 	withDispatchMeta,
 	withSelectMeta,
-};
+	withNotice,
+	withSelectGatewaysLoading,
+	withSelectFormFields,
+	withSelectGateways,
+	withDispatchGateways
+}
 

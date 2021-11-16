@@ -23,6 +23,8 @@ const { ActionModal } = JetFBComponents;
 const {
 	withDispatchMeta,
 	withSelectMeta,
+	withDispatchGateways,
+	withSelectGateways,
 } = JetFBHooks;
 
 const gatewaysData = window.JetFormEditorData.gateways;
@@ -38,6 +40,8 @@ function PluginGateways( {
 	_jf_gateways: GatewaysMeta,
 	_jf_actions: ActionsMeta,
 	ChangeGateway,
+	setGateway,
+	gatewayGeneral,
 } ) {
 
 	const [ isEdit, setEdit ] = useState( false );
@@ -51,6 +55,14 @@ function PluginGateways( {
 	};
 
 	const isDisabled = ! issetActionType( 'insert_post' );
+
+	useEffect( () => {
+		if ( isEdit ) {
+			setGateway( GatewaysMeta );
+		} else {
+			setGateway( {} );
+		}
+	}, [ isEdit ] );
 
 	return <>
 		<RadioControl
@@ -93,7 +105,10 @@ function PluginGateways( {
 					<GatewaysEditor
 						isSaveAction={ actionClick }
 						onUnMount={ onRequestClose }
-						onSaveItems={ newState => ChangeGateway( newState ) }
+						onSaveItems={ () => {
+							ChangeGateway( gatewayGeneral );
+							onRequestClose();
+						} }
 					/>
 				</> }
 			</ActionModal>
@@ -104,6 +119,8 @@ function PluginGateways( {
 
 export default compose(
 	withDispatch( withDispatchMeta( '_jf_gateways', 'ChangeGateway' ) ),
+	withDispatch( withDispatchGateways ),
+	withSelect( withSelectGateways ),
 	withSelect( withSelectMeta( '_jf_gateways' ) ),
 	withSelect( withSelectMeta( '_jf_actions' ) ),
 )( PluginGateways );

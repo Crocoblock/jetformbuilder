@@ -20,7 +20,7 @@ abstract class Rest_Api_Controller_Base {
 				?: array(
 					'methods'             => $route::get_methods(),
 					'callback'            => array( $route, 'run_callback' ),
-					'permission_callback' => array( $route, 'get_permission_callback' ),
+					'permission_callback' => array( $route, 'check_permission' ),
 					'args'                => $route->get_common_args(),
 				);
 

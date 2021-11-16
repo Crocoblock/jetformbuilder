@@ -95,7 +95,9 @@ abstract class Base_Gateway {
 	}
 
 	public function additional_editor_data() {
-		return array();
+		return array(
+			'version' => 0,
+		);
 	}
 
 	/**

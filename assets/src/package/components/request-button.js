@@ -4,6 +4,7 @@ const {
 	Button,
 } = wp.components;
 
+
 function RequestButton( {
 	label,
 	ajaxArgs = {},
@@ -17,16 +18,27 @@ function RequestButton( {
 	children = () => {
 	},
 	disabled = false,
+	customRequest = false,
 } ) {
 
-	const defaultValidate = () => {
-		return jQuery.ajax( { url: ajaxurl, type: 'POST', data: ajaxArgs } );
+	const defaultRequest = () => {
+		onLoading();
+
+		jQuery.ajax( {
+			url: ajaxurl,
+			type: 'POST',
+			data: ajaxArgs,
+		} ).done( response => response.success ? onSuccessRequest( response ) : onFailRequest() ).fail( () => onFailRequest() );
 	};
 
 	const request = () => {
-		onLoading();
-
-		defaultValidate().done( response => response.success ? onSuccessRequest( response ) : onFailRequest() ).fail( () => onFailRequest() );
+		if ( false === customRequest ) {
+			defaultRequest();
+		} else if ( 'function' === typeof customRequest ) {
+			customRequest();
+		} else {
+			onFailRequest();
+		}
 	};
 
 	return <Button

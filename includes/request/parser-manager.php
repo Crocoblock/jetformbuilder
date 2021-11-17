@@ -115,7 +115,11 @@ class Parser_Manager {
 		$settings = $field['attrs'];
 		$name     = $settings['name'] ?? 'field_name';
 
-		$output[ $name ] = $this->get_parsed_value( $field, $request, $name, $inside_conditional );
+		try {
+			$output[ $name ] = $this->get_parsed_value( $field, $request, $name, $inside_conditional );
+		} catch ( Parse_Exception $exception ) {
+			$output = array_merge( $output, $exception->get_inner() );
+		}
 	}
 
 	public function get_parsed_value( $field, $request, $name, $inside_conditional ) {

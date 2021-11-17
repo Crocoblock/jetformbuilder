@@ -257,7 +257,7 @@ class Form_Builder {
 		$form .= Live_Form::force_render_field(
 			'hidden-field',
 			array(
-				'field_value'   => Live_Form::instance()->post->ID,
+				'field_value'   => Live_Form::instance()->post->ID ?? - 1,
 				'name'          => Plugin::instance()->form_handler->post_id_key,
 				'_static_value' => true,
 			)

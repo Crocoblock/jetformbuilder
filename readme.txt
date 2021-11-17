@@ -265,8 +265,8 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
  - ADD: Support for `%field_name%` macros in custom url in Redirect to Page action.
  - ADD: `Condition Operator` for *Action Conditions* (`AND` & `OR`).
  - ADD: The ability to compare dates based on Unix timestamps in *Action Conditions*.
- - FIX: UI/UX for Select, Radio & Checkbox fields
- - FIX: Calculated field set as Hidden should not take any space in the grafic
+ - FIX: Ability to update member's Mailchimp tags.
+ - FIX: UI/UX for Select, Radio & Checkbox fields.
  - FIX: A calculated field set as hidden takes up space.
  - FIX: Enqueueing styles in Elementor editor.
  - UPD: Preset logic for the Repeater field.

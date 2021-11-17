@@ -53,8 +53,8 @@ class Hidden_Field extends Base {
 		} )->render_without_layout();
 	}
 
-	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
-		parent::set_block_data( $attributes, $content, $wp_block );
+	public function set_preset() {
+		parent::set_preset();
 
 		$this->block_attrs['field_value'] = $this->get_hidden_field_value();
 	}

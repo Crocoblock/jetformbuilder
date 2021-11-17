@@ -20,7 +20,7 @@ class Request_Handler {
 	public $_response_data;
 
 	const REPEATERS_SETTINGS = '__repeaters_settings';
-	const WP_NONCE_KEY       = '_wpnonce';
+	const WP_NONCE_KEY = '_wpnonce';
 
 	public function set_request( $request ) {
 		$this->request = $request;
@@ -177,8 +177,8 @@ class Request_Handler {
 	public function _get_field_attrs_by_name( $source, $field_name, $attr_name = '', $default_val = '' ) {
 		foreach ( $source as $field ) {
 			if ( empty( $field['attrs'] )
-				 || ! isset( $field['attrs']['name'] )
-				 || $field_name !== $field['attrs']['name']
+			     || ! isset( $field['attrs']['name'] )
+			     || $field_name !== $field['attrs']['name']
 			) {
 				if ( ! empty( $field['innerBlocks'] ) ) {
 					return $this->_get_field_attrs_by_name(

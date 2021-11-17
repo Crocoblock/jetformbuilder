@@ -53,7 +53,7 @@ import {
 	withSelectGatewaysLoading,
 	withSelectFormFields,
 	withSelectGateways,
-	withDispatchGateways,
+	withDispatchGateways, withSelectActionsByType,
 } from './helpers/hooks/hooks-helper';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
@@ -73,7 +73,7 @@ import {
 	actionByTypeList,
 	convertListToFieldsMap,
 	fromLocalizeHelper,
-	getActionSettings,
+	getActionSettings, prepareActionsListByType,
 } from './helpers/actions/action-helper';
 import gatewayActionAttributes from './helpers/gateways/gateway-action-attrubites';
 import { globalTab } from './helpers/settings/helper';
@@ -119,8 +119,6 @@ window.JetFBComponents = {
 	GatewayFetchButton,
 };
 
-
-
 // JFBFunctions
 window.JetFBActions = {
 	addAction,
@@ -152,6 +150,7 @@ window.JetFBActions = {
 	classnames,
 	getBlocksByName,
 	convertObjectToOptionsList,
+	prepareActionsListByType,
 };
 
 // JFBHooks
@@ -170,6 +169,7 @@ window.JetFBHooks = {
 	withSelectGatewaysLoading,
 	withSelectFormFields,
 	withSelectGateways,
-	withDispatchGateways
-}
+	withDispatchGateways,
+	withSelectActionsByType
+};
 

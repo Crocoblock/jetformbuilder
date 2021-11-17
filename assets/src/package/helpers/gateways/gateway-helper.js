@@ -26,7 +26,9 @@ export const registerGateway = ( id, callback, forWhat = 'cred' ) => {
 };
 
 export const issetRenderGateway = ( id, what = 'cred' ) => {
-	return ( window.JetFBGatewaysList && window.JetFBGatewaysList[ id ] && window.JetFBGatewaysList[ id ][ what ] );
+	return (
+		window.JetFBGatewaysList && window.JetFBGatewaysList[ id ] && window.JetFBGatewaysList[ id ][ what ]
+	);
 };
 
 export const renderGateway = ( id, props, what = 'cred' ) => {

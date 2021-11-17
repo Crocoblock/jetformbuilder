@@ -20,6 +20,7 @@ const {
 const { compose } = wp.compose;
 
 const { ActionModal } = JetFBComponents;
+
 const {
 	withDispatchMeta,
 	withSelectMeta,
@@ -46,7 +47,18 @@ function PluginGateways( {
 
 	const [ isEdit, setEdit ] = useState( false );
 
-	const closeModal = () => {
+	useEffect( () => {
+		if ( isEdit ) {
+			setGateway( GatewaysMeta );
+		} else {
+			setGateway( {} );
+		}
+	}, [ isEdit ] );
+
+	const closeModal = ( newMeta = false ) => {
+		if ( false !== newMeta ) {
+			ChangeGateway( newMeta );
+		}
 		setEdit( false );
 	};
 
@@ -55,14 +67,6 @@ function PluginGateways( {
 	};
 
 	const isDisabled = ! issetActionType( 'insert_post' );
-
-	useEffect( () => {
-		if ( isEdit ) {
-			setGateway( GatewaysMeta );
-		} else {
-			setGateway( {} );
-		}
-	}, [ isEdit ] );
 
 	return <>
 		<RadioControl
@@ -98,19 +102,12 @@ function PluginGateways( {
 		{ isEdit && (
 			<ActionModal
 				classNames={ [ 'width-60' ] }
-				onRequestClose={ closeModal }
+				onRequestClose={ () => closeModal() }
+				onCancelClick={ () => closeModal() }
+				onUpdateClick={ () => closeModal( gatewayGeneral ) }
 				title={ `Edit ${ getGatewayLabel( GatewaysMeta.gateway ) } Settings` }
 			>
-				{ ( { actionClick, onRequestClose } ) => <>
-					<GatewaysEditor
-						isSaveAction={ actionClick }
-						onUnMount={ onRequestClose }
-						onSaveItems={ () => {
-							ChangeGateway( gatewayGeneral );
-							onRequestClose();
-						} }
-					/>
-				</> }
+				<GatewaysEditor/>
 			</ActionModal>
 		) }
 	</>;

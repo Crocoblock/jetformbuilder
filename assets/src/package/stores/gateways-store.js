@@ -32,6 +32,20 @@ const actions = {
 			item,
 		};
 	},
+	hardSetGateway( item, value = '' ) {
+		return {
+			type: 'HARD_SET_CURRENT_GATEWAY',
+			item,
+			value,
+		};
+	},
+	hardSetGatewaySpecific( item, value = '' ) {
+		return {
+			type: 'HARD_SET_CURRENT_GATEWAY_SPECIFIC',
+			item,
+			value,
+		};
+	},
 };
 
 const selectors = {
@@ -83,10 +97,29 @@ register( createReduxStore( 'jet-forms/gateways', {
 					currentGateway: {
 						...state.currentGateway,
 						[ key ]: {
-							...( state.currentGateway[ key ] || {} ),
+							...(
+								state.currentGateway[ key ] || {}
+							),
 							...value,
 						},
 					},
+				};
+			case 'HARD_SET_CURRENT_GATEWAY':
+				if ( action.item ) {
+					state.currentGateway[ action.item ] = action.value;
+				}
+
+				return {
+					...state,
+				};
+			case 'HARD_SET_CURRENT_GATEWAY_SPECIFIC':
+				if ( action.item && state.currentGateway?.gateway ) {
+					state.currentGateway[ state.currentGateway?.gateway ] = {};
+					state.currentGateway[ state.currentGateway?.gateway ][ action.item ] = action.value;
+				}
+
+				return {
+					...state,
 				};
 		}
 		return state;

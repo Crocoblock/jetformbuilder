@@ -1,9 +1,8 @@
-import PayPal from './paypal';
+import * as paypal from './paypal';
 
 const {
-	actionByTypeList,
+	prepareActionsListByType,
 	fromLocalizeHelper,
-	getFormFieldsBlocks,
 	gatewayAttr,
 	renderGateway,
 	gatewayActionAttributes,
@@ -20,12 +19,6 @@ const {
 	RadioControl,
 	ToggleControl,
 } = wp.components;
-
-const {
-	useState,
-	useEffect,
-} = wp.element;
-
 
 const {
 	withSelect,
@@ -54,6 +47,7 @@ function GatewaysEditor( {
 } ) {
 
 	const availableActions = ActionsMeta.filter( action => action.type !== 'redirect_to_page' );
+	const insertPostActions = prepareActionsListByType( ActionsMeta, 'insert_post', true );
 
 	const additional = callableGateway( gatewayGeneral.gateway );
 
@@ -72,7 +66,6 @@ function GatewaysEditor( {
 			},
 		} );
 	};
-
 	/**
 	 * Used for get notifications and gateway type settings
 	 *
@@ -179,13 +172,12 @@ function GatewaysEditor( {
 				</div>
 			</BaseControl>
 		</> }
-
 		{ ActionsMeta.find( action => action.type === 'redirect_to_page' ) && <ToggleControl
 			key='checkbox_block_redirect_to_page'
 			checked={ gatewayGeneral.use_success_redirect }
 			label={ label( 'use_success_redirect' ) }
-			onChange={ use_success_redirect => {
-				setGateway( { use_success_redirect } );
+			onChange={ val => {
+				setGateway( { use_success_redirect: val } );
 			} }
 		/> }
 		{ 1 !== additional.version && <>
@@ -196,7 +188,7 @@ function GatewaysEditor( {
 				<RadioControl
 					className='jet-control-clear-full jet-user-fields-map__list'
 					key='gateway_action_order'
-					options={ actionByTypeList( 'insert_post', true ) }
+					options={ insertPostActions }
 					selected={ gatewayGeneral.action_order }
 					onChange={ newVal => {
 						setGateway( { action_order: Number( newVal ) } );

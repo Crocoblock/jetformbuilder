@@ -1,3 +1,5 @@
+import { prepareActionsListByType } from '../actions/action-helper';
+
 const {
 	useState,
 	useEffect,
@@ -283,7 +285,9 @@ export const withDispatchGateways = ( dispatch, ownProps, { select } ) => {
 	return {
 		setGatewayRequest( item ) {
 			const { gatewayGeneral } = withSelectGateways( select );
-			item.id = gatewayGeneral.gateway + '/' + item?.id;
+			const items = [ gatewayGeneral.gateway, item?.id ].filter( value => value );
+
+			item.id = items.join( '/' );
 
 			dispatch( 'jet-forms/gateways' ).setRequest( item );
 		},
@@ -342,5 +346,13 @@ export const withSelectFormFields = (
 
 	return {
 		formFields: suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields ),
+	};
+};
+
+export const withSelectActionsByType = ( actionType, withDesc = false ) => select => {
+	const { _jf_actions } = withSelectMeta( '_jf_actions', [] )( select );
+
+	return {
+		[ actionType ]: prepareActionsListByType( _jf_actions, actionType, withDesc ),
 	};
 };

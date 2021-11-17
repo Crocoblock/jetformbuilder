@@ -1,5 +1,3 @@
-const { __ } = wp.i18n;
-
 const { compose } = wp.compose;
 
 const {
@@ -12,7 +10,6 @@ const {
 	ToggleControl,
 	SelectControl,
 	BaseControl,
-	RadioControl,
 } = wp.components;
 
 const {
@@ -20,30 +17,25 @@ const {
 } = wp.element;
 
 const {
-	registerGateway,
 	renderGateway,
 	gatewayLabel,
 	globalTab,
 	gatewayAttr,
-	actionByTypeList,
 } = JetFBActions;
 
 const {
 	withSelectGatewaysLoading,
-	withSelectFormFields,
-	withSelectGateways,
 	withDispatchGateways,
 } = JetFBHooks;
 
 const { GatewayFetchButton } = JetFBComponents;
 
-const paypalLabel = gatewayLabel( 'paypal' );
 const currentTab = globalTab( { slug: 'paypal' } );
-
 let callableGateway = gatewayAttr( 'additional' );
-const globalLabel = gatewayAttr( 'labels' );
 
-export default function PayPal( {
+const paypalLabel = gatewayLabel( 'paypal' );
+
+function PaypalMain( {
 	loadingGateway,
 	setGatewayRequest,
 	gatewaySpecific,
@@ -59,9 +51,7 @@ export default function PayPal( {
 
 
 	const getManualOrGlobal = key => {
-		return use_global
-			? currentTab[ key ]
-			: gatewaySpecific[ key ] || '';
+		return use_global ? currentTab[ key ] : gatewaySpecific[ key ] || '';
 	};
 
 	const credits = {
@@ -122,63 +112,9 @@ export default function PayPal( {
 	</>;
 }
 
-registerGateway(
-	'paypal',
-	compose(
-		withSelect( withSelectGatewaysLoading ),
-		withDispatch( withDispatchGateways ),
-	)( PayPal ),
-);
+export default compose(
+	withSelect( withSelectGatewaysLoading ),
+	withDispatch( withDispatchGateways ),
+)( PaypalMain );
 
-function PayNowScenario( {
-	setGatewayRequest,
-	gatewayGeneral,
-	gatewaySpecific,
-	setGateway,
-	setGatewaySpecific,
-	formFields,
-} ) {
-	return <>
-		<TextControl
-			label={ paypalLabel( 'currency' ) }
-			key='paypal_currency_code_setting'
-			value={ gatewaySpecific.currency }
-			onChange={ currency => setGatewaySpecific( { currency } ) }
-		/>
-		<SelectControl
-			label={ globalLabel( 'price_field' ) }
-			key={ 'form_fields_price_field' }
-			value={ gatewayGeneral.price_field }
-			labelPosition='side'
-			onChange={ price_field => {
-				setGateway( { price_field } );
-			} }
-			options={ formFields }
-		/>
-		<BaseControl
-			label={ globalLabel( 'action_order' ) }
-			key='gateway_action_order_base_control'
-		>
-			<RadioControl
-				className='jet-control-clear-full jet-user-fields-map__list'
-				key='gateway_action_order'
-				options={ actionByTypeList( 'insert_post', true ) }
-				selected={ gatewayGeneral.action_order }
-				onChange={ action_order => {
-					setGateway( { action_order } );
-				} }
-			/>
-		</BaseControl>
-	</>;
-}
-
-registerGateway(
-	'paypal',
-	compose(
-		withSelect( withSelectFormFields( [], '--' ) ),
-		withSelect( withSelectGateways ),
-		withDispatch( withDispatchGateways ),
-	)( PayNowScenario ),
-	'PAY_NOW',
-);
 

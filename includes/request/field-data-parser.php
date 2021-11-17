@@ -10,7 +10,7 @@ abstract class Field_Data_Parser {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name        = 'field_name';
+	protected $name = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;
@@ -40,9 +40,7 @@ abstract class Field_Data_Parser {
 	}
 
 	public function init( $value, $block, $inside_conditional ) {
-		$this->value = $this->parse_value( $value );
-		$this->block = $block;
-
+		$this->block              = $block;
 		$this->inside_conditional = $inside_conditional;
 		$this->settings           = $this->block['attrs'];
 		$this->inner              = $this->block['innerBlocks'];
@@ -53,6 +51,7 @@ abstract class Field_Data_Parser {
 		if ( isset( $this->settings['name'] ) ) {
 			$this->name = $this->settings['name'];
 		}
+		$this->value = $this->parse_value( $value );
 	}
 
 	protected function _is_required() {

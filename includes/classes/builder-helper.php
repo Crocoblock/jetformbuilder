@@ -12,7 +12,7 @@ class Builder_Helper {
 	/**
 	 * @param $object_id
 	 * @param $args
-	 * @param false     $checked
+	 * @param false $checked
 	 *
 	 * @return string
 	 */
@@ -54,7 +54,17 @@ class Builder_Helper {
 		jet_engine()->frontend->set_listing( $listing_id );
 
 		ob_start();
-		$content  = jet_engine()->frontend->get_listing_item( $object );
+		$content = jet_engine()->frontend->get_listing_item( $object );
+
+		/*if ( ! jet_engine()->blocks_views->is_blocks_listing( $listing_id ) ) {
+			$css_file = new \Elementor\Core\Files\CSS\Post( $listing_id );
+			$css_file->enqueue();
+		} elseif ( class_exists( 'JET_SM\Gutenberg\Style_Manager' ) ) {
+			( new \JET_SM\Gutenberg\Style_Manager() )->render_blocks_style(
+				$listing_id,
+				'<style class="jet-sm-gb-style--jet-fb-' . ( $args['type'] ?? 'radio' ) . '-field">%s</style>'
+			);
+		}*/
 		$content .= ob_get_clean();
 
 		$result = sprintf(

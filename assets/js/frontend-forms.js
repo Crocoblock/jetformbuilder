@@ -2,6 +2,8 @@
 
 	'use strict';
 
+	const { addAction, doAction, applyFilters } = wp.hooks;
+
 	const JetFormBuilderDev = {
 		isActive: function() {
 			return Boolean( window.JetFormBuilderSettings.devmode );
@@ -1482,6 +1484,15 @@
 				} );
 			}
 			$target.find( '.jet-form-builder__submit' ).attr( 'disabled', true );
+			event.preventDefault();
+
+			Promise.all(
+				applyFilters( 'jet.fb.submit.reload.promises', [ true ], event )
+			).then( () => event.target.submit() ).catch( () => {
+				$target.find( '.jet-form-builder__submit' ).attr( 'disabled', false );
+
+				doAction( 'jet.fb.on.prevented.submit.reload', event );
+			} );
 		},
 
 		ajaxSubmitForm: function() {
@@ -1502,20 +1513,9 @@
 				window.tinyMCE.triggerSave();
 			}
 
-			data.values = $form.serializeArray();
-			data._jet_engine_booking_form_id = formID;
-
-			$form.addClass( 'is-loading' );
-			$this.attr( 'disabled', true );
-
 			JetFormBuilder.clearFieldErrors( formID );
 
-			$.ajax( {
-				url: JetFormBuilderSettings.ajaxurl,
-				type: 'POST',
-				dataType: 'json',
-				data: data,
-			} ).done( function( response ) {
+			const onSuccess = function( response ) {
 
 				$form.removeClass( 'is-loading' );
 				$this.attr( 'disabled', false );
@@ -1557,8 +1557,35 @@
 
 				$( '.jet-form-builder-messages-wrap[data-form-id="' + formID + '"]' ).html( response.message );
 
-			} );
+			};
 
+			const onError = function ( jqXHR, textStatus, errorThrown ) {
+				console.error( jqXHR.responseText, errorThrown );
+
+				$form.removeClass( 'is-loading' );
+				$this.attr( 'disabled', false );
+			}
+
+			const runAjaxForm = () => {
+				$form.addClass( 'is-loading' );
+				$this.attr( 'disabled', true );
+
+				data.values = $form.serializeArray();
+				data._jet_engine_booking_form_id = formID;
+
+				$.ajax( {
+					url: JetFormBuilderSettings.ajaxurl,
+					type: 'POST',
+					dataType: 'json',
+					data: data,
+				} ).done( onSuccess ).fail( onError );
+			};
+
+			Promise.all(
+				applyFilters( 'jet.fb.submit.ajax.promises', [ true ], $form, $this, data )
+			).then( runAjaxForm ).catch( () => {
+				doAction( 'jet.fb.on.prevented.submit.ajax', $this, $form, data );
+			} );
 		},
 
 		clearFieldErrors: function( formID ) {

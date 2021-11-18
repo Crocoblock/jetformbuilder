@@ -1483,12 +1483,14 @@
 					}
 				} );
 			}
+			$target.addClass( 'is-loading' );
 			$target.find( '.jet-form-builder__submit' ).attr( 'disabled', true );
 			event.preventDefault();
 
 			Promise.all(
 				applyFilters( 'jet.fb.submit.reload.promises', [ true ], event )
 			).then( () => event.target.submit() ).catch( () => {
+				$target.removeClass( 'is-loading' );
 				$target.find( '.jet-form-builder__submit' ).attr( 'disabled', false );
 
 				doAction( 'jet.fb.on.prevented.submit.reload', event );
@@ -1567,9 +1569,6 @@
 			}
 
 			const runAjaxForm = () => {
-				$form.addClass( 'is-loading' );
-				$this.attr( 'disabled', true );
-
 				data.values = $form.serializeArray();
 				data._jet_engine_booking_form_id = formID;
 
@@ -1580,6 +1579,9 @@
 					data: data,
 				} ).done( onSuccess ).fail( onError );
 			};
+
+			$form.addClass( 'is-loading' );
+			$this.attr( 'disabled', true );
 
 			Promise.all(
 				applyFilters( 'jet.fb.submit.ajax.promises', [ true ], $form, $this, data )

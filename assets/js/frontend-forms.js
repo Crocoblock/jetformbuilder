@@ -904,10 +904,34 @@
 				return [ 'checkbox', 'radio' ].includes( $field.attr( 'type' ) );
 			}
 
+			const getFieldNamesWithBrackets = macrosValue => {
+				const matches = macrosValue.match( /(?:<!\-{2}\s*JFB_FIELD::)([\w\-]+)\s*(?:\-{2}>)/gi );
+
+				if ( ! matches ) {
+					return [];
+				}
+
+				return matches.map(
+					match => match.replace( /<!\-{2}\s*JFB_FIELD::/gi, '' ).replace( /\-{2}>/gi, '' )
+				)
+			};
+
+			const getFieldNamesWithOutBrackets = macrosValue => {
+				const matches = macrosValue.match( /(?:\s*JFB_FIELD::)([\w\-]+)\s*/gi );
+
+				if ( ! matches ) {
+					return [];
+				}
+
+				return matches.map(
+					match => match.replace( /\s*JFB_FIELD::/gi, '' )
+				)
+			};
+
 			const getFieldNames = ( macrosValue, withBrackets = true ) => {
 				return withBrackets
-					? macrosValue.match( /(?<=<!\-{2}\s*JFB_FIELD::)([\w\-]+)\s*(?=\-{2}>)/gi )
-					: macrosValue.match( /(?<=\s*JFB_FIELD::)([\w\-]+)\s*/gi );
+					? getFieldNamesWithBrackets( macrosValue )
+					: getFieldNamesWithOutBrackets( macrosValue );
 			};
 
 			const replaceMacros = ( replaceFrom, fieldName, fieldValue, withBrackets = true ) => {

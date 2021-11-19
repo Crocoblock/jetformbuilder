@@ -7,7 +7,7 @@
  */
 $required = $this->block_type->get_required_val();
 $name     = $this->block_type->get_field_name( $args['name'] );
-$default  = ! empty( $args['default'] ) ? $args['default'] : false;
+$default  = $args['default'] ?? array();
 $this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $required );
@@ -57,12 +57,8 @@ if ( ! empty( $args['field_options'] ) ) {
 						value="<?php echo esc_attr( $val ); ?>"
 						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
 					<?php
-					if ( $default ) {
-						if ( is_array( $default ) ) {
-							echo in_array( $val, $default, true ) ? 'checked' : '';
-						} else {
-							checked( $default, $val );
-						}
+					if ( in_array( (string) $val, $default, true ) ) {
+						echo 'checked="checked"';
 					}
 					if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
 						echo ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';

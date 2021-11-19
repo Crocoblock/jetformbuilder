@@ -166,11 +166,7 @@ class Condition_Instance {
 	}
 
 	public function get_parsed_value( $maybe_json_string ) {
-		return ( new Dynamic_Preset() )->parse_value(
-			array(
-				'default' => $maybe_json_string,
-			)
-		);
+		return ( new Dynamic_Preset() )->parse_json( $maybe_json_string );
 	}
 
 

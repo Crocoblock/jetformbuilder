@@ -8,14 +8,11 @@ use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 
 /**
- * @property Base_Source source
- *
  * Class Base_Preset
  * @package Jet_Form_Builder\Presets\Types
  */
 abstract class Base_Preset {
 
-	public $source;
 	public $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -24,17 +21,18 @@ abstract class Base_Preset {
 		'query_var'  => '_post_id',
 		'fields_map' => array(),
 	);
-	public $fields_map;
 	public $data;
-
-	protected $field;
 
 	abstract public function get_fields_map();
 
 	/**
+	 * Slug to be able to overwrite preset classes.
+	 *
 	 * @return string
 	 */
-	//abstract public function get_slug(): string;
+	abstract public function get_slug(): string;
+
+	abstract public function is_unique(): bool;
 
 	public function is_active_preset( $args ) {
 		return false;
@@ -48,34 +46,20 @@ abstract class Base_Preset {
 		return $this;
 	}
 
-	/**
-	 * @param array $args
-	 *
-	 * @return $this
-	 * @throws Preset_Exception
-	 */
-	public function set_additional_data( $args = array() ): Base_Preset {
-		$this->field      = $args['name'] ?? '';
-		$this->fields_map = $this->get_fields_map();
-		$this->source     = $this->get_source( $args );
-
-		return $this;
-	}
-
 
 	/**
-	 * @param $args
+	 * @param $args array - Field attributes
 	 *
 	 * @return Base_Source
 	 * @throws Preset_Exception
 	 */
-	public function get_source( $args ): Base_Source {
+	public function get_source( $args = array() ): Base_Source {
 		$from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 
 		$source = Preset_Manager::instance()->get_source_by_type( $from );
 
 		return $source->init_source(
-			$this->fields_map,
+			$this->get_fields_map(),
 			$args,
 			$this->data
 		);

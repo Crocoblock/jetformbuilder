@@ -206,7 +206,29 @@ abstract class Base extends Base_Module {
 		if ( ! $this->use_preset() ) {
 			return;
 		}
-		$this->block_attrs['default'] = $this->get_default_from_preset();
+
+		$this->block_attrs['default'] = $this->get_prepared_default( $this->get_default_from_preset() );
+	}
+
+	/**
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	protected function get_prepared_default( $value ) {
+		$format = $this->expected_preset_type()[0] ?? false;
+
+		switch ( $format ) {
+			case 'array':
+				if ( ! is_array( $value ) ) {
+					$value = array( $value );
+				}
+
+				return array_map( 'strval', $value );
+			case 'raw':
+			default:
+				return $value;
+		}
 	}
 
 	private function get_default_from_preset() {
@@ -218,7 +240,7 @@ abstract class Base extends Base_Module {
 			$this->set_current_repeater(
 				array(
 					'index'  => false,
-					'values' => $this->load_current_repeater_preset() ?: array(),
+					'values' => $this->load_current_repeater_preset(),
 				)
 			);
 		}
@@ -630,7 +652,7 @@ abstract class Base extends Base_Module {
 		return $this->block_context[ $context ] ?? '';
 	}
 
-	public function load_current_repeater_preset() {
+	public function load_current_repeater_preset(): array {
 		$repeater_block = Plugin::instance()->form->get_field_by_name(
 			0,
 			$this->parent_repeater_name(),
@@ -638,20 +660,24 @@ abstract class Base extends Base_Module {
 		);
 
 		if ( ! $repeater_block ) {
-			return '';
+			return array();
 		}
 
-		return array_values(
-			$this->get_field_value(
-				array_merge(
-					$repeater_block['attrs'],
-					array(
-						'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
-						'blockName' => $repeater_block['blockName'],
-					)
+		$repeater_preset = $this->get_field_value(
+			array_merge(
+				$repeater_block['attrs'],
+				array(
+					'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+					'blockName' => $repeater_block['blockName'],
 				)
-			) ?: array()
+			)
 		);
+
+		if ( ! $repeater_preset ) {
+			return array();
+		}
+
+		return array_values( $repeater_preset );
 	}
 
 	public function get_field_value( $attributes = array() ) {
@@ -664,6 +690,17 @@ abstract class Base extends Base_Module {
 
 	public function set_current_repeater( $attrs ) {
 		Live_Form::instance()->set_repeater( $this->parent_repeater_name(), $attrs );
+	}
+
+	/**
+	 * Possible values:
+	 * 'raw' - get what is, unchanged;
+	 * 'array';
+	 *
+	 * @return array
+	 */
+	public function expected_preset_type(): array {
+		return array( 'raw' );
 	}
 
 

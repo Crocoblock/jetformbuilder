@@ -3,18 +3,36 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-
-use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
+use Jet_Form_Builder\Presets\Sources\Base_Source;
 
 class Dynamic_Preset extends Base_Preset {
 
-	public $json_value_key;
+	private $field;
+	public $json_value_key = 'default';
 
-	public function __construct( $json_value_key = 'default' ) {
+	const SLUG = 'dynamic';
+
+	public function get_slug(): string {
+		return self::SLUG;
+	}
+
+	public function is_unique(): bool {
+		return true;
+	}
+
+	public function set_key( $json_value_key ): Dynamic_Preset {
 		$this->json_value_key = $json_value_key;
+
+		return $this;
+	}
+
+	public function get_source( $args = array() ): Base_Source {
+		$this->field = $args['name'] ?? '';
+
+		return parent::get_source( $args );
 	}
 
 	public function get_fields_map() {
@@ -22,25 +40,18 @@ class Dynamic_Preset extends Base_Preset {
 			$this->field => array(
 				'prop'  => ! empty( $this->data['current_field_prop'] ) ? $this->data['current_field_prop'] : '',
 				'key'   => ! empty( $this->data['current_field_key'] ) ? $this->data['current_field_key'] : '',
-				'other' => $this->data
+				'other' => $this->data,
 			),
 		);
 	}
 
-
 	/**
-	 * @param $args
+	 * @param $source
 	 *
 	 * @return bool
 	 * @throws Plain_Default_Exception
 	 */
-	public function is_active_preset( $args ) {
-
-		if ( ! isset( $args[ $this->json_value_key ] ) || is_array( $args[ $this->json_value_key ] ) ) {
-			return false;
-		}
-		$source = (string) $args[ $this->json_value_key ];
-
+	public function is_active_preset( $source ) {
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {
@@ -60,20 +71,67 @@ class Dynamic_Preset extends Base_Preset {
 		return true;
 	}
 
-	public function parse_value( $args ) {
+
+	/**
+	 * @param $args
+	 *
+	 * @return bool
+	 * @throws Plain_Default_Exception
+	 */
+	public function is_active_preset_from_array( $args ) {
+
+		if ( ! isset( $args[ $this->json_value_key ] ) || is_array( $args[ $this->json_value_key ] ) ) {
+			return false;
+		}
+		$source = (string) $args[ $this->json_value_key ];
+
+		return $this->is_active_preset( $source );
+	}
+
+	/**
+	 * @param $args
+	 * @param string $value_key
+	 *
+	 * @return mixed|string
+	 */
+	public function parse_value( $args, $value_key = 'default' ) {
+		$this->set_key( $value_key );
 		try {
-			if ( ! $this->is_active_preset( $args ) ) {
+			if ( ! $this->is_active_preset_from_array( $args ) ) {
 				return $args[ $this->json_value_key ];
 			}
 		} catch ( Plain_Default_Exception $exception ) {
 			return $exception->getMessage();
 		}
 
+		return $this->get_result();
+	}
+
+	/**
+	 * @param $json_string
+	 *
+	 * @return mixed
+	 */
+	public function parse_json( $json_string ) {
 		try {
-			return $this->set_additional_data()->source->result();
+			if ( ! $this->is_active_preset( $json_string ) ) {
+				return $json_string;
+			}
+		} catch ( Plain_Default_Exception $exception ) {
+			return $exception->getMessage();
+		}
+
+		return $this->get_result();
+	}
+
+	/**
+	 * @return mixed|string
+	 */
+	public function get_result() {
+		try {
+			return $this->get_source()->result();
 		} catch ( Preset_Exception $exception ) {
 			return '';
 		}
 	}
-
 }

@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
+use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 
@@ -16,7 +17,9 @@ abstract class Base_Source {
 	protected $prop;
 	private $src;
 
-	const FUNC_PREFIX = '_source__';
+	private $current_block;
+
+	const FUNC_PREFIX = 'source__';
 	const EMPTY       = '';
 
 	abstract public function query_source();
@@ -36,10 +39,10 @@ abstract class Base_Source {
 	 * @throws Preset_Exception
 	 */
 	public function init_source( $fields_map, $field_args, $preset_data ) {
+		$this->set_field_args( $field_args );
+
 		$this->fields_map  = $fields_map;
-		$this->field_args  = $field_args;
 		$this->preset_data = $preset_data;
-		$this->field       = $this->field_args['name'] ?? '';
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
 		$this->src         = $this->maybe_query_source();
@@ -49,10 +52,28 @@ abstract class Base_Source {
 		return $this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param $args
+	 *
+	 * @return $this
+	 */
+	public function set_field_args( $args ): Base_Source {
+		$this->field_args = $args;
+		$this->field      = $args['name'] ?? '';
+
+		return $this;
+	}
+
 	public function after_init() {
 	}
 
 	public function after_register() {
+	}
+
+	public function on_sanitize(): bool {
+		return true;
 	}
 
 	/**
@@ -157,6 +178,35 @@ abstract class Base_Source {
 		}
 
 		return Preset_Manager::instance()->prepare_result( $this->field_args['type'], $value );
+	}
+
+
+	/**
+	 * @return Base
+	 * @throws Preset_Exception
+	 */
+	public function get_field_object(): Base {
+		if ( is_a( $this->current_block, Base::class ) ) {
+			return $this->current_block;
+		}
+		$type  = $this->field_args['type'] ?? false;
+		$block = jet_form_builder()->blocks->get_field_by_name( $type );
+
+		if ( ! $block ) {
+			throw new Preset_Exception( 'Undefined block_type: ' . $type, $this->field_args );
+		}
+
+		$this->current_block = $block;
+
+		return $block;
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
+	public function get_expected_format() {
+		return $this->get_field_object()->expected_preset_type()[0] ?? 'raw';
 	}
 
 }

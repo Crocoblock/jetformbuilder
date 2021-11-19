@@ -31,8 +31,8 @@ class Preset_Manager {
 	use Instance_Trait;
 
 	private $form_id;
-	protected $data = null;
-	protected $source = null;
+	protected $data     = null;
+	protected $source   = null;
 	protected $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -56,8 +56,10 @@ class Preset_Manager {
 
 
 	protected function __construct() {
-		$this->general       = new General_Preset();
-		$this->_source_types = $this->get_source_types();
+		$this->general = new General_Preset();
+		$this->register_source_types();
+
+		do_action( 'jet-form-builder/after-init/preset-manager' );
 	}
 
 	protected function set_data() {

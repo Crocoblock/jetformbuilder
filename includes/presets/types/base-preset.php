@@ -37,6 +37,11 @@ abstract class Base_Preset {
 
 	abstract public function get_fields_map();
 
+	/**
+	 * @return string
+	 */
+	//abstract public function get_slug(): string;
+
 	public function is_active_preset( $args ) {
 		return false;
 	}

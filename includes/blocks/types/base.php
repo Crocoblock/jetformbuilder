@@ -31,11 +31,13 @@ abstract class Base extends Base_Module {
 
 	/**
 	 * Block attributes on render
+	 *
 	 * @var array
 	 */
 	public $block_attrs = array();
 	/**
 	 * Block content on render
+	 *
 	 * @var string
 	 */
 	public $block_content;
@@ -44,12 +46,14 @@ abstract class Base extends Base_Module {
 
 	/**
 	 * Block attributes on register
+	 *
 	 * @var array
 	 */
 	public $attrs = array();
 
 	/**
 	 * Set to `false` if your block should not be styled
+	 *
 	 * @var bool
 	 */
 	public $use_style_manager = true;
@@ -65,7 +69,6 @@ abstract class Base extends Base_Module {
 	 * Override this method to set you style controls
 	 */
 	protected function _jsm_register_controls() {
-		//
 	}
 
 
@@ -108,7 +111,7 @@ abstract class Base extends Base_Module {
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
-				'render_callback' => Plugin::instance()->blocks->render_callback( $this )
+				'render_callback' => Plugin::instance()->blocks->render_callback( $this ),
 			)
 		);
 
@@ -125,7 +128,7 @@ abstract class Base extends Base_Module {
 
 	private function _get_css_scheme() {
 		return apply_filters(
-			"jet-form-builder/block/css-scheme",
+			'jet-form-builder/block/css-scheme',
 			$this->get_css_scheme(),
 			$this->get_name()
 		);
@@ -212,10 +215,12 @@ abstract class Base extends Base_Module {
 		}
 
 		if ( ! $this->get_current_repeater() ) {
-			$this->set_current_repeater( array(
-				'index'  => false,
-				'values' => $this->load_current_repeater_preset() ?: array()
-			) );
+			$this->set_current_repeater(
+				array(
+					'index'  => false,
+					'values' => $this->load_current_repeater_preset() ?: array(),
+				)
+			);
 		}
 
 		$repeater = $this->get_current_repeater();
@@ -250,7 +255,8 @@ abstract class Base extends Base_Module {
 				'%1$s_%2$s_%3$s',
 				$this->parent_repeater_name(),
 				$this->get_current_repeater_index(),
-				$name );
+				$name
+			);
 		}
 
 		return $name;
@@ -282,6 +288,7 @@ abstract class Base extends Base_Module {
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function fields_templates_path() {
@@ -291,6 +298,7 @@ abstract class Base extends Base_Module {
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function common_templates_path() {
@@ -488,7 +496,7 @@ abstract class Base extends Base_Module {
 		return array(
 			'type'  => 'text',
 			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
-			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
+			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' ),
 		);
 	}
 
@@ -633,13 +641,17 @@ abstract class Base extends Base_Module {
 			return '';
 		}
 
-		return array_values( $this->get_field_value( array_merge(
-			$repeater_block['attrs'],
-			array(
-				'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
-				'blockName' => $repeater_block['blockName']
-			)
-		) ) ?: array() );
+		return array_values(
+			$this->get_field_value(
+				array_merge(
+					$repeater_block['attrs'],
+					array(
+						'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+						'blockName' => $repeater_block['blockName'],
+					)
+				)
+			) ?: array()
+		);
 	}
 
 	public function get_field_value( $attributes = array() ) {

@@ -3,9 +3,6 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
-
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
@@ -21,12 +18,24 @@ abstract class Base_Source {
 	private $src;
 
 	const FUNC_PREFIX = '_source__';
-	const EMPTY = '';
+	const EMPTY       = '';
 
 	abstract public function query_source();
 
 	abstract public function get_id();
 
+	public function condition(): bool {
+		return true;
+	}
+
+	/**
+	 * @param $fields_map
+	 * @param $field_args
+	 * @param $preset_data
+	 *
+	 * @return $this
+	 * @throws Preset_Exception
+	 */
 	public function init_source( $fields_map, $field_args, $preset_data ) {
 		$this->fields_map  = $fields_map;
 		$this->field_args  = $field_args;
@@ -44,20 +53,38 @@ abstract class Base_Source {
 	public function after_init() {
 	}
 
-	public function _query_source() {
-		if ( $this->prop ) {
-			return $this->query_source();
-		}
+	public function after_register() {
 	}
 
+	/**
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
+	public function maybe_query_source() {
+		if ( ! $this->prop ) {
+			return $this->query_source();
+		}
+
+		throw new Preset_Exception( 'Empty `prop` in ' . get_class( $this ), $this->field_data );
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
 	protected function get_field_data() {
 		if ( $this->has_field_in_map() ) {
 			return $this->fields_map[ $this->field ];
 		}
+
+		throw new Preset_Exception(
+			"Empty `{$this->field}` `fields_map` in " . get_class( $this ),
+			$this->fields_map
+		);
 	}
 
 	public function has_field_in_map() {
-		return ( isset( $this->fields_map[ $this->field ] ) && ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) ) );
+		return ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) );
 	}
 
 	public function src() {
@@ -68,6 +95,22 @@ abstract class Base_Source {
 		return ( ! empty( $this->src() ) && ! is_wp_error( $this->src() ) );
 	}
 
+	/**
+	 * @throws Preset_Exception
+	 */
+	final protected function throw_if_preset_not_available() {
+		if ( ! $this->can_get_preset() ) {
+			throw new Preset_Exception( static::class . '::can_get_preset return FALSE' );
+		}
+	}
+
+
+	/**
+	 * @param string $prop
+	 *
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
 	public function default_prop( string $prop ) {
 		$source = $this->src;
 
@@ -77,13 +120,17 @@ abstract class Base_Source {
 			return $source->data->$prop;
 		}
 
-		return self::EMPTY;
+		throw new Preset_Exception( "Can't get value from " . get_class( $source ) );
 	}
 
 	protected function get_prop() {
 		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : false );
 	}
 
+	/**
+	 * @return false|mixed
+	 * @throws Preset_Exception
+	 */
 	public function get_result_on_prop() {
 		$func_name = self::FUNC_PREFIX . $this->prop;
 
@@ -94,10 +141,13 @@ abstract class Base_Source {
 		return $this->default_prop( $this->prop );
 	}
 
+
+	/**
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
 	final public function result() {
-		if ( ! $this->can_get_preset() ) {
-			return self::EMPTY;
-		}
+		$this->throw_if_preset_not_available();
 
 		return $this->parse_result_value( $this->get_result_on_prop() );
 	}

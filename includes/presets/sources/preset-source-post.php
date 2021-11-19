@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Presets\Sources;
 
 
+use Jet_Form_Builder\Exceptions\Preset_Exception;
+
 class Preset_Source_Post extends Base_Source {
 
 	private $array_allowed;
@@ -34,6 +36,10 @@ class Preset_Source_Post extends Base_Source {
 		return true;
 	}
 
+	/**
+	 * @return array|\WP_Post|null
+	 * @throws Preset_Exception
+	 */
 	public function query_source() {
 		$post_from = ! empty( $this->preset_data['post_from'] ) ? $this->preset_data['post_from'] : 'current_post';
 
@@ -44,9 +50,11 @@ class Preset_Source_Post extends Base_Source {
 			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 		}
 
-		if ( $post_id ) {
-			return get_post( $post_id );
+		if ( ! $post_id ) {
+			throw new Preset_Exception( 'Empty Post ID' );
 		}
+
+		return get_post( $post_id );
 	}
 
 

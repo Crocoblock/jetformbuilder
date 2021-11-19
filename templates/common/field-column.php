@@ -22,7 +22,7 @@ use Jet_Form_Builder\Classes\Tools;
  * $template - '../fields/{$field_type}.php' ( takes place at the level of a separate field template )
  */
 echo Tools::esc_template_string( $label );
-echo Tools::esc_template_string( $template );
+echo Tools::esc_template_string( $template, false );
 echo Tools::esc_template_string( $desc );
 
 //phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

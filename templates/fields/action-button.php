@@ -13,7 +13,7 @@ if ( ! empty( $this->wrapper->attrs ) ) :
 	<div <?php $this->wrapper->render_attributes_string(); ?>>
 <?php endif; ?>
 <?php require $this->get_global_template( 'common/prev-page-button.php' ); ?>
-	<button <?php $this->render_attributes_string(); ?>><?php echo $args['label']; ?></button>
+	<button <?php $this->render_attributes_string(); ?>><?php echo wp_kses_post( $args['label'] ); ?></button>
 <?php if ( $render_wrapper ) : ?>
 	</div>
 	<?php

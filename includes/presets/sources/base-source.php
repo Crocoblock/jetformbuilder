@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use Jet_Form_Builder\Presets\Types\Base_Preset;
 
 abstract class Base_Source {
 
@@ -43,7 +42,7 @@ abstract class Base_Source {
 		$this->field       = $this->field_args['name'] ?? '';
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
-		$this->src         = $this->_query_source();
+		$this->src         = $this->maybe_query_source();
 
 		$this->after_init();
 
@@ -61,7 +60,7 @@ abstract class Base_Source {
 	 * @throws Preset_Exception
 	 */
 	public function maybe_query_source() {
-		if ( ! $this->prop ) {
+		if ( $this->prop ) {
 			return $this->query_source();
 		}
 

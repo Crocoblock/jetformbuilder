@@ -7,7 +7,6 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
@@ -20,28 +19,38 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id      = null;
+	public $form_id = null;
 	public $request_data = null;
-	public $manager      = null;
+	public $manager = null;
 
 
 	public $form_actions = array();
-	public $is_ajax      = false;
+	private $form_conditions = array();
+	public $is_ajax = false;
 
 	/**
 	 * Data for actions
 	 */
 	public $size_all;
-	public $current_position;
+	public $current_position = false;
 	public $response_data = array();
 
 	public $context = array();
+	private $conditions;
 
 
 	/**
 	 * Constructor for the class
 	 */
 	public function __construct() {
+	}
+
+	public function condition_manager(): Condition_Manager {
+		if ( ! $this->conditions ) {
+			$this->conditions = new Condition_Manager();
+		}
+
+		return $this->conditions;
 	}
 
 	public function get_form_id() {
@@ -96,14 +105,45 @@ class Action_Handler {
 				 */
 				$action->_id      = $id;
 				$action->settings = $settings;
-				$action->condition->set_conditions( $conditions );
-				$action->condition->set_condition_operator( $operator );
 
-				$this->form_actions[ $id ] = $action;
+				$condition = clone $this->condition_manager();
+				$condition->set_conditions( $conditions );
+				$condition->set_condition_operator( $operator );
+
+				$this->form_conditions[ $id ] = $condition;
+				$this->form_actions[ $id ]    = $action;
 			}
 		}
 
 		return $this;
+	}
+
+	public function in_loop(): bool {
+		return false !== $this->current_position;
+	}
+
+	public function in_loop_or_die() {
+		if ( $this->in_loop() ) {
+			return;
+		}
+
+		_doing_it_wrong(
+			__METHOD__,
+			esc_html( 'The action loop has not been started, see ' . self::class . '::run_actions()' ),
+			'1.4.0'
+		);
+	}
+
+	public function get_current_action(): Base {
+		$this->in_loop_or_die();
+
+		return $this->get_action_by_id( $this->current_position );
+	}
+
+	public function get_current_condition_manager(): Condition_Manager {
+		$this->in_loop_or_die();
+
+		return $this->get_condition_by_id( $this->current_position );
 	}
 
 
@@ -196,6 +236,11 @@ class Action_Handler {
 
 		foreach ( $this->form_actions as $index => $action ) {
 
+			/**
+			 * Start the cycle
+			 *
+			 * @var int current_position
+			 */
 			$this->current_position = $index;
 
 			/**
@@ -204,16 +249,21 @@ class Action_Handler {
 			 * @var Base $action
 			 */
 			try {
-				$action->condition->check_all();
+				$this->get_current_condition_manager()->check_all();
 			} catch ( Condition_Exception $exception ) {
 				continue;
 			}
+
 			/**
 			 * Process single action
 			 */
 			$action->do_action( $this->request_data, $this );
 		}
 
+		/**
+		 * End the cycle
+		 */
+		$this->current_position = false;
 	}
 
 	public function get_inserted_post_id( $action_id = 0 ) {
@@ -280,6 +330,15 @@ class Action_Handler {
 	 */
 	public function get_action_by_id( $id ) {
 		return $this->form_actions[ $id ] ?? false;
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return false|Condition_Manager
+	 */
+	public function get_condition_by_id( $id ) {
+		return $this->form_conditions[ $id ] ?? false;
 	}
 
 	/**

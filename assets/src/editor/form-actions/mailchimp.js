@@ -1,183 +1,171 @@
-import IntegrationComponent from "./integration-component";
-
 const {
-		  addAction,
-		  globalTab,
-	  } = JetFBActions;
+	addAction,
+	globalTab,
+} = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-		  TextControl,
-		  ToggleControl,
-		  SelectControl,
-		  CheckboxControl,
-		  BaseControl,
-		  Button,
-	  } = wp.components;
+	TextControl,
+	ToggleControl,
+	SelectControl,
+	CheckboxControl,
+	BaseControl,
+	Button,
+} = wp.components;
 
 const {
-		  ActionFieldsMap,
-		  WrapperRequiredControl,
-	  } = JetFBComponents;
+	ActionFieldsMap,
+	WrapperRequiredControl,
+	ValidateButtonWithStore,
+} = JetFBComponents;
+
+const { convertObjectToOptionsList, getFormFieldsBlocks } = JetFBActions;
 
 const { __ } = wp.i18n;
 
-const { withRequestFields } = JetFBHooks;
+const { withRequestFields, withLoadingSelect } = JetFBHooks;
 
-const { withSelect } = wp.data;
+const {
+	withSelect,
+	withDispatch,
+} = wp.data;
 
-class MailChimpAction extends IntegrationComponent {
+const { compose } = wp.compose;
 
-	constructor( props ) {
-		super( props );
+const {
+	useState,
+	useEffect,
+} = wp.element;
 
-		this.formFieldsList = [ ...this.formFieldsList, ...this.props.requestFields ];
-	}
+function MailChimpAction( props ) {
 
-	getFields() {
-		const { settings } = this.props;
+	const {
+		settings,
+		label,
+		help,
+		requestFields = [],
+		onChangeSettingObj,
+		getMapField,
+		setMapField,
+		source,
+		loadingState,
+	} = props;
 
-		if ( settings.list_id
-			&& settings.data
-			&& settings.data.fields
-			&& settings.data.fields[ settings.list_id ] ) {
-			return Object.entries( settings.data.fields[ settings.list_id ] );
+	const currentTab = globalTab( { slug: 'mailchimp-tab' } );
+
+	const [ formFieldsList, setFormFields ] = useState( [] );
+
+	useEffect( () => {
+		setFormFields( [ ...getFormFieldsBlocks( [], '--' ), ...requestFields ] );
+	}, [] );
+
+	const getFields = () => {
+		const { data = {} } = loadingState.response || {};
+
+		if ( settings.list_id && data?.fields[ settings.list_id ] ) {
+			return Object.entries( data.fields[ settings.list_id ] );
 		}
 		return [];
-	}
+	};
 
-	getLists() {
-		const settings = this.props.settings;
+	const getLists = () => {
+		const { data = {} } = loadingState.response || {};
 
-		if ( settings.data && settings.data.lists ) {
-			return this.formatEntriesArray( settings.data.lists );
+		if ( data.lists ) {
+			return convertObjectToOptionsList( data.lists );
 		}
 		return [];
-	}
+	};
 
-	getGroups() {
-		const settings = this.props.settings;
+	const getGroups = () => {
+		const { data = {} } = loadingState.response || {};
 
-		if ( settings.data
-			&& settings.data.groups ) {
-			return settings.data.groups[ settings.list_id ];
+		if ( data.groups ) {
+			return data.groups[ settings.list_id ];
 		}
 		return [];
-	}
+	};
 
-	formatEntriesArray( entries = [] ) {
-		if ( ! entries ) {
-			return [];
-		}
 
-		const options = Object.entries( entries ).map( ( [ value, label ] ) => {
-			return { value, label };
-		} );
+	const isCheckedGroup = value => {
+		return (
+			value && settings.groups_ids && settings.groups_ids[ value ]
+		)
+			? settings.groups_ids[ value ]
+			: false;
+	};
 
-		return [ { label: '--', value: '' }, ...options ];
-	}
+	const getApiKey = () => {
+		return settings.use_global ? currentTab.api_key : settings.api_key;
+	};
 
-	isCheckedGroup( value ) {
-		const settings = this.props.settings;
 
-		return ( value && settings.groups_ids && settings.groups_ids[ value ] ) ? settings.groups_ids[ value ] : false;
-	}
-
-	render() {
-		const { settings, source, label, help } = this.props;
-		const fields = this.getFields();
-		const currentTab = globalTab( { slug: 'mailchimp-tab' } );
-
-		/* eslint-disable jsx-a11y/no-onchange */
-		return ( <div key="mailchimp">
+	/* eslint-disable jsx-a11y/no-onchange */
+	return (
+		<div key="mailchimp">
 			<ToggleControl
 				key={ 'use_global' }
 				label={ label( 'use_global' ) }
 				checked={ settings.use_global }
 				onChange={ use_global => {
-					this.onChangeSetting( Boolean( use_global ), 'use_global' )
+					onChangeSettingObj( {
+						use_global: Boolean( use_global ),
+					} );
 				} }
 			/>
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
-				className="input-with-button"
 				label={ label( 'api_key' ) }
 			>
-				<TextControl
-					key='api_key'
-					className='jet-control-clear-full'
-					disabled={ settings.use_global }
-					value={ settings.use_global
-						? currentTab.api_key
-						: settings.api_key
-					}
-					onChange={ newVal => {
-						this.onChangeSetting( newVal, 'api_key' )
-					} }
-				/>
-				<Button
-					key={ 'validate_api_key' }
-					isPrimary
-					onClick={ () => {
-						settings.use_global
-							? this.validateAPIKey( currentTab.api_key )
-							: this.validateAPIKey()
-					} }
-					className={ this.state.className.join( ' ' ) + ' jet-form-validate-button' }
-				>
-					<i className="dashicons"/>
-					{ label( 'validate_api_key' ) }
-				</Button>
+				<div className="jet-control-clear-full jet-d-flex-between">
+					<TextControl
+						key='api_key'
+						disabled={ settings.use_global }
+						value={ getApiKey() }
+						onChange={ api_key => onChangeSettingObj( { api_key } ) }
+					/>
+					<ValidateButtonWithStore
+						initialLabel={ label( 'validate_api_key' ) }
+						label={ label( 'retry_request' ) }
+						ajaxArgs={ {
+							action: source.action,
+							api_key: getApiKey(),
+						} }
+					/>
+				</div>
 			</BaseControl>
 			<div/>
 			<div className='margin-bottom--small'>{ help( 'api_key_link_prefix' ) } <a
 				href={ help( 'api_key_link' ) }>{ help( 'api_key_link_suffix' ) }</a>
 			</div>
-			{ settings.isValidAPI && <React.Fragment>
-				<BaseControl
-					key={ 'mailchimp_select_lists' }
-					className="input-with-button"
+			{ loadingState.success && <React.Fragment>
+				<SelectControl
 					label={ label( 'list_id' ) }
-				>
-					<BaseControl
-						key={ 'mailchimp_select_lists_select' }
-						className="jet-control-clear-full"
-					>
-						<SelectControl
-							key='list_id'
-							labelPosition='top'
-							value={ settings.list_id }
-							onChange={ newVal => this.onChangeSetting( newVal, 'list_id' ) }
-							options={ this.getLists() }
-						/>
-					</BaseControl>
-					<Button
-						key={ 'update_list_ids' }
-						isPrimary
-						onClick={ () => {
-							settings.use_global
-								? this.getApiData( settings.api_key )
-								: this.getApiData( currentTab.api_key )
-						} }
-					>
-						{ label( 'update_list_ids' ) }
-					</Button>
-				</BaseControl>
+					key='list_id'
+					labelPosition='side'
+					value={ settings.list_id }
+					onChange={ list_id => onChangeSettingObj( { list_id } ) }
+					options={ getLists() }
+				/>
 				{ Boolean( settings.list_id ) && <>
 					<BaseControl
 						label={ label( 'groups_ids' ) }
 					>
 						<div className='jet-user-fields-map__list'>
-							{ this.getGroups().map( group => <CheckboxControl
+							{ getGroups().map( group => <CheckboxControl
 								key={ `groups_ids_${ group.value }` }
-								checked={ this.isCheckedGroup( group.value ) }
+								checked={ isCheckedGroup( group.value ) }
 								label={ group.label }
-								onChange={ active => this.onChangeSetting( {
-									...( settings.groups_ids || {} ),
-									[ group.value ]: active,
-								}, 'groups_ids' ) }
+								onChange={ active => onChangeSettingObj( {
+									groups_ids: {
+										...(
+											settings?.groups_ids || {}
+										),
+										[ group.value ]: active,
+									},
+								} ) }
 							/> ) }
 						</div>
 					</BaseControl>
@@ -186,18 +174,20 @@ class MailChimpAction extends IntegrationComponent {
 						value={ settings.tags }
 						label={ label( 'tags' ) }
 						help={ help( 'tags' ) }
-						onChange={ newVal => this.onChangeSetting( newVal, 'tags' ) }
+						onChange={ tags => onChangeSettingObj( { tags } ) }
 					/>
 					<ToggleControl
 						key={ 'double_opt_in' }
 						label={ label( 'double_opt_in' ) }
 						checked={ settings.double_opt_in }
-						onChange={ newVal => this.onChangeSetting( Boolean( newVal ), 'double_opt_in' ) }
+						onChange={ double_opt_in => onChangeSettingObj( {
+							double_opt_in: Boolean( double_opt_in ),
+						} ) }
 					/>
 					<ActionFieldsMap
 						label={ label( 'fields_map' ) }
 						key='mailchimp'
-						fields={ fields }
+						fields={ getFields() }
 					>
 						{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
 							field={ [ fieldId, fieldData ] }
@@ -205,17 +195,20 @@ class MailChimpAction extends IntegrationComponent {
 							<SelectControl
 								className="full-width"
 								key={ fieldId + index }
-								value={ this.getFieldDefault( fieldId ) }
-								onChange={ value => this.onChangeFieldMap( value, fieldId ) }
-								options={ this.formFieldsList }
+								value={ getMapField( { name: fieldId } ) }
+								onChange={ value => setMapField( { nameField: fieldId, value } ) }
+								options={ formFieldsList }
 							/>
 						</WrapperRequiredControl> }
 					</ActionFieldsMap>
 				</> }
 			</React.Fragment> }
-		</div> );
-		/* eslint-enable jsx-a11y/no-onchange */
-	}
+		</div>
+	);
+	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'mailchimp', withSelect( withRequestFields )( MailChimpAction ) )
+addAction( 'mailchimp', compose(
+	withSelect( withRequestFields ),
+	withSelect( withLoadingSelect ),
+)( MailChimpAction ) );

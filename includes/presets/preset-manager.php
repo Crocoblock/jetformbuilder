@@ -3,12 +3,13 @@
 
 namespace Jet_Form_Builder\Presets;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
+use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Options_Page;
 use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
 use Jet_Form_Builder\Presets\Sources\Preset_Source_Query_Var;
 use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
@@ -73,24 +74,31 @@ class Preset_Manager {
 		);
 	}
 
-	public function get_source_types() {
+	public function register_source_types() {
 		/** @var Base_Source[] $types */
 
-		$types = apply_filters( 'jet-form-builder/preset/source-types', array(
-			new Preset_Source_Post(),
-			new Preset_Source_User(),
-			new Preset_Source_Query_Var()
-		) );
-
-		$prepared_types = array();
+		$types = apply_filters(
+			'jet-form-builder/preset/source-types',
+			array(
+				new Preset_Source_Post(),
+				new Preset_Source_User(),
+				new Preset_Source_Query_Var(),
+				new Preset_Source_Options_Page(),
+			)
+		);
 
 		foreach ( $types as $type ) {
-			if ( $type instanceof Base_Source ) {
-				$prepared_types[ $type->get_id() ] = $type;
-			}
+			$this->register_source_type( $type );
 		}
+	}
 
-		return $prepared_types;
+	public function register_source_type( Base_Source $source ) {
+		if ( ! $source->condition() ) {
+			return;
+		}
+		$this->_source_types[ $source->get_id() ] = $source;
+
+		$source->after_register();
 	}
 
 	protected function set_preset_type_manager( $args ) {
@@ -105,6 +113,18 @@ class Preset_Manager {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * @return Base_Preset
+	 * @throws Preset_Exception
+	 */
+	public function get_preset_manager(): Base_Preset {
+		if ( ! is_a( $this->manager_preset, Base_Preset::class ) ) {
+			throw new Preset_Exception( 'Preset manager is not installed.' );
+		}
+
+		return $this->manager_preset;
 	}
 
 	protected function register_preset_type( Base_Preset $type ) {
@@ -155,11 +175,11 @@ class Preset_Manager {
 			return $plain;
 		}
 
-		if ( $this->manager_preset instanceof Base_Preset ) {
-			return $this->manager_preset->set_additional_data( $args )->source->result();
+		try {
+			return $this->get_preset_manager()->set_additional_data( $args )->source->result();
+		} catch ( Preset_Exception $exception ) {
+			return '';
 		}
-
-		return '';
 	}
 
 	public function get_plain_default() {
@@ -169,13 +189,15 @@ class Preset_Manager {
 		return $value;
 	}
 
-	public function get_source_by_type( $type ) {
+	/**
+	 * @param $type
+	 *
+	 * @return Base_Source
+	 * @throws Preset_Exception
+	 */
+	public function get_source_by_type( $type ): Base_Source {
 		if ( ! isset( $this->_source_types[ $type ] ) ) {
-			_doing_it_wrong(
-				__METHOD__,
-				"Undefined preset source type: {$type}",
-				'1.2.4'
-			);
+			throw new Preset_Exception( "Undefined source type: {$type}" );
 		}
 
 		return clone $this->_source_types[ $type ];

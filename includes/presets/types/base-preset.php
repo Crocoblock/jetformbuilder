@@ -3,13 +3,9 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
-
-use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_Post;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_Query_Var;
-use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
 
 /**
  * @property Base_Source source
@@ -18,8 +14,6 @@ use Jet_Form_Builder\Presets\Sources\Preset_Source_User;
  * @package Jet_Form_Builder\Presets\Types
  */
 abstract class Base_Preset {
-
-	const SOURCES_NAMESPACE = 'Jet_Form_Builder\\Presets\\Sources\\';
 
 	public $source;
 	public $defaults = array(
@@ -46,7 +40,7 @@ abstract class Base_Preset {
 		return false;
 	}
 
-	public function set_init_data( $data = array() ) {
+	public function set_init_data( $data = array() ): Base_Preset {
 		if ( ! empty( $data ) && empty( $this->data ) ) {
 			$this->data = $data;
 		}
@@ -54,7 +48,13 @@ abstract class Base_Preset {
 		return $this;
 	}
 
-	public function set_additional_data( $args = array() ) {
+	/**
+	 * @param array $args
+	 *
+	 * @return $this
+	 * @throws Preset_Exception
+	 */
+	public function set_additional_data( $args = array() ): Base_Preset {
 		$this->field      = $args['name'] ?? '';
 		$this->fields_map = $this->get_fields_map();
 		$this->source     = $this->get_source( $args );
@@ -63,10 +63,15 @@ abstract class Base_Preset {
 	}
 
 
-	public function get_source( $args ) {
-		$from   = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
+	/**
+	 * @param $args
+	 *
+	 * @return Base_Source
+	 * @throws Preset_Exception
+	 */
+	public function get_source( $args ): Base_Source {
+		$from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 
-		/** @var Base_Source $source */
 		$source = Preset_Manager::instance()->get_source_by_type( $from );
 
 		return $source->init_source(

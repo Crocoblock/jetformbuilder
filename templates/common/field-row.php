@@ -41,7 +41,7 @@ $fullwidth = ' content-fullwidth';
 <div class="jet-form-builder-col__end<?php echo esc_attr( $fullwidth ); ?>">
 	<?php
 	// Read the comment above.
-	echo Tools::esc_template_string( $template );
+	echo Tools::esc_template_string( $template, false );
 
 	//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	?>

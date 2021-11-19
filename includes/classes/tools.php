@@ -411,11 +411,13 @@ class Tools {
 		return wp_http_validate_url( $url );
 	}
 
-	public static function sanitize_text_field( $source ) {
+	public static function sanitize_text_field( $source, $replace_enqueue = true ) {
 		$str = (string) $source;
 
 		$filtered = wp_check_invalid_utf8( $str );
-		$filtered = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $filtered );
+		if ( $replace_enqueue ) {
+			$filtered = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $filtered );
+		}
 
 		return trim( $filtered );
 	}
@@ -478,8 +480,8 @@ class Tools {
 	 *
 	 * @return string
 	 */
-	private static function esc_template( $source ): string {
-		return self::sanitize_text_field( $source );
+	private static function esc_template( $source, $replace_enqueue = true ): string {
+		return self::sanitize_text_field( $source, $replace_enqueue );
 	}
 
 	public static function get_jet_engine_version() {
@@ -532,8 +534,8 @@ class Tools {
 		return ( new \WP_Block( $block, $context ) )->render();
 	}
 	
-	public static function esc_template_string( $source ) {
-		return self::call_escape_func( 'template', $source );
+	public static function esc_template_string( $source, $replace_enqueue = true ) {
+		return self::call_escape_func( 'template', $source, $replace_enqueue );
 	}
 
 }

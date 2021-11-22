@@ -67,6 +67,8 @@ abstract class Base_Source {
 	public function maybe_query_source() {
 		if ( $this->prop ) {
 			$this->src = $this->query_source();
+
+			return $this;
 		}
 
 		throw new Preset_Exception( 'Empty `prop` in ' . get_class( $this ), $this->field_data );

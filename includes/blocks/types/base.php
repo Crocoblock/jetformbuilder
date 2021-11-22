@@ -206,7 +206,7 @@ abstract class Base extends Base_Module {
 		$this->block_attrs['default'] = $this->get_default_from_preset();
 	}
 
-	private function get_default_from_preset() {
+	protected function get_default_from_preset() {
 		if ( ! $this->parent_repeater_name() ) {
 			return $this->get_field_value();
 		}
@@ -214,7 +214,7 @@ abstract class Base extends Base_Module {
 		if ( ! $this->get_current_repeater() ) {
 			$this->set_current_repeater( array(
 				'index'  => false,
-				'values' => $this->load_current_repeater_preset() ?: array()
+				'values' => $this->load_current_repeater_preset()
 			) );
 		}
 
@@ -622,7 +622,7 @@ abstract class Base extends Base_Module {
 		return $this->block_context[ $context ] ?? '';
 	}
 
-	public function load_current_repeater_preset() {
+	public function load_current_repeater_preset(): array {
 		$repeater_block = Plugin::instance()->form->get_field_by_name(
 			0,
 			$this->parent_repeater_name(),
@@ -630,16 +630,24 @@ abstract class Base extends Base_Module {
 		);
 
 		if ( ! $repeater_block ) {
-			return '';
+			return array();
 		}
 
-		return array_values( $this->get_field_value( array_merge(
-			$repeater_block['attrs'],
-			array(
-				'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
-				'blockName' => $repeater_block['blockName']
+		$repeater_preset = $this->get_field_value(
+			array_merge(
+				$repeater_block['attrs'],
+				array(
+					'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+					'blockName' => $repeater_block['blockName'],
+				)
 			)
-		) ) ?: array() );
+		);
+
+		if ( ! $repeater_preset ) {
+			return array();
+		}
+
+		return array_values( $repeater_preset );
 	}
 
 	public function get_field_value( $attributes = array() ) {

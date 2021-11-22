@@ -18,6 +18,7 @@ abstract class Base_Source {
 	private $src;
 
 	private $current_block;
+	protected $permission;
 
 	const FUNC_PREFIX = 'source__';
 	const EMPTY = '';
@@ -93,19 +94,48 @@ abstract class Base_Source {
 		return ( isset( $this->fields_map[ $this->field ]['prop'] ) || isset( $this->fields_map[ $this->field ]['key'] ) );
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function src() {
 		return $this->src;
 	}
 
+	/**
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
+	public function safe_src() {
+		$this->throw_if_preset_not_available();
+
+		return $this->src();
+	}
+
+	/**
+	 * @return bool
+	 * @throws Preset_Exception
+	 */
 	protected function can_get_preset() {
 		return ( ! empty( $this->src() ) && ! is_wp_error( $this->src() ) );
+	}
+
+	/**
+	 * @return bool
+	 * @throws Preset_Exception
+	 */
+	protected function has_permission(): bool {
+		if ( is_null( $this->permission ) ) {
+			$this->permission = $this->can_get_preset();
+		}
+
+		return $this->permission;
 	}
 
 	/**
 	 * @throws Preset_Exception
 	 */
 	final protected function throw_if_preset_not_available() {
-		if ( ! $this->can_get_preset() ) {
+		if ( ! $this->has_permission() ) {
 			throw new Preset_Exception( static::class . '::can_get_preset return FALSE' );
 		}
 	}

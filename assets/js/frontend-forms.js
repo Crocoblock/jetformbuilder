@@ -1588,9 +1588,13 @@
 			const onError = function ( jqXHR, textStatus, errorThrown ) {
 				console.error( jqXHR.responseText, errorThrown );
 
+				removeLoading();
+			}
+
+			const removeLoading = () => {
 				$form.removeClass( 'is-loading' );
 				$this.attr( 'disabled', false );
-			}
+			};
 
 			const runAjaxForm = () => {
 				data.values = $form.serializeArray();
@@ -1610,6 +1614,7 @@
 			Promise.all(
 				applyFilters( 'jet.fb.submit.ajax.promises', [ true ], $form, $this, data )
 			).then( runAjaxForm ).catch( () => {
+				removeLoading();
 				doAction( 'jet.fb.on.prevented.submit.ajax', $this, $form, data );
 			} );
 		},

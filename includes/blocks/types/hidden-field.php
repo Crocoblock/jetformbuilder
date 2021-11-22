@@ -18,19 +18,6 @@ class Hidden_Field extends Base {
 	public $use_style_manager = false;
 
 	private function current_post() {
-		global $post;
-
-		if ( ! Live_Form::instance()->post ) {
-			if ( wp_doing_ajax() && empty( $post->ID ) ) {
-				$url     = wp_get_referer();
-				$post_id = url_to_postid( $url );
-
-				Live_Form::instance()->post = get_post( $post_id );
-			} else {
-				Live_Form::instance()->post = $post;
-			}
-		}
-
 		return Live_Form::instance()->post;
 	}
 

@@ -19,7 +19,9 @@ class Hidden_Field extends Base {
 
 	private function current_post() {
 		if ( ! Live_Form::instance()->post ) {
-			Live_Form::instance()->post = get_post();
+			global $post;
+
+			Live_Form::instance()->post = $post;
 		}
 
 		return Live_Form::instance()->post;

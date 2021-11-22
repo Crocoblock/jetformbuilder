@@ -126,11 +126,13 @@ class Preset_Source_Post extends Base_Source {
 
 		/*
 		 * Get expected format for Form Field
-		 *
 		 */
 		$format = $this->get_expected_format();
 
+		return $this->get_post_terms_by_format( $value, $format );
+	}
 
+	protected function get_post_terms_by_format( $value, $format ) {
 		switch ( $format ) {
 			case 'array':
 				return array_map(

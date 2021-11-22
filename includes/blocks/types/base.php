@@ -231,9 +231,9 @@ abstract class Base extends Base_Module {
 		}
 	}
 
-	private function get_default_from_preset() {
+	protected function get_default_from_preset( $attributes = array() ) {
 		if ( ! $this->parent_repeater_name() ) {
-			return $this->get_field_value();
+			return $this->get_field_value( $attributes );
 		}
 
 		if ( ! $this->get_current_repeater() ) {
@@ -248,13 +248,13 @@ abstract class Base extends Base_Module {
 		$repeater = $this->get_current_repeater();
 
 		if ( false === $repeater['index'] ) {
-			return $this->get_field_value();
+			return $this->get_field_value( $attributes );
 		}
 
 		$name = $this->block_attrs['name'] ?? '';
 		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
 
-		return ( $row[ $name ] ?? $this->get_field_value() ) ?: '';
+		return ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
 	}
 
 	/**

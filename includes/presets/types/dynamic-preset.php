@@ -51,7 +51,7 @@ class Dynamic_Preset extends Base_Preset {
 	 * @return bool
 	 * @throws Plain_Default_Exception
 	 */
-	public function is_active_preset( $source ) {
+	public function is_active_preset_json( $source ) {
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {
@@ -78,14 +78,14 @@ class Dynamic_Preset extends Base_Preset {
 	 * @return bool
 	 * @throws Plain_Default_Exception
 	 */
-	public function is_active_preset_from_array( $args ) {
+	public function is_active_preset( $args ) {
 
 		if ( ! isset( $args[ $this->json_value_key ] ) || is_array( $args[ $this->json_value_key ] ) ) {
 			return false;
 		}
 		$source = (string) $args[ $this->json_value_key ];
 
-		return $this->is_active_preset( $source );
+		return $this->is_active_preset_json( $source );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Dynamic_Preset extends Base_Preset {
 	public function parse_value( $args, $value_key = 'default' ) {
 		$this->set_key( $value_key );
 		try {
-			if ( ! $this->is_active_preset_from_array( $args ) ) {
+			if ( ! $this->is_active_preset( $args ) ) {
 				return $args[ $this->json_value_key ];
 			}
 		} catch ( Plain_Default_Exception $exception ) {
@@ -114,7 +114,7 @@ class Dynamic_Preset extends Base_Preset {
 	 */
 	public function parse_json( $json_string ) {
 		try {
-			if ( ! $this->is_active_preset( $json_string ) ) {
+			if ( ! $this->is_active_preset_json( $json_string ) ) {
 				return $json_string;
 			}
 		} catch ( Plain_Default_Exception $exception ) {

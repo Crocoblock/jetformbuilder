@@ -20,7 +20,7 @@ abstract class Base_Source {
 	private $current_block;
 
 	const FUNC_PREFIX = 'source__';
-	const EMPTY       = '';
+	const EMPTY = '';
 
 	abstract public function query_source();
 
@@ -32,41 +32,25 @@ abstract class Base_Source {
 
 	/**
 	 * @param $fields_map
-	 * @param $field_args
 	 * @param $preset_data
+	 * @param $args
 	 *
 	 * @return $this
 	 * @throws Preset_Exception
 	 */
-	public function init_source( $fields_map, $field_args, $preset_data ) {
-		$this->set_field_args( $field_args );
-
+	public function init_source( $fields_map, $preset_data, $args ): Base_Source {
+		$this->field_args  = $args;
+		$this->field       = $args['name'] ?? '';
 		$this->fields_map  = $fields_map;
 		$this->preset_data = $preset_data;
 		$this->field_data  = $this->get_field_data();
 		$this->prop        = $this->get_prop();
-		$this->src         = $this->maybe_query_source();
-
-		$this->after_init();
 
 		return $this;
 	}
 
-	/**
-	 *
-	 *
-	 * @param $args
-	 *
-	 * @return $this
-	 */
-	public function set_field_args( $args ): Base_Source {
-		$this->field_args = $args;
-		$this->field      = $args['name'] ?? '';
-
+	public function after_init(): Base_Source {
 		return $this;
-	}
-
-	public function after_init() {
 	}
 
 	public function after_register() {
@@ -82,7 +66,7 @@ abstract class Base_Source {
 	 */
 	public function maybe_query_source() {
 		if ( $this->prop ) {
-			return $this->query_source();
+			$this->src = $this->query_source();
 		}
 
 		throw new Preset_Exception( 'Empty `prop` in ' . get_class( $this ), $this->field_data );
@@ -98,7 +82,7 @@ abstract class Base_Source {
 		}
 
 		throw new Preset_Exception(
-			"Empty `{$this->field}` `fields_map` in " . get_class( $this ),
+			"Empty `fields_map['{$this->field}']` in " . get_class( $this ),
 			$this->fields_map
 		);
 	}

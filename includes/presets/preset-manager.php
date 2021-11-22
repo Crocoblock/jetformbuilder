@@ -211,6 +211,7 @@ class Preset_Manager {
 		try {
 			return $this->get_preset_manager()->get_source( $args )->result();
 		} catch ( Preset_Exception $exception ) {
+			do_action( 'qm/debug', array( $exception->getMessage(), $exception->get_additional() ) );
 			return '';
 		}
 	}

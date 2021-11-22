@@ -60,9 +60,9 @@ abstract class Base_Preset {
 
 		return $source->init_source(
 			$this->get_fields_map(),
-			$args,
-			$this->data
-		);
+			$this->data,
+			$args
+		)->maybe_query_source()->after_init();
 	}
 
 }

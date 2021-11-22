@@ -11,7 +11,8 @@ class General_Preset extends Base_Preset {
 
 	const SLUG = 'general';
 
-	private $current_source;
+	/** @var Base_Source */
+	public $current_source;
 
 	public function get_slug(): string {
 		return self::SLUG;
@@ -56,8 +57,13 @@ class General_Preset extends Base_Preset {
 	public function get_source( $args = array() ): Base_Source {
 		if ( ! $this->current_source ) {
 			$this->current_source = parent::get_source( $args );
+		} else {
+			$this->current_source->init_source(
+				$this->get_fields_map(),
+				$this->data,
+				$args
+			);
 		}
-		$this->current_source->set_field_args( $args );
 
 		return $this->current_source;
 	}

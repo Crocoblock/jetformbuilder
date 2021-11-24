@@ -1596,7 +1596,7 @@
 				$this.attr( 'disabled', false );
 			};
 
-			const runAjaxForm = () => {
+			const runAjaxForm = callbacks => {
 				data.values = $form.serializeArray();
 				data._jet_engine_booking_form_id = formID;
 
@@ -1605,7 +1605,15 @@
 					type: 'POST',
 					dataType: 'json',
 					data: data,
-				} ).done( onSuccess ).fail( onError );
+				} ).done( response => {
+					onSuccess( response );
+					callbacks.forEach( cb => {
+						if ( 'function' === typeof cb ) {
+							cb.call( $form, response )
+						}
+					} );
+
+				} ).fail( onError );
 			};
 
 			$form.addClass( 'is-loading' );

@@ -10,6 +10,7 @@ class Preset_Source_Query_Var extends Base_Source {
 	}
 
 	public function query_source() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return $_GET;
 	}
 

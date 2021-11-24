@@ -18,10 +18,6 @@ class Hidden_Field extends Base {
 	public $use_style_manager = false;
 
 	private function current_post() {
-		if ( ! Live_Form::instance()->post ) {
-			Live_Form::instance()->post = get_post();
-		}
-
 		return Live_Form::instance()->post;
 	}
 

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 5.8.2
 Requires PHP: 7.0
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,11 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.4.1**
+ - FIX: Compatibility with iOS.
+ - FIX: Execute reCaptcha token on submit form.
+ - Tweak: Added JS filters `jet.fb.submit.reload.promises` & `jet.fb.submit.ajax.promises`
 
 **1.4.0**
  - ADD: Submit Field migrated to **Action Button** with backward compatibility.

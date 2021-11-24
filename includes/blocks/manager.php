@@ -220,7 +220,7 @@ class Manager {
 		wp_register_script(
 			'jet-form-builder-frontend-forms',
 			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
-			array( 'jquery', 'wp-i18n' ),
+			array( 'jquery', 'wp-i18n', 'wp-hooks' ),
 			Plugin::instance()->get_version(),
 			true
 		);

@@ -9,7 +9,7 @@ class Preset_Source_User extends Base_Source {
 		return 'user';
 	}
 
-	public function on_sanitize() {
+	public function on_sanitize(): bool {
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
@@ -44,7 +44,7 @@ class Preset_Source_User extends Base_Source {
 		);
 	}
 
-	public function _source__user_meta() {
+	public function source__user_meta() {
 		if ( empty( $this->field_data['key'] ) ) {
 			return self::EMPTY;
 		}

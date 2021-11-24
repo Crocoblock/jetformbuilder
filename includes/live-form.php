@@ -26,21 +26,6 @@ class Live_Form {
 	use Instance_Trait;
 
 	public $form_id = false;
-	private $form   = false;
-
-
-	private $field_name;
-	private $current_field_data;
-	private $start_new_page = true;
-	public $rendered_rows   = 0;
-
-	public $is_hidden_row;
-	public $is_submit_row;
-	public $is_page_break_row;
-
-	public $current_repeater;
-	public $current_repeater_i;
-	public $preset;
 	public $spec_data;
 	public $post;
 	public $_conditional_blocks = array();
@@ -56,7 +41,7 @@ class Live_Form {
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->post = get_post();
+		$this->post = $this->current_post();
 	}
 
 	public function set_form_id( $form_id ) {
@@ -207,6 +192,19 @@ class Live_Form {
 
 	public function set_repeater( $name, $attrs ) {
 		$this->_repeaters[ $name ] = array_merge( $this->get_repeater( $name ), $attrs );
+	}
+
+	private function current_post() {
+		global $post;
+
+		if ( wp_doing_ajax() && empty( $post->ID ) ) {
+			$url     = wp_get_referer();
+			$post_id = url_to_postid( $url );
+
+			return get_post( $post_id );
+		} else {
+			return $post;
+		}
 	}
 
 

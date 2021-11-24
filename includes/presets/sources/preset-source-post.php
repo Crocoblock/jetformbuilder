@@ -3,25 +3,15 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
-class Preset_Source_Post extends Base_Source {
+use Jet_Form_Builder\Exceptions\Preset_Exception;
 
-	private $array_allowed;
+class Preset_Source_Post extends Base_Source {
 
 	public function get_id() {
 		return 'post';
 	}
 
-	public function after_init() {
-		$this->set_array_allowed();
-	}
-
-	private function set_array_allowed() {
-		if ( isset( $this->field_args['type'] ) ) {
-			$this->array_allowed = 'checkbox-field' === $this->field_args['type'];
-		}
-	}
-
-	public function on_sanitize() {
+	public function on_sanitize(): bool {
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
@@ -33,6 +23,10 @@ class Preset_Source_Post extends Base_Source {
 		return true;
 	}
 
+	/**
+	 * @return array|\WP_Post|null
+	 * @throws Preset_Exception
+	 */
 	public function query_source() {
 		$post_from = ! empty( $this->preset_data['post_from'] ) ? $this->preset_data['post_from'] : 'current_post';
 
@@ -43,9 +37,11 @@ class Preset_Source_Post extends Base_Source {
 			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 		}
 
-		if ( $post_id ) {
-			return get_post( $post_id );
+		if ( ! $post_id ) {
+			throw new Preset_Exception( 'Empty Post ID' );
 		}
+
+		return get_post( $post_id );
 	}
 
 
@@ -58,7 +54,7 @@ class Preset_Source_Post extends Base_Source {
 		);
 	}
 
-	public function _source__post_meta() {
+	public function source__post_meta() {
 		if ( empty( $this->field_data['key'] ) ) {
 			return self::EMPTY;
 		}
@@ -85,8 +81,8 @@ class Preset_Source_Post extends Base_Source {
 			}
 			$value = $prepared_value;
 		} elseif ( function_exists( 'jet_engine' )
-					&& jet_engine()->relations
-					&& jet_engine()->relations->is_relation_key( $this->field_data['key'] ) ) {
+		           && jet_engine()->relations
+		           && jet_engine()->relations->is_relation_key( $this->field_data['key'] ) ) {
 
 			$info = jet_engine()->relations->get_relation_info( $this->field_data['key'] );
 
@@ -113,33 +109,46 @@ class Preset_Source_Post extends Base_Source {
 		return $value;
 	}
 
-	public function _source__post_terms() {
+	/**
+	 * @return array|string|string[]
+	 * @throws Preset_Exception
+	 */
+	public function source__post_terms() {
 		if ( empty( $this->field_data['key'] ) ) {
-			return self::EMPTY;
+			throw new Preset_Exception( 'Undefined `key` in `field_data`', $this->field_data );
 		}
 
 		$value = wp_get_post_terms( $this->src()->ID, $this->field_data['key'] );
 
 		if ( empty( $value ) || is_wp_error( $value ) ) {
 			return '';
-		} else {
-			if ( $this->array_allowed ) {
-				$value = array_map(
+		}
+
+		/*
+		 * Get expected format for Form Field
+		 */
+		$format = $this->get_expected_format();
+
+		return $this->get_post_terms_by_format( $value, $format );
+	}
+
+	protected function get_post_terms_by_format( $value, $format ) {
+		switch ( $format ) {
+			case 'array':
+				return array_map(
 					function ( $term ) {
 						return strval( $term->term_id );
 					},
 					$value
 				);
-			} else {
-				$value = $value[0];
-				$value = $value->term_id;
-			}
+			case 'custom':
+				return $value;
 		}
 
-		return $value;
+		return $value[0]->term_id ?? '';
 	}
 
-	public function _source__post_thumb() {
+	public function source__post_thumb() {
 		return get_post_thumbnail_id( $this->src()->ID );
 	}
 

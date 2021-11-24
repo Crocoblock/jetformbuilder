@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.4.1
+* FIX: Compatibility with iOS.
+* FIX: Execute reCaptcha token on submit form.
+* Tweak: Added JS filters `jet.fb.submit.reload.promises` & `jet.fb.submit.ajax.promises`
+
 ## 1.4.0
 * ADD: Submit Field migrated to **Action Button** with backward compatibility.
 * ADD: **Progress Bar** - new block. To display steps in multistep form.

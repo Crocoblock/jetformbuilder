@@ -121,10 +121,10 @@ class Conditional_Block extends Base {
 	}
 
 	private function parse_condition( $condition, $index ) {
-		$dynamic_value = ( new Dynamic_Preset( 'value' ) )->parse_value( $condition );
+		$dynamic_value = ( new Dynamic_Preset() )->parse_value( $condition, 'value' );
 
 		$this->block_attrs['conditions'][ $index ]['value']     = $this->parse_string_with_commas( $dynamic_value );
-		$this->block_attrs['conditions'][ $index ]['set_value'] = ( new Dynamic_Preset( 'set_value' ) )->parse_value( $condition );
+		$this->block_attrs['conditions'][ $index ]['set_value'] = ( new Dynamic_Preset() )->parse_value( $condition, 'set_value' );
 	}
 
 	private function parse_string_with_commas( $value ) {

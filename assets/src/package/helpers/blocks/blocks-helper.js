@@ -23,7 +23,12 @@ const blocksRecursiveIterator = ( blockParserFunc ) => {
 	blocksRecursiveIterator();
 }
 
-const getFormFieldsBlocks = ( exclude = [], placeholder = false, suppressFilter = false ) => {
+const getFormFieldsBlocks = (
+	exclude = [],
+	placeholder = false,
+	suppressFilter = false,
+	context = 'default'
+) => {
 	let formFields = [];
 	let skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional', ...exclude ];
 
@@ -49,10 +54,14 @@ const getFormFieldsBlocks = ( exclude = [], placeholder = false, suppressFilter 
 		? [ { value: '', label: placeholder }, ...formFields ]
 		: formFields;
 
-	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields );
+	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields, context );
 }
 
-const getFieldsWithoutCurrent = ( placeholder = false, suppressFilter = false ) => {
+const getFieldsWithoutCurrent = (
+	placeholder = false,
+	suppressFilter = false,
+	context = 'default'
+) => {
 
 	const skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional' ];
 	let formFields = [];
@@ -80,12 +89,12 @@ const getFieldsWithoutCurrent = ( placeholder = false, suppressFilter = false ) 
 		? [ { value: '', label: placeholder }, ...formFields ]
 		: formFields;
 
-	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields );
+	return suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields, context );
 }
 
-const getAvailableFields = ( exclude = [] ) => {
+const getAvailableFields = ( exclude = [], context = 'default' ) => {
 	let fields = [];
-	const blocks = getFormFieldsBlocks( exclude );
+	const blocks = getFormFieldsBlocks( exclude, false, false, context );
 
 	if ( blocks ) {
 		blocks.forEach( item => fields.push( item.name ) );

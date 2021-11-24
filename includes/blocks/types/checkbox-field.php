@@ -347,6 +347,16 @@ class Checkbox_Field extends Base {
 
 	}
 
+	public function expected_preset_type(): array {
+		return array( 'array' );
+	}
+
+	protected function set_preset() {
+		parent::set_preset();
+
+
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *

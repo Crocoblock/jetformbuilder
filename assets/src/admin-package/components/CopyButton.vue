@@ -5,7 +5,7 @@
 		@click="copyObject()"
 	>
 		<template #label>
-			<slot name="label">{{ 'Copy' }}</slot>
+			{{ 'Copy' }}
 		</template>
 	</cx-vui-button>
 </template>
@@ -17,12 +17,24 @@ Vue.use( VueClipboard );
 
 export default {
 	name: 'CopyButton',
-	props: [ 'value' ],
+	props: {
+		column: {
+			type: Object,
+		},
+	},
+	computed: {
+		preparedValue() {
+			switch ( this.column.type ) {
+				case 'rawArray':
+					return JSON.stringify( this.column.value );
+				default:
+					return this.column.value;
+			}
+		},
+	},
 	methods: {
 		copyObject() {
-			const json = JSON.stringify( this.value );
-
-			this.$copyText( json ).then( function ( e ) {
+			this.$copyText( this.preparedValue ).then( function ( e ) {
 				console.log( e );
 			}, function ( e ) {
 				console.log( e );

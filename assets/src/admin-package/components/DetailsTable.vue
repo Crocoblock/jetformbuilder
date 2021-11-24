@@ -20,7 +20,7 @@
 			</template>
 			<template #actions>
 				<CopyButton
-					:value="getColumnValue( columnName, 0 )"
+					:column="source[ columnName ] || {}"
 				/>
 			</template>
 		</DetailsTableRow>

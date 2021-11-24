@@ -82,6 +82,7 @@ class Gateway_Manager {
 		try {
 			$this->get_current_gateway_controller()->before_actions( $this->get_actions_before() );
 		} catch ( Repository_Exception $exception ) {
+			return;
 		}
 	}
 
@@ -99,6 +100,7 @@ class Gateway_Manager {
 		} catch ( Gateway_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
 		} catch ( Repository_Exception $exception ) {
+			return;
 		}
 	}
 
@@ -258,7 +260,7 @@ class Gateway_Manager {
 		$this->set_form_id( $form_id );
 		$gateways = $this->get_form_gateways_by_id( $this->get_form_id() );
 
-		if ( 'none' === $gateways['gateway'] ?? 'none' ) {
+		if ( 'none' === ( $gateways['gateway'] ?? 'none' ) ) {
 			return;
 		}
 		$this->save_gateways_form_data( $gateways );

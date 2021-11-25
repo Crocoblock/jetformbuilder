@@ -34,11 +34,10 @@ export default {
 	},
 	methods: {
 		copyObject() {
-			this.$copyText( this.preparedValue ).then( function ( e ) {
-				console.log( e );
-			}, function ( e ) {
-				console.log( e );
-			} );
+			this.$copyText( this.preparedValue ).then(
+				e => this.$emit( 'success-copy', e ),
+				e => this.$emit( 'failed-copy', e ),
+			);
 		},
 	},
 };

@@ -29,15 +29,15 @@ const { GatewayFetchButton } = JetFBComponents;
 const paypalLabel = gatewayLabel( 'paypal' );
 const globalLabel = gatewayAttr( 'labels' );
 
-function PayNowScenario( {
+function SubscribeNowScenario( {
 	gatewayGeneral,
-	gatewaySpecific,
 	setGateway,
-	setGatewaySpecific,
 	formFields,
 	insert_post,
 	getSpecificOrGlobal,
 	loadingGateway,
+	gatewayScenario,
+	setGatewayScenario,
 	scenarioSource,
 	noticeOperations,
 } ) {
@@ -68,19 +68,13 @@ function PayNowScenario( {
 			/>
 		</BaseControl>
 		{ loadingGateway.success && <>
-			<TextControl
-				label={ paypalLabel( 'currency' ) }
-				key='paypal_currency_code_setting'
-				value={ gatewaySpecific.currency }
-				onChange={ currency => setGatewaySpecific( { currency } ) }
-			/>
 			<SelectControl
-				label={ globalLabel( 'price_field' ) }
-				key={ 'form_fields_price_field' }
-				value={ gatewayGeneral.price_field }
+				label={ paypalLabel( 'subscribe_plan_field' ) }
+				key={ 'form_fields_subscribe_plan_field' }
+				value={ gatewayScenario.plan_field }
 				labelPosition='side'
-				onChange={ price_field => {
-					setGateway( { price_field } );
+				onChange={ plan_field => {
+					setGatewayScenario( { plan_field } );
 				} }
 				options={ formFields }
 			/>
@@ -115,4 +109,4 @@ export default compose(
 			...withDispatchGateways( ...props ),
 		}
 	) ),
-)( PayNowScenario );
+)( SubscribeNowScenario );

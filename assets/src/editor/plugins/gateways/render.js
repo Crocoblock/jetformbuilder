@@ -42,7 +42,9 @@ function PluginGateways( {
 	_jf_actions: ActionsMeta,
 	ChangeGateway,
 	setGateway,
+	setGatewayScenario,
 	gatewayGeneral,
+	gatewayScenario
 } ) {
 
 	const [ isEdit, setEdit ] = useState( false );
@@ -50,8 +52,10 @@ function PluginGateways( {
 	useEffect( () => {
 		if ( isEdit ) {
 			setGateway( GatewaysMeta );
+			setGatewayScenario( GatewaysMeta[ GatewaysMeta.gateway ]?.scenario )
 		} else {
 			setGateway( {} );
+			setGatewayScenario( {} );
 		}
 	}, [ isEdit ] );
 
@@ -104,7 +108,15 @@ function PluginGateways( {
 				classNames={ [ 'width-60' ] }
 				onRequestClose={ () => closeModal() }
 				onCancelClick={ () => closeModal() }
-				onUpdateClick={ () => closeModal( gatewayGeneral ) }
+				onUpdateClick={ () => closeModal( {
+					...gatewayGeneral,
+					[ gatewayGeneral.gateway ]: {
+						...(
+							gatewayGeneral[ gatewayGeneral.gateway ] || {}
+						),
+						scenario: gatewayScenario,
+					},
+				} ) }
 				title={ `Edit ${ getGatewayLabel( GatewaysMeta.gateway ) } Settings` }
 			>
 				<GatewaysEditor/>
@@ -115,9 +127,18 @@ function PluginGateways( {
 
 
 export default compose(
-	withDispatch( withDispatchMeta( '_jf_gateways', 'ChangeGateway' ) ),
-	withDispatch( withDispatchGateways ),
-	withSelect( withSelectGateways ),
-	withSelect( withSelectMeta( '_jf_gateways' ) ),
-	withSelect( withSelectMeta( '_jf_actions' ) ),
+	withDispatch( ( ...props ) => (
+		{
+			...withDispatchMeta( '_jf_gateways', 'ChangeGateway' )( ...props ),
+			...withDispatchGateways( ...props ),
+		}
+	) ),
+	withSelect( ( ...props ) => (
+		{
+			...withSelectGateways( ...props ),
+			...withSelectMeta( '_jf_gateways' )( ...props ),
+			...withSelectMeta( '_jf_actions' )( ...props ),
+
+		}
+	) ),
 )( PluginGateways );

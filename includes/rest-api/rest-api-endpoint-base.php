@@ -11,7 +11,7 @@ abstract class Rest_Api_Endpoint_Base {
 
 	abstract public static function get_rest_base();
 
-	abstract static public function get_methods();
+	abstract public static function get_methods();
 
 	abstract public function run_callback( \WP_REST_Request $request );
 

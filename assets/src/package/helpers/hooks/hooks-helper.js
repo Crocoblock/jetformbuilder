@@ -1,4 +1,5 @@
 import { prepareActionsListByType } from '../actions/action-helper';
+import { globalTab } from '../settings/helper';
 
 const {
 	useState,
@@ -118,11 +119,11 @@ export const useSuccessNotice = ( text, options = {} ) => {
 	return setHasCopied;
 };
 
-export const withNotice = ( dispatch ) => {
+export const withDispatchNotice = ( dispatch ) => {
 	return {
-		createNotice: ( text, options = {} ) => {
+		createNotice: ( status, text, options = {} ) => {
 			dispatch( wp.notices.store ).createNotice(
-				text, {
+				status, text, {
 					type: 'default',
 					status: 'info',
 					...options,
@@ -261,45 +262,47 @@ export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
 
 export const withSelectGateways = select => {
 	const store = select( 'jet-forms/gateways' );
+	const gatewayRequestId = store.getCurrentRequestId();
+	const gatewaySpecific = store.getGatewaySpecific();
 
-	return {
-		gatewayGeneral: store.getGateway(),
-		gatewaySpecific: store.getGatewaySpecific(),
-		gatewayRequestId: store.getCurrentRequestId(),
-		gatewayRequest: store.getCurrentRequest(),
+	const {
+		use_global = false,
+	} = gatewaySpecific;
+
+	const currentTab = globalTab( { slug: store.getGatewayId() } );
+
+	const getSpecificOrGlobal = ( key, ifEmpty = '' ) => {
+		return (
+			use_global ? (
+				currentTab[ key ] || ifEmpty
+			) : (
+				gatewaySpecific[ key ] || ifEmpty
+			)
+		);
 	};
-};
-export const withSelectGatewaysLoading = select => {
-	const { gatewayRequestId, ...other } = withSelectGateways( select );
 
 	const loadingGateway = select( 'jet-forms/actions' ).getLoading( gatewayRequestId );
 
 	return {
-		loadingGateway,
+		gatewayGeneral: store.getGateway(),
+		gatewayRequest: store.getCurrentRequest(),
+		gatewayScenario: store.getScenario(),
+		gatewaySpecific,
 		gatewayRequestId,
-		...other,
+		loadingGateway,
+		getSpecificOrGlobal,
 	};
 };
 
-export const withDispatchGateways = ( dispatch, ownProps, { select } ) => {
+export const withDispatchGateways = ( dispatch ) => {
+	const store = dispatch( 'jet-forms/gateways' );
+
 	return {
-		setGatewayRequest( item ) {
-			const { gatewayGeneral } = withSelectGateways( select );
-			const items = [ gatewayGeneral.gateway, item?.id ].filter( value => value );
-
-			item.id = items.join( '/' );
-
-			dispatch( 'jet-forms/gateways' ).setRequest( item );
-		},
-		setGateway( item ) {
-			dispatch( 'jet-forms/gateways' ).setGateway( item );
-		},
-		setGatewayInner( item ) {
-			dispatch( 'jet-forms/gateways' ).setGatewayInner( item );
-		},
-		setGatewaySpecific( item ) {
-			dispatch( 'jet-forms/gateways' ).setGatewaySpecific( item );
-		},
+		setGatewayRequest: store.setRequest,
+		setGatewayScenario: store.setScenario,
+		setGateway: store.setGateway,
+		setGatewayInner: store.setGatewayInner,
+		setGatewaySpecific: store.setGatewaySpecific
 	};
 };
 

@@ -12,13 +12,21 @@ function GatewayFetchButton( {
 	label = 'InValid',
 	apiArgs = {},
 	gatewayRequestId,
+	loadingGateway,
+	onLoading = () => {},
+	onSuccess = () => {},
+	onFail = () => {}
 } ) {
 
 	return <FetchApiButton
 		id={ gatewayRequestId }
+		loadingState={ loadingGateway }
 		initialLabel={ initialLabel }
 		label={ label }
 		apiArgs={ apiArgs }
+		onFail={ onFail }
+		onLoading={ onLoading }
+		onSuccess={ onSuccess }
 	/>;
 }
 

@@ -25,7 +25,7 @@ abstract class Base_Gateway {
 	const GATEWAY_META_KEY = '_jet_gateway_data';
 
 	const SUCCESS_TYPE = 'success';
-	const FAILED_TYPE  = 'cancel';
+	const FAILED_TYPE = 'cancel';
 
 	protected $payment_id;
 	protected $payment_token;
@@ -209,10 +209,10 @@ abstract class Base_Gateway {
 		}
 
 		$all = $this->get_action_handler()
-					->set_form_id( $this->data['form_id'] )
-					->add_request( $this->data['form_data'] )
-					->unregister_action( 'redirect_to_page' )
-					->get_all();
+		            ->set_form_id( $this->data['form_id'] )
+		            ->add_request( $this->data['form_data'] )
+		            ->unregister_action( 'redirect_to_page' )
+		            ->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -299,7 +299,7 @@ abstract class Base_Gateway {
 
 		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
 			if ( 'insert_post' === $action->get_id()
-				 && $this->get_initialize_action_id() === $action->_id
+			     && $this->get_initialize_action_id() === $action->_id
 			) {
 				continue;
 			}
@@ -321,8 +321,7 @@ abstract class Base_Gateway {
 	}
 
 	public function get_insert_post_action_id() {
-		return GM::instance()->get_actions_handler()
-				 ->get_inserted_post_id( $this->get_initialize_action_id() );
+		return GM::instance()->get_actions_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
 	}
 
 	/**
@@ -458,7 +457,7 @@ abstract class Base_Gateway {
 			return $this->options_list();
 		}
 		foreach ( $this->options_list() as $name => $option ) {
-			$labels[ $name ] = $option[ $param ];
+			$labels[ $name ] = $option[ $param ] ?? '';
 		}
 
 		return $labels;
@@ -496,8 +495,8 @@ abstract class Base_Gateway {
 
 	private function maybe_unregister_action( $index, $keep_these ) {
 		if ( ! array_key_exists( $index, $keep_these )
-			 || ! isset( $keep_these[ $index ]['active'] )
-			 || ! $keep_these[ $index ]['active']
+		     || ! isset( $keep_these[ $index ]['active'] )
+		     || ! $keep_these[ $index ]['active']
 		) {
 			$this->get_action_handler()->unregister_action( $index );
 		}
@@ -608,6 +607,10 @@ abstract class Base_Gateway {
 		}
 
 		return $results;
+	}
+
+	public function custom_labels(): array {
+		return array();
 	}
 
 }

@@ -53,7 +53,6 @@ class Controller extends Base_Gateway {
 				'label' => _x( 'Secret Key', 'Paypal gateways editor data', 'jet-form-builder' ),
 			),
 			'currency'     => array(
-				'label'    => _x( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' ),
 				'required' => false,
 			),
 			'use_global'   => array(
@@ -67,29 +66,47 @@ class Controller extends Base_Gateway {
 		);
 	}
 
+	public function custom_labels(): array {
+		return apply_filters(
+			'jet-form-builder/gateways/paypal/custom-labels',
+			array(
+				'scenario' => array(
+					Scenarios_Logic\Pay_Now::scenario_id() => array(
+						'currency' => _x( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' ),
+					),
+				),
+			)
+		);
+	}
+
 	public function additional_editor_data() {
-		return array(
-			'version'       => 1,
-			'fetch'         => array(
+		return apply_filters(
+			'jet-form-builder/gateways/paypal/editor-data',
+			array(
+				'version'                              => 1,
 				Scenarios_Logic\Pay_Now::scenario_id() => array(
-					'method' => Fetch_Pay_Now_Editor::get_methods(),
-					'url'    => Fetch_Pay_Now_Editor::rest_url(),
+					'fetch' => array(
+						'method' => Fetch_Pay_Now_Editor::get_methods(),
+						'url'    => Fetch_Pay_Now_Editor::rest_url(),
+					),
 				),
 				Scenarios_Logic\Subscribe_Now::scenario_id() => array(
-					'method' => Fetch_Subscribe_Now_Editor::get_methods(),
-					'url'    => Fetch_Subscribe_Now_Editor::rest_url(),
+					'fetch' => array(
+						'method' => Fetch_Subscribe_Now_Editor::get_methods(),
+						'url'    => Fetch_Subscribe_Now_Editor::rest_url(),
+					),
 				),
-			),
-			'gateway_types' => array(
-				array(
-					'value' => Scenarios_Logic\Pay_Now::scenario_id(),
-					'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' ),
+				'gateway_types'                        => array(
+					array(
+						'value' => Scenarios_Logic\Pay_Now::scenario_id(),
+						'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' ),
+					),
+					array(
+						'value' => Scenarios_Logic\Subscribe_Now::scenario_id(),
+						'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' ),
+					),
 				),
-				array(
-					'value' => Scenarios_Logic\Subscribe_Now::scenario_id(),
-					'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' ),
-				),
-			),
+			)
 		);
 	}
 
@@ -228,7 +245,7 @@ class Controller extends Base_Gateway {
 	 */
 	public static function get_token_with_credits( $client_id, $secret ) {
 		if ( ! $client_id || ! $secret ) {
-			throw new Gateway_Exception( 'Empty `client_id` or `secret_key`.' );
+			throw new Gateway_Exception( 'Empty `client_id` or `secret_key`.', array( $client_id, $secret ) );
 		}
 		$hash  = md5( $client_id . $secret );
 		$token = get_transient( $hash );

@@ -44,6 +44,8 @@ function GatewaysEditor( {
 	gatewayGeneral,
 	setGatewayInner,
 	formFields,
+	loadingGateway,
+	gatewayRequest,
 } ) {
 
 	const availableActions = ActionsMeta.filter( action => action.type !== 'redirect_to_page' );
@@ -114,8 +116,7 @@ function GatewaysEditor( {
 
 	const actionLabel = fromLocalizeHelper( 'getActionLabel' );
 
-	return <>
-		{ renderGateway( gatewayGeneral.gateway, { setValueInObject, getNotifications } ) }
+	const GatewayFooter = <>
 		{ Boolean( availableActions.length ) && <>
 			<BaseControl
 				label={ __( 'Before payment processed:', 'jet-form-builder' ) }
@@ -230,11 +231,24 @@ function GatewaysEditor( {
 			onChange={ newValue => setResultMessage( 'failed', newValue ) }
 		/>
 	</>;
+
+	return <>
+		{ renderGateway( gatewayGeneral.gateway, { setValueInObject, getNotifications } ) }
+		{ (
+			  - 1 === gatewayRequest.id
+			  || loadingGateway.success
+			  || ! gatewayRequest.id.includes( gatewayGeneral.gateway )
+		  ) && GatewayFooter }
+	</>;
 }
 
 export default compose(
-	withSelect( withSelectMeta( '_jf_actions' ) ),
-	withSelect( withSelectGateways ),
-	withSelect( withSelectFormFields( [], '--' ) ),
+	withSelect( ( ...props ) => (
+		{
+			...withSelectMeta( '_jf_actions' )( ...props ),
+			...withSelectFormFields( [], '--' )( ...props ),
+			...withSelectGateways( ...props ),
+		}
+	) ),
 	withDispatch( withDispatchGateways ),
 )( GatewaysEditor );

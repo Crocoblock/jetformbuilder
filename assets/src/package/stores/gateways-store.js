@@ -5,6 +5,7 @@ const DEFAULT_STATE = {
 		id: - 1,
 	},
 	currentGateway: {},
+	currentScenario: {},
 };
 
 const actions = {
@@ -32,6 +33,12 @@ const actions = {
 			item,
 		};
 	},
+	setScenario( item ) {
+		return {
+			type: 'SET_CURRENT_GATEWAY_SCENARIO',
+			item,
+		};
+	},
 	hardSetGateway( item, value = '' ) {
 		return {
 			type: 'HARD_SET_CURRENT_GATEWAY',
@@ -55,18 +62,30 @@ const selectors = {
 	getCurrentRequest( state ) {
 		return state.currentRequest;
 	},
+	getScenario( state ) {
+		return state.currentScenario;
+	},
+	getScenarioId( state ) {
+		return state.currentScenario?.id;
+	},
+	getGatewayId( state ) {
+		return state.currentGateway?.gateway;
+	},
 	getGateway( state ) {
 		return state.currentGateway;
 	},
 	getGatewaySpecific( state ) {
-		return state.currentGateway[ state.currentGateway?.gateway ] || {};
+		return state.currentGateway[ selectors.getGatewayId( state ) ] || {};
 	},
 };
 
-register( createReduxStore( 'jet-forms/gateways', {
+const store = createReduxStore( 'jet-forms/gateways', {
 	reducer( state = DEFAULT_STATE, action ) {
 		switch ( action.type ) {
 			case 'SET_CURRENT_REQUEST':
+				const items = [ selectors.getGatewayId( state ), action.item?.id ].filter( value => value );
+				action.item.id = items.join( '/' );
+
 				return {
 					...state,
 					currentRequest: action.item,
@@ -104,6 +123,17 @@ register( createReduxStore( 'jet-forms/gateways', {
 						},
 					},
 				};
+			case 'SET_CURRENT_GATEWAY_SCENARIO':
+				return {
+					...state,
+					currentScenario: {
+						...state.currentScenario,
+						...(
+							action.item || {}
+						),
+					},
+				};
+
 			case 'HARD_SET_CURRENT_GATEWAY':
 				if ( action.item ) {
 					state.currentGateway[ action.item ] = action.value;
@@ -126,4 +156,6 @@ register( createReduxStore( 'jet-forms/gateways', {
 	},
 	actions,
 	selectors,
-} ) );
+} );
+
+register( store );

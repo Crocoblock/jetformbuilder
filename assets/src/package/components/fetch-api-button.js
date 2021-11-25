@@ -11,7 +11,7 @@ const {
 const { apiFetch } = wp;
 
 
-function FetchAjaxButton( {
+function FetchApiButton( {
 	initialLabel = 'Valid',
 	label = 'InValid',
 	apiArgs = {},
@@ -20,6 +20,9 @@ function FetchAjaxButton( {
 	id,
 	setResultSuccess,
 	setResultFail,
+	onLoading = () => {},
+	onSuccess = () => {},
+	onFail = () => {}
 } ) {
 
 	const getLabel = () => {
@@ -36,10 +39,15 @@ function FetchAjaxButton( {
 		className={ loadingState.buttonClassName }
 		customRequest={ () => {
 			setLoading( id );
+			onLoading();
 
 			apiFetch( apiArgs ).then( response => {
 				setResultSuccess( id, response );
-			} ).catch( () => setResultFail( id ) );
+				onSuccess( response );
+			} ).catch( error => {
+				setResultFail( id );
+				onFail( error );
+			} );
 		} }
 	>
 		<i className="dashicons"/>
@@ -47,6 +55,5 @@ function FetchAjaxButton( {
 }
 
 export default compose(
-	withSelect( withSelectActionLoading ),
-	withDispatch( withDispatchActionLoading ),
-)( FetchAjaxButton );
+	withDispatch( withDispatchActionLoading )
+)( FetchApiButton );

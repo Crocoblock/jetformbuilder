@@ -7,7 +7,10 @@
   "private": true,
   "scripts": {
     "dev": "webpack --mode development --progress -w",
-    "build": "webpack --mode production --progress -w"
+    "build": "webpack --mode production --progress -w",
+    "build-styles": "concurrently \"npm run build-editor-style\" \"npm run build-front-style\"",
+    "build-editor-style": "sass scss\\editor\\main.scss css\\editor.css -s compressed --no-source-map",
+    "build-front-style": "sass scss\\frontend\\main.scss css\\frontend.css -s compressed --no-source-map"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -16,6 +19,7 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "babel-loader": "^8.2.2",
+    "concurrently": "^6.4.0",
     "css-loader": "^5.2.6",
     "gulp": "^4.0.2",
     "jed": "^1.1.1",

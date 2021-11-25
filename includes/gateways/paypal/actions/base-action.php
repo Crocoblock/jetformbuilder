@@ -86,14 +86,6 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	public function set_json_body( $content ): Base_Action {
-		if ( is_array( $content ) ) {
-			$this->raw_body_to_json = array_merge( $this->raw_body_to_json, $content );
-		}
-
-		return $this;
-	}
-
 	public function get_headers(): array {
 		$args = array(
 			'Accept-Language' => get_locale(),
@@ -106,8 +98,12 @@ abstract class Base_Action {
 		return array_merge( $args, $this->action_headers() );
 	}
 
+	protected function is_body_ready(): bool {
+		return is_string( $this->body );
+	}
+
 	public function get_body() {
-		if ( $this->is_body_set ) {
+		if ( $this->is_body_ready() ) {
 			return $this->body;
 		}
 
@@ -116,8 +112,7 @@ abstract class Base_Action {
 			ini_set( 'serialize_precision', - 1 );
 		}
 
-		$this->body        = $this->to_json( $this->body );
-		$this->is_body_set = true;
+		$this->body = $this->to_json( $this->body );
 
 		return $this->body;
 	}

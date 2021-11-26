@@ -40,25 +40,29 @@ abstract class Base_Action {
 		return array();
 	}
 
-	public function get_url(): string {
-		return $this->api_url( $this->action_endpoint() );
+	public function action_query_args(): array {
+		return array();
 	}
 
-	public function get_method(): string {
+	public function get_url(): string {
+		return $this->api_url( $this->action_endpoint(), $this->action_query_args() );
+	}
+
+	final public function get_method(): string {
 		return $this->method;
 	}
 
-	public function get_auth() {
+	final public function get_auth() {
 		return $this->auth;
 	}
 
-	public function set_bearer_auth( $token ): Base_Action {
+	final public function set_bearer_auth( $token ): Base_Action {
 		$this->set_auth( "Bearer $token" );
 
 		return $this;
 	}
 
-	public function set_basic_auth( $token ): Base_Action {
+	final public function set_basic_auth( $token ): Base_Action {
 		$this->set_auth( "Basic $token" );
 
 		return $this;
@@ -70,7 +74,7 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	public function set_body( $content ): Base_Action {
+	final public function set_body( $content ): Base_Action {
 		if ( ! $content ) {
 			return $this;
 		}
@@ -86,7 +90,7 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	public function get_headers(): array {
+	final public function get_headers(): array {
 		$args = array(
 			'Accept-Language' => get_locale(),
 		);
@@ -102,7 +106,7 @@ abstract class Base_Action {
 		return is_string( $this->body );
 	}
 
-	public function get_body() {
+	final public function get_body() {
 		if ( $this->is_body_ready() ) {
 			return $this->body;
 		}
@@ -121,7 +125,7 @@ abstract class Base_Action {
 		return wp_unslash( Tools::encode_json( $body ) );
 	}
 
-	public function get_request_args(): array {
+	final public function get_request_args(): array {
 		$args = array(
 			'timeout' => 45,
 			'headers' => $this->get_headers(),
@@ -158,11 +162,18 @@ abstract class Base_Action {
 	 * Return API url
 	 *
 	 * @param $endpoint
+	 * @param $query_args
 	 *
 	 * @return string
 	 */
-	public function api_url( $endpoint ) {
-		return esc_url( $this->base_url() . $endpoint );
+	public function api_url( $endpoint, $query_args ): string {
+		$url = esc_url_raw( $this->base_url() . $endpoint );
+
+		if ( empty( $query_args ) ) {
+			return $url;
+		}
+
+		return add_query_arg( $query_args, $url );
 	}
 
 	public function get_response() {
@@ -179,7 +190,7 @@ abstract class Base_Action {
 	/**
 	 * Make a request
 	 */
-	public function request(): Base_Action {
+	final public function request(): Base_Action {
 		$this->before_make_request();
 
 		$response = $this->get_response();
@@ -244,7 +255,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function check_response_code(): Base_Action {
+	final public function check_response_code(): Base_Action {
 		if ( $this->accept_code() === $this->get_response_code() ) {
 			return $this;
 		}
@@ -260,7 +271,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function response_body_as_array(): Base_Action {
+	final public function response_body_as_array(): Base_Action {
 
 		if ( is_array( $this->get_response_body() ) ) {
 			return $this;
@@ -296,7 +307,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function send_request() {
+	final public function send_request() {
 		$this->request();
 
 		$this->response_body_as_array();

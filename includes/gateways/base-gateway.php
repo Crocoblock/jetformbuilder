@@ -94,7 +94,7 @@ abstract class Base_Gateway {
 		return $this->payment_instance;
 	}
 
-	public function additional_editor_data() {
+	public function additional_editor_data(): array {
 		return array(
 			'version' => 0,
 		);
@@ -533,6 +533,11 @@ abstract class Base_Gateway {
 		return GM::instance()->get_actions_handler();
 	}
 
+
+	/**
+	 * Gateway part starts.
+	 */
+
 	public function get_current_gateway( $if_empty = false ) {
 		return $this->gateway( $this->get_id(), $if_empty );
 	}
@@ -553,7 +558,43 @@ abstract class Base_Gateway {
 		return $this->gateways_meta[ $prop ] ?? $if_empty;
 	}
 
-	public function isset_gateway( $prop ) {
+	/**
+	 * Gateway part ends.
+	 */
+
+	public function get_scenario_meta(): array {
+		$gateway = $this->get_current_gateway( array() );
+
+		return $gateway['scenario'] ?? array();
+	}
+
+	public function get_current_scenario_id() {
+		$scenario = $this->get_scenario_meta();
+
+		return $scenario['id'] ?? Paypal\Scenarios_Logic\Pay_Now::scenario_id();
+	}
+
+	public function get_current_scenario(): array {
+		$scenario_id = $this->get_current_scenario_id();
+		$scenario    = $this->get_current_scenario();
+
+		return $scenario[ $scenario_id ] ?? array();
+	}
+
+	/**
+	 * @param string $prop
+	 * @param false $if_empty
+	 *
+	 * @return mixed
+	 */
+	public function current_scenario( $prop = '', $if_empty = false ) {
+		$scenario = $this->get_current_scenario();
+
+		return $prop ? $scenario[ $prop ] ?? $if_empty : $scenario;
+	}
+
+
+	public function isset_gateway( $prop ): bool {
 		return isset( $this->gateways_meta[ $prop ] );
 	}
 

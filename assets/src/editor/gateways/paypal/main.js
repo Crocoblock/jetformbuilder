@@ -18,17 +18,12 @@ const {
 
 const {
 	renderGateway,
-	gatewayLabel,
-	gatewayAttr,
 } = JetFBActions;
 
 const {
 	withSelectGateways,
 	withDispatchGateways,
 } = JetFBHooks;
-
-const callableGateway = gatewayAttr( 'additional' );
-const paypalLabel = gatewayLabel( 'paypal' );
 
 function PaypalMain( {
 	loadingGateway,
@@ -38,17 +33,15 @@ function PaypalMain( {
 	gatewayScenario,
 	setGatewayScenario,
 	getSpecificOrGlobal,
+	additionalSourceGateway,
+	specificGatewayLabel,
 	noticeOperations,
 	noticeUI,
 } ) {
 
-	const additional = callableGateway( 'paypal' );
-
 	const {
 		id: scenario = 'PAY_NOW',
 	} = gatewayScenario;
-
-	const scenarioSource = additional[ scenario ] || {};
 
 	useEffect( () => {
 		setGatewayRequest( { id: scenario } );
@@ -62,19 +55,19 @@ function PaypalMain( {
 		{ noticeUI }
 		<ToggleControl
 			key={ 'use_global' }
-			label={ paypalLabel( 'use_global' ) }
+			label={ specificGatewayLabel( 'use_global' ) }
 			checked={ gatewaySpecific.use_global }
 			onChange={ use_global => setGatewaySpecific( { use_global } ) }
 		/>
 		<TextControl
-			label={ paypalLabel( 'client_id' ) }
+			label={ specificGatewayLabel( 'client_id' ) }
 			key='paypal_client_id_setting'
 			value={ getSpecificOrGlobal( 'client_id' ) }
 			onChange={ client_id => setGatewaySpecific( { client_id } ) }
 			disabled={ gatewaySpecific.use_global }
 		/>
 		<TextControl
-			label={ paypalLabel( 'secret' ) }
+			label={ specificGatewayLabel( 'secret' ) }
 			key='paypal_secret_setting'
 			value={ getSpecificOrGlobal( 'secret' ) }
 			onChange={ secret => setGatewaySpecific( { secret } ) }
@@ -82,14 +75,14 @@ function PaypalMain( {
 		/>
 		<SelectControl
 			labelPosition='side'
-			label={ paypalLabel( 'gateway_type' ) }
+			label={ specificGatewayLabel( 'gateway_type' ) }
 			value={ scenario }
 			onChange={ id => {
 				setGatewayScenario( { id } );
 			} }
-			options={ additional.gateway_types }
+			options={ additionalSourceGateway.scenarios }
 		/>
-		{ renderGateway( 'paypal', { scenarioSource, noticeOperations }, scenario ) }
+		{ renderGateway( 'paypal', { noticeOperations }, scenario ) }
 	</>;
 }
 

@@ -82,4 +82,18 @@ abstract class Scenario_Logic_Base extends Scenario_Item_Base {
 		}
 	}
 
+	/**
+	 * @param string $key
+	 * @param bool $if_empty
+	 *
+	 * @return mixed
+	 */
+	public function get_setting( string $key, $if_empty = '' ) {
+		return $this->controller->current_scenario( $key, $if_empty );
+	}
+
+	public function get_settings() {
+		return $this->controller->current_scenario();
+	}
+
 }

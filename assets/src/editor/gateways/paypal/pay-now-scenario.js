@@ -13,11 +13,6 @@ const {
 } = wp.components;
 
 const {
-	gatewayLabel,
-	gatewayAttr,
-} = JetFBActions;
-
-const {
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
@@ -25,9 +20,6 @@ const {
 } = JetFBHooks;
 
 const { GatewayFetchButton } = JetFBComponents;
-
-const paypalLabel = gatewayLabel( 'paypal' );
-const globalLabel = gatewayAttr( 'labels' );
 
 function PayNowScenario( {
 	gatewayGeneral,
@@ -40,22 +32,26 @@ function PayNowScenario( {
 	loadingGateway,
 	scenarioSource,
 	noticeOperations,
+	scenarioLabel,
+	globalGatewayLabel,
 } ) {
 
 	const displayNotice = status => response => {
+		noticeOperations.removeNotice( gatewayGeneral.gateway );
 		noticeOperations.createNotice( {
 			status,
 			content: response.message,
-		} )
+			id: gatewayGeneral.gateway,
+		} );
 	};
 
 	return <>
 		<BaseControl
-			label={ 'Request Button' }
+			label={ scenarioLabel( 'fetch_button_label' ) }
 		>
 			<GatewayFetchButton
-				initialLabel={ 'Fetch' }
-				label={ 'Retry Fetch' }
+				initialLabel={ scenarioLabel( 'fetch_button' ) }
+				label={ scenarioLabel( 'fetch_button_retry' ) }
 				apiArgs={ {
 					...scenarioSource.fetch,
 					data: {
@@ -69,13 +65,13 @@ function PayNowScenario( {
 		</BaseControl>
 		{ loadingGateway.success && <>
 			<TextControl
-				label={ paypalLabel( 'currency' ) }
+				label={ scenarioLabel( 'currency' ) }
 				key='paypal_currency_code_setting'
 				value={ gatewaySpecific.currency }
 				onChange={ currency => setGatewaySpecific( { currency } ) }
 			/>
 			<SelectControl
-				label={ globalLabel( 'price_field' ) }
+				label={ globalGatewayLabel( 'price_field' ) }
 				key={ 'form_fields_price_field' }
 				value={ gatewayGeneral.price_field }
 				labelPosition='side'
@@ -85,7 +81,7 @@ function PayNowScenario( {
 				options={ formFields }
 			/>
 			<BaseControl
-				label={ globalLabel( 'action_order' ) }
+				label={ globalGatewayLabel( 'action_order' ) }
 				key='gateway_action_order_pay_now_control'
 			>
 				<RadioControl

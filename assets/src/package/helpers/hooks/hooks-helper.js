@@ -1,5 +1,6 @@
 import { prepareActionsListByType } from '../actions/action-helper';
 import { globalTab } from '../settings/helper';
+import { gatewayAttr, gatewayLabel } from '../gateways/gateway-helper';
 
 const {
 	useState,
@@ -262,14 +263,19 @@ export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
 
 export const withSelectGateways = select => {
 	const store = select( 'jet-forms/gateways' );
+
 	const gatewayRequestId = store.getCurrentRequestId();
 	const gatewaySpecific = store.getGatewaySpecific();
+	const scenario = store.getScenario();
+
+	const CURRENT_GATEWAY = store.getGatewayId();
+	const { id: CURRENT_SCENARIO = 'PAY_NOW' } = scenario;
 
 	const {
 		use_global = false,
 	} = gatewaySpecific;
 
-	const currentTab = globalTab( { slug: store.getGatewayId() } );
+	const currentTab = globalTab( { slug: CURRENT_GATEWAY } );
 
 	const getSpecificOrGlobal = ( key, ifEmpty = '' ) => {
 		return (
@@ -281,16 +287,36 @@ export const withSelectGateways = select => {
 		);
 	};
 
+	const callableGateway = gatewayAttr( 'additional' );
+	const additionalSourceGateway = callableGateway( CURRENT_GATEWAY );
+
 	const loadingGateway = select( 'jet-forms/actions' ).getLoading( gatewayRequestId );
+
+	const globalGatewayLabel = gatewayAttr( 'labels' );
+	const specificGatewayLabel = gatewayLabel( CURRENT_GATEWAY );
+
+	const customGatewayLabel = function ( key ) {
+		return globalGatewayLabel( `${ CURRENT_GATEWAY }.${ key }` );
+	};
+	const scenarioLabel = function ( key ) {
+		return customGatewayLabel( `scenario.${ CURRENT_SCENARIO }.${ key }` );
+	};
 
 	return {
 		gatewayGeneral: store.getGateway(),
 		gatewayRequest: store.getCurrentRequest(),
-		gatewayScenario: store.getScenario(),
+		scenarioSource: additionalSourceGateway[ CURRENT_SCENARIO ] || {},
+		currentScenario: scenario[ CURRENT_SCENARIO ] || {},
+		gatewayScenario: scenario,
+		additionalSourceGateway,
 		gatewaySpecific,
 		gatewayRequestId,
 		loadingGateway,
 		getSpecificOrGlobal,
+		globalGatewayLabel,
+		specificGatewayLabel,
+		customGatewayLabel,
+		scenarioLabel,
 	};
 };
 
@@ -300,9 +326,10 @@ export const withDispatchGateways = ( dispatch ) => {
 	return {
 		setGatewayRequest: store.setRequest,
 		setGatewayScenario: store.setScenario,
+		setScenario: store.setCurrentScenario,
 		setGateway: store.setGateway,
 		setGatewayInner: store.setGatewayInner,
-		setGatewaySpecific: store.setGatewaySpecific
+		setGatewaySpecific: store.setGatewaySpecific,
 	};
 };
 

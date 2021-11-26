@@ -55,7 +55,7 @@ class Scenarios_Manager {
 	 */
 	public function get_logic( Controller $paypal ): Scenarios_Logic\Scenario_Logic_Base {
 		try {
-			return $this->logic()->rep_get_item( $paypal->current_gateway( 'gateway_type' ) );
+			return $this->logic()->rep_get_item( $paypal->get_current_scenario_id() );
 		} catch ( Repository_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
 		}
@@ -78,7 +78,8 @@ class Scenarios_Manager {
 	public function query_logic(): Scenarios_Logic\Scenario_Logic_Base {
 		try {
 			if ( ! $this->queried_scenario ) {
-				$scenario = esc_attr( $_GET[ self::QUERY_VAR ] ) ?? false;
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$scenario = sanitize_text_field( wp_unslash( $_GET[ self::QUERY_VAR ] ?? '' ) );
 
 				$this->queried_scenario = $this->logic()->rep_get_item( $scenario );
 			}

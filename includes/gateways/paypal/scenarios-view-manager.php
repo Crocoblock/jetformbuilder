@@ -21,9 +21,17 @@ class Scenarios_View_Manager {
 		return apply_filters(
 			'jet-form-builder/gateways/paypal/scenarios-view',
 			array(
+				new Scenarios_Views\Pay_Now(),
 				new Scenarios_Views\Subscribe_Now(),
 			)
 		);
+	}
+
+	/**
+	 * @return Scenarios_Views\Scenario_View_Base[]
+	 */
+	public function get_items(): array {
+		return $this->rep_get_items();
 	}
 
 	/**
@@ -54,5 +62,38 @@ class Scenarios_View_Manager {
 		} catch ( Repository_Exception $exception ) {
 			return array();
 		}
+	}
+
+	public function get_editor_labels(): array {
+		$labels = array();
+
+		foreach ( $this->get_items() as $view ) {
+			$labels[ $view::scenario_id() ] = $view->get_editor_labels();
+		}
+
+		return $labels;
+	}
+
+	public function get_editor_data(): array {
+		$data = array();
+
+		foreach ( $this->get_items() as $view ) {
+			$data[ $view::scenario_id() ] = $view->get_editor_data();
+		}
+
+		return $data;
+	}
+
+	public function get_items_list(): array {
+		$list = array();
+
+		foreach ( $this->get_items() as $view ) {
+			$list[] = array(
+				'value' => $view::scenario_id(),
+				'label' => $view->get_title(),
+			);
+		}
+
+		return $list;
 	}
 }

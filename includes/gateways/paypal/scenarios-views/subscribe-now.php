@@ -6,10 +6,16 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
+use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Subscribe_Now_Editor;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
 class Subscribe_Now extends Scenario_View_Base {
 
 	use Paypal\Scenarios_Connectors\Subscribe_Now;
+
+	public function get_title(): string {
+		return _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' );
+	}
 
 	public function get_list(): array {
 		try {
@@ -22,6 +28,36 @@ class Subscribe_Now extends Scenario_View_Base {
 		} catch ( Query_Builder_Exception $exception ) {
 			return array();
 		}
+	}
+
+	public function get_editor_labels(): array {
+		return array_merge(
+			array(
+				'subscribe_plan_field' => __( 'Subscription Plan Field', 'jet-form-builder' ),
+				'subscribe_plan'       => __( 'Subscription Plan', 'jet-form-builder' ),
+				'plan_from'            => __( 'Subscription Plan From', 'jet-form-builder' ),
+			),
+			$this->get_another( Scenarios_Views\Pay_Now::scenario_id() )->get_editor_labels()
+		);
+	}
+
+	public function get_editor_data(): array {
+		return array(
+			'fetch'             => array(
+				'method' => Fetch_Subscribe_Now_Editor::get_methods(),
+				'url'    => Fetch_Subscribe_Now_Editor::rest_url(),
+			),
+			'plan_from_options' => array(
+				array(
+					'value' => '',
+					'label' => __( 'Manual Input', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'field',
+					'label' => __( 'From Field', 'jet-form-builder' ),
+				),
+			),
+		);
 	}
 
 	public function get_single_actions(): array {

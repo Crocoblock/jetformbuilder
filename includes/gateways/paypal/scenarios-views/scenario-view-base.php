@@ -5,23 +5,35 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Query_Views\Paypal_Subscriptions_View;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
 abstract class Scenario_View_Base extends Scenario_Item_Base {
 
-	const COLUMN_CHOOSE  = 'choose';
+	const COLUMN_CHOOSE = 'choose';
 	const COLUMN_ACTIONS = 'actions';
+
+	abstract public function get_title(): string;
 
 	abstract public function get_columns_handlers(): array;
 
 	abstract public function get_columns_headings(): array;
 
+	abstract public function get_list(): array;
+
 	public function get_single_actions(): array {
 		return array();
 	}
 
-	abstract public function get_list(): array;
+	public function get_editor_labels(): array {
+		return array();
+	}
+
+	public function get_editor_data(): array {
+		return array();
+	}
 
 	/**
 	 * @return array
@@ -90,6 +102,15 @@ abstract class Scenario_View_Base extends Scenario_Item_Base {
 			default:
 				return $value;
 		}
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return Scenario_View_Base
+	 */
+	protected function get_another( $slug ): Scenario_View_Base {
+		return Scenarios_Manager::instance()->view()->rep_get_item_or_die( $slug );
 	}
 
 }

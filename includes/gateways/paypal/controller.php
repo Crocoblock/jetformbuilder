@@ -67,46 +67,18 @@ class Controller extends Base_Gateway {
 	}
 
 	public function custom_labels(): array {
-		return apply_filters(
-			'jet-form-builder/gateways/paypal/custom-labels',
-			array(
-				'scenario' => array(
-					Scenarios_Logic\Pay_Now::scenario_id() => array(
-						'currency' => _x( 'Currency Code', 'Paypal gateways editor data', 'jet-form-builder' ),
-					),
-				),
-			)
+		return array(
+			'scenario' => Scenarios_Manager::instance()->view()->get_editor_labels(),
 		);
 	}
 
-	public function additional_editor_data() {
-		return apply_filters(
-			'jet-form-builder/gateways/paypal/editor-data',
+	public function additional_editor_data(): array {
+		return array_merge(
 			array(
-				'version'                              => 1,
-				Scenarios_Logic\Pay_Now::scenario_id() => array(
-					'fetch' => array(
-						'method' => Fetch_Pay_Now_Editor::get_methods(),
-						'url'    => Fetch_Pay_Now_Editor::rest_url(),
-					),
-				),
-				Scenarios_Logic\Subscribe_Now::scenario_id() => array(
-					'fetch' => array(
-						'method' => Fetch_Subscribe_Now_Editor::get_methods(),
-						'url'    => Fetch_Subscribe_Now_Editor::rest_url(),
-					),
-				),
-				'gateway_types'                        => array(
-					array(
-						'value' => Scenarios_Logic\Pay_Now::scenario_id(),
-						'label' => _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' ),
-					),
-					array(
-						'value' => Scenarios_Logic\Subscribe_Now::scenario_id(),
-						'label' => _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' ),
-					),
-				),
-			)
+				'version'   => 1,
+				'scenarios' => Scenarios_Manager::instance()->view()->get_items_list(),
+			),
+			Scenarios_Manager::instance()->view()->get_editor_data()
 		);
 	}
 
@@ -220,7 +192,7 @@ class Controller extends Base_Gateway {
 			return self::get_token_global();
 		}
 
-		return self::get_token_with_credits( $paypal['secret'], $paypal['client_id'] );
+		return self::get_token_with_credits( $paypal['client_id'], $paypal['secret'] );
 	}
 
 	/**

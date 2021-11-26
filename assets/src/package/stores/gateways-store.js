@@ -39,6 +39,12 @@ const actions = {
 			item,
 		};
 	},
+	setCurrentScenario( item ) {
+		return {
+			type: 'SET_CURRENT_SCENARIO',
+			item,
+		};
+	},
 	hardSetGateway( item, value = '' ) {
 		return {
 			type: 'HARD_SET_CURRENT_GATEWAY',
@@ -131,6 +137,22 @@ const store = createReduxStore( 'jet-forms/gateways', {
 						...(
 							action.item || {}
 						),
+					},
+				};
+
+			case 'SET_CURRENT_SCENARIO':
+				return {
+					...state,
+					currentScenario: {
+						...state.currentScenario,
+						[ state.currentScenario?.id ]: {
+							...(
+								state.currentScenario[ state.currentScenario?.id ] || {}
+							),
+							...(
+								action.item || {}
+							),
+						},
 					},
 				};
 

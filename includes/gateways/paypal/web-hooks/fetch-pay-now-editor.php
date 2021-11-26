@@ -21,13 +21,23 @@ class Fetch_Pay_Now_Editor extends Rest_Api_Endpoint_Base {
 		return true;
 	}
 
-	public function run_callback( \WP_REST_Request $request ) {
+	/**
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return mixed|string
+	 * @throws Gateway_Exception
+	 */
+	public function get_token( \WP_REST_Request $request ): string {
 		$credits = $request->get_json_params();
 
 		list( $client_id, $secret ) = array( $credits['client_id'] ?? '', $credits['secret'] ?? '' );
 
+		return Paypal\Controller::get_token_with_credits( $client_id, $secret );
+	}
+
+	public function run_callback( \WP_REST_Request $request ) {
 		try {
-			Paypal\Controller::get_token_with_credits( $client_id, $secret );
+			$this->get_token( $request );
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
@@ -41,7 +51,7 @@ class Fetch_Pay_Now_Editor extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'message' => __( 'Access key saved successfully', 'jet-form-builder' ),
+				'message' => __( 'Access key saved successfully!', 'jet-form-builder' ),
 			)
 		);
 	}

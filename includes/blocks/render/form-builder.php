@@ -117,11 +117,11 @@ class Form_Builder {
 	public function start_form() {
 
 		Plugin::instance()->blocks->enqueue_frontend_assets();
-		$this->render_styles();
 
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
 		$start_form .= $this->maybe_render_fonts_block();
+		$start_form .= $this->render_styles();
 
 		$this->add_attribute( 'class', 'jet-form-builder' );
 		$this->add_attribute( 'class', 'layout-' . Live_Form::instance()->spec_data->fields_layout );
@@ -166,19 +166,37 @@ class Form_Builder {
 	}
 
 	private function render_styles() {
+		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return $this->get_inline_styles();
+		}
+
 		if ( Tools::is_elementor_editor() ) {
-			return;
+			return '';
 		}
 		wp_enqueue_style( 'jet-form-builder-frontend' );
 
 		if ( ! Jet_Style_Manager::is_activated() ) {
-			return;
+			return '';
+		}
+
+		return $this->get_inline_styles();
+	}
+
+	private function get_inline_styles(): string {
+		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			return sprintf(
+				'<style id="jet-form-builder-%s-inline-css">%s</style>',
+				$this->form_id,
+				Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
+			);
 		}
 
 		wp_add_inline_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
 		);
+
+		return '';
 	}
 
 	private function maybe_render_fonts_block(): string {

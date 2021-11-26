@@ -330,6 +330,8 @@ export const withDispatchGateways = ( dispatch ) => {
 		setGateway: store.setGateway,
 		setGatewayInner: store.setGatewayInner,
 		setGatewaySpecific: store.setGatewaySpecific,
+		clearGateway: store.clearGateway,
+		clearScenario: store.clearScenario,
 	};
 };
 

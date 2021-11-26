@@ -34,8 +34,8 @@ function SubscribeNowScenario( {
 	insert_post,
 	getSpecificOrGlobal,
 	loadingGateway,
-	gatewayScenario,
-	setGatewayScenario,
+	currentScenario,
+	setScenario,
 	scenarioSource,
 	noticeOperations,
 	scenarioLabel,
@@ -84,18 +84,18 @@ function SubscribeNowScenario( {
 					className='jet-control-clear-full jet-user-fields-map__list'
 					key='scenario_plan_from_control'
 					options={ scenarioSource.plan_from_options }
-					selected={ gatewayScenario.plan_from }
-					onChange={ plan_from => setGatewayScenario( { plan_from } ) }
+					selected={ currentScenario.plan_from }
+					onChange={ plan_from => setScenario( { plan_from } ) }
 				/>
 			</BaseControl>
-			{ 'field' === gatewayScenario.plan_from
+			{ 'field' === currentScenario.plan_from
 				? <SelectControl
 					label={ scenarioLabel( 'subscribe_plan_field' ) }
 					key={ 'form_fields_subscribe_plan_field' }
-					value={ gatewayScenario.plan_field }
+					value={ currentScenario.plan_field }
 					labelPosition='side'
 					onChange={ plan_field => {
-						setGatewayScenario( { plan_field } );
+						setScenario( { plan_field } );
 					} }
 					options={ formFields }
 				/>
@@ -106,12 +106,12 @@ function SubscribeNowScenario( {
 					<CustomSelectControl
 						hideLabelFromVision
 						options={ fetchedPlans }
-						value={ getPlan( gatewayScenario.plan_manual ) }
+						value={ getPlan( currentScenario.plan_manual ) }
 						onChange={ ( { selectedItem } ) => {
 							if ( selectedItem.disabled ) {
 								return;
 							}
-							setGatewayScenario( { plan_manual: selectedItem.key } );
+							setScenario( { plan_manual: selectedItem.key } );
 						} }
 					/>
 				</BaseControl>

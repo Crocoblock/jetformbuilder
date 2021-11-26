@@ -9,6 +9,16 @@ const DEFAULT_STATE = {
 };
 
 const actions = {
+	clearGateway() {
+		return {
+			type: 'CLEAR_GATEWAY',
+		};
+	},
+	clearScenario() {
+		return {
+			type: 'CLEAR_SCENARIO',
+		};
+	},
 	setRequest( item ) {
 		return {
 			type: 'SET_CURRENT_REQUEST',
@@ -88,6 +98,16 @@ const selectors = {
 const store = createReduxStore( 'jet-forms/gateways', {
 	reducer( state = DEFAULT_STATE, action ) {
 		switch ( action.type ) {
+			case 'CLEAR_GATEWAY':
+				return {
+					...state,
+					currentGateway: {}
+				};
+			case 'CLEAR_SCENARIO':
+				return {
+					...state,
+					currentScenario: {}
+				};
 			case 'SET_CURRENT_REQUEST':
 				const items = [ selectors.getGatewayId( state ), action.item?.id ].filter( value => value );
 				action.item.id = items.join( '/' );

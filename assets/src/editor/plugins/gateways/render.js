@@ -43,8 +43,10 @@ function PluginGateways( {
 	ChangeGateway,
 	setGateway,
 	setGatewayScenario,
+	clearGateway,
+	clearScenario,
 	gatewayGeneral,
-	gatewayScenario
+	gatewayScenario,
 } ) {
 
 	const [ isEdit, setEdit ] = useState( false );
@@ -52,10 +54,10 @@ function PluginGateways( {
 	useEffect( () => {
 		if ( isEdit ) {
 			setGateway( GatewaysMeta );
-			setGatewayScenario( GatewaysMeta[ GatewaysMeta.gateway ]?.scenario )
+			setGatewayScenario( GatewaysMeta[ GatewaysMeta.gateway ]?.scenario );
 		} else {
-			setGateway( {} );
-			setGatewayScenario( {} );
+			clearGateway();
+			clearScenario();
 		}
 	}, [ isEdit ] );
 

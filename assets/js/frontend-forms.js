@@ -1019,10 +1019,6 @@
 				}
 			};
 
-			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
-				replaceFieldValues( $( this ).closest( 'form.jet-form-builder' ) );
-			} );
-
 			const initRepeater = function( e ) {
 				const repeater = $( e.target ).closest( '.jet-form-builder-repeater' );
 				const $form = $( e.target ).closest( 'form.jet-form-builder' );
@@ -1041,11 +1037,6 @@
 				replaceFieldValues( $form );
 			}
 
-			JetFormBuilder.replaceStack[ $form.data( 'form-id' ) ] = {
-				macros: [],
-				repeaters: {},
-			};
-
 			const pushStack = function( formId, stack ) {
 				JetFormBuilder.replaceStack[ formId ].macros.push( ...stack );
 			};
@@ -1057,8 +1048,18 @@
 				JetFormBuilder.replaceStack[ formId ].repeaters[ repeaterName ] = repeater;
 			}
 
-			pushStack( $form.data( 'form-id' ), getAllComments( $form[ 0 ] ) );
-			replaceFieldValues( $form );
+			$( document ).on( 'change.JetFormBuilderMain', 'form.jet-form-builder .jet-form-builder__field', function() {
+				replaceFieldValues( $( this ).closest( 'form.jet-form-builder' ) );
+			} );
+
+			if ( $form.length ) {
+				JetFormBuilder.replaceStack[ $form.data( 'form-id' ) ] = {
+					macros: [],
+					repeaters: {},
+				};
+				pushStack( $form.data( 'form-id' ), getAllComments( $form[ 0 ] ) );
+				replaceFieldValues( $form );
+			}
 
 			$( document ).on(
 				'jet-form-builder/repeater-add-new',

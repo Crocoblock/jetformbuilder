@@ -35,7 +35,9 @@ class Subscribe_Now extends Scenario_View_Base {
 			array(
 				'subscribe_plan_field' => __( 'Subscription Plan Field', 'jet-form-builder' ),
 				'subscribe_plan'       => __( 'Subscription Plan', 'jet-form-builder' ),
-				'plan_from'            => __( 'Subscription Plan From', 'jet-form-builder' ),
+				'copy_plan_button'     => __( 'Copy selected Plan ID', 'jet-form-builder' ),
+				'quantity_field'       => __( 'Quantity field', 'jet-form-builder' ),
+				'quantity_manual'      => __( 'Manual input of quantity', 'jet-form-builder' ),
 			),
 			$this->get_another( Scenarios_Views\Pay_Now::scenario_id() )->get_editor_labels()
 		);

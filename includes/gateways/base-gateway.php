@@ -254,9 +254,7 @@ abstract class Base_Gateway {
 	}
 
 	final public function set_form_gateways_meta() {
-		$this->gateways_meta = $this->with_global_settings();
-
-		return $this;
+		return $this->set_form_meta( $this->with_global_settings() );
 	}
 
 	/**
@@ -295,7 +293,7 @@ abstract class Base_Gateway {
 		if ( empty( $this->get_action_handler()->get_all() ) ) {
 			return;
 		}
-		$this->gateways_meta = GM::instance()->gateways();
+		$this->set_form_meta( GM::instance()->gateways() );
 
 		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
 			if ( 'insert_post' === $action->get_id()
@@ -404,6 +402,7 @@ abstract class Base_Gateway {
 	 */
 	public function set_gateway_data() {
 		if ( ! $this->gateways_meta ) {
+			/** for backward compatibility */
 			$this->gateways_meta = GM::instance()->gateways();
 		}
 
@@ -511,7 +510,7 @@ abstract class Base_Gateway {
 			$this->on_success_payment();
 
 		} catch ( Gateway_Exception $exception ) {
-			// var_dump( $exception ); die;
+
 		}
 	}
 
@@ -576,7 +575,7 @@ abstract class Base_Gateway {
 
 	public function get_current_scenario(): array {
 		$scenario_id = $this->get_current_scenario_id();
-		$scenario    = $this->get_current_scenario();
+		$scenario    = $this->get_scenario_meta();
 
 		return $scenario[ $scenario_id ] ?? array();
 	}
@@ -652,6 +651,12 @@ abstract class Base_Gateway {
 
 	public function custom_labels(): array {
 		return array();
+	}
+
+	public function set_form_meta( $gateways_meta ): Base_Gateway {
+		$this->gateways_meta = $gateways_meta;
+
+		return $this;
 	}
 
 }

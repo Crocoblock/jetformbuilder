@@ -26,7 +26,6 @@ const {
 } = JetFBHooks;
 
 function PaypalMain( {
-	loadingGateway,
 	setGatewayRequest,
 	gatewaySpecific,
 	setGatewaySpecific,

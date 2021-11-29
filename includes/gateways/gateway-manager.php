@@ -160,7 +160,7 @@ class Gateway_Manager {
 	 */
 	public function controller( $gateway_id ) {
 		try {
-			return self::instance()->get_gateway_controller( $gateway_id );
+			return $this->get_gateway_controller( $gateway_id );
 		} catch ( Repository_Exception $exception ) {
 			_doing_it_wrong( __METHOD__, esc_html( "Undefined gateway: {$gateway_id}" ), '1.4.0' );
 		}

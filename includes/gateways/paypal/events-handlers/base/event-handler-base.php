@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Events_Handlers\Base;
 
-use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
+use Jet_Form_Builder\Classes\Repository_Static_Item_It;
 
-abstract class Event_Handler_Base implements Repository_Static_Item_Trait {
+abstract class Event_Handler_Base implements Repository_Static_Item_It {
 
 	public static function rep_item_id() {
 		return static::get_event_type();

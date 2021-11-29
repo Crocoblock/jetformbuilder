@@ -59,11 +59,11 @@ class List_Subscription_Plans extends Base_Action {
 			$is_disabled = 'ACTIVE' !== $plan['status'];
 
 			$response[] = array(
-				'key'                => $plan['id'],
-				'name'               => $plan['name'],
-				'__experimentalHint' => $plan['description'],
-				'disabled'           => $is_disabled,
-				'className'          => $is_disabled ? 'is-disabled' : '',
+				'key'         => $plan['id'],
+				'name'        => $plan['name'],
+				'description' => $plan['description'],
+				'disabled'    => $is_disabled,
+				'className'   => $is_disabled ? 'is-disabled' : '',
 			);
 		}
 

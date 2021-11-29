@@ -4,11 +4,38 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Events_Handlers\Base;
 
 use Jet_Form_Builder\Db_Queries\Query_Builder;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 
-abstract class Billing_Subscription_Change extends Event_Handler_Base {
+abstract class Billing_Subscription extends Event_Handler_Base {
 
+	/**
+	 * @param $subscription_id
+	 *
+	 * @return array
+	 * @throws Gateway_Exception
+	 */
+	public static function get_subscription( $subscription_id ): array {
+		try {
+			return ( new Query_Builder() )
+				->set_view(
+					( new Paypal\Query_Views\Paypal_Subscriptions_Find_View() )
+						->find_by( 'subscription_id', $subscription_id )
+				)
+				->query_one();
+
+		} catch ( Query_Builder_Exception $exception ) {
+			throw ( new Gateway_Exception( $exception->getMessage() ) )->set_code( 404 );
+		}
+	}
+
+	/**
+	 * @param $webhook_event
+	 *
+	 * @return \WP_REST_Response
+	 * @throws Gateway_Exception
+	 */
 	public function on_catch_event( $webhook_event ): \WP_REST_Response {
 		// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		$subscription_id = $webhook_event['resource']['id'] ?? false;
@@ -29,24 +56,7 @@ abstract class Billing_Subscription_Change extends Event_Handler_Base {
 			);
 		}
 
-		try {
-			$subscription = ( new Query_Builder() )
-				->set_view(
-					( new Paypal\Query_Views\Paypal_Subscriptions_Find_View() )
-						->find_by( 'subscription_id', $subscription_id )
-				)
-				->query_one();
-
-		} catch ( Query_Builder_Exception $exception ) {
-			return new \WP_REST_Response(
-				'Fail',
-				404,
-				array(
-					'X-JFB-Paypal-Webhook-Response' => $exception->getMessage(),
-				)
-			);
-		}
-
+		$subscription             = self::get_subscription( $subscription_id );
 		$subscription['resource'] = $webhook_event['resource'];
 
 		update_post_meta(

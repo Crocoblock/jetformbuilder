@@ -1,4 +1,7 @@
-const { compose } = wp.compose;
+const {
+	compose,
+	useCopyToClipboard,
+} = wp.compose;
 
 const {
 	withSelect,
@@ -10,12 +13,11 @@ const {
 	BaseControl,
 	RadioControl,
 	CustomSelectControl,
+	TextControl,
+	Button,
 } = wp.components;
 
-const {
-	gatewayLabel,
-	gatewayAttr,
-} = JetFBActions;
+const { __ } = wp.i18n;
 
 const {
 	withSelectFormFields,
@@ -24,8 +26,9 @@ const {
 	withSelectActionsByType,
 } = JetFBHooks;
 
-const { GatewayFetchButton } = JetFBComponents;
+const { GatewayFetchButton, BaseHelp } = JetFBComponents;
 
+const { RawHTML } = wp.element;
 
 function SubscribeNowScenario( {
 	gatewayGeneral,
@@ -57,6 +60,9 @@ function SubscribeNowScenario( {
 		return fetchedPlans.find( plan => plan.key === planID );
 	};
 
+	const currentPlan = getPlan( currentScenario.plan_manual );
+	const copyRef = useCopyToClipboard( currentScenario.plan_manual, console.log );
+
 	return <>
 		<BaseControl
 			label={ scenarioLabel( 'fetch_button_label' ) }
@@ -76,47 +82,58 @@ function SubscribeNowScenario( {
 			/>
 		</BaseControl>
 		{ loadingGateway.success && <>
-			<BaseControl
-				label={ scenarioLabel( 'plan_from' ) }
-				key='scenario_plan_from'
+			<SelectControl
+				label={ scenarioLabel( 'subscribe_plan_field' ) }
+				key={ 'form_fields_subscribe_plan_field' }
+				value={ currentScenario.plan_field }
+				labelPosition='side'
+				onChange={ plan_field => setScenario( { plan_field } ) }
+				options={ formFields }
+			/>
+			{ ! currentScenario.plan_field && <BaseControl
+				label={ scenarioLabel( 'subscribe_plan' ) }
+				key='scenario_plan_manual'
 			>
-				<RadioControl
-					className='jet-control-clear-full jet-user-fields-map__list'
-					key='scenario_plan_from_control'
-					options={ scenarioSource.plan_from_options }
-					selected={ currentScenario.plan_from }
-					onChange={ plan_from => setScenario( { plan_from } ) }
-				/>
-			</BaseControl>
-			{ 'field' === currentScenario.plan_from
-				? <SelectControl
-					label={ scenarioLabel( 'subscribe_plan_field' ) }
-					key={ 'form_fields_subscribe_plan_field' }
-					value={ currentScenario.plan_field }
-					labelPosition='side'
-					onChange={ plan_field => {
-						setScenario( { plan_field } );
+				<CustomSelectControl
+					hideLabelFromVision
+					options={ fetchedPlans }
+					value={ currentPlan }
+					onChange={ ( { selectedItem } ) => {
+						if ( selectedItem.disabled ) {
+							return;
+						}
+						setScenario( { plan_manual: selectedItem.key } );
 					} }
-					options={ formFields }
 				/>
-				: <BaseControl
-					label={ scenarioLabel( 'subscribe_plan' ) }
-					key='scenario_plan_manual'
+			</BaseControl> }
+			{ ( currentPlan && currentPlan.key ) && <>
+				<Button
+					isLink
+					ref={ copyRef }
+					style={ {
+						marginBottom: currentPlan.description ? 'unset' : '1em',
+					} }
 				>
-					<CustomSelectControl
-						hideLabelFromVision
-						options={ fetchedPlans }
-						value={ getPlan( currentScenario.plan_manual ) }
-						onChange={ ( { selectedItem } ) => {
-							if ( selectedItem.disabled ) {
-								return;
-							}
-							setScenario( { plan_manual: selectedItem.key } );
-						} }
-					/>
-				</BaseControl>
-			}
-
+					{ scenarioLabel( 'copy_plan_button' ) }
+				</Button>
+				{ currentPlan.description && <BaseHelp>
+					<RawHTML>{ currentPlan.description }</RawHTML>
+				</BaseHelp> }
+			</> }
+			<SelectControl
+				label={ scenarioLabel( 'quantity_field' ) }
+				key={ 'form_fields_quantity_field' }
+				value={ currentScenario.quantity_field }
+				labelPosition='side'
+				onChange={ quantity_field => setScenario( { quantity_field } ) }
+				options={ formFields }
+			/>
+			{ ! currentScenario.quantity_field && <TextControl
+				key={ 'control_quantity_manual' }
+				label={ scenarioLabel( 'quantity_manual' ) }
+				value={ currentScenario.quantity_manual }
+				onChange={ quantity_manual => setScenario( { quantity_manual } ) }
+			/> }
 			<BaseControl
 				label={ globalGatewayLabel( 'action_order' ) }
 				key='gateway_action_order_pay_now_control'
@@ -138,7 +155,7 @@ function SubscribeNowScenario( {
 export default compose(
 	withSelect( ( ...props ) => (
 		{
-			...withSelectFormFields( [], '--' )( ...props ),
+			...withSelectFormFields( [], __( 'Manual Input', 'jet-form-builder' ) )( ...props ),
 			...withSelectActionsByType( 'insert_post', true )( ...props ),
 			...withSelectGateways( ...props ),
 		}

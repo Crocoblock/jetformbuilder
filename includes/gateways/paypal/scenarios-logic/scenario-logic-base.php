@@ -3,13 +3,14 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
-use Jet_Form_Builder\Classes\Repository_Static_Item_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
-use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Base;
+use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
-abstract class Scenario_Logic_Base extends Scenario_Item_Base {
+abstract class Scenario_Logic_Base {
+
+	use Scenario_Item_Trait;
 
 	/** @var Controller */
 	protected $controller;
@@ -29,9 +30,7 @@ abstract class Scenario_Logic_Base extends Scenario_Item_Base {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function set_gateway_data() {
-		$this->controller->set_gateway_data();
-	}
+	abstract public function set_gateway_data();
 
 	public function get_queried_token() {
 		if ( ! $this->queried_token ) {

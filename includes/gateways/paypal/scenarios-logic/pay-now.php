@@ -81,14 +81,14 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			Paypal\Controller::GATEWAY_META_KEY,
 			wp_json_encode(
 				array(
+					'gateway_id' => $this->controller->get_id(),
 					'payment_id' => $payment['id'],
-					'scenario'   => $this->rep_item_id(),
+					'scenario'   => self::scenario_id(),
 					'order_id'   => $this->controller->get_order_id(),
 					'form_id'    => $this->get_action_handler()->form_id,
 					'form_data'  => $this->get_action_handler()->request_data,
 					'resource'   => $payment,
 					'provider'   => 'jet-form-builder',
-					'gateway_id' => $this->controller->get_id(),
 				),
 				JSON_UNESCAPED_UNICODE
 			)
@@ -142,5 +142,13 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 				'email'      => $payment['payer']['email_address'] ?? '',
 			)
 		);
+	}
+
+	public function set_gateway_data() {
+		$this->controller->set_order_id();
+		$this->controller->set_price_field();
+		$this->controller->set_price_from_filed();
+		$this->controller->set_current_gateway_options();
+		$this->controller->set_order_token();
 	}
 }

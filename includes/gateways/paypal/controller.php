@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Pay_Now_Editor;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Subscribe_Now_Editor;
@@ -16,8 +17,8 @@ class Controller extends Base_Gateway {
 
 	const ID = 'paypal';
 
-	public $data     = false;
-	public $message  = false;
+	public $data = false;
+	public $message = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
@@ -240,6 +241,13 @@ class Controller extends Base_Gateway {
 		set_transient( $hash, $token, $response['expires_in'] * 0.9 );
 
 		return $token;
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	public function set_gateway_data() {
+		$this->get_scenario()->set_gateway_data();
 	}
 
 }

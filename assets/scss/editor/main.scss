@@ -103,8 +103,12 @@
 	.components-custom-select-control {
 		flex: 3.1;
 
-		.components-custom-select-control__item.is-disabled {
+		&__item.is-disabled {
 			background-color: mistyrose;
+		}
+
+		&__button {
+			width: 100%;
 		}
 	}
 }

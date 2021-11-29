@@ -1,118 +1,41 @@
 {
-  "auth_algo": "SHA256withRSA",
-  "transmission_id": "7e69ae90-4307-11ec-aec0-b7a3983117a7",
-  "cert_url": "https://api.sandbox.paypal.com/v1/notifications/certs/CERT-360caa42-fca2a594-7a8abba8",
-  "transmission_time": "2021-11-11T15:53:20Z",
-  "transmission_sig": "OBsBfC3rRodsgsuDFj4/XRP2zDfjRFtA4DsCNK+mucxTwZVdGR6FzAsvJd0vfnWRcpbuhyzekvA/v2hO1x9ldlIaoxyNGM132W8ZnCNQk0ueKfza3oYe0OvOQKsrv4MHkrwfIGXX8px6HpzXvzhcZdaQ5U5X20Ye+WcrITp/SyJBgbfymoN6BWzSAcbgFDrfkrzyddUjXuaTsp4e9DkHAYLZaXhqP43thrvlMQIK6T9OEo5POrYCJzZ1ARexJB1KKO8leJzfdU4roc99KDrKGuGuvTjEPzsvkvpiWAQ1uiUTE/+U2xQOJ+P85hjp75dk42DpXSJtZbKyG4dOHsRfKg==",
-  "webhook_id": "112080562Y234535X",
-  "webhook_event": {
-    "id": "WH-99224789W4746624A-7GS60039LR8156542",
-    "event_version": "1.0",
-    "create_time": "2021-11-11T15:53:16.968Z",
-    "resource_type": "subscription",
-    "resource_version": "2.0",
-    "event_type": "BILLING.SUBSCRIPTION.SUSPENDED",
-    "summary": "Subscription suspended",
-    "resource": {
-      "status_change_note": "Item out of stock.",
-      "quantity": "1",
-      "subscriber": {
-        "email_address": "sanko200065@gmail.com",
-        "payer_id": "VFG6LG948GRRL",
-        "name": {
-          "given_name": "Олександр",
-          "surname": "Іваненко"
-        },
-        "shipping_address": {
-          "address": {
-            "address_line_1": "Rumina",
-            "admin_area_2": "Mykolaiv",
-            "admin_area_1": "MYKOLAIVSKA OBL",
-            "postal_code": "54000",
-            "country_code": "UA"
-          }
-        }
-      },
-      "create_time": "2021-11-11T13:08:30Z",
-      "plan_overridden": false,
-      "shipping_amount": {
-        "currency_code": "USD",
-        "value": "0.0"
-      },
-      "start_time": "2021-11-11T13:08:15Z",
-      "update_time": "2021-11-11T15:52:48Z",
-      "billing_info": {
-        "outstanding_balance": {
-          "currency_code": "USD",
-          "value": "0.0"
-        },
-        "cycle_executions": [
-          {
-            "tenure_type": "REGULAR",
-            "sequence": 1,
-            "cycles_completed": 1,
-            "cycles_remaining": 2,
-            "current_pricing_scheme_version": 1,
-            "total_cycles": 3
-          }
-        ],
-        "last_payment": {
-          "amount": {
-            "currency_code": "USD",
-            "value": "100.0"
-          },
-          "time": "2021-11-11T13:08:31Z"
-        },
-        "failed_payments_count": 0
-      },
-      "links": [
-        {
-          "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-LGK0KGLACKGN/cancel",
-          "rel": "cancel",
-          "method": "POST",
-          "encType": "application/json"
-        },
-        {
-          "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-LGK0KGLACKGN",
-          "rel": "edit",
-          "method": "PATCH",
-          "encType": "application/json"
-        },
-        {
-          "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-LGK0KGLACKGN",
-          "rel": "self",
-          "method": "GET",
-          "encType": "application/json"
-        },
-        {
-          "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-LGK0KGLACKGN/activate",
-          "rel": "activate",
-          "method": "POST",
-          "encType": "application/json"
-        },
-        {
-          "href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-LGK0KGLACKGN/capture",
-          "rel": "capture",
-          "method": "POST",
-          "encType": "application/json"
-        }
-      ],
-      "id": "I-LGK0KGLACKGN",
-      "plan_id": "P-2RW14005CT679391XMFPMEWI",
-      "status": "SUSPENDED",
-      "status_update_time": "2021-11-11T15:52:48Z"
-    },
-    "links": [
-      {
-        "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-99224789W4746624A-7GS60039LR8156542",
-        "rel": "self",
-        "method": "GET"
-      },
-      {
-        "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-99224789W4746624A-7GS60039LR8156542/resend",
-        "rel": "resend",
-        "method": "POST"
-      }
-    ]
-  }
+	"resource_type": "sale",
+	"event_type": "sale",
+	"summary": "Payment completed for $ 1795.0 USD",
+	"resource": {
+		"amount": {
+			"total": "1795.00",
+			"currency": "USD",
+			"details": {
+				"subtotal": "1795.00"
+			}
+		},
+		"payment_mode": "INSTANT_TRANSFER",
+		"create_time": "2021-11-29T15:34:27Z",
+		"transaction_fee": {
+			"currency": "USD",
+			"value": "90.06"
+		},
+		"billing_agreement_id": "I-7CGKBFYA6LV5",
+		"update_time": "2021-11-29T15:34:27Z",
+		"soft_descriptor": "PAYPAL *JOHNDOESTES",
+		"protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE",
+		"protection_eligibility": "ELIGIBLE",
+		"links": [
+			{
+				"method": "GET",
+				"rel": "self",
+				"href": "https://api.sandbox.paypal.com/v1/payments/sale/6TK11017J91581226"
+			},
+			{
+				"method": "POST",
+				"rel": "refund",
+				"href": "https://api.sandbox.paypal.com/v1/payments/sale/6TK11017J91581226/refund"
+			}
+		],
+		"id": "6TK11017J91581226",
+		"state": "completed",
+		"invoice_number": ""
+	},
+	"create_dt": 1638207318
 }

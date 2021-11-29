@@ -2337,7 +2337,6 @@ class Form extends Jfb_Widget_Base {
 				array(
 					'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
 					'type'      => Controls_Manager::CHOOSE,
-					'default'   => 'flex-start',
 					'options'   => array(
 						'flex-start' => array(
 							'title' => esc_html__( 'Start', 'jet-form-builder' ),
@@ -2793,7 +2792,6 @@ class Form extends Jfb_Widget_Base {
 				array(
 					'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
 					'type'      => Controls_Manager::CHOOSE,
-					'default'   => 'flex-start',
 					'options'   => array(
 						'flex-start' => array(
 							'title' => esc_html__( 'Start', 'jet-form-builder' ),
@@ -2823,7 +2821,6 @@ class Form extends Jfb_Widget_Base {
 				array(
 					'label'     => esc_html__( 'Button Text Alignment', 'jet-form-builder' ),
 					'type'      => Controls_Manager::CHOOSE,
-					'default'   => 'flex-start',
 					'options'   => array(
 						'flex-start' => array(
 							'title' => esc_html__( 'Start', 'jet-form-builder' ),

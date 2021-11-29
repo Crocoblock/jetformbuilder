@@ -171,32 +171,19 @@ class Form_Builder {
 		}
 
 		if ( Tools::is_elementor_editor() ) {
-			return '';
+			return $this->get_inline_styles();
 		}
 		wp_enqueue_style( 'jet-form-builder-frontend' );
-
-		if ( ! Jet_Style_Manager::is_activated() ) {
-			return '';
-		}
 
 		return $this->get_inline_styles();
 	}
 
 	private function get_inline_styles(): string {
-		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
-			return sprintf(
-				'<style id="jet-form-builder-%s-inline-css">%s</style>',
-				$this->form_id,
-				Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
-			);
-		}
-
-		wp_add_inline_style(
-			'jet-form-builder-frontend',
+		return sprintf(
+			'<style id="jet-form-builder-%s-inline-css">%s</style>',
+			$this->form_id,
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
 		);
-
-		return '';
 	}
 
 	private function maybe_render_fonts_block(): string {

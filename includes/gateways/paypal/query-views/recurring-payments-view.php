@@ -39,7 +39,7 @@ class Recurring_Payments_View extends Post_Meta_View {
 	public function order_by(): array {
 		return array(
 			array(
-				'column' => 'post_id',
+				'column' => 'meta_id',
 				'sort'   => self::FROM_HIGH_TO_LOW,
 			),
 		);

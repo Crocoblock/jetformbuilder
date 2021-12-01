@@ -10,4 +10,8 @@ class Payment_Sale_Completed extends Base\Payment_Sale {
 		return 'PAYMENT.SALE.COMPLETED';
 	}
 
+	public function get_billing_id( $webhook_event ): string {
+		return $webhook_event['resource']['billing_agreement_id'] ?? '';
+	}
+
 }

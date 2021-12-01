@@ -23,6 +23,7 @@ abstract class Base_Action {
 	protected $response_message;
 	protected $response_headers;
 	protected $path_parts = array();
+	protected $custom_url = '';
 
 	abstract public function action_slug();
 
@@ -44,24 +45,40 @@ abstract class Base_Action {
 		return array();
 	}
 
-	public function get_url(): string {
-		$url = $this->api_url( $this->action_endpoint(), $this->action_query_args() );
+	public function set_url( $url ): Base_Action {
+		$this->custom_url = esc_url_raw( $url );
 
-		if ( empty( $this->path_parts ) ) {
-			return $url;
+		return $this;
+	}
+
+	public function get_raw_url(): string {
+		return $this->api_url( $this->action_endpoint(), $this->action_query_args() );
+	}
+
+	public function get_url(): string {
+		if ( $this->custom_url ) {
+			return $this->custom_url;
 		}
 
-		return preg_replace_callback_array(
-			$this->get_parts_patterns(),
-			$url
+		$url = $this->get_raw_url();
+
+		if ( empty( $this->path_parts ) ) {
+			return esc_url_raw( $url );
+		}
+
+		return esc_url_raw(
+			preg_replace_callback_array(
+				$this->get_parts_patterns(),
+				$url
+			)
 		);
 	}
 
-	protected function get_parts_patterns(): array {
+	public function get_parts_patterns(): array {
 		$patterns = array();
 
 		foreach ( $this->path_parts as $key => $value ) {
-			$patterns[ "#\{$key\}#" ] = function ( $matches ) use ( $value ) {
+			$patterns[ "#\{($key)\}#" ] = function ( $matches ) use ( $value ) {
 				return $value;
 			};
 		}
@@ -69,21 +86,21 @@ abstract class Base_Action {
 		return $patterns;
 	}
 
-	final public function get_method(): string {
+	public function get_method(): string {
 		return $this->method;
 	}
 
-	final public function get_auth() {
+	public function get_auth() {
 		return $this->auth;
 	}
 
-	final public function set_bearer_auth( $token ): Base_Action {
+	public function set_bearer_auth( $token ): Base_Action {
 		$this->set_auth( "Bearer $token" );
 
 		return $this;
 	}
 
-	final public function set_basic_auth( $token ): Base_Action {
+	public function set_basic_auth( $token ): Base_Action {
 		$this->set_auth( "Basic $token" );
 
 		return $this;
@@ -95,13 +112,13 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	final public function set_path( array $parts ) {
+	public function set_path( array $parts ): Base_Action {
 		$this->path_parts = array_merge( $this->path_parts, $parts );
 
 		return $this;
 	}
 
-	final public function set_body( $content ): Base_Action {
+	public function set_body( $content ): Base_Action {
 		if ( ! $content ) {
 			return $this;
 		}
@@ -117,7 +134,7 @@ abstract class Base_Action {
 		return $this;
 	}
 
-	final public function get_headers(): array {
+	public function get_headers(): array {
 		$args = array(
 			'Accept-Language' => get_locale(),
 		);
@@ -133,7 +150,7 @@ abstract class Base_Action {
 		return is_string( $this->body );
 	}
 
-	final public function get_body() {
+	public function get_body() {
 		if ( $this->is_body_ready() ) {
 			return $this->body;
 		}
@@ -152,7 +169,7 @@ abstract class Base_Action {
 		return wp_unslash( Tools::encode_json( $body ) );
 	}
 
-	final public function get_request_args(): array {
+	public function get_request_args(): array {
 		$args = array(
 			'timeout' => 45,
 			'headers' => $this->get_headers(),
@@ -194,7 +211,7 @@ abstract class Base_Action {
 	 * @return string
 	 */
 	public function api_url( $endpoint, $query_args ): string {
-		$url = esc_url_raw( $this->base_url() . $endpoint );
+		$url = $this->base_url() . $endpoint;
 
 		if ( empty( $query_args ) ) {
 			return $url;
@@ -217,7 +234,7 @@ abstract class Base_Action {
 	/**
 	 * Make a request
 	 */
-	final public function request(): Base_Action {
+	public function request(): Base_Action {
 		$this->before_make_request();
 
 		$response = $this->get_response();
@@ -282,7 +299,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	final public function check_response_code(): Base_Action {
+	public function check_response_code(): Base_Action {
 		if ( $this->accept_code() === $this->get_response_code() ) {
 			return $this;
 		}
@@ -298,7 +315,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	final public function response_body_as_array(): Base_Action {
+	public function response_body_as_array(): Base_Action {
 
 		if ( is_array( $this->get_response_body() ) ) {
 			return $this;
@@ -334,7 +351,7 @@ abstract class Base_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	final public function send_request() {
+	public function send_request() {
 		$this->request();
 
 		$this->response_body_as_array();

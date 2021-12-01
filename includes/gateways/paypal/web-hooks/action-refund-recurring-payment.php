@@ -36,25 +36,8 @@ class Action_Refund_Recurring_Payment extends Rest_Api_Endpoint_Base {
 			 * Execute this action if there is an entry
 			 * with this $payment_id in the database
 			 */
-
-			$raw_payment = ( new Query_Builder() )
-				->set_view(
-					( new Paypal\Query_Views\Recurring_Payment_Find_View() )
-						->find_by( 'payment_id', $payment_id )
-				)
-				->debug()
-				->query_one();
-
-			$payment = ( new Scenarios_Views\Recurring_Payments() )->prepare_record( $raw_payment );
-
-			$raw_subscription = ( new Query_Builder() )
-				->set_view(
-					( new Paypal\Query_Views\Paypal_Subscriptions_Find_View() )
-						->find_by( 'subscription_id', $payment['related_id'] )
-				)->debug()
-				->query_one();
-
-			$subscription = ( new Scenarios_Views\Subscribe_Now() )->prepare_record( $raw_subscription );
+			$payment      = Paypal\Prepared_Views::get_payment( $payment_id );
+			$subscription = Paypal\Prepared_Views::get_subscription( $payment['related_id']['value'] );
 
 		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
@@ -66,35 +49,36 @@ class Action_Refund_Recurring_Payment extends Rest_Api_Endpoint_Base {
 			);
 		}
 
-		$form_id = $subscription['_FORM_ID'] ?? false;
+		$form_id  = $subscription['_FORM_ID']['value'] ?? false;
+		$payer_id = $subscription['subscriber']['value']['payer_id'] ?? false;
 
 		try {
-			$response = ( new Paypal\Api_Actions\Refund_Captured_Payment() )
-				->set_auth_assertion( $form_id, $subscription['subscriber']['payer_id'] ?? '' )
+			$request = ( new Paypal\Api_Actions\Refund_Captured_Payment() )
+				->set_url( $payment['refund_link']['value'] )
 				->set_bearer_auth(
 					Paypal\Controller::get_token_by_form_id( $form_id )
 				)
-				->set_path(
-					array(
-						'capture_id' => $payment_id,
-					)
-				)
-				->set_body(
-					array(
-						'invoice_id'    => $body['invoice_id'] ?? '',
-						'note_to_payer' => $body['note_to_payer'] ?? '',
-					)
-				)->send_request();
+				->set_invoice_id( $body['invoice_id'] ?? '' )
+				->set_note_to_payer( $body['note_to_payer'] ?? '' );
+
+			$request->refund();
+
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
 					'message' => $exception->getMessage(),
 					'data'    => $exception->get_additional(),
+					'file'    => $exception->getFile(),
+					'line'    => $exception->getLine(),
 				),
 				503
 			);
 		}
 
-		return new \WP_REST_Response( 'Success' );
+		return new \WP_REST_Response(
+			array(
+				'message' => 'Success',
+			)
+		);
 	}
 }

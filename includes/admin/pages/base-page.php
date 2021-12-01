@@ -79,11 +79,21 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 
 	/**
 	 * Returns current page url
+	 *
+	 * @param array $query_args
+	 *
+	 * @return string
 	 */
-	public function get_url(): string {
+	public function get_url( $query_args = array() ): string {
 		return add_query_arg(
-			array( 'page' => $this->slug() ),
-			esc_url_raw( admin_url( 'admin.php' ) )
+			array_merge(
+				array(
+					'page'      => $this->slug(),
+					'post_type' => jet_form_builder()->post_type->slug(),
+				),
+				$query_args
+			),
+			esc_url_raw( admin_url( 'edit.php' ) )
 		);
 	}
 

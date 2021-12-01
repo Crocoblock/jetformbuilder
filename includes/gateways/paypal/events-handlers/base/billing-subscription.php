@@ -11,26 +11,6 @@ use Jet_Form_Builder\Gateways\Paypal;
 abstract class Billing_Subscription extends Event_Handler_Base {
 
 	/**
-	 * @param $subscription_id
-	 *
-	 * @return array
-	 * @throws Gateway_Exception
-	 */
-	public static function get_subscription( $subscription_id ): array {
-		try {
-			return ( new Query_Builder() )
-				->set_view(
-					( new Paypal\Query_Views\Paypal_Subscriptions_Find_View() )
-						->find_by( 'subscription_id', $subscription_id )
-				)
-				->query_one();
-
-		} catch ( Query_Builder_Exception $exception ) {
-			throw ( new Gateway_Exception( $exception->getMessage() ) )->set_code( 404 );
-		}
-	}
-
-	/**
 	 * @param $webhook_event
 	 *
 	 * @return \WP_REST_Response
@@ -56,7 +36,12 @@ abstract class Billing_Subscription extends Event_Handler_Base {
 			);
 		}
 
-		$subscription             = self::get_subscription( $subscription_id );
+		try {
+			$subscription = Paypal\Prepared_Views::get_subscription_raw( $subscription_id );
+		} catch ( Query_Builder_Exception $exception ) {
+			throw new Gateway_Exception( "Undefined subscription: {$subscription_id}" );
+		}
+
 		$subscription['resource'] = $webhook_event['resource'];
 
 		update_post_meta(

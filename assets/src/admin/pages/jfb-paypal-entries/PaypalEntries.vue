@@ -21,7 +21,7 @@
 			<template #content>
 				<h3>{{ __( 'Subscription Information', 'jet-form-builder' ) }}</h3>
 				<div class="cx-vui-inner-panel">
-					<DetailsTableWithStore />
+					<DetailsTableWithStore/>
 				</div>
 				<h3>{{ __( 'Subscription Actions', 'jet-form-builder' ) }}</h3>
 				<div class="cx-vui-inner-panel">
@@ -52,11 +52,12 @@ const { applyFilters } = wp.hooks;
 
 const { GetIncoming, i18n } = window.JetFBMixins;
 const { EntriesTable, DetailsTableWithStore } = window.JetFBComponents;
+const { getSearch, createPath } = window.JetFBActions;
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	subscriber,
 	status,
-	billing
+	billing,
 ] );
 
 export default {
@@ -81,6 +82,8 @@ export default {
 		this.scenario = scenario;
 
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
+
+		this.maybeOpen();
 	},
 	computed: {
 		columnsFromStore() {
@@ -89,13 +92,46 @@ export default {
 	},
 	methods: {
 		openPopup( entryID ) {
-			this.$store.commit( 'setCurrent', this.list[ entryID ] || {} );
+			const current = this.list[ entryID ] || {};
+
+			this.$store.commit( 'setCurrent', current );
+
+			window.history.replaceState(
+				'on_open_modal',
+				document.title,
+				createPath( {
+					sub: current.record_id.value,
+				} ),
+			);
 
 			this.isShowPopup = true;
 		},
 		closePopup() {
 			this.isShowPopup = false;
 			this.$store.commit( 'clearCurrent' );
+
+			window.history.replaceState(
+				'on_open_modal',
+				document.title,
+				createPath( {}, {}, [ 'sub' ] ),
+			);
+		},
+		maybeOpen() {
+			const { sub } = getSearch();
+
+			if ( ! sub ) {
+				return;
+			}
+
+			for ( const entryID in this.list ) {
+				const entry = this.list[ entryID ] || {};
+
+				if ( sub === entry.record_id.value ) {
+					this.openPopup( entryID );
+
+					return;
+				}
+			}
 		},
 	},
 };
@@ -103,6 +139,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+.cx-vui-popup__body {
+	max-height: 85vh;
+	overflow: auto;
+}
 
 .cx-vui-button--style-link-error {
 	background: #ffffff;
@@ -118,37 +159,37 @@ export default {
 
 .cx-vue-list-table {
 
-	.list-table-item__cell {
-		white-space: nowrap;
-		overflow: hidden;
+	.list-table-heading {
+		justify-content: space-between;
 	}
 
-	.cell--id {
-		width: 6%;
+	.list-table-item {
+		justify-content: space-between;
+		&__cell {
+			white-space: nowrap;
+			overflow: hidden;
+		}
 	}
 
 	.cell--record_id {
-		width: 13%;
+		width: 160px;
 	}
 
 	.cell--status {
-		width: 8%;
+		width: 160px;
+		text-align: center;
 	}
 
 	.cell--subscriber {
-		width: 20%;
-	}
-
-	.cell--billing_info {
-		width: 12%;
+		width: 220px;
 	}
 
 	.cell--plan_info {
-		width: 24%;
+		width: 300px;
 	}
 
 	.cell--create_time {
-		width: 12%;
+		width: 160px;
 	}
 }
 </style>

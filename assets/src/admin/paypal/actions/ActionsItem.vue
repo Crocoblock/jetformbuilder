@@ -2,16 +2,25 @@
 	<DropdownMenu
 		v-model="showDropdown"
 		:interactive="true"
+		:right="false"
 	>
-		<span
-			class="dashicons dashicons-ellipsis"
-		></span>
+		<cx-vui-button
+			button-style="link"
+			size="mini"
+		>
+			<template #label>
+				<span
+					class="dashicons dashicons-ellipsis"
+				></span>
+			</template>
+		</cx-vui-button>
 		<template #dropdown>
 			<div class="jfb-dropdown">
 				<a
 					class="jfb-dropdown-item"
 					href="javascript:void(0)"
 					v-for="( action, actionID ) in parsedJson"
+					:key="actionID"
 					@click="run( actionID )"
 				>
 					{{ action.label }}
@@ -29,7 +38,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 
 export default {
 	name: 'actions--item',
-	props: [ 'value', 'full-entry' ],
+	props: [ 'value', 'full-entry', 'conditions' ],
 	components: { DropdownMenu },
 	mixins: [ ParseIncomingValueMixin ],
 	data() {
@@ -38,10 +47,13 @@ export default {
 		};
 	},
 	methods: {
+		getPayload( actionID ) {
+			return this.parsedJson[ actionID ]?.payload || {};
+		},
 		run( actionID ) {
 			jfbEventBus.$emit(
 				`click-${ actionID }`,
-				this.parsedJson[ actionID ]?.payload || {},
+				this.getPayload( actionID ),
 				this.fullEntry || {},
 			);
 		},
@@ -50,6 +62,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.cx-vui-button--size-mini {
+	padding: 0 0.4em 0 1em;
+}
 
 .jfb-dropdown {
 	position: absolute;
@@ -60,6 +76,8 @@ export default {
 	border-radius: 4px;
 	font-size: 1.2em;
 	border: 1px solid #ccc;
+	z-index: 1;
+	transform: translate(-100px, 5px);
 
 	&-item {
 		display: block;

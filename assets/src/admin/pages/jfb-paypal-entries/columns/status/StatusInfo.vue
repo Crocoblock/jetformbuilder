@@ -1,5 +1,5 @@
 <template>
-	<span>{{ parsedJson.status }}</span>
+	<span :class="wrapClasses">{{ parsedJson.status }}</span>
 </template>
 
 <script>
@@ -7,10 +7,33 @@ import ParseIncomingValueMixin from '../../../../paypal/ParseIncomingValueMixin'
 
 export default {
 	name: 'status--item',
-	mixins: [ ParseIncomingValueMixin ]
+	mixins: [ ParseIncomingValueMixin ],
+	methods: {},
+	computed: {
+		wrapClasses() {
+			return {
+				'jfb-status': true,
+				[ 'jfb-status-' + this.parsedJson.status.toLowerCase() ]: true,
+			};
+		},
+	},
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+.jfb-status {
+	padding: 0.5em;
 
+	&-active {
+		background-color: rgb(165 241 190 / 40%);
+	}
+
+	&-cancelled {
+		background-color: rgb(245 154 136 / 40%);
+	}
+
+	&-suspended {
+		background-color: rgb(253 209 95 / 41%);
+	}
+}
 </style>

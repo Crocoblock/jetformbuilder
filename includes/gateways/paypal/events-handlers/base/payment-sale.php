@@ -6,12 +6,16 @@ namespace Jet_Form_Builder\Gateways\Paypal\Events_Handlers\Base;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Events_Handlers\Base;
+use Jet_Form_Builder\Gateways\Paypal\Prepared_Views;
 
 abstract class Payment_Sale extends Base\Event_Handler_Base {
 
 	const SLUG = Controller::GATEWAY_META_KEY . '_payment';
+
+	abstract public function get_billing_id( $webhook_event ): string;
 
 	/**
 	 * @param $webhook_event
@@ -20,13 +24,17 @@ abstract class Payment_Sale extends Base\Event_Handler_Base {
 	 * @throws Gateway_Exception
 	 */
 	public function on_catch_event( $webhook_event ): \WP_REST_Response {
-		$subscription_id = $webhook_event['resource']['billing_agreement_id'] ?? false;
+		$subscription_id = $this->get_billing_id( $webhook_event );
 
 		if ( ! $subscription_id ) {
 			throw new Gateway_Exception( 'Empty `billing_agreement_id`', $webhook_event );
 		}
 
-		$subscription = Base\Billing_Subscription::get_subscription( $subscription_id );
+		try {
+			$subscription = Prepared_Views::get_subscription_raw( $subscription_id );
+		} catch ( Query_Builder_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage(), ...$exception->get_additional() );
+		}
 
 		add_post_meta(
 			$subscription['order_id'],

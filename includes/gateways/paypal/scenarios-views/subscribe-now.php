@@ -87,36 +87,32 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'           => array(
+			'id'          => array(
 				'value' => array( $this, 'get_related_id' ),
 				'type'  => 'integer',
 			),
-			'record_id'    => array(
+			'record_id'   => array(
 				'value' => array( $this, 'get_item_id' ),
 			),
-			'status'       => array(
+			'status'      => array(
 				'value' => array( $this, 'get_status_info' ),
 				'type'  => 'rawArray',
 			),
-			'subscriber'   => array(
+			'subscriber'  => array(
 				'value' => array( $this, 'get_subscriber_info' ),
 				'type'  => 'rawArray',
 			),
-			'billing_info' => array(
-				'value' => array( $this, 'get_billing_info' ),
-				'type'  => 'rawArray',
-			),
-			'plan_info'    => array(
+			'plan_info'   => array(
 				'value' => array( $this, 'get_plan_info' ),
 			),
-			'create_time'  => array(
+			'create_time' => array(
 				'value' => array( $this, 'get_create_time' ),
 			),
-			'links'        => array(
+			'links'       => array(
 				'value' => array( $this, 'get_links' ),
 				'type'  => 'rawArray',
 			),
-			'_FORM_ID'     => array(
+			'_FORM_ID'    => array(
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
 			),
@@ -125,14 +121,13 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'id'           => array(
-				'label'    => __( 'ID', 'jet-form-builder' ),
-				'sortable' => true,
+			'create_time' => array(
+				'label' => __( 'Create time', 'jet-form-builder' ),
 			),
-			'record_id'    => array(
+			'record_id'   => array(
 				'label' => __( 'Record ID', 'jet-form-builder' ),
 			),
-			'status'       => array(
+			'status'      => array(
 				'label'    => __( 'Status Info', 'jet-form-builder' ),
 				'children' => array(
 					'status'             => array(
@@ -143,7 +138,7 @@ class Subscribe_Now extends Scenario_View_Base {
 					),
 				),
 			),
-			'subscriber'   => array(
+			'subscriber'  => array(
 				'label'    => __( 'Subscriber Info', 'jet-form-builder' ),
 				'children' => array(
 					'email_address'    => array(
@@ -193,23 +188,8 @@ class Subscribe_Now extends Scenario_View_Base {
 					),
 				),
 			),
-			'billing_info' => array(
-				'label'         => __( 'Last payment', 'jet-form-builder' ),
-				'details_label' => __( 'Billing Info', 'jet-form-builder' ),
-				'children'      => array(
-					'last_payment'     => array(
-						'label' => __( 'Last payment', 'jet-form-builder' ),
-					),
-					'cycle_executions' => array(
-						'hide' => true,
-					),
-				),
-			),
-			'plan_info'    => array(
+			'plan_info'   => array(
 				'label' => __( 'Plan Info', 'jet-form-builder' ),
-			),
-			'create_time'  => array(
-				'label' => __( 'Create time', 'jet-form-builder' ),
 			),
 		);
 	}

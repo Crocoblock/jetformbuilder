@@ -14,8 +14,8 @@ class Controller extends Base_Gateway {
 
 	const ID = 'paypal';
 
-	public $data     = false;
-	public $message  = false;
+	public $data = false;
+	public $message = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
@@ -164,7 +164,13 @@ class Controller extends Base_Gateway {
 		if ( ! $form_id ) {
 			return self::get_credentials();
 		}
-		return GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+		$credits = GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+
+		if ( ! empty( $credits['client_id'] ) && ! empty( $credits['secret'] ) ) {
+			return $credits;
+		}
+
+		return self::get_credentials();
 	}
 
 	/**
@@ -191,13 +197,12 @@ class Controller extends Base_Gateway {
 			return self::get_token_global();
 		}
 
-		$paypal = GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+		$paypal = self::get_credentials_by_form( $form_id );
 
-		if ( empty( $paypal['secret'] ) || empty( $paypal['client_id'] ) ) {
-			return self::get_token_global();
-		}
-
-		return self::get_token_with_credits( $paypal['client_id'], $paypal['secret'] );
+		return self::get_token_with_credits(
+			$paypal['client_id'] ?? '',
+			$paypal['secret'] ?? ''
+		);
 	}
 
 	/**

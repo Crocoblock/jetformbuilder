@@ -9,4 +9,8 @@ class Payment_Sale_Reversed extends Base\Payment_Sale {
 		return 'PAYMENT.SALE.REVERSED';
 	}
 
+	public function get_billing_id( $webhook_event ): string {
+		return $webhook_event['resource']['billing_agreement_id'] ?? '';
+	}
+
 }

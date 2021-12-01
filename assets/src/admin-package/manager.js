@@ -9,9 +9,13 @@ import i18n from './mixins/i18n';
 import { renderCurrentPage } from './functions/RenderCurrentPage';
 import CopyButton from './components/CopyButton';
 import * as ChooseColumn from './entries-table-columns/choose';
+import { getCurrentPath, getSearch, createPath } from './functions/LocationManager';
 
 window.JetFBActions = {
 	renderCurrentPage,
+	getCurrentPath,
+	getSearch,
+	createPath,
 };
 
 window.JetFBErrors = {

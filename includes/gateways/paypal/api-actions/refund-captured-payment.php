@@ -15,7 +15,8 @@ class Refund_Captured_Payment extends Base_Action {
 	}
 
 	public function action_endpoint() {
-		return '/v2/payments/captures/{capture_id}/refund';
+		// v2/payments/captures/{capture_id}/refund
+		return '';
 	}
 
 	public function action_headers() {
@@ -24,6 +25,46 @@ class Refund_Captured_Payment extends Base_Action {
 			'Content-Type'          => 'application/json',
 		);
 	}
+
+	public function set_invoice_id( $invoice_id ): Refund_Captured_Payment {
+		if ( ! $invoice_id ) {
+			return $this;
+		}
+
+		return $this->set_body(
+			array(
+				'invoice_id' => $invoice_id,
+			)
+		);
+	}
+
+
+	public function set_note_to_payer( $note_to_payer ): Refund_Captured_Payment {
+		if ( ! $note_to_payer ) {
+			return $this;
+		}
+
+		return $this->set_body(
+			array(
+				'note_to_payer' => $note_to_payer,
+			)
+		);
+	}
+
+	/**
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
+	public function refund() {
+		$response = $this->send_request();
+
+		if ( 'COMPLETED' === strtoupper( $response['status'] ?? $response['state'] ?? '' ) ) {
+			return $response;
+		}
+
+		throw new Gateway_Exception( $response['message'] ?? 'Unknown error', $response );
+	}
+
 
 	/**
 	 * @param $form_id
@@ -42,7 +83,7 @@ class Refund_Captured_Payment extends Base_Action {
 			throw new Gateway_Exception( 'Empty `client_id`', $credits, $form_id );
 		}
 		if ( ! $payer_id ) {
-			throw new Gateway_Exception( 'Empty `$payer_id`' );
+			throw new Gateway_Exception( 'Empty `$payer_id`', $payer_id );
 		}
 		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 

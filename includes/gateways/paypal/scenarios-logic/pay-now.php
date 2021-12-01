@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
@@ -50,7 +50,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Gateway_Exception
 	 */
 	public function create_resource() {
-		$payment = ( new Actions\Pay_Now_Action() )
+		$payment = ( new Api_Actions\Pay_Now_Action() )
 			->set_bearer_auth( $this->controller->get_order_token() )
 			->set_app_context(
 				array(
@@ -100,7 +100,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
-		return ( new Actions\Capture_Payment_Action() )
+		return ( new Api_Actions\Capture_Payment_Action() )
 			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_order_id( $this->get_queried_token() )
 			->send_request();

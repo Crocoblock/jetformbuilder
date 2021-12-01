@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 trait List_Webhook_Trait {
 
@@ -17,7 +17,7 @@ trait List_Webhook_Trait {
 	 * @throws Gateway_Exception
 	 */
 	public function get_webhook_id_by_endpoint( $compared_url, $token ) {
-		$response = ( new Actions\List_Webhooks() )
+		$response = ( new Api_Actions\List_Webhooks() )
 			->set_bearer_auth( $token )
 			->send_request();
 

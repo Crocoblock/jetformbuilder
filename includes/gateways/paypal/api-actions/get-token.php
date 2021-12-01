@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 class Get_Token extends Base_Action {
 

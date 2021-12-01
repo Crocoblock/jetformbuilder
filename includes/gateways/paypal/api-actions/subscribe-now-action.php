@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
-use Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
 class Subscribe_Now_Action extends Base_Action {
 

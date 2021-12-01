@@ -9,13 +9,13 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
-use Jet_Form_Builder\Gateways\Paypal\Actions;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 abstract class Change_Status_Subscription extends Rest_Api_Endpoint_Base {
 
 	use Dynamic_Rest_Url_Trait;
 
-	abstract public function get_action_instance(): Actions\Base_Action;
+	abstract public function get_action_instance(): Api_Actions\Base_Action;
 
 	abstract public function success_message(): string;
 

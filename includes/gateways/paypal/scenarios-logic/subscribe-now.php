@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
@@ -13,7 +13,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 	use Set_Status_Trait;
-	use Actions\Traits\List_Webhook_Trait;
+	use Api_Actions\Traits\List_Webhook_Trait;
 	use Scenarios_Connectors\Subscribe_Now;
 
 	protected function query_token() {
@@ -49,7 +49,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 	}
 
 	public function create_resource() {
-		$action = ( new Actions\Subscribe_Now_Action() )
+		$action = ( new Api_Actions\Subscribe_Now_Action() )
 			->set_app_context(
 				array(
 					'return_url' => $this->get_success_url(),
@@ -106,7 +106,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
-		return ( new Actions\Show_Subscription_Details_Action() )
+		return ( new Api_Actions\Show_Subscription_Details_Action() )
 			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_subscription_id( $this->get_queried_token() )
 			->send_request();
@@ -139,7 +139,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 			return;
 		}
 
-		$response = ( new Actions\Create_Webhook() )
+		$response = ( new Api_Actions\Create_Webhook() )
 			->set_bearer_auth( $this->controller->get_current_token() )
 			->set_param_url( Web_Hooks\Event_Subscription_Global_Endpoint::rest_url() )
 			->set_param_event_types( Events_Listeners_Manager::instance()->get_events_types_list() )

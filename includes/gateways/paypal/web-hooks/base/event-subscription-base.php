@@ -6,14 +6,14 @@ namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Verify_Webhook_Signature_Action;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Verify_Webhook_Signature_Action;
 use Jet_Form_Builder\Gateways\Paypal\Events_Listeners_Manager;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
 abstract class Event_Subscription_Base extends Rest_Api_Endpoint_Base {
 
-	use Paypal\Actions\Traits\List_Webhook_Trait;
+	use Paypal\Api_Actions\Traits\List_Webhook_Trait;
 
 	abstract public function get_token( \WP_REST_Request $request );
 

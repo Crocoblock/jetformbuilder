@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import * as subscriber from './columns/subscriber';
+import * as subscriber from '../../paypal/subscriber';
 import * as status from './columns/status';
 import * as billing from './columns/billing-info';
 

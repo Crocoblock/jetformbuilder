@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
@@ -10,19 +10,19 @@ use Jet_Form_Builder\Gateways\Paypal\Controller;
 
 abstract class Base_Action {
 
-	const CODE_OK = 200;
-	const CODE_CREATED = 201;
+	const CODE_OK         = 200;
+	const CODE_CREATED    = 201;
 	const CODE_NO_CONTENT = 204;
 
 	protected $auth;
 	protected $method = 'POST';
-	protected $body = array();
+	protected $body   = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
 	protected $response_message;
 	protected $response_headers;
-	protected $is_body_set = false;
+	protected $path_parts = array();
 
 	abstract public function action_slug();
 
@@ -45,7 +45,28 @@ abstract class Base_Action {
 	}
 
 	public function get_url(): string {
-		return $this->api_url( $this->action_endpoint(), $this->action_query_args() );
+		$url = $this->api_url( $this->action_endpoint(), $this->action_query_args() );
+
+		if ( empty( $this->path_parts ) ) {
+			return $url;
+		}
+
+		return preg_replace_callback_array(
+			$this->get_parts_patterns(),
+			$url
+		);
+	}
+
+	protected function get_parts_patterns(): array {
+		$patterns = array();
+
+		foreach ( $this->path_parts as $key => $value ) {
+			$patterns[ "#\{$key\}#" ] = function ( $matches ) use ( $value ) {
+				return $value;
+			};
+		}
+
+		return $patterns;
 	}
 
 	final public function get_method(): string {
@@ -70,6 +91,12 @@ abstract class Base_Action {
 
 	public function set_auth( $auth_str ): Base_Action {
 		$this->auth = $auth_str;
+
+		return $this;
+	}
+
+	final public function set_path( array $parts ) {
+		$this->path_parts = array_merge( $this->path_parts, $parts );
 
 		return $this;
 	}
@@ -246,10 +273,10 @@ abstract class Base_Action {
 
 	public function response_message( $base_message ): string {
 		return $base_message . "\r\n" . sprintf(
-				'%d: %s',
-				$this->get_response_code(),
-				$this->get_response_message()
-			);
+			'%d: %s',
+			$this->get_response_code(),
+			$this->get_response_message()
+		);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 class List_Webhooks extends Base_Action {
 

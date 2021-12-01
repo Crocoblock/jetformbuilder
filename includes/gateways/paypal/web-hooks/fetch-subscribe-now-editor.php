@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\List_Subscription_Plans;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\List_Subscription_Plans;
 
 class Fetch_Subscribe_Now_Editor extends Fetch_Pay_Now_Editor {
 

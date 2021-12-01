@@ -8,6 +8,7 @@ import DetailsTableWithStore from './components/DetailsTableWithStore';
 import i18n from './mixins/i18n';
 import { renderCurrentPage } from './functions/RenderCurrentPage';
 import CopyButton from './components/CopyButton';
+import * as ChooseColumn from './entries-table-columns/choose';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -23,6 +24,7 @@ window.JetFBComponents = {
 	DetailsTable,
 	CopyButton,
 	DetailsTableWithStore,
+	ChooseColumn,
 };
 
 window.JetFBMixins = {

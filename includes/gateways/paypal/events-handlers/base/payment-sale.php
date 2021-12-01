@@ -39,6 +39,7 @@ abstract class Payment_Sale extends Base\Event_Handler_Base {
 					'resource'      => $webhook_event['resource'],
 					// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 					'create_dt'     => current_time( 'timestamp' ),
+					'payment_id'    => $webhook_event['resource']['id'],
 					'gateway_id'    => $subscription['gateway_id'],
 					'scenario'      => $subscription['scenario'],
 				)

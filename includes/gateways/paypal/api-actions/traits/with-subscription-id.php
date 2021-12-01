@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;

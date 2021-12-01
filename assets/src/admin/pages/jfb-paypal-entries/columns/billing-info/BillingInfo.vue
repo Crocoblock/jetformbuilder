@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../../ParseIncomingValueMixin';
+import ParseIncomingValueMixin from '../../../../paypal/ParseIncomingValueMixin';
 
 export default {
 	name: 'billing_info--item',

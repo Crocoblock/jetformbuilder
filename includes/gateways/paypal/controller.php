@@ -4,11 +4,8 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Get_Token;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Pay_Now_Editor;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Subscribe_Now_Editor;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
@@ -17,8 +14,8 @@ class Controller extends Base_Gateway {
 
 	const ID = 'paypal';
 
-	public $data = false;
-	public $message = false;
+	public $data     = false;
+	public $message  = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
@@ -160,7 +157,14 @@ class Controller extends Base_Gateway {
 	}
 
 	public static function get_credentials() {
-		return Gateway_Manager::instance()->get_global_settings( self::ID );
+		return GM::instance()->get_global_settings( self::ID );
+	}
+
+	public static function get_credentials_by_form( $form_id ) {
+		if ( ! $form_id ) {
+			return self::get_credentials();
+		}
+		return GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
 	}
 
 	/**
@@ -187,7 +191,7 @@ class Controller extends Base_Gateway {
 			return self::get_token_global();
 		}
 
-		$paypal = Gateway_Manager::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+		$paypal = GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
 
 		if ( empty( $paypal['secret'] ) || empty( $paypal['client_id'] ) ) {
 			return self::get_token_global();

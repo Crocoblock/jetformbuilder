@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
 class Show_Subscription_Details_Action extends Base_Action {
 

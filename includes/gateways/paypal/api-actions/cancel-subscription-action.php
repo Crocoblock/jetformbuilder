@@ -1,22 +1,22 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Actions;
+namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
-use Jet_Form_Builder\Gateways\Paypal\Actions\Traits;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
-class Suspend_Subscription_Action extends Base_Action {
+class Cancel_Subscription_Action extends Base_Action {
 
 	use Traits\With_Subscription_Id;
 
 	protected $method = \WP_REST_Server::CREATABLE;
 
 	public function action_slug() {
-		return 'SUSPEND_SUBSCRIPTION';
+		return 'CANCEL_SUBSCRIPTION';
 	}
 
 	public function action_endpoint() {
-		return "v1/billing/subscriptions/{$this->get_subscription_id()}/suspend";
+		return "v1/billing/subscriptions/{$this->get_subscription_id()}/cancel";
 	}
 
 	public function action_headers() {

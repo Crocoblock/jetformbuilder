@@ -8,7 +8,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Views\Post_Meta_View;
 use Jet_Form_Builder\Gateways\Paypal;
 
-class Subscription_Payments extends Post_Meta_View {
+class Recurring_Payments_View extends Post_Meta_View {
 
 	public function conditions(): array {
 		return array(

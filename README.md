@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.4.2
+* FIX: Guaranteed css output in editors
+* FIX: Correct init macros if JetForm not rendered
+* FIX: Retrieve current post on doing ajax
+
 ## 1.4.1
 * FIX: Compatibility with iOS.
 * FIX: Execute reCaptcha token on submit form.

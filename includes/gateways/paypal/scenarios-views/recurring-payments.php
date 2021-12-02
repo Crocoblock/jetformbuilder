@@ -13,6 +13,7 @@ use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Refund_Recurring_Payment a
 class Recurring_Payments extends Table_View_Base {
 
 	private $raw_payments;
+	private $queried_related;
 
 	public static function rep_item_id() {
 		return 'SUBSCRIBE_NOW_PAYMENTS';
@@ -22,26 +23,45 @@ class Recurring_Payments extends Table_View_Base {
 		try {
 
 			$this->raw_payments = ( new Query_Builder() )
-				->set_view( new Paypal\Query_Views\Recurring_Payments_View() )
+				->set_view(
+					( new Paypal\Query_Views\Recurring_Payments_View() )
+						->set_limit( array( 25 ) )
+				)
 				->debug()
 				->query_all();
 
-			$subscriptions = ( new Subscribe_Now() )->prepare_list();
+			$this->set_related();
 
 		} catch ( Query_Builder_Exception $exception ) {
 			return array();
 		}
 
-		foreach ( $this->raw_payments as &$payment ) {
-			foreach ( $subscriptions as $subscription ) {
-				if ( $this->get_related_id( $payment ) !== $subscription['record_id']['value'] ) {
-					continue;
-				}
-				$payment['related_object'] = $subscription;
-			}
+		return $this->raw_payments;
+	}
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	private function set_related() {
+		$related_ids = array();
+
+		foreach ( $this->raw_payments as $payment ) {
+			$related_ids[ $payment['resource']['id'] ] = $this->get_related_id( $payment );
 		}
 
-		return $this->raw_payments;
+		$subscriptions = Paypal\Prepared_Views::get_subscriptions_raw_by_id( $related_ids );
+		$view          = new Paypal\Scenarios_Views\Subscribe_Now();
+
+		foreach ( $this->raw_payments as &$payment ) {
+			$subscription_id = $related_ids[ $payment['resource']['id'] ];
+
+			foreach ( $subscriptions as $subscription ) {
+				if ( $subscription['resource']['id'] !== $subscription_id ) {
+					continue;
+				}
+				$payment['related_object'] = $view->prepare_record( $subscription );
+			}
+		}
 	}
 
 	public function get_columns_handlers(): array {
@@ -130,8 +150,14 @@ class Recurring_Payments extends Table_View_Base {
 	}
 
 	public function get_related_id( $record ) {
+		$current_id = $record['resource']['id'] ?? '';
+
 		if ( $this->is_sale( $record ) ) {
 			return $record['resource']['billing_agreement_id'] ?? '';
+		}
+
+		if ( isset( $this->queried_related[ $current_id ] ) ) {
+			return $this->queried_related[ $current_id ];
 		}
 
 		$sale_id = $record['resource']['sale_id'] ?? '';
@@ -144,7 +170,15 @@ class Recurring_Payments extends Table_View_Base {
 			return $payment['resource']['billing_agreement_id'] ?? '';
 		}
 
-		return '';
+		try {
+			$sale = Paypal\Prepared_Views::get_payment_raw( $sale_id );
+		} catch ( Query_Builder_Exception $exception ) {
+			return '';
+		}
+
+		$this->queried_related[ $current_id ] = $sale['resource']['billing_agreement_id'] ?? '';
+
+		return $this->queried_related[ $current_id ];
 	}
 
 	public function get_payment_date( $record ) {
@@ -231,9 +265,9 @@ class Recurring_Payments extends Table_View_Base {
 	}
 
 	public function format_date( $date_time ) {
-		$update_time = date( 'Y-m-d H:i:s', $date_time );
-
-		return get_date_from_gmt( $update_time );
+		return date( 'Y-m-d H:i:s', $date_time );
 	}
+
+
 }
 

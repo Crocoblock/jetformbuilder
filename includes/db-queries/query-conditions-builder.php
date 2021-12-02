@@ -23,7 +23,10 @@ class Query_Conditions_Builder {
 		),
 	);
 
-	private $current_condition_index = false;
+	/**
+	 * @var array
+	 */
+	private $current_condition;
 
 	public function get_types(): array {
 		return array(
@@ -35,6 +38,12 @@ class Query_Conditions_Builder {
 			),
 			'like'         => array(
 				'callback' => array( $this, 'build_like' ),
+			),
+			'more_static'  => array(
+				'callback' => array( $this, 'build_more_static' ),
+			),
+			'less_static'  => array(
+				'callback' => array( $this, 'build_less_static' ),
 			),
 		);
 	}
@@ -73,19 +82,30 @@ class Query_Conditions_Builder {
 	}
 
 	/**
-	 * @return string
+	 * @param $conditions
+	 *
 	 * @throws Query_Builder_Exception
 	 */
-	public function prepare_conditions(): string {
+	public function build_conditions_raw( array $conditions ): array {
 		$prepared = array();
 
-		foreach ( $this->conditions as $index => $condition ) {
-			$this->current_condition_index = $index;
+		foreach ( $conditions as $condition ) {
+			$this->current_condition = $condition;
 
 			$prepared[] = $this->prepare();
 		}
 
-		$this->current_condition_index = false;
+		$this->current_condition = array();
+
+		return $prepared;
+	}
+
+	/**
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function prepare_conditions(): string {
+		$prepared = $this->build_conditions_raw( $this->conditions );
 
 		return implode( "\r\n\tAND ", $prepared );
 	}
@@ -110,11 +130,11 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function current_condition(): array {
-		if ( false === $this->current_condition_index ) {
+		if ( empty( $this->current_condition ) ) {
 			throw new Query_Builder_Exception( 'Do it wrong' );
 		}
 
-		return $this->conditions[ $this->current_condition_index ];
+		return $this->current_condition;
 	}
 
 	/**
@@ -160,6 +180,28 @@ class Query_Conditions_Builder {
 		$second = esc_sql( $second );
 
 		return "{$this->view()->column( $column_name )} LIKE '%{$second}%'";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_more_static( $column_name, $second ): string {
+		return "{$this->view()->column( $column_name )} > {$second}";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_less_static( $column_name, $second ): string {
+		return "{$this->view()->column( $column_name )} < {$second}";
 	}
 
 	/**

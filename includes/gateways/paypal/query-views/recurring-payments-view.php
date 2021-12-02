@@ -3,14 +3,27 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Query_Views;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Views\Post_Meta_View;
 use Jet_Form_Builder\Gateways\Paypal;
 
 class Recurring_Payments_View extends Post_Meta_View {
 
-	public function conditions(): array {
+	public function __construct() {
+		$this->set_conditions(
+			array(
+				array(
+					'type'   => 'more_static',
+					'values' => array(
+						'meta_id',
+						0,
+					),
+				),
+			)
+		);
+	}
+
+	public function always_conditions(): array {
 		return array(
 			array(
 				'type'   => 'equal_column',

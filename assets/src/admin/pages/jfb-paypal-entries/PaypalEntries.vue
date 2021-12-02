@@ -6,12 +6,22 @@
 		['jfb-paypal-scenario--' + scenario]: true
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
+		<cx-vui-pagination
+			:total="100"
+			:page-size="5"
+			:current="1"
+		></cx-vui-pagination>
 		<EntriesTable
 			:entries-list="list"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 			@dblclick-row="openPopup"
 		/>
+		<cx-vui-pagination
+			:total="100"
+			:page-size="5"
+			:current="1"
+		></cx-vui-pagination>
 		<cx-vui-popup
 			v-model="isShowPopup"
 			body-width="60vw"
@@ -69,17 +79,25 @@ export default {
 			scenario: '',
 			settings: {},
 			actions: {},
+			receive_url: '',
 			columnsComponents,
 			isShowPopup: false,
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
 	created() {
-		const { list = [], columns = {}, scenario = '', actions = {} } = this.getIncoming();
+		const {
+			list = [],
+			columns = {},
+			scenario = '',
+			actions = {},
+			receive_url = '',
+		} = this.getIncoming();
 
 		this.list = JSON.parse( JSON.stringify( list ) );
 		this.actions = JSON.parse( JSON.stringify( actions ) );
 		this.scenario = scenario;
+		this.receive_url = receive_url;
 
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
 
@@ -165,6 +183,7 @@ export default {
 
 	.list-table-item {
 		justify-content: space-between;
+
 		&__cell {
 			white-space: nowrap;
 			overflow: hidden;

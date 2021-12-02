@@ -10,33 +10,61 @@ abstract class View_Base {
 	const FROM_HIGH_TO_LOW = 'DESC';
 	const FROM_LOW_TO_HIGH = 'ASC';
 
+	protected $limit      = array();
+	protected $conditions = array();
+	protected $order_by   = array();
+
 	abstract public function table(): string;
 
 	public function select_columns(): array {
 		return array( '*' );
 	}
 
-	public function conditions(): array {
+	public function always_conditions(): array {
 		return array();
+	}
+
+	public function custom_where(): string {
+		return '';
+	}
+
+	public function set_conditions( array $conditions ): View_Base {
+		$this->conditions = array_merge( $this->always_conditions(), $conditions );
+
+		return $this;
+	}
+
+	public function conditions(): array {
+		if ( empty( $this->conditions ) ) {
+			$this->set_conditions( array() );
+		}
+		return $this->conditions;
+	}
+
+	public function set_limit( array $limit ): View_Base {
+		$this->limit = $limit;
+
+		return $this;
 	}
 
 	/**
 	 * @return int[]
 	 */
 	public function limit(): array {
-		return array();
+		return $this->limit;
+	}
+
+	public function set_order_by( array $order_by ): View_Base {
+		$this->order_by = $order_by;
+
+		return $this;
 	}
 
 	/**
 	 * @return string[]
 	 */
 	public function order_by(): array {
-		return array(
-			array(
-				'column' => 'id',
-				'sort'   => self::FROM_HIGH_TO_LOW,
-			),
-		);
+		return $this->order_by;
 	}
 
 	/**
@@ -45,7 +73,7 @@ abstract class View_Base {
 	 *
 	 * @return string
 	 */
-	protected function json_pair( $key, $value ): string {
+	public function json_pair( $key, $value ): string {
 		return sprintf( '"%1$s":"%2$s"', (string) $key, (string) $value );
 	}
 

@@ -22,15 +22,22 @@ abstract class Table_View_Base implements Repository_Static_Item_It {
 	 * @return array
 	 */
 	final public function load_view(): array {
-		return array(
-			'list'    => $this->prepare_list(),
-			'columns' => $this->get_columns_headings(),
-			'actions' => $this->get_single_actions(),
+		return array_merge(
+			array(
+				'list'    => $this->prepare_list(),
+				'columns' => $this->get_columns_headings(),
+				'actions' => $this->get_single_actions(),
+			),
+			$this->load_data()
 		);
 	}
 
-	public function prepare_list(): array {
-		$list = $this->get_list();
+	public function load_data(): array {
+		return array();
+	}
+
+	public function prepare_list( array $custom_list = array() ): array {
+		$list = empty( $custom_list ) ? $this->get_list() : $custom_list;
 
 		if ( ! $list || ! is_array( $list ) ) {
 			return array();

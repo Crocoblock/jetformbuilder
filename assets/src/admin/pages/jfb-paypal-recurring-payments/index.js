@@ -16,7 +16,6 @@ const options = {
 			setColumns( state, columns ) {
 				state.columns = columns;
 			},
-
 		},
 		actions: {
 		},

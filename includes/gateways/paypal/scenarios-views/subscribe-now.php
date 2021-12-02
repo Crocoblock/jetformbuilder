@@ -19,15 +19,20 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_list(): array {
 		try {
-
-			return ( new Query_Builder() )
-				->set_view( new Paypal\Query_Views\Paypal_Subscriptions_View() )
-				->debug()
-				->query_all();
-
+			return Paypal\Prepared_Views::get_subscriptions_raw(
+				array(
+					'limit' => 25,
+				)
+			);
 		} catch ( Query_Builder_Exception $exception ) {
 			return array();
 		}
+	}
+
+	public function load_data(): array {
+		return array(
+			'receive_url' => Paypal\Web_Hooks\Receive_Subscriptions::rest_url(),
+		);
 	}
 
 	public function get_editor_labels(): array {

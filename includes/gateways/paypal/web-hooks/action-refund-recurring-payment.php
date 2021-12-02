@@ -27,6 +27,10 @@ class Action_Refund_Recurring_Payment extends Rest_Api_Endpoint_Base {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	public function check_permission(): bool {
+		return current_user_can( 'manage_options' );
+	}
+
 	public function run_callback( \WP_REST_Request $request ) {
 		$body       = $request->get_json_params();
 		$payment_id = $request->get_param( 'code' );

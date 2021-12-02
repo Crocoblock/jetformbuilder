@@ -19,9 +19,9 @@ class Query_Builder {
 	use With_View;
 
 	protected $sql;
-	protected $select   = '';
-	protected $where    = '';
-	protected $limit    = '';
+	protected $select = '';
+	protected $where = '';
+	protected $limit = '';
 	protected $order_by = '';
 
 	protected $debug = false;
@@ -59,6 +59,14 @@ class Query_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function prepare_where(): Query_Builder {
+		$custom = $this->view()->custom_where();
+
+		if ( $custom ) {
+			$this->where = $custom;
+
+			return $this;
+		}
+
 		$this->where = ( new Query_Conditions_Builder() )
 			->set_view( $this->view() )
 			->result();

@@ -18,7 +18,7 @@ class Fetch_Pay_Now_Editor extends Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return true;
+		return current_user_can( 'manage_options' );
 	}
 
 	/**

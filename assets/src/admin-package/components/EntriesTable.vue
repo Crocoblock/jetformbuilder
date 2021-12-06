@@ -3,12 +3,12 @@
 		<cx-vui-list-table>
 			<template #heading>
 				<cx-vui-list-table-heading
-					:slots="columnsIDs"
+					:slots="filteredColumns"
 				>
 					<span
 						:key="column"
 						:slot="column"
-						v-for="column in columnsIDs"
+						v-for="column in filteredColumns"
 					>
 						<template v-if="getHeadingComponent( column )">
 							<keep-alive>
@@ -35,7 +35,8 @@
 					@dblclick="$emit( 'dblclick-row', entryID )"
 				>
 					<div
-						v-for="column in columnsIDs"
+						v-for="column in filteredColumns"
+						:key="'entry_' + column"
 						:class="[ 'list-table-item__cell', 'cell--' + column ]"
 					>
 						<template v-if="getItemComponent( column )">
@@ -93,7 +94,15 @@ export default {
 			this.componentsCols.push( defaultColumns[ columnName ] );
 		}
 	},
+	computed: {
+		filteredColumns() {
+			return this.columnsIDs.filter( this.isShown );
+		}
+	},
 	methods: {
+		isShown( column ) {
+			return this.columns[ column ].show_in_table ?? true;
+		},
 		classEntry( entryID ) {
 			return {
 				'list-table-item': true,

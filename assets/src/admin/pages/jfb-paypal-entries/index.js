@@ -14,6 +14,7 @@ const options = {
 				limit: 25,
 				sort: 'DESC',
 			},
+			fetchedSubscriptions: {}
 		},
 		getters: {
 			getCurrent: state => {
@@ -22,6 +23,14 @@ const options = {
 			getColumns: state => {
 				return state.columns;
 			},
+			getSubscription: state => id => {
+				return state.fetchedSubscriptions[ id ] || {};
+			},
+			currentSubscription: ( state, getters ) => {
+				const id = state.currentPopupData?.record_id?.value;
+
+				return getters.getSubscription( id );
+			}
 		},
 		mutations: {
 			setList( state, list ) {
@@ -42,6 +51,9 @@ const options = {
 			clearCurrent( state ) {
 				state.currentPopupData = {};
 			},
+			saveSubscription( state, subDetails ) {
+				state.fetchedSubscriptions[ subDetails?.sub_id ] = subDetails;
+			}
 		},
 	} ),
 };

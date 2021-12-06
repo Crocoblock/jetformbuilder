@@ -92,32 +92,44 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'          => array(
+			'id'               => array(
 				'value' => array( $this, 'get_related_id' ),
 				'type'  => 'integer',
 			),
-			'record_id'   => array(
+			'record_id'        => array(
 				'value' => array( $this, 'get_item_id' ),
 			),
-			'status'      => array(
+			'status'           => array(
 				'value' => array( $this, 'get_status_info' ),
 				'type'  => 'rawArray',
 			),
-			'subscriber'  => array(
+			'subscriber'       => array(
 				'value' => array( $this, 'get_subscriber_info' ),
 				'type'  => 'rawArray',
 			),
-			'plan_info'   => array(
+			'subscriber_email' => array(
+				'value' => array( $this, 'get_subscriber_email' )
+			),
+			'subscriber_id' => array(
+				'value' => array( $this, 'get_subscriber_id' )
+			),
+			'subscriber_name' => array(
+				'value' => array( $this, 'get_subscriber_name' )
+			),
+			'plan_info'        => array(
 				'value' => array( $this, 'get_plan_info' ),
 			),
-			'create_time' => array(
+			'plan_links'       => array(
+				'value' => array( $this, 'get_plan_links' )
+			),
+			'create_time'      => array(
 				'value' => array( $this, 'get_create_time' ),
 			),
-			'links'       => array(
+			'links'            => array(
 				'value' => array( $this, 'get_links' ),
 				'type'  => 'rawArray',
 			),
-			'_FORM_ID'    => array(
+			'_FORM_ID'         => array(
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
 			),
@@ -126,24 +138,11 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'create_time' => array(
-				'label' => __( 'Create time', 'jet-form-builder' ),
+			'heading_1'     => array(
+				'label'         => __( 'Subscriber', 'jet-form-builder' ),
+				'show_in_table' => false,
 			),
-			'record_id'   => array(
-				'label' => __( 'Record ID', 'jet-form-builder' ),
-			),
-			'status'      => array(
-				'label'    => __( 'Status Info', 'jet-form-builder' ),
-				'children' => array(
-					'status'             => array(
-						'label' => __( 'Status', 'jet-form-builder' ),
-					),
-					'status_update_time' => array(
-						'label' => __( 'Last update date', 'jet-form-builder' ),
-					),
-				),
-			),
-			'subscriber'  => array(
+			'subscriber'    => array(
 				'label'    => __( 'Subscriber Info', 'jet-form-builder' ),
 				'children' => array(
 					'email_address'    => array(
@@ -193,9 +192,47 @@ class Subscribe_Now extends Scenario_View_Base {
 					),
 				),
 			),
-			'plan_info'   => array(
-				'label' => __( 'Plan Info', 'jet-form-builder' ),
+			'create_time'   => array(
+				'label' => __( 'Create time', 'jet-form-builder' ),
 			),
+			'record_id'     => array(
+				'label' => __( 'Record ID', 'jet-form-builder' ),
+			),
+			'status'        => array(
+				'label'    => __( 'Status Info', 'jet-form-builder' ),
+				'children' => array(
+					'status'             => array(
+						'label' => __( 'Status', 'jet-form-builder' ),
+					),
+					'status_update_time' => array(
+						'label' => __( 'Last update date', 'jet-form-builder' ),
+					),
+				),
+			),
+			'product_name'  => array(
+				'label'         => __( 'Product Name', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'plan_name'     => array(
+				'label'         => __( 'Plan Name', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'billing_cycle' => array(
+				'label'         => __( 'Billing Cycle', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'times_billed'  => array(
+				'label'         => __( 'Times Billed', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'product'       => array(
+				'label'         => __( 'Product' ),
+				'show_in_table' => false,
+			),
+
+			self::COLUMN_ACTIONS => array(
+				'label' => __( 'Actions', 'jet-form-builder' )
+			)
 		);
 	}
 
@@ -226,14 +263,18 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_links( $record, $default ) {
 		return array(
-			'cancel'  => array(
+			'cancel'       => array(
 				'method' => Paypal\Web_Hooks\Action_Cancel_Subscription::get_methods(),
 				'url'    => Paypal\Web_Hooks\Action_Cancel_Subscription::dynamic_rest_url( $record['resource']['id'] ),
 			),
-			'suspend' => array(
+			'suspend'      => array(
 				'method' => Paypal\Web_Hooks\Action_Suspend_Subscription::get_methods(),
 				'url'    => Paypal\Web_Hooks\Action_Suspend_Subscription::dynamic_rest_url( $record['resource']['id'] ),
 			),
+			'plan_details' => array(
+				'method' => Paypal\Web_Hooks\Receive_Plan_Details::get_methods(),
+				'url'    => Paypal\Web_Hooks\Receive_Plan_Details::dynamic_rest_url( $record['resource']['id'] ),
+			)
 		);
 	}
 
@@ -290,6 +331,23 @@ class Subscribe_Now extends Scenario_View_Base {
 	 */
 	public function get_subscriber_info( $record, $undefined ) {
 		return $record['resource']['subscriber'] ?? $undefined;
+	}
+
+	public function get_subscriber_email( $record ) {
+		return $record['resource']['subscriber']['email_address'] ?? '';
+	}
+
+	public function get_subscriber_id( $record ) {
+		return $record['resource']['subscriber']['payer_id'] ?? '';
+	}
+
+	public function get_subscriber_name( $record ) {
+		$parts = array(
+			$record['resource']['subscriber']['name']['given_name'] ?? '',
+			$record['resource']['subscriber']['name']['surname'] ?? ''
+		);
+
+		return implode( ' ', $parts );
 	}
 
 	public function get_billing_info( $record, $undefined ) {

@@ -11,7 +11,7 @@ module.exports = {
 		path: path.resolve( __dirname, 'js' ),
 		filename: '[name]',
 	},
-	devtool: 'inline-cheap-module-source-map',
+	devtool: 'source-map',
 	resolve: {
 		modules: [
 			path.resolve( __dirname, 'src' ),

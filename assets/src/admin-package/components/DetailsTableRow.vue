@@ -95,6 +95,10 @@ export default {
 		text-align: right;
 	}
 
+	&-role--default.table-details-row--heading {
+		font-weight: 600;
+	}
+
 	&--content {
 		flex: 2;
 	}

@@ -44,6 +44,7 @@
 				</div>
 			</template>
 		</cx-vui-popup>
+		<div class="loader" v-if="loading"></div>
 	</div>
 </template>
 
@@ -64,6 +65,8 @@ const { GetIncoming, i18n } = window.JetFBMixins;
 const { EntriesTable, DetailsTableWithStore } = window.JetFBComponents;
 const { getSearch, createPath } = window.JetFBActions;
 
+const { apiFetch } = wp;
+
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	subscriber,
 	status,
@@ -76,6 +79,7 @@ export default {
 	data() {
 		return {
 			list: [],
+			loading: false,
 			scenario: '',
 			settings: {},
 			actions: {},
@@ -87,12 +91,12 @@ export default {
 	mixins: [ GetIncoming, i18n ],
 	created() {
 		const {
-			list = [],
-			columns = {},
-			scenario = '',
-			actions = {},
-			receive_url = '',
-		} = this.getIncoming();
+				  list        = [],
+				  columns     = {},
+				  scenario    = '',
+				  actions     = {},
+				  receive_url = '',
+			  } = this.getIncoming();
 
 		this.list = JSON.parse( JSON.stringify( list ) );
 		this.actions = JSON.parse( JSON.stringify( actions ) );
@@ -107,6 +111,12 @@ export default {
 		columnsFromStore() {
 			return this.$store.getters.getColumns;
 		},
+		current() {
+			return this.$store.getters.getCurrent;
+		},
+		currentSubscription() {
+			return this.$store.getters.currentSubscription;
+		}
 	},
 	methods: {
 		openPopup( entryID ) {
@@ -122,7 +132,21 @@ export default {
 				} ),
 			);
 
-			this.isShowPopup = true;
+			if ( this.currentSubscription.sub_id ) {
+				this.isShowPopup = true;
+				return;
+			}
+
+			this.loading = true;
+
+			this.fetchPlan()
+				.then( response => {
+					this.$store.commit( 'saveSubscription', response.data )
+					this.isShowPopup = true;
+				} )
+				.finally( () => {
+					this.loading = false;
+				} );
 		},
 		closePopup() {
 			this.isShowPopup = false;
@@ -151,6 +175,23 @@ export default {
 				}
 			}
 		},
+		fetchPlan() {
+			const options = {
+				...this.current?.links?.value?.plan_details || {},
+			};
+
+			return new Promise( ( resolve, reject ) => {
+				apiFetch( options ).then( resolve ).catch( error => {
+					this.$CXNotice.add( {
+						message: error.message,
+						type: 'error',
+						duration: 4000,
+					} );
+
+					reject( error );
+				} );
+			} );
+		},
 	},
 };
 
@@ -176,39 +217,152 @@ export default {
 }
 
 .cx-vue-list-table {
-
 	.list-table-heading {
 		justify-content: space-between;
 	}
-
 	.list-table-item {
 		justify-content: space-between;
-
 		&__cell {
 			white-space: nowrap;
 			overflow: hidden;
 		}
 	}
-
 	.cell--record_id {
 		width: 160px;
 	}
-
 	.cell--status {
 		width: 160px;
 		text-align: center;
 	}
-
 	.cell--subscriber {
 		width: 220px;
 	}
-
 	.cell--plan_info {
 		width: 300px;
 	}
-
 	.cell--create_time {
 		width: 160px;
+	}
+}
+
+.loader {
+	/* Absolute Center Spinner */
+	position: fixed;
+	z-index: 999;
+	height: 2em;
+	width: 2em;
+	overflow: visible;
+	margin: auto;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+
+	/* Transparent Overlay */
+	&:before {
+		content: '';
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .5));
+
+		background: -webkit-radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0,.5));
+	}
+
+	/* :not(:required) hides these rules from IE9 and below */
+	&:not(:required) {
+		/* hide "loading..." text */
+		font: 0/0 a;
+		color: transparent;
+		text-shadow: none;
+		background-color: transparent;
+		border: 0;
+	}
+
+	&:not(:required):after {
+		content: '';
+		display: block;
+		font-size: 10px;
+		width: 1em;
+		height: 1em;
+		margin-top: -0.5em;
+		-webkit-animation: spinner 150ms infinite linear;
+		-moz-animation: spinner 150ms infinite linear;
+		-ms-animation: spinner 150ms infinite linear;
+		-o-animation: spinner 150ms infinite linear;
+		animation: spinner 150ms infinite linear;
+		border-radius: 0.5em;
+		-webkit-box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+		box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+	}
+}
+/* Animation */
+
+@-webkit-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-moz-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-o-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
 	}
 }
 </style>

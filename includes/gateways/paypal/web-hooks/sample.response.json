@@ -1,41 +1,113 @@
 {
-	"resource_type": "sale",
-	"event_type": "sale",
-	"summary": "Payment completed for $ 1795.0 USD",
+	"_ROW_ID": "70",
+	"gateway_id": "paypal",
+	"subscription_id": "I-FMMWBSNPLS26",
+	"scenario": "SUBSCRIBE_NOW",
+	"order_id": 51,
+	"form_id": 28,
+	"form_data": {
+		"post_id": 10,
+		"quantity": 5,
+		"text_field": "https://crocodev.net/develop/wp-json/jet-form-builder/v1/event-subscription",
+		"field_name": "",
+		"__form_id": 28,
+		"__is_ajax": true,
+		"__refer": "https://crocodev.net/develop/home",
+		"__repeaters_settings": [],
+		"inserted_post_id": 51
+	},
 	"resource": {
-		"amount": {
-			"total": "1795.00",
-			"currency": "USD",
-			"details": {
-				"subtotal": "1795.00"
+		"quantity": "5",
+		"subscriber": {
+			"email_address": "sanko200065@gmail.com",
+			"payer_id": "VFG6LG948GRRL",
+			"name": {
+				"given_name": "Олександр",
+				"surname": "Іваненко"
+			},
+			"shipping_address": {
+				"address": {
+					"address_line_1": "Rumina",
+					"admin_area_2": "Mykolaiv",
+					"admin_area_1": "MYKOLAIVSKA OBL",
+					"postal_code": "54000",
+					"country_code": "UA"
+				}
 			}
 		},
-		"payment_mode": "INSTANT_TRANSFER",
-		"create_time": "2021-11-29T15:34:27Z",
-		"transaction_fee": {
-			"currency": "USD",
-			"value": "90.06"
+		"create_time": "2021-12-01T16:53:52Z",
+		"plan_overridden": false,
+		"shipping_amount": {
+			"currency_code": "USD",
+			"value": "0.0"
 		},
-		"billing_agreement_id": "I-7CGKBFYA6LV5",
-		"update_time": "2021-11-29T15:34:27Z",
-		"soft_descriptor": "PAYPAL *JOHNDOESTES",
-		"protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE",
-		"protection_eligibility": "ELIGIBLE",
+		"start_time": "2021-12-01T16:52:11Z",
+		"update_time": "2021-12-06T09:45:33Z",
+		"billing_info": {
+			"outstanding_balance": {
+				"currency_code": "USD",
+				"value": "0.0"
+			},
+			"cycle_executions": [
+				{
+					"tenure_type": "REGULAR",
+					"sequence": 1,
+					"cycles_completed": 1,
+					"cycles_remaining": 4,
+					"current_pricing_scheme_version": 1,
+					"total_cycles": 5
+				}
+			],
+			"last_payment": {
+				"amount": {
+					"currency_code": "USD",
+					"value": "500.0"
+				},
+				"time": "2021-12-01T16:53:53Z"
+			},
+			"next_billing_time": "2021-12-06T10:00:00Z",
+			"final_payment_time": "2021-12-09T10:00:00Z",
+			"failed_payments_count": 0
+		},
 		"links": [
 			{
-				"method": "GET",
-				"rel": "self",
-				"href": "https://api.sandbox.paypal.com/v1/payments/sale/6TK11017J91581226"
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-FMMWBSNPLS26/cancel",
+				"rel": "cancel",
+				"method": "POST",
+				"encType": "application/json"
 			},
 			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-FMMWBSNPLS26",
+				"rel": "edit",
+				"method": "PATCH",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-FMMWBSNPLS26",
+				"rel": "self",
+				"method": "GET",
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-FMMWBSNPLS26/suspend",
+				"rel": "suspend",
 				"method": "POST",
-				"rel": "refund",
-				"href": "https://api.sandbox.paypal.com/v1/payments/sale/6TK11017J91581226/refund"
+				"encType": "application/json"
+			},
+			{
+				"href": "https://api.sandbox.paypal.com/v1/billing/subscriptions/I-FMMWBSNPLS26/capture",
+				"rel": "capture",
+				"method": "POST",
+				"encType": "application/json"
 			}
 		],
-		"id": "6TK11017J91581226",
-		"state": "completed",
-		"invoice_number": ""
+		"id": "I-FMMWBSNPLS26",
+		"plan_id": "P-4S348724TC0657240MGSPO7A",
+		"status": "ACTIVE",
+		"status_update_time": "2021-12-06T09:45:33Z"
 	},
-	"create_dt": 1638207318
+	"provider": "jet-form-builder",
+	"status": "ACTIVE",
+	"date": "December 1, 2021, 18:53",
+	"gateway": "PayPal Checkout"
 }

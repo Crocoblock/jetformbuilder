@@ -8,7 +8,7 @@
 			:key="columnName"
 			v-if="false !== column.show_in_details && getColumnValue( columnName, false )"
 		>
-			<template #name>{{ column.label }}</template>
+			<template #name>{{ column.label + ':' }}</template>
 			<template #value>
 				<template v-if="'object' === typeof getColumnValue( columnName, false )">
 					<DetailsTableRowValue
@@ -51,7 +51,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .table-details {
 	display: flex;
 	flex-direction: column;

@@ -963,7 +963,18 @@
 				const fieldNames = getFieldNames( initialValue, withBrackets );
 
 				fieldNames.forEach( name => {
-					const fieldValue = getValueFromField( scope.find( `[data-field-name="${ name }"]` ) );
+					const fieldElement = scope.find( `[data-field-name="${ name }"]` );
+					
+					let fieldValue = applyFilters(
+						'jet.fb.macro.field.value',
+						false,
+						fieldElement,
+						scope,
+					)
+
+					if ( false === fieldValue ) {
+						fieldValue = getValueFromField( fieldElement );
+					}
 
 					initialValue = replaceMacros( initialValue, name, fieldValue, withBrackets );
 				} );

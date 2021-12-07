@@ -83,17 +83,25 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 				'data' => array(
 					'plan_id'      => $plan['id'] ?? '',
 					'sub_id'       => $subscription['resource']['id'] ?? '',
-					'price'        => $this->get_price_for_cycle( $plan, $subscription ),
 					'subscription' => $subscription,
 					'plan'         => $plan,
 					'product'      => $product,
+					'replace'      => ( new Paypal\Scenarios_Views\Subscribe_Now() )
+						->transform_to_columns_values(
+							array(
+								'price'         => $this->get_price_for_cycle( $plan, $subscription ),
+								'product_name'  => $product['name'],
+								'plan_name'     => $plan['name'],
+								'billing_cycle' => $this->get_billing_cycle( $plan )
+							)
+						),
 				),
 			)
 		);
 	}
 
 	private function format_amount( $amount, $quantity = 1 ) {
-		$value = $quantity * $amount['value'] ?? 0;
+		$value = number_format( $quantity * $amount['value'] ?? 0, 2 );
 
 		return sprintf( '%s %s', $value, $amount['currency_code'] ?? '' );
 	}
@@ -112,11 +120,16 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 		return array();
 	}
 
+	private function get_last_cycle( $plan ) {
+		$cycles = $plan['billing_cycles'] ?? array();
+
+		return array_pop( $cycles );
+	}
+
 	private function get_price_for_cycle( $plan, $subscription ): string {
 		$quantity = (int) $subscription['resource']['quantity'] ?? 1;
 
-		$cycles     = $plan['billing_cycles'] ?? array();
-		$last_cycle = array_pop( $cycles );
+		$last_cycle = $this->get_last_cycle( $plan );
 
 		$scheme = $last_cycle['pricing_scheme'] ?? array();
 
@@ -138,6 +151,15 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 
 				return $this->format_amount( $tier['amount'], $quantity );
 		}
+	}
+
+	private function get_billing_cycle( $plan ) {
+		$last_cycle = $this->get_last_cycle( $plan );
+
+		$count = $last_cycle['frequency']['interval_count'] ?? 1;
+		$unit  = strtolower( $last_cycle['frequency']['interval_unit'] ?? 'DAY' );
+
+		return sprintf( __( 'Every %d %s', 'jet-form-builder' ), $count, $unit );
 	}
 
 }

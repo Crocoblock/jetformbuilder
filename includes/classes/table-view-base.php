@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Classes;
 
 abstract class Table_View_Base implements Repository_Static_Item_It {
 
-	const COLUMN_CHOOSE  = 'choose';
+	const COLUMN_CHOOSE = 'choose';
 	const COLUMN_ACTIONS = 'actions';
 
 	abstract public function get_columns_handlers(): array;
@@ -74,6 +74,23 @@ abstract class Table_View_Base implements Repository_Static_Item_It {
 		}
 
 		return $prepared;
+	}
+
+	public function transform_to_columns_values( array $columns ) {
+		$transformed = array();
+
+		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {
+			if ( ! isset( $columns[ $column_name ] ) ) {
+				continue;
+			}
+			$column_attrs['type']    = $column_attrs['type'] ?? 'string';
+			$column_attrs['default'] = $column_attrs['default'] ?? false;
+			$column_attrs['value']   = $columns[ $column_name ];
+
+			$transformed[ $column_name ] = $column_attrs;
+		}
+
+		return $transformed;
 	}
 
 	protected function prepare_record_value_type( $value, $column ) {

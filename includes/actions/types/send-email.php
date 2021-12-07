@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Dev_Mode;
 
@@ -283,7 +284,7 @@ class Send_Email extends Base {
 	 * @since 2.1
 	 */
 	public function get_headers() {
-		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
+		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 

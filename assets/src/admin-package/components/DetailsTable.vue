@@ -1,14 +1,12 @@
 <template>
 	<section class="table-details">
 		<DetailsTableRow
-			:role="'header'"
-		/>
-		<DetailsTableRow
 			v-for="( column, columnName ) in columns"
 			:key="columnName"
-			v-if="false !== column.show_in_details && getColumnValue( columnName, false )"
+			v-if="canShow( columnName )"
+			:type="getType( columnName )"
 		>
-			<template #name>{{ column.label + ':' }}</template>
+			<template #name>{{ column.label }}</template>
 			<template #value>
 				<template v-if="'object' === typeof getColumnValue( columnName, false )">
 					<DetailsTableRowValue
@@ -46,6 +44,19 @@ export default {
 	methods: {
 		getColumnValue( column, ifEmpty = false ) {
 			return this.source[ column ] ? this.source[ column ].value : ifEmpty;
+		},
+		hasValueOrAnotherType( column ) {
+			return ( this.getColumnValue( column ) || 'rowValue' !== this.getType( column ) );
+		},
+		getType( column ) {
+			return this.columns[ column ].type ?? 'rowValue';
+		},
+		canShow( columnName ) {
+			const type = this.getType( columnName );
+			const inDetails = false !== this.columns[ columnName ].show_in_details;
+			const value = this.getColumnValue( columnName );
+
+			return inDetails && ( 'rowValue' !== type || value );
 		},
 	},
 };

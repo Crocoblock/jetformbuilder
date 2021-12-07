@@ -12,7 +12,7 @@
 			:current="1"
 		></cx-vui-pagination>
 		<EntriesTable
-			:entries-list="list"
+			:entries-list="currentList"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 			@dblclick-row="openPopup"
@@ -29,18 +29,9 @@
 			@on-cancel="closePopup"
 		>
 			<template #content>
-				<h3>{{ __( 'Subscription Information', 'jet-form-builder' ) }}</h3>
-				<div class="cx-vui-inner-panel">
-					<DetailsTableWithStore/>
-				</div>
-				<h3>{{ __( 'Subscription Actions', 'jet-form-builder' ) }}</h3>
-				<div class="cx-vui-inner-panel">
-					<SubscriptionActionPanel
-						v-for="( actionOptions, actionSlug ) in actions"
-						:key="actionSlug"
-						:type="actionSlug"
-						v-bind="actionOptions"
-					/>
+				<DetailsTableWithStore/>
+				<div class="jfb-subscriptions-actions">
+					<SubscriptionActions/>
 				</div>
 			</template>
 		</cx-vui-popup>
@@ -49,11 +40,10 @@
 </template>
 
 <script>
-import * as subscriber from '../../paypal/subscriber';
 import * as status from './columns/status';
-import * as billing from './columns/billing-info';
+import * as actions from './columns/actions';
 
-import SubscriptionActionPanel from './SubscriptionActionPanel';
+import SubscriptionActions from './SubscriptionActions';
 
 import '../../../../scss/admin/default.scss';
 
@@ -68,21 +58,18 @@ const { getSearch, createPath } = window.JetFBActions;
 const { apiFetch } = wp;
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
-	subscriber,
 	status,
-	billing,
+	actions,
 ] );
 
 export default {
 	name: 'jfb-paypal-entries',
-	components: { DetailsTableWithStore, SubscriptionActionPanel, EntriesTable },
+	components: { DetailsTableWithStore, SubscriptionActions, EntriesTable },
 	data() {
 		return {
-			list: [],
 			loading: false,
 			scenario: '',
 			settings: {},
-			actions: {},
 			receive_url: '',
 			columnsComponents,
 			isShowPopup: false,
@@ -98,12 +85,12 @@ export default {
 				  receive_url = '',
 			  } = this.getIncoming();
 
-		this.list = JSON.parse( JSON.stringify( list ) );
-		this.actions = JSON.parse( JSON.stringify( actions ) );
 		this.scenario = scenario;
 		this.receive_url = receive_url;
 
+		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
+		this.$store.commit( 'setActions', JSON.parse( JSON.stringify( actions ) ) );
 
 		this.maybeOpen();
 	},
@@ -114,13 +101,16 @@ export default {
 		current() {
 			return this.$store.getters.getCurrent;
 		},
+		currentList() {
+			return this.$store.getters.getList;
+		},
 		currentSubscription() {
 			return this.$store.getters.currentSubscription;
-		}
+		},
 	},
 	methods: {
 		openPopup( entryID ) {
-			const current = this.list[ entryID ] || {};
+			const current = this.currentList[ entryID ] || {};
 
 			this.$store.commit( 'setCurrent', current );
 
@@ -141,6 +131,23 @@ export default {
 
 			this.fetchPlan()
 				.then( response => {
+					const replace = response.data?.replace ?? {};
+
+					this.$store.commit( 'setCurrent', {
+						...current,
+						...replace,
+					} );
+
+					this.$store.commit( 'setList', this.currentList.map( subscription => {
+						if ( response.data?.sub_id !== subscription.record_id.value ) {
+							return subscription;
+						}
+						return {
+							...subscription,
+							...replace,
+						};
+					} ) );
+
 					this.$store.commit( 'saveSubscription', response.data )
 					this.isShowPopup = true;
 				} )
@@ -202,6 +209,23 @@ export default {
 .cx-vui-popup__body {
 	max-height: 85vh;
 	overflow: auto;
+	position: relative;
+}
+
+.cx-vui-popup__content {
+	padding-bottom: 3em;
+}
+
+.jfb-subscriptions-actions {
+	display: flex;
+	column-gap: 10px;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 3em;
+	background-color: #fff;
+	width: 60%;
+	padding: 1em;
+	border-top: 1px solid #eee;
 }
 
 .cx-vui-button--style-link-error {
@@ -234,13 +258,13 @@ export default {
 		width: 160px;
 		text-align: center;
 	}
-	.cell--subscriber {
-		width: 220px;
-	}
-	.cell--plan_info {
-		width: 300px;
+	.cell--subscriber_name {
+		width: 250px;
 	}
 	.cell--create_time {
+		width: 160px;
+	}
+	.cell--actions {
 		width: 160px;
 	}
 }
@@ -257,7 +281,6 @@ export default {
 	left: 0;
 	bottom: 0;
 	right: 0;
-
 	/* Transparent Overlay */
 	&:before {
 		content: '';
@@ -267,11 +290,9 @@ export default {
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .5));
-
-		background: -webkit-radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0,.5));
+		background: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));
+		background: -webkit-radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));
 	}
-
 	/* :not(:required) hides these rules from IE9 and below */
 	&:not(:required) {
 		/* hide "loading..." text */
@@ -281,7 +302,6 @@ export default {
 		background-color: transparent;
 		border: 0;
 	}
-
 	&:not(:required):after {
 		content: '';
 		display: block;
@@ -295,12 +315,12 @@ export default {
 		-o-animation: spinner 150ms infinite linear;
 		animation: spinner 150ms infinite linear;
 		border-radius: 0.5em;
-		-webkit-box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
-		box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+		-webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+		box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
 	}
 }
-/* Animation */
 
+/* Animation */
 @-webkit-keyframes spinner {
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -317,6 +337,7 @@ export default {
 		transform: rotate(360deg);
 	}
 }
+
 @-moz-keyframes spinner {
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -333,6 +354,7 @@ export default {
 		transform: rotate(360deg);
 	}
 }
+
 @-o-keyframes spinner {
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -349,6 +371,7 @@ export default {
 		transform: rotate(360deg);
 	}
 }
+
 @keyframes spinner {
 	0% {
 		-webkit-transform: rotate(0deg);

@@ -8,6 +8,7 @@ const options = {
 			currentPopupData: {},
 			columns: {},
 			currentList: [],
+			actions: {},
 			queryState: {
 				currentPage: 0,
 				extreme_id: 0,
@@ -30,7 +31,13 @@ const options = {
 				const id = state.currentPopupData?.record_id?.value;
 
 				return getters.getSubscription( id );
-			}
+			},
+			getList: state => {
+				return state.currentList;
+			},
+			getActions: state => {
+				return state.actions;
+			},
 		},
 		mutations: {
 			setList( state, list ) {
@@ -53,6 +60,9 @@ const options = {
 			},
 			saveSubscription( state, subDetails ) {
 				state.fetchedSubscriptions[ subDetails?.sub_id ] = subDetails;
+			},
+			setActions( state, actions ) {
+				state.actions = actions;
 			}
 		},
 	} ),

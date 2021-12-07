@@ -207,8 +207,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -231,6 +229,20 @@ __webpack_require__.r(__webpack_exports__);
     getColumnValue: function getColumnValue(column) {
       var ifEmpty = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       return this.source[column] ? this.source[column].value : ifEmpty;
+    },
+    hasValueOrAnotherType: function hasValueOrAnotherType(column) {
+      return this.getColumnValue(column) || 'rowValue' !== this.getType(column);
+    },
+    getType: function getType(column) {
+      var _this$columns$column$;
+
+      return (_this$columns$column$ = this.columns[column].type) !== null && _this$columns$column$ !== void 0 ? _this$columns$column$ : 'rowValue';
+    },
+    canShow: function canShow(columnName) {
+      var type = this.getType(columnName);
+      var inDetails = false !== this.columns[columnName].show_in_details;
+      var value = this.getColumnValue(columnName);
+      return inDetails && ('rowValue' !== type || value);
     }
   }
 });
@@ -277,6 +289,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 function defaultColumnClasses() {
   return {
     'table-details-row-column': true
@@ -291,6 +312,13 @@ function defaultColumnClasses() {
       default: 'default',
       validator: function validator(value) {
         return -1 !== ['header', 'default', 'footer'].indexOf(value);
+      }
+    },
+    type: {
+      type: String,
+      default: 'rowValue',
+      validator: function validator(value) {
+        return -1 !== ['rowValue', 'heading'].indexOf(value);
       }
     }
   },
@@ -1195,17 +1223,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".table-details {\n  display: flex;\n  flex-direction: column;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/DetailsTable.vue","webpack://./../DetailsTable.vue"],"names":[],"mappings":"AAsDA;EACC,aAAA;EACA,sBAAA;ACrDD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.table-details {\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n}\r\n",".table-details {\n  display: flex;\n  flex-direction: column;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".table-details {\n  display: flex;\n  flex-direction: column;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/DetailsTable.vue","webpack://./../DetailsTable.vue"],"names":[],"mappings":"AAiEA;EACC,aAAA;EACA,sBAAA;AChED","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.table-details {\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n}\r\n",".table-details {\n  display: flex;\n  flex-direction: column;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&":
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1222,7 +1250,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".table-details-row[data-v-d41fc6ac] {\n  display: flex;\n  justify-content: space-between;\n  font-size: 1.1em;\n}\n.table-details-row[data-v-d41fc6ac]:first-child {\n  font-weight: bold;\n}\n.table-details-row[data-v-d41fc6ac]:nth-child(even) {\n  background-color: #FFFFFF;\n}\n.table-details-row-column[data-v-d41fc6ac] {\n  padding: 0.5em 1em;\n  /*border-bottom: 1px solid #ccc;*/\n}\n.table-details-row--heading[data-v-d41fc6ac] {\n  flex: 1;\n  text-align: right;\n}\n.table-details-row-role--default.table-details-row--heading[data-v-d41fc6ac] {\n  font-weight: 600;\n}\n.table-details-row--content[data-v-d41fc6ac] {\n  flex: 2;\n}\n.table-details-row--actions[data-v-d41fc6ac] {\n  flex: 0.3;\n  /*border-left: 1px solid #ccc;*/\n}", "",{"version":3,"sources":["webpack://./admin-package/components/DetailsTableRow.vue","webpack://./../DetailsTableRow.vue"],"names":[],"mappings":"AA0EA;EACC,aAAA;EACA,8BAAA;EACA,gBAAA;ACzED;AD2EC;EACC,iBAAA;ACzEF;AD4EC;EACC,yBAAA;AC1EF;AD6EC;EACC,kBAAA;EACA,iCAAA;AC3EF;AD8EC;EACC,OAAA;EACA,iBAAA;AC5EF;AD+EC;EACC,gBAAA;AC7EF;ADgFC;EACC,OAAA;AC9EF;ADiFC;EACC,SAAA;EACA,+BAAA;AC/EF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.table-details-row {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\tfont-size: 1.1em;\r\n\r\n\t&:first-child {\r\n\t\tfont-weight: bold;\r\n\t}\r\n\r\n\t&:nth-child(even) {\r\n\t\tbackground-color: #FFFFFF;\r\n\t}\r\n\r\n\t&-column {\r\n\t\tpadding: 0.5em 1em;\r\n\t\t/*border-bottom: 1px solid #ccc;*/\r\n\t}\r\n\r\n\t&--heading {\r\n\t\tflex: 1;\r\n\t\ttext-align: right;\r\n\t}\r\n\r\n\t&-role--default.table-details-row--heading {\r\n\t\tfont-weight: 600;\r\n\t}\r\n\r\n\t&--content {\r\n\t\tflex: 2;\r\n\t}\r\n\r\n\t&--actions {\r\n\t\tflex: 0.3;\r\n\t\t/*border-left: 1px solid #ccc;*/\r\n\t}\r\n}\r\n",".table-details-row {\n  display: flex;\n  justify-content: space-between;\n  font-size: 1.1em;\n}\n.table-details-row:first-child {\n  font-weight: bold;\n}\n.table-details-row:nth-child(even) {\n  background-color: #FFFFFF;\n}\n.table-details-row-column {\n  padding: 0.5em 1em;\n  /*border-bottom: 1px solid #ccc;*/\n}\n.table-details-row--heading {\n  flex: 1;\n  text-align: right;\n}\n.table-details-row-role--default.table-details-row--heading {\n  font-weight: 600;\n}\n.table-details-row--content {\n  flex: 2;\n}\n.table-details-row--actions {\n  flex: 0.3;\n  /*border-left: 1px solid #ccc;*/\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".table-details-row {\n  display: flex;\n  justify-content: space-between;\n  font-size: 1.1em;\n}\n.table-details-row:first-child {\n  font-weight: bold;\n}\n.table-details-row:nth-child(even) {\n  background-color: #eeeeee;\n}\n.table-details-row-column {\n  padding: 0.5em 1em;\n  /*border-bottom: 1px solid #ccc;*/\n}\n.table-details-row--heading {\n  flex: 1;\n  text-align: right;\n}\n.table-details-row-role--default.table-details-row--heading {\n  font-weight: 600;\n}\n.table-details-row--content {\n  flex: 2;\n}\n.table-details-row--actions {\n  flex: 0.3;\n  /*border-left: 1px solid #ccc;*/\n}\n.table-details-row h3 {\n  padding: 0.5em;\n  border-bottom: 1px solid #aaa;\n  width: 50%;\n  margin: 1em auto;\n  text-align: center;\n  color: #aaa;\n  font-weight: 400;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/DetailsTableRow.vue","webpack://./../DetailsTableRow.vue"],"names":[],"mappings":"AA4FA;EACC,aAAA;EACA,8BAAA;EACA,gBAAA;AC3FD;AD4FC;EACC,iBAAA;AC1FF;AD4FC;EACC,yBAAA;AC1FF;AD4FC;EACC,kBAAA;EACA,iCAAA;AC1FF;AD4FC;EACC,OAAA;EACA,iBAAA;AC1FF;AD4FC;EACC,gBAAA;AC1FF;AD4FC;EACC,OAAA;AC1FF;AD4FC;EACC,SAAA;EACA,+BAAA;AC1FF;AD6FC;EACC,cAAA;EACA,6BAAA;EACA,UAAA;EACA,gBAAA;EACA,kBAAA;EACA,WAAA;EACA,gBAAA;AC3FF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.table-details-row {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\tfont-size: 1.1em;\r\n\t&:first-child {\r\n\t\tfont-weight: bold;\r\n\t}\r\n\t&:nth-child(even) {\r\n\t\tbackground-color: #eeeeee;\r\n\t}\r\n\t&-column {\r\n\t\tpadding: 0.5em 1em;\r\n\t\t/*border-bottom: 1px solid #ccc;*/\r\n\t}\r\n\t&--heading {\r\n\t\tflex: 1;\r\n\t\ttext-align: right;\r\n\t}\r\n\t&-role--default.table-details-row--heading {\r\n\t\tfont-weight: 600;\r\n\t}\r\n\t&--content {\r\n\t\tflex: 2;\r\n\t}\r\n\t&--actions {\r\n\t\tflex: 0.3;\r\n\t\t/*border-left: 1px solid #ccc;*/\r\n\t}\r\n\r\n\th3 {\r\n\t\tpadding: 0.5em;\r\n\t\tborder-bottom: 1px solid #aaa;\r\n\t\twidth: 50%;\r\n\t\tmargin: 1em auto;\r\n\t\ttext-align: center;\r\n\t\tcolor: #aaa;\r\n\t\tfont-weight: 400;\r\n\t}\r\n}\r\n",".table-details-row {\n  display: flex;\n  justify-content: space-between;\n  font-size: 1.1em;\n}\n.table-details-row:first-child {\n  font-weight: bold;\n}\n.table-details-row:nth-child(even) {\n  background-color: #eeeeee;\n}\n.table-details-row-column {\n  padding: 0.5em 1em;\n  /*border-bottom: 1px solid #ccc;*/\n}\n.table-details-row--heading {\n  flex: 1;\n  text-align: right;\n}\n.table-details-row-role--default.table-details-row--heading {\n  font-weight: 600;\n}\n.table-details-row--content {\n  flex: 2;\n}\n.table-details-row--actions {\n  flex: 0.3;\n  /*border-left: 1px solid #ccc;*/\n}\n.table-details-row h3 {\n  padding: 0.5em;\n  border-bottom: 1px solid #aaa;\n  width: 50%;\n  margin: 1em auto;\n  text-align: center;\n  color: #aaa;\n  font-weight: 400;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1633,9 +1661,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true& */ "./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true&");
+/* harmony import */ var _DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DetailsTableRow.vue?vue&type=template&id=d41fc6ac& */ "./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&");
 /* harmony import */ var _DetailsTableRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DetailsTableRow.vue?vue&type=script&lang=js& */ "./admin-package/components/DetailsTableRow.vue?vue&type=script&lang=js&");
-/* harmony import */ var _DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& */ "./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&");
+/* harmony import */ var _DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DetailsTableRow.vue?vue&type=style&index=0&lang=scss& */ "./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1647,11 +1675,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _DetailsTableRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__.render,
+  _DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  "d41fc6ac",
+  null,
   null
   
 )
@@ -2057,19 +2085,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true&":
-/*!*************************************************************************************************!*\
-  !*** ./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true& ***!
-  \*************************************************************************************************/
+/***/ "./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&":
+/*!*************************************************************************************!*\
+  !*** ./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac& ***!
+  \*************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_template_id_d41fc6ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=template&id=d41fc6ac& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&");
 
 
 /***/ }),
@@ -2193,18 +2221,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&":
-/*!****************************************************************************************************************!*\
-  !*** ./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& ***!
-  \****************************************************************************************************************/
+/***/ "./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&":
+/*!****************************************************************************************!*\
+  !*** ./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss& ***!
+  \****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-style-loader/index.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/sass-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-style-loader/index.js!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/sass-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_id_d41fc6ac_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableRow_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -2424,66 +2452,57 @@ var render = function () {
   return _c(
     "section",
     { staticClass: "table-details" },
-    [
-      _c("DetailsTableRow", { attrs: { role: "header" } }),
-      _vm._v(" "),
-      _vm._l(_vm.columns, function (column, columnName) {
-        return false !== column.show_in_details &&
-          _vm.getColumnValue(columnName, false)
-          ? _c("DetailsTableRow", {
-              key: columnName,
-              scopedSlots: _vm._u(
-                [
-                  {
-                    key: "name",
-                    fn: function () {
-                      return [_vm._v(_vm._s(column.label + ":"))]
-                    },
-                    proxy: true,
+    _vm._l(_vm.columns, function (column, columnName) {
+      return _vm.canShow(columnName)
+        ? _c("DetailsTableRow", {
+            key: columnName,
+            attrs: { type: _vm.getType(columnName) },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "name",
+                  fn: function () {
+                    return [_vm._v(_vm._s(column.label))]
                   },
-                  {
-                    key: "value",
-                    fn: function () {
-                      return [
-                        "object" ===
-                        typeof _vm.getColumnValue(columnName, false)
-                          ? [
-                              _c("DetailsTableRowValue", {
-                                attrs: {
-                                  value: _vm.getColumnValue(columnName, false),
-                                  columns: column.children || {},
-                                },
-                              }),
-                            ]
-                          : [
-                              _vm._v(
-                                _vm._s(_vm.getColumnValue(columnName, ""))
-                              ),
-                            ],
-                      ]
-                    },
-                    proxy: true,
+                  proxy: true,
+                },
+                {
+                  key: "value",
+                  fn: function () {
+                    return [
+                      "object" === typeof _vm.getColumnValue(columnName, false)
+                        ? [
+                            _c("DetailsTableRowValue", {
+                              attrs: {
+                                value: _vm.getColumnValue(columnName, false),
+                                columns: column.children || {},
+                              },
+                            }),
+                          ]
+                        : [_vm._v(_vm._s(_vm.getColumnValue(columnName, "")))],
+                    ]
                   },
-                  {
-                    key: "actions",
-                    fn: function () {
-                      return [
-                        _c("CopyButton", {
-                          attrs: { column: _vm.source[columnName] || {} },
-                        }),
-                      ]
-                    },
-                    proxy: true,
+                  proxy: true,
+                },
+                {
+                  key: "actions",
+                  fn: function () {
+                    return [
+                      _c("CopyButton", {
+                        attrs: { column: _vm.source[columnName] || {} },
+                      }),
+                    ]
                   },
-                ],
-                null,
-                true
-              ),
-            })
-          : _vm._e()
-      }),
-    ],
-    2
+                  proxy: true,
+                },
+              ],
+              null,
+              true
+            ),
+          })
+        : _vm._e()
+    }),
+    1
   )
 }
 var staticRenderFns = []
@@ -2493,10 +2512,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true&":
-/*!******************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&scoped=true& ***!
-  \******************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=template&id=d41fc6ac& ***!
+  \******************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2509,32 +2528,49 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "table-details-row" }, [
-    _c(
-      "div",
-      { class: _vm.headingClasses },
-      [_vm.role !== "default" ? [_vm._v(_vm._s("Name"))] : [_vm._t("name")]],
-      2
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { class: _vm.contentClasses },
-      [_vm.role !== "default" ? [_vm._v(_vm._s("Value"))] : [_vm._t("value")]],
-      2
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { class: _vm.actionClasses },
-      [
-        _vm.role !== "default"
-          ? [_vm._v(_vm._s("Actions"))]
-          : [_vm._t("actions")],
-      ],
-      2
-    ),
-  ])
+  return _c(
+    "div",
+    { staticClass: "table-details-row" },
+    [
+      "rowValue" === _vm.type
+        ? [
+            _c(
+              "div",
+              { class: _vm.headingClasses },
+              [
+                _vm.role !== "default"
+                  ? [_vm._v(_vm._s("Name"))]
+                  : [_vm._t("name"), _vm._v("\n\t\t\t\t:\n\t\t\t")],
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { class: _vm.contentClasses },
+              [
+                _vm.role !== "default"
+                  ? [_vm._v(_vm._s("Value"))]
+                  : [_vm._t("value")],
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { class: _vm.actionClasses },
+              [
+                _vm.role !== "default"
+                  ? [_vm._v(_vm._s("Actions"))]
+                  : [_vm._t("actions")],
+              ],
+              2
+            ),
+          ]
+        : [_c("h3", [_vm._t("name")], 2)],
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -3089,22 +3125,22 @@ if(false) {}
 
 /***/ }),
 
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/sass-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&id=d41fc6ac&scoped=true&lang=scss&");
+var content = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/sass-loader/dist/cjs.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableRow.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/DetailsTableRow.vue?vue&type=style&index=0&lang=scss&");
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("7a385e41", content, false, {});
+var update = add("4c5c86d6", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

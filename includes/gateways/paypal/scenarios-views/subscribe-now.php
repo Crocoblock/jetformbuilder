@@ -73,6 +73,7 @@ class Subscribe_Now extends Scenario_View_Base {
 				'label'              => __( 'Cancel subscription', 'jet-form-builder' ),
 				'reason'             => array(
 					'label'   => __( 'Reason', 'jet-form-builder' ),
+					'warn'    => __( 'Are you sure you want to cancel your subscription? If so, write the reason.', 'jet-form-builder' ),
 					'desc'    => __( 'The reason for the cancellation of a subscription.', 'jet-form-builder' ),
 					'default' => 'Not satisfied with the service.',
 				),
@@ -82,6 +83,7 @@ class Subscribe_Now extends Scenario_View_Base {
 				'label'              => __( 'Suspend subscription', 'jet-form-builder' ),
 				'reason'             => array(
 					'label'   => __( 'Reason', 'jet-form-builder' ),
+					'warn'    => __( 'Are you sure you want to suspend your subscription? If so, write the reason.', 'jet-form-builder' ),
 					'desc'    => __( 'The reason for suspenson of the subscription.', 'jet-form-builder' ),
 					'default' => 'Item out of stock.',
 				),
@@ -92,44 +94,63 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'               => array(
+			'id'                 => array(
 				'value' => array( $this, 'get_related_id' ),
 				'type'  => 'integer',
 			),
-			'record_id'        => array(
+			'record_id'          => array(
 				'value' => array( $this, 'get_item_id' ),
 			),
-			'status'           => array(
+			'status'             => array(
 				'value' => array( $this, 'get_status_info' ),
 				'type'  => 'rawArray',
 			),
-			'subscriber'       => array(
+			'subscriber'         => array(
 				'value' => array( $this, 'get_subscriber_info' ),
 				'type'  => 'rawArray',
 			),
-			'subscriber_email' => array(
+			'subscriber_email'   => array(
 				'value' => array( $this, 'get_subscriber_email' )
 			),
-			'subscriber_id' => array(
+			'subscriber_id'      => array(
 				'value' => array( $this, 'get_subscriber_id' )
 			),
-			'subscriber_name' => array(
+			'subscriber_name'    => array(
 				'value' => array( $this, 'get_subscriber_name' )
 			),
-			'plan_info'        => array(
+			'subscriber_address' => array(
+				'value' => array( $this, 'get_subscriber_address' ),
+				'type'  => 'rawArray',
+			),
+			'plan_info'          => array(
 				'value' => array( $this, 'get_plan_info' ),
 			),
-			'plan_links'       => array(
+			'plan_name'          => array(
+				'value' => 'Undefined', // should be loaded on the client side by rest api
+			),
+			'product_name'       => array(
+				'value' => 'Undefined', // should be loaded on the client side by rest api
+			),
+			'price'              => array(
+				'value' => 'Undefined', // should be loaded on the client side by rest api
+			),
+			'billing_cycle'      => array(
+				'value' => 'Undefined', // should be loaded on the client side by rest api
+			),
+			'cycles_completed'   => array(
+				'value' => array( $this, 'get_cycles_completed' )
+			),
+			'plan_links'         => array(
 				'value' => array( $this, 'get_plan_links' )
 			),
-			'create_time'      => array(
+			'create_time'        => array(
 				'value' => array( $this, 'get_create_time' ),
 			),
-			'links'            => array(
+			'links'              => array(
 				'value' => array( $this, 'get_links' ),
 				'type'  => 'rawArray',
 			),
-			'_FORM_ID'         => array(
+			'_FORM_ID'           => array(
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
 			),
@@ -138,67 +159,69 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'heading_1'     => array(
+			'heading_1'          => array(
 				'label'         => __( 'Subscriber', 'jet-form-builder' ),
+				'type'          => 'heading',
 				'show_in_table' => false,
 			),
-			'subscriber'    => array(
-				'label'    => __( 'Subscriber Info', 'jet-form-builder' ),
-				'children' => array(
-					'email_address'    => array(
-						'label' => __( 'Email', 'jet-form-builder' ),
+			'subscriber_name'    => array(
+				'label' => __( 'Name', 'jet-form-builder' ),
+				'table_order' => 1
+			),
+			'subscriber_email'   => array(
+				'label'         => __( 'Email', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'record_id'          => array(
+				'label' => __( 'Subscription ID', 'jet-form-builder' ),
+				'table_order' => 2
+			),
+			'subscriber_address' => array(
+				'label'         => __( 'Shipping Address', 'jet-form-builder' ),
+				'show_in_table' => false,
+				'children'      => array(
+					'address_line_1' => array(
+						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+						'label' => sprintf( __( 'Address Line %s', 'jet-form-builder' ), '#1' ),
 					),
-					'payer_id'         => array(
-						'label' => __( 'Payer ID', 'jet-form-builder' ),
+					'admin_area_2'   => array(
+						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+						'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#2' ),
 					),
-					'name'             => array(
-						'label'    => __( 'Name', 'jet-form-builder' ),
-						'children' => array(
-							'given_name' => array(
-								'label' => __( 'Given Name', 'jet-form-builder' ),
-							),
-							'surname'    => array(
-								'label' => __( 'Surname', 'jet-form-builder' ),
-							),
-						),
+					'admin_area_1'   => array(
+						// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+						'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#1' ),
 					),
-					'shipping_address' => array(
-						'skip_level' => true,
-						'children'   => array(
-							'address' => array(
-								'label'    => __( 'Address', 'jet-form-builder' ),
-								'children' => array(
-									'address_line_1' => array(
-										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-										'label' => sprintf( __( 'Address Line %s', 'jet-form-builder' ), '#1' ),
-									),
-									'admin_area_2'   => array(
-										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-										'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#2' ),
-									),
-									'admin_area_1'   => array(
-										// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-										'label' => sprintf( __( 'Admin Area %s', 'jet-form-builder' ), '#1' ),
-									),
-									'postal_code'    => array(
-										'label' => __( 'Postal Code', 'jet-form-builder' ),
-									),
-									'country_code'   => array(
-										'label' => __( 'Country Code', 'jet-form-builder' ),
-									),
-								),
-							),
-						),
+					'postal_code'    => array(
+						'label' => __( 'Postal Code', 'jet-form-builder' ),
+					),
+					'country_code'   => array(
+						'label' => __( 'Country Code', 'jet-form-builder' ),
 					),
 				),
 			),
-			'create_time'   => array(
-				'label' => __( 'Create time', 'jet-form-builder' ),
+			'heading_3'          => array(
+				'label'         => __( 'Subscription', 'jet-form-builder' ),
+				'type'          => 'heading',
+				'show_in_table' => false,
 			),
-			'record_id'     => array(
-				'label' => __( 'Record ID', 'jet-form-builder' ),
+			'price'              => array(
+				'label'         => __( 'Price', 'jet-form-builder' ),
+				'show_in_table' => false,
 			),
-			'status'        => array(
+			'billing_cycle'      => array(
+				'label'         => __( 'Billing Cycle', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'cycles_completed'   => array(
+				'label'         => __( 'Cycles Completed', 'jet-form-builder' ),
+				'show_in_table' => false,
+			),
+			'create_time'        => array(
+				'label'       => __( 'Create time', 'jet-form-builder' ),
+				'table_order' => 0
+			),
+			'status'             => array(
 				'label'    => __( 'Status Info', 'jet-form-builder' ),
 				'children' => array(
 					'status'             => array(
@@ -209,27 +232,23 @@ class Subscribe_Now extends Scenario_View_Base {
 					),
 				),
 			),
-			'product_name'  => array(
+			'heading_2'          => array(
+				'label'         => __( 'Plan', 'jet-form-builder' ),
+				'type'          => 'heading',
+				'show_in_table' => false,
+			),
+			'product_name'       => array(
 				'label'         => __( 'Product Name', 'jet-form-builder' ),
 				'show_in_table' => false,
 			),
-			'plan_name'     => array(
+			'plan_name'          => array(
 				'label'         => __( 'Plan Name', 'jet-form-builder' ),
 				'show_in_table' => false,
 			),
-			'billing_cycle' => array(
-				'label'         => __( 'Billing Cycle', 'jet-form-builder' ),
+			'plan_info'          => array(
+				'label'         => __( 'Plan ID', 'jet-form-builder' ),
 				'show_in_table' => false,
 			),
-			'times_billed'  => array(
-				'label'         => __( 'Times Billed', 'jet-form-builder' ),
-				'show_in_table' => false,
-			),
-			'product'       => array(
-				'label'         => __( 'Product' ),
-				'show_in_table' => false,
-			),
-
 			self::COLUMN_ACTIONS => array(
 				'label' => __( 'Actions', 'jet-form-builder' )
 			)
@@ -350,8 +369,23 @@ class Subscribe_Now extends Scenario_View_Base {
 		return implode( ' ', $parts );
 	}
 
-	public function get_billing_info( $record, $undefined ) {
-		return $record['resource']['billing_info'] ?? $undefined;
+	public function get_subscriber_address( $record ) {
+		return $record['resource']['subscriber']['shipping_address']['address'] ?? array();
+	}
+
+	public function get_cycles_completed( $record ) {
+		$cycles = $record['resource']['billing_info']['cycle_executions'] ?? array();
+
+		$last_cycle = array_pop( $cycles );
+
+		$completed = (int) ( $last_cycle['cycles_completed'] );
+		$all       = (int) ( $last_cycle['total_cycles'] );
+
+		if ( 0 === $all ) {
+			return $completed;
+		}
+
+		return sprintf( __( '%d of %d', 'jet-form-builder' ), $completed, $all );
 	}
 
 	/**

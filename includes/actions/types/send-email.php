@@ -248,6 +248,12 @@ class Send_Email extends Base {
 		$message = str_replace( '&#038;', '&amp;', $message );
 		$message = stripcslashes( $message );
 
+		if ( Manager::instance()->active() ) {
+			add_action( 'wp_mail_failed', function ( \WP_Error $wp_error ) {
+				new Action_Exception( 'failed', $wp_error->get_error_message(), $wp_error->get_error_data() );
+			} );
+		}
+
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
 
 		if ( ! $sent ) {

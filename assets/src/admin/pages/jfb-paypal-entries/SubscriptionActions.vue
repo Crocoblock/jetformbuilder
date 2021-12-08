@@ -8,6 +8,7 @@
 			:force-current="forceCurrent"
 			:button-props="buttonProps"
 		/>
+		<slot></slot>
 	</div>
 </template>
 
@@ -18,15 +19,7 @@ export default {
 	name: "SubscriptionActions",
 	props: {
 		forceCurrent: Object,
-		buttonProps: {
-			type: Object,
-			default() {
-				return {
-					buttonStyle: 'accent',
-					size: 'mini',
-				}
-			},
-		},
+		buttonProps: Object,
 	},
 	components: { SubscriptionActionPanel },
 	computed: {

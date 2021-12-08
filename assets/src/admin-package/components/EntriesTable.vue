@@ -45,6 +45,7 @@
 									v-bind:is="getItemComponent( column )"
 									:value="entry[column] ? entry[column].value : false"
 									:full-entry="entry"
+									:entry-id="entryID"
 								/>
 							</keep-alive>
 						</template>
@@ -97,7 +98,7 @@ export default {
 	computed: {
 		filteredColumns() {
 			return this.columnsIDs.filter( this.isShown );
-		}
+		},
 	},
 	methods: {
 		isShown( column ) {
@@ -119,13 +120,29 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 
-.list-table-heading__cell > span {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
+.cx-vue-list-table {
+	.list-table-heading {
+		justify-content: space-between;
+
+		&__cell > span {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+	}
+	.list-table-item {
+		justify-content: space-between;
+
+		&__cell {
+			white-space: nowrap;
+			overflow: hidden;
+			text-align: center;
+		}
+	}
 }
+
 
 </style>

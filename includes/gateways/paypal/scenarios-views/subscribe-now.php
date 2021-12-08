@@ -154,6 +154,9 @@ class Subscribe_Now extends Scenario_View_Base {
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
 			),
+			'notes'              => array(
+				'value' => 'Undefined', // should be loaded on the client side by rest api
+			),
 		);
 	}
 
@@ -165,7 +168,7 @@ class Subscribe_Now extends Scenario_View_Base {
 				'show_in_table' => false,
 			),
 			'subscriber_name'    => array(
-				'label' => __( 'Name', 'jet-form-builder' ),
+				'label'       => __( 'Name', 'jet-form-builder' ),
 				'table_order' => 1
 			),
 			'subscriber_email'   => array(
@@ -173,7 +176,7 @@ class Subscribe_Now extends Scenario_View_Base {
 				'show_in_table' => false,
 			),
 			'record_id'          => array(
-				'label' => __( 'Subscription ID', 'jet-form-builder' ),
+				'label'       => __( 'Subscription ID', 'jet-form-builder' ),
 				'table_order' => 2
 			),
 			'subscriber_address' => array(
@@ -291,8 +294,12 @@ class Subscribe_Now extends Scenario_View_Base {
 				'url'    => Paypal\Web_Hooks\Action_Suspend_Subscription::dynamic_rest_url( $record['resource']['id'] ),
 			),
 			'plan_details' => array(
-				'method' => Paypal\Web_Hooks\Receive_Plan_Details::get_methods(),
-				'url'    => Paypal\Web_Hooks\Receive_Plan_Details::dynamic_rest_url( $record['resource']['id'] ),
+				'method' => Paypal\Web_Hooks\Receive_Admin_Subscription_Details::get_methods(),
+				'url'    => Paypal\Web_Hooks\Receive_Admin_Subscription_Details::dynamic_rest_url( $record['resource']['id'] ),
+			),
+			'add_note'     => array(
+				'method' => Paypal\Web_Hooks\Add_Subscription_Note::get_methods(),
+				'url'    => Paypal\Web_Hooks\Add_Subscription_Note::rest_url()
 			)
 		);
 	}

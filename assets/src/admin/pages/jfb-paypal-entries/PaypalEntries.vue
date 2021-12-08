@@ -15,7 +15,6 @@
 			:entries-list="currentList"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
-			@dblclick-row="openPopup"
 		/>
 		<cx-vui-pagination
 			:total="100"
@@ -23,7 +22,8 @@
 			:current="1"
 		></cx-vui-pagination>
 		<cx-vui-popup
-			v-model="isShowPopup"
+			:value="isShowPopup"
+			@change="togglePopup"
 			body-width="60vw"
 			:footer="false"
 			@on-cancel="closePopup"
@@ -33,9 +33,37 @@
 				<div class="jfb-subscriptions-actions">
 					<SubscriptionActions/>
 				</div>
+				<h3>{{ __( 'Notes', 'jet-form-builder' ) }}</h3>
+				<SimpleWrapperComponent>
+					<template #meta>
+						<div
+							class="jfb-note"
+							v-for="val in current.notes.value"
+							:key="val"
+						>
+							{{ val.created_dt }} <{{ val.by }}>: {{ val.note }}
+						</div>
+					</template>
+					<cx-vui-textarea
+						:size="'fullwidth'"
+						rows="10"
+						prevent-wrap
+						v-model="note"
+					>
+						<cx-vui-button
+							@click="addNote"
+							:loading="isDoingAction"
+							:disabled="isDoingAction"
+							button-style="accent"
+							size="mini"
+						>
+							<template #label>{{ 'Add' }}</template>
+						</cx-vui-button>
+					</cx-vui-textarea>
+				</SimpleWrapperComponent>
 			</template>
 		</cx-vui-popup>
-		<div class="loader" v-if="loading"></div>
+		<div class="loader" v-if="isLoadingPopup"></div>
 	</div>
 </template>
 
@@ -51,11 +79,21 @@ Vue.config.devtools = true;
 
 const { applyFilters } = wp.hooks;
 
-const { GetIncoming, i18n } = window.JetFBMixins;
-const { EntriesTable, DetailsTableWithStore } = window.JetFBComponents;
-const { getSearch, createPath } = window.JetFBActions;
+const {
+		  GetIncoming,
+		  i18n,
+	  } = window.JetFBMixins;
+const {
+		  EntriesTable,
+		  DetailsTableWithStore,
+		  DetailsTable,
+		  SimpleWrapperComponent,
+	  } = window.JetFBComponents;
 
-const { apiFetch } = wp;
+const {
+		  getSearch,
+		  createPath,
+	  } = window.JetFBActions;
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	status,
@@ -64,15 +102,19 @@ const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns'
 
 export default {
 	name: 'jfb-paypal-entries',
-	components: { DetailsTableWithStore, SubscriptionActions, EntriesTable },
+	components: {
+		DetailsTableWithStore,
+		SubscriptionActions,
+		EntriesTable,
+		SimpleWrapperComponent,
+	},
 	data() {
 		return {
-			loading: false,
 			scenario: '',
 			settings: {},
 			receive_url: '',
 			columnsComponents,
-			isShowPopup: false,
+			note: '',
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
@@ -107,63 +149,30 @@ export default {
 		currentSubscription() {
 			return this.$store.getters.currentSubscription;
 		},
+		isLoadingPopup() {
+			return this.$store.getters.isLoadingPopup;
+		},
+		isShowPopup() {
+			return this.$store.getters.isShowPopup;
+		},
+		isDoingAction() {
+			return this.$store.getters.isDoingAction;
+		},
 	},
 	methods: {
+		togglePopup() {
+			this.$store.commit( 'togglePopup' );
+		},
 		openPopup( entryID ) {
-			const current = this.currentList[ entryID ] || {};
-
-			this.$store.commit( 'setCurrent', current );
-
-			window.history.replaceState(
-				'on_open_modal',
-				document.title,
-				createPath( {
-					sub: current.record_id.value,
-				} ),
-			);
-
-			if ( this.currentSubscription.sub_id ) {
-				this.isShowPopup = true;
-				return;
-			}
-
-			this.loading = true;
-
-			this.fetchPlan()
-				.then( response => {
-					const replace = response.data?.replace ?? {};
-
-					this.$store.commit( 'setCurrent', {
-						...current,
-						...replace,
-					} );
-
-					this.$store.commit( 'setList', this.currentList.map( subscription => {
-						if ( response.data?.sub_id !== subscription.record_id.value ) {
-							return subscription;
-						}
-						return {
-							...subscription,
-							...replace,
-						};
-					} ) );
-
-					this.$store.commit( 'saveSubscription', response.data )
-					this.isShowPopup = true;
-				} )
-				.finally( () => {
-					this.loading = false;
-				} );
+			this.$store.dispatch( 'openPopup', entryID );
 		},
 		closePopup() {
-			this.isShowPopup = false;
-			this.$store.commit( 'clearCurrent' );
-
-			window.history.replaceState(
-				'on_open_modal',
-				document.title,
-				createPath( {}, {}, [ 'sub' ] ),
-			);
+			this.note = '';
+			this.$store.dispatch( 'closePopup' );
+		},
+		addNote() {
+			this.$store.dispatch( 'addNote', this.note );
+			this.note = '';
 		},
 		maybeOpen() {
 			const { sub } = getSearch();
@@ -172,9 +181,7 @@ export default {
 				return;
 			}
 
-			for ( const entryID in this.list ) {
-				const entry = this.list[ entryID ] || {};
-
+			for ( const [ entryID, entry ] of Object.entries( this.currentList ) ) {
 				if ( sub === entry.record_id.value ) {
 					this.openPopup( entryID );
 
@@ -182,23 +189,7 @@ export default {
 				}
 			}
 		},
-		fetchPlan() {
-			const options = {
-				...this.current?.links?.value?.plan_details || {},
-			};
 
-			return new Promise( ( resolve, reject ) => {
-				apiFetch( options ).then( resolve ).catch( error => {
-					this.$CXNotice.add( {
-						message: error.message,
-						type: 'error',
-						duration: 4000,
-					} );
-
-					reject( error );
-				} );
-			} );
-		},
 	},
 };
 
@@ -210,27 +201,38 @@ export default {
 	max-height: 85vh;
 	overflow: auto;
 	position: relative;
-}
-
-.cx-vui-popup__content {
-	padding-bottom: 3em;
+	.cx-vui-component-raw {
+		position: sticky;
+		top: 0;
+		text-align: end;
+	}
 }
 
 .jfb-subscriptions-actions {
-	display: flex;
-	column-gap: 10px;
-	justify-content: flex-end;
-	position: fixed;
-	bottom: 3em;
+	width: 60vw;
 	background-color: #fff;
-	width: 60%;
 	padding: 1em;
 	border-top: 1px solid #eee;
+	box-sizing: border-box;
+	position: sticky;
+	bottom: -3em;
+	& > div {
+		display: flex;
+		column-gap: 10px;
+		justify-content: flex-end;
+	}
 }
 
-.cx-vui-button--style-link-error {
-	background: #ffffff;
-	box-shadow: 0 4px 4px rgb(201 44 44 / 50%);
+.jfb-note {
+	padding: 1em 0.5em;
+	width: 100%;
+	&:nth-child(odd) {
+		background-color: #eee;
+	}
+}
+
+button.cx-vui-button.cx-vui-button--size-link:hover {
+	box-shadow: 0 4px 4px;
 }
 
 .cx-vui-component--fullwidth-label {
@@ -241,16 +243,6 @@ export default {
 }
 
 .cx-vue-list-table {
-	.list-table-heading {
-		justify-content: space-between;
-	}
-	.list-table-item {
-		justify-content: space-between;
-		&__cell {
-			white-space: nowrap;
-			overflow: hidden;
-		}
-	}
 	.cell--record_id {
 		width: 160px;
 	}
@@ -265,7 +257,7 @@ export default {
 		width: 160px;
 	}
 	.cell--actions {
-		width: 160px;
+		width: 200px;
 	}
 }
 

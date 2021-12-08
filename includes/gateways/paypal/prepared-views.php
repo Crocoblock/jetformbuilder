@@ -4,11 +4,13 @@
 namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Classes\Table_View_Base;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
+use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Show_Plan_Details_Action;
 
 class Prepared_Views {
 
@@ -163,5 +165,52 @@ class Prepared_Views {
 
 		return ( new Scenarios_Views\Recurring_Payments() )->prepare_record( $raw_payment );
 	}
+
+	/**
+	 * @param string $token
+	 * @param string $plan_id
+	 *
+	 * @throws Gateway_Exception
+	 */
+	public static function get_plan_by_id( string $token, string $plan_id ) {
+		return ( new Show_Plan_Details_Action() )
+			->set_bearer_auth( $token )
+			->set_path(
+				array(
+					'plan_id' => $plan_id
+				)
+			)
+			->send_request();
+	}
+
+	/**
+	 * @param string $token
+	 * @param string $product_id
+	 *
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
+	public static function get_product_by_id( string $token, string $product_id ) {
+		return ( new Paypal\Api_Actions\Show_Product_Details() )
+			->set_bearer_auth( $token )
+			->set_path(
+				array(
+					'product_id' => $product_id,
+				)
+			)
+			->send_request();
+	}
+
+	public static function get_notes_by_id( $post_id ) {
+		$notes = array_reverse( get_post_meta( $post_id, Scenarios_Manager::NOTES_KEY ) );
+
+		return array_map( function ( $item ) {
+			$parsed = Tools::decode_json( $item );
+			$parsed['created_dt'] = gmdate( 'M d Y H:i:s', $parsed['created_dt'] );
+
+			return $parsed;
+		}, $notes );
+	}
+
 
 }

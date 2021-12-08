@@ -10,6 +10,21 @@ use Jet_Form_Builder\Gateways\Paypal;
 
 abstract class Billing_Subscription extends Event_Handler_Base {
 
+	public function get_note_message( array $old_subscription, array $new_subscription ): string {
+		$old_status = $old_subscription['status'] ?? '';
+		$new_status = $new_subscription['status'] ?? '';
+
+		if ( $old_status === $new_status ) {
+			return '';
+		}
+
+		return sprintf(
+			__( 'Subscription status changed from %s to %s', 'jet-form-builder' ),
+			$old_status,
+			$new_status
+		);
+	}
+
 	/**
 	 * @param $webhook_event
 	 *
@@ -41,6 +56,11 @@ abstract class Billing_Subscription extends Event_Handler_Base {
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Gateway_Exception( "Undefined subscription: {$subscription_id}" );
 		}
+
+		Paypal\Prepared_Queries::add_notes_by_id(
+			$subscription['order_id'],
+			$this->get_note_message( $subscription['resource'], $webhook_event['resource'] )
+		);
 
 		$subscription['resource'] = $webhook_event['resource'];
 

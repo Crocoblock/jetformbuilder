@@ -17,7 +17,8 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 				new Fetch_Pay_Now_Editor(),
 				new Fetch_Subscribe_Now_Editor(),
 				new Action_Refund_Recurring_Payment(),
-				new Receive_Plan_Details()
+				new Receive_Admin_Subscription_Details(),
+				new Add_Subscription_Note(),
 			)
 		);
 	}

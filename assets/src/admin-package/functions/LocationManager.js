@@ -17,6 +17,18 @@ export function getSearch() {
 	return args;
 }
 
+export function addQueryArgs( args, url ) {
+	url = new URL( url );
+
+	const params = new URLSearchParams( url.search );
+
+	for ( const [ key, value ] of Object.entries( args ) ) {
+		params.append( key, value );
+	}
+
+	return url.origin + url.pathname + '?' + params;
+}
+
 export function createPath( queryArgs = {}, hashes = {}, clearArgs = [] ) {
 	const params = [];
 	queryArgs = {
@@ -28,7 +40,7 @@ export function createPath( queryArgs = {}, hashes = {}, clearArgs = [] ) {
 		if ( clearArgs.includes( key ) ) {
 			continue;
 		}
-		params.push( `${key}=${encodeURIComponent( value )}` );
+		params.push( `${ key }=${ encodeURIComponent( value ) }` );
 	}
 
 	const urlParts = [ getCurrentPath(), params.join( '&' ) ];

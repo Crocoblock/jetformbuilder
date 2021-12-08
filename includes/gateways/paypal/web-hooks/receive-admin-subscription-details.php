@@ -12,12 +12,12 @@ use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
-class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
+class Receive_Admin_Subscription_Details extends Rest_Api_Endpoint_Base {
 
 	use Dynamic_Rest_Url_Trait;
 
 	public static function get_rest_static_base(): string {
-		return 'paypal/show-plan-details/';
+		return 'paypal/admin-subscription-details/';
 	}
 
 	public static function get_rest_dynamic_base(): string {
@@ -46,28 +46,13 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 			);
 		}
 
+		$notes   = Paypal\Prepared_Views::get_notes_by_id( $subscription['order_id'] );
 		$plan_id = $subscription['resource']['plan_id'] ?? '';
 
 		try {
-			$token = Paypal\Controller::get_token_by_form_id( $subscription['form_id'] );
-
-			$plan = ( new Show_Plan_Details_Action() )
-				->set_bearer_auth( $token )
-				->set_path(
-					array(
-						'plan_id' => $plan_id
-					)
-				)
-				->send_request();
-
-			$product = ( new Paypal\Api_Actions\Show_Product_Details() )
-				->set_bearer_auth( $token )
-				->set_path(
-					array(
-						'product_id' => $plan['product_id'],
-					)
-				)
-				->send_request();
+			$token   = Paypal\Controller::get_token_by_form_id( $subscription['form_id'] );
+			$plan    = Prepared_Views::get_plan_by_id( $token, $plan_id );
+			$product = Prepared_Views::get_product_by_id( $token, $plan['product_id'] );
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
@@ -81,8 +66,8 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 		return new \WP_REST_Response(
 			array(
 				'data' => array(
-					'plan_id'      => $plan['id'] ?? '',
-					'sub_id'       => $subscription['resource']['id'] ?? '',
+					'plan_id'      => $plan_id,
+					'sub_id'       => $subscription_id,
 					'subscription' => $subscription,
 					'plan'         => $plan,
 					'product'      => $product,
@@ -92,7 +77,8 @@ class Receive_Plan_Details extends Rest_Api_Endpoint_Base {
 								'price'         => $this->get_price_for_cycle( $plan, $subscription ),
 								'product_name'  => $product['name'],
 								'plan_name'     => $plan['name'],
-								'billing_cycle' => $this->get_billing_cycle( $plan )
+								'billing_cycle' => $this->get_billing_cycle( $plan ),
+								'notes'         => $notes
 							)
 						),
 				),

@@ -29,8 +29,8 @@ export default {
 			type: Object,
 			default() {
 				return {
+					size: 'link',
 					buttonStyle: 'accent',
-					size: 'mini',
 				}
 			},
 		},
@@ -99,8 +99,8 @@ export default {
 };
 </script>
 
-<style>
-.cx-vui-collapse-mini__header {
-	justify-content: space-between;
+<style lang="scss">
+.cx-vui-button--size-link {
+	padding: 0.5em;
 }
 </style>

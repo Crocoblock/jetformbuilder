@@ -1,12 +1,18 @@
 <template>
-	<div class="jfb-actions-item">
+	<!--<div class="jfb-actions-item">
 		<SubscriptionActions
 			:force-current="fullEntry"
-			:button-props="{
-			size: 'link'
-		}"
-		/>
-	</div>
+		>
+
+		</SubscriptionActions>
+	</div>-->
+	<cx-vui-button
+		button-style="accent-border"
+		size="link"
+		@click="openPopup"
+	>
+		<template #label>{{ 'View' }}</template>
+	</cx-vui-button>
 </template>
 
 <script>
@@ -14,10 +20,15 @@ import SubscriptionActions from '../../SubscriptionActions';
 
 export default {
 	name: "actions--item",
-	props: [ 'value', 'full-entry' ],
+	props: [ 'value', 'full-entry', 'entry-id' ],
 	components: { SubscriptionActions },
 	created() {
 	},
+	methods: {
+		openPopup() {
+			this.$store.dispatch( 'openPopup', this.entryId );
+		}
+	}
 }
 </script>
 
@@ -31,7 +42,6 @@ export default {
 		}
 		button {
 			flex: 1;
-			padding: 0.5em;
 		}
 	}
 </style>

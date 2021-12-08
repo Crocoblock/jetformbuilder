@@ -17,12 +17,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SubscriptionActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SubscriptionActions */ "./admin/pages/jfb-paypal-entries/SubscriptionActions.vue");
 /* harmony import */ var _scss_admin_default_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../scss/admin/default.scss */ "../scss/admin/default.scss");
 /* harmony import */ var _scss_admin_default_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scss_admin_default_scss__WEBPACK_IMPORTED_MODULE_3__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -75,28 +109,28 @@ var _window$JetFBMixins = window.JetFBMixins,
     i18n = _window$JetFBMixins.i18n;
 var _window$JetFBComponen = window.JetFBComponents,
     EntriesTable = _window$JetFBComponen.EntriesTable,
-    DetailsTableWithStore = _window$JetFBComponen.DetailsTableWithStore;
+    DetailsTableWithStore = _window$JetFBComponen.DetailsTableWithStore,
+    DetailsTable = _window$JetFBComponen.DetailsTable,
+    SimpleWrapperComponent = _window$JetFBComponen.SimpleWrapperComponent;
 var _window$JetFBActions = window.JetFBActions,
     getSearch = _window$JetFBActions.getSearch,
     createPath = _window$JetFBActions.createPath;
-var _wp = wp,
-    apiFetch = _wp.apiFetch;
 var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [_columns_status__WEBPACK_IMPORTED_MODULE_0__, _columns_actions__WEBPACK_IMPORTED_MODULE_1__]);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'jfb-paypal-entries',
   components: {
     DetailsTableWithStore: DetailsTableWithStore,
     SubscriptionActions: _SubscriptionActions__WEBPACK_IMPORTED_MODULE_2__["default"],
-    EntriesTable: EntriesTable
+    EntriesTable: EntriesTable,
+    SimpleWrapperComponent: SimpleWrapperComponent
   },
   data: function data() {
     return {
-      loading: false,
       scenario: '',
       settings: {},
       receive_url: '',
       columnsComponents: columnsComponents,
-      isShowPopup: false
+      note: ''
     };
   },
   mixins: [GetIncoming, i18n],
@@ -132,52 +166,31 @@ var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [
     },
     currentSubscription: function currentSubscription() {
       return this.$store.getters.currentSubscription;
+    },
+    isLoadingPopup: function isLoadingPopup() {
+      return this.$store.getters.isLoadingPopup;
+    },
+    isShowPopup: function isShowPopup() {
+      return this.$store.getters.isShowPopup;
+    },
+    isDoingAction: function isDoingAction() {
+      return this.$store.getters.isDoingAction;
     }
   },
   methods: {
+    togglePopup: function togglePopup() {
+      this.$store.commit('togglePopup');
+    },
     openPopup: function openPopup(entryID) {
-      var _this = this;
-
-      var current = this.currentList[entryID] || {};
-      this.$store.commit('setCurrent', current);
-      window.history.replaceState('on_open_modal', document.title, createPath({
-        sub: current.record_id.value
-      }));
-
-      if (this.currentSubscription.sub_id) {
-        this.isShowPopup = true;
-        return;
-      }
-
-      this.loading = true;
-      this.fetchPlan().then(function (response) {
-        var _response$data$replac, _response$data;
-
-        var replace = (_response$data$replac = (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.replace) !== null && _response$data$replac !== void 0 ? _response$data$replac : {};
-
-        _this.$store.commit('setCurrent', _objectSpread(_objectSpread({}, current), replace));
-
-        _this.$store.commit('setList', _this.currentList.map(function (subscription) {
-          var _response$data2;
-
-          if (((_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.sub_id) !== subscription.record_id.value) {
-            return subscription;
-          }
-
-          return _objectSpread(_objectSpread({}, subscription), replace);
-        }));
-
-        _this.$store.commit('saveSubscription', response.data);
-
-        _this.isShowPopup = true;
-      }).finally(function () {
-        _this.loading = false;
-      });
+      this.$store.dispatch('openPopup', entryID);
     },
     closePopup: function closePopup() {
-      this.isShowPopup = false;
-      this.$store.commit('clearCurrent');
-      window.history.replaceState('on_open_modal', document.title, createPath({}, {}, ['sub']));
+      this.note = '';
+      this.$store.dispatch('closePopup');
+    },
+    addNote: function addNote() {
+      this.$store.dispatch('addNote', this.note);
+      this.note = '';
     },
     maybeOpen: function maybeOpen() {
       var _getSearch = getSearch(),
@@ -187,34 +200,16 @@ var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [
         return;
       }
 
-      for (var entryID in this.list) {
-        var entry = this.list[entryID] || {};
+      for (var _i = 0, _Object$entries = Object.entries(this.currentList); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+            entryID = _Object$entries$_i[0],
+            entry = _Object$entries$_i[1];
 
         if (sub === entry.record_id.value) {
           this.openPopup(entryID);
           return;
         }
       }
-    },
-    fetchPlan: function fetchPlan() {
-      var _this$current,
-          _this$current$links,
-          _this$current$links$v,
-          _this2 = this;
-
-      var options = _objectSpread({}, ((_this$current = this.current) === null || _this$current === void 0 ? void 0 : (_this$current$links = _this$current.links) === null || _this$current$links === void 0 ? void 0 : (_this$current$links$v = _this$current$links.value) === null || _this$current$links$v === void 0 ? void 0 : _this$current$links$v.plan_details) || {});
-
-      return new Promise(function (resolve, reject) {
-        apiFetch(options).then(resolve).catch(function (error) {
-          _this2.$CXNotice.add({
-            message: error.message,
-            type: 'error',
-            duration: 4000
-          });
-
-          reject(error);
-        });
-      });
     }
   }
 });
@@ -268,8 +263,8 @@ var _wp = wp,
       type: Object,
       default: function _default() {
         return {
-          buttonStyle: 'accent',
-          size: 'mini'
+          size: 'link',
+          buttonStyle: 'accent'
         };
       }
     }
@@ -367,20 +362,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SubscriptionActions",
   props: {
     forceCurrent: Object,
-    buttonProps: {
-      type: Object,
-      default: function _default() {
-        return {
-          buttonStyle: 'accent',
-          size: 'mini'
-        };
-      }
-    }
+    buttonProps: Object
   },
   components: {
     SubscriptionActionPanel: _SubscriptionActionPanel__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -417,14 +405,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "actions--item",
-  props: ['value', 'full-entry'],
+  props: ['value', 'full-entry', 'entry-id'],
   components: {
     SubscriptionActions: _SubscriptionActions__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  created: function created() {}
+  created: function created() {},
+  methods: {
+    openPopup: function openPopup() {
+      this.$store.dispatch('openPopup', this.entryId);
+    }
+  }
 });
 
 /***/ }),
@@ -571,7 +570,34 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__content {\n  padding-bottom: 3em;\n}\n.jfb-subscriptions-actions {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n  position: fixed;\n  bottom: 3em;\n  background-color: #fff;\n  width: 60%;\n  padding: 1em;\n  border-top: 1px solid #eee;\n}\n.cx-vui-button--style-link-error {\n  background: #ffffff;\n  box-shadow: 0 4px 4px rgba(201, 44, 44, 0.5);\n}\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 160px;\n}\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-moz-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-o-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/PaypalEntries.vue","webpack://./../PaypalEntries.vue"],"names":[],"mappings":"AAgNA;EACC,gBAAA;EACA,cAAA;EACA,kBAAA;AC/MD;ADkNA;EACC,mBAAA;AC/MD;ADkNA;EACC,aAAA;EACA,gBAAA;EACA,yBAAA;EACA,eAAA;EACA,WAAA;EACA,sBAAA;EACA,UAAA;EACA,YAAA;EACA,0BAAA;AC/MD;ADkNA;EACC,mBAAA;EACA,4CAAA;AC/MD;ADmNC;EACC,uBAAA;EACA,OAAA;AChNF;ADqNC;EACC,8BAAA;AClNF;ADoNC;EACC,8BAAA;AClNF;ADmNE;EACC,mBAAA;EACA,gBAAA;ACjNH;ADoNC;EACC,YAAA;AClNF;ADoNC;EACC,YAAA;EACA,kBAAA;AClNF;ADoNC;EACC,YAAA;AClNF;ADoNC;EACC,YAAA;AClNF;ADoNC;EACC,YAAA;AClNF;ADsNA;EACC,4BAAA;EACA,eAAA;EACA,YAAA;EACA,WAAA;EACA,UAAA;EACA,iBAAA;EACA,YAAA;EACA,MAAA;EACA,OAAA;EACA,SAAA;EACA,QAAA;EACA,wBAAA;EAYA,yDAAA;AC9ND;ADmNC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,MAAA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,sEAAA;EACA,8EAAA;ACjNF;ADoNC;EACC,2BAAA;EACA,WAAA;EACA,kBAAA;EACA,iBAAA;EACA,6BAAA;EACA,SAAA;AClNF;ADoNC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;EACA,gDAAA;EACA,6CAAA;EACA,4CAAA;EACA,2CAAA;EACA,wCAAA;EACA,oBAAA;EACA,gWAAA;EACA,wVAAA;AClNF;;ADsNA,cAAA;AACA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACnNA;ADqND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACnNA;AACF;ADsNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACpNA;ADsND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACpNA;AACF;ADuNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACrNA;ADuND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACrNA;AACF;ADwNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACtNA;ADwND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACtNA;AACF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-popup__body {\r\n\tmax-height: 85vh;\r\n\toverflow: auto;\r\n\tposition: relative;\r\n}\r\n\r\n.cx-vui-popup__content {\r\n\tpadding-bottom: 3em;\r\n}\r\n\r\n.jfb-subscriptions-actions {\r\n\tdisplay: flex;\r\n\tcolumn-gap: 10px;\r\n\tjustify-content: flex-end;\r\n\tposition: fixed;\r\n\tbottom: 3em;\r\n\tbackground-color: #fff;\r\n\twidth: 60%;\r\n\tpadding: 1em;\r\n\tborder-top: 1px solid #eee;\r\n}\r\n\r\n.cx-vui-button--style-link-error {\r\n\tbackground: #ffffff;\r\n\tbox-shadow: 0 4px 4px rgb(201 44 44 / 50%);\r\n}\r\n\r\n.cx-vui-component--fullwidth-label {\r\n\t.cx-vui-component__meta {\r\n\t\tjustify-content: center;\r\n\t\tflex: 1;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tjustify-content: space-between;\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t}\r\n\t}\r\n\t.cell--record_id {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t\ttext-align: center;\r\n\t}\r\n\t.cell--subscriber_name {\r\n\t\twidth: 250px;\r\n\t}\r\n\t.cell--create_time {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--actions {\r\n\t\twidth: 160px;\r\n\t}\r\n}\r\n\r\n.loader {\r\n\t/* Absolute Center Spinner */\r\n\tposition: fixed;\r\n\tz-index: 999;\r\n\theight: 2em;\r\n\twidth: 2em;\r\n\toverflow: visible;\r\n\tmargin: auto;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\tbottom: 0;\r\n\tright: 0;\r\n\t/* Transparent Overlay */\r\n\t&:before {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tbackground: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t\tbackground: -webkit-radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t}\r\n\t/* :not(:required) hides these rules from IE9 and below */\r\n\t&:not(:required) {\r\n\t\t/* hide \"loading...\" text */\r\n\t\tfont: 0/0 a;\r\n\t\tcolor: transparent;\r\n\t\ttext-shadow: none;\r\n\t\tbackground-color: transparent;\r\n\t\tborder: 0;\r\n\t}\r\n\t&:not(:required):after {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tfont-size: 10px;\r\n\t\twidth: 1em;\r\n\t\theight: 1em;\r\n\t\tmargin-top: -0.5em;\r\n\t\t-webkit-animation: spinner 150ms infinite linear;\r\n\t\t-moz-animation: spinner 150ms infinite linear;\r\n\t\t-ms-animation: spinner 150ms infinite linear;\r\n\t\t-o-animation: spinner 150ms infinite linear;\r\n\t\tanimation: spinner 150ms infinite linear;\r\n\t\tborder-radius: 0.5em;\r\n\t\t-webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t\tbox-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t}\r\n}\r\n\r\n/* Animation */\r\n@-webkit-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-moz-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-o-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n",".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n\n.cx-vui-popup__content {\n  padding-bottom: 3em;\n}\n\n.jfb-subscriptions-actions {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n  position: fixed;\n  bottom: 3em;\n  background-color: #fff;\n  width: 60%;\n  padding: 1em;\n  border-top: 1px solid #eee;\n}\n\n.cx-vui-button--style-link-error {\n  background: #ffffff;\n  box-shadow: 0 4px 4px rgba(201, 44, 44, 0.5);\n}\n\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 160px;\n}\n\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-moz-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-o-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-moz-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-o-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/PaypalEntries.vue","webpack://./../PaypalEntries.vue"],"names":[],"mappings":"AAuMA;EACC,gBAAA;EACA,cAAA;EACA,kBAAA;ACtMD;ADuMC;EACC,gBAAA;EACA,MAAA;EACA,eAAA;ACrMF;ADyMA;EACC,WAAA;EACA,sBAAA;EACA,YAAA;EACA,0BAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;ACtMD;ADuMC;EACC,aAAA;EACA,gBAAA;EACA,yBAAA;ACrMF;ADyMA;EACC,kBAAA;EACA,WAAA;ACtMD;ADuMC;EACC,sBAAA;ACrMF;ADyMA;EACC,qBAAA;ACtMD;AD0MC;EACC,uBAAA;EACA,OAAA;ACvMF;AD4MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;EACA,kBAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD6MA;EACC,4BAAA;EACA,eAAA;EACA,YAAA;EACA,WAAA;EACA,UAAA;EACA,iBAAA;EACA,YAAA;EACA,MAAA;EACA,OAAA;EACA,SAAA;EACA,QAAA;EACA,wBAAA;EAYA,yDAAA;ACrND;AD0MC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,MAAA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,sEAAA;EACA,8EAAA;ACxMF;AD2MC;EACC,2BAAA;EACA,WAAA;EACA,kBAAA;EACA,iBAAA;EACA,6BAAA;EACA,SAAA;ACzMF;AD2MC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;EACA,gDAAA;EACA,6CAAA;EACA,4CAAA;EACA,2CAAA;EACA,wCAAA;EACA,oBAAA;EACA,gWAAA;EACA,wVAAA;ACzMF;;AD6MA,cAAA;AACA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC1MA;AD4MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC1MA;AACF;AD6MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC3MA;AD6MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC3MA;AACF;AD8MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC5MA;AD8MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC5MA;AACF;AD+MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC7MA;AD+MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC7MA;AACF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-popup__body {\r\n\tmax-height: 85vh;\r\n\toverflow: auto;\r\n\tposition: relative;\r\n\t.cx-vui-component-raw {\r\n\t\tposition: sticky;\r\n\t\ttop: 0;\r\n\t\ttext-align: end;\r\n\t}\r\n}\r\n\r\n.jfb-subscriptions-actions {\r\n\twidth: 60vw;\r\n\tbackground-color: #fff;\r\n\tpadding: 1em;\r\n\tborder-top: 1px solid #eee;\r\n\tbox-sizing: border-box;\r\n\tposition: sticky;\r\n\tbottom: -3em;\r\n\t& > div {\r\n\t\tdisplay: flex;\r\n\t\tcolumn-gap: 10px;\r\n\t\tjustify-content: flex-end;\r\n\t}\r\n}\r\n\r\n.jfb-note {\r\n\tpadding: 1em 0.5em;\r\n\twidth: 100%;\r\n\t&:nth-child(odd) {\r\n\t\tbackground-color: #eee;\r\n\t}\r\n}\r\n\r\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\r\n\tbox-shadow: 0 4px 4px;\r\n}\r\n\r\n.cx-vui-component--fullwidth-label {\r\n\t.cx-vui-component__meta {\r\n\t\tjustify-content: center;\r\n\t\tflex: 1;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--record_id {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t\ttext-align: center;\r\n\t}\r\n\t.cell--subscriber_name {\r\n\t\twidth: 250px;\r\n\t}\r\n\t.cell--create_time {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--actions {\r\n\t\twidth: 200px;\r\n\t}\r\n}\r\n\r\n.loader {\r\n\t/* Absolute Center Spinner */\r\n\tposition: fixed;\r\n\tz-index: 999;\r\n\theight: 2em;\r\n\twidth: 2em;\r\n\toverflow: visible;\r\n\tmargin: auto;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\tbottom: 0;\r\n\tright: 0;\r\n\t/* Transparent Overlay */\r\n\t&:before {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tbackground: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t\tbackground: -webkit-radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t}\r\n\t/* :not(:required) hides these rules from IE9 and below */\r\n\t&:not(:required) {\r\n\t\t/* hide \"loading...\" text */\r\n\t\tfont: 0/0 a;\r\n\t\tcolor: transparent;\r\n\t\ttext-shadow: none;\r\n\t\tbackground-color: transparent;\r\n\t\tborder: 0;\r\n\t}\r\n\t&:not(:required):after {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tfont-size: 10px;\r\n\t\twidth: 1em;\r\n\t\theight: 1em;\r\n\t\tmargin-top: -0.5em;\r\n\t\t-webkit-animation: spinner 150ms infinite linear;\r\n\t\t-moz-animation: spinner 150ms infinite linear;\r\n\t\t-ms-animation: spinner 150ms infinite linear;\r\n\t\t-o-animation: spinner 150ms infinite linear;\r\n\t\tanimation: spinner 150ms infinite linear;\r\n\t\tborder-radius: 0.5em;\r\n\t\t-webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t\tbox-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t}\r\n}\r\n\r\n/* Animation */\r\n@-webkit-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-moz-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-o-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n",".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\n\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-moz-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-o-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button--size-link {\n  padding: 0.5em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue","webpack://./../SubscriptionActionPanel.vue"],"names":[],"mappings":"AAsGA;EACC,cAAA;ACrGD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-button--size-link {\r\n\tpadding: 0.5em;\r\n}\r\n",".cx-vui-button--size-link {\n  padding: 0.5em;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -598,7 +624,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n  padding: 0.5em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AAyBC;EACC,aAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;ACxBF;AD0BC;EACC,OAAA;EACA,cAAA;ACxBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.jfb-actions-item {\n\t& > div {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tcolumn-gap: 10px;\n\t\trow-gap: 4px;\n\t}\n\tbutton {\n\t\tflex: 1;\n\t\tpadding: 0.5em;\n\t}\n}\n",".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n  padding: 0.5em;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AAoCC;EACC,aAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;ACnCF;ADqCC;EACC,OAAA;ACnCF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.jfb-actions-item {\n\t& > div {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tcolumn-gap: 10px;\n\t\trow-gap: 4px;\n\t}\n\tbutton {\n\t\tflex: 1;\n\t}\n}\n",".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -626,33 +652,6 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, ".jfb-status {\n  padding: 0.5em;\n}\n.jfb-status-active {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-status-cancelled {\n  background-color: rgba(245, 154, 136, 0.4);\n}\n.jfb-status-suspended {\n  background-color: rgba(253, 209, 95, 0.41);\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/columns/status/StatusInfo.vue","webpack://./../StatusInfo.vue"],"names":[],"mappings":"AAuBA;EACC,cAAA;ACtBD;ADwBC;EACC,0CAAA;ACtBF;ADyBC;EACC,0CAAA;ACvBF;AD0BC;EACC,0CAAA;ACxBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jfb-status {\r\n\tpadding: 0.5em;\r\n\r\n\t&-active {\r\n\t\tbackground-color: rgb(165 241 190 / 40%);\r\n\t}\r\n\r\n\t&-cancelled {\r\n\t\tbackground-color: rgb(245 154 136 / 40%);\r\n\t}\r\n\r\n\t&-suspended {\r\n\t\tbackground-color: rgb(253 209 95 / 41%);\r\n\t}\r\n}\r\n",".jfb-status {\n  padding: 0.5em;\n}\n.jfb-status-active {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-status-cancelled {\n  background-color: rgba(245, 154, 136, 0.4);\n}\n.jfb-status-suspended {\n  background-color: rgba(253, 209, 95, 0.41);\n}"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&":
-/*!******************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& ***!
-  \******************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
-
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cx-vui-collapse-mini__header {\r\n\tjustify-content: space-between;\n}\r\n", "",{"version":3,"sources":["webpack://./../admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue"],"names":[],"mappings":";AAsGA;CACA,8BAAA;AACA","sourcesContent":["<template>\r\n\t<cx-vui-button\r\n\t\tv-bind=\"buttonProps\"\r\n\t\t@click=\"runAction\"\r\n\t\t:loading=\"loading\"\r\n\t\t:disabled=\"compareStatus\"\r\n\t>\r\n\t\t<template #label>{{ label }}</template>\r\n\t</cx-vui-button>\r\n</template>\r\n\r\n<script>\r\nconst { GetIncoming, i18n } = window.JetFBMixins;\r\n\r\nconst { CxVuiCollapseMini } = window.JetFBComponents;\r\n\r\nconst { apiFetch } = wp;\r\n\r\nexport default {\r\n\tname: 'SubscriptionActionPanel',\r\n\tcomponents: {},\r\n\tprops: {\r\n\t\tlabel: String,\r\n\t\treason: Object,\r\n\t\ttype: String,\r\n\t\tmust_have_statuses: Array,\r\n\t\tforceCurrent: Object,\r\n\t\tbuttonProps: {\r\n\t\t\ttype: Object,\r\n\t\t\tdefault() {\r\n\t\t\t\treturn {\r\n\t\t\t\t\tbuttonStyle: 'accent',\r\n\t\t\t\t\tsize: 'mini',\r\n\t\t\t\t}\r\n\t\t\t},\r\n\t\t},\r\n\t},\r\n\tmixins: [ i18n ],\r\n\tcreated() {\r\n\t\tthis.reasonString = this.reason.default;\r\n\t},\r\n\tdata() {\r\n\t\treturn {\r\n\t\t\treasonString: '',\r\n\t\t\tloading: false,\r\n\t\t};\r\n\t},\r\n\tcomputed: {\r\n\t\tcurrent() {\r\n\t\t\tif ( this.forceCurrent ) {\r\n\t\t\t\treturn this.forceCurrent;\r\n\t\t\t}\r\n\t\t\treturn this.$store.getters.getCurrent;\r\n\t\t},\r\n\t\tgetCurrentStatus() {\r\n\t\t\treturn this.current?.status?.value?.status;\r\n\t\t},\r\n\t\tcompareStatus() {\r\n\t\t\treturn ( ! this.must_have_statuses.includes( this.getCurrentStatus ) || this.loading );\r\n\t\t},\r\n\t},\r\n\tmethods: {\r\n\t\trunAction() {\r\n\t\t\tconst reason = prompt( this.reason.warn, this.reasonString );\r\n\r\n\t\t\tif ( ! reason ) {\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\r\n\t\t\tconst options = {\r\n\t\t\t\t...this.current.links.value[ this.type ],\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tform_id: this.current._FORM_ID.value,\r\n\t\t\t\t\treason: reason,\r\n\t\t\t\t},\r\n\t\t\t};\r\n\r\n\t\t\tthis.loading = true;\r\n\r\n\t\t\tapiFetch( options ).then( res => {\r\n\t\t\t\tthis.$CXNotice.add( {\r\n\t\t\t\t\tmessage: res.message,\r\n\t\t\t\t\ttype: 'success',\r\n\t\t\t\t\tduration: 4000,\r\n\t\t\t\t} );\r\n\r\n\t\t\t\tthis.loading = false;\r\n\t\t\t} ).catch( error => {\r\n\t\t\t\tthis.$CXNotice.add( {\r\n\t\t\t\t\tmessage: error.message,\r\n\t\t\t\t\ttype: 'error',\r\n\t\t\t\t\tduration: 4000,\r\n\t\t\t\t} );\r\n\r\n\t\t\t\tthis.loading = false;\r\n\t\t\t} );\r\n\t\t},\r\n\t},\r\n};\r\n</script>\r\n\r\n<style>\r\n.cx-vui-collapse-mini__header {\r\n\tjustify-content: space-between;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -835,7 +834,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SubscriptionActionPanel_vue_vue_type_template_id_37f13d98___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SubscriptionActionPanel.vue?vue&type=template&id=37f13d98& */ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=template&id=37f13d98&");
 /* harmony import */ var _SubscriptionActionPanel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SubscriptionActionPanel.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=script&lang=js&");
-/* harmony import */ var _SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& */ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1166,6 +1165,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&":
+/*!******************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
 /***/ "./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss&":
 /*!**********************************************************************************************************!*\
   !*** ./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss& ***!
@@ -1195,23 +1211,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-/***/ }),
-
-/***/ "./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&":
-/*!*****************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SubscriptionActionPanel_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -1263,7 +1262,6 @@ var render = function () {
           columns: _vm.columnsFromStore,
           "columns-components": _vm.columnsComponents,
         },
-        on: { "dblclick-row": _vm.openPopup },
       }),
       _vm._v(" "),
       _c("cx-vui-pagination", {
@@ -1271,8 +1269,8 @@ var render = function () {
       }),
       _vm._v(" "),
       _c("cx-vui-popup", {
-        attrs: { "body-width": "60vw", footer: false },
-        on: { "on-cancel": _vm.closePopup },
+        attrs: { value: _vm.isShowPopup, "body-width": "60vw", footer: false },
+        on: { change: _vm.togglePopup, "on-cancel": _vm.closePopup },
         scopedSlots: _vm._u([
           {
             key: "content",
@@ -1286,21 +1284,92 @@ var render = function () {
                   [_c("SubscriptionActions")],
                   1
                 ),
+                _vm._v(" "),
+                _c("h3", [_vm._v(_vm._s(_vm.__("Notes", "jet-form-builder")))]),
+                _vm._v(" "),
+                _c(
+                  "SimpleWrapperComponent",
+                  {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "meta",
+                        fn: function () {
+                          return _vm._l(
+                            _vm.current.notes.value,
+                            function (val) {
+                              return _c(
+                                "div",
+                                { key: val, staticClass: "jfb-note" },
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t" +
+                                      _vm._s(val.created_dt) +
+                                      " <" +
+                                      _vm._s(val.by) +
+                                      ">: " +
+                                      _vm._s(val.note) +
+                                      "\n\t\t\t\t\t"
+                                  ),
+                                ]
+                              )
+                            }
+                          )
+                        },
+                        proxy: true,
+                      },
+                    ]),
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "cx-vui-textarea",
+                      {
+                        attrs: {
+                          size: "fullwidth",
+                          rows: "10",
+                          "prevent-wrap": "",
+                        },
+                        model: {
+                          value: _vm.note,
+                          callback: function ($$v) {
+                            _vm.note = $$v
+                          },
+                          expression: "note",
+                        },
+                      },
+                      [
+                        _c("cx-vui-button", {
+                          attrs: {
+                            loading: _vm.isDoingAction,
+                            disabled: _vm.isDoingAction,
+                            "button-style": "accent",
+                            size: "mini",
+                          },
+                          on: { click: _vm.addNote },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "label",
+                              fn: function () {
+                                return [_vm._v(_vm._s("Add"))]
+                              },
+                              proxy: true,
+                            },
+                          ]),
+                        }),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
               ]
             },
             proxy: true,
           },
         ]),
-        model: {
-          value: _vm.isShowPopup,
-          callback: function ($$v) {
-            _vm.isShowPopup = $$v
-          },
-          expression: "isShowPopup",
-        },
       }),
       _vm._v(" "),
-      _vm.loading ? _c("div", { staticClass: "loader" }) : _vm._e(),
+      _vm.isLoadingPopup ? _c("div", { staticClass: "loader" }) : _vm._e(),
     ],
     1
   )
@@ -1375,25 +1444,29 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.actions, function (actionOptions, actionSlug) {
-      return _c(
-        "SubscriptionActionPanel",
-        _vm._b(
-          {
-            key: actionSlug,
-            attrs: {
-              type: actionSlug,
-              "force-current": _vm.forceCurrent,
-              "button-props": _vm.buttonProps,
-            },
-          },
+    [
+      _vm._l(_vm.actions, function (actionOptions, actionSlug) {
+        return _c(
           "SubscriptionActionPanel",
-          actionOptions,
-          false
+          _vm._b(
+            {
+              key: actionSlug,
+              attrs: {
+                type: actionSlug,
+                "force-current": _vm.forceCurrent,
+                "button-props": _vm.buttonProps,
+              },
+            },
+            "SubscriptionActionPanel",
+            actionOptions,
+            false
+          )
         )
-      )
-    }),
-    1
+      }),
+      _vm._v(" "),
+      _vm._t("default"),
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -1419,21 +1492,19 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "jfb-actions-item" },
-    [
-      _c("SubscriptionActions", {
-        attrs: {
-          "force-current": _vm.fullEntry,
-          "button-props": {
-            size: "link",
-          },
+  return _c("cx-vui-button", {
+    attrs: { "button-style": "accent-border", size: "link" },
+    on: { click: _vm.openPopup },
+    scopedSlots: _vm._u([
+      {
+        key: "label",
+        fn: function () {
+          return [_vm._v(_vm._s("View"))]
         },
-      }),
-    ],
-    1
-  )
+        proxy: true,
+      },
+    ]),
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -1624,6 +1695,27 @@ if(false) {}
 
 /***/ }),
 
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=scss&");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
+var update = add("3e6d5526", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
 /***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss& ***!
@@ -1661,27 +1753,6 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
 var update = add("7fe679c8", content, false, {});
-// Hot Module Replacement
-if(false) {}
-
-/***/ }),
-
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue?vue&type=style&index=0&lang=css&");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.id, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("35a984a7", content, false, {});
 // Hot Module Replacement
 if(false) {}
 
@@ -2052,6 +2123,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 Vue.use(Vuex);
+var _window$JetFBActions = window.JetFBActions,
+    getSearch = _window$JetFBActions.getSearch,
+    createPath = _window$JetFBActions.createPath,
+    addQueryArgs = _window$JetFBActions.addQueryArgs;
+var _wp = wp,
+    apiFetch = _wp.apiFetch;
 var options = {
   store: new Vuex.Store({
     state: {
@@ -2065,7 +2142,10 @@ var options = {
         limit: 25,
         sort: 'DESC'
       },
-      fetchedSubscriptions: {}
+      fetchedSubscriptions: {},
+      isShowPopup: false,
+      loadingPopup: false,
+      doingAction: false
     },
     getters: {
       getCurrent: function getCurrent(state) {
@@ -2090,6 +2170,15 @@ var options = {
       },
       getActions: function getActions(state) {
         return state.actions;
+      },
+      isShowPopup: function isShowPopup(state) {
+        return state.isShowPopup;
+      },
+      isLoadingPopup: function isLoadingPopup(state) {
+        return state.loadingPopup;
+      },
+      isDoingAction: function isDoingAction(state) {
+        return state.doingAction;
       }
     },
     mutations: {
@@ -2113,6 +2202,105 @@ var options = {
       },
       setActions: function setActions(state, actions) {
         state.actions = actions;
+      },
+      togglePopup: function togglePopup(state) {
+        state.isShowPopup = !state.isShowPopup;
+      },
+      toggleLoadingPopup: function toggleLoadingPopup(state) {
+        state.loadingPopup = !state.loadingPopup;
+      },
+      toggleDoingAction: function toggleDoingAction(state) {
+        state.doingAction = !state.doingAction;
+      }
+    },
+    actions: {
+      replaceCurrent: function replaceCurrent(_ref, _ref2) {
+        var commit = _ref.commit,
+            getters = _ref.getters;
+        var sub_id = _ref2.sub_id,
+            replace = _ref2.replace;
+        commit('setCurrent', _objectSpread(_objectSpread({}, getters.getCurrent), replace));
+        commit('setList', getters.getList.map(function (subscription) {
+          if (sub_id !== subscription.record_id.value) {
+            return subscription;
+          }
+
+          return _objectSpread(_objectSpread({}, subscription), replace);
+        }));
+      },
+      openPopup: function openPopup(_ref3, entryID) {
+        var _getters$getCurrent, _getters$getCurrent$l, _getters$getCurrent$l2;
+
+        var commit = _ref3.commit,
+            state = _ref3.state,
+            getters = _ref3.getters,
+            dispatch = _ref3.dispatch;
+        var current = state.currentList[entryID] || {};
+        commit('setCurrent', current);
+        window.history.replaceState('on_open_modal', document.title, createPath({
+          sub: current.record_id.value
+        }));
+
+        if (getters.currentSubscription.sub_id) {
+          commit('togglePopup');
+          return;
+        }
+
+        commit('toggleLoadingPopup');
+
+        var options = _objectSpread({}, ((_getters$getCurrent = getters.getCurrent) === null || _getters$getCurrent === void 0 ? void 0 : (_getters$getCurrent$l = _getters$getCurrent.links) === null || _getters$getCurrent$l === void 0 ? void 0 : (_getters$getCurrent$l2 = _getters$getCurrent$l.value) === null || _getters$getCurrent$l2 === void 0 ? void 0 : _getters$getCurrent$l2.plan_details) || {});
+
+        dispatch('fetch', options).then(function (response) {
+          dispatch('replaceCurrent', response.data);
+          commit('saveSubscription', response.data);
+          commit('togglePopup');
+        }).finally(function () {
+          commit('toggleLoadingPopup');
+        });
+      },
+      closePopup: function closePopup(_ref4) {
+        var commit = _ref4.commit;
+        commit('togglePopup');
+        commit('clearCurrent');
+        window.history.replaceState('on_open_modal', document.title, createPath({}, {}, ['sub']));
+      },
+      addNote: function addNote(_ref5, note) {
+        var _getters$getCurrent2, _getters$getCurrent2$, _getters$getCurrent2$2;
+
+        var commit = _ref5.commit,
+            getters = _ref5.getters,
+            dispatch = _ref5.dispatch;
+
+        var options = _objectSpread(_objectSpread({}, ((_getters$getCurrent2 = getters.getCurrent) === null || _getters$getCurrent2 === void 0 ? void 0 : (_getters$getCurrent2$ = _getters$getCurrent2.links) === null || _getters$getCurrent2$ === void 0 ? void 0 : (_getters$getCurrent2$2 = _getters$getCurrent2$.value) === null || _getters$getCurrent2$2 === void 0 ? void 0 : _getters$getCurrent2$2.add_note) || {}), {}, {
+          data: {
+            sub_id: getters.getCurrent.record_id.value,
+            order_id: getters.getCurrent.id.value,
+            note: note
+          }
+        });
+
+        commit('toggleDoingAction');
+        dispatch('fetch', options).then(function (response) {
+          dispatch('replaceCurrent', response.data);
+        }).finally(function () {
+          commit('toggleDoingAction');
+        });
+      },
+      fetch: function fetch(_ref6, options) {
+        var commit = _ref6.commit,
+            getters = _ref6.getters;
+        return new Promise(function (resolve, reject) {
+          apiFetch(options).then(function (response) {
+            resolve(response);
+          }).catch(function (error) {
+            Vue.$CXNotice.add({
+              message: error.message,
+              type: 'error',
+              duration: 4000
+            });
+            reject(error);
+          });
+        });
       }
     }
   })

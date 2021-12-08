@@ -18,6 +18,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Views\Scenario_View_Base;
 class Scenarios_Manager {
 
 	const QUERY_VAR = 'jet_gateway_scenario';
+	const NOTES_KEY = Controller::GATEWAY_META_KEY . '_note';
 
 	use Instance_Trait;
 

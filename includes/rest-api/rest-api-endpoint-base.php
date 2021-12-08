@@ -37,8 +37,8 @@ abstract class Rest_Api_Endpoint_Base {
 		return true;
 	}
 
-	public static function rest_url() {
-		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base(), 'https' );
+	public static function rest_url( $scheme = 'rest' ) {
+		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base(), $scheme );
 	}
 
 }

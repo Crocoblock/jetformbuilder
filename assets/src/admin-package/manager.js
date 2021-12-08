@@ -5,17 +5,19 @@ import SaveTabByAjax from './mixins/SaveTabByAjax';
 import EntriesTable from './components/EntriesTable';
 import DetailsTable from './components/DetailsTable';
 import DetailsTableWithStore from './components/DetailsTableWithStore';
+import SimpleWrapperComponent from './components/SimpleWrapperComponent';
 import i18n from './mixins/i18n';
 import { renderCurrentPage } from './functions/RenderCurrentPage';
 import CopyButton from './components/CopyButton';
 import * as ChooseColumn from './entries-table-columns/choose';
-import { getCurrentPath, getSearch, createPath } from './functions/LocationManager';
+import { getCurrentPath, getSearch, createPath, addQueryArgs } from './functions/LocationManager';
 
 window.JetFBActions = {
 	renderCurrentPage,
 	getCurrentPath,
 	getSearch,
 	createPath,
+	addQueryArgs
 };
 
 window.JetFBErrors = {
@@ -29,6 +31,7 @@ window.JetFBComponents = {
 	CopyButton,
 	DetailsTableWithStore,
 	ChooseColumn,
+	SimpleWrapperComponent,
 };
 
 window.JetFBMixins = {

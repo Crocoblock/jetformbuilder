@@ -3,7 +3,7 @@
 		v-bind="buttonProps"
 		@click="runAction"
 		:loading="loading"
-		:disabled="compareStatus"
+		:disabled="isDisabled"
 	>
 		<template #label>{{ label }}</template>
 	</cx-vui-button>
@@ -55,8 +55,11 @@ export default {
 		getCurrentStatus() {
 			return this.current?.status?.value?.status;
 		},
-		compareStatus() {
-			return ( ! this.must_have_statuses.includes( this.getCurrentStatus ) || this.loading );
+		isDisabled() {
+			return ( ! this.must_have_statuses.includes( this.getCurrentStatus ) || this.isDoingAction );
+		},
+		isDoingAction() {
+			return this.$store.getters.isDoingAction;
 		},
 	},
 	methods: {

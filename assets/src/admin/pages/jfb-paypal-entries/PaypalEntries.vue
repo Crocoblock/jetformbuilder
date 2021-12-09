@@ -7,19 +7,22 @@
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
 		<cx-vui-pagination
-			:total="100"
-			:page-size="query.limit"
-			:current="query.currentPage"
+			v-if="queryState.limit < queryState.total"
+			:total="queryState.total"
+			:page-size="queryState.limit"
+			:current="queryState.currentPage"
+			@on-change="changePage"
 		></cx-vui-pagination>
 		<EntriesTable
-			:entries-list="currentList"
-			:columns="columnsFromStore"
+			:columns="columns"
 			:columns-components="columnsComponents"
 		/>
 		<cx-vui-pagination
-			:total="100"
-			:page-size="5"
-			:current="1"
+			v-if="queryState.limit < queryState.total"
+			:total="queryState.total"
+			:page-size="queryState.limit"
+			:current="queryState.currentPage"
+			@on-change="changePage"
 		></cx-vui-pagination>
 		<cx-vui-popup
 			:value="isShowPopup"
@@ -38,7 +41,7 @@
 					<template #meta>
 						<div
 							class="jfb-note"
-							v-for="val in current.notes.value"
+							v-for="val in currentPopupData.notes.value"
 							:key="val"
 						>
 							{{ val.created_dt }} <{{ val.by }}>: {{ val.note }}
@@ -53,7 +56,7 @@
 						<cx-vui-button
 							@click="addNote"
 							:loading="loadingNote"
-							:disabled="isDoingAction"
+							:disabled="doingAction"
 							button-style="accent"
 							size="mini"
 						>
@@ -63,7 +66,7 @@
 				</SimpleWrapperComponent>
 			</template>
 		</cx-vui-popup>
-		<div class="loader" v-if="isLoadingPopup"></div>
+		<div class="loader" v-if="loadingPopup"></div>
 	</div>
 </template>
 
@@ -76,6 +79,11 @@ import SubscriptionActions from './SubscriptionActions';
 import '../../../../scss/admin/default.scss';
 
 Vue.config.devtools = true;
+
+const {
+		  mapState,
+		  mapGetters,
+	  } = Vuex;
 
 const { applyFilters } = wp.hooks;
 
@@ -93,6 +101,7 @@ const {
 const {
 		  getSearch,
 		  createPath,
+		  addQueryArgs,
 	  } = window.JetFBActions;
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
@@ -112,10 +121,10 @@ export default {
 		return {
 			scenario: '',
 			settings: {},
-			receive_url: '',
 			columnsComponents,
 			note: '',
 			loadingNote: false,
+			receive_url: '',
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
@@ -126,6 +135,7 @@ export default {
 				  scenario    = '',
 				  actions     = {},
 				  receive_url = '',
+				  total,
 			  } = this.getIncoming();
 
 		this.scenario = scenario;
@@ -134,34 +144,27 @@ export default {
 		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
 		this.$store.commit( 'setActions', JSON.parse( JSON.stringify( actions ) ) );
+		this.$store.commit( 'setQueryState', {
+			total: +total,
+			limit: this.$store.state.currentList.length,
+		} )
 
 		this.maybeOpen();
 	},
 	computed: {
-		columnsFromStore() {
-			return this.$store.getters.getColumns;
-		},
-		current() {
-			return this.$store.getters.getCurrent;
-		},
-		currentList() {
-			return this.$store.getters.getList;
-		},
-		currentSubscription() {
-			return this.$store.getters.currentSubscription;
-		},
-		isLoadingPopup() {
-			return this.$store.getters.isLoadingPopup;
-		},
-		isShowPopup() {
-			return this.$store.getters.isShowPopup;
-		},
-		isDoingAction() {
-			return this.$store.getters.isDoingAction;
-		},
-		query() {
-			return this.$store.getters.getQueryState;
-		}
+		...mapState( [
+			'columns',
+			'currentPopupData',
+			'loadingPopup',
+			'isShowPopup',
+			'queryState',
+			'doingAction',
+		] ),
+		...mapGetters( [
+			'currentSubscription',
+			'lastRow',
+			'currentList',
+		] ),
 	},
 	methods: {
 		togglePopup() {
@@ -196,6 +199,14 @@ export default {
 					return;
 				}
 			}
+		},
+		changePage( pageNum ) {
+			this.$store.commit( 'setQueryState', {
+				currentPage: pageNum,
+				extreme_id: this.lastRow._ROW_ID.value,
+			} );
+
+			this.$store.dispatch( 'fetchPage', this.receive_url );
 		},
 
 	},

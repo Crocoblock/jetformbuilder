@@ -16,6 +16,11 @@ const { CxVuiCollapseMini } = window.JetFBComponents;
 
 const { apiFetch } = wp;
 
+const {
+		  mapState,
+		  mapGetters,
+	  } = Vuex;
+
 export default {
 	name: 'SubscriptionActionPanel',
 	components: {},
@@ -56,11 +61,11 @@ export default {
 			return this.current?.status?.value?.status;
 		},
 		isDisabled() {
-			return ( ! this.must_have_statuses.includes( this.getCurrentStatus ) || this.isDoingAction );
+			return ( ! this.must_have_statuses.includes( this.getCurrentStatus ) || this.doingAction );
 		},
-		isDoingAction() {
-			return this.$store.getters.isDoingAction;
-		},
+		...mapState( [
+			'doingAction'
+		] )
 	},
 	methods: {
 		runAction() {

@@ -1,11 +1,8 @@
 export default {
 	props: [ 'value', 'full-entry' ],
-	data() {
-		return {
-			parsedJson: {}
-		};
+	computed: {
+		parsedJson() {
+			return JSON.parse( JSON.stringify( this.value ) );
+		}
 	},
-	created() {
-		this.parsedJson = JSON.parse( JSON.stringify( this.value ) );
-	}
 }

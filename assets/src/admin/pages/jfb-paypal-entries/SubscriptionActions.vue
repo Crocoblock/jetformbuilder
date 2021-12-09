@@ -15,6 +15,11 @@
 <script>
 import SubscriptionActionPanel from './SubscriptionActionPanel';
 
+const {
+		  mapState,
+		  mapGetters,
+	  } = Vuex;
+
 export default {
 	name: "SubscriptionActions",
 	props: {
@@ -23,9 +28,9 @@ export default {
 	},
 	components: { SubscriptionActionPanel },
 	computed: {
-		actions() {
-			return this.$store.getters.getActions;
-		},
+		...mapState( [
+			'actions'
+		] )
 	},
 }
 </script>

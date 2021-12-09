@@ -504,13 +504,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'DetailsTableWithStore',
   props: {
-    getColumns: {
+    columns: {
       type: String,
-      default: 'getColumns'
+      default: 'columns'
     },
-    getCurrent: {
+    current: {
       type: String,
-      default: 'getCurrent'
+      default: 'currentPopupData'
     }
   },
   components: {
@@ -518,10 +518,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     columnsFromStore: function columnsFromStore() {
-      return this.$store.getters[this.getColumns];
+      return this.$store.state[this.columns];
     },
     currentFromStore: function currentFromStore() {
-      return this.$store.getters[this.getCurrent];
+      return this.$store.state[this.current];
     }
   }
 });
@@ -541,6 +541,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../entries-table-columns/choose */ "./admin-package/entries-table-columns/choose/index.js");
 /* harmony import */ var _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/GetColumnComponent */ "./admin-package/mixins/GetColumnComponent.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -607,13 +611,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var defaultColumns = {
   choose: _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_0__
 };
+var _Vuex = Vuex,
+    mapState = _Vuex.mapState,
+    mapGetters = _Vuex.mapGetters;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'entries-table',
   props: {
-    entriesList: {
-      type: Object,
-      required: true
-    },
     columns: {
       type: Object,
       required: true
@@ -621,14 +624,12 @@ var defaultColumns = {
   },
   data: function data() {
     return {
-      columnsIDs: [],
-      entries: {}
+      columnsIDs: []
     };
   },
   mixins: [_mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_1__["default"]],
   created: function created() {
     this.columnsIDs = Object.keys(this.columns);
-    this.entries = JSON.parse(JSON.stringify(this.entriesList));
 
     for (var columnName in defaultColumns) {
       if (!this.columnsIDs.includes(columnName)) {
@@ -638,7 +639,7 @@ var defaultColumns = {
       this.componentsCols.push(defaultColumns[columnName]);
     }
   },
-  computed: {
+  computed: _objectSpread({
     filteredColumns: function filteredColumns() {
       var _this = this;
 
@@ -648,7 +649,7 @@ var defaultColumns = {
         return ((_this$columns$prev$ta = _this.columns[prev].table_order) !== null && _this$columns$prev$ta !== void 0 ? _this$columns$prev$ta : 999) - ((_this$columns$next$ta = _this.columns[next].table_order) !== null && _this$columns$next$ta !== void 0 ? _this$columns$next$ta : 999);
       });
     }
-  },
+  }, mapGetters(['currentList'])),
   methods: {
     isShown: function isShown(column) {
       var _this$columns$column$;
@@ -1357,7 +1358,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: center;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AA+HC;EACC,8BAAA;AC9HF;ADgIE;EACC,aAAA;EACA,uBAAA;EACA,mBAAA;EACA,eAAA;AC9HH;ADiIC;EACC,8BAAA;AC/HF;ADiIE;EACC,mBAAA;EACA,gBAAA;EACA,kBAAA;AC/HH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading {\r\n\t\tjustify-content: space-between;\r\n\r\n\t\t&__cell > span {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tflex-wrap: wrap;\r\n\t\t}\r\n\t}\r\n\t.list-table-item {\r\n\t\tjustify-content: space-between;\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: center;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: center;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: center;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AAiIC;EACC,8BAAA;AChIF;ADkIE;EACC,aAAA;EACA,uBAAA;EACA,mBAAA;EACA,eAAA;AChIH;ADmIC;EACC,8BAAA;ACjIF;ADmIE;EACC,mBAAA;EACA,gBAAA;EACA,kBAAA;ACjIH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading {\r\n\t\tjustify-content: space-between;\r\n\r\n\t\t&__cell > span {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tflex-wrap: wrap;\r\n\t\t}\r\n\t}\r\n\t.list-table-item {\r\n\t\tjustify-content: space-between;\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: center;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: center;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2961,7 +2962,7 @@ var render = function () {
           {
             key: "items",
             fn: function () {
-              return _vm._l(_vm.entries, function (entry, entryID) {
+              return _vm._l(_vm.currentList, function (entry, entryID) {
                 return _c(
                   "div",
                   {

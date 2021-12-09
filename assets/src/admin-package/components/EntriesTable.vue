@@ -30,7 +30,7 @@
 			<template #items>
 				<div
 					:key="entryID"
-					v-for="( entry, entryID ) in entries"
+					v-for="( entry, entryID ) in currentList"
 					:class="classEntry( entryID )"
 					@dblclick="$emit( 'dblclick-row', entryID )"
 				>
@@ -65,13 +65,14 @@ const defaultColumns = {
 	choose: ChooseColumn,
 };
 
+const {
+		  mapState,
+		  mapGetters,
+	  } = Vuex;
+
 export default {
 	name: 'entries-table',
 	props: {
-		entriesList: {
-			type: Object,
-			required: true,
-		},
 		columns: {
 			type: Object,
 			required: true,
@@ -80,13 +81,11 @@ export default {
 	data() {
 		return {
 			columnsIDs: [],
-			entries: {},
 		};
 	},
 	mixins: [ GetColumnComponent ],
 	created() {
 		this.columnsIDs = Object.keys( this.columns );
-		this.entries = JSON.parse( JSON.stringify( this.entriesList ) );
 
 		for ( const columnName in defaultColumns ) {
 			if ( ! this.columnsIDs.includes( columnName ) ) {
@@ -101,6 +100,9 @@ export default {
 				return ( ( this.columns[ prev ].table_order ?? 999 ) - ( this.columns[ next ].table_order ?? 999 ) );
 			} );
 		},
+		...mapGetters( [
+			'currentList',
+		] ),
 	},
 	methods: {
 		isShown( column ) {

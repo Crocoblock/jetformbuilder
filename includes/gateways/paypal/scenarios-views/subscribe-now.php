@@ -21,7 +21,7 @@ class Subscribe_Now extends Scenario_View_Base {
 		try {
 			return Paypal\Prepared_Views::get_subscriptions_raw(
 				array(
-					'limit' => 25,
+					'limit' => 5,
 				)
 			);
 		} catch ( Query_Builder_Exception $exception ) {
@@ -31,7 +31,10 @@ class Subscribe_Now extends Scenario_View_Base {
 
 	public function load_data(): array {
 		return array(
-			'receive_url' => Paypal\Web_Hooks\Receive_Subscriptions::rest_url(),
+			'receive_url' => array(
+				'method' => Paypal\Web_Hooks\Receive_Subscriptions::get_methods(),
+				'url'    => Paypal\Web_Hooks\Receive_Subscriptions::rest_url(),
+			),
 			'total'       => Paypal\Prepared_Views::count_subscriptions()
 		);
 	}
@@ -158,6 +161,7 @@ class Subscribe_Now extends Scenario_View_Base {
 			'notes'              => array(
 				'value' => 'Undefined', // should be loaded on the client side by rest api
 			),
+			'_ROW_ID'            => array()
 		);
 	}
 

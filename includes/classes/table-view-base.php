@@ -55,7 +55,7 @@ abstract class Table_View_Base implements Repository_Static_Item_It {
 		$prepared = array();
 
 		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {
-			$value                   = $column_attrs['value'] ?? false;
+			$value                   = $column_attrs['value'] ?? $record[ $column_name ] ?? false;
 			$column_attrs['type']    = $column_attrs['type'] ?? 'string';
 			$column_attrs['default'] = $column_attrs['default'] ?? false;
 

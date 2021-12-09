@@ -11,22 +11,22 @@ import DetailsTable from './DetailsTable';
 export default {
 	name: 'DetailsTableWithStore',
 	props: {
-		getColumns: {
+		columns: {
 			type: String,
-			default: 'getColumns'
+			default: 'columns'
 		},
-		getCurrent: {
+		current: {
 			type: String,
-			default: 'getCurrent'
+			default: 'currentPopupData'
 		}
 	},
 	components: { DetailsTable },
 	computed: {
 		columnsFromStore() {
-			return this.$store.getters[ this.getColumns ];
+			return this.$store.state[ this.columns ];
 		},
 		currentFromStore() {
-			return this.$store.getters[ this.getCurrent ];
+			return this.$store.state[ this.current ];
 		},
 	}
 };

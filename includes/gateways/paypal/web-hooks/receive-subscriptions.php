@@ -12,7 +12,7 @@ use Jet_Form_Builder\Gateways\Paypal;
 class Receive_Subscriptions extends Rest_Api_Endpoint_Base {
 
 	public static function get_rest_base() {
-		return 'receive-subscriptions';
+		return 'paypal/receive-subscriptions';
 	}
 
 	public static function get_methods() {
@@ -24,10 +24,10 @@ class Receive_Subscriptions extends Rest_Api_Endpoint_Base {
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
-		$body = $request->get_json_params();
+		$body = $request->get_query_params();
 		$args = array(
-			'limit'      => $body['limit'] ?? 25,
-			'extreme_id' => $body['extreme_id'] ?? 0,
+			'limit'      => (int) ( $body['limit'] ?? 5 ),
+			'extreme_id' => (int) ( $body['extreme_id'] ?? 0 ),
 			'sort'       => $body['sort'] ?? View_Base::FROM_HIGH_TO_LOW,
 		);
 

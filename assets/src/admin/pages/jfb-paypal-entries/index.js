@@ -2,7 +2,11 @@ import PaypalEntries from './PaypalEntries';
 
 Vue.use( Vuex );
 
-const { getSearch, createPath, addQueryArgs } = window.JetFBActions;
+const {
+		  getSearch,
+		  createPath,
+		  addQueryArgs,
+	  } = window.JetFBActions;
 
 const { apiFetch } = wp;
 
@@ -21,20 +25,17 @@ const options = {
 				limit: 25,
 				sort: 'DESC',
 				total: 0,
+				endpoint: '',
 			},
 			fetchedSubscriptions: {},
 			isShowPopup: false,
+			// for showing loader, while subscription details is loading
 			loadingPopup: false,
+			// for disable action buttons: cancel subscription, suspend subscription & add note
 			doingAction: false,
-			loadingButton: {},
+			loadingPage: false,
 		},
 		getters: {
-			getCurrent: state => {
-				return state.currentPopupData;
-			},
-			getColumns: state => {
-				return state.columns;
-			},
 			getSubscription: state => id => {
 				return state.fetchedSubscriptions[ id ] || {};
 			},
@@ -43,23 +44,11 @@ const options = {
 
 				return getters.getSubscription( id );
 			},
-			getList: state => {
+			lastRow: state => {
+				return state.currentList[ state.currentList.length - 1 ];
+			},
+			currentList: state => {
 				return state.currentList;
-			},
-			getActions: state => {
-				return state.actions;
-			},
-			isShowPopup: state => {
-				return state.isShowPopup;
-			},
-			isLoadingPopup: state => {
-				return state.loadingPopup;
-			},
-			isDoingAction: state => {
-				return state.doingAction;
-			},
-			getQueryState: state => {
-				return state.queryState;
 			}
 		},
 		mutations: {
@@ -96,16 +85,19 @@ const options = {
 			toggleDoingAction( state ) {
 				state.doingAction = ! state.doingAction;
 			},
+			toggleLoadingPage( state ) {
+				state.loadingPage = ! state.loadingPage;
+			},
 
 		},
 		actions: {
-			replaceCurrent( { commit, getters }, { sub_id, replace } ) {
+			replaceCurrent( { commit, state }, { sub_id, replace } ) {
 				commit( 'setCurrent', {
-					...getters.getCurrent,
+					...state.currentPopupData,
 					...replace,
 				} );
 
-				commit( 'setList', getters.getList.map( subscription => {
+				commit( 'setList', state.currentList.map( subscription => {
 					if ( sub_id !== subscription.record_id.value ) {
 						return subscription;
 					}
@@ -136,7 +128,7 @@ const options = {
 				commit( 'toggleLoadingPopup' );
 
 				const options = {
-					...getters.getCurrent?.links?.value?.plan_details || {},
+					...current?.links?.value?.plan_details || {},
 				};
 
 				dispatch( 'fetch', options ).then( response => {
@@ -159,12 +151,13 @@ const options = {
 					createPath( {}, {}, [ 'sub' ] ),
 				);
 			},
-			addNote( { commit, getters, dispatch }, note ) {
+			addNote( { commit, dispatch, state }, note ) {
+
 				const options = {
-					...getters.getCurrent?.links?.value?.add_note || {},
+					...state.currentPopupData?.links?.value?.add_note || {},
 					data: {
-						sub_id: getters.getCurrent.record_id.value,
-						order_id: getters.getCurrent.id.value,
+						sub_id: state.currentPopupData.record_id.value,
+						order_id: state.currentPopupData.id.value,
 						note,
 					},
 				};
@@ -200,6 +193,27 @@ const options = {
 					commit( 'toggleDoingAction' );
 					resolve();
 				} ) );
+			},
+			fetchPage( { commit, getters, dispatch, state }, endpoint ) {
+				const { limit, extreme_id, sort } = state.queryState;
+
+				const options = {
+					...endpoint,
+					url: addQueryArgs(
+						{ limit, extreme_id, sort },
+						endpoint.url
+					),
+				};
+
+				commit( 'toggleLoadingPage' );
+
+				dispatch( 'fetch', options )
+					.then( response => {
+						commit( 'setList', response.data );
+					} )
+					.finally( () => {
+						commit( 'toggleLoadingPage' );
+					} )
 			},
 			fetch( { commit, getters }, options ) {
 				return new Promise( ( resolve, reject ) => {

@@ -97,7 +97,9 @@ export default {
 	},
 	computed: {
 		filteredColumns() {
-			return this.columnsIDs.filter( this.isShown );
+			return this.columnsIDs.filter( this.isShown ).sort( ( prev, next ) => {
+				return ( ( this.columns[ prev ].table_order ?? 999 ) - ( this.columns[ next ].table_order ?? 999 ) );
+			} );
 		},
 	},
 	methods: {

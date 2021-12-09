@@ -130,7 +130,8 @@ var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [
       settings: {},
       receive_url: '',
       columnsComponents: columnsComponents,
-      note: ''
+      note: '',
+      loadingNote: false
     };
   },
   mixins: [GetIncoming, i18n],
@@ -175,6 +176,9 @@ var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [
     },
     isDoingAction: function isDoingAction() {
       return this.$store.getters.isDoingAction;
+    },
+    query: function query() {
+      return this.$store.getters.getQueryState;
     }
   },
   methods: {
@@ -189,8 +193,13 @@ var columnsComponents = applyFilters('jet.fb.register.paypal.entries.columns', [
       this.$store.dispatch('closePopup');
     },
     addNote: function addNote() {
-      this.$store.dispatch('addNote', this.note);
-      this.note = '';
+      var _this = this;
+
+      this.loadingNote = true;
+      this.$store.dispatch('addNote', this.note).then(function () {
+        _this.loadingNote = false;
+        _this.note = '';
+      });
     },
     maybeOpen: function maybeOpen() {
       var _getSearch = getSearch(),
@@ -227,12 +236,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -309,29 +312,11 @@ var _wp = wp,
         return;
       }
 
-      var options = _objectSpread(_objectSpread({}, this.current.links.value[this.type]), {}, {
-        data: {
-          form_id: this.current._FORM_ID.value,
-          reason: reason
-        }
-      });
-
       this.loading = true;
-      apiFetch(options).then(function (res) {
-        _this.$CXNotice.add({
-          message: res.message,
-          type: 'success',
-          duration: 4000
-        });
-
-        _this.loading = false;
-      }).catch(function (error) {
-        _this.$CXNotice.add({
-          message: error.message,
-          type: 'error',
-          duration: 4000
-        });
-
+      this.$store.dispatch('processAction', {
+        reason: reason,
+        type: this.type
+      }).then(function () {
         _this.loading = false;
       });
     }
@@ -396,7 +381,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _SubscriptionActions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SubscriptionActions */ "./admin/pages/jfb-paypal-entries/SubscriptionActions.vue");
 //
 //
 //
@@ -407,20 +391,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "actions--item",
   props: ['value', 'full-entry', 'entry-id'],
-  components: {
-    SubscriptionActions: _SubscriptionActions__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
   created: function created() {},
   methods: {
     openPopup: function openPopup() {
@@ -573,7 +546,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-moz-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-o-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/PaypalEntries.vue","webpack://./../PaypalEntries.vue"],"names":[],"mappings":"AAuMA;EACC,gBAAA;EACA,cAAA;EACA,kBAAA;ACtMD;ADuMC;EACC,gBAAA;EACA,MAAA;EACA,eAAA;ACrMF;ADyMA;EACC,WAAA;EACA,sBAAA;EACA,YAAA;EACA,0BAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;ACtMD;ADuMC;EACC,aAAA;EACA,gBAAA;EACA,yBAAA;ACrMF;ADyMA;EACC,kBAAA;EACA,WAAA;ACtMD;ADuMC;EACC,sBAAA;ACrMF;ADyMA;EACC,qBAAA;ACtMD;AD0MC;EACC,uBAAA;EACA,OAAA;ACvMF;AD4MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;EACA,kBAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD2MC;EACC,YAAA;ACzMF;AD6MA;EACC,4BAAA;EACA,eAAA;EACA,YAAA;EACA,WAAA;EACA,UAAA;EACA,iBAAA;EACA,YAAA;EACA,MAAA;EACA,OAAA;EACA,SAAA;EACA,QAAA;EACA,wBAAA;EAYA,yDAAA;ACrND;AD0MC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,MAAA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,sEAAA;EACA,8EAAA;ACxMF;AD2MC;EACC,2BAAA;EACA,WAAA;EACA,kBAAA;EACA,iBAAA;EACA,6BAAA;EACA,SAAA;ACzMF;AD2MC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;EACA,gDAAA;EACA,6CAAA;EACA,4CAAA;EACA,2CAAA;EACA,wCAAA;EACA,oBAAA;EACA,gWAAA;EACA,wVAAA;ACzMF;;AD6MA,cAAA;AACA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC1MA;AD4MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC1MA;AACF;AD6MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC3MA;AD6MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC3MA;AACF;AD8MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC5MA;AD8MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC5MA;AACF;AD+MA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AC7MA;AD+MD;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AC7MA;AACF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-popup__body {\r\n\tmax-height: 85vh;\r\n\toverflow: auto;\r\n\tposition: relative;\r\n\t.cx-vui-component-raw {\r\n\t\tposition: sticky;\r\n\t\ttop: 0;\r\n\t\ttext-align: end;\r\n\t}\r\n}\r\n\r\n.jfb-subscriptions-actions {\r\n\twidth: 60vw;\r\n\tbackground-color: #fff;\r\n\tpadding: 1em;\r\n\tborder-top: 1px solid #eee;\r\n\tbox-sizing: border-box;\r\n\tposition: sticky;\r\n\tbottom: -3em;\r\n\t& > div {\r\n\t\tdisplay: flex;\r\n\t\tcolumn-gap: 10px;\r\n\t\tjustify-content: flex-end;\r\n\t}\r\n}\r\n\r\n.jfb-note {\r\n\tpadding: 1em 0.5em;\r\n\twidth: 100%;\r\n\t&:nth-child(odd) {\r\n\t\tbackground-color: #eee;\r\n\t}\r\n}\r\n\r\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\r\n\tbox-shadow: 0 4px 4px;\r\n}\r\n\r\n.cx-vui-component--fullwidth-label {\r\n\t.cx-vui-component__meta {\r\n\t\tjustify-content: center;\r\n\t\tflex: 1;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--record_id {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t\ttext-align: center;\r\n\t}\r\n\t.cell--subscriber_name {\r\n\t\twidth: 250px;\r\n\t}\r\n\t.cell--create_time {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--actions {\r\n\t\twidth: 200px;\r\n\t}\r\n}\r\n\r\n.loader {\r\n\t/* Absolute Center Spinner */\r\n\tposition: fixed;\r\n\tz-index: 999;\r\n\theight: 2em;\r\n\twidth: 2em;\r\n\toverflow: visible;\r\n\tmargin: auto;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\tbottom: 0;\r\n\tright: 0;\r\n\t/* Transparent Overlay */\r\n\t&:before {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tbackground: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t\tbackground: -webkit-radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t}\r\n\t/* :not(:required) hides these rules from IE9 and below */\r\n\t&:not(:required) {\r\n\t\t/* hide \"loading...\" text */\r\n\t\tfont: 0/0 a;\r\n\t\tcolor: transparent;\r\n\t\ttext-shadow: none;\r\n\t\tbackground-color: transparent;\r\n\t\tborder: 0;\r\n\t}\r\n\t&:not(:required):after {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tfont-size: 10px;\r\n\t\twidth: 1em;\r\n\t\theight: 1em;\r\n\t\tmargin-top: -0.5em;\r\n\t\t-webkit-animation: spinner 150ms infinite linear;\r\n\t\t-moz-animation: spinner 150ms infinite linear;\r\n\t\t-ms-animation: spinner 150ms infinite linear;\r\n\t\t-o-animation: spinner 150ms infinite linear;\r\n\t\tanimation: spinner 150ms infinite linear;\r\n\t\tborder-radius: 0.5em;\r\n\t\t-webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t\tbox-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t}\r\n}\r\n\r\n/* Animation */\r\n@-webkit-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-moz-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-o-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n",".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\n\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-moz-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-o-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-moz-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@-o-keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}\n@keyframes spinner {\n0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n}\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/PaypalEntries.vue","webpack://./../PaypalEntries.vue"],"names":[],"mappings":"AA+MA;EACC,gBAAA;EACA,cAAA;EACA,kBAAA;AC9MD;AD+MC;EACC,gBAAA;EACA,MAAA;EACA,eAAA;AC7MF;ADiNA;EACC,WAAA;EACA,sBAAA;EACA,YAAA;EACA,0BAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;AC9MD;AD+MC;EACC,aAAA;EACA,gBAAA;EACA,yBAAA;AC7MF;ADiNA;EACC,kBAAA;EACA,WAAA;AC9MD;AD+MC;EACC,sBAAA;AC7MF;ADiNA;EACC,qBAAA;AC9MD;ADkNC;EACC,uBAAA;EACA,OAAA;AC/MF;ADoNC;EACC,YAAA;ACjNF;ADmNC;EACC,YAAA;EACA,kBAAA;ACjNF;ADmNC;EACC,YAAA;ACjNF;ADmNC;EACC,YAAA;ACjNF;ADmNC;EACC,YAAA;ACjNF;ADqNA;EACC,4BAAA;EACA,eAAA;EACA,YAAA;EACA,WAAA;EACA,UAAA;EACA,iBAAA;EACA,YAAA;EACA,MAAA;EACA,OAAA;EACA,SAAA;EACA,QAAA;EACA,wBAAA;EAYA,yDAAA;AC7ND;ADkNC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,MAAA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,sEAAA;EACA,8EAAA;AChNF;ADmNC;EACC,2BAAA;EACA,WAAA;EACA,kBAAA;EACA,iBAAA;EACA,6BAAA;EACA,SAAA;ACjNF;ADmNC;EACC,WAAA;EACA,cAAA;EACA,eAAA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;EACA,gDAAA;EACA,6CAAA;EACA,4CAAA;EACA,2CAAA;EACA,wCAAA;EACA,oBAAA;EACA,gWAAA;EACA,wVAAA;ACjNF;;ADqNA,cAAA;AACA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;AClNA;ADoND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;AClNA;AACF;ADqNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACnNA;ADqND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACnNA;AACF;ADsNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACpNA;ADsND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACpNA;AACF;ADuNA;AACC;IACC,+BAAA;IACA,4BAAA;IACA,2BAAA;IACA,0BAAA;IACA,uBAAA;ACrNA;ADuND;IACC,iCAAA;IACA,8BAAA;IACA,6BAAA;IACA,4BAAA;IACA,yBAAA;ACrNA;AACF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-popup__body {\r\n\tmax-height: 85vh;\r\n\toverflow: auto;\r\n\tposition: relative;\r\n\t.cx-vui-component-raw {\r\n\t\tposition: sticky;\r\n\t\ttop: 0;\r\n\t\ttext-align: end;\r\n\t}\r\n}\r\n\r\n.jfb-subscriptions-actions {\r\n\twidth: 60vw;\r\n\tbackground-color: #fff;\r\n\tpadding: 1em;\r\n\tborder-top: 1px solid #eee;\r\n\tbox-sizing: border-box;\r\n\tposition: sticky;\r\n\tbottom: -3em;\r\n\t& > div {\r\n\t\tdisplay: flex;\r\n\t\tcolumn-gap: 10px;\r\n\t\tjustify-content: flex-end;\r\n\t}\r\n}\r\n\r\n.jfb-note {\r\n\tpadding: 1em 0.5em;\r\n\twidth: 100%;\r\n\t&:nth-child(odd) {\r\n\t\tbackground-color: #eee;\r\n\t}\r\n}\r\n\r\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\r\n\tbox-shadow: 0 4px 4px;\r\n}\r\n\r\n.cx-vui-component--fullwidth-label {\r\n\t.cx-vui-component__meta {\r\n\t\tjustify-content: center;\r\n\t\tflex: 1;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--record_id {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t\ttext-align: center;\r\n\t}\r\n\t.cell--subscriber_name {\r\n\t\twidth: 250px;\r\n\t}\r\n\t.cell--create_time {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--actions {\r\n\t\twidth: 200px;\r\n\t}\r\n}\r\n\r\n.loader {\r\n\t/* Absolute Center Spinner */\r\n\tposition: fixed;\r\n\tz-index: 999;\r\n\theight: 2em;\r\n\twidth: 2em;\r\n\toverflow: visible;\r\n\tmargin: auto;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\tbottom: 0;\r\n\tright: 0;\r\n\t/* Transparent Overlay */\r\n\t&:before {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tposition: fixed;\r\n\t\ttop: 0;\r\n\t\tleft: 0;\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t\tbackground: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t\tbackground: -webkit-radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .5));\r\n\t}\r\n\t/* :not(:required) hides these rules from IE9 and below */\r\n\t&:not(:required) {\r\n\t\t/* hide \"loading...\" text */\r\n\t\tfont: 0/0 a;\r\n\t\tcolor: transparent;\r\n\t\ttext-shadow: none;\r\n\t\tbackground-color: transparent;\r\n\t\tborder: 0;\r\n\t}\r\n\t&:not(:required):after {\r\n\t\tcontent: '';\r\n\t\tdisplay: block;\r\n\t\tfont-size: 10px;\r\n\t\twidth: 1em;\r\n\t\theight: 1em;\r\n\t\tmargin-top: -0.5em;\r\n\t\t-webkit-animation: spinner 150ms infinite linear;\r\n\t\t-moz-animation: spinner 150ms infinite linear;\r\n\t\t-ms-animation: spinner 150ms infinite linear;\r\n\t\t-o-animation: spinner 150ms infinite linear;\r\n\t\tanimation: spinner 150ms infinite linear;\r\n\t\tborder-radius: 0.5em;\r\n\t\t-webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t\tbox-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\r\n\t}\r\n}\r\n\r\n/* Animation */\r\n@-webkit-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-moz-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@-o-keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n\r\n@keyframes spinner {\r\n\t0% {\r\n\t\t-webkit-transform: rotate(0deg);\r\n\t\t-moz-transform: rotate(0deg);\r\n\t\t-ms-transform: rotate(0deg);\r\n\t\t-o-transform: rotate(0deg);\r\n\t\ttransform: rotate(0deg);\r\n\t}\r\n\t100% {\r\n\t\t-webkit-transform: rotate(360deg);\r\n\t\t-moz-transform: rotate(360deg);\r\n\t\t-ms-transform: rotate(360deg);\r\n\t\t-o-transform: rotate(360deg);\r\n\t\ttransform: rotate(360deg);\r\n\t}\r\n}\r\n",".cx-vui-popup__body {\n  max-height: 85vh;\n  overflow: auto;\n  position: relative;\n}\n.cx-vui-popup__body .cx-vui-component-raw {\n  position: sticky;\n  top: 0;\n  text-align: end;\n}\n\n.jfb-subscriptions-actions {\n  width: 60vw;\n  background-color: #fff;\n  padding: 1em;\n  border-top: 1px solid #eee;\n  box-sizing: border-box;\n  position: sticky;\n  bottom: -3em;\n}\n.jfb-subscriptions-actions > div {\n  display: flex;\n  column-gap: 10px;\n  justify-content: flex-end;\n}\n\n.jfb-note {\n  padding: 1em 0.5em;\n  width: 100%;\n}\n.jfb-note:nth-child(odd) {\n  background-color: #eee;\n}\n\nbutton.cx-vui-button.cx-vui-button--size-link:hover {\n  box-shadow: 0 4px 4px;\n}\n\n.cx-vui-component--fullwidth-label .cx-vui-component__meta {\n  justify-content: center;\n  flex: 1;\n}\n\n.cx-vue-list-table .cell--record_id {\n  width: 160px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n  text-align: center;\n}\n.cx-vue-list-table .cell--subscriber_name {\n  width: 250px;\n}\n.cx-vue-list-table .cell--create_time {\n  width: 160px;\n}\n.cx-vue-list-table .cell--actions {\n  width: 200px;\n}\n\n.loader {\n  /* Absolute Center Spinner */\n  position: fixed;\n  z-index: 999;\n  height: 2em;\n  width: 2em;\n  overflow: visible;\n  margin: auto;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  /* Transparent Overlay */\n  /* :not(:required) hides these rules from IE9 and below */\n}\n.loader:before {\n  content: \"\";\n  display: block;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n  background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.5));\n}\n.loader:not(:required) {\n  /* hide \"loading...\" text */\n  font: 0/0 a;\n  color: transparent;\n  text-shadow: none;\n  background-color: transparent;\n  border: 0;\n}\n.loader:not(:required):after {\n  content: \"\";\n  display: block;\n  font-size: 10px;\n  width: 1em;\n  height: 1em;\n  margin-top: -0.5em;\n  -webkit-animation: spinner 150ms infinite linear;\n  -moz-animation: spinner 150ms infinite linear;\n  -ms-animation: spinner 150ms infinite linear;\n  -o-animation: spinner 150ms infinite linear;\n  animation: spinner 150ms infinite linear;\n  border-radius: 0.5em;\n  -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n  box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;\n}\n\n/* Animation */\n@-webkit-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-moz-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@-o-keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@keyframes spinner {\n  0% {\n    -webkit-transform: rotate(0deg);\n    -moz-transform: rotate(0deg);\n    -ms-transform: rotate(0deg);\n    -o-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    -moz-transform: rotate(360deg);\n    -ms-transform: rotate(360deg);\n    -o-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -600,7 +573,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button--size-link {\n  padding: 0.5em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue","webpack://./../SubscriptionActionPanel.vue"],"names":[],"mappings":"AAyGA;EACC,cAAA;ACxGD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-button--size-link {\r\n\tpadding: 0.5em;\r\n}\r\n",".cx-vui-button--size-link {\n  padding: 0.5em;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button--size-link {\n  padding: 0.5em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/SubscriptionActionPanel.vue","webpack://./../SubscriptionActionPanel.vue"],"names":[],"mappings":"AAsFA;EACC,cAAA;ACrFD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-button--size-link {\r\n\tpadding: 0.5em;\r\n}\r\n",".cx-vui-button--size-link {\n  padding: 0.5em;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -627,7 +600,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AAoCC;EACC,aAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;ACnCF;ADqCC;EACC,OAAA;ACnCF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.jfb-actions-item {\n\t& > div {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tcolumn-gap: 10px;\n\t\trow-gap: 4px;\n\t}\n\tbutton {\n\t\tflex: 1;\n\t}\n}\n",".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-entries/columns/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AA2BC;EACC,aAAA;EACA,sBAAA;EACA,gBAAA;EACA,YAAA;AC1BF;AD4BC;EACC,OAAA;AC1BF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.jfb-actions-item {\n\t& > div {\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tcolumn-gap: 10px;\n\t\trow-gap: 4px;\n\t}\n\tbutton {\n\t\tflex: 1;\n\t}\n}\n",".jfb-actions-item > div {\n  display: flex;\n  flex-direction: column;\n  column-gap: 10px;\n  row-gap: 4px;\n}\n.jfb-actions-item button {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1256,7 +1229,11 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("cx-vui-pagination", {
-        attrs: { total: 100, "page-size": 5, current: 1 },
+        attrs: {
+          total: 100,
+          "page-size": _vm.query.limit,
+          current: _vm.query.currentPage,
+        },
       }),
       _vm._v(" "),
       _c("EntriesTable", {
@@ -1343,7 +1320,7 @@ var render = function () {
                       [
                         _c("cx-vui-button", {
                           attrs: {
-                            loading: _vm.isDoingAction,
+                            loading: _vm.loadingNote,
                             disabled: _vm.isDoingAction,
                             "button-style": "accent",
                             size: "mini",
@@ -1496,7 +1473,7 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("cx-vui-button", {
-    attrs: { "button-style": "accent-border", size: "link" },
+    attrs: { "button-style": "link-accent", size: "link" },
     on: { click: _vm.openPopup },
     scopedSlots: _vm._u([
       {
@@ -2132,6 +2109,7 @@ var _window$JetFBActions = window.JetFBActions,
     addQueryArgs = _window$JetFBActions.addQueryArgs;
 var _wp = wp,
     apiFetch = _wp.apiFetch;
+window.jfbEventBus = window.jfbEventBus || new Vue();
 var options = {
   store: new Vuex.Store({
     state: {
@@ -2140,15 +2118,17 @@ var options = {
       currentList: [],
       actions: {},
       queryState: {
-        currentPage: 0,
+        currentPage: 1,
         extreme_id: 0,
         limit: 25,
-        sort: 'DESC'
+        sort: 'DESC',
+        total: 0
       },
       fetchedSubscriptions: {},
       isShowPopup: false,
       loadingPopup: false,
-      doingAction: false
+      doingAction: false,
+      loadingButton: {}
     },
     getters: {
       getCurrent: function getCurrent(state) {
@@ -2182,6 +2162,9 @@ var options = {
       },
       isDoingAction: function isDoingAction(state) {
         return state.doingAction;
+      },
+      getQueryState: function getQueryState(state) {
+        return state.queryState;
       }
     },
     mutations: {
@@ -2283,26 +2266,59 @@ var options = {
         });
 
         commit('toggleDoingAction');
-        dispatch('fetch', options).then(function (response) {
-          dispatch('replaceCurrent', response.data);
-        }).finally(function () {
-          commit('toggleDoingAction');
+        return new Promise(function (resolve) {
+          return dispatch('fetch', options).then(function (response) {
+            dispatch('replaceCurrent', response.data);
+          }).finally(function () {
+            commit('toggleDoingAction');
+            resolve();
+          });
         });
       },
-      fetch: function fetch(_ref6, options) {
+      processAction: function processAction(_ref6, _ref7) {
+        var _getters$getCurrent3, _getters$getCurrent3$;
+
         var commit = _ref6.commit,
-            getters = _ref6.getters;
+            getters = _ref6.getters,
+            dispatch = _ref6.dispatch;
+        var reason = _ref7.reason,
+            type = _ref7.type;
+
+        var options = _objectSpread(_objectSpread({}, (_getters$getCurrent3 = getters.getCurrent) === null || _getters$getCurrent3 === void 0 ? void 0 : (_getters$getCurrent3$ = _getters$getCurrent3.links) === null || _getters$getCurrent3$ === void 0 ? void 0 : _getters$getCurrent3$.value[type]), {}, {
+          data: {
+            form_id: getters.getCurrent._FORM_ID.value,
+            reason: reason
+          }
+        });
+
+        commit('toggleDoingAction');
+        return new Promise(function (resolve) {
+          return dispatch('fetch', options).then(function (response) {
+            jfbEventBus.$CXNotice.add({
+              message: response.message,
+              type: 'success',
+              duration: 4000
+            });
+          }).finally(function () {
+            commit('toggleDoingAction');
+            resolve();
+          });
+        });
+      },
+      fetch: function fetch(_ref8, options) {
+        var commit = _ref8.commit,
+            getters = _ref8.getters;
         return new Promise(function (resolve, reject) {
           apiFetch(options).then(function (response) {
             resolve(response);
           }).catch(function (error) {
-            Vue.$CXNotice.add({
+            jfbEventBus.$CXNotice.add({
               message: error.message,
               type: 'error',
               duration: 4000
             });
             reject(error);
-          });
+          }).finally(reject);
         });
       }
     }

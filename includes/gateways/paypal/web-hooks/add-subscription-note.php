@@ -33,7 +33,7 @@ class Add_Subscription_Note extends Rest_Api_Endpoint_Base {
 		if ( ! Prepared_Queries::add_notes_by_id( $post_id, $text ) ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => __( 'Something went wrong...', 'jet-form-builder' )
+					'message' => __( 'Something went wrong. Maybe your note is empty', 'jet-form-builder' )
 				),
 				503
 			);

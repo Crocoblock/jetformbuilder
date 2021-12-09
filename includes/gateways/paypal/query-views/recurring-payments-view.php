@@ -58,7 +58,7 @@ class Recurring_Payments_View extends Post_Meta_View {
 		);
 	}
 
-	public function prepare_row( $row ): array {
+	public function prepare_row( $row ) {
 		$value = Tools::decode_json( $row['meta_value'] ?? '[]' );
 
 		return array_merge( array( '_ROW_ID' => $row['meta_id'] ), $value );

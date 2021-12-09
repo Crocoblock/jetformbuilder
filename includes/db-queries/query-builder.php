@@ -200,4 +200,20 @@ class Query_Builder {
 		return $this->view()->get_prepared_row( $row );
 	}
 
+	/**
+	 * @param $column_offset
+	 * @param $row_offset
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public function query_var( $column_offset = 0, $row_offset = 0 ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB
+		$row = $wpdb->get_var( $this->sql(), $column_offset, $row_offset );
+
+		return $this->view()->get_prepared_row( $row );
+	}
+
 }

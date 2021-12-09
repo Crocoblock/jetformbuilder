@@ -8,8 +8,8 @@
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
 		<cx-vui-pagination
 			:total="100"
-			:page-size="5"
-			:current="1"
+			:page-size="query.limit"
+			:current="query.currentPage"
 		></cx-vui-pagination>
 		<EntriesTable
 			:entries-list="currentList"
@@ -52,7 +52,7 @@
 					>
 						<cx-vui-button
 							@click="addNote"
-							:loading="isDoingAction"
+							:loading="loadingNote"
 							:disabled="isDoingAction"
 							button-style="accent"
 							size="mini"
@@ -115,6 +115,7 @@ export default {
 			receive_url: '',
 			columnsComponents,
 			note: '',
+			loadingNote: false,
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
@@ -158,6 +159,9 @@ export default {
 		isDoingAction() {
 			return this.$store.getters.isDoingAction;
 		},
+		query() {
+			return this.$store.getters.getQueryState;
+		}
 	},
 	methods: {
 		togglePopup() {
@@ -171,8 +175,12 @@ export default {
 			this.$store.dispatch( 'closePopup' );
 		},
 		addNote() {
-			this.$store.dispatch( 'addNote', this.note );
-			this.note = '';
+			this.loadingNote = true;
+
+			this.$store.dispatch( 'addNote', this.note ).then( () => {
+				this.loadingNote = false;
+				this.note = '';
+			} );
 		},
 		maybeOpen() {
 			const { sub } = getSearch();

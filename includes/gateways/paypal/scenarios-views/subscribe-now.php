@@ -32,6 +32,7 @@ class Subscribe_Now extends Scenario_View_Base {
 	public function load_data(): array {
 		return array(
 			'receive_url' => Paypal\Web_Hooks\Receive_Subscriptions::rest_url(),
+			'total'       => Paypal\Prepared_Views::count_subscriptions()
 		);
 	}
 
@@ -225,8 +226,9 @@ class Subscribe_Now extends Scenario_View_Base {
 				'table_order' => 0
 			),
 			'status'             => array(
-				'label'    => __( 'Status Info', 'jet-form-builder' ),
-				'children' => array(
+				'label'       => __( 'Status Info', 'jet-form-builder' ),
+				'table_order' => 3,
+				'children'    => array(
 					'status'             => array(
 						'label' => __( 'Status', 'jet-form-builder' ),
 					),

@@ -6,6 +6,8 @@ const { getSearch, createPath, addQueryArgs } = window.JetFBActions;
 
 const { apiFetch } = wp;
 
+window.jfbEventBus = window.jfbEventBus || new Vue();
+
 const options = {
 	store: new Vuex.Store( {
 		state: {
@@ -14,15 +16,17 @@ const options = {
 			currentList: [],
 			actions: {},
 			queryState: {
-				currentPage: 0,
+				currentPage: 1,
 				extreme_id: 0,
 				limit: 25,
 				sort: 'DESC',
+				total: 0,
 			},
 			fetchedSubscriptions: {},
 			isShowPopup: false,
 			loadingPopup: false,
 			doingAction: false,
+			loadingButton: {},
 		},
 		getters: {
 			getCurrent: state => {
@@ -54,6 +58,9 @@ const options = {
 			isDoingAction: state => {
 				return state.doingAction;
 			},
+			getQueryState: state => {
+				return state.queryState;
+			}
 		},
 		mutations: {
 			setList( state, list ) {
@@ -164,27 +171,52 @@ const options = {
 
 				commit( 'toggleDoingAction' );
 
-				dispatch( 'fetch', options ).then( response => {
+				return new Promise( resolve => dispatch( 'fetch', options ).then( response => {
 					dispatch( 'replaceCurrent', response.data );
+
 				} ).finally( () => {
 					commit( 'toggleDoingAction' );
-				} );
+					resolve();
+				} ) );
+			},
+			processAction( { commit, getters, dispatch }, { reason, type } ) {
+				const options = {
+					...getters.getCurrent?.links?.value[ type ],
+					data: {
+						form_id: getters.getCurrent._FORM_ID.value,
+						reason,
+					},
+				};
+
+				commit( 'toggleDoingAction' );
+
+				return new Promise( resolve => dispatch( 'fetch', options ).then( response => {
+					jfbEventBus.$CXNotice.add( {
+						message: response.message,
+						type: 'success',
+						duration: 4000,
+					} );
+				} ).finally( () => {
+					commit( 'toggleDoingAction' );
+					resolve();
+				} ) );
 			},
 			fetch( { commit, getters }, options ) {
 				return new Promise( ( resolve, reject ) => {
 					apiFetch( options ).then( response => {
 						resolve( response );
 					} ).catch( error => {
-						Vue.$CXNotice.add( {
+						jfbEventBus.$CXNotice.add( {
 							message: error.message,
 							type: 'error',
 							duration: 4000,
 						} );
 
 						reject( error );
-					} );
+					} ).finally( reject );
 				} );
 			},
+
 		},
 	} ),
 };

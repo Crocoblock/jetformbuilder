@@ -70,33 +70,14 @@ export default {
 				return;
 			}
 
-			const options = {
-				...this.current.links.value[ this.type ],
-				data: {
-					form_id: this.current._FORM_ID.value,
-					reason: reason,
-				},
-			};
-
 			this.loading = true;
 
-			apiFetch( options ).then( res => {
-				this.$CXNotice.add( {
-					message: res.message,
-					type: 'success',
-					duration: 4000,
-				} );
-
+			this.$store.dispatch( 'processAction', {
+				reason,
+				type: this.type,
+			} ).then( () => {
 				this.loading = false;
-			} ).catch( error => {
-				this.$CXNotice.add( {
-					message: error.message,
-					type: 'error',
-					duration: 4000,
-				} );
-
-				this.loading = false;
-			} );
+			} )
 		},
 	},
 };

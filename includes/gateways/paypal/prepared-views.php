@@ -138,6 +138,18 @@ class Prepared_Views {
 		}
 	}
 
+	public static function count_subscriptions(): int {
+		try {
+			return (int) ( new Query_Builder() )
+				->set_view( new Paypal\Query_Views\Subscriptions_Count() )
+				->debug()
+				->query_var();
+
+		} catch ( Query_Builder_Exception $exception ) {
+			return 0;
+		}
+	}
+
 	/**
 	 * @param $payment_id
 	 *
@@ -205,7 +217,7 @@ class Prepared_Views {
 		$notes = array_reverse( get_post_meta( $post_id, Scenarios_Manager::NOTES_KEY ) );
 
 		return array_map( function ( $item ) {
-			$parsed = Tools::decode_json( $item );
+			$parsed               = Tools::decode_json( $item );
 			$parsed['created_dt'] = gmdate( 'M d Y H:i:s', $parsed['created_dt'] );
 
 			return $parsed;

@@ -104,7 +104,7 @@ abstract class View_Base {
 		return "`{$table}`.`{$name}`";
 	}
 
-	protected function prepare_row( $row ): array {
+	protected function prepare_row( $row ) {
 		return $row;
 	}
 
@@ -114,7 +114,7 @@ abstract class View_Base {
 	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	public function get_prepared_row( $row ): array {
+	public function get_prepared_row( $row ) {
 		$prepared = $this->prepare_row( $row );
 
 		if ( empty( $prepared ) ) {

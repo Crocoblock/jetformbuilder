@@ -1,13 +1,6 @@
 <template>
-	<!--<div class="jfb-actions-item">
-		<SubscriptionActions
-			:force-current="fullEntry"
-		>
-
-		</SubscriptionActions>
-	</div>-->
 	<cx-vui-button
-		button-style="accent-border"
+		button-style="link-accent"
 		size="link"
 		@click="openPopup"
 	>
@@ -16,12 +9,10 @@
 </template>
 
 <script>
-import SubscriptionActions from '../../SubscriptionActions';
 
 export default {
 	name: "actions--item",
 	props: [ 'value', 'full-entry', 'entry-id' ],
-	components: { SubscriptionActions },
 	created() {
 	},
 	methods: {

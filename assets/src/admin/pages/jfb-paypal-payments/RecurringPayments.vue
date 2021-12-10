@@ -6,7 +6,6 @@
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Recurring Payments', 'jet-form-builder' ) }}</h1>
 		<EntriesTable
-			:entries-list="list"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 		/>
@@ -88,13 +87,13 @@ const columnsComponents = applyFilters( 'jet.fb.register.paypal.recurring-paymen
 	subscriber,
 	actions,
 	related,
-	gross
+	gross,
 ] );
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 export default {
-	name: 'jfb-paypal-recurring-payments',
+	name: 'jfb-paypal-payments',
 	components: { DetailsTableWithStore, EntriesTable },
 	data() {
 		return {
@@ -112,10 +111,10 @@ export default {
 	created() {
 		const { list = [], columns = {}, actions = {} } = this.getIncoming();
 
-		this.list = JSON.parse( JSON.stringify( list ) );
 		this.actions = JSON.parse( JSON.stringify( actions ) );
 
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
+		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
 
 		jfbEventBus.$on( 'click-refund', this.openPopup.bind( this ) );
 		jfbEventBus.$on( 'click-view_subscription', this.viewSubscription.bind( this ) );
@@ -178,11 +177,9 @@ export default {
 
 .jfb-popup-grid {
 	display: flex;
-
 	&-column:first-child {
 		flex: 3;
 	}
-
 	&-column:not(:first-child) {
 		flex: 1;
 		text-align: center;
@@ -190,11 +187,9 @@ export default {
 }
 
 .cx-vue-list-table {
-
 	.list-table-heading {
 		justify-content: space-between;
 	}
-
 	.list-table-item {
 		justify-content: space-between;
 		&__cell {
@@ -202,23 +197,18 @@ export default {
 			overflow: hidden;
 		}
 	}
-
 	.cell--date {
-		width: 150px;
+		width: 200px;
 	}
-
 	.cell--related_id {
 		width: 200px;
 	}
-
 	.cell--status {
 		width: 160px;
 	}
-
 	.cell--subscriber {
 		width: 220px;
 	}
-
 	.cell--gross {
 		width: 130px;
 		text-align: center;

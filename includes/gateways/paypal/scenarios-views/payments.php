@@ -10,7 +10,7 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Refund_Recurring_Payment as RefundAction;
 
-class Recurring_Payments extends Table_View_Base {
+class Payments extends Table_View_Base {
 
 	private $raw_payments;
 	private $queried_related;
@@ -25,7 +25,7 @@ class Recurring_Payments extends Table_View_Base {
 			$this->raw_payments = ( new Query_Builder() )
 				->set_view(
 					( new Paypal\Query_Views\Recurring_Payments_View() )
-						->set_limit( array( 25 ) )
+						->set_limit( array( 0, 200 ) )
 				)
 				->debug()
 				->query_all();
@@ -37,6 +37,15 @@ class Recurring_Payments extends Table_View_Base {
 		}
 
 		return $this->raw_payments;
+	}
+
+	public function load_data(): array {
+		return array(
+			'receive_url' => array(
+				// todo: add webhook to receive paginated payments
+			),
+			'total'       => Paypal\Prepared_Views::count_payments()
+		);
 	}
 
 	/**
@@ -115,7 +124,7 @@ class Recurring_Payments extends Table_View_Base {
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
 			'subscriber'         => array(
-				'label' => __( 'Subscriber', 'jet-form-builder' ),
+				'label' => __( 'Payer', 'jet-form-builder' ),
 			),
 			'gross'              => array(
 				'label' => __( 'Gross', 'jet-form-builder' ),
@@ -131,14 +140,23 @@ class Recurring_Payments extends Table_View_Base {
 	}
 
 	public function get_status_info( $record ) {
-		switch ( $record['resource_type'] ) {
+		switch ( $this->get_resource_type( $record ) ) {
 			case 'sale':
 				return __( 'Recurring payment from', 'jet-form-builder' );
 			case 'refund':
 				return __( 'Refund to', 'jet-form-builder' );
+			case 'order':
 			default:
-				return __( 'Unknown', 'jet-form-builder' );
+				return __( 'Order by', 'jet-form-builder' );
 		}
+	}
+
+	public function is_recurrent( $record ) {
+		return in_array(
+			$this->get_resource_type( $record ),
+			array( 'sale', 'refund' ),
+			true
+		);
 	}
 
 	public function get_resource_type( $record ) {
@@ -150,6 +168,10 @@ class Recurring_Payments extends Table_View_Base {
 	}
 
 	public function get_related_id( $record ) {
+		if ( ! $this->is_recurrent( $record ) ) {
+			return '';
+		}
+
 		$current_id = $record['resource']['id'] ?? '';
 
 		if ( $this->is_sale( $record ) ) {
@@ -182,19 +204,66 @@ class Recurring_Payments extends Table_View_Base {
 	}
 
 	public function get_payment_date( $record ) {
-		return $this->format_date( $record['create_dt'] ?? 0 );
+		if ( array_key_exists( 'create_dt', $record ) ) {
+			return date( 'F j, Y, H:i', $record['create_dt'] ?? 0 );
+		}
+
+		return $record['date'] ?? '';
 	}
 
 	public function get_subscriber( $record ) {
-		return $record['related_object']['subscriber']['value'];
+		if ( $this->is_recurrent( $record ) ) {
+			return $record['related_object']['subscriber']['value'];
+		}
+
+		return array(
+			'email_address' => $record['payer']['email'] ?? '',
+			'name'          => array(
+				'given_name' => $record['payer']['first_name'] ?? '',
+				'surname'    => $record['payer']['last_name'] ?? ''
+			)
+		);
 	}
 
 	public function get_form_id( $record ) {
-		return $record['related_object']['_FORM_ID']['value'];
+		if ( $this->is_recurrent( $record ) ) {
+			return $record['related_object']['_FORM_ID']['value'];
+		}
+
+		return $record['form_id'] ?? 0;
 	}
 
 
 	public function get_actions( $record ): array {
+		$refund = array(
+			'label'   => __( 'Refund payment', 'jet-form-builder' ),
+			'payload' => array(
+				'contact_name'  => array(
+					'label' => __( 'Subscriber name', 'jet-form-builder' ),
+				),
+				'contact_email' => array(
+					'label' => __( 'Subscriber email', 'jet-form-builder' ),
+				),
+				'amount'        => array(
+					'label' => __( 'Total Refund Amount', 'jet-form-builder' ),
+				),
+				'invoice_id'    => array(
+					'label' => __( 'Invoice Number (Optional)', 'jet-form-builder' ),
+				),
+				'note_to_payer' => array(
+					'label' => __( 'Note To Buyer (Optional)', 'jet-form-builder' ),
+				),
+				'method'        => RefundAction::get_methods(),
+				'url'           => RefundAction::dynamic_rest_url( $record['resource']['id'] ),
+			),
+		);
+
+		if ( ! $this->is_recurrent( $record ) ) {
+			return array(
+				'refund' => $refund
+			);
+		}
+
 		$subscription_id = $this->get_related_id( $record );
 
 		$actions = array(
@@ -217,33 +286,18 @@ class Recurring_Payments extends Table_View_Base {
 		return array_merge(
 			$actions,
 			array(
-				'refund' => array(
-					'label'   => __( 'Refund payment', 'jet-form-builder' ),
-					'payload' => array(
-						'contact_name'  => array(
-							'label' => __( 'Subscriber name', 'jet-form-builder' ),
-						),
-						'contact_email' => array(
-							'label' => __( 'Subscriber email', 'jet-form-builder' ),
-						),
-						'amount'        => array(
-							'label' => __( 'Total Refund Amount', 'jet-form-builder' ),
-						),
-						'invoice_id'    => array(
-							'label' => __( 'Invoice Number (Optional)', 'jet-form-builder' ),
-						),
-						'note_to_payer' => array(
-							'label' => __( 'Note To Buyer (Optional)', 'jet-form-builder' ),
-						),
-						'method'        => RefundAction::get_methods(),
-						'url'           => RefundAction::dynamic_rest_url( $record['resource']['id'] ),
-					),
-				),
+				'refund' => $refund
 			)
 		);
 	}
 
 	public function get_gross( $record ) {
+		if ( ! $this->is_recurrent( $record ) ) {
+			$value = number_format( $record['amount']['value'] ?? 0, 2 );
+
+			return sprintf( '+ %s %s', $value, $record['amount']['currency_code'] ?? '' );
+		}
+
 		$value    = number_format( $record['resource']['amount']['total'] ?? 0, 2 );
 		$currency = $record['resource']['amount']['currency'] ?? '';
 
@@ -263,11 +317,6 @@ class Recurring_Payments extends Table_View_Base {
 
 		return '';
 	}
-
-	public function format_date( $date_time ) {
-		return date( 'Y-m-d H:i:s', $date_time );
-	}
-
 
 }
 

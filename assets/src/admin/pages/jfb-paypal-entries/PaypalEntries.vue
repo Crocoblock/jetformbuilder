@@ -6,24 +6,13 @@
 		['jfb-paypal-scenario--' + scenario]: true
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
-		<cx-vui-pagination
-			v-if="queryState.limit < queryState.total"
-			:total="queryState.total"
-			:page-size="queryState.limit"
-			:current="queryState.currentPage"
-			@on-change="changePage"
-		></cx-vui-pagination>
+		<SubscriptionsPagination/>
 		<EntriesTable
+			:loading="loadingPage"
 			:columns="columns"
 			:columns-components="columnsComponents"
 		/>
-		<cx-vui-pagination
-			v-if="queryState.limit < queryState.total"
-			:total="queryState.total"
-			:page-size="queryState.limit"
-			:current="queryState.currentPage"
-			@on-change="changePage"
-		></cx-vui-pagination>
+		<SubscriptionsPagination/>
 		<cx-vui-popup
 			:value="isShowPopup"
 			@change="togglePopup"
@@ -77,6 +66,7 @@ import * as actions from './columns/actions';
 import SubscriptionActions from './SubscriptionActions';
 
 import '../../../../scss/admin/default.scss';
+import SubscriptionsPagination from './SubscriptionsPagination';
 
 Vue.config.devtools = true;
 
@@ -112,6 +102,7 @@ const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns'
 export default {
 	name: 'jfb-paypal-entries',
 	components: {
+		SubscriptionsPagination,
 		DetailsTableWithStore,
 		SubscriptionActions,
 		EntriesTable,
@@ -130,16 +121,14 @@ export default {
 	mixins: [ GetIncoming, i18n ],
 	created() {
 		const {
-				  list        = [],
-				  columns     = {},
-				  scenario    = '',
-				  actions     = {},
-				  receive_url = '',
+				  list     = [],
+				  columns  = {},
+				  scenario = '',
+				  actions  = {},
 				  total,
 			  } = this.getIncoming();
 
 		this.scenario = scenario;
-		this.receive_url = receive_url;
 
 		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
@@ -147,7 +136,9 @@ export default {
 		this.$store.commit( 'setQueryState', {
 			total: +total,
 			limit: this.$store.state.currentList.length,
-		} )
+		} );
+
+		this.$store.dispatch( 'setQueriedPage', 1 );
 
 		this.maybeOpen();
 	},
@@ -157,13 +148,12 @@ export default {
 			'currentPopupData',
 			'loadingPopup',
 			'isShowPopup',
-			'queryState',
 			'doingAction',
+			'loadingPage',
+			'currentList'
 		] ),
 		...mapGetters( [
 			'currentSubscription',
-			'lastRow',
-			'currentList',
 		] ),
 	},
 	methods: {
@@ -200,15 +190,6 @@ export default {
 				}
 			}
 		},
-		changePage( pageNum ) {
-			this.$store.commit( 'setQueryState', {
-				currentPage: pageNum,
-				extreme_id: this.lastRow._ROW_ID.value,
-			} );
-
-			this.$store.dispatch( 'fetchPage', this.receive_url );
-		},
-
 	},
 };
 

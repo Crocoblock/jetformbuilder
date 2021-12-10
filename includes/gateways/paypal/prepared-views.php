@@ -29,17 +29,6 @@ class Prepared_Views {
 			->query_one();
 	}
 
-	private static function get_condition_type_by_sort( string $sort ): string {
-		switch ( $sort ) {
-			case View_Base::FROM_HIGH_TO_LOW:
-				return 'less_static';
-			case View_Base::FROM_LOW_TO_HIGH:
-				return 'more_static';
-			default:
-				return '';
-		}
-	}
-
 	/**
 	 * @param array $args
 	 *
@@ -52,27 +41,18 @@ class Prepared_Views {
 				'limit'      => 25,
 				'extreme_id' => 0,
 				'sort'       => View_Base::FROM_HIGH_TO_LOW,
+				'page'       => 1
 			),
 			$args
 		);
 
-		$conditions = array();
-
-		if ( $args['extreme_id'] ) {
-			$conditions[] = array(
-				'type'   => self::get_condition_type_by_sort( $args['sort'] ),
-				'values' => array(
-					'meta_id',
-					$args['extreme_id'],
-				),
-			);
-		}
+		$offset = 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
 
 		return ( new Query_Builder() )
 			->set_view(
 				( new Paypal\Query_Views\Paypal_Subscriptions_View() )
-					->set_limit( array( $args['limit'] ) )
-					->set_conditions( $conditions )
+					->set_limit( array( $offset, $args['limit'] ) )
+					//->set_conditions( $conditions )
 			)
 			->debug()
 			->query_all();
@@ -166,6 +146,18 @@ class Prepared_Views {
 			->query_one();
 	}
 
+	public static function count_payments(): int {
+		try {
+			return (int) ( new Query_Builder() )
+				->set_view( new Paypal\Query_Views\Payments_Count() )
+				->debug()
+				->query_var();
+
+		} catch ( Query_Builder_Exception $exception ) {
+			return 0;
+		}
+	}
+
 	/**
 	 * @param $payment_id
 	 *
@@ -175,7 +167,7 @@ class Prepared_Views {
 	public static function get_payment( $payment_id ): array {
 		$raw_payment = self::get_payment_raw( $payment_id );
 
-		return ( new Scenarios_Views\Recurring_Payments() )->prepare_record( $raw_payment );
+		return ( new Scenarios_Views\Payments() )->prepare_record( $raw_payment );
 	}
 
 	/**

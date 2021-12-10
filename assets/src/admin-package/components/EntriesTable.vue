@@ -1,5 +1,5 @@
 <template>
-	<div class="cx-vui-panel">
+	<div :class="rootClasses">
 		<cx-vui-list-table>
 			<template #heading>
 				<cx-vui-list-table-heading
@@ -32,7 +32,6 @@
 					:key="entryID"
 					v-for="( entry, entryID ) in currentList"
 					:class="classEntry( entryID )"
-					@dblclick="$emit( 'dblclick-row', entryID )"
 				>
 					<div
 						v-for="column in filteredColumns"
@@ -77,6 +76,10 @@ export default {
 			type: Object,
 			required: true,
 		},
+		loading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -100,7 +103,13 @@ export default {
 				return ( ( this.columns[ prev ].table_order ?? 999 ) - ( this.columns[ next ].table_order ?? 999 ) );
 			} );
 		},
-		...mapGetters( [
+		rootClasses() {
+			return {
+				'cx-vui-panel': true,
+				'cx-vui-panel--loading': this.loading,
+			};
+		},
+		...mapState( [
 			'currentList',
 		] ),
 	},
@@ -126,10 +135,13 @@ export default {
 
 <style lang="scss">
 
+.cx-vui-panel--loading {
+	opacity: 0.5;
+}
+
 .cx-vue-list-table {
 	.list-table-heading {
 		justify-content: space-between;
-
 		&__cell > span {
 			display: flex;
 			justify-content: center;
@@ -139,7 +151,6 @@ export default {
 	}
 	.list-table-item {
 		justify-content: space-between;
-
 		&__cell {
 			white-space: nowrap;
 			overflow: hidden;

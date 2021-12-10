@@ -39,7 +39,7 @@ class Pages_Manager {
 				new Settings_Page(),
 				new Addons_Page(),
 				new Paypal_Subscriptions_Entries(),
-				new Paypal_Recurring_Payments_Entries(),
+				new Paypal_Payments_Entries(),
 			)
 		);
 	}

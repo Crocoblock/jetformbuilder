@@ -1,9 +1,15 @@
-const { __ } = wp.i18n;
+const { __, sprintf } = wp.i18n;
 
 export default {
 	methods: {
 		__( value, context ) {
 			return __( value, context );
+		},
+		sprintf( format, ...values ) {
+			return sprintf( format, ...values );
+		},
+		__s( format, domain, ...values ) {
+			return sprintf( __( format, domain ), ...values );
 		}
-	}
+	},
 }

@@ -13,7 +13,7 @@ class Paypal_Subscriptions_Entries extends Base_Page {
 	}
 
 	public function title(): string {
-		return __( 'Paypal Entries', 'jet-form-builder' );
+		return __( 'Paypal Subscriptions', 'jet-form-builder' );
 	}
 
 	public function page_config(): array {

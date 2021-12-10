@@ -1,5 +1,6 @@
 <template>
 	<cx-vui-button
+		v-if="value"
 		button-style="accent-border"
 		size="link"
 		@click="viewSubscription"
@@ -23,10 +24,10 @@ export default {
 		viewSubscription() {
 			window.open(
 				this.getLink(),
-				'_blank'
+				'_blank',
 			);
-		}
-	}
+		},
+	},
 };
 </script>
 

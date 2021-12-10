@@ -39,6 +39,9 @@ class Query_Conditions_Builder {
 			'like'         => array(
 				'callback' => array( $this, 'build_like' ),
 			),
+			'not_like'     => array(
+				'callback' => array( $this, 'build_not_like' ),
+			),
 			'more_static'  => array(
 				'callback' => array( $this, 'build_more_static' ),
 			),
@@ -177,6 +180,19 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function build_like( $column_name, $second ): string {
+		$second = esc_sql( $second );
+
+		return "{$this->view()->column( $column_name )} LIKE '%{$second}%'";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_not_like( $column_name, $second ): string {
 		$second = esc_sql( $second );
 
 		return "{$this->view()->column( $column_name )} LIKE '%{$second}%'";

@@ -1,37 +1,18 @@
 <template>
-	<DropdownMenu
-		v-model="showDropdown"
-		:interactive="true"
-		:right="false"
-	>
-		<cx-vui-button
-			button-style="link"
-			size="mini"
+	<div class="jfb-actions">
+		<a
+			class="jfb-dropdown-item"
+			href="javascript:void(0)"
+			v-for="( action, actionID ) in parsedJson"
+			:key="actionID"
+			@click="run( actionID )"
 		>
-			<template #label>
-				<span
-					class="dashicons dashicons-ellipsis"
-				></span>
-			</template>
-		</cx-vui-button>
-		<template #dropdown>
-			<div class="jfb-dropdown">
-				<a
-					class="jfb-dropdown-item"
-					href="javascript:void(0)"
-					v-for="( action, actionID ) in parsedJson"
-					:key="actionID"
-					@click="run( actionID )"
-				>
-					{{ action.label }}
-				</a>
-			</div>
-		</template>
-	</DropdownMenu>
+			{{ action.label }}
+		</a>
+	</div>
 </template>
 
 <script>
-import DropdownMenu from '@innologica/vue-dropdown-menu';
 import ParseIncomingValueMixin from '../ParseIncomingValueMixin';
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
@@ -39,7 +20,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 export default {
 	name: 'actions--item',
 	props: [ 'value', 'full-entry', 'conditions' ],
-	components: { DropdownMenu },
+	components: {},
 	mixins: [ ParseIncomingValueMixin ],
 	data() {
 		return {
@@ -63,35 +44,21 @@ export default {
 
 <style lang="scss">
 
-.cx-vui-button--size-mini {
-	padding: 0 0.4em 0 1em;
-}
-
-.jfb-dropdown {
-	position: absolute;
+.jfb-actions {
 	display: flex;
-	padding: 0.6em 0;
-	background-color: aliceblue;
 	flex-direction: column;
-	border-radius: 4px;
-	font-size: 1.2em;
-	border: 1px solid #ccc;
-	z-index: 1;
-	transform: translate(-100px, 5px);
-
-	&-item {
-		display: block;
-		padding: 0.5em 0.3em;
+	row-gap: 10px;
+	a.jfb-dropdown-item {
+		padding: 0.5em 0;
 		text-decoration: none;
-
 		&:hover {
-			background-color: #FFFFFF;
-		}
-
-		&:not(:first-child) {
-			border-top: 1px solid #f5f5f5;
+			text-decoration: underline;
 		}
 	}
+	a.jfb-dropdown-item:not(:first-child) {
+		border-top: 1px solid #cccccc;
+	}
 }
+
 
 </style>

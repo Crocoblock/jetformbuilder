@@ -1,41 +1,34 @@
 import PaypalEntries from './PaypalEntries';
+import {
+	getActions,
+	getGetters,
+	getMutations,
+	getBaseState,
+} from '../../paypal/StoreHelper';
 
 Vue.use( Vuex );
 
-const {
-		  getSearch,
-		  createPath,
-		  addQueryArgs,
-	  } = window.JetFBActions;
-
-const { apiFetch } = wp;
-
 window.jfbEventBus = window.jfbEventBus || new Vue();
+
+const {
+		  createPath,
+	  } = window.JetFBActions;
 
 const options = {
 	store: new Vuex.Store( {
 		state: {
+			...getBaseState(),
 			currentPopupData: {},
-			columns: {},
-			currentList: [],
 			actions: {},
-			queryState: {
-				currentPage: 1,
-				extreme_id: 0,
-				limit: 25,
-				sort: 'DESC',
-				total: 0,
-				endpoint: '',
-			},
 			fetchedSubscriptions: {},
 			isShowPopup: false,
 			// for showing loader, while subscription details is loading
 			loadingPopup: false,
 			// for disable action buttons: cancel subscription, suspend subscription & add note
 			doingAction: false,
-			loadingPage: false,
 		},
 		getters: {
+			...getGetters(),
 			getSubscription: state => id => {
 				return state.fetchedSubscriptions[ id ] || {};
 			},
@@ -47,23 +40,9 @@ const options = {
 			lastRow: state => {
 				return state.currentList[ state.currentList.length - 1 ];
 			},
-			currentList: state => {
-				return state.currentList;
-			}
 		},
 		mutations: {
-			setList( state, list ) {
-				state.currentList = list;
-			},
-			setQueryState( state, newState ) {
-				state.queryState = {
-					...state.queryState,
-					...newState,
-				};
-			},
-			setColumns( state, columns ) {
-				state.columns = columns;
-			},
+			...getMutations(),
 			setCurrent( state, current ) {
 				state.currentPopupData = current;
 			},
@@ -85,12 +64,9 @@ const options = {
 			toggleDoingAction( state ) {
 				state.doingAction = ! state.doingAction;
 			},
-			toggleLoadingPage( state ) {
-				state.loadingPage = ! state.loadingPage;
-			},
-
 		},
 		actions: {
+			...getActions(),
 			replaceCurrent( { commit, state }, { sub_id, replace } ) {
 				commit( 'setCurrent', {
 					...state.currentPopupData,
@@ -194,43 +170,6 @@ const options = {
 					resolve();
 				} ) );
 			},
-			fetchPage( { commit, getters, dispatch, state }, endpoint ) {
-				const { limit, extreme_id, sort } = state.queryState;
-
-				const options = {
-					...endpoint,
-					url: addQueryArgs(
-						{ limit, extreme_id, sort },
-						endpoint.url
-					),
-				};
-
-				commit( 'toggleLoadingPage' );
-
-				dispatch( 'fetch', options )
-					.then( response => {
-						commit( 'setList', response.data );
-					} )
-					.finally( () => {
-						commit( 'toggleLoadingPage' );
-					} )
-			},
-			fetch( { commit, getters }, options ) {
-				return new Promise( ( resolve, reject ) => {
-					apiFetch( options ).then( response => {
-						resolve( response );
-					} ).catch( error => {
-						jfbEventBus.$CXNotice.add( {
-							message: error.message,
-							type: 'error',
-							duration: 4000,
-						} );
-
-						reject( error );
-					} ).finally( reject );
-				} );
-			},
-
 		},
 	} ),
 };

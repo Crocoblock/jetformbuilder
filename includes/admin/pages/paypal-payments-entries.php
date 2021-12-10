@@ -3,20 +3,20 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Gateways\Paypal\Scenarios_Views\Recurring_Payments;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Views\Payments;
 
-class Paypal_Recurring_Payments_Entries extends Base_Page {
+class Paypal_Payments_Entries extends Base_Page {
 
 	public function slug(): string {
-		return 'jfb-paypal-recurring-payments';
+		return 'jfb-paypal-payments';
 	}
 
 	public function title(): string {
-		return __( 'Paypal Recurring Payments', 'jet-form-builder' );
+		return __( 'Paypal Payments', 'jet-form-builder' );
 	}
 
 	public function page_config(): array {
-		$view = new Recurring_Payments();
+		$view = new Payments();
 
 		return $view->load_view();
 	}

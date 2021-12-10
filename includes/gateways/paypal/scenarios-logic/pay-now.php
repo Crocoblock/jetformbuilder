@@ -114,6 +114,11 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		$this->set_payment_status();
 		$this->set_payment_amount();
 		$this->set_payer();
+
+		$this->controller->set_post_meta(
+			'resource',
+			$this->controller->get_payment()
+		);
 	}
 
 	private function set_payment_amount() {

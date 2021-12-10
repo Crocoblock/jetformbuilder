@@ -9,7 +9,7 @@ export default {
 	methods: {},
 	computed: {
 		type() {
-			return this.fullEntry.type.value;
+			return this.fullEntry.type.value || 'sale';
 		},
 		wrapClasses() {
 			return {

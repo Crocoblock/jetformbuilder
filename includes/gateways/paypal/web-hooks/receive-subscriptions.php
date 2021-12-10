@@ -29,6 +29,7 @@ class Receive_Subscriptions extends Rest_Api_Endpoint_Base {
 			'limit'      => (int) ( $body['limit'] ?? 5 ),
 			'extreme_id' => (int) ( $body['extreme_id'] ?? 0 ),
 			'sort'       => $body['sort'] ?? View_Base::FROM_HIGH_TO_LOW,
+			'page'       => (int) ( $body['page'] ?? 1 ),
 		);
 
 		try {
@@ -36,7 +37,7 @@ class Receive_Subscriptions extends Rest_Api_Endpoint_Base {
 		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => __( 'Something went wrong.', 'jet-form-builder' ),
+					'message' => $exception->getMessage(),
 				),
 				404
 			);
@@ -46,7 +47,7 @@ class Receive_Subscriptions extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'data' => $view->prepare_list( $subscriptions ),
+				'list' => $view->prepare_list( $subscriptions ),
 			)
 		);
 	}

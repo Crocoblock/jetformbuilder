@@ -1,21 +1,10 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../node_modules/@innologica/vue-dropdown-menu/dist/vue-dropdown-menu.umd.min.js":
-/*!***************************************************************************************!*\
-  !*** ../node_modules/@innologica/vue-dropdown-menu/dist/vue-dropdown-menu.umd.min.js ***!
-  \***************************************************************************************/
-/***/ (function(module) {
-
-(function(t,e){ true?module.exports=e():0})("undefined"!==typeof self?self:this,function(){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!==typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"===typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t["default"]}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s="fb15")}({"014b":function(t,e,n){"use strict";var r=n("e53d"),o=n("07e3"),i=n("8e60"),u=n("63b6"),c=n("9138"),f=n("ebfd").KEY,a=n("294c"),s=n("dbdb"),p=n("45f2"),l=n("62a0"),d=n("5168"),v=n("ccb9"),h=n("6718"),y=n("47ee"),b=n("9003"),m=n("e4ae"),g=n("f772"),x=n("241e"),w=n("36c3"),O=n("1bc3"),_=n("aebd"),S=n("a159"),j=n("0395"),E=n("bf0b"),T=n("9aa9"),P=n("d9f6"),M=n("c3a1"),N=E.f,I=P.f,L=j.f,k=r.Symbol,C=r.JSON,F=C&&C.stringify,A="prototype",R=d("_hidden"),$=d("toPrimitive"),V={}.propertyIsEnumerable,G=s("symbol-registry"),D=s("symbols"),B=s("op-symbols"),W=Object[A],U="function"==typeof k&&!!T.f,H=r.QObject,z=!H||!H[A]||!H[A].findChild,J=i&&a(function(){return 7!=S(I({},"a",{get:function(){return I(this,"a",{value:7}).a}})).a})?function(t,e,n){var r=N(W,e);r&&delete W[e],I(t,e,n),r&&t!==W&&I(W,e,r)}:I,X=function(t){var e=D[t]=S(k[A]);return e._k=t,e},Y=U&&"symbol"==typeof k.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof k},K=function(t,e,n){return t===W&&K(B,e,n),m(t),e=O(e,!0),m(n),o(D,e)?(n.enumerable?(o(t,R)&&t[R][e]&&(t[R][e]=!1),n=S(n,{enumerable:_(0,!1)})):(o(t,R)||I(t,R,_(1,{})),t[R][e]=!0),J(t,e,n)):I(t,e,n)},q=function(t,e){m(t);var n,r=y(e=w(e)),o=0,i=r.length;while(i>o)K(t,n=r[o++],e[n]);return t},Q=function(t,e){return void 0===e?S(t):q(S(t),e)},Z=function(t){var e=V.call(this,t=O(t,!0));return!(this===W&&o(D,t)&&!o(B,t))&&(!(e||!o(this,t)||!o(D,t)||o(this,R)&&this[R][t])||e)},tt=function(t,e){if(t=w(t),e=O(e,!0),t!==W||!o(D,e)||o(B,e)){var n=N(t,e);return!n||!o(D,e)||o(t,R)&&t[R][e]||(n.enumerable=!0),n}},et=function(t){var e,n=L(w(t)),r=[],i=0;while(n.length>i)o(D,e=n[i++])||e==R||e==f||r.push(e);return r},nt=function(t){var e,n=t===W,r=L(n?B:w(t)),i=[],u=0;while(r.length>u)!o(D,e=r[u++])||n&&!o(W,e)||i.push(D[e]);return i};U||(k=function(){if(this instanceof k)throw TypeError("Symbol is not a constructor!");var t=l(arguments.length>0?arguments[0]:void 0),e=function(n){this===W&&e.call(B,n),o(this,R)&&o(this[R],t)&&(this[R][t]=!1),J(this,t,_(1,n))};return i&&z&&J(W,t,{configurable:!0,set:e}),X(t)},c(k[A],"toString",function(){return this._k}),E.f=tt,P.f=K,n("6abf").f=j.f=et,n("355d").f=Z,T.f=nt,i&&!n("b8e3")&&c(W,"propertyIsEnumerable",Z,!0),v.f=function(t){return X(d(t))}),u(u.G+u.W+u.F*!U,{Symbol:k});for(var rt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),ot=0;rt.length>ot;)d(rt[ot++]);for(var it=M(d.store),ut=0;it.length>ut;)h(it[ut++]);u(u.S+u.F*!U,"Symbol",{for:function(t){return o(G,t+="")?G[t]:G[t]=k(t)},keyFor:function(t){if(!Y(t))throw TypeError(t+" is not a symbol!");for(var e in G)if(G[e]===t)return e},useSetter:function(){z=!0},useSimple:function(){z=!1}}),u(u.S+u.F*!U,"Object",{create:Q,defineProperty:K,defineProperties:q,getOwnPropertyDescriptor:tt,getOwnPropertyNames:et,getOwnPropertySymbols:nt});var ct=a(function(){T.f(1)});u(u.S+u.F*ct,"Object",{getOwnPropertySymbols:function(t){return T.f(x(t))}}),C&&u(u.S+u.F*(!U||a(function(){var t=k();return"[null]"!=F([t])||"{}"!=F({a:t})||"{}"!=F(Object(t))})),"JSON",{stringify:function(t){var e,n,r=[t],o=1;while(arguments.length>o)r.push(arguments[o++]);if(n=e=r[1],(g(e)||void 0!==t)&&!Y(t))return b(e)||(e=function(t,e){if("function"==typeof n&&(e=n.call(this,t,e)),!Y(e))return e}),r[1]=e,F.apply(C,r)}}),k[A][$]||n("35e8")(k[A],$,k[A].valueOf),p(k,"Symbol"),p(Math,"Math",!0),p(r.JSON,"JSON",!0)},"0395":function(t,e,n){var r=n("36c3"),o=n("6abf").f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],c=function(t){try{return o(t)}catch(e){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?c(t):o(r(t))}},"07e3":function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e)}},"0d58":function(t,e,n){var r=n("ce10"),o=n("e11e");t.exports=Object.keys||function(t){return r(t,o)}},"0fc9":function(t,e,n){var r=n("3a38"),o=Math.max,i=Math.min;t.exports=function(t,e){return t=r(t),t<0?o(t+e,0):i(t,e)}},"11e9":function(t,e,n){var r=n("52a7"),o=n("4630"),i=n("6821"),u=n("6a99"),c=n("69a8"),f=n("c69a"),a=Object.getOwnPropertyDescriptor;e.f=n("9e1e")?a:function(t,e){if(t=i(t),e=u(e,!0),f)try{return a(t,e)}catch(n){}if(c(t,e))return o(!r.f.call(t,e),t[e])}},1495:function(t,e,n){var r=n("86cc"),o=n("cb7c"),i=n("0d58");t.exports=n("9e1e")?Object.defineProperties:function(t,e){o(t);var n,u=i(e),c=u.length,f=0;while(c>f)r.f(t,n=u[f++],e[n]);return t}},1654:function(t,e,n){"use strict";var r=n("71c1")(!0);n("30f1")(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=r(e,n),this._i+=t.length,{value:t,done:!1})})},1691:function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},"1bc3":function(t,e,n){var r=n("f772");t.exports=function(t,e){if(!r(t))return t;var n,o;if(e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;if("function"==typeof(n=t.valueOf)&&!r(o=n.call(t)))return o;if(!e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},"1ec9":function(t,e,n){var r=n("f772"),o=n("e53d").document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},"230e":function(t,e,n){var r=n("d3f4"),o=n("7726").document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},"241e":function(t,e,n){var r=n("25eb");t.exports=function(t){return Object(r(t))}},"25eb":function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},"294c":function(t,e){t.exports=function(t){try{return!!t()}catch(e){return!0}}},"2aba":function(t,e,n){var r=n("7726"),o=n("32e9"),i=n("69a8"),u=n("ca5a")("src"),c=n("fa5b"),f="toString",a=(""+c).split(f);n("8378").inspectSource=function(t){return c.call(t)},(t.exports=function(t,e,n,c){var f="function"==typeof n;f&&(i(n,"name")||o(n,"name",e)),t[e]!==n&&(f&&(i(n,u)||o(n,u,t[e]?""+t[e]:a.join(String(e)))),t===r?t[e]=n:c?t[e]?t[e]=n:o(t,e,n):(delete t[e],o(t,e,n)))})(Function.prototype,f,function(){return"function"==typeof this&&this[u]||c.call(this)})},"2aeb":function(t,e,n){var r=n("cb7c"),o=n("1495"),i=n("e11e"),u=n("613b")("IE_PROTO"),c=function(){},f="prototype",a=function(){var t,e=n("230e")("iframe"),r=i.length,o="<",u=">";e.style.display="none",n("fab2").appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;while(r--)delete a[f][i[r]];return a()};t.exports=Object.create||function(t,e){var n;return null!==t?(c[f]=r(t),n=new c,c[f]=null,n[u]=t):n=a(),void 0===e?n:o(n,e)}},"2d00":function(t,e){t.exports=!1},"2d95":function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1)}},"30f1":function(t,e,n){"use strict";var r=n("b8e3"),o=n("63b6"),i=n("9138"),u=n("35e8"),c=n("481b"),f=n("8f60"),a=n("45f2"),s=n("53e2"),p=n("5168")("iterator"),l=!([].keys&&"next"in[].keys()),d="@@iterator",v="keys",h="values",y=function(){return this};t.exports=function(t,e,n,b,m,g,x){f(n,e,b);var w,O,_,S=function(t){if(!l&&t in P)return P[t];switch(t){case v:return function(){return new n(this,t)};case h:return function(){return new n(this,t)}}return function(){return new n(this,t)}},j=e+" Iterator",E=m==h,T=!1,P=t.prototype,M=P[p]||P[d]||m&&P[m],N=M||S(m),I=m?E?S("entries"):N:void 0,L="Array"==e&&P.entries||M;if(L&&(_=s(L.call(new t)),_!==Object.prototype&&_.next&&(a(_,j,!0),r||"function"==typeof _[p]||u(_,p,y))),E&&M&&M.name!==h&&(T=!0,N=function(){return M.call(this)}),r&&!x||!l&&!T&&P[p]||u(P,p,N),c[e]=N,c[j]=y,m)if(w={values:E?N:S(h),keys:g?N:S(v),entries:I},x)for(O in w)O in P||i(P,O,w[O]);else o(o.P+o.F*(l||T),e,w);return w}},"32e9":function(t,e,n){var r=n("86cc"),o=n("4630");t.exports=n("9e1e")?function(t,e,n){return r.f(t,e,o(1,n))}:function(t,e,n){return t[e]=n,t}},"32fc":function(t,e,n){var r=n("e53d").document;t.exports=r&&r.documentElement},"335c":function(t,e,n){var r=n("6b4c");t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},"355d":function(t,e){e.f={}.propertyIsEnumerable},"35e8":function(t,e,n){var r=n("d9f6"),o=n("aebd");t.exports=n("8e60")?function(t,e,n){return r.f(t,e,o(1,n))}:function(t,e,n){return t[e]=n,t}},"36c3":function(t,e,n){var r=n("335c"),o=n("25eb");t.exports=function(t){return r(o(t))}},"3a38":function(t,e){var n=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:n)(t)}},4588:function(t,e){var n=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:n)(t)}},"45f2":function(t,e,n){var r=n("d9f6").f,o=n("07e3"),i=n("5168")("toStringTag");t.exports=function(t,e,n){t&&!o(t=n?t:t.prototype,i)&&r(t,i,{configurable:!0,value:e})}},4630:function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}},"47ee":function(t,e,n){var r=n("c3a1"),o=n("9aa9"),i=n("355d");t.exports=function(t){var e=r(t),n=o.f;if(n){var u,c=n(t),f=i.f,a=0;while(c.length>a)f.call(t,u=c[a++])&&e.push(u)}return e}},"481b":function(t,e){t.exports={}},"50ed":function(t,e){t.exports=function(t,e){return{value:e,done:!!t}}},5168:function(t,e,n){var r=n("dbdb")("wks"),o=n("62a0"),i=n("e53d").Symbol,u="function"==typeof i,c=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};c.store=r},"52a7":function(t,e){e.f={}.propertyIsEnumerable},"53e2":function(t,e,n){var r=n("07e3"),o=n("241e"),i=n("5559")("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},5537:function(t,e,n){var r=n("8378"),o=n("7726"),i="__core-js_shared__",u=o[i]||(o[i]={});(t.exports=function(t,e){return u[t]||(u[t]=void 0!==e?e:{})})("versions",[]).push({version:r.version,mode:n("2d00")?"pure":"global",copyright:"© 2019 Denis Pushkarev (zloirock.ru)"})},5559:function(t,e,n){var r=n("dbdb")("keys"),o=n("62a0");t.exports=function(t){return r[t]||(r[t]=o(t))}},"584a":function(t,e){var n=t.exports={version:"2.6.9"};"number"==typeof __e&&(__e=n)},"5b4e":function(t,e,n){var r=n("36c3"),o=n("b447"),i=n("0fc9");t.exports=function(t){return function(e,n,u){var c,f=r(e),a=o(f.length),s=i(u,a);if(t&&n!=n){while(a>s)if(c=f[s++],c!=c)return!0}else for(;a>s;s++)if((t||s in f)&&f[s]===n)return t||s||0;return!t&&-1}}},"5ca1":function(t,e,n){var r=n("7726"),o=n("8378"),i=n("32e9"),u=n("2aba"),c=n("9b43"),f="prototype",a=function(t,e,n){var s,p,l,d,v=t&a.F,h=t&a.G,y=t&a.S,b=t&a.P,m=t&a.B,g=h?r:y?r[e]||(r[e]={}):(r[e]||{})[f],x=h?o:o[e]||(o[e]={}),w=x[f]||(x[f]={});for(s in h&&(n=e),n)p=!v&&g&&void 0!==g[s],l=(p?g:n)[s],d=m&&p?c(l,r):b&&"function"==typeof l?c(Function.call,l):l,g&&u(g,s,l,t&a.U),x[s]!=l&&i(x,s,d),b&&w[s]!=l&&(w[s]=l)};r.core=o,a.F=1,a.G=2,a.S=4,a.P=8,a.B=16,a.W=32,a.U=64,a.R=128,t.exports=a},"5d58":function(t,e,n){t.exports=n("d8d6")},"5dbc":function(t,e,n){var r=n("d3f4"),o=n("8b97").set;t.exports=function(t,e,n){var i,u=e.constructor;return u!==n&&"function"==typeof u&&(i=u.prototype)!==n.prototype&&r(i)&&o&&o(t,i),t}},"613b":function(t,e,n){var r=n("5537")("keys"),o=n("ca5a");t.exports=function(t){return r[t]||(r[t]=o(t))}},"626a":function(t,e,n){var r=n("2d95");t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},"62a0":function(t,e){var n=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+r).toString(36))}},"63b6":function(t,e,n){var r=n("e53d"),o=n("584a"),i=n("d864"),u=n("35e8"),c=n("07e3"),f="prototype",a=function(t,e,n){var s,p,l,d=t&a.F,v=t&a.G,h=t&a.S,y=t&a.P,b=t&a.B,m=t&a.W,g=v?o:o[e]||(o[e]={}),x=g[f],w=v?r:h?r[e]:(r[e]||{})[f];for(s in v&&(n=e),n)p=!d&&w&&void 0!==w[s],p&&c(g,s)||(l=p?w[s]:n[s],g[s]=v&&"function"!=typeof w[s]?n[s]:b&&p?i(l,r):m&&w[s]==l?function(t){var e=function(e,n,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(e);case 2:return new t(e,n)}return new t(e,n,r)}return t.apply(this,arguments)};return e[f]=t[f],e}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((g.virtual||(g.virtual={}))[s]=l,t&a.R&&x&&!x[s]&&u(x,s,l)))};a.F=1,a.G=2,a.S=4,a.P=8,a.B=16,a.W=32,a.U=64,a.R=128,t.exports=a},6718:function(t,e,n){var r=n("e53d"),o=n("584a"),i=n("b8e3"),u=n("ccb9"),c=n("d9f6").f;t.exports=function(t){var e=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in e||c(e,t,{value:u.f(t)})}},"67bb":function(t,e,n){t.exports=n("f921")},6821:function(t,e,n){var r=n("626a"),o=n("be13");t.exports=function(t){return r(o(t))}},"69a8":function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e)}},"69d3":function(t,e,n){n("6718")("asyncIterator")},"6a99":function(t,e,n){var r=n("d3f4");t.exports=function(t,e){if(!r(t))return t;var n,o;if(e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;if("function"==typeof(n=t.valueOf)&&!r(o=n.call(t)))return o;if(!e&&"function"==typeof(n=t.toString)&&!r(o=n.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},"6abf":function(t,e,n){var r=n("e6f3"),o=n("1691").concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},"6b4c":function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1)}},"6c1c":function(t,e,n){n("c367");for(var r=n("e53d"),o=n("35e8"),i=n("481b"),u=n("5168")("toStringTag"),c="CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList".split(","),f=0;f<c.length;f++){var a=c[f],s=r[a],p=s&&s.prototype;p&&!p[u]&&o(p,u,a),i[a]=i.Array}},"71c1":function(t,e,n){var r=n("3a38"),o=n("25eb");t.exports=function(t){return function(e,n){var i,u,c=String(o(e)),f=r(n),a=c.length;return f<0||f>=a?t?"":void 0:(i=c.charCodeAt(f),i<55296||i>56319||f+1===a||(u=c.charCodeAt(f+1))<56320||u>57343?t?c.charAt(f):i:t?c.slice(f,f+2):u-56320+(i-55296<<10)+65536)}}},"765d":function(t,e,n){n("6718")("observable")},7726:function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n)},"77f1":function(t,e,n){var r=n("4588"),o=Math.max,i=Math.min;t.exports=function(t,e){return t=r(t),t<0?o(t+e,0):i(t,e)}},"794b":function(t,e,n){t.exports=!n("8e60")&&!n("294c")(function(){return 7!=Object.defineProperty(n("1ec9")("div"),"a",{get:function(){return 7}}).a})},"79aa":function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},"79e5":function(t,e){t.exports=function(t){try{return!!t()}catch(e){return!0}}},"7e90":function(t,e,n){var r=n("d9f6"),o=n("e4ae"),i=n("c3a1");t.exports=n("8e60")?Object.defineProperties:function(t,e){o(t);var n,u=i(e),c=u.length,f=0;while(c>f)r.f(t,n=u[f++],e[n]);return t}},8378:function(t,e){var n=t.exports={version:"2.6.9"};"number"==typeof __e&&(__e=n)},8436:function(t,e){t.exports=function(){}},"86cc":function(t,e,n){var r=n("cb7c"),o=n("c69a"),i=n("6a99"),u=Object.defineProperty;e.f=n("9e1e")?Object.defineProperty:function(t,e,n){if(r(t),e=i(e,!0),r(n),o)try{return u(t,e,n)}catch(c){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t}},"8b97":function(t,e,n){var r=n("d3f4"),o=n("cb7c"),i=function(t,e){if(o(t),!r(e)&&null!==e)throw TypeError(e+": can't set as prototype!")};t.exports={set:Object.setPrototypeOf||("__proto__"in{}?function(t,e,r){try{r=n("9b43")(Function.call,n("11e9").f(Object.prototype,"__proto__").set,2),r(t,[]),e=!(t instanceof Array)}catch(o){e=!0}return function(t,n){return i(t,n),e?t.__proto__=n:r(t,n),t}}({},!1):void 0),check:i}},"8e60":function(t,e,n){t.exports=!n("294c")(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},"8f60":function(t,e,n){"use strict";var r=n("a159"),o=n("aebd"),i=n("45f2"),u={};n("35e8")(u,n("5168")("iterator"),function(){return this}),t.exports=function(t,e,n){t.prototype=r(u,{next:o(1,n)}),i(t,e+" Iterator")}},9003:function(t,e,n){var r=n("6b4c");t.exports=Array.isArray||function(t){return"Array"==r(t)}},9093:function(t,e,n){var r=n("ce10"),o=n("e11e").concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},9138:function(t,e,n){t.exports=n("35e8")},"9aa9":function(t,e){e.f=Object.getOwnPropertySymbols},"9b43":function(t,e,n){var r=n("d8e8");t.exports=function(t,e,n){if(r(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n)};case 2:return function(n,r){return t.call(e,n,r)};case 3:return function(n,r,o){return t.call(e,n,r,o)}}return function(){return t.apply(e,arguments)}}},"9def":function(t,e,n){var r=n("4588"),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},"9e1e":function(t,e,n){t.exports=!n("79e5")(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},a159:function(t,e,n){var r=n("e4ae"),o=n("7e90"),i=n("1691"),u=n("5559")("IE_PROTO"),c=function(){},f="prototype",a=function(){var t,e=n("1ec9")("iframe"),r=i.length,o="<",u=">";e.style.display="none",n("32fc").appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;while(r--)delete a[f][i[r]];return a()};t.exports=Object.create||function(t,e){var n;return null!==t?(c[f]=r(t),n=new c,c[f]=null,n[u]=t):n=a(),void 0===e?n:o(n,e)}},aa77:function(t,e,n){var r=n("5ca1"),o=n("be13"),i=n("79e5"),u=n("fdef"),c="["+u+"]",f="​",a=RegExp("^"+c+c+"*"),s=RegExp(c+c+"*$"),p=function(t,e,n){var o={},c=i(function(){return!!u[t]()||f[t]()!=f}),a=o[t]=c?e(l):u[t];n&&(o[n]=a),r(r.P+r.F*c,"String",o)},l=p.trim=function(t,e){return t=String(o(t)),1&e&&(t=t.replace(a,"")),2&e&&(t=t.replace(s,"")),t};t.exports=p},aebd:function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}},b447:function(t,e,n){var r=n("3a38"),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},b8e3:function(t,e){t.exports=!0},be13:function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},bf0b:function(t,e,n){var r=n("355d"),o=n("aebd"),i=n("36c3"),u=n("1bc3"),c=n("07e3"),f=n("794b"),a=Object.getOwnPropertyDescriptor;e.f=n("8e60")?a:function(t,e){if(t=i(t),e=u(e,!0),f)try{return a(t,e)}catch(n){}if(c(t,e))return o(!r.f.call(t,e),t[e])}},c207:function(t,e){},c366:function(t,e,n){var r=n("6821"),o=n("9def"),i=n("77f1");t.exports=function(t){return function(e,n,u){var c,f=r(e),a=o(f.length),s=i(u,a);if(t&&n!=n){while(a>s)if(c=f[s++],c!=c)return!0}else for(;a>s;s++)if((t||s in f)&&f[s]===n)return t||s||0;return!t&&-1}}},c367:function(t,e,n){"use strict";var r=n("8436"),o=n("50ed"),i=n("481b"),u=n("36c3");t.exports=n("30f1")(Array,"Array",function(t,e){this._t=u(t),this._i=0,this._k=e},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,o(1)):o(0,"keys"==e?n:"values"==e?t[n]:[n,t[n]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},c3a1:function(t,e,n){var r=n("e6f3"),o=n("1691");t.exports=Object.keys||function(t){return r(t,o)}},c5f6:function(t,e,n){"use strict";var r=n("7726"),o=n("69a8"),i=n("2d95"),u=n("5dbc"),c=n("6a99"),f=n("79e5"),a=n("9093").f,s=n("11e9").f,p=n("86cc").f,l=n("aa77").trim,d="Number",v=r[d],h=v,y=v.prototype,b=i(n("2aeb")(y))==d,m="trim"in String.prototype,g=function(t){var e=c(t,!1);if("string"==typeof e&&e.length>2){e=m?e.trim():l(e,3);var n,r,o,i=e.charCodeAt(0);if(43===i||45===i){if(n=e.charCodeAt(2),88===n||120===n)return NaN}else if(48===i){switch(e.charCodeAt(1)){case 66:case 98:r=2,o=49;break;case 79:case 111:r=8,o=55;break;default:return+e}for(var u,f=e.slice(2),a=0,s=f.length;a<s;a++)if(u=f.charCodeAt(a),u<48||u>o)return NaN;return parseInt(f,r)}}return+e};if(!v(" 0o1")||!v("0b1")||v("+0x1")){v=function(t){var e=arguments.length<1?0:t,n=this;return n instanceof v&&(b?f(function(){y.valueOf.call(n)}):i(n)!=d)?u(new h(g(e)),n,v):g(e)};for(var x,w=n("9e1e")?a(h):"MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger".split(","),O=0;w.length>O;O++)o(h,x=w[O])&&!o(v,x)&&p(v,x,s(h,x));v.prototype=y,y.constructor=v,n("2aba")(r,d,v)}},c69a:function(t,e,n){t.exports=!n("9e1e")&&!n("79e5")(function(){return 7!=Object.defineProperty(n("230e")("div"),"a",{get:function(){return 7}}).a})},ca5a:function(t,e){var n=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+r).toString(36))}},cb7c:function(t,e,n){var r=n("d3f4");t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},ccb9:function(t,e,n){e.f=n("5168")},ce10:function(t,e,n){var r=n("69a8"),o=n("6821"),i=n("c366")(!1),u=n("613b")("IE_PROTO");t.exports=function(t,e){var n,c=o(t),f=0,a=[];for(n in c)n!=u&&r(c,n)&&a.push(n);while(e.length>f)r(c,n=e[f++])&&(~i(a,n)||a.push(n));return a}},d3f4:function(t,e){t.exports=function(t){return"object"===typeof t?null!==t:"function"===typeof t}},d864:function(t,e,n){var r=n("79aa");t.exports=function(t,e,n){if(r(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n)};case 2:return function(n,r){return t.call(e,n,r)};case 3:return function(n,r,o){return t.call(e,n,r,o)}}return function(){return t.apply(e,arguments)}}},d8d6:function(t,e,n){n("1654"),n("6c1c"),t.exports=n("ccb9").f("iterator")},d8e8:function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},d9f6:function(t,e,n){var r=n("e4ae"),o=n("794b"),i=n("1bc3"),u=Object.defineProperty;e.f=n("8e60")?Object.defineProperty:function(t,e,n){if(r(t),e=i(e,!0),r(n),o)try{return u(t,e,n)}catch(c){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t}},dbdb:function(t,e,n){var r=n("584a"),o=n("e53d"),i="__core-js_shared__",u=o[i]||(o[i]={});(t.exports=function(t,e){return u[t]||(u[t]=void 0!==e?e:{})})("versions",[]).push({version:r.version,mode:n("b8e3")?"pure":"global",copyright:"© 2019 Denis Pushkarev (zloirock.ru)"})},e11e:function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},e4ae:function(t,e,n){var r=n("f772");t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},e53d:function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n)},e6f3:function(t,e,n){var r=n("07e3"),o=n("36c3"),i=n("5b4e")(!1),u=n("5559")("IE_PROTO");t.exports=function(t,e){var n,c=o(t),f=0,a=[];for(n in c)n!=u&&r(c,n)&&a.push(n);while(e.length>f)r(c,n=e[f++])&&(~i(a,n)||a.push(n));return a}},ebfd:function(t,e,n){var r=n("62a0")("meta"),o=n("f772"),i=n("07e3"),u=n("d9f6").f,c=0,f=Object.isExtensible||function(){return!0},a=!n("294c")(function(){return f(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++c,w:{}}})},p=function(t,e){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!f(t))return"F";if(!e)return"E";s(t)}return t[r].i},l=function(t,e){if(!i(t,r)){if(!f(t))return!0;if(!e)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&f(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:p,getWeak:l,onFreeze:d}},f6fd:function(t,e){(function(t){var e="currentScript",n=t.getElementsByTagName("script");e in t||Object.defineProperty(t,e,{get:function(){try{throw new Error}catch(r){var t,e=(/.*at [^\(]*\((.*):.+:.+\)$/gi.exec(r.stack)||[!1])[1];for(t in n)if(n[t].src==e||"interactive"==n[t].readyState)return n[t];return null}}})})(document)},f772:function(t,e){t.exports=function(t){return"object"===typeof t?null!==t:"function"===typeof t}},f921:function(t,e,n){n("014b"),n("c207"),n("69d3"),n("765d"),t.exports=n("584a").Symbol},fa5b:function(t,e,n){t.exports=n("5537")("native-function-to-string",Function.toString)},fab2:function(t,e,n){var r=n("7726").document;t.exports=r&&r.documentElement},fb15:function(t,e,n){"use strict";var r;(n.r(e),"undefined"!==typeof window)&&(n("f6fd"),(r=window.document.currentScript)&&(r=r.src.match(/(.+\/)[^/]+\.js(\?.*)?$/))&&(n.p=r[1]));var o=function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"dropdown",class:{dropup:t.top},on:{mouseleave:t.mouseLeave,mouseover:t.mouseOver,mouseenter:t.mouseEnter,click:t.toggleMenu}},[t._t("default"),n("transition",{attrs:{name:t.transition}},[n("div",{directives:[{name:"show",rawName:"v-show",value:t.value,expression:"value"}],ref:"dropdown",staticClass:"dropdown-menu show",class:{"dropdown-menu-right":t.right},style:t.styles,on:{mouseleave:t.startTimer,mouseenter:t.stopTimer,click:function(t){t.stopPropagation()}}},[t._t("dropdown")],2)])],2)},i=[],u=n("5d58"),c=n.n(u),f=n("67bb"),a=n.n(f);function s(t){return s="function"===typeof a.a&&"symbol"===typeof c.a?function(t){return typeof t}:function(t){return t&&"function"===typeof a.a&&t.constructor===a.a&&t!==a.a.prototype?"symbol":typeof t},s(t)}function p(t){return p="function"===typeof a.a&&"symbol"===s(c.a)?function(t){return s(t)}:function(t){return t&&"function"===typeof a.a&&t.constructor===a.a&&t!==a.a.prototype?"symbol":s(t)},p(t)}n("c5f6");var l={props:{value:Boolean,right:Boolean,hover:Boolean,hover_time:{type:Number,default:100},hover_timeout:{type:Number,default:500},styles:{type:Object,default:function(){return{}}},interactive:{type:Boolean,default:!1},transition:{type:String,default:""},closeOnClickOutside:{type:Boolean,default:!0}},data:function(){return{hovering:!1,top:!1}},destroyed:function(){document.body.removeEventListener("click",this.closeMenu)},methods:{mouseEnter:function(){var t=this;this.stopTimer(),this.hover&&this.hover_time>0&&!this.value&&(this.hoverOpenTimer=setTimeout(function(){t.$emit("input",!0),t.hovering=!0,setTimeout(function(){t.hovering=!1},t.hover_timeout)},this.hover_time)),this.hover&&!this.value&&0===this.hover_time&&(this.hovering=!0,setTimeout(function(){t.hovering=!1},this.hover_timeout),this.$emit("input",!0))},mouseLeave:function(){this.hoverTimer||this.startTimer(),this.hover_time>0&&this.hover&&clearTimeout(this.hoverOpenTimer)},mouseOver:function(){this.stopTimer()},closeMenu:function(t){t&&this.$el.contains(t.target)||this.value&&this.closeOnClickOutside&&this.$emit("input",!1)},toggleMenu:function(){this.hovering||this.value&&this.hover||this.$emit("input",!this.value)},stopTimer:function(){clearTimeout(this.hoverTimer),this.hoverTimer=null},startTimer:function(){this.interactive||(this.hoverTimer=setTimeout(this.closeMenu,this.hover_timeout))}},watch:{value:function(t){var e=this;if(t){var n=this;this.top=!1,this.$nextTick(function(){var t=n.$refs.dropdown.getBoundingClientRect(),r=window.innerHeight||document.documentElement.clientHeight;e.top=t.bottom>r&&t.top>=t.height})}},interactive:{handler:function(t){"object"===("undefined"===typeof document?"undefined":p(document))&&(t?document.body.addEventListener("click",this.closeMenu):document.body.removeEventListener("click",this.closeMenu))},immediate:!0}}},d=l;function v(t,e,n,r,o,i,u,c){var f,a="function"===typeof t?t.options:t;if(e&&(a.render=e,a.staticRenderFns=n,a._compiled=!0),r&&(a.functional=!0),i&&(a._scopeId="data-v-"+i),u?(f=function(t){t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,t||"undefined"===typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),o&&o.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(u)},a._ssrRegister=f):o&&(f=c?function(){o.call(this,this.$root.$options.shadowRoot)}:o),f)if(a.functional){a._injectStyles=f;var s=a.render;a.render=function(t,e){return f.call(e),s(t,e)}}else{var p=a.beforeCreate;a.beforeCreate=p?[].concat(p,f):[f]}return{exports:t,options:a}}var h=v(d,o,i,!1,null,null,null),y=h.exports,b=function(t){t.component("DropdownMenu",y)};"undefined"!==typeof window&&window.Vue&&b(window.Vue);e["default"]=y},fdef:function(t,e){t.exports="\t\n\v\f\r   ᠎             　\u2028\u2029\ufeff"}})});
-//# sourceMappingURL=vue-dropdown-menu.umd.min.js.map
-
-/***/ }),
-
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27,9 +16,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_admin_default_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scss_admin_default_scss__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _paypal_subscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../paypal/subscriber */ "./admin/paypal/subscriber/index.js");
 /* harmony import */ var _paypal_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../paypal/actions */ "./admin/paypal/actions/index.js");
-/* harmony import */ var _related_id_column__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./related-id-column */ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/index.js");
-/* harmony import */ var _gross__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gross */ "./admin/pages/jfb-paypal-recurring-payments/gross/index.js");
-//
+/* harmony import */ var _related_id_column__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./related-id-column */ "./admin/pages/jfb-paypal-payments/related-id-column/index.js");
+/* harmony import */ var _gross__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gross */ "./admin/pages/jfb-paypal-payments/gross/index.js");
 //
 //
 //
@@ -118,7 +106,7 @@ var _window$JetFBComponen = window.JetFBComponents,
 var columnsComponents = applyFilters('jet.fb.register.paypal.recurring-payments.columns', [_paypal_subscriber__WEBPACK_IMPORTED_MODULE_1__, _paypal_actions__WEBPACK_IMPORTED_MODULE_2__, _related_id_column__WEBPACK_IMPORTED_MODULE_3__, _gross__WEBPACK_IMPORTED_MODULE_4__]);
 window.jfbEventBus = window.jfbEventBus || new Vue();
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'jfb-paypal-recurring-payments',
+  name: 'jfb-paypal-payments',
   components: {
     DetailsTableWithStore: DetailsTableWithStore,
     EntriesTable: EntriesTable
@@ -145,9 +133,9 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
         _this$getIncoming$act = _this$getIncoming.actions,
         actions = _this$getIncoming$act === void 0 ? {} : _this$getIncoming$act;
 
-    this.list = JSON.parse(JSON.stringify(list));
     this.actions = JSON.parse(JSON.stringify(actions));
     this.$store.commit('setColumns', JSON.parse(JSON.stringify(columns)));
+    this.$store.commit('setList', JSON.parse(JSON.stringify(list)));
     jfbEventBus.$on('click-refund', this.openPopup.bind(this));
     jfbEventBus.$on('click-view_subscription', this.viewSubscription.bind(this));
   },
@@ -205,10 +193,10 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -228,7 +216,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {},
   computed: {
     type: function type() {
-      return this.fullEntry.type.value;
+      return this.fullEntry.type.value || 'sale';
     },
     wrapClasses: function wrapClasses() {
       return _defineProperty({
@@ -240,10 +228,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -251,6 +239,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -292,9 +281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _innologica_vue_dropdown_menu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @innologica/vue-dropdown-menu */ "../node_modules/@innologica/vue-dropdown-menu/dist/vue-dropdown-menu.umd.min.js");
-/* harmony import */ var _innologica_vue_dropdown_menu__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_innologica_vue_dropdown_menu__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ParseIncomingValueMixin */ "./admin/paypal/ParseIncomingValueMixin.js");
+/* harmony import */ var _ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ParseIncomingValueMixin */ "./admin/paypal/ParseIncomingValueMixin.js");
 //
 //
 //
@@ -309,34 +296,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'actions--item',
   props: ['value', 'full-entry', 'conditions'],
-  components: {
-    DropdownMenu: (_innologica_vue_dropdown_menu__WEBPACK_IMPORTED_MODULE_0___default())
-  },
-  mixins: [_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  components: {},
+  mixins: [_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
       showDropdown: false
@@ -380,10 +346,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/gross/index.js":
-/*!******************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/gross/index.js ***!
-  \******************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/gross/index.js":
+/*!********************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/gross/index.js ***!
+  \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -391,17 +357,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "item": () => (/* binding */ item)
 /* harmony export */ });
-/* harmony import */ var _GrossColumn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GrossColumn */ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue");
+/* harmony import */ var _GrossColumn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GrossColumn */ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue");
 
 var item = _GrossColumn__WEBPACK_IMPORTED_MODULE_0__["default"];
 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/index.js":
-/*!******************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/related-id-column/index.js ***!
-  \******************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/related-id-column/index.js":
+/*!********************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/related-id-column/index.js ***!
+  \********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -409,7 +375,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "item": () => (/* binding */ item)
 /* harmony export */ });
-/* harmony import */ var _RelatedIdColumn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RelatedIdColumn */ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue");
+/* harmony import */ var _RelatedIdColumn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RelatedIdColumn */ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue");
 
 var item = _RelatedIdColumn__WEBPACK_IMPORTED_MODULE_0__["default"];
 
@@ -435,6 +401,137 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./admin/paypal/StoreHelper.js":
+/*!*************************************!*\
+  !*** ./admin/paypal/StoreHelper.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getActions": () => (/* binding */ getActions),
+/* harmony export */   "getMutations": () => (/* binding */ getMutations),
+/* harmony export */   "getGetters": () => (/* binding */ getGetters),
+/* harmony export */   "getBaseState": () => (/* binding */ getBaseState)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _window$JetFBActions = window.JetFBActions,
+    getSearch = _window$JetFBActions.getSearch,
+    createPath = _window$JetFBActions.createPath,
+    addQueryArgs = _window$JetFBActions.addQueryArgs;
+var _wp = wp,
+    apiFetch = _wp.apiFetch;
+window.jfbEventBus = window.jfbEventBus || new Vue();
+function getActions() {
+  return {
+    setQueriedPage: function setQueriedPage(_ref, pageNum) {
+      var commit = _ref.commit,
+          getters = _ref.getters,
+          state = _ref.state;
+      var offset = getOffset(+pageNum, state.queryState.limit);
+      commit('setQueryState', {
+        currentPage: +pageNum,
+        itemsFrom: offset + 1,
+        itemsTo: offset + state.queryState.limit
+      });
+    },
+    fetchPage: function fetchPage(_ref2, endpoint) {
+      var commit = _ref2.commit,
+          getters = _ref2.getters,
+          dispatch = _ref2.dispatch,
+          state = _ref2.state;
+      var _state$queryState = state.queryState,
+          limit = _state$queryState.limit,
+          sort = _state$queryState.sort,
+          page = _state$queryState.currentPage;
+
+      var options = _objectSpread(_objectSpread({}, endpoint), {}, {
+        url: addQueryArgs({
+          limit: limit,
+          sort: sort,
+          page: page
+        }, endpoint.url)
+      });
+
+      commit('toggleLoadingPage');
+      dispatch('fetch', options).then(function (response) {
+        commit('setList', response.list);
+        dispatch('setQueriedPage', page);
+      }).finally(function () {
+        commit('toggleLoadingPage');
+      });
+    },
+    fetch: function fetch(_ref3, options) {
+      var commit = _ref3.commit,
+          getters = _ref3.getters;
+      return new Promise(function (resolve, reject) {
+        apiFetch(options).then(function (response) {
+          resolve(response);
+        }).catch(function (error) {
+          jfbEventBus.$CXNotice.add({
+            message: error.message,
+            type: 'error',
+            duration: 4000
+          });
+          reject(error);
+        }).finally(reject);
+      });
+    }
+  };
+}
+function getMutations() {
+  return {
+    setList: function setList(state, list) {
+      state.currentList = list;
+    },
+    setQueryState: function setQueryState(state, newState) {
+      state.queryState = _objectSpread(_objectSpread({}, state.queryState), newState);
+    },
+    setColumns: function setColumns(state, columns) {
+      state.columns = columns;
+    },
+    toggleLoadingPage: function toggleLoadingPage(state) {
+      state.loadingPage = !state.loadingPage;
+    }
+  };
+}
+
+var getOffset = function getOffset(page, limit) {
+  return 1 !== page ? (page - 1) * limit : 0;
+};
+
+function getGetters() {
+  return {
+    offset: function offset(state) {
+      return getOffset(state.queryState.currentPage, state.queryState.limit);
+    }
+  };
+}
+function getBaseState() {
+  return {
+    columns: {},
+    currentList: [],
+    loadingPage: false,
+    queryState: {
+      currentPage: 1,
+      extreme_id: 0,
+      limit: 25,
+      sort: 'DESC',
+      total: 0,
+      itemsFrom: 0,
+      itemsTo: 0
+    }
+  };
+}
 
 /***/ }),
 
@@ -501,10 +598,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page p.fb-descriptio
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -521,17 +618,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--date {\n  width: 150px;\n}\n.cx-vue-list-table .cell--related_id {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--subscriber {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n  text-align: center;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue","webpack://./../RecurringPayments.vue"],"names":[],"mappings":"AAkLA;EACC,aAAA;ACjLD;ADmLC;EACC,OAAA;ACjLF;ADoLC;EACC,OAAA;EACA,kBAAA;AClLF;ADwLC;EACC,8BAAA;ACrLF;ADwLC;EACC,8BAAA;ACtLF;ADuLE;EACC,mBAAA;EACA,gBAAA;ACrLH;ADyLC;EACC,YAAA;ACvLF;AD0LC;EACC,YAAA;ACxLF;AD2LC;EACC,YAAA;ACzLF;AD4LC;EACC,YAAA;AC1LF;AD6LC;EACC,YAAA;EACA,kBAAA;AC3LF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-popup-grid {\r\n\tdisplay: flex;\r\n\r\n\t&-column:first-child {\r\n\t\tflex: 3;\r\n\t}\r\n\r\n\t&-column:not(:first-child) {\r\n\t\tflex: 1;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\r\n\t.list-table-heading {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tjustify-content: space-between;\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t}\r\n\t}\r\n\r\n\t.cell--date {\r\n\t\twidth: 150px;\r\n\t}\r\n\r\n\t.cell--related_id {\r\n\t\twidth: 200px;\r\n\t}\r\n\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t}\r\n\r\n\t.cell--subscriber {\r\n\t\twidth: 220px;\r\n\t}\r\n\r\n\t.cell--gross {\r\n\t\twidth: 130px;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n",".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--date {\n  width: 150px;\n}\n.cx-vue-list-table .cell--related_id {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--subscriber {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n  text-align: center;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--related_id {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--subscriber {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n  text-align: center;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-payments/RecurringPayments.vue","webpack://./../RecurringPayments.vue"],"names":[],"mappings":"AAiLA;EACC,aAAA;AChLD;ADiLC;EACC,OAAA;AC/KF;ADiLC;EACC,OAAA;EACA,kBAAA;AC/KF;ADoLC;EACC,8BAAA;ACjLF;ADmLC;EACC,8BAAA;ACjLF;ADkLE;EACC,mBAAA;EACA,gBAAA;AChLH;ADmLC;EACC,YAAA;ACjLF;ADmLC;EACC,YAAA;ACjLF;ADmLC;EACC,YAAA;ACjLF;ADmLC;EACC,YAAA;ACjLF;ADmLC;EACC,YAAA;EACA,kBAAA;ACjLF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-popup-grid {\r\n\tdisplay: flex;\r\n\t&-column:first-child {\r\n\t\tflex: 3;\r\n\t}\r\n\t&-column:not(:first-child) {\r\n\t\tflex: 1;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tjustify-content: space-between;\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t}\r\n\t}\r\n\t.cell--date {\r\n\t\twidth: 200px;\r\n\t}\r\n\t.cell--related_id {\r\n\t\twidth: 200px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--subscriber {\r\n\t\twidth: 220px;\r\n\t}\r\n\t.cell--gross {\r\n\t\twidth: 130px;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n",".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n\n.cx-vue-list-table .list-table-heading {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n}\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--related_id {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--subscriber {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n  text-align: center;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -548,17 +645,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button__content {\n  padding: 0.4em;\n}\n.jfb-gross {\n  padding: 0.3em;\n  font-weight: 600;\n}\n.jfb-gross-sale {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-gross-refund {\n  background-color: rgba(245, 154, 136, 0.4);\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue","webpack://./../GrossColumn.vue"],"names":[],"mappings":"AAyBA;EACC,cAAA;ACxBD;AD2BA;EACC,cAAA;EACA,gBAAA;ACxBD;AD0BC;EACC,0CAAA;ACxBF;AD2BC;EACC,0CAAA;ACzBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-button__content {\r\n\tpadding: 0.4em;\r\n}\r\n\r\n.jfb-gross {\r\n\tpadding: 0.3em;\r\n\tfont-weight: 600;\r\n\r\n\t&-sale {\r\n\t\tbackground-color: rgb(165 241 190 / 40%);\r\n\t}\r\n\r\n\t&-refund {\r\n\t\tbackground-color: rgb(245 154 136 / 40%);\r\n\t}\r\n}\r\n\r\n",".cx-vui-button__content {\n  padding: 0.4em;\n}\n\n.jfb-gross {\n  padding: 0.3em;\n  font-weight: 600;\n}\n.jfb-gross-sale {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-gross-refund {\n  background-color: rgba(245, 154, 136, 0.4);\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button__content {\n  padding: 0.4em;\n}\n.jfb-gross {\n  padding: 0.3em;\n  font-weight: 600;\n}\n.jfb-gross-sale {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-gross-refund {\n  background-color: rgba(245, 154, 136, 0.4);\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue","webpack://./../GrossColumn.vue"],"names":[],"mappings":"AAyBA;EACC,cAAA;ACxBD;AD2BA;EACC,cAAA;EACA,gBAAA;ACxBD;AD0BC;EACC,0CAAA;ACxBF;AD2BC;EACC,0CAAA;ACzBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-button__content {\r\n\tpadding: 0.4em;\r\n}\r\n\r\n.jfb-gross {\r\n\tpadding: 0.3em;\r\n\tfont-weight: 600;\r\n\r\n\t&-sale {\r\n\t\tbackground-color: rgb(165 241 190 / 40%);\r\n\t}\r\n\r\n\t&-refund {\r\n\t\tbackground-color: rgb(245 154 136 / 40%);\r\n\t}\r\n}\r\n\r\n",".cx-vui-button__content {\n  padding: 0.4em;\n}\n\n.jfb-gross {\n  padding: 0.3em;\n  font-weight: 600;\n}\n.jfb-gross-sale {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-gross-refund {\n  background-color: rgba(245, 154, 136, 0.4);\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -575,7 +672,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button__content {\n  padding: 0.4em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue","webpack://./../RelatedIdColumn.vue"],"names":[],"mappings":"AAkCA;EACC,cAAA;ACjCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-button__content {\r\n\tpadding: 0.4em;\r\n}\r\n\r\n",".cx-vui-button__content {\n  padding: 0.4em;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button__content {\n  padding: 0.4em;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue","webpack://./../RelatedIdColumn.vue"],"names":[],"mappings":"AAmCA;EACC,cAAA;AClCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-button__content {\r\n\tpadding: 0.4em;\r\n}\r\n\r\n",".cx-vui-button__content {\n  padding: 0.4em;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -602,7 +699,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-button--size-mini {\n  padding: 0 0.4em 0 1em;\n}\n.jfb-dropdown {\n  position: absolute;\n  display: flex;\n  padding: 0.6em 0;\n  background-color: aliceblue;\n  flex-direction: column;\n  border-radius: 4px;\n  font-size: 1.2em;\n  border: 1px solid #ccc;\n  z-index: 1;\n  transform: translate(-100px, 5px);\n}\n.jfb-dropdown-item {\n  display: block;\n  padding: 0.5em 0.3em;\n  text-decoration: none;\n}\n.jfb-dropdown-item:hover {\n  background-color: #FFFFFF;\n}\n.jfb-dropdown-item:not(:first-child) {\n  border-top: 1px solid #f5f5f5;\n}", "",{"version":3,"sources":["webpack://./admin/paypal/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AAiEA;EACC,sBAAA;AChED;ADmEA;EACC,kBAAA;EACA,aAAA;EACA,gBAAA;EACA,2BAAA;EACA,sBAAA;EACA,kBAAA;EACA,gBAAA;EACA,sBAAA;EACA,UAAA;EACA,iCAAA;AChED;ADkEC;EACC,cAAA;EACA,oBAAA;EACA,qBAAA;AChEF;ADkEE;EACC,yBAAA;AChEH;ADmEE;EACC,6BAAA;ACjEH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-button--size-mini {\r\n\tpadding: 0 0.4em 0 1em;\r\n}\r\n\r\n.jfb-dropdown {\r\n\tposition: absolute;\r\n\tdisplay: flex;\r\n\tpadding: 0.6em 0;\r\n\tbackground-color: aliceblue;\r\n\tflex-direction: column;\r\n\tborder-radius: 4px;\r\n\tfont-size: 1.2em;\r\n\tborder: 1px solid #ccc;\r\n\tz-index: 1;\r\n\ttransform: translate(-100px, 5px);\r\n\r\n\t&-item {\r\n\t\tdisplay: block;\r\n\t\tpadding: 0.5em 0.3em;\r\n\t\ttext-decoration: none;\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #FFFFFF;\r\n\t\t}\r\n\r\n\t\t&:not(:first-child) {\r\n\t\t\tborder-top: 1px solid #f5f5f5;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".cx-vui-button--size-mini {\n  padding: 0 0.4em 0 1em;\n}\n\n.jfb-dropdown {\n  position: absolute;\n  display: flex;\n  padding: 0.6em 0;\n  background-color: aliceblue;\n  flex-direction: column;\n  border-radius: 4px;\n  font-size: 1.2em;\n  border: 1px solid #ccc;\n  z-index: 1;\n  transform: translate(-100px, 5px);\n}\n.jfb-dropdown-item {\n  display: block;\n  padding: 0.5em 0.3em;\n  text-decoration: none;\n}\n.jfb-dropdown-item:hover {\n  background-color: #FFFFFF;\n}\n.jfb-dropdown-item:not(:first-child) {\n  border-top: 1px solid #f5f5f5;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-actions {\n  display: flex;\n  flex-direction: column;\n  row-gap: 10px;\n}\n.jfb-actions a.jfb-dropdown-item {\n  padding: 0.5em 0;\n  text-decoration: none;\n}\n.jfb-actions a.jfb-dropdown-item:hover {\n  text-decoration: underline;\n}\n.jfb-actions a.jfb-dropdown-item:not(:first-child) {\n  border-top: 1px solid #cccccc;\n}", "",{"version":3,"sources":["webpack://./admin/paypal/actions/ActionsItem.vue","webpack://./../ActionsItem.vue"],"names":[],"mappings":"AA8CA;EACC,aAAA;EACA,sBAAA;EACA,aAAA;AC7CD;AD8CC;EACC,gBAAA;EACA,qBAAA;AC5CF;AD6CE;EACC,0BAAA;AC3CH;AD8CC;EACC,6BAAA;AC5CF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-actions {\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\trow-gap: 10px;\r\n\ta.jfb-dropdown-item {\r\n\t\tpadding: 0.5em 0;\r\n\t\ttext-decoration: none;\r\n\t\t&:hover {\r\n\t\t\ttext-decoration: underline;\r\n\t\t}\r\n\t}\r\n\ta.jfb-dropdown-item:not(:first-child) {\r\n\t\tborder-top: 1px solid #cccccc;\r\n\t}\r\n}\r\n\r\n\r\n",".jfb-actions {\n  display: flex;\n  flex-direction: column;\n  row-gap: 10px;\n}\n.jfb-actions a.jfb-dropdown-item {\n  padding: 0.5em 0;\n  text-decoration: none;\n}\n.jfb-actions a.jfb-dropdown-item:hover {\n  text-decoration: underline;\n}\n.jfb-actions a.jfb-dropdown-item:not(:first-child) {\n  border-top: 1px solid #cccccc;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -731,10 +828,10 @@ module.exports = function cssWithMappingToString(item) {
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue":
-/*!*************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue ***!
-  \*************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue":
+/*!***************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/RecurringPayments.vue ***!
+  \***************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -742,9 +839,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=template&id=12f6b262& */ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262&");
-/* harmony import */ var _RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js&");
-/* harmony import */ var _RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=template&id=67b3801c& */ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c&");
+/* harmony import */ var _RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js&");
+/* harmony import */ var _RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -756,8 +853,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__.render,
-  _RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__.render,
+  _RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -767,15 +864,15 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue"
+component.options.__file = "admin/pages/jfb-paypal-payments/RecurringPayments.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue":
-/*!*************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue ***!
-  \*************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue":
+/*!***************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue ***!
+  \***************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -783,9 +880,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=template&id=9dbf8bb2& */ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2&");
-/* harmony import */ var _GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js&");
-/* harmony import */ var _GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=template&id=6a4fc7b7& */ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7&");
+/* harmony import */ var _GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js&");
+/* harmony import */ var _GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -797,8 +894,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__.render,
-  _GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__.render,
+  _GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -808,15 +905,15 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue"
+component.options.__file = "admin/pages/jfb-paypal-payments/gross/GrossColumn.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue":
-/*!*****************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue ***!
-  \*****************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue":
+/*!*******************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue ***!
+  \*******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -824,9 +921,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=template&id=3d14fb6b& */ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b&");
-/* harmony import */ var _RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&");
-/* harmony import */ var _RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=template&id=b1d12e0a& */ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a&");
+/* harmony import */ var _RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&");
+/* harmony import */ var _RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -838,8 +935,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__.render,
-  _RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -849,7 +946,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue"
+component.options.__file = "admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -934,10 +1031,10 @@ component.options.__file = "admin/paypal/subscriber/SubscriberInfo.vue"
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -945,15 +1042,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -961,15 +1058,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -977,7 +1074,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
@@ -1014,53 +1111,53 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262&":
-/*!********************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262& ***!
-  \********************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c&":
+/*!**********************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c& ***!
+  \**********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_12f6b262___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=template&id=12f6b262& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_template_id_67b3801c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=template&id=67b3801c& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c&");
 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2&":
-/*!********************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2& ***!
-  \********************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7&":
+/*!**********************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7& ***!
+  \**********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_9dbf8bb2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=template&id=9dbf8bb2& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_template_id_6a4fc7b7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=template&id=6a4fc7b7& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7&");
 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b&":
-/*!************************************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b& ***!
-  \************************************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a&":
+/*!**************************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a& ***!
+  \**************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_3d14fb6b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=template&id=3d14fb6b& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_template_id_b1d12e0a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=template&id=b1d12e0a& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a&");
 
 
 /***/ }),
@@ -1099,15 +1196,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
-/*!***********************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
-  \***********************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
+/*!*************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
+  \*************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RecurringPayments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
@@ -1116,15 +1213,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!***********************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \***********************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!*************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \*************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_GrossColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
@@ -1133,15 +1230,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!***************************************************************************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \***************************************************************************************************************************/
+/***/ "./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_RelatedIdColumn_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
@@ -1167,10 +1264,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262&":
-/*!*************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=template&id=12f6b262& ***!
-  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c&":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=template&id=67b3801c& ***!
+  \***************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1206,7 +1303,6 @@ var render = function () {
       _vm._v(" "),
       _c("EntriesTable", {
         attrs: {
-          "entries-list": _vm.list,
           columns: _vm.columnsFromStore,
           "columns-components": _vm.columnsComponents,
         },
@@ -1361,10 +1457,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2&":
-/*!*************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=template&id=9dbf8bb2& ***!
-  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7&":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=template&id=6a4fc7b7& ***!
+  \***************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1386,10 +1482,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b&":
-/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=3d14fb6b& ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a&":
+/*!*******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=template&id=b1d12e0a& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1402,19 +1498,26 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("cx-vui-button", {
-    attrs: { "button-style": "accent-border", size: "link" },
-    on: { click: _vm.viewSubscription },
-    scopedSlots: _vm._u([
-      {
-        key: "label",
-        fn: function () {
-          return [_vm._v(_vm._s(_vm.value))]
-        },
-        proxy: true,
-      },
-    ]),
-  })
+  return _vm.value
+    ? _c("cx-vui-button", {
+        attrs: { "button-style": "accent-border", size: "link" },
+        on: { click: _vm.viewSubscription },
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "label",
+              fn: function () {
+                return [_vm._v(_vm._s(_vm.value))]
+              },
+              proxy: true,
+            },
+          ],
+          null,
+          false,
+          3125897533
+        ),
+      })
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -1440,65 +1543,25 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "DropdownMenu",
-    {
-      attrs: { interactive: true, right: false },
-      scopedSlots: _vm._u([
+    "div",
+    { staticClass: "jfb-actions" },
+    _vm._l(_vm.parsedJson, function (action, actionID) {
+      return _c(
+        "a",
         {
-          key: "dropdown",
-          fn: function () {
-            return [
-              _c(
-                "div",
-                { staticClass: "jfb-dropdown" },
-                _vm._l(_vm.parsedJson, function (action, actionID) {
-                  return _c(
-                    "a",
-                    {
-                      key: actionID,
-                      staticClass: "jfb-dropdown-item",
-                      attrs: { href: "javascript:void(0)" },
-                      on: {
-                        click: function ($event) {
-                          return _vm.run(actionID)
-                        },
-                      },
-                    },
-                    [_vm._v("\n\t\t\t\t" + _vm._s(action.label) + "\n\t\t\t")]
-                  )
-                }),
-                0
-              ),
-            ]
-          },
-          proxy: true,
-        },
-      ]),
-      model: {
-        value: _vm.showDropdown,
-        callback: function ($$v) {
-          _vm.showDropdown = $$v
-        },
-        expression: "showDropdown",
-      },
-    },
-    [
-      _c("cx-vui-button", {
-        attrs: { "button-style": "link", size: "mini" },
-        scopedSlots: _vm._u([
-          {
-            key: "label",
-            fn: function () {
-              return [
-                _c("span", { staticClass: "dashicons dashicons-ellipsis" }),
-              ]
+          key: actionID,
+          staticClass: "jfb-dropdown-item",
+          attrs: { href: "javascript:void(0)" },
+          on: {
+            click: function ($event) {
+              return _vm.run(actionID)
             },
-            proxy: true,
           },
-        ]),
-      }),
-    ],
-    1
+        },
+        [_vm._v("\n\t\t" + _vm._s(action.label) + "\n\t")]
+      )
+    }),
+    0
   )
 }
 var staticRenderFns = []
@@ -1671,64 +1734,64 @@ if(false) {}
 
 /***/ }),
 
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RecurringPayments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/RecurringPayments.vue?vue&type=style&index=0&lang=scss&");
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("017148c6", content, false, {});
+var update = add("70d2c356", content, false, {});
 // Hot Module Replacement
 if(false) {}
 
 /***/ }),
 
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
+var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GrossColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/gross/GrossColumn.vue?vue&type=style&index=0&lang=scss&");
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("021bd8b2", content, false, {});
+var update = add("525b8137", content, false, {});
 // Hot Module Replacement
 if(false) {}
 
 /***/ }),
 
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-recurring-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
+var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./RelatedIdColumn.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-paypal-payments/related-id-column/RelatedIdColumn.vue?vue&type=style&index=0&lang=scss&");
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("3636fc66", content, false, {});
+var update = add("a971bc46", content, false, {});
 // Hot Module Replacement
 if(false) {}
 
@@ -2055,7 +2118,7 @@ function listToStyles (parentId, list) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -2107,29 +2170,45 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!************************************************************!*\
-  !*** ./admin/pages/jfb-paypal-recurring-payments/index.js ***!
-  \************************************************************/
+/*!**************************************************!*\
+  !*** ./admin/pages/jfb-paypal-payments/index.js ***!
+  \**************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _RecurringPayments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RecurringPayments */ "./admin/pages/jfb-paypal-recurring-payments/RecurringPayments.vue");
+/* harmony import */ var _RecurringPayments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RecurringPayments */ "./admin/pages/jfb-paypal-payments/RecurringPayments.vue");
+/* harmony import */ var _paypal_StoreHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../paypal/StoreHelper */ "./admin/paypal/StoreHelper.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 Vue.use(Vuex);
+var _window$JetFBActions = window.JetFBActions,
+    getSearch = _window$JetFBActions.getSearch,
+    createPath = _window$JetFBActions.createPath,
+    addQueryArgs = _window$JetFBActions.addQueryArgs;
+var _wp = wp,
+    apiFetch = _wp.apiFetch;
+window.jfbEventBus = window.jfbEventBus || new Vue();
 var options = {
   store: new Vuex.Store({
-    state: {
-      columns: {}
-    },
-    getters: {
+    state: _objectSpread({}, (0,_paypal_StoreHelper__WEBPACK_IMPORTED_MODULE_1__.getBaseState)()),
+    getters: _objectSpread(_objectSpread({}, (0,_paypal_StoreHelper__WEBPACK_IMPORTED_MODULE_1__.getGetters)()), {}, {
       getColumns: function getColumns(state) {
         return state.columns;
       }
-    },
-    mutations: {
+    }),
+    mutations: _objectSpread(_objectSpread({}, (0,_paypal_StoreHelper__WEBPACK_IMPORTED_MODULE_1__.getMutations)()), {}, {
       setColumns: function setColumns(state, columns) {
         state.columns = columns;
+      },
+      setList: function setList(state, list) {
+        state.currentList = list;
       }
-    },
-    actions: {}
+    }),
+    actions: _objectSpread({}, (0,_paypal_StoreHelper__WEBPACK_IMPORTED_MODULE_1__.getActions)())
   })
 };
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
@@ -2138,4 +2217,4 @@ renderCurrentPage(_RecurringPayments__WEBPACK_IMPORTED_MODULE_0__["default"], op
 
 /******/ })()
 ;
-//# sourceMappingURL=jfb-paypal-recurring-payments.js.map
+//# sourceMappingURL=jfb-paypal-payments.js.map

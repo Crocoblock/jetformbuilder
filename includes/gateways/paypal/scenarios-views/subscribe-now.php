@@ -21,7 +21,7 @@ class Subscribe_Now extends Scenario_View_Base {
 		try {
 			return Paypal\Prepared_Views::get_subscriptions_raw(
 				array(
-					'limit' => 5,
+					'limit' => 10,
 				)
 			);
 		} catch ( Query_Builder_Exception $exception ) {

@@ -21,8 +21,7 @@ class Refund_Captured_Payment extends Base_Action {
 
 	public function action_headers() {
 		return array(
-			'PayPal-Auth-Assertion' => $this->auth_assertion,
-			'Content-Type'          => 'application/json',
+			'Content-Type' => 'application/json',
 		);
 	}
 

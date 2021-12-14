@@ -17,6 +17,21 @@ class Subscribe_Now extends Scenario_View_Base {
 		return _x( 'Create a subscription', 'Paypal gateway editor data', 'jet-form-builder' );
 	}
 
+	public function default_statuses(): array {
+		return array(
+			'APPROVAL_PENDING',
+			'APPROVED',
+			'ACTIVE',
+			'SUSPENDED',
+			'CANCELLED',
+			'EXPIRED'
+		);
+	}
+
+	public function is_custom_status( string $status ) {
+		return ( ! in_array( $status, $this->default_statuses(), true ) );
+	}
+
 	public function get_list(): array {
 		try {
 			return Paypal\Prepared_Views::get_subscriptions_raw(
@@ -81,7 +96,7 @@ class Subscribe_Now extends Scenario_View_Base {
 					'desc'    => __( 'The reason for the cancellation of a subscription.', 'jet-form-builder' ),
 					'default' => 'Not satisfied with the service.',
 				),
-				'must_have_statuses' => array( 'ACTIVE' ),
+				'must_have_statuses' => array( 'ACTIVE', 'REFUNDED' ),
 			),
 			'suspend' => array(
 				'label'              => __( 'Suspend subscription', 'jet-form-builder' ),
@@ -91,7 +106,7 @@ class Subscribe_Now extends Scenario_View_Base {
 					'desc'    => __( 'The reason for suspenson of the subscription.', 'jet-form-builder' ),
 					'default' => 'Item out of stock.',
 				),
-				'must_have_statuses' => array( 'ACTIVE' ),
+				'must_have_statuses' => array( 'ACTIVE', 'REFUNDED' ),
 			),
 		);
 	}
@@ -161,7 +176,11 @@ class Subscribe_Now extends Scenario_View_Base {
 			'notes'              => array(
 				'value' => 'Undefined', // should be loaded on the client side by rest api
 			),
-			'_ROW_ID'            => array()
+			'_ROW_ID'            => array(),
+			self::COLUMN_ACTIONS => array(
+				'value' => array( $this, 'get_actions' ),
+				'type'  => 'rawArray',
+			),
 		);
 	}
 
@@ -259,7 +278,8 @@ class Subscribe_Now extends Scenario_View_Base {
 				'show_in_table' => false,
 			),
 			self::COLUMN_ACTIONS => array(
-				'label' => __( 'Actions', 'jet-form-builder' )
+				'label'           => __( 'Actions', 'jet-form-builder' ),
+				'show_in_details' => false,
 			)
 		);
 	}
@@ -391,8 +411,8 @@ class Subscribe_Now extends Scenario_View_Base {
 
 		$last_cycle = array_pop( $cycles );
 
-		$completed = (int) ( $last_cycle['cycles_completed'] );
-		$all       = (int) ( $last_cycle['total_cycles'] );
+		$completed = (int) ( $last_cycle['cycles_completed'] ?? 0 );
+		$all       = (int) ( $last_cycle['total_cycles'] ?? 0 );
 
 		if ( 0 === $all ) {
 			return $completed;
@@ -417,6 +437,15 @@ class Subscribe_Now extends Scenario_View_Base {
 		$update_time = date( 'Y-m-d H:i:s', strtotime( $datetime ) );
 
 		return get_date_from_gmt( $update_time );
+	}
+
+	public function get_actions( $record ) {
+		return array(
+			'view_subscription' => array(
+				'label'   => __( 'View Subscription', 'jet-form-builder' ),
+				'payload' => array(),
+			),
+		);
 	}
 
 }

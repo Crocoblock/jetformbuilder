@@ -16,7 +16,7 @@ class Action_Refund_Recurring_Payment extends Rest_Api_Endpoint_Base {
 	use Dynamic_Rest_Url_Trait;
 
 	public static function get_rest_static_base(): string {
-		return 'action-refund-recurring-payment/';
+		return 'paypal/action-refund-recurring-payment/';
 	}
 
 	public static function get_rest_dynamic_base(): string {
@@ -74,6 +74,7 @@ class Action_Refund_Recurring_Payment extends Rest_Api_Endpoint_Base {
 					'data'    => $exception->get_additional(),
 					'file'    => $exception->getFile(),
 					'line'    => $exception->getLine(),
+					$payment['refund_link']
 				),
 				503
 			);

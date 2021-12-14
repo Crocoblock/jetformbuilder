@@ -14,6 +14,22 @@ use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Show_Plan_Details_Action;
 
 class Prepared_Views {
 
+	public static function get_paginated_args( $args ): array {
+		return array_merge(
+			array(
+				'limit'      => 25,
+				'extreme_id' => 0,
+				'sort'       => View_Base::FROM_HIGH_TO_LOW,
+				'page'       => 1
+			),
+			$args
+		);
+	}
+
+	public static function get_offset( $args ): int {
+		return 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
+	}
+
 	/**
 	 * @param $subscription_id
 	 *
@@ -36,23 +52,13 @@ class Prepared_Views {
 	 * @throws Query_Builder_Exception
 	 */
 	public static function get_subscriptions_raw( array $args = array() ): array {
-		$args = array_merge(
-			array(
-				'limit'      => 25,
-				'extreme_id' => 0,
-				'sort'       => View_Base::FROM_HIGH_TO_LOW,
-				'page'       => 1
-			),
-			$args
-		);
-
-		$offset = 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
+		$args   = self::get_paginated_args( $args );
+		$offset = self::get_offset( $args );
 
 		return ( new Query_Builder() )
 			->set_view(
 				( new Paypal\Query_Views\Paypal_Subscriptions_View() )
 					->set_limit( array( $offset, $args['limit'] ) )
-					//->set_conditions( $conditions )
 			)
 			->debug()
 			->query_all();
@@ -137,13 +143,32 @@ class Prepared_Views {
 	 * @throws Query_Builder_Exception
 	 */
 	public static function get_payment_raw( $payment_id ): array {
-		return ( new Query_Builder() )
+		$query = ( new Query_Builder() )
 			->set_view(
 				( new Paypal\Query_Views\Recurring_Payment_Find_View() )
 					->find_by( 'payment_id', $payment_id )
+			);
+
+		return $query->query_one();
+	}
+
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function get_payments_raw( array $args = array() ): array {
+		$args   = self::get_paginated_args( $args );
+		$offset = self::get_offset( $args );
+
+		return ( new Query_Builder() )
+			->set_view(
+				( new Paypal\Query_Views\Recurring_Payments_View() )
+					->set_limit( array( $offset, $args['limit'] ) )
 			)
 			->debug()
-			->query_one();
+			->query_all();
 	}
 
 	public static function count_payments(): int {
@@ -177,6 +202,9 @@ class Prepared_Views {
 	 * @throws Gateway_Exception
 	 */
 	public static function get_plan_by_id( string $token, string $plan_id ) {
+		if ( ! $plan_id ) {
+			throw new Gateway_Exception( __( 'Plan is not defined', 'jet-form-builder' ) );
+		}
 		return ( new Show_Plan_Details_Action() )
 			->set_bearer_auth( $token )
 			->set_path(

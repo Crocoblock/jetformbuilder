@@ -51,8 +51,8 @@ class Receive_Admin_Subscription_Details extends Rest_Api_Endpoint_Base {
 
 		try {
 			$token   = Paypal\Controller::get_token_by_form_id( $subscription['form_id'] );
-			$plan    = Prepared_Views::get_plan_by_id( $token, $plan_id );
-			$product = Prepared_Views::get_product_by_id( $token, $plan['product_id'] );
+			$plan    = Prepared_Views::get_plan_by_id( $token, (string) $plan_id );
+			$product = Prepared_Views::get_product_by_id( $token, (string) ( $plan['product_id'] ?? '' ) );
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(

@@ -1,10 +1,4 @@
 import PaypalEntries from './PaypalEntries';
-import {
-	getActions,
-	getGetters,
-	getMutations,
-	getBaseState,
-} from '../../paypal/StoreHelper';
 
 Vue.use( Vuex );
 
@@ -13,6 +7,15 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 const {
 		  createPath,
 	  } = window.JetFBActions;
+
+const {
+		  StoreHelper: {
+			  getActions,
+			  getGetters,
+			  getMutations,
+			  getBaseState,
+		  },
+	  } = JetFBMixins;
 
 const options = {
 	store: new Vuex.Store( {

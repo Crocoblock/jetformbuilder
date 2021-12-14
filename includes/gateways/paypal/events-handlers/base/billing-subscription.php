@@ -57,12 +57,16 @@ abstract class Billing_Subscription extends Event_Handler_Base {
 			throw new Gateway_Exception( "Undefined subscription: {$subscription_id}" );
 		}
 
+		return $this->update_subscription( $subscription, $webhook_event['resource'] );
+	}
+
+	public function update_subscription( array $subscription, $new_resource ) {
 		Paypal\Prepared_Queries::add_notes_by_id(
 			$subscription['order_id'],
-			$this->get_note_message( $subscription['resource'], $webhook_event['resource'] )
+			$this->get_note_message( $subscription['resource'], $new_resource )
 		);
 
-		$subscription['resource'] = $webhook_event['resource'];
+		$subscription['resource'] = $new_resource;
 
 		update_post_meta(
 			$subscription['order_id'],

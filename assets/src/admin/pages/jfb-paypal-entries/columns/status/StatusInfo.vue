@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../../../../paypal/ParseIncomingValueMixin';
+const { ParseIncomingValueMixin } = JetFBMixins;
 
 export default {
 	name: 'status--item',
@@ -34,6 +34,18 @@ export default {
 
 	&-suspended {
 		background-color: rgb(253 209 95 / 41%);
+	}
+
+	&-expired {
+		background-color: aliceblue;
+	}
+
+	&-approval_pending {
+		background-color: antiquewhite;
+	}
+
+	&-refunded {
+		background-color: antiquewhite;
 	}
 }
 </style>

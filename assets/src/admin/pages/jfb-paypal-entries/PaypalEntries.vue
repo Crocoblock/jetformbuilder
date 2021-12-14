@@ -6,13 +6,13 @@
 		['jfb-paypal-scenario--' + scenario]: true
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Paypal Entries', 'jet-form-builder' ) }}</h1>
-		<SubscriptionsPagination/>
+		<TablePagination/>
 		<EntriesTable
 			:loading="loadingPage"
 			:columns="columns"
 			:columns-components="columnsComponents"
 		/>
-		<SubscriptionsPagination/>
+		<TablePagination/>
 		<cx-vui-popup
 			:value="isShowPopup"
 			@change="togglePopup"
@@ -61,12 +61,8 @@
 
 <script>
 import * as status from './columns/status';
-import * as actions from './columns/actions';
-
 import SubscriptionActions from './SubscriptionActions';
-
 import '../../../../scss/admin/default.scss';
-import SubscriptionsPagination from './SubscriptionsPagination';
 
 Vue.config.devtools = true;
 
@@ -86,6 +82,8 @@ const {
 		  DetailsTableWithStore,
 		  DetailsTable,
 		  SimpleWrapperComponent,
+		  ActionsColumn,
+		  TablePagination,
 	  } = window.JetFBComponents;
 
 const {
@@ -96,13 +94,13 @@ const {
 
 const columnsComponents = applyFilters( 'jet.fb.register.paypal.entries.columns', [
 	status,
-	actions,
+	ActionsColumn,
 ] );
 
 export default {
 	name: 'jfb-paypal-entries',
 	components: {
-		SubscriptionsPagination,
+		TablePagination,
 		DetailsTableWithStore,
 		SubscriptionActions,
 		EntriesTable,
@@ -133,6 +131,7 @@ export default {
 		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
 		this.$store.commit( 'setActions', JSON.parse( JSON.stringify( actions ) ) );
+
 		this.$store.commit( 'setQueryState', {
 			total: +total,
 			limit: this.$store.state.currentList.length,
@@ -141,6 +140,8 @@ export default {
 		this.$store.dispatch( 'setQueriedPage', 1 );
 
 		this.maybeOpen();
+
+		jfbEventBus.$on( 'click-view_subscription', this.viewSubscription.bind( this ) );
 	},
 	computed: {
 		...mapState( [
@@ -150,7 +151,7 @@ export default {
 			'isShowPopup',
 			'doingAction',
 			'loadingPage',
-			'currentList'
+			'currentList',
 		] ),
 		...mapGetters( [
 			'currentSubscription',
@@ -162,6 +163,9 @@ export default {
 		},
 		openPopup( entryID ) {
 			this.$store.dispatch( 'openPopup', entryID );
+		},
+		viewSubscription( payload, entry, entryId ) {
+			this.openPopup( entryId );
 		},
 		closePopup() {
 			this.note = '';

@@ -1,18 +1,15 @@
 import RecurringPayments from './RecurringPayments';
-import {
-	getBaseState,
-	getGetters,
-	getMutations,
-	getActions,
-} from '../../paypal/StoreHelper';
 
 Vue.use( Vuex );
 
 const {
-		  getSearch,
-		  createPath,
-		  addQueryArgs,
-	  } = window.JetFBActions;
+		  StoreHelper: {
+			  getActions,
+			  getGetters,
+			  getMutations,
+			  getBaseState,
+		  },
+	  } = JetFBMixins;
 
 const { apiFetch } = wp;
 

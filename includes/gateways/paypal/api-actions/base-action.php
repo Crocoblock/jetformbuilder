@@ -339,7 +339,9 @@ abstract class Base_Action {
 		if ( is_null( $parsed_response ) ) {
 			throw new Gateway_Exception(
 				$this->response_message( 'Invalid JSON.' ),
-				$this->get_response_body()
+				$this->get_response_body(),
+				$this->get_request_args(),
+				$this->get_url()
 			);
 		}
 

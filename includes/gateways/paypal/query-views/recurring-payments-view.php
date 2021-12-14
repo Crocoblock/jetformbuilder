@@ -60,7 +60,7 @@ class Recurring_Payments_View extends Post_Meta_View {
             `wp_postmeta`.`meta_value` LIKE '%\"gateway\":\"PayPal Checkout\"%' 
             )
         AND ( 
-            `wp_postmeta`.`meta_value` NOT LIKE '%\"scenario\"%' 
+            `wp_postmeta`.`meta_value` NOT LIKE '%\"scenario\":%' 
             OR 
             `wp_postmeta`.`meta_value` LIKE '%\"scenario\":\"PAY_NOW\"%' 
             )";

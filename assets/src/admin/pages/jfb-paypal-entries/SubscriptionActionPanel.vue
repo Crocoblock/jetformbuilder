@@ -55,7 +55,7 @@ export default {
 			if ( this.forceCurrent ) {
 				return this.forceCurrent;
 			}
-			return this.$store.getters.getCurrent;
+			return this.$store.state.currentPopupData;
 		},
 		getCurrentStatus() {
 			return this.current?.status?.value?.status;

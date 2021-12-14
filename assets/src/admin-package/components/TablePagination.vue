@@ -1,6 +1,6 @@
 <template>
-	<div class="jfb-subscriptions-pagination cx-vui-panel">
-		<span class="jfb-subscriptions-pagination--results">
+	<div class="jfb-pagination cx-vui-panel">
+		<span class="jfb-pagination--results">
 			{{
 				__s(
 					`Showing %d - %d of %d results.`,
@@ -19,7 +19,7 @@
 			:disabled="loadingPage"
 			@on-change="changePage"
 		></cx-vui-pagination>
-		<span class="jfb-subscriptions-pagination--sort">
+		<span class="jfb-pagination--sort">
 			<cx-vui-input
 				:label="__( 'Results per page', 'jet-form-builder' )"
 				@on-input-change="changeLimit"
@@ -34,19 +34,16 @@
 </template>
 
 <script>
+import i18n from '../mixins/i18n';
+import GetIncoming from '../mixins/GetIncoming';
 
 const {
-		  i18n,
-		  GetIncoming,
-	  } = window.JetFBMixins;
-
-const {
-		  mapState,
-		  mapGetters,
-	  } = Vuex;
+		  mapState = () => ({}),
+		  mapGetters = () => ({}),
+	  } = window?.Vuex;
 
 export default {
-	name: "SubscriptionsPagination",
+	name: "TablePagination",
 	mixins: [ i18n, GetIncoming ],
 	computed: {
 		...mapState( [
@@ -89,7 +86,7 @@ export default {
 
 <style lang="scss">
 
-.jfb-subscriptions-pagination {
+.jfb-pagination {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

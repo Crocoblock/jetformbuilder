@@ -65,9 +65,9 @@ const defaultColumns = {
 };
 
 const {
-		  mapState,
-		  mapGetters,
-	  } = Vuex;
+		  mapState   = () => ( {} ),
+		  mapGetters = () => ( {} ),
+	  } = window?.Vuex;
 
 export default {
 	name: 'entries-table',

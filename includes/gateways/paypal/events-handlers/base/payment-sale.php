@@ -17,6 +17,9 @@ abstract class Payment_Sale extends Base\Event_Handler_Base {
 
 	abstract public function get_billing_id( $webhook_event ): string;
 
+	protected function on_get_subscription( array $subscription ) {
+	}
+
 	/**
 	 * @param $webhook_event
 	 *
@@ -35,6 +38,8 @@ abstract class Payment_Sale extends Base\Event_Handler_Base {
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
+		
+		$this->on_get_subscription( $subscription );
 
 		add_post_meta(
 			$subscription['order_id'],

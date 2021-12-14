@@ -94,6 +94,7 @@ class Subscribe_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'form_data'       => $this->get_action_handler()->request_data,
 					'resource'        => $subscription,
 					'provider'        => 'jet-form-builder',
+					'user_id'         => get_current_user_id()
 				),
 				JSON_UNESCAPED_UNICODE
 			)

@@ -19,7 +19,8 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 				new Action_Refund_Recurring_Payment(),
 				new Receive_Admin_Subscription_Details(),
 				new Add_Subscription_Note(),
-				new Receive_Subscriptions()
+				new Receive_Subscriptions(),
+				new Receive_Payments()
 			)
 		);
 	}

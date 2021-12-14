@@ -24,4 +24,18 @@ class Payment_Sale_Refunded extends Base\Payment_Sale {
 		return $parent_payment['resource']['billing_agreement_id'] ?? '';
 	}
 
+	protected function on_get_subscription( array $subscription ) {
+		$event = new class() extends Base\Billing_Subscription {
+			public static function get_event_type() {
+				return 'nameless';
+			}
+		};
+
+		$new_resource = array_merge( $subscription['resource'], array(
+			'status' => 'REFUNDED'
+		) );
+
+		$event->update_subscription( $subscription, $new_resource );
+	}
+
 }

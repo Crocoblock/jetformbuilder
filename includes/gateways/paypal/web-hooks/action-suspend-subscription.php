@@ -10,7 +10,7 @@ use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Base\Change_Status_Subscription;
 class Action_Suspend_Subscription extends Change_Status_Subscription {
 
 	public static function get_rest_static_base(): string {
-		return 'action-subscription/suspend/';
+		return 'paypal/action-subscription/suspend/';
 	}
 
 	public function get_action_instance(): Api_Actions\Base_Action {

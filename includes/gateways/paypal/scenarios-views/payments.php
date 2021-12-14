@@ -12,7 +12,7 @@ use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Action_Refund_Recurring_Payment a
 
 class Payments extends Table_View_Base {
 
-	private $raw_payments;
+	private $raw_payments = array();
 	private $queried_related;
 
 	public static function rep_item_id() {
@@ -20,12 +20,15 @@ class Payments extends Table_View_Base {
 	}
 
 	public function get_list(): array {
-		try {
+		return $this->get_raw_payments( 0, 15 );
+	}
 
+	public function get_raw_payments( $offset, $limit ): array {
+		try {
 			$this->raw_payments = ( new Query_Builder() )
 				->set_view(
 					( new Paypal\Query_Views\Recurring_Payments_View() )
-						->set_limit( array( 0, 200 ) )
+						->set_limit( array( $offset, $limit ) )
 				)
 				->debug()
 				->query_all();
@@ -42,7 +45,8 @@ class Payments extends Table_View_Base {
 	public function load_data(): array {
 		return array(
 			'receive_url' => array(
-				// todo: add webhook to receive paginated payments
+				'method' => Paypal\Web_Hooks\Receive_Payments::get_methods(),
+				'url'    => Paypal\Web_Hooks\Receive_Payments::rest_url(),
 			),
 			'total'       => Paypal\Prepared_Views::count_payments()
 		);
@@ -235,33 +239,8 @@ class Payments extends Table_View_Base {
 
 
 	public function get_actions( $record ): array {
-		$refund = array(
-			'label'   => __( 'Refund payment', 'jet-form-builder' ),
-			'payload' => array(
-				'contact_name'  => array(
-					'label' => __( 'Subscriber name', 'jet-form-builder' ),
-				),
-				'contact_email' => array(
-					'label' => __( 'Subscriber email', 'jet-form-builder' ),
-				),
-				'amount'        => array(
-					'label' => __( 'Total Refund Amount', 'jet-form-builder' ),
-				),
-				'invoice_id'    => array(
-					'label' => __( 'Invoice Number (Optional)', 'jet-form-builder' ),
-				),
-				'note_to_payer' => array(
-					'label' => __( 'Note To Buyer (Optional)', 'jet-form-builder' ),
-				),
-				'method'        => RefundAction::get_methods(),
-				'url'           => RefundAction::dynamic_rest_url( $record['resource']['id'] ),
-			),
-		);
-
 		if ( ! $this->is_recurrent( $record ) ) {
-			return array(
-				'refund' => $refund
-			);
+			return array();
 		}
 
 		$subscription_id = $this->get_related_id( $record );
@@ -286,7 +265,28 @@ class Payments extends Table_View_Base {
 		return array_merge(
 			$actions,
 			array(
-				'refund' => $refund
+				'refund' => array(
+					'label'   => __( 'Refund payment', 'jet-form-builder' ),
+					'payload' => array(
+						'contact_name'  => array(
+							'label' => __( 'Subscriber name', 'jet-form-builder' ),
+						),
+						'contact_email' => array(
+							'label' => __( 'Subscriber email', 'jet-form-builder' ),
+						),
+						'amount'        => array(
+							'label' => __( 'Total Refund Amount', 'jet-form-builder' ),
+						),
+						'invoice_id'    => array(
+							'label' => __( 'Invoice Number (Optional)', 'jet-form-builder' ),
+						),
+						'note_to_payer' => array(
+							'label' => __( 'Note To Buyer (Optional)', 'jet-form-builder' ),
+						),
+						'method'        => RefundAction::get_methods(),
+						'url'           => RefundAction::dynamic_rest_url( $record['resource']['id'] ),
+					),
+				)
 			)
 		);
 	}

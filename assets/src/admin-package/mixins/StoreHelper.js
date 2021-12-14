@@ -1,22 +1,49 @@
-const {
-		  getSearch,
-		  createPath,
-		  addQueryArgs,
-	  } = window.JetFBActions;
+import { addQueryArgs } from '../functions/LocationManager';
 
 const { apiFetch } = wp;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
+
+const getOffset = ( page, limit ) => {
+	return 1 !== page ? ( ( page - 1 ) * limit ) : 0;
+}
+
+export function getGetters() {
+	return {
+		offset: state => {
+			return getOffset( state.queryState.currentPage, state.queryState.limit );
+		},
+	};
+}
+
+export function getBaseState() {
+	return {
+		columns: {},
+		currentList: [],
+		loadingPage: false,
+		queryState: {
+			currentPage: 1,
+			extreme_id: 0,
+			limit: 25,
+			sort: 'DESC',
+			total: 0,
+			itemsFrom: 0,
+			itemsTo: 0,
+		},
+	};
+}
 
 export function getActions() {
 	return {
 		setQueriedPage( { commit, getters, state }, pageNum ) {
 			const offset = getOffset( +pageNum, state.queryState.limit );
 
+			const itemTo = offset + state.queryState.limit;
+
 			commit( 'setQueryState', {
 				currentPage: +pageNum,
 				itemsFrom: offset + 1,
-				itemsTo: offset + state.queryState.limit,
+				itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo,
 			} );
 		},
 		fetchPage( { commit, getters, dispatch, state }, endpoint ) {
@@ -75,35 +102,6 @@ export function getMutations() {
 		},
 		toggleLoadingPage( state ) {
 			state.loadingPage = ! state.loadingPage;
-		},
-	};
-}
-
-const getOffset = ( page, limit ) => {
-	return 1 !== page ? ( ( page - 1 ) * limit ) : 0;
-}
-
-export function getGetters() {
-	return {
-		offset: state => {
-			return getOffset( state.queryState.currentPage, state.queryState.limit );
-		},
-	};
-}
-
-export function getBaseState() {
-	return {
-		columns: {},
-		currentList: [],
-		loadingPage: false,
-		queryState: {
-			currentPage: 1,
-			extreme_id: 0,
-			limit: 25,
-			sort: 'DESC',
-			total: 0,
-			itemsFrom: 0,
-			itemsTo: 0,
 		},
 	};
 }

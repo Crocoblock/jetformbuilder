@@ -25,6 +25,10 @@ class Recurring_Payment_Find_View extends Query_Views\Recurring_Payments_View {
 		);
 	}
 
+	public function custom_where(): string {
+		return '';
+	}
+
 	public function order_by(): array {
 		return array();
 	}

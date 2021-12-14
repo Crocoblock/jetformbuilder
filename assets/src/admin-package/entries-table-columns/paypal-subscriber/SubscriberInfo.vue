@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../ParseIncomingValueMixin';
+import ParseIncomingValueMixin from '../../mixins/ParseIncomingValueMixin';
 
 export default {
 	name: 'subscriber--item',

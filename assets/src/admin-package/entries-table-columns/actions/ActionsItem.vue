@@ -13,20 +13,15 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../ParseIncomingValueMixin';
+import ParseIncomingValueMixin from '../../mixins/ParseIncomingValueMixin';
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 export default {
 	name: 'actions--item',
-	props: [ 'value', 'full-entry', 'conditions' ],
+	props: [ 'value', 'full-entry', 'entry-id' ],
 	components: {},
 	mixins: [ ParseIncomingValueMixin ],
-	data() {
-		return {
-			showDropdown: false,
-		};
-	},
 	methods: {
 		getPayload( actionID ) {
 			return this.parsedJson[ actionID ]?.payload || {};
@@ -36,6 +31,7 @@ export default {
 				`click-${ actionID }`,
 				this.getPayload( actionID ),
 				this.fullEntry || {},
+				this.entryId,
 			);
 		},
 	},

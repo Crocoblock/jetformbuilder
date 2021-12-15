@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
@@ -74,7 +75,10 @@ class Controller extends Base_Gateway {
 		return array_merge(
 			array(
 				'version'   => 1,
-				'scenarios' => Scenarios_Manager::instance()->view()->get_items_list(),
+				'scenarios' => Tools::with_placeholder(
+					Scenarios_Manager::instance()->view()->get_items_list(),
+					__( 'Choose scenario...', 'jet-form-builder' )
+				),
 			),
 			Scenarios_Manager::instance()->view()->get_editor_data()
 		);

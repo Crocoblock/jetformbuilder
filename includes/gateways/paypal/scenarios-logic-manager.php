@@ -14,7 +14,6 @@ class Scenarios_Logic_Manager {
 			'jet-form-builder/gateways/paypal/scenarios-logic',
 			array(
 				new Scenarios_Logic\Pay_Now(),
-				new Scenarios_Logic\Subscribe_Now(),
 			)
 		);
 	}

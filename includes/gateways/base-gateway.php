@@ -570,7 +570,9 @@ abstract class Base_Gateway {
 	public function get_current_scenario_id() {
 		$scenario = $this->get_scenario_meta();
 
-		return $scenario['id'] ?? Paypal\Scenarios_Logic\Pay_Now::scenario_id();
+		return empty( $scenario['id'] )
+			? Paypal\Scenarios_Logic\Pay_Now::scenario_id()
+			: $scenario['id'];
 	}
 
 	public function get_current_scenario(): array {

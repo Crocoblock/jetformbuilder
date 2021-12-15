@@ -80,7 +80,9 @@ class Scenarios_Manager {
 		try {
 			if ( ! $this->queried_scenario ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$scenario = sanitize_text_field( wp_unslash( $_GET[ self::QUERY_VAR ] ?? '' ) );
+				$scenario = sanitize_text_field( wp_unslash(
+					$_GET[ self::QUERY_VAR ] ?? ''
+				) );
 
 				$this->queried_scenario = $this->logic()->rep_get_item( $scenario );
 			}

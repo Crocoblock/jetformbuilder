@@ -22,7 +22,6 @@ class Scenarios_View_Manager {
 			'jet-form-builder/gateways/paypal/scenarios-view',
 			array(
 				new Scenarios_Views\Pay_Now(),
-				new Scenarios_Views\Subscribe_Now(),
 			)
 		);
 	}

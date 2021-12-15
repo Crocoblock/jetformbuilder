@@ -38,9 +38,9 @@ import i18n from '../mixins/i18n';
 import GetIncoming from '../mixins/GetIncoming';
 
 const {
-		  mapState = () => ({}),
-		  mapGetters = () => ({}),
-	  } = window?.Vuex;
+		  mapState   = () => ( {} ),
+		  mapGetters = () => ( {} ),
+	  } = window?.Vuex || {};
 
 export default {
 	name: "TablePagination",

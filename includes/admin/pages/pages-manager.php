@@ -38,8 +38,6 @@ class Pages_Manager {
 			array(
 				new Settings_Page(),
 				new Addons_Page(),
-				new Paypal_Subscriptions_Entries(),
-				new Paypal_Payments_Entries(),
 			)
 		);
 	}

@@ -607,7 +607,7 @@ abstract class Base_Gateway {
 	 * @param null $payment
 	 *
 	 * @return array|object|void|null [description]
-	 * @deprecated since 1.4.0
+	 * @deprecated since 1.5.0
 	 */
 	public function get_form_by_payment_token( $payment = null ) {
 
@@ -619,34 +619,6 @@ abstract class Base_Gateway {
 		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
 
 		return $wpdb->get_row( $sql, ARRAY_A );
-	}
-
-	public function get_gateway_entries( $properties = array() ) {
-		$compare    = array(
-			'1=1',
-			sprintf( "`meta_key` = '%s'", self::GATEWAY_META_KEY ),
-		);
-		$properties = array_merge(
-			array( 'gateway_id' => $this->get_id() ),
-			$properties
-		);
-
-		foreach ( $properties as $property => $value ) {
-			$value     = sprintf( '"%1$s":"%2$s"', (string) $property, (string) $value );
-			$compare[] = "`meta_value` LIKE '%$value%'";
-		}
-		global $wpdb;
-
-		$sql  = "SELECT * FROM $wpdb->postmeta WHERE " . implode( "\n\rAND ", $compare ) . ';';
-		$meta = $wpdb->get_results( $sql, ARRAY_A );
-
-		$results = array();
-
-		foreach ( $meta as $row ) {
-			$results[ $row['meta_id'] ] = Tools::decode_json( $row['meta_value'] ?? '[]' );
-		}
-
-		return $results;
 	}
 
 	public function custom_labels(): array {

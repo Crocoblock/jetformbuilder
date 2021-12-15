@@ -613,15 +613,15 @@ var defaultColumns = {
   choose: _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_0__
 };
 
-var _window$Vuex = (_window = window) === null || _window === void 0 ? void 0 : _window.Vuex,
-    _window$Vuex$mapState = _window$Vuex.mapState,
-    mapState = _window$Vuex$mapState === void 0 ? function () {
+var _ref = ((_window = window) === null || _window === void 0 ? void 0 : _window.Vuex) || {},
+    _ref$mapState = _ref.mapState,
+    mapState = _ref$mapState === void 0 ? function () {
   return {};
-} : _window$Vuex$mapState,
-    _window$Vuex$mapGette = _window$Vuex.mapGetters,
-    mapGetters = _window$Vuex$mapGette === void 0 ? function () {
+} : _ref$mapState,
+    _ref$mapGetters = _ref.mapGetters,
+    mapGetters = _ref$mapGetters === void 0 ? function () {
   return {};
-} : _window$Vuex$mapGette;
+} : _ref$mapGetters;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'entries-table',
@@ -781,15 +781,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var _window$Vuex = (_window = window) === null || _window === void 0 ? void 0 : _window.Vuex,
-    _window$Vuex$mapState = _window$Vuex.mapState,
-    mapState = _window$Vuex$mapState === void 0 ? function () {
+var _ref = ((_window = window) === null || _window === void 0 ? void 0 : _window.Vuex) || {},
+    _ref$mapState = _ref.mapState,
+    mapState = _ref$mapState === void 0 ? function () {
   return {};
-} : _window$Vuex$mapState,
-    _window$Vuex$mapGette = _window$Vuex.mapGetters,
-    mapGetters = _window$Vuex$mapGette === void 0 ? function () {
+} : _ref$mapState,
+    _ref$mapGetters = _ref.mapGetters,
+    mapGetters = _ref$mapGetters === void 0 ? function () {
   return {};
-} : _window$Vuex$mapGette;
+} : _ref$mapGetters;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TablePagination",
@@ -803,8 +803,8 @@ var _window$Vuex = (_window = window) === null || _window === void 0 ? void 0 : 
     }
   }),
   methods: {
-    changeLimit: function changeLimit(_ref) {
-      var value = _ref.target.value;
+    changeLimit: function changeLimit(_ref2) {
+      var value = _ref2.target.value;
 
       if (this.loadingPage) {
         return;

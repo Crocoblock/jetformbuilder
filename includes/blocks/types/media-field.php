@@ -34,9 +34,9 @@ class Media_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		File_Upload::instance()->enqueue_scripts();
+		$scripts = File_Upload::instance()->ensure_media_js();
 
-		return ( new Media_Field_Render( $this ) )->render();
+		return $scripts . ( new Media_Field_Render( $this ) )->render();
 	}
 
 	public function block_data( $editor, $handle ) {

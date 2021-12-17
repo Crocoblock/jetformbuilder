@@ -673,7 +673,7 @@ abstract class Base extends Base_Module {
 			)
 		);
 
-		if ( ! $repeater_preset ) {
+		if ( ! $repeater_preset || ! is_array( $repeater_preset ) ) {
 			return array();
 		}
 

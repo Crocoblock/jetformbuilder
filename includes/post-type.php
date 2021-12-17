@@ -173,15 +173,15 @@ class Post_Type {
 				'default' => '{}',
 			),
 
-			'_jf_actions'   => array(
+			'_jf_actions'  => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages'  => array(
+			'_jf_messages' => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'    => array(
+			'_jf_preset'   => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -316,25 +316,27 @@ class Post_Type {
 
 	public function get_default_args() {
 		return array(
-			'submit_type'     => '',
-			'required_mark'   => '',
-			'fields_layout'   => '',
-			'enable_progress' => null,
+			'submit_type'      => '',
+			'required_mark'    => '',
+			'fields_layout'    => '',
+			'enable_progress'  => null,
+			'fields_label_tag' => ''
 		);
 	}
 
 	public function get_default_args_on_render() {
 		return array(
-			'submit_type'     => 'reload',
-			'required_mark'   => '*',
-			'fields_layout'   => 'column',
-			'enable_progress' => false,
+			'submit_type'      => 'reload',
+			'required_mark'    => '*',
+			'fields_layout'    => 'column',
+			'enable_progress'  => false,
+			'fields_label_tag' => 'div'
 		);
 	}
 
 	public function set_default_messages() {
 		$this->messages = apply_filters(
-			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			'jet-form-builder/message-types',
 			array(
 				'success'           => array(

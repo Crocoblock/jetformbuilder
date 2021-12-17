@@ -4,11 +4,10 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Classes\Listing_Filter_Manager;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Request\Request_Handler;
+use Jet_Form_Builder\Dev_Mode;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -247,6 +246,12 @@ class Send_Email extends Base {
 
 		$message = str_replace( '&#038;', '&amp;', $message );
 		$message = stripcslashes( $message );
+
+		if ( Dev_Mode\Manager::instance()->active() ) {
+			add_action( 'wp_mail_failed', function ( \WP_Error $wp_error ) {
+				new Action_Exception( 'failed', $wp_error->get_error_message(), $wp_error->get_error_data() );
+			} );
+		}
 
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
 

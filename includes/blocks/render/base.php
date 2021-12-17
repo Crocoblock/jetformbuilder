@@ -94,12 +94,34 @@ abstract class Base {
 	 * @return [type] [description]
 	 */
 	public function get_field_label() {
+		if ( empty( $this->block_type->block_attrs['label'] ) || ! $this->label_allowed() ) {
+			return '';
+		}
+
+		$args = $this->block_type->block_attrs;
+
+		$label_wrapper = new class {
+			use Attributes_Trait;
+		};
+		$label_text    = clone $label_wrapper;
+
+		if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
+			$label_wrapper->add_attribute( 'class', 'jet-form-builder__heading' );
+			$label_wrapper->add_attribute( 'class', $args['class_name'] );
+		} else {
+			$label_wrapper->add_attribute( 'class', 'jet-form-builder__label' );
+		}
+
+		$label_text->add_attribute( 'class', 'jet-form-builder__label-text' );
+		$label_text_tag = esc_attr( Live_Form::instance()->spec_data->fields_label_tag );
+
+		if ( 'label' === $label_text_tag ) {
+			$label_text->add_attribute( 'for', $this->block_type->get_field_id( $args ) );
+		}
 
 		ob_start();
-		if ( ! empty( $this->block_type->block_attrs['label'] ) && $this->label_allowed() ) {
-			$args = $this->block_type->block_attrs;
-			include $this->block_type->get_common_template( 'field-label.php' );
-		}
+
+		include $this->block_type->get_common_template( 'field-label.php' );
 
 		return ob_get_clean();
 
@@ -232,8 +254,8 @@ abstract class Base {
 	/**
 	 * Render custom form item template
 	 *
-	 * @param int|string  $object_id Object ID.
-	 * @param array       $args Field arguments.
+	 * @param int|string $object_id Object ID.
+	 * @param array $args Field arguments.
 	 * @param bool|string $checked
 	 *
 	 * @return string

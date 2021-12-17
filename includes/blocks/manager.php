@@ -212,7 +212,7 @@ class Manager {
 						'src',
 						'alt',
 						'title',
-					)
+					),
 				)
 			)
 		);

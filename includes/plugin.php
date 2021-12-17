@@ -30,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Form_Handler $form_handler
  * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
- * @property AddonsManager $license_manager
+ * @property AddonsManager $addons_manager
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
  * Class Plugin

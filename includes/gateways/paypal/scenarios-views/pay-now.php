@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Fetch_Pay_Now_Editor;
+use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Fetch_Pay_Now_Editor;
 
 class Pay_Now extends Scenario_View_Base {
 

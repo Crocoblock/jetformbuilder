@@ -7,7 +7,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
-use Jet_Form_Builder\Gateways\Paypal\Web_Hooks\Rest_Api_Controller;
+use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 

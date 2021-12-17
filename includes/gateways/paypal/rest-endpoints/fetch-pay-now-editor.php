@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Web_Hooks;
+namespace Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;

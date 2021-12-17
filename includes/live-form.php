@@ -36,7 +36,6 @@ class Live_Form {
 
 	public $is_hidden_row;
 	public $is_submit_row;
-	public $is_page_break_row;
 
 	public $current_repeater;
 	public $current_repeater_i;
@@ -94,6 +93,10 @@ class Live_Form {
 		$this->spec_data = ( object ) $render_attributes;
 
 		return $this;
+	}
+
+	public function get_spec( $property, $default = '' ) {
+		return ( $this->spec_data->{$property} ?? $default ) ?: $default;
 	}
 
 	public function is_not_field( $block ) {

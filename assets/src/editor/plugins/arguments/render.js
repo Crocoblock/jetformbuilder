@@ -1,8 +1,3 @@
-import {
-	fieldsLayout,
-	submitTypes,
-} from "./options";
-
 const { useMetaState } = JetFBHooks;
 
 const {
@@ -13,6 +8,8 @@ const {
 
 const { __ } = wp.i18n;
 
+const source = window.JetFormEditorData.argumentsSource || {};
+
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
@@ -21,7 +18,7 @@ export default function PluginArgs() {
 		<SelectControl
 			label={ __( 'Fields Layout', 'jet-form-builder' ) }
 			value={ args.fields_layout }
-			options={ fieldsLayout }
+			options={ source.fields_layout }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {
 					...prevArgs,
@@ -39,10 +36,23 @@ export default function PluginArgs() {
 				} ) );
 			} }
 		/>
+
+		<SelectControl
+			label={ __( 'Fields label HTML tag', 'jet-form-builder' ) }
+			value={ args.fields_label_tag }
+			options={ source.fields_label_tag }
+			onChange={ newVal => {
+				setArgs( ( prevArgs ) => ( {
+					...prevArgs,
+					fields_label_tag: newVal,
+				} ) );
+			} }
+		/>
+
 		<SelectControl
 			label={ __( 'Submit Type', 'jet-form-builder' ) }
 			value={ args.submit_type }
-			options={ submitTypes }
+			options={ source.submit_type }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => ( {
 					...prevArgs,

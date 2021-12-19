@@ -597,6 +597,18 @@ class Manager {
 		return $args;
 	}
 
+	public function is_active() {
+		$licenses = get_option( 'jfb-license-data', array() );
+
+		foreach ( $licenses as $item ) {
+			if ( 'valid' === ( $item['license'] ?? '' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * Manager constructor.
 	 */

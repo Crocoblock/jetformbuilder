@@ -598,15 +598,7 @@ class Manager {
 	}
 
 	public function is_active() {
-		$licenses = get_option( 'jfb-license-data', array() );
-
-		foreach ( $licenses as $item ) {
-			if ( 'valid' === ( $item['license'] ?? '' ) ) {
-				return true;
-			}
-		}
-
-		return false;
+		return ! empty( get_option( 'jfb-license-data', false ) );
 	}
 
 	/**

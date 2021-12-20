@@ -41,7 +41,10 @@ const settings = {
 		from: [
 			{
 				type: 'block',
-				blocks: [ 'jet-forms/number-field' ],
+				blocks: [
+					'jet-forms/number-field',
+					'jet-forms/text-field'
+				],
 				transform: ( attributes ) => {
 					return createBlock( name, { ...attributes } );
 				},

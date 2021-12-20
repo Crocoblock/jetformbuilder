@@ -3,6 +3,8 @@ import metadata from "@blocks/submit-field/block.json";
 
 const { __ } = wp.i18n;
 
+const { createBlock } = wp.blocks;
+
 const { name, icon = '' } = metadata;
 
 /**
@@ -21,6 +23,44 @@ const settings = {
 		attributes: {
 			label: 'Action Button'
 		}
+	},
+	transforms: {
+		to: [
+			{
+				type: 'block',
+				blocks: [
+					'jet-forms/text-field',
+				],
+				transform: ( attributes ) => {
+					return createBlock( 'jet-forms/text-field', { ...attributes } );
+				},
+				priority: 0,
+			},
+		],
+		from: [
+			{
+				type: 'block',
+				blocks: [
+					'jet-forms/text-field',
+				],
+				transform: ( attributes ) => {
+					return createBlock( name, { ...attributes } );
+				},
+				priority: 0,
+			},
+			{
+				type: 'block',
+				blocks: [
+					'core/buttons',
+				],
+				transform: ( attributes, innerBlocks ) => {
+					return createBlock( name, {
+						label: innerBlocks[ 0 ]?.attributes?.text || '',
+					} );
+				},
+				priority: 0,
+			},
+		],
 	}
 };
 

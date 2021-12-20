@@ -27,42 +27,14 @@ const settings = {
 		},
 	},
 	transforms: {
-		to: [
-			{
-				type: 'block',
-				blocks: [ 'jet-forms/textarea-field' ],
-				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/textarea-field', { ...attributes } );
-				},
-				priority: 0,
-			},
-			{
-				type: 'block',
-				blocks: [ 'jet-forms/number-field' ],
-				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/number-field', { ...attributes } );
-				},
-				priority: 0,
-			},
-			{
-				type: 'block',
-				blocks: [ 'jet-forms/wysiwyg-field' ],
-				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/wysiwyg-field', { ...attributes } );
-				},
-				priority: 0,
-			},
-		],
 		from: [
 			{
 				type: 'block',
 				blocks: [
-					'jet-forms/textarea-field',
-					'jet-forms/number-field',
-					'jet-forms/wysiwyg-field',
+					'core/paragraph',
 				],
-				transform: ( attributes ) => {
-					return createBlock( name, { ...attributes } );
+				transform: ( { content = '' } ) => {
+					return createBlock( name, { label: content } );
 				},
 				priority: 0,
 			},

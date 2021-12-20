@@ -51,6 +51,14 @@ class Color_Picker_Field extends Base {
 			'css_selector' => [
 				$this->selector( '__field-wrap.%s__field-wrap' ) => 'width: {{VALUE}}{{UNIT}};',
 			],
+			'attributes'   => array(
+				'default' => array(
+					'value' => array(
+						'value' => 100,
+						'unit'  => '%'
+					)
+				)
+			),
 		] );
 
 		$this->controls_manager->end_section();

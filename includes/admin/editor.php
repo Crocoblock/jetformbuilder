@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE         = 'jet-form-builder-editor';
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	/**
@@ -344,6 +344,7 @@ class Editor {
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
+				'argumentsSource'         => Tools::get_form_settings_options()
 			)
 		);
 

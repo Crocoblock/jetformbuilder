@@ -31,6 +31,10 @@ function jet_form_builder_init() {
 	add_filter(
 		'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
 		function ( $links ) {
+			if ( jet_form_builder()->addons_manager->is_active() ) {
+				return $links;
+			}
+
 			$url = 'https://jetformbuilder.com/pricing/';
 			$url = add_query_arg(
 				array(

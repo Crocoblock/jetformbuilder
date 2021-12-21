@@ -373,14 +373,19 @@ class Form extends Base {
 
 
 	public function block_data( $editor, $handle ) {
+		$options = Tools::get_form_settings_options();
+
 		wp_localize_script(
 			$handle,
 			'JetFormData',
-			array(
-				'forms_list' => Tools::with_placeholder(
-					Tools::get_forms_list_for_js(),
-					$this->get_placeholder()
+			array_merge(
+				array(
+					'forms_list' => Tools::with_placeholder(
+						Tools::get_forms_list_for_js(),
+						$this->get_placeholder()
+					),
 				),
+				$options
 			)
 		);
 	}

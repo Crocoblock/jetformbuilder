@@ -1084,6 +1084,16 @@ class Form extends Jfb_Widget_Base {
 			);
 
 			$this->add_control(
+				'fields_label_tag',
+				array(
+					'label'   => __( 'Fields label HTML tag', 'jet-form-builder' ),
+					'type'    => Controls_Manager::SELECT,
+					'default' => 'div',
+					'options' => $options['fields_label_tag']
+				)
+			);
+
+			$this->add_control(
 				'submit_type',
 				array(
 					'label'   => __( 'Submit Type', 'jet-form-builder' ),

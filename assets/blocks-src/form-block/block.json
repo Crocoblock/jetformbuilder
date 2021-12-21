@@ -1,9 +1,12 @@
 {
-	"apiVersion": "2",
+	"apiVersion": 2,
 	"name": "jet-forms/form-block",
 	"title": "JetForm",
 	"keywords": [
-		"jetform", "form", "builder", "crocoblock"
+		"jetform",
+		"form",
+		"builder",
+		"crocoblock"
 	],
 	"textdomain": "jet-form-builder",
 	"supports": {
@@ -34,6 +37,10 @@
 		"enable_progress": {
 			"type": "boolean",
 			"default": false
+		},
+		"fields_label_tag": {
+			"type": "string",
+			"default": "div"
 		}
 	}
 }

@@ -197,24 +197,32 @@ class Tools {
 
 	public static function get_form_settings_options( $for_elementor = false ) {
 		$submit_type   = array(
-			''       => '--',
-			'reload' => 'Page Reload',
-			'ajax'   => 'AJAX',
+			''       => __( 'Default', 'jet-form-builder' ),
+			'reload' => __( 'Page Reload', 'jet-form-builder' ),
+			'ajax'   => __( 'AJAX', 'jet-form-builder' ),
 		);
 		$fields_layout = array(
-			''       => '--',
-			'column' => 'Column',
-			'row'    => 'Row',
+			''       => __( 'Default', 'jet-form-builder' ),
+			'column' => __( 'Column', 'jet-form-builder' ),
+			'row'    => __( 'Row', 'jet-form-builder' )
+		);
+
+		$label_tag = array(
+			''      => 'Default',
+			'div'   => __( 'DIV', 'jet-form-builder' ),
+			'label' => __( 'LABEL', 'jet-form-builder' ),
 		);
 
 		if ( ! $for_elementor ) {
 			$submit_type   = self::prepare_list_for_js( $submit_type );
 			$fields_layout = self::prepare_list_for_js( $fields_layout );
+			$label_tag     = self::prepare_list_for_js( $label_tag );
 		}
 
 		return array(
-			'submit_type'   => $submit_type,
-			'fields_layout' => $fields_layout,
+			'submit_type'      => $submit_type,
+			'fields_layout'    => $fields_layout,
+			'fields_label_tag' => $label_tag
 		);
 	}
 

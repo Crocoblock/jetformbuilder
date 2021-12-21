@@ -674,7 +674,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			)
 		);
 
-		if ( ! $repeater_preset ) {
+		if ( ! $repeater_preset || ! is_array( $repeater_preset ) ) {
 			return array();
 		}
 

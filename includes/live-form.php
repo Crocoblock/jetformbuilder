@@ -83,6 +83,10 @@ class Live_Form {
 		return $this;
 	}
 
+	public function get_spec( $property, $default = '' ) {
+		return ( $this->spec_data->{$property} ?? $default ) ?: $default;
+	}
+
 	public function is_not_field( $block ) {
 		return Plugin::instance()->form->is_not_field( $block['blockName'] );
 	}

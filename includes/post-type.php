@@ -316,19 +316,21 @@ class Post_Type {
 
 	public function get_default_args() {
 		return array(
-			'submit_type'     => '',
-			'required_mark'   => '',
-			'fields_layout'   => '',
-			'enable_progress' => null,
+			'submit_type'      => '',
+			'required_mark'    => '',
+			'fields_layout'    => '',
+			'enable_progress'  => null,
+			'fields_label_tag' => ''
 		);
 	}
 
 	public function get_default_args_on_render() {
 		return array(
-			'submit_type'     => 'reload',
-			'required_mark'   => '*',
-			'fields_layout'   => 'column',
-			'enable_progress' => false,
+			'submit_type'      => 'reload',
+			'required_mark'    => '*',
+			'fields_layout'    => 'column',
+			'enable_progress'  => false,
+			'fields_label_tag' => 'div'
 		);
 	}
 

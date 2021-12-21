@@ -617,6 +617,10 @@ class Manager {
 		return $args;
 	}
 
+	public function is_active() {
+		return ! empty( get_option( 'jfb-license-data', false ) );
+	}
+
 	/**
 	 * Manager constructor.
 	 */

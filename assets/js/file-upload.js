@@ -2,8 +2,6 @@
 
 	"use strict";
 
-	const { __ } = wp.i18n;
-
 	var JetFormBuilderFileUpload = {
 
 		init: function() {
@@ -143,6 +141,7 @@
 		},
 
 		getMessage: function( formId, status ) {
+			const { __ } = wp.i18n;
 			const unknown = __( 'Unknown error.', 'jet-form-builder' );
 			const message = JetFormBuilderFileUpload.issetMessage( formId, status );
 
@@ -349,6 +348,6 @@
 
 	};
 
-	JetFormBuilderFileUpload.init();
+	$( JetFormBuilderFileUpload.init() );
 
 }( jQuery ) );

@@ -24,8 +24,9 @@ class File_Upload {
 	use Instance_Trait;
 
 	private $nonce_key = 'jet-form-builder-file-upload-nonce-key';
-	private $action    = 'jet-form-builder-upload-file';
-	private $errors    = array();
+	private $action = 'jet-form-builder-upload-file';
+	private $errors = array();
+	private $rendered_scripts = false;
 
 	public function __construct() {
 		add_action( 'wp_ajax_' . $this->action, array( $this, 'ajax_file_upload' ) );
@@ -243,7 +244,7 @@ class File_Upload {
 	/**
 	 * Try to get files array from field data
 	 *
-	 * @param array  $field [description]
+	 * @param array $field [description]
 	 * @param string $format [description]
 	 *
 	 * @return [type]         [description]
@@ -347,9 +348,9 @@ class File_Upload {
 
 	public function get_loader() {
 		return '<div class="jet-form-builder-file-upload__loader">' . apply_filters(
-			'jet-form-builder/file-upload/loader',
-			'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
-		) . '</div>';
+				'jet-form-builder/file-upload/loader',
+				'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
+			) . '</div>';
 	}
 
 	/**
@@ -565,9 +566,15 @@ class File_Upload {
 		);
 	}
 
-	public function ensure_media_js( $content, $popup_data = array() ) {
+	public function ensure_media_js( $content = '', $popup_data = array() ) {
+		if ( $this->rendered_scripts ) {
+			return '';
+		}
+		$this->rendered_scripts = true;
+
 		ob_start();
-		jet_engine()->frontend->frontend_scripts();
+		jet_form_builder()->blocks->register_form_scripts();
+
 		$this->enqueue_scripts();
 		wp_scripts()->done[] = 'jet-form-builder-frontend-forms';
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );

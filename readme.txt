@@ -1,4 +1,4 @@
-﻿=== JetFormBuilder — Form Builder for Gutenberg ===
+﻿=== JetFormBuilder — Dynamic Blocks Form Builder ===
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
@@ -12,9 +12,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 == Description ==
 
-**JetFormBuilder — Form Builder plugin for Gutenberg**
+**JetFormBuilder — Dynamic Blocks Form Builder**
 
-A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the Gutenberg Editor. No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
+A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the block editor (Gutenberg). No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
@@ -173,7 +173,7 @@ Check out the JetFormBuilder demo page and figure out what functionality you get
 == Integrations ==
 
 - **<a href="https://bit.ly/3sttCJ1" target="_blank">JetEngine</a>**
-Use the JetEngine potential when setting up a Gutenberg form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically and put the JetEngine-built custom post types into the dynamic settings.
+Use the JetEngine potential when setting up a form. You can add meta fields and custom taxonomies to the JetFormBuilder fields, generate the field values dynamically and put the JetEngine-built custom post types into the dynamic settings.
 - **<a href="https://bit.ly/3st6hHj">JetStyleManager</a>**
 We added the opportunity to change the way Gutenberg Form blocks will look on the frontend. You can style up every component separately. Hit the brush icon on the WordPress admin panel and do the necessary styling in the Block Style section.
 - **<a href="https://bit.ly/3AXi83h">JetBooking</a>**

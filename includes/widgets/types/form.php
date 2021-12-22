@@ -90,6 +90,10 @@ class Form extends Jfb_Widget_Base {
 		return array( 'jet-form-builder' );
 	}
 
+	public function get_script_depends() {
+		return array( 'jet-form-builder-frontend-forms' );
+	}
+
 	private function jet_form_builder_slug() {
 		return jet_form_builder()->post_type->slug();
 	}

@@ -4,6 +4,7 @@
 		:class="{ 'proccesing-state': proccesingState }"
 	>
 		<h1 class="cs-vui-title">{{ 'JetFormBuilder Addons' }}</h1>
+		<Christmas2022 />
 		<div class="jfb-addons-page__inner cx-vui-panel">
 			<div class="jfb-addons-page__header">
 				<div class="jfb-addons-page__header-controls" v-if="isLicenseMode">
@@ -132,6 +133,7 @@
 <script>
 
 import AddonItem from './components/AddonItem.vue';
+import Christmas2022 from './Christmas2022';
 
 const { applyFilters, doAction } = wp.hooks;
 
@@ -140,6 +142,7 @@ window.jfbEventBus = new Vue();
 export default {
 	name: 'jfb-addons',
 	components: {
+		Christmas2022,
 		AddonItem,
 	},
 	data() {

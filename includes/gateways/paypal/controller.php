@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
@@ -94,8 +95,12 @@ class Controller extends Base_Gateway {
 		return $this->query_scenario()->get_failed_statuses();
 	}
 
+	/**
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
 	protected function retrieve_gateway_meta() {
-		return Plugin::instance()->post_type->get_gateways( $this->data['form_id'] ?? 0 );
+		return $this->query_scenario()->get_gateway_meta();
 	}
 
 	/**
@@ -135,13 +140,6 @@ class Controller extends Base_Gateway {
 	 */
 	protected function retrieve_payment_instance() {
 		return $this->query_scenario()->process_after();
-	}
-
-	/**
-	 * @throws Gateway_Exception
-	 */
-	protected function set_gateway_data_on_result() {
-		$this->query_scenario()->process_save();
 	}
 
 	/**
@@ -263,4 +261,52 @@ class Controller extends Base_Gateway {
 		$this->get_scenario()->set_gateway_data();
 	}
 
+	/**
+	 * Execute actions or something else when payment is success
+	 *
+	 * @return void
+	 * @throws Gateway_Exception
+	 */
+	protected function try_do_actions() {
+		try {
+			$this->process_status( $this->query_scenario()->get_process_status() );
+
+		} catch ( Action_Exception $exception ) {
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
+		}
+	}
+
+
+	public function try_run_on_catch() {
+		try {
+			/** set to $this->payment_token */
+			$this->set_payment_token();
+
+			/** set to $this->gateways_meta */
+			$this->set_form_gateways_meta();
+
+			/** here you can update scenario rows */
+			$this->query_scenario()->process_after();
+
+			$this->try_do_actions();
+
+			/** redirect to the page */
+			$this->query_scenario()->on_success();
+
+		} catch ( Gateway_Exception $exception ) {
+
+			return;
+		}
+	}
+
+	/**
+	 * @deprecated 1.5.0
+	 */
+	protected function set_gateway_data_on_result() {
+		// TODO: Implement set_gateway_data_on_result() method.
+	}
 }

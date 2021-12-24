@@ -16,21 +16,39 @@ abstract class Scenario_Logic_Base {
 	protected $controller;
 
 	protected $queried_token;
+	protected $queried_row;
+	protected $api_response;
 
 	abstract public function process_before();
 
-	abstract public function process_after();
+	/**
+	 * To get the result of this methods use
+	 * $this->controller->get_payment()
+	 *
+	 * @return mixed
+	 * @throws Gateway_Exception
+	 */
+	abstract public function get_gateway_meta();
 
-	abstract public function process_save();
+	abstract public function process_after();
 
 	abstract protected function query_token();
 
 	abstract public function get_failed_statuses();
 
-	/**
-	 * @throws Gateway_Exception
-	 */
-	abstract public function set_gateway_data();
+	public function on_success() {
+		$this->controller->send_response(
+			array(
+				'status' => $this->controller->get_status_on_payment( $this->queried_row['status'] ),
+			)
+		);
+	}
+
+	public function get_process_status() {
+		return in_array( $this->queried_row['status'] ?? '', $this->get_failed_statuses() )
+			? 'failed'
+			: 'success';
+	}
 
 	public function get_queried_token() {
 		if ( ! $this->queried_token ) {

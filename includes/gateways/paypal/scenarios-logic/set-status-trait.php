@@ -11,13 +11,7 @@ trait Set_Status_Trait {
 	 * @throws Gateway_Exception
 	 */
 	protected function set_payment_status() {
-		$payment = $this->controller->get_payment();
 
-		if ( empty( $payment['status'] ) ) {
-			throw new Gateway_Exception( 'Empty payment status' );
-		}
-
-		$this->controller->set_post_meta( 'status', $payment['status'] );
 	}
 
 }

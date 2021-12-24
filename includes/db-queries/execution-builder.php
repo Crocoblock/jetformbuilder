@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Db_Queries;
 
 
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Exceptions\Skip_Exception;
-use Jet_Form_Builder\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 
 /**
  * @method static Execution_Builder instance()

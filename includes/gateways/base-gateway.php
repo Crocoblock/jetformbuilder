@@ -23,10 +23,15 @@ use Jet_Form_Builder\Dev_Mode;
 abstract class Base_Gateway {
 
 	const GATEWAY_META_KEY = '_jet_gateway_data';
+	const PAYMENT_TYPE_INITIAL = 'initial';
+	const PAYMENT_TYPE_RENEWAl = 'renewal';
 
 	const SUCCESS_TYPE = 'success';
 	const FAILED_TYPE = 'cancel';
 
+	/**
+	 * @deprecated 1.5.0
+	 */
 	protected $payment_id;
 	protected $payment_token;
 	protected $data;
@@ -105,6 +110,7 @@ abstract class Base_Gateway {
 	 *
 	 * @return void [description]
 	 * @throws Gateway_Exception
+	 * @deprecated 1.5.0
 	 */
 	public function on_success_payment() {
 		$this->set_current_gateway_options();
@@ -124,6 +130,9 @@ abstract class Base_Gateway {
 		);
 	}
 
+	/**
+	 * @deprecated 1.5.0
+	 */
 	public function save_gateway_before_send_response() {
 		$this->data['date']    = date_i18n( 'F j, Y, H:i' );
 		$this->data['gateway'] = $this->get_name();
@@ -175,7 +184,7 @@ abstract class Base_Gateway {
 		}
 	}
 
-	private function send_response( $args = array() ) {
+	public function send_response( $args = array() ) {
 		( new Response( $this->get_response_manager() ) )->init( $args )->send();
 	}
 
@@ -243,8 +252,7 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-
-	final public function set_gateway_from_post_meta() {
+	public function set_gateway_from_post_meta() {
 		$row_data = $this->get_form_data();
 
 		$this->payment_id = $row_data['post_id'];
@@ -253,7 +261,10 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	final public function set_form_gateways_meta() {
+	/**
+	 * @return $this
+	 */
+	public function set_form_gateways_meta() {
 		return $this->set_form_meta( $this->with_global_settings() );
 	}
 
@@ -314,15 +325,27 @@ abstract class Base_Gateway {
 		}
 	}
 
+	/**
+	 * @deprecated 1.5.0
+	 *
+	 * @return int
+	 */
 	public function get_initialize_action_id() {
 		return (int) $this->gateway( 'action_order', 0 );
 	}
 
+	/**
+	 * @deprecated 1.5.0
+	 *
+	 * @return int|mixed
+	 */
 	public function get_insert_post_action_id() {
 		return GM::instance()->get_actions_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
 	}
 
 	/**
+	 * @deprecated 1.5.0
+	 *
 	 * @throws Gateway_Exception
 	 */
 	public function set_order_id() {
@@ -333,6 +356,11 @@ abstract class Base_Gateway {
 		$this->order_id = $this->get_insert_post_action_id();
 	}
 
+	/**
+	 * @deprecated 1.5.0
+	 *
+	 * @return mixed
+	 */
 	public function get_order_id() {
 		return $this->order_id;
 	}
@@ -445,6 +473,11 @@ abstract class Base_Gateway {
 
 	abstract protected function query_order_token( $order_id, $form_id );
 
+	/**
+	 * @deprecated 1.5.0
+	 *
+	 * @return array|object|void|null
+	 */
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );
 	}

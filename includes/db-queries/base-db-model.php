@@ -4,37 +4,42 @@
 namespace Jet_Form_Builder\Db_Queries;
 
 
-use Jet_Form_Builder\Exceptions\Skip_Exception;
-use Jet_Form_Builder\Exceptions\Sql_Exception;
+
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 
 abstract class Base_Db_Model {
 
-	protected $prefix = 'jet_fb_';
+	const DB_TABLE_PREFIX = 'jet_fb_';
+
+	protected static $prefix = self::DB_TABLE_PREFIX;
 
 	/**
 	 * Returns table name
 	 * @return [type] [description]
 	 */
-	abstract protected function table_name(): string;
+	abstract public static function table_name(): string;
 
 	/**
 	 * Returns columns schema
 	 * @return [type] [description]
 	 */
-	abstract public function schema(): array;
+	abstract public static function schema(): array;
 
 	/**
 	 * Returns schemas options
 	 * Such as primary keys, charset
 	 * @return [type] [description]
 	 */
-	abstract public function schema_keys(): array;
+	abstract public static function schema_keys(): array;
 
 	/**
 	 * @throws Sql_Exception
 	 */
-	public function safe_create() {
+	public function safe_create(): Base_Db_Model {
 		Execution_Builder::instance()->safe_create( $this );
+
+		return $this;
 	}
 
 	/**
@@ -111,15 +116,15 @@ abstract class Base_Db_Model {
 	 * to get right name of table
 	 * @return string table name
 	 */
-	public function table() {
-		return $this->wpdb()->prefix . $this->prefix . $this->table_name();
+	public static function table() {
+		return static::wpdb()->prefix . static::$prefix . static::table_name();
 	}
 
 	/**
 	 * Returns WPDB instance
 	 * @return \QM_DB|\wpdb [description]
 	 */
-	protected function wpdb() {
+	public static function wpdb() {
 		global $wpdb;
 
 		return $wpdb;

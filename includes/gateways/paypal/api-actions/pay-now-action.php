@@ -25,6 +25,7 @@ class Pay_Now_Action extends Base_Action {
 	public function action_headers() {
 		return array(
 			'Content-Type' => 'application/json',
+			'Prefer'       => 'return=representation'
 		);
 	}
 
@@ -37,9 +38,9 @@ class Pay_Now_Action extends Base_Action {
 	}
 
 	public function set_units( array $amounts ) {
-		foreach ( $amounts as $order_id => $amount ) {
+		foreach ( $amounts as $amount ) {
 			$this->units[] = array(
-				'custom_id' => Gateway_Manager::instance()->get_actions_handler()->get_form_id() . '-' . $order_id,
+				'custom_id' => Gateway_Manager::instance()->get_actions_handler()->get_form_id(),
 				'amount'    => $amount,
 			);
 		}

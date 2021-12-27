@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
@@ -16,36 +17,67 @@ abstract class Scenario_Logic_Base {
 	protected $controller;
 
 	protected $queried_token;
-	protected $queried_row;
+	protected $queried_row = array();
 	protected $api_response;
 
 	abstract public function process_before();
-
-	/**
-	 * To get the result of this methods use
-	 * $this->controller->get_payment()
-	 *
-	 * @return mixed
-	 * @throws Gateway_Exception
-	 */
-	abstract public function get_gateway_meta();
 
 	abstract public function process_after();
 
 	abstract protected function query_token();
 
+	abstract protected function query_scenario_row();
+
 	abstract public function get_failed_statuses();
+
+	public function get_gateways_meta() {
+		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
+
+		return jet_form_builder()->post_type->get_gateways( $form_id );
+	}
+
+	public function scenario_row( $props = array() ) {
+		if ( ! empty( $props ) ) {
+			$this->set_scenario_row( $props );
+		}
+
+		return $this->get_scenario_row();
+	}
+
+	public function get_scenario_row( $key = '', $if_empty = false ) {
+		$this->maybe_query_scenario_row();
+
+		return $key ? ( $this->queried_row[ $key ] ?? $if_empty ) : $this->queried_row;
+	}
+
+	public function set_scenario_row( $props ): Scenario_Logic_Base {
+		$this->maybe_query_scenario_row();
+
+		$this->queried_row = array_merge( $this->queried_row, $props );
+
+		return $this;
+	}
+
+	protected function maybe_query_scenario_row(): Scenario_Logic_Base {
+		if ( empty( $this->queried_row ) ) {
+			$this->queried_row = $this->query_scenario_row();
+		}
+
+		return $this;
+	}
 
 	public function on_success() {
 		$this->controller->send_response(
 			array(
-				'status' => $this->controller->get_status_on_payment( $this->queried_row['status'] ),
+				'status' => $this->controller->get_status_on_payment(
+					$this->get_scenario_row( 'status' )
+				),
 			)
 		);
 	}
 
 	public function get_process_status() {
-		return in_array( $this->queried_row['status'] ?? '', $this->get_failed_statuses() )
+		return in_array( $this->get_scenario_row( 'status' ), $this->get_failed_statuses(), true )
 			? 'failed'
 			: 'success';
 	}

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -24,9 +23,11 @@ class Prepared_Queries {
 
 		self::insert_payer( $payer );
 
-		$find_payer = self::get_payer( array(
-			'payer_id' => $payer_id
-		) );
+		$find_payer = self::get_payer(
+			array(
+				'payer_id' => $payer_id,
+			)
+		);
 
 		return (int) ( $find_payer['id'] ?? 0 );
 	}
@@ -40,7 +41,7 @@ class Prepared_Queries {
 	public static function insert_payer( $payer ) {
 		$model = new Payer_Model();
 
-		return $model->insert( $payer );
+		return $model->safe_create()->insert( $payer );
 	}
 
 	/**

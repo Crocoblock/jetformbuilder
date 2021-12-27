@@ -4,7 +4,9 @@
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
-class Payer_Model extends \Jet_Form_Builder\Db_Queries\Base_Db_Model {
+use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+
+class Payer_Model extends Base_Db_Model {
 
 	/**
 	 * @inheritDoc
@@ -24,12 +26,13 @@ class Payer_Model extends \Jet_Form_Builder\Db_Queries\Base_Db_Model {
 			'last_name'      => 'varchar(100)',
 			'email'          => 'varchar(255)',
 			'address_line_1' => 'varchar(255)',
+			'address_line_2' => 'varchar(255)',
 			'admin_area_2'   => 'varchar(255)',
 			'admin_area_1'   => 'varchar(255)',
 			'postal_code'    => 'varchar(100)',
 			'country_code'   => 'varchar(100)',
 			'created_at'     => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'     => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL'
+			'updated_at'     => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -37,10 +40,12 @@ class Payer_Model extends \Jet_Form_Builder\Db_Queries\Base_Db_Model {
 	 * @inheritDoc
 	 */
 	public static function schema_keys(): array {
-		return array( 'primary key' => 'id' );
+		return array(
+			'id'       => 'primary key',
+			'payer_id' => 'index',
+			'email'    => 'index',
+
+		);
 	}
 
-	public function prepare_where( $payer ): array {
-		return array( 'id', 'payer_id' );
-	}
 }

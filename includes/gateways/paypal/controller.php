@@ -100,7 +100,7 @@ class Controller extends Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	protected function retrieve_gateway_meta() {
-		return $this->query_scenario()->get_gateway_meta();
+		return $this->query_scenario()->get_gateways_meta();
 	}
 
 	/**
@@ -298,7 +298,6 @@ class Controller extends Base_Gateway {
 			$this->query_scenario()->on_success();
 
 		} catch ( Gateway_Exception $exception ) {
-
 			return;
 		}
 	}

@@ -4,7 +4,9 @@
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
-class Payment_Model extends \Jet_Form_Builder\Db_Queries\Base_Db_Model {
+use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+
+class Payment_Model extends Base_Db_Model {
 
 	/**
 	 * @inheritDoc
@@ -38,6 +40,11 @@ class Payment_Model extends \Jet_Form_Builder\Db_Queries\Base_Db_Model {
 	 * @inheritDoc
 	 */
 	public static function schema_keys(): array {
-		return array( 'primary key' => 'id' );
+		return array(
+			'id'             => 'primary key',
+			'transaction_id' => 'index',
+			'form_id'        => 'index',
+			'user_id'        => 'index',
+		);
 	}
 }

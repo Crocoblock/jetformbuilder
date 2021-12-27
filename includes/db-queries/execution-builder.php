@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -150,8 +149,8 @@ class Execution_Builder {
 			$ready_columns .= $column . ' ' . $desc . ", \n";
 		}
 
-		$keys = [];
-		foreach ( $schema_keys as $key => $column_name ) {
+		$keys = array();
+		foreach ( $schema_keys as $column_name => $key ) {
 			$keys[] = "$key ($column_name)";
 		}
 		$ready_keys = implode( ", \n", $keys );
@@ -187,14 +186,14 @@ class Execution_Builder {
 	}
 
 	public function save_to_existed( Base_Db_Model $model ): Execution_Builder {
-		$this->existed_tables[ $model->table() ] = true;
+		$this->existed_tables[ $model->table() ] = true;ё
 
 		return $this;
 	}
 
 	public function delta( $sql ) {
 		if ( ! function_exists( 'dbDelta' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		}
 
 		dbDelta( $sql );
@@ -202,6 +201,7 @@ class Execution_Builder {
 
 	/**
 	 * Returns WPDB instance
+	 *
 	 * @return \QM_DB|\wpdb [description]
 	 */
 	protected function wpdb() {

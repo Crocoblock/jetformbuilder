@@ -4,8 +4,10 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Meta_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Paypal;
@@ -86,6 +88,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		$payments      = new Payment_Model();
 		$payments_meta = new Payment_Meta_Model();
 		$payers        = new Payer_Model();
+		$payers_ship   = new Payer_Shipping_Model();
 
 		try {
 			$payments->safe_create()->insert(
@@ -104,6 +107,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			);
 
 			$payers->safe_create();
+			$payers_ship->safe_create();
 			$payments_meta->safe_create();
 
 		} catch ( Sql_Exception $exception ) {
@@ -148,8 +152,13 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			->set_order_id( $this->get_scenario_row( 'transaction_id' ) )
 			->send_request();
 
-		$model = new Payment_Model();
-		$meta  = new Payment_Meta_Model();
+		if ( isset( $payment['message'] ) ) {
+			throw new Gateway_Exception( $payment['message'] );
+		}
+
+		$model      = new Payment_Model();
+		$meta       = new Payment_Meta_Model();
+		$payer_ship = new Payer_Shipping_Model();
 
 		try {
 			$model->update(
@@ -174,32 +183,37 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 			$shipping = $payment['purchase_units'][0]['shipping'] ?? array();
 
-			$payer_id = Prepared_Queries::insert_payer_with_id(
+			$payer_id = Prepared_Queries::insert_or_update_payer(
 				array(
-					'payer_id'       => $payment['payer']['payer_id'] ?? '',
-					'first_name'     => $payment['payer']['name']['given_name'] ?? '',
-					'last_name'      => $payment['payer']['name']['surname'] ?? '',
-					'email'          => $payment['payer']['email_address'] ?? '',
-					'address_line_1' => $shipping['address']['address_line_1'],
-					'address_line_2' => $shipping['address']['address_line_2'],
-					'admin_area_2'   => $shipping['address']['admin_area_2'],
-					'admin_area_1'   => $shipping['address']['admin_area_1'],
-					'postal_code'    => $shipping['address']['postal_code'],
-					'country_code'   => $shipping['address']['country_code'],
+					'payer_id'   => $payment['payer']['payer_id'] ?? '',
+					'first_name' => $payment['payer']['name']['given_name'] ?? '',
+					'last_name'  => $payment['payer']['name']['surname'] ?? '',
+					'email'      => $payment['payer']['email_address'] ?? '',
+				)
+			);
+
+			$payer_ship_id = $payer_ship->insert(
+				array(
+					'payer_id'       => $payer_id,
+					'full_name'      => $shipping['name']['full_name'] ?? '',
+					'address_line_1' => $shipping['address']['address_line_1'] ?? '',
+					'address_line_2' => $shipping['address']['address_line_2'] ?? '',
+					'admin_area_2'   => $shipping['address']['admin_area_2'] ?? '',
+					'admin_area_1'   => $shipping['address']['admin_area_1'] ?? '',
+					'postal_code'    => $shipping['address']['postal_code'] ?? '',
+					'country_code'   => $shipping['address']['country_code'] ?? '',
 				)
 			);
 
 			$meta->insert(
 				array(
 					'payment_id' => $this->get_scenario_row( 'id' ),
-					'meta_key'   => 'payer_relation',
-					'meta_value' => $payer_id,
+					'meta_key'   => 'payer_ship_relation',
+					'meta_value' => $payer_ship_id,
 				)
 			);
 
 		} catch ( Sql_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		} catch ( Query_Builder_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
 		}
 	}

@@ -16,20 +16,23 @@ class Prepared_Queries {
 	 * @param $payer
 	 *
 	 * @return int
-	 * @throws Sql_Exception|Query_Builder_Exception
+	 * @throws Sql_Exception
 	 */
-	public static function insert_payer_with_id( $payer ): int {
+	public static function insert_or_update_payer( $payer ): int {
 		$payer_id = $payer['payer_id'] ?? '';
 
-		self::insert_payer( $payer );
+		try {
+			$find_payer = self::get_payer( array(
+				'payer_id' => $payer_id
+			) );
 
-		$find_payer = self::get_payer(
-			array(
-				'payer_id' => $payer_id,
-			)
-		);
+			self::update_payer( $payer );
 
-		return (int) ( $find_payer['id'] ?? 0 );
+			return (int) ( $find_payer['id'] ?? 0 );
+
+		} catch ( Query_Builder_Exception $exception ) {
+			return self::insert_payer( $payer );
+		}
 	}
 
 	/**
@@ -51,8 +54,7 @@ class Prepared_Queries {
 	 * @throws Sql_Exception
 	 */
 	public static function update_payer( $payer ) {
-		$model = new Payer_Model();
-
+		$model = ( new Payer_Model() )->set_silence( true );
 		$where = array();
 
 		if ( isset( $payer['id'] ) ) {
@@ -60,7 +62,7 @@ class Prepared_Queries {
 		} elseif ( isset( $payer['payer_id'] ) ) {
 			$where['payer_id'] = $payer['payer_id'];
 		}
-		unset( $payer['id'] );
+		unset( $payer['id'], $payer['payer_id'] );
 
 		return $model->update( $payer, $where );
 	}

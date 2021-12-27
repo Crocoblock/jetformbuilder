@@ -4,8 +4,10 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
@@ -132,14 +134,6 @@ class Controller extends Base_Gateway {
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 		$this->get_scenario()->process_before();
-	}
-
-	/**
-	 * @return mixed
-	 * @throws Gateway_Exception
-	 */
-	protected function retrieve_payment_instance() {
-		return $this->query_scenario()->process_after();
 	}
 
 	/**
@@ -297,8 +291,16 @@ class Controller extends Base_Gateway {
 			/** redirect to the page */
 			$this->query_scenario()->on_success();
 
-		} catch ( Gateway_Exception $exception ) {
+		} catch ( Skip_Exception $exception ) {
 			return;
+		} catch ( Gateway_Exception $exception ) {
+			$exception->dynamic_error();
+
+			$this->send_response(
+				array(
+					'status' => $exception->getMessage()
+				)
+			);
 		}
 	}
 

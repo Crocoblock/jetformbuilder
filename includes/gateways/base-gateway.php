@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
@@ -87,10 +88,11 @@ abstract class Base_Gateway {
 
 	abstract protected function failed_statuses();
 
-	abstract protected function retrieve_payment_instance();
-
 	abstract protected function retrieve_gateway_meta();
 
+	/**
+	 * @deprecated 1.5.0
+	 */
 	protected function set_payment() {
 		$this->payment_instance = $this->retrieve_payment_instance();
 	}
@@ -235,18 +237,18 @@ abstract class Base_Gateway {
 
 	/**
 	 * @return $this
-	 * @throws Gateway_Exception
+	 * @throws Skip_Exception
 	 */
 	public function set_payment_token() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $this->token_query_name ) || empty( $_GET[ $this->token_query_name ] ) ) {
-			throw new Gateway_Exception( 'Empty payment token.' );
+			throw new Skip_Exception( 'Empty payment token.' );
 		}
 
 		$this->payment_token = $this->get_payment_token();
 
 		if ( empty( $this->payment_token ) ) {
-			throw new Gateway_Exception( 'Invalid payment token.' );
+			throw new Skip_Exception( 'Invalid payment token.' );
 		}
 
 		return $this;

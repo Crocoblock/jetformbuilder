@@ -65,13 +65,13 @@ class Execution_Builder {
 		$this->before_insert( $model );
 
 		$insert_columns = array_merge( $model->get_defaults(), $columns );
-		$result         = (int) $this->wpdb()->insert( $model->table(), $insert_columns, $format );
+		$this->wpdb()->insert( $model->table(), $insert_columns, $format );
 
-		if ( ! $result ) {
+		if ( ! $this->wpdb()->insert_id ) {
 			throw new Sql_Exception( "Something went wrong on insert into: {$model->table()}" );
 		}
 
-		return $result;
+		return $this->wpdb()->insert_id;
 	}
 
 	/**
@@ -143,6 +143,7 @@ class Execution_Builder {
 		$table           = $model->table();
 		$columns         = $model->schema();
 		$charset_collate = $model->schema_charset_collate();
+		$engine          = $model->schema_engine();
 
 		$ready_columns = '';
 		foreach ( $columns as $column => $desc ) {
@@ -158,7 +159,7 @@ class Execution_Builder {
 		return "CREATE TABLE $table (
 			$ready_columns
 			$ready_keys
-		) $charset_collate;";
+		) ENGINE={$engine} {$charset_collate};";
 	}
 
 	public function is_exist( Base_Db_Model $model ): bool {
@@ -186,7 +187,7 @@ class Execution_Builder {
 	}
 
 	public function save_to_existed( Base_Db_Model $model ): Execution_Builder {
-		$this->existed_tables[ $model->table() ] = true;ё
+		$this->existed_tables[ $model->table() ] = true;
 
 		return $this;
 	}
@@ -197,6 +198,24 @@ class Execution_Builder {
 		}
 
 		dbDelta( $sql );
+	}
+
+	public function transaction_start() {
+		//$this->wpdb()->hide_errors();
+
+		return $this->wpdb()->query( 'START TRANSACTION' );
+	}
+
+	public function transaction_commit() {
+		//$this->wpdb()->hide_errors();
+
+		return $this->wpdb()->query( 'COMMIT' );
+	}
+
+	public function transaction_rollback() {
+		//$this->wpdb()->hide_errors();
+
+		return $this->wpdb()->query( 'ROLLBACK' );
 	}
 
 	/**

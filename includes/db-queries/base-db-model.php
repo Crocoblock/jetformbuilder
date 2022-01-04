@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 abstract class Base_Db_Model {
 
@@ -41,6 +43,64 @@ abstract class Base_Db_Model {
 		Execution_Builder::instance()->safe_create( $this );
 
 		return $this;
+	}
+
+	/**
+	 * @return View_Base
+	 * @throws Query_Builder_Exception
+	 */
+	public static function view(): View_Base {
+		throw new Query_Builder_Exception( 'View is undefined.' );
+	}
+
+	/**
+	 * @param $primary_id
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function findById( $primary_id ) {
+		return static::find( array( 'id' => $primary_id ) )
+		             ->set_limit( array( 1 ) )
+		             ->query()
+		             ->query_one();
+	}
+
+	/**
+	 * @param $columns
+	 *
+	 * @return View_Base
+	 * @throws Query_Builder_Exception
+	 */
+	public static function find( $columns ): View_Base {
+		$conditions = array();
+
+		foreach ( $columns as $column => $value ) {
+			$conditions[] = array(
+				'type'   => 'equal_column',
+				'values' => array( $column, $value ),
+			);
+		}
+
+		return static::view()->set_conditions( $conditions );
+	}
+
+	/**
+	 * @param $columns
+	 *
+	 * @return View_Base
+	 * @throws Query_Builder_Exception
+	 */
+	public static function findOne( $columns ): View_Base {
+		return static::find( $columns )->set_limit( array( 1 ) );
+	}
+
+	/**
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function all() {
+		return static::view()->query()->query_all();
 	}
 
 	/**
@@ -105,6 +165,9 @@ abstract class Base_Db_Model {
 	 */
 	public function before_insert() {
 		throw new Skip_Exception();
+	}
+
+	public function after_insert( $insert_columns ) {
 	}
 
 	public function capabilities_to_insert(): array {

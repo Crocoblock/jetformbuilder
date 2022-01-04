@@ -4,9 +4,10 @@
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
-use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 
-class Payment_Model extends Base_Db_Model {
+class Payment_Model extends Base_Gateway_Db_Model {
 
 	/**
 	 * @inheritDoc
@@ -28,7 +29,7 @@ class Payment_Model extends Base_Db_Model {
 			'gateway_id'             => 'varchar(100)',
 			'scenario'               => 'varchar(100)',
 			'amount_value'           => 'DECIMAL(10,4)',
-			'amount_code'            => 'varchar(100)',
+			'amount_code'            => 'varchar(20)',
 			'type'                   => 'varchar(100)',
 			'status'                 => 'varchar(100)',
 			'created_at'             => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
@@ -46,5 +47,9 @@ class Payment_Model extends Base_Db_Model {
 			'form_id'        => 'index',
 			'user_id'        => 'index',
 		);
+	}
+
+	public static function view(): View_Base {
+		return new Payment_View();
 	}
 }

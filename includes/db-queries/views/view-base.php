@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Db_Queries\Views;
 
+use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 abstract class View_Base {
@@ -10,9 +11,9 @@ abstract class View_Base {
 	const FROM_HIGH_TO_LOW = 'DESC';
 	const FROM_LOW_TO_HIGH = 'ASC';
 
-	protected $limit      = array();
+	protected $limit = array();
 	protected $conditions = array();
-	protected $order_by   = array();
+	protected $order_by = array();
 
 	abstract public function table(): string;
 
@@ -38,6 +39,7 @@ abstract class View_Base {
 		if ( empty( $this->conditions ) ) {
 			$this->set_conditions( array() );
 		}
+
 		return $this->conditions;
 	}
 
@@ -128,5 +130,11 @@ abstract class View_Base {
 		return __( 'Empty row.', 'jet-form-builder' );
 	}
 
+	/**
+	 * @return Query_Builder
+	 */
+	public function query() {
+		return ( new Query_Builder() )->set_view( $this );
+	}
 
 }

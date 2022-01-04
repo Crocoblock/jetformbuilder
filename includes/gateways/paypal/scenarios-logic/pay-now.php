@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Db_Models\Notes_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Meta_Model;
@@ -85,13 +86,8 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	}
 
 	public function save_resource( $payment ) {
-		$payments      = new Payment_Model();
-		$payments_meta = new Payment_Meta_Model();
-		$payers        = new Payer_Model();
-		$payers_ship   = new Payer_Shipping_Model();
-
 		try {
-			$payments->safe_create()->insert(
+			( new Payment_Model() )->insert(
 				array(
 					'transaction_id'         => $payment['id'],
 					'initial_transaction_id' => $payment['id'],
@@ -105,10 +101,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'status'                 => $payment['status'],
 				)
 			);
-
-			$payers->safe_create();
-			$payers_ship->safe_create();
-			$payments_meta->safe_create();
 
 		} catch ( Sql_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
@@ -132,11 +124,12 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 */
 	public function query_scenario_row() {
 		try {
-			return Prepared_Queries::get_payment(
+			return Payment_Model::findOne(
 				array(
 					'transaction_id' => $this->get_queried_token(),
 				)
-			);
+			)->query()->query_one();
+
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
 		}
@@ -157,7 +150,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		}
 
 		$model      = new Payment_Model();
-		$meta       = new Payment_Meta_Model();
 		$payer_ship = new Payer_Shipping_Model();
 
 		try {
@@ -183,7 +175,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 			$shipping = $payment['purchase_units'][0]['shipping'] ?? array();
 
-			$payer_id = Prepared_Queries::insert_or_update_payer(
+			$payer_id = Payer_Model::insert_or_update(
 				array(
 					'payer_id'   => $payment['payer']['payer_id'] ?? '',
 					'first_name' => $payment['payer']['name']['given_name'] ?? '',
@@ -192,8 +184,10 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 				)
 			);
 
-			$payer_ship_id = $payer_ship->insert(
+			$payer_ship->insert(
 				array(
+					'relation_id'    => $this->get_scenario_row( 'id' ),
+					'relation_type'  => self::scenario_id(),
 					'payer_id'       => $payer_id,
 					'full_name'      => $shipping['name']['full_name'] ?? '',
 					'address_line_1' => $shipping['address']['address_line_1'] ?? '',
@@ -202,14 +196,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'admin_area_1'   => $shipping['address']['admin_area_1'] ?? '',
 					'postal_code'    => $shipping['address']['postal_code'] ?? '',
 					'country_code'   => $shipping['address']['country_code'] ?? '',
-				)
-			);
-
-			$meta->insert(
-				array(
-					'payment_id' => $this->get_scenario_row( 'id' ),
-					'meta_key'   => 'payer_ship_relation',
-					'meta_value' => $payer_ship_id,
 				)
 			);
 

@@ -4,7 +4,6 @@
 		:class="{ 'proccesing-state': proccesingState }"
 	>
 		<h1 class="cs-vui-title">{{ 'JetFormBuilder Addons' }}</h1>
-		<HeaderBanner/>
 		<div class="jfb-addons-page__inner cx-vui-panel">
 			<div class="jfb-addons-page__header">
 				<div class="jfb-addons-page__header-controls" v-if="isLicenseMode">
@@ -140,7 +139,6 @@
 <script>
 
 import AddonItem from './components/AddonItem.vue';
-import HeaderBanner from './HeaderBanner.vue';
 
 const { applyFilters, doAction } = wp.hooks;
 
@@ -150,7 +148,6 @@ export default {
 	name: 'jfb-addons',
 	components: {
 		AddonItem,
-		HeaderBanner,
 	},
 	data() {
 		return {

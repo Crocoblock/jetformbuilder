@@ -4,6 +4,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.4.3
+* ADD: Option "Fields label HTML tag"
+* FIX: Correct rendering media field in Elementor editor
+* FIX: PHP Warning on load repeater preset
+* FIX: Displaying correct links for the plugin
+* Tweak: add filter `jet.fb.macro.field.value`
+
 ## 1.4.2
 * FIX: Guaranteed css output in editors
 * FIX: Correct init macros if JetForm not rendered

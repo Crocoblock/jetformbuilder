@@ -566,9 +566,9 @@ class File_Upload {
 		);
 	}
 
-	public function ensure_media_js( $content = '', $popup_data = array() ) {
+	public function ensure_media_js( $content = '' ) {
 		if ( $this->rendered_scripts ) {
-			return '';
+			return $content;
 		}
 		$this->rendered_scripts = true;
 
@@ -576,7 +576,6 @@ class File_Upload {
 		jet_form_builder()->blocks->register_form_scripts();
 
 		$this->enqueue_scripts();
-		wp_scripts()->done[] = 'jet-form-builder-frontend-forms';
 		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
 
 		return $content . ob_get_clean();

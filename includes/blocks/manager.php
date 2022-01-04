@@ -236,7 +236,7 @@ class Manager {
 		wp_register_script(
 			'jet-form-builder-file-upload',
 			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
-			array( 'jet-form-builder-frontend-forms', 'jet-form-builder-sortable' ),
+			array( 'jet-form-builder-sortable' ),
 			Plugin::instance()->get_version(),
 			true
 		);

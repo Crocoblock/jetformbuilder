@@ -38,7 +38,6 @@ class Addons_Page extends Base_Page {
 					'mainSiteUrl'    => 'https://jetformbuilder.com/',
 					'pricingPageUrl' => 'https://jetformbuilder.com/pricing/',
 				),
-				'christmasImage' => Plugin::instance()->plugin_url( 'assets/img/Cristmas-2022.png' ),
 			)
 		);
 	}

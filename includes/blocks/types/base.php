@@ -203,7 +203,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
 	}
 
-	protected function set_preset() {
+	public function set_preset() {
 		if ( ! $this->use_preset() ) {
 			return;
 		}

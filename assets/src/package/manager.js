@@ -30,6 +30,7 @@ import {
 	getFormFieldsBlocks,
 	getFormFieldsByBlock,
 	getInnerBlocks,
+	appendField,
 } from './helpers/blocks/blocks-helper';
 import {
 	gatewayAttr,
@@ -150,6 +151,7 @@ window.JetFBActions = {
 	getBlocksByName,
 	convertObjectToOptionsList,
 	prepareActionsListByType,
+	appendField,
 };
 
 // JFBHooks

@@ -248,7 +248,7 @@ class Mailchimp extends Integration_Base_Action {
 		list ( $tags_inactive, $tags_active ) = $this->get_tags_difference( $subscriber );
 
 		return array_merge(
-			$this->get_tags_with_status( $tags_inactive, 'inactive' ),
+			$this->get_tags_with_status( $tags_inactive, 'active' ),
 			$this->get_tags_with_status( $tags_active, 'active' )
 		);
 	}

@@ -227,7 +227,7 @@ class Form_Builder {
 			return '';
 		}
 
-		if ( ! $this->preset()->sanitize_source() ) {
+		if ( ! $this->preset()->general()->sanitize_source() ) {
 			echo 'You are not permitted to submit this form!';
 
 			return '';

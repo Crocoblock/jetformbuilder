@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -18,19 +19,6 @@ class Hidden_Field extends Base {
 	public $use_style_manager = false;
 
 	private function current_post() {
-		global $post;
-
-		if ( ! Live_Form::instance()->post ) {
-			if ( wp_doing_ajax() && empty( $post->ID ) ) {
-				$url     = wp_get_referer();
-				$post_id = url_to_postid( $url );
-
-				Live_Form::instance()->post = get_post( $post_id );
-			} else {
-				Live_Form::instance()->post = $post;
-			}
-		}
-
 		return Live_Form::instance()->post;
 	}
 
@@ -76,9 +64,13 @@ class Hidden_Field extends Base {
 			return $call_field_value;
 		}
 
-		$value = '';
+		$custom_cb = apply_filters( 'jet-form-builder/fields/hidden-field/value-cb', false, $call_field_value, $this );
+		$value     = '';
+
 		if ( is_callable( array( $this, $call_field_value ) ) ) {
 			$value = call_user_func( array( $this, $call_field_value ) );
+		} elseif ( is_callable( $custom_cb ) ) {
+			$value = call_user_func( $custom_cb );
 		}
 
 		return ( ! $this->is_empty( $value ) )
@@ -289,8 +281,86 @@ class Hidden_Field extends Base {
 		return isset( $field['default'] ) ? $field['default'] : '';
 	}
 
+	protected function referer_url() {
+		return wp_get_raw_referer();
+	}
+
 	private function is_empty( $value ) {
 		return ( "" === $value || is_null( $value ) || false === $value );
+	}
+
+	public function block_data( $editor, $handle ) {
+		wp_localize_script( $handle, 'JetFormHiddenField',
+			apply_filters(
+				'jet-form-builder/editor/hidden-field/config',
+				array(
+					'sources' => Tools::with_placeholder( array(
+							array(
+								'value' => 'post_id',
+								'label' => __( 'Current Post ID', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'post_title',
+								'label' => __( 'Current Post Title', 'jet-form-builder' ),
+							),
+
+							array(
+								'value' => 'post_url',
+								'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'post_meta',
+								'label' => __( 'Current Post Meta', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'user_id',
+								'label' => __( 'Current User ID', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'user_email',
+								'label' => __( 'Current User Email', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'user_name',
+								'label' => __( 'Current User Name', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'user_meta',
+								'label' => __( 'Current User Meta', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_id',
+								'label' => __( 'Current Post Author ID', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_email',
+								'label' => __( 'Current Post Author Email', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_name',
+								'label' => __( 'Current Post Author Name', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'query_var',
+								'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'referer_url',
+								'label' => __( 'Referer URL', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'current_date',
+								'label' => __( 'Current Date', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'manual_input',
+								'label' => __( 'Manual Input', 'jet-form-builder' ),
+							),
+						)
+					)
+				)
+			)
+		);
 	}
 
 }

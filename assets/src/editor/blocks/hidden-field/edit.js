@@ -1,4 +1,3 @@
-import { hiddenValues } from "./options";
 
 const { __ } = wp.i18n;
 
@@ -19,11 +18,9 @@ const {
 const {
 		  TextControl,
 		  SelectControl,
-		  PanelBody,
 		  Card,
 		  CardHeader,
 		  CardBody,
-		  BaseControl,
 	  } = wp.components;
 
 export default function HiddenEdit( props ) {
@@ -55,7 +52,7 @@ export default function HiddenEdit( props ) {
 				setAttributes( { field_value: newValue } );
 				setDynamicName( newValue )
 			} }
-			options={ hiddenValues }
+			options={ JetFormHiddenField.sources }
 		/>
 		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
 			key="hidden_value_field"
@@ -91,7 +88,7 @@ export default function HiddenEdit( props ) {
 		/> }
 	</>;
 
-	const { label = 'Please set `Field Value`' } = hiddenValues.find( option => option.value === attributes.field_value );
+	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find( option => option.value === attributes.field_value );
 	const resultLabel = [ label ];
 
 	switch ( attributes.field_value ) {

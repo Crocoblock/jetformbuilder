@@ -31,11 +31,13 @@ abstract class Base extends Base_Module {
 
 	/**
 	 * Block attributes on render
+	 *
 	 * @var array
 	 */
 	public $block_attrs = array();
 	/**
 	 * Block content on render
+	 *
 	 * @var string
 	 */
 	public $block_content;
@@ -44,12 +46,14 @@ abstract class Base extends Base_Module {
 
 	/**
 	 * Block attributes on register
+	 *
 	 * @var array
 	 */
 	public $attrs = array();
 
 	/**
 	 * Set to `false` if your block should not be styled
+	 *
 	 * @var bool
 	 */
 	public $use_style_manager = true;
@@ -65,7 +69,6 @@ abstract class Base extends Base_Module {
 	 * Override this method to set you style controls
 	 */
 	protected function _jsm_register_controls() {
-		//
 	}
 
 
@@ -108,7 +111,7 @@ abstract class Base extends Base_Module {
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
 			array(
-				'render_callback' => Plugin::instance()->blocks->render_callback( $this )
+				'render_callback' => Plugin::instance()->blocks->render_callback( $this ),
 			)
 		);
 
@@ -125,7 +128,7 @@ abstract class Base extends Base_Module {
 
 	private function _get_css_scheme() {
 		return apply_filters(
-			"jet-form-builder/block/css-scheme",
+			'jet-form-builder/block/css-scheme',
 			$this->get_css_scheme(),
 			$this->get_name()
 		);
@@ -199,35 +202,59 @@ abstract class Base extends Base_Module {
 		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
 	}
 
-	protected function set_preset() {
+	public function set_preset() {
 		if ( ! $this->use_preset() ) {
 			return;
 		}
-		$this->block_attrs['default'] = $this->get_default_from_preset();
+
+		$this->block_attrs['default'] = $this->get_prepared_default( $this->get_default_from_preset() );
 	}
 
-	protected function get_default_from_preset() {
+	/**
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	protected function get_prepared_default( $value ) {
+		$format = $this->expected_preset_type()[0] ?? false;
+
+		switch ( $format ) {
+			case 'array':
+				if ( ! is_array( $value ) ) {
+					$value = array( $value );
+				}
+
+				return array_map( 'strval', $value );
+			case 'raw':
+			default:
+				return $value;
+		}
+	}
+
+	protected function get_default_from_preset( $attributes = array() ) {
 		if ( ! $this->parent_repeater_name() ) {
-			return $this->get_field_value();
+			return $this->get_field_value( $attributes );
 		}
 
 		if ( ! $this->get_current_repeater() ) {
-			$this->set_current_repeater( array(
-				'index'  => false,
-				'values' => $this->load_current_repeater_preset()
-			) );
+			$this->set_current_repeater(
+				array(
+					'index'  => false,
+					'values' => $this->load_current_repeater_preset(),
+				)
+			);
 		}
 
 		$repeater = $this->get_current_repeater();
 
 		if ( false === $repeater['index'] ) {
-			return $this->get_field_value();
+			return $this->get_field_value( $attributes );
 		}
 
 		$name = $this->block_attrs['name'] ?? '';
 		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
 
-		return ( $row[ $name ] ?? $this->get_field_value() ) ?: '';
+		return ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
 	}
 
 	/**
@@ -250,7 +277,8 @@ abstract class Base extends Base_Module {
 				'%1$s_%2$s_%3$s',
 				$this->parent_repeater_name(),
 				$this->get_current_repeater_index(),
-				$name );
+				$name
+			);
 		}
 
 		return $name;
@@ -282,6 +310,7 @@ abstract class Base extends Base_Module {
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function fields_templates_path() {
@@ -291,6 +320,7 @@ abstract class Base extends Base_Module {
 	/**
 	 * You can override this method
 	 * to set your own template path
+	 *
 	 * @return false|string
 	 */
 	public function common_templates_path() {
@@ -488,7 +518,7 @@ abstract class Base extends Base_Module {
 		return array(
 			'type'  => 'text',
 			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
-			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' )
+			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' ),
 		);
 	}
 
@@ -660,6 +690,17 @@ abstract class Base extends Base_Module {
 
 	public function set_current_repeater( $attrs ) {
 		Live_Form::instance()->set_repeater( $this->parent_repeater_name(), $attrs );
+	}
+
+	/**
+	 * Possible values:
+	 * 'raw' - get what is, unchanged;
+	 * 'array';
+	 *
+	 * @return array
+	 */
+	public function expected_preset_type(): array {
+		return array( 'raw' );
 	}
 
 

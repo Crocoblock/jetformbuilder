@@ -10,7 +10,7 @@ function PluginPreset() {
 	} = wp.components;
 
 	const [ args, setArgs ] = useMetaState( '_jf_preset' );
-	const formFields = getAvailableFields();
+	const formFields = args.enabled ? getAvailableFields( [], 'preset' ) : [];
 
 	return <>
 		<ToggleControl

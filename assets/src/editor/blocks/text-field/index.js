@@ -1,7 +1,9 @@
-import TextEdit from "./edit";
-import metadata from "@blocks/text-field/block.json";
+import TextEdit from './edit';
+import metadata from '@blocks/text-field/block.json';
 
 const { __ } = wp.i18n;
+
+const { createBlock } = wp.blocks;
 
 const { name, icon = '' } = metadata;
 
@@ -14,7 +16,6 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	title: __( 'Text Field', 'jet-form-builder' ),
-	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: TextEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
@@ -22,13 +23,27 @@ const settings = {
 		attributes: {
 			label: 'Text Field',
 			placeholder: 'Input your text...',
-			desc: 'Field description...'
-		}
-	}
+			desc: 'Field description...',
+		},
+	},
+	transforms: {
+		from: [
+			{
+				type: 'block',
+				blocks: [
+					'core/paragraph',
+				],
+				transform: ( { content = '' } ) => {
+					return createBlock( name, { label: content } );
+				},
+				priority: 0,
+			},
+		],
+	},
 };
 
 export {
 	metadata,
 	name,
-	settings
+	settings,
 };

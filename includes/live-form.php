@@ -26,25 +26,11 @@ class Live_Form {
 	use Instance_Trait;
 
 	public $form_id = false;
-	private $form = false;
-
-
-	private $field_name;
-	private $current_field_data;
-	private $start_new_page = true;
-	public $rendered_rows = 0;
-
-	public $is_hidden_row;
-	public $is_submit_row;
-
-	public $current_repeater;
-	public $current_repeater_i;
-	public $preset;
 	public $spec_data;
 	public $post;
 	public $_conditional_blocks = array();
-	public $_repeaters = array();
-	public $blocks = array();
+	public $_repeaters          = array();
+	public $blocks              = array();
 
 	// for progress
 	public $form_break;
@@ -55,7 +41,7 @@ class Live_Form {
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->post = get_post();
+		$this->post = $this->current_post();
 	}
 
 	public function set_form_id( $form_id ) {
@@ -81,16 +67,18 @@ class Live_Form {
 		$attributes_from_post_type = array_diff( $jf_args, $jf_default_args );
 		$form_block_or_widget      = array_diff( $incoming_attributes, $jf_default_args );
 
-		$render_attributes = array_merge( ...apply_filters(
-			'jet-form-builder/form-render/attributes',
-			array(
-				Plugin::instance()->post_type->get_default_args_on_render(),
-				$attributes_from_post_type,
-				$form_block_or_widget
+		$render_attributes = array_merge(
+			...apply_filters(
+				'jet-form-builder/form-render/attributes',
+				array(
+					Plugin::instance()->post_type->get_default_args_on_render(),
+					$attributes_from_post_type,
+					$form_block_or_widget,
+				)
 			)
-		) );
+		);
 
-		$this->spec_data = ( object ) $render_attributes;
+		$this->spec_data = (object) $render_attributes;
 
 		return $this;
 	}
@@ -130,9 +118,12 @@ class Live_Form {
 			return '';
 		}
 
-		return $this->get_form_break()->render_progress( 'default', array(
-			'jet-form-builder-progress-pages--global'
-		) );
+		return $this->get_form_break()->render_progress(
+			'default',
+			array(
+				'jet-form-builder-progress-pages--global',
+			)
+		);
 	}
 
 
@@ -205,6 +196,19 @@ class Live_Form {
 
 	public function set_repeater( $name, $attrs ) {
 		$this->_repeaters[ $name ] = array_merge( $this->get_repeater( $name ), $attrs );
+	}
+
+	private function current_post() {
+		global $post;
+
+		if ( wp_doing_ajax() && empty( $post->ID ) ) {
+			$url     = wp_get_referer();
+			$post_id = url_to_postid( $url );
+
+			return get_post( $post_id );
+		} else {
+			return $post;
+		}
 	}
 
 

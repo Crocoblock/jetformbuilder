@@ -92,7 +92,7 @@ class Redirect_To_Page extends Base {
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
 
 				$parser = ( new Macros_Parser() )->set_replacements( $request );
-				$to_url = ( new Dynamic_Preset( 'redirect_url' ) )->parse_value( $this->settings );
+				$to_url = ( new Dynamic_Preset() )->parse_value( $this->settings, 'redirect_url' );
 
 				$to_url = $parser->parse_macros( $to_url );
 

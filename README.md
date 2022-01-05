@@ -4,6 +4,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.5.0
+* ADD: Transforming fields
+* ADD: New source for hidden-field: `Referer URL`
+* ADD: php filter `jet-form-builder/editor/hidden-field/config` for hidden-field config
+* FIX: Removing tags from existing members in Mailchimp.
+* Tweak: Fixes and improvements for better compatibility with PRO addons
+
 ## 1.4.3
 * ADD: Option "Fields label HTML tag"
 * FIX: Correct rendering media field in Elementor editor

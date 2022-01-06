@@ -24,6 +24,7 @@ class Payment_Model extends Base_Gateway_Db_Model {
 			'id'                     => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'transaction_id'         => 'varchar(255)',
 			'initial_transaction_id' => 'varchar(255)',
+			'subscription_id'        => 'bigint(20)',
 			'form_id'                => 'bigint(20)',
 			'user_id'                => 'bigint(20)',
 			'gateway_id'             => 'varchar(100)',

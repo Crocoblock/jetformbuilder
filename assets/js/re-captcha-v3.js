@@ -46,11 +46,10 @@
 			const current = window.JetFormBuilderReCaptchaConfig[ formID ] || false;
 
 			if ( ! current ) {
-				return;
+				return resolve();
 			}
 
 			window.JetFormBuilderCaptcha( formID, current, resolve, reject );
-
 		};
 
 		const setUpMain = function () {

@@ -36,6 +36,9 @@ class Query_Conditions_Builder {
 			'equal_column' => array(
 				'callback' => array( $this, 'build_equal_column' ),
 			),
+			'equal_two_columns' => array(
+				'callback' => array( $this, 'build_equal_two_columns' ),
+			),
 			'like'         => array(
 				'callback' => array( $this, 'build_like' ),
 			),
@@ -170,6 +173,17 @@ class Query_Conditions_Builder {
 		$second = esc_sql( $second );
 
 		return "{$this->view()->column( $column_name )} = '{$second}'";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_equal_two_columns( $column_name, $second ): string {
+		return "{$this->view()->column( $column_name )} = {$this->view()->column( $second )}";
 	}
 
 	/**

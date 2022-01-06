@@ -50,7 +50,7 @@ abstract class Base_Db_Model {
 	 * @throws Query_Builder_Exception
 	 */
 	public static function view(): View_Base {
-		throw new Query_Builder_Exception( 'View is undefined.' );
+		throw new Query_Builder_Exception( 'View is undefined for: ' . static::class );
 	}
 
 	/**
@@ -76,10 +76,14 @@ abstract class Base_Db_Model {
 		$conditions = array();
 
 		foreach ( $columns as $column => $value ) {
-			$conditions[] = array(
-				'type'   => 'equal_column',
-				'values' => array( $column, $value ),
-			);
+			if ( is_numeric( $column ) ) {
+				$conditions[] = $value;
+			} else {
+				$conditions[] = array(
+					'type'   => 'equal_column',
+					'values' => array( $column, $value ),
+				);
+			}
 		}
 
 		return static::view()->set_conditions( $conditions );

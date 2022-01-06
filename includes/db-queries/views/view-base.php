@@ -14,11 +14,15 @@ abstract class View_Base {
 	protected $limit = array();
 	protected $conditions = array();
 	protected $order_by = array();
+	protected $select = array( '*' );
+
+	/** @var Relation[] */
+	protected $relations = array();
 
 	abstract public function table(): string;
 
 	public function select_columns(): array {
-		return array( '*' );
+		return $this->select;
 	}
 
 	public function always_conditions(): array {
@@ -27,6 +31,19 @@ abstract class View_Base {
 
 	public function custom_where(): string {
 		return '';
+	}
+
+	public function with( View_Base $view, Relation $relation = null ): View_Base {
+		if ( ! $relation ) {
+			$relation = new Relation();
+		}
+		$this->relations[] = $relation->left( $this )->right( $view );
+
+		return $this;
+	}
+
+	public function primary_column(): string {
+		return 'id';
 	}
 
 	public function set_conditions( array $conditions ): View_Base {

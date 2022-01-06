@@ -61,6 +61,10 @@ abstract class Base_Source {
 		return true;
 	}
 
+	public function is_need_prop() {
+		return true;
+	}
+
 	/**
 	 * @return mixed
 	 * @throws Preset_Exception
@@ -160,6 +164,9 @@ abstract class Base_Source {
 	}
 
 	protected function get_prop() {
+		if ( ! $this->is_need_prop() ) {
+			return true;
+		}
 		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : false );
 	}
 
@@ -168,6 +175,9 @@ abstract class Base_Source {
 	 * @throws Preset_Exception
 	 */
 	public function get_result_on_prop() {
+		if ( ! $this->is_need_prop() ) {
+			return $this->src();
+		}
 		$func_name = self::FUNC_PREFIX . $this->prop;
 
 		if ( is_callable( array( $this, $func_name ) ) ) {

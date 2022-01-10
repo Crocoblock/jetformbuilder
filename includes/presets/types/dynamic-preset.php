@@ -32,7 +32,7 @@ class Dynamic_Preset extends Base_Preset {
 	public function get_source( $args = array() ): Base_Source {
 		$this->field = $args['name'] ?? '';
 
-		return parent::get_source( $args );
+		return $this->get_new_source( $args );
 	}
 
 	public function get_fields_map() {

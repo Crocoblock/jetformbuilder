@@ -6,11 +6,11 @@ namespace Jet_Form_Builder\Db_Queries\Views;
 
 class Relation {
 
-	/** @var View_Base */
-	public $left;
+	/** @var object */
+	public $local;
 
-	/** @var View_Base */
-	public $right;
+	/** @var object */
+	public $foreign;
 
 	public $condition = '';
 	protected $type = 'INNER';
@@ -21,17 +21,23 @@ class Relation {
 		return $this;
 	}
 
-	public function left( View_Base $view_base ): Relation {
-		if ( ! $this->left ) {
-			$this->left = $view_base;
+	public function local( View_Base $view_base, string $foreign_key ): Relation {
+		if ( ! $this->local ) {
+			$this->local = (object) array(
+				'table' => $view_base->table(),
+				'key'   => $foreign_key
+			);
 		}
 
 		return $this;
 	}
 
-	public function right( View_Base $view_base ): Relation {
-		if ( ! $this->right ) {
-			$this->right = $view_base;
+	public function foreign( View_Base $view_base, string $primary_key = 'id' ): Relation {
+		if ( ! $this->foreign ) {
+			$this->foreign = (object) array(
+				'table' => $view_base->table(),
+				'key'   => $primary_key
+			);
 		}
 
 		return $this;
@@ -45,17 +51,19 @@ class Relation {
 
 	public function parse_condition( string $condition ): string {
 		return str_replace(
-			array( '@left', '@right' ),
-			array( $this->left->table(), $this->right->table() ),
+			array( '@local', '@foreign' ),
+			array( $this->local->table, $this->foreign->table ),
 			$condition
 		);
 	}
 
 	public function get_result() {
-		$left  = "`{$this->left->table()}`.`{$this->left->primary_column()}`";
-		$right = "`{$this->right->table()}`.`{$this->right->primary_column()}`";
+		$foreign = $this->foreign->table;
 
-		return "{$this->type} JOIN {$left} = {$right} {$this->parse_condition( $this->condition )}";
+		$left  = "`{$this->local->table}`.`{$this->local->key}`";
+		$right = "`{$foreign}`.`{$this->foreign->key}`";
+
+		return "{$this->type} JOIN `{$foreign}` ON {$left} = {$right} {$this->parse_condition( $this->condition )}";
 	}
 
 }

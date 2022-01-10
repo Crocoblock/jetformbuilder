@@ -36,6 +36,20 @@ abstract class Base_Db_Model {
 	 */
 	abstract public static function schema_keys(): array;
 
+	public static function schema_columns( $prefix = '' ): array {
+		$columns = array_keys( static::schema() );
+
+		if ( ! $prefix ) {
+			return $columns;
+		}
+
+		return array_map( function ( $column ) use ( $prefix ) {
+			return array(
+				'as' => sprintf( "`%s`.`%s` as '%s'", static::table(), $column, "{$prefix}.{$column}" )
+			);
+		}, $columns );
+	}
+
 	/**
 	 * @throws Sql_Exception
 	 */
@@ -105,6 +119,16 @@ abstract class Base_Db_Model {
 	 */
 	public static function all() {
 		return static::view()->query()->query_all();
+	}
+
+	/**
+	 * @param $callable
+	 *
+	 * @return View_Base
+	 * @throws Query_Builder_Exception
+	 */
+	public static function with( $callable ) {
+		return static::view()->with( $callable );
 	}
 
 	/**

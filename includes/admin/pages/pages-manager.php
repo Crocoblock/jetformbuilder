@@ -38,6 +38,7 @@ class Pages_Manager {
 			array(
 				new Settings_Page(),
 				new Addons_Page(),
+				new Payments_Page(),
 			)
 		);
 	}

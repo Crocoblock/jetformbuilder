@@ -33,17 +33,25 @@ abstract class View_Base {
 		return '';
 	}
 
-	public function with( View_Base $view, Relation $relation = null ): View_Base {
-		if ( ! $relation ) {
-			$relation = new Relation();
+	/**
+	 * @param $callable
+	 *
+	 * @return $this
+	 * @throws Query_Builder_Exception
+	 */
+	public function with( $callable ): View_Base {
+		if ( is_string( $callable ) ) {
+			$callable = array( $this, $callable );
 		}
-		$this->relations[] = $relation->left( $this )->right( $view );
+		if ( ! is_callable( $callable ) ) {
+			throw new Query_Builder_Exception( 'Relation is not callable.' );
+		}
+		$this->relations[] = call_user_func( $callable );
 
 		return $this;
 	}
 
-	public function primary_column(): string {
-		return 'id';
+	public function get_prepared_join( Query_Builder $builder ) {
 	}
 
 	public function set_conditions( array $conditions ): View_Base {
@@ -124,6 +132,17 @@ abstract class View_Base {
 	}
 
 	protected function prepare_row( $row ) {
+		foreach ( $row as $column => $value ) {
+			$parts = explode( '.', $column );
+
+			if ( ! isset( $parts[1] ) ) {
+				continue;
+			}
+
+			$row[ $parts[0] ][ $parts[1] ] = $value;
+			unset( $row[ $column ] );
+		}
+
 		return $row;
 	}
 

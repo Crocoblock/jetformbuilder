@@ -18,17 +18,23 @@ class Query_Builder {
 
 	use With_View;
 
-	protected $sql;
-	protected $select = '';
-	protected $where = '';
-	protected $limit = '';
-	protected $order_by = '';
+	public $sql;
+	public $select = '';
+	public $join = '';
+	public $where = '';
+	public $limit = '';
+	public $order_by = '';
 
-	protected $debug = false;
+	public $debug = false;
 
+	/**
+	 * @return array[]
+	 * @throws Query_Builder_Exception
+	 */
 	public function prepare_parts_callbacks(): array {
 		return array(
 			'select'   => array( $this, 'prepare_select' ),
+			'join'     => array( $this->view(), 'get_prepared_join' ),
 			'where'    => array( $this, 'prepare_where' ),
 			'order_by' => array( $this, 'prepare_order_by' ),
 			'limit'    => array( $this, 'prepare_limit' ),
@@ -114,7 +120,7 @@ class Query_Builder {
 				continue;
 			}
 
-			call_user_func( $callback );
+			call_user_func( $callback, $this );
 		}
 	}
 

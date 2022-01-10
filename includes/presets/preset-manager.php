@@ -11,6 +11,7 @@ use Jet_Form_Builder\Presets\Sources;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use Jet_Form_Builder\Presets\Types\General_Preset;
+use function GuzzleHttp\Psr7\_caseless_remove;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -39,11 +40,6 @@ class Preset_Manager {
 	);
 
 	private $_preset_types = array();
-
-	/**
-	 * @var Base_Preset
-	 */
-	public $manager_preset;
 	private $_source_types;
 
 
@@ -151,14 +147,17 @@ class Preset_Manager {
 	/**
 	 * @param $args
 	 *
-	 * @throws Plain_Default_Exception
+	 * @return Base_Preset
+	 * @throws Plain_Default_Exception|Preset_Exception
 	 */
-	protected function set_preset_type_manager( $args ) {
+	protected function get_preset_type_manager( $args ) {
 		foreach ( $this->preset_types() as $type ) {
 			if ( $type->is_active_preset( $args ) ) {
-				$this->manager_preset = $this->get_preset_type( $type->get_slug() );
+				return $this->get_preset_type( $type->get_slug() );
 			}
 		}
+
+		throw new Preset_Exception( 'Preset manager is not installed.' );
 	}
 
 	/**
@@ -172,17 +171,6 @@ class Preset_Manager {
 		}
 	}
 
-	/**
-	 * @return Base_Preset
-	 * @throws Preset_Exception
-	 */
-	public function get_preset_manager(): Base_Preset {
-		if ( ! is_a( $this->manager_preset, Base_Preset::class ) ) {
-			throw new Preset_Exception( 'Preset manager is not installed.' );
-		}
-
-		return $this->manager_preset;
-	}
 
 	protected function register_preset_type( Base_Preset $type ) {
 		$this->_preset_types[ $type->get_slug() ] = $type;
@@ -196,20 +184,20 @@ class Preset_Manager {
 	 * @return [type] [description]
 	 */
 	public function get_field_value( $args = array() ) {
-		$this->manager_preset = null;
-
 		if ( empty( $args['name'] ) ) {
 			return '';
 		}
 
 		try {
-			$this->set_preset_type_manager( $args );
+			$manager = $this->get_preset_type_manager( $args );
 		} catch ( Plain_Default_Exception $exception ) {
 			return $exception->getMessage();
+		} catch ( Preset_Exception $exception ) {
+			return '';
 		}
 
 		try {
-			return $this->get_preset_manager()->get_source( $args )->result();
+			return $manager->get_source( $args )->result();
 		} catch ( Preset_Exception $exception ) {
 			return '';
 		}

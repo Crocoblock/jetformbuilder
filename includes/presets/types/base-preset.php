@@ -46,9 +46,7 @@ abstract class Base_Preset {
 	abstract public function is_active_preset( $args );
 
 	public function set_init_data( $data = array() ): Base_Preset {
-		if ( ! empty( $data ) && empty( $this->data ) ) {
-			$this->data = $data;
-		}
+		$this->data = $data;
 
 		return $this;
 	}

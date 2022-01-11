@@ -2,22 +2,32 @@
 	<div :class="{
 		'wrap': true,
 		'jet-form-builder-page': true,
-		'jet-form-builder-page--paypal-recurring-payments': true,
+		'jet-form-builder-page--payments': true,
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Payments', 'jet-form-builder' ) }}</h1>
-		<TablePagination/>
+		<template v-if="$slots.top">
+			<slot name="top"></slot>
+		</template>
+		<TablePagination v-else/>
 		<EntriesTable
 			:loading="loadingPage"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 		/>
-		<TablePagination/>
+		<template v-if="$slots.bottom">
+			<slot name="bottom"></slot>
+		</template>
+		<TablePagination v-else/>
 	</div>
 </template>
 
 <script>
-import * as related from './related-id-column';
+import GetIncoming from '../../mixins/GetIncoming';
+import i18n from '../../mixins/i18n';
+import EntriesTable from '../EntriesTable';
+import TablePagination from '../TablePagination';
 import * as gross from './gross';
+import * as PayerColumn from '../../entries-table-columns/payer';
 
 Vue.config.devtools = true;
 
@@ -25,28 +35,16 @@ const { applyFilters } = wp.hooks;
 const { apiFetch } = wp;
 const { mapState } = Vuex;
 
-const { GetIncoming, i18n } = window.JetFBMixins;
-const {
-		  EntriesTable,
-		  DetailsTableWithStore,
-		  TablePagination,
-		  ActionsColumn,
-		  PaypalSubscriberColumn,
-	  } = window.JetFBComponents;
-
-const columnsComponents = applyFilters( 'jet.fb.register.paypal.recurring-payments.columns', [
-	PaypalSubscriberColumn,
-	ActionsColumn,
-	related,
+const columnsComponents = [
+	PayerColumn,
 	gross,
-] );
+];
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 export default {
-	name: 'jfb-paypal-payments',
+	name: 'payments-table-core',
 	components: {
-		DetailsTableWithStore,
 		EntriesTable,
 		TablePagination,
 	},
@@ -91,8 +89,7 @@ export default {
 			'loadingPage',
 		] ),
 	},
-	methods: {
-	},
+	methods: {},
 };
 
 </script>
@@ -117,7 +114,7 @@ export default {
 	.cell--status {
 		width: 160px;
 	}
-	.cell--subscriber {
+	.cell--payer {
 		width: 220px;
 	}
 	.cell--gross {

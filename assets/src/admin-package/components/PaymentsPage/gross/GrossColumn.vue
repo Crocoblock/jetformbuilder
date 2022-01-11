@@ -9,7 +9,7 @@ export default {
 	methods: {},
 	computed: {
 		type() {
-			return this.fullEntry.type.value || 'sale';
+			return this.fullEntry.type.value;
 		},
 		wrapClasses() {
 			return {
@@ -31,7 +31,7 @@ export default {
 	padding: 0.3em;
 	font-weight: 600;
 
-	&-sale {
+	&-initial {
 		background-color: rgb(165 241 190 / 40%);
 	}
 

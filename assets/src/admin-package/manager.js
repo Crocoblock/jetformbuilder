@@ -13,8 +13,9 @@ import { renderCurrentPage } from './functions/RenderCurrentPage';
 import CopyButton from './components/CopyButton';
 import * as ChooseColumn from './entries-table-columns/choose';
 import * as ActionsColumn from './entries-table-columns/actions';
-import * as PaypalSubscriberColumn from './entries-table-columns/paypal-subscriber';
-import * as StoreHelper from './mixins/StoreHelper';
+import * as PayerColumn from './entries-table-columns/payer';
+import * as TableStoreHelper from './mixins/TableStoreHelper';
+import PaymentsPage from './components/PaymentsPage'
 
 import {
 	getCurrentPath,
@@ -43,15 +44,16 @@ window.JetFBComponents = {
 	DetailsTableWithStore,
 	ChooseColumn,
 	ActionsColumn,
-	PaypalSubscriberColumn,
+	PayerColumn,
 	SimpleWrapperComponent,
 	TablePagination,
+	PaymentsPage,
 };
 
 window.JetFBMixins = {
 	GetIncoming,
 	SaveTabByAjax,
 	i18n,
-	StoreHelper,
+	TableStoreHelper,
 	ParseIncomingValueMixin,
 };

@@ -62,6 +62,10 @@ class Payments extends Table_View_Base {
 			'gross'    => array(
 				'value' => array( $this, 'get_gross' ),
 			),
+			'payer'    => array(
+				'value' => array( $this, 'get_payer' ),
+				'type'  => 'rawArray',
+			),
 			'_FORM_ID' => array(
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
@@ -71,16 +75,16 @@ class Payments extends Table_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'date'       => array(
+			'date'   => array(
 				'label' => __( 'Date', 'jet-form-builder' ),
 			),
-			'status'     => array(
+			'status' => array(
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
-			'subscriber' => array(
+			'payer'  => array(
 				'label' => __( 'Payer', 'jet-form-builder' ),
 			),
-			'gross'      => array(
+			'gross'  => array(
 				'label' => __( 'Gross', 'jet-form-builder' ),
 			)
 		);
@@ -94,7 +98,7 @@ class Payments extends Table_View_Base {
 		return $record['type'] ?? '';
 	}
 
-	public function get_subscriber( $record ) {
+	public function get_payer( $record ) {
 		$name = $record['ship']['full_name'] ?? '';
 
 		if ( empty( $name ) ) {
@@ -111,7 +115,7 @@ class Payments extends Table_View_Base {
 	}
 
 	public function get_payment_date( $record ) {
-		return date( 'F j, Y, H:i', $record['created_at'] );
+		return mysql2date( 'F j, Y, H:i', $record['created_at'] );
 	}
 
 	public function get_form_id( $record ) {

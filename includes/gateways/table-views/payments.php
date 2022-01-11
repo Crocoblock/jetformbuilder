@@ -10,6 +10,7 @@ use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_FB_Paypal\RestEndpoints;
 use Jet_FB_Paypal\RestEndpoints\ActionRefundRecurringPayment as RefundAction;
+use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 
 class Payments extends Table_View_Base {
@@ -43,33 +44,33 @@ class Payments extends Table_View_Base {
 				'method' => RestEndpoints\ReceivePayments::get_methods(),
 				'url'    => RestEndpoints\ReceivePayments::rest_url(),
 			),
-			'total'       => PreparedViews::count_payments()
+			'total'       => Payment_Count_View::count()
 		);
 	}
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'       => array(
+			'id'             => array(
 				'value' => array( $this, 'get_payment_id' ),
 			),
-			'transaction_id'       => array(
+			'transaction_id' => array(
 				'value' => array( $this, 'get_transaction_id' ),
 			),
-			'type'     => array(
+			'type'           => array(
 				'value' => array( $this, 'get_payment_type_with_label' ),
 				'type'  => 'rawArray',
 			),
-			'date'     => array(
+			'date'           => array(
 				'value' => array( $this, 'get_payment_date' ),
 			),
-			'gross'    => array(
+			'gross'          => array(
 				'value' => array( $this, 'get_gross' ),
 			),
-			'payer'    => array(
+			'payer'          => array(
 				'value' => array( $this, 'get_payer' ),
 				'type'  => 'rawArray',
 			),
-			'_FORM_ID' => array(
+			'_FORM_ID'       => array(
 				'value' => array( $this, 'get_form_id' ),
 				'type'  => 'integer',
 			),
@@ -78,18 +79,24 @@ class Payments extends Table_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'date'   => array(
+			'id'    => array(
+				'label' => __( 'ID', 'jet-form-builder' ),
+			),
+			'date'  => array(
 				'label' => __( 'Date', 'jet-form-builder' ),
 			),
-			'type' => array(
+			'type'           => array(
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
-			'payer'  => array(
+			'gross' => array(
+				'label' => __( 'Gross', 'jet-form-builder' ),
+			),
+			'payer'          => array(
 				'label' => __( 'Payer', 'jet-form-builder' ),
 			),
-			'gross'  => array(
-				'label' => __( 'Gross', 'jet-form-builder' ),
-			)
+			'transaction_id' => array(
+				'label' => __( 'Transaction ID', 'jet-form-builder' ),
+			),
 		);
 	}
 
@@ -111,7 +118,7 @@ class Payments extends Table_View_Base {
 
 	public function get_payment_type_with_label( $record ) {
 		return array(
-			'slug' => $this->get_payment_type( $record ),
+			'slug'  => $this->get_payment_type( $record ),
 			'label' => $this->get_payment_type_label( $record )
 		);
 	}

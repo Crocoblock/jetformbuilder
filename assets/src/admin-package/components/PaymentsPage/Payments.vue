@@ -9,11 +9,17 @@
 			<slot name="top"></slot>
 		</template>
 		<TablePagination v-else/>
+
+		<template v-if="$slots.default">
+			<slot name="default"></slot>
+		</template>
 		<EntriesTable
+			v-else
 			:loading="loadingPage"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 		/>
+
 		<template v-if="$slots.bottom">
 			<slot name="bottom"></slot>
 		</template>
@@ -110,10 +116,13 @@ export default {
 }
 
 .cx-vue-list-table {
+	.cell--id {
+		width: 100px;
+	}
 	.cell--date {
 		width: 200px;
 	}
-	.cell--status {
+	.cell--type {
 		width: 160px;
 	}
 	.cell--payer {
@@ -121,6 +130,9 @@ export default {
 	}
 	.cell--gross {
 		width: 130px;
+	}
+	.cell--transaction_id {
+		width: 200px;
 	}
 }
 </style>

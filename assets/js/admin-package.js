@@ -750,6 +750,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2072,7 +2078,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/PaymentsPage/Payments.vue","webpack://./../Payments.vue"],"names":[],"mappings":"AAoGA;EACC,aAAA;ACnGD;ADoGC;EACC,OAAA;AClGF;ADoGC;EACC,OAAA;EACA,kBAAA;AClGF;ADuGC;EACC,YAAA;ACpGF;ADsGC;EACC,YAAA;ACpGF;ADsGC;EACC,YAAA;ACpGF;ADsGC;EACC,YAAA;ACpGF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-popup-grid {\r\n\tdisplay: flex;\r\n\t&-column:first-child {\r\n\t\tflex: 3;\r\n\t}\r\n\t&-column:not(:first-child) {\r\n\t\tflex: 1;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--date {\r\n\t\twidth: 200px;\r\n\t}\r\n\t.cell--status {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--payer {\r\n\t\twidth: 220px;\r\n\t}\r\n\t.cell--gross {\r\n\t\twidth: 130px;\r\n\t}\r\n}\r\n",".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.cx-vue-list-table .cell--id {\n  width: 100px;\n}\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--type {\n  width: 160px;\n}\n.cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n}\n.cx-vue-list-table .cell--transaction_id {\n  width: 200px;\n}", "",{"version":3,"sources":["webpack://./admin-package/components/PaymentsPage/Payments.vue","webpack://./../Payments.vue"],"names":[],"mappings":"AA0GA;EACC,aAAA;ACzGD;AD0GC;EACC,OAAA;ACxGF;AD0GC;EACC,OAAA;EACA,kBAAA;ACxGF;AD6GC;EACC,YAAA;AC1GF;AD4GC;EACC,YAAA;AC1GF;AD4GC;EACC,YAAA;AC1GF;AD4GC;EACC,YAAA;AC1GF;AD4GC;EACC,YAAA;AC1GF;AD4GC;EACC,YAAA;AC1GF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-popup-grid {\r\n\tdisplay: flex;\r\n\t&-column:first-child {\r\n\t\tflex: 3;\r\n\t}\r\n\t&-column:not(:first-child) {\r\n\t\tflex: 1;\r\n\t\ttext-align: center;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id {\r\n\t\twidth: 100px;\r\n\t}\r\n\t.cell--date {\r\n\t\twidth: 200px;\r\n\t}\r\n\t.cell--type {\r\n\t\twidth: 160px;\r\n\t}\r\n\t.cell--payer {\r\n\t\twidth: 220px;\r\n\t}\r\n\t.cell--gross {\r\n\t\twidth: 130px;\r\n\t}\r\n\t.cell--transaction_id {\r\n\t\twidth: 200px;\r\n\t}\r\n}\r\n",".jfb-popup-grid {\n  display: flex;\n}\n.jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n\n.cx-vue-list-table .cell--id {\n  width: 100px;\n}\n.cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.cx-vue-list-table .cell--type {\n  width: 160px;\n}\n.cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.cx-vue-list-table .cell--gross {\n  width: 130px;\n}\n.cx-vue-list-table .cell--transaction_id {\n  width: 200px;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4356,13 +4362,15 @@ var render = function () {
       _vm._v(" "),
       _vm.$slots.top ? [_vm._t("top")] : _c("TablePagination"),
       _vm._v(" "),
-      _c("EntriesTable", {
-        attrs: {
-          loading: _vm.loadingPage,
-          columns: _vm.columnsFromStore,
-          "columns-components": _vm.columnsComponents,
-        },
-      }),
+      _vm.$slots.default
+        ? [_vm._t("default")]
+        : _c("EntriesTable", {
+            attrs: {
+              loading: _vm.loadingPage,
+              columns: _vm.columnsFromStore,
+              "columns-components": _vm.columnsComponents,
+            },
+          }),
       _vm._v(" "),
       _vm.$slots.bottom ? [_vm._t("bottom")] : _c("TablePagination"),
     ],

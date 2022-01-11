@@ -51,10 +51,13 @@ class Payments extends Table_View_Base {
 		return array(
 			'id'       => array(
 				'value' => array( $this, 'get_payment_id' ),
-				'type'  => 'integer',
+			),
+			'transaction_id'       => array(
+				'value' => array( $this, 'get_transaction_id' ),
 			),
 			'type'     => array(
-				'value' => array( $this, 'get_payment_type' ),
+				'value' => array( $this, 'get_payment_type_with_label' ),
+				'type'  => 'rawArray',
 			),
 			'date'     => array(
 				'value' => array( $this, 'get_payment_date' ),
@@ -78,7 +81,7 @@ class Payments extends Table_View_Base {
 			'date'   => array(
 				'label' => __( 'Date', 'jet-form-builder' ),
 			),
-			'status' => array(
+			'type' => array(
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
 			'payer'  => array(
@@ -90,12 +93,27 @@ class Payments extends Table_View_Base {
 		);
 	}
 
-	public function get_payment_id( $record ) {
+	public function get_transaction_id( $record ) {
 		return $record['transaction_id'] ?? '';
+	}
+
+	public function get_payment_id( $record ) {
+		return $record['id'] ?? 0;
 	}
 
 	public function get_payment_type( $record ) {
 		return $record['type'] ?? '';
+	}
+
+	public function get_payment_type_label( $record ) {
+		return __( 'Initial payment', 'jet-form-builder' );
+	}
+
+	public function get_payment_type_with_label( $record ) {
+		return array(
+			'slug' => $this->get_payment_type( $record ),
+			'label' => $this->get_payment_type_label( $record )
+		);
 	}
 
 	public function get_payer( $record ) {

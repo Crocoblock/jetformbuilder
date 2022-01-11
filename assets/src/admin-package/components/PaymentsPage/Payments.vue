@@ -26,7 +26,8 @@ import GetIncoming from '../../mixins/GetIncoming';
 import i18n from '../../mixins/i18n';
 import EntriesTable from '../EntriesTable';
 import TablePagination from '../TablePagination';
-import * as gross from './gross';
+import * as GrossColumn from './gross';
+import * as PaymentType from './payment-type';
 import * as PayerColumn from '../../entries-table-columns/payer';
 
 Vue.config.devtools = true;
@@ -34,30 +35,25 @@ Vue.config.devtools = true;
 const { applyFilters } = wp.hooks;
 const { apiFetch } = wp;
 const { mapState } = Vuex;
-
-const columnsComponents = [
-	PayerColumn,
-	gross,
-];
-
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 export default {
 	name: 'payments-table-core',
+	props: {
+		columns: {
+			type: Array,
+			default: () => [],
+		},
+	},
 	components: {
 		EntriesTable,
 		TablePagination,
 	},
 	data() {
 		return {
-			list: [],
-			current: {},
-			currentPayload: {},
-			settings: {},
 			actions: {},
-			columnsComponents,
+			columnsComponents: [],
 			isShowPopup: false,
-			loading: false,
 		};
 	},
 	mixins: [ GetIncoming, i18n ],
@@ -69,6 +65,12 @@ export default {
 				  total,
 			  } = this.getIncoming();
 
+		this.columnsComponents = [
+			PayerColumn,
+			GrossColumn,
+			PaymentType,
+			...this.columns,
+		]
 		this.actions = JSON.parse( JSON.stringify( actions ) );
 
 		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );

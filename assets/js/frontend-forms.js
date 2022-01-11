@@ -1004,11 +1004,11 @@
 					return;
 				}
 
-				if ( prevSibling.textContent === currentValue ) {
+				if ( prevSibling.innerHTML === currentValue ) {
 					return;
 				}
 
-				prevSibling.textContent = currentValue;
+				prevSibling.innerHTML = currentValue;
 			};
 
 			const replaceFieldValues = scope => {

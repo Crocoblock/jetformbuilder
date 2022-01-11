@@ -998,17 +998,20 @@
 				);
 
 				if ( ! prevSibling ) {
-					prevSibling = macros.node.parentNode.insertBefore( document.createTextNode( currentValue ), macros.node );
+					let wrapper = document.createElement( 'div' );
+					wrapper.innerHTML = currentValue;
+
+					prevSibling = macros.node.parentNode.insertBefore( wrapper, macros.node );
 					prevSibling.JFB_macros_id = macros.id;
 
 					return;
 				}
 
-				if ( prevSibling.textContent === currentValue ) {
+				if ( prevSibling.innerHTML === currentValue ) {
 					return;
 				}
 
-				prevSibling.textContent = currentValue;
+				prevSibling.innerHTML = currentValue;
 			};
 
 			const replaceFieldValues = scope => {

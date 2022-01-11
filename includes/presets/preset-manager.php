@@ -152,23 +152,14 @@ class Preset_Manager {
 	 */
 	protected function get_preset_type_manager( $args ) {
 		foreach ( $this->preset_types() as $type ) {
-			if ( $type->is_active_preset( $args ) ) {
-				return $this->get_preset_type( $type->get_slug() );
+			$preset = $this->get_preset_type( $type->get_slug() );
+
+			if ( $preset->is_active_preset( $args ) ) {
+				return $preset;
 			}
 		}
 
 		throw new Preset_Exception( 'Preset manager is not installed.' );
-	}
-
-	/**
-	 * @param $args
-	 *
-	 * @throws Plain_Default_Exception
-	 */
-	public function maybe_throw_plain_default( $args ) {
-		foreach ( $this->preset_types() as $type ) {
-			$type->is_active_preset( $args );
-		}
 	}
 
 

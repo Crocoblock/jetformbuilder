@@ -92,8 +92,8 @@ class Calculated_Field extends Base {
 			For example:<br/><br/>
 			%FIELD::quantity%*%META::price%<br/><br/>
 			Where:<br/>
-			- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>
-			- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>
+			- %FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from<br/>
+			- %META::price% - macro for current post meta value. \"price\" - is a meta key to get value from<br/><br/>
 		", 'jet-form-builder' )
 		) ) );
 	}

@@ -136,6 +136,14 @@ function RegisterUserAction( props ) {
 			checked={ settings.log_in }
 			onChange={ log_in => onChangeSettingObj( { log_in } ) }
 		/>
+		{ settings.log_in && <SelectControl
+			key="remember_me_field"
+			label={ label( 'remember_me_field' ) }
+			labelPosition="side"
+			value={ settings.remember_me_field }
+			options={ withPlaceholder( fields ) }
+			onChange={ remember_me_field => onChangeSettingObj( { remember_me_field } ) }
+		/> }
 		<ToggleControl
 			key='add_user_id_control'
 			label={ label( 'add_user_id' ) }

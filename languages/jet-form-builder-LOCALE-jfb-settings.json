@@ -12,7 +12,7 @@
             "https://jetformbuilder.com/": [
                 ""
             ],
-            "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor": [
+            "Advanced form builder plugin for WordPress block editor. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.": [
                 ""
             ],
             "Crocoblock": [
@@ -540,7 +540,7 @@
             "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case": [
                 ""
             ],
-            "\r\n\t\t\tSet math formula to calculate field value.<br/>\r\n\t\t\tFor example:<br/><br/>\r\n\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n\t\t\tWhere:<br/>\r\n\t\t\t- %FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from<br/>\r\n\t\t\t- %META::price% - macros for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n\t\t": [
+            "\r\n\t\t\tSet math formula to calculate field value.<br/>\r\n\t\t\tFor example:<br/><br/>\r\n\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n\t\t\tWhere:<br/>\r\n\t\t\t- %FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from<br/>\r\n\t\t\t- %META::price% - macro for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n\t\t": [
                 ""
             ],
             "Items": [
@@ -666,6 +666,48 @@
             "Color": [
                 ""
             ],
+            "Current Post ID": [
+                ""
+            ],
+            "Current Post Title": [
+                ""
+            ],
+            "Current Post/Page URL": [
+                ""
+            ],
+            "Current Post Meta": [
+                ""
+            ],
+            "Current User ID": [
+                ""
+            ],
+            "Current User Email": [
+                ""
+            ],
+            "Current User Name": [
+                ""
+            ],
+            "Current User Meta": [
+                ""
+            ],
+            "Current Post Author ID": [
+                ""
+            ],
+            "Current Post Author Email": [
+                ""
+            ],
+            "Current Post Author Name": [
+                ""
+            ],
+            "Referer URL": [
+                ""
+            ],
+            "Current Date": [
+                ""
+            ],
+            "Manual Input": [
+                ""
+            ],
             "Number Input": [
                 ""
             ],
@@ -724,6 +766,21 @@
                 ""
             ],
             "Please select template": [
+                ""
+            ],
+            "Page Reload": [
+                ""
+            ],
+            "AJAX": [
+                ""
+            ],
+            "Row": [
+                ""
+            ],
+            "DIV": [
+                ""
+            ],
+            "LABEL": [
                 ""
             ],
             "You not allowed to do this": [
@@ -904,6 +961,9 @@
                 ""
             ],
             "*": [
+                ""
+            ],
+            "Fields label HTML tag": [
                 ""
             ],
             "Submit Type": [
@@ -1164,45 +1224,6 @@
             "Hidden Field": [
                 ""
             ],
-            "Current Post ID": [
-                ""
-            ],
-            "Current Post Title": [
-                ""
-            ],
-            "Current Post/Page URL": [
-                ""
-            ],
-            "Current Post Meta": [
-                ""
-            ],
-            "Current User ID": [
-                ""
-            ],
-            "Current User Email": [
-                ""
-            ],
-            "Current User Name": [
-                ""
-            ],
-            "Current User Meta": [
-                ""
-            ],
-            "Current Post Author ID": [
-                ""
-            ],
-            "Current Post Author Email": [
-                ""
-            ],
-            "Current Post Author Name": [
-                ""
-            ],
-            "Current Date": [
-                ""
-            ],
-            "Manual Input": [
-                ""
-            ],
             "Media Field": [
                 ""
             ],
@@ -1221,10 +1242,10 @@
             "Where:": [
                 ""
             ],
-            "%FIELD::quantity% - macros for form field value. \"quantity\" - is a field name to get value from": [
+            "%FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from": [
                 ""
             ],
-            "%META::price% - macros for current post meta value. \"price\" - is a meta key to get value from": [
+            "%META::price% - macro for current post meta value. \"price\" - is a meta key to get value from": [
                 ""
             ],
             "Select Field": [

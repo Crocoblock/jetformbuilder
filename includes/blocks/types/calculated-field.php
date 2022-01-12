@@ -87,32 +87,16 @@ class Calculated_Field extends Base {
 	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script(
-			$handle,
-			'JetFormCalculatedField',
-			apply_filters(
-				"jet-form-builder/field-data/{$this->get_name()}",
-				array(
-					'field_desc' => __(
-						'
-		            Set math formula to calculate field value.<br/>
-		            For example:<br/><br/>
-		            %1$FIELD::quantity%*%META::price%<br/><br/>
-		            Where:<br/>
-		            - %2$FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from<br/>
-		            - %META::price% - macros for current post meta value. "price" - is a meta key to get value from<br/><br/>
-		            Set math formula to calculate field value . < br / >
-					for example: <br/><br/>
-					%FIELD::quantity% * %META::price% <br/><br/>
-					Where: <br/>
-					- % FIELD::quantity % - macros for form field value . \'quantity" - is a field name to get value from<br/>
-					- %META::price% - macros for current post meta value. "price" - is a meta key to get value from<br/><br/>
-					',
-						'jet-form-builder'
-					),
-				)
-			)
-		);
+		wp_localize_script( $handle, 'JetFormCalculatedField', apply_filters( "jet-form-builder/field-data/{$this->get_name()}", array(
+			'field_desc' => __( "
+			Set math formula to calculate field value.<br/>
+			For example:<br/><br/>
+			%FIELD::quantity%*%META::price%<br/><br/>
+			Where:<br/>
+			- %FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from<br/>
+			- %META::price% - macro for current post meta value. \"price\" - is a meta key to get value from<br/><br/>
+		", 'jet-form-builder' )
+		) ) );
 	}
 
 }

@@ -61,6 +61,7 @@ class Register_User extends Base {
 			'user_meta'         => __( 'User Meta:', 'jet-form-builder' ),
 			'log_in'            => __( 'Log In User after Register:', 'jet-form-builder' ),
 			'add_user_id'       => __( 'Add User ID to form data:', 'jet-from-builder' ),
+			'remember_me_field' => __( '"Remember me" field:', 'jet-form-builder' )
 		);
 	}
 
@@ -110,7 +111,7 @@ class Register_User extends Base {
 	}
 
 	/**
-	 * @param array          $request
+	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void
@@ -124,12 +125,14 @@ class Register_User extends Base {
 		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
 
 		// Prepare fields
-		$username = false;
-		$email    = false;
-		$password = false;
-		$fname    = false;
-		$lname    = false;
-		$user_url = false;
+		$username       = false;
+		$email          = false;
+		$password       = false;
+		$fname          = false;
+		$lname          = false;
+		$user_url       = false;
+		$remember_field = $this->settings['remember_me_field'] ?? '';
+		$is_remember    = ! empty( $request[ $remember_field ] );
 
 		// If fields map for login, password or email is not set - abort but allow submit form (its not user fault)
 		if ( empty( $fields_map['login'] ) || empty( $fields_map['email'] ) || empty( $fields_map['password'] ) ) {
@@ -269,6 +272,7 @@ class Register_User extends Base {
 					array(
 						'user_login'    => $username,
 						'user_password' => $password,
+						'remember'      => $is_remember
 					)
 				);
 
@@ -302,7 +306,7 @@ class Register_User extends Base {
 				'user_id' => array(
 					'name' => 'user_id',
 					'help' => sprintf(
-						/* translators: %s: action label */
+					/* translators: %s: action label */
 						__( 'A computed field from the %s action.', 'jet-form-builder' ),
 						"<b>{$this->get_name()}</b>"
 					),
@@ -347,7 +351,7 @@ class Register_User extends Base {
 			),
 			'not_logged_in'     => array(
 				'label' => sprintf(
-					/* translators: %s: action label */
+				/* translators: %s: action label */
 					__( 'Not Logged in (appears only when the "%s" option is enabled)', 'jet-form-builder' ),
 					$this->editor_labels()['allow_register']
 				),

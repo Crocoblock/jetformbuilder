@@ -157,9 +157,9 @@ export default function RepeaterEdit( props ) {
 					%FIELD::quantity%*%META::price%<br/><br/>
 					{ __( 'Where:', 'jet-form-builder' ) }<br/>
 					-
-					{ __( '%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+					{ __( '%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
 					-
-					{ __( '%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+					{ __( '%META::price% - macro for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
 				</div> }
 
 

@@ -74,7 +74,6 @@ export default {
 	props: {
 		columns: {
 			type: Object,
-			required: true,
 		},
 		loading: {
 			type: Boolean,

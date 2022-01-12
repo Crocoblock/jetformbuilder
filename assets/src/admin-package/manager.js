@@ -4,6 +4,7 @@ import GetIncoming from './mixins/GetIncoming';
 import SaveTabByAjax from './mixins/SaveTabByAjax';
 import ParseIncomingValueMixin from './mixins/ParseIncomingValueMixin';
 import EntriesTable from './components/EntriesTable';
+import EntriesStoreTable from './components/EntriesStoreTable';
 import DetailsTable from './components/DetailsTable';
 import DetailsTableWithStore from './components/DetailsTableWithStore';
 import SimpleWrapperComponent from './components/SimpleWrapperComponent';
@@ -48,6 +49,7 @@ window.JetFBComponents = {
 	SimpleWrapperComponent,
 	TablePagination,
 	PaymentsPage,
+	EntriesStoreTable,
 };
 
 window.JetFBMixins = {

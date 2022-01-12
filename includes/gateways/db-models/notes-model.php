@@ -4,14 +4,8 @@
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
-use Automattic\WooCommerce\Admin\Notes\Note;
-use Jet_FB_Paypal\Views\SubscribeNow;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
-use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use Jet_Form_Builder\Gateways\Query_Views\Payer_View;
 
 class Notes_Model extends Base_Db_Model {
 

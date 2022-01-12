@@ -10,15 +10,14 @@
 		</template>
 		<TablePagination v-else/>
 
-		<template v-if="$slots.default">
-			<slot name="default"></slot>
-		</template>
 		<EntriesTable
-			v-else
 			:loading="loadingPage"
 			:columns="columnsFromStore"
 			:columns-components="columnsComponents"
 		/>
+		<template v-if="$slots.default">
+			<slot name="default"></slot>
+		</template>
 
 		<template v-if="$slots.bottom">
 			<slot name="bottom"></slot>

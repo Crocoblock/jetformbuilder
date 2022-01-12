@@ -3570,7 +3570,7 @@ function RepeaterEdit(props) {
     options: _options__WEBPACK_IMPORTED_MODULE_0__.calcType
   }), 'custom' === attributes.repeater_calc_type && wp.element.createElement("div", {
     className: "jet-form-editor__row-notice"
-  }, __('Set math formula to calculate field value.', 'jet-form-builder'), wp.element.createElement("br", null), __('For example:', 'jet-form-builder'), wp.element.createElement("br", null), wp.element.createElement("br", null), "%FIELD::quantity%*%META::price%", wp.element.createElement("br", null), wp.element.createElement("br", null), __('Where:', 'jet-form-builder'), wp.element.createElement("br", null), "-", __('%FIELD::quantity% - macros for form field value. "quantity" - is a field name to get value from', 'jet-form-builder'), wp.element.createElement("br", null), "-", __('%META::price% - macros for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder'), wp.element.createElement("br", null), wp.element.createElement("br", null))), wp.element.createElement(AdvancedFields, _extends({
+  }, __('Set math formula to calculate field value.', 'jet-form-builder'), wp.element.createElement("br", null), __('For example:', 'jet-form-builder'), wp.element.createElement("br", null), wp.element.createElement("br", null), "%FIELD::quantity%*%META::price%", wp.element.createElement("br", null), wp.element.createElement("br", null), __('Where:', 'jet-form-builder'), wp.element.createElement("br", null), "-", __('%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from', 'jet-form-builder'), wp.element.createElement("br", null), "-", __('%META::price% - macro for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder'), wp.element.createElement("br", null), wp.element.createElement("br", null))), wp.element.createElement(AdvancedFields, _extends({
     key: uniqKey('AdvancedFields')
   }, props))), wp.element.createElement("div", _extends({
     key: uniqKey('Fragment')
@@ -7531,6 +7531,17 @@ function RegisterUserAction(props) {
     onChange: function onChange(log_in) {
       return onChangeSettingObj({
         log_in: log_in
+      });
+    }
+  }), settings.log_in && wp.element.createElement(SelectControl, {
+    key: "remember_me_field",
+    label: label('remember_me_field'),
+    labelPosition: "side",
+    value: settings.remember_me_field,
+    options: withPlaceholder(fields),
+    onChange: function onChange(remember_me_field) {
+      return onChangeSettingObj({
+        remember_me_field: remember_me_field
       });
     }
   }), wp.element.createElement(ToggleControl, {

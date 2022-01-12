@@ -998,7 +998,7 @@
 				);
 
 				if ( ! prevSibling ) {
-					let wrapper = document.createElement( 'div' );
+					let wrapper = document.createElement( 'span' );
 					wrapper.innerHTML = currentValue;
 
 					prevSibling = macros.node.parentNode.insertBefore( wrapper, macros.node );

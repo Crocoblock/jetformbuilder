@@ -118,8 +118,8 @@ class Insert_Post extends Base {
 					}
 				} else {
 					if ( function_exists( 'jet_engine' )
-						 && jet_engine()->relations
-						 && jet_engine()->relations->is_relation_key( $key ) ) {
+					     && jet_engine()->relations
+					     && jet_engine()->relations->is_relation_key( $key ) ) {
 						$rels_input[ $key ] = $value;
 					} else {
 						if ( $this->is_repeater_val( $value ) ) {
@@ -336,6 +336,21 @@ class Insert_Post extends Base {
 				'label' => $label,
 			);
 		}
+
+		$result = array_merge( $result, array(
+			array(
+				'value' => 'trash',
+				'label' => __( 'Move to Trash', 'jet-form-builder' )
+			),
+			array(
+				'value' => 'from-field',
+				'label' => __( 'Get from the form field', 'jet-form-builder' )
+			),
+			array(
+				'value' => 'keep-current',
+				'label' => __( 'Keep current status (when updating post)', 'jet-form-builder' )
+			),
+		) );
 
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
 

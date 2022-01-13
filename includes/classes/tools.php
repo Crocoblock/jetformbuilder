@@ -546,4 +546,12 @@ class Tools {
 		return self::call_escape_func( 'template', $source, $replace_enqueue );
 	}
 
+	public static function is_repeater_val( $value ) {
+		if ( is_array( $value ) && ! empty( $value ) ) {
+			return is_array( array_shift( $value ) );
+		} else {
+			return false;
+		}
+	}
+
 }

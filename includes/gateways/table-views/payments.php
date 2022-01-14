@@ -3,15 +3,12 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views;
 
-use Jet_FB_Paypal\PreparedViews;
-use Jet_Form_Builder\Admin\Pages;
 use Jet_Form_Builder\Classes\Table_View_Base;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use Jet_FB_Paypal\RestEndpoints;
-use Jet_FB_Paypal\RestEndpoints\ActionRefundRecurringPayment as RefundAction;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
+use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
 
 class Payments extends Table_View_Base {
 
@@ -41,8 +38,8 @@ class Payments extends Table_View_Base {
 	public function load_data(): array {
 		return array(
 			'receive_url' => array(
-				'method' => RestEndpoints\ReceivePayments::get_methods(),
-				'url'    => RestEndpoints\ReceivePayments::rest_url(),
+				'method' => Rest_Endpoints\Receive_Payments::get_methods(),
+				'url'    => Rest_Endpoints\Receive_Payments::rest_url(),
 			),
 			'total'       => Payment_Count_View::count()
 		);
@@ -79,16 +76,16 @@ class Payments extends Table_View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'id'    => array(
+			'id'             => array(
 				'label' => __( 'ID', 'jet-form-builder' ),
 			),
-			'date'  => array(
+			'date'           => array(
 				'label' => __( 'Date', 'jet-form-builder' ),
 			),
 			'type'           => array(
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
-			'gross' => array(
+			'gross'          => array(
 				'label' => __( 'Gross', 'jet-form-builder' ),
 			),
 			'payer'          => array(

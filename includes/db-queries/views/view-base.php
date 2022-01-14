@@ -173,4 +173,20 @@ abstract class View_Base {
 		return ( new Query_Builder() )->set_view( $this );
 	}
 
+	public static function get_paginated_args( $args ): array {
+		return array_merge(
+			array(
+				'limit'      => 25,
+				'sort'       => View_Base::FROM_HIGH_TO_LOW,
+				'page'       => 1
+			),
+			$args
+		);
+	}
+
+	public static function get_offset( $args ): int {
+		return 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
+	}
+
+
 }

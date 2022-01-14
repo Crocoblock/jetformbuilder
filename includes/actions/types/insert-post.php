@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Methods\Post_Controller;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -24,23 +25,6 @@ class Insert_Post extends Base {
 		return 'insert_post';
 	}
 
-	/**
-	 * Return object fields
-	 *
-	 * @return string[] [type] [description]
-	 */
-	public function get_object_fields() {
-		return array(
-			'ID',
-			'post_title',
-			'post_content',
-			'post_excerpt',
-			'post_date',
-			'post_date_gmt',
-			'post_author',
-		);
-	}
-
 	public function action_attributes() {
 		return array(
 			'post_type'    => array(
@@ -58,219 +42,37 @@ class Insert_Post extends Base {
 		);
 	}
 
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @return void
+	 * @throws Action_Exception
+	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$post_type = ! empty( $this->settings['post_type'] ) ? $this->settings['post_type'] : false;
+		$post_type   = $this->settings['post_type'] ?? false;
+		$fields_map  = $this->settings['fields_map'] ?? array();
+		$post_status = $this->settings['post_status'] ?? '';
+		$meta        = $this->settings['default_meta'] ?? array();
 
-		if ( ! $post_type || ! post_type_exists( $post_type ) ) {
-			throw new Action_Exception(
-				'failed',
-				array(
-					'post_type' => $post_type,
-				)
-			);
-		}
-
-		$fields_map    = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
-		$meta_input    = array();
-		$terms_input   = array();
-		$rels_input    = array();
-		$object_fields = $this->get_object_fields();
-		$has_title     = false;
-
-		$postarr = array(
-			'post_type' => $post_type,
-		);
-
-		if ( ! empty( $this->settings['default_meta'] ) ) {
-			foreach ( $this->settings['default_meta'] as $meta_row ) {
-				if ( ! empty( $meta_row['key'] ) ) {
-					$meta_input[ $meta_row['key'] ] = $meta_row['value'];
-				}
-			}
-		}
-
-		foreach ( $request as $key => $value ) {
-			$key_found_in_map = false;
-
-			if ( ! empty( $fields_map[ $key ] ) ) {
-				$key              = Tools::sanitize_text_field( $fields_map[ $key ] );
-				$key_found_in_map = true;
-			}
-
-			if ( 'Submit' === $key ) {
-				continue;
-			}
-
-			if ( ! in_array( $key, $object_fields, true ) ) {
-
-				if ( false !== strpos( $key, 'jet_tax__' ) ) {
-
-					$tax = str_replace( 'jet_tax__', '', $key );
-
-					if ( ! isset( $terms_input[ $tax ] ) ) {
-						$terms_input[ $tax ] = array();
-					}
-
-					if ( ! is_array( $value ) ) {
-						$terms_input[ $tax ][] = absint( $value );
-					} else {
-						$terms_input[ $tax ] = array_merge( $terms_input[ $tax ], array_map( 'absint', $value ) );
-					}
-				} else {
-					if ( function_exists( 'jet_engine' )
-					     && jet_engine()->relations
-					     && jet_engine()->relations->is_relation_key( $key ) ) {
-						$rels_input[ $key ] = $value;
-					} else {
-						if ( $this->is_repeater_val( $value ) ) {
-
-							$prepared_value = array();
-
-							foreach ( $value as $index => $row ) {
-
-								$prepared_row = array();
-
-								foreach ( $row as $item_key => $item_value ) {
-
-									$item_key = ! empty( $fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $fields_map[ $item_key ] ) : $item_key;
-
-									$prepared_row[ $item_key ] = $item_value;
-								}
-
-								$prepared_value[ 'item-' . $index ] = $prepared_row;
-							}
-
-							if ( $key_found_in_map ) {
-								$meta_input[ $key ] = $prepared_value;
-							}
-						} elseif ( $key_found_in_map ) {
-							$meta_input[ $key ] = $value;
-						}
-					}
-				}
-			} else {
-				$postarr[ $key ] = $value;
-
-				if ( 'post_title' === $key ) {
-					$has_title = true;
-				}
-			}
-		}
-
-		$post_status = ! empty( $this->settings['post_status'] ) ? $this->settings['post_status'] : '';
-
-		if ( $post_status && 'keep-current' !== $post_status ) {
-			$postarr['post_status'] = $post_status;
-		}
-		$postarr['meta_input'] = $meta_input;
-		$post_type_obj         = get_post_type_object( $post_type );
-
-		$pre_post_check = apply_filters( 'jet-form-builder/action/insert-post/pre-check', true, $postarr, $this );
-
-		if ( ! $pre_post_check ) {
-			return;
-		}
-
-		if ( ! empty( $postarr['ID'] ) ) {
-
-			$post = get_post( (int) $postarr['ID'] );
-
-			if ( ! $post || ( absint( $post->post_author ) !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) ) ) {
-				throw new Action_Exception(
-					'failed',
-					array(
-						'post' => $post,
-					)
-				);
-			}
-
-			$post_id     = wp_update_post( $postarr );
-			$post_action = 'update';
-		} else {
-
-			if ( ! $has_title ) {
-				$postarr['post_title'] = $post_type_obj->labels->singular_name . ' #';
-			}
-
-			$post_id     = wp_insert_post( $postarr );
-			$post_action = 'insert';
-		}
-
-		if ( ! $post_id ) {
-			throw new Action_Exception(
-				'failed',
-				array(
-					'post_id' => $post_id,
-				)
-			);
-		}
-
-		$this->add_inserted_post_id( $handler, $post_id );
-
-		$this->add_context_once(
-			array(
-				$this->get_context_post_key( $post_id ) => array_merge(
-					array(
-						'__action' => $post_action,
-						'ID'       => $post_id,
-					),
-					$postarr
-				),
-			)
-		);
-
-		/**
-		 * Perform any actions after post inserted/updated
-		 */
-		do_action( 'jet-form-builder/action/after-post-' . $post_action, $this, $handler );
-
-		if ( ! empty( $terms_input ) ) {
-
-			foreach ( $terms_input as $tax => $terms ) {
-				$res = wp_set_post_terms( $post_id, $terms, $tax );
-			}
-		}
-
-		if ( ! $has_title && empty( $postarr['ID'] ) ) {
-
-			$title = $post_type_obj->labels->singular_name . ' #' . $post_id;
-
-			wp_update_post(
-				array(
-					'ID'         => $post_id,
-					'post_title' => $title,
-				)
-			);
-
-		}
-
-		if ( ! empty( $rels_input ) ) {
-			foreach ( $rels_input as $rel_key => $rel_posts ) {
-				jet_engine()->relations->process_meta( false, $post_id, $rel_key, $rel_posts );
-			}
-		}
-	}
-
-	private function add_inserted_post_id( Action_Handler $handler, $post_id ) {
-		if ( empty( $handler->response_data['inserted_post_id'] ) ) {
-			$handler->response_data['inserted_post_id'] = $post_id;
-			$handler->request_data['inserted_post_id']  = $post_id;
-		} else {
-			$handler->response_data['inserted_posts'][] = array(
-				'post_id'   => $post_id,
-				'action_id' => $this->_id,
-			);
-		}
+		( new Post_Controller() )
+			->suppress_filters( false )
+			->set_post_type( $post_type )
+			->set_meta( $meta )
+			->set_fields_map( $fields_map )
+			->set_request( $request )
+			->set_general_post_status( $post_status )
+			->run();
 	}
 
 	public function get_inserted_post_context( $post_id = false ) {
 		$handler = $this->get_action_handler();
 		$post_id = $post_id ?: $handler->get_inserted_post_id();
 
-		return $handler->get_context( 'insert_post', $this->get_context_post_key( $post_id ) );
+		return $handler->get_context( 'insert_post', self::get_context_post_key( $post_id ) );
 	}
 
-	public function get_context_post_key( $post_id ) {
+	public static function get_context_post_key( $post_id ) {
 		return "post-id-{$post_id}";
 	}
 

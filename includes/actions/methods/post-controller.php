@@ -4,25 +4,13 @@
 namespace Jet_Form_Builder\Actions\Methods;
 
 
+use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Post_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-class Post_Controller {
-
-	public $post_arr = array();
-	public $fields_map = array();
-	public $request = array();
-
-	public $current_prop = '';
-	public $current_value;
-	public $current_external;
-
-	private $action = 'insert';
-	private $excluded_props = array();
-
-	private $external_data = array();
+class Post_Controller extends Post_Controller_Core {
 
 	/**
 	 * Return object fields
@@ -45,6 +33,7 @@ class Post_Controller {
 				'post_date',
 				'post_date_gmt',
 				'post_author',
+				'_thumbnail_id'
 			)
 		);
 	}
@@ -53,9 +42,17 @@ class Post_Controller {
 		return apply_filters(
 			'jet-form-builder/post-controller/object-actions',
 			array(
-				'update' => array( $this, 'update_post' ),
-				'insert' => array( $this, 'insert_post' ),
-				'trash'  => array( $this, 'trash_post' ),
+				'update' => array(
+					'action' => array( $this, 'update_post' ),
+					'after'  => array( $this, 'after_do_action' )
+				),
+				'insert' => array(
+					'action' => array( $this, 'insert_post' ),
+					'after'  => array( $this, 'after_do_action' )
+				),
+				'trash'  => array(
+					'action' => array( $this, 'trash_post' )
+				),
 			)
 		);
 	}
@@ -64,11 +61,16 @@ class Post_Controller {
 		return apply_filters(
 			'jet-form-builder/post-controller/external-actions',
 			array(
+				'meta'         => array(
+					'condition_cb' => true,
+					'match_cb'     => array( $this, 'attach_post_meta' )
+				),
 				'terms'        => array(
 					'condition_cb' => function () {
 						return false !== strpos( $this->current_prop, 'jet_tax__' );
 					},
-					'match_cb' => array( $this, 'attach_post_terms' )
+					'match_cb'     => array( $this, 'attach_post_terms' ),
+					'after_action' => array( $this, 'after_action_terms' )
 				),
 				'je_relations' => array(
 					'condition_cb' => function () {
@@ -76,13 +78,151 @@ class Post_Controller {
 						       && jet_engine()->relations
 						       && jet_engine()->relations->is_relation_key( $this->current_prop );
 					},
-					'match_cb' => array( $this, 'attach_je_relations' )
-				),
-				'meta'         => array(
-					'match_cb' => array( $this, 'attach_post_meta' )
+					'match_cb'     => array( $this, 'attach_je_relations' ),
+					'after_action' => array( $this, 'after_action_je_relations' )
 				)
 			)
 		);
+	}
+
+	public function insert_post() {
+		$this->inserted_post_id = wp_insert_post( $this->post_arr );
+
+		if ( ! empty( $this->post_arr['post_title'] ) ) {
+			return;
+		}
+
+		$post_type_obj = get_post_type_object( $this->post_arr['post_type'] );
+		$title         = $post_type_obj->labels->singular_name . ' #' . $this->inserted_post_id;
+
+		wp_update_post( array(
+			'ID'         => $this->inserted_post_id,
+			'post_title' => $title,
+		) );
+	}
+
+	public function update_post() {
+		$this->inserted_post_id = wp_update_post( $this->post_arr );
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	public function trash_post() {
+		$post = wp_trash_post( $this->post_arr['ID'] ?? 0 );
+
+		if ( ! is_a( $post, \WP_Post::class ) ) {
+			throw new Action_Exception(
+				'failed',
+				$this->post_arr
+			);
+		}
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	public function after_do_action() {
+		if ( ! $this->inserted_post_id ) {
+			throw new Action_Exception(
+				'failed',
+				array(
+					'post_id' => $this->inserted_post_id,
+				)
+			);
+		}
+		$post_id = $this->inserted_post_id;
+
+		$this->add_inserted_post_id( $post_id );
+		$this->add_context_once( $post_id );
+
+		if ( $this->suppress_filters ) {
+			return;
+		}
+
+		/**
+		 * Perform any actions after post inserted/updated
+		 */
+		do_action(
+			'jet-form-builder/action/after-post-' . $this->action,
+			$this->get_handler()->get_current_action(),
+			$this->get_handler()
+		);
+	}
+
+	public function after_action_terms() {
+		if ( ! in_array( $this->action, array( 'insert', 'update' ) ) ) {
+			return;
+		}
+		$taxonomies = $this->get_current_external();
+
+		foreach ( $taxonomies as $tax => $terms ) {
+			wp_set_post_terms( $this->inserted_post_id, $terms, $tax );
+		}
+	}
+
+	public function after_action_je_relations() {
+		if ( ! in_array( $this->action, array( 'insert', 'update' ) )
+		     || ! function_exists( 'jet_engine' )
+		     || ! isset( jet_engine()->relations )
+		) {
+			return;
+		}
+		$relations_input = $this->get_current_external();
+
+		foreach ( $relations_input as $rel_key => $rel_posts ) {
+			jet_engine()->relations->process_meta(
+				false,
+				$this->inserted_post_id,
+				$rel_key,
+				$rel_posts
+			);
+		}
+	}
+
+	public function add_inserted_post_id( $post_id ) {
+		$handler = $this->get_handler();
+
+		if ( $handler->in_loop() ) {
+			return;
+		}
+
+		if ( empty( $handler->response_data['inserted_post_id'] ) ) {
+			$handler->response_data['inserted_post_id'] = $post_id;
+			$handler->request_data['inserted_post_id']  = $post_id;
+		} else {
+			$handler->response_data['inserted_posts'][] = array(
+				'post_id'   => $post_id,
+				'action_id' => $handler->get_current_action()->_id,
+			);
+		}
+	}
+
+	public function add_context_once( $post_id ) {
+		$handler = $this->get_handler();
+
+		if ( $handler->in_loop() ) {
+			return;
+		}
+		/**
+		 * For Redirect to Page action
+		 */
+		$handler->add_context_once(
+			'insert_post',
+			array(
+				Insert_Post::get_context_post_key( $post_id ) => array_merge(
+					array(
+						'__action' => $this->action,
+						'ID'       => $post_id,
+					),
+					$this->post_arr
+				),
+			)
+		);
+	}
+
+	public function get_handler() {
+		return jet_form_builder()->form_handler->action_handler;
 	}
 
 	/**
@@ -132,6 +272,8 @@ class Post_Controller {
 			$this->set_meta( array(
 				$this->current_prop => $this->current_value
 			) );
+
+			return;
 		}
 
 		$prepared_value = array();
@@ -140,7 +282,6 @@ class Post_Controller {
 			$prepared_row = array();
 
 			foreach ( $row as $item_key => $item_value ) {
-
 				$item_key                  = ! empty( $this->fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $this->fields_map[ $item_key ] ) : $item_key;
 				$prepared_row[ $item_key ] = $item_value;
 			}
@@ -160,12 +301,13 @@ class Post_Controller {
 		) );
 	}
 
-	public function custom_before_attach() {
-		
-	}
 
 	/**
-	 * @throws Silence_Exception|Post_Exception
+	 * To skip setting this property
+	 * @throws Silence_Exception
+	 *
+	 * To exclude this property from $this->post_arr
+	 * @throws Post_Exception
 	 */
 	public function before_attach_status() {
 		switch ( $this->current_value ) {
@@ -174,220 +316,14 @@ class Post_Controller {
 			case 'trash':
 				$this->set_action( 'trash' );
 
-				return;
+				break;
 			case 'from-field':
-			default:
 				throw new Silence_Exception( 'Status must be replaced by another field' );
+			default:
+				if ( empty( $this->current_value ) ) {
+					throw new Silence_Exception( 'Empty status' );
+				}
 		}
-	}
-
-	public function is_reserved_property( $prop ) {
-		return array_key_exists( $prop, $this->get_object_fields() )
-		       || in_array( $prop, $this->get_object_fields(), true );
-	}
-
-	/**
-	 * @param $post_type
-	 *
-	 * @return Post_Controller
-	 * @throws Action_Exception
-	 */
-	public function set_post_type( $post_type ) {
-		if ( $post_type && post_type_exists( $post_type ) ) {
-			$this->post_arr['post_type'] = $post_type;
-
-			return $this;
-		}
-
-		throw new Action_Exception(
-			'failed',
-			array(
-				'post_type' => $post_type,
-			)
-		);
-	}
-
-	/**
-	 * @param string $action
-	 *
-	 * @return Post_Controller
-	 * @throws Silence_Exception
-	 */
-	public function set_action( string $action ) {
-		$actions = $this->get_actions();
-
-		if ( isset( $actions[ $action ] ) && is_callable( $actions[ $action ] ) ) {
-			$this->action = $action;
-
-			return $this;
-		}
-
-		throw new Silence_Exception(
-			'Undefined action',
-			array(
-				$action,
-				array_keys( $this->get_actions() )
-			)
-		);
-	}
-
-	/**
-	 * @param string $action
-	 *
-	 * @return $this
-	 * @throws Silence_Exception
-	 */
-	public function set_action_once( string $action ) {
-		if ( $this->action !== 'insert' ) {
-			return $this;
-		}
-
-		return $this->set_action( $action );
-	}
-
-	public function set_fields_map( $fields_map ) {
-		$this->fields_map = $fields_map;
-
-		return $this;
-	}
-
-	public function set_meta( $meta ) {
-		if ( empty( $this->post_arr['meta_input'] ) || ! is_array( $this->post_arr['meta_input'] ) ) {
-			$this->post_arr['meta_input'] = array();
-		}
-
-		foreach ( $meta as $meta_key => $meta_row ) {
-			if ( ! empty( $meta_row['key'] ) ) {
-				$prepared_meta[ $meta_row['key'] ] = $meta_row['value'];
-				unset( $meta[ $meta_key ] );
-			}
-		}
-
-		$this->post_arr['meta_input'] = array_merge( $this->post_arr['meta_input'], $meta );
-
-		return $this;
-	}
-
-	public function set_external( string $key, array $data ) {
-		if ( ! is_array( $this->external_data[ $key ] ) ) {
-			$this->external_data[ $key ] = array();
-		}
-		$this->external_data[ $key ] = array_merge( $this->external_data[ $key ], $data );
-
-		return $this;
-	}
-
-	public function get_external( string $key ) {
-		return $this->external_data[ $key ] ?? array();
-	}
-
-	public function set_current_external( array $data ) {
-		return $this->set_external( $this->current_external, $data );
-	}
-
-	public function get_current_external() {
-		return $this->get_external( (string) $this->current_external );
-	}
-
-	public function set_general_post_status( $status ) {
-		$field_name = $this->unique_slug( 'status' );
-
-		$this->fields_map[ $field_name ] = 'post_status';
-
-		$this->save_request( array(
-			$field_name => $status
-		) );
-
-		return $this;
-	}
-
-	public function save_request( $request ) {
-		$this->request = array_merge( $this->request, $request );
-
-		return $this;
-	}
-
-	public function run() {
-		foreach ( $this->request as $key => $value ) {
-			try {
-				$this->current_prop  = $key;
-				$this->current_value = $value;
-
-				$this->attach_item();
-			} catch ( Post_Exception $exception ) {
-				$this->exclude_current_prop();
-
-			} catch ( Silence_Exception $exception ) {
-				continue;
-			}
-		}
-	}
-
-	public function exclude_current_prop() {
-		$this->exclude_prop( $this->current_prop );
-	}
-
-	public function exclude_prop( string $prop ) {
-		if ( ! in_array( $prop, $this->excluded_props, true ) ) {
-			$this->excluded_props[] = $prop;
-		}
-
-		unset( $this->post_arr[ $prop ] );
-	}
-
-	/**
-	 * @throws Silence_Exception
-	 */
-	public function attach_item() {
-		$this->current_prop = $this->get_prop_from_fields_map();
-
-		if ( in_array( $this->current_prop, $this->excluded_props, true ) ) {
-			throw new Silence_Exception( "Prop '{$this->current_prop}' is excluded" );
-		}
-
-		$this->before_attach();
-
-		$this->post_arr[ $this->current_prop ] = $this->current_value;
-	}
-
-	/**
-	 * @return string
-	 * @throws Silence_Exception
-	 */
-	public function get_prop_from_fields_map() {
-		/**
-		 * At this moment $this->current_prop
-		 * store the `field_name`
-		 */
-		if ( empty( $this->fields_map[ $this->current_prop ] ) ) {
-			throw new Silence_Exception( 'Field is not used.' );
-		}
-
-		/**
-		 * And here we returning the post property
-		 * Ex: 'post_content' | 'post_status' | 'jet_tax__slug' | 'custom_meta_key'
-		 */
-		return Tools::sanitize_text_field( $this->fields_map[ $this->current_prop ] );
-	}
-
-	public function is_reserved_current_property() {
-		return $this->is_reserved_property( $this->current_prop );
-	}
-
-	public function before_attach() {
-		$property_callback = $this->get_object_fields()[ $this->current_prop ]['before_cb'] ?? false;
-
-		if ( is_callable( $property_callback ) ) {
-			call_user_func( $property_callback, $this );
-		} else {
-			call_user_func( array( $this, 'custom_before_attach' ), $this );
-		}
-	}
-
-	public function unique_slug( $suffix ) {
-		$form_id = jet_form_builder()->form_handler->form_id ?? 0;
-
-		return "post_prop_{$form_id}__{$suffix}";
 	}
 
 }

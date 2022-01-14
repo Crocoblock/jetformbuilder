@@ -85,8 +85,13 @@ class Post_Controller extends Post_Controller_Core {
 		);
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function insert_post() {
 		$this->inserted_post_id = wp_insert_post( $this->post_arr );
+
+		$this->is_valid_post_id();
 
 		if ( ! empty( $this->post_arr['post_title'] ) ) {
 			return;
@@ -101,8 +106,13 @@ class Post_Controller extends Post_Controller_Core {
 		) );
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function update_post() {
 		$this->inserted_post_id = wp_update_post( $this->post_arr );
+
+		$this->is_valid_post_id();
 	}
 
 	/**
@@ -122,15 +132,18 @@ class Post_Controller extends Post_Controller_Core {
 	/**
 	 * @throws Action_Exception
 	 */
-	public function after_do_action() {
-		if ( ! $this->inserted_post_id ) {
-			throw new Action_Exception(
-				'failed',
-				array(
-					'post_id' => $this->inserted_post_id,
-				)
-			);
+	public function is_valid_post_id() {
+		if ( is_numeric( $this->inserted_post_id ) && ! empty( $this->inserted_post_id ) ) {
+			return;
 		}
+
+		throw new Action_Exception(
+			'failed',
+			array( $this->inserted_post_id )
+		);
+	}
+
+	public function after_do_action() {
 		$post_id = $this->inserted_post_id;
 
 		$this->add_inserted_post_id( $post_id );

@@ -15,8 +15,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Radio Field' ),
-	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: RadioEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],

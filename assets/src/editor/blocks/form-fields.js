@@ -69,8 +69,13 @@ const registerFormField = block => {
 	} );
 };
 
-function sortBlocks( { settings: { title: a } },
-					 { settings: { title: b } } ) {
+function sortBlocks( first, next ) {
+	let { metadata: { title: a } } = first;
+	let { metadata: { title: b } } = next;
+
+	a = a ? a : first.settings?.title;
+	b = b ? b : next.settings?.title;
+
 	try {
 		return a.localeCompare( b );
 	} catch ( e ) {

@@ -2963,8 +2963,33 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
-			$this->start_controls_tabs( 'form_break_next_styles' );
+			$this->add_responsive_control(
+				'form_break_next_justify',
+				array(
+					'label'       => __( 'Alignment', 'jet-form-builder' ),
+					'type'        => Controls_Manager::CHOOSE,
+					'label_block' => false,
+					'options'     => array(
+						'flex-start'   => array(
+							'title' => __( 'Left', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-left',
+						),
+						'center' => array(
+							'title' => __( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'flex-end'  => array(
+							'title' => __( 'Right', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-right',
+						),
+					),
+					'selectors'   => array(
+						$this->selector( '-row' ) => 'justify-content: {{VALUE}};',
+					),
+				)
+			);
 
+			$this->start_controls_tabs( 'form_break_next_styles' );
 
 			$this->start_controls_tab(
 				'form_break_next--normal',
@@ -3085,6 +3110,32 @@ class Form extends Jfb_Widget_Base {
 					'size_units' => array( 'px' ),
 					'selectors'  => array(
 						$this->selector( '__prev-page' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'form_break_prev_justify',
+				array(
+					'label'       => __( 'Alignment', 'jet-form-builder' ),
+					'type'        => Controls_Manager::CHOOSE,
+					'label_block' => false,
+					'options'     => array(
+						'flex-start'   => array(
+							'title' => __( 'Left', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-left',
+						),
+						'center' => array(
+							'title' => __( 'Center', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-center',
+						),
+						'flex-end'  => array(
+							'title' => __( 'Right', 'jet-form-builder' ),
+							'icon'  => 'eicon-h-align-right',
+						),
+					),
+					'selectors'   => array(
+						$this->selector( '-row' ) => 'justify-content: {{VALUE}};',
 					),
 				)
 			);

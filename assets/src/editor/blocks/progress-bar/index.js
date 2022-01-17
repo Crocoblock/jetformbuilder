@@ -13,7 +13,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Progress Bar', 'jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: Progressbar,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],

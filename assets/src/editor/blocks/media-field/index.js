@@ -15,8 +15,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Media Field', 'jet-form-builder' ),
-	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: MediaEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],

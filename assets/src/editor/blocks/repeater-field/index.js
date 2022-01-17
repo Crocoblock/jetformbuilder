@@ -14,8 +14,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Repeater Field' ),
-	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: RepeaterEdit,
 	save: RepeaterSave,

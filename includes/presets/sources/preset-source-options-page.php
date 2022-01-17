@@ -33,12 +33,6 @@ class Preset_Source_Options_Page extends Base_Source {
 			throw new Preset_Exception( "Undefined option page: {$key[0]}" );
 		}
 
-		if ( empty( $key[1] ) ) {
-			throw new Preset_Exception( "Undefined {$key[0]} page value: {$key[1]}" );
-		}
-
-		$this->prop = $key[1];
-
 		return $item;
 	}
 
@@ -51,6 +45,12 @@ class Preset_Source_Options_Page extends Base_Source {
 	 * @see https://gist.github.com/MjHead/49ebe7ecc20bff9aaf8516417ed27c38
 	 */
 	public function default_prop( string $prop ) {
+		$key = explode( '::', $prop );
+
+		if ( empty( $key[1] ) ) {
+			throw new Preset_Exception( "Undefined {$key[0]} page value: {$key[1]}" );
+		}
+
 		if ( ! is_a( $this->src(), '\Jet_Engine_Options_Page_Factory' ) ) {
 			throw new Preset_Exception( 'Source is not instance of ' . \Jet_Engine_Options_Page_Factory::class );
 		}

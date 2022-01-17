@@ -15,7 +15,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Action Button', 'jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: ActionButtonEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],

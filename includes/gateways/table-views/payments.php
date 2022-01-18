@@ -124,15 +124,17 @@ class Payments extends Table_View_Base {
 		$name = $record['ship']['full_name'] ?? '';
 
 		if ( empty( $name ) ) {
-			$name = implode( ' ', array(
-				$record['payer']['first_name'] ?? '',
-				$record['payer']['last_name'] ?? ''
+			$name = implode( ' ', array_filter(
+				array(
+					$record['payer']['first_name'] ?? '',
+					$record['payer']['last_name'] ?? ''
+				)
 			) );
 		}
 
 		return array(
 			'email_address' => $record['payer']['email'] ?? '',
-			'full_name'     => empty( $name ) ? 'unknown' : $name
+			'full_name'     => $name ?: __( 'Not attached', 'jet-form-builder' )
 		);
 	}
 

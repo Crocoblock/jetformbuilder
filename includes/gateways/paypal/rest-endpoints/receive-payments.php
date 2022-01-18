@@ -36,12 +36,12 @@ class Receive_Payments extends Rest_Api_Endpoint_Base {
 		$args   = View_Base::get_paginated_args( $this->get_paginate_args( $request ) );
 		$offset = View_Base::get_offset( $args );
 
-		try {
-			$payments = $view->get_raw_payments( $offset, $args['limit'] );
-		} catch ( Query_Builder_Exception $exception ) {
+		$payments = $view->get_raw_payments( $offset, $args['limit'] );
+
+		if ( ! $payments ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => __( 'Payments not found', 'jet-form-builder' ),
 				),
 				404
 			);

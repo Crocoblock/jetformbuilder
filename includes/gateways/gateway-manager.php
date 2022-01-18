@@ -25,14 +25,14 @@ class Gateway_Manager {
 	use Repository_Pattern_Trait;
 
 	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
-	const AFTER_ACTIONS_CALLABLE  = 'after_send_actions';
-	const PAYMENT_TYPE_PARAM      = 'jet_form_gateway';
+	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
+	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
 	private $gateways_form_data = array();
 	private $form_id;
 
 	public $message = null;
-	public $data    = null;
+	public $data = null;
 	public $is_sandbox;
 	private $current_gateway_type;
 
@@ -268,6 +268,42 @@ class Gateway_Manager {
 
 	public function current_gateway() {
 		return $this->current_gateway_type;
+	}
+
+	public function currency_symbol( $currency ) {
+		$currency = strtoupper( $currency );
+
+		switch ( $currency ) {
+			case "USD" :
+			case "AUD" :
+			case "NZD" :
+			case "CAD" :
+			case "HKD" :
+			case "MXN" :
+			case "SGD" :
+				$symbol = '&#36;';
+				break;
+			case "EUR" :
+				$symbol = '&euro;';
+				break;
+			case "GBP" :
+				$symbol = '&pound;';
+				break;
+			case "BRL" :
+				$symbol = 'R&#36;';
+				break;
+			case "JPY" :
+				$symbol = '&yen;';
+				break;
+			case "AOA" :
+				$symbol = 'Kz';
+				break;
+			default :
+				$symbol = $currency;
+				break;
+		}
+
+		return apply_filters( 'jet-form-builder/gateways/currency-symbol', $symbol, $currency );
 	}
 
 }

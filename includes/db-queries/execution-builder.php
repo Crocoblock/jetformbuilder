@@ -68,7 +68,7 @@ class Execution_Builder {
 		$this->wpdb()->insert( $model->table(), $insert_columns, $format );
 
 		if ( ! $this->wpdb()->insert_id ) {
-			throw new Sql_Exception( "Something went wrong on insert into: {$model->table()}" );
+			throw new Sql_Exception( "Something went wrong on insert into: {$model->table()}", $insert_columns );
 		}
 
 		$model->after_insert( $insert_columns );

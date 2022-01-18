@@ -4447,7 +4447,9 @@ var render = function () {
                             ]
                           : [
                               _vm._v(
-                                _vm._s(entry[column] ? entry[column].value : "")
+                                _vm._s(
+                                  entry[column] ? entry[column].value : column
+                                )
                               ),
                             ],
                       ],

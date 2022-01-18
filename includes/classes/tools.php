@@ -586,4 +586,19 @@ class Tools {
 		return self::call_escape_func( 'template', $source, $replace_enqueue );
 	}
 
+	public static function replace_path_args( string $path, array $path_args ): string {
+		$patterns = array();
+
+		foreach ( $path_args as $key => $value ) {
+			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
+				return (string) $value;
+			};
+		}
+
+		return implode( '/', preg_replace_callback_array(
+			$patterns,
+			explode( '/', $path )
+		) );
+	}
+
 }

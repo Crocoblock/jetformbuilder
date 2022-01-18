@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Gateways\Query_Views\Notes_View;
 
 class Notes_Model extends Base_Db_Model {
 
@@ -41,6 +43,10 @@ class Notes_Model extends Base_Db_Model {
 		);
 	}
 
+	public static function view(): View_Base {
+		return new Notes_View();
+	}
+
 	/**
 	 * @param $columns
 	 *
@@ -55,8 +61,7 @@ class Notes_Model extends Base_Db_Model {
 		$login = wp_get_current_user()->user_login ?? 'WEBHOOK';
 
 		$columns = array_merge( array(
-			'by'         => $login,
-			'created_dt' => current_time( 'timestamp' ),
+			'created_by' => $login,
 			'message'    => ''
 		), $columns );
 

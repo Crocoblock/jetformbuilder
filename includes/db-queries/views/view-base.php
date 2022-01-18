@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Db_Queries\Views;
 
 use Jet_Form_Builder\Db_Queries\Query_Builder;
+use Jet_Form_Builder\Db_Queries\Query_Cache_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 abstract class View_Base {
@@ -167,10 +168,10 @@ abstract class View_Base {
 	}
 
 	/**
-	 * @return Query_Builder
+	 * @return Query_Cache_Builder
 	 */
 	public function query() {
-		return ( new Query_Builder() )->set_view( $this );
+		return ( new Query_Cache_Builder() )->set_view( $this );
 	}
 
 	public static function get_paginated_args( $args ): array {

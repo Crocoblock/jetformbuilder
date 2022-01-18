@@ -157,11 +157,24 @@ class Query_Builder {
 	}
 
 	public function prepare_sql(): Query_Builder {
+		if ( ! empty( $this->sql ) ) {
+			return $this;
+		}
+
 		$this->maybe_prepare_parts();
 
 		$this->sql = implode( "\r\n", $this->get_parts() ) . ';';
 
 		return $this;
+	}
+
+	public function cache() {
+		$hash = md5( $this->sql() );
+
+		$cache = wp_cache_get( $hash, 'jfb_queries' );
+
+
+
 	}
 
 	/**
@@ -180,7 +193,6 @@ class Query_Builder {
 	 */
 	public function query_all(): array {
 		global $wpdb;
-
 
 		// phpcs:ignore WordPress.DB
 		$rows = $wpdb->get_results( $this->sql(), ARRAY_A );

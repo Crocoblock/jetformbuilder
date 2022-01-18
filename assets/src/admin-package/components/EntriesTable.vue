@@ -48,7 +48,7 @@
 								/>
 							</keep-alive>
 						</template>
-						<template v-else>{{ entry[ column ] ? entry[ column ].value : '' }}</template>
+						<template v-else>{{ entry[ column ] ? entry[ column ].value : column }}</template>
 					</div>
 				</div>
 			</template>

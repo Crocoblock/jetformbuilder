@@ -1865,6 +1865,26 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
+			$this->add_responsive_control(
+				'calc_fields_flex_align',
+				array(
+					'label'   => __( 'Content Align', 'jet-form-builder' ),
+					'type'    => Controls_Manager::SELECT,
+					'options' => array(
+						''              => __( 'Default', 'jet-form-builder' ),
+						'start'         => __( 'Left', 'jet-form-builder' ),
+						'center'        => __( 'Center', 'jet-form-builder' ),
+						'end'           => __( 'Right', 'jet-form-builder' ),
+						'space-between' => __( 'Space Between', 'jet-form-builder' ),
+						'space-evenly'  => __( 'Space Evenly', 'jet-form-builder' ),
+						'space-around'  => __( 'Space Around', 'jet-form-builder' ),
+					),
+					'selectors'  => array(
+						$this->selector( '__calculated-field' ) => 'justify-content: {{VALUE}};',
+					),
+				)
+			);
+
 			$this->end_controls_section();
 		};
 		$closure();

@@ -3,41 +3,35 @@
 </template>
 
 <script>
+
 export default {
-	props: [ 'value', 'full-entry' ],
-	name: 'gross--item',
+	name: 'status--item',
+	props: [ 'value' ],
 	methods: {},
 	computed: {
-		type() {
-			return this.fullEntry.type.value.slug;
-		},
 		wrapClasses() {
 			return {
-				'jfb-gross': true,
-				[ `jfb-gross-${ this.type }` ]: true,
+				'jfb-status': true,
+				[ 'jfb-status-' + this.status ]: true,
 			};
 		},
+		status() {
+			return this.value.toLowerCase();
+		}
 	},
 };
 </script>
 
 <style lang="scss">
+.jfb-status {
+	padding: 0.5em;
 
-.cx-vui-button__content {
-	padding: 0.4em;
-}
-
-.jfb-gross {
-	padding: 0.3em;
-	font-weight: 600;
-
-	&-initial {
+	&-completed {
 		background-color: rgb(165 241 190 / 40%);
 	}
 
-	&-refund {
+	&-refunded {
 		background-color: rgb(245 154 136 / 40%);
 	}
 }
-
 </style>

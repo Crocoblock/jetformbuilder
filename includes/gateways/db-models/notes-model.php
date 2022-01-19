@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Notes_View;
 
 class Notes_Model extends Base_Db_Model {
@@ -51,7 +52,7 @@ class Notes_Model extends Base_Db_Model {
 	 * @param $columns
 	 *
 	 * @return int
-	 * @throws Sql_Exception
+	 * @throws Sql_Exception|Silence_Exception
 	 */
 	public static function add( $columns ) {
 		if ( ! is_array( $columns ) ) {
@@ -66,7 +67,7 @@ class Notes_Model extends Base_Db_Model {
 		), $columns );
 
 		if ( ! $columns['message'] ) {
-			throw new Sql_Exception( 'Your note is empty.' );
+			throw new Silence_Exception( 'Your note is empty.' );
 		}
 
 		return ( new static )->insert( $columns );

@@ -57,6 +57,9 @@ class Payments extends Table_View_Base {
 				'value' => array( $this, 'get_payment_type_with_label' ),
 				'type'  => 'rawArray',
 			),
+			'status'         => array(
+				'value' => array( $this, 'get_payment_status' ),
+			),
 			'date'           => array(
 				'value' => array( $this, 'get_payment_date' ),
 			),
@@ -84,6 +87,9 @@ class Payments extends Table_View_Base {
 			),
 			'type'           => array(
 				'label' => __( 'Type', 'jet-form-builder' ),
+			),
+			'status'         => array(
+				'label' => __( 'Status', 'jet-form-builder' )
 			),
 			'gross'          => array(
 				'label' => __( 'Gross', 'jet-form-builder' ),
@@ -118,6 +124,10 @@ class Payments extends Table_View_Base {
 			'slug'  => $this->get_payment_type( $record ),
 			'label' => $this->get_payment_type_label( $record )
 		);
+	}
+
+	public function get_payment_status( $record ) {
+		return $record['status'] ?? '';
 	}
 
 	public function get_payer( $record ) {

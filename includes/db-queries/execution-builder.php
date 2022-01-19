@@ -113,7 +113,11 @@ class Execution_Builder {
 		$result = (int) $this->wpdb()->update( $model->table(), $columns, $where, $format, $where_format );
 
 		if ( ! $result ) {
-			throw new Sql_Exception( "Something went wrong on update rows in: {$model->table()}" );
+			throw new Sql_Exception(
+				"Something went wrong on update rows in: {$model->table()}",
+				$columns,
+				$where
+			);
 		}
 
 		return $result;

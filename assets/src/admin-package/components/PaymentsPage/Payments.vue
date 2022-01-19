@@ -31,8 +31,8 @@ import GetIncoming from '../../mixins/GetIncoming';
 import i18n from '../../mixins/i18n';
 import EntriesTable from '../EntriesTable';
 import TablePagination from '../TablePagination';
-import * as GrossColumn from './gross';
 import * as PaymentType from './payment-type';
+import * as StatusColumn from './status';
 import * as PayerColumn from '../../entries-table-columns/payer';
 
 Vue.config.devtools = true;
@@ -72,8 +72,8 @@ export default {
 
 		this.columnsComponents = [
 			PayerColumn,
-			GrossColumn,
 			PaymentType,
+			StatusColumn,
 			...this.columns,
 		]
 		this.actions = JSON.parse( JSON.stringify( actions ) );
@@ -124,11 +124,14 @@ export default {
 	.cell--type {
 		width: 160px;
 	}
+	.cell--status {
+		width: 160px;
+	}
 	.cell--payer {
 		width: 220px;
 	}
 	.cell--gross {
-		width: 130px;
+		width: 160px;
 	}
 	.cell--transaction_id {
 		width: 200px;

@@ -212,17 +212,12 @@ abstract class Base_Source {
 	 * @throws Preset_Exception
 	 */
 	public function get_field_object(): Base {
-		if ( is_a( $this->current_block, Base::class ) ) {
-			return $this->current_block;
-		}
 		$type  = $this->field_args['type'] ?? false;
 		$block = jet_form_builder()->blocks->get_field_by_name( $type );
 
 		if ( ! $block ) {
 			throw new Preset_Exception( 'Undefined block_type: ' . $type, $this->field_args );
 		}
-
-		$this->current_block = $block;
 
 		return $block;
 	}

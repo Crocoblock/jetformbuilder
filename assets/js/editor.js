@@ -8326,8 +8326,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var _JetFBActions = JetFBActions,
     registerGateway = _JetFBActions.registerGateway;
-registerGateway('paypal', _main__WEBPACK_IMPORTED_MODULE_0__["default"]);
-registerGateway('paypal', _pay_now_scenario__WEBPACK_IMPORTED_MODULE_1__["default"], 'PAY_NOW');
+var addFilter = wp.hooks.addFilter;
+var gatewayID = 'paypal';
+registerGateway(gatewayID, _main__WEBPACK_IMPORTED_MODULE_0__["default"]);
+registerGateway(gatewayID, _pay_now_scenario__WEBPACK_IMPORTED_MODULE_1__["default"], 'PAY_NOW');
+addFilter('jet.fb.gateways.getDisabledStateButton', 'jet-form-builder', function (isDisabled, props) {
+  var _props$_jf_gateways;
+
+  return gatewayID === (props === null || props === void 0 ? void 0 : (_props$_jf_gateways = props._jf_gateways) === null || _props$_jf_gateways === void 0 ? void 0 : _props$_jf_gateways.gateway) ? false : isDisabled;
+});
 
 /***/ }),
 
@@ -8469,7 +8476,6 @@ function PayNowScenario(_ref) {
       setGateway = _ref.setGateway,
       setGatewaySpecific = _ref.setGatewaySpecific,
       formFields = _ref.formFields,
-      insert_post = _ref.insert_post,
       getSpecificOrGlobal = _ref.getSpecificOrGlobal,
       loadingGateway = _ref.loadingGateway,
       scenarioSource = _ref.scenarioSource,
@@ -8521,24 +8527,11 @@ function PayNowScenario(_ref) {
       });
     },
     options: formFields
-  }), wp.element.createElement(BaseControl, {
-    label: globalGatewayLabel('action_order'),
-    key: "gateway_action_order_pay_now_control"
-  }, wp.element.createElement(RadioControl, {
-    className: "jet-control-clear-full jet-user-fields-map__list",
-    key: "gateway_action_order_pay_now",
-    options: insert_post,
-    selected: gatewayGeneral.action_order,
-    onChange: function onChange(val) {
-      setGateway({
-        action_order: Number(val)
-      });
-    }
-  }))));
+  })));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (compose(withSelect(function () {
-  return _objectSpread(_objectSpread(_objectSpread({}, withSelectFormFields([], '--').apply(void 0, arguments)), withSelectActionsByType('insert_post', true).apply(void 0, arguments)), withSelectGateways.apply(void 0, arguments));
+  return _objectSpread(_objectSpread({}, withSelectFormFields([], '--').apply(void 0, arguments)), withSelectGateways.apply(void 0, arguments));
 }), withDispatch(function () {
   return _objectSpread({}, withDispatchGateways.apply(void 0, arguments));
 }))(PayNowScenario));
@@ -9437,13 +9430,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var __ = wp.i18n.__;
 var _wp$components = wp.components,
     RadioControl = _wp$components.RadioControl,
-    Button = _wp$components.Button;
+    Button = _wp$components.Button,
+    withFilters = _wp$components.withFilters;
 var _wp$data = wp.data,
     withDispatch = _wp$data.withDispatch,
     withSelect = _wp$data.withSelect;
 var _wp$element = wp.element,
     useState = _wp$element.useState,
     useEffect = _wp$element.useEffect;
+var applyFilters = wp.hooks.applyFilters;
 var compose = wp.compose.compose;
 var _JetFBComponents = JetFBComponents,
     ActionModal = _JetFBComponents.ActionModal;
@@ -9460,21 +9455,36 @@ var getGatewayLabel = function getGatewayLabel(type) {
   }).label;
 };
 
-function PluginGateways(_ref) {
-  var GatewaysMeta = _ref._jf_gateways,
-      ActionsMeta = _ref._jf_actions,
-      ChangeGateway = _ref.ChangeGateway,
-      setGateway = _ref.setGateway,
-      setGatewayScenario = _ref.setGatewayScenario,
-      clearGateway = _ref.clearGateway,
-      clearScenario = _ref.clearScenario,
-      gatewayGeneral = _ref.gatewayGeneral,
-      gatewayScenario = _ref.gatewayScenario;
+function PluginGateways(props) {
+  var GatewaysMeta = props._jf_gateways,
+      ActionsMeta = props._jf_actions,
+      ChangeGateway = props.ChangeGateway,
+      setGateway = props.setGateway,
+      setGatewayScenario = props.setGatewayScenario,
+      clearGateway = props.clearGateway,
+      clearScenario = props.clearScenario,
+      gatewayGeneral = props.gatewayGeneral,
+      gatewayScenario = props.gatewayScenario;
+
+  var issetActionType = function issetActionType(type) {
+    return Boolean(ActionsMeta.find(function (action) {
+      return type === action.type;
+    }));
+  };
+
+  var getDisabledStateButton = function getDisabledStateButton() {
+    return applyFilters('jet.fb.gateways.getDisabledStateButton', !issetActionType('insert_post'), props);
+  };
 
   var _useState = useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       isEdit = _useState2[0],
       setEdit = _useState2[1];
+
+  var _useState3 = useState(getDisabledStateButton),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isDisabled = _useState4[0],
+      setDisabled = _useState4[1];
 
   useEffect(function () {
     if (isEdit) {
@@ -9498,13 +9508,9 @@ function PluginGateways(_ref) {
     setEdit(false);
   };
 
-  var issetActionType = function issetActionType(type) {
-    return Boolean(ActionsMeta.find(function (action) {
-      return type === action.type;
-    }));
-  };
-
-  var isDisabled = !issetActionType('insert_post');
+  useEffect(function () {
+    setDisabled(getDisabledStateButton());
+  }, [GatewaysMeta.gateway]);
   return wp.element.createElement(React.Fragment, null, wp.element.createElement(RadioControl, {
     key: 'gateways_radio_control',
     selected: GatewaysMeta.gateway,

@@ -3,30 +3,33 @@ import GatewaysEditor from '../../gateways/gateways-editor';
 const { __ } = wp.i18n;
 
 const {
-	RadioControl,
-	Button,
-} = wp.components;
+		  RadioControl,
+		  Button,
+		  withFilters,
+	  } = wp.components;
 
 const {
-	withDispatch,
-	withSelect,
-} = wp.data;
+		  withDispatch,
+		  withSelect,
+	  } = wp.data;
 
 const {
-	useState,
-	useEffect,
-} = wp.element;
+		  useState,
+		  useEffect,
+	  } = wp.element;
+
+const { applyFilters } = wp.hooks;
 
 const { compose } = wp.compose;
 
 const { ActionModal } = JetFBComponents;
 
 const {
-	withDispatchMeta,
-	withSelectMeta,
-	withDispatchGateways,
-	withSelectGateways,
-} = JetFBHooks;
+		  withDispatchMeta,
+		  withSelectMeta,
+		  withDispatchGateways,
+		  withSelectGateways,
+	  } = JetFBHooks;
 
 const gatewaysData = window.JetFormEditorData.gateways;
 
@@ -36,20 +39,30 @@ const getGatewayLabel = ( type ) => {
 	);
 };
 
+function PluginGateways( props ) {
 
-function PluginGateways( {
-	_jf_gateways: GatewaysMeta,
-	_jf_actions: ActionsMeta,
-	ChangeGateway,
-	setGateway,
-	setGatewayScenario,
-	clearGateway,
-	clearScenario,
-	gatewayGeneral,
-	gatewayScenario,
-} ) {
+	const {
+			  _jf_gateways: GatewaysMeta,
+			  _jf_actions: ActionsMeta,
+			  ChangeGateway,
+			  setGateway,
+			  setGatewayScenario,
+			  clearGateway,
+			  clearScenario,
+			  gatewayGeneral,
+			  gatewayScenario,
+		  } = props;
+
+	const issetActionType = type => {
+		return Boolean( ActionsMeta.find( action => type === action.type ) );
+	};
+
+	const getDisabledStateButton = () => {
+		return applyFilters( 'jet.fb.gateways.getDisabledStateButton', ! issetActionType( 'insert_post' ), props );
+	};
 
 	const [ isEdit, setEdit ] = useState( false );
+	const [ isDisabled, setDisabled ] = useState( getDisabledStateButton );
 
 	useEffect( () => {
 		if ( isEdit ) {
@@ -68,11 +81,9 @@ function PluginGateways( {
 		setEdit( false );
 	};
 
-	const issetActionType = type => {
-		return Boolean( ActionsMeta.find( action => type === action.type ) );
-	};
-
-	const isDisabled = ! issetActionType( 'insert_post' );
+	useEffect( () => {
+		setDisabled( getDisabledStateButton() );
+	}, [ GatewaysMeta.gateway ] );
 
 	return <>
 		<RadioControl
@@ -90,21 +101,21 @@ function PluginGateways( {
 			} }
 		/>
 		{ (
-		  GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway
-		  ) && <>
-			  <Button
-				  onClick={ () => setEdit( true ) }
-				  icon={ 'admin-tools' }
-				  style={ {
-					  margin: '1em 0',
-				  } }
-				  isSecondary
-				  disabled={ isDisabled }
-			  >
-				  { __( 'Edit' ) }
-			  </Button>
-			  { isDisabled && <p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p> }
-		  </> }
+			GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway
+		) && <>
+			<Button
+				onClick={ () => setEdit( true ) }
+				icon={ 'admin-tools' }
+				style={ {
+					margin: '1em 0',
+				} }
+				isSecondary
+				disabled={ isDisabled }
+			>
+				{ __( 'Edit' ) }
+			</Button>
+			{ isDisabled && <p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p> }
+		</> }
 		{ isEdit && (
 			<ActionModal
 				classNames={ [ 'width-60' ] }
@@ -126,7 +137,6 @@ function PluginGateways( {
 		) }
 	</>;
 }
-
 
 export default compose(
 	withDispatch( ( ...props ) => (

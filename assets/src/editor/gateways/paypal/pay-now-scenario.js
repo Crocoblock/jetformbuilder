@@ -27,7 +27,6 @@ function PayNowScenario( {
 	setGateway,
 	setGatewaySpecific,
 	formFields,
-	insert_post,
 	getSpecificOrGlobal,
 	loadingGateway,
 	scenarioSource,
@@ -80,20 +79,6 @@ function PayNowScenario( {
 				} }
 				options={ formFields }
 			/>
-			<BaseControl
-				label={ globalGatewayLabel( 'action_order' ) }
-				key='gateway_action_order_pay_now_control'
-			>
-				<RadioControl
-					className='jet-control-clear-full jet-user-fields-map__list'
-					key='gateway_action_order_pay_now'
-					options={ insert_post }
-					selected={ gatewayGeneral.action_order }
-					onChange={ val => {
-						setGateway( { action_order: Number( val ) } );
-					} }
-				/>
-			</BaseControl>
 		</> }
 	</>;
 }
@@ -102,7 +87,6 @@ export default compose(
 	withSelect( ( ...props ) => (
 		{
 			...withSelectFormFields( [], '--' )( ...props ),
-			...withSelectActionsByType( 'insert_post', true )( ...props ),
 			...withSelectGateways( ...props ),
 		}
 	) ),

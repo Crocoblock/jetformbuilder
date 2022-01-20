@@ -36,13 +36,11 @@ class Payment_View extends View_Base {
 		}
 
 		$builder->join = "
-JOIN `{$payers_ship}` ON ( 
-    `{$payments}`.`id` = `{$payers_ship}`.`relation_id`
-    AND 
-	`{$payers_ship}`.`relation_type` = 'PAY_NOW' 
-)
+LEFT JOIN `{$payers_ship}` ON 1=1
+    AND `{$payments}`.`id` = `{$payers_ship}`.`relation_id`
+    AND `{$payers_ship}`.`relation_type` = 'PAY_NOW' 
 
-JOIN `{$payers}` ON `{$payers_ship}`.`payer_id` = `{$payers}`.`id`
+LEFT JOIN `{$payers}` ON `{$payers_ship}`.`payer_id` = `{$payers}`.`id`
 		";
 	}
 

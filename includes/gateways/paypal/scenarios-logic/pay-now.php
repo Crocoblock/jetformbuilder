@@ -4,12 +4,9 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
-use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use Jet_Form_Builder\Gateways\Db_Models\Notes_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
-use Jet_Form_Builder\Gateways\Db_Models\Payment_Meta_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
@@ -19,7 +16,6 @@ use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
-	use Set_Status_Trait;
 	use Scenarios_Connectors\Pay_Now;
 
 	protected function query_token() {

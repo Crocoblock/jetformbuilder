@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Gateways\Table_Views;
 
 use Jet_Form_Builder\Classes\Table_View_Base;
-use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
@@ -25,7 +24,6 @@ class Payments extends Table_View_Base {
 			return ( new Payment_View )
 				->set_limit( array( $offset, $limit ) )
 				->query()
-				->debug()
 				->query_all();
 
 		} catch ( Query_Builder_Exception $exception ) {

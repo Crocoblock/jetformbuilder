@@ -579,12 +579,12 @@
 }
 
 .jet-form-edit-modal__actions {
-	position: sticky;
+	position: absolute;
 	bottom: 0;
-	margin: 20px -24px -24px;
+	left: 0;
 	padding: 18px 24px 20px;
 	background-color: #fff;
-	width: calc(100% + 48px);
+	width: 100%;
 	border-top: 1px solid #ddd;
 	z-index: 100;
 }
@@ -661,7 +661,7 @@ select.components-select-control__input.components-select-control__input.compone
 }
 
 .jet-form-edit-modal__content {
-	padding-bottom: 0.5em;
+	padding-bottom: 5rem;
 }
 
 .jet-label-overflow {

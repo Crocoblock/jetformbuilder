@@ -57,10 +57,12 @@ function ActionModal( {
 		>
 			{ 'Action callback is not found.' }
 		</div> }
-		{ children && <div className='jet-form-edit-modal__wrapper'>
-			<div className="jet-form-edit-modal__content">
-				{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
-				{ 'function' !== typeof children && children }
+		{ children && <>
+			<div className='jet-form-edit-modal__wrapper'>
+				<div className="jet-form-edit-modal__content">
+					{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
+					{ 'function' !== typeof children && children }
+				</div>
 			</div>
 			<ButtonGroup
 				className="jet-form-edit-modal__actions"
@@ -79,7 +81,7 @@ function ActionModal( {
 					{ ...cancelBtnProps }
 				>{ cancelBtnLabel }</Button>
 			</ButtonGroup>
-		</div> }
+		</> }
 	</Modal>;
 }
 

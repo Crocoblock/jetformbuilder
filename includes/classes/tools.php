@@ -601,4 +601,12 @@ class Tools {
 		) );
 	}
 
+	public static function is_repeater_val( $value ) {
+		if ( is_array( $value ) && ! empty( $value ) ) {
+			return is_array( array_shift( $value ) );
+		} else {
+			return false;
+		}
+	}
+
 }

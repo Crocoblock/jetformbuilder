@@ -1,7 +1,7 @@
 {
   "name": "jet-form-builder",
   "description": "Plugin For Gutenberg & Elementor",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "author": "hug.reed <sanko200065@gmail.com>",
   "license": "MIT",
   "private": true,
@@ -34,8 +34,6 @@
     "write": "^2.0.0"
   },
   "dependencies": {
-    "@innologica/vue-dropdown-menu": "^0.1.4",
-    "semver": "^7.3.5",
-    "vue-clipboard2": "^0.3.3"
+    "semver": "^7.3.5"
   }
 }

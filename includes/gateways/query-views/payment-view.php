@@ -4,8 +4,10 @@
 namespace Jet_Form_Builder\Gateways\Query_Views;
 
 
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
@@ -19,10 +21,19 @@ class Payment_View extends View_Base {
 		),
 	);
 
+	/**
+	 * @param Query_Builder $builder
+	 *
+	 * @throws Query_Builder_Exception
+	 */
 	public function get_prepared_join( Query_Builder $builder ) {
-		$payments = Payment_Model::table();
-		$payers = Payer_Model::table();
-		$payers_ship = Payer_Shipping_Model::table();
+		try {
+			$payments    = ( new Payment_Model )->safe_create()::table();
+			$payers      = ( new Payer_Model )->safe_create()::table();
+			$payers_ship = ( new Payer_Shipping_Model )->safe_create()::table();
+		} catch ( Sql_Exception $exception ) {
+			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
+		}
 
 		$builder->join = "
 JOIN `{$payers_ship}` ON ( 

@@ -133,6 +133,9 @@ abstract class View_Base {
 	}
 
 	protected function prepare_row( $row ) {
+		if ( ! $row ) {
+			return array();
+		}
 		foreach ( $row as $column => $value ) {
 			$parts = explode( '.', $column );
 
@@ -187,6 +190,54 @@ abstract class View_Base {
 
 	public static function get_offset( $args ): int {
 		return 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
+	}
+
+	/**
+	 * @param $columns
+	 *
+	 * @return View_Base
+	 */
+	public static function find( $columns ): View_Base {
+		$conditions = array();
+
+		foreach ( $columns as $column => $value ) {
+			if ( is_numeric( $column ) ) {
+				$conditions[] = $value;
+			} else {
+				$conditions[] = array(
+					'type'   => 'equal_column',
+					'values' => array( $column, $value ),
+				);
+			}
+		}
+
+		return ( new static )->set_conditions( $conditions );
+	}
+
+
+	public static function findOne( $columns ) {
+		return static::find( $columns )->set_limit( array( 1 ) );
+	}
+
+	/**
+	 * @param $primary_id
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function findById( $primary_id ) {
+		return static::find( array( 'id' => $primary_id ) )
+			->set_limit( array( 1 ) )
+			->query()
+			->query_one();
+	}
+
+	/**
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function all() {
+		return ( new static )->query()->query_all();
 	}
 
 

@@ -50,7 +50,4 @@ class Payment_Model extends Base_Gateway_Db_Model {
 		);
 	}
 
-	public static function view(): View_Base {
-		return new Payment_View();
-	}
 }

@@ -44,10 +44,6 @@ class Notes_Model extends Base_Db_Model {
 		);
 	}
 
-	public static function view(): View_Base {
-		return new Notes_View();
-	}
-
 	/**
 	 * @param $columns
 	 *

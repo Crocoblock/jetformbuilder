@@ -45,10 +45,6 @@ class Payer_Model extends Base_Db_Model {
 		);
 	}
 
-	public static function view(): View_Base {
-		return new Payer_View();
-	}
-
 	/**
 	 * @param $payer
 	 *

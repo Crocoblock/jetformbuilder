@@ -22,11 +22,9 @@ class Payments extends Table_View_Base {
 
 	public function get_raw_payments( $offset, $limit ): array {
 		try {
-			return ( new Query_Builder() )
-				->set_view(
-					( new Payment_View )
-						->set_limit( array( $offset, $limit ) )
-				)
+			return ( new Payment_View )
+				->set_limit( array( $offset, $limit ) )
+				->query()
 				->debug()
 				->query_all();
 

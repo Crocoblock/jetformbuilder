@@ -15,8 +15,7 @@ use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
-use Jet_Form_Builder\Gateways\Prepared_Queries;
-use Repositories\EventTypesRepository;
+use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
@@ -124,7 +123,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 */
 	public function query_scenario_row() {
 		try {
-			return Payment_Model::findOne(
+			return Payment_View::findOne(
 				array(
 					'transaction_id' => $this->get_queried_token(),
 				)

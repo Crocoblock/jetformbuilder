@@ -7,7 +7,7 @@ namespace Jet_Form_Builder\Db_Queries\Views;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
-trait View_Base_Count_Trait  {
+trait View_Base_Count_Trait {
 
 	/**
 	 * @return array[]
@@ -31,10 +31,9 @@ trait View_Base_Count_Trait  {
 
 	public function get_count() {
 		try {
-			return (int) ( new Query_Builder() )
-				->set_view( $this )
-				->debug()
-				->query_var();
+			return (int) $this->query()
+			                  ->debug()
+			                  ->query_var();
 
 		} catch ( Query_Builder_Exception $exception ) {
 			return 0;

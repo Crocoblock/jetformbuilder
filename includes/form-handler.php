@@ -155,7 +155,7 @@ class Form_Handler {
 	/**
 	 * Process form with Ajax
 	 *
-	 * @return [type] [description]
+	 * @return void
 	 */
 	public function process_ajax_form() {
 		$this->is_ajax = true;

@@ -199,45 +199,14 @@ class Action_Handler {
 	 * @throws Action_Exception
 	 */
 	public function do_actions() {
+		do_action( 'jet-form-builder/actions/before-send' );
 
-		$this->before_run_actions();
-		$this->run_actions();
-		$this->after_run_actions();
+		$run_actions_callback = apply_filters( 'jet-form-builder/actions/run-callback', array( $this, 'run_actions' ) );
+		call_user_func( $run_actions_callback );
+
+		do_action( 'jet-form-builder/actions/after-send' );
 
 		return $this->response_data;
-	}
-
-	public function before_run_actions() {
-		$callbacks = array();
-
-		if ( Plugin::instance()->allow_gateways ) {
-			$callbacks[] = array(
-				Gateway_Manager::instance(),
-				Gateway_Manager::BEFORE_ACTIONS_CALLABLE,
-			);
-		}
-
-		Tools::run_callbacks(
-			apply_filters( 'jet-form-builder/actions/before-send/callbacks', $callbacks ),
-			$this
-		);
-	}
-
-	public function after_run_actions() {
-		$callbacks = array();
-
-		if ( Plugin::instance()->allow_gateways ) {
-			$callbacks[] = array(
-				Gateway_Manager::instance(),
-				Gateway_Manager::AFTER_ACTIONS_CALLABLE,
-			);
-		}
-
-		Tools::run_callbacks(
-			apply_filters( 'jet-form-builder/actions/after-send/callbacks', $callbacks ),
-			$this
-		);
-
 	}
 
 	/**

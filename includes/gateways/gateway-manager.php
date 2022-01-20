@@ -24,8 +24,6 @@ class Gateway_Manager {
 	use Gateways_Editor_Data;
 	use Repository_Pattern_Trait;
 
-	const BEFORE_ACTIONS_CALLABLE = 'before_send_actions';
-	const AFTER_ACTIONS_CALLABLE = 'after_send_actions';
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
 	private $gateways_form_data = array();
@@ -44,6 +42,9 @@ class Gateway_Manager {
 			return;
 		}
 		add_action( 'init', array( $this, 'register_gateways' ) );
+
+		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_send_actions' ) );
+		add_action( 'jet-form-builder/actions/after-send', array( $this, 'after_send_actions' ) );
 
 		$this->catch_payment_result();
 	}
@@ -84,6 +85,10 @@ class Gateway_Manager {
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
+
+		add_filter( 'jet-form-builder/actions/run-callback', function () {
+			return array( jet_form_builder()->form_handler->action_handler, 'soft_run_actions' );
+		} );
 	}
 
 	/**
@@ -117,7 +122,7 @@ class Gateway_Manager {
 	 */
 	public function catch_payment_result() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) || ! Plugin::instance()->allow_gateways ) {
+		if ( ! isset( $_GET[ self::PAYMENT_TYPE_PARAM ] ) ) {
 			return;
 		}
 

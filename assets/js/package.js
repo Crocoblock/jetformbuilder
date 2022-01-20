@@ -364,14 +364,14 @@ function ActionModal(_ref) {
     style: style
   }, !children && wp.element.createElement("div", {
     className: "jet-form-edit-modal__content"
-  }, 'Action callback is not found.'), children && wp.element.createElement("div", {
+  }, 'Action callback is not found.'), children && wp.element.createElement(React.Fragment, null, wp.element.createElement("div", {
     className: "jet-form-edit-modal__wrapper"
   }, wp.element.createElement("div", {
     className: "jet-form-edit-modal__content"
   }, 'function' === typeof children && children({
     actionClick: actionClick,
     onRequestClose: onRequestClose
-  }), 'function' !== typeof children && children), wp.element.createElement(ButtonGroup, {
+  }), 'function' !== typeof children && children)), wp.element.createElement(ButtonGroup, {
     className: "jet-form-edit-modal__actions"
   }, wp.element.createElement(Button, _extends({
     isPrimary: true,

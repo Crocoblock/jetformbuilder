@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Methods\Post_Controller;
+use Jet_Form_Builder\Actions\Methods\Post_Modifier;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -55,7 +55,7 @@ class Insert_Post extends Base {
 		$post_status = $this->settings['post_status'] ?? '';
 		$meta        = $this->settings['default_meta'] ?? array();
 
-		( new Post_Controller() )
+		( new Post_Modifier )
 			->suppress_filters( false )
 			->set_post_type( $post_type )
 			->set_meta( $meta )

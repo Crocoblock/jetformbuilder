@@ -10,7 +10,7 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Post_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-class Post_Controller extends Post_Controller_Core {
+class Post_Modifier extends Post_Modifier_Core {
 
 	/**
 	 * Return object fields

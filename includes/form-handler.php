@@ -191,8 +191,6 @@ class Form_Handler {
 
 		$this->try_to_do_actions();
 
-		do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
-
 		if ( true === $this->is_success ) {
 			$this->send_response(
 				array(
@@ -247,6 +245,10 @@ class Form_Handler {
 		}
 	}
 
+	public function after_send( $args ) {
+
+	}
+
 
 	/**
 	 * Add new properties into response data
@@ -265,6 +267,20 @@ class Form_Handler {
 	 * @return void [description]
 	 */
 	public function send_response( $args = array() ) {
+		try {
+			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success, $args );
+		} catch ( Handler_Exception $exception ) {
+			$this->send_raw_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
+		}
+
+		$this->send_raw_response( $args );
+	}
+
+	public function send_raw_response( $args = array() ) {
 		( new Form_Response\Response( $this->get_response_manager(), $this->response_data ) )->init( $args )->send();
 	}
 

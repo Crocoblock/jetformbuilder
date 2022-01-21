@@ -9,7 +9,7 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Post_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-abstract class Post_Controller_Core {
+abstract class Post_Modifier_Core {
 
 	public $post_arr = array();
 	public $fields_map = array();

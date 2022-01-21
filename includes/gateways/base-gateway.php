@@ -303,10 +303,11 @@ abstract class Base_Gateway {
 	 * @return void [description]
 	 */
 	public function before_actions( $keep_these ) {
+		$this->set_form_meta( GM::instance()->gateways() );
+
 		if ( empty( $this->get_action_handler()->get_all() ) ) {
 			return;
 		}
-		$this->set_form_meta( GM::instance()->gateways() );
 
 		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
 			if ( 'insert_post' === $action->get_id()
@@ -381,7 +382,7 @@ abstract class Base_Gateway {
 		);
 
 		if ( ! $this->price_field ) {
-			throw new Gateway_Exception( 'Invalid price field' );
+			throw new Gateway_Exception( 'Invalid price field',  $this->gateways_meta );
 		}
 	}
 

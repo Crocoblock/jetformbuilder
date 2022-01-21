@@ -55,7 +55,7 @@ class Payer_Model extends Base_Db_Model {
 		$payer_id = $payer['payer_id'] ?? '';
 
 		try {
-			$find_payer = self::find( array(
+			$find_payer = Payer_View::find( array(
 				'payer_id' => $payer_id
 			) )->query()->query_one();
 
@@ -64,7 +64,7 @@ class Payer_Model extends Base_Db_Model {
 			return (int) ( $find_payer['id'] ?? 0 );
 
 		} catch ( Query_Builder_Exception $exception ) {
-			return ( new self() )->safe_create()->insert( $payer );
+			return ( new self )->safe_create()->insert( $payer );
 		}
 	}
 

@@ -4,11 +4,10 @@
 namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 use Jet_Form_Builder\Gateways\Gateway_Manager;
-use Jet_FB_Paypal\ApiActions\Traits;
 
 class Pay_Now_Action extends Base_Action {
 
-	use Traits\AppContextTrait;
+	use Traits\App_Context_Trait;
 
 	const SLUG = 'PAY_NOW';
 

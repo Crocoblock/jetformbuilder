@@ -24,9 +24,8 @@ class Record_Field_Model extends Base_Db_Model {
 
 	public static function schema_keys(): array {
 		return array(
-			'id'      => 'primary key',
-			'form_id' => 'index',
-			'user_id' => 'index',
+			'id'        => 'primary key',
+			'record_id' => 'index',
 		);
 	}
 

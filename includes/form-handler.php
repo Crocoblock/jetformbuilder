@@ -247,7 +247,7 @@ class Form_Handler {
 				)
 			);
 
-			$this->send_response(
+			$this->send_raw_response(
 				array(
 					'status' => 'failed',
 				)

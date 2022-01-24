@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Request\Request_Handler;
 
 class Controller {
 
@@ -135,16 +136,18 @@ class Controller {
 			return array();
 		}
 
-		foreach ( Logger::instance()->get_logs() as $instance => $log ) {
-			$errors[] = array(
-				'record_id'    => $this->record_id,
-				'name'         => $instance,
-				'message'      => $log['message'],
-				'file'         => $log['file'],
-				'line'         => $log['line'],
-				'data'         => wp_json_encode( $log['data'] ),
-				'trace_string' => $log['trace_string'],
-			);
+		foreach ( Logger::instance()->get_logs() as $instance => $logs ) {
+			foreach ( $logs as $log ) {
+				$errors[] = array(
+					'record_id'    => $this->record_id,
+					'name'         => $instance,
+					'message'      => $log['message'],
+					'file'         => $log['file'],
+					'line'         => $log['line'],
+					'data'         => wp_json_encode( $log['data'] ),
+					'trace_string' => $log['trace_string'],
+				);
+			}
 		}
 
 		return $errors;
@@ -155,19 +158,27 @@ class Controller {
 		$fields      = array();
 
 		foreach ( $this->handler()->request_data as $field_name => $value ) {
-			if ( isset( $core_fields[ $field_name ] ) ||
-			     ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+			// like 1=1 SQL-trick
+			if ( false
+			     || isset( $core_fields[ $field_name ] )
+			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+			     || Request_Handler::REPEATERS_SETTINGS === $field_name
 			) {
 				continue;
 			}
+			$current_attrs = jet_form_builder()->form->get_field_by_name(
+				0,
+				$field_name,
+				jet_form_builder()->form_handler->request_handler->_fields
+			);
 
-			$current_attrs = jet_form_builder()->form_handler->request_handler->get_field_attrs_by_name( $field_name );
+			$type = jet_form_builder()->form->field_name( $current_attrs['blockName'] ?? '' );
 
 			$fields[] = array(
 				'record_id'   => $this->record_id,
 				'field_name'  => $field_name,
-				'field_type'  => $current_attrs['type'] ?? '',
-				'field_value' => $value
+				'field_type'  => $type,
+				'field_value' => is_scalar( $value ) ? $value : wp_json_encode( $value )
 			);
 		}
 

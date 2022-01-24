@@ -30,7 +30,7 @@ class Request_Handler {
 		return $this->_request_values;
 	}
 
-	private function with_repeaters( $data ) {
+	public function with_repeaters( $data ) {
 		$data[ self::REPEATERS_SETTINGS ] = $this->repeaters;
 
 		return $data;

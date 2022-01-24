@@ -4,8 +4,8 @@
 namespace Jet_Form_Builder\Db_Queries\Exceptions;
 
 
-use Jet_Form_Builder\Exceptions\Silence_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 
-class Sql_Exception extends Silence_Exception {
+class Sql_Exception extends Handler_Exception {
 
 }

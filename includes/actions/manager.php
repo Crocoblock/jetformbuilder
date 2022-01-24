@@ -42,6 +42,7 @@ class Manager {
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
 			new Types\Active_Campaign(),
+			new Types\Save_Record(),
 		);
 	}
 

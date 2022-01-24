@@ -40,7 +40,6 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 	 * Page specific assets
 	 */
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-package' );
 		wp_enqueue_script( $this->slug() );
 	}
 

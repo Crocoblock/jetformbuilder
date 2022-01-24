@@ -51,11 +51,12 @@ class Logger {
 
 	private function save_log( Handler_Exception $exception ) {
 		$this->logged[ get_class( $exception ) ][] = array(
-			'message' => $exception->getMessage(),
-			'file'    => $this->make_pretty_filename( $exception->getFile() ),
-			'line'    => $exception->getLine(),
-			'data'    => $exception->get_additional(),
-			'version' => jet_form_builder()->get_version(),
+			'message'      => $exception->getMessage(),
+			'file'         => $this->make_pretty_filename( $exception->getFile() ),
+			'line'         => $exception->getLine(),
+			'data'         => $exception->get_additional(),
+			'trace_string' => $exception->getTraceAsString(),
+			'version'      => jet_form_builder()->get_version(),
 		);
 	}
 

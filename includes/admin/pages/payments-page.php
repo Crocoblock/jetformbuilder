@@ -23,9 +23,7 @@ class Payments_Page extends Base_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-vuex' );
-		wp_enqueue_script( 'wp-api' );
-		wp_enqueue_script( 'wp-api-fetch' );
+		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
 
 		parent::assets();
 	}

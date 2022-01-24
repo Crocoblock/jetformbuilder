@@ -1,5 +1,4 @@
 import Payments from './Payments';
-
 import * as TableStoreHelper from '../../mixins/TableStoreHelper';
 
 const {

@@ -1,5 +1,4 @@
-import { addQueryArgs } from '../functions/LocationManager';
-
+const { addQueryArgs } = JetFBActions;
 const { apiFetch } = wp;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();

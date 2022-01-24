@@ -19,12 +19,8 @@ class Save_Record extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
-		$save_errors = ! empty( $this->settings['save_errors'] )
-			? $this->settings['save_errors']
-			: Manager::instance()->active();
-
 		$controller = ( new Form_Record\Controller )
-			->set_saving_errors( $save_errors );
+			->set_setting( 'save_errors', Manager::instance()->active() );
 
 		add_action(
 			'jet-form-builder/form-handler/after-send',

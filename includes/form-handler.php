@@ -24,12 +24,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key        = 'jet_form_builder_submit';
-	public $hook_val        = 'submit';
-	public $form_data       = array();
-	public $response_data   = array();
-	public $is_ajax         = false;
-	public $is_success      = false;
+	public $hook_key = 'jet_form_builder_submit';
+	public $hook_val = 'submit';
+	public $form_data = array();
+	public $response_data = array();
+	public $is_ajax = false;
+	public $is_success = false;
 	public $response_status = 'failed';
 
 	public $form_id;
@@ -38,11 +38,10 @@ class Form_Handler {
 
 	/** @var Action_Handler */
 	public $action_handler;
-
 	public $request_data;
 
-	public $form_key    = '_jet_engine_booking_form_id';
-	public $refer_key   = '_jet_engine_refer';
+	public $form_key = '_jet_engine_booking_form_id';
+	public $refer_key = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
@@ -79,6 +78,76 @@ class Form_Handler {
 		}
 	}
 
+	public function core_fields() {
+		return apply_filters(
+			'jet-form-builder/form-handler/core-fields',
+			array(
+				$this->form_key    => array(
+					'callback' => array( $this, 'set_form_id' ),
+				),
+				$this->refer_key   => array(
+					'callback' => array( $this, 'set_referrer' ),
+				),
+				$this->post_id_key => array(
+					'callback' => array( Tools::class, 'set_current_post' )
+				)
+			)
+		);
+	}
+
+	/**
+	 * Moved to a separate function to define the hidden field when saving the Form Record
+	 *
+	 * These fields will not be saved to a separate `*_jet_fb_records_fields` table
+	 *
+	 * @return array
+	 */
+	public function hidden_request_fields() {
+		return apply_filters(
+			'jet-form-builder/form-handler/hidden-request-fields',
+			array(
+				'__form_id' => $this->get_form_id(),
+				'__refer'   => $this->get_referrer(),
+				'__is_ajax' => $this->is_ajax(),
+			)
+		);
+	}
+
+	public function merge_request( $request ) {
+		$request = array_merge(
+			$this->hidden_request_fields(),
+			$request
+		);
+
+		return $request;
+	}
+
+
+	public function set_referrer( $url ) {
+		$refer = remove_query_arg(
+			array( 'values', 'status', 'fields' ),
+			esc_url_raw( $url )
+		);
+
+		$this->refer = wp_validate_redirect( $refer );
+
+		return $this;
+	}
+
+	public function get_referrer() {
+		return $this->refer;
+	}
+
+	public function set_form_id( $form_id ) {
+		$this->form_id = absint( $form_id );
+
+		return $this;
+	}
+
+	public function get_form_id() {
+		return $this->form_id;
+	}
+
 	/**
 	 * Is ajax form processing or not
 	 *
@@ -94,39 +163,39 @@ class Form_Handler {
 	 * @return void [description]
 	 */
 	public function setup_form() {
-		global $post;
 
 		if ( $this->form_id ) {
 			return;
 		}
 
-		// phpcs:disable WordPress
-		if ( ! $this->is_ajax ) {
-			$post          = ! empty( $_POST[ $this->post_id_key ] ) ? get_post( absint( $_POST[ $this->post_id_key ] ) ) : null;
-			$this->form_id = ! empty( $_POST[ $this->form_key ] ) ? absint( $_POST[ $this->form_key ] ) : false;
-			$this->refer   = ! empty( $_POST[ $this->refer_key ] ) ? esc_url_raw( $_POST[ $this->refer_key ] ) : false;
-		} else {
+		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
+
+		$fields = $this->core_fields();
+
+		if ( $this->is_ajax() ) {
 			$values = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( $_POST['values'] ) : array();
 
 			foreach ( $values as $data ) {
-				switch ( $data['name'] ) {
-					case $this->form_key:
-						$this->form_id = absint( $data['value'] );
-						break;
-					case $this->post_id_key:
-						$post = get_post( absint( $data['value'] ) );
-						break;
-					case $this->refer_key:
-						$this->refer = esc_url_raw( $data['value'] );
-						// Clear form-related arguments.
-						$this->refer = remove_query_arg( array( 'values', 'status', 'fields' ), $this->refer );
-						break;
+				if ( ! isset( $fields[ $data['name'] ] ) ) {
+					continue;
 				}
-			}
-		}
-		// phpcs:enable WordPress
+				$options = $fields[ $data['name'] ] ?? array();
 
-		$this->refer = wp_validate_redirect( $this->refer );
+				Tools::call( $options['callback'] ?? false, $data['value'] ?? '' );
+			}
+
+			return;
+		}
+
+		foreach ( $fields as $field_name => $options ) {
+			if ( ! isset( $_POST[ $field_name ] ) ) {
+				continue;
+			}
+
+			// phpcs:disable WordPress
+			Tools::call( $options['callback'] ?? false, $_POST[ $field_name ] );
+			// phpcs:enable WordPress
+		}
 	}
 
 	private function get_response_manager() {
@@ -165,7 +234,7 @@ class Form_Handler {
 	/**
 	 * Process current form
 	 *
-	 * @return [type] [description]
+	 * @return void [description]
 	 */
 	public function process_form() {
 
@@ -185,11 +254,7 @@ class Form_Handler {
 			);
 		}
 
-		$this->try_set_data();
-
-		do_action( 'jet-form-builder/form-handler/before-send', $this );
-
-		$this->try_to_do_actions();
+		$this->try_send();
 
 		if ( true === $this->is_success ) {
 			$this->send_response(
@@ -206,18 +271,9 @@ class Form_Handler {
 		}
 	}
 
-	public function try_set_data() {
+	public function try_send() {
 		try {
-			$request = array(
-				'form_id' => $this->form_id,
-				'is_ajax' => $this->is_ajax,
-				'refer'   => $this->refer,
-			);
-			$this->action_handler->set_form_id( $this->form_id );
-			$this->request_handler->set_request( $request );
-
-			$this->request_data = $this->request_handler->get_form_data();
-
+			$this->send_form();
 		} catch ( Request_Exception $exception ) {
 			$this->send_response(
 				array(
@@ -225,18 +281,7 @@ class Form_Handler {
 					'errors' => $exception->get_fields_errors(),
 				)
 			);
-		}
-	}
-
-
-	public function try_to_do_actions() {
-		try {
-			$this->action_handler->add_request( $this->request_data );
-
-			$this->add_response_data( $this->action_handler->do_actions() );
-			$this->is_success = true;
-
-		} catch ( Handler_Exception $exception ) {
+		} catch ( Action_Exception $exception ) {
 			$this->send_response(
 				array(
 					'status' => $exception->get_form_status(),
@@ -245,8 +290,22 @@ class Form_Handler {
 		}
 	}
 
-	public function after_send( $args ) {
+	/**
+	 * @throws Action_Exception
+	 * @throws Request_Exception
+	 */
+	public function send_form() {
+		$this->action_handler->set_form_id( $this->form_id );
 
+		$this->action_handler->add_request(
+			$this->request_handler->get_form_data()
+		);
+
+		do_action( 'jet-form-builder/form-handler/before-send', $this );
+
+		$this->add_response_data( $this->action_handler->do_actions() );
+
+		$this->is_success = true;
 	}
 
 

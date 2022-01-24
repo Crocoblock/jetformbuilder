@@ -111,7 +111,21 @@ class Pages_Manager {
 		wp_register_script(
 			'jet-form-builder-admin-package',
 			Plugin::instance()->plugin_url( 'assets/js/admin-package.js' ),
-			array(),
+			array(
+				'wp-api',
+				'wp-api-fetch',
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			'jet-form-builder-admin-vuex-package',
+			Plugin::instance()->plugin_url( 'assets/js/admin-vuex-package.js' ),
+			array(
+				'jet-form-builder-admin-vuex',
+				'jet-form-builder-admin-package'
+			),
 			Plugin::instance()->get_version(),
 			true
 		);

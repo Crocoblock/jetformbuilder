@@ -30,6 +30,7 @@ module.exports = {
 			'form-block.js': './editor/form-block.js',
 			'package.js': './package/manager.js',
 			'admin-package.js': './admin-package/manager.js',
+			'admin-vuex-package.js': './admin-vuex-package/manager.js',
 			...getAdminPagesEntries()
 		};
 	}

@@ -77,6 +77,25 @@ abstract class Base_Db_Model {
 	}
 
 	/**
+	 * @param $multi_columns
+	 * @param null $format
+	 *
+	 * @return int[]
+	 * @throws Sql_Exception
+	 */
+	public function insert_many( $multi_columns, $format = null ) {
+		$inserted_ids = array();
+		foreach ( $multi_columns as $columns ) {
+			if ( ! is_array( $columns ) || empty( $columns ) ) {
+				continue;
+			}
+			$inserted_ids[] = $this->insert( $columns );
+		}
+
+		return $inserted_ids;
+	}
+
+	/**
 	 * @param $columns
 	 * @param $where
 	 * @param null $format

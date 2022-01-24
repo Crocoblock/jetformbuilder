@@ -17,13 +17,15 @@ class Record_Model extends Base_Db_Model {
 	public static function schema(): array {
 		return array(
 			'id'                => 'bigint(20) NOT NULL AUTO_INCREMENT',
-			'form_id'           => 'bigint(20)',
+			'form_id'           => 'bigint(20) NOT NULL',
 			'user_id'           => 'bigint(20)',
-			'from_content_id'   => 'bigint(20)',
-			'from_content_type' => 'varchar(20)',
+			'from_content_id'   => 'bigint(20) NOT NULL',
+			'from_content_type' => 'varchar(20) NOT NULL',
 			'status'            => 'varchar(20)',
 			'ip_address'        => 'int(11) UNSIGNED',
-			'user_agent'        => 'varchar(256)',
+			'user_agent'        => 'varchar(255)',
+			'referrer'          => 'varchar(255)',
+			'submit_type'       => 'varchar(20)',
 			'created_at'        => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 			'updated_at'        => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL'
 		);
@@ -44,6 +46,8 @@ class Record_Model extends Base_Db_Model {
 		$this->safe_create();
 		( new Record_Field_Model )->safe_create();
 		( new Record_Error_Model )->safe_create();
+		( new Record_Action_Result_Model )->safe_create();
+		( new Record_View_Model )->safe_create();
 
 		parent::before_insert();
 	}

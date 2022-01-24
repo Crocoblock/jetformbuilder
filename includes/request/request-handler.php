@@ -22,25 +22,19 @@ class Request_Handler {
 	const REPEATERS_SETTINGS = '__repeaters_settings';
 	const WP_NONCE_KEY = '_wpnonce';
 
-	public function set_request( $request ) {
-		$this->request = $request;
-
-		Parser_Manager::instance();
+	public function __construct() {
+		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'with_repeaters' ), 0 );
 	}
 
 	public function get_request() {
 		return $this->_request_values;
 	}
 
-	private function merge_with_base_request( $data ) {
-		foreach ( $this->request as $name => $field ) {
-			$data[ '__' . $name ] = $field;
-		}
+	private function with_repeaters( $data ) {
 		$data[ self::REPEATERS_SETTINGS ] = $this->repeaters;
 
 		return $data;
 	}
-
 
 	/**
 	 * Get form values from request
@@ -48,87 +42,85 @@ class Request_Handler {
 	 * @return [type] [description]
 	 */
 	public function get_values_from_request() {
+		// phpcs:disable WordPress.Security
 
-		if ( $this->request['is_ajax'] ) {
-
-			$prepared = array();
-			// phpcs:disable WordPress.Security.NonceVerification.Missing
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$raw = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( wp_unslash( $_POST['values'] ) ) : array();
-			// phpcs:enable WordPress.Security.NonceVerification.Missing
-
-			if ( empty( $raw ) ) {
-				return $prepared;
-			}
-
-			foreach ( $raw as $data ) {
-
-				$name  = $data['name'];
-				$value = $data['value'];
-
-				if ( preg_match( '/\[\d\]\[/', $name ) ) {
-
-					$name_parts = explode( '[', $name );
-
-					$name  = $name_parts[0];
-					$index = absint( rtrim( $name_parts[1], ']' ) );
-					$key   = rtrim( $name_parts[2], ']' );
-
-					if ( empty( $prepared[ $name ] ) ) {
-						$prepared[ $name ] = array();
-					}
-
-					if ( empty( $prepared[ $name ][ $index ] ) ) {
-						$prepared[ $name ][ $index ] = array();
-					}
-
-					if ( isset( $name_parts[3] ) ) {
-
-						if ( empty( $prepared[ $name ][ $index ][ $key ] ) ) {
-							$prepared[ $name ][ $index ][ $key ] = array();
-						}
-
-						$prepared[ $name ][ $index ][ $key ][] = $value;
-
-					} else {
-						$prepared[ $name ][ $index ][ $key ] = $value;
-					}
-				} elseif ( false !== strpos( $name, '[]' ) ) {
-
-					$name = str_replace( '[]', '', $name );
-
-					if ( empty( $prepared[ $name ] ) ) {
-						$prepared[ $name ] = array();
-					}
-
-					$prepared[ $name ][] = $value;
-
-				} else {
-					$prepared[ $name ] = $value;
-				}
-			}
-
-			return $prepared;
-
-		} else {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! $this->handler()->is_ajax() ) {
 			return $_POST;
 		}
 
+		$prepared = array();
+		$raw      = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( wp_unslash( $_POST['values'] ) ) : array();
+
+		// phpcs:enable WordPress.Security
+
+		if ( empty( $raw ) ) {
+			return $prepared;
+		}
+
+		foreach ( $raw as $data ) {
+
+			$name  = $data['name'];
+			$value = $data['value'];
+
+			if ( preg_match( '/\[\d\]\[/', $name ) ) {
+
+				$name_parts = explode( '[', $name );
+
+				$name  = $name_parts[0];
+				$index = absint( rtrim( $name_parts[1], ']' ) );
+				$key   = rtrim( $name_parts[2], ']' );
+
+				if ( empty( $prepared[ $name ] ) ) {
+					$prepared[ $name ] = array();
+				}
+
+				if ( empty( $prepared[ $name ][ $index ] ) ) {
+					$prepared[ $name ][ $index ] = array();
+				}
+
+				if ( isset( $name_parts[3] ) ) {
+
+					if ( empty( $prepared[ $name ][ $index ][ $key ] ) ) {
+						$prepared[ $name ][ $index ][ $key ] = array();
+					}
+
+					$prepared[ $name ][ $index ][ $key ][] = $value;
+
+				} else {
+					$prepared[ $name ][ $index ][ $key ] = $value;
+				}
+			} elseif ( false !== strpos( $name, '[]' ) ) {
+
+				$name = str_replace( '[]', '', $name );
+
+				if ( empty( $prepared[ $name ] ) ) {
+					$prepared[ $name ] = array();
+				}
+
+				$prepared[ $name ][] = $value;
+
+			} else {
+				$prepared[ $name ] = $value;
+			}
+		}
+
+		return $prepared;
 	}
 
 	/**
 	 * @throws Request_Exception
 	 */
 	public function init_form_data() {
-		$this->_fields         = Plugin::instance()->form->get_form_blocks( $this->request['form_id'] );
+		$this->_fields         = Plugin::instance()->form->get_form_blocks(
+			$this->handler()->get_form_id()
+		);
 		$this->_request_values = $this->get_values_from_request();
 
 		$nonce = isset( $this->_request_values[ self::WP_NONCE_KEY ] )
 			? $this->_request_values[ self::WP_NONCE_KEY ]
 			: '';
 
-		Live_Form::instance()->set_form_id( $this->request['form_id'] );
+		Live_Form::instance()->set_form_id( $this->handler()->get_form_id() );
 
 		if ( ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() ) ) {
 			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
@@ -157,13 +149,11 @@ class Request_Handler {
 			);
 		}
 
-		if ( ! Plugin::instance()->captcha->verify( $this->request['form_id'], $this->request['is_ajax'] ) ) {
+		if ( ! Plugin::instance()->captcha->verify( $this->handler()->get_form_id(), $this->handler()->is_ajax() ) ) {
 			throw new Request_Exception( 'captcha_failed' );
 		}
 
-		$data = apply_filters( 'jet-form-builder/form-handler/form-data', $this->_response_data, $this );
-
-		return $this->merge_with_base_request( $data );
+		return apply_filters( 'jet-form-builder/form-handler/form-data', $this->_response_data, $this );
 	}
 
 	public function save_repeater( $name, $value ) {
@@ -203,6 +193,10 @@ class Request_Handler {
 		}
 
 		return $default_val;
+	}
+
+	private function handler() {
+		return jet_form_builder()->form_handler;
 	}
 
 

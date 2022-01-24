@@ -34,13 +34,9 @@
 </template>
 
 <script>
-import i18n from '../mixins/i18n';
-import GetIncoming from '../mixins/GetIncoming';
+const { i18n, GetIncoming } = JetFBMixins;
 
-const {
-		  mapState   = () => ( {} ),
-		  mapGetters = () => ( {} ),
-	  } = window?.Vuex || {};
+const { mapState, mapGetters } = Vuex;
 
 export default {
 	name: "TablePagination",

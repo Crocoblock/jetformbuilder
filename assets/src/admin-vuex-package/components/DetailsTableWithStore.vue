@@ -6,19 +6,19 @@
 </template>
 
 <script>
-import DetailsTable from './DetailsTable';
+const { DetailsTable } = JetFBComponents
 
 export default {
 	name: 'DetailsTableWithStore',
 	props: {
 		columns: {
 			type: String,
-			default: 'columns'
+			default: 'columns',
 		},
 		current: {
 			type: String,
-			default: 'currentPopupData'
-		}
+			default: 'currentPopupData',
+		},
 	},
 	components: { DetailsTable },
 	computed: {
@@ -28,7 +28,7 @@ export default {
 		currentFromStore() {
 			return this.$store.state[ this.current ];
 		},
-	}
+	},
 };
 </script>
 

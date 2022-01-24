@@ -27,13 +27,12 @@
 </template>
 
 <script>
-import GetIncoming from '../../mixins/GetIncoming';
-import i18n from '../../mixins/i18n';
-import EntriesTable from '../EntriesTable';
 import TablePagination from '../TablePagination';
 import * as PaymentType from './payment-type';
 import * as StatusColumn from './status';
-import * as PayerColumn from '../../entries-table-columns/payer';
+
+const { PayerColumn, EntriesTable } = JetFBComponents;
+const { GetIncoming, i18n } = JetFBMixins;
 
 Vue.config.devtools = true;
 

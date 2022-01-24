@@ -369,17 +369,12 @@ class Tools {
 		return self::EMPTY_DEEP_VALUE;
 	}
 
-	public static function run_callbacks( $callbacks = array(), ...$params ) {
-		if ( ! $callbacks ) {
+	public static function call( $callback, ...$params ) {
+		if ( ! is_callable( $callback ) ) {
 			return;
 		}
 
-		foreach ( $callbacks as $callback ) {
-			if ( ! is_callable( $callback ) ) {
-				continue;
-			}
-			call_user_func( $callback, ...$params );
-		}
+		call_user_func( $callback, ...$params );
 	}
 
 	public static function decode_unserializable( $value ) {
@@ -607,6 +602,39 @@ class Tools {
 		} else {
 			return false;
 		}
+	}
+
+	public static function array_chunk_by_key( $chunk_key, array $source, $include_in_before = false ) {
+		$before = array();
+		$after  = array();
+
+		$in_after = false;
+
+		foreach ( $source as $key => $value ) {
+			if ( $chunk_key === $key ) {
+				$in_after = true;
+			}
+
+			if ( $chunk_key === $key ) {
+				if ( $include_in_before ) {
+					$before[ $key ] = $value;
+				} else {
+					$after[ $key ] = $value;
+				}
+			} elseif ( $in_after ) {
+				$after[ $key ] = $value;
+			} else {
+				$before[ $key ] = $value;
+			}
+		}
+
+		return array( $before, $after );
+	}
+
+	public static function set_current_post( $post_id ) {
+		global $post;
+
+		$post = get_post( absint( $post_id ) );
 	}
 
 }

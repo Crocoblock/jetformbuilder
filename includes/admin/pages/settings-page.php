@@ -29,4 +29,10 @@ class Settings_Page extends Base_Page {
 	public function page_config(): array {
 		return array();
 	}
+
+	public function assets() {
+		wp_enqueue_script( 'jet-form-builder-admin-package' );
+		
+		parent::assets();
+	}
 }

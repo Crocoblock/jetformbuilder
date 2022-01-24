@@ -40,6 +40,16 @@ class Action_Handler {
 	public $context = array();
 	private $conditions;
 
+	/**
+	 * @var array Action IDs that were executed without errors
+	 */
+	protected $passed = array();
+
+	/**
+	 * @var array Action IDs that were skipped due to a condition not matching
+	 */
+	protected $skipped = array();
+
 
 	/**
 	 * Constructor for the class
@@ -251,6 +261,12 @@ class Action_Handler {
 			try {
 				$this->get_current_condition_manager()->check_all();
 			} catch ( Condition_Exception $exception ) {
+				/**
+				 * We save the ID of the current action,
+				 * for possible logging of form entries
+				 */
+				$this->skipping_current();
+
 				continue;
 			}
 
@@ -258,6 +274,12 @@ class Action_Handler {
 			 * Process single action
 			 */
 			$action->do_action( $this->request_data, $this );
+
+			/**
+			 * We save the ID of the current action,
+			 * for possible logging of form entries
+			 */
+			$this->passing_current();
 		}
 
 		/**
@@ -362,6 +384,26 @@ class Action_Handler {
 
 	public function get_refer() {
 		return $this->request_data['__refer'] ?? '';
+	}
+
+	public function get_passed_actions() {
+		return $this->passed;
+	}
+
+	public function get_skipped_actions() {
+		return $this->skipped;
+	}
+
+	protected function passing_current() {
+		$this->passed[] = $this->current_position;
+
+		return $this;
+	}
+
+	protected function skipping_current() {
+		$this->skipped[] = $this->current_position;
+
+		return $this;
 	}
 
 

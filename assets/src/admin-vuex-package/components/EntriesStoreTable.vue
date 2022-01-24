@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import GetColumnComponent from '../mixins/GetColumnComponent';
-import EntriesTable from './EntriesTable';
-
 const { mapState } = Vuex;
+
+const { GetColumnComponent } = JetFBMixins;
+const { EntriesTable } = JetFBComponents;
 
 export default {
 	name: "EntriesStoreTable",

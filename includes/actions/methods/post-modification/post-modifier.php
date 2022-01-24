@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Actions\Methods;
+namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
 use Jet_Form_Builder\Actions\Types\Insert_Post;

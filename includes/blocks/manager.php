@@ -196,6 +196,19 @@ class Manager {
 		$this->enqueue_frontend_styles();
 
 		wp_enqueue_script( 'jet-form-builder-frontend-forms' );
+	}
+
+	public function register_form_scripts() {
+		if ( $this->_registered_scripts ) {
+			return;
+		}
+		wp_register_script(
+			'jet-form-builder-frontend-forms',
+			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
+			array( 'jquery', 'wp-i18n', 'wp-hooks' ),
+			Plugin::instance()->get_version(),
+			true
+		);
 
 		wp_localize_script(
 			'jet-form-builder-frontend-forms',
@@ -215,19 +228,6 @@ class Manager {
 					),
 				)
 			)
-		);
-	}
-
-	public function register_form_scripts() {
-		if ( $this->_registered_scripts ) {
-			return;
-		}
-		wp_register_script(
-			'jet-form-builder-frontend-forms',
-			Plugin::instance()->plugin_url( 'assets/js/frontend-forms.js' ),
-			array( 'jquery', 'wp-i18n', 'wp-hooks' ),
-			Plugin::instance()->get_version(),
-			true
 		);
 
 		wp_register_script(

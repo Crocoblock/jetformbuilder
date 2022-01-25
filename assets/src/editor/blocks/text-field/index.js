@@ -15,7 +15,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Text Field', 'jet-form-builder' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: TextEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],

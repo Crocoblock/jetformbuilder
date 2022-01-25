@@ -15,8 +15,6 @@ const { name, icon = '' } = metadata;
  *  - attrHelp
  */
 const settings = {
-	title: __( 'Date Field' ),
-	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: DateEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],

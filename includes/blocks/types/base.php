@@ -227,6 +227,12 @@ abstract class Base extends Base_Module {
 				return array_map( 'strval', $value );
 			case 'raw':
 			default:
+				if ( is_array( $value ) ) {
+					foreach ( $value as $item ) {
+						return $item;
+					}
+				}
+
 				return $value;
 		}
 	}

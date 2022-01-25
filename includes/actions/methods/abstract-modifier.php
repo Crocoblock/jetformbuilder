@@ -101,17 +101,17 @@ abstract class Abstract_Modifier {
 	}
 
 	/**
-	 * @param string $prop
+	 * @param string $field_name
 	 *
 	 * @return string
 	 * @throws Silence_Exception
 	 */
-	public function get_prop_from_fields_map( string $prop ) {
+	public function get_prop_by_field_name( string $field_name ) {
 		/**
 		 * At this moment $this->current_prop
 		 * store the `field_name`
 		 */
-		if ( empty( $this->fields_map[ $prop ] ) ) {
+		if ( empty( $this->fields_map[ $field_name ] ) ) {
 			throw new Silence_Exception( 'Field is not used.' );
 		}
 
@@ -119,7 +119,7 @@ abstract class Abstract_Modifier {
 		 * And here we returning the post property
 		 * Ex: 'post_content' | 'post_status' | 'jet_tax__slug' | 'custom_meta_key'
 		 */
-		return Tools::sanitize_text_field( $this->fields_map[ $prop ] );
+		return Tools::sanitize_text_field( $this->fields_map[ $field_name ] );
 	}
 
 	/**
@@ -127,13 +127,23 @@ abstract class Abstract_Modifier {
 	 * @throws Silence_Exception
 	 */
 	public function get_current_prop_from_fields_map() {
-		return $this->get_prop_from_fields_map( $this->current_prop );
+		return $this->get_prop_by_field_name( $this->current_prop );
 	}
 
 	public function get_value_by_prop( string $prop ) {
-		$field_name = $this->fields_map[ $prop ] ?? false;
+		$field_name = $this->get_field_name_by_prop( $prop );
 
 		return $this->request[ $field_name ] ?? false;
+	}
+
+	public function get_field_name_by_prop( string $search_prop ) {
+		foreach ( $this->fields_map as $field_name => $prop ) {
+			if ( $search_prop === $prop ) {
+				return $field_name;
+			}
+		}
+
+		return false;
 	}
 
 
@@ -252,6 +262,13 @@ abstract class Abstract_Modifier {
 
 	public function exclude_current_prop() {
 		$this->exclude_prop( $this->current_prop );
+	}
+
+	/**
+	 * @throws Modifier_Exclude_Property
+	 */
+	public function exclude_current() {
+		throw new Modifier_Exclude_Property( "Excluding: {$this->current_prop}" );
 	}
 
 	public function exclude_prop( string $prop ) {

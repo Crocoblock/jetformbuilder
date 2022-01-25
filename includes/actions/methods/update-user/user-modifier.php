@@ -11,47 +11,44 @@ class User_Modifier extends Abstract_Modifier {
 
 	/** @var \WP_User */
 	private $updated_user;
+
+	/** @var string */
 	private $user_role;
 
 	public function get_object_fields() {
-		return array(
-			'ID'            => array(
-				'before_cb' => array( $this, 'before_attach_id' )
-			),
-			'user_nicename' => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
-			'user_url'      => array(
-				'before_cb' => array( $this, 'before_attach_url' )
-			),
-			'password'      => array(
-				'before_cb' => array( $this, 'before_attach_password' )
-			),
-			'email'         => array(
-				'before_cb' => array( $this, 'before_attach_email' )
-			),
-			'display_name'  => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
-			'nickname'      => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
-			'first_name'    => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
-			'last_name'     => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
-			'description'   => array(
-				'before_cb' => array( $this, 'throw_if_empty' )
-			),
+		return apply_filters(
+			'jet-form-builder/user-modifier/object-properties',
+			array(
+				'ID'               => array(
+					'before_cb' => array( $this, 'before_attach_id' )
+				),
+				'password'         => array(
+					'before_cb' => array( $this, 'before_attach_password' )
+				),
+				'email'            => array(
+					'before_cb' => array( $this, 'before_attach_email' )
+				),
+				'confirm_password' => array(
+					'before_cb' => array( $this, 'exclude_current' )
+				),
+				'user_url',
+				'user_nicename',
+				'first_name',
+				'last_name',
+				'display_name',
+				'nickname',
+				'description',
+			)
 		);
 	}
 
 	public function get_actions() {
-		return array(
-			'update' => array(
-				'action' => array( $this, 'update_user' ),
+		return apply_filters(
+			'jet-form-builder/user-modifier/object-actions',
+			array(
+				'update' => array(
+					'action' => array( $this, 'update_user' ),
+				)
 			)
 		);
 	}

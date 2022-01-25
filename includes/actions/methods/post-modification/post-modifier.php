@@ -271,6 +271,10 @@ class Post_Modifier extends Post_Modifier_Core {
 
 		$taxonomies = $this->get_current_external();
 
+		if ( ! isset( $taxonomies[ $tax ] ) ) {
+			$taxonomies[ $tax ] = array();
+		}
+
 		if ( ! is_array( $this->current_value ) ) {
 			$taxonomies[ $tax ][] = absint( $this->current_value );
 		} else {

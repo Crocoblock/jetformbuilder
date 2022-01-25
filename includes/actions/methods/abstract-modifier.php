@@ -149,9 +149,9 @@ abstract class Abstract_Modifier {
 			return;
 		}
 
-		call_user_func( array( $this, 'custom_before_attach' ), $this );
-
 		if ( ! $this->is_reserved_property( $this->current_prop ) ) {
+			call_user_func( array( $this, 'custom_before_attach' ), $this );
+
 			throw new Silence_Exception( 'Property not need to attach' );
 		}
 	}

@@ -122,6 +122,22 @@ abstract class Abstract_Modifier {
 		return Tools::sanitize_text_field( $this->fields_map[ $field_name ] );
 	}
 
+	public function replace_field_by_prop( string $prop_name, $value ) {
+		$field_name = $this->get_field_name_by_prop( $prop_name );
+
+		if ( false === $field_name ) {
+			$field_name = $this->unique_slug( $prop_name );
+
+			$this->fields_map[ $field_name ] = $prop_name;
+		}
+
+		$this->set_request( array(
+			$field_name => $value
+		) );
+
+		return $this;
+	}
+
 	/**
 	 * @return string
 	 * @throws Silence_Exception

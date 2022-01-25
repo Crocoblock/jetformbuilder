@@ -111,22 +111,6 @@ abstract class Post_Modifier_Core extends Abstract_Modifier {
 	}
 
 
-	public function set_general_post_status( $status ) {
-		$field_name = $this->get_field_name_by_prop( 'post_status' );
-
-		if ( false === $field_name ) {
-			$field_name = $this->unique_slug( 'status' );
-
-			$this->fields_map[ $field_name ] = 'post_status';
-		}
-
-		$this->set_request( array(
-			$field_name => $status
-		) );
-
-		return $this;
-	}
-
 
 	/**
 	 * @throws Silence_Exception

@@ -224,7 +224,7 @@ abstract class Abstract_Modifier {
 	}
 
 	public function set_external( string $key, array $data ) {
-		if ( ! is_array( $this->external_data[ $key ] ) ) {
+		if ( ! isset( $this->external_data[ $key ] ) || ! is_array( $this->external_data[ $key ] ) ) {
 			$this->external_data[ $key ] = array();
 		}
 		$this->external_data[ $key ] = array_merge( $this->external_data[ $key ], $data );

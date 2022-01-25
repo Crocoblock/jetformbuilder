@@ -26,6 +26,23 @@ class Editor {
 	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
+	public function __construct() {
+		add_action( 'enqueue_block_editor_assets', array( $this, 'admin_assets' ) );
+	}
+
+	/**
+	 * Register admin assets
+	 *
+	 * @return void [type] [description]
+	 */
+	public function admin_assets() {
+		if ( jet_form_builder()->post_type->is_form_editor ) {
+			$this->enqueue_assets();
+		} else {
+			$this->enqueue_form_assets();
+		}
+	}
+
 	/**
 	 * Returns taxonomies list for the config
 	 *
@@ -374,7 +391,7 @@ class Editor {
 
 		do_action( 'jet-form-builder/other-editor-assets/before', $this, $handle );
 
-		wp_enqueue_script(
+		wp_register_script(
 			$handle,
 			JET_FORM_BUILDER_URL . 'assets/js/form-block.js',
 			array(
@@ -389,7 +406,7 @@ class Editor {
 			true
 		);
 
-		wp_enqueue_style(
+		wp_register_style(
 			'jet-form-builder-others',
 			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
 			array(),

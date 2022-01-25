@@ -61,8 +61,28 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	 */
 	abstract public function do_action( array $request, Action_Handler $handler );
 
+	/**
+	 * This method will affect the registration of the action.
+	 * If the action is not registered,
+	 * then it will not be executed/available in the editor.
+	 *
+	 * Used by \Jet_Form_Builder\Actions\Manager::rep_before_install_item
+	 *
+	 * @return bool
+	 */
 	public function dependence() {
 		return true;
+	}
+
+	/**
+	 * If this method returns TRUE, then the action will be executed in any case,
+	 * despite the fact that there were errors in previous actions.
+	 *
+	 * @since 2.0.0
+	 * @return string
+	 */
+	public function get_flow_handler(): string {
+		return false;
 	}
 
 	public function messages() {

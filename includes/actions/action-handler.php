@@ -25,7 +25,6 @@ class Action_Handler {
 	public $request_data = array();
 	public $manager = null;
 
-
 	public $form_actions = array();
 	private $form_conditions = array();
 	public $is_ajax = false;
@@ -34,7 +33,6 @@ class Action_Handler {
 	 * Data for actions
 	 */
 	public $size_all;
-	public $current_position = false;
 	public $response_data = array();
 
 	public $context = array();
@@ -49,13 +47,6 @@ class Action_Handler {
 	 * @var array Action IDs that were skipped due to a condition not matching
 	 */
 	protected $skipped = array();
-
-
-	/**
-	 * Constructor for the class
-	 */
-	public function __construct() {
-	}
 
 	public function condition_manager(): Condition_Manager {
 		if ( ! $this->conditions ) {
@@ -142,35 +133,6 @@ class Action_Handler {
 	}
 
 
-	public function in_loop(): bool {
-		return false !== $this->current_position;
-	}
-
-	public function in_loop_or_die() {
-		if ( $this->in_loop() ) {
-			return;
-		}
-
-		_doing_it_wrong(
-			__METHOD__,
-			esc_html( 'The action loop has not been started, see ' . self::class . '::run_actions()' ),
-			'1.4.0'
-		);
-	}
-
-	public function get_current_action(): Base {
-		$this->in_loop_or_die();
-
-		return $this->get_action_by_id( $this->current_position );
-	}
-
-	public function get_current_condition_manager(): Condition_Manager {
-		$this->in_loop_or_die();
-
-		return $this->get_condition_by_id( $this->current_position );
-	}
-
-
 	/**
 	 * Unregister notification by id
 	 *
@@ -200,92 +162,6 @@ class Action_Handler {
 	 */
 	public function get_all() {
 		return $this->form_actions;
-	}
-
-	/**
-	 * Send form notifications
-	 *
-	 * @return array [type] [description]
-	 * @throws Action_Exception
-	 */
-	public function do_actions() {
-		do_action( 'jet-form-builder/actions/before-send' );
-
-		$run_actions_callback = apply_filters( 'jet-form-builder/actions/run-callback', array( $this, 'run_actions' ) );
-		call_user_func( $run_actions_callback );
-
-		do_action( 'jet-form-builder/actions/after-send' );
-
-		return $this->response_data;
-	}
-
-	/**
-	 * Doesn't throw an exception if there are no actions
-	 *
-	 * @return $this
-	 * @throws Action_Exception
-	 */
-	public function soft_run_actions() {
-		if ( empty( $this->form_actions ) ) {
-			return $this;
-		}
-		$this->run_actions();
-
-		return $this;
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	public function run_actions() {
-		if ( empty( $this->form_actions ) ) {
-			throw new Action_Exception( 'failed', 'Empty actions' );
-		}
-
-		$this->size_all = sizeof( $this->form_actions );
-
-		foreach ( $this->form_actions as $index => $action ) {
-
-			/**
-			 * Start the cycle
-			 *
-			 * @var int current_position
-			 */
-			$this->current_position = $index;
-
-			/**
-			 * Check conditions for action
-			 *
-			 * @var Base $action
-			 */
-			try {
-				$this->get_current_condition_manager()->check_all();
-			} catch ( Condition_Exception $exception ) {
-				/**
-				 * We save the ID of the current action,
-				 * for possible logging of form entries
-				 */
-				$this->skipping_current();
-
-				continue;
-			}
-
-			/**
-			 * Process single action
-			 */
-			$action->do_action( $this->request_data, $this );
-
-			/**
-			 * We save the ID of the current action,
-			 * for possible logging of form entries
-			 */
-			$this->passing_current();
-		}
-
-		/**
-		 * End the cycle
-		 */
-		$this->current_position = false;
 	}
 
 	public function get_inserted_post_id( $action_id = 0 ) {
@@ -394,14 +270,14 @@ class Action_Handler {
 		return $this->skipped;
 	}
 
-	protected function passing_current() {
-		$this->passed[] = $this->current_position;
+	protected function passing_action( int $action_id ) {
+		$this->passed[] = $action_id;
 
 		return $this;
 	}
 
-	protected function skipping_current() {
-		$this->skipped[] = $this->current_position;
+	protected function skipping_current( int $action_id ) {
+		$this->skipped[] = $action_id;
 
 		return $this;
 	}

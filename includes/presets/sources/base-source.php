@@ -17,7 +17,6 @@ abstract class Base_Source {
 	protected $prop;
 	private $src;
 
-	private $current_block;
 	protected $permission;
 
 	const FUNC_PREFIX = 'source__';

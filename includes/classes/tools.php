@@ -554,4 +554,21 @@ class Tools {
 		}
 	}
 
+	public static function prepare_repeater_value( $value, $fields_map ) {
+		$prepared_value = array();
+
+		foreach ( $value as $index => $row ) {
+			$prepared_row = array();
+
+			foreach ( $row as $item_key => $item_value ) {
+				$item_key                  = ! empty( $fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $fields_map[ $item_key ] ) : $item_key;
+				$prepared_row[ $item_key ] = $item_value;
+			}
+
+			$prepared_value[ 'item-' . $index ] = $prepared_row;
+		}
+
+		return $prepared_value;
+	}
+
 }

@@ -175,6 +175,10 @@ class Editor {
 									'label' => __( 'Post Status', 'jet-form-builder' ),
 								),
 								array(
+									'value' => 'post_author',
+									'label' => __( 'Post Author', 'jet-form-builder' ),
+								),
+								array(
 									'value' => 'post_excerpt',
 									'label' => __( 'Post Excerpt', 'jet-form-builder' ),
 								),

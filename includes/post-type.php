@@ -39,7 +39,6 @@ class Post_Type {
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 
 		add_filter( "manage_{$this->slug()}_posts_columns", array( $this, 'filter_columns' ) );
 		add_action( "manage_{$this->slug()}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
@@ -69,20 +68,7 @@ class Post_Type {
 		);
 	}
 
-	/**
-	 * Register admin assets
-	 *
-	 * @return void [type] [description]
-	 */
-	public function admin_assets() {
 
-		if ( $this->is_form_editor ) {
-			Plugin::instance()->editor->enqueue_assets();
-
-		} elseif ( false === $this->is_form_editor ) {
-			Plugin::instance()->editor->enqueue_form_assets();
-		}
-	}
 
 	/**
 	 * Returns current post type slug

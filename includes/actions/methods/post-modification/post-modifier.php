@@ -4,10 +4,10 @@
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
+use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Post_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Post_Modifier extends Post_Modifier_Core {
@@ -19,7 +19,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	 */
 	public function get_object_fields() {
 		return apply_filters(
-			'jet-form-builder/post-controller/object-properties',
+			'jet-form-builder/post-modifier/object-properties',
 			array(
 				'ID'          => array(
 					'before_cb' => array( $this, 'before_attach_id' )
@@ -40,7 +40,7 @@ class Post_Modifier extends Post_Modifier_Core {
 
 	public function get_actions() {
 		return apply_filters(
-			'jet-form-builder/post-controller/object-actions',
+			'jet-form-builder/post-modifier/object-actions',
 			array(
 				'update' => array(
 					'action' => array( $this, 'update_post' ),
@@ -59,7 +59,7 @@ class Post_Modifier extends Post_Modifier_Core {
 
 	public function get_external_properties() {
 		return apply_filters(
-			'jet-form-builder/post-controller/external-actions',
+			'jet-form-builder/post-modifier/external-actions',
 			array(
 				'meta'         => array(
 					'condition_cb' => true,
@@ -89,15 +89,15 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function insert_post() {
-		$this->inserted_post_id = wp_insert_post( $this->post_arr );
+		$this->inserted_post_id = wp_insert_post( $this->source_arr );
 
 		$this->is_valid_post_id();
 
-		if ( ! empty( $this->post_arr['post_title'] ) ) {
+		if ( ! empty( $this->source_arr['post_title'] ) ) {
 			return;
 		}
 
-		$post_type_obj = get_post_type_object( $this->post_arr['post_type'] );
+		$post_type_obj = get_post_type_object( $this->source_arr['post_type'] );
 		$title         = $post_type_obj->labels->singular_name . ' #' . $this->inserted_post_id;
 
 		wp_update_post( array(
@@ -110,7 +110,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function update_post() {
-		$this->inserted_post_id = wp_update_post( $this->post_arr );
+		$this->inserted_post_id = wp_update_post( $this->source_arr );
 
 		$this->is_valid_post_id();
 	}
@@ -119,12 +119,12 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function trash_post() {
-		$post = wp_trash_post( $this->post_arr['ID'] ?? 0 );
+		$post = wp_trash_post( $this->source_arr['ID'] ?? 0 );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
 			throw new Action_Exception(
 				'failed',
-				$this->post_arr
+				$this->source_arr
 			);
 		}
 	}
@@ -228,7 +228,7 @@ class Post_Modifier extends Post_Modifier_Core {
 						'__action' => $this->action,
 						'ID'       => $post_id,
 					),
-					$this->post_arr
+					$this->source_arr
 				),
 			)
 		);
@@ -271,6 +271,10 @@ class Post_Modifier extends Post_Modifier_Core {
 
 		$taxonomies = $this->get_current_external();
 
+		if ( ! isset( $taxonomies[ $tax ] ) ) {
+			$taxonomies[ $tax ] = array();
+		}
+
 		if ( ! is_array( $this->current_value ) ) {
 			$taxonomies[ $tax ][] = absint( $this->current_value );
 		} else {
@@ -289,23 +293,12 @@ class Post_Modifier extends Post_Modifier_Core {
 			return;
 		}
 
-		$prepared_value = array();
-
-		foreach ( $this->current_value as $index => $row ) {
-			$prepared_row = array();
-
-			foreach ( $row as $item_key => $item_value ) {
-				$item_key                  = ! empty( $this->fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $this->fields_map[ $item_key ] ) : $item_key;
-				$prepared_row[ $item_key ] = $item_value;
-			}
-
-			$prepared_value[ 'item-' . $index ] = $prepared_row;
-		}
-
 		$this->set_meta( array(
-			$this->current_prop => $prepared_value
+			$this->current_prop => Tools::prepare_repeater_value(
+				$this->current_value,
+				$this->fields_map
+			)
 		) );
-
 	}
 
 	public function attach_je_relations() {
@@ -319,13 +312,13 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * To skip setting this property
 	 * @throws Silence_Exception
 	 *
-	 * To exclude this property from $this->post_arr
-	 * @throws Post_Exception
+	 * To exclude this property from $this->source_arr
+	 * @throws Modifier_Exclude_Property
 	 */
 	public function before_attach_status() {
 		switch ( $this->current_value ) {
 			case 'keep-current':
-				throw new Post_Exception( 'Keep current status, exclude this prop' );
+				throw new Modifier_Exclude_Property( 'Keep current status, exclude this prop' );
 			case 'trash':
 				$this->set_action( 'trash' );
 

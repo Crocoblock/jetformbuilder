@@ -61,7 +61,7 @@ class Insert_Post extends Base {
 			->set_meta( $meta )
 			->set_fields_map( $fields_map )
 			->set_request( $request )
-			->set_general_post_status( $post_status )
+			->replace_field_by_prop( 'post_status', $post_status )
 			->run();
 	}
 

@@ -70,8 +70,18 @@ class User_Modifier extends Abstract_Modifier {
 		return 'update';
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function update_user() {
-		wp_update_user( $this->source_arr );
+		$response = wp_update_user( $this->source_arr );
+
+		if ( is_wp_error( $response ) ) {
+			throw ( new Action_Exception(
+				$response->get_error_message(),
+				$response->get_error_data() )
+			)->dynamic_error();
+		}
 
 		if ( ! empty( $this->user_role ) ) {
 			$this->updated_user->set_role( $this->user_role );

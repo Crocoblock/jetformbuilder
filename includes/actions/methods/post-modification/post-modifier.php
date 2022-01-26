@@ -133,14 +133,13 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function is_valid_post_id() {
-		if ( is_numeric( $this->inserted_post_id ) && ! empty( $this->inserted_post_id ) ) {
-			return;
+		if ( is_wp_error( $this->inserted_post_id ) ) {
+			throw new Action_Exception(
+				'failed',
+				$this->inserted_post_id->get_error_data(),
+				$this->source_arr
+			);
 		}
-
-		throw new Action_Exception(
-			'failed',
-			array( $this->inserted_post_id )
-		);
 	}
 
 	public function after_do_action() {

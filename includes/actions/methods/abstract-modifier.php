@@ -47,6 +47,30 @@ abstract class Abstract_Modifier {
 	}
 
 	/**
+	 * @param string $action
+	 *
+	 * @return Abstract_Modifier
+	 * @throws Silence_Exception
+	 */
+	public function set_action( string $action ) {
+		$actions = $this->get_actions();
+
+		if ( isset( $actions[ $action ]['action'] ) && is_callable( $actions[ $action ]['action'] ) ) {
+			$this->action = $action;
+
+			return $this;
+		}
+
+		throw new Silence_Exception(
+			'Undefined action',
+			array(
+				$action,
+				array_keys( $this->get_actions() )
+			)
+		);
+	}
+
+	/**
 	 * @throws Action_Exception
 	 */
 	public function do_action() {

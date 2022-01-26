@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
@@ -53,30 +52,6 @@ abstract class Post_Modifier_Core extends Abstract_Modifier {
 			'failed',
 			array(
 				'post_type' => $post_type,
-			)
-		);
-	}
-
-	/**
-	 * @param string $action
-	 *
-	 * @return Post_Modifier_Core
-	 * @throws Silence_Exception
-	 */
-	public function set_action( string $action ) {
-		$actions = $this->get_actions();
-
-		if ( isset( $actions[ $action ]['action'] ) && is_callable( $actions[ $action ]['action'] ) ) {
-			$this->action = $action;
-
-			return $this;
-		}
-
-		throw new Silence_Exception(
-			'Undefined action',
-			array(
-				$action,
-				array_keys( $this->get_actions() )
 			)
 		);
 	}

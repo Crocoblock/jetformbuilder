@@ -11,7 +11,9 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 abstract class Post_Modifier_Core extends Abstract_Modifier {
 
+	/** @var int|\WP_Error */
 	public $inserted_post_id;
+
 	public $suppress_filters = true;
 
 

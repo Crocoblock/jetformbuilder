@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -30,7 +31,7 @@ class Form_Handler {
 	public $response_data = array();
 	public $is_ajax = false;
 	public $is_success = false;
-	public $response_status = 'failed';
+	public $response_args = array();
 
 	public $form_id;
 	public $refer;
@@ -318,6 +319,16 @@ class Form_Handler {
 		$this->response_data = array_merge( $this->response_data, $data );
 	}
 
+	public function set_response_args( $args ) {
+		$this->response_args = array_merge( $this->response_args, $args );
+
+		return $this;
+	}
+
+	public function get_response_args() {
+		return $this->response_args;
+	}
+
 	/**
 	 * Redirect back to refer
 	 *
@@ -327,20 +338,26 @@ class Form_Handler {
 	 */
 	public function send_response( $args = array() ) {
 		try {
+			$this->set_response_args( $args );
+
+			( new Action_Required_Executor )->run_actions();
+
 			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success, $args );
 		} catch ( Handler_Exception $exception ) {
-			$this->send_raw_response(
-				array(
-					'status' => $exception->get_form_status(),
-				)
-			);
+			$this->send_raw_response( array(
+				'status' => $exception->get_form_status(),
+			) );
 		}
 
-		$this->send_raw_response( $args );
+		$this->send_raw_response();
 	}
 
 	public function send_raw_response( $args = array() ) {
-		( new Form_Response\Response( $this->get_response_manager(), $this->response_data ) )->init( $args )->send();
+		if ( ! empty( $args ) ) {
+			$this->set_response_args( $args );
+		}
+
+		( new Form_Response\Response( $this->get_response_manager(), $this->response_data ) )->init( $this->response_args )->send();
 	}
 
 }

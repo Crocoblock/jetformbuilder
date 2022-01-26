@@ -5,9 +5,8 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Action_Localize;
-use Jet_Form_Builder\Actions\Condition_Manager;
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 
@@ -75,14 +74,16 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * If this method returns TRUE, then the action will be executed in any case,
-	 * despite the fact that there were errors in previous actions.
+	 * If this method returns Action_Default_Executor::class
+	 * then the action will be executed normally.
 	 *
-	 * @since 2.0.0
+	 * With any other value, this action will be excluded from the general list.
+	 *
 	 * @return string
+	 * @since 2.0.0
 	 */
 	public function get_flow_handler(): string {
-		return false;
+		return Action_Default_Executor::class;
 	}
 
 	public function messages() {

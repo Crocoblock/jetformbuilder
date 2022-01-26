@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Request\Request_Handler;
 
@@ -20,19 +21,6 @@ class Controller {
 	protected $columns = array();
 	protected $record_id;
 
-
-	/**
-	 * @param $handler
-	 * @param $is_success
-	 * @param $args
-	 *
-	 * @throws Sql_Exception
-	 */
-	public function hook_handler( $handler, $is_success, $args ) {
-		$this->save( array(
-			'status' => $args['status'] ?? ''
-		) );
-	}
 
 	/**
 	 * @param $defaults
@@ -107,6 +95,36 @@ class Controller {
 		);
 
 		return ( new Record_Action_Result_Model )->insert_many( $actions );
+	}
+
+	public function get_chunked_actions() {
+		list( $passed, $skipped ) = array(
+			$this->handler()->get_passed_actions(),
+			$this->handler()->get_skipped_actions()
+		);
+
+		$passed_actions  = array();
+		$skipped_actions = array();
+		$with_errors     = array();
+
+		foreach ( $this->handler()->get_all() as $index => $action ) {
+			if ( $this->handler()->get_position() === $index ) {
+				continue;
+			}
+			if ( in_array( $index, $passed, true ) ) {
+				$passed_actions[] = $action;
+			} elseif ( in_array( $index, $skipped, true ) ) {
+				$skipped_actions[] = $action;
+			} else {
+				$with_errors[] = $action;
+			}
+		}
+
+		return array(
+			$passed_actions,
+			$skipped_actions,
+			$with_errors
+		);
 	}
 
 	/**
@@ -219,33 +237,6 @@ class Controller {
 
 	public function handler() {
 		return jet_form_builder()->form_handler->action_handler;
-	}
-
-	public function get_chunked_actions() {
-		list( $passed, $skipped ) = array(
-			$this->handler()->get_passed_actions(),
-			$this->handler()->get_skipped_actions()
-		);
-
-		$passed_actions  = array();
-		$skipped_actions = array();
-		$with_errors     = array();
-
-		foreach ( $this->handler()->form_actions as $index => $action ) {
-			if ( in_array( $index, $passed, true ) ) {
-				$passed_actions[] = $action;
-			} elseif ( in_array( $index, $skipped, true ) ) {
-				$skipped_actions[] = $action;
-			} else {
-				$with_errors[] = $action;
-			}
-		}
-
-		return array(
-			$passed_actions,
-			$skipped_actions,
-			$with_errors
-		);
 	}
 
 	public function set_setting( string $key, $value ) {

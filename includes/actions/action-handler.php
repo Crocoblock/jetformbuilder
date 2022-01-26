@@ -3,13 +3,9 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -36,7 +32,6 @@ class Action_Handler {
 	public $response_data = array();
 
 	public $context = array();
-	private $conditions;
 
 	/** @var bool|int Current Action ID */
 	public $current_position = false;
@@ -53,14 +48,6 @@ class Action_Handler {
 	 * @var array Action IDs that were skipped due to a condition not matching
 	 */
 	protected $skipped = array();
-
-	public function condition_manager(): Condition_Manager {
-		if ( ! $this->conditions ) {
-			$this->conditions = new Condition_Manager();
-		}
-
-		return $this->conditions;
-	}
 
 	public function get_form_id() {
 		return (int) $this->form_id;
@@ -130,7 +117,7 @@ class Action_Handler {
 		$action->_id      = $id;
 		$action->settings = $settings;
 
-		$condition = clone $this->condition_manager();
+		$condition = new Condition_Manager();
 		$condition->set_conditions( $conditions );
 		$condition->set_condition_operator( $operator );
 
@@ -138,6 +125,25 @@ class Action_Handler {
 		$this->form_actions[ $id ]    = $action;
 	}
 
+	/**
+	 * Send form notifications
+	 *
+	 * @return array [description]
+	 */
+	public function do_actions() {
+		do_action( 'jet-form-builder/actions/before-send' );
+
+		$run_actions_callback = apply_filters(
+			'jet-form-builder/actions/run-callback',
+			array( new Action_Default_Executor, 'run_actions' )
+		);
+
+		call_user_func( $run_actions_callback );
+
+		do_action( 'jet-form-builder/actions/after-send' );
+
+		return $this->response_data;
+	}
 
 	/**
 	 * Unregister notification by id

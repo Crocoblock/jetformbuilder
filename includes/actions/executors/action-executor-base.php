@@ -34,25 +34,6 @@ abstract class Action_Executor_Base {
 		return $this->actions_ids;
 	}
 
-	/**
-	 * Send form notifications
-	 *
-	 * @return array [description]
-	 */
-	public function do_actions() {
-		do_action( 'jet-form-builder/actions/before-send' );
-
-		$run_actions_callback = apply_filters( 'jet-form-builder/actions/run-callback', array(
-			$this,
-			'run_actions'
-		) );
-		call_user_func( $run_actions_callback );
-
-		do_action( 'jet-form-builder/actions/after-send' );
-
-		return $this->handler()->response_data;
-	}
-
 
 	/**
 	 * Doesn't throw an exception if there are no actions
@@ -60,7 +41,7 @@ abstract class Action_Executor_Base {
 	 * @return $this
 	 * @throws Action_Exception
 	 */
-	public function soft_run_default_actions() {
+	public function soft_run_actions() {
 		if ( empty( $this->get_actions_ids() ) ) {
 			return $this;
 		}
@@ -132,6 +113,10 @@ abstract class Action_Executor_Base {
 
 	public function start_flow() {
 		$this->handler()->start_flow( static::rep_item_id() );
+	}
+
+	public function set_form_id( $form_id ) {
+		return $this->handler()->set_form_id( $form_id );
 	}
 
 	public function handler() {

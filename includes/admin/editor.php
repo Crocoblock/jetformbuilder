@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Admin;
 
+use Jet_Form_Builder\Actions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Condition_Helper;
 use Jet_Form_Builder\Classes\Tools;
@@ -356,7 +357,7 @@ class Editor {
 			'all'
 		);
 
-		$conditions_settings = jet_form_builder()->form_handler->action_handler->condition_manager()->get_settings();
+		$conditions_settings = ( new Condition_Manager )->get_settings();
 
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,

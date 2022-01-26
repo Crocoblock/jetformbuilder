@@ -2,7 +2,7 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
@@ -87,7 +87,7 @@ class Gateway_Manager {
 		}
 
 		add_filter( 'jet-form-builder/actions/run-callback', function () {
-			return array( jet_form_builder()->form_handler->action_handler, 'soft_run_actions' );
+			return array( new Action_Default_Executor, 'soft_run_actions' );
 		} );
 	}
 

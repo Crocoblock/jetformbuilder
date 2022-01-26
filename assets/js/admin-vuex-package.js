@@ -487,7 +487,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getGetters": () => (/* binding */ getGetters),
 /* harmony export */   "getBaseState": () => (/* binding */ getBaseState),
 /* harmony export */   "getActions": () => (/* binding */ getActions),
-/* harmony export */   "getMutations": () => (/* binding */ getMutations)
+/* harmony export */   "getMutations": () => (/* binding */ getMutations),
+/* harmony export */   "getBaseStore": () => (/* binding */ getBaseStore)
 /* harmony export */ });
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
@@ -509,6 +510,9 @@ function getGetters() {
   return {
     offset: function offset(state) {
       return getOffset(state.queryState.currentPage, state.queryState.limit);
+    },
+    getColumns: function getColumns(state) {
+      return state.columns;
     }
   };
 }
@@ -600,6 +604,14 @@ function getMutations() {
     toggleLoadingPage: function toggleLoadingPage(state) {
       state.loadingPage = !state.loadingPage;
     }
+  };
+}
+function getBaseStore() {
+  return {
+    state: _objectSpread({}, getBaseState()),
+    getters: _objectSpread({}, getGetters()),
+    mutations: _objectSpread({}, getMutations()),
+    actions: _objectSpread({}, getActions())
   };
 }
 
@@ -1518,7 +1530,7 @@ var render = function () {
               label: _vm.__("Results per page", "jet-form-builder"),
               value: _vm.queryState.limit,
               type: "number",
-              min: "1",
+              min: 1,
               max: _vm.queryState.total,
               disabled: _vm.loadingPage,
             },

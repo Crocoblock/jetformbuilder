@@ -3,11 +3,11 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
 
-use Jet_Form_Builder\Classes\Table_View_Base;
+use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
-abstract class Scenario_View_Base extends Table_View_Base {
+abstract class Scenario_View_Base extends View_Base {
 
 	use Scenario_Item_Trait;
 

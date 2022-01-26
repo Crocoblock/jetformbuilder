@@ -12,6 +12,9 @@ export function getGetters() {
 		offset: state => {
 			return getOffset( state.queryState.currentPage, state.queryState.limit );
 		},
+		getColumns: state => {
+			return state.columns;
+		},
 	};
 }
 
@@ -101,6 +104,23 @@ export function getMutations() {
 		},
 		toggleLoadingPage( state ) {
 			state.loadingPage = ! state.loadingPage;
+		},
+	};
+}
+
+export function getBaseStore() {
+	return {
+		state: {
+			...getBaseState(),
+		},
+		getters: {
+			...getGetters(),
+		},
+		mutations: {
+			...getMutations(),
+		},
+		actions: {
+			...getActions(),
 		},
 	};
 }

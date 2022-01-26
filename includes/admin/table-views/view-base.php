@@ -1,9 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes;
+namespace Jet_Form_Builder\Admin\Table_Views;
 
-abstract class Table_View_Base implements Repository_Static_Item_It {
+use Jet_Form_Builder\Classes\Repository_Static_Item_It;
+
+abstract class View_Base implements Repository_Static_Item_It {
 
 	const COLUMN_CHOOSE = 'choose';
 	const COLUMN_ACTIONS = 'actions';
@@ -12,7 +14,11 @@ abstract class Table_View_Base implements Repository_Static_Item_It {
 
 	abstract public function get_columns_headings(): array;
 
-	abstract public function get_list(): array;
+	abstract public function get_raw_list( $offset, $limit );
+
+	public function get_list(): array {
+		return $this->get_raw_list( 0, 15 );
+	}
 
 	public function get_single_actions(): array {
 		return array();

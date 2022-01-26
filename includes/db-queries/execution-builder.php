@@ -151,6 +151,10 @@ class Execution_Builder {
 		$charset_collate = $model->schema_charset_collate();
 		$engine          = $model->schema_engine();
 
+		if ( ! empty( $engine ) ) {
+			$engine = "ENGINE={$engine}";
+		}
+
 		$ready_columns = '';
 		foreach ( $columns as $column => $desc ) {
 			$ready_columns .= $column . ' ' . $desc . ", \n";
@@ -165,7 +169,7 @@ class Execution_Builder {
 		return "CREATE TABLE $table (
 			$ready_columns
 			$ready_keys
-		) ENGINE={$engine} {$charset_collate};";
+		) {$engine} {$charset_collate};";
 	}
 
 	public function is_exist( Base_Db_Model $model ): bool {

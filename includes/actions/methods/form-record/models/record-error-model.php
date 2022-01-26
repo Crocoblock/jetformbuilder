@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Actions\Methods\Form_Record;
+namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;

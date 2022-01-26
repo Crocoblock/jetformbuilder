@@ -48,6 +48,16 @@
 								/>
 							</keep-alive>
 						</template>
+						<template v-else-if="getItemComponent( entry[column].type )">
+							<keep-alive>
+								<component
+									v-bind:is="getItemComponent( entry[column].type )"
+									:value="entry[column] ? entry[column].value : false"
+									:full-entry="entry"
+									:entry-id="entryID"
+								/>
+							</keep-alive>
+						</template>
 						<template v-else>{{ entry[ column ] ? entry[ column ].value : column }}</template>
 					</div>
 				</div>
@@ -58,16 +68,21 @@
 
 <script>
 import * as ChooseColumn from '../entries-table-columns/choose';
+import * as LinkType from '../entries-table-columns/link-type';
 import GetColumnComponent from '../mixins/GetColumnComponent';
 
 const defaultColumns = {
 	choose: ChooseColumn,
 };
 
+const defaultTypes = {
+	link: LinkType
+};
+
 const {
-		  mapState   = () => ( {} ),
-		  mapGetters = () => ( {} ),
-	  } = window?.Vuex || {};
+		  mapState,
+		  mapGetters,
+	  } = window.Vuex;
 
 export default {
 	name: 'entries-table',

@@ -1,12 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Actions\Methods\Form_Record;
+namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
-use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
-use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 
 class Record_View_Model extends Base_Db_Model {
 

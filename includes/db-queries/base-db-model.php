@@ -165,7 +165,7 @@ abstract class Base_Db_Model {
 	}
 
 	public function schema_engine() {
-		return 'MyISAM';
+		return '';
 	}
 
 	/**

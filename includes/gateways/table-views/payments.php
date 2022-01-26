@@ -3,23 +3,19 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views;
 
-use Jet_Form_Builder\Classes\Table_View_Base;
+use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
 
-class Payments extends Table_View_Base {
+class Payments extends View_Base {
 
 	public static function rep_item_id() {
 		return 'SUBSCRIBE_NOW_PAYMENTS';
 	}
 
-	public function get_list(): array {
-		return $this->get_raw_payments( 0, 15 );
-	}
-
-	public function get_raw_payments( $offset, $limit ): array {
+	public function get_raw_list( $offset, $limit ): array {
 		try {
 			return ( new Payment_View )
 				->set_limit( array( $offset, $limit ) )

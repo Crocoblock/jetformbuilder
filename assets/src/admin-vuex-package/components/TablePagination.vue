@@ -25,7 +25,7 @@
 				@on-input-change="changeLimit"
 				:value="queryState.limit"
 				type="number"
-				min="1"
+				:min="1"
 				:max="queryState.total"
 				:disabled="loadingPage"
 			></cx-vui-input>

@@ -10,6 +10,7 @@ use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Request\Request_Handler;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 class Controller {
 
@@ -78,7 +79,7 @@ class Controller {
 
 		$this->maybe_unset_user_data();
 
-		return ( new Record_Model )->insert( $this->columns );
+		return ( new Models\Record_Model )->insert( $this->columns );
 	}
 
 	/**
@@ -94,7 +95,7 @@ class Controller {
 			$this->get_prepared_actions( $failed, 'failed' )
 		);
 
-		return ( new Record_Action_Result_Model )->insert_many( $actions );
+		return ( new Models\Record_Action_Result_Model )->insert_many( $actions );
 	}
 
 	public function get_chunked_actions() {
@@ -134,7 +135,7 @@ class Controller {
 	public function save_fields() {
 		$fields = $this->get_prepared_fields();
 
-		return ( new Record_Field_Model )->insert_many( $fields );
+		return ( new Models\Record_Field_Model )->insert_many( $fields );
 	}
 
 	/**
@@ -144,7 +145,7 @@ class Controller {
 	public function save_errors() {
 		$errors = $this->get_prepared_errors();
 
-		return ( new Record_Error_Model )->insert_many( $errors );
+		return ( new Models\Record_Error_Model )->insert_many( $errors );
 	}
 
 	private function get_prepared_errors() {

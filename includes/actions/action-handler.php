@@ -38,6 +38,12 @@ class Action_Handler {
 	public $context = array();
 	private $conditions;
 
+	/** @var bool|int Current Action ID */
+	public $current_position = false;
+
+	/** @var string */
+	public $current_flow_handler = '';
+
 	/**
 	 * @var array Action IDs that were executed without errors
 	 */
@@ -221,6 +227,34 @@ class Action_Handler {
 		return $this;
 	}
 
+	public function in_loop(): bool {
+		return false !== $this->current_position;
+	}
+
+	public function in_loop_or_die() {
+		if ( $this->in_loop() ) {
+			return;
+		}
+
+		_doing_it_wrong(
+			__METHOD__,
+			esc_html( 'The action loop has not been started, see ' . self::class . '::run_actions()' ),
+			'1.4.0'
+		);
+	}
+
+	public function get_current_action(): Base {
+		$this->in_loop_or_die();
+
+		return $this->get_action_by_id( $this->get_position() );
+	}
+
+	public function get_current_condition_manager(): Condition_Manager {
+		$this->in_loop_or_die();
+
+		return $this->get_condition_by_id( $this->get_position() );
+	}
+
 	/**
 	 * @param $id
 	 *
@@ -270,14 +304,49 @@ class Action_Handler {
 		return $this->skipped;
 	}
 
-	protected function passing_action( int $action_id ) {
+	public function passing_current() {
+		$this->passing_action( $this->get_position() );
+	}
+
+	public function passing_action( int $action_id ) {
 		$this->passed[] = $action_id;
 
 		return $this;
 	}
 
-	protected function skipping_current( int $action_id ) {
+	public function skipping_current() {
+		$this->skipping_action( $this->get_position() );
+	}
+
+	public function skipping_action( int $action_id ) {
 		$this->skipped[] = $action_id;
+
+		return $this;
+	}
+
+	/**
+	 * @param int|bool $action_id
+	 *
+	 * @return $this
+	 */
+	public function set_current_action( $action_id ) {
+		$this->current_position = $action_id;
+
+		return $this;
+	}
+
+	public function get_position() {
+		return $this->current_position;
+	}
+
+	public function start_flow( string $flow_handler ) {
+		$this->current_flow_handler = $flow_handler;
+
+		return $this;
+	}
+
+	public function end_flow() {
+		$this->current_flow_handler = '';
 
 		return $this;
 	}

@@ -32,7 +32,7 @@ trait Repository_Pattern_Trait {
 					_doing_it_wrong(
 						__METHOD__,
 						$exception->getMessage(),
-						'1.4.0'
+						'2.0.0'
 					);
 			}
 		}
@@ -136,7 +136,7 @@ trait Repository_Pattern_Trait {
 
 	public function rep_get_item_or_die( $slug ) {
 		if ( ! $this->rep_isset_item( $slug ) ) {
-			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '1.4.0' );
+			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '2.0.0' );
 		}
 
 		return $this->_rep_get_item( $slug );
@@ -156,7 +156,7 @@ trait Repository_Pattern_Trait {
 
 	public function rep_clone_item_or_die( $slug ) {
 		if ( ! $this->rep_isset_item( $slug ) ) {
-			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '1.4.0' );
+			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '2.0.0' );
 		}
 
 		return clone $this->_rep_get_item( $slug );

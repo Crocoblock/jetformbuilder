@@ -9,7 +9,6 @@ use Jet_Form_Builder\Form_Messages\Manager;
 abstract class Handler_Exception extends \Exception {
 
 	protected $default_type_message = 'failed';
-	protected $dynamic_message      = '';
 
 	protected $additional_data;
 

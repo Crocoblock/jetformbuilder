@@ -22,7 +22,7 @@ abstract class Response_It {
 	private function save_additional( $additional ) {
 		$insert = array();
 		foreach ( $additional as $key => $value ) {
-			if ( ! in_array( $key, $this->additional_fields() ) ) {
+			if ( ! in_array( $key, $this->additional_fields(), true ) ) {
 				continue;
 			}
 			$insert[ $key ] = $value;

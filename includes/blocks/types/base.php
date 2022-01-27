@@ -3,9 +3,10 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
+use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -20,8 +21,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 abstract class Base extends Base_Module implements Repository_Item_Instance_Trait {
-
-	private $_unregistered = array();
 
 	/**
 	 * @var Controls_Manager
@@ -59,19 +58,16 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	public $use_style_manager = true;
 
-	public $error_data = false;
-
 	public function register_block_type() {
 		$this->maybe_init_style_manager();
-		$this->_register_block();
+		$this->register_block();
 	}
 
 	/**
 	 * Override this method to set you style controls
 	 */
-	protected function _jsm_register_controls() {
+	protected function jsm_controls() {
 	}
-
 
 	public function get_css_scheme() {
 		return array();
@@ -108,7 +104,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return jet_form_builder()->plugin_dir( $path );
 	}
 
-	private function _register_block() {
+	protected function register_block() {
 		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
 			return;
 		}
@@ -124,19 +120,16 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	private function maybe_init_style_manager() {
-		if ( Jet_Style_Manager::is_activated() && $this->use_style_manager ) {
-			$this->css_scheme = array_merge( $this->general_css_scheme(), $this->_get_css_scheme() );
-			$this->set_style_manager_instance()->_jsm_register_controls();
-			$this->general_style_manager_options();
+		if ( ! Compatibility::has_jet_sm() || ! $this->use_style_manager ) {
+			return;
 		}
-	}
 
-	private function _get_css_scheme() {
-		return apply_filters(
-			'jet-form-builder/block/css-scheme',
-			$this->get_css_scheme(),
-			$this->get_name()
-		);
+		$this->css_scheme       = array_merge( $this->general_css_scheme(), $this->get_css_scheme() );
+		$this->controls_manager = new Controls_Manager( $this->block_name() );
+
+		$this->run_jsm_controls();
+
+		$this->general_style_manager_options();
 	}
 
 	/**
@@ -144,8 +137,12 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @return Base
 	 */
-	private function set_style_manager_instance() {
-		$this->controls_manager = new Controls_Manager( $this->block_name() );
+	private function run_jsm_controls(): Base {
+		if ( method_exists( $this, 'jsm_controls' ) ) {
+			$this->jsm_controls();
+		} elseif ( method_exists( $this, '_jsm_register_controls' ) ) {
+			$this->_jsm_register_controls();
+		}
 
 		return $this;
 	}
@@ -153,10 +150,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	/**
 	 * Render callback for the block
 	 *
-	 * @param array   $attrs
+	 * @param array $attrs
 	 * @param $content
 	 *
-	 * @param null    $wp_block
+	 * @param null $wp_block
 	 *
 	 * @return string
 	 */
@@ -188,8 +185,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	/**
 	 * @param $attributes
-	 * @param null       $content
-	 * @param \WP_Block  $wp_block
+	 * @param null $content
+	 * @param \WP_Block $wp_block
 	 */
 	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		$this->block_content = $content;
@@ -200,7 +197,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$this->block_context = $wp_block->context ?? array();
 
 		$this->block_attrs['blockName'] = $this->block_name();
-		$this->block_attrs['type']      = Plugin::instance()->form->field_name( $this->block_attrs['blockName'] );
+		$this->block_attrs['type']      = $this->get_name();
 	}
 
 	public function set_preset() {
@@ -347,42 +344,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return true;
 	}
 
-	/**
-	 * Remove attribute from registered
-	 * (should be called only inside get_attributes() method)
-	 *
-	 * @param  [type] $key [description]
-	 *
-	 * @return [type]      [description]
-	 */
-	public function unregister_attribute( $key ) {
-		$this->_unregistered[] = $key;
-	}
-
-	public function unregister_attributes( $keys = array() ) {
-		$this->_unregistered = array_merge(
-			$this->_unregistered,
-			$keys
-		);
-	}
-
 
 	/**
 	 * Returns full block name
 	 *
 	 * @return [type] [description]
 	 */
-	public function block_name() {
+	public function block_name(): string {
 		return jet_form_builder()->form::NAMESPACE_FIELDS . $this->get_name();
-	}
-
-	/**
-	 * Returns default class name for the block
-	 *
-	 * @return [type] [description]
-	 */
-	public function block_class_name() {
-		return 'jet-form-' . $this->get_name();
 	}
 
 	/**
@@ -454,52 +423,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	/**
-	 * Returns attra from input array if not isset, get from defaults
-	 *
-	 * @param string $attr
-	 * @param array  $all
-	 *
-	 * @return mixed|string [type] [description]
-	 */
-	public function get_attr( $attr = '', $all = array() ) {
-		if ( isset( $all[ $attr ] ) ) {
-			return $all[ $attr ];
-		} else {
-			$defaults = $this->block_attributes();
-
-			return isset( $defaults[ $attr ]['default'] ) ? $defaults[ $attr ]['default'] : '';
-		}
-	}
-
-	/**
-	 * Returns all block attributes list (custom + general + system)
-	 *
-	 * @param bool $with_styles
-	 *
-	 * @return array [type] [description]
-	 */
-	public function block_attributes() {
-
-		/**
-		 * Set default blocks attributes to avoid errors
-		 */
-		$this->attrs['className'] = array(
-			'type'    => 'string',
-			'default' => '',
-		);
-
-		if ( ! empty( $this->_unregistered ) ) {
-			foreach ( $this->_unregistered as $key ) {
-				unset( $this->attrs[ $key ] );
-			}
-		}
-
-		return $this->attrs;
-
-	}
-
-
-	/**
 	 * Register blocks specific JS variables
 	 *
 	 * @param  [type] $editor [description]
@@ -508,25 +431,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @return [type]         [description]
 	 */
 	public function block_data( $editor, $handle ) {
-	}
-
-	/**
-	 * Allow to filter raw attributes from block type instance to adjust JS and PHP attributes format
-	 *
-	 * @param  [type] $attributes [description]
-	 *
-	 * @return [type]             [description]
-	 */
-	public function prepare_attributes( $attributes ) {
-		return $attributes;
-	}
-
-	public function general_field_name_params( $label = '', $help = '' ) {
-		return array(
-			'type'  => 'text',
-			'label' => $label ? $label : __( 'Form field name', 'jet-form-builder' ),
-			'help'  => $help ? $help : __( 'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case', 'jet-form-builder' ),
-		);
 	}
 
 	public function get_attributes() {
@@ -674,7 +578,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			array_merge(
 				$repeater_block['attrs'],
 				array(
-					'type'      => Plugin::instance()->form->field_name( $repeater_block['blockName'] ),
+					'type'      => Block_Helper::delete_namespace( $repeater_block['blockName'] ),
 					'blockName' => $repeater_block['blockName'],
 				)
 			)

@@ -27,7 +27,6 @@ class Preset_Manager {
 
 	use Instance_Trait;
 
-	private $form_id;
 	protected $data     = null;
 	protected $source   = null;
 	protected $defaults = array(
@@ -51,8 +50,6 @@ class Preset_Manager {
 	}
 
 	public function set_form_id( $form_id ) {
-		$this->form_id = $form_id;
-
 		$this->general()->set_init_data( $this->general()->preset_source( $form_id ) );
 
 		try {

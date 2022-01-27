@@ -14,7 +14,7 @@ class Listing_Filter_Manager {
 	}
 
 	private function isset_engine_filter_module() {
-		return ( function_exists( 'jet_engine' ) && jet_engine()->listings );
+		return ( Compatibility::has_jet_engine() && jet_engine()->listings );
 	}
 
 

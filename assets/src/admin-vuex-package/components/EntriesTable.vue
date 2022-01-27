@@ -29,8 +29,8 @@
 			</template>
 			<template #items>
 				<div
-					:key="entryID"
 					v-for="( entry, entryID ) in currentList"
+					:key="entryID"
 					:class="classEntry( entryID )"
 				>
 					<div
@@ -48,7 +48,7 @@
 								/>
 							</keep-alive>
 						</template>
-						<template v-else-if="getItemComponent( entry[column].type )">
+						<template v-else-if="getItemComponent( entry[column] ? entry[column].type : false )">
 							<keep-alive>
 								<component
 									v-bind:is="getItemComponent( entry[column].type )"
@@ -67,22 +67,25 @@
 </template>
 
 <script>
-import * as ChooseColumn from '../entries-table-columns/choose';
-import * as LinkType from '../entries-table-columns/link-type';
-import GetColumnComponent from '../mixins/GetColumnComponent';
+const {
+	ChooseColumn,
+	LinkTypeColumn,
+} = JetFBComponents;
+
+const { GetColumnComponent } = JetFBMixins;
 
 const defaultColumns = {
 	choose: ChooseColumn,
 };
 
 const defaultTypes = {
-	link: LinkType
+	link: LinkTypeColumn,
 };
 
 const {
-		  mapState,
-		  mapGetters,
-	  } = window.Vuex;
+	mapState,
+	mapGetters,
+} = window.Vuex;
 
 export default {
 	name: 'entries-table',
@@ -102,19 +105,19 @@ export default {
 	},
 	mixins: [ GetColumnComponent ],
 	created() {
-		this.columnsIDs = Object.keys( this.columns );
-
-		for ( const columnName in defaultColumns ) {
-			if ( ! this.columnsIDs.includes( columnName ) ) {
-				continue;
-			}
-			this.componentsCols.push( defaultColumns[ columnName ] );
-		}
+		this.attachComponentsByColumn();
+		this.attachComponentsByType();
 	},
 	computed: {
 		filteredColumns() {
 			return this.columnsIDs.filter( this.isShown ).sort( ( prev, next ) => {
-				return ( ( this.columns[ prev ].table_order ?? 999 ) - ( this.columns[ next ].table_order ?? 999 ) );
+				return (
+					(
+						this.columns[ prev ].table_order ?? 999
+					) - (
+						this.columns[ next ].table_order ?? 999
+					)
+				);
 			} );
 		},
 		rootClasses() {
@@ -128,6 +131,28 @@ export default {
 		] ),
 	},
 	methods: {
+		attachComponentsByType() {
+			const first = this.currentList[ 0 ] ?? {};
+			const types = Object.keys( defaultTypes );
+
+			for ( const typeName of types ) {
+				for ( const firstColumn of this.columnsIDs ) {
+					if ( typeName === first[ firstColumn ]?.type ) {
+						this.componentsCols.push( defaultTypes[ typeName ] );
+					}
+				}
+			}
+		},
+		attachComponentsByColumn() {
+			this.columnsIDs = Object.keys( this.columns );
+
+			for ( const columnName in defaultColumns ) {
+				if ( ! this.columnsIDs.includes( columnName ) ) {
+					continue;
+				}
+				this.componentsCols.push( defaultColumns[ columnName ] );
+			}
+		},
 		isShown( column ) {
 			return this.columns[ column ].show_in_table ?? true;
 		},
@@ -154,22 +179,21 @@ export default {
 }
 
 .cx-vue-list-table {
-	.list-table-heading {
-		justify-content: space-between;
-		&__cell > span {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-		}
+	.list-table-heading, .list-table-item {
+		justify-content: space-evenly;
 	}
-	.list-table-item {
-		justify-content: space-between;
-		&__cell {
-			white-space: nowrap;
-			overflow: hidden;
-			text-align: center;
-		}
+
+	.list-table-heading__cell > span {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.list-table-item__cell {
+		white-space: nowrap;
+		overflow: hidden;
+		text-align: center;
 	}
 }
 

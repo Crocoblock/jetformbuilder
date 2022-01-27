@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
 
@@ -10,13 +11,13 @@ class Form_Break {
 
 	use Get_Template_Trait;
 
-	private $pages              = 0;
-	private $form_breaks        = array();
-	private $count_form_breaks  = null;
-	private $current_page       = 1;
+	private $pages = 0;
+	private $form_breaks = array();
+	private $count_form_breaks = null;
+	private $current_page = 1;
 	private $current_form_break = 0;
-	private $is_editor          = false;
-	private $progress_type      = 'default';
+	private $is_editor = false;
+	private $progress_type = 'default';
 
 	public function get_pages() {
 		return $this->pages;
@@ -84,7 +85,7 @@ class Form_Break {
 		$last_break   = false;
 
 		foreach ( $blocks as $index => $field ) {
-			if ( ! Live_Form::instance()->is_field( $field, 'form-break' ) ) {
+			if ( ! stripos( $field['blockName'] ?? '', 'form-break' ) ) {
 				continue;
 			}
 			$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );

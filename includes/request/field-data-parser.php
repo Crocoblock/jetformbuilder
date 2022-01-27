@@ -4,13 +4,14 @@
 namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
+use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
-abstract class Field_Data_Parser {
+abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name = 'field_name';
+	protected $name        = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;
@@ -19,16 +20,19 @@ abstract class Field_Data_Parser {
 
 	abstract public function type();
 
+	/**
+	 * @return string
+	 */
+	public function rep_item_id() {
+		return $this->type();
+	}
+
 	public function get_response() {
 		return $this->value;
 	}
 
-	public function _is_custom_check() {
-		return false;
-	}
-
 	final public function response() {
-		if ( $this->_is_required() || $this->_is_custom_check() ) {
+		if ( $this->has_error() ) {
 			$this->save_error();
 		}
 
@@ -54,7 +58,7 @@ abstract class Field_Data_Parser {
 		$this->value = $this->parse_value( $value );
 	}
 
-	protected function _is_required() {
+	protected function has_error(): bool {
 		return ( ! $this->inside_conditional && $this->is_required && empty( $this->value ) );
 	}
 

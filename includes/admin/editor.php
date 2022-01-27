@@ -24,7 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE = 'jet-form-builder-editor';
+	const EDITOR_HANDLE         = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public function __construct() {
@@ -300,10 +300,6 @@ class Editor {
 		);
 	}
 
-	public function get_messages_default() {
-		return Plugin::instance()->post_type->get_messages_default();
-	}
-
 	/**
 	 * Enqueue editor assets
 	 *
@@ -357,20 +353,20 @@ class Editor {
 			'all'
 		);
 
-		$conditions_settings = ( new Condition_Manager )->get_settings();
+		$conditions_settings = ( new Condition_Manager() )->get_settings();
 
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			array(
 				'presetConfig'            => $this->get_preset_config(),
-				'messagesDefault'         => $this->get_messages_default(),
+				'messagesDefault'         => Plugin::instance()->post_type->get_messages_default(),
 				'gateways'                => Gateway_Manager::instance()->editor_data(),
 				'helpForRepeaters'        => $this->get_help_for_repeaters(),
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
-				'argumentsSource'         => Tools::get_form_settings_options()
+				'argumentsSource'         => Tools::get_form_settings_options(),
 			)
 		);
 

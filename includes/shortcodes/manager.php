@@ -3,52 +3,44 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
+use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+
+/**
+ * @method static Manager instance()
+ *
+ * Class Manager
+ * @package Jet_Form_Builder\Shortcodes
+ */
 class Manager {
 
-	private $_types;
-
-	public static $instance = null;
-
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
-
+	use Instance_Trait;
+	use Repository_Pattern_Trait;
 
 	private function __construct() {
-		$this->register_shortcodes();
+		$this->rep_install();
 	}
 
-	private function register_shortcodes() {
-		$types = array(
+	public function rep_instances(): array {
+		return array(
 			new Form_Shortcode(),
 		);
-
-		foreach ( $types as $type ) {
-			$this->_types[ $type->get_name() ] = $type;
-		}
 	}
 
-	private function get_shortcode_instance( $type ) {
-		return isset( $this->_types[ $type ] ) ? $this->_types[ $type ] : false;
-	}
-
-	public static function get_shortcode( $type, $arguments ) {
+	public static function get_shortcode( $type, $arguments ): string {
 		$format = '[%1$s %2$s]';
 
-		$type = self::instance()->get_shortcode_instance( $type );
-
-		if ( ! $type ) {
+		try {
+			$type = self::instance()->rep_clone_item( $type );
+		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
 
 		return sprintf( $format, $type->get_name(), self::generate_arguments_string( $arguments ) );
 	}
 
-	public static function generate_arguments_string( $arguments ) {
+	public static function generate_arguments_string( $arguments ): string {
 		$response = array();
 
 		foreach ( $arguments as $name => $value ) {

@@ -2,10 +2,10 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Shortcodes\Manager;
 
 // If this file is called directly, abort.
@@ -67,7 +67,6 @@ class Post_Type {
 			'width: 100%'
 		);
 	}
-
 
 
 	/**
@@ -160,15 +159,15 @@ class Post_Type {
 				'default' => '{}',
 			),
 
-			'_jf_actions'  => array(
+			'_jf_actions'   => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages' => array(
+			'_jf_messages'  => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'   => array(
+			'_jf_preset'    => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -280,11 +279,7 @@ class Post_Type {
 	}
 
 	public function maybe_get_jet_sm_ready_styles( $form_id ) {
-		if ( Jet_Style_Manager::is_activated() ) {
-			return get_post_meta( $form_id, '_jet_sm_ready_style', true );
-		}
-
-		return '';
+		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
 	}
 
 
@@ -306,7 +301,7 @@ class Post_Type {
 			'required_mark'    => '',
 			'fields_layout'    => '',
 			'enable_progress'  => null,
-			'fields_label_tag' => ''
+			'fields_label_tag' => '',
 		);
 	}
 
@@ -316,7 +311,7 @@ class Post_Type {
 			'required_mark'    => '*',
 			'fields_layout'    => 'column',
 			'enable_progress'  => false,
-			'fields_label_tag' => 'div'
+			'fields_label_tag' => 'div',
 		);
 	}
 

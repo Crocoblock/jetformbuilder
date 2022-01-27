@@ -3,10 +3,12 @@
 
 namespace Jet_Form_Builder\Request;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
-use Jet_Form_Builder\Exceptions\Request_Exception;
-use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Fields;
 
 /**
@@ -22,18 +24,15 @@ class Parser_Manager {
 	const FIELD_HAS_INNER     = '2';
 	const IS_CONDITIONAL      = '3';
 
-	private $_parsers;
-	private $response;
-	public $inside_conditional = false;
-
 	use Instance_Trait;
+	use Repository_Pattern_Trait;
 
 	private function __construct() {
-		$this->register_request_parsers();
+		$this->rep_install();
 	}
 
-	private function register_request_parsers() {
-		$parsers = apply_filters(
+	public function rep_instances(): array {
+		return apply_filters(
 			'jet-form-builder/parsers-request/register',
 			array(
 				new Fields\Date_Field_Parser(),
@@ -45,10 +44,6 @@ class Parser_Manager {
 				new Fields\Datetime_Field_Parser(),
 			)
 		);
-
-		foreach ( $parsers as $parser ) {
-			$this->_parsers[ $parser->type() ] = $parser;
-		}
 	}
 
 	public function get_values_fields( $fields, $request, $inside_conditional = false ) {
@@ -107,7 +102,7 @@ class Parser_Manager {
 			if ( strpos( $field['blockName'], 'conditional-block' ) ) {
 				throw new Parse_Exception( self::IS_CONDITIONAL, $field['innerBlocks'] );
 			}
-			if ( ! $this->isset_parser_by_block_name( $field['blockName'] ) ) {
+			if ( ! $this->isset_parser( $field['blockName'] ) ) {
 				throw new Parse_Exception( self::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
 			}
 		}
@@ -119,40 +114,49 @@ class Parser_Manager {
 			$output[ $name ] = $this->get_parsed_value( $field, $request, $name, $inside_conditional );
 		} catch ( Parse_Exception $exception ) {
 			$output = array_merge( $output, $exception->get_inner() );
+		} catch ( Exclude_Field_Exception $exception ) {
+			return;
 		}
 	}
 
 	public function get_parsed_value( $field, $request, $name, $inside_conditional ) {
-
 		if ( ! $this->is_field_visible( $field['attrs'] ) ) {
 			return null;
 		}
-		$value  = $request[ $name ] ?? '';
-		$parser = $this->get_parser_by_block_name( $field['blockName'] );
+		$value = $request[ $name ] ?? '';
 
-		if ( $parser instanceof Field_Data_Parser ) {
-			$parser->init( $value, $field, $inside_conditional );
-
-			return $parser->response();
+		try {
+			$parser = $this->get_parser( $field['blockName'] );
+		} catch ( Repository_Exception $exception ) {
+			return $value;
 		}
 
-		return $value;
+		$parser->init( $value, $field, $inside_conditional );
+
+		return $parser->response();
 	}
 
-	private function isset_parser_by_block_name( $block_name ) {
-		$type = Plugin::instance()->form->field_name( $block_name );
+	/**
+	 * @param $block_name
+	 *
+	 * @return bool
+	 */
+	private function isset_parser( $block_name ): bool {
+		$type = Block_Helper::delete_namespace( $block_name );
 
-		return isset( $this->_parsers[ $type ] );
+		return $this->rep_isset_item( $type );
 	}
 
-	private function get_parser_by_block_name( $block_name ) {
-		$type = Plugin::instance()->form->field_name( $block_name );
+	/**
+	 * @param $slug
+	 *
+	 * @return mixed
+	 * @throws Repository_Exception
+	 */
+	public function get_parser( $slug ): Field_Data_Parser {
+		$type = Block_Helper::delete_namespace( $slug );
 
-		return $this->get_parser( $type );
-	}
-
-	private function get_parser( $type ) {
-		return isset( $this->_parsers[ $type ] ) ? clone $this->_parsers[ $type ] : false;
+		return $this->rep_clone_item( $type );
 	}
 
 	/**

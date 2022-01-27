@@ -3,10 +3,9 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Classes\Attributes_Trait;
+use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
-use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -35,23 +34,16 @@ class Form_Builder {
 	/**
 	 * Constructor for the class
 	 *
-	 * @param null  $form_id
-	 * @param bool  $post
+	 * @param null $form_id
 	 * @param array $args
 	 */
-	function __construct( $form_id = null, $post = false, $args = array() ) {
+	public function __construct( $form_id = null, $args = array() ) {
 
 		if ( ! $form_id ) {
 			return;
 		}
 		$this->form_id = $form_id;
 		$this->set_form_args( $args );
-
-		if ( empty( $post ) ) {
-			$this->post = get_post();
-		}
-
-		$this->form_content = Plugin::instance()->form->get_form_content( $form_id );
 	}
 
 	/**
@@ -188,7 +180,7 @@ class Form_Builder {
 
 	private function maybe_render_fonts_block(): string {
 		if (
-			! Jet_Style_Manager::is_activated()
+			! Compatibility::has_jet_sm()
 			|| ! method_exists( Style_Manager::get_instance(), 'get_blocks_fonts' )
 		) {
 			return '';
@@ -233,10 +225,10 @@ class Form_Builder {
 			return '';
 		}
 
-		$this->form_content = Live_Form::instance()
-									   ->set_form_id( $this->form_id )
-									   ->set_specific_data_for_render( $this->args )
-									   ->setup_fields( $this->form_content );
+		$blocks = Live_Form::instance()
+							->set_form_id( $this->form_id )
+							->set_specific_data_for_render( $this->args )
+							->setup_fields();
 
 		$form = $this->start_form();
 
@@ -271,7 +263,7 @@ class Form_Builder {
 
 		$form .= Live_Form::instance()->maybe_start_page( true );
 
-		foreach ( $this->form_content as $block ) {
+		foreach ( $blocks as $block ) {
 			$form .= render_block( $block );
 		}
 

@@ -3,8 +3,7 @@
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
+use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -66,9 +65,11 @@ class Manager {
 	}
 
 	public function init_jet_sm_block_manager() {
-		if ( Jet_Style_Manager::is_activated() ) {
-			Block_Manager::get_instance();
+		if ( ! Compatibility::has_jet_sm() ) {
+			return;
 		}
+
+		Block_Manager::get_instance();
 	}
 
 	/**
@@ -248,7 +249,7 @@ class Manager {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_controls_list( $attributes = array(), $context = 'toolbar' ) {
+	public function get_controls_list( $attributes = array(), $context = 'toolbar' ): array {
 
 		$result = array();
 
@@ -275,40 +276,37 @@ class Manager {
 	 * @param $block_name
 	 * @param $attributes
 	 *
-	 * @return array|false
+	 * @return array
 	 */
-	public function get_field_attrs( $block_name, $attributes ) {
+	public function get_field_attrs( $block_name, $attributes ): array {
 		if ( ! $block_name ) {
-			return false;
+			return array();
 		}
-		$block_id = $this->explode_block_name( $block_name );
+		$block_id = Block_Helper::delete_namespace( $block_name );
 
 		try {
 			$field = $this->builder_repository()->rep_get_item( $block_id );
-
-			return array_merge( $field->get_default_attributes(), $attributes );
-
 		} catch ( Repository_Exception $exception ) {
+			return array();
 		}
 
-		return false;
+		return array_merge( $field->get_default_attributes(), $attributes );
 	}
 
 
 	/**
 	 * @param $block_name
 	 *
-	 * @return false|mixed
+	 * @return mixed
 	 */
 	public function get_field_by_name( $block_name ) {
-		$block_id = $this->explode_block_name( $block_name );
+		$block_id = Block_Helper::delete_namespace( $block_name );
 
 		try {
 			return $this->builder_repository()->rep_clone_item( $block_id );
 		} catch ( Repository_Exception $exception ) {
+			return false;
 		}
-
-		return false;
 	}
 
 
@@ -319,9 +317,8 @@ class Manager {
 		try {
 			return $this->default_repository()->rep_get_item( 'form-block' );
 		} catch ( Repository_Exception $exception ) {
+			return false;
 		}
-
-		return false;
 	}
 
 	public function render_callback( $instance ) {
@@ -344,12 +341,6 @@ class Manager {
 		}
 
 		return $this->_default_blocks_repository;
-	}
-
-	public function explode_block_name( $block_name ): string {
-		$block_name_parts = explode( Plugin::instance()->form::NAMESPACE_FIELDS, $block_name );
-
-		return $block_name_parts[1] ?? $block_name_parts[0];
 	}
 
 }

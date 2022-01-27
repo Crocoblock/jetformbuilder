@@ -3,12 +3,12 @@
 
 namespace Jet_Form_Builder;
 
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
 use Jet_Form_Builder\Generators\Num_Range;
 use Jet_Form_Builder\Generators\Num_Range_Manual;
 use Jet_Form_Builder\Shortcodes\Manager;
+use Jet_Form_Builder\Blocks\Block_Helper;
 
 
 // If this file is called directly, abort.
@@ -19,9 +19,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Manager {
 	public $generators = false;
 	public $builder;
-	private $result_fields = array();
 
-	const   NAMESPACE_FIELDS = 'jet-forms/';
+	const  NAMESPACE_FIELDS = 'jet-forms/';
 
 	public function __construct() {
 		Manager::instance();
@@ -55,71 +54,6 @@ class Form_Manager {
 		return $this->generators;
 	}
 
-	/**
-	 * Returns form fields,
-	 * parsed from post_content
-	 *
-	 * @param $content
-	 *
-	 * @return array[]
-	 */
-	public function get_fields( $content ) {
-		return parse_blocks( $content );
-	}
-
-	public function is_not_field( $block_name ) {
-		return (
-			stripos(
-				$block_name,
-				self::NAMESPACE_FIELDS
-			) === false
-		);
-	}
-
-	public function is_field( $block_name, $needle ) {
-		return stristr( $block_name, $needle );
-	}
-
-	public function get_form_blocks( $form_id ) {
-		return $this->get_fields( get_post( $form_id )->post_content );
-	}
-
-	public function prepare_fields_names( $block_name ) {
-		return "jet-forms/$block_name";
-	}
-
-	public function get_only_form_fields( $form_id, $exclude = array(), $recursive = true ) {
-		$content = $this->get_form_blocks( $form_id );
-
-		return $this->only_form_fields( $content, $exclude, $recursive );
-	}
-
-	public function only_form_fields( $content, $exclude = array(), $recursive = true ) {
-		$exclude = array_map( array( $this, 'prepare_fields_names' ), $exclude );
-
-		$this->result_fields = array();
-		$this->get_inner_fields( $content, $exclude, $recursive );
-
-		$response            = $this->result_fields;
-		$this->result_fields = array();
-
-		return $response;
-	}
-
-
-	private function get_inner_fields( $source, $exclude, $recursive = true ) {
-		foreach ( $source as $block ) {
-
-			if ( ! $this->is_not_field( $block['blockName'] ) && ! in_array( $block['blockName'], $exclude ) ) {
-				$this->result_fields[] = $block;
-			}
-
-			if ( $recursive && ! empty( $block['innerBlocks'] ) ) {
-				$this->get_inner_fields( $block['innerBlocks'], $exclude, true );
-			}
-		}
-	}
-
 
 	/**
 	 * Returns generators list
@@ -141,45 +75,18 @@ class Form_Manager {
 
 	}
 
-	public function field_name( $blockName ) {
-		$parts = explode( self::NAMESPACE_FIELDS, $blockName );
+	public function get_only_form_fields( $form_id ): array {
+		$content = Block_Helper::get_blocks_by_post( $form_id );
 
-		return isset( $parts[1] ) ? $parts[1] : '';
+		return Block_Helper::filter_blocks_by_namespace( $content );
 	}
 
-	public function get_form_content( $form_id ) {
-		return get_post( $form_id )->post_content;
-	}
-
-	public function get_field_by_name( $form_id, $field_name, $blocks = array() ) {
+	public function get_field_by_name( $form_id, $field_name, $blocks = array() ): array {
 		if ( ! $blocks ) {
 			$blocks = $this->get_only_form_fields( $form_id );
 		}
 
-		return $this->_get_field_by_name( $field_name, $blocks );
+		return Block_Helper::find_block_by_attr( $field_name, 'name', $blocks );
 	}
-
-	private function _get_field_by_name( $field_name, $blocks ) {
-		foreach ( $blocks as $block ) {
-			$name = isset( $block['attrs']['name'] ) && $block['attrs']['name']
-				? $block['attrs']['name']
-				: '';
-
-			if ( $name === $field_name ) {
-				return $block;
-			}
-
-			if ( 0 < count( $block['innerBlocks'] ) ) {
-				$find = $this->_get_field_by_name( $field_name, $block['innerBlocks'] );
-
-				if ( $find ) {
-					return $find;
-				}
-			}
-		}
-
-		return array();
-	}
-
 
 }

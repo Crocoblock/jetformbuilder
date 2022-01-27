@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
@@ -29,8 +30,8 @@ class Live_Form {
 	public $spec_data;
 	public $post;
 	public $_conditional_blocks = array();
-	public $_repeaters          = array();
-	public $blocks              = array();
+	public $_repeaters = array();
+	public $blocks = array();
 
 	// for progress
 	public $form_break;
@@ -87,28 +88,17 @@ class Live_Form {
 		return ( $this->spec_data->{$property} ?? $default ) ?: $default;
 	}
 
-	public function is_not_field( $block ) {
-		return Plugin::instance()->form->is_not_field( $block['blockName'] );
-	}
-
-	public function is_field( $block, $needle ) {
-		return Plugin::instance()->form->is_field( $block['blockName'], $needle );
-	}
-
-	public function get_fields( $content ) {
-		return Plugin::instance()->form->get_fields( $content );
-	}
-
 	/**
 	 * Setup fields prop
 	 *
-	 * @param $content
+	 * @param $blocks
 	 *
 	 * @return array[]
 	 */
-	public function setup_fields( $content ) {
-		$blocks       = parse_blocks( $content );
-		$this->blocks = $this->get_form_break()->set_pages( $blocks );
+	public function setup_fields() {
+		$this->blocks = $this->get_form_break()->set_pages(
+			Block_Helper::get_blocks_by_post( $this->form_id )
+		);
 
 		return $this->blocks;
 	}

@@ -204,7 +204,7 @@ class Tools {
 		$fields_layout = array(
 			''       => __( 'Default', 'jet-form-builder' ),
 			'column' => __( 'Column', 'jet-form-builder' ),
-			'row'    => __( 'Row', 'jet-form-builder' )
+			'row'    => __( 'Row', 'jet-form-builder' ),
 		);
 
 		$label_tag = array(
@@ -222,7 +222,7 @@ class Tools {
 		return array(
 			'submit_type'      => $submit_type,
 			'fields_layout'    => $fields_layout,
-			'fields_label_tag' => $label_tag
+			'fields_label_tag' => $label_tag,
 		);
 	}
 
@@ -328,8 +328,8 @@ class Tools {
 	 */
 	public static function is_valid_timestamp( $timestamp ) {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
-		       && ( $timestamp <= PHP_INT_MAX )
-		       && ( $timestamp >= ~PHP_INT_MAX );
+			   && ( $timestamp <= PHP_INT_MAX )
+			   && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
@@ -529,8 +529,8 @@ class Tools {
 
 		foreach ( $array2 as $key => &$value ) {
 			if ( is_array( $value )
-			     && isset( $merged [ $key ] )
-			     && is_array( $merged [ $key ] )
+				 && isset( $merged [ $key ] )
+				 && is_array( $merged [ $key ] )
 			) {
 				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
 			} else {
@@ -585,50 +585,28 @@ class Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
+			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
 				return (string) $value;
 			};
 		}
 
-		return implode( '/', preg_replace_callback_array(
-			$patterns,
-			explode( '/', $path )
-		) );
+		return implode(
+			'/',
+			preg_replace_callback_array(
+				$patterns,
+				explode( '/', $path )
+			)
+		);
 	}
 
-	public static function is_repeater_val( $value ) {
+	public static function is_repeater_val( $value ): bool {
 		if ( is_array( $value ) && ! empty( $value ) ) {
-			return is_array( array_shift( $value ) );
-		} else {
-			return false;
-		}
-	}
-
-	public static function array_chunk_by_key( $chunk_key, array $source, $include_in_before = false ) {
-		$before = array();
-		$after  = array();
-
-		$in_after = false;
-
-		foreach ( $source as $key => $value ) {
-			if ( $chunk_key === $key ) {
-				$in_after = true;
-			}
-
-			if ( $chunk_key === $key ) {
-				if ( $include_in_before ) {
-					$before[ $key ] = $value;
-				} else {
-					$after[ $key ] = $value;
-				}
-			} elseif ( $in_after ) {
-				$after[ $key ] = $value;
-			} else {
-				$before[ $key ] = $value;
+			foreach ( $value as $item ) {
+				return is_array( $item );
 			}
 		}
 
-		return array( $before, $after );
+		return false;
 	}
 
 	public static function set_current_post( $post_id ) {
@@ -637,14 +615,14 @@ class Tools {
 		$post = get_post( absint( $post_id ) );
 	}
 
-	public static function prepare_repeater_value( $value, $fields_map ) {
+	public static function prepare_repeater_value( $value, $fields_map ): array {
 		$prepared_value = array();
 
 		foreach ( $value as $index => $row ) {
 			$prepared_row = array();
 
 			foreach ( $row as $item_key => $item_value ) {
-				$item_key                  = ! empty( $fields_map[ $item_key ] ) ? Tools::sanitize_text_field( $fields_map[ $item_key ] ) : $item_key;
+				$item_key                  = ! empty( $fields_map[ $item_key ] ) ? self::sanitize_text_field( $fields_map[ $item_key ] ) : $item_key;
 				$prepared_row[ $item_key ] = $item_value;
 			}
 

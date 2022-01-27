@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Request;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -111,7 +112,7 @@ class Request_Handler {
 	 * @throws Request_Exception
 	 */
 	public function init_form_data() {
-		$this->_fields         = Plugin::instance()->form->get_form_blocks(
+		$this->_fields         = Block_Helper::get_blocks_by_post(
 			$this->handler()->get_form_id()
 		);
 		$this->_request_values = $this->get_values_from_request();

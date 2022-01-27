@@ -17,7 +17,7 @@ class Builder_Helper {
 	 * @return string
 	 */
 	public function get_custom_template( $object_id, $args, $checked = false ) {
-		if ( ! function_exists( 'jet_engine' ) ) {
+		if ( ! Compatibility::has_jet_engine() ) {
 			return __( 'Please install JetEngine', 'jet-form-builder' ) . '<br>';
 		}
 
@@ -56,15 +56,6 @@ class Builder_Helper {
 		ob_start();
 		$content = jet_engine()->frontend->get_listing_item( $object );
 
-		/*if ( ! jet_engine()->blocks_views->is_blocks_listing( $listing_id ) ) {
-			$css_file = new \Elementor\Core\Files\CSS\Post( $listing_id );
-			$css_file->enqueue();
-		} elseif ( class_exists( 'JET_SM\Gutenberg\Style_Manager' ) ) {
-			( new \JET_SM\Gutenberg\Style_Manager() )->render_blocks_style(
-				$listing_id,
-				'<style class="jet-sm-gb-style--jet-fb-' . ( $args['type'] ?? 'radio' ) . '-field">%s</style>'
-			);
-		}*/
 		$content .= ob_get_clean();
 
 		$result = sprintf(

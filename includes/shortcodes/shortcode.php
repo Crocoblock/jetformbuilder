@@ -3,7 +3,9 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
-abstract class Shortcode {
+use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+
+abstract class Shortcode implements Repository_Item_Instance_Trait {
 
 	public function __construct() {
 		add_shortcode( $this->get_name(), array( $this, 'add_shortcode_callback' ) );
@@ -13,24 +15,20 @@ abstract class Shortcode {
 
 	abstract public function generate( $settings );
 
+	public function rep_item_id() {
+		return $this->get_name();
+	}
+
 	protected function default_args() {
 		return array();
 	}
 
 	protected function prepare_attributes( $attrs ) {
-		$result = array();
+		$result       = array();
+		$allowed_args = jet_form_builder()->post_type->get_default_args();
 
 		foreach ( $attrs as $name => $attr ) {
-			if ( in_array(
-				$name,
-				array(
-					'form_id',
-					'submit_type',
-					'required_mark',
-					'fields_layout',
-					'enable_progress',
-				)
-			) ) {
+			if ( isset( $allowed_args[ $name ] ) ) {
 				$result[ $name ] = $attr['default'];
 			}
 		}

@@ -4,10 +4,12 @@
 namespace Jet_Form_Builder\Admin\Table_Views;
 
 use Jet_Form_Builder\Classes\Repository_Static_Item_It;
+use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 
 abstract class View_Base implements Repository_Static_Item_It {
 
-	const COLUMN_CHOOSE = 'choose';
+	const COLUMN_CHOOSE  = 'choose';
 	const COLUMN_ACTIONS = 'actions';
 
 	abstract public function get_columns_handlers(): array;
@@ -25,9 +27,26 @@ abstract class View_Base implements Repository_Static_Item_It {
 	}
 
 	/**
+	 * @return Base_Db_Model[]
+	 */
+	public function get_dependencies(): array {
+		return array();
+	}
+
+	/**
 	 * @return array
 	 */
 	final public function load_view(): array {
+		try {
+			$this->prepare_dependencies();
+		} catch ( Sql_Exception $exception ) {
+			return array(
+				'list'    => array(),
+				'columns' => array(),
+				'actions' => array(),
+			);
+		}
+
 		return array_merge(
 			array(
 				'list'    => $this->prepare_list(),
@@ -82,7 +101,16 @@ abstract class View_Base implements Repository_Static_Item_It {
 		return $prepared;
 	}
 
-	public function transform_to_columns_values( array $columns ) {
+	/**
+	 * @throws Sql_Exception
+	 */
+	public function prepare_dependencies() {
+		foreach ( $this->get_dependencies() as $model ) {
+			$model->safe_create();
+		}
+	}
+
+	public function transform_to_columns_values( array $columns ): array {
 		$transformed = array();
 
 		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {

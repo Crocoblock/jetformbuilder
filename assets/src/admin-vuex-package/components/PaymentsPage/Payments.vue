@@ -102,38 +102,40 @@ export default {
 
 <style lang="scss">
 
-.jfb-popup-grid {
-	display: flex;
-	&-column:first-child {
-		flex: 3;
+.jet-form-builder-page--payments {
+	.jfb-popup-grid {
+		display: flex;
+		&-column:first-child {
+			flex: 3;
+		}
+		&-column:not(:first-child) {
+			flex: 1;
+			text-align: center;
+		}
 	}
-	&-column:not(:first-child) {
-		flex: 1;
-		text-align: center;
-	}
-}
 
-.cx-vue-list-table {
-	.cell--id {
-		width: 100px;
-	}
-	.cell--date {
-		width: 200px;
-	}
-	.cell--type {
-		width: 160px;
-	}
-	.cell--status {
-		width: 160px;
-	}
-	.cell--payer {
-		width: 220px;
-	}
-	.cell--gross {
-		width: 160px;
-	}
-	.cell--transaction_id {
-		width: 200px;
+	.cx-vue-list-table {
+		.cell--id {
+			width: 100px;
+		}
+		.cell--date {
+			width: 200px;
+		}
+		.cell--type {
+			width: 160px;
+		}
+		.cell--status {
+			width: 160px;
+		}
+		.cell--payer {
+			width: 220px;
+		}
+		.cell--gross {
+			width: 160px;
+		}
+		.cell--transaction_id {
+			width: 200px;
+		}
 	}
 }
 </style>

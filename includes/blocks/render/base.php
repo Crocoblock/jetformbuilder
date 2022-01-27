@@ -57,10 +57,6 @@ abstract class Base {
 		$this->block_type = $block_type;
 	}
 
-	private function is_field( $needle ) {
-		return Plugin::instance()->form->is_field( $this->block_type->block_attrs['blockName'], $needle );
-	}
-
 	public function maybe_add_error_class( $args ) {
 		if ( $this->has_error( $args ) ) {
 			$this->add_attribute( 'class', self::FIELD_ERROR_CLASS );

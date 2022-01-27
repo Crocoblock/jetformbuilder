@@ -31,6 +31,7 @@ class Reload_Response extends Response_It {
 	public function send( array $query_args ) {
 		$this->maybe_remove_query_args();
 
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( $this->get_redirect_url( $query_args ) );
 		die();
 	}

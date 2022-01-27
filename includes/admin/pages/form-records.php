@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
 
 class Form_Records extends Base_Page {
@@ -17,7 +16,7 @@ class Form_Records extends Base_Page {
 	}
 
 	public function page_config(): array {
-		return ( new Records_Table_View )->load_view();
+		return ( new Records_Table_View() )->load_view();
 	}
 
 	public function assets() {

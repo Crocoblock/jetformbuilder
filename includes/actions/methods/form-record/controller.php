@@ -3,23 +3,24 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 
-
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Request\Request_Handler;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
+use Members\BlockPermissions\Block;
 
 class Controller {
 
 	protected $settings = array(
 		'save_user_data'    => false,
 		'save_empty_fields' => false,
-		'save_errors'       => false
+		'save_errors'       => false,
 	);
-	protected $columns = array();
+	protected $columns  = array();
 	protected $record_id;
 
 
@@ -66,20 +67,22 @@ class Controller {
 	 * @throws Sql_Exception
 	 */
 	public function save_record( $defaults ) {
-		$this->set_columns( array(
-			'form_id'           => $this->handler()->get_form_id(),
-			'referrer'          => $this->handler()->get_refer(),
-			'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
-			'user_id'           => get_current_user_id(),
-			'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
-			'from_content_type' => 'post', /* it can be replaced by CCT slug */
-		) );
+		$this->set_columns(
+			array(
+				'form_id'           => $this->handler()->get_form_id(),
+				'referrer'          => $this->handler()->get_refer(),
+				'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
+				'user_id'           => get_current_user_id(),
+				'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
+				'from_content_type' => 'post', /* it can be replaced by CCT slug */
+			)
+		);
 
 		$this->set_columns( $defaults );
 
 		$this->maybe_unset_user_data();
 
-		return ( new Models\Record_Model )->insert( $this->columns );
+		return ( new Models\Record_Model() )->insert( $this->columns );
 	}
 
 	/**
@@ -95,13 +98,13 @@ class Controller {
 			$this->get_prepared_actions( $failed, 'failed' )
 		);
 
-		return ( new Models\Record_Action_Result_Model )->insert_many( $actions );
+		return ( new Models\Record_Action_Result_Model() )->insert_many( $actions );
 	}
 
 	public function get_chunked_actions() {
 		list( $passed, $skipped ) = array(
 			$this->handler()->get_passed_actions(),
-			$this->handler()->get_skipped_actions()
+			$this->handler()->get_skipped_actions(),
 		);
 
 		$passed_actions  = array();
@@ -124,7 +127,7 @@ class Controller {
 		return array(
 			$passed_actions,
 			$skipped_actions,
-			$with_errors
+			$with_errors,
 		);
 	}
 
@@ -135,7 +138,7 @@ class Controller {
 	public function save_fields() {
 		$fields = $this->get_prepared_fields();
 
-		return ( new Models\Record_Field_Model )->insert_many( $fields );
+		return ( new Models\Record_Field_Model() )->insert_many( $fields );
 	}
 
 	/**
@@ -145,7 +148,7 @@ class Controller {
 	public function save_errors() {
 		$errors = $this->get_prepared_errors();
 
-		return ( new Models\Record_Error_Model )->insert_many( $errors );
+		return ( new Models\Record_Error_Model() )->insert_many( $errors );
 	}
 
 	private function get_prepared_errors() {
@@ -172,39 +175,38 @@ class Controller {
 		return $errors;
 	}
 
-	private function get_prepared_fields() {
+	private function get_prepared_fields(): array {
 		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
 		$fields      = array();
 
 		foreach ( $this->handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
-			     || isset( $core_fields[ $field_name ] )
-			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
-			     || Request_Handler::REPEATERS_SETTINGS === $field_name
+				|| isset( $core_fields[ $field_name ] )
+				|| ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+				|| Request_Handler::REPEATERS_SETTINGS === $field_name
 			) {
 				continue;
 			}
-			$current_attrs = jet_form_builder()->form->get_field_by_name(
-				0,
+			$current_attrs = Block_Helper::find_block_by_name(
 				$field_name,
 				jet_form_builder()->form_handler->request_handler->_fields
 			);
 
-			$type = jet_form_builder()->form->field_name( $current_attrs['blockName'] ?? '' );
+			$type = Block_Helper::delete_namespace( $current_attrs );
 
 			$fields[] = array(
 				'record_id'   => $this->record_id,
 				'field_name'  => $field_name,
 				'field_type'  => $type,
-				'field_value' => is_scalar( $value ) ? $value : wp_json_encode( $value )
+				'field_value' => is_scalar( $value ) ? $value : wp_json_encode( $value ),
 			);
 		}
 
 		return $fields;
 	}
 
-	private function get_prepared_actions( $source, $status ) {
+	private function get_prepared_actions( $source, $status ): array {
 		$actions = array();
 
 		/**
@@ -222,7 +224,7 @@ class Controller {
 		return $actions;
 	}
 
-	public function maybe_unset_user_data() {
+	public function maybe_unset_user_data(): Controller {
 		if ( ! empty( $this->settings['save_user_data'] ) ) {
 			return $this;
 		}

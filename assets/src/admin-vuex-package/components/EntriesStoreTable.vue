@@ -7,13 +7,14 @@
 </template>
 
 <script>
+import EntriesTable from './EntriesTable';
+
 const { mapState } = Vuex;
 
 const { GetColumnComponent } = JetFBMixins;
-const { EntriesTable } = JetFBComponents;
 
 export default {
-	name: "EntriesStoreTable",
+	name: 'EntriesStoreTable',
 	mixins: [ GetColumnComponent ],
 	components: {
 		EntriesTable,
@@ -23,7 +24,7 @@ export default {
 			'loadingPage',
 		] ),
 	},
-}
+};
 </script>
 
 <style>

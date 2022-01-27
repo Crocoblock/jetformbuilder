@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Compatibility\Jet_Style_Manager;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Style_Manager;
 
@@ -51,7 +50,7 @@ class Form extends Base {
 		);
 	}
 
-	public function _jsm_register_controls() {
+	public function jsm_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			array(
@@ -429,7 +428,7 @@ class Form extends Base {
 			return $custom_form;
 		}
 
-		$builder = new Form_Builder( $form_id, false, $attrs );
+		$builder = new Form_Builder( $form_id, $attrs );
 
 		Error_Handler::instance();
 

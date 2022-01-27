@@ -25,12 +25,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key = 'jet_form_builder_submit';
-	public $hook_val = 'submit';
-	public $form_data = array();
+	public $hook_key      = 'jet_form_builder_submit';
+	public $hook_val      = 'submit';
+	public $form_data     = array();
 	public $response_data = array();
-	public $is_ajax = false;
-	public $is_success = false;
+	public $is_ajax       = false;
+	public $is_success    = false;
 	public $response_args = array();
 
 	public $form_id;
@@ -41,8 +41,8 @@ class Form_Handler {
 	public $action_handler;
 	public $request_data;
 
-	public $form_key = '_jet_engine_booking_form_id';
-	public $refer_key = '_jet_engine_refer';
+	public $form_key    = '_jet_engine_booking_form_id';
+	public $refer_key   = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
@@ -53,7 +53,7 @@ class Form_Handler {
 	/**
 	 * Constructor for the class
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
 
@@ -90,8 +90,8 @@ class Form_Handler {
 					'callback' => array( $this, 'set_referrer' ),
 				),
 				$this->post_id_key => array(
-					'callback' => array( Tools::class, 'set_current_post' )
-				)
+					'callback' => array( Tools::class, 'set_current_post' ),
+				),
 			)
 		);
 	}
@@ -292,7 +292,6 @@ class Form_Handler {
 	}
 
 	/**
-	 * @throws Action_Exception
 	 * @throws Request_Exception
 	 */
 	public function send_form() {
@@ -340,13 +339,15 @@ class Form_Handler {
 		try {
 			$this->set_response_args( $args );
 
-			( new Action_Required_Executor )->run_actions();
+			( new Action_Required_Executor() )->run_actions();
 
 			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success, $args );
 		} catch ( Handler_Exception $exception ) {
-			$this->send_raw_response( array(
-				'status' => $exception->get_form_status(),
-			) );
+			$this->send_raw_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
 		}
 
 		$this->send_raw_response();
@@ -357,7 +358,10 @@ class Form_Handler {
 			$this->set_response_args( $args );
 		}
 
-		( new Form_Response\Response( $this->get_response_manager(), $this->response_data ) )->init( $this->response_args )->send();
+		( new Form_Response\Response(
+			$this->get_response_manager(),
+			$this->response_data
+		) )->init( $this->response_args )->send();
 	}
 
 }

@@ -1,44 +1,85 @@
-
 const { __ } = wp.i18n;
+const { addFilter } = wp.hooks;
 
 const {
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	GeneralFields,
+	AdvancedFields,
+	FieldSettingsWrapper,
+} = JetFBComponents;
 
 const { getConvertedName } = JetFBActions;
 
 const {
-		  InspectorControls,
-		  useBlockProps,
-		  RichText,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	InspectorControls,
+	useBlockProps,
+	RichText,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  TextControl,
-		  SelectControl,
-		  Card,
-		  CardHeader,
-		  CardBody,
-	  } = wp.components;
+	TextControl,
+	SelectControl,
+	Card,
+	CardHeader,
+	CardBody,
+	withFilters,
+} = wp.components;
+
+function FieldValueControls( { attributes, setAttributes } ) {
+	return <>
+		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
+			key="hidden_value_field"
+			label="Meta Field to Get Value From"
+			value={ attributes.hidden_value_field }
+			onChange={ hidden_value_field => setAttributes( { hidden_value_field } ) }
+		/> }
+		{ 'query_var' === attributes.field_value && <TextControl
+			key="query_var_key"
+			label="Query Variable Key"
+			value={ attributes.query_var_key }
+			onChange={ query_var_key => setAttributes( { query_var_key } ) }
+		/> }
+		{ 'current_date' === attributes.field_value && <>
+			<TextControl
+				key="date_format"
+				label="Format"
+				value={ attributes.date_format }
+				onChange={ date_format => setAttributes( { date_format } ) }
+			/>
+			<b>{ __( 'Example:', 'jet-form-builder' ) }</b><br/>
+			<i>Y-m-d\TH:i - </i>{ __( 'datetime format', 'jet-form-builder' ) }<br/>
+			<i>U - </i>{ __( 'timestamp format', 'jet-form-builder' ) }
+		</> }
+		{ 'manual_input' === attributes.field_value && <TextControl
+			key="hidden_value"
+			label="Value"
+			value={ attributes.hidden_value }
+			onChange={ newValue => {
+				setAttributes( { hidden_value: newValue } );
+			} }
+		/> }
+	</>;
+}
+
+const FieldsValueControlsWithFilters = withFilters( 'jfb.hidden-field.field-value.controls' )( FieldValueControls );
 
 export default function HiddenEdit( props ) {
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey },
+	} = props;
 
 	const blockProps = useBlockProps();
 
 	const setDynamicName = newValue => {
 		if ( newValue
-			&& ( ! attributes.name || 'hidden_field_name' === attributes.name )
+		     && (
+			     ! attributes.name || 'hidden_field_name' === attributes.name
+		     )
 		) {
-			setAttributes( { name: newValue } )
+			setAttributes( { name: newValue } );
 		}
 	};
 
@@ -50,45 +91,18 @@ export default function HiddenEdit( props ) {
 			value={ attributes.field_value }
 			onChange={ newValue => {
 				setAttributes( { field_value: newValue } );
-				setDynamicName( newValue )
+				setDynamicName( newValue );
 			} }
 			options={ JetFormHiddenField.sources }
 		/>
-		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
-			key="hidden_value_field"
-			label="Meta Field to Get Value From"
-			value={ attributes.hidden_value_field }
-			onChange={ newValue => {
-				setAttributes( { hidden_value_field: newValue } );
-			} }
-		/> }
-		{ 'query_var' === attributes.field_value && <TextControl
-			key="query_var_key"
-			label="Query Variable Key"
-			value={ attributes.query_var_key }
-			onChange={ newValue => {
-				setAttributes( { query_var_key: newValue } );
-			} }
-		/> }
-		{ 'current_date' === attributes.field_value && <TextControl
-			key="date_format"
-			label="Format"
-			value={ attributes.date_format }
-			onChange={ newValue => {
-				setAttributes( { date_format: newValue } );
-			} }
-		/> }
-		{ 'manual_input' === attributes.field_value && <TextControl
-			key="hidden_value"
-			label="Value"
-			value={ attributes.hidden_value }
-			onChange={ newValue => {
-				setAttributes( { hidden_value: newValue } );
-			} }
-		/> }
+		<FieldsValueControlsWithFilters
+			{ ...props }
+			key={ uniqKey( 'controls-with-filters' ) }
+		/>
 	</>;
 
-	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find( option => option.value === attributes.field_value );
+	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find( option => option.value ===
+	                                                                                          attributes.field_value );
 	const resultLabel = [ label ];
 
 	switch ( attributes.field_value ) {

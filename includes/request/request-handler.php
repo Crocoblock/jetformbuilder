@@ -7,34 +7,55 @@ use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Form_Handler;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Plugin;
 
 class Request_Handler {
-	public $request;
-	public $errors;
 
-	public $repeaters = array();
+	public $_fields        = array();
+	private $request_types = array();
+	private $request_attrs = array();
+	private $raw_request   = array();
 
-	public $_fields = array();
-	public $_request_values;
-	public $_response_data;
-
-	const REPEATERS_SETTINGS = '__repeaters_settings';
 	const WP_NONCE_KEY = '_wpnonce';
 
-	public function __construct() {
-		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'with_repeaters' ), 0 );
+	public function set_request_type( array $types ): Request_Handler {
+		$this->request_types = array_merge( $this->request_types, $types );
+
+		return $this;
 	}
 
-	public function get_request() {
-		return $this->_request_values;
+	public function set_request_attrs( array $attrs ): Request_Handler {
+		$this->request_attrs = array_merge( $this->request_attrs, $attrs );
+
+		return $this;
 	}
 
-	public function with_repeaters( $data ) {
-		$data[ self::REPEATERS_SETTINGS ] = $this->repeaters;
+	public function get_types(): array {
+		return $this->request_types;
+	}
 
-		return $data;
+	public function get_attrs(): array {
+		return $this->request_attrs;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $field_type
+	 *
+	 * @return bool
+	 */
+	public function is_type( string $name, string $field_type ): bool {
+		return ( ( $this->request_types[ $name ] ?? false ) === $field_type );
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return array
+	 */
+	public function get_attrs_by_name( string $name ): array {
+		return $this->request_attrs[ $name ] ?? array();
 	}
 
 	/**
@@ -111,15 +132,13 @@ class Request_Handler {
 	/**
 	 * @throws Request_Exception
 	 */
-	public function init_form_data() {
-		$this->_fields         = Block_Helper::get_blocks_by_post(
+	private function get_raw_request(): array {
+		$this->_fields = Block_Helper::get_blocks_by_post(
 			$this->handler()->get_form_id()
 		);
-		$this->_request_values = $this->get_values_from_request();
 
-		$nonce = isset( $this->_request_values[ self::WP_NONCE_KEY ] )
-			? $this->_request_values[ self::WP_NONCE_KEY ]
-			: '';
+		$values = $this->get_values_from_request();
+		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
 
 		Live_Form::instance()->set_form_id( $this->handler()->get_form_id() );
 
@@ -127,8 +146,8 @@ class Request_Handler {
 			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
 		}
 
+		return $values;
 	}
-
 
 	/**
 	 * Get submitted form data
@@ -136,69 +155,60 @@ class Request_Handler {
 	 * @return array [type] [description]
 	 * @throws Request_Exception
 	 */
-	public function get_form_data() {
-
-		$this->init_form_data();
-
-		$this->_response_data = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->_request_values );
+	public function get_form_data(): array {
+		$this->raw_request = $this->get_raw_request();
+		$request           = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->raw_request );
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
 			throw new Request_Exception(
 				'validation_failed',
 				Error_Handler::instance()->errors(),
-				$this->_response_data
+				$request
 			);
 		}
 
-		if ( ! Plugin::instance()->captcha->verify( $this->handler()->get_form_id(), $this->handler()->is_ajax() ) ) {
-			throw new Request_Exception( 'captcha_failed' );
-		}
-
-		return apply_filters( 'jet-form-builder/form-handler/form-data', $this->_response_data, $this );
+		return apply_filters( 'jet-form-builder/form-handler/form-data', $request, $this );
 	}
 
-	public function save_repeater( $name, $value ) {
-		$this->repeaters[ $name ] = $value;
+	/**
+	 * @return array
+	 */
+	public function get_request(): array {
+		return $this->raw_request;
 	}
 
-	public function get_field_attrs_by_name( $field_name, $attr_name = '', $default_val = '' ) {
-		return $this->_get_field_attrs_by_name( $this->_fields, $field_name, $attr_name, $default_val );
+	/**
+	 * @param $field_name
+	 * @param $attr_name
+	 * @param false $if_not_exist
+	 *
+	 * @return mixed
+	 */
+	public function get_attr( $field_name, $attr_name, $if_not_exist = false ) {
+		$attrs = $this->get_attrs_by_name( $field_name );
+
+		return $attrs[ $attr_name ] ?? $if_not_exist;
 	}
 
-	public function _get_field_attrs_by_name( $source, $field_name, $attr_name = '', $default_val = '' ) {
-		foreach ( $source as $field ) {
-			if ( empty( $field['attrs'] )
-			     || ! isset( $field['attrs']['name'] )
-			     || $field_name !== $field['attrs']['name']
-			) {
-				if ( ! empty( $field['innerBlocks'] ) ) {
-					return $this->_get_field_attrs_by_name(
-						$field['innerBlocks'],
-						$field_name,
-						$attr_name,
-						$default_val
-					);
-				}
-				continue;
-			}
-			$attrs = $field['attrs'];
-
-			if ( ! $attr_name ) {
-				return $attrs;
-			}
-			if ( ! isset( $attrs[ $attr_name ] ) ) {
-				return $default_val;
-			}
-
-			return $attrs[ $attr_name ];
-		}
-
-		return $default_val;
-	}
-
-	private function handler() {
+	/**
+	 * @return Form_Handler
+	 */
+	private function handler(): Form_Handler {
 		return jet_form_builder()->form_handler;
 	}
 
+
+	/**
+	 * @deprecated since 2.0.0
+	 * Use jfb_request_handler()->get_single_attr instead
+	 *
+	 * @param $field_name
+	 * @param string $attr_name
+	 *
+	 * @return array
+	 */
+	public function get_field_attrs_by_name( $field_name, $attr_name = '', $if_empty = false ) {
+		return $this->get_attr( $field_name, $attr_name, $if_empty );
+	}
 
 }

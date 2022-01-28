@@ -29,6 +29,13 @@ export function getBaseState() {
 		// for choose column
 		checked: [],
 		idList: [],
+		currentAction: '',
+		actionsList: [],
+		actionsPromises: {},
+		actionsResponseCallbacks: {},
+		initializedPromises: false,
+		// for disable action buttons: filter, apply list-action & other.
+		doingAction: false,
 	};
 }
 
@@ -48,6 +55,107 @@ export function getGetters() {
 		 */
 		isChecked: state => id => {
 			return state.checked.includes( id );
+		},
+	};
+}
+
+
+export function getMutations() {
+	return {
+		/*
+		 for pagination
+		 */
+		setList( state, list ) {
+			state.currentList = list;
+		},
+		setQueryState( state, newState ) {
+			state.queryState = {
+				...state.queryState,
+				...newState,
+			};
+		},
+		setColumns( state, columns ) {
+			state.columns = columns;
+		},
+		toggleLoadingPage( state ) {
+			state.loadingPage = ! state.loadingPage;
+		},
+		/*
+		 for choose column
+		 */
+		addToStore( state, { id } ) {
+			state.idList.push( id );
+		},
+		addChecked( state, { id } ) {
+			state.checked.push( id );
+		},
+		removeAll( state ) {
+			state.checked = [];
+		},
+		activeAll( state ) {
+			state.checked = [ ...state.idList ];
+		},
+		removeChecked( state, { id } ) {
+			state.checked = state.checked.filter( checked => (
+				checked !== id
+			) );
+		},
+		setCurrentAction( state, action ) {
+			state.currentAction = action;
+		},
+		setActionsList( state, list ) {
+			state.actionsList = JSON.parse( JSON.stringify( list ) );
+		},
+		/*
+		 for requests
+		 */
+		toggleDoingAction( state ) {
+			state.doingAction = ! state.doingAction;
+		},
+		isInitializedPromises( state ) {
+			state.initializedPromises = ! state.initializedPromises;
+		},
+		addActionPromise( state, { action, promise } ) {
+			state.actionsPromises = {
+				...state.actionsPromises,
+				[ action ]: [
+					...(
+						state.actionsPromises[ action ] ?? []
+					),
+					promise,
+				],
+			};
+		},
+		addActionResponseCallback( state, { action, thenCallback, catchCallback = false } ) {
+			if ( ! state.actionsResponseCallbacks[ action ] ) {
+				state.actionsResponseCallbacks[ action ] = {
+					thenCallbacks: [],
+					catchCallbacks: [],
+				};
+			}
+			state.actionsResponseCallbacks[ action ] = {
+				...state.actionsResponseCallbacks[ action ],
+				thenCallbacks: [
+					...(
+						state.actionsResponseCallbacks[ action ]?.thenCallbacks ?? []
+					),
+					thenCallback,
+				],
+			};
+
+			if ( catchCallback === false ) {
+				return;
+			}
+
+			state.actionsResponseCallbacks[ action ] = {
+				...state.actionsResponseCallbacks[ action ],
+				catchCallbacks: [
+					...(
+						state.actionsResponseCallbacks[ action ]?.catchCallbacks ?? []
+					),
+					catchCallback,
+				],
+			};
 		},
 	};
 }
@@ -116,48 +224,6 @@ export function getActions() {
 	};
 }
 
-export function getMutations() {
-	return {
-		/*
-		 for pagination
-		 */
-		setList( state, list ) {
-			state.currentList = list;
-		},
-		setQueryState( state, newState ) {
-			state.queryState = {
-				...state.queryState,
-				...newState,
-			};
-		},
-		setColumns( state, columns ) {
-			state.columns = columns;
-		},
-		toggleLoadingPage( state ) {
-			state.loadingPage = ! state.loadingPage;
-		},
-		/*
-		 for choose column
-		 */
-		addToStore( state, { id } ) {
-			state.idList.push( id );
-		},
-		addChecked( state, { id } ) {
-			state.checked.push( id );
-		},
-		removeAll( state ) {
-			state.checked = [];
-		},
-		activeAll( state ) {
-			state.checked = [ ...state.idList ];
-		},
-		removeChecked( state, { id } ) {
-			state.checked = state.checked.filter( checked => (
-				checked !== id
-			) );
-		},
-	};
-}
 
 export function getBaseStore() {
 	return {

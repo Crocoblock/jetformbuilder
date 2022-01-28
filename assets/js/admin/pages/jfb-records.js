@@ -12,16 +12,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -39,33 +35,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 var _JetFBComponents = JetFBComponents,
     TablePagination = _JetFBComponents.TablePagination,
-    EntriesStoreTable = _JetFBComponents.EntriesStoreTable;
+    EntriesStoreTable = _JetFBComponents.EntriesStoreTable,
+    ChooseAction = _JetFBComponents.ChooseAction;
 var _JetFBMixins = JetFBMixins,
-    GetIncoming = _JetFBMixins.GetIncoming,
+    TableViewMixin = _JetFBMixins.TableViewMixin,
     i18n = _JetFBMixins.i18n;
+var _Vuex = Vuex,
+    mapMutations = _Vuex.mapMutations,
+    mapState = _Vuex.mapState;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'jfb-records',
   components: {
     TablePagination: TablePagination,
-    EntriesStoreTable: EntriesStoreTable
+    EntriesStoreTable: EntriesStoreTable,
+    ChooseAction: ChooseAction
   },
-  mixins: [GetIncoming, i18n],
+  data: function data() {
+    return {
+      messages: {}
+    };
+  },
+  mixins: [TableViewMixin, i18n],
   created: function created() {
     var _this$getIncoming = this.getIncoming(),
-        _this$getIncoming$lis = _this$getIncoming.list,
-        list = _this$getIncoming$lis === void 0 ? [] : _this$getIncoming$lis,
-        _this$getIncoming$col = _this$getIncoming.columns,
-        columns = _this$getIncoming$col === void 0 ? {} : _this$getIncoming$col,
-        total = _this$getIncoming.total;
+        actions_list = _this$getIncoming.actions_list,
+        messages = _this$getIncoming.messages;
 
-    this.$store.commit('setColumns', JSON.parse(JSON.stringify(columns)));
-    this.$store.commit('setList', JSON.parse(JSON.stringify(list)));
-    this.$store.commit('setQueryState', {
-      total: +total,
-      limit: this.$store.state.currentList.length
+    this.messages = JSON.parse(JSON.stringify(messages));
+    this.setActionsList(actions_list);
+    this.addActionPromise({
+      action: 'delete',
+      promise: this.deleteChecked.bind(this)
     });
-    this.$store.dispatch('setQueriedPage', 1);
-  }
+  },
+  computed: _objectSpread({}, mapState(['checked'])),
+  methods: _objectSpread(_objectSpread({}, mapMutations(['setActionsList', 'addActionPromise'])), {}, {
+    deleteChecked: function deleteChecked(resolve, reject) {
+      if (!this.checked.length) {
+        var _this$messages;
+
+        reject();
+        this.$CXNotice.add({
+          message: (_this$messages = this.messages) === null || _this$messages === void 0 ? void 0 : _this$messages.empty_checked,
+          type: 'error',
+          duration: 4000
+        });
+      }
+    }
+  })
 });
 
 /***/ }),
@@ -90,7 +107,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--records .cx-vue-list-table .cell--id {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--status {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--form {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--referrer {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--user {\n  width: 180px;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAmEE;EACC,YAAA;AClEH;ADqEE;EACC,YAAA;ACnEH;ADsEE;EACC,YAAA;ACpEH;ADuEE;EACC,YAAA;ACrEH;ADwEE;EACC,YAAA;ACtEH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--records {\r\n\t.cx-vue-list-table {\r\n\r\n\t\t.cell--id {\r\n\t\t\twidth: 120px;\r\n\t\t}\r\n\r\n\t\t.cell--status {\r\n\t\t\twidth: 120px;\r\n\t\t}\r\n\r\n\t\t.cell--form {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\r\n\t\t.cell--referrer {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\r\n\t\t.cell--user {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jet-form-builder-page--records .cx-vue-list-table .cell--id {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--status {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--form {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--referrer {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--user {\n  width: 180px;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--records .cx-vue-list-table .cell--id {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--status {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--form {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--referrer {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--user {\n  width: 180px;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAkFE;EACC,YAAA;ACjFH;ADoFE;EACC,YAAA;AClFH;ADqFE;EACC,YAAA;ACnFH;ADsFE;EACC,YAAA;ACpFH;ADuFE;EACC,YAAA;ACrFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--records {\r\n\t.cx-vue-list-table {\r\n\r\n\t\t.cell--id {\r\n\t\t\twidth: 120px;\r\n\t\t}\r\n\r\n\t\t.cell--status {\r\n\t\t\twidth: 120px;\r\n\t\t}\r\n\r\n\t\t.cell--form {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\r\n\t\t.cell--referrer {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\r\n\t\t.cell--user {\r\n\t\t\twidth: 180px;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jet-form-builder-page--records .cx-vue-list-table .cell--id {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--status {\n  width: 120px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--form {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--referrer {\n  width: 180px;\n}\n.jet-form-builder-page--records .cx-vue-list-table .cell--user {\n  width: 180px;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -344,25 +361,11 @@ var render = function () {
       _vm._v(" "),
       _c("TablePagination"),
       _vm._v(" "),
-      _c("cx-vui-select", {
-        attrs: {
-          "wrapper-css": ["equalwidth"],
-          size: "fullwidth",
-          "options-list": [{ value: "", label: "Select action..." }],
-          size: "fullwidth",
-        },
-      }),
+      _c("ChooseAction"),
       _vm._v(" "),
       _c("EntriesStoreTable"),
       _vm._v(" "),
-      _c("cx-vui-select", {
-        attrs: {
-          "wrapper-css": ["equalwidth"],
-          size: "fullwidth",
-          "options-list": [{ value: "", label: "Select action..." }],
-          size: "fullwidth",
-        },
-      }),
+      _c("ChooseAction"),
       _vm._v(" "),
       _c("TablePagination"),
     ],

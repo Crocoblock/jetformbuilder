@@ -184,7 +184,6 @@ class Controller {
 			if ( false
 				|| isset( $core_fields[ $field_name ] )
 				|| ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
-				|| Request_Handler::REPEATERS_SETTINGS === $field_name
 			) {
 				continue;
 			}

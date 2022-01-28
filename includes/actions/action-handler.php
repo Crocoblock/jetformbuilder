@@ -17,13 +17,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id = null;
-	public $request_data = array();
-	public $manager = null;
-
-	public $form_actions = array();
+	public $form_id          = null;
+	public $request_data     = array();
+	public $form_actions     = array();
 	private $form_conditions = array();
-	public $is_ajax = false;
+	public $is_ajax          = false;
 
 	/**
 	 * Data for actions
@@ -68,7 +66,7 @@ class Action_Handler {
 		return $this;
 	}
 
-	public function add_request( $request ) {
+	public function add_request( $request ): Action_Handler {
 		$this->request_data = array_merge( $this->request_data, $request );
 
 		return $this;
@@ -135,7 +133,7 @@ class Action_Handler {
 
 		$run_actions_callback = apply_filters(
 			'jet-form-builder/actions/run-callback',
-			array( new Action_Default_Executor, 'run_actions' )
+			array( new Action_Default_Executor(), 'run_actions' )
 		);
 
 		call_user_func( $run_actions_callback );

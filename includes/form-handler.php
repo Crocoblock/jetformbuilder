@@ -39,7 +39,6 @@ class Form_Handler {
 
 	/** @var Action_Handler */
 	public $action_handler;
-	public $request_data;
 
 	public $form_key    = '_jet_engine_booking_form_id';
 	public $refer_key   = '_jet_engine_refer';
@@ -205,12 +204,12 @@ class Form_Handler {
 		}
 
 		if ( $this->is_ajax ) {
-			$this->action_handler->set_form_id( $this->form_id );
+			jfb_action_handler()->set_form_id( $this->form_id );
 
 			return new Form_Response\Types\Ajax_Response(
 				array(
 					'form_id' => $this->form_id,
-					'actions' => $this->action_handler->get_all(),
+					'actions' => jfb_action_handler()->get_all(),
 				)
 			);
 		} else {
@@ -340,9 +339,9 @@ class Form_Handler {
 			$this->set_response_args( $args );
 
 			( new Action_Required_Executor() )->run_actions();
-
-			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success, $args );
 		} catch ( Handler_Exception $exception ) {
+			$this->is_success = false;
+
 			$this->send_raw_response(
 				array(
 					'status' => $exception->get_form_status(),
@@ -357,6 +356,7 @@ class Form_Handler {
 		if ( ! empty( $args ) ) {
 			$this->set_response_args( $args );
 		}
+		do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 
 		( new Form_Response\Response(
 			$this->get_response_manager(),

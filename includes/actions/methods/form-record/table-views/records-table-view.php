@@ -84,8 +84,25 @@ class Records_Table_View extends View_Base {
 
 	public function load_data(): array {
 		return array(
-			'receive_url' => array(),
-			'total'       => Form_Record_View_Count::count(),
+			'receive_url'  => array(),
+			'total'        => Form_Record_View_Count::count(),
+			'actions_list' => array(
+				array(
+					'value' => 'delete',
+					'label' => __( 'Delete', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'view',
+					'label' => __( 'Mark as Viewed', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'not_view',
+					'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
+				),
+			),
+			'messages'     => array(
+				'empty_checked' => __( 'You have not selected any record.', 'jet-form-builder' ),
+			),
 		);
 	}
 

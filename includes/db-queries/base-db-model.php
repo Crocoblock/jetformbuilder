@@ -3,11 +3,7 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
-
-use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
-use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 abstract class Base_Db_Model {
 
@@ -19,12 +15,14 @@ abstract class Base_Db_Model {
 
 	/**
 	 * Returns table name
+	 *
 	 * @return [type] [description]
 	 */
 	abstract public static function table_name(): string;
 
 	/**
 	 * Returns columns schema
+	 *
 	 * @return [type] [description]
 	 */
 	abstract public static function schema(): array;
@@ -32,6 +30,7 @@ abstract class Base_Db_Model {
 	/**
 	 * Returns schemas options
 	 * Such as primary keys, charset
+	 *
 	 * @return [type] [description]
 	 */
 	abstract public static function schema_keys(): array;
@@ -43,11 +42,14 @@ abstract class Base_Db_Model {
 			return $columns;
 		}
 
-		return array_map( function ( $column ) use ( $prefix ) {
-			return array(
-				'as' => sprintf( "`%s`.`%s` as '%s'", static::table(), $column, "{$prefix}.{$column}" )
-			);
-		}, $columns );
+		return array_map(
+			function ( $column ) use ( $prefix ) {
+				return array(
+					'as' => sprintf( "`%s`.`%s` as '%s'", static::table(), $column, "{$prefix}.{$column}" ),
+				);
+			},
+			$columns
+		);
 	}
 
 	/**
@@ -115,49 +117,42 @@ abstract class Base_Db_Model {
 		}
 	}
 
+	/**
+	 * @param $where
+	 * @param null $format
+	 *
+	 * @return int
+	 * @throws Sql_Exception
+	 */
+	public function delete( $where, $format = null ) {
+		return Execution_Builder::instance()->delete( $this, $where, $format );
+	}
+
 	public function get_defaults(): array {
 		return array();
 	}
 
-	/**
-	 * To skip checking the rights specified in the "capabilities_to_create" method,
-	 * throw the Skip_Exception exception.
-	 *
-	 * If you need a custom check before creating the table, throw a Sql_Exception.
-	 *
-	 * @throws Skip_Exception
-	 */
 	public function before_create() {
-		throw new Skip_Exception();
 	}
 
-	public function capabilities_to_create(): array {
-		return array( 'read' );
-	}
-
-	/**
-	 * @throws Skip_Exception
-	 */
 	public function before_insert() {
-		throw new Skip_Exception();
 	}
 
 	public function after_insert( $insert_columns ) {
 	}
 
-	public function capabilities_to_insert(): array {
-		return array( 'read' );
+	public function before_update() {
 	}
 
 	/**
-	 * @throws Skip_Exception
+	 * @throws Sql_Exception
 	 */
-	public function before_update() {
-		throw new Skip_Exception();
-	}
-
-	public function capabilities_to_update(): array {
-		return array( 'read' );
+	public function before_delete() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			throw new Sql_Exception(
+				"Not enough capabilities for current user to delete rows in {$this::table()}"
+			);
+		}
 	}
 
 	public function schema_charset_collate() {
@@ -171,6 +166,7 @@ abstract class Base_Db_Model {
 	/**
 	 * You must you this function,
 	 * to get right name of table
+	 *
 	 * @return string table name
 	 */
 	public static function table() {
@@ -197,6 +193,7 @@ abstract class Base_Db_Model {
 
 	/**
 	 * Returns WPDB instance
+	 *
 	 * @return \QM_DB|\wpdb [description]
 	 */
 	public static function wpdb() {

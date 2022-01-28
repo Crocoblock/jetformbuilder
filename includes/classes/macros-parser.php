@@ -78,7 +78,7 @@ class Macros_Parser {
 						);
 					} else {
 						if ( is_array( $this->replacements[ $match[1] ] ) ) {
-							if ( ! empty( $this->replacements[ Request_Handler::REPEATERS_SETTINGS ][ $match[1] ] ) ) {
+							if ( jfb_request_handler()->is_type( $match[1], 'repeater-field' ) ) {
 								return $this->verbose_repeater( $this->replacements[ $match[1] ] );
 							} else {
 								return implode( ', ', $this->replacements[ $match[1] ] );

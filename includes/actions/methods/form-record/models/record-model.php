@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -27,7 +26,7 @@ class Record_Model extends Base_Db_Model {
 			'referrer'          => 'varchar(255)',
 			'submit_type'       => 'varchar(20)',
 			'created_at'        => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'        => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL'
+			'updated_at'        => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -44,10 +43,10 @@ class Record_Model extends Base_Db_Model {
 	 */
 	public function before_insert() {
 		$this->safe_create();
-		( new Record_Field_Model )->safe_create();
-		( new Record_Error_Model )->safe_create();
-		( new Record_Action_Result_Model )->safe_create();
-		( new Record_View_Model )->safe_create();
+		( new Record_Field_Model() )->safe_create();
+		( new Record_Error_Model() )->safe_create();
+		( new Record_Action_Result_Model() )->safe_create();
+		( new Record_View_Model() )->safe_create();
 
 		parent::before_insert();
 	}

@@ -127,7 +127,7 @@ class Live_Form {
 			return '';
 		}
 
-		$field->set_block_data( $arguments, null );
+		$field->set_block_data( $arguments );
 
 		return $field->get_block_renderer();
 	}

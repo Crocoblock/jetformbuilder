@@ -25,26 +25,42 @@ class Forms_Captcha {
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
-	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults  = array(
+	private $api = 'https://www.google.com/recaptcha/api/siteverify';
+	private $defaults = array(
 		'enabled' => false,
 		'key'     => '',
 		'secret'  => '',
 	);
 
+	public function __construct() {
+		add_filter();
+	}
+
+	/**
+	 * @param $request
+	 *
+	 * @return mixed
+	 * @throws Request_Exception
+	 */
+	public function handle_request( $request ) {
+		if ( ! Plugin::instance()->captcha->verify( $request ) ) {
+			throw new Request_Exception( 'captcha_failed' );
+		}
+
+		return $request;
+	}
+
 	private function api_front_url( $key ): string {
 		return esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
 	}
 
-	public function verify( $form_id = null, $is_ajax = false ) {
-
+	public function verify( $request ) {
+		$form_id = jet_form_builder()->form_handler->get_form_id();
 		$captcha = $this->get_data( $form_id );
 
 		if ( empty( $captcha['enabled'] ) ) {
 			return true;
 		}
-
-		$request = $this->sanitize_token_from_request();
 
 		if ( empty( $request[ $this->field_key ] ) ) {
 			return false;
@@ -64,24 +80,11 @@ class Forms_Captcha {
 		$body = wp_remote_retrieve_body( $response );
 		$body = json_decode( $body, true );
 
-		if ( ! $body || empty( $body['success'] ) ) {
-			return false;
-		} elseif ( ! empty( $body['action'] ) && ( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] ) {
-
+		if ( ! empty( $body['action'] ) && ( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] ) {
 			return $body['success'];
 		}
 
-	}
-
-	private function sanitize_token_from_request(): array {
-		$response = array();
-		$request  = jet_form_builder()->form_handler->request_handler->get_request();
-
-		if ( isset( $request[ $this->field_key ] ) ) {
-			$response[ $this->field_key ] = sanitize_text_field( $request[ $this->field_key ] );
-		}
-
-		return $response;
+		return false;
 	}
 
 	/**
@@ -92,11 +95,6 @@ class Forms_Captcha {
 	 * @return [type]          [description]
 	 */
 	public function get_data( $form_id = null ) {
-
-		if ( ! $form_id ) {
-			$form_id = get_the_ID();
-		}
-
 		$captcha = Plugin::instance()->post_type->get_recaptcha( $form_id );
 
 		if ( ! $captcha || ! is_array( $captcha ) ) {
@@ -110,7 +108,6 @@ class Forms_Captcha {
 		} else {
 			return wp_parse_args( $captcha, $this->defaults );
 		}
-
 	}
 
 	public function render( $form_id ) {

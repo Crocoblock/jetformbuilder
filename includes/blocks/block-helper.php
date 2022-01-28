@@ -106,9 +106,11 @@ class Block_Helper {
 			$block = $block['blockName'] ?? '';
 		}
 
-		$parts = explode( Form_Manager::NAMESPACE_FIELDS, $block );
+		if ( stripos( $block, '/' ) === false ) {
+			return $block;
+		}
 
-		return $parts[1] ?? '';
+		return explode( '/', $block )[1] ?? '';
 	}
 
 	public static function is_field( $block_name ): bool {

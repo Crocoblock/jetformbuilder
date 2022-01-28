@@ -107,33 +107,45 @@ class Parser_Manager {
 			}
 		}
 
-		$settings = $field['attrs'];
-		$name     = $settings['name'] ?? 'field_name';
+		$settings   = $field['attrs'];
+		$name       = $settings['name'] ?? 'field_name';
+		$field_type = Block_Helper::delete_namespace( $field['blockName'] );
+		$value      = $request[ $name ] ?? '';
 
 		try {
-			$output[ $name ] = $this->get_parsed_value( $field, $request, $name, $inside_conditional );
+			$parser = $this->get_parser( $field_type );
+		} catch ( Repository_Exception $exception ) {
+			$this->save_to_request( $name, $field_type, $settings );
+
+			$output[ $name ] = $value;
+
+			return;
+		}
+
+		try {
+			$output[ $name ] = $parser->get_parsed_value( $value, $field, $inside_conditional );
 		} catch ( Parse_Exception $exception ) {
 			$output = array_merge( $output, $exception->get_inner() );
+			return;
+
 		} catch ( Exclude_Field_Exception $exception ) {
 			return;
 		}
+
+		$this->save_to_request( $name, $field_type, $settings );
 	}
 
-	public function get_parsed_value( $field, $request, $name, $inside_conditional ) {
-		if ( ! $this->is_field_visible( $field['attrs'] ) ) {
-			return null;
-		}
-		$value = $request[ $name ] ?? '';
-
-		try {
-			$parser = $this->get_parser( $field['blockName'] );
-		} catch ( Repository_Exception $exception ) {
-			return $value;
-		}
-
-		$parser->init( $value, $field, $inside_conditional );
-
-		return $parser->response();
+	private function save_to_request( $name, $type, $settings ) {
+		jfb_request_handler()->set_request_type(
+			array(
+				$name => $type,
+			)
+		);
+		jfb_request_handler()->set_request_attrs(
+			array(
+				$name => $settings,
+			)
+		);
 	}
 
 	/**
@@ -154,42 +166,7 @@ class Parser_Manager {
 	 * @throws Repository_Exception
 	 */
 	public function get_parser( $slug ): Field_Data_Parser {
-		$type = Block_Helper::delete_namespace( $slug );
-
-		return $this->rep_clone_item( $type );
-	}
-
-	/**
-	 * Returns true if field is visible
-	 *
-	 * @param array $field [description]
-	 *
-	 * @return boolean        [description]
-	 */
-	public function is_field_visible( $field = array() ) {
-
-		// For backward compatibility and hidden fields.
-		if ( empty( $field['visibility'] ) ) {
-			return true;
-		}
-
-		// If is visible for all - show field.
-		if ( 'all' === $field['visibility'] ) {
-			return true;
-		}
-
-		// If is visible for logged in users and user is logged in - show field.
-		if ( 'logged_id' === $field['visibility'] && is_user_logged_in() ) {
-			return true;
-		}
-
-		// If is visible for not logged in users and user is not logged in - show field.
-		if ( 'not_logged_in' === $field['visibility'] && ! is_user_logged_in() ) {
-			return true;
-		}
-
-		return false;
-
+		return $this->rep_clone_item( $slug );
 	}
 
 }

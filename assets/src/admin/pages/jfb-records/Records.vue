@@ -6,19 +6,9 @@
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
 		<TablePagination/>
-		<cx-vui-select
-			:wrapper-css="[ 'equalwidth' ]"
-			:size="'fullwidth'"
-			:options-list="[ { value: '', label: 'Select action...' } ]"
-			size="fullwidth"
-		></cx-vui-select>
+		<ChooseAction/>
 		<EntriesStoreTable/>
-		<cx-vui-select
-			:wrapper-css="[ 'equalwidth' ]"
-			:size="'fullwidth'"
-			:options-list="[ { value: '', label: 'Select action...' } ]"
-			size="fullwidth"
-		></cx-vui-select>
+		<ChooseAction/>
 		<TablePagination/>
 	</div>
 </template>
@@ -27,35 +17,60 @@
 const {
 	TablePagination,
 	EntriesStoreTable,
+	ChooseAction,
 } = JetFBComponents;
 const {
-	GetIncoming,
+	TableViewMixin,
 	i18n,
 } = JetFBMixins;
+
+const { mapMutations, mapState } = Vuex;
 
 export default {
 	name: 'jfb-records',
 	components: {
 		TablePagination,
 		EntriesStoreTable,
+		ChooseAction,
 	},
-	mixins: [ GetIncoming, i18n ],
+	data() {
+		return {
+			messages: {},
+		};
+	},
+	mixins: [ TableViewMixin, i18n ],
 	created() {
-		const {
-			list = [],
-			columns = {},
-			total,
-		} = this.getIncoming();
+		const { actions_list, messages } = this.getIncoming();
 
-		this.$store.commit( 'setColumns', JSON.parse( JSON.stringify( columns ) ) );
-		this.$store.commit( 'setList', JSON.parse( JSON.stringify( list ) ) );
+		this.messages = JSON.parse( JSON.stringify( messages ) );
 
-		this.$store.commit( 'setQueryState', {
-			total: + total,
-			limit: this.$store.state.currentList.length,
+		this.setActionsList( actions_list );
+
+		this.addActionPromise( {
+			action: 'delete',
+			promise: this.deleteChecked.bind( this ),
 		} );
-
-		this.$store.dispatch( 'setQueriedPage', 1 );
+	},
+	computed: {
+		...mapState( [
+			'checked',
+		] ),
+	},
+	methods: {
+		...mapMutations( [
+			'setActionsList',
+			'addActionPromise',
+		] ),
+		deleteChecked( resolve, reject ) {
+			if ( ! this.checked.length ) {
+				reject();
+				this.$CXNotice.add( {
+					message: this.messages?.empty_checked,
+					type: 'error',
+					duration: 4000,
+				} );
+			}
+		},
 	},
 };
 </script>

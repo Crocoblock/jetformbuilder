@@ -22,9 +22,16 @@ const {
 const {
 	TableViewMixin,
 	i18n,
+	PromiseWrapper
 } = JetFBMixins;
 
-const { mapMutations, mapState } = Vuex;
+const { apiFetch } = wp;
+const {
+	mapMutations,
+	mapState,
+	mapActions,
+	mapGetters,
+} = Vuex;
 
 export default {
 	name: 'jfb-records',
@@ -38,7 +45,11 @@ export default {
 			messages: {},
 		};
 	},
-	mixins: [ TableViewMixin, i18n ],
+	mixins: [
+		TableViewMixin,
+		i18n,
+		PromiseWrapper
+	],
 	created() {
 		const { actions_list, messages } = this.getIncoming();
 
@@ -48,27 +59,62 @@ export default {
 
 		this.addActionPromise( {
 			action: 'delete',
-			promise: this.deleteChecked.bind( this ),
+			promise: this.promiseWrapper( this.deleteChecked.bind( this ) ),
 		} );
 	},
 	computed: {
 		...mapState( [
 			'checked',
+			'queryState'
 		] ),
+		...mapGetters( [
+			'getCurrentAction'
+		] )
 	},
 	methods: {
 		...mapMutations( [
+			'setList',
+			'setQueryState',
 			'setActionsList',
 			'addActionPromise',
 		] ),
-		deleteChecked( resolve, reject ) {
+		...mapActions( [
+			'fetch'
+		] ),
+		deleteChecked( { onSuccess, onError } ) {
+			this.beforeRunFetch();
+
+			const options = {
+				...this.getCurrentAction?.endpoint,
+				data: {
+					checked: this.checked
+				}
+			}
+
+			apiFetch( options ).then( response => {
+				this.setList( response.list );
+
+				const state = {
+					total: + response.total
+				};
+
+				if ( response.list.length < this.queryState.limit ) {
+					state.limit = response.list.length;
+				}
+
+				this.setQueryState( state );
+
+				onSuccess( response.message );
+			} ).catch( onError );
+
+		},
+		beforeRunFetch() {
 			if ( ! this.checked.length ) {
-				reject();
-				this.$CXNotice.add( {
-					message: this.messages?.empty_checked,
-					type: 'error',
-					duration: 4000,
-				} );
+				throw new Error( this.messages?.empty_checked );
+			}
+
+			if ( ! this.getCurrentAction?.endpoint ) {
+				throw new Error( this.messages?.empty_action );
 			}
 		},
 	},
@@ -85,19 +131,19 @@ export default {
 		}
 
 		.cell--status {
-			width: 120px;
+			width: 150px;
 		}
 
 		.cell--form {
-			width: 180px;
+			width: 250px;
 		}
 
 		.cell--referrer {
-			width: 180px;
+			width: 250px;
 		}
 
 		.cell--user {
-			width: 180px;
+			width: 220px;
 		}
 	}
 }

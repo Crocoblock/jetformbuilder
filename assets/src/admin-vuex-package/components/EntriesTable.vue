@@ -87,6 +87,8 @@ const {
 	mapGetters,
 } = window.Vuex;
 
+window.jfbEventBus = window.jfbEventBus || new Vue();
+
 export default {
 	name: 'entries-table',
 	props: {
@@ -180,12 +182,12 @@ export default {
 
 .cx-vue-list-table {
 	.list-table-heading, .list-table-item {
-		justify-content: space-evenly;
+		justify-content: space-between;
 	}
 
 	.list-table-heading__cell > span {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 		flex-wrap: wrap;
 	}
@@ -193,7 +195,7 @@ export default {
 	.list-table-item__cell {
 		white-space: nowrap;
 		overflow: hidden;
-		text-align: center;
+		text-align: left;
 	}
 }
 

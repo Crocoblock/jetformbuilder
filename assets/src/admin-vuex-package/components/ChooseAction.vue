@@ -46,7 +46,7 @@ export default {
 	},
 	mixins: [ i18n ],
 	created() {
-		if ( this.initializedPromises ) {
+		if ( this.isInitializedColumn( 'choose' ) ) {
 			return;
 		}
 		const onFinish = () => {
@@ -69,25 +69,27 @@ export default {
 			} );
 		} );
 
-		this.isInitializedPromises();
+		this.initializeColumn( 'choose' );
 	},
 	computed: {
 		...mapState( [
 			'doingAction',
 			'currentAction',
 			'actionsList',
-			'initializedPromises',
 			'actionsPromises',
 			'actionsResponseCallbacks',
 		] ),
 	},
 	methods: {
+		...mapGetters( [
+			'isInitializedColumn'
+		] ),
 		...mapMutations( [
 			'toggleDoingAction',
 			'setCurrentAction',
 			'addActionPromise',
 			'addActionResponseCallback',
-			'isInitializedPromises',
+			'initializeColumn',
 		] ),
 		applyAction() {
 			const promises = this.actionsPromises[ this.currentAction ] ?? [];

@@ -29,6 +29,12 @@ class Save_Record extends Base {
 		return Action_Required_Executor::class;
 	}
 
+	public function dependence() {
+		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
+
+		return parent::dependence();
+	}
+
 	/**
 	 * @param array $request
 	 * @param Action_Handler $handler

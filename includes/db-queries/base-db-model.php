@@ -124,8 +124,8 @@ abstract class Base_Db_Model {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function delete( $where, $format = null ) {
-		return Execution_Builder::instance()->delete( $this, $where, $format );
+	public function core_delete( $where, $format = null ) {
+		return Execution_Builder::instance()->core_delete( $this, $where, $format );
 	}
 
 	public function get_defaults(): array {

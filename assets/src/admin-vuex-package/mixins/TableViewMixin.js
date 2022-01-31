@@ -35,8 +35,8 @@ export default {
 	methods: {
 		...mapMutations( [
 			'setList',
-			'setColumns',
 			'setQueryState',
+			'setColumns',
 			'setActionsList',
 		] ),
 		...mapActions( [

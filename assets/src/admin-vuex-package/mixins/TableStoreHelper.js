@@ -33,14 +33,14 @@ export function getBaseState() {
 		actionsList: [],
 		actionsPromises: {},
 		actionsResponseCallbacks: {},
-		initializedPromises: false,
+		initializedColumns: [],
 		// for disable action buttons: filter, apply list-action & other.
 		doingAction: false,
 	};
 }
 
 export function getGetters() {
-	return {
+	const getters = {
 		/*
 		 for pagination
 		 */
@@ -56,6 +56,19 @@ export function getGetters() {
 		isChecked: state => id => {
 			return state.checked.includes( id );
 		},
+		getAction: state => id => {
+			return state.actionsList.find( action => id === action.value );
+		},
+		isInitializedColumn: state => slug => {
+			return state.initializedColumns.includes( slug );
+		}
+	};
+
+	return {
+		...getters,
+		getCurrentAction: state => {
+			return getters.getAction( state )( state.currentAction );
+		}
 	};
 }
 
@@ -112,8 +125,11 @@ export function getMutations() {
 		toggleDoingAction( state ) {
 			state.doingAction = ! state.doingAction;
 		},
-		isInitializedPromises( state ) {
-			state.initializedPromises = ! state.initializedPromises;
+		initializeColumn( state, column ) {
+			state.initializedColumns = [
+				...state.initializedColumns,
+				column
+			];
 		},
 		addActionPromise( state, { action, promise } ) {
 			state.actionsPromises = {

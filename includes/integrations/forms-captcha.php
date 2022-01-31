@@ -33,16 +33,20 @@ class Forms_Captcha {
 	);
 
 	public function __construct() {
-		add_filter();
+		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'handle_request' ) );
 	}
 
 	/**
-	 * @param $request
-	 *
 	 * @return mixed
 	 * @throws Request_Exception
 	 */
-	public function handle_request( $request ) {
+	public function handle_request() {
+		/**
+		 * We get an array with the request body from the raw array,
+         * since only those fields that are in the form get into the processed request.
+		 */
+	    $request = jfb_request_handler()->get_request();
+
 		if ( ! Plugin::instance()->captcha->verify( $request ) ) {
 			throw new Request_Exception( 'captcha_failed' );
 		}
@@ -55,7 +59,7 @@ class Forms_Captcha {
 	}
 
 	public function verify( $request ) {
-		$form_id = jet_form_builder()->form_handler->get_form_id();
+		$form_id = jfb_handler()->get_form_id();
 		$captcha = $this->get_data( $form_id );
 
 		if ( empty( $captcha['enabled'] ) ) {

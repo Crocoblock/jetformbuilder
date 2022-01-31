@@ -7,7 +7,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
-class Form_Record_View extends View_Base {
+class Record_View extends View_Base {
 
 	protected $order_by = array(
 		array(

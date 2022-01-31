@@ -3,10 +3,12 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views;
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Form_Record_View;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Form_Record_View_Count;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
+use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
@@ -61,6 +63,9 @@ class Records_Table_View extends View_Base {
 		);
 	}
 
+	/**
+	 * @return Base_Db_Model[]
+	 */
 	public function get_dependencies(): array {
 		return array(
 			new Models\Record_Model(),
@@ -73,7 +78,7 @@ class Records_Table_View extends View_Base {
 
 	public function get_raw_list( $offset, $limit ) {
 		try {
-			return ( new Form_Record_View() )
+			return ( new Record_View() )
 				->set_limit( array( $offset, $limit ) )
 				->query()
 				->query_all();
@@ -85,11 +90,15 @@ class Records_Table_View extends View_Base {
 	public function load_data(): array {
 		return array(
 			'receive_url'  => array(),
-			'total'        => Form_Record_View_Count::count(),
+			'total'        => Record_View_Count::count(),
 			'actions_list' => array(
 				array(
-					'value' => 'delete',
-					'label' => __( 'Delete', 'jet-form-builder' ),
+					'value'    => 'delete',
+					'label'    => __( 'Delete', 'jet-form-builder' ),
+					'endpoint' => array(
+						'method' => Delete_Form_Record_Endpoint::get_methods(),
+						'url'    => Delete_Form_Record_Endpoint::rest_url()
+					),
 				),
 				array(
 					'value' => 'view',
@@ -102,6 +111,7 @@ class Records_Table_View extends View_Base {
 			),
 			'messages'     => array(
 				'empty_checked' => __( 'You have not selected any record.', 'jet-form-builder' ),
+				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -141,4 +151,5 @@ class Records_Table_View extends View_Base {
 
 		return $user->user_login ?? 'Guest';
 	}
+
 }

@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Db_Queries;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 /**
  * @method static Execution_Builder instance()
@@ -89,7 +91,7 @@ class Execution_Builder {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function delete( Base_Db_Model $model, $where, $where_format ): int {
+	public function core_delete( Base_Db_Model $model, $where, $where_format ): int {
 		$model->before_delete();
 
 		$result = (int) $this->wpdb()->delete( $model->table(), $where, $where_format );
@@ -102,6 +104,32 @@ class Execution_Builder {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param View_Base $view
+	 *
+	 * @return int
+	 * @throws Query_Builder_Exception
+	 */
+	public function delete( View_Base $view ) {
+		$where = ( new Query_Conditions_Builder() )
+			->set_view( $view )
+			->result();
+
+		$sql = "DELETE FROM {$view->table()} {$where};";
+
+		$result = (int) $this->wpdb()->query( $sql );
+
+		if ( ! $result ) {
+			throw new Query_Builder_Exception(
+				"Something went wrong on delete rows in: {$view->table()}",
+				$where
+			);
+		}
+
+		return $result;
+
 	}
 
 	public function create_table_schema( Base_Db_Model $model ) {

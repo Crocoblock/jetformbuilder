@@ -4,6 +4,7 @@ import GetIncoming from './mixins/GetIncoming';
 import SaveTabByAjax from './mixins/SaveTabByAjax';
 import ParseIncomingValueMixin from './mixins/ParseIncomingValueMixin';
 import GetColumnComponent from './mixins/GetColumnComponent';
+import PromiseWrapper from './mixins/PromiseWrapper';
 import DetailsTable from './components/DetailsTable';
 import SimpleWrapperComponent from './components/SimpleWrapperComponent';
 import i18n from './mixins/i18n';
@@ -50,4 +51,5 @@ window.JetFBMixins = {
 	i18n,
 	ParseIncomingValueMixin,
 	GetColumnComponent,
+	PromiseWrapper,
 };

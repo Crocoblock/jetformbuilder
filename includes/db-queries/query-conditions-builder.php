@@ -51,6 +51,9 @@ class Query_Conditions_Builder {
 			'less_static'  => array(
 				'callback' => array( $this, 'build_less_static' ),
 			),
+			'in' => array(
+				'callback' => array( $this, 'build_in' )
+			)
 		);
 	}
 
@@ -232,6 +235,19 @@ class Query_Conditions_Builder {
 	 */
 	public function build_less_static( $column_name, $second ): string {
 		return "{$this->view()->column( $column_name )} < {$second}";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_in( $column_name, $second ): string {
+		$right_part = implode( ', ', $second );
+
+		return "{$this->view()->column( $column_name )} IN ({$right_part})";
 	}
 
 	/**

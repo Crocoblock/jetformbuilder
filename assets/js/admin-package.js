@@ -615,6 +615,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 window.jfbEventBus = window.jfbEventBus || new Vue();
+jfbEventBus.$on('on-click-row', function (entryID) {});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'choose--item',
   props: ['value', 'full-entry'],
@@ -1054,6 +1055,68 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     parsedJson: function parsedJson() {
       return JSON.parse(JSON.stringify(this.value));
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-package/mixins/PromiseWrapper.js":
+/*!************************************************!*\
+  !*** ./admin-package/mixins/PromiseWrapper.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    promiseWrapper: function promiseWrapper(callableFunc) {
+      var _this = this;
+
+      var prepareMessage = function prepareMessage(message) {
+        return 'object' === _typeof(message) ? message === null || message === void 0 ? void 0 : message.message : message;
+      };
+
+      return function (resolve, reject) {
+        var onSuccess = function onSuccess(message) {
+          if ('function' === typeof resolve) {
+            resolve();
+          }
+
+          _this.$CXNotice.add({
+            message: prepareMessage(message),
+            type: 'success',
+            duration: 4000
+          });
+        };
+
+        var onError = function onError(message) {
+          if ('function' === typeof reject) {
+            reject();
+          }
+
+          _this.$CXNotice.add({
+            message: prepareMessage(message),
+            type: 'error',
+            duration: 4000
+          });
+        };
+
+        try {
+          callableFunc.call(_this, {
+            onSuccess: onSuccess,
+            onError: onError
+          });
+        } catch (error) {
+          onError(error.message);
+        }
+      };
     }
   }
 });
@@ -3705,16 +3768,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_SaveTabByAjax__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mixins/SaveTabByAjax */ "./admin-package/mixins/SaveTabByAjax.js");
 /* harmony import */ var _mixins_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mixins/ParseIncomingValueMixin */ "./admin-package/mixins/ParseIncomingValueMixin.js");
 /* harmony import */ var _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mixins/GetColumnComponent */ "./admin-package/mixins/GetColumnComponent.js");
-/* harmony import */ var _components_DetailsTable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/DetailsTable */ "./admin-package/components/DetailsTable.vue");
-/* harmony import */ var _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/SimpleWrapperComponent */ "./admin-package/components/SimpleWrapperComponent.vue");
-/* harmony import */ var _mixins_i18n__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mixins/i18n */ "./admin-package/mixins/i18n.js");
-/* harmony import */ var _functions_RenderCurrentPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./functions/RenderCurrentPage */ "./admin-package/functions/RenderCurrentPage.js");
-/* harmony import */ var _components_CopyButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/CopyButton */ "./admin-package/components/CopyButton.vue");
-/* harmony import */ var _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./entries-table-columns/choose */ "./admin-package/entries-table-columns/choose/index.js");
-/* harmony import */ var _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./entries-table-columns/link-type */ "./admin-package/entries-table-columns/link-type/index.js");
-/* harmony import */ var _entries_table_columns_actions__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./entries-table-columns/actions */ "./admin-package/entries-table-columns/actions/index.js");
-/* harmony import */ var _entries_table_columns_payer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./entries-table-columns/payer */ "./admin-package/entries-table-columns/payer/index.js");
-/* harmony import */ var _functions_LocationManager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./functions/LocationManager */ "./admin-package/functions/LocationManager.js");
+/* harmony import */ var _mixins_PromiseWrapper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/PromiseWrapper */ "./admin-package/mixins/PromiseWrapper.js");
+/* harmony import */ var _components_DetailsTable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/DetailsTable */ "./admin-package/components/DetailsTable.vue");
+/* harmony import */ var _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/SimpleWrapperComponent */ "./admin-package/components/SimpleWrapperComponent.vue");
+/* harmony import */ var _mixins_i18n__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./mixins/i18n */ "./admin-package/mixins/i18n.js");
+/* harmony import */ var _functions_RenderCurrentPage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./functions/RenderCurrentPage */ "./admin-package/functions/RenderCurrentPage.js");
+/* harmony import */ var _components_CopyButton__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/CopyButton */ "./admin-package/components/CopyButton.vue");
+/* harmony import */ var _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./entries-table-columns/choose */ "./admin-package/entries-table-columns/choose/index.js");
+/* harmony import */ var _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./entries-table-columns/link-type */ "./admin-package/entries-table-columns/link-type/index.js");
+/* harmony import */ var _entries_table_columns_actions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./entries-table-columns/actions */ "./admin-package/entries-table-columns/actions/index.js");
+/* harmony import */ var _entries_table_columns_payer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./entries-table-columns/payer */ "./admin-package/entries-table-columns/payer/index.js");
+/* harmony import */ var _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./functions/LocationManager */ "./admin-package/functions/LocationManager.js");
+
 
 
 
@@ -3732,31 +3797,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.JetFBActions = {
-  renderCurrentPage: _functions_RenderCurrentPage__WEBPACK_IMPORTED_MODULE_9__.renderCurrentPage,
-  getCurrentPath: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_15__.getCurrentPath,
-  getSearch: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_15__.getSearch,
-  createPath: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_15__.createPath,
-  addQueryArgs: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_15__.addQueryArgs
+  renderCurrentPage: _functions_RenderCurrentPage__WEBPACK_IMPORTED_MODULE_10__.renderCurrentPage,
+  getCurrentPath: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__.getCurrentPath,
+  getSearch: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__.getSearch,
+  createPath: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__.createPath,
+  addQueryArgs: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__.addQueryArgs
 };
 window.JetFBErrors = {
   ApiInputError: _input_error__WEBPACK_IMPORTED_MODULE_0__["default"]
 };
 window.JetFBComponents = {
   CxVuiCollapseMini: _components_CxVuiCollapseMini__WEBPACK_IMPORTED_MODULE_1__["default"],
-  DetailsTable: _components_DetailsTable__WEBPACK_IMPORTED_MODULE_6__["default"],
-  CopyButton: _components_CopyButton__WEBPACK_IMPORTED_MODULE_10__["default"],
-  ChooseColumn: _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_11__,
-  ActionsColumn: _entries_table_columns_actions__WEBPACK_IMPORTED_MODULE_13__,
-  PayerColumn: _entries_table_columns_payer__WEBPACK_IMPORTED_MODULE_14__,
-  LinkTypeColumn: _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_12__,
-  SimpleWrapperComponent: _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+  DetailsTable: _components_DetailsTable__WEBPACK_IMPORTED_MODULE_7__["default"],
+  CopyButton: _components_CopyButton__WEBPACK_IMPORTED_MODULE_11__["default"],
+  ChooseColumn: _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_12__,
+  ActionsColumn: _entries_table_columns_actions__WEBPACK_IMPORTED_MODULE_14__,
+  PayerColumn: _entries_table_columns_payer__WEBPACK_IMPORTED_MODULE_15__,
+  LinkTypeColumn: _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_13__,
+  SimpleWrapperComponent: _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
 };
 window.JetFBMixins = {
   GetIncoming: _mixins_GetIncoming__WEBPACK_IMPORTED_MODULE_2__["default"],
   SaveTabByAjax: _mixins_SaveTabByAjax__WEBPACK_IMPORTED_MODULE_3__["default"],
-  i18n: _mixins_i18n__WEBPACK_IMPORTED_MODULE_8__["default"],
+  i18n: _mixins_i18n__WEBPACK_IMPORTED_MODULE_9__["default"],
   ParseIncomingValueMixin: _mixins_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_4__["default"],
-  GetColumnComponent: _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_5__["default"]
+  GetColumnComponent: _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+  PromiseWrapper: _mixins_PromiseWrapper__WEBPACK_IMPORTED_MODULE_6__["default"]
 };
 })();
 

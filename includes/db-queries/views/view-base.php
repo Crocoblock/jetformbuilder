@@ -3,9 +3,11 @@
 
 namespace Jet_Form_Builder\Db_Queries\Views;
 
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Cache_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
 
 abstract class View_Base {
 
@@ -170,13 +172,6 @@ abstract class View_Base {
 		return __( 'Empty row.', 'jet-form-builder' );
 	}
 
-	/**
-	 * @return Query_Cache_Builder
-	 */
-	public function query() {
-		return ( new Query_Cache_Builder() )->set_view( $this );
-	}
-
 	public static function get_paginated_args( $args ): array {
 		return array_merge(
 			array(
@@ -198,18 +193,7 @@ abstract class View_Base {
 	 * @return View_Base
 	 */
 	public static function find( $columns ): View_Base {
-		$conditions = array();
-
-		foreach ( $columns as $column => $value ) {
-			if ( is_numeric( $column ) ) {
-				$conditions[] = $value;
-			} else {
-				$conditions[] = array(
-					'type'   => 'equal_column',
-					'values' => array( $column, $value ),
-				);
-			}
-		}
+		$conditions = static::prepare_columns( $columns );
 
 		return ( new static )->set_conditions( $conditions );
 	}
@@ -240,5 +224,46 @@ abstract class View_Base {
 		return ( new static )->query()->query_all();
 	}
 
+	/**
+	 * @param $columns
+	 *
+	 * @return int
+	 * @throws Query_Builder_Exception
+	 */
+	public static function delete( $columns ) {
+		$conditions = static::prepare_columns( $columns );
+		$self = ( new static )->set_conditions( $conditions );
+
+		return Execution_Builder::instance()->delete( $self );
+	}
+
+	/**
+	 * @param $columns
+	 *
+	 * @return array
+	 */
+	public static function prepare_columns( $columns ): array {
+		$conditions = array();
+
+		foreach ( $columns as $column => $value ) {
+			if ( is_numeric( $column ) ) {
+				$conditions[] = $value;
+			} else {
+				$conditions[] = array(
+					'type'   => 'equal_column',
+					'values' => array( $column, $value ),
+				);
+			}
+		}
+
+		return $conditions;
+	}
+
+	/**
+	 * @return Query_Cache_Builder
+	 */
+	public function query() {
+		return ( new Query_Cache_Builder() )->set_view( $this );
+	}
 
 }

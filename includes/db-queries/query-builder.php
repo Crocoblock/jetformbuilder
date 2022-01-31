@@ -114,6 +114,9 @@ class Query_Builder {
 		return $this;
 	}
 
+	/**
+	 * @throws Query_Builder_Exception
+	 */
 	public function maybe_prepare_parts() {
 		foreach ( $this->prepare_parts_callbacks() as $part_name => $callback ) {
 			if ( ! empty( $this->$part_name ) ) {
@@ -124,6 +127,10 @@ class Query_Builder {
 		}
 	}
 
+	/**
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
 	public function get_parts(): array {
 		$parts = array();
 
@@ -166,15 +173,6 @@ class Query_Builder {
 		$this->sql = implode( "\r\n", $this->get_parts() ) . ';';
 
 		return $this;
-	}
-
-	public function cache() {
-		$hash = md5( $this->sql() );
-
-		$cache = wp_cache_get( $hash, 'jfb_queries' );
-
-
-
 	}
 
 	/**

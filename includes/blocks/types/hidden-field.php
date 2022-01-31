@@ -286,15 +286,18 @@ class Hidden_Field extends Base {
 	}
 
 	private function is_empty( $value ) {
-		return ( "" === $value || is_null( $value ) || false === $value );
+		return ( '' === $value || is_null( $value ) || false === $value );
 	}
 
 	public function block_data( $editor, $handle ) {
-		wp_localize_script( $handle, 'JetFormHiddenField',
+		wp_localize_script(
+			$handle,
+			'JetFormHiddenField',
 			apply_filters(
 				'jet-form-builder/editor/hidden-field/config',
 				array(
-					'sources' => Tools::with_placeholder( array(
+					'sources' => Tools::with_placeholder(
+						array(
 							array(
 								'value' => 'post_id',
 								'label' => __( 'Current Post ID', 'jet-form-builder' ),
@@ -357,7 +360,7 @@ class Hidden_Field extends Base {
 								'label' => __( 'Manual Input', 'jet-form-builder' ),
 							),
 						)
-					)
+					),
 				)
 			)
 		);

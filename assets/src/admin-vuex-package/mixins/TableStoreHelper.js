@@ -36,6 +36,7 @@ export function getBaseState() {
 		initializedColumns: [],
 		// for disable action buttons: filter, apply list-action & other.
 		doingAction: false,
+		filters: {}
 	};
 }
 

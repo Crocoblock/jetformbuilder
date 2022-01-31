@@ -109,6 +109,24 @@ class Records_Table_View extends View_Base {
 					'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
 				),
 			),
+			'filters_url' => array(
+				'url' => '',
+				'methods' => ''
+			),
+			'filters'      => array(
+				'by_form' => array(
+					'type'        => 'f-select',
+					'placeholder' => __( 'Select Form', 'jet-form-builder' ),
+				),
+				'by_user' => array(
+					'type'        => 'f-select',
+					'placeholder' => __( 'Select User', 'jet-form-builder' ),
+				),
+				'by_status' => array(
+					'type'        => 'f-select',
+					'placeholder' => __( 'Select Status', 'jet-form-builder' ),
+				),
+			),
 			'messages'     => array(
 				'empty_checked' => __( 'You have not selected any record.', 'jet-form-builder' ),
 				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),

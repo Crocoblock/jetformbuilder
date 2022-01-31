@@ -14,21 +14,29 @@ use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 class Delete_Form_Record_Endpoint extends Rest_Api_Endpoint_Base {
 
 	public static function get_rest_base() {
-		return 'form-record/delete';
+		return 'records-table/delete';
 	}
 
 	public static function get_methods() {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	public function check_permission(): bool {
+		return current_user_can( 'manage_options' );
+	}
+
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_json_params();
 
 		try {
-			Record_View::delete( array(
-				'type'   => 'in',
-				'values' => array( 'id', $body['checked'] ?? array() )
-			) );
+			Record_View::delete(
+				array(
+					array(
+						'type'   => 'in',
+						'values' => array( 'id', $body['checked'] ?? array() )
+					)
+				)
+			);
 		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
@@ -42,7 +50,7 @@ class Delete_Form_Record_Endpoint extends Rest_Api_Endpoint_Base {
 		return new \WP_REST_Response(
 			array(
 				'message' => __( 'Successfully removed', 'jet-form-builder' ),
-				'list'    => ( new Records_Table_View )->get_list(),
+				'list'    => ( new Records_Table_View )->prepare_list(),
 				'total'   => Record_View_Count::count()
 			)
 		);

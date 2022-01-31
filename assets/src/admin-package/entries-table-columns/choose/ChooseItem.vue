@@ -8,10 +8,6 @@
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
-jfbEventBus.$on( 'on-click-row', function( entryID ) {
-
-} );
-
 export default {
 	name: 'choose--item',
 	props: [ 'value', 'full-entry' ],

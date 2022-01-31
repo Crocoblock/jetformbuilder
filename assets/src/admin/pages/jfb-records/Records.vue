@@ -6,39 +6,40 @@
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
 		<TablePagination/>
-		<ChooseAction/>
+		<ActionsWithFilters/>
 		<EntriesStoreTable/>
-		<ChooseAction/>
+		<ActionsWithFilters/>
 		<TablePagination/>
 	</div>
 </template>
 
 <script>
+import ActionsWithFilters from './ActionsWithFilters';
+
 const {
-	TablePagination,
-	EntriesStoreTable,
-	ChooseAction,
-} = JetFBComponents;
+		  TablePagination,
+		  EntriesStoreTable,
+	  } = JetFBComponents;
 const {
-	TableViewMixin,
-	i18n,
-	PromiseWrapper
-} = JetFBMixins;
+		  TableViewMixin,
+		  i18n,
+		  PromiseWrapper,
+	  } = JetFBMixins;
 
 const { apiFetch } = wp;
 const {
-	mapMutations,
-	mapState,
-	mapActions,
-	mapGetters,
-} = Vuex;
+		  mapMutations,
+		  mapState,
+		  mapActions,
+		  mapGetters,
+	  } = Vuex;
 
 export default {
 	name: 'jfb-records',
 	components: {
 		TablePagination,
 		EntriesStoreTable,
-		ChooseAction,
+		ActionsWithFilters,
 	},
 	data() {
 		return {
@@ -48,13 +49,12 @@ export default {
 	mixins: [
 		TableViewMixin,
 		i18n,
-		PromiseWrapper
+		PromiseWrapper,
 	],
 	created() {
 		const { actions_list, messages } = this.getIncoming();
 
 		this.messages = JSON.parse( JSON.stringify( messages ) );
-
 		this.setActionsList( actions_list );
 
 		this.addActionPromise( {
@@ -65,11 +65,11 @@ export default {
 	computed: {
 		...mapState( [
 			'checked',
-			'queryState'
+			'queryState',
 		] ),
 		...mapGetters( [
-			'getCurrentAction'
-		] )
+			'getCurrentAction',
+		] ),
 	},
 	methods: {
 		...mapMutations( [
@@ -79,7 +79,7 @@ export default {
 			'addActionPromise',
 		] ),
 		...mapActions( [
-			'fetch'
+			'fetch',
 		] ),
 		deleteChecked( { onSuccess, onError } ) {
 			this.beforeRunFetch();
@@ -87,15 +87,15 @@ export default {
 			const options = {
 				...this.getCurrentAction?.endpoint,
 				data: {
-					checked: this.checked
-				}
+					checked: this.checked,
+				},
 			}
 
 			apiFetch( options ).then( response => {
 				this.setList( response.list );
 
 				const state = {
-					total: + response.total
+					total: +response.total,
 				};
 
 				if ( response.list.length < this.queryState.limit ) {
@@ -125,23 +125,18 @@ export default {
 
 .jet-form-builder-page--records {
 	.cx-vue-list-table {
-
 		.cell--id {
 			width: 120px;
 		}
-
 		.cell--status {
 			width: 150px;
 		}
-
 		.cell--form {
 			width: 250px;
 		}
-
 		.cell--referrer {
 			width: 250px;
 		}
-
 		.cell--user {
 			width: 220px;
 		}

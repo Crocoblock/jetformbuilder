@@ -95,8 +95,8 @@ var _Vuex = Vuex,
     });
     this.initializeColumn('choose');
   },
-  computed: _objectSpread({}, mapState(['doingAction', 'currentAction', 'actionsList', 'actionsPromises', 'actionsResponseCallbacks'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapGetters(['isInitializedColumn'])), mapMutations(['toggleDoingAction', 'setCurrentAction', 'addActionPromise', 'addActionResponseCallback', 'initializeColumn'])), {}, {
+  computed: _objectSpread(_objectSpread({}, mapState(['doingAction', 'currentAction', 'actionsList', 'actionsPromises', 'actionsResponseCallbacks'])), mapGetters(['isInitializedColumn'])),
+  methods: _objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction', 'setCurrentAction', 'addActionPromise', 'addActionResponseCallback', 'initializeColumn'])), {}, {
     applyAction: function applyAction() {
       var _this$actionsPromises, _this$actionsResponse;
 
@@ -872,7 +872,8 @@ function getBaseState() {
     actionsResponseCallbacks: {},
     initializedColumns: [],
     // for disable action buttons: filter, apply list-action & other.
-    doingAction: false
+    doingAction: false,
+    filters: {}
   };
 }
 function getGetters() {
@@ -1165,7 +1166,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAiHA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;AChHD;ADkHC;EACC,OAAA;AChHF;ADkHE;EACC,OAAA;AChHH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAiHA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;AChHD;ADkHC;EACC,OAAA;EACA,cAAA;AChHF;ADkHE;EACC,OAAA;AChHH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 5.8.3
+Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,7 @@ Build a form easily, be it simple or complex. Such specific features as autocomp
 - <a href="https://jetformbuilder.com/addons/schedule-forms/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Schedule Forms</a>. This functionality allows you to set up the form availability by indicating its open and close dates.
 - <a href="https://jetformbuilder.com/addons/user-login/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">User Login</a>. This addon allows you to configure the Login User post-submit action. Add it to the login form and let users log in with their credentials.
 - <a href="https://jetformbuilder.com/addons/advanced-color-picker/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Advanced Color Picker</a>. Use this addon to activate the advanced color picker feature and fine-tune the color opacity in the frontend form fields.
+- <a href="https://jetformbuilder.com/addons/hierarchical-select/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Hierarchical Select</a>. This addon allows you to pull the taxonomy term data into Select fields in the front-end form putting them in a level-wise hierarchy.
 
 = EMAIL MARKETING =
 Create contact forms for collecting user data and managing it the way you like. Garner more subscribers and add them to your mailing lists using the right email marketing tool.
@@ -252,6 +253,14 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.5.2**
+ - ADD: Insert/Update Post statuses: `Move to Trash`, `Get from the form field`, `Keep current status`
+ - ADD: Alignment for the Prev/Next Buttons in JetForm Elementor widget.
+ - FIX: Using Options Pages, Post Terms in a preset.
+ - FIX: Update unused user fields.
+ - FIX: Compatibility with JetEngine 2.11.X
+ - FIX: Compatibility with Full Site Editor (since Wordpress 5.9)
 
 **1.5.1**
  - ADD: Remembering a user when logging in using the "Remember Me" field

@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.5.2
+* ADD: Insert/Update Post statuses: `Move to Trash`, `Get from the form field`, `Keep current status`
+* ADD: Alignment for the Prev/Next Buttons in JetForm Elementor widget.
+* FIX: Using Options Pages, Post Terms in a preset.
+* FIX: Update unused user fields.
+* FIX: Compatibility with JetEngine 2.11.X
+* FIX: Compatibility with Full Site Editor (since Wordpress 5.9)
+
 ## 1.5.1
 * ADD: Remembering a user when logging in using the "Remember Me" field 
 * FIX: Form not submitted if re-captcha not enabled

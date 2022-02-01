@@ -34,7 +34,26 @@ class Post_Modifier extends Post_Modifier_Core {
 				'post_date_gmt',
 				'post_author',
 				'_thumbnail_id'
-			)
+			),
+			$this
+		);
+	}
+
+	/**
+	 * To repeat the logic that would create an empty post,
+	 * we need to define at least a post_title.
+	 *
+	 * @return array
+	 */
+	public function get_required_fields() {
+		return apply_filters(
+			'jet-form-builder/post-modifier/object-required-properties',
+			array(
+				'post_title' => array(
+					'callback' => array( $this, 'set_required_title' )
+				)
+			),
+			$this
 		);
 	}
 
@@ -53,7 +72,8 @@ class Post_Modifier extends Post_Modifier_Core {
 				'trash'  => array(
 					'action' => array( $this, 'trash_post' )
 				),
-			)
+			),
+			$this
 		);
 	}
 
@@ -81,7 +101,8 @@ class Post_Modifier extends Post_Modifier_Core {
 					'match_cb'     => array( $this, 'attach_je_relations' ),
 					'after_action' => array( $this, 'after_action_je_relations' )
 				)
-			)
+			),
+			$this
 		);
 	}
 
@@ -89,11 +110,16 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function insert_post() {
-		$this->inserted_post_id = wp_insert_post( $this->source_arr );
-
+		$this->inserted_post_id = wp_insert_post( $this->source_arr, true );
 		$this->is_valid_post_id();
 
-		if ( ! empty( $this->source_arr['post_title'] ) ) {
+		$title = $this->source_arr['post_title'] ?? false;
+
+		/**
+		 * Result of `$this->get_unique_title()` was placed in post_title
+		 * if it was not in the general array `$this->source_arr`
+		 */
+		if ( $this->get_unique_title() !== $title ) {
 			return;
 		}
 
@@ -103,6 +129,7 @@ class Post_Modifier extends Post_Modifier_Core {
 		wp_update_post( array(
 			'ID'         => $this->inserted_post_id,
 			'post_title' => $title,
+			'post_name'  => "{$post_type_obj->labels->singular_name}-$this->inserted_post_id"
 		) );
 	}
 
@@ -110,7 +137,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function update_post() {
-		$this->inserted_post_id = wp_update_post( $this->source_arr );
+		$this->inserted_post_id = wp_update_post( $this->source_arr, true );
 
 		$this->is_valid_post_id();
 	}
@@ -136,10 +163,20 @@ class Post_Modifier extends Post_Modifier_Core {
 		if ( is_wp_error( $this->inserted_post_id ) ) {
 			throw new Action_Exception(
 				'failed',
-				$this->inserted_post_id->get_error_data(),
+				$this->inserted_post_id->get_error_message(),
 				$this->source_arr
 			);
 		}
+	}
+
+	public function set_required_title( array $options ) {
+		if ( ! isset( $this->source_arr[ $this->current_prop ] ) ) {
+			$this->source_arr[ $this->current_prop ] = $this->get_unique_title();
+		}
+	}
+
+	public function get_unique_title() {
+		return $this->unique_slug( 'Temp title' );
 	}
 
 	public function after_do_action() {
@@ -195,7 +232,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	public function add_inserted_post_id( $post_id ) {
 		$handler = $this->get_handler();
 
-		if ( $handler->in_loop() ) {
+		if ( ! $handler->in_loop() ) {
 			return;
 		}
 
@@ -213,7 +250,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	public function add_context_once( $post_id ) {
 		$handler = $this->get_handler();
 
-		if ( $handler->in_loop() ) {
+		if ( ! $handler->in_loop() ) {
 			return;
 		}
 		/**

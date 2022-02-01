@@ -33,11 +33,16 @@ abstract class Abstract_Modifier {
 		return array();
 	}
 
+	public function get_required_fields() {
+		return array();
+	}
+
 	/**
 	 * @throws Action_Exception
 	 */
 	public function run() {
 		$this->attach_items();
+		$this->attach_required_fields();
 		$this->do_action();
 		$this->after_action_externals();
 	}
@@ -106,6 +111,34 @@ abstract class Abstract_Modifier {
 			} catch ( Silence_Exception $exception ) {
 				continue;
 			}
+		}
+	}
+
+	public function attach_required_fields() {
+		foreach ( $this->get_required_fields() as $name => $options ) {
+			try {
+				$this->current_prop = $name;
+				$this->is_isset_current_prop( $options );
+
+			} catch ( Silence_Exception $exception ) {
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * @param array $options
+	 *
+	 * @throws Silence_Exception
+	 */
+	public function is_isset_current_prop( array $options ) {
+		if ( isset( $options['callback'] ) && is_callable( $options['callback'] ) ) {
+			call_user_func( $options['callback'], $options );
+
+			return;
+		}
+		if ( isset( $this->source_arr[ $this->current_prop ] ) ) {
+			throw new Silence_Exception( "{$this->current_prop} is not set." );
 		}
 	}
 

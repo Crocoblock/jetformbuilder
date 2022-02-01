@@ -408,10 +408,6 @@ class Tools {
 			return esc_url_raw( $source );
 		}
 
-		if ( is_numeric( $source ) ) {
-			return (float) $source;
-		}
-
 		return self::sanitize_text_field( $source );
 	}
 

@@ -36,7 +36,7 @@ export function getBaseState() {
 		initializedColumns: [],
 		// for disable action buttons: filter, apply list-action & other.
 		doingAction: false,
-		filters: {}
+		filters: {},
 	};
 }
 
@@ -62,17 +62,19 @@ export function getGetters() {
 		},
 		isInitializedColumn: state => slug => {
 			return state.initializedColumns.includes( slug );
-		}
+		},
+		getFilter: state => slug => {
+			return state.filters[ slug ] ?? {};
+		},
 	};
 
 	return {
 		...getters,
 		getCurrentAction: state => {
 			return getters.getAction( state )( state.currentAction );
-		}
+		},
 	};
 }
-
 
 export function getMutations() {
 	return {
@@ -129,7 +131,7 @@ export function getMutations() {
 		initializeColumn( state, column ) {
 			state.initializedColumns = [
 				...state.initializedColumns,
-				column
+				column,
 			];
 		},
 		addActionPromise( state, { action, promise } ) {
@@ -174,6 +176,16 @@ export function getMutations() {
 				],
 			};
 		},
+		setFilters( state, filters ) {
+			state.filters = filters;
+		},
+		setFilter( state, { slug, props } ) {
+			state.filters[ slug ] = state.filters[ slug ] ?? {};
+			state.filters[ slug ] = {
+				...state.filters[ slug ],
+				...props,
+			};
+		},
 	};
 }
 
@@ -193,12 +205,12 @@ export function getActions() {
 		 for pagination
 		 */
 		setQueriedPage( { commit, getters, state }, pageNum ) {
-			const offset = getOffset( + pageNum, state.queryState.limit );
+			const offset = getOffset( +pageNum, state.queryState.limit );
 
 			const itemTo = offset + state.queryState.limit;
 
 			commit( 'setQueryState', {
-				currentPage: + pageNum,
+				currentPage: +pageNum,
 				itemsFrom: offset + 1,
 				itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo,
 			} );
@@ -225,25 +237,36 @@ export function getActions() {
 		},
 		fetch( { commit, getters }, options ) {
 			return new Promise( ( resolve, reject ) => {
-				apiFetch( options ).then( response => {
-					resolve( response );
-				} ).catch( error => {
-					jfbEventBus.$CXNotice.add( {
-						message: error.message,
-						type: 'error',
-						duration: 4000,
-					} );
+				apiFetch( options ).then( resolve )
+					.catch( error => {
+						jfbEventBus.$CXNotice.add( {
+							message: error.message,
+							type: 'error',
+							duration: 4000,
+						} );
 
-					reject( error );
-				} ).finally( reject );
+						reject( error );
+					} ).finally( reject );
 			} );
+		},
+		maybeFetchFilters( { commit, getters, dispatch, state }, endpoint ) {
+			if ( Object.keys( state.filters ).length || state.doingAction ) {
+				return;
+			}
+			commit( 'toggleDoingAction' );
+
+			dispatch( 'fetch', endpoint ).then( response => {
+				commit( 'setFilters', response.filters );
+			} ).finally( () => {
+				commit( 'toggleDoingAction' );
+			} )
 		},
 	};
 }
 
-
 export function getBaseStore() {
 	return {
+		strict: true,
 		state: {
 			...getBaseState(),
 		},

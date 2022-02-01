@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 
@@ -17,11 +18,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id          = null;
-	public $request_data     = array();
-	public $form_actions     = array();
+	public $form_id = null;
+	public $request_data = array();
+	public $form_actions = array();
 	private $form_conditions = array();
-	public $is_ajax          = false;
+	public $is_ajax = false;
 
 	/**
 	 * Data for actions
@@ -141,6 +142,41 @@ class Action_Handler {
 		do_action( 'jet-form-builder/actions/after-send' );
 
 		return $this->response_data;
+	}
+
+	public function process_single_action( $index ) {
+		/**
+		 * Start the cycle
+		 *
+		 * @var int current_position
+		 */
+		$this->set_current_action( $index );
+
+		try {
+			/**
+			 * Check conditions for action
+			 */
+			$this->get_current_condition_manager()->check_all();
+		} catch ( Condition_Exception $exception ) {
+			/**
+			 * We save the ID of the current action,
+			 * for possible logging of form entries
+			 */
+			$this->skipping_current();
+
+			return;
+		}
+
+		/**
+		 * Process single action
+		 */
+		$this->get_current_action()->do_action( $this->request_data, $this );
+
+		/**
+		 * We save the ID of the current action,
+		 * for possible logging of form entries
+		 */
+		$this->passing_current();
 	}
 
 	/**

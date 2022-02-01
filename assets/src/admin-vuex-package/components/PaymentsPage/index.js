@@ -13,7 +13,7 @@ Vue.use( Vuex );
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 const options = {
-	store: new Vuex.Store( {
+	store: {
 		state: {
 			...getBaseState(),
 		},
@@ -35,7 +35,7 @@ const options = {
 		actions: {
 			...getActions(),
 		},
-	} ),
+	},
 };
 
 export default { Payments, options };

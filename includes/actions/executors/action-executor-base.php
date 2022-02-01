@@ -25,7 +25,7 @@ abstract class Action_Executor_Base {
 			return $this->actions_ids;
 		}
 
-		foreach ( $this->handler()->get_all() as $index => $action ) {
+		foreach ( jfb_action_handler()->get_all() as $index => $action ) {
 			if ( self::rep_item_id() === $action->get_flow_handler() ) {
 				$this->actions_ids[] = $index;
 			}
@@ -58,69 +58,31 @@ abstract class Action_Executor_Base {
 			throw new Action_Exception( 'failed', 'Empty actions' );
 		}
 
+		/**
+		 * Start cycle
+		 */
 		$this->start_flow();
-		$this->handler()->size_all = count( $this->get_actions_ids() );
+		jfb_action_handler()->size_all = count( $this->get_actions_ids() );
 
 		foreach ( $this->get_actions_ids() as $index ) {
-
-			/**
-			 * Start the cycle
-			 *
-			 * @var int current_position
-			 */
-			$this->handler()->set_current_action( $index );
-
-			try {
-				/**
-				 * Check conditions for action
-				 */
-				$this->handler()->get_current_condition_manager()->check_all();
-			} catch ( Condition_Exception $exception ) {
-				/**
-				 * We save the ID of the current action,
-				 * for possible logging of form entries
-				 */
-				$this->handler()->skipping_current();
-
-				continue;
-			}
-
-			/**
-			 * Process single action
-			 */
-			$this->get_action()->do_action( $this->handler()->request_data, $this->handler() );
-
-			/**
-			 * We save the ID of the current action,
-			 * for possible logging of form entries
-			 */
-			$this->handler()->passing_current();
+			jfb_action_handler()->process_single_action( $index );
 		}
 
 		/**
 		 * End the cycle
 		 */
-		$this->handler()->set_current_action( false );
-		$this->handler()->end_flow();
-	}
-
-	/**
-	 * @return false|Base
-	 */
-	public function get_action() {
-		return $this->handler()->get_current_action();
+		jfb_action_handler()->set_current_action( false );
+		jfb_action_handler()->end_flow();
 	}
 
 	public function start_flow() {
-		$this->handler()->start_flow( static::rep_item_id() );
+		jfb_action_handler()->start_flow( static::rep_item_id() );
 	}
 
 	public function set_form_id( $form_id ) {
-		return $this->handler()->set_form_id( $form_id );
+		return jfb_action_handler()->set_form_id( $form_id );
 	}
 
-	public function handler() {
-		return jet_form_builder()->form_handler->action_handler;
-	}
+
 
 }

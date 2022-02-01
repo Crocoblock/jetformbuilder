@@ -744,7 +744,7 @@ var getActions = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getAction
 Vue.use(Vuex);
 window.jfbEventBus = window.jfbEventBus || new Vue();
 var options = {
-  store: new Vuex.Store({
+  store: {
     state: _objectSpread({}, getBaseState()),
     getters: _objectSpread(_objectSpread({}, getGetters()), {}, {
       getColumns: function getColumns(state) {
@@ -760,7 +760,7 @@ var options = {
       }
     }),
     actions: _objectSpread({}, getActions())
-  })
+  }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   Payments: _Payments__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -907,6 +907,13 @@ function getGetters() {
       return function (slug) {
         return state.initializedColumns.includes(slug);
       };
+    },
+    getFilter: function getFilter(state) {
+      return function (slug) {
+        var _state$filters$slug;
+
+        return (_state$filters$slug = state.filters[slug]) !== null && _state$filters$slug !== void 0 ? _state$filters$slug : {};
+      };
     }
   };
   return _objectSpread(_objectSpread({}, getters), {}, {
@@ -1005,6 +1012,17 @@ function getMutations() {
       state.actionsResponseCallbacks[action] = _objectSpread(_objectSpread({}, state.actionsResponseCallbacks[action]), {}, {
         catchCallbacks: [].concat(_toConsumableArray((_state$actionsRespons3 = (_state$actionsRespons4 = state.actionsResponseCallbacks[action]) === null || _state$actionsRespons4 === void 0 ? void 0 : _state$actionsRespons4.catchCallbacks) !== null && _state$actionsRespons3 !== void 0 ? _state$actionsRespons3 : []), [catchCallback])
       });
+    },
+    setFilters: function setFilters(state, filters) {
+      state.filters = filters;
+    },
+    setFilter: function setFilter(state, _ref6) {
+      var _state$filters$slug2;
+
+      var slug = _ref6.slug,
+          props = _ref6.props;
+      state.filters[slug] = (_state$filters$slug2 = state.filters[slug]) !== null && _state$filters$slug2 !== void 0 ? _state$filters$slug2 : {};
+      state.filters[slug] = _objectSpread(_objectSpread({}, state.filters[slug]), props);
     }
   };
 }
@@ -1013,10 +1031,10 @@ function getActions() {
     /*
      for choose column
      */
-    changeChecked: function changeChecked(_ref6, _ref7) {
-      var commit = _ref6.commit;
-      var id = _ref7.id,
-          active = _ref7.active;
+    changeChecked: function changeChecked(_ref7, _ref8) {
+      var commit = _ref7.commit;
+      var id = _ref8.id,
+          active = _ref8.active;
 
       if (active) {
         commit('addChecked', {
@@ -1032,10 +1050,10 @@ function getActions() {
     /*
      for pagination
      */
-    setQueriedPage: function setQueriedPage(_ref8, pageNum) {
-      var commit = _ref8.commit,
-          getters = _ref8.getters,
-          state = _ref8.state;
+    setQueriedPage: function setQueriedPage(_ref9, pageNum) {
+      var commit = _ref9.commit,
+          getters = _ref9.getters,
+          state = _ref9.state;
       var offset = getOffset(+pageNum, state.queryState.limit);
       var itemTo = offset + state.queryState.limit;
       commit('setQueryState', {
@@ -1044,11 +1062,11 @@ function getActions() {
         itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo
       });
     },
-    fetchPage: function fetchPage(_ref9, endpoint) {
-      var commit = _ref9.commit,
-          getters = _ref9.getters,
-          dispatch = _ref9.dispatch,
-          state = _ref9.state;
+    fetchPage: function fetchPage(_ref10, endpoint) {
+      var commit = _ref10.commit,
+          getters = _ref10.getters,
+          dispatch = _ref10.dispatch,
+          state = _ref10.state;
       var _state$queryState = state.queryState,
           limit = _state$queryState.limit,
           sort = _state$queryState.sort,
@@ -1070,13 +1088,11 @@ function getActions() {
         commit('toggleLoadingPage');
       });
     },
-    fetch: function fetch(_ref10, options) {
-      var commit = _ref10.commit,
-          getters = _ref10.getters;
+    fetch: function fetch(_ref11, options) {
+      var commit = _ref11.commit,
+          getters = _ref11.getters;
       return new Promise(function (resolve, reject) {
-        apiFetch(options).then(function (response) {
-          resolve(response);
-        }).catch(function (error) {
+        apiFetch(options).then(resolve).catch(function (error) {
           jfbEventBus.$CXNotice.add({
             message: error.message,
             type: 'error',
@@ -1085,11 +1101,29 @@ function getActions() {
           reject(error);
         }).finally(reject);
       });
+    },
+    maybeFetchFilters: function maybeFetchFilters(_ref12, endpoint) {
+      var commit = _ref12.commit,
+          getters = _ref12.getters,
+          dispatch = _ref12.dispatch,
+          state = _ref12.state;
+
+      if (Object.keys(state.filters).length || state.doingAction) {
+        return;
+      }
+
+      commit('toggleDoingAction');
+      dispatch('fetch', endpoint).then(function (response) {
+        commit('setFilters', response.filters);
+      }).finally(function () {
+        commit('toggleDoingAction');
+      });
     }
   };
 }
 function getBaseStore() {
   return {
+    strict: true,
     state: _objectSpread({}, getBaseState()),
     getters: _objectSpread({}, getGetters()),
     mutations: _objectSpread({}, getMutations()),

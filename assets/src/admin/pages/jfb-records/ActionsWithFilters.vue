@@ -4,57 +4,69 @@
 			<ChooseAction/>
 		</div>
 		<div class="cx-vui-panel">
-			<div></div>
-			<cx-vui-f-select
-				:options-list="[ { value: 1, label: 'Test' }, { value: 2, label: 'Test 22' }, { value: 3, label: 'Test 334' } ]"
-				:multiple="true"
-				:wrapper-css="[ 'equalwidth' ]"
-				v-model="selected"
-			></cx-vui-f-select>
+			<ListComponents
+				:components="filtersComponents"
+			/>
 		</div>
 	</div>
 </template>
 
 <script>
+import FormFilter from './filters/FormFilter';
+import UserFilter from './filters/UserFilter';
+
 const {
 		  ChooseAction,
+		  ListComponents,
 	  } = JetFBComponents;
+
+const { GetIncoming } = JetFBMixins;
 
 const {
 		  mapMutations,
+		  mapActions,
+		  mapState,
 	  } = Vuex;
+
+const { applyFilters } = wp.hooks;
+
+const filtersComponents = applyFilters( 'jet.fb.records.page.filters', [
+	FormFilter,
+	UserFilter
+] );
 
 export default {
 	name: "ActionsWithFilters",
 	components: {
 		ChooseAction,
+		ListComponents,
 	},
+	mixins: [ GetIncoming ],
 	data() {
 		return {
-			loading: false,
-			selected: []
+			filtersComponents,
 		};
 	},
 	computed: {
+		...mapState( [
+			'doingAction'
+		] ),
 		wrapperClass() {
 			return {
 				'jfb-row-wrapper': true,
-				'jfb-row-wrapper--loading': this.loading,
+				'jfb-row-wrapper--loading': this.doingAction,
 			};
 		},
 	},
 	created() {
-		this.toggleProcess();
-		this.toggleProcess();
+		const { filters_endpoint } = this.getIncoming();
+
+		this.maybeFetchFilters( filters_endpoint );
 	},
 	methods: {
-		...mapMutations( [
-			'toggleDoingAction',
+		...mapActions( [
+			'maybeFetchFilters',
 		] ),
-		toggleProcess() {
-			this.toggleDoingAction();
-			this.loading = ! this.loading;
-		}
 	},
 }
 </script>
@@ -65,7 +77,6 @@ export default {
 	display: flex;
 	gap: 2em;
 	align-items: end;
-
 	.cx-vui-panel:nth-child(1) {
 		flex: 1;
 	}
@@ -76,9 +87,14 @@ export default {
 	&--loading {
 		opacity: 0.5;
 	}
-
 	.cx-vui-component {
 		padding: unset;
+	}
+
+	.jfb-list-components {
+		display: flex;
+		gap: 2em;
+		align-items: end;
 	}
 }
 

@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -109,25 +110,14 @@ class Records_Table_View extends View_Base {
 					'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
 				),
 			),
-			'filters_url' => array(
-				'url' => '',
-				'methods' => ''
-			),
-			'filters'      => array(
-				'by_form' => array(
-					'type'        => 'f-select',
-					'placeholder' => __( 'Select Form', 'jet-form-builder' ),
-				),
-				'by_user' => array(
-					'type'        => 'f-select',
-					'placeholder' => __( 'Select User', 'jet-form-builder' ),
-				),
-				'by_status' => array(
-					'type'        => 'f-select',
-					'placeholder' => __( 'Select Status', 'jet-form-builder' ),
-				),
+			'filters_endpoint'  => array(
+				'methods' => Fetch_Filters_Endpoint::get_methods(),
+				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
 			'messages'     => array(
+				'filter_form'   => __( 'Select Form', 'jet-form-builder' ),
+				'filter_user'   => __( 'Select User', 'jet-form-builder' ),
+				'filter_status' => __( 'Select Status', 'jet-form-builder' ),
 				'empty_checked' => __( 'You have not selected any record.', 'jet-form-builder' ),
 				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),

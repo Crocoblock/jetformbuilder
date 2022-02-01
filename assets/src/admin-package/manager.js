@@ -21,6 +21,9 @@ import {
 	createPath,
 	addQueryArgs,
 } from './functions/LocationManager';
+import ListComponents from './components/ListComponents';
+import GetIncomingMessages from './mixins/GetIncomingMessages';
+import FilterMixin from './mixins/FilterMixin';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -43,6 +46,7 @@ window.JetFBComponents = {
 	PayerColumn,
 	LinkTypeColumn,
 	SimpleWrapperComponent,
+	ListComponents
 };
 
 window.JetFBMixins = {
@@ -52,4 +56,6 @@ window.JetFBMixins = {
 	ParseIncomingValueMixin,
 	GetColumnComponent,
 	PromiseWrapper,
+	GetIncomingMessages,
+	FilterMixin
 };

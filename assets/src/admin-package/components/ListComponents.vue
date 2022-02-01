@@ -1,0 +1,28 @@
+<template>
+	<div class="jfb-list-components">
+		<div
+			v-for="( component, index ) in components"
+			:key="'entry_' + index"
+		>
+			<keep-alive>
+				<component
+					v-bind:is="component"
+				/>
+			</keep-alive>
+		</div>
+	</div>
+
+</template>
+
+<script>
+export default {
+	name: "ListComponents",
+	props: {
+		components: Array,
+	},
+}
+</script>
+
+<style>
+
+</style>

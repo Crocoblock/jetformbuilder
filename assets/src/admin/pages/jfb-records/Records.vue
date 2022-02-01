@@ -24,6 +24,7 @@ const {
 		  TableViewMixin,
 		  i18n,
 		  PromiseWrapper,
+		  GetIncomingMessages
 	  } = JetFBMixins;
 
 const { apiFetch } = wp;
@@ -41,22 +42,16 @@ export default {
 		EntriesStoreTable,
 		ActionsWithFilters,
 	},
-	data() {
-		return {
-			messages: {},
-		};
-	},
 	mixins: [
 		TableViewMixin,
 		i18n,
 		PromiseWrapper,
+		GetIncomingMessages,
 	],
 	created() {
-		const { actions_list, messages } = this.getIncoming();
+		const { actions_list } = this.getIncoming();
 
-		this.messages = JSON.parse( JSON.stringify( messages ) );
 		this.setActionsList( actions_list );
-
 		this.addActionPromise( {
 			action: 'delete',
 			promise: this.promiseWrapper( this.deleteChecked.bind( this ) ),

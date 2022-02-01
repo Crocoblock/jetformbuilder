@@ -2225,6 +2225,7 @@ __webpack_require__.r(__webpack_exports__);
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var __ = wp.i18n.__;
+var addFilter = wp.hooks.addFilter;
 var _JetFBComponents = JetFBComponents,
     GeneralFields = _JetFBComponents.GeneralFields,
     AdvancedFields = _JetFBComponents.AdvancedFields,
@@ -2242,7 +2243,52 @@ var _wp$components = wp.components,
     SelectControl = _wp$components.SelectControl,
     Card = _wp$components.Card,
     CardHeader = _wp$components.CardHeader,
-    CardBody = _wp$components.CardBody;
+    CardBody = _wp$components.CardBody,
+    withFilters = _wp$components.withFilters;
+
+function FieldValueControls(_ref2) {
+  var attributes = _ref2.attributes,
+      setAttributes = _ref2.setAttributes;
+  return wp.element.createElement(React.Fragment, null, ['post_meta', 'user_meta'].includes(attributes.field_value) && wp.element.createElement(TextControl, {
+    key: "hidden_value_field",
+    label: "Meta Field to Get Value From",
+    value: attributes.hidden_value_field,
+    onChange: function onChange(hidden_value_field) {
+      return setAttributes({
+        hidden_value_field: hidden_value_field
+      });
+    }
+  }), 'query_var' === attributes.field_value && wp.element.createElement(TextControl, {
+    key: "query_var_key",
+    label: "Query Variable Key",
+    value: attributes.query_var_key,
+    onChange: function onChange(query_var_key) {
+      return setAttributes({
+        query_var_key: query_var_key
+      });
+    }
+  }), 'current_date' === attributes.field_value && wp.element.createElement(React.Fragment, null, wp.element.createElement(TextControl, {
+    key: "date_format",
+    label: "Format",
+    value: attributes.date_format,
+    onChange: function onChange(date_format) {
+      return setAttributes({
+        date_format: date_format
+      });
+    }
+  }), wp.element.createElement("b", null, __('Example:', 'jet-form-builder')), wp.element.createElement("br", null), wp.element.createElement("i", null, "Y-m-d\\TH:i - "), __('datetime format', 'jet-form-builder'), wp.element.createElement("br", null), wp.element.createElement("i", null, "U - "), __('timestamp format', 'jet-form-builder')), 'manual_input' === attributes.field_value && wp.element.createElement(TextControl, {
+    key: "hidden_value",
+    label: "Value",
+    value: attributes.hidden_value,
+    onChange: function onChange(newValue) {
+      setAttributes({
+        hidden_value: newValue
+      });
+    }
+  }));
+}
+
+var FieldsValueControlsWithFilters = withFilters('jfb.hidden-field.field-value.controls')(FieldValueControls);
 function HiddenEdit(props) {
   var attributes = props.attributes,
       setAttributes = props.setAttributes,
@@ -2271,43 +2317,9 @@ function HiddenEdit(props) {
         setDynamicName(newValue);
       },
       options: JetFormHiddenField.sources
-    }), ['post_meta', 'user_meta'].includes(attributes.field_value) && wp.element.createElement(TextControl, {
-      key: "hidden_value_field",
-      label: "Meta Field to Get Value From",
-      value: attributes.hidden_value_field,
-      onChange: function onChange(newValue) {
-        setAttributes({
-          hidden_value_field: newValue
-        });
-      }
-    }), 'query_var' === attributes.field_value && wp.element.createElement(TextControl, {
-      key: "query_var_key",
-      label: "Query Variable Key",
-      value: attributes.query_var_key,
-      onChange: function onChange(newValue) {
-        setAttributes({
-          query_var_key: newValue
-        });
-      }
-    }), 'current_date' === attributes.field_value && wp.element.createElement(TextControl, {
-      key: "date_format",
-      label: "Format",
-      value: attributes.date_format,
-      onChange: function onChange(newValue) {
-        setAttributes({
-          date_format: newValue
-        });
-      }
-    }), 'manual_input' === attributes.field_value && wp.element.createElement(TextControl, {
-      key: "hidden_value",
-      label: "Value",
-      value: attributes.hidden_value,
-      onChange: function onChange(newValue) {
-        setAttributes({
-          hidden_value: newValue
-        });
-      }
-    }));
+    }), wp.element.createElement(FieldsValueControlsWithFilters, _extends({}, props, {
+      key: uniqKey('controls-with-filters')
+    })));
   };
 
   var _JetFormHiddenField$s = JetFormHiddenField.sources.find(function (option) {

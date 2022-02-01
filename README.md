@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.5.3
+* FIX: Saving an inserted_post_id
+
 ## 1.5.2
 * ADD: Insert/Update Post statuses: `Move to Trash`, `Get from the form field`, `Keep current status`
 * ADD: Alignment for the Prev/Next Buttons in JetForm Elementor widget.

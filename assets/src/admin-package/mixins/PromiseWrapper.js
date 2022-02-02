@@ -5,7 +5,7 @@ export default {
 				return 'object' === typeof message ? message?.message : message;
 			};
 
-			return ( resolve, reject ) => {
+			return ( payload, resolve, reject ) => {
 				const onSuccess = message => {
 					if ( 'function' === typeof resolve ) {
 						resolve();
@@ -32,7 +32,7 @@ export default {
 
 
 				try {
-					callableFunc.call( this, { onSuccess, onError } );
+					callableFunc.call( this, { payload, onSuccess, onError } );
 				} catch ( error ) {
 					onError( error.message );
 				}

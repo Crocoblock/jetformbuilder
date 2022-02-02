@@ -19,27 +19,31 @@ class Records_Table_View extends View_Base {
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'                => array(
+			'id'                 => array(
 				'value' => array( $this, 'get_row_id' ),
 				'type'  => 'integer',
 			),
-			'status'            => array(
+			'status'             => array(
 				'value' => array( $this, 'get_status' ),
 			),
-			'form'              => array(
+			'form'               => array(
 				'value' => array( $this, 'get_form' ),
 				'type'  => 'link',
 			),
-			'referrer'          => array(
+			'referrer'           => array(
 				'value' => array( $this, 'get_referrer' ),
 				'type'  => 'link',
 			),
-			'user'              => array(
+			'user'               => array(
 				'value' => array( $this, 'get_user' ),
 			),
-			self::COLUMN_CHOOSE => array(
+			self::COLUMN_CHOOSE  => array(
 				'value' => array( $this, 'get_row_id' ),
 			),
+			self::COLUMN_ACTIONS => array(
+				'value' => array( $this, 'get_row_actions' ),
+				'type'  => 'rawArray'
+			)
 		);
 	}
 
@@ -49,14 +53,14 @@ class Records_Table_View extends View_Base {
 			'id'                => array(
 				'label' => __( 'ID', 'jet-form-builder' ),
 			),
-			'status'            => array(
-				'label' => __( 'Status', 'jet-form-builder' ),
-			),
 			'form'              => array(
 				'label' => __( 'Form', 'jet-form-builder' ),
 			),
 			'referrer'          => array(
 				'label' => __( 'Referrer', 'jet-form-builder' ),
+			),
+			'status'            => array(
+				'label' => __( 'Status', 'jet-form-builder' ),
 			),
 			'user'              => array(
 				'label' => __( 'Submitted By', 'jet-form-builder' ),
@@ -88,33 +92,46 @@ class Records_Table_View extends View_Base {
 		}
 	}
 
+	public function get_single_actions(): array {
+		return array(
+			array(
+				'value'    => 'delete',
+				'label'    => __( 'Delete', 'jet-form-builder' ),
+				'endpoint' => array(
+					'method' => Delete_Form_Record_Endpoint::get_methods(),
+					'url'    => Delete_Form_Record_Endpoint::rest_url()
+				),
+				'type'     => 'danger'
+			),
+			array(
+				'value' => 'view',
+				'label' => __( 'Mark as Viewed', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'not_view',
+				'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
+			),
+		);
+	}
+
+	/**
+	 * @param $record
+	 *
+	 * @return array
+	 */
+	public function get_row_actions( $record ): array {
+		return $this->get_single_actions();
+	}
+
 	public function load_data(): array {
 		return array(
-			'receive_url'  => array(),
-			'total'        => Record_View_Count::count(),
-			'actions_list' => array(
-				array(
-					'value'    => 'delete',
-					'label'    => __( 'Delete', 'jet-form-builder' ),
-					'endpoint' => array(
-						'method' => Delete_Form_Record_Endpoint::get_methods(),
-						'url'    => Delete_Form_Record_Endpoint::rest_url()
-					),
-				),
-				array(
-					'value' => 'view',
-					'label' => __( 'Mark as Viewed', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'not_view',
-					'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
-				),
-			),
-			'filters_endpoint'  => array(
+			'receive_url'      => array(),
+			'total'            => Record_View_Count::count(),
+			'filters_endpoint' => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
-			'messages'     => array(
+			'messages'         => array(
 				'filter_form'   => __( 'Select Form', 'jet-form-builder' ),
 				'filter_user'   => __( 'Select User', 'jet-form-builder' ),
 				'filter_status' => __( 'Select Status', 'jet-form-builder' ),

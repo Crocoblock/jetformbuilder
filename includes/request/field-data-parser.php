@@ -101,7 +101,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 
 		// If is visible for not logged in users and user is not logged in - show field.
-		if ( 'not_logged_in' === $this->settings['visibility'] && is_user_logged_in() ) {
+		if ( 'not_logged_in' === $visibility && is_user_logged_in() ) {
 			throw new Exclude_Field_Exception();
 		}
 	}

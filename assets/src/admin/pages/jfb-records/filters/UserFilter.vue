@@ -1,11 +1,14 @@
 <template>
-	<cx-vui-select
-		:options-list="filter.options || []"
-		:wrapper-css="[ 'equalwidth' ]"
-		:value="filter.selected"
-		:placeholder="messages.filter_user"
-		@input="onChangeFilter"
-	></cx-vui-select>
+	<div>
+		<h4>Filter by User</h4>
+		<cx-vui-select
+			:options-list="filter.options || []"
+			:wrapper-css="[ 'equalwidth' ]"
+			:value="filter.selected"
+			:placeholder="messages.filter_user"
+			@input="onChangeFilter"
+		></cx-vui-select>
+	</div>
 </template>
 
 <script>

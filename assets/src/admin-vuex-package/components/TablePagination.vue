@@ -87,6 +87,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 0 0 1.5em;
+	margin-bottom: unset;
 	&--sort {
 		.cx-vui-component {
 			column-gap: 1em;

@@ -32,7 +32,6 @@ export function getBaseState() {
 		currentAction: '',
 		actionsList: [],
 		actionsPromises: {},
-		actionsResponseCallbacks: {},
 		initializedColumns: [],
 		// for disable action buttons: filter, apply list-action & other.
 		doingAction: false,
@@ -134,46 +133,15 @@ export function getMutations() {
 				column,
 			];
 		},
-		addActionPromise( state, { action, promise } ) {
+		addActionPromise( state, [ action, promises ] ) {
 			state.actionsPromises = {
 				...state.actionsPromises,
-				[ action ]: [
+				[ action ]: {
 					...(
-						state.actionsPromises[ action ] ?? []
+						state.actionsPromises[ action ] ?? {}
 					),
-					promise,
-				],
-			};
-		},
-		addActionResponseCallback( state, { action, thenCallback, catchCallback = false } ) {
-			if ( ! state.actionsResponseCallbacks[ action ] ) {
-				state.actionsResponseCallbacks[ action ] = {
-					thenCallbacks: [],
-					catchCallbacks: [],
-				};
-			}
-			state.actionsResponseCallbacks[ action ] = {
-				...state.actionsResponseCallbacks[ action ],
-				thenCallbacks: [
-					...(
-						state.actionsResponseCallbacks[ action ]?.thenCallbacks ?? []
-					),
-					thenCallback,
-				],
-			};
-
-			if ( catchCallback === false ) {
-				return;
-			}
-
-			state.actionsResponseCallbacks[ action ] = {
-				...state.actionsResponseCallbacks[ action ],
-				catchCallbacks: [
-					...(
-						state.actionsResponseCallbacks[ action ]?.catchCallbacks ?? []
-					),
-					catchCallback,
-				],
+					...promises,
+				},
 			};
 		},
 		setFilters( state, filters ) {
@@ -260,6 +228,11 @@ export function getActions() {
 			} ).finally( () => {
 				commit( 'toggleDoingAction' );
 			} )
+		},
+		runRowAction( { state }, { action, payload, context } ) {
+			const promise = state.actionsPromises[ incoming.action ][ context ] ?? [];
+
+			new Promise( ( resolve, reject ) => func( incoming?.payload, resolve, reject ) )
 		},
 	};
 }

@@ -59,3 +59,5 @@ window.JetFBMixins = {
 	GetIncomingMessages,
 	FilterMixin
 };
+
+window.JetFBConst = {};

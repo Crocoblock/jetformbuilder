@@ -22,3 +22,9 @@ window.JetFBMixins = {
 	TableStoreHelper,
 	TableViewMixin,
 };
+
+window.JetFBConst = {
+	...window.JetFBConst,
+	CHOOSE_ACTION: 'chooseAction',
+	CLICK_ACTION: 'clickAction',
+}

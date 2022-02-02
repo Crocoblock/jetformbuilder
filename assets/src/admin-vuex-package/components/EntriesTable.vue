@@ -33,32 +33,46 @@
 					:key="entryID"
 					:class="classEntry( entryID )"
 				>
-					<div
-						v-for="column in filteredColumns"
-						:key="'entry_' + column"
-						:class="[ 'list-table-item__cell', 'cell--' + column ]"
-					>
-						<template v-if="getItemComponent( column )">
-							<keep-alive>
-								<component
-									v-bind:is="getItemComponent( column )"
-									:value="entry[column] ? entry[column].value : false"
-									:full-entry="entry"
-									:entry-id="entryID"
-								/>
-							</keep-alive>
-						</template>
-						<template v-else-if="getItemComponent( entry[column] ? entry[column].type : false )">
-							<keep-alive>
-								<component
-									v-bind:is="getItemComponent( entry[column].type )"
-									:value="entry[column] ? entry[column].value : false"
-									:full-entry="entry"
-									:entry-id="entryID"
-								/>
-							</keep-alive>
-						</template>
-						<template v-else>{{ entry[ column ] ? entry[ column ].value : column }}</template>
+					<div class="list-table-item-columns">
+						<div
+							v-for="column in filteredColumns"
+							:key="'entry_' + column"
+							:class="[ 'list-table-item__cell', 'cell--' + column ]"
+						>
+							<template v-if="getItemComponent( column )">
+								<keep-alive>
+									<component
+										v-bind:is="getItemComponent( column )"
+										:value="entry[column] ? entry[column].value : false"
+										:full-entry="entry"
+										:entry-id="entryID"
+									/>
+								</keep-alive>
+							</template>
+							<template v-else-if="getItemComponent( entry[column] ? entry[column].type : false )">
+								<keep-alive>
+									<component
+										v-bind:is="getItemComponent( entry[column].type )"
+										:value="entry[column] ? entry[column].value : false"
+										:full-entry="entry"
+										:entry-id="entryID"
+									/>
+								</keep-alive>
+							</template>
+							<template v-else>{{ entry[ column ] ? entry[ column ].value : column }}</template>
+						</div>
+					</div>
+					<div class="list-table-item-actions" v-if="entry.actions">
+						<a
+							v-for="action in entry.actions.value"
+							:key="action.value"
+							href="javascript:void(0)"
+							:class="getActionClass( action )"
+							:disabled="doingAction"
+							@click="onClickAction( action, entry )"
+						>
+							{{ action.label }}
+						</a>
 					</div>
 				</div>
 			</template>
@@ -68,9 +82,9 @@
 
 <script>
 const {
-	ChooseColumn,
-	LinkTypeColumn,
-} = JetFBComponents;
+		  ChooseColumn,
+		  LinkTypeColumn,
+	  } = JetFBComponents;
 
 const { GetColumnComponent } = JetFBMixins;
 
@@ -83,9 +97,11 @@ const defaultTypes = {
 };
 
 const {
-	mapState,
-	mapGetters,
-} = window.Vuex;
+		  mapState,
+		  mapGetters,
+		  mapActions,
+		  mapMutations,
+	  } = window.Vuex;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
@@ -130,9 +146,26 @@ export default {
 		},
 		...mapState( [
 			'currentList',
+			'actionsList',
+			'doingAction'
 		] ),
 	},
 	methods: {
+		...mapMutations( [
+			'toggleDoingAction'
+		] ),
+		...mapActions( [
+			'runRowAction'
+		] ),
+		getActionClass( action ) {
+			const { type = 'default', class_name = '' } = action;
+
+			return {
+				'list-table-item-actions-single': true,
+				[ class_name ]: true,
+				[ 'list-table-item-actions-single--type-' + type ]: true,
+			};
+		},
 		attachComponentsByType() {
 			const first = this.currentList[ 0 ] ?? {};
 			const types = Object.keys( defaultTypes );
@@ -170,6 +203,16 @@ export default {
 		getItemComponent( column ) {
 			return this.getColumnComponentByPrefix( column, 'item' );
 		},
+		onClickAction( { value: action }, { id } ) {
+			this.runRowAction( {
+				action,
+				payload: [ id.value ]
+			} ).then( () => {
+				this.toggleDoingAction();
+			} ).catch( () => {
+				this.toggleDoingAction();
+			} );
+		},
 	},
 };
 </script>
@@ -181,21 +224,55 @@ export default {
 }
 
 .cx-vue-list-table {
-	.list-table-heading, .list-table-item {
+	.list-table-heading, .list-table-item-columns {
 		justify-content: space-between;
 	}
-
+	.list-table-item {
+		flex-direction: column;
+		&:hover .list-table-item-actions {
+			visibility: visible;
+		}
+	}
+	.list-table-item-columns {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+	.list-table-item-actions {
+		display: flex;
+		width: 100%;
+		column-gap: 0.5em;
+		margin-bottom: 0.5em;
+		margin-left: 3em;
+		visibility: hidden;
+		& > *:not(:last-child)::after {
+			content: '|';
+		}
+		&-single {
+			text-decoration: unset;
+			&--type {
+				&-danger {
+					color: firebrick;
+				}
+			}
+		}
+	}
 	.list-table-heading__cell > span {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
 		flex-wrap: wrap;
 	}
-
 	.list-table-item__cell {
 		white-space: nowrap;
 		overflow: hidden;
 		text-align: left;
+		&:not(.cell--choose) {
+			flex: 1
+		}
+	}
+	.list-table-heading__cell:not(.cell--choose) {
+		flex: 1
 	}
 }
 

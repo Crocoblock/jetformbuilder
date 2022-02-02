@@ -69,8 +69,8 @@ class Controller {
 	public function save_record( $defaults ) {
 		$this->set_columns(
 			array(
-				'form_id'           => $this->handler()->get_form_id(),
-				'referrer'          => $this->handler()->get_refer(),
+				'form_id'           => jfb_handler()->get_form_id(),
+				'referrer'          => jfb_handler()->refer,
 				'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
 				'user_id'           => get_current_user_id(),
 				'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
@@ -103,16 +103,16 @@ class Controller {
 
 	public function get_chunked_actions() {
 		list( $passed, $skipped ) = array(
-			$this->handler()->get_passed_actions(),
-			$this->handler()->get_skipped_actions(),
+			jfb_action_handler()->get_passed_actions(),
+			jfb_action_handler()->get_skipped_actions(),
 		);
 
 		$passed_actions  = array();
 		$skipped_actions = array();
 		$with_errors     = array();
 
-		foreach ( $this->handler()->get_all() as $index => $action ) {
-			if ( $this->handler()->get_position() === $index ) {
+		foreach ( jfb_action_handler()->get_all() as $index => $action ) {
+			if ( jfb_action_handler()->get_position() === $index ) {
 				continue;
 			}
 			if ( in_array( $index, $passed, true ) ) {
@@ -179,7 +179,7 @@ class Controller {
 		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
 		$fields      = array();
 
-		foreach ( $this->handler()->request_data as $field_name => $value ) {
+		foreach ( jfb_action_handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
 				|| isset( $core_fields[ $field_name ] )
@@ -234,11 +234,6 @@ class Controller {
 		);
 
 		return $this;
-	}
-
-
-	public function handler() {
-		return jet_form_builder()->form_handler->action_handler;
 	}
 
 	public function set_setting( string $key, $value ) {

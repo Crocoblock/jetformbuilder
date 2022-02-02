@@ -5,10 +5,13 @@
 		'jet-form-builder-page--records': true,
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
-		<TablePagination/>
-		<ActionsWithFilters/>
+		<div class="jfb-page-header">
+			<ActionsWithFilters/>
+		</div>
 		<EntriesStoreTable/>
-		<ActionsWithFilters/>
+		<div v-show="isFooterVisible">
+			<ActionsWithFilters/>
+		</div>
 		<TablePagination/>
 	</div>
 </template>
@@ -24,8 +27,12 @@ const {
 		  TableViewMixin,
 		  i18n,
 		  PromiseWrapper,
-		  GetIncomingMessages
+		  GetIncomingMessages,
 	  } = JetFBMixins;
+const {
+		  CHOOSE_ACTION,
+		CLICK_ACTION,
+	  } = JetFBConst;
 
 const { apiFetch } = wp;
 const {
@@ -42,6 +49,11 @@ export default {
 		EntriesStoreTable,
 		ActionsWithFilters,
 	},
+	data() {
+		return {
+			isFooterVisible: true,
+		};
+	},
 	mixins: [
 		TableViewMixin,
 		i18n,
@@ -49,13 +61,29 @@ export default {
 		GetIncomingMessages,
 	],
 	created() {
-		const { actions_list } = this.getIncoming();
+		const { actions } = this.getIncoming();
 
-		this.setActionsList( actions_list );
-		this.addActionPromise( {
-			action: 'delete',
-			promise: this.promiseWrapper( this.deleteChecked.bind( this ) ),
-		} );
+		this.setActionsList( actions );
+		this.addActionPromise( [
+			'delete',
+			{
+				[ CHOOSE_ACTION ]: () => this.promiseWrapper( this.deleteChecked.bind( this ) ),
+				[ CLICK_ACTION ]: () => this.promiseWrapper( this.deleteClicked.bind( this ) )
+			}
+		] );
+	},
+	mounted() {
+		const observer = new IntersectionObserver( ( entries, observer ) => {
+			entries.forEach( entry => {
+				// если элемент является наблюдаемым
+				this.isFooterVisible = ( ! entry.isIntersecting );
+			} )
+		}, {
+			root: null,
+			rootMargin: '0px',
+		} )
+
+		observer.observe( document.querySelector( '.jfb-page-header' ) );
 	},
 	computed: {
 		...mapState( [
@@ -76,16 +104,7 @@ export default {
 		...mapActions( [
 			'fetch',
 		] ),
-		deleteChecked( { onSuccess, onError } ) {
-			this.beforeRunFetch();
-
-			const options = {
-				...this.getCurrentAction?.endpoint,
-				data: {
-					checked: this.checked,
-				},
-			}
-
+		deleteAction( { onSuccess, onError, options } ) {
 			apiFetch( options ).then( response => {
 				this.setList( response.list );
 
@@ -101,6 +120,21 @@ export default {
 
 				onSuccess( response.message );
 			} ).catch( onError );
+		},
+		deleteChecked( { onSuccess, onError } ) {
+			this.beforeRunFetch();
+
+			const options = {
+				...this.getCurrentAction?.endpoint,
+				data: {
+					checked: this.checked,
+				},
+			}
+
+			this.deleteAction( { onSuccess, onError, options } );
+
+		},
+		deleteClicked( { onSuccess, onError } ) {
 
 		},
 		beforeRunFetch() {
@@ -120,20 +154,8 @@ export default {
 
 .jet-form-builder-page--records {
 	.cx-vue-list-table {
-		.cell--id {
-			width: 120px;
-		}
-		.cell--status {
-			width: 150px;
-		}
-		.cell--form {
-			width: 250px;
-		}
-		.cell--referrer {
-			width: 250px;
-		}
-		.cell--user {
-			width: 220px;
+		.cell--id.cell--id {
+			flex: 0.3;
 		}
 	}
 }

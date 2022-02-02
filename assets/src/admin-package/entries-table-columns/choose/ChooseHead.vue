@@ -1,5 +1,12 @@
 <template>
-	<input type="checkbox" :checked="isChecked" @change="onClick( $event.target.checked )">
+	<cx-vui-checkbox
+		:options-list="[ { value: 'checked' } ]"
+		:value="value"
+		@input="onClick"
+		return-type="single"
+		name="jfb_record_all"
+	>
+	</cx-vui-checkbox>
 </template>
 
 <script>
@@ -8,19 +15,22 @@ export default {
 	data() {
 		return {
 			isChecked: false,
+			value: ''
 		};
 	},
 	methods: {
-		onClick( active ) {
-			this.isChecked = active;
+		onClick() {
+			this.isChecked = ! this.isChecked;
+			this.value = this.isChecked ? 'checked' : '';
 
-			if ( active ) {
-				this.$store.commit( 'activeAll' );
-
-				return;
-			}
-			this.$store.commit( 'removeAll' );
+			this.$store.commit( this.isChecked ? 'activeAll' : 'removeAll' );
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.cx-vui-component {
+	padding: unset;
+}
+</style>

@@ -26,10 +26,11 @@ const { applyFilters } = wp.hooks;
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
 const {
-	mapState,
-	mapGetters,
-	mapMutations,
-} = Vuex;
+		  mapState,
+		  mapGetters,
+		  mapMutations,
+		  mapActions,
+	  } = Vuex;
 
 export default {
 	name: 'ChooseAction',
@@ -49,23 +50,14 @@ export default {
 		if ( this.isInitializedColumn( 'choose' ) ) {
 			return;
 		}
-		const onFinish = () => {
-			this.loading = ! this.loading;
-			this.toggleDoingAction();
-		};
 
 		this.actionsList.forEach( ( { value: action } ) => {
 			this.addActionPromise( {
 				action,
 				promise( resolve ) {
-					onFinish();
+					this.onFinish();
 					resolve();
 				},
-			} );
-			this.addActionResponseCallback( {
-				action,
-				thenCallback: onFinish,
-				catchCallback: onFinish,
 			} );
 		} );
 
@@ -80,7 +72,7 @@ export default {
 			'actionsResponseCallbacks',
 		] ),
 		...mapGetters( [
-			'isInitializedColumn'
+			'isInitializedColumn',
 		] ),
 	},
 	methods: {
@@ -91,20 +83,19 @@ export default {
 			'addActionResponseCallback',
 			'initializeColumn',
 		] ),
+		...mapActions( [
+			'runRowAction',
+		] ),
+		onFinish() {
+			this.loading = ! this.loading;
+			this.toggleDoingAction();
+		},
 		applyAction() {
-			const promises = this.actionsPromises[ this.currentAction ] ?? [];
-			const {
-				thenCallbacks = [],
-				catchCallbacks = [],
-			} = this.actionsResponseCallbacks[ this.currentAction ] ?? {};
-
-			const runCallbacks = callbacks => response => {
-				callbacks.forEach( callback => callback.call( response ) );
-			};
-
-			Promise.all( promises.map( func => (
-				new Promise( func )
-			) ) ).then( runCallbacks( thenCallbacks ) ).catch( runCallbacks( catchCallbacks ) );
+			this.runRowAction( this.currentAction ).then( () => {
+				this.onFinish();
+			} ).catch( () => {
+				this.onFinish();
+			} );
 		},
 	},
 };
@@ -117,11 +108,9 @@ export default {
 	justify-content: space-between;
 	gap: 0.7em;
 	padding: 1em;
-
 	.cx-vui-component {
 		flex: 1;
 		padding: unset;
-
 		&__control {
 			flex: 1;
 		}

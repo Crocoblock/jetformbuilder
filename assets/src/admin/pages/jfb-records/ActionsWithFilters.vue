@@ -1,9 +1,9 @@
 <template>
 	<div :class="wrapperClass">
-		<div class="cx-vui-panel">
+		<div class="jfb-row-wrapper-item">
 			<ChooseAction/>
 		</div>
-		<div class="cx-vui-panel">
+		<div class="jfb-row-wrapper-item">
 			<ListComponents
 				:components="filtersComponents"
 			/>
@@ -71,17 +71,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .jfb-row-wrapper {
 	display: flex;
 	gap: 2em;
 	align-items: end;
-	.cx-vui-panel:nth-child(1) {
+	&-item:nth-child(1) {
 		flex: 1;
 	}
-	.cx-vui-panel:nth-child(2) {
-		padding: 1em;
+	&-item:nth-child(2) {
 		flex: 3;
 	}
 	&--loading {
@@ -91,10 +90,15 @@ export default {
 		padding: unset;
 	}
 
+	.cx-vui-select {
+		background-color: white;
+	}
+
 	.jfb-list-components {
 		display: flex;
 		gap: 2em;
 		align-items: end;
+		padding: 1em;
 	}
 }
 

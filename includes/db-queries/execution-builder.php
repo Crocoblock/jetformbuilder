@@ -31,6 +31,8 @@ class Execution_Builder {
 
 		$this->delta( $this->create_table_schema( $model ) );
 
+		$this->add_foreign_relations( $model );
+
 		return $this->save_to_existed( $model );
 	}
 
@@ -158,6 +160,16 @@ class Execution_Builder {
 			$ready_columns
 			$ready_keys
 		) {$engine} {$charset_collate};";
+	}
+
+	protected function add_foreign_relations( Base_Db_Model $model ) {
+		$queries = array();
+
+		foreach ( $model->foreign_relations() as $constraint ) {
+			$queries[] = "ALTER TABLE {$model::table()} ADD " . $constraint->build();
+		}
+
+		$this->wpdb()->query( implode( '; ', $queries ) );
 	}
 
 	public function is_exist( Base_Db_Model $model ): bool {

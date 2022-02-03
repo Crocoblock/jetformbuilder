@@ -6,6 +6,7 @@ import TablePagination from './components/TablePagination';
 import ChooseAction from './components/ChooseAction';
 import * as TableStoreHelper from './mixins/TableStoreHelper';
 import TableViewMixin from './mixins/TableViewMixin';
+import Constants from './constants';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -23,8 +24,4 @@ window.JetFBMixins = {
 	TableViewMixin,
 };
 
-window.JetFBConst = {
-	...window.JetFBConst,
-	CHOOSE_ACTION: 'chooseAction',
-	CLICK_ACTION: 'clickAction',
-}
+window.JetFBConst = Constants;

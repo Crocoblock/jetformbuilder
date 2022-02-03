@@ -175,6 +175,16 @@ class Query_Builder {
 		return $this;
 	}
 
+
+	/**
+	 * @return \QM_DB|\wpdb
+	 */
+	public function db() {
+		global $wpdb;
+
+		return $wpdb;
+	}
+
 	/**
 	 * @return string
 	 */
@@ -190,10 +200,8 @@ class Query_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function query_all(): array {
-		global $wpdb;
-
 		// phpcs:ignore WordPress.DB
-		$rows = $wpdb->get_results( $this->sql(), ARRAY_A );
+		$rows = $this->db()->get_results( $this->sql(), ARRAY_A );
 
 		$response = array();
 
@@ -208,10 +216,8 @@ class Query_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function query_one(): array {
-		global $wpdb;
-
 		// phpcs:ignore WordPress.DB
-		$row = $wpdb->get_row( $this->sql(), ARRAY_A );
+		$row = $this->db()->get_row( $this->sql(), ARRAY_A );
 
 		return $this->view()->get_prepared_row( $row );
 	}
@@ -224,12 +230,22 @@ class Query_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function query_var( $column_offset = 0, $row_offset = 0 ) {
-		global $wpdb;
-
 		// phpcs:ignore WordPress.DB
-		$row = $wpdb->get_var( $this->sql(), $column_offset, $row_offset );
+		$row = $this->db()->get_var( $this->sql(), $column_offset, $row_offset );
 
 		return $this->view()->get_prepared_row( $row );
+	}
+
+	/**
+	 * @param int $index
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public function query_col( $index = 0 ) {
+		$values = $this->db()->get_col( $this->sql(), $index );
+
+		return $this->view()->get_prepared_values( $values );
 	}
 
 }

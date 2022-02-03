@@ -83,4 +83,18 @@ class Query_Cache_Builder extends Query_Builder {
 		return $results;
 	}
 
+	public function query_col( $index = 0 ) {
+		$cached = $this->get_cached( "query_col_{$index}_" );
+
+		if ( $cached !== false ) {
+			return $cached;
+		}
+
+		$results = parent::query_col( $index );
+
+		wp_cache_set( $this->get_hash(), self::CACHE_GROUP );
+
+		return $results;
+	}
+
 }

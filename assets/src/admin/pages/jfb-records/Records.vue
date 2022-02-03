@@ -31,7 +31,7 @@ const {
 	  } = JetFBMixins;
 const {
 		  CHOOSE_ACTION,
-		CLICK_ACTION,
+		  CLICK_ACTION,
 	  } = JetFBConst;
 
 const { apiFetch } = wp;
@@ -64,13 +64,39 @@ export default {
 		const { actions } = this.getIncoming();
 
 		this.setActionsList( actions );
-		this.addActionPromise( [
-			'delete',
-			{
-				[ CHOOSE_ACTION ]: () => this.promiseWrapper( this.deleteChecked.bind( this ) ),
-				[ CLICK_ACTION ]: () => this.promiseWrapper( this.deleteClicked.bind( this ) )
-			}
-		] );
+
+		this.setActionPromises( {
+			action: 'delete',
+			context: CHOOSE_ACTION,
+			promise: this.promiseWrapper( this.deleteChecked.bind( this ) ),
+		} );
+		this.setActionPromises( {
+			action: 'delete',
+			context: CLICK_ACTION,
+			promise: this.promiseWrapper( this.deleteClicked.bind( this ) ),
+		} );
+
+		this.setActionPromises( {
+			action: 'view',
+			context: CHOOSE_ACTION,
+			promise: this.promiseWrapper( this.viewChecked.bind( this ) ),
+		} );
+		this.setActionPromises( {
+			action: 'view',
+			context: CLICK_ACTION,
+			promise: this.promiseWrapper( this.viewClicked.bind( this ) ),
+		} );
+
+		this.setActionPromises( {
+			action: 'not_view',
+			context: CHOOSE_ACTION,
+			promise: this.promiseWrapper( this.viewChecked.bind( this ) ),
+		} );
+		this.setActionPromises( {
+			action: 'not_view',
+			context: CLICK_ACTION,
+			promise: this.promiseWrapper( this.notViewClicked.bind( this ) ),
+		} );
 	},
 	mounted() {
 		const observer = new IntersectionObserver( ( entries, observer ) => {
@@ -91,6 +117,7 @@ export default {
 			'queryState',
 		] ),
 		...mapGetters( [
+			'getAction',
 			'getCurrentAction',
 		] ),
 	},
@@ -99,12 +126,41 @@ export default {
 			'setList',
 			'setQueryState',
 			'setActionsList',
-			'addActionPromise',
+			'setActionPromises',
+			'toggleDoingAction',
+			'toggleLoading',
 		] ),
 		...mapActions( [
 			'fetch',
 		] ),
-		deleteAction( { onSuccess, onError, options } ) {
+		beforeRunFetch() {
+			if ( ! this.checked.length ) {
+				throw new Error( this.messages?.empty_checked );
+			}
+
+			if ( ! this.getCurrentAction?.endpoint ) {
+				throw new Error( this.messages?.empty_action );
+			}
+		},
+		onCheckedOptions() {
+			return {
+				...this.getCurrentAction?.endpoint,
+				data: {
+					checked: this.checked,
+				},
+			}
+		},
+		getOptionsStatic( action, payload ) {
+			const [ id ] = payload;
+
+			return {
+				...this.getAction( action )?.endpoint,
+				data: {
+					checked: [ id ],
+				},
+			}
+		},
+		deleteAction( { resolve, reject, options } ) {
 			apiFetch( options ).then( response => {
 				this.setList( response.list );
 
@@ -118,34 +174,58 @@ export default {
 
 				this.setQueryState( state );
 
-				onSuccess( response.message );
-			} ).catch( onError );
+				resolve( response.message );
+
+			} ).catch( reject );
 		},
-		deleteChecked( { onSuccess, onError } ) {
+
+		deleteChecked( { resolve, reject } ) {
 			this.beforeRunFetch();
 
-			const options = {
-				...this.getCurrentAction?.endpoint,
-				data: {
-					checked: this.checked,
-				},
-			}
-
-			this.deleteAction( { onSuccess, onError, options } );
-
+			this.deleteAction( {
+				resolve,
+				reject,
+				options: this.onCheckedOptions(),
+			} );
 		},
-		deleteClicked( { onSuccess, onError } ) {
-
+		deleteClicked( { resolve, reject }, ...payload ) {
+			this.deleteAction( {
+				resolve,
+				reject,
+				options: this.getOptionsStatic( 'delete', payload ),
+			} );
 		},
-		beforeRunFetch() {
-			if ( ! this.checked.length ) {
-				throw new Error( this.messages?.empty_checked );
-			}
+		viewAction( { resolve, reject, options } ) {
+			apiFetch( options ).then( response => {
+				this.setList( response.list );
 
-			if ( ! this.getCurrentAction?.endpoint ) {
-				throw new Error( this.messages?.empty_action );
-			}
+				resolve( response.message );
+			} ).catch( reject );
 		},
+		viewChecked( { resolve, reject } ) {
+			this.beforeRunFetch();
+
+			this.viewAction( {
+				resolve,
+				reject,
+				options: this.onCheckedOptions(),
+			} );
+		},
+		viewClicked( { resolve, reject }, ...payload ) {
+			this.viewAction( {
+				resolve,
+				reject,
+				options: this.getOptionsStatic( 'view', payload ),
+			} );
+		},
+		notViewClicked( { resolve, reject }, ...payload ) {
+			this.viewAction( {
+				resolve,
+				reject,
+				options: this.getOptionsStatic( 'not_view', payload ),
+			} );
+		},
+
 	},
 };
 </script>

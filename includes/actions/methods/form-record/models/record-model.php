@@ -25,6 +25,7 @@ class Record_Model extends Base_Db_Model {
 			'user_agent'        => 'varchar(255)',
 			'referrer'          => 'varchar(255)',
 			'submit_type'       => 'varchar(20)',
+			'is_viewed'         => 'tinyint(1)',
 			'created_at'        => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 			'updated_at'        => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
 		);
@@ -39,14 +40,13 @@ class Record_Model extends Base_Db_Model {
 	}
 
 	/**
-	 * @throws Skip_Exception|Sql_Exception
+	 * @throws Sql_Exception
 	 */
 	public function before_insert() {
 		$this->safe_create();
 		( new Record_Field_Model() )->safe_create();
 		( new Record_Error_Model() )->safe_create();
 		( new Record_Action_Result_Model() )->safe_create();
-		( new Record_View_Model() )->safe_create();
 
 		parent::before_insert();
 	}

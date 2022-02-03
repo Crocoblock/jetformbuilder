@@ -9,7 +9,7 @@
 		></cx-vui-select>
 		<cx-vui-button
 			@click="applyAction"
-			:loading="loading"
+			:loading="isLoading( 'applyButton' )"
 			:disabled="doingAction"
 			button-style="accent"
 			size="mini"
@@ -20,8 +20,15 @@
 </template>
 
 <script>
+import Constants from '../constants';
+
 const { i18n } = JetFBMixins;
 const { applyFilters } = wp.hooks;
+
+const {
+		  CHOOSE_ACTION,
+		  CLICK_ACTION,
+	  } = Constants;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
@@ -34,64 +41,37 @@ const {
 
 export default {
 	name: 'ChooseAction',
-	props: {
-		options: {
-			type: Array,
-			default: () => [],
-		},
-	},
-	data() {
-		return {
-			loading: false,
-		};
-	},
 	mixins: [ i18n ],
-	created() {
-		if ( this.isInitializedColumn( 'choose' ) ) {
-			return;
-		}
-
-		this.actionsList.forEach( ( { value: action } ) => {
-			this.addActionPromise( {
-				action,
-				promise( resolve ) {
-					this.onFinish();
-					resolve();
-				},
-			} );
-		} );
-
-		this.initializeColumn( 'choose' );
-	},
 	computed: {
 		...mapState( [
 			'doingAction',
 			'currentAction',
 			'actionsList',
-			'actionsPromises',
-			'actionsResponseCallbacks',
 		] ),
 		...mapGetters( [
-			'isInitializedColumn',
+			'isLoading'
 		] ),
 	},
 	methods: {
 		...mapMutations( [
 			'toggleDoingAction',
 			'setCurrentAction',
-			'addActionPromise',
-			'addActionResponseCallback',
-			'initializeColumn',
+			'toggleLoading',
 		] ),
 		...mapActions( [
 			'runRowAction',
 		] ),
 		onFinish() {
-			this.loading = ! this.loading;
+			this.toggleLoading( 'applyButton' );
 			this.toggleDoingAction();
 		},
 		applyAction() {
-			this.runRowAction( this.currentAction ).then( () => {
+			this.onFinish();
+
+			this.runRowAction( {
+				action: this.currentAction,
+				context: CHOOSE_ACTION
+			} ).then( () => {
 				this.onFinish();
 			} ).catch( () => {
 				this.onFinish();

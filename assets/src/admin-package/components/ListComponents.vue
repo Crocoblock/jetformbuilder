@@ -3,6 +3,7 @@
 		<div
 			v-for="( component, index ) in components"
 			:key="'entry_' + index"
+			class="jfb-list-components-item"
 		>
 			<keep-alive>
 				<component

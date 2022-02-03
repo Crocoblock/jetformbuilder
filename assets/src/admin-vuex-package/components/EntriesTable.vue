@@ -68,7 +68,6 @@
 							:key="action.value"
 							href="javascript:void(0)"
 							:class="getActionClass( action )"
-							:disabled="doingAction"
 							@click="onClickAction( action, entry )"
 						>
 							{{ action.label }}
@@ -81,12 +80,19 @@
 </template>
 
 <script>
+import Constants from '../constants';
+
 const {
 		  ChooseColumn,
 		  LinkTypeColumn,
 	  } = JetFBComponents;
 
 const { GetColumnComponent } = JetFBMixins;
+
+const {
+		  CHOOSE_ACTION,
+		  CLICK_ACTION,
+	  } = Constants;
 
 const defaultColumns = {
 	choose: ChooseColumn,
@@ -147,15 +153,15 @@ export default {
 		...mapState( [
 			'currentList',
 			'actionsList',
-			'doingAction'
+			'doingAction',
 		] ),
 	},
 	methods: {
 		...mapMutations( [
-			'toggleDoingAction'
+			'toggleDoingAction',
 		] ),
 		...mapActions( [
-			'runRowAction'
+			'runRowAction',
 		] ),
 		getActionClass( action ) {
 			const { type = 'default', class_name = '' } = action;
@@ -164,6 +170,7 @@ export default {
 				'list-table-item-actions-single': true,
 				[ class_name ]: true,
 				[ 'list-table-item-actions-single--type-' + type ]: true,
+				'disabled': this.doingAction,
 			};
 		},
 		attachComponentsByType() {
@@ -204,9 +211,12 @@ export default {
 			return this.getColumnComponentByPrefix( column, 'item' );
 		},
 		onClickAction( { value: action }, { id } ) {
+			this.toggleDoingAction();
+
 			this.runRowAction( {
 				action,
-				payload: [ id.value ]
+				context: CLICK_ACTION,
+				payload: [ id.value ],
 			} ).then( () => {
 				this.toggleDoingAction();
 			} ).catch( () => {
@@ -254,6 +264,10 @@ export default {
 				&-danger {
 					color: firebrick;
 				}
+			}
+			&.disabled {
+				pointer-events: none;
+				cursor: default;
 			}
 		}
 	}

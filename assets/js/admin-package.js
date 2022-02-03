@@ -508,6 +508,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ListComponents",
   props: {
@@ -1199,7 +1200,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         return 'object' === _typeof(message) ? message === null || message === void 0 ? void 0 : message.message : message;
       };
 
-      return function (payload, resolve, reject) {
+      return function (resolve, reject) {
         var onSuccess = function onSuccess(message) {
           if ('function' === typeof resolve) {
             resolve();
@@ -1225,11 +1226,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         };
 
         try {
-          callableFunc.call(_this, {
-            payload: payload,
-            onSuccess: onSuccess,
-            onError: onError
-          });
+          for (var _len = arguments.length, payload = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+            payload[_key - 2] = arguments[_key];
+          }
+
+          callableFunc.call.apply(callableFunc, [_this, {
+            resolve: onSuccess,
+            reject: onError
+          }].concat(payload));
         } catch (error) {
           onError(error.message);
         }
@@ -3281,7 +3285,7 @@ var render = function () {
     _vm._l(_vm.components, function (component, index) {
       return _c(
         "div",
-        { key: "entry_" + index },
+        { key: "entry_" + index, staticClass: "jfb-list-components-item" },
         [_c("keep-alive", [_c(component, { tag: "component" })], 1)],
         1
       )
@@ -4191,7 +4195,6 @@ window.JetFBMixins = {
   GetIncomingMessages: _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_18__["default"],
   FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_19__["default"]
 };
-window.JetFBConst = {};
 })();
 
 /******/ })()

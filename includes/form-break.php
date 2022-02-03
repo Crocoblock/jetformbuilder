@@ -219,7 +219,7 @@ class Form_Break {
 			return '';
 		}
 
-		if ( ! $is_last && ! Live_Form::instance()->is_field( $field, 'form-break' ) ) {
+		if ( ! $is_last && 'form-break' !== Block_Helper::delete_namespace( $field ) ) {
 			return '';
 		}
 

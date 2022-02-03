@@ -117,4 +117,8 @@ class Block_Helper {
 		return ( stripos( $block_name, Form_Manager::NAMESPACE_FIELDS ) !== false );
 	}
 
+	public static function render_with_context( $block, $context ) {
+		return ( new \WP_Block( $block, $context ) )->render();
+	}
+
 }

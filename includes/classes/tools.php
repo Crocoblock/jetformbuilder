@@ -181,16 +181,19 @@ class Tools {
 	 *
 	 * @param bool $for_elementor
 	 *
+	 * @param array $args
+	 *
 	 * @return array [description]
 	 */
-	public static function get_forms_list_for_js( $for_elementor = false ) {
-		$posts = get_posts(
+	public static function get_forms_list_for_js( $for_elementor = false, $args = array() ) {
+		$posts = get_posts( array_merge(
 			array(
 				'post_status'    => 'publish',
 				'posts_per_page' => - 1,
 				'post_type'      => jet_form_builder()->post_type->slug(),
-			)
-		);
+			),
+			$args
+		) );
 
 		return self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
 	}
@@ -328,8 +331,8 @@ class Tools {
 	 */
 	public static function is_valid_timestamp( $timestamp ) {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
-			   && ( $timestamp <= PHP_INT_MAX )
-			   && ( $timestamp >= ~PHP_INT_MAX );
+		       && ( $timestamp <= PHP_INT_MAX )
+		       && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
@@ -529,8 +532,8 @@ class Tools {
 
 		foreach ( $array2 as $key => &$value ) {
 			if ( is_array( $value )
-				 && isset( $merged [ $key ] )
-				 && is_array( $merged [ $key ] )
+			     && isset( $merged [ $key ] )
+			     && is_array( $merged [ $key ] )
 			) {
 				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
 			} else {
@@ -569,10 +572,6 @@ class Tools {
 		return $last === $changed ? $source : $if_empty;
 	}
 
-	public static function render_block_with_context( $block, $context ) {
-		return ( new \WP_Block( $block, $context ) )->render();
-	}
-
 	public static function get_site_host() {
 		return str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 	}
@@ -585,7 +584,7 @@ class Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
+			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
 				return (string) $value;
 			};
 		}

@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
@@ -108,7 +109,7 @@ class Repeater_Field_Render extends Base {
 		);
 
 		foreach ( $wp_block['innerBlocks'] as $block ) {
-			$html .= Tools::render_block_with_context(
+			$html .= Block_Helper::render_with_context(
 				$block,
 				array(
 					'jet-forms/repeater-field--name' => $this->block_type->parent_repeater_name(),

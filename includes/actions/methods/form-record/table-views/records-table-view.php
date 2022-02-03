@@ -7,6 +7,8 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Not_Viewed_Record_Endpoint;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -77,7 +79,6 @@ class Records_Table_View extends View_Base {
 			new Models\Record_Action_Result_Model(),
 			new Models\Record_Error_Model(),
 			new Models\Record_Field_Model(),
-			new Models\Record_View_Model(),
 		);
 	}
 
@@ -104,12 +105,20 @@ class Records_Table_View extends View_Base {
 				'type'     => 'danger'
 			),
 			array(
-				'value' => 'view',
-				'label' => __( 'Mark as Viewed', 'jet-form-builder' ),
+				'value'    => 'view',
+				'label'    => __( 'Mark as Viewed', 'jet-form-builder' ),
+				'endpoint' => array(
+					'method' => Mark_As_Viewed_Record_Endpoint::get_methods(),
+					'url'    => Mark_As_Viewed_Record_Endpoint::rest_url()
+				),
 			),
 			array(
-				'value' => 'not_view',
-				'label' => __( 'Mark as not Viewed', 'jet-form-builder' ),
+				'value'    => 'not_view',
+				'label'    => __( 'Mark as not Viewed', 'jet-form-builder' ),
+				'endpoint' => array(
+					'method' => Mark_As_Not_Viewed_Record_Endpoint::get_methods(),
+					'url'    => Mark_As_Not_Viewed_Record_Endpoint::rest_url()
+				),
 			),
 		);
 	}
@@ -120,7 +129,21 @@ class Records_Table_View extends View_Base {
 	 * @return array
 	 */
 	public function get_row_actions( $record ): array {
-		return $this->get_single_actions();
+		$actions = $this->get_single_actions();
+		list( $delete ) = $actions;
+
+		list( $view ) = array_filter( $actions, function ( $action ) {
+			return 'view' === $action['value'];
+		} );
+
+		list( $not_view ) = array_filter( $actions, function ( $action ) {
+			return 'not_view' === $action['value'];
+		} );
+
+		return array(
+			$delete,
+			empty( $record['is_viewed'] ) ? $view : $not_view
+		);
 	}
 
 	public function load_data(): array {

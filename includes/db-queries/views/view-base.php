@@ -152,6 +152,10 @@ abstract class View_Base {
 		return $row;
 	}
 
+	protected function prepare_values( $values ) {
+		return $values;
+	}
+
 	/**
 	 * @param $row
 	 *
@@ -163,6 +167,22 @@ abstract class View_Base {
 
 		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception( $this->empty_message(), $row );
+		}
+
+		return $prepared;
+	}
+
+	/**
+	 * @param $values
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public function get_prepared_values( $values ) {
+		$prepared = $this->prepare_values( $values );
+
+		if ( empty( $prepared ) ) {
+			throw new Query_Builder_Exception( $this->empty_message(), $values );
 		}
 
 		return $prepared;
@@ -222,6 +242,22 @@ abstract class View_Base {
 	 */
 	public static function all() {
 		return ( new static )->query()->query_all();
+	}
+
+	/**
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public static function one() {
+		return ( new static )->query()->query_one();
+	}
+
+	/**
+	 * @return array|mixed
+	 * @throws Query_Builder_Exception
+	 */
+	public static function values() {
+		return ( new static )->query()->query_col();
 	}
 
 	/**

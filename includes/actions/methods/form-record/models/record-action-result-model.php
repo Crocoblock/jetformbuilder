@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 
+use Jet_Form_Builder\Actions\Methods\Form_Record\Constraints\Record_Model_Constraint;
+use Jet_Form_Builder\Db_Queries\Base_Db_Constraint;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 
 class Record_Action_Result_Model extends Base_Db_Model {
@@ -26,6 +28,12 @@ class Record_Action_Result_Model extends Base_Db_Model {
 		return array(
 			'id'        => 'primary key',
 			'record_id' => 'index',
+		);
+	}
+
+	public function foreign_relations(): array {
+		return array(
+			new Record_Model_Constraint()
 		);
 	}
 }

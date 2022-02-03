@@ -12,6 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./admin-vuex-package/constants.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -39,9 +40,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+
 var _JetFBMixins = JetFBMixins,
     i18n = _JetFBMixins.i18n;
 var applyFilters = wp.hooks.applyFilters;
+var CHOOSE_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CHOOSE_ACTION,
+    CLICK_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CLICK_ACTION;
 window.jfbEventBus = window.jfbEventBus || new Vue();
 var _Vuex = Vuex,
     mapState = _Vuex.mapState,
@@ -50,53 +54,24 @@ var _Vuex = Vuex,
     mapActions = _Vuex.mapActions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'ChooseAction',
-  props: {
-    options: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    }
-  },
-  data: function data() {
-    return {
-      loading: false
-    };
-  },
   mixins: [i18n],
-  created: function created() {
-    var _this = this;
-
-    if (this.isInitializedColumn('choose')) {
-      return;
-    }
-
-    this.actionsList.forEach(function (_ref) {
-      var action = _ref.value;
-
-      _this.addActionPromise({
-        action: action,
-        promise: function promise(resolve) {
-          this.onFinish();
-          resolve();
-        }
-      });
-    });
-    this.initializeColumn('choose');
-  },
-  computed: _objectSpread(_objectSpread({}, mapState(['doingAction', 'currentAction', 'actionsList', 'actionsPromises', 'actionsResponseCallbacks'])), mapGetters(['isInitializedColumn'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction', 'setCurrentAction', 'addActionPromise', 'addActionResponseCallback', 'initializeColumn'])), mapActions(['runRowAction'])), {}, {
+  computed: _objectSpread(_objectSpread({}, mapState(['doingAction', 'currentAction', 'actionsList'])), mapGetters(['isLoading'])),
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction', 'setCurrentAction', 'toggleLoading'])), mapActions(['runRowAction'])), {}, {
     onFinish: function onFinish() {
-      this.loading = !this.loading;
+      this.toggleLoading('applyButton');
       this.toggleDoingAction();
     },
     applyAction: function applyAction() {
-      var _this2 = this;
+      var _this = this;
 
-      this.runRowAction(this.currentAction).then(function () {
-        _this2.onFinish();
+      this.onFinish();
+      this.runRowAction({
+        action: this.currentAction,
+        context: CHOOSE_ACTION
+      }).then(function () {
+        _this.onFinish();
       }).catch(function () {
-        _this2.onFinish();
+        _this.onFinish();
       });
     }
   })
@@ -204,6 +179,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./admin-vuex-package/constants.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -297,12 +273,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
+
 var _JetFBComponents = JetFBComponents,
     ChooseColumn = _JetFBComponents.ChooseColumn,
     LinkTypeColumn = _JetFBComponents.LinkTypeColumn;
 var _JetFBMixins = JetFBMixins,
     GetColumnComponent = _JetFBMixins.GetColumnComponent;
+var CHOOSE_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CHOOSE_ACTION,
+    CLICK_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CLICK_ACTION;
 var defaultColumns = {
   choose: ChooseColumn
 };
@@ -363,7 +341,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
           class_name = _action$class_name === void 0 ? '' : _action$class_name;
       return _ref = {
         'list-table-item-actions-single': true
-      }, _defineProperty(_ref, class_name, true), _defineProperty(_ref, 'list-table-item-actions-single--type-' + type, true), _ref;
+      }, _defineProperty(_ref, class_name, true), _defineProperty(_ref, 'list-table-item-actions-single--type-' + type, true), _defineProperty(_ref, 'disabled', this.doingAction), _ref;
     },
     attachComponentsByType: function attachComponentsByType() {
       var _this$currentList$;
@@ -426,8 +404,10 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 
       var action = _ref3.value;
       var id = _ref4.id;
+      this.toggleDoingAction();
       this.runRowAction({
         action: action,
+        context: CLICK_ACTION,
         payload: [id.value]
       }).then(function () {
         _this2.toggleDoingAction();
@@ -825,6 +805,24 @@ var item = _StatusInfo__WEBPACK_IMPORTED_MODULE_0__["default"];
 
 /***/ }),
 
+/***/ "./admin-vuex-package/constants.js":
+/*!*****************************************!*\
+  !*** ./admin-vuex-package/constants.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  CHOOSE_ACTION: 'chooseAction',
+  CLICK_ACTION: 'clickAction'
+});
+
+/***/ }),
+
 /***/ "./admin-vuex-package/mixins/TableStoreHelper.js":
 /*!*******************************************************!*\
   !*** ./admin-vuex-package/mixins/TableStoreHelper.js ***!
@@ -840,14 +838,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getActions": () => (/* binding */ getActions),
 /* harmony export */   "getBaseStore": () => (/* binding */ getBaseStore)
 /* harmony export */ });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -881,7 +871,6 @@ function getBaseState() {
     // for pagination
     columns: {},
     currentList: [],
-    loadingPage: false,
     queryState: {
       currentPage: 1,
       extreme_id: 0,
@@ -900,6 +889,10 @@ function getBaseState() {
     initializedColumns: [],
     // for disable action buttons: filter, apply list-action & other.
     doingAction: false,
+    loading: {
+      page: false,
+      applyButton: false
+    },
     filters: {}
   };
 }
@@ -941,6 +934,16 @@ function getGetters() {
 
         return (_state$filters$slug = state.filters[slug]) !== null && _state$filters$slug !== void 0 ? _state$filters$slug : {};
       };
+    },
+    isLoading: function isLoading(state) {
+      return function (what) {
+        var _state$loading$what;
+
+        return (_state$loading$what = state.loading[what]) !== null && _state$loading$what !== void 0 ? _state$loading$what : false;
+      };
+    },
+    hasFilters: function hasFilters(state) {
+      return 0 < Object.keys(state.filters).length;
     }
   };
   return _objectSpread(_objectSpread({}, getters), {}, {
@@ -963,8 +966,10 @@ function getMutations() {
     setColumns: function setColumns(state, columns) {
       state.columns = columns;
     },
-    toggleLoadingPage: function toggleLoadingPage(state) {
-      state.loadingPage = !state.loadingPage;
+    toggleLoading: function toggleLoading(state, what) {
+      var _state$loading$what2;
+
+      state.loading = _objectSpread(_objectSpread({}, state.loading), {}, _defineProperty({}, what, !((_state$loading$what2 = state.loading[what]) !== null && _state$loading$what2 !== void 0 ? _state$loading$what2 : false)));
     },
 
     /*
@@ -1006,23 +1011,23 @@ function getMutations() {
     initializeColumn: function initializeColumn(state, column) {
       state.initializedColumns = [].concat(_toConsumableArray(state.initializedColumns), [column]);
     },
-    addActionPromise: function addActionPromise(state, _ref4) {
+    setActionPromises: function setActionPromises(state, _ref4) {
       var _state$actionsPromise;
 
-      var _ref5 = _slicedToArray(_ref4, 2),
-          action = _ref5[0],
-          promises = _ref5[1];
-
-      state.actionsPromises = _objectSpread(_objectSpread({}, state.actionsPromises), {}, _defineProperty({}, action, _objectSpread(_objectSpread({}, (_state$actionsPromise = state.actionsPromises[action]) !== null && _state$actionsPromise !== void 0 ? _state$actionsPromise : {}), promises)));
+      var action = _ref4.action,
+          promise = _ref4.promise,
+          _ref4$context = _ref4.context,
+          context = _ref4$context === void 0 ? 'default' : _ref4$context;
+      state.actionsPromises = _objectSpread(_objectSpread({}, state.actionsPromises), {}, _defineProperty({}, action, _objectSpread(_objectSpread({}, (_state$actionsPromise = state.actionsPromises[action]) !== null && _state$actionsPromise !== void 0 ? _state$actionsPromise : {}), {}, _defineProperty({}, context, promise))));
     },
     setFilters: function setFilters(state, filters) {
       state.filters = filters;
     },
-    setFilter: function setFilter(state, _ref6) {
+    setFilter: function setFilter(state, _ref5) {
       var _state$filters$slug2;
 
-      var slug = _ref6.slug,
-          props = _ref6.props;
+      var slug = _ref5.slug,
+          props = _ref5.props;
       state.filters[slug] = (_state$filters$slug2 = state.filters[slug]) !== null && _state$filters$slug2 !== void 0 ? _state$filters$slug2 : {};
       state.filters[slug] = _objectSpread(_objectSpread({}, state.filters[slug]), props);
     }
@@ -1033,10 +1038,10 @@ function getActions() {
     /*
      for choose column
      */
-    changeChecked: function changeChecked(_ref7, _ref8) {
-      var commit = _ref7.commit;
-      var id = _ref8.id,
-          active = _ref8.active;
+    changeChecked: function changeChecked(_ref6, _ref7) {
+      var commit = _ref6.commit;
+      var id = _ref7.id,
+          active = _ref7.active;
 
       if (active) {
         commit('addChecked', {
@@ -1052,10 +1057,10 @@ function getActions() {
     /*
      for pagination
      */
-    setQueriedPage: function setQueriedPage(_ref9, pageNum) {
-      var commit = _ref9.commit,
-          getters = _ref9.getters,
-          state = _ref9.state;
+    setQueriedPage: function setQueriedPage(_ref8, pageNum) {
+      var commit = _ref8.commit,
+          getters = _ref8.getters,
+          state = _ref8.state;
       var offset = getOffset(+pageNum, state.queryState.limit);
       var itemTo = offset + state.queryState.limit;
       commit('setQueryState', {
@@ -1064,11 +1069,11 @@ function getActions() {
         itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo
       });
     },
-    fetchPage: function fetchPage(_ref10, endpoint) {
-      var commit = _ref10.commit,
-          getters = _ref10.getters,
-          dispatch = _ref10.dispatch,
-          state = _ref10.state;
+    fetchPage: function fetchPage(_ref9, endpoint) {
+      var commit = _ref9.commit,
+          getters = _ref9.getters,
+          dispatch = _ref9.dispatch,
+          state = _ref9.state;
       var _state$queryState = state.queryState,
           limit = _state$queryState.limit,
           sort = _state$queryState.sort,
@@ -1090,9 +1095,9 @@ function getActions() {
         commit('toggleLoadingPage');
       });
     },
-    fetch: function fetch(_ref11, options) {
-      var commit = _ref11.commit,
-          getters = _ref11.getters;
+    fetch: function fetch(_ref10, options) {
+      var commit = _ref10.commit,
+          getters = _ref10.getters;
       return new Promise(function (resolve, reject) {
         apiFetch(options).then(resolve).catch(function (error) {
           jfbEventBus.$CXNotice.add({
@@ -1104,35 +1109,40 @@ function getActions() {
         }).finally(reject);
       });
     },
-    maybeFetchFilters: function maybeFetchFilters(_ref12, endpoint) {
-      var commit = _ref12.commit,
-          getters = _ref12.getters,
-          dispatch = _ref12.dispatch,
-          state = _ref12.state;
+    maybeFetchFilters: function maybeFetchFilters(_ref11, endpoint) {
+      var commit = _ref11.commit,
+          getters = _ref11.getters,
+          dispatch = _ref11.dispatch,
+          state = _ref11.state;
 
-      if (Object.keys(state.filters).length || state.doingAction) {
+      if (getters.hasFilters || state.doingAction) {
         return;
       }
 
       commit('toggleDoingAction');
-      dispatch('fetch', endpoint).then(function (response) {
+      apiFetch(endpoint).then(function (response) {
         commit('setFilters', response.filters);
       }).finally(function () {
         commit('toggleDoingAction');
       });
     },
-    runRowAction: function runRowAction(_ref13, _ref14) {
+    runRowAction: function runRowAction(_ref12, _ref13) {
       var _state$actionsPromise2;
 
-      var state = _ref13.state;
-      var action = _ref14.action,
-          payload = _ref14.payload,
-          context = _ref14.context;
-      var promise = (_state$actionsPromise2 = state.actionsPromises[incoming.action][context]) !== null && _state$actionsPromise2 !== void 0 ? _state$actionsPromise2 : [];
-      new Promise(function (resolve, reject) {
-        var _incoming;
+      var state = _ref12.state;
+      var action = _ref13.action,
+          _ref13$context = _ref13.context,
+          context = _ref13$context === void 0 ? 'default' : _ref13$context,
+          _ref13$payload = _ref13.payload,
+          payload = _ref13$payload === void 0 ? false : _ref13$payload;
+      var promise = (_state$actionsPromise2 = state.actionsPromises[action][context]) !== null && _state$actionsPromise2 !== void 0 ? _state$actionsPromise2 : false;
 
-        return func((_incoming = incoming) === null || _incoming === void 0 ? void 0 : _incoming.payload, resolve, reject);
+      if (false === payload) {
+        return new Promise(promise);
+      }
+
+      return new Promise(function (resolve, reject) {
+        return promise.apply(void 0, [resolve, reject].concat(_toConsumableArray(payload)));
       });
     }
   };
@@ -1216,7 +1226,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAwGA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;ACvGD;ADwGC;EACC,OAAA;EACA,cAAA;ACtGF;ADuGE;EACC,OAAA;ACrGH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAoFA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;ACnFD;ADoFC;EACC,OAAA;EACA,cAAA;AClFF;ADmFE;EACC,OAAA;ACjFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1243,7 +1253,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 100%;\n  column-gap: 0.5em;\n  margin-bottom: 0.5em;\n  margin-left: 3em;\n  visibility: hidden;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AA6NA;EACC,YAAA;AC5ND;ADgOC;EACC,8BAAA;AC7NF;AD+NC;EACC,sBAAA;AC7NF;AD8NE;EACC,mBAAA;AC5NH;AD+NC;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AC7NF;AD+NC;EACC,aAAA;EACA,WAAA;EACA,iBAAA;EACA,oBAAA;EACA,gBAAA;EACA,kBAAA;AC7NF;AD8NE;EACC,YAAA;AC5NH;AD8NE;EACC,sBAAA;AC5NH;AD8NI;EACC,gBAAA;AC5NL;ADiOC;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;AC/NF;ADiOC;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;AC/NF;ADgOE;EACC,OAAA;AC9NH;ADiOC;EACC,OAAA;AC/NF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t}\r\n\t.list-table-item-columns {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: space-between;\r\n\t\twidth: 100%;\r\n\t}\r\n\t.list-table-item-actions {\r\n\t\tdisplay: flex;\r\n\t\twidth: 100%;\r\n\t\tcolumn-gap: 0.5em;\r\n\t\tmargin-bottom: 0.5em;\r\n\t\tmargin-left: 3em;\r\n\t\tvisibility: hidden;\r\n\t\t& > *:not(:last-child)::after {\r\n\t\t\tcontent: '|';\r\n\t\t}\r\n\t\t&-single {\r\n\t\t\ttext-decoration: unset;\r\n\t\t\t&--type {\r\n\t\t\t\t&-danger {\r\n\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell > span {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: flex-start;\r\n\t\talign-items: center;\r\n\t\tflex-wrap: wrap;\r\n\t}\r\n\t.list-table-item__cell {\r\n\t\twhite-space: nowrap;\r\n\t\toverflow: hidden;\r\n\t\ttext-align: left;\r\n\t\t&:not(.cell--choose) {\r\n\t\t\tflex: 1\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 100%;\n  column-gap: 0.5em;\n  margin-bottom: 0.5em;\n  margin-left: 3em;\n  visibility: hidden;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 100%;\n  column-gap: 0.5em;\n  margin-bottom: 0.5em;\n  margin-left: 3em;\n  visibility: hidden;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AAuOA;EACC,YAAA;ACtOD;AD0OC;EACC,8BAAA;ACvOF;ADyOC;EACC,sBAAA;ACvOF;ADwOE;EACC,mBAAA;ACtOH;ADyOC;EACC,aAAA;EACA,8BAAA;EACA,WAAA;ACvOF;ADyOC;EACC,aAAA;EACA,WAAA;EACA,iBAAA;EACA,oBAAA;EACA,gBAAA;EACA,kBAAA;ACvOF;ADwOE;EACC,YAAA;ACtOH;ADwOE;EACC,sBAAA;ACtOH;ADwOI;EACC,gBAAA;ACtOL;ADyOG;EACC,oBAAA;EACA,eAAA;ACvOJ;AD2OC;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;ACzOF;AD2OC;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;ACzOF;AD0OE;EACC,OAAA;ACxOH;AD2OC;EACC,OAAA;ACzOF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t}\r\n\t.list-table-item-columns {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: space-between;\r\n\t\twidth: 100%;\r\n\t}\r\n\t.list-table-item-actions {\r\n\t\tdisplay: flex;\r\n\t\twidth: 100%;\r\n\t\tcolumn-gap: 0.5em;\r\n\t\tmargin-bottom: 0.5em;\r\n\t\tmargin-left: 3em;\r\n\t\tvisibility: hidden;\r\n\t\t& > *:not(:last-child)::after {\r\n\t\t\tcontent: '|';\r\n\t\t}\r\n\t\t&-single {\r\n\t\t\ttext-decoration: unset;\r\n\t\t\t&--type {\r\n\t\t\t\t&-danger {\r\n\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\t&.disabled {\r\n\t\t\t\tpointer-events: none;\r\n\t\t\t\tcursor: default;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell > span {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: flex-start;\r\n\t\talign-items: center;\r\n\t\tflex-wrap: wrap;\r\n\t}\r\n\t.list-table-item__cell {\r\n\t\twhite-space: nowrap;\r\n\t\toverflow: hidden;\r\n\t\ttext-align: left;\r\n\t\t&:not(.cell--choose) {\r\n\t\t\tflex: 1\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 100%;\n  column-gap: 0.5em;\n  margin-bottom: 0.5em;\n  margin-left: 3em;\n  visibility: hidden;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2156,7 +2166,7 @@ var render = function () {
       _vm._v(" "),
       _c("cx-vui-button", {
         attrs: {
-          loading: _vm.loading,
+          loading: _vm.isLoading("applyButton"),
           disabled: _vm.doingAction,
           "button-style": "accent",
           size: "mini",
@@ -2422,10 +2432,7 @@ var render = function () {
                               {
                                 key: action.value,
                                 class: _vm.getActionClass(action),
-                                attrs: {
-                                  href: "javascript:void(0)",
-                                  disabled: _vm.doingAction,
-                                },
+                                attrs: { href: "javascript:void(0)" },
                                 on: {
                                   click: function ($event) {
                                     return _vm.onClickAction(action, entry)
@@ -3228,11 +3235,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ChooseAction__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/ChooseAction */ "./admin-vuex-package/components/ChooseAction.vue");
 /* harmony import */ var _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/TableStoreHelper */ "./admin-vuex-package/mixins/TableStoreHelper.js");
 /* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./constants */ "./admin-vuex-package/constants.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -3254,10 +3263,7 @@ window.JetFBMixins = _objectSpread(_objectSpread({}, window.JetFBMixins), {}, {
   TableStoreHelper: _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__,
   TableViewMixin: _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__["default"]
 });
-window.JetFBConst = _objectSpread(_objectSpread({}, window.JetFBConst), {}, {
-  CHOOSE_ACTION: 'chooseAction',
-  CLICK_ACTION: 'clickAction'
-});
+window.JetFBConst = _constants__WEBPACK_IMPORTED_MODULE_8__["default"];
 })();
 
 /******/ })()

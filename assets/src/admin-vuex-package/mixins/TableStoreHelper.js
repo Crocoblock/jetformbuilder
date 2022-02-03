@@ -16,7 +16,6 @@ export function getBaseState() {
 		// for pagination
 		columns: {},
 		currentList: [],
-		loadingPage: false,
 		queryState: {
 			currentPage: 1,
 			extreme_id: 0,
@@ -35,6 +34,10 @@ export function getBaseState() {
 		initializedColumns: [],
 		// for disable action buttons: filter, apply list-action & other.
 		doingAction: false,
+		loading: {
+			page: false,
+			applyButton: false,
+		},
 		filters: {},
 	};
 }
@@ -65,6 +68,12 @@ export function getGetters() {
 		getFilter: state => slug => {
 			return state.filters[ slug ] ?? {};
 		},
+		isLoading: state => what => {
+			return ( state.loading[ what ] ?? false );
+		},
+		hasFilters: state => {
+			return 0 < Object.keys( state.filters ).length;
+		}
 	};
 
 	return {
@@ -92,8 +101,11 @@ export function getMutations() {
 		setColumns( state, columns ) {
 			state.columns = columns;
 		},
-		toggleLoadingPage( state ) {
-			state.loadingPage = ! state.loadingPage;
+		toggleLoading( state, what ) {
+			state.loading = {
+				...state.loading,
+				[ what ]: ! ( state.loading[ what ] ?? false ),
+			};
 		},
 		/*
 		 for choose column
@@ -133,14 +145,14 @@ export function getMutations() {
 				column,
 			];
 		},
-		addActionPromise( state, [ action, promises ] ) {
+		setActionPromises( state, { action, promise, context = 'default' } ) {
 			state.actionsPromises = {
 				...state.actionsPromises,
 				[ action ]: {
 					...(
 						state.actionsPromises[ action ] ?? {}
 					),
-					...promises,
+					[ context ]: promise,
 				},
 			};
 		},
@@ -218,21 +230,25 @@ export function getActions() {
 			} );
 		},
 		maybeFetchFilters( { commit, getters, dispatch, state }, endpoint ) {
-			if ( Object.keys( state.filters ).length || state.doingAction ) {
+			if ( getters.hasFilters || state.doingAction ) {
 				return;
 			}
 			commit( 'toggleDoingAction' );
 
-			dispatch( 'fetch', endpoint ).then( response => {
+			apiFetch( endpoint ).then( response => {
 				commit( 'setFilters', response.filters );
 			} ).finally( () => {
 				commit( 'toggleDoingAction' );
 			} )
 		},
-		runRowAction( { state }, { action, payload, context } ) {
-			const promise = state.actionsPromises[ incoming.action ][ context ] ?? [];
+		runRowAction( { state }, { action, context = 'default', payload = false } ) {
+			const promise = state.actionsPromises[ action ][ context ] ?? false;
 
-			new Promise( ( resolve, reject ) => func( incoming?.payload, resolve, reject ) )
+			if ( false === payload ) {
+				return new Promise( promise );
+			}
+
+			return new Promise( (resolve, reject) => promise(resolve, reject, ...payload ) );
 		},
 	};
 }

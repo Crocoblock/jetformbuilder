@@ -62,6 +62,13 @@ abstract class Base_Db_Model {
 	}
 
 	/**
+	 * @return Base_Db_Constraint[]
+	 */
+	public function foreign_relations(): array {
+		return array();
+	}
+
+	/**
 	 * @param array $columns
 	 *
 	 * @return int
@@ -160,7 +167,7 @@ abstract class Base_Db_Model {
 	}
 
 	public function schema_engine() {
-		return '';
+		return 'InnoDB';
 	}
 
 	/**

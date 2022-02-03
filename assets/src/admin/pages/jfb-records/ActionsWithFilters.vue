@@ -5,6 +5,7 @@
 		</div>
 		<div class="jfb-row-wrapper-item">
 			<ListComponents
+				v-if="hasFilters"
 				:components="filtersComponents"
 			/>
 		</div>
@@ -13,7 +14,6 @@
 
 <script>
 import FormFilter from './filters/FormFilter';
-import UserFilter from './filters/UserFilter';
 
 const {
 		  ChooseAction,
@@ -26,13 +26,13 @@ const {
 		  mapMutations,
 		  mapActions,
 		  mapState,
+		  mapGetters,
 	  } = Vuex;
 
 const { applyFilters } = wp.hooks;
 
 const filtersComponents = applyFilters( 'jet.fb.records.page.filters', [
 	FormFilter,
-	UserFilter
 ] );
 
 export default {
@@ -49,7 +49,10 @@ export default {
 	},
 	computed: {
 		...mapState( [
-			'doingAction'
+			'doingAction',
+		] ),
+		...mapGetters( [
+			'hasFilters'
 		] ),
 		wrapperClass() {
 			return {
@@ -89,16 +92,23 @@ export default {
 	.cx-vui-component {
 		padding: unset;
 	}
-
 	.cx-vui-select {
 		background-color: white;
 	}
-
 	.jfb-list-components {
 		display: flex;
 		gap: 2em;
 		align-items: end;
 		padding: 1em;
+		&-item {
+			flex: 0 0 30%;
+			.cx-vui-component__control {
+				flex: 1;
+				select {
+					width: 100%;
+				}
+			}
+		}
 	}
 }
 

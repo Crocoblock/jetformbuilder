@@ -30,13 +30,13 @@ $this->add_attribute( 'data-default-val', $default );
 		<?php
 
 		if ( $placeholder ) {
-			$selected_placeholder = '';
+			$additional_attrs = 'disabled';
 
 			if ( ! $default ) {
-				$selected_placeholder = 'selected';
+				$additional_attrs .= ' selected';
 			}
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			printf( '<option value="" %1$s>%2$s</option>', $selected_placeholder, $placeholder );
+			printf( '<option value="" %1$s>%2$s</option>', $additional_attrs, $placeholder );
 		}
 
 		if ( ! empty( $args['field_options'] ) ) {

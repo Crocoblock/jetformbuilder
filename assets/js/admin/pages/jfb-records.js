@@ -89,6 +89,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _ActionsWithFilters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ActionsWithFilters */ "./admin/pages/jfb-records/ActionsWithFilters.vue");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -160,6 +172,26 @@ var _Vuex = Vuex,
       context: CLICK_ACTION,
       promise: this.promiseWrapper(this.deleteClicked.bind(this))
     });
+    this.setActionPromises({
+      action: 'view',
+      context: CHOOSE_ACTION,
+      promise: this.promiseWrapper(this.viewChecked.bind(this))
+    });
+    this.setActionPromises({
+      action: 'view',
+      context: CLICK_ACTION,
+      promise: this.promiseWrapper(this.viewClicked.bind(this))
+    });
+    this.setActionPromises({
+      action: 'not_view',
+      context: CHOOSE_ACTION,
+      promise: this.promiseWrapper(this.viewChecked.bind(this))
+    });
+    this.setActionPromises({
+      action: 'not_view',
+      context: CLICK_ACTION,
+      promise: this.promiseWrapper(this.notViewClicked.bind(this))
+    });
   },
   mounted: function mounted() {
     var _this = this;
@@ -177,6 +209,42 @@ var _Vuex = Vuex,
   },
   computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction'])),
   methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setQueryState', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch'])), {}, {
+    beforeRunFetch: function beforeRunFetch() {
+      var _this$getCurrentActio;
+
+      if (!this.checked.length) {
+        var _this$messages;
+
+        throw new Error((_this$messages = this.messages) === null || _this$messages === void 0 ? void 0 : _this$messages.empty_checked);
+      }
+
+      if (!((_this$getCurrentActio = this.getCurrentAction) !== null && _this$getCurrentActio !== void 0 && _this$getCurrentActio.endpoint)) {
+        var _this$messages2;
+
+        throw new Error((_this$messages2 = this.messages) === null || _this$messages2 === void 0 ? void 0 : _this$messages2.empty_action);
+      }
+    },
+    onCheckedOptions: function onCheckedOptions() {
+      var _this$getCurrentActio2;
+
+      return _objectSpread(_objectSpread({}, (_this$getCurrentActio2 = this.getCurrentAction) === null || _this$getCurrentActio2 === void 0 ? void 0 : _this$getCurrentActio2.endpoint), {}, {
+        data: {
+          checked: this.checked
+        }
+      });
+    },
+    getOptionsStatic: function getOptionsStatic(action, payload) {
+      var _this$getAction;
+
+      var _payload = _slicedToArray(payload, 1),
+          id = _payload[0];
+
+      return _objectSpread(_objectSpread({}, (_this$getAction = this.getAction(action)) === null || _this$getAction === void 0 ? void 0 : _this$getAction.endpoint), {}, {
+        data: {
+          checked: [id]
+        }
+      });
+    },
     deleteAction: function deleteAction(_ref) {
       var _this2 = this;
 
@@ -200,27 +268,16 @@ var _Vuex = Vuex,
       }).catch(reject);
     },
     deleteChecked: function deleteChecked(_ref2) {
-      var _this$getCurrentActio;
-
       var resolve = _ref2.resolve,
           reject = _ref2.reject;
       this.beforeRunFetch();
-
-      var options = _objectSpread(_objectSpread({}, (_this$getCurrentActio = this.getCurrentAction) === null || _this$getCurrentActio === void 0 ? void 0 : _this$getCurrentActio.endpoint), {}, {
-        data: {
-          checked: this.checked
-        }
-      });
-
       this.deleteAction({
         resolve: resolve,
         reject: reject,
-        options: options
+        options: this.onCheckedOptions()
       });
     },
     deleteClicked: function deleteClicked(_ref3) {
-      var _this$getAction;
-
       var resolve = _ref3.resolve,
           reject = _ref3.reject;
 
@@ -228,34 +285,61 @@ var _Vuex = Vuex,
         payload[_key - 1] = arguments[_key];
       }
 
-      var id = payload[0];
-
-      var options = _objectSpread(_objectSpread({}, (_this$getAction = this.getAction('delete')) === null || _this$getAction === void 0 ? void 0 : _this$getAction.endpoint), {}, {
-        data: {
-          checked: [id]
-        }
-      });
-
       this.deleteAction({
         resolve: resolve,
         reject: reject,
-        options: options
+        options: this.getOptionsStatic('delete', payload)
       });
     },
-    beforeRunFetch: function beforeRunFetch() {
-      var _this$getCurrentActio2;
+    viewAction: function viewAction(_ref4) {
+      var _this3 = this;
 
-      if (!this.checked.length) {
-        var _this$messages;
+      var resolve = _ref4.resolve,
+          reject = _ref4.reject,
+          options = _ref4.options;
+      apiFetch(options).then(function (response) {
+        _this3.setList(response.list);
 
-        throw new Error((_this$messages = this.messages) === null || _this$messages === void 0 ? void 0 : _this$messages.empty_checked);
+        resolve(response.message);
+      }).catch(reject);
+    },
+    viewChecked: function viewChecked(_ref5) {
+      var resolve = _ref5.resolve,
+          reject = _ref5.reject;
+      this.beforeRunFetch();
+      this.viewAction({
+        resolve: resolve,
+        reject: reject,
+        options: this.onCheckedOptions()
+      });
+    },
+    viewClicked: function viewClicked(_ref6) {
+      var resolve = _ref6.resolve,
+          reject = _ref6.reject;
+
+      for (var _len2 = arguments.length, payload = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        payload[_key2 - 1] = arguments[_key2];
       }
 
-      if (!((_this$getCurrentActio2 = this.getCurrentAction) !== null && _this$getCurrentActio2 !== void 0 && _this$getCurrentActio2.endpoint)) {
-        var _this$messages2;
+      this.viewAction({
+        resolve: resolve,
+        reject: reject,
+        options: this.getOptionsStatic('view', payload)
+      });
+    },
+    notViewClicked: function notViewClicked(_ref7) {
+      var resolve = _ref7.resolve,
+          reject = _ref7.reject;
 
-        throw new Error((_this$messages2 = this.messages) === null || _this$messages2 === void 0 ? void 0 : _this$messages2.empty_action);
+      for (var _len3 = arguments.length, payload = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        payload[_key3 - 1] = arguments[_key3];
       }
+
+      this.viewAction({
+        resolve: resolve,
+        reject: reject,
+        options: this.getOptionsStatic('not_view', payload)
+      });
     }
   })
 });
@@ -353,7 +437,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AA4KE;EACC,SAAA;AC3KH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--records {\r\n\t.cx-vue-list-table {\r\n\t\t.cell--id.cell--id {\r\n\t\t\tflex: 0.3;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AA4OE;EACC,SAAA;AC3OH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--records {\r\n\t.cx-vue-list-table {\r\n\t\t.cell--id.cell--id {\r\n\t\t\tflex: 0.3;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

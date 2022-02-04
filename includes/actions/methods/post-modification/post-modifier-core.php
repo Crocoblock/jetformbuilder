@@ -63,7 +63,7 @@ abstract class Post_Modifier_Core extends Abstract_Modifier {
 	 * @throws Silence_Exception
 	 */
 	public function set_action_once( string $action ) {
-		if ( 'insert' !== $this->action ) {
+		if ( 'insert' !== $this->get_action() ) {
 			return $this;
 		}
 

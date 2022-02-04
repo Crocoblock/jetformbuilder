@@ -1,5 +1,6 @@
 const { addQueryArgs } = JetFBActions;
 const { apiFetch } = wp;
+const { __ } = wp.i18n;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
@@ -117,6 +118,12 @@ export function getMutations() {
 		toggleHead( state ) {
 			state.chooseHead = state.chooseHead ? '' : 'checked';
 		},
+		unChooseHead( state ) {
+			state.chooseHead = '';
+		},
+		chooseHead( state ) {
+			state.chooseHead = 'checked';
+		},
 		addToStore( state, { id } ) {
 			state.idList.push( id );
 		},
@@ -202,6 +209,10 @@ export function getActions() {
 				itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo,
 			} );
 		},
+		updateQueryState( { commit, getters, state, dispatch }, newState ) {
+			commit( 'setQueryState', newState );
+			dispatch( 'setQueriedPage', state.queryState.currentPage );
+		},
 		fetchPage( { commit, getters, dispatch, state }, endpoint ) {
 			const { limit, sort, currentPage: page } = state.queryState;
 
@@ -249,6 +260,10 @@ export function getActions() {
 			} )
 		},
 		runRowAction( { state }, { action, context = 'default', payload = false } ) {
+			if ( 'object' !== typeof state.actionsPromises[ action ] ) {
+				return Promise.reject( __( 'Please choose your action', 'jet-form-builder' ) );
+			}
+
 			const promise = state.actionsPromises[ action ][ context ] ?? false;
 
 			if ( false === payload ) {

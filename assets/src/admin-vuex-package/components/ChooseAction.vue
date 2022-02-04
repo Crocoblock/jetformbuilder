@@ -58,7 +58,7 @@ export default {
 			'setCurrentAction',
 			'toggleLoading',
 			'removeAll',
-			'toggleHead'
+			'unChooseHead'
 		] ),
 		...mapActions( [
 			'runRowAction',
@@ -79,7 +79,7 @@ export default {
 				this.onFinish();
 			} ).finally( () => {
 				this.removeAll();
-				this.toggleHead();
+				this.unChooseHead();
 			} );
 		},
 	},

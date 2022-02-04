@@ -124,7 +124,6 @@ export default {
 	methods: {
 		...mapMutations( [
 			'setList',
-			'setQueryState',
 			'setActionsList',
 			'setActionPromises',
 			'toggleDoingAction',
@@ -132,6 +131,7 @@ export default {
 		] ),
 		...mapActions( [
 			'fetch',
+			'updateQueryState',
 		] ),
 		beforeRunFetch() {
 			if ( ! this.checked.length ) {
@@ -172,7 +172,7 @@ export default {
 					state.limit = response.list.length;
 				}
 
-				this.setQueryState( state );
+				this.updateQueryState( state );
 
 				resolve( response.message );
 

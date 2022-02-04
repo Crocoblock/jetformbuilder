@@ -208,7 +208,7 @@ var _Vuex = Vuex,
     observer.observe(document.querySelector('.jfb-page-header'));
   },
   computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setQueryState', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch', 'updateQueryState'])), {}, {
     beforeRunFetch: function beforeRunFetch() {
       var _this$getCurrentActio;
 
@@ -262,7 +262,7 @@ var _Vuex = Vuex,
           state.limit = response.list.length;
         }
 
-        _this2.setQueryState(state);
+        _this2.updateQueryState(state);
 
         resolve(response.message);
       }).catch(reject);

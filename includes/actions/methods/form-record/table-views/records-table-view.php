@@ -52,9 +52,6 @@ class Records_Table_View extends View_Base {
 	public function get_columns_headings(): array {
 		return array(
 			self::COLUMN_CHOOSE => array(),
-			'id'                => array(
-				'label' => __( 'ID', 'jet-form-builder' ),
-			),
 			'form'              => array(
 				'label' => __( 'Form', 'jet-form-builder' ),
 			),
@@ -66,6 +63,9 @@ class Records_Table_View extends View_Base {
 			),
 			'user'              => array(
 				'label' => __( 'Submitted By', 'jet-form-builder' ),
+			),
+			'id'                => array(
+				'label' => __( 'ID', 'jet-form-builder' ),
 			),
 		);
 	}

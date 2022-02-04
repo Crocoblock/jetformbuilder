@@ -33,25 +33,25 @@ class Delete_Form_Record_Endpoint extends Rest_Api_Endpoint_Base {
 				array(
 					array(
 						'type'   => 'in',
-						'values' => array( 'id', $body['checked'] ?? array() )
-					)
+						'values' => array( 'id', $body['checked'] ?? array() ),
+					),
 				)
 			);
 		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => __( 'Something went wrong on delete.', 'jet-form-builder' )
+					'message' => __( 'Something went wrong on delete.', 'jet-form-builder' ),
 				),
 				503
 			);
 		}
 
-		//Record_Model::
+		// Record_Model::
 		return new \WP_REST_Response(
 			array(
 				'message' => __( 'Successfully removed', 'jet-form-builder' ),
-				'list'    => ( new Records_Table_View )->prepare_list(),
-				'total'   => Record_View_Count::count()
+				'list'    => ( new Records_Table_View() )->prepare_list(),
+				'total'   => Record_View_Count::count(),
 			)
 		);
 	}

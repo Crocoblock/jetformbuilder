@@ -18,7 +18,6 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 			return array();
 		}
 		$response = array();
-		Plugin::instance()->form_handler->request_handler->save_repeater( $this->name, $this->value );
 
 		foreach ( $this->value as $index => $row ) {
 			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $row, $this->inside_conditional );

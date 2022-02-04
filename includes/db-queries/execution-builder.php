@@ -49,6 +49,8 @@ class Execution_Builder {
 		$model->before_insert();
 
 		$insert_columns = array_merge( $model->get_defaults(), $columns );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->insert( $model->table(), $insert_columns, $format );
 
 		if ( ! $wpdb->insert_id ) {
@@ -75,6 +77,7 @@ class Execution_Builder {
 
 		$model->before_update();
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$result = (int) $wpdb->update( $model->table(), $columns, $where, $format, $where_format );
 
 		if ( ! $result ) {
@@ -127,10 +130,8 @@ class Execution_Builder {
 			->set_view( $view )
 			->result();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$result = (int) $wpdb->query(
-			$wpdb->prepare( 'DELETE FROM %s %s', $view->table(), $where )
-		);
+		// phpcs:ignore WordPress.DB
+		$result = (int) $wpdb->query( "DELETE FROM {$view->table()} {$where}" );
 
 		if ( ! $result ) {
 			throw new Query_Builder_Exception(
@@ -158,10 +159,8 @@ class Execution_Builder {
 
 		$set = Query_Builder::build_set( $columns );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$result = (int) $wpdb->query(
-			$wpdb->prepare( 'UPDATE %s %s %s;', $view->table(), $set, $where )
-		);
+		// phpcs:ignore WordPress.DB
+		$result = (int) $wpdb->query( "UPDATE {$view->table()} {$set} {$where};" );
 
 		if ( ! $result ) {
 			throw new Query_Builder_Exception(
@@ -207,11 +206,9 @@ class Execution_Builder {
 		$queries = array();
 
 		foreach ( $model->foreign_relations() as $constraint ) {
-			$queries[] = $wpdb->prepare(
-				'ALTER TABLE %s ADD %s',
-				$model::table(),
-				$constraint->build()
-			);
+			$constraint->set_foreign_table( $model::table_name() );
+
+			$queries[] = "ALTER TABLE {$model::table()} ADD {$constraint->build()}";
 		}
 
 		// phpcs:ignore WordPress.DB
@@ -224,8 +221,9 @@ class Execution_Builder {
 		$table = $model::table();
 
 		if ( ! isset( $this->existed_tables[ $table ] ) ) {
-			$find = $this->wpdb()->get_var(
-				$wpdb->prepare( 'SHOW TABLES LIKE "%s"', $table )
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$find = $wpdb->get_var(
+				$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )
 			);
 
 			$this->existed_tables[ $table ] = ( $table === $find );

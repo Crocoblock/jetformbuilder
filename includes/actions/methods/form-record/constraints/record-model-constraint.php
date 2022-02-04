@@ -12,6 +12,7 @@ class Record_Model_Constraint extends Base_Db_Constraint {
 	public function __construct() {
 		$this->set_table( Record_Model::table() );
 		$this->set_foreign_keys( array( 'record_id' ) );
+		$this->on_delete( self::ACTION_CASCADE );
 	}
 
 }

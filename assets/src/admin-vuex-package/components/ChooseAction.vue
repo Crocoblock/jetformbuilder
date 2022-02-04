@@ -57,6 +57,8 @@ export default {
 			'toggleDoingAction',
 			'setCurrentAction',
 			'toggleLoading',
+			'removeAll',
+			'toggleHead'
 		] ),
 		...mapActions( [
 			'runRowAction',
@@ -75,6 +77,9 @@ export default {
 				this.onFinish();
 			} ).catch( () => {
 				this.onFinish();
+			} ).finally( () => {
+				this.removeAll();
+				this.toggleHead();
 			} );
 		},
 	},

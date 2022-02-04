@@ -56,7 +56,7 @@ var _Vuex = Vuex,
   name: 'ChooseAction',
   mixins: [i18n],
   computed: _objectSpread(_objectSpread({}, mapState(['doingAction', 'currentAction', 'actionsList'])), mapGetters(['isLoading'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction', 'setCurrentAction', 'toggleLoading'])), mapActions(['runRowAction'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction', 'setCurrentAction', 'toggleLoading', 'removeAll', 'toggleHead'])), mapActions(['runRowAction'])), {}, {
     onFinish: function onFinish() {
       this.toggleLoading('applyButton');
       this.toggleDoingAction();
@@ -72,6 +72,10 @@ var _Vuex = Vuex,
         _this.onFinish();
       }).catch(function () {
         _this.onFinish();
+      }).finally(function () {
+        _this.removeAll();
+
+        _this.toggleHead();
       });
     }
   })
@@ -882,6 +886,7 @@ function getBaseState() {
     },
     // for choose column
     checked: [],
+    chooseHead: '',
     idList: [],
     currentAction: '',
     actionsList: [],
@@ -915,6 +920,9 @@ function getGetters() {
       return function (id) {
         return state.checked.includes(id);
       };
+    },
+    isCheckedHead: function isCheckedHead(state) {
+      return 'checked' === state.chooseHead;
     },
     getAction: function getAction(state) {
       return function (id) {
@@ -975,6 +983,9 @@ function getMutations() {
     /*
      for choose column
      */
+    toggleHead: function toggleHead(state) {
+      state.chooseHead = state.chooseHead ? '' : 'checked';
+    },
     addToStore: function addToStore(state, _ref) {
       var id = _ref.id;
       state.idList.push(id);
@@ -1226,7 +1237,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAoFA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;ACnFD;ADoFC;EACC,OAAA;EACA,cAAA;AClFF;ADmFE;EACC,OAAA;ACjFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AAyFA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;ACxFD;ADyFC;EACC,OAAA;EACA,cAAA;ACvFF;ADwFE;EACC,OAAA;ACtFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

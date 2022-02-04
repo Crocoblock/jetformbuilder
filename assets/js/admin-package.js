@@ -620,17 +620,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'choose--head',
-  data: function data() {
-    return {
-      isChecked: false,
-      value: ''
-    };
-  },
   methods: {
     onClick: function onClick() {
-      this.isChecked = !this.isChecked;
-      this.value = this.isChecked ? 'checked' : '';
-      this.$store.commit(this.isChecked ? 'activeAll' : 'removeAll');
+      this.$store.commit('toggleHead');
+      this.$store.commit(this.$store.getters.isCheckedHead ? 'activeAll' : 'removeAll');
     }
   }
 });
@@ -1571,7 +1564,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-d2b192c8] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-package/entries-table-columns/choose/ChooseHead.vue","webpack://./../ChooseHead.vue"],"names":[],"mappings":"AAgCA;EACC,cAAA;AC/BD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-d2b192c8] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-package/entries-table-columns/choose/ChooseHead.vue","webpack://./../ChooseHead.vue"],"names":[],"mappings":"AAyBA;EACC,cAAA;ACxBD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3409,7 +3402,7 @@ var render = function () {
   return _c("cx-vui-checkbox", {
     attrs: {
       "options-list": [{ value: "checked" }],
-      value: _vm.value,
+      value: _vm.$store.state.chooseHead,
       "return-type": "single",
       name: "jfb_record_all",
     },

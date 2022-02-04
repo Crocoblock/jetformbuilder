@@ -27,6 +27,7 @@ export function getBaseState() {
 		},
 		// for choose column
 		checked: [],
+		chooseHead: '',
 		idList: [],
 		currentAction: '',
 		actionsList: [],
@@ -58,6 +59,9 @@ export function getGetters() {
 		 */
 		isChecked: state => id => {
 			return state.checked.includes( id );
+		},
+		isCheckedHead: state => {
+			return 'checked' === state.chooseHead;
 		},
 		getAction: state => id => {
 			return state.actionsList.find( action => id === action.value );
@@ -110,6 +114,9 @@ export function getMutations() {
 		/*
 		 for choose column
 		 */
+		toggleHead( state ) {
+			state.chooseHead = state.chooseHead ? '' : 'checked';
+		},
 		addToStore( state, { id } ) {
 			state.idList.push( id );
 		},

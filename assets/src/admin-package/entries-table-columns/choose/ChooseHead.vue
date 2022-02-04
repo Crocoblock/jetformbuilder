@@ -1,7 +1,7 @@
 <template>
 	<cx-vui-checkbox
 		:options-list="[ { value: 'checked' } ]"
-		:value="value"
+		:value="$store.state.chooseHead"
 		@input="onClick"
 		return-type="single"
 		name="jfb_record_all"
@@ -12,18 +12,11 @@
 <script>
 export default {
 	name: 'choose--head',
-	data() {
-		return {
-			isChecked: false,
-			value: ''
-		};
-	},
 	methods: {
 		onClick() {
-			this.isChecked = ! this.isChecked;
-			this.value = this.isChecked ? 'checked' : '';
+			this.$store.commit( 'toggleHead' );
 
-			this.$store.commit( this.isChecked ? 'activeAll' : 'removeAll' );
+			this.$store.commit( this.$store.getters.isCheckedHead ? 'activeAll' : 'removeAll' );
 		},
 	},
 };

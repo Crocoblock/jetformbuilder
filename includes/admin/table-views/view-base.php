@@ -16,10 +16,15 @@ abstract class View_Base implements Repository_Static_Item_It {
 
 	abstract public function get_columns_headings(): array;
 
-	abstract public function get_raw_list( $offset, $limit );
+	abstract public function get_raw_list( array $args ): array;
 
 	public function get_list(): array {
-		return $this->get_raw_list( 0, 15 );
+		return $this->get_raw_list(
+			array(
+				'offset' => 0,
+				'limit'  => 15,
+			)
+		);
 	}
 
 	public function get_single_actions(): array {

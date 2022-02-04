@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h4>Filter by Form</h4>
+		<h4>{{ messages.filter_form_title }}</h4>
 		<cx-vui-select
 			:options-list="filter.options || []"
 			:wrapper-css="[ 'equalwidth' ]"
@@ -38,12 +38,5 @@ export default {
 <style scoped lang="scss">
 .cx-vui-component {
 	padding: unset;
-}
-</style>
-
-<style>
-.cx-vui-f-select__results {
-	max-height: 35vh;
-	overflow: auto;
 }
 </style>

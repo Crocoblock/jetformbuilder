@@ -683,14 +683,7 @@ var _Vuex = Vuex,
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TablePagination",
   mixins: [i18n, GetIncoming],
-  computed: _objectSpread(_objectSpread({}, mapState(['queryState', 'loadingPage'])), {}, {
-    endpoint: function endpoint() {
-      var _this$getIncoming = this.getIncoming(),
-          receive_url = _this$getIncoming.receive_url;
-
-      return receive_url;
-    }
-  }),
+  computed: _objectSpread({}, mapState(['queryState', 'loadingPage'])),
   methods: {
     changeLimit: function changeLimit(_ref) {
       var value = _ref.target.value;
@@ -706,7 +699,7 @@ var _Vuex = Vuex,
       this.$store.commit('setQueryState', {
         limit: +value
       });
-      this.$store.dispatch('fetchPage', this.endpoint);
+      this.$store.dispatch('fetchPage');
     },
     changePage: function changePage(pageNum) {
       if (this.loadingPage) {
@@ -716,7 +709,7 @@ var _Vuex = Vuex,
       this.$store.commit('setQueryState', {
         currentPage: pageNum
       });
-      this.$store.dispatch('fetchPage', this.endpoint);
+      this.$store.dispatch('fetchPage');
     }
   }
 });
@@ -907,6 +900,18 @@ function getBaseState() {
     filters: {}
   };
 }
+
+var prepareFiltersQuery = function prepareFiltersQuery(filters) {
+  var query = {};
+
+  for (var filtersKey in filters) {
+    var filter = filters[filtersKey];
+    query[filtersKey] = filter.selected;
+  }
+
+  return query;
+};
+
 function getGetters() {
   var getters = {
     /*
@@ -958,6 +963,21 @@ function getGetters() {
     },
     hasFilters: function hasFilters(state) {
       return 0 < Object.keys(state.filters).length;
+    },
+    fetchListOptions: function fetchListOptions(state) {
+      return function (endpoint) {
+        var _state$queryState = state.queryState,
+            limit = _state$queryState.limit,
+            sort = _state$queryState.sort,
+            page = _state$queryState.currentPage;
+        return _objectSpread(_objectSpread({}, endpoint), {}, {
+          url: addQueryArgs({
+            limit: limit,
+            sort: sort,
+            page: page
+          }, endpoint.url)
+        });
+      };
     }
   };
   return _objectSpread(_objectSpread({}, getters), {}, {
@@ -1100,28 +1120,17 @@ function getActions() {
       commit('setQueryState', newState);
       dispatch('setQueriedPage', state.queryState.currentPage);
     },
-    fetchPage: function fetchPage(_ref10, endpoint) {
+    fetchPage: function fetchPage(_ref10) {
       var commit = _ref10.commit,
           getters = _ref10.getters,
           dispatch = _ref10.dispatch,
           state = _ref10.state;
-      var _state$queryState = state.queryState,
-          limit = _state$queryState.limit,
-          sort = _state$queryState.sort,
-          page = _state$queryState.currentPage;
-
-      var options = _objectSpread(_objectSpread({}, endpoint), {}, {
-        url: addQueryArgs({
-          limit: limit,
-          sort: sort,
-          page: page
-        }, endpoint.url)
-      });
-
+      var receive_url = window.JetFBPageConfig.receive_url;
+      var options = getters.fetchListOptions(receive_url);
       commit('toggleLoadingPage');
       dispatch('fetch', options).then(function (response) {
         commit('setList', response.list);
-        dispatch('setQueriedPage', page);
+        dispatch('updateQueryState', {});
       }).finally(function () {
         commit('toggleLoadingPage');
       });
@@ -1370,7 +1379,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0 0 0 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AAoFA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,oBAAA;EACA,oBAAA;ACnFD;ADqFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;ACnFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 0 0 0 1.5em;\r\n\tmargin-bottom: unset;\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0 0 0 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0 0 0 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA+EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,oBAAA;EACA,oBAAA;AC9ED;ADgFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;AC9EH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 0 0 0 1.5em;\r\n\tmargin-bottom: unset;\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0 0 0 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

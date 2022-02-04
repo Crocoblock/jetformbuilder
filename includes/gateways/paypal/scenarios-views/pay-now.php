@@ -44,7 +44,7 @@ class Pay_Now extends Scenario_View_Base {
 		);
 	}
 
-	public function get_raw_list( $offset, $limit ) {
-		// TODO: Implement get_raw_list() method.
+	public function get_raw_list( array $args ): array {
+		return array();
 	}
 }

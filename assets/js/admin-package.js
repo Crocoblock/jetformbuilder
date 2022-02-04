@@ -1022,14 +1022,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var _Vuex = Vuex,
     mapGetters = _Vuex.mapGetters,
-    mapMutations = _Vuex.mapMutations;
+    mapMutations = _Vuex.mapMutations,
+    mapActions = _Vuex.mapActions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: _objectSpread(_objectSpread({}, mapGetters(['getFilter'])), {}, {
     filter: function filter() {
       return this.getFilter(this.filter_id);
     }
   }),
-  methods: _objectSpread(_objectSpread({}, mapMutations(['setFilter'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setFilter'])), mapActions(['filterRows'])), {}, {
     setCurrentFilter: function setCurrentFilter(props) {
       this.setFilter({
         slug: this.filter_id,
@@ -1040,6 +1041,7 @@ var _Vuex = Vuex,
       this.setCurrentFilter({
         selected: value
       });
+      this.filterRows();
     }
   })
 });

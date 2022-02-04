@@ -46,11 +46,6 @@ export default {
 			'queryState',
 			'loadingPage',
 		] ),
-		endpoint() {
-			const { receive_url } = this.getIncoming();
-
-			return receive_url;
-		},
 	},
 	methods: {
 		changeLimit( { target: { value } } ) {
@@ -64,7 +59,7 @@ export default {
 				limit: +value,
 			} );
 
-			this.$store.dispatch( 'fetchPage', this.endpoint );
+			this.$store.dispatch( 'fetchPage' );
 		},
 		changePage( pageNum ) {
 			if ( this.loadingPage ) {
@@ -74,7 +69,7 @@ export default {
 				currentPage: pageNum,
 			} );
 
-			this.$store.dispatch( 'fetchPage', this.endpoint );
+			this.$store.dispatch( 'fetchPage' );
 		},
 	},
 }

@@ -82,7 +82,10 @@ class Records_Table_View extends View_Base {
 		);
 	}
 
-	public function get_raw_list( $offset, $limit ) {
+	public function get_raw_list( array $args ): array {
+		$offset = $args['offset'] ?? 0;
+		$limit  = $args['limit'] ?? 15;
+
 		try {
 			return ( new Record_View() )
 				->set_limit( array( $offset, $limit ) )
@@ -165,11 +168,10 @@ class Records_Table_View extends View_Base {
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
 			'messages'         => array(
-				'filter_form'   => __( 'Select Form', 'jet-form-builder' ),
-				'filter_user'   => __( 'Select User', 'jet-form-builder' ),
-				'filter_status' => __( 'Select Status', 'jet-form-builder' ),
-				'empty_checked' => __( 'You have not selected any record.', 'jet-form-builder' ),
-				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
+				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
+				'filter_form_title' => __( 'Filter by Form', 'jet-form-builder' ),
+				'empty_checked'     => __( 'You have not selected any record.', 'jet-form-builder' ),
+				'empty_action'      => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),
 		);
 	}

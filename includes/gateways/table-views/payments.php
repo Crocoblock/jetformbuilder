@@ -15,9 +15,12 @@ class Payments extends View_Base {
 		return 'SUBSCRIBE_NOW_PAYMENTS';
 	}
 
-	public function get_raw_list( $offset, $limit ): array {
+	public function get_raw_list( array $args ): array {
+		$offset = $args['offset'] ?? 0;
+		$limit  = $args['limit'] ?? 15;
+
 		try {
-			return ( new Payment_View )
+			return ( new Payment_View() )
 				->set_limit( array( $offset, $limit ) )
 				->query()
 				->query_all();
@@ -33,7 +36,7 @@ class Payments extends View_Base {
 				'method' => Rest_Endpoints\Receive_Payments::get_methods(),
 				'url'    => Rest_Endpoints\Receive_Payments::rest_url(),
 			),
-			'total'       => Payment_Count_View::count()
+			'total'       => Payment_Count_View::count(),
 		);
 	}
 
@@ -81,7 +84,7 @@ class Payments extends View_Base {
 				'label' => __( 'Type', 'jet-form-builder' ),
 			),
 			'status'         => array(
-				'label' => __( 'Status', 'jet-form-builder' )
+				'label' => __( 'Status', 'jet-form-builder' ),
 			),
 			'gross'          => array(
 				'label' => __( 'Gross', 'jet-form-builder' ),
@@ -114,7 +117,7 @@ class Payments extends View_Base {
 	public function get_payment_type_with_label( $record ) {
 		return array(
 			'slug'  => $this->get_payment_type( $record ),
-			'label' => $this->get_payment_type_label( $record )
+			'label' => $this->get_payment_type_label( $record ),
 		);
 	}
 
@@ -126,17 +129,20 @@ class Payments extends View_Base {
 		$name = $record['ship']['full_name'] ?? '';
 
 		if ( empty( $name ) ) {
-			$name = implode( ' ', array_filter(
-				array(
-					$record['payer']['first_name'] ?? '',
-					$record['payer']['last_name'] ?? ''
+			$name = implode(
+				' ',
+				array_filter(
+					array(
+						$record['payer']['first_name'] ?? '',
+						$record['payer']['last_name'] ?? '',
+					)
 				)
-			) );
+			);
 		}
 
 		return array(
 			'email_address' => $record['payer']['email'] ?? '',
-			'full_name'     => $name ?: __( 'Not attached', 'jet-form-builder' )
+			'full_name'     => $name ?: __( 'Not attached', 'jet-form-builder' ),
 		);
 	}
 

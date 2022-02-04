@@ -44,6 +44,18 @@ export function getBaseState() {
 	};
 }
 
+const prepareFiltersQuery = filters => {
+	const query = {};
+
+	for ( const filtersKey in filters ) {
+		const filter = filters[ filtersKey ];
+
+		query[ filtersKey ] = filter.selected;
+	}
+
+	return query;
+};
+
 export function getGetters() {
 	const getters = {
 		/*
@@ -74,11 +86,28 @@ export function getGetters() {
 			return state.filters[ slug ] ?? {};
 		},
 		isLoading: state => what => {
-			return ( state.loading[ what ] ?? false );
+			return (
+				state.loading[ what ] ?? false
+			);
 		},
 		hasFilters: state => {
 			return 0 < Object.keys( state.filters ).length;
-		}
+		},
+		fetchListOptions: state => endpoint => {
+			const { limit, sort, currentPage: page } = state.queryState;
+
+			return {
+				...endpoint,
+				url: addQueryArgs(
+					{
+						limit,
+						sort,
+						page,
+					},
+					endpoint.url,
+				),
+			};
+		},
 	};
 
 	return {
@@ -109,7 +138,9 @@ export function getMutations() {
 		toggleLoading( state, what ) {
 			state.loading = {
 				...state.loading,
-				[ what ]: ! ( state.loading[ what ] ?? false ),
+				[ what ]: ! (
+					state.loading[ what ] ?? false
+				),
 			};
 		},
 		/*
@@ -199,12 +230,12 @@ export function getActions() {
 		 for pagination
 		 */
 		setQueriedPage( { commit, getters, state }, pageNum ) {
-			const offset = getOffset( +pageNum, state.queryState.limit );
+			const offset = getOffset( + pageNum, state.queryState.limit );
 
 			const itemTo = offset + state.queryState.limit;
 
 			commit( 'setQueryState', {
-				currentPage: +pageNum,
+				currentPage: + pageNum,
 				itemsFrom: offset + 1,
 				itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo,
 			} );
@@ -213,38 +244,31 @@ export function getActions() {
 			commit( 'setQueryState', newState );
 			dispatch( 'setQueriedPage', state.queryState.currentPage );
 		},
-		fetchPage( { commit, getters, dispatch, state }, endpoint ) {
-			const { limit, sort, currentPage: page } = state.queryState;
+		fetchPage( { commit, getters, dispatch, state } ) {
+			const { receive_url } = window.JetFBPageConfig;
 
-			const options = {
-				...endpoint,
-				url: addQueryArgs(
-					{ limit, sort, page },
-					endpoint.url,
-				),
-			};
+			const options = getters.fetchListOptions( receive_url );
 
 			commit( 'toggleLoadingPage' );
 
 			dispatch( 'fetch', options ).then( response => {
 				commit( 'setList', response.list );
-				dispatch( 'setQueriedPage', page );
+				dispatch( 'updateQueryState', {} );
 			} ).finally( () => {
 				commit( 'toggleLoadingPage' );
 			} );
 		},
 		fetch( { commit, getters }, options ) {
 			return new Promise( ( resolve, reject ) => {
-				apiFetch( options ).then( resolve )
-					.catch( error => {
-						jfbEventBus.$CXNotice.add( {
-							message: error.message,
-							type: 'error',
-							duration: 4000,
-						} );
+				apiFetch( options ).then( resolve ).catch( error => {
+					jfbEventBus.$CXNotice.add( {
+						message: error.message,
+						type: 'error',
+						duration: 4000,
+					} );
 
-						reject( error );
-					} ).finally( reject );
+					reject( error );
+				} ).finally( reject );
 			} );
 		},
 		maybeFetchFilters( { commit, getters, dispatch, state }, endpoint ) {
@@ -257,7 +281,7 @@ export function getActions() {
 				commit( 'setFilters', response.filters );
 			} ).finally( () => {
 				commit( 'toggleDoingAction' );
-			} )
+			} );
 		},
 		runRowAction( { state }, { action, context = 'default', payload = false } ) {
 			if ( 'object' !== typeof state.actionsPromises[ action ] ) {
@@ -270,7 +294,7 @@ export function getActions() {
 				return new Promise( promise );
 			}
 
-			return new Promise( (resolve, reject) => promise(resolve, reject, ...payload ) );
+			return new Promise( ( resolve, reject ) => promise( resolve, reject, ...payload ) );
 		},
 	};
 }

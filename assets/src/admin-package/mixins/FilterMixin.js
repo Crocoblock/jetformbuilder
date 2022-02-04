@@ -1,7 +1,8 @@
 const {
-		  mapGetters,
-		  mapMutations,
-	  } = Vuex;
+	mapGetters,
+	mapMutations,
+	mapActions,
+} = Vuex;
 
 export default {
 	computed: {
@@ -16,6 +17,9 @@ export default {
 		...mapMutations( [
 			'setFilter',
 		] ),
+		...mapActions( [
+			'filterRows',
+		] ),
 		setCurrentFilter( props ) {
 			this.setFilter( {
 				slug: this.filter_id,
@@ -26,6 +30,7 @@ export default {
 			this.setCurrentFilter( {
 				selected: value,
 			} );
+			this.filterRows();
 		},
 	},
-}
+};

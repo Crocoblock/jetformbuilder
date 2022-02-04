@@ -19,13 +19,27 @@ class Query_Builder {
 	use With_View;
 
 	public $sql;
-	public $select = '';
-	public $join = '';
-	public $where = '';
-	public $limit = '';
+	public $select   = '';
+	public $join     = '';
+	public $where    = '';
+	public $limit    = '';
 	public $order_by = '';
 
 	public $debug = false;
+
+	public static function build_set( array $columns ): string {
+		$pairs = array();
+
+		foreach ( $columns as $name => $value ) {
+			if ( is_numeric( $name ) ) {
+				$pairs[] = $value;
+			} else {
+				$pairs[] = sprintf( '%s = %s', $name, $value );
+			}
+		}
+
+		return 'SET ' . implode( ', ', $pairs );
+	}
 
 	/**
 	 * @return array[]

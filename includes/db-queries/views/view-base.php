@@ -195,9 +195,9 @@ abstract class View_Base {
 	public static function get_paginated_args( $args ): array {
 		return array_merge(
 			array(
-				'limit'      => 25,
-				'sort'       => View_Base::FROM_HIGH_TO_LOW,
-				'page'       => 1
+				'limit' => 25,
+				'sort'  => self::FROM_HIGH_TO_LOW,
+				'page'  => 1,
 			),
 			$args
 		);
@@ -215,11 +215,11 @@ abstract class View_Base {
 	public static function find( $columns ): View_Base {
 		$conditions = static::prepare_columns( $columns );
 
-		return ( new static )->set_conditions( $conditions );
+		return ( new static() )->set_conditions( $conditions );
 	}
 
 
-	public static function findOne( $columns ) {
+	public static function findOne( $columns ): View_Base {
 		return static::find( $columns )->set_limit( array( 1 ) );
 	}
 
@@ -229,48 +229,56 @@ abstract class View_Base {
 	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	public static function findById( $primary_id ) {
+	public static function findById( $primary_id ): array {
 		return static::find( array( 'id' => $primary_id ) )
-			->set_limit( array( 1 ) )
-			->query()
-			->query_one();
+		             ->set_limit( array( 1 ) )
+		             ->query()
+		             ->query_one();
 	}
 
 	/**
 	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	public static function all() {
-		return ( new static )->query()->query_all();
+	public static function all(): array {
+		return ( new static() )->query()->query_all();
 	}
 
 	/**
 	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	public static function one() {
-		return ( new static )->query()->query_one();
+	public static function one(): array {
+		return ( new static() )->query()->query_one();
 	}
 
 	/**
-	 * @return array|mixed
+	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	public static function values() {
-		return ( new static )->query()->query_col();
+	public static function values(): array {
+		return ( new static() )->query()->query_col();
 	}
 
 	/**
-	 * @param $columns
+	 * @param $where
 	 *
 	 * @return int
 	 * @throws Query_Builder_Exception
 	 */
-	public static function delete( $columns ) {
-		$conditions = static::prepare_columns( $columns );
-		$self = ( new static )->set_conditions( $conditions );
+	public static function delete( $where ): int {
+		return Execution_Builder::instance()->view_delete( static::create( $where ) );
+	}
 
-		return Execution_Builder::instance()->delete( $self );
+	/**
+	 * @param array $columns
+	 * @param array $where
+	 *
+	 * @return int
+	 * @throws Query_Builder_Exception
+	 */
+	public static function update( array $columns, array $where ): int {
+		return Execution_Builder::instance()->view_update( $columns, static::create( $where ) );
 	}
 
 	/**
@@ -296,9 +304,20 @@ abstract class View_Base {
 	}
 
 	/**
+	 * @param array $where
+	 *
+	 * @return View_Base
+	 */
+	public static function create( array $where ): View_Base {
+		$conditions = static::prepare_columns( $where );
+
+		return ( new static() )->set_conditions( $conditions );
+	}
+
+	/**
 	 * @return Query_Cache_Builder
 	 */
-	public function query() {
+	public function query(): Query_Builder {
 		return ( new Query_Cache_Builder() )->set_view( $this );
 	}
 

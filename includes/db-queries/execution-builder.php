@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -45,18 +44,20 @@ class Execution_Builder {
 	 * @throws Sql_Exception
 	 */
 	public function insert( Base_Db_Model $model, $columns = array(), $format = null ): int {
+		global $wpdb;
+
 		$model->before_insert();
 
 		$insert_columns = array_merge( $model->get_defaults(), $columns );
-		$this->wpdb()->insert( $model->table(), $insert_columns, $format );
+		$wpdb->insert( $model->table(), $insert_columns, $format );
 
-		if ( ! $this->wpdb()->insert_id ) {
+		if ( ! $wpdb->insert_id ) {
 			throw new Sql_Exception( "Something went wrong on insert into: {$model->table()}", $insert_columns );
 		}
 
 		$model->after_insert( $insert_columns );
 
-		return $this->wpdb()->insert_id;
+		return $wpdb->insert_id;
 	}
 
 	/**
@@ -70,9 +71,11 @@ class Execution_Builder {
 	 * @throws Sql_Exception
 	 */
 	public function update( Base_Db_Model $model, $columns, $where, $format = null, $where_format = null ): int {
+		global $wpdb;
+
 		$model->before_update();
 
-		$result = (int) $this->wpdb()->update( $model->table(), $columns, $where, $format, $where_format );
+		$result = (int) $wpdb->update( $model->table(), $columns, $where, $format, $where_format );
 
 		if ( ! $result ) {
 			throw new Sql_Exception(
@@ -93,10 +96,13 @@ class Execution_Builder {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function core_delete( Base_Db_Model $model, $where, $where_format ): int {
+	public function delete( Base_Db_Model $model, $where, $where_format ): int {
+		global $wpdb;
+
 		$model->before_delete();
 
-		$result = (int) $this->wpdb()->delete( $model->table(), $where, $where_format );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result = (int) $wpdb->delete( $model->table(), $where, $where_format );
 
 		if ( ! $result ) {
 			throw new Sql_Exception(
@@ -114,14 +120,17 @@ class Execution_Builder {
 	 * @return int
 	 * @throws Query_Builder_Exception
 	 */
-	public function delete( View_Base $view ) {
+	public function view_delete( View_Base $view ): int {
+		global $wpdb;
+
 		$where = ( new Query_Conditions_Builder() )
 			->set_view( $view )
 			->result();
 
-		$sql = "DELETE FROM {$view->table()} {$where};";
-
-		$result = (int) $this->wpdb()->query( $sql );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result = (int) $wpdb->query(
+			$wpdb->prepare( 'DELETE FROM %s %s', $view->table(), $where )
+		);
 
 		if ( ! $result ) {
 			throw new Query_Builder_Exception(
@@ -131,7 +140,37 @@ class Execution_Builder {
 		}
 
 		return $result;
+	}
 
+	/**
+	 * @param array $columns
+	 * @param View_Base $view
+	 *
+	 * @return int
+	 * @throws Query_Builder_Exception
+	 */
+	public function view_update( array $columns, View_Base $view ): int {
+		global $wpdb;
+
+		$where = ( new Query_Conditions_Builder() )
+			->set_view( $view )
+			->result();
+
+		$set = Query_Builder::build_set( $columns );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result = (int) $wpdb->query(
+			$wpdb->prepare( 'UPDATE %s %s %s;', $view->table(), $set, $where )
+		);
+
+		if ( ! $result ) {
+			throw new Query_Builder_Exception(
+				"Something went wrong on delete rows in: {$view->table()}",
+				$where
+			);
+		}
+
+		return $result;
 	}
 
 	public function create_table_schema( Base_Db_Model $model ) {
@@ -163,21 +202,33 @@ class Execution_Builder {
 	}
 
 	protected function add_foreign_relations( Base_Db_Model $model ) {
+		global $wpdb;
+
 		$queries = array();
 
 		foreach ( $model->foreign_relations() as $constraint ) {
-			$queries[] = "ALTER TABLE {$model::table()} ADD " . $constraint->build();
+			$queries[] = $wpdb->prepare(
+				'ALTER TABLE %s ADD %s',
+				$model::table(),
+				$constraint->build()
+			);
 		}
 
-		$this->wpdb()->query( implode( '; ', $queries ) );
+		// phpcs:ignore WordPress.DB
+		$wpdb->query( implode( '; ', $queries ) );
 	}
 
 	public function is_exist( Base_Db_Model $model ): bool {
-		$table = $model->table();
+		global $wpdb;
+
+		$table = $model::table();
 
 		if ( ! isset( $this->existed_tables[ $table ] ) ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$this->existed_tables[ $table ] = ( $table === $this->wpdb()->get_var( "SHOW TABLES LIKE '$table'" ) );
+			$find = $this->wpdb()->get_var(
+				$wpdb->prepare( 'SHOW TABLES LIKE "%s"', $table )
+			);
+
+			$this->existed_tables[ $table ] = ( $table === $find );
 		}
 
 		return $this->existed_tables[ $table ];
@@ -208,17 +259,6 @@ class Execution_Builder {
 		}
 
 		dbDelta( $sql );
-	}
-
-	/**
-	 * Returns WPDB instance
-	 *
-	 * @return \QM_DB|\wpdb [description]
-	 */
-	protected function wpdb() {
-		global $wpdb;
-
-		return $wpdb;
 	}
 
 }

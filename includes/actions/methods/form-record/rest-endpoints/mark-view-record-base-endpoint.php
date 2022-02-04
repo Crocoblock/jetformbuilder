@@ -3,11 +3,12 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
 abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
@@ -26,20 +27,19 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 		$body = $request->get_json_params();
 
 		try {
-			( new Record_Model )
-				->update(
-					array( 'is_viewed' => (int) $this->is_viewed() ),
+			Record_View::update(
+				array( 'is_viewed' => (int) $this->is_viewed() ),
+				array(
 					array(
-						array(
-							'type'   => 'in',
-							'values' => array( 'id', $body['checked'] ?? array() )
-						)
-					)
-				);
-		} catch ( Sql_Exception $exception ) {
+						'type'   => 'in',
+						'values' => array( 'id', $body['checked'] ?? array() ),
+					),
+				)
+			);
+		} catch ( Query_Builder_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage()
+					'message' => $exception->getMessage(),
 				),
 				503
 			);
@@ -48,8 +48,7 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 		return new \WP_REST_Response(
 			array(
 				'message' => __( 'Successfully updated', 'jet-form-builder' ),
-				'list'    => ( new Records_Table_View )->prepare_list(),
-				'total'   => Record_View_Count::count()
+				'list'    => ( new Records_Table_View() )->prepare_list(),
 			)
 		);
 	}

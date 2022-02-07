@@ -21,8 +21,11 @@ export default {
 	},
 	computed: {
 		...mapState( [
-			'loadingPage',
+			'loading',
 		] ),
+		loadingPage() {
+			return this.loading?.page;
+		}
 	},
 };
 </script>

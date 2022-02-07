@@ -103,11 +103,13 @@ export function getGetters() {
 						limit,
 						sort,
 						page,
+						filters: prepareFiltersQuery( state.filters ),
 					},
 					endpoint.url,
 				),
 			};
 		},
+
 	};
 
 	return {
@@ -115,6 +117,11 @@ export function getGetters() {
 		getCurrentAction: state => {
 			return getters.getAction( state )( state.currentAction );
 		},
+		getPageOptionsFetch: state => {
+			const { receive_url } = window.JetFBPageConfig;
+
+			return getters.fetchListOptions( state )( receive_url );
+		}
 	};
 }
 
@@ -211,6 +218,11 @@ export function getMutations() {
 				...props,
 			};
 		},
+		clearSelectedFilters( state, replaceMap = {} ) {
+			for ( const filter in state.filters ) {
+				state.filters[ filter ].selected = replaceMap[ filter ] ?? '';
+			}
+		},
 	};
 }
 
@@ -230,12 +242,12 @@ export function getActions() {
 		 for pagination
 		 */
 		setQueriedPage( { commit, getters, state }, pageNum ) {
-			const offset = getOffset( + pageNum, state.queryState.limit );
+			const offset = getOffset( +pageNum, state.queryState.limit );
 
 			const itemTo = offset + state.queryState.limit;
 
 			commit( 'setQueryState', {
-				currentPage: + pageNum,
+				currentPage: +pageNum,
 				itemsFrom: offset + 1,
 				itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo,
 			} );
@@ -245,18 +257,36 @@ export function getActions() {
 			dispatch( 'setQueriedPage', state.queryState.currentPage );
 		},
 		fetchPage( { commit, getters, dispatch, state } ) {
-			const { receive_url } = window.JetFBPageConfig;
+			commit( 'toggleLoading', 'page' );
 
-			const options = getters.fetchListOptions( receive_url );
-
-			commit( 'toggleLoadingPage' );
-
-			dispatch( 'fetch', options ).then( response => {
+			dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
 				commit( 'setList', response.list );
 				dispatch( 'updateQueryState', {} );
 			} ).finally( () => {
-				commit( 'toggleLoadingPage' );
+				commit( 'toggleLoading', 'page' );
 			} );
+		},
+		fetchPageWithFilters( { commit, getters, dispatch, state } ) {
+			commit( 'toggleLoading', 'page' );
+
+			dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
+				dispatch( 'updateList', response );
+			} ).finally( () => {
+				commit( 'toggleLoading', 'page' );
+			} );
+		},
+		updateList( { commit, getters, dispatch, state }, response ) {
+			commit( 'setList', response.list );
+
+			const newState = {
+				total: +( response.total ?? state.queryState.total ),
+			};
+
+			if ( response.list.length < state.queryState.limit ) {
+				newState.limit = response.list.length;
+			}
+
+			dispatch( 'updateQueryState', newState );
 		},
 		fetch( { commit, getters }, options ) {
 			return new Promise( ( resolve, reject ) => {
@@ -295,6 +325,10 @@ export function getActions() {
 			}
 
 			return new Promise( ( resolve, reject ) => promise( resolve, reject, ...payload ) );
+		},
+		clearFiltersWithFetch( { commit, dispatch }, replaceMap ) {
+			commit( 'clearSelectedFilters', replaceMap );
+			dispatch( 'fetchPageWithFilters' );
 		},
 	};
 }

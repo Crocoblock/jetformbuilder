@@ -7,7 +7,11 @@
 			<ListComponents
 				v-if="hasFilters"
 				:components="filtersComponents"
-			/>
+			>
+				<ClearFiltersButton
+					:label="__( 'Clear Filters', 'jet-form-builder' )"
+				/>
+			</ListComponents>
 		</div>
 	</div>
 </template>
@@ -18,9 +22,10 @@ import FormFilter from './filters/FormFilter';
 const {
 		  ChooseAction,
 		  ListComponents,
+		  ClearFiltersButton,
 	  } = JetFBComponents;
 
-const { GetIncoming } = JetFBMixins;
+const { GetIncoming, i18n } = JetFBMixins;
 
 const {
 		  mapMutations,
@@ -40,8 +45,9 @@ export default {
 	components: {
 		ChooseAction,
 		ListComponents,
+		ClearFiltersButton,
 	},
-	mixins: [ GetIncoming ],
+	mixins: [ GetIncoming, i18n ],
 	data() {
 		return {
 			filtersComponents,
@@ -52,7 +58,7 @@ export default {
 			'doingAction',
 		] ),
 		...mapGetters( [
-			'hasFilters'
+			'hasFilters',
 		] ),
 		wrapperClass() {
 			return {

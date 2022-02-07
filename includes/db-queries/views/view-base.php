@@ -36,6 +36,21 @@ abstract class View_Base {
 		return '';
 	}
 
+	public function set_table_args( array $table_args ) {
+		$offset  = $table_args['offset'] ?? 0;
+		$limit   = $table_args['limit'] ?? 15;
+		$filters = $table_args['filters'] ?? array();
+
+		$this->set_limit( array( $offset, $limit ) );
+		$this->set_filters( $filters );
+
+		return $this;
+	}
+
+	public function set_filters( array $filters ) {
+		return $this;
+	}
+
 	/**
 	 * @param $callable
 	 *
@@ -193,7 +208,7 @@ abstract class View_Base {
 	}
 
 	public static function get_paginated_args( $args ): array {
-		return array_merge(
+		$base = array_merge(
 			array(
 				'limit' => 25,
 				'sort'  => self::FROM_HIGH_TO_LOW,
@@ -201,6 +216,10 @@ abstract class View_Base {
 			),
 			$args
 		);
+
+		$base['offset'] = static::get_offset( $args );
+
+		return $base;
 	}
 
 	public static function get_offset( $args ): int {

@@ -8,10 +8,14 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+use Jet_Form_Builder\Rest_Api\Traits;
 
 abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
+
+	use Traits\Paginated_Args;
 
 	public static function get_methods() {
 		return \WP_REST_Server::CREATABLE;
@@ -25,6 +29,9 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_json_params();
+		$view = new Records_Table_View();
+
+		$args = View_Base::get_paginated_args( $this->get_paginate_args( $request ) );
 
 		try {
 			Record_View::update(
@@ -44,11 +51,13 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 				503
 			);
 		}
+		$list = $view->get_raw_list( $args );
 
 		return new \WP_REST_Response(
 			array(
 				'message' => __( 'Successfully updated', 'jet-form-builder' ),
-				'list'    => ( new Records_Table_View() )->prepare_list(),
+				'list'    => $view->prepare_list( $list ),
+				'total'   => Record_View_Count::count( $args )
 			)
 		);
 	}

@@ -11,6 +11,7 @@ abstract class View_Base implements Repository_Static_Item_It {
 
 	const COLUMN_CHOOSE  = 'choose';
 	const COLUMN_ACTIONS = 'actions';
+	const COLUMN_CLASSES = 'classes';
 
 	abstract public function get_columns_handlers(): array;
 

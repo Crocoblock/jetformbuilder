@@ -31,7 +31,7 @@
 				<div
 					v-for="( entry, entryID ) in currentList"
 					:key="entryID"
-					:class="classEntry( entryID )"
+					:class="classEntry( entryID, entry )"
 				>
 					<div class="list-table-item-columns">
 						<div
@@ -201,10 +201,13 @@ export default {
 		isShown( column ) {
 			return this.columns[ column ].show_in_table ?? true;
 		},
-		classEntry( entryID ) {
+		classEntry( entryID, entry ) {
+			const columnClasses = entry?.classes?.value ?? {};
+
 			return {
 				'list-table-item': true,
 				[ 'list-table-item--' + entryID ]: true,
+				...columnClasses
 			};
 		},
 		getHeadingComponent( column ) {

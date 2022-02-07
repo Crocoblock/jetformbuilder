@@ -33,12 +33,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 var _JetFBComponents = JetFBComponents,
     ChooseAction = _JetFBComponents.ChooseAction,
-    ListComponents = _JetFBComponents.ListComponents;
+    ListComponents = _JetFBComponents.ListComponents,
+    ClearFiltersButton = _JetFBComponents.ClearFiltersButton;
 var _JetFBMixins = JetFBMixins,
-    GetIncoming = _JetFBMixins.GetIncoming;
+    GetIncoming = _JetFBMixins.GetIncoming,
+    i18n = _JetFBMixins.i18n;
 var _Vuex = Vuex,
     mapMutations = _Vuex.mapMutations,
     mapActions = _Vuex.mapActions,
@@ -50,9 +56,10 @@ var filtersComponents = applyFilters('jet.fb.records.page.filters', [_filters_Fo
   name: "ActionsWithFilters",
   components: {
     ChooseAction: ChooseAction,
-    ListComponents: ListComponents
+    ListComponents: ListComponents,
+    ClearFiltersButton: ClearFiltersButton
   },
-  mixins: [GetIncoming],
+  mixins: [GetIncoming, i18n],
   data: function data() {
     return {
       filtersComponents: filtersComponents
@@ -207,8 +214,8 @@ var _Vuex = Vuex,
     });
     observer.observe(document.querySelector('.jfb-page-header'));
   },
-  computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch', 'updateQueryState'])), {}, {
+  computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction', 'fetchListOptions'])),
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch', 'updateList'])), {}, {
     beforeRunFetch: function beforeRunFetch() {
       var _this$getCurrentActio;
 
@@ -227,7 +234,7 @@ var _Vuex = Vuex,
     onCheckedOptions: function onCheckedOptions() {
       var _this$getCurrentActio2;
 
-      return _objectSpread(_objectSpread({}, (_this$getCurrentActio2 = this.getCurrentAction) === null || _this$getCurrentActio2 === void 0 ? void 0 : _this$getCurrentActio2.endpoint), {}, {
+      return _objectSpread(_objectSpread({}, this.fetchListOptions((_this$getCurrentActio2 = this.getCurrentAction) === null || _this$getCurrentActio2 === void 0 ? void 0 : _this$getCurrentActio2.endpoint)), {}, {
         data: {
           checked: this.checked
         }
@@ -239,7 +246,7 @@ var _Vuex = Vuex,
       var _payload = _slicedToArray(payload, 1),
           id = _payload[0];
 
-      return _objectSpread(_objectSpread({}, (_this$getAction = this.getAction(action)) === null || _this$getAction === void 0 ? void 0 : _this$getAction.endpoint), {}, {
+      return _objectSpread(_objectSpread({}, this.fetchListOptions((_this$getAction = this.getAction(action)) === null || _this$getAction === void 0 ? void 0 : _this$getAction.endpoint)), {}, {
         data: {
           checked: [id]
         }
@@ -252,17 +259,7 @@ var _Vuex = Vuex,
           reject = _ref.reject,
           options = _ref.options;
       apiFetch(options).then(function (response) {
-        _this2.setList(response.list);
-
-        var state = {
-          total: +response.total
-        };
-
-        if (response.list.length < _this2.queryState.limit) {
-          state.limit = response.list.length;
-        }
-
-        _this2.updateQueryState(state);
+        _this2.updateList(response);
 
         resolve(response.message);
       }).catch(reject);
@@ -410,7 +407,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AA8EA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;AC7ED;AD8EC;EACC,OAAA;AC5EF;AD8EC;EACC,OAAA;AC5EF;AD8EC;EACC,YAAA;AC5EF;AD8EC;EACC,cAAA;AC5EF;AD8EC;EACC,uBAAA;AC5EF;AD8EC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,YAAA;AC5EF;AD6EE;EACC,aAAA;AC3EH;AD4EG;EACC,OAAA;AC1EJ;AD2EI;EACC,WAAA;ACzEL","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t\tselect {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AAoFA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;ACnFD;ADoFC;EACC,OAAA;AClFF;ADoFC;EACC,OAAA;AClFF;ADoFC;EACC,YAAA;AClFF;ADoFC;EACC,cAAA;AClFF;ADoFC;EACC,uBAAA;AClFF;ADoFC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,YAAA;AClFF;ADmFE;EACC,aAAA;ACjFH;ADkFG;EACC,OAAA;AChFJ;ADiFI;EACC,WAAA;AC/EL","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t\tselect {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -437,7 +434,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AA4OE;EACC,SAAA;AC3OH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--records {\r\n\t.cx-vue-list-table {\r\n\t\t.cell--id.cell--id {\r\n\t\t\tflex: 0.3;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jet-form-builder-page--records .cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAkOC;EACC,SAAA;ACjOF;ADoOC;EACC,yBAAA;AClOF;ADoOE;EACC,gCAAA;AClOH;ADqOE;EACC,yBAAA;ACnOH;ADqOE;EACC,yBAAA;ACnOH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -890,9 +887,16 @@ var render = function () {
       { staticClass: "jfb-row-wrapper-item" },
       [
         _vm.hasFilters
-          ? _c("ListComponents", {
-              attrs: { components: _vm.filtersComponents },
-            })
+          ? _c(
+              "ListComponents",
+              { attrs: { components: _vm.filtersComponents } },
+              [
+                _c("ClearFiltersButton", {
+                  attrs: { label: _vm.__("Clear Filters", "jet-form-builder") },
+                }),
+              ],
+              1
+            )
           : _vm._e(),
       ],
       1

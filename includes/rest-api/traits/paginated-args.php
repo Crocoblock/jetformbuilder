@@ -11,9 +11,10 @@ trait Paginated_Args {
 		$body = $request->get_query_params();
 
 		return array(
-			'limit' => (int) ( $body['limit'] ?? 5 ),
-			'sort'  => $body['sort'] ?? View_Base::FROM_HIGH_TO_LOW,
-			'page'  => (int) ( $body['page'] ?? 1 ),
+			'limit'   => (int) ( $body['limit'] ?? 5 ),
+			'sort'    => $body['sort'] ?? View_Base::FROM_HIGH_TO_LOW,
+			'page'    => (int) ( $body['page'] ?? 1 ),
+			'filters' => $body['filters'] ?? array()
 		);
 	}
 

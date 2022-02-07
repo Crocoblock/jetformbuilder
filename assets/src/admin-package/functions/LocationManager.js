@@ -17,12 +17,38 @@ export function getSearch() {
 	return args;
 }
 
+function prepareQueryArgs( key, value ) {
+	if ( 'object' !== typeof value ) {
+		return [
+			[ key, value ],
+		];
+	}
+
+	const response = [];
+
+	for ( let [ valueKey, valueItem ] of Object.entries( value ) ) {
+		valueKey = `${ key }[${ valueKey }]`;
+
+		response.push( ...prepareQueryArgs( valueKey, valueItem ) );
+	}
+
+	return response;
+}
+
 export function addQueryArgs( args, url ) {
 	url = new URL( url );
 
 	const params = new URLSearchParams( url.search );
+	const pairs = [];
 
 	for ( const [ key, value ] of Object.entries( args ) ) {
+		pairs.push( ...prepareQueryArgs( key, value ) );
+	}
+
+	for ( const [ key, value ] of pairs ) {
+		if ( ! value ) {
+			continue;
+		}
 		params.append( key, value );
 	}
 

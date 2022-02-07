@@ -39,7 +39,9 @@ trait View_Base_Count_Trait {
 		}
 	}
 
-	public static function count() {
-		return ( new static )->get_count();
+	public static function count( $args = array() ) {
+		$filters = $args['filters'] ?? array();
+
+		return ( new static )->set_filters( $filters )->get_count();
 	}
 }

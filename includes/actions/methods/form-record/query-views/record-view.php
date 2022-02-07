@@ -23,4 +23,27 @@ class Record_View extends View_Base {
 	public function select_columns(): array {
 		return Models\Record_Model::schema_columns();
 	}
+
+	public function set_filters( array $filters ) {
+		$forms = $filters['form'] ?? array();
+
+		if ( empty( $forms ) ) {
+			return $this;
+		}
+
+		if ( ! is_array( $forms ) ) {
+			$forms = array( $forms );
+		}
+
+		$this->set_conditions(
+			array(
+				array(
+					'type'   => 'in',
+					'values' => array( 'form_id', $forms ),
+				),
+			)
+		);
+
+		return $this;
+	}
 }

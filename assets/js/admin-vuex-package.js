@@ -83,6 +83,48 @@ var _Vuex = Vuex,
 
 /***/ }),
 
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _Vuex = Vuex,
+    mapState = _Vuex.mapState,
+    mapGetters = _Vuex.mapGetters,
+    mapMutations = _Vuex.mapMutations,
+    mapActions = _Vuex.mapActions;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "ClearFiltersButton",
+  props: {
+    label: String
+  },
+  methods: _objectSpread({}, mapActions(['clearFiltersWithFetch']))
+});
+
+/***/ }),
+
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=script&lang=js& ***!
@@ -167,7 +209,13 @@ var _JetFBMixins = JetFBMixins,
   components: {
     EntriesTable: _EntriesTable__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  computed: _objectSpread({}, mapState(['loadingPage']))
+  computed: _objectSpread(_objectSpread({}, mapState(['loading'])), {}, {
+    loadingPage: function loadingPage() {
+      var _this$loading;
+
+      return (_this$loading = this.loading) === null || _this$loading === void 0 ? void 0 : _this$loading.page;
+    }
+  })
 });
 
 /***/ }),
@@ -395,10 +443,13 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 
       return (_this$columns$column$ = this.columns[column].show_in_table) !== null && _this$columns$column$ !== void 0 ? _this$columns$column$ : true;
     },
-    classEntry: function classEntry(entryID) {
-      return _defineProperty({
+    classEntry: function classEntry(entryID, entry) {
+      var _entry$classes$value, _entry$classes;
+
+      var columnClasses = (_entry$classes$value = entry === null || entry === void 0 ? void 0 : (_entry$classes = entry.classes) === null || _entry$classes === void 0 ? void 0 : _entry$classes.value) !== null && _entry$classes$value !== void 0 ? _entry$classes$value : {};
+      return _objectSpread(_defineProperty({
         'list-table-item': true
-      }, 'list-table-item--' + entryID, true);
+      }, 'list-table-item--' + entryID, true), columnClasses);
     },
     getHeadingComponent: function getHeadingComponent(column) {
       return this.getColumnComponentByPrefix(column, 'head');
@@ -406,11 +457,11 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
     getItemComponent: function getItemComponent(column) {
       return this.getColumnComponentByPrefix(column, 'item');
     },
-    onClickAction: function onClickAction(_ref3, _ref4) {
+    onClickAction: function onClickAction(_ref2, _ref3) {
       var _this2 = this;
 
-      var action = _ref3.value;
-      var id = _ref4.id;
+      var action = _ref2.value;
+      var id = _ref3.id;
       this.toggleDoingAction();
       this.runRowAction({
         action: action,
@@ -974,7 +1025,8 @@ function getGetters() {
           url: addQueryArgs({
             limit: limit,
             sort: sort,
-            page: page
+            page: page,
+            filters: prepareFiltersQuery(state.filters)
           }, endpoint.url)
         });
       };
@@ -983,6 +1035,10 @@ function getGetters() {
   return _objectSpread(_objectSpread({}, getters), {}, {
     getCurrentAction: function getCurrentAction(state) {
       return getters.getAction(state)(state.currentAction);
+    },
+    getPageOptionsFetch: function getPageOptionsFetch(state) {
+      var receive_url = window.JetFBPageConfig.receive_url;
+      return getters.fetchListOptions(state)(receive_url);
     }
   });
 }
@@ -1073,6 +1129,15 @@ function getMutations() {
           props = _ref5.props;
       state.filters[slug] = (_state$filters$slug2 = state.filters[slug]) !== null && _state$filters$slug2 !== void 0 ? _state$filters$slug2 : {};
       state.filters[slug] = _objectSpread(_objectSpread({}, state.filters[slug]), props);
+    },
+    clearSelectedFilters: function clearSelectedFilters(state) {
+      var replaceMap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      for (var filter in state.filters) {
+        var _replaceMap$filter;
+
+        state.filters[filter].selected = (_replaceMap$filter = replaceMap[filter]) !== null && _replaceMap$filter !== void 0 ? _replaceMap$filter : '';
+      }
     }
   };
 }
@@ -1125,19 +1190,47 @@ function getActions() {
           getters = _ref10.getters,
           dispatch = _ref10.dispatch,
           state = _ref10.state;
-      var receive_url = window.JetFBPageConfig.receive_url;
-      var options = getters.fetchListOptions(receive_url);
-      commit('toggleLoadingPage');
-      dispatch('fetch', options).then(function (response) {
+      commit('toggleLoading', 'page');
+      dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
         commit('setList', response.list);
         dispatch('updateQueryState', {});
       }).finally(function () {
-        commit('toggleLoadingPage');
+        commit('toggleLoading', 'page');
       });
     },
-    fetch: function fetch(_ref11, options) {
+    fetchPageWithFilters: function fetchPageWithFilters(_ref11) {
       var commit = _ref11.commit,
-          getters = _ref11.getters;
+          getters = _ref11.getters,
+          dispatch = _ref11.dispatch,
+          state = _ref11.state;
+      commit('toggleLoading', 'page');
+      dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
+        dispatch('updateList', response);
+      }).finally(function () {
+        commit('toggleLoading', 'page');
+      });
+    },
+    updateList: function updateList(_ref12, response) {
+      var _response$total;
+
+      var commit = _ref12.commit,
+          getters = _ref12.getters,
+          dispatch = _ref12.dispatch,
+          state = _ref12.state;
+      commit('setList', response.list);
+      var newState = {
+        total: +((_response$total = response.total) !== null && _response$total !== void 0 ? _response$total : state.queryState.total)
+      };
+
+      if (response.list.length < state.queryState.limit) {
+        newState.limit = response.list.length;
+      }
+
+      dispatch('updateQueryState', newState);
+    },
+    fetch: function fetch(_ref13, options) {
+      var commit = _ref13.commit,
+          getters = _ref13.getters;
       return new Promise(function (resolve, reject) {
         apiFetch(options).then(resolve).catch(function (error) {
           jfbEventBus.$CXNotice.add({
@@ -1149,11 +1242,11 @@ function getActions() {
         }).finally(reject);
       });
     },
-    maybeFetchFilters: function maybeFetchFilters(_ref12, endpoint) {
-      var commit = _ref12.commit,
-          getters = _ref12.getters,
-          dispatch = _ref12.dispatch,
-          state = _ref12.state;
+    maybeFetchFilters: function maybeFetchFilters(_ref14, endpoint) {
+      var commit = _ref14.commit,
+          getters = _ref14.getters,
+          dispatch = _ref14.dispatch,
+          state = _ref14.state;
 
       if (getters.hasFilters || state.doingAction) {
         return;
@@ -1166,15 +1259,15 @@ function getActions() {
         commit('toggleDoingAction');
       });
     },
-    runRowAction: function runRowAction(_ref13, _ref14) {
+    runRowAction: function runRowAction(_ref15, _ref16) {
       var _state$actionsPromise2;
 
-      var state = _ref13.state;
-      var action = _ref14.action,
-          _ref14$context = _ref14.context,
-          context = _ref14$context === void 0 ? 'default' : _ref14$context,
-          _ref14$payload = _ref14.payload,
-          payload = _ref14$payload === void 0 ? false : _ref14$payload;
+      var state = _ref15.state;
+      var action = _ref16.action,
+          _ref16$context = _ref16.context,
+          context = _ref16$context === void 0 ? 'default' : _ref16$context,
+          _ref16$payload = _ref16.payload,
+          payload = _ref16$payload === void 0 ? false : _ref16$payload;
 
       if ('object' !== _typeof(state.actionsPromises[action])) {
         return Promise.reject(__('Please choose your action', 'jet-form-builder'));
@@ -1189,6 +1282,12 @@ function getActions() {
       return new Promise(function (resolve, reject) {
         return promise.apply(void 0, [resolve, reject].concat(_toConsumableArray(payload)));
       });
+    },
+    clearFiltersWithFetch: function clearFiltersWithFetch(_ref17, replaceMap) {
+      var commit = _ref17.commit,
+          dispatch = _ref17.dispatch;
+      commit('clearSelectedFilters', replaceMap);
+      dispatch('fetchPageWithFilters');
     }
   };
 }
@@ -1298,7 +1397,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AA0OA;EACC,YAAA;ACzOD;AD6OC;EACC,oBAAA;AC1OF;AD6OC;EACC,8BAAA;AC3OF;AD8OC;EACC,sBAAA;EACA,kBAAA;AC5OF;AD8OE;EACC,mBAAA;AC5OH;ADgPC;EACC,aAAA;EACA,8BAAA;EACA,WAAA;EACA,oBAAA;AC9OF;ADiPC;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC/OF;ADiPE;EACC,YAAA;AC/OH;ADkPE;EACC,sBAAA;AChPH;ADmPI;EACC,gBAAA;ACjPL;ADqPG;EACC,oBAAA;EACA,eAAA;ACnPJ;ADwPC;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;ACtPF;ADyPC;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;ACvPF;ADyPE;EACC,OAAA;ACvPH;AD0PE;EACC,0BAAA;ACxPH;AD4PC;EACC,OAAA;AC1PF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--choose {\r\n\t\tpadding-right: unset;\r\n\t}\r\n\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-item-columns {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: space-between;\r\n\t\twidth: 100%;\r\n\t\tmargin-bottom: 1.5em;\r\n\t}\r\n\r\n\t.list-table-item-actions {\r\n\t\tdisplay: flex;\r\n\t\twidth: 85%;\r\n\t\tcolumn-gap: 0.5em;\r\n\t\tvisibility: hidden;\r\n\t\tposition: absolute;\r\n\t\tbottom: 0.5em;\r\n\t\tleft: 5.2em;\r\n\r\n\t\t& > *:not(:last-child)::after {\r\n\t\t\tcontent: '|';\r\n\t\t}\r\n\r\n\t\t&-single {\r\n\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t&--type {\r\n\t\t\t\t&-danger {\r\n\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\t&.disabled {\r\n\t\t\t\tpointer-events: none;\r\n\t\t\t\tcursor: default;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell > span {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: flex-start;\r\n\t\talign-items: center;\r\n\t\tflex-wrap: wrap;\r\n\t}\r\n\r\n\t.list-table-item__cell {\r\n\t\twhite-space: nowrap;\r\n\t\toverflow: hidden;\r\n\t\ttext-align: left;\r\n\r\n\t\t&:not(.cell--choose) {\r\n\t\t\tflex: 1\r\n\t\t}\r\n\r\n\t\t&.cell--choose {\r\n\t\t\ttransform: translateY(25%);\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTable.vue","webpack://./../EntriesTable.vue"],"names":[],"mappings":"AA6OA;EACC,YAAA;AC5OD;ADgPC;EACC,oBAAA;AC7OF;ADgPC;EACC,8BAAA;AC9OF;ADiPC;EACC,sBAAA;EACA,kBAAA;AC/OF;ADiPE;EACC,mBAAA;AC/OH;ADmPC;EACC,aAAA;EACA,8BAAA;EACA,WAAA;EACA,oBAAA;ACjPF;ADoPC;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AClPF;ADoPE;EACC,YAAA;AClPH;ADqPE;EACC,sBAAA;ACnPH;ADsPI;EACC,gBAAA;ACpPL;ADwPG;EACC,oBAAA;EACA,eAAA;ACtPJ;AD2PC;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;ACzPF;AD4PC;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;AC1PF;AD4PE;EACC,OAAA;AC1PH;AD6PE;EACC,0BAAA;AC3PH;AD+PC;EACC,OAAA;AC7PF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--choose {\r\n\t\tpadding-right: unset;\r\n\t}\r\n\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-item-columns {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: space-between;\r\n\t\twidth: 100%;\r\n\t\tmargin-bottom: 1.5em;\r\n\t}\r\n\r\n\t.list-table-item-actions {\r\n\t\tdisplay: flex;\r\n\t\twidth: 85%;\r\n\t\tcolumn-gap: 0.5em;\r\n\t\tvisibility: hidden;\r\n\t\tposition: absolute;\r\n\t\tbottom: 0.5em;\r\n\t\tleft: 5.2em;\r\n\r\n\t\t& > *:not(:last-child)::after {\r\n\t\t\tcontent: '|';\r\n\t\t}\r\n\r\n\t\t&-single {\r\n\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t&--type {\r\n\t\t\t\t&-danger {\r\n\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\t&.disabled {\r\n\t\t\t\tpointer-events: none;\r\n\t\t\t\tcursor: default;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell > span {\r\n\t\tdisplay: flex;\r\n\t\tjustify-content: flex-start;\r\n\t\talign-items: center;\r\n\t\tflex-wrap: wrap;\r\n\t}\r\n\r\n\t.list-table-item__cell {\r\n\t\twhite-space: nowrap;\r\n\t\toverflow: hidden;\r\n\t\ttext-align: left;\r\n\r\n\t\t&:not(.cell--choose) {\r\n\t\t\tflex: 1\r\n\t\t}\r\n\r\n\t\t&.cell--choose {\r\n\t\t\ttransform: translateY(25%);\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-heading__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1545,6 +1644,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "admin-vuex-package/components/ChooseAction.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./admin-vuex-package/components/ClearFiltersButton.vue":
+/*!**************************************************************!*\
+  !*** ./admin-vuex-package/components/ClearFiltersButton.vue ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClearFiltersButton.vue?vue&type=template&id=3c7bfee1& */ "./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1&");
+/* harmony import */ var _ClearFiltersButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClearFiltersButton.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ClearFiltersButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__.render,
+  _ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "admin-vuex-package/components/ClearFiltersButton.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -1846,6 +1984,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ClearFiltersButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClearFiltersButton.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ClearFiltersButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************!*\
   !*** ./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=script&lang=js& ***!
@@ -1971,6 +2125,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAction_vue_vue_type_template_id_3f84bee4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAction_vue_vue_type_template_id_3f84bee4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ChooseAction.vue?vue&type=template&id=3f84bee4& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ChooseAction.vue?vue&type=template&id=3f84bee4&");
+
+
+/***/ }),
+
+/***/ "./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1&":
+/*!*********************************************************************************************!*\
+  !*** ./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClearFiltersButton_vue_vue_type_template_id_3c7bfee1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClearFiltersButton.vue?vue&type=template&id=3c7bfee1& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1&");
 
 
 /***/ }),
@@ -2213,7 +2384,7 @@ var render = function () {
         attrs: {
           loading: _vm.isLoading("applyButton"),
           disabled: _vm.doingAction,
-          "button-style": "accent",
+          "button-style": "accent-border",
           size: "mini",
         },
         on: { click: _vm.applyAction },
@@ -2230,6 +2401,43 @@ var render = function () {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/ClearFiltersButton.vue?vue&type=template&id=3c7bfee1& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("cx-vui-button", {
+    attrs: { "button-style": "accent-border", size: "mini" },
+    on: { click: _vm.clearFiltersWithFetch },
+    scopedSlots: _vm._u([
+      {
+        key: "label",
+        fn: function () {
+          return [_vm._v(_vm._s(_vm.label))]
+        },
+        proxy: true,
+      },
+    ]),
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2393,7 +2601,7 @@ var render = function () {
               return _vm._l(_vm.currentList, function (entry, entryID) {
                 return _c(
                   "div",
-                  { key: entryID, class: _vm.classEntry(entryID) },
+                  { key: entryID, class: _vm.classEntry(entryID, entry) },
                   [
                     _c(
                       "div",
@@ -3282,11 +3490,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/TableStoreHelper */ "./admin-vuex-package/mixins/TableStoreHelper.js");
 /* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./constants */ "./admin-vuex-package/constants.js");
+/* harmony import */ var _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/ClearFiltersButton */ "./admin-vuex-package/components/ClearFiltersButton.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -3303,7 +3513,8 @@ window.JetFBComponents = _objectSpread(_objectSpread({}, window.JetFBComponents)
   EntriesStoreTable: _components_EntriesStoreTable__WEBPACK_IMPORTED_MODULE_2__["default"],
   DetailsTableWithStore: _components_DetailsTableWithStore__WEBPACK_IMPORTED_MODULE_3__["default"],
   TablePagination: _components_TablePagination__WEBPACK_IMPORTED_MODULE_4__["default"],
-  ChooseAction: _components_ChooseAction__WEBPACK_IMPORTED_MODULE_5__["default"]
+  ChooseAction: _components_ChooseAction__WEBPACK_IMPORTED_MODULE_5__["default"],
+  ClearFiltersButton: _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_9__["default"]
 });
 window.JetFBMixins = _objectSpread(_objectSpread({}, window.JetFBMixins), {}, {
   TableStoreHelper: _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__,

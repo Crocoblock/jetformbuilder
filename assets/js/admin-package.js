@@ -509,6 +509,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ListComponents",
   props: {
@@ -830,6 +831,16 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -860,16 +871,49 @@ function getSearch() {
   });
   return args;
 }
+
+function prepareQueryArgs(key, value) {
+  if ('object' !== _typeof(value)) {
+    return [[key, value]];
+  }
+
+  var response = [];
+
+  for (var _i2 = 0, _Object$entries = Object.entries(value); _i2 < _Object$entries.length; _i2++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
+        valueKey = _Object$entries$_i[0],
+        valueItem = _Object$entries$_i[1];
+
+    valueKey = "".concat(key, "[").concat(valueKey, "]");
+    response.push.apply(response, _toConsumableArray(prepareQueryArgs(valueKey, valueItem)));
+  }
+
+  return response;
+}
+
 function addQueryArgs(args, url) {
   url = new URL(url);
   var params = new URLSearchParams(url.search);
+  var pairs = [];
 
-  for (var _i2 = 0, _Object$entries = Object.entries(args); _i2 < _Object$entries.length; _i2++) {
-    var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
-        key = _Object$entries$_i[0],
-        value = _Object$entries$_i[1];
+  for (var _i3 = 0, _Object$entries2 = Object.entries(args); _i3 < _Object$entries2.length; _i3++) {
+    var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i3], 2),
+        key = _Object$entries2$_i[0],
+        value = _Object$entries2$_i[1];
 
-    params.append(key, value);
+    pairs.push.apply(pairs, _toConsumableArray(prepareQueryArgs(key, value)));
+  }
+
+  for (var _i4 = 0, _pairs = pairs; _i4 < _pairs.length; _i4++) {
+    var _pairs$_i = _slicedToArray(_pairs[_i4], 2),
+        _key = _pairs$_i[0],
+        _value = _pairs$_i[1];
+
+    if (!_value) {
+      continue;
+    }
+
+    params.append(_key, _value);
   }
 
   return url.origin + url.pathname + '?' + params;
@@ -881,10 +925,10 @@ function createPath() {
   var params = [];
   queryArgs = _objectSpread(_objectSpread({}, getSearch()), queryArgs);
 
-  for (var _i3 = 0, _Object$entries2 = Object.entries(queryArgs); _i3 < _Object$entries2.length; _i3++) {
-    var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i3], 2),
-        key = _Object$entries2$_i[0],
-        value = _Object$entries2$_i[1];
+  for (var _i5 = 0, _Object$entries3 = Object.entries(queryArgs); _i5 < _Object$entries3.length; _i5++) {
+    var _Object$entries3$_i = _slicedToArray(_Object$entries3[_i5], 2),
+        key = _Object$entries3$_i[0],
+        value = _Object$entries3$_i[1];
 
     if (clearArgs.includes(key)) {
       continue;
@@ -1030,7 +1074,7 @@ var _Vuex = Vuex,
       return this.getFilter(this.filter_id);
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setFilter'])), mapActions(['filterRows'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setFilter'])), mapActions(['fetchPageWithFilters'])), {}, {
     setCurrentFilter: function setCurrentFilter(props) {
       this.setFilter({
         slug: this.filter_id,
@@ -1041,7 +1085,7 @@ var _Vuex = Vuex,
       this.setCurrentFilter({
         selected: value
       });
-      this.filterRows();
+      this.fetchPageWithFilters();
     }
   })
 });
@@ -3277,15 +3321,19 @@ var render = function () {
   return _c(
     "div",
     { staticClass: "jfb-list-components" },
-    _vm._l(_vm.components, function (component, index) {
-      return _c(
-        "div",
-        { key: "entry_" + index, staticClass: "jfb-list-components-item" },
-        [_c("keep-alive", [_c(component, { tag: "component" })], 1)],
-        1
-      )
-    }),
-    0
+    [
+      _vm._l(_vm.components, function (component, index) {
+        return _c(
+          "div",
+          { key: "entry_" + index, staticClass: "jfb-list-components-item" },
+          [_c("keep-alive", [_c(component, { tag: "component" })], 1)],
+          1
+        )
+      }),
+      _vm._v(" "),
+      _vm._t("default"),
+    ],
+    2
   )
 }
 var staticRenderFns = []

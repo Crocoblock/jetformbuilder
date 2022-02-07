@@ -119,6 +119,7 @@ export default {
 		...mapGetters( [
 			'getAction',
 			'getCurrentAction',
+			'fetchListOptions'
 		] ),
 	},
 	methods: {
@@ -131,7 +132,7 @@ export default {
 		] ),
 		...mapActions( [
 			'fetch',
-			'updateQueryState',
+			'updateList',
 		] ),
 		beforeRunFetch() {
 			if ( ! this.checked.length ) {
@@ -144,7 +145,7 @@ export default {
 		},
 		onCheckedOptions() {
 			return {
-				...this.getCurrentAction?.endpoint,
+				...this.fetchListOptions( this.getCurrentAction?.endpoint ),
 				data: {
 					checked: this.checked,
 				},
@@ -154,7 +155,7 @@ export default {
 			const [ id ] = payload;
 
 			return {
-				...this.getAction( action )?.endpoint,
+				...this.fetchListOptions( this.getAction( action )?.endpoint ),
 				data: {
 					checked: [ id ],
 				},
@@ -162,17 +163,7 @@ export default {
 		},
 		deleteAction( { resolve, reject, options } ) {
 			apiFetch( options ).then( response => {
-				this.setList( response.list );
-
-				const state = {
-					total: +response.total,
-				};
-
-				if ( response.list.length < this.queryState.limit ) {
-					state.limit = response.list.length;
-				}
-
-				this.updateQueryState( state );
+				this.updateList( response );
 
 				resolve( response.message );
 
@@ -232,12 +223,26 @@ export default {
 
 <style lang="scss">
 
-.jet-form-builder-page--records {
-	.cx-vue-list-table {
-		.cell--id.cell--id {
-			flex: 0.3;
+.cx-vue-list-table {
+	.cell--id.cell--id {
+		flex: 0.3;
+	}
+
+	.list-table-item {
+		background-color: #ffffff;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid #ececec;
+		}
+
+		&--not-viewed {
+			background-color: #f7fdff;
+		}
+		&:hover {
+			background-color: #e3f6fd;
 		}
 	}
+
 }
 
 </style>

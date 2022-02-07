@@ -7,6 +7,7 @@ import ChooseAction from './components/ChooseAction';
 import * as TableStoreHelper from './mixins/TableStoreHelper';
 import TableViewMixin from './mixins/TableViewMixin';
 import Constants from './constants';
+import ClearFiltersButton from './components/ClearFiltersButton';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -16,6 +17,7 @@ window.JetFBComponents = {
 	DetailsTableWithStore,
 	TablePagination,
 	ChooseAction,
+	ClearFiltersButton,
 };
 
 window.JetFBMixins = {

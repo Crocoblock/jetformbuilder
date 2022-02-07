@@ -18,7 +18,7 @@ export default {
 			'setFilter',
 		] ),
 		...mapActions( [
-			'filterRows',
+			'fetchPageWithFilters',
 		] ),
 		setCurrentFilter( props ) {
 			this.setFilter( {
@@ -30,7 +30,7 @@ export default {
 			this.setCurrentFilter( {
 				selected: value,
 			} );
-			this.filterRows();
+			this.fetchPageWithFilters();
 		},
 	},
 };

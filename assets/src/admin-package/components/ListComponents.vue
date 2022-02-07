@@ -11,6 +11,7 @@
 				/>
 			</keep-alive>
 		</div>
+		<slot></slot>
 	</div>
 
 </template>

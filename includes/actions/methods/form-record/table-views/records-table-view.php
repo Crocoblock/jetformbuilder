@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Not_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
@@ -46,6 +47,10 @@ class Records_Table_View extends View_Base {
 				'value' => array( $this, 'get_row_actions' ),
 				'type'  => 'rawArray',
 			),
+			self::COLUMN_CLASSES => array(
+				'value' => array( $this, 'get_row_classes' ),
+				'type'  => 'rawArray',
+			),
 		);
 	}
 
@@ -83,12 +88,9 @@ class Records_Table_View extends View_Base {
 	}
 
 	public function get_raw_list( array $args ): array {
-		$offset = $args['offset'] ?? 0;
-		$limit  = $args['limit'] ?? 15;
-
 		try {
 			return ( new Record_View() )
-				->set_limit( array( $offset, $limit ) )
+				->set_table_args( $args )
 				->query()
 				->query_all();
 		} catch ( Query_Builder_Exception $exception ) {
@@ -132,7 +134,7 @@ class Records_Table_View extends View_Base {
 	 * @return array
 	 */
 	public function get_row_actions( $record ): array {
-		$actions        = $this->get_single_actions();
+		$actions = $this->get_single_actions();
 		list( $delete ) = $actions;
 
 		list( $view ) = array_values(
@@ -159,9 +161,18 @@ class Records_Table_View extends View_Base {
 		);
 	}
 
+	public function get_row_classes( $record ) {
+		return array(
+			'list-table-item--not-viewed' => empty( $record['is_viewed'] )
+		);
+	}
+
 	public function load_data(): array {
 		return array(
-			'receive_url'      => array(),
+			'receive_url'      => array(
+				'url'     => Fetch_Records_Page_Endpoint::rest_url(),
+				'methods' => Fetch_Records_Page_Endpoint::get_methods(),
+			),
 			'total'            => Record_View_Count::count(),
 			'filters_endpoint' => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),

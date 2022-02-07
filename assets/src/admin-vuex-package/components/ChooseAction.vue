@@ -11,7 +11,7 @@
 			@click="applyAction"
 			:loading="isLoading( 'applyButton' )"
 			:disabled="doingAction"
-			button-style="accent"
+			button-style="accent-border"
 			size="mini"
 		>
 			<template #label>{{ __( 'Apply', 'jet-form-builder' ) }}</template>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h4>{{ messages.filter_form_title }}</h4>
+		<h3>{{ messages.filter_form_title }}</h3>
 		<cx-vui-select
 			:options-list="filter.options || []"
 			:wrapper-css="[ 'equalwidth' ]"

@@ -128,10 +128,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 var _JetFBComponents = JetFBComponents,
     TablePagination = _JetFBComponents.TablePagination,
@@ -200,20 +196,6 @@ var _Vuex = Vuex,
       promise: this.promiseWrapper(this.notViewClicked.bind(this))
     });
   },
-  mounted: function mounted() {
-    var _this = this;
-
-    var observer = new IntersectionObserver(function (entries, observer) {
-      entries.forEach(function (entry) {
-        // если элемент является наблюдаемым
-        _this.isFooterVisible = !entry.isIntersecting;
-      });
-    }, {
-      root: null,
-      rootMargin: '0px'
-    });
-    observer.observe(document.querySelector('.jfb-page-header'));
-  },
   computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction', 'fetchListOptions'])),
   methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch', 'updateList'])), {}, {
     beforeRunFetch: function beforeRunFetch() {
@@ -253,13 +235,13 @@ var _Vuex = Vuex,
       });
     },
     deleteAction: function deleteAction(_ref) {
-      var _this2 = this;
+      var _this = this;
 
       var resolve = _ref.resolve,
           reject = _ref.reject,
           options = _ref.options;
       apiFetch(options).then(function (response) {
-        _this2.updateList(response);
+        _this.updateList(response);
 
         resolve(response.message);
       }).catch(reject);
@@ -289,13 +271,13 @@ var _Vuex = Vuex,
       });
     },
     viewAction: function viewAction(_ref4) {
-      var _this3 = this;
+      var _this2 = this;
 
       var resolve = _ref4.resolve,
           reject = _ref4.reject,
           options = _ref4.options;
       apiFetch(options).then(function (response) {
-        _this3.setList(response.list);
+        _this2.setList(response.list);
 
         resolve(response.message);
       }).catch(reject);
@@ -407,7 +389,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AAoFA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;ACnFD;ADoFC;EACC,OAAA;AClFF;ADoFC;EACC,OAAA;AClFF;ADoFC;EACC,YAAA;AClFF;ADoFC;EACC,cAAA;AClFF;ADoFC;EACC,uBAAA;AClFF;ADoFC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,YAAA;AClFF;ADmFE;EACC,aAAA;ACjFH;ADkFG;EACC,OAAA;AChFJ;ADiFI;EACC,WAAA;AC/EL","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t\tselect {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n.jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AAqFC;EACC,uBAAA;ACpFF;ADwFA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;ACrFD;ADsFC;EACC,OAAA;ACpFF;ADsFC;EACC,OAAA;ACpFF;ADsFC;EACC,YAAA;ACpFF;ADsFC;EACC,cAAA;ACpFF;ADsFC;EACC,uBAAA;ACpFF;ADsFC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,YAAA;ACpFF;ADqFE;EACC,aAAA;ACnFH;ADoFG;EACC,OAAA;AClFJ;ADmFI;EACC,WAAA;ACjFL","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n}\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t\tselect {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n\n.jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control select {\n  width: 100%;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -434,7 +416,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAkOC;EACC,SAAA;ACjOF;ADoOC;EACC,yBAAA;AClOF;ADoOE;EACC,gCAAA;AClOH;ADqOE;EACC,yBAAA;ACnOH;ADqOE;EACC,yBAAA;ACnOH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAgNA;EACC,oBAAA;AC/MD;ADmNC;EACC,SAAA;AChNF;ADmNC;EACC,yBAAA;ACjNF;ADmNE;EACC,gCAAA;ACjNH;ADoNE;EACC,yBAAA;AClNH;ADoNE;EACC,yBAAA;AClNH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -942,30 +924,11 @@ var render = function () {
         ),
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "jfb-page-header" },
-        [_c("ActionsWithFilters")],
-        1
-      ),
+      _c("ActionsWithFilters"),
+      _vm._v(" "),
+      _c("TablePagination"),
       _vm._v(" "),
       _c("EntriesStoreTable"),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.isFooterVisible,
-              expression: "isFooterVisible",
-            },
-          ],
-        },
-        [_c("ActionsWithFilters")],
-        1
-      ),
       _vm._v(" "),
       _c("TablePagination"),
     ],
@@ -998,7 +961,7 @@ var render = function () {
   return _c(
     "div",
     [
-      _c("h4", [_vm._v(_vm._s(_vm.messages.filter_form_title))]),
+      _c("h3", [_vm._v(_vm._s(_vm.messages.filter_form_title))]),
       _vm._v(" "),
       _c("cx-vui-select", {
         attrs: {

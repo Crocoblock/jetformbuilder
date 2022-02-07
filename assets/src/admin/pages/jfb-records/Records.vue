@@ -5,13 +5,9 @@
 		'jet-form-builder-page--records': true,
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
-		<div class="jfb-page-header">
-			<ActionsWithFilters/>
-		</div>
+		<ActionsWithFilters/>
+		<TablePagination/>
 		<EntriesStoreTable/>
-		<div v-show="isFooterVisible">
-			<ActionsWithFilters/>
-		</div>
 		<TablePagination/>
 	</div>
 </template>
@@ -97,19 +93,6 @@ export default {
 			context: CLICK_ACTION,
 			promise: this.promiseWrapper( this.notViewClicked.bind( this ) ),
 		} );
-	},
-	mounted() {
-		const observer = new IntersectionObserver( ( entries, observer ) => {
-			entries.forEach( entry => {
-				// если элемент является наблюдаемым
-				this.isFooterVisible = ( ! entry.isIntersecting );
-			} )
-		}, {
-			root: null,
-			rootMargin: '0px',
-		} )
-
-		observer.observe( document.querySelector( '.jfb-page-header' ) );
 	},
 	computed: {
 		...mapState( [
@@ -222,6 +205,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.cx-vui-panel-table-wrapper {
+	margin-bottom: unset;
+}
 
 .cx-vue-list-table {
 	.cell--id.cell--id {

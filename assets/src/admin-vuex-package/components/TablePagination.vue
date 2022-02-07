@@ -1,5 +1,5 @@
 <template>
-	<div class="jfb-pagination cx-vui-panel">
+	<div class="jfb-pagination">
 		<span class="jfb-pagination--results">
 			{{
 				__s(
@@ -19,7 +19,7 @@
 			:disabled="loadingPage"
 			@on-change="changePage"
 		></cx-vui-pagination>
-		<span class="jfb-pagination--sort">
+		<div class="jfb-pagination--sort">
 			<cx-vui-input
 				:label="__( 'Results per page', 'jet-form-builder' )"
 				@on-input-change="changeLimit"
@@ -29,7 +29,7 @@
 				:max="queryState.total"
 				:disabled="loadingPage"
 			></cx-vui-input>
-		</span>
+		</div>
 	</div>
 </template>
 
@@ -81,13 +81,14 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 0 0 1.5em;
+	padding: 1.5em;
 	margin-bottom: unset;
 	&--sort {
 		.cx-vui-component {
 			column-gap: 1em;
 			justify-content: center;
 			align-items: center;
+			padding: unset;
 		}
 	}
 }

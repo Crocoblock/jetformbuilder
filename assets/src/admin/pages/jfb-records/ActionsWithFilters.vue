@@ -82,6 +82,12 @@ export default {
 
 <style lang="scss">
 
+.jfb-pagination {
+	.cx-vui-input {
+		background-color: white;
+	}
+}
+
 .jfb-row-wrapper {
 	display: flex;
 	gap: 2em;

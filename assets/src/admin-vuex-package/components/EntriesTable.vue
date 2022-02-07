@@ -86,16 +86,16 @@
 import Constants from '../constants';
 
 const {
-	ChooseColumn,
-	LinkTypeColumn,
-} = JetFBComponents;
+		  ChooseColumn,
+		  LinkTypeColumn,
+	  } = JetFBComponents;
 
 const { GetColumnComponent } = JetFBMixins;
 
 const {
-	CHOOSE_ACTION,
-	CLICK_ACTION,
-} = Constants;
+		  CHOOSE_ACTION,
+		  CLICK_ACTION,
+	  } = Constants;
 
 const defaultColumns = {
 	choose: ChooseColumn,
@@ -106,11 +106,11 @@ const defaultTypes = {
 };
 
 const {
-	mapState,
-	mapGetters,
-	mapActions,
-	mapMutations,
-} = window.Vuex;
+		  mapState,
+		  mapGetters,
+		  mapActions,
+		  mapMutations,
+	  } = window.Vuex;
 
 window.jfbEventBus = window.jfbEventBus || new Vue();
 
@@ -151,6 +151,7 @@ export default {
 			return {
 				'cx-vui-panel': true,
 				'cx-vui-panel--loading': this.loading,
+				'cx-vui-panel-table-wrapper': true,
 			};
 		},
 		...mapState( [
@@ -207,7 +208,7 @@ export default {
 			return {
 				'list-table-item': true,
 				[ 'list-table-item--' + entryID ]: true,
-				...columnClasses
+				...columnClasses,
 			};
 		},
 		getHeadingComponent( column ) {
@@ -243,27 +244,22 @@ export default {
 	.cell--choose {
 		padding-right: unset;
 	}
-
 	.list-table-heading, .list-table-item-columns {
 		justify-content: space-between;
 	}
-
 	.list-table-item {
 		flex-direction: column;
 		position: relative;
-
 		&:hover .list-table-item-actions {
 			visibility: visible;
 		}
 	}
-
 	.list-table-item-columns {
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
 		margin-bottom: 1.5em;
 	}
-
 	.list-table-item-actions {
 		display: flex;
 		width: 85%;
@@ -272,48 +268,39 @@ export default {
 		position: absolute;
 		bottom: 0.5em;
 		left: 5.2em;
-
 		& > *:not(:last-child)::after {
 			content: '|';
 		}
-
 		&-single {
 			text-decoration: unset;
-
 			&--type {
 				&-danger {
 					color: firebrick;
 				}
 			}
-
 			&.disabled {
 				pointer-events: none;
 				cursor: default;
 			}
 		}
 	}
-
 	.list-table-heading__cell > span {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
 		flex-wrap: wrap;
 	}
-
 	.list-table-item__cell {
 		white-space: nowrap;
 		overflow: hidden;
 		text-align: left;
-
 		&:not(.cell--choose) {
 			flex: 1
 		}
-
 		&.cell--choose {
 			transform: translateY(25%);
 		}
 	}
-
 	.list-table-heading__cell:not(.cell--choose) {
 		flex: 1
 	}

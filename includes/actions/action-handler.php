@@ -248,7 +248,7 @@ class Action_Handler {
 		return $this;
 	}
 
-	public function add_context_once( $action_slug, $context ) {
+	public function add_context_once( string $action_slug, array $context ) {
 		$action_context = $this->get_context( $action_slug );
 
 		if ( ! $action_context ) {

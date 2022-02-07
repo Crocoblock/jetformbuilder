@@ -13,6 +13,7 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
@@ -42,7 +43,11 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		/**
 		 * By default save payment id & form data to inserted post meta
 		 */
-		$this->save_resource( $payment );
+		$this->add_context(
+			array(
+				'payment_id' => $this->save_resource( $payment )
+			)
+		);
 
 		/**
 		 * Redirect to Paypal checkout for approve payment
@@ -82,11 +87,11 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 	public function save_resource( $payment ) {
 		try {
-			( new Payment_Model() )->insert(
+			return ( new Payment_Model() )->insert(
 				array(
 					'transaction_id'         => $payment['id'],
 					'initial_transaction_id' => $payment['id'],
-					'form_id'                => $this->get_action_handler()->form_id,
+					'form_id'                => jfb_handler()->form_id,
 					'user_id'                => get_current_user_id(),
 					'gateway_id'             => $this->controller->get_id(),
 					'scenario'               => self::scenario_id(),

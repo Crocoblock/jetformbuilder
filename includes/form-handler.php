@@ -338,7 +338,9 @@ class Form_Handler {
 		try {
 			$this->set_response_args( $args );
 
-			( new Action_Required_Executor() )->run_actions();
+			( new Action_Required_Executor() )->soft_run_actions();
+
+			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 		} catch ( Handler_Exception $exception ) {
 			$this->is_success = false;
 
@@ -356,7 +358,6 @@ class Form_Handler {
 		if ( ! empty( $args ) ) {
 			$this->set_response_args( $args );
 		}
-		do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 
 		( new Form_Response\Response(
 			$this->get_response_manager(),

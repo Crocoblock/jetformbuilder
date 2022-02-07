@@ -3,11 +3,9 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Repository;
 
-class Scenarios_Logic_Manager {
-
-	use Repository_Pattern_Trait;
+class Scenarios_Logic_Manager extends Scenario_Logic_Repository {
 
 	public function rep_instances(): array {
 		return apply_filters(

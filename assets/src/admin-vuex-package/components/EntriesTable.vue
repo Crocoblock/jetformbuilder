@@ -27,6 +27,32 @@
             		</span>
 				</cx-vui-list-table-heading>
 			</template>
+			<template #footer>
+				<cx-vui-list-table-heading
+					:slots="filteredColumns"
+				>
+					<span
+						:key="column"
+						:slot="column"
+						v-for="column in filteredColumns"
+					>
+						<template v-if="getHeadingComponent( column )">
+							<keep-alive>
+								<component
+									v-bind:is="getHeadingComponent( column )"
+									:value="columns[ column ]"
+								/>
+							</keep-alive>
+						</template>
+						<template v-else>
+							{{ columns[ column ] ? columns[ column ].label : '' }}
+						</template>
+						<svg v-if="columns[ column ].sortable" width="10"
+							 height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
+							d="M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z" fill="#7B7E81"/></svg>
+            		</span>
+				</cx-vui-list-table-heading>
+			</template>
 			<template #items>
 				<div
 					v-for="( entry, entryID ) in currentList"

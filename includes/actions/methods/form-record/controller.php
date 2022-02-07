@@ -7,11 +7,11 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Request\Request_Handler;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
-use Members\BlockPermissions\Block;
 
 class Controller {
 
@@ -20,22 +20,29 @@ class Controller {
 		'save_empty_fields' => false,
 		'save_errors'       => false,
 	);
-	protected $columns  = array();
+	protected $columns = array();
 	protected $record_id;
 
+	public function __construct() {
+		$this->set_setting( 'save_errors', Manager::instance()->active() );
+	}
+
+
+	public function get_record_id(): int {
+		return (int) $this->record_id;
+	}
 
 	/**
-	 * @param $defaults
-	 *
+	 * @return $this
 	 * @throws Sql_Exception
 	 */
-	public function save( $defaults ) {
+	public function save() {
 		/**
 		 * Saving general information about the request from the form
 		 * in `*_jet_fb_records`
 		 * by \Jet_Form_Builder\Actions\Methods\Form_Record\Record_Model
 		 */
-		$this->record_id = $this->save_record( $defaults );
+		$this->record_id = $this->save_record();
 
 		/**
 		 * Saving each field as a separate record
@@ -58,6 +65,7 @@ class Controller {
 		 */
 		$this->save_errors();
 
+		return $this;
 	}
 
 	/**
@@ -66,7 +74,9 @@ class Controller {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function save_record( $defaults ) {
+	public function save_record( $defaults = array() ) {
+		$args = jet_form_builder()->form_handler->get_response_args();
+
 		$this->set_columns(
 			array(
 				'form_id'           => jfb_handler()->get_form_id(),
@@ -75,6 +85,7 @@ class Controller {
 				'user_id'           => get_current_user_id(),
 				'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
 				'from_content_type' => 'post', /* it can be replaced by CCT slug */
+				'status'            => $args['status'] ?? '',
 			)
 		);
 
@@ -182,8 +193,8 @@ class Controller {
 		foreach ( jfb_action_handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
-				|| isset( $core_fields[ $field_name ] )
-				|| ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+			     || isset( $core_fields[ $field_name ] )
+			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
 			) {
 				continue;
 			}

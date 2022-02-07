@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
@@ -78,7 +79,7 @@ class Gateway_Manager {
 	}
 
 	public function before_send_actions() {
-		$this->set_gateways_options_by_form_id( $this->get_actions_handler()->form_id );
+		$this->set_gateways_options_by_form_id( jfb_handler()->form_id );
 
 		try {
 			$this->get_current_gateway_controller()->before_actions( $this->get_actions_before() );
@@ -100,11 +101,23 @@ class Gateway_Manager {
 		}
 
 		try {
-			$this->get_current_gateway_controller()->after_actions( $this->get_actions_handler() );
+			$controller = $this->get_current_gateway_controller();
+		} catch ( Repository_Exception $exception ) {
+			return;
+		}
 
+		try {
+			$controller->after_actions( jfb_action_handler() );
 		} catch ( Gateway_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
-		} catch ( Repository_Exception $exception ) {
+		}
+
+		try {
+			add_action(
+				'jet-form-builder/form-handler/after-send',
+				array( $controller->get_scenario(), 'attach_record_id' )
+			);
+		} catch ( Gateway_Exception $exception ) {
 			return;
 		}
 	}
@@ -194,37 +207,26 @@ class Gateway_Manager {
 		return $prop ? ( $this->gateways_form_data[ $prop ] ?? $if_empty ) : $this->gateways_form_data;
 	}
 
+	/**
+	 * @return int[]
+	 */
 	public function get_actions_before() {
-		$with_filter = function ( $actions = array() ) {
-			return apply_filters(
-				'jet-form-builder/gateways/notifications-before',
-				$actions,
-				$this->get_actions_handler()->get_all()
-			);
-		};
-
 		if ( ! $this->gateways( 'notifications_before' ) ) {
-			return $with_filter();
+			return array();
 		}
 
-		$actions_ids = array_filter(
+		return array_filter(
 			$this->gateways( 'notifications_before' ),
 			function ( $action ) {
 				return $action['active'];
 			}
 		);
-
-		return $with_filter( $actions_ids );
 	}
 
 	public function has_gateway( $form_id ) {
 		$this->set_gateways_options_by_form_id( $form_id );
 
 		return $this->get_gateway_id( false );
-	}
-
-	public function get_actions_handler() {
-		return jet_form_builder()->form_handler->action_handler;
 	}
 
 	public function get_global_settings( $gateway_id ) {

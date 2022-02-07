@@ -1,0 +1,95 @@
+<?php
+
+
+namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
+
+use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Base_Gateway;
+
+
+/**
+ * Class Actions_Manager
+ * @package Jet_Form_Builder\Gateways\Paypal
+ */
+abstract class Scenarios_Manager_Abstract {
+
+	const QUERY_VAR = 'jet_gateway_scenario';
+
+	private $queried_scenario;
+	private $_logic_manager;
+	private $_view_manager;
+
+	protected function __construct() {
+		$this->logic()->rep_install();
+		$this->view()->rep_install();
+	}
+
+	public function logic(): Scenario_Logic_Repository {
+		return $this->_logic_manager;
+	}
+
+	public function view(): Scenarios_View_Repository {
+		return $this->_view_manager;
+	}
+
+	protected function set_logic_manager( Scenario_Logic_Repository $manager ) {
+		$this->_logic_manager = $manager;
+
+		return $this;
+	}
+
+	protected function set_view_manager( Scenarios_View_Repository $manager ) {
+		$this->_view_manager = $manager;
+
+		return $this;
+	}
+
+	/**
+	 * @param Base_Gateway $paypal
+	 *
+	 * @return Scenario_Logic_Base
+	 * @throws Gateway_Exception
+	 */
+	public function get_logic( Base_Gateway $paypal ): Scenario_Logic_Base {
+		try {
+			return $this->logic()->rep_get_item( $paypal->get_current_scenario_id() );
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
+	}
+
+	/**
+	 * @param $slug
+	 *
+	 * @return Scenario_View_Base
+	 * @throws Repository_Exception
+	 */
+	public function get_view( $slug ): Scenario_View_Base {
+		return $this->view()->get_view( $slug );
+	}
+
+	/**
+	 * @return Scenario_Logic_Base
+	 * @throws Gateway_Exception
+	 */
+	public function query_logic(): Scenario_Logic_Base {
+		try {
+			if ( ! $this->queried_scenario ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$scenario = sanitize_text_field( wp_unslash(
+					$_GET[ self::QUERY_VAR ] ?? ''
+				) );
+
+				$this->queried_scenario = $this->logic()->rep_get_item( $scenario );
+			}
+		} catch ( Repository_Exception $exception ) {
+			throw new Gateway_Exception( $exception->getMessage() );
+		}
+
+		return $this->queried_scenario;
+	}
+
+
+}

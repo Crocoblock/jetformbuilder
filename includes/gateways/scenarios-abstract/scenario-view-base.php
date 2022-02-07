@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Views;
+namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;

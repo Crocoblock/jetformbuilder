@@ -11,11 +11,13 @@ use Jet_Form_Builder\Dev_Mode\Manager;
 
 class Save_Record extends Base {
 
+	const ID = 'save_record';
+
 	/**
 	 * @return string
 	 */
 	public function get_id() {
-		return 'save_record';
+		return self::ID;
 	}
 
 	/**
@@ -43,15 +45,13 @@ class Save_Record extends Base {
 	 * @throws Sql_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$args = jet_form_builder()->form_handler->get_response_args();
+		$record_id = ( new Form_Record\Controller() )
+			->save()
+			->get_record_id();
 
-		( new Form_Record\Controller() )
-			->set_setting( 'save_errors', Manager::instance()->active() )
-			->save(
-				array(
-					'status' => $args['status'] ?? '',
-				)
-			);
+		$this->add_context_once(
+			array( 'id' => $record_id )
+		);
 	}
 
 }

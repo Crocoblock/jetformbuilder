@@ -1,10 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
+namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Base_Gateway;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
@@ -90,10 +92,6 @@ abstract class Scenario_Logic_Base {
 		return $this->queried_token;
 	}
 
-	public function get_action_handler() {
-		return $this->controller->get_action_handler();
-	}
-
 	public function get_additional_args() {
 		return array(
 			Scenarios_Manager::QUERY_VAR => static::scenario_id(),
@@ -108,9 +106,9 @@ abstract class Scenario_Logic_Base {
 		return $this->controller->get_refer_url( Controller::FAILED_TYPE, $this->get_additional_args() );
 	}
 
-	public function install( Controller $paypal ) {
+	public function install( Base_Gateway $controller ) {
 		if ( ! $this->controller ) {
-			$this->controller = $paypal;
+			$this->controller = $controller;
 		}
 
 		return $this;
@@ -122,18 +120,14 @@ abstract class Scenario_Logic_Base {
 				continue;
 			}
 
-			$this->get_action_handler()->add_response(
-				array(
-					'redirect' => $link['href'],
-				)
-			);
+			jfb_action_handler()->add_response( array( 'redirect' => $link['href'] ) );
 			break;
 		}
 	}
 
 	/**
 	 * @param string $key
-	 * @param bool $if_empty
+	 * @param string $if_empty
 	 *
 	 * @return mixed
 	 */
@@ -143,6 +137,29 @@ abstract class Scenario_Logic_Base {
 
 	public function get_settings() {
 		return $this->controller->current_scenario();
+	}
+
+	private function get_context_key() {
+		return $this->controller->get_id() . '__' . static::scenario_id();
+	}
+
+	public function add_context( array $context ) {
+		jfb_action_handler()->add_context( $this->get_context_key(), $context );
+
+		return $this;
+	}
+
+	public function get_context( string $property = '' ) {
+		return jfb_action_handler()->get_context( $this->get_context_key(), $property );
+	}
+
+	/**
+	 * @since 2.0.0
+	 */
+	public function attach_record_id() {
+		$record_id = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
+
+		// todo: attach record_id to payment or subscription
 	}
 
 }

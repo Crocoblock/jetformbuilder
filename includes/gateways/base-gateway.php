@@ -4,7 +4,9 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -13,7 +15,8 @@ use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
-use Jet_Form_Builder\Dev_Mode;
+use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
 /**
  *
@@ -91,6 +94,22 @@ abstract class Base_Gateway {
 	abstract protected function retrieve_gateway_meta();
 
 	/**
+	 * @return Scenario_Logic_Base
+	 * @throws Gateway_Exception
+	 */
+	public function get_scenario() {
+		return Scenarios_Manager::instance()->get_logic( $this )->install( $this );
+	}
+
+	/**
+	 * @return Scenario_Logic_Base
+	 * @throws Gateway_Exception
+	 */
+	public function query_scenario() {
+		return Scenarios_Manager::instance()->query_logic()->install( $this );
+	}
+
+	/**
 	 * @deprecated 1.5.0
 	 */
 	protected function set_payment() {
@@ -112,7 +131,7 @@ abstract class Base_Gateway {
 	 *
 	 * @return void [description]
 	 * @throws Gateway_Exception
-	 * @deprecated 1.5.0
+	 * @deprecated 2.0.0
 	 */
 	public function on_success_payment() {
 		$this->set_current_gateway_options();
@@ -133,7 +152,7 @@ abstract class Base_Gateway {
 	}
 
 	/**
-	 * @deprecated 1.5.0
+	 * @deprecated 2.0.0
 	 */
 	public function save_gateway_before_send_response() {
 		$this->data['date']    = date_i18n( 'F j, Y, H:i' );
@@ -219,20 +238,21 @@ abstract class Base_Gateway {
 			return;
 		}
 
-		$all = $this->get_action_handler()
-		            ->set_form_id( $this->data['form_id'] )
-		            ->add_request( $this->data['form_data'] )
-		            ->unregister_action( 'redirect_to_page' )
-		            ->get_all();
+		$all = jfb_action_handler()->set_form_id( $this->data['form_id'] )
+		                           ->add_request( $this->data['form_data'] )
+		                           ->unregister_action( 'redirect_to_page' )
+		                           ->get_all();
 
 		if ( empty( $all ) ) {
 			return;
 		}
 		foreach ( $all as $index => $notification ) {
-			$this->maybe_unregister_action( $index, $keep_these );
+			if ( empty( $keep_these[ $index ]['active'] ) ) {
+				jfb_action_handler()->unregister_action( $index );
+			}
 		}
 
-		$this->get_action_handler()->soft_run_actions();
+		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	/**
@@ -304,52 +324,48 @@ abstract class Base_Gateway {
 	 */
 	public function before_actions( $keep_these ) {
 		$this->set_form_meta( GM::instance()->gateways() );
+		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
-		if ( empty( $this->get_action_handler()->get_all() ) ) {
+		if ( empty( $default_actions ) ) {
 			return;
 		}
 
-		foreach ( $this->get_action_handler()->get_all() as $index => $action ) {
-			if ( 'insert_post' === $action->get_id()
-			     && $this->get_initialize_action_id() === $action->_id
-			) {
-				continue;
-			}
+		foreach ( $default_actions as $index ) {
+			$action = jfb_action_handler()->get_action_by_id( $index );
 
 			if ( 'redirect_to_page' === $action->get_id() ) {
-				$this->get_action_handler()->unregister_action( $action->get_id() );
+				jfb_action_handler()->unregister_action( $index );
 				$this->redirect = $action;
 			}
 
-			if ( ! array_key_exists( $index, $keep_these ) ) {
-				$this->get_action_handler()->unregister_action( $index );
+			if ( empty( $keep_these[ $index ]['active'] ) ) {
+				jfb_action_handler()->unregister_action( $index );
 			}
-			$this->maybe_unregister_action( $index, $keep_these );
 		}
 	}
 
 	/**
+	 * @return int
 	 * @deprecated 1.5.0
 	 *
-	 * @return int
 	 */
 	public function get_initialize_action_id() {
 		return (int) $this->gateway( 'action_order', 0 );
 	}
 
 	/**
+	 * @return int|mixed
 	 * @deprecated 1.5.0
 	 *
-	 * @return int|mixed
 	 */
 	public function get_insert_post_action_id() {
 		return GM::instance()->get_actions_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
 	}
 
 	/**
+	 * @throws Gateway_Exception
 	 * @deprecated 1.5.0
 	 *
-	 * @throws Gateway_Exception
 	 */
 	public function set_order_id() {
 		if ( ! $this->get_insert_post_action_id() ) {
@@ -360,9 +376,9 @@ abstract class Base_Gateway {
 	}
 
 	/**
+	 * @return mixed
 	 * @deprecated 1.5.0
 	 *
-	 * @return mixed
 	 */
 	public function get_order_id() {
 		return $this->order_id;
@@ -382,7 +398,7 @@ abstract class Base_Gateway {
 		);
 
 		if ( ! $this->price_field ) {
-			throw new Gateway_Exception( 'Invalid price field',  $this->gateways_meta );
+			throw new Gateway_Exception( 'Invalid price field', $this->gateways_meta );
 		}
 	}
 
@@ -477,9 +493,9 @@ abstract class Base_Gateway {
 	abstract protected function query_order_token( $order_id, $form_id );
 
 	/**
+	 * @return array|object|void|null
 	 * @deprecated 1.5.0
 	 *
-	 * @return array|object|void|null
 	 */
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );
@@ -528,15 +544,6 @@ abstract class Base_Gateway {
 		);
 	}
 
-	private function maybe_unregister_action( $index, $keep_these ) {
-		if ( ! array_key_exists( $index, $keep_these )
-		     || ! isset( $keep_these[ $index ]['active'] )
-		     || ! $keep_these[ $index ]['active']
-		) {
-			$this->get_action_handler()->unregister_action( $index );
-		}
-	}
-
 	public function try_run_on_catch() {
 		try {
 			$this->set_payment_token();
@@ -562,10 +569,6 @@ abstract class Base_Gateway {
 		$this->data[ $prop ] = $value;
 
 		return $this;
-	}
-
-	public function get_action_handler() {
-		return GM::instance()->get_actions_handler();
 	}
 
 
@@ -645,7 +648,7 @@ abstract class Base_Gateway {
 	 * @param null $payment
 	 *
 	 * @return array|object|void|null [description]
-	 * @deprecated since 1.5.0
+	 * @deprecated since 2.0.0
 	 */
 	public function get_form_by_payment_token( $payment = null ) {
 

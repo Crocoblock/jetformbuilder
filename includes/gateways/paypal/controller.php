@@ -11,6 +11,7 @@ use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
@@ -134,22 +135,6 @@ class Controller extends Base_Gateway {
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 		$this->get_scenario()->process_before();
-	}
-
-	/**
-	 * @return Scenarios_Logic\Scenario_Logic_Base
-	 * @throws Gateway_Exception
-	 */
-	public function get_scenario() {
-		return Scenarios_Manager::instance()->get_logic( $this )->install( $this );
-	}
-
-	/**
-	 * @return Scenarios_Logic\Scenario_Logic_Base
-	 * @throws Gateway_Exception
-	 */
-	public function query_scenario() {
-		return Scenarios_Manager::instance()->query_logic()->install( $this );
 	}
 
 	public static function get_credentials() {

@@ -59,13 +59,13 @@ class Payer_Model extends Base_Db_Model {
 				'payer_id' => $payer_id
 			) )->query()->query_one();
 
-			self::update_payer( $payer );
-
-			return (int) ( $find_payer['id'] ?? 0 );
-
 		} catch ( Query_Builder_Exception $exception ) {
 			return ( new self )->safe_create()->insert( $payer );
 		}
+
+		self::update_payer( $payer );
+
+		return (int) ( $find_payer['id'] ?? 0 );
 	}
 
 	/**

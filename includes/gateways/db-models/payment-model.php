@@ -27,6 +27,7 @@ class Payment_Model extends Base_Gateway_Db_Model {
 			'subscription_id'        => 'bigint(20)',
 			'form_id'                => 'bigint(20)',
 			'user_id'                => 'bigint(20)',
+			'record_id'              => 'bigint(20)',
 			'gateway_id'             => 'varchar(100)',
 			'scenario'               => 'varchar(100)',
 			'amount_value'           => 'DECIMAL(10,4)',

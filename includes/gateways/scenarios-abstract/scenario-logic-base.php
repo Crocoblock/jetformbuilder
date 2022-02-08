@@ -4,9 +4,11 @@
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
 use Jet_Form_Builder\Actions\Types\Save_Record;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Base_Gateway;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Paypal\Controller;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
@@ -154,12 +156,34 @@ abstract class Scenario_Logic_Base {
 	}
 
 	/**
+	 * This function is called on the hook
+	 * jet-form-builder/form-handler/after-send
+	 *
+	 * from the \Jet_Form_Builder\Gateways\Gateway_Manager::after_send_actions
+	 *
+	 * @throws Sql_Exception
 	 * @since 2.0.0
 	 */
 	public function attach_record_id() {
-		$record_id = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
+		$record_id  = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
+		$payment_id = $this->get_context( 'payment_id' );
 
-		// todo: attach record_id to payment or subscription
+		if ( ! $record_id || ! $payment_id ) {
+			return;
+		}
+
+		try {
+			( new Payment_Model )->update(
+				array(
+					'record_id' => $record_id,
+				),
+				array(
+					'id' => $payment_id
+				)
+			);	
+		} catch ( Sql_Exception $exception ) {
+			throw $exception->dynamic_error();
+		}
 	}
 
 }

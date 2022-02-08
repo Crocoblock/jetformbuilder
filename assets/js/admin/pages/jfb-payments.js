@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -16,28 +16,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var Payments = window.JetFBComponents.PaymentsPage.Payments;
+var PaymentsComponent = window.JetFBComponents.PaymentsPage.PaymentsComponent;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "jfb-payments",
   components: {
-    Payments: Payments
+    PaymentsComponent: PaymentsComponent
   }
 });
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-payments/Payments.vue":
-/*!***********************************************!*\
-  !*** ./admin/pages/jfb-payments/Payments.vue ***!
-  \***********************************************/
+/***/ "./admin/pages/jfb-payments/PaymentsPage.vue":
+/*!***************************************************!*\
+  !*** ./admin/pages/jfb-payments/PaymentsPage.vue ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Payments.vue?vue&type=template&id=03d6cf9f& */ "./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f&");
-/* harmony import */ var _Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Payments.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsPage.vue?vue&type=template&id=18604964& */ "./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964&");
+/* harmony import */ var _PaymentsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PaymentsPage.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -47,9 +47,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__.render,
-  _Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _PaymentsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -59,46 +59,46 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "admin/pages/jfb-payments/Payments.vue"
+component.options.__file = "admin/pages/jfb-payments/PaymentsPage.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js&":
-/*!************************************************************************!*\
-  !*** ./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js& ***!
-  \************************************************************************/
+/***/ "./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsPage.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f&":
-/*!******************************************************************************!*\
-  !*** ./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f& ***!
-  \******************************************************************************/
+/***/ "./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964&":
+/*!**********************************************************************************!*\
+  !*** ./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964& ***!
+  \**********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_03d6cf9f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=template&id=03d6cf9f& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsPage_vue_vue_type_template_id_18604964___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsPage.vue?vue&type=template&id=18604964& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964&");
 
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f&":
-/*!***********************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/Payments.vue?vue&type=template&id=03d6cf9f& ***!
-  \***********************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-payments/PaymentsPage.vue?vue&type=template&id=18604964& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -110,7 +110,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("Payments")
+  return _c("PaymentsComponent")
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -294,11 +294,16 @@ var __webpack_exports__ = {};
   !*** ./admin/pages/jfb-payments/index.js ***!
   \*******************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Payments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Payments */ "./admin/pages/jfb-payments/Payments.vue");
+/* harmony import */ var _PaymentsPage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsPage */ "./admin/pages/jfb-payments/PaymentsPage.vue");
 
 var options = window.JetFBComponents.PaymentsPage.options;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
-renderCurrentPage(_Payments__WEBPACK_IMPORTED_MODULE_0__["default"], options);
+
+if ('store' in options) {
+  options.store = new Vuex.Store(options.store);
+}
+
+renderCurrentPage(_PaymentsPage__WEBPACK_IMPORTED_MODULE_0__["default"], options);
 })();
 
 /******/ })()

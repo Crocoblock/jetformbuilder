@@ -93,7 +93,7 @@ var _wp$hooks = wp.hooks,
 var _window$JetFBMixins = window.JetFBMixins,
     SaveTabByAjax = _window$JetFBMixins.SaveTabByAjax,
     GetIncoming = _window$JetFBMixins.GetIncoming;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 var settingTabs = applyFilters('jet.fb.register.settings-page.tabs', [_tabs_payments_gateways__WEBPACK_IMPORTED_MODULE_4__, _tabs_captcha__WEBPACK_IMPORTED_MODULE_0__, _tabs_mailchimp__WEBPACK_IMPORTED_MODULE_1__, _tabs_getresponse__WEBPACK_IMPORTED_MODULE_2__, _tabs_activecampaign__WEBPACK_IMPORTED_MODULE_3__]);
 
 var changeHash = function changeHash(hash) {
@@ -571,7 +571,7 @@ var _window$JetFBMixins = window.JetFBMixins,
     SaveTabByAjax = _window$JetFBMixins.SaveTabByAjax,
     GetIncoming = _window$JetFBMixins.GetIncoming;
 var CxVuiCollapseMini = window.JetFBComponents.CxVuiCollapseMini;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 var gatewaysTabs = applyFilters('jet.fb.register.gateways', [_gateways_paypal__WEBPACK_IMPORTED_MODULE_1__]);
 
 var requestFunc = function requestFunc() {};

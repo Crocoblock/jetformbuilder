@@ -46,7 +46,7 @@ var _JetFBMixins = JetFBMixins,
 var applyFilters = wp.hooks.applyFilters;
 var CHOOSE_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CHOOSE_ACTION,
     CLICK_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CLICK_ACTION;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 var _Vuex = Vuex,
     mapState = _Vuex.mapState,
     mapGetters = _Vuex.mapGetters,
@@ -373,7 +373,7 @@ var _window$Vuex = window.Vuex,
     mapGetters = _window$Vuex.mapGetters,
     mapActions = _window$Vuex.mapActions,
     mapMutations = _window$Vuex.mapMutations;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'entries-table',
   props: {
@@ -505,10 +505,10 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -519,6 +519,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TablePagination__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../TablePagination */ "./admin-vuex-package/components/TablePagination.vue");
 /* harmony import */ var _payment_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./payment-type */ "./admin-vuex-package/components/PaymentsPage/payment-type/index.js");
 /* harmony import */ var _status__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./status */ "./admin-vuex-package/components/PaymentsPage/status/index.js");
+/* harmony import */ var _EntriesTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
+/* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -557,20 +559,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 
 
 
 var _JetFBComponents = JetFBComponents,
-    PayerColumn = _JetFBComponents.PayerColumn,
-    EntriesTable = _JetFBComponents.EntriesTable;
+    PayerColumn = _JetFBComponents.PayerColumn;
 var _JetFBMixins = JetFBMixins,
     GetIncoming = _JetFBMixins.GetIncoming,
     i18n = _JetFBMixins.i18n;
@@ -579,8 +574,9 @@ var applyFilters = wp.hooks.applyFilters;
 var _wp = wp,
     apiFetch = _wp.apiFetch;
 var _Vuex = Vuex,
-    mapState = _Vuex.mapState;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+    mapState = _Vuex.mapState,
+    mapGetters = _Vuex.mapGetters;
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'payments-table-core',
   props: {
@@ -592,43 +588,19 @@ window.jfbEventBus = window.jfbEventBus || new Vue();
     }
   },
   components: {
-    EntriesTable: EntriesTable,
+    EntriesTable: _EntriesTable__WEBPACK_IMPORTED_MODULE_3__["default"],
     TablePagination: _TablePagination__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
-      actions: {},
-      columnsComponents: [],
-      isShowPopup: false
+      columnsComponents: []
     };
   },
-  mixins: [GetIncoming, i18n],
+  mixins: [GetIncoming, i18n, _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_4__["default"]],
   created: function created() {
-    var _this$getIncoming = this.getIncoming(),
-        _this$getIncoming$lis = _this$getIncoming.list,
-        list = _this$getIncoming$lis === void 0 ? [] : _this$getIncoming$lis,
-        _this$getIncoming$col = _this$getIncoming.columns,
-        columns = _this$getIncoming$col === void 0 ? {} : _this$getIncoming$col,
-        _this$getIncoming$act = _this$getIncoming.actions,
-        actions = _this$getIncoming$act === void 0 ? {} : _this$getIncoming$act,
-        total = _this$getIncoming.total;
-
     this.columnsComponents = [PayerColumn, _payment_type__WEBPACK_IMPORTED_MODULE_1__, _status__WEBPACK_IMPORTED_MODULE_2__].concat(_toConsumableArray(this.columns));
-    this.actions = JSON.parse(JSON.stringify(actions));
-    this.$store.commit('setColumns', JSON.parse(JSON.stringify(columns)));
-    this.$store.commit('setList', JSON.parse(JSON.stringify(list)));
-    this.$store.commit('setQueryState', {
-      total: +total,
-      limit: this.$store.state.currentList.length
-    });
-    this.$store.dispatch('setQueriedPage', 1);
   },
-  computed: _objectSpread({
-    columnsFromStore: function columnsFromStore() {
-      return this.$store.getters.getColumns;
-    }
-  }, mapState(['loadingPage'])),
-  methods: {}
+  computed: _objectSpread(_objectSpread({}, mapState(['loadingPage'])), mapGetters(['getColumns']))
 });
 
 /***/ }),
@@ -805,43 +777,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Payments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Payments */ "./admin-vuex-package/components/PaymentsPage/Payments.vue");
+/* harmony import */ var _PaymentsComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsComponent */ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue");
 /* harmony import */ var _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/TableStoreHelper */ "./admin-vuex-package/mixins/TableStoreHelper.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-
-var getActions = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getActions,
-    getGetters = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getGetters,
-    getMutations = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getMutations,
-    getBaseState = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getBaseState;
+var getBaseStore = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getBaseStore;
 Vue.use(Vuex);
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 var options = {
-  store: {
-    state: _objectSpread({}, getBaseState()),
-    getters: _objectSpread(_objectSpread({}, getGetters()), {}, {
-      getColumns: function getColumns(state) {
-        return state.columns;
-      }
-    }),
-    mutations: _objectSpread(_objectSpread({}, getMutations()), {}, {
-      setColumns: function setColumns(state, columns) {
-        state.columns = columns;
-      },
-      setList: function setList(state, list) {
-        state.currentList = list;
-      }
-    }),
-    actions: _objectSpread({}, getActions())
-  }
+  store: getBaseStore()
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  Payments: _Payments__WEBPACK_IMPORTED_MODULE_0__["default"],
+  PaymentsComponent: _PaymentsComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
   options: options
 });
 
@@ -941,7 +888,7 @@ var _JetFBActions = JetFBActions,
 var _wp = wp,
     apiFetch = _wp.apiFetch;
 var __ = wp.i18n.__;
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 
 var getOffset = function getOffset(page, limit) {
   return 1 !== page ? (page - 1) * limit : 0;
@@ -1361,10 +1308,12 @@ var _Vuex = Vuex,
         list = _this$getIncoming$lis === void 0 ? [] : _this$getIncoming$lis,
         _this$getIncoming$col = _this$getIncoming.columns,
         columns = _this$getIncoming$col === void 0 ? {} : _this$getIncoming$col,
-        total = _this$getIncoming.total;
+        total = _this$getIncoming.total,
+        actions = _this$getIncoming.actions;
 
     this.setColumns(JSON.parse(JSON.stringify(columns)));
     this.setList(JSON.parse(JSON.stringify(list)));
+    this.setActionsList(actions);
     this.setQueryState({
       total: +total,
       limit: this.currentList.length
@@ -1431,10 +1380,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1451,7 +1400,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-form-builder-page--payments .jfb-popup-grid {\n  display: flex;\n}\n.jet-form-builder-page--payments .jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jet-form-builder-page--payments .jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--id {\n  width: 100px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--type {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--gross {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--transaction_id {\n  width: 200px;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/Payments.vue","webpack://./../Payments.vue"],"names":[],"mappings":"AAyGC;EACC,aAAA;ACxGF;ADyGE;EACC,OAAA;ACvGH;ADyGE;EACC,OAAA;EACA,kBAAA;ACvGH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH;AD4GE;EACC,YAAA;AC1GH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jet-form-builder-page--payments {\r\n\t.jfb-popup-grid {\r\n\t\tdisplay: flex;\r\n\t\t&-column:first-child {\r\n\t\t\tflex: 3;\r\n\t\t}\r\n\t\t&-column:not(:first-child) {\r\n\t\t\tflex: 1;\r\n\t\t\ttext-align: center;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vue-list-table {\r\n\t\t.cell--id {\r\n\t\t\twidth: 100px;\r\n\t\t}\r\n\t\t.cell--date {\r\n\t\t\twidth: 200px;\r\n\t\t}\r\n\t\t.cell--type {\r\n\t\t\twidth: 160px;\r\n\t\t}\r\n\t\t.cell--status {\r\n\t\t\twidth: 160px;\r\n\t\t}\r\n\t\t.cell--payer {\r\n\t\t\twidth: 220px;\r\n\t\t}\r\n\t\t.cell--gross {\r\n\t\t\twidth: 160px;\r\n\t\t}\r\n\t\t.cell--transaction_id {\r\n\t\t\twidth: 200px;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-form-builder-page--payments .jfb-popup-grid {\n  display: flex;\n}\n.jet-form-builder-page--payments .jfb-popup-grid-column:first-child {\n  flex: 3;\n}\n.jet-form-builder-page--payments .jfb-popup-grid-column:not(:first-child) {\n  flex: 1;\n  text-align: center;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--id {\n  width: 100px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--date {\n  width: 200px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--type {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--status {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--payer {\n  width: 220px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--gross {\n  width: 160px;\n}\n.jet-form-builder-page--payments .cx-vue-list-table .cell--transaction_id {\n  width: 200px;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue","webpack://./../PaymentsComponent.vue"],"names":[],"mappings":"AA8EA;EACC,oBAAA;AC7ED;ADiFC;EACC,SAAA;AC9EF;ADiFC;EACC,yBAAA;AC/EF;ADiFE;EACC,gCAAA;AC/EH;ADkFE;EACC,yBAAA;AChFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1505,7 +1454,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA+EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;AC9ED;ADgFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;AC9EH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA+EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;AC9ED;ADgFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;AC9EH;ADiFC;EACC,uBAAA;AC/EF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1833,10 +1782,10 @@ component.options.__file = "admin-vuex-package/components/EntriesTable.vue"
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/Payments.vue":
-/*!*****************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/Payments.vue ***!
-  \*****************************************************************/
+/***/ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue":
+/*!**************************************************************************!*\
+  !*** ./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue ***!
+  \**************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1844,9 +1793,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Payments.vue?vue&type=template&id=c89bffe2& */ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2&");
-/* harmony import */ var _Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Payments.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js&");
-/* harmony import */ var _Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Payments.vue?vue&type=style&index=0&lang=scss& */ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsComponent.vue?vue&type=template&id=7d33215e& */ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e&");
+/* harmony import */ var _PaymentsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PaymentsComponent.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PaymentsComponent.vue?vue&type=style&index=0&lang=scss& */ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1857,9 +1806,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__.render,
-  _Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _PaymentsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -1869,7 +1818,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "admin-vuex-package/components/PaymentsPage/Payments.vue"
+component.options.__file = "admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -2075,10 +2024,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************/
+/***/ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************!*\
+  !*** ./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2086,8 +2035,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsComponent.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -2224,19 +2173,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2&":
-/*!************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2& ***!
-  \************************************************************************************************/
+/***/ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e&":
+/*!*********************************************************************************************************!*\
+  !*** ./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e& ***!
+  \*********************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_template_id_c89bffe2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=template&id=c89bffe2& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_template_id_7d33215e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsComponent.vue?vue&type=template&id=7d33215e& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e&");
 
 
 /***/ }),
@@ -2326,18 +2275,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&":
-/*!***************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss& ***!
-  \***************************************************************************************************/
+/***/ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&":
+/*!************************************************************************************************************!*\
+  !*** ./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss& ***!
+  \************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsComponent.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Payments_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -2820,10 +2769,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2&":
-/*!*****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=template&id=c89bffe2& ***!
-  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e&":
+/*!**************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=template&id=7d33215e& ***!
+  \**************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2850,19 +2799,19 @@ var render = function () {
         _vm._v(_vm._s(_vm.__("JetFormBuilder Payments", "jet-form-builder"))),
       ]),
       _vm._v(" "),
-      _vm.$slots.top ? [_vm._t("top")] : _c("TablePagination"),
+      _c("TablePagination"),
       _vm._v(" "),
       _c("EntriesTable", {
         attrs: {
           loading: _vm.loadingPage,
-          columns: _vm.columnsFromStore,
+          columns: _vm.getColumns,
           "columns-components": _vm.columnsComponents,
         },
       }),
       _vm._v(" "),
       _vm.$slots.default ? [_vm._t("default")] : _vm._e(),
       _vm._v(" "),
-      _vm.$slots.bottom ? [_vm._t("bottom")] : _c("TablePagination"),
+      _c("TablePagination"),
     ],
     2
   )
@@ -3158,22 +3107,22 @@ if(false) {}
 
 /***/ }),
 
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&":
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss& ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Payments.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/Payments.vue?vue&type=style&index=0&lang=scss&");
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/sass-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PaymentsComponent.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue?vue&type=style&index=0&lang=scss&");
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("68d55174", content, false, {});
+var update = add("6cbed514", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

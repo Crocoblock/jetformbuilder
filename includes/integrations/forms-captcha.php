@@ -37,10 +37,12 @@ class Forms_Captcha {
 	}
 
 	/**
+	 * @param $incoming_request
+	 *
 	 * @return mixed
 	 * @throws Request_Exception
 	 */
-	public function handle_request() {
+	public function handle_request( $incoming_request ) {
 		/**
 		 * We get an array with the request body from the raw array,
          * since only those fields that are in the form get into the processed request.
@@ -51,7 +53,7 @@ class Forms_Captcha {
 			throw new Request_Exception( 'captcha_failed' );
 		}
 
-		return $request;
+		return $incoming_request;
 	}
 
 	private function api_front_url( $key ): string {

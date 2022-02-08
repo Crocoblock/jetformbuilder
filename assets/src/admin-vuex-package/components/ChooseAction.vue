@@ -30,7 +30,7 @@ const {
 		  CLICK_ACTION,
 	  } = Constants;
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const {
 		  mapState,

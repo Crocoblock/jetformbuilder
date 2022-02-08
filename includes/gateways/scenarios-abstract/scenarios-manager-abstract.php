@@ -47,17 +47,13 @@ abstract class Scenarios_Manager_Abstract {
 	}
 
 	/**
-	 * @param Base_Gateway $paypal
+	 * @param Base_Gateway $controller
 	 *
 	 * @return Scenario_Logic_Base
-	 * @throws Gateway_Exception
+	 * @throws Repository_Exception
 	 */
-	public function get_logic( Base_Gateway $paypal ): Scenario_Logic_Base {
-		try {
-			return $this->logic()->rep_get_item( $paypal->get_current_scenario_id() );
-		} catch ( Repository_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
-		}
+	public function get_logic( Base_Gateway $controller ): Scenario_Logic_Base {
+		return $this->logic()->rep_get_item( $controller->get_current_scenario_id() );
 	}
 
 	/**

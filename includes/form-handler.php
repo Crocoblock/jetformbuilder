@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Request_Handler;
@@ -341,6 +342,10 @@ class Form_Handler {
 			( new Action_Required_Executor() )->soft_run_actions();
 
 			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
+		} catch ( Repository_Exception $exception ) {
+			$this->send_raw_response();
+
+			return;
 		} catch ( Handler_Exception $exception ) {
 			$this->is_success = false;
 
@@ -349,6 +354,8 @@ class Form_Handler {
 					'status' => $exception->get_form_status(),
 				)
 			);
+
+			return;
 		}
 
 		$this->send_raw_response();

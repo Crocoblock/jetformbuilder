@@ -60,7 +60,7 @@ const { applyFilters } = wp.hooks;
 const { SaveTabByAjax, GetIncoming } = window.JetFBMixins;
 const { CxVuiCollapseMini } = window.JetFBComponents;
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const gatewaysTabs = applyFilters( 'jet.fb.register.gateways', [
 	paypal,

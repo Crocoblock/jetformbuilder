@@ -15,7 +15,7 @@
 <script>
 import ParseIncomingValueMixin from '../../mixins/ParseIncomingValueMixin';
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 export default {
 	name: 'actions--item',

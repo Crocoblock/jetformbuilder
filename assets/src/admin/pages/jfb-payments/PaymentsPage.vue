@@ -1,14 +1,14 @@
 <template>
-	<Payments />
+	<PaymentsComponent/>
 </template>
 
 <script>
-const { PaymentsPage: { Payments } } = window.JetFBComponents;
+const { PaymentsPage: { PaymentsComponent } } = window.JetFBComponents;
 
 export default {
 	name: "jfb-payments",
 	components: {
-		Payments,
+		PaymentsComponent,
 	},
 }
 </script>

@@ -51,7 +51,7 @@ const { applyFilters, doAction } = wp.hooks;
 
 const { SaveTabByAjax, GetIncoming } = window.JetFBMixins;
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	paymentGateways,

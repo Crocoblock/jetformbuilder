@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Query_Views;
 
 
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
@@ -31,6 +32,7 @@ class Payment_View extends View_Base {
 			$payments    = ( new Payment_Model )->safe_create()::table();
 			$payers      = ( new Payer_Model )->safe_create()::table();
 			$payers_ship = ( new Payer_Shipping_Model )->safe_create()::table();
+			$records     = ( new Record_Model )->safe_create()::table();
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
@@ -41,6 +43,7 @@ LEFT JOIN `{$payers_ship}` ON 1=1
     AND `{$payers_ship}`.`relation_type` = 'PAY_NOW' 
 
 LEFT JOIN `{$payers}` ON `{$payers_ship}`.`payer_id` = `{$payers}`.`id`
+LEFT JOIN `{$records}` ON `{$payments}`.`record_id` = `{$records}`.`id`
 		";
 	}
 
@@ -52,7 +55,8 @@ LEFT JOIN `{$payers}` ON `{$payers_ship}`.`payer_id` = `{$payers}`.`id`
 		return array_merge(
 			Payment_Model::schema_columns(),
 			Payer_Shipping_Model::schema_columns( 'ship' ),
-			Payer_Model::schema_columns( 'payer' )
+			Payer_Model::schema_columns( 'payer' ),
+			Record_Model::schema_columns( 'record' )
 		);
 	}
 }

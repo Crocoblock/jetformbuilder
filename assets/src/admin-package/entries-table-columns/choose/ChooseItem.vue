@@ -11,7 +11,7 @@
 
 <script>
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 export default {
 	name: 'choose--item',

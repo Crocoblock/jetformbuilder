@@ -86,6 +86,15 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 			return jfb_handler()->request_handler;
 		}
 	}
+	if ( ! function_exists( 'jfb_gateway_current' ) ) {
+		/**
+		 * @return \Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
+		 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+		 */
+		function jfb_gateway_current(): \Jet_Form_Builder\Gateways\Base_Gateway {
+			return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller();
+		}
+	}
 } else {
 	add_action(
 		'admin_notices',

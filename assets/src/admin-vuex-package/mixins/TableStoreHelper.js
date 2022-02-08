@@ -2,7 +2,7 @@ const { addQueryArgs } = JetFBActions;
 const { apiFetch } = wp;
 const { __ } = wp.i18n;
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const getOffset = ( page, limit ) => {
 	return 1 !== page ? (

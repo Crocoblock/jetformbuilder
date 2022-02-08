@@ -3,13 +3,18 @@
 
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
+use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
-use Jet_Form_Builder\Gateways\Paypal\Controller;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
@@ -17,14 +22,11 @@ abstract class Scenario_Logic_Base {
 
 	use Scenario_Item_Trait;
 
-	/** @var Controller */
-	protected $controller;
-
 	protected $queried_token;
 	protected $queried_row = array();
 	protected $api_response;
 
-	abstract public function process_before();
+	abstract public function after_actions();
 
 	abstract public function process_after();
 
@@ -33,6 +35,125 @@ abstract class Scenario_Logic_Base {
 	abstract protected function query_scenario_row();
 
 	abstract public function get_failed_statuses();
+
+	/**
+	 * @throws Repository_Exception
+	 * @throws Action_Exception
+	 */
+	public function on_catch() {
+		$this->process_after();
+
+		$this->process_status( $this->get_process_status() );
+
+		/** redirect to the page */
+		jfb_gateway_current()->send_response(
+			array(
+				'status' => jfb_gateway_current()->get_result_message(
+					$this->get_scenario_row( 'status' )
+				)
+			)
+		);
+	}
+
+	/**
+	 * @throws Repository_Exception
+	 */
+	public function before_actions() {
+		$keep_these = jfb_gateway_current()->get_actions_before();
+
+		jfb_gateway_current()->set_form_meta( Gateway_Manager::instance()->gateways() );
+		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
+
+		foreach ( $default_actions as $index ) {
+			$action = jfb_action_handler()->get_action_by_id( $index );
+
+			if ( 'redirect_to_page' === $action->get_id() ) {
+				jfb_action_handler()->unregister_action( $index );
+
+				$this->add_context( array(
+					'redirect' => $action
+				) );
+			}
+
+			if ( empty( $keep_these[ $index ]['active'] ) ) {
+				jfb_action_handler()->unregister_action( $index );
+			}
+		}
+	}
+
+	/**
+	 * @param $type
+	 *
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_referrer_url( string $type ) {
+		$success_redirect = filter_var(
+			jfb_gateway_current()->gateway( 'use_success_redirect' ),
+			FILTER_VALIDATE_BOOLEAN
+		);
+		$refer            = jfb_action_handler()->get_refer();
+
+		/** @var Redirect_To_Page $redirect */
+		$redirect = $this->get_context( 'redirect' );
+
+		if ( $success_redirect && $redirect && 'success' === $type ) {
+			$refer = $redirect->get_completed_redirect_url();
+		}
+
+		return add_query_arg(
+			array(
+				Gateway_Manager::PAYMENT_TYPE_PARAM => jfb_gateway_current()->get_id(),
+				Scenarios_Manager::QUERY_VAR        => static::scenario_id()
+			),
+			$refer
+		);
+	}
+
+	/**
+	 * Process status notification and enqueue message
+	 *
+	 * @param string $type [description]
+	 *
+	 * @throws Action_Exception
+	 * @throws Repository_Exception
+	 */
+	public function process_status( $type = 'success' ) {
+
+		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jfb_gateway_current() );
+
+		$keep_these = jfb_gateway_current()->gateway( 'notifications_' . $type, array() );
+
+		if ( empty( $keep_these ) ) {
+			return;
+		}
+
+		$entry = $this->get_scenario_row();
+
+		$all = jfb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
+		                           ->unregister_action( 'redirect_to_page' )
+		                           ->get_all();
+
+		if ( empty( $all ) ) {
+			return;
+		}
+
+		foreach ( $all as $index => $notification ) {
+			if ( empty( $keep_these[ $index ]['active'] ) ) {
+				jfb_action_handler()->unregister_action( $index );
+			}
+		}
+
+		try {
+			$request = Record_Fields_View::get_request( $entry['record_id'] ?? 0 );
+		} catch ( Query_Builder_Exception $exception ) {
+			return;
+		}
+
+		jfb_action_handler()->add_request( $request );
+
+		( new Action_Default_Executor() )->soft_run_actions();
+	}
 
 	public function get_gateways_meta() {
 		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
@@ -70,16 +191,6 @@ abstract class Scenario_Logic_Base {
 		return $this;
 	}
 
-	public function on_success() {
-		$this->controller->send_response(
-			array(
-				'status' => $this->controller->get_status_on_payment(
-					$this->get_scenario_row( 'status' )
-				),
-			)
-		);
-	}
-
 	public function get_process_status() {
 		return in_array( $this->get_scenario_row( 'status' ), $this->get_failed_statuses(), true )
 			? 'failed'
@@ -94,30 +205,8 @@ abstract class Scenario_Logic_Base {
 		return $this->queried_token;
 	}
 
-	public function get_additional_args() {
-		return array(
-			Scenarios_Manager::QUERY_VAR => static::scenario_id(),
-		);
-	}
-
-	protected function get_success_url() {
-		return $this->controller->get_refer_url( Controller::SUCCESS_TYPE, $this->get_additional_args() );
-	}
-
-	protected function get_failed_url() {
-		return $this->controller->get_refer_url( Controller::FAILED_TYPE, $this->get_additional_args() );
-	}
-
-	public function install( Base_Gateway $controller ) {
-		if ( ! $this->controller ) {
-			$this->controller = $controller;
-		}
-
-		return $this;
-	}
-
-	public function redirect_to_checkout( $order ) {
-		foreach ( $order['links'] as $link ) {
+	public function add_redirect( $links ) {
+		foreach ( $links as $link ) {
 			if ( empty( $link['rel'] ) || 'approve' !== $link['rel'] ) {
 				continue;
 			}
@@ -132,58 +221,48 @@ abstract class Scenario_Logic_Base {
 	 * @param string $if_empty
 	 *
 	 * @return mixed
+	 * @throws Repository_Exception
 	 */
 	public function get_setting( string $key, $if_empty = '' ) {
-		return $this->controller->current_scenario( $key, $if_empty );
+		return jfb_gateway_current()->current_scenario( $key, $if_empty );
 	}
 
+	/**
+	 * @return array|false|mixed
+	 * @throws Repository_Exception
+	 */
 	public function get_settings() {
-		return $this->controller->current_scenario();
+		return jfb_gateway_current()->current_scenario();
 	}
 
+	/**
+	 * @return string
+	 * @throws Repository_Exception
+	 */
 	private function get_context_key() {
-		return $this->controller->get_id() . '__' . static::scenario_id();
+		return jfb_gateway_current()->get_id() . '__' . static::scenario_id();
 	}
 
+	/**
+	 * @param array $context
+	 *
+	 * @return $this
+	 * @throws Repository_Exception
+	 */
 	public function add_context( array $context ) {
 		jfb_action_handler()->add_context( $this->get_context_key(), $context );
 
 		return $this;
 	}
 
+	/**
+	 * @param string $property
+	 *
+	 * @return array|false|mixed
+	 * @throws Repository_Exception
+	 */
 	public function get_context( string $property = '' ) {
 		return jfb_action_handler()->get_context( $this->get_context_key(), $property );
-	}
-
-	/**
-	 * This function is called on the hook
-	 * jet-form-builder/form-handler/after-send
-	 *
-	 * from the \Jet_Form_Builder\Gateways\Gateway_Manager::after_send_actions
-	 *
-	 * @throws Sql_Exception
-	 * @since 2.0.0
-	 */
-	public function attach_record_id() {
-		$record_id  = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
-		$payment_id = $this->get_context( 'payment_id' );
-
-		if ( ! $record_id || ! $payment_id ) {
-			return;
-		}
-
-		try {
-			( new Payment_Model )->update(
-				array(
-					'record_id' => $record_id,
-				),
-				array(
-					'id' => $payment_id
-				)
-			);	
-		} catch ( Sql_Exception $exception ) {
-			throw $exception->dynamic_error();
-		}
 	}
 
 }

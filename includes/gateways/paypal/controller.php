@@ -8,6 +8,7 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
+use Jet_Form_Builder\Gateways\Base_Scenario_Gateway;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
@@ -15,7 +16,7 @@ use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Gateways\Base_Gateway;
 
-class Controller extends Base_Gateway {
+class Controller extends Base_Scenario_Gateway {
 
 	const ID = 'paypal';
 
@@ -86,55 +87,6 @@ class Controller extends Base_Gateway {
 			),
 			Scenarios_Manager::instance()->view()->get_editor_data()
 		);
-	}
-
-	// statuses from scenario
-
-	/**
-	 * @return array
-	 * @throws Gateway_Exception
-	 */
-	public function failed_statuses() {
-		return $this->query_scenario()->get_failed_statuses();
-	}
-
-	/**
-	 * @return mixed
-	 * @throws Gateway_Exception
-	 */
-	protected function retrieve_gateway_meta() {
-		return $this->query_scenario()->get_gateways_meta();
-	}
-
-	/**
-	 * @return string|void
-	 * @throws Gateway_Exception
-	 */
-	public function get_payment_token() {
-		return $this->query_scenario()->get_queried_token();
-	}
-
-	/**
-	 * @param $order_id
-	 * @param $form_id
-	 *
-	 * @return mixed|void
-	 * @throws Gateway_Exception
-	 */
-	protected function query_order_token( $order_id, $form_id ) {
-		return $this->get_current_token();
-	}
-
-	/**
-	 * Process gateway payment
-	 *
-	 * @param $action_handler
-	 *
-	 * @return void [type] [description]
-	 * @throws Gateway_Exception
-	 */
-	public function after_actions( Action_Handler $action_handler ) {
-		$this->get_scenario()->process_before();
 	}
 
 	public static function get_credentials() {
@@ -233,66 +185,4 @@ class Controller extends Base_Gateway {
 		return $token;
 	}
 
-	/**
-	 * @throws Gateway_Exception
-	 */
-	public function set_gateway_data() {
-		$this->get_scenario()->set_gateway_data();
-	}
-
-	/**
-	 * Execute actions or something else when payment is success
-	 *
-	 * @return void
-	 * @throws Gateway_Exception
-	 */
-	protected function try_do_actions() {
-		try {
-			$this->process_status( $this->query_scenario()->get_process_status() );
-
-		} catch ( Action_Exception $exception ) {
-			$this->send_response(
-				array(
-					'status' => $exception->get_form_status(),
-				)
-			);
-		}
-	}
-
-
-	public function try_run_on_catch() {
-		try {
-			/** set to $this->payment_token */
-			$this->set_payment_token();
-
-			/** set to $this->gateways_meta */
-			$this->set_form_gateways_meta();
-
-			/** here you can update scenario rows */
-			$this->query_scenario()->process_after();
-
-			$this->try_do_actions();
-
-			/** redirect to the page */
-			$this->query_scenario()->on_success();
-
-		} catch ( Skip_Exception $exception ) {
-			return;
-		} catch ( Gateway_Exception $exception ) {
-			$exception->dynamic_error();
-
-			$this->send_response(
-				array(
-					'status' => $exception->getMessage()
-				)
-			);
-		}
-	}
-
-	/**
-	 * @deprecated 1.5.0
-	 */
-	protected function set_gateway_data_on_result() {
-		// TODO: Implement set_gateway_data_on_result() method.
-	}
 }

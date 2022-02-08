@@ -4,7 +4,7 @@ const { TableStoreHelper: { getBaseStore } } = JetFBMixins;
 const { renderCurrentPage } = window.JetFBActions;
 Vue.use( Vuex );
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const store = getBaseStore();
 

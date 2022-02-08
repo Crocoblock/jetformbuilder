@@ -16,15 +16,11 @@ class Payments extends View_Base {
 	}
 
 	public function get_raw_list( array $args ): array {
-		$offset = $args['offset'] ?? 0;
-		$limit  = $args['limit'] ?? 15;
-
 		try {
 			return ( new Payment_View() )
-				->set_limit( array( $offset, $limit ) )
+				->set_table_args( $args )
 				->query()
 				->query_all();
-
 		} catch ( Query_Builder_Exception $exception ) {
 			return array();
 		}
@@ -74,14 +70,11 @@ class Payments extends View_Base {
 
 	public function get_columns_headings(): array {
 		return array(
-			'id'             => array(
-				'label' => __( 'ID', 'jet-form-builder' ),
+			'type'           => array(
+				'label' => __( 'Type', 'jet-form-builder' ),
 			),
 			'date'           => array(
 				'label' => __( 'Date', 'jet-form-builder' ),
-			),
-			'type'           => array(
-				'label' => __( 'Type', 'jet-form-builder' ),
 			),
 			'status'         => array(
 				'label' => __( 'Status', 'jet-form-builder' ),
@@ -94,6 +87,9 @@ class Payments extends View_Base {
 			),
 			'transaction_id' => array(
 				'label' => __( 'Transaction ID', 'jet-form-builder' ),
+			),
+			'id'             => array(
+				'label' => __( 'ID', 'jet-form-builder' ),
 			),
 		);
 	}

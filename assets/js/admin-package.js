@@ -577,7 +577,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'actions--item',
   props: ['value', 'full-entry', 'entry-id'],
@@ -653,7 +653,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-window.jfbEventBus = window.jfbEventBus || new Vue();
+window.jfbEventBus = window.jfbEventBus || new Vue({});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'choose--item',
   props: ['value', 'full-entry'],

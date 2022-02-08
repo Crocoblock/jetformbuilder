@@ -11,6 +11,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
@@ -24,7 +25,7 @@ use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
  *
  * @package Jet_Form_Builder\Gateways
  */
-abstract class Base_Gateway {
+abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	const GATEWAY_META_KEY = '_jet_gateway_data';
 	const PAYMENT_TYPE_INITIAL = 'initial';
@@ -32,18 +33,6 @@ abstract class Base_Gateway {
 
 	const SUCCESS_TYPE = 'success';
 	const FAILED_TYPE = 'cancel';
-
-	/**
-	 * @deprecated 1.5.0
-	 */
-	protected $payment_id;
-	protected $payment_token;
-	protected $data;
-	protected $order_id;
-	protected $gateways_meta;
-	protected $price_field;
-	protected $price;
-	protected $options;
 
 	/** @var Redirect_To_Page */
 	protected $redirect;
@@ -79,41 +68,12 @@ abstract class Base_Gateway {
 
 	abstract protected function options_list();
 
-	/**
-	 * @param Action_Handler $action_handler
-	 *
-	 * @return mixed
-	 * @throws Gateway_Exception
-	 */
-	abstract public function after_actions( Action_Handler $action_handler );
-
-	abstract protected function set_gateway_data_on_result();
-
 	abstract protected function failed_statuses();
 
 	abstract protected function retrieve_gateway_meta();
 
-	/**
-	 * @return Scenario_Logic_Base
-	 * @throws Gateway_Exception
-	 */
-	public function get_scenario() {
-		return Scenarios_Manager::instance()->get_logic( $this )->install( $this );
-	}
-
-	/**
-	 * @return Scenario_Logic_Base
-	 * @throws Gateway_Exception
-	 */
-	public function query_scenario() {
-		return Scenarios_Manager::instance()->query_logic()->install( $this );
-	}
-
-	/**
-	 * @deprecated 1.5.0
-	 */
-	protected function set_payment() {
-		$this->payment_instance = $this->retrieve_payment_instance();
+	public function custom_labels(): array {
+		return array();
 	}
 
 	public function get_payment() {
@@ -126,133 +86,19 @@ abstract class Base_Gateway {
 		);
 	}
 
-	/**
-	 * Store payment status into order and show success/failed message
-	 *
-	 * @return void [description]
-	 * @throws Gateway_Exception
-	 * @deprecated 2.0.0
-	 */
-	public function on_success_payment() {
-		$this->set_current_gateway_options();
-		$this->set_gateway_data_on_result();
-
-		$this->try_do_actions();
-
-		/**
-		 * By default save 'data' property to  payment/subscription post meta
-		 */
-		$this->save_gateway_before_send_response();
-
-		$this->send_response(
-			array(
-				'status' => $this->get_status_on_payment( $this->data['status'] ),
-			)
-		);
-	}
-
-	/**
-	 * @deprecated 2.0.0
-	 */
-	public function save_gateway_before_send_response() {
-		$this->data['date']    = date_i18n( 'F j, Y, H:i' );
-		$this->data['gateway'] = $this->get_name();
-
-		/**
-		 * JSON_UNESCAPED_UNICODE - for valid encode cyrillic
-		 */
-		$json = wp_json_encode( $this->data, JSON_UNESCAPED_UNICODE );
-
-		update_post_meta( $this->payment_id, self::GATEWAY_META_KEY, $json );
-	}
-
-	public function get_status_on_payment( $status ) {
-		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
-			$message = Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
-		} else {
-			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
-		}
-		$message = stripcslashes( $message );
-
-		return $message;
-	}
-
-	public function get_meta_message( $type ) {
-
-		return isset( $this->gateways_meta['messages'][ $type ] )
-			? $this->apply_macros( $this->gateways_meta['messages'][ $type ] )
-			: Gateway_Manager::instance()->default_messages()[ $type ];
-	}
-
-	/**
-	 * Execute actions or something else when payment is success
-	 *
-	 * @return void [description]
-	 */
-	protected function try_do_actions() {
+	public function try_run_on_catch() {
 		try {
-			if ( in_array( $this->data['status'], $this->failed_statuses() ) ) {
-				$this->process_status( 'failed' );
-			} else {
-				$this->process_status( 'success' );
-			}
-		} catch ( Action_Exception $exception ) {
-			$this->send_response(
-				array(
-					'status' => $exception->get_form_status(),
-				)
-			);
-		}
-	}
+			$this->set_payment_token();
+			$this->set_gateway_from_post_meta();
+			$this->set_form_gateways_meta();
+			$this->set_payment();
+			$this->on_success_payment();
 
-	public function send_response( $args = array() ) {
-		( new Response( $this->get_response_manager() ) )->init( $args )->send();
-	}
-
-	private function get_response_manager() {
-		global $wp;
-
-		return new Reload_Response(
-			array(
-				'refer'       => home_url( $wp->request ),
-				'remove_args' => $this->removed_query_args_on_payment,
-			)
-		);
-	}
-
-	/**
-	 * Process status notification and enqueue message
-	 *
-	 * @param string $type [description]
-	 *
-	 * @return void [type]           [description]
-	 * @throws Action_Exception
-	 */
-	public function process_status( $type = 'success' ) {
-
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
-
-		$keep_these = $this->gateway( 'notifications_' . $type, array() );
-
-		if ( empty( $keep_these ) ) {
+		} catch ( Gateway_Exception $exception ) {
+			return;
+		} catch ( Skip_Exception $e ) {
 			return;
 		}
-
-		$all = jfb_action_handler()->set_form_id( $this->data['form_id'] )
-		                           ->add_request( $this->data['form_data'] )
-		                           ->unregister_action( 'redirect_to_page' )
-		                           ->get_all();
-
-		if ( empty( $all ) ) {
-			return;
-		}
-		foreach ( $all as $index => $notification ) {
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
-			}
-		}
-
-		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	/**
@@ -274,14 +120,6 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	public function set_gateway_from_post_meta() {
-		$row_data = $this->get_form_data();
-
-		$this->payment_id = $row_data['post_id'];
-		$this->data       = Tools::decode_unserializable( $row_data['meta_value'] );
-
-		return $this;
-	}
 
 	/**
 	 * @return $this
@@ -290,132 +128,52 @@ abstract class Base_Gateway {
 		return $this->set_form_meta( $this->with_global_settings() );
 	}
 
-	/**
-	 * @throws Gateway_Exception
-	 */
-	public function set_order_token() {
-		$this->order_token = $this->query_order_token( $this->order_id, $this->get_action_handler()->form_id );
-
-		if ( ! $this->order_token ) {
-			throw new Gateway_Exception( 'Invalid token', $this->order_token );
-		}
-	}
-
-	public function get_order_token() {
-		return $this->order_token;
-	}
-
-
 	public function get_payment_token() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return sanitize_text_field( wp_unslash( $_GET[ $this->token_query_name ] ?? '' ) );
 	}
 
-	public function get_payment_id() {
-		return absint( explode( '-', $this->payment_token )[0] );
-	}
-
 	/**
-	 * Prevent unnecessary notifications processing before form is send.
-	 *
-	 * @param $keep_these
-	 *
-	 * @return void [description]
+	 * @return int[]
 	 */
-	public function before_actions( $keep_these ) {
-		$this->set_form_meta( GM::instance()->gateways() );
-		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
-
-		if ( empty( $default_actions ) ) {
-			return;
+	public function get_actions_before() {
+		if ( ! $this->gateway( 'notifications_before' ) ) {
+			return array();
 		}
 
-		foreach ( $default_actions as $index ) {
-			$action = jfb_action_handler()->get_action_by_id( $index );
-
-			if ( 'redirect_to_page' === $action->get_id() ) {
-				jfb_action_handler()->unregister_action( $index );
-				$this->redirect = $action;
+		return array_filter(
+			$this->gateway( 'notifications_before' ),
+			function ( $action ) {
+				return $action['active'];
 			}
-
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
-			}
-		}
-	}
-
-	/**
-	 * @return int
-	 * @deprecated 1.5.0
-	 *
-	 */
-	public function get_initialize_action_id() {
-		return (int) $this->gateway( 'action_order', 0 );
-	}
-
-	/**
-	 * @return int|mixed
-	 * @deprecated 1.5.0
-	 *
-	 */
-	public function get_insert_post_action_id() {
-		return GM::instance()->get_actions_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
-	}
-
-	/**
-	 * @throws Gateway_Exception
-	 * @deprecated 1.5.0
-	 *
-	 */
-	public function set_order_id() {
-		if ( ! $this->get_insert_post_action_id() ) {
-			throw new Gateway_Exception( 'There is not inserted_post_id' );
-		}
-
-		$this->order_id = $this->get_insert_post_action_id();
-	}
-
-	/**
-	 * @return mixed
-	 * @deprecated 1.5.0
-	 *
-	 */
-	public function get_order_id() {
-		return $this->order_id;
-	}
-
-
-	/**
-	 * @throws Gateway_Exception
-	 */
-	public function set_price_field() {
-		$this->price_field = sanitize_key( $this->gateway( 'price_field', '' ) );
-
-		$this->price_field = apply_filters(
-			'jet-form-builder/gateways/price-field',
-			$this->price_field,
-			GM::instance()->get_actions_handler()
 		);
-
-		if ( ! $this->price_field ) {
-			throw new Gateway_Exception( 'Invalid price field', $this->gateways_meta );
-		}
 	}
 
 	/**
-	 * @throws Gateway_Exception
+	 *
+	 * @return string
 	 */
-	public function set_price_from_filed() {
-		$this->price = $this->get_price_from_request();
-
-		if ( ! $this->price ) {
-			throw new Gateway_Exception( 'Empty price field' );
+	public function get_result_message( $status ) {
+		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
+			$message = Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
+		} else {
+			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
 		}
+		$message = stripcslashes( $message );
+
+		return $message;
 	}
 
-	public function get_price_var() {
-		return $this->price;
+	/**
+	 * @return string
+	 */
+	public function get_meta_message( $type ) {
+
+		return isset( $this->gateways_meta['messages'][ $type ] )
+			? $this->apply_macros( $this->gateways_meta['messages'][ $type ] )
+			: Gateway_Manager::instance()->default_messages()[ $type ];
 	}
+
 
 	/**
 	 * @throws Gateway_Exception
@@ -444,38 +202,10 @@ abstract class Base_Gateway {
 		return $this;
 	}
 
-	/**
-	 * @throws Gateway_Exception
-	 */
-	public function set_gateway_data() {
-		if ( ! $this->gateways_meta ) {
-			/** for backward compatibility */
-			$this->gateways_meta = GM::instance()->gateways();
-		}
-
-		$this->set_order_id();
-		$this->set_price_field();
-		$this->set_price_from_filed();
-		$this->set_current_gateway_options();
-		$this->set_order_token();
-
-		/** for backward compatibility */
-		return true;
-	}
-
-	protected function get_price_from_request() {
-		return $this->get_price(
-			$this->get_action_handler()->request_data[ $this->price_field ] ?? 0
-		);
-	}
-
-	protected function get_price( $price ) {
-		return (float) $price;
-	}
 
 	public function get_refer_url( $type, array $additional_args = array() ) {
 		$success_redirect = filter_var( $this->gateway( 'use_success_redirect' ), FILTER_VALIDATE_BOOLEAN );
-		$refer            = $this->get_action_handler()->get_refer();
+		$refer            = jfb_action_handler()->get_refer();
 
 		if ( $success_redirect && $this->redirect && 'success' === $type ) {
 			$refer = $this->redirect->get_completed_redirect_url();
@@ -490,16 +220,6 @@ abstract class Base_Gateway {
 		);
 	}
 
-	abstract protected function query_order_token( $order_id, $form_id );
-
-	/**
-	 * @return array|object|void|null
-	 * @deprecated 1.5.0
-	 *
-	 */
-	protected function get_form_data() {
-		return $this->get_form_by_payment_token( $this->payment_token );
-	}
 
 	public function options( $param = false ) {
 		$labels = array();
@@ -514,66 +234,18 @@ abstract class Base_Gateway {
 		return $labels;
 	}
 
-	/**
-	 * Apply macros in string
-	 *
-	 * @param null $string
-	 *
-	 * @return string [description]
-	 */
-	public function apply_macros( $string = null ) {
-		return preg_replace_callback(
-			'/%(.*?)%/',
-			function ( $matches ) {
-				switch ( $matches[1] ) {
-					case 'gateway_amount':
-						if ( empty( $this->data['amount'] ) ) {
-							return 0;
-						}
-
-						return $this->data['amount']['value'] ?? 0 . ' ' . $this->data['amount']['currency_code'] ?? '';
-
-					case 'gateway_status':
-						return $this->data['status'] ?? '';
-
-					default:
-						return $this->data['form_data'][ $matches[1] ] ?? '';
-				}
-			},
-			$string
-		);
-	}
-
-	public function try_run_on_catch() {
-		try {
-			$this->set_payment_token();
-			$this->set_gateway_from_post_meta();
-			$this->set_form_gateways_meta();
-			$this->set_payment();
-			$this->on_success_payment();
-
-		} catch ( Gateway_Exception $exception ) {
-
-		}
-	}
 
 	public function with_global_settings() {
 		return Gateway_Manager::instance()->with_global_settings( $this->retrieve_gateway_meta(), $this->get_id() );
 	}
 
-	public function get_post_meta( $prop = '', $if_empty = false ) {
-		return Tools::get_property_recursive( $this->data, $prop, '.', $if_empty );
-	}
-
-	public function set_post_meta( $prop, $value ) {
-		$this->data[ $prop ] = $value;
-
-		return $this;
-	}
-
 
 	/**
 	 * Gateway part starts.
+	 *
+	 * @param bool $if_empty
+	 *
+	 * @return false|mixed
 	 */
 
 	public function get_current_gateway( $if_empty = false ) {
@@ -642,34 +314,46 @@ abstract class Base_Gateway {
 		return $this->$prop ?? false;
 	}
 
-	/**
-	 * Returns form data by payment ID
-	 *
-	 * @param null $payment
-	 *
-	 * @return array|object|void|null [description]
-	 * @deprecated since 2.0.0
-	 */
-	public function get_form_by_payment_token( $payment = null ) {
-
-		if ( ! $payment ) {
-			return;
-		}
-
-		global $wpdb;
-		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
-
-		return $wpdb->get_row( $sql, ARRAY_A );
-	}
-
-	public function custom_labels(): array {
-		return array();
-	}
-
 	public function set_form_meta( $gateways_meta ): Base_Gateway {
 		$this->gateways_meta = $gateways_meta;
 
 		return $this;
+	}
+
+	/**
+	 * Execute actions or something else when payment is success
+	 *
+	 * @return void [description]
+	 */
+	protected function try_do_actions() {
+		try {
+			if ( in_array( $this->data['status'], $this->failed_statuses() ) ) {
+				$this->process_status( 'failed' );
+			} else {
+				$this->process_status( 'success' );
+			}
+		} catch ( Action_Exception $exception ) {
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
+		}
+	}
+
+	public function send_response( $args = array() ) {
+		( new Response( $this->get_response_manager() ) )->init( $args )->send();
+	}
+
+	private function get_response_manager() {
+		global $wp;
+
+		return new Reload_Response(
+			array(
+				'refer'       => home_url( $wp->request ),
+				'remove_args' => $this->removed_query_args_on_payment,
+			)
+		);
 	}
 
 }

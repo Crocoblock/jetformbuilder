@@ -82,7 +82,7 @@ class Gateway_Manager {
 		$this->set_gateways_options_by_form_id( jfb_handler()->form_id );
 
 		try {
-			$this->get_current_gateway_controller()->before_actions( $this->get_actions_before() );
+			jfb_gateway_current()->before_actions();
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
@@ -96,29 +96,12 @@ class Gateway_Manager {
 	 * @throws Action_Exception
 	 */
 	public function after_send_actions() {
-		if ( empty( $this->gateways_form_data ) ) {
-			return;
-		}
-
 		try {
-			$controller = $this->get_current_gateway_controller();
+			jfb_gateway_current()->after_actions( jfb_action_handler() );
 		} catch ( Repository_Exception $exception ) {
 			return;
-		}
-
-		try {
-			$controller->after_actions( jfb_action_handler() );
 		} catch ( Gateway_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
-		}
-
-		try {
-			add_action(
-				'jet-form-builder/form-handler/after-send',
-				array( $controller->get_scenario(), 'attach_record_id' )
-			);
-		} catch ( Gateway_Exception $exception ) {
-			return;
 		}
 	}
 
@@ -149,7 +132,7 @@ class Gateway_Manager {
 		try {
 			$this->get_gateway_controller( $this->current_gateway() )->try_run_on_catch();
 		} catch ( Repository_Exception $exception ) {
-			/** Just do nothing */
+			return;
 		}
 	}
 
@@ -185,7 +168,7 @@ class Gateway_Manager {
 	}
 
 	/**
-	 * Returns gatewyas config for current form
+	 * Returns gateways config for current form
 	 *
 	 * @param  [type] $post_id [description]
 	 *
@@ -205,22 +188,6 @@ class Gateway_Manager {
 
 	public function gateways( $prop = '', $if_empty = false ) {
 		return $prop ? ( $this->gateways_form_data[ $prop ] ?? $if_empty ) : $this->gateways_form_data;
-	}
-
-	/**
-	 * @return int[]
-	 */
-	public function get_actions_before() {
-		if ( ! $this->gateways( 'notifications_before' ) ) {
-			return array();
-		}
-
-		return array_filter(
-			$this->gateways( 'notifications_before' ),
-			function ( $action ) {
-				return $action['active'];
-			}
-		);
 	}
 
 	public function has_gateway( $form_id ) {
@@ -247,7 +214,7 @@ class Gateway_Manager {
 	}
 
 	public function get_gateway_id( $if_empty = 'none' ) {
-		return $this->gateways_form_data['gateway'] ?? $if_empty;
+		return $this->gateways_form_data['gateway'] ?? $this->current_gateway_type ?? $if_empty;
 	}
 
 	public function set_form_id( $form_id ) {

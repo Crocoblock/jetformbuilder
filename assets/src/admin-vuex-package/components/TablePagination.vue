@@ -91,6 +91,9 @@ export default {
 			padding: unset;
 		}
 	}
+	.cx-vui-input {
+		background-color: white;
+	}
 }
 
 </style>

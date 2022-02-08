@@ -15,10 +15,12 @@ export default {
 			list = [],
 			columns = {},
 			total,
+			actions
 		} = this.getIncoming();
 
 		this.setColumns( JSON.parse( JSON.stringify( columns ) ) );
 		this.setList( JSON.parse( JSON.stringify( list ) ) );
+		this.setActionsList( actions );
 
 		this.setQueryState( {
 			total: + total,

@@ -57,10 +57,6 @@ export default {
 		GetIncomingMessages,
 	],
 	created() {
-		const { actions } = this.getIncoming();
-
-		this.setActionsList( actions );
-
 		this.setActionPromises( {
 			action: 'delete',
 			context: CHOOSE_ACTION,

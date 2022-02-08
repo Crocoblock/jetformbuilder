@@ -20,7 +20,7 @@ class Record_Model extends Base_Db_Model {
 			'user_id'           => 'bigint(20)',
 			'from_content_id'   => 'bigint(20) NOT NULL',
 			'from_content_type' => 'varchar(20) NOT NULL',
-			'status'            => 'varchar(20)',
+			'status'            => 'varchar(255)',
 			'ip_address'        => 'int(11) UNSIGNED',
 			'user_agent'        => 'varchar(255)',
 			'referrer'          => 'varchar(255)',

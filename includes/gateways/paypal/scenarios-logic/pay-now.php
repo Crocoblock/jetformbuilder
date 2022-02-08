@@ -3,8 +3,11 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Base_Gateway;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
@@ -31,8 +34,9 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	/**
 	 * @return void
 	 * @throws Gateway_Exception
+	 * @throws Repository_Exception
 	 */
-	public function process_before() {
+	public function after_actions() {
 		$this->set_gateway_data();
 
 		/**
@@ -52,27 +56,31 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		/**
 		 * Redirect to Paypal checkout for approve payment
 		 */
-		$this->redirect_to_checkout( $payment );
+		$this->add_redirect( $payment['links'] ?? array() );
+
+		add_action(
+			'jet-form-builder/form-handler/after-send',
+			array( $this, 'attach_record_id' )
+		);
 	}
 
 	/**
-	 * @return array
-	 * @throws Gateway_Exception
+	 * @throws Gateway_Exception|Repository_Exception
 	 */
 	public function create_resource() {
 		$payment = ( new Api_Actions\Pay_Now_Action() )
-			->set_bearer_auth( $this->controller->get_current_token() )
+			->set_bearer_auth( jfb_gateway_current()->get_current_token() )
 			->set_app_context(
 				array(
-					'return_url' => $this->get_success_url(),
-					'cancel_url' => $this->get_failed_url(),
+					'return_url' => $this->get_referrer_url( Base_Gateway::SUCCESS_TYPE ),
+					'cancel_url' => $this->get_referrer_url( Base_Gateway::FAILED_TYPE ),
 				)
 			)
 			->set_units(
 				array(
 					array(
-						'currency_code' => $this->controller->current_gateway( 'currency' ),
-						'value'         => $this->controller->get_price_var(),
+						'currency_code' => jfb_gateway_current()->current_gateway( 'currency' ),
+						'value'         => jfb_gateway_current()->get_price_var(),
 					),
 				)
 			)
@@ -85,6 +93,36 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		return $payment;
 	}
 
+
+	/**
+	 * @throws Sql_Exception
+	 * @throws Repository_Exception
+	 */
+	public function attach_record_id() {
+		$record_id  = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
+		$payment_id = $this->get_context( 'payment_id' );
+
+		if ( ! $record_id || ! $payment_id ) {
+			return;
+		}
+
+		( new Payment_Model )->update(
+			array(
+				'record_id' => $record_id,
+			),
+			array(
+				'id' => $payment_id
+			)
+		);
+	}
+
+	/**
+	 * @param $payment
+	 *
+	 * @return array|int
+	 * @throws Gateway_Exception
+	 * @throws Repository_Exception
+	 */
 	public function save_resource( $payment ) {
 		try {
 			return ( new Payment_Model() )->insert(
@@ -93,7 +131,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'initial_transaction_id' => $payment['id'],
 					'form_id'                => jfb_handler()->form_id,
 					'user_id'                => get_current_user_id(),
-					'gateway_id'             => $this->controller->get_id(),
+					'gateway_id'             => jfb_gateway_current()->get_id(),
 					'scenario'               => self::scenario_id(),
 					'amount_value'           => $this->retrieve_amount( $payment, 'value' ),
 					'amount_code'            => $this->retrieve_amount( $payment, 'currency_code' ),
@@ -137,11 +175,11 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 
 	/**
-	 * @throws Gateway_Exception
+	 * @throws Gateway_Exception|Repository_Exception
 	 */
 	public function process_after() {
 		$payment = ( new Api_Actions\Capture_Payment_Action() )
-			->set_bearer_auth( $this->controller->get_current_token() )
+			->set_bearer_auth( jfb_gateway_current()->get_current_token() )
 			->set_order_id( $this->get_scenario_row( 'transaction_id' ) )
 			->send_request();
 
@@ -205,10 +243,10 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	}
 
 	/**
-	 * @throws Gateway_Exception
+	 * @throws Gateway_Exception|Repository_Exception
 	 */
 	public function set_gateway_data() {
-		$this->controller->set_price_field();
-		$this->controller->set_price_from_filed();
+		jfb_gateway_current()->set_price_field();
+		jfb_gateway_current()->set_price_from_filed();
 	}
 }

@@ -1,6 +1,10 @@
-import Payments from './Payments';
+import PaymentsPage from './PaymentsPage';
 
 const { PaymentsPage: { options } } = window.JetFBComponents;
 const { renderCurrentPage } = window.JetFBActions;
 
-renderCurrentPage( Payments, options );
+if ( 'store' in options ) {
+	options.store = new Vuex.Store( options.store )
+}
+
+renderCurrentPage( PaymentsPage, options );

@@ -11,7 +11,7 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 abstract class Base_Gateway_Db_Model extends Base_Db_Model {
 
 	/**
-	 * @throws Sql_Exception|Skip_Exception
+	 * @throws Sql_Exception
 	 */
 	public function before_insert() {
 		( new Payment_Model() )->safe_create();
@@ -19,8 +19,6 @@ abstract class Base_Gateway_Db_Model extends Base_Db_Model {
 		( new Payer_Model() )->safe_create();
 		( new Payer_Shipping_Model() )->safe_create();
 		( new Notes_Model() )->safe_create();
-
-		throw new Skip_Exception();
 	}
 
 }

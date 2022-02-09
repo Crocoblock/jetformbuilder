@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Constraints\Payer_Model_Constraint;
 
 class Payer_Shipping_Model extends Base_Db_Model {
 
@@ -21,8 +22,6 @@ class Payer_Shipping_Model extends Base_Db_Model {
 	public static function schema(): array {
 		return array(
 			'id'             => 'bigint(20) NOT NULL AUTO_INCREMENT',
-			'relation_id'    => 'bigint(20)', // PAY_NOW or SUBSCRIBE_NOW
-			'relation_type'  => 'varchar(100)',
 			'payer_id'       => 'bigint(20)',
 			'full_name'      => 'varchar(255)',
 			'address_line_1' => 'varchar(255)',
@@ -43,6 +42,12 @@ class Payer_Shipping_Model extends Base_Db_Model {
 		return array(
 			'id'       => 'primary key',
 			'payer_id' => 'index'
+		);
+	}
+
+	public function foreign_relations(): array {
+		return array(
+			new Payer_Model_Constraint()
 		);
 	}
 

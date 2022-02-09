@@ -27,8 +27,8 @@ class Execution_Builder {
 	 */
 	public function create( Base_Db_Model $model ): Execution_Builder {
 		$model->before_create();
-
 		$this->delta( $this->create_table_schema( $model ) );
+		$model->after_create();
 
 		$this->add_foreign_relations( $model );
 

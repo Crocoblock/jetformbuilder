@@ -11,11 +11,14 @@ use Jet_Form_Builder\Gateways\Base_Gateway;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
+use Jet_Form_Builder\Gateways\Query_Views\Payment_With_Record_View;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
@@ -106,12 +109,10 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			return;
 		}
 
-		( new Payment_Model )->update(
+		( new Payment_To_Record )->insert(
 			array(
-				'record_id' => $record_id,
-			),
-			array(
-				'id' => $payment_id
+				'record_id'  => $record_id,
+				'payment_id' => $payment_id,
 			)
 		);
 	}
@@ -162,7 +163,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 */
 	public function query_scenario_row() {
 		try {
-			return Payment_View::findOne(
+			return Payment_With_Record_View::findOne(
 				array(
 					'transaction_id' => $this->get_queried_token(),
 				)
@@ -187,59 +188,69 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			throw new Gateway_Exception( $payment['message'] );
 		}
 
-		$model      = new Payment_Model();
-		$payer_ship = new Payer_Shipping_Model();
-
 		try {
-			$model->update(
-				array(
-					'status' => $payment['status'],
-				),
-				array(
-					'id' => $this->get_scenario_row( 'id' ),
-				)
-			);
-
-			/**
-			 * We save the current status of the payment,
-			 * so that we can then determine which actions
-			 * to execute and which message to show to the user
-			 */
-			$this->scenario_row(
-				array(
-					'status' => $payment['status'],
-				)
-			);
-
-			$shipping = $payment['purchase_units'][0]['shipping'] ?? array();
-
-			$payer_id = Payer_Model::insert_or_update(
-				array(
-					'payer_id'   => $payment['payer']['payer_id'] ?? '',
-					'first_name' => $payment['payer']['name']['given_name'] ?? '',
-					'last_name'  => $payment['payer']['name']['surname'] ?? '',
-					'email'      => $payment['payer']['email_address'] ?? '',
-				)
-			);
-
-			$payer_ship->insert(
-				array(
-					'relation_id'    => $this->get_scenario_row( 'id' ),
-					'relation_type'  => self::scenario_id(),
-					'payer_id'       => $payer_id,
-					'full_name'      => $shipping['name']['full_name'] ?? '',
-					'address_line_1' => $shipping['address']['address_line_1'] ?? '',
-					'address_line_2' => $shipping['address']['address_line_2'] ?? '',
-					'admin_area_2'   => $shipping['address']['admin_area_2'] ?? '',
-					'admin_area_1'   => $shipping['address']['admin_area_1'] ?? '',
-					'postal_code'    => $shipping['address']['postal_code'] ?? '',
-					'country_code'   => $shipping['address']['country_code'] ?? '',
-				)
-			);
-
+			$this->save_payment( $payment );
 		} catch ( Sql_Exception $exception ) {
 			throw new Gateway_Exception( $exception->getMessage() );
 		}
+	}
+
+	/**
+	 * @param array $payment
+	 *
+	 * @throws Sql_Exception
+	 */
+	private function save_payment( array $payment ) {
+		( new Payment_Model )->update(
+			array(
+				'status' => $payment['status'],
+			),
+			array(
+				'id' => $this->get_scenario_row( 'id' ),
+			)
+		);
+
+		/**
+		 * We save the current status of the payment,
+		 * so that we can then determine which actions
+		 * to execute and which message to show to the user
+		 */
+		$this->scenario_row(
+			array(
+				'status' => $payment['status'],
+			)
+		);
+
+		$shipping = $payment['purchase_units'][0]['shipping'] ?? array();
+
+		$payer_id = Payer_Model::insert_or_update(
+			array(
+				'payer_id'   => $payment['payer']['payer_id'] ?? '',
+				'first_name' => $payment['payer']['name']['given_name'] ?? '',
+				'last_name'  => $payment['payer']['name']['surname'] ?? '',
+				'email'      => $payment['payer']['email_address'] ?? '',
+			)
+		);
+
+		$payer_ship_id = ( new Payer_Shipping_Model )->insert(
+			array(
+				'payer_id'       => $payer_id,
+				'full_name'      => $shipping['name']['full_name'] ?? '',
+				'address_line_1' => $shipping['address']['address_line_1'] ?? '',
+				'address_line_2' => $shipping['address']['address_line_2'] ?? '',
+				'admin_area_2'   => $shipping['address']['admin_area_2'] ?? '',
+				'admin_area_1'   => $shipping['address']['admin_area_1'] ?? '',
+				'postal_code'    => $shipping['address']['postal_code'] ?? '',
+				'country_code'   => $shipping['address']['country_code'] ?? '',
+			)
+		);
+
+		( new Payment_To_Payer_Shipping_Model )->insert(
+			array(
+				'payment_id'        => $this->get_scenario_row( 'id' ),
+				'payer_shipping_id' => $payer_ship_id
+			)
+		);
 	}
 
 	/**

@@ -12,6 +12,8 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 
 class Payment_View extends View_Base {
 
@@ -29,21 +31,26 @@ class Payment_View extends View_Base {
 	 */
 	public function get_prepared_join( Query_Builder $builder ) {
 		try {
-			$payments    = ( new Payment_Model )->safe_create()::table();
-			$payers      = ( new Payer_Model )->safe_create()::table();
-			$payers_ship = ( new Payer_Shipping_Model )->safe_create()::table();
-			$records     = ( new Record_Model )->safe_create()::table();
+			// and also safely create dependent tables
+			$payments = ( new Payment_Model )->safe_create()::table();
+
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
 
-		$builder->join = "
-LEFT JOIN `{$payers_ship}` ON 1=1
-    AND `{$payments}`.`id` = `{$payers_ship}`.`relation_id`
-    AND `{$payers_ship}`.`relation_type` = 'PAY_NOW' 
+		$payers              = Payer_Model::table();
+		$payers_ship         = Payer_Shipping_Model::table();
+		$payments_to_p_ships = Payment_To_Payer_Shipping_Model::table();
 
-LEFT JOIN `{$payers}` ON `{$payers_ship}`.`payer_id` = `{$payers}`.`id`
-LEFT JOIN `{$records}` ON `{$payments}`.`record_id` = `{$records}`.`id`
+		$builder->join = "
+LEFT JOIN `{$payments_to_p_ships}` ON 1=1
+    AND `{$payments}`.`id` = `{$payments_to_p_ships}`.`payment_id`
+
+LEFT JOIN `{$payers_ship}` ON 1=1 
+	AND {$payers_ship}.`id` = `{$payments_to_p_ships}`.`payer_shipping_id`
+	
+LEFT JOIN `{$payers}` ON 1=1
+	AND `{$payers}`.`id` = `{$payers_ship}`.`payer_id` 
 		";
 	}
 
@@ -56,7 +63,6 @@ LEFT JOIN `{$records}` ON `{$payments}`.`record_id` = `{$records}`.`id`
 			Payment_Model::schema_columns(),
 			Payer_Shipping_Model::schema_columns( 'ship' ),
 			Payer_Model::schema_columns( 'payer' ),
-			Record_Model::schema_columns( 'record' )
 		);
 	}
 }

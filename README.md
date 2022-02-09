@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.5.4
+* FIX: Correct Updating Post
+* FIX: Disabling select placeholder
+* FIX: Action Modal editor UI
+* FIX: Validation issues
+
 ## 1.5.3
 * FIX: Saving an inserted_post_id
 

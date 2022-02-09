@@ -170,6 +170,10 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function set_required_title( array $options ) {
+		if ( 'insert' !== $this->get_action() ) {
+			return;
+		}
+
 		if ( ! isset( $this->source_arr[ $this->current_prop ] ) ) {
 			$this->source_arr[ $this->current_prop ] = $this->get_unique_title();
 		}

@@ -6,7 +6,6 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use Jet_Form_Builder\Admin\Pages\Settings_Page;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
@@ -34,6 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property AddonsManager $addons_manager
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
+ * @property Admin\Pages\Pages_Manager $pages
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -51,6 +51,7 @@ class Plugin {
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
+	public $pages;
 
 	public static $instance;
 
@@ -111,8 +112,8 @@ class Plugin {
 			Preset_Manager::instance();
 
 			$this->editor = new Admin\Editor();
+			$this->pages = new Pages_Manager();
 			new Form_Actions_Manager();
-			new Pages_Manager();
 
 			new PatternsManager();
 		}

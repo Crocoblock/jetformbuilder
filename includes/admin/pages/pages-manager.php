@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -63,6 +64,18 @@ class Pages_Manager {
 	 */
 	public function get_page( $slug ) {
 		return $this->rep_get_item( $slug );
+	}
+
+	/**
+	 * @return Base_Page
+	 * @throws Not_Found_Page_Exception
+	 */
+	public function get_current(): Base_Page {
+		if ( is_a( $this->current_page, Base_Page::class ) ) {
+			return  $this->current_page;
+		}
+
+		throw new Not_Found_Page_Exception( 'Current page is not defined' );
 	}
 
 	/**

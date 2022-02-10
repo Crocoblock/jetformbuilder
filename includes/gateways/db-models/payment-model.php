@@ -4,10 +4,9 @@
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
-use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
+use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 
-class Payment_Model extends Base_Gateway_Db_Model {
+class Payment_Model extends Base_Db_Model {
 
 	/**
 	 * @inheritDoc

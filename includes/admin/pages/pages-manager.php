@@ -45,6 +45,17 @@ class Pages_Manager {
 	}
 
 	/**
+	 * @param Base_Page $item
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function rep_before_install_item( $item ) {
+		if ( ! $item->is_active() ) {
+			$this->_rep_abort_this();
+		}
+	}
+
+	/**
 	 * @param $slug
 	 *
 	 * @return Base_Page

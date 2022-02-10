@@ -16,6 +16,10 @@ class Payments_Page extends Base_Page {
 		return __( 'Payments', 'jet-form-builder' );
 	}
 
+	public function is_active(): bool {
+		return jet_form_builder()->allow_gateways;
+	}
+
 	public function page_config(): array {
 		$view = new Payments();
 

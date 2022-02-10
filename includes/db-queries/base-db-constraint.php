@@ -13,7 +13,8 @@ class Base_Db_Constraint {
 	protected $foreign_keys;
 	protected $foreign_table;
 
-	protected $parent_table;
+	/** @var Base_Db_Model */
+	protected $parent_model;
 	protected $parent_keys = array( 'id' );
 
 	protected $actions = array();
@@ -40,10 +41,18 @@ class Base_Db_Constraint {
 		return $this;
 	}
 
-	public function set_table( string $table ): Base_Db_Constraint {
-		$this->parent_table = $table;
+	public function set_model( Base_Db_Model $model ): Base_Db_Constraint {
+		$this->parent_model = $model;
 
 		return $this;
+	}
+
+	public function get_model(): Base_Db_Model {
+		return $this->parent_model;
+	}
+
+	public function get_table(): string {
+		return $this->parent_model::table();
 	}
 
 	public function set_parent_keys( array $keys ): Base_Db_Constraint {
@@ -73,12 +82,12 @@ class Base_Db_Constraint {
 	}
 
 	public function get_name(): string {
-		return "{$this->parent_table}__" . implode( '_', $this->foreign_keys ) . "__{$this->foreign_table}";
+		return "{$this->get_table()}__" . implode( '_', $this->foreign_keys ) . "__{$this->foreign_table}";
 	}
 
 	final public function build_part(): string {
 		$constraint  = 'FOREIGN KEY (' . implode( ',', $this->foreign_keys ) . ') ';
-		$constraint .= "REFERENCES {$this->parent_table}(" . implode( ',', $this->parent_keys ) . ')';
+		$constraint .= "REFERENCES {$this->get_table()}(" . implode( ',', $this->parent_keys ) . ')';
 
 		foreach ( $this->actions as $name => $action ) {
 			$constraint .= " ON {$name} {$action}";

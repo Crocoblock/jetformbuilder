@@ -1047,51 +1047,6 @@ var ApiInputError = /*#__PURE__*/function (_Error) {
 
 /***/ }),
 
-/***/ "./admin-package/mixins/FilterMixin.js":
-/*!*********************************************!*\
-  !*** ./admin-package/mixins/FilterMixin.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var _Vuex = Vuex,
-    mapGetters = _Vuex.mapGetters,
-    mapMutations = _Vuex.mapMutations,
-    mapActions = _Vuex.mapActions;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread(_objectSpread({}, mapGetters(['getFilter'])), {}, {
-    filter: function filter() {
-      return this.getFilter(this.filter_id);
-    }
-  }),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setFilter'])), mapActions(['fetchPageWithFilters'])), {}, {
-    setCurrentFilter: function setCurrentFilter(props) {
-      this.setFilter({
-        slug: this.filter_id,
-        props: props
-      });
-    },
-    onChangeFilter: function onChangeFilter(value) {
-      this.setCurrentFilter({
-        selected: value
-      });
-      this.fetchPageWithFilters();
-    }
-  })
-});
-
-/***/ }),
-
 /***/ "./admin-package/mixins/GetColumnComponent.js":
 /*!****************************************************!*\
   !*** ./admin-package/mixins/GetColumnComponent.js ***!
@@ -4186,8 +4141,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./functions/LocationManager */ "./admin-package/functions/LocationManager.js");
 /* harmony import */ var _components_ListComponents__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/ListComponents */ "./admin-package/components/ListComponents.vue");
 /* harmony import */ var _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./mixins/GetIncomingMessages */ "./admin-package/mixins/GetIncomingMessages.js");
-/* harmony import */ var _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./mixins/FilterMixin */ "./admin-package/mixins/FilterMixin.js");
-
 
 
 
@@ -4235,8 +4188,7 @@ window.JetFBMixins = {
   ParseIncomingValueMixin: _mixins_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_4__["default"],
   GetColumnComponent: _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
   PromiseWrapper: _mixins_PromiseWrapper__WEBPACK_IMPORTED_MODULE_6__["default"],
-  GetIncomingMessages: _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_18__["default"],
-  FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_19__["default"]
+  GetIncomingMessages: _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_18__["default"]
 };
 })();
 

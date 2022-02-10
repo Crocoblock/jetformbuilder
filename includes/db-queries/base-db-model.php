@@ -62,6 +62,14 @@ abstract class Base_Db_Model {
 	}
 
 	/**
+	 * This method is used to create foreign keys.
+	 * And this is safe as the model will create
+	 * the outer table before it creates the current one.
+	 *
+	 * P.S. see
+	 *  - \Jet_Form_Builder\Db_Queries\Base_Db_Model::before_create
+	 *  - \Jet_Form_Builder\Db_Queries\Execution_Builder::create
+	 *
 	 * @return Base_Db_Constraint[]
 	 */
 	public function foreign_relations(): array {
@@ -70,6 +78,8 @@ abstract class Base_Db_Model {
 
 	/**
 	 * @param array $columns
+	 *
+	 * @param null $format
 	 *
 	 * @return int
 	 * @throws Sql_Exception
@@ -139,13 +149,28 @@ abstract class Base_Db_Model {
 		return array();
 	}
 
+	/**
+	 * @throws Sql_Exception
+	 */
 	public function before_create() {
+		$this->create_foreign_tables();
+	}
+
+	/**
+	 * @throws Sql_Exception
+	 */
+	protected function create_foreign_tables() {
+		Execution_Builder::instance()->create_foreign_tables( $this );
 	}
 
 	public function after_create() {
 	}
 
+	/**
+	 * @throws Sql_Exception
+	 */
 	public function before_insert() {
+		( new static() )->safe_create();
 	}
 
 	public function after_insert( $insert_columns ) {

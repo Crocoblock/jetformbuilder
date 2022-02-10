@@ -8,6 +8,7 @@ import * as TableStoreHelper from './mixins/TableStoreHelper';
 import TableViewMixin from './mixins/TableViewMixin';
 import Constants from './constants';
 import ClearFiltersButton from './components/ClearFiltersButton';
+import FilterMixin from './mixins/FilterMixin';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -24,6 +25,7 @@ window.JetFBMixins = {
 	...window.JetFBMixins,
 	TableStoreHelper,
 	TableViewMixin,
+	FilterMixin,
 };
 
 window.JetFBConst = Constants;

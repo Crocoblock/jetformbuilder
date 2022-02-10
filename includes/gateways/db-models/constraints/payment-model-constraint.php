@@ -10,7 +10,7 @@ use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 class Payment_Model_Constraint extends Base_Db_Constraint {
 
 	public function __construct() {
-		$this->set_table( Payment_Model::table() );
+		$this->set_model( new Payment_Model() );
 		$this->set_foreign_keys( array( 'payment_id' ) );
 		$this->on_delete( self::ACTION_CASCADE );
 	}

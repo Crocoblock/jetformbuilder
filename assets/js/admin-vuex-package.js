@@ -848,6 +848,51 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin-vuex-package/mixins/FilterMixin.js":
+/*!**************************************************!*\
+  !*** ./admin-vuex-package/mixins/FilterMixin.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _Vuex = Vuex,
+    mapGetters = _Vuex.mapGetters,
+    mapMutations = _Vuex.mapMutations,
+    mapActions = _Vuex.mapActions;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  computed: _objectSpread(_objectSpread({}, mapGetters(['getFilter'])), {}, {
+    filter: function filter() {
+      return this.getFilter(this.filter_id);
+    }
+  }),
+  methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setFilter'])), mapActions(['fetchPageWithFilters'])), {}, {
+    setCurrentFilter: function setCurrentFilter(props) {
+      this.setFilter({
+        slug: this.filter_id,
+        props: props
+      });
+    },
+    onChangeFilter: function onChangeFilter(value) {
+      this.setCurrentFilter({
+        selected: value
+      });
+      this.fetchPageWithFilters();
+    }
+  })
+});
+
+/***/ }),
+
 /***/ "./admin-vuex-package/mixins/TableStoreHelper.js":
 /*!*******************************************************!*\
   !*** ./admin-vuex-package/mixins/TableStoreHelper.js ***!
@@ -3536,11 +3581,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./constants */ "./admin-vuex-package/constants.js");
 /* harmony import */ var _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/ClearFiltersButton */ "./admin-vuex-package/components/ClearFiltersButton.vue");
+/* harmony import */ var _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mixins/FilterMixin */ "./admin-vuex-package/mixins/FilterMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -3563,7 +3610,8 @@ window.JetFBComponents = _objectSpread(_objectSpread({}, window.JetFBComponents)
 });
 window.JetFBMixins = _objectSpread(_objectSpread({}, window.JetFBMixins), {}, {
   TableStoreHelper: _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__,
-  TableViewMixin: _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__["default"]
+  TableViewMixin: _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__["default"],
+  FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_10__["default"]
 });
 window.JetFBConst = _constants__WEBPACK_IMPORTED_MODULE_8__["default"];
 })();

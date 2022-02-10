@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Db_Queries;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 /**
@@ -24,6 +25,7 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return Execution_Builder
+	 * @throws Sql_Exception
 	 */
 	public function create( Base_Db_Model $model ): Execution_Builder {
 		$model->before_create();
@@ -33,6 +35,29 @@ class Execution_Builder {
 		$this->add_foreign_relations( $model );
 
 		return $this->save_to_existed( $model );
+	}
+
+	/**
+	 * @param Base_Db_Model $model
+	 *
+	 * @return Execution_Builder
+	 * @throws Sql_Exception
+	 */
+	public function create_foreign_tables( Base_Db_Model $model ): Execution_Builder {
+		foreach ( $model->foreign_relations() as $constraint ) {
+			// Fool protection
+			if ( get_class( $constraint->get_model() ) === get_class( $model ) ) {
+				_doing_it_wrong(
+					'\Jet_Form_Builder\Db_Queries\Base_Db_Model::foreign_relations',
+					'You have a logical error. A model cannot be dependent on itself.',
+					'2.0.0'
+				);
+				continue;
+			}
+			$constraint->get_model()->safe_create();
+		}
+
+		return $this;
 	}
 
 
@@ -236,6 +261,7 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return Execution_Builder
+	 * @throws Sql_Exception
 	 */
 	public function safe_create( Base_Db_Model $model ): Execution_Builder {
 		if ( $this->is_exist( $model ) ) {

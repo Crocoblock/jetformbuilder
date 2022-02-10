@@ -43,6 +43,14 @@ abstract class Base_Page implements Repository_Item_Instance_Trait {
 		wp_enqueue_script( $this->slug() );
 	}
 
+	/**
+	 * If it returns FALSE, this page is not registered
+	 *
+	 * @return bool
+	 */
+	public function is_active(): bool {
+		return true;
+	}
 
 	/**
 	 * Enqueue script

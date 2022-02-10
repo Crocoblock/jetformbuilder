@@ -23,7 +23,6 @@ import {
 } from './functions/LocationManager';
 import ListComponents from './components/ListComponents';
 import GetIncomingMessages from './mixins/GetIncomingMessages';
-import FilterMixin from './mixins/FilterMixin';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -57,5 +56,4 @@ window.JetFBMixins = {
 	GetColumnComponent,
 	PromiseWrapper,
 	GetIncomingMessages,
-	FilterMixin
 };

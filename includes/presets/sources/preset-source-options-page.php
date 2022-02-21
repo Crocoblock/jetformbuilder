@@ -46,16 +46,18 @@ class Preset_Source_Options_Page extends Base_Source {
 	 */
 	public function default_prop( string $prop ) {
 		$key = explode( '::', $prop );
+		$page = $key[0] ?? 'page-slug';
+		$slug = $key[1] ?? 'page-field';
 
 		if ( empty( $key[1] ) ) {
-			throw new Preset_Exception( "Undefined {$key[0]} page value: {$key[1]}" );
+			throw new Preset_Exception( "Undefined {$page} page value: {$slug}" );
 		}
 
 		if ( ! is_a( $this->src(), '\Jet_Engine_Options_Page_Factory' ) ) {
 			throw new Preset_Exception( 'Source is not instance of ' . \Jet_Engine_Options_Page_Factory::class );
 		}
 
-		return $this->src()->get( $prop );
+		return $this->src()->get( $slug );
 	}
 
 	public function after_register() {

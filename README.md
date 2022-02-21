@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 1.5.5
+* FIX: Fatal error when executing actions after passing a payment
+* FIX: Load preset for Options Page (JetEngine compatibility)
+
 ## 1.5.4
 * FIX: Correct Updating Post
 * FIX: Disabling select placeholder

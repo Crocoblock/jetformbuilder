@@ -188,7 +188,7 @@ class Controller extends Base_Gateway {
 	private function maybe_redirect_to_checkout( $order ) {
 		foreach ( $order['links'] as $link ) {
 			if ( ! empty( $link['rel'] ) && 'approve' === $link['rel'] ) {
-				$this->action_handler->add_response( array(
+				jet_form_builder()->form_handler->action_handler->add_response( array(
 					'redirect' => $link['href']
 				) );
 			}

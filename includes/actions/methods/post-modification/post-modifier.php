@@ -110,6 +110,12 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function insert_post() {
+		try {
+			$this->pre_check();
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
 		$this->inserted_post_id = wp_insert_post( $this->source_arr, true );
 		$this->is_valid_post_id();
 
@@ -137,6 +143,12 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function update_post() {
+		try {
+			$this->pre_check();
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
 		$this->inserted_post_id = wp_update_post( $this->source_arr, true );
 
 		$this->is_valid_post_id();
@@ -146,6 +158,12 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * @throws Action_Exception
 	 */
 	public function trash_post() {
+		try {
+			$this->pre_check();
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
 		$post = wp_trash_post( $this->source_arr['ID'] ?? 0 );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
@@ -204,7 +222,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function after_action_terms() {
-		if ( ! in_array( $this->action, array( 'insert', 'update' ) ) ) {
+		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ) ) ) {
 			return;
 		}
 		$taxonomies = $this->get_current_external();
@@ -215,7 +233,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function after_action_je_relations() {
-		if ( ! in_array( $this->action, array( 'insert', 'update' ) )
+		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ) )
 		     || ! function_exists( 'jet_engine' )
 		     || ! isset( jet_engine()->relations )
 		) {

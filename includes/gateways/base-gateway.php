@@ -166,7 +166,7 @@ abstract class Base_Gateway {
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
 
 		if ( ! empty( $keep_these ) ) {
-			$notifications = ( new Action_Handler() )->set_form_id( $this->data['form_id'] );
+			$notifications = jet_form_builder()->form_handler->action_handler->set_form_id( $this->data['form_id'] );
 			$notifications->add_request( $this->data['form_data'] );
 
 			$notifications->unregister_action( 'redirect_to_page' );
@@ -228,7 +228,10 @@ abstract class Base_Gateway {
 	}
 
 	final protected function set_order_token() {
-		$this->order_token = $this->query_order_token( $this->order_id, $this->action_handler->form_id );
+		$this->order_token = $this->query_order_token(
+			$this->order_id,
+			jet_form_builder()->form_handler->action_handler->form_id
+		);
 
 		if ( ! $this->order_token ) {
 			throw new Gateway_Exception( 'Invalid token', $this->order_token );
@@ -299,7 +302,7 @@ abstract class Base_Gateway {
 
 	protected function set_order_id() {
 		$inserted_id = empty( $this->gateways_meta['action_order'] ) ? 0 : $this->gateways_meta['action_order'];
-		$inserted_id = $this->action_handler->get_inserted_post_id( $inserted_id );
+		$inserted_id = jet_form_builder()->form_handler->action_handler->get_inserted_post_id( $inserted_id );
 
 		if ( ! $inserted_id ) {
 			throw new Gateway_Exception( 'There is not inserted_post_id' );
@@ -314,7 +317,11 @@ abstract class Base_Gateway {
 			$this->price_field = Tools::sanitize_text_field( $this->gateways_meta['price_field'] );
 		}
 
-		$this->price_field = apply_filters( 'jet-form-builder/gateways/price-field', $this->price_field, $this->action_handler );
+		$this->price_field = apply_filters(
+			'jet-form-builder/gateways/price-field',
+			$this->price_field,
+			jet_form_builder()->form_handler->action_handler
+		);
 
 		if ( ! $this->price_field ) {
 			throw new Gateway_Exception( 'Invalid price field' );
@@ -322,8 +329,10 @@ abstract class Base_Gateway {
 	}
 
 	protected function set_price_from_filed() {
-		if ( isset( $this->action_handler->request_data[ $this->price_field ] ) ) {
-			$this->price = $this->get_price( $this->action_handler->request_data[ $this->price_field ] );
+		$handler = jet_form_builder()->form_handler->action_handler;
+
+		if ( isset( $handler->request_data[ $this->price_field ] ) ) {
+			$this->price = $this->get_price( $handler->request_data[ $this->price_field ] );
 		}
 
 		if ( ! $this->price ) {
@@ -351,7 +360,6 @@ abstract class Base_Gateway {
 
 	protected function set_gateway_data( Action_Handler $action_handler ) {
 		$this->gateways_meta  = GM::instance()->gateways();
-		$this->action_handler = $action_handler;
 
 		try {
 			$this->set_order_id();
@@ -375,7 +383,7 @@ abstract class Base_Gateway {
 
 		$success_redirect = ! empty( $this->gateways_meta['use_success_redirect'] ) ? $this->gateways_meta['use_success_redirect'] : false;
 		$success_redirect = filter_var( $success_redirect, FILTER_VALIDATE_BOOLEAN );
-		$refer            = $this->action_handler->request_data['__refer'];
+		$refer            = jet_form_builder()->form_handler->action_handler->request_data['__refer'] ?? '';
 
 		if ( $success_redirect && $this->redirect && 'success' === $type ) {
 			$settings = $this->redirect->settings;

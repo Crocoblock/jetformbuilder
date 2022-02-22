@@ -60,17 +60,17 @@ abstract class Legacy_Base_Gateway {
 			return;
 		}
 
-		$all = jfb_action_handler()->set_form_id( $this->data['form_id'] )
-		                           ->add_request( $this->data['form_data'] )
-		                           ->unregister_action( 'redirect_to_page' )
-		                           ->get_all();
+		$all = jet_fb_action_handler()->set_form_id( $this->data['form_id'] )
+		                              ->add_request( $this->data['form_data'] )
+		                              ->unregister_action( 'redirect_to_page' )
+		                              ->get_all();
 
 		if ( empty( $all ) ) {
 			return;
 		}
 		foreach ( $all as $index => $notification ) {
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 			}
 		}
 
@@ -146,7 +146,7 @@ abstract class Legacy_Base_Gateway {
 	 * @throws Gateway_Exception
 	 */
 	public function set_order_token() {
-		$this->order_token = $this->query_order_token( $this->order_id, jfb_handler()->form_id );
+		$this->order_token = $this->query_order_token( $this->order_id, jet_fb_handler()->form_id );
 
 		if ( ! $this->order_token ) {
 			throw new Gateway_Exception( 'Invalid token', $this->order_token );
@@ -173,7 +173,7 @@ abstract class Legacy_Base_Gateway {
 	 *
 	 */
 	public function get_insert_post_action_id() {
-		return jfb_action_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
+		return jet_fb_action_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
 	}
 
 	/**
@@ -208,7 +208,7 @@ abstract class Legacy_Base_Gateway {
 		$this->price_field = apply_filters(
 			'jet-form-builder/gateways/price-field',
 			$this->price_field,
-			jfb_action_handler()
+			jet_fb_action_handler()
 		);
 
 		if ( ! $this->price_field ) {
@@ -252,7 +252,7 @@ abstract class Legacy_Base_Gateway {
 
 	protected function get_price_from_request() {
 		return $this->get_price(
-			jfb_action_handler()->request_data[ $this->price_field ] ?? 0
+			jet_fb_action_handler()->request_data[ $this->price_field ] ?? 0
 		);
 	}
 
@@ -348,15 +348,15 @@ abstract class Legacy_Base_Gateway {
 		}
 
 		foreach ( $default_actions as $index ) {
-			$action = jfb_action_handler()->get_action_by_id( $index );
+			$action = jet_fb_action_handler()->get_action_by_id( $index );
 
 			if ( 'redirect_to_page' === $action->get_id() ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 				$this->redirect = $action;
 			}
 
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 			}
 		}
 	}

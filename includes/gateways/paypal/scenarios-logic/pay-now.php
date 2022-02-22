@@ -20,6 +20,7 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_With_Record_View;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
@@ -72,7 +73,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 */
 	public function create_resource() {
 		$payment = ( new Api_Actions\Pay_Now_Action() )
-			->set_bearer_auth( jfb_gateway_current()->get_current_token() )
+			->set_bearer_auth( jet_fb_gateway_current()->get_current_token() )
 			->set_app_context(
 				array(
 					'return_url' => $this->get_referrer_url( Base_Gateway::SUCCESS_TYPE ),
@@ -82,8 +83,8 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			->set_units(
 				array(
 					array(
-						'currency_code' => jfb_gateway_current()->current_gateway( 'currency' ),
-						'value'         => jfb_gateway_current()->get_price_var(),
+						'currency_code' => jet_fb_gateway_current()->current_gateway( 'currency' ),
+						'value'         => jet_fb_gateway_current()->get_price_var(),
 					),
 				)
 			)
@@ -102,7 +103,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Repository_Exception
 	 */
 	public function attach_record_id() {
-		$record_id  = jfb_action_handler()->get_context( Save_Record::ID, 'id' );
+		$record_id  = jet_fb_action_handler()->get_context( Save_Record::ID, 'id' );
 		$payment_id = $this->get_context( 'payment_id' );
 
 		if ( ! $record_id || ! $payment_id ) {
@@ -130,9 +131,9 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 				array(
 					'transaction_id'         => $payment['id'],
 					'initial_transaction_id' => $payment['id'],
-					'form_id'                => jfb_handler()->form_id,
+					'form_id'                => jet_fb_handler()->form_id,
 					'user_id'                => get_current_user_id(),
-					'gateway_id'             => jfb_gateway_current()->get_id(),
+					'gateway_id'             => jet_fb_gateway_current()->get_id(),
 					'scenario'               => self::scenario_id(),
 					'amount_value'           => $this->retrieve_amount( $payment, 'value' ),
 					'amount_code'            => $this->retrieve_amount( $payment, 'currency_code' ),
@@ -180,7 +181,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 */
 	public function process_after() {
 		$payment = ( new Api_Actions\Capture_Payment_Action() )
-			->set_bearer_auth( jfb_gateway_current()->get_current_token() )
+			->set_bearer_auth( jet_fb_gateway_current()->get_current_token() )
 			->set_order_id( $this->get_scenario_row( 'transaction_id' ) )
 			->send_request();
 
@@ -189,8 +190,15 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		}
 
 		try {
+			Execution_Builder::instance()->transaction_start();
+
 			$this->save_payment( $payment );
+
+			Execution_Builder::instance()->transaction_commit();
+
 		} catch ( Sql_Exception $exception ) {
+			Execution_Builder::instance()->transaction_rollback();
+
 			throw new Gateway_Exception( $exception->getMessage() );
 		}
 	}
@@ -257,7 +265,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Gateway_Exception|Repository_Exception
 	 */
 	public function set_gateway_data() {
-		jfb_gateway_current()->set_price_field();
-		jfb_gateway_current()->set_price_from_filed();
+		jet_fb_gateway_current()->set_price_field();
+		jet_fb_gateway_current()->set_price_from_filed();
 	}
 }

@@ -4,10 +4,12 @@
 namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use JET_MSG\Exceptions\Handler_Exception;
 
 /**
  * @method static Execution_Builder instance()
@@ -48,7 +50,7 @@ class Execution_Builder {
 			// Fool protection
 			if ( get_class( $constraint->get_model() ) === get_class( $model ) ) {
 				_doing_it_wrong(
-					'\Jet_Form_Builder\Db_Queries\Base_Db_Model::foreign_relations',
+					get_class( $model ) . '::foreign_relations',
 					'You have a logical error. A model cannot be dependent on itself.',
 					'2.0.0'
 				);
@@ -65,6 +67,8 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 * @param array $columns
 	 *
+	 * @param null $format
+	 *
 	 * @return int
 	 * @throws Sql_Exception
 	 */
@@ -76,10 +80,10 @@ class Execution_Builder {
 		$insert_columns = array_merge( $model->get_defaults(), $columns );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$wpdb->insert( $model->table(), $insert_columns, $format );
+		$wpdb->insert( $model::table(), $insert_columns, $format );
 
 		if ( ! $wpdb->insert_id ) {
-			throw new Sql_Exception( "Something went wrong on insert into: {$model->table()}", $insert_columns );
+			throw new Sql_Exception( "Something went wrong on insert into: {$model::table()}", $insert_columns );
 		}
 
 		$model->after_insert( $insert_columns );
@@ -228,16 +232,12 @@ class Execution_Builder {
 	protected function add_foreign_relations( Base_Db_Model $model ) {
 		global $wpdb;
 
-		$queries = array();
-
 		foreach ( $model->foreign_relations() as $constraint ) {
 			$constraint->set_foreign_table( $model::table_name() );
 
-			$queries[] = "ALTER TABLE {$model::table()} ADD {$constraint->build()}";
+			// phpcs:ignore WordPress.DB
+			$wpdb->query( "ALTER TABLE `{$model::table()}` ADD {$constraint->build()}" );
 		}
-
-		// phpcs:ignore WordPress.DB
-		$wpdb->query( implode( '; ', $queries ) );
 	}
 
 	public function is_exist( Base_Db_Model $model ): bool {
@@ -276,6 +276,25 @@ class Execution_Builder {
 
 		return $this;
 	}
+
+	public function transaction_start() {
+		global $wpdb;
+
+		return $wpdb->query( 'START TRANSACTION' );
+	}
+
+	public function transaction_commit() {
+		global $wpdb;
+
+		return $wpdb->query( 'COMMIT' );
+	}
+
+	public function transaction_rollback() {
+		global $wpdb;
+
+		return $wpdb->query( 'ROLLBACK' );
+	}
+
 
 	public function delta( $sql ) {
 		if ( ! function_exists( 'dbDelta' ) ) {

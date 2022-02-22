@@ -37,7 +37,7 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		jfb_gateway_current()->get_scenario()->before_actions();
+		jet_fb_gateway_current()->get_scenario()->before_actions();
 	}
 
 	/**
@@ -46,7 +46,7 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	 * @throws Repository_Exception
 	 */
 	public function after_actions( Action_Handler $handler ) {
-		jfb_gateway_current()->get_scenario()->after_actions();
+		jet_fb_gateway_current()->get_scenario()->after_actions();
 	}
 
 	public function try_run_on_catch() {

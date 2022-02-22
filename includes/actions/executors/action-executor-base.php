@@ -25,7 +25,7 @@ abstract class Action_Executor_Base {
 			return $this->actions_ids;
 		}
 
-		foreach ( jfb_action_handler()->get_all() as $index => $action ) {
+		foreach ( jet_fb_action_handler()->get_all() as $index => $action ) {
 			if ( self::rep_item_id() === $action->get_flow_handler() ) {
 				$this->actions_ids[] = $index;
 			}
@@ -62,25 +62,25 @@ abstract class Action_Executor_Base {
 		 * Start cycle
 		 */
 		$this->start_flow();
-		jfb_action_handler()->size_all = count( $this->get_actions_ids() );
+		jet_fb_action_handler()->size_all = count( $this->get_actions_ids() );
 
 		foreach ( $this->get_actions_ids() as $index ) {
-			jfb_action_handler()->process_single_action( $index );
+			jet_fb_action_handler()->process_single_action( $index );
 		}
 
 		/**
 		 * End the cycle
 		 */
-		jfb_action_handler()->set_current_action( false );
-		jfb_action_handler()->end_flow();
+		jet_fb_action_handler()->set_current_action( false );
+		jet_fb_action_handler()->end_flow();
 	}
 
 	public function start_flow() {
-		jfb_action_handler()->start_flow( static::rep_item_id() );
+		jet_fb_action_handler()->start_flow( static::rep_item_id() );
 	}
 
 	public function set_form_id( $form_id ) {
-		return jfb_action_handler()->set_form_id( $form_id );
+		return jet_fb_action_handler()->set_form_id( $form_id );
 	}
 
 

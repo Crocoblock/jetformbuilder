@@ -79,8 +79,8 @@ class Controller {
 
 		$this->set_columns(
 			array(
-				'form_id'           => jfb_handler()->get_form_id(),
-				'referrer'          => jfb_handler()->refer,
+				'form_id'           => jet_fb_handler()->get_form_id(),
+				'referrer'          => jet_fb_handler()->refer,
 				'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
 				'user_id'           => get_current_user_id(),
 				'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
@@ -114,16 +114,16 @@ class Controller {
 
 	public function get_chunked_actions() {
 		list( $passed, $skipped ) = array(
-			jfb_action_handler()->get_passed_actions(),
-			jfb_action_handler()->get_skipped_actions(),
+			jet_fb_action_handler()->get_passed_actions(),
+			jet_fb_action_handler()->get_skipped_actions(),
 		);
 
 		$passed_actions  = array();
 		$skipped_actions = array();
 		$with_errors     = array();
 
-		foreach ( jfb_action_handler()->get_all() as $index => $action ) {
-			if ( jfb_action_handler()->get_position() === $index ) {
+		foreach ( jet_fb_action_handler()->get_all() as $index => $action ) {
+			if ( jet_fb_action_handler()->get_position() === $index ) {
 				continue;
 			}
 			if ( in_array( $index, $passed, true ) ) {
@@ -190,7 +190,7 @@ class Controller {
 		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
 		$fields      = array();
 
-		foreach ( jfb_action_handler()->request_data as $field_name => $value ) {
+		foreach ( jet_fb_action_handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
 			     || isset( $core_fields[ $field_name ] )

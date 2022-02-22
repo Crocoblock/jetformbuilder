@@ -205,12 +205,12 @@ class Form_Handler {
 		}
 
 		if ( $this->is_ajax ) {
-			jfb_action_handler()->set_form_id( $this->form_id );
+			jet_fb_action_handler()->set_form_id( $this->form_id );
 
 			return new Form_Response\Types\Ajax_Response(
 				array(
 					'form_id' => $this->form_id,
-					'actions' => jfb_action_handler()->get_all(),
+					'actions' => jet_fb_action_handler()->get_all(),
 				)
 			);
 		} else {
@@ -347,13 +347,13 @@ class Form_Handler {
 
 			return;
 		} catch ( Handler_Exception $exception ) {
-			$this->is_success = false;
-
-			$this->send_raw_response(
-				array(
-					'status' => $exception->get_form_status(),
-				)
+			$this->is_success    = false;
+			$this->response_args = array(
+				'status' => $exception->get_form_status(),
 			);
+			$this->response_data = array();
+
+			$this->send_raw_response();
 
 			return;
 		}
@@ -361,11 +361,7 @@ class Form_Handler {
 		$this->send_raw_response();
 	}
 
-	public function send_raw_response( $args = array() ) {
-		if ( ! empty( $args ) ) {
-			$this->set_response_args( $args );
-		}
-
+	public function send_raw_response() {
 		( new Form_Response\Response(
 			$this->get_response_manager(),
 			$this->response_data

@@ -229,12 +229,12 @@ export default {
 			return this.columns[ column ].show_in_table ?? true;
 		},
 		classEntry( entryID, entry ) {
-			const columnClasses = entry?.classes?.value ?? {};
-
 			return {
 				'list-table-item': true,
+				'list-table-item--has-choose': entry?.choose?.value,
+				'list-table-item--has-actions': entry?.actions?.value?.length,
 				[ 'list-table-item--' + entryID ]: true,
-				...columnClasses,
+				...( entry?.classes?.value ?? {} ),
 			};
 		},
 		getHeadingComponent( column ) {
@@ -279,52 +279,61 @@ export default {
 		&:hover .list-table-item-actions {
 			visibility: visible;
 		}
-	}
-	.list-table-item-columns {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-		margin-bottom: 1.5em;
-	}
-	.list-table-item-actions {
-		display: flex;
-		width: 85%;
-		column-gap: 0.5em;
-		visibility: hidden;
-		position: absolute;
-		bottom: 0.5em;
-		left: 5.2em;
-		& > *:not(:last-child)::after {
-			content: '|';
+		&--has-choose {
+			.list-table-item-actions {
+				left: 5.2em;
+			}
 		}
-		&-single {
-			text-decoration: unset;
-			&--type {
-				&-danger {
-					color: firebrick;
+		&--has-actions {
+			.list-table-item-columns {
+				margin-bottom: 1.5em;
+			}
+		}
+		&-actions {
+			display: flex;
+			width: 85%;
+			column-gap: 0.5em;
+			visibility: hidden;
+			position: absolute;
+			bottom: 0.5em;
+			left: 0.5em;
+			& > *:not(:last-child)::after {
+				content: '|';
+			}
+			&-single {
+				text-decoration: unset;
+				&--type {
+					&-danger {
+						color: firebrick;
+					}
+				}
+				&.disabled {
+					pointer-events: none;
+					cursor: default;
 				}
 			}
-			&.disabled {
-				pointer-events: none;
-				cursor: default;
+		}
+		&-columns {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+		}
+		&__cell {
+			white-space: nowrap;
+			overflow: hidden;
+			text-align: left;
+			&:not(.cell--choose) {
+				flex: 1
 			}
-		}
-	}
-	.list-table-heading__cell > span {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		flex-wrap: wrap;
-	}
-	.list-table-item__cell {
-		white-space: nowrap;
-		overflow: hidden;
-		text-align: left;
-		&:not(.cell--choose) {
-			flex: 1
-		}
-		&.cell--choose {
-			transform: translateY(25%);
+			&.cell--choose {
+				transform: translateY(25%);
+			}
+			& > span {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				flex-wrap: wrap;
+			}
 		}
 	}
 	.list-table-heading__cell:not(.cell--choose) {

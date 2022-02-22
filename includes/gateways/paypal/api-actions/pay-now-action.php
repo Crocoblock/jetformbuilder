@@ -39,7 +39,7 @@ class Pay_Now_Action extends Base_Action {
 	public function set_units( array $amounts ) {
 		foreach ( $amounts as $amount ) {
 			$this->units[] = array(
-				'custom_id' => jfb_handler()->get_form_id(),
+				'custom_id' => jet_fb_handler()->get_form_id(),
 				'amount'    => $amount,
 			);
 		}

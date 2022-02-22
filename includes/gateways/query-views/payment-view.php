@@ -32,15 +32,15 @@ class Payment_View extends View_Base {
 	public function get_prepared_join( Query_Builder $builder ) {
 		try {
 			// and also safely create dependent tables
-			$payments = ( new Payment_Model )->safe_create()::table();
+			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model )->safe_create()::table();
 
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
 
-		$payers              = Payer_Model::table();
-		$payers_ship         = Payer_Shipping_Model::table();
-		$payments_to_p_ships = Payment_To_Payer_Shipping_Model::table();
+		$payments    = Payment_Model::table();
+		$payers      = Payer_Model::table();
+		$payers_ship = Payer_Shipping_Model::table();
 
 		$builder->join = "
 LEFT JOIN `{$payments_to_p_ships}` ON 1=1

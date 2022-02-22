@@ -136,12 +136,12 @@ class Parser_Manager {
 	}
 
 	private function save_to_request( $name, $type, $settings ) {
-		jfb_request_handler()->set_request_type(
+		jet_fb_request_handler()->set_request_type(
 			array(
 				$name => $type,
 			)
 		);
-		jfb_request_handler()->set_request_attrs(
+		jet_fb_request_handler()->set_request_attrs(
 			array(
 				$name => $settings,
 			)

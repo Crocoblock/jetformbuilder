@@ -47,7 +47,7 @@ class Forms_Captcha {
 		 * We get an array with the request body from the raw array,
          * since only those fields that are in the form get into the processed request.
 		 */
-	    $request = jfb_request_handler()->get_request();
+	    $request = jet_fb_request_handler()->get_request();
 
 		if ( ! Plugin::instance()->captcha->verify( $request ) ) {
 			throw new Request_Exception( 'captcha_failed' );
@@ -61,7 +61,7 @@ class Forms_Captcha {
 	}
 
 	public function verify( $request ) {
-		$form_id = jfb_handler()->get_form_id();
+		$form_id = jet_fb_handler()->get_form_id();
 		$captcha = $this->get_data( $form_id );
 
 		if ( empty( $captcha['enabled'] ) ) {

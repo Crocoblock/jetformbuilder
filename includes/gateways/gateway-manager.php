@@ -79,10 +79,10 @@ class Gateway_Manager {
 	}
 
 	public function before_send_actions() {
-		$this->set_gateways_options_by_form_id( jfb_handler()->form_id );
+		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
 
 		try {
-			jfb_gateway_current()->before_actions();
+			jet_fb_gateway_current()->before_actions();
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
@@ -97,7 +97,7 @@ class Gateway_Manager {
 	 */
 	public function after_send_actions() {
 		try {
-			jfb_gateway_current()->after_actions( jfb_action_handler() );
+			jet_fb_gateway_current()->after_actions( jet_fb_action_handler() );
 		} catch ( Repository_Exception $exception ) {
 			return;
 		} catch ( Gateway_Exception $exception ) {

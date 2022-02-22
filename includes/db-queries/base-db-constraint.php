@@ -5,10 +5,10 @@ namespace Jet_Form_Builder\Db_Queries;
 
 class Base_Db_Constraint {
 
-	const ACTION_CASCADE     = 'CASCADE';
+	const ACTION_CASCADE = 'CASCADE';
 	const ACTION_SET_DEFAULT = 'SET DEFAULT';
-	const ACTION_SET_NULL    = 'SET NULL';
-	const ACTION_RESTRICT    = 'RESTRICT';
+	const ACTION_SET_NULL = 'SET NULL';
+	const ACTION_RESTRICT = 'RESTRICT';
 
 	protected $foreign_keys;
 	protected $foreign_table;
@@ -55,6 +55,10 @@ class Base_Db_Constraint {
 		return $this->parent_model::table();
 	}
 
+	public function get_table_name(): string {
+		return $this->parent_model::table_name();
+	}
+
 	public function set_parent_keys( array $keys ): Base_Db_Constraint {
 		$this->parent_keys = $keys;
 
@@ -82,12 +86,24 @@ class Base_Db_Constraint {
 	}
 
 	public function get_name(): string {
-		return "{$this->get_table()}__" . implode( '_', $this->foreign_keys ) . "__{$this->foreign_table}";
+		$raw_name = "{$this->get_table_name()}__" . implode( '_', $this->foreign_keys ) . "__{$this->foreign_table}";
+
+		/**
+		 * https://dev.mysql.com/doc/refman/5.6/en/identifier-length.html
+		 */
+		$length_excess = strlen( $raw_name ) - 64;
+
+		if ( $length_excess < 0 ) {
+			return $raw_name;
+		}
+
+		// cut the string
+		return substr( $raw_name, 0, -$length_excess );
 	}
 
 	final public function build_part(): string {
-		$constraint  = 'FOREIGN KEY (' . implode( ',', $this->foreign_keys ) . ') ';
-		$constraint .= "REFERENCES {$this->get_table()}(" . implode( ',', $this->parent_keys ) . ')';
+		$constraint = 'FOREIGN KEY (`' . implode( '` , `', $this->foreign_keys ) . '`) ';
+		$constraint .= "REFERENCES {$this->get_table()}(`" . implode( '` , `', $this->parent_keys ) . '`)';
 
 		foreach ( $this->actions as $name => $action ) {
 			$constraint .= " ON {$name} {$action}";

@@ -136,15 +136,15 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	}
 
 	public function get_context( $property = '' ) {
-		return jfb_action_handler()->get_context( $this->get_id(), $property );
+		return jet_fb_action_handler()->get_context( $this->get_id(), $property );
 	}
 
 	public function add_context( $context ) {
-		return jfb_action_handler()->add_context( $this->get_id(), $context );
+		return jet_fb_action_handler()->add_context( $this->get_id(), $context );
 	}
 
 	public function add_context_once( $context ) {
-		return jfb_action_handler()->add_context_once( $this->get_id(), $context );
+		return jet_fb_action_handler()->add_context_once( $this->get_id(), $context );
 	}
 
 

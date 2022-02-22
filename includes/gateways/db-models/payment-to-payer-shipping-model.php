@@ -22,6 +22,7 @@ class Payment_To_Payer_Shipping_Model extends Base_Db_Model {
 	 */
 	public static function schema(): array {
 		return array(
+			'id'                => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'payment_id'        => 'bigint(20) NOT NULL',
 			'payer_shipping_id' => 'bigint(20) NOT NULL',
 		);
@@ -29,6 +30,7 @@ class Payment_To_Payer_Shipping_Model extends Base_Db_Model {
 
 	public static function schema_keys(): array {
 		return array(
+			'id'                => 'primary key',
 			'payment_id'        => 'index',
 			'payer_shipping_id' => 'index'
 		);

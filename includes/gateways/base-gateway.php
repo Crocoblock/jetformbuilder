@@ -205,7 +205,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	public function get_refer_url( $type, array $additional_args = array() ) {
 		$success_redirect = filter_var( $this->gateway( 'use_success_redirect' ), FILTER_VALIDATE_BOOLEAN );
-		$refer            = jfb_action_handler()->get_refer();
+		$refer            = jet_fb_action_handler()->get_refer();
 
 		if ( $success_redirect && $this->redirect && 'success' === $type ) {
 			$refer = $this->redirect->get_completed_redirect_url();

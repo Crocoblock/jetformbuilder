@@ -46,9 +46,9 @@ abstract class Scenario_Logic_Base {
 		$this->process_status( $this->get_process_status() );
 
 		/** redirect to the page */
-		jfb_gateway_current()->send_response(
+		jet_fb_gateway_current()->send_response(
 			array(
-				'status' => jfb_gateway_current()->get_result_message(
+				'status' => jet_fb_gateway_current()->get_result_message(
 					$this->get_scenario_row( 'status' )
 				)
 			)
@@ -59,16 +59,16 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		$keep_these = jfb_gateway_current()->get_actions_before();
+		$keep_these = jet_fb_gateway_current()->get_actions_before();
 
-		jfb_gateway_current()->set_form_meta( Gateway_Manager::instance()->gateways() );
+		jet_fb_gateway_current()->set_form_meta( Gateway_Manager::instance()->gateways() );
 		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
 		foreach ( $default_actions as $index ) {
-			$action = jfb_action_handler()->get_action_by_id( $index );
+			$action = jet_fb_action_handler()->get_action_by_id( $index );
 
 			if ( 'redirect_to_page' === $action->get_id() ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 
 				$this->add_context( array(
 					'redirect' => $action
@@ -76,7 +76,7 @@ abstract class Scenario_Logic_Base {
 			}
 
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 			}
 		}
 	}
@@ -89,10 +89,10 @@ abstract class Scenario_Logic_Base {
 	 */
 	public function get_referrer_url( string $type ) {
 		$success_redirect = filter_var(
-			jfb_gateway_current()->gateway( 'use_success_redirect' ),
+			jet_fb_gateway_current()->gateway( 'use_success_redirect' ),
 			FILTER_VALIDATE_BOOLEAN
 		);
-		$refer            = jfb_action_handler()->get_refer();
+		$refer            = jet_fb_action_handler()->get_refer();
 
 		/** @var Redirect_To_Page $redirect */
 		$redirect = $this->get_context( 'redirect' );
@@ -103,7 +103,7 @@ abstract class Scenario_Logic_Base {
 
 		return add_query_arg(
 			array(
-				Gateway_Manager::PAYMENT_TYPE_PARAM => jfb_gateway_current()->get_id(),
+				Gateway_Manager::PAYMENT_TYPE_PARAM => jet_fb_gateway_current()->get_id(),
 				Scenarios_Manager::QUERY_VAR        => static::scenario_id()
 			),
 			$refer
@@ -120,9 +120,9 @@ abstract class Scenario_Logic_Base {
 	 */
 	public function process_status( $type = 'success' ) {
 
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jfb_gateway_current() );
+		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
 
-		$keep_these = jfb_gateway_current()->gateway( 'notifications_' . $type, array() );
+		$keep_these = jet_fb_gateway_current()->gateway( 'notifications_' . $type, array() );
 
 		if ( empty( $keep_these ) ) {
 			return;
@@ -130,9 +130,9 @@ abstract class Scenario_Logic_Base {
 
 		$entry = $this->get_scenario_row();
 
-		$all = jfb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
-		                           ->unregister_action( 'redirect_to_page' )
-		                           ->get_all();
+		$all = jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
+		                              ->unregister_action( 'redirect_to_page' )
+		                              ->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -140,7 +140,7 @@ abstract class Scenario_Logic_Base {
 
 		foreach ( $all as $index => $notification ) {
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jfb_action_handler()->unregister_action( $index );
+				jet_fb_action_handler()->unregister_action( $index );
 			}
 		}
 
@@ -150,7 +150,7 @@ abstract class Scenario_Logic_Base {
 			return;
 		}
 
-		jfb_action_handler()->add_request( $request );
+		jet_fb_action_handler()->add_request( $request );
 
 		( new Action_Default_Executor() )->soft_run_actions();
 	}
@@ -211,7 +211,7 @@ abstract class Scenario_Logic_Base {
 				continue;
 			}
 
-			jfb_action_handler()->add_response( array( 'redirect' => $link['href'] ) );
+			jet_fb_action_handler()->add_response( array( 'redirect' => $link['href'] ) );
 			break;
 		}
 	}
@@ -224,7 +224,7 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function get_setting( string $key, $if_empty = '' ) {
-		return jfb_gateway_current()->current_scenario( $key, $if_empty );
+		return jet_fb_gateway_current()->current_scenario( $key, $if_empty );
 	}
 
 	/**
@@ -232,7 +232,7 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function get_settings() {
-		return jfb_gateway_current()->current_scenario();
+		return jet_fb_gateway_current()->current_scenario();
 	}
 
 	/**
@@ -240,7 +240,7 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	private function get_context_key() {
-		return jfb_gateway_current()->get_id() . '__' . static::scenario_id();
+		return jet_fb_gateway_current()->get_id() . '__' . static::scenario_id();
 	}
 
 	/**
@@ -250,7 +250,7 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function add_context( array $context ) {
-		jfb_action_handler()->add_context( $this->get_context_key(), $context );
+		jet_fb_action_handler()->add_context( $this->get_context_key(), $context );
 
 		return $this;
 	}
@@ -262,7 +262,7 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function get_context( string $property = '' ) {
-		return jfb_action_handler()->get_context( $this->get_context_key(), $property );
+		return jet_fb_action_handler()->get_context( $this->get_context_key(), $property );
 	}
 
 }

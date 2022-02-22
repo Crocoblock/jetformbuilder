@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 1.5.3
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 **JetFormBuilder — Dynamic Blocks Form Builder**
 
 A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the block editor (Gutenberg). No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
+
+= SUPPORT =
+Please use our Github repo for the any issues/bugs/problems - <a href="https://github.com/Crocoblock/jetformbuilder/issues/" target="_blank">https://github.com/Crocoblock/jetformbuilder/issues/</a>
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
@@ -253,6 +256,16 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**1.5.5**
+ - FIX: Fatal error when executing actions after passing a payment
+ - FIX: Load preset for Options Page (JetEngine compatibility)
+
+**1.5.4**
+ - FIX: Correct Updating Post
+ - FIX: Disabling select placeholder
+ - FIX: Action Modal editor UI
+ - FIX: Validation issues
 
 **1.5.3**
  - FIX: Saving an inserted_post_id

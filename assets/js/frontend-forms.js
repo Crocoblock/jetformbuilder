@@ -159,7 +159,13 @@
 
 				case 'one_of':
 					if ( val && val.constructor === Array ) {
-						checkResult = val.includes( listenFor );
+						checkResult = false;
+
+						for ( const valElement of val ) {
+							if ( listenFor.length && 0 <= listenFor.indexOf( valElement ) ) {
+								checkResult = true;
+							}
+						}
 
 					} else if ( ! val ) {
 						checkResult = false;

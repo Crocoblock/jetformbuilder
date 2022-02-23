@@ -23,6 +23,9 @@ import {
 } from './functions/LocationManager';
 import ListComponents from './components/ListComponents';
 import GetIncomingMessages from './mixins/GetIncomingMessages';
+import PostBox from './components/PostBox';
+import PostBoxGrid from './components/PostBoxGrid';
+import PostBoxContainer from './components/PostBoxContainer';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -45,7 +48,10 @@ window.JetFBComponents = {
 	PayerColumn,
 	LinkTypeColumn,
 	SimpleWrapperComponent,
-	ListComponents
+	ListComponents,
+	PostBox,
+	PostBoxGrid,
+	PostBoxContainer,
 };
 
 window.JetFBMixins = {

@@ -3,7 +3,9 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -12,22 +14,15 @@ class Pages_Manager {
 
 	use Repository_Pattern_Trait;
 
-	/**
-	 * @var Base_Page
-	 */
+	/** @var Base_Page */
 	private $current_page;
-
 
 	public function __construct() {
 		/** Register pages */
 		$this->rep_install();
+		$this->set_current_page();
 
 		add_action( 'admin_menu', array( $this, 'add_pages' ) );
-
-		if ( $this->is_dashboard_page() ) {
-			$this->set_current_page();
-			add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
-		}
 	}
 
 	/**
@@ -57,22 +52,11 @@ class Pages_Manager {
 	}
 
 	/**
-	 * @param $slug
-	 *
-	 * @return Base_Page
-	 * @throws Repository_Exception
-	 */
-	public function get_page( $slug ) {
-		return $this->rep_get_item( $slug );
-	}
-
-	/**
-	 * @return Base_Page
 	 * @throws Not_Found_Page_Exception
 	 */
-	public function get_current(): Base_Page {
-		if ( is_a( $this->current_page, Base_Page::class ) ) {
-			return  $this->current_page;
+	public function get_current(): Admin_Page_Interface {
+		if ( is_a( $this->current_page, Admin_Page_Interface::class ) ) {
+			return $this->current_page;
 		}
 
 		throw new Not_Found_Page_Exception( 'Current page is not defined' );
@@ -94,11 +78,25 @@ class Pages_Manager {
 	 * Set current admin page
 	 */
 	public function set_current_page() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		try {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$this->current_page = $this->get_page( sanitize_key( $_GET['page'] ) );
+			$this->rep_throw_if_undefined( $_GET['page'] ?? '' );
+
+			/** @var Base_Page $page */
+			$page = $this->rep_get_item( sanitize_key( $_GET['page'] ?? '' ) );
 		} catch ( Repository_Exception $exception ) {
+			return;
 		}
+		$item_id = absint( $_GET['item_id'] ?? 0 );
+
+		try {
+			$this->current_page = $page->create_single( $item_id );
+		} catch ( Not_Found_Page_Exception $exception ) {
+			$this->current_page = $page;
+		}
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -108,8 +106,7 @@ class Pages_Manager {
 		$ui_data = Plugin::instance()->framework->get_included_module_data( 'cherry-x-vue-ui.php' );
 		( new \CX_Vue_UI( $ui_data ) )->enqueue_assets();
 
-		( new Page_Config( $this->current_page ) )->render_config();
-
+		$this->current_page->render_config();
 		$this->register_scripts();
 
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
@@ -177,27 +174,10 @@ class Pages_Manager {
 	 */
 	public function get_url_of( $page_slug ): string {
 		try {
-			return $this->get_page( $page_slug )->get_url();
+			return $this->rep_get_item( $page_slug )->get_url();
 		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
-	}
-
-	/**
-	 * Check if passed page is currently displayed
-	 *
-	 * @param Base_Page $page
-	 *
-	 * @return bool
-	 */
-	public function is_page_now( Base_Page $page ): bool {
-
-		if ( ! $this->is_dashboard_page() ) {
-			return false;
-		}
-
-		return ( $page->slug() === $this->current_page->slug() );
-
 	}
 
 	/**

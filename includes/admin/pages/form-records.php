@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
+use Jet_Form_Builder\Admin\Single_Pages\Single_Form_Record_Page;
 
 class Form_Records extends Base_Page {
 
@@ -13,6 +14,10 @@ class Form_Records extends Base_Page {
 
 	public function title(): string {
 		return __( 'Form Records', 'jet-form-builder' );
+	}
+
+	protected function single_page(): string {
+		return Single_Form_Record_Page::class;
 	}
 
 	public function page_config(): array {

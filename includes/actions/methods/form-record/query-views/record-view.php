@@ -25,7 +25,9 @@ class Record_View extends View_Base {
 	}
 
 	public function set_filters( array $filters ) {
-		$forms = $filters['form'] ?? array();
+		parent::set_filters( $filters );
+
+		$forms = $this->filters['form'] ?? array();
 
 		if ( empty( $forms ) ) {
 			return $this;

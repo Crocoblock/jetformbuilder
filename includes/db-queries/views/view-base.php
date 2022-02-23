@@ -21,6 +21,7 @@ abstract class View_Base {
 
 	/** @var Relation[] */
 	protected $relations = array();
+	protected $filters = array();
 
 	abstract public function table(): string;
 
@@ -48,6 +49,8 @@ abstract class View_Base {
 	}
 
 	public function set_filters( array $filters ) {
+		$this->filters = esc_sql( $filters );
+
 		return $this;
 	}
 
@@ -87,7 +90,7 @@ abstract class View_Base {
 	}
 
 	public function set_limit( array $limit ): View_Base {
-		$this->limit = $limit;
+		$this->limit = array_map( 'intval', $limit );
 
 		return $this;
 	}
@@ -100,6 +103,10 @@ abstract class View_Base {
 	}
 
 	public function set_order_by( array $order_by ): View_Base {
+		if ( ! in_array( $order_by, array( self::FROM_HIGH_TO_LOW, self::FROM_LOW_TO_HIGH ) ) ) {
+			return $this;
+		}
+
 		$this->order_by = $order_by;
 
 		return $this;

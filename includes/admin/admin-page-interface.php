@@ -4,7 +4,12 @@
 namespace Jet_Form_Builder\Admin;
 
 
-interface Admin_Page {
+interface Admin_Page_Interface {
+
+	/**
+	 * Page slug
+	 */
+	public function slug(): string;
 
 	/**
 	 * Page title
@@ -14,7 +19,7 @@ interface Admin_Page {
 	/**
 	 * Page render function
 	 */
-	public function render();
+	public function render_page();
 
 	/**
 	 * Return page config array
@@ -25,13 +30,6 @@ interface Admin_Page {
 	 * Page specific assets
 	 */
 	public function assets();
-
-	/**
-	 * If it returns FALSE, this page is not registered
-	 *
-	 * @return bool
-	 */
-	public function is_active(): bool;
 
 	/**
 	 * Returns current page url

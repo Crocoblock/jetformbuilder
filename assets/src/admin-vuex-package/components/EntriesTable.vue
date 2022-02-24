@@ -94,7 +94,7 @@
 							:key="action.value"
 						>
 							<a
-								href="javascript:void(0)"
+								:href="getActionHref( action )"
 								:class="getActionClass( action )"
 								@click="onClickAction( action, entry )"
 							>
@@ -193,6 +193,9 @@ export default {
 		...mapActions( [
 			'runRowAction',
 		] ),
+		getActionHref( action ) {
+			return action?.href || 'javascript:void(0)';
+		},
 		getActionClass( action ) {
 			const { type = 'default', class_name = '' } = action;
 
@@ -244,6 +247,9 @@ export default {
 			return this.getColumnComponentByPrefix( column, 'item' );
 		},
 		onClickAction( { value: action }, { id } ) {
+			if ( action?.href ) {
+				return;
+			}
 			this.toggleDoingAction();
 
 			this.runRowAction( {

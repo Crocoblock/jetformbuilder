@@ -26,6 +26,14 @@
 					title="Form Record"
 				>
 				</PostBox>
+				<PostBox
+					:values="{
+			something: 'Wowo!',
+			another: 'helldsf,fdowe',
+			dsfgfgf: '2332424'
+			}"
+					title="Another #2"
+				></PostBox>
 			</PostBoxContainer>
 		</PostBoxGrid>
 	</div>

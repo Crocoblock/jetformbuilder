@@ -172,22 +172,22 @@ var _Vuex = Vuex,
       promise: this.promiseWrapper(this.deleteClicked.bind(this))
     });
     this.setActionPromises({
-      action: 'view',
+      action: 'mark_viewed',
       context: CHOOSE_ACTION,
       promise: this.promiseWrapper(this.viewChecked.bind(this))
     });
     this.setActionPromises({
-      action: 'view',
+      action: 'mark_viewed',
       context: CLICK_ACTION,
       promise: this.promiseWrapper(this.viewClicked.bind(this))
     });
     this.setActionPromises({
-      action: 'not_view',
+      action: 'mark_not_viewed',
       context: CHOOSE_ACTION,
       promise: this.promiseWrapper(this.viewChecked.bind(this))
     });
     this.setActionPromises({
-      action: 'not_view',
+      action: 'mark_not_viewed',
       context: CLICK_ACTION,
       promise: this.promiseWrapper(this.notViewClicked.bind(this))
     });
@@ -299,7 +299,7 @@ var _Vuex = Vuex,
       this.viewAction({
         resolve: resolve,
         reject: reject,
-        options: this.getOptionsStatic('view', payload)
+        options: this.getOptionsStatic('mark_viewed', payload)
       });
     },
     notViewClicked: function notViewClicked(_ref7) {
@@ -313,7 +313,7 @@ var _Vuex = Vuex,
       this.viewAction({
         resolve: resolve,
         reject: reject,
-        options: this.getOptionsStatic('not_view', payload)
+        options: this.getOptionsStatic('mark_not_viewed', payload)
       });
     }
   })

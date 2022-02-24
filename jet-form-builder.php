@@ -66,27 +66,26 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return Jet_Form_Builder\Plugin::instance();
 	}
 
-	if ( ! function_exists( 'jet_fb_render_form' ) ) {
-		function jet_fb_render_form( $settings ) {
-			return Jet_Form_Builder\Plugin::instance()->blocks->get_form_class()->render_callback_field( $settings );
-		}
+	function jet_fb_render_form( $settings ) {
+		return Jet_Form_Builder\Plugin::instance()->blocks->get_form_class()->render_callback_field( $settings );
 	}
-	if ( ! function_exists( 'jet_fb_handler' ) ) {
-		function jet_fb_handler(): \Jet_Form_Builder\Form_Handler {
-			return jet_form_builder()->form_handler;
-		}
+
+	function jet_fb_handler(): \Jet_Form_Builder\Form_Handler {
+		return jet_form_builder()->form_handler;
 	}
-	if ( ! function_exists( 'jet_fb_action_handler' ) ) {
-		function jet_fb_action_handler(): \Jet_Form_Builder\Actions\Action_Handler {
-			return jet_fb_handler()->action_handler;
-		}
+
+	function jet_fb_action_handler(): \Jet_Form_Builder\Actions\Action_Handler {
+		return jet_fb_handler()->action_handler;
 	}
-	if ( ! function_exists( 'jet_fb_request_handler' ) ) {
-		function jet_fb_request_handler(): \Jet_Form_Builder\Request\Request_Handler {
-			return jet_fb_handler()->request_handler;
-		}
+
+	function jet_fb_request_handler(): \Jet_Form_Builder\Request\Request_Handler {
+		return jet_fb_handler()->request_handler;
 	}
-	if ( ! function_exists( 'jet_fb_gateway_current' ) ) {
+
+	function jet_fb_admin_pages():\Jet_Form_Builder\Admin\Pages\Pages_Manager {
+		return jet_form_builder()->pages;
+	}
+
 		/**
 		 * @return \Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
 		 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
@@ -94,7 +93,7 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		function jet_fb_gateway_current(): \Jet_Form_Builder\Gateways\Base_Gateway {
 			return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller();
 		}
-	}
+
 } else {
 	add_action(
 		'admin_notices',

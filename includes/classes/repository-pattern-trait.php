@@ -18,9 +18,12 @@ trait Repository_Pattern_Trait {
 		return false;
 	}
 
-	public function rep_install() {
+	public function rep_install( $instances = array() ) {
+		if ( empty( $instances ) ) {
+			$instances = $this->rep_instances();
+		}
 		try {
-			foreach ( $this->rep_instances() as $instance ) {
+			foreach ( $instances as $instance ) {
 				$this->rep_install_item( $instance );
 			}
 		} catch ( Repository_Exception $exception ) {

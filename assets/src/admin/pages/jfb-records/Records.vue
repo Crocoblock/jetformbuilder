@@ -69,23 +69,23 @@ export default {
 		} );
 
 		this.setActionPromises( {
-			action: 'view',
+			action: 'mark_viewed',
 			context: CHOOSE_ACTION,
 			promise: this.promiseWrapper( this.viewChecked.bind( this ) ),
 		} );
 		this.setActionPromises( {
-			action: 'view',
+			action: 'mark_viewed',
 			context: CLICK_ACTION,
 			promise: this.promiseWrapper( this.viewClicked.bind( this ) ),
 		} );
 
 		this.setActionPromises( {
-			action: 'not_view',
+			action: 'mark_not_viewed',
 			context: CHOOSE_ACTION,
 			promise: this.promiseWrapper( this.viewChecked.bind( this ) ),
 		} );
 		this.setActionPromises( {
-			action: 'not_view',
+			action: 'mark_not_viewed',
 			context: CLICK_ACTION,
 			promise: this.promiseWrapper( this.notViewClicked.bind( this ) ),
 		} );
@@ -185,14 +185,14 @@ export default {
 			this.viewAction( {
 				resolve,
 				reject,
-				options: this.getOptionsStatic( 'view', payload ),
+				options: this.getOptionsStatic( 'mark_viewed', payload ),
 			} );
 		},
 		notViewClicked( { resolve, reject }, ...payload ) {
 			this.viewAction( {
 				resolve,
 				reject,
-				options: this.getOptionsStatic( 'not_view', payload ),
+				options: this.getOptionsStatic( 'mark_not_viewed', payload ),
 			} );
 		},
 

@@ -28,7 +28,11 @@ trait Admin_Page_Trait {
 		if ( ! empty( $this->config ) ) {
 			return $this->config;
 		}
-		$this->config = $this->page_config();
+		$this->config = apply_filters(
+			"jet-form-builder/page-config/{$this->slug()}",
+			$this->page_config(),
+			$this
+		);
 
 		return $this->config;
 	}
@@ -38,7 +42,7 @@ trait Admin_Page_Trait {
 	}
 
 	public function render_config() {
-		$config = apply_filters( "jet-form-builder/page-config/{$this->slug()}", $this->query_config() );
+		$config = $this->query_config();
 
 		if ( ! empty( $config ) ) {
 			wp_localize_script( 'cx-vue', 'JetFBPageConfig', $config );

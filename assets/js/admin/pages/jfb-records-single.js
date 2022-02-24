@@ -45,6 +45,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var _JetFBComponents = JetFBComponents,
     PostBox = _JetFBComponents.PostBox,
     PostBoxGrid = _JetFBComponents.PostBoxGrid,
@@ -193,6 +201,17 @@ var render = function () {
             [
               _c("PostBox", {
                 attrs: { values: _vm.values, title: "Form Record" },
+              }),
+              _vm._v(" "),
+              _c("PostBox", {
+                attrs: {
+                  values: {
+                    something: "Wowo!",
+                    another: "helldsf,fdowe",
+                    dsfgfgf: "2332424",
+                  },
+                  title: "Another #2",
+                },
               }),
             ],
             1

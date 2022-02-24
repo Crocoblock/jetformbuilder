@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views;
 
+use Automattic\WooCommerce\Vendor\League\Container\Exception\NotFoundException;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
@@ -10,11 +11,14 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_En
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Not_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
+use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
+use Jet_Form_Builder\Admin\Pages\Form_Records;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 class Records_Table_View extends View_Base {
 
@@ -110,7 +114,7 @@ class Records_Table_View extends View_Base {
 				'type'     => 'danger',
 			),
 			array(
-				'value'    => 'view',
+				'value'    => 'mark_viewed',
 				'label'    => __( 'Mark as Viewed', 'jet-form-builder' ),
 				'endpoint' => array(
 					'method' => Mark_As_Viewed_Record_Endpoint::get_methods(),
@@ -118,7 +122,7 @@ class Records_Table_View extends View_Base {
 				),
 			),
 			array(
-				'value'    => 'not_view',
+				'value'    => 'mark_not_viewed',
 				'label'    => __( 'Mark as not Viewed', 'jet-form-builder' ),
 				'endpoint' => array(
 					'method' => Mark_As_Not_Viewed_Record_Endpoint::get_methods(),
@@ -134,36 +138,52 @@ class Records_Table_View extends View_Base {
 	 * @return array
 	 */
 	public function get_row_actions( $record ): array {
-		$actions = $this->get_single_actions();
+		$actions        = $this->get_single_actions();
 		list( $delete ) = $actions;
 
-		list( $view ) = array_values(
+		list( $mark_view ) = array_values(
 			array_filter(
 				$actions,
 				function ( $action ) {
-					return 'view' === $action['value'];
+					return 'mark_viewed' === $action['value'];
 				}
 			)
 		);
 
-		list( $not_view ) = array_values(
+		list( $mark_not_view ) = array_values(
 			array_filter(
 				$actions,
 				function ( $action ) {
-					return 'not_view' === $action['value'];
+					return 'mark_not_viewed' === $action['value'];
 				}
 			)
 		);
 
-		return array(
+		$actions = array(
 			$delete,
-			empty( $record['is_viewed'] ) ? $view : $not_view,
+			empty( $record['is_viewed'] ) ? $mark_view : $mark_not_view,
 		);
+
+		try {
+			$single = ( new Form_Records() )->create_single( $record['id'] );
+
+			$view = array(
+				'value' => 'view',
+				'label' => __( 'View', 'jet-form-builder' ),
+				'href'  => $single->get_url(),
+			);
+		} catch ( Not_Found_Page_Exception $e ) {
+			return $actions;
+		}
+
+		$actions[] = $view;
+
+		return $actions;
 	}
 
-	public function get_row_classes( $record ) {
+	public function get_row_classes( $record ): array {
 		return array(
-			'list-table-item--not-viewed' => empty( $record['is_viewed'] )
+			'list-table-item--not-viewed' => empty( $record['is_viewed'] ),
 		);
 	}
 

@@ -8,8 +8,10 @@ use Jet_Form_Builder\Admin\Single_Pages\Single_Form_Record_Page;
 
 class Form_Records extends Base_Page {
 
+	const SLUG = 'jfb-records';
+
 	public function slug(): string {
-		return 'jfb-records';
+		return self::SLUG;
 	}
 
 	public function title(): string {

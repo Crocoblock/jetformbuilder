@@ -18,10 +18,6 @@ class Form_Records extends Base_Page {
 		return __( 'Form Records', 'jet-form-builder' );
 	}
 
-	protected function single_page(): string {
-		return Single_Form_Record_Page::class;
-	}
-
 	public function page_config(): array {
 		return ( new Records_Table_View() )->load_view();
 	}

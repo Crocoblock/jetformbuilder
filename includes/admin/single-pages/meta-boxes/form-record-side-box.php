@@ -11,7 +11,7 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 class Form_Record_Side_Box extends Base_Meta_Box {
 
 	public function get_title(): string {
-		return __( 'General Values','jet-form-builder' );
+		return __( 'General Values', 'jet-form-builder' );
 	}
 
 	/**

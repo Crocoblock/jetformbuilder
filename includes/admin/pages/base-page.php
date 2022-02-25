@@ -29,36 +29,10 @@ abstract class Base_Page implements Repository_Item_Instance_Trait, Admin_Page_I
 	}
 
 	/**
-	 * @return string
-	 * @throws Not_Found_Page_Exception
-	 */
-	protected function single_page(): string {
-		throw new Not_Found_Page_Exception( static::class . ' does not have a single page' );
-	}
-
-	/**
 	 * @throws Not_Found_Page_Exception
 	 */
 	public function render() {
-		jet_form_builder()->pages->get_current()->render_page();
-	}
-
-	/**
-	 * @param int $item_id
-	 *
-	 * @return Base_Single_Page
-	 * @throws Not_Found_Page_Exception
-	 */
-	public function create_single( int $item_id ): Base_Single_Page {
-		$single = $this->single_page();
-
-		/** @var Base_Single_Page $single */
-		$single = new $single( $this->slug(), $item_id );
-
-		/** Query the current item. If item not found - set the parent page */
-		$single->query_config();
-
-		return $single;
+		Pages_Manager::instance()->get_current()->render_page();
 	}
 
 	/**
@@ -69,10 +43,12 @@ abstract class Base_Page implements Repository_Item_Instance_Trait, Admin_Page_I
 	 * @return string
 	 */
 	public function get_url( $query_args = array() ): string {
-		return $this->admin_url( array_merge(
-			array( 'page' => $this->slug() ),
-			$query_args
-		) );
+		return $this->admin_url(
+			array_merge(
+				array( 'page' => $this->slug() ),
+				$query_args
+			)
+		);
 	}
 
 }

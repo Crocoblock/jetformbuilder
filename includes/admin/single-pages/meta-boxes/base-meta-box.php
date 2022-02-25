@@ -4,9 +4,13 @@
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
+use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 
 abstract class Base_Meta_Box {
+
+	use Repository_Item_With_Class;
 
 	abstract public function get_title(): string;
 
@@ -26,8 +30,19 @@ abstract class Base_Meta_Box {
 	 */
 	public function get_id(): int {
 		/** @var Base_Single_Page $single */
-		$single = jet_fb_admin_pages()->get_current();
+		$single = Pages_Manager::instance()->get_current();
 
 		return $single->get_id();
+	}
+
+	/**
+	 * @return int[]
+	 */
+	public function to_array(): array {
+		return array(
+			'id'     => $this->get_slug(),
+			'title'  => $this->get_title(),
+			'values' => $this->get_values(),
+		);
 	}
 }

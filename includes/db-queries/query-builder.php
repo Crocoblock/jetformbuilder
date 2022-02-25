@@ -27,6 +27,11 @@ class Query_Builder {
 
 	public $debug = false;
 
+	/**
+	 * @param array $columns
+	 *
+	 * @return string
+	 */
 	public static function build_set( array $columns ): string {
 		$pairs = array();
 

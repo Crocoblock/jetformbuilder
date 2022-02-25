@@ -82,18 +82,13 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return jet_fb_handler()->request_handler;
 	}
 
-	function jet_fb_admin_pages():\Jet_Form_Builder\Admin\Pages\Pages_Manager {
-		return jet_form_builder()->pages;
+	/**
+	 * @return \Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
+	 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+	 */
+	function jet_fb_gateway_current(): \Jet_Form_Builder\Gateways\Base_Gateway {
+		return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller();
 	}
-
-		/**
-		 * @return \Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
-		 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
-		 */
-		function jet_fb_gateway_current(): \Jet_Form_Builder\Gateways\Base_Gateway {
-			return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller();
-		}
-
 } else {
 	add_action(
 		'admin_notices',

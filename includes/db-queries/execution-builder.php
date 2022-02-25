@@ -186,20 +186,29 @@ class Execution_Builder {
 			->set_view( $view )
 			->result();
 
-		$set = Query_Builder::build_set( $columns );
+		$set   = $view->build_set( $columns );
+		$query = "UPDATE `{$view->table()}` {$set} {$where};";
 
 		// phpcs:ignore WordPress.DB
-		$result = (int) $wpdb->query( "UPDATE {$view->table()} {$set} {$where};" );
+		$result = (int) $wpdb->query( $query );
 
 		if ( ! $result ) {
 			throw new Query_Builder_Exception(
-				"Something went wrong on delete rows in: {$view->table()}",
-				$where
+				"Something went wrong on update rows in: {$view->table()}",
+				$where,
+				$query
 			);
 		}
 
 		return $result;
 	}
+
+	/**
+	 * @param Base_Db_Model $model
+	 *
+	 * @return string
+	 *
+	 */
 
 	public function create_table_schema( Base_Db_Model $model ) {
 		$schema_keys     = $model->schema_keys();

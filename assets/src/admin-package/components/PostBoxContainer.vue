@@ -1,9 +1,9 @@
 <template>
 	<div
-		:id="'postbox-container-' + currentIndex"
+		:id="wrapId"
 		class="postbox-container"
 	>
-		<div :id="containerId" class="meta-box-sortables ui-sortable">
+		<div :id="id" :class="containerClasses">
 			<slot></slot>
 		</div>
 	</div>
@@ -12,19 +12,20 @@
 <script>
 export default {
 	name: "PostBoxContainer",
-	data: () => ( {
-		currentIndex: 0,
-	} ),
-	created() {
-		this.currentIndex = ++this.$parent.containerIndex;
+	props: {
+		wrapId: String,
+		id: String,
+		classes: Array
 	},
 	computed: {
-		containerId() {
-			if ( 1 !== this.currentIndex ) {
-				return 'normal-sortables';
-			} else {
-				return 'side-sortables';
+		containerClasses() {
+			const classes = {};
+
+			for ( const classItem of this.classes ) {
+				classes[ classItem ] = true;
 			}
+
+			return classes;
 		}
 	}
 }

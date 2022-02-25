@@ -558,56 +558,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PostBox",
   props: {
     values: Object,
     title: String,
-    slug: String,
-    isOrdering: {
-      type: Boolean,
-      default: false
-    },
-    isToggling: {
-      type: Boolean,
-      default: false
-    }
+    slug: String
   },
-  computed: {
-    slugInside: function slugInside() {
-      if (this.slug) {
-        return this.slug;
-      }
-
-      return this.title.toLowerCase().replace(' ', '_');
-    },
-    idMoveUpDesc: function idMoveUpDesc() {
-      return this.slugInside + '-handle-order-higher-description';
-    },
-    idMoveDownDesc: function idMoveDownDesc() {
-      return this.slugInside + '-handle-order-lower-description';
-    }
-  }
+  computed: {}
 });
 
 /***/ }),
@@ -623,6 +581,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -636,21 +600,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "PostBoxContainer",
-  data: function data() {
-    return {
-      currentIndex: 0
-    };
-  },
-  created: function created() {
-    this.currentIndex = ++this.$parent.containerIndex;
+  props: {
+    wrapId: String,
+    id: String,
+    classes: Array
   },
   computed: {
-    containerId: function containerId() {
-      if (1 !== this.currentIndex) {
-        return 'normal-sortables';
-      } else {
-        return 'side-sortables';
+    containerClasses: function containerClasses() {
+      var classes = {};
+
+      var _iterator = _createForOfIteratorHelper(this.classes),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var classItem = _step.value;
+          classes[classItem] = true;
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
+
+      return classes;
     }
   }
 });
@@ -668,6 +641,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _PostBoxContainer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxContainer */ "./admin-package/components/PostBoxContainer.vue");
+/* harmony import */ var _PostBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBox */ "./admin-package/components/PostBox.vue");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -679,12 +656,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "PostBoxGrid",
+  name: 'PostBoxGrid',
+  props: {
+    containers: Array
+  },
+  components: {
+    PostBoxContainer: _PostBoxContainer__WEBPACK_IMPORTED_MODULE_0__["default"],
+    PostBox: _PostBox__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
-    return {
-      containerIndex: 0
-    };
+    return {};
+  },
+  created: function created() {},
+  computed: {
+    bodyClasses: function bodyClasses() {
+      return _defineProperty({
+        'metabox-holder': true
+      }, 'columns-' + this.containers.length, true);
+    }
   }
 });
 
@@ -3695,98 +3700,11 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "postbox", attrs: { id: _vm.slugInside } }, [
+  return _c("div", { staticClass: "postbox", attrs: { id: _vm.slug } }, [
     _c("div", { staticClass: "postbox-header" }, [
       _c("h2", { staticClass: "ui-sortable-handle" }, [
         _vm._v(_vm._s(_vm.title)),
       ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "handle-actions hide-if-no-js" },
-        [
-          _vm.isOrdering
-            ? [
-                _c(
-                  "button",
-                  {
-                    staticClass: "handle-order-higher",
-                    attrs: {
-                      type: "button",
-                      "aria-disabled": "false",
-                      "aria-describedby": _vm.idMoveUpDesc,
-                    },
-                  },
-                  [
-                    _c("span", { staticClass: "screen-reader-text" }, [
-                      _vm._v("Move up"),
-                    ]),
-                    _c("span", {
-                      staticClass: "order-higher-indicator",
-                      attrs: { "aria-hidden": "true" },
-                    }),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  { staticClass: "hidden", attrs: { id: _vm.idMoveUpDesc } },
-                  [_vm._v("Move " + _vm._s(_vm.title) + " box up")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "handle-order-lower",
-                    attrs: {
-                      type: "button",
-                      "aria-disabled": "false",
-                      "aria-describedby": _vm.idMoveDownDesc,
-                    },
-                  },
-                  [
-                    _c("span", { staticClass: "screen-reader-text" }, [
-                      _vm._v("Move up"),
-                    ]),
-                    _c("span", {
-                      staticClass: "order-lower-indicator",
-                      attrs: { "aria-hidden": "true" },
-                    }),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  { staticClass: "hidden", attrs: { id: _vm.idMoveDownDesc } },
-                  [_vm._v("Move " + _vm._s(_vm.title) + " box down")]
-                ),
-              ]
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.isToggling
-            ? _c(
-                "button",
-                {
-                  staticClass: "handlediv",
-                  attrs: { type: "button", "aria-expanded": "true" },
-                },
-                [
-                  _c("span", { staticClass: "screen-reader-text" }, [
-                    _vm._v("Toggle panel: " + _vm._s(_vm.title)),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", {
-                    staticClass: "toggle-indicator",
-                    attrs: { "aria-hidden": "true" },
-                  }),
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm._t("actions"),
-        ],
-        2
-      ),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "postbox-inner submitbox" }, [
@@ -3850,17 +3768,11 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass: "postbox-container",
-      attrs: { id: "postbox-container-" + _vm.currentIndex },
-    },
+    { staticClass: "postbox-container", attrs: { id: _vm.wrapId } },
     [
       _c(
         "div",
-        {
-          staticClass: "meta-box-sortables ui-sortable",
-          attrs: { id: _vm.containerId },
-        },
+        { class: _vm.containerClasses, attrs: { id: _vm.id } },
         [_vm._t("default")],
         2
       ),
@@ -3893,7 +3805,7 @@ var render = function () {
   return _c("div", { attrs: { id: "poststuff" } }, [
     _c(
       "div",
-      { staticClass: "metabox-holder columns-2", attrs: { id: "post-body" } },
+      { class: _vm.bodyClasses, attrs: { id: "post-body" } },
       [
         _vm.$slots.topBody
           ? _c(
@@ -3904,7 +3816,29 @@ var render = function () {
             )
           : _vm._e(),
         _vm._v(" "),
-        _vm._t("default"),
+        _vm._l(_vm.containers, function (ref) {
+          var wrap_id = ref.wrap_id
+          var id = ref.id
+          var classes = ref.classes
+          var boxes = ref.boxes
+          return _c(
+            "PostBoxContainer",
+            {
+              key: wrap_id,
+              attrs: { "wrap-id": wrap_id, id: id, classes: classes },
+            },
+            _vm._l(boxes, function (ref) {
+              var id = ref.id
+              var title = ref.title
+              var values = ref.values
+              return _c("PostBox", {
+                key: id,
+                attrs: { title: title, values: values },
+              })
+            }),
+            1
+          )
+        }),
       ],
       2
     ),

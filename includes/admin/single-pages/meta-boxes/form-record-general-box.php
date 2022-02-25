@@ -10,7 +10,7 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 class Form_Record_General_Box extends Base_Meta_Box {
 
 	public function get_title(): string {
-		return __( 'General Values', 'jet-form-builder' );
+		return __( 'Form Fields', 'jet-form-builder' );
 	}
 
 	/**
@@ -18,10 +18,16 @@ class Form_Record_General_Box extends Base_Meta_Box {
 	 * @throws Not_Found_Page_Exception
 	 */
 	public function get_values(): array {
-		try {
-			return Record_View::findById( $this->get_id() );
-		} catch ( Query_Builder_Exception $exception ) {
-			throw new Not_Found_Page_Exception( $exception, ...$exception->get_additional() );
-		}
+		return array(
+			'filekljdf'     => 'dsfd',
+			'filedf'        => 'dsfd',
+			'fild879sgfedf' => 'ds324fd',
+			'figfjhledf'    => 'd456sfd',
+			'file21df'      => 'dgfsfd',
+			'filsdfedf'     => 'dfdsfd',
+			'filertedf'     => 'dsfk,jd',
+			'filbhjedf'     => 'dsfdfgd',
+			'filweredf'     => 'dsszdfd',
+		);
 	}
 }

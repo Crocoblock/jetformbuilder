@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Meta_Box;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 abstract class Base_Meta_Container {
@@ -12,9 +13,23 @@ abstract class Base_Meta_Container {
 	use Repository_Pattern_Trait;
 
 	const TYPE_NORMAL = 'normal-sortables';
-	const TYPE_SIDE   = 'side-sortables';
+	const TYPE_SIDE = 'side-sortables';
 
-	abstract public function get_type(): string;
+	protected $index;
+
+	public function get_type(): string {
+		return 1 !== $this->index ? self::TYPE_NORMAL : self::TYPE_SIDE;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function get_classes(): array {
+		return array(
+			'meta-box-sortables',
+			'ui-sortable',
+		);
+	}
 
 	/**
 	 * Base_Meta_Container constructor.
@@ -30,11 +45,39 @@ abstract class Base_Meta_Container {
 	}
 
 	/**
+	 * @return Base_Meta_Box[]
+	 */
+	public function get_boxes(): array {
+		return $this->rep_get_values();
+	}
+
+	/**
 	 * @param Base_Meta_Box $box
 	 *
 	 * @throws Repository_Exception
 	 */
 	public function add_meta_box( Base_Meta_Box $box ) {
 		$this->rep_install_item( $box );
+	}
+
+	public function set_index( int $index ): Base_Meta_Container {
+		$this->index = $index;
+
+		return $this;
+	}
+
+	public function to_array(): array {
+		$boxes = array();
+
+		foreach ( $this->get_boxes() as $box ) {
+			$boxes[] = $box->to_array();
+		}
+
+		return array(
+			'wrap_id' => "postbox-container-{$this->index}",
+			'id'      => $this->get_type(),
+			'classes' => implode( ' ', $this->get_classes() ),
+			'boxes'   => $boxes,
+		);
 	}
 }

@@ -6,49 +6,67 @@ namespace Jet_Form_Builder\Admin\Pages;
 use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 
+/**
+ * @method static Pages_Manager instance()
+ *
+ * Class Pages_Manager
+ * @package Jet_Form_Builder\Admin\Pages
+ */
 class Pages_Manager {
 
-	use Repository_Pattern_Trait;
+	use Instance_Trait;
 
 	/** @var Base_Page */
 	private $current_page;
 
-	public function __construct() {
+	/** @var Stable_Pages_Manager */
+	private $stable_manager;
+	private $single_manager;
+
+	protected function __construct() {
 		/** Register pages */
-		$this->rep_install();
-		$this->set_current_page();
+		$this->stable()->rep_install();
+		$this->single()->rep_install();
+	}
 
-		add_action( 'admin_menu', array( $this, 'add_pages' ) );
+	public function stable(): Stable_Pages_Manager {
+		if ( ! $this->stable_manager ) {
+			$this->stable_manager = new Stable_Pages_Manager();
+		}
+
+		return $this->stable_manager;
+	}
+
+	public function single(): Single_Pages_Manager {
+		if ( ! $this->single_manager ) {
+			$this->single_manager = new Single_Pages_Manager();
+		}
+
+		return $this->single_manager;
 	}
 
 	/**
-	 * Register admin pages
-	 */
-	public function rep_instances(): array {
-		return apply_filters(
-			'jet-form-builder/admin/pages',
-			array(
-				new Settings_Page(),
-				new Addons_Page(),
-				new Form_Records(),
-				new Payments_Page(),
-			)
-		);
-	}
-
-	/**
-	 * @param Base_Page $item
+	 * @param string $slug
 	 *
+	 * @return Base_Page
 	 * @throws Repository_Exception
 	 */
-	public function rep_before_install_item( $item ) {
-		if ( ! $item->is_active() ) {
-			$this->_rep_abort_this();
-		}
+	public function get_stable( string $slug ): Base_Page {
+		return $this->stable()->rep_get_item( $slug );
+	}
+
+	/**
+	 * @param string $slug
+	 *
+	 * @return Base_Single_Page
+	 * @throws Repository_Exception
+	 */
+	public function get_single( string $slug ): Base_Single_Page {
+		return $this->single()->rep_get_item( $slug );
 	}
 
 	/**
@@ -63,35 +81,25 @@ class Pages_Manager {
 	}
 
 	/**
-	 * Check if is dashboard page
-	 *
-	 * @return boolean [description]
-	 */
-	public function is_dashboard_page() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$page = ! empty( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : false;
-
-		return $this->rep_isset_item( $page );
-	}
-
-	/**
 	 * Set current admin page
 	 */
 	public function set_current_page() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		try {
-			$this->rep_throw_if_undefined( $_GET['page'] ?? '' );
-
-			/** @var Base_Page $page */
-			$page = $this->rep_get_item( sanitize_key( $_GET['page'] ?? '' ) );
+			$slug = sanitize_key( $_GET['page'] ?? '' );
+			$page = $this->get_stable( $slug );
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
 		$item_id = absint( $_GET['item_id'] ?? 0 );
 
 		try {
-			$this->current_page = $page->create_single( $item_id );
+			$this->current_page = $this->get_single( $slug );
+			$this->current_page->make( $item_id );
+
 		} catch ( Not_Found_Page_Exception $exception ) {
+			$this->current_page = $page;
+		} catch ( Repository_Exception $exception ) {
 			$this->current_page = $page;
 		}
 
@@ -146,7 +154,7 @@ class Pages_Manager {
 			Plugin::instance()->plugin_url( 'assets/js/admin-vuex-package.js' ),
 			array(
 				'jet-form-builder-admin-vuex',
-				'jet-form-builder-admin-package'
+				'jet-form-builder-admin-package',
 			),
 			Plugin::instance()->get_version(),
 			true
@@ -165,37 +173,6 @@ class Pages_Manager {
 			'jet-form-builder',
 			Plugin::instance()->plugin_dir( 'languages' )
 		);
-	}
-
-	/**
-	 * @param $page_slug
-	 *
-	 * @return string
-	 */
-	public function get_url_of( $page_slug ): string {
-		try {
-			return $this->rep_get_item( $page_slug )->get_url();
-		} catch ( Repository_Exception $exception ) {
-			return '';
-		}
-	}
-
-	/**
-	 * Register appointments
-	 */
-	public function add_pages() {
-		$parent = 'edit.php?post_type=' . jet_form_builder()->post_type->slug();
-
-		foreach ( $this->rep_get_items() as $page ) {
-			add_submenu_page(
-				$parent,
-				$page->title(),
-				$page->title(),
-				'manage_options',
-				$page->slug(),
-				array( $page, 'render' )
-			);
-		}
 	}
 
 }

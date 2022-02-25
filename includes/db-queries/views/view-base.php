@@ -308,6 +308,20 @@ abstract class View_Base {
 	}
 
 	/**
+	 * @param array $columns
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_set( array $columns ): string {
+		$columns = $this->attach_columns( $columns );
+
+		return Query_Builder::build_set( $columns );
+	}
+
+	/**
+	 * Prepare columns for build conditions
+	 *
 	 * @param $columns
 	 *
 	 * @return array
@@ -327,6 +341,24 @@ abstract class View_Base {
 		}
 
 		return $conditions;
+	}
+
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 * @throws Query_Builder_Exception
+	 */
+	public function attach_columns( array $columns ): array {
+		foreach ( $columns as $name => $value ) {
+			if ( is_numeric( $name ) ) {
+				continue;
+			}
+			$columns[ $this->column( $name ) ] = $value;
+			unset( $columns[ $name ] );
+		}
+
+		return $columns;
 	}
 
 	/**

@@ -21,49 +21,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _JetFBComponents = JetFBComponents,
-    PostBox = _JetFBComponents.PostBox,
-    PostBoxGrid = _JetFBComponents.PostBoxGrid,
-    PostBoxContainer = _JetFBComponents.PostBoxContainer;
+    PostBoxGrid = _JetFBComponents.PostBoxGrid;
 var _JetFBMixins = JetFBMixins,
     GetIncoming = _JetFBMixins.GetIncoming;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "jfb-records-single",
+  name: 'jfb-records-single',
   components: {
-    PostBoxContainer: PostBoxContainer,
-    PostBox: PostBox,
     PostBoxGrid: PostBoxGrid
   },
   data: function data() {
@@ -165,60 +129,11 @@ var render = function () {
     "div",
     { staticClass: "wrap" },
     [
-      _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Form Record")]),
+      _c("h1", { staticClass: "wp-heading-inline" }, [
+        _vm._v(_vm._s(_vm.values.title)),
+      ]),
       _vm._v(" "),
-      _c(
-        "PostBoxGrid",
-        [
-          _c(
-            "PostBoxContainer",
-            [
-              _c("PostBox", {
-                attrs: {
-                  values: {
-                    something: "Wowo!",
-                    another: "hellowe",
-                  },
-                  title: "Another #1",
-                },
-              }),
-              _vm._v(" "),
-              _c("PostBox", {
-                attrs: {
-                  values: {
-                    something: "Wowo!",
-                    another: "helldsfsfdowe",
-                  },
-                  title: "Another #2",
-                },
-              }),
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "PostBoxContainer",
-            [
-              _c("PostBox", {
-                attrs: { values: _vm.values, title: "Form Record" },
-              }),
-              _vm._v(" "),
-              _c("PostBox", {
-                attrs: {
-                  values: {
-                    something: "Wowo!",
-                    another: "helldsf,fdowe",
-                    dsfgfgf: "2332424",
-                  },
-                  title: "Another #2",
-                },
-              }),
-            ],
-            1
-          ),
-        ],
-        1
-      ),
+      _c("PostBoxGrid", { attrs: { containers: _vm.values.containers } }),
     ],
     1
   )

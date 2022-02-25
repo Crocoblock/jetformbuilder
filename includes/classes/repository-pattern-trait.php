@@ -114,11 +114,15 @@ trait Repository_Pattern_Trait {
 	public function rep_after_install_item( $item ) {
 	}
 
-	public function rep_get_items() {
+	public function rep_get_items(): array {
 		return $this->__repository;
 	}
 
-	public function rep_get_items_keys() {
+	public function rep_get_values(): array {
+		return array_values( $this->__repository );
+	}
+
+	public function rep_get_keys(): array {
 		return array_keys( $this->__repository );
 	}
 

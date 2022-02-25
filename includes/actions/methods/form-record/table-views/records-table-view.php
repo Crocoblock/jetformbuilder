@@ -12,6 +12,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Pa
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Not_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Single_Pages\Single_Form_Record_Page;
 use Jet_Form_Builder\Admin\Table_Views\View_Base;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -165,7 +166,7 @@ class Records_Table_View extends View_Base {
 		);
 
 		try {
-			$single = ( new Form_Records() )->create_single( $record['id'] );
+			$single = ( new Single_Form_Record_Page() )->set_id( $record['id'] );
 
 			$view = array(
 				'value' => 'view',

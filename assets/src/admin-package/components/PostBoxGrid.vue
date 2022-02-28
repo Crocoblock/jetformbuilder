@@ -11,12 +11,13 @@
 				:id="id"
 				:classes="classes"
 			>
-				<PostBox
+				<PostBoxSimple
 					v-for="({ id, title, values }) in boxes"
 					:key="id"
+					:slug="id"
 					:title="title"
 					:values="values"
-				></PostBox>
+				></PostBoxSimple>
 			</PostBoxContainer>
 		</div>
 	</div>
@@ -24,7 +25,7 @@
 
 <script>
 import PostBoxContainer from './PostBoxContainer';
-import PostBox from './PostBox';
+import PostBoxSimple from './PostBoxSimple';
 
 export default {
 	name: 'PostBoxGrid',
@@ -33,7 +34,7 @@ export default {
 	},
 	components: {
 		PostBoxContainer,
-		PostBox,
+		PostBoxSimple,
 	},
 	data() {
 		return {};

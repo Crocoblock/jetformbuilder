@@ -121,4 +121,8 @@ class Block_Helper {
 		return ( new \WP_Block( $block, $context ) )->render();
 	}
 
+	public static function pref( string $block_name ): string {
+		return Form_Manager::NAMESPACE_FIELDS . self::delete_namespace( $block_name );
+	}
+
 }

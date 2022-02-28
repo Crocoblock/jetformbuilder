@@ -40,9 +40,9 @@ abstract class Base_Meta_Box {
 	 */
 	public function to_array(): array {
 		return array(
-			'id'     => $this->get_slug(),
-			'title'  => $this->get_title(),
-			'values' => $this->get_values(),
+			'id'    => $this->get_slug(),
+			'title' => $this->get_title(),
+			'list'  => $this->get_values(),
 		);
 	}
 }

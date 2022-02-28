@@ -9,6 +9,7 @@ import TableViewMixin from './mixins/TableViewMixin';
 import Constants from './constants';
 import ClearFiltersButton from './components/ClearFiltersButton';
 import FilterMixin from './mixins/FilterMixin';
+import './vuex-prototype';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,

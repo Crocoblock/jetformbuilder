@@ -145,7 +145,7 @@ abstract class Scenario_Logic_Base {
 		}
 
 		try {
-			$request = Record_Fields_View::get_request( $entry['record']['id'] ?? 0 );
+			$request = Record_Fields_View::get_request_list( $entry['record']['id'] ?? 0 );
 		} catch ( Query_Builder_Exception $exception ) {
 			return;
 		}

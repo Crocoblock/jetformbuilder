@@ -3,31 +3,70 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Blocks\Block_Helper;
 
-class Form_Record_General_Box extends Base_Meta_Box {
+class Form_Record_General_Box extends Base_Table_Box {
 
 	public function get_title(): string {
 		return __( 'Form Fields', 'jet-form-builder' );
+	}
+
+	public function get_columns_handlers(): array {
+		return array(
+			'name'       => array(
+				'value' => array( $this, 'get_field_name' ),
+			),
+			'value'      => array(
+				'value' => array( $this, 'get_field_value' ),
+			),
+			'field_type' => array(
+				'value' => array( $this, 'get_field_type' ),
+				'type'  => 'rawArray',
+			),
+		);
+	}
+
+	public function get_columns_headings(): array {
+		return array(
+			'name'       => array(
+				'label' => __( 'Name', 'jet-form-builder' ),
+			),
+			'value'      => array(
+				'label' => __( 'Value', 'jet-form-builder' ),
+			),
+			'field_type' => array(
+				'label' => __( 'Field Type', 'jet-form-builder' ),
+			),
+		);
 	}
 
 	/**
 	 * @return array
 	 * @throws Not_Found_Page_Exception
 	 */
-	public function get_values(): array {
+	public function get_list(): array {
+		return Record_Fields_View::get_request( $this->get_id() );
+	}
+
+	public function get_field_name( $record ): string {
+		return $record['field_name'] ?? '';
+	}
+
+	public function get_field_value( $record ): string {
+		return $record['field_value'] ?? '';
+	}
+
+	public function get_field_type( $record ): array {
+		$block = \WP_Block_Type_Registry::get_instance()->get_registered(
+			Block_Helper::pref( $record['field_type'] )
+		);
+
 		return array(
-			'filekljdf'     => 'dsfd',
-			'filedf'        => 'dsfd',
-			'fild879sgfedf' => 'ds324fd',
-			'figfjhledf'    => 'd456sfd',
-			'file21df'      => 'dgfsfd',
-			'filsdfedf'     => 'dfdsfd',
-			'filertedf'     => 'dsfk,jd',
-			'filbhjedf'     => 'dsfdfgd',
-			'filweredf'     => 'dsszdfd',
+			'title' => $block->title,
+			'icon'  => $block->icon,
 		);
 	}
+
 }

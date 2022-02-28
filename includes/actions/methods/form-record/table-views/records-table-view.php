@@ -18,8 +18,6 @@ use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
-use Jet_Form_Builder\Admin\Pages\Form_Records;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 class Records_Table_View extends View_Base {
 

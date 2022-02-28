@@ -70,7 +70,7 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		);
 	}
 
-	public function get_prepared_containers(): array {
+	final public function get_prepared_containers(): array {
 		$prepared = array();
 
 		/** @var Base_Meta_Container[] $containers */

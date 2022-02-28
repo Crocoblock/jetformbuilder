@@ -33,6 +33,10 @@ class Pages_Manager {
 		$this->single()->rep_install();
 	}
 
+	public function set_up() {
+		add_action( 'init', array( $this, 'set_current_page' ), 100 );
+	}
+
 	public function stable(): Stable_Pages_Manager {
 		if ( ! $this->stable_manager ) {
 			$this->stable_manager = new Stable_Pages_Manager();

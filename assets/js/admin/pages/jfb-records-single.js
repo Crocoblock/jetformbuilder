@@ -323,7 +323,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SingleRecord__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SingleRecord */ "./admin/pages/jfb-records-single/SingleRecord.vue");
 
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
-renderCurrentPage(_SingleRecord__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Vue.use(Vuex);
+var store = new Vuex.Store({
+  state: {
+    globalState: 0
+  }
+});
+store.registerMetaBoxes();
+renderCurrentPage(_SingleRecord__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  store: store
+});
 })();
 
 /******/ })()

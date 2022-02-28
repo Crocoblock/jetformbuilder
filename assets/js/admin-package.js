@@ -519,57 +519,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "PostBox",
-  props: {
-    values: Object,
-    title: String,
-    slug: String
-  },
-  computed: {}
-});
-
-/***/ }),
-
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxContainer.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxContainer.vue?vue&type=script&lang=js& ***!
@@ -581,12 +530,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 //
 //
 //
@@ -603,29 +546,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   props: {
     wrapId: String,
     id: String,
-    classes: Array
+    classes: String
   },
-  computed: {
-    containerClasses: function containerClasses() {
-      var classes = {};
-
-      var _iterator = _createForOfIteratorHelper(this.classes),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var classItem = _step.value;
-          classes[classItem] = true;
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      return classes;
-    }
-  }
+  computed: {}
 });
 
 /***/ }),
@@ -642,9 +565,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _PostBoxContainer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxContainer */ "./admin-package/components/PostBoxContainer.vue");
-/* harmony import */ var _PostBox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBox */ "./admin-package/components/PostBox.vue");
+/* harmony import */ var _PostBoxSimple__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBoxSimple */ "./admin-package/components/PostBoxSimple.vue");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -678,7 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   components: {
     PostBoxContainer: _PostBoxContainer__WEBPACK_IMPORTED_MODULE_0__["default"],
-    PostBox: _PostBox__WEBPACK_IMPORTED_MODULE_1__["default"]
+    PostBoxSimple: _PostBoxSimple__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {};
@@ -691,6 +615,98 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, 'columns-' + this.containers.length, true);
     }
   }
+});
+
+/***/ }),
+
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxSkeleton */ "./admin-package/components/PostBoxSkeleton.vue");
+/* harmony import */ var _mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/GetColumnComponent */ "./admin-package/mixins/GetColumnComponent.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'PostBoxSimple',
+  props: {
+    title: String,
+    slug: String,
+    values: Object
+  },
+  mixins: [_mixins_GetColumnComponent__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  components: {
+    PostBoxSkeleton: _PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  methods: {
+    getComponent: function getComponent() {}
+  }
+});
+
+/***/ }),
+
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "PostBox",
+  props: {
+    title: String,
+    slug: String
+  },
+  computed: {}
 });
 
 /***/ }),
@@ -2229,45 +2245,6 @@ component.options.__file = "admin-package/components/ListComponents.vue"
 
 /***/ }),
 
-/***/ "./admin-package/components/PostBox.vue":
-/*!**********************************************!*\
-  !*** ./admin-package/components/PostBox.vue ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBox.vue?vue&type=template&id=6d2843a7& */ "./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7&");
-/* harmony import */ var _PostBox_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBox.vue?vue&type=script&lang=js& */ "./admin-package/components/PostBox.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PostBox_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__.render,
-  _PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "admin-package/components/PostBox.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./admin-package/components/PostBoxContainer.vue":
 /*!*******************************************************!*\
   !*** ./admin-package/components/PostBoxContainer.vue ***!
@@ -2342,6 +2319,84 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "admin-package/components/PostBoxGrid.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSimple.vue":
+/*!****************************************************!*\
+  !*** ./admin-package/components/PostBoxSimple.vue ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true& */ "./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true&");
+/* harmony import */ var _PostBoxSimple_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBoxSimple.vue?vue&type=script&lang=js& */ "./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PostBoxSimple_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "3ecae139",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "admin-package/components/PostBoxSimple.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSkeleton.vue":
+/*!******************************************************!*\
+  !*** ./admin-package/components/PostBoxSkeleton.vue ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxSkeleton.vue?vue&type=template&id=c299bad8& */ "./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8&");
+/* harmony import */ var _PostBoxSkeleton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostBoxSkeleton.vue?vue&type=script&lang=js& */ "./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PostBoxSkeleton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "admin-package/components/PostBoxSkeleton.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -2682,22 +2737,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-package/components/PostBox.vue?vue&type=script&lang=js&":
-/*!***********************************************************************!*\
-  !*** ./admin-package/components/PostBox.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBox_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBox.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBox_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
 /***/ "./admin-package/components/PostBoxContainer.vue?vue&type=script&lang=js&":
 /*!********************************************************************************!*\
   !*** ./admin-package/components/PostBoxContainer.vue?vue&type=script&lang=js& ***!
@@ -2727,6 +2766,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxGrid.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxGrid.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxGrid_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSimple_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxSimple.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSimple_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxSkeleton.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -2928,23 +2999,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7&":
-/*!*****************************************************************************!*\
-  !*** ./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7& ***!
-  \*****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBox_vue_vue_type_template_id_6d2843a7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBox.vue?vue&type=template&id=6d2843a7& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7&");
-
-
-/***/ }),
-
 /***/ "./admin-package/components/PostBoxContainer.vue?vue&type=template&id=443a364a&":
 /*!**************************************************************************************!*\
   !*** ./admin-package/components/PostBoxContainer.vue?vue&type=template&id=443a364a& ***!
@@ -2975,6 +3029,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxGrid_vue_vue_type_template_id_e119fee6___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxGrid_vue_vue_type_template_id_e119fee6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxGrid.vue?vue&type=template&id=e119fee6& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxGrid.vue?vue&type=template&id=e119fee6&");
+
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true& ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSimple_vue_vue_type_template_id_3ecae139_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8&":
+/*!*************************************************************************************!*\
+  !*** ./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8& ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_template_id_c299bad8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostBoxSkeleton.vue?vue&type=template&id=c299bad8& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8&");
 
 
 /***/ }),
@@ -3684,72 +3772,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7&":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBox.vue?vue&type=template&id=6d2843a7& ***!
-  \**********************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function () {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "postbox", attrs: { id: _vm.slug } }, [
-    _c("div", { staticClass: "postbox-header" }, [
-      _c("h2", { staticClass: "ui-sortable-handle" }, [
-        _vm._v(_vm._s(_vm.title)),
-      ]),
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "postbox-inner submitbox" }, [
-      _c(
-        "div",
-        { attrs: { id: "misc-publishing-actions" } },
-        _vm._l(_vm.values, function (value, name) {
-          return _c("div", { key: name, staticClass: "misc-pub-section" }, [
-            _vm.$scopedSlots.row
-              ? _c(
-                  "div",
-                  [_vm._t("row", null, null, { name: name, value: value })],
-                  2
-                )
-              : _c("div", [
-                  _vm._v("\n\t\t\t\t\t" + _vm._s(name) + ": "),
-                  _c("strong", [_vm._v(_vm._s(value))]),
-                ]),
-          ])
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _vm.$slots.actions
-        ? _c(
-            "div",
-            { attrs: { id: "major-publishing-actions" } },
-            [
-              _vm._t("actions"),
-              _vm._v(" "),
-              _c("div", { staticClass: "clear" }),
-            ],
-            2
-          )
-        : _vm._e(),
-    ]),
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxContainer.vue?vue&type=template&id=443a364a&":
 /*!*******************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxContainer.vue?vue&type=template&id=443a364a& ***!
@@ -3772,7 +3794,7 @@ var render = function () {
     [
       _c(
         "div",
-        { class: _vm.containerClasses, attrs: { id: _vm.id } },
+        { class: _vm.classes, attrs: { id: _vm.id } },
         [_vm._t("default")],
         2
       ),
@@ -3831,14 +3853,116 @@ var render = function () {
               var id = ref.id
               var title = ref.title
               var values = ref.values
-              return _c("PostBox", {
+              return _c("PostBoxSimple", {
                 key: id,
-                attrs: { title: title, values: values },
+                attrs: { slug: id, title: title, values: values },
               })
             }),
             1
           )
         }),
+      ],
+      2
+    ),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSimple.vue?vue&type=template&id=3ecae139&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "PostBoxSkeleton",
+    { attrs: { title: _vm.title, slug: _vm.slug } },
+    [
+      _c(
+        "div",
+        { attrs: { id: "misc-publishing-actions" } },
+        _vm._l(_vm.values, function (value, name) {
+          return _c("div", { key: name, staticClass: "misc-pub-section" }, [
+            _vm.$scopedSlots.row
+              ? _c(
+                  "div",
+                  [_vm._t("row", null, null, { name: name, value: value })],
+                  2
+                )
+              : _c("div", [
+                  _vm._v("\n\t\t\t\t" + _vm._s(name) + ": "),
+                  _c("strong", [_vm._v(_vm._s(value))]),
+                ]),
+          ])
+        }),
+        0
+      ),
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-package/components/PostBoxSkeleton.vue?vue&type=template&id=c299bad8& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "postbox", attrs: { id: _vm.slug } }, [
+    _c("div", { staticClass: "postbox-header" }, [
+      _c("h2", { staticClass: "ui-sortable-handle" }, [
+        _vm._v(_vm._s(_vm.title)),
+      ]),
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "postbox-inner submitbox" },
+      [
+        _vm._t("default"),
+        _vm._v(" "),
+        _vm.$slots.actions
+          ? _c(
+              "div",
+              { attrs: { id: "major-publishing-actions" } },
+              [
+                _vm._t("actions"),
+                _vm._v(" "),
+                _c("div", { staticClass: "clear" }),
+              ],
+              2
+            )
+          : _vm._e(),
       ],
       2
     ),
@@ -4694,9 +4818,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions_LocationManager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./functions/LocationManager */ "./admin-package/functions/LocationManager.js");
 /* harmony import */ var _components_ListComponents__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/ListComponents */ "./admin-package/components/ListComponents.vue");
 /* harmony import */ var _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./mixins/GetIncomingMessages */ "./admin-package/mixins/GetIncomingMessages.js");
-/* harmony import */ var _components_PostBox__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/PostBox */ "./admin-package/components/PostBox.vue");
+/* harmony import */ var _components_PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/PostBoxSkeleton */ "./admin-package/components/PostBoxSkeleton.vue");
 /* harmony import */ var _components_PostBoxGrid__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/PostBoxGrid */ "./admin-package/components/PostBoxGrid.vue");
 /* harmony import */ var _components_PostBoxContainer__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/PostBoxContainer */ "./admin-package/components/PostBoxContainer.vue");
+/* harmony import */ var _components_PostBoxSimple__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/PostBoxSimple */ "./admin-package/components/PostBoxSimple.vue");
+
 
 
 
@@ -4739,9 +4865,10 @@ window.JetFBComponents = {
   LinkTypeColumn: _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_13__,
   SimpleWrapperComponent: _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_8__["default"],
   ListComponents: _components_ListComponents__WEBPACK_IMPORTED_MODULE_17__["default"],
-  PostBox: _components_PostBox__WEBPACK_IMPORTED_MODULE_19__["default"],
+  PostBoxSkeleton: _components_PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_19__["default"],
   PostBoxGrid: _components_PostBoxGrid__WEBPACK_IMPORTED_MODULE_20__["default"],
-  PostBoxContainer: _components_PostBoxContainer__WEBPACK_IMPORTED_MODULE_21__["default"]
+  PostBoxContainer: _components_PostBoxContainer__WEBPACK_IMPORTED_MODULE_21__["default"],
+  PostBoxSimple: _components_PostBoxSimple__WEBPACK_IMPORTED_MODULE_22__["default"]
 };
 window.JetFBMixins = {
   GetIncoming: _mixins_GetIncoming__WEBPACK_IMPORTED_MODULE_2__["default"],

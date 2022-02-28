@@ -3,7 +3,7 @@
 		:id="wrapId"
 		class="postbox-container"
 	>
-		<div :id="id" :class="containerClasses">
+		<div :id="id" :class="classes">
 			<slot></slot>
 		</div>
 	</div>
@@ -15,18 +15,9 @@ export default {
 	props: {
 		wrapId: String,
 		id: String,
-		classes: Array
+		classes: String
 	},
 	computed: {
-		containerClasses() {
-			const classes = {};
-
-			for ( const classItem of this.classes ) {
-				classes[ classItem ] = true;
-			}
-
-			return classes;
-		}
 	}
 }
 </script>

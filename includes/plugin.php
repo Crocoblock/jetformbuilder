@@ -110,9 +110,9 @@ class Plugin {
 			Preset_Manager::instance();
 
 			$this->editor = new Admin\Editor();
-			Pages_Manager::instance()->set_current_page();
-			new Form_Actions_Manager();
+			Pages_Manager::instance()->set_up();
 
+			new Form_Actions_Manager();
 			new PatternsManager();
 		}
 	}

@@ -1,6 +1,5 @@
 import PaymentsPage from './components/PaymentsPage';
 import EntriesTable from './components/EntriesTable';
-import EntriesStoreTable from './components/EntriesStoreTable';
 import DetailsTableWithStore from './components/DetailsTableWithStore';
 import TablePagination from './components/TablePagination';
 import ChooseAction from './components/ChooseAction';
@@ -15,7 +14,6 @@ window.JetFBComponents = {
 	...window.JetFBComponents,
 	EntriesTable,
 	PaymentsPage,
-	EntriesStoreTable,
 	DetailsTableWithStore,
 	TablePagination,
 	ChooseAction,

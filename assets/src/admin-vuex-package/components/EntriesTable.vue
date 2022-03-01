@@ -3,6 +3,7 @@
 		:list="list"
 		:columns="columns"
 		:loading="loading"
+		:columns-components="components"
 	></EntriesTableSkeleton>
 </template>
 
@@ -16,6 +17,8 @@ const {
 	mapMutations,
 } = window.Vuex;
 
+const { applyFilters } = wp.hooks;
+
 export default {
 	name: 'entries-table',
 	props: {
@@ -24,6 +27,9 @@ export default {
 			default: 'default'
 		},
 	},
+	data: () => ({
+		components: []
+	}),
 	components: { EntriesTableSkeleton },
 	computed: {
 		currentState() {
@@ -36,9 +42,11 @@ export default {
 			return this.currentState.columns;
 		},
 		loading() {
-			return this.currentState.loading;
+			return this.currentState.loading?.table;
 		}
-
+	},
+	created() {
+		this.components = applyFilters( `jet.fb.admin.table.${this.scope}`, [] );
 	},
 	methods: {},
 };

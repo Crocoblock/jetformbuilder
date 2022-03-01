@@ -7,7 +7,7 @@
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
 		<ActionsWithFilters/>
 		<TablePagination/>
-		<EntriesStoreTable/>
+		<EntriesTable/>
 		<TablePagination/>
 	</div>
 </template>
@@ -17,7 +17,7 @@ import ActionsWithFilters from './ActionsWithFilters';
 
 const {
 		  TablePagination,
-		  EntriesStoreTable,
+		  EntriesTable,
 	  } = JetFBComponents;
 const {
 		  TableViewMixin,
@@ -42,7 +42,7 @@ export default {
 	name: 'jfb-records',
 	components: {
 		TablePagination,
-		EntriesStoreTable,
+		EntriesTable,
 		ActionsWithFilters,
 	},
 	data() {

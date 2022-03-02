@@ -12,11 +12,12 @@
 				:classes="classes"
 			>
 				<PostBoxSimple
-					v-for="({ id, title, values }) in boxes"
-					:key="id"
-					:slug="id"
+					v-for="({ slug, title, list, is_table = false }) in boxes"
+					:key="slug"
+					:slug="slug"
 					:title="title"
-					:values="values"
+					:list="list"
+					:is-table="is_table"
 				></PostBoxSimple>
 			</PostBoxContainer>
 		</div>

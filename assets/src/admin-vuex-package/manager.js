@@ -7,8 +7,13 @@ import Constants from './constants';
 import ClearFiltersButton from './components/ClearFiltersButton';
 import FilterMixin from './mixins/FilterMixin';
 import BaseStore from './store/base-store';
-import TableSeedPlugin from './plugins/table-seed-plugin';
-import TableModulePlugin from './plugins/table-module-plugin';
+import TableSeedPlugin from './store/plugins/table-seed';
+import TableModulePlugin from './store/plugins/table-module';
+import SingleMetaBoxesPlugin from './store/plugins/single-meta-boxes';
+import PostBoxSkeleton from './components/PostBoxSkeleton';
+import PostBoxGrid from './components/PostBoxGrid';
+import PostBoxContainer from './components/PostBoxContainer';
+import PostBoxSimple from './components/PostBoxSimple';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -18,6 +23,10 @@ window.JetFBComponents = {
 	TablePagination,
 	ChooseAction,
 	ClearFiltersButton,
+	PostBoxSkeleton,
+	PostBoxGrid,
+	PostBoxContainer,
+	PostBoxSimple
 };
 
 window.JetFBMixins = {
@@ -30,6 +39,7 @@ window.JetFBStore = {
 	BaseStore,
 	TableSeedPlugin,
 	TableModulePlugin,
+	SingleMetaBoxesPlugin,
 };
 
 window.JetFBConst = Constants;

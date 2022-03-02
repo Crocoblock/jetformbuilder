@@ -30,14 +30,14 @@ class Form_Record_General_Box extends Base_Table_Box {
 
 	public function get_columns_headings(): array {
 		return array(
+			'field_type' => array(
+				'label' => __( 'Field', 'jet-form-builder' ),
+			),
 			'name'       => array(
 				'label' => __( 'Name', 'jet-form-builder' ),
 			),
 			'value'      => array(
 				'label' => __( 'Value', 'jet-form-builder' ),
-			),
-			'field_type' => array(
-				'label' => __( 'Field Type', 'jet-form-builder' ),
 			),
 		);
 	}

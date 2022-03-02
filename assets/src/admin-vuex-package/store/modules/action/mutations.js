@@ -3,7 +3,7 @@ export default {
 		state.currentAction = action;
 	},
 	setActionsList( state, list ) {
-		state.actionsList = JSON.parse( JSON.stringify( list ) );
+		state.actionsList = JSON.parse( JSON.stringify( list || [] ) );
 	},
 	/*
 	 for requests

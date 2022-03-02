@@ -17,8 +17,8 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 		return array_merge(
 			parent::to_array(),
 			array(
-				'columns'       => $this->get_columns_headings(),
-				'is_table_view' => true,
+				'columns'  => $this->get_columns_headings(),
+				'is_table' => true,
 			)
 		);
 	}

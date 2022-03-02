@@ -34,7 +34,11 @@ export default {
 				try {
 					callableFunc.call( this, { resolve: onSuccess, reject: onError }, ...payload );
 				} catch ( error ) {
-					onError( error.message );
+					if ( process.env.NODE_ENV !== 'production' ) {
+						console.error( error );
+					} else {
+						onError( error.message );
+					}
 				}
 			};
 		}

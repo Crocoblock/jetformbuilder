@@ -5,4 +5,7 @@ export default {
 	isCheckedHead: state => {
 		return 'checked' === state.chooseHead;
 	},
+	getChecked: state => {
+		return state.checked;
+	},
 }

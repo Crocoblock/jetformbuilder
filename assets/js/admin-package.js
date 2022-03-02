@@ -1415,7 +1415,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             reject: onError
           }].concat(payload));
         } catch (error) {
-          onError(error.message);
+          if (true) {
+            console.error(error);
+          } else {}
         }
       };
     }

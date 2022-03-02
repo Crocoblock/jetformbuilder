@@ -16,27 +16,28 @@
 import ActionsWithFilters from './ActionsWithFilters';
 
 const {
-		  TablePagination,
-		  EntriesTable,
-	  } = JetFBComponents;
+	TablePagination,
+	EntriesTable,
+} = JetFBComponents;
+
 const {
-		  TableViewMixin,
-		  i18n,
-		  PromiseWrapper,
-		  GetIncomingMessages,
-	  } = JetFBMixins;
+	i18n,
+	PromiseWrapper,
+	GetIncomingMessages,
+} = JetFBMixins;
+
 const {
-		  CHOOSE_ACTION,
-		  CLICK_ACTION,
-	  } = JetFBConst;
+	CHOOSE_ACTION,
+	CLICK_ACTION,
+} = JetFBConst;
 
 const { apiFetch } = wp;
 const {
-		  mapMutations,
-		  mapState,
-		  mapActions,
-		  mapGetters,
-	  } = Vuex;
+	mapMutations,
+	mapState,
+	mapActions,
+	mapGetters,
+} = Vuex;
 
 export default {
 	name: 'jfb-records',
@@ -51,7 +52,6 @@ export default {
 		};
 	},
 	mixins: [
-		TableViewMixin,
 		i18n,
 		PromiseWrapper,
 		GetIncomingMessages,
@@ -91,14 +91,11 @@ export default {
 		} );
 	},
 	computed: {
-		...mapState( [
-			'checked',
-			'queryState',
-		] ),
 		...mapGetters( [
 			'getAction',
 			'getCurrentAction',
-			'fetchListOptions'
+			'fetchListOptions',
+			'getChecked',
 		] ),
 	},
 	methods: {
@@ -114,7 +111,7 @@ export default {
 			'updateList',
 		] ),
 		beforeRunFetch() {
-			if ( ! this.checked.length ) {
+			if ( ! this.getChecked.length ) {
 				throw new Error( this.messages?.empty_checked );
 			}
 
@@ -128,7 +125,7 @@ export default {
 				data: {
 					checked: this.checked,
 				},
-			}
+			};
 		},
 		getOptionsStatic( action, payload ) {
 			const [ id ] = payload;
@@ -138,7 +135,7 @@ export default {
 				data: {
 					checked: [ id ],
 				},
-			}
+			};
 		},
 		deleteAction( { resolve, reject, options } ) {
 			apiFetch( options ).then( response => {
@@ -221,6 +218,7 @@ export default {
 		&--not-viewed {
 			background-color: #f7fdff;
 		}
+
 		&:hover {
 			background-color: #e3f6fd;
 		}

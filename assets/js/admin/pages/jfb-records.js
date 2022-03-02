@@ -131,9 +131,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var _JetFBComponents = JetFBComponents,
     TablePagination = _JetFBComponents.TablePagination,
-    EntriesStoreTable = _JetFBComponents.EntriesStoreTable;
+    EntriesTable = _JetFBComponents.EntriesTable;
 var _JetFBMixins = JetFBMixins,
-    TableViewMixin = _JetFBMixins.TableViewMixin,
     i18n = _JetFBMixins.i18n,
     PromiseWrapper = _JetFBMixins.PromiseWrapper,
     GetIncomingMessages = _JetFBMixins.GetIncomingMessages;
@@ -151,7 +150,7 @@ var _Vuex = Vuex,
   name: 'jfb-records',
   components: {
     TablePagination: TablePagination,
-    EntriesStoreTable: EntriesStoreTable,
+    EntriesTable: EntriesTable,
     ActionsWithFilters: _ActionsWithFilters__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
@@ -159,7 +158,7 @@ var _Vuex = Vuex,
       isFooterVisible: true
     };
   },
-  mixins: [TableViewMixin, i18n, PromiseWrapper, GetIncomingMessages],
+  mixins: [i18n, PromiseWrapper, GetIncomingMessages],
   created: function created() {
     this.setActionPromises({
       action: 'delete',
@@ -192,12 +191,12 @@ var _Vuex = Vuex,
       promise: this.promiseWrapper(this.notViewClicked.bind(this))
     });
   },
-  computed: _objectSpread(_objectSpread({}, mapState(['checked', 'queryState'])), mapGetters(['getAction', 'getCurrentAction', 'fetchListOptions'])),
+  computed: _objectSpread({}, mapGetters(['getAction', 'getCurrentAction', 'fetchListOptions', 'getChecked'])),
   methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['setList', 'setActionsList', 'setActionPromises', 'toggleDoingAction', 'toggleLoading'])), mapActions(['fetch', 'updateList'])), {}, {
     beforeRunFetch: function beforeRunFetch() {
       var _this$getCurrentActio;
 
-      if (!this.checked.length) {
+      if (!this.getChecked.length) {
         var _this$messages;
 
         throw new Error((_this$messages = this.messages) === null || _this$messages === void 0 ? void 0 : _this$messages.empty_checked);
@@ -412,7 +411,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AA4MA;EACC,oBAAA;AC3MD;AD+MC;EACC,SAAA;AC5MF;AD+MC;EACC,yBAAA;AC7MF;AD+ME;EACC,gCAAA;AC7MH;ADgNE;EACC,yBAAA;AC9MH;ADgNE;EACC,yBAAA;AC9MH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAyMA;EACC,oBAAA;ACxMD;AD4MC;EACC,SAAA;ACzMF;AD4MC;EACC,yBAAA;AC1MF;AD4ME;EACC,gCAAA;AC1MH;AD6ME;EACC,yBAAA;AC3MH;AD8ME;EACC,yBAAA;AC5MH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -924,7 +923,7 @@ var render = function () {
       _vm._v(" "),
       _c("TablePagination"),
       _vm._v(" "),
-      _c("EntriesStoreTable"),
+      _c("EntriesTable"),
       _vm._v(" "),
       _c("TablePagination"),
     ],
@@ -1519,16 +1518,18 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-var _JetFBMixins = JetFBMixins,
-    getBaseStore = _JetFBMixins.TableStoreHelper.getBaseStore;
+var _JetFBStore = JetFBStore,
+    BaseStore = _JetFBStore.BaseStore,
+    TableModulePlugin = _JetFBStore.TableModulePlugin,
+    TableSeedPlugin = _JetFBStore.TableSeedPlugin;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
 Vue.use(Vuex);
-window.jfbEventBus = window.jfbEventBus || new Vue({});
-var store = getBaseStore();
-var options = {
-  store: new Vuex.Store(_objectSpread({}, store))
-};
-renderCurrentPage(_Records__WEBPACK_IMPORTED_MODULE_0__["default"], options);
+var store = new Vuex.Store(_objectSpread(_objectSpread({}, BaseStore), {}, {
+  plugins: [TableModulePlugin(), TableSeedPlugin()]
+}));
+renderCurrentPage(_Records__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  store: store
+});
 })();
 
 /******/ })()

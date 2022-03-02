@@ -23,7 +23,6 @@ import TablePagination from '../TablePagination';
 import * as PaymentType from './payment-type';
 import * as StatusColumn from './status';
 import EntriesTable from '../EntriesTable';
-import TableViewMixin from '../../mixins/TableViewMixin';
 
 const { PayerColumn } = JetFBComponents;
 const { GetIncoming, i18n } = JetFBMixins;
@@ -53,7 +52,7 @@ export default {
 			columnsComponents: [],
 		};
 	},
-	mixins: [ GetIncoming, i18n, TableViewMixin ],
+	mixins: [ GetIncoming, i18n ],
 	created() {
 		this.columnsComponents = [
 			PayerColumn,

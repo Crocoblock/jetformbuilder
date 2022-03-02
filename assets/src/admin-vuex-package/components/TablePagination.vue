@@ -16,7 +16,7 @@
 			:total="queryState.total"
 			:page-size="queryState.limit"
 			:current="queryState.currentPage"
-			:disabled="loadingPage"
+			:disabled="isLoading( 'page' )"
 			@on-change="changePage"
 		></cx-vui-pagination>
 		<div class="jfb-pagination--sort">
@@ -27,7 +27,7 @@
 				type="number"
 				:min="1"
 				:max="queryState.total"
-				:disabled="loadingPage"
+				:disabled="isLoading( 'page' )"
 			></cx-vui-input>
 		</div>
 	</div>
@@ -39,40 +39,34 @@ const { i18n, GetIncoming } = JetFBMixins;
 const { mapState, mapGetters } = Vuex;
 
 export default {
-	name: "TablePagination",
+	name: 'TablePagination',
 	mixins: [ i18n, GetIncoming ],
 	computed: {
-		...mapState( [
+		...mapGetters( [
 			'queryState',
-			'loadingPage',
+			'isLoading',
 		] ),
 	},
 	methods: {
 		changeLimit( { target: { value } } ) {
-			if ( this.loadingPage ) {
+			if ( this.isLoading( 'page' ) ) {
 				return;
 			}
 			if ( this.queryState.total < value ) {
 				value = this.queryState.total;
 			}
-			this.$store.commit( 'setQueryState', {
-				limit: +value,
-			} );
-
+			this.$store.commit( 'setLimit', value );
 			this.$store.dispatch( 'fetchPage' );
 		},
 		changePage( pageNum ) {
-			if ( this.loadingPage ) {
+			if ( this.isLoading( 'page' ) ) {
 				return;
 			}
-			this.$store.commit( 'setQueryState', {
-				currentPage: pageNum,
-			} );
-
+			this.$store.commit( 'setCurrentPage', pageNum );
 			this.$store.dispatch( 'fetchPage' );
 		},
 	},
-}
+};
 </script>
 
 <style lang="scss">
@@ -83,6 +77,7 @@ export default {
 	align-items: center;
 	padding: 1.5em;
 	margin-bottom: unset;
+
 	&--sort {
 		.cx-vui-component {
 			column-gap: 1em;
@@ -91,6 +86,7 @@ export default {
 			padding: unset;
 		}
 	}
+
 	.cx-vui-input {
 		background-color: white;
 	}

@@ -3,12 +3,12 @@ import EntriesTable from './components/EntriesTable';
 import DetailsTableWithStore from './components/DetailsTableWithStore';
 import TablePagination from './components/TablePagination';
 import ChooseAction from './components/ChooseAction';
-import * as TableStoreHelper from './mixins/TableStoreHelper';
-import TableViewMixin from './mixins/TableViewMixin';
 import Constants from './constants';
 import ClearFiltersButton from './components/ClearFiltersButton';
 import FilterMixin from './mixins/FilterMixin';
-import './vuex-prototype';
+import BaseStore from './store/base-store';
+import TableSeedPlugin from './plugins/table-seed-plugin';
+import TableModulePlugin from './plugins/table-module-plugin';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -22,9 +22,14 @@ window.JetFBComponents = {
 
 window.JetFBMixins = {
 	...window.JetFBMixins,
-	TableStoreHelper,
-	TableViewMixin,
 	FilterMixin,
+};
+
+
+window.JetFBStore = {
+	BaseStore,
+	TableSeedPlugin,
+	TableModulePlugin,
 };
 
 window.JetFBConst = Constants;

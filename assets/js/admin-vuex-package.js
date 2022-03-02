@@ -172,54 +172,6 @@ var _JetFBComponents = JetFBComponents,
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _EntriesTable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-
-var _Vuex = Vuex,
-    mapState = _Vuex.mapState;
-var _JetFBMixins = JetFBMixins,
-    GetColumnComponent = _JetFBMixins.GetColumnComponent;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'EntriesStoreTable',
-  mixins: [GetColumnComponent],
-  components: {
-    EntriesTable: _EntriesTable__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  computed: _objectSpread(_objectSpread({}, mapState(['loading'])), {}, {
-    loadingPage: function loadingPage() {
-      var _this$loading;
-
-      return (_this$loading = this.loading) === null || _this$loading === void 0 ? void 0 : _this$loading.page;
-    }
-  })
-});
-
-/***/ }),
-
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js& ***!
@@ -240,12 +192,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 var _window$Vuex = window.Vuex,
     mapState = _window$Vuex.mapState,
     mapGetters = _window$Vuex.mapGetters,
     mapActions = _window$Vuex.mapActions,
     mapMutations = _window$Vuex.mapMutations;
+var applyFilters = wp.hooks.applyFilters;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'entries-table',
   props: {
@@ -254,22 +208,23 @@ var _window$Vuex = window.Vuex,
       default: 'default'
     }
   },
+  data: function data() {
+    return {
+      components: []
+    };
+  },
   components: {
     EntriesTableSkeleton: _EntriesTableSkeleton__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
-    currentState: function currentState() {
-      return this.$store.state['scope-' + this.scope];
-    },
-    list: function list() {
-      return this.currentState.list;
-    },
-    columns: function columns() {
-      return this.currentState.columns;
-    },
-    loading: function loading() {
-      return this.currentState.loading;
+    storeGetters: function storeGetters() {
+      var _this$$store$getters;
+
+      return (_this$$store$getters = this.$store.getters['scope-' + this.scope]) !== null && _this$$store$getters !== void 0 ? _this$$store$getters : this.$store.getters;
     }
+  },
+  created: function created() {
+    this.components = applyFilters("jet.fb.admin.table.".concat(this.scope), []);
   },
   methods: {}
 });
@@ -587,7 +542,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _payment_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./payment-type */ "./admin-vuex-package/components/PaymentsPage/payment-type/index.js");
 /* harmony import */ var _status__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./status */ "./admin-vuex-package/components/PaymentsPage/status/index.js");
 /* harmony import */ var _EntriesTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
-/* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -630,7 +584,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-
 var _JetFBComponents = JetFBComponents,
     PayerColumn = _JetFBComponents.PayerColumn;
 var _JetFBMixins = JetFBMixins,
@@ -663,7 +616,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue({});
       columnsComponents: []
     };
   },
-  mixins: [GetIncoming, i18n, _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_4__["default"]],
+  mixins: [GetIncoming, i18n],
   created: function created() {
     this.columnsComponents = [PayerColumn, _payment_type__WEBPACK_IMPORTED_MODULE_1__, _status__WEBPACK_IMPORTED_MODULE_2__].concat(_toConsumableArray(this.columns));
   },
@@ -798,14 +751,14 @@ var _Vuex = Vuex,
     mapState = _Vuex.mapState,
     mapGetters = _Vuex.mapGetters;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "TablePagination",
+  name: 'TablePagination',
   mixins: [i18n, GetIncoming],
-  computed: _objectSpread({}, mapState(['queryState', 'loadingPage'])),
+  computed: _objectSpread({}, mapGetters(['queryState', 'isLoading'])),
   methods: {
     changeLimit: function changeLimit(_ref) {
       var value = _ref.target.value;
 
-      if (this.loadingPage) {
+      if (this.isLoading('page')) {
         return;
       }
 
@@ -813,19 +766,15 @@ var _Vuex = Vuex,
         value = this.queryState.total;
       }
 
-      this.$store.commit('setQueryState', {
-        limit: +value
-      });
+      this.$store.commit('setLimit', value);
       this.$store.dispatch('fetchPage');
     },
     changePage: function changePage(pageNum) {
-      if (this.loadingPage) {
+      if (this.isLoading('page')) {
         return;
       }
 
-      this.$store.commit('setQueryState', {
-        currentPage: pageNum
-      });
+      this.$store.commit('setCurrentPage', pageNum);
       this.$store.dispatch('fetchPage');
     }
   }
@@ -845,18 +794,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _PaymentsComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsComponent */ "./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue");
-/* harmony import */ var _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/TableStoreHelper */ "./admin-vuex-package/mixins/TableStoreHelper.js");
+/* harmony import */ var _store_base_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/base-store */ "./admin-vuex-package/store/base-store.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-var getBaseStore = _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_1__.getBaseStore;
+
 Vue.use(Vuex);
-window.jfbEventBus = window.jfbEventBus || new Vue({});
-var options = {
-  store: getBaseStore()
-};
+var store = new Vuex.Store(_objectSpread({}, _store_base_store__WEBPACK_IMPORTED_MODULE_1__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   PaymentsComponent: _PaymentsComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
-  options: options
+  options: {
+    store: store
+  }
 });
 
 /***/ }),
@@ -960,23 +913,144 @@ var _Vuex = Vuex,
 
 /***/ }),
 
-/***/ "./admin-vuex-package/mixins/TableStoreHelper.js":
-/*!*******************************************************!*\
-  !*** ./admin-vuex-package/mixins/TableStoreHelper.js ***!
-  \*******************************************************/
+/***/ "./admin-vuex-package/plugins/functions.js":
+/*!*************************************************!*\
+  !*** ./admin-vuex-package/plugins/functions.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getBaseState": () => (/* binding */ getBaseState),
-/* harmony export */   "getGetters": () => (/* binding */ getGetters),
-/* harmony export */   "getMutations": () => (/* binding */ getMutations),
-/* harmony export */   "getActions": () => (/* binding */ getActions),
-/* harmony export */   "getBaseStore": () => (/* binding */ getBaseStore)
+/* harmony export */   "config": () => (/* binding */ config),
+/* harmony export */   "registerNamespacedModule": () => (/* binding */ registerNamespacedModule)
 /* harmony export */ });
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* harmony import */ var _store_stable_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store/stable-view */ "./admin-vuex-package/store/stable-view.js");
+/* harmony import */ var _store_single_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/single-view */ "./admin-vuex-package/store/single-view.js");
 
+
+var config = function config() {
+  return window.JetFBPageConfig;
+};
+function registerNamespacedModule(store) {
+  var namespace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+  store.registerModule("scope-".concat(namespace), 'default' === namespace || !namespace ? _store_stable_view__WEBPACK_IMPORTED_MODULE_0__["default"] : _store_single_view__WEBPACK_IMPORTED_MODULE_1__["default"]);
+}
+
+/***/ }),
+
+/***/ "./admin-vuex-package/plugins/table-module-plugin.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/plugins/table-module-plugin.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TableModulePlugin)
+/* harmony export */ });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./admin-vuex-package/plugins/functions.js");
+
+/**
+ * @returns {function(*=): void}
+ * @param namespace
+ */
+
+function TableModulePlugin() {
+  var namespace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+  return function (store) {
+    (0,_functions__WEBPACK_IMPORTED_MODULE_0__.registerNamespacedModule)(store, namespace);
+  };
+}
+
+/***/ }),
+
+/***/ "./admin-vuex-package/plugins/table-seed-plugin.js":
+/*!*********************************************************!*\
+  !*** ./admin-vuex-package/plugins/table-seed-plugin.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./admin-vuex-package/plugins/functions.js");
+
+/**
+ * @param source
+ * @returns {function(*): void}
+ * @constructor
+ */
+
+function TableSeedPlugin() {
+  var source = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  return function (store) {
+    if (!source) {
+      source = (0,_functions__WEBPACK_IMPORTED_MODULE_0__.config)();
+    }
+
+    var _source = source,
+        _source$list = _source.list,
+        list = _source$list === void 0 ? [] : _source$list,
+        _source$columns = _source.columns,
+        columns = _source$columns === void 0 ? {} : _source$columns,
+        total = _source.total,
+        actions = _source.actions;
+    store.commit('setColumns', JSON.parse(JSON.stringify(columns)));
+    store.commit('setList', JSON.parse(JSON.stringify(list)));
+    store.commit('setActionsList', actions);
+    store.commit('setTotal', total);
+    store.commit('setLimit', store.getters.list.length);
+    store.dispatch('setQueriedPage', 1);
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TableSeedPlugin);
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/base-store.js":
+/*!************************************************!*\
+  !*** ./admin-vuex-package/store/base-store.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modules_action__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/action */ "./admin-vuex-package/store/modules/action/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  state: _objectSpread({}, _modules_action__WEBPACK_IMPORTED_MODULE_0__["default"].state),
+  getters: _objectSpread({}, _modules_action__WEBPACK_IMPORTED_MODULE_0__["default"].getters),
+  mutations: _objectSpread({}, _modules_action__WEBPACK_IMPORTED_MODULE_0__["default"].mutations),
+  actions: _objectSpread({}, _modules_action__WEBPACK_IMPORTED_MODULE_0__["default"].actions)
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/action/actions.js":
+/*!************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/action/actions.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -989,410 +1063,42 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var _JetFBActions = JetFBActions,
-    addQueryArgs = _JetFBActions.addQueryArgs;
-var _wp = wp,
-    apiFetch = _wp.apiFetch;
 var __ = wp.i18n.__;
-window.jfbEventBus = window.jfbEventBus || new Vue({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  runRowAction: function runRowAction(_ref, _ref2) {
+    var _state$actionsPromise;
 
-var getOffset = function getOffset(page, limit) {
-  return 1 !== page ? (page - 1) * limit : 0;
-};
+    var state = _ref.state;
+    var action = _ref2.action,
+        _ref2$context = _ref2.context,
+        context = _ref2$context === void 0 ? 'default' : _ref2$context,
+        _ref2$payload = _ref2.payload,
+        payload = _ref2$payload === void 0 ? false : _ref2$payload;
 
-function getBaseState() {
-  return {
-    // for pagination
-    columns: {},
-    currentList: [],
-    queryState: {
-      currentPage: 1,
-      extreme_id: 0,
-      limit: 25,
-      sort: 'DESC',
-      total: 0,
-      itemsFrom: 0,
-      itemsTo: 0
-    },
-    // for choose column
-    checked: [],
-    chooseHead: '',
-    idList: [],
-    currentAction: '',
-    actionsList: [],
-    actionsPromises: {},
-    initializedColumns: [],
-    // for disable action buttons: filter, apply list-action & other.
-    doingAction: false,
-    loading: {
-      page: false,
-      applyButton: false
-    },
-    filters: {}
-  };
-}
+    if ('object' !== _typeof(state.actionsPromises[action])) {
+      return Promise.reject(__('Please choose your action', 'jet-form-builder'));
+    }
 
-var prepareFiltersQuery = function prepareFiltersQuery(filters) {
-  var query = {};
+    var promise = (_state$actionsPromise = state.actionsPromises[action][context]) !== null && _state$actionsPromise !== void 0 ? _state$actionsPromise : false;
 
-  for (var filtersKey in filters) {
-    var filter = filters[filtersKey];
-    query[filtersKey] = filter.selected;
+    if (false === payload) {
+      return new Promise(promise);
+    }
+
+    return new Promise(function (resolve, reject) {
+      return promise.apply(void 0, [resolve, reject].concat(_toConsumableArray(payload)));
+    });
   }
-
-  return query;
-};
-
-function getGetters() {
-  var getters = {
-    /*
-     for pagination
-     */
-    offset: function offset(state) {
-      return getOffset(state.queryState.currentPage, state.queryState.limit);
-    },
-    getColumns: function getColumns(state) {
-      return state.columns;
-    },
-
-    /*
-     for choose column
-     */
-    isChecked: function isChecked(state) {
-      return function (id) {
-        return state.checked.includes(id);
-      };
-    },
-    isCheckedHead: function isCheckedHead(state) {
-      return 'checked' === state.chooseHead;
-    },
-    getAction: function getAction(state) {
-      return function (id) {
-        return state.actionsList.find(function (action) {
-          return id === action.value;
-        });
-      };
-    },
-    isInitializedColumn: function isInitializedColumn(state) {
-      return function (slug) {
-        return state.initializedColumns.includes(slug);
-      };
-    },
-    getFilter: function getFilter(state) {
-      return function (slug) {
-        var _state$filters$slug;
-
-        return (_state$filters$slug = state.filters[slug]) !== null && _state$filters$slug !== void 0 ? _state$filters$slug : {};
-      };
-    },
-    isLoading: function isLoading(state) {
-      return function (what) {
-        var _state$loading$what;
-
-        return (_state$loading$what = state.loading[what]) !== null && _state$loading$what !== void 0 ? _state$loading$what : false;
-      };
-    },
-    hasFilters: function hasFilters(state) {
-      return 0 < Object.keys(state.filters).length;
-    },
-    fetchListOptions: function fetchListOptions(state) {
-      return function (endpoint) {
-        var _state$queryState = state.queryState,
-            limit = _state$queryState.limit,
-            sort = _state$queryState.sort,
-            page = _state$queryState.currentPage;
-        return _objectSpread(_objectSpread({}, endpoint), {}, {
-          url: addQueryArgs({
-            limit: limit,
-            sort: sort,
-            page: page,
-            filters: prepareFiltersQuery(state.filters)
-          }, endpoint.url)
-        });
-      };
-    }
-  };
-  return _objectSpread(_objectSpread({}, getters), {}, {
-    getCurrentAction: function getCurrentAction(state) {
-      return getters.getAction(state)(state.currentAction);
-    },
-    getPageOptionsFetch: function getPageOptionsFetch(state) {
-      var receive_url = window.JetFBPageConfig.receive_url;
-      return getters.fetchListOptions(state)(receive_url);
-    }
-  });
-}
-function getMutations() {
-  return {
-    /*
-     for pagination
-     */
-    setList: function setList(state, list) {
-      state.currentList = list;
-    },
-    setQueryState: function setQueryState(state, newState) {
-      state.queryState = _objectSpread(_objectSpread({}, state.queryState), newState);
-    },
-    setColumns: function setColumns(state, columns) {
-      state.columns = columns;
-    },
-    toggleLoading: function toggleLoading(state, what) {
-      var _state$loading$what2;
-
-      state.loading = _objectSpread(_objectSpread({}, state.loading), {}, _defineProperty({}, what, !((_state$loading$what2 = state.loading[what]) !== null && _state$loading$what2 !== void 0 ? _state$loading$what2 : false)));
-    },
-
-    /*
-     for choose column
-     */
-    toggleHead: function toggleHead(state) {
-      state.chooseHead = state.chooseHead ? '' : 'checked';
-    },
-    unChooseHead: function unChooseHead(state) {
-      state.chooseHead = '';
-    },
-    chooseHead: function chooseHead(state) {
-      state.chooseHead = 'checked';
-    },
-    addToStore: function addToStore(state, _ref) {
-      var id = _ref.id;
-      state.idList.push(id);
-    },
-    addChecked: function addChecked(state, _ref2) {
-      var id = _ref2.id;
-      state.checked.push(id);
-    },
-    removeAll: function removeAll(state) {
-      state.checked = [];
-    },
-    activeAll: function activeAll(state) {
-      state.checked = _toConsumableArray(state.idList);
-    },
-    removeChecked: function removeChecked(state, _ref3) {
-      var id = _ref3.id;
-      state.checked = state.checked.filter(function (checked) {
-        return checked !== id;
-      });
-    },
-    setCurrentAction: function setCurrentAction(state, action) {
-      state.currentAction = action;
-    },
-    setActionsList: function setActionsList(state, list) {
-      state.actionsList = JSON.parse(JSON.stringify(list));
-    },
-
-    /*
-     for requests
-     */
-    toggleDoingAction: function toggleDoingAction(state) {
-      state.doingAction = !state.doingAction;
-    },
-    initializeColumn: function initializeColumn(state, column) {
-      state.initializedColumns = [].concat(_toConsumableArray(state.initializedColumns), [column]);
-    },
-    setActionPromises: function setActionPromises(state, _ref4) {
-      var _state$actionsPromise;
-
-      var action = _ref4.action,
-          promise = _ref4.promise,
-          _ref4$context = _ref4.context,
-          context = _ref4$context === void 0 ? 'default' : _ref4$context;
-      state.actionsPromises = _objectSpread(_objectSpread({}, state.actionsPromises), {}, _defineProperty({}, action, _objectSpread(_objectSpread({}, (_state$actionsPromise = state.actionsPromises[action]) !== null && _state$actionsPromise !== void 0 ? _state$actionsPromise : {}), {}, _defineProperty({}, context, promise))));
-    },
-    setFilters: function setFilters(state, filters) {
-      state.filters = filters;
-    },
-    setFilter: function setFilter(state, _ref5) {
-      var _state$filters$slug2;
-
-      var slug = _ref5.slug,
-          props = _ref5.props;
-      state.filters[slug] = (_state$filters$slug2 = state.filters[slug]) !== null && _state$filters$slug2 !== void 0 ? _state$filters$slug2 : {};
-      state.filters[slug] = _objectSpread(_objectSpread({}, state.filters[slug]), props);
-    },
-    clearSelectedFilters: function clearSelectedFilters(state) {
-      var replaceMap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      for (var filter in state.filters) {
-        var _replaceMap$filter;
-
-        state.filters[filter].selected = (_replaceMap$filter = replaceMap[filter]) !== null && _replaceMap$filter !== void 0 ? _replaceMap$filter : '';
-      }
-    }
-  };
-}
-function getActions() {
-  return {
-    /*
-     for choose column
-     */
-    changeChecked: function changeChecked(_ref6, _ref7) {
-      var commit = _ref6.commit;
-      var id = _ref7.id,
-          active = _ref7.active;
-
-      if (active) {
-        commit('addChecked', {
-          id: id
-        });
-      } else {
-        commit('removeChecked', {
-          id: id
-        });
-      }
-    },
-
-    /*
-     for pagination
-     */
-    setQueriedPage: function setQueriedPage(_ref8, pageNum) {
-      var commit = _ref8.commit,
-          getters = _ref8.getters,
-          state = _ref8.state;
-      var offset = getOffset(+pageNum, state.queryState.limit);
-      var itemTo = offset + state.queryState.limit;
-      commit('setQueryState', {
-        currentPage: +pageNum,
-        itemsFrom: offset + 1,
-        itemsTo: itemTo > state.queryState.total ? state.queryState.total : itemTo
-      });
-    },
-    updateQueryState: function updateQueryState(_ref9, newState) {
-      var commit = _ref9.commit,
-          getters = _ref9.getters,
-          state = _ref9.state,
-          dispatch = _ref9.dispatch;
-      commit('setQueryState', newState);
-      dispatch('setQueriedPage', state.queryState.currentPage);
-    },
-    fetchPage: function fetchPage(_ref10) {
-      var commit = _ref10.commit,
-          getters = _ref10.getters,
-          dispatch = _ref10.dispatch,
-          state = _ref10.state;
-      commit('toggleLoading', 'page');
-      dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
-        commit('setList', response.list);
-        dispatch('updateQueryState', {});
-      }).finally(function () {
-        commit('toggleLoading', 'page');
-      });
-    },
-    fetchPageWithFilters: function fetchPageWithFilters(_ref11) {
-      var commit = _ref11.commit,
-          getters = _ref11.getters,
-          dispatch = _ref11.dispatch,
-          state = _ref11.state;
-      commit('toggleLoading', 'page');
-      dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
-        dispatch('updateList', response);
-      }).finally(function () {
-        commit('toggleLoading', 'page');
-      });
-    },
-    updateList: function updateList(_ref12, response) {
-      var _response$total;
-
-      var commit = _ref12.commit,
-          getters = _ref12.getters,
-          dispatch = _ref12.dispatch,
-          state = _ref12.state;
-      commit('setList', response.list);
-      var newState = {
-        total: +((_response$total = response.total) !== null && _response$total !== void 0 ? _response$total : state.queryState.total)
-      };
-
-      if (response.list.length < state.queryState.limit) {
-        newState.limit = response.list.length;
-      }
-
-      dispatch('updateQueryState', newState);
-    },
-    fetch: function fetch(_ref13, options) {
-      var commit = _ref13.commit,
-          getters = _ref13.getters;
-      return new Promise(function (resolve, reject) {
-        apiFetch(options).then(resolve).catch(function (error) {
-          jfbEventBus.$CXNotice.add({
-            message: error.message,
-            type: 'error',
-            duration: 4000
-          });
-          reject(error);
-        }).finally(reject);
-      });
-    },
-    maybeFetchFilters: function maybeFetchFilters(_ref14, endpoint) {
-      var commit = _ref14.commit,
-          getters = _ref14.getters,
-          dispatch = _ref14.dispatch,
-          state = _ref14.state;
-
-      if (getters.hasFilters || state.doingAction) {
-        return;
-      }
-
-      commit('toggleDoingAction');
-      apiFetch(endpoint).then(function (response) {
-        commit('setFilters', response.filters);
-      }).finally(function () {
-        commit('toggleDoingAction');
-      });
-    },
-    runRowAction: function runRowAction(_ref15, _ref16) {
-      var _state$actionsPromise2;
-
-      var state = _ref15.state;
-      var action = _ref16.action,
-          _ref16$context = _ref16.context,
-          context = _ref16$context === void 0 ? 'default' : _ref16$context,
-          _ref16$payload = _ref16.payload,
-          payload = _ref16$payload === void 0 ? false : _ref16$payload;
-
-      if ('object' !== _typeof(state.actionsPromises[action])) {
-        return Promise.reject(__('Please choose your action', 'jet-form-builder'));
-      }
-
-      var promise = (_state$actionsPromise2 = state.actionsPromises[action][context]) !== null && _state$actionsPromise2 !== void 0 ? _state$actionsPromise2 : false;
-
-      if (false === payload) {
-        return new Promise(promise);
-      }
-
-      return new Promise(function (resolve, reject) {
-        return promise.apply(void 0, [resolve, reject].concat(_toConsumableArray(payload)));
-      });
-    },
-    clearFiltersWithFetch: function clearFiltersWithFetch(_ref17, replaceMap) {
-      var commit = _ref17.commit,
-          dispatch = _ref17.dispatch;
-      commit('clearSelectedFilters', replaceMap);
-      dispatch('fetchPageWithFilters');
-    }
-  };
-}
-function getBaseStore() {
-  return {
-    strict: true,
-    state: _objectSpread({}, getBaseState()),
-    getters: _objectSpread({}, getGetters()),
-    mutations: _objectSpread({}, getMutations()),
-    actions: _objectSpread({}, getActions())
-  };
-}
+});
 
 /***/ }),
 
-/***/ "./admin-vuex-package/mixins/TableViewMixin.js":
-/*!*****************************************************!*\
-  !*** ./admin-vuex-package/mixins/TableViewMixin.js ***!
-  \*****************************************************/
+/***/ "./admin-vuex-package/store/modules/action/getters.js":
+/*!************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/action/getters.js ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1406,101 +1112,911 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _JetFBMixins = JetFBMixins,
-    GetIncoming = _JetFBMixins.GetIncoming;
-var _Vuex = Vuex,
-    mapMutations = _Vuex.mapMutations,
-    mapActions = _Vuex.mapActions,
-    mapState = _Vuex.mapState;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mixins: [GetIncoming],
-  created: function created() {
-    var _this$getIncoming = this.getIncoming(),
-        _this$getIncoming$lis = _this$getIncoming.list,
-        list = _this$getIncoming$lis === void 0 ? [] : _this$getIncoming$lis,
-        _this$getIncoming$col = _this$getIncoming.columns,
-        columns = _this$getIncoming$col === void 0 ? {} : _this$getIncoming$col,
-        total = _this$getIncoming.total,
-        actions = _this$getIncoming.actions;
-
-    this.setColumns(JSON.parse(JSON.stringify(columns)));
-    this.setList(JSON.parse(JSON.stringify(list)));
-    this.setActionsList(actions);
-    this.setQueryState({
-      total: +total,
-      limit: this.currentList.length
-    });
-    this.setQueriedPage(1);
+var getters = {
+  getAction: function getAction(state) {
+    return function (id) {
+      return state.actionsList.find(function (action) {
+        return id === action.value;
+      });
+    };
   },
-  computed: _objectSpread({}, mapState(['currentList'])),
-  methods: _objectSpread(_objectSpread({}, mapMutations(['setList', 'setQueryState', 'setColumns', 'setActionsList'])), mapActions(['setQueriedPage']))
+  isDoing: function isDoing(state) {
+    return state.doingAction;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_objectSpread(_objectSpread({}, getters), {}, {
+  getCurrentAction: function getCurrentAction(state) {
+    return getters.getAction(state)(state.currentAction);
+  }
+}));
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/action/index.js":
+/*!**********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/action/index.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./admin-vuex-package/store/modules/action/state.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters */ "./admin-vuex-package/store/modules/action/getters.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./admin-vuex-package/store/modules/action/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions */ "./admin-vuex-package/store/modules/action/actions.js");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 
 /***/ }),
 
-/***/ "./admin-vuex-package/vuex-prototype.js":
-/*!**********************************************!*\
-  !*** ./admin-vuex-package/vuex-prototype.js ***!
-  \**********************************************/
-/***/ (() => {
+/***/ "./admin-vuex-package/store/modules/action/mutations.js":
+/*!**************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/action/mutations.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setCurrentAction: function setCurrentAction(state, action) {
+    state.currentAction = action;
+  },
+  setActionsList: function setActionsList(state, list) {
+    state.actionsList = JSON.parse(JSON.stringify(list));
+  },
+
+  /*
+   for requests
+   */
+  toggleDoingAction: function toggleDoingAction(state) {
+    state.doingAction = !state.doingAction;
+  },
+  setActionPromises: function setActionPromises(state, _ref) {
+    var _state$actionsPromise;
+
+    var action = _ref.action,
+        promise = _ref.promise,
+        _ref$context = _ref.context,
+        context = _ref$context === void 0 ? 'default' : _ref$context;
+    state.actionsPromises = _objectSpread(_objectSpread({}, state.actionsPromises), {}, _defineProperty({}, action, _objectSpread(_objectSpread({}, (_state$actionsPromise = state.actionsPromises[action]) !== null && _state$actionsPromise !== void 0 ? _state$actionsPromise : {}), {}, _defineProperty({}, context, promise))));
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/action/state.js":
+/*!**********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/action/state.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  currentAction: '',
+  actionsList: [],
+  actionsPromises: {},
+  // for disable action buttons: filter, apply list-action & other.
+  doingAction: false
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/choose-column/actions.js":
+/*!*******************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/choose-column/actions.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  changeChecked: function changeChecked(_ref, _ref2) {
+    var commit = _ref.commit;
+    var id = _ref2.id,
+        active = _ref2.active;
+
+    if (active) {
+      commit('addChecked', {
+        id: id
+      });
+    } else {
+      commit('removeChecked', {
+        id: id
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/choose-column/getters.js":
+/*!*******************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/choose-column/getters.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  isChecked: function isChecked(state) {
+    return function (id) {
+      return state.checked.includes(id);
+    };
+  },
+  isCheckedHead: function isCheckedHead(state) {
+    return 'checked' === state.chooseHead;
+  },
+  getChecked: function getChecked(state) {
+    return state.checked;
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/choose-column/index.js":
+/*!*****************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/choose-column/index.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./admin-vuex-package/store/modules/choose-column/state.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters */ "./admin-vuex-package/store/modules/choose-column/getters.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./admin-vuex-package/store/modules/choose-column/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions */ "./admin-vuex-package/store/modules/choose-column/actions.js");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/choose-column/mutations.js":
+/*!*********************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/choose-column/mutations.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-Vuex.Store.prototype.registerMetaBoxes = function registerMetaBoxes() {
-  var _iterator = _createForOfIteratorHelper(window.JetFBPageConfig.containers),
-      _step;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  toggleHead: function toggleHead(state) {
+    state.chooseHead = state.chooseHead ? '' : 'checked';
+  },
+  unChooseHead: function unChooseHead(state) {
+    state.chooseHead = '';
+  },
+  chooseHead: function chooseHead(state) {
+    state.chooseHead = 'checked';
+  },
+  addToStore: function addToStore(state, _ref) {
+    var id = _ref.id;
+    state.idList.push(id);
+  },
+  addChecked: function addChecked(state, _ref2) {
+    var id = _ref2.id;
+    state.checked.push(id);
+  },
+  removeAll: function removeAll(state) {
+    state.checked = [];
+  },
+  activeAll: function activeAll(state) {
+    state.checked = _toConsumableArray(state.idList);
+  },
+  removeChecked: function removeChecked(state, _ref3) {
+    var id = _ref3.id;
+    state.checked = state.checked.filter(function (checked) {
+      return checked !== id;
+    });
+  }
+});
 
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var container = _step.value;
+/***/ }),
 
-      var boxes = _toConsumableArray(container.boxes.filter(function (box) {
-        return box.is_table_view;
-      }));
+/***/ "./admin-vuex-package/store/modules/choose-column/state.js":
+/*!*****************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/choose-column/state.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-      var _iterator2 = _createForOfIteratorHelper(boxes),
-          _step2;
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  checked: [],
+  chooseHead: '',
+  idList: []
+});
 
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var box = _step2.value;
-          this.registerMetaBox(box);
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/loading/getters.js":
+/*!*************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/loading/getters.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  isLoading: function isLoading(state) {
+    return function (what) {
+      var _state$loading$what;
+
+      return (_state$loading$what = state.loading[what]) !== null && _state$loading$what !== void 0 ? _state$loading$what : false;
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/loading/index.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/loading/index.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./admin-vuex-package/store/modules/loading/state.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters */ "./admin-vuex-package/store/modules/loading/getters.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./admin-vuex-package/store/modules/loading/mutations.js");
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"]
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/loading/mutations.js":
+/*!***************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/loading/mutations.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  toggleLoading: function toggleLoading(state, what) {
+    var _state$loading$what;
+
+    state.loading = _objectSpread(_objectSpread({}, state.loading), {}, _defineProperty({}, what, !((_state$loading$what = state.loading[what]) !== null && _state$loading$what !== void 0 ? _state$loading$what : false)));
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/loading/state.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/loading/state.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  loading: {
+    page: false,
+    applyButton: false
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/actions.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/actions.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./admin-vuex-package/store/modules/query/functions.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setQueryState: function setQueryState(_ref, newState) {
+    var commit = _ref.commit,
+        getters = _ref.getters,
+        state = _ref.state;
+
+    if ('currentPage' in newState) {
+      commit('setCurrentPage', newState.currentPage);
     }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
+
+    if ('total' in newState) {
+      commit('setTotal', newState.total);
+    }
+
+    if ('limit' in newState) {
+      commit('setLimit', newState.limit);
+    }
+  },
+  setQueriedPage: function setQueriedPage(_ref2, pageNum) {
+    var commit = _ref2.commit,
+        getters = _ref2.getters,
+        state = _ref2.state;
+    var offset = (0,_functions__WEBPACK_IMPORTED_MODULE_0__.getOffset)(+pageNum, state.limit);
+    commit('setCurrentPage', pageNum);
+    commit('setOffset', offset);
+  },
+  updateQueryState: function updateQueryState(_ref3) {
+    var commit = _ref3.commit,
+        getters = _ref3.getters,
+        state = _ref3.state,
+        dispatch = _ref3.dispatch;
+    var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    dispatch('setQueriedPage', page || state.currentPage);
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/functions.js":
+/*!*************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/functions.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getOffset": () => (/* binding */ getOffset),
+/* harmony export */   "prepareFiltersQuery": () => (/* binding */ prepareFiltersQuery)
+/* harmony export */ });
+var getOffset = function getOffset(page, limit) {
+  return 1 !== page ? (page - 1) * limit : 0;
+};
+
+var prepareFiltersQuery = function prepareFiltersQuery(filters) {
+  var query = {};
+
+  for (var filtersKey in filters) {
+    var filter = filters[filtersKey];
+    query[filtersKey] = filter.selected;
+  }
+
+  return query;
+};
+
+
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/getters.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/getters.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./admin-vuex-package/store/modules/query/functions.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+var _JetFBActions = JetFBActions,
+    addQueryArgs = _JetFBActions.addQueryArgs;
+var getters = {
+  offset: function offset(state) {
+    return (0,_functions__WEBPACK_IMPORTED_MODULE_0__.getOffset)(state.currentPage, state.limit);
+  },
+  getLimit: function getLimit(state) {
+    return state.limit;
+  },
+  getFilter: function getFilter(state) {
+    return function (slug) {
+      var _state$filters$slug;
+
+      return (_state$filters$slug = state.filters[slug]) !== null && _state$filters$slug !== void 0 ? _state$filters$slug : {};
+    };
+  },
+  queryState: function queryState(state) {
+    return {
+      limit: state.limit,
+      total: state.total,
+      currentPage: state.currentPage,
+      itemsFrom: state.itemsFrom,
+      itemsTo: state.itemsTo
+    };
+  },
+  hasFilters: function hasFilters(state) {
+    return 0 < Object.keys(state.filters).length;
+  },
+  fetchListOptions: function fetchListOptions(state) {
+    return function (endpoint) {
+      var limit = state.limit,
+          sort = state.sort,
+          page = state.currentPage;
+      return _objectSpread(_objectSpread({}, endpoint), {}, {
+        url: addQueryArgs({
+          limit: limit,
+          sort: sort,
+          page: page,
+          filters: (0,_functions__WEBPACK_IMPORTED_MODULE_0__.prepareFiltersQuery)(state.filters)
+        }, endpoint.url)
+      });
+    };
   }
 };
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_objectSpread(_objectSpread({}, getters), {}, {
+  getPageOptionsFetch: function getPageOptionsFetch(state) {
+    var receive_url = window.JetFBPageConfig.receive_url;
+    return getters.fetchListOptions(state)(receive_url);
+  }
+}));
 
-Vuex.Store.prototype.registerMetaBox = function registerMetaBox(box) {
-  this.registerModule("scope-".concat(box.id), {
-    namespaced: true,
-    state: function state() {
-      return {
-        list: box.values
-      };
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/index.js":
+/*!*********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/index.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./admin-vuex-package/store/modules/query/state.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters */ "./admin-vuex-package/store/modules/query/getters.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./admin-vuex-package/store/modules/query/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions */ "./admin-vuex-package/store/modules/query/actions.js");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/mutations.js":
+/*!*************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/mutations.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setTotal: function setTotal(state, newTotal) {
+    state.total = +newTotal;
+  },
+  setLimit: function setLimit(state, limit) {
+    state.limit = +limit;
+  },
+  setCurrentPage: function setCurrentPage(state, pageNum) {
+    state.currentPage = +pageNum;
+  },
+  setOffset: function setOffset(state, offset) {
+    var itemTo = offset + state.limit;
+    state.itemsFrom = offset + 1;
+    state.itemsTo = itemTo > state.total ? state.total : itemTo;
+  },
+  setFilters: function setFilters(state, filters) {
+    state.filters = filters;
+  },
+  setFilter: function setFilter(state, _ref) {
+    var _state$filters$slug;
+
+    var slug = _ref.slug,
+        props = _ref.props;
+    state.filters[slug] = (_state$filters$slug = state.filters[slug]) !== null && _state$filters$slug !== void 0 ? _state$filters$slug : {};
+    state.filters[slug] = _objectSpread(_objectSpread({}, state.filters[slug]), props);
+  },
+  clearSelectedFilters: function clearSelectedFilters(state) {
+    var replaceMap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    for (var filter in state.filters) {
+      var _replaceMap$filter;
+
+      state.filters[filter].selected = (_replaceMap$filter = replaceMap[filter]) !== null && _replaceMap$filter !== void 0 ? _replaceMap$filter : '';
     }
-  });
-};
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/query/state.js":
+/*!*********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/query/state.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  currentPage: 1,
+  extreme_id: 0,
+  limit: 25,
+  sort: 'DESC',
+  total: 0,
+  itemsFrom: 0,
+  itemsTo: 0,
+  filters: {}
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/table/getters.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table/getters.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  list: function list(state) {
+    return state.list;
+  },
+  columns: function columns(state) {
+    return state.columns;
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/table/index.js":
+/*!*********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table/index.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./admin-vuex-package/store/modules/table/state.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutations */ "./admin-vuex-package/store/modules/table/mutations.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getters */ "./admin-vuex-package/store/modules/table/getters.js");
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_2__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_1__["default"]
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/table/mutations.js":
+/*!*************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table/mutations.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setList: function setList(state, list) {
+    state.list = JSON.parse(JSON.stringify(list));
+  },
+  setColumns: function setColumns(state, columns) {
+    state.columns = JSON.parse(JSON.stringify(columns));
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/table/state.js":
+/*!*********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table/state.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  list: [],
+  columns: {}
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/view/actions.js":
+/*!**********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/view/actions.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+window.jfbEventBus = window.jfbEventBus || new Vue({});
+var _wp = wp,
+    apiFetch = _wp.apiFetch;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  fetchPage: function fetchPage(_ref) {
+    var commit = _ref.commit,
+        getters = _ref.getters,
+        dispatch = _ref.dispatch,
+        state = _ref.state;
+    commit('toggleLoading', 'page');
+    dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
+      commit('setList', response.list);
+      commit('updateQueryState');
+    }).finally(function () {
+      commit('toggleLoading', 'page');
+    });
+  },
+  fetchPageWithFilters: function fetchPageWithFilters(_ref2) {
+    var commit = _ref2.commit,
+        getters = _ref2.getters,
+        dispatch = _ref2.dispatch,
+        state = _ref2.state;
+    commit('toggleLoading', 'page');
+    dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
+      dispatch('updateList', response);
+    }).finally(function () {
+      commit('toggleLoading', 'page');
+    });
+  },
+  updateList: function updateList(_ref3, response) {
+    var _response$total;
+
+    var commit = _ref3.commit,
+        getters = _ref3.getters,
+        dispatch = _ref3.dispatch,
+        state = _ref3.state;
+    commit('setList', response.list);
+    commit('setTotal', (_response$total = response.total) !== null && _response$total !== void 0 ? _response$total : state.queryState.total);
+
+    if (response.list.length < getters.getLimit) {
+      commit('setLimit', response.list.length);
+    }
+  },
+  fetch: function fetch(_ref4, options) {
+    var commit = _ref4.commit,
+        getters = _ref4.getters;
+    return new Promise(function (resolve, reject) {
+      apiFetch(options).then(resolve).catch(function (error) {
+        jfbEventBus.$CXNotice.add({
+          message: error.message,
+          type: 'error',
+          duration: 4000
+        });
+        reject(error);
+      }).finally(reject);
+    });
+  },
+  maybeFetchFilters: function maybeFetchFilters(_ref5, endpoint) {
+    var commit = _ref5.commit,
+        getters = _ref5.getters,
+        dispatch = _ref5.dispatch,
+        state = _ref5.state;
+
+    if (getters.hasFilters || getters.isDoing) {
+      return;
+    }
+
+    commit('toggleDoingAction');
+    apiFetch(endpoint).then(function (response) {
+      commit('setFilters', response.filters);
+    }).finally(function () {
+      commit('toggleDoingAction');
+    });
+  },
+  clearFiltersWithFetch: function clearFiltersWithFetch(_ref6, replaceMap) {
+    var commit = _ref6.commit,
+        dispatch = _ref6.dispatch;
+    commit('clearSelectedFilters', replaceMap);
+    dispatch('fetchPageWithFilters');
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/modules/view/index.js":
+/*!********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/view/index.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../loading */ "./admin-vuex-package/store/modules/loading/index.js");
+/* harmony import */ var _query__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../query */ "./admin-vuex-package/store/modules/query/index.js");
+/* harmony import */ var _table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../table */ "./admin-vuex-package/store/modules/table/index.js");
+/* harmony import */ var _choose_column__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../choose-column */ "./admin-vuex-package/store/modules/choose-column/index.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./actions */ "./admin-vuex-package/store/modules/view/actions.js");
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  strict: true,
+  actions: _actions__WEBPACK_IMPORTED_MODULE_4__["default"],
+  modules: {
+    chooseColumn: _choose_column__WEBPACK_IMPORTED_MODULE_3__["default"],
+    loading: _loading__WEBPACK_IMPORTED_MODULE_0__["default"],
+    query: _query__WEBPACK_IMPORTED_MODULE_1__["default"],
+    table: _table__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/single-view.js":
+/*!*************************************************!*\
+  !*** ./admin-vuex-package/store/single-view.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modules_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/view */ "./admin-vuex-package/store/modules/view/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespace: true,
+  modules: {
+    view: _objectSpread({}, _modules_view__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }
+});
+
+/***/ }),
+
+/***/ "./admin-vuex-package/store/stable-view.js":
+/*!*************************************************!*\
+  !*** ./admin-vuex-package/store/stable-view.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modules_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/view */ "./admin-vuex-package/store/modules/view/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  modules: {
+    view: _objectSpread({}, _modules_view__WEBPACK_IMPORTED_MODULE_0__["default"])
+  }
+});
 
 /***/ }),
 
@@ -1578,7 +2094,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue","webpack://./../PaymentsComponent.vue"],"names":[],"mappings":"AA8EA;EACC,oBAAA;AC7ED;ADiFC;EACC,SAAA;AC9EF;ADiFC;EACC,yBAAA;AC/EF;ADiFE;EACC,gCAAA;AC/EH;ADkFE;EACC,yBAAA;AChFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue","webpack://./../PaymentsComponent.vue"],"names":[],"mappings":"AA6EA;EACC,oBAAA;AC5ED;ADgFC;EACC,SAAA;AC7EF;ADgFC;EACC,yBAAA;AC9EF;ADgFE;EACC,gCAAA;AC9EH;ADiFE;EACC,yBAAA;AC/EH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1632,7 +2148,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA+EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;AC9ED;ADgFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;AC9EH;ADiFC;EACC,uBAAA;AC/EF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AAyEA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;ACxED;AD2EE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;ACzEH;AD6EC;EACC,uBAAA;AC3EF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1876,45 +2392,6 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "admin-vuex-package/components/DetailsTableWithStore.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/EntriesStoreTable.vue":
-/*!*************************************************************!*\
-  !*** ./admin-vuex-package/components/EntriesStoreTable.vue ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EntriesStoreTable.vue?vue&type=template&id=5f2666e8& */ "./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8&");
-/* harmony import */ var _EntriesStoreTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntriesStoreTable.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _EntriesStoreTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__.render,
-  _EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "admin-vuex-package/components/EntriesStoreTable.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -2209,22 +2686,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************!*\
-  !*** ./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesStoreTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EntriesStoreTable.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesStoreTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
 /***/ "./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
   !*** ./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js& ***!
@@ -2368,23 +2829,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableWithStore_vue_vue_type_template_id_6f067e5e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableWithStore_vue_vue_type_template_id_6f067e5e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableWithStore.vue?vue&type=template&id=6f067e5e& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=template&id=6f067e5e&");
-
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8&":
-/*!********************************************************************************************!*\
-  !*** ./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8& ***!
-  \********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesStoreTable_vue_vue_type_template_id_5f2666e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EntriesStoreTable.vue?vue&type=template&id=5f2666e8& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8&");
 
 
 /***/ }),
@@ -2699,37 +3143,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8&":
-/*!*************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesStoreTable.vue?vue&type=template&id=5f2666e8& ***!
-  \*************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function () {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("EntriesTable", {
-    attrs: {
-      loading: _vm.loadingPage,
-      columns: _vm.$store.getters.getColumns,
-      "columns-components": _vm.columnsComponents,
-    },
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=template&id=7f29adff&":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=template&id=7f29adff& ***!
@@ -2747,7 +3160,12 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("EntriesTableSkeleton", {
-    attrs: { list: _vm.list, columns: _vm.columns, loading: _vm.loading },
+    attrs: {
+      list: _vm.storeGetters.list,
+      columns: _vm.storeGetters.columns,
+      loading: _vm.storeGetters.isLoading("page"),
+      "columns-components": _vm.components,
+    },
   })
 }
 var staticRenderFns = []
@@ -3194,7 +3612,7 @@ var render = function () {
               total: _vm.queryState.total,
               "page-size": _vm.queryState.limit,
               current: _vm.queryState.currentPage,
-              disabled: _vm.loadingPage,
+              disabled: _vm.isLoading("page"),
             },
             on: { "on-change": _vm.changePage },
           })
@@ -3211,7 +3629,7 @@ var render = function () {
               type: "number",
               min: 1,
               max: _vm.queryState.total,
-              disabled: _vm.loadingPage,
+              disabled: _vm.isLoading("page"),
             },
             on: { "on-input-change": _vm.changeLimit },
           }),
@@ -3805,17 +4223,15 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PaymentsPage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/PaymentsPage */ "./admin-vuex-package/components/PaymentsPage/index.js");
 /* harmony import */ var _components_EntriesTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
-/* harmony import */ var _components_EntriesStoreTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/EntriesStoreTable */ "./admin-vuex-package/components/EntriesStoreTable.vue");
-/* harmony import */ var _components_DetailsTableWithStore__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/DetailsTableWithStore */ "./admin-vuex-package/components/DetailsTableWithStore.vue");
-/* harmony import */ var _components_TablePagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/TablePagination */ "./admin-vuex-package/components/TablePagination.vue");
-/* harmony import */ var _components_ChooseAction__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/ChooseAction */ "./admin-vuex-package/components/ChooseAction.vue");
-/* harmony import */ var _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/TableStoreHelper */ "./admin-vuex-package/mixins/TableStoreHelper.js");
-/* harmony import */ var _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/TableViewMixin */ "./admin-vuex-package/mixins/TableViewMixin.js");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./constants */ "./admin-vuex-package/constants.js");
-/* harmony import */ var _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/ClearFiltersButton */ "./admin-vuex-package/components/ClearFiltersButton.vue");
-/* harmony import */ var _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mixins/FilterMixin */ "./admin-vuex-package/mixins/FilterMixin.js");
-/* harmony import */ var _vuex_prototype__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./vuex-prototype */ "./admin-vuex-package/vuex-prototype.js");
-/* harmony import */ var _vuex_prototype__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_vuex_prototype__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _components_DetailsTableWithStore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/DetailsTableWithStore */ "./admin-vuex-package/components/DetailsTableWithStore.vue");
+/* harmony import */ var _components_TablePagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/TablePagination */ "./admin-vuex-package/components/TablePagination.vue");
+/* harmony import */ var _components_ChooseAction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ChooseAction */ "./admin-vuex-package/components/ChooseAction.vue");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constants */ "./admin-vuex-package/constants.js");
+/* harmony import */ var _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/ClearFiltersButton */ "./admin-vuex-package/components/ClearFiltersButton.vue");
+/* harmony import */ var _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/FilterMixin */ "./admin-vuex-package/mixins/FilterMixin.js");
+/* harmony import */ var _store_base_store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./store/base-store */ "./admin-vuex-package/store/base-store.js");
+/* harmony import */ var _plugins_table_seed_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/table-seed-plugin */ "./admin-vuex-package/plugins/table-seed-plugin.js");
+/* harmony import */ var _plugins_table_module_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/table-module-plugin */ "./admin-vuex-package/plugins/table-module-plugin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3833,22 +4249,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 window.JetFBComponents = _objectSpread(_objectSpread({}, window.JetFBComponents), {}, {
   EntriesTable: _components_EntriesTable__WEBPACK_IMPORTED_MODULE_1__["default"],
   PaymentsPage: _components_PaymentsPage__WEBPACK_IMPORTED_MODULE_0__["default"],
-  EntriesStoreTable: _components_EntriesStoreTable__WEBPACK_IMPORTED_MODULE_2__["default"],
-  DetailsTableWithStore: _components_DetailsTableWithStore__WEBPACK_IMPORTED_MODULE_3__["default"],
-  TablePagination: _components_TablePagination__WEBPACK_IMPORTED_MODULE_4__["default"],
-  ChooseAction: _components_ChooseAction__WEBPACK_IMPORTED_MODULE_5__["default"],
-  ClearFiltersButton: _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_9__["default"]
+  DetailsTableWithStore: _components_DetailsTableWithStore__WEBPACK_IMPORTED_MODULE_2__["default"],
+  TablePagination: _components_TablePagination__WEBPACK_IMPORTED_MODULE_3__["default"],
+  ChooseAction: _components_ChooseAction__WEBPACK_IMPORTED_MODULE_4__["default"],
+  ClearFiltersButton: _components_ClearFiltersButton__WEBPACK_IMPORTED_MODULE_6__["default"]
 });
 window.JetFBMixins = _objectSpread(_objectSpread({}, window.JetFBMixins), {}, {
-  TableStoreHelper: _mixins_TableStoreHelper__WEBPACK_IMPORTED_MODULE_6__,
-  TableViewMixin: _mixins_TableViewMixin__WEBPACK_IMPORTED_MODULE_7__["default"],
-  FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_10__["default"]
+  FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_7__["default"]
 });
-window.JetFBConst = _constants__WEBPACK_IMPORTED_MODULE_8__["default"];
+window.JetFBStore = {
+  BaseStore: _store_base_store__WEBPACK_IMPORTED_MODULE_8__["default"],
+  TableSeedPlugin: _plugins_table_seed_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
+  TableModulePlugin: _plugins_table_module_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]
+};
+window.JetFBConst = _constants__WEBPACK_IMPORTED_MODULE_5__["default"];
 })();
 
 /******/ })()

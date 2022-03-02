@@ -1,16 +1,10 @@
 import PaymentsComponent from './PaymentsComponent';
-import * as TableStoreHelper from '../../mixins/TableStoreHelper';
-
-const {
-		  getBaseStore,
-	  } = TableStoreHelper;
+import BaseStore from '../../store/base-store';
 
 Vue.use( Vuex );
 
-window.jfbEventBus = window.jfbEventBus || new Vue( {} );
+const store = new Vuex.Store( {
+	...BaseStore,
+} );
 
-const options = {
-	store: getBaseStore(),
-};
-
-export default { PaymentsComponent, options };
+export default { PaymentsComponent, options: { store } };

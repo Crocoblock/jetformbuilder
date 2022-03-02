@@ -1,17 +1,20 @@
 import Records from './Records';
 
-const { TableStoreHelper: { getBaseStore } } = JetFBMixins;
-const { renderCurrentPage } = window.JetFBActions;
+const {
+	BaseStore,
+	TableModulePlugin,
+	TableSeedPlugin,
+} = JetFBStore;
+
+const {
+	renderCurrentPage,
+} = window.JetFBActions;
+
 Vue.use( Vuex );
 
-window.jfbEventBus = window.jfbEventBus || new Vue( {} );
+const store = new Vuex.Store( {
+	...BaseStore,
+	plugins: [ TableModulePlugin(), TableSeedPlugin() ],
+} );
 
-const store = getBaseStore();
-
-const options = {
-	store: new Vuex.Store( {
-		...store,
-	} ),
-};
-
-renderCurrentPage( Records, options );
+renderCurrentPage( Records, { store } );

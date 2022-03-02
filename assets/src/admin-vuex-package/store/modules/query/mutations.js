@@ -1,9 +1,18 @@
 export default {
-	setQueryState( state, newState ) {
-		state.queryState = {
-			...state.queryState,
-			...newState,
-		};
+	setTotal( state, newTotal ) {
+		state.total = + newTotal;
+	},
+	setLimit( state, limit ) {
+		state.limit = + limit;
+	},
+	setCurrentPage( state, pageNum ) {
+		state.currentPage = + pageNum;
+	},
+	setOffset( state, offset ) {
+		const itemTo = offset + state.limit;
+
+		state.itemsFrom = offset + 1;
+		state.itemsTo = itemTo > state.total ? state.total : itemTo;
 	},
 	setFilters( state, filters ) {
 		state.filters = filters;
@@ -20,4 +29,4 @@ export default {
 			state.filters[ filter ].selected = replaceMap[ filter ] ?? '';
 		}
 	},
-}
+};

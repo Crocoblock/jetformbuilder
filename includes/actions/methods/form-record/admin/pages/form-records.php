@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Pages;
+namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages;
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
-use Jet_Form_Builder\Admin\Single_Pages\Single_Form_Record_Page;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views\Records_Table_View;
+use Jet_Form_Builder\Admin\Pages\Base_Page;
 
 class Form_Records extends Base_Page {
 

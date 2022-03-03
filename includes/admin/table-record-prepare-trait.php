@@ -31,27 +31,30 @@ trait Table_Record_Prepare_Trait {
 		$prepared = array();
 
 		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {
-			$value                   = $column_attrs['value'] ?? $record[ $column_name ] ?? false;
-			$column_attrs['type']    = $column_attrs['type'] ?? 'string';
-			$column_attrs['default'] = $column_attrs['default'] ?? false;
-
-			$default = $this->prepare_record_value_type( $column_attrs['default'], $column_attrs );
-
-			if ( ! is_callable( $value ) ) {
-				$column_attrs['value'] = $value ?: $default;
-			} else {
-				$column_attrs['value'] = $this->prepare_record_value_type(
-					call_user_func( $value, $record, $default ),
-					$column_attrs
-				);
-			}
-
-			$prepared[ $column_name ] = $column_attrs;
+			$prepared[ $column_name ] = $this->prepare_column_attrs( $record, $column_attrs, $column_name );
 		}
 
 		return $prepared;
 	}
 
+	public function prepare_column_attrs( array $record, $column_attrs, $column_name ): array {
+		$value                   = $column_attrs['value'] ?? $record[ $column_name ] ?? false;
+		$column_attrs['type']    = $column_attrs['type'] ?? 'string';
+		$column_attrs['default'] = $column_attrs['default'] ?? false;
+
+		$default = $this->prepare_record_value_type( $column_attrs['default'], $column_attrs );
+
+		if ( ! is_callable( $value ) ) {
+			$column_attrs['value'] = $value ?: $default;
+		} else {
+			$column_attrs['value'] = $this->prepare_record_value_type(
+				call_user_func( $value, $record, $default ),
+				$column_attrs
+			);
+		}
+
+		return $column_attrs;
+	}
 
 	public function transform_to_columns_values( array $columns ): array {
 		$transformed = array();

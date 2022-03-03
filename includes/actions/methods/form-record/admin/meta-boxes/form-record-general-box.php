@@ -1,11 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
+namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 
 class Form_Record_General_Box extends Base_Table_Box {
 

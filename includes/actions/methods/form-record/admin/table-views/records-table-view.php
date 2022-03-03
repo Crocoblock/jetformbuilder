@@ -1,48 +1,41 @@
 <?php
 
 
-namespace Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views;
+namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views;
 
-use Automattic\WooCommerce\Vendor\League\Container\Exception\NotFoundException;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Link_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Referrer_Link_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Status_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\User_Login_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Not_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use Jet_Form_Builder\Admin\Single_Pages\Single_Form_Record_Page;
-use Jet_Form_Builder\Admin\Table_Views\View_Base;
-use Jet_Form_Builder\Classes\Repository_Item_With_Class;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column;
+use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
-class Records_Table_View extends View_Base {
+class Records_Table_View extends View_Advanced_Base {
 
-	use Repository_Item_With_Class;
+	public function get_columns(): array {
+		return array(
+			self::COLUMN_CHOOSE => ( new Record_Id_Column() )->use_label( false ),
+			'form'              => new Form_Link_Column(),
+			'referrer'          => new Referrer_Link_Column( 'from_content_id' ),
+			'status'            => new Status_Column( 'status' ),
+			'user'              => new User_Login_Column(),
+			'id'                => new Record_Id_Column(),
+		);
+	}
 
 	public function get_columns_handlers(): array {
 		return array(
-			'id'                 => array(
-				'value' => array( $this, 'get_row_id' ),
-				'type'  => 'integer',
-			),
-			'status'             => array(
-				'value' => array( $this, 'get_status' ),
-			),
-			'form'               => array(
-				'value' => array( $this, 'get_form' ),
-				'type'  => 'link',
-			),
-			'referrer'           => array(
-				'value' => array( $this, 'get_referrer' ),
-				'type'  => 'link',
-			),
-			'user'               => array(
-				'value' => array( $this, 'get_user' ),
-			),
 			self::COLUMN_CHOOSE  => array(
 				'value' => array( $this, 'get_row_id' ),
 			),
@@ -104,15 +97,6 @@ class Records_Table_View extends View_Base {
 	public function get_single_actions(): array {
 		return array(
 			array(
-				'value'    => 'delete',
-				'label'    => __( 'Delete', 'jet-form-builder' ),
-				'endpoint' => array(
-					'method' => Delete_Form_Record_Endpoint::get_methods(),
-					'url'    => Delete_Form_Record_Endpoint::rest_url(),
-				),
-				'type'     => 'danger',
-			),
-			array(
 				'value'    => 'mark_viewed',
 				'label'    => __( 'Mark as Viewed', 'jet-form-builder' ),
 				'endpoint' => array(
@@ -137,7 +121,7 @@ class Records_Table_View extends View_Base {
 	 * @return array
 	 */
 	public function get_row_actions( $record ): array {
-		$actions        = $this->get_single_actions();
+		$actions = $this->get_single_actions();
 		list( $delete ) = $actions;
 
 		list( $mark_view ) = array_values(
@@ -206,40 +190,7 @@ class Records_Table_View extends View_Base {
 		);
 	}
 
-	public function get_row_id( $record ) {
+	public function get_row_id( $record ): int {
 		return $record['id'] ?? 0;
 	}
-
-	public function get_status( $record ) {
-		return $record['status'] ?? 'failed';
-	}
-
-	public function get_referrer( $record ) {
-		$text   = get_the_title( $record['from_content_id'] ?? 0 );
-		$params = array(
-			'text' => $text ?: '--',
-		);
-
-		if ( ! empty( $record['referrer'] ) ) {
-			$params['href'] = $record['referrer'];
-		}
-
-		return $params;
-	}
-
-	public function get_form( $record ): array {
-		$form = get_post( $record['form_id'] ?? 0 );
-
-		return array(
-			'text' => get_the_title( $form ),
-			'href' => get_edit_post_link( $form, false ),
-		);
-	}
-
-	public function get_user( $record ) {
-		$user = get_user_by( 'ID', $record['user_id'] ?? 0 );
-
-		return $user->user_login ?? 'Guest';
-	}
-
 }

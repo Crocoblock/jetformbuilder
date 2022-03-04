@@ -14,7 +14,7 @@ class Form_Link_Column extends Column_Advanced_Base {
 		return __( 'Form', 'jet-form-builder' );
 	}
 
-	protected function get_value( array $record ) {
+	public function get_value( array $record = array() ) {
 		$form_id = parent::get_value( $record );
 		$form    = get_post( $form_id );
 

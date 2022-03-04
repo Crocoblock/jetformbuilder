@@ -12,12 +12,12 @@
 				:classes="classes"
 			>
 				<PostBoxSimple
-					v-for="({ slug, title, list, is_table = false }) in boxes"
+					v-for="({ slug, title, list, render_type = false }) in boxes"
 					:key="slug"
 					:slug="slug"
 					:title="title"
 					:list="list"
-					:is-table="is_table"
+					:render-type="render_type"
 				></PostBoxSimple>
 			</PostBoxContainer>
 		</div>
@@ -36,12 +36,6 @@ export default {
 	components: {
 		PostBoxContainer,
 		PostBoxSimple,
-	},
-	data() {
-		return {};
-	},
-	created() {
-
 	},
 	computed: {
 		bodyClasses() {

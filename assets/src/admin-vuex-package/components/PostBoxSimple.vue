@@ -3,7 +3,18 @@
 		:title="title"
 		:slug="slug"
 	>
-		<div id="misc-publishing-actions" v-if="! isTable">
+		<EntriesTable
+			v-if="'table' === renderType"
+			:scope="slug"
+		/>
+		<EntriesList
+			v-else-if="'list' === renderType"
+			:scope="slug"
+		/>
+		<div
+			id="misc-publishing-actions"
+			v-else
+		>
 			<div
 				class="misc-pub-section"
 				v-for="(value, name) in list"
@@ -12,30 +23,26 @@
 				{{ name }}: <strong>{{ value }}</strong>
 			</div>
 		</div>
-		<EntriesTable
-			v-else
-			:scope="slug"
-		/>
 	</PostBoxSkeleton>
 </template>
 
 <script>
 import PostBoxSkeleton from './PostBoxSkeleton';
 import EntriesTable from './EntriesTable';
+import EntriesList from './EntriesList';
+
 
 export default {
 	name: 'PostBoxSimple',
-	props: {
-		title: String,
-		slug: String,
-		list: Object|Array,
-		isTable: {
-			type: Boolean,
-			default: false,
-		},
-	},
+	props: [
+		'title',
+		'slug',
+		'list',
+		'renderType',
+	],
 	components: {
 		EntriesTable,
+		EntriesList,
 		PostBoxSkeleton,
 	},
 };

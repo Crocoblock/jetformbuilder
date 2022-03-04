@@ -21,7 +21,7 @@ class Delete_Record_Action extends Api_Single_Action {
 		return 'danger';
 	}
 
-	public function show_in_header( array $record ): bool {
+	public function show_in_header(): bool {
 		return true;
 	}
 

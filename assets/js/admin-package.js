@@ -1052,6 +1052,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../entries-table-columns/choose */ "./admin-package/entries-table-columns/choose/index.js");
+/* harmony import */ var _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../entries-table-columns/link-type */ "./admin-package/entries-table-columns/link-type/index.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1063,6 +1065,8 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -1080,7 +1084,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   created: function created() {
-    this.componentsCols = _toConsumableArray(this.columnsComponents);
+    this.componentsCols = [].concat(_toConsumableArray(this.columnsComponents), [_entries_table_columns_choose__WEBPACK_IMPORTED_MODULE_0__, _entries_table_columns_link_type__WEBPACK_IMPORTED_MODULE_1__]);
   },
   methods: {
     getColumnComponentByPrefix: function getColumnComponentByPrefix(column, prefix) {

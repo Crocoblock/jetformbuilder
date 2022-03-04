@@ -3,9 +3,10 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
-
-use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Value_Handlers\Form_Link_Column;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Value_Handlers\User_Login_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Link_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Referrer_Link_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Status_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\User_Login_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -15,6 +16,15 @@ class Form_Record_Side_Box extends Base_List_Box {
 
 	public function get_title(): string {
 		return __( 'General Values', 'jet-form-builder' );
+	}
+
+	public function get_columns(): array {
+		return array(
+			'form'     => new Form_Link_Column(),
+			'referrer' => new Referrer_Link_Column(),
+			'status'   => new Status_Column(),
+			'user'     => new User_Login_Column(),
+		);
 	}
 
 	/**
@@ -27,19 +37,6 @@ class Form_Record_Side_Box extends Base_List_Box {
 		} catch ( Query_Builder_Exception $exception ) {
 			return array();
 		}
-	}
-
-	public function get_columns_handlers(): array {
-		return array(
-			'form_link' => new Form_Link_Column( 'form_id' ),
-			'user'      => new User_Login_Column( 'user_id' ),
-		);
-	}
-
-	public function get_columns_headings(): array {
-		return array(
-			'form_link' => array()
-		);
 	}
 
 }

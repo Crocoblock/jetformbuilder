@@ -172,6 +172,89 @@ var _JetFBComponents = JetFBComponents,
 
 /***/ }),
 
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _JetFBMixins = JetFBMixins,
+    GetColumnComponent = _JetFBMixins.GetColumnComponent;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'EntriesList',
+  props: {
+    scope: {
+      type: String,
+      default: 'default'
+    }
+  },
+  mixins: [GetColumnComponent],
+  computed: {
+    storeGetters: function storeGetters() {
+      var _this$$store$getters;
+
+      return (_this$$store$getters = this.$store.getters['scope-' + this.scope]) !== null && _this$$store$getters !== void 0 ? _this$$store$getters : this.$store.getters;
+    }
+  },
+  methods: {
+    getItemComponent: function getItemComponent(column) {
+      return this.getColumnComponentByPrefix(column, 'item');
+    },
+    getColumnType: function getColumnType(column) {
+      var _this$storeGetters$li, _this$storeGetters$li2;
+
+      return (_this$storeGetters$li = (_this$storeGetters$li2 = this.storeGetters.list[column]) === null || _this$storeGetters$li2 === void 0 ? void 0 : _this$storeGetters$li2.type) !== null && _this$storeGetters$li !== void 0 ? _this$storeGetters$li : false;
+    },
+    getColumnValue: function getColumnValue(column) {
+      var _this$storeGetters$li3, _this$storeGetters$li4;
+
+      return (_this$storeGetters$li3 = (_this$storeGetters$li4 = this.storeGetters.list[column]) === null || _this$storeGetters$li4 === void 0 ? void 0 : _this$storeGetters$li4.value) !== null && _this$storeGetters$li3 !== void 0 ? _this$storeGetters$li3 : '';
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js& ***!
@@ -217,16 +300,15 @@ var applyFilters = wp.hooks.applyFilters;
     EntriesTableSkeleton: _EntriesTableSkeleton__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
-    storeGetters: function storeGetters() {
-      var _this$$store$getters;
-
-      return (_this$$store$getters = this.$store.getters['scope-' + this.scope]) !== null && _this$$store$getters !== void 0 ? _this$$store$getters : this.$store.getters;
+    store: function store() {
+      var getters = mapGetters('scope-' + this.scope, ['list', 'columns', 'isLoading']);
+      debugger;
+      return getters;
     }
   },
   created: function created() {
     this.components = applyFilters("jet.fb.admin.table.".concat(this.scope), []);
-  },
-  methods: {}
+  }
 });
 
 /***/ }),
@@ -243,12 +325,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./admin-vuex-package/constants.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -370,20 +446,11 @@ var CHOOSE_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CHOOSE_AC
     CLICK_ACTION = _constants__WEBPACK_IMPORTED_MODULE_0__["default"].CLICK_ACTION;
 var _JetFBMixins = JetFBMixins,
     GetColumnComponent = _JetFBMixins.GetColumnComponent;
-var _JetFBComponents = JetFBComponents,
-    ChooseColumn = _JetFBComponents.ChooseColumn,
-    LinkTypeColumn = _JetFBComponents.LinkTypeColumn;
 var _window$Vuex = window.Vuex,
     mapState = _window$Vuex.mapState,
     mapGetters = _window$Vuex.mapGetters,
     mapActions = _window$Vuex.mapActions,
     mapMutations = _window$Vuex.mapMutations;
-var defaultColumns = {
-  choose: ChooseColumn
-};
-var defaultTypes = {
-  link: LinkTypeColumn
-};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'EntriesTableSkeleton',
   props: {
@@ -405,8 +472,7 @@ var defaultTypes = {
   },
   mixins: [GetColumnComponent],
   created: function created() {
-    this.attachComponentsByColumn();
-    this.attachComponentsByType();
+    debugger;
   },
   computed: _objectSpread({
     rootClasses: function rootClasses() {
@@ -427,46 +493,6 @@ var defaultTypes = {
     }
   }, mapState(['doingAction'])),
   methods: _objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction'])), mapActions(['runRowAction'])), {}, {
-    attachComponentsByType: function attachComponentsByType() {
-      var _this$list$;
-
-      var first = (_this$list$ = this.list[0]) !== null && _this$list$ !== void 0 ? _this$list$ : {};
-      var types = Object.keys(defaultTypes);
-
-      for (var _i = 0, _types = types; _i < _types.length; _i++) {
-        var typeName = _types[_i];
-
-        var _iterator = _createForOfIteratorHelper(this.columnsIDs),
-            _step;
-
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var _first$firstColumn;
-
-            var firstColumn = _step.value;
-
-            if (typeName === ((_first$firstColumn = first[firstColumn]) === null || _first$firstColumn === void 0 ? void 0 : _first$firstColumn.type)) {
-              this.componentsCols.push(defaultTypes[typeName]);
-            }
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-      }
-    },
-    attachComponentsByColumn: function attachComponentsByColumn() {
-      this.columnsIDs = Object.keys(this.columns);
-
-      for (var columnName in defaultColumns) {
-        if (!this.columnsIDs.includes(columnName)) {
-          continue;
-        }
-
-        this.componentsCols.push(defaultColumns[columnName]);
-      }
-    },
     getHeadingComponent: function getHeadingComponent(column) {
       return this.getColumnComponentByPrefix(column, 'head');
     },
@@ -778,10 +804,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     PostBoxContainer: _PostBoxContainer__WEBPACK_IMPORTED_MODULE_0__["default"],
     PostBoxSimple: _PostBoxSimple__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  data: function data() {
-    return {};
-  },
-  created: function created() {},
   computed: {
     bodyClasses: function bodyClasses() {
       return _defineProperty({
@@ -806,6 +828,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostBoxSkeleton */ "./admin-vuex-package/components/PostBoxSkeleton.vue");
 /* harmony import */ var _EntriesTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
+/* harmony import */ var _EntriesList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EntriesList */ "./admin-vuex-package/components/EntriesList.vue");
 //
 //
 //
@@ -827,21 +850,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'PostBoxSimple',
-  props: {
-    title: String,
-    slug: String,
-    list: Object | Array,
-    isTable: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: ['title', 'slug', 'list', 'renderType'],
   components: {
     EntriesTable: _EntriesTable__WEBPACK_IMPORTED_MODULE_1__["default"],
+    EntriesList: _EntriesList__WEBPACK_IMPORTED_MODULE_2__["default"],
     PostBoxSkeleton: _PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
 });
@@ -1246,8 +1270,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
-  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  state: function state() {
+    return _state__WEBPACK_IMPORTED_MODULE_0__["default"];
+  },
   getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
   actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -1398,8 +1423,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
-  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  state: function state() {
+    return _state__WEBPACK_IMPORTED_MODULE_0__["default"];
+  },
   getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
   actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -1524,8 +1550,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
-  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  state: function state() {
+    return _state__WEBPACK_IMPORTED_MODULE_0__["default"];
+  },
   getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"]
 });
@@ -1753,8 +1780,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
-  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  state: function state() {
+    return _state__WEBPACK_IMPORTED_MODULE_0__["default"];
+  },
   getters: _getters__WEBPACK_IMPORTED_MODULE_1__["default"],
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_2__["default"],
   actions: _actions__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -1882,8 +1910,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
-  state: _state__WEBPACK_IMPORTED_MODULE_0__["default"],
+  state: function state() {
+    return _state__WEBPACK_IMPORTED_MODULE_0__["default"];
+  },
   getters: _getters__WEBPACK_IMPORTED_MODULE_2__["default"],
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_1__["default"]
 });
@@ -2047,7 +2076,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  strict: true,
   actions: _actions__WEBPACK_IMPORTED_MODULE_4__["default"],
   modules: {
     chooseColumn: _choose_column__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -2069,6 +2097,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "config": () => (/* binding */ config),
+/* harmony export */   "getBoxSlug": () => (/* binding */ getBoxSlug),
+/* harmony export */   "withScope": () => (/* binding */ withScope),
+/* harmony export */   "getScopeName": () => (/* binding */ getScopeName),
 /* harmony export */   "registerNamespacedModule": () => (/* binding */ registerNamespacedModule),
 /* harmony export */   "setTableSeed": () => (/* binding */ setTableSeed)
 /* harmony export */ });
@@ -2079,23 +2110,38 @@ __webpack_require__.r(__webpack_exports__);
 var config = function config() {
   return window.JetFBPageConfig;
 };
-function registerNamespacedModule(store) {
-  var namespace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
-  store.registerModule("scope-".concat(namespace), 'default' === namespace || !namespace ? _stable_view__WEBPACK_IMPORTED_MODULE_0__["default"] : _single_view__WEBPACK_IMPORTED_MODULE_1__["default"]);
+function getBoxSlug(box) {
+  return 'string' === typeof box ? box : (box === null || box === void 0 ? void 0 : box.slug) || 'default';
+}
+function withScope(box) {
+  var pref = getScopeName(box);
+  return function (method) {
+    return "".concat(pref, "/").concat(method);
+  };
+}
+function getScopeName(box) {
+  return 'scope-' + getBoxSlug(box);
+}
+function registerNamespacedModule(store, box) {
+  var slug = getBoxSlug(box);
+  var module = 'default' === slug ? _stable_view__WEBPACK_IMPORTED_MODULE_0__["default"] : _single_view__WEBPACK_IMPORTED_MODULE_1__["default"];
+  store.registerModule(getScopeName(box), module);
 }
 function setTableSeed(store, source) {
   var _source$list = source.list,
       list = _source$list === void 0 ? [] : _source$list,
       _source$columns = source.columns,
       columns = _source$columns === void 0 ? {} : _source$columns,
-      total = source.total,
+      _source$total = source.total,
+      total = _source$total === void 0 ? 0 : _source$total,
       actions = source.actions;
-  store.commit('setColumns', columns);
-  store.commit('setList', list);
+  var getName = withScope(source);
   store.commit('setActionsList', actions);
-  store.commit('setTotal', total);
-  store.commit('setLimit', store.getters.list.length);
-  store.dispatch('setQueriedPage', 1);
+  store.commit(getName('setColumns'), columns);
+  store.commit(getName('setList'), list);
+  store.commit(getName('setTotal'), total);
+  store.commit(getName('setLimit'), list === null || list === void 0 ? void 0 : list.length);
+  store.dispatch(getName('setQueriedPage'), 1);
 }
 
 /***/ }),
@@ -2129,7 +2175,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 function registerMetaBox(store, box) {
-  (0,_functions__WEBPACK_IMPORTED_MODULE_0__.registerNamespacedModule)(store, box.slug);
+  (0,_functions__WEBPACK_IMPORTED_MODULE_0__.registerNamespacedModule)(store, box);
   (0,_functions__WEBPACK_IMPORTED_MODULE_0__.setTableSeed)(store, box);
 }
 function SingleMetaBoxesPlugin(store) {
@@ -2141,7 +2187,7 @@ function SingleMetaBoxesPlugin(store) {
       var container = _step.value;
 
       var boxes = _toConsumableArray(container.boxes.filter(function (box) {
-        return box.is_table;
+        return ['table', 'list'].includes(box.render_type);
       }));
 
       var _iterator2 = _createForOfIteratorHelper(boxes),
@@ -2149,8 +2195,8 @@ function SingleMetaBoxesPlugin(store) {
 
       try {
         for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var box = _step2.value;
-          registerMetaBox(store, box);
+          var boxItem = _step2.value;
+          registerMetaBox(store, boxItem);
         }
       } catch (err) {
         _iterator2.e(err);
@@ -2249,7 +2295,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  namespace: true,
+  namespaced: true,
   modules: {
     view: _objectSpread({}, _modules_view__WEBPACK_IMPORTED_MODULE_0__["default"])
   }
@@ -2331,7 +2377,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 0.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-item__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AA6QA;EACC,YAAA;AC5QD;ADgRC;EACC,oBAAA;AC7QF;AD+QC;EACC,8BAAA;AC7QF;AD+QC;EACC,sBAAA;EACA,kBAAA;AC7QF;AD8QE;EACC,mBAAA;AC5QH;AD+QG;EACC,WAAA;AC7QJ;ADiRG;EACC,oBAAA;AC/QJ;ADkRE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AChRH;ADiRG;EACC,YAAA;AC/QJ;ADiRG;EACC,sBAAA;AC/QJ;ADiRK;EACC,gBAAA;AC/QN;ADkRI;EACC,oBAAA;EACA,eAAA;AChRL;ADoRE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AClRH;ADoRE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;AClRH;ADmRG;EACC,OAAA;ACjRJ;ADmRG;EACC,0BAAA;ACjRJ;ADmRG;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;ACjRJ;ADqRC;EACC,OAAA;ACnRF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--choose {\r\n\t\tpadding-right: unset;\r\n\t}\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 0.5em;\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1\r\n\t\t\t}\r\n\t\t\t&.cell--choose {\r\n\t\t\t\ttransform: translateY(25%);\r\n\t\t\t}\r\n\t\t\t& > span {\r\n\t\t\t\tdisplay: flex;\r\n\t\t\t\tjustify-content: flex-start;\r\n\t\t\t\talign-items: center;\r\n\t\t\t\tflex-wrap: wrap;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 0.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-item__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 0.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-item__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AAyOA;EACC,YAAA;ACxOD;AD4OC;EACC,oBAAA;ACzOF;AD2OC;EACC,8BAAA;ACzOF;AD2OC;EACC,sBAAA;EACA,kBAAA;ACzOF;AD0OE;EACC,mBAAA;ACxOH;AD2OG;EACC,WAAA;ACzOJ;AD6OG;EACC,oBAAA;AC3OJ;AD8OE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC5OH;AD6OG;EACC,YAAA;AC3OJ;AD6OG;EACC,sBAAA;AC3OJ;AD6OK;EACC,gBAAA;AC3ON;AD8OI;EACC,oBAAA;EACA,eAAA;AC5OL;ADgPE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AC9OH;ADgPE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;AC9OH;AD+OG;EACC,OAAA;AC7OJ;AD+OG;EACC,0BAAA;AC7OJ;AD+OG;EACC,aAAA;EACA,2BAAA;EACA,mBAAA;EACA,eAAA;AC7OJ;ADiPC;EACC,OAAA;AC/OF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel--loading {\r\n\topacity: 0.5;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--choose {\r\n\t\tpadding-right: unset;\r\n\t}\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 0.5em;\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1\r\n\t\t\t}\r\n\t\t\t&.cell--choose {\r\n\t\t\t\ttransform: translateY(25%);\r\n\t\t\t}\r\n\t\t\t& > span {\r\n\t\t\t\tdisplay: flex;\r\n\t\t\t\tjustify-content: flex-start;\r\n\t\t\t\talign-items: center;\r\n\t\t\t\tflex-wrap: wrap;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n\n.cx-vue-list-table .cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 0.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-item__cell.cell--choose {\n  transform: translateY(25%);\n}\n.cx-vue-list-table .list-table-item__cell > span {\n  display: flex;\n  justify-content: flex-start;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2439,7 +2485,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.misc-pub-section {\n\tborder-bottom: 1px solid #ececec;\n}\n.misc-pub-section:last-child {\n\tborder-bottom: unset;\n}\n\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/PostBoxSimple.vue"],"names":[],"mappings":";AA6CA;CACA,gCAAA;AACA;AAEA;CACA,oBAAA;AACA","sourcesContent":["<template>\n\t<PostBoxSkeleton\n\t\t:title=\"title\"\n\t\t:slug=\"slug\"\n\t>\n\t\t<div id=\"misc-publishing-actions\" v-if=\"! isTable\">\n\t\t\t<div\n\t\t\t\tclass=\"misc-pub-section\"\n\t\t\t\tv-for=\"(value, name) in list\"\n\t\t\t\t:key=\"name\"\n\t\t\t>\n\t\t\t\t{{ name }}: <strong>{{ value }}</strong>\n\t\t\t</div>\n\t\t</div>\n\t\t<EntriesTable\n\t\t\tv-else\n\t\t\t:scope=\"slug\"\n\t\t/>\n\t</PostBoxSkeleton>\n</template>\n\n<script>\nimport PostBoxSkeleton from './PostBoxSkeleton';\nimport EntriesTable from './EntriesTable';\n\nexport default {\n\tname: 'PostBoxSimple',\n\tprops: {\n\t\ttitle: String,\n\t\tslug: String,\n\t\tlist: Object|Array,\n\t\tisTable: {\n\t\t\ttype: Boolean,\n\t\t\tdefault: false,\n\t\t},\n\t},\n\tcomponents: {\n\t\tEntriesTable,\n\t\tPostBoxSkeleton,\n\t},\n};\n</script>\n\n<style>\n\n.misc-pub-section {\n\tborder-bottom: 1px solid #ececec;\n}\n\n.misc-pub-section:last-child {\n\tborder-bottom: unset;\n}\n\n</style>"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.misc-pub-section {\n\tborder-bottom: 1px solid #ececec;\n}\n.misc-pub-section:last-child {\n\tborder-bottom: unset;\n}\n\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/PostBoxSimple.vue"],"names":[],"mappings":";AAoDA;CACA,gCAAA;AACA;AAEA;CACA,oBAAA;AACA","sourcesContent":["<template>\n\t<PostBoxSkeleton\n\t\t:title=\"title\"\n\t\t:slug=\"slug\"\n\t>\n\t\t<EntriesTable\n\t\t\tv-if=\"'table' === renderType\"\n\t\t\t:scope=\"slug\"\n\t\t/>\n\t\t<EntriesList\n\t\t\tv-else-if=\"'list' === renderType\"\n\t\t\t:scope=\"slug\"\n\t\t/>\n\t\t<div\n\t\t\tid=\"misc-publishing-actions\"\n\t\t\tv-else\n\t\t>\n\t\t\t<div\n\t\t\t\tclass=\"misc-pub-section\"\n\t\t\t\tv-for=\"(value, name) in list\"\n\t\t\t\t:key=\"name\"\n\t\t\t>\n\t\t\t\t{{ name }}: <strong>{{ value }}</strong>\n\t\t\t</div>\n\t\t</div>\n\t</PostBoxSkeleton>\n</template>\n\n<script>\nimport PostBoxSkeleton from './PostBoxSkeleton';\nimport EntriesTable from './EntriesTable';\nimport EntriesList from './EntriesList';\n\n\nexport default {\n\tname: 'PostBoxSimple',\n\tprops: [\n\t\t'title',\n\t\t'slug',\n\t\t'list',\n\t\t'renderType',\n\t],\n\tcomponents: {\n\t\tEntriesTable,\n\t\tEntriesList,\n\t\tPostBoxSkeleton,\n\t},\n};\n</script>\n\n<style>\n\n.misc-pub-section {\n\tborder-bottom: 1px solid #ececec;\n}\n\n.misc-pub-section:last-child {\n\tborder-bottom: unset;\n}\n\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2683,6 +2729,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "admin-vuex-package/components/DetailsTableWithStore.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./admin-vuex-package/components/EntriesList.vue":
+/*!*******************************************************!*\
+  !*** ./admin-vuex-package/components/EntriesList.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EntriesList.vue?vue&type=template&id=1600d67d& */ "./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d&");
+/* harmony import */ var _EntriesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntriesList.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EntriesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__.render,
+  _EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "admin-vuex-package/components/EntriesList.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -3135,6 +3220,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EntriesList.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
   !*** ./admin-vuex-package/components/EntriesTable.vue?vue&type=script&lang=js& ***!
@@ -3342,6 +3443,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableWithStore_vue_vue_type_template_id_6f067e5e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailsTableWithStore_vue_vue_type_template_id_6f067e5e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DetailsTableWithStore.vue?vue&type=template&id=6f067e5e& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/DetailsTableWithStore.vue?vue&type=template&id=6f067e5e&");
+
+
+/***/ }),
+
+/***/ "./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d&":
+/*!**************************************************************************************!*\
+  !*** ./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntriesList_vue_vue_type_template_id_1600d67d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EntriesList.vue?vue&type=template&id=1600d67d& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d&");
 
 
 /***/ }),
@@ -3741,6 +3859,89 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesList.vue?vue&type=template&id=1600d67d& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: "misc-publishing-actions" } },
+    _vm._l(_vm.storeGetters.columns, function (ref, column) {
+      var label = ref.label
+      return _c(
+        "div",
+        { key: column, staticClass: "misc-pub-section" },
+        [
+          _vm._v("\n\t\t" + _vm._s(label) + ":\n\t\t"),
+          _vm.getItemComponent(column)
+            ? [
+                _c(
+                  "keep-alive",
+                  [
+                    _c(_vm.getItemComponent(column), {
+                      tag: "component",
+                      attrs: {
+                        value: _vm.getColumnValue(column),
+                        "full-entry": _vm.storeGetters.list,
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]
+            : _vm.getItemComponent(_vm.getColumnType(column))
+            ? [
+                _c(
+                  "keep-alive",
+                  [
+                    _c(_vm.getItemComponent(_vm.getColumnType(column)), {
+                      tag: "component",
+                      attrs: {
+                        value: _vm.getColumnValue(column),
+                        "full-entry": _vm.storeGetters.list,
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]
+            : [
+                _vm._v(
+                  "\n\t\t\t" +
+                    _vm._s(
+                      _vm.storeGetters.list[column]
+                        ? _vm.storeGetters.list[column].value
+                        : column
+                    ) +
+                    "\n\t\t"
+                ),
+              ],
+        ],
+        2
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=template&id=7f29adff&":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/EntriesTable.vue?vue&type=template&id=7f29adff& ***!
@@ -3759,9 +3960,9 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("EntriesTableSkeleton", {
     attrs: {
-      list: _vm.storeGetters.list,
-      columns: _vm.storeGetters.columns,
-      loading: _vm.storeGetters.isLoading("page"),
+      list: _vm.list,
+      columns: _vm.columns,
+      loading: _vm.isLoading("page"),
       "columns-components": _vm.components,
     },
   })
@@ -4249,15 +4450,15 @@ var render = function () {
               var slug = ref.slug
               var title = ref.title
               var list = ref.list
-              var is_table = ref.is_table
-              if (is_table === void 0) is_table = false
+              var render_type = ref.render_type
+              if (render_type === void 0) render_type = false
               return _c("PostBoxSimple", {
                 key: slug,
                 attrs: {
                   slug: slug,
                   title: title,
                   list: list,
-                  "is-table": is_table,
+                  "render-type": render_type,
                 },
               })
             }),
@@ -4296,8 +4497,11 @@ var render = function () {
     "PostBoxSkeleton",
     { attrs: { title: _vm.title, slug: _vm.slug } },
     [
-      !_vm.isTable
-        ? _c(
+      "table" === _vm.renderType
+        ? _c("EntriesTable", { attrs: { scope: _vm.slug } })
+        : "list" === _vm.renderType
+        ? _c("EntriesList", { attrs: { scope: _vm.slug } })
+        : _c(
             "div",
             { attrs: { id: "misc-publishing-actions" } },
             _vm._l(_vm.list, function (value, name) {
@@ -4307,8 +4511,7 @@ var render = function () {
               ])
             }),
             0
-          )
-        : _c("EntriesTable", { attrs: { scope: _vm.slug } }),
+          ),
     ],
     1
   )
@@ -5061,11 +5264,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PostBoxGrid__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/PostBoxGrid */ "./admin-vuex-package/components/PostBoxGrid.vue");
 /* harmony import */ var _components_PostBoxContainer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/PostBoxContainer */ "./admin-vuex-package/components/PostBoxContainer.vue");
 /* harmony import */ var _components_PostBoxSimple__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/PostBoxSimple */ "./admin-vuex-package/components/PostBoxSimple.vue");
+/* harmony import */ var _components_EntriesList__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/EntriesList */ "./admin-vuex-package/components/EntriesList.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -5093,7 +5298,8 @@ window.JetFBComponents = _objectSpread(_objectSpread({}, window.JetFBComponents)
   PostBoxSkeleton: _components_PostBoxSkeleton__WEBPACK_IMPORTED_MODULE_12__["default"],
   PostBoxGrid: _components_PostBoxGrid__WEBPACK_IMPORTED_MODULE_13__["default"],
   PostBoxContainer: _components_PostBoxContainer__WEBPACK_IMPORTED_MODULE_14__["default"],
-  PostBoxSimple: _components_PostBoxSimple__WEBPACK_IMPORTED_MODULE_15__["default"]
+  PostBoxSimple: _components_PostBoxSimple__WEBPACK_IMPORTED_MODULE_15__["default"],
+  EntriesList: _components_EntriesList__WEBPACK_IMPORTED_MODULE_16__["default"]
 });
 window.JetFBMixins = _objectSpread(_objectSpread({}, window.JetFBMixins), {}, {
   FilterMixin: _mixins_FilterMixin__WEBPACK_IMPORTED_MODULE_7__["default"]

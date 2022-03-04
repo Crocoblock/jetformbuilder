@@ -4,7 +4,7 @@ import * as fieldType from './field-type-column';
 const { addFilter } = wp.hooks;
 
 addFilter( 'jet.fb.admin.table.form-fields', 'jet-form-builder', components => {
-	components.push( fieldType )
+	components.push( fieldType );
 
 	return components;
 } );

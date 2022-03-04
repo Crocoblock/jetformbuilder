@@ -1,0 +1,15 @@
+<?php
+
+
+namespace Jet_Form_Builder\Admin\Table_Views\Columns;
+
+
+use Jet_Form_Builder\Admin\Table_Views\Actions\View_Single_Action;
+
+abstract class Base_Header_Actions_Column extends Base_Actions_Column {
+
+	protected function is_active( View_Single_Action $action, array $record ): bool {
+		return $action->show_in_header();
+	}
+
+}

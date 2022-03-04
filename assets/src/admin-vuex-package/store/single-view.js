@@ -1,7 +1,7 @@
 import view from './modules/view';
 
 export default {
-	namespace: true,
+	namespaced: true,
 	modules: {
 		view: {
 			...view,

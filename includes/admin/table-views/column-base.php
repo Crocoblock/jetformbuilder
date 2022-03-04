@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Admin\Table_Views;
 abstract class Column_Base {
 
 	protected $column = '';
-	protected $type = 'string';
+	protected $type   = 'string';
 
 	public function __construct( $column = '' ) {
 		$this->set_column( $column );
@@ -20,7 +20,7 @@ abstract class Column_Base {
 		return $this;
 	}
 
-	protected function get_value( array $record ) {
+	public function get_value( array $record = array() ) {
 		return $record[ $this->column ] ?? false;
 	}
 

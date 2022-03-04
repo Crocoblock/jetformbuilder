@@ -119,24 +119,11 @@ const {
 const { GetColumnComponent } = JetFBMixins;
 
 const {
-	ChooseColumn,
-	LinkTypeColumn,
-} = JetFBComponents;
-
-const {
 	mapState,
 	mapGetters,
 	mapActions,
 	mapMutations,
 } = window.Vuex;
-
-const defaultColumns = {
-	choose: ChooseColumn,
-};
-
-const defaultTypes = {
-	link: LinkTypeColumn,
-};
 
 export default {
 	name: 'EntriesTableSkeleton',
@@ -159,8 +146,7 @@ export default {
 	},
 	mixins: [ GetColumnComponent ],
 	created() {
-		this.attachComponentsByColumn();
-		this.attachComponentsByType();
+		debugger;
 	},
 	computed: {
 		rootClasses() {
@@ -192,28 +178,6 @@ export default {
 		...mapActions( [
 			'runRowAction',
 		] ),
-		attachComponentsByType() {
-			const first = this.list[ 0 ] ?? {};
-			const types = Object.keys( defaultTypes );
-
-			for ( const typeName of types ) {
-				for ( const firstColumn of this.columnsIDs ) {
-					if ( typeName === first[ firstColumn ]?.type ) {
-						this.componentsCols.push( defaultTypes[ typeName ] );
-					}
-				}
-			}
-		},
-		attachComponentsByColumn() {
-			this.columnsIDs = Object.keys( this.columns );
-
-			for ( const columnName in defaultColumns ) {
-				if ( ! this.columnsIDs.includes( columnName ) ) {
-					continue;
-				}
-				this.componentsCols.push( defaultColumns[ columnName ] );
-			}
-		},
 		getHeadingComponent( column ) {
 			return this.getColumnComponentByPrefix( column, 'head' );
 		},

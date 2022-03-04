@@ -15,14 +15,14 @@ class View_Action extends Link_Single_Action {
 	private $single;
 
 	public function get_slug(): string {
-		return 'mark_view';
+		return 'view';
 	}
 
 	public function get_label(): string {
-		return __( 'Mark as Viewed', 'jet-form-builder' );
+		return __( 'View', 'jet-form-builder' );
 	}
 
-	public function show_in_header( array $record ): bool {
+	public function show_in_header(): bool {
 		return false;
 	}
 

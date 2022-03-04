@@ -17,7 +17,7 @@ class Mark_Not_Viewed_Action extends Api_Single_Action {
 		return __( 'Mark as not Viewed', 'jet-form-builder' );
 	}
 
-	public function show_in_header( array $record ): bool {
+	public function show_in_header(): bool {
 		return true;
 	}
 

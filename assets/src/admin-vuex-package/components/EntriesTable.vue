@@ -1,8 +1,8 @@
 <template>
 	<EntriesTableSkeleton
-		:list="storeGetters.list"
-		:columns="storeGetters.columns"
-		:loading="storeGetters.isLoading( 'page' )"
+		:list="list"
+		:columns="columns"
+		:loading="isLoading( 'page' )"
 		:columns-components="components"
 	></EntriesTableSkeleton>
 </template>
@@ -24,22 +24,32 @@ export default {
 	props: {
 		scope: {
 			type: String,
-			default: 'default'
+			default: 'default',
 		},
 	},
-	data: () => ({
-		components: []
-	}),
+	data: () => (
+		{
+			components: [],
+		}
+	),
 	components: { EntriesTableSkeleton },
 	computed: {
-		storeGetters() {
-			return this.$store.getters[ 'scope-' + this.scope ] ?? this.$store.getters;
+		store() {
+			const getters = mapGetters( 'scope-' + this.scope, [
+				'list',
+				'columns',
+				'isLoading',
+			] );
+
+			debugger;
+
+			return getters;
 		},
+
 	},
 	created() {
-		this.components = applyFilters( `jet.fb.admin.table.${this.scope}`, [] );
+		this.components = applyFilters( `jet.fb.admin.table.${ this.scope }`, [] );
 	},
-	methods: {},
 };
 </script>
 

@@ -7,13 +7,14 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 
 class Referrer_Link_Column extends Column_Advanced_Base {
 
-	protected $type = 'link';
+	protected $column = 'from_content_id';
+	protected $type   = 'link';
 
 	public function get_label(): string {
 		return __( 'Referrer', 'jet-form-builder' );
 	}
 
-	protected function get_value( array $record ) {
+	public function get_value( array $record = array() ) {
 		$id = parent::get_value( $record );
 
 		$text   = get_the_title( $id );

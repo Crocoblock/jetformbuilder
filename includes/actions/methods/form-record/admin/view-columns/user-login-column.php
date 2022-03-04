@@ -10,10 +10,10 @@ class User_Login_Column extends Column_Advanced_Base {
 	protected $column = 'user_id';
 
 	public function get_label(): string {
-		return __( 'User Login', 'jet-form-builder' );
+		return __( 'Submitted By', 'jet-form-builder' );
 	}
 
-	protected function get_value( array $record ) {
+	public function get_value( array $record = array() ) {
 		$id   = parent::get_value( $record );
 		$user = get_user_by( 'ID', $id );
 

@@ -5,7 +5,6 @@ import chooseColumn from '../choose-column';
 import actions from './actions';
 
 export default {
-	strict: true,
 	actions,
 	modules: {
 		chooseColumn,

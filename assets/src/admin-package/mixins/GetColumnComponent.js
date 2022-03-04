@@ -1,3 +1,6 @@
+import * as ChooseColumn from '../entries-table-columns/choose';
+import * as LinkTypeColumn from '../entries-table-columns/link-type';
+
 export default {
 	props: {
 		columnsComponents: {
@@ -14,7 +17,7 @@ export default {
 		};
 	},
 	created() {
-		this.componentsCols = [ ...this.columnsComponents ];
+		this.componentsCols = [ ...this.columnsComponents, ChooseColumn, LinkTypeColumn ];
 	},
 	methods: {
 		getColumnComponentByPrefix( column, prefix ) {

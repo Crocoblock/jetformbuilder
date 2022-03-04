@@ -10,6 +10,9 @@ use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 
 abstract class Base_Meta_Box {
 
+	const TYPE_LIST  = 'list';
+	const TYPE_TABLE = 'table';
+
 	use Repository_Item_With_Class;
 
 	abstract public function get_title(): string;

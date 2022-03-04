@@ -14,6 +14,7 @@ import PostBoxSkeleton from './components/PostBoxSkeleton';
 import PostBoxGrid from './components/PostBoxGrid';
 import PostBoxContainer from './components/PostBoxContainer';
 import PostBoxSimple from './components/PostBoxSimple';
+import EntriesList from './components/EntriesList';
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -26,7 +27,8 @@ window.JetFBComponents = {
 	PostBoxSkeleton,
 	PostBoxGrid,
 	PostBoxContainer,
-	PostBoxSimple
+	PostBoxSimple,
+	EntriesList,
 };
 
 window.JetFBMixins = {

@@ -8,4 +8,10 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 
 class Actions_Column extends Column_Base {
 
+	protected $type = 'rawArray';
+
+	protected function get_value( array $record ) {
+
+	}
+
 }

@@ -96,22 +96,6 @@ class Records_Table_View extends View_Advanced_Base {
 
 	public function get_single_actions(): array {
 		return array(
-			array(
-				'value'    => 'mark_viewed',
-				'label'    => __( 'Mark as Viewed', 'jet-form-builder' ),
-				'endpoint' => array(
-					'method' => Mark_As_Viewed_Record_Endpoint::get_methods(),
-					'url'    => Mark_As_Viewed_Record_Endpoint::rest_url(),
-				),
-			),
-			array(
-				'value'    => 'mark_not_viewed',
-				'label'    => __( 'Mark as not Viewed', 'jet-form-builder' ),
-				'endpoint' => array(
-					'method' => Mark_As_Not_Viewed_Record_Endpoint::get_methods(),
-					'url'    => Mark_As_Not_Viewed_Record_Endpoint::rest_url(),
-				),
-			),
 		);
 	}
 

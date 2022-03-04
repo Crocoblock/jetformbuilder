@@ -15,6 +15,10 @@ abstract class View_Single_Action implements Repository_Item_Instance_Trait {
 
 	abstract public function get_label(): string;
 
+	abstract public function show_in_header( array $record ): bool;
+
+	abstract public function show_in_row( array $record ): bool;
+
 	public function get_type(): string {
 		return '';
 	}

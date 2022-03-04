@@ -4,10 +4,15 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions;
 
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Mark_As_Viewed_Record_Endpoint;
-use Jet_Form_Builder\Admin\Table_Views\Actions\Api_Single_Action;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
+use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
+use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;
 
-class View_Action extends Api_Single_Action {
+class View_Action extends Link_Single_Action {
+
+	/** @var Base_Single_Page */
+	private $single;
 
 	public function get_slug(): string {
 		return 'mark_view';
@@ -18,18 +23,22 @@ class View_Action extends Api_Single_Action {
 	}
 
 	public function show_in_header( array $record ): bool {
-		return true;
+		return false;
 	}
 
+	/**
+	 * @param array $record
+	 *
+	 * @return bool
+	 * @throws Not_Found_Page_Exception
+	 */
 	public function show_in_row( array $record ): bool {
+		$this->single = ( new Single_Form_Record_Page() )->set_id( $record['id'] );
+
 		return true;
 	}
 
-	public function get_method(): string {
-		return Mark_As_Viewed_Record_Endpoint::get_methods();
-	}
-
-	public function get_rest_url(): string {
-		return Mark_As_Viewed_Record_Endpoint::rest_url();
+	public function get_href(): string {
+		return $this->single->get_url();
 	}
 }

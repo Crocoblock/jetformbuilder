@@ -1,5 +1,5 @@
-import * as ChooseColumn from '../entries-table-columns/choose';
-import * as LinkTypeColumn from '../entries-table-columns/link-type';
+import * as ChooseColumn from '../components/TableColumns/choose';
+import * as LinkTypeColumn from '../components/TableColumns/link-type';
 
 export default {
 	props: {

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../../mixins/ParseIncomingValueMixin';
+const { ParseIncomingValueMixin } = JetFBMixins;
 
 export default {
 	name: 'payer--item',

@@ -2,9 +2,12 @@ const getters = {
 	getAction: state => id => {
 		return state.actionsList.find( action => id === action.value );
 	},
-	isDoing: state => {
-		return state.doingAction;
-	}
+	actionsList: state => {
+		return state.actionsList;
+	},
+	currentAction: state => {
+		return state.currentAction;
+	},
 };
 
 export default {

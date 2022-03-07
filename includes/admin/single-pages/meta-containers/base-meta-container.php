@@ -60,6 +60,17 @@ abstract class Base_Meta_Container {
 		$this->rep_install_item( $box );
 	}
 
+	/**
+	 * @param Base_Meta_Box $item
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function rep_before_install_item( $item ) {
+		if ( ! $item->is_active() ) {
+			$this->_rep_abort_this();
+		}
+	}
+
 	public function set_index( int $index ): Base_Meta_Container {
 		$this->index = $index;
 

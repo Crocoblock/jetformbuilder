@@ -2,13 +2,15 @@
 	<EntriesTableSkeleton
 		:list="list"
 		:columns="columns"
-		:loading="isLoading( 'page' )"
+		:loading="isLoading"
 		:columns-components="components"
+		:scope="scope"
 	></EntriesTableSkeleton>
 </template>
 
 <script>
 import EntriesTableSkeleton from './EntriesTableSkeleton';
+import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
 const {
 	mapState,
@@ -21,34 +23,26 @@ const { applyFilters } = wp.hooks;
 
 export default {
 	name: 'entries-table',
-	props: {
-		scope: {
-			type: String,
-			default: 'default',
-		},
-	},
 	data: () => (
 		{
 			components: [],
 		}
 	),
 	components: { EntriesTableSkeleton },
-	computed: {
-		store() {
-			const getters = mapGetters( 'scope-' + this.scope, [
-				'list',
-				'columns',
-				'isLoading',
-			] );
-
-			debugger;
-
-			return getters;
-		},
-
-	},
+	mixins: [ ScopeStoreMixin ],
 	created() {
 		this.components = applyFilters( `jet.fb.admin.table.${ this.scope }`, [] );
+	},
+	computed: {
+		list() {
+			return this.getter( 'list' );
+		},
+		columns() {
+			return this.getter( 'columns' );
+		},
+		isLoading() {
+			return this.getter( 'isLoading', 'page' );
+		},
 	},
 };
 </script>

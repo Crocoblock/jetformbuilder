@@ -25,7 +25,11 @@ const {
 		  ClearFiltersButton,
 	  } = JetFBComponents;
 
-const { GetIncoming, i18n } = JetFBMixins;
+const {
+	GetIncoming,
+	i18n,
+	ScopeStoreMixin,
+} = JetFBMixins;
 
 const {
 		  mapMutations,
@@ -41,41 +45,36 @@ const filtersComponents = applyFilters( 'jet.fb.records.page.filters', [
 ] );
 
 export default {
-	name: "ActionsWithFilters",
+	name: 'ActionsWithFilters',
 	components: {
 		ChooseAction,
 		ListComponents,
 		ClearFiltersButton,
 	},
-	mixins: [ GetIncoming, i18n ],
+	mixins: [ GetIncoming, i18n, ScopeStoreMixin ],
 	data() {
 		return {
 			filtersComponents,
 		};
 	},
 	computed: {
-		...mapState( [
-			'doingAction',
-		] ),
 		...mapGetters( [
-			'hasFilters',
+			'isDoing',
 		] ),
+		hasFilters() {
+			return this.getter( 'hasFilters' );
+		},
 		wrapperClass() {
 			return {
 				'jfb-row-wrapper': true,
-				'jfb-row-wrapper--loading': this.doingAction,
+				'jfb-row-wrapper--loading': this.isDoing,
 			};
 		},
 	},
 	created() {
 		const { filters_endpoint } = this.getIncoming();
 
-		this.maybeFetchFilters( filters_endpoint );
-	},
-	methods: {
-		...mapActions( [
-			'maybeFetchFilters',
-		] ),
+		this.dispatch( 'maybeFetchFilters', filters_endpoint );
 	},
 }
 </script>

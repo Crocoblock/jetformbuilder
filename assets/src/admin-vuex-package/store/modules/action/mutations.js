@@ -8,9 +8,6 @@ export default {
 	/*
 	 for requests
 	 */
-	toggleDoingAction( state ) {
-		state.doingAction = ! state.doingAction;
-	},
 	setActionPromises( state, { action, promise, context = 'default' } ) {
 		state.actionsPromises = {
 			...state.actionsPromises,

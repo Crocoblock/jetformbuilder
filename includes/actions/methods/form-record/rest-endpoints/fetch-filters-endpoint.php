@@ -33,7 +33,7 @@ class Fetch_Filters_Endpoint extends Rest_Api_Endpoint_Base {
 		$forms = Tools::get_forms_list_for_js(
 			false,
 			array(
-				'include' => $form_ids
+				'include' => $form_ids,
 			)
 		);
 
@@ -43,7 +43,7 @@ class Fetch_Filters_Endpoint extends Rest_Api_Endpoint_Base {
 					'form' => array(
 						'options' => $forms,
 					),
-				)
+				),
 			)
 		);
 	}

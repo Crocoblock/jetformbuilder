@@ -6,6 +6,7 @@ import ChooseAction from './components/ChooseAction';
 import Constants from './constants';
 import ClearFiltersButton from './components/ClearFiltersButton';
 import FilterMixin from './mixins/FilterMixin';
+import GetColumnComponent from './mixins/GetColumnComponent';
 import BaseStore from './store/base-store';
 import TableSeedPlugin from './store/plugins/table-seed';
 import TableModulePlugin from './store/plugins/table-module';
@@ -15,6 +16,12 @@ import PostBoxGrid from './components/PostBoxGrid';
 import PostBoxContainer from './components/PostBoxContainer';
 import PostBoxSimple from './components/PostBoxSimple';
 import EntriesList from './components/EntriesList';
+import * as ChooseColumn from './components/TableColumns/choose';
+import * as LinkTypeColumn from './components/TableColumns/link-type';
+import * as ActionsColumn from './components/TableColumns/actions';
+import * as PayerColumn from './components/TableColumns/payer';
+import ScopeStoreMixin from './mixins/ScopeStoreMixin';
+
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -29,11 +36,18 @@ window.JetFBComponents = {
 	PostBoxContainer,
 	PostBoxSimple,
 	EntriesList,
+	ChooseColumn,
+	ActionsColumn,
+	PayerColumn,
+	LinkTypeColumn,
 };
+
 
 window.JetFBMixins = {
 	...window.JetFBMixins,
 	FilterMixin,
+	GetColumnComponent,
+	ScopeStoreMixin,
 };
 
 

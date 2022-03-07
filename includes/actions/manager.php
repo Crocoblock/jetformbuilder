@@ -101,7 +101,7 @@ class Manager {
 	/**
 	 * @param $type
 	 *
-	 * @return mixed
+	 * @return Types\Base
 	 * @throws Repository_Exception
 	 */
 	public function get_action( $type ) {

@@ -3,5 +3,4 @@ export default {
 	actionsList: [],
 	actionsPromises: {},
 	// for disable action buttons: filter, apply list-action & other.
-	doingAction: false,
 };

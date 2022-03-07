@@ -8,6 +8,7 @@
 			<keep-alive>
 				<component
 					v-bind:is="component"
+					:scope="scope"
 				/>
 			</keep-alive>
 		</div>
@@ -21,6 +22,7 @@ export default {
 	name: "ListComponents",
 	props: {
 		components: Array,
+		scope: String,
 	},
 }
 </script>

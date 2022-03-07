@@ -48,4 +48,8 @@ class Pay_Now extends Scenario_View_Base {
 	public function get_raw_list( array $args ): array {
 		return array();
 	}
+
+	public function get_prepared_list( array $custom_list = array() ): array {
+		return array();
+	}
 }

@@ -1,6 +1,6 @@
 <template>
 	<cx-vui-button
-		@click="clearFiltersWithFetch"
+		@click="dispatch('clearFiltersWithFetch' )"
 		button-style="accent-border"
 		size="mini"
 	>
@@ -10,24 +10,22 @@
 
 <script>
 
+import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
+
 const {
-		  mapState,
-		  mapGetters,
-		  mapMutations,
-		  mapActions,
-	  } = Vuex;
+	mapState,
+	mapGetters,
+	mapMutations,
+	mapActions,
+} = Vuex;
 
 export default {
-	name: "ClearFiltersButton",
+	name: 'ClearFiltersButton',
 	props: {
 		label: String,
 	},
-	methods: {
-		...mapActions( [
-			'clearFiltersWithFetch'
-		] )
-	},
-}
+	mixins: [ ScopeStoreMixin ],
+};
 </script>
 
 <style>

@@ -1,16 +1,13 @@
-import action from './modules/action';
+import doingAction from './modules/doing-action';
 
 export default {
 	state: {
-		...action.state,
+		...doingAction.state,
 	},
 	getters: {
-		...action.getters,
+		...doingAction.getters,
 	},
 	mutations: {
-		...action.mutations,
-	},
-	actions: {
-		...action.actions
-	},
+		...doingAction.mutations,
+	}
 }

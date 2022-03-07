@@ -3,7 +3,11 @@
 		<h1 class="wp-heading-inline">{{ values.title }}</h1>
 		<PostBoxGrid
 			:containers="values.containers"
-		/>
+		>
+			<template #after-actions-log>
+				<h3>Hello World!</h3>
+			</template>
+		</PostBoxGrid>
 	</div>
 </template>
 

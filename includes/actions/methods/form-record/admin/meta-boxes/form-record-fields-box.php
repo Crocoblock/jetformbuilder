@@ -10,7 +10,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 
-class Form_Record_General_Box extends Base_Table_Box {
+class Form_Record_Fields_Box extends Base_Table_Box {
 
 	public function get_title(): string {
 		return __( 'Form Fields', 'jet-form-builder' );

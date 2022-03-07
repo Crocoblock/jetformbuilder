@@ -1,4 +1,3 @@
-import stableView from '../stable-view';
 import singleView from '../single-view';
 
 export const config = () => window.JetFBPageConfig;
@@ -9,23 +8,22 @@ export function getBoxSlug( box ) {
 	);
 }
 
+export function getScopeName( box ) {
+	return 'scope-' + getBoxSlug( box );
+}
+
+const getModule = () => singleView;
+
+export function registerNamespacedModule( store, box ) {
+	store.registerModule( getScopeName( box ), getModule() );
+}
+
 export function withScope( box ) {
 	const pref = getScopeName( box );
 
 	return method => {
 		return `${ pref }/${ method }`;
 	};
-}
-
-export function getScopeName( box ) {
-	return 'scope-' + getBoxSlug( box );
-}
-
-export function registerNamespacedModule( store, box ) {
-	const slug = getBoxSlug( box );
-	const module = 'default' === slug ? stableView : singleView;
-
-	store.registerModule( getScopeName( box ), module );
 }
 
 export function setTableSeed( store, source ) {
@@ -36,13 +34,25 @@ export function setTableSeed( store, source ) {
 		actions,
 	} = source;
 
-	const getName = withScope( source );
+	let getName = withScope( source );
 
-	store.commit( 'setActionsList', actions );
+	store.commit( getName( 'setActionsList' ), actions );
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setLimit' ), list?.length );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
+}
+
+export function setListSeed( store, source ) {
+	const {
+		list = {},
+		columns = {},
+	} = source;
+
+	let getName = withScope( source );
+
+	store.commit( getName( 'setColumns' ), columns );
+	store.commit( getName( 'setList' ), list );
 }

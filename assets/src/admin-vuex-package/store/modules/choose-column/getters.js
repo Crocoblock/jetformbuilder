@@ -1,4 +1,7 @@
 export default {
+	chooseHeadValue: state => {
+		return state.chooseHead;
+	},
 	isChecked: state => id => {
 		return state.checked.includes( id );
 	},

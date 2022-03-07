@@ -9,8 +9,8 @@
 		></cx-vui-select>
 		<cx-vui-button
 			@click="applyAction"
-			:loading="isLoading( 'applyButton' )"
-			:disabled="doingAction"
+			:loading="isLoading"
+			:disabled="isDoing"
 			button-style="accent-border"
 			size="mini"
 		>
@@ -21,6 +21,7 @@
 
 <script>
 import Constants from '../constants';
+import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
 const { i18n } = JetFBMixins;
 const { applyFilters } = wp.hooks;
@@ -41,45 +42,45 @@ const {
 
 export default {
 	name: 'ChooseAction',
-	mixins: [ i18n ],
+	mixins: [ i18n, ScopeStoreMixin ],
 	computed: {
-		...mapState( [
-			'doingAction',
-			'currentAction',
-			'actionsList',
-		] ),
 		...mapGetters( [
-			'isLoading'
+			'isDoing',
 		] ),
+		currentAction() {
+			return this.getter( 'currentAction' );
+		},
+		isLoading() {
+			return this.getter( 'isLoading', 'applyButton' );
+		},
+		actionsList() {
+			return this.getter( 'actionsList' );
+		},
 	},
 	methods: {
 		...mapMutations( [
 			'toggleDoingAction',
-			'setCurrentAction',
-			'toggleLoading',
-			'removeAll',
-			'unChooseHead'
 		] ),
-		...mapActions( [
-			'runRowAction',
-		] ),
+		setCurrentAction( value ) {
+			this.commit( 'setCurrentAction', value );
+		},
 		onFinish() {
-			this.toggleLoading( 'applyButton' );
+			this.commit( 'toggleLoading', 'applyButton' );
 			this.toggleDoingAction();
 		},
 		applyAction() {
 			this.onFinish();
 
-			this.runRowAction( {
+			this.dispatch( 'runRowAction', {
 				action: this.currentAction,
-				context: CHOOSE_ACTION
+				context: CHOOSE_ACTION,
 			} ).then( () => {
 				this.onFinish();
 			} ).catch( () => {
 				this.onFinish();
 			} ).finally( () => {
-				this.removeAll();
-				this.unChooseHead();
+				this.commit( 'removeAll' );
+				this.commit( 'unChooseHead' );
 			} );
 		},
 	},

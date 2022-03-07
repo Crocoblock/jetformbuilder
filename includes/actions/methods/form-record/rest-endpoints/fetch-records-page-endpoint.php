@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Table_Views\Records_Table_View;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;

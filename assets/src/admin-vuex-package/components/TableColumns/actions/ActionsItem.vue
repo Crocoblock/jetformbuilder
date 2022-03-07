@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ParseIncomingValueMixin from '../../mixins/ParseIncomingValueMixin';
+const { ParseIncomingValueMixin } = JetFBMixins;
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 

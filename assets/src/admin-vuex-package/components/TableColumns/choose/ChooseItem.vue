@@ -10,26 +10,28 @@
 </template>
 
 <script>
+import ScopeStoreMixin from '../../../mixins/ScopeStoreMixin';
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 export default {
 	name: 'choose--item',
 	props: [ 'value', 'full-entry' ],
+	mixins: [ ScopeStoreMixin ],
 	created() {
-		this.$store.commit( 'addToStore', {
+		this.commit( 'addToStore', {
 			id: this.value,
 		} );
 	},
 	methods: {
 		isChecked( value ) {
-			return this.$store.getters.isChecked( value );
+			return this.getter( 'isChecked', value );
 		},
 		isCheckedCurrent() {
 			return this.isChecked( this.value ) ? this.value : '';
 		},
 		onChange() {
-			this.$store.dispatch( 'changeChecked', {
+			this.dispatch( 'changeChecked', {
 				id: this.value,
 				active: ! this.isCheckedCurrent(),
 			} );
@@ -38,7 +40,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cx-vui-component {
 	padding: unset;
 }

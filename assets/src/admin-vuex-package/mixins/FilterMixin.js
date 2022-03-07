@@ -1,27 +1,15 @@
-const {
-	mapGetters,
-	mapMutations,
-	mapActions,
-} = Vuex;
+import ScopeStoreMixin from './ScopeStoreMixin';
 
 export default {
+	mixins: [ ScopeStoreMixin ],
 	computed: {
-		...mapGetters( [
-			'getFilter',
-		] ),
 		filter() {
-			return this.getFilter( this.filter_id );
+			return this.getter( 'getFilter', this.filter_id );
 		},
 	},
 	methods: {
-		...mapMutations( [
-			'setFilter',
-		] ),
-		...mapActions( [
-			'fetchPageWithFilters',
-		] ),
 		setCurrentFilter( props ) {
-			this.setFilter( {
+			this.commit( 'setFilter', {
 				slug: this.filter_id,
 				props,
 			} );
@@ -30,7 +18,7 @@ export default {
 			this.setCurrentFilter( {
 				selected: value,
 			} );
-			this.fetchPageWithFilters();
+			this.dispatch( 'fetchPageWithFilters' );
 		},
 	},
 };

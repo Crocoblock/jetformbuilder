@@ -12,7 +12,7 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 
-class Form_Record_Side_Box extends Base_List_Box {
+class Form_Record_Values_Box extends Base_List_Box {
 
 	public function get_title(): string {
 		return __( 'General Values', 'jet-form-builder' );

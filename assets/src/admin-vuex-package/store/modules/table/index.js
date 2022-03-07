@@ -3,7 +3,9 @@ import mutations from './mutations';
 import getters from './getters';
 
 export default {
-	state: () => state,
+	state: () => (
+		{ ...state }
+	),
 	getters,
 	mutations,
 };

@@ -15,6 +15,7 @@
 								<component
 									v-bind:is="getHeadingComponent( column )"
 									:value="columns[ column ]"
+									:scope="scope"
 								/>
 							</keep-alive>
 						</template>
@@ -41,6 +42,7 @@
 								<component
 									v-bind:is="getHeadingComponent( column )"
 									:value="columns[ column ]"
+									:scope="scope"
 								/>
 							</keep-alive>
 						</template>
@@ -72,6 +74,7 @@
 										:value="entry[column] ? entry[column].value : false"
 										:full-entry="entry"
 										:entry-id="entryID"
+										:scope="scope"
 									/>
 								</keep-alive>
 							</template>
@@ -82,6 +85,7 @@
 										:value="entry[column] ? entry[column].value : false"
 										:full-entry="entry"
 										:entry-id="entryID"
+										:scope="scope"
 									/>
 								</keep-alive>
 							</template>
@@ -110,13 +114,13 @@
 
 <script>
 import Constants from '../constants';
+import ScopePropMixin from '../mixins/ScopeStoreMixin';
+import GetColumnComponent from '../mixins/GetColumnComponent';
 
 const {
 	CHOOSE_ACTION,
 	CLICK_ACTION,
 } = Constants;
-
-const { GetColumnComponent } = JetFBMixins;
 
 const {
 	mapState,
@@ -144,9 +148,9 @@ export default {
 			columnsIDs: [],
 		};
 	},
-	mixins: [ GetColumnComponent ],
+	mixins: [ GetColumnComponent, ScopePropMixin ],
 	created() {
-		debugger;
+		this.columnsIDs = Object.keys( this.columns );
 	},
 	computed: {
 		rootClasses() {
@@ -167,16 +171,13 @@ export default {
 				);
 			} );
 		},
-		...mapState( [
-			'doingAction',
+		...mapGetters( [
+			'isDoing',
 		] ),
 	},
 	methods: {
 		...mapMutations( [
 			'toggleDoingAction',
-		] ),
-		...mapActions( [
-			'runRowAction',
 		] ),
 		getHeadingComponent( column ) {
 			return this.getColumnComponentByPrefix( column, 'head' );
@@ -194,7 +195,7 @@ export default {
 				'list-table-item-actions-single': true,
 				[ class_name ]: true,
 				[ 'list-table-item-actions-single--type-' + type ]: true,
-				'disabled': this.doingAction,
+				'disabled': this.isDoing,
 			};
 		},
 		isShown( column ) {
@@ -206,17 +207,19 @@ export default {
 				'list-table-item--has-choose': entry?.choose?.value,
 				'list-table-item--has-actions': entry?.actions?.value?.length,
 				[ 'list-table-item--' + entryID ]: true,
-				...( entry?.classes?.value ?? {} ),
+				...(
+					entry?.classes?.value ?? {}
+				),
 			};
 		},
-		onClickAction( { value: action }, { id } ) {
+		onClickAction( action, { id } ) {
 			if ( action?.href ) {
 				return;
 			}
 			this.toggleDoingAction();
 
-			this.runRowAction( {
-				action,
+			this.dispatch( 'runRowAction', {
+				action: action.value,
 				context: CLICK_ACTION,
 				payload: [ id.value ],
 			} ).then( () => {
@@ -254,6 +257,9 @@ export default {
 			}
 		}
 		&--has-actions {
+			.list-table-item__cell.cell--choose {
+				transform: translateY(25%);
+			}
 			.list-table-item-columns {
 				margin-bottom: 1.5em;
 			}
@@ -294,9 +300,7 @@ export default {
 			&:not(.cell--choose) {
 				flex: 1
 			}
-			&.cell--choose {
-				transform: translateY(25%);
-			}
+
 			& > span {
 				display: flex;
 				justify-content: flex-start;

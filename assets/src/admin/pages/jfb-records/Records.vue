@@ -91,7 +91,7 @@ export default {
 		} );
 	},
 	computed: {
-		...mapGetters( [
+		...mapGetters( 'scope-default', [
 			'getAction',
 			'getCurrentAction',
 			'fetchListOptions',
@@ -99,14 +99,14 @@ export default {
 		] ),
 	},
 	methods: {
-		...mapMutations( [
+		...mapMutations( [ 'toggleDoingAction' ] ),
+		...mapMutations( 'scope-default', [
 			'setList',
 			'setActionsList',
 			'setActionPromises',
-			'toggleDoingAction',
 			'toggleLoading',
 		] ),
-		...mapActions( [
+		...mapActions( 'scope-default', [
 			'fetch',
 			'updateList',
 		] ),
@@ -123,7 +123,7 @@ export default {
 			return {
 				...this.fetchListOptions( this.getCurrentAction?.endpoint ),
 				data: {
-					checked: this.checked,
+					checked: this.getChecked,
 				},
 			};
 		},

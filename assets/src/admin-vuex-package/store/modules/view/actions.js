@@ -7,7 +7,7 @@ export default {
 
 		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
 			commit( 'setList', response.list );
-			commit( 'updateQueryState' );
+			dispatch( 'updateQueryState' );
 		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );
@@ -42,16 +42,19 @@ export default {
 			} ).finally( reject );
 		} );
 	},
-	maybeFetchFilters( { commit, getters, dispatch, state }, endpoint ) {
-		if ( getters.hasFilters || getters.isDoing ) {
+	maybeFetchFilters( props, endpoint ) {
+		const { commit, getters, rootGetters } = props;
+
+		if ( getters.hasFilters || rootGetters.isDoing ) {
 			return;
 		}
-		commit( 'toggleDoingAction' );
+
+		commit( 'toggleDoingAction', null, { root: true } );
 
 		apiFetch( endpoint ).then( response => {
 			commit( 'setFilters', response.filters );
 		} ).finally( () => {
-			commit( 'toggleDoingAction' );
+			commit( 'toggleDoingAction', null, { root: true } );
 		} );
 	},
 	clearFiltersWithFetch( { commit, dispatch }, replaceMap ) {

@@ -2,22 +2,32 @@ import {
 	config,
 	setTableSeed,
 	registerNamespacedModule,
+	setListSeed
 } from './functions';
 
-export function registerMetaBox( store, box ) {
-	registerNamespacedModule( store, box );
-	setTableSeed( store, box );
+export function seedMetaBox( store, box ) {
+	switch ( box.render_type ) {
+		case 'table':
+			setTableSeed( store, box );
+			break;
+		case 'list':
+			setListSeed( store, box );
+			break;
+	}
+
 }
 
 export default function SingleMetaBoxesPlugin( store ) {
+	let boxes = [];
 	for ( const container of config().containers ) {
-		const boxes = [ ...container.boxes.filter( box => {
+		boxes.push( ...container.boxes.filter( box => {
 			return ['table', 'list' ].includes( box.render_type );
-		} ) ];
+		} ) );
+	}
 
-		for ( const boxItem of boxes ) {
-			registerMetaBox( store, boxItem );
-		}
+	for ( const boxElem of boxes ) {
+		registerNamespacedModule( store, boxElem );
+		seedMetaBox( store, boxElem );
 	}
 };
 

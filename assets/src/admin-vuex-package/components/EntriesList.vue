@@ -4,51 +4,52 @@
 	>
 		<div
 			class="misc-pub-section"
-			v-for="({ label }, column) in storeGetters.columns"
+			v-for="({ label }, column) in columns"
 			:key="column"
 		>
-			{{ label }}:
-			<template v-if="getItemComponent( column )">
-				<keep-alive>
-					<component
-						v-bind:is="getItemComponent( column )"
-						:value="getColumnValue( column )"
-						:full-entry="storeGetters.list"
-					/>
-				</keep-alive>
-			</template>
-			<template v-else-if="getItemComponent( getColumnType( column ) )">
-				<keep-alive>
-					<component
-						v-bind:is="getItemComponent( getColumnType( column ) )"
-						:value="getColumnValue( column )"
-						:full-entry="storeGetters.list"
-					/>
-				</keep-alive>
-			</template>
-			<template v-else>
-				{{ storeGetters.list[ column ] ? storeGetters.list[ column ].value : column }}
-			</template>
+			<div class="misc-pub-section--label">{{ label }}</div>
+			<div class="misc-pub-section--value">
+				<template v-if="getItemComponent( column )">
+					<keep-alive>
+						<component
+							v-bind:is="getItemComponent( column )"
+							:value="getColumnValue( column )"
+							:full-entry="list"
+							:scope="scope"
+						/>
+					</keep-alive>
+				</template>
+				<template v-else-if="getItemComponent( getColumnType( column ) )">
+					<keep-alive>
+						<component
+							v-bind:is="getItemComponent( getColumnType( column ) )"
+							:value="getColumnValue( column )"
+							:full-entry="list"
+							:scope="scope"
+						/>
+					</keep-alive>
+				</template>
+				<template v-else>
+					{{ list[ column ] ? list[ column ].value : column }}
+				</template>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-
-const { GetColumnComponent } = JetFBMixins;
+import GetColumnComponent from '../mixins/GetColumnComponent';
+import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
 export default {
 	name: 'EntriesList',
-	props: {
-		scope: {
-			type: String,
-			default: 'default',
-		},
-	},
-	mixins: [ GetColumnComponent ],
+	mixins: [ GetColumnComponent, ScopeStoreMixin ],
 	computed: {
-		storeGetters() {
-			return this.$store.getters[ 'scope-' + this.scope ] ?? this.$store.getters;
+		columns() {
+			return this.getter( 'columns' );
+		},
+		list() {
+			return this.getter( 'list' );
 		},
 	},
 	methods: {
@@ -56,15 +57,27 @@ export default {
 			return this.getColumnComponentByPrefix( column, 'item' );
 		},
 		getColumnType( column ) {
-			return this.storeGetters.list[ column ]?.type ?? false;
+			return this.list[ column ]?.type ?? false;
 		},
 		getColumnValue( column ) {
-			return this.storeGetters.list[ column ]?.value ?? '';
+			return this.list[ column ]?.value ?? '';
 		},
 	},
 };
 </script>
 
-<style>
+<style lang="scss">
+
+.misc-pub-section {
+	display: flex;
+	justify-content: space-between;
+	padding: 1em 0.5em;
+
+	&--label {
+		&::after {
+			content: ':';
+		}
+	}
+}
 
 </style>

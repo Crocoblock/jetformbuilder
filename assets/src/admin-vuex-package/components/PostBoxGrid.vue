@@ -18,7 +18,17 @@
 					:title="title"
 					:list="list"
 					:render-type="render_type"
-				></PostBoxSimple>
+				>
+					<template #default>
+						<slot :name="'body-' + slug" v-bind="{ list }"></slot>
+					</template>
+					<template #before>
+						<slot :name="'before-' + slug" v-bind="{ list }"></slot>
+					</template>
+					<template #after>
+						<slot :name="'after-' + slug" v-bind="{ list }"></slot>
+					</template>
+				</PostBoxSimple>
 			</PostBoxContainer>
 		</div>
 	</div>

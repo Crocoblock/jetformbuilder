@@ -10,13 +10,23 @@
 </template>
 
 <script>
+import ScopeStoreMixin from '../../../mixins/ScopeStoreMixin';
+
 export default {
 	name: 'choose--head',
+	mixins: [ ScopeStoreMixin ],
+	computed: {
+		chooseHeadValue() {
+			return this.getter( 'chooseHeadValue' );
+		},
+	},
 	methods: {
 		onClick() {
-			this.$store.commit( 'toggleHead' );
+			this.commit( 'toggleHead' );
 
-			this.$store.commit( this.$store.getters.isCheckedHead ? 'activeAll' : 'removeAll' );
+			this.commit(
+				this.getter( 'isCheckedHead' ) ? 'activeAll' : 'removeAll',
+			);
 		},
 	},
 };

@@ -28,7 +28,7 @@ abstract class Column_Base {
 		return $this->type;
 	}
 
-	final public function get_column( array $record ): array {
+	public function get_column( array $record ): array {
 		$value = $this->prepare_value( $this->get_value( $record ) );
 
 		return array(
@@ -41,8 +41,6 @@ abstract class Column_Base {
 		switch ( $this->type ) {
 			case 'integer':
 				return (int) $value;
-			case 'float':
-				return (float) $value;
 			case 'array':
 				return (array) $value;
 			case 'string':

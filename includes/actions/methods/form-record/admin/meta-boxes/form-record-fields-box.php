@@ -9,8 +9,11 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Field_Value_
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Hidden_Primary_Id_Column_Trait;
 
 class Form_Record_Fields_Box extends Base_Table_Box {
+
+	use Hidden_Primary_Id_Column_Trait;
 
 	public function get_title(): string {
 		return __( 'Form Fields', 'jet-form-builder' );

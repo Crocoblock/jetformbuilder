@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 
+use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Meta_Box;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 abstract class Base_Meta_Container {
@@ -81,7 +81,11 @@ abstract class Base_Meta_Container {
 		$boxes = array();
 
 		foreach ( $this->get_boxes() as $box ) {
-			$boxes[] = $box->to_array();
+			try {
+				$boxes[] = $box->to_array();
+			} catch ( Empty_Box_Exception $exception ) {
+				continue;
+			}
 		}
 
 		return array(

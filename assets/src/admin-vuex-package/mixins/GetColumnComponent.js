@@ -1,5 +1,6 @@
 import * as ChooseColumn from '../components/TableColumns/choose';
 import * as LinkTypeColumn from '../components/TableColumns/link-type';
+import * as IconStatusColumn from '../components/TableColumns/icon-status';
 
 export default {
 	props: {
@@ -17,7 +18,12 @@ export default {
 		};
 	},
 	created() {
-		this.componentsCols = [ ...this.columnsComponents, ChooseColumn, LinkTypeColumn ];
+		this.componentsCols = [
+			...this.columnsComponents,
+			ChooseColumn,
+			LinkTypeColumn,
+			IconStatusColumn,
+		];
 	},
 	methods: {
 		getColumnComponentByPrefix( column, prefix ) {

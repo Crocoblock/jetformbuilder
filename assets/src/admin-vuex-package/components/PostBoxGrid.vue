@@ -19,6 +19,9 @@
 					:list="list"
 					:render-type="render_type"
 				>
+					<template #header-actions>
+						<slot :name="'header-actions-' + slug" v-bind="{ list }"></slot>
+					</template>
 					<template #default>
 						<slot :name="'body-' + slug" v-bind="{ list }"></slot>
 					</template>

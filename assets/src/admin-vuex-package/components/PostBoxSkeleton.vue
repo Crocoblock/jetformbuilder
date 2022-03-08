@@ -2,6 +2,9 @@
 	<div class="postbox" :id="slug">
 		<div class="postbox-header">
 			<h2 class="ui-sortable-handle">{{ title }}</h2>
+			<div class="handle-actions">
+				<slot name="header-actions"></slot>
+			</div>
 		</div>
 		<div class="postbox-inner submitbox">
 			<slot></slot>
@@ -26,5 +29,9 @@ export default {
 </script>
 
 <style>
+
+.postbox-header {
+	padding-right: 2em;
+}
 
 </style>

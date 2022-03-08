@@ -4,8 +4,13 @@
 		<PostBoxGrid
 			:containers="values.containers"
 		>
-			<template #after-actions-log>
-				<h3>Hello World!</h3>
+			<template #header-actions-form-fields>
+				<cx-vui-switcher
+					:wrapper-css="[ 'equalwidth' ]"
+					:label="'Edit table'"
+					:value="isEditedTable"
+					@input="toggleEditTable"
+				></cx-vui-switcher>
 			</template>
 		</PostBoxGrid>
 	</div>
@@ -18,6 +23,11 @@ const {
 
 const { GetIncoming } = JetFBMixins;
 
+const {
+	mapGetters,
+	mapMutations
+} = Vuex;
+
 export default {
 	name: 'jfb-records-single',
 	components: {
@@ -29,7 +39,15 @@ export default {
 		};
 	},
 	mixins: [ GetIncoming ],
-	created() {
+	computed: {
+		...mapGetters( 'scope-form-fields', [
+			'isEditedTable'
+		] )
+	},
+	methods: {
+		...mapMutations( 'scope-form-fields', [
+			'toggleEditTable'
+		] )
 	},
 };
 </script>

@@ -31,6 +31,7 @@ class Single_Form_Record_Page extends Base_Single_Page {
 
 	public function assets() {
 		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
+		wp_enqueue_style( 'dashicons' );
 
 		parent::assets();
 	}

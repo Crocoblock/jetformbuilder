@@ -222,6 +222,10 @@ class Query_Builder {
 		// phpcs:ignore WordPress.DB
 		$rows = $this->db()->get_results( $this->sql(), ARRAY_A );
 
+		if ( empty( $rows ) ) {
+			throw new Query_Builder_Exception( "Empty {$this->view()->table()} rows" );
+		}
+
 		$response = array();
 
 		foreach ( $rows as $row ) {

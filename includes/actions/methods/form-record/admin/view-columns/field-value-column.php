@@ -12,4 +12,13 @@ class Field_Value_Column extends Column_Advanced_Base {
 	public function get_label(): string {
 		return __( 'Value', 'jet-form-builder' );
 	}
+
+	public function get_column( array $record ): array {
+		return array_merge(
+			parent::get_column( $record ),
+			array(
+				'editable' => true,
+			)
+		);
+	}
 }

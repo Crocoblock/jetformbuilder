@@ -62,35 +62,16 @@
 					:class="classEntry( entryID, entry )"
 				>
 					<div class="list-table-item-columns">
-						<div
+						<EntryColumnsTable
 							v-for="column in filteredColumns"
 							:key="'entry_' + column"
 							:class="[ 'list-table-item__cell', 'cell--' + column ]"
-						>
-							<template v-if="getItemComponent( column )">
-								<keep-alive>
-									<component
-										v-bind:is="getItemComponent( column )"
-										:value="entry[column] ? entry[column].value : false"
-										:full-entry="entry"
-										:entry-id="entryID"
-										:scope="scope"
-									/>
-								</keep-alive>
-							</template>
-							<template v-else-if="getItemComponent( entry[column] ? entry[column].type : false )">
-								<keep-alive>
-									<component
-										v-bind:is="getItemComponent( entry[column].type )"
-										:value="entry[column] ? entry[column].value : false"
-										:full-entry="entry"
-										:entry-id="entryID"
-										:scope="scope"
-									/>
-								</keep-alive>
-							</template>
-							<template v-else>{{ entry[ column ] ? entry[ column ].value : column }}</template>
-						</div>
+							:column="column"
+							:entry="entry"
+							:entry-id="entryID"
+							:scope="scope"
+							:columns-components="columnsComponents"
+						/>
 					</div>
 					<div class="list-table-item-actions" v-if="entry.actions">
 						<span
@@ -116,6 +97,7 @@
 import Constants from '../constants';
 import ScopePropMixin from '../mixins/ScopeStoreMixin';
 import GetColumnComponent from '../mixins/GetColumnComponent';
+import EntryColumnsTable from './EntryColumnsTable';
 
 const {
 	CHOOSE_ACTION,
@@ -131,6 +113,7 @@ const {
 
 export default {
 	name: 'EntriesTableSkeleton',
+	components: { EntryColumnsTable },
 	props: {
 		list: {
 			type: Array,
@@ -171,6 +154,7 @@ export default {
 				);
 			} );
 		},
+
 		...mapGetters( [
 			'isDoing',
 		] ),
@@ -181,9 +165,6 @@ export default {
 		] ),
 		getHeadingComponent( column ) {
 			return this.getColumnComponentByPrefix( column, 'head' );
-		},
-		getItemComponent( column ) {
-			return this.getColumnComponentByPrefix( column, 'item' );
 		},
 		getActionHref( action ) {
 			return action?.href || 'javascript:void(0)';
@@ -206,7 +187,6 @@ export default {
 				'list-table-item': true,
 				'list-table-item--has-choose': entry?.choose?.value,
 				'list-table-item--has-actions': entry?.actions?.value?.length,
-				[ 'list-table-item--' + entryID ]: true,
 				...(
 					entry?.classes?.value ?? {}
 				),
@@ -297,6 +277,8 @@ export default {
 			white-space: nowrap;
 			overflow: hidden;
 			text-align: left;
+			position: relative;
+
 			&:not(.cell--choose) {
 				flex: 1
 			}
@@ -306,6 +288,27 @@ export default {
 				justify-content: flex-start;
 				align-items: center;
 				flex-wrap: wrap;
+			}
+
+			span.dashicons {
+				opacity: 0;
+				position: absolute;
+				right: 0;
+				transition: all 0.2s ease-in-out;
+				padding: 0.2em;
+				border-radius: 50%;
+				box-shadow: unset;
+				transform: translate(-0.4em, -1em);
+				cursor: pointer;
+				background-color: #fff;
+			}
+
+			&:hover span.dashicons {
+				opacity: 1;
+
+				&:hover {
+					box-shadow: 0 0 8px #ccc;
+				}
 			}
 		}
 	}

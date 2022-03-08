@@ -10,7 +10,8 @@ trait Table_Advanced_Record_Prepare_Trait {
 
 	use Table_Record_Prepare_Trait;
 
-	private $columns = array();
+	private $columns        = array();
+	private $preset_columns = array();
 
 	abstract public function get_columns(): array;
 
@@ -19,10 +20,16 @@ trait Table_Advanced_Record_Prepare_Trait {
 	 */
 	private function get_prepared_columns(): array {
 		if ( empty( $this->columns ) ) {
-			$this->columns = $this->get_columns();
+			$this->columns = array_merge( $this->preset_columns, $this->get_columns() );
 		}
 
 		return $this->columns;
+	}
+
+	public function add_columns( array $columns ) {
+		$this->preset_columns = array_merge( $this->preset_columns, $columns );
+
+		return $this;
 	}
 
 	public function get_columns_handlers(): array {

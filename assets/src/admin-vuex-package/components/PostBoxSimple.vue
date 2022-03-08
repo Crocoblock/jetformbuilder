@@ -9,26 +9,31 @@
 				:title="title"
 				:slug="slug"
 			>
-				<EntriesTable
-					v-if="'table' === renderType"
-					:scope="slug"
-				/>
-				<EntriesList
-					v-else-if="'list' === renderType"
-					:scope="slug"
-				/>
-				<div
-					id="misc-publishing-actions"
-					v-else
-				>
+				<template #header-actions>
+					<slot name="header-actions"></slot>
+				</template>
+				<template #default>
+					<EntriesTable
+						v-if="'table' === renderType"
+						:scope="slug"
+					/>
+					<EntriesList
+						v-else-if="'list' === renderType"
+						:scope="slug"
+					/>
 					<div
-						class="misc-pub-section"
-						v-for="(value, name) in list"
-						:key="name"
+						id="misc-publishing-actions"
+						v-else
 					>
-						{{ name }}: <strong>{{ value }}</strong>
+						<div
+							class="misc-pub-section"
+							v-for="(value, name) in list"
+							:key="name"
+						>
+							{{ name }}: <strong>{{ value }}</strong>
+						</div>
 					</div>
-				</div>
+				</template>
 			</PostBoxSkeleton>
 			<slot name="after"></slot>
 		</div>

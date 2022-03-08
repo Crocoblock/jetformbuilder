@@ -13,6 +13,9 @@ export default {
 			const result = this.$store.getters[ this.scopedName( name ) ];
 
 			if ( 'undefined' !== typeof payload && 'function' === typeof result ) {
+				if ( payload?.length ) {
+					return result( ...payload );
+				}
 				return result( payload );
 			}
 

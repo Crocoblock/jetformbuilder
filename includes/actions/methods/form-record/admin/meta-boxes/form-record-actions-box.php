@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Action_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Action_Status_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Actions;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
@@ -18,6 +19,12 @@ class Form_Record_Actions_Box extends Base_Table_Box {
 
 	public function get_title(): string {
 		return __( 'Actions Log', 'jet-form-builder' );
+	}
+
+	public function get_dependencies(): array {
+		return array(
+			new Record_Action_Result_Model(),
+		);
 	}
 
 	/**
@@ -44,7 +51,7 @@ class Form_Record_Actions_Box extends Base_Table_Box {
 			)->query()->query_all();
 
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Empty_Box_Exception( 'Empty Actions Log' );
+			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
 	}
 }

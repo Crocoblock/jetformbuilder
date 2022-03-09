@@ -1,7 +1,7 @@
 <template>
 	<cx-vui-checkbox
 		:options-list="[ { value } ]"
-		:value="isCheckedCurrent()"
+		:value="isCheckedCurrent"
 		@input="onChange"
 		return-type="single"
 		name="jfb_record_row"
@@ -23,17 +23,19 @@ export default {
 			id: this.value,
 		} );
 	},
+	computed: {
+		isCheckedCurrent() {
+			return this.isChecked( this.value ) ? this.value : '';
+		}
+	},
 	methods: {
 		isChecked( value ) {
 			return this.getter( 'isChecked', value );
 		},
-		isCheckedCurrent() {
-			return this.isChecked( this.value ) ? this.value : '';
-		},
 		onChange() {
 			this.dispatch( 'changeChecked', {
 				id: this.value,
-				active: ! this.isCheckedCurrent(),
+				active: ! this.isCheckedCurrent,
 			} );
 		},
 	},
@@ -41,7 +43,9 @@ export default {
 </script>
 
 <style lang="scss">
-.cx-vui-component {
-	padding: unset;
+.list-table-item__cell.cell--choose {
+	.cx-vui-component {
+		padding: unset;
+	}
 }
 </style>

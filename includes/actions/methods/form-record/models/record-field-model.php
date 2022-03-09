@@ -19,6 +19,7 @@ class Record_Field_Model extends Base_Db_Model {
 			'field_name'  => 'varchar(100) NOT NULL',
 			'field_value' => 'longtext',
 			'field_type'  => 'varchar(40) NOT NULL',
+			'field_attrs' => 'longtext',
 		);
 	}
 

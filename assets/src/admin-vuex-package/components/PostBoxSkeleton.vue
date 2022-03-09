@@ -2,8 +2,16 @@
 	<div class="postbox" :id="slug">
 		<div class="postbox-header">
 			<h2 class="ui-sortable-handle">{{ title }}</h2>
-			<div class="handle-actions">
+			<div class="handle-actions" v-if="$slots['header-actions']">
 				<slot name="header-actions"></slot>
+			</div>
+			<div class="handle-actions" v-else>
+				<UndoChangesTable
+					:scope="slug"
+				/>
+				<EditTableSwitcher
+					:scope="slug"
+				/>
 			</div>
 		</div>
 		<div class="postbox-inner submitbox">
@@ -17,21 +25,27 @@
 </template>
 
 <script>
+import EditTableSwitcher from './EditTableSwitcher';
+import UndoChangesTable from './UndoChangesTable';
+
 export default {
-	name: "PostBox",
+	name: 'PostBox',
 	props: {
 		title: String,
 		slug: String,
 	},
-	computed: {
+	components: {
+		UndoChangesTable,
+		EditTableSwitcher,
 	},
-}
+	computed: {},
+};
 </script>
 
-<style>
+<style scoped>
 
-.postbox-header {
-	padding-right: 2em;
+.handle-actions {
+	display: flex;
 }
 
 </style>

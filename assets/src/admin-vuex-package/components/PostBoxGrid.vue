@@ -12,7 +12,12 @@
 				:classes="classes"
 			>
 				<PostBoxSimple
-					v-for="({ slug, title, list, render_type = false }) in boxes"
+					v-for="({
+						slug,
+						title,
+						list,
+						render_type = false
+					}) in boxes"
 					:key="slug"
 					:slug="slug"
 					:title="title"
@@ -40,6 +45,7 @@
 <script>
 import PostBoxContainer from './PostBoxContainer';
 import PostBoxSimple from './PostBoxSimple';
+import EditTableSwitcher from './EditTableSwitcher';
 
 export default {
 	name: 'PostBoxGrid',
@@ -47,6 +53,7 @@ export default {
 		containers: Array,
 	},
 	components: {
+		EditTableSwitcher,
 		PostBoxContainer,
 		PostBoxSimple,
 	},

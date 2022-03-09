@@ -4,14 +4,6 @@
 		<PostBoxGrid
 			:containers="values.containers"
 		>
-			<template #header-actions-form-fields>
-				<cx-vui-switcher
-					:wrapper-css="[ 'equalwidth' ]"
-					:label="'Edit table'"
-					:value="isEditedTable"
-					@input="toggleEditTable"
-				></cx-vui-switcher>
-			</template>
 		</PostBoxGrid>
 	</div>
 </template>
@@ -19,6 +11,7 @@
 <script>
 const {
 	PostBoxGrid,
+	EditTableSwitcher,
 } = JetFBComponents;
 
 const { GetIncoming } = JetFBMixins;
@@ -32,6 +25,7 @@ export default {
 	name: 'jfb-records-single',
 	components: {
 		PostBoxGrid,
+		EditTableSwitcher,
 	},
 	data() {
 		return {
@@ -39,16 +33,6 @@ export default {
 		};
 	},
 	mixins: [ GetIncoming ],
-	computed: {
-		...mapGetters( 'scope-form-fields', [
-			'isEditedTable'
-		] )
-	},
-	methods: {
-		...mapMutations( 'scope-form-fields', [
-			'toggleEditTable'
-		] )
-	},
 };
 </script>
 

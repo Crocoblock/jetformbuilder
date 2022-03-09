@@ -44,6 +44,7 @@
 import PostBoxSkeleton from './PostBoxSkeleton';
 import EntriesTable from './EntriesTable';
 import EntriesList from './EntriesList';
+import EditTableSwitcher from './EditTableSwitcher';
 
 
 export default {
@@ -58,6 +59,7 @@ export default {
 		EntriesTable,
 		EntriesList,
 		PostBoxSkeleton,
+		EditTableSwitcher,
 	},
 };
 </script>

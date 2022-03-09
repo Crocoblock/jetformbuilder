@@ -24,26 +24,32 @@
 			</keep-alive>
 		</template>
 		<div
-			v-else-if="initial.editable && isEditedTable"
-			:class="{
-				'list-table-item__cell--edit-control': true,
-			}"
-		>
-			<input type="text" :value="editedCellValue" @change="onEditColumn"/>
-		</div>
-		<div
 			v-else
 			:class="{
-				'list-table-item__cell--content': true,
+				'list-table-item__cell--body': true,
+				'list-table-item__cell--body-is-editable': initial.editable
 			}"
 		>
-			{{ initial.editable ? editedCellValue : initialValue }}
+			<div
+				v-if="initial.editable && isEnableEdit"
+				class="list-table-item__cell--body-value jfb-control"
+			>
+				<input type="text" v-model="editedCellValue"/>
+			</div>
+			<div
+				v-else
+				class="list-table-item__cell--body-value"
+			>
+				{{ initial.editable ? editedCellValue : initialValue }}
+			</div>
+			<div class="list-table-item__cell--body-actions" v-if="initial.editable">
+				<span
+					v-show="editedCellValue !== initialValue"
+					class="dashicons dashicons-undo"
+					@click="revertChangesColumn"
+				></span>
+			</div>
 		</div>
-		<span
-			v-if="initial.editable"
-			class="dashicons dashicons-edit"
-			@click="toggleEditTable"
-		></span>
 	</div>
 </template>
 
@@ -58,11 +64,6 @@ export default {
 		column: String,
 		entryId: Number,
 	},
-	data: () => (
-		{
-			value: 0,
-		}
-	),
 	mixins: [ ScopeStoreMixin, GetColumnComponent ],
 	computed: {
 		initial() {
@@ -74,30 +75,36 @@ export default {
 		initialType() {
 			return this.initial?.type ?? 'string';
 		},
-		editedCellValue() {
-			this.value;
+		editedCellValue: {
+			get() {
+				jfbEventBus.reactiveCounter;
 
-			return this.getter( 'editedCellValue', [ this.column, this.entry ] );
+				return this.getter( 'editedCellValue', [ this.column, this.entry ] );
+			},
+			set( value ) {
+				this.commit( 'updateEditableCell', {
+					record: this.entry,
+					column: this.column,
+					props: {
+						value,
+					},
+				} );
+				jfbEventBus.reactiveCounter ++;
+			},
 		},
-		isEditedTable() {
-			this.value;
+		isEnableEdit() {
+			jfbEventBus.reactiveCounter;
 
-			return this.getter( 'isEditedTable' );
+			return this.getter( 'isEnableEdit' );
 		},
 	},
 	methods: {
-		toggleEditTable() {
-			this.commit( 'toggleEditTable' );
-			this.value ++;
-		},
-		onEditColumn( { target: { value } } ) {
-			this.commit( 'updateEditableCell', {
+		revertChangesColumn() {
+			this.commit( 'revertChangesColumn', {
 				record: this.entry,
 				column: this.column,
-				props: {
-					value,
-				},
 			} );
+			jfbEventBus.reactiveCounter ++;
 		},
 		getItemComponent( column ) {
 			return this.getColumnComponentByPrefix( column, 'item' );
@@ -106,6 +113,42 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+
+.list-table-item__cell {
+	&--body {
+		&-is-editable {
+			display: flex;
+			justify-content: space-between;
+			column-gap: 1em;
+
+			span.dashicons {
+				transition: all 0.2s ease-in-out;
+				padding: 0.2em;
+				border-radius: 50%;
+				box-shadow: unset;
+				cursor: pointer;
+				background-color: #fff;
+			}
+
+			input {
+				width: 100%;
+			}
+		}
+
+		&-value.jfb-control {
+			flex: 1;
+		}
+
+		&-actions {
+			display: flex;
+			column-gap: 1em;
+		}
+	}
+
+	&:hover .list-table-item__cell--body-is-editable span.dashicons:hover {
+		box-shadow: 0 0 8px #ccc;
+	}
+}
 
 </style>

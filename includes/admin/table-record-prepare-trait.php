@@ -27,11 +27,21 @@ trait Table_Record_Prepare_Trait {
 		return $prepared;
 	}
 
+	public function before_prepare_record( array $record, $column_attrs, $column_name ) {
+	}
+
+	public function after_prepare_record( $prepared, array $record, $column_name ) {
+	}
+
 	public function prepare_record( $record ): array {
 		$prepared = array();
 
 		foreach ( $this->get_columns_handlers() as $column_name => $column_attrs ) {
+			$this->before_prepare_record( $record, $column_attrs, $column_name );
+
 			$prepared[ $column_name ] = $this->prepare_column_attrs( $record, $column_attrs, $column_name );
+
+			$this->after_prepare_record( $prepared[ $column_name ], $record, $column_name );
 		}
 
 		return $prepared;

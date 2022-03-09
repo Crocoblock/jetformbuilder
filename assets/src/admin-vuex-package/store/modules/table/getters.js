@@ -38,8 +38,14 @@ export default {
 			return record[ column ]?.value ?? 'NULL';
 		}
 	},
-	isEditedTable: state => {
-		return state.isEditedTable;
+	isEnableEdit: state => {
+		return state.isEnableEdit;
+	},
+	isEditableTable: state => {
+		return state.isEditableTable;
+	},
+	hasChanges: state => {
+		return state.hasChanges;
 	},
 	columns: state => {
 		return state.columns;

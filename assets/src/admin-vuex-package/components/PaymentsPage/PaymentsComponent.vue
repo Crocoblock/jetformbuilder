@@ -33,7 +33,7 @@ const { applyFilters } = wp.hooks;
 const { apiFetch } = wp;
 const { mapState, mapGetters } = Vuex;
 
-window.jfbEventBus = window.jfbEventBus || new Vue( {} );
+
 
 export default {
 	name: 'payments-table-core',

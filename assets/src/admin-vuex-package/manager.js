@@ -1,3 +1,4 @@
+import './event-bus';
 import PaymentsPage from './components/PaymentsPage';
 import EntriesTable from './components/EntriesTable';
 import DetailsTableWithStore from './components/DetailsTableWithStore';
@@ -21,6 +22,7 @@ import * as LinkTypeColumn from './components/TableColumns/link-type';
 import * as ActionsColumn from './components/TableColumns/actions';
 import * as PayerColumn from './components/TableColumns/payer';
 import ScopeStoreMixin from './mixins/ScopeStoreMixin';
+import EditTableSwitcher from './components/EditTableSwitcher';
 
 
 window.JetFBComponents = {
@@ -40,6 +42,7 @@ window.JetFBComponents = {
 	ActionsColumn,
 	PayerColumn,
 	LinkTypeColumn,
+	EditTableSwitcher,
 };
 
 

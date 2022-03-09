@@ -289,27 +289,6 @@ export default {
 				align-items: center;
 				flex-wrap: wrap;
 			}
-
-			span.dashicons {
-				opacity: 0;
-				position: absolute;
-				right: 0;
-				transition: all 0.2s ease-in-out;
-				padding: 0.2em;
-				border-radius: 50%;
-				box-shadow: unset;
-				transform: translate(-0.4em, -1em);
-				cursor: pointer;
-				background-color: #fff;
-			}
-
-			&:hover span.dashicons {
-				opacity: 1;
-
-				&:hover {
-					box-shadow: 0 0 8px #ccc;
-				}
-			}
 		}
 	}
 	.list-table-heading__cell:not(.cell--choose) {

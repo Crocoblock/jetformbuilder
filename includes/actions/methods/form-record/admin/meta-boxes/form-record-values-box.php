@@ -7,7 +7,9 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Link_Co
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Referrer_Link_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Status_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\User_Login_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
+use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
@@ -16,6 +18,12 @@ class Form_Record_Values_Box extends Base_List_Box {
 
 	public function get_title(): string {
 		return __( 'General Values', 'jet-form-builder' );
+	}
+
+	public function get_dependencies(): array {
+		return array(
+			new Record_Model(),
+		);
 	}
 
 	public function get_columns(): array {
@@ -29,13 +37,13 @@ class Form_Record_Values_Box extends Base_List_Box {
 
 	/**
 	 * @return array
-	 * @throws Not_Found_Page_Exception
+	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
 	 */
 	public function get_list(): array {
 		try {
 			return Record_View::findById( $this->get_id() );
 		} catch ( Query_Builder_Exception $exception ) {
-			return array();
+			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
 	}
 

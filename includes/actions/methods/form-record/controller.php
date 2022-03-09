@@ -3,15 +3,14 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Request\Request_Handler;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 class Controller {
 
@@ -20,7 +19,7 @@ class Controller {
 		'save_empty_fields' => false,
 		'save_errors'       => false,
 	);
-	protected $columns = array();
+	protected $columns  = array();
 	protected $record_id;
 
 	public function __construct() {
@@ -193,8 +192,8 @@ class Controller {
 		foreach ( jet_fb_action_handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
-			     || isset( $core_fields[ $field_name ] )
-			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+				|| isset( $core_fields[ $field_name ] )
+				|| ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
 			) {
 				continue;
 			}
@@ -210,10 +209,26 @@ class Controller {
 				'field_name'  => $field_name,
 				'field_type'  => $type,
 				'field_value' => is_scalar( $value ) ? $value : wp_json_encode( $value ),
+				'field_attrs' => $this->get_attrs_by_field_type( $type, $current_attrs ),
 			);
 		}
 
 		return $fields;
+	}
+
+	private function get_attrs_by_field_type( string $type, array $block ) {
+		$list = array( 'label' );
+
+		switch ( $type ) {
+			case 'text-field':
+				$list[] = 'field_type';
+				break;
+		}
+		$attrs = Block_Helper::get_attrs_from_block( $block, $list );
+
+		return Tools::encode_json(
+			apply_filters( 'jet-form-builder/on-save-record/field-attributes', $attrs, $type, $block )
+		);
 	}
 
 	private function get_prepared_actions( $source, $status ): array {

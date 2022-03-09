@@ -3,15 +3,18 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
-use Jet_Form_Builder\Admin\Table_Record_Prepare_Trait;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Classes\Repository_Static_Item_It;
-use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
+use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 
-abstract class View_Base implements Repository_Static_Item_It {
+abstract class View_Base implements
+	Repository_Static_Item_It,
+	Model_Dependencies_Interface {
 
 	use Repository_Item_With_Class;
+	use Model_Dependencies;
 
 	const COLUMN_CHOOSE  = 'choose';
 	const COLUMN_ACTIONS = 'actions';
@@ -34,24 +37,8 @@ abstract class View_Base implements Repository_Static_Item_It {
 		return array();
 	}
 
-	/**
-	 * @return Base_Db_Model[]
-	 */
-	public function get_dependencies(): array {
-		return array();
-	}
-
 	public function load_data(): array {
 		return array();
-	}
-
-	/**
-	 * @throws Sql_Exception
-	 */
-	public function prepare_dependencies() {
-		foreach ( $this->get_dependencies() as $model ) {
-			$model->safe_create();
-		}
 	}
 
 	/**

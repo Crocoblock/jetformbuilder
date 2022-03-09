@@ -2,5 +2,7 @@ export default {
 	list: [],
 	columns: {},
 	editedList: {},
-	isEditedTable: false,
+	isEnableEdit: false,
+	isEditableTable: false,
+	hasChanges: false,
 }

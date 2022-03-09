@@ -12,20 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -37,7 +23,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 var _JetFBComponents = JetFBComponents,
-    PostBoxGrid = _JetFBComponents.PostBoxGrid;
+    PostBoxGrid = _JetFBComponents.PostBoxGrid,
+    EditTableSwitcher = _JetFBComponents.EditTableSwitcher;
 var _JetFBMixins = JetFBMixins,
     GetIncoming = _JetFBMixins.GetIncoming;
 var _Vuex = Vuex,
@@ -46,16 +33,15 @@ var _Vuex = Vuex,
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'jfb-records-single',
   components: {
-    PostBoxGrid: PostBoxGrid
+    PostBoxGrid: PostBoxGrid,
+    EditTableSwitcher: EditTableSwitcher
   },
   data: function data() {
     return {
       values: this.getIncoming()
     };
   },
-  mixins: [GetIncoming],
-  computed: _objectSpread({}, mapGetters('scope-form-fields', ['isEditedTable'])),
-  methods: _objectSpread({}, mapMutations('scope-form-fields', ['toggleEditTable']))
+  mixins: [GetIncoming]
 });
 
 /***/ }),
@@ -153,7 +139,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\n}\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin/pages/jfb-records-single/SingleRecord.vue"],"names":[],"mappings":";AAwDA;CACA,SAAA;AACA;AAEA;CACA,SAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"wrap\">\r\n\t\t<h1 class=\"wp-heading-inline\">{{ values.title }}</h1>\r\n\t\t<PostBoxGrid\r\n\t\t\t:containers=\"values.containers\"\r\n\t\t>\r\n\t\t\t<template #header-actions-form-fields>\r\n\t\t\t\t<cx-vui-switcher\r\n\t\t\t\t\t:wrapper-css=\"[ 'equalwidth' ]\"\r\n\t\t\t\t\t:label=\"'Edit table'\"\r\n\t\t\t\t\t:value=\"isEditedTable\"\r\n\t\t\t\t\t@input=\"toggleEditTable\"\r\n\t\t\t\t></cx-vui-switcher>\r\n\t\t\t</template>\r\n\t\t</PostBoxGrid>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nconst {\r\n\tPostBoxGrid,\r\n} = JetFBComponents;\r\n\r\nconst { GetIncoming } = JetFBMixins;\r\n\r\nconst {\r\n\tmapGetters,\r\n\tmapMutations\r\n} = Vuex;\r\n\r\nexport default {\r\n\tname: 'jfb-records-single',\r\n\tcomponents: {\r\n\t\tPostBoxGrid,\r\n\t},\r\n\tdata() {\r\n\t\treturn {\r\n\t\t\tvalues: this.getIncoming(),\r\n\t\t};\r\n\t},\r\n\tmixins: [ GetIncoming ],\r\n\tcomputed: {\r\n\t\t...mapGetters( 'scope-form-fields', [\r\n\t\t\t'isEditedTable'\r\n\t\t] )\r\n\t},\r\n\tmethods: {\r\n\t\t...mapMutations( 'scope-form-fields', [\r\n\t\t\t'toggleEditTable'\r\n\t\t] )\r\n\t},\r\n};\r\n</script>\r\n\r\n<style>\r\n\r\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\r\n}\r\n\r\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\n}\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin/pages/jfb-records-single/SingleRecord.vue"],"names":[],"mappings":";AAwCA;CACA,SAAA;AACA;AAEA;CACA,SAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"wrap\">\r\n\t\t<h1 class=\"wp-heading-inline\">{{ values.title }}</h1>\r\n\t\t<PostBoxGrid\r\n\t\t\t:containers=\"values.containers\"\r\n\t\t>\r\n\t\t</PostBoxGrid>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nconst {\r\n\tPostBoxGrid,\r\n\tEditTableSwitcher,\r\n} = JetFBComponents;\r\n\r\nconst { GetIncoming } = JetFBMixins;\r\n\r\nconst {\r\n\tmapGetters,\r\n\tmapMutations\r\n} = Vuex;\r\n\r\nexport default {\r\n\tname: 'jfb-records-single',\r\n\tcomponents: {\r\n\t\tPostBoxGrid,\r\n\t\tEditTableSwitcher,\r\n\t},\r\n\tdata() {\r\n\t\treturn {\r\n\t\t\tvalues: this.getIncoming(),\r\n\t\t};\r\n\t},\r\n\tmixins: [ GetIncoming ],\r\n};\r\n</script>\r\n\r\n<style>\r\n\r\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\r\n}\r\n\r\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -488,27 +474,7 @@ var render = function () {
         _vm._v(_vm._s(_vm.values.title)),
       ]),
       _vm._v(" "),
-      _c("PostBoxGrid", {
-        attrs: { containers: _vm.values.containers },
-        scopedSlots: _vm._u([
-          {
-            key: "header-actions-form-fields",
-            fn: function () {
-              return [
-                _c("cx-vui-switcher", {
-                  attrs: {
-                    "wrapper-css": ["equalwidth"],
-                    label: "Edit table",
-                    value: _vm.isEditedTable,
-                  },
-                  on: { input: _vm.toggleEditTable },
-                }),
-              ]
-            },
-            proxy: true,
-          },
-        ]),
-      }),
+      _c("PostBoxGrid", { attrs: { containers: _vm.values.containers } }),
     ],
     1
   )

@@ -28,6 +28,7 @@ const mutations = {
 				...props,
 			},
 		};
+		state.hasChanges = true;
 	},
 };
 
@@ -40,7 +41,34 @@ export default {
 		state.columns = JSON.parse( JSON.stringify( columns ) );
 	},
 	toggleEditTable( state ) {
-		state.isEditedTable = ! state.isEditedTable;
+		state.isEnableEdit = ! state.isEnableEdit;
 	},
+	setEditableTable( state, isEditableTable ) {
+		state.isEditableTable = !! isEditableTable;
+	},
+	revertChangesColumn( state, { column, record } ) {
+		let position, columnPair;
 
+		try {
+			[ columnPair, position ] = getEditableColumn( state, column, record );
+		} catch ( error ) {
+			return;
+		}
+
+		Vue.delete( state.editedList[ position ], column );
+
+		const currentColumns = Object.keys( state.editedList[ position ] );
+
+		if ( ! currentColumns.length ) {
+			Vue.delete( state.editedList, position );
+
+			if ( ! Object.keys( state.editedList ).length ) {
+				state.hasChanges = false;
+			}
+		}
+	},
+	revertChanges( state ) {
+		state.editedList = {};
+		state.hasChanges = false;
+	},
 };

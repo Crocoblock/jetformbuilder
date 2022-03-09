@@ -125,4 +125,18 @@ class Block_Helper {
 		return Form_Manager::NAMESPACE_FIELDS . self::delete_namespace( $block_name );
 	}
 
+	public static function get_attrs_from_block( array $block, array $attrs_list ): array {
+		$source = $block['attrs'] ?? $block;
+		$attrs  = array();
+
+		foreach ( $attrs_list as $attr_name ) {
+			if ( ! isset( $source[ $attr_name ] ) ) {
+				continue;
+			}
+			$attrs[ $attr_name ] = $source[ $attr_name ];
+		}
+
+		return $attrs;
+	}
+
 }

@@ -32,6 +32,7 @@ export function setTableSeed( store, source ) {
 		columns = {},
 		total = 0,
 		actions,
+		is_editable_table = false,
 	} = source;
 
 	let getName = withScope( source );
@@ -41,6 +42,7 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setLimit' ), list?.length );
+	store.commit( getName( 'setEditableTable' ), is_editable_table );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
 }

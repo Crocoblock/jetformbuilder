@@ -9,17 +9,39 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 
 	use Table_Advanced_Record_Prepare_Trait;
 
+	private $editable_table = false;
+
 	final public function get_values(): array {
 		return $this->prepare_list();
 	}
 
+	public function after_prepare_record( $prepared, array $record, $column_name ) {
+		$is_editable = $prepared['editable'] ?? false;
+
+		if ( $is_editable ) {
+			$this->set_editable_table( true );
+		}
+	}
+
+	/**
+	 * @param bool $editable_table
+	 */
+	public function set_editable_table( bool $editable_table ) {
+		$this->editable_table = $editable_table;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_editable_table(): bool {
+		return $this->editable_table;
+	}
+
 	public function to_array(): array {
-		return array_merge(
-			parent::to_array(),
-			array(
-				'columns'     => $this->get_columns_headings(),
-				'render_type' => self::TYPE_TABLE,
-			)
+		return parent::to_array() + array(
+			'columns'           => $this->get_columns_headings(),
+			'render_type'       => self::TYPE_TABLE,
+			'is_editable_table' => $this->is_editable_table(),
 		);
 	}
 

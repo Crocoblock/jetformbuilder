@@ -668,6 +668,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3424,7 +3426,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".list-table-item__cell--body-is-editable {\n  display: flex;\n  justify-content: space-between;\n  column-gap: 1em;\n}\n.list-table-item__cell--body-is-editable span.dashicons {\n  transition: all 0.2s ease-in-out;\n  padding: 0.2em;\n  border-radius: 50%;\n  box-shadow: unset;\n  cursor: pointer;\n  background-color: #fff;\n}\n.list-table-item__cell--body-is-editable input {\n  width: 100%;\n}\n.list-table-item__cell--body-value.jfb-control {\n  flex: 1;\n}\n.list-table-item__cell--body-actions {\n  display: flex;\n  column-gap: 1em;\n}\n.list-table-item__cell:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\n  box-shadow: 0 0 8px #ccc;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntryColumnsTable.vue","webpack://./../EntryColumnsTable.vue"],"names":[],"mappings":"AAuHE;EACC,aAAA;EACA,8BAAA;EACA,eAAA;ACtHH;ADwHG;EACC,gCAAA;EACA,cAAA;EACA,kBAAA;EACA,iBAAA;EACA,eAAA;EACA,sBAAA;ACtHJ;ADyHG;EACC,WAAA;ACvHJ;AD2HE;EACC,OAAA;ACzHH;AD4HE;EACC,aAAA;EACA,eAAA;AC1HH;AD8HC;EACC,wBAAA;AC5HF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.list-table-item__cell {\r\n\t&--body {\r\n\t\t&-is-editable {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\tcolumn-gap: 1em;\r\n\r\n\t\t\tspan.dashicons {\r\n\t\t\t\ttransition: all 0.2s ease-in-out;\r\n\t\t\t\tpadding: 0.2em;\r\n\t\t\t\tborder-radius: 50%;\r\n\t\t\t\tbox-shadow: unset;\r\n\t\t\t\tcursor: pointer;\r\n\t\t\t\tbackground-color: #fff;\r\n\t\t\t}\r\n\r\n\t\t\tinput {\r\n\t\t\t\twidth: 100%;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-value.jfb-control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t}\r\n\t}\r\n\r\n\t&:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\r\n\t\tbox-shadow: 0 0 8px #ccc;\r\n\t}\r\n}\r\n\r\n",".list-table-item__cell--body-is-editable {\n  display: flex;\n  justify-content: space-between;\n  column-gap: 1em;\n}\n.list-table-item__cell--body-is-editable span.dashicons {\n  transition: all 0.2s ease-in-out;\n  padding: 0.2em;\n  border-radius: 50%;\n  box-shadow: unset;\n  cursor: pointer;\n  background-color: #fff;\n}\n.list-table-item__cell--body-is-editable input {\n  width: 100%;\n}\n.list-table-item__cell--body-value.jfb-control {\n  flex: 1;\n}\n.list-table-item__cell--body-actions {\n  display: flex;\n  column-gap: 1em;\n}\n.list-table-item__cell:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\n  box-shadow: 0 0 8px #ccc;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".list-table-item__cell--body-is-editable {\n  display: flex;\n  justify-content: space-between;\n  column-gap: 1em;\n}\n.list-table-item__cell--body-is-editable span.dashicons {\n  transition: all 0.2s ease-in-out;\n  padding: 0.2em;\n  border-radius: 50%;\n  box-shadow: unset;\n  cursor: pointer;\n  background-color: #fff;\n}\n.list-table-item__cell--body-is-editable input {\n  width: 100%;\n}\n.list-table-item__cell--body-value {\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.list-table-item__cell--body-value.jfb-control {\n  flex: 1;\n  padding-right: 1px;\n}\n.list-table-item__cell--body-actions {\n  display: flex;\n  column-gap: 1em;\n}\n.list-table-item__cell:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\n  box-shadow: 0 0 8px #ccc;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntryColumnsTable.vue","webpack://./../EntryColumnsTable.vue"],"names":[],"mappings":"AAyHE;EACC,aAAA;EACA,8BAAA;EACA,eAAA;ACxHH;AD0HG;EACC,gCAAA;EACA,cAAA;EACA,kBAAA;EACA,iBAAA;EACA,eAAA;EACA,sBAAA;ACxHJ;AD2HG;EACC,WAAA;ACzHJ;AD6HE;EACC,gBAAA;EACA,uBAAA;AC3HH;AD6HG;EACC,OAAA;EACA,kBAAA;AC3HJ;AD+HE;EACC,aAAA;EACA,eAAA;AC7HH;ADiIC;EACC,wBAAA;AC/HF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.list-table-item__cell {\r\n\t&--body {\r\n\t\t&-is-editable {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\tcolumn-gap: 1em;\r\n\r\n\t\t\tspan.dashicons {\r\n\t\t\t\ttransition: all 0.2s ease-in-out;\r\n\t\t\t\tpadding: 0.2em;\r\n\t\t\t\tborder-radius: 50%;\r\n\t\t\t\tbox-shadow: unset;\r\n\t\t\t\tcursor: pointer;\r\n\t\t\t\tbackground-color: #fff;\r\n\t\t\t}\r\n\r\n\t\t\tinput {\r\n\t\t\t\twidth: 100%;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-value {\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-overflow: ellipsis;\r\n\r\n\t\t\t&.jfb-control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t\tpadding-right: 1px;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t}\r\n\t}\r\n\r\n\t&:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\r\n\t\tbox-shadow: 0 0 8px #ccc;\r\n\t}\r\n}\r\n\r\n",".list-table-item__cell--body-is-editable {\n  display: flex;\n  justify-content: space-between;\n  column-gap: 1em;\n}\n.list-table-item__cell--body-is-editable span.dashicons {\n  transition: all 0.2s ease-in-out;\n  padding: 0.2em;\n  border-radius: 50%;\n  box-shadow: unset;\n  cursor: pointer;\n  background-color: #fff;\n}\n.list-table-item__cell--body-is-editable input {\n  width: 100%;\n}\n.list-table-item__cell--body-value {\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.list-table-item__cell--body-value.jfb-control {\n  flex: 1;\n  padding-right: 1px;\n}\n.list-table-item__cell--body-actions {\n  display: flex;\n  column-gap: 1em;\n}\n.list-table-item__cell:hover .list-table-item__cell--body-is-editable span.dashicons:hover {\n  box-shadow: 0 0 8px #ccc;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6352,20 +6354,12 @@ var render = function () {
                     ]
                   ),
               _vm._v(" "),
-              _vm.initial.editable
+              _vm.initial.editable && _vm.editedCellValue !== _vm.initialValue
                 ? _c(
                     "div",
                     { staticClass: "list-table-item__cell--body-actions" },
                     [
                       _c("span", {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.editedCellValue !== _vm.initialValue,
-                            expression: "editedCellValue !== initialValue",
-                          },
-                        ],
                         staticClass: "dashicons dashicons-undo",
                         on: { click: _vm.revertChangesColumn },
                       }),

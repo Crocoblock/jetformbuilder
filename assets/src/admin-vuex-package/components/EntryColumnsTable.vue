@@ -42,9 +42,11 @@
 			>
 				{{ initial.editable ? editedCellValue : initialValue }}
 			</div>
-			<div class="list-table-item__cell--body-actions" v-if="initial.editable">
+			<div
+				class="list-table-item__cell--body-actions"
+				v-if="initial.editable && editedCellValue !== initialValue"
+			>
 				<span
-					v-show="editedCellValue !== initialValue"
 					class="dashicons dashicons-undo"
 					@click="revertChangesColumn"
 				></span>
@@ -136,8 +138,14 @@ export default {
 			}
 		}
 
-		&-value.jfb-control {
-			flex: 1;
+		&-value {
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			&.jfb-control {
+				flex: 1;
+				padding-right: 1px;
+			}
 		}
 
 		&-actions {

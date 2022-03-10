@@ -1,6 +1,9 @@
 import * as ChooseColumn from '../components/TableColumns/choose';
 import * as LinkTypeColumn from '../components/TableColumns/link-type';
 import * as IconStatusColumn from '../components/TableColumns/icon-status';
+import * as InputControlColumn from '../components/TableColumns/input-control';
+import * as TextareaControlColumn from '../components/TableColumns/textarea-control';
+
 
 export default {
 	props: {
@@ -23,6 +26,8 @@ export default {
 			ChooseColumn,
 			LinkTypeColumn,
 			IconStatusColumn,
+			InputControlColumn,
+			TextareaControlColumn,
 		];
 	},
 	methods: {

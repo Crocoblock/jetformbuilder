@@ -13,6 +13,10 @@ abstract class Base_List_Box extends Base_Meta_Box {
 		return $this->prepare_record( $this->get_list() );
 	}
 
+	public function get_raw_list( array $args ): array {
+		return array();
+	}
+
 	public function to_array(): array {
 		return array_merge(
 			parent::to_array(),

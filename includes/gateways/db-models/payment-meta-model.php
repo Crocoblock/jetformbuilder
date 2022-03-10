@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Constraints\Payment_Model_Constraint;
 
@@ -26,7 +25,7 @@ class Payment_Meta_Model extends Base_Db_Model {
 			'meta_key'   => 'varchar(255)',
 			'meta_value' => 'text',
 			'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at' => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL'
+			'updated_at' => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -43,7 +42,7 @@ class Payment_Meta_Model extends Base_Db_Model {
 
 	public function foreign_relations(): array {
 		return array(
-			new Payment_Model_Constraint()
+			new Payment_Model_Constraint(),
 		);
 	}
 }

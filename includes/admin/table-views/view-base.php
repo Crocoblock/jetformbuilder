@@ -22,8 +22,6 @@ abstract class View_Base implements
 
 	abstract public function get_prepared_list( array $custom_list = array() ): array;
 
-	abstract public function get_raw_list( array $args ): array;
-
 	public function get_list(): array {
 		return $this->get_raw_list(
 			array(
@@ -33,7 +31,7 @@ abstract class View_Base implements
 		);
 	}
 
-	public function get_single_actions(): array {
+	public function get_global_actions(): array {
 		return array();
 	}
 
@@ -59,7 +57,7 @@ abstract class View_Base implements
 			array(
 				'list'    => $this->get_prepared_list(),
 				'columns' => $this->get_columns_headings(),
-				'actions' => $this->get_single_actions(),
+				'actions' => $this->get_global_actions(),
 			),
 			$this->load_data()
 		);

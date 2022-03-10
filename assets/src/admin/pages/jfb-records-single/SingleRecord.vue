@@ -1,8 +1,8 @@
 <template>
 	<div class="wrap">
-		<h1 class="wp-heading-inline">{{ values.title }}</h1>
+		<h1 class="wp-heading-inline">{{ title }}</h1>
 		<PostBoxGrid
-			:containers="values.containers"
+			:containers="containers"
 		>
 		</PostBoxGrid>
 	</div>
@@ -11,7 +11,6 @@
 <script>
 const {
 	PostBoxGrid,
-	EditTableSwitcher,
 } = JetFBComponents;
 
 const { GetIncoming } = JetFBMixins;
@@ -25,11 +24,11 @@ export default {
 	name: 'jfb-records-single',
 	components: {
 		PostBoxGrid,
-		EditTableSwitcher,
 	},
 	data() {
 		return {
-			values: this.getIncoming(),
+			title: this.getIncoming( 'title' ),
+			containers: this.getIncoming( 'containers' ),
 		};
 	},
 	mixins: [ GetIncoming ],
@@ -37,13 +36,5 @@ export default {
 </script>
 
 <style>
-
-.cell--field_type.cell--field_type.cell--field_type {
-	flex: 0.2;
-}
-
-.cell--name.cell--name.cell--name {
-	flex: 0.5;
-}
 
 </style>

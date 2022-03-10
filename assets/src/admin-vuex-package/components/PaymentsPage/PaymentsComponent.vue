@@ -6,69 +6,31 @@
 	}">
 		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Payments', 'jet-form-builder' ) }}</h1>
 		<TablePagination/>
-		<EntriesTable
-			:loading="loadingPage"
-			:columns="getColumns"
-			:columns-components="columnsComponents"
-		/>
+		<EntriesTable/>
 		<template v-if="$slots.default">
 			<slot name="default"></slot>
 		</template>
-		<TablePagination />
+		<TablePagination/>
 	</div>
 </template>
 
 <script>
 import TablePagination from '../TablePagination';
-import * as PaymentType from './payment-type';
-import * as StatusColumn from './status';
 import EntriesTable from '../EntriesTable';
-
-const { PayerColumn } = JetFBComponents;
-const { GetIncoming, i18n } = JetFBMixins;
 
 Vue.config.devtools = true;
 
-const { applyFilters } = wp.hooks;
+const { GetIncoming, i18n } = JetFBMixins;
 const { apiFetch } = wp;
 const { mapState, mapGetters } = Vuex;
 
-
-
 export default {
 	name: 'payments-table-core',
-	props: {
-		columns: {
-			type: Array,
-			default: () => [],
-		},
-	},
 	components: {
 		EntriesTable,
 		TablePagination,
 	},
-	data() {
-		return {
-			columnsComponents: [],
-		};
-	},
 	mixins: [ GetIncoming, i18n ],
-	created() {
-		this.columnsComponents = [
-			PayerColumn,
-			PaymentType,
-			StatusColumn,
-			...this.columns,
-		]
-	},
-	computed: {
-		...mapState( [
-			'loadingPage',
-		] ),
-		...mapGetters( [
-			'getColumns'
-		] )
-	},
 };
 
 </script>

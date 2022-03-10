@@ -40,7 +40,6 @@ class Records_Table_View extends View_Advanced_Base {
 	 */
 	public function get_dependencies(): array {
 		return array(
-			new Models\Record_Model(),
 			new Models\Record_Action_Result_Model(),
 			new Models\Record_Error_Model(),
 			new Models\Record_Field_Model(),
@@ -58,7 +57,7 @@ class Records_Table_View extends View_Advanced_Base {
 		}
 	}
 
-	public function get_single_actions(): array {
+	public function get_global_actions(): array {
 		return ( new Header_Actions_Column() )->get_value();
 	}
 

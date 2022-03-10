@@ -1,23 +1,21 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Pages;
+namespace Jet_Form_Builder\Gateways\Pages;
 
-
+use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Gateways\Table_Views\Payments;
 
 class Payments_Page extends Base_Page {
 
+	const SLUG = 'jfb-payments';
+
 	public function slug(): string {
-		return 'jfb-payments';
+		return self::SLUG;
 	}
 
 	public function title(): string {
 		return __( 'Payments', 'jet-form-builder' );
-	}
-
-	public function is_active(): bool {
-		return jet_form_builder()->allow_gateways;
 	}
 
 	public function page_config(): array {

@@ -251,7 +251,7 @@ export default {
 			visibility: hidden;
 			position: absolute;
 			bottom: 0.5em;
-			left: 0.5em;
+			left: 1.5em;
 			& > *:not(:last-child)::after {
 				content: '|';
 			}
@@ -278,6 +278,7 @@ export default {
 			overflow: hidden;
 			text-align: left;
 			position: relative;
+			margin: auto 0;
 
 			&:not(.cell--choose) {
 				flex: 1

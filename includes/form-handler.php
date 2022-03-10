@@ -26,12 +26,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key = 'jet_form_builder_submit';
-	public $hook_val = 'submit';
-	public $form_data = array();
+	public $hook_key      = 'jet_form_builder_submit';
+	public $hook_val      = 'submit';
+	public $form_data     = array();
 	public $response_data = array();
-	public $is_ajax = false;
-	public $is_success = false;
+	public $is_ajax       = false;
+	public $is_success    = false;
 	public $response_args = array();
 
 	public $form_id;
@@ -41,8 +41,8 @@ class Form_Handler {
 	/** @var Action_Handler */
 	public $action_handler;
 
-	public $form_key = '_jet_engine_booking_form_id';
-	public $refer_key = '_jet_engine_refer';
+	public $form_key    = '_jet_engine_booking_form_id';
+	public $refer_key   = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
@@ -247,12 +247,12 @@ class Form_Handler {
 					'reload' => true,
 				)
 			);
-
-			$this->send_raw_response(
+			$this->set_response_args(
 				array(
 					'status' => 'failed',
 				)
 			);
+			$this->send_raw_response();
 		}
 
 		$this->try_send();

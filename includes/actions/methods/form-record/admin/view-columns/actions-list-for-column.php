@@ -13,10 +13,10 @@ trait Actions_List_For_Column {
 
 	protected function get_actions(): array {
 		return array(
-			new Delete_Record_Action(),
+			new View_Action(),
 			new Mark_Viewed_Action(),
 			new Mark_Not_Viewed_Action(),
-			new View_Action(),
+			new Delete_Record_Action(),
 		);
 	}
 

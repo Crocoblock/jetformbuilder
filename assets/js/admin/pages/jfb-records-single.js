@@ -23,8 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var _JetFBComponents = JetFBComponents,
-    PostBoxGrid = _JetFBComponents.PostBoxGrid,
-    EditTableSwitcher = _JetFBComponents.EditTableSwitcher;
+    PostBoxGrid = _JetFBComponents.PostBoxGrid;
 var _JetFBMixins = JetFBMixins,
     GetIncoming = _JetFBMixins.GetIncoming;
 var _Vuex = Vuex,
@@ -33,12 +32,12 @@ var _Vuex = Vuex,
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'jfb-records-single',
   components: {
-    PostBoxGrid: PostBoxGrid,
-    EditTableSwitcher: EditTableSwitcher
+    PostBoxGrid: PostBoxGrid
   },
   data: function data() {
     return {
-      values: this.getIncoming()
+      title: this.getIncoming('title'),
+      containers: this.getIncoming('containers')
     };
   },
   mixins: [GetIncoming]
@@ -113,33 +112,6 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, ".field-type-template--icon > svg {\n  width: 24px;\n  height: 24px;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records-single/field-type-column/FieldType.vue","webpack://./../FieldType.vue"],"names":[],"mappings":"AAmBC;EACC,WAAA;EACA,YAAA;AClBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.field-type-template {\r\n\t&--icon > svg {\r\n\t\twidth: 24px;\r\n\t\theight: 24px;\r\n\t}\r\n}\r\n",".field-type-template--icon > svg {\n  width: 24px;\n  height: 24px;\n}"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&":
-/*!*******************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
-
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\n}\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin/pages/jfb-records-single/SingleRecord.vue"],"names":[],"mappings":";AAwCA;CACA,SAAA;AACA;AAEA;CACA,SAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"wrap\">\r\n\t\t<h1 class=\"wp-heading-inline\">{{ values.title }}</h1>\r\n\t\t<PostBoxGrid\r\n\t\t\t:containers=\"values.containers\"\r\n\t\t>\r\n\t\t</PostBoxGrid>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nconst {\r\n\tPostBoxGrid,\r\n\tEditTableSwitcher,\r\n} = JetFBComponents;\r\n\r\nconst { GetIncoming } = JetFBMixins;\r\n\r\nconst {\r\n\tmapGetters,\r\n\tmapMutations\r\n} = Vuex;\r\n\r\nexport default {\r\n\tname: 'jfb-records-single',\r\n\tcomponents: {\r\n\t\tPostBoxGrid,\r\n\t\tEditTableSwitcher,\r\n\t},\r\n\tdata() {\r\n\t\treturn {\r\n\t\t\tvalues: this.getIncoming(),\r\n\t\t};\r\n\t},\r\n\tmixins: [ GetIncoming ],\r\n};\r\n</script>\r\n\r\n<style>\r\n\r\n.cell--field_type.cell--field_type.cell--field_type {\r\n\tflex: 0.2;\r\n}\r\n\r\n.cell--name.cell--name.cell--name {\r\n\tflex: 0.5;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -281,17 +253,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _SingleRecord_vue_vue_type_template_id_5bd9a836___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SingleRecord.vue?vue&type=template&id=5bd9a836& */ "./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=template&id=5bd9a836&");
 /* harmony import */ var _SingleRecord_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SingleRecord.vue?vue&type=script&lang=js& */ "./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=script&lang=js&");
-/* harmony import */ var _SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SingleRecord.vue?vue&type=style&index=0&lang=css& */ "./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
-;
 
 
 /* normalize component */
-
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _SingleRecord_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _SingleRecord_vue_vue_type_template_id_5bd9a836___WEBPACK_IMPORTED_MODULE_0__.render,
   _SingleRecord_vue_vue_type_template_id_5bd9a836___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
@@ -433,23 +403,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&":
-/*!******************************************************************************************!*\
-  !*** ./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css& ***!
-  \******************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SingleRecord.vue?vue&type=style&index=0&lang=css& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_SingleRecord_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-/***/ }),
-
 /***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=template&id=5bd9a836&":
 /*!*********************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=template&id=5bd9a836& ***!
@@ -471,10 +424,10 @@ var render = function () {
     { staticClass: "wrap" },
     [
       _c("h1", { staticClass: "wp-heading-inline" }, [
-        _vm._v(_vm._s(_vm.values.title)),
+        _vm._v(_vm._s(_vm.title)),
       ]),
       _vm._v(" "),
-      _c("PostBoxGrid", { attrs: { containers: _vm.values.containers } }),
+      _c("PostBoxGrid", { attrs: { containers: _vm.containers } }),
     ],
     1
   )
@@ -646,27 +599,6 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
 var update = add("16ca7ab6", content, false, {});
-// Hot Module Replacement
-if(false) {}
-
-/***/ }),
-
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&":
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css& ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SingleRecord.vue?vue&type=style&index=0&lang=css& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin/pages/jfb-records-single/SingleRecord.vue?vue&type=style&index=0&lang=css&");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.id, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("499dd2bc", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

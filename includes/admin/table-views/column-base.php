@@ -32,26 +32,34 @@ abstract class Column_Base {
 		return false;
 	}
 
+	public function get_control( array $record = array() ): string {
+		return 'input';
+	}
+
+	public function get_control_options( array $record = array() ): array {
+		return array(
+			'type' => 'text',
+		);
+	}
+
 	public function get_options( array $record = array() ): array {
 		return array();
 	}
 
-	public function get_editable_control( array $record = array() ): string {
-		return 'text';
-	}
-
 	final public function get_column( array $record ): array {
-		$type             = $this->get_type( $record );
-		$value            = $this->prepare_value( $this->get_value( $record ), $type );
-		$editable         = $this->is_editable( $record );
-		$editable_control = $this->get_editable_control( $record );
-		$options          = $this->get_options( $record );
+		$type            = $this->get_type( $record );
+		$value           = $this->prepare_value( $this->get_value( $record ), $type );
+		$editable        = $this->is_editable( $record );
+		$control         = $this->get_control( $record );
+		$control_options = $this->get_control_options( $record );
+		$options         = $this->get_options( $record );
 
 		return array(
-			'type'             => $type,
-			'value'            => $value,
-			'editable'         => $editable,
-			'editable_control' => $editable_control,
+			'type'            => $type,
+			'value'           => $value,
+			'editable'        => $editable,
+			'control'         => $control,
+			'control_options' => $control_options,
 		) + $options;
 	}
 

@@ -30,7 +30,7 @@ class Payment_To_Record extends Base_Db_Model {
 		return array(
 			'id'         => 'primary key',
 			'payment_id' => 'index',
-			'record_id'  => 'index'
+			'record_id'  => 'index',
 		);
 	}
 

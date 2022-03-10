@@ -47,7 +47,7 @@ class Payer_Shipping_Model extends Base_Db_Model {
 
 	public function foreign_relations(): array {
 		return array(
-			new Payer_Model_Constraint()
+			new Payer_Model_Constraint(),
 		);
 	}
 

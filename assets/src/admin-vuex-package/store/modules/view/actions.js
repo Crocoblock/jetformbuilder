@@ -17,6 +17,7 @@ export default {
 
 		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
 			dispatch( 'updateList', response );
+			jfbEventBus.reactiveCounter ++;
 		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );
@@ -53,6 +54,7 @@ export default {
 
 		apiFetch( endpoint ).then( response => {
 			commit( 'setFilters', response.filters );
+			jfbEventBus.reactiveCounter ++;
 		} ).finally( () => {
 			commit( 'toggleDoingAction', null, { root: true } );
 		} );

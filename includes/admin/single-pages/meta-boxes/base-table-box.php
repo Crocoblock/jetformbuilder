@@ -15,6 +15,15 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 		return $this->prepare_list();
 	}
 
+	public function get_list(): array {
+		return $this->get_raw_list(
+			array(
+				'offset' => 0,
+				'limit'  => 15,
+			)
+		);
+	}
+
 	public function after_prepare_record( $prepared, array $record, $column_name ) {
 		$is_editable = $prepared['editable'] ?? false;
 

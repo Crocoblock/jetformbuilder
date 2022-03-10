@@ -4,6 +4,8 @@ export default {
 	mixins: [ ScopeStoreMixin ],
 	computed: {
 		filter() {
+			jfbEventBus.reactiveCounter;
+
 			return this.getter( 'getFilter', this.filter_id );
 		},
 	},

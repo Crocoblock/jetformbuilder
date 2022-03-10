@@ -1,27 +1,22 @@
 <template>
 	<div>
-		<template v-if="getItemComponent( column )">
-			<keep-alive>
-				<component
-					v-bind:is="getItemComponent( column )"
-					:value="initialValue"
-					:full-entry="entry"
-					:entry-id="entryId"
-					:scope="scope"
-				/>
-			</keep-alive>
+		<template v-if="getComponentColumn">
+			<component
+				:is="getComponentColumn"
+				:value="initialValue"
+				:full-entry="entry"
+				:entry-id="entryId"
+				:scope="scope"
+			/>
 		</template>
-		<template v-else-if="getItemComponent( initialType )">
-			<keep-alive>
-				<component
-					v-bind:is="getItemComponent( initialType )"
-					:value="initialValue"
-					:full-entry="entry"
-					:entry-id="entryId"
-					:scope="scope"
-
-				/>
-			</keep-alive>
+		<template v-else-if="getComponentType">
+			<component
+				:is="getComponentType"
+				:value="initialValue"
+				:full-entry="entry"
+				:entry-id="entryId"
+				:scope="scope"
+			/>
 		</template>
 		<div
 			v-else
@@ -34,7 +29,13 @@
 				v-if="initial.editable && isEnableEdit"
 				class="list-table-item__cell--body-value jfb-control"
 			>
-				<input type="text" v-model="editedCellValue"/>
+				<keep-alive>
+					<component
+						:is="getComponentEditControl"
+						:options="initial.control_options"
+						v-model="editedCellValue"
+					/>
+				</keep-alive>
 			</div>
 			<div
 				v-else
@@ -99,6 +100,15 @@ export default {
 
 			return this.getter( 'isEnableEdit' );
 		},
+		getComponentType() {
+			return this.getItemComponent( this.initialType );
+		},
+		getComponentColumn() {
+			return this.getItemComponent( this.column );
+		},
+		getComponentEditControl() {
+			return this.getColumnComponentByPrefix( this.initial?.control, 'control' );
+		},
 	},
 	methods: {
 		revertChangesColumn() {
@@ -132,10 +142,6 @@ export default {
 				cursor: pointer;
 				background-color: #fff;
 			}
-
-			input {
-				width: 100%;
-			}
 		}
 
 		&-value {
@@ -145,6 +151,10 @@ export default {
 			&.jfb-control {
 				flex: 1;
 				padding-right: 1px;
+
+				& > * {
+					width: 100%;
+				}
 			}
 		}
 

@@ -10,6 +10,8 @@ trait Table_Record_Prepare_Trait {
 
 	abstract public function get_columns_headings(): array;
 
+	abstract public function get_raw_list( array $args ): array;
+
 	abstract public function get_list(): array;
 
 	public function prepare_list( array $custom_list = array() ): array {

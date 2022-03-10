@@ -12,6 +12,7 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Hidden_Primary_Id_Column_Trait;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 class Form_Record_Fields_Box extends Base_Table_Box {
 
@@ -36,17 +37,22 @@ class Form_Record_Fields_Box extends Base_Table_Box {
 	}
 
 	/**
+	 * @param array $args
+	 *
 	 * @return array
 	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
 	 */
-	public function get_list(): array {
-		$request = Record_Fields_View::get_request( $this->get_id() );
+	public function get_raw_list( array $args ): array {
+		try {
+			return Record_Fields_View::find(
+				array( 'record_id' => $this->get_id() )
+			)->set_table_args( $args )
+			->query()
+			->query_all();
 
-		if ( empty( $request ) ) {
-			throw new Empty_Box_Exception( 'Empty request' );
+		} catch ( Query_Builder_Exception $exception ) {
+			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
-
-		return $request;
 	}
 
 }

@@ -3,17 +3,24 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views;
 
-use Jet_Form_Builder\Admin\Table_Views\View_Base;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
+use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Created_At_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Gross_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Header_Actions_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Payer_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Type_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Row_Actions_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Transaction_Column;
 
-class Payments extends View_Base {
-
-	public static function rep_item_id() {
-		return 'SUBSCRIBE_NOW_PAYMENTS';
-	}
+class Payments extends View_Advanced_Base {
 
 	public function get_raw_list( array $args ): array {
 		try {
@@ -26,6 +33,13 @@ class Payments extends View_Base {
 		}
 	}
 
+	public function get_dependencies(): array {
+		return array(
+			new Payment_To_Payer_Shipping_Model(),
+			new Payment_To_Record(),
+		);
+	}
+
 	public function load_data(): array {
 		return array(
 			'receive_url' => array(
@@ -36,133 +50,24 @@ class Payments extends View_Base {
 		);
 	}
 
-	public function get_columns_handlers(): array {
-		return array(
-			'id'             => array(
-				'value' => array( $this, 'get_payment_id' ),
-			),
-			'transaction_id' => array(
-				'value' => array( $this, 'get_transaction_id' ),
-			),
-			'type'           => array(
-				'value' => array( $this, 'get_payment_type_with_label' ),
-				'type'  => 'rawArray',
-			),
-			'status'         => array(
-				'value' => array( $this, 'get_payment_status' ),
-			),
-			'date'           => array(
-				'value' => array( $this, 'get_payment_date' ),
-			),
-			'gross'          => array(
-				'value' => array( $this, 'get_gross' ),
-			),
-			'payer'          => array(
-				'value' => array( $this, 'get_payer' ),
-				'type'  => 'rawArray',
-			),
-			'_FORM_ID'       => array(
-				'value' => array( $this, 'get_form_id' ),
-				'type'  => 'integer',
-			),
-		);
-	}
-
-	public function get_columns_headings(): array {
-		return array(
-			'type'           => array(
-				'label' => __( 'Type', 'jet-form-builder' ),
-			),
-			'date'           => array(
-				'label' => __( 'Date', 'jet-form-builder' ),
-			),
-			'status'         => array(
-				'label' => __( 'Status', 'jet-form-builder' ),
-			),
-			'gross'          => array(
-				'label' => __( 'Gross', 'jet-form-builder' ),
-			),
-			'payer'          => array(
-				'label' => __( 'Payer', 'jet-form-builder' ),
-			),
-			'transaction_id' => array(
-				'label' => __( 'Transaction ID', 'jet-form-builder' ),
-			),
-			'id'             => array(
-				'label' => __( 'ID', 'jet-form-builder' ),
-			),
-		);
-	}
-
-	public function get_transaction_id( $record ) {
-		return $record['transaction_id'] ?? '';
-	}
-
-	public function get_payment_id( $record ) {
-		return $record['id'] ?? 0;
-	}
-
-	public function get_payment_type( $record ) {
-		return $record['type'] ?? '';
-	}
-
-	public function get_payment_type_label( $record ) {
-		return __( 'Initial payment', 'jet-form-builder' );
-	}
-
-	public function get_payment_type_with_label( $record ) {
-		return array(
-			'slug'  => $this->get_payment_type( $record ),
-			'label' => $this->get_payment_type_label( $record ),
-		);
-	}
-
-	public function get_payment_status( $record ) {
-		return $record['status'] ?? '';
-	}
-
-	public function get_payer( $record ) {
-		$name = $record['ship']['full_name'] ?? '';
-
-		if ( empty( $name ) ) {
-			$name = implode(
-				' ',
-				array_filter(
-					array(
-						$record['payer']['first_name'] ?? '',
-						$record['payer']['last_name'] ?? '',
-					)
-				)
-			);
-		}
+	public function get_columns(): array {
+		$id_column = new Record_Id_Column_Advanced();
 
 		return array(
-			'email_address' => $record['payer']['email'] ?? '',
-			'full_name'     => $name ?: __( 'Not attached', 'jet-form-builder' ),
+			self::COLUMN_CHOOSE  => $id_column,
+			self::COLUMN_ACTIONS => new Row_Actions_Column(),
+			'type'               => new Payment_Type_Column(),
+			'date'               => new Created_At_Column(),
+			'status'             => new Payment_Status_Column(),
+			'gross'              => new Gross_Column(),
+			'payer'              => new Payer_Column(),
+			'transaction_id'     => new Transaction_Column(),
+			'id'                 => $id_column,
 		);
 	}
 
-	public function get_payment_date( $record ) {
-		return mysql2date( 'F j, Y, H:i', $record['created_at'] );
-	}
-
-	public function get_form_id( $record ) {
-		return $record['form_id'] ?? 0;
-	}
-
-	public function get_gross_sign( $record ) {
-		return '+';
-	}
-
-	public function get_gross( $record ) {
-		$value = number_format( $record['amount_value'] ?? 0, 2 );
-
-		return sprintf(
-			'%s %s %s',
-			$this->get_gross_sign( $record ),
-			$value,
-			$record['amount_code'] ?? ''
-		);
+	public function get_global_actions(): array {
+		return ( new Header_Actions_Column() )->get_value();
 	}
 
 }

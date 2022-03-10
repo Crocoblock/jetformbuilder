@@ -298,11 +298,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var options = window.JetFBComponents.PaymentsPage.options;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
-
-if ('store' in options) {
-  options.store = new Vuex.Store(options.store);
-}
-
+options.store = new Vuex.Store(options.store);
 renderCurrentPage(_PaymentsPage__WEBPACK_IMPORTED_MODULE_0__["default"], options);
 })();
 

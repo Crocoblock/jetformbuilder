@@ -3,13 +3,14 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
-use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Pages\Payments_Page;
+use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Plugin;
 
@@ -31,7 +32,7 @@ class Gateway_Manager {
 	private $form_id;
 
 	public $message = null;
-	public $data = null;
+	public $data    = null;
 	public $is_sandbox;
 	private $current_gateway_type;
 
@@ -46,6 +47,8 @@ class Gateway_Manager {
 
 		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_send_actions' ) );
 		add_action( 'jet-form-builder/actions/after-send', array( $this, 'after_send_actions' ) );
+		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ) );
+		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ) );
 
 		$this->catch_payment_result();
 	}
@@ -54,6 +57,18 @@ class Gateway_Manager {
 		return array(
 			new Paypal\Controller(),
 		);
+	}
+
+	public function add_stable_pages( $pages ): array {
+		$pages[] = new Payments_Page();
+
+		return $pages;
+	}
+
+	public function add_single_pages( $pages ): array {
+		$pages[] = new Single_Payment_Page();
+
+		return $pages;
 	}
 
 	/**
@@ -87,9 +102,12 @@ class Gateway_Manager {
 			return;
 		}
 
-		add_filter( 'jet-form-builder/actions/run-callback', function () {
-			return array( new Action_Default_Executor, 'soft_run_actions' );
-		} );
+		add_filter(
+			'jet-form-builder/actions/run-callback',
+			function () {
+				return array( new Action_Default_Executor(), 'soft_run_actions' );
+			}
+		);
 	}
 
 	/**
@@ -248,31 +266,31 @@ class Gateway_Manager {
 		$currency = strtoupper( $currency );
 
 		switch ( $currency ) {
-			case "USD" :
-			case "AUD" :
-			case "NZD" :
-			case "CAD" :
-			case "HKD" :
-			case "MXN" :
-			case "SGD" :
+			case 'USD':
+			case 'AUD':
+			case 'NZD':
+			case 'CAD':
+			case 'HKD':
+			case 'MXN':
+			case 'SGD':
 				$symbol = '&#36;';
 				break;
-			case "EUR" :
+			case 'EUR':
 				$symbol = '&euro;';
 				break;
-			case "GBP" :
+			case 'GBP':
 				$symbol = '&pound;';
 				break;
-			case "BRL" :
+			case 'BRL':
 				$symbol = 'R&#36;';
 				break;
-			case "JPY" :
+			case 'JPY':
 				$symbol = '&yen;';
 				break;
-			case "AOA" :
+			case 'AOA':
 				$symbol = 'Kz';
 				break;
-			default :
+			default:
 				$symbol = $currency;
 				break;
 		}

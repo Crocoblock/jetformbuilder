@@ -6,6 +6,9 @@ namespace Jet_Form_Builder\Gateways\Pages;
 
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
+use Jet_Form_Builder\Gateways\Meta_Boxes\Payer_Box;
+use Jet_Form_Builder\Gateways\Meta_Boxes\Payer_Shipping_Box;
+use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
 
 class Single_Payment_Page extends Base_Single_Page {
 
@@ -23,8 +26,11 @@ class Single_Payment_Page extends Base_Single_Page {
 	public function meta_containers(): array {
 		return array(
 			new Meta_Containers\Normal_Meta_Container(
+				new Payer_Box(),
+				new Payer_Shipping_Box()
 			),
 			new Meta_Containers\Side_Meta_Container(
+				new Payment_Details_Box()
 			),
 		);
 	}

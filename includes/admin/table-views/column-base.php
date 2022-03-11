@@ -67,6 +67,8 @@ abstract class Column_Base {
 		switch ( $type ) {
 			case 'integer':
 				return (int) $value;
+			case 'price':
+				return number_format( $value, 2 );
 			case 'array':
 				return (array) $value;
 			case 'string':

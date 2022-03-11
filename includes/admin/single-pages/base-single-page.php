@@ -10,7 +10,6 @@ use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
 
@@ -31,10 +30,9 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	 * @throws Not_Found_Page_Exception
 	 */
 	public function make( int $id ): Base_Single_Page {
-		$self = $this->set_id( $id );
-		$self->query_config();
+		$this->set_id( $id )->query_config();
 
-		return $self;
+		return $this;
 	}
 
 

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Query_Views;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
@@ -13,7 +12,6 @@ use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
-use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 
 class Payment_View extends View_Base {
 
@@ -32,7 +30,7 @@ class Payment_View extends View_Base {
 	public function get_prepared_join( Query_Builder $builder ) {
 		try {
 			// and also safely create dependent tables
-			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model )->safe_create()::table();
+			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->safe_create()::table();
 
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
@@ -62,7 +60,7 @@ LEFT JOIN `{$payers}` ON 1=1
 		return array_merge(
 			Payment_Model::schema_columns(),
 			Payer_Shipping_Model::schema_columns( 'ship' ),
-			Payer_Model::schema_columns( 'payer' ),
+			Payer_Model::schema_columns( 'payer' )
 		);
 	}
 }

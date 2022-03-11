@@ -11,7 +11,7 @@ use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
-use Jet_Form_Builder\Gateways\Table_Views\Columns\Created_At_Column;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Gross_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Header_Actions_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payer_Column;

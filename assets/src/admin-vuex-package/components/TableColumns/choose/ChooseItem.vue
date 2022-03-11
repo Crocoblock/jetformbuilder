@@ -43,9 +43,13 @@ export default {
 </script>
 
 <style lang="scss">
-.list-table-item__cell.cell--choose {
-	.cx-vui-component {
-		padding: unset;
+.cx-vue-list-table {
+	.cell--choose.cell--choose {
+		padding-right: unset;
+
+		.cx-vui-component {
+			padding: unset;
+		}
 	}
 }
 </style>

@@ -1,40 +1,33 @@
 <template>
-	<div
-		id="misc-publishing-actions"
-	>
-		<div
-			class="misc-pub-section"
+	<table class="jfb-list-table">
+		<tr
 			v-for="({ label }, column) in columns"
 			:key="column"
 		>
-			<div class="misc-pub-section--label">{{ label }}</div>
-			<div class="misc-pub-section--value">
+			<th>{{ label }}</th>
+			<td>
 				<template v-if="getItemComponent( column )">
-					<keep-alive>
-						<component
-							v-bind:is="getItemComponent( column )"
-							:value="getColumnValue( column )"
-							:full-entry="list"
-							:scope="scope"
-						/>
-					</keep-alive>
+					<component
+						v-bind:is="getItemComponent( column )"
+						:value="getColumnValue( column )"
+						:full-entry="list"
+						:scope="scope"
+					/>
 				</template>
 				<template v-else-if="getItemComponent( getColumnType( column ) )">
-					<keep-alive>
-						<component
-							v-bind:is="getItemComponent( getColumnType( column ) )"
-							:value="getColumnValue( column )"
-							:full-entry="list"
-							:scope="scope"
-						/>
-					</keep-alive>
+					<component
+						v-bind:is="getItemComponent( getColumnType( column ) )"
+						:value="getColumnValue( column )"
+						:full-entry="list"
+						:scope="scope"
+					/>
 				</template>
 				<template v-else>
 					{{ list[ column ] ? list[ column ].value : column }}
 				</template>
-			</div>
-		</div>
-	</div>
+			</td>
+		</tr>
+	</table>
 </template>
 
 <script>
@@ -68,14 +61,30 @@ export default {
 
 <style lang="scss">
 
-.misc-pub-section {
-	display: flex;
-	justify-content: space-between;
-	padding: 1em 0.5em;
+#normal-sortables {
+	.jfb-list-table {
+		th {
+			width: 30%;
+		}
+	}
+}
 
-	&--label {
-		&::after {
-			content: ':';
+.jfb-list-table {
+	border-collapse: collapse;
+	width: 100%;
+
+	th, td {
+		padding: 0.8em;
+	}
+	th {
+		//border-right: 1px solid #ccc;
+		text-align: left;
+	}
+	tr {
+		border-bottom: 1px solid #ececec;
+
+		&:last-child {
+			border-bottom: unset;
 		}
 	}
 }

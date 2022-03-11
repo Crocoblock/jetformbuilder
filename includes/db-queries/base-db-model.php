@@ -36,20 +36,19 @@ abstract class Base_Db_Model {
 	abstract public static function schema_keys(): array;
 
 	public static function schema_columns( $prefix = '' ): array {
-		$columns = array_keys( static::schema() );
+		$columns = array();
 
-		if ( ! $prefix ) {
-			return $columns;
+		foreach ( array_keys( static::schema() ) as $column ) {
+			$item = sprintf( '`%s`.`%s`', static::table(), $column );
+
+			if ( $prefix ) {
+				$item .= sprintf( " as '%s'", "{$prefix}.{$column}" );
+			}
+
+			$columns[] = array( 'as' => $item );
 		}
 
-		return array_map(
-			function ( $column ) use ( $prefix ) {
-				return array(
-					'as' => sprintf( "`%s`.`%s` as '%s'", static::table(), $column, "{$prefix}.{$column}" ),
-				);
-			},
-			$columns
-		);
+		return $columns;
 	}
 
 	/**

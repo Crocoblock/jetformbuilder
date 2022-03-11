@@ -53,11 +53,9 @@ abstract class Base_Meta_Container {
 
 	/**
 	 * @param Base_Meta_Box $box
-	 *
-	 * @throws Repository_Exception
 	 */
 	public function add_meta_box( Base_Meta_Box $box ) {
-		$this->rep_install_item( $box );
+		$this->rep_install_item_soft( $box );
 	}
 
 	/**

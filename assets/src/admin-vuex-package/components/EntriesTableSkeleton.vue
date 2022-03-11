@@ -219,9 +219,6 @@ export default {
 }
 
 .cx-vue-list-table {
-	.cell--choose {
-		padding-right: unset;
-	}
 	.list-table-heading, .list-table-item-columns {
 		justify-content: space-between;
 	}
@@ -238,7 +235,7 @@ export default {
 		}
 		&--has-actions {
 			.list-table-item__cell.cell--choose {
-				transform: translateY(25%);
+				/*transform: translateY(25%);*/
 			}
 			.list-table-item-columns {
 				margin-bottom: 1.5em;
@@ -279,9 +276,10 @@ export default {
 			text-align: left;
 			position: relative;
 			margin: auto 0;
+			padding: 8px 20px 6px;
 
 			&:not(.cell--choose) {
-				flex: 1
+				flex: 1;
 			}
 
 			& > span {

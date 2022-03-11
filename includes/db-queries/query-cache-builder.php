@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Db_Queries;
 
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 /**
  * @method Query_Cache_Builder set_view( View_Base $view )
@@ -50,7 +49,7 @@ class Query_Cache_Builder extends Query_Builder {
 
 		$results = parent::query_all();
 
-		wp_cache_set( $this->get_hash(), self::CACHE_GROUP );
+		wp_cache_set( $this->get_hash(), $results, self::CACHE_GROUP );
 
 		return $results;
 	}
@@ -64,7 +63,7 @@ class Query_Cache_Builder extends Query_Builder {
 
 		$results = parent::query_one();
 
-		wp_cache_set( $this->get_hash(), self::CACHE_GROUP );
+		wp_cache_set( $this->get_hash(), $results, self::CACHE_GROUP );
 
 		return $results;
 	}
@@ -78,7 +77,7 @@ class Query_Cache_Builder extends Query_Builder {
 
 		$results = parent::query_var();
 
-		wp_cache_set( $this->get_hash(), self::CACHE_GROUP );
+		wp_cache_set( $this->get_hash(), $results, self::CACHE_GROUP );
 
 		return $results;
 	}
@@ -92,7 +91,7 @@ class Query_Cache_Builder extends Query_Builder {
 
 		$results = parent::query_col( $index );
 
-		wp_cache_set( $this->get_hash(), self::CACHE_GROUP );
+		wp_cache_set( $this->get_hash(), $results, self::CACHE_GROUP );
 
 		return $results;
 	}

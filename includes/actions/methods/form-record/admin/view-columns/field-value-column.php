@@ -15,17 +15,13 @@ class Field_Value_Column extends Column_Advanced_Base {
 	}
 
 	public function is_editable( array $record = array() ): bool {
+		//return false;
 		$type        = $record['field_type'] ?? '';
 		$is_editable = true;
 
 		switch ( $type ) {
 			case 'hidden-field':
 				$is_editable = false;
-				break;
-			case 'text-field':
-				$attrs = Tools::decode_json( $record['field_attrs'] ?? '' );
-
-				$is_editable = 'password' !== ( $attrs['field_type'] ?? '' );
 				break;
 		}
 

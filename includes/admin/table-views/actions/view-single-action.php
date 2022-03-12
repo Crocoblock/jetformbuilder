@@ -23,7 +23,7 @@ abstract class View_Single_Action implements Repository_Item_Instance_Trait {
 		return '';
 	}
 
-	public function to_array(): array {
+	public function to_array( array $record ): array {
 		$attrs = array(
 			'value' => $this->get_slug(),
 			'label' => $this->get_label(),

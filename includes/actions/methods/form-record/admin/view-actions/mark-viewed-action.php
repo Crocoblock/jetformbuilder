@@ -29,7 +29,7 @@ class Mark_Viewed_Action extends Api_Single_Action {
 		return Mark_As_Viewed_Record_Endpoint::get_methods();
 	}
 
-	public function get_rest_url(): string {
+	public function get_rest_url( array $record ): string {
 		return Mark_As_Viewed_Record_Endpoint::rest_url();
 	}
 }

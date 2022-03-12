@@ -843,7 +843,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['value', 'full-entry'],
+  props: ['value', 'full-entry', 'entry-id', 'scope'],
   computed: {
     parsedJson: function parsedJson() {
       return JSON.parse(JSON.stringify(this.value));

@@ -2,9 +2,15 @@
 	<a
 		:href="parsedJson.href"
 		target="_blank"
-	>
-		{{ parsedJson.text }}
-	</a>
+		:class="{
+			'row-title': parsedJson.primary
+		}"
+		:title="parsedJson.title"
+	>{{ parsedJson.text }} <span
+		v-if="'external' === parsedJson.type"
+		class="dashicons dashicons-external"
+		aria-hidden="true"
+	/></a>
 </template>
 
 <script>
@@ -17,6 +23,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+a {
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	column-gap: 0.3em;
+}
 </style>

@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\Delete_Recor
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\Mark_Not_Viewed_Action;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\Mark_Viewed_Action;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\View_Action;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\View_Related_Form;
 
 trait Actions_List_For_Column {
 
@@ -16,6 +17,7 @@ trait Actions_List_For_Column {
 			new View_Action(),
 			new Mark_Viewed_Action(),
 			new Mark_Not_Viewed_Action(),
+			new View_Related_Form(),
 			new Delete_Record_Action(),
 		);
 	}

@@ -8,14 +8,14 @@ abstract class Api_Single_Action extends View_Single_Action {
 
 	abstract public function get_method(): string;
 
-	abstract public function get_rest_url(): string;
+	abstract public function get_rest_url( array $record ): string;
 
-	public function to_array(): array {
-		$attrs = parent::to_array();
+	public function to_array( array $record ): array {
+		$attrs = parent::to_array( $record );
 
 		$attrs['endpoint'] = array(
 			'method' => $this->get_method(),
-			'url'    => $this->get_rest_url(),
+			'url'    => $this->get_rest_url( $record ),
 		);
 
 		return $attrs;

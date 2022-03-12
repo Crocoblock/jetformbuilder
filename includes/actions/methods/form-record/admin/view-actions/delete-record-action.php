@@ -33,7 +33,7 @@ class Delete_Record_Action extends Api_Single_Action {
 		return Delete_Form_Record_Endpoint::get_methods();
 	}
 
-	public function get_rest_url(): string {
+	public function get_rest_url( array $record ): string {
 		return Delete_Form_Record_Endpoint::rest_url();
 	}
 }

@@ -25,7 +25,7 @@ abstract class Base_Actions_Column extends Column_Base {
 			if ( ! $this->is_active( $action, $record ) ) {
 				continue;
 			}
-			$prepared[] = $action->to_array();
+			$prepared[] = $action->to_array( $record );
 		}
 
 		return $prepared;

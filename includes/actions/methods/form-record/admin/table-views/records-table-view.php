@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Classes_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Link_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Header_Actions_Column;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Primary_Form_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Referrer_Link_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Row_Actions_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Status_Column;
@@ -27,7 +28,7 @@ class Records_Table_View extends View_Advanced_Base {
 			self::COLUMN_CHOOSE  => new Record_Id_Column_Advanced(),
 			self::COLUMN_ACTIONS => new Row_Actions_Column(),
 			self::COLUMN_CLASSES => new Classes_Column(),
-			'form'               => new Form_Link_Column(),
+			'form'               => new Primary_Form_Column(),
 			'referrer'           => new Referrer_Link_Column(),
 			'status'             => new Status_Column(),
 			'user'               => new User_Login_Column(),

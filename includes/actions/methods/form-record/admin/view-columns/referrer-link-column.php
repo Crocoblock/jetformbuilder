@@ -20,6 +20,7 @@ class Referrer_Link_Column extends Column_Advanced_Base {
 		$text   = get_the_title( $id );
 		$params = array(
 			'text' => $text ?: '--',
+			'type' => 'external',
 		);
 
 		if ( ! empty( $record['referrer'] ) ) {

@@ -14,6 +14,11 @@ class Form_Link_Column extends Column_Advanced_Base {
 		return __( 'Form', 'jet-form-builder' );
 	}
 
+	/**
+	 * @param array $record
+	 *
+	 * @return array
+	 */
 	public function get_value( array $record = array() ) {
 		$form_id = parent::get_value( $record );
 		$form    = get_post( $form_id );
@@ -21,6 +26,7 @@ class Form_Link_Column extends Column_Advanced_Base {
 		return array(
 			'text' => get_the_title( $form ),
 			'href' => get_edit_post_link( $form, false ),
+			'type' => 'external',
 		);
 	}
 }

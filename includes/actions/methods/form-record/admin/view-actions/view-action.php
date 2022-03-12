@@ -11,9 +11,6 @@ use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;
 
 class View_Action extends Link_Single_Action {
 
-	/** @var Base_Single_Page */
-	private $single;
-
 	public function get_slug(): string {
 		return 'view';
 	}
@@ -30,15 +27,20 @@ class View_Action extends Link_Single_Action {
 	 * @param array $record
 	 *
 	 * @return bool
-	 * @throws Not_Found_Page_Exception
 	 */
 	public function show_in_row( array $record ): bool {
-		$this->single = ( new Single_Form_Record_Page() )->set_id( $record['id'] );
-
 		return true;
 	}
 
-	public function get_href(): string {
-		return $this->single->get_url();
+	/**
+	 * @param array $record
+	 *
+	 * @return string
+	 * @throws Not_Found_Page_Exception
+	 */
+	public function get_href( array $record ): string {
+		$single = ( new Single_Form_Record_Page() )->set_id( $record['id'] ?? 0 );
+
+		return $single->get_url();
 	}
 }

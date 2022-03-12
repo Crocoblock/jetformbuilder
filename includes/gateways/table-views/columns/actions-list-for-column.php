@@ -14,7 +14,6 @@ trait Actions_List_For_Column {
 	 */
 	protected function get_actions(): array {
 		return array(
-			new View_Action(),
 		);
 	}
 

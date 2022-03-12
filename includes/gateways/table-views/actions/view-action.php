@@ -30,15 +30,20 @@ class View_Action extends Link_Single_Action {
 	 * @param array $record
 	 *
 	 * @return bool
-	 * @throws Not_Found_Page_Exception
 	 */
 	public function show_in_row( array $record ): bool {
-		$this->single = ( new Single_Payment_Page() )->set_id( $record['id'] );
-
 		return true;
 	}
 
-	public function get_href(): string {
-		return $this->single->get_url();
+	/**
+	 * @param array $record
+	 *
+	 * @return string
+	 * @throws Not_Found_Page_Exception
+	 */
+	public function get_href( array $record ): string {
+		$single = ( new Single_Payment_Page() )->set_id( $record['id'] );
+
+		return $single->get_url();
 	}
 }

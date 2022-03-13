@@ -15,11 +15,11 @@ class Field_Value_Column extends Column_Advanced_Base {
 	}
 
 	public function is_editable( array $record = array() ): bool {
-		//return false;
 		$type        = $record['field_type'] ?? '';
 		$is_editable = true;
 
 		switch ( $type ) {
+			case 'computed':
 			case 'hidden-field':
 				$is_editable = false;
 				break;

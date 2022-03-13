@@ -27,12 +27,12 @@ use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
  */
 abstract class Base_Gateway extends Legacy_Base_Gateway {
 
-	const GATEWAY_META_KEY = '_jet_gateway_data';
+	const GATEWAY_META_KEY     = '_jet_gateway_data';
 	const PAYMENT_TYPE_INITIAL = 'initial';
 	const PAYMENT_TYPE_RENEWAl = 'renewal';
 
 	const SUCCESS_TYPE = 'success';
-	const FAILED_TYPE = 'cancel';
+	const FAILED_TYPE  = 'cancel';
 
 	/** @var Redirect_To_Page */
 	protected $redirect;

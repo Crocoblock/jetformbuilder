@@ -50,7 +50,7 @@ abstract class Scenario_Logic_Base {
 			array(
 				'status' => jet_fb_gateway_current()->get_result_message(
 					$this->get_scenario_row( 'status' )
-				)
+				),
 			)
 		);
 	}
@@ -59,9 +59,9 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		$keep_these = jet_fb_gateway_current()->get_actions_before();
-
 		jet_fb_gateway_current()->set_form_meta( Gateway_Manager::instance()->gateways() );
+
+		$keep_these      = jet_fb_gateway_current()->get_actions_before();
 		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
 		foreach ( $default_actions as $index ) {
@@ -70,9 +70,11 @@ abstract class Scenario_Logic_Base {
 			if ( 'redirect_to_page' === $action->get_id() ) {
 				jet_fb_action_handler()->unregister_action( $index );
 
-				$this->add_context( array(
-					'redirect' => $action
-				) );
+				$this->add_context(
+					array(
+						'redirect' => $action,
+					)
+				);
 			}
 
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
@@ -104,7 +106,7 @@ abstract class Scenario_Logic_Base {
 		return add_query_arg(
 			array(
 				Gateway_Manager::PAYMENT_TYPE_PARAM => jet_fb_gateway_current()->get_id(),
-				Scenarios_Manager::QUERY_VAR        => static::scenario_id()
+				Scenarios_Manager::QUERY_VAR        => static::scenario_id(),
 			),
 			$refer
 		);
@@ -131,8 +133,8 @@ abstract class Scenario_Logic_Base {
 		$entry = $this->get_scenario_row();
 
 		$all = jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
-		                              ->unregister_action( 'redirect_to_page' )
-		                              ->get_all();
+									  ->unregister_action( 'redirect_to_page' )
+									  ->get_all();
 
 		if ( empty( $all ) ) {
 			return;

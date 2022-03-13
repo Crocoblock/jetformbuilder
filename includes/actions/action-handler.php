@@ -336,11 +336,11 @@ class Action_Handler {
 		return $this->request_data['__refer'] ?? '';
 	}
 
-	public function get_passed_actions() {
+	public function get_passed_actions(): array {
 		return $this->passed;
 	}
 
-	public function get_skipped_actions() {
+	public function get_skipped_actions(): array {
 		return $this->skipped;
 	}
 

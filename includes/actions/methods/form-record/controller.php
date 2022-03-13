@@ -202,14 +202,19 @@ class Controller {
 				jet_form_builder()->form_handler->request_handler->_fields
 			);
 
-			$type = Block_Helper::delete_namespace( $current_attrs );
+			if ( 'password' === ( $current_attrs['attrs']['field_type'] ?? '' ) ) {
+				continue;
+			}
+
+			$type          = Block_Helper::delete_namespace( $current_attrs );
+			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
 
 			$fields[] = array(
 				'record_id'   => $this->record_id,
 				'field_name'  => $field_name,
-				'field_type'  => $type,
-				'field_value' => is_scalar( $value ) ? $value : wp_json_encode( $value ),
-				'field_attrs' => $this->get_attrs_by_field_type( $type, $current_attrs ),
+				'field_type'  => empty( $type ) ? 'computed' : $type,
+				'field_value' => is_scalar( $value ) ? $value : Tools::encode_json( $value ),
+				'field_attrs' => Tools::encode_json( $attrs_to_save ),
 			);
 		}
 
@@ -226,9 +231,7 @@ class Controller {
 		}
 		$attrs = Block_Helper::get_attrs_from_block( $block, $list );
 
-		return Tools::encode_json(
-			apply_filters( 'jet-form-builder/on-save-record/field-attributes', $attrs, $type, $block )
-		);
+		return apply_filters( 'jet-form-builder/on-save-record/field-attributes', $attrs, $type, $block );
 	}
 
 	private function get_prepared_actions( $source, $status ): array {

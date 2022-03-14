@@ -525,24 +525,6 @@ class Tools {
 		return JET_FORM_BUILDER_PATH . 'templates/' . $path;
 	}
 
-	public static function array_merge_recursive_distinct( array &$array1, array &$array2 ) {
-		$merged = $array1;
-
-		foreach ( $array2 as $key => &$value ) {
-			if ( true
-				&& is_array( $value )
-				&& isset( $merged [ $key ] )
-				&& is_array( $merged [ $key ] )
-			) {
-				$merged [ $key ] = self::array_merge_recursive_distinct( $merged [ $key ], $value );
-			} else {
-				$merged [ $key ] = $value;
-			}
-		}
-
-		return $merged;
-	}
-
 	public static function get_property( $source, $name, $if_not_exist = '' ) {
 		if ( is_object( $source ) ) {
 			return $source->{$name} ?? $if_not_exist;
@@ -551,50 +533,8 @@ class Tools {
 		return $source[ $name ] ?? $if_not_exist;
 	}
 
-	public static function get_property_recursive( $source, $props_string, $delimiter = '.', $if_empty = false ) {
-		if ( ! $props_string ) {
-			return empty( $source ) ? $if_empty : $source;
-		}
-
-		$props   = explode( $delimiter, $props_string );
-		$changed = false;
-
-		foreach ( $props as $prop_item ) {
-			if ( ! isset( $source[ $prop_item ] ) ) {
-				break;
-			}
-			$source  = $source[ $prop_item ];
-			$changed = $prop_item;
-		}
-		$last = end( $props );
-
-		return $last === $changed ? $source : $if_empty;
-	}
-
-	public static function get_site_host() {
-		return str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
-	}
-
 	public static function esc_template_string( $source, $replace_enqueue = true ) {
 		return self::call_escape_func( 'template', $source, $replace_enqueue );
-	}
-
-	public static function replace_path_args( string $path, array $path_args ): string {
-		$patterns = array();
-
-		foreach ( $path_args as $key => $value ) {
-			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
-				return (string) $value;
-			};
-		}
-
-		return implode(
-			'/',
-			preg_replace_callback_array(
-				$patterns,
-				explode( '/', $path )
-			)
-		);
 	}
 
 	public static function is_repeater_val( $value ): bool {

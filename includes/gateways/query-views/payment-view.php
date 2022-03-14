@@ -12,6 +12,7 @@ use Jet_Form_Builder\Gateways\Db_Models\Payer_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
+use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 
 class Payment_View extends View_Base {
 

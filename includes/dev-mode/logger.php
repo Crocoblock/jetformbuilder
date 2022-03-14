@@ -37,6 +37,7 @@ class Logger {
 			'data'         => $exception->get_additional(),
 			'trace_string' => $exception->getTraceAsString(),
 			'version'      => jet_form_builder()->get_version(),
+			'action_id'    => jet_fb_action_handler()->get_position(),
 		);
 	}
 

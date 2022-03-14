@@ -7539,6 +7539,37 @@ addAction('register_user', withSelect(withRequestFields)(RegisterUserAction));
 
 /***/ }),
 
+/***/ "./editor/form-actions/save-record.js":
+/*!********************************************!*\
+  !*** ./editor/form-actions/save-record.js ***!
+  \********************************************/
+/***/ (() => {
+
+var _JetFBActions = JetFBActions,
+    addAction = _JetFBActions.addAction;
+var ToggleControl = wp.components.ToggleControl;
+
+function SaveRecordAction(_ref) {
+  var settings = _ref.settings,
+      source = _ref.source,
+      label = _ref.label,
+      help = _ref.help,
+      onChangeSettingObj = _ref.onChangeSettingObj;
+  return wp.element.createElement(React.Fragment, null, wp.element.createElement(ToggleControl, {
+    label: label('save_user_data'),
+    checked: settings.save_user_data,
+    onChange: function onChange(save_user_data) {
+      return onChangeSettingObj({
+        save_user_data: save_user_data
+      });
+    }
+  }));
+}
+
+addAction('save_record', SaveRecordAction);
+
+/***/ }),
+
 /***/ "./editor/form-actions/send-email.js":
 /*!*******************************************!*\
   !*** ./editor/form-actions/send-email.js ***!
@@ -8110,6 +8141,9 @@ var _wp$data = wp.data,
     withSelect = _wp$data.withSelect,
     withDispatch = _wp$data.withDispatch;
 var compose = wp.compose.compose;
+var _wp$element = wp.element,
+    useState = _wp$element.useState,
+    useEffect = _wp$element.useEffect;
 var _JetFBHooks = JetFBHooks,
     withSelectMeta = _JetFBHooks.withSelectMeta,
     withSelectGateways = _JetFBHooks.withSelectGateways,
@@ -8118,6 +8152,8 @@ var _JetFBHooks = JetFBHooks,
 var gatewaysData = gatewayAttr();
 var label = gatewayAttr('labels');
 var callableGateway = gatewayAttr('additional');
+var _JetFBLocalizeHelper = JetFBLocalizeHelper,
+    isInDefaultFlow = _JetFBLocalizeHelper.isInDefaultFlow;
 
 function GatewaysEditor(_ref) {
   var ActionsMeta = _ref._jf_actions,
@@ -8128,7 +8164,7 @@ function GatewaysEditor(_ref) {
       loadingGateway = _ref.loadingGateway,
       gatewayRequest = _ref.gatewayRequest;
   var availableActions = ActionsMeta.filter(function (action) {
-    return action.type !== 'redirect_to_page';
+    return action.type !== 'redirect_to_page' && isInDefaultFlow(action.type);
   });
   var insertPostActions = prepareActionsListByType(ActionsMeta, 'insert_post', true);
   var additional = callableGateway(gatewayGeneral.gateway);
@@ -8339,13 +8375,27 @@ __webpack_require__.r(__webpack_exports__);
 var _JetFBActions = JetFBActions,
     registerGateway = _JetFBActions.registerGateway;
 var addFilter = wp.hooks.addFilter;
+var __ = wp.i18n.__;
 var gatewayID = 'paypal';
 registerGateway(gatewayID, _main__WEBPACK_IMPORTED_MODULE_0__["default"]);
 registerGateway(gatewayID, _pay_now_scenario__WEBPACK_IMPORTED_MODULE_1__["default"], 'PAY_NOW');
-addFilter('jet.fb.gateways.getDisabledStateButton', 'jet-form-builder', function (isDisabled, props) {
+addFilter('jet.fb.gateways.getDisabledStateButton', 'jet-form-builder', function (isDisabled, props, issetActionType) {
   var _props$_jf_gateways;
 
-  return gatewayID === (props === null || props === void 0 ? void 0 : (_props$_jf_gateways = props._jf_gateways) === null || _props$_jf_gateways === void 0 ? void 0 : _props$_jf_gateways.gateway) ? false : isDisabled;
+  if (gatewayID === (props === null || props === void 0 ? void 0 : (_props$_jf_gateways = props._jf_gateways) === null || _props$_jf_gateways === void 0 ? void 0 : _props$_jf_gateways.gateway)) {
+    return !issetActionType('save_record');
+  }
+
+  return isDisabled;
+});
+addFilter('jet.fb.gateways.getDisabledInfo', 'jet-form-builder', function (component, props) {
+  var _props$_jf_gateways2;
+
+  if (gatewayID !== (props === null || props === void 0 ? void 0 : (_props$_jf_gateways2 = props._jf_gateways) === null || _props$_jf_gateways2 === void 0 ? void 0 : _props$_jf_gateways2.gateway)) {
+    return component;
+  }
+
+  return wp.element.createElement("p", null, __('Please add \`Save Form Record\` action', 'jet-form-builder'));
 });
 
 /***/ }),
@@ -9485,7 +9535,11 @@ function PluginGateways(props) {
   };
 
   var getDisabledStateButton = function getDisabledStateButton() {
-    return applyFilters('jet.fb.gateways.getDisabledStateButton', !issetActionType('insert_post'), props);
+    return applyFilters('jet.fb.gateways.getDisabledStateButton', !issetActionType('insert_post'), props, issetActionType);
+  };
+
+  var getDisabledInfo = function getDisabledInfo() {
+    return applyFilters('jet.fb.gateways.getDisabledInfo', wp.element.createElement("p", null, __('Please add \`Insert/Update Post\` action', 'jet-form-builder')), props);
   };
 
   var _useState = useState(false),
@@ -9497,6 +9551,11 @@ function PluginGateways(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       isDisabled = _useState4[0],
       setDisabled = _useState4[1];
+
+  var _useState5 = useState(getDisabledInfo),
+      _useState6 = _slicedToArray(_useState5, 2),
+      disabledInfo = _useState6[0],
+      setDisabledInfo = _useState6[1];
 
   useEffect(function () {
     if (isEdit) {
@@ -9522,7 +9581,8 @@ function PluginGateways(props) {
 
   useEffect(function () {
     setDisabled(getDisabledStateButton());
-  }, [GatewaysMeta.gateway]);
+    setDisabledInfo(getDisabledInfo());
+  }, [GatewaysMeta.gateway, ActionsMeta]);
   return wp.element.createElement(React.Fragment, null, wp.element.createElement(RadioControl, {
     key: 'gateways_radio_control',
     selected: GatewaysMeta.gateway,
@@ -9545,7 +9605,7 @@ function PluginGateways(props) {
     },
     isSecondary: true,
     disabled: isDisabled
-  }, __('Edit')), isDisabled && wp.element.createElement("p", null, __('Please add \`Insert/Update Post\` action', 'jet-form-builder'))), isEdit && wp.element.createElement(ActionModal, {
+  }, __('Edit')), isDisabled && disabledInfo), isEdit && wp.element.createElement(ActionModal, {
     classNames: ['width-60'],
     onRequestClose: function onRequestClose() {
       return closeModal();
@@ -10227,7 +10287,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _form_actions_getresponse__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./form-actions/getresponse */ "./editor/form-actions/getresponse.js");
 /* harmony import */ var _form_actions_activecampaign__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./form-actions/activecampaign */ "./editor/form-actions/activecampaign.js");
 /* harmony import */ var _form_actions_activecampaign__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_form_actions_activecampaign__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _plugins_manager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/manager */ "./editor/plugins/manager.js");
+/* harmony import */ var _form_actions_save_record__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./form-actions/save-record */ "./editor/form-actions/save-record.js");
+/* harmony import */ var _form_actions_save_record__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_form_actions_save_record__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _plugins_manager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/manager */ "./editor/plugins/manager.js");
+
 
 
 
@@ -10250,7 +10313,7 @@ window.jetFormActionTypes.forEach(function (action, index) {
     window.jetFormActionTypes[index].callback = window.jetFormDefaultActions[action.id];
   }
 });
-(0,_plugins_manager__WEBPACK_IMPORTED_MODULE_12__["default"])();
+(0,_plugins_manager__WEBPACK_IMPORTED_MODULE_13__["default"])();
 (0,_blocks_form_fields__WEBPACK_IMPORTED_MODULE_0__["default"])();
 event('jet-form-builder-initialized')();
 })();

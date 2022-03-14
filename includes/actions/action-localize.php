@@ -14,7 +14,9 @@ trait Action_Localize {
 	}
 
 	public function self_script_name() {
-		return '';
+		$id = str_replace( '-', '_', $this->get_id() );
+
+		return "JetFormAction_{$id}";
 	}
 
 	public function editor_labels() {

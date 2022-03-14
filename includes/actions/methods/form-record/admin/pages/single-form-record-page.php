@@ -21,10 +21,11 @@ class Single_Form_Record_Page extends Base_Single_Page {
 		return array(
 			new Meta_Containers\Normal_Meta_Container(
 				new Meta_Boxes\Form_Record_Fields_Box(),
-				new Meta_Boxes\Form_Record_Actions_Box()
+				new Meta_Boxes\Form_Record_Errors_Box()
 			),
 			new Meta_Containers\Side_Meta_Container(
-				new Meta_Boxes\Form_Record_Values_Box()
+				new Meta_Boxes\Form_Record_Values_Box(),
+				new Meta_Boxes\Form_Record_Actions_Box(),
 			),
 		);
 	}

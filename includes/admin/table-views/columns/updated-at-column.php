@@ -13,6 +13,12 @@ class Updated_At_Column extends Column_Advanced_Base {
 	}
 
 	public function get_value( array $record = array() ) {
-		return mysql2date( 'F j, Y, H:i:s', $record['updated_at'] ?? '' );
+		$date = $record['updated_at'] ?? '';
+
+		if ( '0000-00-00 00:00:00' === $date ) {
+			return $date;
+		}
+
+		return mysql2date( 'F j, Y, H:i:s', $date );
 	}
 }

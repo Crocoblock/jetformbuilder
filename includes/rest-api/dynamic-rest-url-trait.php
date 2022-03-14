@@ -4,12 +4,12 @@
 namespace Jet_Form_Builder\Rest_Api;
 
 
-use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Classes\Http_Tools;
 
 trait Dynamic_Rest_Url_Trait {
 
 	public static function get_dynamic_base( array $path_args ): string {
-		return Tools::replace_path_args( static::get_rest_base(), $path_args );
+		return Http_Tools::replace_path_args( static::get_rest_base(), $path_args );
 	}
 
 	public static function dynamic_rest_url( array $path ): string {

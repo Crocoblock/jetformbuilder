@@ -35,6 +35,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+
+#actions-log {
+	.cell--status{
+		flex: 0.2;
+	}
+}
 
 </style>

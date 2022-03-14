@@ -1301,12 +1301,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var _JetFBMixins = JetFBMixins,
     ParseIncomingValueMixin = _JetFBMixins.ParseIncomingValueMixin;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "link--item",
+  name: 'link--item',
   mixins: [ParseIncomingValueMixin],
-  computed: {}
+  computed: {
+    isExternal: function isExternal() {
+      return 'external' === this.parsedJson.type;
+    }
+  }
 });
 
 /***/ }),
@@ -3627,6 +3632,33 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".jfb-icon-status > span[data-v-eb79323
 
 /***/ }),
 
+/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "a[data-v-160b62b6] {\n  text-decoration: none;\n}\na.with-flex[data-v-160b62b6] {\n  display: flex;\n  align-items: center;\n  column-gap: 0.3em;\n  width: fit-content;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/link-type/LinkType.vue","webpack://./../LinkType.vue"],"names":[],"mappings":"AA+BA;EACC,qBAAA;AC9BD;ADgCC;EACC,aAAA;EACA,mBAAA;EACA,iBAAA;EACA,kBAAA;AC9BF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\na {\r\n\ttext-decoration: none;\r\n\r\n\t&.with-flex {\r\n\t\tdisplay: flex;\r\n\t\talign-items: center;\r\n\t\tcolumn-gap: 0.3em;\r\n\t\twidth: fit-content;\r\n\t}\r\n}\r\n","a {\n  text-decoration: none;\n}\na.with-flex {\n  display: flex;\n  align-items: center;\n  column-gap: 0.3em;\n  width: fit-content;\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss&":
 /*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss& ***!
@@ -3702,33 +3734,6 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.handle-actions[data-v-07ca11b2] {\r\n\tdisplay: flex;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/PostBoxSkeleton.vue"],"names":[],"mappings":";AA8CA;CACA,aAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"postbox\" :id=\"slug\">\r\n\t\t<div class=\"postbox-header\">\r\n\t\t\t<h2 class=\"ui-sortable-handle\">{{ title }}</h2>\r\n\t\t\t<div class=\"handle-actions\" v-if=\"$slots['header-actions']\">\r\n\t\t\t\t<slot name=\"header-actions\"></slot>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"handle-actions\" v-else>\r\n\t\t\t\t<UndoChangesTable\r\n\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t/>\r\n\t\t\t\t<EditTableSwitcher\r\n\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t/>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div class=\"postbox-inner submitbox\">\r\n\t\t\t<slot></slot>\r\n\t\t\t<div id=\"major-publishing-actions\" v-if=\"$slots.actions\">\r\n\t\t\t\t<slot name=\"actions\"></slot>\r\n\t\t\t\t<div class=\"clear\"></div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nimport EditTableSwitcher from './EditTableSwitcher';\r\nimport UndoChangesTable from './UndoChangesTable';\r\n\r\nexport default {\r\n\tname: 'PostBox',\r\n\tprops: {\r\n\t\ttitle: String,\r\n\t\tslug: String,\r\n\t},\r\n\tcomponents: {\r\n\t\tUndoChangesTable,\r\n\t\tEditTableSwitcher,\r\n\t},\r\n\tcomputed: {},\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n\r\n.handle-actions {\r\n\tdisplay: flex;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&":
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
-
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "\na[data-v-160b62b6] {\r\n\ttext-decoration: none;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tcolumn-gap: 0.3em;\n}\r\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/TableColumns/link-type/LinkType.vue"],"names":[],"mappings":";AA0BA;CACA,qBAAA;CACA,aAAA;CACA,mBAAA;CACA,iBAAA;AACA","sourcesContent":["<template>\r\n\t<a\r\n\t\t:href=\"parsedJson.href\"\r\n\t\ttarget=\"_blank\"\r\n\t\t:class=\"{\r\n\t\t\t'row-title': parsedJson.primary\r\n\t\t}\"\r\n\t\t:title=\"parsedJson.title\"\r\n\t>{{ parsedJson.text }} <span\r\n\t\tv-if=\"'external' === parsedJson.type\"\r\n\t\tclass=\"dashicons dashicons-external\"\r\n\t\taria-hidden=\"true\"\r\n\t/></a>\r\n</template>\r\n\r\n<script>\r\nconst { ParseIncomingValueMixin } = JetFBMixins;\r\n\r\nexport default {\r\n\tname: \"link--item\",\r\n\tmixins: [ ParseIncomingValueMixin ],\r\n\tcomputed: {\t},\r\n}\r\n</script>\r\n\r\n<style scoped>\r\na {\r\n\ttext-decoration: none;\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tcolumn-gap: 0.3em;\r\n}\r\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4637,7 +4642,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _LinkType_vue_vue_type_template_id_160b62b6_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LinkType.vue?vue&type=template&id=160b62b6&scoped=true& */ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=template&id=160b62b6&scoped=true&");
 /* harmony import */ var _LinkType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LinkType.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=script&lang=js&");
-/* harmony import */ var _LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& */ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&");
+/* harmony import */ var _LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& */ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -5802,6 +5807,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&":
+/*!*************************************************************************************************************************************!*\
+  !*** ./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& ***!
+  \*************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
 /***/ "./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss&":
 /*!*********************************************************************************************!*\
   !*** ./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss& ***!
@@ -5848,23 +5870,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_style_index_0_id_07ca11b2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_style_index_0_id_07ca11b2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_style_index_0_id_07ca11b2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PostBoxSkeleton_vue_vue_type_style_index_0_id_07ca11b2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&":
-/*!************************************************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& ***!
-  \************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkType_vue_vue_type_style_index_0_id_160b62b6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -7082,6 +7087,7 @@ var render = function () {
     {
       class: {
         "row-title": _vm.parsedJson.primary,
+        "with-flex": _vm.isExternal,
       },
       attrs: {
         href: _vm.parsedJson.href,
@@ -7091,7 +7097,7 @@ var render = function () {
     },
     [
       _vm._v(_vm._s(_vm.parsedJson.text) + " "),
-      "external" === _vm.parsedJson.type
+      _vm.isExternal
         ? _c("span", {
             staticClass: "dashicons dashicons-external",
             attrs: { "aria-hidden": "true" },
@@ -7640,6 +7646,27 @@ if(false) {}
 
 /***/ }),
 
+/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=scss&");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
+var update = add("c52b77c2", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
 /***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TablePagination.vue?vue&type=style&index=0&lang=scss& ***!
@@ -7698,27 +7725,6 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
 var update = add("25fd2c0c", content, false, {});
-// Hot Module Replacement
-if(false) {}
-
-/***/ }),
-
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/link-type/LinkType.vue?vue&type=style&index=0&id=160b62b6&scoped=true&lang=css&");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.id, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("3e76ae96", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

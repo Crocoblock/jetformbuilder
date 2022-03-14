@@ -58,11 +58,20 @@ function PluginGateways( props ) {
 	};
 
 	const getDisabledStateButton = () => {
-		return applyFilters( 'jet.fb.gateways.getDisabledStateButton', ! issetActionType( 'insert_post' ), props );
+		return applyFilters( 'jet.fb.gateways.getDisabledStateButton', ! issetActionType( 'insert_post' ), props, issetActionType );
 	};
+
+	const getDisabledInfo = () => {
+		return applyFilters(
+			'jet.fb.gateways.getDisabledInfo',
+			<p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p>,
+			props
+		);
+	}
 
 	const [ isEdit, setEdit ] = useState( false );
 	const [ isDisabled, setDisabled ] = useState( getDisabledStateButton );
+	const [ disabledInfo, setDisabledInfo ] = useState( getDisabledInfo )
 
 	useEffect( () => {
 		if ( isEdit ) {
@@ -83,7 +92,8 @@ function PluginGateways( props ) {
 
 	useEffect( () => {
 		setDisabled( getDisabledStateButton() );
-	}, [ GatewaysMeta.gateway ] );
+		setDisabledInfo( getDisabledInfo() );
+	}, [ GatewaysMeta.gateway, ActionsMeta ] );
 
 	return <>
 		<RadioControl
@@ -114,7 +124,7 @@ function PluginGateways( props ) {
 			>
 				{ __( 'Edit' ) }
 			</Button>
-			{ isDisabled && <p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p> }
+			{ isDisabled && disabledInfo }
 		</> }
 		{ isEdit && (
 			<ActionModal

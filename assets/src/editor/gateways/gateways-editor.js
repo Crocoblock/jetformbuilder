@@ -28,6 +28,11 @@ const {
 const { compose } = wp.compose;
 
 const {
+	useState,
+	useEffect,
+} = wp.element;
+
+const {
 	withSelectMeta,
 	withSelectGateways,
 	withDispatchGateways,
@@ -37,6 +42,8 @@ const {
 const gatewaysData = gatewayAttr();
 const label = gatewayAttr( 'labels' );
 const callableGateway = gatewayAttr( 'additional' );
+
+const { isInDefaultFlow } = JetFBLocalizeHelper;
 
 function GatewaysEditor( {
 	_jf_actions: ActionsMeta,
@@ -48,7 +55,7 @@ function GatewaysEditor( {
 	gatewayRequest,
 } ) {
 
-	const availableActions = ActionsMeta.filter( action => action.type !== 'redirect_to_page' );
+	const availableActions = ActionsMeta.filter( action => ( action.type !== 'redirect_to_page' && isInDefaultFlow( action.type ) ) );
 	const insertPostActions = prepareActionsListByType( ActionsMeta, 'insert_post', true );
 
 	const additional = callableGateway( gatewayGeneral.gateway );

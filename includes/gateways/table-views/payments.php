@@ -54,14 +54,12 @@ class Payments extends View_Advanced_Base {
 		$id_column = new Record_Id_Column_Advanced();
 
 		return array(
-			self::COLUMN_CHOOSE  => $id_column,
 			self::COLUMN_ACTIONS => new Row_Actions_Column(),
 			'type'               => new Payment_Type_Column(),
 			'date'               => new Created_At_Column(),
 			'status'             => new Payment_Status_Column(),
 			'gross'              => new Gross_Column(),
 			'payer'              => new Payer_Column(),
-			'transaction_id'     => new Transaction_Column(),
 			'id'                 => $id_column,
 		);
 	}

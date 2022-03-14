@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode\Manager;
@@ -336,7 +337,7 @@ class Send_Email extends Base {
 		$address = ! empty( $this->settings['reply_email'] ) ? $this->settings['reply_email'] : '';
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
-			$address = 'noreply@' . Tools::get_site_host();
+			$address = 'noreply@' . Http_Tools::get_site_host();
 		}
 
 		return apply_filters( 'jet-form-builder/send-email/reply-to', $address, $this );

@@ -15,7 +15,8 @@ class Field_Value_Column extends Column_Advanced_Base {
 	}
 
 	public function is_editable( array $record = array() ): bool {
-		$type        = $record['field_type'] ?? '';
+		return false;
+		/*$type        = $record['field_type'] ?? '';
 		$is_editable = true;
 
 		switch ( $type ) {
@@ -29,7 +30,7 @@ class Field_Value_Column extends Column_Advanced_Base {
 			'jet-form-builder/table-form-fields/column-value/is-editable',
 			$is_editable,
 			$record
-		);
+		);*/
 	}
 
 	public function get_control( array $record = array() ): string {

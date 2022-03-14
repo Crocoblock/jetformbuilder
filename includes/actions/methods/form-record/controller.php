@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
@@ -21,11 +22,6 @@ class Controller {
 	);
 	protected $columns  = array();
 	protected $record_id;
-
-	public function __construct() {
-		$this->set_setting( 'save_errors', Manager::instance()->active() );
-	}
-
 
 	public function get_record_id(): int {
 		return (int) $this->record_id;
@@ -73,24 +69,20 @@ class Controller {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function save_record( $defaults = array() ) {
-		$args = jet_form_builder()->form_handler->get_response_args();
-
-		$this->set_columns(
-			array(
-				'form_id'           => jet_fb_handler()->get_form_id(),
-				'referrer'          => jet_fb_handler()->refer,
-				'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
-				'user_id'           => get_current_user_id(),
-				'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
-				'from_content_type' => 'post', /* it can be replaced by CCT slug */
-				'status'            => $args['status'] ?? '',
-			)
+	public function save_record() {
+		$args    = jet_form_builder()->form_handler->get_response_args();
+		$columns = array(
+			'form_id'           => jet_fb_handler()->get_form_id(),
+			'referrer'          => jet_fb_handler()->refer,
+			'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
+			'user_id'           => get_current_user_id(),
+			'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
+			'from_content_type' => 'post', /* it can be replaced by CCT slug */
+			'status'            => $args['status'] ?? '',
 		);
 
-		$this->set_columns( $defaults );
-
-		$this->maybe_unset_user_data();
+		$this->set_columns( $columns );
+		$this->maybe_set_user_data();
 
 		return ( new Models\Record_Model() )->insert( $this->columns );
 	}
@@ -252,15 +244,13 @@ class Controller {
 		return $actions;
 	}
 
-	public function maybe_unset_user_data(): Controller {
-		if ( ! empty( $this->settings['save_user_data'] ) ) {
+	public function maybe_set_user_data(): Controller {
+		if ( empty( $this->settings['save_user_data'] ) ) {
 			return $this;
 		}
 
-		unset(
-			$this->columns['user_agent'],
-			$this->columns['ip_address']
-		);
+		$this->columns['user_agent'] = Http_Tools::get_user_agent();
+		$this->columns['ip_address'] = Http_Tools::get_ip_address();
 
 		return $this;
 	}

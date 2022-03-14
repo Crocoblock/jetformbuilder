@@ -370,12 +370,12 @@ class Action_Handler {
 	 * @return $this
 	 */
 	public function set_current_action( $action_id ) {
-		$this->current_position = $action_id;
+		$this->current_position = (int) $action_id;
 
 		return $this;
 	}
 
-	public function get_position() {
+	public function get_position(): int {
 		return $this->current_position;
 	}
 

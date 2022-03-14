@@ -87,6 +87,12 @@ const getLocalizedFullPack = ( actionType, source = false ) => {
 	return { source, label, help, messages, gatewayAttrs, setSource };
 };
 
+const isInDefaultFlow = actionType => {
+	const flow = 'Jet_Form_Builder\\Actions\\Executors\\Action_Default_Executor';
+
+	return flow === getLocalized( actionType, '__flow' );
+};
+
 window.JetFBLocalizeHelper = {
 	getActionLabel,
 	getLocalizedWithFunc,
@@ -95,4 +101,5 @@ window.JetFBLocalizeHelper = {
 	localizedGatewayAttrs,
 	localizedMessages,
 	getLocalizedFullPack,
+	isInDefaultFlow
 };

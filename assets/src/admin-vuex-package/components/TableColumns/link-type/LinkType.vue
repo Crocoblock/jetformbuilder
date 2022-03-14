@@ -3,11 +3,12 @@
 		:href="parsedJson.href"
 		target="_blank"
 		:class="{
-			'row-title': parsedJson.primary
+			'row-title': parsedJson.primary,
+			'with-flex': isExternal,
 		}"
 		:title="parsedJson.title"
 	>{{ parsedJson.text }} <span
-		v-if="'external' === parsedJson.type"
+		v-if="isExternal"
 		class="dashicons dashicons-external"
 		aria-hidden="true"
 	/></a>
@@ -17,17 +18,25 @@
 const { ParseIncomingValueMixin } = JetFBMixins;
 
 export default {
-	name: "link--item",
+	name: 'link--item',
 	mixins: [ ParseIncomingValueMixin ],
-	computed: {	},
+	computed: {
+		isExternal() {
+			return 'external' === this.parsedJson.type;
+		},
+	},
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 a {
 	text-decoration: none;
-	display: flex;
-	align-items: center;
-	column-gap: 0.3em;
+
+	&.with-flex {
+		display: flex;
+		align-items: center;
+		column-gap: 0.3em;
+		width: fit-content;
+	}
 }
 </style>

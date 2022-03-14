@@ -21,7 +21,7 @@ class Record_Model extends Base_Db_Model {
 			'from_content_id'   => 'bigint(20) NOT NULL',
 			'from_content_type' => 'varchar(20) NOT NULL',
 			'status'            => 'varchar(255)',
-			'ip_address'        => 'int(11) UNSIGNED',
+			'ip_address'        => 'varchar(255)',
 			'user_agent'        => 'varchar(255)',
 			'referrer'          => 'varchar(255)',
 			'submit_type'       => 'varchar(20)',
@@ -37,17 +37,5 @@ class Record_Model extends Base_Db_Model {
 			'form_id' => 'index',
 			'user_id' => 'index',
 		);
-	}
-
-	/**
-	 * @throws Sql_Exception
-	 */
-	public function before_insert() {
-		$this->safe_create();
-		( new Record_Field_Model() )->safe_create();
-		( new Record_Error_Model() )->safe_create();
-		( new Record_Action_Result_Model() )->safe_create();
-
-		parent::before_insert();
 	}
 }

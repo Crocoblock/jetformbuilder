@@ -9,11 +9,11 @@ use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;
 class View_Related_Form extends Link_Single_Action {
 
 	public function get_slug(): string {
-		return 'view_form';
+		return 'edit_form';
 	}
 
 	public function get_label(): string {
-		return __( 'View Form', 'jet-form-builder' );
+		return __( 'Edit Form', 'jet-form-builder' );
 	}
 
 	public function get_href( array $record ): string {

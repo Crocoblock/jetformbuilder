@@ -17,9 +17,9 @@ class Record_Action_Result_Model extends Base_Db_Model {
 		return array(
 			'id'          => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'record_id'   => 'bigint(20) NOT NULL',
-			'action_slug' => 'varchar(20) NOT NULL',
+			'action_slug' => 'varchar(255) NOT NULL',
 			'action_id'   => 'int(11) NOT NULL',
-			'status'      => 'varchar(20) NOT NULL',
+			'status'      => 'varchar(255) NOT NULL',
 		);
 	}
 

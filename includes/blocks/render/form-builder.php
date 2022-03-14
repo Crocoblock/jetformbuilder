@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -57,43 +58,6 @@ class Form_Builder {
 
 
 	/**
-	 * Returns form action url
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_form_action_url() {
-
-		$action = add_query_arg(
-			array(
-				Plugin::instance()->form_handler->hook_key => Plugin::instance()->form_handler->hook_val,
-			),
-			home_url( '/' )
-		);
-
-		return apply_filters( 'jet-form-builder/form-action-url', $action, $this );
-
-	}
-
-	/**
-	 * Returns form refer url
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_form_refer_url() {
-
-		global $wp;
-
-		$refer = home_url( $wp->request );
-
-		if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
-			$refer = trailingslashit( $refer ) . '?' . $_SERVER['QUERY_STRING'];
-		}
-
-		return apply_filters( 'jet-form-builder/form-refer-url', $refer, $this );
-
-	}
-
-	/**
 	 * @return mixed|void
 	 */
 	public function pre_render() {
@@ -118,7 +82,7 @@ class Form_Builder {
 		$this->add_attribute( 'class', 'jet-form-builder' );
 		$this->add_attribute( 'class', 'layout-' . Live_Form::instance()->spec_data->fields_layout );
 		$this->add_attribute( 'class', 'submit-type-' . Live_Form::instance()->spec_data->submit_type );
-		$this->add_attribute( 'action', $this->get_form_action_url() );
+		$this->add_attribute( 'action', Http_Tools::get_form_action_url() );
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
 		$this->add_attribute( 'data-layout', Live_Form::instance()->spec_data->fields_layout );
@@ -246,7 +210,7 @@ class Form_Builder {
 		$form .= Live_Form::force_render_field(
 			'hidden-field',
 			array(
-				'field_value'   => $this->get_form_refer_url(),
+				'field_value'   => Http_Tools::get_form_refer_url(),
 				'name'          => Plugin::instance()->form_handler->refer_key,
 				'_static_value' => true,
 			)

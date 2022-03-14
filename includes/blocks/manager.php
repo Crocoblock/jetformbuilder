@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
+use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -212,8 +213,9 @@ class Manager {
 			apply_filters(
 				'jet-form-builder/frontend-settings',
 				array(
-					'ajaxurl'      => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
-					'form_action'  => Plugin::instance()->form_handler->hook_key,
+					'ajaxurl'      => Http_Tools::get_form_action_url(
+						array( 'method' => 'ajax' )
+					),
 					'devmode'      => Dev_Mode\Manager::instance()->active(),
 					'scrollOffset' => - 50,
 					'replaceAttrs' => array(

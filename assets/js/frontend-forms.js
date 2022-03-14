@@ -1541,9 +1541,7 @@
 			var $this  = $( this ),
 				$form  = $this.closest( '.jet-form-builder' ),
 				formID = $form.data( 'form-id' ),
-				data   = {
-					action: JetFormBuilderSettings.form_action,
-				};
+				data   = {};
 
 			if ( 'undefined' !== typeof $form[ 0 ].checkValidity && 'undefined' !== typeof $form[ 0 ].reportValidity && ! $form[ 0 ].checkValidity() ) {
 				$form[ 0 ].reportValidity();

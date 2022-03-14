@@ -114,6 +114,8 @@ class Plugin {
 
 			new Form_Actions_Manager();
 			new PatternsManager();
+		} else {
+			$this->form_handler->call_form();
 		}
 	}
 

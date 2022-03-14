@@ -7,10 +7,12 @@ use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Not_Form_Request;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Request_Handler;
+use Jet_Form_Builder\Request_Router;
 
 /**
  * Form builder class
@@ -56,11 +58,18 @@ class Form_Handler {
 	public function __construct() {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
+	}
+
+	public function call_form() {
+		try {
+			Request_Router::init();
+		} catch ( Not_Form_Request $exception ) {
+			return;
+		}
 
 		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
 
 		if ( wp_doing_ajax() ) {
-
 			add_action(
 				'wp_ajax_' . $this->hook_key,
 				array( $this, 'process_ajax_form' )
@@ -69,14 +78,7 @@ class Form_Handler {
 				'wp_ajax_nopriv_' . $this->hook_key,
 				array( $this, 'process_ajax_form' )
 			);
-
 		} else {
-
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if ( ! isset( $_REQUEST[ $this->hook_key ] ) || $this->hook_val !== $_REQUEST[ $this->hook_key ] ) {
-				return;
-			}
-
 			add_action( 'wp_loaded', array( $this, 'process_form' ), 0 );
 		}
 	}
@@ -238,7 +240,6 @@ class Form_Handler {
 	 * @return void [description]
 	 */
 	public function process_form() {
-
 		$this->setup_form();
 
 		if ( ! $this->form_id || ! $this->refer ) {

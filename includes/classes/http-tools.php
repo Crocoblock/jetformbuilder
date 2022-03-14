@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Classes;
 
+use Jet_Form_Builder\Plugin;
 
 class Http_Tools {
 
@@ -53,6 +54,47 @@ class Http_Tools {
 				explode( '/', $path )
 			)
 		);
+	}
+
+	/**
+	 * Returns form action url
+	 *
+	 * @param array $args
+	 *
+	 * @return string [type] [description]
+	 */
+	public static function get_form_action_url( array $args = array() ): string {
+		$args = array_merge(
+			array(
+				Plugin::instance()->form_handler->hook_key => Plugin::instance()->form_handler->hook_val,
+				'method'                                   => 'reload',
+			),
+			$args
+		);
+
+		$action = home_url(
+			add_query_arg( $args )
+		);
+
+		return apply_filters( 'jet-form-builder/form-action-url', $action );
+	}
+
+	/**
+	 * Returns form refer url
+	 *
+	 * @return [type] [description]
+	 */
+	public static function get_form_refer_url(): string {
+
+		global $wp;
+
+		$refer = home_url( $wp->request );
+
+		if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
+			$refer = trailingslashit( $refer ) . '?' . $_SERVER['QUERY_STRING'];
+		}
+
+		return apply_filters( 'jet-form-builder/form-refer-url', $refer );
 	}
 
 }

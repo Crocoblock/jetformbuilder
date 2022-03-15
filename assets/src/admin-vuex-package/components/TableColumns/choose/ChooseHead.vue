@@ -1,7 +1,7 @@
 <template>
 	<cx-vui-checkbox
 		:options-list="[ { value: 'checked' } ]"
-		:value="$store.state.chooseHead"
+		:value="chooseHeadValue"
 		@input="onClick"
 		return-type="single"
 		name="jfb_record_all"

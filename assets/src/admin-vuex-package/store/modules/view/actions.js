@@ -8,6 +8,8 @@ export default {
 		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
 			commit( 'setList', response.list );
 			dispatch( 'updateQueryState' );
+
+			jfbEventBus.$emit( 'fetch-page', response );
 		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );

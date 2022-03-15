@@ -30,10 +30,13 @@ class Execution_Builder {
 	 * @throws Sql_Exception
 	 */
 	public function create( Base_Db_Model $model ): Execution_Builder {
+		global $wpdb;
 		$model->before_create();
-		$this->delta( $this->create_table_schema( $model ) );
-		$model->after_create();
 
+		// phpcs:ignore WordPress.DB
+		$wpdb->query( $this->create_table_schema( $model ) );
+
+		$model->after_create();
 		$this->add_foreign_relations( $model );
 
 		return $this->save_to_existed( $model );

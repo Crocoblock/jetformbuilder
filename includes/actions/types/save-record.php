@@ -76,7 +76,7 @@ class Save_Record extends Base {
 
 	public function editor_labels() {
 		return array(
-			'save_user_data' => __( 'Store the IP address and other specific request headers.', 'jet-form-builder' ),
+			'save_user_data' => __( 'Store the IP address and other request headers', 'jet-form-builder' ),
 		);
 	}
 

@@ -51,21 +51,14 @@ class Payments extends View_Advanced_Base {
 	}
 
 	public function get_columns(): array {
-		$id_column = new Record_Id_Column_Advanced();
-
 		return array(
-			self::COLUMN_ACTIONS => new Row_Actions_Column(),
-			'type'               => new Payment_Type_Column(),
-			'date'               => new Created_At_Column(),
-			'status'             => new Payment_Status_Column(),
-			'gross'              => new Gross_Column(),
-			'payer'              => new Payer_Column(),
-			'id'                 => $id_column,
+			'type'   => new Payment_Type_Column(),
+			'date'   => new Created_At_Column(),
+			'status' => new Payment_Status_Column(),
+			'gross'  => new Gross_Column(),
+			'payer'  => new Payer_Column(),
+			'id'     => new Record_Id_Column_Advanced(),
 		);
-	}
-
-	public function get_global_actions(): array {
-		return ( new Header_Actions_Column() )->get_value();
 	}
 
 }

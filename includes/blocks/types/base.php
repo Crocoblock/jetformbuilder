@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Form_Break;
@@ -158,8 +159,24 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @return string
 	 */
 	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
-		if ( ! Live_Form::instance()->form_id ) {
+		try {
+			return $this->render_field( $attrs, $content, $wp_block );
+		} catch ( Render_Empty_Field $exception ) {
 			return '';
+		}
+	}
+
+	/**
+	 * @param array $attrs
+	 * @param null $content
+	 * @param null $wp_block
+	 *
+	 * @return string
+	 * @throws Render_Empty_Field
+	 */
+	protected function render_field( array $attrs, $content = null, $wp_block = null ): string {
+		if ( ! Live_Form::instance()->form_id ) {
+			throw new Render_Empty_Field( 'empty_form_id' );
 		}
 		$this->set_block_data( $attrs, $content, $wp_block );
 		$this->set_preset();

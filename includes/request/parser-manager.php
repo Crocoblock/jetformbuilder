@@ -42,6 +42,7 @@ class Parser_Manager {
 				new Fields\Repeater_Field_Parser(),
 				new Fields\Media_Field_Parser(),
 				new Fields\Datetime_Field_Parser(),
+				new Fields\Hidden_Field_Parser(),
 			)
 		);
 	}

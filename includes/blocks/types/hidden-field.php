@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
@@ -17,6 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Hidden_Field extends Base {
 
 	public $use_style_manager = false;
+	private $rendering        = true;
 
 	private function current_post() {
 		return Live_Form::instance()->post;
@@ -48,6 +50,34 @@ class Hidden_Field extends Base {
 				return 'hidden-field';
 			}
 		} )->render_without_layout();
+	}
+
+	/**
+	 * @param $attributes
+	 * @param null $content
+	 * @param null $wp_block
+	 *
+	 * @throws Render_Empty_Field
+	 */
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
+		if ( $this->is_rendering() && ! ( $attributes['render'] ?? true ) ) {
+			throw new Render_Empty_Field( 'hidden_field' );
+		}
+		parent::set_block_data( $attributes, $content, $wp_block );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_rendering(): bool {
+		return $this->rendering;
+	}
+
+	/**
+	 * @param bool $rendering
+	 */
+	public function set_rendering( bool $rendering ) {
+		$this->rendering = $rendering;
 	}
 
 	public function set_preset() {

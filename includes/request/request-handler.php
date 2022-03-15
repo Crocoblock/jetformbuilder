@@ -66,7 +66,7 @@ class Request_Handler {
 	public function get_values_from_request() {
 		// phpcs:disable WordPress.Security
 
-		if ( ! $this->handler()->is_ajax() ) {
+		if ( ! jet_fb_handler()->is_ajax() ) {
 			return $_POST;
 		}
 
@@ -134,13 +134,13 @@ class Request_Handler {
 	 */
 	private function get_raw_request(): array {
 		$this->_fields = Block_Helper::get_blocks_by_post(
-			$this->handler()->get_form_id()
+			jet_fb_handler()->get_form_id()
 		);
 
 		$values = $this->get_values_from_request();
 		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
 
-		Live_Form::instance()->set_form_id( $this->handler()->get_form_id() );
+		Live_Form::instance()->set_form_id( jet_fb_handler()->get_form_id() );
 
 		if ( ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() ) ) {
 			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
@@ -188,13 +188,6 @@ class Request_Handler {
 		$attrs = $this->get_attrs_by_name( $field_name );
 
 		return $attrs[ $attr_name ] ?? $if_not_exist;
-	}
-
-	/**
-	 * @return Form_Handler
-	 */
-	private function handler(): Form_Handler {
-		return jet_form_builder()->form_handler;
 	}
 
 

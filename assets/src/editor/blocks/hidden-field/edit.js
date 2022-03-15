@@ -7,8 +7,6 @@ const {
 	FieldSettingsWrapper,
 } = JetFBComponents;
 
-const { getConvertedName } = JetFBActions;
-
 const {
 	InspectorControls,
 	useBlockProps,
@@ -18,6 +16,7 @@ const {
 const {
 	TextControl,
 	SelectControl,
+	ToggleControl,
 	Card,
 	CardHeader,
 	CardBody,
@@ -84,6 +83,12 @@ export default function HiddenEdit( props ) {
 	};
 
 	const checkFieldValueInput = () => <>
+		<ToggleControl
+			key={ uniqKey( 'render_in_html' ) }
+			label={ __( 'Render in HTML', 'jet-form-builder' ) }
+			checked={ attributes.render }
+			onChange={ render => setAttributes( { render: Boolean( render ) } ) }
+		/>
 		<SelectControl
 			key='field_value'
 			label="Field Value"

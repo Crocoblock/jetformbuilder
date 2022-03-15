@@ -7,10 +7,11 @@ use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
-use Jet_Form_Builder\Exceptions\Not_Form_Request;
+use Jet_Form_Builder\Exceptions\Not_Router_Request;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
+use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
 use Jet_Form_Builder\Request_Router;
 
@@ -62,8 +63,8 @@ class Form_Handler {
 
 	public function call_form() {
 		try {
-			Request_Router::init();
-		} catch ( Not_Form_Request $exception ) {
+			Form_Request_Router::listen();
+		} catch ( Not_Router_Request $exception ) {
 			return;
 		}
 

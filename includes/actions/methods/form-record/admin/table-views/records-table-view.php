@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Classes_Column;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Link_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Header_Actions_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Primary_Form_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Referrer_Link_Column;
@@ -16,6 +15,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -32,7 +32,7 @@ class Records_Table_View extends View_Advanced_Base {
 			'referrer'           => new Referrer_Link_Column(),
 			'status'             => new Status_Column(),
 			'user'               => new User_Login_Column(),
-			'id'                 => new Record_Id_Column_Advanced(),
+			'created_at'         => new Created_At_Column(),
 		);
 	}
 

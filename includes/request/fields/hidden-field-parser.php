@@ -16,6 +16,10 @@ class Hidden_Field_Parser extends Field_Data_Parser {
 	 * @return mixed
 	 */
 	public function get_response() {
+		if ( $this->settings['render'] ?? true ) {
+			return $this->value;
+		}
+
 		/** @var Hidden_Field $hidden_type */
 		$hidden_type = jet_form_builder()->blocks->get_field_by_name( $this->type() );
 

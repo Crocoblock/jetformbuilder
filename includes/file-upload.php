@@ -23,9 +23,9 @@ class File_Upload {
 
 	use Instance_Trait;
 
-	private $nonce_key = 'jet-form-builder-file-upload-nonce-key';
-	private $action = 'jet-form-builder-upload-file';
-	private $errors = array();
+	private $nonce_key        = 'jet-form-builder-file-upload-nonce-key';
+	private $action           = 'jet-form-builder-upload-file';
+	private $errors           = array();
 	private $rendered_scripts = false;
 
 	public function __construct() {
@@ -320,7 +320,7 @@ class File_Upload {
 			return '';
 		}
 
-		$format = '<div class="jet-form-builder-file-upload__file" data-file="%1$s" data-id="%2$s" data-format="%3$s"><img src="%1$s" alt=""><div class="jet-form-builder-file-upload__file-remove"><svg width="22" height="22" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.375 7H6.125V12.25H4.375V7ZM7.875 7H9.625V12.25H7.875V7ZM10.5 1.75C10.5 1.51302 10.4134 1.30794 10.2402 1.13477C10.0762 0.961589 9.87109 0.875 9.625 0.875H4.375C4.12891 0.875 3.91927 0.961589 3.74609 1.13477C3.58203 1.30794 3.5 1.51302 3.5 1.75V3.5H0V5.25H0.875V14C0.875 14.237 0.957031 14.4421 1.12109 14.6152C1.29427 14.7884 1.50391 14.875 1.75 14.875H12.25C12.4961 14.875 12.7012 14.7884 12.8652 14.6152C13.0384 14.4421 13.125 14.237 13.125 14V5.25H14V3.5H10.5V1.75ZM5.25 2.625H8.75V3.5H5.25V2.625ZM11.375 5.25V13.125H2.625V5.25H11.375Z"></path></svg></div>%4$s</div>';
+		$format = '<div class="jet-form-builder-file-upload__file" data-file="%1$s" data-id="%2$s" data-format="%3$s">%4$s<div class="jet-form-builder-file-upload__file-remove"><svg width="22" height="22" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.375 7H6.125V12.25H4.375V7ZM7.875 7H9.625V12.25H7.875V7ZM10.5 1.75C10.5 1.51302 10.4134 1.30794 10.2402 1.13477C10.0762 0.961589 9.87109 0.875 9.625 0.875H4.375C4.12891 0.875 3.91927 0.961589 3.74609 1.13477C3.58203 1.30794 3.5 1.51302 3.5 1.75V3.5H0V5.25H0.875V14C0.875 14.237 0.957031 14.4421 1.12109 14.6152C1.29427 14.7884 1.50391 14.875 1.75 14.875H12.25C12.4961 14.875 12.7012 14.7884 12.8652 14.6152C13.0384 14.4421 13.125 14.237 13.125 14V5.25H14V3.5H10.5V1.75ZM5.25 2.625H8.75V3.5H5.25V2.625ZM11.375 5.25V13.125H2.625V5.25H11.375Z"></path></svg></div>%5$s</div>';
 
 		$result = '';
 
@@ -332,12 +332,27 @@ class File_Upload {
 				$attachment = 0;
 			}
 
+			$img_preview = '';
+
+			$image_exts   = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg' );
+			$img_ext_preg = '!\.(' . join( '|', $image_exts ) . ')$!i';
+
+			if ( preg_match( $img_ext_preg, $file['url'] ) ) {
+				$img_preview = sprintf( '<img src="%s" alt="">', $file['url'] );
+			}
+
 			$result .= sprintf(
 				$format,
-				$file['url'],
-				$attachment,
-				$result_format,
-				apply_filters( 'jet-form-builder/file-upload/custom-html', '', $file, $field )
+				...apply_filters(
+					'jet-form-builder/file-upload/render-file-params',
+					array(
+						$file['url'],
+						$attachment,
+						$result_format,
+						$img_preview,
+						apply_filters( 'jet-form-builder/file-upload/custom-html', '', $file, $field ),
+					)
+				)
 			);
 
 		}
@@ -348,9 +363,9 @@ class File_Upload {
 
 	public function get_loader() {
 		return '<div class="jet-form-builder-file-upload__loader">' . apply_filters(
-				'jet-form-builder/file-upload/loader',
-				'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
-			) . '</div>';
+			'jet-form-builder/file-upload/loader',
+			'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
+		) . '</div>';
 	}
 
 	/**

@@ -3,16 +3,16 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 
 abstract class Legacy_Base_Gateway {
+
+	const GATEWAY_META_KEY = '_jet_gateway_data';
 
 	/**
 	 * @deprecated 2.0.0
@@ -61,9 +61,9 @@ abstract class Legacy_Base_Gateway {
 		}
 
 		$all = jet_fb_action_handler()->set_form_id( $this->data['form_id'] )
-		                              ->add_request( $this->data['form_data'] )
-		                              ->unregister_action( 'redirect_to_page' )
-		                              ->get_all();
+									  ->add_request( $this->data['form_data'] )
+									  ->unregister_action( 'redirect_to_page' )
+									  ->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -161,7 +161,6 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @return int
 	 * @deprecated 2.0.0
-	 *
 	 */
 	public function get_initialize_action_id() {
 		return (int) $this->gateway( 'action_order', 0 );
@@ -170,7 +169,6 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @return int|mixed
 	 * @deprecated 2.0.0
-	 *
 	 */
 	public function get_insert_post_action_id() {
 		return jet_fb_action_handler()->get_inserted_post_id( $this->get_initialize_action_id() );
@@ -179,7 +177,6 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @throws Gateway_Exception
 	 * @deprecated 2.0.0
-	 *
 	 */
 	public function set_order_id() {
 		if ( ! $this->get_insert_post_action_id() ) {
@@ -192,7 +189,6 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @return mixed
 	 * @deprecated 1.5.0
-	 *
 	 */
 	public function get_order_id() {
 		return $this->order_id;
@@ -263,7 +259,6 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @return array|object|void|null
 	 * @deprecated 2.0.0
-	 *
 	 */
 	protected function get_form_data() {
 		return $this->get_form_by_payment_token( $this->payment_token );
@@ -338,17 +333,22 @@ abstract class Legacy_Base_Gateway {
 	 * @return void [description]
 	 */
 	public function before_actions() {
-		$keep_these = $this->get_actions_before();
-
 		$this->set_form_meta( GM::instance()->gateways() );
+
+		$keep_these      = $this->get_actions_before();
 		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
 		if ( empty( $default_actions ) ) {
 			return;
 		}
+		$action_order = (int) $this->gateway( 'action_order' );
 
 		foreach ( $default_actions as $index ) {
 			$action = jet_fb_action_handler()->get_action_by_id( $index );
+
+			if ( 'insert_post' === $action->get_id() && $action_order === $action->_id ) {
+				continue;
+			}
 
 			if ( 'redirect_to_page' === $action->get_id() ) {
 				jet_fb_action_handler()->unregister_action( $index );

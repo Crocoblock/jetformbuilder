@@ -64,12 +64,10 @@ class Controller {
 	}
 
 	/**
-	 * @param $defaults
-	 *
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function save_record() {
+	public function save_record(): int {
 		$args    = jet_form_builder()->form_handler->get_response_args();
 		$columns = array(
 			'form_id'           => jet_fb_handler()->get_form_id(),
@@ -91,7 +89,7 @@ class Controller {
 	 * @return int[]
 	 * @throws Sql_Exception
 	 */
-	public function save_actions() {
+	public function save_actions(): array {
 		list( $success, $skipped, $failed ) = $this->get_chunked_actions();
 
 		$actions = array_merge(
@@ -103,7 +101,7 @@ class Controller {
 		return ( new Models\Record_Action_Result_Model() )->insert_many( $actions );
 	}
 
-	public function get_chunked_actions() {
+	public function get_chunked_actions(): array {
 		list( $passed, $skipped ) = array(
 			jet_fb_action_handler()->get_passed_actions(),
 			jet_fb_action_handler()->get_skipped_actions(),
@@ -137,7 +135,7 @@ class Controller {
 	 * @return int[]
 	 * @throws Sql_Exception
 	 */
-	public function save_fields() {
+	public function save_fields(): array {
 		$fields = $this->get_prepared_fields();
 
 		return ( new Models\Record_Field_Model() )->insert_many( $fields );
@@ -147,13 +145,13 @@ class Controller {
 	 * @return int[]
 	 * @throws Sql_Exception
 	 */
-	public function save_errors() {
+	public function save_errors(): array {
 		$errors = $this->get_prepared_errors();
 
 		return ( new Models\Record_Error_Model() )->insert_many( $errors );
 	}
 
-	private function get_prepared_errors() {
+	private function get_prepared_errors(): array {
 		$errors = array();
 
 		if ( empty( $this->settings['save_errors'] ) ) {

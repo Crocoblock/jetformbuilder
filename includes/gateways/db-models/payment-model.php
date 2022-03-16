@@ -27,12 +27,12 @@ class Payment_Model extends Base_Db_Model {
 			'user_id'                => 'bigint(20)',
 			'gateway_id'             => 'varchar(100)',
 			'scenario'               => 'varchar(100)',
-			'amount_value'           => 'DECIMAL(10,4)',
+			'amount_value'           => 'DECIMAL(10,2)',
 			'amount_code'            => 'varchar(20)',
 			'type'                   => 'varchar(100)',
 			'status'                 => 'varchar(100)',
 			'created_at'             => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'             => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL'
+			'updated_at'             => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
 		);
 	}
 

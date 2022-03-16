@@ -53,7 +53,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		 */
 		$this->add_context(
 			array(
-				'payment_id' => $this->save_resource( $payment )
+				'payment_id' => $this->save_resource( $payment ),
 			)
 		);
 
@@ -110,7 +110,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			return;
 		}
 
-		( new Payment_To_Record )->insert(
+		( new Payment_To_Record() )->insert(
 			array(
 				'record_id'  => $record_id,
 				'payment_id' => $payment_id,
@@ -209,7 +209,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Sql_Exception
 	 */
 	private function save_payment( array $payment ) {
-		( new Payment_Model )->update(
+		( new Payment_Model() )->update(
 			array(
 				'status' => $payment['status'],
 			),
@@ -240,7 +240,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			)
 		);
 
-		$payer_ship_id = ( new Payer_Shipping_Model )->insert(
+		$payer_ship_id = ( new Payer_Shipping_Model() )->insert(
 			array(
 				'payer_id'       => $payer_id,
 				'full_name'      => $shipping['name']['full_name'] ?? '',
@@ -253,10 +253,10 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			)
 		);
 
-		( new Payment_To_Payer_Shipping_Model )->insert(
+		( new Payment_To_Payer_Shipping_Model() )->insert(
 			array(
 				'payment_id'        => $this->get_scenario_row( 'id' ),
-				'payer_shipping_id' => $payer_ship_id
+				'payer_shipping_id' => $payer_ship_id,
 			)
 		);
 	}

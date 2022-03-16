@@ -31,7 +31,7 @@ class Record_Fields_View extends View_Base {
 		}
 	}
 
-	public static function get_request_list( $record_id, $value_key = 'field_value', $label_key = 'field_name' ): array {
+	public static function get_request_list( $record_id, $value_key = 'field_name', $label_key = 'field_value' ): array {
 		$request = static::get_request( $record_id );
 
 		return Tools::prepare_list_for_js( $request, $value_key, $label_key, true );

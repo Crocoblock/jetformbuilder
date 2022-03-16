@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
@@ -69,7 +68,7 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 
 			$this->send_response(
 				array(
-					'status' => $exception->getMessage()
+					'status' => $exception->getMessage(),
 				)
 			);
 		}
@@ -99,6 +98,18 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	 */
 	public function get_payment_token() {
 		return $this->query_scenario()->get_queried_token();
+	}
+
+	/**
+	 * Apply macros in string
+	 *
+	 * @param null $string
+	 *
+	 * @return string [description]
+	 * @throws Gateway_Exception
+	 */
+	public function apply_macros( $string = null ) {
+		return $this->query_scenario()->apply_macros( $string );
 	}
 
 }

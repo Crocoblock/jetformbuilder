@@ -6,17 +6,13 @@ namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
-use Jet_Form_Builder\Actions\Types\Save_Record;
-use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Base_Gateway;
-use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
+use Jet_Form_Builder\Gateways\Query_Views\Record_Fields_By_Payment;
 
 abstract class Scenario_Logic_Base {
 
@@ -265,6 +261,30 @@ abstract class Scenario_Logic_Base {
 	 */
 	public function get_context( string $property = '' ) {
 		return jet_fb_action_handler()->get_context( $this->get_context_key(), $property );
+	}
+
+	public function apply_macros( string $message ): string {
+		return preg_replace_callback(
+			'/%(.*?)%/',
+			function ( $matches ) {
+				switch ( $matches[1] ) {
+					case 'gateway_amount':
+						$amount = $this->get_scenario_row( 'amount_value', 0 );
+						if ( empty( $amount ) ) {
+							return 0;
+						}
+
+						return $amount . ' ' . $this->get_scenario_row( 'amount_code' );
+
+					case 'gateway_status':
+						return $this->get_scenario_row( 'status' );
+
+					default:
+						return jet_fb_action_handler()->request_data[ $matches[1] ] ?? '';
+				}
+			},
+			$message
+		);
 	}
 
 }

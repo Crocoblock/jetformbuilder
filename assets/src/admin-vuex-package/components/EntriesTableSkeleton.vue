@@ -98,6 +98,7 @@ import Constants from '../constants';
 import ScopePropMixin from '../mixins/ScopeStoreMixin';
 import GetColumnComponent from '../mixins/GetColumnComponent';
 import EntryColumnsTable from './EntryColumnsTable';
+import { getPrimaryId } from '../functions';
 
 const {
 	CHOOSE_ACTION,
@@ -192,7 +193,7 @@ export default {
 				),
 			};
 		},
-		onClickAction( action, { id } ) {
+		onClickAction( action, record ) {
 			if ( action?.href ) {
 				return;
 			}
@@ -201,7 +202,7 @@ export default {
 			this.dispatch( 'runRowAction', {
 				action: action.value,
 				context: CLICK_ACTION,
-				payload: [ id.value ],
+				payload: [ getPrimaryId( record ) ],
 			} ).then( () => {
 				this.toggleDoingAction();
 			} ).catch( () => {

@@ -25,7 +25,7 @@ class Single_Form_Record_Page extends Base_Single_Page {
 			),
 			new Meta_Containers\Side_Meta_Container(
 				new Meta_Boxes\Form_Record_Values_Box(),
-				new Meta_Boxes\Form_Record_Actions_Box(),
+				new Meta_Boxes\Form_Record_Actions_Box()
 			),
 		);
 	}

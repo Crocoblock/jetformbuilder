@@ -15,6 +15,7 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Updated_At_Column;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 
@@ -39,6 +40,7 @@ class Form_Record_Values_Box extends Base_List_Box {
 			'ip_address' => new Ip_Address_Column(),
 			'user_agent' => new User_Agent_Column(),
 			'created_at' => new Created_At_Column(),
+			'updated_at' => new Updated_At_Column(),
 		);
 	}
 
@@ -48,10 +50,30 @@ class Form_Record_Values_Box extends Base_List_Box {
 	 */
 	public function get_list(): array {
 		try {
-			return Record_View::findById( $this->get_id() );
+			$record = Record_View::findById( $this->get_id() );
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
+
+		if ( $record['is_viewed'] ) {
+			return $record;
+		}
+
+		try {
+			( new Record_Model() )->update(
+				array(
+					'is_viewed' => 1,
+				),
+				array(
+					'id' => $record['id'],
+				)
+			);
+			$record['is_viewed'] = 1;
+		} catch ( Sql_Exception $exception ) {
+			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
+		}
+
+		return $record;
 	}
 
 }

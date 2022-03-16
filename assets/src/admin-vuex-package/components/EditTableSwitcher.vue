@@ -34,10 +34,16 @@ export default {
 
 <style lang="scss">
 
-.jfb-cx-vui-component.cx-vui-component {
-	column-gap: 1em;
-	flex-direction: row-reverse;
-	padding: 1.2em;
+.jfb-cx-vui-component {
+
+	&.cx-vui-component {
+		column-gap: 1em;
+		flex-direction: row-reverse;
+		padding: 1.2em;
+	}
+	.cx-vui-component__label {
+		font-size: inherit;
+	}
 }
 
 </style>

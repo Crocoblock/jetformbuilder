@@ -33,10 +33,12 @@ export function setTableSeed( store, source ) {
 		total = 0,
 		actions,
 		is_editable_table = false,
+		render_type = '',
 	} = source;
 
 	let getName = withScope( source );
 
+	store.commit( getName( 'setRenderType' ), render_type );
 	store.commit( getName( 'setActionsList' ), actions );
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
@@ -51,10 +53,12 @@ export function setListSeed( store, source ) {
 	const {
 		list = {},
 		columns = {},
+		render_type = '',
 	} = source;
 
 	let getName = withScope( source );
 
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
+	store.commit( getName( 'setRenderType' ), render_type );
 }

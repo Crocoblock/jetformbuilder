@@ -22,7 +22,8 @@
 			v-else
 			:class="{
 				'list-table-item__cell--body': true,
-				'list-table-item__cell--body-is-editable': initial.editable
+				'list-table-item__cell--body-is-editable': initial.editable,
+				'show-overflow': isShowOverflow,
 			}"
 		>
 			<div
@@ -100,6 +101,9 @@ export default {
 
 			return this.getter( 'isEnableEdit' );
 		},
+		isShowOverflow() {
+			return this.getter( 'isShowOverflow' );
+		},
 		getComponentType() {
 			return this.getItemComponent( this.initialType );
 		},
@@ -161,6 +165,12 @@ export default {
 		&-actions {
 			display: flex;
 			column-gap: 1em;
+		}
+
+		&.show-overflow {
+			word-break: break-word;
+			white-space: normal;
+			line-height: 1.5;
 		}
 	}
 

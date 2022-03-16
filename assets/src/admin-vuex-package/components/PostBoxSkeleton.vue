@@ -12,6 +12,9 @@
 				<EditTableSwitcher
 					:scope="slug"
 				/>
+				<ShowOverflowTable
+					:scope="slug"
+				/>
 			</div>
 		</div>
 		<div class="postbox-inner submitbox">
@@ -27,6 +30,7 @@
 <script>
 import EditTableSwitcher from './EditTableSwitcher';
 import UndoChangesTable from './UndoChangesTable';
+import ShowOverflowTable from './ShowOverflowTable';
 
 export default {
 	name: 'PostBox',
@@ -35,6 +39,7 @@ export default {
 		slug: String,
 	},
 	components: {
+		ShowOverflowTable,
 		UndoChangesTable,
 		EditTableSwitcher,
 	},

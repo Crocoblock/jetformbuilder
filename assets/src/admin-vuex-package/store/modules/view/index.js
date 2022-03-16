@@ -4,6 +4,8 @@ import table from '../table';
 import chooseColumn from '../choose-column';
 import actions from './actions';
 import action from '../action';
+import renderType from '../render-type';
+import tableOptions from '../table-options';
 
 export default {
 	actions,
@@ -13,5 +15,7 @@ export default {
 		loading,
 		query,
 		table,
+		renderType,
+		tableOptions
 	},
 };

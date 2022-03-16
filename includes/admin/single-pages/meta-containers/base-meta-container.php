@@ -80,7 +80,7 @@ abstract class Base_Meta_Container {
 
 		foreach ( $this->get_boxes() as $box ) {
 			try {
-				$boxes[] = $box->to_array();
+				$boxes[] = $box->set_single_id()->to_array();
 			} catch ( Empty_Box_Exception $exception ) {
 				continue;
 			}

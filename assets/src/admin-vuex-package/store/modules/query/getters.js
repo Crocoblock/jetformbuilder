@@ -12,6 +12,9 @@ const getters = {
 	getFilter: state => slug => {
 		return state.filters[ slug ] ?? {};
 	},
+	receiveEndpoint: state => {
+		return state.receiveEndpoint;
+	},
 	queryState: state => {
 		return {
 			limit: state.limit,
@@ -45,7 +48,7 @@ const getters = {
 export default {
 	...getters,
 	getPageOptionsFetch: state => {
-		const { receive_url } = window.JetFBPageConfig;
+		const receive_url = getters.receiveEndpoint( state );
 
 		return getters.fetchListOptions( state )( receive_url );
 	},

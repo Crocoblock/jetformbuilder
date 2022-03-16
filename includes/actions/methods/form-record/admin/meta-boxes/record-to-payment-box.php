@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
 
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
-use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_By_Payment;
 
@@ -13,7 +12,7 @@ class Record_To_Payment_Box extends Form_Record_Values_Box {
 
 	/**
 	 * @return int
-	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
+	 * @throws Empty_Box_Exception
 	 */
 	public function get_id(): int {
 		$payment_id = parent::get_id();

@@ -1,5 +1,5 @@
 <template>
-	<div class="jfb-post-box">
+	<div class="jfb-post-box" :id="slug + '-wrapper'">
 		<div class="jfb-post-box--content" v-if="$slots.default">
 			<slot></slot>
 		</div>

@@ -8,6 +8,8 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Field_Type_C
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Field_Value_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Field_Model;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View_Count;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Fields_Box_Endpoint;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
@@ -28,6 +30,25 @@ class Form_Record_Fields_Box extends Base_Table_Box {
 		);
 	}
 
+	public function get_total(): int {
+		return Record_Fields_View_Count::count(
+			array(
+				'record_id' => $this->get_id(),
+			)
+		);
+	}
+
+	public function get_receive_endpoint(): array {
+		return array(
+			'url'     => Fetch_Records_Fields_Box_Endpoint::dynamic_rest_url(
+				array(
+					'id' => $this->get_id(),
+				)
+			),
+			'methods' => Fetch_Records_Fields_Box_Endpoint::get_methods(),
+		);
+	}
+
 	public function get_columns(): array {
 		return array(
 			'name'       => new Field_Name_Column(),
@@ -40,7 +61,7 @@ class Form_Record_Fields_Box extends Base_Table_Box {
 	 * @param array $args
 	 *
 	 * @return array
-	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
+	 * @throws Empty_Box_Exception
 	 */
 	public function get_raw_list( array $args ): array {
 		try {

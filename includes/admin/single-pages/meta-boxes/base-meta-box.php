@@ -7,6 +7,7 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
+use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
@@ -19,6 +20,8 @@ abstract class Base_Meta_Box implements Model_Dependencies_Interface {
 
 	use Repository_Item_With_Class;
 	use Model_Dependencies;
+
+	private $id = 0;
 
 	abstract public function get_title(): string;
 
@@ -34,13 +37,31 @@ abstract class Base_Meta_Box implements Model_Dependencies_Interface {
 
 	/**
 	 * @return int
-	 * @throws Not_Found_Page_Exception
 	 */
 	public function get_id(): int {
-		/** @var Base_Single_Page $single */
-		$single = Pages_Manager::instance()->get_current();
+		return $this->id;
+	}
 
-		return $single->get_id();
+	/**
+	 * @param int $id
+	 *
+	 * @return Base_Meta_Box
+	 */
+	public function set_id( int $id ): Base_Meta_Box {
+		$this->id = $id;
+
+		return $this;
+	}
+
+	public function set_single_id(): Base_Meta_Box {
+		/** @var Base_Single_Page $single */
+		try {
+			$single = Pages_Manager::instance()->get_current();
+		} catch ( Not_Found_Page_Exception $e ) {
+			return $this;
+		}
+
+		return $this->set_id( $single->get_id() );
 	}
 
 	/**

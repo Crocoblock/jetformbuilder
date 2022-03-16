@@ -39,7 +39,7 @@ class Form_Record_Actions_Box extends Base_Table_Box {
 	 * @param array $args
 	 *
 	 * @return array
-	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
+	 * @throws Empty_Box_Exception
 	 */
 	public function get_raw_list( array $args ): array {
 		try {

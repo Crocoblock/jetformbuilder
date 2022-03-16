@@ -12,7 +12,7 @@ class Payment_Info_For_Record extends Payment_Details_Box {
 
 	/**
 	 * @return int
-	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
+	 * @throws Empty_Box_Exception
 	 */
 	public function get_id(): int {
 		$record_id = parent::get_id();

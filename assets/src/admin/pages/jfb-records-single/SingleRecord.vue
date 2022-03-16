@@ -4,6 +4,11 @@
 		<PostBoxGrid
 			:containers="containers"
 		>
+			<template #after-form-fields>
+				<TablePagination
+					scope="form-fields"
+				/>
+			</template>
 		</PostBoxGrid>
 	</div>
 </template>
@@ -11,6 +16,7 @@
 <script>
 const {
 	PostBoxGrid,
+	TablePagination
 } = JetFBComponents;
 
 const { GetIncoming } = JetFBMixins;
@@ -24,6 +30,7 @@ export default {
 	name: 'jfb-records-single',
 	components: {
 		PostBoxGrid,
+		TablePagination,
 	},
 	data() {
 		return {
@@ -36,6 +43,16 @@ export default {
 </script>
 
 <style lang="scss">
+
+#form-fields-wrapper {
+	margin-bottom: 20px;
+	#form-fields {
+		margin-bottom: unset;
+	}
+	.jfb-pagination {
+		padding: 0.8em 0;
+	}
+}
 
 #actions-log {
 	.cell--status{

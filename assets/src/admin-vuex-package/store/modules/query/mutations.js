@@ -14,6 +14,9 @@ export default {
 		state.itemsFrom = offset + 1;
 		state.itemsTo = itemTo > state.total ? state.total : itemTo;
 	},
+	setReceiveEndpoint( state, endpoint ) {
+		state.receiveEndpoint = { ...endpoint };
+	},
 	setFilters( state, filters ) {
 		state.filters = filters;
 	},

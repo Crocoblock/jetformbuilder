@@ -94,6 +94,22 @@ export default {
 	.cx-vui-input {
 		background-color: white;
 	}
+
+	li.cx-vui-pagination-item {
+		width: 1.2em;
+		height: 1.5em;
+		border-radius: 5px;
+		font-size: 1.15em;
+		transition: all 0.3s ease-in-out;
+
+		&-active, &:hover {
+			box-shadow: 0 5px 5px -1px #bdbdbd;
+			background-color: #007cba;
+			color: #f5f5f5;
+			border-color: #007cba;
+		}
+	}
+
 }
 
 </style>

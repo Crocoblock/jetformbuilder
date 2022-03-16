@@ -14,11 +14,20 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
  */
 class Query_Conditions_Builder {
 
+	const TYPE_EQUAL_STATIC  = 'equal_static';
+	const TYPE_EQUAL         = 'equal_column';
+	const TYPE_EQUAL_COLUMNS = 'equal_two_columns';
+	const TYPE_LIKE          = 'like';
+	const TYPE_NOT_LIKE      = 'not_like';
+	const TYPE_MORE_STATIC   = 'more_static';
+	const TYPE_LESS_STATIC   = 'less_static';
+	const TYPE_IN            = 'in';
+
 	use With_View;
 
 	private $conditions = array(
 		array(
-			'type'   => 'equal_static',
+			'type'   => self::TYPE_EQUAL_STATIC,
 			'values' => array( 1, 1 ),
 		),
 	);
@@ -30,30 +39,30 @@ class Query_Conditions_Builder {
 
 	public function get_types(): array {
 		return array(
-			'equal_static' => array(
+			self::TYPE_EQUAL_STATIC  => array(
 				'callback' => array( $this, 'build_equal_static' ),
 			),
-			'equal_column' => array(
+			self::TYPE_EQUAL         => array(
 				'callback' => array( $this, 'build_equal_column' ),
 			),
-			'equal_two_columns' => array(
+			self::TYPE_EQUAL_COLUMNS => array(
 				'callback' => array( $this, 'build_equal_two_columns' ),
 			),
-			'like'         => array(
+			self::TYPE_LIKE          => array(
 				'callback' => array( $this, 'build_like' ),
 			),
-			'not_like'     => array(
+			self::TYPE_NOT_LIKE      => array(
 				'callback' => array( $this, 'build_not_like' ),
 			),
-			'more_static'  => array(
+			self::TYPE_MORE_STATIC   => array(
 				'callback' => array( $this, 'build_more_static' ),
 			),
-			'less_static'  => array(
+			self::TYPE_LESS_STATIC   => array(
 				'callback' => array( $this, 'build_less_static' ),
 			),
-			'in' => array(
-				'callback' => array( $this, 'build_in' )
-			)
+			self::TYPE_IN            => array(
+				'callback' => array( $this, 'build_in' ),
+			),
 		);
 	}
 

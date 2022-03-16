@@ -34,7 +34,7 @@ class Payment_Details_Box extends Base_List_Box {
 
 	/**
 	 * @return array
-	 * @throws Not_Found_Page_Exception|Empty_Box_Exception
+	 * @throws Empty_Box_Exception
 	 */
 	public function get_list(): array {
 		try {

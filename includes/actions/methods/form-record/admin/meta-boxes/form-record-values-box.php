@@ -39,7 +39,6 @@ class Form_Record_Values_Box extends Base_List_Box {
 			'ip_address' => new Ip_Address_Column(),
 			'user_agent' => new User_Agent_Column(),
 			'created_at' => new Created_At_Column(),
-			'updated_at' => new Updated_At_Column(),
 		);
 	}
 

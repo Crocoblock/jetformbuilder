@@ -14,14 +14,14 @@ abstract class View_Base {
 	const FROM_HIGH_TO_LOW = 'DESC';
 	const FROM_LOW_TO_HIGH = 'ASC';
 
-	protected $limit = array();
+	protected $limit      = array();
 	protected $conditions = array();
-	protected $order_by = array();
-	protected $select = array( '*' );
+	protected $order_by   = array();
+	protected $select     = array( '*' );
 
 	/** @var Relation[] */
 	protected $relations = array();
-	protected $filters = array();
+	protected $filters   = array();
 
 	abstract public function table(): string;
 
@@ -257,9 +257,9 @@ abstract class View_Base {
 	 */
 	public static function findById( $primary_id ): array {
 		return static::find( array( 'id' => $primary_id ) )
-		             ->set_limit( array( 1 ) )
-		             ->query()
-		             ->query_one();
+					 ->set_limit( array( 1 ) )
+					 ->query()
+					 ->query_one();
 	}
 
 	/**

@@ -26,7 +26,7 @@ abstract class Rest_Api_Endpoint_Base {
 	/**
 	 * @return bool
 	 */
-	public function get_override() {
+	public function get_override(): bool {
 		return true;
 	}
 

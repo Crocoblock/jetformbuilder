@@ -24,6 +24,14 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 		);
 	}
 
+	public function get_total(): int {
+		return 0;
+	}
+
+	public function get_receive_endpoint(): array {
+		return array();
+	}
+
 	public function after_prepare_record( $prepared, array $record, $column_name ) {
 		$is_editable = $prepared['editable'] ?? false;
 
@@ -51,6 +59,8 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 			'columns'           => $this->get_columns_headings(),
 			'render_type'       => self::TYPE_TABLE,
 			'is_editable_table' => $this->is_editable_table(),
+			'total'             => $this->get_total(),
+			'receive_url'       => $this->get_receive_endpoint(),
 		);
 	}
 

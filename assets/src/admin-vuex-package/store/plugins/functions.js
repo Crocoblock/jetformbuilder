@@ -31,6 +31,7 @@ export function setTableSeed( store, source ) {
 		list = [],
 		columns = {},
 		total = 0,
+		receive_url = {},
 		actions,
 		is_editable_table = false,
 		render_type = '',
@@ -43,6 +44,7 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
+	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
 	store.commit( getName( 'setLimit' ), list?.length );
 	store.commit( getName( 'setEditableTable' ), is_editable_table );
 

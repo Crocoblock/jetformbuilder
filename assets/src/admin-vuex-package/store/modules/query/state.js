@@ -7,4 +7,5 @@ export default {
 	itemsFrom: 0,
 	itemsTo: 0,
 	filters: {},
+	receiveEndpoint: {},
 }

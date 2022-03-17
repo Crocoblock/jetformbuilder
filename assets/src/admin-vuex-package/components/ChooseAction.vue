@@ -79,7 +79,7 @@ export default {
 			} ).catch( () => {
 				this.onFinish();
 			} ).finally( () => {
-				this.commit( 'removeAll' );
+				this.commit( 'setChecked' );
 				this.commit( 'unChooseHead' );
 			} );
 		},
@@ -93,7 +93,6 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.7em;
-	padding: 1em;
 	.cx-vui-component {
 		flex: 1;
 		padding: unset;

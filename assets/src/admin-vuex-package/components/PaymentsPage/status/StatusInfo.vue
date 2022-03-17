@@ -5,7 +5,7 @@
 <script>
 
 export default {
-	name: 'status--item',
+	name: 'payment_status--item',
 	props: [ 'value' ],
 	methods: {},
 	computed: {

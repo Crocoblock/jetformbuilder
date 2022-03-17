@@ -19,7 +19,7 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 		return $this->get_raw_list(
 			array(
 				'offset' => 0,
-				'limit'  => 15,
+				'limit'  => 8,
 			)
 		);
 	}

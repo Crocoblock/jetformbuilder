@@ -53,6 +53,7 @@ class Execution_Builder {
 			// Fool protection
 			if ( get_class( $constraint->get_model() ) === get_class( $model ) ) {
 				_doing_it_wrong(
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					get_class( $model ) . '::foreign_relations',
 					'You have a logical error. A model cannot be dependent on itself.',
 					'2.0.0'
@@ -110,17 +111,17 @@ class Execution_Builder {
 		$model->before_update();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$result = (int) $wpdb->update( $model->table(), $columns, $where, $format, $where_format );
+		$wpdb->update( $model->table(), $columns, $where, $format, $where_format );
 
-		if ( ! $result ) {
+		if ( ! $wpdb->rows_affected ) {
 			throw new Sql_Exception(
-				"Something went wrong on update rows in: {$model->table()}",
+				"Something went wrong on update rows in: {$model::table()}",
 				$columns,
 				$where
 			);
 		}
 
-		return $result;
+		return $wpdb->rows_affected;
 	}
 
 	/**
@@ -180,7 +181,7 @@ class Execution_Builder {
 	 * @param View_Base $view
 	 *
 	 * @return int
-	 * @throws Query_Builder_Exception
+	 * @throws Sql_Exception
 	 */
 	public function view_update( array $columns, View_Base $view ): int {
 		global $wpdb;
@@ -193,17 +194,17 @@ class Execution_Builder {
 		$query = "UPDATE `{$view->table()}` {$set} {$where};";
 
 		// phpcs:ignore WordPress.DB
-		$result = (int) $wpdb->query( $query );
+		(int) $wpdb->query( $query );
 
-		if ( ! $result ) {
-			throw new Query_Builder_Exception(
+		if ( ! $wpdb->rows_affected ) {
+			throw new Sql_Exception(
 				"Something went wrong on update rows in: {$view->table()}",
-				$where,
-				$query
+				$query,
+				$wpdb->rows_affected
 			);
 		}
 
-		return $result;
+		return $wpdb->rows_affected;
 	}
 
 	/**

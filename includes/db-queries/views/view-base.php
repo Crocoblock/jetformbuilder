@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Db_Queries\Views;
 
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Cache_Builder;
@@ -135,7 +136,6 @@ abstract class View_Base {
 	 * @param $column
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function column( $column ): string {
 		if ( is_string( $column ) ) {
@@ -150,7 +150,8 @@ abstract class View_Base {
 		$table = empty( $column['table'] ) ? $this->table() : $column['table'];
 
 		if ( ! $name ) {
-			throw new Query_Builder_Exception( 'Please set the column name.', $column );
+			_doing_it_wrong( __METHOD__, 'Please set the column name.', '2.0.0' );
+			wp_die();
 		}
 
 		return "`{$table}`.`{$name}`";
@@ -301,7 +302,7 @@ abstract class View_Base {
 	 * @param array $where
 	 *
 	 * @return int
-	 * @throws Query_Builder_Exception
+	 * @throws Sql_Exception
 	 */
 	public static function update( array $columns, array $where ): int {
 		return Execution_Builder::instance()->view_update( $columns, static::create( $where ) );
@@ -311,7 +312,6 @@ abstract class View_Base {
 	 * @param array $columns
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_set( array $columns ): string {
 		$columns = $this->attach_columns( $columns );
@@ -347,7 +347,6 @@ abstract class View_Base {
 	 * @param array $columns
 	 *
 	 * @return array
-	 * @throws Query_Builder_Exception
 	 */
 	public function attach_columns( array $columns ): array {
 		foreach ( $columns as $name => $value ) {

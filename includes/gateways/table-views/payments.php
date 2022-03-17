@@ -40,24 +40,26 @@ class Payments extends View_Advanced_Base {
 		);
 	}
 
-	public function load_data(): array {
+	public function get_receive_endpoint(): array {
 		return array(
-			'receive_url' => array(
-				'method' => Rest_Endpoints\Receive_Payments::get_methods(),
-				'url'    => Rest_Endpoints\Receive_Payments::rest_url(),
-			),
-			'total'       => Payment_Count_View::count(),
+			'method' => Rest_Endpoints\Receive_Payments::get_methods(),
+			'url'    => Rest_Endpoints\Receive_Payments::rest_url(),
 		);
 	}
 
+	public function get_total(): int {
+		return Payment_Count_View::count();
+	}
+
+
 	public function get_columns(): array {
 		return array(
-			'type'   => new Payment_Type_Column(),
-			'date'   => new Created_At_Column(),
-			'status' => new Payment_Status_Column(),
-			'gross'  => new Gross_Column(),
-			'payer'  => new Payer_Column(),
-			'id'     => new Record_Id_Column_Advanced(),
+			'type'           => new Payment_Type_Column(),
+			'date'           => new Created_At_Column(),
+			'payment_status' => new Payment_Status_Column(),
+			'gross'          => new Gross_Column(),
+			'payer'          => new Payer_Column(),
+			'id'             => new Record_Id_Column_Advanced(),
 		);
 	}
 

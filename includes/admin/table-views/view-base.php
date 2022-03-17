@@ -35,6 +35,14 @@ abstract class View_Base implements
 		return array();
 	}
 
+	public function get_total(): int {
+		return 0;
+	}
+
+	public function get_receive_endpoint(): array {
+		return array();
+	}
+
 	public function load_data(): array {
 		return array();
 	}
@@ -55,9 +63,11 @@ abstract class View_Base implements
 
 		return array_merge(
 			array(
-				'list'    => $this->get_prepared_list(),
-				'columns' => $this->get_columns_headings(),
-				'actions' => $this->get_global_actions(),
+				'list'        => $this->get_prepared_list(),
+				'columns'     => $this->get_columns_headings(),
+				'actions'     => $this->get_global_actions(),
+				'total'       => $this->get_total(),
+				'receive_url' => $this->get_receive_endpoint(),
 			),
 			$this->load_data()
 		);

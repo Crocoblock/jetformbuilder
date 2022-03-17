@@ -24,9 +24,11 @@ export default {
 		onClick() {
 			this.commit( 'toggleHead' );
 
-			this.commit(
-				this.getter( 'isCheckedHead' ) ? 'activeAll' : 'removeAll',
-			);
+			if ( this.getter( 'isCheckedHead' ) ) {
+				this.dispatch( 'activeAll' );
+			} else {
+				this.commit( 'setChecked' );
+			}
 		},
 	},
 };

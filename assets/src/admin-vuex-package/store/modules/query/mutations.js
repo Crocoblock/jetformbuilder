@@ -3,6 +3,9 @@ export default {
 		state.total = + newTotal;
 	},
 	setLimit( state, limit ) {
+		if ( + limit < 1 ) {
+			limit = 1;
+		}
 		state.limit = + limit;
 	},
 	setCurrentPage( state, pageNum ) {

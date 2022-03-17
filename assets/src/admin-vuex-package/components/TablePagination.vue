@@ -56,10 +56,11 @@ export default {
 			if ( this.isLoading ) {
 				return;
 			}
-			if ( this.queryState.total < value ) {
+			if ( this.queryState.total < value || ! value ) {
 				value = this.queryState.total;
 			}
 			this.commit( 'setLimit', value );
+			this.commit( 'setCurrentPage', 1 );
 			this.dispatch( 'fetchPage' );
 		},
 		changePage( pageNum ) {

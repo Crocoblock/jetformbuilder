@@ -88,7 +88,7 @@ var _Vuex = Vuex,
       }).catch(function () {
         _this.onFinish();
       }).finally(function () {
-        _this.commit('removeAll');
+        _this.commit('setChecked');
 
         _this.commit('unChooseHead');
       });
@@ -811,7 +811,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'status--item',
+  name: 'payment_status--item',
   props: ['value'],
   methods: {},
   computed: {
@@ -1208,7 +1208,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onClick: function onClick() {
       this.commit('toggleHead');
-      this.commit(this.getter('isCheckedHead') ? 'activeAll' : 'removeAll');
+
+      if (this.getter('isCheckedHead')) {
+        this.dispatch('activeAll');
+      } else {
+        this.commit('setChecked');
+      }
     }
   }
 });
@@ -1244,11 +1249,6 @@ window.jfbEventBus = window.jfbEventBus || new Vue({});
   name: 'choose--item',
   props: ['value', 'full-entry'],
   mixins: [_mixins_ScopeStoreMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  created: function created() {
-    this.commit('addToStore', {
-      id: this.value
-    });
-  },
   computed: {
     isCheckedCurrent: function isCheckedCurrent() {
       return this.isChecked(this.value) ? this.value : '';
@@ -1495,11 +1495,12 @@ var _Vuex = Vuex,
         return;
       }
 
-      if (this.queryState.total < value) {
+      if (this.queryState.total < value || !value) {
         value = this.queryState.total;
       }
 
       this.commit('setLimit', value);
+      this.commit('setCurrentPage', 1);
       this.dispatch('fetchPage');
     },
     changePage: function changePage(pageNum) {
@@ -2307,18 +2308,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   toggleHead: function toggleHead(state) {
     state.chooseHead = state.chooseHead ? '' : 'checked';
@@ -2329,22 +2318,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   chooseHead: function chooseHead(state) {
     state.chooseHead = 'checked';
   },
-  addToStore: function addToStore(state, _ref) {
+  addChecked: function addChecked(state, _ref) {
     var id = _ref.id;
-    state.idList.push(id);
-  },
-  addChecked: function addChecked(state, _ref2) {
-    var id = _ref2.id;
     state.checked.push(id);
   },
-  removeAll: function removeAll(state) {
-    state.checked = [];
+  setChecked: function setChecked(state) {
+    var payload = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    state.checked = payload;
   },
-  activeAll: function activeAll(state) {
-    state.checked = _toConsumableArray(state.idList);
-  },
-  removeChecked: function removeChecked(state, _ref3) {
-    var id = _ref3.id;
+  removeChecked: function removeChecked(state, _ref2) {
+    var id = _ref2.id;
     state.checked = state.checked.filter(function (checked) {
       return checked !== id;
     });
@@ -2721,6 +2704,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     state.total = +newTotal;
   },
   setLimit: function setLimit(state, limit) {
+    if (+limit < 1) {
+      limit = 1;
+    }
+
     state.limit = +limit;
   },
   setCurrentPage: function setCurrentPage(state, pageNum) {
@@ -3148,8 +3135,10 @@ var _wp = wp,
     commit('toggleLoading', 'page');
     dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
       commit('setList', response.list);
-      dispatch('updateQueryState');
-      jfbEventBus.$emit('fetch-page', response);
+      dispatch('updateQueryState'); // clear checked rows
+
+      commit('unChooseHead');
+      commit('setChecked');
     }).finally(function () {
       commit('toggleLoading', 'page');
     });
@@ -3216,9 +3205,19 @@ var _wp = wp,
       });
     });
   },
-  clearFiltersWithFetch: function clearFiltersWithFetch(_ref5, replaceMap) {
+  activeAll: function activeAll(_ref5) {
     var commit = _ref5.commit,
-        dispatch = _ref5.dispatch;
+        getters = _ref5.getters;
+    var idsList = getters.list.map(function (row) {
+      var _row$choose;
+
+      return row === null || row === void 0 ? void 0 : (_row$choose = row.choose) === null || _row$choose === void 0 ? void 0 : _row$choose.value;
+    });
+    commit('setChecked', idsList);
+  },
+  clearFiltersWithFetch: function clearFiltersWithFetch(_ref6, replaceMap) {
+    var commit = _ref6.commit,
+        dispatch = _ref6.dispatch;
     commit('clearSelectedFilters', replaceMap);
     dispatch('fetchPageWithFilters');
   }
@@ -3527,7 +3526,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AA0FA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;EACA,YAAA;ACzFD;AD0FC;EACC,OAAA;EACA,cAAA;ACxFF;ADyFE;EACC,OAAA;ACvFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\tpadding: 1em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n  padding: 1em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/ChooseAction.vue","webpack://./../ChooseAction.vue"],"names":[],"mappings":"AA0FA;EACC,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,UAAA;ACzFD;AD0FC;EACC,OAAA;EACA,cAAA;ACxFF;ADyFE;EACC,OAAA;ACvFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jet-fb-choose-action-wrapper {\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tjustify-content: space-between;\r\n\tgap: 0.7em;\r\n\t.cx-vui-component {\r\n\t\tflex: 1;\r\n\t\tpadding: unset;\r\n\t\t&__control {\r\n\t\t\tflex: 1;\r\n\t\t}\r\n\t}\r\n}\r\n",".jet-fb-choose-action-wrapper {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 0.7em;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component {\n  flex: 1;\n  padding: unset;\n}\n.jet-fb-choose-action-wrapper .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3743,7 +3742,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-3548b9f0] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/choose/ChooseHead.vue","webpack://./../ChooseHead.vue"],"names":[],"mappings":"AAmCA;EACC,cAAA;AClCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-3548b9f0] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/choose/ChooseHead.vue","webpack://./../ChooseHead.vue"],"names":[],"mappings":"AAqCA;EACC,cAAA;ACpCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3770,7 +3769,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .cell--choose.cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .cell--choose.cell--choose .cx-vui-component {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/choose/ChooseItem.vue","webpack://./../ChooseItem.vue"],"names":[],"mappings":"AA8CC;EACC,oBAAA;AC7CF;AD+CE;EACC,cAAA;AC7CH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table {\r\n\t.cell--choose.cell--choose {\r\n\t\tpadding-right: unset;\r\n\r\n\t\t.cx-vui-component {\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n}\r\n",".cx-vue-list-table .cell--choose.cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .cell--choose.cell--choose .cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .cell--choose.cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .cell--choose.cell--choose .cx-vui-component {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/choose/ChooseItem.vue","webpack://./../ChooseItem.vue"],"names":[],"mappings":"AAyCC;EACC,oBAAA;ACxCF;AD0CE;EACC,cAAA;ACxCH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table {\r\n\t.cell--choose.cell--choose {\r\n\t\tpadding-right: unset;\r\n\r\n\t\t.cx-vui-component {\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n}\r\n",".cx-vue-list-table .cell--choose.cell--choose {\n  padding-right: unset;\n}\n.cx-vue-list-table .cell--choose.cell--choose .cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -3851,7 +3850,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n.jfb-pagination li.cx-vui-pagination-item {\n  width: 1.2em;\n  height: 1.5em;\n  border-radius: 5px;\n  font-size: 1.15em;\n  transition: all 0.3s ease-in-out;\n}\n.jfb-pagination li.cx-vui-pagination-item-active, .jfb-pagination li.cx-vui-pagination-item:hover {\n  box-shadow: 0 5px 5px -1px #bdbdbd;\n  background-color: #007cba;\n  color: #f5f5f5;\n  border-color: #007cba;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA6EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;AC5ED;AD+EE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;AC7EH;ADiFC;EACC,uBAAA;AC/EF;ADkFC;EACC,YAAA;EACA,aAAA;EACA,kBAAA;EACA,iBAAA;EACA,gCAAA;AChFF;ADkFE;EACC,kCAAA;EACA,yBAAA;EACA,cAAA;EACA,qBAAA;AChFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n\r\n\tli.cx-vui-pagination-item {\r\n\t\twidth: 1.2em;\r\n\t\theight: 1.5em;\r\n\t\tborder-radius: 5px;\r\n\t\tfont-size: 1.15em;\r\n\t\ttransition: all 0.3s ease-in-out;\r\n\r\n\t\t&-active, &:hover {\r\n\t\t\tbox-shadow: 0 5px 5px -1px #bdbdbd;\r\n\t\t\tbackground-color: #007cba;\r\n\t\t\tcolor: #f5f5f5;\r\n\t\t\tborder-color: #007cba;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n.jfb-pagination li.cx-vui-pagination-item {\n  width: 1.2em;\n  height: 1.5em;\n  border-radius: 5px;\n  font-size: 1.15em;\n  transition: all 0.3s ease-in-out;\n}\n.jfb-pagination li.cx-vui-pagination-item-active, .jfb-pagination li.cx-vui-pagination-item:hover {\n  box-shadow: 0 5px 5px -1px #bdbdbd;\n  background-color: #007cba;\n  color: #f5f5f5;\n  border-color: #007cba;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n.jfb-pagination li.cx-vui-pagination-item {\n  width: 1.2em;\n  height: 1.5em;\n  border-radius: 5px;\n  font-size: 1.15em;\n  transition: all 0.3s ease-in-out;\n}\n.jfb-pagination li.cx-vui-pagination-item-active, .jfb-pagination li.cx-vui-pagination-item:hover {\n  box-shadow: 0 5px 5px -1px #bdbdbd;\n  background-color: #007cba;\n  color: #f5f5f5;\n  border-color: #007cba;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TablePagination.vue","webpack://./../TablePagination.vue"],"names":[],"mappings":"AA8EA;EACC,aAAA;EACA,8BAAA;EACA,mBAAA;EACA,cAAA;EACA,oBAAA;AC7ED;ADgFE;EACC,eAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;AC9EH;ADkFC;EACC,uBAAA;AChFF;ADmFC;EACC,YAAA;EACA,aAAA;EACA,kBAAA;EACA,iBAAA;EACA,gCAAA;ACjFF;ADmFE;EACC,kCAAA;EACA,yBAAA;EACA,cAAA;EACA,qBAAA;ACjFH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-pagination {\r\n\tdisplay: flex;\r\n\tjustify-content: space-between;\r\n\talign-items: center;\r\n\tpadding: 1.5em;\r\n\tmargin-bottom: unset;\r\n\r\n\t&--sort {\r\n\t\t.cx-vui-component {\r\n\t\t\tcolumn-gap: 1em;\r\n\t\t\tjustify-content: center;\r\n\t\t\talign-items: center;\r\n\t\t\tpadding: unset;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vui-input {\r\n\t\tbackground-color: white;\r\n\t}\r\n\r\n\tli.cx-vui-pagination-item {\r\n\t\twidth: 1.2em;\r\n\t\theight: 1.5em;\r\n\t\tborder-radius: 5px;\r\n\t\tfont-size: 1.15em;\r\n\t\ttransition: all 0.3s ease-in-out;\r\n\r\n\t\t&-active, &:hover {\r\n\t\t\tbox-shadow: 0 5px 5px -1px #bdbdbd;\r\n\t\t\tbackground-color: #007cba;\r\n\t\t\tcolor: #f5f5f5;\r\n\t\t\tborder-color: #007cba;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".jfb-pagination {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1.5em;\n  margin-bottom: unset;\n}\n.jfb-pagination--sort .cx-vui-component {\n  column-gap: 1em;\n  justify-content: center;\n  align-items: center;\n  padding: unset;\n}\n.jfb-pagination .cx-vui-input {\n  background-color: white;\n}\n.jfb-pagination li.cx-vui-pagination-item {\n  width: 1.2em;\n  height: 1.5em;\n  border-radius: 5px;\n  font-size: 1.15em;\n  transition: all 0.3s ease-in-out;\n}\n.jfb-pagination li.cx-vui-pagination-item-active, .jfb-pagination li.cx-vui-pagination-item:hover {\n  box-shadow: 0 5px 5px -1px #bdbdbd;\n  background-color: #007cba;\n  color: #f5f5f5;\n  border-color: #007cba;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

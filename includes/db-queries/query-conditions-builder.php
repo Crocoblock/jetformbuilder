@@ -89,7 +89,6 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function result(): string {
 		if ( ! $this->conditions ) {
@@ -102,7 +101,7 @@ class Query_Conditions_Builder {
 	/**
 	 * @param $conditions
 	 *
-	 * @throws Query_Builder_Exception
+	 * @return array
 	 */
 	public function build_conditions_raw( array $conditions ): array {
 		$prepared = array();
@@ -120,7 +119,6 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function prepare_conditions(): string {
 		$prepared = $this->build_conditions_raw( $this->conditions );
@@ -130,7 +128,6 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return mixed
-	 * @throws Query_Builder_Exception
 	 */
 	public function prepare() {
 		$type = $this->get_condition_type();
@@ -145,11 +142,11 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return array
-	 * @throws Query_Builder_Exception
 	 */
 	public function current_condition(): array {
 		if ( empty( $this->current_condition ) ) {
-			throw new Query_Builder_Exception( 'Do it wrong' );
+			_doing_it_wrong( __METHOD__, 'Current condition is empty', '2.0.0' );
+			wp_die();
 		}
 
 		return $this->current_condition;
@@ -157,14 +154,15 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	private function get_condition_type(): string {
 		$condition = $this->current_condition();
 		$type      = $condition['type'] ?? false;
 
 		if ( ! $type || ! in_array( $type, array_keys( $this->get_types() ), true ) ) {
-			throw new Query_Builder_Exception( "Undefined condition type: $type" );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			_doing_it_wrong( __METHOD__, "Undefined condition type: $type", '2.0.0' );
+			wp_die();
 		}
 
 		return $type;
@@ -261,7 +259,6 @@ class Query_Conditions_Builder {
 
 	/**
 	 * @return array
-	 * @throws Query_Builder_Exception
 	 */
 	public function get_condition_values(): array {
 		$condition = $this->current_condition();

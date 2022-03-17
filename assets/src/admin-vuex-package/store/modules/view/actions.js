@@ -9,7 +9,9 @@ export default {
 			commit( 'setList', response.list );
 			dispatch( 'updateQueryState' );
 
-			jfbEventBus.$emit( 'fetch-page', response );
+			// clear checked rows
+			commit( 'unChooseHead' );
+			commit( 'setChecked' );
 		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );
@@ -60,6 +62,11 @@ export default {
 		} ).finally( () => {
 			commit( 'toggleDoingAction', null, { root: true } );
 		} );
+	},
+	activeAll( { commit, getters } ) {
+		const idsList = getters.list.map( row => (row?.choose?.value) );
+
+		commit( 'setChecked', idsList );
 	},
 	clearFiltersWithFetch( { commit, dispatch }, replaceMap ) {
 		commit( 'clearSelectedFilters', replaceMap );

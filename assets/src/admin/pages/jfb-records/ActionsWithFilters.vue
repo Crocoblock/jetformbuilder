@@ -99,19 +99,18 @@ export default {
 	}
 	.cx-vui-select {
 		background-color: white;
+		width: 100%;
+		padding: 6px 21px 6px 12px;
 	}
 	.jfb-list-components {
 		display: flex;
 		gap: 2em;
 		align-items: end;
-		padding: 1em;
+		padding: 0 1em;
 		&-item {
 			flex: 0 0 30%;
 			.cx-vui-component__control {
 				flex: 1;
-				select {
-					width: 100%;
-				}
 			}
 		}
 	}

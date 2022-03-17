@@ -18,11 +18,6 @@ export default {
 	name: 'choose--item',
 	props: [ 'value', 'full-entry' ],
 	mixins: [ ScopeStoreMixin ],
-	created() {
-		this.commit( 'addToStore', {
-			id: this.value,
-		} );
-	},
 	computed: {
 		isCheckedCurrent() {
 			return this.isChecked( this.value ) ? this.value : '';

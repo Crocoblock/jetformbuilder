@@ -62,13 +62,19 @@ class Records_Table_View extends View_Advanced_Base {
 		return ( new Header_Actions_Column() )->get_value();
 	}
 
+	public function get_receive_endpoint(): array {
+		return array(
+			'url'     => Fetch_Records_Page_Endpoint::rest_url(),
+			'methods' => Fetch_Records_Page_Endpoint::get_methods(),
+		);
+	}
+
+	public function get_total(): int {
+		return Record_View_Count::count();
+	}
+
 	public function load_data(): array {
 		return array(
-			'receive_url'      => array(
-				'url'     => Fetch_Records_Page_Endpoint::rest_url(),
-				'methods' => Fetch_Records_Page_Endpoint::get_methods(),
-			),
-			'total'            => Record_View_Count::count(),
 			'filters_endpoint' => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),
 				'url'     => Fetch_Filters_Endpoint::rest_url(),

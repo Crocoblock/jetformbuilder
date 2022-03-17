@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Admin\Table_Views;
 
 abstract class Column_Base {
 
+	const CHOOSE  = 'choose';
+	const ACTIONS = 'actions';
+	const CLASSES = 'classes';
+	const STATUS  = 'icon_status';
+
 	protected $column = '';
 	protected $type   = 'string';
 

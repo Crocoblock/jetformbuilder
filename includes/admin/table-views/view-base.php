@@ -16,10 +16,6 @@ abstract class View_Base implements
 	use Repository_Item_With_Class;
 	use Model_Dependencies;
 
-	const COLUMN_CHOOSE  = 'choose';
-	const COLUMN_ACTIONS = 'actions';
-	const COLUMN_CLASSES = 'classes';
-
 	abstract public function get_prepared_list( array $custom_list = array() ): array;
 
 	public function get_list(): array {

@@ -15,6 +15,7 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
+use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
@@ -25,9 +26,9 @@ class Records_Table_View extends View_Advanced_Base {
 
 	public function get_columns(): array {
 		return array(
-			self::COLUMN_CHOOSE  => new Record_Id_Column_Advanced(),
-			self::COLUMN_ACTIONS => new Row_Actions_Column(),
-			self::COLUMN_CLASSES => new Classes_Column(),
+			Column_Base::CHOOSE  => new Record_Id_Column_Advanced(),
+			Column_Base::ACTIONS => new Row_Actions_Column(),
+			Column_Base::CLASSES => new Classes_Column(),
 			'form'               => new Primary_Form_Column(),
 			'referrer'           => new Referrer_Link_Column(),
 			'status'             => new Status_Column(),

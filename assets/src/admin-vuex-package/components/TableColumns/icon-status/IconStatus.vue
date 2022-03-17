@@ -1,14 +1,6 @@
 <template>
 	<div class="jfb-icon-status">
-		<template v-if="'success' === value.type">
-			<span class="dashicons dashicons-yes-alt"></span>
-		</template>
-		<template v-else-if="'warning' === value.type">
-			<span class="dashicons dashicons-warning"></span>
-		</template>
-		<template v-else>
-			<span class="dashicons dashicons-dismiss"></span>
-		</template>
+		<span :class="dashIconClass"></span>
 		<div
 			:class="tooltipClasses"
 		>{{ value.help }}</div>
@@ -23,18 +15,34 @@ export default {
 		helpPosition() {
 			return this.value?.help_position ?? 'top-left';
 		},
+		dashIconClass() {
+			const classes = [ 'dashicons' ];
+			switch ( this.value.type ) {
+				case 'success':
+					classes.push( 'dashicons-yes-alt' );
+					break;
+				case 'warning':
+					classes.push( 'dashicons-warning' );
+					break;
+				default:
+					classes.push( 'dashicons-dismiss' );
+					break;
+			}
+
+			return classes;
+		},
 		tooltipClasses() {
 			return {
 				'cx-vui-tooltip': true,
-				['tooltip-position-' + this.helpPosition]: true,
+				[ 'tooltip-position-' + this.helpPosition ]: true,
 			};
-		}
+		},
 	}
 };
 </script>
 
 <style lang="scss">
-.cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell--status {
+.cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {
 	overflow: visible;
 }
 

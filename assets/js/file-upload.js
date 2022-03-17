@@ -243,7 +243,7 @@
 				}
 
 				if ( file[ 'size' ] > maxSize ) {
-					throw 'upload_mime_types';
+					throw 'upload_max_size';
 				}
 
 				formData.append( 'file_' + i, file );

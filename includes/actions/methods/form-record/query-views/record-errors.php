@@ -10,13 +10,6 @@ use Jet_Form_Builder\Db_Queries\Views\View_Base;
 
 class Record_Errors extends View_Base {
 
-	protected $order_by = array(
-		array(
-			'column' => 'id',
-			'sort'   => self::FROM_HIGH_TO_LOW,
-		),
-	);
-
 	public function table(): string {
 		return Record_Error_Model::table();
 	}

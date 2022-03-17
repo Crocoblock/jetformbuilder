@@ -2244,6 +2244,9 @@ var _wp$components = wp.components,
     CardHeader = _wp$components.CardHeader,
     CardBody = _wp$components.CardBody,
     withFilters = _wp$components.withFilters;
+var _wp$element = wp.element,
+    useState = _wp$element.useState,
+    useEffect = _wp$element.useEffect;
 
 function FieldValueControls(_ref2) {
   var attributes = _ref2.attributes,
@@ -2303,8 +2306,19 @@ function HiddenEdit(props) {
     }
   };
 
+  var resetRender = function resetRender() {
+    if ('referer_url' === attributes.field_value) {
+      setAttributes({
+        render: true
+      });
+    }
+  };
+
+  useEffect(resetRender, []);
+  useEffect(resetRender, [attributes.field_value]);
+
   var checkFieldValueInput = function checkFieldValueInput() {
-    return wp.element.createElement(React.Fragment, null, wp.element.createElement(ToggleControl, {
+    return wp.element.createElement(React.Fragment, null, 'referer_url' !== attributes.field_value && wp.element.createElement(ToggleControl, {
       key: uniqKey('render_in_html'),
       label: __('Render in HTML', 'jet-form-builder'),
       checked: attributes.render,

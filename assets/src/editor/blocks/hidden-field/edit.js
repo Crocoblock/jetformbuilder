@@ -23,6 +23,11 @@ const {
 	withFilters,
 } = wp.components;
 
+const {
+	useState,
+	useEffect,
+} = wp.element;
+
 function FieldValueControls( { attributes, setAttributes } ) {
 	return <>
 		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
@@ -82,13 +87,22 @@ export default function HiddenEdit( props ) {
 		}
 	};
 
+	const resetRender = () => {
+		if ( 'referer_url' === attributes.field_value ) {
+			setAttributes( { render: true } );
+		}
+	};
+
+	useEffect( resetRender, [] );
+	useEffect( resetRender, [ attributes.field_value ] );
+
 	const checkFieldValueInput = () => <>
-		<ToggleControl
+		{ 'referer_url' !== attributes.field_value && <ToggleControl
 			key={ uniqKey( 'render_in_html' ) }
 			label={ __( 'Render in HTML', 'jet-form-builder' ) }
 			checked={ attributes.render }
 			onChange={ render => setAttributes( { render: Boolean( render ) } ) }
-		/>
+		/> }
 		<SelectControl
 			key='field_value'
 			label="Field Value"

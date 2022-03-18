@@ -802,41 +802,6 @@ var _Vuex = Vuex,
 
 /***/ }),
 
-/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'payment_status--item',
-  props: ['value'],
-  methods: {},
-  computed: {
-    wrapClasses: function wrapClasses() {
-      return _defineProperty({
-        'jfb-status': true
-      }, 'jfb-status-' + this.status, true);
-    },
-    status: function status() {
-      return this.value.toLowerCase();
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PostBoxContainer.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PostBoxContainer.vue?vue&type=script&lang=js& ***!
@@ -1300,6 +1265,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'icon_status--item',
   props: ['value', 'full-entry', 'entry-id'],
@@ -1308,6 +1276,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this$value$help_posi, _this$value;
 
       return (_this$value$help_posi = (_this$value = this.value) === null || _this$value === void 0 ? void 0 : _this$value.help_position) !== null && _this$value$help_posi !== void 0 ? _this$value$help_posi : 'top-left';
+    },
+    wrapperClasses: function wrapperClasses() {
+      return {
+        'jfb-icon-status': true,
+        'jfb-icon-status-has-text': !!this.value.text,
+        'jfb-icon-status-has-help': !!this.value.help
+      };
     },
     dashIconClass: function dashIconClass() {
       var classes = ['dashicons'];
@@ -1319,6 +1294,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         case 'warning':
           classes.push('dashicons-warning');
+          break;
+
+        case 'info':
+          classes.push('dashicons-info');
           break;
 
         default:
@@ -1618,8 +1597,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_base_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/base-store */ "./admin-vuex-package/store/base-store.js");
 /* harmony import */ var _store_plugins_table_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/plugins/table-module */ "./admin-vuex-package/store/plugins/table-module.js");
 /* harmony import */ var _store_plugins_table_seed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/plugins/table-seed */ "./admin-vuex-package/store/plugins/table-seed.js");
-/* harmony import */ var _status__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./status */ "./admin-vuex-package/components/PaymentsPage/status/index.js");
-/* harmony import */ var _TableColumns_payer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../TableColumns/payer */ "./admin-vuex-package/components/TableColumns/payer/index.js");
+/* harmony import */ var _TableColumns_payer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../TableColumns/payer */ "./admin-vuex-package/components/TableColumns/payer/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1631,10 +1609,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var addFilter = wp.hooks.addFilter;
 addFilter('jet.fb.admin.table.default', 'jet-form-builder', function (components) {
-  components.push(_TableColumns_payer__WEBPACK_IMPORTED_MODULE_5__, _status__WEBPACK_IMPORTED_MODULE_4__);
+  components.push(_TableColumns_payer__WEBPACK_IMPORTED_MODULE_4__);
   return components;
 });
 
@@ -1648,24 +1625,6 @@ var store = _objectSpread(_objectSpread({}, _store_base_store__WEBPACK_IMPORTED_
     store: store
   }
 });
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/PaymentsPage/status/index.js":
-/*!********************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/status/index.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "item": () => (/* binding */ item)
-/* harmony export */ });
-/* harmony import */ var _StatusInfo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./StatusInfo */ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue");
-
-var item = _StatusInfo__WEBPACK_IMPORTED_MODULE_0__["default"];
-
 
 /***/ }),
 
@@ -3705,33 +3664,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margi
 
 /***/ }),
 
-/***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&":
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss& ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "../node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
-
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-status {\n  padding: 0.5em;\n}\n.jfb-status-completed {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-status-refunded {\n  background-color: rgba(245, 154, 136, 0.4);\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue","webpack://./../StatusInfo.vue"],"names":[],"mappings":"AAyBA;EACC,cAAA;ACxBD;AD0BC;EACC,0CAAA;ACxBF;AD2BC;EACC,0CAAA;ACzBF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.jfb-status {\r\n\tpadding: 0.5em;\r\n\r\n\t&-completed {\r\n\t\tbackground-color: rgb(165 241 190 / 40%);\r\n\t}\r\n\r\n\t&-refunded {\r\n\t\tbackground-color: rgb(245 154 136 / 40%);\r\n\t}\r\n}\r\n",".jfb-status {\n  padding: 0.5em;\n}\n.jfb-status-completed {\n  background-color: rgba(165, 241, 190, 0.4);\n}\n.jfb-status-refunded {\n  background-color: rgba(245, 154, 136, 0.4);\n}"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
 /***/ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/TableColumns/actions/ActionsItem.vue?vue&type=style&index=0&lang=scss& ***!
@@ -3833,7 +3765,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\n  overflow: visible;\n}\n.jfb-icon-status {\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n}\n.jfb-icon-status .dashicons-dismiss {\n  color: #ff4500;\n}\n.jfb-icon-status .dashicons-warning {\n  color: #ffa500;\n}\n.jfb-icon-status .dashicons-yes-alt {\n  color: #32cd32;\n}\n.jfb-icon-status .cx-vui-tooltip {\n  width: fit-content;\n  bottom: calc(100% + 15px);\n  box-sizing: border-box;\n  pointer-events: none;\n  transition: all 0.18s linear;\n  opacity: 0;\n  padding-left: 1em;\n  padding-right: 1em;\n  position: absolute;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left {\n  right: -1.2em;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left:after {\n  right: 20px;\n  left: unset;\n}\n.jfb-icon-status:hover .cx-vui-tooltip {\n  opacity: 1;\n}\n.jfb-icon-status:hover .cx-vui-tooltip.tooltip-position-top-left {\n  bottom: 100%;\n}\n.jfb-icon-status > span {\n  font-size: 1.5em;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/icon-status/IconStatus.vue","webpack://./../IconStatus.vue"],"names":[],"mappings":"AA4CA;EACC,iBAAA;AC3CD;AD8CA;EACC,kBAAA;EACA,eAAA;EACA,qBAAA;AC3CD;AD8CE;EACC,cAAA;AC5CH;AD+CE;EACC,cAAA;AC7CH;ADgDE;EACC,cAAA;AC9CH;ADkDC;EACC,kBAAA;EACA,yBAAA;EACA,sBAAA;EACA,oBAAA;EACA,4BAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;AChDF;ADkDE;EACC,aAAA;AChDH;ADkDG;EACC,WAAA;EACA,WAAA;AChDJ;ADsDE;EACC,UAAA;ACpDH;ADsDG;EACC,YAAA;ACpDJ;ADyDC;EACC,gBAAA;ACvDF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\r\n\toverflow: visible;\r\n}\r\n\r\n.jfb-icon-status {\r\n\tposition: relative;\r\n\tcursor: pointer;\r\n\tdisplay: inline-block;\r\n\r\n\t.dashicons {\r\n\t\t&-dismiss {\r\n\t\t\tcolor: #ff4500;\r\n\t\t}\r\n\r\n\t\t&-warning {\r\n\t\t\tcolor: #ffa500;\r\n\t\t}\r\n\r\n\t\t&-yes-alt {\r\n\t\t\tcolor: #32cd32;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vui-tooltip {\r\n\t\twidth: fit-content;\r\n\t\tbottom: calc(100% + 15px);\r\n\t\tbox-sizing: border-box;\r\n\t\tpointer-events: none;\r\n\t\ttransition: all 0.180s linear;\r\n\t\topacity: 0;\r\n\t\tpadding-left: 1em;\r\n\t\tpadding-right: 1em;\r\n\t\tposition: absolute;\r\n\r\n\t\t&.tooltip-position-top-left {\r\n\t\t\tright: -1.2em;\r\n\r\n\t\t\t&:after {\r\n\t\t\t\tright: 20px;\r\n\t\t\t\tleft: unset;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t&:hover {\r\n\t\t.cx-vui-tooltip {\r\n\t\t\topacity: 1;\r\n\r\n\t\t\t&.tooltip-position-top-left {\r\n\t\t\t\tbottom: 100%;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t& > span {\r\n\t\tfont-size: 1.5em;\r\n\t}\r\n}\r\n\r\n",".cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\n  overflow: visible;\n}\n\n.jfb-icon-status {\n  position: relative;\n  cursor: pointer;\n  display: inline-block;\n}\n.jfb-icon-status .dashicons-dismiss {\n  color: #ff4500;\n}\n.jfb-icon-status .dashicons-warning {\n  color: #ffa500;\n}\n.jfb-icon-status .dashicons-yes-alt {\n  color: #32cd32;\n}\n.jfb-icon-status .cx-vui-tooltip {\n  width: fit-content;\n  bottom: calc(100% + 15px);\n  box-sizing: border-box;\n  pointer-events: none;\n  transition: all 0.18s linear;\n  opacity: 0;\n  padding-left: 1em;\n  padding-right: 1em;\n  position: absolute;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left {\n  right: -1.2em;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left:after {\n  right: 20px;\n  left: unset;\n}\n.jfb-icon-status:hover .cx-vui-tooltip {\n  opacity: 1;\n}\n.jfb-icon-status:hover .cx-vui-tooltip.tooltip-position-top-left {\n  bottom: 100%;\n}\n.jfb-icon-status > span {\n  font-size: 1.5em;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\n  overflow: visible;\n}\n.jfb-icon-status {\n  position: relative;\n  display: inline-block;\n}\n.jfb-icon-status-has-help {\n  cursor: pointer;\n}\n.jfb-icon-status-has-text {\n  display: flex;\n  column-gap: 0.5em;\n  align-items: center;\n}\n.jfb-icon-status .dashicons-dismiss {\n  color: #ff4500;\n}\n.jfb-icon-status .dashicons-warning {\n  color: #ffa500;\n}\n.jfb-icon-status .dashicons-yes-alt {\n  color: #32cd32;\n}\n.jfb-icon-status .dashicons-info {\n  color: #90c6db;\n}\n.jfb-icon-status .cx-vui-tooltip {\n  width: fit-content;\n  bottom: calc(100% + 15px);\n  box-sizing: border-box;\n  pointer-events: none;\n  transition: all 0.18s linear;\n  opacity: 0;\n  padding-left: 1em;\n  padding-right: 1em;\n  position: absolute;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left {\n  right: -1.2em;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left:after {\n  right: 20px;\n  left: unset;\n}\n.jfb-icon-status:hover .cx-vui-tooltip {\n  opacity: 1;\n}\n.jfb-icon-status:hover .cx-vui-tooltip.tooltip-position-top-left {\n  bottom: 100%;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/TableColumns/icon-status/IconStatus.vue","webpack://./../IconStatus.vue"],"names":[],"mappings":"AAyDA;EACC,iBAAA;ACxDD;AD2DA;EACC,kBAAA;EACA,qBAAA;ACxDD;AD0DC;EACC,eAAA;ACxDF;AD2DC;EACC,aAAA;EACA,iBAAA;EACA,mBAAA;ACzDF;AD6DE;EACC,cAAA;AC3DH;AD8DE;EACC,cAAA;AC5DH;AD+DE;EACC,cAAA;AC7DH;ADgEE;EACC,cAAA;AC9DH;ADkEC;EACC,kBAAA;EACA,yBAAA;EACA,sBAAA;EACA,oBAAA;EACA,4BAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;AChEF;ADkEE;EACC,aAAA;AChEH;ADkEG;EACC,WAAA;EACA,WAAA;AChEJ;ADsEE;EACC,UAAA;ACpEH;ADsEG;EACC,YAAA;ACpEJ","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\r\n\toverflow: visible;\r\n}\r\n\r\n.jfb-icon-status {\r\n\tposition: relative;\r\n\tdisplay: inline-block;\r\n\r\n\t&-has-help {\r\n\t\tcursor: pointer;\r\n\t}\r\n\r\n\t&-has-text {\r\n\t\tdisplay: flex;\r\n\t\tcolumn-gap: 0.5em;\r\n\t\talign-items: center;\r\n\t}\r\n\r\n\t.dashicons {\r\n\t\t&-dismiss {\r\n\t\t\tcolor: #ff4500;\r\n\t\t}\r\n\r\n\t\t&-warning {\r\n\t\t\tcolor: #ffa500;\r\n\t\t}\r\n\r\n\t\t&-yes-alt {\r\n\t\t\tcolor: #32cd32;\r\n\t\t}\r\n\r\n\t\t&-info {\r\n\t\t\tcolor: #90c6db;\r\n\t\t}\r\n\t}\r\n\r\n\t.cx-vui-tooltip {\r\n\t\twidth: fit-content;\r\n\t\tbottom: calc(100% + 15px);\r\n\t\tbox-sizing: border-box;\r\n\t\tpointer-events: none;\r\n\t\ttransition: all 0.180s linear;\r\n\t\topacity: 0;\r\n\t\tpadding-left: 1em;\r\n\t\tpadding-right: 1em;\r\n\t\tposition: absolute;\r\n\r\n\t\t&.tooltip-position-top-left {\r\n\t\t\tright: -1.2em;\r\n\r\n\t\t\t&:after {\r\n\t\t\t\tright: 20px;\r\n\t\t\t\tleft: unset;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t&:hover {\r\n\t\t.cx-vui-tooltip {\r\n\t\t\topacity: 1;\r\n\r\n\t\t\t&.tooltip-position-top-left {\r\n\t\t\t\tbottom: 100%;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {\n  overflow: visible;\n}\n\n.jfb-icon-status {\n  position: relative;\n  display: inline-block;\n}\n.jfb-icon-status-has-help {\n  cursor: pointer;\n}\n.jfb-icon-status-has-text {\n  display: flex;\n  column-gap: 0.5em;\n  align-items: center;\n}\n.jfb-icon-status .dashicons-dismiss {\n  color: #ff4500;\n}\n.jfb-icon-status .dashicons-warning {\n  color: #ffa500;\n}\n.jfb-icon-status .dashicons-yes-alt {\n  color: #32cd32;\n}\n.jfb-icon-status .dashicons-info {\n  color: #90c6db;\n}\n.jfb-icon-status .cx-vui-tooltip {\n  width: fit-content;\n  bottom: calc(100% + 15px);\n  box-sizing: border-box;\n  pointer-events: none;\n  transition: all 0.18s linear;\n  opacity: 0;\n  padding-left: 1em;\n  padding-right: 1em;\n  position: absolute;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left {\n  right: -1.2em;\n}\n.jfb-icon-status .cx-vui-tooltip.tooltip-position-top-left:after {\n  right: 20px;\n  left: unset;\n}\n.jfb-icon-status:hover .cx-vui-tooltip {\n  opacity: 1;\n}\n.jfb-icon-status:hover .cx-vui-tooltip.tooltip-position-top-left {\n  bottom: 100%;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4429,47 +4361,6 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue":
-/*!**************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./StatusInfo.vue?vue&type=template&id=a707366a& */ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a&");
-/* harmony import */ var _StatusInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StatusInfo.vue?vue&type=script&lang=js& */ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js&");
-/* harmony import */ var _StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StatusInfo.vue?vue&type=style&index=0&lang=scss& */ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-;
-
-
-/* normalize component */
-
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _StatusInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__.render,
-  _StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -5219,22 +5110,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./StatusInfo.vue?vue&type=script&lang=js& */ "../node_modules/babel-loader/lib/index.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
 /***/ "./admin-vuex-package/components/PostBoxContainer.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************!*\
   !*** ./admin-vuex-package/components/PostBoxContainer.vue?vue&type=script&lang=js& ***!
@@ -5628,23 +5503,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a&":
-/*!*********************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a& ***!
-  \*********************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_template_id_a707366a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./StatusInfo.vue?vue&type=template&id=a707366a& */ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a&");
-
-
-/***/ }),
-
 /***/ "./admin-vuex-package/components/PostBoxContainer.vue?vue&type=template&id=d86617d2&":
 /*!*******************************************************************************************!*\
   !*** ./admin-vuex-package/components/PostBoxContainer.vue?vue&type=template&id=d86617d2& ***!
@@ -5997,23 +5855,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsComponent_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-
-
-/***/ }),
-
-/***/ "./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&":
-/*!************************************************************************************************************!*\
-  !*** ./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss& ***!
-  \************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-style-loader/index.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./StatusInfo.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_StatusInfo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -6838,31 +6679,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a&":
-/*!**************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=template&id=a707366a& ***!
-  \**************************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function () {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("span", { class: _vm.wrapClasses }, [_vm._v(_vm._s(_vm.value))])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PostBoxContainer.vue?vue&type=template&id=d86617d2&":
 /*!************************************************************************************************************************************************************************************************************************************!*\
   !*** ../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PostBoxContainer.vue?vue&type=template&id=d86617d2& ***!
@@ -7348,10 +7164,20 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "jfb-icon-status" }, [
+  return _c("div", { class: _vm.wrapperClasses }, [
     _c("span", { class: _vm.dashIconClass }),
     _vm._v(" "),
-    _c("div", { class: _vm.tooltipClasses }, [_vm._v(_vm._s(_vm.value.help))]),
+    _vm.value.text
+      ? _c("span", { staticClass: "jfb-icon-status--text" }, [
+          _vm._v(_vm._s(_vm.value.text)),
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.value.help
+      ? _c("div", { class: _vm.tooltipClasses }, [
+          _vm._v(_vm._s(_vm.value.help) + "\n\t"),
+        ])
+      : _vm._e(),
   ])
 }
 var staticRenderFns = []
@@ -7860,27 +7686,6 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
 var update = add("6cbed514", content, false, {});
-// Hot Module Replacement
-if(false) {}
-
-/***/ }),
-
-/***/ "../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../node_modules/vue-style-loader/index.js!../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./StatusInfo.vue?vue&type=style&index=0&lang=scss& */ "../node_modules/css-loader/dist/cjs.js!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/sass-loader/dist/cjs.js!../node_modules/vue-loader/lib/index.js??vue-loader-options!./admin-vuex-package/components/PaymentsPage/status/StatusInfo.vue?vue&type=style&index=0&lang=scss&");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.id, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = (__webpack_require__(/*! !../../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "../node_modules/vue-style-loader/lib/addStylesClient.js")["default"])
-var update = add("27fab4cd", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

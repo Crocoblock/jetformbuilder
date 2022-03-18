@@ -214,12 +214,11 @@ class Form_Break {
 	 * @return string
 	 */
 	public function maybe_end_page( $is_last = false, $field = false ) {
-
 		if ( 0 >= $this->pages ) {
 			return '';
 		}
 
-		if ( ! $is_last && 'form-break' !== Block_Helper::delete_namespace( $field ) ) {
+		if ( ! $is_last && 'form-break-field' !== Block_Helper::delete_namespace( $field ) ) {
 			return '';
 		}
 

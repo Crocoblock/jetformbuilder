@@ -7,20 +7,30 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 
 class Payment_Status_Column extends Column_Advanced_Base {
 
-	//protected $type   = self::STATUS;
+	protected $type   = self::STATUS;
 	protected $column = 'status';
 
 	public function get_label(): string {
 		return __( 'Status', 'jet-form-builder' );
 	}
 
-	/*public function get_labels(): array {
+	public function get_replace_map(): array {
 		return array(
-			'success' => __( '','jet-form-builder' )
+			'COMPLETED' => array(
+				'type' => 'success',
+				'text' => __( 'Completed', 'jet-form-builder' ),
+			),
+			'CREATED'   => array(
+				'type' => 'info',
+				'text' => __( 'Created', 'jet-form-builder' ),
+			),
 		);
 	}
 
 	public function get_value( array $record = array() ) {
 		$status = parent::get_value( $record );
-	}*/
+		$map    = $this->get_replace_map();
+
+		return $map[ $status ] ?? array();
+	}
 }

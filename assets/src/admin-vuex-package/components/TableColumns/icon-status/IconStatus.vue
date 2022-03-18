@@ -1,9 +1,12 @@
 <template>
-	<div class="jfb-icon-status">
+	<div :class="wrapperClasses">
 		<span :class="dashIconClass"></span>
+		<span class="jfb-icon-status--text" v-if="value.text">{{ value.text }}</span>
 		<div
 			:class="tooltipClasses"
-		>{{ value.help }}</div>
+			v-if="value.help"
+		>{{ value.help }}
+		</div>
 	</div>
 </template>
 
@@ -15,6 +18,13 @@ export default {
 		helpPosition() {
 			return this.value?.help_position ?? 'top-left';
 		},
+		wrapperClasses() {
+			return {
+				'jfb-icon-status': true,
+				'jfb-icon-status-has-text': !! this.value.text,
+				'jfb-icon-status-has-help': !! this.value.help,
+			};
+		},
 		dashIconClass() {
 			const classes = [ 'dashicons' ];
 			switch ( this.value.type ) {
@@ -23,6 +33,9 @@ export default {
 					break;
 				case 'warning':
 					classes.push( 'dashicons-warning' );
+					break;
+				case 'info':
+					classes.push( 'dashicons-info' );
 					break;
 				default:
 					classes.push( 'dashicons-dismiss' );
@@ -48,8 +61,17 @@ export default {
 
 .jfb-icon-status {
 	position: relative;
-	cursor: pointer;
 	display: inline-block;
+
+	&-has-help {
+		cursor: pointer;
+	}
+
+	&-has-text {
+		display: flex;
+		column-gap: 0.5em;
+		align-items: center;
+	}
 
 	.dashicons {
 		&-dismiss {
@@ -62,6 +84,10 @@ export default {
 
 		&-yes-alt {
 			color: #32cd32;
+		}
+
+		&-info {
+			color: #90c6db;
 		}
 	}
 
@@ -94,10 +120,6 @@ export default {
 				bottom: 100%;
 			}
 		}
-	}
-
-	& > span {
-		font-size: 1.5em;
 	}
 }
 

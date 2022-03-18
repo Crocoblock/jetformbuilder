@@ -25,6 +25,8 @@ function jet_form_builder_init() {
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );
 	define( 'JET_FORM_BUILDER_PATH', plugin_dir_path( JET_FORM_BUILDER__FILE__ ) );
 	define( 'JET_FORM_BUILDER_URL', plugins_url( '/', JET_FORM_BUILDER__FILE__ ) );
+	define( 'JET_FORM_BUILDER_SITE', 'https://jetformbuilder.com' );
+	define( 'JET_FORM_BUILDER_SITE_PRICING', JET_FORM_BUILDER_SITE . '/pricing/' );
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
 
@@ -35,14 +37,13 @@ function jet_form_builder_init() {
 				return $links;
 			}
 
-			$url = 'https://jetformbuilder.com/pricing/';
 			$url = add_query_arg(
 				array(
 					'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
 					'utm_medium'   => 'crocoblock-license/theme-author',
 					'utm_campaign' => 'go-pro-button',
 				),
-				$url
+				JET_FORM_BUILDER_SITE_PRICING
 			);
 
 			wp_enqueue_style(

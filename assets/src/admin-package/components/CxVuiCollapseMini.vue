@@ -18,7 +18,16 @@
 				{{ label }}
 			</div>
 			<div
-				v-if="desc"
+				v-if="icon"
+				class="cx-vui-collapse-mini__header-desc"
+			>
+				<component
+					v-if="'object' === typeof icon"
+					v-bind:is="icon"
+				/>
+			</div>
+			<div
+				v-else-if="desc"
 				class="cx-vui-collapse-mini__header-desc"
 			>
 				{{ desc }}
@@ -71,6 +80,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		icon: {
+			type: [ Object, String ],
+			default: '',
+		}
 	},
 	data() {
 		return {
@@ -119,13 +132,13 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		column-gap: 1em;
 
 		&-label {
 			font-weight: 500;
 			font-size: 15px;
 			line-height: 23px;
 			color: #007CBA;
-			margin: 0 25px 0 0;
 			display: flex;
 			align-items: center;
 		}

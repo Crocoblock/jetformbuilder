@@ -17,6 +17,8 @@ import {
 } from './functions/LocationManager';
 import ListComponents from './components/ListComponents';
 import GetIncomingMessages from './mixins/GetIncomingMessages';
+import CxVuiTabsPanel from './components/CxVuiTabsPanel';
+import CxVuiTabs from './components/CxVuiTabs';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -36,6 +38,8 @@ window.JetFBComponents = {
 	CopyButton,
 	SimpleWrapperComponent,
 	ListComponents,
+	CxVuiTabsPanel,
+	CxVuiTabs,
 };
 
 window.JetFBMixins = {

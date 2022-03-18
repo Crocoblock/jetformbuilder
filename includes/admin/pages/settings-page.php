@@ -3,9 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Plugin;
-
 class Settings_Page extends Base_Page {
 
 	/**
@@ -27,7 +24,9 @@ class Settings_Page extends Base_Page {
 	 * Return page config array
 	 */
 	public function page_config(): array {
-		return array();
+		return array(
+			'is_active' => jet_form_builder()->addons_manager->is_active(),
+		);
 	}
 
 	public function assets() {

@@ -22,9 +22,10 @@
 				<CxVuiCollapseMini
 					with-panel
 					v-for="( tab, index ) in gateways"
-					:desc="tab.desc || ''"
+					:icon="tab.icon"
 					:label="tab.title"
 					:key="tab.component.name"
+					:disabled="tab.disabled"
 					:initial-active="isActive( tab.component.name )"
 					@change="onChangeActive( $event, tab.component.name )"
 				>

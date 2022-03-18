@@ -5,15 +5,18 @@ namespace Jet_Form_Builder\Admin\Pages;
 use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
+use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
 
 /**
  * Base dashboard page
  */
-abstract class Base_Page implements Repository_Item_Instance_Trait, Admin_Page_Interface {
+abstract class Base_Page implements
+	Repository_Item_Instance_Trait,
+	Admin_Page_Interface {
 
 	use Admin_Page_Trait;
+	use With_Notices_Trait;
 
 	public function rep_item_id(): string {
 		return $this->slug();

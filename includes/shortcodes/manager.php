@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Shortcodes;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**

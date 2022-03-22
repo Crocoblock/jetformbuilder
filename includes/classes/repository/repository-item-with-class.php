@@ -1,8 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes;
-
+namespace Jet_Form_Builder\Classes\Repository;
 
 trait Repository_Item_With_Class {
 

@@ -4,8 +4,6 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Live_Form;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

@@ -2,5 +2,10 @@ import './addons-tabs';
 import SettingsPage from './SettingsPage';
 
 const { renderCurrentPage } = window.JetFBActions;
+const { NoticesPlugin } = JetFBStore;
 
-renderCurrentPage( SettingsPage );
+const store = new Vuex.Store( {
+	plugins: [ NoticesPlugin ]
+} )
+
+renderCurrentPage( SettingsPage, { store } );

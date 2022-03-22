@@ -2,6 +2,7 @@
 	<div class="jet-form-builder-page jet-form-builder-page--settings wrap">
 		<h1 class="cs-vui-title">{{ 'JetFormBuilder Settings' }}</h1>
 		<div class="jfb-content">
+			<AlertsList/>
 			<div class="jfb-content-main">
 				<div class="cx-vui-panel">
 					<CxVuiTabs
@@ -42,7 +43,7 @@
 					</CxVuiTabs>
 				</div>
 			</div>
-			<SideBarBoxes />
+			<SettingsSideBar />
 		</div>
 	</div>
 </template>
@@ -53,20 +54,22 @@ import * as mailchimp from './tabs/mailchimp';
 import * as getResponse from './tabs/getresponse';
 import * as activecampaign from './tabs/activecampaign';
 import * as paymentGateways from './tabs/payments-gateways';
-import SideBarBoxes from './SideBarBoxes';
 import '../../../../scss/admin/default.scss';
 import './styles/main.scss';
+import SettingsSideBar from './sidebar/SettingsSideBar';
 
 const { applyFilters, doAction } = wp.hooks;
 
 const {
 	SaveTabByAjax,
 	GetIncoming,
+	i18n,
 } = window.JetFBMixins;
 
 const {
 	CxVuiTabsPanel,
 	CxVuiTabs,
+	AlertsList,
 } = JetFBComponents;
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
@@ -107,9 +110,10 @@ const getActiveTab = () => {
 export default {
 	name: 'jfb-settings',
 	components: {
-		SideBarBoxes,
+		AlertsList,
 		CxVuiTabsPanel,
 		CxVuiTabs,
+		SettingsSideBar,
 	},
 	data() {
 		const [ tabSlug, others ] = getActiveTab();
@@ -121,13 +125,19 @@ export default {
 			isActivePro: false,
 		};
 	},
-	mixins: [ SaveTabByAjax, GetIncoming ],
+	mixins: [ SaveTabByAjax, GetIncoming, i18n ],
 	created() {
 		this.isActivePro = this.getIncoming( 'is_active' );
 
 		jfbEventBus.$on( 'request-state', props => {
 			const { state, slug } = props;
 			this.$set( this.loadingTab, slug, state === 'begin' );
+		} );
+		jfbEventBus.$on( 'alert-click-thanks', ( { self } ) => {
+			self.closeAlert();
+		} );
+		jfbEventBus.$on( 'alert-click-check', ( { self } ) => {
+			self.closeAlert();
 		} );
 	},
 	methods: {
@@ -151,7 +161,8 @@ export default {
 <style lang="scss">
 .jfb-content {
 	display: flex;
-	column-gap: 2em;
+	flex-wrap: wrap;
+	gap: 2em;
 
 	&-main {
 		flex: 1;

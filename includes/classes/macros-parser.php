@@ -3,9 +3,6 @@
 
 namespace Jet_Form_Builder\Classes;
 
-use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Request\Request_Handler;
-
 class Macros_Parser {
 
 	/** @var Listing_Filter */

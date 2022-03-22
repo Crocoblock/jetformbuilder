@@ -7,9 +7,8 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Dev_Mode\Manager;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Dev_Mode;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

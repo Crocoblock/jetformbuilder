@@ -4,11 +4,8 @@
 namespace Jet_Form_Builder\Actions\Executors;
 
 
-use Jet_Form_Builder\Actions\Condition_Manager;
-use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Classes\Repository_Item_With_Class;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_With_Class;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Condition_Exception;
 
 abstract class Action_Executor_Base {
 

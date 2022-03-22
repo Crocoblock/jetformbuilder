@@ -9,7 +9,7 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
 
@@ -24,15 +24,20 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	}
 
 	/**
-	 * @param int $id
-	 *
 	 * @return Base_Single_Page
 	 * @throws Not_Found_Page_Exception
 	 */
-	public function make( int $id ): Base_Single_Page {
+	public function make(): Base_Single_Page {
+		$id = $this->query_id();
+
 		$this->set_id( $id )->query_config();
 
 		return $this;
+	}
+
+	public function query_id(): int {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return absint( $_GET['item_id'] ?? 0 );
 	}
 
 

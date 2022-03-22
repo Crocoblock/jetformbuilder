@@ -823,7 +823,6 @@ var _JetFBStore = JetFBStore,
     BaseStore = _JetFBStore.BaseStore,
     SingleMetaBoxesPlugin = _JetFBStore.SingleMetaBoxesPlugin;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
-Vue.use(Vuex);
 var store = new Vuex.Store(_objectSpread(_objectSpread({}, BaseStore), {}, {
   plugins: [SingleMetaBoxesPlugin]
 }));

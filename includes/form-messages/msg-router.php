@@ -76,11 +76,9 @@ class Msg_Router {
 		}
 
 		$this->set_actions(
-			jet_form_builder()
-			->form_handler
-			->action_handler
-			->set_form_id( $this->form_id )
-			->get_all()
+			jet_fb_action_handler()
+				->set_form_id( $this->form_id )
+				->get_all()
 		);
 
 		return true;

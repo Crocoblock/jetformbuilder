@@ -16,11 +16,6 @@
 				</template>
 				<template v-else>{{ getColumnValue( columnName, '' ) }}</template>
 			</template>
-			<template #actions>
-				<CopyButton
-					:column="source[ columnName ] || {}"
-				/>
-			</template>
 		</DetailsTableRow>
 	</section>
 </template>
@@ -28,11 +23,10 @@
 <script>
 import DetailsTableRowValue from './DetailsTableRowValue';
 import DetailsTableRow from './DetailsTableRow';
-import CopyButton from './CopyButton';
 
 export default {
 	name: 'DetailsTable',
-	components: { CopyButton, DetailsTableRow, DetailsTableRowValue },
+	components: { DetailsTableRow, DetailsTableRowValue },
 	props: {
 		columns: {
 			type: Object,

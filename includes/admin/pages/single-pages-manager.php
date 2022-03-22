@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 
 class Single_Pages_Manager {

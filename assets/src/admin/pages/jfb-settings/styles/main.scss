@@ -1,5 +1,7 @@
 .jet-form-builder-page {
 
+
+
 	&__panel {
 		min-width: 292px;
 		box-sizing: border-box;
@@ -145,48 +147,4 @@
 		}
 	}
 
-	&__help-center {
-		width: 100%;
-
-		@media (max-width: 1140px) {
-			width: calc( 100% / 2 );
-		}
-	}
-
-	&__help-center-links {
-		display: flex;
-		flex-direction: column;
-		margin-top: 12px;
-		border-top: 1px solid #DCDCDD;
-		padding-top: 23px;
-	}
-
-	&__help-center-link {
-		display: flex;
-		justify-content: flex-start;
-		margin-bottom: 22px;
-
-		&:last-child {
-			margin-bottom: 0;
-		}
-
-		a {
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
-			font-size: 14px;
-			line-height: 18px;
-			color: #007CBA;
-			text-decoration: none;
-
-			&:hover {
-				color: #066EA2;
-				text-decoration: underline;
-			}
-
-			.help-center-link-icon {
-				margin-right: 28px;
-			}
-		}
-	}
 }

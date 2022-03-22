@@ -5,10 +5,11 @@ namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Meta_Box;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
-abstract class Base_Meta_Container {
+abstract class Base_Meta_Container implements Arrayable {
 
 	use Repository_Pattern_Trait;
 

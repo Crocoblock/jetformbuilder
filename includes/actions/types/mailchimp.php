@@ -6,7 +6,6 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
-use Jet_Form_Builder\Integrations\Integration_Base;
 use Jet_Form_Builder\Integrations\MailChimp_Handler;
 
 // If this file is called directly, abort.

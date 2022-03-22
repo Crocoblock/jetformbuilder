@@ -7,13 +7,13 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
-use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
-use Jet_Form_Builder\Classes\Repository_Item_With_Class;
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_With_Class;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 
-abstract class Base_Meta_Box implements Model_Dependencies_Interface {
+abstract class Base_Meta_Box implements Model_Dependencies_Interface, Arrayable {
 
 	const TYPE_LIST  = 'list';
 	const TYPE_TABLE = 'table';

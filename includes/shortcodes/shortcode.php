@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 abstract class Shortcode implements Repository_Item_Instance_Trait {
 

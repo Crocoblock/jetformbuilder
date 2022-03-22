@@ -6,7 +6,7 @@ use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 /**
  * Base dashboard page

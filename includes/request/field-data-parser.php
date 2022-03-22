@@ -4,8 +4,7 @@
 namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
-use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 
 abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {

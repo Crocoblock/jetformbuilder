@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 
 /**
  * CRUD

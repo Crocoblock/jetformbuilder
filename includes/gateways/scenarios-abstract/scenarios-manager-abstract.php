@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Base_Gateway;

@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views\Actions;
 
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 abstract class View_Single_Action implements Repository_Item_Instance_Trait {
 

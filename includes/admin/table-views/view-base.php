@@ -3,8 +3,8 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
-use Jet_Form_Builder\Classes\Repository_Item_With_Class;
-use Jet_Form_Builder\Classes\Repository_Static_Item_It;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_With_Class;
+use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;

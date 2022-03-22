@@ -3,9 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Form_Records;
+use Jet_Form_Builder\Admin\Pages\Settings\Settings_Page;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 
 class Stable_Pages_Manager {
@@ -68,13 +69,14 @@ class Stable_Pages_Manager {
 
 	public function add_static_pages() {
 		$parent = $this->get_parent_slug();
+		$pages  = array();
 
-		$pages = array(
-			array(
+		if ( ! jet_form_builder()->addons_manager->is_active() ) {
+			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),
 				'capability' => 'read',
 				'slug'       => add_query_arg(
-					// TODO: replace utm
+				// TODO: replace utm
 					array(
 						'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
 						'utm_medium'   => 'crocoblock-license/theme-author',
@@ -82,8 +84,8 @@ class Stable_Pages_Manager {
 					),
 					JET_FORM_BUILDER_SITE
 				),
-			),
-		);
+			);
+		}
 
 		foreach ( $pages as $page ) {
 			add_submenu_page(

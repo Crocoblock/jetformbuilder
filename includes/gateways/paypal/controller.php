@@ -2,19 +2,12 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Base_Scenario_Gateway;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
-use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
-use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Gateways\Base_Gateway;
 
 class Controller extends Base_Scenario_Gateway {
 

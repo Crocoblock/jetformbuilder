@@ -7,7 +7,6 @@ use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Prev;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Submit;
 use Jet_Form_Builder\Blocks\Render\Action_Button_Render;
-use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

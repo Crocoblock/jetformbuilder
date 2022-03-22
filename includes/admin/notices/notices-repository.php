@@ -3,8 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Notices;
 
-
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 
 class Notices_Repository implements Admin_Notices_Interface {
 

@@ -3,21 +3,14 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
-use Jet_Form_Builder\Actions\Types\Save_Record;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
-use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
-use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
 /**
  *

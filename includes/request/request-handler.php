@@ -7,7 +7,6 @@ use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
-use Jet_Form_Builder\Form_Handler;
 use Jet_Form_Builder\Live_Form;
 
 class Request_Handler {

@@ -11,7 +11,6 @@ use Jet_Form_Builder\Presets\Sources;
 use Jet_Form_Builder\Presets\Types\Base_Preset;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use Jet_Form_Builder\Presets\Types\General_Preset;
-use function GuzzleHttp\Psr7\_caseless_remove;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

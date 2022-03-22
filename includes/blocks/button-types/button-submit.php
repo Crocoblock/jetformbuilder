@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
 class Button_Submit extends Button_Type_Base {

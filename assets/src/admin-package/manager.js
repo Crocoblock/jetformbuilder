@@ -8,7 +8,6 @@ import DetailsTable from './components/DetailsTable';
 import SimpleWrapperComponent from './components/SimpleWrapperComponent';
 import i18n from './mixins/i18n';
 import { renderCurrentPage } from './functions/RenderCurrentPage';
-import CopyButton from './components/CopyButton';
 import {
 	getCurrentPath,
 	getSearch,
@@ -19,6 +18,7 @@ import ListComponents from './components/ListComponents';
 import GetIncomingMessages from './mixins/GetIncomingMessages';
 import CxVuiTabsPanel from './components/CxVuiTabsPanel';
 import CxVuiTabs from './components/CxVuiTabs';
+import LocalStorage from './functions/LocalStorage';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -26,6 +26,7 @@ window.JetFBActions = {
 	getSearch,
 	createPath,
 	addQueryArgs,
+	LocalStorage,
 };
 
 window.JetFBErrors = {
@@ -35,7 +36,6 @@ window.JetFBErrors = {
 window.JetFBComponents = {
 	CxVuiCollapseMini,
 	DetailsTable,
-	CopyButton,
 	SimpleWrapperComponent,
 	ListComponents,
 	CxVuiTabsPanel,

@@ -3,8 +3,8 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
+use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 

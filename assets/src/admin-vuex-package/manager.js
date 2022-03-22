@@ -12,6 +12,7 @@ import BaseStore from './store/base-store';
 import TableSeedPlugin from './store/plugins/table-seed';
 import TableModulePlugin from './store/plugins/table-module';
 import SingleMetaBoxesPlugin from './store/plugins/single-meta-boxes';
+import NoticesPlugin from './store/plugins/NoticesPlugin';
 import PostBoxSkeleton from './components/PostBoxSkeleton';
 import PostBoxGrid from './components/PostBoxGrid';
 import PostBoxContainer from './components/PostBoxContainer';
@@ -23,7 +24,11 @@ import * as ActionsColumn from './components/TableColumns/actions';
 import * as PayerColumn from './components/TableColumns/payer';
 import ScopeStoreMixin from './mixins/ScopeStoreMixin';
 import EditTableSwitcher from './components/EditTableSwitcher';
+import AlertsList from './components/Alerts/AlertsList';
+import DashboardPanel from './components/VuiBoxes/DashboardPanel';
+import SideBarBoxes from './components/SideBarBoxes';
 
+Vue.use( Vuex );
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -43,6 +48,9 @@ window.JetFBComponents = {
 	PayerColumn,
 	LinkTypeColumn,
 	EditTableSwitcher,
+	AlertsList,
+	DashboardPanel,
+	SideBarBoxes,
 };
 
 
@@ -59,6 +67,7 @@ window.JetFBStore = {
 	TableSeedPlugin,
 	TableModulePlugin,
 	SingleMetaBoxesPlugin,
+	NoticesPlugin,
 };
 
 window.JetFBConst = Constants;

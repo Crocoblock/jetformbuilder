@@ -8,7 +8,7 @@ use Jet_Form_Builder\Actions\Action_Localize;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

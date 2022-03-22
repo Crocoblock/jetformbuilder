@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes;
+namespace Jet_Form_Builder\Classes\Repository;
 
 interface Repository_Item_Instance_Trait {
 

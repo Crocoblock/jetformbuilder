@@ -5,8 +5,7 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 
 use Jet_Form_Builder\Actions\Types;
-use Jet_Form_Builder\Classes\Condition_Helper;
-use Jet_Form_Builder\Classes\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 if ( ! defined( 'WPINC' ) ) {

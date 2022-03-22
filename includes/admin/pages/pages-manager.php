@@ -27,6 +27,10 @@ class Pages_Manager {
 	private $stable_manager;
 	private $single_manager;
 
+	const SCRIPT_VUEX         = 'jet-form-builder-admin-vuex';
+	const SCRIPT_PACKAGE      = 'jet-form-builder-admin-package';
+	const SCRIPT_VUEX_PACKAGE = 'jet-form-builder-admin-vuex-package';
+
 	protected function __construct() {
 		/** Register pages */
 		$this->stable()->rep_install();
@@ -95,11 +99,10 @@ class Pages_Manager {
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
-		$item_id = absint( $_GET['item_id'] ?? 0 );
 
 		try {
 			$this->current_page = $this->get_single( $slug );
-			$this->current_page->make( $item_id );
+			$this->current_page->make();
 
 		} catch ( Not_Found_Page_Exception $exception ) {
 			$this->current_page = $page;
@@ -135,7 +138,7 @@ class Pages_Manager {
 		}
 
 		wp_register_script(
-			'jet-form-builder-admin-vuex',
+			self::SCRIPT_VUEX,
 			Plugin::instance()->plugin_url( 'assets/lib/vuex' . $suffix . '.js' ),
 			array(),
 			'3.6.2',
@@ -143,7 +146,7 @@ class Pages_Manager {
 		);
 
 		wp_register_script(
-			'jet-form-builder-admin-package',
+			self::SCRIPT_PACKAGE,
 			Plugin::instance()->plugin_url( 'assets/js/admin-package.js' ),
 			array(
 				'wp-api',
@@ -154,7 +157,7 @@ class Pages_Manager {
 		);
 
 		wp_register_script(
-			'jet-form-builder-admin-vuex-package',
+			self::SCRIPT_VUEX_PACKAGE,
 			Plugin::instance()->plugin_url( 'assets/js/admin-vuex-package.js' ),
 			array(
 				'jet-form-builder-admin-vuex',

@@ -7,8 +7,6 @@ const {
 
 const { renderCurrentPage } = window.JetFBActions;
 
-Vue.use( Vuex );
-
 const store = new Vuex.Store( {
 	...BaseStore,
 	plugins: [ SingleMetaBoxesPlugin ],

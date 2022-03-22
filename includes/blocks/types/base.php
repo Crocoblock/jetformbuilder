@@ -4,10 +4,10 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
+use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Classes\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;

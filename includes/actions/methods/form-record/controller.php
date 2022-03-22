@@ -10,7 +10,6 @@ use Jet_Form_Builder\Classes\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
-use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Live_Form;
 
 class Controller {

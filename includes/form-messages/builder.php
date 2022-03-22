@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Form_Messages;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 
 if ( ! defined( 'WPINC' ) ) {

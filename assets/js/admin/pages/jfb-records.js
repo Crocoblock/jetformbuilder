@@ -1526,7 +1526,6 @@ var _JetFBStore = JetFBStore,
     TableModulePlugin = _JetFBStore.TableModulePlugin,
     TableSeedPlugin = _JetFBStore.TableSeedPlugin;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
-Vue.use(Vuex);
 var store = new Vuex.Store(_objectSpread(_objectSpread({}, BaseStore), {}, {
   plugins: [TableModulePlugin(), TableSeedPlugin()]
 }));

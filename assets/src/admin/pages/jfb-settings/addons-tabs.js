@@ -7,8 +7,6 @@ import stripe from './proGateways/stripe';
 
 const { addFilter } = wp.hooks;
 
-
-
 const addons = [
 	addressAutocomplete,
 	hubspot,

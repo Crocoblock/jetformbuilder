@@ -25,15 +25,15 @@
 		},
 		"submit_type": {
 			"type": "string",
-			"default": "reload"
+			"default": ""
 		},
 		"required_mark": {
 			"type": "string",
-			"default": "*"
+			"default": ""
 		},
 		"fields_layout": {
 			"type": "string",
-			"default": "column"
+			"default": ""
 		},
 		"enable_progress": {
 			"type": "boolean",
@@ -41,7 +41,11 @@
 		},
 		"fields_label_tag": {
 			"type": "string",
-			"default": "div"
+			"default": ""
+		},
+		"load_nonce": {
+			"type": "string",
+			"default": "render"
 		}
 	}
 }

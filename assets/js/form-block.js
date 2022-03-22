@@ -8,7 +8,7 @@
   \*******************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"jet-forms/form-block","title":"JetForm","keywords":["jetform","form","builder","crocoblock"],"textdomain":"jet-form-builder","supports":{"html":false,"className":true},"editorScript":"jet-form-builder/form","editorStyle":"jet-form-builder-others","category":"layout","icon":"<svg width=\\"64\\" height=\\"64\\" viewBox=\\"0 0 64 64\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\"><rect width=\\"42\\" height=\\"2\\" rx=\\"1\\" fill=\\"#162B40\\"/><path d=\\"M0 5C0 4.44772 0.447715 4 1 4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H1C0.447715 6 0 5.55228 0 5Z\\" fill=\\"#162B40\\"/><rect x=\\"1\\" y=\\"2\\" width=\\"62\\" height=\\"61\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"7\\" y=\\"19\\" width=\\"50\\" height=\\"11\\" rx=\\"2\\" fill=\\"#6F8CFF\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"7\\" y=\\"35\\" width=\\"50\\" height=\\"11\\" rx=\\"2\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"39\\" y=\\"51\\" width=\\"18\\" height=\\"7\\" rx=\\"2\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/></svg>","attributes":{"form_id":{"type":"number","default":0},"submit_type":{"type":"string","default":"reload"},"required_mark":{"type":"string","default":"*"},"fields_layout":{"type":"string","default":"column"},"enable_progress":{"type":"boolean","default":false},"fields_label_tag":{"type":"string","default":"div"}}}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"jet-forms/form-block","title":"JetForm","keywords":["jetform","form","builder","crocoblock"],"textdomain":"jet-form-builder","supports":{"html":false,"className":true},"editorScript":"jet-form-builder/form","editorStyle":"jet-form-builder-others","category":"layout","icon":"<svg width=\\"64\\" height=\\"64\\" viewBox=\\"0 0 64 64\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\"><rect width=\\"42\\" height=\\"2\\" rx=\\"1\\" fill=\\"#162B40\\"/><path d=\\"M0 5C0 4.44772 0.447715 4 1 4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H1C0.447715 6 0 5.55228 0 5Z\\" fill=\\"#162B40\\"/><rect x=\\"1\\" y=\\"2\\" width=\\"62\\" height=\\"61\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"7\\" y=\\"19\\" width=\\"50\\" height=\\"11\\" rx=\\"2\\" fill=\\"#6F8CFF\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"7\\" y=\\"35\\" width=\\"50\\" height=\\"11\\" rx=\\"2\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"39\\" y=\\"51\\" width=\\"18\\" height=\\"7\\" rx=\\"2\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/></svg>","attributes":{"form_id":{"type":"number","default":0},"submit_type":{"type":"string","default":""},"required_mark":{"type":"string","default":""},"fields_layout":{"type":"string","default":""},"enable_progress":{"type":"boolean","default":false},"fields_label_tag":{"type":"string","default":""},"load_nonce":{"type":"string","default":"render"}}}');
 
 /***/ })
 
@@ -146,11 +146,20 @@ function FormEdit(_ref2) {
     }
   }), wp.element.createElement(ToggleControl, {
     key: 'enable_progress',
-    label: __('Enable form pages progress'),
+    label: __('Enable form pages progress', 'jet-form-builder'),
     checked: attributes.enable_progress,
     onChange: function onChange(newVal) {
       setAttributes({
         enable_progress: Boolean(newVal)
+      });
+    }
+  }), wp.element.createElement(ToggleControl, {
+    key: 'load_nonce',
+    label: __('Enable form safety', 'jet-form-builder'),
+    checked: 'render' === attributes.load_nonce,
+    onChange: function onChange(newVal) {
+      setAttributes({
+        load_nonce: Boolean(newVal) ? 'render' : 'hide'
       });
     }
   })))), wp.element.createElement("div", _extends({

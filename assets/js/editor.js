@@ -9284,6 +9284,17 @@ function PluginArgs() {
         });
       });
     }
+  }), wp.element.createElement(ToggleControl, {
+    key: 'load_nonce',
+    label: __('Enable form safety', 'jet-form-builder'),
+    checked: 'render' === args.load_nonce,
+    onChange: function onChange(newVal) {
+      setArgs(function (prev) {
+        return _objectSpread(_objectSpread({}, prev), {}, {
+          load_nonce: Boolean(newVal) ? 'render' : 'hide'
+        });
+      });
+    }
   }));
 }
 ;

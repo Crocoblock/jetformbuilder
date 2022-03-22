@@ -72,5 +72,16 @@ export default function PluginArgs() {
 				} ) );
 			} }
 		/>
+		<ToggleControl
+			key={ 'load_nonce' }
+			label={ __( 'Enable form safety', 'jet-form-builder' ) }
+			checked={ 'render' === args.load_nonce  }
+			onChange={ newVal => {
+				setArgs( prev => ( {
+					...prev,
+					load_nonce: Boolean( newVal ) ? 'render' : 'hide',
+				} ) );
+			} }
+		/>
 	</>
 };

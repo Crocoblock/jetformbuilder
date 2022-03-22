@@ -196,7 +196,8 @@ class Form_Builder {
 
 		$form = $this->start_form();
 
-		$form .= wp_nonce_field( Live_Form::instance()->get_nonce_id(), '_wpnonce', true, false );
+		// render wp nonce
+		$form .= Live_Form::instance()->get_nonce_field();
 
 		$form .= Live_Form::force_render_field(
 			'hidden-field',

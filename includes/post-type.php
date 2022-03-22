@@ -302,6 +302,7 @@ class Post_Type {
 			'fields_layout'    => '',
 			'enable_progress'  => null,
 			'fields_label_tag' => '',
+			'load_nonce'       => '',
 		);
 	}
 
@@ -312,6 +313,7 @@ class Post_Type {
 			'fields_layout'    => 'column',
 			'enable_progress'  => false,
 			'fields_label_tag' => 'div',
+			'load_nonce'       => 'render',
 		);
 	}
 

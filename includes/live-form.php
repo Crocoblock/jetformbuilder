@@ -160,6 +160,14 @@ class Live_Form {
 		return "jet-form-builder-wp-nonce-{$this->form_id}";
 	}
 
+	public function get_nonce_field(): string {
+		if ( 'render' !== $this->spec_data->load_nonce ) {
+			return '';
+		}
+
+		return wp_nonce_field( $this->get_nonce_id(), '_wpnonce', true, false );
+	}
+
 	/**
 	 * @param string $name
 	 *

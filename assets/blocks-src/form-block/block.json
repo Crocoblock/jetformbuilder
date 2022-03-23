@@ -42,10 +42,6 @@
 		"fields_label_tag": {
 			"type": "string",
 			"default": ""
-		},
-		"load_nonce": {
-			"type": "string",
-			"default": "render"
 		}
 	}
 }

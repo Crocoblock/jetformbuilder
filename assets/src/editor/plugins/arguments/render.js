@@ -8,11 +8,22 @@ const {
 
 const { __ } = wp.i18n;
 
+const { useEffect } = wp.element;
+
 const source = window.JetFormEditorData.argumentsSource || {};
 
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
+
+	useEffect( () => {
+		if ( ! args.load_nonce ) {
+			setArgs( ( prevArgs ) => ( {
+				...prevArgs,
+				load_nonce: 'render',
+			} ) );
+		}
+	}, [] )
 
 	return <>
 		<SelectControl
@@ -65,6 +76,7 @@ export default function PluginArgs() {
 			key={ 'enable_progress' }
 			label={ __( 'Enable form pages progress', 'jet-from-builder' ) }
 			checked={ args.enable_progress }
+			help={ __( 'Displays the progress of a multi-page form', 'jet-form-builder' ) }
 			onChange={ newVal => {
 				setArgs( prev => ( {
 					...prev,
@@ -76,6 +88,7 @@ export default function PluginArgs() {
 			key={ 'load_nonce' }
 			label={ __( 'Enable form safety', 'jet-form-builder' ) }
 			checked={ 'render' === args.load_nonce  }
+			help={ __( `Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`, 'jet-form-builder' ) }
 			onChange={ newVal => {
 				setArgs( prev => ( {
 					...prev,

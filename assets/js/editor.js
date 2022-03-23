@@ -9223,6 +9223,7 @@ var _wp$components = wp.components,
     SelectControl = _wp$components.SelectControl,
     ToggleControl = _wp$components.ToggleControl;
 var __ = wp.i18n.__;
+var useEffect = wp.element.useEffect;
 var source = window.JetFormEditorData.argumentsSource || {};
 function PluginArgs() {
   var _useMetaState = useMetaState('_jf_args'),
@@ -9230,6 +9231,15 @@ function PluginArgs() {
       args = _useMetaState2[0],
       setArgs = _useMetaState2[1];
 
+  useEffect(function () {
+    if (!args.load_nonce) {
+      setArgs(function (prevArgs) {
+        return _objectSpread(_objectSpread({}, prevArgs), {}, {
+          load_nonce: 'render'
+        });
+      });
+    }
+  }, []);
   return wp.element.createElement(React.Fragment, null, wp.element.createElement(SelectControl, {
     label: __('Fields Layout', 'jet-form-builder'),
     value: args.fields_layout,
@@ -9277,6 +9287,7 @@ function PluginArgs() {
     key: 'enable_progress',
     label: __('Enable form pages progress', 'jet-from-builder'),
     checked: args.enable_progress,
+    help: __('Displays the progress of a multi-page form', 'jet-form-builder'),
     onChange: function onChange(newVal) {
       setArgs(function (prev) {
         return _objectSpread(_objectSpread({}, prev), {}, {
@@ -9288,6 +9299,7 @@ function PluginArgs() {
     key: 'load_nonce',
     label: __('Enable form safety', 'jet-form-builder'),
     checked: 'render' === args.load_nonce,
+    help: __("Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled", 'jet-form-builder'),
     onChange: function onChange(newVal) {
       setArgs(function (prev) {
         return _objectSpread(_objectSpread({}, prev), {}, {

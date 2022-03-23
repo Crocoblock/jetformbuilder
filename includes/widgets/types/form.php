@@ -1119,18 +1119,6 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
-			$this->add_control(
-				'load_nonce',
-				array(
-					'label'        => __( 'Enable form safety', 'jet-form-builder' ),
-					'type'         => Controls_Manager::SWITCHER,
-					'label_on'     => __( 'Yes', 'jet-form-builder' ),
-					'label_off'    => __( 'No', 'jet-form-builder' ),
-					'return_value' => true,
-					'default'      => true,
-				)
-			);
-
 			$this->end_controls_section();
 		};
 		$closure();

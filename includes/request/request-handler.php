@@ -139,9 +139,13 @@ class Request_Handler {
 		$values = $this->get_values_from_request();
 		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
 
-		Live_Form::instance()->set_form_id( jet_fb_handler()->get_form_id() );
+		Live_Form::instance()
+				->set_form_id( jet_fb_handler()->get_form_id() )
+				->set_specific_data_for_render();
 
-		if ( ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() ) ) {
+		if ( 'render' === Live_Form::instance()->spec_data->load_nonce
+			&& ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() )
+		) {
 			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
 		}
 

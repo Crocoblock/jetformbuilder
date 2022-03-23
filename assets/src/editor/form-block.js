@@ -79,14 +79,6 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 							setAttributes( { enable_progress: Boolean( newVal ) } );
 						} }
 					/>
-					<ToggleControl
-						key={ 'load_nonce' }
-						label={ __( 'Enable form safety', 'jet-form-builder' ) }
-						checked={ 'render' === attributes.load_nonce  }
-						onChange={ newVal => {
-							setAttributes( { load_nonce: Boolean( newVal ) ? 'render' : 'hide' } );
-						} }
-					/>
 				</React.Fragment> }
 			</PanelBody>
 		</InspectorControls>,

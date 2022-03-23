@@ -1,9 +1,4 @@
-import {
-	conditionSettings,
-	defaultAction,
-	defaultActions,
-	getRandomID,
-} from './options';
+import { conditionSettings, defaultAction, defaultActions, getRandomID } from './options';
 
 const {
 	getFormFieldsBlocks,
@@ -46,6 +41,7 @@ const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	return {
 		value: action.id,
 		label: action.name,
+		disabled: action.disabled,
 	};
 } );
 
@@ -208,7 +204,14 @@ let PluginActions = ( { setCurrentAction } ) => {
 						value={ action.type }
 						options={ actionTypes }
 						onChange={ newType => updateActionType( action.id, newType ) }
-					/>
+					>
+						{ actionTypes.map( type => <option
+							key={ action.id + '__' +type.value }
+							value={ type.value }
+							disabled={ type.disabled }
+							dangerouslySetInnerHTML={ { __html: type.label } }
+						/> ) }
+					</SelectControl>
 					{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
 					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
 						<Button
@@ -273,20 +276,28 @@ let PluginActions = ( { setCurrentAction } ) => {
 				</CardBody>
 			</Card>;
 		} ) }
-		<Button
-			isPrimary
-			onClick={ () => {
-				setActions( [
-					...actions,
-					{
-						...JSON.parse( JSON.stringify( defaultAction ) ),
-						id: getRandomID(),
-					},
-				] );
-			} }
-		>
-			{ '+ New Action' }
-		</Button>
+		<div className='jfb-button-group'>
+			<Button
+				isPrimary
+				onClick={ () => {
+					setActions( [
+						...actions,
+						{
+							...JSON.parse( JSON.stringify( defaultAction ) ),
+							id: getRandomID(),
+						},
+					] );
+				} }
+			>
+				{ __( '+ New Action', 'jet-form-builder' ) }
+			</Button>
+			<Button
+				href='#'
+				variant='link'
+			>
+				{ __( 'All PRO Actions', 'jet-form-builder' ) }
+			</Button>
+		</div>
 		{ isEdit && <ActionModal
 			classNames={ [ 'width-60' ] }
 			onRequestClose={ closeModal }

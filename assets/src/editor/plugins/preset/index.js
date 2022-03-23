@@ -12,7 +12,7 @@ const settings = {
 	icon: null
 };
 
-export {
+export default {
 	base,
 	settings
 };

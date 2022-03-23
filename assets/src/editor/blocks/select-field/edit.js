@@ -1,5 +1,5 @@
-import { SelectRadioCheckPlaceholder } from "../../components/base-select-check-radio/select-radio-check-placeholder";
-import SelectRadioCheck from "../../components/base-select-check-radio/select-radio-check";
+import { SelectRadioCheckPlaceholder } from '../../components/base-select-check-radio/select-radio-check-placeholder';
+import SelectRadioCheck from '../../components/base-select-check-radio/select-radio-check';
 
 const { __ } = wp.i18n;
 const { applyFilters } = wp.hooks;
@@ -9,18 +9,36 @@ const {
 	GeneralFields,
 	AdvancedFields,
 	FieldControl,
-	HorizontalLine
+	HorizontalLine,
 } = JetFBComponents;
 
 const {
 	BlockControls,
 	InspectorControls,
-	useBlockProps
+	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	ToggleControl,
 } = wp.components;
+
+/*const { registerPlugin } = wp.plugins;
+const { PluginBlockSettingsMenuItem } = wp.editPost;
+
+const PluginBlockSettingsMenuGroupTest = () => (
+	<PluginBlockSettingsMenuItem
+		allowedBlocks={ [ 'jet-forms/select-field' ] }
+		icon="smiley"
+		label="Read about Hierarchical Select addon"
+		onClick={ () => {
+			window.open( 'https://jetformbuilder.com/addons/hierarchical-select/', '_blank' );
+		} }
+	/>
+);
+
+registerPlugin( 'block-settings-menu-group-test', {
+	render: PluginBlockSettingsMenuGroupTest,
+} );*/
 
 export default function SelectEdit( props ) {
 
@@ -28,7 +46,7 @@ export default function SelectEdit( props ) {
 		attributes,
 		setAttributes,
 		isSelected,
-		editProps: { uniqKey, attrHelp }
+		editProps: { uniqKey, attrHelp },
 	} = props;
 
 	const blockProps = useBlockProps();

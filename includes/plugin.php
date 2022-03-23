@@ -4,7 +4,6 @@ namespace Jet_Form_Builder;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
-use Jet_Form_Builder\Admin\Pages\Addons_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;

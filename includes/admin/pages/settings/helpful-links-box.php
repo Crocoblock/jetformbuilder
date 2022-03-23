@@ -20,13 +20,16 @@ class Helpful_Links_Box extends Base_Vui_Panel_Box {
 	}
 
 	public function to_array(): array {
+		$author_slug = jet_fb_current_page()->theme()->author_slug();
+		$license     = jet_form_builder()->addons_manager->get_slug();
+
 		return array_merge(
 			parent::to_array(),
 			array(
 				'link_knowledge'  => add_query_arg(
 					array(
 						'utm_source'   => rawurlencode( 'jetformbuilder-dashboard/settings-help-center' ),
-						'utm_medium'   => rawurlencode( 'jetformbuilder-license(license-not-activated)/theme-author' ),
+						'utm_medium'   => rawurlencode( "$license/$author_slug" ),
 						'utm_campaign' => 'knowledge-base',
 					),
 					JET_FORM_BUILDER_SITE . '/features/overview/'

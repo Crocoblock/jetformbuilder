@@ -1,0 +1,10 @@
+.jfb-button-group {
+	display: flex;
+	justify-content: space-between;
+}
+
+.jet-form-action {
+	option[disabled] {
+		background-color: #d3d3d35e;
+	}
+}

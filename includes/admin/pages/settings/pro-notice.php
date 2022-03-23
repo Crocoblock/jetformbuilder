@@ -21,10 +21,13 @@ class Pro_Notice extends Base_Notice {
 	}
 
 	public function get_buttons(): array {
+		$author_slug = jet_fb_current_page()->theme()->author_slug();
+		$license     = jet_form_builder()->addons_manager->get_slug();
+
 		$addons_url = add_query_arg(
 			array(
 				'utm_source'   => rawurlencode( 'wp-dashboard/jetformbuilder-notification' ),
-				'utm_medium'   => rawurlencode( 'license-not-activated/theme-author' ),
+				'utm_medium'   => rawurlencode( "$license/$author_slug" ),
 				'utm_campaign' => 'check-pro-addons',
 			),
 			JET_FORM_BUILDER_SITE . '/addons/'

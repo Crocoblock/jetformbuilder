@@ -78,6 +78,7 @@ class Pages_Manager {
 	}
 
 	/**
+	 * @return Base_Page|Base_Single_Page
 	 * @throws Not_Found_Page_Exception
 	 */
 	public function get_current(): Admin_Page_Interface {

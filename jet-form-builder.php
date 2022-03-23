@@ -37,10 +37,12 @@ function jet_form_builder_init() {
 				return $links;
 			}
 
+			$theme = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
+
 			$url = add_query_arg(
 				array(
 					'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
-					'utm_medium'   => 'crocoblock-license/theme-author',
+					'utm_medium'   => 'crocoblock-license/' . $theme->author_slug(),
 					'utm_campaign' => 'go-pro-button',
 				),
 				JET_FORM_BUILDER_SITE_PRICING
@@ -81,6 +83,18 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 
 	function jet_fb_request_handler(): \Jet_Form_Builder\Request\Request_Handler {
 		return jet_fb_handler()->request_handler;
+	}
+
+
+	/**
+	 * @return false|\Jet_Form_Builder\Admin\Pages\Base_Page|\Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page
+	 */
+	function jet_fb_current_page() {
+		try {
+			return \Jet_Form_Builder\Admin\Pages\Pages_Manager::instance()->get_current();
+		} catch ( \Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception $exception ) {
+			return false;
+		}
 	}
 
 	/**

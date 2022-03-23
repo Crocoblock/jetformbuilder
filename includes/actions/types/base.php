@@ -74,6 +74,17 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	}
 
 	/**
+	 * If this method returns false,
+	 * then this action cannot be selected in the list
+	 * when editing the form
+	 *
+	 * @return bool
+	 */
+	public function is_disabled(): bool {
+		return false;
+	}
+
+	/**
 	 * If this method returns Action_Default_Executor::class
 	 * then the action will be executed normally.
 	 *

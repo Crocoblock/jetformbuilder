@@ -1,23 +1,28 @@
-import * as actions from "./actions";
-import * as args from "./arguments";
-import * as captcha from "./captcha";
-import * as gateways from "./gateways";
-import * as preset from "./preset";
-import * as messages from "./messages";
+import actions from './actions';
+import args from './arguments';
+import captcha from './captcha';
+import gateways from './gateways';
+import preset from './preset';
+import messages from './messages';
+import limitAddon from './limit-addon';
+import scheduleAddon from './schedule-addon';
 
 const {
-	applyFilters
+	applyFilters,
+	addFilter,
 } = wp.hooks;
 
 const {
-	registerPlugin
+	registerPlugin,
+	getPlugin,
+	unregisterPlugin,
 } = wp.plugins;
 
 const {
 	PluginDocumentSettingPanel
 } = wp.editPost;
 
-const withPluginProps = ( settings, base ) => {
+/*const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;
 	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
 		<PluginRender key={ `plugin-render-${ base.name }` }/>
@@ -29,8 +34,17 @@ const registerJfbPlugin = plugin => {
 
 	settings.render = withPluginProps( settings, base );
 
+	if ( getPlugin( base.name ) ) {
+		unregisterPlugin( base.name );
+	}
 	registerPlugin( base.name, settings );
-};
+};*/
+
+addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
+	plugins.push( scheduleAddon, limitAddon );
+
+	return plugins;
+}, 0 );
 
 export default function RegisterPlugins() {
 	const sortedPlugins = [];

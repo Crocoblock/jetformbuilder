@@ -6,7 +6,9 @@ use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
+use Jet_Form_Builder\Admin\Vui_Boxes\With_Boxes_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 
 /**
  * Base dashboard page
@@ -17,6 +19,8 @@ abstract class Base_Page implements
 
 	use Admin_Page_Trait;
 	use With_Notices_Trait;
+	use With_Theme_Info;
+	use With_Boxes_Trait;
 
 	public function rep_item_id(): string {
 		return $this->slug();

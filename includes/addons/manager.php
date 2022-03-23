@@ -2,7 +2,6 @@
 namespace Jet_Form_Builder\Addons;
 
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Plugin;
 
 /**
  * This class required to get actual JetFormBuilder addons list and changelog for these addons from account.jetformbuilder.com.
@@ -619,6 +618,10 @@ class Manager {
 
 	public function is_active() {
 		return ! empty( get_option( 'jfb-license-data', false ) );
+	}
+
+	public function get_slug(): string {
+		return $this->is_active() ? 'jetformbuilder-license' : 'license-not-activated';
 	}
 
 	/**

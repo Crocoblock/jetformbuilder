@@ -3792,6 +3792,24 @@ var _ref = wp.blockEditor ? wp.blockEditor : wp.editor,
     useBlockProps = _ref.useBlockProps;
 
 var ToggleControl = wp.components.ToggleControl;
+/*const { registerPlugin } = wp.plugins;
+const { PluginBlockSettingsMenuItem } = wp.editPost;
+
+const PluginBlockSettingsMenuGroupTest = () => (
+	<PluginBlockSettingsMenuItem
+		allowedBlocks={ [ 'jet-forms/select-field' ] }
+		icon="smiley"
+		label="Read about Hierarchical Select addon"
+		onClick={ () => {
+			window.open( 'https://jetformbuilder.com/addons/hierarchical-select/', '_blank' );
+		} }
+	/>
+);
+
+registerPlugin( 'block-settings-menu-group-test', {
+	render: PluginBlockSettingsMenuGroupTest,
+} );*/
+
 function SelectEdit(props) {
   var attributes = props.attributes,
       setAttributes = props.setAttributes,
@@ -8631,8 +8649,7 @@ function PayNowScenario(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/actions/render.js");
 
@@ -8645,7 +8662,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -8761,7 +8781,8 @@ var compose = wp.compose.compose;
 var actionTypes = window.jetFormActionTypes.map(function (action) {
   return {
     value: action.id,
-    label: action.name
+    label: action.name,
+    disabled: action.disabled
   };
 });
 
@@ -8942,7 +8963,16 @@ var PluginActions = function PluginActions(_ref) {
       onChange: function onChange(newType) {
         return updateActionType(action.id, newType);
       }
-    }), applyFilters("jet.fb.section.actions.afterSelect.".concat(action.type), null, action, actions), wp.element.createElement(Flex, {
+    }, actionTypes.map(function (type) {
+      return wp.element.createElement("option", {
+        key: action.id + '__' + type.value,
+        value: type.value,
+        disabled: type.disabled,
+        dangerouslySetInnerHTML: {
+          __html: type.label
+        }
+      });
+    })), applyFilters("jet.fb.section.actions.afterSelect.".concat(action.type), null, action, actions), wp.element.createElement(Flex, {
       style: {
         marginTop: '0.5em'
       },
@@ -8996,14 +9026,19 @@ var PluginActions = function PluginActions(_ref) {
         }
       }]
     }))));
-  }), wp.element.createElement(Button, {
+  }), wp.element.createElement("div", {
+    className: "jfb-button-group"
+  }, wp.element.createElement(Button, {
     isPrimary: true,
     onClick: function onClick() {
       setActions([].concat(_toConsumableArray(actions), [_objectSpread(_objectSpread({}, JSON.parse(JSON.stringify(_options__WEBPACK_IMPORTED_MODULE_0__.defaultAction))), {}, {
         id: (0,_options__WEBPACK_IMPORTED_MODULE_0__.getRandomID)()
       })]));
     }
-  }, '+ New Action'), isEdit && wp.element.createElement(ActionModal, {
+  }, __('+ New Action', 'jet-form-builder')), wp.element.createElement(Button, {
+    href: "#",
+    variant: "link"
+  }, __('All PRO Actions', 'jet-form-builder'))), isEdit && wp.element.createElement(ActionModal, {
     classNames: ['width-60'],
     onRequestClose: closeModal,
     title: 'Edit Action',
@@ -9169,8 +9204,7 @@ PluginActions = compose(withDispatch(function (dispatch) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/arguments/render.js");
 
@@ -9183,7 +9217,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -9322,8 +9359,7 @@ function PluginArgs() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/captcha/render.js");
 
@@ -9336,7 +9372,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -9476,8 +9515,7 @@ function PluginCaptcha() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/gateways/render.js");
 
@@ -9491,7 +9529,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -9675,6 +9716,58 @@ function PluginGateways(props) {
 
 /***/ }),
 
+/***/ "./editor/plugins/limit-addon/index.js":
+/*!*********************************************!*\
+  !*** ./editor/plugins/limit-addon/index.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/limit-addon/render.js");
+
+var __ = wp.i18n.__;
+var base = {
+  name: 'jf-limit-responses-panel',
+  title: __('Limit Form Responses', 'jet-form-builder')
+};
+var settings = {
+  render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
+  icon: 'lock'
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
+
+/***/ }),
+
+/***/ "./editor/plugins/limit-addon/render.js":
+/*!**********************************************!*\
+  !*** ./editor/plugins/limit-addon/render.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var __ = wp.i18n.__;
+
+function PluginScheduleForm() {
+  return wp.element.createElement(React.Fragment, null, wp.element.createElement("a", {
+    href: '#'
+  }, __('See Pro Addon', 'jet-form-builder')));
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginScheduleForm);
+
+/***/ }),
+
 /***/ "./editor/plugins/manager.js":
 /*!***********************************!*\
   !*** ./editor/plugins/manager.js ***!
@@ -9692,6 +9785,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gateways__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./gateways */ "./editor/plugins/gateways/index.js");
 /* harmony import */ var _preset__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./preset */ "./editor/plugins/preset/index.js");
 /* harmony import */ var _messages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./messages */ "./editor/plugins/messages/index.js");
+/* harmony import */ var _limit_addon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./limit-addon */ "./editor/plugins/limit-addon/index.js");
+/* harmony import */ var _schedule_addon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./schedule-addon */ "./editor/plugins/schedule-addon/index.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -9704,7 +9799,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
@@ -9712,31 +9806,40 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
-var applyFilters = wp.hooks.applyFilters;
-var registerPlugin = wp.plugins.registerPlugin;
+
+var _wp$hooks = wp.hooks,
+    applyFilters = _wp$hooks.applyFilters,
+    addFilter = _wp$hooks.addFilter;
+var _wp$plugins = wp.plugins,
+    registerPlugin = _wp$plugins.registerPlugin,
+    getPlugin = _wp$plugins.getPlugin,
+    unregisterPlugin = _wp$plugins.unregisterPlugin;
 var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
+/*const withPluginProps = ( settings, base ) => {
+	const PluginRender = settings.render;
+	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
+		<PluginRender key={ `plugin-render-${ base.name }` }/>
+	</PluginDocumentSettingPanel>;
+}
 
-var withPluginProps = function withPluginProps(settings, base) {
-  var PluginRender = settings.render;
-  return function () {
-    return wp.element.createElement(PluginDocumentSettingPanel, _extends({}, base, {
-      key: "plugin-panel-".concat(base.name)
-    }), wp.element.createElement(PluginRender, {
-      key: "plugin-render-".concat(base.name)
-    }));
-  };
-};
+const registerJfbPlugin = plugin => {
+	const { base, settings } = plugin;
 
-var registerJfbPlugin = function registerJfbPlugin(plugin) {
-  var base = plugin.base,
-      settings = plugin.settings;
-  settings.render = withPluginProps(settings, base);
-  registerPlugin(base.name, settings);
-};
+	settings.render = withPluginProps( settings, base );
 
+	if ( getPlugin( base.name ) ) {
+		unregisterPlugin( base.name );
+	}
+	registerPlugin( base.name, settings );
+};*/
+
+addFilter('jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', function (plugins) {
+  plugins.push(_schedule_addon__WEBPACK_IMPORTED_MODULE_7__["default"], _limit_addon__WEBPACK_IMPORTED_MODULE_6__["default"]);
+  return plugins;
+}, 0);
 function RegisterPlugins() {
   var sortedPlugins = [];
-  var jfbPlugins = applyFilters('jet.fb.register.plugins', [_arguments__WEBPACK_IMPORTED_MODULE_1__, _captcha__WEBPACK_IMPORTED_MODULE_2__, _gateways__WEBPACK_IMPORTED_MODULE_3__, _actions__WEBPACK_IMPORTED_MODULE_0__, _preset__WEBPACK_IMPORTED_MODULE_4__, _messages__WEBPACK_IMPORTED_MODULE_5__]);
+  var jfbPlugins = applyFilters('jet.fb.register.plugins', [_arguments__WEBPACK_IMPORTED_MODULE_1__["default"], _captcha__WEBPACK_IMPORTED_MODULE_2__["default"], _gateways__WEBPACK_IMPORTED_MODULE_3__["default"], _actions__WEBPACK_IMPORTED_MODULE_0__["default"], _preset__WEBPACK_IMPORTED_MODULE_4__["default"], _messages__WEBPACK_IMPORTED_MODULE_5__["default"]]);
   jfbPlugins.forEach(function (plugin) {
     var _plugin$base = plugin.base,
         name = _plugin$base.name,
@@ -9774,8 +9877,7 @@ function RegisterPlugins() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/messages/render.js");
 
@@ -9788,7 +9890,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -9900,8 +10005,7 @@ function PluginMessages() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "base": () => (/* binding */ base),
-/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/preset/render.js");
 
@@ -9914,7 +10018,10 @@ var settings = {
   render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
   icon: null
 };
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
 
 /***/ }),
 
@@ -9990,6 +10097,58 @@ function PluginPreset() {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginPreset);
+
+/***/ }),
+
+/***/ "./editor/plugins/schedule-addon/index.js":
+/*!************************************************!*\
+  !*** ./editor/plugins/schedule-addon/index.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render */ "./editor/plugins/schedule-addon/render.js");
+
+var __ = wp.i18n.__;
+var base = {
+  name: 'jf-schedule-panel',
+  title: __('Form Schedule', 'jet-form-builder')
+};
+var settings = {
+  render: _render__WEBPACK_IMPORTED_MODULE_0__["default"],
+  icon: 'lock'
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  base: base,
+  settings: settings
+});
+
+/***/ }),
+
+/***/ "./editor/plugins/schedule-addon/render.js":
+/*!*************************************************!*\
+  !*** ./editor/plugins/schedule-addon/render.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var __ = wp.i18n.__;
+
+function PluginLimitFormResponses() {
+  return wp.element.createElement(React.Fragment, null, wp.element.createElement("a", {
+    href: '#'
+  }, __('See Pro Addon', 'jet-form-builder')));
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginLimitFormResponses);
 
 /***/ }),
 
@@ -10176,7 +10335,7 @@ module.exports = JSON.parse('{"apiVersion":2,"name":"jet-forms/repeater-field","
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"apiVersion":2,"name":"jet-forms/select-field","category":"jet-form-builder-fields","keywords":["jetformbuilder","field","select"],"textdomain":"jet-form-builder","supports":{"customClassName":false,"html":false},"title":"Select Field","icon":"<svg width=\\"64\\" height=\\"64\\" viewBox=\\"0 0 64 64\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\"><rect width=\\"64\\" height=\\"64\\" fill=\\"white\\"/><rect x=\\"1\\" y=\\"3\\" width=\\"62\\" height=\\"26\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"42\\" y=\\"8\\" width=\\"16\\" height=\\"16\\" rx=\\"3\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><path d=\\"M48 15L50 17L52 15\\" stroke=\\"#162B40\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\"/><rect x=\\"1\\" y=\\"36\\" width=\\"62\\" height=\\"26\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"42\\" y=\\"41\\" width=\\"16\\" height=\\"16\\" rx=\\"3\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><path d=\\"M48 48L50 50L52 48\\" stroke=\\"#162B40\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\"/></svg>","attributes":{"generator_numbers_min":{"type":"number","default":""},"generator_numbers_max":{"type":"number","default":""},"generator_numbers_step":{"type":"number","default":""},"glossary_id":{"type":"string","default":""},"switch_on_change":{"type":"boolean","default":false},"field_options_from":{"type":"string","default":"manual_input"},"field_options":{"type":"array","default":[]},"field_options_post_type":{"type":"string","default":"post"},"field_options_tax":{"type":"string","default":"category"},"field_options_key":{"type":"string","default":""},"generator_function":{"type":"string","default":""},"generator_field":{"type":"string","default":""},"calculated_value_from_key":{"type":"string","default":""},"value_from_key":{"type":"string","default":""},"label":{"type":"string","default":""},"name":{"type":"string","default":"field_name"},"desc":{"type":"string","default":""},"default":{"type":"string","default":""},"placeholder":{"type":"string","default":""},"required":{"type":"boolean","default":false},"add_prev":{"type":"boolean","default":false},"prev_label":{"type":"string","default":""},"visibility":{"type":"string","default":""},"class_name":{"type":"string","default":""},"className":{"type":"string","default":""}},"usesContext":["jet-forms/repeater-field--name"]}');
+module.exports = JSON.parse('{"apiVersion":2,"name":"jet-forms/select-field","category":"jet-form-builder-fields","description":"Try more options with Hierarchical Select addon","keywords":["jetformbuilder","field","select"],"textdomain":"jet-form-builder","supports":{"customClassName":false,"html":false},"title":"Select Field","icon":"<svg width=\\"64\\" height=\\"64\\" viewBox=\\"0 0 64 64\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\"><rect width=\\"64\\" height=\\"64\\" fill=\\"white\\"/><rect x=\\"1\\" y=\\"3\\" width=\\"62\\" height=\\"26\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"42\\" y=\\"8\\" width=\\"16\\" height=\\"16\\" rx=\\"3\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><path d=\\"M48 15L50 17L52 15\\" stroke=\\"#162B40\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\"/><rect x=\\"1\\" y=\\"36\\" width=\\"62\\" height=\\"26\\" rx=\\"3\\" fill=\\"white\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><rect x=\\"42\\" y=\\"41\\" width=\\"16\\" height=\\"16\\" rx=\\"3\\" fill=\\"#4AF3BA\\" stroke=\\"#162B40\\" stroke-width=\\"2\\"/><path d=\\"M48 48L50 50L52 48\\" stroke=\\"#162B40\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\"/></svg>","attributes":{"generator_numbers_min":{"type":"number","default":""},"generator_numbers_max":{"type":"number","default":""},"generator_numbers_step":{"type":"number","default":""},"glossary_id":{"type":"string","default":""},"switch_on_change":{"type":"boolean","default":false},"field_options_from":{"type":"string","default":"manual_input"},"field_options":{"type":"array","default":[]},"field_options_post_type":{"type":"string","default":"post"},"field_options_tax":{"type":"string","default":"category"},"field_options_key":{"type":"string","default":""},"generator_function":{"type":"string","default":""},"generator_field":{"type":"string","default":""},"calculated_value_from_key":{"type":"string","default":""},"value_from_key":{"type":"string","default":""},"label":{"type":"string","default":""},"name":{"type":"string","default":"field_name"},"desc":{"type":"string","default":""},"default":{"type":"string","default":""},"placeholder":{"type":"string","default":""},"required":{"type":"boolean","default":false},"add_prev":{"type":"boolean","default":false},"prev_label":{"type":"string","default":""},"visibility":{"type":"string","default":""},"class_name":{"type":"string","default":""},"className":{"type":"string","default":""}},"usesContext":["jet-forms/repeater-field--name"]}');
 
 /***/ }),
 

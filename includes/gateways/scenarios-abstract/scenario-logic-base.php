@@ -117,6 +117,16 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function process_status( $type = 'success' ) {
+		$entry = $this->get_scenario_row();
+
+		try {
+			$request = Record_Fields_View::get_request_list( $entry['record']['id'] ?? 0 );
+		} catch ( Query_Builder_Exception $exception ) {
+			$request = array();
+		}
+
+		// For backward compatibility with JetAppointment & JetBooking
+		jet_fb_gateway_current()->set_form_data( $request );
 
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
 
@@ -126,11 +136,9 @@ abstract class Scenario_Logic_Base {
 			return;
 		}
 
-		$entry = $this->get_scenario_row();
-
 		$all = jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
-									  ->unregister_action( 'redirect_to_page' )
-									  ->get_all();
+							->unregister_action( 'redirect_to_page' )
+							->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -140,12 +148,6 @@ abstract class Scenario_Logic_Base {
 			if ( empty( $keep_these[ $index ]['active'] ) ) {
 				jet_fb_action_handler()->unregister_action( $index );
 			}
-		}
-
-		try {
-			$request = Record_Fields_View::get_request_list( $entry['record']['id'] ?? 0 );
-		} catch ( Query_Builder_Exception $exception ) {
-			return;
 		}
 
 		jet_fb_action_handler()->add_request( $request );

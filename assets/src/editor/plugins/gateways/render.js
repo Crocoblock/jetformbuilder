@@ -65,13 +65,18 @@ function PluginGateways( props ) {
 		return applyFilters(
 			'jet.fb.gateways.getDisabledInfo',
 			<p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p>,
-			props
+			props,
 		);
-	}
+	};
+
+	const isIssetGateway = () => {
+		return - 1 !== gatewaysData.list.findIndex( gateway => GatewaysMeta.gateway === gateway.value );
+	};
 
 	const [ isEdit, setEdit ] = useState( false );
 	const [ isDisabled, setDisabled ] = useState( getDisabledStateButton );
-	const [ disabledInfo, setDisabledInfo ] = useState( getDisabledInfo )
+	const [ disabledInfo, setDisabledInfo ] = useState( getDisabledInfo );
+	const [ issetGateway, setIssetGateway ] = useState( isIssetGateway );
 
 	useEffect( () => {
 		if ( isEdit ) {
@@ -83,6 +88,7 @@ function PluginGateways( props ) {
 		}
 	}, [ isEdit ] );
 
+
 	const closeModal = ( newMeta = false ) => {
 		if ( false !== newMeta ) {
 			ChangeGateway( newMeta );
@@ -93,6 +99,7 @@ function PluginGateways( props ) {
 	useEffect( () => {
 		setDisabled( getDisabledStateButton() );
 		setDisabledInfo( getDisabledInfo() );
+		setIssetGateway( isIssetGateway() );
 	}, [ GatewaysMeta.gateway, ActionsMeta ] );
 
 	return <>
@@ -111,7 +118,7 @@ function PluginGateways( props ) {
 			} }
 		/>
 		{ (
-			GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway
+			GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway && issetGateway
 		) && <>
 			<Button
 				onClick={ () => setEdit( true ) }

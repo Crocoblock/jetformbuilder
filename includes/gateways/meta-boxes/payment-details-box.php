@@ -34,13 +34,13 @@ class Payment_Details_Box extends Base_List_Box {
 
 	/**
 	 * @return array
-	 * @throws Empty_Box_Exception
+	 * @throws Not_Found_Page_Exception
 	 */
 	public function get_list(): array {
 		try {
 			return Payment_View::findById( $this->get_id() );
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
 	}
 }

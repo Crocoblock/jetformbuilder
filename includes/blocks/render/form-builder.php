@@ -6,6 +6,7 @@ use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Http_Tools;
+use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -172,8 +173,6 @@ class Form_Builder {
 
 	/**
 	 * Render from HTML
-	 *
-	 * @param bool $echo
 	 *
 	 * @return false|string [type] [description]
 	 */

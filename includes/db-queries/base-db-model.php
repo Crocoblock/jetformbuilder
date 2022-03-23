@@ -54,7 +54,7 @@ abstract class Base_Db_Model {
 	/**
 	 * @throws Sql_Exception
 	 */
-	public function safe_create(): Base_Db_Model {
+	public function create(): Base_Db_Model {
 		Execution_Builder::instance()->safe_create( $this );
 
 		return $this;
@@ -169,7 +169,7 @@ abstract class Base_Db_Model {
 	 * @throws Sql_Exception
 	 */
 	public function before_insert() {
-		( new static() )->safe_create();
+		$this->create();
 	}
 
 	public function after_insert( $insert_columns ) {

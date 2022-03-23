@@ -31,7 +31,7 @@ class Payment_View extends View_Base {
 	public function get_prepared_join( Query_Builder $builder ) {
 		try {
 			// and also safely create dependent tables
-			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->safe_create()::table();
+			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->create()::table();
 
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );

@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Base_Gateway;
@@ -14,13 +16,10 @@ use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_To_Record;
 use Jet_Form_Builder\Gateways\Paypal;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
-use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_With_Record_View;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
-use Jet_Form_Builder\Db_Queries\Execution_Builder;
 
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
@@ -233,6 +232,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 		$payer_id = Payer_Model::insert_or_update(
 			array(
+				'user_id'    => $this->get_scenario_row( 'user_id' ),
 				'payer_id'   => $payment['payer']['payer_id'] ?? '',
 				'first_name' => $payment['payer']['name']['given_name'] ?? '',
 				'last_name'  => $payment['payer']['name']['surname'] ?? '',

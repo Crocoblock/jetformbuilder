@@ -224,8 +224,14 @@ class Post_Type {
 	 *
 	 * @return array
 	 */
-	public function get_args( $form_id ) {
-		return $this->get_form_meta( '_jf_args', $form_id );
+	public function get_args( $form_id ): array {
+		$args = $this->get_form_meta( '_jf_args', $form_id );
+
+		if ( ! is_array( $args ) ) {
+			return array();
+		}
+
+		return $args;
 	}
 
 	/**

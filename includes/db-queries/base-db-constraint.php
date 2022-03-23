@@ -5,10 +5,10 @@ namespace Jet_Form_Builder\Db_Queries;
 
 class Base_Db_Constraint {
 
-	const ACTION_CASCADE = 'CASCADE';
+	const ACTION_CASCADE     = 'CASCADE';
 	const ACTION_SET_DEFAULT = 'SET DEFAULT';
-	const ACTION_SET_NULL = 'SET NULL';
-	const ACTION_RESTRICT = 'RESTRICT';
+	const ACTION_SET_NULL    = 'SET NULL';
+	const ACTION_RESTRICT    = 'RESTRICT';
 
 	protected $foreign_keys;
 	protected $foreign_table;
@@ -102,7 +102,7 @@ class Base_Db_Constraint {
 	}
 
 	final public function build_part(): string {
-		$constraint = 'FOREIGN KEY (`' . implode( '` , `', $this->foreign_keys ) . '`) ';
+		$constraint  = 'FOREIGN KEY (`' . implode( '` , `', $this->foreign_keys ) . '`) ';
 		$constraint .= "REFERENCES {$this->get_table()}(`" . implode( '` , `', $this->parent_keys ) . '`)';
 
 		foreach ( $this->actions as $name => $action ) {

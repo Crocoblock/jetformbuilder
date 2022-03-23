@@ -9628,6 +9628,12 @@ function PluginGateways(props) {
     return applyFilters('jet.fb.gateways.getDisabledInfo', wp.element.createElement("p", null, __('Please add \`Insert/Update Post\` action', 'jet-form-builder')), props);
   };
 
+  var isIssetGateway = function isIssetGateway() {
+    return -1 !== gatewaysData.list.findIndex(function (gateway) {
+      return GatewaysMeta.gateway === gateway.value;
+    });
+  };
+
   var _useState = useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       isEdit = _useState2[0],
@@ -9642,6 +9648,11 @@ function PluginGateways(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       disabledInfo = _useState6[0],
       setDisabledInfo = _useState6[1];
+
+  var _useState7 = useState(isIssetGateway),
+      _useState8 = _slicedToArray(_useState7, 2),
+      issetGateway = _useState8[0],
+      setIssetGateway = _useState8[1];
 
   useEffect(function () {
     if (isEdit) {
@@ -9668,6 +9679,7 @@ function PluginGateways(props) {
   useEffect(function () {
     setDisabled(getDisabledStateButton());
     setDisabledInfo(getDisabledInfo());
+    setIssetGateway(isIssetGateway());
   }, [GatewaysMeta.gateway, ActionsMeta]);
   return wp.element.createElement(React.Fragment, null, wp.element.createElement(RadioControl, {
     key: 'gateways_radio_control',
@@ -9681,7 +9693,7 @@ function PluginGateways(props) {
         gateway: val
       }));
     }
-  }), GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway && wp.element.createElement(React.Fragment, null, wp.element.createElement(Button, {
+  }), GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway && issetGateway && wp.element.createElement(React.Fragment, null, wp.element.createElement(Button, {
     onClick: function onClick() {
       return setEdit(true);
     },
@@ -9799,6 +9811,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 
 
 
@@ -9815,23 +9829,29 @@ var _wp$plugins = wp.plugins,
     getPlugin = _wp$plugins.getPlugin,
     unregisterPlugin = _wp$plugins.unregisterPlugin;
 var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
-/*const withPluginProps = ( settings, base ) => {
-	const PluginRender = settings.render;
-	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
-		<PluginRender key={ `plugin-render-${ base.name }` }/>
-	</PluginDocumentSettingPanel>;
-}
 
-const registerJfbPlugin = plugin => {
-	const { base, settings } = plugin;
+var withPluginProps = function withPluginProps(settings, base) {
+  var PluginRender = settings.render;
+  return function () {
+    return wp.element.createElement(PluginDocumentSettingPanel, _extends({}, base, {
+      key: "plugin-panel-".concat(base.name)
+    }), wp.element.createElement(PluginRender, {
+      key: "plugin-render-".concat(base.name)
+    }));
+  };
+};
 
-	settings.render = withPluginProps( settings, base );
+var registerJfbPlugin = function registerJfbPlugin(plugin) {
+  var base = plugin.base,
+      settings = plugin.settings;
+  settings.render = withPluginProps(settings, base);
 
-	if ( getPlugin( base.name ) ) {
-		unregisterPlugin( base.name );
-	}
-	registerPlugin( base.name, settings );
-};*/
+  if (getPlugin(base.name)) {
+    unregisterPlugin(base.name);
+  }
+
+  registerPlugin(base.name, settings);
+};
 
 addFilter('jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', function (plugins) {
   plugins.push(_schedule_addon__WEBPACK_IMPORTED_MODULE_7__["default"], _limit_addon__WEBPACK_IMPORTED_MODULE_6__["default"]);

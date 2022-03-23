@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
+use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
+use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Style_Manager;
@@ -406,12 +408,18 @@ class Form extends Base {
 			return $this->get_placeholder();
 		}
 
+		try {
+			$form = Post_Tools::get_post( $form_id );
+		} catch ( Not_Found_Post_Exception $exception ) {
+			return $this->get_placeholder();
+		}
+
 		Plugin::instance()->admin_bar->register_item(
 			$form_id,
 			array(
-				'title'     => get_the_title( $form_id ),
+				'title'     => get_the_title( $form ),
 				'sub_title' => __( 'JetForm', 'jet-form-builder' ),
-				'href'      => get_edit_post_link( $form_id ),
+				'href'      => get_edit_post_link( $form ),
 			)
 		);
 
@@ -428,11 +436,7 @@ class Form extends Base {
 			return $custom_form;
 		}
 
-		$builder = new Form_Builder( $form_id, $attrs );
-
-		Error_Handler::instance();
-
-		$form = $builder->render_form();
+		$form = ( new Form_Builder( $form_id, $attrs ) )->render_form();
 
 		ob_start();
 		jet_form_builder()->msg_router->get_builder()->render_messages();

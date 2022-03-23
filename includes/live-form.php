@@ -7,6 +7,7 @@ use Jet_Form_Builder\Blocks\Types\Base as Block_Type_Base;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Post\Post_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -91,13 +92,13 @@ class Live_Form {
 	/**
 	 * Setup fields prop
 	 *
-	 * @param $blocks
-	 *
 	 * @return array[]
 	 */
-	public function setup_fields() {
+	public function setup_fields(): array {
+		$form = get_post( $this->form_id );
+
 		$this->blocks = $this->get_form_break()->set_pages(
-			Block_Helper::get_blocks_by_post( $this->form_id )
+			parse_blocks( $form->post_content )
 		);
 
 		return $this->blocks;

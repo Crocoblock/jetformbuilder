@@ -17,7 +17,7 @@ class Payment_With_Record_View extends Payment_View {
 		parent::get_prepared_join( $builder );
 
 		try {
-			$payments_to_records = ( new Payment_To_Record )->safe_create()::table();
+			$payments_to_records = ( new Payment_To_Record )->create()::table();
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}

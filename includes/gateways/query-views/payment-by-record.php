@@ -27,7 +27,7 @@ class Payment_By_Record extends View_Base {
 	 */
 	public function get_prepared_join( Query_Builder $builder ) {
 		try {
-			$payment_to_record = ( new Payment_To_Record() )->safe_create()::table();
+			$payment_to_record = ( new Payment_To_Record() )->create()::table();
 		} catch ( Sql_Exception $exception ) {
 			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}

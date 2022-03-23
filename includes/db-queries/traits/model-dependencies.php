@@ -21,7 +21,7 @@ trait Model_Dependencies {
 	 */
 	public function prepare_dependencies() {
 		foreach ( $this->get_dependencies() as $model ) {
-			$model->safe_create();
+			$model->create();
 		}
 	}
 

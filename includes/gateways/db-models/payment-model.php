@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+use Jet_Form_Builder\Db_Queries\Constraints\Form_Constraint;
 
 class Payment_Model extends Base_Db_Model {
 
@@ -23,7 +24,7 @@ class Payment_Model extends Base_Db_Model {
 			'id'                     => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'transaction_id'         => 'varchar(255)',
 			'initial_transaction_id' => 'varchar(255)',
-			'form_id'                => 'bigint(20)',
+			'form_id'                => 'bigint UNSIGNED NOT NULL',
 			'user_id'                => 'bigint(20)',
 			'gateway_id'             => 'varchar(100)',
 			'scenario'               => 'varchar(100)',
@@ -45,6 +46,12 @@ class Payment_Model extends Base_Db_Model {
 			'transaction_id' => 'index',
 			'form_id'        => 'index',
 			'user_id'        => 'index',
+		);
+	}
+
+	public function foreign_relations(): array {
+		return array(
+			new Form_Constraint(),
 		);
 	}
 

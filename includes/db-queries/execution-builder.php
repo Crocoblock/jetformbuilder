@@ -57,7 +57,7 @@ class Execution_Builder {
 				);
 				continue;
 			}
-			$constraint->get_model()->safe_create();
+			$constraint->get_model()->create();
 		}
 
 		return $this;

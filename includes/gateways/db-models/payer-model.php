@@ -3,10 +3,8 @@
 
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
-use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Payer_View;
 
@@ -25,6 +23,7 @@ class Payer_Model extends Base_Db_Model {
 	public static function schema(): array {
 		return array(
 			'id'         => 'bigint(20) NOT NULL AUTO_INCREMENT',
+			'user_id'    => 'bigint(20)',
 			'payer_id'   => 'varchar(100)',
 			'first_name' => 'varchar(100)',
 			'last_name'  => 'varchar(100)',
@@ -55,12 +54,14 @@ class Payer_Model extends Base_Db_Model {
 		$payer_id = $payer['payer_id'] ?? '';
 
 		try {
-			$find_payer = Payer_View::find( array(
-				'payer_id' => $payer_id
-			) )->query()->query_one();
+			$find_payer = Payer_View::find(
+				array(
+					'payer_id' => $payer_id,
+				)
+			)->query()->query_one();
 
 		} catch ( Query_Builder_Exception $exception ) {
-			return ( new self )->safe_create()->insert( $payer );
+			return ( new self() )->insert( $payer );
 		}
 
 		self::update_payer( $payer );

@@ -18,11 +18,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id = null;
-	public $request_data = array();
-	public $form_actions = array();
+	public $form_id          = null;
+	public $request_data     = array();
+	public $form_actions     = array();
 	private $form_conditions = array();
-	public $is_ajax = false;
+	public $is_ajax          = false;
 
 	/**
 	 * Data for actions

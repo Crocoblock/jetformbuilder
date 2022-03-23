@@ -22,7 +22,7 @@ const {
 	PluginDocumentSettingPanel
 } = wp.editPost;
 
-/*const withPluginProps = ( settings, base ) => {
+const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;
 	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
 		<PluginRender key={ `plugin-render-${ base.name }` }/>
@@ -38,7 +38,7 @@ const registerJfbPlugin = plugin => {
 		unregisterPlugin( base.name );
 	}
 	registerPlugin( base.name, settings );
-};*/
+};
 
 addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
 	plugins.push( scheduleAddon, limitAddon );

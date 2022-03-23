@@ -361,5 +361,14 @@ abstract class Legacy_Base_Gateway {
 		}
 	}
 
+	/**
+	 * For backward compatibility with JetAppointment & JetBooking
+	 *
+	 * @param array $request
+	 */
+	public function set_form_data( array $request ) {
+		$this->data['form_data'] = $request;
+	}
+
 
 }

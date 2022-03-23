@@ -70,19 +70,19 @@ class Stable_Pages_Manager {
 	public function add_static_pages() {
 		$parent = $this->get_parent_slug();
 		$pages  = array();
+		$theme  = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
 
 		if ( ! jet_form_builder()->addons_manager->is_active() ) {
 			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),
 				'capability' => 'read',
 				'slug'       => add_query_arg(
-				// TODO: replace utm
 					array(
-						'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
-						'utm_medium'   => 'crocoblock-license/theme-author',
+						'utm_source'   => 'wp-dashboard/jetformbuilder-menu',
+						'utm_medium'   => 'license-not-activated/' . $theme->author_slug(),
 						'utm_campaign' => 'go-pro-button',
 					),
-					JET_FORM_BUILDER_SITE
+					JET_FORM_BUILDER_SITE . '/pricing/'
 				),
 			);
 		}

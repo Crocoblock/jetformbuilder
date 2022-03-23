@@ -17,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Manager {
 
+	const NOT_ACTIVE = 'license-not-activated';
+
 	/**
 	 * [$api_url description]
 	 *
@@ -621,7 +623,7 @@ class Manager {
 	}
 
 	public function get_slug(): string {
-		return $this->is_active() ? 'jetformbuilder-license' : 'license-not-activated';
+		return $this->is_active() ? 'jetformbuilder-license' : self::NOT_ACTIVE;
 	}
 
 	/**

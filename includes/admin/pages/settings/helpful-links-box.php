@@ -23,19 +23,37 @@ class Helpful_Links_Box extends Base_Vui_Panel_Box {
 		$author_slug = jet_fb_current_page()->theme()->author_slug();
 		$license     = jet_form_builder()->addons_manager->get_slug();
 
+		$utm_params = array(
+			'utm_source' => rawurlencode( 'jetformbuilder-dashboard/settings-help-center' ),
+			'utm_medium' => rawurlencode( "$license/$author_slug" ),
+		);
+
+		$knowledge = array_merge(
+			$utm_params,
+			array(
+				'utm_campaign' => 'knowledge-base',
+			)
+		);
+
+		$support = array_merge(
+			$utm_params,
+			array(
+				'utm_campaign' => 'contact-support',
+			)
+		);
+
 		return array_merge(
 			parent::to_array(),
 			array(
 				'link_knowledge'  => add_query_arg(
-					array(
-						'utm_source'   => rawurlencode( 'jetformbuilder-dashboard/settings-help-center' ),
-						'utm_medium'   => rawurlencode( "$license/$author_slug" ),
-						'utm_campaign' => 'knowledge-base',
-					),
+					$knowledge,
 					JET_FORM_BUILDER_SITE . '/features/overview/'
 				),
-				'link_community'  => 'https://www.facebook.com/crocoblock/',
-				'link_support'    => 'https://crocoblock.com/help-center/',
+				'link_support'    => add_query_arg(
+					$support,
+					'https://support.crocoblock.com/support/home/'
+				),
+				'link_community'  => 'https://www.facebook.com/groups/CrocoblockCommunity',
 				'link_git'        => 'https://github.com/Crocoblock/jetformbuilder',
 				'label_knowledge' => __( 'Knowledge base', 'jet-form-builder' ),
 				'label_community' => __( 'Ask the community', 'jet-form-builder' ),

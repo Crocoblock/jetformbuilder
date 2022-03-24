@@ -66,10 +66,11 @@ class Builder {
 			return;
 		}
 
-		$message_content = $this->get_manager()->get_message( $status );
+		$info            = new Status_Info( $status );
+		$message_content = $this->get_manager()->get_message_by_info( $info );
 
 		$class  = 'jet-form-builder-message';
-		$class .= ' jet-form-builder-message--' . $this->get_manager()->get_status_class( $status );
+		$class .= ' jet-form-builder-message--' . $info->get_css_class();
 
 		include $this->get_global_template( 'common/messages.php' );
 	}

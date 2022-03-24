@@ -17,11 +17,11 @@ class Payment_Status_Column extends Column_Advanced_Base {
 	public function get_replace_map(): array {
 		return array(
 			'COMPLETED' => array(
-				'type' => 'success',
+				'type' => self::STATUS_SUCCESS,
 				'text' => __( 'Completed', 'jet-form-builder' ),
 			),
 			'CREATED'   => array(
-				'type' => 'info',
+				'type' => self::STATUS_INFO,
 				'text' => __( 'Created', 'jet-form-builder' ),
 			),
 		);

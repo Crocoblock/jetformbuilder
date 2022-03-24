@@ -65,11 +65,6 @@
 						<EntryColumnsTable
 							v-for="column in filteredColumns"
 							:key="'entry_' + column"
-							:class="[
-								'list-table-item__cell',
-								'cell--' + column,
-								'cell-type--' + columnType( entry, column )
-							]"
 							:column="column"
 							:entry="entry"
 							:entry-id="entryID"

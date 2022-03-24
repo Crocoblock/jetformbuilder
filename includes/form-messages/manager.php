@@ -7,8 +7,7 @@ use Jet_Form_Builder\Plugin;
 
 class Manager {
 
-	public $_types            = array();
-	private $success_statuses = array( 'success' );
+	public $_types = array();
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
 	const DYNAMIC_FAILED_PREF  = 'derror|';
@@ -22,22 +21,7 @@ class Manager {
 		return self::DYNAMIC_FAILED_PREF . $message;
 	}
 
-	private function is_success( $status ) {
-		$message = $this->parse_message( $status );
-
-		if ( $this->is_dynamic_message( $message ) ) {
-			return 'success' === $this->dynamic_types()[ $message[0] ]['type'];
-		}
-
-		return in_array( $message[0], $this->success_statuses );
-	}
-
-
-	public function get_status_class( $status ) {
-		return $this->is_success( $status ) ? 'success' : 'error';
-	}
-
-	public function dynamic_types() {
+	public static function dynamic_types() {
 		return array(
 			'dsuccess' => array(
 				'type' => 'success',
@@ -91,23 +75,24 @@ class Manager {
 	}
 
 
-	public function get_message( $type ) {
-		$message = $this->parse_message( $type );
+	public function get_message( $type ): string {
+		$info = new Status_Info( $type );
 
 		/**
 		 * Return dynamic message
 		 */
+		return $this->get_message_by_info( $info );
+	}
 
-		if ( $this->is_dynamic_message( $message ) ) {
-			unset( $message[0] );
-
-			return implode( '|', $message );
+	public function get_message_by_info( Status_Info $info ): string {
+		if ( $info->is_dynamic() ) {
+			return $info->get_message();
 		}
 
-		if ( $this->isset_message_type( $message[0] ) ) {
-			return is_array( $this->_types[ $message[0] ] )
-				? $this->_types[ $message[0] ]['value']
-				: $this->_types[ $message[0] ];
+		$status = $info->get_message();
+
+		if ( $this->isset_message_type( $status ) ) {
+			return $this->_types[ $status ]['value'] ?? $this->_types[ $status ];
 		}
 
 		return 'Undefined error';
@@ -117,12 +102,8 @@ class Manager {
 		return $this->_types;
 	}
 
-	private function parse_message( $status ) {
+	public static function parse_message( $status ) {
 		return explode( '|', $status );
-	}
-
-	private function is_dynamic_message( $message ) {
-		return isset( $this->dynamic_types()[ $message[0] ] ) && ! empty( $message[1] );
 	}
 
 }

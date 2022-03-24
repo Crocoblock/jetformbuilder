@@ -5,10 +5,14 @@ namespace Jet_Form_Builder\Admin\Table_Views;
 
 abstract class Column_Base {
 
-	const CHOOSE  = 'choose';
-	const ACTIONS = 'actions';
-	const CLASSES = 'classes';
-	const STATUS  = 'icon_status';
+	const CHOOSE         = 'choose';
+	const ACTIONS        = 'actions';
+	const CLASSES        = 'classes';
+	const STATUS         = 'icon_status';
+	const STATUS_SUCCESS = 'success';
+	const STATUS_INFO    = 'info';
+	const STATUS_WARNING = 'warning';
+	const STATUS_FAILED  = 'failed';
 
 	protected $column = '';
 	protected $type   = 'string';
@@ -51,6 +55,10 @@ abstract class Column_Base {
 		return array();
 	}
 
+	public function get_css_classes( array $record = array() ): array {
+		return array();
+	}
+
 	final public function get_column( array $record ): array {
 		$type            = $this->get_type( $record );
 		$value           = $this->prepare_value( $this->get_value( $record ), $type );
@@ -58,6 +66,7 @@ abstract class Column_Base {
 		$control         = $this->get_control( $record );
 		$control_options = $this->get_control_options( $record );
 		$options         = $this->get_options( $record );
+		$classes         = $this->get_css_classes( $record );
 
 		return array(
 			'type'            => $type,
@@ -65,6 +74,7 @@ abstract class Column_Base {
 			'editable'        => $editable,
 			'control'         => $control,
 			'control_options' => $control_options,
+			'classes'         => $classes,
 		) + $options;
 	}
 

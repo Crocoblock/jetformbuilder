@@ -55,10 +55,6 @@ export default {
 </script>
 
 <style lang="scss">
-.cx-vue-list-table .list-table-item__cell.list-table-item__cell.cell-type--icon_status {
-	overflow: visible;
-}
-
 .jfb-icon-status {
 	position: relative;
 	display: inline-block;
@@ -71,6 +67,12 @@ export default {
 		display: flex;
 		column-gap: 0.5em;
 		align-items: center;
+	}
+
+	&--text {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		padding: 0.1em 0;
 	}
 
 	.dashicons {

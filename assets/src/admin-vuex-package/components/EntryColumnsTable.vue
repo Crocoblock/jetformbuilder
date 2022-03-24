@@ -1,5 +1,12 @@
 <template>
-	<div>
+	<div
+		:class="[
+			'list-table-item__cell',
+			'cell--' + column,
+			'cell-type--' + initialType,
+			...initialClasses,
+		]"
+	>
 		<template v-if="getComponentColumn">
 			<component
 				:is="getComponentColumn"
@@ -79,6 +86,9 @@ export default {
 		initialType() {
 			return this.initial?.type ?? 'string';
 		},
+		initialClasses() {
+			return this.initial?.classes ?? [];
+		},
 		editedCellValue: {
 			get() {
 				jfbEventBus.reactiveCounter;
@@ -132,6 +142,9 @@ export default {
 <style lang="scss">
 
 .list-table-item__cell {
+	&.overflow-visible.overflow-visible {
+		overflow: visible;
+	}
 	&--body {
 		&-is-editable {
 			display: flex;

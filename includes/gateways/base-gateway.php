@@ -61,8 +61,6 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	abstract protected function options_list();
 
-	abstract protected function failed_statuses();
-
 	abstract protected function retrieve_gateway_meta();
 
 	public function custom_labels(): array {
@@ -143,6 +141,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	/**
+	 * @deprecated since 2.0.0
 	 *
 	 * @return string
 	 */

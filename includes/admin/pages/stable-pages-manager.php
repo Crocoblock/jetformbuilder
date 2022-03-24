@@ -70,16 +70,17 @@ class Stable_Pages_Manager {
 	public function add_static_pages() {
 		$parent = $this->get_parent_slug();
 		$pages  = array();
-		$theme  = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
 
 		if ( ! jet_form_builder()->addons_manager->is_active() ) {
+			$theme = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
+
 			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),
 				'capability' => 'read',
 				'slug'       => add_query_arg(
 					array(
-						'utm_source'   => 'wp-dashboard/jetformbuilder-menu',
-						'utm_medium'   => 'license-not-activated/' . $theme->author_slug(),
+						'utm_source'   => rawurlencode( 'wp-dashboard/jetformbuilder-menu' ),
+						'utm_medium'   => rawurlencode( 'license-not-activated/' . $theme->author_slug() ),
 						'utm_campaign' => 'go-pro-button',
 					),
 					JET_FORM_BUILDER_SITE . '/pricing/'

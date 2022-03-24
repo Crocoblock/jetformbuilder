@@ -9,6 +9,7 @@ use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
@@ -44,7 +45,7 @@ abstract class Scenario_Logic_Base {
 		/** redirect to the page */
 		jet_fb_gateway_current()->send_response(
 			array(
-				'status' => jet_fb_gateway_current()->get_result_message(
+				'status' => $this->get_result_message(
 					$this->get_scenario_row( 'status' )
 				),
 			)
@@ -287,6 +288,48 @@ abstract class Scenario_Logic_Base {
 			},
 			$message
 		);
+	}
+
+	/**
+	 *
+	 * @param $status
+	 *
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_result_message( $status ): string {
+		$gateway = jet_fb_gateway_current();
+		$message = $status;
+
+		switch ( $this->get_status_type( $status ) ) {
+			case 'failed':
+				$message = Manager::dynamic_error( $gateway->get_meta_message( 'failed' ) );
+				break;
+			case 'success':
+				$message = Manager::dynamic_success( $gateway->get_meta_message( 'success' ) );
+				break;
+		}
+		$message = stripcslashes( $message );
+
+		return $message;
+	}
+
+	/**
+	 * @param $status
+	 *
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_meta_message( $status ): string {
+		$gateway = jet_fb_gateway_current();
+
+		return $gateway->get_meta_message( $this->get_status_type( $status ) );
+	}
+
+	public function get_status_type( $status ): string {
+		return ( ! $status || in_array( $status, $this->get_failed_statuses(), true ) )
+			? 'failed'
+			: 'success';
 	}
 
 }

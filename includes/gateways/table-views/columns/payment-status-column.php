@@ -24,6 +24,10 @@ class Payment_Status_Column extends Column_Advanced_Base {
 				'type' => self::STATUS_INFO,
 				'text' => __( 'Created', 'jet-form-builder' ),
 			),
+			'VOIDED'    => array(
+				'type' => self::STATUS_FAILED,
+				'text' => __( 'Voided', 'jet-form-builder' ),
+			),
 		);
 	}
 

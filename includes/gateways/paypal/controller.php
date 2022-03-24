@@ -13,8 +13,8 @@ class Controller extends Base_Scenario_Gateway {
 
 	const ID = 'paypal';
 
-	public $data = false;
-	public $message = false;
+	public $data     = false;
+	public $message  = false;
 	public $redirect = false;
 
 	protected $token_query_name = 'token';

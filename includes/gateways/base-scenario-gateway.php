@@ -77,14 +77,6 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	// statuses from scenario
 
 	/**
-	 * @return array
-	 * @throws Gateway_Exception
-	 */
-	public function failed_statuses() {
-		return $this->query_scenario()->get_failed_statuses();
-	}
-
-	/**
 	 * @return mixed
 	 * @throws Gateway_Exception
 	 */

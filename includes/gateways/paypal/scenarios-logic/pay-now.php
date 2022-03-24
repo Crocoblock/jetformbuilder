@@ -176,7 +176,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 
 	/**
-	 * @throws Gateway_Exception|Repository_Exception
+	 * @throws Repository_Exception|Gateway_Exception
 	 */
 	public function process_after() {
 		$payment = ( new Api_Actions\Capture_Payment_Action() )
@@ -185,7 +185,13 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			->send_request();
 
 		if ( isset( $payment['message'] ) ) {
-			throw new Gateway_Exception( $payment['message'] );
+			try {
+				$this->save_failed_payment( $payment );
+			} catch ( Sql_Exception $exception ) {
+				return;
+			} finally {
+				throw new Gateway_Exception( $this->get_meta_message( 'VOIDED' ), $payment['message'] );
+			}
 		}
 
 		try {
@@ -257,6 +263,22 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			array(
 				'payment_id'        => $this->get_scenario_row( 'id' ),
 				'payer_shipping_id' => $payer_ship_id,
+			)
+		);
+	}
+
+	/**
+	 * @param array $payment
+	 *
+	 * @throws Sql_Exception
+	 */
+	public function save_failed_payment( array $payment ) {
+		( new Payment_Model() )->update(
+			array(
+				'status' => 'VOIDED',
+			),
+			array(
+				'id' => $this->get_scenario_row( 'id' ),
 			)
 		);
 	}

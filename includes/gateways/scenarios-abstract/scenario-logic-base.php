@@ -110,6 +110,28 @@ abstract class Scenario_Logic_Base {
 	}
 
 	/**
+	 * @return array
+	 * @throws Repository_Exception
+	 */
+	protected function init_request(): array {
+		if ( ! empty( jet_fb_action_handler()->request_data ) ) {
+			return jet_fb_action_handler()->request_data;
+		}
+		$record = $this->get_scenario_row( 'record' );
+
+		try {
+			$request = Record_Fields_View::get_request_list( $record['id'] ?? 0 );
+		} catch ( Query_Builder_Exception $exception ) {
+			$request = array();
+		}
+		// For backward compatibility with JetAppointment & JetBooking
+		jet_fb_gateway_current()->set_form_data( $request );
+		jet_fb_action_handler()->add_request( $request );
+
+		return $request;
+	}
+
+	/**
 	 * Process status notification and enqueue message
 	 *
 	 * @param string $type [description]
@@ -120,14 +142,8 @@ abstract class Scenario_Logic_Base {
 	public function process_status( $type = 'success' ) {
 		$entry = $this->get_scenario_row();
 
-		try {
-			$request = Record_Fields_View::get_request_list( $entry['record']['id'] ?? 0 );
-		} catch ( Query_Builder_Exception $exception ) {
-			$request = array();
-		}
-
-		// For backward compatibility with JetAppointment & JetBooking
-		jet_fb_gateway_current()->set_form_data( $request );
+		// save form request to Action_Handler & current gateway controller
+		$this->init_request();
 
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
 
@@ -150,8 +166,6 @@ abstract class Scenario_Logic_Base {
 				jet_fb_action_handler()->unregister_action( $index );
 			}
 		}
-
-		jet_fb_action_handler()->add_request( $request );
 
 		( new Action_Default_Executor() )->soft_run_actions();
 	}
@@ -193,9 +207,7 @@ abstract class Scenario_Logic_Base {
 	}
 
 	public function get_process_status() {
-		return in_array( $this->get_scenario_row( 'status' ), $this->get_failed_statuses(), true )
-			? 'failed'
-			: 'success';
+		return $this->get_status_type( $this->get_scenario_row( 'status' ) );
 	}
 
 	public function get_queried_token() {

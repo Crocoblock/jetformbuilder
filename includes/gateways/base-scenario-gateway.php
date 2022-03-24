@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -63,6 +64,12 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 			return;
 		} catch ( Skip_Exception $exception ) {
 			return;
+		} catch ( Action_Exception $exception ) {
+			$this->send_response(
+				array(
+					'status' => $exception->getMessage(),
+				)
+			);
 		} catch ( Handler_Exception $exception ) {
 			$exception->dynamic_error();
 

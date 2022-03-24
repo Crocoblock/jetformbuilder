@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -68,7 +69,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	}
 
 	/**
-	 * @throws Gateway_Exception|Repository_Exception
+	 * @throws Repository_Exception|Gateway_Exception
 	 */
 	public function create_resource() {
 		$payment = ( new Api_Actions\Pay_Now_Action() )
@@ -176,7 +177,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 
 	/**
-	 * @throws Repository_Exception|Gateway_Exception
+	 * @throws Repository_Exception|Action_Exception|Gateway_Exception
 	 */
 	public function process_after() {
 		$payment = ( new Api_Actions\Capture_Payment_Action() )
@@ -185,13 +186,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			->send_request();
 
 		if ( isset( $payment['message'] ) ) {
-			try {
-				$this->save_failed_payment( $payment );
-			} catch ( Sql_Exception $exception ) {
-				return;
-			} finally {
-				throw new Gateway_Exception( $this->get_meta_message( 'VOIDED' ), $payment['message'] );
-			}
+			$this->on_error( $payment );
 		}
 
 		try {
@@ -205,6 +200,37 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			Execution_Builder::instance()->transaction_rollback();
 
 			throw new Gateway_Exception( $exception->getMessage() );
+		}
+	}
+
+	/**
+	 * @param array $payment
+	 *
+	 * @throws Action_Exception
+	 * @throws Gateway_Exception
+	 * @throws Repository_Exception
+	 */
+	private function on_error( array $payment ) {
+		$this->scenario_row(
+			array(
+				'status' => 'VOIDED',
+			)
+		);
+		try {
+			( new Payment_Model() )->update(
+				array(
+					'status' => 'VOIDED',
+				),
+				array(
+					'id' => $this->get_scenario_row( 'id' ),
+				)
+			);
+		} catch ( Sql_Exception $exception ) {
+			return;
+		} finally {
+			$this->process_status( 'failed' );
+
+			throw new Gateway_Exception( $this->get_meta_message( 'VOIDED' ), $payment['message'] );
 		}
 	}
 
@@ -263,22 +289,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			array(
 				'payment_id'        => $this->get_scenario_row( 'id' ),
 				'payer_shipping_id' => $payer_ship_id,
-			)
-		);
-	}
-
-	/**
-	 * @param array $payment
-	 *
-	 * @throws Sql_Exception
-	 */
-	public function save_failed_payment( array $payment ) {
-		( new Payment_Model() )->update(
-			array(
-				'status' => 'VOIDED',
-			),
-			array(
-				'id' => $this->get_scenario_row( 'id' ),
 			)
 		);
 	}

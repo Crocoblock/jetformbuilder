@@ -67,7 +67,7 @@ const selectors = {
 	getLoading( state, actionId ) {
 		const actionIndex = selectors.getLoadingIndex( state, actionId );
 
-		return - 1 !== actionIndex ? state.loadingState[ actionIndex ] : DEFAULT_LOADING_STATE;
+		return - 1 !== actionIndex ? state.loadingState[ actionIndex ] : { ...DEFAULT_LOADING_STATE };
 	},
 	getCurrentLoading( state ) {
 		const actionId = state.currentAction?.id;

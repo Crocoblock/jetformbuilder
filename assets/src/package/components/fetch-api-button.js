@@ -22,11 +22,12 @@ function FetchApiButton( {
 	setResultFail,
 	onLoading = () => {},
 	onSuccess = () => {},
-	onFail = () => {}
+	onFail = () => {},
+	isHidden = false,
 } ) {
 
 	const getLabel = () => {
-		if ( - 1 === loadingState.id && initialLabel ) {
+		if ( ( - 1 === loadingState.id || loadingState.loading ) && initialLabel ) {
 			return initialLabel;
 		}
 
@@ -35,8 +36,10 @@ function FetchApiButton( {
 
 	return <RequestButton
 		disabled={ loadingState.loading }
+		hasFetched={ loadingState.id }
 		label={ getLabel() }
 		className={ loadingState.buttonClassName }
+		isHidden={ isHidden }
 		customRequest={ () => {
 			setLoading( id );
 			onLoading();

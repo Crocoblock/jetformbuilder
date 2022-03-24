@@ -48,19 +48,25 @@ function PayNowScenario( {
 		<BaseControl
 			label={ scenarioLabel( 'fetch_button_label' ) }
 		>
-			<GatewayFetchButton
-				initialLabel={ scenarioLabel( 'fetch_button' ) }
-				label={ scenarioLabel( 'fetch_button_retry' ) }
-				apiArgs={ {
-					...scenarioSource.fetch,
-					data: {
-						client_id: getSpecificOrGlobal( 'client_id' ),
-						secret: getSpecificOrGlobal( 'secret' ),
-					},
-				} }
-				onSuccess={ displayNotice( 'success' ) }
-				onFail={ displayNotice( 'error' ) }
-			/>
+			<div className="jet-user-fields-map__list">
+				{ ( ! loadingGateway.success && ! loadingGateway.loading ) && <span
+					className={ 'description-controls' }
+				>
+					{ scenarioLabel( 'fetch_button_help' ) }
+				</span> }
+				<GatewayFetchButton
+					initialLabel={ scenarioLabel( 'fetch_button' ) }
+					label={ scenarioLabel( 'fetch_button_retry' ) }
+					apiArgs={ {
+						...scenarioSource.fetch,
+						data: {
+							client_id: getSpecificOrGlobal( 'client_id' ),
+							secret: getSpecificOrGlobal( 'secret' ),
+						},
+					} }
+					onFail={ displayNotice( 'error' ) }
+				/>
+			</div>
 		</BaseControl>
 		{ loadingGateway.success && <>
 			<TextControl

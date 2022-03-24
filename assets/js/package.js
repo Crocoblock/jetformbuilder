@@ -672,10 +672,12 @@ function FetchApiButton(_ref) {
       _ref$onSuccess = _ref.onSuccess,
       onSuccess = _ref$onSuccess === void 0 ? function () {} : _ref$onSuccess,
       _ref$onFail = _ref.onFail,
-      onFail = _ref$onFail === void 0 ? function () {} : _ref$onFail;
+      onFail = _ref$onFail === void 0 ? function () {} : _ref$onFail,
+      _ref$isHidden = _ref.isHidden,
+      isHidden = _ref$isHidden === void 0 ? false : _ref$isHidden;
 
   var getLabel = function getLabel() {
-    if (-1 === loadingState.id && initialLabel) {
+    if ((-1 === loadingState.id || loadingState.loading) && initialLabel) {
       return initialLabel;
     }
 
@@ -684,8 +686,10 @@ function FetchApiButton(_ref) {
 
   return wp.element.createElement(_request_button__WEBPACK_IMPORTED_MODULE_0__["default"], {
     disabled: loadingState.loading,
+    hasFetched: loadingState.id,
     label: getLabel(),
     className: loadingState.buttonClassName,
+    isHidden: isHidden,
     customRequest: function customRequest() {
       setLoading(id);
       onLoading();
@@ -1854,7 +1858,9 @@ function GatewayFetchButton(_ref) {
       _ref$onSuccess = _ref.onSuccess,
       onSuccess = _ref$onSuccess === void 0 ? function () {} : _ref$onSuccess,
       _ref$onFail = _ref.onFail,
-      onFail = _ref$onFail === void 0 ? function () {} : _ref$onFail;
+      onFail = _ref$onFail === void 0 ? function () {} : _ref$onFail,
+      _ref$isHidden = _ref.isHidden,
+      isHidden = _ref$isHidden === void 0 ? false : _ref$isHidden;
   return wp.element.createElement(_fetch_api_button__WEBPACK_IMPORTED_MODULE_0__["default"], {
     id: gatewayRequestId,
     loadingState: loadingGateway,
@@ -1863,7 +1869,8 @@ function GatewayFetchButton(_ref) {
     apiArgs: apiArgs,
     onFail: onFail,
     onLoading: onLoading,
-    onSuccess: onSuccess
+    onSuccess: onSuccess,
+    isHidden: isHidden
   });
 }
 
@@ -2529,6 +2536,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var __ = wp.i18n.__;
 var Button = wp.components.Button;
+var useEffect = wp.element.useEffect;
 
 function RequestButton(_ref) {
   var label = _ref.label,
@@ -2547,7 +2555,11 @@ function RequestButton(_ref) {
       _ref$disabled = _ref.disabled,
       disabled = _ref$disabled === void 0 ? false : _ref$disabled,
       _ref$customRequest = _ref.customRequest,
-      customRequest = _ref$customRequest === void 0 ? false : _ref$customRequest;
+      customRequest = _ref$customRequest === void 0 ? false : _ref$customRequest,
+      _ref$isHidden = _ref.isHidden,
+      isHidden = _ref$isHidden === void 0 ? false : _ref$isHidden,
+      _ref$hasFetched = _ref.hasFetched,
+      hasFetched = _ref$hasFetched === void 0 ? -1 : _ref$hasFetched;
 
   var defaultRequest = function defaultRequest() {
     onLoading();
@@ -2571,6 +2583,16 @@ function RequestButton(_ref) {
       onFailRequest();
     }
   };
+
+  useEffect(function () {
+    if (isHidden && -1 === hasFetched) {
+      request();
+    }
+  }, []);
+
+  if (isHidden) {
+    return null;
+  }
 
   return wp.element.createElement(Button, {
     disabled: disabled,
@@ -4201,7 +4223,7 @@ var selectors = {
   },
   getLoading: function getLoading(state, actionId) {
     var actionIndex = selectors.getLoadingIndex(state, actionId);
-    return -1 !== actionIndex ? state.loadingState[actionIndex] : DEFAULT_LOADING_STATE;
+    return -1 !== actionIndex ? state.loadingState[actionIndex] : _objectSpread({}, DEFAULT_LOADING_STATE);
   },
   getCurrentLoading: function getCurrentLoading(state) {
     var _state$currentAction;

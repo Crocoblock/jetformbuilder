@@ -21,6 +21,10 @@ class Fake_Wc_Add_To_Cart extends Base {
 		return true;
 	}
 
+	public function dependence() {
+		return ! jet_form_builder()->addons_manager->is_active();
+	}
+
 	/**
 	 * @param $request array - Form data
 	 * @param $handler Action_Handler

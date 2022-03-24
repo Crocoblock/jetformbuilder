@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Rest_Api;
 
 
-use Jet_Form_Builder\Classes\Http_Tools;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 
 trait Dynamic_Rest_Url_Trait {
 

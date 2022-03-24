@@ -4,7 +4,7 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Classes\Http_Tools;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;

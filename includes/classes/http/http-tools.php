@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes;
+namespace Jet_Form_Builder\Classes\Http;
 
 use Jet_Form_Builder\Plugin;
 

@@ -4,6 +4,7 @@ const {
 	Button,
 } = wp.components;
 
+const { useEffect } = wp.element;
 
 function RequestButton( {
 	label,
@@ -19,6 +20,8 @@ function RequestButton( {
 	},
 	disabled = false,
 	customRequest = false,
+	isHidden = false,
+	hasFetched = -1
 } ) {
 
 	const defaultRequest = () => {
@@ -40,6 +43,16 @@ function RequestButton( {
 			onFailRequest();
 		}
 	};
+
+	useEffect( () => {
+		if ( isHidden && -1 === hasFetched ) {
+			request();
+		}
+	}, [] );
+
+	if ( isHidden ) {
+		return null;
+	}
 
 	return <Button
 		disabled={ disabled }

@@ -40,11 +40,13 @@ const registerJfbPlugin = plugin => {
 	registerPlugin( base.name, settings );
 };
 
-addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
-	plugins.push( scheduleAddon, limitAddon );
+if ( ! JetFormEditorData.iasActivePro ) {
+	addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
+		plugins.push( scheduleAddon, limitAddon );
 
-	return plugins;
-}, 0 );
+		return plugins;
+	}, 0 );
+}
 
 export default function RegisterPlugins() {
 	const sortedPlugins = [];

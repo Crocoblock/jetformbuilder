@@ -8598,7 +8598,11 @@ function PayNowScenario(_ref) {
 
   return wp.element.createElement(React.Fragment, null, wp.element.createElement(BaseControl, {
     label: scenarioLabel('fetch_button_label')
-  }, wp.element.createElement(GatewayFetchButton, {
+  }, wp.element.createElement("div", {
+    className: "jet-user-fields-map__list"
+  }, !loadingGateway.success && !loadingGateway.loading && wp.element.createElement("span", {
+    className: 'description-controls'
+  }, scenarioLabel('fetch_button_help')), wp.element.createElement(GatewayFetchButton, {
     initialLabel: scenarioLabel('fetch_button'),
     label: scenarioLabel('fetch_button_retry'),
     apiArgs: _objectSpread(_objectSpread({}, scenarioSource.fetch), {}, {
@@ -8607,9 +8611,8 @@ function PayNowScenario(_ref) {
         secret: getSpecificOrGlobal('secret')
       }
     }),
-    onSuccess: displayNotice('success'),
     onFail: displayNotice('error')
-  })), loadingGateway.success && wp.element.createElement(React.Fragment, null, wp.element.createElement(TextControl, {
+  }))), loadingGateway.success && wp.element.createElement(React.Fragment, null, wp.element.createElement(TextControl, {
     label: scenarioLabel('currency'),
     key: "paypal_currency_code_setting",
     value: gatewaySpecific.currency,
@@ -9770,13 +9773,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var __ = wp.i18n.__;
 
-function PluginScheduleForm() {
-  return wp.element.createElement(React.Fragment, null, wp.element.createElement("a", {
-    href: '#'
-  }, __('See Pro Addon', 'jet-form-builder')));
+function PluginLimitFormResponses() {
+  var limitResponses = JetFormEditorData.utmLinks.limitResponses;
+  return wp.element.createElement("p", null, __('You’re using free version of JetFormBuilder.') + "\n", wp.element.createElement("a", {
+    href: limitResponses,
+    target: "_blank"
+  }, __('Upgrade', 'jet-form-builder')), ' ' + __('to unlock this feature.', 'jet-form-builder'));
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginScheduleForm);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginLimitFormResponses);
 
 /***/ }),
 
@@ -9853,10 +9858,13 @@ var registerJfbPlugin = function registerJfbPlugin(plugin) {
   registerPlugin(base.name, settings);
 };
 
-addFilter('jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', function (plugins) {
-  plugins.push(_schedule_addon__WEBPACK_IMPORTED_MODULE_7__["default"], _limit_addon__WEBPACK_IMPORTED_MODULE_6__["default"]);
-  return plugins;
-}, 0);
+if (!JetFormEditorData.iasActivePro) {
+  addFilter('jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', function (plugins) {
+    plugins.push(_schedule_addon__WEBPACK_IMPORTED_MODULE_7__["default"], _limit_addon__WEBPACK_IMPORTED_MODULE_6__["default"]);
+    return plugins;
+  }, 0);
+}
+
 function RegisterPlugins() {
   var sortedPlugins = [];
   var jfbPlugins = applyFilters('jet.fb.register.plugins', [_arguments__WEBPACK_IMPORTED_MODULE_1__["default"], _captcha__WEBPACK_IMPORTED_MODULE_2__["default"], _gateways__WEBPACK_IMPORTED_MODULE_3__["default"], _actions__WEBPACK_IMPORTED_MODULE_0__["default"], _preset__WEBPACK_IMPORTED_MODULE_4__["default"], _messages__WEBPACK_IMPORTED_MODULE_5__["default"]]);
@@ -10162,13 +10170,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var __ = wp.i18n.__;
 
-function PluginLimitFormResponses() {
-  return wp.element.createElement(React.Fragment, null, wp.element.createElement("a", {
-    href: '#'
-  }, __('See Pro Addon', 'jet-form-builder')));
+function PluginScheduleForm() {
+  var scheduleForm = JetFormEditorData.utmLinks.scheduleForm;
+  return wp.element.createElement("p", null, __('You’re using free version of JetFormBuilder.') + "\n", wp.element.createElement("a", {
+    href: scheduleForm,
+    target: "_blank"
+  }, __('Upgrade', 'jet-form-builder')), ' ' + __('to unlock this feature.', 'jet-form-builder'));
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginLimitFormResponses);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PluginScheduleForm);
 
 /***/ }),
 

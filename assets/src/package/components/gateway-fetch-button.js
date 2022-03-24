@@ -15,7 +15,8 @@ function GatewayFetchButton( {
 	loadingGateway,
 	onLoading = () => {},
 	onSuccess = () => {},
-	onFail = () => {}
+	onFail = () => {},
+	isHidden = false,
 } ) {
 
 	return <FetchApiButton
@@ -27,6 +28,7 @@ function GatewayFetchButton( {
 		onFail={ onFail }
 		onLoading={ onLoading }
 		onSuccess={ onSuccess }
+		isHidden={ isHidden }
 	/>;
 }
 

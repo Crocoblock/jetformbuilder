@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Classes\Http_Tools;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;

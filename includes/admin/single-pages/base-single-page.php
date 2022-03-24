@@ -10,10 +10,12 @@ use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 
 abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
 
 	use Admin_Page_Trait;
+	use With_Theme_Info;
 
 	protected $id;
 

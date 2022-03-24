@@ -367,6 +367,12 @@ class Editor {
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
 				'argumentsSource'         => Tools::get_form_settings_options(),
+				'utmLinks'                => array(
+					'allProActions'  => '#',
+					'limitResponses' => '#',
+					'scheduleForm'   => '#',
+				),
+				'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
 			)
 		);
 

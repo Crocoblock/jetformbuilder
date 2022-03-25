@@ -40,7 +40,7 @@ const registerJfbPlugin = plugin => {
 	registerPlugin( base.name, settings );
 };
 
-if ( ! JetFormEditorData.iasActivePro ) {
+if ( ! JetFormEditorData.isActivePro ) {
 	addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
 		plugins.push( scheduleAddon, limitAddon );
 

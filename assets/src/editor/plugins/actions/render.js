@@ -291,12 +291,12 @@ let PluginActions = ( { setCurrentAction } ) => {
 			>
 				{ __( '+ New Action', 'jet-form-builder' ) }
 			</Button>
-			<Button
+			{ ( ! JetFormEditorData.isActivePro ) && <Button
 				href='#'
 				variant='link'
 			>
 				{ __( 'All PRO Actions', 'jet-form-builder' ) }
-			</Button>
+			</Button> }
 		</div>
 		{ isEdit && <ActionModal
 			classNames={ [ 'width-60' ] }

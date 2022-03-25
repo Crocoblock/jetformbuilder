@@ -1,5 +1,5 @@
-import BlockEdit from "./edit";
-import metadata from "@blocks/color-picker-field/block.json";
+import BlockEdit from './edit';
+import metadata from '@blocks/color-picker-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -14,8 +14,11 @@ const { name, icon } = metadata;
  *  - blockName
  *  - attrHelp
  */
+const description = 'Try more options with Advanced Color Picker addon';
+
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: JetFormEditorData.isActivePro ? '' : description,
 	edit: BlockEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {

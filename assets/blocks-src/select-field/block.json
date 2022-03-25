@@ -2,7 +2,6 @@
 	"apiVersion": 2,
 	"name": "jet-forms/select-field",
 	"category": "jet-form-builder-fields",
-	"description": "Try more options with Hierarchical Select addon",
 	"keywords": [
 		"jetformbuilder",
 		"field",

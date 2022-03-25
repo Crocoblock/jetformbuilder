@@ -292,7 +292,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 				{ __( '+ New Action', 'jet-form-builder' ) }
 			</Button>
 			{ ( ! JetFormEditorData.isActivePro ) && <Button
-				href='#'
+				href={ JetFormEditorData.utmLinks.allProActions }
 				variant='link'
 			>
 				{ __( 'All PRO Actions', 'jet-form-builder' ) }

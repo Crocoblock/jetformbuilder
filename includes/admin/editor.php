@@ -4,7 +4,7 @@ namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Actions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Classes\Condition_Helper;
+use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
@@ -355,6 +355,10 @@ class Editor {
 
 		$conditions_settings = ( new Condition_Manager() )->get_settings();
 
+		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
+		$addons  = JET_FORM_BUILDER_SITE . '/addons/';
+		$pricing = JET_FORM_BUILDER_SITE . '/pricing/';
+
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
@@ -368,9 +372,9 @@ class Editor {
 				'actionConditionSettings' => $conditions_settings,
 				'argumentsSource'         => Tools::get_form_settings_options(),
 				'utmLinks'                => array(
-					'allProActions'  => '#',
-					'limitResponses' => '#',
-					'scheduleForm'   => '#',
+					'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
+					'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),
+					'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
 				),
 				'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
 			)

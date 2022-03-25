@@ -18,7 +18,7 @@ const description = 'Try more options with Hierarchical Select addon';
 
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	description: JetFormEditorData.isActivePro ? '' : description,
+	description,
 	edit: SelectEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {

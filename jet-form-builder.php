@@ -36,16 +36,10 @@ function jet_form_builder_init() {
 				return $links;
 			}
 
-			$theme = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
+			$utm = new \Jet_Form_Builder\Classes\Http\Utm_Url( 'wp-dashboard/jet-form-builder-plugins-page' );
+			$utm->set_campaign( 'go-pro-button' );
 
-			$url = add_query_arg(
-				array(
-					'utm_source'   => 'wp-dashboard/jet-form-builder-plugins-page',
-					'utm_medium'   => 'license-not-activated/' . $theme->author_slug(),
-					'utm_campaign' => 'go-pro-button',
-				),
-				JET_FORM_BUILDER_SITE . '/pricing/'
-			);
+			$url = $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' );
 
 			wp_enqueue_style(
 				'jet-fb-admin',
@@ -54,7 +48,9 @@ function jet_form_builder_init() {
 				JET_FORM_BUILDER_VERSION
 			);
 
-			$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">Go Pro</a>";
+			$label = __( 'Go Pro', 'jet-form-builder' );
+
+			$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">{$label}</a>";
 
 			return $links;
 		}

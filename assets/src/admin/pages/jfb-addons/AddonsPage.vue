@@ -214,8 +214,8 @@ export default {
 		goProLink() {
 			let pricingPageUrl = this.miscInfo.pricingPageUrl,
 				utmParams      = this.getUtmParamsString( {
-					utm_source: `dashboard/jet-form-builder-addons-page`,
-					utm_medium: `crocoblock-license/${ this.themeInfo.theme }`,
+					utm_source: `jetformbuilder-dashboard/addons`,
+					utm_medium: `license-not-activated/${ this.themeInfo.authorSlug }`,
 					utm_campaign: 'go-pro-button',
 				} );
 

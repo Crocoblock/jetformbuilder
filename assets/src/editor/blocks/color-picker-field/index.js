@@ -18,7 +18,7 @@ const description = 'Try more options with Advanced Color Picker addon';
 
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	description: JetFormEditorData.isActivePro ? '' : description,
+	description,
 	edit: BlockEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {

@@ -26,6 +26,7 @@
 				</div>
 				<div
 					class="jfb-addons__item-update"
+					v-if="$parent.isLicenseActivated"
 				>
 					<div v-if="!updateAvaliable">Your plugin is up to date</div>
 					<div v-if="updateAvaliable">
@@ -163,10 +164,12 @@ export default {
 		},
 
 		learnMoreUrl() {
+			const license = this.$parent.isLicenseActivated ? 'jetformbuilder-license' : 'license-not-activated';
+
 			let demoUrl = this.addonData.demo,
 				utmParams = this.$parent.getUtmParamsString( {
-					utm_source: `dashboard/jet-form-builder-addons-page`,
-					utm_medium: `crocoblock-license/${ this.$parent.themeInfo.theme }`,
+					utm_source: `jetformbuilder-dashboard/addons`,
+					utm_medium: `${license}/${ this.$parent.themeInfo.authorSlug }`,
 					utm_campaign: 'addon-learn-more',
 				} );
 

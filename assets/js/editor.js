@@ -628,7 +628,7 @@ var settings = {
       __html: icon
     }
   }),
-  description: JetFormEditorData.isActivePro ? '' : description,
+  description: description,
   edit: _edit__WEBPACK_IMPORTED_MODULE_0__["default"],
   useEditProps: ['uniqKey', 'blockName', 'attrHelp'],
   example: {
@@ -3893,7 +3893,7 @@ var settings = {
       __html: icon
     }
   }),
-  description: JetFormEditorData.isActivePro ? '' : description,
+  description: description,
   edit: _edit__WEBPACK_IMPORTED_MODULE_0__["default"],
   useEditProps: ['uniqKey', 'attrHelp', 'blockName'],
   example: {
@@ -9043,7 +9043,7 @@ var PluginActions = function PluginActions(_ref) {
       })]));
     }
   }, __('+ New Action', 'jet-form-builder')), !JetFormEditorData.isActivePro && wp.element.createElement(Button, {
-    href: "#",
+    href: JetFormEditorData.utmLinks.allProActions,
     variant: "link"
   }, __('All PRO Actions', 'jet-form-builder'))), isEdit && wp.element.createElement(ActionModal, {
     classNames: ['width-60'],

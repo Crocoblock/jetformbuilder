@@ -15,25 +15,13 @@ class Pay_Now extends Scenario_View_Base {
 		return _x( 'Pay Now', 'Paypal gateway editor data', 'jet-form-builder' );
 	}
 
-	public function get_columns_handlers(): array {
-		return array();
-	}
-
-	public function get_columns_headings(): array {
-		return array();
-	}
-
-	public function get_list(): array {
-		return array();
-	}
-
 	public function get_editor_labels(): array {
 		return array(
 			'currency'           => __( 'Currency Code', 'jet-form-builder' ),
 			'fetch_button'       => __( 'Sync Access Token', 'jet-form-builder' ),
 			'fetch_button_retry' => __( 'Access Token updated', 'jet-form-builder' ),
 			'fetch_button_label' => __( 'Request Button', 'jet-form-builder' ),
-			'fetch_button_help'  => __( 'To further manage the payment settings, you need to click on the button', 'jet-form-builder' ),
+			'fetch_button_help'  => __( 'Click on the button to further manage the payment settings', 'jet-form-builder' ),
 		);
 	}
 
@@ -46,11 +34,4 @@ class Pay_Now extends Scenario_View_Base {
 		);
 	}
 
-	public function get_raw_list( array $args ): array {
-		return array();
-	}
-
-	public function get_prepared_list( array $custom_list = array() ): array {
-		return array();
-	}
 }

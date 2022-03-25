@@ -16,6 +16,10 @@ class Payment_Type_Column extends Column_Advanced_Base {
 		return __( 'Payment Type', 'jet-form-builder' );
 	}
 
+	public function get_type_name( array $record ): string {
+		return __( 'Initial payment', 'jet-form-builder' );
+	}
+
 	/**
 	 * @param array $record
 	 *
@@ -26,7 +30,7 @@ class Payment_Type_Column extends Column_Advanced_Base {
 		$single = ( new Single_Payment_Page() )->set_id( $record['id'] ?? 0 );
 
 		return array(
-			'text'    => __( 'Initial payment', 'jet-form-builder' ),
+			'text'    => $this->get_type_name( $record ),
 			'href'    => $single->get_url(),
 			'primary' => true,
 		);

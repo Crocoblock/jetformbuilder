@@ -57,14 +57,14 @@ class Redirect_To_Page extends Base {
 				return empty( $to_page ) ? false : get_permalink( $to_page );
 
 			case 'current_page':
-				return $this->get_action_handler()->get_refer();
+				return jet_fb_action_handler()->get_refer();
 
 			case 'inserted_post':
 				/** @var Insert_Post $insert_instance */
 				$insert_instance = jet_form_builder()->actions->get_actions( 'insert_post' );
 
 				if ( ! $insert_instance ) {
-					break;
+					return false;
 				}
 
 				$context = $insert_instance->get_inserted_post_context();
@@ -82,7 +82,7 @@ class Redirect_To_Page extends Base {
 			default:
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
 
-				$request = $this->get_action_handler()->request_data;
+				$request = jet_fb_action_handler()->request_data;
 
 				$to_url = ( new Dynamic_Preset() )->parse_value( $this->settings, 'redirect_url' );
 				$parser = ( new Macros_Parser() )->set_replacements( $request );

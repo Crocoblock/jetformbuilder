@@ -139,11 +139,12 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @return Base
 	 */
 	private function run_jsm_controls(): Base {
-		if ( method_exists( $this, 'jsm_controls' ) ) {
-			$this->jsm_controls();
-		} elseif ( method_exists( $this, '_jsm_register_controls' ) ) {
+		if ( method_exists( $this, '_jsm_register_controls' ) ) {
 			$this->_jsm_register_controls();
+
+			return $this;
 		}
+		$this->jsm_controls();
 
 		return $this;
 	}

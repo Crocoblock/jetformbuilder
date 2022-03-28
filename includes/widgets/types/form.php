@@ -3046,7 +3046,7 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'   => array(
-						$this->selector( '-row' ) => 'justify-content: {{VALUE}};',
+						$this->selector( '-row .%s__action-button-wrapper[data-type="next"]' ) => 'justify-content: {{VALUE}};',
 					),
 				)
 			);
@@ -3197,7 +3197,7 @@ class Form extends Jfb_Widget_Base {
 						),
 					),
 					'selectors'   => array(
-						$this->selector( '-row' ) => 'justify-content: {{VALUE}};',
+						$this->selector( '-row .%s__action-button-wrapper[data-type="prev"]' ) => 'justify-content: {{VALUE}};',
 					),
 				)
 			);

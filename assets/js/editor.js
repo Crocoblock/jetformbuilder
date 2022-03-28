@@ -4015,6 +4015,7 @@ var _wp$element = wp.element,
     useState = _wp$element.useState,
     useEffect = _wp$element.useEffect;
 var defaultClasses = ['jet-form-builder__action-button'];
+var defaultWrapperClasses = ['jet-form-builder__action-button-wrapper'];
 function ActionButtonEdit(props) {
   var attributes = props.attributes,
       setAttributes = props.setAttributes,
@@ -4045,7 +4046,7 @@ function ActionButtonEdit(props) {
 
   var classesWrapper = function classesWrapper() {
     if (!attributes.action_type) {
-      return [];
+      return [].concat(defaultWrapperClasses);
     }
 
     var action = JetFormActionButton.actions.find(function (elem) {
@@ -4053,10 +4054,10 @@ function ActionButtonEdit(props) {
     });
 
     if (!action) {
-      return [];
+      return [].concat(defaultWrapperClasses);
     }
 
-    return [].concat(defaultClasses, [action.wrapper_class]);
+    return [].concat(defaultWrapperClasses, [action.wrapper_class]);
   };
 
   var _useState = useState(classesButton),
@@ -4073,9 +4074,7 @@ function ActionButtonEdit(props) {
     setButtonClasses(classesButton());
     setWrapperClasses(classesWrapper());
   }, [attributes.action_type]);
-  var blockProps = useBlockProps({
-    className: wrapperClasses.join(' ')
-  });
+  var blockProps = useBlockProps();
   return [isSelected && wp.element.createElement(InspectorControls, {
     key: uniqKey('InspectorControls')
   }, wp.element.createElement(GeneralFields, _extends({
@@ -4097,7 +4096,9 @@ function ActionButtonEdit(props) {
     key: uniqKey('AdvancedFields')
   }, props))), wp.element.createElement("div", _extends({
     key: uniqKey('submit-wrap')
-  }, blockProps), wp.element.createElement(Button, {
+  }, blockProps), wp.element.createElement("div", {
+    className: wrapperClasses.join(' ')
+  }, wp.element.createElement(Button, {
     isPrimary: true,
     className: buttonClasses.join(' '),
     key: uniqKey('place_holder_block')
@@ -4110,7 +4111,7 @@ function ActionButtonEdit(props) {
         label: label
       });
     }
-  })))];
+  }))))];
 }
 
 /***/ }),

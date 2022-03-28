@@ -131,7 +131,7 @@ class Action_Button extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( '__submit-wrap' ) => 'align-items: {{VALUE}};',
+					$this->selector( '__action-button-wrapper' ) => 'justify-content: {{VALUE}};',
 				),
 				'attributes'   => array(
 					'default' => array(

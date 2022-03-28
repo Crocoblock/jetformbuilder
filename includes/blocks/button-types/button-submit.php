@@ -12,11 +12,11 @@ class Button_Submit extends Button_Type_Base {
 	}
 
 	public function label(): string {
-		return __( 'Submit Form', 'jet-from-builder' );
+		return __( 'Submit Form', 'jet-form-builder' );
 	}
 
 	public function preset_label(): string {
-		return __( 'Submit', 'jet-from-builder' );
+		return __( 'Submit', 'jet-form-builder' );
 	}
 
 	public function html_attrs() {

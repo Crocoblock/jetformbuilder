@@ -3,9 +3,8 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-
 class Rest_Response extends \WP_REST_Response {
-	
+
 	public function get_custom_header_prefix(): string {
 		return 'X-JFB-';
 	}
@@ -19,7 +18,7 @@ class Rest_Response extends \WP_REST_Response {
 	}
 
 	public function set_headers_custom( $headers ) {
-		$prefix = $this->get_custom_header_prefix();
+		$prefix   = $this->get_custom_header_prefix();
 		$prepared = array();
 
 		foreach ( $headers as $name => $value ) {

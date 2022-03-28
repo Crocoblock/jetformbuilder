@@ -128,13 +128,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 var _JetFBComponents = JetFBComponents,
     TablePagination = _JetFBComponents.TablePagination,
-    EntriesTable = _JetFBComponents.EntriesTable;
+    EntriesTable = _JetFBComponents.EntriesTable,
+    FormBuilderPage = _JetFBComponents.FormBuilderPage;
 var _JetFBMixins = JetFBMixins,
     i18n = _JetFBMixins.i18n,
     PromiseWrapper = _JetFBMixins.PromiseWrapper,
@@ -154,7 +152,8 @@ var _Vuex = Vuex,
   components: {
     TablePagination: TablePagination,
     EntriesTable: EntriesTable,
-    ActionsWithFilters: _ActionsWithFilters__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ActionsWithFilters: _ActionsWithFilters__WEBPACK_IMPORTED_MODULE_0__["default"],
+    FormBuilderPage: FormBuilderPage
   },
   data: function data() {
     return {
@@ -414,7 +413,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAyMA;EACC,oBAAA;ACxMD;AD4MC;EACC,SAAA;ACzMF;AD4MC;EACC,yBAAA;AC1MF;AD4ME;EACC,gCAAA;AC1MH;AD6ME;EACC,yBAAA;AC3MH;AD8ME;EACC,yBAAA;AC5MH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAwMA;EACC,oBAAA;ACvMD;AD2MC;EACC,SAAA;ACxMF;AD2MC;EACC,yBAAA;ACzMF;AD2ME;EACC,gCAAA;ACzMH;AD4ME;EACC,yBAAA;AC1MH;AD6ME;EACC,yBAAA;AC3MH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&--not-viewed {\r\n\t\t\tbackground-color: #f7fdff;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -907,21 +906,13 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "FormBuilderPage",
     {
-      class: {
-        wrap: true,
-        "jet-form-builder-page": true,
-        "jet-form-builder-page--records": true,
+      attrs: {
+        title: _vm.__("JetFormBuilder Form Records", "jet-form-builder"),
       },
     },
     [
-      _c("h1", { staticClass: "cs-vui-title" }, [
-        _vm._v(
-          _vm._s(_vm.__("JetFormBuilder Form Records", "jet-form-builder"))
-        ),
-      ]),
-      _vm._v(" "),
       _c("ActionsWithFilters"),
       _vm._v(" "),
       _c("TablePagination"),

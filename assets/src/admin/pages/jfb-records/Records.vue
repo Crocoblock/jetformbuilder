@@ -1,15 +1,12 @@
 <template>
-	<div :class="{
-		'wrap': true,
-		'jet-form-builder-page': true,
-		'jet-form-builder-page--records': true,
-	}">
-		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Form Records', 'jet-form-builder' ) }}</h1>
+	<FormBuilderPage
+		:title="__( 'JetFormBuilder Form Records', 'jet-form-builder' )"
+	>
 		<ActionsWithFilters/>
 		<TablePagination/>
 		<EntriesTable/>
 		<TablePagination/>
-	</div>
+	</FormBuilderPage>
 </template>
 
 <script>
@@ -18,6 +15,7 @@ import ActionsWithFilters from './ActionsWithFilters';
 const {
 	TablePagination,
 	EntriesTable,
+	FormBuilderPage,
 } = JetFBComponents;
 
 const {
@@ -45,6 +43,7 @@ export default {
 		TablePagination,
 		EntriesTable,
 		ActionsWithFilters,
+		FormBuilderPage,
 	},
 	data() {
 		return {

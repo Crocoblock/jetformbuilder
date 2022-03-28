@@ -321,6 +321,8 @@ abstract class Base_Gateway_Action {
 		}
 		if ( is_wp_error( $this->get_response_body() ) ) {
 			/** @var \WP_Error $response */
+			$response = $this->get_response_body();
+
 			throw new Gateway_Exception(
 				$this->response_message( 'Internal error.' ),
 				$response->get_error_message(

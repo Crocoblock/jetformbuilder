@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Form_Records;
 use Jet_Form_Builder\Admin\Pages\Settings\Settings_Page;
+use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
@@ -72,19 +73,13 @@ class Stable_Pages_Manager {
 		$pages  = array();
 
 		if ( ! jet_form_builder()->addons_manager->is_active() ) {
-			$theme = new \Jet_Form_Builder\Classes\Theme\Theme_Info();
+			$utm = new Utm_Url( 'wp-dashboard/jetformbuilder-menu' );
+			$utm->set_campaign( 'go-pro-button' );
 
 			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),
 				'capability' => 'read',
-				'slug'       => add_query_arg(
-					array(
-						'utm_source'   => rawurlencode( 'wp-dashboard/jetformbuilder-menu' ),
-						'utm_medium'   => rawurlencode( 'license-not-activated/' . $theme->author_slug() ),
-						'utm_campaign' => 'go-pro-button',
-					),
-					JET_FORM_BUILDER_SITE . '/pricing/'
-				),
+				'slug'       => $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' ),
 			);
 		}
 

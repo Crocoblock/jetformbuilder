@@ -23,6 +23,9 @@ const {
 const { useState, useEffect } = wp.element;
 
 const defaultClasses = [ 'jet-form-builder__action-button' ];
+const defaultWrapperClasses = [
+	'jet-form-builder__action-button-wrapper',
+];
 
 export default function ActionButtonEdit( props ) {
 
@@ -51,15 +54,15 @@ export default function ActionButtonEdit( props ) {
 
 	const classesWrapper = () => {
 		if ( ! attributes.action_type ) {
-			return [];
+			return [ ...defaultWrapperClasses ];
 		}
 		const action = JetFormActionButton.actions.find( elem => attributes.action_type === elem.value );
 
 		if ( ! action ) {
-			return [];
+			return [ ...defaultWrapperClasses ];
 		}
 
-		return [ ...defaultClasses, action.wrapper_class ];
+		return [ ...defaultWrapperClasses, action.wrapper_class ];
 	};
 
 	const [ buttonClasses, setButtonClasses ] = useState( classesButton );
@@ -70,7 +73,7 @@ export default function ActionButtonEdit( props ) {
 		setWrapperClasses( classesWrapper() );
 	}, [ attributes.action_type ] );
 
-	const blockProps = useBlockProps( { className: wrapperClasses.join( ' ' ) } );
+	const blockProps = useBlockProps();
 
 	return [
 		isSelected && <InspectorControls
@@ -99,18 +102,20 @@ export default function ActionButtonEdit( props ) {
 			key={ uniqKey( 'submit-wrap' ) }
 			{ ...blockProps }
 		>
-			<Button
-				isPrimary
-				className={ buttonClasses.join( ' ' ) }
-				key={ uniqKey( 'place_holder_block' ) }
-			>
-				<RichText
-					placeholder='Input Submit label...'
-					allowedFormats={ [] }
-					value={ attributes.label }
-					onChange={ label => setAttributes( { label } ) }
-				/>
-			</Button>
+			<div className={ wrapperClasses.join( ' ' ) }>
+				<Button
+					isPrimary
+					className={ buttonClasses.join( ' ' ) }
+					key={ uniqKey( 'place_holder_block' ) }
+				>
+					<RichText
+						placeholder='Input Submit label...'
+						allowedFormats={ [] }
+						value={ attributes.label }
+						onChange={ label => setAttributes( { label } ) }
+					/>
+				</Button>
+			</div>
 		</div>,
 	];
 }

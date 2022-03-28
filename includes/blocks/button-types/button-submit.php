@@ -3,8 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
-
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 
 class Button_Submit extends Button_Type_Base {
@@ -14,11 +12,11 @@ class Button_Submit extends Button_Type_Base {
 	}
 
 	public function label(): string {
-		return __( 'Submit Form', 'jet-from-builder' );
+		return __( 'Submit Form', 'jet-form-builder' );
 	}
 
 	public function preset_label(): string {
-		return __( 'Submit', 'jet-from-builder' );
+		return __( 'Submit', 'jet-form-builder' );
 	}
 
 	public function html_attrs() {
@@ -35,8 +33,8 @@ class Button_Submit extends Button_Type_Base {
 			'type'  => 'reload' === $submit_type ? 'submit' : 'button',
 			'class' => array(
 				'button'  => $button,
-				'wrapper' => "jet-form-builder__{$this->slug()}-wrap"
-			)
+				'wrapper' => "jet-form-builder__{$this->slug()}-wrap",
+			),
 		);
 	}
 

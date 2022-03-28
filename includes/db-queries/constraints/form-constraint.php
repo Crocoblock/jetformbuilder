@@ -3,11 +3,9 @@
 
 namespace Jet_Form_Builder\Db_Queries\Constraints;
 
-
-use Jet_Form_Builder\Db_Queries\Base_Db_Constraint;
 use Jet_Form_Builder\Db_Queries\Models\Core_Post_Model;
 
-class Form_Constraint extends Base_Db_Constraint {
+class Form_Constraint extends Core_Table_Constraint {
 
 	public function __construct() {
 		$this->set_model( new Core_Post_Model() );

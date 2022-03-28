@@ -20,6 +20,13 @@ class Base_Db_Constraint {
 	protected $actions = array();
 
 	/**
+	 * Here we can check the engine of the table,
+	 * if it is not InnoDB - throw \Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception
+	 */
+	public function before_create() {
+	}
+
+	/**
 	 * @param array $keys
 	 *
 	 * @return $this

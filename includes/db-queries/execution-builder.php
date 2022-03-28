@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -244,7 +245,11 @@ class Execution_Builder {
 
 		foreach ( $model->foreign_relations() as $constraint ) {
 			$constraint->set_foreign_table( $model::table_name() );
-
+			try {
+				$constraint->before_create();
+			} catch ( Skip_Exception $exception ) {
+				continue;
+			}
 			// phpcs:ignore WordPress.DB
 			$wpdb->query( "ALTER TABLE `{$model::table()}` ADD {$constraint->build()}" );
 		}

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns;
 
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
+use Jet_Form_Builder\Classes\Post\Post_Tools;
 
 class Referrer_Link_Column extends Column_Advanced_Base {
 
@@ -17,9 +18,8 @@ class Referrer_Link_Column extends Column_Advanced_Base {
 	public function get_value( array $record = array() ) {
 		$id = parent::get_value( $record );
 
-		$text   = get_the_title( $id );
 		$params = array(
-			'text' => $text ?: '--',
+			'text' => Post_Tools::get_title( $id ),
 			'type' => 'external',
 		);
 

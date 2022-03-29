@@ -199,13 +199,34 @@ export default {
 			if ( action?.href ) {
 				return;
 			}
-			this.toggleDoingAction();
+			try {
+				this.beforeRowAction( action, record );
+			} catch ( error ) {
+				return;
+			}
 
-			this.dispatch( 'runRowAction', {
+			this.runRowAction( action, record );
+		},
+		getClickPayload( action, record ) {
+			return {
 				action: action.value,
 				context: CLICK_ACTION,
 				payload: [ getPrimaryId( record ) ],
-			} ).then( () => {
+			};
+		},
+		beforeRowAction( action, record ) {
+			this.dispatch(
+				'beforeRowAction',
+				this.getClickPayload( action, record ),
+			);
+		},
+		runRowAction( action, record ) {
+			this.toggleDoingAction();
+
+			this.dispatch(
+				'runRowAction',
+				this.getClickPayload( action, record ),
+			).then( () => {
 				this.toggleDoingAction();
 			} ).catch( () => {
 				this.toggleDoingAction();

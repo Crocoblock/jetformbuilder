@@ -4,14 +4,20 @@
 		target="_blank"
 		:class="{
 			'row-title': parsedJson.primary,
-			'with-flex': isExternal,
+			'with-flex': hasIcon,
 		}"
 		:title="parsedJson.title"
-	>{{ parsedJson.text }} <span
-		v-if="isExternal"
-		class="dashicons dashicons-external"
-		aria-hidden="true"
-	/></a>
+	>
+		<span>{{ parsedJson.text }}</span>
+		<span
+			v-if="hasIcon"
+			:class="{
+			'dashicons': true,
+			[ 'dashicons-' + parsedJson.type ]: true,
+		}"
+			aria-hidden="true"
+		/>
+	</a>
 </template>
 
 <script>
@@ -21,8 +27,8 @@ export default {
 	name: 'link--item',
 	mixins: [ ParseIncomingValueMixin ],
 	computed: {
-		isExternal() {
-			return 'external' === this.parsedJson.type;
+		hasIcon() {
+			return !! this.parsedJson.type;
 		},
 	},
 }

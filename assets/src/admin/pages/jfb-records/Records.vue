@@ -203,10 +203,6 @@ export default {
 }
 
 .cx-vue-list-table {
-	.cell--id.cell--id {
-		flex: 0.3;
-	}
-
 	.list-table-item {
 		background-color: #ffffff;
 

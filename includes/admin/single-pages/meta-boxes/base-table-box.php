@@ -9,7 +9,11 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 
 	use Table_Advanced_Record_Prepare_Trait;
 
-	private $editable_table = false;
+	protected $editable_table        = false;
+	protected $show_overflow         = false;
+	protected $show_overflow_control = false;
+	protected $offset                = 0;
+	protected $limit                 = 8;
 
 	final public function get_values(): array {
 		return $this->prepare_list();
@@ -18,8 +22,8 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 	public function get_list(): array {
 		return $this->get_raw_list(
 			array(
-				'offset' => 0,
-				'limit'  => 8,
+				'offset' => $this->offset,
+				'limit'  => $this->limit,
 			)
 		);
 	}
@@ -54,13 +58,29 @@ abstract class Base_Table_Box extends Base_Meta_Box {
 		return $this->editable_table;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function is_show_overflow(): bool {
+		return $this->show_overflow;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_show_overflow_control(): bool {
+		return $this->show_overflow_control;
+	}
+
 	public function to_array(): array {
 		return parent::to_array() + array(
-			'columns'           => $this->get_columns_headings(),
-			'render_type'       => self::TYPE_TABLE,
-			'is_editable_table' => $this->is_editable_table(),
-			'total'             => $this->get_total(),
-			'receive_url'       => $this->get_receive_endpoint(),
+			'columns'               => $this->get_columns_headings(),
+			'render_type'           => self::TYPE_TABLE,
+			'is_editable_table'     => $this->is_editable_table(),
+			'total'                 => $this->get_total(),
+			'receive_url'           => $this->get_receive_endpoint(),
+			'show_overflow'         => $this->is_show_overflow(),
+			'show_overflow_control' => $this->is_show_overflow_control(),
 		);
 	}
 

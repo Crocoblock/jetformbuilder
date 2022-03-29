@@ -1,7 +1,7 @@
 <template>
 	<div class="jet-fb-choose-action-wrapper">
 		<cx-vui-select
-			:placeholder="__( 'Select action...', 'jet-form-builder' )"
+			:placeholder="__( 'Bulk actions', 'jet-form-builder' )"
 			size="fullwidth"
 			:value="currentAction"
 			@input="setCurrentAction"

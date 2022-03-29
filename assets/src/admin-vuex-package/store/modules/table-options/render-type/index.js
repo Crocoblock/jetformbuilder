@@ -1,9 +1,7 @@
 export default {
-	state: () => (
-		{
-			renderType: ''
-		}
-	),
+	state: {
+		renderType: ''
+	},
 	getters: {
 		isTable: state => {
 			return 'table' === state.renderType;

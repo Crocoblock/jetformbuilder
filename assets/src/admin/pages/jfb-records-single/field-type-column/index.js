@@ -2,4 +2,4 @@ import FieldType from './FieldType';
 
 const item = FieldType;
 
-export { item };
+export default { item };

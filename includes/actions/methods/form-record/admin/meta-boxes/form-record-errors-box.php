@@ -9,12 +9,13 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Error_Place_
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Exception_Name_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Errors;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
-use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 class Form_Record_Errors_Box extends Base_Table_Box {
+
+	protected $show_overflow_control = true;
 
 	public function get_title(): string {
 		return __( 'Record Errors', 'jet-form-builder' );

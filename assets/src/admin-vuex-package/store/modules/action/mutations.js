@@ -19,4 +19,15 @@ export default {
 			},
 		};
 	},
+	setBeforeAction( state, { action, callback, context = 'default' } ) {
+		state.beforeActions = {
+			...state.beforeActions,
+			[ action ]: {
+				...(
+					state.beforeActions[ action ] ?? {}
+				),
+				[ context ]: callback,
+			},
+		};
+	},
 }

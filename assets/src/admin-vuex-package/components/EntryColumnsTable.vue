@@ -1,11 +1,6 @@
 <template>
 	<div
-		:class="[
-			'list-table-item__cell',
-			'cell--' + column,
-			'cell-type--' + initialType,
-			...initialClasses,
-		]"
+		:class="getClasses"
 	>
 		<template v-if="getComponentColumn">
 			<component
@@ -30,7 +25,6 @@
 			:class="{
 				'list-table-item__cell--body': true,
 				'list-table-item__cell--body-is-editable': initial.editable,
-				'show-overflow': isShowOverflow,
 			}"
 		>
 			<div
@@ -88,6 +82,20 @@ export default {
 		},
 		initialClasses() {
 			return this.initial?.classes ?? [];
+		},
+		getClasses() {
+			const classes = [
+				'list-table-item__cell',
+				'cell--' + this.column,
+				'cell-type--' + this.initialType,
+				...this.initialClasses,
+			];
+
+			if ( ! classes.includes( 'overflow-visible' ) && this.isShowOverflow ) {
+				classes.push( 'show-overflow' );
+			}
+
+			return classes;
 		},
 		editedCellValue: {
 			get() {
@@ -179,12 +187,12 @@ export default {
 			display: flex;
 			column-gap: 1em;
 		}
+	}
 
-		&.show-overflow {
-			word-break: break-word;
-			white-space: normal;
-			line-height: 1.5;
-		}
+	&.show-overflow.show-overflow {
+		word-break: break-word;
+		white-space: normal;
+		line-height: 1.5;
 	}
 
 	&:hover .list-table-item__cell--body-is-editable span.dashicons:hover {

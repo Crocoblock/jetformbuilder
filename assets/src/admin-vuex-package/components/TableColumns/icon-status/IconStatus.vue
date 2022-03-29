@@ -16,7 +16,7 @@ export default {
 	props: [ 'value', 'full-entry', 'entry-id' ],
 	computed: {
 		helpPosition() {
-			return this.value?.help_position ?? 'top-left';
+			return this.value?.help_position ?? 'top-right';
 		},
 		wrapperClasses() {
 			return {
@@ -104,12 +104,21 @@ export default {
 		padding-right: 1em;
 		position: absolute;
 
-		&.tooltip-position-top-left {
+		&.tooltip-position-top-right {
 			right: -1.2em;
 
 			&:after {
 				right: 20px;
 				left: unset;
+			}
+		}
+
+		&.tooltip-position-top-left {
+			left: -0.9em;
+
+			&:after {
+				left: 20px;
+				right: unset;
 			}
 		}
 	}
@@ -118,6 +127,9 @@ export default {
 		.cx-vui-tooltip {
 			opacity: 1;
 
+			&.tooltip-position-top-right {
+				bottom: 100%;
+			}
 			&.tooltip-position-top-left {
 				bottom: 100%;
 			}

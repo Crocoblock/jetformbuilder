@@ -11,12 +11,13 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View_Count;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Fetch_Records_Fields_Box_Endpoint;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
-use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Hidden_Primary_Id_Column_Trait;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 class Form_Record_Fields_Box extends Base_Table_Box {
+
+	protected $show_overflow = true;
 
 	use Hidden_Primary_Id_Column_Trait;
 

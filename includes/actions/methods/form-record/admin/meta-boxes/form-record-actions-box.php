@@ -15,6 +15,8 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 class Form_Record_Actions_Box extends Base_Table_Box {
 
+	protected $show_overflow = true;
+
 	public function get_title(): string {
 		return __( 'Actions Log', 'jet-form-builder' );
 	}

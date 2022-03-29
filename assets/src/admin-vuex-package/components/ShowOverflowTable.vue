@@ -1,7 +1,7 @@
 <template>
 	<cx-vui-switcher
 		class="jfb-cx-vui-component"
-		v-if="isTable"
+		v-if="showOverflowControl"
 		:label="__( 'Show overflow', 'jet-form-builder' )"
 		v-model="showOverflow"
 	></cx-vui-switcher>
@@ -16,8 +16,8 @@ export default {
 	name: 'ShowOverflowTable',
 	mixins: [ ScopeStoreMixin, i18n ],
 	computed: {
-		isTable() {
-			return this.getter( 'isTable' );
+		showOverflowControl() {
+			return this.getter( 'showOverflowControl' );
 		},
 		showOverflow: {
 			get() {

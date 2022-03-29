@@ -35,6 +35,8 @@ export function setTableSeed( store, source ) {
 		actions,
 		is_editable_table = false,
 		render_type = '',
+		show_overflow = false,
+		show_overflow_control = false,
 	} = source;
 
 	let getName = withScope( source );
@@ -47,6 +49,8 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
 	store.commit( getName( 'setLimit' ), list?.length );
 	store.commit( getName( 'setEditableTable' ), is_editable_table );
+	store.commit( getName( 'showOverflow' ), show_overflow );
+	store.commit( getName( 'showOverflowControl' ), show_overflow_control );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
 }

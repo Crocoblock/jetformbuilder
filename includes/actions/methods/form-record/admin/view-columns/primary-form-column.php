@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
+use Jet_Form_Builder\Classes\Post\Post_Tools;
 
 class Primary_Form_Column extends Column_Advanced_Base {
 
@@ -27,10 +28,9 @@ class Primary_Form_Column extends Column_Advanced_Base {
 		$single  = ( new Single_Form_Record_Page() )->set_id( $record['id'] ?? 0 );
 
 		return array(
-			'text'    => get_the_title( $form_id ),
-			'href'    => $single->get_url(),
-			'primary' => true,
-			'title'   => __( 'View Record', 'jet-form-builder' ),
+			'text'  => Post_Tools::get_title( $form_id ),
+			'href'  => $single->get_url(),
+			'title' => __( 'View Record', 'jet-form-builder' ),
 		);
 	}
 }

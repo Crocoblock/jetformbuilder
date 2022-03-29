@@ -28,4 +28,10 @@ class Post_Tools {
 		return $post;
 	}
 
+	public static function get_title( $post ): string {
+		$title = get_the_title( $post );
+
+		return empty( $title ) ? __( '(no title)', 'jet-form-builder' ) : $title;
+	}
+
 }

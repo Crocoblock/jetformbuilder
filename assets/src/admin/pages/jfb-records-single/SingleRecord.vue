@@ -52,6 +52,13 @@ export default {
 	.jfb-pagination {
 		padding: 0.8em 0;
 	}
+
+	.cell--field_type {
+		flex: 0.3;
+	}
+	.cell--name {
+		flex: 0.5;
+	}
 }
 
 #actions-log {

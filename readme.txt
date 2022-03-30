@@ -112,6 +112,7 @@ Can’t decide what to do with system fields that were not meant for users to be
 == More JetFormBuilder Features ==
 
 - **Field Value Generator Function.** Three available functions help you generate the field values dynamically.
+- **Really Hidden Fields.** Secure hidden fields by disabling HTML render.
 - **JetEngine Forms migration.** Duplicate all the forms you created through JetEngine to Gutenberg in one click.
 - **Editable post-submit messages.** Use the default message texts or input those you see fit.
 - **Spam filtering & protection.** Add a Google reCAPTCHA to your form easily.

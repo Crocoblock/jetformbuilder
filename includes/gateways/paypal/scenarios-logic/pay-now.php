@@ -64,6 +64,11 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 		add_action(
 			'jet-form-builder/form-handler/after-send',
+			array( $this, 'save_record_backward_compatibility' )
+		);
+
+		add_action(
+			'jet-form-builder/form-handler/after-send',
 			array( $this, 'attach_record_id' )
 		);
 	}
@@ -97,7 +102,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		return $payment;
 	}
 
-
 	/**
 	 * @throws Sql_Exception
 	 * @throws Repository_Exception
@@ -123,7 +127,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 *
 	 * @return array|int
 	 * @throws Gateway_Exception
-	 * @throws Repository_Exception
 	 */
 	public function save_resource( $payment ) {
 		try {

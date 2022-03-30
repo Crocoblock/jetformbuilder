@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
+use Jet_Form_Builder\Actions\Types\Save_Record;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -342,7 +344,6 @@ abstract class Scenario_Logic_Base {
 	 * @param $status
 	 *
 	 * @return string
-	 * @throws Repository_Exception
 	 */
 	public function get_meta_message( $status ): string {
 		$gateway = jet_fb_gateway_current();
@@ -354,6 +355,19 @@ abstract class Scenario_Logic_Base {
 		return ( ! $status || in_array( $status, $this->get_failed_statuses(), true ) )
 			? 'failed'
 			: 'success';
+	}
+
+	/**
+	 * @throws Sql_Exception
+	 */
+	public function save_record_backward_compatibility() {
+		if ( false !== jet_fb_action_handler()->get_action_by_slug( Save_Record::ID ) ) {
+			return;
+		}
+		/** @var Save_Record $record */
+		$record = jet_form_builder()->actions->rep_get_item_or_die( Save_Record::ID );
+
+		$record->do_action( array(), jet_fb_action_handler() );
 	}
 
 }

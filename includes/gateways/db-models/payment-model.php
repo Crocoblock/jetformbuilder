@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
-use Jet_Form_Builder\Db_Queries\Constraints\Form_Constraint;
 
 class Payment_Model extends Base_Db_Model {
 
@@ -49,10 +48,5 @@ class Payment_Model extends Base_Db_Model {
 		);
 	}
 
-	public function foreign_relations(): array {
-		return array(
-			new Form_Constraint(),
-		);
-	}
 
 }

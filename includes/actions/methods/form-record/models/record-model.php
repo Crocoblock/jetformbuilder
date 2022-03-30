@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
-use Jet_Form_Builder\Db_Queries\Constraints\Form_Constraint;
 
 class Record_Model extends Base_Db_Model {
 
@@ -38,9 +37,4 @@ class Record_Model extends Base_Db_Model {
 		);
 	}
 
-	public function foreign_relations(): array {
-		return array(
-			new Form_Constraint(),
-		);
-	}
 }

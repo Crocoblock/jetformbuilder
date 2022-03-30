@@ -299,7 +299,6 @@ export default {
 			overflow: hidden;
 			text-align: left;
 			position: relative;
-			margin: auto 0;
 			padding: 8px 20px 6px;
 
 			&:not(.cell--choose) {

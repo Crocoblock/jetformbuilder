@@ -237,7 +237,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".field-type-template--icon > svg {\n  width: 24px;\n  height: 24px;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records-single/field-value/FieldValue.vue","webpack://./../FieldValue.vue"],"names":[],"mappings":"AAgCC;EACC,WAAA;EACA,YAAA;AC/BF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.field-type-template {\r\n\t&--icon > svg {\r\n\t\twidth: 24px;\r\n\t\theight: 24px;\r\n\t}\r\n}\r\n",".field-type-template--icon > svg {\n  width: 24px;\n  height: 24px;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "pre {\n  margin: unset;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records-single/field-value/FieldValue.vue","webpack://./../FieldValue.vue"],"names":[],"mappings":"AA+BA;EACC,aAAA;AC9BD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\npre {\r\n\tmargin: unset;\r\n}\r\n","pre {\n  margin: unset;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

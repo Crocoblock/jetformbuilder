@@ -29,10 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-.field-type-template {
-	&--icon > svg {
-		width: 24px;
-		height: 24px;
-	}
+pre {
+	margin: unset;
 }
 </style>

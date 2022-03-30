@@ -87,8 +87,11 @@ We integrated JetStyleManager & Gutenberg to make it possible for you to <a href
 = BEGINNER-FRIENDLY & VISUAL =
 No more confusing field rows and additional styling. Because Gutenberg is a visual editor, you can monitor the form creation process as if you were on the frontend. All field types can be found in the JetForm Fields block in the WordPress dashboard.
 
+= STORE FORM RECORD =
+Manage the entry submissions in the convenient Dashboard. Add Store Form Record post-submit action to save all the submitted forms in one place and check their status, basic data, and filled in fields’ data. Review the error’s details if any.
+
 = PAYMENT METHODS INTEGRATION =
-Accept all kinds of payments securely via any of your forms, be it one-off, recurring, fixed, variable fees, or user-entered amounts. JetFormBuilder supports WooCommerce, [Stripe, and PayPal integrations](https://jetformbuilder.com/features/how-to-configure-payment-gateways/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder).
+Accept all kinds of payments securely via any of your forms, be it one-off, recurring, fixed, variable fees, or user-entered amounts. JetFormBuilder supports WooCommerce, [Stripe, and PayPal integrations](https://jetformbuilder.com/features/how-to-configure-payment-gateways/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder). Check the payments basic details: status, date, amount in one place in the Dashboard.
 
 https://www.youtube.com/watch?v=LPVzsnl5XQI
 

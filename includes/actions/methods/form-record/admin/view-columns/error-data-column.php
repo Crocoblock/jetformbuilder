@@ -9,6 +9,7 @@ use Jet_Form_Builder\Classes\Tools;
 class Error_Data_Column extends Column_Advanced_Base {
 
 	protected $column = 'data';
+	protected $type   = self::PRE;
 
 	public function get_label(): string {
 		return __( 'Data', 'jet-form-builder' );

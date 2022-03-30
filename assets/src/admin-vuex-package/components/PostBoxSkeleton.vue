@@ -15,6 +15,9 @@
 				<ShowOverflowTable
 					:scope="slug"
 				/>
+				<RedirectToSingle
+					:scope="slug"
+				/>
 			</div>
 		</div>
 		<div class="postbox-inner submitbox">
@@ -28,9 +31,10 @@
 </template>
 
 <script>
-import EditTableSwitcher from './EditTableSwitcher';
-import UndoChangesTable from './UndoChangesTable';
-import ShowOverflowTable from './ShowOverflowTable';
+import EditTableSwitcher from './BoxActions/EditTableSwitcher';
+import UndoChangesTable from './BoxActions/UndoChangesTable';
+import ShowOverflowTable from './BoxActions/ShowOverflowTable';
+import RedirectToSingle from './BoxActions/RedirectToSingle';
 
 export default {
 	name: 'PostBox',
@@ -39,6 +43,7 @@ export default {
 		slug: String,
 	},
 	components: {
+		RedirectToSingle,
 		ShowOverflowTable,
 		UndoChangesTable,
 		EditTableSwitcher,

@@ -1,11 +1,10 @@
 import SingleRecord from './SingleRecord';
 import fieldType from './field-type-column';
-import fieldValue from './field-value';
 
 const { addFilter } = wp.hooks;
 
 addFilter( 'jet.fb.admin.table.form-fields', 'jet-form-builder', components => {
-	components.push( fieldType, fieldValue );
+	components.push( fieldType );
 
 	return components;
 } );

@@ -8,6 +8,7 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 class Field_Value_Column extends Column_Advanced_Base {
 
 	protected $column = 'field_value';
+	protected $type   = self::PRE;
 
 	public function get_label(): string {
 		return __( 'Value', 'jet-form-builder' );
@@ -15,7 +16,8 @@ class Field_Value_Column extends Column_Advanced_Base {
 
 	public function is_editable( array $record = array() ): bool {
 		return false;
-		/*$type        = $record['field_type'] ?? '';
+		/*
+		$type        = $record['field_type'] ?? '';
 		$is_editable = true;
 
 		switch ( $type ) {

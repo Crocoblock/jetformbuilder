@@ -30,7 +30,6 @@ class Stable_Pages_Manager {
 				new Settings_Page(),
 				new Addons_Page(),
 				new Form_Records(),
-				new Payments_Page(),
 			)
 		);
 	}

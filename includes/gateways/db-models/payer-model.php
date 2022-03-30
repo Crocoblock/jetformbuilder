@@ -73,10 +73,8 @@ class Payer_Model extends Base_Db_Model {
 	 * @param $payer
 	 *
 	 * @return int
-	 * @throws Sql_Exception
 	 */
-	public static function update_payer( $payer ) {
-		$model = ( new self() )->set_silence( true );
+	public static function update_payer( $payer ): int {
 		$where = array();
 
 		if ( isset( $payer['id'] ) ) {
@@ -86,7 +84,7 @@ class Payer_Model extends Base_Db_Model {
 		}
 		unset( $payer['id'], $payer['payer_id'] );
 
-		return $model->update( $payer, $where );
+		return ( new static() )->update_soft( $payer, $where );
 	}
 
 

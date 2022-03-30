@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
+import ScopeStoreMixin from '../../mixins/ScopeStoreMixin';
 
 const { i18n } = JetFBMixins;
 

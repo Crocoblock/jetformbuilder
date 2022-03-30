@@ -84,8 +84,10 @@ class Action_Handler {
 
 		foreach ( $form_actions as $form_action ) {
 			try {
-				$this->save_form_action( $form_action );
+				list( $action ) = $this->save_form_action( $form_action );
+				$action->on_register_in_flow();
 			} catch ( Repository_Exception $exception ) {
+				continue;
 			}
 		}
 
@@ -95,9 +97,10 @@ class Action_Handler {
 	/**
 	 * @param $form_action
 	 *
+	 * @return Base[]|Condition_Manager[]
 	 * @throws Repository_Exception
 	 */
-	public function save_form_action( $form_action ) {
+	public function save_form_action( $form_action ): array {
 		$type = $form_action['type'];
 
 		/** @var Base $action */
@@ -122,6 +125,8 @@ class Action_Handler {
 
 		$this->form_conditions[ $id ] = $condition;
 		$this->form_actions[ $id ]    = $action;
+
+		return array( $action, $condition );
 	}
 
 	/**

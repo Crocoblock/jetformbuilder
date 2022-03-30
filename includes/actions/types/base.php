@@ -85,6 +85,12 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	}
 
 	/**
+	 * This method is run after all its settings have been initialized
+	 */
+	public function on_register_in_flow() {
+	}
+
+	/**
 	 * If this method returns Action_Default_Executor::class
 	 * then the action will be executed normally.
 	 *

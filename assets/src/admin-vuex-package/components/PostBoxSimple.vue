@@ -44,7 +44,7 @@
 import PostBoxSkeleton from './PostBoxSkeleton';
 import EntriesTable from './EntriesTable';
 import EntriesList from './EntriesList';
-import EditTableSwitcher from './EditTableSwitcher';
+import EditTableSwitcher from './BoxActions/EditTableSwitcher';
 
 
 export default {

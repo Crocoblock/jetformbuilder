@@ -177,7 +177,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 
 	/**
-	 * @throws Repository_Exception|Action_Exception|Gateway_Exception
+	 * @throws Gateway_Exception
 	 */
 	public function process_after() {
 		$payment = ( new Api_Actions\Capture_Payment_Action() )
@@ -206,9 +206,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	/**
 	 * @param array $payment
 	 *
-	 * @throws Action_Exception
 	 * @throws Gateway_Exception
-	 * @throws Repository_Exception
 	 */
 	private function on_error( array $payment ) {
 		$this->scenario_row(
@@ -228,9 +226,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		} catch ( Sql_Exception $exception ) {
 			return;
 		} finally {
-			$this->process_status( 'failed' );
-
-			throw new Gateway_Exception( $this->get_meta_message( 'VOIDED' ), $payment['message'] );
+			throw new Gateway_Exception( 'Payment was voided', $payment['message'] );
 		}
 	}
 

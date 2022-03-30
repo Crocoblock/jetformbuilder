@@ -10,6 +10,7 @@ use Jet_Form_Builder\Gateways\Base_Gateway;
 
 /**
  * Class Actions_Manager
+ *
  * @package Jet_Form_Builder\Gateways\Paypal
  */
 abstract class Scenarios_Manager_Abstract {
@@ -72,10 +73,12 @@ abstract class Scenarios_Manager_Abstract {
 	public function query_logic(): Scenario_Logic_Base {
 		try {
 			if ( ! $this->queried_scenario ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$scenario = sanitize_text_field( wp_unslash(
-					$_GET[ self::QUERY_VAR ] ?? ''
-				) );
+				$scenario = sanitize_text_field(
+					wp_unslash(
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						$_GET[ self::QUERY_VAR ] ?? ''
+					)
+				);
 
 				$this->queried_scenario = $this->logic()->rep_get_item( $scenario );
 			}

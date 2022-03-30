@@ -17,12 +17,17 @@ abstract class Base_List_Box extends Base_Meta_Box {
 		return array();
 	}
 
+	public function get_single(): array {
+		return array();
+	}
+
 	public function to_array(): array {
 		return array_merge(
 			parent::to_array(),
 			array(
-				'columns'     => $this->get_columns_headings(),
-				'render_type' => self::TYPE_LIST,
+				'columns'         => $this->get_columns_headings(),
+				'single_endpoint' => $this->get_single(),
+				'render_type'     => self::TYPE_LIST,
 			)
 		);
 	}

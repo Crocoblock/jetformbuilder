@@ -60,6 +60,7 @@ export function setListSeed( store, source ) {
 		list = {},
 		columns = {},
 		render_type = '',
+		single_endpoint = {},
 	} = source;
 
 	let getName = withScope( source );
@@ -67,4 +68,5 @@ export function setListSeed( store, source ) {
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setRenderType' ), render_type );
+	store.commit( getName( 'setSingleEndpoint' ), single_endpoint );
 }

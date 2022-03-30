@@ -119,7 +119,7 @@ class Gateway_Manager {
 		add_filter(
 			'jet-form-builder/actions/run-callback',
 			function () {
-				return array( new Action_Default_Executor(), 'soft_run_actions' );
+				return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
 			}
 		);
 	}
@@ -184,6 +184,17 @@ class Gateway_Manager {
 	 */
 	public function get_current_gateway_controller() {
 		return $this->get_gateway_controller( $this->get_gateway_id() );
+	}
+
+	/**
+	 * @return Base_Gateway
+	 */
+	public function get_current_gateway_controller_or_die(): Base_Gateway {
+		try {
+			return $this->get_current_gateway_controller();
+		} catch ( Repository_Exception $exception ) {
+			wp_die( 'Undefined gateway: ' . $this->get_gateway_id() );
+		}
 	}
 
 	/**

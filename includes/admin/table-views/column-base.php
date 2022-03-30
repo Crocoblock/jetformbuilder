@@ -9,6 +9,8 @@ abstract class Column_Base {
 	const ACTIONS        = 'actions';
 	const CLASSES        = 'classes';
 	const STATUS         = 'icon_status';
+	const PRE            = 'pre';
+	const LINK           = 'link';
 	const STATUS_SUCCESS = 'success';
 	const STATUS_INFO    = 'info';
 	const STATUS_WARNING = 'warning';

@@ -5,9 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
@@ -51,34 +49,23 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 
 	public function try_run_on_catch() {
 		try {
+			$scenario = $this->query_scenario();
+		} catch ( Gateway_Exception $exception ) {
+			return;
+		}
+
+		try {
 			/** set to $this->payment_token */
 			$this->set_payment_token();
 
-			/** set to $this->gateways_meta */
-			$this->set_form_gateways_meta();
-
-			/** here you can update scenario rows */
-			$this->query_scenario()->on_catch();
-
-		} catch ( Repository_Exception $exception ) {
-			return;
 		} catch ( Skip_Exception $exception ) {
 			return;
-		} catch ( Action_Exception $exception ) {
-			$this->send_response(
-				array(
-					'status' => $exception->getMessage(),
-				)
-			);
-		} catch ( Handler_Exception $exception ) {
-			$exception->dynamic_error();
-
-			$this->send_response(
-				array(
-					'status' => $exception->getMessage(),
-				)
-			);
 		}
+
+		/** set to $this->gateways_meta */
+		$this->set_form_gateways_meta();
+
+		$scenario->on_catch();
 	}
 
 	// statuses from scenario

@@ -1,6 +1,7 @@
 <template>
-	<div class="wrap">
-		<h1 class="wp-heading-inline">{{ title }}</h1>
+	<FormBuilderPage
+		:title="title"
+	>
 		<PostBoxGrid
 			:containers="containers"
 		>
@@ -10,13 +11,14 @@
 				/>
 			</template>
 		</PostBoxGrid>
-	</div>
+	</FormBuilderPage>
 </template>
 
 <script>
 const {
 	PostBoxGrid,
-	TablePagination
+	TablePagination,
+	FormBuilderPage,
 } = JetFBComponents;
 
 const { GetIncoming } = JetFBMixins;
@@ -31,6 +33,7 @@ export default {
 	components: {
 		PostBoxGrid,
 		TablePagination,
+		FormBuilderPage
 	},
 	data() {
 		return {

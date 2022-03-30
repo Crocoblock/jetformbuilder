@@ -4,12 +4,16 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Controller;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
 class Save_Record extends Base {
 
@@ -37,7 +41,22 @@ class Save_Record extends Base {
 		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
 		add_filter( 'jet-form-builder/page-containers/jfb-payments-single', array( $this, 'add_box_to_single_payment' ) );
 
+		add_action(
+			'jet-form-builder/gateways/before-send',
+			array( $this, 'before_send_gateway' ),
+			10,
+			3
+		);
+
 		return parent::dependence();
+	}
+
+	public function on_register_in_flow() {
+		add_filter( 'jet-form-builder/actions/run-callback', array( $this, 'set_soft_run_actions' ) );
+	}
+
+	public function set_soft_run_actions( $callback ) {
+		return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
 	}
 
 	/**
@@ -49,6 +68,21 @@ class Save_Record extends Base {
 		$containers[1]->add_meta_box( new Record_To_Payment_Box() );
 
 		return $containers;
+	}
+
+	public function before_send_gateway( $status, $action_error, Scenario_Logic_Base $scenario ) {
+		// prepare record controller, for saving errors & actions
+		$record     = $scenario->get_scenario_row( 'record' );
+		$controller = ( new Controller() )->set_record_id( $record['id'] );
+		$controller->set_setting( 'save_errors', Manager::instance()->active() );
+
+		try {
+			$controller->save_actions();
+			$controller->save_errors();
+
+		} catch ( Handler_Exception $exception ) {
+			// do nothing
+		}
 	}
 
 	/**

@@ -7,13 +7,13 @@ use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
-use Jet_Form_Builder\Gateways\Query_Views\Record_Fields_By_Payment;
 
 abstract class Scenario_Logic_Base {
 
@@ -25,6 +25,9 @@ abstract class Scenario_Logic_Base {
 
 	abstract public function after_actions();
 
+	/**
+	 * @throws Gateway_Exception
+	 */
 	abstract public function process_after();
 
 	abstract protected function query_token();
@@ -33,21 +36,33 @@ abstract class Scenario_Logic_Base {
 
 	abstract public function get_failed_statuses();
 
-	/**
-	 * @throws Repository_Exception
-	 * @throws Action_Exception
-	 */
+
 	public function on_catch() {
-		$this->process_after();
+		// complete payment/subscription
+		try {
+			$this->process_after();
+			$status = $this->get_process_status();
 
-		$this->process_status( $this->get_process_status() );
+		} catch ( Gateway_Exception $exception ) {
+			$status = 'failed';
+		}
 
-		/** redirect to the page */
+		// run actions
+		try {
+			$action_error = false;
+			$this->process_status( $status );
+
+		} catch ( Action_Exception $exception ) {
+			$action_error = $exception->getMessage();
+		}
+		// reset current action id, for save results
+		jet_fb_action_handler()->set_current_action( false );
+
+		do_action( 'jet-form-builder/gateways/before-send', $status, $action_error, $this );
+
 		jet_fb_gateway_current()->send_response(
 			array(
-				'status' => $this->get_result_message(
-					$this->get_scenario_row( 'status' )
-				),
+				'status' => $action_error ? $action_error : $this->get_result_message( $status ),
 			)
 		);
 	}
@@ -111,7 +126,6 @@ abstract class Scenario_Logic_Base {
 
 	/**
 	 * @return array
-	 * @throws Repository_Exception
 	 */
 	protected function init_request(): array {
 		if ( ! empty( jet_fb_action_handler()->request_data ) ) {
@@ -137,7 +151,6 @@ abstract class Scenario_Logic_Base {
 	 * @param string $type [description]
 	 *
 	 * @throws Action_Exception
-	 * @throws Repository_Exception
 	 */
 	public function process_status( $type = 'success' ) {
 		$entry = $this->get_scenario_row();
@@ -307,7 +320,6 @@ abstract class Scenario_Logic_Base {
 	 * @param $status
 	 *
 	 * @return string
-	 * @throws Repository_Exception
 	 */
 	public function get_result_message( $status ): string {
 		$gateway = jet_fb_gateway_current();

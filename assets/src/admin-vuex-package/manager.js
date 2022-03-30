@@ -23,7 +23,7 @@ import * as LinkTypeColumn from './components/TableColumns/link-type';
 import * as ActionsColumn from './components/TableColumns/actions';
 import * as PayerColumn from './components/TableColumns/payer';
 import ScopeStoreMixin from './mixins/ScopeStoreMixin';
-import EditTableSwitcher from './components/EditTableSwitcher';
+import EditTableSwitcher from './components/BoxActions/EditTableSwitcher';
 import AlertsList from './components/Alerts/AlertsList';
 import DashboardPanel from './components/VuiBoxes/DashboardPanel';
 import SideBarBoxes from './components/SideBarBoxes';

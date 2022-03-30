@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Live_Form;
 
 class Controller {
@@ -26,6 +27,12 @@ class Controller {
 		return (int) $this->record_id;
 	}
 
+	public function set_record_id( $record_id ): Controller {
+		$this->record_id = (int) $record_id;
+
+		return $this;
+	}
+
 	/**
 	 * @return $this
 	 * @throws Sql_Exception
@@ -36,7 +43,7 @@ class Controller {
 		 * in `*_jet_fb_records`
 		 * by \Jet_Form_Builder\Actions\Methods\Form_Record\Record_Model
 		 */
-		$this->record_id = $this->save_record();
+		$this->set_record_id( $this->save_record() );
 
 		/**
 		 * Saving each field as a separate record
@@ -165,7 +172,7 @@ class Controller {
 					'message'      => $log['message'],
 					'file'         => $log['file'],
 					'line'         => $log['line'],
-					'data'         => wp_json_encode( $log['data'] ),
+					'data'         => Tools::encode_json( $log['data'] ),
 					'trace_string' => $log['trace_string'],
 				);
 			}

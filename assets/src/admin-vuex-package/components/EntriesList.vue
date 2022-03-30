@@ -3,9 +3,13 @@
 		<tr
 			v-for="({ label }, column) in columns"
 			:key="column"
+			:class="[
+				'jfb-list-table-row',
+				'row--' + column
+			]"
 		>
-			<th>{{ label }}</th>
-			<td>
+			<th class="jfb-list-table-row--inner jfb-list-table-row--heading">{{ label }}</th>
+			<td class="jfb-list-table-row--inner jfb-list-table-row--item">
 				<template v-if="getItemComponent( column )">
 					<component
 						v-bind:is="getItemComponent( column )"
@@ -73,20 +77,28 @@ export default {
 	border-collapse: collapse;
 	width: 100%;
 
-	th, td {
-		padding: 0.8em;
-	}
-	th {
-		//border-right: 1px solid #ccc;
-		text-align: left;
-	}
-	tr {
+	&-row {
 		border-bottom: 1px solid #ececec;
+
+		&--inner {
+			padding: 0.8em;
+		}
+
+		&--heading {
+			text-align: left;
+		}
 
 		&:last-child {
 			border-bottom: unset;
 		}
 	}
+
+	/*&-actions {
+		padding: 10px;
+		clear: both;
+		border-top: 1px solid #dcdcde;
+		background: #f6f7f7;
+	}*/
 }
 
 </style>

@@ -45,7 +45,7 @@
 <script>
 import PostBoxContainer from './PostBoxContainer';
 import PostBoxSimple from './PostBoxSimple';
-import EditTableSwitcher from './EditTableSwitcher';
+import EditTableSwitcher from './BoxActions/EditTableSwitcher';
 
 export default {
 	name: 'PostBoxGrid',

@@ -3,11 +3,13 @@
 
 namespace Jet_Form_Builder\Actions\Executors;
 
-
 use Jet_Form_Builder\Classes\Repository\Repository_Item_With_Class;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 abstract class Action_Executor_Base {
+
+	const SOFT   = 'soft_run_actions';
+	const NORMAL = 'run_actions';
 
 	/** @var int[] */
 	protected $actions_ids = array();

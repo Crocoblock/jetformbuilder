@@ -85,14 +85,15 @@ abstract class Base_Db_Model {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function insert( $columns = array(), $format = null ) {
+	public function insert( $columns = array(), $format = null ): int {
+		return Execution_Builder::instance()->insert( $this, $columns, $format );
+	}
+
+	public function insert_soft( $columns = array(), $format = null ): int {
 		try {
-			return Execution_Builder::instance()->insert( $this, $columns, $format );
+			return $this->insert( $columns, $format );
 		} catch ( Sql_Exception $exception ) {
-			if ( $this->is_silence() ) {
-				return 0;
-			}
-			throw $exception;
+			return 0;
 		}
 	}
 
@@ -124,14 +125,15 @@ abstract class Base_Db_Model {
 	 * @return int
 	 * @throws Sql_Exception
 	 */
-	public function update( $columns, $where, $format = null, $where_format = null ) {
+	public function update( $columns, $where, $format = null, $where_format = null ): int {
+		return Execution_Builder::instance()->update( $this, $columns, $where, $format, $where_format );
+	}
+
+	public function update_soft( $columns, $where, $format = null, $where_format = null ): int {
 		try {
-			return Execution_Builder::instance()->update( $this, $columns, $where, $format, $where_format );
+			return $this->update( $columns, $where, $format, $where_format );
 		} catch ( Sql_Exception $exception ) {
-			if ( $this->is_silence() ) {
-				return 0;
-			}
-			throw $exception;
+			return 0;
 		}
 	}
 

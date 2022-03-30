@@ -1143,9 +1143,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 Vue.config.devtools = true;
@@ -1157,9 +1154,12 @@ var _wp = wp,
 var _Vuex = Vuex,
     mapState = _Vuex.mapState,
     mapGetters = _Vuex.mapGetters;
+var _JetFBComponents = JetFBComponents,
+    FormBuilderPage = _JetFBComponents.FormBuilderPage;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'payments-table-core',
   components: {
+    FormBuilderPage: FormBuilderPage,
     EntriesTable: _EntriesTable__WEBPACK_IMPORTED_MODULE_1__["default"],
     TablePagination: _TablePagination__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -4483,7 +4483,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue","webpack://./../PaymentsComponent.vue"],"names":[],"mappings":"AAuCA;EACC,oBAAA;ACtCD;AD0CC;EACC,SAAA;ACvCF;AD0CC;EACC,yBAAA;ACxCF;AD0CE;EACC,gCAAA;ACxCH;AD2CE;EACC,yBAAA;ACzCH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/PaymentsPage/PaymentsComponent.vue","webpack://./../PaymentsComponent.vue"],"names":[],"mappings":"AAsCA;EACC,oBAAA;ACrCD;ADyCC;EACC,SAAA;ACtCF;ADyCC;EACC,yBAAA;ACvCF;ADyCE;EACC,gCAAA;ACvCH;AD0CE;EACC,yBAAA;ACxCH","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel-table-wrapper {\r\n\tmargin-bottom: unset;\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.cell--id.cell--id {\r\n\t\tflex: 0.3;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\t}\r\n\r\n}\r\n",".cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .cell--id.cell--id {\n  flex: 0.3;\n}\n.cx-vue-list-table .list-table-item {\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8504,19 +8504,9 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
-    {
-      class: {
-        wrap: true,
-        "jet-form-builder-page": true,
-        "jet-form-builder-page--payments": true,
-      },
-    },
+    "FormBuilderPage",
+    { attrs: { title: _vm.__("JetFormBuilder Payments", "jet-form-builder") } },
     [
-      _c("h1", { staticClass: "cs-vui-title" }, [
-        _vm._v(_vm._s(_vm.__("JetFormBuilder Payments", "jet-form-builder"))),
-      ]),
-      _vm._v(" "),
       _c("TablePagination"),
       _vm._v(" "),
       _c("EntriesTable"),

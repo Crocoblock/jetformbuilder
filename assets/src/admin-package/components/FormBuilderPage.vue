@@ -3,7 +3,7 @@
 		'wrap': true,
 		'jet-form-builder-page': true,
 	}">
-		<h1 class="cs-vui-title">{{ title }}</h1>
+		<h1 class="wp-heading-inline">{{ title }}</h1>
 		<slot></slot>
 	</div>
 </template>

@@ -14,7 +14,7 @@ class Single_Form_Record_Page extends Base_Single_Page {
 	}
 
 	public function title(): string {
-		return __( 'Form Record', 'jet-form-builder' );
+		return __( 'JetFormBuilder Form Record', 'jet-form-builder' );
 	}
 
 	public function meta_containers(): array {

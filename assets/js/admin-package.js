@@ -2917,7 +2917,9 @@ var render = function () {
       },
     },
     [
-      _c("h1", { staticClass: "cs-vui-title" }, [_vm._v(_vm._s(_vm.title))]),
+      _c("h1", { staticClass: "wp-heading-inline" }, [
+        _vm._v(_vm._s(_vm.title)),
+      ]),
       _vm._v(" "),
       _vm._t("default"),
     ],

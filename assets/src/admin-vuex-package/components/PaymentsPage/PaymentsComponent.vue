@@ -1,17 +1,14 @@
 <template>
-	<div :class="{
-		'wrap': true,
-		'jet-form-builder-page': true,
-		'jet-form-builder-page--payments': true,
-	}">
-		<h1 class="cs-vui-title">{{ __( 'JetFormBuilder Payments', 'jet-form-builder' ) }}</h1>
+	<FormBuilderPage
+		:title="__( 'JetFormBuilder Payments', 'jet-form-builder' )"
+	>
 		<TablePagination/>
 		<EntriesTable/>
 		<template v-if="$slots.default">
 			<slot name="default"></slot>
 		</template>
 		<TablePagination/>
-	</div>
+	</FormBuilderPage>
 </template>
 
 <script>
@@ -23,10 +20,12 @@ Vue.config.devtools = true;
 const { GetIncoming, i18n } = JetFBMixins;
 const { apiFetch } = wp;
 const { mapState, mapGetters } = Vuex;
+const { FormBuilderPage } = JetFBComponents;
 
 export default {
 	name: 'payments-table-core',
 	components: {
+		FormBuilderPage,
 		EntriesTable,
 		TablePagination,
 	},

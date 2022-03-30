@@ -21,12 +21,7 @@ class User_Agent_Column extends Column_Advanced_Base {
 			return $value;
 		}
 
-		return array(
-			'type'          => Column_Base::STATUS_WARNING,
-			'help'          => __( 'You can enable saving in the action settings', 'jet-form-builder' ),
-			'text'          => __( 'Not recorded', 'jet-form-builder' ),
-			'help_position' => 'top-left',
-		);
+		return Utils::get_empty_status();
 	}
 
 	public function get_type( array $record = array() ): string {

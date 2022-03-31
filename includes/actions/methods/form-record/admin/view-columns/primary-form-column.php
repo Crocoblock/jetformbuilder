@@ -11,7 +11,7 @@ use Jet_Form_Builder\Classes\Post\Post_Tools;
 class Primary_Form_Column extends Column_Advanced_Base {
 
 	protected $column = 'form_id';
-	protected $type   = 'link';
+	protected $type   = self::LINK;
 
 	public function get_label(): string {
 		return __( 'Form', 'jet-form-builder' );
@@ -28,9 +28,10 @@ class Primary_Form_Column extends Column_Advanced_Base {
 		$single  = ( new Single_Form_Record_Page() )->set_id( $record['id'] ?? 0 );
 
 		return array(
-			'text'  => Post_Tools::get_title( $form_id ),
-			'href'  => $single->get_url(),
-			'title' => __( 'View Record', 'jet-form-builder' ),
+			'text'    => Post_Tools::get_title( $form_id ),
+			'href'    => $single->get_url(),
+			'primary' => empty( $record['is_viewed'] ),
+			'title'   => __( 'View Record', 'jet-form-builder' ),
 		);
 	}
 }

@@ -205,27 +205,6 @@
 	text-align: center
 }
 
-.jet-form-builder__submit-wrap {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	align-items: flex-start;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	width: 100%
-}
-
-.jet-form-builder__submit-wrap.has-prev {
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: row;
-	flex-direction: row;
-	-webkit-box-pack: justify;
-	-ms-flex-pack: justify;
-}
-
 button.jet-form-builder__submit {
 	display: inline-flex;
 	justify-content: flex-start;

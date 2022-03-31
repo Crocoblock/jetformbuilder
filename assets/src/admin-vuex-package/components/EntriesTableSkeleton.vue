@@ -232,39 +232,59 @@ export default {
 				this.toggleDoingAction();
 			} );
 		},
-	}
+	},
 };
 </script>
 
 <style lang="scss">
 
-.cx-vui-panel--loading {
-	opacity: 0.5;
+.cx-vui-panel {
+	&--loading {
+		opacity: 0.5;
+	}
+	&-table-wrapper {
+		margin-bottom: unset;
+	}
 }
 
 .cx-vue-list-table {
 	.list-table-heading, .list-table-item-columns {
 		justify-content: space-between;
 	}
+
 	.list-table-item {
 		flex-direction: column;
 		position: relative;
+		background-color: #ffffff;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid #ececec;
+		}
+
+		&:hover {
+			background-color: #e3f6fd;
+		}
+
 		&:hover .list-table-item-actions {
 			visibility: visible;
 		}
+
 		&--has-choose {
 			.list-table-item-actions {
 				left: 5.2em;
 			}
 		}
+
 		&--has-actions {
 			.list-table-item__cell.cell--choose {
 				/*transform: translateY(25%);*/
 			}
+
 			.list-table-item-columns {
 				margin-bottom: 1.5em;
 			}
 		}
+
 		&-actions {
 			display: flex;
 			width: 85%;
@@ -273,27 +293,33 @@ export default {
 			position: absolute;
 			bottom: 0.5em;
 			left: 1.5em;
+
 			& > *:not(:last-child)::after {
 				content: '|';
 			}
+
 			&-single {
 				text-decoration: unset;
+
 				&--type {
 					&-danger {
 						color: firebrick;
 					}
 				}
+
 				&.disabled {
 					pointer-events: none;
 					cursor: default;
 				}
 			}
 		}
+
 		&-columns {
 			display: flex;
 			justify-content: space-between;
 			width: 100%;
 		}
+
 		&__cell {
 			white-space: nowrap;
 			overflow: hidden;
@@ -313,6 +339,7 @@ export default {
 			}
 		}
 	}
+
 	.list-table-heading__cell:not(.cell--choose) {
 		flex: 1
 	}

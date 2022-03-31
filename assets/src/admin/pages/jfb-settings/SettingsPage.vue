@@ -1,6 +1,7 @@
 <template>
-	<div class="jet-form-builder-page jet-form-builder-page--settings wrap">
-		<h1 class="cs-vui-title">{{ 'JetFormBuilder Settings' }}</h1>
+	<FormBuilderPage
+		:title="__( 'JetFormBuilder Settings', 'jet-form-builder' )"
+	>
 		<div class="jfb-content">
 			<AlertsList/>
 			<div class="jfb-content-main">
@@ -43,9 +44,9 @@
 					</CxVuiTabs>
 				</div>
 			</div>
-			<SettingsSideBar />
+			<SettingsSideBar/>
 		</div>
-	</div>
+	</FormBuilderPage>
 </template>
 
 <script>
@@ -70,6 +71,7 @@ const {
 	CxVuiTabsPanel,
 	CxVuiTabs,
 	AlertsList,
+	FormBuilderPage,
 } = JetFBComponents;
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
@@ -114,6 +116,7 @@ export default {
 		CxVuiTabsPanel,
 		CxVuiTabs,
 		SettingsSideBar,
+		FormBuilderPage,
 	},
 	data() {
 		const [ tabSlug, others ] = getActiveTab();
@@ -155,7 +158,7 @@ export default {
 			this.saveByAjax( currentTab, tabSlug );
 		},
 	},
-}
+};
 </script>
 
 <style lang="scss">
@@ -163,6 +166,7 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 2em;
+	margin-top: 1em;
 
 	&-main {
 		flex: 1;

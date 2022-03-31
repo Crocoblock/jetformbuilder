@@ -197,28 +197,10 @@ export default {
 </script>
 
 <style lang="scss">
-
-.cx-vui-panel-table-wrapper {
-	margin-bottom: unset;
-}
-
 .cx-vue-list-table {
-	.list-table-item {
-		background-color: #ffffff;
-
-		&:not(:last-child) {
-			border-bottom: 1px solid #ececec;
-		}
-
-		&--not-viewed {
-			background-color: #f7fdff;
-		}
-
-		&:hover {
-			background-color: #e3f6fd;
-		}
+	.list-table-item--not-viewed {
+		background-color: #f7fdff;
 	}
-
 }
 
 </style>

@@ -36,26 +36,9 @@ export default {
 
 <style lang="scss">
 
-.cx-vui-panel-table-wrapper {
-	margin-bottom: unset;
-}
-
 .cx-vue-list-table {
 	.cell--id.cell--id {
 		flex: 0.3;
 	}
-
-	.list-table-item {
-		background-color: #ffffff;
-
-		&:not(:last-child) {
-			border-bottom: 1px solid #ececec;
-		}
-
-		&:hover {
-			background-color: #e3f6fd;
-		}
-	}
-
 }
 </style>

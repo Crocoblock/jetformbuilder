@@ -93,9 +93,9 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 	}
 
 	/**
-	 * @return \Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
+	 * @return false|\Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
 	 */
-	function jet_fb_gateway_current(): \Jet_Form_Builder\Gateways\Base_Gateway {
+	function jet_fb_gateway_current() {
 		return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller_or_die();
 	}
 } else {

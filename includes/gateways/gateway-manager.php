@@ -111,7 +111,7 @@ class Gateway_Manager {
 		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
 
 		try {
-			jet_fb_gateway_current()->before_actions();
+			$this->get_current_gateway_controller()->before_actions();
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
@@ -129,7 +129,7 @@ class Gateway_Manager {
 	 */
 	public function after_send_actions() {
 		try {
-			jet_fb_gateway_current()->after_actions( jet_fb_action_handler() );
+			$this->get_current_gateway_controller()->after_actions( jet_fb_action_handler() );
 		} catch ( Repository_Exception $exception ) {
 			return;
 		} catch ( Gateway_Exception $exception ) {
@@ -179,7 +179,7 @@ class Gateway_Manager {
 	}
 
 	/**
-	 * @return false|Base_Gateway
+	 * @return Base_Gateway|Base_Scenario_Gateway
 	 * @throws Repository_Exception
 	 */
 	public function get_current_gateway_controller() {
@@ -187,13 +187,13 @@ class Gateway_Manager {
 	}
 
 	/**
-	 * @return Base_Gateway
+	 * @return false|Base_Gateway|Base_Scenario_Gateway
 	 */
-	public function get_current_gateway_controller_or_die(): Base_Gateway {
+	public function get_current_gateway_controller_or_die() {
 		try {
 			return $this->get_current_gateway_controller();
 		} catch ( Repository_Exception $exception ) {
-			wp_die( 'Undefined gateway: ' . $this->get_gateway_id() );
+			return false;
 		}
 	}
 

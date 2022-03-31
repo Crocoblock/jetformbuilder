@@ -7,10 +7,14 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Query_Cache_Builder;
+use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
+use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
 
-abstract class View_Base {
+abstract class View_Base implements Model_Dependencies_Interface {
+
+	use Model_Dependencies;
 
 	const FROM_HIGH_TO_LOW = 'DESC';
 	const FROM_LOW_TO_HIGH = 'ASC';
@@ -104,7 +108,7 @@ abstract class View_Base {
 	}
 
 	public function set_order_by( array $order_by ): View_Base {
-		if ( ! in_array( $order_by, array( self::FROM_HIGH_TO_LOW, self::FROM_LOW_TO_HIGH ) ) ) {
+		if ( ! in_array( $order_by, array( self::FROM_HIGH_TO_LOW, self::FROM_LOW_TO_HIGH ), true ) ) {
 			return $this;
 		}
 
@@ -375,6 +379,8 @@ abstract class View_Base {
 	 * @return Query_Cache_Builder
 	 */
 	public function query(): Query_Builder {
+		$this->prepare_dependencies();
+
 		return ( new Query_Cache_Builder() )->set_view( $this );
 	}
 

@@ -22,17 +22,10 @@ class Record_By_Payment extends View_Base {
 
 	/**
 	 * @param Query_Builder $builder
-	 *
-	 * @throws Query_Builder_Exception
 	 */
 	public function get_prepared_join( Query_Builder $builder ) {
-		try {
-			$payment_to_record = ( new Payment_To_Record() )->create()::table();
-		} catch ( Sql_Exception $exception ) {
-			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
-		}
-
-		$records = Record_Model::table();
+		$payment_to_record = ( new Payment_To_Record() )->create()::table();
+		$records           = Record_Model::table();
 
 		$builder->join = "
 LEFT JOIN `{$records}` ON 1=1

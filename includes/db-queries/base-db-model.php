@@ -53,9 +53,7 @@ abstract class Base_Db_Model {
 		return $columns;
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
+
 	public function create(): Base_Db_Model {
 		Execution_Builder::instance()->safe_create( $this );
 
@@ -152,16 +150,10 @@ abstract class Base_Db_Model {
 		return array();
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
 	public function before_create() {
 		$this->create_foreign_tables();
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
 	protected function create_foreign_tables() {
 		Execution_Builder::instance()->create_foreign_tables( $this );
 	}
@@ -169,9 +161,6 @@ abstract class Base_Db_Model {
 	public function after_create() {
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
 	public function before_insert() {
 		$this->create();
 	}

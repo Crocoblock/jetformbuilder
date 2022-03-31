@@ -16,9 +16,6 @@ trait Model_Dependencies {
 		return array();
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
 	public function prepare_dependencies() {
 		foreach ( $this->get_dependencies() as $model ) {
 			$model->create();

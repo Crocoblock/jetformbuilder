@@ -25,21 +25,12 @@ class Payment_View extends View_Base {
 
 	/**
 	 * @param Query_Builder $builder
-	 *
-	 * @throws Query_Builder_Exception
 	 */
 	public function get_prepared_join( Query_Builder $builder ) {
-		try {
-			// and also safely create dependent tables
-			$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->create()::table();
-
-		} catch ( Sql_Exception $exception ) {
-			throw new Query_Builder_Exception( $exception->getMessage(), ...$exception->get_additional() );
-		}
-
-		$payments    = Payment_Model::table();
-		$payers      = Payer_Model::table();
-		$payers_ship = Payer_Shipping_Model::table();
+		$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->create()::table();
+		$payments            = Payment_Model::table();
+		$payers              = Payer_Model::table();
+		$payers_ship         = Payer_Shipping_Model::table();
 
 		$builder->join = "
 LEFT JOIN `{$payments_to_p_ships}` ON 1=1

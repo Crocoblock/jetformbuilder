@@ -25,7 +25,6 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return Execution_Builder
-	 * @throws Sql_Exception
 	 */
 	public function create( Base_Db_Model $model ): Execution_Builder {
 		global $wpdb;
@@ -44,7 +43,6 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return Execution_Builder
-	 * @throws Sql_Exception
 	 */
 	public function create_foreign_tables( Base_Db_Model $model ): Execution_Builder {
 		foreach ( $model->foreign_relations() as $constraint ) {
@@ -276,7 +274,6 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return Execution_Builder
-	 * @throws Sql_Exception
 	 */
 	public function safe_create( Base_Db_Model $model ): Execution_Builder {
 		if ( $this->is_exist( $model ) ) {

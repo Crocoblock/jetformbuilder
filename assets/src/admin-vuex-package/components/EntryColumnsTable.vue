@@ -149,10 +149,19 @@ export default {
 
 <style lang="scss">
 
+.jfb-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .list-table-item__cell {
+	overflow: hidden;
+	text-overflow: ellipsis;
+
 	&.overflow-visible.overflow-visible {
 		overflow: visible;
 	}
+
 	&--body {
 		&-is-editable {
 			display: flex;

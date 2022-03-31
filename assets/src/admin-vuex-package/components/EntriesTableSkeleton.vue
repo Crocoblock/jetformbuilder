@@ -330,13 +330,6 @@ export default {
 			&:not(.cell--choose) {
 				flex: 1;
 			}
-
-			& > span {
-				display: flex;
-				justify-content: flex-start;
-				align-items: center;
-				flex-wrap: wrap;
-			}
 		}
 	}
 

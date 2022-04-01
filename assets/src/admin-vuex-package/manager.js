@@ -27,6 +27,7 @@ import EditTableSwitcher from './components/BoxActions/EditTableSwitcher';
 import AlertsList from './components/Alerts/AlertsList';
 import DashboardPanel from './components/VuiBoxes/DashboardPanel';
 import SideBarBoxes from './components/SideBarBoxes';
+import RunActionsMixin from './mixins/RunActionsMixin';
 
 Vue.use( Vuex );
 
@@ -59,6 +60,7 @@ window.JetFBMixins = {
 	FilterMixin,
 	GetColumnComponent,
 	ScopeStoreMixin,
+	RunActionsMixin,
 };
 
 

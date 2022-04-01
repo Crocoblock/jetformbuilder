@@ -22,6 +22,7 @@ const {
 	i18n,
 	PromiseWrapper,
 	GetIncomingMessages,
+	RunActionsMixin,
 } = JetFBMixins;
 
 const {
@@ -54,6 +55,7 @@ export default {
 		i18n,
 		PromiseWrapper,
 		GetIncomingMessages,
+		RunActionsMixin,
 	],
 	created() {
 		/** Delete */
@@ -92,55 +94,17 @@ export default {
 			promise: this.promiseWrapper( this.notViewClicked.bind( this ) ),
 		} );
 	},
-	computed: {
-		...mapGetters( 'scope-default', [
-			'getAction',
-			'getCurrentAction',
-			'fetchListOptions',
-			'getChecked',
-		] ),
-	},
 	methods: {
 		...mapMutations( [ 'toggleDoingAction' ] ),
 		...mapMutations( 'scope-default', [
 			'setList',
-			'setActionsList',
 			'setActionPromises',
 			'setBeforeAction',
-			'toggleLoading',
 		] ),
 		...mapActions( 'scope-default', [
-			'fetch',
 			'updateList',
 			'runRowAction',
 		] ),
-		beforeRunFetch() {
-			if ( ! this.getChecked.length ) {
-				throw new Error( this.messages?.empty_checked );
-			}
-
-			if ( ! this.getCurrentAction?.endpoint ) {
-				throw new Error( this.messages?.empty_action );
-			}
-		},
-		onCheckedOptions() {
-			return {
-				...this.fetchListOptions( this.getCurrentAction?.endpoint ),
-				data: {
-					checked: this.getChecked,
-				},
-			};
-		},
-		getOptionsStatic( action, payload ) {
-			const [ id ] = payload;
-
-			return {
-				...this.fetchListOptions( this.getAction( action )?.endpoint ),
-				data: {
-					checked: [ id ],
-				},
-			};
-		},
 		deleteAction( { resolve, reject, options } ) {
 			apiFetch( options ).then( response => {
 				this.updateList( response );

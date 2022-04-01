@@ -3,12 +3,9 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views\Columns;
 
-
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 
 class Payer_Column extends Column_Advanced_Base {
-
-	protected $type = 'rawArray';
 
 	public function get_label(): string {
 		return __( 'Payer', 'jet-form-builder' );
@@ -29,9 +26,6 @@ class Payer_Column extends Column_Advanced_Base {
 			);
 		}
 
-		return array(
-			'email_address' => $record['payer']['email'] ?? '',
-			'full_name'     => $name ?: __( 'Not attached', 'jet-form-builder' ),
-		);
+		return $name ?: __( 'Not attached', 'jet-form-builder' );
 	}
 }

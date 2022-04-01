@@ -14,7 +14,7 @@ const getters = {
 		const { action, context, payload = false } = state.currentProcess;
 
 		if ( 'object' !== typeof state.actionsPromises[ action ] ) {
-			return Promise.reject( __( 'Please choose your action', 'jet-form-builder' ) );
+			throw new Error( __( 'Please choose your action', 'jet-form-builder' ) );
 		}
 
 		const promise = state.actionsPromises[ action ][ context ] ?? false;

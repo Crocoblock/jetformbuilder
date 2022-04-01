@@ -82,12 +82,19 @@ export default {
 				},
 			);
 
-			this.getActionPromise().finally( () => {
+			const finish = () => {
 				this.onFinish();
 				this.commit( 'clearProcess' );
 				this.commit( 'setChecked' );
 				this.commit( 'unChooseHead' );
-			} );
+			};
+
+			try {
+				this.getActionPromise().finally( finish );
+			} catch ( error ) {
+				this.onFinish();
+			}
+
 		},
 	},
 };

@@ -19,8 +19,12 @@ export default {
 				};
 
 				const onError = message => {
-					if ( 'function' === typeof reject ) {
-						reject();
+					/**
+					 * Use resolve instead of reject,
+					 * because reject causes console errors to pop up
+					 */
+					if ( 'function' === typeof resolve ) {
+						resolve();
 					}
 
 					this.$CXNotice.add( {

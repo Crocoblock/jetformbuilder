@@ -4,11 +4,18 @@ export default {
 		commit( 'toggleDoingAction', null, { root: true } );
 		commit( 'toggleLoading', 'page' );
 
-		getters.getActionPromise.finally( () => {
+		const onFinish = () => {
 			commit( 'toggleLoading', 'page' );
 			commit( 'toggleDoingAction', null, { root: true } );
 			commit( 'clearProcess' );
-		} );
+		};
+
+		try {
+			getters.getActionPromise.finally( onFinish );
+		} catch ( error ) {
+			onFinish();
+		}
+
 	},
 	beforeRowAction( { state } ) {
 		const { action, context, payload = false } = state.currentProcess;

@@ -55,7 +55,7 @@ class Insert_Post extends Base {
 		$post_status = $this->settings['post_status'] ?? '';
 		$meta        = $this->settings['default_meta'] ?? array();
 
-		( new Post_Modifier )
+		( new Post_Modifier() )
 			->suppress_filters( false )
 			->set_post_type( $post_type )
 			->set_meta( $meta )
@@ -66,10 +66,12 @@ class Insert_Post extends Base {
 	}
 
 	public function get_inserted_post_context( $post_id = false ) {
-		$handler = $this->get_action_handler();
-		$post_id = $post_id ?: $handler->get_inserted_post_id();
+		$post_id = $post_id ?: jet_fb_action_handler()->get_inserted_post_id();
 
-		return $handler->get_context( 'insert_post', self::get_context_post_key( $post_id ) );
+		return jet_fb_action_handler()->get_context(
+			'insert_post',
+			self::get_context_post_key( $post_id )
+		);
 	}
 
 	public static function get_context_post_key( $post_id ) {
@@ -139,20 +141,23 @@ class Insert_Post extends Base {
 			);
 		}
 
-		$result = array_merge( $result, array(
+		$result = array_merge(
+			$result,
 			array(
-				'value' => 'trash',
-				'label' => __( 'Move to Trash', 'jet-form-builder' )
-			),
-			array(
-				'value' => 'from-field',
-				'label' => __( 'Get from the form field', 'jet-form-builder' )
-			),
-			array(
-				'value' => 'keep-current',
-				'label' => __( 'Keep current status (when updating post)', 'jet-form-builder' )
-			),
-		) );
+				array(
+					'value' => 'trash',
+					'label' => __( 'Move to Trash', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'from-field',
+					'label' => __( 'Get from the form field', 'jet-form-builder' ),
+				),
+				array(
+					'value' => 'keep-current',
+					'label' => __( 'Keep current status (when updating post)', 'jet-form-builder' ),
+				),
+			)
+		);
 
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
 

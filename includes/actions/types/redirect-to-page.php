@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 use phpDocumentor\Reflection\Types\False_;
 
@@ -61,9 +62,9 @@ class Redirect_To_Page extends Base {
 
 			case 'inserted_post':
 				/** @var Insert_Post $insert_instance */
-				$insert_instance = jet_form_builder()->actions->get_actions( 'insert_post' );
-
-				if ( ! $insert_instance ) {
+				try {
+					$insert_instance = jet_form_builder()->actions->get_action( 'insert_post' );
+				} catch ( Repository_Exception $exception ) {
 					return false;
 				}
 
@@ -122,7 +123,7 @@ class Redirect_To_Page extends Base {
 	}
 
 	/**
-	 * @param array          $request
+	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return mixed|void

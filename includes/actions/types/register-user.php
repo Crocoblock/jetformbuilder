@@ -60,8 +60,8 @@ class Register_User extends Base {
 			'user_role'         => __( 'User Role:', 'jet-form-builder' ),
 			'user_meta'         => __( 'User Meta:', 'jet-form-builder' ),
 			'log_in'            => __( 'Log In User after Register:', 'jet-form-builder' ),
-			'add_user_id'       => __( 'Add User ID to form data:', 'jet-from-builder' ),
-			'remember_me_field' => __( '"Remember me" field:', 'jet-form-builder' )
+			'add_user_id'       => __( 'Add User ID to form data:', 'jet-form-builder' ),
+			'remember_me_field' => __( '"Remember me" field:', 'jet-form-builder' ),
 		);
 	}
 
@@ -95,8 +95,8 @@ class Register_User extends Base {
 
 			if ( ! $allow_register ) {
 				if ( isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
-					$this->get_action_handler()->response_data['user_id'] = (int) $user->ID;
-					$this->get_action_handler()->request_data['user_id']  = (int) $user->ID;
+					jet_fb_action_handler()->response_data['user_id'] = (int) $user->ID;
+					jet_fb_action_handler()->request_data['user_id']  = (int) $user->ID;
 
 					return false;
 				}
@@ -272,7 +272,7 @@ class Register_User extends Base {
 					array(
 						'user_login'    => $username,
 						'user_password' => $password,
-						'remember'      => $is_remember
+						'remember'      => $is_remember,
 					)
 				);
 

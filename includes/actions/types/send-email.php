@@ -249,9 +249,12 @@ class Send_Email extends Base {
 		$message = stripcslashes( $message );
 
 		if ( Dev_Mode\Manager::instance()->active() ) {
-			add_action( 'wp_mail_failed', function ( \WP_Error $wp_error ) {
-				new Action_Exception( 'failed', $wp_error->get_error_message(), $wp_error->get_error_data() );
-			} );
+			add_action(
+				'wp_mail_failed',
+				function ( \WP_Error $wp_error ) {
+					new Action_Exception( 'failed', $wp_error->get_error_message(), $wp_error->get_error_data() );
+				}
+			);
 		}
 
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
@@ -284,7 +287,7 @@ class Send_Email extends Base {
 	 * @since 2.1
 	 */
 	public function get_headers() {
-		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
+		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 

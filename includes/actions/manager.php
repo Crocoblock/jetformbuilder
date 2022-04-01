@@ -84,7 +84,7 @@ class Manager {
 	/**
 	 * @param string $type
 	 *
-	 * @return array
+	 * @return Types\Base|array
 	 */
 	public function get_actions( $type = '' ) {
 		if ( ! $type ) {

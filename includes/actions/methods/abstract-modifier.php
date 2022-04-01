@@ -9,14 +9,14 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 abstract class Abstract_Modifier {
 
-	public $source_arr = array();
+	public $source_arr      = array();
 	protected $current_prop = '';
 	protected $current_value;
-	protected $request = array();
+	protected $request        = array();
 	protected $excluded_props = array();
 	protected $current_external;
 	protected $external_data = array();
-	protected $fields_map = array();
+	protected $fields_map    = array();
 
 	protected $action;
 
@@ -70,7 +70,7 @@ abstract class Abstract_Modifier {
 			'Undefined action',
 			array(
 				$action,
-				array_keys( $this->get_actions() )
+				array_keys( $this->get_actions() ),
 			)
 		);
 	}
@@ -188,9 +188,11 @@ abstract class Abstract_Modifier {
 			$this->fields_map[ $field_name ] = $prop_name;
 		}
 
-		$this->set_request( array(
-			$field_name => $value
-		) );
+		$this->set_request(
+			array(
+				$field_name => $value,
+			)
+		);
 
 		return $this;
 	}

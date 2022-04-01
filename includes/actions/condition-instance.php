@@ -17,7 +17,7 @@ class Condition_Instance {
 	private $compare_value_format;
 
 	private function get_manager(): Condition_Manager {
-		return jet_form_builder()->form_handler->action_handler->get_current_condition_manager();
+		return jet_fb_action_handler()->get_current_condition_manager();
 	}
 
 	/**
@@ -177,7 +177,7 @@ class Condition_Instance {
 	 * @throws Condition_Silence_Exception
 	 */
 	public function get_request_field( $field_name ) {
-		$handler = jet_form_builder()->form_handler->action_handler;
+		$handler = jet_fb_action_handler();
 
 		if ( isset( $handler->request_data[ $field_name ] ) ) {
 			return $handler->request_data[ $field_name ];

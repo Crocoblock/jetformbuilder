@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Tools;
@@ -22,10 +21,10 @@ class Post_Modifier extends Post_Modifier_Core {
 			'jet-form-builder/post-modifier/object-properties',
 			array(
 				'ID'          => array(
-					'before_cb' => array( $this, 'before_attach_id' )
+					'before_cb' => array( $this, 'before_attach_id' ),
 				),
 				'post_status' => array(
-					'before_cb' => array( $this, 'before_attach_status' )
+					'before_cb' => array( $this, 'before_attach_status' ),
 				),
 				'post_title',
 				'post_content',
@@ -33,7 +32,7 @@ class Post_Modifier extends Post_Modifier_Core {
 				'post_date',
 				'post_date_gmt',
 				'post_author',
-				'_thumbnail_id'
+				'_thumbnail_id',
 			),
 			$this
 		);
@@ -50,8 +49,8 @@ class Post_Modifier extends Post_Modifier_Core {
 			'jet-form-builder/post-modifier/object-required-properties',
 			array(
 				'post_title' => array(
-					'callback' => array( $this, 'set_required_title' )
-				)
+					'callback' => array( $this, 'set_required_title' ),
+				),
 			),
 			$this
 		);
@@ -63,14 +62,14 @@ class Post_Modifier extends Post_Modifier_Core {
 			array(
 				'update' => array(
 					'action' => array( $this, 'update_post' ),
-					'after'  => array( $this, 'after_do_action' )
+					'after'  => array( $this, 'after_do_action' ),
 				),
 				'insert' => array(
 					'action' => array( $this, 'insert_post' ),
-					'after'  => array( $this, 'after_do_action' )
+					'after'  => array( $this, 'after_do_action' ),
 				),
 				'trash'  => array(
-					'action' => array( $this, 'trash_post' )
+					'action' => array( $this, 'trash_post' ),
 				),
 			),
 			$this
@@ -83,24 +82,24 @@ class Post_Modifier extends Post_Modifier_Core {
 			array(
 				'meta'         => array(
 					'condition_cb' => true,
-					'match_cb'     => array( $this, 'attach_post_meta' )
+					'match_cb'     => array( $this, 'attach_post_meta' ),
 				),
 				'terms'        => array(
 					'condition_cb' => function () {
 						return false !== strpos( $this->current_prop, 'jet_tax__' );
 					},
 					'match_cb'     => array( $this, 'attach_post_terms' ),
-					'after_action' => array( $this, 'after_action_terms' )
+					'after_action' => array( $this, 'after_action_terms' ),
 				),
 				'je_relations' => array(
 					'condition_cb' => function () {
 						return function_exists( 'jet_engine' )
-						       && jet_engine()->relations
-						       && jet_engine()->relations->is_relation_key( $this->current_prop );
+								&& jet_engine()->relations
+								&& jet_engine()->relations->is_relation_key( $this->current_prop );
 					},
 					'match_cb'     => array( $this, 'attach_je_relations' ),
-					'after_action' => array( $this, 'after_action_je_relations' )
-				)
+					'after_action' => array( $this, 'after_action_je_relations' ),
+				),
 			),
 			$this
 		);
@@ -132,11 +131,13 @@ class Post_Modifier extends Post_Modifier_Core {
 		$post_type_obj = get_post_type_object( $this->source_arr['post_type'] );
 		$title         = $post_type_obj->labels->singular_name . ' #' . $this->inserted_post_id;
 
-		wp_update_post( array(
-			'ID'         => $this->inserted_post_id,
-			'post_title' => $title,
-			'post_name'  => "{$post_type_obj->labels->singular_name}-$this->inserted_post_id"
-		) );
+		wp_update_post(
+			array(
+				'ID'         => $this->inserted_post_id,
+				'post_title' => $title,
+				'post_name'  => "{$post_type_obj->labels->singular_name}-$this->inserted_post_id",
+			)
+		);
 	}
 
 	/**
@@ -216,13 +217,13 @@ class Post_Modifier extends Post_Modifier_Core {
 		 */
 		do_action(
 			'jet-form-builder/action/after-post-' . $this->action,
-			$this->get_handler()->get_current_action(),
-			$this->get_handler()
+			jet_fb_action_handler()->get_current_action(),
+			jet_fb_action_handler()
 		);
 	}
 
 	public function after_action_terms() {
-		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ) ) ) {
+		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ), true ) ) {
 			return;
 		}
 		$taxonomies = $this->get_current_external();
@@ -233,9 +234,9 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function after_action_je_relations() {
-		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ) )
-		     || ! function_exists( 'jet_engine' )
-		     || ! isset( jet_engine()->relations )
+		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ), true )
+			 || ! function_exists( 'jet_engine' )
+			 || ! isset( jet_engine()->relations )
 		) {
 			return;
 		}
@@ -252,7 +253,7 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function add_inserted_post_id( $post_id ) {
-		$handler = $this->get_handler();
+		$handler = jet_fb_action_handler();
 
 		if ( ! $handler->in_loop() ) {
 			return;
@@ -270,15 +271,13 @@ class Post_Modifier extends Post_Modifier_Core {
 	}
 
 	public function add_context_once( $post_id ) {
-		$handler = $this->get_handler();
-
-		if ( ! $handler->in_loop() ) {
+		if ( ! jet_fb_action_handler()->in_loop() ) {
 			return;
 		}
 		/**
 		 * For Redirect to Page action
 		 */
-		$handler->add_context_once(
+		jet_fb_action_handler()->add_context_once(
 			'insert_post',
 			array(
 				Insert_Post::get_context_post_key( $post_id ) => array_merge(
@@ -290,10 +289,6 @@ class Post_Modifier extends Post_Modifier_Core {
 				),
 			)
 		);
-	}
-
-	public function get_handler() {
-		return jet_form_builder()->form_handler->action_handler;
 	}
 
 	/**
@@ -344,30 +339,37 @@ class Post_Modifier extends Post_Modifier_Core {
 
 	public function attach_post_meta() {
 		if ( ! Tools::is_repeater_val( $this->current_value ) ) {
-			$this->set_meta( array(
-				$this->current_prop => $this->current_value
-			) );
+			$this->set_meta(
+				array(
+					$this->current_prop => $this->current_value,
+				)
+			);
 
 			return;
 		}
 
-		$this->set_meta( array(
-			$this->current_prop => Tools::prepare_repeater_value(
-				$this->current_value,
-				$this->fields_map
+		$this->set_meta(
+			array(
+				$this->current_prop => Tools::prepare_repeater_value(
+					$this->current_value,
+					$this->fields_map
+				),
 			)
-		) );
+		);
 	}
 
 	public function attach_je_relations() {
-		$this->set_current_external( array(
-			$this->current_prop => $this->current_value
-		) );
+		$this->set_current_external(
+			array(
+				$this->current_prop => $this->current_value,
+			)
+		);
 	}
 
 
 	/**
 	 * To skip setting this property
+	 *
 	 * @throws Silence_Exception
 	 *
 	 * To exclude this property from $this->source_arr

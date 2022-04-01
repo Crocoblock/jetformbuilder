@@ -20,16 +20,16 @@ class User_Modifier extends Abstract_Modifier {
 			'jet-form-builder/user-modifier/object-properties',
 			array(
 				'ID'               => array(
-					'before_cb' => array( $this, 'before_attach_id' )
+					'before_cb' => array( $this, 'before_attach_id' ),
 				),
 				'password'         => array(
-					'before_cb' => array( $this, 'before_attach_password' )
+					'before_cb' => array( $this, 'before_attach_password' ),
 				),
 				'email'            => array(
-					'before_cb' => array( $this, 'before_attach_email' )
+					'before_cb' => array( $this, 'before_attach_email' ),
 				),
 				'confirm_password' => array(
-					'before_cb' => array( $this, 'exclude_current' )
+					'before_cb' => array( $this, 'exclude_current' ),
 				),
 				'user_url',
 				'user_nicename',
@@ -48,7 +48,7 @@ class User_Modifier extends Abstract_Modifier {
 			array(
 				'update' => array(
 					'action' => array( $this, 'update_user' ),
-				)
+				),
 			)
 		);
 	}
@@ -60,7 +60,7 @@ class User_Modifier extends Abstract_Modifier {
 				'meta' => array(
 					'condition_cb' => true,
 					'match_cb'     => array( $this, 'attach_user_meta' ),
-					'after_action' => array( $this, 'after_action_user_meta' )
+					'after_action' => array( $this, 'after_action_user_meta' ),
 				),
 			)
 		);
@@ -79,7 +79,8 @@ class User_Modifier extends Abstract_Modifier {
 		if ( is_wp_error( $response ) ) {
 			throw ( new Action_Exception(
 				$response->get_error_message(),
-				$response->get_error_data() )
+				$response->get_error_data()
+			)
 			)->dynamic_error();
 		}
 
@@ -90,19 +91,23 @@ class User_Modifier extends Abstract_Modifier {
 
 	public function attach_user_meta() {
 		if ( ! Tools::is_repeater_val( $this->current_value ) ) {
-			$this->set_current_external( array(
-				$this->current_prop => $this->current_value
-			) );
+			$this->set_current_external(
+				array(
+					$this->current_prop => $this->current_value,
+				)
+			);
 
 			return;
 		}
 
-		$this->set_current_external( array(
-			$this->current_prop => Tools::prepare_repeater_value(
-				$this->current_value,
-				$this->fields_map
+		$this->set_current_external(
+			array(
+				$this->current_prop => Tools::prepare_repeater_value(
+					$this->current_value,
+					$this->fields_map
+				),
 			)
-		) );
+		);
 	}
 
 	public function after_action_user_meta() {

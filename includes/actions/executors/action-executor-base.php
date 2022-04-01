@@ -19,7 +19,7 @@ abstract class Action_Executor_Base {
 	/**
 	 * @return int[]
 	 */
-	public function get_actions_ids() {
+	public function get_actions_ids(): array {
 		if ( ! empty( $this->actions_ids ) ) {
 			return $this->actions_ids;
 		}

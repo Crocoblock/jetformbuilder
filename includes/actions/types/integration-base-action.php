@@ -28,11 +28,13 @@ abstract class Integration_Base_Action extends Base {
 	abstract public function api_handler( $api_key );
 
 	public function get_api_data() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $_REQUEST['api_key'] ) ) {
 			wp_send_json_error();
 		}
 
-		$handler = $this->api_handler( sanitize_text_field( $_REQUEST['api_key'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$handler = $this->api_handler( sanitize_text_field( wp_unslash( $_REQUEST['api_key'] ) ) );
 
 		if ( is_wp_error( $handler ) ) {
 			wp_send_json_error();

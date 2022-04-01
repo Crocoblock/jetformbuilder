@@ -84,6 +84,7 @@ export default {
 
 			this.getActionPromise().finally( () => {
 				this.onFinish();
+				this.commit( 'clearProcess' );
 				this.commit( 'setChecked' );
 				this.commit( 'unChooseHead' );
 			} );

@@ -7,6 +7,7 @@ export default {
 		getters.getActionPromise.finally( () => {
 			commit( 'toggleLoading', 'page' );
 			commit( 'toggleDoingAction', null, { root: true } );
+			commit( 'clearProcess' );
 		} );
 	},
 	beforeRowAction( { state } ) {

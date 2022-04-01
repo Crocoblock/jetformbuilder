@@ -27,18 +27,18 @@ const { i18n } = JetFBMixins;
 const { applyFilters } = wp.hooks;
 
 const {
-		  CHOOSE_ACTION,
-		  CLICK_ACTION,
-	  } = Constants;
+	CHOOSE_ACTION,
+	CLICK_ACTION,
+} = Constants;
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const {
-		  mapState,
-		  mapGetters,
-		  mapMutations,
-		  mapActions,
-	  } = Vuex;
+	mapState,
+	mapGetters,
+	mapMutations,
+	mapActions,
+} = Vuex;
 
 export default {
 	name: 'ChooseAction',
@@ -61,6 +61,9 @@ export default {
 		...mapMutations( [
 			'toggleDoingAction',
 		] ),
+		getActionPromise() {
+			return this.getter( 'getActionPromise' );
+		},
 		setCurrentAction( value ) {
 			this.commit( 'setCurrentAction', value );
 		},
@@ -71,14 +74,16 @@ export default {
 		applyAction() {
 			this.onFinish();
 
-			this.dispatch( 'runRowAction', {
-				action: this.currentAction,
-				context: CHOOSE_ACTION,
-			} ).then( () => {
+			this.commit(
+				'setProcess',
+				{
+					action: this.currentAction,
+					context: CHOOSE_ACTION,
+				},
+			);
+
+			this.getActionPromise().finally( () => {
 				this.onFinish();
-			} ).catch( () => {
-				this.onFinish();
-			} ).finally( () => {
 				this.commit( 'setChecked' );
 				this.commit( 'unChooseHead' );
 			} );
@@ -93,9 +98,11 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.7em;
+
 	.cx-vui-component {
 		flex: 1;
 		padding: unset;
+
 		&__control {
 			flex: 1;
 		}

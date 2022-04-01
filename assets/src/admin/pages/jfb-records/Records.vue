@@ -56,6 +56,7 @@ export default {
 		GetIncomingMessages,
 	],
 	created() {
+		/** Delete */
 		this.setActionPromises( {
 			action: 'delete',
 			context: CHOOSE_ACTION,
@@ -67,6 +68,7 @@ export default {
 			promise: this.promiseWrapper( this.deleteClicked.bind( this ) ),
 		} );
 
+		/** Mark as Viewed */
 		this.setActionPromises( {
 			action: 'mark_viewed',
 			context: CHOOSE_ACTION,
@@ -78,6 +80,7 @@ export default {
 			promise: this.promiseWrapper( this.viewClicked.bind( this ) ),
 		} );
 
+		/** Mark as Not Viewed */
 		this.setActionPromises( {
 			action: 'mark_not_viewed',
 			context: CHOOSE_ACTION,
@@ -103,11 +106,13 @@ export default {
 			'setList',
 			'setActionsList',
 			'setActionPromises',
+			'setBeforeAction',
 			'toggleLoading',
 		] ),
 		...mapActions( 'scope-default', [
 			'fetch',
 			'updateList',
+			'runRowAction',
 		] ),
 		beforeRunFetch() {
 			if ( ! this.getChecked.length ) {

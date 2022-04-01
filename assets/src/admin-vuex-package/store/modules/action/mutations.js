@@ -30,4 +30,10 @@ export default {
 			},
 		};
 	},
-}
+	setProcess( state, process ) {
+		state.currentProcess = process;
+	},
+	clearProcess( state ) {
+		state.currentProcess = {};
+	}
+};

@@ -199,38 +199,22 @@ export default {
 			if ( action?.href ) {
 				return;
 			}
+			this.commit(
+				'setProcess',
+				{
+					action: action.value,
+					context: CLICK_ACTION,
+					payload: [ getPrimaryId( record ) ],
+				},
+			);
+
 			try {
-				this.beforeRowAction( action, record );
+				this.dispatch( 'beforeRowAction' );
 			} catch ( error ) {
 				return;
 			}
 
-			this.runRowAction( action, record );
-		},
-		getClickPayload( action, record ) {
-			return {
-				action: action.value,
-				context: CLICK_ACTION,
-				payload: [ getPrimaryId( record ) ],
-			};
-		},
-		beforeRowAction( action, record ) {
-			this.dispatch(
-				'beforeRowAction',
-				this.getClickPayload( action, record ),
-			);
-		},
-		runRowAction( action, record ) {
-			this.toggleDoingAction();
-
-			this.dispatch(
-				'runRowAction',
-				this.getClickPayload( action, record ),
-			).then( () => {
-				this.toggleDoingAction();
-			} ).catch( () => {
-				this.toggleDoingAction();
-			} );
+			this.dispatch( 'runRowAction' );
 		},
 	},
 };
@@ -242,6 +226,7 @@ export default {
 	&--loading {
 		opacity: 0.5;
 	}
+
 	&-table-wrapper {
 		margin-bottom: unset;
 	}

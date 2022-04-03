@@ -25,7 +25,7 @@ class Record_Model extends Base_Db_Model {
 			'submit_type'       => 'varchar(20)',
 			'is_viewed'         => 'tinyint(1)',
 			'created_at'        => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'        => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at'        => 'TIMESTAMP NOT NULL',
 		);
 	}
 

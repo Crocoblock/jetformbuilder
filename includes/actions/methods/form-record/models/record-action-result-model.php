@@ -20,7 +20,7 @@ class Record_Action_Result_Model extends Base_Db_Model {
 			'action_id'   => 'int(11) NOT NULL',
 			'status'      => 'varchar(255) NOT NULL',
 			'created_at'  => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'  => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at'  => 'TIMESTAMP NOT NULL',
 		);
 	}
 

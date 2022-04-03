@@ -29,7 +29,7 @@ class Payer_Model extends Base_Db_Model {
 			'last_name'  => 'varchar(100)',
 			'email'      => 'varchar(255)',
 			'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at' => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at' => 'TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -86,8 +86,6 @@ class Payer_Model extends Base_Db_Model {
 
 		return ( new static() )->update_soft( $payer, $where );
 	}
-
-
 
 
 }

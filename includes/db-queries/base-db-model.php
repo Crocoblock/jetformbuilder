@@ -8,8 +8,8 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';
-	const InnoDB          = 'InnoDB';
-	const MyISAM          = 'MyISAM';
+	const InnoDB = 'InnoDB';
+	const MyISAM = 'MyISAM';
 
 	protected static $prefix = self::DB_TABLE_PREFIX;
 
@@ -147,7 +147,14 @@ abstract class Base_Db_Model {
 	}
 
 	public function get_defaults(): array {
-		return array();
+		$defaults    = array();
+		$schema_keys = array_keys( static::schema() );
+
+		if ( in_array( 'created_at', $schema_keys, true ) ) {
+			$defaults['created_at'] = current_time( 'mysql' );
+		}
+
+		return $defaults;
 	}
 
 	public function before_create() {
@@ -169,6 +176,17 @@ abstract class Base_Db_Model {
 	}
 
 	public function before_update() {
+	}
+
+	public function update_columns( array $columns ): array {
+		$schema_keys = array_keys( static::schema() );
+
+		if ( in_array( 'updated_at', $schema_keys, true )
+			&& ! array_key_exists( 'updated_at', $columns )
+		) {
+			$defaults['updated_at'] = current_time( 'mysql' );
+		}
+		return $columns;
 	}
 
 	/**

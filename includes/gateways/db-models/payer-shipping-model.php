@@ -31,7 +31,7 @@ class Payer_Shipping_Model extends Base_Db_Model {
 			'postal_code'    => 'varchar(100)',
 			'country_code'   => 'varchar(100)',
 			'created_at'     => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'     => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at'     => 'TIMESTAMP NOT NULL',
 		);
 	}
 

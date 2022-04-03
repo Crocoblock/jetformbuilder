@@ -23,7 +23,7 @@ class Record_Error_Model extends Base_Db_Model {
 			'trace_string' => 'longtext',
 			'data'         => 'longtext',
 			'created_at'   => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at'   => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at'   => 'TIMESTAMP NOT NULL',
 		);
 	}
 

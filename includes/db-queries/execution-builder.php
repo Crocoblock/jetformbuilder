@@ -106,8 +106,10 @@ class Execution_Builder {
 
 		$model->before_update();
 
+		$update_columns = $model->update_columns( $columns );
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$wpdb->update( $model->table(), $columns, $where, $format, $where_format );
+		$wpdb->update( $model->table(), $update_columns, $where, $format, $where_format );
 
 		if ( ! $wpdb->rows_affected ) {
 			throw new Sql_Exception(

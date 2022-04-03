@@ -25,7 +25,7 @@ class Payment_Meta_Model extends Base_Db_Model {
 			'meta_key'   => 'varchar(255)',
 			'meta_value' => 'text',
 			'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at' => 'TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL',
+			'updated_at' => 'TIMESTAMP NOT NULL',
 		);
 	}
 

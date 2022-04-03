@@ -184,7 +184,7 @@ abstract class Base_Db_Model {
 		if ( in_array( 'updated_at', $schema_keys, true )
 			&& ! array_key_exists( 'updated_at', $columns )
 		) {
-			$defaults['updated_at'] = current_time( 'mysql' );
+			$columns['updated_at'] = current_time( 'mysql' );
 		}
 		return $columns;
 	}

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Admin;
 
 
+use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
 use Jet_Form_Builder\Plugin;
 
 trait Admin_Page_Trait {
@@ -22,6 +23,13 @@ trait Admin_Page_Trait {
 	 */
 	public function render_page() {
 		printf( '<div id="%s"></div>', esc_attr( 'jet-form-builder_page_' . $this->slug() ) );
+	}
+
+	/**
+	 * @return Base_Page_Action[]
+	 */
+	public function get_actions(): array {
+		return array();
 	}
 
 	public function query_config(): array {

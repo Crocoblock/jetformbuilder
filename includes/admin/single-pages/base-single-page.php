@@ -8,7 +8,9 @@ use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
+use Jet_Form_Builder\Admin\Single_Pages\Actions\Base_Single_Page_Action;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 
@@ -24,6 +26,14 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	public function rep_item_id() {
 		return $this->parent_slug();
 	}
+
+	/**
+	 * @return Base_Meta_Container[]
+	 */
+	public function meta_containers(): array {
+		return array();
+	}
+
 
 	/**
 	 * @return Base_Single_Page
@@ -59,19 +69,13 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	}
 
 	/**
-	 * @return Base_Meta_Container[]
-	 */
-	public function meta_containers(): array {
-		return array();
-	}
-
-	/**
 	 * @return array
 	 */
 	public function page_config(): array {
 		return array(
 			'containers' => $this->get_prepared_containers(),
 			'title'      => $this->title(),
+			'actions'    => Array_Tools::to_array( $this->get_actions() ),
 		);
 	}
 

@@ -14,13 +14,13 @@
 <script>
 import TablePagination from '../TablePagination';
 import EntriesTable from '../EntriesTable';
+import FormBuilderPage from '../FormBuilderPage';
 
 Vue.config.devtools = true;
 
 const { GetIncoming, i18n } = JetFBMixins;
 const { apiFetch } = wp;
 const { mapState, mapGetters } = Vuex;
-const { FormBuilderPage } = JetFBComponents;
 
 export default {
 	name: 'payments-table-core',

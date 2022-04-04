@@ -4,15 +4,18 @@
 namespace Jet_Form_Builder\Admin\Buttons;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Generators\Base;
 
 class Base_Vui_Button implements Arrayable {
 
-	const STYLE_ACCENT         = 'accent';
-	const STYLE_DEFAULT        = 'default';
-	const STYLE_LINK_ACCENT    = 'link-accent';
-	const STYLE_LINK_ERROR     = 'link-error';
-	const STYLE_ACCENT_BORDER  = 'accent-border';
-	const STYLE_DEFAULT_BORDER = 'default-border';
+	const STYLE_ACCENT              = 'accent';
+	const STYLE_ACCENT_ERROR        = 'accent-error';
+	const STYLE_ACCENT_ERROR_BORDER = 'accent-error-border';
+	const STYLE_DEFAULT             = 'default';
+	const STYLE_LINK_ACCENT         = 'link-accent';
+	const STYLE_LINK_ERROR          = 'link-error';
+	const STYLE_ACCENT_BORDER       = 'accent-border';
+	const STYLE_DEFAULT_BORDER      = 'default-border';
 
 	const TYPE_BUTTON = 'button';
 	const TYPE_SUBMIT = 'submit';
@@ -20,16 +23,18 @@ class Base_Vui_Button implements Arrayable {
 
 	const SIZE_DEFAULT = 'default';
 	const SIZE_MINI    = 'mini';
+	const SIZE_MINI_X2 = 'mini-x2';
 	const SIZE_LINK    = 'link';
 
-	protected $slug  = 'default';
-	protected $url   = '';
-	protected $style = self::STYLE_ACCENT;
-	protected $type  = self::TYPE_BUTTON;
-	protected $size  = self::SIZE_DEFAULT;
-	protected $label = '';
+	protected $slug;
+	protected $url     = '';
+	protected $style   = self::STYLE_ACCENT;
+	protected $type    = self::TYPE_BUTTON;
+	protected $size    = self::SIZE_DEFAULT;
+	protected $label   = '';
+	protected $classes = array();
 
-	public function __construct( string $slug ) {
+	public function __construct( string $slug = 'default' ) {
 		$this->slug = $slug;
 	}
 
@@ -57,6 +62,10 @@ class Base_Vui_Button implements Arrayable {
 
 	public function get_label(): string {
 		return $this->label;
+	}
+
+	public function get_classes(): array {
+		return $this->classes;
 	}
 
 	/** Setters */
@@ -91,6 +100,12 @@ class Base_Vui_Button implements Arrayable {
 		return $this;
 	}
 
+	public function add_classes( array $classes ): Base_Vui_Button {
+		$this->classes += $classes;
+
+		return $this;
+	}
+
 	/**
 	 * Get the instance as an array.
 	 *
@@ -98,12 +113,13 @@ class Base_Vui_Button implements Arrayable {
 	 */
 	public function to_array(): array {
 		return array(
-			'slug'  => $this->get_slug(),
-			'size'  => $this->get_size(),
-			'style' => $this->get_style(),
-			'type'  => $this->get_type(),
-			'url'   => $this->get_url(),
-			'label' => $this->get_label(),
+			'slug'    => $this->get_slug(),
+			'size'    => $this->get_size(),
+			'style'   => $this->get_style(),
+			'type'    => $this->get_type(),
+			'url'     => $this->get_url(),
+			'label'   => $this->get_label(),
+			'classes' => $this->get_classes(),
 		);
 	}
 }

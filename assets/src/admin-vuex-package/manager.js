@@ -27,6 +27,8 @@ import AlertsList from './components/Alerts/AlertsList';
 import DashboardPanel from './components/VuiBoxes/DashboardPanel';
 import SideBarBoxes from './components/SideBarBoxes';
 import RunActionsMixin from './mixins/RunActionsMixin';
+import FormBuilderPage from './components/FormBuilderPage';
+import PageActionsPlugin from './store/plugins/PageActions';
 
 Vue.use( Vuex );
 
@@ -50,6 +52,7 @@ window.JetFBComponents = {
 	AlertsList,
 	DashboardPanel,
 	SideBarBoxes,
+	FormBuilderPage,
 };
 
 
@@ -68,6 +71,7 @@ window.JetFBStore = {
 	TableModulePlugin,
 	SingleMetaBoxesPlugin,
 	NoticesPlugin,
+	PageActionsPlugin,
 };
 
 window.JetFBConst = Constants;

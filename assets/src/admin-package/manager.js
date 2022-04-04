@@ -19,7 +19,6 @@ import GetIncomingMessages from './mixins/GetIncomingMessages';
 import CxVuiTabsPanel from './components/CxVuiTabsPanel';
 import CxVuiTabs from './components/CxVuiTabs';
 import LocalStorage from './functions/LocalStorage';
-import FormBuilderPage from './components/FormBuilderPage';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -41,7 +40,6 @@ window.JetFBComponents = {
 	ListComponents,
 	CxVuiTabsPanel,
 	CxVuiTabs,
-	FormBuilderPage,
 };
 
 window.JetFBMixins = {

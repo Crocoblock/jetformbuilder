@@ -27,6 +27,7 @@ class Pages_Manager {
 	private $stable_manager;
 	private $single_manager;
 
+	const STYLE_ADMIN         = 'jet-form-builder-admin-style';
 	const SCRIPT_VUEX         = 'jet-form-builder-admin-vuex';
 	const SCRIPT_PACKAGE      = 'jet-form-builder-admin-package';
 	const SCRIPT_VUEX_PACKAGE = 'jet-form-builder-admin-vuex-package';
@@ -144,6 +145,13 @@ class Pages_Manager {
 			array(),
 			'3.6.2',
 			true
+		);
+
+		wp_register_style(
+			self::STYLE_ADMIN,
+			Plugin::instance()->plugin_url( 'assets/css/admin/default.css' ),
+			array(),
+			Plugin::instance()->get_version()
 		);
 
 		wp_register_script(

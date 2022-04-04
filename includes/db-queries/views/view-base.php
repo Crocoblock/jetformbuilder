@@ -154,8 +154,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		$table = empty( $column['table'] ) ? $this->table() : $column['table'];
 
 		if ( ! $name ) {
-			_doing_it_wrong( __METHOD__, 'Please set the column name.', '2.0.0' );
-			wp_die();
+			wp_die( 'Please set the column name.', 'View Base Error' );
 		}
 
 		return "`{$table}`.`{$name}`";

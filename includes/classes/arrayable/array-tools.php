@@ -20,7 +20,7 @@ class Array_Tools {
 			unset( $payload[ $index ] );
 		}
 
-		return $payload;
+		return array_values( $payload );
 	}
 
 }

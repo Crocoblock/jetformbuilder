@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Admin;
 
 
+use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
+
 interface Admin_Page_Interface {
 
 	/**
@@ -39,5 +41,10 @@ interface Admin_Page_Interface {
 	 * @return string
 	 */
 	public function get_url( $query_args = array() ): string;
+
+	/**
+	 * @return Base_Page_Action[]
+	 */
+	public function get_actions(): array;
 
 }

@@ -55,8 +55,6 @@ import * as mailchimp from './tabs/mailchimp';
 import * as getResponse from './tabs/getresponse';
 import * as activecampaign from './tabs/activecampaign';
 import * as paymentGateways from './tabs/payments-gateways';
-import '../../../../scss/admin/default.scss';
-import './styles/main.scss';
 import SettingsSideBar from './sidebar/SettingsSideBar';
 
 const { applyFilters, doAction } = wp.hooks;

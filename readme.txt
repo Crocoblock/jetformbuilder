@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 5.9
+Tested up to: 5.9.2
 Requires PHP: 7.0
-Stable tag: 1.5.5
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -260,6 +260,12 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**2.0.0**
+ - ADD: Really hidden fields. Which are not displayed in HTML
+ - ADD: Form Record functionality. This includes a form action and admin view
+ - UPD: PayPal Gateway functionality: admin view
+ - Tweak: fixes and improvements
 
 **1.5.5**
  - FIX: Fatal error when executing actions after passing a payment

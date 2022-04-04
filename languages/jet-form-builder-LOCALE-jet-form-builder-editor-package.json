@@ -48,6 +48,138 @@
             "Contain text": [
                 ""
             ],
+            "Actions Log": [
+                ""
+            ],
+            "Record Errors": [
+                ""
+            ],
+            "Form Fields": [
+                ""
+            ],
+            "General Values": [
+                ""
+            ],
+            "Related Form Record": [
+                ""
+            ],
+            "Form Records": [
+                ""
+            ],
+            "JetFormBuilder Form Record": [
+                ""
+            ],
+            "Select Form": [
+                ""
+            ],
+            "Filter by Form": [
+                ""
+            ],
+            "You have not selected any record.": [
+                ""
+            ],
+            "You have not selected an action.": [
+                ""
+            ],
+            "Delete": [
+                ""
+            ],
+            "Mark as not Viewed": [
+                ""
+            ],
+            "Mark as Viewed": [
+                ""
+            ],
+            "View": [
+                ""
+            ],
+            "Edit Form": [
+                ""
+            ],
+            "Data": [
+                ""
+            ],
+            "Message": [
+                ""
+            ],
+            "Error Place": [
+                ""
+            ],
+            "Exception": [
+                ""
+            ],
+            "Name": [
+                ""
+            ],
+            "Field Type": [
+                ""
+            ],
+            "Computed Field": [
+                ""
+            ],
+            "Value": [
+                ""
+            ],
+            "Action": [
+                ""
+            ],
+            "Status": [
+                ""
+            ],
+            "The action was completed successfully": [
+                ""
+            ],
+            "The action was skipped because the condition did not met": [
+                ""
+            ],
+            "An error occurred while executing the action": [
+                ""
+            ],
+            "Form": [
+                ""
+            ],
+            "Ip Address": [
+                ""
+            ],
+            "View Record": [
+                ""
+            ],
+            "Referrer": [
+                ""
+            ],
+            "Completed": [
+                ""
+            ],
+            "Created": [
+                ""
+            ],
+            "User Agent": [
+                ""
+            ],
+            "Submitted By": [
+                ""
+            ],
+            "This data is not stored now. You can enable data storing in the Action's settings": [
+                ""
+            ],
+            "Is not stored": [
+                ""
+            ],
+            "Something went wrong on delete.": [
+                ""
+            ],
+            "Successfully removed": [
+                ""
+            ],
+            "Record Fields not found": [
+                ""
+            ],
+            "Records not found": [
+                ""
+            ],
+            "Successfully updated!": [
+                ""
+            ],
             "ActiveCampaign": [
                 ""
             ],
@@ -117,6 +249,9 @@
             "Webhook URL:": [
                 ""
             ],
+            "User Login": [
+                ""
+            ],
             "Getresponse": [
                 ""
             ],
@@ -145,6 +280,15 @@
                 ""
             ],
             "Set default meta values which should be set on post insert/update": [
+                ""
+            ],
+            "Move to Trash": [
+                ""
+            ],
+            "Get from the form field": [
+                ""
+            ],
+            "Keep current status (when updating post)": [
                 ""
             ],
             "Post ID": [
@@ -240,6 +384,12 @@
             "Log In User after Register:": [
                 ""
             ],
+            "Add User ID to form data:": [
+                ""
+            ],
+            "\"Remember me\" field:": [
+                ""
+            ],
             "Registered user ID will be added to form data. If form is filled by logged \r\n\t\t\tin user - current user ID will be added to form data.": [
                 ""
             ],
@@ -276,9 +426,6 @@
             "Not enough capabilities": [
                 ""
             ],
-            "User Login": [
-                ""
-            ],
             "Password": [
                 ""
             ],
@@ -286,6 +433,12 @@
                 ""
             ],
             "User URL": [
+                ""
+            ],
+            "Save Form Record": [
+                ""
+            ],
+            "Store the IP address and other request headers": [
                 ""
             ],
             "Send Email": [
@@ -456,7 +609,52 @@
             "Addons": [
                 ""
             ],
+            "Help Center": [
+                ""
+            ],
+            "Support & Info": [
+                ""
+            ],
+            "Knowledge base": [
+                ""
+            ],
+            "Ask the community": [
+                ""
+            ],
+            "Contact support": [
+                ""
+            ],
+            "Feature requests & bug fixes": [
+                ""
+            ],
+            "Expand your forms functionality with automate, calculate, integrations of payments gateways, \r\n\t\tCRMs and email marketing. Try premium addons for JetFormBuilder plugin.": [
+                ""
+            ],
+            "Check Pro Addons": [
+                ""
+            ],
+            "No, thanks": [
+                ""
+            ],
             "Settings": [
+                ""
+            ],
+            "Useful": [
+                ""
+            ],
+            "Try more options with PRO addons from JetFormBuilder.": [
+                ""
+            ],
+            "15 Addons Available": [
+                ""
+            ],
+            "Discover addons": [
+                ""
+            ],
+            "Go PRO": [
+                ""
+            ],
+            "Updated": [
                 ""
             ],
             "Saved successfully!": [
@@ -465,10 +663,13 @@
             "Unsuccessful save.": [
                 ""
             ],
-            "Jet Form Fields": [
+            "Submit Form": [
                 ""
             ],
             "Submit": [
+                ""
+            ],
+            "Jet Form Fields": [
                 ""
             ],
             "Margin": [
@@ -532,12 +733,6 @@
                 ""
             ],
             "Hover": [
-                ""
-            ],
-            "Form field name": [
-                ""
-            ],
-            "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case": [
                 ""
             ],
             "\r\n\t\t\tSet math formula to calculate field value.<br/>\r\n\t\t\tFor example:<br/><br/>\r\n\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n\t\t\tWhere:<br/>\r\n\t\t\t- %FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from<br/>\r\n\t\t\t- %META::price% - macro for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n\t\t": [
@@ -768,6 +963,9 @@
             "Please select template": [
                 ""
             ],
+            "(no title)": [
+                ""
+            ],
             "Page Reload": [
                 ""
             ],
@@ -781,6 +979,9 @@
                 ""
             ],
             "LABEL": [
+                ""
+            ],
+            "Empty row.": [
                 ""
             ],
             "You not allowed to do this": [
@@ -834,6 +1035,96 @@
             "Booking form": [
                 ""
             ],
+            "Street Address Line 1": [
+                ""
+            ],
+            "Street Address Line 2": [
+                ""
+            ],
+            "City": [
+                ""
+            ],
+            "Country": [
+                ""
+            ],
+            "Gateway": [
+                ""
+            ],
+            "Amount": [
+                ""
+            ],
+            "Currency Code": [
+                ""
+            ],
+            "Zip / Postal Code": [
+                ""
+            ],
+            "Full Name": [
+                ""
+            ],
+            "State / Province": [
+                ""
+            ],
+            "Payer Info": [
+                ""
+            ],
+            "Payment Shipping": [
+                ""
+            ],
+            "Payment Details": [
+                ""
+            ],
+            "Related Payment": [
+                ""
+            ],
+            "Payments": [
+                ""
+            ],
+            "JetFormBuilder Payment": [
+                ""
+            ],
+            "Choose scenario...": [
+                ""
+            ],
+            "Access key saved successfully!": [
+                ""
+            ],
+            "Payments not found": [
+                ""
+            ],
+            "Sync Access Token": [
+                ""
+            ],
+            "Access Token updated": [
+                ""
+            ],
+            "Request Button": [
+                ""
+            ],
+            "Click on the button to further manage the payment settings": [
+                ""
+            ],
+            "Gross": [
+                ""
+            ],
+            "Payer": [
+                ""
+            ],
+            "Not attached": [
+                ""
+            ],
+            "Voided": [
+                ""
+            ],
+            "Payment Type": [
+                ""
+            ],
+            "Initial payment": [
+                ""
+            ],
+            "Transaction ID": [
+                ""
+            ],
             "Get values list from JetEngine field options": [
                 ""
             ],
@@ -841,9 +1132,6 @@
                 ""
             ],
             "Numbers range by meta value": [
-                ""
-            ],
-            "Name": [
                 ""
             ],
             "Shortcode": [
@@ -856,9 +1144,6 @@
                 ""
             ],
             "Add New Form": [
-                ""
-            ],
-            "Edit Form": [
                 ""
             ],
             "New Form": [
@@ -924,16 +1209,19 @@
             "Enable form pages progress": [
                 ""
             ],
-            "Checkbox Size": [
-                ""
-            ],
-            "JetForm Radio": [
+            "JetForm Checkbox": [
                 ""
             ],
             "Yes": [
                 ""
             ],
             "No": [
+                ""
+            ],
+            "Checkbox Size": [
+                ""
+            ],
+            "JetForm Radio": [
                 ""
             ],
             "Radio Size": [
@@ -990,6 +1278,9 @@
             "Control Size": [
                 ""
             ],
+            "Option label": [
+                ""
+            ],
             "Background color": [
                 ""
             ],
@@ -1023,6 +1314,15 @@
             "Suffix size": [
                 ""
             ],
+            "Content Align": [
+                ""
+            ],
+            "Space Evenly": [
+                ""
+            ],
+            "Space Around": [
+                ""
+            ],
             "Range Fields": [
                 ""
             ],
@@ -1045,9 +1345,6 @@
                 ""
             ],
             "Thumb Color": [
-                ""
-            ],
-            "Value": [
                 ""
             ],
             "Heading": [
@@ -1116,6 +1413,9 @@
             "Error Message": [
                 ""
             ],
+            "Go Pro": [
+                ""
+            ],
             "<b>Error:</b> <b>JetFormBuilder</b> plugin requires a PHP version \">= 7.0\"": [
                 ""
             ],
@@ -1123,6 +1423,57 @@
                 ""
             ],
             "Maximum file size": [
+                ""
+            ],
+            "JetFormBuilder Payments": [
+                ""
+            ],
+            "Results per page": [
+                ""
+            ],
+            "Bulk actions": [
+                ""
+            ],
+            "Apply": [
+                ""
+            ],
+            "Edit table": [
+                ""
+            ],
+            "Undo": [
+                ""
+            ],
+            "Show overflow": [
+                ""
+            ],
+            "JetFormBuilder Form Records": [
+                ""
+            ],
+            "Clear Filters": [
+                ""
+            ],
+            "Pro": [
+                ""
+            ],
+            "HubSpot API": [
+                ""
+            ],
+            "Address Autocomplete": [
+                ""
+            ],
+            "ConvertKit API": [
+                ""
+            ],
+            "MailerLite API": [
+                ""
+            ],
+            "Moosend API": [
+                ""
+            ],
+            "Stripe Gateway API": [
+                ""
+            ],
+            "JetFormBuilder Settings": [
                 ""
             ],
             "Captcha Settings": [
@@ -1149,7 +1500,16 @@
             "Preset Settings": [
                 ""
             ],
+            "Limit Form Responses": [
+                ""
+            ],
+            "Form Schedule": [
+                ""
+            ],
             "Unknown error.": [
+                ""
+            ],
+            "Please choose your action": [
                 ""
             ],
             "Client ID": [
@@ -1165,15 +1525,6 @@
                 ""
             ],
             "Enable Test Mode": [
-                ""
-            ],
-            "Calculated Field": [
-                ""
-            ],
-            "Calculate and display your number values": [
-                ""
-            ],
-            "Checkbox Field": [
                 ""
             ],
             "Last Page Name": [
@@ -1212,25 +1563,19 @@
             "Form Break": [
                 ""
             ],
-            "Form Break Field": [
+            "Example:": [
                 ""
             ],
-            "Group Break Field": [
+            "datetime format": [
                 ""
             ],
-            "Heading Field": [
+            "timestamp format": [
                 ""
             ],
-            "Hidden Field": [
-                ""
-            ],
-            "Media Field": [
+            "Render in HTML": [
                 ""
             ],
             "Progress Bar Type": [
-                ""
-            ],
-            "Progress Bar": [
                 ""
             ],
             "Set math formula to calculate field value.": [
@@ -1246,9 +1591,6 @@
                 ""
             ],
             "%META::price% - macro for current post meta value. \"price\" - is a meta key to get value from": [
-                ""
-            ],
-            "Select Field": [
                 ""
             ],
             "Posts": [
@@ -1273,12 +1615,6 @@
                 ""
             ],
             "More info - ": [
-                ""
-            ],
-            "Text Field": [
-                ""
-            ],
-            "Wysiwyg Field": [
                 ""
             ],
             "Use custom template": [
@@ -1323,6 +1659,9 @@
             "%field_name% - replace \"field_name\" with any field name from the form;": [
                 ""
             ],
+            "Please add `Save Form Record` action": [
+                ""
+            ],
             "AND (ALL conditions must be met)": [
                 ""
             ],
@@ -1330,6 +1669,12 @@
                 ""
             ],
             "Condition Operator": [
+                ""
+            ],
+            "+ New Action": [
+                ""
+            ],
+            "All PRO Actions": [
                 ""
             ],
             "Edit Action Conditions": [
@@ -1344,6 +1689,12 @@
             "Type transform comparing value": [
                 ""
             ],
+            "Displays the progress of a multi-page form": [
+                ""
+            ],
+            "Enable form safety": [
+                ""
+            ],
             "Enable reCAPTCHA v3 form verification": [
                 ""
             ],
@@ -1356,10 +1707,22 @@
             "Please add `Insert/Update Post` action": [
                 ""
             ],
+            "Upgrade": [
+                ""
+            ],
+            "to unlock this feature.": [
+                ""
+            ],
             "General": [
                 ""
             ],
             "Field Label": [
+                ""
+            ],
+            "Form field name": [
+                ""
+            ],
+            "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case": [
                 ""
             ],
             "Field Description": [
@@ -1410,19 +1773,40 @@
             "Clone": [
                 ""
             ],
-            "Delete": [
+            "Available fields: ": [
                 ""
             ],
-            "Available fields: ": [
+            "Gateways editor data\u0004Before payment processed:": [
+                ""
+            ],
+            "Gateways editor data\u0004On successful payment:": [
+                ""
+            ],
+            "Gateways editor data\u0004On failed payment:": [
+                ""
+            ],
+            "Gateways editor data\u0004Price/amount field": [
+                ""
+            ],
+            "Gateways editor data\u0004Payment success message": [
+                ""
+            ],
+            "Gateways editor data\u0004Payment failed message": [
+                ""
+            ],
+            "Gateways editor data\u0004Use redirect URL from Redirect notification": [
+                ""
+            ],
+            "Gateways editor data\u0004Create payment order notification:": [
+                ""
+            ],
+            "Paypal gateways editor data\u0004PayPal Checkout": [
                 ""
             ],
             "Paypal gateways editor data\u0004Client ID": [
                 ""
             ],
             "Paypal gateways editor data\u0004Secret Key": [
-                ""
-            ],
-            "Paypal gateways editor data\u0004Currency Code": [
                 ""
             ],
             "Paypal gateways editor data\u0004Use Global Settings": [
@@ -1434,7 +1818,76 @@
             "Paypal gateway editor data\u0004Pay Now": [
                 ""
             ],
-            "Paypal gateway editor data\u0004Create a subscription": [
+            "block title\u0004Calculated Field": [
+                ""
+            ],
+            "block title\u0004Checkbox Field": [
+                ""
+            ],
+            "block title\u0004Color Picker Field": [
+                ""
+            ],
+            "block title\u0004Conditional Block": [
+                ""
+            ],
+            "block title\u0004Date Field": [
+                ""
+            ],
+            "block title\u0004Datetime Field": [
+                ""
+            ],
+            "block title\u0004JetForm": [
+                ""
+            ],
+            "block title\u0004Form Break Field": [
+                ""
+            ],
+            "block title\u0004Group Break Field": [
+                ""
+            ],
+            "block title\u0004Heading Field": [
+                ""
+            ],
+            "block title\u0004Hidden Field": [
+                ""
+            ],
+            "block title\u0004Media Field": [
+                ""
+            ],
+            "block title\u0004Number Field": [
+                ""
+            ],
+            "block title\u0004Progress Bar": [
+                ""
+            ],
+            "block title\u0004Radio Field": [
+                ""
+            ],
+            "block title\u0004Range Field": [
+                ""
+            ],
+            "block title\u0004Repeater Field": [
+                ""
+            ],
+            "block title\u0004Select Field": [
+                ""
+            ],
+            "block title\u0004Action Button": [
+                ""
+            ],
+            "block title\u0004Text Field": [
+                ""
+            ],
+            "block title\u0004Textarea Field": [
+                ""
+            ],
+            "block title\u0004Time Field": [
+                ""
+            ],
+            "block title\u0004Wysiwyg Field": [
+                ""
+            ],
+            "block description\u0004Calculate and display your number values": [
                 ""
             ],
             "block keyword\u0004jetformbuilder": [
@@ -1546,9 +1999,6 @@
                 ""
             ],
             "block keyword\u0004wysiwyg": [
-                ""
-            ],
-            "block title\u0004JetForm": [
                 ""
             ]
         }

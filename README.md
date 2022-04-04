@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.0
+* ADD: Really hidden fields. Which are not displayed in HTML
+* ADD: Form Record functionality. This includes a form action and admin view
+* UPD: PayPal Gateway functionality: admin view
+* Tweak: fixes and improvements
+
 ## 1.5.5
 * FIX: Fatal error when executing actions after passing a payment
 * FIX: Load preset for Options Page (JetEngine compatibility)

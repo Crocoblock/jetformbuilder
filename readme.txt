@@ -64,7 +64,7 @@ JetFormBuilder is a user-friendly form creator that lets you create new forms an
 Find inside 21+ JetFormBuilder blocks colored to stand out from the crowd. You can mix and match them freely until you achieve a unique row or column layout.
 
 = POST SUBMIT ACTIONS =
-Choose from 11 available actions and set any you want to be performed after the form is submitted on the frontend:
+Choose from 12 available actions and set any you want to be performed after the form is submitted on the frontend:
 
 - Send Email;
 - Insert/Update Post;

@@ -30,6 +30,11 @@
 				box-shadow: 0 2px 6px rgb(35 40 45 / 24%);
 			}
 		}
+		&.background-light {
+			&:hover {
+				background-color: white;
+			}
+		}
 	}
 
 	&__panel {

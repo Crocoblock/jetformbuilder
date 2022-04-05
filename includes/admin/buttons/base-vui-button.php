@@ -26,6 +26,8 @@ class Base_Vui_Button implements Arrayable {
 	const SIZE_MINI_X2 = 'mini-x2';
 	const SIZE_LINK    = 'link';
 
+	const PRESET_PAGE_ACTION = 'page_action';
+
 	protected $slug;
 	protected $url     = '';
 	protected $style   = self::STYLE_ACCENT;
@@ -39,6 +41,12 @@ class Base_Vui_Button implements Arrayable {
 	}
 
 	/** Getters */
+
+	protected function get_presets(): array {
+		return array(
+			self::PRESET_PAGE_ACTION => array( $this, 'set_preset_page_action' ),
+		);
+	}
 
 	public function get_slug(): string {
 		return $this->slug;
@@ -69,6 +77,26 @@ class Base_Vui_Button implements Arrayable {
 	}
 
 	/** Setters */
+
+	protected function set_preset_page_action() {
+		$this->set_style( self::STYLE_ACCENT_ERROR_BORDER );
+		$this->add_classes(
+			array( 'unset-box-shadow', 'background-light' )
+		);
+		$this->set_size( self::SIZE_MINI_X2 );
+	}
+
+	public function set_preset( string $preset ): Base_Vui_Button {
+		$presets = $this->get_presets();
+
+		if ( ! isset( $presets[ $preset ] ) || ! is_callable( $presets[ $preset ] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( 'Undefined style preset in ' . static::class );
+		}
+		call_user_func( $presets[ $preset ] );
+
+		return $this;
+	}
 
 	public function set_style( string $style ): Base_Vui_Button {
 		$this->style = $style;

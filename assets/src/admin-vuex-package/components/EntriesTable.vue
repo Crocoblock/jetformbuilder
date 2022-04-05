@@ -3,6 +3,7 @@
 		:list="list"
 		:columns="columns"
 		:loading="isLoading"
+		:empty-message="emptyMessage"
 		:columns-components="components"
 		:scope="scope"
 	></EntriesTableSkeleton>
@@ -39,6 +40,9 @@ export default {
 		},
 		columns() {
 			return this.getter( 'columns' );
+		},
+		emptyMessage() {
+			return this.getter( 'emptyMessage' );
 		},
 		isLoading() {
 			return this.getter( 'isLoading', 'page' );

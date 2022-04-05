@@ -79,7 +79,6 @@ class Base_Vui_Button implements Arrayable {
 	/** Setters */
 
 	protected function set_preset_page_action() {
-		$this->set_style( self::STYLE_ACCENT_ERROR_BORDER );
 		$this->add_classes(
 			array( 'unset-box-shadow', 'background-light' )
 		);

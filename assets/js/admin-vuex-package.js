@@ -668,6 +668,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 var _window$Vuex = window.Vuex,
@@ -696,6 +697,9 @@ var applyFilters = wp.hooks.applyFilters;
     },
     columns: function columns() {
       return this.getter('columns');
+    },
+    emptyMessage: function emptyMessage() {
+      return this.getter('emptyMessage');
     },
     isLoading: function isLoading() {
       return this.getter('isLoading', 'page');
@@ -821,6 +825,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -848,6 +855,10 @@ var _window$Vuex = window.Vuex,
     loading: {
       type: Boolean,
       default: false
+    },
+    emptyMessage: {
+      type: String,
+      default: ''
     }
   },
   data: function data() {
@@ -3707,6 +3718,36 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./admin-vuex-package/store/modules/table-options/empty-message/index.js":
+/*!*******************************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table-options/empty-message/index.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var __ = wp.i18n.__;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  state: {
+    message: ''
+  },
+  getters: {
+    emptyMessage: function emptyMessage(state) {
+      return state.message;
+    }
+  },
+  mutations: {
+    setEmptyMessage: function setEmptyMessage(state, message) {
+      state.message = message ? message : __('No items found', 'jet-form-builder');
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./admin-vuex-package/store/modules/table-options/index.js":
 /*!*****************************************************************!*\
   !*** ./admin-vuex-package/store/modules/table-options/index.js ***!
@@ -3721,6 +3762,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _show_overflow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./show-overflow */ "./admin-vuex-package/store/modules/table-options/show-overflow/index.js");
 /* harmony import */ var _render_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-type */ "./admin-vuex-package/store/modules/table-options/render-type/index.js");
 /* harmony import */ var _single__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./single */ "./admin-vuex-package/store/modules/table-options/single/index.js");
+/* harmony import */ var _empty_message__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./empty-message */ "./admin-vuex-package/store/modules/table-options/empty-message/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3730,12 +3772,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: function state() {
-    return _objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].state), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].state), _single__WEBPACK_IMPORTED_MODULE_2__["default"].state);
+    return _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].state), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].state), _single__WEBPACK_IMPORTED_MODULE_2__["default"].state), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].state);
   },
-  getters: _objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].getters), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].getters), _single__WEBPACK_IMPORTED_MODULE_2__["default"].getters),
-  mutations: _objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].mutations), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].mutations), _single__WEBPACK_IMPORTED_MODULE_2__["default"].mutations),
+  getters: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].getters), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].getters), _single__WEBPACK_IMPORTED_MODULE_2__["default"].getters), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].getters),
+  mutations: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].mutations), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].mutations), _single__WEBPACK_IMPORTED_MODULE_2__["default"].mutations), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].mutations),
   actions: {}
 });
 
@@ -4388,8 +4431,11 @@ function setTableSeed(store, source) {
       _source$show_overflow = source.show_overflow,
       show_overflow = _source$show_overflow === void 0 ? false : _source$show_overflow,
       _source$show_overflow2 = source.show_overflow_control,
-      show_overflow_control = _source$show_overflow2 === void 0 ? false : _source$show_overflow2;
+      show_overflow_control = _source$show_overflow2 === void 0 ? false : _source$show_overflow2,
+      _source$empty_message = source.empty_message,
+      empty_message = _source$empty_message === void 0 ? '' : _source$empty_message;
   var getName = withScope(source);
+  store.commit(getName('setEmptyMessage'), empty_message);
   store.commit(getName('setRenderType'), render_type);
   store.commit(getName('setActionsList'), actions);
   store.commit(getName('setColumns'), columns);
@@ -4739,7 +4785,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AAiOC;EACC,YAAA;AChOF;ADmOC;EACC,oBAAA;ACjOF;ADsOC;EACC,8BAAA;ACnOF;ADsOC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;ACpOF;ADsOE;EACC,gCAAA;ACpOH;ADuOE;EACC,yBAAA;ACrOH;ADwOE;EACC,mBAAA;ACtOH;AD0OG;EACC,WAAA;ACxOJ;AD6OG;EACC,8BAAA;AC3OJ;AD8OG;EACC,oBAAA;AC5OJ;ADgPE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC9OH;ADgPG;EACC,YAAA;AC9OJ;ADiPG;EACC,sBAAA;AC/OJ;ADkPK;EACC,gBAAA;AChPN;ADoPI;EACC,oBAAA;EACA,eAAA;AClPL;ADuPE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;ACrPH;ADwPE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;ACtPH;ADwPG;EACC,OAAA;ACtPJ;AD2PC;EACC,OAAA;ACzPF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AAwOC;EACC,YAAA;ACvOF;AD0OC;EACC,oBAAA;ACxOF;AD6OC;EACC,8BAAA;AC1OF;AD6OC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;AC3OF;AD6OE;EACC,gCAAA;AC3OH;AD8OE;EACC,yBAAA;AC5OH;AD+OE;EACC,mBAAA;AC7OH;ADiPG;EACC,WAAA;AC/OJ;ADoPG;EACC,8BAAA;AClPJ;ADqPG;EACC,oBAAA;ACnPJ;ADuPE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;ACrPH;ADuPG;EACC,YAAA;ACrPJ;ADwPG;EACC,sBAAA;ACtPJ;ADyPK;EACC,gBAAA;ACvPN;AD2PI;EACC,oBAAA;EACA,eAAA;ACzPL;AD8PE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AC5PH;AD+PE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;AC7PH;AD+PG;EACC,OAAA;AC7PJ;ADkQC;EACC,OAAA;AChQF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8586,6 +8632,7 @@ var render = function () {
       list: _vm.list,
       columns: _vm.columns,
       loading: _vm.isLoading,
+      "empty-message": _vm.emptyMessage,
       "columns-components": _vm.components,
       scope: _vm.scope,
     },
@@ -8619,6 +8666,10 @@ var render = function () {
     { class: _vm.rootClasses },
     [
       _c("cx-vui-list-table", {
+        attrs: {
+          "is-empty": !_vm.list.length,
+          "empty-message": _vm.emptyMessage,
+        },
         scopedSlots: _vm._u([
           {
             key: "heading",

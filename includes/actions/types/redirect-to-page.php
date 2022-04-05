@@ -105,6 +105,7 @@ class Redirect_To_Page extends Base {
 			return $url;
 		}
 		$redirect_args = array();
+		$request       = jet_fb_action_handler()->request_data;
 
 		foreach ( $this->settings['redirect_args'] as $arg ) {
 			$redirect_args[ $arg ] = ! empty( $request[ $arg ] ) ? $request[ $arg ] : 0;

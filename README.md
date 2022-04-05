@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.1
+* FIX: Rendering form in a shortcode
+* Tweak: Empty table notice
+
 ## 2.0.0
 * ADD: Really hidden fields. Which are not displayed in HTML
 * ADD: Form Record functionality. This includes a form action and admin view

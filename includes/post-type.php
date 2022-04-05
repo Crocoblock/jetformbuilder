@@ -159,15 +159,15 @@ class Post_Type {
 				'default' => '{}',
 			),
 
-			'_jf_actions'   => array(
+			'_jf_actions'  => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages'  => array(
+			'_jf_messages' => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'    => array(
+			'_jf_preset'   => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -303,6 +303,7 @@ class Post_Type {
 
 	public function get_default_args() {
 		return array(
+			'form_id'          => '',
 			'submit_type'      => '',
 			'required_mark'    => '',
 			'fields_layout'    => '',

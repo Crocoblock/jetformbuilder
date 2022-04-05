@@ -51,6 +51,9 @@ class Payments extends View_Advanced_Base {
 		return Payment_Count_View::count();
 	}
 
+	public function get_empty_message(): string {
+		return __( 'No payments found.', 'jet-form-builder' );
+	}
 
 	public function get_columns(): array {
 		return array(

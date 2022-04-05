@@ -35,6 +35,10 @@ abstract class View_Base implements
 		return 0;
 	}
 
+	public function get_empty_message(): string {
+		return __( 'No items found.', 'jet-form-builder' );
+	}
+
 	public function get_receive_endpoint(): array {
 		return array();
 	}
@@ -59,11 +63,12 @@ abstract class View_Base implements
 
 		return array_merge(
 			array(
-				'list'        => $this->get_prepared_list(),
-				'columns'     => $this->get_columns_headings(),
-				'actions'     => $this->get_global_actions(),
-				'total'       => $this->get_total(),
-				'receive_url' => $this->get_receive_endpoint(),
+				'list'          => $this->get_prepared_list(),
+				'columns'       => $this->get_columns_headings(),
+				'actions'       => $this->get_global_actions(),
+				'total'         => $this->get_total(),
+				'receive_url'   => $this->get_receive_endpoint(),
+				'empty_message' => $this->get_empty_message(),
 			),
 			$this->load_data()
 		);

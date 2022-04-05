@@ -1,6 +1,9 @@
 <template>
 	<div :class="rootClasses">
-		<cx-vui-list-table>
+		<cx-vui-list-table
+			:is-empty="! list.length"
+			:empty-message="emptyMessage"
+		>
 			<template #heading>
 				<cx-vui-list-table-heading
 					:slots="filteredColumns"
@@ -125,6 +128,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		emptyMessage: {
+			type: String,
+			default: ''
+		}
 	},
 	data() {
 		return {

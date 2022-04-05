@@ -37,10 +37,12 @@ export function setTableSeed( store, source ) {
 		render_type = '',
 		show_overflow = false,
 		show_overflow_control = false,
+		empty_message = ''
 	} = source;
 
 	let getName = withScope( source );
 
+	store.commit( getName( 'setEmptyMessage' ), empty_message );
 	store.commit( getName( 'setRenderType' ), render_type );
 	store.commit( getName( 'setActionsList' ), actions );
 	store.commit( getName( 'setColumns' ), columns );

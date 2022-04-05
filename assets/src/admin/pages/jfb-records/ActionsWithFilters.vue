@@ -1,5 +1,5 @@
 <template>
-	<div :class="wrapperClass">
+	<div :class="wrapperClass" v-if="items.length">
 		<div class="jfb-row-wrapper-item">
 			<ChooseAction/>
 		</div>
@@ -64,6 +64,9 @@ export default {
 		hasFilters() {
 			return this.getter( 'hasFilters' );
 		},
+		items() {
+			return this.getter( 'list' );
+		},
 		wrapperClass() {
 			return {
 				'jfb-row-wrapper': true,
@@ -72,6 +75,9 @@ export default {
 		},
 	},
 	created() {
+		if ( ! this.items.length ) {
+			return;
+		}
 		const { filters_endpoint } = this.getIncoming();
 
 		this.dispatch( 'maybeFetchFilters', filters_endpoint );

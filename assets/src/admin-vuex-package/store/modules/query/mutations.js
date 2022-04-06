@@ -23,7 +23,7 @@ export default {
 	setFilters( state, filters ) {
 		state.filters = filters;
 	},
-	setFilter( state, { slug, props } ) {
+	setFilter( state, { slug, props = {} } ) {
 		state.filters[ slug ] = state.filters[ slug ] ?? {};
 		state.filters[ slug ] = {
 			...state.filters[ slug ],

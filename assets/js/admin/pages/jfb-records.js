@@ -68,6 +68,7 @@ var filtersComponents = applyFilters('jet.fb.records.page.filters', [_filters_Fo
   },
   computed: _objectSpread(_objectSpread({}, mapGetters(['isDoing'])), {}, {
     hasFilters: function hasFilters() {
+      jfbEventBus.reactiveCounter;
       return this.getter('hasFilters');
     },
     items: function items() {
@@ -130,9 +131,7 @@ var _JetFBComponents = JetFBComponents,
     FormBuilderPage = _JetFBComponents.FormBuilderPage;
 var _JetFBMixins = JetFBMixins,
     i18n = _JetFBMixins.i18n,
-    PromiseWrapper = _JetFBMixins.PromiseWrapper,
-    GetIncomingMessages = _JetFBMixins.GetIncomingMessages,
-    RunActionsMixin = _JetFBMixins.RunActionsMixin;
+    PromiseWrapper = _JetFBMixins.PromiseWrapper;
 var _JetFBConst = JetFBConst,
     CHOOSE_ACTION = _JetFBConst.CHOOSE_ACTION,
     CLICK_ACTION = _JetFBConst.CLICK_ACTION;
@@ -151,135 +150,48 @@ var _Vuex = Vuex,
     ActionsWithFilters: _ActionsWithFilters__WEBPACK_IMPORTED_MODULE_0__["default"],
     FormBuilderPage: FormBuilderPage
   },
-  data: function data() {
-    return {
-      isFooterVisible: true
-    };
-  },
-  mixins: [i18n, PromiseWrapper, GetIncomingMessages, RunActionsMixin],
+  mixins: [i18n, PromiseWrapper],
   created: function created() {
     /** Delete */
     this.setActionPromises({
       action: 'delete',
-      context: CHOOSE_ACTION,
-      promise: this.promiseWrapper(this.deleteChecked.bind(this))
-    });
-    this.setActionPromises({
-      action: 'delete',
-      context: CLICK_ACTION,
-      promise: this.promiseWrapper(this.deleteClicked.bind(this))
+      promise: this.promiseWrapper(this.deleteAction.bind(this))
     });
     /** Mark as Viewed */
 
     this.setActionPromises({
       action: 'mark_viewed',
-      context: CHOOSE_ACTION,
-      promise: this.promiseWrapper(this.viewChecked.bind(this))
-    });
-    this.setActionPromises({
-      action: 'mark_viewed',
-      context: CLICK_ACTION,
-      promise: this.promiseWrapper(this.viewClicked.bind(this))
+      promise: this.promiseWrapper(this.viewAction.bind(this))
     });
     /** Mark as Not Viewed */
 
     this.setActionPromises({
       action: 'mark_not_viewed',
-      context: CHOOSE_ACTION,
-      promise: this.promiseWrapper(this.viewChecked.bind(this))
-    });
-    this.setActionPromises({
-      action: 'mark_not_viewed',
-      context: CLICK_ACTION,
-      promise: this.promiseWrapper(this.notViewClicked.bind(this))
+      promise: this.promiseWrapper(this.viewAction.bind(this))
     });
   },
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction'])), mapMutations('scope-default', ['setList', 'setActionPromises', 'setBeforeAction'])), mapActions('scope-default', ['updateList', 'runRowAction'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, mapMutations(['toggleDoingAction'])), mapMutations('scope-default', ['setList', 'setActionPromises', 'setBeforeAction'])), mapActions('scope-default', ['updateList', 'apiFetch'])), {}, {
     deleteAction: function deleteAction(_ref) {
       var _this = this;
 
       var resolve = _ref.resolve,
-          reject = _ref.reject,
-          options = _ref.options;
-      apiFetch(options).then(function (response) {
+          reject = _ref.reject;
+      this.apiFetch().then(function (response) {
         _this.updateList(response);
 
         resolve(response.message);
       }).catch(reject);
     },
-    deleteChecked: function deleteChecked(_ref2) {
-      var resolve = _ref2.resolve,
-          reject = _ref2.reject;
-      this.beforeRunFetch();
-      this.deleteAction({
-        resolve: resolve,
-        reject: reject,
-        options: this.onCheckedOptions()
-      });
-    },
-    deleteClicked: function deleteClicked(_ref3) {
-      var resolve = _ref3.resolve,
-          reject = _ref3.reject;
-
-      for (var _len = arguments.length, payload = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        payload[_key - 1] = arguments[_key];
-      }
-
-      this.deleteAction({
-        resolve: resolve,
-        reject: reject,
-        options: this.getOptionsStatic('delete', payload)
-      });
-    },
-    viewAction: function viewAction(_ref4) {
+    viewAction: function viewAction(_ref2) {
       var _this2 = this;
 
-      var resolve = _ref4.resolve,
-          reject = _ref4.reject,
-          options = _ref4.options;
-      apiFetch(options).then(function (response) {
+      var resolve = _ref2.resolve,
+          reject = _ref2.reject;
+      this.apiFetch().then(function (response) {
         _this2.setList(response.list);
 
         resolve(response.message);
       }).catch(reject);
-    },
-    viewChecked: function viewChecked(_ref5) {
-      var resolve = _ref5.resolve,
-          reject = _ref5.reject;
-      this.beforeRunFetch();
-      this.viewAction({
-        resolve: resolve,
-        reject: reject,
-        options: this.onCheckedOptions()
-      });
-    },
-    viewClicked: function viewClicked(_ref6) {
-      var resolve = _ref6.resolve,
-          reject = _ref6.reject;
-
-      for (var _len2 = arguments.length, payload = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        payload[_key2 - 1] = arguments[_key2];
-      }
-
-      this.viewAction({
-        resolve: resolve,
-        reject: reject,
-        options: this.getOptionsStatic('mark_viewed', payload)
-      });
-    },
-    notViewClicked: function notViewClicked(_ref7) {
-      var resolve = _ref7.resolve,
-          reject = _ref7.reject;
-
-      for (var _len3 = arguments.length, payload = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        payload[_key3 - 1] = arguments[_key3];
-      }
-
-      this.viewAction({
-        resolve: resolve,
-        reject: reject,
-        options: this.getOptionsStatic('mark_not_viewed', payload)
-      });
     }
   })
 });
@@ -297,6 +209,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -316,7 +234,6 @@ var _Vuex = Vuex,
     mapMutations = _Vuex.mapMutations,
     mapActions = _Vuex.mapActions;
 var _JetFBMixins = JetFBMixins,
-    GetIncomingMessages = _JetFBMixins.GetIncomingMessages,
     FilterMixin = _JetFBMixins.FilterMixin;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "FormFilter",
@@ -325,7 +242,8 @@ var _JetFBMixins = JetFBMixins,
       filter_id: "form"
     };
   },
-  mixins: [GetIncomingMessages, FilterMixin]
+  mixins: [FilterMixin],
+  computed: _objectSpread({}, mapGetters('messages', ['label']))
 });
 
 /***/ }),
@@ -350,7 +268,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n  width: 100%;\n  padding: 6px 21px 6px 12px;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 0 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AAyFA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;ACxFD;ADyFC;EACC,OAAA;ACvFF;ADyFC;EACC,OAAA;ACvFF;ADyFC;EACC,YAAA;ACvFF;ADyFC;EACC,cAAA;ACvFF;ADyFC;EACC,uBAAA;EACA,WAAA;EACA,0BAAA;ACvFF;ADyFC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,cAAA;ACvFF;ADwFE;EACC,aAAA;ACtFH;ADuFG;EACC,OAAA;ACrFJ","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t\twidth: 100%;\r\n\t\tpadding: 6px 21px 6px 12px;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 0 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n  width: 100%;\n  padding: 6px 21px 6px 12px;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 0 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n  width: 100%;\n  padding: 6px 21px 6px 12px;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 0 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/ActionsWithFilters.vue","webpack://./../ActionsWithFilters.vue"],"names":[],"mappings":"AA2FA;EACC,aAAA;EACA,QAAA;EACA,gBAAA;AC1FD;AD2FC;EACC,OAAA;ACzFF;AD2FC;EACC,OAAA;ACzFF;AD2FC;EACC,YAAA;ACzFF;AD2FC;EACC,cAAA;ACzFF;AD2FC;EACC,uBAAA;EACA,WAAA;EACA,0BAAA;ACzFF;AD2FC;EACC,aAAA;EACA,QAAA;EACA,gBAAA;EACA,cAAA;ACzFF;AD0FE;EACC,aAAA;ACxFH;ADyFG;EACC,OAAA;ACvFJ","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.jfb-row-wrapper {\r\n\tdisplay: flex;\r\n\tgap: 2em;\r\n\talign-items: end;\r\n\t&-item:nth-child(1) {\r\n\t\tflex: 1;\r\n\t}\r\n\t&-item:nth-child(2) {\r\n\t\tflex: 3;\r\n\t}\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\t.cx-vui-component {\r\n\t\tpadding: unset;\r\n\t}\r\n\t.cx-vui-select {\r\n\t\tbackground-color: white;\r\n\t\twidth: 100%;\r\n\t\tpadding: 6px 21px 6px 12px;\r\n\t}\r\n\t.jfb-list-components {\r\n\t\tdisplay: flex;\r\n\t\tgap: 2em;\r\n\t\talign-items: end;\r\n\t\tpadding: 0 1em;\r\n\t\t&-item {\r\n\t\t\tflex: 0 0 30%;\r\n\t\t\t.cx-vui-component__control {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n\r\n",".jfb-row-wrapper {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n}\n.jfb-row-wrapper-item:nth-child(1) {\n  flex: 1;\n}\n.jfb-row-wrapper-item:nth-child(2) {\n  flex: 3;\n}\n.jfb-row-wrapper--loading {\n  opacity: 0.5;\n}\n.jfb-row-wrapper .cx-vui-component {\n  padding: unset;\n}\n.jfb-row-wrapper .cx-vui-select {\n  background-color: white;\n  width: 100%;\n  padding: 6px 21px 6px 12px;\n}\n.jfb-row-wrapper .jfb-list-components {\n  display: flex;\n  gap: 2em;\n  align-items: end;\n  padding: 0 1em;\n}\n.jfb-row-wrapper .jfb-list-components-item {\n  flex: 0 0 30%;\n}\n.jfb-row-wrapper .jfb-list-components-item .cx-vui-component__control {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -377,7 +295,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAyKC;EACC,yBAAA;ACxKF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table {\r\n\t.list-table-item--not-viewed {\r\n\t\tbackground-color: #f7fdff;\r\n\t}\r\n}\r\n\r\n",".cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/Records.vue","webpack://./../Records.vue"],"names":[],"mappings":"AAoGC;EACC,yBAAA;ACnGF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vue-list-table {\r\n\t.list-table-item--not-viewed {\r\n\t\tbackground-color: #f7fdff;\r\n\t}\r\n}\r\n\r\n",".cx-vue-list-table .list-table-item--not-viewed {\n  background-color: #f7fdff;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -404,7 +322,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-9e418906] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/filters/FormFilter.vue","webpack://./../FormFilter.vue"],"names":[],"mappings":"AAsCA;EACC,cAAA;ACrCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-component[data-v-9e418906] {\n  padding: unset;\n}", "",{"version":3,"sources":["webpack://./admin/pages/jfb-records/filters/FormFilter.vue","webpack://./../FormFilter.vue"],"names":[],"mappings":"AA0CA;EACC,cAAA;ACzCD","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.cx-vui-component {\r\n\tpadding: unset;\r\n}\r\n",".cx-vui-component {\n  padding: unset;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -923,14 +841,14 @@ var render = function () {
   return _c(
     "div",
     [
-      _c("h3", [_vm._v(_vm._s(_vm.messages.filter_form_title))]),
+      _c("h3", [_vm._v(_vm._s(_vm.label("filter_form_title")))]),
       _vm._v(" "),
       _c("cx-vui-select", {
         attrs: {
           "options-list": _vm.filter.options || [],
           "wrapper-css": ["equalwidth"],
           value: _vm.filter.selected,
-          placeholder: _vm.messages.filter_form,
+          placeholder: _vm.label("filter_form"),
         },
         on: { input: _vm.onChangeFilter },
       }),
@@ -1488,10 +1406,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var _JetFBStore = JetFBStore,
     BaseStore = _JetFBStore.BaseStore,
     TableModulePlugin = _JetFBStore.TableModulePlugin,
-    TableSeedPlugin = _JetFBStore.TableSeedPlugin;
+    TableSeedPlugin = _JetFBStore.TableSeedPlugin,
+    MessagesPlugin = _JetFBStore.MessagesPlugin;
 var renderCurrentPage = window.JetFBActions.renderCurrentPage;
 var store = new Vuex.Store(_objectSpread(_objectSpread({}, BaseStore), {}, {
-  plugins: [TableModulePlugin(), TableSeedPlugin()]
+  plugins: [TableModulePlugin(), TableSeedPlugin(), MessagesPlugin]
 }));
 renderCurrentPage(_Records__WEBPACK_IMPORTED_MODULE_0__["default"], {
   store: store

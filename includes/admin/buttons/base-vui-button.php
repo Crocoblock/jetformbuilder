@@ -29,12 +29,13 @@ class Base_Vui_Button implements Arrayable {
 	const PRESET_PAGE_ACTION = 'page_action';
 
 	protected $slug;
-	protected $url     = '';
-	protected $style   = self::STYLE_ACCENT;
-	protected $type    = self::TYPE_BUTTON;
-	protected $size    = self::SIZE_DEFAULT;
-	protected $label   = '';
-	protected $classes = array();
+	protected $url      = '';
+	protected $style    = self::STYLE_ACCENT;
+	protected $type     = self::TYPE_BUTTON;
+	protected $size     = self::SIZE_DEFAULT;
+	protected $label    = '';
+	protected $disabled = false;
+	protected $classes  = array();
 
 	public function __construct( string $slug = 'default' ) {
 		$this->slug = $slug;
@@ -76,11 +77,15 @@ class Base_Vui_Button implements Arrayable {
 		return $this->classes;
 	}
 
+	public function is_disabled(): bool {
+		return $this->disabled;
+	}
+
 	/** Setters */
 
 	protected function set_preset_page_action() {
 		$this->add_classes(
-			array( 'unset-box-shadow', 'background-light' )
+			array( 'unset-box-shadow' )
 		);
 		$this->set_size( self::SIZE_MINI_X2 );
 	}
@@ -133,6 +138,12 @@ class Base_Vui_Button implements Arrayable {
 		return $this;
 	}
 
+	public function set_disabled( bool $disabled ): Base_Vui_Button {
+		$this->disabled = $disabled;
+
+		return $this;
+	}
+
 	/**
 	 * Get the instance as an array.
 	 *
@@ -140,13 +151,14 @@ class Base_Vui_Button implements Arrayable {
 	 */
 	public function to_array(): array {
 		return array(
-			'slug'    => $this->get_slug(),
-			'size'    => $this->get_size(),
-			'style'   => $this->get_style(),
-			'type'    => $this->get_type(),
-			'url'     => $this->get_url(),
-			'label'   => $this->get_label(),
-			'classes' => $this->get_classes(),
+			'slug'     => $this->get_slug(),
+			'size'     => $this->get_size(),
+			'style'    => $this->get_style(),
+			'type'     => $this->get_type(),
+			'url'      => $this->get_url(),
+			'label'    => $this->get_label(),
+			'classes'  => $this->get_classes(),
+			'disabled' => $this->is_disabled(),
 		);
 	}
 }

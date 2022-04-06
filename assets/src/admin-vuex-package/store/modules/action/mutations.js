@@ -8,26 +8,16 @@ export default {
 	/*
 	 for requests
 	 */
-	setActionPromises( state, { action, promise, context = 'default' } ) {
+	setActionPromises( state, { action, promise } ) {
 		state.actionsPromises = {
 			...state.actionsPromises,
-			[ action ]: {
-				...(
-					state.actionsPromises[ action ] ?? {}
-				),
-				[ context ]: promise,
-			},
+			[ action ]: promise,
 		};
 	},
-	setBeforeAction( state, { action, callback, context = 'default' } ) {
+	setBeforeAction( state, { action, callback } ) {
 		state.beforeActions = {
 			...state.beforeActions,
-			[ action ]: {
-				...(
-					state.beforeActions[ action ] ?? {}
-				),
-				[ context ]: callback,
-			},
+			[ action ]: callback,
 		};
 	},
 	setProcess( state, process ) {

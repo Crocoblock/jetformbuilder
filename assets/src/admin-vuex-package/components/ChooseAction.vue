@@ -56,14 +56,18 @@ export default {
 		actionsList() {
 			return this.getter( 'actionsList' );
 		},
+		getChecked() {
+			return this.getter( 'getChecked' );
+		},
+		getActionPromise() {
+			return this.getter( 'getActionPromise' );
+		},
 	},
 	methods: {
 		...mapMutations( [
 			'toggleDoingAction',
 		] ),
-		getActionPromise() {
-			return this.getter( 'getActionPromise' );
-		},
+
 		setCurrentAction( value ) {
 			this.commit( 'setCurrentAction', value );
 		},
@@ -71,6 +75,7 @@ export default {
 			this.commit( 'toggleLoading', 'applyButton' );
 			this.toggleDoingAction();
 		},
+
 		applyAction() {
 			this.onFinish();
 
@@ -79,13 +84,14 @@ export default {
 				{
 					action: this.currentAction,
 					context: CHOOSE_ACTION,
+					payload: [ this.getChecked ]
 				},
 			);
 
 			const finish = () => {
 				this.onFinish();
 				this.commit( 'clearProcess' );
-				this.commit( 'setChecked' );
+				this.commit( 'setChecked', [] );
 				this.commit( 'unChooseHead' );
 			};
 

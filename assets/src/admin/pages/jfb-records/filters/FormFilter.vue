@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<h3>{{ messages.filter_form_title }}</h3>
+		<h3>{{ label( 'filter_form_title' ) }}</h3>
 		<cx-vui-select
 			:options-list="filter.options || []"
 			:wrapper-css="[ 'equalwidth' ]"
 			:value="filter.selected"
-			:placeholder="messages.filter_form"
+			:placeholder="label( 'filter_form' )"
 			@input="onChangeFilter"
 		></cx-vui-select>
 	</div>
@@ -20,7 +20,6 @@ const {
 	  } = Vuex;
 
 const {
-		  GetIncomingMessages,
 		  FilterMixin,
 	  } = JetFBMixins;
 
@@ -31,7 +30,12 @@ export default {
 			filter_id: "form",
 		};
 	},
-	mixins: [ GetIncomingMessages, FilterMixin ],
+	mixins: [ FilterMixin ],
+	computed: {
+		...mapGetters( 'messages', [
+			'label'
+		] ),
+	}
 }
 </script>
 

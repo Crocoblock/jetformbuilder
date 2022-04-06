@@ -130,8 +130,8 @@ export default {
 		},
 		emptyMessage: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 	data() {
 		return {
@@ -211,7 +211,9 @@ export default {
 				{
 					action: action.value,
 					context: CLICK_ACTION,
-					payload: [ getPrimaryId( record ) ],
+					payload: [
+						[ getPrimaryId( record ) ],
+					],
 				},
 			);
 

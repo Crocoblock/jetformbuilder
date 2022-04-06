@@ -1,7 +1,7 @@
 <template>
 	<a
 		:href="parsedJson.href"
-		target="_blank"
+		:target="target"
 		:class="{
 			'row-title': parsedJson.primary,
 			'with-flex': hasIcon,
@@ -30,6 +30,9 @@ export default {
 		hasIcon() {
 			return !! this.parsedJson.type;
 		},
+		target() {
+			return this.parsedJson.target ?? '_self';
+		}
 	},
 }
 </script>

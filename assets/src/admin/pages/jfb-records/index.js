@@ -4,6 +4,7 @@ const {
 	BaseStore,
 	TableModulePlugin,
 	TableSeedPlugin,
+	MessagesPlugin,
 } = JetFBStore;
 
 const {
@@ -12,7 +13,7 @@ const {
 
 const store = new Vuex.Store( {
 	...BaseStore,
-	plugins: [ TableModulePlugin(), TableSeedPlugin() ],
+	plugins: [ TableModulePlugin(), TableSeedPlugin(), MessagesPlugin ],
 } );
 
 renderCurrentPage( Records, { store } );

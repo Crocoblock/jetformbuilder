@@ -26,9 +26,9 @@ import EditTableSwitcher from './components/BoxActions/EditTableSwitcher';
 import AlertsList from './components/Alerts/AlertsList';
 import DashboardPanel from './components/VuiBoxes/DashboardPanel';
 import SideBarBoxes from './components/SideBarBoxes';
-import RunActionsMixin from './mixins/RunActionsMixin';
 import FormBuilderPage from './components/FormBuilderPage';
 import PageActionsPlugin from './store/plugins/PageActions';
+import MessagesPlugin from './store/plugins/MessagesPlugin';
 
 Vue.use( Vuex );
 
@@ -61,7 +61,6 @@ window.JetFBMixins = {
 	FilterMixin,
 	GetColumnComponent,
 	ScopeStoreMixin,
-	RunActionsMixin,
 };
 
 
@@ -72,6 +71,7 @@ window.JetFBStore = {
 	SingleMetaBoxesPlugin,
 	NoticesPlugin,
 	PageActionsPlugin,
+	MessagesPlugin,
 };
 
 window.JetFBConst = Constants;

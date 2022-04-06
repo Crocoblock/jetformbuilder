@@ -62,6 +62,8 @@ export default {
 			'isDoing',
 		] ),
 		hasFilters() {
+			jfbEventBus.reactiveCounter;
+
 			return this.getter( 'hasFilters' );
 		},
 		items() {

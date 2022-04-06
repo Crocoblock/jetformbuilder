@@ -15,7 +15,6 @@ import {
 	addQueryArgs,
 } from './functions/LocationManager';
 import ListComponents from './components/ListComponents';
-import GetIncomingMessages from './mixins/GetIncomingMessages';
 import CxVuiTabsPanel from './components/CxVuiTabsPanel';
 import CxVuiTabs from './components/CxVuiTabs';
 import LocalStorage from './functions/LocalStorage';
@@ -47,6 +46,5 @@ window.JetFBMixins = {
 	SaveTabByAjax,
 	i18n,
 	ParseIncomingValueMixin,
-	PromiseWrapper,
-	GetIncomingMessages,
+	PromiseWrapper
 };

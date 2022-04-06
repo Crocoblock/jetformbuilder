@@ -1,5 +1,20 @@
+import Constants from '../../../constants';
 
 export default {
+	beforeRunFetch( { getters, rootGetters } ) {
+		if ( Constants.CHOOSE_ACTION !== getters.processContext ) {
+			return;
+		}
+		const label = rootGetters['messages/label'];
+
+		if ( ! getters.getChecked.length ) {
+			throw new Error( label( 'empty_checked' ) );
+		}
+
+		if ( ! getters.getCurrentAction?.endpoint ) {
+			throw new Error( label( 'empty_action' ) );
+		}
+	},
 	runRowAction( { commit, getters } ) {
 		commit( 'toggleDoingAction', null, { root: true } );
 		commit( 'toggleLoading', 'page' );
@@ -11,25 +26,19 @@ export default {
 		};
 
 		try {
-			getters.getActionPromise.finally( onFinish );
+			getters.getActionPromise().finally( onFinish );
 		} catch ( error ) {
 			onFinish();
 		}
-
 	},
 	beforeRowAction( { state } ) {
-		const { action, context, payload = false } = state.currentProcess;
+		const { action, payload = [] } = state.currentProcess;
 
-		if ( 'object' !== typeof state.beforeActions[ action ] ) {
+		if ( 'function' !== typeof state.beforeActions[ action ] ) {
 			return;
 		}
-		const promise = state.beforeActions[ action ][ context ] ?? false;
 
-		if ( false === payload ) {
-			promise();
-
-			throw new Error();
-		}
+		const promise = state.beforeActions[ action ] ?? false;
 
 		promise( ...payload );
 

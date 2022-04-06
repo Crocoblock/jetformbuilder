@@ -1,6 +1,16 @@
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 const { apiFetch } = wp;
 
+const apiOptions = getters => {
+	const { action, payload: [ checked ] } = getters.currentProcess;
+	const options = getters.fetchListOptions( getters.getAction( action )?.endpoint );
+
+	return {
+		...options,
+		data: { checked },
+	};
+};
+
 export default {
 	fetchPage( { commit, getters, dispatch, state } ) {
 		commit( 'toggleLoading', 'page' );
@@ -11,7 +21,7 @@ export default {
 
 			// clear checked rows
 			commit( 'unChooseHead' );
-			commit( 'setChecked' );
+			commit( 'setChecked', [] );
 		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );
@@ -46,6 +56,11 @@ export default {
 				reject( error );
 			} ).finally( reject );
 		} );
+	},
+	apiFetch( { getters, dispatch } ) {
+		dispatch( 'beforeRunFetch' );
+
+		return apiFetch( apiOptions( getters ) );
 	},
 	maybeFetchFilters( props, endpoint ) {
 		const { commit, getters, rootGetters } = props;

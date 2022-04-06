@@ -679,7 +679,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ListComponents",
   props: {
@@ -1049,33 +1048,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getIncoming: function getIncoming(tabName) {
       return tabName ? window.JetFBPageConfig[tabName] : window.JetFBPageConfig;
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./admin-package/mixins/GetIncomingMessages.js":
-/*!*****************************************************!*\
-  !*** ./admin-package/mixins/GetIncomingMessages.js ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _GetIncoming__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GetIncoming */ "./admin-package/mixins/GetIncoming.js");
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mixins: [_GetIncoming__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  computed: {
-    messages: function messages() {
-      var _this$getIncoming = this.getIncoming(),
-          messages = _this$getIncoming.messages;
-
-      return JSON.parse(JSON.stringify(messages));
     }
   }
 });
@@ -3472,11 +3444,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions_RenderCurrentPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./functions/RenderCurrentPage */ "./admin-package/functions/RenderCurrentPage.js");
 /* harmony import */ var _functions_LocationManager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./functions/LocationManager */ "./admin-package/functions/LocationManager.js");
 /* harmony import */ var _components_ListComponents__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/ListComponents */ "./admin-package/components/ListComponents.vue");
-/* harmony import */ var _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./mixins/GetIncomingMessages */ "./admin-package/mixins/GetIncomingMessages.js");
-/* harmony import */ var _components_CxVuiTabsPanel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/CxVuiTabsPanel */ "./admin-package/components/CxVuiTabsPanel.vue");
-/* harmony import */ var _components_CxVuiTabs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/CxVuiTabs */ "./admin-package/components/CxVuiTabs.vue");
-/* harmony import */ var _functions_LocalStorage__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./functions/LocalStorage */ "./admin-package/functions/LocalStorage.js");
-
+/* harmony import */ var _components_CxVuiTabsPanel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/CxVuiTabsPanel */ "./admin-package/components/CxVuiTabsPanel.vue");
+/* harmony import */ var _components_CxVuiTabs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/CxVuiTabs */ "./admin-package/components/CxVuiTabs.vue");
+/* harmony import */ var _functions_LocalStorage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./functions/LocalStorage */ "./admin-package/functions/LocalStorage.js");
 
 
 
@@ -3498,7 +3468,7 @@ window.JetFBActions = {
   getSearch: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_10__.getSearch,
   createPath: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_10__.createPath,
   addQueryArgs: _functions_LocationManager__WEBPACK_IMPORTED_MODULE_10__.addQueryArgs,
-  LocalStorage: _functions_LocalStorage__WEBPACK_IMPORTED_MODULE_15__["default"]
+  LocalStorage: _functions_LocalStorage__WEBPACK_IMPORTED_MODULE_14__["default"]
 };
 window.JetFBErrors = {
   ApiInputError: _input_error__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -3508,16 +3478,15 @@ window.JetFBComponents = {
   DetailsTable: _components_DetailsTable__WEBPACK_IMPORTED_MODULE_6__["default"],
   SimpleWrapperComponent: _components_SimpleWrapperComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
   ListComponents: _components_ListComponents__WEBPACK_IMPORTED_MODULE_11__["default"],
-  CxVuiTabsPanel: _components_CxVuiTabsPanel__WEBPACK_IMPORTED_MODULE_13__["default"],
-  CxVuiTabs: _components_CxVuiTabs__WEBPACK_IMPORTED_MODULE_14__["default"]
+  CxVuiTabsPanel: _components_CxVuiTabsPanel__WEBPACK_IMPORTED_MODULE_12__["default"],
+  CxVuiTabs: _components_CxVuiTabs__WEBPACK_IMPORTED_MODULE_13__["default"]
 };
 window.JetFBMixins = {
   GetIncoming: _mixins_GetIncoming__WEBPACK_IMPORTED_MODULE_2__["default"],
   SaveTabByAjax: _mixins_SaveTabByAjax__WEBPACK_IMPORTED_MODULE_3__["default"],
   i18n: _mixins_i18n__WEBPACK_IMPORTED_MODULE_8__["default"],
   ParseIncomingValueMixin: _mixins_ParseIncomingValueMixin__WEBPACK_IMPORTED_MODULE_4__["default"],
-  PromiseWrapper: _mixins_PromiseWrapper__WEBPACK_IMPORTED_MODULE_5__["default"],
-  GetIncomingMessages: _mixins_GetIncomingMessages__WEBPACK_IMPORTED_MODULE_12__["default"]
+  PromiseWrapper: _mixins_PromiseWrapper__WEBPACK_IMPORTED_MODULE_5__["default"]
 };
 })();
 

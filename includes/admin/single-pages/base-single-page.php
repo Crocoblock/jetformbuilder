@@ -8,7 +8,6 @@ use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use Jet_Form_Builder\Admin\Single_Pages\Actions\Base_Single_Page_Action;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
@@ -79,7 +78,7 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		);
 	}
 
-	final public function get_prepared_containers(): array {
+	public function get_prepared_containers(): array {
 		$prepared = array();
 
 		/** @var Base_Meta_Container[] $containers */

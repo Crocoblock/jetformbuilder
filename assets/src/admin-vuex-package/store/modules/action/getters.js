@@ -11,19 +11,20 @@ const getters = {
 		return state.currentAction;
 	},
 	getActionPromise: state => {
-		const { action, context, payload = false } = state.currentProcess;
+		let { action,  payload = [] } = state.currentProcess;
 
-		if ( 'object' !== typeof state.actionsPromises[ action ] ) {
+		if ( 'function' !== typeof state.actionsPromises[ action ] ) {
 			throw new Error( __( 'Please choose your action', 'jet-form-builder' ) );
 		}
+		const promise = state.actionsPromises[ action ] ?? false;
 
-		const promise = state.actionsPromises[ action ][ context ] ?? false;
-
-		if ( false === payload ) {
-			return new Promise( promise );
-		}
-
-		return new Promise( ( resolve, reject ) => promise( resolve, reject, ...payload ) );
+		return () => new Promise( ( resolve, reject ) => promise( resolve, reject, ...payload ) )
+	},
+	processContext: state => {
+		return state.currentProcess.context;
+	},
+	currentProcess: state => {
+		return state.currentProcess;
 	},
 };
 

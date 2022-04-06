@@ -27,7 +27,7 @@ export default {
 			if ( this.getter( 'isCheckedHead' ) ) {
 				this.dispatch( 'activeAll' );
 			} else {
-				this.commit( 'setChecked' );
+				this.commit( 'setChecked', [] );
 			}
 		},
 	},

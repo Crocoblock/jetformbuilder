@@ -16,8 +16,11 @@ class Array_Tools {
 				wp_die( 'Must implements Arrayable.', 'Illegal item of array' );
 			}
 
-			$payload[] = $object->to_array();
-			unset( $payload[ $index ] );
+			try {
+				$payload[ $index ] = $object->to_array();
+			} catch ( Array_Continue_Exception $exception ) {
+				continue;
+			}
 		}
 
 		return array_values( $payload );

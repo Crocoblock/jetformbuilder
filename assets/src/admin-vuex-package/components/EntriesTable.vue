@@ -5,6 +5,7 @@
 		:loading="isLoading"
 		:empty-message="emptyMessage"
 		:columns-components="components"
+		:footer-heading="footerHeading"
 		:scope="scope"
 	></EntriesTableSkeleton>
 </template>
@@ -46,6 +47,9 @@ export default {
 		},
 		isLoading() {
 			return this.getter( 'isLoading', 'page' );
+		},
+		footerHeading() {
+			return this.getter( 'footerHeading' );
 		},
 	},
 };

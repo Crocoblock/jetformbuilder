@@ -673,6 +673,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 var _window$Vuex = window.Vuex,
@@ -707,6 +708,9 @@ var applyFilters = wp.hooks.applyFilters;
     },
     isLoading: function isLoading() {
       return this.getter('isLoading', 'page');
+    },
+    footerHeading: function footerHeading() {
+      return this.getter('footerHeading');
     }
   }
 });
@@ -863,6 +867,10 @@ var _window$Vuex = window.Vuex,
     emptyMessage: {
       type: String,
       default: ''
+    },
+    footerHeading: {
+      type: Boolean,
+      default: true
     }
   },
   data: function data() {
@@ -1395,6 +1403,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1410,9 +1424,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     bodyClasses: function bodyClasses() {
+      var _this$containers;
+
       return _defineProperty({
         'metabox-holder': true
-      }, 'columns-' + this.containers.length, true);
+      }, 'columns-' + ((_this$containers = this.containers) === null || _this$containers === void 0 ? void 0 : _this$containers.length), true);
     }
   }
 });
@@ -1434,6 +1450,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EntriesTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntriesTable */ "./admin-vuex-package/components/EntriesTable.vue");
 /* harmony import */ var _EntriesList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EntriesList */ "./admin-vuex-package/components/EntriesList.vue");
 /* harmony import */ var _BoxActions_EditTableSwitcher__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BoxActions/EditTableSwitcher */ "./admin-vuex-package/components/BoxActions/EditTableSwitcher.vue");
+//
+//
 //
 //
 //
@@ -3330,6 +3348,38 @@ var storage = LocalStorage.storage('notices');
 
 /***/ }),
 
+/***/ "./admin-vuex-package/store/modules/options/index.js":
+/*!***********************************************************!*\
+  !*** ./admin-vuex-package/store/modules/options/index.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: function state() {
+    return {
+      options: {}
+    };
+  },
+  getters: {
+    all: function all(state) {
+      return state.options;
+    }
+  },
+  mutations: {
+    insert: function insert(state, options) {
+      state.options = options;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./admin-vuex-package/store/modules/page-actions/index.js":
 /*!****************************************************************!*\
   !*** ./admin-vuex-package/store/modules/page-actions/index.js ***!
@@ -3420,7 +3470,7 @@ var current = function current(state) {
     label: function label(state) {
       var action = current(state);
       return function (slug) {
-        return action !== null && action !== void 0 && action.messages ? action.messages[slug] : '';
+        return action !== null && action !== void 0 && action.messages ? action.messages[slug] : 'null';
       };
     }
   },
@@ -3768,6 +3818,35 @@ var __ = wp.i18n.__;
 
 /***/ }),
 
+/***/ "./admin-vuex-package/store/modules/table-options/footer-heading/index.js":
+/*!********************************************************************************!*\
+  !*** ./admin-vuex-package/store/modules/table-options/footer-heading/index.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  state: {
+    footerHeading: true
+  },
+  getters: {
+    footerHeading: function footerHeading(state) {
+      return state.footerHeading;
+    }
+  },
+  mutations: {
+    setFooterHeading: function setFooterHeading(state, show) {
+      state.footerHeading = show;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./admin-vuex-package/store/modules/table-options/index.js":
 /*!*****************************************************************!*\
   !*** ./admin-vuex-package/store/modules/table-options/index.js ***!
@@ -3783,6 +3862,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _render_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-type */ "./admin-vuex-package/store/modules/table-options/render-type/index.js");
 /* harmony import */ var _single__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./single */ "./admin-vuex-package/store/modules/table-options/single/index.js");
 /* harmony import */ var _empty_message__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./empty-message */ "./admin-vuex-package/store/modules/table-options/empty-message/index.js");
+/* harmony import */ var _footer_heading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./footer-heading */ "./admin-vuex-package/store/modules/table-options/footer-heading/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3793,12 +3873,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   state: function state() {
-    return _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].state), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].state), _single__WEBPACK_IMPORTED_MODULE_2__["default"].state), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].state);
+    return _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].state), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].state), _single__WEBPACK_IMPORTED_MODULE_2__["default"].state), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].state), _footer_heading__WEBPACK_IMPORTED_MODULE_4__["default"].state);
   },
-  getters: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].getters), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].getters), _single__WEBPACK_IMPORTED_MODULE_2__["default"].getters), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].getters),
-  mutations: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].mutations), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].mutations), _single__WEBPACK_IMPORTED_MODULE_2__["default"].mutations), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].mutations),
+  getters: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].getters), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].getters), _single__WEBPACK_IMPORTED_MODULE_2__["default"].getters), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].getters), _footer_heading__WEBPACK_IMPORTED_MODULE_4__["default"].getters),
+  mutations: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _show_overflow__WEBPACK_IMPORTED_MODULE_0__["default"].mutations), _render_type__WEBPACK_IMPORTED_MODULE_1__["default"].mutations), _single__WEBPACK_IMPORTED_MODULE_2__["default"].mutations), _empty_message__WEBPACK_IMPORTED_MODULE_3__["default"].mutations), _footer_heading__WEBPACK_IMPORTED_MODULE_4__["default"].mutations),
   actions: {}
 });
 
@@ -4226,8 +4307,7 @@ var apiOptions = function apiOptions(getters) {
   fetchPage: function fetchPage(_ref) {
     var commit = _ref.commit,
         getters = _ref.getters,
-        dispatch = _ref.dispatch,
-        state = _ref.state;
+        dispatch = _ref.dispatch;
     commit('toggleLoading', 'page');
     dispatch('fetch', getters.getPageOptionsFetch).then(function (response) {
       commit('setList', response.list);
@@ -4346,6 +4426,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./actions */ "./admin-vuex-package/store/modules/view/actions.js");
 /* harmony import */ var _action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../action */ "./admin-vuex-package/store/modules/action/index.js");
 /* harmony import */ var _table_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../table-options */ "./admin-vuex-package/store/modules/table-options/index.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../options */ "./admin-vuex-package/store/modules/options/index.js");
+
 
 
 
@@ -4361,7 +4443,8 @@ __webpack_require__.r(__webpack_exports__);
     loading: _loading__WEBPACK_IMPORTED_MODULE_0__["default"],
     query: _query__WEBPACK_IMPORTED_MODULE_1__["default"],
     table: _table__WEBPACK_IMPORTED_MODULE_2__["default"],
-    tableOptions: _table_options__WEBPACK_IMPORTED_MODULE_6__["default"]
+    tableOptions: _table_options__WEBPACK_IMPORTED_MODULE_6__["default"],
+    options: _options__WEBPACK_IMPORTED_MODULE_7__["default"]
   }
 });
 
@@ -4478,6 +4561,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "setListSeed": () => (/* binding */ setListSeed)
 /* harmony export */ });
 /* harmony import */ var _single_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../single-view */ "./admin-vuex-package/store/single-view.js");
+var _excluded = ["list", "columns", "total", "receive_url", "actions", "is_editable_table", "render_type", "show_overflow", "show_overflow_control", "empty_message", "footer_heading"],
+    _excluded2 = ["list", "columns", "render_type", "single_endpoint", "receive_url"];
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 var config = function config() {
   return window.JetFBPageConfig;
@@ -4521,7 +4611,11 @@ function setTableSeed(store, source) {
       _source$show_overflow2 = source.show_overflow_control,
       show_overflow_control = _source$show_overflow2 === void 0 ? false : _source$show_overflow2,
       _source$empty_message = source.empty_message,
-      empty_message = _source$empty_message === void 0 ? '' : _source$empty_message;
+      empty_message = _source$empty_message === void 0 ? '' : _source$empty_message,
+      _source$footer_headin = source.footer_heading,
+      footer_heading = _source$footer_headin === void 0 ? true : _source$footer_headin,
+      options = _objectWithoutProperties(source, _excluded);
+
   var getName = withScope(source);
   store.commit(getName('setEmptyMessage'), empty_message);
   store.commit(getName('setRenderType'), render_type);
@@ -4534,6 +4628,8 @@ function setTableSeed(store, source) {
   store.commit(getName('setEditableTable'), is_editable_table);
   store.commit(getName('showOverflow'), show_overflow);
   store.commit(getName('showOverflowControl'), show_overflow_control);
+  store.commit(getName('setFooterHeading'), footer_heading);
+  store.commit(getName('options/insert'), options);
   store.dispatch(getName('setQueriedPage'), 1);
 }
 function setListSeed(store, source) {
@@ -4544,12 +4640,18 @@ function setListSeed(store, source) {
       _source$render_type2 = source.render_type,
       render_type = _source$render_type2 === void 0 ? '' : _source$render_type2,
       _source$single_endpoi = source.single_endpoint,
-      single_endpoint = _source$single_endpoi === void 0 ? {} : _source$single_endpoi;
+      single_endpoint = _source$single_endpoi === void 0 ? {} : _source$single_endpoi,
+      _source$receive_url2 = source.receive_url,
+      receive_url = _source$receive_url2 === void 0 ? {} : _source$receive_url2,
+      options = _objectWithoutProperties(source, _excluded2);
+
   var getName = withScope(source);
   store.commit(getName('setColumns'), columns);
   store.commit(getName('setList'), list);
+  store.commit(getName('setReceiveEndpoint'), receive_url);
   store.commit(getName('setRenderType'), render_type);
   store.commit(getName('setSingleEndpoint'), single_endpoint);
+  store.commit(getName('options/insert'), options);
 }
 
 /***/ }),
@@ -4873,7 +4975,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AA0OC;EACC,YAAA;ACzOF;AD4OC;EACC,oBAAA;AC1OF;AD+OC;EACC,8BAAA;AC5OF;AD+OC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;AC7OF;AD+OE;EACC,gCAAA;AC7OH;ADgPE;EACC,yBAAA;AC9OH;ADiPE;EACC,mBAAA;AC/OH;ADmPG;EACC,WAAA;ACjPJ;ADsPG;EACC,8BAAA;ACpPJ;ADuPG;EACC,oBAAA;ACrPJ;ADyPE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;ACvPH;ADyPG;EACC,YAAA;ACvPJ;AD0PG;EACC,sBAAA;ACxPJ;AD2PK;EACC,gBAAA;ACzPN;AD6PI;EACC,oBAAA;EACA,eAAA;AC3PL;ADgQE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AC9PH;ADiQE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;AC/PH;ADiQG;EACC,OAAA;AC/PJ;ADoQC;EACC,OAAA;AClQF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AA8OC;EACC,YAAA;AC7OF;ADgPC;EACC,oBAAA;AC9OF;ADmPC;EACC,8BAAA;AChPF;ADmPC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;ACjPF;ADmPE;EACC,gCAAA;ACjPH;ADoPE;EACC,yBAAA;AClPH;ADqPE;EACC,mBAAA;ACnPH;ADuPG;EACC,WAAA;ACrPJ;AD0PG;EACC,8BAAA;ACxPJ;AD2PG;EACC,oBAAA;ACzPJ;AD6PE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC3PH;AD6PG;EACC,YAAA;AC3PJ;AD8PG;EACC,sBAAA;AC5PJ;AD+PK;EACC,gBAAA;AC7PN;ADiQI;EACC,oBAAA;EACA,eAAA;AC/PL;ADoQE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AClQH;ADqQE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;ACnQH;ADqQG;EACC,OAAA;ACnQJ;ADwQC;EACC,OAAA;ACtQF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5251,7 +5353,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.misc-pub-section {\r\n\tborder-bottom: 1px solid #ececec;\n}\n.misc-pub-section:last-child {\r\n\tborder-bottom: unset;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/PostBoxSimple.vue"],"names":[],"mappings":";AAoEA;CACA,gCAAA;AACA;AAEA;CACA,oBAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"jfb-post-box\" :id=\"slug + '-wrapper'\">\r\n\t\t<div class=\"jfb-post-box--content\" v-if=\"$slots.default\">\r\n\t\t\t<slot></slot>\r\n\t\t</div>\r\n\t\t<div class=\"jfb-post-box--content\" v-else>\r\n\t\t\t<slot name=\"before\"></slot>\r\n\t\t\t<PostBoxSkeleton\r\n\t\t\t\t:title=\"title\"\r\n\t\t\t\t:slug=\"slug\"\r\n\t\t\t>\r\n\t\t\t\t<template #header-actions>\r\n\t\t\t\t\t<slot name=\"header-actions\"></slot>\r\n\t\t\t\t</template>\r\n\t\t\t\t<template #default>\r\n\t\t\t\t\t<EntriesTable\r\n\t\t\t\t\t\tv-if=\"'table' === renderType\"\r\n\t\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t\t<EntriesList\r\n\t\t\t\t\t\tv-else-if=\"'list' === renderType\"\r\n\t\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t\t<div\r\n\t\t\t\t\t\tid=\"misc-publishing-actions\"\r\n\t\t\t\t\t\tv-else\r\n\t\t\t\t\t>\r\n\t\t\t\t\t\t<div\r\n\t\t\t\t\t\t\tclass=\"misc-pub-section\"\r\n\t\t\t\t\t\t\tv-for=\"(value, name) in list\"\r\n\t\t\t\t\t\t\t:key=\"name\"\r\n\t\t\t\t\t\t>\r\n\t\t\t\t\t\t\t{{ name }}: <strong>{{ value }}</strong>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</template>\r\n\t\t\t</PostBoxSkeleton>\r\n\t\t\t<slot name=\"after\"></slot>\r\n\t\t</div>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nimport PostBoxSkeleton from './PostBoxSkeleton';\r\nimport EntriesTable from './EntriesTable';\r\nimport EntriesList from './EntriesList';\r\nimport EditTableSwitcher from './BoxActions/EditTableSwitcher';\r\n\r\n\r\nexport default {\r\n\tname: 'PostBoxSimple',\r\n\tprops: [\r\n\t\t'title',\r\n\t\t'slug',\r\n\t\t'list',\r\n\t\t'renderType',\r\n\t],\r\n\tcomponents: {\r\n\t\tEntriesTable,\r\n\t\tEntriesList,\r\n\t\tPostBoxSkeleton,\r\n\t\tEditTableSwitcher,\r\n\t},\r\n};\r\n</script>\r\n\r\n<style>\r\n\r\n.misc-pub-section {\r\n\tborder-bottom: 1px solid #ececec;\r\n}\r\n\r\n.misc-pub-section:last-child {\r\n\tborder-bottom: unset;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.misc-pub-section {\r\n\tborder-bottom: 1px solid #ececec;\n}\n.misc-pub-section:last-child {\r\n\tborder-bottom: unset;\n}\r\n\r\n", "",{"version":3,"sources":["webpack://./../admin-vuex-package/components/PostBoxSimple.vue"],"names":[],"mappings":";AAsEA;CACA,gCAAA;AACA;AAEA;CACA,oBAAA;AACA","sourcesContent":["<template>\r\n\t<div class=\"jfb-post-box\" :id=\"slug + '-wrapper'\">\r\n\t\t<div class=\"jfb-post-box--content\" v-if=\"$slots.default\">\r\n\t\t\t<slot></slot>\r\n\t\t</div>\r\n\t\t<div class=\"jfb-post-box--content\" v-else>\r\n\t\t\t<slot name=\"before\"></slot>\r\n\t\t\t<PostBoxSkeleton\r\n\t\t\t\t:title=\"title\"\r\n\t\t\t\t:slug=\"slug\"\r\n\t\t\t>\r\n\t\t\t\t<template #header-actions>\r\n\t\t\t\t\t<slot name=\"header-actions\"></slot>\r\n\t\t\t\t</template>\r\n\t\t\t\t<template #default>\r\n\t\t\t\t\t<slot name=\"in-header\"></slot>\r\n\t\t\t\t\t<EntriesTable\r\n\t\t\t\t\t\tv-if=\"'table' === renderType\"\r\n\t\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t\t<EntriesList\r\n\t\t\t\t\t\tv-else-if=\"'list' === renderType\"\r\n\t\t\t\t\t\t:scope=\"slug\"\r\n\t\t\t\t\t/>\r\n\t\t\t\t\t<div\r\n\t\t\t\t\t\tid=\"misc-publishing-actions\"\r\n\t\t\t\t\t\tv-else\r\n\t\t\t\t\t>\r\n\t\t\t\t\t\t<div\r\n\t\t\t\t\t\t\tclass=\"misc-pub-section\"\r\n\t\t\t\t\t\t\tv-for=\"(value, name) in list\"\r\n\t\t\t\t\t\t\t:key=\"name\"\r\n\t\t\t\t\t\t>\r\n\t\t\t\t\t\t\t{{ name }}: <strong>{{ value }}</strong>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<slot name=\"in-footer\"></slot>\r\n\t\t\t\t</template>\r\n\t\t\t</PostBoxSkeleton>\r\n\t\t\t<slot name=\"after\"></slot>\r\n\t\t</div>\r\n\t</div>\r\n</template>\r\n\r\n<script>\r\nimport PostBoxSkeleton from './PostBoxSkeleton';\r\nimport EntriesTable from './EntriesTable';\r\nimport EntriesList from './EntriesList';\r\nimport EditTableSwitcher from './BoxActions/EditTableSwitcher';\r\n\r\n\r\nexport default {\r\n\tname: 'PostBoxSimple',\r\n\tprops: [\r\n\t\t'title',\r\n\t\t'slug',\r\n\t\t'list',\r\n\t\t'renderType',\r\n\t],\r\n\tcomponents: {\r\n\t\tEntriesTable,\r\n\t\tEntriesList,\r\n\t\tPostBoxSkeleton,\r\n\t\tEditTableSwitcher,\r\n\t},\r\n};\r\n</script>\r\n\r\n<style>\r\n\r\n.misc-pub-section {\r\n\tborder-bottom: 1px solid #ececec;\r\n}\r\n\r\n.misc-pub-section:last-child {\r\n\tborder-bottom: unset;\r\n}\r\n\r\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8722,6 +8824,7 @@ var render = function () {
       loading: _vm.isLoading,
       "empty-message": _vm.emptyMessage,
       "columns-components": _vm.components,
+      "footer-heading": _vm.footerHeading,
       scope: _vm.scope,
     },
   })
@@ -8758,214 +8861,224 @@ var render = function () {
           "is-empty": !_vm.list.length,
           "empty-message": _vm.emptyMessage,
         },
-        scopedSlots: _vm._u([
-          {
-            key: "heading",
-            fn: function () {
-              return [
-                _c(
-                  "cx-vui-list-table-heading",
-                  { attrs: { slots: _vm.filteredColumns } },
-                  _vm._l(_vm.filteredColumns, function (column) {
-                    return _c(
-                      "span",
-                      { key: column, attrs: { slot: column }, slot: column },
-                      [
-                        _vm.getHeadingComponent(column)
-                          ? [
-                              _c(
-                                "keep-alive",
-                                [
-                                  _c(_vm.getHeadingComponent(column), {
-                                    tag: "component",
-                                    attrs: {
-                                      value: _vm.columns[column],
-                                      scope: _vm.scope,
-                                    },
-                                  }),
-                                ],
-                                1
-                              ),
-                            ]
-                          : [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t\t" +
-                                  _vm._s(
-                                    _vm.columns[column]
-                                      ? _vm.columns[column].label
-                                      : ""
-                                  ) +
-                                  "\n\t\t\t\t\t\t"
-                              ),
-                            ],
-                        _vm._v(" "),
-                        _vm.columns[column].sortable
-                          ? _c(
-                              "svg",
-                              {
-                                attrs: {
-                                  width: "10",
-                                  height: "5",
-                                  viewBox: "0 0 10 5",
-                                  fill: "none",
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                },
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    d: "M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z",
-                                    fill: "#7B7E81",
-                                  },
-                                }),
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "heading",
+              fn: function () {
+                return [
+                  _c(
+                    "cx-vui-list-table-heading",
+                    { attrs: { slots: _vm.filteredColumns } },
+                    _vm._l(_vm.filteredColumns, function (column) {
+                      return _c(
+                        "span",
+                        { key: column, attrs: { slot: column }, slot: column },
+                        [
+                          _vm.getHeadingComponent(column)
+                            ? [
+                                _c(
+                                  "keep-alive",
+                                  [
+                                    _c(_vm.getHeadingComponent(column), {
+                                      tag: "component",
+                                      attrs: {
+                                        value: _vm.columns[column],
+                                        scope: _vm.scope,
+                                      },
+                                    }),
+                                  ],
+                                  1
+                                ),
                               ]
-                            )
-                          : _vm._e(),
-                      ],
-                      2
-                    )
-                  }),
-                  0
-                ),
-              ]
-            },
-            proxy: true,
-          },
-          {
-            key: "footer",
-            fn: function () {
-              return [
-                _c(
-                  "cx-vui-list-table-heading",
-                  { attrs: { slots: _vm.filteredColumns } },
-                  _vm._l(_vm.filteredColumns, function (column) {
-                    return _c(
-                      "span",
-                      { key: column, attrs: { slot: column }, slot: column },
-                      [
-                        _vm.getHeadingComponent(column)
-                          ? [
-                              _c(
-                                "keep-alive",
-                                [
-                                  _c(_vm.getHeadingComponent(column), {
-                                    tag: "component",
-                                    attrs: {
-                                      value: _vm.columns[column],
-                                      scope: _vm.scope,
-                                    },
-                                  }),
-                                ],
-                                1
-                              ),
-                            ]
-                          : [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t\t" +
-                                  _vm._s(
-                                    _vm.columns[column]
-                                      ? _vm.columns[column].label
-                                      : ""
-                                  ) +
-                                  "\n\t\t\t\t\t\t"
-                              ),
-                            ],
-                        _vm._v(" "),
-                        _vm.columns[column].sortable
-                          ? _c(
-                              "svg",
-                              {
-                                attrs: {
-                                  width: "10",
-                                  height: "5",
-                                  viewBox: "0 0 10 5",
-                                  fill: "none",
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                },
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    d: "M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z",
-                                    fill: "#7B7E81",
-                                  },
-                                }),
-                              ]
-                            )
-                          : _vm._e(),
-                      ],
-                      2
-                    )
-                  }),
-                  0
-                ),
-              ]
-            },
-            proxy: true,
-          },
-          {
-            key: "items",
-            fn: function () {
-              return _vm._l(_vm.list, function (entry, entryID) {
-                return _c(
-                  "div",
-                  { key: entryID, class: _vm.classEntry(entryID, entry) },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "list-table-item-columns" },
-                      _vm._l(_vm.filteredColumns, function (column) {
-                        return _c("EntryColumnsTable", {
-                          key: "entry_" + column,
-                          attrs: {
-                            column: column,
-                            entry: entry,
-                            "entry-id": entryID,
-                            scope: _vm.scope,
-                            "columns-components": _vm.columnsComponents,
-                          },
-                        })
-                      }),
-                      1
-                    ),
-                    _vm._v(" "),
-                    entry.actions
-                      ? _c(
-                          "div",
-                          { staticClass: "list-table-item-actions" },
-                          _vm._l(entry.actions.value, function (action) {
-                            return _c("span", { key: action.value }, [
-                              _c(
-                                "a",
+                            : [
+                                _vm._v(
+                                  "\n\t\t\t\t\t\t\t" +
+                                    _vm._s(
+                                      _vm.columns[column]
+                                        ? _vm.columns[column].label
+                                        : ""
+                                    ) +
+                                    "\n\t\t\t\t\t\t"
+                                ),
+                              ],
+                          _vm._v(" "),
+                          _vm.columns[column].sortable
+                            ? _c(
+                                "svg",
                                 {
-                                  class: _vm.getActionClass(action),
-                                  attrs: { href: _vm.getActionHref(action) },
-                                  on: {
-                                    click: function ($event) {
-                                      return _vm.onClickAction(action, entry)
-                                    },
+                                  attrs: {
+                                    width: "10",
+                                    height: "5",
+                                    viewBox: "0 0 10 5",
+                                    fill: "none",
+                                    xmlns: "http://www.w3.org/2000/svg",
                                   },
                                 },
                                 [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t" +
-                                      _vm._s(action.label) +
-                                      "\n\t\t\t\t\t\t\t"
-                                  ),
+                                  _c("path", {
+                                    attrs: {
+                                      d: "M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z",
+                                      fill: "#7B7E81",
+                                    },
+                                  }),
                                 ]
-                              ),
-                            ])
-                          }),
-                          0
-                        )
-                      : _vm._e(),
-                  ]
-                )
-              })
+                              )
+                            : _vm._e(),
+                        ],
+                        2
+                      )
+                    }),
+                    0
+                  ),
+                ]
+              },
+              proxy: true,
             },
-            proxy: true,
-          },
-        ]),
+            _vm.footerHeading
+              ? {
+                  key: "footer",
+                  fn: function () {
+                    return [
+                      _c(
+                        "cx-vui-list-table-heading",
+                        { attrs: { slots: _vm.filteredColumns } },
+                        _vm._l(_vm.filteredColumns, function (column) {
+                          return _c(
+                            "span",
+                            {
+                              key: column,
+                              attrs: { slot: column },
+                              slot: column,
+                            },
+                            [
+                              _vm.getHeadingComponent(column)
+                                ? [
+                                    _c(
+                                      "keep-alive",
+                                      [
+                                        _c(_vm.getHeadingComponent(column), {
+                                          tag: "component",
+                                          attrs: {
+                                            value: _vm.columns[column],
+                                            scope: _vm.scope,
+                                          },
+                                        }),
+                                      ],
+                                      1
+                                    ),
+                                  ]
+                                : [
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t" +
+                                        _vm._s(
+                                          _vm.columns[column]
+                                            ? _vm.columns[column].label
+                                            : ""
+                                        ) +
+                                        "\n\t\t\t\t\t\t"
+                                    ),
+                                  ],
+                              _vm._v(" "),
+                              _vm.columns[column].sortable
+                                ? _c(
+                                    "svg",
+                                    {
+                                      attrs: {
+                                        width: "10",
+                                        height: "5",
+                                        viewBox: "0 0 10 5",
+                                        fill: "none",
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                      },
+                                    },
+                                    [
+                                      _c("path", {
+                                        attrs: {
+                                          d: "M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z",
+                                          fill: "#7B7E81",
+                                        },
+                                      }),
+                                    ]
+                                  )
+                                : _vm._e(),
+                            ],
+                            2
+                          )
+                        }),
+                        0
+                      ),
+                    ]
+                  },
+                  proxy: true,
+                }
+              : null,
+            {
+              key: "items",
+              fn: function () {
+                return _vm._l(_vm.list, function (entry, entryID) {
+                  return _c(
+                    "div",
+                    { key: entryID, class: _vm.classEntry(entryID, entry) },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "list-table-item-columns" },
+                        _vm._l(_vm.filteredColumns, function (column) {
+                          return _c("EntryColumnsTable", {
+                            key: "entry_" + column,
+                            attrs: {
+                              column: column,
+                              entry: entry,
+                              "entry-id": entryID,
+                              scope: _vm.scope,
+                              "columns-components": _vm.columnsComponents,
+                            },
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      entry.actions
+                        ? _c(
+                            "div",
+                            { staticClass: "list-table-item-actions" },
+                            _vm._l(entry.actions.value, function (action) {
+                              return _c("span", { key: action.value }, [
+                                _c(
+                                  "a",
+                                  {
+                                    class: _vm.getActionClass(action),
+                                    attrs: { href: _vm.getActionHref(action) },
+                                    on: {
+                                      click: function ($event) {
+                                        return _vm.onClickAction(action, entry)
+                                      },
+                                    },
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t\t" +
+                                        _vm._s(action.label) +
+                                        "\n\t\t\t\t\t\t\t"
+                                    ),
+                                  ]
+                                ),
+                              ])
+                            }),
+                            0
+                          )
+                        : _vm._e(),
+                    ]
+                  )
+                })
+              },
+              proxy: true,
+            },
+          ],
+          null,
+          true
+        ),
       }),
     ],
     1
@@ -9397,6 +9510,24 @@ var render = function () {
                       },
                       proxy: true,
                     },
+                    _vm.$slots["in-header-" + slug]
+                      ? {
+                          key: "in-header",
+                          fn: function () {
+                            return [_vm._t("in-header-" + slug)]
+                          },
+                          proxy: true,
+                        }
+                      : null,
+                    _vm.$slots["in-footer-" + slug]
+                      ? {
+                          key: "in-footer",
+                          fn: function () {
+                            return [_vm._t("in-footer-" + slug)]
+                          },
+                          proxy: true,
+                        }
+                      : null,
                   ],
                   null,
                   true
@@ -9466,6 +9597,8 @@ var render = function () {
                       key: "default",
                       fn: function () {
                         return [
+                          _vm._t("in-header"),
+                          _vm._v(" "),
                           "table" === _vm.renderType
                             ? _c("EntriesTable", { attrs: { scope: _vm.slug } })
                             : "list" === _vm.renderType
@@ -9490,6 +9623,8 @@ var render = function () {
                                 }),
                                 0
                               ),
+                          _vm._v(" "),
+                          _vm._t("in-footer"),
                         ]
                       },
                       proxy: true,

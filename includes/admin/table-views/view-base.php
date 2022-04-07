@@ -8,10 +8,13 @@ use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
+use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
+use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
 abstract class View_Base implements
 	Repository_Static_Item_It,
-	Model_Dependencies_Interface {
+	Model_Dependencies_Interface,
+	Rest_Fetch_Endpoint {
 
 	use Repository_Item_With_Class;
 	use Model_Dependencies;
@@ -39,8 +42,16 @@ abstract class View_Base implements
 		return __( 'No items found.', 'jet-form-builder' );
 	}
 
+	public function get_rest_methods(): string {
+		return '';
+	}
+
+	public function get_rest_url(): string {
+		return '';
+	}
+
 	public function get_receive_endpoint(): array {
-		return array();
+		return ( new Rest_Endpoint( $this ) )->to_array();
 	}
 
 	public function load_data(): array {

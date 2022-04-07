@@ -37,7 +37,9 @@ export function setTableSeed( store, source ) {
 		render_type = '',
 		show_overflow = false,
 		show_overflow_control = false,
-		empty_message = ''
+		empty_message = '',
+		footer_heading = true,
+		...options
 	} = source;
 
 	let getName = withScope( source );
@@ -53,6 +55,8 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setEditableTable' ), is_editable_table );
 	store.commit( getName( 'showOverflow' ), show_overflow );
 	store.commit( getName( 'showOverflowControl' ), show_overflow_control );
+	store.commit( getName( 'setFooterHeading' ), footer_heading );
+	store.commit( getName( 'options/insert' ), options );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
 }
@@ -63,12 +67,16 @@ export function setListSeed( store, source ) {
 		columns = {},
 		render_type = '',
 		single_endpoint = {},
+		receive_url = {},
+		...options
 	} = source;
 
 	let getName = withScope( source );
 
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
+	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
 	store.commit( getName( 'setRenderType' ), render_type );
 	store.commit( getName( 'setSingleEndpoint' ), single_endpoint );
+	store.commit( getName( 'options/insert' ), options );
 }

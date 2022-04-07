@@ -13,6 +13,7 @@
 					<slot name="header-actions"></slot>
 				</template>
 				<template #default>
+					<slot name="in-header"></slot>
 					<EntriesTable
 						v-if="'table' === renderType"
 						:scope="slug"
@@ -33,6 +34,7 @@
 							{{ name }}: <strong>{{ value }}</strong>
 						</div>
 					</div>
+					<slot name="in-footer"></slot>
 				</template>
 			</PostBoxSkeleton>
 			<slot name="after"></slot>

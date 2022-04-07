@@ -36,6 +36,12 @@
 					<template #after>
 						<slot :name="'after-' + slug" v-bind="{ list }"></slot>
 					</template>
+					<template #in-header v-if="$slots['in-header-' + slug ]">
+						<slot :name="'in-header-' + slug"></slot>
+					</template>
+					<template #in-footer v-if="$slots['in-footer-' + slug ]">
+						<slot :name="'in-footer-' + slug"></slot>
+					</template>
 				</PostBoxSimple>
 			</PostBoxContainer>
 		</div>
@@ -61,7 +67,7 @@ export default {
 		bodyClasses() {
 			return {
 				'metabox-holder': true,
-				[ 'columns-' + this.containers.length ]: true,
+				[ 'columns-' + this.containers?.length ]: true,
 			};
 		},
 	},

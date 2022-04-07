@@ -66,7 +66,7 @@ export default {
 		label: state => {
 			const action = current( state );
 			return slug => {
-				return action?.messages ? action.messages[ slug ] : '';
+				return action?.messages ? action.messages[ slug ] : 'null';
 			};
 		},
 	},

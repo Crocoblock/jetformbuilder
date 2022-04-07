@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Rest_Api;
 
 abstract class Rest_Api_Endpoint_Base {
 
-	public static function get_namespace(): string {
+	final public static function get_namespace(): string {
 		return 'jet-form-builder/v1';
 	}
 

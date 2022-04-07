@@ -147,9 +147,11 @@ class Pages_Manager {
 			true
 		);
 
+		$name = ( $this->current_page instanceof Base_Single_Page ) ? 'single' : 'static';
+
 		wp_register_style(
 			self::STYLE_ADMIN,
-			Plugin::instance()->plugin_url( 'assets/css/admin/default.css' ),
+			Plugin::instance()->plugin_url( "assets/css/admin/$name.css" ),
 			array(),
 			Plugin::instance()->get_version()
 		);

@@ -31,7 +31,7 @@
             		</span>
 				</cx-vui-list-table-heading>
 			</template>
-			<template #footer>
+			<template #footer v-if="footerHeading">
 				<cx-vui-list-table-heading
 					:slots="filteredColumns"
 				>
@@ -132,6 +132,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		footerHeading: {
+			type: Boolean,
+			default: true,
+		}
 	},
 	data() {
 		return {

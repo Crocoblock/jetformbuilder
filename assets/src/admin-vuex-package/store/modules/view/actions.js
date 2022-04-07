@@ -12,7 +12,7 @@ const apiOptions = getters => {
 };
 
 export default {
-	fetchPage( { commit, getters, dispatch, state } ) {
+	fetchPage( { commit, getters, dispatch } ) {
 		commit( 'toggleLoading', 'page' );
 
 		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {

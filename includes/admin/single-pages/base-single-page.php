@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Classes\Arrayable\Array_Convert_Once;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
@@ -19,8 +20,13 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	use With_Theme_Info;
 
 	protected $id;
+	protected $storage;
 
 	abstract public function parent_slug(): string;
+
+	public function __construct() {
+		$this->storage = new Array_Convert_Once();
+	}
 
 	public function rep_item_id() {
 		return $this->parent_slug();
@@ -117,6 +123,10 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 
 	public function get_id(): int {
 		return $this->id;
+	}
+
+	public function get_storage(): Array_Convert_Once {
+		return $this->storage;
 	}
 
 }

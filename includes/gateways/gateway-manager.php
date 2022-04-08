@@ -14,6 +14,7 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 use Jet_Form_Builder\Gateways\Paypal;
+use Jet_Form_Builder\Gateways\Rest_Api\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 
 /**
@@ -46,6 +47,7 @@ class Gateway_Manager {
 			return;
 		}
 		add_action( 'init', array( $this, 'register_gateways' ) );
+		( new Rest_Api_Controller() )->rest_api_init();
 
 		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_send_actions' ) );
 		add_action( 'jet-form-builder/actions/after-send', array( $this, 'after_send_actions' ) );

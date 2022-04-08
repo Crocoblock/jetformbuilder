@@ -14,7 +14,7 @@ abstract class Base_Meta_Container implements Arrayable {
 	use Repository_Pattern_Trait;
 
 	const TYPE_NORMAL = 'normal-sortables';
-	const TYPE_SIDE   = 'side-sortables';
+	const TYPE_SIDE = 'side-sortables';
 
 	protected $index;
 
@@ -52,6 +52,10 @@ abstract class Base_Meta_Container implements Arrayable {
 		return $this->rep_get_values();
 	}
 
+	public function get_box( string $slug ): Base_Meta_Box {
+		return $this->rep_get_item_or_die( $slug );
+	}
+
 	/**
 	 * @param Base_Meta_Box $box
 	 */
@@ -77,11 +81,14 @@ abstract class Base_Meta_Container implements Arrayable {
 	}
 
 	public function to_array(): array {
-		$boxes = array();
+		$boxes   = array();
+		$storage = jet_fb_current_page()->get_storage();
 
 		foreach ( $this->get_boxes() as $box ) {
 			try {
-				$boxes[] = $box->set_single_id()->to_array();
+				$box->set_single_id();
+
+				$boxes[] = $storage->to_array( $box );
 			} catch ( Empty_Box_Exception $exception ) {
 				continue;
 			}

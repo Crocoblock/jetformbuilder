@@ -19,7 +19,7 @@
 				:size="action.button.size"
 				:url="action.button.url"
 				:tag-name="action.button.url ? 'a' : 'button'"
-				:disabled="isDisabled( action.slug )"
+				:disabled="isDisabled( action.slug ) || isGlobalDoing"
 				:loading="isLoading( action.slug )"
 				target="_blank"
 				@click="globalEmit( action )"
@@ -50,6 +50,14 @@ export default {
 			'isLoading',
 			'isDisabled',
 		] ),
+		...mapGetters( [
+			'isDoing'
+		] ),
+		isGlobalDoing() {
+			jfbEventBus.reactiveCounter;
+
+			return this.isDoing;
+		}
 	},
 	methods: {
 		...mapMutations( 'actions', [

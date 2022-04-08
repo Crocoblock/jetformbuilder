@@ -12,6 +12,7 @@ use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
+use Jet_Form_Builder\Gateways\Rest_Api\Receive_Payments;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Gross_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Header_Actions_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payer_Column;
@@ -40,11 +41,12 @@ class Payments extends View_Advanced_Base {
 		);
 	}
 
-	public function get_receive_endpoint(): array {
-		return array(
-			'method' => Rest_Endpoints\Receive_Payments::get_methods(),
-			'url'    => Rest_Endpoints\Receive_Payments::rest_url(),
-		);
+	public function get_rest_url(): string {
+		return Receive_Payments::rest_url();
+	}
+
+	public function get_rest_methods(): string {
+		return Receive_Payments::get_methods();
 	}
 
 	public function get_total(): int {

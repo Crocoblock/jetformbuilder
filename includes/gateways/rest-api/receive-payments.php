@@ -1,11 +1,9 @@
 <?php
 
 
-namespace Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints;
-
+namespace Jet_Form_Builder\Gateways\Rest_Api;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;
 use Jet_Form_Builder\Gateways\Table_Views;
@@ -15,7 +13,7 @@ class Receive_Payments extends Rest_Api_Endpoint_Base {
 	use Traits\Paginated_Args;
 
 	public static function get_rest_base() {
-		return 'receive-payments';
+		return 'payments';
 	}
 
 	public static function get_methods() {
@@ -27,7 +25,7 @@ class Receive_Payments extends Rest_Api_Endpoint_Base {
 	}
 
 	public function get_table_view() {
-		return new Table_Views\Payments;
+		return new Table_Views\Payments();
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

@@ -7,7 +7,6 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Base_Scenario_Gateway;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
-use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Rest_Api_Controller;
 
 class Controller extends Base_Scenario_Gateway {
 
@@ -18,10 +17,6 @@ class Controller extends Base_Scenario_Gateway {
 	public $redirect = false;
 
 	protected $token_query_name = 'token';
-
-	public function __construct() {
-		( new Rest_Api_Controller() )->rest_api_init();
-	}
 
 	/**
 	 * Returns current gateway ID

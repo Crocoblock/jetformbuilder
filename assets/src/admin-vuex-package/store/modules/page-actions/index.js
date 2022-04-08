@@ -8,15 +8,13 @@ const findActionIndex = ( state, actionSlug ) => {
 	return index;
 };
 
-const toggleDisabled = ( state, slug ) => {
+const toggleDisabled = ( state, slug, forceDisable ) => {
 	if ( 'undefined' === typeof slug ) {
 		slug = state.current;
 	}
 	state.disabled = {
 		...state.disabled,
-		[ slug ]: ! (
-			state.disabled[ slug ] ?? false
-		),
+		[ slug ]: forceDisable ?? ! ( state.disabled[ slug ] ?? false ),
 	};
 };
 
@@ -96,7 +94,7 @@ export default {
 		toggleLoading,
 		disabledAll( state ) {
 			state.actions.forEach( ( { slug } ) => {
-				toggleDisabled( state, slug );
+				toggleDisabled( state, slug, true );
 			} );
 		},
 	},

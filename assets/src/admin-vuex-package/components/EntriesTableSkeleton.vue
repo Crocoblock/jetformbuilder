@@ -135,7 +135,7 @@ export default {
 		footerHeading: {
 			type: Boolean,
 			default: true,
-		}
+		},
 	},
 	data() {
 		return {
@@ -218,7 +218,8 @@ export default {
 					payload: [
 						[ getPrimaryId( record ) ],
 						CLICK_ACTION,
-						record
+						action?.payload,
+						record,
 					],
 				},
 			);

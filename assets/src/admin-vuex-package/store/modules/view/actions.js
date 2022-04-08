@@ -12,7 +12,7 @@ const apiOptions = getters => {
 	let actionEndpoint = getters.getAction( action );
 
 	if ( ! actionEndpoint ) {
-		const record = payload[2] ?? {};
+		const record = payload[3] ?? {};
 
 		actionEndpoint = getActionFromRecord( record, action )
 	}

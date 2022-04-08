@@ -1,13 +1,31 @@
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 const { apiFetch } = wp;
 
+const getActionFromRecord = ( record, slug ) => {
+	return record.actions.value.find( action => slug === action.value )
+};
+
 const apiOptions = getters => {
-	const { action, payload: [ checked ] } = getters.currentProcess;
-	const options = getters.fetchListOptions( getters.getAction( action )?.endpoint );
+	const { action, payload } = getters.currentProcess;
+	const [ checked ] = payload;
+
+	let actionEndpoint = getters.getAction( action );
+
+	if ( ! actionEndpoint ) {
+		const record = payload[2] ?? {};
+
+		actionEndpoint = getActionFromRecord( record, action )
+	}
+
+	const options = getters.fetchListOptions( actionEndpoint?.endpoint );
 
 	return {
 		...options,
-		data: { checked },
+		...getters.apiOptions,
+		data: {
+			checked,
+			...getters.apiData,
+		},
 	};
 };
 
@@ -79,7 +97,9 @@ export default {
 		} );
 	},
 	activeAll( { commit, getters } ) {
-		const idsList = getters.list.map( row => (row?.choose?.value) );
+		const idsList = getters.list.map( row => (
+			row?.choose?.value
+		) );
 
 		commit( 'setChecked', idsList );
 	},

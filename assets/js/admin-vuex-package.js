@@ -459,7 +459,7 @@ var _Vuex = Vuex,
       this.commit('setProcess', {
         action: this.currentAction,
         context: CHOOSE_ACTION,
-        payload: [this.getChecked]
+        payload: [this.getChecked, CHOOSE_ACTION]
       });
 
       var finish = function finish() {
@@ -945,7 +945,7 @@ var _window$Vuex = window.Vuex,
       this.commit('setProcess', {
         action: action.value,
         context: CLICK_ACTION,
-        payload: [[(0,_functions__WEBPACK_IMPORTED_MODULE_4__.getPrimaryId)(record)]]
+        payload: [[(0,_functions__WEBPACK_IMPORTED_MODULE_4__.getPrimaryId)(record)], CLICK_ACTION, record]
       });
 
       try {
@@ -3638,6 +3638,12 @@ var getters = {
   hasFilters: function hasFilters(state) {
     return 0 < Object.keys(state.filters).length;
   },
+  apiOptions: function apiOptions(state) {
+    return state.apiOptions;
+  },
+  apiData: function apiData(state) {
+    return state.apiData;
+  },
   fetchListOptions: function fetchListOptions(state) {
     return function (endpoint) {
       var limit = state.limit,
@@ -3758,6 +3764,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       state.filters[filter].selected = (_replaceMap$filter = replaceMap[filter]) !== null && _replaceMap$filter !== void 0 ? _replaceMap$filter : '';
     }
+  },
+  setApiOptions: function setApiOptions(state, options) {
+    state.apiOptions = options;
+  },
+  setApiData: function setApiData(state, data) {
+    state.apiData = data;
   }
 });
 
@@ -3783,7 +3795,9 @@ __webpack_require__.r(__webpack_exports__);
   itemsFrom: 0,
   itemsTo: 0,
   filters: {},
-  receiveEndpoint: {}
+  receiveEndpoint: {},
+  apiOptions: {},
+  apiData: {}
 });
 
 /***/ }),
@@ -4287,19 +4301,36 @@ window.jfbEventBus = window.jfbEventBus || new Vue({});
 var _wp = wp,
     _apiFetch = _wp.apiFetch;
 
+var getActionFromRecord = function getActionFromRecord(record, slug) {
+  return record.actions.value.find(function (action) {
+    return slug === action.value;
+  });
+};
+
 var apiOptions = function apiOptions(getters) {
-  var _getters$getAction;
+  var _actionEndpoint;
 
   var _getters$currentProce = getters.currentProcess,
       action = _getters$currentProce.action,
-      _getters$currentProce2 = _slicedToArray(_getters$currentProce.payload, 1),
-      checked = _getters$currentProce2[0];
+      payload = _getters$currentProce.payload;
 
-  var options = getters.fetchListOptions((_getters$getAction = getters.getAction(action)) === null || _getters$getAction === void 0 ? void 0 : _getters$getAction.endpoint);
-  return _objectSpread(_objectSpread({}, options), {}, {
-    data: {
+  var _payload = _slicedToArray(payload, 1),
+      checked = _payload[0];
+
+  var actionEndpoint = getters.getAction(action);
+
+  if (!actionEndpoint) {
+    var _payload$;
+
+    var record = (_payload$ = payload[2]) !== null && _payload$ !== void 0 ? _payload$ : {};
+    actionEndpoint = getActionFromRecord(record, action);
+  }
+
+  var options = getters.fetchListOptions((_actionEndpoint = actionEndpoint) === null || _actionEndpoint === void 0 ? void 0 : _actionEndpoint.endpoint);
+  return _objectSpread(_objectSpread(_objectSpread({}, options), getters.apiOptions), {}, {
+    data: _objectSpread({
       checked: checked
-    }
+    }, getters.apiData)
   });
 };
 
@@ -4975,7 +5006,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AA8OC;EACC,YAAA;AC7OF;ADgPC;EACC,oBAAA;AC9OF;ADmPC;EACC,8BAAA;AChPF;ADmPC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;ACjPF;ADmPE;EACC,gCAAA;ACjPH;ADoPE;EACC,yBAAA;AClPH;ADqPE;EACC,mBAAA;ACnPH;ADuPG;EACC,WAAA;ACrPJ;AD0PG;EACC,8BAAA;ACxPJ;AD2PG;EACC,oBAAA;ACzPJ;AD6PE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC3PH;AD6PG;EACC,YAAA;AC3PJ;AD8PG;EACC,sBAAA;AC5PJ;AD+PK;EACC,gBAAA;AC7PN;ADiQI;EACC,oBAAA;EACA,eAAA;AC/PL;ADoQE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;AClQH;ADqQE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;ACnQH;ADqQG;EACC,OAAA;ACnQJ;ADwQC;EACC,OAAA;ACtQF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}", "",{"version":3,"sources":["webpack://./admin-vuex-package/components/EntriesTableSkeleton.vue","webpack://./../EntriesTableSkeleton.vue"],"names":[],"mappings":"AAgPC;EACC,YAAA;AC/OF;ADkPC;EACC,oBAAA;AChPF;ADqPC;EACC,8BAAA;AClPF;ADqPC;EACC,sBAAA;EACA,kBAAA;EACA,yBAAA;ACnPF;ADqPE;EACC,gCAAA;ACnPH;ADsPE;EACC,yBAAA;ACpPH;ADuPE;EACC,mBAAA;ACrPH;ADyPG;EACC,WAAA;ACvPJ;AD4PG;EACC,8BAAA;AC1PJ;AD6PG;EACC,oBAAA;AC3PJ;AD+PE;EACC,aAAA;EACA,UAAA;EACA,iBAAA;EACA,kBAAA;EACA,kBAAA;EACA,aAAA;EACA,WAAA;AC7PH;AD+PG;EACC,YAAA;AC7PJ;ADgQG;EACC,sBAAA;AC9PJ;ADiQK;EACC,gBAAA;AC/PN;ADmQI;EACC,oBAAA;EACA,eAAA;ACjQL;ADsQE;EACC,aAAA;EACA,8BAAA;EACA,WAAA;ACpQH;ADuQE;EACC,mBAAA;EACA,gBAAA;EACA,gBAAA;EACA,kBAAA;EACA,qBAAA;ACrQH;ADuQG;EACC,OAAA;ACrQJ;AD0QC;EACC,OAAA;ACxQF","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n.cx-vui-panel {\r\n\t&--loading {\r\n\t\topacity: 0.5;\r\n\t}\r\n\r\n\t&-table-wrapper {\r\n\t\tmargin-bottom: unset;\r\n\t}\r\n}\r\n\r\n.cx-vue-list-table {\r\n\t.list-table-heading, .list-table-item-columns {\r\n\t\tjustify-content: space-between;\r\n\t}\r\n\r\n\t.list-table-item {\r\n\t\tflex-direction: column;\r\n\t\tposition: relative;\r\n\t\tbackground-color: #ffffff;\r\n\r\n\t\t&:not(:last-child) {\r\n\t\t\tborder-bottom: 1px solid #ececec;\r\n\t\t}\r\n\r\n\t\t&:hover {\r\n\t\t\tbackground-color: #e3f6fd;\r\n\t\t}\r\n\r\n\t\t&:hover .list-table-item-actions {\r\n\t\t\tvisibility: visible;\r\n\t\t}\r\n\r\n\t\t&--has-choose {\r\n\t\t\t.list-table-item-actions {\r\n\t\t\t\tleft: 5.2em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&--has-actions {\r\n\t\t\t.list-table-item__cell.cell--choose {\r\n\t\t\t\t/*transform: translateY(25%);*/\r\n\t\t\t}\r\n\r\n\t\t\t.list-table-item-columns {\r\n\t\t\t\tmargin-bottom: 1.5em;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-actions {\r\n\t\t\tdisplay: flex;\r\n\t\t\twidth: 85%;\r\n\t\t\tcolumn-gap: 0.5em;\r\n\t\t\tvisibility: hidden;\r\n\t\t\tposition: absolute;\r\n\t\t\tbottom: 0.5em;\r\n\t\t\tleft: 1.5em;\r\n\r\n\t\t\t& > *:not(:last-child)::after {\r\n\t\t\t\tcontent: '|';\r\n\t\t\t}\r\n\r\n\t\t\t&-single {\r\n\t\t\t\ttext-decoration: unset;\r\n\r\n\t\t\t\t&--type {\r\n\t\t\t\t\t&-danger {\r\n\t\t\t\t\t\tcolor: firebrick;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\r\n\t\t\t\t&.disabled {\r\n\t\t\t\t\tpointer-events: none;\r\n\t\t\t\t\tcursor: default;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t&-columns {\r\n\t\t\tdisplay: flex;\r\n\t\t\tjustify-content: space-between;\r\n\t\t\twidth: 100%;\r\n\t\t}\r\n\r\n\t\t&__cell {\r\n\t\t\twhite-space: nowrap;\r\n\t\t\toverflow: hidden;\r\n\t\t\ttext-align: left;\r\n\t\t\tposition: relative;\r\n\t\t\tpadding: 8px 20px 6px;\r\n\r\n\t\t\t&:not(.cell--choose) {\r\n\t\t\t\tflex: 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t.list-table-heading__cell:not(.cell--choose) {\r\n\t\tflex: 1\r\n\t}\r\n}\r\n\r\n\r\n",".cx-vui-panel--loading {\n  opacity: 0.5;\n}\n.cx-vui-panel-table-wrapper {\n  margin-bottom: unset;\n}\n\n.cx-vue-list-table .list-table-heading, .cx-vue-list-table .list-table-item-columns {\n  justify-content: space-between;\n}\n.cx-vue-list-table .list-table-item {\n  flex-direction: column;\n  position: relative;\n  background-color: #ffffff;\n}\n.cx-vue-list-table .list-table-item:not(:last-child) {\n  border-bottom: 1px solid #ececec;\n}\n.cx-vue-list-table .list-table-item:hover {\n  background-color: #e3f6fd;\n}\n.cx-vue-list-table .list-table-item:hover .list-table-item-actions {\n  visibility: visible;\n}\n.cx-vue-list-table .list-table-item--has-choose .list-table-item-actions {\n  left: 5.2em;\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item__cell.cell--choose {\n  /*transform: translateY(25%);*/\n}\n.cx-vue-list-table .list-table-item--has-actions .list-table-item-columns {\n  margin-bottom: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions {\n  display: flex;\n  width: 85%;\n  column-gap: 0.5em;\n  visibility: hidden;\n  position: absolute;\n  bottom: 0.5em;\n  left: 1.5em;\n}\n.cx-vue-list-table .list-table-item-actions > *:not(:last-child)::after {\n  content: \"|\";\n}\n.cx-vue-list-table .list-table-item-actions-single {\n  text-decoration: unset;\n}\n.cx-vue-list-table .list-table-item-actions-single--type-danger {\n  color: firebrick;\n}\n.cx-vue-list-table .list-table-item-actions-single.disabled {\n  pointer-events: none;\n  cursor: default;\n}\n.cx-vue-list-table .list-table-item-columns {\n  display: flex;\n  justify-content: space-between;\n  width: 100%;\n}\n.cx-vue-list-table .list-table-item__cell {\n  white-space: nowrap;\n  overflow: hidden;\n  text-align: left;\n  position: relative;\n  padding: 8px 20px 6px;\n}\n.cx-vue-list-table .list-table-item__cell:not(.cell--choose) {\n  flex: 1;\n}\n.cx-vue-list-table .list-table-heading__cell:not(.cell--choose) {\n  flex: 1;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

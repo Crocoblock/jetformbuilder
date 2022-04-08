@@ -8,4 +8,6 @@ export default {
 	itemsTo: 0,
 	filters: {},
 	receiveEndpoint: {},
+	apiOptions: {},
+	apiData: {},
 }

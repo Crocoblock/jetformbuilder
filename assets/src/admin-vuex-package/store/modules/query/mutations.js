@@ -35,4 +35,10 @@ export default {
 			state.filters[ filter ].selected = replaceMap[ filter ] ?? '';
 		}
 	},
+	setApiOptions( state, options ) {
+		state.apiOptions = options;
+	},
+	setApiData( state, data ) {
+		state.apiData = data;
+	},
 };

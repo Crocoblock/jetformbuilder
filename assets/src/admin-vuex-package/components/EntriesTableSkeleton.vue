@@ -217,6 +217,8 @@ export default {
 					context: CLICK_ACTION,
 					payload: [
 						[ getPrimaryId( record ) ],
+						CLICK_ACTION,
+						record
 					],
 				},
 			);

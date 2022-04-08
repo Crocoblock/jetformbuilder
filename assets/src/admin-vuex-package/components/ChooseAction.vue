@@ -84,7 +84,7 @@ export default {
 				{
 					action: this.currentAction,
 					context: CHOOSE_ACTION,
-					payload: [ this.getChecked ]
+					payload: [ this.getChecked, CHOOSE_ACTION ]
 				},
 			);
 

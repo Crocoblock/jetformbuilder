@@ -27,6 +27,12 @@ const getters = {
 	hasFilters: state => {
 		return 0 < Object.keys( state.filters ).length;
 	},
+	apiOptions: state => {
+		return state.apiOptions;
+	},
+	apiData: state => {
+		return state.apiData;
+	},
 	fetchListOptions: state => endpoint => {
 		const { limit, sort, currentPage: page } = state;
 

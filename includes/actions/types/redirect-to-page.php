@@ -174,7 +174,7 @@ class Redirect_To_Page extends Base {
 		return apply_filters(
 			"jet-form-builder/action/{$this->get_id()}/editor-data",
 			array(
-				'pages'          => Tools::get_pages_list_for_js(),
+				'pages'          => Tools::with_placeholder( Tools::get_pages_list_for_js() ),
 				'redirect_types' => $this->get_redirect_types(),
 			)
 		);

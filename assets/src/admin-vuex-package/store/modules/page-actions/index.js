@@ -82,7 +82,7 @@ export default {
 			state.actions = actions;
 
 			actions.forEach( action => {
-				if ( action.button.disabled ) {
+				if ( action?.button?.disabled ) {
 					state.disabled[ action.slug ] = true;
 				}
 			} );

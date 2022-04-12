@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Pages;
 
 
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payer_Box;
@@ -36,8 +37,8 @@ class Single_Payment_Page extends Base_Single_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
-		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_style( Pages_Manager::STYLE_ADMIN );
+		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();
 	}

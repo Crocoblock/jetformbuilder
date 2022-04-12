@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Meta_Boxes;
 
-use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
@@ -13,6 +12,7 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Gateway_Type_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Amount_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Currency_Column;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
+use Jet_Form_Builder\Gateways\Rest_Api\Receive_Payment;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
 
 class Payment_Details_Box extends Base_List_Box {
@@ -30,6 +30,16 @@ class Payment_Details_Box extends Base_List_Box {
 			'created_at' => new Created_At_Column(),
 			'updated_at' => new Updated_At_Column(),
 		);
+	}
+
+	public function get_rest_url(): string {
+		return Receive_Payment::dynamic_rest_url(
+			array( 'id' => $this->get_id() )
+		);
+	}
+
+	public function get_rest_methods(): string {
+		return Receive_Payment::get_methods();
 	}
 
 	/**

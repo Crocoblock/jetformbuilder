@@ -2,7 +2,7 @@ import SinglePayment from './SinglePayment';
 
 const {
 	BaseStore,
-	SingleMetaBoxesPlugin,
+	SingleMetaBoxesPlugin
 } = JetFBStore;
 
 const { renderCurrentPage } = window.JetFBActions;

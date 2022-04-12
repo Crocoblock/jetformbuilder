@@ -28,6 +28,7 @@ class Pages_Manager {
 	private $single_manager;
 
 	const STYLE_ADMIN         = 'jet-form-builder-admin-style';
+	const STYLE_DASHICONS     = 'dashicons';
 	const SCRIPT_VUEX         = 'jet-form-builder-admin-vuex';
 	const SCRIPT_PACKAGE      = 'jet-form-builder-admin-package';
 	const SCRIPT_VUEX_PACKAGE = 'jet-form-builder-admin-vuex-package';
@@ -152,7 +153,9 @@ class Pages_Manager {
 		wp_register_style(
 			self::STYLE_ADMIN,
 			Plugin::instance()->plugin_url( "assets/css/admin/$name.css" ),
-			array(),
+			array(
+				self::STYLE_DASHICONS,
+			),
 			Plugin::instance()->get_version()
 		);
 

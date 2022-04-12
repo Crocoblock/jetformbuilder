@@ -56,7 +56,12 @@ import EditTableSwitcher from './BoxActions/EditTableSwitcher';
 export default {
 	name: 'PostBoxGrid',
 	props: {
-		containers: Array,
+		containers: {
+			type: Array,
+			default() {
+				return window?.JetFBPageConfig?.containers ?? [];
+			},
+		},
 	},
 	components: {
 		EditTableSwitcher,

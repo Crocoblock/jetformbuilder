@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways\Pages;
 
 use Jet_Form_Builder\Admin\Pages\Base_Page;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Gateways\Table_Views\Payments;
 
 class Payments_Page extends Base_Page {
@@ -25,7 +26,7 @@ class Payments_Page extends Base_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
+		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();
 	}

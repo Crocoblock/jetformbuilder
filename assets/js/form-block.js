@@ -1,6 +1,24 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./editor/form-block.js":
+/*!******************************!*\
+  !*** ./editor/form-block.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @blocks/form-block/block.json */ \"../blocks-src/form-block/block.json\");\nfunction ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }\n\nfunction _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }\n\nfunction _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }\n\nfunction _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }\n\n\nvar registerBlockType = wp.blocks.registerBlockType;\nvar __ = wp.i18n.__;\n\nvar _ref = wp.blockEditor ? wp.blockEditor : wp.editor,\n    InspectorControls = _ref.InspectorControls,\n    useBlockProps = _ref.useBlockProps;\n\nvar _wp$components = wp.components,\n    PanelBody = _wp$components.PanelBody,\n    SelectControl = _wp$components.SelectControl,\n    TextControl = _wp$components.TextControl,\n    ToggleControl = _wp$components.ToggleControl;\nvar _wp = wp,\n    ServerSideRender = _wp.serverSideRender;\n\nvar uniqKey = function uniqKey(suffix) {\n  return \"\".concat(_blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name, \"/\").concat(suffix);\n};\n\nfunction FormEdit(_ref2) {\n  var attributes = _ref2.attributes,\n      setAttributes = _ref2.setAttributes,\n      isSelected = _ref2.isSelected;\n  var localize = window.JetFormData;\n  var blockProps = useBlockProps();\n  return [isSelected && wp.element.createElement(InspectorControls, {\n    key: uniqKey('InspectorControls')\n  }, wp.element.createElement(PanelBody, {\n    title: __('Form Settings'),\n    key: uniqKey('PanelBody')\n  }, wp.element.createElement(SelectControl, {\n    key: \"form_id\",\n    label: __('Choose Form'),\n    labelposition: \"top\",\n    value: attributes.form_id,\n    onChange: function onChange(newValue) {\n      setAttributes({\n        form_id: Number(newValue)\n      });\n    },\n    options: localize.forms_list\n  }), Boolean(attributes.form_id) && wp.element.createElement(React.Fragment, null, wp.element.createElement(SelectControl, {\n    label: __('Fields Layout', 'jet-form-builder'),\n    value: attributes.fields_layout,\n    options: localize.fields_layout,\n    onChange: function onChange(fields_layout) {\n      return setAttributes({\n        fields_layout: fields_layout\n      });\n    }\n  }), wp.element.createElement(TextControl, {\n    label: __('Required Mark', 'jet-form-builder'),\n    value: attributes.required_mark,\n    onChange: function onChange(required_mark) {\n      return setAttributes({\n        required_mark: required_mark\n      });\n    }\n  }), wp.element.createElement(SelectControl, {\n    label: __('Fields label HTML tag', 'jet-form-builder'),\n    value: attributes.fields_label_tag,\n    options: localize.fields_label_tag,\n    onChange: function onChange(fields_label_tag) {\n      return setAttributes({\n        fields_label_tag: fields_label_tag\n      });\n    }\n  }), wp.element.createElement(SelectControl, {\n    label: __('Submit Type', 'jet-form-builder'),\n    value: attributes.submit_type,\n    options: localize.submit_type,\n    onChange: function onChange(submit_type) {\n      return setAttributes({\n        submit_type: submit_type\n      });\n    }\n  }), wp.element.createElement(ToggleControl, {\n    key: 'enable_progress',\n    label: __('Enable form pages progress', 'jet-form-builder'),\n    checked: attributes.enable_progress,\n    onChange: function onChange(newVal) {\n      setAttributes({\n        enable_progress: Boolean(newVal)\n      });\n    }\n  })))), wp.element.createElement(\"div\", _extends({\n    key: uniqKey('viewBlock')\n  }, blockProps), wp.element.createElement(ServerSideRender, {\n    block: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name,\n    attributes: attributes,\n    httpMethod: 'POST'\n  }))];\n}\n\nregisterBlockType(_blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name, _objectSpread(_objectSpread({}, _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__), {}, {\n  title: __('JetForm'),\n  icon: wp.element.createElement(\"span\", {\n    dangerouslySetInnerHTML: {\n      __html: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.icon\n    }\n  }),\n  attributes: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.attributes,\n  edit: FormEdit\n}));//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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SyxFQUFFbkMsRUFBRSxDQUFFLFNBQUYsQ0FKTTtBQUtmb0MsRUFBQUEsSUFBSSxFQUFFO0FBQU0sMkJBQXVCLEVBQUc7QUFBRUMsTUFBQUEsTUFBTSxFQUFFekMsK0RBQWF3QztBQUF2QjtBQUFoQyxJQUxTO0FBTWZuQixFQUFBQSxVQUFVLEVBQUVyQixxRUFORztBQU9mMEMsRUFBQUEsSUFBSSxFQUFFdEI7QUFQUyxHQUFqQiIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL2VkaXRvci9mb3JtLWJsb2NrLmpzP2Q2NWYiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IG1ldGFkYXRhIGZyb20gXCJAYmxvY2tzL2Zvcm0tYmxvY2svYmxvY2suanNvblwiXHJcblxyXG5jb25zdCB7XHJcblx0XHQgIHJlZ2lzdGVyQmxvY2tUeXBlLFxyXG5cdCAgfSA9IHdwLmJsb2NrcztcclxuXHJcbmNvbnN0IHsgX18gfSA9IHdwLmkxOG47XHJcblxyXG5jb25zdCB7XHJcblx0XHQgIEluc3BlY3RvckNvbnRyb2xzLFxyXG5cdFx0ICB1c2VCbG9ja1Byb3BzLFxyXG5cdCAgfSA9IHdwLmJsb2NrRWRpdG9yID8gd3AuYmxvY2tFZGl0b3IgOiB3cC5lZGl0b3I7XHJcblxyXG5jb25zdCB7XHJcblx0XHQgIFBhbmVsQm9keSxcclxuXHRcdCAgU2VsZWN0Q29udHJvbCxcclxuXHRcdCAgVGV4dENvbnRyb2wsXHJcblx0XHQgIFRvZ2dsZUNvbnRyb2wsXHJcblx0ICB9ID0gd3AuY29tcG9uZW50cztcclxuXHJcbmNvbnN0IHtcclxuXHRcdCAgc2VydmVyU2lkZVJlbmRlcjogU2VydmVyU2lkZVJlbmRlcixcclxuXHQgIH0gPSB3cDtcclxuXHJcbmNvbnN0IHVuaXFLZXkgPSBzdWZmaXggPT4gYCR7IG1ldGFkYXRhLm5hbWUgfS8keyBzdWZmaXggfWA7XHJcblxyXG5mdW5jdGlvbiBGb3JtRWRpdCggeyBhdHRyaWJ1dGVzLCBzZXRBdHRyaWJ1dGVzLCBpc1NlbGVjdGVkIH0gKSB7XHJcblxyXG5cdGNvbnN0IGxvY2FsaXplID0gd2luZG93LkpldEZvcm1EYXRhO1xyXG5cdGNvbnN0IGJsb2NrUHJvcHMgPSB1c2VCbG9ja1Byb3BzKCk7XHJcblxyXG5cdHJldHVybiBbXHJcblx0XHRpc1NlbGVjdGVkICYmIDxJbnNwZWN0b3JDb250cm9sc1xyXG5cdFx0XHRrZXk9eyB1bmlxS2V5KCAnSW5zcGVjdG9yQ29udHJvbHMnICkgfVxyXG5cdFx0PlxyXG5cdFx0XHQ8UGFuZWxCb2R5XHJcblx0XHRcdFx0dGl0bGU9eyBfXyggJ0Zvcm0gU2V0dGluZ3MnICkgfVxyXG5cdFx0XHRcdGtleT17IHVuaXFLZXkoICdQYW5lbEJvZHknICkgfVxyXG5cdFx0XHQ+XHJcblx0XHRcdFx0PFNlbGVjdENvbnRyb2xcclxuXHRcdFx0XHRcdGtleT0nZm9ybV9pZCdcclxuXHRcdFx0XHRcdGxhYmVsPXsgX18oICdDaG9vc2UgRm9ybScgKSB9XHJcblx0XHRcdFx0XHRsYWJlbHBvc2l0aW9uPSd0b3AnXHJcblx0XHRcdFx0XHR2YWx1ZT17IGF0dHJpYnV0ZXMuZm9ybV9pZCB9XHJcblx0XHRcdFx0XHRvbkNoYW5nZT17IG5ld1ZhbHVlID0+IHtcclxuXHRcdFx0XHRcdFx0c2V0QXR0cmlidXRlcyggeyBmb3JtX2lkOiBOdW1iZXIoIG5ld1ZhbHVlICkgfSApO1xyXG5cdFx0XHRcdFx0fSB9XHJcblx0XHRcdFx0XHRvcHRpb25zPXsgbG9jYWxpemUuZm9ybXNfbGlzdCB9XHJcblx0XHRcdFx0Lz5cclxuXHRcdFx0XHR7IEJvb2xlYW4oIGF0dHJpYnV0ZXMuZm9ybV9pZCApICYmIDxSZWFjdC5GcmFnbWVudD5cclxuXHRcdFx0XHRcdDxTZWxlY3RDb250cm9sXHJcblx0XHRcdFx0XHRcdGxhYmVsPXsgX18oICdGaWVsZHMgTGF5b3V0JywgJ2pldC1mb3JtLWJ1aWxkZXInICkgfVxyXG5cdFx0XHRcdFx0XHR2YWx1ZT17IGF0dHJpYnV0ZXMuZmllbGRzX2xheW91dCB9XHJcblx0XHRcdFx0XHRcdG9wdGlvbnM9eyBsb2NhbGl6ZS5maWVsZHNfbGF5b3V0IH1cclxuXHRcdFx0XHRcdFx0b25DaGFuZ2U9eyBmaWVsZHNfbGF5b3V0ID0+IHNldEF0dHJpYnV0ZXMoIHsgZmllbGRzX2xheW91dCB9ICkgfVxyXG5cdFx0XHRcdFx0Lz5cclxuXHRcdFx0XHRcdDxUZXh0Q29udHJvbFxyXG5cdFx0XHRcdFx0XHRsYWJlbD17IF9fKCAnUmVxdWlyZWQgTWFyaycsICdqZXQtZm9ybS1idWlsZGVyJyApIH1cclxuXHRcdFx0XHRcdFx0dmFsdWU9eyBhdHRyaWJ1dGVzLnJlcXVpcmVkX21hcmsgfVxyXG5cdFx0XHRcdFx0XHRvbkNoYW5nZT17IHJlcXVpcmVkX21hcmsgPT4gc2V0QXR0cmlidXRlcyggeyByZXF1aXJlZF9tYXJrIH0gKSB9XHJcblx0XHRcdFx0XHQvPlxyXG5cdFx0XHRcdFx0PFNlbGVjdENvbnRyb2xcclxuXHRcdFx0XHRcdFx0bGFiZWw9eyBfXyggJ0ZpZWxkcyBsYWJlbCBIVE1MIHRhZycsICdqZXQtZm9ybS1idWlsZGVyJyApIH1cclxuXHRcdFx0XHRcdFx0dmFsdWU9eyBhdHRyaWJ1dGVzLmZpZWxkc19sYWJlbF90YWcgfVxyXG5cdFx0XHRcdFx0XHRvcHRpb25zPXsgbG9jYWxpemUuZmllbGRzX2xhYmVsX3RhZyB9XHJcblx0XHRcdFx0XHRcdG9uQ2hhbmdlPXsgZmllbGRzX2xhYmVsX3RhZyA9PiBzZXRBdHRyaWJ1dGVzKCB7IGZpZWxkc19sYWJlbF90YWcgfSApIH1cclxuXHRcdFx0XHRcdC8+XHJcblx0XHRcdFx0XHQ8U2VsZWN0Q29udHJvbFxyXG5cdFx0XHRcdFx0XHRsYWJlbD17IF9fKCAnU3VibWl0IFR5cGUnLCAnamV0LWZvcm0tYnVpbGRlcicgKSB9XHJcblx0XHRcdFx0XHRcdHZhbHVlPXsgYXR0cmlidXRlcy5zdWJtaXRfdHlwZSB9XHJcblx0XHRcdFx0XHRcdG9wdGlvbnM9eyBsb2NhbGl6ZS5zdWJtaXRfdHlwZSB9XHJcblx0XHRcdFx0XHRcdG9uQ2hhbmdlPXsgc3VibWl0X3R5cGUgPT4gc2V0QXR0cmlidXRlcyggeyBzdWJtaXRfdHlwZSB9ICkgfVxyXG5cdFx0XHRcdFx0Lz5cclxuXHRcdFx0XHRcdDxUb2dnbGVDb250cm9sXHJcblx0XHRcdFx0XHRcdGtleT17ICdlbmFibGVfcHJvZ3Jlc3MnIH1cclxuXHRcdFx0XHRcdFx0bGFiZWw9eyBfXyggJ0VuYWJsZSBmb3JtIHBhZ2VzIHByb2dyZXNzJywgJ2pldC1mb3JtLWJ1aWxkZXInICkgfVxyXG5cdFx0XHRcdFx0XHRjaGVja2VkPXsgYXR0cmlidXRlcy5lbmFibGVfcHJvZ3Jlc3MgfVxyXG5cdFx0XHRcdFx0XHRvbkNoYW5nZT17IG5ld1ZhbCA9PiB7XHJcblx0XHRcdFx0XHRcdFx0c2V0QXR0cmlidXRlcyggeyBlbmFibGVfcHJvZ3Jlc3M6IEJvb2xlYW4oIG5ld1ZhbCApIH0gKTtcclxuXHRcdFx0XHRcdFx0fSB9XHJcblx0XHRcdFx0XHQvPlxyXG5cdFx0XHRcdDwvUmVhY3QuRnJhZ21lbnQ+IH1cclxuXHRcdFx0PC9QYW5lbEJvZHk+XHJcblx0XHQ8L0luc3BlY3RvckNvbnRyb2xzPixcclxuXHRcdDxkaXYga2V5PXsgdW5pcUtleSggJ3ZpZXdCbG9jaycgKSB9IHsgLi4uYmxvY2tQcm9wcyB9PlxyXG5cdFx0XHQ8U2VydmVyU2lkZVJlbmRlclxyXG5cdFx0XHRcdGJsb2NrPXsgbWV0YWRhdGEubmFtZSB9XHJcblx0XHRcdFx0YXR0cmlidXRlcz17IGF0dHJpYnV0ZXMgfVxyXG5cdFx0XHRcdGh0dHBNZXRob2Q9eyAnUE9TVCcgfVxyXG5cdFx0XHQvPlxyXG5cdFx0PC9kaXY+LFxyXG5cdF07XHJcbn1cclxuXHJcbnJlZ2lzdGVyQmxvY2tUeXBlKFxyXG5cdG1ldGFkYXRhLm5hbWUsXHJcblx0e1xyXG5cdFx0Li4ubWV0YWRhdGEsXHJcblx0XHR0aXRsZTogX18oICdKZXRGb3JtJyApLFxyXG5cdFx0aWNvbjogPHNwYW4gZGFuZ2Vyb3VzbHlTZXRJbm5lckhUTUw9eyB7IF9faHRtbDogbWV0YWRhdGEuaWNvbiB9IH0+PC9zcGFuPixcclxuXHRcdGF0dHJpYnV0ZXM6IG1ldGFkYXRhLmF0dHJpYnV0ZXMsXHJcblx0XHRlZGl0OiBGb3JtRWRpdCxcclxuXHR9LFxyXG4pOyJdLCJuYW1lcyI6WyJtZXRhZGF0YSIsInJlZ2lzdGVyQmxvY2tUeXBlIiwid3AiLCJibG9ja3MiLCJfXyIsImkxOG4iLCJibG9ja0VkaXRvciIsImVkaXRvciIsIkluc3BlY3RvckNvbnRyb2xzIiwidXNlQmxvY2tQcm9wcyIsImNvbXBvbmVudHMiLCJQYW5lbEJvZHkiLCJTZWxlY3RDb250cm9sIiwiVGV4dENvbnRyb2wiLCJUb2dnbGVDb250cm9sIiwiU2VydmVyU2lkZVJlbmRlciIsInNlcnZlclNpZGVSZW5kZXIiLCJ1bmlxS2V5Iiwic3VmZml4IiwibmFtZSIsIkZvcm1FZGl0IiwiYXR0cmlidXRlcyIsInNldEF0dHJpYnV0ZXMiLCJpc1NlbGVjdGVkIiwibG9jYWxpemUiLCJ3aW5kb3ciLCJKZXRGb3JtRGF0YSIsImJsb2NrUHJvcHMiLCJmb3JtX2lkIiwibmV3VmFsdWUiLCJOdW1iZXIiLCJmb3Jtc19saXN0IiwiQm9vbGVhbiIsImZpZWxkc19sYXlvdXQiLCJyZXF1aXJlZF9tYXJrIiwiZmllbGRzX2xhYmVsX3RhZyIsInN1Ym1pdF90eXBlIiwiZW5hYmxlX3Byb2dyZXNzIiwibmV3VmFsIiwidGl0bGUiLCJpY29uIiwiX19odG1sIiwiZWRpdCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./editor/form-block.js\n");
+
+/***/ }),
 
 /***/ "../blocks-src/form-block/block.json":
 /*!*******************************************!*\
@@ -51,129 +69,11 @@ module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-/*!******************************!*\
-  !*** ./editor/form-block.js ***!
-  \******************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @blocks/form-block/block.json */ "../blocks-src/form-block/block.json");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-
-var registerBlockType = wp.blocks.registerBlockType;
-var __ = wp.i18n.__;
-
-var _ref = wp.blockEditor ? wp.blockEditor : wp.editor,
-    InspectorControls = _ref.InspectorControls,
-    useBlockProps = _ref.useBlockProps;
-
-var _wp$components = wp.components,
-    PanelBody = _wp$components.PanelBody,
-    SelectControl = _wp$components.SelectControl,
-    TextControl = _wp$components.TextControl,
-    ToggleControl = _wp$components.ToggleControl;
-var _wp = wp,
-    ServerSideRender = _wp.serverSideRender;
-
-var uniqKey = function uniqKey(suffix) {
-  return "".concat(_blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name, "/").concat(suffix);
-};
-
-function FormEdit(_ref2) {
-  var attributes = _ref2.attributes,
-      setAttributes = _ref2.setAttributes,
-      isSelected = _ref2.isSelected;
-  var localize = window.JetFormData;
-  var blockProps = useBlockProps();
-  return [isSelected && wp.element.createElement(InspectorControls, {
-    key: uniqKey('InspectorControls')
-  }, wp.element.createElement(PanelBody, {
-    title: __('Form Settings'),
-    key: uniqKey('PanelBody')
-  }, wp.element.createElement(SelectControl, {
-    key: "form_id",
-    label: __('Choose Form'),
-    labelposition: "top",
-    value: attributes.form_id,
-    onChange: function onChange(newValue) {
-      setAttributes({
-        form_id: Number(newValue)
-      });
-    },
-    options: localize.forms_list
-  }), Boolean(attributes.form_id) && wp.element.createElement(React.Fragment, null, wp.element.createElement(SelectControl, {
-    label: __('Fields Layout', 'jet-form-builder'),
-    value: attributes.fields_layout,
-    options: localize.fields_layout,
-    onChange: function onChange(fields_layout) {
-      return setAttributes({
-        fields_layout: fields_layout
-      });
-    }
-  }), wp.element.createElement(TextControl, {
-    label: __('Required Mark', 'jet-form-builder'),
-    value: attributes.required_mark,
-    onChange: function onChange(required_mark) {
-      return setAttributes({
-        required_mark: required_mark
-      });
-    }
-  }), wp.element.createElement(SelectControl, {
-    label: __('Fields label HTML tag', 'jet-form-builder'),
-    value: attributes.fields_label_tag,
-    options: localize.fields_label_tag,
-    onChange: function onChange(fields_label_tag) {
-      return setAttributes({
-        fields_label_tag: fields_label_tag
-      });
-    }
-  }), wp.element.createElement(SelectControl, {
-    label: __('Submit Type', 'jet-form-builder'),
-    value: attributes.submit_type,
-    options: localize.submit_type,
-    onChange: function onChange(submit_type) {
-      return setAttributes({
-        submit_type: submit_type
-      });
-    }
-  }), wp.element.createElement(ToggleControl, {
-    key: 'enable_progress',
-    label: __('Enable form pages progress', 'jet-form-builder'),
-    checked: attributes.enable_progress,
-    onChange: function onChange(newVal) {
-      setAttributes({
-        enable_progress: Boolean(newVal)
-      });
-    }
-  })))), wp.element.createElement("div", _extends({
-    key: uniqKey('viewBlock')
-  }, blockProps), wp.element.createElement(ServerSideRender, {
-    block: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name,
-    attributes: attributes,
-    httpMethod: 'POST'
-  }))];
-}
-
-registerBlockType(_blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.name, _objectSpread(_objectSpread({}, _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__), {}, {
-  title: __('JetForm'),
-  icon: wp.element.createElement("span", {
-    dangerouslySetInnerHTML: {
-      __html: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.icon
-    }
-  }),
-  attributes: _blocks_form_block_block_json__WEBPACK_IMPORTED_MODULE_0__.attributes,
-  edit: FormEdit
-}));
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval-source-map devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./editor/form-block.js");
+/******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=form-block.js.map

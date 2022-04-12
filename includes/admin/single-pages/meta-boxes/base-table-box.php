@@ -7,16 +7,19 @@ use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
-abstract class Base_Table_Box extends Base_Meta_Box implements Rest_Fetch_Endpoint {
+abstract class Base_Table_Box extends Base_Meta_Box implements
+	Rest_Fetch_Endpoint,
+	Meta_Table_Options {
 
 	use Table_Advanced_Record_Prepare_Trait;
 
-	protected $editable_table        = false;
-	protected $show_overflow         = false;
-	protected $show_overflow_control = false;
-	protected $offset                = 0;
-	protected $limit                 = 8;
-	protected $footer_heading        = true;
+	protected $editable_table         = false;
+	protected $editable_table_control = false;
+	protected $show_overflow          = false;
+	protected $show_overflow_control  = false;
+	protected $offset                 = 0;
+	protected $limit                  = 8;
+	protected $footer_heading         = true;
 
 	final public function get_values(): array {
 		return $this->prepare_list();
@@ -41,10 +44,6 @@ abstract class Base_Table_Box extends Base_Meta_Box implements Rest_Fetch_Endpoi
 
 	public function get_rest_url(): string {
 		return '';
-	}
-
-	public function get_receive_endpoint(): array {
-		return ( new Rest_Endpoint( $this ) )->to_array();
 	}
 
 	public function after_prepare_record( $prepared, array $record, $column_name ) {
@@ -97,16 +96,30 @@ abstract class Base_Table_Box extends Base_Meta_Box implements Rest_Fetch_Endpoi
 		$this->footer_heading = $footer_heading;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function is_editable_table_control(): bool {
+		return $this->editable_table_control;
+	}
+
+	/**
+	 * @param bool $editable_table_control
+	 */
+	public function set_editable_table_control( bool $editable_table_control ) {
+		$this->editable_table_control = $editable_table_control;
+	}
+
 	public function to_array(): array {
-		return parent::to_array() + array(
-			'columns'               => $this->get_columns_headings(),
-			'render_type'           => self::TYPE_TABLE,
-			'is_editable_table'     => $this->is_editable_table(),
-			'total'                 => $this->get_total(),
-			'receive_url'           => $this->get_receive_endpoint(),
-			'show_overflow'         => $this->is_show_overflow(),
-			'show_overflow_control' => $this->is_show_overflow_control(),
-			'footer_heading'        => $this->is_footer_heading(),
+		return array_merge(
+			parent::to_array(),
+			( new Meta_Table_Options_Converter( $this ) )->to_array(),
+			array(
+				'render_type' => self::TYPE_TABLE,
+				'columns'     => $this->get_columns_headings(),
+				'total'       => $this->get_total(),
+				'receive_url' => ( new Rest_Endpoint( $this ) )->to_array(),
+			)
 		);
 	}
 

@@ -16,8 +16,8 @@ class Field_Value_Column extends Column_Advanced_Base {
 
 	public function is_editable( array $record = array() ): bool {
 		return false;
-		/*
-		$type        = $record['field_type'] ?? '';
+
+		/*$type        = $record['field_type'] ?? '';
 		$is_editable = true;
 
 		switch ( $type ) {

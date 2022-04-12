@@ -9,7 +9,7 @@ use Jet_Form_Builder\Classes\Post\Post_Tools;
 class Referrer_Link_Column extends Column_Advanced_Base {
 
 	protected $column = 'from_content_id';
-	protected $type   = 'link';
+	protected $type   = self::LINK;
 
 	public function get_label(): string {
 		return __( 'Referrer', 'jet-form-builder' );
@@ -19,8 +19,9 @@ class Referrer_Link_Column extends Column_Advanced_Base {
 		$id = parent::get_value( $record );
 
 		$params = array(
-			'text' => Post_Tools::get_title( $id ),
-			'type' => 'external',
+			'text'  => Post_Tools::get_title( $id ),
+			'title' => __( 'Go to refer page', 'jet-form-builder' ),
+			'type'  => 'external',
 		);
 
 		if ( ! empty( $record['referrer'] ) ) {

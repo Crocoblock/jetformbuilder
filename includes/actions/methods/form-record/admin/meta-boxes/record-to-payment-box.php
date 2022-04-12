@@ -25,7 +25,8 @@ class Record_To_Payment_Box extends Form_Record_Values_Box {
 		$single = ( new Single_Form_Record_Page() )->set_id( $this->get_id() );
 
 		return array(
-			'href' => $single->get_url(),
+			'href'  => $single->get_url(),
+			'title' => __( 'View related form record', 'jet-form-builder' ),
 		);
 	}
 

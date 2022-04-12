@@ -14,7 +14,7 @@ export default {
 	mixins: [ ScopeStoreMixin ],
 	computed: {
 		isShowOverflow() {
-			return this.getter( 'isShowOverflow' );
+			return this.getter( 'options/isShowOverflow' );
 		},
 		parsedValue() {
 			let json;

@@ -49,7 +49,7 @@ export default {
 			return this.getter( 'isLoading', 'page' );
 		},
 		footerHeading() {
-			return this.getter( 'footerHeading' );
+			return this.getter( 'options/footerHeading' );
 		},
 	},
 };

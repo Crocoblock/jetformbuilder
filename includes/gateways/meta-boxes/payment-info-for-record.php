@@ -24,7 +24,8 @@ class Payment_Info_For_Record extends Payment_Details_Box {
 		$single = ( new Single_Payment_Page() )->set_id( $this->get_id() );
 
 		return array(
-			'href' => $single->get_url(),
+			'href'  => $single->get_url(),
+			'title' => __( 'View related payment', 'jet-form-builder' ),
 		);
 	}
 

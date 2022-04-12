@@ -10,37 +10,24 @@
 		>
 			<th class="jfb-list-table-row--inner jfb-list-table-row--heading">{{ label }}</th>
 			<td class="jfb-list-table-row--inner jfb-list-table-row--item">
-				<template v-if="getItemComponent( column )">
-					<component
-						v-bind:is="getItemComponent( column )"
-						:value="getColumnValue( column )"
-						:full-entry="list"
-						:scope="scope"
-					/>
-				</template>
-				<template v-else-if="getItemComponent( getColumnType( column ) )">
-					<component
-						v-bind:is="getItemComponent( getColumnType( column ) )"
-						:value="getColumnValue( column )"
-						:full-entry="list"
-						:scope="scope"
-					/>
-				</template>
-				<template v-else>
-					{{ list[ column ] ? list[ column ].value : column }}
-				</template>
+				<EntryColumnList
+					:scope="scope"
+					:list="list"
+					:column="column"
+				/>
 			</td>
 		</tr>
 	</table>
 </template>
 
 <script>
-import GetColumnComponent from '../mixins/GetColumnComponent';
 import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
+import EntryColumnList from './EntryColumnList';
 
 export default {
 	name: 'EntriesList',
-	mixins: [ GetColumnComponent, ScopeStoreMixin ],
+	mixins: [ ScopeStoreMixin ],
+	components: { EntryColumnList },
 	computed: {
 		columns() {
 			return this.getter( 'columns' );
@@ -50,15 +37,7 @@ export default {
 		},
 	},
 	methods: {
-		getItemComponent( column ) {
-			return this.getColumnComponentByPrefix( column, 'item' );
-		},
-		getColumnType( column ) {
-			return this.list[ column ]?.type ?? false;
-		},
-		getColumnValue( column ) {
-			return this.list[ column ]?.value ?? '';
-		},
+
 	},
 };
 </script>

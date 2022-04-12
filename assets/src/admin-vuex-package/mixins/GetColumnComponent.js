@@ -3,6 +3,7 @@ import * as LinkTypeColumn from '../components/TableColumns/link-type';
 import * as IconStatusColumn from '../components/TableColumns/icon-status';
 import * as InputControlColumn from '../components/TableColumns/input-control';
 import * as TextareaControlColumn from '../components/TableColumns/textarea-control';
+import SelectControlColumn from '../components/TableColumns/select-control';
 import ColumnPre from '../components/TableColumns/pre';
 
 
@@ -30,6 +31,7 @@ export default {
 			InputControlColumn,
 			TextareaControlColumn,
 			ColumnPre,
+			SelectControlColumn,
 		];
 	},
 	methods: {

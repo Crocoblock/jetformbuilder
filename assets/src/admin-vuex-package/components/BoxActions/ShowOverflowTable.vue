@@ -17,14 +17,14 @@ export default {
 	mixins: [ ScopeStoreMixin, i18n ],
 	computed: {
 		showOverflowControl() {
-			return this.getter( 'showOverflowControl' );
+			return this.getter( 'options/showOverflowControl' );
 		},
 		showOverflow: {
 			get() {
-				return this.getter( 'isShowOverflow' );
+				return this.getter( 'options/isShowOverflow' );
 			},
 			set() {
-				this.commit( 'toggleShowOverflow' );
+				this.commit( 'options/toggleShowOverflow' );
 			}
 		}
 	},

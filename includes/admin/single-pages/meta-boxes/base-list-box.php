@@ -7,7 +7,9 @@ use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
-abstract class Base_List_Box extends Base_Meta_Box implements Rest_Fetch_Endpoint {
+abstract class Base_List_Box extends Base_Meta_Box implements
+	Rest_Fetch_Endpoint,
+	Meta_Box_Options {
 
 	use Table_Advanced_Record_Prepare_Trait;
 
@@ -31,9 +33,18 @@ abstract class Base_List_Box extends Base_Meta_Box implements Rest_Fetch_Endpoin
 		return '';
 	}
 
+	public function is_editable_table(): bool {
+		return false;
+	}
+
+	public function is_editable_table_control(): bool {
+		return false;
+	}
+
 	public function to_array(): array {
 		return array_merge(
 			parent::to_array(),
+			( new Meta_Box_Options_Converter( $this ) )->to_array(),
 			array(
 				'columns'         => $this->get_columns_headings(),
 				'single_endpoint' => $this->get_single(),

@@ -1,4 +1,6 @@
 import singleView from '../single-view';
+import editTable from '../modules/edit-table';
+import editList from '../modules/edit-list';
 
 export const config = () => window.JetFBPageConfig;
 
@@ -12,10 +14,36 @@ export function getScopeName( box ) {
 	return 'scope-' + getBoxSlug( box );
 }
 
-const getModule = () => singleView;
-
 export function registerNamespacedModule( store, box ) {
-	store.registerModule( getScopeName( box ), getModule() );
+	const { render_type } = box;
+	let module = ( modules = {} ) => (
+		{
+			...singleView,
+			modules: {
+				...singleView.modules,
+				...modules,
+			},
+		}
+	);
+
+	switch ( render_type ) {
+		case 'table':
+			store.registerModule(
+				getScopeName( box ),
+				module( {
+					edit: editTable,
+				} ),
+			);
+			break;
+		default:
+			store.registerModule(
+				getScopeName( box ),
+				module( {
+					edit: editList
+				} )
+			);
+			break;
+	}
 }
 
 export function withScope( box ) {
@@ -33,12 +61,10 @@ export function setTableSeed( store, source ) {
 		total = 0,
 		receive_url = {},
 		actions,
-		is_editable_table = false,
 		render_type = '',
-		show_overflow = false,
-		show_overflow_control = false,
 		empty_message = '',
-		footer_heading = true,
+		is_editable_table = false,
+		is_editable_table_control = false,
 		...options
 	} = source;
 
@@ -52,10 +78,8 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
 	store.commit( getName( 'setLimit' ), list?.length );
-	store.commit( getName( 'setEditableTable' ), is_editable_table );
-	store.commit( getName( 'showOverflow' ), show_overflow );
-	store.commit( getName( 'showOverflowControl' ), show_overflow_control );
-	store.commit( getName( 'setFooterHeading' ), footer_heading );
+	store.commit( getName( 'toggleEditTable' ), is_editable_table );
+	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
 	store.commit( getName( 'options/insert' ), options );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
@@ -68,6 +92,8 @@ export function setListSeed( store, source ) {
 		render_type = '',
 		single_endpoint = {},
 		receive_url = {},
+		is_editable_table = false,
+		is_editable_table_control = false,
 		...options
 	} = source;
 
@@ -78,5 +104,7 @@ export function setListSeed( store, source ) {
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
 	store.commit( getName( 'setRenderType' ), render_type );
 	store.commit( getName( 'setSingleEndpoint' ), single_endpoint );
+	store.commit( getName( 'toggleEditTable' ), is_editable_table );
+	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
 	store.commit( getName( 'options/insert' ), options );
 }

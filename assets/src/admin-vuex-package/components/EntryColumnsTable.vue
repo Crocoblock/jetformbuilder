@@ -2,30 +2,8 @@
 	<div
 		:class="getClasses"
 	>
-		<template v-if="getComponentColumn">
-			<component
-				:is="getComponentColumn"
-				:value="initialValue"
-				:full-entry="entry"
-				:entry-id="entryId"
-				:scope="scope"
-			/>
-		</template>
-		<template v-else-if="getComponentType">
-			<component
-				:is="getComponentType"
-				:value="initialValue"
-				:full-entry="entry"
-				:entry-id="entryId"
-				:scope="scope"
-			/>
-		</template>
 		<div
-			v-else
-			:class="{
-				'list-table-item__cell--body': true,
-				'list-table-item__cell--body-is-editable': initial.editable,
-			}"
+			class="list-table-item__cell--body jfb-ellipsis"
 		>
 			<div
 				v-if="initial.editable && isEnableEdit"
@@ -39,21 +17,39 @@
 					/>
 				</keep-alive>
 			</div>
+			<template v-else-if="getComponentColumn">
+				<component
+					:is="getComponentColumn"
+					:value="value"
+					:full-entry="entry"
+					:entry-id="entryId"
+					:scope="scope"
+				/>
+			</template>
+			<template v-else-if="getComponentType">
+				<component
+					:is="getComponentType"
+					:value="value"
+					:full-entry="entry"
+					:entry-id="entryId"
+					:scope="scope"
+				/>
+			</template>
 			<div
 				v-else
 				class="list-table-item__cell--body-value"
 			>
-				{{ initial.editable ? editedCellValue : initialValue }}
+				{{ value }}
 			</div>
-			<div
-				class="list-table-item__cell--body-actions"
-				v-if="initial.editable && editedCellValue !== initialValue"
-			>
-				<span
-					class="dashicons dashicons-undo"
-					@click="revertChangesColumn"
-				></span>
-			</div>
+		</div>
+		<div
+			class="list-table-item__cell--actions"
+			v-if="initial.editable && editedCellValue !== initialValue"
+		>
+			<span
+				class="dashicons dashicons-undo"
+				@click="revertChangesColumn"
+			></span>
 		</div>
 	</div>
 </template>
@@ -74,8 +70,17 @@ export default {
 		initial() {
 			return this.entry[ this.column ] ?? {};
 		},
+		value() {
+			return this.initial.editable ? this.editedCellValue : this.initialValue;
+		},
 		initialValue() {
-			return this.initial?.value ?? false;
+			/**
+			 * Such nesting can be subject
+			 * to the use of a component with settings
+			 *
+			 * For example status with icon (icon_status)
+			 */
+			return this.initial?.value ?? this.initial?.value?.value ?? false;
 		},
 		initialType() {
 			return this.initial?.type ?? 'string';
@@ -93,6 +98,10 @@ export default {
 
 			if ( ! classes.includes( 'overflow-visible' ) && this.isShowOverflow ) {
 				classes.push( 'show-overflow' );
+			}
+
+			if ( this.initial.editable ) {
+				classes.push( 'is-editable' );
 			}
 
 			return classes;
@@ -120,7 +129,7 @@ export default {
 			return this.getter( 'isEnableEdit' );
 		},
 		isShowOverflow() {
-			return this.getter( 'isShowOverflow' );
+			return this.getter( 'options/isShowOverflow' );
 		},
 		getComponentType() {
 			return this.getItemComponent( this.initialType );
@@ -162,39 +171,35 @@ export default {
 		overflow: visible;
 	}
 
+	&.is-editable {
+		display: flex;
+		justify-content: space-between;
+		column-gap: 1em;
+
+		span.dashicons {
+			transition: all 0.2s ease-in-out;
+			padding: 0.2em;
+			border-radius: 50%;
+			box-shadow: unset;
+			cursor: pointer;
+			background-color: #fff;
+		}
+	}
 	&--body {
-		&-is-editable {
-			display: flex;
-			justify-content: space-between;
-			column-gap: 1em;
+		flex: 1;
+	}
 
-			span.dashicons {
-				transition: all 0.2s ease-in-out;
-				padding: 0.2em;
-				border-radius: 50%;
-				box-shadow: unset;
-				cursor: pointer;
-				background-color: #fff;
+	&--body-value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		&.jfb-control {
+			flex: 1;
+			padding-right: 1px;
+
+			& > * {
+				width: 100%;
 			}
-		}
-
-		&-value {
-			overflow: hidden;
-			text-overflow: ellipsis;
-
-			&.jfb-control {
-				flex: 1;
-				padding-right: 1px;
-
-				& > * {
-					width: 100%;
-				}
-			}
-		}
-
-		&-actions {
-			display: flex;
-			column-gap: 1em;
 		}
 	}
 

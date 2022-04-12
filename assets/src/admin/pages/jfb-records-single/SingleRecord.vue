@@ -1,10 +1,6 @@
 <template>
-	<FormBuilderPage
-		:title="title"
-	>
-		<PostBoxGrid
-			:containers="containers"
-		>
+	<FormBuilderPage>
+		<PostBoxGrid>
 			<template #after-form-fields>
 				<TablePagination
 					scope="form-fields"
@@ -21,13 +17,6 @@ const {
 	FormBuilderPage,
 } = JetFBComponents;
 
-const { GetIncoming } = JetFBMixins;
-
-const {
-	mapGetters,
-	mapMutations
-} = Vuex;
-
 export default {
 	name: 'jfb-records-single',
 	components: {
@@ -35,13 +24,6 @@ export default {
 		TablePagination,
 		FormBuilderPage
 	},
-	data() {
-		return {
-			title: this.getIncoming( 'title' ),
-			containers: this.getIncoming( 'containers' ),
-		};
-	},
-	mixins: [ GetIncoming ],
 };
 </script>
 

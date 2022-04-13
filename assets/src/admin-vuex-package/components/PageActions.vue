@@ -1,7 +1,7 @@
 <template>
 	<div class="page-actions">
 		<div
-			v-for="action in pageActions"
+			v-for="action in secondaryActions"
 			:key="action.slug"
 			:class="[
 				'page-actions-item',
@@ -27,7 +27,6 @@
 				<template #label>{{ action.button.label }}</template>
 			</cx-vui-button>
 		</div>
-
 	</div>
 </template>
 
@@ -46,18 +45,21 @@ export default {
 	mixins: [ ScopeStoreMixin ],
 	computed: {
 		...mapGetters( 'actions', [
-			'pageActions',
+			'actions',
 			'isLoading',
 			'isDisabled',
 		] ),
 		...mapGetters( [
-			'isDoing'
+			'isDoing',
 		] ),
 		isGlobalDoing() {
 			jfbEventBus.reactiveCounter;
 
 			return this.isDoing;
-		}
+		},
+		secondaryActions() {
+			return this.actions.filter( action => 'secondary' === action.position );
+		},
 	},
 	methods: {
 		...mapMutations( 'actions', [

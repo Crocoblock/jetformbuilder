@@ -116,6 +116,7 @@ export default {
 				this.commit( 'updateEditableCell', {
 					record: this.entry,
 					column: this.column,
+					initial: this.initialValue,
 					props: {
 						value,
 					},
@@ -195,7 +196,7 @@ export default {
 
 		&.jfb-control {
 			flex: 1;
-			padding-right: 1px;
+			padding: 0.1em;
 
 			& > * {
 				width: 100%;

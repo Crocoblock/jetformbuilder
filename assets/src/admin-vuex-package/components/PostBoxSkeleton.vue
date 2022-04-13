@@ -22,10 +22,14 @@
 		</div>
 		<div class="postbox-inner submitbox">
 			<slot></slot>
-			<div id="major-publishing-actions" v-if="$slots.actions">
+			<div class="major-publishing-actions" v-if="$slots.actions">
 				<slot name="actions"></slot>
 				<div class="clear"></div>
 			</div>
+			<PrimaryActions
+				v-else
+				:scope="slug"
+			/>
 		</div>
 	</div>
 </template>
@@ -35,14 +39,16 @@ import EditTableSwitcher from './BoxActions/EditTableSwitcher';
 import UndoChangesTable from './BoxActions/UndoChangesTable';
 import ShowOverflowTable from './BoxActions/ShowOverflowTable';
 import RedirectToSingle from './BoxActions/RedirectToSingle';
+import PrimaryActions from './BoxActions/BoxActions';
 
 export default {
-	name: 'PostBox',
+	name: 'PostBoxSkeleton',
 	props: {
 		title: String,
 		slug: String,
 	},
 	components: {
+		PrimaryActions,
 		RedirectToSingle,
 		ShowOverflowTable,
 		UndoChangesTable,

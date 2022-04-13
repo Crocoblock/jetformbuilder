@@ -21,6 +21,18 @@ const getters = {
 	},
 };
 
+const mutations = {
+	revertChangesColumn( state, { column } ) {
+		const { base } = state;
+
+		Vue.delete( base.editedList, column );
+
+		if ( ! Object.keys( base.editedList ).length ) {
+			base.hasChanges = false;
+		}
+	},
+};
+
 export default {
 	modules: {
 		base: editBase,
@@ -34,10 +46,29 @@ export default {
 				return initialValue ?? 'NULL';
 			}
 		},
+		editedListValues: state => {
+			const values = {};
+
+			const { base } = state;
+
+			for ( const [ column, { value } ] of Object.entries( base.editedList ) ) {
+				values[ column ] = value;
+			}
+
+			return values;
+		},
 	},
 	mutations: {
-		updateEditableCell( state, { column, props } ) {
+		...mutations,
+		updateEditableCell( state, { column, initial, props } ) {
 			const { base } = state;
+
+			if ( initial === props.value ) {
+				mutations.revertChangesColumn( state, { column } );
+
+				return;
+			}
+
 			const columnPair = base.editedList[ column ] || {};
 
 			base.editedList[ column ] = {
@@ -46,14 +77,6 @@ export default {
 			};
 			base.hasChanges = true;
 		},
-		revertChangesColumn( state, { column } ) {
-			const { base } = state;
 
-			Vue.delete( base.editedList, column );
-
-			if ( ! Object.keys( base.editedList ).length ) {
-				base.hasChanges = false;
-			}
-		},
 	},
 };

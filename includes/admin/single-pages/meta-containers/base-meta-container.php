@@ -14,7 +14,7 @@ abstract class Base_Meta_Container implements Arrayable {
 	use Repository_Pattern_Trait;
 
 	const TYPE_NORMAL = 'normal-sortables';
-	const TYPE_SIDE = 'side-sortables';
+	const TYPE_SIDE   = 'side-sortables';
 
 	protected $index;
 
@@ -54,6 +54,25 @@ abstract class Base_Meta_Container implements Arrayable {
 
 	public function get_box( string $slug ): Base_Meta_Box {
 		return $this->rep_get_item_or_die( $slug );
+	}
+
+	/**
+	 * @param string $scoped_slug
+	 *
+	 * @return Base_Meta_Box
+	 * @throws Repository_Exception
+	 */
+	public function get_box_by_scope( string $scoped_slug ): Base_Meta_Box {
+		// cut the `scope-`
+		$slug = substr( $scoped_slug, 6, 0 );
+
+		foreach ( $this->get_boxes() as $box ) {
+			if ( $box->get_slug() === $slug ) {
+				return $box;
+			}
+		}
+
+		throw new Repository_Exception( 'Undefined ' . $scoped_slug );
 	}
 
 	/**

@@ -5,7 +5,7 @@ function PageActionsPlugin( store ) {
 	const { actions = [] } = config();
 
 	store.registerModule( 'actions', PagesActions );
-	store.commit( 'actions/setPageActions', [ ...actions ] );
+	store.commit( 'actions/setActions', [ ...actions ] );
 }
 
 export default PageActionsPlugin;

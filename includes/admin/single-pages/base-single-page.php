@@ -13,6 +13,7 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Convert_Once;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
 
 abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
 
@@ -21,6 +22,7 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 
 	protected $id;
 	protected $storage;
+	protected $containers = array();
 
 	abstract public function parent_slug(): string;
 
@@ -78,23 +80,25 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 	 */
 	public function page_config(): array {
 		return array(
-			'containers' => $this->get_prepared_containers(),
 			'title'      => $this->title(),
+			'containers' => Array_Tools::to_array( $this->get_prepared_containers() ),
 			'actions'    => Array_Tools::to_array( $this->get_actions() ),
 		);
 	}
 
 	public function get_prepared_containers(): array {
-		$prepared = array();
+		if ( count( $this->containers ) ) {
+			return $this->containers;
+		}
 
 		/** @var Base_Meta_Container[] $containers */
 		$containers = apply_filters( "jet-form-builder/page-containers/{$this->slug()}", $this->meta_containers() );
 
 		foreach ( $containers as $index => $container ) {
-			$prepared[] = $container->set_index( $index )->to_array();
+			$this->containers[] = $container->set_index( $index );
 		}
 
-		return $prepared;
+		return $this->containers;
 	}
 
 	public function slug(): string {

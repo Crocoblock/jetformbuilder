@@ -90,6 +90,7 @@ export default {
 			set( value ) {
 				this.commit( 'updateEditableCell', {
 					column: this.column,
+					initial: this.initialValue,
 					props: {
 						value,
 					},

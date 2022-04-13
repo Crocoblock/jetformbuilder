@@ -14,4 +14,8 @@ class Ship_Full_Name_Column extends Column_Advanced_Base {
 	public function get_value( array $record = array() ) {
 		return $record['full_name'] ?? '';
 	}
+
+	public function is_editable( array $record = array() ): bool {
+		return true;
+	}
 }

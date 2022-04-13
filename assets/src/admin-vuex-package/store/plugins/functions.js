@@ -1,6 +1,7 @@
 import singleView from '../single-view';
 import editTable from '../modules/edit-table';
 import editList from '../modules/edit-list';
+import actions from '../modules/page-actions';
 
 export const config = () => window.JetFBPageConfig;
 
@@ -39,8 +40,9 @@ export function registerNamespacedModule( store, box ) {
 			store.registerModule(
 				getScopeName( box ),
 				module( {
-					edit: editList
-				} )
+					edit: editList,
+					actions,
+				} ),
 			);
 			break;
 	}
@@ -94,6 +96,7 @@ export function setListSeed( store, source ) {
 		receive_url = {},
 		is_editable_table = false,
 		is_editable_table_control = false,
+		box_actions = [],
 		...options
 	} = source;
 
@@ -106,5 +109,6 @@ export function setListSeed( store, source ) {
 	store.commit( getName( 'setSingleEndpoint' ), single_endpoint );
 	store.commit( getName( 'toggleEditTable' ), is_editable_table );
 	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
+	store.commit( getName( 'actions/setActions' ), box_actions );
 	store.commit( getName( 'options/insert' ), options );
 }

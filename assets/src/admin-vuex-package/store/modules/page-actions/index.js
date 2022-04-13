@@ -1,5 +1,5 @@
 const findActionIndex = ( state, actionSlug ) => {
-	const index = state.actions.findIndex( action => state.current === action.slug );
+	const index = state.actions.findIndex( action => actionSlug === action.slug );
 
 	if ( - 1 === index ) {
 		throw new Error( 'Undefined ' + actionSlug );
@@ -8,24 +8,24 @@ const findActionIndex = ( state, actionSlug ) => {
 	return index;
 };
 
-const toggleDisabled = ( state, slug, forceDisable ) => {
-	if ( 'undefined' === typeof slug ) {
-		slug = state.current;
-	}
+const toggleDisabled = ( state, { slug, force } = {} ) => {
+	slug = slug ?? state.current;
+
 	state.disabled = {
 		...state.disabled,
-		[ slug ]: forceDisable ?? ! ( state.disabled[ slug ] ?? false ),
+		[ slug ]: force ?? ! (
+		          state.disabled[ slug ] ?? false
+		),
 	};
 };
 
-const toggleLoading = ( state, slug ) => {
-	if ( 'undefined' === typeof slug ) {
-		slug = state.current;
-	}
+const toggleLoading = ( state, { slug, force } = {} ) => {
+	slug = slug ?? state.current;
+
 	state.loading = {
 		...state.loading,
-		[ slug ]: ! (
-			state.loading[ slug ] ?? false
+		[ slug ]: force ?? ! (
+		          state.loading[ slug ] ?? false
 		),
 	};
 };
@@ -51,7 +51,7 @@ export default {
 		}
 	),
 	getters: {
-		pageActions: state => {
+		actions: state => {
 			return state.actions;
 		},
 		isLoading: state => slug => {
@@ -67,6 +67,11 @@ export default {
 				return action?.messages ? action.messages[ slug ] : 'null';
 			};
 		},
+		byEvent: state => event => {
+			return state.actions.filter( action => (
+				action.subscriptions.includes( event )
+			) );
+		},
 	},
 	mutations: {
 		replaceCurrent( state, action ) {
@@ -78,7 +83,7 @@ export default {
 				// do nothing
 			}
 		},
-		setPageActions( state, actions ) {
+		setActions( state, actions ) {
 			state.actions = actions;
 
 			actions.forEach( action => {
@@ -94,7 +99,7 @@ export default {
 		toggleLoading,
 		disabledAll( state ) {
 			state.actions.forEach( ( { slug } ) => {
-				toggleDisabled( state, slug, true );
+				toggleDisabled( state, { slug, force: true } );
 			} );
 		},
 	},

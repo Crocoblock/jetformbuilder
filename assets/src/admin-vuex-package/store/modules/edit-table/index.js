@@ -51,6 +51,23 @@ export default {
 				return record[ column ]?.value ?? 'NULL';
 			}
 		},
+		editedListValues: state => {
+			const values = {};
+
+			const { base } = state;
+
+			for ( const [ position, currentRow ] of Object.entries( base.editedList ) ) {
+				const row = {};
+
+				for ( const [ column, { value } ] of Object.entries( currentRow ) ) {
+					row[ column ] = value;
+				}
+
+				values[ position ] = row;
+			}
+
+			return values;
+		},
 	},
 	mutations: {
 		updateEditableCell( state, { column, props, record } ) {

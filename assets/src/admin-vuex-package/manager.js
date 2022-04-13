@@ -29,6 +29,8 @@ import SideBarBoxes from './components/SideBarBoxes';
 import FormBuilderPage from './components/FormBuilderPage';
 import PageActionsPlugin from './store/plugins/PageActions';
 import MessagesPlugin from './store/plugins/MessagesPlugin';
+import OnUpdateEditableCellPlugin from './store/plugins/OnUpdateEditableCellPlugin';
+import EditCollectorPlugin from './store/plugins/EditCollectorPlugin';
 
 Vue.use( Vuex );
 
@@ -72,6 +74,8 @@ window.JetFBStore = {
 	NoticesPlugin,
 	PageActionsPlugin,
 	MessagesPlugin,
+	OnUpdateEditableCellPlugin,
+	EditCollectorPlugin,
 };
 
 window.JetFBConst = Constants;

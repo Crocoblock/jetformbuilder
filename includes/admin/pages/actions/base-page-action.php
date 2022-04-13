@@ -12,9 +12,21 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 
 abstract class Base_Page_Action implements Arrayable {
 
+	const SECONDARY = 'secondary';
+	const PRIMARY = 'primary';
+	const ON_UPDATE = 'update';
+
 	protected $page;
 
 	abstract public function get_slug(): string;
+
+	public function get_position(): string {
+		return self::SECONDARY;
+	}
+
+	public function get_subscriptions(): array {
+		return array();
+	}
 
 	/**
 	 * @param Base_Page|Base_Single_Page $page
@@ -33,7 +45,9 @@ abstract class Base_Page_Action implements Arrayable {
 
 	public function to_array(): array {
 		$config = array(
-			'slug' => $this->get_slug(),
+			'slug'          => $this->get_slug(),
+			'position'      => $this->get_position(),
+			'subscriptions' => $this->get_subscriptions(),
 		);
 
 		try {

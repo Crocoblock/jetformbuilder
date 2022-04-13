@@ -3,7 +3,9 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
+use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
 use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
@@ -41,6 +43,13 @@ abstract class Base_List_Box extends Base_Meta_Box implements
 		return false;
 	}
 
+	/**
+	 * @return Base_Page_Action[]
+	 */
+	public function get_actions(): array {
+		return array();
+	}
+
 	public function to_array(): array {
 		return array_merge(
 			parent::to_array(),
@@ -50,6 +59,7 @@ abstract class Base_List_Box extends Base_Meta_Box implements
 				'single_endpoint' => $this->get_single(),
 				'render_type'     => self::TYPE_LIST,
 				'receive_url'     => ( new Rest_Endpoint( $this ) )->to_array(),
+				'box_actions'     => Array_Tools::to_array( $this->get_actions() ),
 			)
 		);
 	}

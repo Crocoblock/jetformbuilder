@@ -34,7 +34,7 @@ export default {
 		commit( 'toggleLoading', 'page' );
 
 		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
-			commit( 'setList', response.list );
+			dispatch( 'updateList', response );
 			dispatch( 'updateQueryState' );
 
 			// clear checked rows
@@ -58,7 +58,7 @@ export default {
 		commit( 'setList', response.list );
 		commit( 'setTotal', response.total ?? state.queryState.total );
 
-		if ( response.list.length < getters.getLimit ) {
+		if ( response.list.length !== getters.getLimit ) {
 			commit( 'setLimit', response.list.length );
 		}
 	},

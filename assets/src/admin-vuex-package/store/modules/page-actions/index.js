@@ -40,6 +40,8 @@ const current = state => {
 	}
 };
 
+const { apiFetch } = wp;
+
 export default {
 	namespaced: true,
 	state: () => (
@@ -103,4 +105,30 @@ export default {
 			} );
 		},
 	},
+	actions: {
+		defaultDelete( { getters, commit } ) {
+			commit( 'toggleLoading' );
+			commit( 'toggleDoingAction', null, { root: true } );
+
+			apiFetch( getters.current.endpoint ).then( response => {
+				jfbEventBus.$CXNotice.add( {
+					message: response.message,
+					type: 'success',
+					duration: 4000,
+				} );
+				commit( 'toggleDisabled' );
+
+				document.location.href = getters.current.payload.redirect;
+			} ).catch( error => {
+				jfbEventBus.$CXNotice.add( {
+					message: error.message,
+					type: 'error',
+					duration: 4000,
+				} );
+			} ).finally( () => {
+				commit( 'toggleLoading' );
+				commit( 'toggleDoingAction', null, { root: true } );
+			} );
+		}
+	}
 };

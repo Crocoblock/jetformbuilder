@@ -332,6 +332,15 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	public static function prepare_columns( $columns ): array {
 		$conditions = array();
 
+		if ( ! is_array( $columns ) ) {
+			return array(
+				array(
+					'type'   => 'equal_column',
+					'values' => array( 'id', $columns ),
+				),
+			);
+		}
+
 		foreach ( $columns as $column => $value ) {
 			if ( is_numeric( $column ) ) {
 				$conditions[] = $value;
@@ -364,11 +373,11 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	}
 
 	/**
-	 * @param array $where
+	 * @param mixed $where
 	 *
 	 * @return View_Base
 	 */
-	public static function create( array $where ): View_Base {
+	public static function create( $where ): View_Base {
 		$conditions = static::prepare_columns( $where );
 
 		return ( new static() )->set_conditions( $conditions );

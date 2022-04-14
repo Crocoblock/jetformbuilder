@@ -9,7 +9,7 @@
 			<template v-if="$slots['heading-after']">
 				<slot name="heading-after"></slot>
 			</template>
-			<template v-else>
+			<template v-else-if="hasGlobalActions">
 				<PageActions />
 			</template>
 		</div>
@@ -27,6 +27,11 @@ export default {
 			type: String,
 			default: window?.JetFBPageConfig?.title ?? '',
 		},
+	},
+	computed: {
+		hasGlobalActions() {
+			return this.$store.hasModule( 'actions' );
+		}
 	},
 	components: {
 		PageActions,

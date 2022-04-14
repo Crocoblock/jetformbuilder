@@ -65,10 +65,15 @@ abstract class Column_Base {
 		$type            = $this->get_type( $record );
 		$value           = $this->prepare_value( $this->get_value( $record ), $type );
 		$editable        = $this->is_editable( $record );
-		$control         = $this->get_control( $record );
-		$control_options = $this->get_control_options( $record );
 		$options         = $this->get_options( $record );
 		$classes         = $this->get_css_classes( $record );
+		$control         = 'input';
+		$control_options = array();
+
+		if ( $editable ) {
+			$control         = $this->get_control( $record );
+			$control_options = $this->get_control_options( $record );
+		}
 
 		return array(
 			'type'            => $type,

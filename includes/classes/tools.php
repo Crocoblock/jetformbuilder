@@ -200,37 +200,6 @@ class Tools {
 		return self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
 	}
 
-	public static function get_form_settings_options( $for_elementor = false ) {
-		$submit_type   = array(
-			''       => __( 'Default', 'jet-form-builder' ),
-			'reload' => __( 'Page Reload', 'jet-form-builder' ),
-			'ajax'   => __( 'AJAX', 'jet-form-builder' ),
-		);
-		$fields_layout = array(
-			''       => __( 'Default', 'jet-form-builder' ),
-			'column' => __( 'Column', 'jet-form-builder' ),
-			'row'    => __( 'Row', 'jet-form-builder' ),
-		);
-
-		$label_tag = array(
-			''      => 'Default',
-			'div'   => __( 'DIV', 'jet-form-builder' ),
-			'label' => __( 'LABEL', 'jet-form-builder' ),
-		);
-
-		if ( ! $for_elementor ) {
-			$submit_type   = self::prepare_list_for_js( $submit_type );
-			$fields_layout = self::prepare_list_for_js( $fields_layout );
-			$label_tag     = self::prepare_list_for_js( $label_tag );
-		}
-
-		return array(
-			'submit_type'      => $submit_type,
-			'fields_layout'    => $fields_layout,
-			'fields_label_tag' => $label_tag,
-		);
-	}
-
 	/**
 	 * Returns all registered user roles
 	 *
@@ -333,8 +302,8 @@ class Tools {
 	 */
 	public static function is_valid_timestamp( $timestamp ) {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
-			   && ( $timestamp <= PHP_INT_MAX )
-			   && ( $timestamp >= ~PHP_INT_MAX );
+		       && ( $timestamp <= PHP_INT_MAX )
+		       && ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {

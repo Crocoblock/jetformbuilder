@@ -92,6 +92,18 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		}
 	}
 
+	function jet_fb_live(): \Jet_Form_Builder\Live_Form {
+		return \Jet_Form_Builder\Live_Form::instance();
+	}
+
+	function jet_fb_live_arg( string $arg_name, $default = false ) {
+		return jet_fb_live_args()->argument( $arg_name, $default );
+	}
+
+	function jet_fb_live_args(): \Jet_Form_Builder\Classes\Arguments\Form_Arguments {
+		return jet_fb_live()->spec_data;
+	}
+
 	/**
 	 * @return false|\Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
 	 */

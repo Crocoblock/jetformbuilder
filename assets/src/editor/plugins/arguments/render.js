@@ -12,6 +12,13 @@ const { useEffect } = wp.element;
 
 const source = window.JetFormEditorData.argumentsSource || {};
 
+const helpSafety = {
+	render: __(
+		`Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`,
+		'jet-form-builder'
+	)
+};
+
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
@@ -84,15 +91,17 @@ export default function PluginArgs() {
 				} ) );
 			} }
 		/>
-		<ToggleControl
+
+		<SelectControl
 			key={ 'load_nonce' }
-			label={ __( 'Enable form safety', 'jet-form-builder' ) }
-			checked={ 'render' === args.load_nonce  }
-			help={ __( `Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`, 'jet-form-builder' ) }
+			label={ __( 'Form safety', 'jet-form-builder' ) }
+			value={ args.load_nonce }
+			options={ source.load_nonce }
+			help={ helpSafety[ args.load_nonce ] ?? '' }
 			onChange={ newVal => {
-				setArgs( prev => ( {
-					...prev,
-					load_nonce: Boolean( newVal ) ? 'render' : 'hide',
+				setArgs( ( prevArgs ) => ( {
+					...prevArgs,
+					load_nonce: newVal,
 				} ) );
 			} }
 		/>

@@ -2,6 +2,8 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
@@ -58,8 +60,8 @@ class Post_Type {
 			return;
 		}
 		$arguments = json_decode( get_post_meta( $form_id, '_jf_args', true ), true );
-		$arguments = array_diff( $arguments, $this->get_default_args() );
-		$arguments = array_merge( array( 'form_id' => $form_id ), $this->get_default_args_on_render(), $arguments );
+		$arguments = array_diff( $arguments, Form_Arguments::arguments() );
+		$arguments = array_merge( array( 'form_id' => $form_id ), Default_Form_Arguments::arguments(), $arguments );
 
 		printf(
 			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
@@ -152,22 +154,21 @@ class Post_Type {
 		$meta = array(
 			'_jf_args'      => array(
 				'type'    => 'string',
-				'default' => wp_json_encode( $this->get_default_args() ),
+				'default' => wp_json_encode( Form_Arguments::arguments() ),
 			),
 			'_jf_recaptcha' => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
-
-			'_jf_actions'  => array(
+			'_jf_actions'   => array(
 				'type'    => 'string',
 				'default' => '[]',
 			),
-			'_jf_messages' => array(
+			'_jf_messages'  => array(
 				'type'    => 'string',
 				'default' => $this->get_default_messages_values_json(),
 			),
-			'_jf_preset'   => array(
+			'_jf_preset'    => array(
 				'type'    => 'string',
 				'default' => '{}',
 			),
@@ -298,30 +299,6 @@ class Post_Type {
 	 */
 	public function get_gateways( $form_id ) {
 		return $this->get_form_meta( '_jf_gateways', $form_id );
-	}
-
-
-	public function get_default_args() {
-		return array(
-			'form_id'          => '',
-			'submit_type'      => '',
-			'required_mark'    => '',
-			'fields_layout'    => '',
-			'enable_progress'  => null,
-			'fields_label_tag' => '',
-			'load_nonce'       => '',
-		);
-	}
-
-	public function get_default_args_on_render() {
-		return array(
-			'submit_type'      => 'reload',
-			'required_mark'    => '*',
-			'fields_layout'    => 'column',
-			'enable_progress'  => false,
-			'fields_label_tag' => 'div',
-			'load_nonce'       => 'render',
-		);
 	}
 
 	public function set_default_messages() {

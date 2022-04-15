@@ -4,6 +4,8 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
+use Jet_Form_Builder\Classes\Security\Csrf_Tools;
+use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -13,7 +15,6 @@ use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
-use Jet_Form_Builder\Request_Router;
 
 /**
  * Form builder class
@@ -29,12 +30,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key      = 'jet_form_builder_submit';
-	public $hook_val      = 'submit';
-	public $form_data     = array();
+	public $hook_key = 'jet_form_builder_submit';
+	public $hook_val = 'submit';
+	public $form_data = array();
 	public $response_data = array();
-	public $is_ajax       = false;
-	public $is_success    = false;
+	public $is_ajax = false;
+	public $is_success = false;
 	public $response_args = array();
 
 	public $form_id;
@@ -44,8 +45,8 @@ class Form_Handler {
 	/** @var Action_Handler */
 	public $action_handler;
 
-	public $form_key    = '_jet_engine_booking_form_id';
-	public $refer_key   = '_jet_engine_refer';
+	public $form_key = '_jet_engine_booking_form_id';
+	public $refer_key = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
@@ -67,6 +68,9 @@ class Form_Handler {
 		} catch ( Not_Router_Request $exception ) {
 			return;
 		}
+
+		Wp_Nonce_Tools::register();
+		Csrf_Tools::register();
 
 		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
 

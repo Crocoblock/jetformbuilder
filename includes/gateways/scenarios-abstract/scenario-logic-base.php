@@ -352,6 +352,10 @@ abstract class Scenario_Logic_Base {
 	}
 
 	public function get_status_type( $status ): string {
+		if ( in_array( (string) $status, array( 'success', 'failed' ), true ) ) {
+			return $status;
+		}
+
 		return ( ! $status || in_array( $status, $this->get_failed_statuses(), true ) )
 			? 'failed'
 			: 'success';

@@ -30,12 +30,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key = 'jet_form_builder_submit';
-	public $hook_val = 'submit';
-	public $form_data = array();
+	public $hook_key      = 'jet_form_builder_submit';
+	public $hook_val      = 'submit';
+	public $form_data     = array();
 	public $response_data = array();
-	public $is_ajax = false;
-	public $is_success = false;
+	public $is_ajax       = false;
+	public $is_success    = false;
 	public $response_args = array();
 
 	public $form_id;
@@ -45,13 +45,16 @@ class Form_Handler {
 	/** @var Action_Handler */
 	public $action_handler;
 
-	public $form_key = '_jet_engine_booking_form_id';
-	public $refer_key = '_jet_engine_refer';
+	public $form_key    = '_jet_engine_booking_form_id';
+	public $refer_key   = '_jet_engine_refer';
 	public $post_id_key = '__queried_post_id';
 	/**
 	 * @var Request_Handler
 	 */
 	public $request_handler;
+
+	/** @var Csrf_Tools */
+	public $csrf;
 
 
 	/**
@@ -60,6 +63,7 @@ class Form_Handler {
 	public function __construct() {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
+		$this->csrf            = new Csrf_Tools();
 	}
 
 	public function call_form() {
@@ -70,7 +74,7 @@ class Form_Handler {
 		}
 
 		Wp_Nonce_Tools::register();
-		Csrf_Tools::register();
+		$this->csrf->register();
 
 		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
 

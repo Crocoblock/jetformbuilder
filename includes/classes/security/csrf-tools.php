@@ -13,8 +13,11 @@ class Csrf_Tools {
 
 	const FIELD = '_jfb_csrf_token';
 
-	public static function register() {
-		add_filter( 'jet-form-builder/request-handler/request', array( self::class, 'handle_request' ) );
+	private $token;
+	private $client;
+
+	public function register() {
+		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
 	}
 
 	public static function get_field(): string {
@@ -23,14 +26,14 @@ class Csrf_Tools {
 		}
 
 		// generate new unique token
-		$csrf = self::generate();
+		$csrf = static::generate();
 
 		// get hashed string with user-agent, ip address & form-id
-		$client_id = self::client_id( jet_fb_live_args()->form_id );
+		$client_id = static::client_id( jet_fb_live_args()->form_id );
 
 		try {
 			// insert new token if client_id is not exist in table
-			self::add( $csrf, $client_id );
+			$token = static::add( $csrf, $client_id );
 		} catch ( Sql_Exception $exception ) {
 			return '';
 		}
@@ -38,7 +41,7 @@ class Csrf_Tools {
 		return Live_Form::force_render_field(
 			'hidden-field',
 			array(
-				'field_value' => $csrf,
+				'field_value' => $token,
 				'name'        => self::FIELD,
 			)
 		);
@@ -50,65 +53,88 @@ class Csrf_Tools {
 	 * @return array
 	 * @throws Request_Exception
 	 */
-	public static function handle_request( array $request ): array {
+	public function handle_request( array $request ): array {
 		if ( ! jet_fb_live_args()->is_use_csrf() ) {
 			return $request;
 		}
 
-		$token     = $request[ self::FIELD ] ?? false;
-		$client_id = static::client_id( jet_fb_live_args()->form_id );
+		$this->token  = $request[ self::FIELD ] ?? false;
+		$this->client = static::client_id( jet_fb_live_args()->form_id );
 
 		// delete all old tokens
 		Csrf_Token_Model::clear();
 
-		if ( ! static::verify( $token, $client_id ) ) {
+		if ( ! static::verify( $this->token, $this->client ) ) {
 			throw ( new Request_Exception( 'Invalid token' ) )->dynamic_error();
 		}
 
+		// delete verified token only on success
+		add_action( 'jet-form-builder/form-handler/after-send', array( $this, 'handle_after_send' ) );
+
 		return $request;
+	}
+
+	public function handle_after_send() {
+		if ( ! jet_fb_handler()->is_success ) {
+			return;
+		}
+
+		static::delete( $this->token, $this->client );
 	}
 
 	/**
 	 * @param string $token
 	 * @param string $client_id
 	 *
-	 * @return int
+	 * New token or existed
+	 * @return string
 	 * @throws Sql_Exception
 	 */
-	public static function add( string $token, string $client_id ): int {
+	public static function add( string $token, string $client_id ): string {
 		$self = ( new Csrf_Token_Model() )->create();
 
 		try {
-			Csrf_Token_View::by_client( $client_id );
+			$row = Csrf_Token_View::by_client( $client_id );
 
-			return 0;
+			$token = $row['token'];
 		} catch ( Query_Builder_Exception $exception ) {
-			return $self->insert(
+			$self->insert(
 				array(
 					'token'     => $token,
 					'client_id' => $client_id,
 				)
 			);
 		}
+
+		return $token;
 	}
 
 
 	public static function verify( string $token, string $client_id ): bool {
+		$where = array(
+			'token'     => $token,
+			'client_id' => $client_id,
+		);
 		try {
-			( new Csrf_Token_Model() )->update(
-				array(
-					'is_verified' => 1,
-				),
-				array(
-					'token'     => $token,
-					'client_id' => $client_id,
-				)
-			);
-		} catch ( Sql_Exception $exception ) {
+			Csrf_Token_View::findOne( $where )->query()->query_one();
+		} catch ( Query_Builder_Exception $exception ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	public static function delete( string $token, string $client_id ): int {
+		$where = array(
+			'token'     => $token,
+			'client_id' => $client_id,
+		);
+
+		try {
+			return Csrf_Token_View::delete( $where );
+		} catch ( Query_Builder_Exception $exception ) {
+			return 0;
+		}
 	}
 
 	public static function generate(): string {

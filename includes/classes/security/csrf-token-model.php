@@ -22,9 +22,7 @@ class Csrf_Token_Model extends Base_Db_Model {
 			self::PRIMARY_ID => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'client_id'      => 'varchar(255)',
 			'token'          => 'text',
-			'is_verified'    => 'tinyint(1)',
 			self::CREATED_AT => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			self::UPDATED_AT => 'TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -55,7 +53,7 @@ class Csrf_Token_Model extends Base_Db_Model {
 				"
 DELETE FROM {$self::table()} 
 WHERE 1=1
-AND (TIMESTAMP(`created_at`) <= TIMESTAMP(%s) OR `is_verified` = 1)
+	AND TIMESTAMP(`created_at`) <= TIMESTAMP(%s)
 ",
 				$datetime_limit->format( 'Y-m-d H:i:s' )
 			)

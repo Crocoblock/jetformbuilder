@@ -3,7 +3,7 @@
 		'wrap': true,
 		'jet-form-builder-page': true,
 	}">
-		<div class="wp-heading">
+		<div class="jfb-heading">
 			<slot name="heading-before"></slot>
 			<h1>{{ title }}</h1>
 			<template v-if="$slots['heading-after']">

@@ -18,6 +18,7 @@ class Form_Arguments implements Arrayable {
 	public $enable_progress  = null;
 	public $fields_label_tag = '';
 	public $load_nonce       = '';
+	public $use_csrf         = null;
 
 	public function __construct( $form_id = 0 ) {
 		$this->form_id = (int) $form_id;
@@ -63,6 +64,13 @@ class Form_Arguments implements Arrayable {
 	}
 
 	/**
+	 * @param null $use_csrf
+	 */
+	public function set_use_csrf( $use_csrf ) {
+		$this->use_csrf = (bool) $use_csrf;
+	}
+
+	/**
 	 * @param mixed $fields_label_tag
 	 */
 	public function set_fields_label_tag( $fields_label_tag ) {
@@ -94,7 +102,7 @@ class Form_Arguments implements Arrayable {
 	public function set_load_nonce( $load_nonce ) {
 		$load_nonce = strtolower( $load_nonce );
 
-		if ( ! in_array( $load_nonce, array( 'render', 'hide', 'csrf' ), true ) ) {
+		if ( ! in_array( $load_nonce, array( 'render', 'hide' ), true ) ) {
 			return;
 		}
 
@@ -130,6 +138,7 @@ class Form_Arguments implements Arrayable {
 			'enable_progress'  => $this->enable_progress,
 			'fields_label_tag' => $this->fields_label_tag,
 			'load_nonce'       => $this->load_nonce,
+			'use_csrf'         => $this->use_csrf,
 		);
 	}
 
@@ -169,8 +178,8 @@ class Form_Arguments implements Arrayable {
 		return 'render' === $this->load_nonce;
 	}
 
-	public function is_use_csrf(): bool {
-		return 'csrf' === $this->load_nonce;
+	public function is_use_csrf() {
+		return $this->use_csrf;
 	}
 
 	public static function arguments(): array {

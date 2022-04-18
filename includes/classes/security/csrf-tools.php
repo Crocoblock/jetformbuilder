@@ -94,14 +94,17 @@ class Csrf_Tools {
 
 
 	public static function verify( string $token, string $client_id ): bool {
-		$where = array(
-			'token'     => $token,
-			'client_id' => $client_id,
-		);
-
 		try {
-			Csrf_Token_View::delete( $where );
-		} catch ( Query_Builder_Exception $exception ) {
+			( new Csrf_Token_Model() )->update(
+				array(
+					'is_verified' => 1,
+				),
+				array(
+					'token'     => $token,
+					'client_id' => $client_id,
+				)
+			);
+		} catch ( Sql_Exception $exception ) {
 			return false;
 		}
 

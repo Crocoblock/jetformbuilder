@@ -12,13 +12,6 @@ const { useEffect } = wp.element;
 
 const source = window.JetFormEditorData.argumentsSource || {};
 
-const helpSafety = {
-	render: __(
-		`Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`,
-		'jet-form-builder'
-	)
-};
-
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
@@ -92,16 +85,27 @@ export default function PluginArgs() {
 			} }
 		/>
 
-		<SelectControl
+		<ToggleControl
 			key={ 'load_nonce' }
-			label={ __( 'Form safety', 'jet-form-builder' ) }
-			value={ args.load_nonce }
-			options={ source.load_nonce }
-			help={ helpSafety[ args.load_nonce ] ?? '' }
+			label={ __( 'Enable form safety', 'jet-form-builder' ) }
+			checked={ 'render' === args.load_nonce  }
+			help={ __( `Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`, 'jet-form-builder' ) }
 			onChange={ newVal => {
-				setArgs( ( prevArgs ) => ( {
-					...prevArgs,
-					load_nonce: newVal,
+				setArgs( prev => ( {
+					...prev,
+					load_nonce: Boolean( newVal ) ? 'render' : 'hide',
+				} ) );
+			} }
+		/>
+
+		<ToggleControl
+			key={ 'use_csrf' }
+			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
+			checked={ args.use_csrf  }
+			onChange={ newVal => {
+				setArgs( prev => ( {
+					...prev,
+					use_csrf: Boolean( newVal ),
 				} ) );
 			} }
 		/>

@@ -19,10 +19,12 @@ class Csrf_Token_Model extends Base_Db_Model {
 	 */
 	public static function schema(): array {
 		return array(
-			'id'         => 'bigint(20) NOT NULL AUTO_INCREMENT',
-			'client_id'  => 'varchar(255)',
-			'token'      => 'text',
-			'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+			self::PRIMARY_ID => 'bigint(20) NOT NULL AUTO_INCREMENT',
+			'client_id'      => 'varchar(255)',
+			'token'          => 'text',
+			'is_verified'    => 'tinyint(1)',
+			self::CREATED_AT => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+			self::UPDATED_AT => 'TIMESTAMP NOT NULL',
 		);
 	}
 
@@ -38,15 +40,27 @@ class Csrf_Token_Model extends Base_Db_Model {
 
 	public static function clear() {
 		global $wpdb;
+
+		/** @var \DateTimeImmutable $datetime_limit */
+		$datetime_limit = apply_filters(
+			'jet-form-builder/security/csrf-token/datetime-limit',
+			current_datetime()->modify( '-4 hours' )
+		);
+
 		$self = ( new static() )->create();
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+		// phpcs:disable WordPress.DB
 		$wpdb->query(
 			$wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"DELETE FROM {$self::table()} WHERE TIMESTAMP(`created_at`) <= TIMESTAMP(%s)",
-				current_datetime()->modify( '-4 hours' )->format( 'Y-m-d H:i:s' )
+				"
+DELETE FROM {$self::table()} 
+WHERE 1=1
+AND (TIMESTAMP(`created_at`) <= TIMESTAMP(%s) OR `is_verified` = 1)
+",
+				$datetime_limit->format( 'Y-m-d H:i:s' )
 			)
 		);
+		// phpcs:enable WordPress.DB
 	}
 
 

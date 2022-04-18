@@ -2,7 +2,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 const { apiFetch } = wp;
 
 const getActionFromRecord = ( record, slug ) => {
-	return record.actions.value.find( action => slug === action.value )
+	return record.actions.value.find( action => slug === action.value );
 };
 
 const apiOptions = getters => {
@@ -12,9 +12,9 @@ const apiOptions = getters => {
 	let actionEndpoint = getters.getAction( action );
 
 	if ( ! actionEndpoint ) {
-		const record = payload[3] ?? {};
+		const record = payload[ 3 ] ?? {};
 
-		actionEndpoint = getActionFromRecord( record, action )
+		actionEndpoint = getActionFromRecord( record, action );
 	}
 
 	const options = getters.fetchListOptions( actionEndpoint?.endpoint );
@@ -56,7 +56,10 @@ export default {
 	},
 	updateList( { commit, getters, dispatch, state }, response ) {
 		commit( 'setList', response.list );
-		commit( 'setTotal', response.total ?? state.queryState.total );
+
+		if ( state.queryState ) {
+			commit( 'setTotal', response?.total ?? state.queryState.total );
+		}
 
 		if ( response.list.length !== getters.getLimit ) {
 			commit( 'setLimit', response.list.length );

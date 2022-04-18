@@ -83,5 +83,12 @@ export default {
 		background: #f6f7f7;
 	}*/
 }
+body.rtl .jfb-list-table {
+	&-row {
+		&--heading {
+			text-align: right;
+		}
+	}
+}
 
 </style>

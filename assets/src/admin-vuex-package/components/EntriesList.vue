@@ -63,6 +63,10 @@ export default {
 			padding: 0.8em;
 		}
 
+		&--item {
+			word-break: break-word;
+		}
+
 		&--heading {
 			text-align: left;
 		}

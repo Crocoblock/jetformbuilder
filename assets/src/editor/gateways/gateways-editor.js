@@ -184,6 +184,7 @@ function GatewaysEditor( {
 			key='checkbox_block_redirect_to_page'
 			checked={ gatewayGeneral.use_success_redirect }
 			label={ label( 'use_success_redirect' ) }
+			help={ label( 'use_success_redirect_help' ) }
 			onChange={ val => {
 				setGateway( { use_success_redirect: val } );
 			} }

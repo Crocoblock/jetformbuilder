@@ -10,14 +10,19 @@ trait Gateways_Editor_Data {
 	private function labels() {
 		return array_merge(
 			array(
-				'notifications_before'  => _x( 'Before payment processed:', 'Gateways editor data', 'jet-form-builder' ),
-				'notifications_success' => _x( 'On successful payment:', 'Gateways editor data', 'jet-form-builder' ),
-				'notifications_failed'  => _x( 'On failed payment:', 'Gateways editor data', 'jet-form-builder' ),
-				'price_field'           => _x( 'Price/amount field', 'Gateways editor data', 'jet-form-builder' ),
-				'message_success'       => _x( 'Payment success message', 'Gateways editor data', 'jet-form-builder' ),
-				'message_failed'        => _x( 'Payment failed message', 'Gateways editor data', 'jet-form-builder' ),
-				'use_success_redirect'  => _x( 'Use redirect URL from Redirect notification', 'Gateways editor data', 'jet-form-builder' ),
-				'action_order'          => _x( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' ),
+				'notifications_before'      => _x( 'Before payment processed:', 'Gateways editor data', 'jet-form-builder' ),
+				'notifications_success'     => _x( 'On successful payment:', 'Gateways editor data', 'jet-form-builder' ),
+				'notifications_failed'      => _x( 'On failed payment:', 'Gateways editor data', 'jet-form-builder' ),
+				'price_field'               => _x( 'Price/amount field', 'Gateways editor data', 'jet-form-builder' ),
+				'message_success'           => _x( 'Payment success message', 'Gateways editor data', 'jet-form-builder' ),
+				'message_failed'            => _x( 'Payment failed message', 'Gateways editor data', 'jet-form-builder' ),
+				'use_success_redirect'      => _x( 'Redirect to a page', 'Gateways editor data', 'jet-form-builder' ),
+				'action_order'              => _x( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' ),
+				'use_success_redirect_help' => _x(
+					'Enable this toggle to redirect a user after successful payment.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
 			),
 			$this->options_labels(),
 			$this->custom_labels()

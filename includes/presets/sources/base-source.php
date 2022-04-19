@@ -20,7 +20,7 @@ abstract class Base_Source {
 	protected $permission;
 
 	const FUNC_PREFIX = 'source__';
-	const EMPTY = '';
+	const EMPTY       = '';
 
 	abstract public function query_source();
 
@@ -128,7 +128,7 @@ abstract class Base_Source {
 	 */
 	protected function has_permission(): bool {
 		if ( is_null( $this->permission ) ) {
-			$this->permission = $this->can_get_preset();
+			$this->permission = apply_filters( 'jet-form-builder/preset-sanitize', $this->can_get_preset(), $this );
 		}
 
 		return $this->permission;
@@ -166,6 +166,7 @@ abstract class Base_Source {
 		if ( ! $this->is_need_prop() ) {
 			return true;
 		}
+
 		return ( ! empty( $this->field_data['prop'] ) ? $this->field_data['prop'] : false );
 	}
 

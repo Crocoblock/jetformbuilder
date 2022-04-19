@@ -49,7 +49,6 @@ if ( ! empty( $args['field_options'] ) ) {
 						value="<?php echo esc_attr( $val ); ?>"
 						data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
 					<?php
-                    do_action( 'qm/debug', $default );
 					if ( $default ) {
 						checked( $default, $val );
 					}

@@ -139,12 +139,7 @@ class Redirect_To_Page extends Base {
 
 		$to_url = $this->get_completed_redirect_url( $to_url );
 
-		if ( ! $request['__is_ajax'] ) {
-			wp_safe_redirect( $to_url );
-			die();
-		} else {
-			$handler->response_data['redirect'] = $to_url;
-		}
+		$handler->response_data['redirect'] = $to_url;
 	}
 
 	public function self_script_name() {

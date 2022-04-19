@@ -44,6 +44,7 @@ export const renderGatewayWithPlaceholder = ( id, props, what = 'cred', Placehol
 	if ( ! issetRenderGateway( id, what ) ) {
 		return Placeholder;
 	}
+	props.Placeholder = Placeholder;
 
 	return renderGateway( id, props, what );
 };

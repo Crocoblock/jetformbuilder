@@ -53,9 +53,13 @@ function GatewaysEditor( {
 	formFields,
 	loadingGateway,
 	gatewayRequest,
+	CURRENT_SCENARIO,
+	currentScenario,
 } ) {
 
-	const availableActions = ActionsMeta.filter( action => ( action.type !== 'redirect_to_page' && isInDefaultFlow( action.type ) ) );
+	const availableActions = ActionsMeta.filter( action => (
+		action.type !== 'redirect_to_page' && isInDefaultFlow( action.type )
+	) );
 	const insertPostActions = prepareActionsListByType( ActionsMeta, 'insert_post', true );
 
 	const additional = callableGateway( gatewayGeneral.gateway );
@@ -216,16 +220,20 @@ function GatewaysEditor( {
 				options={ formFields }
 			/>
 		</> }
-		{ renderGatewayWithPlaceholder( gatewayGeneral.gateway, {}, 'macrosList', <BaseControl
-			key="payment_result_macros_base_control"
-		>
-			<h4>
-				{ __( 'Available macros list: ', 'jet-form-builder' ) }<br/>
-				{ __( '%gateway_amount% - payment amount returned from gateway template;', 'jet-form-builder' ) }<br/>
-				{ __( '%gateway_status% - payment status returned from payment gateway;', 'jet-form-builder' ) }<br/>
-				{ __( '%field_name% - replace "field_name" with any field name from the form;', 'jet-form-builder' ) }<br/>
-			</h4>
-		</BaseControl> ) }
+		{ renderGatewayWithPlaceholder(
+			gatewayGeneral.gateway,
+			{ gatewayGeneral, CURRENT_SCENARIO, currentScenario },
+			'macrosList',
+			<BaseControl
+				key="payment_result_macros_base_control"
+			>
+				<h4>
+					{ __( 'Available macros list: ', 'jet-form-builder' ) }<br/>
+					{ __( '%gateway_amount% - payment amount returned from gateway template;', 'jet-form-builder' ) }<br/>
+					{ __( '%gateway_status% - payment status returned from payment gateway;', 'jet-form-builder' ) }<br/>
+					{ __( '%field_name% - replace "field_name" with any field name from the form;', 'jet-form-builder' ) }<br/>
+				</h4>
+			</BaseControl> ) }
 		<TextareaControl
 			key="payment_result_message_success"
 			label={ label( 'message_success' ) }

@@ -135,11 +135,8 @@ abstract class Scenario_Logic_Base {
 		}
 		$record = $this->get_scenario_row( 'record' );
 
-		try {
-			$request = Record_Fields_View::get_request_list( $record['id'] ?? 0 );
-		} catch ( Query_Builder_Exception $exception ) {
-			$request = array();
-		}
+		$request = Record_Fields_View::get_request_list( $record['id'] ?? 0 );
+
 		// For backward compatibility with JetAppointment & JetBooking
 		jet_fb_gateway_current()->set_form_data( $request );
 		jet_fb_action_handler()->add_request( $request );

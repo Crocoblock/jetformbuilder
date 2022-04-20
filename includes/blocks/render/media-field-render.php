@@ -23,7 +23,7 @@ class Media_Field_Render extends Base {
 
 		ob_start();
 
-		require_once Tools::get_global_template( 'fields/image-preview.php' );
+		require Tools::get_global_template( 'fields/image-preview.php' );
 
 		$template_content = ob_get_clean();
 

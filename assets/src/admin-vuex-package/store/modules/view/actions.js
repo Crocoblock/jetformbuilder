@@ -61,7 +61,7 @@ export default {
 			commit( 'setTotal', response?.total ?? state.queryState.total );
 		}
 
-		if ( response.list.length !== getters.getLimit ) {
+		if ( response.list.length > getters.getLimit ) {
 			commit( 'setLimit', response.list.length );
 		}
 	},

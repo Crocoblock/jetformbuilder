@@ -3,16 +3,16 @@
 
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
-use Jet_Form_Builder\Admin\Table_Views\View_Base;
-use Jet_Form_Builder\Admin\Table_Views\View_Simple_Base;
-use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
+use Jet_Form_Builder\Gateways\Scenario_Item;
 
-abstract class Scenario_View_Base {
-
-	use Scenario_Item_Trait;
+abstract class Scenario_View_Base implements Scenario_Item {
 
 	abstract public function get_title(): string;
+
+	public static function rep_item_id() {
+		return static::scenario_id();
+	}
 
 	public function get_editor_labels(): array {
 		return array();

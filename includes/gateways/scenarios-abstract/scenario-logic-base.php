@@ -10,16 +10,13 @@ use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
-use Jet_Form_Builder\Gateways\Paypal\Scenario_Item_Trait;
+use Jet_Form_Builder\Gateways\Scenario_Item;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
-abstract class Scenario_Logic_Base {
-
-	use Scenario_Item_Trait;
+abstract class Scenario_Logic_Base implements Scenario_Item {
 
 	protected $queried_token;
 	protected $queried_row = array();
@@ -38,6 +35,9 @@ abstract class Scenario_Logic_Base {
 
 	abstract public function get_failed_statuses();
 
+	public static function rep_item_id() {
+		return static::scenario_id();
+	}
 
 	public function on_catch() {
 		// complete payment/subscription
@@ -73,8 +73,6 @@ abstract class Scenario_Logic_Base {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		jet_fb_gateway_current()->set_form_meta( Gateway_Manager::instance()->gateways() );
-
 		$keep_these      = jet_fb_gateway_current()->get_actions_before();
 		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
@@ -246,7 +244,6 @@ abstract class Scenario_Logic_Base {
 	 * @param string $if_empty
 	 *
 	 * @return mixed
-	 * @throws Repository_Exception
 	 */
 	public function get_setting( string $key, $if_empty = '' ) {
 		return jet_fb_gateway_current()->current_scenario( $key, $if_empty );
@@ -254,7 +251,6 @@ abstract class Scenario_Logic_Base {
 
 	/**
 	 * @return array|false|mixed
-	 * @throws Repository_Exception
 	 */
 	public function get_settings() {
 		return jet_fb_gateway_current()->current_scenario();
@@ -262,7 +258,6 @@ abstract class Scenario_Logic_Base {
 
 	/**
 	 * @return string
-	 * @throws Repository_Exception
 	 */
 	private function get_context_key() {
 		return jet_fb_gateway_current()->get_id() . '__' . static::scenario_id();

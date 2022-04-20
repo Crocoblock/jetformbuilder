@@ -35,7 +35,8 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		jet_fb_gateway_current()->get_scenario()->before_actions();
+		$this->set_form_meta( Gateway_Manager::instance()->gateways() );
+		$this->get_scenario()->before_actions();
 	}
 
 	/**

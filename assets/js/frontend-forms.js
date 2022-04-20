@@ -1616,14 +1616,19 @@
 			};
 
 			const runAjaxForm = callbacks => {
-				data.values = $form.serializeArray();
-				data._jet_engine_booking_form_id = formID;
+				//data.values = $form.serializeArray();
+				//data._jet_engine_booking_form_id = formID;
+				const formData = new FormData( $form[ 0 ] );
+				formData.append( '_jet_engine_booking_form_id', formID );
 
 				$.ajax( {
 					url: JetFormBuilderSettings.ajaxurl,
 					type: 'POST',
 					dataType: 'json',
-					data: data,
+					data: formData,
+					cache      : false,
+					contentType: false,
+					processData: false,
 				} ).done( response => {
 					onSuccess( response );
 					callbacks.forEach( cb => {

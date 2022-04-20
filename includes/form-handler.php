@@ -243,7 +243,7 @@ class Form_Handler {
 	public function process_form() {
 		$this->setup_form();
 
-		if ( ! $this->form_id || ! $this->refer ) {
+		/*if ( ! $this->form_id || ! $this->refer ) {
 			$this->add_response_data(
 				array(
 					'reload' => true,
@@ -255,7 +255,7 @@ class Form_Handler {
 				)
 			);
 			$this->send_raw_response();
-		}
+		}*/
 
 		$this->try_send();
 
@@ -276,6 +276,8 @@ class Form_Handler {
 
 	public function try_send() {
 		try {
+			throw new Action_Exception( 'debug', $_FILES, $_POST );
+
 			$this->send_form();
 		} catch ( Request_Exception $exception ) {
 			$this->send_response(

@@ -86,6 +86,7 @@ class Form_Builder {
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
 		$this->add_attribute( 'data-layout', Live_Form::instance()->spec_data->fields_layout );
+		$this->add_attribute( 'enctype', 'multipart/form-data' );
 
 		ob_start();
 		include $this->get_global_template( 'common/start-form.php' );
@@ -188,9 +189,9 @@ class Form_Builder {
 		}
 
 		$blocks = Live_Form::instance()
-							->set_form_id( $this->form_id )
-							->set_specific_data_for_render( $this->args )
-							->setup_fields();
+		                   ->set_form_id( $this->form_id )
+		                   ->set_specific_data_for_render( $this->args )
+		                   ->setup_fields();
 
 		$form = $this->start_form();
 

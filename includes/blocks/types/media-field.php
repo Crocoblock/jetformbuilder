@@ -26,6 +26,17 @@ class Media_Field extends Base {
 		return 'media-field';
 	}
 
+	public function get_field_name( $name = '' ) {
+		$max_files = absint( $this->block_attrs['max_files'] ?? 1 );
+
+		$suffix = '';
+		if ( 1 < $max_files ) {
+			$suffix = '[]';
+		}
+
+		return ( parent::get_field_name( $name ) . $suffix );
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *

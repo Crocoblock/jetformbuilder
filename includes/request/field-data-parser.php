@@ -5,18 +5,23 @@ namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Resources\File;
+use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 
 abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name = 'field_name';
+	protected $name        = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;
 	protected $request_handler;
 	protected $inside_conditional;
+
+	/** @var File|File_Collection|bool */
+	protected $file;
 
 	abstract public function type();
 
@@ -39,8 +44,13 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 * @return mixed
 	 * @throws Exclude_Field_Exception
 	 */
-	final public function get_parsed_value( $value, $block, $inside_conditional ) {
-		$this->init( $value, $block, $inside_conditional )->is_field_visible();
+	final public function get_parsed_value( $value, $file, $block, $inside_conditional ) {
+		$this->init(
+			$value,
+			$file,
+			$block,
+			$inside_conditional
+		)->is_field_visible();
 
 		return $this->response();
 	}
@@ -57,11 +67,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $value;
 	}
 
-	public function init( $value, $block, $inside_conditional ): Field_Data_Parser {
+	public function init( $value, $file, $block, $inside_conditional ): Field_Data_Parser {
 		$this->block              = $block;
 		$this->inside_conditional = $inside_conditional;
 		$this->settings           = $this->block['attrs'];
 		$this->inner              = $this->block['innerBlocks'];
+		$this->file               = $file;
 
 		if ( isset( $this->settings['required'] ) ) {
 			$this->is_required = $this->settings['required'];

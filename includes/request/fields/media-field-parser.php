@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Request\Fields;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
+use Psr\Container\ContainerInterface;
 
 class Media_Field_Parser extends Field_Data_Parser {
 
@@ -12,11 +13,10 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return 'media-field';
 	}
 
-	public function parse_value( $value ) {
-		$string_value = wp_unslash( wp_specialchars_decode( $value, ENT_COMPAT ) );
-
-		return json_decode( $string_value, true );
+	private function get_temp_file(): string {
+		
 	}
+
 
 	public function get_response() {
 		if ( $this->is_value_format( 'id' ) ) {
@@ -34,9 +34,9 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return $this->value;
 	}
 
-	private function is_value_format( $format ) {
+	private function is_value_format( $format ): bool {
 		return ( ! empty( $this->settings['insert_attachment'] )
-				 && ! empty( $this->settings['value_format'] )
-				 && $format === $this->settings['value_format'] );
+				&& ! empty( $this->settings['value_format'] )
+				&& $format === $this->settings['value_format'] );
 	}
 }

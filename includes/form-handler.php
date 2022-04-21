@@ -176,21 +176,6 @@ class Form_Handler {
 
 		$fields = $this->core_fields();
 
-		if ( $this->is_ajax() ) {
-			$values = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( $_POST['values'] ) : array();
-
-			foreach ( $values as $data ) {
-				if ( ! isset( $fields[ $data['name'] ] ) ) {
-					continue;
-				}
-				$options = $fields[ $data['name'] ] ?? array();
-
-				Tools::call( $options['callback'] ?? false, $data['value'] ?? '' );
-			}
-
-			return;
-		}
-
 		foreach ( $fields as $field_name => $options ) {
 			if ( ! isset( $_POST[ $field_name ] ) ) {
 				continue;
@@ -243,7 +228,7 @@ class Form_Handler {
 	public function process_form() {
 		$this->setup_form();
 
-		/*if ( ! $this->form_id || ! $this->refer ) {
+		if ( ! $this->form_id || ! $this->refer ) {
 			$this->add_response_data(
 				array(
 					'reload' => true,
@@ -255,7 +240,7 @@ class Form_Handler {
 				)
 			);
 			$this->send_raw_response();
-		}*/
+		}
 
 		$this->try_send();
 
@@ -276,8 +261,6 @@ class Form_Handler {
 
 	public function try_send() {
 		try {
-			throw new Action_Exception( 'debug', $_FILES, $_POST );
-
 			$this->send_form();
 		} catch ( Request_Exception $exception ) {
 			$this->send_response(
@@ -304,6 +287,8 @@ class Form_Handler {
 		$this->action_handler->add_request(
 			$this->request_handler->get_form_data()
 		);
+
+		var_dump( $_FILES, $this->request_handler->get_files() ); die;
 
 		do_action( 'jet-form-builder/form-handler/before-send', $this );
 

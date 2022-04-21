@@ -67,6 +67,7 @@ export function setTableSeed( store, source ) {
 		empty_message = '',
 		is_editable_table = false,
 		is_editable_table_control = false,
+		stable_limit = null,
 		...options
 	} = source;
 
@@ -79,7 +80,7 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
-	store.commit( getName( 'setLimit' ), list?.length );
+	store.commit( getName( 'setLimit' ), stable_limit ?? list?.length );
 	store.commit( getName( 'toggleEditTable' ), is_editable_table );
 	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
 	store.commit( getName( 'options/insert' ), options );

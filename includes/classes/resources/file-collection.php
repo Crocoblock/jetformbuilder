@@ -3,10 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Resources;
 
-class File_Collection implements \Iterator {
+class File_Collection implements \Iterator, \Countable, Media_Block_Value {
 
 	protected $position = 0;
-	protected $files    = array();
+
+	/** @var File[] */
+	protected $files = array();
 
 	public function __construct( array $files ) {
 		$this->add_files( $files );
@@ -61,5 +63,44 @@ class File_Collection implements \Iterator {
 
 	public function rewind() {
 		$this->position = 0;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function count() {
+		return count( $this->files );
+	}
+
+	/*
+	 * Realisation of
+	 * \Jet_Form_Builder\Classes\Resources\Media_Block_Value
+	 */
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_id(): string {
+		return '';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_url(): string {
+		$urls = array();
+
+		foreach ( $this->files as $file ) {
+			$urls[] = $file->get_attachment_url();
+		}
+
+		return implode( ',', $urls );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_attachment_both(): array {
+		return array();
 	}
 }

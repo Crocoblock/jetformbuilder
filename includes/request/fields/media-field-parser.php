@@ -3,9 +3,11 @@
 
 namespace Jet_Form_Builder\Request\Fields;
 
-use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
+use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
-use Psr\Container\ContainerInterface;
+use Jet_Form_Builder\Request\File_Uploader;
 
 class Media_Field_Parser extends Field_Data_Parser {
 
@@ -13,30 +15,46 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return 'media-field';
 	}
 
-	private function get_temp_file(): string {
-		
-	}
-
-
+	/**
+	 * @return array|false|int|string|null
+	 * @throws Sanitize_Value_Exception
+	 */
 	public function get_response() {
-		if ( $this->is_value_format( 'id' ) ) {
-			if ( ! is_array( $this->value ) ) {
-				$this->value = ! empty( $this->value ) ? absint( $this->value ) : null;
-			} else {
-				$this->value = implode( ',', $this->value );
-			}
+		if ( empty( $this->file ) ) {
+			return false;
 		}
 
-		if ( is_array( $this->value ) && $this->is_value_format( 'url' ) ) {
-			$this->value = implode( ', ', $this->value );
+		try {
+			$uploader = ( new File_Uploader() )
+				->set_settings( $this->settings )
+				->set_file( $this->file );
+		} catch ( Upload_Exception $exception ) {
+			return false;
 		}
 
-		return $this->value;
+		try {
+			/** @var Media_Block_Value $uploads */
+			$uploads = $uploader->upload();
+		} catch ( Upload_Exception $exception ) {
+			throw new Sanitize_Value_Exception( $exception->getMessage() );
+		}
+
+		switch ( $this->get_value_format() ) {
+			case 'id':
+				return $uploads->get_attachment_id();
+			case 'both':
+				return $uploads->get_attachment_both();
+			default:
+				return $uploads->get_attachment_url();
+		}
 	}
 
-	private function is_value_format( $format ): bool {
-		return ( ! empty( $this->settings['insert_attachment'] )
-				&& ! empty( $this->settings['value_format'] )
-				&& $format === $this->settings['value_format'] );
+	protected function get_value_format(): string {
+		if ( empty( $this->settings['save_upload'] ) && empty( $this->settings['insert_attachment'] ) ) {
+			return 'url';
+		}
+
+		return $this->settings['value_format'] ?? 'url';
 	}
+
 }

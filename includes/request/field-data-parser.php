@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 
 abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
@@ -38,6 +39,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	/**
 	 * @param $value
+	 * @param $file
 	 * @param $block
 	 * @param $inside_conditional
 	 *
@@ -60,7 +62,13 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 			$this->save_error();
 		}
 
-		return $this->get_response();
+		try {
+			return $this->get_response();
+		} catch ( Sanitize_Value_Exception $exception ) {
+			$this->save_error( $exception->getMessage() );
+		}
+
+		return $this->value;
 	}
 
 	public function parse_value( $value ) {
@@ -89,14 +97,17 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return ( ! $this->inside_conditional && $this->is_required && empty( $this->value ) );
 	}
 
-	protected function save_error() {
-		Error_Handler::instance()->add(
-			$this->type(),
-			array(
-				'name'   => $this->name,
-				'params' => $this->settings,
-			)
+	protected function save_error( string $message = '' ) {
+		$args = array(
+			'name'   => $this->name,
+			'params' => $this->settings,
 		);
+
+		if ( $message ) {
+			$args['message'] = $message;
+		}
+
+		Error_Handler::instance()->add( $this->type(), $args );
 	}
 
 	/**

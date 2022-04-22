@@ -1,30 +1,30 @@
 import {
 	userAccess,
 	valueFormats,
-} from "./options";
+} from './options';
 
 const {
-		  ToolBarFields,
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldWrapper,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+	FieldWrapper,
+	FieldSettingsWrapper,
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-		  useBlockProps,
-		  InspectorControls,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	useBlockProps,
+	InspectorControls,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  SelectControl,
-		  ToggleControl,
-		  PanelBody,
-		  __experimentalNumberControl,
-		  __experimentalInputControl,
-	  } = wp.components;
+	SelectControl,
+	ToggleControl,
+	PanelBody,
+	__experimentalNumberControl,
+	__experimentalInputControl,
+} = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
 
@@ -43,11 +43,13 @@ export default function MediaEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey, attrHelp },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp },
+	} = props;
+
+	const canEditFormat = attributes.save_upload && 'any_user' !== attributes.allowed_user_cap;
 
 	return [
 		<ToolBarFields
@@ -73,25 +75,35 @@ export default function MediaEdit( props ) {
 						} }
 						options={ userAccess }
 					/>
-					{ 'any_user' !== attributes.allowed_user_cap && <ToggleControl
-						key='insert_attachment'
-						label={ __( 'Insert attachment' ) }
-						checked={ attributes.insert_attachment }
-						help={ attrHelp( 'insert_attachment' ) }
+					<ToggleControl
+						key='save_upload'
+						label={ __( 'Save to upload folder' ) }
+						checked={ attributes.save_upload }
 						onChange={ ( newValue ) => {
-							setAttributes( { insert_attachment: Boolean( newValue ) } );
+							setAttributes( { save_upload: Boolean( newValue ) } );
 						} }
-					/> }
-					{ ( 'any_user' !== attributes.allowed_user_cap && attributes.insert_attachment ) && <SelectControl
-						key='value_format'
-						label={ __( 'Field value' ) }
-						labelPosition='top'
-						value={ attributes.value_format }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { value_format: newValue } );
-						} }
-						options={ valueFormats }
-					/> }
+					/>
+					{ canEditFormat && <>
+						<ToggleControl
+							key='insert_attachment'
+							label={ __( 'Insert attachment' ) }
+							checked={ attributes.insert_attachment }
+							help={ attrHelp( 'insert_attachment' ) }
+							onChange={ ( newValue ) => {
+								setAttributes( { insert_attachment: Boolean( newValue ) } );
+							} }
+						/>
+						{ attributes.insert_attachment && <SelectControl
+							key='value_format'
+							label={ __( 'Field value' ) }
+							labelPosition='top'
+							value={ attributes.value_format }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { value_format: newValue } );
+							} }
+							options={ valueFormats }
+						/> }
+					</> }
 					<NumberControl
 						key='max_files'
 						label={ __( 'Maximum allowed files to upload' ) }

@@ -3,14 +3,15 @@
 
 namespace Jet_Form_Builder\Classes\Resources;
 
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 
-class File {
+class File implements Arrayable, Media_Block_Value {
 
-	protected $error;
-	protected $name;
-	protected $size;
-	protected $tmp_name;
-	protected $type;
+	protected $error    = 0;
+	protected $size     = 0;
+	protected $name     = '';
+	protected $tmp_name = '';
+	protected $type     = '';
 
 	/**
 	 * File constructor.
@@ -85,6 +86,41 @@ class File {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_type(): string {
+		return $this->type;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_error(): int {
+		return $this->error;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_name(): string {
+		return $this->name;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_size(): int {
+		return $this->size;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_tmp_name(): string {
+		return $this->tmp_name;
+	}
+
+	/**
 	 * @throws Sanitize_File_Exception
 	 */
 	protected function sanitize_filename() {
@@ -96,13 +132,51 @@ class File {
 		$type            = $validate['type'] ?? false;
 		$proper_filename = $validate['proper_filename'] ?? false;
 
-		if ( $proper_filename && $proper_filename !== $this->name ) {
-			throw new Sanitize_File_Exception( 'Incorrect filename' );
+		if ( $proper_filename ) {
+			$this->name = $proper_filename;
 		}
 
-		if ( ! $ext || ! $type ) {
+		if ( ( ! $type || ! $ext ) && ! current_user_can( 'unfiltered_upload' ) ) {
 			throw new Sanitize_File_Exception( 'Incorrect extension or mime type' );
 		}
 	}
 
+	/**
+	 * @return array
+	 */
+	public function to_array(): array {
+		return array(
+			'name'     => $this->get_name(),
+			'type'     => $this->get_type(),
+			'size'     => $this->get_size(),
+			'error'    => $this->get_error(),
+			'tmp_name' => $this->get_tmp_name(),
+		);
+	}
+
+	/*
+	 * Realisation of
+	 * \Jet_Form_Builder\Classes\Resources\Media_Block_Value
+	 */
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_id(): string {
+		return '';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_url(): string {
+		return $this->get_tmp_name();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_attachment_both(): array {
+		return array();
+	}
 }

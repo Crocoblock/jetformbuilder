@@ -80,6 +80,10 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return jet_fb_handler()->request_handler;
 	}
 
+	function jet_fb_msg_router_manager( $data = array() ): \Jet_Form_Builder\Form_Messages\Manager {
+		return jet_form_builder()->msg_router->get_manager( $data );
+	}
+
 
 	/**
 	 * @return false|\Jet_Form_Builder\Admin\Pages\Base_Page|\Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page

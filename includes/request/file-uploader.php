@@ -24,7 +24,6 @@ class File_Uploader {
 	protected $allowed_user_cap;
 	protected $allowed_mimes;
 	protected $insert_attachment;
-	protected $save_upload;
 
 
 	/**
@@ -38,7 +37,6 @@ class File_Uploader {
 		return $this->upload_files();
 	}
 
-
 	/**
 	 * @throws Upload_Permission_Exception|Upload_Exception
 	 */
@@ -48,7 +46,6 @@ class File_Uploader {
 		$this->allowed_user_cap  = $this->get_allowed_user_cap();
 		$this->insert_attachment = $this->is_insert_attachment();
 		$this->allowed_mimes     = $this->get_mime_types();
-		$this->set_save_upload();
 
 		$this->sanitize_permissions();
 		$this->sanitize_max_files();
@@ -60,10 +57,6 @@ class File_Uploader {
 	 * @throws Upload_Exception
 	 */
 	protected function upload_files() {
-		if ( ! $this->save_upload ) {
-			return $this->file;
-		}
-
 		if ( $this->file instanceof File ) {
 			return $this->upload_file( $this->file );
 		}
@@ -206,19 +199,10 @@ class File_Uploader {
 	}
 
 	/**
-	 * @return File_Uploader
-	 */
-	protected function set_save_upload(): File_Uploader {
-		$this->save_upload = $this->is_save_upload();
-
-		return $this;
-	}
-
-	/**
 	 * @return bool
 	 */
-	protected function is_save_upload(): bool {
-		return ( $this->settings['save_upload'] ?? true );
+	protected function get_return_value(): string {
+		return ( $this->settings['return_value'] ?? Uploaded_File::RETURN_URL );
 	}
 
 	protected function get_allowed_user_cap(): string {

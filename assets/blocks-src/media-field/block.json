@@ -25,10 +25,6 @@
 			"type": "boolean",
 			"default": false
 		},
-		"save_upload": {
-			"type": "boolean",
-			"default": true
-		},
 		"value_format": {
 			"type": "string",
 			"default": ""

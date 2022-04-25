@@ -24,6 +24,8 @@ const {
 	PanelBody,
 	__experimentalNumberControl,
 	__experimentalInputControl,
+	__experimentalToggleGroupControl: ToggleGroupControl,
+	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
 } = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
@@ -49,8 +51,6 @@ export default function MediaEdit( props ) {
 		editProps: { uniqKey, attrHelp },
 	} = props;
 
-	const canEditFormat = attributes.save_upload && 'any_user' !== attributes.allowed_user_cap;
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -75,15 +75,7 @@ export default function MediaEdit( props ) {
 						} }
 						options={ userAccess }
 					/>
-					<ToggleControl
-						key='save_upload'
-						label={ __( 'Save to upload folder' ) }
-						checked={ attributes.save_upload }
-						onChange={ ( newValue ) => {
-							setAttributes( { save_upload: Boolean( newValue ) } );
-						} }
-					/>
-					{ canEditFormat && <>
+					{ 'any_user' !== attributes.allowed_user_cap && <>
 						<ToggleControl
 							key='insert_attachment'
 							label={ __( 'Insert attachment' ) }

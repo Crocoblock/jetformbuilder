@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Classes\Resources;
 
 
-class Uploaded_Collection implements Media_Block_Value {
+class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 
 	/** @var Uploaded_File[]  */
 	protected $uploads;
@@ -55,5 +55,18 @@ class Uploaded_Collection implements Media_Block_Value {
 		}
 
 		return $both;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_file(): string {
+		$files = array();
+
+		foreach ( $this->uploads as $upload ) {
+			$files[] = $upload->get_attachment_file();
+		}
+
+		return implode( ',', $files );
 	}
 }

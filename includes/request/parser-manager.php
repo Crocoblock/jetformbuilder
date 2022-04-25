@@ -92,6 +92,7 @@ class Parser_Manager {
 	 * @param $field
 	 *
 	 * @param $request
+	 * @param $files
 	 * @param $inside_conditional
 	 *
 	 * @throws Parse_Exception

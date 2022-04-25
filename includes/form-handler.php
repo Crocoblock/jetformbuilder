@@ -288,8 +288,6 @@ class Form_Handler {
 			$this->request_handler->get_form_data()
 		);
 
-		var_dump( $_FILES, $this->request_handler->get_files() ); die;
-
 		do_action( 'jet-form-builder/form-handler/before-send', $this );
 
 		$this->add_response_data( $this->action_handler->do_actions() );

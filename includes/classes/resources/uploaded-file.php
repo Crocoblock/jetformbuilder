@@ -3,8 +3,7 @@
 
 namespace Jet_Form_Builder\Classes\Resources;
 
-
-class Uploaded_File implements Media_Block_Value {
+class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 	protected $file;
 	protected $url;
@@ -148,5 +147,12 @@ class Uploaded_File implements Media_Block_Value {
 			'id'  => $this->get_attachment_id(),
 			'url' => $this->get_attachment_url(),
 		);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attachment_file(): string {
+		return $this->get_file();
 	}
 }

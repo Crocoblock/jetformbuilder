@@ -39,6 +39,8 @@ class Media_Field_Parser extends Field_Data_Parser {
 			throw new Sanitize_Value_Exception( $exception->getMessage() );
 		}
 
+		jet_fb_request_handler()->update_file( $this->name, $uploads );
+
 		switch ( $this->get_value_format() ) {
 			case 'id':
 				return $uploads->get_attachment_id();

@@ -91,7 +91,7 @@ class Request_Handler {
 			$count_collection = count( $files['name'] );
 			$collection       = array();
 
-			for ( $index = 0; $index < $count_collection; $index++ ) {
+			for ( $index = 0; $index < $count_collection; $index ++ ) {
 				$file = array();
 
 				foreach ( self::FILE_PROPERTIES as $property ) {
@@ -167,11 +167,11 @@ class Request_Handler {
 		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
 
 		Live_Form::instance()
-				->set_form_id( jet_fb_handler()->get_form_id() )
-				->set_specific_data_for_render();
+				 ->set_form_id( jet_fb_handler()->get_form_id() )
+				 ->set_specific_data_for_render();
 
 		if ( 'render' === Live_Form::instance()->spec_data->load_nonce
-			&& ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() )
+			 && ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() )
 		) {
 			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
 		}
@@ -218,6 +218,12 @@ class Request_Handler {
 	 */
 	public function get_files(): array {
 		return $this->files;
+	}
+
+	public function update_file( string $name, $file ): Request_Handler {
+		$this->files[ $name ] = $file;
+
+		return $this;
 	}
 
 	/**

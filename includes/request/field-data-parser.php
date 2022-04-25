@@ -104,7 +104,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		);
 
 		if ( $message ) {
-			$args['message'] = $message;
+			$args['message'] = jet_fb_msg_router_manager()->get_message( $message );
 		}
 
 		Error_Handler::instance()->add( $this->type(), $args );

@@ -95,7 +95,7 @@ class Manager {
 			return $this->_types[ $status ]['value'] ?? $this->_types[ $status ];
 		}
 
-		return 'Undefined error';
+		return $info->get_raw_message();
 	}
 
 	public function get_messages() {

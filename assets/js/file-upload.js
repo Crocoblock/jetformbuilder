@@ -54,81 +54,35 @@
 			},
 
 			deleteUpload: function () {
-				var $this = $( this ),
+				const $this = $( this ),
 					$file = $this.closest( '.jet-form-builder-file-upload__file' ),
-					$upload = $this.closest( '.jet-form-builder-file-upload' ),
-					$value = $upload.find( '.jet-form-builder-file-upload__value' ),
-					val = $value.val(),
-					fileURL = $file.data( 'file' ),
-					fileID = $file.data( 'id' ),
-					$errors = $upload.find( '.jet-form-builder-file-upload__errors' ),
-					format = $file.data( 'format' );
+					$upload = $this.closest( '.jet-form-builder-file-upload' );
 
-				if ( ! $errors.hasClass( 'is-hidden' ) ) {
-					$errors.html( '' ).addClass( 'is-hidden' );
+				const $value = $this.siblings( '.jet-form-builder-file-upload__value' );
+				let fileValue = $value.val();
+
+				if ( ! fileValue ) {
+					const fileInput = $upload.find( '.jet-form-builder-file-upload__input[type="file"]' );
+					JetFormBuilderFileUpload.removeFileFromFileList( fileInput[0], $this.data( 'index' ) );
 				}
 
-				if ( ! val ) {
-					return;
-				}
-
-				val = JSON.parse( val );
-
-				if ( fileID ) {
-					fileID = parseInt( fileID, 10 );
-				}
-
-				if ( val.constructor === Array ) {
-
-					var index = - 1;
-
-					switch ( format ) {
-
-						case 'url':
-							index = val.indexOf( fileURL );
-							break;
-
-						case 'id':
-
-							for ( var i = 0; i < val.length; i ++ ) {
-								val[ i ] = parseInt( val[ i ], 10 );
-							}
-
-							index = val.indexOf( fileID );
-							break;
-
-						case 'both':
-
-							for ( var i = 0; i < val.length; i ++ ) {
-								if ( fileURL === val[ i ].url ) {
-									index = i;
-								}
-							}
-
-							break;
-					}
-
-					if ( 0 <= index ) {
-						val.splice( index, 1 );
-					}
-
-					if ( ! val[ 0 ] ) {
-						val = '';
-					}
-
-				} else {
-					val = '';
-				}
-
-				if ( val ) {
-					val = JSON.stringify( val );
-				}
-
-				$value.trigger( 'jet-form-builder/on-remove-media-item', [ fileURL, fileID ] );
+				//$value.trigger( 'jet-form-builder/on-remove-media-item', [ fileValue ] );
 
 				$file.remove();
-				$value.val( val ).trigger( 'change.JetFormBuilderMain' );
+				//$value.val( val ).trigger( 'change.JetFormBuilderMain' );
+			},
 
+			removeFileFromFileList( input, index ) {
+				const dt = new DataTransfer();
+				const { files } = input;
+
+				for ( let i = 0; i < files.length; i ++ ) {
+					if ( +index !== i ) {
+						dt.items.add( files[ i ] );
+					}
+				}
+
+				input.files = dt.files; // Assign the updates list
 			},
 
 			issetMessage: function ( formId, status ) {
@@ -147,17 +101,15 @@
 				return message || unknown;
 			},
 
-			getFilePreview: function ( file, fileWrapper ) {
+			getFilePreview: function ( file, fileWrapper, index ) {
 				const url = URL.createObjectURL( file );
-				let template = fileWrapper
-					.closest( '.field-type-media-field' )
-					.find( '.jet-form-builder__preview-template' )
-					.html();
+				let template = fileWrapper.closest( '.field-type-media-field' ).find( '.jet-form-builder__preview-template' ).html();
 
 				template = template.replace( '%file_url%', url );
+				template = template.replace( '%file_index%', +index );
 
 				if ( /^image\//.test( file.type ) ) {
-					template = template.replace( '<!-- preview -->', `<img src="${ url }" alt="${ file.name }">` )
+					template = template.replace( '<!-- preview -->', `<img src="${ url }" alt="${ file.name }">` );
 				}
 
 				return template;
@@ -174,8 +126,8 @@
 
 				$errors.html( '' ).addClass( 'is-hidden' );
 
-				for ( const file of files ) {
-					const previewHtml = self.getFilePreview( file, wrapper );
+				for ( const [ index, file ] of Object.entries( files ) ) {
+					const previewHtml = self.getFilePreview( file, wrapper, index );
 
 					previews.append( $( previewHtml ) );
 				}

@@ -95,7 +95,7 @@ abstract class Base {
 
 		$args = $this->block_type->block_attrs;
 
-		$label_wrapper = new class {
+		$label_wrapper = new class() {
 			use Attributes_Trait;
 		};
 		$label_text    = clone $label_wrapper;

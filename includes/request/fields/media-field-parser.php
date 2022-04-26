@@ -52,7 +52,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 	}
 
 	protected function get_value_format(): string {
-		if ( empty( $this->settings['save_upload'] ) && empty( $this->settings['insert_attachment'] ) ) {
+		if ( empty( $this->settings['insert_attachment'] ) ) {
 			return 'url';
 		}
 

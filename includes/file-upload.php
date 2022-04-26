@@ -39,15 +39,7 @@ class File_Upload {
 	 */
 	public function get_files_data_args( $args ) {
 
-		$data_args = array(
-			'max_files'         => 1,
-			'insert_attachment' => false,
-			'value_format'      => 'url',
-		);
 
-		foreach ( $data_args as $key => $value ) {
-			$data_args[ $key ] = ! empty( $args[ $key ] ) ? $args[ $key ] : $value;
-		}
 
 		return sprintf( ' data-args="%s"', htmlspecialchars( wp_json_encode( $data_args ) ) );
 	}
@@ -253,50 +245,6 @@ class File_Upload {
 
 		$files = array();
 		$value = ! empty( $field['default'] ) ? $field['default'] : array();
-
-		if ( ! is_array( $value ) ) {
-			if ( 'both' !== $format ) {
-				$value = explode( ',', str_replace( ', ', ',', $value ) );
-			} else {
-				if ( false !== strpos( $value, '{' ) ) {
-					$value = json_decode( wp_unslash( $value ), true );
-				} else {
-					return $files;
-				}
-			}
-		}
-
-		if ( 'both' === $format ) {
-			$value = isset( $value['id'] ) ? array( $value ) : $value;
-		}
-
-		foreach ( $value as $val ) {
-			switch ( $format ) {
-				case 'id':
-					$files[] = array(
-						'url'        => wp_get_attachment_url( $val ),
-						'attachment' => $val,
-					);
-					break;
-
-				case 'url':
-					$files[] = array(
-						'url' => $val,
-					);
-					break;
-
-				case 'both':
-					if ( is_array( $val ) && isset( $val['url'] ) && isset( $val['id'] ) ) {
-						$files[] = array(
-							'url'        => $val['url'],
-							'attachment' => $val['id'],
-						);
-					}
-					break;
-			}
-		}
-
-		return $files;
 	}
 
 	/**
@@ -377,72 +325,6 @@ class File_Upload {
 	 * @return [type]        [description]
 	 */
 	public function get_result_value( $field = array(), $files = array() ) {
-
-		if ( ! empty( $field['insert_attachment'] ) ) {
-			$format = ! empty( $field['value_format'] ) ? $field['value_format'] : 'url';
-		} else {
-			$format = 'url';
-		}
-
-		if ( empty( $files ) ) {
-			$files = $this->get_files_from_field( $field, $format );
-		}
-
-		if ( empty( $files ) ) {
-			return '';
-		}
-
-		$limit  = ! empty( $field['max_files'] ) ? absint( $field['max_files'] ) : 1;
-		$limit  = $limit ? $limit : 1;
-		$result = array();
-
-		foreach ( $files as $file ) {
-
-			if ( isset( $file['attachment'] ) && ! is_wp_error( $file['attachment'] ) ) {
-				$id = $file['attachment'];
-			} else {
-				$id = false;
-			}
-
-			$url = ! empty( $file['url'] ) ? $file['url'] : false;
-
-			switch ( $format ) {
-				case 'id':
-					if ( 1 < $limit ) {
-						$result[] = $id;
-					} else {
-						$result = $id;
-					}
-					break;
-
-				case 'url':
-					if ( 1 < $limit ) {
-						$result[] = $url;
-					} else {
-						$result = $url;
-					}
-					break;
-
-				case 'both':
-					if ( $url && $id ) {
-						if ( 1 < $limit ) {
-							$result[] = array(
-								'id'  => $id,
-								'url' => $url,
-							);
-						} else {
-							$result = array(
-								'id'  => $id,
-								'url' => $url,
-							);
-						}
-					}
-					break;
-			}
-		}
-
-		return is_array( $result ) ? array_filter( $result ) : $result;
-
 	}
 
 	/**

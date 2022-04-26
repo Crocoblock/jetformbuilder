@@ -23,6 +23,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base extends Base_Module implements Repository_Item_Instance_Trait {
 
+	const PRESET_RAW     = 'raw';
+	const PRESET_ARRAY   = 'array';
+	const PRESET_EXACTLY = 'exactly';
+
 	/**
 	 * @var Controls_Manager
 	 */
@@ -235,13 +239,15 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$format = $this->expected_preset_type()[0] ?? false;
 
 		switch ( $format ) {
-			case 'array':
+			case self::PRESET_EXACTLY:
+				return $value;
+			case self::PRESET_ARRAY:
 				if ( ! is_array( $value ) ) {
 					$value = array( $value );
 				}
 
 				return array_map( 'strval', $value );
-			case 'raw':
+			case self::PRESET_RAW:
 			default:
 				if ( is_array( $value ) ) {
 					foreach ( $value as $item ) {
@@ -629,7 +635,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @return array
 	 */
 	public function expected_preset_type(): array {
-		return array( 'raw' );
+		return array( self::PRESET_RAW );
 	}
 
 

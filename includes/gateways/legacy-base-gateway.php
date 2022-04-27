@@ -43,12 +43,11 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * Process status notification and enqueue message
 	 *
-	 * @deprecated 2.0.0
-	 *
 	 * @param string $type [description]
 	 *
 	 * @return void [type]           [description]
 	 * @throws Action_Exception
+	 * @deprecated 2.0.0
 	 */
 	public function process_status( $type = 'success' ) {
 
@@ -60,10 +59,10 @@ abstract class Legacy_Base_Gateway {
 			return;
 		}
 
-		$all = jet_fb_action_handler()->set_form_id( $this->data['form_id'] )
-									  ->add_request( $this->data['form_data'] )
-									  ->unregister_action( 'redirect_to_page' )
-									  ->get_all();
+		$all = jet_fb_action_handler()->add_request( $this->data['form_data'] )
+									->set_form_id( $this->data['form_id'] )
+									->unregister_action( 'redirect_to_page' )
+									->get_all();
 
 		if ( empty( $all ) ) {
 			return;
@@ -118,9 +117,8 @@ abstract class Legacy_Base_Gateway {
 	}
 
 	/**
-	 * @deprecated 2.0.0
-	 *
 	 * @return $this
+	 * @deprecated 2.0.0
 	 */
 	public function set_gateway_from_post_meta() {
 		$row_data = $this->get_form_data();
@@ -132,18 +130,16 @@ abstract class Legacy_Base_Gateway {
 	}
 
 	/**
-	 * @deprecated 2.0.0
-	 *
 	 * @return false
+	 * @deprecated 2.0.0
 	 */
 	protected function query_order_token( $order_id, $form_id ) {
 		return false;
 	}
 
 	/**
-	 * @deprecated 2.0.0
-	 *
 	 * @throws Gateway_Exception
+	 * @deprecated 2.0.0
 	 */
 	public function set_order_token() {
 		$this->order_token = $this->query_order_token( $this->order_id, jet_fb_handler()->form_id );
@@ -317,10 +313,9 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * @param Action_Handler $action_handler
 	 *
-	 * @deprecated 2.0.0
-	 *
 	 * @return void
 	 * @throws Gateway_Exception
+	 * @deprecated 2.0.0
 	 */
 	public function after_actions( Action_Handler $action_handler ) {
 	}
@@ -328,9 +323,8 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * Prevent unnecessary notifications processing before form is send.
 	 *
-	 * @deprecated 2.0.0
-	 *
 	 * @return void [description]
+	 * @deprecated 2.0.0
 	 */
 	public function before_actions() {
 		$this->set_form_meta( GM::instance()->gateways() );

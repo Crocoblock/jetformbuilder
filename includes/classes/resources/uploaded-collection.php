@@ -57,6 +57,11 @@ class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 		return $both;
 	}
 
+	/*
+	 * Realisation of
+	 * \Jet_Form_Builder\Classes\Resources\Uploaded_File_Path
+	 */
+
 	/**
 	 * @return string
 	 */

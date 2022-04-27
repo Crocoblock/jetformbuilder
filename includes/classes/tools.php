@@ -389,6 +389,12 @@ class Tools {
 	}
 
 	public static function decode_json( $json ) {
+		if ( is_array( $json ) ) {
+			foreach ( $json as $key => $row ) {
+				$json[] = static::decode_json( $row );
+			}
+			return $json;
+		}
 		if ( defined( 'JSON_INVALID_UTF8_IGNORE' ) ) {
 			return json_decode( $json, true, 512, JSON_INVALID_UTF8_IGNORE );
 		}

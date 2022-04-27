@@ -11,17 +11,6 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	protected $attachment_id = '';
 
 	/**
-	 * Uploaded_File constructor.
-	 *
-	 * @param File $file
-	 *
-	 * @throws Upload_Exception
-	 */
-	public function __construct( File $file ) {
-		$this->upload( $file );
-	}
-
-	/**
 	 * @param File $file
 	 *
 	 * @throws Upload_Exception
@@ -63,9 +52,7 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			throw new Upload_Exception( $upload['error'] );
 		}
 
-		$this->file = $upload['file'];
-		$this->url  = $upload['url'];
-		$this->type = $upload['type'];
+		$this->set_from_array( $upload );
 	}
 
 	/**
@@ -90,6 +77,23 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		}
 
 		$this->set_attachment_id( (string) $attachment );
+	}
+
+	public function set_from_array( array $upload ): Uploaded_File {
+		if ( isset( $upload['file'] ) ) {
+			$this->file = $upload['file'];
+		}
+		if ( isset( $upload['url'] ) ) {
+			$this->url = $upload['url'];
+		}
+		if ( isset( $upload['type'] ) ) {
+			$this->type = $upload['type'];
+		}
+		if ( isset( $upload['id'] ) ) {
+			$this->set_attachment_id( (string) $upload['id'] );
+		}
+
+		return $this;
 	}
 
 	public function set_attachment_id( string $attachment_id ): Uploaded_File {
@@ -148,6 +152,11 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			'url' => $this->get_attachment_url(),
 		);
 	}
+
+	/*
+	 * Realisation of
+	 * \Jet_Form_Builder\Classes\Resources\Uploaded_File_Path
+	 */
 
 	/**
 	 * @return string

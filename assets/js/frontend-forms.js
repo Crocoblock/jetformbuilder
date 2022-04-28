@@ -970,7 +970,7 @@
 
 				fieldNames.forEach( name => {
 					const fieldElement = scope.find( `[data-field-name="${ name }"]` );
-					
+
 					let fieldValue = applyFilters(
 						'jet.fb.macro.field.value',
 						false,
@@ -1513,6 +1513,23 @@
 
 			$number.text( val );
 		},
+		getRecalculateFields: function ( $form ) {
+			$form.find(
+				'.jet-form-builder__calculated-field, .jet-form-builder__calculated-field--child'
+			).each( function() {
+
+				let $childCalculatedField = $( this ),
+					val                   = JetFormBuilder.calculateValue( $childCalculatedField )
+
+				if ( ! val ) {
+					val = 0;
+				}
+
+				JetFormBuilder.setCalculatedValue( val, $childCalculatedField );
+			} );
+
+			return true;
+		},
 
 		reloadSubmitForm: function( event ) {
 			const $target = $( event.target );
@@ -1533,7 +1550,13 @@
 			event.preventDefault();
 
 			Promise.all(
-				applyFilters( 'jet.fb.submit.reload.promises', [ true ], event )
+				applyFilters(
+					'jet.fb.submit.reload.promises',
+					[
+						JetFormBuilder.getRecalculateFields( $target )
+					],
+					event
+				)
 			).then( () => event.target.submit() ).catch( () => {
 				$target.removeClass( 'is-loading' );
 				$target.find( '.jet-form-builder__submit' ).attr( 'disabled', false );
@@ -1639,7 +1662,15 @@
 			$this.attr( 'disabled', true );
 
 			Promise.all(
-				applyFilters( 'jet.fb.submit.ajax.promises', [ true ], $form, $this, data )
+				applyFilters(
+					'jet.fb.submit.ajax.promises',
+					[
+						JetFormBuilder.getRecalculateFields( $form )
+					],
+					$form,
+					$this,
+					data
+				)
 			).then( runAjaxForm ).catch( () => {
 				removeLoading();
 				doAction( 'jet.fb.on.prevented.submit.ajax', $this, $form, data );

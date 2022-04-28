@@ -209,7 +209,6 @@ class Execution_Builder {
 	 * @param Base_Db_Model $model
 	 *
 	 * @return string
-	 *
 	 */
 
 	public function create_table_schema( Base_Db_Model $model ) {
@@ -217,7 +216,7 @@ class Execution_Builder {
 		$table           = $model->table();
 		$columns         = $model->schema();
 		$charset_collate = $model->schema_charset_collate();
-		$engine          = $model->schema_engine();
+		$engine          = apply_filters( 'jet-form-builder/table-engine', $model->schema_engine(), $model );
 
 		if ( ! empty( $engine ) ) {
 			$engine = "ENGINE={$engine}";

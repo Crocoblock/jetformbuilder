@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.2
+* FIX: Redirect to Page action with URL args
+
 ## 2.0.1
 * FIX: Rendering form in a shortcode
 * Tweak: Empty table notice

@@ -43,8 +43,9 @@ class General_Preset extends Base_Preset {
 			if ( ! $this->get_source() instanceof Base_Source || ! $this->get_source()->src() ) {
 				return true;
 			}
+			$sanitize = $this->get_source()->on_sanitize();
 
-			return $this->get_source()->on_sanitize();
+			return apply_filters( 'jet-form-builder/preset-sanitize', $sanitize, $this->get_source() );
 
 		} catch ( Preset_Exception $exception ) {
 			return true;

@@ -380,7 +380,6 @@
 }
 
 
-
 .jet-form-builder__field-wrap.range-wrap .components-input-control__backdrop[aria-hidden="true"] {
 	border-width: 0;
 }
@@ -467,6 +466,7 @@
 	&.width-60 {
 		width: 60vw;
 	}
+
 	&__actions {
 		position: sticky;
 		bottom: 0;
@@ -477,9 +477,11 @@
 		border-top: 1px solid #ddd;
 		z-index: 100;
 	}
+
 	&__content {
 		padding-bottom: 2em;
 	}
+
 	.components-modal__content {
 		padding-bottom: unset;
 	}
@@ -572,11 +574,6 @@ select.components-select-control__input.components-select-control__input.compone
 	display: block;
 	padding: unset;
 	border-top: unset;
-}
-
-.jet-forms-checkbox-field p.components-base-control__help {
-	margin-top: -33px;
-	margin-left: 15vw;
 }
 
 .editor-styles-wrapper .wp-block.wp-block.wp-block {
@@ -767,6 +764,36 @@ div.components-modal__screen-overlay {
 			content: ' *';
 			color: red;
 			font-weight: 700;
+		}
+	}
+}
+
+$sizes: ("xs":320px, "sm":576px, "md":768px, "lg":992px, "xl":1200px);
+
+@mixin media($minmax, $media) {
+	@each $size, $resolution in $sizes {
+		@if $media == $size {
+			@media only screen and (#{$minmax}-width: $resolution) {
+				@content;
+			}
+		}
+	}
+}
+
+@include media("min", "xl") {
+	.components-base-control {
+		&.components-checkbox-control.jet-forms-checkbox-field {
+			position: relative;
+
+			.components-base-control__help {
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+
+			&:first-child .components-base-control__help {
+				margin-top: unset;
+			}
 		}
 	}
 }

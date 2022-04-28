@@ -26,6 +26,10 @@ class Csrf_Token_Model extends Base_Db_Model {
 		);
 	}
 
+	public function schema_engine() {
+		return self::MyISAM;
+	}
+
 	/**
 	 * @return array
 	 */

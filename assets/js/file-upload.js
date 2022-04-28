@@ -56,33 +56,47 @@
 			deleteUpload: function () {
 				const $this = $( this ),
 					$file = $this.closest( '.jet-form-builder-file-upload__file' ),
-					$upload = $this.closest( '.jet-form-builder-file-upload' );
+					$upload = $this.closest( '.jet-form-builder-file-upload' ),
+					// main input
+					fileInput = $upload.find( '.jet-form-builder-file-upload__input[type="file"]' ),
+					// hidden input with preset
+					$value = $this.siblings( '.jet-form-builder-file-upload__value' );
 
-				const $value = $this.siblings( '.jet-form-builder-file-upload__value' );
 				let fileValue = $value.val();
 
-				if ( ! fileValue ) {
-					const fileInput = $upload.find( '.jet-form-builder-file-upload__input[type="file"]' );
-					JetFormBuilderFileUpload.removeFileFromFileList( fileInput[0], $this.data( 'index' ) );
+				try {
+					fileValue = JSON.parse( fileValue );
+				} catch ( e ) {
+					fileValue = {};
 				}
 
-				//$value.trigger( 'jet-form-builder/on-remove-media-item', [ fileValue ] );
+				if ( ! Object.keys( fileValue ).length ) {
+					fileValue = JetFormBuilderFileUpload.removeFileFromFileList( fileInput[0], $this.data( 'index' ) );
+
+					$file.trigger( 'change.JetFormBuilderMain' );
+				}
+
+				$file.trigger( 'jet-form-builder/on-remove-media-item', [ fileValue ] );
 
 				$file.remove();
-				//$value.val( val ).trigger( 'change.JetFormBuilderMain' );
 			},
 
 			removeFileFromFileList( input, index ) {
 				const dt = new DataTransfer();
 				const { files } = input;
+				let removedFile;
 
 				for ( let i = 0; i < files.length; i ++ ) {
 					if ( +index !== i ) {
 						dt.items.add( files[ i ] );
+					} else {
+						removedFile = files[ i ];
 					}
 				}
 
 				input.files = dt.files; // Assign the updates list
+
+				return removedFile;
 			},
 
 			issetMessage: function ( formId, status ) {
@@ -117,12 +131,16 @@
 
 			processUpload: function ( event ) {
 				const self = JetFormBuilderFileUpload;
+				const { files } = event.target;
 
 				const wrapper = $( event.target ).closest( '.jet-form-builder-file-upload' ),
-					files = event.target.files,
 					$errors = wrapper.find( '.jet-form-builder-file-upload__errors' ),
-					formId = + wrapper.closest( 'form' ).data( 'form-id' ),
-					previews = wrapper.find( '.jet-form-builder-file-upload__files' );
+					previews = wrapper.find( '.jet-form-builder-file-upload__files' ),
+					settings = previews.data( 'args' );
+
+				if ( ! ( settings.max_files > 1 ) ) {
+					previews.find( '.jet-form-builder-file-upload__file' ).remove();
+				}
 
 				$errors.html( '' ).addClass( 'is-hidden' );
 
@@ -131,21 +149,6 @@
 
 					previews.append( $( previewHtml ) );
 				}
-
-				/*try {
-				 self.uploadFiles( files, event.target, formId );
-				 } catch ( error ) {
-
-				 if ( self.issetMessage( formId, error ) ) {
-				 $errors.html( self.getMessage( formId, error ) ).removeClass( 'is-hidden' );
-				 } else {
-				 $errors.html( error ).removeClass( 'is-hidden' );
-				 }
-
-				 event.target.value = '';
-
-				 }*/
-
 			},
 
 			lockButtons: function ( $upload ) {

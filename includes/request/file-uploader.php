@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Request;
 
+use Jet_Form_Builder\Blocks\Types\Media_Field;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
@@ -10,7 +11,6 @@ use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Permission_Exception;
-use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 
 class File_Uploader {
 
@@ -20,7 +20,9 @@ class File_Uploader {
 	protected $file;
 
 	/** @var Uploaded_File|Uploaded_File[] */
-	protected $preset;
+	protected $preset = array();
+
+	protected $default_value;
 
 	protected $max_files;
 	protected $max_size;
@@ -35,31 +37,19 @@ class File_Uploader {
 	 * @throws Upload_Permission_Exception
 	 */
 	public function upload() {
-		$this->set_vars();
+		$this->sanitize_preset();
 		$this->sanitize();
 
 		return $this->upload_files();
-	}
-
-	protected function set_vars() {
-		$this->max_files         = $this->get_max_files();
-		$this->max_size          = $this->get_max_size();
-		$this->allowed_user_cap  = $this->get_allowed_user_cap();
-		$this->insert_attachment = $this->is_insert_attachment();
-		$this->allowed_mimes     = $this->get_mime_types();
 	}
 
 	/**
 	 * @throws Upload_Permission_Exception|Upload_Exception
 	 */
 	protected function sanitize() {
-		try {
-			$this->sanitize_permissions();
-			$this->sanitize_max_files();
-			$this->sanitize_files();
-		} catch ( Skip_Exception $exception ) {
-			return;
-		}
+		$this->sanitize_permissions();
+		$this->sanitize_max_files();
+		$this->sanitize_files();
 	}
 
 	/**
@@ -74,7 +64,7 @@ class File_Uploader {
 			return $this->upload_file( $this->file );
 		}
 
-		$uploaded = array();
+		$uploaded = $this->preset;
 
 		/** @var File $file */
 		foreach ( $this->file as $file ) {
@@ -189,13 +179,13 @@ class File_Uploader {
 	protected function count_files(): int {
 		$counter = 0;
 		if ( $this->file instanceof File ) {
-			++$counter;
+			++ $counter;
 		} elseif ( $this->file instanceof File_Collection ) {
 			$counter += count( $this->file );
 		}
 
 		if ( $this->preset instanceof Uploaded_File ) {
-			++$counter;
+			++ $counter;
 		} elseif ( is_array( $this->preset ) ) {
 			$counter += count( $this->preset );
 		}
@@ -239,12 +229,56 @@ class File_Uploader {
 	 * @param File|File_Collection $file
 	 *
 	 * @return File_Uploader
-	 * @throws Upload_Exception
 	 */
 	public function set_file( $file ): File_Uploader {
 		$this->file = $file;
 
 		return $this;
+	}
+
+	protected function sanitize_preset(): File_Uploader {
+		if ( empty( $this->preset ) ) {
+			return $this;
+		}
+		if ( ! empty( $this->file ) && $this->is_must_be_single() ) {
+			return $this->clear_preset();
+		}
+
+		return $this->compare_preset();
+	}
+
+	protected function compare_preset(): File_Uploader {
+		if ( $this->preset instanceof Uploaded_File ) {
+			if ( ! $this->isset_in_preset( $this->preset ) ) {
+				return $this->clear_preset();
+			}
+
+			return $this;
+		}
+
+		foreach ( $this->preset as $index => $value ) {
+			if ( ! $this->isset_in_preset( $value ) ) {
+				unset( $this->preset[ $index ] );
+			}
+		}
+
+		return $this;
+	}
+
+	protected function isset_in_preset( Uploaded_File $preset ): bool {
+		$value = $this->default_value();
+
+		foreach ( $value as $item ) {
+			if (
+				( $preset->get_url() === $item['url'] )
+				&&
+				( ! isset( $item['id'] ) || $preset->get_attachment_id() === (string) $item['id'] )
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function set_preset( $preset ): File_Uploader {
@@ -262,6 +296,10 @@ class File_Uploader {
 		$files = isset( $preset[0] ) ? $preset : array( $preset );
 
 		foreach ( $files as $index => $file ) {
+			if ( ! is_array( $file ) ) {
+				unset( $files[ $index ] );
+				continue;
+			}
 			$files[ $index ] = ( new Uploaded_File() )->set_from_array( $file );
 		}
 
@@ -271,21 +309,41 @@ class File_Uploader {
 	}
 
 	/**
-	 * @throws Skip_Exception
-	 */
-	protected function is_file_valid() {
-		if ( ! ( $this->file instanceof File ) && ! ( $this->file instanceof File_Collection ) ) {
-			throw new Skip_Exception( 'internal_error' );
-		}
-	}
-
-	/**
 	 * @param array $settings
 	 *
 	 * @return File_Uploader
 	 */
 	public function set_settings( array $settings ): File_Uploader {
 		$this->settings = $settings;
+
+		$this->max_files         = $this->get_max_files();
+		$this->max_size          = $this->get_max_size();
+		$this->allowed_user_cap  = $this->get_allowed_user_cap();
+		$this->insert_attachment = $this->is_insert_attachment();
+		$this->allowed_mimes     = $this->get_mime_types();
+
+		return $this;
+	}
+
+	protected function default_value(): array {
+		if ( ! empty( $this->default_value ) ) {
+			return $this->default_value;
+		}
+
+		/** @var Media_Field $media */
+		$media = jet_form_builder()->blocks->get_field_by_name( 'media-field' );
+
+		// the exception will never be thrown
+		$media->set_block_data( $this->settings );
+		$media->set_preset();
+
+		$this->default_value = $media->block_attrs['default'];
+
+		return $this->default_value;
+	}
+
+	public function clear_preset(): File_Uploader {
+		$this->preset = array();
 
 		return $this;
 	}

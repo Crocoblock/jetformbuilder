@@ -391,7 +391,7 @@ class Tools {
 	public static function decode_json( $json ) {
 		if ( is_array( $json ) ) {
 			foreach ( $json as $key => $row ) {
-				$json[] = static::decode_json( $row );
+				$json[ $key ] = static::decode_json( $row );
 			}
 			return $json;
 		}

@@ -44,7 +44,6 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			$file,
 			array(
 				'test_form' => false,
-				'test_type' => false,
 			)
 		);
 

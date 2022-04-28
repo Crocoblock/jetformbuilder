@@ -189,8 +189,6 @@ class Request_Handler {
 		$this->raw_request = $this->get_raw_request();
 		$this->files       = $this->get_raw_files();
 
-		throw new Request_Exception( 'debug', $this->raw_request );
-
 		$request = Parser_Manager::instance()->get_values_fields(
 			$this->_fields,
 			$this->raw_request,

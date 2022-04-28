@@ -182,16 +182,16 @@ class Form_Builder {
 			return '';
 		}
 
-		if ( ! $this->preset()->general()->sanitize_source() ) {
+		if ( ! jet_fb_preset( $this->form_id )->general()->sanitize_source() ) {
 			echo 'You are not permitted to submit this form!';
 
 			return '';
 		}
 
 		$blocks = Live_Form::instance()
-		                   ->set_form_id( $this->form_id )
-		                   ->set_specific_data_for_render( $this->args )
-		                   ->setup_fields();
+							->set_form_id( $this->form_id )
+							->set_specific_data_for_render( $this->args )
+							->setup_fields();
 
 		$form = $this->start_form();
 
@@ -238,12 +238,6 @@ class Form_Builder {
 		Preset_Manager::clear();
 
 		return $form;
-	}
-
-	public function preset() {
-		Preset_Manager::instance()->set_form_id( $this->form_id );
-
-		return Preset_Manager::instance();
 	}
 
 }

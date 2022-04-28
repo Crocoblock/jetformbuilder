@@ -25,13 +25,10 @@ class Media_Field_Parser extends Field_Data_Parser {
 			return false;
 		}
 
-		try {
-			$uploader = ( new File_Uploader() )
-				->set_settings( $this->settings )
-				->set_file( $this->file );
-		} catch ( Upload_Exception $exception ) {
-			return false;
-		}
+		$uploader = ( new File_Uploader() )
+			->set_settings( $this->settings )
+			->set_preset( Tools::decode_json( $this->value ) )
+			->set_file( $this->file );
 
 		try {
 			/** @var Media_Block_Value $uploads */

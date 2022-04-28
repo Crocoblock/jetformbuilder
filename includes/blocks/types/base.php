@@ -260,6 +260,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	protected function get_default_from_preset( $attributes = array() ) {
+		jet_fb_preset( Live_Form::instance()->form_id );
+
 		if ( ! $this->parent_repeater_name() ) {
 			return $this->get_field_value( $attributes );
 		}

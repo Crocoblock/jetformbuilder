@@ -40,6 +40,8 @@ class Preset_Manager {
 	private $_preset_types = array();
 	private $_source_types;
 
+	private $general_initialized = false;
+
 
 	protected function __construct() {
 		$this->register_preset_types();
@@ -48,14 +50,20 @@ class Preset_Manager {
 		do_action( 'jet-form-builder/after-init/preset-manager' );
 	}
 
-	public function set_form_id( $form_id ) {
+	public function set_form_id( $form_id ): Preset_Manager {
+		if ( ! $form_id || $this->general_initialized ) {
+			return $this;
+		}
 		$this->general()->set_init_data( $this->general()->preset_source( $form_id ) );
 
 		try {
 			$this->general()->get_source();
 		} catch ( Preset_Exception $exception ) {
-			return;
+			// do nothing
 		}
+		$this->general_initialized = true;
+
+		return $this;
 	}
 
 	/**

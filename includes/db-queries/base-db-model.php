@@ -8,8 +8,8 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';
-	const InnoDB = 'InnoDB';
-	const MyISAM = 'MyISAM';
+	const InnoDB          = 'InnoDB';
+	const MyISAM          = 'MyISAM';
 
 	protected static $prefix = self::DB_TABLE_PREFIX;
 

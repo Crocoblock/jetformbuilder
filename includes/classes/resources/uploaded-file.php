@@ -35,11 +35,6 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	 * @throws Upload_Exception
 	 */
 	protected function upload_file( array $file ) {
-		/**
-		 * We do not need an extra check `test_type`, since we performed it before
-		 *
-		 * @see \Jet_Form_Builder\Classes\Resources\File::sanitize_filename
-		 */
 		$upload = wp_handle_upload(
 			$file,
 			array(

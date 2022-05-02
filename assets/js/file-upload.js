@@ -54,49 +54,10 @@
 			},
 
 			deleteUpload: function () {
-				const $this = $( this ),
-					$file = $this.closest( '.jet-form-builder-file-upload__file' ),
-					$upload = $this.closest( '.jet-form-builder-file-upload' ),
-					// main input
-					fileInput = $upload.find( '.jet-form-builder-file-upload__input[type="file"]' ),
-					// hidden input with preset
-					$value = $this.siblings( '.jet-form-builder-file-upload__value' );
+				const action = new DeleteAction( this );
 
-				let fileValue = $value.val();
-
-				try {
-					fileValue = JSON.parse( fileValue );
-				} catch ( e ) {
-					fileValue = {};
-				}
-
-				if ( ! Object.keys( fileValue ).length ) {
-					fileValue = JetFormBuilderFileUpload.removeFileFromFileList( fileInput[0], $this.data( 'index' ) );
-
-					$file.trigger( 'change.JetFormBuilderMain' );
-				}
-
-				$file.trigger( 'jet-form-builder/on-remove-media-item', [ fileValue ] );
-
-				$file.remove();
-			},
-
-			removeFileFromFileList( input, index ) {
-				const dt = new DataTransfer();
-				const { files } = input;
-				let removedFile;
-
-				for ( let i = 0; i < files.length; i ++ ) {
-					if ( +index !== i ) {
-						dt.items.add( files[ i ] );
-					} else {
-						removedFile = files[ i ];
-					}
-				}
-
-				input.files = dt.files; // Assign the updates list
-
-				return removedFile;
+				action.remove();
+				action.toggleMaxFilesError();
 			},
 
 			issetMessage: function ( formId, status ) {
@@ -115,42 +76,160 @@
 				return message || unknown;
 			},
 
-			getFilePreview: function ( file, fileWrapper, index ) {
-				const url = URL.createObjectURL( file );
-				let template = fileWrapper.closest( '.field-type-media-field' ).find( '.jet-form-builder__preview-template' ).html();
+			processUpload: function ( event ) {
+				const upload = new UploadAction( event );
 
-				template = template.replace( '%file_url%', url );
-				template = template.replace( '%file_index%', +index );
+				upload.removeSingle();
+				upload.insertPreviews();
+
+				upload.toggleMaxFilesError();
+			},
+		};
+
+		class ChangeFiles {
+			constructor( event ) {
+				this.uploadEl = $( event.target ?? event ).closest( '.jet-form-builder-file-upload' );
+				this.files = this.getFiles( event );
+				this.errorsEl = this.uploadEl.find( '.jet-form-builder-file-upload__errors' );
+				this.previewsEl = this.uploadEl.find( '.jet-form-builder-file-upload__files' );
+				this.settings = this.previewsEl.data( 'args' );
+				this.fields = this.getFields();
+				this.input = this.getFields().find( 'input[type="file"]' );
+			}
+
+			getFiles( event ) {
+				return [];
+			}
+
+			removeSingle() {
+				if ( ! this.settings?.max_files || this.settings.max_files <= 1 ) {
+					this.getPreview().remove();
+				}
+			}
+
+			toggleMaxFilesError() {
+				this.input.removeClass( 'field-has-error' );
+				this.fields.find( '.error-message' ).remove();
+
+				if ( this.getPreview()?.length <= this.settings.max_files ) {
+					return;
+				}
+
+				this.input.addClass( 'field-has-error' );
+				this.fields.append(
+					$( `<div class="error-message">${ this.getMessage( 'upload_max_files' ) }</div>` ),
+				);
+			}
+
+			getPreview() {
+				return this.previewsEl.find( '.jet-form-builder-file-upload__file' );
+			}
+
+			getFields() {
+				return this.uploadEl.find( '.jet-form-builder-file-upload__fields' );
+			}
+
+			getFormId() {
+				return this.uploadEl.closest( 'form.jet-form-builder' ).data( 'form-id' );
+			}
+
+			getMessage( status ) {
+				return JetFormBuilderFileUpload.getMessage( this.getFormId(), status );
+			}
+		}
+
+		class UploadAction extends ChangeFiles {
+			constructor( event ) {
+				super( event );
+
+				this.template = this.getTemplate();
+			}
+
+			getFiles( event ) {
+				return event.target.files;
+			}
+
+			insertPreviews() {
+				this.errorsEl.html( '' ).addClass( 'is-hidden' );
+
+				let previewHtml = '';
+				for ( const file of this.files ) {
+					previewHtml += this.getFilePreview( file );
+				}
+
+				this.previewsEl.append( $( previewHtml ) );
+			}
+
+			getFilePreview( file ) {
+				const url = URL.createObjectURL( file );
+				let template = this.template.replace( '%file_url%', url );
+				template = template.replace( '%file_name%', file.name );
 
 				if ( /^image\//.test( file.type ) ) {
 					template = template.replace( '<!-- preview -->', `<img src="${ url }" alt="${ file.name }">` );
 				}
 
 				return template;
-			},
+			}
 
-			processUpload: function ( event ) {
-				const self = JetFormBuilderFileUpload;
-				const { files } = event.target;
+			getTemplate() {
+				return this.uploadEl.closest( '.field-type-media-field' ).find( '.jet-form-builder__preview-template' ).html();
+			}
+		}
 
-				const wrapper = $( event.target ).closest( '.jet-form-builder-file-upload' ),
-					$errors = wrapper.find( '.jet-form-builder-file-upload__errors' ),
-					previews = wrapper.find( '.jet-form-builder-file-upload__files' ),
-					settings = previews.data( 'args' );
+		class DeleteAction extends ChangeFiles {
+			constructor( event ) {
+				super( event );
 
-				if ( ! ( settings.max_files > 1 ) ) {
-					previews.find( '.jet-form-builder-file-upload__file' ).remove();
+				this.self = $( event );
+				this.previewEl = this.self.closest( '.jet-form-builder-file-upload__file' );
+				this.preset = this.self.siblings( '.jet-form-builder-file-upload__value' );
+				this.name = this.self.data( 'file-name' );
+			}
+
+			remove() {
+				let fieldValue = this.getPreset();
+
+				if ( ! Object.keys( fieldValue ).length ) {
+					fieldValue = this.removeFileFromFileList();
+
+					this.input.trigger( 'change.JetFormBuilderMain' );
 				}
 
-				$errors.html( '' ).addClass( 'is-hidden' );
+				this.previewEl.trigger( 'jet-form-builder/on-remove-media-item', [ fieldValue ] );
+				this.previewEl.remove();
+			}
 
-				for ( const [ index, file ] of Object.entries( files ) ) {
-					const previewHtml = self.getFilePreview( file, wrapper, index );
+			removeFileFromFileList() {
+				const dt = new DataTransfer();
+				const originalInput = this.input[ 0 ];
 
-					previews.append( $( previewHtml ) );
+				const { files } = originalInput;
+				let removedFile;
+
+				for ( const file of files ) {
+					if ( this.name !== file.name ) {
+						dt.items.add( file );
+					} else {
+						removedFile = file;
+					}
 				}
-			},
-		};
+
+				originalInput.files = dt.files; // Assign the updates list
+
+				return removedFile;
+			}
+
+			getPreset() {
+				let fileValue = this.preset.val();
+
+				try {
+					return JSON.parse( fileValue );
+				} catch ( e ) {
+					return {};
+				}
+			}
+		}
 
 		$( JetFormBuilderFileUpload.init() );
 

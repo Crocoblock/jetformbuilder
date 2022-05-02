@@ -21,11 +21,9 @@ const {
 const {
 	SelectControl,
 	ToggleControl,
-	PanelBody,
+	FormTokenField,
 	__experimentalNumberControl,
 	__experimentalInputControl,
-	__experimentalToggleGroupControl: ToggleGroupControl,
-	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
 } = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
@@ -117,18 +115,13 @@ export default function MediaEdit( props ) {
 							props.setAttributes( { max_size: Number( newValue ) } );
 						} }
 					/>
-					<SelectControl
-						multiple
-						className='field-mime-types'
+					<FormTokenField
 						key='allowed_mimes'
-						label={ __( 'Allow MIME types' ) }
-						labelPosition='top'
-						help={ attrHelp( 'allowed_mimes' ) }
 						value={ attributes.allowed_mimes }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { allowed_mimes: newValue } );
-						} }
-						options={ localizeData.mime_types }
+						label={ __( 'Allow MIME types', 'jet-form-builder' ) }
+						suggestions={ localizeData.mime_types }
+						onChange={ allowed_mimes => setAttributes( { allowed_mimes } ) }
+						tokenizeOnSpace
 					/>
 				</FieldSettingsWrapper>
 				<AdvancedFields

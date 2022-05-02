@@ -16,8 +16,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Media_Field extends Base {
 
-	protected $value_format      = 'url';
-	protected $max_files         = 1;
+	protected $value_format = 'url';
+	protected $max_files = 1;
 	protected $insert_attachment = false;
 
 	/**
@@ -78,12 +78,6 @@ class Media_Field extends Base {
 					);
 					break;
 
-				case 'url':
-					$files[] = array(
-						'url' => $item,
-					);
-					break;
-
 				case 'both':
 					if ( is_array( $item ) && isset( $item['url'] ) && isset( $item['id'] ) ) {
 						$files[] = array(
@@ -91,6 +85,11 @@ class Media_Field extends Base {
 							'id'  => $item['id'],
 						);
 					}
+					break;
+				default:
+					$files[] = array(
+						'url' => $item,
+					);
 					break;
 			}
 		}

@@ -53,6 +53,7 @@ class Send_Email extends Base {
 			'content_type'     => __( 'Content type:', 'jet-form-builder' ),
 			'content'          => __( 'Content:', 'jet-form-builder' ),
 			'attachments'      => __( 'Attachments:', 'jet-form-builder' ),
+			'add_attachment'   => __( 'Add form field with attachment', 'jet-form-builder' ),
 		);
 	}
 

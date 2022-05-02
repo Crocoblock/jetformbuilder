@@ -183,6 +183,7 @@ function SendEmailAction( {
 			className={ 'control-flex' }
 		>
 			<FormTokenField
+				label={ label( 'add_attachment' ) }
 				value={ settings.attachments }
 				suggestions={ formFieldsTokens }
 				onChange={ tokens => onChangeSettingObj( { attachments: [ ...new Set( tokens ) ] } ) }

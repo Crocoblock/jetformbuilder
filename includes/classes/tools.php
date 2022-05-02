@@ -124,17 +124,7 @@ class Tools {
 	}
 
 	public static function get_allowed_mimes_list_for_js() {
-		$mimes = get_allowed_mime_types();
-
-		$mimes_list = array();
-		foreach ( $mimes as $mime ) {
-			$mimes_list[] = array(
-				'label' => $mime,
-				'value' => $mime,
-			);
-		}
-
-		return $mimes_list;
+		return get_allowed_mime_types();
 	}
 
 	/**

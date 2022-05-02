@@ -20,7 +20,7 @@ class Csrf_Token_Model extends Base_Db_Model {
 	public static function schema(): array {
 		return array(
 			self::PRIMARY_ID => 'bigint(20) NOT NULL AUTO_INCREMENT',
-			'client_id'      => 'varchar(255)',
+			'client_id'      => 'varchar(155)',
 			'token'          => 'text',
 			self::CREATED_AT => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 		);

@@ -391,17 +391,6 @@ class File_Upload {
 		$messages = wp_json_encode( jet_form_builder()->msg_router->get_manager()->get_messages() );
 		$form_id  = (int) Live_Form::instance()->form_id;
 
-		wp_localize_script(
-			'jet-form-builder-file-upload',
-			'JetFormBuilderFileUploadConfig',
-			array(
-				'ajaxurl'         => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
-				'action'          => $this->action,
-				'nonce'           => wp_create_nonce( $this->nonce_key ),
-				'max_upload_size' => wp_max_upload_size(),
-			)
-		);
-
 		wp_add_inline_script(
 			'jet-form-builder-file-upload',
 			"

@@ -422,123 +422,134 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	color: red
 }
 
-.jet-form-builder-file-upload__files {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap
-}
+.jet-form-builder-file-upload {
+	&__files {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap
+	}
 
-.jet-form-builder-file-upload .sortable-placeholder {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 100px;
-	flex: 0 0 100px;
-	width: 100px;
-	margin: 0 10px 10px 0;
-	position: relative;
-	background: rgba(123, 123, 123, 0.2);
-	height: 100px
-}
+	&__content {
+		min-height: 100px;
+		min-width: 100px;
+		position: relative;
+		display: -webkit-inline-box;
+		display: -ms-inline-flexbox;
+		display: inline-flex
+	}
 
-.jet-form-builder-file-upload__content {
-	min-height: 100px;
-	min-width: 100px;
-	position: relative;
-	display: -webkit-inline-box;
-	display: -ms-inline-flexbox;
-	display: inline-flex
-}
+	&__loader {
+		top: 0;
+		left: 0;
+		right: 10px;
+		bottom: 10px;
+		position: absolute;
+		background: rgba(0, 0, 0, 0.5);
+		display: none;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center
+	}
 
-.jet-form-builder-file-upload__loader {
-	top: 0;
-	left: 0;
-	right: 10px;
-	bottom: 10px;
-	position: absolute;
-	background: rgba(0, 0, 0, 0.5);
-	display: none;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center
-}
+	&__file {
+		width: 100px;
+		height: 100px;
+		margin: 0 10px 10px 0;
+		position: relative;
+		background-color: rgba(123, 123, 123, 0.2);
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237a7a7a' width='48px' height='48px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z'/%3E%3C/svg%3E");
+		background-position: center;
+		background-repeat: no-repeat;
 
-.is-loading .jet-form-builder-file-upload__loader {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex
-}
+		&-remove {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 50%;
+			bottom: 0;
+			cursor: pointer;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			align-items: center;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+			-webkit-transition: opacity 200ms linear;
+			transition: opacity 200ms linear;
+			opacity: 0;
+			background: rgba(0, 0, 0, 0.4);
 
-.jet-form-builder-file-upload__file {
-	width: 100px;
-	height: 100px;
-	margin: 0 10px 10px 0;
-	position: relative;
-	background-color: rgba(123, 123, 123, 0.2);
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237a7a7a' width='48px' height='48px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z'/%3E%3C/svg%3E");
-	background-position: center;
-	background-repeat: no-repeat
-}
+			svg path {
+				fill: #fff;
+			}
+		}
 
-.is-loading .jet-form-builder-file-upload__file {
-	opacity: .5
-}
+		&-invalid-marker {
+			position: absolute;
+			top: 0.15em;
+			right: 0.15em;
+			background-color: #fff;
+			border-radius: 50%;
+			color: #a52a2a;
+		}
 
-.jet-form-builder-file-upload__file-remove {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 50%;
-	bottom: 0;
-	cursor: pointer;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-transition: opacity 200ms linear;
-	transition: opacity 200ms linear;
-	opacity: 0;
-	background: rgba(0, 0, 0, 0.4)
-}
+		img {
+			display: block;
+			width: 100%;
+			height: 100% !important;
+			padding: 0;
+			margin: 0;
+			-o-object-fit: cover;
+			object-fit: cover;
+			-o-object-position: center center;
+			object-position: center center
+		}
 
-.jet-form-builder-file-upload__file-remove svg path {
-	fill: #fff
-}
+		&:hover .jet-form-builder-file-upload__file-remove {
+			opacity: 1
+		}
+	}
 
-.jet-form-builder-file-upload__file:hover .jet-form-builder-file-upload__file-remove {
-	opacity: 1
-}
+	&__errors.is-hidden {
+		display: none
+	}
 
-.jet-form-builder-file-upload__file img {
-	display: block;
-	width: 100%;
-	height: 100% !important;
-	padding: 0;
-	margin: 0;
-	-o-object-fit: cover;
-	object-fit: cover;
-	-o-object-position: center center;
-	object-position: center center
-}
+	.is-loading .jet-form-builder-file-upload__file {
+		opacity: .5
+	}
 
-.jet-form-builder-file-upload__errors.is-hidden {
-	display: none
-}
+	.is-loading .jet-form-builder-file-upload__loader {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex
+	}
 
-input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
-	border: none !important;
-	padding: 0 !important;
-	border-radius: 0 !important;
-	margin: 0 !important;
-	width: auto !important
+	.sortable-placeholder {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 100px;
+		flex: 0 0 100px;
+		width: 100px;
+		margin: 0 10px 10px 0;
+		position: relative;
+		background: rgba(123, 123, 123, 0.2);
+		height: 100px
+	}
+
+	&__input {
+		border: none !important;
+		padding: 0 !important;
+		border-radius: 0 !important;
+		margin: 0 !important;
+		width: auto !important
+	}
 }
 
 .field-type-wysiwyg .jet-form-builder__field {
@@ -674,10 +685,6 @@ input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
 .jet-form-builder__field.field-has-error + .error-message {
 	color: red;
 }
-
-/*.jet-form-builder-file-upload__value:not([value*=""]) + input.jet-form-builder__field.file-field.jet-form-builder-file-upload__input {
-	color: transparent;
-}*/
 
 .block-editor-block-list__block[data-type^="jet-forms/"] {
 	max-width: 100%;

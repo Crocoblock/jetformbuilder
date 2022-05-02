@@ -151,7 +151,7 @@ class File_Uploader {
 	 * @throws Upload_Exception
 	 */
 	protected function sanitize_file( File $file ) {
-		if ( ! $file->get_size() > $this->max_size ) {
+		if ( $file->get_size() > $this->max_size ) {
 			throw new Upload_Exception( 'upload_max_size' );
 		}
 

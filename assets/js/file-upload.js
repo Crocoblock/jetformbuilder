@@ -57,7 +57,7 @@
 				const action = new DeleteAction( this );
 
 				action.remove();
-				action.toggleMaxFilesError();
+				action.showErrors();
 			},
 
 			issetMessage: function ( formId, status ) {
@@ -82,7 +82,7 @@
 				upload.removeSingle();
 				upload.insertPreviews();
 
-				upload.toggleMaxFilesError();
+				upload.showErrors();
 			},
 		};
 
@@ -95,6 +95,7 @@
 				this.settings = this.previewsEl.data( 'args' );
 				this.fields = this.getFields();
 				this.input = this.getFields().find( 'input[type="file"]' );
+				this.hasError = false;
 			}
 
 			getFiles( event ) {
@@ -107,18 +108,25 @@
 				}
 			}
 
-			toggleMaxFilesError() {
+			showErrors() {
 				this.input.removeClass( 'field-has-error' );
 				this.fields.find( '.error-message' ).remove();
 
-				if ( this.getPreview()?.length <= this.settings.max_files ) {
+				if ( this.getPreview()?.length > this.settings.max_files ) {
+					this.input.addClass( 'field-has-error' );
+					this.fields.append(
+						$( `<div class="error-message">${ this.getMessage( 'upload_max_files' ) }</div>` ),
+					);
+
 					return;
 				}
 
-				this.input.addClass( 'field-has-error' );
-				this.fields.append(
-					$( `<div class="error-message">${ this.getMessage( 'upload_max_files' ) }</div>` ),
-				);
+				if ( this.hasError ) {
+					this.input.addClass( 'field-has-error' );
+					this.fields.append(
+						$( `<div class="error-message">${ this.getMessage( this.hasError ) }</div>` ),
+					);
+				}
 			}
 
 			getPreview() {
@@ -152,12 +160,28 @@
 			insertPreviews() {
 				this.errorsEl.html( '' ).addClass( 'is-hidden' );
 
-				let previewHtml = '';
+				const previewElements = [];
+
 				for ( const file of this.files ) {
-					previewHtml += this.getFilePreview( file );
+					const current = $( this.getFilePreview( file ) );
+
+					try {
+						this.validateImage( file, current );
+					} catch ( error ) {
+						this.hasError = error;
+						current.find( '.jet-form-builder-file-upload__file-invalid-marker' ).show();
+					}
+
+					previewElements.push( current );
 				}
 
-				this.previewsEl.append( $( previewHtml ) );
+				this.previewsEl.append( previewElements );
+			}
+
+			validateImage( file, current ) {
+				if ( file.size > this.settings.max_size ) {
+					throw 'upload_max_size';
+				}
 			}
 
 			getFilePreview( file ) {

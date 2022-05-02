@@ -27,9 +27,8 @@ class Media_Field_Render extends Base {
 
 	protected function get_block_args(): array {
 		return array(
-			'max_files'         => $this->block_type->get_max_files(),
-			'insert_attachment' => $this->block_type->is_insert_attachment(),
-			'value_format'      => $this->block_type->get_value_format(),
+			'max_files' => $this->block_type->get_max_files(),
+			'max_size'  => $this->block_type->get_max_size(),
 		);
 	}
 

@@ -18,7 +18,7 @@ class Media_Field extends Base {
 
 	protected $value_format = 'url';
 	protected $max_files = 1;
-	protected $insert_attachment = false;
+	protected $max_size = 1;
 
 	/**
 	 * Returns block name
@@ -45,7 +45,7 @@ class Media_Field extends Base {
 
 		$this->set_value_format();
 		$this->set_max_files();
-		$this->set_insert_attachment();
+		$this->set_max_size();
 	}
 
 	protected function parse_preset( $preset ): array {
@@ -124,16 +124,31 @@ class Media_Field extends Base {
 		return $this->value_format;
 	}
 
-	public function is_insert_attachment(): bool {
-		return $this->insert_attachment;
-	}
-
 	public function get_max_files(): int {
 		return $this->max_files;
 	}
 
 	public function is_both_format(): bool {
 		return 'both' === $this->value_format;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_max_size(): int {
+		return $this->max_size;
+	}
+
+	protected function set_max_size() {
+		$size_in_mb = $this->block_attrs['max_size'] ?? false;
+
+		if ( false === $size_in_mb ) {
+			$this->max_size = wp_max_upload_size();
+
+			return;
+		}
+
+		$this->max_size = ( MB_IN_BYTES * $size_in_mb );
 	}
 
 	protected function set_value_format() {
@@ -146,10 +161,6 @@ class Media_Field extends Base {
 		$max_files = $this->block_attrs['max_files'] ?? 1;
 
 		$this->max_files = empty( $max_files ) ? 1 : (int) $max_files;
-	}
-
-	public function set_insert_attachment() {
-		$this->insert_attachment = $this->block_attrs['insert_attachment'] ?? false;
 	}
 
 

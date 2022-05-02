@@ -34,6 +34,10 @@ abstract class Base_Table_Box extends Base_Meta_Box implements
 		);
 	}
 
+	public function get_stable_limit(): int {
+		return 0;
+	}
+
 	public function get_total(): int {
 		return 0;
 	}
@@ -111,14 +115,17 @@ abstract class Base_Table_Box extends Base_Meta_Box implements
 	}
 
 	public function to_array(): array {
+		$stable_limit = $this->get_stable_limit();
+
 		return array_merge(
 			parent::to_array(),
 			( new Meta_Table_Options_Converter( $this ) )->to_array(),
 			array(
-				'render_type' => self::TYPE_TABLE,
-				'columns'     => $this->get_columns_headings(),
-				'total'       => $this->get_total(),
-				'receive_url' => ( new Rest_Endpoint( $this ) )->to_array(),
+				'render_type'  => self::TYPE_TABLE,
+				'columns'      => $this->get_columns_headings(),
+				'total'        => $this->get_total(),
+				'stable_limit' => $stable_limit ? $stable_limit : null,
+				'receive_url'  => ( new Rest_Endpoint( $this ) )->to_array(),
 			)
 		);
 	}

@@ -44,4 +44,7 @@ a {
 	margin-right: 1em;
 	text-decoration: none;
 }
+body.rtl a {
+	margin-left: 1em;
+}
 </style>

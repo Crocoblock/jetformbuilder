@@ -307,6 +307,7 @@ export const withSelectGateways = select => {
 		gatewayRequest: store.getCurrentRequest(),
 		scenarioSource: additionalSourceGateway[ CURRENT_SCENARIO ] || {},
 		currentScenario: scenario[ CURRENT_SCENARIO ] || {},
+		CURRENT_SCENARIO,
 		gatewayScenario: scenario,
 		additionalSourceGateway,
 		gatewaySpecific,

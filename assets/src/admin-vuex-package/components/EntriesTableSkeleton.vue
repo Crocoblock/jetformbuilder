@@ -324,7 +324,6 @@ export default {
 		&__cell {
 			white-space: nowrap;
 			overflow: hidden;
-			text-align: left;
 			position: relative;
 			padding: 8px 20px 6px;
 
@@ -336,6 +335,19 @@ export default {
 
 	.list-table-heading__cell:not(.cell--choose) {
 		flex: 1
+	}
+}
+
+body.rtl .cx-vue-list-table {
+	.list-table-item {
+		&--has-choose {
+			.list-table-item-actions {
+				right: 5.2em;
+			}
+		}
+		&-actions {
+			right: 1.5em;
+		}
 	}
 }
 

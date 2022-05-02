@@ -3,16 +3,14 @@
 		'wrap': true,
 		'jet-form-builder-page': true,
 	}">
-		<div class="wp-heading">
-			<slot name="heading-before"></slot>
-			<h1>{{ title }}</h1>
-			<template v-if="$slots['heading-after']">
-				<slot name="heading-after"></slot>
-			</template>
-			<template v-else-if="hasGlobalActions">
-				<PageActions />
-			</template>
-		</div>
+		<slot name="heading-before"></slot>
+		<h1>{{ title }}</h1>
+		<template v-if="$slots['heading-after']">
+			<slot name="heading-after"></slot>
+		</template>
+		<template v-else-if="hasGlobalActions">
+			<PageActions/>
+		</template>
 		<slot></slot>
 	</div>
 </template>
@@ -31,17 +29,17 @@ export default {
 	computed: {
 		hasGlobalActions() {
 			return this.$store.hasModule( 'actions' );
-		}
+		},
 	},
 	components: {
 		PageActions,
-	}
+	},
 };
 </script>
 
 <style lang="scss">
 .jet-form-builder-page {
-	.wp-heading {
+	.jfb-heading {
 		display: flex;
 		align-items: flex-end;
 		gap: 2em;

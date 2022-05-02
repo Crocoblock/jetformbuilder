@@ -37,6 +37,8 @@ class Upload_Dir {
 		self::create_index( $path );
 		self::create_index( $pathdata['path'] );
 
+		self::create_htaccess( $path );
+
 		return $pathdata;
 	}
 
@@ -75,6 +77,33 @@ class Upload_Dir {
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions
 		return file_put_contents( $index, '' );
+	}
+
+	public static function create_htaccess( $path ) {
+		if ( ! is_dir( $path ) ) {
+			return false;
+		}
+
+
+		$path  = trailingslashit( $path ) . '.htaccess';
+		$index = wp_normalize_path( $path );
+
+		if ( file_exists( $index ) ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions
+		return file_put_contents( $index, static::htaccess_content() );
+	}
+
+	protected static function htaccess_content(): string {
+		return '
+# Disable directory browsing 
+Options -Indexes
+
+# Hide the contents of directories
+IndexIgnore *
+';
 	}
 
 }

@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.3
+* FIX: Recalculate fields before submit
+* FIX: An instant redirect on submit type reload
+* FIX: Add a placeholder to the Redirect to Page action for static page
+* Tweak: add filter `jet-form-builder/preset-sanitize`. Return a boolean value, checking if the preset is available.
+* Tweak: add filter `jet-form-builder/table-engine`. Return string value with name of database engine. Ex.: MyISAM
+* Minor fixes & improvements for admin pages. 
+
 ## 2.0.2
 * FIX: Redirect to Page action with URL args
 

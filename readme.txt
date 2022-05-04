@@ -174,6 +174,7 @@ Get your site eCommerce-ready. Choose the preferred payment method, add its gate
 
 - <a href="https://jetformbuilder.com/addons/stripe-payments/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Stripe Payments</a>. With the help of this addon, you add a Stripe payment gateway to the JetFormBuilder forms, which allows you to carry out payments.
 - <a href="https://jetformbuilder.com/addons/woocommerce-cart-checkout-action/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">WooCommerce Cart & Checkout Action</a>. This addon allows adding one product to the cart and redirecting users to WooCommerce checkout once they submit the form.
+- <a href="https://jetformbuilder.com/addons/paypal-recurring-payments?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">PayPal Recurring Payments</a>. It allows you to create recurring subscriptions for your customers and accept payments via the form.
 
 == Demo ==
 Check out the JetFormBuilder demo page and figure out what functionality you get. Explore the <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">demo</a> now.

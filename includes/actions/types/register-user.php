@@ -268,13 +268,17 @@ class Register_User extends Base {
 
 			if ( ! empty( $this->settings['log_in'] ) ) {
 
-				wp_signon(
+				$user = wp_signon(
 					array(
 						'user_login'    => $username,
 						'user_password' => $password,
 						'remember'      => $is_remember,
 					)
 				);
+
+				if ( ! is_wp_error( $user ) ) {
+					wp_set_current_user( $user->ID );
+				}
 
 				// If form submitted by AJAX - we need to reload page to ensure user is logged in
 				if ( $request['__is_ajax'] ) {

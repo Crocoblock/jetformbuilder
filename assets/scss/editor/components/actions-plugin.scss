@@ -7,4 +7,20 @@
 	option[disabled] {
 		background-color: #d3d3d35e;
 	}
+
+	.components-button.has-icon {
+		position: relative;
+
+		span.dashicons-randomize[data-count]:after {
+			content: attr(data-count);
+			position: absolute;
+			font-size: 0.7em;
+			background-color: var(--wp-admin-theme-color);
+			color: #fff;
+			padding: 2px;
+			border-radius: 5px;
+			top: 0;
+			font-family: monospace;
+		}
+	}
 }

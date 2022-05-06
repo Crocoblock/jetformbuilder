@@ -191,6 +191,14 @@ let PluginActions = ( { setCurrentAction } ) => {
 	return <>
 		{ actions && actions.map( ( action, index ) => {
 			const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action, actions );
+
+			const conditionsIcon = action?.conditions?.length ? <span
+				className="dashicon dashicons dashicons-randomize"
+				data-count={ action?.conditions.length }
+			/> : <span
+				className="dashicon dashicons dashicons-randomize"
+			/>;
+
 			return <Card
 				key={ action.id }
 				size={ 'extraSmall' }
@@ -228,7 +236,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 							} }
 						/>
 						<Button
-							icon='randomize'
+							icon={ conditionsIcon }
 							label={ 'Conditions' }
 							onClick={ () => {
 								setProcessedAction( () => (

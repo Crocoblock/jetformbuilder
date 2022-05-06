@@ -279,11 +279,6 @@ class Register_User extends Base {
 				if ( ! is_wp_error( $user ) ) {
 					wp_set_current_user( $user->ID );
 				}
-
-				// If form submitted by AJAX - we need to reload page to ensure user is logged in
-				if ( $request['__is_ajax'] ) {
-					$handler->response_data['reload'] = true;
-				}
 			}
 
 			if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {

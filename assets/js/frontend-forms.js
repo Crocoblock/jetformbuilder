@@ -1532,8 +1532,15 @@
 		},
 
 		reloadSubmitForm: function( event ) {
+			event.preventDefault();
 			const $target = $( event.target );
 			const $maskedFields = $target.find( '.jet-form-builder__masked-field' );
+
+			if ( event.target?.checkValidity && event.target?.reportValidity && ! event.target.checkValidity() ) {
+				event.target.reportValidity();
+
+				return;
+			}
 
 			if ( $maskedFields && $maskedFields.length ) {
 				$maskedFields.each( function() {
@@ -1545,9 +1552,9 @@
 					}
 				} );
 			}
+
 			$target.addClass( 'is-loading' );
 			$target.find( '.jet-form-builder__submit' ).attr( 'disabled', true );
-			event.preventDefault();
 
 			Promise.all(
 				applyFilters(

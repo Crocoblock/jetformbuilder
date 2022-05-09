@@ -485,7 +485,7 @@
 			var self = JetFormBuilder;
 
 			$( document )
-				.on( 'click.JetFormBuilderMain', '.jet-form-builder__submit.submit-type-ajax', self.ajaxSubmitForm )
+				.on( 'submit.JetFormBuilderMain', 'form.jet-form-builder.submit-type-ajax', self.ajaxSubmitForm )
 				.on( 'submit.JetFormBuilderMain', 'form.jet-form-builder.submit-type-reload', self.reloadSubmitForm )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__next-page', self.nextFormPage )
 				.on( 'click.JetFormBuilderMain', '.jet-form-builder__prev-page', self.prevFormPage )
@@ -1565,15 +1565,17 @@
 			} );
 		},
 
-		ajaxSubmitForm: function() {
+		ajaxSubmitForm: function( event ) {
+			event.preventDefault();
 
 			var $this  = $( this ),
 				$form  = $this.closest( '.jet-form-builder' ),
 				formID = $form.data( 'form-id' ),
 				data   = {};
 
-			if ( 'undefined' !== typeof $form[ 0 ].checkValidity && 'undefined' !== typeof $form[ 0 ].reportValidity && ! $form[ 0 ].checkValidity() ) {
+			if ( $form[ 0 ]?.checkValidity && $form[ 0 ]?.reportValidity && ! $form[ 0 ].checkValidity() ) {
 				$form[ 0 ].reportValidity();
+
 				return;
 			}
 

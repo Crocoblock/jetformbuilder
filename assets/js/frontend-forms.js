@@ -799,6 +799,21 @@
 			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 
+		isTriggered: function ( $scope ) {
+			const formId = $scope.find( 'form.jet-form-builder' ).data( 'form-id' );
+
+			if ( ! formId ) {
+				return;
+			}
+
+			if ( JetFormBuilder.installed.includes( formId ) ) {
+				return;
+			}
+
+			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
+			JetFormBuilder.installed.push( formId );
+		},
+
 		widgetBookingForm: function( $scope ) {
 			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );
 
@@ -809,7 +824,7 @@
 			}
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
-			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
+			JetFormBuilder.isTriggered( $scope );
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );

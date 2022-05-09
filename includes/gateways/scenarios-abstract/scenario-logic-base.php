@@ -353,17 +353,4 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 			: 'success';
 	}
 
-	/**
-	 * @throws Sql_Exception
-	 */
-	public function save_record_backward_compatibility() {
-		if ( false !== jet_fb_action_handler()->get_action_by_slug( Save_Record::ID ) ) {
-			return;
-		}
-		/** @var Save_Record $record */
-		$record = jet_form_builder()->actions->rep_get_item_or_die( Save_Record::ID );
-
-		$record->do_action( array(), jet_fb_action_handler() );
-	}
-
 }

@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

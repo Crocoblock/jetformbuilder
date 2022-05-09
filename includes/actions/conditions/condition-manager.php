@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Actions;
+namespace Jet_Form_Builder\Actions\Conditions;
 
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;

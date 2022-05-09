@@ -2,7 +2,7 @@
 
 namespace Jet_Form_Builder\Admin;
 
-use Jet_Form_Builder\Actions\Condition_Manager;
+use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;

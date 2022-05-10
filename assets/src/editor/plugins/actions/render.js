@@ -23,6 +23,9 @@ const {
 	CardHeader,
 	DropdownMenu,
 	Flex,
+	FormTokenField,
+	__experimentalToggleGroupControl: ToggleGroupControl,
+	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
 } = wp.components;
 
 const {
@@ -372,68 +375,92 @@ let PluginActions = ( { setCurrentAction } ) => {
 						const operatorOption = getOperatorOption( currentItem.operator );
 
 						return <>
-							<ToggleControl
-								label={ executeLabel }
-								checked={ currentItem.execute }
-								onChange={ newValue => {
-									changeCurrentItem( { execute: newValue } );
-								} }
-							/>
-							<SelectControl
-								label="Operator"
-								labelPosition="side"
-								help={ operatorOption( 'help' ) }
-								value={ currentItem.operator }
-								options={ conditionSettings.operators }
-								onChange={ operator => changeCurrentItem( { operator } ) }
-							/>
-							<SelectControl
-								label="Field"
-								labelPosition="side"
-								value={ currentItem.field }
-								options={ formFields }
-								onChange={ field => changeCurrentItem( { field } ) }
-							/>
-							<SelectControl
-								label={ __( 'Type transform comparing value', 'jet-form-builder' ) }
-								labelPosition="side"
-								value={ currentItem.compare_value_format }
-								options={ conditionSettings.compare_value_formats }
-								onChange={ compare_value_format => {
-									changeCurrentItem( { compare_value_format } );
-								} }
-							/>
-							{ transformerOption( 'help' ).length > 0 && <p
-								className={ 'components-base-control__help' }
-								style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
-								dangerouslySetInnerHTML={ { __html: transformerOption( 'help' ) } }
-							/> }
-							<FieldWithPreset
-								baseControlProps={ {
-									label: 'Value to Compare',
-								} }
-								ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-									value={ currentItem.default }
-									isSaveAction={ actionClick }
-									onSavePreset={ newValue => {
-										changeCurrentItem( { default: newValue } );
-									} }
-									excludeSources={ [ 'query_var' ] }
-									onUnMount={ onRequestClose }
-								/> }
-								triggerClasses={ [ 'trigger__textarea' ] }
+							<ToggleGroupControl
+								label={ __( 'Condition type', 'jet-form-builder' ) }
+								value={ currentItem.type ?? 'field' }
+								isBlock
 							>
-								<TextareaControl
-									className={ 'jet-control-clear jet-user-fields-map__list' }
-									value={ currentItem.default }
-									help={ operatorOption( 'need_explode' )
-										? conditionSettings.help_for_exploding_compare
-										: '' }
+								<ToggleGroupControlOption value="field" label={ __( 'Field comparison', 'jet-form-builder' ) } />
+								<ToggleGroupControlOption value="event" label={ __( 'Event match', 'jet-form-builder' ) } />
+							</ToggleGroupControl>
+							{ 'field' === currentItem.type ? <>
+								<ToggleControl
+									label={ executeLabel }
+									checked={ currentItem.execute }
 									onChange={ newValue => {
-										changeCurrentItem( { default: newValue } );
+										changeCurrentItem( { execute: newValue } );
 									} }
 								/>
-							</FieldWithPreset>
+								<SelectControl
+									label="Operator"
+									labelPosition="side"
+									help={ operatorOption( 'help' ) }
+									value={ currentItem.operator }
+									options={ conditionSettings.operators }
+									onChange={ operator => changeCurrentItem( { operator } ) }
+								/>
+								<SelectControl
+									label="Field"
+									labelPosition="side"
+									value={ currentItem.field }
+									options={ formFields }
+									onChange={ field => changeCurrentItem( { field } ) }
+								/>
+								<SelectControl
+									label={ __( 'Type transform comparing value', 'jet-form-builder' ) }
+									labelPosition="side"
+									value={ currentItem.compare_value_format }
+									options={ conditionSettings.compare_value_formats }
+									onChange={ compare_value_format => {
+										changeCurrentItem( { compare_value_format } );
+									} }
+								/>
+								{ transformerOption( 'help' ).length > 0 && <p
+									className={ 'components-base-control__help' }
+									style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
+									dangerouslySetInnerHTML={ { __html: transformerOption( 'help' ) } }
+								/> }
+								<FieldWithPreset
+									baseControlProps={ {
+										label: 'Value to Compare',
+									} }
+									ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
+										value={ currentItem.default }
+										isSaveAction={ actionClick }
+										onSavePreset={ newValue => {
+											changeCurrentItem( { default: newValue } );
+										} }
+										excludeSources={ [ 'query_var' ] }
+										onUnMount={ onRequestClose }
+									/> }
+									triggerClasses={ [ 'trigger__textarea' ] }
+								>
+									<TextareaControl
+										className={ 'jet-control-clear jet-user-fields-map__list' }
+										value={ currentItem.default }
+										help={ operatorOption( 'need_explode' )
+											? conditionSettings.help_for_exploding_compare
+											: '' }
+										onChange={ newValue => {
+											changeCurrentItem( { default: newValue } );
+										} }
+									/>
+								</FieldWithPreset>
+							</> : <>
+								<BaseControl
+									label={ __( 'Choose events', 'jet-form-builder' ) }
+									className={ 'control-flex' }
+								>
+									<FormTokenField
+										label={ label( 'add_attachment' ) }
+										value={ currentItem.events ?? [] }
+										suggestions={ formFieldsTokens }
+										onChange={ tokens => onChangeSettingObj( { attachments: [ ...new Set( tokens ) ] } ) }
+										tokenizeOnSpace
+									/>
+								</BaseControl>
+							</> }
+
 						</>;
 					} }
 				</RepeaterWithState>;

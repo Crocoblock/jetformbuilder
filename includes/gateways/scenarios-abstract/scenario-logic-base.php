@@ -157,25 +157,11 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
 
-		$keep_these = jet_fb_gateway_current()->gateway( 'notifications_' . $type, array() );
 
-		if ( empty( $keep_these ) ) {
-			return;
-		}
+		jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
+							->unregister_action( 'redirect_to_page' );
 
-		$all = jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
-							->unregister_action( 'redirect_to_page' )
-							->get_all();
-
-		if ( empty( $all ) ) {
-			return;
-		}
-
-		foreach ( $all as $index => $notification ) {
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
+		jet_fb_events()->se
 
 		( new Action_Default_Executor() )->soft_run_actions();
 	}

@@ -8,6 +8,9 @@ use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 class Condition_Instance {
 
+	private $type;
+	private $events;
+
 	private $operator;
 	private $must_be_true = true;
 	private $field_name;
@@ -23,9 +26,16 @@ class Condition_Instance {
 	 * @param $condition
 	 *
 	 * @return $this
-	 * @throws Condition_Silence_Exception
 	 */
 	public function set_condition( $condition ): Condition_Instance {
+		$this->set_type( $condition['type'] ?? '' );
+
+		if ( ! $this->is_field_compare() ) {
+			$this->set_events( $condition['events'] ?? array() );
+
+			return $this;
+		}
+
 		$this->set_operator( $condition['operator'] ?? false );
 		$this->set_field( $condition['field'] ?? '' );
 		$this->set_compare_value_format( $condition['compare_value_format'] ?? '' );
@@ -55,7 +65,6 @@ class Condition_Instance {
 		);
 	}
 
-
 	public function get_compare_value_transformer() {
 		return $this->compare_value_format;
 	}
@@ -65,6 +74,7 @@ class Condition_Instance {
 
 		return $this;
 	}
+
 
 	public function set_operator( string $operator ): Condition_Instance {
 		$operators = $this->get_manager()->get_operators_list();
@@ -81,10 +91,23 @@ class Condition_Instance {
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function get_events() {
+		return $this->events;
+	}
+
+	/**
+	 * @param mixed $events
+	 */
+	public function set_events( array $events ) {
+		$this->events = $events;
+	}
+
+	/**
 	 * @param $field_name
 	 *
 	 * @return $this
-	 * @throws Condition_Silence_Exception
 	 */
 	public function set_field( $field_name ): Condition_Instance {
 		$this->field_name = $field_name;
@@ -104,6 +127,24 @@ class Condition_Instance {
 
 	public function get_field_value() {
 		return $this->field_value;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_type() {
+		return $this->type;
+	}
+
+	/**
+	 * @param mixed $type
+	 */
+	public function set_type( string $type ) {
+		$this->type = empty( $type ) ? 'field' : $type;
+	}
+
+	public function is_field_compare(): bool {
+		return 'field' === $this->get_type();
 	}
 
 	public function set_compare( $compare ): Condition_Instance {
@@ -173,7 +214,6 @@ class Condition_Instance {
 	 * @param $field_name
 	 *
 	 * @return mixed
-	 * @throws Condition_Silence_Exception
 	 */
 	public function get_request_field( $field_name ) {
 		$handler = jet_fb_action_handler();
@@ -181,8 +221,6 @@ class Condition_Instance {
 		if ( isset( $handler->request_data[ $field_name ] ) ) {
 			return $handler->request_data[ $field_name ];
 		}
-
-		$this->error( "empty_field::{$field_name}" );
 
 		return false;
 	}

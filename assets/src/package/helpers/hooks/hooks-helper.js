@@ -180,7 +180,7 @@ const selectPostMeta = select => {
 	return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 };
 
-const selectParsedPostMeta = ( select, name ) => {
+export const selectParsedPostMeta = ( select, name ) => {
 	const allMeta = selectPostMeta( select );
 
 	return JSON.parse( allMeta[ name ] || '{}' );
@@ -256,7 +256,7 @@ export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
 
 	return {
 		[ metaSlug ]: (
-			current || ifEmpty
+			current ?? ifEmpty
 		),
 	};
 };

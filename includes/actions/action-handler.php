@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Events\Default_Process_Event;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
@@ -138,6 +139,9 @@ class Action_Handler {
 	public function do_actions() {
 		do_action( 'jet-form-builder/actions/before-send' );
 
+		jet_fb_events()->set_current( Default_Process_Event::get_slug() );
+		jet_fb_events()->get_current()->validate_actions();
+
 		$run_actions_callback = apply_filters(
 			'jet-form-builder/actions/run-callback',
 			array( new Action_Default_Executor(), 'run_actions' )
@@ -195,12 +199,16 @@ class Action_Handler {
 	public function unregister_action( $key ) {
 		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
 			unset( $this->form_actions[ $key ] );
+			unset( $this->form_conditions[ $key ] );
 
 			return $this;
 		}
 		foreach ( $this->form_actions as $index => $action ) {
 			if ( $key === $action->get_id() ) {
 				unset( $this->form_actions[ $index ] );
+				unset( $this->form_conditions[ $index ] );
+
+				return $this;
 			}
 		}
 

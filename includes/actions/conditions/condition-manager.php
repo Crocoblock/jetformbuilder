@@ -131,17 +131,8 @@ class Condition_Manager {
 		}
 	}
 
-	/**
-	 * @param $condition
-	 *
-	 * @throws Condition_Silence_Exception
-	 */
-	public function is_correct( $condition ) {
-		( new Condition_Instance() )->set_condition( $condition )->is_correct_with_throw();
-	}
-
 	public function set_conditions( array $conditions ): Condition_Manager {
-		$this->conditions = $conditions;
+		$this->conditions = array_map( array( new Condition_Instance(), 'set_condition' ), $conditions );
 
 		return $this;
 	}
@@ -149,6 +140,10 @@ class Condition_Manager {
 	public function set_condition_operator( string $operator ): Condition_Manager {
 		$this->operator = $operator;
 
+		return $this;
+	}
+
+	protected function set_fields_conditions(): Condition_Manager {
 		return $this;
 	}
 

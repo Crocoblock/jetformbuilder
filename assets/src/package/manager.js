@@ -53,8 +53,12 @@ import {
 	withDispatchNotice,
 	withSelectFormFields,
 	withSelectGateways,
-	withDispatchGateways, withSelectActionsByType,
+	withDispatchGateways,
+	withSelectActionsByType,
 } from './helpers/hooks/hooks-helper';
+import {
+	withRequestEvents,
+} from './helpers/hooks/event-types';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
 import RepeaterWithState from './components/fields/repeater-with-state';
@@ -84,9 +88,14 @@ import {
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
 import './stores/action-store';
-import './stores/gateways-store';
+import gateways from './stores/gateways';
+import './stores/subscribers/migrate-gateways-settings';
 import ValidateButtonWithStore from './components/validate-button-with-store';
 import GatewayFetchButton from './components/gateway-fetch-button';
+
+const { register } = wp.data;
+
+register( gateways );
 
 // JFBComponents
 window.JetFBComponents = {
@@ -170,6 +179,7 @@ window.JetFBHooks = {
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
-	withSelectActionsByType
+	withSelectActionsByType,
+	withRequestEvents,
 };
 

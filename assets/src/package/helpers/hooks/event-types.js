@@ -1,31 +1,39 @@
 import { selectParsedPostMeta } from './hooks-helper';
 
 export const withRequestEvents = select => {
-	const actions = selectParsedPostMeta( select, '_jf_actions' );
-	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
-
-	actions.splice( currentAction.index );
-
 	const eventTypes = [
-		...getEventsFromActions( actions ),
 		...getEventsFromGateways( select ),
+		...getEventsFromActions( select ),
 	];
 
 	return { eventTypes };
 };
 
-const getEventsFromGateways = select => {
+const getEventsFromGateways = ( select ) => {
 	const gateways = selectParsedPostMeta( select, '_jf_gateways' );
 	const { scenario = 'PAY_NOW' } = gateways[ gateways?.gateway ] ?? {};
 
-	const events = select( 'jet-forms/gateways' ).getEventTypes();
+	const eventsObjects = select( 'jet-forms/events' ).getGatewayTypes();
+	const events = [];
 
-	return events.filter( event => (
-		event.gateway === gateways.gateway && event.scenario === scenario
-	) );
+	for ( const event of eventsObjects ) {
+		const correctGateway = event.gateway ? event.gateway === gateways.gateway : true;
+		const correctScenario = event.scenario ? event.scenario === scenario : true;
+
+		if ( correctGateway && correctScenario ) {
+			events.push( event.value );
+		}
+	}
+
+	return [ ...new Set( events ) ];
 };
 
-export const getEventsFromActions = actions => {
+export const getEventsFromActions = select => {
+	const actions = selectParsedPostMeta( select, '_jf_actions' );
+	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
+
+	actions.splice( currentAction.index );
+
 	const events = [];
 
 	for ( const action of actions ) {
@@ -33,27 +41,12 @@ export const getEventsFromActions = actions => {
 			[ action.type ]: current = {},
 		} = action.settings;
 
-		if ( ! current.eventTypes ) {
+		if ( ! current.eventTypes?.length ) {
 			continue;
 		}
 
-		for ( const eventType of current.eventTypes ) {
-			const index = events.findIndex( field => field.value === eventType.value );
-
-			if ( - 1 !== index ) {
-				continue;
-			}
-
-			events.push( {
-				action_type: action.type,
-				action_id: action.id,
-				label: eventType?.label ?? eventType.value,
-				title: eventType?.label ?? eventType.value,
-				value: eventType.value,
-				help: eventType.help,
-			} );
-		}
+		events.push( ...current.eventTypes );
 	}
 
-	return events;
+	return [ ...new Set( events ) ];
 };

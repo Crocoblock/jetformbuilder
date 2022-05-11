@@ -5,9 +5,12 @@ namespace Jet_Form_Builder\Actions;
 
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
+use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Failed_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Success_Gateway_Event;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -18,7 +21,7 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
  * Class Events_Manager
  * @package Jet_Form_Builder\Actions
  */
-class Events_Manager {
+class Events_Manager implements Arrayable {
 
 	use Instance_Trait;
 	use Repository_Pattern_Trait;
@@ -43,6 +46,7 @@ class Events_Manager {
 		} catch ( Repository_Exception $exception ) {
 			return false;
 		}
+		$event->validate_actions();
 
 		$this->current = $event;
 
@@ -66,6 +70,32 @@ class Events_Manager {
 		return $this->rep_get_item( $slug );
 	}
 
+	public function get_gateways_events(): array {
+		/** @var Base_Event[] $response */
+		$response = $this->rep_get_items();
+
+		foreach ( $response as $key => $event ) {
+			if ( ! ( $event instanceof Base_Gateway_Event ) ) {
+				unset( $response[ $key ] );
+			}
+		}
+
+		return $response;
+	}
+
+	public function get_actions_events(): array {
+		/** @var Base_Event[] $response */
+		$response = $this->rep_get_items();
+
+		foreach ( $response as $key => $event ) {
+			if ( ! ( $event instanceof Base_Gateway_Event ) ) {
+				unset( $response[ $key ] );
+			}
+		}
+
+		return $response;
+	}
+
 	/**
 	 * @return array
 	 */
@@ -78,5 +108,12 @@ class Events_Manager {
 				new Failed_Gateway_Event(),
 			)
 		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function to_array(): array {
+		return Array_Tools::to_array( $this->rep_get_items() );
 	}
 }

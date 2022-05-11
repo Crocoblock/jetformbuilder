@@ -140,7 +140,6 @@ class Action_Handler {
 		do_action( 'jet-form-builder/actions/before-send' );
 
 		jet_fb_events()->set_current( Default_Process_Event::get_slug() );
-		jet_fb_events()->get_current()->validate_actions();
 
 		$run_actions_callback = apply_filters(
 			'jet-form-builder/actions/run-callback',

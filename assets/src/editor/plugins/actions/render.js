@@ -11,7 +11,10 @@ const {
 	DynamicPreset,
 } = JetFBComponents;
 
-const { useActions } = JetFBHooks;
+const {
+	useActions,
+	withRequestEvents,
+} = JetFBHooks;
 
 const {
 	TextareaControl,
@@ -24,6 +27,7 @@ const {
 	DropdownMenu,
 	Flex,
 	FormTokenField,
+	BaseControl,
 	__experimentalToggleGroupControl: ToggleGroupControl,
 	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
 } = wp.components;
@@ -37,7 +41,10 @@ const { __ } = wp.i18n;
 
 const { applyFilters } = wp.hooks;
 
-const { withDispatch, useDispatch } = wp.data;
+const {
+	withDispatch,
+	withSelect,
+} = wp.data;
 const { compose } = wp.compose;
 
 const actionTypes = window.jetFormActionTypes.map( function ( action ) {
@@ -81,7 +88,10 @@ const operators = [
 
 const operatorLabel = __( 'Condition Operator', 'jet-form-builder' );
 
-let PluginActions = ( { setCurrentAction } ) => {
+let PluginActions = ( {
+	setCurrentAction,
+	eventTypes,
+} ) => {
 
 	const [ actions, setActions ] = useActions( true );
 
@@ -92,7 +102,6 @@ let PluginActions = ( { setCurrentAction } ) => {
 	}, [] );
 
 	const moveAction = ( fromIndex, toIndex ) => {
-
 		var item = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
 			replacedItem = JSON.parse( JSON.stringify( actions[ toIndex ] ) );
 
@@ -100,7 +109,6 @@ let PluginActions = ( { setCurrentAction } ) => {
 		actions.splice( fromIndex, 1, replacedItem );
 
 		setActions( [ ...actions ] );
-
 	};
 
 	const deleteAction = ( index ) => {
@@ -176,12 +184,14 @@ let PluginActions = ( { setCurrentAction } ) => {
 
 	useEffect( () => {
 		if ( editedAction.type ) {
+			document.dispatchEvent( JetFBMigrateEvent );
 			setEdit( true );
 		}
 	}, [ editedAction ] );
 
 	useEffect( () => {
 		if ( processedAction.type ) {
+			document.dispatchEvent( JetFBMigrateEvent );
 			setEditProcessAction( true );
 			setFormFields( getFormFieldsBlocks( [], '--' ) );
 		}
@@ -217,7 +227,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 						onChange={ newType => updateActionType( action.id, newType ) }
 					>
 						{ actionTypes.map( type => <option
-							key={ action.id + '__' +type.value }
+							key={ action.id + '__' + type.value }
 							value={ type.value }
 							disabled={ type.disabled }
 							dangerouslySetInnerHTML={ { __html: type.label } }
@@ -245,6 +255,7 @@ let PluginActions = ( { setCurrentAction } ) => {
 								setProcessedAction( () => (
 									{ ...action }
 								) );
+								setCurrentAction( { ...action, index } );
 							} }
 						/>
 						<DropdownMenu
@@ -302,12 +313,14 @@ let PluginActions = ( { setCurrentAction } ) => {
 			>
 				{ __( '+ New Action', 'jet-form-builder' ) }
 			</Button>
-			{ ( ! JetFormEditorData.isActivePro ) && <Button
-				href={ JetFormEditorData.utmLinks.allProActions }
-				variant='link'
-			>
-				{ __( 'All PRO Actions', 'jet-form-builder' ) }
-			</Button> }
+			{ (
+				  ! JetFormEditorData.isActivePro
+			  ) && <Button
+				  href={ JetFormEditorData.utmLinks.allProActions }
+				  variant='link'
+			  >
+				  { __( 'All PRO Actions', 'jet-form-builder' ) }
+			  </Button> }
 		</div>
 		{ isEdit && <ActionModal
 			classNames={ [ 'width-60' ] }
@@ -375,15 +388,28 @@ let PluginActions = ( { setCurrentAction } ) => {
 						const operatorOption = getOperatorOption( currentItem.operator );
 
 						return <>
-							<ToggleGroupControl
+							<BaseControl
 								label={ __( 'Condition type', 'jet-form-builder' ) }
-								value={ currentItem.type ?? 'field' }
-								isBlock
+								className={ 'control-flex field-display-grid' }
 							>
-								<ToggleGroupControlOption value="field" label={ __( 'Field comparison', 'jet-form-builder' ) } />
-								<ToggleGroupControlOption value="event" label={ __( 'Event match', 'jet-form-builder' ) } />
-							</ToggleGroupControl>
-							{ 'field' === currentItem.type ? <>
+								<ToggleGroupControl
+									hideLabelFromVision
+									value={ currentItem.type ?? 'field' }
+									onChange={ type => changeCurrentItem( { type } ) }
+								>
+									<ToggleGroupControlOption
+										value="field"
+										label={ __( 'Field comparison', 'jet-form-builder' ) }
+									/>
+									<ToggleGroupControlOption
+										value="event"
+										label={ __( 'Event match', 'jet-form-builder' ) }
+									/>
+								</ToggleGroupControl>
+							</BaseControl>
+							{ 'field' === (
+								currentItem.type ?? 'field'
+							) ? <>
 								<ToggleControl
 									label={ executeLabel }
 									checked={ currentItem.execute }
@@ -452,15 +478,14 @@ let PluginActions = ( { setCurrentAction } ) => {
 									className={ 'control-flex' }
 								>
 									<FormTokenField
-										label={ label( 'add_attachment' ) }
+										label={ __( 'Add event', 'jet-form-builder' ) }
 										value={ currentItem.events ?? [] }
-										suggestions={ formFieldsTokens }
-										onChange={ tokens => onChangeSettingObj( { attachments: [ ...new Set( tokens ) ] } ) }
+										suggestions={ eventTypes }
+										onChange={ events => changeCurrentItem( { events } ) }
 										tokenizeOnSpace
 									/>
 								</BaseControl>
 							</> }
-
 						</>;
 					} }
 				</RepeaterWithState>;
@@ -477,6 +502,7 @@ PluginActions = compose(
 			},
 		};
 	} ),
+	withSelect( withRequestEvents ),
 )( PluginActions );
 
 export default PluginActions;

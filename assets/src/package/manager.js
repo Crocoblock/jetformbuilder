@@ -87,15 +87,9 @@ import {
 	getBlockControls,
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
-import './stores/action-store';
-import gateways from './stores/gateways';
-import './stores/subscribers/migrate-gateways-settings';
 import ValidateButtonWithStore from './components/validate-button-with-store';
 import GatewayFetchButton from './components/gateway-fetch-button';
-
-const { register } = wp.data;
-
-register( gateways );
+import './stores/manager';
 
 // JFBComponents
 window.JetFBComponents = {

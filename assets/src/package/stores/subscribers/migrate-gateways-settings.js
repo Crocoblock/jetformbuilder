@@ -1,15 +1,11 @@
-const endMigrate = new CustomEvent( 'jfb.endMigrate' );
-
-const {
-	select,
-	dispatch,
-} = wp.data;
-
 const getMeta = () => {
+	const { select } = wp.data;
 	return select( 'core/editor' ).getEditedPostAttribute( 'meta' );
 };
 
 const editMeta = ( name, objectValue ) => {
+	const { dispatch } = wp.data;
+
 	const { editPost } = dispatch( 'core/editor' );
 	const formBuilderMeta = getMeta();
 
@@ -30,7 +26,7 @@ const getActiveActions = actions => {
 		if ( ! active ) {
 			continue;
 		}
-		response.push( action_id );
+		response.push( + action_id );
 	}
 
 	return response;
@@ -65,15 +61,17 @@ const migrate = ( gateways, actions ) => {
 	const on_success = getActiveActions( gateways[ 'notifications_success' ] ?? {} );
 	const on_failed = getActiveActions( gateways[ 'notifications_failed' ] ?? {} );
 	const on_before = getActiveActions( gateways[ 'notifications_before' ] ?? {} );
+	const redirect_id = + gateways[ 'use_success_redirect' ] ?? 0;
 
-	if ( ! on_success.length && ! on_failed.length && ! on_before.length ) {
+	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! redirect_id ) {
 		throw 'nothing_to_migrate';
 	}
 
-	actions = actions.map( action => {
+	return actions.map( action => {
 		if ( ! on_success.includes( action.id ) &&
 		     ! on_failed.includes( action.id ) &&
-		     ! on_failed.includes( action.id )
+		     ! on_failed.includes( action.id ) &&
+		     action.id !== redirect_id
 		) {
 			return action;
 		}
@@ -81,13 +79,16 @@ const migrate = ( gateways, actions ) => {
 		const events = [];
 
 		if ( on_success.includes( action.id ) ) {
-			events.push( 'success-gateway' );
+			events.push( 'GATEWAY.SUCCESS' );
 		}
 		if ( on_failed.includes( action.id ) ) {
-			events.push( 'failed-gateway' );
+			events.push( 'GATEWAY.FAILED' );
 		}
 		if ( on_before.includes( action.id ) ) {
-			events.push( 'default-process' );
+			events.push( 'DEFAULT.PROCESS' );
+		}
+		if ( action.id === redirect_id ) {
+			events.push( 'GATEWAY.SUCCESS' );
 		}
 
 		action.conditions = [
@@ -97,11 +98,11 @@ const migrate = ( gateways, actions ) => {
 
 		return action;
 	} );
-
-	return actions;
 };
 
 const runEvent = () => {
+	document.removeEventListener( 'jfb.migrate', runEvent );
+
 	let gateways = {}, actions = [];
 
 	try {
@@ -113,20 +114,16 @@ const runEvent = () => {
 	gateways.last_migrate = 1;
 	editMeta( '_jf_gateways', gateways );
 
+	const withConditions = [];
 	try {
-		actions = migrate( gateways, actions );
+		withConditions.push( ...migrate( gateways, actions ) );
 	} catch ( error ) {
 		return;
 	}
 
-	editMeta( '_jf_actions', actions );
+	editMeta( '_jf_actions', withConditions );
 };
 
-const unsubscribe = wp.data.subscribe( () => {
-	document.dispatchEvent( endMigrate );
+window.JetFBMigrateEvent = new CustomEvent( 'jfb.migrate' );
 
-	runEvent();
-} );
-
-document.addEventListener( 'jfb.endMigrate', () => unsubscribe() );
-//unsubscribe();
+document.addEventListener( 'jfb.migrate', runEvent );

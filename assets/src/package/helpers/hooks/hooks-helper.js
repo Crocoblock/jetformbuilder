@@ -50,20 +50,26 @@ export const useActions = ( withEditPostEffect = false ) => {
 
 	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
 
-	useEffect( () => {
-		if ( withEditPostEffect ) {
-			editPost( {
-				meta: (
-					{
-						...meta,
-						_jf_actions: JSON.stringify( actions ),
-					}
-				),
-			} );
-		}
-	}, [ actions ] );
+	const setActionsWithMeta = newActions => {
+		setActions( newActions );
 
-	return [ actions, setActions ];
+		if ( ! withEditPostEffect ) {
+			return;
+		}
+
+		debugger;
+
+		editPost( {
+			meta: (
+				{
+					...meta,
+					_jf_actions: JSON.stringify( newActions ),
+				}
+			),
+		} );
+	};
+
+	return [ actions, setActionsWithMeta ];
 };
 export const initClasses = [ 'jet-form-validate-button' ];
 

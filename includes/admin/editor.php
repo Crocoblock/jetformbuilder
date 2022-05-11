@@ -24,7 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE         = 'jet-form-builder-editor';
+	const EDITOR_HANDLE = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public function __construct() {
@@ -321,6 +321,12 @@ class Editor {
 			),
 			JET_FORM_BUILDER_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jetFormEvents',
+			jet_fb_events()->to_array()
 		);
 
 		wp_set_script_translations(

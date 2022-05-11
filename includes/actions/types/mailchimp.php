@@ -161,11 +161,11 @@ class Mailchimp extends Integration_Base_Action {
 
 		if ( ! in_array( $status, $this->get_api_handler()->success_statuses, true ) ) {
 
-			if ( isset( $response['title'] ) ) {
-				throw new Action_Exception( "derror|{$response['title']}" );
+			if ( isset( $response['detail'] ) ) {
+				throw new Action_Exception( "derror|{$response['detail']}", $response );
 			}
 
-			throw new Action_Exception( 'internal_error' );
+			throw new Action_Exception( 'internal_error', $response );
 		}
 
 		// Error response

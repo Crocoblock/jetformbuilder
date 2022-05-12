@@ -23,54 +23,27 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 		editPost,
 	} = useDispatch( 'core/editor' );
 
-	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
+	const metaStateValue = JSON.parse( meta[ key ] || ifEmpty );
 
-	useEffect( () => {
+	const setMetaStateValue = newValue => {
 		editPost( {
 			meta: (
 				{
 					...meta,
-					[ key ]: JSON.stringify( metaStateValue ),
-				}
-			),
-		} );
-	}, [ metaStateValue ] );
-
-	return [ metaStateValue, setMetaStateValue ];
-};
-
-export const useActions = ( withEditPostEffect = false ) => {
-	const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
-
-	const {
-		editPost,
-	} = useDispatch( 'core/editor' );
-
-	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
-
-	const setActionsWithMeta = newActions => {
-		setActions( newActions );
-
-		if ( ! withEditPostEffect ) {
-			return;
-		}
-
-		debugger;
-
-		editPost( {
-			meta: (
-				{
-					...meta,
-					_jf_actions: JSON.stringify( newActions ),
+					[ key ]: JSON.stringify( newValue ),
 				}
 			),
 		} );
 	};
 
-	return [ actions, setActionsWithMeta ];
+	return [ metaStateValue, setMetaStateValue ];
 };
+
+export const useActions = () => {
+	return useMetaState( '_jf_actions' );
+};
+
+
 export const initClasses = [ 'jet-form-validate-button' ];
 
 export const useStateValidClasses = initialValid => {

@@ -82,9 +82,6 @@ function PluginGateways( props ) {
 		if ( isEdit ) {
 			setGateway( GatewaysMeta );
 			setGatewayScenario( GatewaysMeta[ GatewaysMeta.gateway ]?.scenario );
-
-			document.dispatchEvent( JetFBMigrateEvent );
-
 		} else {
 			clearGateway();
 			clearScenario();

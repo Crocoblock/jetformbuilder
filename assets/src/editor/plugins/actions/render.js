@@ -1,4 +1,7 @@
-import { conditionSettings, defaultAction, defaultActions, getRandomID } from './options';
+import { defaultAction, defaultActions, getRandomID } from './options';
+import EditConditions from './edit.conditions';
+import { useActionsEdit } from './hooks';
+import EditSettingsModal from './edit.settings.modal';
 
 const {
 	getFormFieldsBlocks,
@@ -10,11 +13,6 @@ const {
 	FieldWithPreset,
 	DynamicPreset,
 } = JetFBComponents;
-
-const {
-	useActions,
-	withRequestEvents,
-} = JetFBHooks;
 
 const {
 	TextareaControl,
@@ -39,61 +37,8 @@ const {
 
 const { __ } = wp.i18n;
 
-const { applyFilters } = wp.hooks;
-
-const {
-	withDispatch,
-	withSelect,
-} = wp.data;
-const { compose } = wp.compose;
-
-const actionTypes = window.jetFormActionTypes.map( function ( action ) {
-	return {
-		value: action.id,
-		label: action.name,
-		disabled: action.disabled,
-	};
-} );
-
-function getActionCallback( editedAction ) {
-	for ( let i = 0; i < window.jetFormActionTypes.length; i ++ ) {
-		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
-			return window.jetFormActionTypes[ i ].callback;
-		}
-	}
-
-	return false;
-}
-
-function getConditionOptionFrom( from, value ) {
-	const option = conditionSettings[ from ].find( item => item.value === value );
-
-	return ( optionName, ifNot = '' ) => option ? (
-		option[ optionName ] || ifNot
-	) : ifNot;
-}
-
-function getOperatorOption( operator ) {
-	return getConditionOptionFrom( 'operators', operator );
-}
-
-function getTransformerOption( value ) {
-	return getConditionOptionFrom( 'compare_value_formats', value );
-}
-
-const operators = [
-	{ value: 'and', label: __( 'AND (ALL conditions must be met)', 'jet-form-builder' ) },
-	{ value: 'or', label: __( 'OR (at least ONE condition must be met)', 'jet-form-builder' ) },
-];
-
-const operatorLabel = __( 'Condition Operator', 'jet-form-builder' );
-
-let PluginActions = ( {
-	setCurrentAction,
-	eventTypes,
-} ) => {
-
-	const [ actions, setActions ] = useActions( true );
+function PluginActions() {
+	const [ actions, setActions ] = useActionsEdit();
 
 	useEffect( () => {
 		if ( 0 === actions.length ) {
@@ -101,202 +46,9 @@ let PluginActions = ( {
 		}
 	}, [] );
 
-	const moveAction = ( fromIndex, toIndex ) => {
-		var item = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
-			replacedItem = JSON.parse( JSON.stringify( actions[ toIndex ] ) );
-
-		actions.splice( toIndex, 1, item );
-		actions.splice( fromIndex, 1, replacedItem );
-
-		setActions( [ ...actions ] );
-	};
-
-	const deleteAction = ( index ) => {
-		actions.splice( index, 1 );
-		setActions( [ ...actions ] );
-	};
-
-	const updateAction = ( id, key, value ) => {
-		setActions( actions.map( ( action, index ) => {
-			if ( action.id === id ) {
-				var newAction = JSON.parse( JSON.stringify( action ) );
-				newAction[ key ] = value;
-				return newAction;
-			} else {
-				return action;
-			}
-		} ) );
-	};
-
-	const updateActionObj = ( id, props ) => {
-		setActions( actions => actions.map( current => {
-			if ( id !== current.id ) {
-				return current;
-			}
-			return {
-				...JSON.parse( JSON.stringify( current ) ),
-				...props,
-			};
-		} ) );
-	};
-
-	const [ isEdit, setEdit ] = useState( false );
-	const [ editedAction, setEditedAction ] = useState( {} );
-
-	const [ isEditProcessAction, setEditProcessAction ] = useState( false );
-	const [ processedAction, setProcessedAction ] = useState( {} );
-
-	const [ formFields, setFormFields ] = useState( [] );
-
-	const closeModal = () => {
-		setEdit( false );
-		setCurrentAction( {} );
-	};
-
-	var Callback = getActionCallback( editedAction );
-
-	const updateActionSettings = action => {
-		updateActionObj( action.id, {
-			settings: action.settings,
-		} );
-		closeModal();
-	};
-
-	const updateActionCondition = items => {
-		updateAction( processedAction.id, 'conditions', items );
-		setEditProcessAction( false );
-	};
-
-	const updateActionType = ( id, type ) => {
-		setActions( prev => prev.map( prevItem => {
-			if ( prevItem.id === id ) {
-				var newAction = JSON.parse( JSON.stringify( prevItem ) );
-				newAction.type = type;
-				newAction.settings = newAction.settings || {};
-				newAction.settings[ type ] = newAction.settings[ type ] || {};
-
-				return newAction;
-			} else {
-				return prevItem;
-			}
-		} ) );
-	};
-
-	useEffect( () => {
-		if ( editedAction.type ) {
-			document.dispatchEvent( JetFBMigrateEvent );
-			setEdit( true );
-		}
-	}, [ editedAction ] );
-
-	useEffect( () => {
-		if ( processedAction.type ) {
-			document.dispatchEvent( JetFBMigrateEvent );
-			setEditProcessAction( true );
-			setFormFields( getFormFieldsBlocks( [], '--' ) );
-		}
-	}, [ processedAction ] );
-
-	const getMergedSettings = () => {
-		return editedAction.settings[ editedAction.type ] || editedAction.settings;
-	};
-
 	return <>
 		{ actions && actions.map( ( action, index ) => {
-			const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action, actions );
 
-			const conditionsIcon = action?.conditions?.length ? <span
-				className="dashicon dashicons dashicons-randomize"
-				data-count={ action?.conditions.length }
-			/> : <span
-				className="dashicon dashicons dashicons-randomize"
-			/>;
-
-			return <Card
-				key={ action.id }
-				size={ 'extraSmall' }
-				className={ 'jet-form-action' }
-			>
-				{ header && <CardHeader>
-					{ header }
-				</CardHeader> }
-				<CardBody>
-					<SelectControl
-						value={ action.type }
-						options={ actionTypes }
-						onChange={ newType => updateActionType( action.id, newType ) }
-					>
-						{ actionTypes.map( type => <option
-							key={ action.id + '__' + type.value }
-							value={ type.value }
-							disabled={ type.disabled }
-							dangerouslySetInnerHTML={ { __html: type.label } }
-						/> ) }
-					</SelectControl>
-					{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
-					<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
-						<Button
-							disabled={ ! getActionCallback( action ) }
-							icon='edit'
-							label={ 'Edit Action' }
-							onClick={ () => {
-								setEditedAction( () => (
-									{
-										...action,
-									}
-								) );
-								setCurrentAction( { ...action, index } );
-							} }
-						/>
-						<Button
-							icon={ conditionsIcon }
-							label={ 'Conditions' }
-							onClick={ () => {
-								setProcessedAction( () => (
-									{ ...action }
-								) );
-								setCurrentAction( { ...action, index } );
-							} }
-						/>
-						<DropdownMenu
-							icon={ 'ellipsis' }
-							label={ 'Edit, move or delete' }
-							controls={ [
-								{
-									title: 'Up',
-									icon: 'arrow-up',
-									disabled: true,
-									onClick: () => {
-										if ( 0 !== index ) {
-											moveAction( index, index - 1 );
-										}
-									},
-								},
-								{
-									title: 'Down',
-									icon: 'arrow-down',
-									disabled: index === actions.length,
-									onClick: () => {
-										if ( (
-											     actions.length - 1
-										     ) !== index ) {
-											moveAction( index, index + 1 );
-										}
-									},
-								},
-								{
-									title: 'Delete',
-									icon: 'trash',
-									onClick: () => {
-										deleteAction( index );
-									},
-								},
-							] }
-						/>
-					</Flex>
-
-				</CardBody>
-			</Card>;
 		} ) }
 		<div className='jfb-button-group'>
 			<Button
@@ -322,187 +74,19 @@ let PluginActions = ( {
 				  { __( 'All PRO Actions', 'jet-form-builder' ) }
 			  </Button> }
 		</div>
-		{ isEdit && <ActionModal
-			classNames={ [ 'width-60' ] }
-			onRequestClose={ closeModal }
-			title={ 'Edit Action' }
-			onUpdateClick={ () => {
-				updateActionSettings( editedAction );
-			} }
-			onCancelClick={ closeModal }
-		>
-			{ Callback && <Callback
-				settings={ getMergedSettings() }
-				actionId={ editedAction.id }
-				onChange={ ( data ) => {
-					setEditedAction( prev => (
-						{
-							...prev,
-							settings: {
-								...prev.settings,
-								[ editedAction.type ]: data,
-							},
-						}
-					) );
-				} }
-			/> }
-		</ActionModal> }
+		{ isEdit && <EditSettingsModal /> }
 		{ isEditProcessAction && <ActionModal
 			classNames={ [ 'width-60' ] }
 			title={ __( 'Edit Action Conditions', 'jet-form-builder' ) }
 			onRequestClose={ () => setEditProcessAction( false ) }
 			onCancelClick={ () => setEditProcessAction( false ) }
 		>
-			{ ( { actionClick, onRequestClose } ) => {
-				return <RepeaterWithState
-					items={ processedAction.conditions }
-					newItem={ conditionSettings.item }
-					onUnMount={ onRequestClose }
-					isSaveAction={ actionClick }
-					onSaveItems={ conditions => {
-						updateActionObj( processedAction.id, {
-							conditions,
-							condition_operator: processedAction.condition_operator,
-						} );
-						setProcessedAction( false );
-					} }
-					addNewButtonLabel={ __( 'Add New Condition', 'jet-form-builder' ) }
-					additionalControls={ <SelectControl
-						key={ 'SelectControl-operator' }
-						label={ operatorLabel }
-						labelPosition="side"
-						value={ processedAction.condition_operator || 'and' }
-						options={ operators }
-						onChange={ condition_operator => {
-							setProcessedAction( prev => (
-								{ ...prev, condition_operator }
-							) );
-						} }
-					/> }
-				>
-					{ ( { currentItem, changeCurrentItem } ) => {
-						let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
-						executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
-
-						const transformerOption = getTransformerOption( currentItem.compare_value_format );
-						const operatorOption = getOperatorOption( currentItem.operator );
-
-						return <>
-							<BaseControl
-								label={ __( 'Condition type', 'jet-form-builder' ) }
-								className={ 'control-flex field-display-grid' }
-							>
-								<ToggleGroupControl
-									hideLabelFromVision
-									value={ currentItem.type ?? 'field' }
-									onChange={ type => changeCurrentItem( { type } ) }
-								>
-									<ToggleGroupControlOption
-										value="field"
-										label={ __( 'Field comparison', 'jet-form-builder' ) }
-									/>
-									<ToggleGroupControlOption
-										value="event"
-										label={ __( 'Event match', 'jet-form-builder' ) }
-									/>
-								</ToggleGroupControl>
-							</BaseControl>
-							{ 'field' === (
-								currentItem.type ?? 'field'
-							) ? <>
-								<ToggleControl
-									label={ executeLabel }
-									checked={ currentItem.execute }
-									onChange={ newValue => {
-										changeCurrentItem( { execute: newValue } );
-									} }
-								/>
-								<SelectControl
-									label="Operator"
-									labelPosition="side"
-									help={ operatorOption( 'help' ) }
-									value={ currentItem.operator }
-									options={ conditionSettings.operators }
-									onChange={ operator => changeCurrentItem( { operator } ) }
-								/>
-								<SelectControl
-									label="Field"
-									labelPosition="side"
-									value={ currentItem.field }
-									options={ formFields }
-									onChange={ field => changeCurrentItem( { field } ) }
-								/>
-								<SelectControl
-									label={ __( 'Type transform comparing value', 'jet-form-builder' ) }
-									labelPosition="side"
-									value={ currentItem.compare_value_format }
-									options={ conditionSettings.compare_value_formats }
-									onChange={ compare_value_format => {
-										changeCurrentItem( { compare_value_format } );
-									} }
-								/>
-								{ transformerOption( 'help' ).length > 0 && <p
-									className={ 'components-base-control__help' }
-									style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
-									dangerouslySetInnerHTML={ { __html: transformerOption( 'help' ) } }
-								/> }
-								<FieldWithPreset
-									baseControlProps={ {
-										label: 'Value to Compare',
-									} }
-									ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-										value={ currentItem.default }
-										isSaveAction={ actionClick }
-										onSavePreset={ newValue => {
-											changeCurrentItem( { default: newValue } );
-										} }
-										excludeSources={ [ 'query_var' ] }
-										onUnMount={ onRequestClose }
-									/> }
-									triggerClasses={ [ 'trigger__textarea' ] }
-								>
-									<TextareaControl
-										className={ 'jet-control-clear jet-user-fields-map__list' }
-										value={ currentItem.default }
-										help={ operatorOption( 'need_explode' )
-											? conditionSettings.help_for_exploding_compare
-											: '' }
-										onChange={ newValue => {
-											changeCurrentItem( { default: newValue } );
-										} }
-									/>
-								</FieldWithPreset>
-							</> : <>
-								<BaseControl
-									label={ __( 'Choose events', 'jet-form-builder' ) }
-									className={ 'control-flex' }
-								>
-									<FormTokenField
-										label={ __( 'Add event', 'jet-form-builder' ) }
-										value={ currentItem.events ?? [] }
-										suggestions={ eventTypes }
-										onChange={ events => changeCurrentItem( { events } ) }
-										tokenizeOnSpace
-									/>
-								</BaseControl>
-							</> }
-						</>;
-					} }
-				</RepeaterWithState>;
-			} }
+			{ ( { actionClick, onRequestClose } ) => <EditConditions
+				actionClick={ actionClick }
+				onRequestClose={ onRequestClose }
+			/> }
 		</ActionModal> }
 	</>;
 };
-
-PluginActions = compose(
-	withDispatch( dispatch => {
-		return {
-			setCurrentAction( action ) {
-				dispatch( 'jet-forms/actions' ).setCurrentAction( action );
-			},
-		};
-	} ),
-	withSelect( withRequestEvents ),
-)( PluginActions );
 
 export default PluginActions;

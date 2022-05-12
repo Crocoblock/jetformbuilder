@@ -124,6 +124,4 @@ const runEvent = () => {
 	editMeta( '_jf_actions', withConditions );
 };
 
-window.JetFBMigrateEvent = new CustomEvent( 'jfb.migrate' );
-
-document.addEventListener( 'jfb.migrate', runEvent );
+wp.domReady( () => setTimeout( runEvent, 0 ) );

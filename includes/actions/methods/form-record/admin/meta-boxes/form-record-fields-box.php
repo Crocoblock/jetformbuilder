@@ -39,15 +39,16 @@ class Form_Record_Fields_Box extends Base_Table_Box {
 		);
 	}
 
-	public function get_receive_endpoint(): array {
-		return array(
-			'url'     => Fetch_Records_Fields_Box_Endpoint::dynamic_rest_url(
-				array(
-					'id' => $this->get_id(),
-				)
-			),
-			'methods' => Fetch_Records_Fields_Box_Endpoint::get_methods(),
+	public function get_rest_url(): string {
+		return Fetch_Records_Fields_Box_Endpoint::dynamic_rest_url(
+			array(
+				'id' => $this->get_id(),
+			)
 		);
+	}
+
+	public function get_rest_methods(): string {
+		return Fetch_Records_Fields_Box_Endpoint::get_methods();
 	}
 
 	public function get_columns(): array {

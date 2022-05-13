@@ -90,11 +90,23 @@ import BaseHelp from './components/controls/base-help';
 import ValidateButtonWithStore from './components/validate-button-with-store';
 import GatewayFetchButton from './components/gateway-fetch-button';
 import './stores/manager';
+import ActionModalContext from './context/action.modal';
+import SafeDeleteContext from './context/safe.delete';
+import RepeaterItemContext from './context/repeater.item';
+import SafeDeleteToggle from './components/fields/safe.delete.toggle';
+import RepeaterAddNew from './components/fields/repeater.add.new';
+import Repeater from './components/fields/repeater';
 
 // JFBComponents
 window.JetFBComponents = {
 	ActionFieldsMap,
 	ActionModal,
+	ActionModalContext,
+	SafeDeleteContext,
+	RepeaterItemContext,
+	SafeDeleteToggle,
+	RepeaterAddNew,
+	Repeater,
 	RequestButton,
 	ValidateButton,
 	RequestLoadingButton,

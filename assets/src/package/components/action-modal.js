@@ -1,27 +1,29 @@
-const {
-		  Button,
-		  ButtonGroup,
-		  Modal,
-	  } = wp.components;
+import ActionModalContext from '../context/action.modal';
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	Button,
+	ButtonGroup,
+	Modal,
+} = wp.components;
+
+const {
+	useState,
+	useEffect,
+} = wp.element;
 
 function ActionModal( {
-						  onRequestClose,
-						  children,
-						  title,
-						  classNames = [],
-						  onUpdateClick,
-						  onCancelClick,
-						  updateBtnLabel = 'Update',
-						  updateBtnProps = {},
-						  cancelBtnProps = {},
-						  cancelBtnLabel = 'Cancel',
-						  fixedHeight = '',
-					  } ) {
+	onRequestClose,
+	children,
+	title,
+	classNames = [],
+	onUpdateClick,
+	onCancelClick,
+	updateBtnLabel = 'Update',
+	updateBtnProps = {},
+	cancelBtnProps = {},
+	cancelBtnLabel = 'Cancel',
+	fixedHeight = '',
+} ) {
 
 	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
 
@@ -31,19 +33,19 @@ function ActionModal( {
 		if ( onUpdateClick ) {
 			onUpdateClick();
 		}
-		setActionClick( true )
-	}
+		setActionClick( true );
+	};
 	const cancelClick = () => {
 		if ( onCancelClick ) {
 			onCancelClick();
 		}
 		setActionClick( false );
-	}
+	};
 
-	let style = {}
+	let style = {};
 	if ( fixedHeight ) {
 		style = { height: fixedHeight };
-		modalClasses.push( 'jet-modal-fixed-height' )
+		modalClasses.push( 'jet-modal-fixed-height' );
 	}
 
 	return <Modal
@@ -59,10 +61,12 @@ function ActionModal( {
 		</div> }
 		{ children && <>
 			<div className='jet-form-edit-modal__wrapper'>
-				<div className="jet-form-edit-modal__content">
-					{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
-					{ 'function' !== typeof children && children }
-				</div>
+				<ActionModalContext.Provider value={ { actionClick, onRequestClose } }>
+					<div className="jet-form-edit-modal__content">
+						{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
+						{ 'function' !== typeof children && children }
+					</div>
+				</ActionModalContext.Provider>
 			</div>
 			<ButtonGroup
 				className="jet-form-edit-modal__actions"

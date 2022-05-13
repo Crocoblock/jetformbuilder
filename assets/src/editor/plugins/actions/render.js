@@ -1,44 +1,21 @@
 import { defaultAction, defaultActions, getRandomID } from './options';
-import EditConditions from './edit.conditions';
 import { useActionsEdit } from './hooks';
 import EditSettingsModal from './edit.settings.modal';
+import EditConditionsModal from './edit.conditions.modal';
+import ListActionItem from './action.item';
 
-const {
-	getFormFieldsBlocks,
-} = JetFBActions;
-
-const {
-	ActionModal,
-	RepeaterWithState,
-	FieldWithPreset,
-	DynamicPreset,
-} = JetFBComponents;
-
-const {
-	TextareaControl,
-	ToggleControl,
-	SelectControl,
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	DropdownMenu,
-	Flex,
-	FormTokenField,
-	BaseControl,
-	__experimentalToggleGroupControl: ToggleGroupControl,
-	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
-} = wp.components;
 
 const {
 	useState,
 	useEffect,
 } = wp.element;
 
+const { Button } = wp.components;
+
 const { __ } = wp.i18n;
 
 function PluginActions() {
-	const [ actions, setActions ] = useActionsEdit();
+	const { actions, setActions } = useActionsEdit();
 
 	useEffect( () => {
 		if ( 0 === actions.length ) {
@@ -46,10 +23,14 @@ function PluginActions() {
 		}
 	}, [] );
 
-	return <>
-		{ actions && actions.map( ( action, index ) => {
 
-		} ) }
+
+	return <>
+		{ actions && actions.map( ( action, index ) => <ListActionItem
+			key={ action.id }
+			action={ action }
+			index={ index }
+		/> ) }
 		<div className='jfb-button-group'>
 			<Button
 				isPrimary
@@ -74,18 +55,8 @@ function PluginActions() {
 				  { __( 'All PRO Actions', 'jet-form-builder' ) }
 			  </Button> }
 		</div>
-		{ isEdit && <EditSettingsModal /> }
-		{ isEditProcessAction && <ActionModal
-			classNames={ [ 'width-60' ] }
-			title={ __( 'Edit Action Conditions', 'jet-form-builder' ) }
-			onRequestClose={ () => setEditProcessAction( false ) }
-			onCancelClick={ () => setEditProcessAction( false ) }
-		>
-			{ ( { actionClick, onRequestClose } ) => <EditConditions
-				actionClick={ actionClick }
-				onRequestClose={ onRequestClose }
-			/> }
-		</ActionModal> }
+		<EditSettingsModal/>
+		<EditConditionsModal/>
 	</>;
 };
 

@@ -4,10 +4,33 @@ import functions from './functions';
 import withActionLocalizeScript from '../../helpers/actions/action-wrapper';
 
 export default {
-	[ constants.setCurrentAction ]: ( state, action ) => (
+	[ constants.setCurrentAction ]: ( state, action ) => {
+		const update = {};
+
+		if ( 'function' === typeof action.item ) {
+			update.currentAction = action.item( state.currentAction );
+		} else {
+			update.currentAction = action.item;
+		}
+
+		return {
+			...state,
+			...update,
+		};
+	},
+	[ constants.setMeta ]: ( state, action ) => (
 		{
 			...state,
-			currentAction: action.item,
+			meta: {
+				...action.item,
+			},
+		}
+	),
+	[ constants.clearCurrent ]: ( state ) => (
+		{
+			...state,
+			currentAction: {},
+			meta: {},
 		}
 	),
 	[ constants.setLoading ]: ( state, action ) => {
@@ -40,7 +63,20 @@ export default {
 				settings: {
 					...settings,
 					[ type ]: updateSettings,
-				}
+				},
+			},
+		};
+	},
+	[ constants.updateCurrentConditions ]: ( state, action ) => {
+		const { conditions = [] } = state.currentAction;
+
+		const update = 'function' === typeof action.item ? action.item( conditions ) : action.item;
+
+		return {
+			...state,
+			currentAction: {
+				...state.currentAction,
+				conditions: update,
 			},
 		};
 	},
@@ -50,7 +86,7 @@ export default {
 			callbacks: {
 				...state.callbacks,
 				[ action.actionType ]: withActionLocalizeScript( action.actionType, action.callback ),
-			}
+			},
 		}
 	),
 

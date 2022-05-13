@@ -12,24 +12,20 @@ export const useActionsEdit = () => {
 		const item = JSON.parse( JSON.stringify( actions[ fromIndex ] ) ),
 			replacedItem = JSON.parse( JSON.stringify( actions[ toIndex ] ) );
 
-		setActions( prevActions => {
-			prevActions.splice( toIndex, 1, item );
-			prevActions.splice( fromIndex, 1, replacedItem );
+		actions.splice( toIndex, 1, item );
+		actions.splice( fromIndex, 1, replacedItem );
 
-			return [ ...prevActions ];
-		} );
+		setActions( [ ...actions ] );
 	};
 
 	const deleteAction = ( index ) => {
-		setActions( prevActions => {
-			prevActions.splice( index, 1 );
+		actions.splice( index, 1 );
 
-			return [ ...prevActions ];
-		} );
+		setActions( [ ...actions ] );
 	};
 
 	const updateActionObj = ( id, props ) => {
-		setActions( prevActions => prevActions.map( current => {
+		const newActions = actions.map( current => {
 			if ( id !== current.id ) {
 				return current;
 			}
@@ -37,7 +33,9 @@ export const useActionsEdit = () => {
 				...JSON.parse( JSON.stringify( current ) ),
 				...props,
 			};
-		} ) );
+		} );
+
+		setActions( [ ...newActions ] );
 	};
 
 	return {
@@ -49,9 +47,61 @@ export const useActionsEdit = () => {
 	};
 };
 
-export const useActionSingle = () => {
-	const ActionCallback = useSelect( select => select( 'jet-forms/actions' ).getCurrentCallback(), [] );
-	const { getCallback, setCurrentAction } = useDispatch( 'jet-form/actions', [] );
+export const useActionCallback = ( actionType = false ) => {
+	return useSelect( select => {
+		return actionType
+			? select( 'jet-forms/actions' ).getCallback( actionType )
+			: select( 'jet-forms/actions' ).getCurrentCallback();
+	}, [] );
+}
 
-	return { ActionCallback, getCallback, setCurrentAction };
+export const useCurrentAction = () => {
+	const [ currentAction, currentSettings ] = useSelect( select => {
+		const state = select( 'jet-forms/actions' ).getCurrentAction();
+		const settings = select( 'jet-forms/actions' ).getCurrentSettings();
+
+		return [ state, settings ];
+	} );
+
+	return { currentAction, currentSettings };
+}
+
+/**
+ * Update action in meta
+ * @returns {function(*=): void}
+ */
+export const useUpdateCurrentActionMeta = () => {
+	const { currentAction } = useCurrentAction();
+	const { updateActionObj } = useActionsEdit();
+
+	return newProps => {
+		updateActionObj( currentAction.id, newProps );
+	};
+};
+
+
+/**
+ * Update current meta in store (while editing it in modal)
+ * @returns {{setCurrentAction, clearCurrent, setTypeSettings, updateCurrentConditions}}
+ */
+export const useUpdateCurrentAction = () => {
+	const { currentAction } = useCurrentAction();
+	const { setCurrentAction, clearCurrent, updateCurrentConditions } = useDispatch( 'jet-forms/actions', [] );
+
+	const setTypeSettings = settings => {
+		setCurrentAction( {
+			...currentAction,
+			settings: {
+				...currentAction.settings,
+				[ currentAction.type ]: settings,
+			},
+		} );
+	};
+
+	return {
+		setCurrentAction,
+		setTypeSettings,
+		clearCurrent,
+		updateCurrentConditions,
+	};
 }

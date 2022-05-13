@@ -1,11 +1,20 @@
 import constants from './constants';
 
 export default {
-	setCurrentAction( item ) {
+	setCurrentAction( item = {} ) {
 		return {
 			type: constants.setCurrentAction,
 			item,
 		};
+	},
+	setMeta( item ) {
+		return {
+			type: constants.setMeta,
+			item,
+		};
+	},
+	clearCurrent() {
+		return { type: constants.clearCurrent };
 	},
 	setLoading( item ) {
 		return {
@@ -32,6 +41,12 @@ export default {
 	updateCurrentSettings( item ) {
 		return {
 			type: constants.updateCurrentSettings,
+			item,
+		};
+	},
+	updateCurrentConditions( item ) {
+		return {
+			type: constants.updateCurrentConditions,
 			item,
 		};
 	},

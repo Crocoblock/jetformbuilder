@@ -1,4 +1,4 @@
-import { useActionsEdit, useActionSingle } from './hooks';
+import { useActionCallback, useActionsEdit, useActionStore } from './hooks';
 
 const {
 	withDispatch,
@@ -16,6 +16,7 @@ const {
 	Card,
 	CardBody,
 	CardHeader,
+	CardFooter,
 	DropdownMenu,
 	Flex,
 } = wp.components;
@@ -39,7 +40,8 @@ function ListActionItem( props ) {
 		updateActionObj,
 	} = useActionsEdit();
 
-	const { getCallback, setCurrentAction } = useActionSingle();
+	const ActionCallback = useActionCallback( action.type );
+	const { setCurrentAction, setMeta } = useDispatch( 'jet-forms/actions', [] );
 
 	const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action );
 
@@ -50,7 +52,7 @@ function ListActionItem( props ) {
 		className="dashicon dashicons dashicons-randomize"
 	/>;
 
-	const ActionDropDown = <DropdownMenu
+	const ActionDropDown = () => <DropdownMenu
 		icon={ 'ellipsis' }
 		label={ 'Edit, move or delete' }
 		controls={ [
@@ -106,21 +108,27 @@ function ListActionItem( props ) {
 			{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
 			<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
 				<Button
-					disabled={ ! getCallback( action.type ) }
+					disabled={ ! ActionCallback }
 					icon='edit'
 					label={ __( 'Edit Action', 'jet-form-builder' ) }
-					onClick={ () => setCurrentAction( { ...action, index } ) }
+					onClick={ () => {
+						setCurrentAction( action );
+						setMeta( { index, modalType: 'settings' } )
+					} }
 				/>
 				<Button
 					icon={ conditionsIcon }
-					label={ __( 'Conditions', 'jet-form-builder' ) }
-					onClick={ () => setCurrentAction( { ...action, index } ) }
+					label={ __( 'Edit Conditions & Events', 'jet-form-builder' ) }
+					onClick={ () => {
+						setCurrentAction( action );
+						setMeta( { index, modalType: 'conditions' } )
+					} }
 				/>
 				<ActionDropDown/>
 			</Flex>
 		</CardBody>
 		<CardFooter>
-
+			Footer
 		</CardFooter>
 	</Card>;
 }

@@ -19,9 +19,7 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	} );
 
-	const {
-		editPost,
-	} = useDispatch( 'core/editor' );
+	const { editPost } = useDispatch( 'core/editor', [ meta ] );
 
 	const metaStateValue = JSON.parse( meta[ key ] || ifEmpty );
 

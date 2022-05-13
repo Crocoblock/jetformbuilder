@@ -16,6 +16,15 @@ const self = {
 
 export default {
 	...self,
+	isSettingsModal( state ) {
+		return 'settings' === state.meta?.modalType;
+	},
+	isConditionalModal( state ) {
+		return 'conditions' === state.meta?.modalType;
+	},
+	getMetaIndex( state ) {
+		return state.meta?.index;
+	},
 	getCurrentAction( state ) {
 		return state.currentAction;
 	},

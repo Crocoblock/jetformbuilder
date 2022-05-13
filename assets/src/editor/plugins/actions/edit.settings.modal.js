@@ -1,44 +1,36 @@
+import { useActionCallback, useCurrentAction, useUpdateCurrentActionMeta } from './hooks';
+import { useUpdateCurrentAction } from './hooks';
 
-function getActionCallback( editedAction ) {
-	for ( let i = 0; i < window.jetFormActionTypes.length; i ++ ) {
-		if ( window.jetFormActionTypes[ i ].id === editedAction.type && window.jetFormActionTypes[ i ].callback ) {
-			return window.jetFormActionTypes[ i ].callback;
-		}
+const { ActionModal } = JetFBComponents;
+
+const { useSelect } = wp.data;
+
+function EditSettingsModal() {
+	const { currentAction, currentSettings } = useCurrentAction();
+	const isSettingsModal = useSelect( select => select( 'jet-forms/actions' ).isSettingsModal() );
+
+	const ActionCallback = useActionCallback();
+	const updateAction = useUpdateCurrentActionMeta();
+	const { setTypeSettings, clearCurrent } = useUpdateCurrentAction();
+
+	if ( ! isSettingsModal ) {
+		return null;
 	}
-
-	return false;
-}
-
-function EditSettingsModal( props ) {
-
-	var Callback = getActionCallback( editedAction );
 
 	return <ActionModal
 		classNames={ [ 'width-60' ] }
-		onRequestClose={ closeModal }
 		title={ 'Edit Action' }
+		onRequestClose={ clearCurrent }
+		onCancelClick={ clearCurrent }
 		onUpdateClick={ () => {
-			updateActionObj( editedAction.id, {
-				settings: editedAction.settings,
-			} );
-			closeModal();
+			updateAction( { settings: currentAction.settings } );
+			clearCurrent();
 		} }
-		onCancelClick={ closeModal }
 	>
-		{ Callback && <Callback
-			settings={ getMergedSettings() }
-			actionId={ editedAction.id }
-			onChange={ ( data ) => {
-				setEditedAction( prev => (
-					{
-						...prev,
-						settings: {
-							...prev.settings,
-							[ editedAction.type ]: data,
-						},
-					}
-				) );
-			} }
+		{ ActionCallback && <ActionCallback
+			settings={ currentSettings }
+			actionId={ currentAction.id }
+			onChange={ settings => setTypeSettings( settings ) }
 		/> }
 	</ActionModal>;
 }

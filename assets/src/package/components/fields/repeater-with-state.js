@@ -61,7 +61,7 @@ function RepeaterWithState( {
 		setItemsData( parsedItems() );
 	}, [] );
 
-	const [ isSafeDeleting, setSafeDeleting ] = useState( true );
+
 
 	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
@@ -132,7 +132,7 @@ function RepeaterWithState( {
 	}
 
 	const isDisabledEnd = ( index ) => {
-		return ! ( index < itemsData.length - 1 );
+		return ;
 	}
 
 	const toggleVisible = index => {

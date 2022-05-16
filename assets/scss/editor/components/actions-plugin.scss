@@ -23,4 +23,26 @@
 			font-family: monospace;
 		}
 	}
+
+	.jfb-events-item {
+		padding: 0 4px;
+		border-radius: 5px;
+		color: #5c5c5c;
+		font-size: 0.9em;
+		background-color: #f3f4f5;
+		cursor: pointer;
+		margin: auto;
+		border: 0;
+		font-family: monospace;
+
+		&:after {
+			content: ' X';
+			font-weight: bold;
+		}
+
+		&:focus {
+			outline: 1px solid #5c5c5c;
+			background-color: #e7e8e9;
+		}
+	}
 }

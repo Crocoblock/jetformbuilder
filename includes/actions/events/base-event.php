@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Events;
 
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
 
@@ -26,6 +27,11 @@ abstract class Base_Event implements Repository_Static_Item_It, Arrayable {
 	public function validate_actions() {
 		foreach ( $this->get_unsupported_actions() as $action ) {
 			jet_fb_action_handler()->unregister_action( $action );
+		}
+		$actions = jet_fb_action_handler()->get_all();
+
+		foreach ( $actions as $action ) {
+
 		}
 	}
 

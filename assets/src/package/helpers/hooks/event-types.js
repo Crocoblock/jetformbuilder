@@ -1,19 +1,21 @@
-import { selectParsedPostMeta } from './hooks-helper';
+import { useSelectPostMeta } from './hooks-helper';
 
-export const withRequestEvents = select => {
-	const eventTypes = [
-		...getEventsFromGateways( select ),
-		...getEventsFromActions( select ),
+const { useSelect } = wp.data;
+
+export const useRequestEvents = () => {
+	return [
+		...useEventsFromGateways(),
+		...useEventsFromActions(),
 	];
-
-	return { eventTypes };
 };
 
-const getEventsFromGateways = ( select ) => {
-	const gateways = selectParsedPostMeta( select, '_jf_gateways' );
+const useEventsFromGateways = () => {
+	const gateways = useSelectPostMeta( '_jf_gateways' );
 	const { scenario = 'PAY_NOW' } = gateways[ gateways?.gateway ] ?? {};
 
-	const eventsObjects = select( 'jet-forms/events' ).getGatewayTypes();
+	const eventsObjects = useSelect(
+		select => select( 'jet-forms/events' ).getGatewayTypes(),
+	);
 	const events = [];
 
 	for ( const event of eventsObjects ) {
@@ -28,11 +30,13 @@ const getEventsFromGateways = ( select ) => {
 	return [ ...new Set( events ) ];
 };
 
-export const getEventsFromActions = select => {
-	const actions = selectParsedPostMeta( select, '_jf_actions' );
-	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
+export const useEventsFromActions = () => {
+	const actions = useSelectPostMeta( '_jf_actions' );
 
-	actions.splice( currentAction.index );
+	const currentAction = useSelect(
+		select => select( 'jet-forms/actions' ).getCurrentAction(),
+	);
+	actions.splice( currentAction.index, 1 );
 
 	const events = [];
 
@@ -41,11 +45,11 @@ export const getEventsFromActions = select => {
 			[ action.type ]: current = {},
 		} = action.settings;
 
-		if ( ! current.eventTypes?.length ) {
+		if ( ! current.provideEvents?.length ) {
 			continue;
 		}
 
-		events.push( ...current.eventTypes );
+		events.push( ...current.provideEvents );
 	}
 
 	return [ ...new Set( events ) ];

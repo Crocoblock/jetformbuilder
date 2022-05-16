@@ -23,8 +23,9 @@ class Action_Handler {
 	public $form_id          = null;
 	public $request_data     = array();
 	public $form_actions     = array();
-	private $form_conditions = array();
 	public $is_ajax          = false;
+	private $form_conditions = array();
+	private $form_events     = array();
 
 	/**
 	 * Data for actions

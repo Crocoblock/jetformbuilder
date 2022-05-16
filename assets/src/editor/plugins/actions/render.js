@@ -23,8 +23,6 @@ function PluginActions() {
 		}
 	}, [] );
 
-
-
 	return <>
 		{ actions && actions.map( ( action, index ) => <ListActionItem
 			key={ action.id }
@@ -58,6 +56,6 @@ function PluginActions() {
 		<EditSettingsModal/>
 		<EditConditionsModal/>
 	</>;
-};
+}
 
 export default PluginActions;

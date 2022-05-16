@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions;
 
 
+use Jet_Form_Builder\Actions\Events\Base_Action_Event;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process_Event;
@@ -88,7 +89,7 @@ class Events_Manager implements Arrayable {
 		$response = $this->rep_get_items();
 
 		foreach ( $response as $key => $event ) {
-			if ( ! ( $event instanceof Base_Gateway_Event ) ) {
+			if ( ! ( $event instanceof Base_Action_Event ) ) {
 				unset( $response[ $key ] );
 			}
 		}

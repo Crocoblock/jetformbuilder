@@ -61,48 +61,36 @@ const migrate = ( gateways, actions ) => {
 	const on_success = getActiveActions( gateways[ 'notifications_success' ] ?? {} );
 	const on_failed = getActiveActions( gateways[ 'notifications_failed' ] ?? {} );
 	const on_before = getActiveActions( gateways[ 'notifications_before' ] ?? {} );
-	const redirect_id = + gateways[ 'use_success_redirect' ] ?? 0;
+	const use_redirect = gateways[ 'use_success_redirect' ] ?? false;
 
-	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! redirect_id ) {
+	let has_redirect = false;
+
+	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! has_redirect ) {
 		throw 'nothing_to_migrate';
 	}
 
 	return actions.map( action => {
-		if ( ! on_success.includes( action.id ) &&
-		     ! on_failed.includes( action.id ) &&
-		     ! on_failed.includes( action.id ) &&
-		     action.id !== redirect_id
-		) {
-			return action;
-		}
-		action.conditions = action.conditions ?? [];
-		const events = [];
+		action.events = action.events ?? [];
 
 		if ( on_success.includes( action.id ) ) {
-			events.push( 'GATEWAY.SUCCESS' );
+			action.events.push( 'GATEWAY.SUCCESS' );
 		}
 		if ( on_failed.includes( action.id ) ) {
-			events.push( 'GATEWAY.FAILED' );
+			action.events.push( 'GATEWAY.FAILED' );
 		}
 		if ( on_before.includes( action.id ) ) {
-			events.push( 'DEFAULT.PROCESS' );
+			action.events.push( 'DEFAULT.PROCESS' );
 		}
-		if ( action.id === redirect_id ) {
-			events.push( 'GATEWAY.SUCCESS' );
+		if ( use_redirect && ! has_redirect && 'redirect_to_page' === action.type ) {
+			action.events.push( 'GATEWAY.SUCCESS' );
+			has_redirect = true;
 		}
-
-		action.conditions = [
-			{ type: 'event', events },
-			...action.conditions,
-		];
 
 		return action;
 	} );
 };
 
 const runEvent = () => {
-	document.removeEventListener( 'jfb.migrate', runEvent );
-
 	let gateways = {}, actions = [];
 
 	try {

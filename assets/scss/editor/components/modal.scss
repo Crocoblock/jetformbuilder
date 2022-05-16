@@ -115,4 +115,36 @@
 			border-top: 1px solid #ddd;
 		}
 	}
+
+	.jfb-conditions-tab-panel .components-tab-panel__tabs {
+		margin-bottom: 1em;
+		border-bottom: 1px solid #ddd;
+	}
+
+	&.width-60 {
+		width: 60vw;
+	}
+
+	&.without-margin .components-modal__content:before {
+		display: none;
+	}
+
+	&__actions {
+		position: sticky;
+		bottom: 0;
+		left: 0;
+		padding: 18px 24px 20px 0;
+		background-color: #fff;
+		width: 100%;
+		border-top: 1px solid #ddd;
+		z-index: 100;
+	}
+
+	&__content {
+		padding-bottom: 2em;
+	}
+
+	.components-modal__content {
+		padding-bottom: unset;
+	}
 }

@@ -163,6 +163,12 @@ export const selectParsedPostMeta = ( select, name ) => {
 	return JSON.parse( allMeta[ name ] || '{}' );
 };
 
+export const useSelectPostMeta = ( name ) => {
+	const allMeta = useSelect( select => selectPostMeta( select ) );
+
+	return JSON.parse( allMeta[ name ] || '{}' );
+};
+
 export const withCurrentAction = select => {
 	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
 

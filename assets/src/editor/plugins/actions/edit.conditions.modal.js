@@ -18,7 +18,7 @@ function EditConditionsModal() {
 	}
 
 	return <ActionModal
-		classNames={ [ 'width-60' ] }
+		classNames={ [ 'width-60', 'without-margin' ] }
 		title={ __( 'Edit Action Conditions & Events', 'jet-form-builder' ) }
 		onRequestClose={ clearCurrent }
 		onCancelClick={ clearCurrent }

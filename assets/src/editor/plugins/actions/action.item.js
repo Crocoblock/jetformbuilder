@@ -1,9 +1,9 @@
-import { useActionCallback, useActionsEdit, useActionStore } from './hooks';
+import { useActionCallback, useActionsEdit } from './hooks';
+import EventsList from './events.list';
 
 const {
-	withDispatch,
-	withSelect,
 	useDispatch,
+	useSelect,
 } = wp.data;
 
 const { applyFilters } = wp.hooks;
@@ -20,6 +20,11 @@ const {
 	DropdownMenu,
 	Flex,
 } = wp.components;
+
+const {
+	ActionListItemContext,
+} = JetFBComponents;
+
 
 const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	return {
@@ -113,7 +118,7 @@ function ListActionItem( props ) {
 					label={ __( 'Edit Action', 'jet-form-builder' ) }
 					onClick={ () => {
 						setCurrentAction( action );
-						setMeta( { index, modalType: 'settings' } )
+						setMeta( { index, modalType: 'settings' } );
 					} }
 				/>
 				<Button
@@ -121,15 +126,22 @@ function ListActionItem( props ) {
 					label={ __( 'Edit Conditions & Events', 'jet-form-builder' ) }
 					onClick={ () => {
 						setCurrentAction( action );
-						setMeta( { index, modalType: 'conditions' } )
+						setMeta( { index, modalType: 'conditions' } );
 					} }
 				/>
 				<ActionDropDown/>
 			</Flex>
 		</CardBody>
-		<CardFooter>
-			Footer
-		</CardFooter>
+		{ Boolean( action.events?.length ) && <CardFooter
+			style={ {
+				flexWrap: 'wrap',
+				rowGap: '0.5em',
+			} }
+		>
+			<ActionListItemContext.Provider value={ { index, action } }>
+				<EventsList events={ action.events }/>
+			</ActionListItemContext.Provider>
+		</CardFooter> }
 	</Card>;
 }
 

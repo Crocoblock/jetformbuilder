@@ -57,7 +57,7 @@ import {
 	withSelectActionsByType,
 } from './helpers/hooks/hooks-helper';
 import {
-	withRequestEvents,
+	useRequestEvents,
 } from './helpers/hooks/event-types';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
@@ -93,6 +93,7 @@ import './stores/manager';
 import ActionModalContext from './context/action.modal';
 import SafeDeleteContext from './context/safe.delete';
 import RepeaterItemContext from './context/repeater.item';
+import ActionListItemContext from './context/action.list.item';
 import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
@@ -104,6 +105,7 @@ window.JetFBComponents = {
 	ActionModalContext,
 	SafeDeleteContext,
 	RepeaterItemContext,
+	ActionListItemContext,
 	SafeDeleteToggle,
 	RepeaterAddNew,
 	Repeater,
@@ -176,6 +178,7 @@ window.JetFBHooks = {
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,
+	useRequestEvents,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,
@@ -186,6 +189,5 @@ window.JetFBHooks = {
 	withSelectGateways,
 	withDispatchGateways,
 	withSelectActionsByType,
-	withRequestEvents,
 };
 

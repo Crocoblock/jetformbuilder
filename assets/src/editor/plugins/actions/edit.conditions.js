@@ -1,18 +1,18 @@
 import { conditionSettings } from './options';
-import { useCurrentAction, useUpdateCurrentAction, useUpdateCurrentActionMeta } from './hooks';
+import { useCurrentAction, useUpdateCurrentAction } from './hooks';
 
 const {
-	RepeaterWithState,
 	FieldWithPreset,
 	DynamicPreset,
-	ActionModalContext,
 	RepeaterItemContext,
 	Repeater,
 	RepeaterAddNew,
+	SafeDeleteToggle,
+	HorizontalLine,
 } = JetFBComponents;
 
 const {
-	withRequestEvents,
+	useRequestEvents,
 } = JetFBHooks;
 
 const {
@@ -25,8 +25,7 @@ const {
 	ToggleControl,
 	FormTokenField,
 	BaseControl,
-	__experimentalToggleGroupControl: ToggleGroupControl,
-	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
+	TabPanel,
 } = wp.components;
 
 const { __ } = wp.i18n;
@@ -136,9 +135,27 @@ function RepeaterItem( { formFields } ) {
 	</>;
 }
 
-function EditConditions( props ) {
-	const { eventTypes } = props;
+function EditEvents( props ) {
+	const provideEvents = useRequestEvents();
 
+	const { currentAction } = useCurrentAction();
+	const { setCurrentAction } = useUpdateCurrentAction();
+
+	return <BaseControl
+		label={ __( 'Choose events', 'jet-form-builder' ) }
+		className={ 'control-flex' }
+	>
+		<FormTokenField
+			label={ __( 'Add event', 'jet-form-builder' ) }
+			value={ currentAction.events ?? [] }
+			suggestions={ provideEvents }
+			onChange={ events => setCurrentAction( { ...currentAction, events } ) }
+			tokenizeOnSpace
+		/>
+	</BaseControl>;
+}
+
+function EditFields() {
 	const [ formFields, setFormFields ] = useState( [] );
 
 	useEffect( () => {
@@ -149,62 +166,52 @@ function EditConditions( props ) {
 	const { setCurrentAction, updateCurrentConditions } = useUpdateCurrentAction();
 
 	return <>
-		<BaseControl
-			label={ __( 'Condition type', 'jet-form-builder' ) }
-			className={ 'control-flex field-display-grid' }
-		>
-			<ToggleGroupControl
-				hideLabelFromVision
-				value={ currentAction.check_type ?? 'field' }
-				onChange={ check_type => setCurrentAction( { ...currentAction, check_type } ) }
-			>
-				<ToggleGroupControlOption
-					value="field"
-					label={ __( 'Fields comparison', 'jet-form-builder' ) }
-				/>
-				<ToggleGroupControlOption
-					value="event"
-					label={ __( 'Events match', 'jet-form-builder' ) }
-				/>
-			</ToggleGroupControl>
-		</BaseControl>
-		{ 'event' === currentAction.check_type ? <>
-			<BaseControl
-				label={ __( 'Choose events', 'jet-form-builder' ) }
-				className={ 'control-flex' }
-			>
-				<FormTokenField
-					label={ __( 'Add event', 'jet-form-builder' ) }
-					value={ currentAction.events ?? [] }
-					suggestions={ eventTypes }
-					onChange={ events => setCurrentAction( { ...currentAction, events } ) }
-					tokenizeOnSpace
-				/>
-			</BaseControl>
-		</> : <>
-			<SelectControl
-				key={ 'SelectControl-operator' }
-				label={ __( 'Condition Operator', 'jet-form-builder' ) }
-				labelPosition="side"
-				value={ currentAction.condition_operator || 'and' }
-				options={ operators }
-				onChange={ condition_operator => setCurrentAction( { ...currentAction, condition_operator } ) }
-			/>
+		<SelectControl
+			key={ 'SelectControl-operator' }
+			label={ __( 'Condition Operator', 'jet-form-builder' ) }
+			labelPosition="side"
+			value={ currentAction.condition_operator || 'and' }
+			options={ operators }
+			onChange={ condition_operator => setCurrentAction( { ...currentAction, condition_operator } ) }
+		/>
+		<SafeDeleteToggle>
 			<Repeater
 				onSetState={ updateCurrentConditions }
 				items={ currentAction.conditions ?? [] }
 			>
 				<RepeaterItem formFields={ formFields }/>
 			</Repeater>
-			<RepeaterAddNew
-				onSetState={ updateCurrentConditions }
-			>
-				{ __( 'Add New Condition', 'jet-form-builder' ) }
-			</RepeaterAddNew>
-		</> }
+		</SafeDeleteToggle>
+		<RepeaterAddNew
+			onSetState={ updateCurrentConditions }
+		>
+			{ __( 'Add New Condition', 'jet-form-builder' ) }
+		</RepeaterAddNew>
 	</>;
 }
 
-export default compose(
-	withSelect( withRequestEvents ),
-)( EditConditions );
+function EditConditions() {
+	return <>
+		<TabPanel
+			className="jfb-conditions-tab-panel"
+			initialTabName={ 'fields' }
+			tabs={ [
+				{
+					name: 'fields',
+					title: __( 'Fields comparison', 'jet-form-builder' ),
+					edit: <EditFields />,
+				},
+				{
+					name: 'events',
+					title: __( 'Events match', 'jet-form-builder' ),
+					edit: <EditEvents/>,
+				},
+			] }
+		>
+			{ tab => tab.edit }
+		</TabPanel>
+	</>;
+}
+
+
+export default EditConditions;

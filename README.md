@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.4
+* FIX: Trigger JS event once, added event `jet-form-builder/after-init`
+* FIX: Paginate fields list in single form record
+* FIX: Disable reload after registration for forms with ajax submit type
+* FIX: Dynamic sing-on on register user
+* Tweak: JetStyleManager compatibility
+* Tweak: Add Mailchimp response for dev-mode logger
+
 ## 2.0.3
 * FIX: Recalculate fields before submit
 * FIX: An instant redirect on submit type reload

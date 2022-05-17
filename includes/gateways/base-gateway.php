@@ -307,6 +307,8 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	public function set_form_meta( $gateways_meta ): Base_Gateway {
+		Migrate_Legacy_Data::migrate( $gateways_meta );
+
 		$this->gateways_meta = $gateways_meta;
 
 		return $this;

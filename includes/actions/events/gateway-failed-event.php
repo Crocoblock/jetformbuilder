@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Actions\Events;
 
 
-class Failed_Gateway_Event extends Base_Gateway_Event {
+class Gateway_Failed_Event extends Base_Gateway_Event {
 
 	public static function get_slug(): string {
 		return 'GATEWAY.FAILED';

@@ -31,7 +31,15 @@ abstract class Base_Event implements Repository_Static_Item_It, Arrayable {
 		$actions = jet_fb_action_handler()->get_all();
 
 		foreach ( $actions as $action ) {
+			$this->validate_action( $action );
+		}
+	}
 
+	protected function validate_action( Base $action ) {
+		$events = $action->get_events();
+
+		if ( ! $events || ! count( $events ) || ! $events->in_array( $this ) ) {
+			$action->unregister();
 		}
 	}
 

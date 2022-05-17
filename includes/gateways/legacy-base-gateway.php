@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -50,28 +52,20 @@ abstract class Legacy_Base_Gateway {
 	 * @deprecated 2.0.0
 	 */
 	public function process_status( $type = 'success' ) {
+		switch ( $type ) {
+			case 'success':
+				jet_fb_events()->set_current( Gateway_Success_Event::get_slug() );
+				break;
+			case 'failed':
+			default:
+				jet_fb_events()->set_current( Gateway_Failed_Event::get_slug() );
+				break;
+		}
 
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
 
-		$keep_these = $this->gateway( 'notifications_' . $type, array() );
-
-		if ( empty( $keep_these ) ) {
-			return;
-		}
-
-		$all = jet_fb_action_handler()->add_request( $this->data['form_data'] )
-									->set_form_id( $this->data['form_id'] )
-									->unregister_action( 'redirect_to_page' )
-									->get_all();
-
-		if ( empty( $all ) ) {
-			return;
-		}
-		foreach ( $all as $index => $notification ) {
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
+		jet_fb_action_handler()->add_request( $this->data['form_data'] )->set_form_id( $this->data['form_id'] );
+		jet_fb_events()->get_current()->validate_actions();
 
 		( new Action_Default_Executor() )->soft_run_actions();
 	}

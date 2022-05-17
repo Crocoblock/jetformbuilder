@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
@@ -113,10 +114,14 @@ class Gateway_Manager {
 		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
 
 		try {
-			$this->get_current_gateway_controller()->before_actions();
+			$controller = $this->get_current_gateway_controller();
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
+		$controller->set_form_meta( GM::instance()->gateways() );
+
+		// Remove actions
+		jet_fb_events()->get_current()->validate_actions();
 
 		add_filter(
 			'jet-form-builder/actions/run-callback',
@@ -173,7 +178,7 @@ class Gateway_Manager {
 	/**
 	 * @param false $type
 	 *
-	 * @return Base_Gateway
+	 * @return Base_Gateway|Base_Scenario_Gateway
 	 * @throws Repository_Exception
 	 */
 	public function get_gateway_controller( $type = false ) {

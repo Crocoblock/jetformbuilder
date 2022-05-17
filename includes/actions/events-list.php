@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
 
-class Events_List implements \ArrayAccess {
+class Events_List implements \ArrayAccess, \Countable {
 
 	private $events;
 
@@ -52,5 +52,12 @@ class Events_List implements \ArrayAccess {
 	 */
 	public function offsetUnset( $offset ) {
 		unset( $this->events[ $offset ] );
+	}
+
+	/**
+	 * @return int
+	 */
+	public function count() {
+		return count( $this->events );
 	}
 }

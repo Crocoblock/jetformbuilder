@@ -113,6 +113,7 @@ class Action_Handler {
 		$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
 		$conditions = $form_action['conditions'] ?? array();
 		$operator   = $form_action['condition_operator'] ?? 'and';
+		$events     = $form_action['events'] ?? array();
 
 		/**
 		 * Save action settings to the class field,
@@ -128,6 +129,7 @@ class Action_Handler {
 
 		$this->form_conditions[ $id ] = $condition;
 		$this->form_actions[ $id ]    = $action;
+		$this->form_events[ $id ]     = new Events_List( $events );
 
 		return array( $action, $condition );
 	}
@@ -138,9 +140,9 @@ class Action_Handler {
 	 * @return array [description]
 	 */
 	public function do_actions() {
-		do_action( 'jet-form-builder/actions/before-send' );
-
 		jet_fb_events()->set_current( Default_Process_Event::get_slug() );
+
+		do_action( 'jet-form-builder/actions/before-send' );
 
 		$run_actions_callback = apply_filters(
 			'jet-form-builder/actions/run-callback',
@@ -325,6 +327,28 @@ class Action_Handler {
 	 */
 	public function get_condition_by_id( $id ) {
 		return $this->form_conditions[ $id ] ?? false;
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return false|Events_List
+	 */
+	public function get_events_by_id( $id ) {
+		return $this->form_events[ $id ] ?? false;
+	}
+
+	/**
+	 * For fix backward compatibility
+	 *
+	 * @param array $form_events
+	 *
+	 * @return $this
+	 */
+	public function merge_events( array $form_events ): Action_Handler {
+		$this->form_events = array_merge( $this->form_events, $form_events );
+
+		return $this;
 	}
 
 	/**

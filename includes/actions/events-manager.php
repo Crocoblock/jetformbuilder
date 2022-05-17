@@ -8,8 +8,8 @@ use Jet_Form_Builder\Actions\Events\Base_Action_Event;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\Failed_Gateway_Event;
-use Jet_Form_Builder\Actions\Events\Success_Gateway_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
@@ -47,7 +47,6 @@ class Events_Manager implements Arrayable {
 		} catch ( Repository_Exception $exception ) {
 			return false;
 		}
-		$event->validate_actions();
 
 		$this->current = $event;
 
@@ -105,8 +104,8 @@ class Events_Manager implements Arrayable {
 			'jet-form-builder/event-types',
 			array(
 				new Default_Process_Event(),
-				new Success_Gateway_Event(),
-				new Failed_Gateway_Event(),
+				new Gateway_Success_Event(),
+				new Gateway_Failed_Event(),
 			)
 		);
 	}

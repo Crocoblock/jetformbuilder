@@ -65,7 +65,7 @@ const migrate = ( gateways, actions ) => {
 
 	let has_redirect = false;
 
-	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! has_redirect ) {
+	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! use_redirect ) {
 		throw 'nothing_to_migrate';
 	}
 

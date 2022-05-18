@@ -122,7 +122,7 @@ class Form_Builder {
 		return $end_form;
 	}
 
-	private function render_styles() {
+	private function render_styles(): string {
 		if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
 			return $this->get_inline_styles();
 		}
@@ -130,9 +130,14 @@ class Form_Builder {
 		if ( Tools::is_elementor_editor() ) {
 			return $this->get_inline_styles();
 		}
+
+		wp_add_inline_style(
+			'jet-form-builder-frontend',
+			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
+		);
 		wp_enqueue_style( 'jet-form-builder-frontend' );
 
-		return $this->get_inline_styles();
+		return '';
 	}
 
 	private function get_inline_styles(): string {

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 5.9.3
 Requires PHP: 7.0
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,6 +174,7 @@ Get your site eCommerce-ready. Choose the preferred payment method, add its gate
 
 - <a href="https://jetformbuilder.com/addons/stripe-payments/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Stripe Payments</a>. With the help of this addon, you add a Stripe payment gateway to the JetFormBuilder forms, which allows you to carry out payments.
 - <a href="https://jetformbuilder.com/addons/woocommerce-cart-checkout-action/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">WooCommerce Cart & Checkout Action</a>. This addon allows adding one product to the cart and redirecting users to WooCommerce checkout once they submit the form.
+- <a href="https://jetformbuilder.com/addons/paypal-recurring-payments?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">PayPal Recurring Payments</a>. It allows you to create recurring subscriptions for your customers and accept payments via the form.
 
 == Demo ==
 Check out the JetFormBuilder demo page and figure out what functionality you get. Explore the <a href="https://jetformbuilder.com/demo/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">demo</a> now.
@@ -260,6 +261,14 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**2.0.4**
+ - FIX: Trigger JS event once, added event `jet-form-builder/after-init`
+ - FIX: Paginate fields list in single form record
+ - FIX: Disable reload after registration for forms with ajax submit type
+ - FIX: Dynamic sing-on on register user
+ - Tweak: JetStyleManager compatibility
+ - Tweak: Add Mailchimp response for dev-mode logger
 
 **2.0.3**
  - FIX: Recalculate fields before submit

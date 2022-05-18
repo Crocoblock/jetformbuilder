@@ -65,7 +65,7 @@ class Media_Field_Render extends Base {
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
 
 			if ( preg_match( $img_ext_preg, $file['url'] ) ) {
-				$replace = sprintf( '<img src="%s" alt="">', $file['url'] );
+				$replace = sprintf( '<img src="%s" alt="" width="100px" height="100px">', $file['url'] );
 
 				$updated = str_replace( '<!-- preview -->', $replace, $updated );
 			}

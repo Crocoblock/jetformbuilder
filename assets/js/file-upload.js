@@ -79,6 +79,7 @@
 			processUpload: function ( event ) {
 				const upload = new UploadAction( event );
 
+				upload.loadFiles();
 				upload.removeSingle();
 				upload.insertPreviews();
 
@@ -155,6 +156,30 @@
 
 			getFiles( event ) {
 				return event.target.files;
+			}
+
+			loadFiles() {
+				const dt = new DataTransfer();
+				const originalInput = this.input[ 0 ];
+				const { files } = originalInput;
+
+				if ( ! originalInput.jfbPrevFiles?.length ) {
+					originalInput.jfbPrevFiles = files;
+
+					return;
+				}
+
+				for ( const file of originalInput.jfbPrevFiles ) {
+					dt.items.add( file );
+				}
+
+				for ( const file of files ) {
+					dt.items.add( file );
+				}
+
+				originalInput.files = dt.files; // Assign the updates list
+				originalInput.jfbPrevFiles = dt.files;
+
 			}
 
 			insertPreviews() {
@@ -240,6 +265,7 @@
 				}
 
 				originalInput.files = dt.files; // Assign the updates list
+				originalInput.jfbPrevFiles = dt.files;
 
 				return removedFile;
 			}

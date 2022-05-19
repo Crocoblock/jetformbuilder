@@ -18,4 +18,7 @@ export default {
 
 		return state.types[ index ];
 	},
+	isLockedAction( state, slug ) {
+		return state.lockedActions.includes( slug );
+	}
 };

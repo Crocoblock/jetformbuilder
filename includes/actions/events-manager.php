@@ -114,6 +114,9 @@ class Events_Manager implements Arrayable {
 	 * @return array
 	 */
 	public function to_array(): array {
-		return Array_Tools::to_array( $this->rep_get_items() );
+		return array(
+			'types' => Array_Tools::to_array( $this->rep_get_items() ),
+			//'locked' =>
+		);
 	}
 }

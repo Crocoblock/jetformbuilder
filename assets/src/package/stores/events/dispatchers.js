@@ -2,7 +2,7 @@ import constants from './constants';
 import selectors from './selectors';
 
 export default {
-	[ constants.register ]: ( state, action ) => {
+	[ constants.register ] ( state, action ) {
 		for ( const item of action.items ) {
 			item.title = item.label;
 

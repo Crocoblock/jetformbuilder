@@ -9,4 +9,4 @@ register( gateways );
 register( events );
 register( actions );
 
-dispatch( 'jet-forms/events' ).register( window.jetFormEvents );
+dispatch( 'jet-forms/events' ).register( window.jetFormEvents.types );

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
+use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
@@ -15,8 +16,6 @@ class Request_Handler {
 	private $request_types = array();
 	private $request_attrs = array();
 	private $raw_request   = array();
-
-	const WP_NONCE_KEY = '_wpnonce';
 
 	public function set_request_type( array $types ): Request_Handler {
 		$this->request_types = array_merge( $this->request_types, $types );
@@ -128,28 +127,18 @@ class Request_Handler {
 		return $prepared;
 	}
 
-	/**
-	 * @throws Request_Exception
-	 */
 	private function get_raw_request(): array {
 		$this->_fields = Block_Helper::get_blocks_by_post(
 			jet_fb_handler()->get_form_id()
 		);
 
 		$values = $this->get_values_from_request();
-		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
 
 		Live_Form::instance()
 				->set_form_id( jet_fb_handler()->get_form_id() )
 				->set_specific_data_for_render();
 
-		if ( 'render' === Live_Form::instance()->spec_data->load_nonce
-			&& ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() )
-		) {
-			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
-		}
-
-		return $values;
+		return apply_filters( 'jet-form-builder/request-handler/request', $values );
 	}
 
 	/**

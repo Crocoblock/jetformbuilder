@@ -84,6 +84,7 @@ export default function PluginArgs() {
 				} ) );
 			} }
 		/>
+
 		<ToggleControl
 			key={ 'load_nonce' }
 			label={ __( 'Enable form safety', 'jet-form-builder' ) }
@@ -93,6 +94,18 @@ export default function PluginArgs() {
 				setArgs( prev => ( {
 					...prev,
 					load_nonce: Boolean( newVal ) ? 'render' : 'hide',
+				} ) );
+			} }
+		/>
+
+		<ToggleControl
+			key={ 'use_csrf' }
+			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
+			checked={ args.use_csrf  }
+			onChange={ newVal => {
+				setArgs( prev => ( {
+					...prev,
+					use_csrf: Boolean( newVal ),
 				} ) );
 			} }
 		/>

@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
@@ -376,7 +377,7 @@ class Editor {
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
-				'argumentsSource'         => Tools::get_form_settings_options(),
+				'argumentsSource'         => Form_Arguments::get_options(),
 				'utmLinks'                => array(
 					'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
 					'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),

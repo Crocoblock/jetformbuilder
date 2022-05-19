@@ -4,6 +4,8 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
+use Jet_Form_Builder\Classes\Security\Csrf_Tools;
+use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -13,7 +15,6 @@ use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
-use Jet_Form_Builder\Request_Router;
 
 /**
  * Form builder class
@@ -52,6 +53,9 @@ class Form_Handler {
 	 */
 	public $request_handler;
 
+	/** @var Csrf_Tools */
+	public $csrf;
+
 
 	/**
 	 * Constructor for the class
@@ -59,6 +63,7 @@ class Form_Handler {
 	public function __construct() {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
+		$this->csrf            = new Csrf_Tools();
 	}
 
 	public function call_form() {
@@ -67,6 +72,9 @@ class Form_Handler {
 		} catch ( Not_Router_Request $exception ) {
 			return;
 		}
+
+		Wp_Nonce_Tools::register();
+		$this->csrf->register();
 
 		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
 

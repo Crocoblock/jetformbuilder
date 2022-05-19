@@ -11,6 +11,10 @@ abstract class Base_Db_Model {
 	const InnoDB          = 'InnoDB';
 	const MyISAM          = 'MyISAM';
 
+	const PRIMARY_ID = 'id';
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
+
 	protected static $prefix = self::DB_TABLE_PREFIX;
 
 	protected $silence = false;
@@ -150,8 +154,8 @@ abstract class Base_Db_Model {
 		$defaults    = array();
 		$schema_keys = array_keys( static::schema() );
 
-		if ( in_array( 'created_at', $schema_keys, true ) ) {
-			$defaults['created_at'] = current_time( 'mysql' );
+		if ( in_array( self::CREATED_AT, $schema_keys, true ) ) {
+			$defaults[ self::CREATED_AT ] = current_time( 'mysql' );
 		}
 
 		return $defaults;
@@ -181,10 +185,10 @@ abstract class Base_Db_Model {
 	public function update_columns( array $columns ): array {
 		$schema_keys = array_keys( static::schema() );
 
-		if ( in_array( 'updated_at', $schema_keys, true )
-			&& ! array_key_exists( 'updated_at', $columns )
+		if ( in_array( self::UPDATED_AT, $schema_keys, true )
+			&& ! array_key_exists( self::UPDATED_AT, $columns )
 		) {
-			$columns['updated_at'] = current_time( 'mysql' );
+			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}
 		return $columns;
 	}

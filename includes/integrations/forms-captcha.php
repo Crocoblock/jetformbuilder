@@ -25,35 +25,29 @@ class Forms_Captcha {
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
-	private $api = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults = array(
+	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
+	private $defaults  = array(
 		'enabled' => false,
 		'key'     => '',
 		'secret'  => '',
 	);
 
 	public function __construct() {
-		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'handle_request' ) );
+		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
 	}
 
 	/**
-	 * @param $incoming_request
+	 * @param $request
 	 *
 	 * @return mixed
 	 * @throws Request_Exception
 	 */
-	public function handle_request( $incoming_request ) {
-		/**
-		 * We get an array with the request body from the raw array,
-         * since only those fields that are in the form get into the processed request.
-		 */
-	    $request = jet_fb_request_handler()->get_request();
-
-		if ( ! Plugin::instance()->captcha->verify( $request ) ) {
+	public function handle_request( $request ) {
+		if ( ! $this->verify( $request ) ) {
 			throw new Request_Exception( 'captcha_failed' );
 		}
 
-		return $incoming_request;
+		return $request;
 	}
 
 	private function api_front_url( $key ): string {
@@ -154,7 +148,7 @@ class Forms_Captcha {
 		);
 
 		?>
-        <input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
+		<input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
 		<?php
 	}
 

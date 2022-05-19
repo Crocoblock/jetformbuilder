@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
@@ -49,9 +50,11 @@ class Form_Builder {
 
 	/**
 	 * @param $arguments
+	 *
+	 * @return Form_Builder
 	 */
-	public function set_form_args( $arguments ) {
-		$this->args = array_intersect_key( $arguments, Plugin::instance()->post_type->get_default_args() );
+	public function set_form_args( $arguments ): Form_Builder {
+		$this->args = array_intersect_key( $arguments, Form_Arguments::arguments() );
 
 		return $this;
 	}
@@ -80,12 +83,12 @@ class Form_Builder {
 		$start_form .= $this->render_styles();
 
 		$this->add_attribute( 'class', 'jet-form-builder' );
-		$this->add_attribute( 'class', 'layout-' . Live_Form::instance()->spec_data->fields_layout );
-		$this->add_attribute( 'class', 'submit-type-' . Live_Form::instance()->spec_data->submit_type );
+		$this->add_attribute( 'class', 'layout-' . jet_fb_live_args()->fields_layout );
+		$this->add_attribute( 'class', 'submit-type-' . jet_fb_live_args()->submit_type );
 		$this->add_attribute( 'action', Http_Tools::get_form_action_url() );
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
-		$this->add_attribute( 'data-layout', Live_Form::instance()->spec_data->fields_layout );
+		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
 
 		ob_start();
 		include $this->get_global_template( 'common/start-form.php' );
@@ -199,34 +202,8 @@ class Form_Builder {
 
 		$form = $this->start_form();
 
-		// render wp nonce
-		$form .= Live_Form::instance()->get_nonce_field();
+		$form .= Form_Hidden_Fields::render();
 
-		$form .= Live_Form::force_render_field(
-			'hidden-field',
-			array(
-				'field_value'   => $this->form_id,
-				'name'          => Plugin::instance()->form_handler->form_key,
-				'_static_value' => true,
-			)
-		);
-
-		$form .= Live_Form::force_render_field(
-			'hidden-field',
-			array(
-				'field_value'   => Http_Tools::get_form_refer_url(),
-				'name'          => Plugin::instance()->form_handler->refer_key,
-				'_static_value' => true,
-			)
-		);
-		$form .= Live_Form::force_render_field(
-			'hidden-field',
-			array(
-				'field_value'   => Live_Form::instance()->post->ID ?? - 1,
-				'name'          => Plugin::instance()->form_handler->post_id_key,
-				'_static_value' => true,
-			)
-		);
 		$form .= Live_Form::instance()->maybe_progress_pages();
 
 		$form .= Live_Form::instance()->maybe_start_page( true );

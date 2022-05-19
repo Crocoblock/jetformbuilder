@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
@@ -374,7 +375,7 @@ class Form extends Base {
 
 
 	public function block_data( $editor, $handle ) {
-		$options = Tools::get_form_settings_options();
+		$options = Form_Arguments::get_options();
 
 		wp_localize_script(
 			$handle,

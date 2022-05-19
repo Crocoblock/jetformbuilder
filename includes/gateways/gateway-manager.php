@@ -114,14 +114,10 @@ class Gateway_Manager {
 		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
 
 		try {
-			$controller = $this->get_current_gateway_controller();
+			$this->get_current_gateway_controller()->before_actions();
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
-		$controller->set_form_meta( GM::instance()->gateways() );
-
-		// Remove actions
-		jet_fb_events()->get_current()->validate_actions();
 
 		add_filter(
 			'jet-form-builder/actions/run-callback',

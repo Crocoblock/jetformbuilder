@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
@@ -37,9 +39,19 @@ class Save_Record extends Base {
 		return Action_Required_Executor::class;
 	}
 
+	public function get_required_events(): array {
+		return array( Default_Process_Event::get_slug() );
+	}
+
 	public function dependence() {
 		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
-		add_filter( 'jet-form-builder/page-containers/jfb-payments-single', array( $this, 'add_box_to_single_payment' ) );
+		add_filter(
+			'jet-form-builder/page-containers/jfb-payments-single',
+			array(
+				$this,
+				'add_box_to_single_payment',
+			)
+		);
 
 		add_action(
 			'jet-form-builder/gateways/before-send',
@@ -52,11 +64,13 @@ class Save_Record extends Base {
 	}
 
 	public function on_register_in_flow() {
-		add_filter( 'jet-form-builder/actions/run-callback', array( $this, 'set_soft_run_actions' ) );
-	}
-
-	public function set_soft_run_actions( $callback ) {
-		return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
+		add_filter(
+			'jet-form-builder/actions/run-callback',
+			array(
+				new Action_Default_Executor(),
+				Action_Default_Executor::SOFT,
+			)
+		);
 	}
 
 	/**

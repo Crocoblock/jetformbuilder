@@ -104,6 +104,10 @@ abstract class Base implements Repository_Item_Instance_Trait {
 		return Action_Default_Executor::class;
 	}
 
+	public function get_required_events(): array {
+		return array();
+	}
+
 	public function messages() {
 		return array();
 	}

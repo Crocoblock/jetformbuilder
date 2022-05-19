@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
@@ -35,8 +36,11 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	 * @throws Repository_Exception
 	 */
 	public function before_actions() {
-		$this->set_form_meta( Gateway_Manager::instance()->gateways() );
+		$this->set_form_meta( GM::instance()->gateways() );
 		$this->get_scenario()->before_actions();
+
+		// Remove actions
+		jet_fb_events()->get_current()->validate_actions();
 	}
 
 	/**
@@ -62,6 +66,13 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 		} catch ( Skip_Exception $exception ) {
 			return;
 		}
+
+		/**
+		 * Init actions for correct migrating
+		 *
+		 * Later should be deprecated
+		 */
+		$scenario->init_actions();
 
 		/** set to $this->gateways_meta */
 		$this->set_form_gateways_meta();

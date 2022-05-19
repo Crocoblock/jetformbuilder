@@ -50,7 +50,7 @@ class Migrate_Legacy_Data {
 			if ( in_array( $action->_id, $on_failed, true ) ) {
 				$events[] = Gateway_Failed_Event::get_slug();
 			}
-			if ( in_array( $action->_id, $on_failed, true ) ) {
+			if ( in_array( $action->_id, $on_before, true ) ) {
 				$events[] = Default_Process_Event::get_slug();
 			}
 			if ( $use_redirect && ! $has_redirect && 'redirect_to_page' === $action->get_id() ) {

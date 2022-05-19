@@ -13,8 +13,18 @@ class Events_List implements \ArrayAccess, \Countable {
 		$this->events = $events;
 	}
 
-	public function in_array( Base_Event $event ): bool {
-		return in_array( $event::get_slug(), $this->events, true );
+	public function in_array( $event ): bool {
+		return in_array( $this->get_slug( $event ), $this->events, true );
+	}
+
+	public function add( $event ): Events_List {
+		$this->events[] = $this->get_slug( $event );
+
+		return $this;
+	}
+
+	protected function get_slug( $event ): string {
+		return ( $event instanceof Base_Event ) ? $event::get_slug() : $event;
 	}
 
 	/**

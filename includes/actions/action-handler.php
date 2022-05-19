@@ -20,12 +20,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id          = null;
-	public $request_data     = array();
-	public $form_actions     = array();
-	public $is_ajax          = false;
+	public $form_id = null;
+	public $request_data = array();
+	public $form_actions = array();
+	public $is_ajax = false;
 	private $form_conditions = array();
-	private $form_events     = array();
+	private $form_events = array();
 
 	/**
 	 * Data for actions
@@ -129,7 +129,9 @@ class Action_Handler {
 
 		$this->form_conditions[ $id ] = $condition;
 		$this->form_actions[ $id ]    = $action;
-		$this->form_events[ $id ]     = new Events_List( $events );
+		$this->form_events[ $id ]     = new Events_List(
+			array_merge( $events, $action->get_required_events() )
+		);
 
 		return array( $action, $condition );
 	}
@@ -345,10 +347,12 @@ class Action_Handler {
 	 *
 	 * @return $this
 	 */
-	public function merge_events( array $form_events ): Action_Handler {
-		$this->form_events = array_merge( $this->form_events, $form_events );
+	public function merge_events( array $form_events ): array {
+		foreach ( $form_events as $action_id => $event_list ) {
+			$this->form_events[ $action_id ] = $event_list;
+		}
 
-		return $this;
+		return $this->form_events;
 	}
 
 	/**

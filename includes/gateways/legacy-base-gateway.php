@@ -4,8 +4,10 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -322,31 +324,29 @@ abstract class Legacy_Base_Gateway {
 	 */
 	public function before_actions() {
 		$this->set_form_meta( GM::instance()->gateways() );
-
-		$keep_these      = $this->get_actions_before();
 		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
 
-		if ( empty( $default_actions ) ) {
-			return;
-		}
 		$action_order = (int) $this->gateway( 'action_order' );
 
 		foreach ( $default_actions as $index ) {
 			$action = jet_fb_action_handler()->get_action_by_id( $index );
 
-			if ( 'insert_post' === $action->get_id() && $action_order === $action->_id ) {
+			if ( 'insert_post' !== $action->get_id() || $action_order !== $action->_id ) {
 				continue;
 			}
+			/** @var Events_List|false $list */
+			$list = $action->get_events();
 
-			if ( 'redirect_to_page' === $action->get_id() ) {
-				jet_fb_action_handler()->unregister_action( $index );
-				$this->redirect = $action;
+			if ( ! $list ) {
+				$list = new Events_List( array() );
 			}
 
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
+			$list->add( Default_Process_Event::get_slug() );
+			break;
 		}
+
+		// Remove actions
+		jet_fb_events()->get_current()->validate_actions();
 	}
 
 	/**

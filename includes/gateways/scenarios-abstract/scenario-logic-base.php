@@ -71,30 +71,7 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		);
 	}
 
-	/**
-	 * @throws Repository_Exception
-	 */
 	public function before_actions() {
-		$keep_these      = jet_fb_gateway_current()->get_actions_before();
-		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
-
-		foreach ( $default_actions as $index ) {
-			$action = jet_fb_action_handler()->get_action_by_id( $index );
-
-			if ( 'redirect_to_page' === $action->get_id() ) {
-				jet_fb_action_handler()->unregister_action( $index );
-
-				$this->add_context(
-					array(
-						'redirect' => $action,
-					)
-				);
-			}
-
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
 	}
 
 	/**
@@ -144,6 +121,12 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		return $request;
 	}
 
+	public function init_actions() {
+		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
+
+		jet_fb_action_handler()->set_form_id( $form_id );
+	}
+
 	/**
 	 * Process status notification and enqueue message
 	 *
@@ -152,8 +135,6 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 * @throws Action_Exception
 	 */
 	public function process_status( $type = 'success' ) {
-		$entry = $this->get_scenario_row();
-
 		// save form request to Action_Handler & current gateway controller
 		$this->init_request();
 
@@ -169,7 +150,7 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 
 		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
 
-		jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 );
+		$this->init_actions();
 		jet_fb_events()->get_current()->validate_actions();
 
 		( new Action_Default_Executor() )->soft_run_actions();

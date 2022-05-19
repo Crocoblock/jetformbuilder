@@ -184,21 +184,6 @@ class Form_Handler {
 
 		$fields = $this->core_fields();
 
-		if ( $this->is_ajax() ) {
-			$values = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( $_POST['values'] ) : array();
-
-			foreach ( $values as $data ) {
-				if ( ! isset( $fields[ $data['name'] ] ) ) {
-					continue;
-				}
-				$options = $fields[ $data['name'] ] ?? array();
-
-				Tools::call( $options['callback'] ?? false, $data['value'] ?? '' );
-			}
-
-			return;
-		}
-
 		foreach ( $fields as $field_name => $options ) {
 			if ( ! isset( $_POST[ $field_name ] ) ) {
 				continue;

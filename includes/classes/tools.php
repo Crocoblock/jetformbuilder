@@ -124,17 +124,7 @@ class Tools {
 	}
 
 	public static function get_allowed_mimes_list_for_js() {
-		$mimes = get_allowed_mime_types();
-
-		$mimes_list = array();
-		foreach ( $mimes as $mime ) {
-			$mimes_list[] = array(
-				'label' => $mime,
-				'value' => $mime,
-			);
-		}
-
-		return $mimes_list;
+		return get_allowed_mime_types();
 	}
 
 	/**
@@ -358,6 +348,12 @@ class Tools {
 	}
 
 	public static function decode_json( $json ) {
+		if ( is_array( $json ) ) {
+			foreach ( $json as $key => $row ) {
+				$json[ $key ] = static::decode_json( $row );
+			}
+			return $json;
+		}
 		if ( defined( 'JSON_INVALID_UTF8_IGNORE' ) ) {
 			return json_decode( $json, true, 512, JSON_INVALID_UTF8_IGNORE );
 		}

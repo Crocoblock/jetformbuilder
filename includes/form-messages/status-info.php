@@ -15,6 +15,13 @@ class Status_Info {
 		$this->raw = $status;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function get_raw_message(): string {
+		return $this->raw;
+	}
+
 	public function is_dynamic(): bool {
 		if ( is_null( $this->is_dynamic ) ) {
 			$this->set_dynamic_and_success();

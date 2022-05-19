@@ -47,17 +47,17 @@ class Parser_Manager {
 		);
 	}
 
-	public function get_values_fields( $fields, $request, $inside_conditional = false ) {
+	public function get_values_fields( $fields, $request, $files, $inside_conditional = false ) {
 		$response = array();
-		$this->get_values_fields_recursive( $response, $fields, $request, $inside_conditional );
+		$this->get_values_fields_recursive( $response, $fields, $request, $files, $inside_conditional );
 
 		return $response;
 	}
 
-	public function get_values_fields_recursive( &$output, $fields, $request, $inside_conditional ) {
+	public function get_values_fields_recursive( &$output, $fields, $request, $files, $inside_conditional ) {
 		foreach ( $fields as $field ) {
 			try {
-				$this->get_value_from_field( $output, $field, $request, $inside_conditional );
+				$this->get_value_from_field( $output, $field, $request, $files, $inside_conditional );
 
 			} catch ( Parse_Exception $exception ) {
 				switch ( $exception->getMessage() ) {
@@ -67,6 +67,7 @@ class Parser_Manager {
 							$output,
 							$exception->get_inner(),
 							$request,
+							$files,
 							true
 						);
 						break;
@@ -76,6 +77,7 @@ class Parser_Manager {
 							$output,
 							$exception->get_inner(),
 							$request,
+							$files,
 							$inside_conditional
 						);
 						break;
@@ -90,11 +92,12 @@ class Parser_Manager {
 	 * @param $field
 	 *
 	 * @param $request
+	 * @param $files
 	 * @param $inside_conditional
 	 *
 	 * @throws Parse_Exception
 	 */
-	public function get_value_from_field( &$output, $field, $request, $inside_conditional ) {
+	public function get_value_from_field( &$output, $field, $request, $files, $inside_conditional ) {
 		if ( empty( $field['blockName'] ) ) {
 			throw new Parse_Exception( self::EMPTY_BLOCK_ERROR );
 		}
@@ -112,6 +115,7 @@ class Parser_Manager {
 		$name       = $settings['name'] ?? 'field_name';
 		$field_type = Block_Helper::delete_namespace( $field['blockName'] );
 		$value      = $request[ $name ] ?? '';
+		$file       = $files[ $name ] ?? false;
 
 		try {
 			$parser = $this->get_parser( $field_type );
@@ -124,7 +128,7 @@ class Parser_Manager {
 		}
 
 		try {
-			$output[ $name ] = $parser->get_parsed_value( $value, $field, $inside_conditional );
+			$output[ $name ] = $parser->get_parsed_value( $value, $file, $field, $inside_conditional );
 		} catch ( Parse_Exception $exception ) {
 			$output = array_merge( $output, $exception->get_inner() );
 			return;

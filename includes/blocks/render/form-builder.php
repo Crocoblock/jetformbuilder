@@ -89,6 +89,7 @@ class Form_Builder {
 		$this->add_attribute( 'method', 'POST' );
 		$this->add_attribute( 'data-form-id', $this->form_id );
 		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
+		$this->add_attribute( 'enctype', 'multipart/form-data' );
 
 		ob_start();
 		include $this->get_global_template( 'common/start-form.php' );
@@ -189,7 +190,7 @@ class Form_Builder {
 			return '';
 		}
 
-		if ( ! $this->preset()->general()->sanitize_source() ) {
+		if ( ! jet_fb_preset( $this->form_id )->general()->sanitize_source() ) {
 			echo 'You are not permitted to submit this form!';
 
 			return '';
@@ -219,12 +220,6 @@ class Form_Builder {
 		Preset_Manager::clear();
 
 		return $form;
-	}
-
-	public function preset() {
-		Preset_Manager::instance()->set_form_id( $this->form_id );
-
-		return Preset_Manager::instance();
 	}
 
 }

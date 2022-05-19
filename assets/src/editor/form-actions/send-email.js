@@ -3,49 +3,58 @@
  */
 
 const {
-		  MacrosInserter,
-	  } = JetFBComponents;
+	MacrosInserter,
+} = JetFBComponents;
 
 const {
-		  addAction,
-		  getFormFieldsBlocks,
-		  Tools: { withPlaceholder },
-	  } = JetFBActions;
+	addAction,
+	getFormFieldsBlocks,
+	Tools: { withPlaceholder },
+} = JetFBActions;
 
 const {
-		  TextControl,
-		  TextareaControl,
-		  SelectControl,
-	  } = wp.components;
+	TextControl,
+	TextareaControl,
+	SelectControl,
+	FormTokenField,
+	BaseControl,
+} = wp.components;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	useState,
+	useEffect,
+} = wp.element;
 
 const { withRequestFields } = JetFBHooks;
 
 const { withSelect } = wp.data;
 
 function SendEmailAction( {
-							  settings,
-							  source,
-							  label,
-							  help,
-							  onChangeSetting,
-							  requestFields,
-						  } ) {
+	settings,
+	source,
+	label,
+	help,
+	onChangeSetting,
+	onChangeSettingObj,
+	requestFields,
+} ) {
 
 	const [ formFields, setFormFields ] = useState( [] );
+	const [ formFieldsTokens, setFormFieldsTokens ] = useState( [] );
 
 	useEffect( () => {
-		setFormFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
+		const fields = [ ...getFormFieldsBlocks(), ...requestFields ];
+		setFormFields( fields );
+
+		setFormFieldsTokens( fields.map( ( { value } ) => value ) );
 	}, [] );
 
 	const insertMacros = ( macros ) => {
-		const content = ( settings.content || '' ) + '%' + macros + '%';
+		const content = (
+			                settings.content || ''
+		                ) + '%' + macros + '%';
 		onChangeSetting( content, 'content' );
-	}
+	};
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <>
@@ -169,8 +178,20 @@ function SendEmailAction( {
 				zIndex={ 10000000 }
 			/>
 		</div>
+		<BaseControl
+			label={ label( 'attachments' ) }
+			className={ 'control-flex' }
+		>
+			<FormTokenField
+				label={ label( 'add_attachment' ) }
+				value={ settings.attachments }
+				suggestions={ formFieldsTokens }
+				onChange={ tokens => onChangeSettingObj( { attachments: [ ...new Set( tokens ) ] } ) }
+				tokenizeOnSpace
+			/>
+		</BaseControl>
 	</>;
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'send_email', withSelect( withRequestFields )( SendEmailAction ) )
+addAction( 'send_email', withSelect( withRequestFields )( SendEmailAction ) );

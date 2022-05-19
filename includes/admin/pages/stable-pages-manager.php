@@ -77,7 +77,7 @@ class Stable_Pages_Manager {
 
 			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),
-				'capability' => 'read',
+				'capability' => 'manage_options',
 				'slug'       => $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' ),
 			);
 		}

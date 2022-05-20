@@ -45,7 +45,8 @@ class Live_Form {
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->post = $this->current_post();
+		$this->post      = $this->current_post();
+		$this->spec_data = new Form_Arguments();
 	}
 
 	public function set_form_id( $form_id ) {
@@ -60,8 +61,9 @@ class Live_Form {
 	 * @return $this
 	 */
 	public function set_specific_data_for_render( $incoming_attributes = array() ) {
-		$form_args       = new Form_Arguments( $this->form_id );
-		$this->spec_data = $form_args->load( $incoming_attributes );
+		$this->spec_data
+			->set_form_id( $this->form_id )
+			->load( $incoming_attributes );
 
 		return $this;
 	}

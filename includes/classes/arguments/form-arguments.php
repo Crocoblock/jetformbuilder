@@ -21,7 +21,18 @@ class Form_Arguments implements Arrayable {
 	public $use_csrf         = null;
 
 	public function __construct( $form_id = 0 ) {
-		$this->form_id = (int) $form_id;
+		$this->set_form_id( (int) $form_id );
+	}
+
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return Form_Arguments
+	 */
+	public function set_form_id( $form_id ): Form_Arguments {
+		$this->form_id = $form_id;
+
+		return $this;
 	}
 
 	/**
@@ -223,6 +234,13 @@ class Form_Arguments implements Arrayable {
 			'fields_label_tag' => $label_tag,
 			'load_nonce'       => $load_nonce,
 		);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_submit_type(): string {
+		return $this->submit_type ? $this->submit_type : 'reload';
 	}
 
 }

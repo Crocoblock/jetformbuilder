@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions;
 
-
 use Jet_Form_Builder\Actions\Events\Base_Action_Event;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
@@ -116,7 +115,6 @@ class Events_Manager implements Arrayable {
 	public function to_array(): array {
 		return array(
 			'types' => Array_Tools::to_array( $this->rep_get_items() ),
-			//'locked' =>
 		);
 	}
 }

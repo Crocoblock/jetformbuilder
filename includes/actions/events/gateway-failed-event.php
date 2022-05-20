@@ -14,10 +14,6 @@ class Gateway_Failed_Event extends Base_Gateway_Event {
 		return __( 'When canceling the passage of the gateway', 'jet-form-builder' );
 	}
 
-	protected function get_unsupported_actions(): array {
-		return array( 'redirect_to_page' );
-	}
-
 	/**
 	 * @return string
 	 */

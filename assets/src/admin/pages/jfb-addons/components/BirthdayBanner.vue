@@ -34,14 +34,18 @@ export default {
 	name: 'BirthdayBanner',
 	computed: {
 		buttonHref() {
+			const licence = this.$parent.isLicenseActivated
+				? 'jetformbuilder-license'
+				: 'license-not-activated';
+
 			const utmParams = this.$parent.getUtmParamsString( {
 				utm_source: `dashboard/jet-form-builder-addons-page`,
-				utm_medium: `jetformbuilder-license/${ this.$parent.themeInfo.authorSlug }`,
+				utm_medium: `${ licence }/${ this.$parent.themeInfo.authorSlug }`,
 				utm_campaign: 'birthday-sale-2022',
 			} );
 
-			return `${this.$parent.miscInfo.pricingPageUrl}?${ utmParams }`;
-		}
+			return `https://crocoblock.com/pricing/?${ utmParams }`;
+		},
 	},
 };
 </script>

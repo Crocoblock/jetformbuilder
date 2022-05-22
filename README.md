@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.5
+* FIX: "Go PRO" link appears for all User Roles
+
 ## 2.0.4
 * FIX: Trigger JS event once, added event `jet-form-builder/after-init`
 * FIX: Paginate fields list in single form record

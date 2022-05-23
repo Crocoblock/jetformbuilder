@@ -37,6 +37,9 @@ export default {
 				case 'info':
 					classes.push( 'dashicons-info' );
 					break;
+				case 'pending':
+					classes.push( 'dashicons-hourglass' );
+					break;
 				default:
 					classes.push( 'dashicons-dismiss' );
 					break;
@@ -90,6 +93,10 @@ export default {
 
 		&-info {
 			color: #90c6db;
+		}
+
+		&-hourglass {
+			color: #b5b5b5;
 		}
 	}
 

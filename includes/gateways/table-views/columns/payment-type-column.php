@@ -30,9 +30,8 @@ class Payment_Type_Column extends Column_Advanced_Base {
 		$single = ( new Single_Payment_Page() )->set_id( $record['id'] ?? 0 );
 
 		return array(
-			'text'    => $this->get_type_name( $record ),
-			'href'    => $single->get_url(),
-			'primary' => true,
+			'text' => $this->get_type_name( $record ),
+			'href' => $single->get_url(),
 		);
 	}
 

@@ -263,6 +263,7 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 == Changelog ==
 
 **2.0.6**
+ - FIX: Block controls for Calculated Field & Repeater Field
  - Tweak: Addons page banner
 
 **2.0.5**

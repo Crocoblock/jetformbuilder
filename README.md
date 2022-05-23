@@ -5,6 +5,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 # ChangeLog
 
 ## 2.0.6
+* FIX: Block controls for Calculated Field & Repeater Field
 * Tweak: Addons page banner
 
 ## 2.0.5

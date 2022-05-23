@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.0.6
+* Tweak: Addons page banner
+
 ## 2.0.5
 * FIX: "Go PRO" link appears for all User Roles
 

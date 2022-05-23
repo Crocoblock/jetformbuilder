@@ -1,33 +1,34 @@
 const {
-		  AdvancedFields,
-		  GeneralFields,
-		  FieldWrapper,
-		  FieldSettingsWrapper,
-		  BaseHelp,
-	  } = JetFBComponents;
+	AdvancedFields,
+	GeneralFields,
+	FieldWrapper,
+	FieldSettingsWrapper,
+	BaseHelp,
+	ToolBarFields,
+} = JetFBComponents;
 
 const {
-		  getFieldsWithoutCurrent,
-	  } = JetFBActions;
+	getFieldsWithoutCurrent,
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-		  BlockControls,
-		  InspectorControls,
-		  useBlockProps,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	BlockControls,
+	InspectorControls,
+	useBlockProps,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  TextControl,
-		  TextareaControl,
-		  ToggleControl,
-		  PanelBody,
-		  Button,
-		  Popover,
-		  ToolbarGroup,
-		  __experimentalNumberControl,
-	  } = wp.components;
+	TextControl,
+	TextareaControl,
+	ToggleControl,
+	PanelBody,
+	Button,
+	Popover,
+	ToolbarGroup,
+	__experimentalNumberControl,
+} = wp.components;
 
 const NumberControl = __experimentalNumberControl;
 
@@ -42,11 +43,11 @@ export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey },
+	} = props;
 
 	const insertMacros = ( macros ) => {
 		setAttributes( {
@@ -54,7 +55,9 @@ export default function EditCalculated( props ) {
 		} );
 	};
 	const togglePopover = () => {
-		const fields = getFieldsWithoutCurrent().map( ( { value } ) => ( '%FIELD::' + value + '%' ) );
+		const fields = getFieldsWithoutCurrent().map( ( { value } ) => (
+			'%FIELD::' + value + '%'
+		) );
 
 		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields', fields ) );
 		setShowMacros( toggle => ! toggle );
@@ -64,33 +67,34 @@ export default function EditCalculated( props ) {
 	const [ showMacros, setShowMacros ] = useState( false );
 
 	return [
-		<BlockControls key={ uniqKey( 'BlockControls' ) }>
-			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
-				<Button
-					key={ uniqKey( 'show-popover' ) }
-					isTertiary
-					isSmall
-					icon={ showMacros ? 'no-alt' : 'admin-tools' }
-					onClick={ togglePopover }
-				/>
-				{ showMacros && <Popover
-					key={ uniqKey( 'Popover' ) }
-					position={ 'bottom left' }
-				>
-					{ formFields.length && <PanelBody title={ 'Form Fields' }>
-						{ formFields.map( ( value, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
-								<Button
-									isLink
-									onClick={ () => {
-										insertMacros( value )
-									} }
-								>{ value }</Button>
-							</div>,
-						) }
-					</PanelBody> }
-				</Popover> }
-			</ToolbarGroup>
-		</BlockControls>,
+		<ToolBarFields
+			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
+		>
+			<Button
+				key={ uniqKey( 'show-popover' ) }
+				isTertiary
+				isSmall
+				icon={ showMacros ? 'no-alt' : 'admin-tools' }
+				onClick={ togglePopover }
+			/>
+			{ showMacros && <Popover
+				key={ uniqKey( 'Popover' ) }
+				placement={ 'bottom-end' }
+			>
+				{ formFields.length && <PanelBody title={ 'Form Fields' }>
+					{ formFields.map( ( value, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
+							<Button
+								isLink
+								onClick={ () => {
+									insertMacros( value );
+								} }
+							>{ value }</Button>
+						</div>,
+					) }
+				</PanelBody> }
+			</Popover> }
+		</ToolBarFields>,
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>

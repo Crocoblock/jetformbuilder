@@ -30,11 +30,6 @@ const {
 
 const { __ } = wp.i18n;
 
-const {
-	withDispatch,
-	withSelect,
-} = wp.data;
-
 const { compose } = wp.compose;
 
 const { useEffect, useState, useContext } = wp.element;

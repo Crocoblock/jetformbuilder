@@ -14,4 +14,10 @@ class Default_Process_Event extends Base_Event {
 		return __( 'When the Form was submitted', 'jet-form-builder' );
 	}
 
+	public function to_array(): array {
+		return parent::to_array() + array(
+			'always' => true,
+		);
+	}
+
 }

@@ -13,6 +13,11 @@ export default {
 			'gateway' in event
 		) );
 	},
+	getAlwaysTypes( state ) {
+		return state.types.filter( event => (
+			'always' in event
+		) );
+	},
 	getType( state, slug ) {
 		const index = selectors.getTypeIndex( state, slug );
 

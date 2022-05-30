@@ -4,9 +4,23 @@ const { useSelect } = wp.data;
 
 export const useRequestEvents = () => {
 	return [
+		...useDefaultEvents(),
 		...useEventsFromGateways(),
 		...useEventsFromActions(),
 	];
+};
+
+const useDefaultEvents = () => {
+	const eventsObjects = useSelect(
+		select => select( 'jet-forms/events' ).getAlwaysTypes(),
+	);
+	const events = [];
+
+	for ( const { value } of eventsObjects ) {
+		events.push( value );
+	}
+
+	return [ ...new Set( events ) ];
 };
 
 const useEventsFromGateways = () => {

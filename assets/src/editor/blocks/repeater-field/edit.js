@@ -1,47 +1,47 @@
 import {
 	calcType,
 	manageItemsCount,
-} from "./options";
+} from './options';
 
 const {
-		  ToolBarFields,
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldWrapper,
-	  } = JetFBComponents;
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+	FieldWrapper,
+} = JetFBComponents;
 
 const {
-		  getFieldsWithoutCurrent,
-		  Tools,
-	  } = JetFBActions;
+	getFieldsWithoutCurrent,
+	Tools,
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-		  InspectorControls,
-		  InnerBlocks,
-		  useBlockProps,
-		  RichText,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	InspectorControls,
+	InnerBlocks,
+	useBlockProps,
+	RichText,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  select,
-	  } = wp.data;
+	select,
+} = wp.data;
 
 const {
-		  useState,
-	  } = wp.element;
+	useState,
+} = wp.element;
 
 const {
-		  TextControl,
-		  TextareaControl,
-		  SelectControl,
-		  PanelBody,
-		  Button,
-		  Popover,
-		  BaseControl,
-		  __experimentalNumberControl,
-	  } = wp.components;
+	TextControl,
+	TextareaControl,
+	SelectControl,
+	PanelBody,
+	Button,
+	Popover,
+	BaseControl,
+	__experimentalNumberControl,
+} = wp.components;
 
 let { NumberControl } = wp.components;
 
@@ -55,51 +55,50 @@ export default function RepeaterEdit( props ) {
 	const [ showMacros, setShowMacros ] = useState( false );
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey, attrHelp },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp },
+	} = props;
 
 	const formFields = getFieldsWithoutCurrent();
-
-	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	const label = Tools.getLabel( meta, attributes );
 
 	const insertMacros = ( macros ) => {
 		const formula = attributes.calc_formula || '';
 		props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
-	}
+	};
 
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
 			{ ...props }
 		>
-			{ 'custom' === attributes.repeater_calc_type && <Button
-				key={ uniqKey( 'Button' ) }
-				isTertiary
-				isSmall
-				icon={ showMacros ? 'no-alt' : 'admin-tools' }
-				onClick={ () => setShowMacros( toggle => ! toggle ) }
-			/> }
-			{ showMacros && <Popover
-				position={ 'bottom left' }
-				key={ uniqKey( 'Popover' ) }
-			>
-				{ formFields.length && <PanelBody title={ 'Form Fields' }>
-					{ formFields.map( ( { value }, index ) => <div
-						key={ uniqKey( 'field_' + value + index ) }
-					>
-						<Button
-							isLink
-							onClick={ () => {
-								insertMacros( value )
-							} }
-						>{ '%FIELD::' + value + '%' }</Button>
-					</div> ) }
-				</PanelBody> }
-			</Popover> }
+			{ 'custom' === attributes.repeater_calc_type && <>
+				<Button
+					key={ uniqKey( 'Button' ) }
+					isTertiary
+					isSmall
+					icon={ showMacros ? 'no-alt' : 'admin-tools' }
+					onClick={ () => setShowMacros( toggle => ! toggle ) }
+				/>
+				{ showMacros && <Popover
+					key={ uniqKey( 'Popover' ) }
+					placement={ 'bottom-end' }
+				>
+					{ formFields.length && <PanelBody title={ 'Form Fields' }>
+						{ formFields.map( ( { value }, index ) => <div
+							key={ uniqKey( 'field_' + value + index ) }
+						>
+							<Button
+								isLink
+								onClick={ () => {
+									insertMacros( value );
+								} }
+							>{ '%FIELD::' + value + '%' }</Button>
+						</div> ) }
+					</PanelBody> }
+				</Popover> }
+			</> }
 		</ToolBarFields>,
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }

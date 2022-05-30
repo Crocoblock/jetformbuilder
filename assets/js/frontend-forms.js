@@ -1754,6 +1754,8 @@
 
 			const editor = tinymce.get( editorId );
 
+			field.trigger( 'init.JetFormBuilderMain', [ editor ] );
+
 			editor
 				.on( 'input', callable )
 				.on( 'change', callable );

@@ -233,7 +233,9 @@ class Condition_Instance {
 			return $compare;
 		}
 
-		return array_map( 'trim', explode( ',', $compare ) );
+		$this->compare = array_map( 'trim', explode( ',', $compare ) );
+
+		return $this->compare;
 	}
 
 	/**
@@ -258,20 +260,42 @@ class Condition_Instance {
 
 				return ( $compare_values[0] < $field && $compare_values[1] > $field );
 			case 'one_of':
-				$field          = $this->get_field_value();
-				$compare_values = $this->get_compare_as_array();
-
-				if ( ! is_array( $compare_values ) ) {
-					return false;
-				}
-
-				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				return in_array( $field, $compare_values );
+				return $this->check_one_of();
 			case 'contain':
 				return ( strpos( $this->get_field_value(), $this->get_compare() ) !== false );
 			default:
 				return apply_filters( 'jet-form-builder/actions/process-condition', false, $this );
 		}
+	}
+
+	protected function check_one_of(): bool {
+		$field          = $this->get_field_value();
+		$compare_values = $this->get_compare_as_array();
+
+		if ( ! is_array( $compare_values ) ) {
+			return false;
+		}
+
+		// then value is from checkbox field
+		if ( is_array( $field ) ) {
+			return $this->check_one_of_list();
+		}
+
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		return in_array( $field, $compare_values );
+	}
+
+	public function check_one_of_list(): bool {
+		$field          = $this->get_field_value();
+		$compare_values = $this->get_compare_as_array();
+
+		foreach ( $field as $current ) {
+			if ( in_array( $current, $compare_values, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

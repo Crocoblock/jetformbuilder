@@ -15,6 +15,7 @@ abstract class Column_Base {
 	const STATUS_INFO    = 'info';
 	const STATUS_WARNING = 'warning';
 	const STATUS_FAILED  = 'failed';
+	const STATUS_PENDING = 'pending';
 
 	protected $column = '';
 	protected $type   = 'string';

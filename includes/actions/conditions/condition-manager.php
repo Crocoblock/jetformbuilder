@@ -12,6 +12,7 @@ class Condition_Manager {
 	const THROW_IF_ONE_WRONG          = 'throw_out_if_at_least_one_wrong';
 	const TRANSFORM_DATE_TO_TIMESTAMP = 'date_to_timestamp';
 
+	/** @var Condition_Instance[] */
 	private $conditions;
 	private $operator;
 	private $settings;
@@ -113,7 +114,7 @@ class Condition_Manager {
 
 		foreach ( $this->conditions as $condition ) {
 			try {
-				$this->is_correct( $condition );
+				$condition->is_correct();
 
 			} catch ( Condition_Silence_Exception $exception ) {
 				switch ( $exception->getMessage() ) {

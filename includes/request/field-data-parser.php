@@ -50,6 +50,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->set_context( $context );
 		$this->set_block();
 		$this->set_value( $context->get_value() );
+		$this->set_file( $context->get_file() );
 
 		return $this->response();
 	}
@@ -142,6 +143,17 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected function set_name(): Field_Data_Parser {
 		$this->name = $this->settings['name'] ?? '';
+
+		return $this;
+	}
+
+	/**
+	 * @param bool|File|File_Collection $file
+	 *
+	 * @return Field_Data_Parser
+	 */
+	public function set_file( $file ): Field_Data_Parser {
+		$this->file = $file;
 
 		return $this;
 	}

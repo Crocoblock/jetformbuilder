@@ -20,12 +20,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id = null;
-	public $request_data = array();
-	public $form_actions = array();
-	public $is_ajax = false;
+	public $form_id          = null;
+	public $request_data     = array();
+	public $form_actions     = array();
+	public $is_ajax          = false;
 	private $form_conditions = array();
-	private $form_events = array();
+	private $form_events     = array();
 
 	/**
 	 * Data for actions
@@ -294,9 +294,9 @@ class Action_Handler {
 			return;
 		}
 
-		_doing_it_wrong(
-			__METHOD__,
+		wp_die(
 			esc_html( 'The action loop has not been started, see ' . self::class . '::run_actions()' ),
+			__METHOD__,
 			'1.4.0'
 		);
 	}

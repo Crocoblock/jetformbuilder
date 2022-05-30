@@ -49,6 +49,8 @@ class Condition_Instance {
 	 * @return bool
 	 */
 	public function is_correct(): bool {
+		$this->sanitize_operator();
+
 		$result = $this->check();
 
 		return $this->get_must_be() ? $result : ! $result;
@@ -77,10 +79,16 @@ class Condition_Instance {
 
 
 	public function set_operator( string $operator ): Condition_Instance {
+		$this->operator = $operator;
+
+		return $this;
+	}
+
+	public function sanitize_operator(): Condition_Instance {
 		$operators = $this->get_manager()->get_operators_list();
 
-		if ( $operator && in_array( $operator, $operators, true ) ) {
-			$this->operator = $operator;
+		if ( ! $this->operator || ! in_array( $this->operator, $operators, true ) ) {
+			$this->operator = '';
 		}
 
 		return $this;

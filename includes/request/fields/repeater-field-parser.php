@@ -16,30 +16,16 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 	public function get_response() {
 		$response = array();
 		$indexes  = $this->get_indexes();
-		$context  = ( clone $this->context )->query_context();
+		$context  = clone $this->context;
 
 		foreach ( $indexes as $index ) {
 			$row   = $this->value[ $index ] ?? array();
 			$files = $this->file[ $index ] ?? array();
 
-			/*jet_fb_live()->set_repeater(
-				$this->name,
-				array(
-					'index' => $index,
-				)
-			);*/
-
 			$context->set_request_context( $row )->set_files_context( $files );
 
 			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $context );
 		}
-
-		/*jet_fb_live()->set_repeater(
-			$this->name,
-			array(
-				'index' => false,
-			)
-		);*/
 
 		return $response;
 	}

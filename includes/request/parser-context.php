@@ -88,25 +88,6 @@ class Parser_Context {
 		}
 	}
 
-	public function query_context(): Parser_Context {
-		/** @var Base $field */
-		$field    = jet_form_builder()->blocks->get_field_by_name( $this->field_type );
-		$provides = $field->get_provides_context();
-
-		if ( empty( $provides ) ) {
-			return $this;
-		}
-
-		foreach ( $provides as $property => $attribute ) {
-			if ( ! isset( $this->settings[ $attribute ] ) ) {
-				continue;
-			}
-			$this->context[ $property ] = $this->settings[ $attribute ];
-		}
-
-		return $this;
-	}
-
 	public function get_default_value() {
 		/** @var Base $block */
 		$block = jet_form_builder()->blocks->get_field_by_name( $this->field_type );

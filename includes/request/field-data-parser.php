@@ -24,6 +24,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	/** @var File|File_Collection|bool */
 	protected $file;
 
+	/** @var Parser_Context */
+	protected $context;
+
 	abstract public function type();
 
 	/**
@@ -38,21 +41,15 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @param $value
-	 * @param $file
-	 * @param $block
-	 * @param $inside_conditional
+	 * @param Parser_Context $context
 	 *
 	 * @return mixed
 	 * @throws Exclude_Field_Exception
 	 */
-	final public function get_parsed_value( $value, $file, $block, $inside_conditional ) {
-		$this->init(
-			$value,
-			$file,
-			$block,
-			$inside_conditional
-		)->is_field_visible();
+	final public function get_parsed_value( Parser_Context $context ) {
+		$this->set_context( $context );
+		$this->set_block();
+		$this->set_value( $context->get_value() );
 
 		return $this->response();
 	}
@@ -75,26 +72,8 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $value;
 	}
 
-	public function init( $value, $file, $block, $inside_conditional ): Field_Data_Parser {
-		$this->block              = $block;
-		$this->inside_conditional = $inside_conditional;
-		$this->settings           = $this->block['attrs'];
-		$this->inner              = $this->block['innerBlocks'];
-		$this->file               = $file;
-
-		if ( isset( $this->settings['required'] ) ) {
-			$this->is_required = $this->settings['required'];
-		}
-		if ( isset( $this->settings['name'] ) ) {
-			$this->name = $this->settings['name'];
-		}
-		$this->value = $this->parse_value( $value );
-
-		return $this;
-	}
-
 	protected function has_error(): bool {
-		return ( ! $this->inside_conditional && $this->is_required && empty( $this->value ) );
+		return ( ! $this->context->is_inside_conditional() && $this->is_required && empty( $this->value ) );
 	}
 
 	protected function save_error( string $message = '' ) {
@@ -125,6 +104,46 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		if ( 'not_logged_in' === $visibility && is_user_logged_in() ) {
 			throw new Exclude_Field_Exception();
 		}
+	}
+
+	protected function set_context( Parser_Context $context ): Field_Data_Parser {
+		$this->context = $context;
+
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 * @throws Exclude_Field_Exception
+	 */
+	protected function set_block(): Field_Data_Parser {
+		$block          = $this->context->get_block();
+		$this->settings = $block['attrs'];
+		$this->inner    = $block['innerBlocks'];
+
+		$this->set_name();
+		$this->set_required();
+		$this->is_field_visible();
+
+		return $this;
+	}
+
+	public function set_value( $value ): Field_Data_Parser {
+		$this->value = $this->parse_value( $value );
+
+		return $this;
+	}
+
+	protected function set_required(): Field_Data_Parser {
+		$this->is_required = $this->settings['required'] ?? false;
+
+		return $this;
+	}
+
+	protected function set_name(): Field_Data_Parser {
+		$this->name = $this->settings['name'] ?? '';
+
+		return $this;
 	}
 
 

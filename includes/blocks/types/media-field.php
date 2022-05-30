@@ -17,8 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Media_Field extends Base {
 
 	protected $value_format = 'url';
-	protected $max_files = 1;
-	protected $max_size = 1;
+	protected $max_files    = 1;
+	protected $max_size     = 1;
 
 	/**
 	 * Returns block name

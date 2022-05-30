@@ -23,12 +23,20 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 
 	const metaStateValue = JSON.parse( meta[ key ] || ifEmpty );
 
-	const setMetaStateValue = newValue => {
+	const setMetaStateValue = callable => {
+		let value;
+
+		if ( 'function' === typeof callable ) {
+			value = callable( metaStateValue );
+		} else {
+			value = callable;
+		}
+
 		editPost( {
 			meta: (
 				{
 					...meta,
-					[ key ]: JSON.stringify( newValue ),
+					[ key ]: JSON.stringify( value ),
 				}
 			),
 		} );

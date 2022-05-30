@@ -11,6 +11,7 @@ use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Permission_Exception;
+use Jet_Form_Builder\Classes\Tools;
 
 class File_Uploader {
 
@@ -30,6 +31,8 @@ class File_Uploader {
 	protected $allowed_mimes;
 	protected $insert_attachment;
 
+	/** @var Parser_Context */
+	protected $context;
 
 	/**
 	 * @return Media_Block_Value
@@ -37,7 +40,6 @@ class File_Uploader {
 	 * @throws Upload_Permission_Exception
 	 */
 	public function upload() {
-		$this->sanitize_preset();
 		$this->sanitize();
 
 		return $this->upload_files();
@@ -236,51 +238,6 @@ class File_Uploader {
 		return $this;
 	}
 
-	protected function sanitize_preset(): File_Uploader {
-		if ( empty( $this->preset ) ) {
-			return $this;
-		}
-		if ( ! empty( $this->file ) && $this->is_must_be_single() ) {
-			return $this->clear_preset();
-		}
-
-		return $this->compare_preset();
-	}
-
-	protected function compare_preset(): File_Uploader {
-		if ( $this->preset instanceof Uploaded_File ) {
-			if ( ! $this->isset_in_preset( $this->preset ) ) {
-				return $this->clear_preset();
-			}
-
-			return $this;
-		}
-
-		foreach ( $this->preset as $index => $value ) {
-			if ( ! $this->isset_in_preset( $value ) ) {
-				unset( $this->preset[ $index ] );
-			}
-		}
-
-		return $this;
-	}
-
-	protected function isset_in_preset( Uploaded_File $preset ): bool {
-		$value = $this->default_value();
-
-		foreach ( $value as $item ) {
-			if (
-				( $preset->get_url() === $item['url'] )
-				&&
-				( ! isset( $item['id'] ) || $preset->get_attachment_id() === (string) $item['id'] )
-			) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public function set_preset( $preset ): File_Uploader {
 		if ( empty( $preset ) || ! is_array( $preset ) ) {
 			return $this;
@@ -325,25 +282,25 @@ class File_Uploader {
 		return $this;
 	}
 
-	protected function default_value(): array {
-		if ( ! empty( $this->default_value ) ) {
-			return $this->default_value;
-		}
-
-		/** @var Media_Field $media */
-		$media = jet_form_builder()->blocks->get_field_by_name( 'media-field' );
-
-		// the exception will never be thrown
-		$media->set_block_data( $this->settings );
-		$media->set_preset();
-
-		$this->default_value = $media->block_attrs['default'];
-
-		return $this->default_value;
-	}
-
 	public function clear_preset(): File_Uploader {
 		$this->preset = array();
+
+		return $this;
+	}
+
+	/**
+	 * @return Uploaded_File|Uploaded_File[]
+	 */
+	public function get_preset() {
+		return $this->preset;
+	}
+
+	public function set_context( Parser_Context $context ): File_Uploader {
+		$this->context = $context;
+
+		$this->set_settings( $context->get_settings() );
+		$this->set_preset( Tools::decode_json( $context->get_value() ) );
+		$this->set_file( $context->get_file() );
 
 		return $this;
 	}

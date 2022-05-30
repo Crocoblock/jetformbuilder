@@ -46,6 +46,7 @@ import {
 	useStateLoadingClasses,
 	useSuccessNotice,
 	useRequestFields,
+	useSelectPostMeta,
 	withRequestFields,
 	withSelectActionLoading,
 	withDispatchMeta,
@@ -175,6 +176,7 @@ window.JetFBActions = {
 window.JetFBHooks = {
 	useActions,
 	useMetaState,
+	useSelectPostMeta,
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,

@@ -106,6 +106,9 @@ class Request_Handler {
 		return $response;
 	}
 
+	/**
+	 *
+	 */
 	private function get_repeating_raw_files( array $files ): array {
 		$rows     = count( $files['name'] );
 		$repeater = array();
@@ -142,6 +145,7 @@ class Request_Handler {
 					try {
 						$file = new File( $values );
 					} catch ( Sanitize_File_Exception $exception ) {
+						unset( $row[ $field_name ] );
 						continue;
 					}
 					$row[ $field_name ] = $file;
@@ -178,11 +182,11 @@ class Request_Handler {
 		$this->raw_request = $this->get_raw_request();
 		$this->files       = $this->get_raw_files();
 
-		$request = Parser_Manager::instance()->get_values_fields(
-			$this->_fields,
-			$this->raw_request,
-			$this->files
-		);
+		$context = ( new Parser_Context() )
+			->set_files_context( $this->files )
+			->set_request_context( $this->raw_request );
+
+		$request = Parser_Manager::instance()->get_values_fields( $this->_fields, $context );
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
 			throw new Request_Exception(

@@ -54,7 +54,9 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @var array
 	 */
-	public $attrs = array();
+	public $attrs               = array();
+	protected $provides_context = array();
+	protected $uses_context     = array();
 
 	/**
 	 * Set to `false` if your block should not be styled
@@ -121,7 +123,35 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			)
 		);
 
-		$this->attrs = $block->attributes;
+		if ( ! $block ) {
+			_doing_it_wrong(
+				__METHOD__,
+				esc_html__(
+					'Unsuccessful field (block) registration. 
+				Perhaps the path to the block scheme (block.json) is incorrectly specified',
+					'jet-form-builder'
+				),
+				'2.1.0'
+			);
+		}
+
+		$this->attrs            = $block->attributes;
+		$this->uses_context     = $block->uses_context;
+		$this->provides_context = $block->provides_context;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_uses_context(): array {
+		return $this->uses_context;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_provides_context(): array {
+		return $this->provides_context;
 	}
 
 	private function maybe_init_style_manager() {
@@ -216,10 +246,16 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			$this->get_default_attributes(),
 			$attributes
 		);
-		$this->block_context = $wp_block->context ?? array();
+		$this->set_context( $wp_block->context ?? array() );
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = $this->get_name();
+	}
+
+	public function set_context( array $context ): Base {
+		$this->block_context = $context;
+
+		return $this;
 	}
 
 	public function set_preset() {
@@ -260,7 +296,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	protected function get_default_from_preset( $attributes = array() ) {
-		jet_fb_preset( Live_Form::instance()->form_id );
+		jet_fb_preset( jet_fb_live()->form_id );
 
 		if ( ! $this->parent_repeater_name() ) {
 			return $this->get_field_value( $attributes );
@@ -542,12 +578,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		return false;
-
 	}
 
 	public function after_set_pages( Form_Break $break ) {
 	}
-
 
 	/**
 	 * @return Form_Break

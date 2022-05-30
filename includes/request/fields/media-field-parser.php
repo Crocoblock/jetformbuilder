@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Request\Fields;
 
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
@@ -21,14 +22,11 @@ class Media_Field_Parser extends Field_Data_Parser {
 	 * @throws Sanitize_Value_Exception
 	 */
 	public function get_response() {
-		if ( empty( $this->file ) && empty( $this->value ) ) {
+		if ( empty( $this->context->get_file() ) && empty( $this->value ) ) {
 			return false;
 		}
 
-		$uploader = ( new File_Uploader() )
-			->set_settings( $this->settings )
-			->set_preset( Tools::decode_json( $this->value ) )
-			->set_file( $this->file );
+		$uploader = ( new File_Uploader() )->set_context( $this->context );
 
 		try {
 			/** @var Media_Block_Value $uploads */

@@ -61,7 +61,7 @@ function RepeaterWithState( {
 		setItemsData( parsedItems() );
 	}, [] );
 
-
+	const [ isSafeDeleting, setSafeDeleting ] = useState( true );
 
 	const changeCurrentItem = ( valueToSet, index ) => {
 		setItemsData( prev => {
@@ -132,8 +132,11 @@ function RepeaterWithState( {
 	}
 
 	const isDisabledEnd = ( index ) => {
-		return ;
+		return ! ( index < itemsData.length - 1 );
 	}
+	/*
+	  
+	 */
 
 	const toggleVisible = index => {
 		setItemsData( prev => {
@@ -163,10 +166,10 @@ function RepeaterWithState( {
 	const getRepeaterItemId = index => `jet-form-builder-repeater__item_${ index }`;
 
 	const {
-			  helpSource,
-			  helpVisible,
-			  helpKey,
-		  } = help;
+		helpSource,
+		helpVisible,
+		helpKey,
+	} = help;
 
 	const isVisibleHelp = helpVisible( itemsData ) && helpSource && helpSource[ helpKey ];
 
@@ -190,21 +193,21 @@ function RepeaterWithState( {
 					marginBottom: '1em',
 				} }>
 					{/*<ButtonGroup>
-						<Button
-							isSecondary
-							onClick={ () => {
-							} }
-						>
-							{ __( 'Copy items to clipboard', 'jet-from-builder' ) }
-						</Button>
-						<Button
-							isSecondary
-							onClick={ () => {
-							} }
-						>
-							{ __( 'Import items from clipboard', 'jet-from-builder' ) }
-						</Button>
-					</ButtonGroup>*/ }
+					 <Button
+					 isSecondary
+					 onClick={ () => {
+					 } }
+					 >
+					 { __( 'Copy items to clipboard', 'jet-from-builder' ) }
+					 </Button>
+					 <Button
+					 isSecondary
+					 onClick={ () => {
+					 } }
+					 >
+					 { __( 'Import items from clipboard', 'jet-from-builder' ) }
+					 </Button>
+					 </ButtonGroup>*/ }
 				</FlexItem>
 			</Flex>
 		</> }
@@ -299,6 +302,7 @@ function RepeaterWithState( {
 			{ addNewButtonLabel }
 		</Button>
 	</div>;
+
 }
 
 export default RepeaterWithState;

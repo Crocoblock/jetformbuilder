@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
@@ -86,7 +87,7 @@ class Conditional_Block extends Base {
 		$this->controls_manager->end_section();
 	}
 
-	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+	protected function render_field( array $attrs, $content = null, $wp_block = null ): string {
 		if ( ! Live_Form::instance()->form_id ) {
 			return '';
 		}
@@ -108,12 +109,12 @@ class Conditional_Block extends Base {
 		);
 	}
 
-	public function get_conditions() {
-		foreach ( $this->block_attrs['conditions'] as $index => $condition ) {
-			$this->parse_condition( $condition, $index );
-		}
+	private function get_conditions(): string {
+		$conditions = Condition_Manager::instance()->prepare(
+			$this->block_attrs['conditions'] ?? array()
+		);
 
-		return htmlspecialchars( wp_json_encode( $this->block_attrs['conditions'] ) );
+		return htmlspecialchars( wp_json_encode( $conditions ) );
 	}
 
 	private function parse_condition( $condition, $index ) {

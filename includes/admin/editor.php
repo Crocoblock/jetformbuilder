@@ -2,13 +2,14 @@
 
 namespace Jet_Form_Builder\Admin;
 
-use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
+use Jet_Form_Builder\Actions\Conditions\Condition_Manager as Action_Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
 
 /**
  * Form editor class
@@ -25,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Editor {
 
-	const EDITOR_HANDLE = 'jet-form-builder-editor';
+	const EDITOR_HANDLE         = 'jet-form-builder-editor';
 	const EDITOR_PACKAGE_HANDLE = 'jet-form-builder-editor-package';
 
 	public function __construct() {
@@ -330,6 +331,12 @@ class Editor {
 			jet_fb_events()->to_array()
 		);
 
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jetFormBlockConditions',
+			Block_Condition_Manager::instance()->to_array()
+		);
+
 		wp_set_script_translations(
 			self::EDITOR_PACKAGE_HANDLE,
 			'jet-form-builder',
@@ -360,7 +367,7 @@ class Editor {
 			'all'
 		);
 
-		$conditions_settings = ( new Condition_Manager() )->get_settings();
+		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 
 		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
 		$addons  = JET_FORM_BUILDER_SITE . '/addons/';

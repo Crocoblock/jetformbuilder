@@ -1,63 +1,65 @@
-import { options } from "./options";
+import { options } from './options';
 
 const {
-		  RepeaterWithState,
-		  ActionModal,
-		  FieldWithPreset,
-		  DynamicPreset,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	RepeaterWithState,
+	ActionModal,
+	FieldWithPreset,
+	DynamicPreset,
+	FieldSettingsWrapper,
+} = JetFBComponents;
 
 const {
-		  getFormFieldsBlocks,
-		  getInnerBlocks,
-		  Tools,
-	  } = JetFBActions;
+	getFormFieldsBlocks,
+	getInnerBlocks,
+	Tools,
+} = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-		  BlockControls,
-		  InnerBlocks,
-		  useBlockProps,
-		  InspectorControls,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	BlockControls,
+	InnerBlocks,
+	useBlockProps,
+	InspectorControls,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  Button,
-		  ToolbarGroup,
-		  TextareaControl,
-		  SelectControl,
-		  TextControl,
-	  } = wp.components;
+	Button,
+	ToolbarGroup,
+	TextareaControl,
+	SelectControl,
+	TextControl,
+} = wp.components;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	useState,
+	useEffect,
+} = wp.element;
+
+const {
+	useSelect,
+} = wp.data;
 
 export default function ConditionalBlockEdit( props ) {
 
 	const blockProps = useBlockProps();
 
 	const {
-			  setAttributes,
-			  attributes,
-			  clientId,
-			  editProps: { uniqKey },
-		  } = props;
+		setAttributes,
+		attributes,
+		clientId,
+		editProps: { uniqKey },
+	} = props;
 
 	useEffect( () => {
 		if ( ! attributes.name ) {
-			setAttributes( { name: clientId } )
+			setAttributes( { name: clientId } );
 		}
 	}, [] );
 
-	Tools.addConditionForCondType( 'isSingleField', () => {
-		return 1 === getInnerBlocks( clientId ).length;
-	} )
+	const operators = useSelect( select => select( 'jet-forms/block-conditions' ).getOperators() );
+	const functions = useSelect( select => select( 'jet-forms/block-conditions' ).getFunctions() );
 
-	const getConditionTypes = Tools.parseConditionsFunc( options.conditionTypes );
 	const [ showModal, setShowModal ] = useState( false );
 	const [ formFields, setFormFields ] = useState( [] );
 
@@ -113,7 +115,7 @@ export default function ConditionalBlockEdit( props ) {
 				onUnMount={ onRequestClose }
 				newItem={ options.condition }
 				onSaveItems={ conditions => setAttributes( { conditions } ) }
-				addNewButtonLabel={ __( "New Condition", 'jet-form-builder' ) }
+				addNewButtonLabel={ __( 'New Condition', 'jet-form-builder' ) }
 			>
 				{ ( { currentItem, changeCurrentItem } ) => <>
 					<SelectControl
@@ -121,7 +123,7 @@ export default function ConditionalBlockEdit( props ) {
 						label="Type"
 						labelPosition="side"
 						value={ currentItem.type }
-						options={ getConditionTypes }
+						options={ functions }
 						onChange={ newValue => {
 							changeCurrentItem( { type: newValue } );
 						} }
@@ -141,7 +143,7 @@ export default function ConditionalBlockEdit( props ) {
 						label="Operator"
 						labelPosition="side"
 						value={ currentItem.operator }
-						options={ options.conditionOperators }
+						options={ operators }
 						onChange={ newValue => {
 							changeCurrentItem( { operator: newValue } );
 						} }
@@ -149,7 +151,7 @@ export default function ConditionalBlockEdit( props ) {
 					<FieldWithPreset
 						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
 						baseControlProps={ {
-							label: "Value to Compare",
+							label: 'Value to Compare',
 						} }
 						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
 							key={ uniqKey( 'DynamicPreset-value_to_compare' ) }

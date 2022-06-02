@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Base_Function;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
+use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
@@ -44,11 +46,6 @@ class Condition_Item implements Arrayable {
 	}
 
 	public function to_array(): array {
-		/** @var Base_Function $function */
-		$function = Condition_Manager::instance()->get_functions()->rep_get_item_or_die( $this->type );
-		/** @var Base_Operator $operator */
-		$operator = Condition_Manager::instance()->get_operators()->rep_get_item_or_die( $this->operator );
-
 		$base = array(
 			'value'    => $this->get_parsed_value(),
 			'type'     => $this->get_type(),
@@ -58,9 +55,17 @@ class Condition_Item implements Arrayable {
 
 		return array_merge(
 			$base,
-			$function->to_response( $this ),
-			$operator->to_response( $this )
+			$this->get_function_object()->to_response( $this ),
+			$this->get_operator_object()->to_response( $this )
 		);
+	}
+
+	public function get_function_object(): Base_Function {
+		return Condition_Manager::instance()->get_functions()->rep_get_item_or_die( $this->type );
+	}
+
+	public function get_operator_object(): Base_Operator {
+		return Condition_Manager::instance()->get_operators()->rep_get_item_or_die( $this->operator );
 	}
 
 	public function get_parsed_value(): string {

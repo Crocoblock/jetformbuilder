@@ -7,5 +7,11 @@ export default {
 			items,
 		};
 	},
+	registerFunctionsFilters( item ) {
+		return {
+			type: constants.registerFunctionsFilters,
+			item,
+		};
+	},
 
 }

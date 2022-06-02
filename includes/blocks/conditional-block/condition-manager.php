@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
+use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
@@ -35,7 +37,24 @@ class Condition_Manager implements Arrayable {
 			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
-			$response[] = $item->to_array();
+
+			/**
+			 * Catch Condition_Exception on this level,
+			 * because in future we can implement "OR" operator
+			 * between all conditions.
+			 *
+			 * Here we could access the global option
+			 */
+			try {
+				$response[] = $item->to_array();
+			} catch ( Condition_Exception $exception ) {
+				/**
+				 * This exception catches in
+				 *
+				 * @see \Jet_Form_Builder\Blocks\Types\Base::render_callback_field
+				 */
+				throw new Render_Empty_Field( 'This is temporary.' );
+			}
 		}
 
 		return $response;

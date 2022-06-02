@@ -9,4 +9,12 @@ export default {
 
 		return state;
 	},
+	[ constants.registerFunctionsFilters ]( state, action ) {
+		state.functionFilters = {
+			...state.functionFilters,
+			...action.item,
+		};
+
+		return state;
+	},
 };

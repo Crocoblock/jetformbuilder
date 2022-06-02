@@ -1,18 +1,9 @@
-import { options } from './options';
+import ConditionsModal from './conditions.modal';
 
 const {
-	RepeaterWithState,
-	ActionModal,
-	FieldWithPreset,
-	DynamicPreset,
 	FieldSettingsWrapper,
 } = JetFBComponents;
 
-const {
-	getFormFieldsBlocks,
-	getInnerBlocks,
-	Tools,
-} = JetFBActions;
 
 const { __ } = wp.i18n;
 
@@ -26,8 +17,6 @@ const {
 const {
 	Button,
 	ToolbarGroup,
-	TextareaControl,
-	SelectControl,
 	TextControl,
 } = wp.components;
 
@@ -35,10 +24,6 @@ const {
 	useState,
 	useEffect,
 } = wp.element;
-
-const {
-	useSelect,
-} = wp.data;
 
 export default function ConditionalBlockEdit( props ) {
 
@@ -57,17 +42,7 @@ export default function ConditionalBlockEdit( props ) {
 		}
 	}, [] );
 
-	const operators = useSelect( select => select( 'jet-forms/block-conditions' ).getOperators() );
-	const functions = useSelect( select => select( 'jet-forms/block-conditions' ).getFunctions() );
-
 	const [ showModal, setShowModal ] = useState( false );
-	const [ formFields, setFormFields ] = useState( [] );
-
-	useEffect( () => {
-		if ( showModal ) {
-			setFormFields( getFormFieldsBlocks( [], '--' ) );
-		}
-	}, [ showModal ] );
 
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
@@ -103,104 +78,10 @@ export default function ConditionalBlockEdit( props ) {
 				/>
 			</div>
 		</div>,
-		showModal && <ActionModal
-			classNames={ [ 'width-60' ] }
-			onRequestClose={ () => setShowModal( false ) }
-			title="Conditional Logic"
-		>
-			{ ( { actionClick, onRequestClose } ) => <RepeaterWithState
-				key={ uniqKey( 'RepeaterWithState' ) }
-				items={ attributes.conditions }
-				isSaveAction={ actionClick }
-				onUnMount={ onRequestClose }
-				newItem={ options.condition }
-				onSaveItems={ conditions => setAttributes( { conditions } ) }
-				addNewButtonLabel={ __( 'New Condition', 'jet-form-builder' ) }
-			>
-				{ ( { currentItem, changeCurrentItem } ) => <>
-					<SelectControl
-						key={ uniqKey( 'SelectControl-type' ) }
-						label="Type"
-						labelPosition="side"
-						value={ currentItem.type }
-						options={ functions }
-						onChange={ newValue => {
-							changeCurrentItem( { type: newValue } );
-						} }
-					/>
-					<SelectControl
-						key={ uniqKey( 'SelectControl-field' ) }
-						label="Field"
-						labelPosition="side"
-						value={ currentItem.field }
-						options={ formFields }
-						onChange={ newValue => {
-							changeCurrentItem( { field: newValue } );
-						} }
-					/>
-					<SelectControl
-						key={ uniqKey( 'SelectControl-operator' ) }
-						label="Operator"
-						labelPosition="side"
-						value={ currentItem.operator }
-						options={ operators }
-						onChange={ newValue => {
-							changeCurrentItem( { operator: newValue } );
-						} }
-					/>
-					<FieldWithPreset
-						key={ uniqKey( 'FieldWithPreset-value_to_compare' ) }
-						baseControlProps={ {
-							label: 'Value to Compare',
-						} }
-						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-							key={ uniqKey( 'DynamicPreset-value_to_compare' ) }
-							value={ currentItem.value }
-							isSaveAction={ actionClick }
-							onSavePreset={ newValue => {
-								changeCurrentItem( { value: newValue } );
-							} }
-							onUnMount={ onRequestClose }
-						/> }
-						triggerClasses={ [ 'trigger__textarea' ] }
-					>
-						<TextareaControl
-							key={ uniqKey( 'TextareaControl-value' ) }
-							className={ 'jet-control-clear jet-user-fields-map__list' }
-							value={ currentItem.value }
-							onChange={ newValue => {
-								changeCurrentItem( { value: newValue } );
-							} }
-						/>
-					</FieldWithPreset>
-					{ 'set_value' === currentItem.type && <FieldWithPreset
-						key={ uniqKey( 'FieldWithPreset-value_to_set' ) }
-						baseControlProps={ {
-							label: __( 'Value to Set', 'jet-form-builder' ),
-							help: __( 'Separate values with commas', 'jet-form-builder' ),
-						} }
-						ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-							key={ uniqKey( 'DynamicPreset-value_to_set' ) }
-							value={ currentItem.set_value }
-							isSaveAction={ actionClick }
-							onSavePreset={ newValue => {
-								changeCurrentItem( { set_value: newValue } );
-							} }
-							onUnMount={ onRequestClose }
-						/> }
-						triggerClasses={ [ 'trigger__textarea' ] }
-					>
-						<TextareaControl
-							key={ uniqKey( 'TextareaControl-set_value' ) }
-							className={ 'jet-control-clear jet-user-fields-map__list' }
-							value={ currentItem.set_value }
-							onChange={ newValue => {
-								changeCurrentItem( { set_value: newValue } );
-							} }
-						/>
-					</FieldWithPreset> }
-				</> }
-			</RepeaterWithState> }
-		</ActionModal>,
+		showModal && <ConditionsModal
+			setShowModal={ setShowModal }
+			attributes={ attributes }
+			setAttributes={ setAttributes }
+		/>,
 	];
 }

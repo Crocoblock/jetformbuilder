@@ -8,6 +8,7 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Between;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Contain;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Equal;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Example_Server_Side;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Greater;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_In_The_List;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Less;
@@ -37,6 +38,7 @@ class Operators implements Arrayable {
 				new Operator_Between(),
 				new Operator_In_The_List(),
 				new Operator_Contain(),
+				new Operator_Example_Server_Side(),
 			)
 		);
 	}

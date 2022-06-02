@@ -16,8 +16,4 @@ class Operator_Greater extends Base_Operator {
 		return __( 'Greater than', 'jet-form-builder' );
 	}
 
-	public function is_supports(): bool {
-		return false;
-	}
-
 }

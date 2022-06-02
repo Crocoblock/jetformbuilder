@@ -1,5 +1,6 @@
 export default {
-	register: 'REGISTER'
+	register: 'REGISTER',
+	registerFunctionsFilters: 'REGISTER_FUNCTION_FILTERS',
 }
 
 

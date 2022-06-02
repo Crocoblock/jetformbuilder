@@ -60,6 +60,12 @@ import {
 import {
 	useRequestEvents,
 } from './helpers/hooks/event-types';
+import {
+	useBlockConditions,
+} from './helpers/hooks/block-conditions';
+import {
+	useUniqKey,
+} from './helpers/hooks/blocks';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
 import RepeaterWithState from './components/fields/repeater-with-state';
@@ -181,6 +187,8 @@ window.JetFBHooks = {
 	useStateLoadingClasses,
 	useSuccessNotice,
 	useRequestEvents,
+	useBlockConditions,
+	useUniqKey,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,

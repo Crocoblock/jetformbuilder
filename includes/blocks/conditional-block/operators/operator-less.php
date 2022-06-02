@@ -16,8 +16,4 @@ class Operator_Less extends Base_Operator {
 		return __( 'Less than', 'jet-form-builder' );
 	}
 
-	public function is_supports(): bool {
-		return false;
-	}
-
 }

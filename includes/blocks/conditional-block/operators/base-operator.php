@@ -18,14 +18,18 @@ abstract class Base_Operator implements
 
 	abstract public function get_title(): string;
 
-	abstract public function is_supports(): bool;
-
 	public function rep_item_id() {
 		return $this->get_id();
 	}
 
+	protected function check( Condition_Item $item ): bool {
+		return true;
+	}
+
 	public function to_response( Condition_Item $item ): array {
-		return array();
+		return array(
+			'result' => $this->check( $item ),
+		);
 	}
 
 	public function to_array(): array {

@@ -16,8 +16,4 @@ class Operator_Between extends Base_Operator {
 		return __( 'Between', 'jet-form-builder' );
 	}
 
-	public function is_supports(): bool {
-		return false;
-	}
-
 }

@@ -7,6 +7,8 @@ const {
 	SelectControl,
 	TextControl,
 	withFilters,
+	BaseControl,
+	FormTokenField,
 } = wp.components;
 
 const {
@@ -41,19 +43,25 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 
 	const uniqKey = useUniqKey();
 	const [ formFields ] = useState( () => getFormFieldsBlocks( [], '--' ) );
-	const renderStates = useSelect( select => select( 'jet-forms/block-conditions' ).getRenderStates() );
+	const renderStates = useSelect(
+		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(), [],
+	);
 
 	switch ( currentItem.operator ) {
 		case 'render_state':
 			return <>
-				<SelectControl
-					key={ uniqKey( 'SelectControl-state' ) }
+				<BaseControl
 					label={ __( 'Render State', 'jet-form-builder' ) }
-					labelPosition="side"
-					value={ currentItem.state }
-					options={ renderStates }
-					onChange={ state => changeCurrentItem( { state } ) }
-				/>
+					className={ 'control-flex' }
+				>
+					<FormTokenField
+						label={ __( 'Add render state', 'jet-form-builder' ) }
+						value={ currentItem.render_state }
+						suggestions={ renderStates }
+						onChange={ render_state => changeCurrentItem( { render_state } ) }
+						tokenizeOnSpace
+					/>
+				</BaseControl>
 			</>;
 		default:
 			return <>

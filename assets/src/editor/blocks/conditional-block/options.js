@@ -4,6 +4,7 @@ export const options = {
 		field: '',
 		operator: '',
 		value: '',
+		render_state: [],
 		set_value: '',
 	},
 };

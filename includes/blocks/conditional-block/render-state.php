@@ -24,7 +24,7 @@ class Render_State implements Arrayable {
 	use Repository_Pattern_Trait;
 	use Instance_Trait;
 
-	/** @var Base_Render_State */
+	/** @var Base_Render_State|null */
 	private $current;
 
 	protected function __construct() {
@@ -84,6 +84,13 @@ class Render_State implements Arrayable {
 		$this->current = null;
 
 		return $this;
+	}
+
+	/**
+	 * @return Base_Render_State|null
+	 */
+	public function get_current() {
+		return $this->current;
 	}
 
 

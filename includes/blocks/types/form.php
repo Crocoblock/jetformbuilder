@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
@@ -434,7 +435,7 @@ class Form extends Base {
 		);
 
 		try {
-			Condition_Manager::instance()->get_states()->set_current( Default_State::class );
+			Render_State::instance()->set_current( Default_State::class );
 		} catch ( Repository_Exception $exception ) {
 			// do nothing
 		}

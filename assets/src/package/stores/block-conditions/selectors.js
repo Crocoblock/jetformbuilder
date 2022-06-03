@@ -11,6 +11,9 @@ const selectors = {
 	getRenderStates( state ) {
 		return state.renderStates;
 	},
+	getRenderStatesList( state ) {
+		return state.renderStates.map( ( { value } ) => value );
+	},
 	getFilteredFunctions( state, blockProps ) {
 		return state.functions.filter( item => {
 			const callback = state.functionFilters[ item.value ] ?? false;

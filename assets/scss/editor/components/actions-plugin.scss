@@ -3,12 +3,8 @@
 	justify-content: space-between;
 }
 
-.jet-form-action {
-	option[disabled] {
-		background-color: #d3d3d35e;
-	}
-
-	.components-button.has-icon {
+.jfb-button {
+	&.components-button.has-icon {
 		position: relative;
 
 		span.dashicons-randomize[data-count]:after {
@@ -22,6 +18,12 @@
 			top: 0;
 			font-family: monospace;
 		}
+	}
+}
+
+.jet-form-action {
+	option[disabled] {
+		background-color: #d3d3d35e;
 	}
 
 	.jfb-events-item {

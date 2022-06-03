@@ -44,6 +44,13 @@ export default function ConditionalBlockEdit( props ) {
 
 	const [ showModal, setShowModal ] = useState( false );
 
+	const conditionsIcon = attributes?.conditions?.length ? <span
+		className="dashicon dashicons dashicons-randomize"
+		data-count={ attributes.conditions.length }
+	/> : <span
+		className="dashicon dashicons dashicons-randomize"
+	/>;
+
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
 			<FieldSettingsWrapper
@@ -62,10 +69,11 @@ export default function ConditionalBlockEdit( props ) {
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
+					className={ 'jfb-button' }
 					key={ uniqKey( 'randomize' ) }
 					isTertiary
 					isSmall
-					icon='randomize'
+					icon={ conditionsIcon }
 					onClick={ () => setShowModal( true ) }
 				/>
 			</ToolbarGroup>

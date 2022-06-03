@@ -122,6 +122,7 @@ function ListActionItem( props ) {
 					} }
 				/>
 				<Button
+					className={ 'jfb-button' }
 					icon={ conditionsIcon }
 					label={ __( 'Edit Conditions & Events', 'jet-form-builder' ) }
 					onClick={ () => {

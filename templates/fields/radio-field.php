@@ -30,7 +30,7 @@ if ( ! empty( $args['field_options'] ) ) {
 		}
 
 		if ( ! empty( $args['custom_item_template'] ) ) {
-			$custom_template = $this->get_custom_template( $val, $args );
+			$custom_template = $this->get_custom_template( $option['object_id'] ?? $val, $args );
 		}
 
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

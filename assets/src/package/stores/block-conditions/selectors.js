@@ -8,6 +8,9 @@ const selectors = {
 	getFunctionFilters( state ) {
 		return state.functionFilters;
 	},
+	getRenderStates( state ) {
+		return state.renderStates;
+	},
 	getFilteredFunctions( state, blockProps ) {
 		return state.functions.filter( item => {
 			const callback = state.functionFilters[ item.value ] ?? false;
@@ -17,8 +20,8 @@ const selectors = {
 			}
 
 			return callback( item, blockProps );
-		} )
-	}
+		} );
+	},
 };
 
 export default {

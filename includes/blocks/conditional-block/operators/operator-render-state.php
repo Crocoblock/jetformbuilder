@@ -7,15 +7,14 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block\Operators;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide;
 use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 
-class Operator_Example_Server_Side extends Base_Operator {
+class Operator_Render_State extends Base_Operator {
 
 	/**
 	 * @return string
 	 */
 	public function get_id(): string {
-		return 'ss_example';
+		return 'render_state';
 	}
 
 	/**

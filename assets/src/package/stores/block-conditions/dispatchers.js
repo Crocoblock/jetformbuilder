@@ -2,10 +2,11 @@ import constants from './constants';
 
 export default {
 	[ constants.register ]( state, action ) {
-		const { operators, functions } = action.items;
+		const { operators, functions, render_states } = action.items;
 
 		state.operators = [ ...operators ];
 		state.functions = [ ...functions ];
+		state.renderStates = [ ...render_states ];
 
 		return state;
 	},

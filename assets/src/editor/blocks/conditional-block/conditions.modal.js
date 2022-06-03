@@ -32,15 +32,29 @@ const {
 	useEffect,
 } = wp.element;
 
+const {
+	useSelect,
+} = wp.data;
+
 const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props => {
 	const { currentItem, changeCurrentItem } = props;
 
 	const uniqKey = useUniqKey();
 	const [ formFields ] = useState( () => getFormFieldsBlocks( [], '--' ) );
+	const renderStates = useSelect( select => select( 'jet-forms/block-conditions' ).getRenderStates() );
 
 	switch ( currentItem.operator ) {
-		case 'ss_example':
-			return null;
+		case 'render_state':
+			return <>
+				<SelectControl
+					key={ uniqKey( 'SelectControl-state' ) }
+					label={ __( 'Render State', 'jet-form-builder' ) }
+					labelPosition="side"
+					value={ currentItem.state }
+					options={ renderStates }
+					onChange={ state => changeCurrentItem( { state } ) }
+				/>
+			</>;
 		default:
 			return <>
 				<SelectControl

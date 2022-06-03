@@ -5,6 +5,7 @@ import { getInnerBlocks } from '../../helpers/blocks/blocks-helper';
 const DEFAULT_STATE = {
 	functions: [],
 	operators: [],
+	renderStates: [],
 	functionFilters: {
 		set_value( item, blockProps ) {
 			const { [ 'data-block' ]: clientId } = blockProps;

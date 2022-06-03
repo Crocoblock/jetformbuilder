@@ -8,7 +8,7 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Between;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Contain;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Equal;
-use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Example_Server_Side;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Greater;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_In_The_List;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Less;
@@ -29,17 +29,22 @@ class Operators implements Arrayable {
 	 * @return array
 	 */
 	public function rep_instances(): array {
+		$operators = array(
+			new Operator_Equal(),
+			new Operator_Greater(),
+			new Operator_Less(),
+			new Operator_Between(),
+			new Operator_In_The_List(),
+			new Operator_Contain(),
+		);
+
+		if ( Render_State::instance()->is_multiple() ) {
+			$operators[] = new Operator_Render_State();
+		}
+
 		return apply_filters(
 			'jet-form-builder/conditional-block/operators',
-			array(
-				new Operator_Equal(),
-				new Operator_Greater(),
-				new Operator_Less(),
-				new Operator_Between(),
-				new Operator_In_The_List(),
-				new Operator_Contain(),
-				new Operator_Example_Server_Side(),
-			)
+			$operators
 		);
 	}
 

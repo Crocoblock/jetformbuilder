@@ -115,8 +115,9 @@ trait Base_Select_Radio_Check {
 			foreach ( $posts as $post ) {
 
 				$item = array(
-					'value' => $post->ID,
-					'label' => apply_filters( 'jet-form-builder/render-choice/label/posts', $post->post_title, $post ),
+					'object_id' => $post->ID,
+					'value'     => $post->ID,
+					'label'     => apply_filters( 'jet-form-builder/render-choice/label/posts', $post->post_title, $post ),
 				);
 
 				if ( ! empty( $value_from ) ) {
@@ -168,8 +169,9 @@ trait Base_Select_Radio_Check {
 			foreach ( $terms as $term ) {
 
 				$item = array(
-					'value' => $term->term_id,
-					'label' => apply_filters( 'jet-form-builder/render-choice/label/terms', $term->name, $term ),
+					'object_id' => $term->term_id,
+					'value'     => $term->term_id,
+					'label'     => apply_filters( 'jet-form-builder/render-choice/label/terms', $term->name, $term ),
 				);
 
 				if ( ! empty( $value_from ) ) {
@@ -222,14 +224,14 @@ trait Base_Select_Radio_Check {
 						);
 					}
 
-					$post_id = $item['value'];
+					$item['object_id'] = $item['value'];
 
 					if ( ! empty( $value_from ) ) {
-						$item['value'] = get_post_meta( $post_id, $value_from, true );
+						$item['value'] = get_post_meta( $item['object_id'], $value_from, true );
 					}
 
 					if ( ! empty( $calc_from ) ) {
-						$item['calculate'] = get_post_meta( $post_id, $calc_from, true );
+						$item['calculate'] = get_post_meta( $item['object_id'], $calc_from, true );
 					}
 
 					$result[] = $item;
@@ -243,8 +245,8 @@ trait Base_Select_Radio_Check {
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-				 && false !== Tools::get_jet_engine_version()
-				 && isset( jet_engine()->glossaries )
+			     && false !== Tools::get_jet_engine_version()
+			     && isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 

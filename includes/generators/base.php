@@ -43,7 +43,7 @@ abstract class Base {
 		$fields = array();
 
 		foreach ( $this->incoming_args() as $name => $parse_callable ) {
-			$fields[ $name ] = ! empty( $args[ $name ] ) ? call_user_func( $parse_callable, $args[ $name ] ) : false;
+			$fields[ $name ] = isset( $args[ $name ] ) ? call_user_func( $parse_callable, $args[ $name ] ) : false;
 		}
 
 		return $this->generate( $fields );

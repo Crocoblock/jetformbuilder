@@ -44,7 +44,7 @@ return array(
 
 <!-- wp:jet-forms/select-field {"field_options":[{"label":"Ukraine","value":"ukr","calculate":""},{"label":"Germany","value":"ger","calculate":""},{"label":"United States","value":"usa","calculate":""}],"label":"Country","name":"country","className":" jet-sm-gb-wrapper jet-sm-gb-768ef910-1daf-4499-888d-06015bd895ef","blockID":"jet-sm-gb-768ef910-1daf-4499-888d-06015bd895ef","autocomplete_enable":false,"autocomplete_via_ajax":false} /-->
 
-<!-- wp:jet-forms/submit-field {"label":"Sing Up","className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /--></div>
+<!-- wp:jet-forms/submit-field {"label":"Sign Up","className":" jet-sm-gb-wrapper jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec","blockID":"jet-sm-gb-e49443d8-8a29-40ba-8288-836622af67ec"} /--></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->',
 	),

@@ -42,7 +42,7 @@ class Http_Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
+			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
 				return (string) $value;
 			};
 		}
@@ -64,6 +64,8 @@ class Http_Tools {
 	 * @return string [type] [description]
 	 */
 	public static function get_form_action_url( array $args = array() ): string {
+		global $wp;
+
 		$args = array_merge(
 			array(
 				Plugin::instance()->form_handler->hook_key => Plugin::instance()->form_handler->hook_val,
@@ -72,9 +74,7 @@ class Http_Tools {
 			$args
 		);
 
-		$action = home_url(
-			add_query_arg( $args )
-		);
+		$action = add_query_arg( $args, home_url( $wp->request ) );
 
 		return apply_filters( 'jet-form-builder/form-action-url', $action );
 	}

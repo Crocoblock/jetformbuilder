@@ -1131,7 +1131,7 @@
 
 			var $button        = $page.find( '.jet-form-builder__next-page' ),
 				$msg           = $page.find( '.jet-form-builder__next-page-msg' ),
-				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
+				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required], .jet-form-builder-file-upload__value[required]' ),
 				pageNum        = parseInt( $page.data( 'page' ), 10 ),
 				disabled       = false,
 				radioFields    = {};

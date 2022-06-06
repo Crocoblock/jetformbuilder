@@ -16,4 +16,7 @@ class Operator_In_The_List extends Base_Operator {
 		return __( 'In the list', 'jet-form-builder' );
 	}
 
+	public function is_supported(): bool {
+		return false;
+	}
 }

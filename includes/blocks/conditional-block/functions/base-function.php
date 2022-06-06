@@ -22,7 +22,7 @@ abstract class Base_Function implements
 		return $this->get_id();
 	}
 
-	public function to_response( Condition_Item $item ): array {
+	public function to_response( array $base, Condition_Item $item ): array {
 		return array();
 	}
 

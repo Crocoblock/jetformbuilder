@@ -26,32 +26,19 @@ class Operator_Render_State extends Base_Operator {
 		return __( 'Is render state', 'jet-form-builder' );
 	}
 
+	public function is_supported(): bool {
+		return true;
+	}
+
 	/**
 	 * @param Condition_Item $item
 	 *
 	 * @return bool
-	 * @throws Condition_Exception
 	 */
 	protected function check( Condition_Item $item ): bool {
 		$render_state = $item->base['render_state'] ?? array();
+		$current      = Render_State::instance()->get_current();
 
-		$current = Render_State::instance()->get_current();
-		$in_list = $current ? in_array( $current->get_id(), $render_state, true ) : false;
-
-		switch ( $item->get_type() ) {
-			case Function_Hide::ID:
-				if ( $in_list ) {
-					throw new Condition_Exception( 'Because I can.' );
-				}
-				break;
-			case Function_Show::ID:
-				if ( ! $in_list ) {
-					throw new Condition_Exception( 'Because I can.' );
-				}
-				break;
-
-		}
-
-		return true;
+		return $current ? in_array( $current->get_id(), $render_state, true ) : false;
 	}
 }

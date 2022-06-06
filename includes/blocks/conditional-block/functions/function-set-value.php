@@ -17,11 +17,11 @@ class Function_Set_Value extends Base_Function {
 		return __( 'Set value for this field if...', 'jet-form-builder' );
 	}
 
-	public function to_response( Condition_Item $item ): array {
+	public function to_response( array $base, Condition_Item $item ): array {
 		$json      = $item->base['set_value'] ?? '';
 		$set_value = ( new Dynamic_Preset() )->parse_json( $json );
 
-		return parent::to_response( $item ) + array(
+		return parent::to_response( $base, $item ) + array(
 			'set_value' => $set_value,
 		);
 	}

@@ -18,6 +18,8 @@ abstract class Base_Operator implements
 
 	abstract public function get_title(): string;
 
+	abstract public function is_supported(): bool;
+
 	public function rep_item_id() {
 		return $this->get_id();
 	}
@@ -26,9 +28,12 @@ abstract class Base_Operator implements
 		return true;
 	}
 
-	public function to_response( Condition_Item $item ): array {
+	public function to_response( array $base, Condition_Item $item ): array {
+		if ( ! $this->is_supported() ) {
+			return array();
+		}
 		return array(
-			'result' => $this->check( $item ),
+			'check_result' => $this->check( $item ),
 		);
 	}
 

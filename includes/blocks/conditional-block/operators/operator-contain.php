@@ -16,4 +16,7 @@ class Operator_Contain extends Base_Operator {
 		return __( 'Contain text', 'jet-form-builder' );
 	}
 
+	public function is_supported(): bool {
+		return false;
+	}
 }

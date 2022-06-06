@@ -52,11 +52,14 @@ class Condition_Item implements Arrayable {
 			'field'    => $this->get_field(),
 			'operator' => $this->get_operator(),
 		);
+		$base = array_merge(
+			$base,
+			$this->get_operator_object()->to_response( $base, $this )
+		);
 
 		return array_merge(
 			$base,
-			$this->get_function_object()->to_response( $this ),
-			$this->get_operator_object()->to_response( $this )
+			$this->get_function_object()->to_response( $base, $this )
 		);
 	}
 

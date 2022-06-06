@@ -11,6 +11,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**
+ * @method static Condition_Manager instance()
  *
  * Class Condition_Manager
  * @package Jet_Form_Builder\Blocks\Conditional_Block

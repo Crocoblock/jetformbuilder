@@ -16,4 +16,7 @@ class Operator_Equal extends Base_Operator {
 		return __( 'Equal', 'jet-form-builder' );
 	}
 
+	public function is_supported(): bool {
+		return false;
+	}
 }

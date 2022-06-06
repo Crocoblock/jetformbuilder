@@ -94,8 +94,8 @@ class Post_Modifier extends Post_Modifier_Core {
 				'je_relations' => array(
 					'condition_cb' => function () {
 						return function_exists( 'jet_engine' )
-								&& jet_engine()->relations
-								&& jet_engine()->relations->is_relation_key( $this->current_prop );
+						       && jet_engine()->relations
+						       && jet_engine()->relations->is_relation_key( $this->current_prop );
 					},
 					'match_cb'     => array( $this, 'attach_je_relations' ),
 					'after_action' => array( $this, 'after_action_je_relations' ),
@@ -235,8 +235,8 @@ class Post_Modifier extends Post_Modifier_Core {
 
 	public function after_action_je_relations() {
 		if ( ! in_array( $this->get_action(), array( 'insert', 'update' ), true )
-			 || ! function_exists( 'jet_engine' )
-			 || ! isset( jet_engine()->relations )
+		     || ! function_exists( 'jet_engine' )
+		     || ! isset( jet_engine()->relations )
 		) {
 			return;
 		}
@@ -329,12 +329,33 @@ class Post_Modifier extends Post_Modifier_Core {
 		}
 
 		if ( ! is_array( $this->current_value ) ) {
-			$taxonomies[ $tax ][] = absint( $this->current_value );
+			$taxonomies[ $tax ][] = $this->sanitize_term( $this->current_value, $tax );
 		} else {
-			$taxonomies[ $tax ] = array_merge( $taxonomies[ $tax ], array_map( 'absint', $this->current_value ) );
+			$taxonomies[ $tax ] = array_merge(
+				$taxonomies[ $tax ],
+				array_map(
+					function ( $term ) use ( $tax ) {
+						return $this->sanitize_term( $term, $tax );
+					},
+					$this->current_value
+				)
+			);
 		}
 
 		$this->set_current_external( $taxonomies );
+	}
+
+	private function sanitize_term( $term, $tax ) {
+		if (
+			is_taxonomy_hierarchical( $tax ) ||
+			(
+				is_numeric( $term ) && absint( $term ) === (int) $term
+			)
+		) {
+			return absint( $term );
+		}
+
+		return esc_html( $term );
 	}
 
 	public function attach_post_meta() {

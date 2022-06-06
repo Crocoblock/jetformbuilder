@@ -87,6 +87,7 @@ export default function ConditionalBlockEdit( props ) {
 			</div>
 		</div>,
 		showModal && <ConditionsModal
+			key={ uniqKey( 'ConditionsModal' ) }
 			setShowModal={ setShowModal }
 			attributes={ attributes }
 			setAttributes={ setAttributes }

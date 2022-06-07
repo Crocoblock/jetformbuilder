@@ -36,6 +36,20 @@ class Events_Manager implements Arrayable {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function rep_instances(): array {
+		return apply_filters(
+			'jet-form-builder/event-types',
+			array(
+				new Default_Process_Event(),
+				new Gateway_Success_Event(),
+				new Gateway_Failed_Event(),
+			)
+		);
+	}
+
+	/**
 	 * @param string $current
 	 *
 	 * @return bool
@@ -95,19 +109,7 @@ class Events_Manager implements Arrayable {
 		return $response;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function rep_instances(): array {
-		return apply_filters(
-			'jet-form-builder/event-types',
-			array(
-				new Default_Process_Event(),
-				new Gateway_Success_Event(),
-				new Gateway_Failed_Event(),
-			)
-		);
-	}
+
 
 	/**
 	 * @return array

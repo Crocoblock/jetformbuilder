@@ -97,7 +97,6 @@ export default function ConditionalBlockEdit( props ) {
 			<div className='jet-form-builder__conditional'>
 				<InnerBlocks
 					key={ uniqKey( 'conditional-fields' ) }
-					renderAppender={ () => <InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/> }
 				/>
 			</div>
 		</div>,

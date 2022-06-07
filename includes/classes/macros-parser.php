@@ -3,27 +3,12 @@
 
 namespace Jet_Form_Builder\Classes;
 
-class Macros_Parser {
+use Jet_Form_Builder\Classes\Filters\Filters_Manager;
 
-	/** @var Listing_Filter */
-	private $filter;
+class Macros_Parser {
 
 	private $content;
 	private $replacements;
-
-	public function __construct() {
-		$this->set_default_filter();
-	}
-
-	public function set_default_filter() {
-		$this->set_custom_filter( ( new Listing_Filter_Manager() )->get_filter() );
-	}
-
-	public function set_custom_filter( $filter ) {
-		$this->filter = $filter;
-
-		return $this;
-	}
 
 	public function set_content( $content ) {
 		if ( ! $content ) {
@@ -46,7 +31,7 @@ class Macros_Parser {
 	public function parse_macros( $content = false, $replacements = false ) {
 		$this->set_content( $content )->set_replacements( $replacements );
 
-		if ( ! $this->filter || ! $this->content || ! $this->replacements ) {
+		if ( ! $this->content || ! $this->replacements ) {
 			return $this->content ?: '';
 		}
 
@@ -69,7 +54,7 @@ class Macros_Parser {
 				if ( isset( $this->replacements[ $match[1] ] ) ) {
 
 					if ( ! empty( $match[3] ) ) {
-						return $this->filter->apply_filters(
+						return Filters_Manager::instance()->apply(
 							$this->replacements[ $match[1] ],
 							$match[3]
 						);

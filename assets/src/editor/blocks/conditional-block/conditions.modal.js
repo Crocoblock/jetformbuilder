@@ -60,6 +60,7 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 						suggestions={ renderStates }
 						onChange={ render_state => changeCurrentItem( { render_state } ) }
 						tokenizeOnSpace
+						__experimentalExpandOnFocus
 					/>
 				</BaseControl>
 			</>;

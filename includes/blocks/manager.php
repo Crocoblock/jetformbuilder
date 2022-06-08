@@ -55,9 +55,9 @@ class Manager {
 		);
 
 		if ( class_exists( 'WP_Block_Editor_Context' ) ) {
-			add_filter( 'block_categories_all', array( $this, 'add_category' ), 10, 2 );
+			add_filter( 'block_categories_all', array( $this, 'add_category' ), 999, 2 );
 		} else {
-			add_filter( 'block_categories', array( $this, 'add_category' ), 10, 2 );
+			add_filter( 'block_categories', array( $this, 'add_category' ), 999, 2 );
 		}
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
@@ -109,9 +109,14 @@ class Manager {
 
 
 	public function add_category( $categories, $post ) {
-		$categories[] = array(
-			'slug'  => 'jet-form-builder-fields',
-			'title' => __( 'Jet Form Fields', 'jet-form-builder' ),
+		$categories = array_merge(
+			array(
+				array(
+					'slug'  => 'jet-form-builder-fields',
+					'title' => __( 'Jet Form Fields', 'jet-form-builder' ),
+				),
+			),
+			$categories
 		);
 
 		return $categories;

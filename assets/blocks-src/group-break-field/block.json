@@ -1,7 +1,7 @@
 {
 	"apiVersion": 2,
 	"name": "jet-forms/group-break-field",
-	"category": "jet-form-builder-fields",
+	"category": "jet-form-builder-elements",
 	"keywords": [
 		"jetformbuilder",
 		"block",

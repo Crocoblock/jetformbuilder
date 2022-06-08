@@ -49,6 +49,49 @@ class Form_Builder {
 	}
 
 	/**
+	 * Render from HTML
+	 *
+	 * @return false|string [type] [description]
+	 */
+	public function render_form() {
+
+		if ( $this->pre_render() ) {
+			return '';
+		}
+
+		if ( ! jet_fb_preset( $this->form_id )->general()->sanitize_source() ) {
+			echo 'You are not permitted to submit this form!';
+
+			return '';
+		}
+
+		$blocks = Live_Form::instance()
+						->set_form_id( $this->form_id )
+						->set_specific_data_for_render( $this->args )
+						->setup_fields();
+
+		$form = $this->start_form();
+
+		$form .= Form_Hidden_Fields::render();
+
+		$form .= jet_fb_live()->maybe_progress_pages();
+		$form .= jet_fb_live()->maybe_start_page( true );
+
+		foreach ( $blocks as $block ) {
+			$form .= render_block( $block );
+		}
+
+		$form .= jet_fb_live()->maybe_end_page( true );
+		$form .= $this->end_form();
+
+		Live_Form::clear();
+		Preset_Manager::clear();
+
+		return $form;
+	}
+
+
+	/**
 	 * @param $arguments
 	 *
 	 * @return Form_Builder
@@ -66,7 +109,6 @@ class Form_Builder {
 	public function pre_render() {
 		return apply_filters( 'jet-form-builder/pre-render/' . $this->form_id, false );
 	}
-
 
 	/**
 	 * Open form wrapper
@@ -151,6 +193,7 @@ class Form_Builder {
 		);
 	}
 
+
 	private function maybe_render_fonts_block(): string {
 		if (
 			! Compatibility::has_jet_sm()
@@ -176,50 +219,6 @@ class Form_Builder {
 				),
 			)
 		);
-	}
-
-
-	/**
-	 * Render from HTML
-	 *
-	 * @return false|string [type] [description]
-	 */
-	public function render_form() {
-
-		if ( $this->pre_render() ) {
-			return '';
-		}
-
-		if ( ! jet_fb_preset( $this->form_id )->general()->sanitize_source() ) {
-			echo 'You are not permitted to submit this form!';
-
-			return '';
-		}
-
-		$blocks = Live_Form::instance()
-							->set_form_id( $this->form_id )
-							->set_specific_data_for_render( $this->args )
-							->setup_fields();
-
-		$form = $this->start_form();
-
-		$form .= Form_Hidden_Fields::render();
-
-		$form .= Live_Form::instance()->maybe_progress_pages();
-
-		$form .= Live_Form::instance()->maybe_start_page( true );
-
-		foreach ( $blocks as $block ) {
-			$form .= render_block( $block );
-		}
-
-		$form .= Live_Form::instance()->maybe_end_page( true );
-		$form .= $this->end_form();
-
-		Live_Form::clear();
-		Preset_Manager::clear();
-
-		return $form;
 	}
 
 }

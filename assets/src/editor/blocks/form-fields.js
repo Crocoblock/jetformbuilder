@@ -20,6 +20,7 @@ import * as time from './time-field';
 import * as wysiwyg from './wysiwyg-field';
 import * as colorPicker from './color-picker-field';
 import * as progressBar from './progress-bar';
+import * as formBreakStart from './form-break-start';
 import * as wrappers from "./block-wrappers";
 
 const {
@@ -53,6 +54,7 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	wysiwyg,
 	colorPicker,
 	progressBar,
+	formBreakStart,
 ] );
 
 const registerFormField = block => {

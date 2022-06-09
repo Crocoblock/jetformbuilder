@@ -14,4 +14,8 @@ class Example_Render_State extends Base_Render_State {
 		return __( 'Some description', 'jet-form-builder' );
 	}
 
+	public function is_supported(): bool {
+		return false;
+	}
+
 }

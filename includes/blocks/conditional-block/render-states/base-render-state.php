@@ -15,6 +15,8 @@ abstract class Base_Render_State implements
 
 	abstract public function get_title(): string;
 
+	abstract public function is_supported(): bool;
+
 	public function rep_item_id() {
 		return $this->get_id();
 	}

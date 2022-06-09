@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Example_Render_State;
@@ -24,10 +23,11 @@ class Render_State implements Arrayable {
 	use Repository_Pattern_Trait;
 	use Instance_Trait;
 
-	/** @var Base_Render_State|null */
+	/** @var Render_States_Collection */
 	private $current;
 
 	protected function __construct() {
+		$this->current = new Render_States_Collection();
 		$this->rep_install();
 	}
 
@@ -61,35 +61,59 @@ class Render_State implements Arrayable {
 	}
 
 	/**
-	 * @param string $slug
-	 *
 	 * @return $this
-	 * @throws Repository_Exception
 	 */
-	public function set_current( string $slug ): Render_State {
-		return $this->set_current_state( $this->get_item( $slug ) );
+	public function set_current(): Render_State {
+		if ( count( $this->current ) ) {
+			return $this;
+		}
+		$items = $this->rep_get_items();
+
+		/** @var Base_Render_State $render_state */
+		foreach ( $items as $render_state ) {
+			if ( ! $render_state->is_supported() ) {
+				continue;
+			}
+			$this->current->push( $render_state );
+		}
+
+		$this->set_current_default();
+
+		return $this;
+	}
+
+	public function set_current_default() {
+		if ( count( $this->current ) ) {
+			return;
+		}
+
+		try {
+			/** @var Default_State $state */
+			$state = $this->rep_get_item( Default_State::class );
+		} catch ( Repository_Exception $exception ) {
+			wp_die(
+				esc_html__( 'Something went wrong', 'jet-form-builder' ),
+				esc_html__( 'Error', 'jet-form-builder' )
+			);
+		}
+
+		$this->current->push( $state );
 	}
 
 	public function to_array(): array {
 		return Array_Tools::to_array( $this->rep_get_items() );
 	}
 
-	public function set_current_state( Base_Render_State $current ): Render_State {
-		$this->current = $current;
-
-		return $this;
-	}
-
 	public function clear_current(): Render_State {
-		$this->current = null;
+		$this->current = new Render_States_Collection();
 
 		return $this;
 	}
 
 	/**
-	 * @return Base_Render_State|null
+	 * @return Render_States_Collection
 	 */
-	public function get_current() {
+	public function get_current(): Render_States_Collection {
 		return $this->current;
 	}
 

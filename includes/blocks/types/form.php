@@ -27,6 +27,76 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
+	/**
+	 * Returns block name
+	 *
+	 * @return [type] [description]
+	 */
+	public function get_name() {
+		return 'form-block';
+	}
+
+	/**
+	 * Render callback for the block
+	 *
+	 * @param array $attrs [description]
+	 *
+	 * @param null $content
+	 * @param null $wp_block
+	 *
+	 * @return false|string [type]             [description]
+	 */
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+		$form_id = absint( $attrs['form_id'] ?? 0 );
+
+		if ( ! $form_id ) {
+			return $this->get_placeholder();
+		}
+
+		try {
+			$form = Post_Tools::get_post( $form_id );
+		} catch ( Not_Found_Post_Exception $exception ) {
+			return $this->get_placeholder();
+		}
+
+		Plugin::instance()->admin_bar->register_item(
+			$form_id,
+			array(
+				'title'     => get_the_title( $form ),
+				'sub_title' => __( 'JetForm', 'jet-form-builder' ),
+				'href'      => get_edit_post_link( $form ),
+			)
+		);
+
+		jet_form_builder()->msg_router->set_up(
+			array(
+				'form_id' => $form_id,
+			)
+		);
+
+		Render_State::instance()->set_current();
+
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
+
+		if ( $custom_form ) {
+			return $custom_form;
+		}
+
+		$form = ( new Form_Builder( $form_id, $attrs ) )->render_form();
+
+		ob_start();
+		jet_form_builder()->msg_router->get_builder()->render_messages();
+
+		if ( Tools::is_editor() ) {
+			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
+		}
+
+		Render_State::instance()->clear_current();
+
+		return ( $form . ob_get_clean() );
+	}
+
 	public function get_placeholder(): string {
 		return __( 'Please select form to show', 'jet-form-builder' );
 	}
@@ -357,14 +427,6 @@ class Form extends Base {
 
 	}
 
-	/**
-	 * Returns block name
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_name() {
-		return 'form-block';
-	}
 
 	/**
 	 * Returns current block render instatnce
@@ -376,7 +438,6 @@ class Form extends Base {
 	public function get_block_renderer( $attributes = null ) {
 		return false;
 	}
-
 
 	public function block_data( $editor, $handle ) {
 		$options = Form_Arguments::get_options();
@@ -394,69 +455,6 @@ class Form extends Base {
 				$options
 			)
 		);
-	}
-
-	/**
-	 * Render callback for the block
-	 *
-	 * @param array $attrs [description]
-	 *
-	 * @param null $content
-	 * @param null $wp_block
-	 *
-	 * @return false|string [type]             [description]
-	 */
-	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
-		$form_id = absint( $attrs['form_id'] ?? 0 );
-
-		if ( ! $form_id ) {
-			return $this->get_placeholder();
-		}
-
-		try {
-			$form = Post_Tools::get_post( $form_id );
-		} catch ( Not_Found_Post_Exception $exception ) {
-			return $this->get_placeholder();
-		}
-
-		Plugin::instance()->admin_bar->register_item(
-			$form_id,
-			array(
-				'title'     => get_the_title( $form ),
-				'sub_title' => __( 'JetForm', 'jet-form-builder' ),
-				'href'      => get_edit_post_link( $form ),
-			)
-		);
-
-		jet_form_builder()->msg_router->set_up(
-			array(
-				'form_id' => $form_id,
-			)
-		);
-
-		try {
-			Render_State::instance()->set_current( Default_State::class );
-		} catch ( Repository_Exception $exception ) {
-			// do nothing
-		}
-
-		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
-
-		if ( $custom_form ) {
-			return $custom_form;
-		}
-
-		$form = ( new Form_Builder( $form_id, $attrs ) )->render_form();
-
-		ob_start();
-		jet_form_builder()->msg_router->get_builder()->render_messages();
-
-		if ( Tools::is_editor() ) {
-			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
-		}
-
-		return ( $form . ob_get_clean() );
 	}
 
 

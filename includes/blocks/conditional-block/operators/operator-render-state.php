@@ -5,10 +5,7 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block\Operators;
 
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
-use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide;
-use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
-use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
 
 class Operator_Render_State extends Base_Operator {
 
@@ -36,9 +33,8 @@ class Operator_Render_State extends Base_Operator {
 	 * @return bool
 	 */
 	protected function check( Condition_Item $item ): bool {
-		$render_state = $item->base['render_state'] ?? array();
-		$current      = Render_State::instance()->get_current();
+		$render_states = $item->base['render_state'] ?? array();
 
-		return $current ? in_array( $current->get_id(), $render_state, true ) : false;
+		return Render_State::instance()->get_current()->intersect( $render_states );
 	}
 }

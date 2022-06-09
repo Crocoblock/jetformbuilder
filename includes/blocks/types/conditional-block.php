@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
@@ -109,6 +110,10 @@ class Conditional_Block extends Base {
 		);
 	}
 
+	/**
+	 * @return string
+	 * @throws Render_Empty_Field
+	 */
 	private function get_conditions(): string {
 		$conditions = Condition_Manager::instance()->prepare(
 			$this->block_attrs['conditions'] ?? array()

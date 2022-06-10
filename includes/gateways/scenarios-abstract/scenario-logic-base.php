@@ -140,11 +140,11 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 
 		switch ( $type ) {
 			case 'success':
-				jet_fb_events()->set_current( Gateway_Success_Event::get_slug() );
+				jet_fb_events()->set_current( Gateway_Success_Event::class );
 				break;
 			case 'failed':
 			default:
-				jet_fb_events()->set_current( Gateway_Failed_Event::get_slug() );
+				jet_fb_events()->set_current( Gateway_Failed_Event::class );
 				break;
 		}
 

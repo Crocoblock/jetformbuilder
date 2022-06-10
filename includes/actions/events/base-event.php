@@ -4,21 +4,25 @@
 namespace Jet_Form_Builder\Actions\Events;
 
 
+use JET_APB\Formbuilder_Plugin\Actions\Insert_Appointment_Action;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
 
-abstract class Base_Event implements Repository_Static_Item_It, Arrayable {
-
-	abstract public static function get_slug(): string;
+abstract class Base_Event implements
+	Repository_Item_Instance_Trait,
+	Collection_Item_Interface,
+	Arrayable {
 
 	public function get_label(): string {
-		return static::get_slug();
+		return $this->get_id();
 	}
 
-	public static function rep_item_id() {
-		return static::get_slug();
+	public function rep_item_id() {
+		return $this->get_id();
 	}
 
 	protected function get_unsupported_actions(): array {
@@ -46,7 +50,7 @@ abstract class Base_Event implements Repository_Static_Item_It, Arrayable {
 
 	public function to_array(): array {
 		return array(
-			'value'       => static::get_slug(),
+			'value'       => $this->get_id(),
 			'label'       => $this->get_label(),
 			'unsupported' => $this->get_unsupported_actions(),
 		);

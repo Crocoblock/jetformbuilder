@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "dev",
     "require-dev": {
-        "wp-coding-standards/wpcs": "dev-develop"
+        "wp-coding-standards/wpcs": "dev-develop",
+        "wp-cli/wp-cli-bundle": "*"
     }
 }

@@ -129,7 +129,7 @@ class Action_Handler {
 
 		$this->form_conditions[ $id ] = $condition;
 		$this->form_actions[ $id ]    = $action;
-		$this->form_events[ $id ]     = new Events_List(
+		$this->form_events[ $id ]     = Events_List::create(
 			array_merge( $events, $action->get_required_events() )
 		);
 
@@ -142,7 +142,7 @@ class Action_Handler {
 	 * @return array [description]
 	 */
 	public function do_actions() {
-		jet_fb_events()->set_current( Default_Process_Event::get_slug() );
+		jet_fb_events()->set_current( ( new Events\Default_Process_Event )->get_id() );
 
 		do_action( 'jet-form-builder/actions/before-send' );
 

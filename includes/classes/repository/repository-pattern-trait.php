@@ -9,7 +9,7 @@ trait Repository_Pattern_Trait {
 
 	use Repository_Aborts_Trait;
 
-	private $__repository = array();
+	private $__repository      = array();
 	private $__failed_installs = array();
 
 	abstract public function rep_instances(): array;
@@ -150,7 +150,7 @@ trait Repository_Pattern_Trait {
 		}
 
 		foreach ( $this->rep_get_items() as $item ) {
-			if ( get_class( $item ) === $class_or_slug ) {
+			if ( is_a( $item, $class_or_slug ) ) {
 				return $item;
 			}
 		}

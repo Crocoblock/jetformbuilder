@@ -5,13 +5,13 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block\Render_States;
 
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 abstract class Base_Render_State implements
 	Repository_Item_Instance_Trait,
+	Collection_Item_Interface,
 	Arrayable {
-
-	abstract public function get_id(): string;
 
 	abstract public function get_title(): string;
 

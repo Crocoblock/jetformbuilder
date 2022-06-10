@@ -21,7 +21,7 @@ abstract class Base_Meta_Box
 	Arrayable,
 	Repository_Static_Item_It {
 
-	const TYPE_LIST  = 'list';
+	const TYPE_LIST = 'list';
 	const TYPE_TABLE = 'table';
 
 	use Repository_Item_With_Class;
@@ -70,6 +70,16 @@ abstract class Base_Meta_Box
 		return $this->set_id( $single->get_id() );
 	}
 
+	public function is_updated(): bool {
+		foreach ( $this->get_dependencies() as $model ) {
+			if ( ! $model->is_updated() ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	/**
 	 * @return int[]
 	 * @throws Empty_Box_Exception
@@ -80,6 +90,7 @@ abstract class Base_Meta_Box
 		} catch ( Sql_Exception $exception ) {
 			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
 		}
+
 		return array(
 			'slug'  => $this->get_slug(),
 			'title' => $this->get_title(),

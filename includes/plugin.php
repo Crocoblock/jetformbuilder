@@ -16,6 +16,7 @@ use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
+use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -207,6 +208,7 @@ class Plugin {
 		);
 
 		$this->init_framework();
+		Wp_Cli_Manager::register();
 	}
 
 }

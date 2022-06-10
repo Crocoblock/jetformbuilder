@@ -19,14 +19,14 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	const FROM_HIGH_TO_LOW = 'DESC';
 	const FROM_LOW_TO_HIGH = 'ASC';
 
-	protected $limit      = array();
+	protected $limit = array();
 	protected $conditions = array();
-	protected $order_by   = array();
-	protected $select     = array( '*' );
+	protected $order_by = array();
+	protected $select = array( '*' );
 
 	/** @var Relation[] */
 	protected $relations = array();
-	protected $filters   = array();
+	protected $filters = array();
 
 	abstract public function table(): string;
 
@@ -122,16 +122,6 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	 */
 	public function order_by(): array {
 		return $this->order_by;
-	}
-
-	/**
-	 * @param $key
-	 * @param $value
-	 *
-	 * @return string
-	 */
-	public function json_pair( $key, $value ): string {
-		return sprintf( '"%1$s":"%2$s"', (string) $key, (string) $value );
 	}
 
 	/**
@@ -261,9 +251,9 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	 */
 	public static function findById( $primary_id ): array {
 		return static::find( array( 'id' => $primary_id ) )
-					 ->set_limit( array( 1 ) )
-					 ->query()
-					 ->query_one();
+		             ->set_limit( array( 1 ) )
+		             ->query()
+		             ->query_one();
 	}
 
 	/**
@@ -383,13 +373,28 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		return ( new static() )->set_conditions( $conditions );
 	}
 
+
 	/**
-	 * @return Query_Cache_Builder
+	 * @return Query_Builder
+	 * @throws Query_Builder_Exception
 	 */
 	public function query(): Query_Builder {
 		$this->prepare_dependencies();
 
 		return ( new Query_Cache_Builder() )->set_view( $this );
+	}
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	public function prepare_dependencies() {
+		foreach ( $this->get_dependencies() as $model ) {
+			$model->create();
+
+			if ( ! $model->is_updated() ) {
+				throw new Query_Builder_Exception( get_class( $model ) . ' is not updated' );
+			}
+		}
 	}
 
 }

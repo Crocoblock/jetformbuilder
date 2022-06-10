@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 
@@ -31,8 +32,8 @@ class Single_Form_Record_Page extends Base_Single_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
-		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
+		wp_enqueue_style( Pages_Manager::STYLE_DASHICONS );
 
 		parent::assets();
 	}

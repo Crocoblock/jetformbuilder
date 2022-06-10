@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
@@ -40,7 +39,7 @@ class Save_Record extends Base {
 	}
 
 	public function get_required_events(): array {
-		return array( Default_Process_Event::get_slug() );
+		return array( Default_Process_Event::class );
 	}
 
 	public function dependence() {

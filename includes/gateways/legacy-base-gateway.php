@@ -56,11 +56,11 @@ abstract class Legacy_Base_Gateway {
 	public function process_status( $type = 'success' ) {
 		switch ( $type ) {
 			case 'success':
-				jet_fb_events()->set_current( Gateway_Success_Event::get_slug() );
+				jet_fb_events()->set_current( Gateway_Success_Event::class );
 				break;
 			case 'failed':
 			default:
-				jet_fb_events()->set_current( Gateway_Failed_Event::get_slug() );
+				jet_fb_events()->set_current( Gateway_Failed_Event::class );
 				break;
 		}
 
@@ -338,10 +338,10 @@ abstract class Legacy_Base_Gateway {
 			$list = $action->get_events();
 
 			if ( ! $list ) {
-				$list = new Events_List( array() );
+				$list = new Events_List();
 			}
 
-			$list->add( Default_Process_Event::get_slug() );
+			$list->push( Default_Process_Event::class );
 			break;
 		}
 

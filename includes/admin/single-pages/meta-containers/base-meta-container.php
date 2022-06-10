@@ -14,7 +14,7 @@ abstract class Base_Meta_Container implements Arrayable {
 	use Repository_Pattern_Trait;
 
 	const TYPE_NORMAL = 'normal-sortables';
-	const TYPE_SIDE   = 'side-sortables';
+	const TYPE_SIDE = 'side-sortables';
 
 	protected $index;
 
@@ -73,6 +73,16 @@ abstract class Base_Meta_Container implements Arrayable {
 		}
 
 		throw new Repository_Exception( 'Undefined ' . $scoped_slug );
+	}
+
+	public function is_updated(): bool {
+		foreach ( $this->get_boxes() as $box ) {
+			if ( ! $box->is_updated() ) {
+				return false;
+			}
+		}
+
+		return false;
 	}
 
 	/**

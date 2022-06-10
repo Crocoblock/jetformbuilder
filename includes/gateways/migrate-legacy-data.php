@@ -42,19 +42,19 @@ class Migrate_Legacy_Data {
 		$response = array();
 
 		foreach ( jet_fb_action_handler()->get_all() as $action ) {
-			$events = array();
+			$events = new Events_List();
 
 			if ( in_array( $action->_id, $on_success, true ) ) {
-				$events[] = Gateway_Success_Event::get_slug();
+				$events->push( Gateway_Success_Event::class );
 			}
 			if ( in_array( $action->_id, $on_failed, true ) ) {
-				$events[] = Gateway_Failed_Event::get_slug();
+				$events->push( Gateway_Failed_Event::class );
 			}
 			if ( in_array( $action->_id, $on_before, true ) ) {
-				$events[] = Default_Process_Event::get_slug();
+				$events->push( Default_Process_Event::class );
 			}
 			if ( $use_redirect && ! $has_redirect && 'redirect_to_page' === $action->get_id() ) {
-				$events[]     = Gateway_Success_Event::get_slug();
+				$events->push( Gateway_Success_Event::class );
 				$has_redirect = true;
 			}
 
@@ -62,7 +62,7 @@ class Migrate_Legacy_Data {
 				continue;
 			}
 
-			$response[ $action->_id ] = new Events_List( $events );
+			$response[ $action->_id ] = $events;
 		}
 
 		return $response;

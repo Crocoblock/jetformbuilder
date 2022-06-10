@@ -4,70 +4,32 @@
 namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 
-class Events_List implements \ArrayAccess, \Countable {
+class Events_List extends Collection {
 
-	private $events;
-
-	public function __construct( array $events ) {
-		$this->events = $events;
-	}
-
-	public function in_array( $event ): bool {
-		return in_array( $this->get_slug( $event ), $this->events, true );
-	}
-
-	public function add( $event ): Events_List {
-		$this->events[] = $this->get_slug( $event );
-
-		return $this;
-	}
-
-	protected function get_slug( $event ): string {
-		return ( $event instanceof Base_Event ) ? $event::get_slug() : $event;
-	}
-
-	/**
-	 * @param mixed $offset
-	 *
-	 * @return bool
-	 */
-	public function offsetExists( $offset ) {
-		return isset( $this->events[ $offset ] );
-	}
-
-	/**
-	 * @param mixed $offset
-	 *
-	 * @return mixed
-	 */
-	public function offsetGet( $offset ) {
-		return $this->events[ $offset ] ?? null;
-	}
-
-	/**
-	 * @param mixed $offset
-	 * @param mixed $value
-	 */
-	public function offsetSet( $offset, $value ) {
-		if ( is_null( $offset ) ) {
-			$this->events[] = $value;
-		} else {
-			$this->events[ $offset ] = $value;
+	public static function create( array $events ): Events_List {
+		$collection = new Events_List();
+		foreach ( $events as $event ) {
+			$collection->push( $event );
 		}
+
+		return $collection;
 	}
 
-	/**
-	 * @param mixed $offset
-	 */
-	public function offsetUnset( $offset ) {
-		unset( $this->events[ $offset ] );
+	public function push( $event ): Events_List {
+		if ( $event instanceof Base_Event ) {
+			return $this->add( $event );
+		}
+
+		try {
+			$item = Events_Manager::instance()->rep_get_item( $event );
+		} catch ( Repository_Exception $exception ) {
+			return $this;
+		}
+
+		return $this->add( $item );
 	}
 
-	/**
-	 * @return int
-	 */
-	public function count() {
-		return count( $this->events );
-	}
 }

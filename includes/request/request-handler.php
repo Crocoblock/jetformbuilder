@@ -15,11 +15,11 @@ use Jet_Form_Builder\Live_Form;
 
 class Request_Handler {
 
-	public $_fields        = array();
+	public $_fields = array();
 	private $request_types = array();
 	private $request_attrs = array();
-	private $raw_request   = array();
-	private $files         = array();
+	private $raw_request = array();
+	private $files = array();
 
 	const FILE_PROPERTIES = array( 'name', 'size', 'error', 'type', 'tmp_name' );
 
@@ -100,7 +100,7 @@ class Request_Handler {
 				$collection[ $index ] = $file;
 			}
 
-			$response[ $fields_name ] = new File_Collection( $collection );
+			$response[ $fields_name ] = ( new File_Collection() )->push_files( $collection );
 		}
 
 		return $response;
@@ -140,7 +140,7 @@ class Request_Handler {
 
 			foreach ( $row as $field_name => $values ) {
 				if ( isset( $values[0] ) ) {
-					$row[ $field_name ] = new File_Collection( $values );
+					$row[ $field_name ] = ( new File_Collection() )->push_files( $values );
 				} else {
 					try {
 						$file = new File( $values );

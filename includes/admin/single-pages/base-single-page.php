@@ -22,6 +22,8 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 
 	protected $id;
 	protected $storage;
+
+	/** @var Base_Meta_Container[] */
 	protected $containers = array();
 
 	abstract public function parent_slug(): string;
@@ -86,6 +88,9 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		);
 	}
 
+	/**
+	 * @return Base_Meta_Container[]
+	 */
 	public function get_prepared_containers(): array {
 		if ( count( $this->containers ) ) {
 			return $this->containers;
@@ -99,6 +104,16 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		}
 
 		return $this->containers;
+	}
+
+	public function in_updated(): bool {
+		foreach ( $this->get_prepared_containers() as $container ) {
+			if ( ! $container->is_updated() ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public function slug(): string {

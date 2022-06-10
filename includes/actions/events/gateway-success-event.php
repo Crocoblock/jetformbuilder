@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Actions\Events;
 
 class Gateway_Success_Event extends Base_Gateway_Event {
 
-	public static function get_slug(): string {
+	public function get_id(): string {
 		return 'GATEWAY.SUCCESS';
 	}
 

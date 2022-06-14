@@ -18,8 +18,8 @@
 					:button-style="button.style"
 					size="mini"
 					:url="button.url"
-					tag-name="a"
-					target="_blank"
+					:tag-name="button.rest ? 'button' : 'a'"
+					:target="button.rest ? '' : '_blank'"
 					@click="emitClick( $event, button )"
 				>
 					<template #label>{{ button.label }}</template>

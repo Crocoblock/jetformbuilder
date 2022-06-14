@@ -13,8 +13,8 @@ use Jet_Form_Builder\Wp_Cli\Cli_Tools;
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';
-	const InnoDB = 'InnoDB';
-	const MyISAM = 'MyISAM';
+	const InnoDB          = 'InnoDB';
+	const MyISAM          = 'MyISAM';
 
 	const PRIMARY_ID = 'id';
 	const CREATED_AT = 'created_at';
@@ -98,14 +98,23 @@ abstract class Base_Db_Model {
 		return array();
 	}
 
-	public function is_updated(): bool {
-		foreach ( $this->related_migrations() as $migration ) {
-			if ( ! $migration->is_installed() ) {
-				return false;
-			}
+	/**
+	 * Generate migrations which need to install
+	 *
+	 * @return \Generator
+	 */
+	public function get_migrations(): \Generator {
+		$migrations = $this->related_migrations();
+
+		if ( ! count( $migrations ) ) {
+			return;
 		}
 
-		return true;
+		foreach ( $this->related_migrations() as $migration ) {
+			if ( ! $migration->is_installed() ) {
+				yield $migration;
+			}
+		}
 	}
 
 	/**
@@ -239,7 +248,7 @@ abstract class Base_Db_Model {
 		$schema_keys = array_keys( static::schema() );
 
 		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
-		     ! array_key_exists( self::UPDATED_AT, $columns )
+			 ! array_key_exists( self::UPDATED_AT, $columns )
 		) {
 			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}

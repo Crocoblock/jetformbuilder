@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Admin\Single_Pages;
 use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
@@ -106,14 +107,13 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		return $this->containers;
 	}
 
-	public function in_updated(): bool {
+	/**
+	 * @return null|\Generator
+	 */
+	public function get_migrations(): \Generator {
 		foreach ( $this->get_prepared_containers() as $container ) {
-			if ( ! $container->is_updated() ) {
-				return false;
-			}
+			yield from $container->get_migrations();
 		}
-
-		return true;
 	}
 
 	public function slug(): string {

@@ -70,14 +70,10 @@ abstract class Base_Meta_Box
 		return $this->set_id( $single->get_id() );
 	}
 
-	public function is_updated(): bool {
+	public function get_migrations(): \Generator {
 		foreach ( $this->get_dependencies() as $model ) {
-			if ( ! $model->is_updated() ) {
-				return false;
-			}
+			yield from $model->get_migrations();
 		}
-
-		return true;
 	}
 
 	/**

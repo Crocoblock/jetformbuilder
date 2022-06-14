@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Admin\Buttons;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Generators\Base;
+use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
 class Base_Vui_Button implements Arrayable {
 
@@ -29,13 +30,15 @@ class Base_Vui_Button implements Arrayable {
 	const PRESET_PAGE_ACTION = 'page_action';
 
 	protected $slug;
-	protected $url      = '';
-	protected $style    = self::STYLE_ACCENT;
-	protected $type     = self::TYPE_BUTTON;
-	protected $size     = self::SIZE_DEFAULT;
-	protected $label    = '';
-	protected $disabled = false;
-	protected $classes  = array();
+	protected $url          = '';
+	protected $rest_url     = '';
+	protected $rest_methods = '';
+	protected $style        = self::STYLE_ACCENT;
+	protected $type         = self::TYPE_BUTTON;
+	protected $size         = self::SIZE_DEFAULT;
+	protected $label        = '';
+	protected $disabled     = false;
+	protected $classes      = array();
 
 	public function __construct( string $slug = 'default' ) {
 		$this->slug = $slug;
@@ -67,6 +70,14 @@ class Base_Vui_Button implements Arrayable {
 
 	public function get_url(): string {
 		return $this->url;
+	}
+
+	public function get_rest_url(): string {
+		return $this->rest_url;
+	}
+
+	public function get_rest_methods(): string {
+		return $this->rest_methods;
 	}
 
 	public function get_label(): string {
@@ -120,6 +131,23 @@ class Base_Vui_Button implements Arrayable {
 		return $this;
 	}
 
+	public function set_rest( Rest_Api_Endpoint_Base $endpoint_base ): Base_Vui_Button {
+		return $this->set_rest_url( $endpoint_base::rest_url() )
+					->set_rest_methods( $endpoint_base::get_methods() );
+	}
+
+	public function set_rest_url( string $url ): Base_Vui_Button {
+		$this->rest_url = $url;
+
+		return $this->set_url( 'javascript:void(0)' );
+	}
+
+	public function set_rest_methods( string $rest_methods ): Base_Vui_Button {
+		$this->rest_methods = $rest_methods;
+
+		return $this;
+	}
+
 	public function set_url( string $url ): Base_Vui_Button {
 		$this->url = $url;
 
@@ -156,6 +184,10 @@ class Base_Vui_Button implements Arrayable {
 			'style'    => $this->get_style(),
 			'type'     => $this->get_type(),
 			'url'      => $this->get_url(),
+			'rest'     => array(
+				'url'    => $this->get_rest_url(),
+				'method' => $this->get_rest_methods(),
+			),
 			'label'    => $this->get_label(),
 			'classes'  => $this->get_classes(),
 			'disabled' => $this->is_disabled(),

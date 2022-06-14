@@ -75,14 +75,10 @@ abstract class Base_Meta_Container implements Arrayable {
 		throw new Repository_Exception( 'Undefined ' . $scoped_slug );
 	}
 
-	public function is_updated(): bool {
+	public function get_migrations(): \Generator {
 		foreach ( $this->get_boxes() as $box ) {
-			if ( ! $box->is_updated() ) {
-				return false;
-			}
+			yield from $box->get_migrations();
 		}
-
-		return false;
 	}
 
 	/**

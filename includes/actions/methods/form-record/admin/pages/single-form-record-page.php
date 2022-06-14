@@ -4,11 +4,16 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Notices\Update_Db_Notice;
+use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 class Single_Form_Record_Page extends Base_Single_Page {
+
+	use With_Notices_Trait;
 
 	public function parent_slug(): string {
 		return Form_Records::SLUG;
@@ -18,15 +23,35 @@ class Single_Form_Record_Page extends Base_Single_Page {
 		return __( 'JetFormBuilder Form Record', 'jet-form-builder' );
 	}
 
+	public function page_config(): array {
+		$migrations = array();
+
+		foreach ( $this->get_migrations() as $migration ) {
+			$migrations[] = get_class( $migration );
+		}
+
+		if ( count( $migrations ) ) {
+			$this->notices()->register_notice( new Update_Db_Notice() );
+		}
+
+		return array_merge(
+			parent::page_config(),
+			array(
+				'notices'    => $this->notices()->to_array(),
+				'migrations' => $migrations,
+			)
+		);
+	}
+
 	public function meta_containers(): array {
 		return array(
 			new Meta_Containers\Normal_Meta_Container(
 				new Meta_Boxes\Form_Record_Fields_Box(),
+				new Meta_Boxes\Form_Record_Actions_Box(),
 				new Meta_Boxes\Form_Record_Errors_Box()
 			),
 			new Meta_Containers\Side_Meta_Container(
-				new Meta_Boxes\Form_Record_Values_Box(),
-				new Meta_Boxes\Form_Record_Actions_Box()
+				new Meta_Boxes\Form_Record_Values_Box()
 			),
 		);
 	}

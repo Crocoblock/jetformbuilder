@@ -18,4 +18,10 @@ class View_Migrations extends View_Base {
 	public function select_columns(): array {
 		return Migration_Model::schema_columns();
 	}
+
+	public function get_dependencies(): array {
+		return array(
+			new Migration_Model(),
+		);
+	}
 }

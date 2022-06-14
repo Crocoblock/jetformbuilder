@@ -5,7 +5,9 @@ namespace Jet_Form_Builder\Migrations;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Migrations\Profilers\Base_Migration_Profiler;
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_0;
 
@@ -35,6 +37,30 @@ class Migrator {
 		);
 	}
 
+	/**
+	 * @param null|Base_Migration_Profiler $profiler
+	 *
+	 * @throws Migration_Exception
+	 */
+	public function install( $profiler = null ) {
+		/** @var Base_Migration $migration */
+		foreach ( $this->rep_get_items() as $migration ) {
+			$migration->set_profiler( $profiler )->install();
+		}
+	}
+
+	/**
+	 * @param null|Base_Migration_Profiler $profiler
+	 *
+	 * @throws Migration_Exception
+	 */
+	public function uninstall( $profiler = null ) {
+		/** @var Base_Migration $migration */
+		foreach ( $this->rep_get_items() as $migration ) {
+			$migration->set_profiler( $profiler )->uninstall();
+		}
+	}
+
 	public function is_installed_all(): bool {
 		$items = $this->rep_get_items();
 
@@ -55,8 +81,6 @@ class Migrator {
 			return $this->installed_migrations[ $version ];
 		}
 
-		( new Migration_Model() )->create();
-
 		$installed = true;
 
 		try {
@@ -66,6 +90,7 @@ class Migrator {
 				)
 			)->query()->query_one();
 		} catch ( Query_Builder_Exception $exception ) {
+			$exception->unset_from_logger();
 			$installed = false;
 		}
 

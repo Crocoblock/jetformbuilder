@@ -45,6 +45,10 @@ abstract class Base_Notice implements Arrayable, Repository_Item_Instance_Trait 
 		return array();
 	}
 
+	public function is_hide_after_close(): bool {
+		return true;
+	}
+
 	public function to_array(): array {
 		return array(
 			'id'      => $this->get_id(),
@@ -53,6 +57,9 @@ abstract class Base_Notice implements Arrayable, Repository_Item_Instance_Trait 
 			'title'   => $this->get_title(),
 			'message' => $this->get_message(),
 			'buttons' => Array_Tools::to_array( $this->get_buttons() ),
+			'options' => array(
+				'is_hide_after_close' => $this->is_hide_after_close(),
+			),
 		);
 	}
 

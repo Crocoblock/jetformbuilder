@@ -41,6 +41,17 @@ class Logger {
 		);
 	}
 
+	public function unset_last( Handler_Exception $exception ) {
+		$key        = get_class( $exception );
+		$exceptions = $this->logged[ $key ] ?? array();
+
+		if ( ! count( $exceptions ) ) {
+			return;
+		}
+
+		array_pop( $this->logged[ $key ] );
+	}
+
 	private function make_pretty_filename( $file ) {
 		$path = explode( 'wp-content\\', $file );
 

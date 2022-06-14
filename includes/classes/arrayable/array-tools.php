@@ -5,7 +5,30 @@ namespace Jet_Form_Builder\Classes\Arrayable;
 
 class Array_Tools {
 
-	public static function to_array( array $payload ): array {
+	/**
+	 * @param array|\Generator $payload
+	 *
+	 * @return array
+	 */
+	public static function to_array( $payload ): array {
+		if ( $payload instanceof \Generator ) {
+			return self::from_generator( $payload );
+		}
+
+		return self::from_array( $payload );
+	}
+
+	public static function from_generator( \Generator $generator ): array {
+		$response = array();
+
+		foreach ( $generator as $value ) {
+			$response[] = $value;
+		}
+
+		return $response;
+	}
+
+	public static function from_array( array $payload ): array {
 		foreach ( $payload as $index => $object ) {
 			if ( is_array( $object ) ) {
 				continue;

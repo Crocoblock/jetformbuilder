@@ -3,9 +3,14 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Actions\Events\Base_Executor;
+use Jet_Form_Builder\Actions\Executors\Action_Executor_Base;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
 
@@ -134,13 +139,56 @@ class Action_Handler {
 		return array( $action, $condition );
 	}
 
-	public function process_single_action( $index ) {
+	/**
+	 * Doesn't throw an exception if there are no actions
+	 *
+	 * Don't call manually.
+	 * Use jet_fb_events()->execute() instead.
+	 *
+	 * @param Base_Executor $executor
+	 *
+	 * @return $this
+	 * @throws Action_Exception
+	 */
+	public function soft_run_actions( Base_Executor $executor ): Action_Handler {
+		if ( ! count( $executor ) ) {
+			return $this;
+		}
+		$this->run_actions( $executor );
+
+		return $this;
+	}
+
+	/**
+	 * Don't call manually.
+	 * Use jet_fb_events()->execute() instead.
+	 *
+	 * @param Base_Executor $executor
+	 *
+	 * @throws Action_Exception
+	 */
+	public function run_actions( Base_Executor $executor ) {
+		if ( ! count( $executor ) ) {
+			throw new Action_Exception( 'failed', 'Empty actions' );
+		}
+
+		foreach ( $executor as $action ) {
+			$this->process_single_action( $action );
+		}
+
+		/**
+		 * End the cycle
+		 */
+		$this->set_current_action( false );
+	}
+
+	private function process_single_action( Base $action ) {
 		/**
 		 * Start the cycle
 		 *
 		 * @var int current_position
 		 */
-		$this->set_current_action( $index );
+		$this->set_current_action( $action->_id );
 
 		try {
 			/**
@@ -160,7 +208,7 @@ class Action_Handler {
 		/**
 		 * Process single action
 		 */
-		$this->get_current_action()->do_action( $this->request_data, $this );
+		$action->do_action( $this->request_data, $this );
 
 		/**
 		 * We save the ID of the current action,

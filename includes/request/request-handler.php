@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Request;
 
+use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
@@ -10,6 +11,7 @@ use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
 
@@ -163,6 +165,7 @@ class Request_Handler {
 			jet_fb_handler()->get_form_id()
 		);
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
 
 		Live_Form::instance()
@@ -175,10 +178,9 @@ class Request_Handler {
 	/**
 	 * Get submitted form data
 	 *
-	 * @return array [type] [description]
-	 * @throws Request_Exception
+	 * @throws Action_Exception|Request_Exception
 	 */
-	public function get_form_data(): array {
+	public function set_form_data() {
 		$this->raw_request = $this->get_raw_request();
 		$this->files       = $this->get_raw_files();
 
@@ -192,15 +194,19 @@ class Request_Handler {
 			$this
 		);
 
-		if ( ! Error_Handler::instance()->empty_errors() ) {
-			throw new Request_Exception(
-				'validation_failed',
-				Error_Handler::instance()->errors(),
-				$request
-			);
+		jet_fb_action_handler()->add_request( $request );
+
+		if ( Error_Handler::instance()->empty_errors() ) {
+			return;
 		}
 
-		return $request;
+		jet_fb_events()->execute( Bad_Request_Event::class );
+
+		throw new Request_Exception(
+			'validation_failed',
+			Error_Handler::instance()->errors(),
+			$request
+		);
 	}
 
 	/**

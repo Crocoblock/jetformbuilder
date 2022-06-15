@@ -26,6 +26,10 @@ abstract class Base_Event implements
 	 */
 	abstract public function executors(): array;
 
+	public function ignored_executors(): array {
+		return array();
+	}
+
 	/**
 	 * @throws Action_Exception
 	 */

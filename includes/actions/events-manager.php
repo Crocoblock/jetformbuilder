@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Actions;
 
+use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
+use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Events\Base_Action_Event;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
@@ -13,6 +15,7 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**
@@ -28,9 +31,6 @@ class Events_Manager implements Arrayable {
 
 	private $types = array();
 
-	/** @var Base_Event|null */
-	private $current;
-
 	public function __construct() {
 		$this->rep_install();
 	}
@@ -45,6 +45,8 @@ class Events_Manager implements Arrayable {
 				new Default_Process_Event(),
 				new Gateway_Success_Event(),
 				new Gateway_Failed_Event(),
+				new Bad_Request_Event(),
+				new Default_Required_Event(),
 			)
 		);
 	}
@@ -53,9 +55,9 @@ class Events_Manager implements Arrayable {
 	 * @param string $current
 	 * @param null $form_id
 	 *
-	 * @return Base_Event
+	 * @throws Action_Exception
 	 */
-	public function set_current( string $current, $form_id = null ): Base_Event {
+	public function execute( string $current, $form_id = null ) {
 		try {
 			$event = $this->get_event( $current );
 		} catch ( Repository_Exception $exception ) {
@@ -66,16 +68,7 @@ class Events_Manager implements Arrayable {
 		// save all form actions
 		jet_fb_action_handler()->set_form_id( $form_id );
 
-		$this->current = $event;
-
-		return $event;
-	}
-
-	/**
-	 * @return Base_Event|null
-	 */
-	public function get_current() {
-		return $this->current;
+		$event->execute();
 	}
 
 	/**

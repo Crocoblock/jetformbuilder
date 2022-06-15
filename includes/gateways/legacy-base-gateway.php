@@ -59,11 +59,11 @@ abstract class Legacy_Base_Gateway {
 
 		switch ( $type ) {
 			case 'success':
-				jet_fb_events()->set_current( Gateway_Success_Event::class, $id )->execute();
+				jet_fb_events()->execute( Gateway_Success_Event::class, $id );
 				break;
 			case 'failed':
 			default:
-				jet_fb_events()->set_current( Gateway_Failed_Event::class, $id )->execute();
+				jet_fb_events()->execute( Gateway_Failed_Event::class, $id );
 				break;
 		}
 	}

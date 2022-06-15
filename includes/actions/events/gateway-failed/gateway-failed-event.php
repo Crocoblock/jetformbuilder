@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Events\Gateway_Failed;
 
 use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Executor;
 
 class Gateway_Failed_Event extends Base_Gateway_Event {
 
@@ -23,6 +24,12 @@ class Gateway_Failed_Event extends Base_Gateway_Event {
 	public function executors(): array {
 		return array(
 			new Gateway_Failed_Executor(),
+		);
+	}
+
+	public function ignored_executors(): array {
+		return array(
+			Default_Process_Executor::class,
 		);
 	}
 

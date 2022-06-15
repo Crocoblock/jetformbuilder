@@ -4,8 +4,6 @@
 namespace Jet_Form_Builder\Classes\Arrayable;
 
 
-use Jet_Form_Builder\Actions\Events_List;
-
 class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	private $position = 0;

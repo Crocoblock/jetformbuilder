@@ -148,7 +148,6 @@ class Manager {
 			$action_localize['__labels']        = $type->editor_labels();
 			$action_localize['__help_messages'] = $type->editor_labels_help();
 			$action_localize['__gateway_attrs'] = $type->visible_attributes_for_gateway_editor();
-			$action_localize['__flow']          = $type->get_flow_handler();
 
 			if ( ! empty( $action_localize ) && $type_script_name ) {
 				$this->localized_actions[ $type->self_script_name() ] = $action_localize;

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
+use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
@@ -30,6 +31,22 @@ class Events_List extends Collection {
 		}
 
 		return $this->add( $item );
+	}
+
+	public function in_array( $state ): bool {
+		if ( ! ( $state instanceof Base_Executor ) ) {
+			return parent::in_array( $state );
+		}
+		$executor_name = get_class( $state );
+
+		/** @var Base_Event $event */
+		foreach ( $this as $event ) {
+			if ( ! in_array( $executor_name, $event->ignored_executors(), true ) ) {
+				return parent::in_array( $state->get_event() );
+			}
+		}
+
+		return 0 !== count( $this );
 	}
 
 }

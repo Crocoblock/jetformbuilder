@@ -3,18 +3,21 @@
 
 namespace Jet_Form_Builder\Actions\Events;
 
-
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
-abstract class Base_Executor {
+abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 
+	/** @var Base_Event */
 	private $event;
+	private $action_ids = array();
+	private $position   = 0;
 
 	abstract public function is_supported(): bool;
 
 	public function before_execute() {
+		$this->validate_actions();
 	}
 
 	public function after_execute() {
@@ -39,26 +42,38 @@ abstract class Base_Executor {
 	}
 
 	protected function validate_actions() {
-		$actions = jet_fb_action_handler()->get_all();
+		$this->action_ids = array();
+		$actions          = jet_fb_action_handler()->get_all();
 
 		foreach ( $actions as $action ) {
-			$this->validate_action( $action );
+			if ( $this->is_valid_action( $action, $action->get_events() ) ) {
+				$this->action_ids[] = $action->_id;
+			}
 		}
 	}
 
-	protected function validate_action( Base $action ) {
-		$events = $action->get_events();
-
-		if ( ! $events || ! count( $events ) || ! $events->in_array( $this->event ) ) {
-			$action->unregister();
-		}
+	/**
+	 * @param Base $action
+	 * @param Events_List $events
+	 *
+	 * Return TRUE if:
+	 * - custom action check AND
+	 * - events list is not empty AND
+	 *      - events list has related event OR
+	 *      - events list is contains only ignored events
+	 *
+	 * @return bool
+	 */
+	protected function is_valid_action( Base $action, Events_List $events ): bool {
+		return $events->in_array( $this ) && $action->on_validate( $this );
 	}
+
 
 	/**
 	 * @throws Action_Exception
 	 */
 	protected function execute_actions() {
-		( new Action_Default_Executor() )->run_actions();
+		jet_fb_action_handler()->soft_run_actions( $this );
 	}
 
 	final public function set_event( Base_Event $event ): Base_Executor {
@@ -67,4 +82,81 @@ abstract class Base_Executor {
 		return $this;
 	}
 
+	/**
+	 * @return Base_Event
+	 */
+	public function get_event(): Base_Event {
+		return $this->event;
+	}
+
+	/**
+	 * @return Base
+	 */
+	public function current() {
+		return jet_fb_action_handler()->get_action_by_id(
+			$this->action_ids[ $this->position ] ?? 0
+		);
+	}
+
+	public function next() {
+		++ $this->position;
+	}
+
+	/**
+	 * @return bool|float|int|string|null
+	 */
+	public function key() {
+		return $this->position;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function valid() {
+		return isset( $this->action_ids[ $this->position ] );
+	}
+
+
+	public function rewind() {
+		$this->position = 0;
+	}
+
+	/**
+	 * @param mixed $offset
+	 *
+	 * @return bool
+	 */
+	public function offsetExists( $offset ) {
+		return isset( jet_fb_action_handler()->form_actions[ $offset ] );
+	}
+
+	/**
+	 * @param mixed $offset
+	 *
+	 * @return mixed
+	 */
+	public function offsetGet( $offset ) {
+		return jet_fb_action_handler()->get_action_by_id( $offset );
+	}
+
+	/**
+	 * @param mixed $offset
+	 * @param mixed $value
+	 */
+	public function offsetSet( $offset, $value ) {
+	}
+
+	/**
+	 * @param mixed $offset
+	 */
+	public function offsetUnset( $offset ) {
+		jet_fb_action_handler()->get_action_by_id( $offset )->unregister();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function count() {
+		return count( $this->action_ids );
+	}
 }

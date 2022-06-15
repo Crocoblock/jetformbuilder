@@ -3,7 +3,7 @@
 namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
+use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
@@ -292,15 +292,12 @@ class Form_Handler {
 	 */
 	public function send_form() {
 		$this->action_handler->set_form_id( $this->form_id );
-
-		$this->action_handler->add_request(
-			$this->request_handler->get_form_data()
-		);
+		$this->request_handler->set_form_data();
 
 		do_action( 'jet-form-builder/form-handler/before-send', $this );
 
 		// execute all actions
-		jet_fb_events()->set_current( Default_Process_Event::class )->execute();
+		jet_fb_events()->execute( Default_Process_Event::class );
 
 		$this->add_response_data( $this->action_handler->response_data );
 
@@ -338,7 +335,7 @@ class Form_Handler {
 		try {
 			$this->set_response_args( $args );
 
-			( new Action_Required_Executor() )->soft_run_actions();
+			jet_fb_events()->execute( Default_Required_Event::class );
 
 			do_action( 'jet-form-builder/form-handler/after-send', $this, $this->is_success );
 		} catch ( Repository_Exception $exception ) {

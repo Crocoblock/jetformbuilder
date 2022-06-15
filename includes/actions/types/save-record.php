@@ -4,9 +4,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
-use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
+use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Controller;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
@@ -34,12 +32,10 @@ class Save_Record extends Base {
 		return __( 'Save Form Record', 'jet-form-builder' );
 	}
 
-	public function get_flow_handler(): string {
-		return Action_Required_Executor::class;
-	}
-
 	public function get_required_events(): array {
-		return array( Default_Process_Event::class );
+		return array(
+			Default_Required_Event::class,
+		);
 	}
 
 	public function dependence() {
@@ -60,16 +56,6 @@ class Save_Record extends Base {
 		);
 
 		return parent::dependence();
-	}
-
-	public function on_register_in_flow() {
-		add_filter(
-			'jet-form-builder/actions/run-callback',
-			array(
-				new Action_Default_Executor(),
-				Action_Default_Executor::SOFT,
-			)
-		);
 	}
 
 	/**

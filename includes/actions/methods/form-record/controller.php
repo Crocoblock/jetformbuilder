@@ -231,20 +231,21 @@ class Controller {
 	}
 
 	private function get_prepared_actions( $source, $status ): array {
-		$actions  = array();
-		$on_event = jet_fb_events()->get_current()->get_id();
+		$actions = array();
 
 		/**
 		 * @var $source Base[]
 		 */
 		foreach ( $source as $action ) {
-			$actions[] = array(
-				'record_id'   => $this->record_id,
-				'action_slug' => $action->get_id(),
-				'action_id'   => $action->_id,
-				'on_event'    => $on_event,
-				'status'      => $status,
-			);
+			foreach ( $action->get_executed_events() as $on_event ) {
+				$actions[] = array(
+					'record_id'   => $this->record_id,
+					'action_slug' => $action->get_id(),
+					'action_id'   => $action->_id,
+					'on_event'    => $on_event,
+					'status'      => $status,
+				);
+			}
 		}
 
 		return $actions;

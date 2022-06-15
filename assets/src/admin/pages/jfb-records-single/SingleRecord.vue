@@ -32,7 +32,7 @@ export default {
 	created() {
 		jfbEventBus.$on( 'alert-click-update', ( { button } ) => {
 			this.installMigrations( button );
-		} )
+		} );
 	},
 	methods: {
 		installMigrations( button ) {
@@ -54,8 +54,8 @@ export default {
 					duration: 4000,
 				} );
 			} );
-		}
-	}
+		},
+	},
 };
 </script>
 
@@ -77,6 +77,12 @@ export default {
 	}
 
 	.cell--name {
+		flex: 0.5;
+	}
+}
+
+#actions-log {
+	.cell--created_at {
 		flex: 0.5;
 	}
 }

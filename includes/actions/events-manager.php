@@ -6,9 +6,9 @@ namespace Jet_Form_Builder\Actions;
 use Jet_Form_Builder\Actions\Events\Base_Action_Event;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
-use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
@@ -51,19 +51,24 @@ class Events_Manager implements Arrayable {
 
 	/**
 	 * @param string $current
+	 * @param null $form_id
 	 *
-	 * @return bool
+	 * @return Base_Event
 	 */
-	public function set_current( string $current ): bool {
+	public function set_current( string $current, $form_id = null ): Base_Event {
 		try {
 			$event = $this->get_event( $current );
 		} catch ( Repository_Exception $exception ) {
-			return false;
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( $exception->getMessage() );
 		}
+
+		// save all form actions
+		jet_fb_action_handler()->set_form_id( $form_id );
 
 		$this->current = $event;
 
-		return true;
+		return $event;
 	}
 
 	/**

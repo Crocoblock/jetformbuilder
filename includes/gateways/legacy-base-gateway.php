@@ -4,9 +4,9 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Classes\Tools;
@@ -54,22 +54,18 @@ abstract class Legacy_Base_Gateway {
 	 * @deprecated 2.0.0
 	 */
 	public function process_status( $type = 'success' ) {
+		$id = $this->data['form_id'] ?? 0;
+		jet_fb_action_handler()->add_request( $this->data['form_data'] );
+
 		switch ( $type ) {
 			case 'success':
-				jet_fb_events()->set_current( Gateway_Success_Event::class );
+				jet_fb_events()->set_current( Gateway_Success_Event::class, $id )->execute();
 				break;
 			case 'failed':
 			default:
-				jet_fb_events()->set_current( Gateway_Failed_Event::class );
+				jet_fb_events()->set_current( Gateway_Failed_Event::class, $id )->execute();
 				break;
 		}
-
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
-
-		jet_fb_action_handler()->add_request( $this->data['form_data'] )->set_form_id( $this->data['form_id'] );
-		jet_fb_events()->get_current()->validate_actions();
-
-		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	/**
@@ -344,9 +340,6 @@ abstract class Legacy_Base_Gateway {
 			$list->push( Default_Process_Event::class );
 			break;
 		}
-
-		// Remove actions
-		jet_fb_events()->get_current()->validate_actions();
 	}
 
 	/**

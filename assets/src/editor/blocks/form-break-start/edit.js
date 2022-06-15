@@ -8,7 +8,7 @@ const {
 } = wp.blockEditor;
 
 export default function FormBreakStart( props ) {
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps( { className: 'jet-form-builder__bottom-line' } );
 
 	const {
 		attributes,

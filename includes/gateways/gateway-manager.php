@@ -110,36 +110,6 @@ class Gateway_Manager {
 		$this->rep_install_item( $gateway );
 	}
 
-	public function before_send_actions() {
-		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
-
-		try {
-			$this->get_current_gateway_controller()->before_actions();
-		} catch ( Repository_Exception $exception ) {
-			return;
-		}
-
-		add_filter(
-			'jet-form-builder/actions/run-callback',
-			function () {
-				return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
-			}
-		);
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	public function after_send_actions() {
-		try {
-			$this->get_current_gateway_controller()->after_actions( jet_fb_action_handler() );
-		} catch ( Repository_Exception $exception ) {
-			return;
-		} catch ( Gateway_Exception $exception ) {
-			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
-		}
-	}
-
 	public function save_gateways_form_data( $data ) {
 		$id = $data['gateway'];
 

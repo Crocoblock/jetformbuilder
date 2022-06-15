@@ -3,8 +3,6 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -134,28 +132,6 @@ class Action_Handler {
 		);
 
 		return array( $action, $condition );
-	}
-
-	/**
-	 * Send form notifications
-	 *
-	 * @return array [description]
-	 */
-	public function do_actions() {
-		jet_fb_events()->set_current( ( new Events\Default_Process_Event )->get_id() );
-
-		do_action( 'jet-form-builder/actions/before-send' );
-
-		$run_actions_callback = apply_filters(
-			'jet-form-builder/actions/run-callback',
-			array( new Action_Default_Executor(), 'run_actions' )
-		);
-
-		call_user_func( $run_actions_callback );
-
-		do_action( 'jet-form-builder/actions/after-send' );
-
-		return $this->response_data;
 	}
 
 	public function process_single_action( $index ) {

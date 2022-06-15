@@ -15,6 +15,7 @@ use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
 use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 
 /**
  * Form builder class
@@ -287,7 +288,7 @@ class Form_Handler {
 	}
 
 	/**
-	 * @throws Request_Exception
+	 * @throws Request_Exception|Action_Exception
 	 */
 	public function send_form() {
 		$this->action_handler->set_form_id( $this->form_id );
@@ -298,7 +299,10 @@ class Form_Handler {
 
 		do_action( 'jet-form-builder/form-handler/before-send', $this );
 
-		$this->add_response_data( $this->action_handler->do_actions() );
+		// execute all actions
+		jet_fb_events()->set_current( Default_Process_Event::class )->execute();
+
+		$this->add_response_data( $this->action_handler->response_data );
 
 		$this->is_success = true;
 	}

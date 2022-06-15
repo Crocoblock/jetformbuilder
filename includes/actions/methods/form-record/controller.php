@@ -231,7 +231,8 @@ class Controller {
 	}
 
 	private function get_prepared_actions( $source, $status ): array {
-		$actions = array();
+		$actions  = array();
+		$on_event = jet_fb_events()->get_current()->get_id();
 
 		/**
 		 * @var $source Base[]
@@ -241,6 +242,7 @@ class Controller {
 				'record_id'   => $this->record_id,
 				'action_slug' => $action->get_id(),
 				'action_id'   => $action->_id,
+				'on_event'    => $on_event,
 				'status'      => $status,
 			);
 		}

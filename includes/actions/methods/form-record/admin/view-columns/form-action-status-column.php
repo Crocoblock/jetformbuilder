@@ -22,10 +22,6 @@ class Form_Action_Status_Column extends Column_Advanced_Base {
 		);
 	}
 
-	public function get_css_classes( array $record = array() ): array {
-		return array( 'overflow-visible' );
-	}
-
 	public function get_value( array $record = array() ) {
 		$status      = parent::get_value( $record );
 		$help_labels = $this->get_help_labels();
@@ -36,7 +32,7 @@ class Form_Action_Status_Column extends Column_Advanced_Base {
 
 		return array(
 			'type' => $status,
-			'help' => $help_labels[ $status ] ?? '',
+			'text' => $help_labels[ $status ] ?? '',
 		);
 	}
 }

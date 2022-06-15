@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Gateways;
 
-use Jet_Form_Builder\Actions\Events\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Events_List;
 
 class Migrate_Legacy_Data {

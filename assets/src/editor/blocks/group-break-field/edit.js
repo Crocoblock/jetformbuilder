@@ -26,7 +26,7 @@ export default function GroupBreakEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div { ...blockProps }>
-			<div className={ 'jet-form-builder__group-break' }>
+			<div className={ 'jet-form-builder__group-break jet-form-builder__bottom-line' }>
 				<span>{ __( 'GROUP BREAK' ) }</span>
 			</div>
 		</div>

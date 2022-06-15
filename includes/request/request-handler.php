@@ -186,7 +186,11 @@ class Request_Handler {
 			->set_files_context( $this->files )
 			->set_request_context( $this->raw_request );
 
-		$request = Parser_Manager::instance()->get_values_fields( $this->_fields, $context );
+		$request = apply_filters(
+			'jet-form-builder/form-handler/form-data',
+			Parser_Manager::instance()->get_values_fields( $this->_fields, $context ),
+			$this
+		);
 
 		if ( ! Error_Handler::instance()->empty_errors() ) {
 			throw new Request_Exception(
@@ -196,7 +200,7 @@ class Request_Handler {
 			);
 		}
 
-		return apply_filters( 'jet-form-builder/form-handler/form-data', $request, $this );
+		return $request;
 	}
 
 	/**

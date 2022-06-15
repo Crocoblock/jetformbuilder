@@ -38,9 +38,6 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	public function before_actions() {
 		$this->set_form_meta( GM::instance()->gateways() );
 		$this->get_scenario()->before_actions();
-
-		// Remove actions
-		jet_fb_events()->get_current()->validate_actions();
 	}
 
 	/**

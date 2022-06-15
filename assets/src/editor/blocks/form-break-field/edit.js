@@ -94,7 +94,7 @@ export default function FormBreakEdit( props ) {
 			</PanelBody>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<div className={ 'jet-form-builder__next-page-wrap' }>
+			<div className={ 'jet-form-builder__next-page-wrap jet-form-builder__bottom-line' }>
 				{ attributes.add_next_button && <Button
 					isSecondary
 					key="next_page_button"

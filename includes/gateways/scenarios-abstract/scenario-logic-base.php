@@ -3,9 +3,8 @@
 
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
-use Jet_Form_Builder\Actions\Events\Gateway_Failed_Event;
-use Jet_Form_Builder\Actions\Events\Gateway_Success_Event;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
@@ -137,23 +136,17 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	public function process_status( $type = 'success' ) {
 		// save form request to Action_Handler & current gateway controller
 		$this->init_request();
+		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
 
 		switch ( $type ) {
 			case 'success':
-				jet_fb_events()->set_current( Gateway_Success_Event::class );
+				jet_fb_events()->set_current( Gateway_Success_Event::class, $form_id )->execute();
 				break;
 			case 'failed':
 			default:
-				jet_fb_events()->set_current( Gateway_Failed_Event::class );
+				jet_fb_events()->set_current( Gateway_Failed_Event::class, $form_id )->execute();
 				break;
 		}
-
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
-
-		$this->init_actions();
-		jet_fb_events()->get_current()->validate_actions();
-
-		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	public function get_gateways_meta() {

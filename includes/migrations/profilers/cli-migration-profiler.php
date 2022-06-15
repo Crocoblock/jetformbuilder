@@ -16,11 +16,11 @@ class Cli_Migration_Profiler extends Base_Migration_Profiler {
 		);
 	}
 
-	public function on_down_end( Base_Migration $migration ) {
+	public function on_down_end( Base_Migration $migration, string $timer_stop ) {
 		$name = get_class( $migration );
 
 		\WP_CLI::line(
-			\WP_CLI::colorize( "%m{$name}" )
+			\WP_CLI::colorize( "%m{$name}: %n{$timer_stop} (s)" )
 		);
 	}
 

@@ -3,12 +3,12 @@
 
 namespace Jet_Form_Builder\Wp_Cli;
 
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Profilers\Cli_Migration_Profiler;
-use Jet_Form_Builder\Migrations\Versions\Base_Migration;
-use Jet_Form_Builder\Migrations\Versions\Version_2_1_0;
 
 class Database_Commands extends \WP_CLI_Command {
 
@@ -41,6 +41,60 @@ class Database_Commands extends \WP_CLI_Command {
 
 			\WP_CLI::error( $exception->getMessage() );
 		}
+	}
+
+	public function seed_records() {
+		/** @var \WP_Post $form */
+		list( $form ) = get_posts(
+			array(
+				'numberposts' => 1,
+				'post_type'   => jet_form_builder()->post_type->slug(),
+			)
+		);
+
+		/** @var \WP_User $user */
+		list( $user ) = get_users(
+			array(
+				'number' => 1,
+			)
+		);
+
+		/** @var \WP_Post $post */
+		list( $post ) = get_posts(
+			array(
+				'numberposts' => 1,
+			)
+		);
+
+		foreach ( range( 0, 1000000 ) as $current ) {
+			$record_id = ( new Record_Model() )->insert_soft(
+				array(
+					'user_id'           => $user->ID,
+					'form_id'           => $form->ID,
+					'from_content_id'   => $post->ID,
+					'from_content_type' => 'cli',
+					'status'            => 'failed',
+				)
+			);
+
+			foreach ( range( 0, 2 ) as $next ) {
+				( new Record_Action_Result_Model() )->insert_soft(
+					array(
+						'record_id'   => $record_id,
+						'action_slug' => 'insert_post',
+						'action_id'   => 9999,
+						'status'      => 'failed',
+						'on_event'    => 'GENERATED.CLI',
+					)
+				);
+			}
+
+			if ( 0 === $current % 100000 ) {
+				\WP_CLI::line( 'Reached: ' . $current );
+			}
+		}
+
+		\WP_CLI::success( 'Executed successfully' );
 	}
 
 }

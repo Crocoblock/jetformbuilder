@@ -84,7 +84,11 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 	final public function run_down() {
 		global $wpdb;
 
+		timer_start();
 		$this->down( $wpdb );
+		$timer_stop = timer_stop();
+
+		$this->profiler->on_down_end( $this, $timer_stop );
 
 		if ( $wpdb->last_error ) {
 			throw new Migration_Exception( $wpdb->last_error );
@@ -95,8 +99,6 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 		} catch ( Sql_Exception $exception ) {
 			throw new Migration_Exception( $exception->getMessage() );
 		}
-
-		$this->profiler->on_down_end( $this );
 	}
 
 	public function save( int $time ) {

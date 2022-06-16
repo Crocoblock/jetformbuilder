@@ -320,13 +320,11 @@ abstract class Legacy_Base_Gateway {
 	 */
 	public function before_actions() {
 		$this->set_form_meta( GM::instance()->gateways() );
-		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
+		$default_actions = jet_fb_action_handler()->get_all();
 
 		$action_order = (int) $this->gateway( 'action_order' );
 
-		foreach ( $default_actions as $index ) {
-			$action = jet_fb_action_handler()->get_action_by_id( $index );
-
+		foreach ( $default_actions as $index => $action ) {
 			if ( 'insert_post' !== $action->get_id() || $action_order !== $action->_id ) {
 				continue;
 			}

@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Hidden_Field extends Base {
 
 	public $use_style_manager = false;
-	private $rendering        = true;
+	private $rendering = true;
 
 	private function current_post() {
 		return Live_Form::instance()->post;
@@ -149,6 +149,17 @@ class Hidden_Field extends Base {
 		} else {
 			return get_permalink( $this->current_post()->ID );
 		}
+	}
+
+	private function term_url( $params = array() ) {
+		/** @var \WP_Term $term */
+		$term = get_queried_object();
+
+		if ( ! ( $term instanceof \WP_Term ) ) {
+			return null;
+		}
+
+		return get_term_link( $term );
 	}
 
 	/**
@@ -336,10 +347,13 @@ class Hidden_Field extends Base {
 								'value' => 'post_title',
 								'label' => __( 'Current Post Title', 'jet-form-builder' ),
 							),
-
 							array(
 								'value' => 'post_url',
 								'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'term_url',
+								'label' => __( 'Current Term URL', 'jet-form-builder' ),
 							),
 							array(
 								'value' => 'post_meta',

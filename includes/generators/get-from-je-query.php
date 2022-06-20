@@ -68,12 +68,19 @@ class Get_From_Je_Query extends Base {
 			$label      = apply_filters( 'jet-forms-generate-from-query/label', $label, $object, $additional_args );
 			$calculated = apply_filters( 'jet-forms-generate-from-query/calculated', $calculated, $object, $additional_args );
 
-			if ( $value && $label ) {
-				$result[] = array(
-					'value'     => $value,
-					'label'     => $label,
-					'calculate' => $calculated,
-				);
+			$item = array();
+
+			if ( $value ) {
+				$item['value'] = $value;
+				$item['label'] = $label;
+			}
+
+			if ( $calculated ) {
+				$item['calculate'] = $calculated;
+			}
+
+			if ( ! empty( $item ) ) {
+				$result[] = $item;
 			}
 		}
 

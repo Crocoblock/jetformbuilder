@@ -75,7 +75,7 @@ class Get_From_Je_Query extends Base {
 				$item['label'] = $label;
 			}
 
-			if ( $calculated ) {
+			if ( $calculated_field ) {
 				$item['calculate'] = $calculated;
 			}
 

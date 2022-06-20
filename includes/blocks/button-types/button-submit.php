@@ -23,7 +23,7 @@ class Button_Submit extends Button_Type_Base {
 		$button[] = "submit-type-{$type}";
 
 		return array(
-			'type'  => 'reload' === $type ? 'submit' : 'button',
+			'type'  => 'submit',
 			'class' => array(
 				'button'  => $button,
 				'wrapper' => "jet-form-builder__{$this->slug()}-wrap",

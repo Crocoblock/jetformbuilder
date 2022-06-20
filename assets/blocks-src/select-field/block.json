@@ -35,6 +35,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"is_disabled_placeholder": {
+			"type": "boolean",
+			"default": false
+		},
 		"field_options_from": {
 			"type": "string",
 			"default": "manual_input"

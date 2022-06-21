@@ -65,7 +65,7 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 	}
 
 	function jet_fb_render_form( $settings ) {
-		return Jet_Form_Builder\Plugin::instance()->blocks->get_form_class()->render_callback_field( $settings );
+		return Jet_Form_Builder\Plugin::instance()->blocks->get_form_class()->render_form( $settings );
 	}
 
 	function jet_fb_handler(): \Jet_Form_Builder\Form_Handler {

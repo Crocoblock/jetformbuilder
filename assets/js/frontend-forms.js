@@ -453,17 +453,8 @@
 		currentFieldWithError: {
 			length: 0,
 		},
-		installed: [],
-
-		notSafeInit: function() {
-			const wrappers = $( '.jet-form-builder__form-wrapper' );
-
-			wrappers.each( function( index, value ) {
-				JetFormBuilder.widgetBookingForm( $( value ) );
-			} );
-		},
 		initCommon: function( $scope = false ) {
-			let wrappers = $( '.jet-form-builder__form-wrapper', $scope );
+			let wrappers = $( '.jet-fb-form-block', $scope );
 
 			wrappers.each( function( index, value ) {
 				JetFormBuilder.widgetBookingForm( $( value ) );
@@ -798,17 +789,6 @@
 		initConditions: function( $scope ) {
 			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
-
-		isTriggered: function ( $scope ) {
-			const formId = $scope.find( 'form.jet-form-builder' ).data( 'form-id' );
-
-			return ( formId && JetFormBuilder.installed.includes( formId ) );
-		},
-		pushInstalled: function ( $scope ) {
-			const formId = $scope.find( 'form.jet-form-builder' ).data( 'form-id' );
-
-			JetFormBuilder.installed.push( formId );
-		},
 		widgetBookingForm: function( $scope ) {
 			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );
 
@@ -820,6 +800,7 @@
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
 			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
+			debugger;
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );
@@ -832,12 +813,7 @@
 			JetFormBuilder.initCalcFields( $scope );
 			JetFormBuilder.initReplaceValues( $scope );
 
-			if ( ! JetFormBuilder.isTriggered( $scope ) ) {
-				$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
-
-				JetFormBuilder.pushInstalled( $scope );
-			}
-
+			$( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
 		},
 
 		initCalcFields: function( $scope ) {
@@ -1794,16 +1770,8 @@
 	window.JetFormBuilderDev = JetFormBuilderDev;
 	window.JetFormBuilder = JetFormBuilder;
 
-	$( () => JetFormBuilder.initCommon() );
+	$( JetFormBuilder.initCommon );
 	$( window ).on( 'elementor/frontend/init', JetFormBuilder.initElementor );
-
-	$( document ).on( 'elementor/popup/show', function( event, id, instance ) {
-		const $modal = $( '#elementor-popup-modal-' + id );
-
-		JetFormBuilder.initCommon( $modal );
-	} );
-
-	document.addEventListener( 'jet-fb.render.form-block', JetFormBuilder.notSafeInit )
 
 	JetFormBuilder.addHandlersInit();
 } )( jQuery );

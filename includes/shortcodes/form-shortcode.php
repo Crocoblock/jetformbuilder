@@ -24,7 +24,9 @@ class Form_Shortcode extends Shortcode {
 	 * @return mixed
 	 */
 	public function generate( $settings ) {
-		return jet_fb_render_form( $settings );
+		$form = jet_form_builder()->blocks->get_form_class();
+
+		return $form->render_callback_field( $settings );
 	}
 
 

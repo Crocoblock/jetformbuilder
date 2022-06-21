@@ -3612,6 +3612,7 @@ class Form extends Jfb_Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo jet_fb_render_form( $settings );
 	}
 

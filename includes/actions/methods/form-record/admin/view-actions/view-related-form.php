@@ -8,6 +8,9 @@ use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;
 
 class View_Related_Form extends Link_Single_Action {
 
+	/** @var \WP_Post */
+	private $form;
+
 	public function get_slug(): string {
 		return 'edit_form';
 	}
@@ -17,9 +20,7 @@ class View_Related_Form extends Link_Single_Action {
 	}
 
 	public function get_href( array $record ): string {
-		$form = get_post( $record['form_id'] ?? 0 );
-
-		return get_edit_post_link( $form, false );
+		return get_edit_post_link( $this->form, false );
 	}
 
 	public function show_in_header(): bool {
@@ -27,6 +28,8 @@ class View_Related_Form extends Link_Single_Action {
 	}
 
 	public function show_in_row( array $record ): bool {
-		return true;
+		$this->form = get_post( $record['form_id'] ?? 0 );
+
+		return ( $this->form instanceof \WP_Post );
 	}
 }

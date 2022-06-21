@@ -30,7 +30,7 @@ $this->add_attribute( 'data-default-val', $default );
 		<?php
 
 		if ( $placeholder ) {
-			$additional_attrs = 'disabled';
+			$additional_attrs = ( $args['is_disabled_placeholder'] ?? false ) ? 'disabled' : '';
 
 			if ( ! $default ) {
 				$additional_attrs .= ' selected';

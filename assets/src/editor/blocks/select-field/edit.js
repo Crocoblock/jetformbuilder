@@ -13,33 +13,22 @@ const {
 } = JetFBComponents;
 
 const {
-	BlockControls,
 	InspectorControls,
 	useBlockProps,
 } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
 	ToggleControl,
+	SelectControl,
+	PanelBody,
+	TextControl,
 } = wp.components;
 
-/*const { registerPlugin } = wp.plugins;
-const { PluginBlockSettingsMenuItem } = wp.editPost;
-
-const PluginBlockSettingsMenuGroupTest = () => (
-	<PluginBlockSettingsMenuItem
-		allowedBlocks={ [ 'jet-forms/select-field' ] }
-		icon="smiley"
-		label="Read about Hierarchical Select addon"
-		onClick={ () => {
-			window.open( 'https://jetformbuilder.com/addons/hierarchical-select/', '_blank' );
-		} }
-	/>
-);
-
-registerPlugin( 'block-settings-menu-group-test', {
-	render: PluginBlockSettingsMenuGroupTest,
-} );*/
-
+/**
+ * @param props
+ * @returns {JSX.Element[]}
+ * @constructor
+ */
 export default function SelectEdit( props ) {
 
 	const {
@@ -63,10 +52,59 @@ export default function SelectEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
-			<AdvancedFields
-				key={ uniqKey( 'AdvancedFields' ) }
-				{ ...props }
-			/>
+			<PanelBody
+				title={ __( 'Advanced', 'jet-form-builder' ) }
+			>
+				<TextControl
+					key={ uniqKey( 'placeholder' ) }
+					label={ __( "Placeholder", 'jet-form-builder' ) }
+					value={ attributes.placeholder }
+					onChange={ placeholder => setAttributes( { placeholder } ) }
+				/>
+				{ ( !!attributes.placeholder.length ) && <ToggleControl
+					key={ uniqKey( 'is_disabled_placeholder' ) }
+					label={ __( 'Disable placeholder', 'jet-form-builder' ) }
+					checked={ attributes.is_disabled_placeholder }
+					onChange={ is_disabled_placeholder => setAttributes( { is_disabled_placeholder } ) }
+				/> }
+				<ToggleControl
+					key={ uniqKey( 'add_prev' ) }
+					label={ __( 'Add Prev Page Button', 'jet-form-builder' ) }
+					checked={ attributes.add_prev }
+					help={ attrHelp( 'add_prev' ) }
+					onChange={ add_prev => setAttributes( { add_prev } ) }
+				/>
+				{ attributes.add_prev && <TextControl
+					label={ __( 'Prev Page Button Label', 'jet-form-builder' ) }
+					value={ attributes.prev_label }
+					onChange={ prev_label => setAttributes( { prev_label } ) }
+				/> }
+				<SelectControl
+					key={ uniqKey( 'SelectControl-type' ) }
+					label={ __( "Field Visibility", 'jet-form-builder' ) }
+					value={ attributes.visibility }
+					options={ [
+						{
+							"value": "all",
+							"label": __( "For all", 'jet-form-builder' ),
+						},
+						{
+							"value": "logged_id",
+							"label": __( "Only for logged in users", 'jet-form-builder' ),
+						},
+						{
+							"value": "not_logged_in",
+							"label": __( "Only for NOT-logged in users", 'jet-form-builder' ),
+						},
+					] }
+					onChange={ visibility => setAttributes( { visibility } ) }
+				/>
+				<TextControl
+					label={ __( 'CSS Class Name', 'jet-form-builder' ) }
+					value={ attributes.class_name }
+					onChange={ class_name => setAttributes( { class_name } ) }
+				/>
+			</PanelBody>
 		</InspectorControls>,
 		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
 			<SelectRadioCheckPlaceholder

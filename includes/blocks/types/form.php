@@ -374,6 +374,10 @@ class Form extends Base {
 
 	}
 
+	public function get_name() {
+		return 'form-block';
+	}
+
 
 	/**
 	 * Returns current block render instatnce
@@ -460,7 +464,7 @@ class Form extends Base {
 			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
 		}
 
-		Render_State::instance()->
+		Render_State::instance()->clear_current();
 
 		return ( $form . ob_get_clean() );
 	}

@@ -819,9 +819,7 @@
 			}
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
-			if ( ! JetFormBuilder.isTriggered( $scope ) ) {
-				$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
-			}
+			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );

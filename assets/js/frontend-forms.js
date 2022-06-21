@@ -800,7 +800,6 @@
 			JetFormBuilder.initRequiredCheckboxGroup( $scope );
 
 			$( document ).trigger( 'jet-form-builder/init', [ $scope ] );
-			debugger;
 
 			JetFormBuilder.initFormPager( $scope );
 			JetFormBuilder.initRangeFields( $scope );

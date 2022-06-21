@@ -38,6 +38,41 @@ const {
 	useSelect,
 } = wp.data;
 
+const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem } ) => {
+
+	const [ name, setName ] = useState( '' );
+	const current = [ ...currentItem.render_state ];
+
+	const addState = () => {
+		current.push( name );
+
+		changeCurrentItem( {
+			render_state: current,
+		} );
+
+		setShowModal( false );
+	};
+
+	return <ActionModal
+		classNames={ [ 'width-60' ] }
+		title={ __( 'Register custom render state' ) }
+		onRequestClose={ () => setShowModal( false ) }
+	>
+		<div className={ 'jet-fb-field-with-button' }>
+			<TextControl
+				value={ name }
+				onChange={ value => setName( value ) }
+			/>
+			<Button
+				variant={ 'secondary' }
+				onClick={ () => addState() }
+			>
+				{ __( 'Add', 'jet-form-builder' ) }
+			</Button>
+		</div>
+	</ActionModal>;
+};
+
 const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props => {
 	const { currentItem, changeCurrentItem } = props;
 
@@ -47,6 +82,8 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(), [],
 	);
 
+	const [ showModal, setShowModal ] = useState( false );
+
 	switch ( currentItem.operator ) {
 		case 'render_state':
 			return <>
@@ -54,15 +91,26 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 					label={ __( 'Render State', 'jet-form-builder' ) }
 					className={ 'control-flex' }
 				>
-					<FormTokenField
-						label={ __( 'Add render state', 'jet-form-builder' ) }
-						value={ currentItem.render_state }
-						suggestions={ renderStates }
-						onChange={ render_state => changeCurrentItem( { render_state } ) }
-						tokenizeOnSpace
-						__experimentalExpandOnFocus
-					/>
+					<div className={ 'jet-fb-field-with-button' }>
+						<FormTokenField
+							label={ __( 'Add render state', 'jet-form-builder' ) }
+							value={ currentItem.render_state }
+							suggestions={ renderStates }
+							onChange={ render_state => changeCurrentItem( { render_state } ) }
+							tokenizeOnSpace
+							__experimentalExpandOnFocus
+						/>
+						<Button
+							variant={ 'secondary' }
+							icon={ 'plus-alt2' }
+							onClick={ () => setShowModal( true ) }
+						/>
+					</div>
 				</BaseControl>
+				{ showModal && <EditCustomRenderStates
+					setShowModal={ setShowModal }
+					changeCurrentItem={ changeCurrentItem }
+				/> }
 			</>;
 		default:
 			return <>

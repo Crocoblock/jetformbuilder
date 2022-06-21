@@ -64,7 +64,7 @@ class Condition_Manager implements Arrayable {
 		return array(
 			'functions'     => Tools::with_placeholder( $this->get_functions()->to_array() ),
 			'operators'     => Tools::with_placeholder( $this->get_operators()->to_array() ),
-			'render_states' => Tools::with_placeholder( Render_State::instance()->to_array() ),
+			'render_states' => Render_State::instance()->to_array(),
 		);
 	}
 

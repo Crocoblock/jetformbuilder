@@ -146,4 +146,18 @@
 	.components-modal__content {
 		padding-bottom: unset;
 	}
+
+	.jet-fb-field-with-button {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		&:first-child {
+			flex: 0.95;
+		}
+
+		button {
+			margin-bottom: 1.1em
+		}
+	}
 }

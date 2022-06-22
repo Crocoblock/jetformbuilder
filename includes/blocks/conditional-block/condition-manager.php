@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api\Add_Render_State_Endpoint_Option;
+use Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api\Get_Render_States_Endpoint;
 use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
@@ -64,10 +65,11 @@ class Condition_Manager implements Arrayable {
 
 	public function to_array(): array {
 		return array(
-			'functions'      => Tools::with_placeholder( $this->get_functions()->to_array() ),
-			'operators'      => Tools::with_placeholder( $this->get_operators()->to_array() ),
-			'render_states'  => Render_State::instance()->to_array(),
-			'rest_add_state' => Add_Render_State_Endpoint_Option::get_endpoint(),
+			'functions'         => Tools::with_placeholder( $this->get_functions()->to_array() ),
+			'operators'         => Tools::with_placeholder( $this->get_operators()->to_array() ),
+			'render_states'     => Render_State::instance()->to_array(),
+			'rest_add_state'    => Add_Render_State_Endpoint_Option::get_endpoint(),
+			'rest_query_states' => Get_Render_States_Endpoint::get_endpoint(),
 		);
 	}
 

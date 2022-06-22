@@ -161,4 +161,23 @@
 			margin-bottom: 1.1em
 		}
 	}
+
+	.jet-fb-buttons-flex {
+		display: flex;
+		gap: 0.8em;
+		width: 45vw;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+
+		& > button {
+			padding: 0 4px;
+			border-radius: 5px;
+			color: #5c5c5c;
+			font-size: .9em;
+			background-color: #f3f4f5;
+			cursor: pointer;
+			border: 0;
+			font-family: monospace;
+		}
+	}
 }

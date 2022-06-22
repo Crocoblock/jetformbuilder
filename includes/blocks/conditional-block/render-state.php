@@ -20,6 +20,8 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
  */
 class Render_State implements Arrayable {
 
+	const OPTION_KEY = 'jet_fb_conditional_render_states';
+
 	use Repository_Pattern_Trait;
 	use Instance_Trait;
 

@@ -15,6 +15,7 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 	public function routes(): array {
 		return array(
 			new Add_Render_State_Endpoint_Option(),
+			new Get_Render_States_Endpoint(),
 		);
 	}
 }

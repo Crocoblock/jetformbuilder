@@ -1,6 +1,6 @@
 import constants from './constants';
 
-export default {
+const dispatchers = {
 	[ constants.register ]( state, action ) {
 		const { operators, functions, render_states } = action.items;
 
@@ -23,4 +23,15 @@ export default {
 
 		return state;
 	},
+	[ constants.addRenderStates ]( state, action ) {
+		for ( const item of action.items ) {
+			state.renderStates.push( item );
+		}
+
+		return state;
+	},
+};
+
+export default {
+	...dispatchers
 };

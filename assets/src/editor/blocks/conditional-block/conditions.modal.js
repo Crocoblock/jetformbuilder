@@ -9,6 +9,7 @@ const {
 	withFilters,
 	BaseControl,
 	FormTokenField,
+	ButtonGroup,
 } = wp.components;
 
 const {
@@ -41,7 +42,9 @@ const {
 
 const { apiFetch } = wp;
 
-const { rest_add_state } = window.jetFormBlockConditions;
+const {
+	rest_add_state,
+} = window.jetFormBlockConditions;
 
 const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem } ) => {
 
@@ -50,6 +53,11 @@ const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem 
 	const [ value, setValue ] = useState( '' );
 	const current = [ ...currentItem.render_state ];
 	const { addRenderState } = useDispatch( 'jet-forms/block-conditions', [] );
+
+	const customStates = useSelect(
+		select => select( 'jet-forms/block-conditions' ).getCustomRenderStates(),
+		[ isLoading ],
+	);
 
 	const addState = () => {
 		setButtonLoading( true );
@@ -96,7 +104,53 @@ const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem 
 				{ __( 'Add', 'jet-form-builder' ) }
 			</Button>
 		</div>
+		<div className={ 'jet-fb-buttons-flex' }>
+			{ customStates.map( state => <Button
+				key={ state.value }
+				icon={ 'no-alt' }
+				iconPosition={ 'right' }
+			>
+				{ state.label }
+			</Button> ) }
+		</div>
 	</ActionModal>;
+};
+
+const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
+	const [ showModal, setShowModal ] = useState( false );
+
+	const renderStates = useSelect(
+		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(),
+		[ showModal ],
+	);
+
+	return <>
+		<BaseControl
+			label={ __( 'Render State', 'jet-form-builder' ) }
+			className={ 'control-flex' }
+		>
+			<div className={ 'jet-fb-field-with-button' }>
+				<FormTokenField
+					label={ __( 'Add render state', 'jet-form-builder' ) }
+					value={ currentItem.render_state }
+					suggestions={ renderStates }
+					onChange={ render_state => changeCurrentItem( { render_state } ) }
+					tokenizeOnSpace
+					__experimentalExpandOnFocus
+				/>
+				<Button
+					variant={ 'secondary' }
+					icon={ 'plus-alt2' }
+					onClick={ () => setShowModal( true ) }
+				/>
+			</div>
+		</BaseControl>
+		{ showModal && <EditCustomRenderStates
+			setShowModal={ setShowModal }
+			changeCurrentItem={ changeCurrentItem }
+			currentItem={ currentItem }
+		/> }
+	</>;
 };
 
 const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props => {
@@ -104,41 +158,14 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 
 	const uniqKey = useUniqKey();
 	const [ formFields ] = useState( () => getFormFieldsBlocks( [], '--' ) );
-	const [ showModal, setShowModal ] = useState( false );
-
-	const renderStates = useSelect(
-		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(), [],
-	);
 
 	switch ( currentItem.operator ) {
 		case 'render_state':
-			return <>
-				<BaseControl
-					label={ __( 'Render State', 'jet-form-builder' ) }
-					className={ 'control-flex' }
-				>
-					<div className={ 'jet-fb-field-with-button' }>
-						<FormTokenField
-							label={ __( 'Add render state', 'jet-form-builder' ) }
-							value={ currentItem.render_state }
-							suggestions={ renderStates }
-							onChange={ render_state => changeCurrentItem( { render_state } ) }
-							tokenizeOnSpace
-							__experimentalExpandOnFocus
-						/>
-						<Button
-							variant={ 'secondary' }
-							icon={ 'plus-alt2' }
-							onClick={ () => setShowModal( true ) }
-						/>
-					</div>
-				</BaseControl>
-				{ showModal && <EditCustomRenderStates
-					setShowModal={ setShowModal }
-					changeCurrentItem={ changeCurrentItem }
-					currentItem={ currentItem }
-				/> }
-			</>;
+			return <RenderStateOptions
+				key={ uniqKey( 'RenderStateOptions' ) }
+				changeCurrentItem={ changeCurrentItem }
+				currentItem={ currentItem }
+			/>;
 		default:
 			return <>
 				<SelectControl

@@ -3,12 +3,11 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api;
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
 class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
-
-	const OPTION_KEY = 'jet_fb_conditional_render_states';
 
 	/**
 	 * @return mixed
@@ -43,7 +42,7 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 			);
 		}
 
-		$saved = Tools::decode_json( get_option( self::OPTION_KEY, '[]' ) );
+		$saved = Tools::decode_json( get_option( Render_State::OPTION_KEY, '[]' ) );
 
 		$find = array_filter(
 			$saved,
@@ -73,7 +72,7 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 		$saved[] = $new_state;
 
 		$result = update_option(
-			self::OPTION_KEY,
+			Render_State::OPTION_KEY,
 			Tools::encode_json( $saved ),
 			false
 		);

@@ -3,7 +3,9 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-abstract class Rest_Api_Endpoint_Base {
+use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
+
+abstract class Rest_Api_Endpoint_Base implements Rest_Fetch_Endpoint {
 
 	final public static function get_namespace(): string {
 		return 'jet-form-builder/v1';
@@ -39,6 +41,22 @@ abstract class Rest_Api_Endpoint_Base {
 
 	public static function rest_url( $scheme = 'rest' ) {
 		return rest_url( '/' . static::get_namespace() . '/' . static::get_rest_base(), $scheme );
+	}
+
+	/**
+	 * Implementation of \Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint
+	 */
+
+	public function get_rest_url(): string {
+		return static::rest_url();
+	}
+
+	public function get_rest_methods(): string {
+		return static::get_rest_methods();
+	}
+
+	public static function get_endpoint(): array {
+		return ( new Rest_Endpoint( new static() ) )->to_array();
 	}
 
 }

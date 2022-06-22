@@ -38,12 +38,30 @@ const {
 	useSelect,
 } = wp.data;
 
+const { apiFetch } = wp;
+
+const { rest_add_state } = window.jetFormBlockConditions;
+
+const labels = {
+	add: __( 'Add', 'jet-form-builder' ),
+	loading: __( 'Loading...', 'jet-form-builder' ),
+};
+
 const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem } ) => {
 
+	const [ buttonLabel, setButtonLabel ] = useState( labels.add );
 	const [ name, setName ] = useState( '' );
 	const current = [ ...currentItem.render_state ];
 
 	const addState = () => {
+		setButtonLabel( labels.loading );
+		apiFetch( rest_add_state ).then( response => {
+
+		} ).catch( error => {
+
+		} ).finally( () => {
+
+		} );
 		current.push( name );
 
 		changeCurrentItem( {
@@ -54,7 +72,6 @@ const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem 
 	};
 
 	return <ActionModal
-		classNames={ [ 'width-60' ] }
 		title={ __( 'Register custom render state' ) }
 		onRequestClose={ () => setShowModal( false ) }
 	>
@@ -67,7 +84,7 @@ const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem 
 				variant={ 'secondary' }
 				onClick={ () => addState() }
 			>
-				{ __( 'Add', 'jet-form-builder' ) }
+				{ buttonLabel }
 			</Button>
 		</div>
 	</ActionModal>;
@@ -110,6 +127,7 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 				{ showModal && <EditCustomRenderStates
 					setShowModal={ setShowModal }
 					changeCurrentItem={ changeCurrentItem }
+					currentItem={ currentItem }
 				/> }
 			</>;
 		default:

@@ -13,5 +13,11 @@ export default {
 			item,
 		};
 	},
+	addRenderState( item ) {
+		return {
+			type: constants.addRenderState,
+			item,
+		};
+	},
 
-}
+};

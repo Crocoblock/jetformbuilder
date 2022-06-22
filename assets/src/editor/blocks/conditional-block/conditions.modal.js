@@ -36,33 +36,38 @@ const {
 
 const {
 	useSelect,
+	useDispatch,
 } = wp.data;
 
 const { apiFetch } = wp;
 
 const { rest_add_state } = window.jetFormBlockConditions;
 
-const labels = {
-	add: __( 'Add', 'jet-form-builder' ),
-	loading: __( 'Loading...', 'jet-form-builder' ),
-};
-
 const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem } ) => {
 
-	const [ buttonLabel, setButtonLabel ] = useState( labels.add );
-	const [ name, setName ] = useState( '' );
+	const [ buttonTooltip, setButtonTooltip ] = useState( '' );
+	const [ isLoading, setButtonLoading ] = useState( false );
+	const [ value, setValue ] = useState( '' );
 	const current = [ ...currentItem.render_state ];
+	const { addRenderState } = useDispatch( 'jet-forms/block-conditions', [] );
 
 	const addState = () => {
-		setButtonLabel( labels.loading );
+		setButtonLoading( true );
+		rest_add_state.data = { value };
+
 		apiFetch( rest_add_state ).then( response => {
-
+			onSuccessAdd( response.state );
 		} ).catch( error => {
-
+			setButtonTooltip( error.message );
+			setTimeout( () => setButtonTooltip( '' ), 4000 );
 		} ).finally( () => {
-
+			setButtonLoading( false );
 		} );
-		current.push( name );
+	};
+
+	const onSuccessAdd = state => {
+		addRenderState( state );
+		current.push( state.value );
 
 		changeCurrentItem( {
 			render_state: current,
@@ -77,14 +82,18 @@ const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem 
 	>
 		<div className={ 'jet-fb-field-with-button' }>
 			<TextControl
-				value={ name }
-				onChange={ value => setName( value ) }
+				value={ value }
+				onChange={ newValue => setValue( newValue ) }
 			/>
 			<Button
 				variant={ 'secondary' }
-				onClick={ () => addState() }
+				onClick={ addState }
+				disabled={ isLoading }
+				isBusy={ isLoading }
+				showTooltip={ !! buttonTooltip.length }
+				shortcut={ buttonTooltip }
 			>
-				{ buttonLabel }
+				{ __( 'Add', 'jet-form-builder' ) }
 			</Button>
 		</div>
 	</ActionModal>;
@@ -95,11 +104,11 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )( props
 
 	const uniqKey = useUniqKey();
 	const [ formFields ] = useState( () => getFormFieldsBlocks( [], '--' ) );
+	const [ showModal, setShowModal ] = useState( false );
+
 	const renderStates = useSelect(
 		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(), [],
 	);
-
-	const [ showModal, setShowModal ] = useState( false );
 
 	switch ( currentItem.operator ) {
 		case 'render_state':

@@ -18,4 +18,9 @@ export default {
 
 		return state;
 	},
+	[ constants.addRenderState ]( state, action ) {
+		state.renderStates.push( action.item );
+
+		return state;
+	},
 };

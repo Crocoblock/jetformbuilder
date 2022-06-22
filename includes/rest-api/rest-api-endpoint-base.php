@@ -52,7 +52,7 @@ abstract class Rest_Api_Endpoint_Base implements Rest_Fetch_Endpoint {
 	}
 
 	public function get_rest_methods(): string {
-		return static::get_rest_methods();
+		return static::get_methods();
 	}
 
 	public static function get_endpoint(): array {

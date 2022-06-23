@@ -71,11 +71,7 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 
 		$saved[] = $new_state;
 
-		$result = update_option(
-			Render_State::OPTION_KEY,
-			Tools::encode_json( $saved ),
-			false
-		);
+		$result = Render_State::update_states( $saved );
 
 		if ( ! $result ) {
 			return new \WP_REST_Response(

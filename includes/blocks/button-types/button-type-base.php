@@ -15,7 +15,7 @@ abstract class Button_Type_Base {
 		return $this->label();
 	}
 
-	public function html_attrs() {
+	public function html_attrs(): array {
 		return array(
 			'type'  => 'button',
 			'class' => array(
@@ -24,7 +24,7 @@ abstract class Button_Type_Base {
 		);
 	}
 
-	public function get_html_attrs( $with_update = false ) {
+	final public function get_html_attrs( $with_update = false ): array {
 		if ( $with_update || ! $this->html_attrs ) {
 			$this->html_attrs = $this->html_attrs();
 		}
@@ -32,11 +32,11 @@ abstract class Button_Type_Base {
 		return $this->html_attrs;
 	}
 
-	public function get_class( $type ) {
+	final public function get_class( $type ): string {
 		return $this->get_html_attrs()['class'][ $type ] ?? '';
 	}
 
-	public function get_type() {
+	final public function get_type(): string {
 		return $this->get_html_attrs()['type'] ?? 'button';
 	}
 

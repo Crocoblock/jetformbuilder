@@ -10,14 +10,14 @@ class Button_Next extends Button_Type_Base {
 	}
 
 	public function label(): string {
-		return __( 'Go to Next Page', 'jet-from-builder' );
+		return __( 'Go to Next Page', 'jet-form-builder' );
 	}
 
 	public function preset_label(): string {
-		return __( 'Next Page', 'jet-from-builder' );
+		return __( 'Next Page', 'jet-form-builder' );
 	}
 
-	public function html_attrs() {
+	public function html_attrs(): array {
 		return array(
 			'class' => array(
 				'button' => 'jet-form-builder__next-page',

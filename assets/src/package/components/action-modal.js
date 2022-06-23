@@ -14,7 +14,7 @@ const {
 function ActionModal( {
 	onRequestClose,
 	children,
-	title,
+	title = '',
 	classNames = [],
 	onUpdateClick,
 	onCancelClick,
@@ -23,6 +23,7 @@ function ActionModal( {
 	cancelBtnProps = {},
 	cancelBtnLabel = 'Cancel',
 	fixedHeight = '',
+	isUseActions = true
 } ) {
 
 	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
@@ -68,7 +69,7 @@ function ActionModal( {
 					</div>
 				</ActionModalContext.Provider>
 			</div>
-			<ButtonGroup
+			{ isUseActions && <ButtonGroup
 				className="jet-form-edit-modal__actions"
 			>
 				<Button
@@ -84,7 +85,7 @@ function ActionModal( {
 					onClick={ cancelClick }
 					{ ...cancelBtnProps }
 				>{ cancelBtnLabel }</Button>
-			</ButtonGroup>
+			</ButtonGroup> }
 		</> }
 	</Modal>;
 }

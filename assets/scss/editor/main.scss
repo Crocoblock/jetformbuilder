@@ -747,6 +747,35 @@ div.components-modal__screen-overlay {
 	}
 }
 
+.jet-fb-notice > a {
+	transition: .2s ease-in-out;
+	text-decoration: none;
+	display: flex;
+	gap: 0.8em;
+	width: fit-content;
+	padding: 0.3em;
+	padding-left: unset;
+	background-color: #eee;
+	border-radius: 50px;
+	opacity: 0.5;
+
+	.dashicons:before {
+		content: "\f14c";
+		border-radius: 50px;
+		background: #4272f9;
+		background: radial-gradient(circle, #4272f9 1%, #fff 100%);
+		color: #fff;
+		padding: 2px;
+	}
+
+	&:hover {
+		opacity: 1;
+		/*.dashicons:before {
+			content: "\f504";
+		}*/
+	}
+}
+
 $sizes: ("xs":320px, "sm":576px, "md":768px, "lg":992px, "xl":1200px);
 
 @mixin media($minmax, $media) {

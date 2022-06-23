@@ -30,8 +30,17 @@ const dispatchers = {
 
 		return state;
 	},
+	[ constants.deleteRenderStates ]( state, action ) {
+		let items = Array.isArray( action.items ) ? [ ...action.items ] : [ action.items ];
+
+		state.renderStates = state.renderStates.filter( ( { value } ) => (
+			! items.includes( value )
+		) );
+
+		return state;
+	},
 };
 
 export default {
-	...dispatchers
+	...dispatchers,
 };

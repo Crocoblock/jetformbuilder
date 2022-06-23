@@ -6,6 +6,7 @@ use Jet_Form_Builder\Blocks\Action_Buttons_Manager;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Prev;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Submit;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Switch_State;
 use Jet_Form_Builder\Blocks\Render\Action_Button_Render;
 
 // If this file is called directly, abort.
@@ -29,6 +30,7 @@ class Action_Button extends Base {
 		$this->set_button_type( new Button_Submit() );
 		$this->set_button_type( new Button_Prev() );
 		$this->set_button_type( new Button_Next() );
+		$this->set_button_type( new Button_Switch_State() );
 
 		do_action( "jet-form-builder/{$this->get_name()}/on-register", $this );
 	}

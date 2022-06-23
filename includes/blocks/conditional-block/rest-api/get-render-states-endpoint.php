@@ -30,9 +30,7 @@ class Get_Render_States_Endpoint extends Rest_Api_Endpoint_Base {
 	 * @return mixed
 	 */
 	public function run_callback( \WP_REST_Request $request ) {
-		$states = Tools::decode_json(
-			get_option( Render_State::OPTION_KEY, '[]' )
-		);
+		$states = Render_State::get_states();
 
 		foreach ( $states as $index => $current ) {
 			$states[ $index ]['is_custom'] = true;

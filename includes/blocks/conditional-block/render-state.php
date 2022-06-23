@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**
@@ -117,6 +118,20 @@ class Render_State implements Arrayable {
 	 */
 	public function get_current(): Render_States_Collection {
 		return $this->current;
+	}
+
+	public static function get_states(): array {
+		return Tools::decode_json(
+			get_option( self::OPTION_KEY, '[]' )
+		);
+	}
+
+	public static function update_states( array $states ): bool {
+		return update_option(
+			self::OPTION_KEY,
+			Tools::encode_json( $states ),
+			false
+		);
 	}
 
 

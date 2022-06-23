@@ -25,5 +25,11 @@ export default {
 			items,
 		};
 	},
+	deleteRenderStates( items ) {
+		return {
+			type: constants.deleteRenderStates,
+			items,
+		}
+	}
 
 };

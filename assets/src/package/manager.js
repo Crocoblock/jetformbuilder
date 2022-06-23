@@ -66,6 +66,9 @@ import {
 import {
 	useUniqKey,
 } from './helpers/hooks/blocks';
+import {
+	useActionButtonEdit
+} from './helpers/hooks/action.buttons';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
 import RepeaterWithState from './components/fields/repeater-with-state';
@@ -189,6 +192,7 @@ window.JetFBHooks = {
 	useRequestEvents,
 	useBlockConditions,
 	useUniqKey,
+	useActionButtonEdit,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,

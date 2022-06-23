@@ -1,24 +1,26 @@
 const {
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	GeneralFields,
+	AdvancedFields,
+	FieldSettingsWrapper,
+} = JetFBComponents;
+
+const { useActionButtonEdit } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
-		  InspectorControls,
-		  useBlockProps,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	InspectorControls,
+	useBlockProps,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  Button,
-		  SelectControl,
-	  } = wp.components;
+	Button,
+	SelectControl,
+} = wp.components;
 
 const {
-		  RichText,
-	  } = wp.blockEditor;
+	RichText,
+} = wp.blockEditor;
 
 const { useState, useEffect } = wp.element;
 
@@ -30,17 +32,17 @@ const defaultWrapperClasses = [
 export default function ActionButtonEdit( props ) {
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey },
+	} = props;
 
 	const classesButton = () => {
 		if ( ! attributes.action_type ) {
 			return defaultClasses;
 		}
-		const action = JetFormActionButton.actions.find( elem => attributes.action_type === elem.value )
+		const action = JetFormActionButton.actions.find( elem => attributes.action_type === elem.value );
 
 		if ( ! action ) {
 			return defaultClasses;
@@ -67,6 +69,7 @@ export default function ActionButtonEdit( props ) {
 
 	const [ buttonClasses, setButtonClasses ] = useState( classesButton );
 	const [ wrapperClasses, setWrapperClasses ] = useState( classesWrapper );
+	const CurrentButtonEdit = useActionButtonEdit( attributes.action_type );
 
 	useEffect( () => {
 		setButtonClasses( classesButton() );
@@ -91,6 +94,11 @@ export default function ActionButtonEdit( props ) {
 					value={ attributes.action_type }
 					options={ JetFormActionButton.actions }
 					onChange={ action_type => setAttributes( { action_type } ) }
+				/>
+				<CurrentButtonEdit
+					key={ uniqKey( 'ButtonControls' ) }
+					attributes={ attributes }
+					setAttributes={ setAttributes }
 				/>
 			</FieldSettingsWrapper>
 			<AdvancedFields

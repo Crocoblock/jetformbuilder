@@ -4,7 +4,7 @@ import selectors from './selectors';
 
 const { createReduxStore } = wp.data;
 
-export default createReduxStore( 'jet-forms/block-conditions', {
+export default createReduxStore( 'jet-forms/action-buttons', {
 	reducer,
 	actions,
 	selectors,

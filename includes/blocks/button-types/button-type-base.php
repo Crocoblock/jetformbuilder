@@ -32,14 +32,15 @@ abstract class Button_Type_Base {
 		return $this->html_attrs;
 	}
 
-	final public function get_class( $type ): string {
-		return $this->get_html_attrs()['class'][ $type ] ?? '';
+	final public function get_class( $type ): array {
+		$css_class = $this->get_html_attrs()['class'][ $type ] ?? '';
+
+		return is_array( $css_class ) ? $css_class : array( $css_class );
 	}
 
 	final public function get_type(): string {
 		return $this->get_html_attrs()['type'] ?? 'button';
 	}
-
 
 
 }

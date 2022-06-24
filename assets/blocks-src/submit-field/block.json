@@ -28,6 +28,10 @@
 			"type": "string",
 			"default": "submit"
 		},
+		"buttons": {
+			"type": "object",
+			"default": {}
+		},
 		"add_prev": {
 			"type": "boolean",
 			"default": false

@@ -5,7 +5,7 @@ const {
 function useActionButtonEdit( actionType ) {
 	return useSelect(
 		select => select( 'jet-forms/action-buttons' ).getButtonEdit( actionType ),
-		[],
+		[ actionType ],
 	);
 }
 

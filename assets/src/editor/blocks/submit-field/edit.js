@@ -1,10 +1,12 @@
+import './change.state.action';
+
 const {
 	GeneralFields,
 	AdvancedFields,
 	FieldSettingsWrapper,
 } = JetFBComponents;
 
-const { useActionButtonEdit } = JetFBHooks;
+const { useActionButtonEdit, useUniqKey } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
@@ -28,6 +30,35 @@ const defaultClasses = [ 'jet-form-builder__action-button' ];
 const defaultWrapperClasses = [
 	'jet-form-builder__action-button-wrapper',
 ];
+
+const ButtonEdit = ( {
+	attributes: rootAttributes,
+	setAttributes: setRootAttributes,
+} ) => {
+
+	const uniqKey = useUniqKey();
+	const CurrentButtonEdit = useActionButtonEdit( rootAttributes.action_type );
+
+	const setAttributes = attrs => {
+		const buttons = JSON.parse( JSON.stringify( rootAttributes.buttons ) );
+		const current = buttons[ rootAttributes.action_type ] ?? {};
+
+		buttons[ rootAttributes.action_type ] = {
+			...current,
+			...attrs,
+		};
+
+		setRootAttributes( { buttons } );
+	};
+
+	return CurrentButtonEdit && <CurrentButtonEdit
+		key={ uniqKey( 'ButtonControls' ) }
+		rootAttributes={ rootAttributes }
+		setRootAttributes={ setRootAttributes }
+		attributes={ rootAttributes.buttons[ rootAttributes.action_type ] ?? {} }
+		setAttributes={ setAttributes }
+	/>;
+};
 
 export default function ActionButtonEdit( props ) {
 
@@ -69,7 +100,6 @@ export default function ActionButtonEdit( props ) {
 
 	const [ buttonClasses, setButtonClasses ] = useState( classesButton );
 	const [ wrapperClasses, setWrapperClasses ] = useState( classesWrapper );
-	const CurrentButtonEdit = useActionButtonEdit( attributes.action_type );
 
 	useEffect( () => {
 		setButtonClasses( classesButton() );
@@ -95,7 +125,7 @@ export default function ActionButtonEdit( props ) {
 					options={ JetFormActionButton.actions }
 					onChange={ action_type => setAttributes( { action_type } ) }
 				/>
-				<CurrentButtonEdit
+				<ButtonEdit
 					key={ uniqKey( 'ButtonControls' ) }
 					attributes={ attributes }
 					setAttributes={ setAttributes }

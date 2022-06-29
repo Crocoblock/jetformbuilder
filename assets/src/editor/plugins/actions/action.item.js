@@ -43,6 +43,7 @@ function ListActionItem( props ) {
 		deleteAction,
 		actions,
 		updateActionObj,
+		toggleExecute,
 	} = useActionsEdit();
 
 	const ActionCallback = useActionCallback( action.type );
@@ -56,6 +57,13 @@ function ListActionItem( props ) {
 	/> : <span
 		className="dashicon dashicons dashicons-randomize"
 	/>;
+
+	const wrapper = ['jet-form-action'];
+	const isExecute = ( action.is_execute ?? true );
+
+	if ( ! isExecute ) {
+		wrapper.push( 'is-disabled' );
+	}
 
 	const ActionDropDown = () => <DropdownMenu
 		icon={ 'ellipsis' }
@@ -86,13 +94,22 @@ function ListActionItem( props ) {
 					deleteAction( index );
 				},
 			},
+			{
+				title: isExecute
+					? __( 'Turn off', 'jet-form-builder' )
+					: __( 'Turn on', 'jet-form-builder' ),
+				icon: isExecute ? 'no-alt' : 'yes',
+				onClick: () => {
+					toggleExecute( action );
+				},
+			},
 		] }
 	/>;
 
 	return <Card
 		key={ action.id }
 		size={ 'extraSmall' }
-		className={ 'jet-form-action' }
+		className={ wrapper }
 	>
 		{ header && <CardHeader>
 			{ header }

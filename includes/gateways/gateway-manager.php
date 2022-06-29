@@ -50,8 +50,6 @@ class Gateway_Manager {
 		add_action( 'init', array( $this, 'register_gateways' ) );
 		( new Rest_Api_Controller() )->rest_api_init();
 
-		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_send_actions' ) );
-		add_action( 'jet-form-builder/actions/after-send', array( $this, 'after_send_actions' ) );
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
 		add_filter( 'jet-form-builder/page-containers/jfb-records-single', array( $this, 'add_box_to_single_record' ), 0 );

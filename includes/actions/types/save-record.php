@@ -38,6 +38,12 @@ class Save_Record extends Base {
 		);
 	}
 
+	public function supported_events(): array {
+		return array(
+			Default_Required_Event::class,
+		);
+	}
+
 	public function dependence() {
 		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
 		add_filter(

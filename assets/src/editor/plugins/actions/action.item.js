@@ -117,7 +117,7 @@ function ListActionItem( props ) {
 					icon='edit'
 					label={ __( 'Edit Action', 'jet-form-builder' ) }
 					onClick={ () => {
-						setCurrentAction( action );
+						setCurrentAction( { ...action, index } );
 						setMeta( { index, modalType: 'settings' } );
 					} }
 				/>
@@ -126,7 +126,7 @@ function ListActionItem( props ) {
 					icon={ conditionsIcon }
 					label={ __( 'Edit Conditions & Events', 'jet-form-builder' ) }
 					onClick={ () => {
-						setCurrentAction( action );
+						setCurrentAction( { ...action, index } );
 						setMeta( { index, modalType: 'conditions' } );
 					} }
 				/>

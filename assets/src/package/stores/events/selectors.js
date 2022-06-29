@@ -2,9 +2,6 @@ const selectors = {
 	getTypeIndex( state, slug ) {
 		return state.types.findIndex( event => event.value === slug );
 	},
-};
-export default {
-	...selectors,
 	getTypes( state ) {
 		return state.types;
 	},
@@ -23,7 +20,42 @@ export default {
 
 		return state.types[ index ];
 	},
-	isLockedAction( state, slug ) {
-		return state.lockedActions.includes( slug );
-	}
+	getUnsupported( state, actionId ) {
+		const action = state.lockedActions[ actionId ] ?? false;
+
+		if ( false === action ) {
+			return [];
+		}
+
+		return action.unsupported;
+	},
+	getSupported( state, actionId ) {
+		const action = state.lockedActions[ actionId ] ?? false;
+
+		if ( false === action ) {
+			return [];
+		}
+
+		return action.supported;
+	},
+	isValid( state, actionId, eventSlug ) {
+		const unsupported = selectors.getUnsupported( state, actionId );
+
+		if ( unsupported.length && unsupported.includes( eventSlug ) ) {
+			return false;
+		}
+
+		const supported = selectors.getSupported( state, actionId );
+
+		return (
+			! supported.length || supported.includes( eventSlug )
+		);
+	},
+	filterList( state, actionId, eventList ) {
+		return eventList.filter( current => selectors.isValid( state, actionId, current ) );
+	},
+};
+
+export default {
+	...selectors,
 };

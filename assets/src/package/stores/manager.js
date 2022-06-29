@@ -15,6 +15,7 @@ register( actionButtons );
 
 dispatch( 'jet-forms/block-conditions' ).register( window.jetFormBlockConditions );
 dispatch( 'jet-forms/events' ).register( window.jetFormEvents.types );
+dispatch( 'jet-forms/events' ).lockActions();
 
 const { rest_query_states } = window.jetFormBlockConditions;
 const { addRenderStates } = dispatch( 'jet-forms/block-conditions' );
@@ -24,3 +25,4 @@ wp.domReady( () => {
 		addRenderStates( response.items );
 	} ).catch( console.error );
 } );
+

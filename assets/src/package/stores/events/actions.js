@@ -7,5 +7,10 @@ export default {
 			items,
 		};
 	},
+	lockActions() {
+		return {
+			type: constants.lockActions,
+		};
+	},
 
 }

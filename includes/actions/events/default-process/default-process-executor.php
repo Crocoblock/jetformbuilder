@@ -23,8 +23,8 @@ class Default_Process_Executor extends Base_Executor {
 		parent::after_execute();
 	}
 
-	protected function is_valid_action( Base $action, Events_List $events ): bool {
-		return ( ! count( $events ) || $events->in_array( $this ) ) && $action->on_validate( $this );
+	protected function is_valid_action( Base $action ): bool {
+		return ( ! count( $action->get_events() ) || parent::is_valid_action( $action ) );
 	}
 
 	/**

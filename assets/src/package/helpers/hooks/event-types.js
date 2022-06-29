@@ -3,17 +3,24 @@ import { useSelectPostMeta } from './hooks-helper';
 const { useSelect } = wp.data;
 
 export const useRequestEvents = () => {
-	return [
-		...useDefaultEvents(),
-		...useEventsFromGateways(),
-		...useEventsFromActions(),
+	const currentAction = useSelect(
+		select => select( 'jet-forms/actions' ).getCurrentAction(),
+	);
+
+	const list = [
+		...useDefaultEvents( currentAction ),
+		...useEventsFromGateways( currentAction ),
+		...useEventsFromActions( currentAction ),
 	];
+
+	return useSelect(
+		select => select( 'jet-forms/events' ).filterList( currentAction.type, list ),
+		[ currentAction.id ],
+	);
 };
 
 const useDefaultEvents = () => {
-	const eventsObjects = useSelect(
-		select => select( 'jet-forms/events' ).getAlwaysTypes(),
-	);
+	const eventsObjects = useSelect( select => select( 'jet-forms/events' ).getAlwaysTypes(), [] );
 	const events = [];
 
 	for ( const { value } of eventsObjects ) {
@@ -21,36 +28,38 @@ const useDefaultEvents = () => {
 	}
 
 	return [ ...new Set( events ) ];
+
 };
 
 const useEventsFromGateways = () => {
 	const gateways = useSelectPostMeta( '_jf_gateways' );
 	const { scenario = 'PAY_NOW' } = gateways[ gateways?.gateway ] ?? {};
 
-	const eventsObjects = useSelect(
-		select => select( 'jet-forms/events' ).getGatewayTypes(),
+	return useSelect(
+		select => {
+			const eventsObjects = select( 'jet-forms/events' ).getGatewayTypes();
+
+			const events = [];
+
+			for ( const event of eventsObjects ) {
+				const correctGateway = event.gateway ? event.gateway === gateways.gateway : true;
+				const correctScenario = event.scenario ? event.scenario === scenario : true;
+
+				if ( correctGateway && correctScenario ) {
+					events.push( event.value );
+				}
+			}
+
+			return [ ...new Set( events ) ];
+		},
+		[ gateways?.gateway ],
 	);
-	const events = [];
-
-	for ( const event of eventsObjects ) {
-		const correctGateway = event.gateway ? event.gateway === gateways.gateway : true;
-		const correctScenario = event.scenario ? event.scenario === scenario : true;
-
-		if ( correctGateway && correctScenario ) {
-			events.push( event.value );
-		}
-	}
-
-	return [ ...new Set( events ) ];
 };
 
-export const useEventsFromActions = () => {
+export const useEventsFromActions = ( { index } ) => {
 	const actions = useSelectPostMeta( '_jf_actions' );
 
-	const currentAction = useSelect(
-		select => select( 'jet-forms/actions' ).getCurrentAction(),
-	);
-	actions.splice( currentAction.index, 1 );
+	actions.splice( index, 1 );
 
 	const events = [];
 

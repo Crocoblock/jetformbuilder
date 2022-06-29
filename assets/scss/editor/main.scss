@@ -65,10 +65,13 @@
 
 .jet-form-action {
 	margin-bottom: 10px;
-}
+	.components-base-control__field {
+		margin: 0;
+	}
 
-.jet-form-action .components-base-control__field {
-	margin: 0;
+	&.is-disabled {
+		background-image: repeating-linear-gradient(-45deg, #ffffff75 0 20px, #d5d5d57d 20px 40px);
+	}
 }
 
 .jet-form-editor__macros-trigger {

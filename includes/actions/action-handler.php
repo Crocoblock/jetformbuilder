@@ -109,6 +109,10 @@ class Action_Handler {
 	public function save_form_action( $form_action ): array {
 		$type = $form_action['type'];
 
+		if ( ! ( $form_action['is_execute'] ?? true ) ) {
+			throw new Repository_Exception( 'This action is turned off' );
+		}
+
 		/** @var Base $action */
 		$action = jet_form_builder()->actions->get_action_clone( $type );
 

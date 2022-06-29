@@ -391,7 +391,7 @@
 		return this.each( function() {
 
 			var $section = $( this );
-			var conditions = $section.data( 'conditional' );
+			var conditions = $section.data( 'jfb-conditional' );
 
 			if ( ! conditions || ! conditions.length ) {
 				return;

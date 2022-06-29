@@ -94,8 +94,9 @@ class Conditional_Block extends Base {
 		}
 		$this->set_block_data( $attrs, $content, $wp_block );
 
-		$content = $this->block_content;
-		$name    = $this->block_attrs['name'] ?? '';
+		$conditions = $this->get_conditions();
+		$content    = $this->block_content;
+		$name       = $this->block_attrs['name'] ?? '';
 
 		if ( Live_Form::instance()->isset_form_break( $name ) ) {
 			$break = Live_Form::instance()->get_form_break( $name );
@@ -104,9 +105,9 @@ class Conditional_Block extends Base {
 		}
 
 		return sprintf(
-			'<div class="jet-form-builder__conditional" data-conditional="%2$s">%1$s</div>',
+			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s">%1$s</div>',
 			$content,
-			$this->get_conditions()
+			$conditions
 		);
 	}
 

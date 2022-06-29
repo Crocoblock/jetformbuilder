@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
@@ -15,6 +16,8 @@ class Form_Hidden_Fields {
 		$fields = Wp_Nonce_Tools::get_nonce_field();
 
 		$fields .= Csrf_Tools::get_field();
+
+		$fields .= Render_State::instance()->set_current()->render();
 
 		$fields .= Live_Form::force_render_field(
 			'hidden-field',

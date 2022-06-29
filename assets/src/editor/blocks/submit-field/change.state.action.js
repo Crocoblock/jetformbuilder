@@ -1,6 +1,6 @@
 const { __ } = wp.i18n;
 const { useSelect } = wp.data;
-const { SelectControl } = wp.components;
+const { FormTokenField } = wp.components;
 const { useUniqKey } = JetFBHooks;
 const { Tools } = JetFBActions;
 
@@ -8,16 +8,18 @@ function SwitcherRenderStateButton( { attributes, setAttributes } ) {
 	const uniqKey = useUniqKey();
 
 	const customStates = useSelect(
-		select => select( 'jet-forms/block-conditions' ).getCustomRenderStates(),
-		[]
+		select => select( 'jet-forms/block-conditions' ).getCustomRenderStatesList(),
+		[],
 	);
 
-	return <SelectControl
+	return <FormTokenField
 		key={ uniqKey( 'switch_on' ) }
 		label={ __( 'Switch on state', 'jet-form-builder' ) }
 		value={ attributes.switch_on }
-		options={ Tools.withPlaceholder( customStates ) }
+		suggestions={ customStates }
 		onChange={ switch_on => setAttributes( { switch_on } ) }
+		tokenizeOnSpace
+		__experimentalExpandOnFocus
 	/>;
 }
 

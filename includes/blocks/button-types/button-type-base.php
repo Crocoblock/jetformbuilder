@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
+use Jet_Form_Builder\Blocks\Render\Base;
+
 abstract class Button_Type_Base {
 
 	private $html_attrs = array();
@@ -22,6 +24,9 @@ abstract class Button_Type_Base {
 				'button' => "jet-form-builder__button-{$this->slug()}",
 			),
 		);
+	}
+
+	public function before_render( Base $render, array $args ) {
 	}
 
 	final public function get_html_attrs( $with_update = false ): array {

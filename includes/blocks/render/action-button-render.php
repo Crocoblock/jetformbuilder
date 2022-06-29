@@ -43,6 +43,8 @@ class Action_Button_Render extends Base {
 		$this->add_attribute( 'class', $type->get_class( 'button' ) );
 		$this->add_attribute( 'type', $type->get_type() );
 
+		$type->before_render( $this, $args );
+
 		$wrap_classes = array(
 			'jet-form-builder__action-button-wrapper',
 			$type->get_class( 'wrapper' ),

@@ -17,4 +17,15 @@ class Render_States_Collection extends Collection {
 		return parent::add( $item );
 	}
 
+	public function render(): string {
+		$response = '';
+
+		/** @var Base_Render_State $item */
+		foreach ( $this as $item ) {
+			$response .= "\r\n" . $item->render();
+		}
+
+		return $response;
+	}
+
 }

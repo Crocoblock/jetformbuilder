@@ -4,9 +4,11 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Render_States;
 
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Live_Form;
 
 abstract class Base_Render_State implements
 	Repository_Item_Instance_Trait,
@@ -19,6 +21,14 @@ abstract class Base_Render_State implements
 
 	public function rep_item_id() {
 		return $this->get_id();
+	}
+
+	public function render(): string {
+		return sprintf(
+			'<input type="hidden" name="%1$s[]" value="%2$s" data-jfb-sync="%1$s" />',
+			Render_State::FIELD_NAME,
+			$this->get_id()
+		);
 	}
 
 	public function to_array(): array {

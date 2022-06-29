@@ -15,7 +15,7 @@ class Example_Render_State extends Base_Render_State {
 	}
 
 	public function is_supported(): bool {
-		return false;
+		return true;
 	}
 
 }

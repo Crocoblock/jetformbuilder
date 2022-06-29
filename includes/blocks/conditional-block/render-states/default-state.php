@@ -18,6 +18,6 @@ class Default_State extends Base_Render_State {
 	 * @return bool
 	 */
 	public function is_supported(): bool {
-		return false;
+		return true;
 	}
 }

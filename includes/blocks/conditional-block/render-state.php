@@ -22,6 +22,7 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 class Render_State implements Arrayable {
 
 	const OPTION_KEY = 'jet_fb_conditional_render_states';
+	const FIELD_NAME = '_jfb_current_render_states';
 
 	use Repository_Pattern_Trait;
 	use Instance_Trait;
@@ -118,6 +119,10 @@ class Render_State implements Arrayable {
 	 */
 	public function get_current(): Render_States_Collection {
 		return $this->current;
+	}
+
+	public function render(): string {
+		return $this->get_current()->render();
 	}
 
 	public static function get_states(): array {

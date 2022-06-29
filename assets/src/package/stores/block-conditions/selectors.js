@@ -17,6 +17,9 @@ const selectors = {
 	getCustomRenderStates( state ) {
 		return state.renderStates.filter( ( { is_custom = false } ) => is_custom );
 	},
+	getCustomRenderStatesList( state ) {
+		return selectors.getCustomRenderStates( state ).map( ( { value } ) => value );
+	},
 	getFilteredFunctions( state, blockProps ) {
 		return state.functions.filter( item => {
 			const callback = state.functionFilters[ item.value ] ?? false;

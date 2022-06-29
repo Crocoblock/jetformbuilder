@@ -292,6 +292,14 @@ class Action_Button extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script(
+			'jet-form-builder-action-button',
+			jet_form_builder()->plugin_url( 'assets/js/action.buttons.js' ),
+			array(),
+			jet_form_builder()->get_version(),
+			true
+		);
+
 		return ( new Action_Button_Render( $this ) )->render_without_layout();
 	}
 

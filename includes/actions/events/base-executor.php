@@ -12,7 +12,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/** @var Base_Event */
 	private $event;
 	private $action_ids = array();
-	private $position   = 0;
+	private $position = 0;
 
 	abstract public function is_supported(): bool;
 
@@ -46,7 +46,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 		$actions          = jet_fb_action_handler()->get_all();
 
 		foreach ( $actions as $action ) {
-			if ( ! $this->is_valid_action( $action ) ) {
+			if ( !  ) {
 				continue;
 			}
 			$action->on_validate( $this );
@@ -55,27 +55,15 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 		}
 	}
 
-	protected function is_valid_action( Base $action ): bool {
-		$unsupported = $action->unsupported_events();
-
-		if ( ! empty( $unsupported ) && in_array( static::class, $unsupported, true ) ) {
-			return false;
-		}
-		$supported = $action->supported_events();
-
-		if ( ! empty( $supported ) && ! in_array( static::class, $supported, true ) ) {
-			return false;
-		}
-
-		return $action->get_events()->in_array( $this );
-	}
-
-
 	/**
 	 * @throws Action_Exception
 	 */
 	protected function execute_actions() {
 		jet_fb_action_handler()->soft_run_actions( $this );
+	}
+
+	protected function is_valid_action( Base $action ): bool {
+		return $this->get_event()->is_valid_action( $action );
 	}
 
 	final public function set_event( Base_Event $event ): Base_Executor {

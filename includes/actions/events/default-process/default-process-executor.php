@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Actions\Events\Default_Process;
 use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 class Default_Process_Executor extends Base_Executor {
@@ -31,7 +32,11 @@ class Default_Process_Executor extends Base_Executor {
 	 * @throws Action_Exception
 	 */
 	protected function execute_actions() {
-		jet_fb_action_handler()->run_actions( $this );
+		$save = jet_fb_action_handler()->get_action_by_slug( Save_Record::ID );
+
+		false === $save
+			? jet_fb_action_handler()->run_actions( $this )
+			: jet_fb_action_handler()->soft_run_actions( $this );
 	}
 
 	/**

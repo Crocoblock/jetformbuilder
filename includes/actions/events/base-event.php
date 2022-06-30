@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Actions\Events;
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
@@ -46,6 +47,21 @@ abstract class Base_Event implements
 			sprintf( __( 'Not founded supported executor for %s', 'jet-form-builder' ), static::class )
 		);
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	public function is_valid_action( Base $action ): bool {
+		$unsupported = $action->unsupported_events();
+
+		if ( ! empty( $unsupported ) && in_array( static::class, $unsupported, true ) ) {
+			return false;
+		}
+		$supported = $action->supported_events();
+
+		if ( ! empty( $supported ) && ! in_array( static::class, $supported, true ) ) {
+			return false;
+		}
+
+		return $action->get_events()->in_array( $this );
 	}
 
 	public function get_label(): string {

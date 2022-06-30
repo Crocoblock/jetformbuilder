@@ -12,7 +12,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/** @var Base_Event */
 	private $event;
 	private $action_ids = array();
-	private $position   = 0;
+	private $position = 0;
 
 	abstract public function is_supported(): bool;
 
@@ -57,13 +57,14 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 
 	protected function is_valid_action( Base $action ): bool {
 		$unsupported = $action->unsupported_events();
+		$event       = get_class( $this->get_event() );
 
-		if ( ! empty( $unsupported ) && in_array( static::class, $unsupported, true ) ) {
+		if ( ! empty( $unsupported ) && in_array( $event, $unsupported, true ) ) {
 			return false;
 		}
 		$supported = $action->supported_events();
 
-		if ( ! empty( $supported ) && ! in_array( static::class, $supported, true ) ) {
+		if ( ! empty( $supported ) && ! in_array( $event, $supported, true ) ) {
 			return false;
 		}
 

@@ -46,7 +46,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 		$actions          = jet_fb_action_handler()->get_all();
 
 		foreach ( $actions as $action ) {
-			if ( ! $this->is_valid_action( $action ) ) {
+			if ( ! $this->get_event()->is_valid_action( $action ) ) {
 				continue;
 			}
 			$action->on_validate( $this );
@@ -54,23 +54,6 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 			$this->action_ids[] = $action->_id;
 		}
 	}
-
-	protected function is_valid_action( Base $action ): bool {
-		$unsupported = $action->unsupported_events();
-		$event       = get_class( $this->get_event() );
-
-		if ( ! empty( $unsupported ) && in_array( $event, $unsupported, true ) ) {
-			return false;
-		}
-		$supported = $action->supported_events();
-
-		if ( ! empty( $supported ) && ! in_array( $event, $supported, true ) ) {
-			return false;
-		}
-
-		return $action->get_events()->in_array( $this );
-	}
-
 
 	/**
 	 * @throws Action_Exception

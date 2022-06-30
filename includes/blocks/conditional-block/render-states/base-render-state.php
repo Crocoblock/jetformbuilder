@@ -24,7 +24,7 @@ abstract class Base_Render_State implements
 
 	public function render(): string {
 		return sprintf(
-			'<input type="hidden" name="%1$s[]" value="%2$s" data-jfb-sync="%1$s" />',
+			'<input type="hidden" name="%1$s[]" value="%2$s" data-jfb-sync />',
 			Render_State::FIELD_NAME,
 			$this->get_id()
 		);

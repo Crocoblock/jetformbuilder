@@ -105,7 +105,7 @@ class Conditional_Block extends Base {
 		}
 
 		return sprintf(
-			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s">%1$s</div>',
+			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s" data-jfb-func="show">%1$s</div>',
 			$content,
 			$conditions
 		);

@@ -46,7 +46,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 		$actions          = jet_fb_action_handler()->get_all();
 
 		foreach ( $actions as $action ) {
-			if ( !  ) {
+			if ( ! $this->is_valid_action( $action ) ) {
 				continue;
 			}
 			$action->on_validate( $this );

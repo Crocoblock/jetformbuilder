@@ -20,6 +20,12 @@ class Csrf_Token_View extends View_Base {
 		return Csrf_Token_Model::schema_columns();
 	}
 
+	public function get_dependencies(): array {
+		return array(
+			new Csrf_Token_Model(),
+		);
+	}
+
 	/**
 	 * @param string $client_id
 	 *

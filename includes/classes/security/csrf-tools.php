@@ -91,14 +91,12 @@ class Csrf_Tools {
 	 * @throws Sql_Exception
 	 */
 	public static function add( string $token, string $client_id ): string {
-		$self = ( new Csrf_Token_Model() )->create();
-
 		try {
 			$row = Csrf_Token_View::by_client( $client_id );
 
 			$token = $row['token'];
 		} catch ( Query_Builder_Exception $exception ) {
-			$self->insert(
+			( new Csrf_Token_Model() )->insert(
 				array(
 					'token'     => $token,
 					'client_id' => $client_id,

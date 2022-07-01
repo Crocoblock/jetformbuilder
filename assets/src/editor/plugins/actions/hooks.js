@@ -38,12 +38,21 @@ export const useActionsEdit = () => {
 		setActions( [ ...newActions ] );
 	};
 
+	const toggleExecute = ( action ) => {
+		updateActionObj( action.id, {
+			is_execute: ! (
+				action.is_execute ?? true
+			),
+		} );
+	};
+
 	return {
 		actions,
 		setActions,
 		moveAction,
 		deleteAction,
 		updateActionObj,
+		toggleExecute,
 	};
 };
 
@@ -53,7 +62,7 @@ export const useActionCallback = ( actionType = false ) => {
 			? select( 'jet-forms/actions' ).getCallback( actionType )
 			: select( 'jet-forms/actions' ).getCurrentCallback();
 	}, [] );
-}
+};
 
 export const useCurrentAction = () => {
 	const [ currentAction, currentSettings ] = useSelect( select => {
@@ -64,7 +73,7 @@ export const useCurrentAction = () => {
 	} );
 
 	return { currentAction, currentSettings };
-}
+};
 
 /**
  * Update action in meta
@@ -104,4 +113,4 @@ export const useUpdateCurrentAction = () => {
 		clearCurrent,
 		updateCurrentConditions,
 	};
-}
+};

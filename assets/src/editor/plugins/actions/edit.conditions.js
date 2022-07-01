@@ -130,9 +130,7 @@ function RepeaterItem( { formFields } ) {
 	</>;
 }
 
-function EditEvents( props ) {
-	const provideEvents = useRequestEvents();
-
+function EditEvents( { events } ) {
 	const { currentAction } = useCurrentAction();
 	const { setCurrentAction } = useUpdateCurrentAction();
 
@@ -143,9 +141,10 @@ function EditEvents( props ) {
 		<FormTokenField
 			label={ __( 'Add event', 'jet-form-builder' ) }
 			value={ currentAction.events ?? [] }
-			suggestions={ provideEvents }
+			suggestions={ events }
 			onChange={ events => setCurrentAction( { ...currentAction, events } ) }
 			tokenizeOnSpace
+			__experimentalExpandOnFocus
 		/>
 	</BaseControl>;
 }
@@ -186,6 +185,12 @@ function EditFields() {
 }
 
 function EditConditions() {
+	const provideEvents = useRequestEvents();
+
+	if ( 1 === provideEvents.length ) {
+		return <EditFields/>;
+	}
+
 	return <>
 		<TabPanel
 			className="jfb-conditions-tab-panel"
@@ -194,12 +199,12 @@ function EditConditions() {
 				{
 					name: 'fields',
 					title: __( 'Fields comparison', 'jet-form-builder' ),
-					edit: <EditFields />,
+					edit: <EditFields/>,
 				},
 				{
 					name: 'events',
 					title: __( 'Events match', 'jet-form-builder' ),
-					edit: <EditEvents/>,
+					edit: <EditEvents events={ provideEvents } />,
 				},
 			] }
 		>

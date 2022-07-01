@@ -100,10 +100,16 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	}
 
 
-	public function on_validate( Base_Executor $executor ): bool {
+	public function on_validate( Base_Executor $executor ) {
 		$this->executed_on[] = $executor->get_event()->get_id();
+	}
 
-		return true;
+	public function unsupported_events(): array {
+		return array();
+	}
+
+	public function supported_events(): array {
+		return array();
 	}
 
 	public function get_required_events(): array {

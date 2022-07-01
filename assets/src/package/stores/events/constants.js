@@ -1,6 +1,6 @@
 export default {
 	register: 'REGISTER',
-	lockAction: 'LOCK_ACTION',
+	lockActions: 'LOCK_ACTIONS',
 }
 
 

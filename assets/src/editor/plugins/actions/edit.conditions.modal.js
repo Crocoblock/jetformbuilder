@@ -4,6 +4,8 @@ import { useCurrentAction, useUpdateCurrentActionMeta } from './hooks';
 const { __ } = wp.i18n;
 const { ActionModal } = JetFBComponents;
 
+const { useRequestEvents } = JetFBHooks;
+
 const { useDispatch, useSelect } = wp.data;
 
 function EditConditionsModal() {
@@ -12,13 +14,20 @@ function EditConditionsModal() {
 	const { clearCurrent } = useDispatch( 'jet-forms/actions', [] );
 	const updateAction = useUpdateCurrentActionMeta();
 	const { currentAction } = useCurrentAction();
+	const provideEvents = useRequestEvents();
 
 	if ( ! isConditionalModal ) {
 		return null;
 	}
 
+	const classNames = [ 'width-60' ];
+
+	if ( 1 !== provideEvents.length ) {
+		classNames.push( 'without-margin' );
+	}
+
 	return <ActionModal
-		classNames={ [ 'width-60', 'without-margin' ] }
+		classNames={ classNames }
 		title={ __( 'Edit Action Conditions & Events', 'jet-form-builder' ) }
 		onRequestClose={ clearCurrent }
 		onCancelClick={ clearCurrent }

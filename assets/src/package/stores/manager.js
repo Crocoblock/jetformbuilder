@@ -13,3 +13,4 @@ register( blockConditions );
 
 dispatch( 'jet-forms/block-conditions' ).register( window.jetFormBlockConditions );
 dispatch( 'jet-forms/events' ).register( window.jetFormEvents.types );
+dispatch( 'jet-forms/events' ).lockActions();

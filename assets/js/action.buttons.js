@@ -11,6 +11,92 @@
 
 		$( document ).on( 'jet-form-builder/init', onInitForm );
 
+		class ConditionalBlock {
+			constructor( node ) {
+				this.node = node;
+
+				this.conditions = false;
+			}
+
+			/**
+			 * @returns {array}
+			 */
+			getConditions() {
+				if ( false !== this.conditions ) {
+					return this.conditions;
+				}
+				this.conditions = JSON.parse( this.node.dataset.jfbConditional );
+
+				return this.conditions;
+			}
+
+			/**
+			 * @returns {string}
+			 */
+			getFunction() {
+				return this.node.dataset.jfbFunc;
+			}
+		}
+
+		class InputData {
+			constructor( inputNode ) {
+				this.rawName = inputNode.name;
+				this.name = this.rawName.replace( '[]', '' );
+
+				this.setValue( inputNode.value );
+				this.setNode( inputNode );
+			}
+
+			/**
+			 * @param inputData {InputData}
+			 */
+			merge( inputData ) {
+				if ( ! this.isArray() ) {
+					return;
+				}
+
+				this.value.push( ...inputData.getValue() );
+				this.node.push( ...inputData.getNode() );
+			}
+
+			setValue( value ) {
+				this.value = this.isArray() ? [ value ] : value;
+			}
+
+			setNode( node ) {
+				this.node = this.isArray() ? [ node ] : node;
+			}
+
+			/**
+			 * @returns {string}
+			 */
+			getName() {
+				return this.name;
+			}
+
+			/**
+			 * @returns {array|string}
+			 */
+			getValue() {
+				return this.value;
+			}
+
+			/**
+			 * @returns {object}
+			 */
+			getNode() {
+				return this.node;
+			}
+
+			getType() {
+				return this.rawName.includes( '[]' ) ? 'array' : 'text';
+			}
+
+			isArray() {
+				return 'array' === this.getType();
+			}
+		}
+
 		class Observable {
 			constructor( scope ) {
 				/**
@@ -20,14 +106,15 @@
 				 */
 				this.signals = {};
 				this.signalTypes = {
-					text: [ this.signalText ],
-					array: [ this.signalArray ],
+					text: this.signalText,
+					array: this.signalArray,
 				};
 				/**
 				 * {
 				 *     [field_name]: array|string
 				 * }
 				 */
+				this.dataInputs = {};
 				this.data = {};
 				/**
 				 * {
@@ -44,31 +131,28 @@
 				 */
 				this.listeners = {};
 				/**
-				 * [ ...{
-				 *     node,
-				 *     conditions
-				 * } ]
+				 * [ ...ConditionalBlock ]
 				 */
 				this.conditionalBlocks = [];
 				this.root = scope;
 
 				this.parseDOM( scope );
-				this.observeData( this.data );
+				this.observeData();
 			}
 
-			observeData( obj ) {
-				for ( let key in obj ) {
-					if ( obj.hasOwnProperty( key ) ) {
-						this.makeReactive( obj, key );
+			observeData() {
+				for ( let key in this.dataInputs ) {
+					if ( this.dataInputs.hasOwnProperty( key ) ) {
+						this.makeReactive( key );
 					}
 				}
 			}
 
-			makeReactive( obj, key ) {
-				let val = obj[ key ];
+			makeReactive( key ) {
+				let val = this.dataInputs[ key ].value;
 				const self = this;
 
-				Object.defineProperty( obj, key, {
+				Object.defineProperty( this.data, key, {
 					get() {
 						return val;
 					},
@@ -80,69 +164,59 @@
 			}
 
 			notify( property ) {
-				const signal = this.signals[ property ] ?? false;
+				const signals = this.signals[ property ] ?? false;
 
-				if ( false === signal ) {
+				if ( ! signals?.length ) {
 					console.error( `Can\'t find the signal of ${ property }` );
 
 					return;
 				}
-				signal();
+
+				signals.forEach( signal => signal( property ) );
 			}
 
 			parseDOM( root ) {
 				for ( const formElement of root.querySelectorAll( '[data-jfb-sync]' ) ) {
-					this.pushOrSet( 'data', formElement.name, formElement.value );
-					this.pushOrSet( 'attachedElements', formElement.name, formElement );
+					this.pushData( new InputData( formElement ) );
 				}
 
 				for ( const node of root.querySelectorAll( `[data-jfb-conditional]` ) ) {
-					const conditions = JSON.parse( node.dataset.jfbConditional ).filter(
-						condition => this.data.hasOwnProperty( condition.field ),
-					);
-					this.conditionalBlocks.push( {
-						node,
-						conditions,
-						functionType: node.dataset.jfbFunc,
-					} );
+					const block = new ConditionalBlock( node );
+					this.conditionalBlocks.push( block );
 
-					for ( const { field } of conditions ) {
+					for ( const { field } of block.getConditions() ) {
 						this.addListener( field, 'conditional', this.conditionalBlocks.length - 1 );
 					}
 				}
 
-				for ( const name in this.data ) {
-					if ( ! this.data.hasOwnProperty( name ) ) {
+				for ( const name in this.dataInputs ) {
+					if ( ! this.dataInputs.hasOwnProperty( name ) ) {
 						continue;
 					}
 					this.observe( name );
+					this.watch( name, this.handleConditions );
 				}
 			}
 
 			observe( property ) {
-				const value = this.data[ property ] ?? false;
-				const type = this.getTypeOf( value );
-				const elements = this.attachedElements[ property ] ?? false;
-
-				const signals = this.signalTypes[ type ] ?? [];
-				const listeners = this.listeners[ property ] ?? {};
-				const conditionalIndexes = listeners?.conditional ?? [];
-
-				const blocks = [];
-
-				for ( const index in this.conditionalBlocks ) {
-					if ( ! this.conditionalBlocks.hasOwnProperty( index ) || ! conditionalIndexes.includes( index ) ) {
-						continue;
+				const inputData = this.dataInputs[ property ];
+				const signalType = this.signalTypes[ inputData.getType() ] ?? (
+					() => {
 					}
-					blocks.push( this.conditionalBlocks[ index ] );
-				}
+				);
 
-				this.signals[ property ] = () => {
+				this.watch( property, () => {
 					const newValue = this.data[ property ] ?? false;
+					const elements = inputData.getNode();
 
-					signals.forEach( func => func.call( this, property, elements, newValue ) );
-					this.handleConditions( blocks );
-				};
+					signalType.call( this, property, elements, newValue );
+				} );
+			}
+
+			watch( fieldName, callable ) {
+				this.signals[ fieldName ] = this.signals[ fieldName ] ?? [];
+
+				this.signals[ fieldName ].push( callable.bind( this ) );
 			}
 
 			addListener( property, type, index ) {
@@ -194,22 +268,40 @@
 				}
 			}
 
-			handleConditions( blocks ) {
+			handleConditions( property ) {
+				const blocks = this.getConditionalBlocks( property );
 
 			}
 
-			pushOrSet( prop, name, value ) {
-				const parsedName = name.replace( '[]', '' );
+			getConditionalBlocks( property ) {
+				const listeners = this.listeners[ property ] ?? {};
+				const conditionalIndexes = listeners?.conditional ?? [];
 
-				if ( name.includes( '[]' ) && ! Array.isArray( this[ prop ][ parsedName ] ) ) {
-					this[ prop ][ parsedName ] = [];
+				const blocks = [];
+
+				for ( const index in this.conditionalBlocks ) {
+					if ( ! this.conditionalBlocks.hasOwnProperty( index ) || ! conditionalIndexes.includes( index ) ) {
+						continue;
+					}
+					blocks.push( this.conditionalBlocks[ index ] );
 				}
 
-				if ( Array.isArray( this[ prop ][ parsedName ] ) ) {
-					this[ prop ][ parsedName ].push( value );
-				} else {
-					this[ prop ][ parsedName ] = value;
+				return blocks;
+			}
+
+			/**
+			 * @param inputData {InputData}
+			 */
+			pushData( inputData ) {
+				const findInput = this.dataInputs[ inputData.getName() ] ?? false;
+
+				if ( false !== findInput ) {
+					findInput.merge( inputData );
+
+					return;
 				}
+
+				this.dataInputs[ inputData.getName() ] = inputData;
 			}
 		}
 	}

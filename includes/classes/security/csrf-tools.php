@@ -29,7 +29,7 @@ class Csrf_Tools {
 		$csrf = static::generate();
 
 		// get hashed string with user-agent, ip address & form-id
-		$client_id = static::client_id( jet_fb_live_args()->form_id );
+		$client_id = static::client_id( jet_fb_live()->form_id );
 
 		try {
 			// insert new token if client_id is not exist in table
@@ -59,7 +59,7 @@ class Csrf_Tools {
 		}
 
 		$this->token  = $request[ self::FIELD ] ?? false;
-		$this->client = static::client_id( jet_fb_live_args()->form_id );
+		$this->client = static::client_id( jet_fb_live()->form_id );
 
 		// delete all old tokens
 		Csrf_Token_Model::clear();
@@ -91,14 +91,12 @@ class Csrf_Tools {
 	 * @throws Sql_Exception
 	 */
 	public static function add( string $token, string $client_id ): string {
-		$self = ( new Csrf_Token_Model() )->create();
-
 		try {
 			$row = Csrf_Token_View::by_client( $client_id );
 
 			$token = $row['token'];
 		} catch ( Query_Builder_Exception $exception ) {
-			$self->insert(
+			( new Csrf_Token_Model() )->insert(
 				array(
 					'token'     => $token,
 					'client_id' => $client_id,

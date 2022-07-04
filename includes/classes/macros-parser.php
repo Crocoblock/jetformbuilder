@@ -102,8 +102,12 @@ class Macros_Parser {
 	 */
 	public function verbose_repeater( $items = array() ) {
 
-		$result = '';
+		$result = apply_filters( 'jet-form-builder/send-email/template-repeater', '', $items, $this );
 		$index  = 1;
+
+		if ( $result ) {
+			return $result;
+		}
 
 		foreach ( $items as $item ) {
 			$item_data = array();

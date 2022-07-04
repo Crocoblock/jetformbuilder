@@ -12,6 +12,7 @@ $this->add_attribute( 'step', $args['step'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
+$this->add_attribute( 'data-jfb-sync' );
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>

@@ -21,6 +21,7 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'minlength', $args['minlength'] );
 $this->add_attribute( 'maxlength', $args['maxlength'] );
+$this->add_attribute( 'data-jfb-sync' );
 
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {

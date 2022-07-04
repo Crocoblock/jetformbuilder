@@ -14,6 +14,7 @@ $this->add_attribute( 'class', 'jet-form-builder__field' );
 $this->add_attribute( 'class', 'jet-form-builder__color-picker-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
+$this->add_attribute( 'data-jfb-sync' );
 ?>
 <div class="jet-form-builder__field-wrap">
 	<input <?php $this->render_attributes_string(); ?>>

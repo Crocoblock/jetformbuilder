@@ -71,7 +71,10 @@ class Condition_Item implements Arrayable {
 		return Condition_Manager::instance()->get_operators()->rep_get_item_or_die( $this->operator );
 	}
 
-	public function get_parsed_value(): string {
+	/**
+	 * @return array|string
+	 */
+	public function get_parsed_value() {
 		if ( ! is_null( $this->parsed_value ) ) {
 			return $this->parsed_value;
 		}

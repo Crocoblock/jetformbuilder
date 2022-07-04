@@ -15,6 +15,7 @@ $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
+$this->add_attribute( 'data-jfb-sync' );
 
 if ( ! empty( $args['switch_on_change'] ) ) {
 	$this->add_attribute( 'data-switch', 1 );

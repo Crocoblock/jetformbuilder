@@ -787,7 +787,7 @@
 		},
 
 		initConditions: function( $scope ) {
-			//$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
+			$scope.find( '.jet-form-builder__conditional' ).jetFormBuilderConditional();
 		},
 		widgetBookingForm: function( $scope ) {
 			var $editors = $scope.find( '.jet-form-builder__field .wp-editor-area' );

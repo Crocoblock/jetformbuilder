@@ -7,9 +7,9 @@
 
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
 
-$calc_data = $this->get_calculated_data( $args );
+$formula = $this->get_calculated_data( $args );
 
-if ( empty( $calc_data['formula'] ) ) {
+if ( empty( $formula ) ) {
 	return;
 }
 
@@ -21,9 +21,8 @@ $precision     = isset( $args['precision'] ) ? $args['precision'] : 0;
 $is_hidden     = isset( $args['calc_hidden'] ) ? filter_var( $args['calc_hidden'], FILTER_VALIDATE_BOOLEAN ) : false;
 
 $this->add_attribute( 'class', $args['class_name'] );
-$this->add_attribute( 'data-formula', $calc_data['formula'] );
+$this->add_attribute( 'data-formula', $formula );
 $this->add_attribute( 'data-name', $args['name'] );
-$this->add_attribute( 'data-listen_to', htmlspecialchars( wp_json_encode( $calc_data['listen_fields'] ) ) );
 $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
@@ -47,7 +46,9 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
            name="<?php echo esc_attr( $name ); ?>"
            value="<?php echo esc_attr( $default_value ); ?>"
 		   class="jet-form-builder__calculated-field-input jet-form-builder__field"
-		   data-field-name="<?php echo esc_attr( $args['name'] ); ?>" />
+		   data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
+           data-jfb-sync
+    />
 	<div class="jet-form-builder__calculated-field-val"><?php echo wp_kses_post( $this->render_editor_placeholder() ); ?></div>
 	<?php if ( false !== $suffix ) : ?>
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>

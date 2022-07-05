@@ -26,6 +26,7 @@ function getAdminPagesEntries() {
 module.exports = {
 	getAllEntries() {
 		return {
+			'frontend-forms-v3.js': './frontend/main.js',
 			'editor.js': './editor/main.js',
 			'form-block.js': './editor/form-block.js',
 			'package.js': './package/manager.js',

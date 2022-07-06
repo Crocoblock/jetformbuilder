@@ -22,6 +22,23 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
+	/**
+	 * Render callback for the block
+	 *
+	 * @param array $attrs [description]
+	 *
+	 * @param null $content
+	 * @param null $wp_block
+	 *
+	 * @return false|string [type]             [description]
+	 */
+	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+		return sprintf(
+			'<div class="jet-fb-form-block">%s</div>',
+			$this->render_form( $attrs, $content, $wp_block )
+		);
+	}
+
 	public function get_placeholder(): string {
 		return __( 'Please select form to show', 'jet-form-builder' );
 	}
@@ -401,7 +418,7 @@ class Form extends Base {
 	 *
 	 * @return false|string [type]             [description]
 	 */
-	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
+	public function render_form( array $attrs, $content = null, $wp_block = null ) {
 		$form_id = absint( $attrs['form_id'] ?? 0 );
 
 		if ( ! $form_id ) {

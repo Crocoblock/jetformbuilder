@@ -13,9 +13,22 @@ abstract class Base_Filter implements Repository_Item_Instance_Trait {
 	abstract public function apply_macros( $value, ...$args ): string;
 
 	final public function apply( $value, ...$args ): string {
-		$callback_args = ( $args + $this->callback_args() );
+		$callback_args = $this->get_prepared_args( $args );
 
 		return $this->apply_macros( $value, ...$callback_args );
+	}
+
+	private function get_prepared_args( array $input_args ): array {
+		$preset = $this->callback_args();
+
+		foreach ( $input_args as $index => $current ) {
+			if ( false === $current ) {
+				continue;
+			}
+			$preset[ $index ] = $input_args[ $index ];
+		}
+
+		return $preset;
 	}
 
 	public function callback_args(): array {

@@ -14,7 +14,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name        = 'field_name';
+	protected $name = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;
@@ -56,12 +56,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	final public function response() {
-		if ( $this->has_error() ) {
-			$this->save_error();
-		}
-
 		try {
-			return $this->get_response();
+			$this->value = $this->get_response();
+
+			if ( $this->has_error() ) {
+				$this->save_error();
+			}
 		} catch ( Sanitize_Value_Exception $exception ) {
 			$this->save_error( $exception->getMessage() );
 		}

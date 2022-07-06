@@ -20,7 +20,7 @@ class Calculated_Field_Render extends Base {
 	}
 
 	public function render_editor_placeholder() {
-		return Tools::is_editor() ? '25.00' : '';
+		return Tools::is_editor() ? '25.00' : '0.00';
 	}
 
 	/**

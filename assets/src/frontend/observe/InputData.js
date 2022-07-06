@@ -11,11 +11,11 @@ import SignalCalculated from '../signals/SignalCalculated';
  * @type {(BaseSignal)[]}
  */
 const signalTypes = [
-	new SignalHiddenArray(),
 	new SignalCheckbox(),
 	new SignalRadio(),
 	new SignalRepeater(),
 	new SignalCalculated(),
+	new SignalHiddenArray(),
 	new SignalText(),
 ];
 
@@ -28,6 +28,10 @@ class InputData {
 		this.comment = false;
 		this.nodes = [];
 		this.relatedConditional = [];
+
+		this.value = null;
+		this.calcValue = null;
+
 		/**
 		 * @type {ConditionChecker}
 		 */
@@ -70,6 +74,7 @@ class InputData {
 	}
 
 	onChange() {
+		this.calcValue = this.value;
 		const callable = signalTypes.find( ( type ) => type.isSupported( this ) );
 
 		callable.runSignal( this );

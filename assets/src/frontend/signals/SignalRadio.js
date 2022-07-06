@@ -9,8 +9,16 @@ class SignalRadio extends BaseSignal {
 	}
 
 	runSignal( inputData ) {
+		inputData.calcValue = 0;
+
 		for ( const node of inputData.nodes ) {
 			node.checked = inputData.value === node.value;
+
+			if ( ! node.checked ) {
+				continue;
+			}
+
+			inputData.calcValue += parseFloat( node.dataset?.calculate ?? node.value );
 		}
 	}
 

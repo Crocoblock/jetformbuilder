@@ -11,12 +11,12 @@ import CalculatedData from './CalculatedData';
  * @type {(InputData)[]}
  */
 const dataTypes = [
-	NoListenData,
 	ChangeData,
 	CheckboxData,
 	RadioData,
 	RepeaterData,
 	CalculatedData,
+	NoListenData,
 	InputData,
 ];
 

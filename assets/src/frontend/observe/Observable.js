@@ -2,7 +2,11 @@ import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import { createInput } from './functions';
 
 class Observable {
-	constructor() {
+	constructor( parent = null ) {
+		/**
+		 * @type {Observable}
+		 */
+		this.parent = parent;
 		/**
 		 * {
 		 *     [field_name]: {InputData}

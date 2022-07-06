@@ -7,6 +7,7 @@ class SignalText extends BaseSignal {
 	}
 
 	runSignal( inputData ) {
+		inputData.calcValue = parseFloat( inputData.calcValue );
 		inputData.nodes[ 0 ].value = inputData.value;
 	}
 }

@@ -17,7 +17,7 @@ class RepeaterData extends InputData {
 
 	addListener() {
 		this.buttonNode.addEventListener( 'click', () => {
-			this.value = [ ...this.value, new Observable() ];
+			this.value = [ ...this.value, new Observable( this.root ) ];
 		} );
 	}
 
@@ -26,7 +26,7 @@ class RepeaterData extends InputData {
 		this.value = [];
 
 		for ( const row of node.querySelectorAll( '.jet-form-builder-repeater__row' ) ) {
-			const current = new Observable();
+			const current = new Observable( this.root );
 			current.observe( row );
 
 			this.value.push( current );

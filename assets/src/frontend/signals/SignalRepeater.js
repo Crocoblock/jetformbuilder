@@ -9,6 +9,8 @@ class SignalRepeater extends BaseSignal {
 	}
 
 	runSignal( inputData ) {
+		inputData.calcValue = inputData.value.length;
+
 		for ( const index in inputData.value ) {
 			if ( ! inputData.value.hasOwnProperty( index ) ) {
 				continue;

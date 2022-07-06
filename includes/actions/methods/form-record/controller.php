@@ -81,7 +81,7 @@ class Controller {
 			'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
 			'user_id'           => get_current_user_id(),
 			'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
-			'from_content_type' => 'post', /* it can be replaced by CCT slug */
+			'from_content_type' => Live_Form::instance()->post->post_type, /* it can be replaced by CCT slug */
 			'status'            => $args['status'] ?? '',
 		);
 

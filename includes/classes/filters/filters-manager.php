@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Classes\Filters;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**
@@ -18,6 +19,10 @@ class Filters_Manager {
 
 	use Repository_Pattern_Trait;
 	use Instance_Trait;
+
+	public function __construct() {
+		$this->rep_install();
+	}
 
 	public function rep_instances(): array {
 		return apply_filters(

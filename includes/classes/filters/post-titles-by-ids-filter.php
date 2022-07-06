@@ -15,9 +15,22 @@ class Post_Titles_By_Ids_Filter extends Base_Filter {
 	}
 
 	public function apply_macros( $value, ...$args ): string {
-		if ( ! $value || ! is_array( $value ) ) {
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		if ( is_object( $value ) ) {
+			$value = get_object_vars( $value );
+		}
+
+		if ( ! $value ) {
 			return $value;
 		}
+
+		if ( ! is_array( $value ) ) {
+			$value = array( $value );
+		}
+
 		list( $delimiter ) = $args;
 
 		return wp_kses_post( implode( $delimiter, array_map( 'get_the_title', $value ) ) );

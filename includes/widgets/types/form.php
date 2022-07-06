@@ -2893,6 +2893,20 @@ class Form extends Jfb_Widget_Base {
 				)
 			);
 
+			$this->add_control(
+				'booking_form_submit_alignment_hidden',
+				array(
+					'type'      => Controls_Manager::HIDDEN,
+					'default'   => 'style',
+					'selectors' => array(
+						$this->selector( '__submit-wrap > .%s__submit' ) => 'width: 100%',
+					),
+					'condition' => array(
+						'booking_form_submit_alignment' => 'stretch',
+					),
+				)
+			);
+
 			$this->add_responsive_control(
 				'booking_form_submit_alignment_text',
 				array(

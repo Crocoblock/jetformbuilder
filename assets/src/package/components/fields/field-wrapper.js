@@ -2,18 +2,21 @@ import {
 	classnames,
 	getConvertedName,
 } from '../../helpers/tools';
+import { useSelectPostMeta } from '../../helpers/hooks/hooks-helper';
 
 const {
-		  BaseControl,
-	  } = wp.components;
+	BaseControl,
+} = wp.components;
 
 const {
-		  withSelect,
-	  } = wp.data;
+	withSelect,
+} = wp.data;
+
+
 
 const {
-		  RichText,
-	  } = wp.blockEditor;
+	RichText,
+} = wp.blockEditor;
 
 const { __ } = wp.i18n;
 
@@ -30,21 +33,24 @@ function RichDescription( content ) {
 function FieldWrapper( props ) {
 
 	const {
-			  attributes,
-			  editProps: { uniqKey, blockName = '' },
-			  children,
-			  wrapClasses       = [],
-			  valueIfEmptyLabel = '',
-			  setAttributes,
-			  childrenPosition  = 'between',
-			  _jf_args,
-		  } = props;
+		attributes,
+		editProps: { uniqKey, blockName = '' },
+		children,
+		wrapClasses = [],
+		valueIfEmptyLabel = '',
+		setAttributes,
+		childrenPosition = 'between',
+	} = props;
+
+	const _jf_args = useSelectPostMeta( '_jf_args' );
 
 	const setDynamicName = () => {
 		if ( 1 < attributes.label.length
-			&& ( ! attributes.name || 'field_name' === attributes.name )
+		     && (
+			     ! attributes.name || 'field_name' === attributes.name
+		     )
 		) {
-			setAttributes( { name: getConvertedName( attributes.label ) } )
+			setAttributes( { name: getConvertedName( attributes.label ) } );
 		}
 	};
 
@@ -116,10 +122,4 @@ function FieldWrapper( props ) {
 	);
 }
 
-export default withSelect( select => {
-	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-
-	return {
-		_jf_args: JSON.parse( meta._jf_args || {} ),
-	}
-} )( FieldWrapper );
+export default FieldWrapper;

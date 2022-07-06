@@ -4,8 +4,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
-use Jet_Form_Builder\Actions\Executors\Action_Required_Executor;
+use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Controller;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
@@ -33,13 +32,27 @@ class Save_Record extends Base {
 		return __( 'Save Form Record', 'jet-form-builder' );
 	}
 
-	public function get_flow_handler(): string {
-		return Action_Required_Executor::class;
+	public function get_required_events(): array {
+		return array(
+			Default_Required_Event::class,
+		);
+	}
+
+	public function supported_events(): array {
+		return array(
+			Default_Required_Event::class,
+		);
 	}
 
 	public function dependence() {
 		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
-		add_filter( 'jet-form-builder/page-containers/jfb-payments-single', array( $this, 'add_box_to_single_payment' ) );
+		add_filter(
+			'jet-form-builder/page-containers/jfb-payments-single',
+			array(
+				$this,
+				'add_box_to_single_payment',
+			)
+		);
 
 		add_action(
 			'jet-form-builder/gateways/before-send',
@@ -49,14 +62,6 @@ class Save_Record extends Base {
 		);
 
 		return parent::dependence();
-	}
-
-	public function on_register_in_flow() {
-		add_filter( 'jet-form-builder/actions/run-callback', array( $this, 'set_soft_run_actions' ) );
-	}
-
-	public function set_soft_run_actions( $callback ) {
-		return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
 	}
 
 	/**
@@ -84,6 +89,33 @@ class Save_Record extends Base {
 			// do nothing
 		}
 	}
+
+	/**
+	 * Run 'Save record' action only once.
+	 */
+	public static function add_hidden() {
+		if ( has_action(
+			'jet-form-builder/form-handler/after-send',
+			array( self::class, 'do_action_hidden' )
+		) ) {
+			return;
+		}
+		add_action( 'jet-form-builder/form-handler/after-send', array( self::class, 'do_action_hidden' ), 0 );
+	}
+
+	/**
+	 * @throws Sql_Exception
+	 */
+	public static function do_action_hidden() {
+		if ( false !== jet_fb_action_handler()->get_action_by_slug( self::ID ) ) {
+			return;
+		}
+		/** @var Save_Record $self */
+		$self = jet_form_builder()->actions->rep_get_item_or_die( self::ID );
+
+		$self->do_action( array(), jet_fb_action_handler() );
+	}
+
 
 	/**
 	 * @param array $request

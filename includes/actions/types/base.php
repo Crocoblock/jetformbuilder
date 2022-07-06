@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Action_Localize;
+use Jet_Form_Builder\Actions\Events\Base_Executor;
+use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Messages_Helper_Trait;
@@ -43,6 +45,13 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	 * @var string
 	 */
 	public $option_name;
+
+	/**
+	 * Contains slugs of events
+	 *
+	 * @var array
+	 */
+	private $executed_on;
 
 	public function __construct() {
 		$this->set_action_messages();
@@ -90,17 +99,21 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	public function on_register_in_flow() {
 	}
 
-	/**
-	 * If this method returns Action_Default_Executor::class
-	 * then the action will be executed normally.
-	 *
-	 * With any other value, this action will be excluded from the general list.
-	 *
-	 * @return string
-	 * @since 2.0.0
-	 */
-	public function get_flow_handler(): string {
-		return Action_Default_Executor::class;
+
+	public function on_validate( Base_Executor $executor ) {
+		$this->executed_on[] = $executor->get_event()->get_id();
+	}
+
+	public function unsupported_events(): array {
+		return array();
+	}
+
+	public function supported_events(): array {
+		return array();
+	}
+
+	public function get_required_events(): array {
+		return array();
 	}
 
 	public function messages() {
@@ -162,6 +175,21 @@ abstract class Base implements Repository_Item_Instance_Trait {
 
 	public function add_context_once( $context ) {
 		return jet_fb_action_handler()->add_context_once( $this->get_id(), $context );
+	}
+
+	public function unregister(): Action_Handler {
+		return jet_fb_action_handler()->unregister_action( $this->_id );
+	}
+
+	/**
+	 * @return false|Events_List
+	 */
+	public function get_events() {
+		return jet_fb_action_handler()->get_events_by_id( $this->_id );
+	}
+
+	public function get_executed_events() {
+		return $this->executed_on;
 	}
 
 

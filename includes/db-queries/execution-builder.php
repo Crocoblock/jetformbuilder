@@ -162,16 +162,16 @@ class Execution_Builder {
 			->result();
 
 		// phpcs:ignore WordPress.DB
-		$result = (int) $wpdb->query( "DELETE FROM {$view->table()} {$where}" );
+		$wpdb->query( "DELETE FROM {$view->table()} {$where}" );
 
-		if ( ! $result ) {
+		if ( ! $wpdb->rows_affected ) {
 			throw new Query_Builder_Exception(
 				"Something went wrong on delete rows in: {$view->table()}",
 				$where
 			);
 		}
 
-		return $result;
+		return $wpdb->rows_affected;
 	}
 
 	/**

@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
+use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Action_Event_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Action_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns\Form_Action_Status_Column;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
@@ -11,6 +12,7 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 use Jet_Form_Builder\Admin\Table_Views\Column_Base;
+use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 class Form_Record_Actions_Box extends Base_Table_Box {
@@ -32,8 +34,10 @@ class Form_Record_Actions_Box extends Base_Table_Box {
 	 */
 	public function get_columns(): array {
 		return array(
-			'action' => new Form_Action_Column(),
-			'status' => new Form_Action_Status_Column(),
+			'action'     => new Form_Action_Column(),
+			'status'     => new Form_Action_Status_Column(),
+			'event'      => new Action_Event_Column(),
+			'created_at' => new Created_At_Column(),
 		);
 	}
 

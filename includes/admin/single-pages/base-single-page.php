@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Admin\Single_Pages;
 use Jet_Form_Builder\Admin\Admin_Page_Interface;
 use Jet_Form_Builder\Admin\Admin_Page_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
@@ -22,6 +23,8 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 
 	protected $id;
 	protected $storage;
+
+	/** @var Base_Meta_Container[] */
 	protected $containers = array();
 
 	abstract public function parent_slug(): string;
@@ -86,6 +89,9 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		);
 	}
 
+	/**
+	 * @return Base_Meta_Container[]
+	 */
 	public function get_prepared_containers(): array {
 		if ( count( $this->containers ) ) {
 			return $this->containers;
@@ -99,6 +105,15 @@ abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item
 		}
 
 		return $this->containers;
+	}
+
+	/**
+	 * @return null|\Generator
+	 */
+	public function get_migrations(): \Generator {
+		foreach ( $this->get_prepared_containers() as $container ) {
+			yield from $container->get_migrations();
+		}
 	}
 
 	public function slug(): string {

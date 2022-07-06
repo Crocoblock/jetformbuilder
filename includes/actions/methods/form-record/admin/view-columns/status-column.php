@@ -8,24 +8,11 @@ use Jet_Form_Builder\Form_Messages\Status_Info;
 
 class Status_Column extends Column_Advanced_Base {
 
-	protected $type = self::STATUS;
+	protected $type   = self::STATUS;
 	protected $column = 'status';
 
 	public function get_label(): string {
 		return __( 'Status', 'jet-form-builder' );
-	}
-
-	public function get_replace_map(): array {
-		return array(
-			'COMPLETED' => array(
-				'type' => self::STATUS_SUCCESS,
-				'text' => __( 'Completed', 'jet-form-builder' ),
-			),
-			'CREATED'   => array(
-				'type' => self::STATUS_INFO,
-				'text' => __( 'Created', 'jet-form-builder' ),
-			),
-		);
 	}
 
 	public function get_value( array $record = array() ) {

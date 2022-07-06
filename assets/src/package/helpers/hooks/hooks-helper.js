@@ -19,52 +19,37 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	} );
 
-	const {
-		editPost,
-	} = useDispatch( 'core/editor' );
+	const { editPost } = useDispatch( 'core/editor', [ meta ] );
 
-	const [ metaStateValue, setMetaStateValue ] = useState( JSON.parse( meta[ key ] || ifEmpty ) );
+	const metaStateValue = JSON.parse( meta[ key ] || ifEmpty );
 
-	useEffect( () => {
+	const setMetaStateValue = callable => {
+		let value;
+
+		if ( 'function' === typeof callable ) {
+			value = callable( metaStateValue );
+		} else {
+			value = callable;
+		}
+
 		editPost( {
 			meta: (
 				{
 					...meta,
-					[ key ]: JSON.stringify( metaStateValue ),
+					[ key ]: JSON.stringify( value ),
 				}
 			),
 		} );
-	}, [ metaStateValue ] );
+	};
 
 	return [ metaStateValue, setMetaStateValue ];
 };
 
-export const useActions = ( withEditPostEffect = false ) => {
-	const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
-
-	const {
-		editPost,
-	} = useDispatch( 'core/editor' );
-
-	const [ actions, setActions ] = useState( JSON.parse( meta._jf_actions || '[]' ) );
-
-	useEffect( () => {
-		if ( withEditPostEffect ) {
-			editPost( {
-				meta: (
-					{
-						...meta,
-						_jf_actions: JSON.stringify( actions ),
-					}
-				),
-			} );
-		}
-	}, [ actions ] );
-
-	return [ actions, setActions ];
+export const useActions = () => {
+	return useMetaState( '_jf_actions' );
 };
+
+
 export const initClasses = [ 'jet-form-validate-button' ];
 
 export const useStateValidClasses = initialValid => {
@@ -180,8 +165,14 @@ const selectPostMeta = select => {
 	return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 };
 
-const selectParsedPostMeta = ( select, name ) => {
+export const selectParsedPostMeta = ( select, name ) => {
 	const allMeta = selectPostMeta( select );
+
+	return JSON.parse( allMeta[ name ] || '{}' );
+};
+
+export const useSelectPostMeta = ( name ) => {
+	const allMeta = useSelect( select => selectPostMeta( select ) );
 
 	return JSON.parse( allMeta[ name ] || '{}' );
 };
@@ -256,7 +247,7 @@ export const withSelectMeta = ( metaSlug, ifEmpty = {} ) => select => {
 
 	return {
 		[ metaSlug ]: (
-			current || ifEmpty
+			current ?? ifEmpty
 		),
 	};
 };

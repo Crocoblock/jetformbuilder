@@ -81,6 +81,12 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 		try {
 			$this->set_payment_token();
 			$this->set_gateway_from_post_meta();
+
+			/**
+			 * Init actions to migrate in events
+			 */
+			$this->init_actions();
+
 			$this->set_form_gateways_meta();
 			$this->set_payment();
 			$this->on_success_payment();
@@ -90,6 +96,12 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 		} catch ( Skip_Exception $e ) {
 			return;
 		}
+	}
+
+	private function init_actions() {
+		$form_id = (int) ( $this->data['form_id'] ?? 0 );
+
+		jet_fb_action_handler()->set_form_id( $form_id );
 	}
 
 	/**
@@ -307,6 +319,8 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	public function set_form_meta( $gateways_meta ): Base_Gateway {
+		Migrate_Legacy_Data::migrate( $gateways_meta );
+
 		$this->gateways_meta = $gateways_meta;
 
 		return $this;

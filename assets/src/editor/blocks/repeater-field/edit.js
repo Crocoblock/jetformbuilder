@@ -189,9 +189,6 @@ export default function RepeaterEdit( props ) {
 			>
 				<InnerBlocks
 					key={ uniqKey( 'repeater-fields' ) }
-					renderAppender={ () => (
-						<InnerBlocks.ButtonBlockAppender key={ uniqKey( 'ButtonBlockAppender' ) }/>
-					) }
 				/>
 				<Button
 					className={ 'jet-form-builder-repeater__remove' }

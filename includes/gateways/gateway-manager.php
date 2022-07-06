@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
@@ -49,8 +50,6 @@ class Gateway_Manager {
 		add_action( 'init', array( $this, 'register_gateways' ) );
 		( new Rest_Api_Controller() )->rest_api_init();
 
-		add_action( 'jet-form-builder/actions/before-send', array( $this, 'before_send_actions' ) );
-		add_action( 'jet-form-builder/actions/after-send', array( $this, 'after_send_actions' ) );
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
 		add_filter( 'jet-form-builder/page-containers/jfb-records-single', array( $this, 'add_box_to_single_record' ), 0 );
@@ -109,36 +108,6 @@ class Gateway_Manager {
 		$this->rep_install_item( $gateway );
 	}
 
-	public function before_send_actions() {
-		$this->set_gateways_options_by_form_id( jet_fb_handler()->form_id );
-
-		try {
-			$this->get_current_gateway_controller()->before_actions();
-		} catch ( Repository_Exception $exception ) {
-			return;
-		}
-
-		add_filter(
-			'jet-form-builder/actions/run-callback',
-			function () {
-				return array( new Action_Default_Executor(), Action_Default_Executor::SOFT );
-			}
-		);
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	public function after_send_actions() {
-		try {
-			$this->get_current_gateway_controller()->after_actions( jet_fb_action_handler() );
-		} catch ( Repository_Exception $exception ) {
-			return;
-		} catch ( Gateway_Exception $exception ) {
-			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
-		}
-	}
-
 	public function save_gateways_form_data( $data ) {
 		$id = $data['gateway'];
 
@@ -173,7 +142,7 @@ class Gateway_Manager {
 	/**
 	 * @param false $type
 	 *
-	 * @return Base_Gateway
+	 * @return Base_Gateway|Base_Scenario_Gateway
 	 * @throws Repository_Exception
 	 */
 	public function get_gateway_controller( $type = false ) {

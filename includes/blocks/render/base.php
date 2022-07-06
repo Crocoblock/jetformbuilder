@@ -95,7 +95,7 @@ abstract class Base {
 
 		$args = $this->block_type->block_attrs;
 
-		$label_wrapper = new class {
+		$label_wrapper = new class() {
 			use Attributes_Trait;
 		};
 		$label_text    = clone $label_wrapper;
@@ -108,7 +108,7 @@ abstract class Base {
 		}
 
 		$label_text->add_attribute( 'class', 'jet-form-builder__label-text' );
-		$label_text_tag = esc_attr( Live_Form::instance()->spec_data->fields_label_tag );
+		$label_text_tag = esc_attr( jet_fb_live_args()->fields_label_tag );
 
 		if ( 'label' === $label_text_tag ) {
 			$label_text->add_attribute( 'for', $this->block_type->get_field_id( $args ) );

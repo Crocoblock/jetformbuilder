@@ -21,7 +21,7 @@ export default {
 	computed: {
 		isCheckedCurrent() {
 			return this.isChecked( this.value ) ? this.value : '';
-		}
+		},
 	},
 	methods: {
 		isChecked( value ) {
@@ -44,6 +44,10 @@ export default {
 
 		.cx-vui-component {
 			padding: unset;
+		}
+
+		.cx-vui-checkbox__check {
+			margin-top: 0;
 		}
 	}
 }

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 
 class Form_Records extends Base_Page {
 
@@ -23,7 +24,7 @@ class Form_Records extends Base_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( 'jet-form-builder-admin-vuex-package' );
+		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();
 	}

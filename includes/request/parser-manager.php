@@ -47,17 +47,19 @@ class Parser_Manager {
 		);
 	}
 
-	public function get_values_fields( $fields, $request, $inside_conditional = false ) {
+	public function get_values_fields( $fields, Parser_Context $context ) {
 		$response = array();
-		$this->get_values_fields_recursive( $response, $fields, $request, $inside_conditional );
+		$this->get_values_fields_recursive( $response, $fields, $context );
 
 		return $response;
 	}
 
-	public function get_values_fields_recursive( &$output, $fields, $request, $inside_conditional ) {
+	public function get_values_fields_recursive( &$output, $fields, Parser_Context $context ) {
 		foreach ( $fields as $field ) {
 			try {
-				$this->get_value_from_field( $output, $field, $request, $inside_conditional );
+				$context->set_field( $field );
+
+				$this->get_value_from_field( $output, $context );
 
 			} catch ( Parse_Exception $exception ) {
 				switch ( $exception->getMessage() ) {
@@ -66,8 +68,7 @@ class Parser_Manager {
 						$this->get_values_fields_recursive(
 							$output,
 							$exception->get_inner(),
-							$request,
-							true
+							$context->set_inside_conditional( true )
 						);
 						break;
 
@@ -75,8 +76,7 @@ class Parser_Manager {
 						$this->get_values_fields_recursive(
 							$output,
 							$exception->get_inner(),
-							$request,
-							$inside_conditional
+							$context
 						);
 						break;
 				}
@@ -87,44 +87,21 @@ class Parser_Manager {
 
 	/**
 	 * @param $output
-	 * @param $field
-	 *
-	 * @param $request
-	 * @param $inside_conditional
-	 *
-	 * @throws Parse_Exception
+	 * @param Parser_Context $context
 	 */
-	public function get_value_from_field( &$output, $field, $request, $inside_conditional ) {
-		if ( empty( $field['blockName'] ) ) {
-			throw new Parse_Exception( self::EMPTY_BLOCK_ERROR );
-		}
-
-		if ( ! empty( $field['innerBlocks'] ) ) {
-			if ( strpos( $field['blockName'], 'conditional-block' ) ) {
-				throw new Parse_Exception( self::IS_CONDITIONAL, $field['innerBlocks'] );
-			}
-			if ( ! $this->isset_parser( $field['blockName'] ) ) {
-				throw new Parse_Exception( self::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
-			}
-		}
-
-		$settings   = $field['attrs'];
-		$name       = $settings['name'] ?? 'field_name';
-		$field_type = Block_Helper::delete_namespace( $field['blockName'] );
-		$value      = $request[ $name ] ?? '';
-
+	public function get_value_from_field( &$output, Parser_Context $context ) {
 		try {
-			$parser = $this->get_parser( $field_type );
+			$parser = $context->get_parser();
 		} catch ( Repository_Exception $exception ) {
-			$this->save_to_request( $name, $field_type, $settings );
+			$context->save_to_request();
 
-			$output[ $name ] = $value;
+			$output[ $context->get_name() ] = $context->get_value();
 
 			return;
 		}
 
 		try {
-			$output[ $name ] = $parser->get_parsed_value( $value, $field, $inside_conditional );
+			$output[ $context->get_name() ] = $parser->get_parsed_value( $context );
 		} catch ( Parse_Exception $exception ) {
 			$output = array_merge( $output, $exception->get_inner() );
 			return;
@@ -133,10 +110,10 @@ class Parser_Manager {
 			return;
 		}
 
-		$this->save_to_request( $name, $field_type, $settings );
+		$context->save_to_request();
 	}
 
-	private function save_to_request( $name, $type, $settings ) {
+	public function save_to_request( $name, $type, $settings ) {
 		jet_fb_request_handler()->set_request_type(
 			array(
 				$name => $type,
@@ -154,7 +131,7 @@ class Parser_Manager {
 	 *
 	 * @return bool
 	 */
-	private function isset_parser( $block_name ): bool {
+	public function isset_parser( $block_name ): bool {
 		$type = Block_Helper::delete_namespace( $block_name );
 
 		return $this->rep_isset_item( $type );

@@ -2,12 +2,14 @@
 
 namespace Jet_Form_Builder\Admin;
 
-use Jet_Form_Builder\Actions\Condition_Manager;
+use Jet_Form_Builder\Actions\Conditions\Condition_Manager as Action_Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
 
 /**
  * Form editor class
@@ -323,6 +325,18 @@ class Editor {
 			true
 		);
 
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jetFormEvents',
+			jet_fb_events()->to_array()
+		);
+
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
+			'jetFormBlockConditions',
+			Block_Condition_Manager::instance()->to_array()
+		);
+
 		wp_set_script_translations(
 			self::EDITOR_PACKAGE_HANDLE,
 			'jet-form-builder',
@@ -353,7 +367,7 @@ class Editor {
 			'all'
 		);
 
-		$conditions_settings = ( new Condition_Manager() )->get_settings();
+		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 
 		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
 		$addons  = JET_FORM_BUILDER_SITE . '/addons/';
@@ -370,7 +384,7 @@ class Editor {
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
-				'argumentsSource'         => Tools::get_form_settings_options(),
+				'argumentsSource'         => Form_Arguments::get_options(),
 				'utmLinks'                => array(
 					'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
 					'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),

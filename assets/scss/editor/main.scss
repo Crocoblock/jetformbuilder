@@ -65,10 +65,13 @@
 
 .jet-form-action {
 	margin-bottom: 10px;
-}
+	.components-base-control__field {
+		margin: 0;
+	}
 
-.jet-form-action .components-base-control__field {
-	margin: 0;
+	&.is-disabled {
+		background-image: repeating-linear-gradient(-45deg, #ffffff75 0 20px, #d5d5d57d 20px 40px);
+	}
 }
 
 .jet-form-editor__macros-trigger {
@@ -229,32 +232,32 @@
 	transition: .3s all;
 }
 
-.jet-form-builder__next-page-wrap, .jet-form-builder__group-break {
+.jet-form-builder__bottom-line {
 	display: block;
 	white-space: nowrap;
-}
 
-.jet-form-builder__next-page-wrap:before, .jet-form-builder__group-break:before {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	border-top: 1px solid #ccc;
-}
+	&:before {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-top: 1px solid #ccc;
+	}
 
-.jet-form-builder__next-page-wrap > span, .jet-form-builder__group-break > span {
-	font-size: 13px;
-	position: relative;
-	display: inline-block;
-	text-transform: uppercase;
-	font-weight: 600;
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-	color: #757575;
-	border-radius: 4px;
-	background: #fff;
-	padding: 6px 8px;
-	height: 24px;
+	& > span {
+		font-size: 13px;
+		position: relative;
+		display: inline-block;
+		text-transform: uppercase;
+		font-weight: 600;
+		font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+		color: #757575;
+		border-radius: 4px;
+		background: #fff;
+		padding: 6px 8px;
+		height: 24px;
+	}
 }
 
 .jet-form-builder__field-wrap.range-wrap fieldset.components-input-control__backdrop {
@@ -463,28 +466,7 @@
 }
 
 .jet-form-edit-modal {
-	&.width-60 {
-		width: 60vw;
-	}
 
-	&__actions {
-		position: sticky;
-		bottom: 0;
-		left: 0;
-		padding: 18px 24px 20px 0;
-		background-color: #fff;
-		width: 100%;
-		border-top: 1px solid #ddd;
-		z-index: 100;
-	}
-
-	&__content {
-		padding-bottom: 2em;
-	}
-
-	.components-modal__content {
-		padding-bottom: unset;
-	}
 }
 
 .jet-form-builder__repeater-component-item {

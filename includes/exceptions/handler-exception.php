@@ -53,4 +53,8 @@ abstract class Handler_Exception extends \Exception {
 		return $this->additional_data;
 	}
 
+	public function unset_from_logger() {
+		Logger::instance()->unset_last( $this );
+	}
+
 }

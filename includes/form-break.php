@@ -18,6 +18,7 @@ class Form_Break {
 	private $current_form_break = 0;
 	private $is_editor = false;
 	private $progress_type = 'default';
+	private $has_start = false;
 
 	public function get_pages() {
 		return $this->pages;
@@ -85,7 +86,12 @@ class Form_Break {
 		$last_break   = false;
 
 		foreach ( $blocks as $index => $field ) {
-			if ( ! stripos( $field['blockName'] ?? '', 'form-break' ) ) {
+			if ( 'form-break-start' === Block_Helper::delete_namespace( $field ) ) {
+				$this->has_start = true;
+
+				continue;
+
+			} elseif ( 'form-break-field' !== Block_Helper::delete_namespace( $field ) ) {
 				continue;
 			}
 			$form_break = Plugin::instance()->blocks->get_field_attrs( $field['blockName'], $field['attrs'] );
@@ -176,8 +182,7 @@ class Form_Break {
 	 * @return string
 	 */
 	public function maybe_start_page( $force_first = false ) {
-
-		if ( 0 >= $this->pages ) {
+		if ( 0 >= $this->pages || $this->is_has_start() ) {
 			return '';
 		}
 
@@ -230,6 +235,16 @@ class Form_Break {
 		do_action( 'jet-form-builder/after-page-end', $this );
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_has_start(): bool {
+		$has_start       = $this->has_start;
+		$this->has_start = false;
+
+		return $has_start;
 	}
 
 }

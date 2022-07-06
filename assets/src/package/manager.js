@@ -46,6 +46,7 @@ import {
 	useStateLoadingClasses,
 	useSuccessNotice,
 	useRequestFields,
+	useSelectPostMeta,
 	withRequestFields,
 	withSelectActionLoading,
 	withDispatchMeta,
@@ -53,8 +54,18 @@ import {
 	withDispatchNotice,
 	withSelectFormFields,
 	withSelectGateways,
-	withDispatchGateways, withSelectActionsByType,
+	withDispatchGateways,
+	withSelectActionsByType,
 } from './helpers/hooks/hooks-helper';
+import {
+	useRequestEvents,
+} from './helpers/hooks/event-types';
+import {
+	useBlockConditions,
+} from './helpers/hooks/block-conditions';
+import {
+	useUniqKey,
+} from './helpers/hooks/blocks';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
 import RepeaterWithState from './components/fields/repeater-with-state';
@@ -83,15 +94,28 @@ import {
 	getBlockControls,
 } from './components/fields/controls';
 import BaseHelp from './components/controls/base-help';
-import './stores/action-store';
-import './stores/gateways-store';
 import ValidateButtonWithStore from './components/validate-button-with-store';
 import GatewayFetchButton from './components/gateway-fetch-button';
+import './stores/manager';
+import ActionModalContext from './context/action.modal';
+import SafeDeleteContext from './context/safe.delete';
+import RepeaterItemContext from './context/repeater.item';
+import ActionListItemContext from './context/action.list.item';
+import SafeDeleteToggle from './components/fields/safe.delete.toggle';
+import RepeaterAddNew from './components/fields/repeater.add.new';
+import Repeater from './components/fields/repeater';
 
 // JFBComponents
 window.JetFBComponents = {
 	ActionFieldsMap,
 	ActionModal,
+	ActionModalContext,
+	SafeDeleteContext,
+	RepeaterItemContext,
+	ActionListItemContext,
+	SafeDeleteToggle,
+	RepeaterAddNew,
+	Repeater,
 	RequestButton,
 	ValidateButton,
 	RequestLoadingButton,
@@ -158,9 +182,13 @@ window.JetFBActions = {
 window.JetFBHooks = {
 	useActions,
 	useMetaState,
+	useSelectPostMeta,
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,
+	useRequestEvents,
+	useBlockConditions,
+	useUniqKey,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,
@@ -170,6 +198,6 @@ window.JetFBHooks = {
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
-	withSelectActionsByType
+	withSelectActionsByType,
 };
 

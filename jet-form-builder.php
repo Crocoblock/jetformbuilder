@@ -3,7 +3,7 @@
  * Plugin Name: JetFormBuilder
  * Plugin URI:  https://jetformbuilder.com/
  * Description: Advanced form builder plugin for WordPress block editor. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.
- * Version:     2.0.6
+ * Version:     2.1.0
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-form-builder
@@ -19,7 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 function jet_form_builder_init() {
 
-	define( 'JET_FORM_BUILDER_VERSION', '2.0.6' );
+	define( 'JET_FORM_BUILDER_VERSION', '2.1.0' );
 
 	define( 'JET_FORM_BUILDER__FILE__', __FILE__ );
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );
@@ -80,6 +80,14 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return jet_fb_handler()->request_handler;
 	}
 
+	function jet_fb_msg_router_manager( $data = array() ): \Jet_Form_Builder\Form_Messages\Manager {
+		return jet_form_builder()->msg_router->get_manager( $data );
+	}
+
+	function jet_fb_preset( $form_id = 0 ): \Jet_Form_Builder\Presets\Preset_Manager {
+		return \Jet_Form_Builder\Presets\Preset_Manager::instance()->set_form_id( $form_id );
+	}
+
 
 	/**
 	 * @return false|\Jet_Form_Builder\Admin\Pages\Base_Page|\Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page
@@ -92,11 +100,27 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		}
 	}
 
+	function jet_fb_live(): \Jet_Form_Builder\Live_Form {
+		return \Jet_Form_Builder\Live_Form::instance();
+	}
+
+	function jet_fb_live_arg( string $arg_name, $default = false ) {
+		return jet_fb_live_args()->argument( $arg_name, $default );
+	}
+
+	function jet_fb_live_args(): \Jet_Form_Builder\Classes\Arguments\Form_Arguments {
+		return jet_fb_live()->spec_data;
+	}
+
 	/**
 	 * @return false|\Jet_Form_Builder\Gateways\Base_Gateway|\Jet_Form_Builder\Gateways\Base_Scenario_Gateway
 	 */
 	function jet_fb_gateway_current() {
 		return \Jet_Form_Builder\Gateways\Gateway_Manager::instance()->get_current_gateway_controller_or_die();
+	}
+
+	function jet_fb_events(): \Jet_Form_Builder\Actions\Events_Manager {
+		return \Jet_Form_Builder\Actions\Events_Manager::instance();
 	}
 } else {
 	add_action(

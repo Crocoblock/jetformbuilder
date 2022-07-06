@@ -38,6 +38,10 @@ class Action_Button_Render extends Base {
 		/** @var Button_Type_Base $type */
 		$type = $this->block_type->get_button_type( $type );
 
+		if ( is_null( $type ) ) {
+			return;
+		}
+
 		$this->add_attribute( 'class', 'jet-form-builder__action-button' );
 		$this->add_attribute( 'class', $args['class_name'] ?? '' );
 		$this->add_attribute( 'class', $type->get_class( 'button' ) );

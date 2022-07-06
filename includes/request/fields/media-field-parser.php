@@ -3,8 +3,13 @@
 
 namespace Jet_Form_Builder\Request\Fields;
 
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
+use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
+use Jet_Form_Builder\Request\File_Uploader;
 
 class Media_Field_Parser extends Field_Data_Parser {
 
@@ -12,31 +17,42 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return 'media-field';
 	}
 
-	public function parse_value( $value ) {
-		$string_value = wp_unslash( wp_specialchars_decode( $value, ENT_COMPAT ) );
-
-		return json_decode( $string_value, true );
-	}
-
+	/**
+	 * @return array|false|int|string|null
+	 * @throws Sanitize_Value_Exception
+	 */
 	public function get_response() {
-		if ( $this->is_value_format( 'id' ) ) {
-			if ( ! is_array( $this->value ) ) {
-				$this->value = ! empty( $this->value ) ? absint( $this->value ) : null;
-			} else {
-				$this->value = implode( ',', $this->value );
-			}
+		if ( empty( $this->context->get_file() ) && empty( $this->value ) ) {
+			return false;
 		}
 
-		if ( is_array( $this->value ) && $this->is_value_format( 'url' ) ) {
-			$this->value = implode( ', ', $this->value );
+		$uploader = ( new File_Uploader() )->set_context( $this->context );
+
+		try {
+			/** @var Media_Block_Value $uploads */
+			$uploads = $uploader->upload();
+		} catch ( Upload_Exception $exception ) {
+			throw new Sanitize_Value_Exception( $exception->getMessage() );
 		}
 
-		return $this->value;
+		jet_fb_request_handler()->update_file( $this->name, $uploads );
+
+		switch ( $this->get_value_format() ) {
+			case 'id':
+				return $uploads->get_attachment_id();
+			case 'both':
+				return $uploads->get_attachment_both();
+			default:
+				return $uploads->get_attachment_url();
+		}
 	}
 
-	private function is_value_format( $format ) {
-		return ( ! empty( $this->settings['insert_attachment'] )
-				 && ! empty( $this->settings['value_format'] )
-				 && $format === $this->settings['value_format'] );
+	protected function get_value_format(): string {
+		if ( empty( $this->settings['insert_attachment'] ) ) {
+			return 'url';
+		}
+
+		return $this->settings['value_format'] ?? 'url';
 	}
+
 }

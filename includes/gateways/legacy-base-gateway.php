@@ -4,6 +4,10 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -50,30 +54,18 @@ abstract class Legacy_Base_Gateway {
 	 * @deprecated 2.0.0
 	 */
 	public function process_status( $type = 'success' ) {
+		$id = $this->data['form_id'] ?? 0;
+		jet_fb_action_handler()->add_request( $this->data['form_data'] );
 
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, $this );
-
-		$keep_these = $this->gateway( 'notifications_' . $type, array() );
-
-		if ( empty( $keep_these ) ) {
-			return;
+		switch ( $type ) {
+			case 'success':
+				jet_fb_events()->execute( Gateway_Success_Event::class, $id );
+				break;
+			case 'failed':
+			default:
+				jet_fb_events()->execute( Gateway_Failed_Event::class, $id );
+				break;
 		}
-
-		$all = jet_fb_action_handler()->add_request( $this->data['form_data'] )
-									->set_form_id( $this->data['form_id'] )
-									->unregister_action( 'redirect_to_page' )
-									->get_all();
-
-		if ( empty( $all ) ) {
-			return;
-		}
-		foreach ( $all as $index => $notification ) {
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
-
-		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	/**
@@ -328,30 +320,23 @@ abstract class Legacy_Base_Gateway {
 	 */
 	public function before_actions() {
 		$this->set_form_meta( GM::instance()->gateways() );
+		$default_actions = jet_fb_action_handler()->get_all();
 
-		$keep_these      = $this->get_actions_before();
-		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
-
-		if ( empty( $default_actions ) ) {
-			return;
-		}
 		$action_order = (int) $this->gateway( 'action_order' );
 
-		foreach ( $default_actions as $index ) {
-			$action = jet_fb_action_handler()->get_action_by_id( $index );
-
-			if ( 'insert_post' === $action->get_id() && $action_order === $action->_id ) {
+		foreach ( $default_actions as $index => $action ) {
+			if ( 'insert_post' !== $action->get_id() || $action_order !== $action->_id ) {
 				continue;
 			}
+			/** @var Events_List|false $list */
+			$list = $action->get_events();
 
-			if ( 'redirect_to_page' === $action->get_id() ) {
-				jet_fb_action_handler()->unregister_action( $index );
-				$this->redirect = $action;
+			if ( ! $list ) {
+				$list = new Events_List();
 			}
 
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
+			$list->push( Default_Process_Event::class );
+			break;
 		}
 	}
 

@@ -15,13 +15,18 @@ export default {
 			return;
 		}
 		const notice = state.notices[ index ];
+		Vue.delete( state.notices, index );
+
+		const { is_hide_after_close } = notice.options;
+
+		if ( ! is_hide_after_close ) {
+			return;
+		}
 		const storageNotice = storage.getItem( notice.id, {} );
 
 		storage.setItem( notice.id, {
 			...storageNotice,
 			closed: true,
 		} );
-
-		Vue.delete( state.notices, index );
 	},
 };

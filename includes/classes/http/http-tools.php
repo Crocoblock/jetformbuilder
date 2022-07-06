@@ -42,7 +42,7 @@ class Http_Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
+			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
 				return (string) $value;
 			};
 		}
@@ -74,7 +74,12 @@ class Http_Tools {
 			$args
 		);
 
-		$action = add_query_arg( $args, home_url( $wp->request ) );
+		$action = add_query_arg(
+			$args,
+			trailingslashit(
+				home_url( $wp->request )
+			)
+		);
 
 		return apply_filters( 'jet-form-builder/form-action-url', $action );
 	}

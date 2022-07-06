@@ -14,16 +14,33 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 	}
 
 	public function get_response() {
-		if ( ! is_array( $this->value ) ) {
-			return array();
-		}
 		$response = array();
+		$indexes  = $this->get_indexes();
+		$context  = clone $this->context;
 
-		foreach ( $this->value as $index => $row ) {
-			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $row, $this->inside_conditional );
+		foreach ( $indexes as $index ) {
+			$row   = $this->value[ $index ] ?? array();
+			$files = $this->file[ $index ] ?? array();
+
+			$context->set_request_context( $row )->set_files_context( $files );
+
+			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $context );
 		}
 
 		return $response;
+	}
+
+	protected function get_indexes(): array {
+		if ( ! is_array( $this->value ) ) {
+			$this->value = array();
+		}
+		if ( ! is_array( $this->file ) ) {
+			$this->file = array();
+		}
+
+		$indexes = array_keys( $this->value );
+
+		return count( $indexes ) ? $indexes : array_keys( $this->file );
 	}
 
 }

@@ -16,6 +16,8 @@ use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Widgets\Elementor_Controller;
+use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
+use Jet_Form_Builder\Migrations;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -104,6 +106,7 @@ class Plugin {
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		new Elementor_Controller();
+		( new Migrations\Rest_Api\Controller() )->rest_api_init();
 
 		if ( is_admin() ) {
 			Preset_Manager::instance();
@@ -207,6 +210,7 @@ class Plugin {
 		);
 
 		$this->init_framework();
+		Wp_Cli_Manager::register();
 	}
 
 }

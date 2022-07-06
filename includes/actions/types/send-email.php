@@ -6,6 +6,8 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Macros_Parser;
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
+use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -50,6 +52,8 @@ class Send_Email extends Base {
 			'from_address'     => __( 'From Email Address:', 'jet-form-builder' ),
 			'content_type'     => __( 'Content type:', 'jet-form-builder' ),
 			'content'          => __( 'Content:', 'jet-form-builder' ),
+			'attachments'      => __( 'Attachments:', 'jet-form-builder' ),
+			'add_attachment'   => __( 'Add form field with attachment', 'jet-form-builder' ),
 		);
 	}
 
@@ -257,7 +261,13 @@ class Send_Email extends Base {
 			);
 		}
 
-		$sent = wp_mail( $to, $subject, $message, $this->get_headers() );
+		$sent = wp_mail(
+			$to,
+			$subject,
+			$message,
+			$this->get_headers(),
+			$this->get_attachments()
+		);
 
 		if ( ! $sent ) {
 			throw new Action_Exception(
@@ -286,12 +296,34 @@ class Send_Email extends Base {
 	 *
 	 * @since 2.1
 	 */
-	public function get_headers() {
+	public function get_headers(): string {
 		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 
 		return apply_filters( 'jet-form-builder/send-email/headers', $headers, $this );
+	}
+
+	public function get_attachments(): array {
+		$files       = jet_fb_request_handler()->get_files();
+		$fields      = $this->settings['attachments'] ?? array();
+		$attachments = array();
+
+		foreach ( $fields as $field ) {
+			/** @var Uploaded_File_Path $value */
+			$value = $files[ $field ] ?? false;
+
+			if ( ! $value ) {
+				continue;
+			}
+
+			array_push(
+				$attachments,
+				...explode( ',', $value->get_attachment_file() )
+			);
+		}
+
+		return $attachments;
 	}
 
 	/**

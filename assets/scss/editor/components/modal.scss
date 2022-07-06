@@ -2,6 +2,7 @@
 	.components-flex-item, .components-flex__item {
 		flex: 1;
 	}
+
 	.components-base-control__label {
 		flex: 1;
 		padding-top: 6px;
@@ -9,13 +10,30 @@
 	}
 	.components-custom-select-control {
 		flex: 3.1;
+
 		&__item.is-disabled {
 			background-color: mistyrose;
 		}
+
 		&__button {
 			width: 100%;
 		}
 	}
+
+	.control-flex {
+		.components-base-control__label {
+			& + * {
+				flex: 3.1;
+			}
+		}
+
+		&.field-display-grid {
+			.components-base-control__field .components-base-control__field {
+				display: grid;
+			}
+		}
+	}
+
 	.jet-user-meta__row {
 		display: flex;
 		padding: 1em;
@@ -25,9 +43,11 @@
 		-webkit-box-shadow: 0 2px 4px rgba(22, 43, 64, .1);
 		box-shadow: 0 2px 4px rgba(22, 43, 64, .1);
 		justify-content: space-between;
+
 		&:not(:last-child) {
 			margin-bottom: 1em;
 		}
+
 		.jet-field-map__row-label, .components-base-control__label {
 			flex: 1;
 			min-width: 150px;
@@ -40,47 +60,90 @@
 			flex: 1;
 		}
 	}
+
 	.components-base-control:first-child .components-base-control__field {
 		border-top: none;
 		padding-top: 0;
 	}
+
 	.jet-post-field-control .components-base-control:nth-child(2) .components-select-control .components-flex__item {
 		display: none;
 	}
+
 	.jet-user-meta__row .components-base-control__field {
 		border: none;
 		padding: 0;
 		margin: 0;
 	}
+
 	.components-base-control__field {
 		display: flex;
 		padding: 12px 0 5px;
 		border-top: 1px solid #ddd;
+
+		& > .input_with_button {
+			width: 55%;
+		}
 	}
+
 	.input_with_button {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.components-base-control__field > .input_with_button {
-		width: 55%;
-	}
+
 	.input_with_button {
 		.components-base-control {
 			margin-right: 1em;
 		}
+
 		select.components-select-control__input {
 			min-width: 26em;
 		}
 	}
+
 	.components-notice {
 		margin: 0 0 2em 0;
 	}
+
 	.jet-form-editor__macros-wrap {
 		position: relative;
+
 		.components-base-control .components-base-control__field {
 			padding-top: 12px;
 			border-top: 1px solid #ddd;
 		}
+	}
+
+	.jfb-conditions-tab-panel .components-tab-panel__tabs {
+		margin-bottom: 1em;
+		border-bottom: 1px solid #ddd;
+	}
+
+	&.width-60 {
+		width: 60vw;
+	}
+
+	&.without-margin .components-modal__content:before {
+		display: none;
+	}
+
+	&__actions {
+		position: sticky;
+		bottom: 0;
+		left: 0;
+		padding: 18px 24px 20px 0;
+		background-color: #fff;
+		width: 100%;
+		border-top: 1px solid #ddd;
+		z-index: 100;
+	}
+
+	&__content {
+		padding-bottom: 2em;
+	}
+
+	.components-modal__content {
+		padding-bottom: unset;
 	}
 }

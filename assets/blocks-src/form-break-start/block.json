@@ -1,0 +1,29 @@
+{
+	"apiVersion": 2,
+	"name": "jet-forms/form-break-start",
+	"category": "jet-form-builder-elements",
+	"keywords": [
+		"jetformbuilder",
+		"block",
+		"break",
+		"pagebreak",
+		"formbreak",
+		"start"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false
+	},
+	"title": "Form Page Start",
+	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"34\" y=\"2\" width=\"28\" height=\"28\" rx=\"3\" fill=\"white\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"3\" fill=\"white\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<rect x=\"2\" y=\"22\" width=\"40\" height=\"40\" rx=\"3\" fill=\"#6F8CFF\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<path d=\"M24.3809 36.1768V49H21.8496V39.0947L18.8086 40.0615V38.0664L24.1084 36.1768H24.3809Z\" fill=\"#0F172A\"/>\n</svg>",
+	"attributes": {
+		"class_name": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [
+		"jet-forms/conditional-block--name"
+	]
+}

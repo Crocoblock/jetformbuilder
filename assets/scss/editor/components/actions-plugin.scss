@@ -3,8 +3,48 @@
 	justify-content: space-between;
 }
 
+.jfb-button {
+	&.components-button.has-icon {
+		position: relative;
+
+		span.dashicons-randomize[data-count]:after {
+			content: attr(data-count);
+			position: absolute;
+			font-size: 0.7em;
+			background-color: var(--wp-admin-theme-color);
+			color: #fff;
+			padding: 2px;
+			border-radius: 5px;
+			top: 0;
+			font-family: monospace;
+		}
+	}
+}
+
 .jet-form-action {
 	option[disabled] {
 		background-color: #d3d3d35e;
+	}
+
+	.jfb-events-item {
+		padding: 0 4px;
+		border-radius: 5px;
+		color: #5c5c5c;
+		font-size: 0.9em;
+		background-color: #f3f4f5;
+		cursor: pointer;
+		margin: auto;
+		border: 0;
+		font-family: monospace;
+
+		&:after {
+			content: ' X';
+			font-weight: bold;
+		}
+
+		&:focus {
+			outline: 1px solid #5c5c5c;
+			background-color: #e7e8e9;
+		}
 	}
 }

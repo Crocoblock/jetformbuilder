@@ -3,9 +3,11 @@
 
 namespace Jet_Form_Builder\Admin\Notices;
 
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 
-class Notices_Repository implements Admin_Notices_Interface {
+class Notices_Repository implements Admin_Notices_Interface, Arrayable {
 
 	use Repository_Pattern_Trait;
 
@@ -18,6 +20,10 @@ class Notices_Repository implements Admin_Notices_Interface {
 	 */
 	public function get_notices(): array {
 		return $this->rep_get_items();
+	}
+
+	public function to_array(): array {
+		return Array_Tools::to_array( $this->get_notices() );
 	}
 
 	/**

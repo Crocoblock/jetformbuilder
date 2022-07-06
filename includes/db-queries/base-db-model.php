@@ -3,13 +3,22 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
+use ElementorPro\Modules\Forms\Submissions\Database\Migration;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Migrations\Migration_Exception;
+use Jet_Form_Builder\Migrations\Migrator;
+use Jet_Form_Builder\Migrations\Versions\Base_Migration;
+use Jet_Form_Builder\Wp_Cli\Cli_Tools;
 
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';
 	const InnoDB          = 'InnoDB';
 	const MyISAM          = 'MyISAM';
+
+	const PRIMARY_ID = 'id';
+	const CREATED_AT = 'created_at';
+	const UPDATED_AT = 'updated_at';
 
 	protected static $prefix = self::DB_TABLE_PREFIX;
 
@@ -73,6 +82,39 @@ abstract class Base_Db_Model {
 	 */
 	public function foreign_relations(): array {
 		return array();
+	}
+
+	/**
+	 * This method returns a list of migrations
+	 * that must be performed before
+	 * the sql query is executed.
+	 *
+	 * These migrations will be automatically
+	 * marked as "installed" after the current table is created
+	 *
+	 * @return Base_Migration[]
+	 */
+	public function related_migrations(): array {
+		return array();
+	}
+
+	/**
+	 * Generate migrations which need to install
+	 *
+	 * @return \Generator
+	 */
+	public function get_migrations(): \Generator {
+		$migrations = $this->related_migrations();
+
+		if ( ! count( $migrations ) ) {
+			return;
+		}
+
+		foreach ( $this->related_migrations() as $migration ) {
+			if ( ! $migration->is_installed() ) {
+				yield $migration;
+			}
+		}
 	}
 
 	/**
@@ -150,8 +192,8 @@ abstract class Base_Db_Model {
 		$defaults    = array();
 		$schema_keys = array_keys( static::schema() );
 
-		if ( in_array( 'created_at', $schema_keys, true ) ) {
-			$defaults['created_at'] = current_time( 'mysql' );
+		if ( in_array( self::CREATED_AT, $schema_keys, true ) ) {
+			$defaults[ self::CREATED_AT ] = current_time( 'mysql' );
 		}
 
 		return $defaults;
@@ -159,17 +201,41 @@ abstract class Base_Db_Model {
 
 	public function before_create() {
 		$this->create_foreign_tables();
+		$this->mark_migrations_as_installed();
 	}
 
 	protected function create_foreign_tables() {
 		Execution_Builder::instance()->create_foreign_tables( $this );
 	}
 
+	protected function mark_migrations_as_installed() {
+		foreach ( $this->related_migrations() as $migration ) {
+			$migration->install_automatic();
+		}
+	}
+
 	public function after_create() {
 	}
 
+	/**
+	 * @throws Sql_Exception
+	 */
 	public function before_insert() {
 		$this->create();
+		$this->migrations_install();
+	}
+
+	/**
+	 * @throws Sql_Exception
+	 */
+	protected function migrations_install() {
+		try {
+			foreach ( $this->related_migrations() as $migration ) {
+				$migration->install();
+			}
+		} catch ( Migration_Exception $exception ) {
+			throw new Sql_Exception( $exception->getMessage() );
+		}
 	}
 
 	public function after_insert( $insert_columns ) {
@@ -181,11 +247,12 @@ abstract class Base_Db_Model {
 	public function update_columns( array $columns ): array {
 		$schema_keys = array_keys( static::schema() );
 
-		if ( in_array( 'updated_at', $schema_keys, true )
-			&& ! array_key_exists( 'updated_at', $columns )
+		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
+			 ! array_key_exists( self::UPDATED_AT, $columns )
 		) {
-			$columns['updated_at'] = current_time( 'mysql' );
+			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}
+
 		return $columns;
 	}
 
@@ -193,6 +260,9 @@ abstract class Base_Db_Model {
 	 * @throws Sql_Exception
 	 */
 	public function before_delete() {
+		if ( Cli_Tools::is_cli() ) {
+			return;
+		}
 		if ( ! current_user_can( 'manage_options' ) ) {
 			throw new Sql_Exception(
 				"Not enough capabilities for current user to delete rows in {$this::table()}"

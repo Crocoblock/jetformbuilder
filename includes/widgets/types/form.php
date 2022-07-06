@@ -8,6 +8,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
 use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
 
 class Form extends Jfb_Widget_Base {
@@ -1046,7 +1047,7 @@ class Form extends Jfb_Widget_Base {
 	 */
 	protected function register_controls() {
 
-		$options = Tools::get_form_settings_options( true );
+		$options = Form_Arguments::get_options( true );
 
 		/** Form Settings */
 		$closure = function () use ( $options ) {
@@ -2888,6 +2889,20 @@ class Form extends Jfb_Widget_Base {
 					),
 					'selectors' => array(
 						$this->selector( '__submit-wrap' ) => 'justify-content: {{VALUE}}; align-items: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_control(
+				'booking_form_submit_alignment_hidden',
+				array(
+					'type'      => Controls_Manager::HIDDEN,
+					'default'   => 'style',
+					'selectors' => array(
+						$this->selector( '__submit-wrap > .%s__submit' ) => 'width: 100%',
+					),
+					'condition' => array(
+						'booking_form_submit_alignment' => 'stretch',
 					),
 				)
 			);

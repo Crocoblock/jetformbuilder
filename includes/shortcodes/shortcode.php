@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Shortcodes;
 
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
 abstract class Shortcode implements Repository_Item_Instance_Trait {
@@ -24,11 +25,11 @@ abstract class Shortcode implements Repository_Item_Instance_Trait {
 	}
 
 	protected function prepare_attributes( $attrs ) {
-		$result       = array();
-		$allowed_args = jet_form_builder()->post_type->get_default_args();
+		$result    = array();
+		$arguments = new Form_Arguments();
 
 		foreach ( $attrs as $name => $attr ) {
-			if ( isset( $allowed_args[ $name ] ) ) {
+			if ( isset( $arguments->{$name} ) ) {
 				$result[ $name ] = $attr['default'];
 			}
 		}

@@ -3,20 +3,27 @@
 
 namespace Jet_Form_Builder\Request;
 
+use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
+use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
+use Jet_Form_Builder\Classes\Resources\File;
+use Jet_Form_Builder\Classes\Resources\File_Collection;
+use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
 
 class Request_Handler {
 
-	public $_fields        = array();
+	public $_fields = array();
 	private $request_types = array();
 	private $request_attrs = array();
-	private $raw_request   = array();
+	private $raw_request = array();
+	private $files = array();
 
-	const WP_NONCE_KEY = '_wpnonce';
+	const FILE_PROPERTIES = array( 'name', 'size', 'error', 'type', 'tmp_name' );
 
 	public function set_request_type( array $types ): Request_Handler {
 		$this->request_types = array_merge( $this->request_types, $types );
@@ -57,120 +64,149 @@ class Request_Handler {
 		return $this->request_attrs[ $name ] ?? array();
 	}
 
-	/**
-	 * Get form values from request
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_values_from_request() {
-		// phpcs:disable WordPress.Security
+	private function get_raw_files(): array {
+		$response = array();
 
-		if ( ! jet_fb_handler()->is_ajax() ) {
-			return $_POST;
-		}
+		foreach ( $_FILES as $fields_name => $files ) {
+			$is_repeater = isset( $files['name'][0] ) && is_array( $files['name'][0] );
 
-		$prepared = array();
-		$raw      = ! empty( $_POST['values'] ) ? Tools::sanitize_recursive( wp_unslash( $_POST['values'] ) ) : array();
+			if ( $is_repeater ) {
+				$response[ $fields_name ] = $this->get_repeating_raw_files( $files );
 
-		// phpcs:enable WordPress.Security
-
-		if ( empty( $raw ) ) {
-			return $prepared;
-		}
-
-		foreach ( $raw as $data ) {
-
-			$name  = $data['name'];
-			$value = $data['value'];
-
-			if ( preg_match( '/\[\d\]\[/', $name ) ) {
-
-				$name_parts = explode( '[', $name );
-
-				$name  = $name_parts[0];
-				$index = absint( rtrim( $name_parts[1], ']' ) );
-				$key   = rtrim( $name_parts[2], ']' );
-
-				if ( empty( $prepared[ $name ] ) ) {
-					$prepared[ $name ] = array();
-				}
-
-				if ( empty( $prepared[ $name ][ $index ] ) ) {
-					$prepared[ $name ][ $index ] = array();
-				}
-
-				if ( isset( $name_parts[3] ) ) {
-
-					if ( empty( $prepared[ $name ][ $index ][ $key ] ) ) {
-						$prepared[ $name ][ $index ][ $key ] = array();
-					}
-
-					$prepared[ $name ][ $index ][ $key ][] = $value;
-
-				} else {
-					$prepared[ $name ][ $index ][ $key ] = $value;
-				}
-			} elseif ( false !== strpos( $name, '[]' ) ) {
-
-				$name = str_replace( '[]', '', $name );
-
-				if ( empty( $prepared[ $name ] ) ) {
-					$prepared[ $name ] = array();
-				}
-
-				$prepared[ $name ][] = $value;
-
-			} else {
-				$prepared[ $name ] = $value;
+				continue;
 			}
+
+			$is_collection = is_array( $files['name'] );
+
+			if ( ! $is_collection ) {
+				try {
+					$file = new File( $files );
+				} catch ( Sanitize_File_Exception $exception ) {
+					continue;
+				}
+				$response[ $fields_name ] = $file;
+
+				continue;
+			}
+
+			$count_collection = count( $files['name'] );
+			$collection       = array();
+
+			for ( $index = 0; $index < $count_collection; $index ++ ) {
+				$file = array();
+
+				foreach ( self::FILE_PROPERTIES as $property ) {
+					$file[ $property ] = $files[ $property ][ $index ];
+				}
+
+				$collection[ $index ] = $file;
+			}
+
+			$response[ $fields_name ] = ( new File_Collection() )->push_files( $collection );
 		}
 
-		return $prepared;
+		return $response;
 	}
 
 	/**
-	 * @throws Request_Exception
+	 *
 	 */
+	private function get_repeating_raw_files( array $files ): array {
+		$rows     = count( $files['name'] );
+		$repeater = array();
+
+		for ( $current = 0; $current < $rows; $current ++ ) {
+			$row = array();
+
+			foreach ( self::FILE_PROPERTIES as $property ) {
+				foreach ( $files[ $property ][ $current ] as $field_name => $values ) {
+					if ( ! isset( $row[ $field_name ] ) ) {
+						$row[ $field_name ] = array();
+					}
+
+					if ( is_array( $values ) ) {
+						$count_values = count( $values );
+
+						for ( $index_value = 0; $index_value < $count_values; $index_value ++ ) {
+							if ( ! isset( $row[ $field_name ][ $index_value ] ) ) {
+								$row[ $field_name ][ $index_value ] = array();
+							}
+							$row[ $field_name ][ $index_value ][ $property ] = $values[ $index_value ];
+						}
+					} else {
+						$row[ $field_name ][ $property ] = $values;
+					}
+				}
+			}
+			unset( $field_name, $values );
+
+			foreach ( $row as $field_name => $values ) {
+				if ( isset( $values[0] ) ) {
+					$row[ $field_name ] = ( new File_Collection() )->push_files( $values );
+				} else {
+					try {
+						$file = new File( $values );
+					} catch ( Sanitize_File_Exception $exception ) {
+						unset( $row[ $field_name ] );
+						continue;
+					}
+					$row[ $field_name ] = $file;
+				}
+			}
+
+			$repeater[ $current ] = $row;
+		}
+
+		return $repeater;
+	}
+
 	private function get_raw_request(): array {
 		$this->_fields = Block_Helper::get_blocks_by_post(
 			jet_fb_handler()->get_form_id()
 		);
 
-		$values = $this->get_values_from_request();
-		$nonce  = $values[ self::WP_NONCE_KEY ] ?? '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
 
 		Live_Form::instance()
 				->set_form_id( jet_fb_handler()->get_form_id() )
 				->set_specific_data_for_render();
 
-		if ( 'render' === Live_Form::instance()->spec_data->load_nonce
-			&& ! wp_verify_nonce( $nonce, Live_Form::instance()->get_nonce_id() )
-		) {
-			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
-		}
-
-		return $values;
+		return apply_filters( 'jet-form-builder/request-handler/request', $values );
 	}
 
 	/**
 	 * Get submitted form data
 	 *
-	 * @return array [type] [description]
-	 * @throws Request_Exception
+	 * @throws Action_Exception|Request_Exception
 	 */
-	public function get_form_data(): array {
+	public function set_form_data() {
 		$this->raw_request = $this->get_raw_request();
-		$request           = Parser_Manager::instance()->get_values_fields( $this->_fields, $this->raw_request );
+		$this->files       = $this->get_raw_files();
 
-		if ( ! Error_Handler::instance()->empty_errors() ) {
-			throw new Request_Exception(
-				'validation_failed',
-				Error_Handler::instance()->errors(),
-				$request
-			);
+		$context = ( new Parser_Context() )
+			->set_files_context( $this->files )
+			->set_request_context( $this->raw_request );
+
+		$request = apply_filters(
+			'jet-form-builder/form-handler/form-data',
+			Parser_Manager::instance()->get_values_fields( $this->_fields, $context ),
+			$this
+		);
+
+		jet_fb_action_handler()->add_request( $request );
+
+		if ( Error_Handler::instance()->empty_errors() ) {
+			return;
 		}
 
-		return apply_filters( 'jet-form-builder/form-handler/form-data', $request, $this );
+		jet_fb_events()->execute( Bad_Request_Event::class );
+
+		throw new Request_Exception(
+			'validation_failed',
+			Error_Handler::instance()->errors(),
+			$request
+		);
 	}
 
 	/**
@@ -181,13 +217,28 @@ class Request_Handler {
 	}
 
 	/**
+	 * @return File[]|File_Collection[]|array[]
+	 */
+	public function get_files(): array {
+		return $this->files;
+	}
+
+	public function update_file( string $name, $file ): Request_Handler {
+		$this->files[ $name ] = $file;
+
+		return $this;
+	}
+
+	/**
 	 * @param $field_name
 	 * @param $attr_name
 	 * @param false $if_not_exist
 	 *
 	 * @return mixed
 	 */
-	public function get_attr( $field_name, $attr_name, $if_not_exist = false ) {
+	public function get_attr(
+		$field_name, $attr_name, $if_not_exist = false
+	) {
 		$attrs = $this->get_attrs_by_name( $field_name );
 
 		return $attrs[ $attr_name ] ?? $if_not_exist;
@@ -195,15 +246,16 @@ class Request_Handler {
 
 
 	/**
-	 * @deprecated since 2.0.0
-	 * Use jfb_request_handler()->get_single_attr instead
-	 *
 	 * @param $field_name
 	 * @param string $attr_name
 	 *
 	 * @return array
+	 * @deprecated since 2.0.0
+	 * Use jfb_request_handler()->get_single_attr instead
 	 */
-	public function get_field_attrs_by_name( $field_name, $attr_name = '', $if_empty = false ) {
+	public function get_field_attrs_by_name(
+		$field_name, $attr_name = '', $if_empty = false
+	) {
 		return $this->get_attr( $field_name, $attr_name, $if_empty );
 	}
 

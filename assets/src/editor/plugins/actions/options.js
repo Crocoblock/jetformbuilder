@@ -6,6 +6,9 @@ const defaultAction = {
 	type: 'send_email',
 	id: getRandomID(),
 	settings: {},
+	conditions: [],
+	events: [],
+	provideEvents: []
 };
 
 const defaultActions = [

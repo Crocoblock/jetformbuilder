@@ -81,7 +81,7 @@ class Controller {
 			'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
 			'user_id'           => get_current_user_id(),
 			'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
-			'from_content_type' => 'post', /* it can be replaced by CCT slug */
+			'from_content_type' => Live_Form::instance()->post->post_type, /* it can be replaced by CCT slug */
 			'status'            => $args['status'] ?? '',
 		);
 
@@ -237,12 +237,15 @@ class Controller {
 		 * @var $source Base[]
 		 */
 		foreach ( $source as $action ) {
-			$actions[] = array(
-				'record_id'   => $this->record_id,
-				'action_slug' => $action->get_id(),
-				'action_id'   => $action->_id,
-				'status'      => $status,
-			);
+			foreach ( $action->get_executed_events() as $on_event ) {
+				$actions[] = array(
+					'record_id'   => $this->record_id,
+					'action_slug' => $action->get_id(),
+					'action_id'   => $action->_id,
+					'on_event'    => $on_event,
+					'status'      => $status,
+				);
+			}
 		}
 
 		return $actions;

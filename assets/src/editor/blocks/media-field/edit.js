@@ -1,30 +1,30 @@
 import {
 	userAccess,
 	valueFormats,
-} from "./options";
+} from './options';
 
 const {
-		  ToolBarFields,
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldWrapper,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	ToolBarFields,
+	GeneralFields,
+	AdvancedFields,
+	FieldWrapper,
+	FieldSettingsWrapper,
+} = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-		  useBlockProps,
-		  InspectorControls,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	useBlockProps,
+	InspectorControls,
+} = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  SelectControl,
-		  ToggleControl,
-		  PanelBody,
-		  __experimentalNumberControl,
-		  __experimentalInputControl,
-	  } = wp.components;
+	SelectControl,
+	ToggleControl,
+	FormTokenField,
+	__experimentalNumberControl,
+	__experimentalInputControl,
+} = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
 
@@ -43,11 +43,11 @@ export default function MediaEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey, attrHelp },
-		  } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp },
+	} = props;
 
 	return [
 		<ToolBarFields
@@ -73,25 +73,27 @@ export default function MediaEdit( props ) {
 						} }
 						options={ userAccess }
 					/>
-					{ 'any_user' !== attributes.allowed_user_cap && <ToggleControl
-						key='insert_attachment'
-						label={ __( 'Insert attachment' ) }
-						checked={ attributes.insert_attachment }
-						help={ attrHelp( 'insert_attachment' ) }
-						onChange={ ( newValue ) => {
-							setAttributes( { insert_attachment: Boolean( newValue ) } );
-						} }
-					/> }
-					{ ( 'any_user' !== attributes.allowed_user_cap && attributes.insert_attachment ) && <SelectControl
-						key='value_format'
-						label={ __( 'Field value' ) }
-						labelPosition='top'
-						value={ attributes.value_format }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { value_format: newValue } );
-						} }
-						options={ valueFormats }
-					/> }
+					{ 'any_user' !== attributes.allowed_user_cap && <>
+						<ToggleControl
+							key='insert_attachment'
+							label={ __( 'Insert attachment' ) }
+							checked={ attributes.insert_attachment }
+							help={ attrHelp( 'insert_attachment' ) }
+							onChange={ ( newValue ) => {
+								setAttributes( { insert_attachment: Boolean( newValue ) } );
+							} }
+						/>
+						{ attributes.insert_attachment && <SelectControl
+							key='value_format'
+							label={ __( 'Field value' ) }
+							labelPosition='top'
+							value={ attributes.value_format }
+							onChange={ ( newValue ) => {
+								props.setAttributes( { value_format: newValue } );
+							} }
+							options={ valueFormats }
+						/> }
+					</> }
 					<NumberControl
 						key='max_files'
 						label={ __( 'Maximum allowed files to upload' ) }
@@ -113,18 +115,13 @@ export default function MediaEdit( props ) {
 							props.setAttributes( { max_size: Number( newValue ) } );
 						} }
 					/>
-					<SelectControl
-						multiple
-						className='field-mime-types'
+					<FormTokenField
 						key='allowed_mimes'
-						label={ __( 'Allow MIME types' ) }
-						labelPosition='top'
-						help={ attrHelp( 'allowed_mimes' ) }
 						value={ attributes.allowed_mimes }
-						onChange={ ( newValue ) => {
-							props.setAttributes( { allowed_mimes: newValue } );
-						} }
-						options={ localizeData.mime_types }
+						label={ __( 'Allow MIME types', 'jet-form-builder' ) }
+						suggestions={ localizeData.mime_types }
+						onChange={ allowed_mimes => setAttributes( { allowed_mimes } ) }
+						tokenizeOnSpace
 					/>
 				</FieldSettingsWrapper>
 				<AdvancedFields

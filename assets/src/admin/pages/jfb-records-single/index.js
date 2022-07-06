@@ -12,13 +12,14 @@ addFilter( 'jet.fb.admin.table.form-fields', 'jet-form-builder', components => {
 const {
 	BaseStore,
 	SingleMetaBoxesPlugin,
+	NoticesPlugin,
 } = JetFBStore;
 
 const { renderCurrentPage } = window.JetFBActions;
 
 const store = new Vuex.Store( {
 	...BaseStore,
-	plugins: [ SingleMetaBoxesPlugin ],
+	plugins: [ SingleMetaBoxesPlugin, NoticesPlugin ],
 } );
 
 renderCurrentPage( SingleRecord, { store } );

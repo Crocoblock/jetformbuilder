@@ -3,11 +3,16 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Events\Base_Executor;
+use Jet_Form_Builder\Actions\Executors\Action_Executor_Base;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -21,8 +26,9 @@ class Action_Handler {
 	public $form_id          = null;
 	public $request_data     = array();
 	public $form_actions     = array();
-	private $form_conditions = array();
 	public $is_ajax          = false;
+	private $form_conditions = array();
+	private $form_events     = array();
 
 	/**
 	 * Data for actions
@@ -103,6 +109,10 @@ class Action_Handler {
 	public function save_form_action( $form_action ): array {
 		$type = $form_action['type'];
 
+		if ( ! ( $form_action['is_execute'] ?? true ) ) {
+			throw new Repository_Exception( 'This action is turned off' );
+		}
+
 		/** @var Base $action */
 		$action = jet_form_builder()->actions->get_action_clone( $type );
 
@@ -110,6 +120,7 @@ class Action_Handler {
 		$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
 		$conditions = $form_action['conditions'] ?? array();
 		$operator   = $form_action['condition_operator'] ?? 'and';
+		$events     = $form_action['events'] ?? array();
 
 		/**
 		 * Save action settings to the class field,
@@ -125,37 +136,63 @@ class Action_Handler {
 
 		$this->form_conditions[ $id ] = $condition;
 		$this->form_actions[ $id ]    = $action;
+		$this->form_events[ $id ]     = Events_List::create(
+			array_merge( $events, $action->get_required_events() )
+		);
 
 		return array( $action, $condition );
 	}
 
 	/**
-	 * Send form notifications
+	 * Doesn't throw an exception if there are no actions
 	 *
-	 * @return array [description]
+	 * Don't call manually.
+	 * Use jet_fb_events()->execute() instead.
+	 *
+	 * @param Base_Executor $executor
+	 *
+	 * @return $this
+	 * @throws Action_Exception
 	 */
-	public function do_actions() {
-		do_action( 'jet-form-builder/actions/before-send' );
+	public function soft_run_actions( Base_Executor $executor ): Action_Handler {
+		if ( ! count( $executor ) ) {
+			return $this;
+		}
+		$this->run_actions( $executor );
 
-		$run_actions_callback = apply_filters(
-			'jet-form-builder/actions/run-callback',
-			array( new Action_Default_Executor(), 'run_actions' )
-		);
-
-		call_user_func( $run_actions_callback );
-
-		do_action( 'jet-form-builder/actions/after-send' );
-
-		return $this->response_data;
+		return $this;
 	}
 
-	public function process_single_action( $index ) {
+	/**
+	 * Don't call manually.
+	 * Use jet_fb_events()->execute() instead.
+	 *
+	 * @param Base_Executor $executor
+	 *
+	 * @throws Action_Exception
+	 */
+	public function run_actions( Base_Executor $executor ) {
+		if ( ! count( $executor ) ) {
+			throw new Action_Exception( 'failed', 'Empty actions' );
+		}
+
+		foreach ( $executor as $action ) {
+			$this->process_single_action( $action );
+		}
+
+		/**
+		 * End the cycle
+		 */
+		$this->set_current_action( false );
+	}
+
+	private function process_single_action( Base $action ) {
 		/**
 		 * Start the cycle
 		 *
 		 * @var int current_position
 		 */
-		$this->set_current_action( $index );
+		$this->set_current_action( $action->_id );
 
 		try {
 			/**
@@ -175,7 +212,7 @@ class Action_Handler {
 		/**
 		 * Process single action
 		 */
-		$this->get_current_action()->do_action( $this->request_data, $this );
+		$action->do_action( $this->request_data, $this );
 
 		/**
 		 * We save the ID of the current action,
@@ -194,12 +231,16 @@ class Action_Handler {
 	public function unregister_action( $key ) {
 		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
 			unset( $this->form_actions[ $key ] );
+			unset( $this->form_conditions[ $key ] );
 
 			return $this;
 		}
 		foreach ( $this->form_actions as $index => $action ) {
 			if ( $key === $action->get_id() ) {
 				unset( $this->form_actions[ $index ] );
+				unset( $this->form_conditions[ $index ] );
+
+				return $this;
 			}
 		}
 
@@ -281,9 +322,9 @@ class Action_Handler {
 			return;
 		}
 
-		_doing_it_wrong(
-			__METHOD__,
+		wp_die(
 			esc_html( 'The action loop has not been started, see ' . self::class . '::run_actions()' ),
+			__METHOD__,
 			'1.4.0'
 		);
 	}
@@ -316,6 +357,30 @@ class Action_Handler {
 	 */
 	public function get_condition_by_id( $id ) {
 		return $this->form_conditions[ $id ] ?? false;
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return false|Events_List
+	 */
+	public function get_events_by_id( $id ) {
+		return $this->form_events[ $id ] ?? false;
+	}
+
+	/**
+	 * For fix backward compatibility
+	 *
+	 * @param array $form_events
+	 *
+	 * @return $this
+	 */
+	public function merge_events( array $form_events ): array {
+		foreach ( $form_events as $action_id => $event_list ) {
+			$this->form_events[ $action_id ] = $event_list;
+		}
+
+		return $this->form_events;
 	}
 
 	/**

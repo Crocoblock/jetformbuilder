@@ -16,4 +16,10 @@ class Record_Actions extends View_Base {
 	public function select_columns(): array {
 		return Record_Action_Result_Model::schema_columns();
 	}
+
+	public function get_dependencies(): array {
+		return array(
+			new Record_Action_Result_Model(),
+		);
+	}
 }

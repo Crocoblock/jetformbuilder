@@ -3,8 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Button_Types;
 
-use Jet_Form_Builder\Live_Form;
-
 class Button_Submit extends Button_Type_Base {
 
 	public function slug(): string {
@@ -20,14 +18,9 @@ class Button_Submit extends Button_Type_Base {
 	}
 
 	public function html_attrs() {
-		$button      = array( "jet-form-builder__{$this->slug()}" );
-		$submit_type = Live_Form::instance()->form_id
-			? Live_Form::instance()->spec_data->submit_type
-			: false;
-
-		if ( $submit_type ) {
-			$button[] = "submit-type-$submit_type";
-		}
+		$button   = array( "jet-form-builder__{$this->slug()}" );
+		$type     = jet_fb_live_args()->get_submit_type();
+		$button[] = "submit-type-{$type}";
 
 		return array(
 			'type'  => 'submit',

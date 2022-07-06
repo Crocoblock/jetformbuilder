@@ -131,15 +131,31 @@ trait Repository_Pattern_Trait {
 	}
 
 	/**
-	 * @param $slug
+	 * @param $class_or_slug
 	 *
 	 * @return mixed
 	 * @throws Repository_Exception
 	 */
-	public function rep_get_item( $slug ) {
-		$this->rep_throw_if_undefined( $slug );
+	public function rep_get_item( $class_or_slug ) {
+		// if we got normal slug
+		if ( ! class_exists( $class_or_slug ) ) {
+			$this->rep_throw_if_undefined( $class_or_slug );
 
-		return $this->_rep_get_item( $slug );
+			return $this->_rep_get_item( $class_or_slug );
+
+		} elseif ( $this->rep_isset_item( $class_or_slug ) ) {
+
+			// if we got class string, which used as key
+			return $this->_rep_get_item( $class_or_slug );
+		}
+
+		foreach ( $this->rep_get_items() as $item ) {
+			if ( is_a( $item, $class_or_slug ) ) {
+				return $item;
+			}
+		}
+
+		throw new Repository_Exception( "Undefined item: {$class_or_slug}" );
 	}
 
 	public function rep_get_item_or_die( $slug ) {

@@ -3,7 +3,8 @@
 
 namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
+use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
+use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
@@ -69,30 +70,7 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		);
 	}
 
-	/**
-	 * @throws Repository_Exception
-	 */
 	public function before_actions() {
-		$keep_these      = jet_fb_gateway_current()->get_actions_before();
-		$default_actions = ( new Action_Default_Executor() )->get_actions_ids();
-
-		foreach ( $default_actions as $index ) {
-			$action = jet_fb_action_handler()->get_action_by_id( $index );
-
-			if ( 'redirect_to_page' === $action->get_id() ) {
-				jet_fb_action_handler()->unregister_action( $index );
-
-				$this->add_context(
-					array(
-						'redirect' => $action,
-					)
-				);
-			}
-
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
 	}
 
 	/**
@@ -142,6 +120,12 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		return $request;
 	}
 
+	public function init_actions() {
+		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
+
+		jet_fb_action_handler()->set_form_id( $form_id );
+	}
+
 	/**
 	 * Process status notification and enqueue message
 	 *
@@ -150,34 +134,19 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 * @throws Action_Exception
 	 */
 	public function process_status( $type = 'success' ) {
-		$entry = $this->get_scenario_row();
-
 		// save form request to Action_Handler & current gateway controller
 		$this->init_request();
+		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
 
-		do_action( 'jet-form-builder/gateways/on-payment-' . $type, jet_fb_gateway_current() );
-
-		$keep_these = jet_fb_gateway_current()->gateway( 'notifications_' . $type, array() );
-
-		if ( empty( $keep_these ) ) {
-			return;
+		switch ( $type ) {
+			case 'success':
+				jet_fb_events()->execute( Gateway_Success_Event::class, $form_id );
+				break;
+			case 'failed':
+			default:
+				jet_fb_events()->execute( Gateway_Failed_Event::class, $form_id );
+				break;
 		}
-
-		$all = jet_fb_action_handler()->set_form_id( $entry['form_id'] ?? 0 )
-							->unregister_action( 'redirect_to_page' )
-							->get_all();
-
-		if ( empty( $all ) ) {
-			return;
-		}
-
-		foreach ( $all as $index => $notification ) {
-			if ( empty( $keep_these[ $index ]['active'] ) ) {
-				jet_fb_action_handler()->unregister_action( $index );
-			}
-		}
-
-		( new Action_Default_Executor() )->soft_run_actions();
 	}
 
 	public function get_gateways_meta() {
@@ -351,19 +320,6 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		return ( ! $status || in_array( $status, $this->get_failed_statuses(), true ) )
 			? 'failed'
 			: 'success';
-	}
-
-	/**
-	 * @throws Sql_Exception
-	 */
-	public function save_record_backward_compatibility() {
-		if ( false !== jet_fb_action_handler()->get_action_by_slug( Save_Record::ID ) ) {
-			return;
-		}
-		/** @var Save_Record $record */
-		$record = jet_form_builder()->actions->rep_get_item_or_die( Save_Record::ID );
-
-		$record->do_action( array(), jet_fb_action_handler() );
 	}
 
 }

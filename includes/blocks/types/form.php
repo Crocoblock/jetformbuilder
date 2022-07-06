@@ -3,11 +3,16 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Style_Manager;
 
@@ -369,14 +374,10 @@ class Form extends Base {
 
 	}
 
-	/**
-	 * Returns block name
-	 *
-	 * @return [type] [description]
-	 */
 	public function get_name() {
 		return 'form-block';
 	}
+
 
 	/**
 	 * Returns current block render instatnce
@@ -389,9 +390,8 @@ class Form extends Base {
 		return false;
 	}
 
-
 	public function block_data( $editor, $handle ) {
-		$options = Tools::get_form_settings_options();
+		$options = Form_Arguments::get_options();
 
 		wp_localize_script(
 			$handle,
@@ -446,6 +446,8 @@ class Form extends Base {
 			)
 		);
 
+		Render_State::instance()->set_current();
+
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		$custom_form = apply_filters( 'jet-form-builder/prevent-render-form', false, $attrs );
 
@@ -461,6 +463,8 @@ class Form extends Base {
 		if ( Tools::is_editor() ) {
 			jet_form_builder()->msg_router->get_builder()->render_messages_samples();
 		}
+
+		Render_State::instance()->clear_current();
 
 		return ( $form . ob_get_clean() );
 	}

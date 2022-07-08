@@ -96,6 +96,8 @@ class File_Uploader {
 
 		$uploaded->add_attachment();
 
+		do_action( 'jet-form-builder/inserted-attachment', $uploaded, $this );
+
 		return $uploaded;
 	}
 
@@ -162,7 +164,7 @@ class File_Uploader {
 		}
 	}
 
-	protected function get_max_size(): int {
+	public function get_max_size(): int {
 		$max_size       = wp_max_upload_size();
 		$field_max_size = $max_size;
 
@@ -178,7 +180,7 @@ class File_Uploader {
 		return $field_max_size;
 	}
 
-	protected function count_files(): int {
+	public function count_files(): int {
 		$counter = 0;
 		if ( $this->file instanceof File ) {
 			++ $counter;
@@ -195,20 +197,20 @@ class File_Uploader {
 		return $counter;
 	}
 
-	protected function get_max_files(): int {
+	public function get_max_files(): int {
 		$files = absint( $this->settings['max_files'] ?? 1 );
 
 		return empty( $files ) ? 1 : $files;
 	}
 
-	protected function get_mime_types(): array {
+	public function get_mime_types(): array {
 		return $this->settings['allowed_mimes'] ?? array();
 	}
 
 	/**
 	 * @return bool
 	 */
-	protected function is_insert_attachment(): bool {
+	public function is_insert_attachment(): bool {
 		// Prevent non logged-in users insert attachment
 		if ( ! is_user_logged_in() ) {
 			return false;
@@ -217,13 +219,13 @@ class File_Uploader {
 		return ! empty( $this->settings['insert_attachment'] );
 	}
 
-	protected function get_allowed_user_cap(): string {
+	public function get_allowed_user_cap(): string {
 		$capability = $this->settings['allowed_user_cap'] ?? 'upload_files';
 
 		return empty( $capability ) ? 'upload_files' : $capability;
 	}
 
-	protected function is_must_be_single(): bool {
+	public function is_must_be_single(): bool {
 		return 1 === $this->max_files;
 	}
 
@@ -303,6 +305,10 @@ class File_Uploader {
 		$this->set_file( $context->get_file() );
 
 		return $this;
+	}
+
+	public function get_settings(): array {
+		return $this->settings;
 	}
 
 

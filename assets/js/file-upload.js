@@ -82,6 +82,7 @@
 				upload.loadFiles();
 				upload.removeSingle();
 				upload.insertPreviews();
+				upload.sortable();
 
 				upload.showErrors();
 			},
@@ -104,7 +105,7 @@
 			}
 
 			removeSingle() {
-				if ( ! this.settings?.max_files || this.settings.max_files <= 1 ) {
+				if ( this.isSingle() ) {
 					this.getPreview().remove();
 				}
 			}
@@ -145,6 +146,10 @@
 			getMessage( status ) {
 				return JetFormBuilderFileUpload.getMessage( this.getFormId(), status );
 			}
+
+			isSingle() {
+				return ( ! this.settings?.max_files || this.settings.max_files <= 1 );
+			}
 		}
 
 		class UploadAction extends ChangeFiles {
@@ -159,6 +164,9 @@
 			}
 
 			loadFiles() {
+				if ( this.isSingle() ) {
+					return;
+				}
 				const dt = new DataTransfer();
 				const originalInput = this.input[ 0 ];
 				const { files } = originalInput;
@@ -201,6 +209,13 @@
 				}
 
 				this.previewsEl.append( previewElements );
+			}
+
+			sortable() {
+				this.previewsEl.sortable( {
+					items: '.jet-form-builder-file-upload__file',
+					forcePlaceholderSize: true,
+				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
 			}
 
 			validateImage( file, current ) {
@@ -281,7 +296,7 @@
 			}
 		}
 
-		$( JetFormBuilderFileUpload.init() );
+		$( document ).on( 'jet-form-builder/init', () => JetFormBuilderFileUpload.init() );
 
 	}( jQuery )
 );

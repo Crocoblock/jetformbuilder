@@ -19,7 +19,7 @@ class User_Object_Handler extends Base_Object_Handler {
 	}
 
 	protected function get_calc( $converted, $object ) {
-		return $object->{$this->label_field};
+		return $object->{$this->calc_field};
 	}
 
 }

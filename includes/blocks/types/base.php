@@ -65,6 +65,16 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	public $use_style_manager = true;
 
+	/**
+	 * @see \Jet_Form_Builder\Blocks\Blocks_Repository_Base::rep_before_install_item
+	 */
+	public function is_supported(): bool {
+		return true;
+	}
+
+	/**
+	 * @see \Jet_Form_Builder\Blocks\Blocks_Repository_Base::rep_before_install_item
+	 */
 	public function register_block_type() {
 		$this->maybe_init_style_manager();
 		$this->register_block();

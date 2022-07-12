@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Engine\Modules\Maps_Listings\Base_Provider;
 use Jet_Engine\Modules\Maps_Listings\Module;
-use Jet_Form_Builder\Blocks\Map_Field\MapTools;
+use Jet_Form_Builder\Blocks\Map_Field\Map_Tools;
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 
 class Map_Field extends Base {
@@ -27,7 +27,7 @@ class Map_Field extends Base {
 	public function get_field_settings(): array {
 		return array(
 			'height'       => $this->block_attrs['height'] ?? 300,
-			'format'       => $this->block_attrs['format'] ?? MapTools::STRING,
+			'format'       => $this->block_attrs['format'] ?? Map_Tools::STRING,
 			'field_prefix' => $this->block_attrs['name'] ?? '',
 		);
 	}
@@ -80,7 +80,7 @@ class Map_Field extends Base {
 			$handle,
 			'JetFBMapField',
 			array(
-				'formats' => MapTools::get_formats(),
+				'formats' => Map_Tools::get_formats(),
 			)
 		);
 	}

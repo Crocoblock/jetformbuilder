@@ -47,6 +47,8 @@ export default function MapEdit( props ) {
 						key={ uniqKey( current.value ) }
 						label={ current.label }
 						value={ current.value }
+						aria-label={ current.title }
+						showTooltip
 					/> ) }
 				</ToggleGroupControl>
 				<RangeControl

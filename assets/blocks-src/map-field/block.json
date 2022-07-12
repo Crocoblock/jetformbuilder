@@ -17,6 +17,14 @@
 		"html": false
 	},
 	"attributes": {
+		"format": {
+			"type": "string",
+			"default": "location_string"
+		},
+		"height": {
+			"type": "number",
+			"default": 300
+		},
 		"label": {
 			"type": "string",
 			"default": ""

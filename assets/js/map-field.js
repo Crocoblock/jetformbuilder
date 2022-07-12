@@ -3,47 +3,57 @@
 
 		'use strict';
 
-		function MapFieldsManager( event, scope ) {
-			const provider = new window.JetEngineMapsProvider();
+		let provider = false;
 
-			const initMapField = currentField => {
-				const observer = new IntersectionObserver( ( entries, observer ) => {
+		function textToNode( text ) {
+			const template = document.createElement( 'template' );
+			template.innerHTML = text.trim();
 
-					entries.forEach( function ( entry ) {
-						if ( ! entry.isIntersecting ) {
-							return;
-						}
+			return template.content;
+		}
 
-						new MapField( currentField, provider );
+		const initMapField = currentField => {
+			const observer = new IntersectionObserver( ( entries, observer ) => {
 
-						// Detach observer after the first render the map
-						observer.unobserve( entry.target );
-					} );
+				entries.forEach( function ( entry ) {
+					if ( ! entry.isIntersecting ) {
+						return;
+					}
+
+					new MapField( currentField );
+
+					// Detach observer after the first render the map
+					observer.unobserve( entry.target );
 				} );
+			} );
 
-				observer.observe( currentField );
-			};
+			observer.observe( currentField );
+		};
 
-			const initFields = () => {
-				for ( const mapField of scope.querySelectorAll( '.jet-fb-map-field' ) ) {
-					initMapField( mapField );
-				}
-			};
 
-			initFields();
+		function MapFieldsManager( event, scope ) {
+			const [ form ] = scope;
+
+			if ( false === provider ) {
+				provider = new window.JetEngineMapsProvider();
+			}
+
+			for ( const mapField of form.querySelectorAll( '.jet-fb-map-field' ) ) {
+				initMapField( mapField );
+			}
 		}
 
 		class MapField {
 
-			constructor( nodeMap, mapProvider ) {
+			constructor( nodeMap ) {
 
-				this.setup( nodeMap, mapProvider );
+				this.setup( nodeMap );
 
 				this.render();
 				this.events();
 			}
 
-			setup( selector, mapProvider ) {
+			setup( selector ) {
 				this.$container = selector;
 				this.$input = selector.querySelector( 'input[name]' );
 				this.repeaterRow = this.$input.closest( '.jet-form-builder-repeater__row' );
@@ -52,17 +62,16 @@
 					height: '300',
 					format: 'location_string',
 					field_prefix: false,
-					...JSON.parse( this.$input.dataset.settings )
+					...JSON.parse( this.$input.dataset.settings ),
 				};
 
-				const field_suffix = this.repeaterRow ? '-' + this.$input.closest( '.cx-ui-repeater-item' ).data( 'item-index' ) : '';
+				const field_suffix = this.repeaterRow ? '-' + this.repeaterRow.dataset.index : '';
 
 				this.$inputHash = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_hash' + field_suffix ) : false;
 				this.$inputLat = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_lat' + field_suffix ) : false;
 				this.$inputLng = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_lng' + field_suffix ) : false;
 
 				// Map props.
-				this.mapProvider = mapProvider;
 				this.map = null;
 				this.mapDefaults = {
 					center: { lat: 41, lng: 71 },
@@ -80,19 +89,19 @@
 				               '<address class="jet-engine-map-field__position"></address>' +
 				               '<div class="jet-engine-map-field__reset" role="button" style="cursor: pointer; color: #c92c2c; font-weight: 500; flex-shrink: 0;">× ' + JetMapFieldsSettings.i18n.resetBtn + '</div>' +
 				               '</div>' +
-				               '<div class="jet-engine-map-field__frame" style="height: ' + this.fieldSettings.height + 'px"></div>';
+				               '<div class="jet-engine-map-field__frame" style="height: ' + this.fieldSettings.height + 'px; width: 100%;"></div>';
 
-				if ( this.isRepeaterField ) {
+				if ( this.repeaterRow ) {
 					template += '<div class="jet-engine-map-field__description">' +
 					            '<p style="margin-bottom: 0;"><strong>' + JetMapFieldsSettings.i18n.descTitle + ':</strong> <i>' + this.fieldSettings.field_prefix + '_lat, ' + this.fieldSettings.field_prefix + '_lng</i></p>' +
 					            '</div>';
 				}
 
-				this.$container.append( template );
+				this.$container.append( textToNode( template ) );
 
-				this.$preview = this.$container.find( '.jet-engine-map-field__preview' );
-				this.$position = this.$container.find( '.jet-engine-map-field__position' );
-				this.$mapFrame = this.$container.find( '.jet-engine-map-field__frame' );
+				this.$preview = this.$container.querySelector( '.jet-engine-map-field__preview' );
+				this.$position = this.$container.querySelector( '.jet-engine-map-field__position' );
+				this.$mapFrame = this.$container.querySelector( '.jet-engine-map-field__frame' );
 
 				let defaultPos,
 					valueFormat = false;
@@ -139,24 +148,25 @@
 					this.mapDefaults.zoom = 14;
 				}
 
-				this.map = this.mapProvider.initMap( this.$mapFrame[ 0 ], this.mapDefaults );
+				this.map = provider.initMap( this.$mapFrame, this.mapDefaults );
 
 				if ( defaultPos ) {
-					this.marker = this.mapProvider.addMarker( Object.assign( this.markerDefaults, {
+					this.marker = provider.addMarker( {
+						...this.markerDefaults,
 						position: defaultPos,
 						map: this.map,
-					} ) );
+					} );
 				}
 
-				this.mapProvider.markerOnClick( this.map, this.markerDefaults, ( marker ) => {
+				provider.markerOnClick( this.map, this.markerDefaults, ( marker ) => {
 
 					if ( this.marker ) {
-						this.mapProvider.removeMarker( this.marker );
+						provider.removeMarker( this.marker );
 					}
 
 					this.marker = marker;
 
-					let position = this.mapProvider.getMarkerPosition( marker, true );
+					let position = provider.getMarkerPosition( marker, true );
 
 					this.setValue( position );
 				} );
@@ -175,7 +185,7 @@
 						location = position.lat + ',' + position.lng;
 
 						this.updateHashFieldPromise( location ).then( function () {
-							self.$input.val( location );
+							self.$input.value = location;
 							self.setPreview( position );
 						} );
 
@@ -186,7 +196,7 @@
 						location = JSON.stringify( position );
 
 						this.updateHashFieldPromise( location ).then( function () {
-							self.$input.val( location );
+							self.$input.value = location;
 							self.setPreview( position );
 						} );
 
@@ -204,17 +214,17 @@
 								if ( response.data ) {
 
 									self.updateHashFieldPromise( response.data ).then( function () {
-										self.$input.val( response.data );
+										self.$input.value = response.data;
 										self.setPreview( response.data );
 									} );
 
 								} else {
-									self.$input.val( null );
+									self.$input.value = null;
 									self.setPreview( JetMapFieldsSettings.i18n.notFound );
 								}
 
 							} else {
-								self.$input.val( null );
+								self.$input.value = null;
 								self.setPreview( response.html );
 							}
 
@@ -226,8 +236,8 @@
 				}
 
 				if ( this.$inputLat && this.$inputLng ) {
-					this.$inputLat.val( position.lat );
-					this.$inputLng.val( position.lng );
+					this.$inputLat.value = position.lat;
+					this.$inputLng.value = position.lng;
 				}
 			}
 
@@ -240,28 +250,28 @@
 					positionText = position;
 				}
 
-				this.$position.html( positionText );
-				this.$preview.css( 'display', position ? 'flex' : 'none' );
+				this.$position.innerHTML = positionText;
+				this.$preview.style.display = position ? 'flex' : 'none';
 			}
 
 			events() {
-				this.$container.on( 'click', '.jet-engine-map-field__reset', this.resetLocation.bind( this ) );
+				const resetBtn = this.$container.querySelector( '.jet-engine-map-field__reset' );
+
+				resetBtn.addEventListener( 'click', this.resetLocation.bind( this ) );
 			}
 
 			resetLocation() {
-				this.mapProvider.removeMarker( this.marker );
+				provider.removeMarker( this.marker );
 				this.setPreview( null );
-				this.$input.val( null );
+				this.$input.value = null;
 
 				if ( this.$inputLat && this.$inputLng ) {
-					this.$inputLat.val( null );
-					this.$inputLng.val( null );
+					this.$inputLat.value = null;
+					this.$inputLng.value = null;
 				}
 			}
 
 			updateHashFieldPromise( location ) {
-				let self = this;
-
 				if ( ! this.$inputHash ) {
 					return new Promise( function ( resolve ) {
 						resolve();
@@ -271,10 +281,10 @@
 				return wp.apiFetch( {
 					method: 'get',
 					path: JetMapFieldsSettings.apiHash + '?loc=' + location,
-				} ).then( function ( response ) {
+				} ).then( response => {
 
 					if ( response.success ) {
-						self.$inputHash.val( response.data );
+						this.$inputHash.value = response.data;
 					}
 
 				} ).catch( function ( e ) {
@@ -288,8 +298,8 @@
 					return false;
 				}
 
-				const lat = this.$inputLat.val(),
-					lng = this.$inputLng.val();
+				const lat = this.$inputLat.value,
+					lng = this.$inputLng.value;
 
 				if ( ! lat || ! lng ) {
 					return false;
@@ -300,11 +310,17 @@
 
 		}
 
-		// Run on document ready.
-		$( function () {
-			new JetEngineMapFields();
-		} );
+		// Run on each form ready.
+		$( document ).on( 'jet-form-builder/init', MapFieldsManager );
+		$( document ).on(
+			'jet-form-builder/repeater-add-new',
+			'.jet-form-builder-repeater__new',
+			( { target } ) => {
+				const repeater = target.closest( '.jet-form-builder-repeater' ),
+					rows = repeater.querySelector( '.jet-form-builder-repeater__items' );
 
-
+				MapFieldsManager( null, [ rows.lastElementChild ] );
+			},
+		);
 	}
 )( jQuery, window.JetMapFieldsSettings );

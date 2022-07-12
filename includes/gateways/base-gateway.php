@@ -348,6 +348,14 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	public function send_response( $args = array() ) {
+		$redirect = jet_fb_action_handler()->response_data['redirect'] ?? '';
+
+		if ( ! empty( $redirect ) ) {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+			wp_redirect( $redirect );
+			die();
+		}
+
 		( new Response( $this->get_response_manager() ) )->init( $args )->send();
 	}
 

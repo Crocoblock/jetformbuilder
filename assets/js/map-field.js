@@ -65,11 +65,13 @@
 					...JSON.parse( this.$input.dataset.settings ),
 				};
 
-				const field_suffix = this.repeaterRow ? '-' + this.repeaterRow.dataset.index : '';
+				const getName = prefix => (
+					`[name="${ this.fieldSettings.field_prefix + prefix }"]`
+				);
 
-				this.$inputHash = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_hash' + field_suffix ) : false;
-				this.$inputLat = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_lat' + field_suffix ) : false;
-				this.$inputLng = this.fieldSettings.field_prefix ? $( '#' + this.fieldSettings.field_prefix + '_lng' + field_suffix ) : false;
+				this.$inputHash = this.$container.querySelector( getName( '_hash' ) );
+				this.$inputLat = this.$container.querySelector( getName( '_lat' ) );
+				this.$inputLng = this.$container.querySelector( getName( '_lng' ) );
 
 				// Map props.
 				this.map = null;

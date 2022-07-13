@@ -1104,7 +1104,7 @@
 
 			var $button        = $page.find( '.jet-form-builder__next-page' ),
 				$msg           = $page.find( '.jet-form-builder__next-page-msg' ),
-				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required], .jet-form-builder-file-upload__value[required]' ),
+				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
 				pageNum        = parseInt( $page.data( 'page' ), 10 ),
 				disabled       = false,
 				radioFields    = {};
@@ -1137,6 +1137,12 @@
 						} else {
 							val = $field.val();
 						}
+					}
+
+					if ( ! val && $field[ 0 ].classList.contains( 'jet-form-builder-file-upload__input' ) ) {
+						const hiddenMediaPreset = $page[ 0 ].querySelector( '.jet-form-builder-file-upload__value' );
+
+						val = !! hiddenMediaPreset?.value;
 					}
 
 					if ( 'TEXTAREA' === $field[ 0 ].nodeName ) {
@@ -1217,9 +1223,21 @@
 
 			$fields.each( function( ind, field ) {
 				if ( ! field.checkValidity() ) {
-					field.reportValidity();
 					isValid = false;
-					return false;
+				} else {
+					return isValid;
+				}
+				if ( ! field.classList.contains( 'jet-form-builder-file-upload__input' ) ) {
+					field.reportValidity();
+					return isValid;
+				}
+				const preset = field.closest( '.jet-form-builder-file-upload' ).querySelector( '.jet-form-builder-file-upload__value' );
+
+				isValid = !! preset?.value;
+
+				if ( ! isValid ) {
+					field.reportValidity();
+					return isValid;
 				}
 			} );
 

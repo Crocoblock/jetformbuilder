@@ -153,9 +153,8 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	/**
-	 * @deprecated since 2.0.0
-	 *
 	 * @return string
+	 * @deprecated since 2.0.0
 	 */
 	public function get_result_message( $status ) {
 		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
@@ -208,12 +207,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 
 	public function get_refer_url( $type, array $additional_args = array() ) {
-		$success_redirect = filter_var( $this->gateway( 'use_success_redirect' ), FILTER_VALIDATE_BOOLEAN );
-		$refer            = jet_fb_action_handler()->get_refer();
-
-		if ( $success_redirect && $this->redirect && 'success' === $type ) {
-			$refer = $this->redirect->get_completed_redirect_url();
-		}
+		$refer = jet_fb_action_handler()->get_refer();
 
 		return add_query_arg(
 			array_merge(
@@ -348,6 +342,14 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	public function send_response( $args = array() ) {
+		$redirect = jet_fb_action_handler()->response_data['redirect'] ?? '';
+
+		if ( ! empty( $redirect ) ) {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+			wp_redirect( $redirect );
+			die();
+		}
+
 		( new Response( $this->get_response_manager() ) )->init( $args )->send();
 	}
 

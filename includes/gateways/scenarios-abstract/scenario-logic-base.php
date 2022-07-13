@@ -77,21 +77,9 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 * @param $type
 	 *
 	 * @return string
-	 * @throws Repository_Exception
 	 */
 	public function get_referrer_url( string $type ) {
-		$success_redirect = filter_var(
-			jet_fb_gateway_current()->gateway( 'use_success_redirect' ),
-			FILTER_VALIDATE_BOOLEAN
-		);
-		$refer            = jet_fb_action_handler()->get_refer();
-
-		/** @var Redirect_To_Page $redirect */
-		$redirect = $this->get_context( 'redirect' );
-
-		if ( $success_redirect && $redirect && 'success' === $type ) {
-			$refer = $redirect->get_completed_redirect_url();
-		}
+		$refer = jet_fb_action_handler()->get_refer();
 
 		return add_query_arg(
 			array(

@@ -22,6 +22,13 @@ abstract class Blocks_Repository_Base {
 		if ( ! $block_type->is_supported() ) {
 			$this->_rep_abort_this();
 		}
+	}
+
+	/**
+	 * @param $block_type
+	 */
+	public function rep_after_install_item( $block_type ) {
+		/** @var Types\Base $block_type */
 
 		$block_type->register_block_type();
 	}

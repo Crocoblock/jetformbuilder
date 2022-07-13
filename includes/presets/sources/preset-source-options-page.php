@@ -8,6 +8,8 @@ use Jet_Form_Builder\Exceptions\Preset_Exception;
 
 class Preset_Source_Options_Page extends Base_Source {
 
+	private $page = '';
+
 	public function get_id() {
 		return 'option_page';
 	}
@@ -21,19 +23,34 @@ class Preset_Source_Options_Page extends Base_Source {
 	 * @throws Preset_Exception
 	 */
 	public function query_source() {
-		$key = explode( '::', $this->prop );
-
-		if ( 2 !== count( $key ) || empty( $key[0] ) ) {
-			throw new Preset_Exception( "Invalid prop: {$this->prop}" );
+		if ( empty( $this->page ) ) {
+			throw new Preset_Exception( 'Empty page' );
 		}
 
-		$item = jet_engine()->options_pages->registered_pages[ $key[0] ] ?? false;
+		$item = jet_engine()->options_pages->registered_pages[ $this->page ] ?? false;
 
 		if ( ! $item ) {
-			throw new Preset_Exception( "Undefined option page: {$key[0]}" );
+			throw new Preset_Exception( "Undefined option page: {$this->page}" );
 		}
 
 		return $item;
+	}
+
+	/**
+	 * @return string
+	 * @throws Preset_Exception
+	 */
+	protected function get_prop() {
+		$prop = explode( '::', parent::get_prop() );
+
+		$this->page = $prop[0] ?? '';
+		$slug       = $prop[1] ?? '';
+
+		if ( empty( $this->page ) || empty( $slug ) ) {
+			throw new Preset_Exception( 'Undefined option' );
+		}
+
+		return $slug;
 	}
 
 	/**
@@ -45,19 +62,15 @@ class Preset_Source_Options_Page extends Base_Source {
 	 * @see https://gist.github.com/MjHead/49ebe7ecc20bff9aaf8516417ed27c38
 	 */
 	public function default_prop( string $prop ) {
-		$key = explode( '::', $prop );
-		$page = $key[0] ?? 'page-slug';
-		$slug = $key[1] ?? 'page-field';
-
-		if ( empty( $key[1] ) ) {
-			throw new Preset_Exception( "Undefined {$page} page value: {$slug}" );
-		}
-
 		if ( ! is_a( $this->src(), '\Jet_Engine_Options_Page_Factory' ) ) {
 			throw new Preset_Exception( 'Source is not instance of ' . \Jet_Engine_Options_Page_Factory::class );
 		}
 
-		return $this->src()->get( $slug );
+		return $this->src()->get( $prop );
+	}
+
+	protected function before_query_extra_field( $field ) {
+		$this->prop = $field;
 	}
 
 	public function after_register() {
@@ -111,8 +124,6 @@ class Preset_Source_Options_Page extends Base_Source {
 				);
 			}
 		}
-
-
 
 		return $result;
 

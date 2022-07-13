@@ -56,7 +56,7 @@ class Preset_Source_Post extends Base_Source {
 
 	public function source__post_meta() {
 		if ( empty( $this->field_data['key'] ) ) {
-			return self::EMPTY;
+			return '';
 		}
 
 		$value = get_post_meta( $this->src()->ID, $this->field_data['key'], true );
@@ -87,7 +87,7 @@ class Preset_Source_Post extends Base_Source {
 			$info = jet_engine()->relations->get_relation_info( $this->field_data['key'] );
 
 			if ( ! $info ) {
-				return self::EMPTY;
+				return '';
 			}
 
 			$args = array(

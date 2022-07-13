@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Presets\Sources;
 
 use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Classes\Macros_Parser;
+use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
 
@@ -20,7 +22,6 @@ abstract class Base_Source {
 	protected $permission;
 
 	const FUNC_PREFIX = 'source__';
-	const EMPTY       = '';
 
 	abstract public function query_source();
 
@@ -144,24 +145,6 @@ abstract class Base_Source {
 	}
 
 
-	/**
-	 * @param string $prop
-	 *
-	 * @return mixed
-	 * @throws Preset_Exception
-	 */
-	public function default_prop( string $prop ) {
-		$source = $this->src;
-
-		if ( isset( $source->$prop ) ) {
-			return $source->$prop;
-		} elseif ( isset( $source->data ) && isset( $source->data->$prop ) ) {
-			return $source->data->$prop;
-		}
-
-		throw new Preset_Exception( "Can't get value from " . get_class( $source ) );
-	}
-
 	protected function get_prop() {
 		if ( ! $this->is_need_prop() ) {
 			return true;
@@ -178,6 +161,33 @@ abstract class Base_Source {
 		if ( ! $this->is_need_prop() ) {
 			return $this->src();
 		}
+
+		$extra = $this->get_extra_fields();
+
+		if ( empty( $extra ) ) {
+			return $this->get_current_value();
+		}
+
+		$value = array();
+
+		foreach ( $extra as $name => $field ) {
+			$this->before_query_extra_field( $field );
+
+			$value[ $name ] = $this->get_current_value();
+		}
+
+		return $value;
+	}
+
+	protected function before_query_extra_field( $field ) {
+		$this->field_data['key'] = $field;
+	}
+
+	/**
+	 * @return false|mixed
+	 * @throws Preset_Exception
+	 */
+	private function get_current_value() {
 		$func_name = self::FUNC_PREFIX . $this->prop;
 
 		if ( is_callable( array( $this, $func_name ) ) ) {
@@ -185,6 +195,50 @@ abstract class Base_Source {
 		}
 
 		return $this->default_prop( $this->prop );
+	}
+
+	private function get_extra_fields(): array {
+		try {
+			$block = $this->get_field_object();
+			$extra = $this->get_field_object()->get_extra_fields( $this );
+		} catch ( Preset_Exception $exception ) {
+			return array();
+		}
+
+		$parser = ( new Macros_Parser() )->set_replacements(
+			array(
+				'key'  => $this->field_data['key'] ?? '',
+				'prop' => $this->prop,
+			)
+		);
+
+		foreach ( $extra as $index => $field ) {
+			$extra[ $index ] = $parser->parse_macros( $field );
+		}
+
+		if ( 'map_field' === $this->field ) {
+			do_action( 'qm/debug', array( $extra, get_class( $block ) ) );
+		}
+
+		return $extra;
+	}
+
+	/**
+	 * @param string $prop
+	 *
+	 * @return mixed
+	 * @throws Preset_Exception
+	 */
+	public function default_prop( string $prop ) {
+		$source = $this->src;
+
+		if ( isset( $source->$prop ) ) {
+			return $source->$prop;
+		} elseif ( isset( $source->data ) && isset( $source->data->$prop ) ) {
+			return $source->data->$prop;
+		}
+
+		throw new Preset_Exception( "Can't get value from " . get_class( $source ) );
 	}
 
 

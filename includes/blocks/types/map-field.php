@@ -7,6 +7,8 @@ use Jet_Engine\Modules\Maps_Listings\Base_Provider;
 use Jet_Engine\Modules\Maps_Listings\Module;
 use Jet_Form_Builder\Blocks\Map_Field\Map_Tools;
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
+use Jet_Form_Builder\Presets\Sources\Base_Source;
+use Jet_Form_Builder\Presets\Sources\Preset_Source_Options_Page;
 
 class Map_Field extends Base {
 
@@ -32,6 +34,36 @@ class Map_Field extends Base {
 		);
 	}
 
+	public function get_extra_fields( Base_Source $source ): array {
+		if ( is_a( $source, Preset_Source_Options_Page::class ) ) {
+			return array(
+				'self' => '%prop%',
+				'lat'  => '%prop|md5%_lat',
+				'lng'  => '%prop|md5%_lng',
+			);
+		}
+		return array(
+			'self' => '%key%',
+			'lat'  => '%key|md5%_lat',
+			'lng'  => '%key|md5%_lng',
+		);
+	}
+
+	public function expected_preset_type(): array {
+		return array( self::PRESET_EXACTLY );
+	}
+
+	protected function get_value_from_repeater( array $row, string $name ) {
+		if ( ! isset( $row[ $name ] ) ) {
+			return false;
+		}
+
+		return array(
+			'self' => $row[ $name ],
+			'lat'  => $row[ $name . '_lat' ],
+			'lng'  => $row[ $name . '_lng' ],
+		);
+	}
 
 	/**
 	 * @param null $wp_block

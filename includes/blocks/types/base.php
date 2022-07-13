@@ -12,6 +12,7 @@ use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
+use Jet_Form_Builder\Presets\Sources\Base_Source;
 use JET_SM\Gutenberg\Controls_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -70,6 +71,17 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	public function is_supported(): bool {
 		return true;
+	}
+
+	/**
+	 * Used to load additional fields through a preset. Example: map-field
+	 *
+	 * @param Base_Source $source
+	 *
+	 * @return array
+	 */
+	public function get_extra_fields( Base_Source $source ): array {
+		return array();
 	}
 
 	/**
@@ -330,7 +342,24 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$name = $this->block_attrs['name'] ?? '';
 		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
 
+		$custom_value = $this->get_value_from_repeater( $row, $name );
+
+		if ( false !== $custom_value ) {
+			return $custom_value;
+		}
+
 		return ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
+	}
+
+
+	/**
+	 * @param array $row
+	 * @param string $name
+	 *
+	 * @return mixed
+	 */
+	protected function get_value_from_repeater( array $row, string $name ) {
+		return false;
 	}
 
 	/**

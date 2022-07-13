@@ -12,6 +12,19 @@
 			return template.content;
 		}
 
+		function getConvertedName( name, prefix ) {
+			const regExp = /^(\w+\[\d+\])\[([\w\-]+)\]$/;
+
+			// fields inside repeater (rep_name[1][content_field])
+			if ( ! regExp.test( name )) {
+				return name + prefix;
+			}
+			const matches = name.match( regExp );
+
+			return matches[ 1 ] + `[${ matches[2] + prefix }]`;
+		}
+
+
 		const initMapField = currentField => {
 			const observer = new IntersectionObserver( ( entries, observer ) => {
 
@@ -65,13 +78,9 @@
 					...JSON.parse( this.$input.dataset.settings ),
 				};
 
-				const getName = prefix => (
-					`[name="${ this.fieldSettings.field_prefix + prefix }"]`
-				);
-
-				this.$inputHash = this.$container.querySelector( getName( '_hash' ) );
-				this.$inputLat = this.$container.querySelector( getName( '_lat' ) );
-				this.$inputLng = this.$container.querySelector( getName( '_lng' ) );
+				this.$inputHash = this.$container.querySelector( this.getConvertedName( '_hash' ) );
+				this.$inputLat = this.$container.querySelector( this.getConvertedName( '_lat' ) );
+				this.$inputLng = this.$container.querySelector( this.getConvertedName( '_lng' ) );
 
 				// Map props.
 				this.map = null;
@@ -108,11 +117,11 @@
 				let defaultPos,
 					valueFormat = false;
 
-				if ( this.value ) {
+				if ( this.$input.value ) {
 					// Set preview from input value.
 					try {
 						// `location_array` value format
-						const jsonValue = JSON.parse( this.value );
+						const jsonValue = JSON.parse( this.$input.value );
 
 						defaultPos = jsonValue;
 						this.setPreview( jsonValue );
@@ -121,7 +130,7 @@
 
 					} catch ( e ) {
 
-						const valueParts = this.value.split( ',' );
+						const valueParts = this.$input.value.split( ',' );
 
 						if ( 2 === valueParts.length && Number( valueParts[ 0 ] ) && Number( valueParts[ 1 ] ) ) {
 							// `location_string` value format
@@ -133,7 +142,7 @@
 						} else {
 							// `location_address` value format
 							defaultPos = this.getPositionFromHashFields();
-							this.setPreview( this.value );
+							this.setPreview( this.$input.value );
 
 							valueFormat = 'location_address';
 						}
@@ -308,6 +317,10 @@
 				}
 
 				return { lat: Number( lat ), lng: Number( lng ) };
+			}
+
+			getConvertedName( prefix ) {
+				return `[name="${ getConvertedName( this.$input.name, prefix ) }"]`
 			}
 
 		}

@@ -114,7 +114,7 @@ class Condition_Manager {
 
 		foreach ( $this->conditions as $condition ) {
 			try {
-				$condition->is_correct();
+				$condition->is_correct_with_throw();
 
 			} catch ( Condition_Silence_Exception $exception ) {
 				switch ( $exception->getMessage() ) {

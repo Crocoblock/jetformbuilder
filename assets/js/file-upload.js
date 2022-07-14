@@ -3,53 +3,39 @@
 
 		'use strict';
 
+
+		const convertFields = scope => {
+			scope.find( '.jet-form-builder-file-upload' ).each( function () {
+				$( this ).find( '.jet-form-builder-file-upload__file' ).each( function () {
+					const url = $( this ).data( 'file' );
+					const name = url.split( '/' ).at( - 1 );
+
+					fetch( url ).then(
+						response => response.blob(),
+					).then(
+						blob => {
+							const file = new File( [ blob ], name, blob );
+						},
+					);
+				} );
+
+			} );
+		};
+
 		var JetFormBuilderFileUpload = {
 
-			init: function () {
-				$( document ).on( 'change', '.jet-form-builder-file-upload__input', JetFormBuilderFileUpload.processUpload ).on( 'click', '.jet-form-builder-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
-
-				$( '.jet-form-builder-file-upload__files' ).sortable( {
+			init: function ( event, scope ) {
+				$( '.jet-form-builder-file-upload__files', scope ).sortable( {
 					items: '.jet-form-builder-file-upload__file',
 					forcePlaceholderSize: true,
 				} ).bind( 'sortupdate', JetFormBuilderFileUpload.onSortCallback );
+
+				convertFields( scope );
 			},
 
+
 			onSortCallback: function ( e, ui ) {
-				var $upload = ui.item.closest( '.jet-form-builder-file-upload' ),
-					$files = $( e.target ),
-					$valueInput = $upload.find( '.jet-form-builder-file-upload__value' ),
-					args = $files.data( 'args' ),
-					maxFiles = parseInt( args.max_files, 10 ),
-					values = [];
 
-				if ( 1 === maxFiles || ! args.insert_attachment ) {
-					return;
-				}
-
-				$files.find( '.jet-form-builder-file-upload__file' ).each( function () {
-
-					var $file = $( this );
-
-					switch ( args.value_format ) {
-						case 'id':
-							values.push( $file.data( 'id' ) );
-							break;
-
-						case 'both':
-							values.push( {
-								id: $file.data( 'id' ),
-								url: $file.data( 'file' ),
-							} );
-							break;
-
-						default:
-							values.push( $file.data( 'file' ) );
-							break;
-					}
-
-				} );
-
-				$valueInput.val( JSON.stringify( values ) ).trigger( 'change.JetFormBuilderMain' );
 
 			},
 
@@ -148,7 +134,9 @@
 			}
 
 			isSingle() {
-				return ( ! this.settings?.max_files || this.settings.max_files <= 1 );
+				return (
+					! this.settings?.max_files || this.settings.max_files <= 1
+				);
 			}
 		}
 
@@ -296,7 +284,7 @@
 			}
 		}
 
-		$( document ).on( 'jet-form-builder/init', () => JetFormBuilderFileUpload.init() );
+		$( document ).on( 'jet-form-builder/init', JetFormBuilderFileUpload.init ).on( 'change', '.jet-form-builder-file-upload__input', JetFormBuilderFileUpload.processUpload ).on( 'click', '.jet-form-builder-file-upload__file-remove', JetFormBuilderFileUpload.deleteUpload );
 
 	}( jQuery )
 );

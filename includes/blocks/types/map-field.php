@@ -19,13 +19,6 @@ class Map_Field extends Base {
 		return 'map-field';
 	}
 
-	public function is_supported(): bool {
-		return (
-			function_exists( 'jet_engine' ) &&
-			jet_engine()->modules->is_module_active( 'maps-listings' )
-		);
-	}
-
 	public function get_field_settings(): array {
 		return array(
 			'height'       => $this->block_attrs['height'] ?? 300,
@@ -42,6 +35,7 @@ class Map_Field extends Base {
 				'lng'  => '%prop|md5%_lng',
 			);
 		}
+
 		return array(
 			'self' => '%key%',
 			'lat'  => '%key|md5%_lat',
@@ -63,6 +57,14 @@ class Map_Field extends Base {
 			'lat'  => $row[ $name . '_lat' ],
 			'lng'  => $row[ $name . '_lng' ],
 		);
+	}
+
+	protected function render_field( array $attrs, $content = null, $wp_block = null ): string {
+		if ( ! Map_Tools::is_supported() ) {
+			return Map_Tools::get_help_message();
+		}
+
+		return parent::render_field( $attrs, $content, $wp_block );
 	}
 
 	/**
@@ -112,8 +114,10 @@ class Map_Field extends Base {
 			$handle,
 			'JetFBMapField',
 			array(
-				'formats' => Map_Tools::get_formats(),
-				'image'   => jet_form_builder()->plugin_url( 'assets/img/map-placeholder.png' ),
+				'formats'      => Map_Tools::get_formats(),
+				'image'        => jet_form_builder()->plugin_url( 'assets/img/map-placeholder.png' ),
+				'is_supported' => Map_Tools::is_supported(),
+				'help'         => Map_Tools::get_help_message(),
 			)
 		);
 	}

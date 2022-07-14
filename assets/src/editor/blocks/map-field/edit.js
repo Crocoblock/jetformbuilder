@@ -13,6 +13,8 @@ const {
 
 const { __ } = wp.i18n;
 
+const { RawHTML } = wp.element;
+
 const {
 	InspectorControls,
 	useBlockProps,
@@ -30,13 +32,14 @@ export default function MapEdit( props ) {
 
 
 	return [
-		isSelected && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
+		( isSelected && JetFBMapField.is_supported ) && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
 			<GeneralFields
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
 			<PanelBody title={ __( 'Map Settings', 'jet-form-builder' ) }>
 				<ToggleGroupControl
+					disabled={ JetFBMapField.is_supported }
 					onChange={ format => setAttributes( { format } ) }
 					value={ attributes.format }
 					label={ __( 'Field format', 'jet-form-builder' ) }
@@ -52,6 +55,7 @@ export default function MapEdit( props ) {
 					/> ) }
 				</ToggleGroupControl>
 				<RangeControl
+					disabled={ JetFBMapField.is_supported }
 					label={ __( 'Height', 'jet-form-builder' ) }
 					value={ attributes.height ?? 300 }
 					onChange={ height => setAttributes( { height } ) }
@@ -67,7 +71,7 @@ export default function MapEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<FieldWrapper
+			{ JetFBMapField.is_supported ? <FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
@@ -76,7 +80,7 @@ export default function MapEdit( props ) {
 					src={ JetFBMapField.image }
 					alt={ __( 'Map Field placeholder', 'jet-form-builder' ) }
 				/>
-			</FieldWrapper>
+			</FieldWrapper> : <RawHTML>{ JetFBMapField.help }</RawHTML>}
 		</div>,
 	];
 }

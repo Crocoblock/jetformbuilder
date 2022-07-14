@@ -69,9 +69,14 @@ export default function MapEdit( props ) {
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				valueIfEmptyLabel={ 'Heading' }
 				{ ...props }
-			/>
+			>
+				<img
+					style={ { height: attributes.height ?? 300 } }
+					src={ JetFBMapField.image }
+					alt={ __( 'Map Field placeholder', 'jet-form-builder' ) }
+				/>
+			</FieldWrapper>
 		</div>,
 	];
 }

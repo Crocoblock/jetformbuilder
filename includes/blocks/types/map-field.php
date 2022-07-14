@@ -113,6 +113,7 @@ class Map_Field extends Base {
 			'JetFBMapField',
 			array(
 				'formats' => Map_Tools::get_formats(),
+				'image'   => jet_form_builder()->plugin_url( 'assets/img/map-placeholder.png' ),
 			)
 		);
 	}

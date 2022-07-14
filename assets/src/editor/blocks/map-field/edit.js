@@ -39,7 +39,6 @@ export default function MapEdit( props ) {
 			/>
 			<PanelBody title={ __( 'Map Settings', 'jet-form-builder' ) }>
 				<ToggleGroupControl
-					disabled={ JetFBMapField.is_supported }
 					onChange={ format => setAttributes( { format } ) }
 					value={ attributes.format }
 					label={ __( 'Field format', 'jet-form-builder' ) }
@@ -55,7 +54,6 @@ export default function MapEdit( props ) {
 					/> ) }
 				</ToggleGroupControl>
 				<RangeControl
-					disabled={ JetFBMapField.is_supported }
 					label={ __( 'Height', 'jet-form-builder' ) }
 					value={ attributes.height ?? 300 }
 					onChange={ height => setAttributes( { height } ) }

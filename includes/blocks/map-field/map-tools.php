@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Blocks\Map_Field;
 
 class Map_Tools {
 
-	const STRING = 'location_string';
-	const ARRAY = 'location_array';
+	const STRING  = 'location_string';
+	const ARRAY   = 'location_array';
 	const ADDRESS = 'location_address';
 
 	public static function get_formats(): array {

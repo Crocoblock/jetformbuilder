@@ -14,7 +14,6 @@ class Condition_Instance {
 	private $operator;
 	private $must_be_true = true;
 	private $field_name;
-	private $field_value;
 	private $compare;
 	private $compare_value_format;
 
@@ -114,27 +113,17 @@ class Condition_Instance {
 
 	/**
 	 * @param $field_name
-	 *
-	 * @return $this
 	 */
-	public function set_field( $field_name ): Condition_Instance {
+	public function set_field( $field_name ) {
 		$this->field_name = $field_name;
-
-		return $this->set_field_value( $this->get_request_field( $field_name ) );
 	}
 
 	public function get_field_name() {
 		return $this->field_name;
 	}
 
-	public function set_field_value( $value ): Condition_Instance {
-		$this->field_value = $value;
-
-		return $this;
-	}
-
 	public function get_field_value() {
-		return $this->field_value;
+		return jet_fb_action_handler()->request_data[ $this->get_field_name() ] ?? false;
 	}
 
 	/**

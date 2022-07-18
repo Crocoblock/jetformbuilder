@@ -6,10 +6,40 @@ const { select } = wp.data;
 
 const { store: blocksStore } = wp.blocks;
 
+const loopBlocks = ( current ) => {
+	const {	getBlock } = select( 'core/block-editor' );
+
+	const { innerBlocks } = current;
+
+	current = {
+		...current,
+		...getBlock( current.clientId ),
+	}
+
+	if ( innerBlocks?.length ) {
+		current.innerBlocks = innerBlocks.map(loopBlocks);
+	}
+
+	return current;
+};
+
+const getBlocks = () => {
+	const {
+		getBlocks,
+		__unstableGetClientIdsTree: getTree,
+	} = select( 'core/block-editor' );
+
+	if ( 'function' !== typeof getTree ) {
+		return getBlocks();
+	}
+
+	return getTree().map( loopBlocks );
+};
+
 const blocksRecursiveIterator = ( blockParserFunc ) => {
 	const blocksRecursiveIterator = ( blocks ) => {
 
-		blocks = blocks || select( 'core/block-editor' ).getBlocks();
+		blocks = blocks || getBlocks();
 
 		blocks.map( block => {
 			blockParserFunc( block );

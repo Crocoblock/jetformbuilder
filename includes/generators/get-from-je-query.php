@@ -3,8 +3,12 @@
 namespace Jet_Form_Builder\Generators;
 
 use Jet_Engine\Query_Builder\Manager as Query_Manager;
+use Jet_Form_Builder\Generators\Je_Query_Object_Handlers\Base_Object_Handler;
+use Jet_Form_Builder\Generators\Je_Query_Object_Handlers\User_Object_Handler;
 
 class Get_From_Je_Query extends Base {
+
+	private $object_handlers = array();
 
 	/**
 	 * Returns generator ID
@@ -25,7 +29,19 @@ class Get_From_Je_Query extends Base {
 	}
 
 	public function can_generate() {
-		return function_exists( 'jet_engine' );
+		if ( ! function_exists( 'jet_engine' ) ) {
+			return false;
+		}
+
+		$this->object_handlers = apply_filters(
+			'jet-form-builder/generators/get_from_query/handlers',
+			array(
+				new User_Object_Handler(),
+				new Base_Object_Handler(),
+			)
+		);
+
+		return true;
 	}
 
 	/**
@@ -39,13 +55,7 @@ class Get_From_Je_Query extends Base {
 
 		$field = isset( $args['generator_field'] ) ? $args['generator_field'] : $args;
 
-		$args = explode( '|', $field );
-
-		$value_field      = $args[1] ?? 'ID';
-		$label_field      = $args[2] ?? 'post_title';
-		$calculated_field = $args[3] ?? false;
-		$additional_args  = $args[4] ?? false;
-
+		$args   = explode( '|', $field );
 		$query  = Query_Manager::instance()->get_query_by_id( $args[0] );
 		$result = array();
 
@@ -56,28 +66,11 @@ class Get_From_Je_Query extends Base {
 		$query->setup_query();
 		$objects = $query->_get_items();
 
+		$handler = $this->get_handler( $objects[0] ?? array() );
+		$handler->set_fields( $args );
+
 		foreach ( $objects as $object ) {
-			// convert to array because in 8.2 dynamic properties will be deprecated
-			$converted = get_object_vars( $object );
-
-			$value      = $converted[ $value_field ] ?? false;
-			$label      = $converted[ $label_field ] ?? $value;
-			$calculated = $converted[ $calculated_field ] ?? false;
-
-			$value      = apply_filters( 'jet-forms-generate-from-query/value', $value, $object, $additional_args );
-			$label      = apply_filters( 'jet-forms-generate-from-query/label', $label, $object, $additional_args );
-			$calculated = apply_filters( 'jet-forms-generate-from-query/calculated', $calculated, $object, $additional_args );
-
-			$item = array();
-
-			if ( $value ) {
-				$item['value'] = $value;
-				$item['label'] = $label;
-			}
-
-			if ( $calculated_field ) {
-				$item['calculate'] = $calculated;
-			}
+			$item = $handler->to_array( $object );
 
 			if ( ! empty( $item ) ) {
 				$result[] = $item;
@@ -86,6 +79,22 @@ class Get_From_Je_Query extends Base {
 
 		return $result;
 
+	}
+
+	private function get_handler( $object ): Base_Object_Handler {
+		/** @var Base_Object_Handler $handler */
+		foreach ( $this->object_handlers as $handler ) {
+			if ( $handler->is_supported( $object ) ) {
+				return $handler;
+			}
+		}
+
+		wp_die(
+			sprintf(
+				__( '%s::is_supported must return TRUE', 'jet-form-builder' ),
+				Base_Object_Handler::class
+			)
+		);
 	}
 
 }

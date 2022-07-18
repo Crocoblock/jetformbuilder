@@ -13,7 +13,7 @@ use Jet_Form_Builder\Classes\Tools;
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
-$this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
+$this->add_attribute( 'name', $this->block_type->get_field_name() );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'multiple', $this->block_type->is_multiple() ? 1 : '' );
@@ -49,7 +49,6 @@ $this->add_attribute( 'data-default-val', $default );
 				$selected = '';
 				$calc     = '';
 
-
 				if ( is_array( $option ) ) {
 					$val   = $option['value'] ?? $value;
 					$label = $option['label'] ?? $val;
@@ -58,8 +57,8 @@ $this->add_attribute( 'data-default-val', $default );
 					$label = $option;
 				}
 
-				if ( $default ) {
-					$selected = selected( $default, $val, false );
+				if ( ! empty( $option['selected'] ) ) {
+					$selected = 'selected="selected"';
 				}
 
 				if ( is_array( $option ) && isset( $option['calculate'] ) ) {

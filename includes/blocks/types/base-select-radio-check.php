@@ -15,6 +15,10 @@ use Jet_Form_Builder\Plugin;
  */
 trait Base_Select_Radio_Check {
 
+	public function prepare_option( array $option ) {
+		return $option;
+	}
+
 	/**
 	 * Return data for Select, Checkboxes and Radio fields
 	 *
@@ -61,7 +65,8 @@ trait Base_Select_Radio_Check {
 	* @return array
 	*/
 	public function get_field_options() {
-		$args = $this->block_attrs;
+		$args   = $this->block_attrs;
+		$preset = $this->block_attrs['default'];
 
 		$options_from = ! empty( $args['field_options_from'] ) ? $args['field_options_from'] : 'manual_input';
 		$options      = array();
@@ -108,8 +113,6 @@ trait Base_Select_Radio_Check {
 			if ( empty( $posts ) ) {
 				return $options;
 			}
-
-			$result     = array();
 			$post_props = array( 'post_title', 'post_content', 'post_name', 'post_excerpt' );
 
 			foreach ( $posts as $post ) {
@@ -136,11 +139,9 @@ trait Base_Select_Radio_Check {
 					}
 				}
 
-				$result[] = $item;
+				$options[] = $item;
 
 			}
-
-			return $result;
 
 		} elseif ( 'terms' === $options_from ) {
 
@@ -164,8 +165,6 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
-			$result = array();
-
 			foreach ( $terms as $term ) {
 
 				$item = array(
@@ -182,11 +181,8 @@ trait Base_Select_Radio_Check {
 					$item['calculate'] = get_term_meta( $term->term_id, $calc_from, true );
 				}
 
-				$result[] = $item;
-
+				$options[] = $item;
 			}
-
-			return $result;
 
 		} elseif ( 'generate' === $options_from ) {
 
@@ -210,7 +206,6 @@ trait Base_Select_Radio_Check {
 			}
 
 			$generated = $generator_instance->get_values( $args );
-			$result    = array();
 
 			if ( ! empty( $value_from || ! empty( $calc_from ) ) ) {
 				foreach ( $generated as $key => $data ) {
@@ -234,14 +229,12 @@ trait Base_Select_Radio_Check {
 						$item['calculate'] = get_post_meta( $item['object_id'], $calc_from, true );
 					}
 
-					$result[] = $item;
+					$options[] = $item;
 
 				}
 
-				return $result;
-
 			} else {
-				return $generated;
+				return array_map( array( $this, 'prepare_option' ), $generated );
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
@@ -254,8 +247,6 @@ trait Base_Select_Radio_Check {
 					$options = $glossary['fields'];
 				}
 			}
-
-			return $options;
 		} else {
 
 			$key = ! empty( $args['field_options_key'] ) ? $args['field_options_key'] : '';
@@ -266,9 +257,10 @@ trait Base_Select_Radio_Check {
 			}
 		}
 
-		return $options;
+		return array_map( array( $this, 'prepare_option' ), $options );
 
 	}
+
 
 	/**
 	 * Prepare repeater options fields

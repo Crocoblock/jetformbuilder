@@ -139,6 +139,8 @@ class File implements Arrayable, Media_Block_Value {
 		if ( ( ! $type || ! $ext ) && ! current_user_can( 'unfiltered_upload' ) ) {
 			throw new Sanitize_File_Exception( 'Incorrect extension or mime type' );
 		}
+
+		$this->type = $type;
 	}
 
 	/**

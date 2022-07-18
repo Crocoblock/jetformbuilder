@@ -64,7 +64,7 @@ class Update_Options extends Base {
 
 		if ( ! empty( $fields_map ) ) {
 			foreach ( $fields_map as $form_field => $option_field ) {
-				if ( ! empty( $option_field ) && ! empty( $request[ $form_field ] ) ) {
+				if ( ! empty( $option_field ) && isset( $request[ $form_field ] ) ) {
 					$options_data[ $option_field ] = $request[ $form_field ];
 				}
 			}

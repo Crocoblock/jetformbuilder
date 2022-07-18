@@ -2,11 +2,12 @@
 /**
  * input[type="hidden"] template
  *
- * @var Base $this
+ * @var Select_Field_Render $this
  * @var array $args
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
 
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
@@ -15,18 +16,20 @@ $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
+$this->add_attribute( 'multiple', $this->block_type->is_multiple() ? 1 : '' );
+$this->add_attribute( 'size', $this->block_type->get_multiple_size() ?: '' );
 
 if ( ! empty( $args['switch_on_change'] ) ) {
 	$this->add_attribute( 'data-switch', 1 );
 }
 
-$placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : false;
-$default     = isset( $args['default'] ) ? $args['default'] : false;
+$placeholder = $args['placeholder'] ?? false;
+$default     = $args['default'] ?? false;
 
 $this->add_attribute( 'data-default-val', $default );
 ?>
 <div class="jet-form-builder__field-wrap">
-	<select <?php $this->render_attributes_string(); ?>>
+    <select <?php $this->render_attributes_string(); ?>>
 		<?php
 
 		if ( $placeholder ) {
@@ -35,7 +38,7 @@ $this->add_attribute( 'data-default-val', $default );
 			if ( ! $default ) {
 				$additional_attrs .= ' selected';
 			}
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			printf( '<option value="" %1$s>%2$s</option>', $additional_attrs, $placeholder );
 		}
 
@@ -48,8 +51,8 @@ $this->add_attribute( 'data-default-val', $default );
 
 
 				if ( is_array( $option ) ) {
-					$val   = isset( $option['value'] ) ? $option['value'] : $value;
-					$label = isset( $option['label'] ) ? $option['label'] : $val;
+					$val   = $option['value'] ?? $value;
+					$label = $option['label'] ?? $val;
 				} else {
 					$val   = $value;
 					$label = $option;
@@ -69,7 +72,7 @@ $this->add_attribute( 'data-default-val', $default );
 		}
 
 		?>
-	</select>
+    </select>
 	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

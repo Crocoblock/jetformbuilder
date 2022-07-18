@@ -137,6 +137,21 @@ class Select_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
+	public function is_multiple(): bool {
+		return $this->block_attrs['multiple'] ?? false;
+	}
+
+	public function get_multiple_size(): int {
+		return $this->block_attrs['multiple_size'] ?? 0;
+	}
+
+	public function expected_preset_type(): array {
+		if ( ! $this->is_multiple() ) {
+			return parent::expected_preset_type();
+		}
+
+		return array( self::PRESET_EXACTLY );
+	}
 
 	/**
 	 * Returns current block render

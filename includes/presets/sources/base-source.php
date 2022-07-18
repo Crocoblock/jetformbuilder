@@ -199,7 +199,6 @@ abstract class Base_Source {
 
 	private function get_extra_fields(): array {
 		try {
-			$block = $this->get_field_object();
 			$extra = $this->get_field_object()->get_extra_fields( $this );
 		} catch ( Preset_Exception $exception ) {
 			return array();
@@ -214,10 +213,6 @@ abstract class Base_Source {
 
 		foreach ( $extra as $index => $field ) {
 			$extra[ $index ] = $parser->parse_macros( $field );
-		}
-
-		if ( 'map_field' === $this->field ) {
-			do_action( 'qm/debug', array( $extra, get_class( $block ) ) );
 		}
 
 		return $extra;

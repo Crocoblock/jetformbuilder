@@ -57,6 +57,10 @@ class Media_Field_Render extends Base {
 
 		foreach ( $files as $file ) {
 			$updated = str_replace( '%file_url%', $file['url'], $preview );
+			$updated = str_replace(
+				'%file_name%',
+				$this->get_name_from_file( $file['url'] ),
+				$updated );
 
 			$image_ext    = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
@@ -71,6 +75,12 @@ class Media_Field_Render extends Base {
 		}
 
 		return $html;
+	}
+
+	private function get_name_from_file( string $file_url ): string {
+		$parts = explode( '/', $file_url );
+
+		return end( $parts );
 	}
 
 	protected function get_preview_html(): string {

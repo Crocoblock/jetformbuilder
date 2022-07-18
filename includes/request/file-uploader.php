@@ -20,9 +20,6 @@ class File_Uploader {
 	/** @var File|File_Collection */
 	protected $file;
 
-	/** @var Uploaded_File|Uploaded_File[] */
-	protected $preset = array();
-
 	protected $default_value;
 
 	protected $max_files;
@@ -59,14 +56,11 @@ class File_Uploader {
 	 * @throws Upload_Exception
 	 */
 	protected function upload_files() {
-		if ( $this->preset instanceof Uploaded_File ) {
-			return $this->preset;
-		}
 		if ( $this->file instanceof File ) {
 			return $this->upload_file( $this->file );
 		}
 
-		$uploaded = $this->preset;
+		$uploaded = array();
 
 		/** @var File $file */
 		foreach ( $this->file as $file ) {
@@ -188,12 +182,6 @@ class File_Uploader {
 			$counter += count( $this->file );
 		}
 
-		if ( $this->preset instanceof Uploaded_File ) {
-			++ $counter;
-		} elseif ( is_array( $this->preset ) ) {
-			$counter += count( $this->preset );
-		}
-
 		return $counter;
 	}
 
@@ -240,33 +228,6 @@ class File_Uploader {
 		return $this;
 	}
 
-	public function set_preset( $preset ): File_Uploader {
-		if ( empty( $preset ) || ! is_array( $preset ) ) {
-			return $this;
-		}
-
-		if ( $this->is_must_be_single() ) {
-			$uploaded     = new Uploaded_File();
-			$this->preset = $uploaded->set_from_array( isset( $preset[0] ) ? $preset[0] : $preset );
-
-			return $this;
-		}
-
-		$files = isset( $preset[0] ) ? $preset : array( $preset );
-
-		foreach ( $files as $index => $file ) {
-			if ( ! is_array( $file ) ) {
-				unset( $files[ $index ] );
-				continue;
-			}
-			$files[ $index ] = ( new Uploaded_File() )->set_from_array( $file );
-		}
-
-		$this->preset = $files;
-
-		return $this;
-	}
-
 	/**
 	 * @param array $settings
 	 *
@@ -284,24 +245,10 @@ class File_Uploader {
 		return $this;
 	}
 
-	public function clear_preset(): File_Uploader {
-		$this->preset = array();
-
-		return $this;
-	}
-
-	/**
-	 * @return Uploaded_File|Uploaded_File[]
-	 */
-	public function get_preset() {
-		return $this->preset;
-	}
-
 	public function set_context( Parser_Context $context ): File_Uploader {
 		$this->context = $context;
 
 		$this->set_settings( $context->get_settings() );
-		$this->set_preset( Tools::decode_json( $context->get_value() ) );
 		$this->set_file( $context->get_file() );
 
 		return $this;

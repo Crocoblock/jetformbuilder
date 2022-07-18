@@ -22,7 +22,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 	 * @throws Sanitize_Value_Exception
 	 */
 	public function get_response() {
-		if ( empty( $this->context->get_file() ) && empty( $this->value ) ) {
+		if ( empty( $this->context->get_file() ) ) {
 			return false;
 		}
 

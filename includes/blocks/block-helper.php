@@ -98,7 +98,15 @@ class Block_Helper {
 	}
 
 	public static function get_blocks_by_post( $post_id ): array {
-		return parse_blocks( get_post( $post_id )->post_content );
+		return array_map( function ( $block ) {
+			if ( 'core/block' !== $block['blockName'] ) {
+				return $block;
+			}
+			$reusable_id          = $block['attrs']['ref'] ?? 0;
+			$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
+
+			return $block;
+		}, parse_blocks( get_post( $post_id )->post_content ) );
 	}
 
 	public static function delete_namespace( $block ): string {

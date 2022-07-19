@@ -5,6 +5,7 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Get_From_Field;
+use Jet_Form_Builder\Generators\Get_From_Je_Query;
 use Jet_Form_Builder\Generators\Num_Range;
 use Jet_Form_Builder\Generators\Num_Range_Manual;
 use Jet_Form_Builder\Shortcodes\Manager;
@@ -40,6 +41,7 @@ class Form_Manager {
 				new Num_Range_Manual(),
 				new Get_From_DB(),
 				new Get_From_Field(),
+				new Get_From_Je_Query(),
 			);
 
 			$instances = apply_filters( 'jet-form-builder/forms/options-generators', $instances, $this );

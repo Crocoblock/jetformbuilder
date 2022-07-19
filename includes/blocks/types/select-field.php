@@ -137,6 +137,55 @@ class Select_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
+	public function get_field_name( $name = '' ) {
+		return $this->is_multiple()
+			? ( parent::get_field_name( $name ) . '[]' )
+			: parent::get_field_name( $name );
+	}
+
+	public function is_multiple(): bool {
+		return $this->block_attrs['multiple'] ?? false;
+	}
+
+	public function get_multiple_size(): int {
+		return $this->block_attrs['multiple_size'] ?? 0;
+	}
+
+	public function expected_preset_type(): array {
+		if ( ! $this->is_multiple() ) {
+			return parent::expected_preset_type();
+		}
+
+		return array( self::PRESET_ARRAY );
+	}
+
+	public function prepare_option( array $option ): array {
+		return $this->is_multiple()
+			? $this->prepare_option_from_array( $option )
+			: $this->prepare_option_from_single( $option );
+	}
+
+	private function prepare_option_from_array( array $option ): array {
+		$value = $this->block_attrs['default'];
+
+		if ( ! is_array( $value ) ) {
+			return $option;
+		}
+
+		if ( in_array( (string) $option['value'], $value, true ) ) {
+			$option['selected'] = true;
+		}
+
+		return $option;
+	}
+
+	private function prepare_option_from_single( array $option ): array {
+		if ( (string) $option['value'] === (string) $this->block_attrs['default'] ) {
+			$option['selected'] = true;
+		}
+
+		return $option;
+	}
 
 	/**
 	 * Returns current block render

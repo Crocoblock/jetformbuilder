@@ -86,6 +86,11 @@ class Form_Break {
 		$last_break   = false;
 
 		foreach ( $blocks as $index => $field ) {
+			if ( 'core/block' === $field['blockName'] ) {
+				$this->set_pages( $field['innerBlocks'] ?? array(), false );
+
+				continue;
+			}
 			if ( 'form-break-start' === Block_Helper::delete_namespace( $field ) ) {
 				$this->has_start = true;
 

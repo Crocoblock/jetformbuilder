@@ -48,6 +48,21 @@
             "Contain text": [
                 ""
             ],
+            "When validation of request is failed": [
+                ""
+            ],
+            "Not founded supported executor for %s": [
+                ""
+            ],
+            "When the Form was submitted": [
+                ""
+            ],
+            "When canceling the passage of the gateway": [
+                ""
+            ],
+            "When passing through the gateway": [
+                ""
+            ],
             "Actions Log": [
                 ""
             ],
@@ -63,10 +78,22 @@
             "Related Form Record": [
                 ""
             ],
+            "View related form record": [
+                ""
+            ],
+            "We need to update your database to the latest version.": [
+                ""
+            ],
+            "Update": [
+                ""
+            ],
             "Form Records": [
                 ""
             ],
             "JetFormBuilder Form Record": [
+                ""
+            ],
+            "No found items. To save a form record, add the \r\n\t\tSave Form Record action to the desired form. \r\n\t\tMore detailed information in the video - %s": [
                 ""
             ],
             "Select Form": [
@@ -94,6 +121,9 @@
                 ""
             ],
             "Edit Form": [
+                ""
+            ],
+            "Executed on event": [
                 ""
             ],
             "Data": [
@@ -138,6 +168,9 @@
             "Form": [
                 ""
             ],
+            "Edit form": [
+                ""
+            ],
             "Ip Address": [
                 ""
             ],
@@ -147,10 +180,7 @@
             "Referrer": [
                 ""
             ],
-            "Completed": [
-                ""
-            ],
-            "Created": [
+            "Go to refer page": [
                 ""
             ],
             "User Agent": [
@@ -477,6 +507,12 @@
             "Content:": [
                 ""
             ],
+            "Attachments:": [
+                ""
+            ],
+            "Add form field with attachment": [
+                ""
+            ],
             "Admin email": [
                 ""
             ],
@@ -654,7 +690,13 @@
             "Go PRO": [
                 ""
             ],
+            "Created": [
+                ""
+            ],
             "Updated": [
+                ""
+            ],
+            "No items found.": [
                 ""
             ],
             "Saved successfully!": [
@@ -669,7 +711,34 @@
             "Submit": [
                 ""
             ],
+            "Hide this field if...": [
+                ""
+            ],
+            "Set value for this field if...": [
+                ""
+            ],
+            "Show this field if...": [
+                ""
+            ],
+            "Is render state": [
+                ""
+            ],
+            "Something went wrong": [
+                ""
+            ],
+            "Error": [
+                ""
+            ],
+            "Normal form output process": [
+                ""
+            ],
+            "Some description": [
+                ""
+            ],
             "Jet Form Fields": [
+                ""
+            ],
+            "Jet Form Elements": [
                 ""
             ],
             "Margin": [
@@ -733,6 +802,9 @@
                 ""
             ],
             "Hover": [
+                ""
+            ],
+            "Unsuccessful field (block) registration. \r\n\t\t\t\tPerhaps the path to the block scheme (block.json) is incorrectly specified": [
                 ""
             ],
             "\r\n\t\t\tSet math formula to calculate field value.<br/>\r\n\t\t\tFor example:<br/><br/>\r\n\t\t\t%FIELD::quantity%*%META::price%<br/><br/>\r\n\t\t\tWhere:<br/>\r\n\t\t\t- %FIELD::quantity% - macro for form field value. \"quantity\" - is a field name to get value from<br/>\r\n\t\t\t- %META::price% - macro for current post meta value. \"price\" - is a meta key to get value from<br/><br/>\r\n\t\t": [
@@ -870,6 +942,9 @@
             "Current Post/Page URL": [
                 ""
             ],
+            "Current Term URL": [
+                ""
+            ],
             "Current Post Meta": [
                 ""
             ],
@@ -957,15 +1032,6 @@
             "Textarea": [
                 ""
             ],
-            "Please install JetEngine": [
-                ""
-            ],
-            "Please select template": [
-                ""
-            ],
-            "(no title)": [
-                ""
-            ],
             "Page Reload": [
                 ""
             ],
@@ -979,6 +1045,24 @@
                 ""
             ],
             "LABEL": [
+                ""
+            ],
+            "Disable": [
+                ""
+            ],
+            "WordPress Nonce": [
+                ""
+            ],
+            "JetFormBuilder Token": [
+                ""
+            ],
+            "Please install JetEngine": [
+                ""
+            ],
+            "Please select template": [
+                ""
+            ],
+            "(no title)": [
                 ""
             ],
             "Empty row.": [
@@ -1077,6 +1161,9 @@
             "Related Payment": [
                 ""
             ],
+            "View related payment": [
+                ""
+            ],
             "Payments": [
                 ""
             ],
@@ -1087,9 +1174,6 @@
                 ""
             ],
             "Access key saved successfully!": [
-                ""
-            ],
-            "Payments not found": [
                 ""
             ],
             "Sync Access Token": [
@@ -1104,6 +1188,12 @@
             "Click on the button to further manage the payment settings": [
                 ""
             ],
+            "Payment not found": [
+                ""
+            ],
+            "Payments not found": [
+                ""
+            ],
             "Gross": [
                 ""
             ],
@@ -1111,6 +1201,9 @@
                 ""
             ],
             "Not attached": [
+                ""
+            ],
+            "Completed": [
                 ""
             ],
             "Voided": [
@@ -1125,13 +1218,22 @@
             "Transaction ID": [
                 ""
             ],
+            "No payments found.": [
+                ""
+            ],
             "Get values list from JetEngine field options": [
+                ""
+            ],
+            "Get values list from JetEngine Query": [
                 ""
             ],
             "Numbers range by manual input": [
                 ""
             ],
             "Numbers range by meta value": [
+                ""
+            ],
+            "Successfully installed migrations.": [
                 ""
             ],
             "Shortcode": [
@@ -1431,6 +1533,9 @@
             "Results per page": [
                 ""
             ],
+            "Please choose your action": [
+                ""
+            ],
             "Bulk actions": [
                 ""
             ],
@@ -1458,6 +1563,30 @@
             "HubSpot API": [
                 ""
             ],
+            "JetFormBuilder Settings": [
+                ""
+            ],
+            "Set form fields names to to get user data from": [
+                ""
+            ],
+            "Set user meta fields to save appropriate form fields into": [
+                ""
+            ],
+            "Unknown error.": [
+                ""
+            ],
+            "No items found": [
+                ""
+            ],
+            "PayPal Gateway API": [
+                ""
+            ],
+            "Client ID": [
+                ""
+            ],
+            "Secret Key": [
+                ""
+            ],
             "Address Autocomplete": [
                 ""
             ],
@@ -1473,52 +1602,22 @@
             "Stripe Gateway API": [
                 ""
             ],
-            "JetFormBuilder Settings": [
+            "ActiveCampaign API": [
                 ""
             ],
             "Captcha Settings": [
                 ""
             ],
-            "MailChimp API": [
+            "Site Key": [
                 ""
             ],
             "GetResponse API": [
                 ""
             ],
-            "ActiveCampaign API": [
-                ""
-            ],
-            "PayPal Gateway API": [
+            "MailChimp API": [
                 ""
             ],
             "Payments Gateways": [
-                ""
-            ],
-            "Post Submit Actions": [
-                ""
-            ],
-            "Preset Settings": [
-                ""
-            ],
-            "Limit Form Responses": [
-                ""
-            ],
-            "Form Schedule": [
-                ""
-            ],
-            "Unknown error.": [
-                ""
-            ],
-            "Please choose your action": [
-                ""
-            ],
-            "Client ID": [
-                ""
-            ],
-            "Secret Key": [
-                ""
-            ],
-            "Site Key": [
                 ""
             ],
             "Enable Gateways": [
@@ -1527,19 +1626,25 @@
             "Enable Test Mode": [
                 ""
             ],
-            "Last Page Name": [
+            "Render State": [
                 ""
             ],
-            "The value of this field will be set as the name of the last page with the \"Progress Bar\" block.": [
-                ""
-            ],
-            "New Condition": [
+            "Add render state": [
                 ""
             ],
             "Value to Set": [
                 ""
             ],
             "Separate values with commas": [
+                ""
+            ],
+            "New Condition": [
+                ""
+            ],
+            "Last Page Name": [
+                ""
+            ],
+            "The value of this field will be set as the name of the last page with the \"Progress Bar\" block.": [
                 ""
             ],
             "Meta Key": [
@@ -1551,7 +1656,22 @@
             "Is Timestamp": [
                 ""
             ],
+            "Buttons Settings": [
+                ""
+            ],
             "Enable \"Next\" Button": [
+                ""
+            ],
+            "Next Button label": [
+                ""
+            ],
+            "Add Prev Page Button": [
+                ""
+            ],
+            "Prev Page Button Label": [
+                ""
+            ],
+            "Page Settings": [
                 ""
             ],
             "Label of progress": [
@@ -1560,7 +1680,16 @@
             "Validation message": [
                 ""
             ],
+            "Advanced": [
+                ""
+            ],
+            "CSS Class Name": [
+                ""
+            ],
             "Form Break": [
+                ""
+            ],
+            "Form Break Start": [
                 ""
             ],
             "Example:": [
@@ -1573,6 +1702,9 @@
                 ""
             ],
             "Render in HTML": [
+                ""
+            ],
+            "Allow MIME types": [
                 ""
             ],
             "Progress Bar Type": [
@@ -1591,6 +1723,24 @@
                 ""
             ],
             "%META::price% - macro for current post meta value. \"price\" - is a meta key to get value from": [
+                ""
+            ],
+            "Placeholder": [
+                ""
+            ],
+            "Disable placeholder": [
+                ""
+            ],
+            "Field Visibility": [
+                ""
+            ],
+            "For all": [
+                ""
+            ],
+            "Only for logged in users": [
+                ""
+            ],
+            "Only for NOT-logged in users": [
                 ""
             ],
             "Posts": [
@@ -1632,21 +1782,6 @@
             "Step": [
                 ""
             ],
-            "Set form fields names to to get user data from": [
-                ""
-            ],
-            "Set user meta fields to save appropriate form fields into": [
-                ""
-            ],
-            "Before payment processed:": [
-                ""
-            ],
-            "On successful payment:": [
-                ""
-            ],
-            "On failed payment:": [
-                ""
-            ],
             "Available macros list: ": [
                 ""
             ],
@@ -1662,25 +1797,28 @@
             "Please add `Save Form Record` action": [
                 ""
             ],
+            "Up": [
+                ""
+            ],
+            "Down": [
+                ""
+            ],
+            "Turn off": [
+                ""
+            ],
+            "Turn on": [
+                ""
+            ],
+            "Edit Action": [
+                ""
+            ],
+            "Edit Conditions & Events": [
+                ""
+            ],
             "AND (ALL conditions must be met)": [
                 ""
             ],
             "OR (at least ONE condition must be met)": [
-                ""
-            ],
-            "Condition Operator": [
-                ""
-            ],
-            "+ New Action": [
-                ""
-            ],
-            "All PRO Actions": [
-                ""
-            ],
-            "Edit Action Conditions": [
-                ""
-            ],
-            "Add New Condition": [
                 ""
             ],
             "To fulfill this condition, the result of the check must be": [
@@ -1689,10 +1827,46 @@
             "Type transform comparing value": [
                 ""
             ],
+            "Choose events": [
+                ""
+            ],
+            "Add event": [
+                ""
+            ],
+            "Condition Operator": [
+                ""
+            ],
+            "Add New Condition": [
+                ""
+            ],
+            "Fields comparison": [
+                ""
+            ],
+            "Events match": [
+                ""
+            ],
+            "Edit Action Conditions & Events": [
+                ""
+            ],
+            "(Click to delete)": [
+                ""
+            ],
+            "Post Submit Actions": [
+                ""
+            ],
+            "+ New Action": [
+                ""
+            ],
+            "All PRO Actions": [
+                ""
+            ],
             "Displays the progress of a multi-page form": [
                 ""
             ],
             "Enable form safety": [
+                ""
+            ],
+            "Enable csrf protection": [
                 ""
             ],
             "Enable reCAPTCHA v3 form verification": [
@@ -1707,10 +1881,19 @@
             "Please add `Insert/Update Post` action": [
                 ""
             ],
+            "Limit Form Responses": [
+                ""
+            ],
             "Upgrade": [
                 ""
             ],
             "to unlock this feature.": [
+                ""
+            ],
+            "Preset Settings": [
+                ""
+            ],
+            "Form Schedule": [
                 ""
             ],
             "General": [
@@ -1734,33 +1917,6 @@
             "Is Required": [
                 ""
             ],
-            "Advanced": [
-                ""
-            ],
-            "Placeholder": [
-                ""
-            ],
-            "Add Prev Page Button": [
-                ""
-            ],
-            "Prev Page Button Label": [
-                ""
-            ],
-            "Field Visibility": [
-                ""
-            ],
-            "For all": [
-                ""
-            ],
-            "Only for logged in users": [
-                ""
-            ],
-            "Only for NOT-logged in users": [
-                ""
-            ],
-            "CSS Class Name": [
-                ""
-            ],
             "input label:": [
                 ""
             ],
@@ -1774,6 +1930,18 @@
                 ""
             ],
             "Available fields: ": [
+                ""
+            ],
+            "Before payment processed:": [
+                ""
+            ],
+            "On successful payment:": [
+                ""
+            ],
+            "On failed payment:": [
+                ""
+            ],
+            "Edit Action Conditions": [
                 ""
             ],
             "Gateways editor data\u0004Before payment processed:": [
@@ -1794,10 +1962,13 @@
             "Gateways editor data\u0004Payment failed message": [
                 ""
             ],
-            "Gateways editor data\u0004Use redirect URL from Redirect notification": [
+            "Gateways editor data\u0004Redirect to a page": [
                 ""
             ],
             "Gateways editor data\u0004Create payment order notification:": [
+                ""
+            ],
+            "Gateways editor data\u0004Enable this toggle to redirect a user after successful payment.": [
                 ""
             ],
             "Paypal gateways editor data\u0004PayPal Checkout": [
@@ -1839,7 +2010,10 @@
             "block title\u0004JetForm": [
                 ""
             ],
-            "block title\u0004Form Break Field": [
+            "block title\u0004Form Page Break": [
+                ""
+            ],
+            "block title\u0004Form Page Start": [
                 ""
             ],
             "block title\u0004Group Break Field": [
@@ -1939,6 +2113,9 @@
                 ""
             ],
             "block keyword\u0004formbreak": [
+                ""
+            ],
+            "block keyword\u0004start": [
                 ""
             ],
             "block keyword\u0004heading": [

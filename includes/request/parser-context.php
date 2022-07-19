@@ -113,6 +113,10 @@ class Parser_Context {
 		return $this;
 	}
 
+	public function get_request(): array {
+		return $this->request;
+	}
+
 	/**
 	 * @return mixed
 	 */

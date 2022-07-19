@@ -20,9 +20,6 @@ class File_Uploader {
 	/** @var File|File_Collection */
 	protected $file;
 
-	/** @var Uploaded_File|Uploaded_File[] */
-	protected $preset = array();
-
 	protected $default_value;
 
 	protected $max_files;
@@ -59,14 +56,11 @@ class File_Uploader {
 	 * @throws Upload_Exception
 	 */
 	protected function upload_files() {
-		if ( $this->preset instanceof Uploaded_File ) {
-			return $this->preset;
-		}
 		if ( $this->file instanceof File ) {
 			return $this->upload_file( $this->file );
 		}
 
-		$uploaded = $this->preset;
+		$uploaded = array();
 
 		/** @var File $file */
 		foreach ( $this->file as $file ) {
@@ -95,6 +89,8 @@ class File_Uploader {
 		}
 
 		$uploaded->add_attachment();
+
+		do_action( 'jet-form-builder/inserted-attachment', $uploaded, $this );
 
 		return $uploaded;
 	}
@@ -162,7 +158,7 @@ class File_Uploader {
 		}
 	}
 
-	protected function get_max_size(): int {
+	public function get_max_size(): int {
 		$max_size       = wp_max_upload_size();
 		$field_max_size = $max_size;
 
@@ -178,7 +174,7 @@ class File_Uploader {
 		return $field_max_size;
 	}
 
-	protected function count_files(): int {
+	public function count_files(): int {
 		$counter = 0;
 		if ( $this->file instanceof File ) {
 			++ $counter;
@@ -186,29 +182,23 @@ class File_Uploader {
 			$counter += count( $this->file );
 		}
 
-		if ( $this->preset instanceof Uploaded_File ) {
-			++ $counter;
-		} elseif ( is_array( $this->preset ) ) {
-			$counter += count( $this->preset );
-		}
-
 		return $counter;
 	}
 
-	protected function get_max_files(): int {
+	public function get_max_files(): int {
 		$files = absint( $this->settings['max_files'] ?? 1 );
 
 		return empty( $files ) ? 1 : $files;
 	}
 
-	protected function get_mime_types(): array {
+	public function get_mime_types(): array {
 		return $this->settings['allowed_mimes'] ?? array();
 	}
 
 	/**
 	 * @return bool
 	 */
-	protected function is_insert_attachment(): bool {
+	public function is_insert_attachment(): bool {
 		// Prevent non logged-in users insert attachment
 		if ( ! is_user_logged_in() ) {
 			return false;
@@ -217,13 +207,13 @@ class File_Uploader {
 		return ! empty( $this->settings['insert_attachment'] );
 	}
 
-	protected function get_allowed_user_cap(): string {
+	public function get_allowed_user_cap(): string {
 		$capability = $this->settings['allowed_user_cap'] ?? 'upload_files';
 
 		return empty( $capability ) ? 'upload_files' : $capability;
 	}
 
-	protected function is_must_be_single(): bool {
+	public function is_must_be_single(): bool {
 		return 1 === $this->max_files;
 	}
 
@@ -234,33 +224,6 @@ class File_Uploader {
 	 */
 	public function set_file( $file ): File_Uploader {
 		$this->file = $file;
-
-		return $this;
-	}
-
-	public function set_preset( $preset ): File_Uploader {
-		if ( empty( $preset ) || ! is_array( $preset ) ) {
-			return $this;
-		}
-
-		if ( $this->is_must_be_single() ) {
-			$uploaded     = new Uploaded_File();
-			$this->preset = $uploaded->set_from_array( isset( $preset[0] ) ? $preset[0] : $preset );
-
-			return $this;
-		}
-
-		$files = isset( $preset[0] ) ? $preset : array( $preset );
-
-		foreach ( $files as $index => $file ) {
-			if ( ! is_array( $file ) ) {
-				unset( $files[ $index ] );
-				continue;
-			}
-			$files[ $index ] = ( new Uploaded_File() )->set_from_array( $file );
-		}
-
-		$this->preset = $files;
 
 		return $this;
 	}
@@ -282,27 +245,17 @@ class File_Uploader {
 		return $this;
 	}
 
-	public function clear_preset(): File_Uploader {
-		$this->preset = array();
-
-		return $this;
-	}
-
-	/**
-	 * @return Uploaded_File|Uploaded_File[]
-	 */
-	public function get_preset() {
-		return $this->preset;
-	}
-
 	public function set_context( Parser_Context $context ): File_Uploader {
 		$this->context = $context;
 
 		$this->set_settings( $context->get_settings() );
-		$this->set_preset( Tools::decode_json( $context->get_value() ) );
 		$this->set_file( $context->get_file() );
 
 		return $this;
+	}
+
+	public function get_settings(): array {
+		return $this->settings;
 	}
 
 

@@ -4,6 +4,35 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.1
+* ADD: Ordering files in media field
+* ADD: Compatibility with Reusable Block
+* FIX: Action conditions
+* FIX: Support Condition Block inside Repeater Field
+* FIX: Update Options action
+* FIX: Redirect to Page action on GATEWAY.{TYPE} event
+* FIX: Media Field required check in multi-step form
+* FIX: Upload zip / pdf files in Media Field
+* FIX: Get values list from JetEngine query with user
+
+## 2.1.0
+* ADD: CSRF protection
+* ADD: Compatibility with **JetEngine Query Builder**
+* ADD: Ability to add attachments to emails in **Send Email** action
+* ADD: Refactor, improve, update logic of file uploading in **Media Field**
+* ADD: New Event logic for Submit Actions
+* ADD: Submit Action on/off logic
+* ADD: **Form Pages Start** block
+* FIX: Numbers range by manual input Generator
+* FIX: Fatal error on view **Form Records** list screen if one of the form were deleted
+* FIX: Using Macros in the body of the **Send Email** action
+* FIX: Required check for **Media field** in multi-step form
+* FIX: Required check for **Text Field** with input mask
+* FIX: Submit button alignment fullwidth in **JetForm** widget (Elementor)
+* FIX: Compatibility with Elementor Popup
+* FIX: Better sanitizing terms in the **Insert/Update Post** action 
+* Tweak: New Editor blocks category - **Jet Form Elements**
+
 ## 2.0.6
 * FIX: Condition "In the list" for checkbox field
 * FIX: Block controls for Calculated Field & Repeater Field

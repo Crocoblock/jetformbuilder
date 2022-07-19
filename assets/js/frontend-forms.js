@@ -74,6 +74,16 @@
 
 	$.fn.jetFormBuilderConditional = function( options ) {
 
+		this.JFBroot = this.closest( '.jet-form-builder-repeater__row-fields' );
+
+		if ( ! this.JFBroot.length ) {
+			this.JFBroot = this.closest( 'form.jet-form-builder' );
+		} else {
+			this.JFBparent = this.closest( 'form.jet-form-builder' );
+		}
+
+		const current = this;
+
 		var settings = $.extend( {
 			hideJS: true,
 		}, options );
@@ -200,26 +210,25 @@
 			return checkResult;
 		};
 
-		var checkVisibilityCond = function( listenTo, listenFor, $section, operator, type ) {
+		var checkVisibilityCond = ( listenTo, listenFor, $section, operator, type ) => {
 
-			var checked = $section.data( 'checked' );
-			var $listenTo = $( listenTo );
+			let $listenTo = $( listenTo, current.JFBroot );
+
+			if ( ! $listenTo.length && current?.JFBparent?.length ) {
+				$listenTo = $( listenTo, current.JFBparent );
+			}
+
 			var checkResult = checkValue( $listenTo, listenFor, operator );
 
 			type = type || 'show';
 
-			if ( ! checked ) {
-				checked = {};
-			}
+			$section.JFBchecked = $section.JFBchecked ?? {};
 
 			if ( 'show' === type ) {
-				checked[ listenTo ] = checkResult;
+				$section.JFBchecked[ listenTo ] = checkResult;
 			} else {
-				checked[ listenTo ] = ! checkResult;
+				$section.JFBchecked[ listenTo ] = ! checkResult;
 			}
-
-			$section.data( 'checked', checked );
-
 		};
 
 		var checkSetValueCond = function( listenTo, listenFor, $section, operator, value, type ) {
@@ -322,18 +331,16 @@
 
 		};
 
-		var setVisibility = function( $section ) {
-
-			var checked = $section.data( 'checked' );
+		var setVisibility = $section => {
 			//var $row = $section.closest( '.jet-form-builder-row' );
-			var res = true;
+			let res = true;
 
-			if ( ! checked ) {
+			if ( ! Object.keys( $section?.JFBchecked )?.length ) {
 				return;
 			}
 
-			for ( var check in checked ) {
-				if ( ! checked[ check ] ) {
+			for ( let check in $section.JFBchecked ) {
+				if ( ! $section.JFBchecked[ check ] ) {
 					res = false;
 				}
 			}
@@ -411,18 +418,23 @@
 				let type = condition.type;
 				let valueToSet = condition.set_value;
 
-				//Set up event listener
-				$( document ).on( 'change.JetFormBuilderMain', listenTo, function() {
+				let field = current.JFBroot.find( listenTo );
 
-					if ( 'show' === type || 'hide' === type ) {
-						checkVisibilityCond( listenTo, listenFor, $section, operator, type );
-					} else {
-						checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
-					}
+				if ( ! field?.length && current?.JFBparent?.length ) {
+					field =  current.JFBparent.find( listenTo );
+				}
 
-					setValue( $section );
-					setVisibility( $section );
+				field.each( function() {
+					$( this ).on( 'change.JetFormBuilderMain', function() {
+						if ( 'show' === type || 'hide' === type ) {
+							checkVisibilityCond( listenTo, listenFor, $section, operator, type );
+						} else {
+							checkSetValueCond( listenTo, listenFor, $section, operator, valueToSet, type );
+						}
 
+						setValue( $section );
+						setVisibility( $section );
+					});
 				} );
 
 				//If setting was chosen, hide everything first...
@@ -594,6 +606,7 @@
 			$this.trigger( 'jet-form-builder/repeater-add-new', [ index ] );
 
 			JetFormBuilder.calculateRowValue( $newVal );
+			JetFormBuilder.initConditions( $newVal );
 
 		},
 
@@ -1104,7 +1117,7 @@
 
 			var $button        = $page.find( '.jet-form-builder__next-page' ),
 				$msg           = $page.find( '.jet-form-builder__next-page-msg' ),
-				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required], .jet-form-builder-file-upload__value[required]' ),
+				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
 				pageNum        = parseInt( $page.data( 'page' ), 10 ),
 				disabled       = false,
 				radioFields    = {};
@@ -1217,9 +1230,21 @@
 
 			$fields.each( function( ind, field ) {
 				if ( ! field.checkValidity() ) {
-					field.reportValidity();
 					isValid = false;
-					return false;
+				} else {
+					return isValid;
+				}
+				if ( ! field.classList.contains( 'jet-form-builder-file-upload__input' ) ) {
+					field.reportValidity();
+					return isValid;
+				}
+				const preset = field.closest( '.jet-form-builder-file-upload' ).querySelector( '.jet-form-builder-file-upload__value' );
+
+				isValid = !! preset?.value;
+
+				if ( ! isValid ) {
+					field.reportValidity();
+					return isValid;
 				}
 			} );
 

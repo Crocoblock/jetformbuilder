@@ -2,14 +2,11 @@ import { SelectRadioCheckPlaceholder } from '../../components/base-select-check-
 import SelectRadioCheck from '../../components/base-select-check-radio/select-radio-check';
 
 const { __ } = wp.i18n;
-const { applyFilters } = wp.hooks;
 
 const {
 	ToolBarFields,
 	GeneralFields,
-	AdvancedFields,
 	FieldControl,
-	HorizontalLine,
 } = JetFBComponents;
 
 const {
@@ -22,6 +19,7 @@ const {
 	SelectControl,
 	PanelBody,
 	TextControl,
+	RangeControl,
 } = wp.components;
 
 /**
@@ -121,6 +119,22 @@ export default function SelectEdit( props ) {
 						setAttributes( { switch_on_change: Boolean( newValue ) } );
 					} }
 				/>
+				<ToggleControl
+					key='multiple'
+					label={ __( 'Is multiple', 'jet-form-builder' ) }
+					checked={ attributes.multiple }
+					help={ attrHelp( 'multiple' ) }
+					onChange={ multiple => setAttributes( { multiple } ) }
+				/>
+				{ attributes.multiple && <RangeControl
+					label={ __( 'Rows count', 'jet-form-builder' ) }
+					value={ attributes.multiple_size ?? 4 }
+					onChange={ multiple_size => setAttributes( { multiple_size } ) }
+					allowReset
+					resetFallbackValue={ 4 }
+					min={ 1 }
+					max={ 25 }
+				/> }
 				<FieldControl
 					type='custom_settings'
 					key={ uniqKey( 'customSettingsFields' ) }

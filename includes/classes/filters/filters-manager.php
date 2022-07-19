@@ -42,6 +42,7 @@ class Filters_Manager {
 				new Render_Acf_Checkbox_Filter(),
 				new Term_Title_By_Id_Filter(),
 				new Term_Titles_By_Ids_Filter(),
+				new Md5_Filter(),
 			)
 		);
 	}

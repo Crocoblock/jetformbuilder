@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.1
+* ADD: Ordering files in media field
+* ADD: Compatibility with Reusable Block
+* FIX: Action conditions
+* FIX: Support Condition Block inside Repeater Field
+* FIX: Update Options action
+* FIX: Redirect to Page action on GATEWAY.{TYPE} event
+* FIX: Media Field required check in multi-step form
+* FIX: Upload zip / pdf files in Media Field
+* FIX: Get values list from JetEngine query with user
+
 ## 2.1.0
 * ADD: CSRF protection
 * ADD: Compatibility with **JetEngine Query Builder**

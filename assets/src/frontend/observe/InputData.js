@@ -6,11 +6,15 @@ import SignalText from '../signals/SignalText';
 import SignalRepeater from '../signals/SignalRepeater';
 import { getParsedName } from './functions';
 import SignalCalculated from '../signals/SignalCalculated';
+import SignalMultiSelect from '../signals/SignalMultiSelect';
+import SignalFile from '../signals/SignalFile';
 
 /**
  * @type {(BaseSignal)[]}
  */
 const signalTypes = [
+	new SignalFile(),
+	new SignalMultiSelect(),
 	new SignalCheckbox(),
 	new SignalRadio(),
 	new SignalRepeater(),

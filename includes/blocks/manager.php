@@ -248,13 +248,13 @@ class Manager {
 			true
 		);
 
-		wp_register_script(
+		/*wp_register_script(
 			'jet-form-builder-file-upload',
 			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
 			array( 'jet-form-builder-sortable' ),
 			Plugin::instance()->get_version(),
 			true
-		);
+		);*/
 		$this->_registered_scripts = true;
 	}
 

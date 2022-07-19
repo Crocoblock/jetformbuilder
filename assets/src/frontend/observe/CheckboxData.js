@@ -1,5 +1,5 @@
 import InputData from './InputData';
-import CheckboxConditionChecker from '../conditional.logic/CheckboxConditionChecker';
+import MultipleConditionChecker from '../conditional.logic/MultipleConditionChecker';
 
 class CheckboxData extends InputData {
 
@@ -16,7 +16,7 @@ class CheckboxData extends InputData {
 	}
 
 	conditionChecker() {
-		return new CheckboxConditionChecker();
+		return new MultipleConditionChecker();
 	}
 
 	setValue() {

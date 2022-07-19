@@ -19,6 +19,7 @@ $this->add_attribute( 'type', 'file' );
 $this->add_attribute( 'data-form_id', $this->form_id );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
+$this->add_attribute( 'data-jfb-sync' );
 
 if ( 1 < $max_files ) {
 	$this->add_attribute( 'data-max_files', $max_files );

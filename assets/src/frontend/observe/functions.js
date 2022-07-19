@@ -5,12 +5,15 @@ import RadioData from './RadioData';
 import RepeaterData from './RepeaterData';
 import InputData from './InputData';
 import CalculatedData from './CalculatedData';
-
+import MultiSelectData from './MultiSelectData';
+import FileData from './FileData';
 
 /**
  * @type {(InputData)[]}
  */
 const dataTypes = [
+	FileData,
+	MultiSelectData,
 	ChangeData,
 	CheckboxData,
 	RadioData,
@@ -29,7 +32,7 @@ function createInput( node, observable ) {
 	for ( const dataType of dataTypes ) {
 		const current = new dataType();
 
-		if ( ! current.isSupported( node ) ) {
+		if ( !current.isSupported( node ) ) {
 			continue;
 		}
 		current.setNode( node );
@@ -50,7 +53,7 @@ function getParsedName( name ) {
 	];
 
 	for ( const regExp of regexps ) {
-		if ( ! regExp.test( name ) ) {
+		if ( !regExp.test( name ) ) {
 			continue;
 		}
 		const matches = name.match( regExp );
@@ -61,4 +64,18 @@ function getParsedName( name ) {
 	return name;
 }
 
-export { createInput, getParsedName };
+/**
+ * @param inputFileArray
+ * @returns {FileList}
+ */
+function createFileList( inputFileArray ) {
+	const transfer = new DataTransfer();
+
+	for ( const file of inputFileArray ) {
+		transfer.items.add( file );
+	}
+
+	return transfer.files;
+}
+
+export { createInput, getParsedName, createFileList };

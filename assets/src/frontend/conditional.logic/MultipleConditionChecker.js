@@ -1,7 +1,7 @@
 import ConditionChecker from './ConditionChecker';
 
 
-class CheckboxConditionChecker extends ConditionChecker {
+class MultipleConditionChecker extends ConditionChecker {
 
 	check( condition, input ) {
 		switch ( condition.operator ) {
@@ -18,4 +18,4 @@ class CheckboxConditionChecker extends ConditionChecker {
 
 }
 
-export default CheckboxConditionChecker;
+export default MultipleConditionChecker;

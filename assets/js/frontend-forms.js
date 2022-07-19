@@ -1152,12 +1152,6 @@
 						}
 					}
 
-					if ( ! val && $field[ 0 ].classList.contains( 'jet-form-builder-file-upload__input' ) ) {
-						const hiddenMediaPreset = $page[ 0 ].querySelector( '.jet-form-builder-file-upload__value' );
-
-						val = !! hiddenMediaPreset?.value;
-					}
-
 					if ( 'TEXTAREA' === $field[ 0 ].nodeName ) {
 						val = $field.val();
 					}

@@ -198,6 +198,7 @@
 						this.updateHashFieldPromise( location ).then( function () {
 							self.$input.value = location;
 							self.setPreview( position );
+							$( self.$input ).trigger( 'change.JetFormBuilderMain' );
 						} );
 
 						break;
@@ -209,6 +210,7 @@
 						this.updateHashFieldPromise( location ).then( function () {
 							self.$input.value = location;
 							self.setPreview( position );
+							$( self.$input ).trigger( 'change.JetFormBuilderMain' );
 						} );
 
 						break;
@@ -238,6 +240,8 @@
 								self.$input.value = null;
 								self.setPreview( response.html );
 							}
+
+							$( self.$input ).trigger( 'change.JetFormBuilderMain' );
 
 						} ).catch( function ( e ) {
 							console.log( e );
@@ -280,6 +284,8 @@
 					this.$inputLat.value = null;
 					this.$inputLng.value = null;
 				}
+
+				$( this.$input ).trigger( 'change.JetFormBuilderMain' );
 			}
 
 			updateHashFieldPromise( location ) {

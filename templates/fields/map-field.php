@@ -17,7 +17,11 @@ $this->add_attribute(
 		Tools::encode_json( $this->block_type->get_field_settings() )
 	)
 );
+$this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'value', $args['default']['self'] ?? '' );
+$this->add_attribute( 'class', 'jet-form-builder__field' );
+$this->add_attribute( 'class', $args['class_name'] );
+$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 ?>
 <div class="jet-fb-map-field">
 	<input <?php $this->render_attributes_string(); ?> />

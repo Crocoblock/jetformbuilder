@@ -74,10 +74,8 @@ class Live_Form {
 	 * @return array[]
 	 */
 	public function setup_fields(): array {
-		$form = get_post( $this->form_id );
-
 		$this->blocks = $this->get_form_break()->set_pages(
-			parse_blocks( $form->post_content )
+			Block_Helper::get_blocks_by_post( $this->form_id )
 		);
 
 		return $this->blocks;

@@ -2,6 +2,7 @@ const {
 	GeneralFields,
 	AdvancedFields,
 	FieldWrapper,
+	ToolBarFields,
 } = JetFBComponents;
 
 const {
@@ -32,6 +33,10 @@ export default function MapEdit( props ) {
 
 
 	return [
+		JetFBMapField.is_supported && <ToolBarFields
+			key={ uniqKey( 'ToolBarFields' ) }
+			{ ...props }
+		/>,
 		( isSelected && JetFBMapField.is_supported ) && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
 			<GeneralFields
 				key={ uniqKey( 'GeneralFields' ) }

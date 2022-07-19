@@ -87,7 +87,7 @@ class Form_Break {
 
 		foreach ( $blocks as $index => $field ) {
 			if ( 'core/block' === $field['blockName'] ) {
-				$this->set_pages( $field['innerBlocks'] ?? array() );
+				$this->set_pages( $field['innerBlocks'] ?? array(), false );
 
 				continue;
 			}

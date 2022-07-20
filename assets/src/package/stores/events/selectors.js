@@ -48,11 +48,21 @@ const selectors = {
 		const supported = selectors.getSupported( state, actionId );
 
 		return (
-			! supported.length || supported.includes( eventSlug )
+			!supported.length || supported.includes( eventSlug )
 		);
 	},
 	filterList( state, actionId, eventList ) {
-		return eventList.filter( current => selectors.isValid( state, actionId, current ) );
+		return eventList.filter(
+			current => selectors.isValid( state, actionId, current ) );
+	},
+	getHelpMap( state ) {
+		const map = {};
+
+		for ( const { value, help } of state.types ) {
+			map[ value ] = help;
+		}
+
+		return map;
 	},
 };
 

@@ -69,6 +69,7 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 		 *
 		 * Later should be deprecated
 		 */
+		$scenario->init_request();
 		$scenario->init_actions();
 
 		/** set to $this->gateways_meta */

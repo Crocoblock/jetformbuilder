@@ -174,7 +174,11 @@ trait Base_Select_Radio_Check {
 				);
 
 				if ( ! empty( $value_from ) ) {
-					$item['value'] = get_term_meta( $term->term_id, $value_from, true );
+					if ( isset( $term->$value_from ) ) {
+						$item['value'] = $term->$value_from;
+					} else {
+						$item['value'] = get_term_meta( $term->term_id, $value_from, true );
+					}
 				}
 
 				if ( ! empty( $calc_from ) ) {

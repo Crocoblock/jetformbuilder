@@ -68,6 +68,10 @@ abstract class Base_Event implements
 		return $this->get_id();
 	}
 
+	public function get_help(): string {
+		return '';
+	}
+
 	public function rep_item_id() {
 		return $this->get_id();
 	}
@@ -77,6 +81,7 @@ abstract class Base_Event implements
 		return array(
 			'value' => $this->get_id(),
 			'label' => $this->get_label(),
+			'help'  => $this->get_help(),
 			'self'  => static::class,
 		);
 	}

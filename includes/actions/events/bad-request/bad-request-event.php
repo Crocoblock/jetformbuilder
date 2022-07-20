@@ -15,6 +15,16 @@ class Bad_Request_Event extends Base_Event {
 		return __( 'When validation of request is failed', 'jet-form-builder' );
 	}
 
+	public function get_help(): string {
+		return __(
+			'Is executed after processing the request, 
+if there are errors in the fields. For example, when you filled 
+out a media field in the wrong format on a form or exceeded the file limit.
+Passes DEFAULT.PROCESS',
+			'jet-form-builder'
+		);
+	}
+
 	public function executors(): array {
 		return array(
 			new Bad_Request_Executor(),
@@ -23,8 +33,8 @@ class Bad_Request_Event extends Base_Event {
 
 	public function to_array(): array {
 		return parent::to_array() + array(
-			'always' => true,
-		);
+				'always' => true,
+			);
 	}
 
 }

@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Events\Default_Process;
 
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -34,6 +35,10 @@ class Default_With_Gateway_Executor extends Default_Process_Executor {
 		} catch ( Gateway_Exception $exception ) {
 			throw ( new Action_Exception( $exception->getMessage(), $exception->get_additional() ) )->dynamic_error();
 		}
+	}
+
+	protected function is_valid_action( Base $action ): bool {
+		return $this->get_event()->is_valid_action( $action );
 	}
 
 	public function is_supported(): bool {

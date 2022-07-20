@@ -93,7 +93,7 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	/**
 	 * @return array
 	 */
-	protected function init_request(): array {
+	public function init_request(): array {
 		if ( ! empty( jet_fb_action_handler()->request_data ) ) {
 			return jet_fb_action_handler()->request_data;
 		}
@@ -123,7 +123,6 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 */
 	public function process_status( $type = 'success' ) {
 		// save form request to Action_Handler & current gateway controller
-		$this->init_request();
 		$form_id = (int) $this->get_scenario_row( 'form_id', 0 );
 
 		switch ( $type ) {

@@ -44,6 +44,37 @@ function createInput( node, observable ) {
 	console.error( 'Something went wrong', node );
 }
 
+function appendNodes( container, nodes ) {
+	for ( const child of container.children ) {
+		if ( nodes.some( node => node.isEqualNode( child ) ) ) {
+			continue;
+		}
+		child.remove();
+	}
+	for ( const index in nodes ) {
+		if ( !nodes.hasOwnProperty( index ) ) {
+			continue;
+		}
+		const node = nodes[ index ];
+
+		if ( node.isConnected ) {
+			continue;
+		}
+
+		if ( (
+			index + 1
+		) === nodes.length ) {
+			container.appendChild( node );
+
+			continue;
+		}
+
+		appendNodes( container, nodes.splice( index + 1 ) );
+
+		container.insertBefore( node, nodes[ index + 1 ] );
+	}
+}
+
 function getParsedName( name ) {
 	const regexps = [
 		// multiple fields (checkbox[])
@@ -78,4 +109,4 @@ function createFileList( inputFileArray ) {
 	return transfer.files;
 }
 
-export { createInput, getParsedName, createFileList };
+export { createInput, getParsedName, createFileList, appendNodes };

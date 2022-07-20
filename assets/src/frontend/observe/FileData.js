@@ -18,6 +18,13 @@ class FileData extends InputData {
 		return 'file' === node.type;
 	}
 
+	onChange() {
+		super.onChange();
+
+		// re-init sortable for new previews
+		this.sortable();
+	}
+
 	addListener() {
 		const [ node ] = this.nodes;
 
@@ -26,6 +33,8 @@ class FileData extends InputData {
 
 			if ( !this.isMultiple ) {
 				this.value = files;
+
+				return;
 			}
 
 			if ( !(
@@ -57,12 +66,17 @@ class FileData extends InputData {
 
 		this.isMultiple = node.multiple;
 
+		this.sortable();
+		this.loadFiles();
+	}
+
+	sortable() {
+		jQuery( this.previewsContainer ).unbind();
+
 		jQuery( this.previewsContainer ).sortable( {
 			items: '.jet-form-builder-file-upload__file',
 			forcePlaceholderSize: true,
 		} ).bind( 'sortupdate', () => this.onSortCallback() );
-
-		this.loadFiles();
 	}
 
 	onSortCallback( e, ui ) {
@@ -96,33 +110,70 @@ class FileData extends InputData {
 			'.jet-form-builder-file-upload__file',
 		);
 
+		const urls = [];
+
 		for ( const preview of files ) {
+			this.addRemoveHandler( preview );
+
 			const url          = preview.dataset.file;
 			const removeNode   = preview.querySelector(
 				'.jet-form-builder-file-upload__file-remove',
 			);
 			const { fileName } = removeNode.dataset;
 
-			fetch( url ).then(
-				response => response.blob(),
-			).then(
-				blob => this.addFileToInput( blob, fileName ),
-			);
+			urls.push( [ url, fileName ] );
 		}
+
+		Promise.allSettled( urls.map( ( [ url, fileName ] ) => (
+			new Promise( ( resolve, reject ) => {
+				fetch( url ).then(
+					response => response.blob(),
+				).then(
+					blob => resolve( this.createFile( blob, fileName ) ),
+				).catch( reject );
+			} )
+		) ) ).then( values => {
+			const files = values.map( ( { value } ) => value );
+
+			this.value     = createFileList( files );
+			this.prevFiles = this.value;
+		} );
+	}
+
+	addRemoveHandler( preview ) {
+		preview.querySelector(
+			'.jet-form-builder-file-upload__file-remove',
+		).addEventListener(
+			'click',
+			this.removeFile.bind( this ),
+		);
+	}
+
+	removeFile( { target } ) {
+		const className = '.jet-form-builder-file-upload__file-remove';
+
+		if ( !target.matches( className ) ) {
+			target = target.closest( className );
+		}
+
+		const { fileName } = target.dataset;
+
+		const dt = new DataTransfer();
+
+		for ( const file of this.value ) {
+			if ( fileName !== file.name ) {
+				dt.items.add( file );
+			}
+		}
+
+		this.value = dt.files;
 	}
 
 	/**
 	 * @private
 	 */
-	addFileToInput( blob, fileName ) {
-		const newFile   = new File( [ blob ], fileName, blob );
-		const [ input ] = this.nodes;
-
-		input.files = createFileList(
-			[ ...input.files, newFile ],
-		);
-
-		input.jfbPrevFiles = input.files;
+	createFile( blob, fileName ) {
+		return new File( [ blob ], fileName, blob );
 	}
 
 }

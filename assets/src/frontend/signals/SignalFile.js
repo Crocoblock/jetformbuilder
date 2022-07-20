@@ -1,5 +1,5 @@
 import BaseSignal from './BaseSignal';
-import { createFileList } from '../observe/functions';
+import { appendNodes, createFileList } from '../observe/functions';
 
 class SignalFile extends BaseSignal {
 
@@ -21,11 +21,8 @@ class SignalFile extends BaseSignal {
 			previews.push( this.getPreview( inputData, file ) );
 		}
 
-		while ( container.firstChild ) {
-			container.removeChild( container.firstChild );
-		}
+		appendNodes( container, previews );
 
-		container.append( ...previews );
 		node.files = createFileList( [ ...inputData.value ] );
 	}
 
@@ -35,7 +32,10 @@ class SignalFile extends BaseSignal {
 		);
 
 		if ( !removeButton ) {
-			return this.createPreview( inputData, file );
+			const preview = this.createPreview( inputData, file );
+			inputData.addRemoveHandler( preview );
+
+			return preview;
 		}
 
 		return removeButton.closest(

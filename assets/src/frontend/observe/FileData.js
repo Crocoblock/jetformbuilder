@@ -37,16 +37,8 @@ class FileData extends InputData {
 				return;
 			}
 
-			if ( !(
-				this.prevFiles instanceof FileList
-			) ) {
-				this.value     = files;
-				this.prevFiles = files;
-
-				return;
-			}
 			this.value = createFileList(
-				[ ...this.prevFiles, ...event.target.files ],
+				[ ...this.prevFiles ?? [], ...event.target.files ],
 			);
 		} );
 	}
@@ -135,8 +127,7 @@ class FileData extends InputData {
 		) ) ).then( values => {
 			const files = values.map( ( { value } ) => value );
 
-			this.value     = createFileList( files );
-			this.prevFiles = this.value;
+			this.value = createFileList( files );
 		} );
 	}
 

@@ -24,6 +24,7 @@ class SignalFile extends BaseSignal {
 		appendNodes( container, previews );
 
 		node.files = createFileList( [ ...inputData.value ] );
+		inputData.prevFiles = inputData.value;
 	}
 
 	getPreview( inputData, file ) {

@@ -61,17 +61,7 @@ function appendNodes( container, nodes ) {
 			continue;
 		}
 
-		if ( (
-			index + 1
-		) === nodes.length ) {
-			container.appendChild( node );
-
-			continue;
-		}
-
-		appendNodes( container, nodes.splice( index + 1 ) );
-
-		container.insertBefore( node, nodes[ index + 1 ] );
+		container.appendChild( node );
 	}
 }
 

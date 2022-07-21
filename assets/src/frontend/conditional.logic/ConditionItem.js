@@ -1,10 +1,9 @@
-
 class ConditionItem {
 
 	constructor( { field, operator, value, render_state }, block ) {
-		this.field = field;
-		this.operator = operator;
-		this.value = value;
+		this.field        = field;
+		this.operator     = operator;
+		this.value        = value;
 		this.render_state = render_state;
 		/**
 		 * @type {ConditionalBlock}
@@ -13,7 +12,9 @@ class ConditionItem {
 	}
 
 	isPassed() {
-		const input = this.block.root.dataInputs[ this.field ] ?? false;
+		const root  = this.block.root;
+		const input = root.dataInputs[ this.field ] ??
+			root.parent.dataInputs[ this.field ] ?? false;
 
 		if ( false === input ) {
 			return false;

@@ -87,13 +87,10 @@ class CalculatedData extends InputData {
 	 * @returns {boolean|InputData}
 	 */
 	getInput( fieldName ) {
-		if ( this.root.dataInputs.hasOwnProperty( fieldName ) ) {
-			return this.root.dataInputs[ fieldName ];
-		}
-		if ( this.root?.parent && this.root.parent.dataInputs.hasOwnProperty( fieldName ) ) {
-			return this.root.parent.dataInputs[ fieldName ];
-		}
-		return false;
+		return (
+			this.root.dataInputs[ fieldName ] ??
+			this.root.parent.dataInputs[ fieldName ] ?? false
+		);
 	}
 
 

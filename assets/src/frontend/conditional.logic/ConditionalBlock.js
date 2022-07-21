@@ -7,6 +7,9 @@ class ConditionalBlock {
 		 * @type {Observable}
 		 */
 		this.root = observable;
+		this.invalid         = [];
+		this.undefinedFields = [];
+		this.isObserved      = false;
 
 		this.setConditions();
 	}
@@ -17,15 +20,59 @@ class ConditionalBlock {
 		);
 	}
 
+	observe() {
+		if ( this.isObserved ) {
+			return;
+		}
+		this.isObserved = true;
+
+		// separated array for field's names, for prevent
+		// multiple watchers to one field
+		const fields = [];
+
+		for ( const condition of this.getConditions() ) {
+			const input = this.getInputByCondition( condition );
+
+			if ( !input ) {
+				this.undefinedFields.push( condition.field );
+				continue;
+			}
+
+			if ( fields.includes( condition.field ) ) {
+				continue;
+			}
+
+			fields.push( condition.field );
+			input.watch( () => this.calculate() );
+		}
+	}
+
+	/**
+	 *
+	 * @param condition {ConditionItem}
+	 * @returns {InputData|boolean}
+	 */
+	getInputByCondition( condition ) {
+		return (
+			this.root.dataInputs[ condition.field ] ??
+			this.root.parent.dataInputs[ condition.field ] ?? false
+		);
+	}
+
 	calculate() {
 		this.runFunction( this.getResult() );
 	}
 
 	getResult() {
+		this.invalid = [];
+
 		for ( const condition of this.getConditions() ) {
-			if ( ! condition.isPassed() ) {
-				return false;
+			if ( condition.isPassed() ) {
+				continue;
 			}
+			this.invalid.push( condition );
+
+			return false;
 		}
 
 		return true;
@@ -40,7 +87,7 @@ class ConditionalBlock {
 				this.showBlockCss( result );
 				break;
 			case 'hide':
-				this.showBlockCss( ! result );
+				this.showBlockCss( !result );
 				break;
 		}
 	}

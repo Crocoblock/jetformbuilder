@@ -68,9 +68,9 @@ function appendNodes( container, nodes ) {
 function getParsedName( name ) {
 	const regexps = [
 		// multiple fields (checkbox[])
-		new RegExp( /^(\w+)\[\]$/ ),
+		/^(\w+)\[\]$/,
 		// fields inside repeater (rep_name[1][content_field])
-		new RegExp( /^\w+\[\d+\]\[([\w\-]+)\]$/ ),
+		/^\w+\[\d+\]\[([\w\-]+)\]\[?\]?$/,
 	];
 
 	for ( const regExp of regexps ) {

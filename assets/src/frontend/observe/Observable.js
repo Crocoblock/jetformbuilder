@@ -1,5 +1,6 @@
 import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import { createInput } from './functions';
+import MultiStepState from '../multi.step/MultiStepState';
 
 class Observable {
 	constructor( parent = null ) {
@@ -18,6 +19,12 @@ class Observable {
 		 * [ ...ConditionalBlock ]
 		 */
 		this.conditionalBlocks = [];
+
+		/**
+		 * @type {MultiStepState}
+		 */
+		this.multistep = null;
+		this.rootNode   = null;
 		this.isObserved = false;
 	}
 
@@ -25,13 +32,31 @@ class Observable {
 		if ( this.isObserved ) {
 			return;
 		}
-		this.parseDOM( root );
+		/**
+		 * Initialize dataInputs with fields.
+		 * Without values
+		 */
+		this.parseDOM();
+
+		/**
+		 * Setup fields values and make them reactive
+		 */
 		this.makeReactiveProxy();
+
+		/**
+		 * Calculate conditional blocks, based on values
+		 */
 		this.initConditionalBlocks();
+
+		this.initMultistep();
 	}
 
 	parseDOM( root ) {
-		for ( const formElement of root.querySelectorAll( '[data-jfb-sync]' ) ) {
+		this.rootNode = root;
+
+		for ( const formElement of root.querySelectorAll(
+			'[data-jfb-sync]',
+		) ) {
 			this.pushData( createInput( formElement, this ) );
 		}
 
@@ -39,19 +64,16 @@ class Observable {
 			const block = new ConditionalBlock( node, this );
 			this.conditionalBlocks.push( block );
 
-			for ( const { field } of block.getConditions() ) {
-				this.addConditionalListener( field, this.conditionalBlocks.length - 1 );
-			}
+			block.observe();
 		}
 
 		for ( const name in this.dataInputs ) {
-			if ( ! this.dataInputs.hasOwnProperty( name ) ) {
+			if ( !this.dataInputs.hasOwnProperty( name ) ) {
 				continue;
 			}
 			const current = this.dataInputs[ name ];
 
-			current.watch( current.onChange.bind( current ) );
-			current.watch( () => this.handleConditions( current ) );
+			current.watch( () => current.onChange() );
 		}
 
 		this.isObserved = true;
@@ -61,24 +83,25 @@ class Observable {
 		this.conditionalBlocks.forEach( block => block.calculate() );
 	}
 
+	initMultistep() {
+		this.multistep = new MultiStepState();
+		this.multistep.setScope( this.rootNode );
+	}
+
 	watch( fieldName, callable ) {
 		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
 			this.dataInputs[ fieldName ].watch( callable );
-		} else {
-			console.error( `dataInputs in Observable don\'t have ${ fieldName } field` );
 		}
-	}
-
-	addConditionalListener( fieldName, index ) {
-		if ( ! this.dataInputs.hasOwnProperty( fieldName ) ) {
-			return;
+		else {
+			console.error(
+				`dataInputs in Observable don\'t have ${ fieldName } field`,
+			);
 		}
-		this.dataInputs[ fieldName ].pushConditionalIndex( index );
 	}
 
 	makeReactiveProxy() {
 		for ( const fieldName in this.dataInputs ) {
-			if ( ! this.dataInputs.hasOwnProperty( fieldName ) ) {
+			if ( !this.dataInputs.hasOwnProperty( fieldName ) ) {
 				continue;
 			}
 			const current = this.dataInputs[ fieldName ];
@@ -96,34 +119,6 @@ class Observable {
 	}
 
 	/**
-	 * @param input {InputData}
-	 */
-	handleConditions( input ) {
-		const blocks = this.getConditionalBlocks( input );
-
-		for ( const block of blocks ) {
-			block.calculate();
-		}
-	}
-
-	/**
-	 * @param input {InputData}
-	 */
-	getConditionalBlocks( input ) {
-		const conditionalIndexes = input.getConditionalIndexes();
-		const blocks = [];
-
-		for ( let index in this.conditionalBlocks ) {
-			if ( ! this.conditionalBlocks.hasOwnProperty( + index ) || ! conditionalIndexes.includes( + index ) ) {
-				continue;
-			}
-			blocks.push( this.conditionalBlocks[ + index ] );
-		}
-
-		return blocks;
-	}
-
-	/**
 	 * @param inputData {InputData}
 	 */
 	pushData( inputData ) {
@@ -135,7 +130,7 @@ class Observable {
 			return;
 		}
 
-		const [ findNode ] = findInput.getNode();
+		const [ findNode ]  = findInput.getNode();
 		const [ inputNode ] = inputData.getNode();
 
 		if ( findNode.type !== inputNode.type ) {

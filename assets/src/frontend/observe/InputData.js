@@ -26,14 +26,14 @@ const signalTypes = [
 class InputData {
 
 	constructor() {
-		this.signals = [];
-		this.rawName = '';
-		this.name = '';
-		this.comment = false;
-		this.nodes = [];
+		this.signals            = [];
+		this.rawName            = '';
+		this.name               = '';
+		this.comment            = false;
+		this.nodes              = [];
 		this.relatedConditional = [];
 
-		this.value = null;
+		this.value     = null;
 		this.calcValue = null;
 
 		/**
@@ -50,6 +50,24 @@ class InputData {
 		return true;
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
+	isRequired() {
+		return !!this.nodes[ 0 ]?.required;
+	}
+
+	/**
+	 * @returns {boolean}
+	 */
+	isValid() {
+		return this.nodes[ 0 ].checkValidity();
+	}
+
+	report() {
+		this.nodes[ 0 ].reportValidity();
+	}
+
 	addListener() {
 		const [ node ] = this.nodes;
 
@@ -63,7 +81,7 @@ class InputData {
 		this.setValue();
 		this.setComment();
 
-		let val = this.value;
+		let val    = this.value;
 		const self = this;
 
 		Object.defineProperty( this, 'value', {
@@ -79,13 +97,15 @@ class InputData {
 
 	onChange() {
 		this.calcValue = this.value;
-		const callable = signalTypes.find( ( type ) => type.isSupported( this ) );
+		const callable = signalTypes.find(
+			( type ) => type.isSupported( this )
+		);
 
 		callable.runSignal( this );
 	}
 
 	notify() {
-		if ( ! this.signals?.length ) {
+		if ( !this.signals?.length ) {
 			return;
 		}
 
@@ -106,17 +126,23 @@ class InputData {
 	setValue() {
 		if ( this.isArray() ) {
 			this.value = Array.from( this.nodes ).map( ( { value } ) => value );
-		} else {
+		}
+		else {
 			this.value = this.nodes[ 0 ]?.value;
 		}
 	}
 
 	setNode( node ) {
-		this.nodes = [ node ];
+		this.nodes   = [ node ];
 		this.rawName = node.name;
-		this.name = getParsedName( this.rawName );
-	}
+		this.name    = getParsedName( this.rawName );
 
+		/**
+		 * Save link to this object
+		 * @type {InputData}
+		 */
+		node.jfbSync = this;
+	}
 
 	/**
 	 * @param observable {Observable}
@@ -126,14 +152,14 @@ class InputData {
 	}
 
 	setComment() {
-		this.comment = document.createComment( this.name );
+		this.comment   = document.createComment( this.name );
 		const [ node ] = this.nodes;
 
 		node.parentElement.insertBefore( this.comment, node );
 	}
 
 	pushConditionalIndex( index ) {
-		this.relatedConditional.push( + index );
+		this.relatedConditional.push( +index );
 
 		this.relatedConditional = [
 			...new Set( this.relatedConditional ),

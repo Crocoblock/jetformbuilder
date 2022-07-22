@@ -1,8 +1,9 @@
-import ConditionItem from './ConditionItem';
+import { createConditionItem } from './functions';
 
 class ConditionalBlock {
 	constructor( node, observable ) {
-		this.node = node;
+		this.node           = node;
+		node.jfbConditional = this;
 		/**
 		 * @type {Observable}
 		 */
@@ -11,13 +12,18 @@ class ConditionalBlock {
 		this.undefinedFields = [];
 		this.isObserved      = false;
 
+		/**
+		 * @type {PageState}
+		 */
+		this.page = null;
+
 		this.setConditions();
 	}
 
 	setConditions() {
 		this.conditions = JSON.parse( this.node.dataset.jfbConditional ).map(
-			item => new ConditionItem( item, this ),
-		);
+			item => createConditionItem( item, this ),
+		).filter( item => item );
 	}
 
 	observe() {
@@ -26,37 +32,9 @@ class ConditionalBlock {
 		}
 		this.isObserved = true;
 
-		// separated array for field's names, for prevent
-		// multiple watchers to one field
-		const fields = [];
-
 		for ( const condition of this.getConditions() ) {
-			const input = this.getInputByCondition( condition );
-
-			if ( !input ) {
-				this.undefinedFields.push( condition.field );
-				continue;
-			}
-
-			if ( fields.includes( condition.field ) ) {
-				continue;
-			}
-
-			fields.push( condition.field );
-			input.watch( () => this.calculate() );
+			condition.observe();
 		}
-	}
-
-	/**
-	 *
-	 * @param condition {ConditionItem}
-	 * @returns {InputData|boolean}
-	 */
-	getInputByCondition( condition ) {
-		return (
-			this.root.dataInputs[ condition.field ] ??
-			this.root.parent.dataInputs[ condition.field ] ?? false
-		);
 	}
 
 	calculate() {
@@ -89,6 +67,9 @@ class ConditionalBlock {
 			case 'hide':
 				this.showBlockCss( !result );
 				break;
+			case 'disable':
+				this.disableBlock( result );
+				break;
 		}
 	}
 
@@ -96,8 +77,12 @@ class ConditionalBlock {
 		this.node.style.display = result ? 'block' : 'none';
 	}
 
+	disableBlock( result ) {
+		this.node.disabled = result;
+	}
+
 	/**
-	 * @returns {array<ConditionItem>}
+	 * @returns {array<ConditionFieldItem|ConditionPageStateItem>}
 	 */
 	getConditions() {
 		return this.conditions;

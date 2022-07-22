@@ -1,26 +1,24 @@
+/**
+ * @property {ConditionalBlock} block
+ */
 class ConditionItem {
 
-	constructor( { field, operator, value, render_state }, block ) {
-		this.field        = field;
-		this.operator     = operator;
-		this.value        = value;
-		this.render_state = render_state;
-		/**
-		 * @type {ConditionalBlock}
-		 */
-		this.block = block;
+	isSupported( options ) {
+		return false;
+	}
+
+	observe() {
+	}
+
+	setOptions( options ) {
 	}
 
 	isPassed() {
-		const root  = this.block.root;
-		const input = root.dataInputs[ this.field ] ??
-			root.parent.dataInputs[ this.field ] ?? false;
+		throw new Error( 'You must provide ConditionItem::isPassed function' );
+	}
 
-		if ( false === input ) {
-			return false;
-		}
-
-		return input.checker.check( this, input );
+	setBlock( block ) {
+		this.block = block;
 	}
 }
 

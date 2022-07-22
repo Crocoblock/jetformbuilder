@@ -1,4 +1,5 @@
 import ConditionalBlock from '../conditional.logic/ConditionalBlock';
+import PageState from './PageState';
 
 class MultiStepState {
 
@@ -27,15 +28,6 @@ class MultiStepState {
 		this.elements = [];
 	}
 
-	init() {
-		this.elements = [
-			...this.getScopeNode().
-				querySelectorAll( '.jet-form-builder-page' ),
-		].map(
-			page => new PageState( page, this ),
-		);
-	}
-
 	setScope( rootOrBlock ) {
 		if ( rootOrBlock instanceof ConditionalBlock ) {
 			this.block = rootOrBlock;
@@ -43,6 +35,29 @@ class MultiStepState {
 		else {
 			this.root = rootOrBlock;
 		}
+	}
+
+	setPages() {
+		this.elements = [
+			...this.getScopeNode().querySelectorAll( '.jet-form-builder-page' ),
+		].filter(
+			/**
+			 * Multistep is initializing for all form or
+			 * specific conditional block.
+			 *
+			 * We need to separate global & block multistep
+			 */
+			page => {
+				if ( !this.root ) {
+					return true;
+				}
+				return page.parentElement.matches(
+					'form.jet-form-builder',
+				);
+			},
+		).map(
+			page => new PageState( page, this ),
+		);
 	}
 
 	getScopeNode() {

@@ -1,6 +1,10 @@
 import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import { createInput } from './functions';
 import MultiStepState from '../multi.step/MultiStepState';
+import {
+	createConditionalBlock,
+	createMultiStep,
+} from '../conditional.logic/functions';
 
 class Observable {
 	constructor( parent = null ) {
@@ -32,11 +36,14 @@ class Observable {
 		if ( this.isObserved ) {
 			return;
 		}
+		this.isObserved = true;
+		this.rootNode   = root;
+
 		/**
 		 * Initialize dataInputs with fields.
 		 * Without values
 		 */
-		this.parseDOM();
+		this.initFields();
 
 		/**
 		 * Setup fields values and make them reactive
@@ -51,20 +58,11 @@ class Observable {
 		this.initMultistep();
 	}
 
-	parseDOM( root ) {
-		this.rootNode = root;
-
-		for ( const formElement of root.querySelectorAll(
+	initFields() {
+		for ( const formElement of this.rootNode.querySelectorAll(
 			'[data-jfb-sync]',
 		) ) {
 			this.pushData( createInput( formElement, this ) );
-		}
-
-		for ( const node of root.querySelectorAll( `[data-jfb-conditional]` ) ) {
-			const block = new ConditionalBlock( node, this );
-			this.conditionalBlocks.push( block );
-
-			block.observe();
 		}
 
 		for ( const name in this.dataInputs ) {
@@ -75,17 +73,18 @@ class Observable {
 
 			current.watch( () => current.onChange() );
 		}
-
-		this.isObserved = true;
 	}
 
 	initConditionalBlocks() {
-		this.conditionalBlocks.forEach( block => block.calculate() );
+		for ( const node of this.rootNode.querySelectorAll(
+			`[data-jfb-conditional]`,
+		) ) {
+			createConditionalBlock( node, this );
+		}
 	}
 
 	initMultistep() {
-		this.multistep = new MultiStepState();
-		this.multistep.setScope( this.rootNode );
+		this.multistep = createMultiStep( this );
 	}
 
 	watch( fieldName, callable ) {

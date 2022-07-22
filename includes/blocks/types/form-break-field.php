@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
 use Jet_Form_Builder\Blocks\Render\Form_Break_Field_Render;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
@@ -20,8 +21,8 @@ class Form_Break_Field extends Base {
 	public $use_style_manager = false;
 
 	/**
-	 * @param array     $attrs
-	 * @param null      $content
+	 * @param array $attrs
+	 * @param null $content
 	 * @param \WP_Block $wp_block
 	 *
 	 * @return string
@@ -66,6 +67,17 @@ class Form_Break_Field extends Base {
 
 			public function label_allowed() {
 				return false;
+			}
+
+			public function before_render( $args ) {
+				parent::before_render( $args );
+
+				if ( empty( $args['add_next_button'] ) ) {
+					return;
+				}
+
+				$this->add_attribute( 'data-jfb-conditional', Button_Next::get_conditions() );
+				$this->add_attribute( 'data-jfb-func', 'disable' );
 			}
 		} )->render();
 	}

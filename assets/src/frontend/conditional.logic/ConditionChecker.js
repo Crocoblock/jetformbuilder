@@ -1,7 +1,7 @@
 class ConditionChecker {
 
 	/**
-	 * @param condition {ConditionItem}
+	 * @param condition {ConditionFieldItem}
 	 * @param input {InputData}
 	 */
 	check( condition, input ) {

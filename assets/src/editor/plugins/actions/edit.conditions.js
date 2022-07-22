@@ -34,7 +34,7 @@ const { __ } = wp.i18n;
 const { compose }   = wp.compose;
 const { useSelect } = wp.data;
 
-const { useEffect, useState, useContext } = wp.element;
+const { useEffect, useState, useContext, RawHTML } = wp.element;
 
 const operators = [
 	{
@@ -178,7 +178,9 @@ function EditEvents( { events } ) {
 		</BaseHelp>
 		{ showDetails && <ul>
 			{ events.map(
-				event => <li><b>{ event }</b>: { helpMap[ event ] }</li>,
+				event => <li>
+					<b>{ event }</b>: <RawHTML>{ helpMap[ event ] }</RawHTML>
+				</li>,
 			) }
 		</ul> }
 	</>;

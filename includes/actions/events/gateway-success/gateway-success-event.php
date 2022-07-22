@@ -20,9 +20,9 @@ class Gateway_Success_Event extends Base_Gateway_Event {
 
 	public function get_help(): string {
 		return __(
-			'Replacing the old option for selecting actions "On failed payment";
-It is performed when the user returns from the checkout page 
-of the payment system without making a payment or subscribing.',
+			'replaces the old "On success payment" option for selecting post-submit actions. 
+The event is executed after passing the checkout on the payment system\'s side, 
+provided the payment/subscription has been successful;',
 			'jet-form-builder'
 		);
 	}

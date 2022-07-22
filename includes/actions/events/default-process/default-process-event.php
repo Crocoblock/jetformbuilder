@@ -18,11 +18,11 @@ class Default_Process_Event extends Base_Event {
 
 	public function get_help(): string {
 		return __(
-			'The moment of execution of actions. 
-Occurs at the same stage that the actions were launched before.
-It is necessary in cases where you have payment (PayPal/Stripe) 
-functionality enabled in your form so that the plugin understands 
-what actions need to be performed before redirecting to checkout;',
+			'the moment when all actions are executed. 
+The event takes place at the same stage as the actions previously performed. 
+It is necessary for forms where payment functionality (PayPal/Stripe) 
+is enabled to let the plugin know which actions 
+to perform before redirecting to checkout;',
 			'jet-form-builder'
 		);
 	}

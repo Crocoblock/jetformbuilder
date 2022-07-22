@@ -44,7 +44,12 @@ class Num_Range extends Base {
 			return $result;
 		}
 
-		$start = apply_filters( 'jet-form-builder/forms/generators/num-range/start-from', 1 );
+		$start = apply_filters(
+			'jet-form-builder/forms/generators/num-range/start-from',
+			1,
+			$args,
+			$meta_value
+		);
 
 		for ( $i = $start; $i <= $meta_value; $i ++ ) {
 			$result[] = array(

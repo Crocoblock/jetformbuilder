@@ -30,11 +30,11 @@ class CalculatedData extends InputData {
 		super.makeReactive();
 
 		// run signals
-		this.value = (this.value);
+		this.value.current = (this.value.current);
 	}
 
 	reCalculate() {
-		this.value = this.calculate().toFixed( this.precision );
+		this.value.current = this.calculate().toFixed( this.precision );
 	}
 
 	calculate() {

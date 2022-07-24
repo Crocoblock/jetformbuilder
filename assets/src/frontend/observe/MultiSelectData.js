@@ -21,7 +21,7 @@ class MultiSelectData extends InputData {
 				values.push( option.value );
 			}
 
-			this.value = values;
+			this.value.current = values;
 		} );
 	}
 

@@ -20,7 +20,7 @@ class CheckboxData extends InputData {
 	}
 
 	setValue() {
-		this.value = this.getActiveValue();
+		this.value.current = this.getActiveValue();
 	}
 
 	getActiveValue() {

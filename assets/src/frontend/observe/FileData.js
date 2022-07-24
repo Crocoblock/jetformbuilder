@@ -32,12 +32,12 @@ class FileData extends InputData {
 			const { files } = event.target;
 
 			if ( !this.isMultiple ) {
-				this.value = files;
+				this.value.current = files;
 
 				return;
 			}
 
-			this.value = createFileList(
+			this.value.current = createFileList(
 				[ ...this.prevFiles ?? [], ...event.target.files ],
 			);
 		} );
@@ -91,7 +91,7 @@ class FileData extends InputData {
 			}
 		}
 
-		this.value = transfer.files;
+		this.value.current = transfer.files;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class FileData extends InputData {
 		) ) ).then( values => {
 			const files = values.map( ( { value } ) => value );
 
-			this.value = createFileList( files );
+			this.value.current = createFileList( files );
 		} );
 	}
 
@@ -157,7 +157,7 @@ class FileData extends InputData {
 			}
 		}
 
-		this.value = dt.files;
+		this.value.current = dt.files;
 	}
 
 	/**

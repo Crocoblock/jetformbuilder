@@ -108,10 +108,10 @@ class Observable {
 
 			Object.defineProperty( this.data, fieldName, {
 				get() {
-					return current.value;
+					return current.value.current;
 				},
 				set( newValue ) {
-					current.value = newValue;
+					current.value.current = newValue;
 				},
 			} );
 		}

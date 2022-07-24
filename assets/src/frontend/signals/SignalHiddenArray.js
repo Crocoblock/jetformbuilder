@@ -9,7 +9,7 @@ class SignalHiddenArray extends BaseSignal {
 	}
 
 	runSignal( inputData ) {
-		if ( ! inputData.value.length ) {
+		if ( ! inputData.value.current.length ) {
 			for ( const node of inputData.nodes ) {
 				node.remove();
 			}
@@ -20,7 +20,7 @@ class SignalHiddenArray extends BaseSignal {
 
 		const saveNodes = [];
 
-		for ( const value of inputData.value ) {
+		for ( const value of inputData.value.current ) {
 			const hasNodeWithSameValue = inputData.nodes.some( ( node, index ) => {
 				if ( node.value !== value ) {
 					return false;

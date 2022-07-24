@@ -5,15 +5,17 @@ class ConditionChecker {
 	 * @param input {InputData}
 	 */
 	check( condition, input ) {
+		const { current } = input.value;
+
 		switch ( condition.operator ) {
 			case 'equal':
-				return input.value === condition.value;
+				return current === condition.value;
 
 			case 'greater':
-				return parseFloat( input.value ) > parseFloat( condition.value );
+				return parseFloat( current ) > parseFloat( condition.value );
 
 			case 'less':
-				return parseFloat( input.value ) < parseFloat( condition.value );
+				return parseFloat( current ) < parseFloat( condition.value );
 
 			case 'between':
 				if ( 2 > condition.value?.length ) {
@@ -22,7 +24,7 @@ class ConditionChecker {
 
 				const from = parseFloat( condition.value[ 0 ] ),
 					to = parseFloat( condition.value[ 1 ] ),
-					value = parseFloat( input.value );
+					value = parseFloat( current );
 
 				return (
 					from <= value && value <= to
@@ -33,10 +35,10 @@ class ConditionChecker {
 					return false;
 				}
 
-				return 0 <= condition.value.indexOf( input.value );
+				return 0 <= condition.value.indexOf( current );
 
 			case 'contain':
-				return 0 <= input.value.indexOf( condition.value );
+				return 0 <= current.indexOf( condition.value );
 
 			default:
 				return false;

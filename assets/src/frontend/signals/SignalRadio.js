@@ -12,7 +12,7 @@ class SignalRadio extends BaseSignal {
 		inputData.calcValue = 0;
 
 		for ( const node of inputData.nodes ) {
-			node.checked = inputData.value === node.value;
+			node.checked = inputData.value.current === node.value;
 
 			if ( ! node.checked ) {
 				continue;

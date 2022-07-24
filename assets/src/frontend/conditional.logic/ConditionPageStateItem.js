@@ -13,7 +13,7 @@ class ConditionPageStateItem extends ConditionItem {
 	isPassed() {
 		switch ( this.pageState ) {
 			case 'active':
-				return ! this.block?.page?.canSwitch;
+				return ! this.block?.page?.canSwitch?.current;
 			default:
 				return false;
 		}

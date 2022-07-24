@@ -1,5 +1,6 @@
 import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import PageState from './PageState';
+import ReactiveVar from '../ReactiveVar';
 
 class MultiStepState {
 
@@ -17,9 +18,9 @@ class MultiStepState {
 
 		/**
 		 * Current page index
-		 * @type {number}
+		 * @type {ReactiveVar}
 		 */
-		this.index = 1;
+		this.index = null;
 
 		/**
 		 * Node elements of pages
@@ -38,26 +39,40 @@ class MultiStepState {
 	}
 
 	setPages() {
+		/**
+		 * Multistep is initializing for all form or
+		 * specific conditional block.
+		 *
+		 * We need to separate global & block multistep
+		 */
 		this.elements = [
-			...this.getScopeNode().querySelectorAll( '.jet-form-builder-page' ),
+			...this.getScopeNode().children,
 		].filter(
-			/**
-			 * Multistep is initializing for all form or
-			 * specific conditional block.
-			 *
-			 * We need to separate global & block multistep
-			 */
-			page => {
-				if ( !this.root ) {
-					return true;
-				}
-				return page.parentElement.matches(
-					'form.jet-form-builder',
-				);
-			},
+			page =>  page.matches( '.jet-form-builder-page' ),
 		).map(
 			page => new PageState( page, this ),
 		);
+
+		if ( !this.elements.length ) {
+			return;
+		}
+
+		this.index = new ReactiveVar( 1 );
+		this.index.make();
+		this.index.watch( () => this.onChangeIndex() );
+	}
+
+	onChangeIndex() {
+		for ( const page of this.getPages() ) {
+			page.isShow.current = page.index === this.index.current;
+		}
+	}
+
+	/**
+	 * @returns {array<PageState>}
+	 */
+	getPages() {
+		return this.elements;
 	}
 
 	getScopeNode() {

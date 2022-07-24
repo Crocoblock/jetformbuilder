@@ -8,6 +8,7 @@ import { getParsedName } from './functions';
 import SignalCalculated from '../signals/SignalCalculated';
 import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
+import ReactiveVar from '../ReactiveVar';
 
 /**
  * @type {(BaseSignal)[]}
@@ -26,14 +27,13 @@ const signalTypes = [
 class InputData {
 
 	constructor() {
-		this.signals            = [];
 		this.rawName            = '';
 		this.name               = '';
 		this.comment            = false;
 		this.nodes              = [];
 		this.relatedConditional = [];
 
-		this.value     = null;
+		this.value     = new ReactiveVar( null );
 		this.calcValue = null;
 
 		/**
@@ -72,7 +72,7 @@ class InputData {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'input', event => {
-			this.value = event.target.value;
+			this.value.current = event.target.value;
 		} );
 	}
 
@@ -81,39 +81,20 @@ class InputData {
 		this.setValue();
 		this.setComment();
 
-		let val    = this.value;
-		const self = this;
-
-		Object.defineProperty( this, 'value', {
-			get() {
-				return val;
-			},
-			set( newVal ) {
-				val = newVal;
-				self.notify();
-			},
-		} );
+		this.value.make();
 	}
 
 	onChange() {
-		this.calcValue = this.value;
+		this.calcValue = this.value.current;
 		const callable = signalTypes.find(
-			( type ) => type.isSupported( this )
+			( type ) => type.isSupported( this ),
 		);
 
 		callable.runSignal( this );
 	}
 
-	notify() {
-		if ( !this.signals?.length ) {
-			return;
-		}
-
-		this.signals.forEach( signal => signal( this.name ) );
-	}
-
 	watch( callable ) {
-		this.signals.push( callable.bind( this ) );
+		this.value.watch( callable );
 	}
 
 	/**
@@ -125,10 +106,11 @@ class InputData {
 
 	setValue() {
 		if ( this.isArray() ) {
-			this.value = Array.from( this.nodes ).map( ( { value } ) => value );
+			this.value.current = Array.from( this.nodes ).
+				map( ( { value } ) => value );
 		}
 		else {
-			this.value = this.nodes[ 0 ]?.value;
+			this.value.current = this.nodes[ 0 ]?.value;
 		}
 	}
 
@@ -158,18 +140,6 @@ class InputData {
 		node.parentElement.insertBefore( this.comment, node );
 	}
 
-	pushConditionalIndex( index ) {
-		this.relatedConditional.push( +index );
-
-		this.relatedConditional = [
-			...new Set( this.relatedConditional ),
-		];
-	}
-
-	getConditionalIndexes() {
-		return this.relatedConditional ?? [];
-	}
-
 	/**
 	 * @private
 	 * @returns {ConditionChecker}
@@ -189,7 +159,7 @@ class InputData {
 	 * @returns {array|string}
 	 */
 	getValue() {
-		return this.value;
+		return this.value.current;
 	}
 
 	/**

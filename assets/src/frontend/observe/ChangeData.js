@@ -10,7 +10,7 @@ class ChangeData extends InputData {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', event => {
-			this.value = event.target.value;
+			this.value.current = event.target.value;
 		} );
 	}
 

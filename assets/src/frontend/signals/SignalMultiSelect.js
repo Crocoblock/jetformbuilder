@@ -13,7 +13,7 @@ class SignalMultiSelect extends BaseSignal {
 		const [ node ]      = inputData.nodes;
 
 		for ( const option of node.options ) {
-			option.selected = inputData.value.includes( option.value );
+			option.selected = inputData.value.current.includes( option.value );
 
 			if ( !option.selected ) {
 				continue;

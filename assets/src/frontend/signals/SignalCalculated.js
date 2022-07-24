@@ -16,7 +16,7 @@ class SignalCalculated extends BaseSignal {
 	runSignal( inputData ) {
 		const [ node ] = inputData.nodes;
 
-		node.value = inputData.value;
+		node.value = inputData.value.current;
 
 		inputData.visibleValNode.textContent = this.convertValue( inputData );
 	}
@@ -25,7 +25,7 @@ class SignalCalculated extends BaseSignal {
 	 * @param calculateData {CalculatedData}
 	 */
 	convertValue( { value, sepThousands, sepDecimal } ) {
-		const parts = value.toString().split( '.' );
+		const parts = value.current.toString().split( '.' );
 		parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, sepThousands );
 
 		return parts.join( sepDecimal );

@@ -17,14 +17,14 @@ class SignalFile extends BaseSignal {
 		const previews  = [];
 		const container = inputData.previewsContainer;
 
-		for ( const file of inputData.value ) {
+		for ( const file of inputData.value.current ) {
 			previews.push( this.getPreview( inputData, file ) );
 		}
 
 		appendNodes( container, previews );
 
-		node.files = createFileList( [ ...inputData.value ] );
-		inputData.prevFiles = inputData.value;
+		node.files = createFileList( [ ...inputData.value.current ] );
+		inputData.prevFiles = inputData.value.current;
 	}
 
 	getPreview( inputData, file ) {

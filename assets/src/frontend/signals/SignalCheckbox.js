@@ -12,7 +12,7 @@ class SignalCheckbox extends BaseSignal {
 		inputData.calcValue = 0;
 
 		for ( const node of inputData.nodes ) {
-			node.checked = inputData.value.includes( node.value );
+			node.checked = inputData.value.current.includes( node.value );
 
 			if ( ! node.checked ) {
 				continue;

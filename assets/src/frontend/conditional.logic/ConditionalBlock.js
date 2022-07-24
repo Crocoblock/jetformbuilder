@@ -1,4 +1,4 @@
-import { createConditionItem } from './functions';
+import { createConditionItem, createMultiStep } from './functions';
 
 class ConditionalBlock {
 	constructor( node, observable ) {
@@ -18,6 +18,8 @@ class ConditionalBlock {
 		this.page = null;
 
 		this.setConditions();
+
+		this.multistep = createMultiStep( this );
 	}
 
 	setConditions() {

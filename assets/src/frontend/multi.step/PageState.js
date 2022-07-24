@@ -1,6 +1,7 @@
 import ConditionPageStateItem
 	from '../conditional.logic/ConditionPageStateItem';
 import { createConditionalBlock } from '../conditional.logic/functions';
+import ReactiveVar from '../ReactiveVar';
 
 /**
  * @property {array<InputData>|*} inputs
@@ -10,20 +11,26 @@ class PageState {
 
 	constructor( node, state ) {
 		this.node      = node;
+		this.index     = +node.dataset.page;
 		this.state     = state;
 		this.inputs    = [];
-		this.canSwitch = false;
-		this.signals   = [];
+		this.canSwitch = new ReactiveVar( false );
+		this.isShow    = new ReactiveVar( 1 === this.index );
 
 		this.parseDom();
-		this.makeReactive();
+
+		this.canSwitch.make();
+		this.isShow.make();
+		this.isShow.watch( () => {
+			this.isShow.current ? this.onShow() : this.onHide();
+		} );
+
+		this.addButtonsListeners();
 		this.updateState();
 	}
 
 	parseDom() {
-		const scope = this.state.getScopeNode();
-
-		for ( const node of scope.querySelectorAll( '[data-jfb-sync]' ) ) {
+		for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
 			if (
 				!this.isNodeBelongThis( node ) ||
 				!node.hasOwnProperty( 'jfbSync' ) ||
@@ -37,7 +44,7 @@ class PageState {
 			node.jfbSync.watch( () => this.updateState() );
 		}
 
-		for ( const node of scope.querySelectorAll(
+		for ( const node of this.node.querySelectorAll(
 			'[data-jfb-conditional]',
 		) ) {
 			if ( !this.isNodeBelongThis( node ) ) {
@@ -52,33 +59,43 @@ class PageState {
 					continue;
 				}
 				block.page = this;
-				this.watch( () => block.calculate() );
+				this.canSwitch.watch( () => block.calculate() );
 
 				break;
 			}
 		}
 	}
 
-	makeReactive() {
-		let canSwitch = this.canSwitch;
-		const self    = this;
+	onShow() {
+		this.node.classList.remove( 'jet-form-builder-page--hidden' );
+	}
 
-		Object.defineProperty( this, 'canSwitch', {
-			get() {
-				return canSwitch;
-			},
-			set( newVal ) {
-				canSwitch = newVal;
-				self.notify();
-			},
-		} );
+	onHide() {
+		this.node.classList.add( 'jet-form-builder-page--hidden' );
 	}
 
 	updateState() {
-		const valid = this.isValidInputs();
+		this.canSwitch.current = this.isValidInputs();
+	}
 
-		if ( valid !== this.canSwitch ) {
-			this.canSwitch = valid;
+	addButtonsListeners() {
+		const switchButtons = this.node.querySelectorAll(
+			'.jet-form-builder__next-page, .jet-form-builder__prev-page',
+		);
+
+		for ( const switchButton of switchButtons ) {
+			if ( !this.isNodeBelongThis( switchButton ) ) {
+				continue;
+			}
+			const isPrev = switchButton.classList.contains(
+				'jet-form-builder__prev-page',
+			);
+
+			switchButton.addEventListener( 'click', () => {
+				this.state.index.current = isPrev
+				                           ? this.index - 1
+				                           : this.index + 1;
+			} );
 		}
 	}
 
@@ -110,14 +127,6 @@ class PageState {
 		input.report();
 
 		return false;
-	}
-
-	notify() {
-		this.signals.forEach( signal => signal() );
-	}
-
-	watch( callable ) {
-		this.signals.push( callable.bind( this ) );
 	}
 
 }

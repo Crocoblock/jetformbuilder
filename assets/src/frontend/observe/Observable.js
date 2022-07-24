@@ -117,6 +117,15 @@ class Observable {
 		}
 	}
 
+	onRemove() {
+		for ( const name in this.dataInputs ) {
+			if ( !this.dataInputs.hasOwnProperty( name ) ) {
+				continue;
+			}
+			this.dataInputs[ name ].onRemove();
+		}
+	}
+
 	/**
 	 * @param inputData {InputData}
 	 */

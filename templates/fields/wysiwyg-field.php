@@ -38,6 +38,7 @@ $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'data-editor', htmlspecialchars( wp_json_encode( $editor ) ) );
+$this->add_attribute( 'data-jfb-sync' );
 
 if ( is_rtl() ) {
 	$editor['tinymce']['plugins']  = $editor['tinymce']['plugins'] . ',directionality';

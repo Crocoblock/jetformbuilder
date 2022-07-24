@@ -49,7 +49,14 @@ class SignalRepeater extends BaseSignal {
 			() => {
 				appended.remove();
 				inputData.value.current = inputData.value.current.filter(
-					( item, index ) => +index !== +current,
+					( item, index ) => {
+						if ( +index !== +current ) {
+							return true;
+						}
+						item.onRemove();
+
+						return false;
+					},
 				);
 			},
 		);

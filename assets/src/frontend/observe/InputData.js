@@ -9,11 +9,13 @@ import SignalCalculated from '../signals/SignalCalculated';
 import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
+import SignalWysiwyg from '../signals/SignalWysiwyg';
 
 /**
  * @type {(BaseSignal)[]}
  */
 const signalTypes = [
+	new SignalWysiwyg(),
 	new SignalFile(),
 	new SignalMultiSelect(),
 	new SignalCheckbox(),
@@ -138,6 +140,12 @@ class InputData {
 		const [ node ] = this.nodes;
 
 		node.parentElement.insertBefore( this.comment, node );
+	}
+
+	/**
+	 * By default it runs only if repeater item was removed
+	 */
+	onRemove() {
 	}
 
 	/**

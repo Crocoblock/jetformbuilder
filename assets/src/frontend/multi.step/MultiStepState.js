@@ -1,6 +1,7 @@
 import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import PageState from './PageState';
 import ReactiveVar from '../ReactiveVar';
+import ProgressBar from './ProgressBar';
 
 class MultiStepState {
 
@@ -60,6 +61,13 @@ class MultiStepState {
 		this.index = new ReactiveVar( 1 );
 		this.index.make();
 		this.index.watch( () => this.onChangeIndex() );
+
+		for ( const child of this.getScopeNode().children ) {
+			if ( ! child.matches( '.jet-form-builder-progress-pages' ) ) {
+				continue;
+			}
+			this.progress = new ProgressBar( child, this );
+		}
 	}
 
 	onChangeIndex() {

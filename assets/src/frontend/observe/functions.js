@@ -7,11 +7,13 @@ import InputData from './InputData';
 import CalculatedData from './CalculatedData';
 import MultiSelectData from './MultiSelectData';
 import FileData from './FileData';
+import WysiwygData from './WysiwygData';
 
 /**
  * @type {(InputData)[]}
  */
 const dataTypes = [
+	WysiwygData,
 	FileData,
 	MultiSelectData,
 	ChangeData,

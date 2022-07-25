@@ -4,6 +4,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.2
+* UPD: Allow using Term object properties as values for select, radio, checkbox fields
+* FIX: Validate action's events in gateways executor
+* FIX: Fatal error when media field format does not match the preset
+* Tweak: Additional args for filter `jet-form-builder/forms/generators/num-range/start-from`
+* Tweak: Description of events for actions in the modal window
+
 ## 2.1.1
 * ADD: Ordering files in media field
 * ADD: Compatibility with Reusable Block

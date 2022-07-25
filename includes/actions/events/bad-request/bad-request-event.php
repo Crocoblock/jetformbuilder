@@ -17,10 +17,9 @@ class Bad_Request_Event extends Base_Event {
 
 	public function get_help(): string {
 		return __(
-			'Is executed after processing the request, 
-if there are errors in the fields. For example, when you filled 
-out a media field in the wrong format on a form or exceeded the file limit.
-Passes DEFAULT.PROCESS',
+			'is executed after processing the request provided there are errors 
+in the form fields such as a media field filled out in the wrong format, 
+exceeded file size limit, etc. The event passes through DEFAULT.PROCESS;',
 			'jet-form-builder'
 		);
 	}

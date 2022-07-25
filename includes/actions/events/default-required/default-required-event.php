@@ -17,14 +17,15 @@ class Default_Required_Event extends Base_Event {
 
 	public function get_help(): string {
 		return __(
-			'Is executed in any case, even in the presence of errors, 
-or in case of unsuccessfully executed actions. 
-This event is fired at the very end, before the form response is submitted.
-By default, this event is used by the Save Form Record action 
-and cannot be added to other events through the form editor;
-P.S. if you use several actions in this event, 
-then Save Form Record should be put last among these actions. 
-Otherwise, the status for the completed action will be saved incorrectly.',
+			"is executed at any time regardless of the form errors 
+and unsuccessfully executed actions. The event is performed at the 
+very end before the form response is submitted. By default, it is 
+used by the Save Form Record action and cannot be added to other events 
+through the form editor.
+<br/>
+<i>P.S. In case there are several post-submit actions under one DEFAULT.REQUIRED event, 
+then Save Form Record should come last on the list. Otherwise, 
+the status for the completed action will be saved incorrectly;</i>",
 			'jet-form-builder'
 		);
 	}

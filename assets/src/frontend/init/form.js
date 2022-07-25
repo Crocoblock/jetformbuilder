@@ -8,11 +8,17 @@ function initForm( $scope ) {
 
 	JetFBReactive[ form.dataset.formId ] = observable;
 
-	jQuery( document ).trigger( 'jet-form-builder/init', [ $scope ] );
+	jQuery( document ).trigger(
+		'jet-form-builder/init',
+		[ $scope, observable ]
+	);
 
 	observable.observe( form );
 
-	jQuery( document ).trigger( 'jet-form-builder/after-init', [ $scope ] );
+	jQuery( document ).trigger(
+		'jet-form-builder/after-init',
+		[ $scope, observable ]
+	);
 }
 
 export default initForm;

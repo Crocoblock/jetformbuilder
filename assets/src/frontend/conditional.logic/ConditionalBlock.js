@@ -17,15 +17,29 @@ class ConditionalBlock {
 		 */
 		this.page = null;
 
-		this.setConditions();
+		/**
+		 * @type {MultiStepState}
+		 */
+		this.multistep = null;
 
-		this.multistep = createMultiStep( this );
+		this.setConditions();
+		this.setMultiStep();
 	}
 
 	setConditions() {
 		this.conditions = JSON.parse( this.node.dataset.jfbConditional ).map(
 			item => createConditionItem( item, this ),
 		).filter( item => item );
+	}
+
+	setMultiStep() {
+		const multistep = createMultiStep( this );
+
+		if ( ! multistep.getPages()?.length ) {
+			return;
+		}
+
+		this.multistep = multistep;
 	}
 
 	observe() {

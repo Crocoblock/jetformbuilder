@@ -1,6 +1,4 @@
-import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import { createInput } from './functions';
-import MultiStepState from '../multi.step/MultiStepState';
 import {
 	createConditionalBlock,
 	createMultiStep,
@@ -19,15 +17,15 @@ class Observable {
 		 */
 		this.dataInputs = {};
 		this.data = {};
-		/**
-		 * [ ...ConditionalBlock ]
-		 */
-		this.conditionalBlocks = [];
 
 		/**
 		 * @type {MultiStepState}
 		 */
 		this.multistep = null;
+
+		/**
+		 * @type {HTMLElement|HTMLFormElement}
+		 */
 		this.rootNode   = null;
 		this.isObserved = false;
 	}
@@ -56,6 +54,8 @@ class Observable {
 		this.initConditionalBlocks();
 
 		this.initMultistep();
+
+		this.initSubmitHandler();
 	}
 
 	initFields() {
@@ -84,7 +84,22 @@ class Observable {
 	}
 
 	initMultistep() {
-		this.multistep = createMultiStep( this );
+		const multistep = createMultiStep( this );
+
+		if ( !multistep.getPages()?.length ) {
+			return;
+		}
+
+		this.multistep = multistep;
+	}
+
+	initSubmitHandler() {
+		// check is current object related for global form element
+		if ( this.parent ) {
+			return;
+		}
+
+
 	}
 
 	watch( fieldName, callable ) {

@@ -8,6 +8,7 @@ import CalculatedData from './CalculatedData';
 import MultiSelectData from './MultiSelectData';
 import FileData from './FileData';
 import WysiwygData from './WysiwygData';
+import InputMaskedData from './InputMaskedData';
 
 /**
  * @type {(InputData)[]}
@@ -22,6 +23,7 @@ const dataTypes = [
 	RepeaterData,
 	CalculatedData,
 	NoListenData,
+	InputMaskedData,
 	InputData,
 ];
 

@@ -100,8 +100,8 @@ class PageState {
 	}
 
 	isValidInputs() {
-		for ( const input of this.inputs ) {
-			if ( this.isValid( input ) ) {
+		for ( const input of this.getInputs() ) {
+			if ( input.validate() ) {
 				continue;
 			}
 			return false;
@@ -117,16 +117,10 @@ class PageState {
 	}
 
 	/**
-	 *
-	 * @param input {InputData}
+	 * @returns {array<InputData>|*}
 	 */
-	isValid( input ) {
-		if ( input.isValid() ) {
-			return true;
-		}
-		input.report();
-
-		return false;
+	getInputs() {
+		return this.inputs;
 	}
 
 }

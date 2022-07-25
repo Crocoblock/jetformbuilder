@@ -17,12 +17,21 @@ class WysiwygData extends InputData {
 
 		const editor = () => window.tinymce.get( this.textArea.id );
 
-		if ( window.tinymce && !editor() ) {
+		if ( !editor() ) {
 			//window.tinymce.get( textArea.id ).remove();
 			window.wp.editor.initialize( this.textArea.id, editorConfig );
 		}
 
 		this.editor = editor();
+	}
+
+	setRoot( observable ) {
+		super.setRoot( observable );
+
+		this.getSubmit().submitter.promise( resolve => {
+			window.tinyMCE.triggerSave();
+			resolve();
+		} );
 	}
 
 	onRemove() {

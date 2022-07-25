@@ -3,6 +3,7 @@ import {
 	createConditionalBlock,
 	createMultiStep,
 } from '../conditional.logic/functions';
+import FormSubmit from '../submit.logic/FormSubmit';
 
 class Observable {
 	constructor( parent = null ) {
@@ -19,6 +20,11 @@ class Observable {
 		this.data = {};
 
 		/**
+		 * @type {FormSubmit}
+		 */
+		this.form = null;
+
+		/**
 		 * @type {MultiStepState}
 		 */
 		this.multistep = null;
@@ -26,7 +32,7 @@ class Observable {
 		/**
 		 * @type {HTMLElement|HTMLFormElement}
 		 */
-		this.rootNode   = null;
+		this.rootNode = null;
 		this.isObserved = false;
 	}
 
@@ -36,6 +42,8 @@ class Observable {
 		}
 		this.isObserved = true;
 		this.rootNode   = root;
+
+		this.initSubmitHandler();
 
 		/**
 		 * Initialize dataInputs with fields.
@@ -54,8 +62,6 @@ class Observable {
 		this.initConditionalBlocks();
 
 		this.initMultistep();
-
-		this.initSubmitHandler();
 	}
 
 	initFields() {
@@ -99,18 +105,36 @@ class Observable {
 			return;
 		}
 
+		this.form = new FormSubmit( this );
+	}
 
+	inputsAreValid() {
+		for ( const inputName in this.dataInputs ) {
+			if ( !this.dataInputs.hasOwnProperty( inputName ) ) {
+				continue;
+			}
+			const input = this.getInput( inputName );
+
+			if ( !input.validate() ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	watch( fieldName, callable ) {
-		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
-			this.dataInputs[ fieldName ].watch( callable );
+		const input = this.getInput( fieldName );
+
+		if ( input ) {
+			input.watch( callable );
+
+			return;
 		}
-		else {
-			console.error(
-				`dataInputs in Observable don\'t have ${ fieldName } field`,
-			);
-		}
+
+		console.error(
+			`dataInputs in Observable don\'t have ${ fieldName } field`,
+		);
 	}
 
 	makeReactiveProxy() {
@@ -161,6 +185,25 @@ class Observable {
 		}
 
 		findInput.merge( inputData );
+	}
+
+	/**
+	 * @returns {array<InputData>}
+	 */
+	getInputs() {
+		return this.dataInputs;
+	}
+
+	/**
+	 * @param fieldName
+	 * @returns {boolean|InputData}
+	 */
+	getInput( fieldName ) {
+		if ( !this.dataInputs.hasOwnProperty( fieldName ) ) {
+			return false;
+		}
+
+		return this.dataInputs[ fieldName ];
 	}
 }
 

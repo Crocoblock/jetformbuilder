@@ -149,6 +149,18 @@ class InputData {
 	}
 
 	/**
+	 * @returns {boolean}
+	 */
+	validate() {
+		if ( !this.isRequired() || this.isValid() ) {
+			return true;
+		}
+		this.report();
+
+		return false;
+	}
+
+	/**
 	 * @private
 	 * @returns {ConditionChecker}
 	 */
@@ -182,6 +194,37 @@ class InputData {
 	 */
 	isArray() {
 		return this.rawName.includes( '[]' );
+	}
+
+	insertError( message ) {
+		const [ node ] = this.nodes;
+		const error    = this.createError( message );
+
+		node.appendChild( error );
+	}
+
+	addErrorCssClass() {
+		const [ node ] = this.nodes;
+
+		node.classList.add( 'field-has-error' );
+	}
+
+	createError( message ) {
+		const div = document.createElement( 'div' );
+
+		div.classList.add( 'error-message' );
+		div.innerHTML = message;
+
+		return div;
+	}
+
+	/**
+	 * @returns {FormSubmit}
+	 */
+	getSubmit() {
+		return this.root.form
+		       ? this.root.form
+		       : this.root.parent.form;
 	}
 }
 

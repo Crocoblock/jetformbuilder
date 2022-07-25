@@ -53,6 +53,27 @@ class RepeaterData extends InputData {
 			'.jet-form-builder-repeater__items',
 		);
 	}
+
+	isRequired() {
+		const [ node ] = this.nodes;
+
+		return !!node.dataset.required?.length;
+	}
+
+	validate() {
+		if ( this.isRequired() && !this.value.current?.length ) {
+			return false;
+		}
+
+		for ( const observable of this.value.current ) {
+			if ( !observable.inputsAreValid() ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }
 
 export default RepeaterData;

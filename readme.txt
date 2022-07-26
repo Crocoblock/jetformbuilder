@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.0.1
 Requires PHP: 7.0
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Please use our Github repo for the any issues/bugs/problems - <a href="https://g
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
-<a href="https://jetformbuilder.com/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">JetFormBuilder</a> lets you build any kind of form nice and easy. Its **21+ field blocks** allow creating forms from scratch or reassembling the existing ones. Throw JetStyleManager into the mix, and you’ll be able to adjust every form field’s fonts and style settings. Create form types, customize, and style – all in WordPress default blocks editor.
+<a href="https://jetformbuilder.com/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">JetFormBuilder</a> lets you build any kind of form nice and easy. Its **23+ field blocks** allow creating forms from scratch or reassembling the existing ones. Throw JetStyleManager into the mix, and you’ll be able to adjust every form field’s fonts and style settings. Create form types, customize, and style – all in WordPress default blocks editor.
 
 > At first, I thought this was just another free form builder for Gutenberg, but I was wrong. I wanted to share what got me so excited about it after only the first 5 minutes.
 
@@ -61,7 +61,7 @@ JetFormBuilder is a user-friendly form creator that lets you create new forms an
 == BASIC FEATURES ==
 
 = VARIOUS FIELD TYPES =
-Find inside 21+ JetFormBuilder blocks colored to stand out from the crowd. You can mix and match them freely until you achieve a unique row or column layout.
+Find inside 23+ JetFormBuilder blocks colored to stand out from the crowd. You can mix and match them freely until you achieve a unique row or column layout.
 
 = POST SUBMIT ACTIONS =
 Choose from 12 available actions and set any you want to be performed after the form is submitted on the frontend:
@@ -71,15 +71,17 @@ Choose from 12 available actions and set any you want to be performed after the 
 - Register User;
 - Update User;
 - Update Options;
-- Call Hook/Webhook;
+- Call Hook;
+- Call Webhook;
 - Redirect to Page;
 - MailChimp;
 - ActiveCampaign;
 - GetResponse;
+- Save Form Record;
 - And more.
 
 = MULTI-STEP FORM & FORM BREAK BLOCK =
-Use **Form Break** to build multi-step WordPress forms. Divide the fields and place them into separate tabs. Add a customizable “**Apply**” button to proceed to the next step. Enable file uploads if desired. By adding a **Form Progress** bar, you’ll indicate the form’s first, current, and last steps.
+Use **Form Page Break** to build multi-step WordPress forms. Divide the fields and place them into separate tabs. Add a customizable “**Apply**” button to proceed to the next step. Enable file uploads if desired. By adding a **Form Progress** bar, you’ll indicate the form’s first, current, and last steps.
 
 = CUSTOM FIELD STYLES =
 We integrated JetStyleManager & Gutenberg to make it possible for you to <a href="https://jetformbuilder.com/features/style-overview/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">style the form fields</a> as desired. Style settings can be applied to anything in the text box, form description, required mark, and content label, too.
@@ -227,10 +229,10 @@ It is. Thanks to the <a href="https://jetformbuilder.com/features/send-email/" t
 Yes. JetFormBuilder is compatible with ACF, Toolset, and JetEngine itself.
 
 = Can I transfer JetEngine Forms to Gutenberg? =
-If desired, you can transfer all JetEngine Forms to Gutenberg using a special addon – **JetFormBuilder Converter**.
+If desired, you can transfer all JetEngine Forms to Gutenberg using a special addon – <a href="https://github.com/Crocoblock/jet-form-builder-converter" target="_blank">**JetFormBuilder Converter**</a>.
 
 = What field types are available in JetFormBuilder? =
-JetFormBuilder currently embraces **21 field blocks**, but the number is to grow eventually.
+JetFormBuilder currently embraces **23 field blocks**, but the number is to grow eventually.
 
 - **Select Field** – Creates a drop-down list, where the user can choose one option.
 - **Text Field** – Adds a single narrow text bar to the form and collects short text information.
@@ -251,7 +253,7 @@ JetFormBuilder currently embraces **21 field blocks**, but the number is to grow
 - **Textarea Field** – Creates a text area where the data can be placed in several lines.
 - **Submit Field** – Adds a “Submit” button to the end of the form.
 - **Repeater Field** – Creates a repeatable block, which includes as many fields as needed.
-- **Form Break Field** – Adds a “Next page” button to the multi-step form.
+- **Form Page Break** – Adds a “Next page” button to the multi-step form.
 - **Group Break Field** – Adds a single line that divides one part of the form from another.
 
 = Is it possible to get JetFormBuilder PRO for Free? =
@@ -261,6 +263,13 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**2.1.2**
+ - UPD: Allow using Term object properties as values for select, radio, checkbox fields
+ - FIX: Validate action's events in gateways executor
+ - FIX: Fatal error when media field format does not match the preset
+ - Tweak: Additional args for filter `jet-form-builder/forms/generators/num-range/start-from`
+ - Tweak: Description of events for actions in the modal window
 
 **2.1.1**
  - ADD: Ordering files in media field

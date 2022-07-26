@@ -1,46 +1,56 @@
 import { conditionSettings } from './options';
 import { useCurrentAction, useUpdateCurrentAction } from './hooks';
+import BaseHelp from '../../../package/components/controls/base-help';
 
 const {
-	FieldWithPreset,
-	DynamicPreset,
-	RepeaterItemContext,
-	Repeater,
-	RepeaterAddNew,
-	SafeDeleteToggle,
-	HorizontalLine,
-} = JetFBComponents;
+	      FieldWithPreset,
+	      DynamicPreset,
+	      RepeaterItemContext,
+	      Repeater,
+	      RepeaterAddNew,
+	      SafeDeleteToggle,
+	      HorizontalLine,
+      } = JetFBComponents;
 
 const {
-	useRequestEvents,
-} = JetFBHooks;
+	      useRequestEvents,
+      } = JetFBHooks;
 
 const {
-	getFormFieldsBlocks,
-} = JetFBActions;
+	      getFormFieldsBlocks,
+      } = JetFBActions;
 
 const {
-	SelectControl,
-	TextareaControl,
-	ToggleControl,
-	FormTokenField,
-	BaseControl,
-	TabPanel,
-} = wp.components;
+	      SelectControl,
+	      TextareaControl,
+	      ToggleControl,
+	      FormTokenField,
+	      BaseControl,
+	      TabPanel,
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
-const { compose } = wp.compose;
+const { compose }   = wp.compose;
+const { useSelect } = wp.data;
 
-const { useEffect, useState, useContext } = wp.element;
+const { useEffect, useState, useContext, RawHTML } = wp.element;
 
 const operators = [
-	{ value: 'and', label: __( 'AND (ALL conditions must be met)', 'jet-form-builder' ) },
-	{ value: 'or', label: __( 'OR (at least ONE condition must be met)', 'jet-form-builder' ) },
+	{
+		value: 'and',
+		label: __( 'AND (ALL conditions must be met)', 'jet-form-builder' ),
+	},
+	{
+		value: 'or',
+		label: __( 'OR (at least ONE condition must be met)',
+			'jet-form-builder' ),
+	},
 ];
 
 function getConditionOptionFrom( from, value ) {
-	const option = conditionSettings[ from ].find( item => item.value === value );
+	const option = conditionSettings[ from ].find(
+		item => item.value === value );
 
 	return ( optionName, ifNot = '' ) => option ? (
 		option[ optionName ] || ifNot
@@ -56,13 +66,17 @@ function getTransformerOption( value ) {
 }
 
 function RepeaterItem( { formFields } ) {
-	const { currentItem, changeCurrentItem } = useContext( RepeaterItemContext );
+	const { currentItem, changeCurrentItem } = useContext(
+		RepeaterItemContext );
 
-	let executeLabel = __( 'To fulfill this condition, the result of the check must be', 'jet-form-builder' ) + ' ';
+	let executeLabel = __(
+		'To fulfill this condition, the result of the check must be',
+		'jet-form-builder' ) + ' ';
 	executeLabel += currentItem.execute ? 'TRUE' : 'FALSE';
 
-	const transformerOption = getTransformerOption( currentItem.compare_value_format );
-	const operatorOption = getOperatorOption( currentItem.operator );
+	const transformerOption = getTransformerOption(
+		currentItem.compare_value_format );
+	const operatorOption    = getOperatorOption( currentItem.operator );
 
 	return <>
 		<ToggleControl
@@ -120,8 +134,8 @@ function RepeaterItem( { formFields } ) {
 				className={ 'jet-control-clear jet-user-fields-map__list' }
 				value={ currentItem.default }
 				help={ operatorOption( 'need_explode' )
-					? conditionSettings.help_for_exploding_compare
-					: '' }
+				       ? conditionSettings.help_for_exploding_compare
+				       : '' }
 				onChange={ newValue => {
 					changeCurrentItem( { default: newValue } );
 				} }
@@ -131,22 +145,45 @@ function RepeaterItem( { formFields } ) {
 }
 
 function EditEvents( { events } ) {
-	const { currentAction } = useCurrentAction();
-	const { setCurrentAction } = useUpdateCurrentAction();
+	const { currentAction }               = useCurrentAction();
+	const { setCurrentAction }            = useUpdateCurrentAction();
+	const [ showDetails, setShowDetails ] = useState( false );
 
-	return <BaseControl
-		label={ __( 'Choose events', 'jet-form-builder' ) }
-		className={ 'control-flex' }
-	>
+	const helpMap = useSelect(
+		select => select( 'jet-forms/events' ).getHelpMap(),
+		[],
+	);
+
+	return <>
 		<FormTokenField
 			label={ __( 'Add event', 'jet-form-builder' ) }
 			value={ currentAction.events ?? [] }
 			suggestions={ events }
-			onChange={ events => setCurrentAction( { ...currentAction, events } ) }
+			onChange={ events => setCurrentAction(
+				{ ...currentAction, events } ) }
 			tokenizeOnSpace
 			__experimentalExpandOnFocus
+			__experimentalShowHowTo={ '' }
 		/>
-	</BaseControl>;
+		<BaseHelp>
+			{ __( 'Separate with commas or the Enter key.' ) + ' ' }
+			<a
+				href="javascript:void(0)"
+				onClick={ () => setShowDetails( prev => !prev ) }
+			>
+				{ showDetails
+				  ? __( 'Hide', 'jet-form-builder' )
+				  : __( 'Details', 'jet-form-builder' ) }
+			</a>
+		</BaseHelp>
+		{ showDetails && <ul>
+			{ events.map(
+				event => <li>
+					<b>{ event }</b>: <RawHTML>{ helpMap[ event ] }</RawHTML>
+				</li>,
+			) }
+		</ul> }
+	</>;
 }
 
 function EditFields() {
@@ -157,7 +194,11 @@ function EditFields() {
 	}, [] );
 
 	const { currentAction } = useCurrentAction();
-	const { setCurrentAction, updateCurrentConditions } = useUpdateCurrentAction();
+
+	const {
+		      setCurrentAction,
+		      updateCurrentConditions,
+	      } = useUpdateCurrentAction();
 
 	return <>
 		<SelectControl
@@ -166,7 +207,9 @@ function EditFields() {
 			labelPosition="side"
 			value={ currentAction.condition_operator || 'and' }
 			options={ operators }
-			onChange={ condition_operator => setCurrentAction( { ...currentAction, condition_operator } ) }
+			onChange={ condition_operator => setCurrentAction(
+				{ ...currentAction, condition_operator },
+			) }
 		/>
 		<SafeDeleteToggle>
 			<Repeater
@@ -204,7 +247,7 @@ function EditConditions() {
 				{
 					name: 'events',
 					title: __( 'Events match', 'jet-form-builder' ),
-					edit: <EditEvents events={ provideEvents } />,
+					edit: <EditEvents events={ provideEvents }/>,
 				},
 			] }
 		>
@@ -212,6 +255,5 @@ function EditConditions() {
 		</TabPanel>
 	</>;
 }
-
 
 export default EditConditions;

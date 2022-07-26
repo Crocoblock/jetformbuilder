@@ -18,6 +18,15 @@ class Gateway_Success_Event extends Base_Gateway_Event {
 		return __( 'When passing through the gateway', 'jet-form-builder' );
 	}
 
+	public function get_help(): string {
+		return __(
+			'replaces the old "On success payment" option for selecting post-submit actions. 
+The event is executed after passing the checkout on the payment system\'s side, 
+provided the payment/subscription has been successful;',
+			'jet-form-builder'
+		);
+	}
+
 	/**
 	 * @return Base_Executor[]
 	 */

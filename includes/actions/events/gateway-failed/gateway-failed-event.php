@@ -18,6 +18,15 @@ class Gateway_Failed_Event extends Base_Gateway_Event {
 		return __( 'When canceling the passage of the gateway', 'jet-form-builder' );
 	}
 
+	public function get_help(): string {
+		return __(
+			'replaces the old "On failed payment" option for selecting post-submit actions. 
+The event is executed when the user returns from the payment system\'s checkout page 
+without making a payment or subscribing;',
+			'jet-form-builder'
+		);
+	}
+
 	/**
 	 * @return Base_Executor[]
 	 */

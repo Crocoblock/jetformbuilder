@@ -124,7 +124,7 @@ class Tools {
 	}
 
 	public static function get_allowed_mimes_list_for_js() {
-		return get_allowed_mime_types();
+		return array_values( get_allowed_mime_types() );
 	}
 
 	/**

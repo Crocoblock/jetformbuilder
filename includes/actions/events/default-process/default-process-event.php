@@ -16,6 +16,17 @@ class Default_Process_Event extends Base_Event {
 		return __( 'When the Form was submitted', 'jet-form-builder' );
 	}
 
+	public function get_help(): string {
+		return __(
+			'the moment when all actions are executed. 
+The event takes place at the same stage as the actions previously performed. 
+It is necessary for forms where payment functionality (PayPal/Stripe) 
+is enabled to let the plugin know which actions 
+to perform before redirecting to checkout;',
+			'jet-form-builder'
+		);
+	}
+
 	public function executors(): array {
 		return array(
 			new Default_With_Gateway_Executor(),
@@ -25,8 +36,8 @@ class Default_Process_Event extends Base_Event {
 
 	public function to_array(): array {
 		return parent::to_array() + array(
-			'always' => true,
-		);
+				'always' => true,
+			);
 	}
 
 }

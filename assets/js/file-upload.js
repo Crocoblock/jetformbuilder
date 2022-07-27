@@ -236,7 +236,7 @@
 				const previewElements = [];
 
 				for (const file of this.files) {
-					const current = $(this.getFilePreview(file));
+					const current = this.getFilePreview(file);
 
 					try {
 						this.validateImage(file, current);
@@ -270,11 +270,10 @@
 			getFilePreview(file) {
 				const url = URL.createObjectURL(file);
 				let template = this.template.replace('%file_url%', url);
-				template = template.replace('%file_name%', file.name);
+				template = $( template.replace('%file_name%', file.name) );
 
 				if (/^image\//.test(file.type)) {
-					template = template.replace('<!-- preview -->',
-						`<img src="${url}" alt="${file.name}">`);
+					template.prepend( $( `<img src="${url}" alt="${file.name}">` ) );
 				}
 
 				return template;

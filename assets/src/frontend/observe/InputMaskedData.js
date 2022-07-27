@@ -9,6 +9,9 @@ class InputMaskedData extends InputData {
 		);
 	}
 
+	addListener() {
+	}
+
 	setNode( node ) {
 		super.setNode( node );
 

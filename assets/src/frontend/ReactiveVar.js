@@ -10,17 +10,14 @@ class ReactiveVar {
 	}
 
 	make() {
-		let current    = this.current;
-		const self    = this;
+		let current = this.current;
+		const self  = this;
 
 		Object.defineProperty( this, 'current', {
 			get() {
 				return current;
 			},
 			set( newVal ) {
-				if ( current === newVal ) {
-					return;
-				}
 				current = newVal;
 				self.signals.forEach( signal => signal() );
 			},

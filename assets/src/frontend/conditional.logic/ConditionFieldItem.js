@@ -26,14 +26,14 @@ class ConditionFieldItem extends ConditionItem {
 
 		return (
 			root.dataInputs[ this.field ] ??
-			root.parent.dataInputs[ this.field ] ?? false
+			root.parent.root.dataInputs[ this.field ] ?? false
 		);
 	}
 
 	isPassed() {
 		const root  = this.block.root;
 		const input = root.dataInputs[ this.field ] ??
-			root.parent.dataInputs[ this.field ] ?? false;
+			root.parent.root.dataInputs[ this.field ] ?? false;
 
 		if ( false === input ) {
 			return false;

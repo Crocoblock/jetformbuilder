@@ -89,7 +89,7 @@ class CalculatedData extends InputData {
 	getInput( fieldName ) {
 		return (
 			this.root.dataInputs[ fieldName ] ??
-			this.root.parent.dataInputs[ fieldName ] ?? false
+			this.root.parent.root.dataInputs[ fieldName ] ?? false
 		);
 	}
 

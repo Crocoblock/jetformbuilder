@@ -9,6 +9,7 @@ class WysiwygData extends InputData {
 
 	setNode( node ) {
 		super.setNode( node );
+
 		this.textArea      = node.querySelector( '.wp-editor-area' );
 		const editorConfig = JSON.parse( node.dataset.editor );
 
@@ -44,6 +45,14 @@ class WysiwygData extends InputData {
 		};
 
 		this.editor.on( 'input', update ).on( 'change', update );
+	}
+
+	isValid() {
+		return !!this.value.current?.length;
+	}
+
+	report() {
+		this.insertError( 'This field is invalid' );
 	}
 
 }

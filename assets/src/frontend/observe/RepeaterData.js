@@ -19,7 +19,7 @@ class RepeaterData extends InputData {
 		this.buttonNode.addEventListener( 'click', () => {
 			this.value.current = [
 				...this.value.current,
-				new Observable( this.root ),
+				new Observable( this ),
 			];
 		} );
 	}
@@ -31,7 +31,7 @@ class RepeaterData extends InputData {
 		for ( const row of node.querySelectorAll(
 			'.jet-form-builder-repeater__row',
 		) ) {
-			const current = new Observable( this.root );
+			const current = new Observable( this );
 			current.observe( row );
 
 			this.value.current.push( current );
@@ -39,6 +39,12 @@ class RepeaterData extends InputData {
 	}
 
 	setNode( node ) {
+		/**
+		 * Save link to this object
+		 * @type {RepeaterData}
+		 */
+		node.jfbSync = this;
+
 		this.nodes   = [ node ];
 		this.name    = node.dataset.fieldName;
 		this.rawName = this.name;
@@ -52,12 +58,6 @@ class RepeaterData extends InputData {
 		this.container  = node.querySelector(
 			'.jet-form-builder-repeater__items',
 		);
-	}
-
-	isRequired() {
-		const [ node ] = this.nodes;
-
-		return !!node.dataset.required?.length;
 	}
 
 	validate() {

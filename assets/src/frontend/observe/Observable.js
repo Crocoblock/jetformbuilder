@@ -8,7 +8,7 @@ import FormSubmit from '../submit.logic/FormSubmit';
 class Observable {
 	constructor( parent = null ) {
 		/**
-		 * @type {Observable}
+		 * @type {RepeaterData}
 		 */
 		this.parent = parent;
 		/**
@@ -144,6 +144,12 @@ class Observable {
 			}
 			const current = this.dataInputs[ fieldName ];
 			current.makeReactive();
+
+			if ( this.parent ) {
+				current.watch( () => {
+					this.parent.value.current = (this.parent.value.current);
+				} )
+			}
 
 			Object.defineProperty( this.data, fieldName, {
 				get() {

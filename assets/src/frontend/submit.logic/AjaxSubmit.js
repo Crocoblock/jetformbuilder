@@ -83,7 +83,6 @@ class AjaxSubmit extends BaseSubmit {
 				continue;
 			}
 
-			input.addErrorCssClass();
 			input.insertError( fieldData.message );
 		}
 	}

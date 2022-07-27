@@ -680,10 +680,18 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	margin-left: 0.5em;
 }
 
-
-
-.jet-form-builder__field.field-has-error + .error-message {
+@mixin error-message {
 	color: red;
+	font-size: 0.8rem;
+}
+
+.jet-form-builder__field.field-has-error {
+	& + .error-message {
+		@include error-message;
+	}
+	.error-message {
+		@include error-message;
+	}
 }
 
 .block-editor-block-list__block[data-type^="jet-forms/"] {

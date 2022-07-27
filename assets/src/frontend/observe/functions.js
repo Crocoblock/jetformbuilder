@@ -103,4 +103,15 @@ function createFileList( inputFileArray ) {
 	return transfer.files;
 }
 
-export { createInput, getParsedName, createFileList, appendNodes };
+/**
+ * @param node {HTMLElement}
+ */
+function isRequired( node ) {
+	if ( node.hasOwnProperty( 'required' ) ) {
+		return node.required;
+	}
+
+	return !!node.dataset.required?.length;
+}
+
+export { createInput, getParsedName, createFileList, appendNodes, isRequired };

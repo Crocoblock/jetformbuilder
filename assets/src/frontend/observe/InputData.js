@@ -4,7 +4,7 @@ import SignalCheckbox from '../signals/SignalCheckbox';
 import SignalRadio from '../signals/SignalRadio';
 import SignalText from '../signals/SignalText';
 import SignalRepeater from '../signals/SignalRepeater';
-import { getParsedName } from './functions';
+import { getParsedName, isRequired } from './functions';
 import SignalCalculated from '../signals/SignalCalculated';
 import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
@@ -56,7 +56,7 @@ class InputData {
 	 * @returns {boolean}
 	 */
 	isRequired() {
-		return !!this.nodes[ 0 ]?.required;
+		return isRequired( this.nodes[ 0 ] );
 	}
 
 	/**
@@ -198,18 +198,24 @@ class InputData {
 
 	insertError( message ) {
 		const [ node ] = this.nodes;
-		const error    = this.createError( message );
-
-		node.appendChild( error );
-	}
-
-	addErrorCssClass() {
-		const [ node ] = this.nodes;
+		const error    = this.createError( node, message );
 
 		node.classList.add( 'field-has-error' );
+
+		if ( !error.isConnected ) {
+			node.appendChild( error );
+		}
 	}
 
-	createError( message ) {
+	createError( node, message ) {
+		const error = node.querySelector( '.error-message' );
+
+		if ( error ) {
+			error.innerHTML = message;
+
+			return error;
+		}
+
 		const div = document.createElement( 'div' );
 
 		div.classList.add( 'error-message' );
@@ -224,7 +230,7 @@ class InputData {
 	getSubmit() {
 		return this.root.form
 		       ? this.root.form
-		       : this.root.parent.form;
+		       : this.root.parent.root.form;
 	}
 }
 

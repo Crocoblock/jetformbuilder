@@ -38,6 +38,11 @@ $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'data-editor', htmlspecialchars( wp_json_encode( $editor ) ) );
+$this->add_attribute( 'data-required', $this->block_type->get_required_val() );
+$this->add_attribute( 'data-report-type', 'html_message' );
+$this->add_attribute( 'data-jfb-messages', Tools::encode_json( array(
+	'required' => 'This field is required',
+) ) );
 $this->add_attribute( 'data-jfb-sync' );
 
 if ( is_rtl() ) {
@@ -46,13 +51,13 @@ if ( is_rtl() ) {
 }
 ?>
 <div class="jet-form-builder__field-wrap">
-	<div <?php $this->render_attributes_string(); ?>>
-<?php
-	wp_editor( $args['default'], $editor_id, $editor );
-?>
-	</div>
-<?php
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    <div <?php $this->render_attributes_string(); ?>>
+		<?php
+		wp_editor( $args['default'], $editor_id, $editor );
+		?>
+    </div>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo Tools::esc_template_string( $this->maybe_render_error( $args ) );
-?>
+	?>
 </div>

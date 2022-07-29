@@ -12,7 +12,7 @@ const {
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
-	      ValidationMessage,
+	      ValidationBlockMessage,
       } = JetFBComponents;
 
 const { useIsAdvancedValidation } = JetFBHooks;
@@ -171,14 +171,14 @@ export default function TextEdit( props ) {
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
 					{ 'email' === attributes.field_type && (
-						<ValidationMessage name="email"/>
+						<ValidationBlockMessage name="email"/>
 					) }
 					{ 'url' === attributes.field_type && (
 						<ValidationMessage name="url"/>
 					) }
-					<ValidationMessage name="empty"/>
-					<ValidationMessage name="char_max"/>
-					<ValidationMessage name="char_min"/>
+					<ValidationBlockMessage name="empty"/>
+					<ValidationBlockMessage name="char_max"/>
+					<ValidationBlockMessage name="char_min"/>
 				</> }
 			</PanelBody>
 			<AdvancedFields

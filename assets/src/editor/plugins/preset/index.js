@@ -9,7 +9,7 @@ const base = {
 
 const settings = {
 	render: PluginPreset,
-	icon: null
+	icon: 'database-import'
 };
 
 export default {

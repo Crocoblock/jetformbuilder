@@ -1,4 +1,6 @@
 .jet-form-edit-modal {
+	@import "validation";
+
 	.components-flex-item, .components-flex__item {
 		flex: 1;
 	}

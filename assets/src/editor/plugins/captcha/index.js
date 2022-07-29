@@ -9,7 +9,7 @@ const base = {
 
 const settings = {
 	render: PluginCaptcha,
-	icon: null
+	icon: 'filter'
 };
 
 export default {

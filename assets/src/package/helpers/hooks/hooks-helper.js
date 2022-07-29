@@ -14,10 +14,10 @@ const {
 
 const { applyFilters } = wp.hooks;
 
-export const useMetaState = ( key, ifEmpty = '{}' ) => {
+export const useMetaState = ( key, ifEmpty = '{}', dependencies = undefined ) => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
+	}, dependencies );
 
 	const { editPost } = useDispatch( 'core/editor', [ meta ] );
 

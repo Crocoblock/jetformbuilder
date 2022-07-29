@@ -4,7 +4,7 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      ValidationToggleGroup,
-	      ValidationMessage,
+	      ValidationBlockMessage,
       } = JetFBComponents;
 
 const { useIsAdvancedValidation } = JetFBHooks;
@@ -45,7 +45,7 @@ export default function WysiwygEdit( props ) {
 				>
 					<ValidationToggleGroup/>
 					{ isAdvancedValidation && <>
-						<ValidationMessage name="empty"/>
+						<ValidationBlockMessage name="empty"/>
 					</> }
 				</PanelBody>
 				<AdvancedFields

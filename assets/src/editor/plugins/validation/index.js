@@ -9,7 +9,7 @@ const base = {
 
 const settings = {
 	render: ValidationPlugin,
-	icon: 'filter'
+	icon: 'shield-alt'
 };
 
 export default {

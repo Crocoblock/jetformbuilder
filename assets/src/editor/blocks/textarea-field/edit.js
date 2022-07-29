@@ -5,7 +5,7 @@ const {
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
-	      ValidationMessage,
+	      ValidationBlockMessage,
       } = JetFBComponents;
 
 const { useIsAdvancedValidation } = JetFBHooks;
@@ -83,9 +83,9 @@ export default function TextareaEdit( props ) {
 			>
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
-					<ValidationMessage name="empty"/>
-					<ValidationMessage name="char_max"/>
-					<ValidationMessage name="char_min"/>
+					<ValidationBlockMessage name="empty"/>
+					<ValidationBlockMessage name="char_max"/>
+					<ValidationBlockMessage name="char_min"/>
 				</> }
 			</PanelBody>
 			<AdvancedFields

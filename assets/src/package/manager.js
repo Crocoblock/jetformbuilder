@@ -69,8 +69,11 @@ import {
 	useBlockAttributes,
 } from './helpers/hooks/blocks';
 import {
-	useActionButtonEdit
+	useActionButtonEdit,
 } from './helpers/hooks/action.buttons';
+import {
+	useGroupedValidationMessages,
+} from './components/validation/hooks';
 import FieldWrapper from './components/fields/field-wrapper';
 import MacrosInserter from './components/fields/macros-inserter';
 import RepeaterWithState from './components/fields/repeater-with-state';
@@ -91,7 +94,8 @@ import {
 	fromLocalizeHelper,
 	getActionSettings, prepareActionsListByType,
 } from './helpers/actions/action-helper';
-import gatewayActionAttributes from './helpers/gateways/gateway-action-attrubites';
+import gatewayActionAttributes
+	from './helpers/gateways/gateway-action-attrubites';
 import { globalTab } from './helpers/settings/helper';
 import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
 import GroupedSelectControl from './components/grouped-select-control';
@@ -109,8 +113,12 @@ import ActionListItemContext from './context/action.list.item';
 import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
-import ValidationToggleGroup from './components/fields/validationToggleGroup';
-import ValidationMessage from './components/fields/ValidationMessage';
+import ValidationToggleGroup
+	from './components/validation/validationToggleGroup';
+import ValidationBlockMessage
+	from './components/validation/ValidationBlockMessage';
+import ValidationMetaMessage
+	from './components/validation/ValidationMetaMessage';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -149,7 +157,8 @@ window.JetFBComponents = {
 	ValidateButtonWithStore,
 	GatewayFetchButton,
 	ValidationToggleGroup,
-	ValidationMessage,
+	ValidationBlockMessage,
+	ValidationMetaMessage,
 };
 
 // JFBFunctions
@@ -201,6 +210,7 @@ window.JetFBHooks = {
 	useBlockAttributes,
 	useIsAdvancedValidation,
 	useActionButtonEdit,
+	useGroupedValidationMessages,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,

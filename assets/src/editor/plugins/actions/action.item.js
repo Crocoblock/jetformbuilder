@@ -2,29 +2,29 @@ import { useActionCallback, useActionsEdit } from './hooks';
 import EventsList from './events.list';
 
 const {
-	useDispatch,
-	useSelect,
-} = wp.data;
+	      useDispatch,
+	      useSelect,
+      } = wp.data;
 
 const { applyFilters } = wp.hooks;
 
 const { __ } = wp.i18n;
 
 const {
-	SelectControl,
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	CardFooter,
-	DropdownMenu,
-	Flex,
-} = wp.components;
+	      SelectControl,
+	      Button,
+	      Card,
+	      CardBody,
+	      CardHeader,
+	      CardFooter,
+	      DropdownMenu,
+	      Flex,
+	      Icon,
+      } = wp.components;
 
 const {
-	ActionListItemContext,
-} = JetFBComponents;
-
+	      ActionListItemContext,
+      } = JetFBComponents;
 
 const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	return {
@@ -34,34 +34,35 @@ const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	};
 } );
 
-
 function ListActionItem( props ) {
 	const { action, index } = props;
 
 	const {
-		moveAction,
-		deleteAction,
-		actions,
-		updateActionObj,
-		toggleExecute,
-	} = useActionsEdit();
+		      moveAction,
+		      deleteAction,
+		      actions,
+		      updateActionObj,
+		      toggleExecute,
+	      } = useActionsEdit();
 
-	const ActionCallback = useActionCallback( action.type );
-	const { setCurrentAction, setMeta } = useDispatch( 'jet-forms/actions', [] );
+	const ActionCallback                = useActionCallback( action.type );
+	const { setCurrentAction, setMeta } = useDispatch( 'jet-forms/actions',
+		[] );
 
-	const header = applyFilters( `jet.fb.section.actions.header.${ action.type }`, null, action );
+	const header = applyFilters(
+		`jet.fb.section.actions.header.${ action.type }`, null, action );
 
 	const conditionsIcon = action?.conditions?.length ? <span
 		className="dashicon dashicons dashicons-randomize"
 		data-count={ action?.conditions.length }
-	/> : <span
-		className="dashicon dashicons dashicons-randomize"
-	/>;
+	/> : <span className="dashicon dashicons dashicons-randomize"/>;
 
-	const wrapper = ['jet-form-action'];
-	const isExecute = ( action.is_execute ?? true );
+	const wrapper   = [ 'jet-form-action' ];
+	const isExecute = (
+		action.is_execute ?? true
+	);
 
-	if ( ! isExecute ) {
+	if ( !isExecute ) {
 		wrapper.push( 'is-disabled' );
 	}
 
@@ -81,8 +82,8 @@ function ListActionItem( props ) {
 				title: __( 'Down', 'jet-form-builder' ),
 				icon: 'arrow-down',
 				disabled: (
-					          actions.length - 1
-				          ) === index,
+					actions.length - 1
+				) === index,
 				onClick: () => {
 					moveAction( index, index + 1 );
 				},
@@ -96,8 +97,8 @@ function ListActionItem( props ) {
 			},
 			{
 				title: isExecute
-					? __( 'Turn off', 'jet-form-builder' )
-					: __( 'Turn on', 'jet-form-builder' ),
+				       ? __( 'Turn off', 'jet-form-builder' )
+				       : __( 'Turn on', 'jet-form-builder' ),
 				icon: isExecute ? 'no-alt' : 'yes',
 				onClick: () => {
 					toggleExecute( action );
@@ -128,11 +129,13 @@ function ListActionItem( props ) {
 					dangerouslySetInnerHTML={ { __html: type.label } }
 				/> ) }
 			</SelectControl>
-			{ applyFilters( `jet.fb.section.actions.afterSelect.${ action.type }`, null, action, actions ) }
-			<Flex style={ { marginTop: '0.5em' } } justify='space-around'>
+			{ applyFilters(
+				`jet.fb.section.actions.afterSelect.${ action.type }`, null,
+				action, actions ) }
+			<Flex style={ { marginTop: '0.5em' } } justify="space-around">
 				<Button
-					disabled={ ! ActionCallback }
-					icon='edit'
+					disabled={ !ActionCallback }
+					icon="edit"
 					label={ __( 'Edit Action', 'jet-form-builder' ) }
 					onClick={ () => {
 						setCurrentAction( { ...action, index } );
@@ -142,7 +145,10 @@ function ListActionItem( props ) {
 				<Button
 					className={ 'jfb-button' }
 					icon={ conditionsIcon }
-					label={ __( 'Edit Conditions & Events', 'jet-form-builder' ) }
+					label={ __(
+						'Edit Conditions & Events',
+						'jet-form-builder',
+					) }
 					onClick={ () => {
 						setCurrentAction( { ...action, index } );
 						setMeta( { index, modalType: 'conditions' } );

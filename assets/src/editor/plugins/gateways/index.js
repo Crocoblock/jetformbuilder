@@ -10,7 +10,7 @@ const base = {
 
 const settings = {
 	render: PluginGateways,
-	icon: null
+	icon: 'money-alt'
 };
 
 export default {

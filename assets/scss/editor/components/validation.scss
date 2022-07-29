@@ -1,0 +1,29 @@
+
+.jet-fb-validation-messages {
+	&-item {
+		&:not(:first-child) {
+			margin-top: 1.7em;
+		}
+
+		&-heading {
+			display: flex;
+			justify-content: space-between;
+			column-gap: 0.7em;
+			flex-wrap: wrap;
+
+			&-pair {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				column-gap: 1em;
+				min-width: 20%;
+
+				&__icon svg {
+					width: 24px;
+					height: 24px;
+				}
+			}
+		}
+	}
+}

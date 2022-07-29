@@ -41,10 +41,15 @@ function ValidationPlugin() {
 			icon={ 'edit' }
 			onClick={ () => setEditValidation( true ) }
 		/> }
-		{ isEditValidation && <ValidationModal
-			updateState={ setEditValidation }
-			setArgs={ setArgs }
-		/> }
+		{ isEditValidation && <ActionModal
+			title={ 'Edit Manual Options' }
+			onRequestClose={ () => setEditValidation( false ) }
+			classNames={ [ 'width-60' ] }
+		>
+			<ValidationModal
+				setArgs={ setArgs }
+			/>
+		</ActionModal> }
 	</>;
 }
 

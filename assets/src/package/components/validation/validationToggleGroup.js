@@ -7,13 +7,13 @@ const {
 
 const { __ } = wp.i18n;
 
-const source = window.JetFormEditorData.argumentsSource || {};
+let { formats } = window.jetFormValidation;
 
 function ValidationToggleGroup( { excludeBrowser = false } ) {
 	const [ attributes, setAttributes ] = useBlockAttributes();
 	const uniqKey                       = useUniqKey();
 
-	const formats = source.validation_formats.filter(
+	formats = formats.filter(
 		( { value } ) => value !== 'browser' || !excludeBrowser,
 	);
 

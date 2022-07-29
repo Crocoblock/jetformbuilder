@@ -9,7 +9,7 @@ const base = {
 
 const settings = {
 	render: PluginMessages,
-	icon: null
+	icon: 'format-status'
 };
 
 export default {

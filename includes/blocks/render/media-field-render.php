@@ -62,6 +62,9 @@ class Media_Field_Render extends Base {
 				$this->get_name_from_file( $file['url'] ),
 				$updated );
 
+			// preset field
+			$updated = str_replace( '<!-- field -->', $this->get_field_preset( $file ), $updated );
+
 			$image_ext    = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
 
@@ -87,6 +90,14 @@ class Media_Field_Render extends Base {
 		ob_start();
 
 		require Tools::get_global_template( 'fields/image-preview.php' );
+
+		return ob_get_clean();
+	}
+
+	protected function get_field_preset( array $file ): string {
+		ob_start();
+
+		require Tools::get_global_template( 'fields/preset-media-field.php' );
 
 		return ob_get_clean();
 	}

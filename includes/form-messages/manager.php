@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Plugin;
 
 class Manager {
@@ -11,26 +12,6 @@ class Manager {
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';
 	const DYNAMIC_FAILED_PREF  = 'derror|';
-
-
-	public static function dynamic_success( $message ) {
-		return self::DYNAMIC_SUCCESS_PREF . $message;
-	}
-
-	public static function dynamic_error( $message ) {
-		return self::DYNAMIC_FAILED_PREF . $message;
-	}
-
-	public static function dynamic_types() {
-		return array(
-			'dsuccess' => array(
-				'type' => 'success',
-			),
-			'derror'   => array(
-				'type' => 'failed',
-			),
-		);
-	}
 
 	/**
 	 * @return Manager
@@ -57,14 +38,9 @@ class Manager {
 	public function get_action_types_messages() {
 		$messages = array();
 
+		/** @var Base $action */
 		foreach ( jet_form_builder()->msg_router->get_actions() as $action ) {
-			if ( ! isset( $action->messages ) ) {
-				continue;
-			}
-			$default_action_messages = wp_list_pluck( $action->messages, 'value' );
-			$action_messages         = isset( $action->settings['messages'] ) ? $action->settings['messages'] : array();
-
-			$messages = array_merge( $messages, $default_action_messages, $action_messages );
+			$messages = array_merge( $messages, Action_Messages_Manager::instance()->get_messages( $action ) );
 		}
 
 		return $messages;
@@ -74,7 +50,6 @@ class Manager {
 		return isset( $this->_types[ $type ] );
 	}
 
-
 	public function get_message( $type ): string {
 		$info = new Status_Info( $type );
 
@@ -83,6 +58,7 @@ class Manager {
 		 */
 		return $this->get_message_by_info( $info );
 	}
+
 
 	public function get_message_by_info( Status_Info $info ): string {
 		if ( $info->is_dynamic() ) {
@@ -96,6 +72,25 @@ class Manager {
 		}
 
 		return $info->get_raw_message();
+	}
+
+	public static function dynamic_success( $message ) {
+		return self::DYNAMIC_SUCCESS_PREF . $message;
+	}
+
+	public static function dynamic_error( $message ) {
+		return self::DYNAMIC_FAILED_PREF . $message;
+	}
+
+	public static function dynamic_types() {
+		return array(
+			'dsuccess' => array(
+				'type' => 'success',
+			),
+			'derror'   => array(
+				'type' => 'failed',
+			),
+		);
 	}
 
 	public function get_messages() {

@@ -1,10 +1,10 @@
 const { useMetaState } = JetFBHooks;
 
 const {
-	TextControl,
-	SelectControl,
-	ToggleControl,
-} = wp.components;
+	      TextControl,
+	      SelectControl,
+	      ToggleControl,
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
@@ -14,7 +14,7 @@ const source = window.JetFormEditorData.argumentsSource || {};
 
 export default function PluginArgs() {
 
-	const [ args, setArgs ] = useMetaState( '_jf_args' );
+	const [ args, setArgs ]             = useMetaState( '_jf_args' );
 	const [ isLoadNonce, setLoadNonce ] = useState( 'render' === (
 		args?.load_nonce ?? 'render'
 	) );
@@ -74,14 +74,16 @@ export default function PluginArgs() {
 			} }
 		/>
 
+
 		<ToggleControl
 			key={ 'enable_progress' }
 			label={ __( 'Enable form pages progress', 'jet-from-builder' ) }
 			checked={ args.enable_progress }
-			help={ __( 'Displays the progress of a multi-page form', 'jet-form-builder' ) }
+			help={ __( 'Displays the progress of a multi-page form',
+				'jet-form-builder' ) }
 			onChange={ () => {
 				setArgs( prev => {
-					const enable_progress = ! Boolean( prev.enable_progress );
+					const enable_progress = !Boolean( prev.enable_progress );
 
 					return { ...prev, enable_progress };
 				} );
@@ -92,13 +94,15 @@ export default function PluginArgs() {
 			key={ 'load_nonce' }
 			label={ __( 'Enable form safety', 'jet-form-builder' ) }
 			checked={ isLoadNonce }
-			help={ __( `Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`, 'jet-form-builder' ) }
+			help={ __(
+				`Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`,
+				'jet-form-builder' ) }
 			onChange={ () => {
-				setLoadNonce( prev => ! prev );
+				setLoadNonce( prev => !prev );
 				setArgs( prev => {
 					const load_nonce = (
-						! isLoadNonce
-					) ? 'hide' : 'render';
+						                   !isLoadNonce
+					                   ) ? 'hide' : 'render';
 
 					return { ...prev, load_nonce };
 				} );
@@ -111,7 +115,7 @@ export default function PluginArgs() {
 			checked={ args.use_csrf }
 			onChange={ () => {
 				setArgs( prev => {
-					const use_csrf = ! Boolean( prev.use_csrf );
+					const use_csrf = !Boolean( prev.use_csrf );
 
 					return { ...prev, use_csrf };
 				} );

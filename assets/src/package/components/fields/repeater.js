@@ -33,7 +33,7 @@ function Repeater( props ) {
 		key={ 'jet-form-builder-repeater' }
 	>
 		{ items.map( ( currentItem, index ) => <Card
-			isElevated={ true }
+			elevation={ 2 }
 			className={ 'jet-form-builder__repeater-component-item' }
 			key={ `jet-form-builder__repeater-component-item-${ index }` }
 		>

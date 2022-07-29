@@ -1,25 +1,31 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+	      ToolBarFields,
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+	      ValidationToggleGroup,
+	      ValidationMessage,
+      } = JetFBComponents;
+
+const { useIsAdvancedValidation } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextareaControl,
-} = wp.components;
+	      TextareaControl,
+      } = wp.components;
 
 export default function WysiwygEdit( props ) {
 
 	const { editProps: { uniqKey }, isSelected } = props;
-	const blockProps = useBlockProps();
+
+	const blockProps           = useBlockProps();
+	const isAdvancedValidation = useIsAdvancedValidation();
 
 	return [
 		<ToolBarFields
@@ -34,6 +40,14 @@ export default function WysiwygEdit( props ) {
 					key={ uniqKey( 'GeneralFields' ) }
 					{ ...props }
 				/>
+				<PanelBody
+					title={ __( 'Validation', 'jet-form-builder' ) }
+				>
+					<ValidationToggleGroup/>
+					{ isAdvancedValidation && <>
+						<ValidationMessage name="empty"/>
+					</> }
+				</PanelBody>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }
@@ -51,7 +65,7 @@ export default function WysiwygEdit( props ) {
 					} }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 
 }

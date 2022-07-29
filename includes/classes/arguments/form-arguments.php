@@ -9,7 +9,7 @@ use Jet_Form_Builder\Plugin;
 
 class Form_Arguments implements Arrayable {
 
-	const SETTER_PREFIX = 'set_';
+	const SETTER_PREFIX       = 'set_';
 
 	public $form_id          = '';
 	public $submit_type      = '';
@@ -19,6 +19,7 @@ class Form_Arguments implements Arrayable {
 	public $fields_label_tag = '';
 	public $load_nonce       = '';
 	public $use_csrf         = null;
+	public $validation_type  = '';
 
 	public function __construct( $form_id = 0 ) {
 		$this->set_form_id( (int) $form_id );
@@ -240,7 +241,7 @@ class Form_Arguments implements Arrayable {
 	 * @return string
 	 */
 	public function get_submit_type(): string {
-		return $this->submit_type ? $this->submit_type : 'reload';
+		return $this->submit_type ?: 'reload';
 	}
 
 }

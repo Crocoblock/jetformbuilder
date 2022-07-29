@@ -6,6 +6,7 @@ import preset from './preset';
 import messages from './messages';
 import limitAddon from './limit-addon';
 import scheduleAddon from './schedule-addon';
+import validation from './validation';
 
 const {
 	applyFilters,
@@ -52,6 +53,7 @@ export default function RegisterPlugins() {
 	const sortedPlugins = [];
 	const jfbPlugins = applyFilters( 'jet.fb.register.plugins', [
 		args,
+		validation,
 		captcha,
 		gateways,
 		actions,

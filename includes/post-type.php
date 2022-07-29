@@ -6,8 +6,16 @@ use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
-use Jet_Form_Builder\Classes\Messages_Helper_Trait;
-use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Post_Meta\Actions_Meta;
+use Jet_Form_Builder\Post_Meta\Base_Meta_Type;
+use Jet_Form_Builder\Post_Meta\Args_Meta;
+use Jet_Form_Builder\Post_Meta\Preset_Meta;
+use Jet_Form_Builder\Post_Meta\Gateways_Meta;
+use Jet_Form_Builder\Post_Meta\Messages_Meta;
+use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
+use Jet_Form_Builder\Post_Meta\Validation_Meta;
 use Jet_Form_Builder\Shortcodes\Manager;
 
 // If this file is called directly, abort.
@@ -21,10 +29,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Post_Type {
 
-	use Messages_Helper_Trait;
 	use Get_Icon_Trait;
-
-	public $allow_gateways;
+	use Repository_Pattern_Trait;
 
 	/**
 	 * Used to define the editor
@@ -46,6 +52,18 @@ class Post_Type {
 		add_action( "manage_{$this->slug()}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
 	}
 
+	public function rep_instances(): array {
+		return array(
+			new Args_Meta(),
+			new Messages_Meta(),
+			new Preset_Meta(),
+			new Recaptcha_Meta(),
+			new Actions_Meta(),
+			new Gateways_Meta(),
+			new Validation_Meta(),
+		);
+	}
+
 	public function filter_columns( $columns ) {
 		$after = array( 'date' => $columns['date'] );
 		unset( $columns['date'] );
@@ -59,9 +77,13 @@ class Post_Type {
 		if ( 'jfb_shortcode' !== $column ) {
 			return;
 		}
-		$arguments = json_decode( get_post_meta( $form_id, '_jf_args', true ), true );
-		$arguments = array_diff( $arguments, Form_Arguments::arguments() );
-		$arguments = array_merge( array( 'form_id' => $form_id ), Default_Form_Arguments::arguments(), $arguments );
+		$arguments = array_diff( $this->get_args( $form_id ), Form_Arguments::arguments() );
+
+		$arguments = array_merge(
+			array( 'form_id' => $form_id ),
+			Default_Form_Arguments::arguments(),
+			$arguments
+		);
 
 		printf(
 			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
@@ -149,71 +171,43 @@ class Post_Type {
 			apply_filters( 'jet-form-builder/post-type/args', $args )
 		);
 
-		$this->set_default_messages();
+		$this->rep_install();
 
-		$meta = array(
-			'_jf_args'      => array(
-				'type'    => 'string',
-				'default' => wp_json_encode( Form_Arguments::arguments() ),
-			),
-			'_jf_recaptcha' => array(
-				'type'    => 'string',
-				'default' => '{}',
-			),
-			'_jf_actions'   => array(
-				'type'    => 'string',
-				'default' => '[]',
-			),
-			'_jf_messages'  => array(
-				'type'    => 'string',
-				'default' => $this->get_default_messages_values_json(),
-			),
-			'_jf_preset'    => array(
-				'type'    => 'string',
-				'default' => '{}',
-			),
-		);
-
-		if ( Plugin::instance()->allow_gateways ) {
-			$meta['_jf_gateways'] = array(
-				'type'    => 'string',
-				'default' => '{}',
-			);
+		/** @var Base_Meta_Type $item */
+		foreach ( $this->rep_get_items() as $item ) {
+			register_post_meta( $this->slug(), $item->get_id(), $item->to_array() );
 		}
+	}
 
-		foreach ( $meta as $key => $args ) {
-
-			$args = array_merge(
-				$args,
-				array(
-					'show_in_rest'  => true,
-					'single'        => true,
-					'auth_callback' => function ( $res, $key, $post_id, $user_id, $cap ) {
-						return user_can( $user_id, 'edit_post', $post_id );
-					},
-				)
-			);
-
-			register_post_meta( $this->slug(), $key, $args );
-
+	/**
+	 * @param string $name
+	 *
+	 * @return false|Base_Meta_Type
+	 */
+	public function get_meta( string $name ) {
+		try {
+			return $this->rep_get_item( $name );
+		} catch ( Repository_Exception $exception ) {
+			return false;
 		}
+	}
 
+	/**
+	 * @param $item
+	 *
+	 * @throws Exceptions\Repository_Exception
+	 */
+	public function rep_before_install_item( $item ) {
+		if ( $item->is_supported() ) {
+			return;
+		}
+		$this->_rep_abort_this();
 	}
 
 	private function get_post_type_icon() {
 		$path = $this->get_icon_path( 'post-type.php' );
 
 		return include_once $path;
-	}
-
-	public function get_form_meta( $meta_key, $form_id ) {
-		return Tools::decode_json(
-			get_post_meta(
-				$form_id,
-				$meta_key,
-				true
-			)
-		);
 	}
 
 	/**
@@ -226,13 +220,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_args( $form_id ): array {
-		$args = $this->get_form_meta( '_jf_args', $form_id );
-
-		if ( ! is_array( $args ) ) {
-			return array();
-		}
-
-		return $args;
+		return $this->get_meta( Args_Meta::class )->query( $form_id );
 	}
 
 	/**
@@ -243,13 +231,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_messages( $form_id ) {
-		$messages = $this->get_form_meta( '_jf_messages', $form_id );
-
-		if ( empty( $messages ) ) {
-			return $this->messages;
-		}
-
-		return $messages;
+		return $this->get_meta( Messages_Meta::class )->query( $form_id );
 	}
 
 	/**
@@ -260,7 +242,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_actions( $form_id ) {
-		return $this->get_form_meta( '_jf_actions', $form_id );
+		return $this->get_meta( Actions_Meta::class )->query( $form_id );
 	}
 
 	/**
@@ -271,7 +253,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_preset( $form_id ) {
-		return $this->get_form_meta( '_jf_preset', $form_id );
+		return $this->get_meta( Preset_Meta::class )->query( $form_id );
 	}
 
 	/**
@@ -282,13 +264,8 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_recaptcha( $form_id ) {
-		return $this->get_form_meta( '_jf_recaptcha', $form_id );
+		return $this->get_meta( Recaptcha_Meta::class )->query( $form_id );
 	}
-
-	public function maybe_get_jet_sm_ready_styles( $form_id ) {
-		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
-	}
-
 
 	/**
 	 * Returns form gateways
@@ -298,56 +275,12 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_gateways( $form_id ) {
-		return $this->get_form_meta( '_jf_gateways', $form_id );
+		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
 	}
 
-	public function set_default_messages() {
-		$this->messages = apply_filters(
-		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-			'jet-form-builder/message-types',
-			array(
-				'success'           => array(
-					'label' => __( 'Form successfully submitted.', 'jet-form-builder' ),
-					'value' => 'Form successfully submitted.',
-				),
-				'failed'            => array(
-					'label' => __( 'Submit failed.', 'jet-form-builder' ),
-					'value' => 'There was an error trying to submit form. Please try again later.',
-				),
-				'validation_failed' => array(
-					'label' => __( 'Validation error', 'jet-form-builder' ),
-					'value' => 'One or more fields have an error. Please check and try again.',
-				),
-				'captcha_failed'    => array(
-					'label' => __( 'Captcha validation failed', 'jet-form-builder' ),
-					'value' => __( 'Captcha validation failed', 'jet-form-builder' ),
-				),
-				'invalid_email'     => array(
-					'label' => __( 'Entered an invalid email', 'jet-form-builder' ),
-					'value' => 'The e-mail address entered is invalid.',
-				),
-				'empty_field'       => array(
-					'label' => __( 'Required field is empty', 'jet-form-builder' ),
-					'value' => 'The field is required.',
-				),
-				'internal_error'    => array(
-					'label' => __( 'Internal server error', 'jet-form-builder' ),
-					'value' => 'Internal server error. Please try again later.',
-				),
-				'upload_max_files'  => array(
-					'label' => __( 'Media Specific: Max files limit', 'jet-form-builder' ),
-					'value' => 'Maximum upload files limit is reached.',
-				),
-				'upload_max_size'   => array(
-					'label' => __( 'Media Specific: Max size reached', 'jet-form-builder' ),
-					'value' => 'Upload max size exceeded.',
-				),
-				'upload_mime_types' => array(
-					'label' => __( 'Media Specific: File type error', 'jet-form-builder' ),
-					'value' => 'File type is not allowed.',
-				),
-			)
-		);
+	public function maybe_get_jet_sm_ready_styles( $form_id ) {
+		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
 	}
+
 
 }

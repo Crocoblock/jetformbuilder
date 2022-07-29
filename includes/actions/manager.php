@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Actions;
 use Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Form_Messages\Action_Messages_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -144,7 +145,7 @@ class Manager {
 			);
 			$action_localize  = $type->action_data();
 
-			$action_localize['__messages']           = $type->get_messages_default();
+			$action_localize['__messages']           = Action_Messages_Manager::instance()->get_messages( $type );
 			$action_localize['__labels']             = $type->editor_labels();
 			$action_localize['__help_messages']      = $type->editor_labels_help();
 			$action_localize['__gateway_attrs']      = $type->visible_attributes_for_gateway_editor();

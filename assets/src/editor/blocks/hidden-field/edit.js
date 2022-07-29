@@ -159,7 +159,7 @@ export default function HiddenEdit( props ) {
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<Card isElevated>
+			<Card elevation={ 2 }>
 				<CardHeader>
 					<RichText
 						placeholder='hidden_field_name...'

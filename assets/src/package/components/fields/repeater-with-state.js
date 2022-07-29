@@ -213,7 +213,7 @@ function RepeaterWithState( {
 		</> }
 		{ additionalControls }
 		{ itemsData.map( ( currentItem, index ) => <Card
-			isElevated={ true }
+			elevation={ 2 }
 			className={ itemClassNames }
 			key={ getRepeaterItemId( index ) }
 		>

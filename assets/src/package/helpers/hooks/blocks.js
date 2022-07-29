@@ -1,11 +1,13 @@
-const {
-	useBlockProps,
-} = wp.blockEditor;
+import { useSelectPostMeta } from './hooks-helper';
 
 const {
-	useSelect,
-	useDispatch,
-} = wp.data;
+	      useBlockProps,
+      } = wp.blockEditor;
+
+const {
+	      useSelect,
+	      useDispatch,
+      } = wp.data;
 
 function useUniqKey() {
 	const blockProps = useBlockProps();
@@ -16,16 +18,19 @@ function useUniqKey() {
 }
 
 function useBlockAttributes() {
-	const [ clientId, attributes ] = useSelect( select => {
-		const clientId = select( 'core/block-editor' ).getSelectedBlockClientId();
+	const blockProps = useBlockProps();
+	const clientId   = blockProps[ 'data-block' ];
 
-		return [ clientId, select( 'core/block-editor' ).getBlockAttributes( clientId ) ];
+	const attributes      = useSelect( select => {
+		return select( 'core/block-editor' ).getBlockAttributes( clientId );
 	} );
 	const { updateBlock } = useDispatch( 'core/block-editor', [] );
 
 	const updateAttributes = props => {
 		if ( 'object' === typeof props ) {
 			updateBlock( clientId, { attributes: props } );
+
+			return;
 		}
 
 		updateBlock( clientId, {
@@ -36,4 +41,15 @@ function useBlockAttributes() {
 	return [ attributes, updateAttributes ];
 }
 
-export { useUniqKey, useBlockAttributes };
+function useIsAdvancedValidation() {
+	const { type }       = useSelectPostMeta( '_jf_validation' );
+	const [ attributes ] = useBlockAttributes();
+
+	if ( attributes.validation?.type ) {
+		return 'advanced' === attributes.validation?.type;
+	}
+
+	return 'advanced' === type;
+}
+
+export { useUniqKey, useBlockAttributes, useIsAdvancedValidation };

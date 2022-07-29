@@ -4,12 +4,14 @@ namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager as Action_Condition_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
+use Jet_Form_Builder\Post_Meta\Messages_Meta;
 
 /**
  * Form editor class
@@ -333,6 +335,12 @@ class Editor {
 
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
+			'jetFormValidation',
+			Validation::instance()->to_array()
+		);
+
+		wp_localize_script(
+			self::EDITOR_PACKAGE_HANDLE,
 			'jetFormBlockConditions',
 			Block_Condition_Manager::instance()->to_array()
 		);
@@ -369,6 +377,9 @@ class Editor {
 
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 
+		/** @var Messages_Meta $messages_meta */
+		$messages_meta = jet_form_builder()->post_type->get_meta( Messages_Meta::class );
+
 		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
 		$addons  = JET_FORM_BUILDER_SITE . '/addons/';
 		$pricing = JET_FORM_BUILDER_SITE . '/pricing/';
@@ -378,7 +389,7 @@ class Editor {
 			'JetFormEditorData',
 			array(
 				'presetConfig'            => $this->get_preset_config(),
-				'messagesDefault'         => Plugin::instance()->post_type->get_messages_default(),
+				'messagesDefault'         => $messages_meta->messages(),
 				'gateways'                => Gateway_Manager::instance()->editor_data(),
 				'helpForRepeaters'        => $this->get_help_for_repeaters(),
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
@@ -391,6 +402,7 @@ class Editor {
 					'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
 				),
 				'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
+				'validationMessages'
 			)
 		);
 

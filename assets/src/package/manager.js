@@ -65,6 +65,8 @@ import {
 } from './helpers/hooks/block-conditions';
 import {
 	useUniqKey,
+	useIsAdvancedValidation,
+	useBlockAttributes,
 } from './helpers/hooks/blocks';
 import {
 	useActionButtonEdit
@@ -107,6 +109,8 @@ import ActionListItemContext from './context/action.list.item';
 import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
+import ValidationToggleGroup from './components/fields/validationToggleGroup';
+import ValidationMessage from './components/fields/ValidationMessage';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -144,6 +148,8 @@ window.JetFBComponents = {
 	BaseHelp,
 	ValidateButtonWithStore,
 	GatewayFetchButton,
+	ValidationToggleGroup,
+	ValidationMessage,
 };
 
 // JFBFunctions
@@ -192,6 +198,8 @@ window.JetFBHooks = {
 	useRequestEvents,
 	useBlockConditions,
 	useUniqKey,
+	useBlockAttributes,
+	useIsAdvancedValidation,
 	useActionButtonEdit,
 	withRequestFields,
 	useRequestFields,

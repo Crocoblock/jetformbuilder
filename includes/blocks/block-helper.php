@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks;
 
+use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Form_Manager;
 
 /**
@@ -145,6 +146,19 @@ class Block_Helper {
 		}
 
 		return $attrs;
+	}
+
+	public static function get_block_names( $names ) {
+		if ( ! is_array( $names ) ) {
+			$block = jet_form_builder()->blocks->get_field_by_name( $names );
+
+			return $block->get_name();
+		}
+
+		return array_map(
+			array( static::class, 'get_block_names' ),
+			$names
+		);
 	}
 
 }

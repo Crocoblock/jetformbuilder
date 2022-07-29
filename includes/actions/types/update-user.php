@@ -124,43 +124,6 @@ class Update_User extends Base {
 	}
 
 
-	public function messages() {
-		return array(
-			'password_mismatch' => array(
-				'label' => __( 'Passwords mismatch', 'jet-form-builder' ),
-				'value' => 'Passwords don\'t match.',
-			),
-			'username_exists'   => array(
-				'label' => __( 'Username exists', 'jet-form-builder' ),
-				'value' => 'This username already taken.',
-			),
-			'email_exists'      => array(
-				'label' => __( 'Email exists', 'jet-form-builder' ),
-				'value' => 'This email address is already used.',
-			),
-			'sanitize_user'     => array(
-				'label' => __( 'Incorrect username', 'jet-form-builder' ),
-				'value' => 'Username contains not allowed characters.',
-			),
-			'empty_username'    => array(
-				'label' => __( 'Empty username', 'jet-form-builder' ),
-				'value' => 'Please set username.',
-			),
-			'empty_email'       => array(
-				'label' => __( 'Empty email', 'jet-form-builder' ),
-				'value' => 'Please set user email.',
-			),
-			'empty_password'    => array(
-				'label' => __( 'Empty password', 'jet-form-builder' ),
-				'value' => 'Please set user password.',
-			),
-			'already_logged_in' => array(
-				'label' => __( 'Logged in (appears only if register user is only notification)', 'jet-form-builder' ),
-				'value' => 'You already logged in.',
-			),
-		);
-	}
-
 
 }
 

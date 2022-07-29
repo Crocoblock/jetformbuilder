@@ -1,0 +1,64 @@
+<?php
+
+
+namespace Jet_Form_Builder\Form_Messages;
+
+
+use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Form_Messages\Actions\Base_Action_Messages;
+use Jet_Form_Builder\Form_Messages\Actions\Register_User_Messages;
+use Jet_Form_Builder\Form_Messages\Actions\User_Specific_Messages;
+
+/**
+ * @method static Action_Messages_Manager instance()
+ *
+ * Class Action_Messages_Manager
+ * @package Jet_Form_Builder\Form_Messages
+ */
+class Action_Messages_Manager {
+
+	use Instance_Trait;
+
+	/** @var Base_Action_Messages[] */
+	private $types;
+
+	public function __construct() {
+		$this->types = array(
+			new User_Specific_Messages(),
+			new Register_User_Messages(),
+		);
+	}
+
+	public function get_messages( Base $action ): array {
+		$messages = array();
+
+		/** @var Base_Action_Messages $type */
+		foreach ( $this->get_types( $action ) as $type ) {
+			$messages = array_merge(
+				$messages,
+				wp_list_pluck( $type->get_messages(), 'value' )
+			);
+		}
+
+		return array_merge(
+			$messages,
+			$action->settings['messages'] ?? array()
+		);
+	}
+
+	/**
+	 * @param Base $action
+	 *
+	 * @return \Generator
+	 */
+	private function get_types( Base $action ): \Generator {
+		foreach ( $this->types as $type ) {
+			if ( ! $type->is_supported( $action ) ) {
+				continue;
+			}
+			yield $type;
+		}
+	}
+
+}

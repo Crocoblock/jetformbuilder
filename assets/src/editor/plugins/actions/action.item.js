@@ -107,6 +107,7 @@ function ListActionItem( props ) {
 	/>;
 
 	return <Card
+		elevation={ 2 }
 		key={ action.id }
 		size={ 'extraSmall' }
 		className={ wrapper }

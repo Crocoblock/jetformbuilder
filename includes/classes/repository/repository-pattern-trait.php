@@ -177,9 +177,7 @@ trait Repository_Pattern_Trait {
 	 * @throws Repository_Exception
 	 */
 	public function rep_clone_item( $slug ) {
-		$this->rep_throw_if_undefined( $slug );
-
-		return clone $this->_rep_get_item( $slug );
+		return clone $this->rep_get_item( $slug );
 	}
 
 	public function rep_clone_item_or_die( $slug ) {

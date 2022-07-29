@@ -6,7 +6,9 @@ namespace Jet_Form_Builder\Request;
 use Jet_Form_Builder\Blocks\Types\Media_Field;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
+use Jet_Form_Builder\Classes\Resources\File_Tools;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
+use Jet_Form_Builder\Classes\Resources\Upload_Dir;
 use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
@@ -16,6 +18,9 @@ use Jet_Form_Builder\Classes\Tools;
 class File_Uploader {
 
 	protected $settings = array();
+
+	/** @var Uploaded_File|Uploaded_File[] */
+	protected $preset = array();
 
 	/** @var File|File_Collection */
 	protected $file;
@@ -81,6 +86,12 @@ class File_Uploader {
 	 * @throws Upload_Exception
 	 */
 	protected function upload_file( File $file ): Uploaded_File {
+		$preset_uploaded = $this->get_uploaded( $file );
+
+		if ( $preset_uploaded instanceof Uploaded_File ) {
+			return $preset_uploaded;
+		}
+
 		$uploaded = new Uploaded_File();
 		$uploaded->upload( $file );
 
@@ -93,6 +104,14 @@ class File_Uploader {
 		do_action( 'jet-form-builder/inserted-attachment', $uploaded, $this );
 
 		return $uploaded;
+	}
+
+	protected function get_uploaded( File $file ) {
+		if ( empty( $this->preset ) ) {
+			return false;
+		}
+
+		return File_Tools::get_uploaded( $file, $this->preset );
 	}
 
 	/**
@@ -228,6 +247,33 @@ class File_Uploader {
 		return $this;
 	}
 
+	public function set_preset( $preset ): File_Uploader {
+		if ( empty( $preset ) || ! is_array( $preset ) ) {
+			return $this;
+		}
+
+		if ( $this->is_must_be_single() ) {
+			$uploaded     = new Uploaded_File();
+			$this->preset = $uploaded->set_from_array( $preset[0] ?? $preset );
+
+			return $this;
+		}
+
+		$files = isset( $preset[0] ) ? $preset : array( $preset );
+
+		foreach ( $files as $index => $file ) {
+			if ( ! is_array( $file ) ) {
+				unset( $files[ $index ] );
+				continue;
+			}
+			$files[ $index ] = ( new Uploaded_File() )->set_from_array( $file );
+		}
+
+		$this->preset = $files;
+
+		return $this;
+	}
+
 	/**
 	 * @param array $settings
 	 *
@@ -249,6 +295,7 @@ class File_Uploader {
 		$this->context = $context;
 
 		$this->set_settings( $context->get_settings() );
+		$this->set_preset( Tools::decode_json( $context->get_value() ) );
 		$this->set_file( $context->get_file() );
 
 		return $this;

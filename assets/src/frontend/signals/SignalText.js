@@ -2,13 +2,13 @@ import BaseSignal from './BaseSignal';
 
 class SignalText extends BaseSignal {
 
-	isSupported( inputData ) {
+	isSupported( node, inputData ) {
 		return true;
 	}
 
-	runSignal( inputData ) {
-		inputData.calcValue = parseFloat( inputData.calcValue );
-		inputData.nodes[ 0 ].value = inputData.value.current;
+	runSignal() {
+		this.input.calcValue = parseFloat( this.input.calcValue );
+		this.input.nodes[ 0 ].value = this.input.value.current;
 	}
 }
 

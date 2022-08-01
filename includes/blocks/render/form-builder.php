@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Compatibility;
@@ -66,9 +67,9 @@ class Form_Builder {
 		}
 
 		$blocks = Live_Form::instance()
-						->set_form_id( $this->form_id )
-						->set_specific_data_for_render( $this->args )
-						->setup_fields();
+		                   ->set_form_id( $this->form_id )
+		                   ->set_specific_data_for_render( $this->args )
+		                   ->setup_fields();
 
 		$form = $this->start_form();
 
@@ -117,6 +118,7 @@ class Form_Builder {
 	 */
 	public function start_form() {
 
+		Validation::instance();
 		Plugin::instance()->blocks->enqueue_frontend_assets();
 
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );

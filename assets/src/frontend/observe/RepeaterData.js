@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import Observable from './Observable';
+import { isRepeater } from '../supports';
 
 class RepeaterData extends InputData {
 
@@ -12,10 +13,10 @@ class RepeaterData extends InputData {
 	}
 
 	isSupported( node ) {
-		return 1 === +node.dataset.repeater;
+		return isRepeater( node );
 	}
 
-	addListener() {
+	addListeners() {
 		this.buttonNode.addEventListener( 'click', () => {
 			this.value.current = [
 				...this.value.current,
@@ -39,11 +40,7 @@ class RepeaterData extends InputData {
 	}
 
 	setNode( node ) {
-		/**
-		 * Save link to this object
-		 * @type {RepeaterData}
-		 */
-		node.jfbSync = this;
+		super.setNode( node );
 
 		this.nodes   = [ node ];
 		this.name    = node.dataset.fieldName;

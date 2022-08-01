@@ -1,46 +1,48 @@
 import BaseSignal from './BaseSignal';
+import { isRepeater } from '../supports';
 
+/**
+ * @property {RepeaterData} input
+ */
 class SignalRepeater extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return 1 === +node.dataset.repeater;
+	isSupported( node, inputData ) {
+		return isRepeater( node );
 	}
 
-	runSignal( inputData ) {
-		inputData.calcValue = inputData.value.current.length;
+	runSignal() {
+		const { current }    = this.input.value;
+		this.input.calcValue = current.length;
 
-		for ( const index in inputData.value.current ) {
-			if ( !inputData.value.current.hasOwnProperty( index ) ) {
+		for ( const index in current ) {
+			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
-			this.runItem( inputData, index );
+			this.runItem( index );
 		}
 	}
 
 	/**
-	 * @param inputData {RepeaterData}
-	 * @param current
+	 * @param current {string}
 	 */
-	runItem( inputData, current ) {
-		const observable = inputData.value.current[ current ];
+	runItem( current ) {
+		const observable = this.input.value.current[ current ];
 
 		if ( observable.isObserved ) {
 			return;
 		}
 		const template     = document.createElement( 'template' );
-		template.innerHTML = inputData.template.innerHTML.trim();
+		template.innerHTML = this.input.template.innerHTML.trim();
 
 		// set current index
-		const currentIndex = inputData.value.current.length - 1;
+		const currentIndex = this.input.value.current.length - 1;
 		template.innerHTML = template.innerHTML.replace( /__i__/g,
 			currentIndex );
 
 		template.content.firstChild.dataset.index = '' + currentIndex;
-		inputData.container.append( template.content.firstChild );
+		this.input.container.append( template.content.firstChild );
 
-		const appended = inputData.container.lastChild;
+		const appended = this.input.container.lastChild;
 
 		appended.querySelector(
 			'.jet-form-builder-repeater__remove',
@@ -48,7 +50,7 @@ class SignalRepeater extends BaseSignal {
 			'click',
 			() => {
 				appended.remove();
-				inputData.value.current = inputData.value.current.filter(
+				this.input.value.current = this.input.value.current.filter(
 					( item, index ) => {
 						if ( +index !== +current ) {
 							return true;

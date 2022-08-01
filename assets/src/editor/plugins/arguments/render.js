@@ -1,23 +1,18 @@
-const { useMetaState } = JetFBHooks;
-
+const {
+	      useMetaState,
+      }      = JetFBHooks;
 const {
 	      TextControl,
 	      SelectControl,
 	      ToggleControl,
-      } = wp.components;
-
+      }      = wp.components;
 const { __ } = wp.i18n;
-
-const { useState } = wp.element;
 
 const source = window.JetFormEditorData.argumentsSource || {};
 
 export default function PluginArgs() {
 
-	const [ args, setArgs ]             = useMetaState( '_jf_args' );
-	const [ isLoadNonce, setLoadNonce ] = useState( 'render' === (
-		args?.load_nonce ?? 'render'
-	) );
+	const [ args, setArgs ] = useMetaState( '_jf_args' );
 
 	return <>
 		<SelectControl
@@ -86,38 +81,6 @@ export default function PluginArgs() {
 					const enable_progress = !Boolean( prev.enable_progress );
 
 					return { ...prev, enable_progress };
-				} );
-			} }
-		/>
-
-		<ToggleControl
-			key={ 'load_nonce' }
-			label={ __( 'Enable form safety', 'jet-form-builder' ) }
-			checked={ isLoadNonce }
-			help={ __(
-				`Protects the form with a WordPress nonce. Toggle this option off if the form's page's caching can't be disabled`,
-				'jet-form-builder' ) }
-			onChange={ () => {
-				setLoadNonce( prev => !prev );
-				setArgs( prev => {
-					const load_nonce = (
-						                   !isLoadNonce
-					                   ) ? 'hide' : 'render';
-
-					return { ...prev, load_nonce };
-				} );
-			} }
-		/>
-
-		<ToggleControl
-			key={ 'use_csrf' }
-			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
-			checked={ args.use_csrf }
-			onChange={ () => {
-				setArgs( prev => {
-					const use_csrf = !Boolean( prev.use_csrf );
-
-					return { ...prev, use_csrf };
 				} );
 			} }
 		/>

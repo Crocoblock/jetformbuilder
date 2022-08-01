@@ -278,6 +278,10 @@ class Post_Type {
 		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
 	}
 
+	public function get_validation( $form_id ) {
+		return $this->get_meta( Validation_Meta::class )->query( $form_id );
+	}
+
 	public function maybe_get_jet_sm_ready_styles( $form_id ) {
 		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
 	}

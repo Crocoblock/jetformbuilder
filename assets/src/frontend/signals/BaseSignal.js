@@ -1,16 +1,26 @@
 class BaseSignal {
-	/**
-	 * @param inputData {InputData}
-	 * @returns {boolean}
-	 */
-	isSupported( inputData ) {
-		return false;
+
+	constructor() {
+		/**
+		 * @type {InputData}
+		 */
+		this.input = null;
 	}
 
 	/**
+	 * @param node {HTMLElement}
 	 * @param inputData {InputData}
+	 * @returns {boolean}
 	 */
-	runSignal( inputData ) {
+	isSupported( node, inputData ) {
+		return false;
+	}
+
+	setInput( input ) {
+		this.input = input;
+	}
+
+	runSignal() {
 		// your code
 	}
 }

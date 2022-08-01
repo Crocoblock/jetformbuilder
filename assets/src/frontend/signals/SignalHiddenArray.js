@@ -1,50 +1,55 @@
 import BaseSignal from './BaseSignal';
+import { isHidden } from '../supports';
 
 class SignalHiddenArray extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return 'hidden' === node.type && inputData.isArray();
+	isSupported( node, inputData ) {
+		return isHidden( node ) && inputData.isArray();
 	}
 
-	runSignal( inputData ) {
-		if ( ! inputData.value.current.length ) {
-			for ( const node of inputData.nodes ) {
+	runSignal() {
+		const { current } = this.input.value;
+
+		if ( !current.length ) {
+			for ( const node of this.input.nodes ) {
 				node.remove();
 			}
 
-			inputData.nodes.splice( 0, inputData.nodes.length );
+			this.input.nodes.splice( 0, this.input.nodes.length );
 			return;
 		}
 
 		const saveNodes = [];
 
-		for ( const value of inputData.value.current ) {
-			const hasNodeWithSameValue = inputData.nodes.some( ( node, index ) => {
-				if ( node.value !== value ) {
-					return false;
-				}
-				saveNodes.push( index );
-				return true;
-			} );
+		for ( const value of current ) {
+			const hasNodeWithSameValue = this.input.nodes.some(
+				( node, index ) => {
+					if ( node.value !== value ) {
+						return false;
+					}
+					saveNodes.push( index );
+					return true;
+				} );
 
 			if ( hasNodeWithSameValue ) {
 				continue;
 			}
 
 			const newElement = document.createElement( 'input' );
-			newElement.type = 'hidden';
+			newElement.type  = 'hidden';
 			newElement.value = value;
-			newElement.name = inputData.rawName;
+			newElement.name  = this.input.rawName;
 
-			inputData.nodes.push( newElement );
-			saveNodes.push( inputData.nodes.length - 1 );
+			this.input.nodes.push( newElement );
+			saveNodes.push( this.input.nodes.length - 1 );
 
-			inputData.comment.parentElement.insertBefore( newElement, inputData.comment.nextElementSibling );
+			this.input.comment.parentElement.insertBefore(
+				newElement,
+				this.input.comment.nextElementSibling,
+			);
 		}
 
-		inputData.nodes = inputData.nodes.filter( ( node, index ) => {
+		this.input.nodes = this.input.nodes.filter( ( node, index ) => {
 			if ( saveNodes.includes( index ) ) {
 				return true;
 			}

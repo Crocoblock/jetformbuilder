@@ -1,12 +1,13 @@
 import InputData from './InputData';
+import { isChangeType } from '../supports';
 
 class ChangeData extends InputData {
 
 	isSupported( node ) {
-		return [ 'select', 'range' ].includes( node.type );
+		return isChangeType( node );
 	}
 
-	addListener() {
+	addListeners() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', event => {

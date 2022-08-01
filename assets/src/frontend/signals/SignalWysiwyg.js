@@ -1,18 +1,17 @@
 import BaseSignal from './BaseSignal';
+import { isWysiwyg } from '../supports';
 
+/**
+ * @property {WysiwygData} input
+ */
 class SignalWysiwyg extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return node.matches( '.wp-editor-area' );
+	isSupported( node, inputData ) {
+		return isWysiwyg( node );
 	}
 
-	/**
-	 * @param inputData {InputData|WysiwygData}
-	 */
-	runSignal( inputData ) {
-		inputData.editor.setContent( inputData.value.current );
+	runSignal() {
+		this.input.editor.setContent( this.input.value.current );
 	}
 
 }

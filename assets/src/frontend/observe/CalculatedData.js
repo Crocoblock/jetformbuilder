@@ -1,23 +1,22 @@
 import InputData from './InputData';
+import { isCalculated } from '../supports';
 
 class CalculatedData extends InputData {
 
 	constructor() {
 		super();
 
-		this.listenTo = [];
-		this.formula = '';
-		this.precision = 0;
-		this.sepDecimal = '';
-		this.sepThousands = '';
+		this.listenTo       = [];
+		this.formula        = '';
+		this.precision      = 0;
+		this.sepDecimal     = '';
+		this.sepThousands   = '';
 		this.visibleValNode = null;
-		this.regexp = /%([\w\-]+)%/g;
+		this.regexp         = /%([\w\-]+)%/g;
 	}
 
 	isSupported( node ) {
-		return !! (
-			node.parentElement.dataset?.formula?.length ?? ''
-		);
+		return isCalculated( node );
 	}
 
 	setValue() {
@@ -30,7 +29,9 @@ class CalculatedData extends InputData {
 		super.makeReactive();
 
 		// run signals
-		this.value.current = (this.value.current);
+		this.value.current = (
+			this.value.current
+		);
 	}
 
 	reCalculate() {
@@ -38,13 +39,14 @@ class CalculatedData extends InputData {
 	}
 
 	calculate() {
-		const formula = this.formula.replace( this.regexp, ( match1, match2 ) => {
-			if ( ! this.listenTo.includes( match2 ) ) {
-				return 0;
-			}
+		const formula = this.formula.replace( this.regexp,
+			( match1, match2 ) => {
+				if ( !this.listenTo.includes( match2 ) ) {
+					return 0;
+				}
 
-			return this.getInput( match2 ).calcValue;
-		} );
+				return this.getInput( match2 ).calcValue;
+			} );
 
 		return (
 			new Function( 'return ' + formula )
@@ -56,9 +58,9 @@ class CalculatedData extends InputData {
 
 		const { formula, precision, sepDecimal } = node.parentElement.dataset;
 
-		this.formula = formula;
-		this.precision = + precision;
-		this.sepDecimal = sepDecimal;
+		this.formula        = formula;
+		this.precision      = +precision;
+		this.sepDecimal     = sepDecimal;
 		this.visibleValNode = node.nextElementSibling;
 	}
 
@@ -93,8 +95,7 @@ class CalculatedData extends InputData {
 		);
 	}
 
-
-	addListener() {
+	addListeners() {
 		// silence is golden
 	}
 

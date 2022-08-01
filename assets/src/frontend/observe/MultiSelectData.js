@@ -1,14 +1,15 @@
 import InputData from './InputData';
 import MultipleConditionChecker
 	from '../conditional.logic/MultipleConditionChecker';
+import { isMultiSelect } from '../supports';
 
 class MultiSelectData extends InputData {
 
 	isSupported( node ) {
-		return 'select-multiple' === node.type;
+		return isMultiSelect( node );
 	}
 
-	addListener() {
+	addListeners() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', event => {

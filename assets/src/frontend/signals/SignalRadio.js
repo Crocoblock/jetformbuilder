@@ -1,24 +1,25 @@
 import BaseSignal from './BaseSignal';
+import { isRadio } from '../supports';
 
 class SignalRadio extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return 'radio' === node.type;
+	isSupported( node, inputData ) {
+		return isRadio( node );
 	}
 
-	runSignal( inputData ) {
-		inputData.calcValue = 0;
+	runSignal() {
+		this.input.calcValue = 0;
 
-		for ( const node of inputData.nodes ) {
-			node.checked = inputData.value.current === node.value;
+		for ( const node of this.input.nodes ) {
+			node.checked = this.input.value.current === node.value;
 
 			if ( ! node.checked ) {
 				continue;
 			}
 
-			inputData.calcValue += parseFloat( node.dataset?.calculate ?? node.value );
+			this.input.calcValue += parseFloat(
+				node.dataset?.calculate ?? node.value
+			);
 		}
 	}
 

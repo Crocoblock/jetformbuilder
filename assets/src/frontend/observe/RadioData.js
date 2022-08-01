@@ -3,10 +3,10 @@ import InputData from './InputData';
 class RadioData extends InputData {
 
 	isSupported( node ) {
-		return 'radio' === node.type;
+		return ;
 	}
 
-	addListener() {
+	addListeners() {
 		for ( const nodeElement of this.nodes ) {
 			nodeElement.addEventListener( 'change', event => {
 				this.setValue();

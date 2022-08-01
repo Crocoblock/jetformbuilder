@@ -1,10 +1,11 @@
 import InputData from './InputData';
 import { getParsedName } from './functions';
+import { isWysiwyg } from '../supports';
 
 class WysiwygData extends InputData {
 
 	isSupported( node ) {
-		return node.matches( '.wysiwyg-field' );
+		return isWysiwyg( node );
 	}
 
 	setNode( node ) {
@@ -39,7 +40,7 @@ class WysiwygData extends InputData {
 		this.editor.remove();
 	}
 
-	addListener() {
+	addListeners() {
 		const update = () => {
 			this.value.current = this.editor.getContent();
 		};

@@ -1,15 +1,18 @@
 import InputData from './InputData';
+import { isInputMask } from '../supports';
 
 class InputMaskedData extends InputData {
 
 	isSupported( node ) {
-		return (
-			node.classList.contains( 'jet-form-builder__masked-field' ) &&
-			jQuery.fn.inputmask
-		);
+		return isInputMask( node );
 	}
 
-	addListener() {
+	addListeners() {
+		const [ node ] = this.nodes;
+
+		node.addEventListener( 'blur', () => {
+			this.value.current = node.inputmask.unmaskedvalue();
+		} );
 	}
 
 	setNode( node ) {

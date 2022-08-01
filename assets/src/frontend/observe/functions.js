@@ -107,11 +107,7 @@ function createFileList( inputFileArray ) {
  * @param node {HTMLElement}
  */
 function isRequired( node ) {
-	if ( node.hasOwnProperty( 'required' ) ) {
-		return node.required;
-	}
-
-	return !!node.dataset.required?.length;
+	return node.required ?? !!node.dataset.required?.length;
 }
 
 export { createInput, getParsedName, createFileList, appendNodes, isRequired };

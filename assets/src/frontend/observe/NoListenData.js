@@ -3,10 +3,10 @@ import InputData from './InputData';
 class NoListenData extends InputData {
 
 	isSupported( node ) {
-		return 'hidden' === node.type;
+		return ;
 	}
 
-	addListener() {
+	addListeners() {
 		// silence is golden
 	}
 }

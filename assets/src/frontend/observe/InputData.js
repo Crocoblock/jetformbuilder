@@ -10,6 +10,7 @@ import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
 import SignalWysiwyg from '../signals/SignalWysiwyg';
+import ReportingField from '../reporting/ReportingField';
 
 /**
  * @type {(BaseSignal)[]}
@@ -42,6 +43,8 @@ class InputData {
 		 * @type {ConditionChecker}
 		 */
 		this.checker = this.conditionChecker();
+		this.reporting = this.reportingInterface();
+
 		/**
 		 * @type {Observable}
 		 */
@@ -70,7 +73,7 @@ class InputData {
 		this.nodes[ 0 ].reportValidity();
 	}
 
-	addListener() {
+	addListeners() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'input', event => {
@@ -79,7 +82,7 @@ class InputData {
 	}
 
 	makeReactive() {
-		this.addListener();
+		this.addListeners();
 		this.setValue();
 		this.setComment();
 
@@ -88,11 +91,12 @@ class InputData {
 
 	onChange() {
 		this.calcValue = this.value.current;
-		const callable = signalTypes.find(
-			( type ) => type.isSupported( this ),
-		);
 
-		callable.runSignal( this );
+		// apply changes in DOM
+		this.callable.runSignal();
+
+		// show errors
+		this.reporting.update();
 	}
 
 	watch( callable ) {
@@ -118,8 +122,16 @@ class InputData {
 
 	setNode( node ) {
 		this.nodes   = [ node ];
-		this.rawName = node.name;
+		this.rawName = node.name ?? '';
 		this.name    = getParsedName( this.rawName );
+
+		/**
+		 * @type {BaseSignal}
+		 */
+		this.callable = signalTypes.find(
+			( type ) => type.isSupported( node, this ),
+		);
+		this.callable.setInput( this );
 
 		/**
 		 * Save link to this object
@@ -152,12 +164,9 @@ class InputData {
 	 * @returns {boolean}
 	 */
 	validate() {
-		if ( !this.isRequired() || this.isValid() ) {
-			return true;
-		}
-		this.report();
-
-		return false;
+		return (
+			!this.isRequired() || this.isValid()
+		);
 	}
 
 	/**
@@ -166,6 +175,14 @@ class InputData {
 	 */
 	conditionChecker() {
 		return new ConditionChecker();
+	}
+
+	/**
+	 * @private
+	 * @returns {ReportingField}
+	 */
+	reportingInterface() {
+		return new ReportingField( this );
 	}
 
 	/**

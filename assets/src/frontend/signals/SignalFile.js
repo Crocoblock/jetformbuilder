@@ -1,40 +1,41 @@
 import BaseSignal from './BaseSignal';
 import { appendNodes, createFileList } from '../observe/functions';
+import { isFile } from '../supports';
 
+/**
+ * @property {FileData} input
+ */
 class SignalFile extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return 'file' === node.type;
+	isSupported( node, inputData ) {
+		return isFile( node );
 	}
 
-	/**
-	 * @param inputData {FileData|InputData}
-	 */
-	runSignal( inputData ) {
-		const [ node ]  = inputData.nodes;
-		const previews  = [];
-		const container = inputData.previewsContainer;
+	runSignal() {
+		const [ node ]    = this.input.nodes;
+		const previews    = [];
+		const container   = this.input.previewsContainer;
+		const { current } = this.input.value;
 
-		for ( const file of inputData.value.current ) {
-			previews.push( this.getPreview( inputData, file ) );
+		for ( const file of current ) {
+			previews.push( this.getPreview( file ) );
 		}
 
 		appendNodes( container, previews );
 
-		node.files = createFileList( [ ...inputData.value.current ] );
-		inputData.prevFiles = inputData.value.current;
+		node.files           = createFileList( [ ...current ] );
+		this.input.prevFiles = current;
 	}
 
-	getPreview( inputData, file ) {
-		const removeButton = inputData.previewsContainer.querySelector(
+	getPreview( file ) {
+		const container    = this.input.previewsContainer;
+		const removeButton = container.querySelector(
 			`[data-file-name="${ file.name }"]`,
 		);
 
 		if ( !removeButton ) {
-			const preview = this.createPreview( inputData, file );
-			inputData.addRemoveHandler( preview );
+			const preview = this.createPreview( file );
+			this.input.addRemoveHandler( preview );
 
 			return preview;
 		}
@@ -44,9 +45,9 @@ class SignalFile extends BaseSignal {
 		);
 	}
 
-	createPreview( inputData, file ) {
+	createPreview( file ) {
 		const url         = URL.createObjectURL( file );
-		let { innerHTML } = inputData.template;
+		let { innerHTML } = this.input.template;
 		innerHTML         = innerHTML.replace( '%file_url%', url );
 		innerHTML         = innerHTML.replace( '%file_name%', file.name );
 

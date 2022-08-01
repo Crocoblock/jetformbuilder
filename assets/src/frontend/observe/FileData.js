@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { createFileList } from './functions';
+import { isFile } from '../supports';
 
 class FileData extends InputData {
 
@@ -15,7 +16,7 @@ class FileData extends InputData {
 	}
 
 	isSupported( node ) {
-		return 'file' === node.type;
+		return isFile( node );
 	}
 
 	onChange() {
@@ -25,7 +26,7 @@ class FileData extends InputData {
 		this.sortable();
 	}
 
-	addListener() {
+	addListeners() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', event => {

@@ -1,13 +1,15 @@
 import InputData from './InputData';
-import MultipleConditionChecker from '../conditional.logic/MultipleConditionChecker';
+import MultipleConditionChecker
+	from '../conditional.logic/MultipleConditionChecker';
+import { isCheckbox } from '../supports';
 
 class CheckboxData extends InputData {
 
 	isSupported( node ) {
-		return 'checkbox' === node.type;
+		return isCheckbox( node );
 	}
 
-	addListener() {
+	addListeners() {
 		for ( const nodeElement of this.nodes ) {
 			nodeElement.addEventListener( 'change', event => {
 				this.setValue();
@@ -24,7 +26,9 @@ class CheckboxData extends InputData {
 	}
 
 	getActiveValue() {
-		return Array.from( this.nodes ).filter( item => item.checked ).map( item => item.value );
+		return Array.from( this.nodes ).
+			filter( item => item.checked ).
+			map( item => item.value );
 	}
 }
 

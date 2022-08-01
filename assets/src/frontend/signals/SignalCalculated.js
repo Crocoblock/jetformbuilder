@@ -1,32 +1,35 @@
 import BaseSignal from './BaseSignal';
+import { isCalculated } from '../supports';
 
+/**
+ * @property {CalculatedData} input
+ */
 class SignalCalculated extends BaseSignal {
 
-	isSupported( inputData ) {
-		const [ node ] = inputData.nodes;
-
-		return !! (
-			node.parentElement.dataset?.formula?.length ?? ''
-		);
+	isSupported( node, inputData ) {
+		return isCalculated( node );
 	}
 
-	/**
-	 * @param inputData {CalculatedData|InputData}
-	 */
-	runSignal( inputData ) {
-		const [ node ] = inputData.nodes;
+	runSignal() {
+		const [ node ] = this.input.nodes;
+		node.value     = this.input.value.current;
 
-		node.value = inputData.value.current;
-
-		inputData.visibleValNode.textContent = this.convertValue( inputData );
+		this.input.visibleValNode.textContent = this.convertValue();
 	}
 
-	/**
-	 * @param calculateData {CalculatedData}
-	 */
-	convertValue( { value, sepThousands, sepDecimal } ) {
+	convertValue() {
+		const {
+			      value,
+			      sepThousands,
+			      sepDecimal,
+		      } = this.input;
+
 		const parts = value.current.toString().split( '.' );
-		parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, sepThousands );
+
+		parts[ 0 ] = parts[ 0 ].replace(
+			/\B(?=(\d{3})+(?!\d))/g,
+			sepThousands,
+		);
 
 		return parts.join( sepDecimal );
 	}

@@ -21,6 +21,9 @@ class Media_Field_Parser extends Field_Data_Parser {
 	 * @throws Sanitize_Value_Exception
 	 */
 	public function get_response() {
+		if ( empty( $this->context->get_file() ) ) {
+			return false;
+		}
 		$uploader = ( new File_Uploader() )->set_context( $this->context );
 
 		try {

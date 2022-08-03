@@ -1,9 +1,10 @@
 import InputData from './InputData';
+import { isHidden } from '../supports';
 
 class NoListenData extends InputData {
 
 	isSupported( node ) {
-		return ;
+		return isHidden( node );
 	}
 
 	addListeners() {

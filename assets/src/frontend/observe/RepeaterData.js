@@ -16,6 +16,10 @@ class RepeaterData extends InputData {
 		return isRepeater( node );
 	}
 
+	valueType() {
+		return Array;
+	}
+
 	addListeners() {
 		this.buttonNode.addEventListener( 'click', () => {
 			this.value.current = [

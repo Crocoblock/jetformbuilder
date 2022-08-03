@@ -30,6 +30,10 @@ class CheckboxData extends InputData {
 			filter( item => item.checked ).
 			map( item => item.value );
 	}
+
+	valueType() {
+		return Array;
+	}
 }
 
 export default CheckboxData;

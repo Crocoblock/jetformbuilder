@@ -161,6 +161,10 @@ class FileData extends InputData {
 		this.value.current = dt.files;
 	}
 
+	valueType() {
+		return FileList;
+	}
+
 	/**
 	 * @private
 	 */

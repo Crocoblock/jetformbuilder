@@ -16,7 +16,7 @@ class MultiSelectData extends InputData {
 			const values = [];
 
 			for ( const option of event.target.options ) {
-				if ( ! option.selected ) {
+				if ( !option.selected ) {
 					continue;
 				}
 				values.push( option.value );
@@ -28,6 +28,10 @@ class MultiSelectData extends InputData {
 
 	conditionChecker() {
 		return new MultipleConditionChecker();
+	}
+
+	valueType() {
+		return Array;
 	}
 
 }

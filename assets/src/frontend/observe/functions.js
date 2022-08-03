@@ -10,6 +10,9 @@ import FileData from './FileData';
 import WysiwygData from './WysiwygData';
 import InputMaskedData from './InputMaskedData';
 
+import BrowserReporting from '../reporting/BrowserReporting';
+import AdvancedReporting from '../reporting/AdvancedReporting';
+
 /**
  * @type {(InputData)[]}
  */
@@ -25,6 +28,11 @@ const dataTypes = [
 	NoListenData,
 	InputMaskedData,
 	InputData,
+];
+
+const reportTypes = [
+	AdvancedReporting,
+	BrowserReporting,
 ];
 
 /**
@@ -110,4 +118,30 @@ function isRequired( node ) {
 	return node.required ?? !!node.dataset.required?.length;
 }
 
-export { createInput, getParsedName, createFileList, appendNodes, isRequired };
+/**
+ * @param input {InputData}
+ * @return {AdvancedReporting|BrowserReporting}
+ */
+function createReport( input ) {
+	for ( const reportType of reportTypes ) {
+		const current = new reportType();
+
+		if ( !current.isSupported( input.nodes[ 0 ], input ) ) {
+			continue;
+		}
+		current.setInput( input );
+
+		return current;
+	}
+
+	throw new Error( 'Something went wrong' );
+}
+
+export {
+	createInput,
+	getParsedName,
+	createFileList,
+	appendNodes,
+	isRequired,
+	createReport,
+};

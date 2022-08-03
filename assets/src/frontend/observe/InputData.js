@@ -4,13 +4,13 @@ import SignalCheckbox from '../signals/SignalCheckbox';
 import SignalRadio from '../signals/SignalRadio';
 import SignalText from '../signals/SignalText';
 import SignalRepeater from '../signals/SignalRepeater';
-import { getParsedName, isRequired } from './functions';
+import { createReport, getParsedName, isRequired } from './functions';
 import SignalCalculated from '../signals/SignalCalculated';
 import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
 import SignalWysiwyg from '../signals/SignalWysiwyg';
-import ReportingField from '../reporting/ReportingField';
+import ReportingField from '../reporting/ReportingInterface';
 
 /**
  * @type {(BaseSignal)[]}
@@ -43,12 +43,21 @@ class InputData {
 		 * @type {ConditionChecker}
 		 */
 		this.checker = this.conditionChecker();
-		this.reporting = this.reportingInterface();
+
+		/**
+		 * @type {AdvancedReporting|BrowserReporting}
+		 */
+		this.reporting = null;
 
 		/**
 		 * @type {Observable}
 		 */
 		this.root = null;
+
+		/**
+		 * @type {PageState}
+		 */
+		this.page = null;
 	}
 
 	isSupported( node ) {
@@ -60,17 +69,6 @@ class InputData {
 	 */
 	isRequired() {
 		return isRequired( this.nodes[ 0 ] );
-	}
-
-	/**
-	 * @returns {boolean}
-	 */
-	isValid() {
-		return this.nodes[ 0 ].checkValidity();
-	}
-
-	report() {
-		this.nodes[ 0 ].reportValidity();
 	}
 
 	addListeners() {
@@ -94,9 +92,6 @@ class InputData {
 
 		// apply changes in DOM
 		this.callable.runSignal();
-
-		// show errors
-		this.reporting.update();
 	}
 
 	watch( callable ) {
@@ -133,6 +128,8 @@ class InputData {
 		);
 		this.callable.setInput( this );
 
+		this.reporting = createReport( this );
+
 		/**
 		 * Save link to this object
 		 * @type {InputData}
@@ -161,28 +158,11 @@ class InputData {
 	}
 
 	/**
-	 * @returns {boolean}
-	 */
-	validate() {
-		return (
-			!this.isRequired() || this.isValid()
-		);
-	}
-
-	/**
 	 * @private
 	 * @returns {ConditionChecker}
 	 */
 	conditionChecker() {
 		return new ConditionChecker();
-	}
-
-	/**
-	 * @private
-	 * @returns {ReportingField}
-	 */
-	reportingInterface() {
-		return new ReportingField( this );
 	}
 
 	/**
@@ -213,32 +193,11 @@ class InputData {
 		return this.rawName.includes( '[]' );
 	}
 
-	insertError( message ) {
-		const [ node ] = this.nodes;
-		const error    = this.createError( node, message );
-
-		node.classList.add( 'field-has-error' );
-
-		if ( !error.isConnected ) {
-			node.appendChild( error );
-		}
-	}
-
-	createError( node, message ) {
-		const error = node.querySelector( '.error-message' );
-
-		if ( error ) {
-			error.innerHTML = message;
-
-			return error;
-		}
-
-		const div = document.createElement( 'div' );
-
-		div.classList.add( 'error-message' );
-		div.innerHTML = message;
-
-		return div;
+	/**
+	 * @return {*}
+	 */
+	valueType() {
+		return String;
 	}
 
 	/**
@@ -248,6 +207,15 @@ class InputData {
 		return this.root.form
 		       ? this.root.form
 		       : this.root.parent.root.form;
+	}
+
+	/**
+	 * @param page {PageState}
+	 */
+	setPage( page ) {
+		this.page = page;
+
+		this.watch( () => page.updateState() );
 	}
 }
 

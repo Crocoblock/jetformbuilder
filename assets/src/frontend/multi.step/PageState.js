@@ -41,9 +41,14 @@ class PageState {
 
 			this.inputs.push( node.jfbSync );
 
-			node.jfbSync.watch( () => this.updateState() );
+			node.jfbSync.setPage( this );
 		}
 
+		/**
+		 * Buttons for switching between pages are hidden conditional blocks
+		 * that perform their function (disable)
+		 * if all required fields are filled in the page.
+		 */
 		for ( const node of this.node.querySelectorAll(
 			'[data-jfb-conditional]',
 		) ) {
@@ -91,12 +96,23 @@ class PageState {
 				'jet-form-builder__prev-page',
 			);
 
-			switchButton.addEventListener( 'click', () => {
-				this.state.index.current = isPrev
-				                           ? this.index - 1
-				                           : this.index + 1;
-			} );
+			switchButton.addEventListener(
+				'click',
+				() => this.changePage( isPrev ),
+			);
 		}
+	}
+
+	changePage( isBack ) {
+		this.updateState();
+
+		if ( !this.canSwitch.current ) {
+			return;
+		}
+
+		this.state.index.current = isBack
+		                           ? this.index - 1
+		                           : this.index + 1;
 	}
 
 	isValidInputs() {

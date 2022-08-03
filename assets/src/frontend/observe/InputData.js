@@ -92,6 +92,7 @@ class InputData {
 
 		// apply changes in DOM
 		this.callable.runSignal();
+		this.reporting.validateWithNotice();
 	}
 
 	watch( callable ) {

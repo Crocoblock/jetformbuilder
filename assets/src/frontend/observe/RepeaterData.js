@@ -16,8 +16,9 @@ class RepeaterData extends InputData {
 		return isRepeater( node );
 	}
 
+	// custom
 	valueType() {
-		return Array;
+		return false;
 	}
 
 	addListeners() {
@@ -59,20 +60,6 @@ class RepeaterData extends InputData {
 		this.container  = node.querySelector(
 			'.jet-form-builder-repeater__items',
 		);
-	}
-
-	validate() {
-		if ( this.isRequired() && !this.value.current?.length ) {
-			return false;
-		}
-
-		for ( const observable of this.value.current ) {
-			if ( !observable.inputsAreValid() ) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 }

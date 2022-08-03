@@ -2,19 +2,25 @@ import Restriction from './Restriction';
 
 class NotEnoughChars extends Restriction {
 
-	constructor( report ) {
-		super( report );
+	isSupported( node, reporting ) {
+		return 0 <= node?.minLength;
+	}
 
-		const [ node ] = this.reporting.input.nodes;
+	setReporting( reporting ) {
+		const [ node ] = reporting.input.nodes;
 		this.min       = node.minLength;
+
+		super.setReporting( reporting );
 	}
 
 	validate() {
-		if ( String !== this.reporting.input.valueType() ) {
-			return false;
-		}
-
 		return this.getValue()?.length >= this.min;
 	}
 
+	getRawMessage() {
+		return this.getMessageBySlug( 'char_min' );
+	}
+
 }
+
+export default NotEnoughChars;

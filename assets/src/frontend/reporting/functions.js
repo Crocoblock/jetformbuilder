@@ -35,8 +35,8 @@ function getMessageBySlug( restriction, slug ) {
 		return message;
 	}
 
-	const form     = reporting.input.getSubmit();
-	const messages = window.JetFormsValidation[ form.getFormId() ] ?? {};
+	const form         = reporting.input.getSubmit();
+	const { messages } = window.JetFormsValidation[ form.getFormId() ] ?? {};
 
 	return messages[ slug ] ?? '';
 }

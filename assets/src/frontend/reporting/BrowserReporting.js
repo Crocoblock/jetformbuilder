@@ -6,12 +6,19 @@ class BrowserReporting extends ReportingInterface {
 		return true;
 	}
 
-	report() {
+	report( validationErrors ) {
 		this.getNode().reportValidity();
 	}
 
 	isValid() {
-		return this.getNode().checkValidity();
+		if ( !this.getNode()?.checkValidity ) {
+			return [];
+		}
+		return this.getNode().checkValidity() ? [] : [ true ];
+	}
+
+	clearReport() {
+		// browser automatically hide tooltip messages
 	}
 
 }

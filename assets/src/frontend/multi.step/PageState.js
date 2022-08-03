@@ -79,8 +79,8 @@ class PageState {
 		this.node.classList.add( 'jet-form-builder-page--hidden' );
 	}
 
-	updateState() {
-		this.canSwitch.current = this.isValidInputs();
+	updateState( withNotice = false ) {
+		this.canSwitch.current = this.isValidInputs( withNotice );
 	}
 
 	addButtonsListeners() {
@@ -104,20 +104,28 @@ class PageState {
 	}
 
 	changePage( isBack ) {
+		if ( isBack ) {
+			this.state.index.current = this.index - 1;
+
+			return;
+		}
+
 		this.updateState();
 
 		if ( !this.canSwitch.current ) {
 			return;
 		}
 
-		this.state.index.current = isBack
-		                           ? this.index - 1
-		                           : this.index + 1;
+		this.state.index.current = this.index + 1;
 	}
 
-	isValidInputs() {
+	isValidInputs( withNotice = false ) {
 		for ( const input of this.getInputs() ) {
-			if ( input.validate() ) {
+			const callback = withNotice
+			                 ? input.reporting.validateWithNotice
+			                 : input.reporting.validate;
+
+			if ( callback.call( input.reporting ) ) {
 				continue;
 			}
 			return false;

@@ -115,7 +115,7 @@ class Observable {
 			}
 			const input = this.getInput( inputName );
 
-			if ( !input.validate() ) {
+			if ( !input.reporting.validate() ) {
 				return false;
 			}
 		}

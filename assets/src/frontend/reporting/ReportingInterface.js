@@ -13,15 +13,18 @@ class ReportingInterface {
 	validateWithNotice() {
 		const errors = this.getErrors();
 
-		if ( !errors.length ) {
+		if ( errors.length ) {
 			this.report( errors );
 		}
+		else {
+			this.clearReport();
+		}
 
-		return !!errors.length;
+		return !errors.length;
 	}
 
 	validate() {
-		return !!this.getErrors()?.length;
+		return !this.getErrors()?.length;
 	}
 
 	/**
@@ -37,6 +40,10 @@ class ReportingInterface {
 	 */
 	report( validationErrors ) {
 		throw new Error( 'report is empty' );
+	}
+
+	clearReport() {
+		throw new Error( 'clearReport is empty' );
 	}
 
 	/**

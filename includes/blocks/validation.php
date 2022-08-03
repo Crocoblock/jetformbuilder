@@ -10,6 +10,7 @@ use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Complete_Mask;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Valid_Email;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Valid_Url;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
@@ -47,6 +48,20 @@ class Validation implements Arrayable {
 		add_action(
 			'jet-form-builder/before-start-form-row',
 			array( $this, 'add_validation_messages_block' )
+		);
+	}
+
+	/**
+	 * @return Base_Message[]
+	 */
+	private function get_messages(): array {
+		return array(
+			new Is_Char_Max(),
+			new Is_Char_Min(),
+			new Is_Empty_Value(),
+			new Is_Not_Valid_Email(),
+			new Is_Not_Valid_Url(),
+			new Is_Not_Complete_Mask(),
 		);
 	}
 
@@ -153,19 +168,6 @@ class Validation implements Arrayable {
 	 */
 	public function messages(): array {
 		return $this->messages;
-	}
-
-	/**
-	 * @return Base_Message[]
-	 */
-	private function get_messages(): array {
-		return array(
-			new Is_Char_Max(),
-			new Is_Char_Min(),
-			new Is_Empty_Value(),
-			new Is_Not_Valid_Email(),
-			new Is_Not_Valid_Url(),
-		);
 	}
 
 	public function to_array(): array {

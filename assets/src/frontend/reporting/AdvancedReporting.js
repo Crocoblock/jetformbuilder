@@ -1,6 +1,6 @@
 import ReportingInterface from './ReportingInterface';
 import { getValidationMessages, getValidationType } from './functions';
-import NotEmptyRestriction from './restrictions/NotEmptyRestriction';
+import { getRestrictions } from './restrictions/functions';
 
 class AdvancedReporting extends ReportingInterface {
 
@@ -45,18 +45,25 @@ class AdvancedReporting extends ReportingInterface {
 		this.messages = getValidationMessages( input.nodes[ 0 ] );
 
 		this.restrictions = (
-			this.isRequired ? this.getPreparedRestrictions() : []
+			this.isRequired ? this.getRestrictions() : []
 		);
 	}
 
-	getPreparedRestrictions() {
-		return this.getRestrictions().map( item => new item( this ) );
+	getRestrictions() {
+		return getRestrictions( this );
 	}
 
-	getRestrictions() {
-		return [
-			NotEmptyRestriction,
-		];
+	clearReport() {
+		const node = this.getNode();
+		node.classList.remove( 'field-has-error' );
+
+		const error = node.parentElement.querySelector( '.error-message' );
+
+		if ( !error ) {
+			return;
+		}
+
+		error.remove();
 	}
 
 	insertError( message ) {
@@ -66,12 +73,12 @@ class AdvancedReporting extends ReportingInterface {
 		node.classList.add( 'field-has-error' );
 
 		if ( !error.isConnected ) {
-			node.appendChild( error );
+			node.parentElement.appendChild( error );
 		}
 	}
 
 	createError( node, message ) {
-		const error = node.querySelector( '.error-message' );
+		const error = node.parentElement.querySelector( '.error-message' );
 
 		if ( error ) {
 			error.innerHTML = message;

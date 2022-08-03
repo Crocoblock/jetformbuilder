@@ -1,4 +1,5 @@
 import { getMessageBySlug } from '../functions';
+import { getSupportedMacros } from '../macros/functions';
 
 class Restriction {
 
@@ -7,6 +8,15 @@ class Restriction {
 		 * @type {AdvancedReporting}
 		 */
 		this.reporting = null;
+		this.macros = {};
+	}
+
+	/**
+	 * @param node {HTMLElement|HTMLInputElement}
+	 * @param reporting {AdvancedReporting}
+	 */
+	isSupported( node, reporting ) {
+		return true;
 	}
 
 	/**
@@ -14,6 +24,14 @@ class Restriction {
 	 */
 	setReporting( reporting ) {
 		this.reporting = reporting;
+		this.macros    = this.getSupportedMacros();
+	}
+
+	/**
+	 * @return {Object}
+	 */
+	getSupportedMacros() {
+		return getSupportedMacros( this );
 	}
 
 	getValue() {
@@ -27,13 +45,37 @@ class Restriction {
 		throw new Error( 'validate is wrong' );
 	}
 
+	getMessage() {
+		if ( ! Object.keys( this.macros )?.length ) {
+			return this.getRawMessage();
+		}
+		return this.getRawMessage().replace(
+			/@([\w\.]+)/g,
+			( all, macro ) => {
+				const [ macroSlug, ...filters ] = macro.split( '.' );
+
+				if ( !this.macros.hasOwnProperty( macroSlug ) ) {
+					return all;
+				}
+
+				/**
+				 * @type {DynamicMacro}
+				 */
+				macro = this.macros[ macroSlug ];
+				macro.setFilters( filters );
+
+				return macro.apply();
+			},
+		);
+	}
+
 	/**
 	 * Here you need to return a prepared message,
 	 * with processed macros
 	 *
 	 * @return {string}
 	 */
-	getMessage() {
+	getRawMessage() {
 		return 'Error';
 	}
 

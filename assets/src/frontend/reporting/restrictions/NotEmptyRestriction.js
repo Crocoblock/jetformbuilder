@@ -2,6 +2,12 @@ import Restriction from './Restriction';
 
 class NotEmptyRestriction extends Restriction {
 
+	isSupported( node, reporting ) {
+		return [ String, Array, FileList ].includes(
+			reporting.input.valueType(),
+		);
+	}
+
 	validate() {
 		const value = this.getValue();
 
@@ -15,12 +21,14 @@ class NotEmptyRestriction extends Restriction {
 			case Array:
 			case FileList:
 				return !!value.length;
-			default:
-				return !!value;
 		}
 	}
 
-	getMessage() {
+	getSupportedMacros() {
+		return {};
+	}
+
+	getRawMessage() {
 		return this.getMessageBySlug( 'empty' );
 	}
 

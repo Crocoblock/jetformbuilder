@@ -174,7 +174,10 @@ export default function TextEdit( props ) {
 						<ValidationBlockMessage name="email"/>
 					) }
 					{ 'url' === attributes.field_type && (
-						<ValidationMessage name="url"/>
+						<ValidationBlockMessage name="url"/>
+					) }
+					{ attributes.enable_input_mask && (
+						<ValidationBlockMessage name="inputmask"/>
 					) }
 					<ValidationBlockMessage name="empty"/>
 					<ValidationBlockMessage name="char_max"/>

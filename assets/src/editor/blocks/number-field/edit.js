@@ -1,23 +1,27 @@
 const {
-		  ToolBarFields,
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldWrapper,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
+	      ToolBarFields,
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+	      ValidationToggleGroup,
+	      ValidationBlockMessage,
+      } = JetFBComponents;
+
+const { useIsAdvancedValidation } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
-		  InspectorControls,
-		  useBlockProps,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  PanelBody,
-		  __experimentalInputControl,
-		  __experimentalNumberControl,
-	  } = wp.components;
+	      PanelBody,
+	      __experimentalInputControl,
+	      __experimentalNumberControl,
+      } = wp.components;
 
 let { InputControl, NumberControl } = wp.components;
 
@@ -31,17 +35,19 @@ if ( typeof NumberControl === 'undefined' ) {
 
 export default function NumberEdit( props ) {
 	const blockProps = useBlockProps();
+	const isAdvancedValidation = useIsAdvancedValidation();
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  editProps: { uniqKey },
-		  } = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey },
+	      } = props;
 
 	const changeNumberValue = ( key, newValue ) => {
-		props.setAttributes( { [ key ]: newValue ? parseFloat( newValue ) : null } );
-	}
+		props.setAttributes(
+			{ [ key ]: newValue ? parseFloat( newValue ) : null } );
+	};
 
 	return [
 		<ToolBarFields
@@ -59,27 +65,40 @@ export default function NumberEdit( props ) {
 				<FieldSettingsWrapper { ...props }>
 					<NumberControl
 						label={ __( 'Min Value' ) }
-						labelPosition='top'
-						key='min'
+						labelPosition="top"
+						key="min"
 						value={ attributes.min }
-						onChange={ newValue => changeNumberValue( 'min', newValue ) }
+						onChange={ newValue => changeNumberValue( 'min',
+							newValue ) }
 					/>
 					<NumberControl
 						label={ __( 'Max Value' ) }
-						labelPosition='top'
-						key='max'
+						labelPosition="top"
+						key="max"
 						value={ attributes.max }
-						onChange={ newValue => changeNumberValue( 'max', newValue ) }
+						onChange={ newValue => changeNumberValue( 'max',
+							newValue ) }
 					/>
 					<NumberControl
 						label={ __( 'Step' ) }
-						labelPosition='top'
-						key='step'
+						labelPosition="top"
+						key="step"
 						step={ 0.01 }
 						value={ attributes.step }
-						onChange={ newValue => changeNumberValue( 'step', newValue ) }
+						onChange={ newValue => changeNumberValue( 'step',
+							newValue ) }
 					/>
 				</FieldSettingsWrapper>
+				<PanelBody
+					title={ __( 'Validation', 'jet-form-builder' ) }
+				>
+					<ValidationToggleGroup/>
+					{ isAdvancedValidation && <>
+						<ValidationBlockMessage name="empty"/>
+						<ValidationBlockMessage name="number_max"/>
+						<ValidationBlockMessage name="number_min"/>
+					</> }
+				</PanelBody>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }

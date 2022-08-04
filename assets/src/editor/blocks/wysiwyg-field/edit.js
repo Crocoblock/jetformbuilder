@@ -18,6 +18,7 @@ const {
 
 const {
 	      TextareaControl,
+	      PanelBody,
       } = wp.components;
 
 export default function WysiwygEdit( props ) {

@@ -8,11 +8,21 @@ function getWrapper( node ) {
 /**
  * @param node {HTMLElement}
  */
-function getValidationType( node ) {
+function getNodeValidationType( node ) {
 	const wrapper                 = getWrapper( node );
 	const { validationType = '' } = wrapper?.dataset ?? {};
 
 	return validationType;
+}
+
+/**
+ * @param input {InputData}
+ */
+function getInheritValidationType( input ) {
+	const form          = input.getSubmit();
+	const { type = '' } = window.JetFormsValidation[ form.getFormId() ] ?? {};
+
+	return type;
 }
 
 function getValidationMessages( node ) {
@@ -31,7 +41,7 @@ function getMessageBySlug( restriction, slug ) {
 	const { reporting } = restriction;
 	const message       = reporting.messages[ slug ] ?? '';
 
-	if ( message ) {
+	if ( message && 'inherit' !== reporting.type ) {
 		return message;
 	}
 
@@ -42,7 +52,8 @@ function getMessageBySlug( restriction, slug ) {
 }
 
 export {
-	getValidationType,
+	getNodeValidationType,
+	getInheritValidationType,
 	getValidationMessages,
 	getMessageBySlug,
 };

@@ -46,22 +46,22 @@ class Restriction {
 	}
 
 	getMessage() {
-		if ( ! Object.keys( this.macros )?.length ) {
+		if ( !Object.keys( this.macros )?.length ) {
 			return this.getRawMessage();
 		}
 		return this.getRawMessage().replace(
-			/@([\w\.]+)/g,
-			( all, macro ) => {
-				const [ macroSlug, ...filters ] = macro.split( '.' );
+			/%(.+?)%/g,
+			( all, fullMacro ) => {
+				let [ macro, ...filters ] = fullMacro.split( '|' );
 
-				if ( !this.macros.hasOwnProperty( macroSlug ) ) {
+				if ( !this.macros.hasOwnProperty( macro ) ) {
 					return all;
 				}
 
 				/**
 				 * @type {DynamicMacro}
 				 */
-				macro = this.macros[ macroSlug ];
+				macro = this.macros[ macro ];
 				macro.setFilters( filters );
 
 				return macro.apply();

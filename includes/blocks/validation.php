@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Blocks\Types\Text_Field;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
@@ -13,6 +14,8 @@ use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Complete_Mask;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Valid_Email;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Valid_Url;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_Number_Max;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_Number_Min;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
@@ -56,6 +59,8 @@ class Validation implements Arrayable {
 	 */
 	private function get_messages(): array {
 		return array(
+			new Is_Number_Max(),
+			new Is_Number_Min(),
 			new Is_Char_Max(),
 			new Is_Char_Min(),
 			new Is_Empty_Value(),
@@ -96,7 +101,7 @@ class Validation implements Arrayable {
 		}
 		$type = $this->get_block_type( $block );
 
-		$block->add_attribute( 'data-validation-type', $type );
+		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
 
 		/**
 		 * If advanced validation not enabled right in block settings

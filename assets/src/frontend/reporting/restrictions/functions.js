@@ -3,9 +3,17 @@ import NotEnoughChars from './NotEnoughChars';
 import ReachLimitChars from './ReachLimitChars';
 import NotEmptyRepeater from './NotEmptyRepeater';
 import NotCompleteInputmask from './NotCompleteInputmask';
+import NotEmail from './NotEmail';
+import NotUrl from './NotUrl';
+import ReachLimitNumbers from './ReachLimitNumbers';
+import NotEnoughNumbers from './NotEnoughNumbers';
 
 const restrictions = () => (
 	[
+		new ReachLimitNumbers(),
+		new NotEnoughNumbers(),
+		new NotUrl(),
+		new NotEmail(),
 		new NotCompleteInputmask(),
 		new NotEmptyRepeater(),
 		new NotEnoughChars(),

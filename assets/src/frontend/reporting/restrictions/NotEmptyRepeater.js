@@ -14,7 +14,7 @@ class NotEmptyRepeater extends NotEmptyRestriction {
 			return false;
 		}
 
-		for ( const observable of value.current ) {
+		for ( const observable of value ) {
 			if ( !observable.inputsAreValid() ) {
 				return false;
 			}

@@ -70,15 +70,6 @@ class Observable {
 		) ) {
 			this.pushData( createInput( formElement, this ) );
 		}
-
-		for ( const name in this.dataInputs ) {
-			if ( !this.dataInputs.hasOwnProperty( name ) ) {
-				continue;
-			}
-			const current = this.dataInputs[ name ];
-
-			current.watch( () => current.onChange() );
-		}
 	}
 
 	initConditionalBlocks() {
@@ -142,13 +133,15 @@ class Observable {
 			if ( !this.dataInputs.hasOwnProperty( fieldName ) ) {
 				continue;
 			}
-			const current = this.dataInputs[ fieldName ];
+			const current = this.getInput( fieldName );
 			current.makeReactive();
+
+			current.watch( () => current.onChange() );
 
 			if ( this.parent ) {
 				current.watch( () => {
-					this.parent.value.current = (this.parent.value.current);
-				} )
+					this.parent.value.notify();
+				} );
 			}
 
 			Object.defineProperty( this.data, fieldName, {

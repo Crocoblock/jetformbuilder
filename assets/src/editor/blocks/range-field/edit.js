@@ -1,22 +1,26 @@
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+	      ValidationToggleGroup,
+	      ValidationBlockMessage,
+      } = JetFBComponents;
+
+const { useIsAdvancedValidation } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	PanelBody,
-	__experimentalNumberControl,
-	__experimentalInputControl
-} = wp.components;
+	      TextControl,
+	      PanelBody,
+	      __experimentalNumberControl,
+	      __experimentalInputControl,
+      } = wp.components;
 
 const { useState } = wp.element;
 
@@ -32,15 +36,16 @@ if ( typeof InputControl === 'undefined' ) {
 
 export default function RangeEdit( props ) {
 
-	const blockProps = useBlockProps();
+	const blockProps           = useBlockProps();
+	const isAdvancedValidation = useIsAdvancedValidation();
 
 	const [ rangeValue, setRangeValue ] = useState( 50 );
 
 	const {
-		attributes,
-		setAttributes,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+		      attributes,
+		      setAttributes,
+		      editProps: { uniqKey, attrHelp },
+	      } = props;
 
 	return [
 		props.isSelected && (
@@ -57,8 +62,8 @@ export default function RangeEdit( props ) {
 				>
 					<NumberControl
 						label={ __( 'Min Value' ) }
-						labelPosition='top'
-						key='min'
+						labelPosition="top"
+						key="min"
 						value={ attributes.min }
 						onChange={ ( newValue ) => {
 							setAttributes( { min: parseFloat( newValue ) } );
@@ -66,8 +71,8 @@ export default function RangeEdit( props ) {
 					/>
 					<NumberControl
 						label={ __( 'Max Value' ) }
-						labelPosition='top'
-						key='max'
+						labelPosition="top"
+						key="max"
 						value={ attributes.max }
 						onChange={ ( newValue ) => {
 							setAttributes( { max: parseFloat( newValue ) } );
@@ -75,15 +80,15 @@ export default function RangeEdit( props ) {
 					/>
 					<NumberControl
 						label={ __( 'Step' ) }
-						labelPosition='top'
-						key='step'
+						labelPosition="top"
+						key="step"
 						value={ attributes.step }
 						onChange={ ( newValue ) => {
 							setAttributes( { step: parseFloat( newValue ) } );
 						} }
 					/>
 					<TextControl
-						key='prefix'
+						key="prefix"
 						label={ __( 'Value prefix' ) }
 						value={ attributes.prefix }
 						help={ attrHelp( 'prefix_suffix' ) }
@@ -92,7 +97,7 @@ export default function RangeEdit( props ) {
 						} }
 					/>
 					<TextControl
-						key='suffix'
+						key="suffix"
 						label={ __( 'Value suffix' ) }
 						value={ attributes.suffix }
 						help={ attrHelp( 'prefix_suffix' ) }
@@ -101,6 +106,16 @@ export default function RangeEdit( props ) {
 						} }
 					/>
 
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Validation', 'jet-form-builder' ) }
+				>
+					<ValidationToggleGroup/>
+					{ isAdvancedValidation && <>
+						<ValidationBlockMessage name="empty"/>
+						<ValidationBlockMessage name="number_max"/>
+						<ValidationBlockMessage name="number_min"/>
+					</> }
 				</PanelBody>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
@@ -112,7 +127,7 @@ export default function RangeEdit( props ) {
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				wrapClasses={ [
-					'range-wrap'
+					'range-wrap',
 				] }
 				{ ...props }
 			>
@@ -126,12 +141,14 @@ export default function RangeEdit( props ) {
 						onChange={ setRangeValue }
 					/>
 					<div className={ 'jet-form-builder__field-value' }>
-						<span className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
+						<span
+							className={ 'jet-form-builder__field-value-prefix' }>{ attributes.prefix }</span>
 						<span>{ rangeValue }</span>
-						<span className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
+						<span
+							className={ 'jet-form-builder__field-value-suffix' }>{ attributes.suffix }</span>
 					</div>
 				</div>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

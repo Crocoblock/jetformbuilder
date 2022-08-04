@@ -17,6 +17,10 @@
 		"html": false
 	},
 	"attributes": {
+		"validation": {
+			"type": "object",
+			"default": {}
+		},
 		"format": {
 			"type": "string",
 			"default": "location_string"

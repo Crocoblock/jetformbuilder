@@ -19,11 +19,6 @@ class InputMaskedData extends InputData {
 		super.setNode( node );
 
 		jQuery( node ).inputmask();
-	}
-
-	setRoot( observable ) {
-		super.setRoot( observable );
-
 		this.getSubmit().submitter.promise( this.removeMask.bind( this ) );
 	}
 

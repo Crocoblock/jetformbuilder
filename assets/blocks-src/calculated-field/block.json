@@ -16,6 +16,10 @@
 		"html": false
 	},
 	"attributes": {
+		"validation": {
+			"type": "object",
+			"default": {}
+		},
 		"separate_decimals": {
 			"type": "string",
 			"default": "."

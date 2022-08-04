@@ -18,7 +18,7 @@ class DynamicMacro {
 		let value = this.value();
 
 		for ( const filter of this.filters ) {
-			value = filter.apply( value );
+			value = filter.applyWithProps( value );
 		}
 
 		return value;

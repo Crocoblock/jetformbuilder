@@ -1,5 +1,9 @@
 class Filter {
 
+	constructor() {
+		this.props = [];
+	}
+
 	/**
 	 * @return {string}
 	 */
@@ -7,11 +11,20 @@ class Filter {
 		throw new Error( 'getSlug is empty' );
 	}
 
+	setProps( props ) {
+		this.props.push( ...props );
+	}
+
+	applyWithProps( value ) {
+		return this.apply( value, ...this.props );
+	}
+
 	/**
 	 * @param value
+	 * @param props
 	 * @return {*}
 	 */
-	apply( value ) {
+	apply( value, ...props ) {
 		return value;
 	}
 

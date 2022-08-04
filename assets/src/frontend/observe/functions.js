@@ -12,11 +12,13 @@ import InputMaskedData from './InputMaskedData';
 
 import BrowserReporting from '../reporting/BrowserReporting';
 import AdvancedReporting from '../reporting/AdvancedReporting';
+import RangeData from './RangeData';
 
 /**
  * @type {(InputData)[]}
  */
 const dataTypes = [
+	RangeData,
 	WysiwygData,
 	FileData,
 	MultiSelectData,
@@ -47,8 +49,8 @@ function createInput( node, observable ) {
 		if ( !current.isSupported( node ) ) {
 			continue;
 		}
-		current.setNode( node );
 		current.setRoot( observable );
+		current.setNode( node );
 
 		return current;
 	}

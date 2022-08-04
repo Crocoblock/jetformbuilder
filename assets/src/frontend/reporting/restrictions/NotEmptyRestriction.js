@@ -17,7 +17,11 @@ class NotEmptyRestriction extends Restriction {
 
 		switch ( this.reporting.input.valueType() ) {
 			case String:
-				return !!value.toString()?.length;
+				const strVal = (
+					value ?? ''
+				).toString();
+
+				return !!strVal.length;
 			case Array:
 			case FileList:
 				return !!value.length;

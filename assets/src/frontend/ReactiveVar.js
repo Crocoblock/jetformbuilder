@@ -1,6 +1,8 @@
 class ReactiveVar {
 
-	constructor( defaultValue ) {
+	constructor(
+		defaultValue,
+	) {
 		this.current = defaultValue;
 		this.signals = [];
 	}
@@ -18,10 +20,17 @@ class ReactiveVar {
 				return current;
 			},
 			set( newVal ) {
+				if ( current === newVal ) {
+					return;
+				}
 				current = newVal;
-				self.signals.forEach( signal => signal() );
+				self.notify();
 			},
 		} );
+	}
+
+	notify() {
+		this.signals.forEach( signal => signal() );
 	}
 }
 

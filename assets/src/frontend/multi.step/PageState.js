@@ -34,7 +34,7 @@ class PageState {
 			if (
 				!this.isNodeBelongThis( node ) ||
 				!node.hasOwnProperty( 'jfbSync' ) ||
-				!node.jfbSync.isRequired()
+				!node.jfbSync.reporting.isRequired
 			) {
 				continue;
 			}

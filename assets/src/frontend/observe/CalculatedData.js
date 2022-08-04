@@ -29,9 +29,7 @@ class CalculatedData extends InputData {
 		super.makeReactive();
 
 		// run signals
-		this.value.current = (
-			this.value.current
-		);
+		this.value.notify();
 	}
 
 	reCalculate() {

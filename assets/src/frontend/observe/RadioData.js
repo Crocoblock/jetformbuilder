@@ -1,9 +1,10 @@
 import InputData from './InputData';
+import { isRadio } from '../supports';
 
 class RadioData extends InputData {
 
 	isSupported( node ) {
-		return ;
+		return isRadio( node );
 	}
 
 	addListeners() {

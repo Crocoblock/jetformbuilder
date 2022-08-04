@@ -11,11 +11,13 @@ import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
 import SignalWysiwyg from '../signals/SignalWysiwyg';
 import ReportingField from '../reporting/ReportingInterface';
+import SignalRange from '../signals/SignalRange';
 
 /**
  * @type {(BaseSignal)[]}
  */
 const signalTypes = [
+	new SignalRange(),
 	new SignalWysiwyg(),
 	new SignalFile(),
 	new SignalMultiSelect(),
@@ -36,7 +38,10 @@ class InputData {
 		this.nodes              = [];
 		this.relatedConditional = [];
 
-		this.value     = new ReactiveVar( null );
+		/**
+		 * @type {ReactiveVar}
+		 */
+		this.value = null;
 		this.calcValue = null;
 
 		/**
@@ -64,13 +69,6 @@ class InputData {
 		return true;
 	}
 
-	/**
-	 * @returns {boolean}
-	 */
-	isRequired() {
-		return isRequired( this.nodes[ 0 ] );
-	}
-
 	addListeners() {
 		const [ node ] = this.nodes;
 
@@ -80,6 +78,7 @@ class InputData {
 	}
 
 	makeReactive() {
+		this.onObserve();
 		this.addListeners();
 		this.setValue();
 		this.setComment();
@@ -120,6 +119,20 @@ class InputData {
 		this.nodes   = [ node ];
 		this.rawName = node.name ?? '';
 		this.name    = getParsedName( this.rawName );
+	}
+
+	/**
+	 * Runs once in lifecycle.
+	 */
+	onObserve() {
+		this.value     = new ReactiveVar( null );
+		const [ node ] = this.nodes;
+
+		/**
+		 * Save link to this object
+		 * @type {InputData}
+		 */
+		node.jfbSync = this;
 
 		/**
 		 * @type {BaseSignal}
@@ -130,12 +143,6 @@ class InputData {
 		this.callable.setInput( this );
 
 		this.reporting = createReport( this );
-
-		/**
-		 * Save link to this object
-		 * @type {InputData}
-		 */
-		node.jfbSync = this;
 	}
 
 	/**

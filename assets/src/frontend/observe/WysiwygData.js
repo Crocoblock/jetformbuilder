@@ -11,6 +11,11 @@ class WysiwygData extends InputData {
 	setNode( node ) {
 		super.setNode( node );
 
+		this.getSubmit().submitter.promise( resolve => {
+			window.tinyMCE.triggerSave();
+			resolve();
+		} );
+
 		this.textArea      = node.querySelector( '.wp-editor-area' );
 		const editorConfig = JSON.parse( node.dataset.editor );
 
@@ -25,15 +30,6 @@ class WysiwygData extends InputData {
 		}
 
 		this.editor = editor();
-	}
-
-	setRoot( observable ) {
-		super.setRoot( observable );
-
-		this.getSubmit().submitter.promise( resolve => {
-			window.tinyMCE.triggerSave();
-			resolve();
-		} );
 	}
 
 	onRemove() {

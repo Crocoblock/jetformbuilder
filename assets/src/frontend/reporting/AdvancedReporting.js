@@ -1,5 +1,10 @@
 import ReportingInterface from './ReportingInterface';
-import { getValidationMessages, getValidationType } from './functions';
+import {
+	getInheritValidationType,
+	getNodeValidationType,
+	getValidationMessages,
+	getValidationType,
+} from './functions';
 import { getRestrictions } from './restrictions/functions';
 
 class AdvancedReporting extends ReportingInterface {
@@ -17,9 +22,13 @@ class AdvancedReporting extends ReportingInterface {
 	}
 
 	isSupported( node, input ) {
-		this.type = getValidationType( node );
+		this.type = getNodeValidationType( node );
 
-		return !!this.type?.length;
+		const inherit = 'inherit' === this.type
+		                ? getInheritValidationType( input )
+		                : this.type;
+
+		return !!inherit?.length;
 	}
 
 	isValid() {

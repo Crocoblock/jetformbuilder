@@ -10,6 +10,14 @@ function isChangeType( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
+function isNumber( node ) {
+	return 'number' === node.type;
+}
+
+/**
+ * @param node {HTMLElement}
+ * @returns {boolean}
+ */
 function isCalculated( node ) {
 	return !!(
 		node.parentElement.dataset?.formula?.length ?? ''
@@ -71,6 +79,14 @@ function isRadio( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
+function isRange( node ) {
+	return 'range' === node.type;
+}
+
+/**
+ * @param node {HTMLElement}
+ * @returns {boolean}
+ */
 function isRepeater( node ) {
 	return 1 === +node.dataset.repeater;
 }
@@ -94,4 +110,6 @@ export {
 	isRadio,
 	isRepeater,
 	isWysiwyg,
+	isNumber,
+	isRange,
 };

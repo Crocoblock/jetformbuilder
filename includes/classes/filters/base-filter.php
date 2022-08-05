@@ -28,7 +28,11 @@ abstract class Base_Filter implements Repository_Item_Instance_Trait {
 			$preset[ $index ] = $input_args[ $index ];
 		}
 
-		return $preset;
+		return apply_filters(
+			'jet-form-builder/content-filters/args',
+			$preset,
+			$this
+		);
 	}
 
 	public function callback_args(): array {

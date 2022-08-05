@@ -17,7 +17,12 @@ $this->add_attribute( 'name', $this->block_type->get_field_name() );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'multiple', $this->block_type->is_multiple() ? 1 : '' );
-$this->add_attribute( 'size', $this->block_type->get_multiple_size() ?: '' );
+$this->add_attribute(
+	'size',
+	$this->block_type->is_multiple()
+		? $this->block_type->get_multiple_size()
+		: ''
+);
 $this->add_attribute( 'data-jfb-sync' );
 
 if ( ! empty( $args['switch_on_change'] ) ) {

@@ -16,7 +16,7 @@ class Function_Show extends Base_Function {
 	}
 
 	public function get_title(): string {
-		return __( 'Show this field if...', 'jet-form-builder' );
+		return __( 'Show if...', 'jet-form-builder' );
 	}
 
 	/**

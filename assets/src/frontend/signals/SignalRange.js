@@ -11,7 +11,10 @@ class SignalRange extends BaseSignal {
 	}
 
 	runSignal() {
-		this.input.numberNode.textContent = this.input.value.current;
+		const [ node ] = this.input.nodes;
+		node.value     = this.input.value.current;
+
+		this.input.numberNode.textContent = node.value;
 	}
 
 }

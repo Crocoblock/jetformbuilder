@@ -1,6 +1,7 @@
 import { createConditionItem, createMultiStep } from './functions';
 
 class ConditionalBlock {
+
 	constructor( node, observable ) {
 		this.node           = node;
 		node.jfbConditional = this;
@@ -22,6 +23,11 @@ class ConditionalBlock {
 		 */
 		this.multistep = null;
 
+		/**
+		 * @type {Node}
+		 */
+		this.comment = null;
+
 		this.setConditions();
 		this.setMultiStep();
 	}
@@ -35,7 +41,7 @@ class ConditionalBlock {
 	setMultiStep() {
 		const multistep = createMultiStep( this );
 
-		if ( ! multistep.getPages()?.length ) {
+		if ( !multistep.getPages()?.length ) {
 			return;
 		}
 
@@ -47,10 +53,25 @@ class ConditionalBlock {
 			return;
 		}
 		this.isObserved = true;
+		this.insertComment();
 
 		for ( const condition of this.getConditions() ) {
 			condition.observe();
 		}
+	}
+
+	insertComment() {
+		if ( !this.willDomChange() ) {
+			return;
+		}
+
+		this.comment = document.createComment( '' );
+
+		// insert comment after conditional block
+		this.node.parentElement.insertBefore(
+			this.comment,
+			this.node.nextSibling,
+		);
 	}
 
 	calculate() {
@@ -76,7 +97,13 @@ class ConditionalBlock {
 	 * @param result {boolean}
 	 */
 	runFunction( result ) {
-		switch ( this.node.dataset.jfbFunc ) {
+		switch ( this.getFunction() ) {
+			case 'show_dom':
+				this.showBlockDom( result );
+				break;
+			case 'hide_dom':
+				this.showBlockDom( !result );
+				break;
 			case 'show':
 				this.showBlockCss( result );
 				break;
@@ -93,8 +120,26 @@ class ConditionalBlock {
 		this.node.style.display = result ? 'block' : 'none';
 	}
 
+	showBlockDom( result ) {
+		if ( !result ) {
+			this.node.remove();
+
+			return;
+		}
+
+		this.comment.parentElement.insertBefore( this.node, this.comment );
+	}
+
 	disableBlock( result ) {
 		this.node.disabled = result;
+	}
+
+	willDomChange() {
+		return [ 'show_dom', 'hide_dom' ].includes( this.getFunction() );
+	}
+
+	getFunction() {
+		return this.node.dataset.jfbFunc;
 	}
 
 	/**

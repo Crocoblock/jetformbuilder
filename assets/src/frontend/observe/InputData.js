@@ -81,7 +81,6 @@ class InputData {
 		this.onObserve();
 		this.addListeners();
 		this.setValue();
-		this.setComment();
 
 		this.value.make();
 	}
@@ -150,13 +149,6 @@ class InputData {
 	 */
 	setRoot( observable ) {
 		this.root = observable;
-	}
-
-	setComment() {
-		this.comment   = document.createComment( this.name );
-		const [ node ] = this.nodes;
-
-		node.parentElement.insertBefore( this.comment, node );
 	}
 
 	/**

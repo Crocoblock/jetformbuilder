@@ -16,7 +16,7 @@ class Function_Hide extends Base_Function {
 	}
 
 	public function get_title(): string {
-		return __( 'Hide this field if...', 'jet-form-builder' );
+		return __( 'Hide if...', 'jet-form-builder' );
 	}
 
 	/**

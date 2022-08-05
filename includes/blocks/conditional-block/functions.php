@@ -6,8 +6,10 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Base_Function;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide;
+use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide_Dom;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Set_Value;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show;
+use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show_Dom;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
@@ -28,6 +30,8 @@ class Functions implements Arrayable {
 				new Function_Hide(),
 				new Function_Show(),
 				new Function_Set_Value(),
+				new Function_Show_Dom(),
+				new Function_Hide_Dom(),
 			)
 		);
 	}

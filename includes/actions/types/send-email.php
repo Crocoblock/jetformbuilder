@@ -246,8 +246,6 @@ class Send_Email extends Base {
 		$subject      = $this->parser->parse_macros( $subject );
 		$message      = $this->parser->parse_macros( $message );
 
-		var_dump( $message ); die;
-
 		if ( 'text/html' === $content_type ) {
 			$message = make_clickable( wpautop( $message ) );
 		}

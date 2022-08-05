@@ -48,29 +48,30 @@ class Macros_Parser {
 	public function macros_replace() {
 
 		return preg_replace_callback(
-			'/%(.*?)(\|([a-zA-Z0-9\(\)\.\,\:\/\s_-]+))?%/',
+			'/%(.+?)%/',
 			function ( $match ) {
+				$filters = explode( '|', $match[1] );
+				$name    = $filters[0];
+				array_shift( $filters );
 
-				if ( isset( $this->replacements[ $match[1] ] ) ) {
-
-					if ( ! empty( $match[3] ) ) {
-						return Filters_Manager::instance()->apply(
-							$this->replacements[ $match[1] ],
-							$match[3]
-						);
-					} else {
-						if ( is_array( $this->replacements[ $match[1] ] ) ) {
-							if ( jet_fb_request_handler()->is_type( $match[1], 'repeater-field' ) ) {
-								return $this->verbose_repeater( $this->replacements[ $match[1] ] );
-							} else {
-								return implode( ', ', $this->replacements[ $match[1] ] );
-							}
-						} else {
-							return $this->replacements[ $match[1] ];
-						}
-					}
-				} else {
+				if ( ! isset( $this->replacements[ $name ] ) ) {
 					return $match[0];
+				}
+
+				$value = $this->replacements[ $name ];
+
+				if ( ! empty( $filters ) ) {
+					return Filters_Manager::instance()->apply( $value, $filters );
+				}
+
+				if ( ! is_array( $value ) ) {
+					return $value;
+				}
+
+				if ( jet_fb_request_handler()->is_type( $name, 'repeater-field' ) ) {
+					return $this->verbose_repeater( $value );
+				} else {
+					return implode( ', ', $value );
 				}
 			},
 			$this->content

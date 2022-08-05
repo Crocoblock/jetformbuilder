@@ -22,6 +22,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Send_Email extends Base {
 
 	private $parser;
+	private $content_type;
 
 	public function get_name() {
 		return __( 'Send Email', 'jet-form-builder' );
@@ -245,6 +246,8 @@ class Send_Email extends Base {
 		$subject      = $this->parser->parse_macros( $subject );
 		$message      = $this->parser->parse_macros( $message );
 
+		var_dump( $message ); die;
+
 		if ( 'text/html' === $content_type ) {
 			$message = make_clickable( wpautop( $message ) );
 		}
@@ -297,7 +300,7 @@ class Send_Email extends Base {
 	 * @since 2.1
 	 */
 	public function get_headers(): string {
-		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
+		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 
@@ -393,14 +396,24 @@ class Send_Email extends Base {
 		return apply_filters( 'jet-form-builder/send-email/from-address', $address, $this );
 	}
 
+	public function is_html(): bool {
+		return 'text/html' === $this->get_content_type();
+	}
+
 	/**
 	 * Get the email content type
 	 */
-	public function get_content_type() {
+	public function get_content_type(): string {
+		if ( $this->content_type ) {
+			return $this->content_type;
+		}
 
-		$type = ! empty( $this->settings['content_type'] ) ? $this->settings['content_type'] : 'text/html';
+		$type = $this->settings['content_type'] ?? 'text/html';
+		$type = empty( $type ) ? 'text/html' : $type;
 
-		return apply_filters( 'jet-form-builder/send-email/content-type', $type, $this );
+		$this->content_type = apply_filters( 'jet-form-builder/send-email/content-type', $type, $this );
+
+		return $this->content_type;
 	}
 
 }

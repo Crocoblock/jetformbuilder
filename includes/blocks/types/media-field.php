@@ -17,8 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Media_Field extends Base {
 
 	protected $value_format = 'url';
-	protected $max_files = 1;
-	protected $max_size = 1;
+	protected $max_files    = 1;
+	protected $max_size     = 1;
 
 	/**
 	 * Returns block name
@@ -55,9 +55,10 @@ class Media_Field extends Base {
 
 		if ( ! $this->is_both_format() ) {
 			// is value format wrong
-			if ( ! is_string( $preset ) ) {
+			if ( ! is_string( $preset ) && ! is_numeric( $preset ) ) {
 				return array();
 			}
+			$preset = (string) $preset;
 
 			return explode( ',', str_replace( ', ', ',', $preset ) );
 		}

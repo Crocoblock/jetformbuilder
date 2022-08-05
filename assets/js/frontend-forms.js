@@ -1310,7 +1310,7 @@
 								}
 							}
 						} else {
-							val = $field.val();
+							val = parseFloat( $field.val() );
 						}
 					}
 				}

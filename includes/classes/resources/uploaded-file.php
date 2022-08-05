@@ -53,6 +53,10 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	 * @throws Upload_Exception
 	 */
 	public function add_attachment() {
+		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/image.php';
+		}
+
 		$attachment = wp_insert_attachment(
 			array(
 				'guid'           => $this->get_url(),
@@ -70,12 +74,17 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			throw new Upload_Exception( $attachment->get_error_message() );
 		}
 
+		wp_update_attachment_metadata(
+			$attachment,
+			wp_generate_attachment_metadata( $attachment, $this->get_file() )
+		);
+
 		$this->set_attachment_id( (string) $attachment );
 	}
 
 	public function set_from_array( array $upload ): Uploaded_File {
 		if ( isset( $upload['file'] ) ) {
-			$this->file = $upload['file'];
+			$this->file = wp_normalize_path( $upload['file'] );
 		}
 		if ( isset( $upload['url'] ) ) {
 			$this->url = $upload['url'];

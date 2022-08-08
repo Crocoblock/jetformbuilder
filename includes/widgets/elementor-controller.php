@@ -13,9 +13,18 @@ class Elementor_Controller {
 	public function __construct() {
 		add_action( 'elementor/init', array( $this, 'setup_widgets' ) );
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ), 11 );
 		add_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_assets' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
+
+		// compatibility with 3.7
+		if (
+			defined( 'ELEMENTOR_VERSION' ) &&
+			version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' )
+		) {
+			add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
+		} else {
+			add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ) );
+		}
 	}
 
 	public function enqueue_form_assets() {
@@ -74,7 +83,12 @@ class Elementor_Controller {
 
 	public function register_widgets( $manager ) {
 		foreach ( $this->_types as $widget ) {
-			$manager->register_widget_type( $widget );
+			// compatibility with 3.7
+			if ( method_exists( $manager, 'register' ) ) {
+				$manager->register( $widget );
+			} else {
+				$manager->register_widget_type( $widget );
+			}
 		}
 	}
 

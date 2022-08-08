@@ -96,6 +96,12 @@ class Pages_Manager {
 	 */
 	public function set_current_page() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$post_type = sanitize_key( $_GET['post_type'] ?? '' );
+
+		if ( jet_form_builder()->post_type->slug() !== $post_type ) {
+			return;
+		}
+
 		try {
 			$slug = sanitize_key( $_GET['page'] ?? '' );
 			$page = $this->get_stable( $slug );

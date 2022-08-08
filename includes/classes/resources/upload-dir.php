@@ -42,6 +42,17 @@ class Upload_Dir {
 		return $pathdata;
 	}
 
+	public static function apply_temp_dir( $pathdata ) {
+		// jet-form-builder
+		$base = static::upload_base();
+
+		$pathdata['subdir'] = '/' . $base . '/temp';
+		$pathdata['path']   = $pathdata['path'] . $pathdata['subdir'];
+		$pathdata['url']    = $pathdata['url'] . $pathdata['subdir'];
+
+		return $pathdata;
+	}
+
 	/**
 	 * Returns upload subdirectory
 	 *

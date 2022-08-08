@@ -2,6 +2,7 @@
 @import "./components/modal";
 @import "./components/actions-plugin";
 @import "../components/action-buttons";
+@import "./components/toolbar";
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;
@@ -729,11 +730,6 @@ select.components-select-control__input.components-select-control__input.compone
 
 .jet-d-flex-between > div {
 	flex: 0.9;
-}
-
-
-.jet-input-with-button {
-	position: relative;
 }
 
 .jet-required-field {

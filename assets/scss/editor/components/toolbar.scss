@@ -1,0 +1,17 @@
+.block-editor-block-toolbar__slot .jet-fb-block-toolbar {
+	display: flex;
+	gap: 0.8em;
+
+	.jet-input-with-button {
+		position: relative;
+	}
+
+	.components-base-control {
+		display: flex;
+		align-items: center;
+
+		&__field {
+			margin-bottom: unset;
+		}
+	}
+}

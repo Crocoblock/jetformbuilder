@@ -23,6 +23,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"func_type": {
+			"type": "string",
+			"default": "show"
+		},
 		"conditions": {
 			"type": "array",
 			"default": []

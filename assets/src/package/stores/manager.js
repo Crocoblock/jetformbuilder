@@ -3,7 +3,7 @@ import gateways from './gateways';
 import events from './events';
 import blockConditions from './block-conditions';
 import actionButtons from './action-buttons';
-import './subscribers/migrate-gateways-settings';
+import './subscribers/migrate.gateways.settings';
 
 const { register, dispatch } = wp.data;
 

@@ -1,6 +1,7 @@
 import ConditionalBlockEdit from './edit';
 import metadata from '@blocks/conditional-block/block.json';
 import ConditionalSave from './save';
+import v3 from './deprecations/v3';
 
 const { __ } = wp.i18n;
 
@@ -60,6 +61,7 @@ const settings = {
 			},
 		],
 	},
+	deprecated: [ v3 ]
 };
 
 export {

@@ -88,8 +88,6 @@ export default function ConditionalBlockEdit( props ) {
 		showModal && <ConditionsModal
 			key={ uniqKey( 'ConditionsModal' ) }
 			setShowModal={ setShowModal }
-			attributes={ attributes }
-			setAttributes={ setAttributes }
 		/>,
 	];
 }

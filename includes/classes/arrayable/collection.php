@@ -8,9 +8,11 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	private $position = 0;
 	private $items;
+	private $groups   = array();
 
 	public function __construct( array $items = array() ) {
 		$this->items = $items;
+		$this->group_items();
 	}
 
 	public function intersect( $list_of_states ): bool {
@@ -37,26 +39,12 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 			return $this->in_array_by_class( $state );
 		}
 
-		return $this->in_array_by_id( $state );
+		return array_key_exists( $state, $this->groups );
 	}
 
 	protected function in_array_by_class( $state_class ): bool {
 		foreach ( $this as $state ) {
 			if ( is_a( $state, $state_class ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	protected function in_array_by_id( $state_class ): bool {
-		/** @var Collection_Item_Interface $state */
-		foreach ( $this as $state ) {
-			if ( ! ( $state instanceof Collection_Item_Interface ) ) {
-				continue;
-			}
-			if ( $state->get_id() !== $state_class ) {
 				return true;
 			}
 		}
@@ -74,6 +62,27 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		unset( $this->items[ $position ] );
 
 		return $this;
+	}
+
+	public function get_by_id( string $id ): array {
+		return $this->groups[ $id ] ?? array();
+	}
+
+	public function group_items() {
+		/** @var Collection_Item_Interface $item */
+		foreach ( $this->items as $item ) {
+			if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+				continue;
+			}
+			if ( ! isset( $this->groups[ $item->get_id() ] ) ) {
+				$this->groups[ $item->get_id() ] = array();
+			}
+			$this->groups[ $item->get_id() ][] = $item;
+		}
+	}
+
+	public function all(): array {
+		return $this->items;
 	}
 
 	/*

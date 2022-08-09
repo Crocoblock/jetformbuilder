@@ -3,48 +3,35 @@
 namespace Jet_Form_Builder\Actions\Methods;
 
 use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
+use Jet_Form_Builder\Actions\Types\Insert_Post;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 abstract class Abstract_Modifier {
 
-	public $source_arr      = array();
-	protected $current_prop = '';
-	protected $current_value;
+	public    $source_arr     = array();
+	public    $current_prop   = '';
+	public    $current_value;
+	public    $fields_map     = array();
 	protected $request        = array();
 	protected $excluded_props = array();
-	protected $current_external;
-	protected $external_data = array();
-	protected $fields_map    = array();
-
 	protected $action;
 
-	/**
-	 * Return object fields
-	 *
-	 * @return string[] [type] [description]
-	 */
-	abstract public function get_object_fields();
+	/** @var Collection */
+	protected $properties_list;
 
 	abstract public function get_actions();
-
-	public function get_external_properties() {
-		return array();
-	}
-
-	public function get_required_fields() {
-		return array();
-	}
 
 	/**
 	 * @throws Action_Exception
 	 */
 	public function run() {
 		$this->attach_items();
-		$this->attach_required_fields();
+		$this->attach_required_properties();
 		$this->do_action();
-		$this->after_action_externals();
+		$this->after_action();
 	}
 
 	public function get_action() {
@@ -112,33 +99,21 @@ abstract class Abstract_Modifier {
 				continue;
 			}
 		}
+
+		$this->current_prop  = null;
+		$this->current_value = null;
 	}
 
-	public function attach_required_fields() {
-		foreach ( $this->get_required_fields() as $name => $options ) {
-			try {
-				$this->current_prop = $name;
-				$this->is_isset_current_prop( $options );
-
-			} catch ( Silence_Exception $exception ) {
+	public function attach_required_properties() {
+		foreach ( $this->properties_list as $property ) {
+			if ( ! is_a( $property, Object_Required_Property::class ) ) {
 				continue;
 			}
-		}
-	}
+			$this->current_prop = $property->get_prop_name();
 
-	/**
-	 * @param array $options
-	 *
-	 * @throws Silence_Exception
-	 */
-	public function is_isset_current_prop( array $options ) {
-		if ( isset( $options['callback'] ) && is_callable( $options['callback'] ) ) {
-			call_user_func( $options['callback'], $options );
-
-			return;
-		}
-		if ( isset( $this->source_arr[ $this->current_prop ] ) ) {
-			throw new Silence_Exception( "{$this->current_prop} is not set." );
+			if ( empty( $this->source_arr[ $this->current_prop ] ) ) {
+				$property->do_if_empty( $this );
+			}
 		}
 	}
 
@@ -151,10 +126,36 @@ abstract class Abstract_Modifier {
 		if ( in_array( $this->current_prop, $this->excluded_props, true ) ) {
 			throw new Silence_Exception( "Prop '{$this->current_prop}' is excluded" );
 		}
-
 		$this->before_attach();
 
 		$this->source_arr[ $this->current_prop ] = $this->current_value;
+	}
+
+	public function before_attach() {
+		/** @var Base_Object_Property[] $properties */
+		$properties = $this->properties_list->get_by_id( $this->current_prop );
+
+		foreach ( $properties as $property ) {
+			$property->attach( $this );
+		}
+
+		if ( ! empty( $properties ) ) {
+			return;
+		}
+
+		$dynamic = array_filter(
+			$this->properties_list->all(),
+			function ( $item ) {
+				return is_a( $item, Object_Dynamic_Property::class );
+			}
+		);
+
+		$dynamic = array_reverse( $dynamic );
+
+		/** @var Base_Object_Property $item */
+		foreach ( $dynamic as $item ) {
+			$item->attach( $this );
+		}
 	}
 
 	/**
@@ -221,77 +222,9 @@ abstract class Abstract_Modifier {
 		return false;
 	}
 
-
-	/**
-	 * @throws Silence_Exception
-	 */
-	public function before_attach() {
-		$property_callback = $this->get_object_fields()[ $this->current_prop ]['before_cb'] ?? false;
-
-		if ( is_callable( $property_callback ) ) {
-			call_user_func( $property_callback, $this );
-
-			return;
-		}
-
-		if ( ! $this->is_reserved_property( $this->current_prop ) ) {
-			call_user_func( array( $this, 'custom_before_attach' ), $this );
-
-			throw new Silence_Exception( 'Property not need to attach' );
-		}
-	}
-
-	/**
-	 * @throws Silence_Exception
-	 */
-	public function custom_before_attach() {
-		/**
-		 * We make the array in reverse order,
-		 * in order to check external: meta last,
-		 * since it does not have a check ( 'condition_cb' )
-		 */
-		$externals = array_reverse( $this->get_external_properties() );
-
-		if ( empty( $externals ) ) {
-			return;
-		}
-
-		foreach ( $externals as $external_key => $external_value ) {
-			$this->current_external = $external_key;
-			$condition_cb           = $external_value['condition_cb'] ?? false;
-
-			if ( empty( $condition_cb ) || (
-					is_callable( $condition_cb ) && ! call_user_func( $condition_cb, $this )
-				) ) {
-				continue;
-			}
-
-			$match_cb = $external_value['match_cb'] ?? false;
-			if ( ! is_callable( $match_cb ) ) {
-				throw new Silence_Exception( "'match_cb' is not callable in {$external_key}" );
-			}
-
-			call_user_func( $match_cb, $this );
-			break;
-		}
-	}
-
-	public function is_reserved_property( $prop ) {
-		$fields = $this->get_object_fields();
-
-		return isset( $fields[ $prop ] ) || in_array( $prop, $fields, true );
-	}
-
-	public function after_action_externals() {
-		$externals = $this->get_external_properties();
-
-		foreach ( $externals as $external_key => $external_value ) {
-			$this->current_external = $external_key;
-			$condition_cb           = $external_value['after_action'] ?? false;
-
-			if ( is_callable( $condition_cb ) ) {
-				call_user_func( $condition_cb, $this );
-			}
+	public function after_action() {
+		foreach ( $this->properties_list as $property ) {
+			$property->do_after( $this );
 		}
 	}
 
@@ -306,27 +239,6 @@ abstract class Abstract_Modifier {
 		$this->fields_map = $fields_map;
 
 		return $this;
-	}
-
-	public function set_external( string $key, array $data ) {
-		if ( ! isset( $this->external_data[ $key ] ) || ! is_array( $this->external_data[ $key ] ) ) {
-			$this->external_data[ $key ] = array();
-		}
-		$this->external_data[ $key ] = array_merge( $this->external_data[ $key ], $data );
-
-		return $this;
-	}
-
-	public function get_external( string $key ) {
-		return $this->external_data[ $key ] ?? array();
-	}
-
-	public function set_current_external( array $data ) {
-		return $this->set_external( $this->current_external, $data );
-	}
-
-	public function get_current_external() {
-		return $this->get_external( (string) $this->current_external );
 	}
 
 	public function set_request( $request ) {
@@ -361,6 +273,16 @@ abstract class Abstract_Modifier {
 		if ( empty( $this->current_value ) ) {
 			throw new Silence_Exception( 'Current field is empty' );
 		}
+	}
+
+	public function get_value() {
+		return $this->source_arr[ $this->current_prop ] ?? $this->current_value;
+	}
+
+	public function set_properties( Collection $properties ): Abstract_Modifier {
+		$this->properties_list = $properties;
+
+		return $this;
 	}
 
 }

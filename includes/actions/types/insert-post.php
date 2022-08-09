@@ -3,7 +3,24 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Methods\Object_Properties_List;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Author_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Gmt_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Id_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Je_Relation_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Meta_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Parent_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Status_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Terms_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Thumbnail_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Title_Property;
+use Jet_Form_Builder\Actions\Methods\Wc_Product_Modification\Wc_Product_Modifier;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -16,6 +33,34 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 class Insert_Post extends Base {
+
+	/** @var Collection */
+	public $list;
+
+	public function __construct() {
+		parent::__construct();
+
+		$this->list = new Collection(
+			apply_filters(
+				'jet-form-builder/post-modifier/object-properties',
+				array(
+					new Post_Id_Property(),
+					new Post_Status_Property(),
+					new Post_Title_Property(),
+					new Post_Content_Property(),
+					new Post_Excerpt_Property(),
+					new Post_Date_Property(),
+					new Post_Date_Gmt_Property(),
+					new Post_Author_Property(),
+					new Post_Thumbnail_Property(),
+					new Post_Parent_Property(),
+					new Post_Meta_Property(),
+					new Post_Je_Relation_Property(),
+					new Post_Terms_Property(),
+				)
+			)
+		);
+	}
 
 	public function get_name() {
 		return __( 'Insert/Update Post', 'jet-form-builder' );
@@ -62,6 +107,7 @@ class Insert_Post extends Base {
 			->set_fields_map( $fields_map )
 			->set_request( $request )
 			->replace_field_by_prop( 'post_status', $post_status )
+			->set_properties( $this->list )
 			->run();
 	}
 
@@ -112,8 +158,7 @@ class Insert_Post extends Base {
 			'postTypes'        => Tools::get_post_types_for_js(),
 			'taxonomies'       => Tools::get_taxonomies_for_js(),
 			'postStatuses'     => $this->get_post_statuses_for_options(),
-			'postFields'       => $this->get_post_fields_for_options(),
-			'fieldsMapOptions' => $this->get_fields_map_options(),
+			'fieldsMapOptions' => Array_Tools::to_array( $this->list->all() ),
 			'requestFields'    => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',
@@ -160,90 +205,6 @@ class Insert_Post extends Base {
 		);
 
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
-
-	}
-
-	/**
-	 * Returns allowed chilces for the fields map control
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_fields_map_options() {
-
-		$post_fields = $this->get_post_fields_for_options();
-
-		foreach ( $post_fields as $index => $data ) {
-			if ( 'ID' === $data['value'] ) {
-				$post_fields[ $index ]['label'] = 'Post ID (will update the post)';
-			}
-		}
-
-		$post_fields[] = array(
-			'value' => '_thumbnail_id',
-			'label' => 'Post Thumbnail',
-		);
-
-		$post_fields[] = array(
-			'value' => 'post_meta',
-			'label' => 'Post Meta',
-		);
-
-		$post_fields[] = array(
-			'value' => 'post_terms',
-			'label' => 'Post Terms',
-		);
-
-		return $post_fields;
-
-	}
-
-	/**
-	 * Returns post object fields list for the options
-	 *
-	 * @return array
-	 */
-	public function get_post_fields_for_options() {
-
-		return Tools::with_placeholder(
-			apply_filters(
-				'jet-form-builder/actions/insert-post/allowed-post-fields',
-				array(
-					array(
-						'value' => 'ID',
-						'label' => __( 'Post ID', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_title',
-						'label' => __( 'Post Title', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_content',
-						'label' => __( 'Post Content', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_excerpt',
-						'label' => __( 'Post Excerpt', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_status',
-						'label' => __( 'Post Status', 'jet-form-builder' ),
-
-					),
-					array(
-						'value' => 'post_date',
-						'label' => __( 'Post Date', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_date_gmt',
-						'label' => __( 'Post Date GMT', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_author',
-						'label' => __( 'Post Author', 'jet-form-builder' ),
-					),
-				)
-			)
-		);
 
 	}
 

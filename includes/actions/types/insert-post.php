@@ -134,11 +134,11 @@ class Insert_Post extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'postTypes'        => Tools::get_post_types_for_js(),
-			'taxonomies'       => Tools::get_taxonomies_for_js(),
-			'postStatuses'     => $this->get_post_statuses_for_options(),
-			'fieldsMapOptions' => Array_Tools::to_array( $this->list->all() ),
-			'requestFields'    => array(
+			'postTypes'     => Tools::get_post_types_for_js(),
+			'taxonomies'    => Tools::get_taxonomies_for_modify(),
+			'postStatuses'  => $this->get_post_statuses_for_options(),
+			'properties'    => Array_Tools::to_array( $this->modifier->properties->all() ),
+			'requestFields' => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',
 					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' ),

@@ -11,7 +11,7 @@ const {
 	      WrapperRequiredControl,
       } = JetFBComponents;
 
-const { useRequestFields, withRequestFields } = JetFBHooks;
+const { withRequestFields } = JetFBHooks;
 
 /**
  * Internal dependencies
@@ -30,10 +30,6 @@ const {
       } = wp.element;
 
 const { withSelect } = wp.data;
-
-function taxPrefix( suffix = '' ) {
-	return 'jet_tax__' + suffix;
-}
 
 function InsertPostAction( props ) {
 
@@ -64,24 +60,7 @@ function InsertPostAction( props ) {
 	);
 
 	const [ fieldType, setTypeField ]   = useState( {} );
-	const [ taxonomies, setTaxonomies ] = useState( [] );
 	const [ formFields, setFormFields ] = useState( [] );
-
-	function getPreparedTaxonomies() {
-		const preparedTaxes = [];
-		if ( !source.taxonomies.length ) {
-			return [];
-		}
-
-		for ( const taxonomy of source.taxonomies ) {
-			preparedTaxes.push( {
-				...taxonomy,
-				value: taxPrefix( taxonomy.value ),
-			} );
-		}
-
-		return preparedTaxes;
-	}
 
 	useEffect( () => {
 		setTypeField( () => {
@@ -95,7 +74,6 @@ function InsertPostAction( props ) {
 
 			return result;
 		} );
-		setTaxonomies( getPreparedTaxonomies() );
 		onChangeSetting(
 			[ source.requestFields.inserted_post_id ],
 			'requestFields',
@@ -108,23 +86,6 @@ function InsertPostAction( props ) {
 	useEffect( () => {
 		setPropertiesOptions( getFilteredProperties() );
 	}, [ settings.post_type ] );
-
-	function getTypeFieldValue( value ) {
-		let resultValue = 'post_meta';
-
-		for ( const fieldsMapOption of propertiesOptions ) {
-			if ( value === fieldsMapOption.value ) {
-				resultValue = value;
-				break;
-			}
-		}
-
-		if ( value.includes( taxPrefix() ) ) {
-			resultValue = 'post_terms';
-		}
-
-		return resultValue;
-	}
 
 	function setTypeFieldValue( prev, fieldID, value ) {
 		const resultValue = getTypeFieldValue( value );
@@ -185,41 +146,36 @@ function InsertPostAction( props ) {
 				key="user_fields_map"
 				fields={ formFields }
 			>
-				{ ( { fieldId, fieldData, index } ) => {
-					return <WrapperRequiredControl
-						field={ [ fieldId, fieldData ] }
-					>
-
-						{ 'post_meta' === fieldType[ fieldId ] &&
-						<div
-							className="components-base-control jet-margin-bottom-wrapper">
-							{ getFieldSelect( fieldId, index ) }
-							<TextControl
-								key={ fieldId + index + '_text' }
-								value={ getMapField( { name: fieldId } ) }
-								onChange={ value => setMapField(
-									{ nameField: fieldId, value } ) }
-							/>
-						</div> }
-						{ 'post_terms' === fieldType[ fieldId ] &&
-						<div
-							className="components-base-control jet-margin-bottom-wrapper">
-							{ getFieldSelect( fieldId, index ) }
-							<SelectControl
-								key={ fieldId + index + '_text' }
-								value={ getMapField( { name: fieldId } ) }
-								onChange={ value => setMapField(
-									{ nameField: fieldId, value } ) }
-								options={ taxonomies }
-							/>
-						</div> }
-						{ ![
-							'post_meta',
-							'post_terms',
-						].includes( fieldType[ fieldId ] ) &&
-						getFieldSelect( fieldId, index ) }
-					</WrapperRequiredControl>;
-				} }
+				<WrapperRequiredControl>
+					{ 'post_meta' === fieldType[ fieldId ] &&
+					<div
+						className="components-base-control jet-margin-bottom-wrapper">
+						{ getFieldSelect( fieldId, index ) }
+						<TextControl
+							key={ fieldId + index + '_text' }
+							value={ getMapField( { name: fieldId } ) }
+							onChange={ value => setMapField(
+								{ nameField: fieldId, value } ) }
+						/>
+					</div> }
+					{ 'post_terms' === fieldType[ fieldId ] &&
+					<div
+						className="components-base-control jet-margin-bottom-wrapper">
+						{ getFieldSelect( fieldId, index ) }
+						<SelectControl
+							key={ fieldId + index + '_text' }
+							value={ getMapField( { name: fieldId } ) }
+							onChange={ value => setMapField(
+								{ nameField: fieldId, value } ) }
+							options={ source.taxonomies }
+						/>
+					</div> }
+					{ ![
+						'post_meta',
+						'post_terms',
+					].includes( fieldType[ fieldId ] ) &&
+					getFieldSelect( fieldId, index ) }
+				</WrapperRequiredControl>
 			</ActionFieldsMap>
 			<BaseControl
 				label={ label( 'default_meta' ) }

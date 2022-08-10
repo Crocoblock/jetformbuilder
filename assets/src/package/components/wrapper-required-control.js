@@ -1,31 +1,21 @@
-const { RawHTML } = wp.element;
+import ActionFieldsMapContext from '../context/action.fields.map.context';
+
+const { RawHTML, useContext } = wp.element;
 
 export default function WrapperRequiredControl( {
-													field,
 													children,
 													labelKey = 'label',
 													requiredKey = 'required',
 													helpKey = 'help',
 												} ) {
-	const [ name, data ] = field;
 
-	/*const IconComponent = data.icon ? props => {
-		return <div
-			key={ 'inner_icon_field_' + name }
-			{ ...props }
-		>{ data.icon }</div>
-	} : null;*/
+	const { name, data } = useContext( ActionFieldsMapContext );
 
 	return (
 		<div
 			className="jet-user-meta__row"
 			key={ 'user_meta_' + name }
 		>
-			{/*<IconComponent
-				className={ 'jet-field-map__row-icon' }
-				key={ 'icon_field_' + name }
-				style={ { height: '48px', width: '48px' } }
-			/>*/}
 			<div className="jet-field-map__row-label">
 
 				<span className={ 'fields-map__label' }>

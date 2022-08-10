@@ -5,23 +5,19 @@ namespace Jet_Form_Builder\Actions\Methods\Wc_Product_Modification;
 
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-/**
- * Update `product_visibility` taxonomy
- *
- * Class Product_Catalog_Visibility_Property
- * @package Jet_Form_Builder\Actions\Methods\Wc_Product_Modification
- */
-class Product_Catalog_Visibility_Property extends Base_Post_Property {
+class Product_Tax_Status_Property extends Post_Excerpt_Property {
 
 	public function get_prop_name(): string {
-		return 'catalog_visibility';
+		return '_tax_status';
 	}
 
 	public function get_label(): string {
-		return __( 'Product Catalog Visibility', 'jet-form-builder' );
+		return __( 'Product Tax Status', 'jet-form-builder' );
 	}
 
 	/**
@@ -33,7 +29,7 @@ class Product_Catalog_Visibility_Property extends Base_Post_Property {
 		$product = $modifier->get_product();
 
 		try {
-			$product->set_catalog_visibility( $modifier->current_value );
+			$product->set_tax_status( $modifier->current_value );
 		} catch ( \WC_Data_Exception $exception ) {
 			throw new Action_Exception( $exception->getMessage() );
 		}

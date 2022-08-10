@@ -8,20 +8,14 @@ use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
-/**
- * Update `product_visibility` taxonomy
- *
- * Class Product_Catalog_Visibility_Property
- * @package Jet_Form_Builder\Actions\Methods\Wc_Product_Modification
- */
-class Product_Catalog_Visibility_Property extends Base_Post_Property {
+class Product_Sku_Property extends Base_Post_Property {
 
 	public function get_prop_name(): string {
-		return 'catalog_visibility';
+		return '_sku';
 	}
 
 	public function get_label(): string {
-		return __( 'Product Catalog Visibility', 'jet-form-builder' );
+		return __( 'Product SKU', 'jet-form-builder' );
 	}
 
 	/**
@@ -33,7 +27,7 @@ class Product_Catalog_Visibility_Property extends Base_Post_Property {
 		$product = $modifier->get_product();
 
 		try {
-			$product->set_catalog_visibility( $modifier->current_value );
+			$product->set_sku( $modifier->get_value() );
 		} catch ( \WC_Data_Exception $exception ) {
 			throw new Action_Exception( $exception->getMessage() );
 		}

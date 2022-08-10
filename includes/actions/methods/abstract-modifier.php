@@ -20,14 +20,18 @@ abstract class Abstract_Modifier {
 	protected $action;
 
 	/** @var Collection */
-	protected $properties_list;
+	public $properties;
 
 	abstract public function get_actions();
+
+	abstract protected function get_properties(): Collection;
 
 	/**
 	 * @throws Action_Exception
 	 */
 	public function run() {
+		$this->properties = $this->get_properties();
+
 		$this->attach_items();
 		$this->attach_required_properties();
 		$this->do_action();
@@ -105,7 +109,7 @@ abstract class Abstract_Modifier {
 	}
 
 	public function attach_required_properties() {
-		foreach ( $this->properties_list as $property ) {
+		foreach ( $this->properties as $property ) {
 			if ( ! is_a( $property, Object_Required_Property::class ) ) {
 				continue;
 			}
@@ -133,7 +137,7 @@ abstract class Abstract_Modifier {
 
 	public function before_attach() {
 		/** @var Base_Object_Property[] $properties */
-		$properties = $this->properties_list->get_by_id( $this->current_prop );
+		$properties = $this->properties->get_by_id( $this->current_prop );
 
 		foreach ( $properties as $property ) {
 			$property->attach( $this );
@@ -144,7 +148,7 @@ abstract class Abstract_Modifier {
 		}
 
 		$dynamic = array_filter(
-			$this->properties_list->all(),
+			$this->properties->all(),
 			function ( $item ) {
 				return is_a( $item, Object_Dynamic_Property::class );
 			}
@@ -223,7 +227,7 @@ abstract class Abstract_Modifier {
 	}
 
 	public function after_action() {
-		foreach ( $this->properties_list as $property ) {
+		foreach ( $this->properties as $property ) {
 			$property->do_after( $this );
 		}
 	}
@@ -277,12 +281,6 @@ abstract class Abstract_Modifier {
 
 	public function get_value() {
 		return $this->source_arr[ $this->current_prop ] ?? $this->current_value;
-	}
-
-	public function set_properties( Collection $properties ): Abstract_Modifier {
-		$this->properties_list = $properties;
-
-		return $this;
 	}
 
 }

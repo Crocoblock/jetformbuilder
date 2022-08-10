@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_List;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Author_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Comments_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Gmt_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Property;
@@ -18,7 +19,6 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Status_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Terms_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Thumbnail_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Title_Property;
-use Jet_Form_Builder\Actions\Methods\Wc_Product_Modification\Wc_Product_Modifier;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
@@ -34,32 +34,16 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Insert_Post extends Base {
 
-	/** @var Collection */
-	public $list;
+	/** @var Post_Modifier */
+	public $modifier;
 
 	public function __construct() {
 		parent::__construct();
 
-		$this->list = new Collection(
-			apply_filters(
-				'jet-form-builder/post-modifier/object-properties',
-				array(
-					new Post_Id_Property(),
-					new Post_Status_Property(),
-					new Post_Title_Property(),
-					new Post_Content_Property(),
-					new Post_Excerpt_Property(),
-					new Post_Date_Property(),
-					new Post_Date_Gmt_Property(),
-					new Post_Author_Property(),
-					new Post_Thumbnail_Property(),
-					new Post_Parent_Property(),
-					new Post_Meta_Property(),
-					new Post_Je_Relation_Property(),
-					new Post_Terms_Property(),
-				)
-			)
-		);
+		/**
+		 * @since 2.1.4
+		 */
+		$this->modifier = new Post_Modifier();
 	}
 
 	public function get_name() {
@@ -100,14 +84,13 @@ class Insert_Post extends Base {
 		$post_status = $this->settings['post_status'] ?? '';
 		$meta        = $this->settings['default_meta'] ?? array();
 
-		( new Post_Modifier() )
+		$this->modifier
 			->suppress_filters( false )
 			->set_post_type( $post_type )
 			->set_meta( $meta )
 			->set_fields_map( $fields_map )
 			->set_request( $request )
 			->replace_field_by_prop( 'post_status', $post_status )
-			->set_properties( $this->list )
 			->run();
 	}
 
@@ -142,10 +125,6 @@ class Insert_Post extends Base {
 			'fields_map'   => __( 'Set meta fields names or post properties to save appropriate form fields into', 'jet-form-builder' ),
 			'default_meta' => __( 'Set default meta values which should be set on post insert/update', 'jet-form-builder' ),
 		);
-	}
-
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'post_type', 'post_status' );
 	}
 
 	/**

@@ -148,10 +148,6 @@ class Getresponse extends Integration_Base_Action {
 		return 'jetFormGetResponseData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'list_id' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'api_key'          => __( 'API Key:', 'jet-form-builder' ),

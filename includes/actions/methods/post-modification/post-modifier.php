@@ -4,10 +4,35 @@
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Types\Insert_Post;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Post_Modifier extends Post_Modifier_Core {
+
+	protected function get_properties(): Collection {
+		return apply_filters(
+			'jet-form-builder/post-modifier/object-properties',
+			new Collection(
+				array(
+					new Post_Id_Property(),
+					new Post_Status_Property(),
+					new Post_Title_Property(),
+					new Post_Content_Property(),
+					new Post_Excerpt_Property(),
+					new Post_Date_Property(),
+					new Post_Date_Gmt_Property(),
+					new Post_Author_Property(),
+					new Post_Thumbnail_Property(),
+					new Post_Comments_Property(),
+					new Post_Parent_Property(),
+					new Post_Meta_Property(),
+					new Post_Je_Relation_Property(),
+					new Post_Terms_Property(),
+				)
+			)
+		);
+	}
 
 	public function get_actions() {
 		return apply_filters(

@@ -94,10 +94,6 @@ class Update_User extends Base {
 		return 'jetFormUpdateUserData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'user_role' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'fields_map' => __( 'Fields Map:', 'jet-form-builder' ),

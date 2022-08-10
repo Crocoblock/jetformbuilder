@@ -63,10 +63,6 @@ class Call_Webhook extends Base {
 		do_action( 'jet-form-builder/action/webhook/response', $response, $this->settings, $this );
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'webhook_url' );
-	}
-
 	public function self_script_name() {
 		return 'jetFormCallWebHookData';
 	}

@@ -43,10 +43,6 @@ class Update_Options extends Base {
 		return 'jetFormUpdateOptionsData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'options_page' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'options_page' => __( 'Options Page:', 'jet-form-builder' ),

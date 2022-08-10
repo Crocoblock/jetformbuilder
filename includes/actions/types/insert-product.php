@@ -19,6 +19,7 @@ use Jet_Form_Builder\Actions\Methods\Wc_Product_Modification\Wc_Product_Modifier
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 
 /**
  * @since 2.1.4
@@ -49,9 +50,25 @@ class Insert_Product extends Base {
 		return true;
 	}
 
+	public function editor_labels() {
+		return array(
+			'post_status' => __( 'Post Status:', 'jet-form-builder' ),
+			'fields_map'  => __( 'Fields Map:', 'jet-form-builder' ),
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'fields_map' => __( 'Set meta fields names or post properties to save appropriate form fields into', 'jet-form-builder' ),
+		);
+	}
+
 	public function action_data() {
 		return array(
-			'properties'    => Array_Tools::to_array( $this->modifier->properties->all() ),
+			'taxonomies'    => Tools::get_taxonomies_for_modify(),
+			'properties'    => Tools::with_placeholder(
+				Array_Tools::to_array( $this->modifier->properties->all() )
+			),
 			'requestFields' => array(
 				'inserted_product_id' => array(
 					'name' => 'inserted_product_id',
@@ -61,7 +78,21 @@ class Insert_Product extends Base {
 		);
 	}
 
+	/**
+	 * @param array $request
+	 * @param Action_Handler $handler
+	 *
+	 * @throws Action_Exception
+	 */
 	public function do_action( array $request, Action_Handler $handler ) {
+		$fields_map  = $this->settings['fields_map'] ?? array();
+		$post_status = $this->settings['post_status'] ?? '';
 
+		$this->modifier
+			->suppress_filters( false )
+			->set_fields_map( $fields_map )
+			->set_request( $request )
+			->replace_field_by_prop( 'post_status', $post_status )
+			->run();
 	}
 }

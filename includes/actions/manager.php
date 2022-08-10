@@ -32,6 +32,7 @@ class Manager {
 		return array(
 			new Types\Send_Email(),
 			new Types\Insert_Post(),
+			new Types\Insert_Product(),
 			new Types\Register_User(),
 			new Types\Fake_User_Login(),
 			new Types\Update_User(),

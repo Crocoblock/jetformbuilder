@@ -1,4 +1,3 @@
-import JetDefaultMetaControl from '../blocks/controls/default-meta';
 import PropertySelect from '../components/property.select';
 
 const {
@@ -31,7 +30,7 @@ const {
 
 const { withSelect } = wp.data;
 
-function InsertPostAction( props ) {
+function InsertProductAction( props ) {
 	const {
 		      settings,
 		      onChangeSettingObj,
@@ -45,7 +44,7 @@ function InsertPostAction( props ) {
 
 	useEffect( () => {
 		onChangeSettingObj(
-			{ requestFields: [ source.requestFields.inserted_post_id ] },
+			{ requestFields: [ source.requestFields.inserted_product_id ] },
 		);
 		setFormFields(
 			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
@@ -57,18 +56,7 @@ function InsertPostAction( props ) {
 	return (
 		<>
 			<SelectControl
-				key="post_type"
-				className="full-width"
-				labelPosition="side"
-				value={ settings.post_type }
-				options={ source.postTypes }
-				label={ label( 'post_type' ) }
-				help={ help( 'post_type' ) }
-				onChange={ post_type => onChangeSettingObj( { post_type } ) }
-			/>
-			<SelectControl
 				key="post_status"
-				className="full-width"
 				labelPosition="side"
 				value={ settings.post_status }
 				options={ source.postStatuses }
@@ -87,20 +75,12 @@ function InsertPostAction( props ) {
 					<PropertySelect/>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
-			<BaseControl
-				label={ label( 'default_meta' ) }
-				key="default_meta"
-			>
-				<JetDefaultMetaControl
-					defaultMeta={ settings.default_meta }
-					onChange={ default_meta => onChangeSettingObj(
-						{ default_meta },
-					) }
-				/>
-			</BaseControl>
 		</>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'insert_post', withSelect( withRequestFields )( InsertPostAction ) );
+addAction(
+	'insert_product',
+	withSelect( withRequestFields )( InsertProductAction ),
+);

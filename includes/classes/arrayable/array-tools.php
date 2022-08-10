@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Classes\Arrayable;
 
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Je_Relation_Property;
+
 class Array_Tools {
 
 	/**
@@ -42,6 +44,7 @@ class Array_Tools {
 			try {
 				$payload[ $index ] = $object->to_array();
 			} catch ( Array_Continue_Exception $exception ) {
+				unset( $payload[ $index ] );
 				continue;
 			}
 		}

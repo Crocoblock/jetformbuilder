@@ -26,12 +26,14 @@ abstract class Abstract_Modifier {
 
 	abstract protected function get_properties(): Collection;
 
+	public function __construct() {
+		$this->properties = $this->get_properties();
+	}
+
 	/**
 	 * @throws Action_Exception
 	 */
 	public function run() {
-		$this->properties = $this->get_properties();
-
 		$this->attach_items();
 		$this->attach_required_properties();
 		$this->do_action();

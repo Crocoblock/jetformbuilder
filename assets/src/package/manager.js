@@ -101,6 +101,8 @@ import ActionModalContext from './context/action.modal';
 import SafeDeleteContext from './context/safe.delete';
 import RepeaterItemContext from './context/repeater.item';
 import ActionListItemContext from './context/action.list.item';
+import CurrentActionEditContext from './context/current.action.edit';
+import ActionFieldsMapContext from './context/action.fields.map.context';
 import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
@@ -113,6 +115,8 @@ window.JetFBComponents = {
 	SafeDeleteContext,
 	RepeaterItemContext,
 	ActionListItemContext,
+	CurrentActionEditContext,
+	ActionFieldsMapContext,
 	SafeDeleteToggle,
 	RepeaterAddNew,
 	Repeater,

@@ -86,7 +86,6 @@ class Update_User extends Base {
 			->set_request( $request )
 			->set_fields_map( $this->settings['fields_map'] ?? array() )
 			->set_user_role( $this->settings['user_role'] ?? false )
-			->set_properties( $this->list )
 			->run();
 	}
 

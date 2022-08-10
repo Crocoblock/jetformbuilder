@@ -107,10 +107,6 @@ class Insert_Post extends Base {
 		return "post-id-{$post_id}";
 	}
 
-	public function self_script_name() {
-		return 'jetFormInsertPostData';
-	}
-
 	public function editor_labels() {
 		return array(
 			'post_type'    => __( 'Post Type:', 'jet-form-builder' ),
@@ -137,7 +133,9 @@ class Insert_Post extends Base {
 			'postTypes'     => Tools::get_post_types_for_js(),
 			'taxonomies'    => Tools::get_taxonomies_for_modify(),
 			'postStatuses'  => $this->get_post_statuses_for_options(),
-			'properties'    => Array_Tools::to_array( $this->modifier->properties->all() ),
+			'properties'    => Tools::with_placeholder(
+				Array_Tools::to_array( $this->modifier->properties->all() )
+			),
 			'requestFields' => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',

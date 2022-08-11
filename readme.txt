@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.0.1
 Requires PHP: 7.0
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -263,6 +263,17 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
 == Changelog ==
+
+**2.1.3**
+ - ADD: Multiple Select support
+ - ADD: JetEngine Map Field block
+ - UPD: `post_link_by_id` macro support multiple values
+ - UPD: Generate sub-images for new attachments
+ - FIX: Media Field duplicates prefilled files
+ - FIX: Inserting images previews with cache plugins
+ - FIX: Post Thumbnail preset
+ - FIX: Calculated Field interprets number with leading zeros as number in Octal numeral system
+ - FIX: Compatibility with Elementor 3.7
 
 **2.1.2**
  - UPD: Allow using Term object properties as values for select, radio, checkbox fields

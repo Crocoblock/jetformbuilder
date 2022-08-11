@@ -237,6 +237,9 @@ class Controller {
 		 * @var $source Base[]
 		 */
 		foreach ( $source as $action ) {
+			if ( ! $action->get_executed_events() ) {
+				continue;
+			}
 			foreach ( $action->get_executed_events() as $on_event ) {
 				$actions[] = array(
 					'record_id'   => $this->record_id,

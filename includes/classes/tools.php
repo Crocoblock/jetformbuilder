@@ -535,4 +535,11 @@ class Tools {
 		return $prepared_value;
 	}
 
+	public static function is_webhook(): bool {
+		return (
+			defined( 'JET_FB_REST_WEBHOOK' ) &&
+			JET_FB_REST_WEBHOOK
+		);
+	}
+
 }

@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Post_Modifier extends Post_Modifier_Core {
@@ -392,20 +393,15 @@ class Post_Modifier extends Post_Modifier_Core {
 	 * To skip setting this property
 	 *
 	 * @throws Silence_Exception
-	 *
-	 * To exclude this property from $this->source_arr
-	 * @throws Modifier_Exclude_Property
 	 */
 	public function before_attach_status() {
+		if ( $this->global_status ) {
+			throw new Silence_Exception( 'Global in priority' );
+		}
 		switch ( $this->current_value ) {
-			case 'keep-current':
-				throw new Modifier_Exclude_Property( 'Keep current status, exclude this prop' );
 			case 'trash':
 				$this->set_action( 'trash' );
-
 				break;
-			case 'from-field':
-				throw new Silence_Exception( 'Status must be replaced by another field' );
 			default:
 				if ( empty( $this->current_value ) ) {
 					throw new Silence_Exception( 'Empty status' );

@@ -302,19 +302,18 @@ class Post_Modifier extends Post_Modifier_Core {
 
 		$post = get_post( (int) $this->current_value );
 
+		if ( ! is_a( $post, \WP_Post::class ) ) {
+			throw new Action_Exception( 'failed', 'empty post' );
+		}
+
 		if (
-			! is_a( $post, \WP_Post::class )
-			|| (
+			! Tools::is_webhook() &&
+			(
 				absint( $post->post_author ) !== get_current_user_id()
-				&& ! current_user_can( 'edit_post', $post->ID )
-			)
+			) &&
+			! current_user_can( 'edit_post', $post->ID )
 		) {
-			throw new Action_Exception(
-				'failed',
-				array(
-					'post' => $post,
-				)
-			);
+			throw new Action_Exception( 'failed', 'No permission' );
 		}
 
 		$this->set_action_once( 'update' );

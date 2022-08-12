@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Actions\Methods\Wc_Product_Modification;
 
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Property;
+use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
 /**
  * Update `product_tag` taxonomy
@@ -13,9 +13,9 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Property;
  * Class Product_Category_Property
  * @package Jet_Form_Builder\Actions\Methods\Wc_Product_Modification
  */
-class Product_Tag_Property extends Base_Post_Property {
+class Product_Tag_Property extends Base_Object_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'set_tag_ids';
 	}
 

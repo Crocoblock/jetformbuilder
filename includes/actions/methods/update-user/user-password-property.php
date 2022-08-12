@@ -7,12 +7,17 @@ namespace Jet_Form_Builder\Actions\Methods\Update_User;
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class User_Password_Property extends Base_Object_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'password';
+	}
+
+	public function get_attach_id(): string {
+		return 'user_pass';
 	}
 
 	public function get_label(): string {
@@ -20,27 +25,29 @@ class User_Password_Property extends Base_Object_Property {
 	}
 
 	/**
+	 * @param string $key
+	 * @param $value
 	 * @param Abstract_Modifier $modifier
 	 *
 	 * @throws Action_Exception
-	 * @throws Silence_Exception
 	 */
-	public function do_before( Abstract_Modifier $modifier ) {
-		$modifier->throw_if_empty();
-		$modifier->current_prop = 'user_pass';
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		$this->value = wp_check_invalid_utf8( $value, true );
+		$confirm     = $modifier->get( 'confirm_password' );
 
-		$modifier->current_value = wp_check_invalid_utf8( $modifier->current_value, true );
-		$confirm                 = $modifier->get_value_by_prop( 'confirm_password' );
-
-		if ( false === $confirm ) {
+		if ( is_null( $confirm->value ) ) {
 			return;
 		}
 
-		$confirm = wp_check_invalid_utf8( $confirm, true );
+		$confirm = wp_check_invalid_utf8( $confirm->value, true );
 
-		if ( $confirm !== $modifier->current_value ) {
+		if ( $confirm !== $this->value ) {
 			throw new Action_Exception( 'password_mismatch' );
 		}
+	}
+
+	public function get_related(): array {
+		return array( 'confirm_password' );
 	}
 
 }

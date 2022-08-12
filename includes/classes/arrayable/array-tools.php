@@ -30,6 +30,17 @@ class Array_Tools {
 		return $response;
 	}
 
+	/**
+	 * @param array|Collection $iterator
+	 *
+	 * @return \Generator
+	 */
+	public static function reverse( $iterator ): \Generator {
+		for ( $current = count( $iterator ) - 1; $current >= 0; $current -- ) {
+			yield $iterator[ $current ];
+		}
+	}
+
 	public static function from_array( array $payload ): array {
 		foreach ( $payload as $index => $object ) {
 			if ( is_array( $object ) ) {

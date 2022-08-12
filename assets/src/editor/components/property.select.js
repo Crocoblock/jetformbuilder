@@ -17,7 +17,7 @@ function taxPrefix( suffix = '' ) {
 }
 
 const getMapValue = value => {
-	return [ 'post_meta', 'post_terms' ].includes( value ) ? '' : value;
+	return [ 'meta_input', 'post_terms' ].includes( value ) ? '' : value;
 };
 
 function PropertySelect() {
@@ -39,7 +39,7 @@ function PropertySelect() {
 	      } = settings;
 
 	function getTypeFieldValue( value ) {
-		let resultValue = 'post_meta';
+		let resultValue = 'meta_input';
 
 		for ( const property of source.properties ) {
 			if ( value === property.value ) {
@@ -77,7 +77,7 @@ function PropertySelect() {
 	);
 
 	switch ( currentProp ) {
-		case 'post_meta':
+		case 'meta_input':
 			return <div
 				className="components-base-control jet-margin-bottom-wrapper"
 			>

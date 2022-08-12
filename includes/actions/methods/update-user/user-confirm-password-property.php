@@ -12,7 +12,7 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class User_Confirm_Password_Property extends Base_Object_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'confirm_password';
 	}
 
@@ -20,13 +20,8 @@ class User_Confirm_Password_Property extends Base_Object_Property {
 		return __( 'Confirm Password', 'jet-form-builder' );
 	}
 
-	/**
-	 * @param Abstract_Modifier $modifier
-	 *
-	 * @throws Modifier_Exclude_Property
-	 */
-	public function do_before( Abstract_Modifier $modifier ) {
-		throw new Modifier_Exclude_Property( "Excluding: {$modifier->current_prop}" );
+	public function get_value() {
+		throw new Silence_Exception();
 	}
 
 }

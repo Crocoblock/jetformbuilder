@@ -13,7 +13,7 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 
 	protected $meta = array();
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'user_meta';
 	}
 
@@ -21,43 +21,24 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 		return __( 'User Meta', 'jet-form-builder' );
 	}
 
-	public function is_supported( Abstract_Modifier $modifier ): bool {
+	public function is_supported( string $key, $value ): bool {
 		return true;
 	}
 
-	public function do_before( Abstract_Modifier $modifier ) {
-		if ( ! Tools::is_repeater_val( $modifier->current_value ) ) {
-			$this->set_meta(
-				array(
-					$modifier->current_prop => $modifier->current_value,
-				)
-			);
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		if ( ! Tools::is_repeater_val( $value ) ) {
+			$this->meta[ $key ] = $value;
 
 			return;
 		}
 
-		$this->set_meta(
-			array(
-				$modifier->current_prop => Tools::prepare_repeater_value(
-					$modifier->current_value,
-					$modifier->fields_map
-				),
-			)
-		);
+		$this->meta[ $key ] = Tools::prepare_repeater_value( $value, $modifier->fields_map );
 	}
 
-	/**
-	 * @param Abstract_Modifier|User_Modifier $modifier
-	 */
-	public function do_after( Abstract_Modifier $modifier ) {
+	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
 		foreach ( $this->meta as $key => $value ) {
-			update_user_meta( $modifier->updated_user->ID, $key, $value );
+			update_user_meta( $modifier->source_arr['ID'], $key, $value );
 		}
 	}
 
-	protected function set_meta( $data ): User_Meta_Property {
-		$this->meta = array_merge( $this->meta, $data );
-
-		return $this;
-	}
 }

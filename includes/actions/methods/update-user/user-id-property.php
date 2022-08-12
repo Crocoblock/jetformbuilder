@@ -13,7 +13,10 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class User_Id_Property extends Base_Object_Property {
 
-	public function get_prop_name(): string {
+	/** @var \WP_User */
+	public $user;
+
+	public function get_id(): string {
 		return 'ID';
 	}
 
@@ -22,27 +25,28 @@ class User_Id_Property extends Base_Object_Property {
 	}
 
 	/**
-	 * @param Abstract_Modifier|User_Modifier $modifier
+	 * @param string $key
+	 * @param $value
+	 * @param Abstract_Modifier $modifier
 	 *
 	 * @throws Action_Exception
 	 */
-	public function do_before( Abstract_Modifier $modifier ) {
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		$this->value = absint( $value );
 
-		$modifier->current_value = absint( $modifier->current_value );
-
-		if ( empty( $modifier->current_value ) ) {
+		if ( empty( $this->value ) ) {
 			throw new Action_Exception( 'sanitize_user' );
 		}
 
-		if ( get_current_user_id() !== $modifier->current_value && ! current_user_can( 'edit_users' ) ) {
+		if ( get_current_user_id() !== $this->value && ! current_user_can( 'edit_users' ) ) {
 			// Only users with appropriate capabilities can edit other users, also user can edit himself
 			throw new Action_Exception( 'internal_error' );
 		}
 
-		$modifier->updated_user = get_user_by( 'ID', $modifier->current_value );
+		$this->user = get_user_by( 'ID', $this->value );
 
-		if ( ! is_a( $modifier->updated_user, \WP_User::class ) ) {
-			throw new Action_Exception( 'internal_error', $modifier->updated_user, $modifier->current_value );
+		if ( ! is_a( $this->user, \WP_User::class ) ) {
+			throw new Action_Exception( 'internal_error', $this->user, $this->value );
 		}
 	}
 }

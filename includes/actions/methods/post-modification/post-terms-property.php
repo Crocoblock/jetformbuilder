@@ -6,13 +6,13 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
-use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 
-class Post_Terms_Property extends Base_Post_Property {
+
+class Post_Terms_Property extends Base_Object_Property {
 
 	protected $taxonomies = array();
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'post_terms';
 	}
 
@@ -20,19 +20,19 @@ class Post_Terms_Property extends Base_Post_Property {
 		return __( 'Post Terms', 'jet-form-builder' );
 	}
 
-	public function is_supported( Abstract_Modifier $modifier ): bool {
-		return false !== strpos( $modifier->current_prop, 'jet_tax__' );
+	public function is_supported( string $key, $value ): bool {
+		return false !== strpos( $key, 'jet_tax__' );
 	}
 
-	public function do_before( Abstract_Modifier $modifier ) {
-		$tax = str_replace( 'jet_tax__', '', $modifier->current_prop );
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		$tax = str_replace( 'jet_tax__', '', $key );
 
 		if ( ! isset( $this->taxonomies[ $tax ] ) ) {
 			$this->taxonomies[ $tax ] = array();
 		}
 
-		if ( ! is_array( $modifier->current_value ) ) {
-			$this->taxonomies[ $tax ][] = $this->sanitize_term( $modifier->current_value, $tax );
+		if ( ! is_array( $value ) ) {
+			$this->taxonomies[ $tax ][] = $this->sanitize_term( $value, $tax );
 
 			return;
 		}
@@ -43,7 +43,7 @@ class Post_Terms_Property extends Base_Post_Property {
 				function ( $term ) use ( $tax ) {
 					return $this->sanitize_term( $term, $tax );
 				},
-				$modifier->current_value
+				$value
 			)
 		);
 	}
@@ -51,13 +51,16 @@ class Post_Terms_Property extends Base_Post_Property {
 	/**
 	 * @param Abstract_Modifier|Post_Modifier $modifier
 	 */
-	public function do_after( Abstract_Modifier $modifier ) {
-		if ( ! in_array( $modifier->get_action(), array( 'insert', 'update' ), true ) ) {
+	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+		if ( Trash_Action::is_supported( $modifier ) ) {
 			return;
 		}
 
+		/** @var Base_Post_Action $action */
+		$action = $modifier->get_action();
+
 		foreach ( $this->taxonomies as $tax => $terms ) {
-			wp_set_post_terms( $modifier->inserted_post_id, $terms, $tax );
+			wp_set_post_terms( $action->get_inserted(), $terms, $tax );
 		}
 	}
 

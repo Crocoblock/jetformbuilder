@@ -12,7 +12,7 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class User_Nicename_Property extends Base_Object_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return 'user_nicename';
 	}
 

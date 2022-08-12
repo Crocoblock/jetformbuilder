@@ -5,44 +5,97 @@ namespace Jet_Form_Builder\Actions\Methods;
 
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 abstract class Base_Object_Property implements
 	Collection_Item_Interface,
 	Arrayable {
 
-	abstract public function get_prop_name(): string;
+	protected $value       = null;
+	protected $is_excluded = false;
 
 	abstract public function get_label(): string;
 
-	public function attach( Abstract_Modifier $modifier ) {
-		if ( ! $this->is_valid( $modifier ) ) {
+	public function set_value( string $key, $value, Abstract_Modifier $modifier ) {
+		if ( ! $this->can_attach( $key, $value ) ) {
 			return;
 		}
-		$this->do_after( $modifier );
+		/**
+		 * This is necessary for those cases when we need to set
+		 * (or not) some property and then build on it.
+		 */
+		$this->set_related( $modifier );
+		$this->do_before( $key, $value, $modifier );
 	}
 
-	public function do_before( Abstract_Modifier $modifier ) {
+	/**
+	 * For dynamic properties, it cannot be constant,
+	 * so we pass it through parameters
+	 * @param string $key
+	 *
+	 * @param $value
+	 * @param Abstract_Modifier $modifier
+	 */
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		$this->value = $value;
 	}
 
-	public function do_after( Abstract_Modifier $modifier ) {
+	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
 	}
 
-	public function is_valid( Abstract_Modifier $modifier ): bool {
-		if ( ! is_a( $this, Object_Dynamic_Property::class ) ) {
-			return true;
+	public function can_attach( string $key, $value ): bool {
+		if ( is_a( $this, Object_Dynamic_Property::class ) ) {
+			return $this->is_supported( $key, $value );
 		}
 
-		return $this->is_supported( $modifier );
+		return ! $this->is_excluded && is_null( $this->value );
 	}
 
-	public function get_id(): string {
-		return $this->get_prop_name();
+	/**
+	 * @return null
+	 * @throws Silence_Exception
+	 */
+	public function get_value() {
+		if ( ! is_null( $this->value ) ) {
+			return $this->value;
+		}
+		throw new Silence_Exception( 'Empty value' );
+	}
+
+	public function exclude() {
+		$this->is_excluded = true;
+	}
+
+	protected function set_related( Abstract_Modifier $modifier ) {
+		$related = $modifier->properties->get_by_ids( $this->get_related() );
+
+		/** @var Base_Object_Property $property */
+		foreach ( $related as $property ) {
+			$value = $modifier->get_value_by_prop( $property->get_id() );
+
+			$property->set_value( $property->get_id(), $value, $modifier );
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_attach_id(): string {
+		return $this->get_id();
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function get_related(): array {
+		return array();
 	}
 
 	public function to_array(): array {
 		return array(
-			'value' => $this->get_prop_name(),
+			'value' => $this->get_id(),
 			'label' => $this->get_label(),
 		);
 	}

@@ -6,9 +6,9 @@ namespace Jet_Form_Builder\Classes\Arrayable;
 
 class Collection implements \Iterator, \Countable, \ArrayAccess {
 
-	private $position = 0;
-	private $items;
-	private $groups   = array();
+	protected $position = 0;
+	protected $items;
+	protected $groups   = array();
 
 	public function __construct( array $items = array() ) {
 		$this->items = $items;
@@ -64,8 +64,22 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		return $this;
 	}
 
-	public function get_by_id( string $id ): array {
-		return $this->groups[ $id ] ?? array();
+	public function has_by_id( string $id ): bool {
+		return $this->get_by_id( $id )->valid();
+	}
+
+	public function get_by_ids( array $ids ): \Generator {
+		foreach ( $ids as $id ) {
+			yield from $this->get_by_id( $id );
+		}
+	}
+
+	public function get_by_id( string $id ): \Generator {
+		$group = $this->groups[ $id ] ?? array();
+
+		foreach ( $group as $property ) {
+			yield $property;
+		}
 	}
 
 	public function group_items() {

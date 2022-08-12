@@ -85,12 +85,11 @@ class Insert_Post extends Base {
 		$meta        = $this->settings['default_meta'] ?? array();
 
 		$this->modifier
-			->suppress_filters( false )
-			->set_post_type( $post_type )
-			->set_meta( $meta )
+			->set( 'post_type', $post_type )
+			->set( 'meta_input', $meta )
+			->set( 'post_status', $post_status )
 			->set_fields_map( $fields_map )
 			->set_request( $request )
-			->replace_field_by_prop( 'post_status', $post_status )
 			->run();
 	}
 

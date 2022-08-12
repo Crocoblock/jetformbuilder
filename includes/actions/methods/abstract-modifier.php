@@ -5,211 +5,133 @@ namespace Jet_Form_Builder\Actions\Methods;
 use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+use Jet_Theme_Core\Template_Conditions\Page_404;
 
 abstract class Abstract_Modifier {
 
-	public    $source_arr     = array();
-	public    $current_prop   = '';
-	public    $current_value;
-	public    $fields_map     = array();
-	protected $request        = array();
-	protected $excluded_props = array();
-	protected $action;
+	public    $source_arr = array();
+	public    $fields_map = array();
+	protected $request    = array();
 
-	/** @var Collection */
+	/** @var Object_Properties_Collection */
 	public $properties;
 
-	abstract public function get_actions();
+	/** @var Collection */
+	public $actions;
 
-	abstract protected function get_properties(): Collection;
+	/** @var Base_Modifier_Action */
+	protected $action;
+
+	abstract protected function get_actions(): Collection;
+
+	abstract protected function get_properties(): Object_Properties_Collection;
 
 	public function __construct() {
 		$this->properties = $this->get_properties();
+		// install actions
+		$this->actions = $this->get_actions();
 	}
 
-	/**
-	 * @throws Action_Exception
-	 */
 	public function run() {
-		$this->attach_items();
-		$this->attach_required_properties();
+		foreach ( $this->request as $key => $value ) {
+			$this->attach_item( $key, $value );
+		}
+
+		$this->do_required_properties();
+		$this->attach_properties();
 		$this->do_action();
-		$this->after_action();
-	}
 
-	public function get_action() {
-		return $this->action;
-	}
-
-	/**
-	 * @param string $action
-	 *
-	 * @return Abstract_Modifier
-	 * @throws Silence_Exception
-	 */
-	public function set_action( string $action ) {
-		$actions = $this->get_actions();
-
-		if ( isset( $actions[ $action ]['action'] ) && is_callable( $actions[ $action ]['action'] ) ) {
-			$this->action = $action;
-
-			return $this;
+		foreach ( $this->properties as $property ) {
+			$property->do_after( $this );
 		}
-
-		throw new Silence_Exception(
-			'Undefined action',
-			array(
-				$action,
-				array_keys( $this->get_actions() ),
-			)
-		);
 	}
 
-	/**
-	 * @throws Action_Exception
-	 */
-	public function do_action() {
-		$action          = $this->get_actions()[ $this->get_action() ] ?? array();
-		$action_callback = $action['action'] ?? false;
-		$after_callback  = $action['after'] ?? false;
+	protected function attach_item( $field_name, $value ) {
+		$key = $this->get_field_key( $field_name );
 
-		if ( ! is_callable( $action_callback ) ) {
-			throw new Action_Exception( 'internal_error' );
-		}
-
-		call_user_func( $action_callback, $this );
-
-		if ( ! is_callable( $after_callback ) ) {
+		if ( ! $key ) {
 			return;
 		}
 
-		call_user_func( $after_callback, $this );
+		/** @var Base_Object_Property $property */
+		foreach ( $this->properties->get_by_id( $key ) as $property ) {
+			$property->set_value( $key, $value, $this );
+		}
+
+		if ( $this->properties->has_by_id( $key ) ) {
+			return;
+		}
+
+		/** @var Base_Object_Property $item */
+		foreach ( $this->properties->get_dynamic() as $item ) {
+			$item->set_value( $key, $value, $this );
+		}
 	}
 
-	public function attach_items() {
-		$this->fields_map = array_filter( $this->fields_map );
+	protected function do_required_properties() {
+		/** @var Base_Object_Property|Object_Required_Property $property */
+		foreach ( $this->properties->get_required() as $property ) {
+			$property->do_if_required( $this );
+		}
+	}
 
-		foreach ( $this->request as $key => $value ) {
+	protected function attach_properties() {
+		/** @var Base_Object_Property $property */
+		foreach ( $this->properties as $property ) {
 			try {
-				$this->current_prop  = $key;
-				$this->current_value = $value;
-
-				$this->attach_item();
-			} catch ( Modifier_Exclude_Property $exception ) {
-				$this->exclude_current_prop();
-
+				$this->source_arr[ $property->get_id() ] = $property->get_value();
 			} catch ( Silence_Exception $exception ) {
 				continue;
 			}
 		}
-
-		$this->current_prop  = null;
-		$this->current_value = null;
 	}
 
-	public function attach_required_properties() {
-		foreach ( $this->properties as $property ) {
-			if ( ! is_a( $property, Object_Required_Property::class ) ) {
+	protected function do_action() {
+		$this->action = $this->get_supported_action();
+
+		$this->action->set_modifier( $this );
+		$this->action->do_action();
+		$this->action->do_after();
+	}
+
+	public function get_supported_action(): Base_Modifier_Action {
+		/** @var Base_Modifier_Action $current */
+		foreach ( $this->actions as $current ) {
+			if ( ! $current::is_supported( $this ) ) {
 				continue;
 			}
-			$this->current_prop = $property->get_prop_name();
 
-			if ( empty( $this->source_arr[ $this->current_prop ] ) ) {
-				$property->do_if_empty( $this );
-			}
+			return $current;
 		}
+
+		wp_die( 'Something went wrong' );
 	}
 
-	/**
-	 * @throws Silence_Exception
-	 */
-	public function attach_item() {
-		$this->current_prop = $this->get_current_prop_from_fields_map();
+	public function set( string $property, $value, $key = null ): Abstract_Modifier {
+		/** @var Base_Object_Property $prop_item */
+		$prop_item = $this->properties->get_by_id( $property )->current();
+		$key       = $key ?? $prop_item->get_id();
 
-		if ( in_array( $this->current_prop, $this->excluded_props, true ) ) {
-			throw new Silence_Exception( "Prop '{$this->current_prop}' is excluded" );
-		}
-		$this->before_attach();
+		$prop_item->set_value( $key, $value, $this );
 
-		$this->source_arr[ $this->current_prop ] = $this->current_value;
+		return $this;
 	}
 
-	public function before_attach() {
-		/** @var Base_Object_Property[] $properties */
-		$properties = $this->properties->get_by_id( $this->current_prop );
-
-		foreach ( $properties as $property ) {
-			$property->attach( $this );
-		}
-
-		if ( ! empty( $properties ) ) {
-			return;
-		}
-
-		$dynamic = array_filter(
-			$this->properties->all(),
-			function ( $item ) {
-				return is_a( $item, Object_Dynamic_Property::class );
-			}
-		);
-
-		$dynamic = array_reverse( $dynamic );
-
-		/** @var Base_Object_Property $item */
-		foreach ( $dynamic as $item ) {
-			$item->attach( $this );
-		}
+	public function get( string $property ): Base_Object_Property {
+		return $this->properties->get_by_id( $property )->current();
 	}
 
 	/**
 	 * @param string $field_name
 	 *
 	 * @return string
-	 * @throws Silence_Exception
 	 */
-	public function get_prop_by_field_name( string $field_name ) {
-		/**
-		 * At this moment $this->current_prop
-		 * store the `field_name`
-		 */
-		if ( empty( $this->fields_map[ $field_name ] ) ) {
-			throw new Silence_Exception( 'Field is not used.' );
-		}
-
-		/**
-		 * And here we returning the post property
-		 * Ex: 'post_content' | 'post_status' | 'jet_tax__slug' | 'custom_meta_key'
-		 */
-		return Tools::sanitize_text_field( $this->fields_map[ $field_name ] );
-	}
-
-	public function replace_field_by_prop( string $prop_name, $value ) {
-		$field_name = $this->get_field_name_by_prop( $prop_name );
-
-		if ( false === $field_name ) {
-			$field_name = $this->unique_slug( $prop_name );
-
-			$this->fields_map[ $field_name ] = $prop_name;
-		}
-
-		$this->set_request(
-			array(
-				$field_name => $value,
-			)
-		);
-
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 * @throws Silence_Exception
-	 */
-	public function get_current_prop_from_fields_map() {
-		return $this->get_prop_by_field_name( $this->current_prop );
+	public function get_field_key( string $field_name ): string {
+		return Tools::sanitize_text_field( $this->fields_map[ $field_name ] ?? '' );
 	}
 
 	public function get_value_by_prop( string $prop ) {
@@ -228,61 +150,22 @@ abstract class Abstract_Modifier {
 		return false;
 	}
 
-	public function after_action() {
-		foreach ( $this->properties as $property ) {
-			$property->do_after( $this );
-		}
-	}
-
-	public function unique_slug( $suffix ) {
-		$form_id = jet_form_builder()->form_handler->form_id ?? 0;
-		$prefix  = static::class;
-
-		return "{$prefix}_{$form_id}__{$suffix}";
-	}
-
-	public function set_fields_map( $fields_map ) {
-		$this->fields_map = $fields_map;
+	public function set_fields_map( $fields_map ): Abstract_Modifier {
+		$this->fields_map = array_filter( $fields_map );
 
 		return $this;
 	}
 
-	public function set_request( $request ) {
+	public function set_request( $request ): Abstract_Modifier {
 		$this->request = array_merge( $this->request, $request );
 
 		return $this;
 	}
 
-	public function exclude_current_prop() {
-		$this->exclude_prop( $this->current_prop );
-	}
-
 	/**
-	 * @throws Modifier_Exclude_Property
+	 * @return Base_Modifier_Action
 	 */
-	public function exclude_current() {
-		throw new Modifier_Exclude_Property( "Excluding: {$this->current_prop}" );
+	public function get_action(): Base_Modifier_Action {
+		return $this->action;
 	}
-
-	public function exclude_prop( string $prop ) {
-		if ( ! in_array( $prop, $this->excluded_props, true ) ) {
-			$this->excluded_props[] = $prop;
-		}
-
-		unset( $this->source_arr[ $prop ] );
-	}
-
-	/**
-	 * @throws Silence_Exception
-	 */
-	public function throw_if_empty() {
-		if ( empty( $this->current_value ) ) {
-			throw new Silence_Exception( 'Current field is empty' );
-		}
-	}
-
-	public function get_value() {
-		return $this->source_arr[ $this->current_prop ] ?? $this->current_value;
-	}
-
 }

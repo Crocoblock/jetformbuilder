@@ -12,7 +12,7 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Product_Tax_Status_Property extends Post_Excerpt_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return '_tax_status';
 	}
 

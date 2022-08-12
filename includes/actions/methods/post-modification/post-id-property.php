@@ -6,11 +6,12 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Silence_Exception;
+use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
-class Post_Id_Property extends Base_Post_Property {
 
-	public function get_prop_name(): string {
+class Post_Id_Property extends Base_Object_Property {
+
+	public function get_id(): string {
 		return 'ID';
 	}
 
@@ -19,20 +20,18 @@ class Post_Id_Property extends Base_Post_Property {
 	}
 
 	/**
-	 * @param Abstract_Modifier|Post_Modifier $modifier
+	 * @param string $key
+	 * @param $value
+	 * @param Abstract_Modifier $modifier
 	 *
-	 * @throws Action_Exception|Silence_Exception
+	 * @throws Action_Exception
 	 */
-	public function do_before( Abstract_Modifier $modifier ) {
-		if ( empty( $modifier->current_value ) ) {
-			throw new Action_Exception(
-				'empty_field',
-				$modifier->current_prop,
-				$modifier->current_value
-			);
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		if ( empty( $value ) ) {
+			throw new Action_Exception( 'empty_field', $key );
 		}
 
-		$post = get_post( (int) $modifier->current_value );
+		$post = get_post( (int) $value );
 
 		if (
 			! is_a( $post, \WP_Post::class )
@@ -48,7 +47,5 @@ class Post_Id_Property extends Base_Post_Property {
 				)
 			);
 		}
-
-		$modifier->set_action_once( 'update' );
 	}
 }

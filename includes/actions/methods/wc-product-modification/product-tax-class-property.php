@@ -10,7 +10,7 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
 
 class Product_Tax_Class_Property extends Post_Excerpt_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return '_tax_class';
 	}
 

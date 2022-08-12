@@ -9,7 +9,7 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
 
 class Product_Manage_Stock_Property extends Post_Excerpt_Property {
 
-	public function get_prop_name(): string {
+	public function get_id(): string {
 		return '_manage_stock';
 	}
 

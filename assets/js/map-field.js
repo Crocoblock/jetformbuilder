@@ -220,6 +220,9 @@
 						wp.apiFetch( {
 							method: 'get',
 							path: JetMapFieldsSettings.api + '?lat=' + position.lat + '&lng=' + position.lng,
+							headers: {
+								'nonce': JetMapFieldsSettings.nonce,
+							},
 						} ).then( function ( response ) {
 
 							if ( response.success ) {
@@ -298,6 +301,9 @@
 				return wp.apiFetch( {
 					method: 'get',
 					path: JetMapFieldsSettings.apiHash + '?loc=' + location,
+					headers: {
+						'nonce': JetMapFieldsSettings.nonce,
+					},
 				} ).then( response => {
 
 					if ( response.success ) {

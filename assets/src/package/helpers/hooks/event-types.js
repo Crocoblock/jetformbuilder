@@ -14,14 +14,16 @@ export const useRequestEvents = () => {
 	];
 
 	return useSelect(
-		select => select( 'jet-forms/events' ).filterList( currentAction.type, list ),
+		select => select( 'jet-forms/events' ).
+			filterList( currentAction.type, list ),
 		[ currentAction.id ],
 	);
 };
 
 const useDefaultEvents = () => {
-	const eventsObjects = useSelect( select => select( 'jet-forms/events' ).getAlwaysTypes(), [] );
-	const events = [];
+	const eventsObjects = useSelect(
+		select => select( 'jet-forms/events' ).getAlwaysTypes(), [] );
+	const events        = [];
 
 	for ( const { value } of eventsObjects ) {
 		events.push( value );
@@ -32,18 +34,23 @@ const useDefaultEvents = () => {
 };
 
 const useEventsFromGateways = () => {
-	const gateways = useSelectPostMeta( '_jf_gateways' );
-	const { scenario = 'PAY_NOW' } = gateways[ gateways?.gateway ] ?? {};
+	const gateways          = useSelectPostMeta( '_jf_gateways' );
+	const { scenario = {} } = gateways[ gateways?.gateway ] ?? {};
 
 	return useSelect(
 		select => {
-			const eventsObjects = select( 'jet-forms/events' ).getGatewayTypes();
+			const eventsObjects = select( 'jet-forms/events' ).
+				getGatewayTypes();
 
 			const events = [];
 
 			for ( const event of eventsObjects ) {
-				const correctGateway = event.gateway ? event.gateway === gateways.gateway : true;
-				const correctScenario = event.scenario ? event.scenario === scenario : true;
+				const correctGateway  = event.gateway
+				                        ? event.gateway === gateways.gateway
+				                        : true;
+				const correctScenario = event.scenario
+				                        ? event.scenario === scenario?.id
+				                        : true;
 
 				if ( correctGateway && correctScenario ) {
 					events.push( event.value );
@@ -65,10 +72,10 @@ export const useEventsFromActions = ( { index } ) => {
 
 	for ( const action of actions ) {
 		const {
-			[ action.type ]: current = {},
-		} = action.settings;
+			      [ action.type ]: current = {},
+		      } = action.settings;
 
-		if ( ! current.provideEvents?.length ) {
+		if ( !current.provideEvents?.length ) {
 			continue;
 		}
 

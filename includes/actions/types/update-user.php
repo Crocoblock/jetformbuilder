@@ -97,7 +97,9 @@ class Update_User extends Base {
 	public function action_data() {
 		return array(
 			'userRoles'  => Tools::get_user_roles_for_js(),
-			'userFields' => Array_Tools::to_array( $this->modifier->properties->all() ),
+			'properties' => Tools::with_placeholder(
+				Array_Tools::to_array( $this->modifier->properties->all() )
+			),
 		);
 	}
 

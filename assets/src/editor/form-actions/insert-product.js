@@ -1,4 +1,4 @@
-import PropertySelect from '../components/property.select';
+import PostPropertySelect from '../components/post.property.select';
 
 const {
 	      addAction,
@@ -9,6 +9,7 @@ const {
 const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
+	      DynamicPropertySelect,
       } = JetFBComponents;
 
 const { withRequestFields } = JetFBHooks;
@@ -17,7 +18,6 @@ const { withRequestFields } = JetFBHooks;
  * Internal dependencies
  */
 const {
-	      BaseControl,
 	      SelectControl,
       } = wp.components;
 
@@ -72,7 +72,14 @@ function InsertProductAction( props ) {
 				fields={ formFields }
 			>
 				<WrapperRequiredControl>
-					<PropertySelect/>
+					<DynamicPropertySelect
+						dynamic={ [ 'meta_input', 'post_terms' ] }
+						parseValue={ value => (
+							value.includes( 'jet_tax__' ) ? 'post_terms' : value
+						) }
+					>
+						<PostPropertySelect/>
+					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
 		</>

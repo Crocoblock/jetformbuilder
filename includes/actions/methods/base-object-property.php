@@ -33,6 +33,7 @@ abstract class Base_Object_Property implements
 	/**
 	 * For dynamic properties, it cannot be constant,
 	 * so we pass it through parameters
+	 *
 	 * @param string $key
 	 *
 	 * @param $value
@@ -42,7 +43,7 @@ abstract class Base_Object_Property implements
 		$this->value = $value;
 	}
 
-	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+	public function do_after( Abstract_Modifier $modifier ) {
 	}
 
 	public function can_attach( string $key, $value ): bool {
@@ -73,7 +74,19 @@ abstract class Base_Object_Property implements
 
 		/** @var Base_Object_Property $property */
 		foreach ( $related as $property ) {
-			$value = $modifier->get_value_by_prop( $property->get_id() );
+			$field_name = $modifier->get_field_name_by_prop( $property->get_id() );
+
+			if ( false === $field_name ) {
+				continue;
+			}
+
+			if ( $property->get_id() === $this->get_id() ) {
+				wp_die(
+					"Logic error. 
+					Property [{$property->get_id()}] can not be related by itself."
+				);
+			}
+			$value = $modifier->get_value( $field_name );
 
 			$property->set_value( $property->get_id(), $value, $modifier );
 		}

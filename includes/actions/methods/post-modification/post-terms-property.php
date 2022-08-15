@@ -51,7 +51,7 @@ class Post_Terms_Property extends Base_Object_Property {
 	/**
 	 * @param Abstract_Modifier|Post_Modifier $modifier
 	 */
-	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+	public function do_after( Abstract_Modifier $modifier ) {
 		if ( Trash_Action::is_supported( $modifier ) ) {
 			return;
 		}

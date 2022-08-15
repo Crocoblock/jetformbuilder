@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
-use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
@@ -22,11 +21,14 @@ class Post_Id_Property extends Base_Object_Property {
 	/**
 	 * @param string $key
 	 * @param $value
-	 * @param Abstract_Modifier $modifier
 	 *
+	 * @return bool
 	 * @throws Action_Exception
 	 */
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function can_attach( string $key, $value ): bool {
+		if ( ! parent::can_attach( $key, $value ) ) {
+			return false;
+		}
 		if ( empty( $value ) ) {
 			throw new Action_Exception( 'empty_field', $key );
 		}
@@ -47,5 +49,7 @@ class Post_Id_Property extends Base_Object_Property {
 				)
 			);
 		}
+
+		return true;
 	}
 }

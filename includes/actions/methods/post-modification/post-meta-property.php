@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 
 class Post_Meta_Property extends Base_Object_Property implements
@@ -46,6 +47,15 @@ class Post_Meta_Property extends Base_Object_Property implements
 		);
 	}
 
+	public function do_after( Abstract_Modifier $modifier ) {
+		/** @var Base_Post_Action $action */
+		$action = $modifier->get_action();
+
+		foreach ( $this->value as $key => $value ) {
+			update_post_meta( $action->get_inserted(), $key, $value );
+		}
+	}
+
 	private function set_meta( array $meta ) {
 		if ( ! is_array( $this->value ) ) {
 			$this->value = array();
@@ -59,5 +69,9 @@ class Post_Meta_Property extends Base_Object_Property implements
 		}
 
 		$this->value = array_merge( $this->value, $meta );
+	}
+
+	public function get_value() {
+		throw new Silence_Exception();
 	}
 }

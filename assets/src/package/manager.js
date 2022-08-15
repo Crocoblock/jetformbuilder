@@ -103,9 +103,11 @@ import RepeaterItemContext from './context/repeater.item';
 import ActionListItemContext from './context/action.list.item';
 import CurrentActionEditContext from './context/current.action.edit';
 import ActionFieldsMapContext from './context/action.fields.map.context';
+import CurrentPropertyMapContext from './context/current.property.map';
 import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
+import DynamicPropertySelect from './components/dynamic.property.select';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -117,6 +119,8 @@ window.JetFBComponents = {
 	ActionListItemContext,
 	CurrentActionEditContext,
 	ActionFieldsMapContext,
+	CurrentPropertyMapContext,
+	DynamicPropertySelect,
 	SafeDeleteToggle,
 	RepeaterAddNew,
 	Repeater,

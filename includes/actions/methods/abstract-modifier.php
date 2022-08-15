@@ -45,6 +45,7 @@ abstract class Abstract_Modifier {
 		$this->attach_properties();
 		$this->do_action();
 
+		/** @var Base_Object_Property $property */
 		foreach ( $this->properties as $property ) {
 			$property->do_after( $this );
 		}
@@ -134,9 +135,7 @@ abstract class Abstract_Modifier {
 		return Tools::sanitize_text_field( $this->fields_map[ $field_name ] ?? '' );
 	}
 
-	public function get_value_by_prop( string $prop ) {
-		$field_name = $this->get_field_name_by_prop( $prop );
-
+	public function get_value( string $field_name ) {
 		return $this->request[ $field_name ] ?? false;
 	}
 

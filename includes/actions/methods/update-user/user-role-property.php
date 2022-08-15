@@ -24,7 +24,7 @@ class User_Role_Property extends Base_Object_Property {
 	}
 
 
-	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+	public function do_after( Abstract_Modifier $modifier ) {
 		/** @var User_Id_Property $id */
 		$id = $modifier->get( 'ID' );
 

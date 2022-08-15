@@ -13,7 +13,7 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 class Post_Title_Property extends Base_Object_Property implements
 	Object_Required_Property {
 
-	private $is_empty = false;
+	protected $is_empty = false;
 
 	public function get_id(): string {
 		return 'post_title';
@@ -32,10 +32,11 @@ class Post_Title_Property extends Base_Object_Property implements
 			return;
 		}
 
+		$this->value    = '(empty)';
 		$this->is_empty = true;
 	}
 
-	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+	public function do_after( Abstract_Modifier $modifier ) {
 		if ( ! $this->is_empty ) {
 			return;
 		}

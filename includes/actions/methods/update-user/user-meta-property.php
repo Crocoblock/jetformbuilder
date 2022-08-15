@@ -35,7 +35,7 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 		$this->meta[ $key ] = Tools::prepare_repeater_value( $value, $modifier->fields_map );
 	}
 
-	public function do_after( string $key, $value, Abstract_Modifier $modifier ) {
+	public function do_after( Abstract_Modifier $modifier ) {
 		foreach ( $this->meta as $key => $value ) {
 			update_user_meta( $modifier->source_arr['ID'], $key, $value );
 		}

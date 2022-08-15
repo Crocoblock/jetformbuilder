@@ -5,10 +5,30 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
+use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 
 
-class Post_Modifier extends Abstract_Modifier {
+class Post_Modifier extends Abstract_Post_Modifier {
+
+	public function is_supported( Insert_Post $action ): bool {
+		return true;
+	}
+
+	public function get_id(): string {
+		return 'all';
+	}
+
+	public function before_run( Insert_Post $action ) {
+		parent::before_run( $action );
+
+		$post_status = $this->settings['post_status'] ?? '';
+		$meta        = $this->settings['default_meta'] ?? array();
+
+		$this->set( 'post_type', $action->get_post_type() );
+		$this->set( 'meta_input', $meta );
+		$this->set( 'post_status', $post_status );
+	}
 
 	protected function get_properties(): Object_Properties_Collection {
 		return apply_filters(
@@ -28,7 +48,6 @@ class Post_Modifier extends Abstract_Modifier {
 					new Post_Comments_Property(),
 					new Post_Parent_Property(),
 					new Post_Meta_Property(),
-					new Post_Je_Relation_Property(),
 					new Post_Terms_Property(),
 				)
 			)

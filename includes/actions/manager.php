@@ -32,11 +32,9 @@ class Manager {
 		return array(
 			new Types\Send_Email(),
 			new Types\Insert_Post(),
-			new Types\Insert_Product(),
 			new Types\Register_User(),
 			new Types\Fake_User_Login(),
 			new Types\Update_User(),
-			new Types\Update_Options(),
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),

@@ -3,26 +3,10 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Methods\Object_Properties_List;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Author_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Comments_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Gmt_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Date_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Id_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Je_Relation_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Meta_Property;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Abstract_Post_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Parent_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Status_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Terms_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Thumbnail_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Title_Property;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -34,16 +18,25 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Insert_Post extends Base {
 
-	/** @var Post_Modifier */
-	public $modifier;
+	/** @var Abstract_Post_Modifier[] */
+	protected $modifiers;
 
 	public function __construct() {
 		parent::__construct();
 
 		/**
+		 * Just add a new element to the end.
+		 * When the action is executed, this array is flipped,
+		 * which puts the \Jet_Form_Builder\Actions\Methods\Post_Modifier at the end.
+		 *
 		 * @since 2.1.4
 		 */
-		$this->modifier = new Post_Modifier();
+		$this->modifiers = apply_filters(
+			'jet-form-builder/action/insert-post/modifiers',
+			array(
+				new Post_Modifier(),
+			)
+		);
 	}
 
 	public function get_name() {
@@ -76,21 +69,23 @@ class Insert_Post extends Base {
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
-	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$post_type   = $this->settings['post_type'] ?? false;
-		$fields_map  = $this->settings['fields_map'] ?? array();
-		$post_status = $this->settings['post_status'] ?? '';
-		$meta        = $this->settings['default_meta'] ?? array();
+		$modifiers = array_reverse( $this->modifiers );
 
-		$this->modifier
-			->set( 'post_type', $post_type )
-			->set( 'meta_input', $meta )
-			->set( 'post_status', $post_status )
-			->set_fields_map( $fields_map )
-			->set_request( $request )
-			->run();
+		/** @var Abstract_Post_Modifier $modifier */
+		foreach ( $modifiers as $modifier ) {
+			if ( ! $modifier->is_supported( $this ) ) {
+				continue;
+			}
+			$modifier->before_run( $this );
+			$modifier->run();
+			break;
+		}
+	}
+
+	public function get_post_type(): string {
+		return $this->settings['post_type'] ?? '';
 	}
 
 	public function get_inserted_post_context( $post_id = false ) {
@@ -128,13 +123,19 @@ class Insert_Post extends Base {
 	 * @return [type] [description]
 	 */
 	public function action_data() {
+		$properties = array();
+
+		foreach ( $this->modifiers as $modifier ) {
+			$properties[ $modifier->get_id() ] = Tools::with_placeholder(
+				Array_Tools::to_array( $modifier->properties->all() )
+			);
+		}
+
 		return array(
 			'postTypes'     => Tools::get_post_types_for_js(),
 			'taxonomies'    => Tools::get_taxonomies_for_modify(),
 			'postStatuses'  => $this->get_post_statuses_for_options(),
-			'properties'    => Tools::with_placeholder(
-				Array_Tools::to_array( $this->modifier->properties->all() )
-			),
+			'properties'    => $properties,
 			'requestFields' => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',

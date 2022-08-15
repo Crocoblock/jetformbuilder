@@ -1,18 +1,19 @@
 import JetDefaultMetaControl from '../blocks/controls/default-meta';
-import PropertySelect from '../components/property.select';
+import PostPropertySelect from '../components/post.property.select';
 
 const {
 	      addAction,
 	      getFormFieldsBlocks,
 	      convertListToFieldsMap,
       } = JetFBActions;
-
 const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
+	      DynamicPropertySelect,
       } = JetFBComponents;
-
-const { withRequestFields } = JetFBHooks;
+const {
+	      withRequestFields,
+      } = JetFBHooks;
 
 /**
  * Internal dependencies
@@ -21,15 +22,43 @@ const {
 	      BaseControl,
 	      SelectControl,
       } = wp.components;
-
-const { __ } = wp.i18n;
-
+const {
+	      __,
+      } = wp.i18n;
 const {
 	      useState,
 	      useEffect,
       } = wp.element;
+const {
+	      withSelect,
+      } = wp.data;
+const {
+	      applyFilters,
+      } = wp.hooks;
 
-const { withSelect } = wp.data;
+const modifiers = applyFilters(
+	'jet.fb.insert.post.modifiers',
+	[
+		{
+			id: 'product',
+			isSupported: settings => 'product' === settings.post_type,
+		},
+		{
+			id: 'all',
+			isSupported: settings => true,
+		},
+	],
+);
+
+const getActionModifierId = settings => {
+	for ( const modifier of modifiers ) {
+		if ( !modifier.isSupported( settings ) ) {
+			continue;
+		}
+
+		return modifier.id;
+	}
+};
 
 function InsertPostAction( props ) {
 	const {
@@ -42,6 +71,11 @@ function InsertPostAction( props ) {
 	      } = props;
 
 	const [ formFields, setFormFields ] = useState( [] );
+	const [ properties, setProperties ] = useState( () => {
+		const id = getActionModifierId( settings );
+
+		return source.properties[ id ] ?? [];
+	} );
 
 	useEffect( () => {
 		onChangeSettingObj(
@@ -51,6 +85,12 @@ function InsertPostAction( props ) {
 			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
 		);
 	}, [] );
+
+	useEffect( () => {
+		const id = getActionModifierId( settings );
+
+		setProperties( source.properties[ id ] ?? [] );
+	}, [ settings ] );
 
 	/* eslint-disable jsx-a11y/no-onchange */
 
@@ -84,7 +124,15 @@ function InsertPostAction( props ) {
 				fields={ formFields }
 			>
 				<WrapperRequiredControl>
-					<PropertySelect/>
+					<DynamicPropertySelect
+						dynamic={ [ 'meta_input', 'post_terms' ] }
+						properties={ properties }
+						parseValue={ value => (
+							value.includes( 'jet_tax__' ) ? 'post_terms' : value
+						) }
+					>
+						<PostPropertySelect/>
+					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
 			<BaseControl

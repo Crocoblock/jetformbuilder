@@ -7,7 +7,7 @@ namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modifica
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
 
-class Product_Stock_Status_Property extends Post_Excerpt_Property {
+class Product_Stock_Status_Property extends Base_Product_Property {
 
 	public function get_id(): string {
 		return '_stock_status';

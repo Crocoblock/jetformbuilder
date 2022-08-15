@@ -99,6 +99,10 @@ abstract class Base_Object_Property implements
 		return $this->get_id();
 	}
 
+	public function get_help(): string {
+		return '';
+	}
+
 	/**
 	 * @return string[]
 	 */
@@ -110,6 +114,7 @@ abstract class Base_Object_Property implements
 		return array(
 			'value' => $this->get_id(),
 			'label' => $this->get_label(),
+			'help'  => $this->get_help(),
 		);
 	}
 

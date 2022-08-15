@@ -22,4 +22,8 @@ class Product_Backorders_Property extends Base_Product_Property {
 
 		$product->set_backorders( $value );
 	}
+
+	public function get_help(): string {
+		return __( "Accepts: 'yes', 'no' or 'notify'", 'jet-form-builder' );
+	}
 }

@@ -17,10 +17,13 @@ class Product_Gallery_Property extends Base_Product_Property {
 		return __( 'Product Gallery', 'jet-form-builder' );
 	}
 
-
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
 		$product = $this->get_product( $modifier );
 
 		$product->set_gallery_image_ids( $value );
+	}
+
+	public function get_help(): string {
+		return __( 'List of image ids', 'jet-form-builder' );
 	}
 }

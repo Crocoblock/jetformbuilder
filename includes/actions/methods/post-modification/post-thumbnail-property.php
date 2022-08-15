@@ -15,4 +15,8 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 	public function get_label(): string {
 		return __( 'Post Thumbnail', 'jet-form-builder' );
 	}
+
+	public function get_help(): string {
+		return __( 'Accepts attachment ID', 'jet-form-builder' );
+	}
 }

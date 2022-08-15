@@ -28,4 +28,8 @@ class Product_Category_Property extends Base_Product_Property {
 
 		$product->set_category_ids( $value );
 	}
+
+	public function get_help(): string {
+		return __( 'List of terms IDs', 'jet-form-builder' );
+	}
 }

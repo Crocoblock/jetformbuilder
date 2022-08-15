@@ -17,7 +17,6 @@ class Product_Width_Property extends Base_Product_Property {
 		return __( 'Product Width', 'jet-form-builder' );
 	}
 
-
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
 		$product = $this->get_product( $modifier );
 

@@ -24,6 +24,11 @@ function DynamicPropertySelect( {
 		      settings,
 		      setMapField,
 	      } = useContext( CurrentActionEditContext );
+
+	properties = (
+		properties ?? source.properties
+	);
+
 	// context with current field in fields map
 	const {
 		      name,
@@ -37,9 +42,7 @@ function DynamicPropertySelect( {
 	function getTypeFieldValue( value ) {
 		let resultValue = dynamic[ 0 ] ?? '';
 
-		for ( const property of (
-			properties ?? source.properties
-		) ) {
+		for ( const property of properties ) {
 			if ( value === property.value ) {
 				resultValue = value;
 				break;
@@ -55,10 +58,20 @@ function DynamicPropertySelect( {
 		() => getTypeFieldValue( fields_map[ name ] ?? '' ),
 	);
 
+	const getHelp = () => {
+		const property = properties.find(
+			( { value } ) => value === currentProp,
+		);
+
+		return property?.help ?? '';
+	};
+
 	const FieldSelect = (
 		<SelectControl
 			key={ name + index }
 			value={ currentProp }
+			options={ properties }
+			help={ getHelp() }
 			onChange={ value => {
 				const prop = getTypeFieldValue( value );
 
@@ -68,7 +81,6 @@ function DynamicPropertySelect( {
 					value: dynamic.includes( value ) ? '' : value,
 				} );
 			} }
-			options={ properties ?? source.properties }
 		/>
 	);
 

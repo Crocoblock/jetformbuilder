@@ -22,4 +22,8 @@ class Product_Cross_Sell_Ids_Property extends Base_Product_Property {
 
 		$product->set_cross_sell_ids( $value );
 	}
+
+	public function get_help(): string {
+		return __( 'IDs from the cross-sell products', 'jet-form-builder' );
+	}
 }

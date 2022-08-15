@@ -23,4 +23,8 @@ class Product_Upsell_Ids_Property extends Base_Product_Property {
 
 		$product->set_upsell_ids( $value );
 	}
+
+	public function get_help(): string {
+		return __( 'IDs from the up-sell products', 'jet-form-builder' );
+	}
 }

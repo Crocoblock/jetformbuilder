@@ -40,4 +40,8 @@ class Product_Catalog_Visibility_Property extends Base_Product_Property {
 			throw new Action_Exception( $exception->getMessage() );
 		}
 	}
+
+	public function get_help(): string {
+		return __( "Accepts: 'hidden', 'visible', 'search' and 'catalog'", 'jet-form-builder' );
+	}
 }

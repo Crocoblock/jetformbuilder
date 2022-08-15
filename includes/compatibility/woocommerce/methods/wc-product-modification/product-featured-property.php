@@ -23,10 +23,13 @@ class Product_Featured_Property extends Base_Product_Property {
 		return 'is_featured';
 	}
 
-
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
 		$product = $this->get_product( $modifier );
 
 		$product->set_featured( $value );
+	}
+
+	public function get_help(): string {
+		return __( 'Whether the product is featured or not', 'jet-form-builder' );
 	}
 }

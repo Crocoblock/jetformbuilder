@@ -34,4 +34,8 @@ class Product_Tax_Status_Property extends Base_Product_Property {
 			throw new Action_Exception( $exception->getMessage() );
 		}
 	}
+
+	public function get_help(): string {
+		return __( "Accepts: 'taxable', 'shipping' or 'none'", 'jet-form-builder' );
+	}
 }

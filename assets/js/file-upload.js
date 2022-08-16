@@ -3,6 +3,16 @@
 
 		'use strict';
 
+		const createFileList = ( inputFileArray ) => {
+			const transfer = new DataTransfer();
+
+			for ( const file of inputFileArray ) {
+				transfer.items.add( file );
+			}
+
+			return transfer.files;
+		};
+
 		const convertFields = scope => {
 			scope.find( '.jet-form-builder-file-upload' ).each( function () {
 				const wrapper = $( this );
@@ -20,6 +30,10 @@
 					);
 
 					urls.push( [ url, removeNode.data( 'file-name' ) ] );
+				}
+
+				if ( !urls.length ) {
+					return;
 				}
 
 				Promise.allSettled( urls.map( ( [ url, fileName ] ) => (
@@ -42,14 +56,8 @@
 		};
 
 		const addFileToInput = ( input, newFiles ) => {
-			const transfer = new DataTransfer();
-
-			for ( const file of newFiles ) {
-				transfer.items.add( file );
-			}
-
-			input.files        = transfer.files;
-			input.jfbPrevFiles = input.files;
+			input.files        = createFileList( [ ...newFiles ] );
+			input.jfbPrevFiles = createFileList( [ ...input.files ] );
 		};
 
 		var JetFormBuilderFileUpload = {
@@ -132,7 +140,6 @@
 			constructor( event ) {
 				this.uploadEl   = $( event.target ?? event ).
 					closest( '.jet-form-builder-file-upload' );
-				this.files      = this.getFiles( event );
 				this.errorsEl   = this.uploadEl.find(
 					'.jet-form-builder-file-upload__errors' );
 				this.previewsEl = this.uploadEl.find(
@@ -141,10 +148,6 @@
 				this.fields     = this.getFields();
 				this.input      = this.getFields().find( 'input[type="file"]' );
 				this.hasError   = false;
-			}
-
-			getFiles( event ) {
-				return [];
 			}
 
 			removeSingle() {
@@ -210,36 +213,29 @@
 				this.template = this.getTemplate();
 			}
 
-			getFiles( event ) {
-				return event.target.files;
-			}
-
 			loadFiles() {
 				if ( this.isSingle() ) {
 					return;
 				}
-				const dt            = new DataTransfer();
 				const originalInput = this.input[ 0 ];
 				const { files }     = originalInput;
 
+				this.files = createFileList( [ ...files ] );
+
 				if ( !originalInput.jfbPrevFiles?.length ) {
-					originalInput.jfbPrevFiles = files;
+					originalInput.jfbPrevFiles = createFileList( [ ...files ] );
 
 					return;
 				}
 
-				for ( const file of originalInput.jfbPrevFiles ) {
-					dt.items.add( file );
-				}
+				originalInput.jfbPrevFiles = createFileList( [
+					...originalInput.jfbPrevFiles,
+					...this.files,
+				] );
 
-				for ( const file of files ) {
-					dt.items.add( file );
-				}
-
-				originalInput.files = dt.files; // Assign the updates
-			                                    // list
-				originalInput.jfbPrevFiles = dt.files;
-
+				originalInput.files = createFileList( [
+					...originalInput.jfbPrevFiles,
+				] );
 			}
 
 			insertPreviews() {
@@ -248,7 +244,8 @@
 				const previewElements = [];
 
 				for ( const file of this.files ) {
-					const current = this.getFilePreview( file );
+					const url     = URL.createObjectURL( file );
+					const current = this.getFilePreview( url, file );
 
 					try {
 						this.validateImage( file, current );
@@ -281,8 +278,7 @@
 				}
 			}
 
-			getFilePreview( file ) {
-				const url    = URL.createObjectURL( file );
+			getFilePreview( url, file ) {
 				let template = this.template.replace( '%file_url%', url );
 				template     = $(
 					template.replace( '%file_name%', file.name ) );
@@ -337,9 +333,17 @@
 					}
 				}
 
-				originalInput.files = dt.files; // Assign the updates
-			                                    // list
-				originalInput.jfbPrevFiles = dt.files;
+				originalInput.files = dt.files;
+
+				if ( !dt.files.length ) {
+					delete originalInput.jfbPrevFiles;
+
+					return removedFile;
+				}
+
+				originalInput.jfbPrevFiles = createFileList( [
+					...originalInput.files,
+				] );
 
 				return removedFile;
 			}

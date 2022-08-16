@@ -9,6 +9,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * ADD: JetEngine Map Field block
 * UPD: `post_link_by_id` macro support multiple values
 * UPD: Generate sub-images for new attachments
+* FIX: Pass gateway with query vars
 * FIX: Media Field duplicates prefilled files 
 * FIX: Inserting images previews with cache plugins
 * FIX: Post Thumbnail preset

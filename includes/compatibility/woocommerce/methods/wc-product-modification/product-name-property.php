@@ -28,7 +28,7 @@ class Product_Name_Property extends Post_Title_Property {
 		// Check is it Insert action (not Update)
 		if ( ! is_a( $action, Save_Action::class ) ||
 		     0 < $product->get_id() ||
-		     ! is_null( $this->value )
+		     $product->get_name()
 		) {
 			return;
 		}

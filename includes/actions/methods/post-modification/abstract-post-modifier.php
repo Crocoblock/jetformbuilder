@@ -14,7 +14,7 @@ abstract class Abstract_Post_Modifier extends Abstract_Modifier {
 	abstract public function get_id(): string;
 
 	public function before_run( Insert_Post $action ) {
-		$fields_map = $this->settings['fields_map'] ?? array();
+		$fields_map = $action->settings['fields_map'] ?? array();
 		$request    = jet_fb_action_handler()->request_data;
 
 		$this->set_fields_map( $fields_map );

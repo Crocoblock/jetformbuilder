@@ -21,7 +21,7 @@ class Product_Id_Property extends Post_Id_Property {
 		if ( is_a( $this->value, \WC_Product::class ) ) {
 			return $this->value;
 		}
-		$this->value = new \WC_Product();
+		$this->value = new \WC_Product_Simple();
 
 		return $this->value;
 	}

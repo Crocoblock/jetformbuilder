@@ -402,6 +402,12 @@ class Action_Handler {
 		return false;
 	}
 
+	/**
+	 * Use jet_fb_handler()->refer
+	 * @deprecated 2.1.4
+	 *
+	 * @return mixed|string
+	 */
 	public function get_refer() {
 		return $this->request_data['__refer'] ?? '';
 	}

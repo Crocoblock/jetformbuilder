@@ -43,6 +43,7 @@ class Parser_Manager {
 				new Fields\Media_Field_Parser(),
 				new Fields\Datetime_Field_Parser(),
 				new Fields\Hidden_Field_Parser(),
+				new Fields\Map_Field_Parser(),
 			)
 		);
 	}
@@ -60,6 +61,8 @@ class Parser_Manager {
 				$context->set_field( $field );
 
 				$this->get_value_from_field( $output, $context );
+
+				$context->save_to_request();
 
 			} catch ( Parse_Exception $exception ) {
 				switch ( $exception->getMessage() ) {
@@ -93,8 +96,6 @@ class Parser_Manager {
 		try {
 			$parser = $context->get_parser();
 		} catch ( Repository_Exception $exception ) {
-			$context->save_to_request();
-
 			$output[ $context->get_name() ] = $context->get_value();
 
 			return;
@@ -109,8 +110,6 @@ class Parser_Manager {
 		} catch ( Exclude_Field_Exception $exception ) {
 			return;
 		}
-
-		$context->save_to_request();
 	}
 
 	public function save_to_request( $name, $type, $settings ) {

@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.3
+* ADD: Multiple Select support
+* ADD: JetEngine Map Field block
+* UPD: `post_link_by_id` macro support multiple values
+* UPD: Generate sub-images for new attachments
+* FIX: Media Field duplicates prefilled files 
+* FIX: Inserting images previews with cache plugins
+* FIX: Post Thumbnail preset
+* FIX: Calculated Field interprets number with leading zeros as number in Octal numeral system
+* FIX: Compatibility with Elementor 3.7
+
 ## 2.1.2
 * UPD: Allow using Term object properties as values for select, radio, checkbox fields
 * FIX: Validate action's events in gateways executor

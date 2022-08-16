@@ -46,7 +46,7 @@ class Preset_Source_User extends Base_Source {
 
 	public function source__user_meta() {
 		if ( empty( $this->field_data['key'] ) ) {
-			return self::EMPTY;
+			return '';
 		}
 
 		return get_user_meta(

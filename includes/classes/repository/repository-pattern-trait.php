@@ -39,6 +39,10 @@ trait Repository_Pattern_Trait {
 					);
 			}
 		}
+
+		foreach ( $this->rep_get_items() as $item ) {
+			$this->rep_after_install_item( $item );
+		}
 	}
 
 	public function rep_allow_rewrite() {
@@ -50,6 +54,8 @@ trait Repository_Pattern_Trait {
 			$this->rep_item_check( $item_trait );
 			$this->rep_throw_if_cant_rewrite( $item_trait );
 			$this->rep_run_install_flow( $item_trait->rep_item_id(), $item_trait );
+
+			$this->rep_after_install_item( $item_trait );
 
 		} catch ( Repository_Exception $exception ) {
 			$this->_rep_save_fail( $exception );
@@ -64,8 +70,6 @@ trait Repository_Pattern_Trait {
 		$this->rep_before_install_item( $item_trait );
 
 		$this->__repository[ $item_key ] = $item_trait;
-
-		$this->rep_after_install_item( $item_trait );
 	}
 
 	/**

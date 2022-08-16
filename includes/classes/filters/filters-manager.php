@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Classes\Filters;
 
 
+use Jet_Form_Builder\Actions\Types\Send_Email;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -42,19 +43,27 @@ class Filters_Manager {
 				new Render_Acf_Checkbox_Filter(),
 				new Term_Title_By_Id_Filter(),
 				new Term_Titles_By_Ids_Filter(),
+				new Md5_Filter(),
 			)
 		);
 	}
 
-	public function apply( $value, $filter ) {
-		preg_match( '/([a-zA-Z0-9_-]+)(\([a-zA-Z0-9\,\:\/\s_-]+\))?/', $filter, $filter_data );
+	public function apply( $value, $filters ) {
+		foreach ( $filters as $filter ) {
+			$value = $this->apply_single( $value, $filter );
+		}
+
+		return $value;
+	}
+
+	private function apply_single( $value, $filter ) {
+		preg_match( '/([-\w]+)(\(.+?\))?/', $filter, $filter_data );
 
 		if ( empty( $filter_data ) ) {
 			return $value;
 		}
 
 		$filter_name = $filter_data[1] ?? false;
-		$filter_arg  = isset( $filter_data[2] ) ? trim( $filter_data[2], '()' ) : false;
 
 		try {
 			/** @var Base_Filter $filter */
@@ -63,8 +72,10 @@ class Filters_Manager {
 			return $value;
 		}
 
-		return $filter->apply( $value, $filter_arg );
+		$filter_arg = isset( $filter_data[2] ) ? trim( $filter_data[2], '()' ) : false;
 
+		return $filter->apply( $value, $filter_arg );
 	}
+
 
 }

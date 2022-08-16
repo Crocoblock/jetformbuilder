@@ -55,7 +55,21 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	public function add( $item ): Collection {
 		$this->items[] = $item;
 
-		return $this;
+		if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+			return $this;
+		}
+
+		return $this->add_to_group( $item );
+	}
+
+	public function replace( $item ): Collection {
+		if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+			return $this;
+		}
+		$this->items[] = $item;
+		$this->groups[ $item->get_id() ] = array();
+
+		return $this->add_to_group( $item );
 	}
 
 	public function delete( $position ): Collection {
@@ -88,11 +102,17 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 			if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
 				continue;
 			}
-			if ( ! isset( $this->groups[ $item->get_id() ] ) ) {
-				$this->groups[ $item->get_id() ] = array();
-			}
-			$this->groups[ $item->get_id() ][] = $item;
+			$this->add_to_group( $item );
 		}
+	}
+
+	protected function add_to_group( $item ): Collection {
+		if ( ! isset( $this->groups[ $item->get_id() ] ) ) {
+			$this->groups[ $item->get_id() ] = array();
+		}
+		$this->groups[ $item->get_id() ][] = $item;
+
+		return $this;
 	}
 
 	public function all(): array {

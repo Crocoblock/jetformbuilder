@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
@@ -11,6 +12,7 @@ use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
+use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenarios_Manager_Abstract;
 
 /**
  *
@@ -36,6 +38,8 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	protected $removed_query_args_on_payment = array(
 		GM::PAYMENT_TYPE_PARAM,
+		Scenarios_Manager_Abstract::QUERY_VAR,
+		'session_id',
 		'order_token',
 		'status',
 		'PayerID',
@@ -207,14 +211,12 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 
 	public function get_refer_url( $type, array $additional_args = array() ) {
-		$refer = jet_fb_action_handler()->get_refer();
-
 		return add_query_arg(
 			array_merge(
 				array( GM::PAYMENT_TYPE_PARAM => $this->get_id() ),
 				$additional_args
 			),
-			$refer
+			jet_fb_handler()->refer
 		);
 	}
 
@@ -354,11 +356,9 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	}
 
 	private function get_response_manager() {
-		global $wp;
-
 		return new Reload_Response(
 			array(
-				'refer'       => home_url( $wp->request ),
+				'refer'       => Http_Tools::get_form_refer_url(),
 				'remove_args' => $this->removed_query_args_on_payment,
 			)
 		);

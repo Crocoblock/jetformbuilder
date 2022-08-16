@@ -93,6 +93,7 @@ class Map_Field extends Base {
 			array(
 				'api'     => jet_engine()->api->get_route( 'get-map-point-data' ),
 				'apiHash' => jet_engine()->api->get_route( 'get-map-location-hash' ),
+				'nonce'   => wp_create_nonce( 'jet-map-field' ),
 				'i18n'    => array(
 					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
 					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),

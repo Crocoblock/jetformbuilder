@@ -267,6 +267,9 @@ It is, actually. If you’ve already purchased either an All-Inclusive or Lifeti
 = Can I Import/Export/Duplicate forms? =
 Yes. It's a push-a-button easy to import/export and duplicate your forms using the default WordPress features.
 
+= How to check the submitted form records? =
+Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
+
 == Changelog ==
 
 **2.1.3**

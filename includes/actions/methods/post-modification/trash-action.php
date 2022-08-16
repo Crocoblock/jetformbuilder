@@ -5,6 +5,8 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
+use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 
 class Trash_Action extends Base_Post_Action {
 
@@ -19,6 +21,9 @@ class Trash_Action extends Base_Post_Action {
 		);
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
 	public function do_action() {
 		if ( ! $this->pre_check() ) {
 			return;
@@ -27,5 +32,9 @@ class Trash_Action extends Base_Post_Action {
 		$this->inserted_id = wp_trash_post(
 			$this->modifier->source_arr['ID'] ?? 0
 		);
+
+		if ( ! is_a( $this->inserted_id, \WP_Post::class ) ) {
+			throw new Action_Exception( 'failed' );
+		}
 	}
 }

@@ -12,11 +12,7 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 
 	protected $inserted_id;
 
-	/**
-	 * @throws Action_Exception
-	 */
 	public function do_after() {
-		$this->is_valid_post_id();
 		$this->add_inserted_post_id();
 		$this->add_context_once();
 
@@ -37,22 +33,6 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 			$this->modifier->source_arr,
 			jet_fb_action_handler()->get_current_action()
 		);
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	public function is_valid_post_id() {
-		if ( is_wp_error( $this->inserted_id ) ) {
-			throw new Action_Exception(
-				'failed',
-				$this->inserted_id->get_error_message()
-			);
-		}
-
-		if ( ! is_a( $this->inserted_id, \WP_Post::class ) ) {
-			throw new Action_Exception( 'failed' );
-		}
 	}
 
 	public function add_inserted_post_id() {

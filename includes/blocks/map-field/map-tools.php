@@ -32,7 +32,7 @@ class Map_Tools {
 	public static function is_supported(): bool {
 		return (
 			function_exists( 'jet_engine' ) &&
-			version_compare( jet_engine()->get_version(), '3.0.0', '>=' ) &&
+			version_compare( jet_engine()->get_version(), '3.0.3', '>=' ) &&
 			jet_engine()->modules->is_module_active( 'maps-listings' )
 		);
 	}

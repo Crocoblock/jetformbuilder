@@ -36,9 +36,9 @@ class Jet_Engine {
 			'jet-form-builder/parsers-request/register',
 			array( $this, 'add_parsers' )
 		);
-		add_action(
-			'jet-form-builder/blocks/register',
-			array( $this, 'add_blocks' )
+		add_filter(
+			'jet-form-builder/blocks/items',
+			array( $this, 'add_blocks' ), 0
 		);
 		add_action(
 			'jet-form-builder/actions/register',
@@ -75,8 +75,10 @@ class Jet_Engine {
 		return $parsers;
 	}
 
-	public function add_blocks( Manager $manager ) {
-		$manager->register_block_type( new Map_Field() );
+	public function add_blocks( array $blocks ): array {
+		$blocks[] = new Map_Field();
+
+		return $blocks;
 	}
 
 	public function add_actions( \Jet_Form_Builder\Actions\Manager $manager ) {

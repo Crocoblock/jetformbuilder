@@ -128,7 +128,9 @@ function InsertPostAction( props ) {
 						dynamic={ [ 'meta_input', 'post_terms' ] }
 						properties={ properties }
 						parseValue={ value => (
-							value.includes( 'jet_tax__' ) ? 'post_terms' : value
+							value.includes( 'jet_tax__' )
+							? 'post_terms'
+							: 'meta_input'
 						) }
 					>
 						<PostPropertySelect/>

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Integrations\Active_Campaign\Actions;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Editor_Fetch_Endpoint;
 use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Lists;
 use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Custom_Fields;
 
@@ -16,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Active_Campaign extends Base {
+class Active_Campaign_Action extends Base {
 
 	public $option_name = 'active-campaign-tab';
 
@@ -110,7 +111,7 @@ class Active_Campaign extends Base {
 			throw new Action_Exception( 'empty_field', $body_args['email'] );
 		}
 
-		$this->api_handler( $settings )->request( false, $body_args );
+		// request
 	}
 
 	public function self_script_name() {
@@ -148,13 +149,9 @@ class Active_Campaign extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'rest_lists' => array(
-				'url' => Retrieve_Lists::rest_url(),
-				'method' => Retrieve_Lists::get_methods(),
-			),
-			'rest_fields' => array(
-				'url' => Retrieve_Custom_Fields::rest_url(),
-				'method' => Retrieve_Custom_Fields::get_methods(),
+			'fetch' => array(
+				'url' => Editor_Fetch_Endpoint::rest_url(),
+				'method' => Editor_Fetch_Endpoint::get_methods(),
 			),
 		);
 	}

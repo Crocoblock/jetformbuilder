@@ -1,5 +1,8 @@
 import FetchApiButton from './fetch-api-button';
-import { withCurrentAction } from '../helpers/hooks/hooks-helper';
+import {
+	withCurrentAction,
+	withSelectActionLoading,
+} from '../helpers/hooks/hooks-helper';
 
 const { compose } = wp.compose;
 
@@ -20,4 +23,5 @@ function ActionFetchButton( {
 
 export default compose(
 	withSelect( withCurrentAction ),
+	withSelect( withSelectActionLoading ),
 )( ActionFetchButton );

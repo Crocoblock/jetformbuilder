@@ -10,8 +10,7 @@ class Rest_Controller extends Rest_Api_Controller_Base {
 
 	public function routes(): array {
 		return array(
-			new Retrieve_Lists(),
-			new Retrieve_Custom_Fields(),
+			new Editor_Fetch_Endpoint(),
 		);
 	}
 }

@@ -41,7 +41,6 @@ class Manager {
 			new Types\Fake_Wc_Add_To_Cart(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
-			new Types\Active_Campaign(),
 			new Types\Save_Record(),
 		);
 	}

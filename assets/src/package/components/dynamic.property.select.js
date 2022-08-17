@@ -83,7 +83,8 @@ function DynamicPropertySelect( {
 		FieldSelect,
 		property: currentProp,
 	} }>
-		{ children }
+		{ children && children }
+		{ ! children && FieldSelect }
 	</CurrentPropertyMapContext.Provider>;
 }
 

@@ -293,10 +293,11 @@ abstract class Base_Gateway_Action {
 	 * @throws Gateway_Exception
 	 */
 	public function check_response_code(): self {
+		$this->response_body_as_array();
+
 		if ( $this->accept_code() === $this->get_response_code() ) {
 			return $this;
 		}
-		$this->response_body_as_array();
 
 		throw new Gateway_Exception(
 			$this->response_message( 'Invalid HTTP code.' ),

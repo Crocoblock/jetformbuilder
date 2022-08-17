@@ -14,6 +14,7 @@ use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -97,6 +98,7 @@ class Plugin {
 
 		Woocommerce::register();
 		Jet_Engine::register();
+		Active_Campaign::register();
 
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();

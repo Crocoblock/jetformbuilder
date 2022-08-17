@@ -3,12 +3,14 @@ const {
 	      globalTab,
 	      Tools: { withPlaceholder },
 	      getFormFieldsBlocks,
+	      convertListToFieldsMap,
       } = JetFBActions;
 const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
 	      PlaceholderMessage,
 	      ActionFetchButton,
+	      DynamicPropertySelect,
       } = JetFBComponents;
 const {
 	      withRequestFields,
@@ -34,14 +36,15 @@ const {
 const {
 	      withSelect,
       } = wp.data;
+const {
+	      compose,
+      } = wp.compose;
 
 function ActiveCampaignAction( props ) {
 
 	const {
 		      settings,
-		      onChangeSetting,
-		      getMapField,
-		      setMapField,
+		      onChangeSettingObj,
 		      source,
 		      label,
 		      help,
@@ -51,7 +54,7 @@ function ActiveCampaignAction( props ) {
 
 	const currentTab = globalTab( { slug: 'active-campaign-tab' } );
 
-	const [ formFieldsList ] = useState(
+	const [ formFields ] = useState(
 		() => (
 			[
 				...getFormFieldsBlocks( [], '--' ),
@@ -72,9 +75,9 @@ function ActiveCampaignAction( props ) {
 			key={ 'use_global' }
 			label={ label( 'use_global' ) }
 			checked={ settings.use_global }
-			onChange={ use_global => {
-				onChangeSetting( Boolean( use_global ), 'use_global' );
-			} }
+			onChange={
+				val => onChangeSettingObj( { use_global: Boolean( val ) } )
+			}
 		/>
 		<BaseControl
 			label={ label( 'api_data' ) }
@@ -88,8 +91,9 @@ function ActiveCampaignAction( props ) {
 						className="jet-control-clear"
 						disabled={ settings.use_global }
 						value={ getAPI( 'api_url' ) }
-						onChange={ newVal => onChangeSetting( newVal,
-							'api_url' ) }
+						onChange={
+							api_url => onChangeSettingObj( { api_url } )
+						}
 					/>
 					<TextControl
 						key="api_key"
@@ -97,8 +101,9 @@ function ActiveCampaignAction( props ) {
 						className="jet-control-clear"
 						disabled={ settings.use_global }
 						value={ getAPI( 'api_key' ) }
-						onChange={ newVal => onChangeSetting( newVal,
-							'api_key' ) }
+						onChange={
+							api_key => onChangeSettingObj( { api_key } )
+						}
 					/>
 				</div>
 				<ActionFetchButton
@@ -107,12 +112,12 @@ function ActiveCampaignAction( props ) {
 					apiArgs={ {
 						...source.fetch,
 						headers: {
-
-						}
+							'API-TOKEN': getAPI( 'api_key' ),
+							'API-URL': getAPI( 'api_url' ),
+						},
 					} }
 				/>
 			</div>
-
 		</BaseControl>
 		<div style={ {
 			paddingBottom: '1.2em',
@@ -121,33 +126,31 @@ function ActiveCampaignAction( props ) {
 			href={ help( 'api_key_link' ) }>{ help(
 			'api_key_link_suffix' ) }</a>
 		</div>
-		{ settings.isValidAPI && <React.Fragment>
+		{ loadingState.success && <React.Fragment>
 			<SelectControl
 				key="activecampaign_select_lists"
 				label={ label( 'list_id' ) }
 				labelPosition="side"
 				value={ settings.list_id }
-				onChange={ newVal => onChangeSetting( newVal, 'list_id' ) }
-				options={ withPlaceholder( settings.data || [] ) }
+				onChange={ list_id => onChangeSettingObj( { list_id } ) }
+				options={ withPlaceholder( loadingState.response.lists ?? [] ) }
 			/>
 			<TextControl
 				key="activecampaign_tags"
 				label={ label( 'tags' ) }
 				value={ settings.tags }
 				help={ help( 'tags' ) }
-				onChange={ newVal => onChangeSetting( newVal, 'tags' ) }
+				onChange={ tags => onChangeSettingObj( { tags } ) }
 			/>
 			<ActionFieldsMap
 				label={ label( 'fields_map' ) }
-				fields={ Object.entries( source.activecampaign_fields ) }
+				fields={ convertListToFieldsMap(
+					loadingState.response.fields,
+				) }
 			>
 				<WrapperRequiredControl>
-					<SelectControl
-						key={ fieldId + index }
-						value={ getMapField( { name: fieldId } ) }
-						onChange={ value => setMapField(
-							{ nameField: fieldId, value } ) }
-						options={ formFieldsList }
+					<DynamicPropertySelect
+						properties={ formFields }
 					/>
 				</WrapperRequiredControl> }
 			</ActionFieldsMap>

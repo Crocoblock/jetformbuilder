@@ -108,6 +108,7 @@ import SafeDeleteToggle from './components/fields/safe.delete.toggle';
 import RepeaterAddNew from './components/fields/repeater.add.new';
 import Repeater from './components/fields/repeater';
 import DynamicPropertySelect from './components/dynamic.property.select';
+import ActionFetchButton from './components/action.fetch.button';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -149,6 +150,7 @@ window.JetFBComponents = {
 	BaseHelp,
 	ValidateButtonWithStore,
 	GatewayFetchButton,
+	ActionFetchButton,
 };
 
 // JFBFunctions

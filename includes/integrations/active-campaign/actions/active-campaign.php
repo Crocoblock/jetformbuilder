@@ -1,10 +1,12 @@
 <?php
 
-namespace Jet_Form_Builder\Actions\Types;
+namespace Jet_Form_Builder\Integrations\Active_Campaign\Actions;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Integrations\Active_Campaign_Handler;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Lists;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Custom_Fields;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,8 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Active_Campaign extends Integration_Base_Action {
-	protected $action = 'jet_form_builder_get_activecampaign_data';
+class Active_Campaign extends Base {
 
 	public $option_name = 'active-campaign-tab';
 
@@ -25,10 +26,6 @@ class Active_Campaign extends Integration_Base_Action {
 
 	public function get_id() {
 		return 'active_campaign';
-	}
-
-	public function api_handler( $settings ) {
-		return new Active_Campaign_Handler( $settings );
 	}
 
 	public function action_attributes() {
@@ -151,7 +148,14 @@ class Active_Campaign extends Integration_Base_Action {
 	 */
 	public function action_data() {
 		return array(
-			'activecampaign_fields' => $this->get_fields(),
+			'rest_lists' => array(
+				'url' => Retrieve_Lists::rest_url(),
+				'method' => Retrieve_Lists::get_methods(),
+			),
+			'rest_fields' => array(
+				'url' => Retrieve_Custom_Fields::rest_url(),
+				'method' => Retrieve_Custom_Fields::get_methods(),
+			),
 		);
 	}
 

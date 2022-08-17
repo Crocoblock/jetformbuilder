@@ -159,7 +159,7 @@ abstract class Base implements Repository_Item_Instance_Trait {
 		$options = Tab_Handler_Manager::instance()->options( $this->option_name );
 
 		foreach ( $keys as $key => $empty ) {
-			$response_values[ $key ] = isset( $options[ $key ] ) ? $options[ $key ] : $empty;
+			$response_values[ $key ] = $options[ $key ] ?? $empty;
 		}
 
 		return $response_values;

@@ -40,7 +40,7 @@ class Map_Tools {
 	public static function get_help_message(): string {
 		return sprintf(
 			__(
-				'The Map Field type requires both the <a href="%1$s">JetEngine</a> plugin and its <a href="%2$s">Map Listing</a> feature to be activated.',
+				'The Map Field type requires both the <a href="%1$s">JetEngine</a> (3.0.3) plugin and its <a href="%2$s">Map Listing</a> feature to be activated.',
 				'jet-form-builder'
 			),
 			'https://crocoblock.com/plugins/jetengine/',

@@ -251,7 +251,7 @@ class Request_Handler {
 	 *
 	 * @return array
 	 * @deprecated since 2.0.0
-	 * Use jfb_request_handler()->get_single_attr instead
+	 * Use jfb_request_handler()->get_attr instead
 	 */
 	public function get_field_attrs_by_name(
 		$field_name, $attr_name = '', $if_empty = false

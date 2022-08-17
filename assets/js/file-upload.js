@@ -214,13 +214,14 @@
 			}
 
 			loadFiles() {
-				if ( this.isSingle() ) {
-					return;
-				}
 				const originalInput = this.input[ 0 ];
 				const { files }     = originalInput;
 
 				this.files = createFileList( [ ...files ] );
+
+				if ( this.isSingle() ) {
+					return;
+				}
 
 				if ( !originalInput.jfbPrevFiles?.length ) {
 					originalInput.jfbPrevFiles = createFileList( [ ...files ] );

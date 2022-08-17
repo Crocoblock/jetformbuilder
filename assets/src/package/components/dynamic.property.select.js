@@ -13,7 +13,7 @@ const {
 
 function DynamicPropertySelect( {
 	dynamic = [],
-	parseValue = val => val,
+	parseValue = null,
 	children = null,
 	properties = null,
 } ) {
@@ -40,18 +40,13 @@ function DynamicPropertySelect( {
 	      } = settings;
 
 	function getTypeFieldValue( value ) {
-		let resultValue = dynamic[ 0 ] ?? '';
-
 		for ( const property of properties ) {
 			if ( value === property.value ) {
-				resultValue = value;
-				break;
+				return value;
 			}
 		}
 
-		resultValue = parseValue( resultValue );
-
-		return resultValue;
+		return parseValue ? parseValue( value ) : dynamic[ 0 ] ?? '';
 	}
 
 	const [ currentProp, setCurrentProp ] = useState(

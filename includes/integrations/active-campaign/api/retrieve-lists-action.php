@@ -16,7 +16,7 @@ class Retrieve_Lists_Action extends Base_Action implements Arrayable {
 
 	public function to_array(): array {
 		$response = array();
-		$lists    = $this->response_body['lists'] ?? array();
+		$lists = $this->response_body['lists'] ?? array();
 
 		foreach ( $lists as $list ) {
 			$response[] = array(

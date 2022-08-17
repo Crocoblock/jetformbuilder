@@ -152,7 +152,7 @@ function ActiveCampaignAction( props ) {
 					<DynamicPropertySelect
 						properties={ formFields }
 					/>
-				</WrapperRequiredControl> }
+				</WrapperRequiredControl>
 			</ActionFieldsMap>
 		</React.Fragment> }
 	</>;

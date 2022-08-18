@@ -10,7 +10,7 @@ class Add_Tag_To_Contact extends Base_Action {
 	protected $tag;
 
 	public function action_endpoint() {
-		return 'api/3/contactTags';
+		return 'contactTags';
 	}
 
 	public function action_headers() {

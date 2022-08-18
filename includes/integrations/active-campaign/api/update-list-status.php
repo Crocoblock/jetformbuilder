@@ -10,7 +10,7 @@ class Update_List_Status extends Base_Action {
 	protected $contact;
 
 	public function action_endpoint() {
-		return 'api/3/contactLists';
+		return 'contactLists';
 	}
 
 	public function action_headers() {

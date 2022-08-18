@@ -11,7 +11,7 @@ class List_All_Tags extends Base_Action implements Arrayable {
 	protected $method = \WP_REST_Server::READABLE;
 
 	public function action_endpoint() {
-		return 'api/3/tags';
+		return 'tags';
 	}
 
 	public function to_array(): array {

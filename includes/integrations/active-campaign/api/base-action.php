@@ -11,7 +11,7 @@ abstract class Base_Action extends Base_Gateway_Action {
 	protected $token;
 
 	public function base_url(): string {
-		return '{base}/';
+		return '{base}/api/3/';
 	}
 
 	public function set_base( string $url ): self {

@@ -11,38 +11,31 @@ class Retrieve_Custom_Fields_Action extends Base_Action implements Arrayable {
 	protected $method = \WP_REST_Server::READABLE;
 
 	public function action_endpoint() {
-		return 'api/3/fields';
+		return 'fields';
 	}
 
 	public function to_array(): array {
-		$response = array(
-			array(
-				'value' => 'email',
-				'label' => __( 'Email', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'firstName',
-				'label' => __( 'First Name', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'lastName',
-				'label' => __( 'Last Name', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'phone',
-				'label' => __( 'Phone', 'jet-form-builder' ),
-			),
-		);
+		$response = array();
 
-		$fields = $this->response_body['fields'] ?? array();
-
-		foreach ( $fields as $field ) {
+		foreach ( $this->response_body['fields'] as $field ) {
 			$response[] = array(
-				'value' => $field['perstag'],
+				'value' => $field['id'],
 				'label' => $field['title'],
 			);
 		}
 
 		return $response;
+	}
+
+	public function get_field_id( string $key ): int {
+		foreach ( $this->response_body['fields'] as $field ) {
+			if ( $field['perstag'] !== $key ) {
+				continue;
+			}
+
+			return (int) $field['id'];
+		}
+
+		return 0;
 	}
 }

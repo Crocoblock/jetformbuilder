@@ -81,10 +81,21 @@ abstract class Abstract_Modifier {
 		/** @var Base_Object_Property $property */
 		foreach ( $this->properties as $property ) {
 			try {
-				$this->source_arr[ $property->get_id() ] = $property->get_value();
+				$value = $property->get_value();
 			} catch ( Silence_Exception $exception ) {
 				continue;
 			}
+
+			if ( ! is_array( $value ) || ! $property->is_merge_value() ) {
+				$this->source_arr[ $property->get_id() ] = $value;
+
+				continue;
+			}
+
+			$this->source_arr = array_merge(
+				$this->source_arr,
+				$value
+			);
 		}
 	}
 

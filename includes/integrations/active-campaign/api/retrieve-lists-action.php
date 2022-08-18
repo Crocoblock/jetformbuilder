@@ -11,7 +11,7 @@ class Retrieve_Lists_Action extends Base_Action implements Arrayable {
 	protected $method = \WP_REST_Server::READABLE;
 
 	public function action_endpoint() {
-		return 'api/3/lists';
+		return 'lists';
 	}
 
 	public function to_array(): array {

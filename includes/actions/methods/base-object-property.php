@@ -110,6 +110,10 @@ abstract class Base_Object_Property implements
 		return array();
 	}
 
+	public function is_merge_value(): bool {
+		return false;
+	}
+
 	public function to_array(): array {
 		return array(
 			'value' => $this->get_id(),

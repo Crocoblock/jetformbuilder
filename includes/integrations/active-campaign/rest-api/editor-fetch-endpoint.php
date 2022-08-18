@@ -63,7 +63,28 @@ class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'fields' => $fields->to_array(),
+				'fields' => array_merge(
+					array(
+						array(
+							'value'    => 'email',
+							'label'    => __( 'Email', 'jet-form-builder' ),
+							'required' => true,
+						),
+						array(
+							'value' => 'firstName',
+							'label' => __( 'First Name', 'jet-form-builder' ),
+						),
+						array(
+							'value' => 'lastName',
+							'label' => __( 'Last Name', 'jet-form-builder' ),
+						),
+						array(
+							'value' => 'phone',
+							'label' => __( 'Phone', 'jet-form-builder' ),
+						),
+					),
+					$fields->to_array()
+				),
 				'lists'  => $lists->to_array(),
 			)
 		);

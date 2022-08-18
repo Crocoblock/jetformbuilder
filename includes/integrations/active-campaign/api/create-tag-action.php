@@ -9,7 +9,7 @@ class Create_Tag_Action extends Base_Action {
 	protected $tag;
 
 	public function action_endpoint() {
-		return 'api/3/tags';
+		return 'tags';
 	}
 
 	public function action_headers() {

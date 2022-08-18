@@ -143,7 +143,7 @@ abstract class Base implements Repository_Item_Instance_Trait {
 		$response_values = array();
 
 		foreach ( $keys as $key => $empty ) {
-			$response_values[ $key ] = isset( $this->settings[ $key ] ) ? $this->settings[ $key ] : $empty;
+			$response_values[ $key ] = $this->settings[ $key ] ?? $empty;
 		}
 		if ( ! isset( $this->settings['use_global'] ) || ! $this->settings['use_global'] ) {
 			return $response_values;

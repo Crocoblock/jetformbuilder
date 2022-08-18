@@ -38,7 +38,7 @@ class Retrieve_Custom_Fields_Action extends Base_Action implements Arrayable {
 
 		foreach ( $fields as $field ) {
 			$response[] = array(
-				'value' => $field['id'],
+				'value' => $field['perstag'],
 				'label' => $field['title'],
 			);
 		}

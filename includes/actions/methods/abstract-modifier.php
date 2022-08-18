@@ -41,7 +41,11 @@ abstract class Abstract_Modifier {
 			$this->attach_item( $key, $value );
 		}
 
-		$this->do_required_properties();
+		/** @var Base_Object_Property|Object_Required_Property $property */
+		foreach ( $this->properties->get_required() as $property ) {
+			$property->do_if_required( $this );
+		}
+
 		$this->attach_properties();
 		$this->do_action();
 
@@ -70,13 +74,6 @@ abstract class Abstract_Modifier {
 		/** @var Base_Object_Property $item */
 		foreach ( $this->properties->get_dynamic() as $item ) {
 			$item->set_value( $key, $value, $this );
-		}
-	}
-
-	protected function do_required_properties() {
-		/** @var Base_Object_Property|Object_Required_Property $property */
-		foreach ( $this->properties->get_required() as $property ) {
-			$property->do_if_required( $this );
 		}
 	}
 
@@ -149,8 +146,30 @@ abstract class Abstract_Modifier {
 		return false;
 	}
 
-	public function set_fields_map( $fields_map ): Abstract_Modifier {
-		$this->fields_map = array_filter( $fields_map );
+	/**
+	 * [field_name] => [property]
+	 *
+	 * @param array $fields_map
+	 *
+	 * Pass TRUE, if your fields_map in such format:
+	 * [property] => [field_name]
+	 * @param false $revert
+	 *
+	 * @return $this
+	 */
+	public function set_fields_map( array $fields_map, bool $revert = false ): self {
+		$fields_map = array_filter( $fields_map );
+
+		if ( ! $revert ) {
+			$this->fields_map = $fields_map;
+
+			return $this;
+		}
+
+		$this->fields_map = array_combine(
+			array_values( $fields_map ),
+			array_keys( $fields_map )
+		);
 
 		return $this;
 	}
@@ -162,6 +181,9 @@ abstract class Abstract_Modifier {
 	}
 
 	/**
+	 * Can be used after run action.
+	 * Ex. in Base_Object_Property::do_after()
+	 *
 	 * @return Base_Modifier_Action
 	 */
 	public function get_action(): Base_Modifier_Action {

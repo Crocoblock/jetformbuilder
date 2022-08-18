@@ -13,9 +13,15 @@ abstract class Base_Gateway_Action {
 	const CODE_CREATED    = 201;
 	const CODE_NO_CONTENT = 204;
 
+	const SUCCESS_CODES = array(
+		self::CODE_OK,
+		self::CODE_CREATED,
+		self::CODE_NO_CONTENT,
+	);
+
 	protected $auth;
-	protected $method = 'POST';
-	protected $body   = array();
+	protected $method     = 'POST';
+	protected $body       = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
@@ -27,10 +33,6 @@ abstract class Base_Gateway_Action {
 	abstract public function action_endpoint();
 
 	abstract public function base_url(): string;
-
-	public function accept_code(): int {
-		return self::CODE_OK;
-	}
 
 	public function action_headers() {
 		return array();
@@ -77,7 +79,7 @@ abstract class Base_Gateway_Action {
 		$patterns = array();
 
 		foreach ( $this->path_parts as $key => $value ) {
-			$patterns[ "#\{($key)\}#" ] = function ( $matches ) use ( $value ) {
+			$patterns["#\{($key)\}#"] = function ( $matches ) use ( $value ) {
 				return $value;
 			};
 		}
@@ -180,7 +182,9 @@ abstract class Base_Gateway_Action {
 
 		$args['method'] = $this->get_method();
 
-		$this->set_body( $this->action_body() );
+		if ( ! $this->is_body_ready() ) {
+			$this->set_body( $this->action_body() );
+		}
 
 		if ( ! empty( $this->body ) ) {
 			$args['body'] = $this->get_body();
@@ -295,7 +299,7 @@ abstract class Base_Gateway_Action {
 	public function check_response_code(): self {
 		$this->response_body_as_array();
 
-		if ( $this->accept_code() === $this->get_response_code() ) {
+		if ( in_array( $this->get_response_code(), self::SUCCESS_CODES, true ) ) {
 			return $this;
 		}
 

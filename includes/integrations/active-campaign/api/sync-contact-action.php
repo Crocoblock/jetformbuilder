@@ -19,6 +19,11 @@ class Sync_Contact_Action extends Base_Action {
 		'phone'
 	);
 
+	const LEGACY_PROPERTIES = array(
+		'first_name' => 'firstName',
+		'last_name'  => 'lastName',
+	);
+
 	protected $contact = array();
 
 	public function action_headers() {
@@ -50,6 +55,12 @@ class Sync_Contact_Action extends Base_Action {
 			$this->contact[ $property ] = $value;
 
 			return $this;
+		}
+
+		if ( array_key_exists( $property, self::LEGACY_PROPERTIES ) ) {
+			$current = self::LEGACY_PROPERTIES[ $property ];
+
+			$this->contact[ $current ] = $value;
 		}
 
 		if ( ! is_array( $this->contact['fieldValues'] ) ) {

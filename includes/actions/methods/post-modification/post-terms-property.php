@@ -6,9 +6,10 @@ namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
+use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 
 
-class Post_Terms_Property extends Base_Object_Property {
+class Post_Terms_Property extends Base_Object_Property implements Object_Dynamic_Property {
 
 	protected $taxonomies = array();
 
@@ -52,7 +53,9 @@ class Post_Terms_Property extends Base_Object_Property {
 	 * @param Abstract_Modifier|Post_Modifier $modifier
 	 */
 	public function do_after( Abstract_Modifier $modifier ) {
-		if ( Trash_Action::is_supported( $modifier ) ) {
+		$action = $modifier->get_action();
+
+		if ( is_a( $action, Trash_Action::class ) ) {
 			return;
 		}
 

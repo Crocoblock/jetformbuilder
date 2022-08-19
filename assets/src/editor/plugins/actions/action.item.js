@@ -56,10 +56,6 @@ function ListActionItem( props ) {
 		      setMeta,
 	      } = useDispatch( 'jet-forms/actions', [] );
 
-	const currentAction = useSelect(
-		select => select( 'jet-forms/actions' ).getCurrentAction(),
-	);
-
 	const header = applyFilters(
 		`jet.fb.section.actions.header.${ action.type }`, null, action );
 
@@ -77,9 +73,6 @@ function ListActionItem( props ) {
 
 	if ( !isExecute ) {
 		wrapper.push( 'is-disabled' );
-	}
-	if ( currentAction?.id === action.id ) {
-		wrapper.push( 'is-current' );
 	}
 
 	const [ showDetails, setShowDetails ] = useState( false );

@@ -21,9 +21,10 @@ class Product_Sale_Price_Property extends Base_Product_Property {
 	 * @param Abstract_Modifier|Wc_Product_Modifier $modifier
 	 *
 	 */
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_sale_price( $value );
+		$product->set_sale_price( $this->value );
 	}
 }

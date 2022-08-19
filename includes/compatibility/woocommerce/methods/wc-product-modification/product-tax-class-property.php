@@ -20,9 +20,10 @@ class Product_Tax_Class_Property extends Base_Product_Property {
 	}
 
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_tax_class( $value );
+		$product->set_tax_class( $this->value );
 	}
 }

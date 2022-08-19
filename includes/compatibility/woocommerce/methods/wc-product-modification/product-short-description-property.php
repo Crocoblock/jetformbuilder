@@ -10,12 +10,13 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
 
 class Product_Short_Description_Property extends Post_Excerpt_Property {
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		/** @var Product_Id_Property $id */
 		$id      = $modifier->get( 'ID' );
 		$product = $id->get_product();
 
-		$product->set_short_description( $value );
+		$product->set_short_description( $this->value );
 	}
 
 	public function get_related(): array {

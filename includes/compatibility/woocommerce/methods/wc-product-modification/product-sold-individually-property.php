@@ -19,10 +19,11 @@ class Product_Sold_Individually_Property extends Base_Product_Property {
 	}
 
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_sold_individually( $value );
+		$product->set_sold_individually( $this->value );
 	}
 
 	public function get_help(): string {

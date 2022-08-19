@@ -71,7 +71,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 		$this->value = array_merge( $this->value, $meta );
 	}
 
-	public function get_value() {
+	public function get_value( Abstract_Modifier $modifier ) {
 		throw new Silence_Exception();
 	}
 }

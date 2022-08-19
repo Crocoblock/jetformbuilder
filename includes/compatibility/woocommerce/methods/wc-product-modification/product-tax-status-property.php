@@ -25,11 +25,12 @@ class Product_Tax_Status_Property extends Base_Product_Property {
 	 *
 	 * @throws Action_Exception
 	 */
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
 		try {
-			$product->set_tax_status( $value );
+			$product->set_tax_status( $this->value );
 		} catch ( \WC_Data_Exception $exception ) {
 			throw new Action_Exception( $exception->getMessage() );
 		}

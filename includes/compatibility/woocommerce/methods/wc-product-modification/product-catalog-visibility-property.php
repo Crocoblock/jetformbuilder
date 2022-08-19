@@ -7,6 +7,8 @@ namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modifica
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 /**
  * Update `product_visibility` taxonomy
@@ -25,17 +27,18 @@ class Product_Catalog_Visibility_Property extends Base_Product_Property {
 	}
 
 	/**
-	 * @param string $key
-	 * @param $value
 	 * @param Abstract_Modifier $modifier
 	 *
+	 * @return void|null
 	 * @throws Action_Exception
+	 * @throws Silence_Exception
 	 */
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
 		try {
-			$product->set_catalog_visibility( $value );
+			$product->set_catalog_visibility( $this->value );
 		} catch ( \WC_Data_Exception $exception ) {
 			throw new Action_Exception( $exception->getMessage() );
 		}

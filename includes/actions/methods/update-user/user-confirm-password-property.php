@@ -20,7 +20,7 @@ class User_Confirm_Password_Property extends Base_Object_Property {
 		return __( 'Confirm Password', 'jet-form-builder' );
 	}
 
-	public function get_value() {
+	public function get_value( Abstract_Modifier $modifier ) {
 		throw new Silence_Exception();
 	}
 

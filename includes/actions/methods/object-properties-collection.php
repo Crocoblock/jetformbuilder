@@ -18,13 +18,4 @@ class Object_Properties_Collection extends Collection {
 		}
 	}
 
-	public function get_required(): \Generator {
-		foreach ( $this as $current ) {
-			if ( ! is_a( $current, Object_Required_Property::class ) ) {
-				continue;
-			}
-			yield $current;
-		}
-	}
-
 }

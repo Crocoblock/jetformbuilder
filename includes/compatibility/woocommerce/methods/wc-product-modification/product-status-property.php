@@ -11,12 +11,13 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Product_Status_Property extends Post_Status_Property {
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		/** @var Product_Id_Property $id */
 		$id      = $modifier->get( 'ID' );
 		$product = $id->get_product();
 
-		$product->set_status( $value );
+		$product->set_status( $this->value );
 	}
 
 	public function get_related(): array {

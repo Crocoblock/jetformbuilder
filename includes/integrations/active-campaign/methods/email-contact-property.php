@@ -6,10 +6,10 @@ namespace Jet_Form_Builder\Integrations\Active_Campaign\Methods;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
-use Jet_Form_Builder\Actions\Methods\Object_Required_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-class Email_Contact_Property extends Base_Object_Property implements Object_Required_Property {
+class Email_Contact_Property extends Base_Object_Property {
 
 	// It can be empty
 	// in action we use dynamic fetching properties
@@ -24,11 +24,12 @@ class Email_Contact_Property extends Base_Object_Property implements Object_Requ
 	/**
 	 * @param Abstract_Modifier $modifier
 	 *
-	 * @throws Action_Exception
+	 * @return void|null
+	 * @throws Action_Exception|Silence_Exception
 	 */
-	public function do_if_required( Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
 		if ( ! empty( $this->value ) ) {
-			return;
+			return parent::get_value( $modifier );
 		}
 
 		throw new Action_Exception( 'empty_field', 'Email' );

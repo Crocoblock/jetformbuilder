@@ -50,7 +50,7 @@ class List_Contact_Property extends Base_Object_Property {
 		}
 	}
 
-	public function get_value() {
+	public function get_value( Abstract_Modifier $modifier ) {
 		throw new Silence_Exception();
 	}
 }

@@ -141,7 +141,7 @@ function ListActionItem( props ) {
 				<Button
 					isSmall
 					variant="tertiary"
-					icon={ 'editor-help' }
+					icon={ showDetails ? 'hidden' : 'editor-help' }
 					label={ __(
 						'Show details about selected action',
 						'jet-form-builder',

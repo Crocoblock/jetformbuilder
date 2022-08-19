@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modifica
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Product_Low_Stock_Amount_Property extends Base_Product_Property {
 
@@ -18,9 +19,10 @@ class Product_Low_Stock_Amount_Property extends Base_Product_Property {
 		return __( 'Product Low Stock Amount', 'jet-form-builder' );
 	}
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_low_stock_amount( $value );
+		$product->set_low_stock_amount( $this->value );
 	}
 }

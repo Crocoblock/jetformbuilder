@@ -84,7 +84,7 @@ abstract class Abstract_Modifier {
 		/** @var Base_Object_Property $property */
 		foreach ( $this->properties as $property ) {
 			try {
-				$this->source_arr[ $property->get_id() ] = $property->get_value();
+				$this->source_arr[ $property->get_id() ] = $property->get_value( $this );
 			} catch ( Silence_Exception $exception ) {
 				continue;
 			}

@@ -19,9 +19,10 @@ class Product_Total_Sales_Property extends Base_Product_Property {
 	}
 
 
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_total_sales( $value );
+		$product->set_total_sales( $this->value );
 	}
 }

@@ -18,10 +18,10 @@ class Product_Date_On_Sale_From_Property extends Base_Product_Property {
 		return __( 'Product Date on Sale from', 'jet-form-builder' );
 	}
 
-
-	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+	public function get_value( Abstract_Modifier $modifier ) {
+		parent::get_value( $modifier );
 		$product = $this->get_product( $modifier );
 
-		$product->set_date_on_sale_from( $value );
+		$product->set_date_on_sale_from( $this->value );
 	}
 }

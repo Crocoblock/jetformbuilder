@@ -58,7 +58,7 @@ abstract class Base_Object_Property implements
 	 * @return null
 	 * @throws Silence_Exception
 	 */
-	public function get_value() {
+	public function get_value( Abstract_Modifier $modifier ) {
 		if ( ! is_null( $this->value ) ) {
 			return $this->value;
 		}

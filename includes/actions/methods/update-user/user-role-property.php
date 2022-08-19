@@ -29,7 +29,7 @@ class User_Role_Property extends Base_Object_Property {
 		$id = $modifier->get( 'ID' );
 
 		if ( ! empty( $this->value ) ) {
-			$id->user->set_role( $value );
+			$id->user->set_role( $this->value );
 		}
 	}
 
@@ -41,7 +41,7 @@ class User_Role_Property extends Base_Object_Property {
 		throw new Array_Continue_Exception();
 	}
 
-	public function get_value() {
+	public function get_value( Abstract_Modifier $modifier ) {
 		throw new Silence_Exception();
 	}
 }

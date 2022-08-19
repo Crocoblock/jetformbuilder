@@ -335,7 +335,7 @@
 			//var $row = $section.closest( '.jet-form-builder-row' );
 			let res = true;
 
-			if ( ! Object.keys( $section?.JFBchecked )?.length ) {
+			if ( ! Object.keys( $section?.JFBchecked ?? {} )?.length ) {
 				return;
 			}
 

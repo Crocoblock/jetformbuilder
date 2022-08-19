@@ -13,8 +13,19 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 
 class Product_Id_Property extends Post_Id_Property {
 
+	/**
+	 * @param string $key
+	 * @param $value
+	 * @param Abstract_Modifier $modifier
+	 *
+	 * @throws Action_Exception
+	 */
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
-		$this->value = new \WC_Product( $value );
+		try {
+			$this->value = new \WC_Product( $value );
+		} catch ( \Exception $exception ) {
+			throw new Action_Exception( $exception->getMessage() );
+		}
 	}
 
 	public function get_product(): \WC_Product {

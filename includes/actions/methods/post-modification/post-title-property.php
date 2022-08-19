@@ -10,8 +10,7 @@ use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Methods\Object_Required_Property;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
-class Post_Title_Property extends Base_Object_Property implements
-	Object_Required_Property {
+class Post_Title_Property extends Base_Object_Property {
 
 	protected $is_empty = false;
 
@@ -23,17 +22,19 @@ class Post_Title_Property extends Base_Object_Property implements
 		return __( 'Post Title', 'jet-form-builder' );
 	}
 
-	public function do_if_required( Abstract_Modifier $modifier ) {
-		$action = $modifier->get_supported_action();
+	public function get_value( Abstract_Modifier $modifier ) {
+		$action = $modifier->get_action();
 
 		if ( ! is_a( $action, Insert_Action::class ) ||
-		     ! is_null( $this->value )
+		     $this->value
 		) {
-			return;
+			return parent::get_value( $modifier );
 		}
 
 		$this->value    = '(empty)';
 		$this->is_empty = true;
+
+		return parent::get_value( $modifier );
 	}
 
 	public function do_after( Abstract_Modifier $modifier ) {

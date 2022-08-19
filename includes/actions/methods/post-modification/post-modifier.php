@@ -59,9 +59,9 @@ class Post_Modifier extends Abstract_Post_Modifier {
 			'jet-form-builder/post-modifier/object-actions',
 			new Collection(
 				array(
-					new Trash_Action(),
-					new Update_Action(),
 					new Insert_Action(),
+					new Update_Action(),
+					new Trash_Action(),
 				)
 			)
 		);

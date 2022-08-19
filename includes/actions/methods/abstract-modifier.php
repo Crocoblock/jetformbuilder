@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Methods;
 
 use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
@@ -41,7 +42,6 @@ abstract class Abstract_Modifier {
 			$this->attach_item( $key, $value );
 		}
 
-		$this->do_required_properties();
 		$this->attach_properties();
 		$this->do_action();
 
@@ -73,13 +73,6 @@ abstract class Abstract_Modifier {
 		}
 	}
 
-	protected function do_required_properties() {
-		/** @var Base_Object_Property|Object_Required_Property $property */
-		foreach ( $this->properties->get_required() as $property ) {
-			$property->do_if_required( $this );
-		}
-	}
-
 	protected function attach_properties() {
 		/** @var Base_Object_Property $property */
 		foreach ( $this->properties as $property ) {
@@ -92,16 +85,16 @@ abstract class Abstract_Modifier {
 	}
 
 	protected function do_action() {
-		$this->action = $this->get_supported_action();
+		$this->action = $this->get_action();
 
 		$this->action->set_modifier( $this );
 		$this->action->do_action();
 		$this->action->do_after();
 	}
 
-	public function get_supported_action(): Base_Modifier_Action {
+	protected function get_supported_action(): Base_Modifier_Action {
 		/** @var Base_Modifier_Action $current */
-		foreach ( $this->actions as $current ) {
+		foreach ( Array_Tools::reverse( $this->actions ) as $current ) {
 			if ( ! $current::is_supported( $this ) ) {
 				continue;
 			}
@@ -165,6 +158,10 @@ abstract class Abstract_Modifier {
 	 * @return Base_Modifier_Action
 	 */
 	public function get_action(): Base_Modifier_Action {
+		if ( is_null( $this->action ) ) {
+			$this->action = $this->get_supported_action();
+		}
+
 		return $this->action;
 	}
 }

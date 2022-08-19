@@ -43,7 +43,6 @@ class Parser_Manager {
 				new Fields\Media_Field_Parser(),
 				new Fields\Datetime_Field_Parser(),
 				new Fields\Hidden_Field_Parser(),
-				new Fields\Map_Field_Parser(),
 			)
 		);
 	}

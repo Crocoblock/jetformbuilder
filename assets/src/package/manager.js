@@ -121,6 +121,14 @@ import ValidationBlockMessage
 	from './components/validation/ValidationBlockMessage';
 import ValidationMetaMessage
 	from './components/validation/ValidationMetaMessage';
+import CurrentActionEditContext from './context/current.action.edit';
+import ActionFieldsMapContext from './context/action.fields.map.context';
+import CurrentPropertyMapContext from './context/current.property.map';
+import SafeDeleteToggle from './components/fields/safe.delete.toggle';
+import RepeaterAddNew from './components/fields/repeater.add.new';
+import Repeater from './components/fields/repeater';
+import DynamicPropertySelect from './components/dynamic.property.select';
+import ActionFetchButton from './components/action.fetch.button';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -131,6 +139,10 @@ window.JetFBComponents = {
 	RepeaterItemContext,
 	ActionListItemContext,
 	RepeaterCustomLayoutContext,
+	CurrentActionEditContext,
+	ActionFieldsMapContext,
+	CurrentPropertyMapContext,
+	DynamicPropertySelect,
 	SafeDeleteToggle,
 	RepeaterAddNew,
 	Repeater,
@@ -162,6 +174,7 @@ window.JetFBComponents = {
 	ValidationToggleGroup,
 	ValidationBlockMessage,
 	ValidationMetaMessage,
+	ActionFetchButton,
 };
 
 // JFBFunctions

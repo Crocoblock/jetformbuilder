@@ -75,10 +75,6 @@ class Call_Hook extends Base {
 		return 'jetFormCallHookData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'hook_name' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'hook_name' => __( 'Hook Name:', 'jet-form-builder' ),

@@ -3,7 +3,22 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
+use Jet_Form_Builder\Actions\Methods\Update_User\Description_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\Display_Name_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\First_Name_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\Last_Name_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\Nick_Name_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Confirm_Password_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Email_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Id_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Meta_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Nicename_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Password_Property;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Url_Property;
 use Jet_Form_Builder\Actions\Methods\Update_User\User_Modifier;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -16,6 +31,18 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 class Update_User extends Base {
+
+	/** @var User_Modifier */
+	private $modifier;
+
+	public function __construct() {
+		parent::__construct();
+
+		/**
+		 * @since 2.1.4
+		 */
+		$this->modifier = new User_Modifier();
+	}
 
 	public function get_name() {
 		return __( 'Update User', 'jet-form-builder' );
@@ -47,16 +74,12 @@ class Update_User extends Base {
 		( new User_Modifier() )
 			->set_request( $request )
 			->set_fields_map( $this->settings['fields_map'] ?? array() )
-			->set_user_role( $this->settings['user_role'] ?? false )
+			->set( 'role', $this->settings['user_role'] ?? false )
 			->run();
 	}
 
 	public function self_script_name() {
 		return 'jetFormUpdateUserData';
-	}
-
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'user_role' );
 	}
 
 	public function editor_labels() {
@@ -74,52 +97,9 @@ class Update_User extends Base {
 	public function action_data() {
 		return array(
 			'userRoles'  => Tools::get_user_roles_for_js(),
-			'userFields' => $this->get_user_fields(),
-		);
-	}
-
-
-	/**
-	 * Returns user fields for user notification
-	 *
-	 * @return array
-	 */
-	public function get_user_fields() {
-		return Tools::with_placeholder(
-			array(
-				array(
-					'value' => 'ID',
-					'label' => __( 'User ID (will update this user)', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'email',
-					'label' => __( 'Email', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'password',
-					'label' => __( 'Password', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'confirm_password',
-					'label' => __( 'Confirm Password', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'first_name',
-					'label' => __( 'First Name', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'last_name',
-					'label' => __( 'Last Name', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'user_url',
-					'label' => __( 'User URL', 'jet-form-builder' ),
-				),
-				array(
-					'value' => 'user_meta',
-					'label' => __( 'User Meta', 'jet-form-builder' ),
-				),
-			)
+			'properties' => Tools::with_placeholder(
+				Array_Tools::to_array( $this->modifier->properties->all() )
+			),
 		);
 	}
 

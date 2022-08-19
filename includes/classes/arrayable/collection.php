@@ -6,11 +6,13 @@ namespace Jet_Form_Builder\Classes\Arrayable;
 
 class Collection implements \Iterator, \Countable, \ArrayAccess {
 
-	private $position = 0;
-	private $items;
+	protected $position = 0;
+	protected $items;
+	protected $groups   = array();
 
 	public function __construct( array $items = array() ) {
 		$this->items = $items;
+		$this->group_items();
 	}
 
 	public function intersect( $list_of_states ): bool {
@@ -37,7 +39,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 			return $this->in_array_by_class( $state );
 		}
 
-		return $this->in_array_by_id( $state );
+		return array_key_exists( $state, $this->groups );
 	}
 
 	protected function in_array_by_class( $state_class ): bool {
@@ -50,30 +52,71 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		return false;
 	}
 
-	protected function in_array_by_id( $state_class ): bool {
-		/** @var Collection_Item_Interface $state */
-		foreach ( $this as $state ) {
-			if ( ! ( $state instanceof Collection_Item_Interface ) ) {
-				continue;
-			}
-			if ( $state->get_id() !== $state_class ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public function add( $item ): Collection {
 		$this->items[] = $item;
 
-		return $this;
+		if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+			return $this;
+		}
+
+		return $this->add_to_group( $item );
+	}
+
+	public function replace( $item ): Collection {
+		if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+			return $this;
+		}
+		$this->items[] = $item;
+		$this->groups[ $item->get_id() ] = array();
+
+		return $this->add_to_group( $item );
 	}
 
 	public function delete( $position ): Collection {
 		unset( $this->items[ $position ] );
 
 		return $this;
+	}
+
+	public function has_by_id( string $id ): bool {
+		return $this->get_by_id( $id )->valid();
+	}
+
+	public function get_by_ids( array $ids ): \Generator {
+		foreach ( $ids as $id ) {
+			yield from $this->get_by_id( $id );
+		}
+	}
+
+	public function get_by_id( string $id ): \Generator {
+		$group = $this->groups[ $id ] ?? array();
+
+		foreach ( $group as $property ) {
+			yield $property;
+		}
+	}
+
+	public function group_items() {
+		/** @var Collection_Item_Interface $item */
+		foreach ( $this->items as $item ) {
+			if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
+				continue;
+			}
+			$this->add_to_group( $item );
+		}
+	}
+
+	protected function add_to_group( $item ): Collection {
+		if ( ! isset( $this->groups[ $item->get_id() ] ) ) {
+			$this->groups[ $item->get_id() ] = array();
+		}
+		$this->groups[ $item->get_id() ][] = $item;
+
+		return $this;
+	}
+
+	public function all(): array {
+		return $this->items;
 	}
 
 	/*

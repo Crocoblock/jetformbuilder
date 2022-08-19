@@ -7,11 +7,14 @@ use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
+use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
+use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
+use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -92,6 +95,10 @@ class Plugin {
 	public function init_components() {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
+
+		Woocommerce::register();
+		Jet_Engine::register();
+		Active_Campaign::register();
 
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();

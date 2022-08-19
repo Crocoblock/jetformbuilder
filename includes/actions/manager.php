@@ -36,14 +36,12 @@ class Manager {
 			new Types\Register_User(),
 			new Types\Fake_User_Login(),
 			new Types\Update_User(),
-			new Types\Update_Options(),
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),
 			new Types\Fake_Wc_Add_To_Cart(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
-			new Types\Active_Campaign(),
 			new Types\Save_Record(),
 		);
 	}
@@ -148,7 +146,6 @@ class Manager {
 			$action_localize['__messages']           = Action_Messages_Manager::instance()->get_messages( $type );
 			$action_localize['__labels']             = $type->editor_labels();
 			$action_localize['__help_messages']      = $type->editor_labels_help();
-			$action_localize['__gateway_attrs']      = $type->visible_attributes_for_gateway_editor();
 			$action_localize['__unsupported_events'] = $type->unsupported_events();
 			$action_localize['__supported_events']   = $type->supported_events();
 

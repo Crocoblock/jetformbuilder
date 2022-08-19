@@ -3,6 +3,7 @@
 @import "./components/actions-plugin";
 @import "../components/action-buttons";
 @import "./components/toolbar";
+@import "./components/buttons";
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;
@@ -66,12 +67,23 @@
 
 .jet-form-action {
 	margin-bottom: 10px;
+
 	.components-base-control__field {
 		margin: 0;
 	}
 
 	&.is-disabled {
 		background-image: repeating-linear-gradient(-45deg, #ffffff75 0 20px, #d5d5d57d 20px 40px);
+	}
+
+	&.is-current {
+		animation: show-current 2s infinite;
+	}
+
+	@keyframes show-current {
+		50% {
+			box-shadow: rgba(3, 102, 214, 0.3) 0 0 0 3px;
+		}
 	}
 }
 
@@ -464,10 +476,6 @@
 .rtl .jet-form-builder__field-wrap.range-wrap .range-flex-wrap .jet-form-builder__field-value {
 	margin-left: unset;
 	margin-right: 10px;
-}
-
-.jet-form-edit-modal {
-
 }
 
 .jet-form-builder__repeater-component-item {

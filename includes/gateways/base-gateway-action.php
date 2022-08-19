@@ -13,9 +13,15 @@ abstract class Base_Gateway_Action {
 	const CODE_CREATED    = 201;
 	const CODE_NO_CONTENT = 204;
 
+	const SUCCESS_CODES = array(
+		self::CODE_OK,
+		self::CODE_CREATED,
+		self::CODE_NO_CONTENT,
+	);
+
 	protected $auth;
-	protected $method = 'POST';
-	protected $body   = array();
+	protected $method     = 'POST';
+	protected $body       = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
@@ -24,15 +30,9 @@ abstract class Base_Gateway_Action {
 	protected $path_parts = array();
 	protected $custom_url = '';
 
-	abstract public function action_slug();
-
 	abstract public function action_endpoint();
 
 	abstract public function base_url(): string;
-
-	public function accept_code(): int {
-		return self::CODE_OK;
-	}
 
 	public function action_headers() {
 		return array();
@@ -46,7 +46,7 @@ abstract class Base_Gateway_Action {
 		return array();
 	}
 
-	public function set_url( $url ): Base_Gateway_Action {
+	public function set_url( $url ): self {
 		$this->custom_url = esc_url_raw( $url );
 
 		return $this;
@@ -79,7 +79,7 @@ abstract class Base_Gateway_Action {
 		$patterns = array();
 
 		foreach ( $this->path_parts as $key => $value ) {
-			$patterns[ "#\{($key)\}#" ] = function ( $matches ) use ( $value ) {
+			$patterns["#\{($key)\}#"] = function ( $matches ) use ( $value ) {
 				return $value;
 			};
 		}
@@ -95,31 +95,31 @@ abstract class Base_Gateway_Action {
 		return $this->auth;
 	}
 
-	public function set_bearer_auth( $token ): Base_Gateway_Action {
+	public function set_bearer_auth( $token ): self {
 		$this->set_auth( "Bearer $token" );
 
 		return $this;
 	}
 
-	public function set_basic_auth( $token ): Base_Gateway_Action {
+	public function set_basic_auth( $token ): self {
 		$this->set_auth( "Basic $token" );
 
 		return $this;
 	}
 
-	public function set_auth( $auth_str ): Base_Gateway_Action {
+	public function set_auth( $auth_str ): self {
 		$this->auth = $auth_str;
 
 		return $this;
 	}
 
-	public function set_path( array $parts ): Base_Gateway_Action {
+	public function set_path( array $parts ): self {
 		$this->path_parts = array_merge( $this->path_parts, $parts );
 
 		return $this;
 	}
 
-	public function set_body( $content ): Base_Gateway_Action {
+	public function set_body( $content ): self {
 		if ( ! $content ) {
 			return $this;
 		}
@@ -182,7 +182,9 @@ abstract class Base_Gateway_Action {
 
 		$args['method'] = $this->get_method();
 
-		$this->set_body( $this->action_body() );
+		if ( ! $this->is_body_ready() ) {
+			$this->set_body( $this->action_body() );
+		}
 
 		if ( ! empty( $this->body ) ) {
 			$args['body'] = $this->get_body();
@@ -229,7 +231,7 @@ abstract class Base_Gateway_Action {
 	/**
 	 * Make a request
 	 */
-	public function request(): Base_Gateway_Action {
+	public function request(): self {
 		$this->before_make_request();
 
 		$response = $this->get_response();
@@ -246,13 +248,13 @@ abstract class Base_Gateway_Action {
 		return $this->response_headers;
 	}
 
-	private function set_response_headers( $headers ): Base_Gateway_Action {
+	private function set_response_headers( $headers ): self {
 		$this->response_headers = $headers;
 
 		return $this;
 	}
 
-	private function set_response_message( $message ): Base_Gateway_Action {
+	private function set_response_message( $message ): self {
 		$this->response_message = $message;
 
 		return $this;
@@ -262,11 +264,11 @@ abstract class Base_Gateway_Action {
 		return $this->response_message;
 	}
 
-	private function get_response_body() {
+	public function get_response_body() {
 		return $this->response_body;
 	}
 
-	private function set_response_body( $body ): Base_Gateway_Action {
+	private function set_response_body( $body ): self {
 		$this->response_body = $body;
 
 		return $this;
@@ -277,7 +279,7 @@ abstract class Base_Gateway_Action {
 	}
 
 
-	private function set_response_code( $code ): Base_Gateway_Action {
+	private function set_response_code( $code ): self {
 		$this->response_code = $code;
 
 		return $this;
@@ -294,11 +296,12 @@ abstract class Base_Gateway_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function check_response_code(): Base_Gateway_Action {
-		if ( $this->accept_code() === $this->get_response_code() ) {
+	public function check_response_code(): self {
+		$this->response_body_as_array();
+
+		if ( in_array( $this->get_response_code(), self::SUCCESS_CODES, true ) ) {
 			return $this;
 		}
-		$this->response_body_as_array();
 
 		throw new Gateway_Exception(
 			$this->response_message( 'Invalid HTTP code.' ),
@@ -310,7 +313,7 @@ abstract class Base_Gateway_Action {
 	/**
 	 * @throws Gateway_Exception
 	 */
-	public function response_body_as_array(): Base_Gateway_Action {
+	public function response_body_as_array(): self {
 
 		if ( is_array( $this->get_response_body() ) ) {
 			return $this;

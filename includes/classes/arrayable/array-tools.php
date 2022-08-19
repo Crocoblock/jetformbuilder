@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Classes\Arrayable;
 
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Je_Relation_Property;
+
 class Array_Tools {
 
 	/**
@@ -28,6 +30,17 @@ class Array_Tools {
 		return $response;
 	}
 
+	/**
+	 * @param array|Collection $iterator
+	 *
+	 * @return \Generator
+	 */
+	public static function reverse( $iterator ): \Generator {
+		for ( $current = count( $iterator ) - 1; $current >= 0; $current -- ) {
+			yield $iterator[ $current ];
+		}
+	}
+
 	public static function from_array( array $payload ): array {
 		foreach ( $payload as $index => $object ) {
 			if ( is_array( $object ) ) {
@@ -42,6 +55,7 @@ class Array_Tools {
 			try {
 				$payload[ $index ] = $object->to_array();
 			} catch ( Array_Continue_Exception $exception ) {
+				unset( $payload[ $index ] );
 				continue;
 			}
 		}

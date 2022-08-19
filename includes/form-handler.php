@@ -128,17 +128,15 @@ class Form_Handler {
 		);
 	}
 
-	public function merge_request( $request ) {
-		$request = array_merge(
+	public function merge_request( $request ): array {
+		return array_merge(
 			$this->hidden_request_fields(),
 			$request
 		);
-
-		return $request;
 	}
 
 
-	public function set_referrer( $url ) {
+	public function set_referrer( $url ): Form_Handler {
 		$refer = remove_query_arg(
 			array( 'values', 'status', 'fields' ),
 			esc_url_raw( $url )

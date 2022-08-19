@@ -79,14 +79,12 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 * @return string
 	 */
 	public function get_referrer_url( string $type ) {
-		$refer = jet_fb_action_handler()->get_refer();
-
 		return add_query_arg(
 			array(
 				Gateway_Manager::PAYMENT_TYPE_PARAM => jet_fb_gateway_current()->get_id(),
 				Scenarios_Manager::QUERY_VAR        => static::scenario_id(),
 			),
-			$refer
+			jet_fb_handler()->refer
 		);
 	}
 
@@ -104,6 +102,7 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		// For backward compatibility with JetAppointment & JetBooking
 		jet_fb_gateway_current()->set_form_data( $request );
 		jet_fb_action_handler()->add_request( $request );
+		jet_fb_handler()->set_referrer( $record['referrer'] ?? '' );
 
 		return $request;
 	}

@@ -55,14 +55,21 @@ class Insert_Post extends Base {
 		$post_status = $this->settings['post_status'] ?? '';
 		$meta        = $this->settings['default_meta'] ?? array();
 
-		( new Post_Modifier() )
+		$modifier = ( new Post_Modifier() )
 			->suppress_filters( false )
 			->set_post_type( $post_type )
 			->set_meta( $meta )
 			->set_fields_map( $fields_map )
-			->set_request( $request )
-			->replace_field_by_prop( 'post_status', $post_status )
-			->run();
+			->set_request( $request );
+
+		if ( 'keep-current' === $post_status ) {
+			$modifier->exclude_prop( 'post_status' );
+		} else if ( $post_status && 'from-field' !== $post_status ) {
+			$modifier->global_status             = true;
+			$modifier->source_arr['post_status'] = $post_status;
+		}
+
+		$modifier->run();
 	}
 
 	public function get_inserted_post_context( $post_id = false ) {

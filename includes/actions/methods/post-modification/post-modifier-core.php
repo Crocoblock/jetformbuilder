@@ -14,6 +14,7 @@ abstract class Post_Modifier_Core extends Abstract_Modifier {
 	public $inserted_post_id;
 
 	public $suppress_filters = true;
+	public $global_status    = false;
 
 
 	/**
@@ -41,7 +42,7 @@ abstract class Post_Modifier_Core extends Abstract_Modifier {
 	 * @return Post_Modifier_Core
 	 * @throws Action_Exception
 	 */
-	public function set_post_type( $post_type ) {
+	public function set_post_type( $post_type ): Post_Modifier_Core {
 		if ( $post_type && post_type_exists( $post_type ) ) {
 			$this->source_arr['post_type'] = $post_type;
 

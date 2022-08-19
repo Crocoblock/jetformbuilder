@@ -232,6 +232,7 @@ class Action_Handler {
 		if ( is_numeric( $key ) && isset( $this->form_actions[ $key ] ) ) {
 			unset( $this->form_actions[ $key ] );
 			unset( $this->form_conditions[ $key ] );
+			unset( $this->form_events[ $key ] );
 
 			return $this;
 		}
@@ -239,6 +240,7 @@ class Action_Handler {
 			if ( $key === $action->get_id() ) {
 				unset( $this->form_actions[ $index ] );
 				unset( $this->form_conditions[ $index ] );
+				unset( $this->form_events[ $index ] );
 
 				return $this;
 			}
@@ -373,7 +375,7 @@ class Action_Handler {
 	 *
 	 * @param array $form_events
 	 *
-	 * @return $this
+	 * @return array
 	 */
 	public function merge_events( array $form_events ): array {
 		foreach ( $form_events as $action_id => $event_list ) {
@@ -402,6 +404,12 @@ class Action_Handler {
 		return false;
 	}
 
+	/**
+	 * Use jet_fb_handler()->refer
+	 * @deprecated 2.1.3
+	 *
+	 * @return mixed|string
+	 */
 	public function get_refer() {
 		return $this->request_data['__refer'] ?? '';
 	}

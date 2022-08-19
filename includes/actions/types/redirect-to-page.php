@@ -58,7 +58,7 @@ class Redirect_To_Page extends Base {
 				return empty( $to_page ) ? false : get_permalink( $to_page );
 
 			case 'current_page':
-				return jet_fb_action_handler()->get_refer();
+				return jet_fb_handler()->refer;
 
 			case 'inserted_post':
 				/** @var Insert_Post $insert_instance */

@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Update_User;
 
+use Jet_FB_Paypal\EventsListenersManager;
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -128,7 +129,11 @@ class User_Modifier extends Abstract_Modifier {
 			throw new Action_Exception( 'sanitize_user' );
 		}
 
-		if ( get_current_user_id() !== $this->current_value && ! current_user_can( 'edit_users' ) ) {
+		if (
+			! Tools::is_webhook() &&
+			get_current_user_id() !== $this->current_value &&
+			! current_user_can( 'edit_users' )
+		) {
 			// Only users with appropriate capabilities can edit other users, also user can edit himself
 			throw new Action_Exception( 'internal_error' );
 		}
@@ -196,7 +201,7 @@ class User_Modifier extends Abstract_Modifier {
 	 * @throws Action_Exception
 	 */
 	public function run() {
-		if ( ! is_user_logged_in() ) {
+		if ( ! Tools::is_webhook() && ! is_user_logged_in() ) {
 			// Only logged in users can edit other users
 			throw new Action_Exception( 'internal_error' );
 		}

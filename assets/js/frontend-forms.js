@@ -1310,7 +1310,11 @@
 								}
 							}
 						} else {
-							val = parseFloat( $field.val() );
+							const rawValue = $field.val();
+
+							val = Number.isNaN( Number( rawValue ) )
+							      ? rawValue
+							      : parseFloat( rawValue );
 						}
 					}
 				}

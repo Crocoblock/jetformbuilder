@@ -133,7 +133,11 @@ class Condition_Manager {
 	}
 
 	public function set_conditions( array $conditions ): Condition_Manager {
-		$this->conditions = array_map( array( new Condition_Instance(), 'set_condition' ), $conditions );
+		$instance = new Condition_Instance();
+
+		foreach ( $conditions as $condition ) {
+			$this->conditions[] = ( clone $instance )->set_condition( $condition );
+		}
 
 		return $this;
 	}

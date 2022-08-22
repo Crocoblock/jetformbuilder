@@ -335,7 +335,7 @@
 			//var $row = $section.closest( '.jet-form-builder-row' );
 			let res = true;
 
-			if ( ! Object.keys( $section?.JFBchecked )?.length ) {
+			if ( ! Object.keys( $section?.JFBchecked ?? {} )?.length ) {
 				return;
 			}
 
@@ -1310,7 +1310,11 @@
 								}
 							}
 						} else {
-							val = parseFloat( $field.val() );
+							const rawValue = $field.val();
+
+							val = Number.isNaN( Number( rawValue ) )
+							      ? rawValue
+							      : parseFloat( rawValue );
 						}
 					}
 				}

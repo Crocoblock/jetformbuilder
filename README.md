@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.4
+* FIX: Action conditions with AND relation - only the last condition has counted
+* FIX: Conditional block with set value & without any show/hide logic
+* FIX: Calculated Field compatibility
+
 ## 2.1.3
 * ADD: Multiple Select support
 * ADD: JetEngine Map Field block

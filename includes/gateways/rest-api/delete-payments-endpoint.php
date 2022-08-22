@@ -28,9 +28,13 @@ class Delete_Payments_Endpoint extends Rest_Api_Endpoint_Base {
 		return current_user_can( 'manage_options' );
 	}
 
+	public function get_table_view() {
+		return new Payments();
+	}
+
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_json_params();
-		$view = new Payments();
+		$view = $this->get_table_view();
 
 		$args = View_Base::get_paginated_args( $this->get_paginate_args( $request ) );
 

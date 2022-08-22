@@ -11,6 +11,7 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 		return array(
 			new Fetch_Pay_Now_Editor(),
 			new Receive_Payments(),
+			new Delete_Payment_Endpoint(),
 		);
 	}
 }

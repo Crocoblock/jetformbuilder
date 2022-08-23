@@ -201,8 +201,16 @@ class Send_Email extends Base {
 				break;
 		}
 
-		if ( ! $email || ! is_email( $email ) ) {
-			throw new Action_Exception( 'invalid_email' );
+		if ( ! is_array( $email ) ) {
+			$email = explode( ',', $email );
+		}
+
+		foreach ( $email as $value ) {
+			$value = trim( $value );
+
+			if ( ! $value || ! is_email( $value ) ) {
+				throw new Action_Exception( 'invalid_email' );
+			}
 		}
 
 		$this->parser = ( new Macros_Parser() )->set_replacements( $request );

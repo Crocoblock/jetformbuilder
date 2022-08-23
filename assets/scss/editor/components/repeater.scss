@@ -1,0 +1,32 @@
+.jet-form-builder__repeater-component-item {
+	margin-bottom: 1.5em;
+
+	.repeater-item__content {
+		flex: 1 1 100%;
+	}
+
+	.repeater-item__remove {
+		flex: 1;
+	}
+
+	.repeater__item__header {
+
+		.repeater-item__left-heading {
+			max-width: 85%;
+			word-break: break-all;
+			display: flex;
+			align-items: center;
+		}
+
+		.repeater-action-button {
+			margin-right: 1em;
+		}
+
+		span.repeater-item-title {
+			font-size: 1.1em;
+			font-style: italic;
+			color: #8e8e8e;
+		}
+	}
+
+}

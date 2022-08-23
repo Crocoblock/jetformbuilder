@@ -111,33 +111,38 @@ class Conditional_Block extends Base {
 		);
 	}
 
+	// Migration
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
+		parent::set_block_data( $attributes, $content, $wp_block );
+
+		$func_type  = $this->block_attrs['func_type'] ?? false;
+		$conditions = $this->block_attrs['conditions'] ?? array();
+
+		if ( ! count( $conditions ) || false !== $func_type ) {
+			return;
+		}
+
+		usort( $conditions, function ( $current ) {
+			return 'show' === $current['type'] ? - 1 : 1;
+		} );
+
+		foreach ( $conditions as $condition ) {
+			$condition['type'] = $condition['type'] ?? 'show';
+
+			if ( ! in_array( $condition['type'], array( 'show', 'hide' ), true ) ) {
+				continue;
+			}
+		}
+	}
+
 	/**
 	 * @return string
 	 * @throws Render_Empty_Field
 	 */
 	private function get_conditions(): string {
-		$conditions = Condition_Manager::instance()->prepare(
-			$this->block_attrs['conditions'] ?? array()
-		);
+		$conditions = Condition_Manager::instance()->prepare( $this->block_attrs );
 
 		return htmlspecialchars( wp_json_encode( $conditions ) );
-	}
-
-	private function parse_condition( $condition, $index ) {
-		$dynamic_value = ( new Dynamic_Preset() )->parse_value( $condition, 'value' );
-
-		$this->block_attrs['conditions'][ $index ]['value']     = $this->parse_string_with_commas( $dynamic_value );
-		$this->block_attrs['conditions'][ $index ]['set_value'] = ( new Dynamic_Preset() )->parse_value( $condition, 'set_value' );
-	}
-
-	private function parse_string_with_commas( $value ) {
-		$value_in_array = explode( ',', $value );
-
-		if ( 1 === count( $value_in_array ) ) {
-			return $value;
-		}
-
-		return array_map( 'trim', $value_in_array );
 	}
 
 

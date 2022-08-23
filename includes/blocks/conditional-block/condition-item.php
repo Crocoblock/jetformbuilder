@@ -38,7 +38,6 @@ class Condition_Item implements Arrayable {
 		$this->base     = $condition;
 		$this->value    = $condition['value'] ?? '';
 		$this->field    = $condition['field'] ?? '';
-		$this->type     = $condition['type'] ?? '';
 		$this->operator = $condition['operator'] ?? '';
 
 		Condition_Manager::instance()->get_functions()->isset_function( $this->type );
@@ -48,24 +47,16 @@ class Condition_Item implements Arrayable {
 	public function to_array(): array {
 		$base = array(
 			'value'    => $this->get_parsed_value(),
-			'type'     => $this->get_type(),
 			'field'    => $this->get_field(),
 			'operator' => $this->get_operator(),
-		);
-		$base = array_merge(
-			$base,
-			$this->get_operator_object()->to_response( $base, $this )
 		);
 
 		return array_merge(
 			$base,
-			$this->get_function_object()->to_response( $base, $this )
+			$this->get_operator_object()->to_response( $base, $this )
 		);
 	}
 
-	public function get_function_object(): Base_Function {
-		return Condition_Manager::instance()->get_functions()->rep_get_item_or_die( $this->type );
-	}
 
 	public function get_operator_object(): Base_Operator {
 		return Condition_Manager::instance()->get_operators()->rep_get_item_or_die( $this->operator );
@@ -94,13 +85,6 @@ class Condition_Item implements Arrayable {
 		}
 
 		return array_map( 'trim', $value_in_array );
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_type(): string {
-		return $this->type;
 	}
 
 	/**

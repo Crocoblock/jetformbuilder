@@ -91,12 +91,9 @@ export default function () {
 		value={ {
 			isSupported: item => item.or_operator,
 			render: () => <span
-				style={ {
-					fontWeight: 700,
-					fontSize: '1.2em',
-				} }
+				className={ 'repeater-item-title' }
 			>
-				{ __( 'Or', 'jet-form-builder' ) }
+				{ __( 'OR', 'jet-form-builder' ) }
 			</span>,
 		} }
 	>

@@ -1,7 +1,8 @@
 import useRepeaterState from '../../helpers/hooks/useRepeaterState';
 import RepeaterItemContext from '../../context/repeater.item';
-import RepeaterCustomLayoutContext
-	from '../../context/repeater.custom.item.layout';
+import RepeaterBodyContext from '../../context/repeater.custom.item.body';
+import RepeaterHeadContext from '../../context/repeater.custom.item.head';
+import RepeaterButtonsContext from '../../context/repeater.custom.item.buttons';
 
 const {
 	      Card,
@@ -34,9 +35,20 @@ function Repeater( props ) {
 		      removeOption,
 	      } = functions ?? useRepeaterState( onSetState );
 
-	const { isSupported, render: CustomLayout } = useContext(
-		RepeaterCustomLayoutContext,
-	);
+	const {
+		      isSupported: isSupportedBody,
+		      render: CustomLayout,
+	      } = useContext( RepeaterBodyContext );
+	const {
+		      isSupported: isSupportedHeader,
+		      render: CustomHeader,
+	      } = useContext( RepeaterHeadContext );
+	const {
+		      edit: supportEdit,
+		      move: supportMove,
+		      clone: supportClone,
+		      delete: supportDelete,
+	      } = useContext( RepeaterButtonsContext );
 
 	const RepeaterBody = ( { currentItem, index } ) =>
 		<RepeaterItemContext.Provider value={ {
@@ -48,6 +60,21 @@ function Repeater( props ) {
 			{ !children && 'Set up your Repeater Template, please.' }
 		</RepeaterItemContext.Provider>;
 
+	const RepeaterHeader = ( { currentItem, index } ) => {
+		if ( isSupportedHeader( currentItem ) ) {
+			return <CustomHeader
+				currentItem={ currentItem }
+				index={ index }
+			/>;
+		}
+
+		return <span
+			className={ 'repeater-item-title' }
+		>
+			{ `#${ index + 1 }` }
+		</span>;
+	};
+
 	const DefaultLayout = ( { currentItem, index } ) => <Card
 		size="small"
 		elevation={ 2 }
@@ -57,21 +84,27 @@ function Repeater( props ) {
 		<CardHeader className={ 'repeater__item__header' }>
 			<div className="repeater-item__left-heading">
 				<ButtonGroup className={ 'repeater-action-buttons' }>
-					<Button
+					{ (
+						!supportEdit || supportEdit( currentItem )
+					) && <Button
 						isSmall
 						icon={ currentItem.__visible ? 'no-alt' : 'edit' }
 						onClick={ () => toggleVisible( index ) }
-						className={ 'repeater-action-button' }
-					/>
-					<Button
+						className={ 'repeater-action-button jet-fb-is-thick' }
+					/> }
+					{ (
+						!supportMove || supportMove( currentItem )
+					) && <Button
 						isSmall
 						isSecondary
 						disabled={ !Boolean( index ) }
 						icon={ 'arrow-up-alt2' }
 						onClick={ () => moveUp( index ) }
-						className={ 'repeater-action-button' }
-					/>
-					<Button
+						className={ 'repeater-action-button jet-fb-is-thick' }
+					/> }
+					{ (
+						!supportMove || supportMove( currentItem )
+					) && <Button
 						isSmall
 						isSecondary
 						disabled={ !(
@@ -79,28 +112,34 @@ function Repeater( props ) {
 						) }
 						icon={ 'arrow-down-alt2' }
 						onClick={ () => moveDown( index ) }
-						className={ 'repeater-action-button' }
-					/>
+						className={ 'repeater-action-button jet-fb-is-thick' }
+					/> }
 				</ButtonGroup>
-				<span className={ 'repeater-item-title' }>{ `#${ index +
-				1 }` }</span>
+				<RepeaterHeader
+					currentItem={ currentItem }
+					index={ index }
+				/>
 			</div>
 			<ButtonGroup>
-				<Button
+				{ (
+					!supportClone || supportClone( currentItem )
+				) && <Button
 					isSmall
 					isSecondary
 					onClick={ () => cloneItem( index ) }
-				>
-					{ __( 'Clone', 'jet-form-builder' ) }
-				</Button>
-				<Button
+					className={ 'jet-fb-is-thick' }
+					icon={ 'admin-page' }
+				/> }
+				{ (
+					!supportDelete || supportDelete( currentItem )
+				) && <Button
 					isSmall
 					isSecondary
 					isDestructive
 					onClick={ () => removeOption( index ) }
-				>
-					{ __( 'Delete', 'jet-form-builder' ) }
-				</Button>
+					className={ 'jet-fb-is-thick' }
+					icon={ 'trash' }
+				/> }
 			</ButtonGroup>
 		</CardHeader>
 		{ currentItem.__visible && <CardBody
@@ -118,7 +157,7 @@ function Repeater( props ) {
 		key={ 'jet-form-builder-repeater' }
 	>
 		{ items.map( ( currentItem, index ) => {
-			return isSupported( currentItem )
+			return isSupportedBody( currentItem )
 			       ? <CustomLayout>
 				       <RepeaterBody
 					       currentItem={ currentItem }

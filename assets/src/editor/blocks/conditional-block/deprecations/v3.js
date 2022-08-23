@@ -19,16 +19,20 @@ export default {
 			current => 'show' === current.type ? -1 : 1,
 		);
 
+		let func_type = null;
+
 		for ( const condition of conditions ) {
 			condition.type = condition.type ?? 'show';
 
 			if ( ![ 'show', 'hide' ].includes( condition.type ) ) {
 				continue;
 			}
-			const type = condition.type;
+			if ( null === func_type ) {
+				func_type = condition.type;
+			}
 			delete condition.type;
 
-			if ( 'hide' === type && Object.keys( parsed ).length ) {
+			if ( 'hide' === func_type && Object.keys( parsed ).length ) {
 				parsed[ condition.field + '_or' ] = {
 					or_operator: true,
 				};
@@ -37,8 +41,11 @@ export default {
 			parsed[ condition.field ] = condition;
 		}
 
+		func_type = func_type ?? 'show';
+
 		return {
 			...attributes,
+			func_type,
 			conditions: Object.values( parsed ),
 		};
 	},

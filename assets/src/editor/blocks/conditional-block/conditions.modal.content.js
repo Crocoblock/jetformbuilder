@@ -5,7 +5,9 @@ const {
 	      Repeater,
 	      RepeaterAddNew,
 	      RepeaterItemContext,
-	      RepeaterCustomLayoutContext,
+	      RepeaterBodyContext,
+	      RepeaterHeadContext,
+	      RepeaterButtonsContext,
       } = JetFBComponents;
 const {
 	      useEffect,
@@ -32,10 +34,6 @@ function RepeaterItem() {
 	      }             = useContext( RepeaterItemContext );
 	const uniqKey       = useUniqKey();
 	const { operators } = useBlockConditions();
-
-	if ( currentItem.or_operator ) {
-		return <h2>Or</h2>;
-	}
 
 	return <>
 		<SelectControl
@@ -82,6 +80,37 @@ export default function () {
 		}
 	}, [ actionClick ] );
 
+	const FullRepeater = <Repeater
+		onSetState={ updateConditions }
+		items={ current.conditions ?? [] }
+	>
+		<RepeaterItem/>
+	</Repeater>;
+
+	const RepeaterWithHead = <RepeaterHeadContext.Provider
+		value={ {
+			isSupported: item => item.or_operator,
+			render: () => <span
+				style={ {
+					fontWeight: 700,
+					fontSize: '1.2em',
+				} }
+			>
+				{ __( 'Or', 'jet-form-builder' ) }
+			</span>,
+		} }
+	>
+		{ FullRepeater }
+	</RepeaterHeadContext.Provider>;
+
+	const RepeaterComplete = <RepeaterButtonsContext.Provider
+		value={ {
+			edit: item => !item.or_operator,
+		} }
+	>
+		{ RepeaterWithHead }
+	</RepeaterButtonsContext.Provider>;
+
 	return <>
 		<SelectControl
 			key={ uniqKey( 'SelectControl-operator' ) }
@@ -95,19 +124,7 @@ export default function () {
 				}
 			) ) }
 		/>
-		<RepeaterCustomLayoutContext.Provider
-			value={ {
-				isSupported: item => item.or_operator,
-				render: ( { children } ) => children,
-			} }
-		>
-			<Repeater
-				onSetState={ updateConditions }
-				items={ current.conditions ?? [] }
-			>
-				<RepeaterItem/>
-			</Repeater>
-		</RepeaterCustomLayoutContext.Provider>
+		{ RepeaterComplete }
 		<RepeaterAddNew
 			onSetState={ updateConditions }
 		>

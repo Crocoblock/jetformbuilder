@@ -74,5 +74,14 @@ class Payments extends View_Advanced_Base {
 		);
 	}
 
+	public function load_data(): array {
+		return array(
+			'messages' => array(
+				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),
+				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
+			),
+		);
+	}
+
 }
 

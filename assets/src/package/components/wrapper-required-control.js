@@ -3,13 +3,18 @@ import ActionFieldsMapContext from '../context/action.fields.map.context';
 const { RawHTML, useContext } = wp.element;
 
 export default function WrapperRequiredControl( {
-													children,
-													labelKey = 'label',
-													requiredKey = 'required',
-													helpKey = 'help',
-												} ) {
+	children,
+	labelKey = 'label',
+	requiredKey = 'required',
+	helpKey = 'help',
+	field = [],
+} ) {
 
-	const { name, data } = useContext( ActionFieldsMapContext );
+	let { name, data } = useContext( ActionFieldsMapContext );
+
+	if ( field.length ) {
+		[ name, data ] = field;
+	}
 
 	return (
 		<div
@@ -19,10 +24,16 @@ export default function WrapperRequiredControl( {
 			<div className="jet-field-map__row-label">
 
 				<span className={ 'fields-map__label' }>
-					{ ( data.hasOwnProperty( labelKey ) && data[ labelKey ] ) && data[ labelKey ] }
-					{ ( ! data.hasOwnProperty( labelKey ) ) && data }
+					{ (
+						data.hasOwnProperty( labelKey ) && data[ labelKey ]
+					) && data[ labelKey ] }
+					{ (
+						!data.hasOwnProperty( labelKey )
+					) && data }
 				</span>
-				{ ( data.hasOwnProperty( requiredKey ) && data[ requiredKey ] ) &&
+				{ (
+					data.hasOwnProperty( requiredKey ) && data[ requiredKey ]
+				) &&
 				<span className={ 'fields-map__required' }> *</span> }
 				{ data[ helpKey ] && <p
 					className={ 'components-base-control__help' }

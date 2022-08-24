@@ -55,7 +55,7 @@ import {
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
-	withSelectActionsByType,
+	withSelectActionsByType, useSanitizeFieldsMap,
 } from './helpers/hooks/hooks-helper';
 import {
 	useRequestEvents,
@@ -197,6 +197,7 @@ window.JetFBHooks = {
 	useRequestEvents,
 	useBlockConditions,
 	useUniqKey,
+	useSanitizeFieldsMap,
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,

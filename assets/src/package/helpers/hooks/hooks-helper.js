@@ -1,16 +1,19 @@
 import { prepareActionsListByType } from '../actions/action-helper';
 import { globalTab } from '../settings/helper';
 import { gatewayAttr, gatewayLabel } from '../gateways/gateway-helper';
+import CurrentActionEditContext from '../../context/current.action.edit';
+import { getFormFieldsBlocks } from '../blocks/blocks-helper';
 
 const {
-	useState,
-	useEffect,
-} = wp.element;
+	      useState,
+	      useEffect,
+	      useContext,
+      } = wp.element;
 
 const {
-	useSelect,
-	useDispatch,
-} = wp.data;
+	      useSelect,
+	      useDispatch,
+      } = wp.data;
 
 const { applyFilters } = wp.hooks;
 
@@ -28,7 +31,8 @@ export const useMetaState = ( key, ifEmpty = '{}' ) => {
 
 		if ( 'function' === typeof callable ) {
 			value = callable( metaStateValue );
-		} else {
+		}
+		else {
 			value = callable;
 		}
 
@@ -49,24 +53,24 @@ export const useActions = () => {
 	return useMetaState( '_jf_actions' );
 };
 
-
 export const initClasses = [ 'jet-form-validate-button' ];
 
 export const useStateValidClasses = initialValid => {
-	const validClass = 'is-valid';
+	const validClass   = 'is-valid';
 	const invalidClass = 'is-invalid';
 
 	const initStateClasses = () => {
 		if ( initialValid ) {
 			return [ ...initClasses, validClass ];
-		} else if ( ! initialValid ) {
+		}
+		else if ( !initialValid ) {
 			return [ ...initClasses, invalidClass ];
 		}
 	};
 
 	const [ classes, setClasses ] = useState( initStateClasses() );
 
-	const setValidClass = () => {
+	const setValidClass   = () => {
 		setClasses( [ ...initClasses, validClass ] );
 	};
 	const setInvalidClass = () => {
@@ -76,13 +80,18 @@ export const useStateValidClasses = initialValid => {
 		setClasses( [ ...initClasses, 'loading' ] );
 	};
 
-	return [ classes.join( ' ' ), setValidClass, setInvalidClass, setLoadingClass ];
+	return [
+		classes.join( ' ' ),
+		setValidClass,
+		setInvalidClass,
+		setLoadingClass,
+	];
 };
 
 export const useStateLoadingClasses = () => {
 	const [ classes, setClasses ] = useState( [ ...initClasses ] );
 
-	const setLoadingClass = () => {
+	const setLoadingClass   = () => {
 		setClasses( [ ...initClasses, 'loading' ] );
 	};
 	const clearLoadingClass = () => {
@@ -94,11 +103,12 @@ export const useStateLoadingClasses = () => {
 
 export const useSuccessNotice = ( text, options = {} ) => {
 	const [ hasCopied, setHasCopied ] = useState( false );
-	const noticeStore = useDispatch( wp.notices.store );
+	const noticeStore                 = useDispatch( wp.notices.store );
 
 	useEffect( () => {
 		if ( hasCopied ) {
-			noticeStore.createWarningNotice( text, { type: 'snackbar', ...options } );
+			noticeStore.createWarningNotice( text,
+				{ type: 'snackbar', ...options } );
 		}
 	}, [ hasCopied ] );
 
@@ -124,17 +134,18 @@ export const getRequestFields = actions => {
 
 	for ( const action of actions ) {
 		const {
-			[ action.type ]: current = {},
-		} = action.settings;
+			      [ action.type ]: current = {},
+		      } = action.settings;
 
-		if ( ! current.requestFields ) {
+		if ( !current.requestFields ) {
 			continue;
 		}
 
 		for ( const requestField of current.requestFields ) {
-			const index = requestFields.findIndex( field => field.value === requestField.name );
+			const index = requestFields.findIndex(
+				field => field.value === requestField.name );
 
-			if ( - 1 !== index ) {
+			if ( -1 !== index ) {
 				continue;
 			}
 
@@ -152,11 +163,19 @@ export const getRequestFields = actions => {
 	return requestFields;
 };
 
-export const useRequestFields = ( options = {} ) => {
+export const useRequestFields = () => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	} );
+	}, [] );
+
 	const actions = JSON.parse( meta._jf_actions || '[]' );
+
+	const currentAction = useSelect(
+		select => select( 'jet-forms/actions' ).getCurrentAction(),
+		[],
+	);
+
+	actions.splice( currentAction.index );
 
 	return getRequestFields( actions );
 };
@@ -184,8 +203,9 @@ export const withCurrentAction = select => {
 };
 
 export const withRequestFields = select => {
-	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-	const actions = JSON.parse( meta._jf_actions || '[]' );
+	const meta          = select( 'core/editor' ).
+		getEditedPostAttribute( 'meta' ) || {};
+	const actions       = JSON.parse( meta._jf_actions || '[]' );
 	const currentAction = select( 'jet-forms/actions' ).getCurrentAction();
 
 	actions.splice( currentAction.index );
@@ -221,12 +241,13 @@ export const withDispatchActionLoading = dispatch => {
 	};
 };
 
-export const withDispatchMeta = ( metaSlug, callbackName ) => ( dispatch, ownProps, { select } ) => {
+export const withDispatchMeta = ( metaSlug, callbackName ) => (
+	dispatch, ownProps, { select } ) => {
 	const allMeta = selectPostMeta( select );
 
 	const {
-		editPost,
-	} = dispatch( 'core/editor' );
+		      editPost,
+	      } = dispatch( 'core/editor' );
 
 	const change = newState => editPost( {
 		meta: (
@@ -256,15 +277,15 @@ export const withSelectGateways = select => {
 	const store = select( 'jet-forms/gateways' );
 
 	const gatewayRequestId = store.getCurrentRequestId();
-	const gatewaySpecific = store.getGatewaySpecific();
-	const scenario = store.getScenario();
+	const gatewaySpecific  = store.getGatewaySpecific();
+	const scenario         = store.getScenario();
 
-	const CURRENT_GATEWAY = store.getGatewayId();
+	const CURRENT_GATEWAY                      = store.getGatewayId();
 	const { id: CURRENT_SCENARIO = 'PAY_NOW' } = scenario;
 
 	const {
-		use_global = false,
-	} = gatewaySpecific;
+		      use_global = false,
+	      } = gatewaySpecific;
 
 	const currentTab = globalTab( { slug: CURRENT_GATEWAY } );
 
@@ -278,18 +299,19 @@ export const withSelectGateways = select => {
 		);
 	};
 
-	const callableGateway = gatewayAttr( 'additional' );
+	const callableGateway         = gatewayAttr( 'additional' );
 	const additionalSourceGateway = callableGateway( CURRENT_GATEWAY );
 
-	const loadingGateway = select( 'jet-forms/actions' ).getLoading( gatewayRequestId );
+	const loadingGateway = select( 'jet-forms/actions' ).
+		getLoading( gatewayRequestId );
 
-	const globalGatewayLabel = gatewayAttr( 'labels' );
+	const globalGatewayLabel   = gatewayAttr( 'labels' );
 	const specificGatewayLabel = gatewayLabel( CURRENT_GATEWAY );
 
 	const customGatewayLabel = function ( key ) {
 		return globalGatewayLabel( `${ CURRENT_GATEWAY }.${ key }` );
 	};
-	const scenarioLabel = function ( key ) {
+	const scenarioLabel      = function ( key ) {
 		return customGatewayLabel( `scenario.${ CURRENT_SCENARIO }.${ key }` );
 	};
 
@@ -338,18 +360,25 @@ const getFormFields = ( blockParserFunc, blocks ) => {
 };
 
 export const withSelectFormFields = (
-	exclude = [],
-	placeholder = false,
+	exclude        = [],
+	placeholder    = false,
 	suppressFilter = false,
 ) => select => {
 
 	let formFields = [];
-	let skipFields = [ 'submit', 'form-break', 'heading', 'group-break', 'conditional', ...exclude ];
+	let skipFields = [
+		'submit',
+		'form-break',
+		'heading',
+		'group-break',
+		'conditional',
+		...exclude,
+	];
 
 	getFormFields( block => {
 		if ( block.name.includes( 'jet-forms/' )
-		     && block.attributes.name
-		     && ! skipFields.find( field => block.name.includes( field ) )
+			&& block.attributes.name
+			&& !skipFields.find( field => block.name.includes( field ) )
 		) {
 
 			/*const blockType = select( blocksStore ).getBlockType( block.name );*/
@@ -365,18 +394,55 @@ export const withSelectFormFields = (
 	}, select( 'core/block-editor' ).getBlocks() );
 
 	formFields = placeholder
-		? [ { value: '', label: placeholder }, ...formFields ]
-		: formFields;
+	             ? [ { value: '', label: placeholder }, ...formFields ]
+	             : formFields;
 
 	return {
-		formFields: suppressFilter ? formFields : applyFilters( 'jet.fb.getFormFieldsBlocks', formFields ),
+		formFields: suppressFilter ? formFields : applyFilters(
+			'jet.fb.getFormFieldsBlocks', formFields ),
 	};
 };
 
-export const withSelectActionsByType = ( actionType, withDesc = false ) => select => {
+export const withSelectActionsByType = (
+	actionType, withDesc = false ) => select => {
 	const { _jf_actions } = withSelectMeta( '_jf_actions', [] )( select );
 
 	return {
-		[ actionType ]: prepareActionsListByType( _jf_actions, actionType, withDesc ),
+		[ actionType ]: prepareActionsListByType( _jf_actions, actionType,
+			withDesc ),
 	};
+};
+
+export const useSanitizeFieldsMap = ( mapProperty = 'fields_map' ) => {
+	const requestFields = useRequestFields();
+
+	const {
+		      settings,
+		      onChangeSettingObj,
+	      } = useContext( CurrentActionEditContext );
+
+	useEffect( () => {
+		if ( !settings.hasOwnProperty( mapProperty ) ) {
+			return;
+		}
+		const fields    = [ ...getFormFieldsBlocks(), ...requestFields ];
+		const fieldsMap = settings[ mapProperty ];
+
+		const hasField = fieldName => {
+			return -1 !== fields.findIndex(
+				current => current.value === fieldName,
+			);
+		};
+
+		for ( const fieldName in fieldsMap ) {
+			if ( !fieldsMap.hasOwnProperty( fieldName ) ) {
+				continue;
+			}
+
+			if ( !hasField( fieldName ) ) {
+				delete fieldsMap[ fieldName ];
+			}
+		}
+		onChangeSettingObj( { [ mapProperty ]: fieldsMap } );
+	}, [] );
 };

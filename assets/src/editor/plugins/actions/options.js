@@ -1,14 +1,12 @@
-const getRandomID = () => {
-	return Math.floor( Math.random() * 8999 ) + 1000;
-};
+const { Tools } = JetFBActions;
 
 const defaultAction = {
 	type: 'send_email',
-	id: getRandomID(),
+	id: Tools.getRandomID(),
 	settings: {},
 	conditions: [],
 	events: [],
-	provideEvents: []
+	provideEvents: [],
 };
 
 const defaultActions = [
@@ -26,7 +24,6 @@ const defaultActions = [
 const conditionSettings = window.JetFormEditorData.actionConditionSettings;
 
 export {
-	getRandomID,
 	defaultActions,
 	conditionSettings,
 	defaultAction,

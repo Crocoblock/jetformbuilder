@@ -17,6 +17,10 @@
 		"html": false
 	},
 	"attributes": {
+		"value": {
+			"type": "object",
+			"default": {}
+		},
 		"validation": {
 			"type": "object",
 			"default": {}

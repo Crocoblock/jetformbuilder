@@ -1,16 +1,19 @@
-import { defaultAction, defaultActions, getRandomID } from './options';
+import { defaultAction, defaultActions } from './options';
 import { useActionsEdit } from './hooks';
 import EditSettingsModal from './edit.settings.modal';
 import EditConditionsModal from './edit.conditions.modal';
 import ListActionItem from './action.item';
 
-
 const {
-	useState,
-	useEffect,
-} = wp.element;
-
-const { Button } = wp.components;
+	      Tools,
+      } = JetFBActions;
+const {
+	      useState,
+	      useEffect,
+      } = wp.element;
+const {
+	      Button,
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
@@ -29,7 +32,7 @@ function PluginActions() {
 			action={ action }
 			index={ index }
 		/> ) }
-		<div className='jfb-button-group'>
+		<div className="jfb-button-group">
 			<Button
 				isPrimary
 				onClick={ () => {
@@ -37,7 +40,7 @@ function PluginActions() {
 						...actions,
 						{
 							...JSON.parse( JSON.stringify( defaultAction ) ),
-							id: getRandomID(),
+							id: Tools.getRandomID(),
 						},
 					] );
 				} }
@@ -45,13 +48,13 @@ function PluginActions() {
 				{ __( '+ New Action', 'jet-form-builder' ) }
 			</Button>
 			{ (
-				  ! JetFormEditorData.isActivePro
-			  ) && <Button
-				  href={ JetFormEditorData.utmLinks.allProActions }
-				  variant='link'
-			  >
-				  { __( 'All PRO Actions', 'jet-form-builder' ) }
-			  </Button> }
+				!JetFormEditorData.isActivePro
+			) && <Button
+				href={ JetFormEditorData.utmLinks.allProActions }
+				variant="link"
+			>
+				{ __( 'All PRO Actions', 'jet-form-builder' ) }
+			</Button> }
 		</div>
 		<EditSettingsModal/>
 		<EditConditionsModal/>

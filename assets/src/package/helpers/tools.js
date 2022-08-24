@@ -1,9 +1,9 @@
-const semverGt = require( 'semver/functions/gt' )
-const semverLt = require( 'semver/functions/lt' )
-const semverGte = require( 'semver/functions/gte' )
-const semverLte = require( 'semver/functions/lte' )
+const semverGt  = require( 'semver/functions/gt' );
+const semverLt  = require( 'semver/functions/lt' );
+const semverGte = require( 'semver/functions/gte' );
+const semverLte = require( 'semver/functions/lte' );
 
-const { __ } = wp.i18n;
+const { __ }           = wp.i18n;
 const { applyFilters } = wp.hooks;
 
 class Tools {
@@ -18,6 +18,10 @@ class Tools {
 	static isEmptyObject( object ) {
 		return 'object' === typeof object && Object.keys( object ).length === 0;
 	}
+
+	static getRandomID() {
+		return Math.floor( Math.random() * 8999 ) + 1000;
+	};
 }
 
 export const event = name => {
@@ -47,7 +51,8 @@ function getSemVerFunc( operator ) {
 export function versionCompare( version1, version2, operator ) {
 	try {
 		return getSemVerFunc( operator )( version1, version2 );
-	} catch ( te ) {
+	}
+	catch ( te ) {
 		return false;
 	}
 }
@@ -83,7 +88,7 @@ export function maybeCyrToLatin( str ) {
 
 export function getConvertedName( valueToChange ) {
 	var regex = /\s+/g,
-		slug = valueToChange.toLowerCase().replace( regex, '_' );
+	    slug  = valueToChange.toLowerCase().replace( regex, '_' );
 
 	// Replace accents
 	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, '' );
@@ -95,8 +100,8 @@ export function getConvertedName( valueToChange ) {
 		// 34 - Lionel Messi's age when he left Barcelona
 		slug = slug.substr( 0, 34 );
 
-		if ( '-' === slug.slice( - 1 ) ) {
-			slug = slug.slice( 0, - 1 );
+		if ( '-' === slug.slice( -1 ) ) {
+			slug = slug.slice( 0, -1 );
 		}
 	}
 
@@ -108,7 +113,7 @@ export function classnames( ...additional ) {
 
 	const parseValues = source => {
 		source.forEach( itemClass => {
-			if ( ! itemClass ) {
+			if ( !itemClass ) {
 				return;
 			}
 			if ( Array.isArray( itemClass ) ) {
@@ -138,10 +143,10 @@ export function convertObjectToOptionsList( entries = [], {
 	usePlaceholder = true,
 	label = '--',
 	value = '',
-} = {} ) {
+}                                                   = {} ) {
 	const placeholder = { label, value };
 
-	if ( ! entries ) {
+	if ( !entries ) {
 		return usePlaceholder ? [ placeholder ] : [];
 	}
 

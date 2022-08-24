@@ -13,22 +13,31 @@ const {
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      BaseHelp,
+	      BlockValueItemContext,
       } = JetFBComponents;
-
-const { useIsAdvancedValidation } = JetFBHooks;
+const {
+	      Tools,
+      } = JetFBActions;
+const {
+	      useIsAdvancedValidation,
+	      useBlockAttributes,
+	      useUniqKey,
+      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      TextControl,
 	      SelectControl,
 	      ToggleControl,
 	      PanelBody,
+	      Button,
 	      __experimentalNumberControl,
       } = wp.components;
 
@@ -36,6 +45,80 @@ let { NumberControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
+}
+
+function DynamicValueItem( { current, update } ) {
+	const updateCurrent = settings => {
+		update( value => {
+			const groups = JSON.parse( JSON.stringify( value.groups ) );
+
+			for ( const groupIndex in groups ) {
+				if (
+					!groups.hasOwnProperty( groupIndex ) ||
+					current.id !== groups[ groupIndex ].id
+				) {
+					continue;
+				}
+				groups[ groupIndex ] = {
+					...groups[ groupIndex ],
+					...settings,
+				};
+			}
+			return { groups };
+		} );
+	};
+
+}
+
+function DynamicValues() {
+	const [ attributes, setAttributes ] = useBlockAttributes();
+
+	const uniqKey = useUniqKey();
+	const value   = attributes.value ?? {};
+	const groups  = value.groups ?? [];
+
+	const updateValue = settings => {
+		setAttributes( {
+			...attributes,
+			value: {
+				...value,
+				...(
+					'function' === typeof settings
+					? settings( value )
+					: settings
+				),
+			},
+		} );
+	};
+
+	return <PanelBody
+		title={ __( 'Dynamic Value', 'jet-form-builder' ) }
+	>
+		<BaseHelp>
+			{ __(
+				`This is a moved functionality from 
+					the conditional block with the Set Value function`,
+				'jet-form-builder',
+			) }
+		</BaseHelp>
+		{ Boolean( groups.length ) ? groups.map( current => (
+			<DynamicValueItem
+				key={ uniqKey( current.id ) }
+				current={ current }
+				update={ updateValue }
+			/>
+		) ) : null }
+		<Button
+			isSecondary
+			onClick={ () => {
+				updateValue( {
+					groups: [ ...groups, { id: Tools.getRandomID() } ],
+				} );
+			} }
+		>
+			{ __( 'Add Value', 'jet-form-builder' ) }
+		</Button>
+	</PanelBody>;
 }
 
 export default function TextEdit( props ) {

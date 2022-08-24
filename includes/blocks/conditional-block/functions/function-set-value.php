@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block\Functions;
 
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
+use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 class Function_Set_Value extends Base_Function {
@@ -24,6 +25,14 @@ class Function_Set_Value extends Base_Function {
 		return parent::to_response( $base, $item ) + array(
 			'set_value' => $set_value,
 		);
+	}
+
+	/**
+	 * @return array
+	 * @throws Array_Continue_Exception
+	 */
+	public function to_array(): array {
+		throw new Array_Continue_Exception();
 	}
 
 }

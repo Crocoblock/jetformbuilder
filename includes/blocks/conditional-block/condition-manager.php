@@ -64,10 +64,6 @@ class Condition_Manager implements Arrayable {
 		return $response;
 	}
 
-	private function legacy_convert( array $conditions ): array {
-
-	}
-
 	public function to_array(): array {
 		return array(
 			'functions'         => Tools::with_placeholder( $this->get_functions()->to_array() ),

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
@@ -95,6 +96,7 @@ class Conditional_Block extends Base {
 		$this->set_block_data( $attrs, $content, $wp_block );
 
 		$conditions = $this->get_conditions();
+		$func_type  = $this->get_function();
 		$content    = $this->block_content;
 		$name       = $this->block_attrs['name'] ?? '';
 
@@ -105,9 +107,10 @@ class Conditional_Block extends Base {
 		}
 
 		return sprintf(
-			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s" data-jfb-func="show_dom">%1$s</div>',
+			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s" data-jfb-func="%3$s">%1$s</div>',
 			$content,
-			$conditions
+			htmlspecialchars( wp_json_encode( $conditions ) ),
+			esc_attr( $func_type )
 		);
 	}
 
@@ -117,6 +120,7 @@ class Conditional_Block extends Base {
 
 		$func_type  = $this->block_attrs['func_type'] ?? false;
 		$conditions = $this->block_attrs['conditions'] ?? array();
+		$parsed     = array();
 
 		if ( ! count( $conditions ) || false !== $func_type ) {
 			return;
@@ -132,17 +136,43 @@ class Conditional_Block extends Base {
 			if ( ! in_array( $condition['type'], array( 'show', 'hide' ), true ) ) {
 				continue;
 			}
+			if ( false === $func_type ) {
+				$func_type = $condition['type'];
+			}
+			unset( $condition['type'] );
+
+			if ( 'hide' === $func_type && ! empty( $parsed ) ) {
+				$parsed[ $condition['field'] . '_or' ] = array(
+					'or_operator' => true,
+				);
+			}
+
+			$parsed[ $condition['field'] ] = $condition;
 		}
+
+		$this->block_attrs['func_type']  = $func_type;
+		$this->block_attrs['conditions'] = array_values( $parsed );
 	}
 
 	/**
-	 * @return string
 	 * @throws Render_Empty_Field
 	 */
-	private function get_conditions(): string {
-		$conditions = Condition_Manager::instance()->prepare( $this->block_attrs );
+	protected function get_conditions(): array {
+		return Condition_Manager::instance()->prepare(
+			$this->block_attrs['conditions'] ?? array()
+		);
+	}
 
-		return htmlspecialchars( wp_json_encode( $conditions ) );
+	protected function get_function(): string {
+		$func_type = $this->block_attrs['func_type'] ?? '';
+
+		try {
+			Condition_Manager::instance()->get_functions()->isset_function( $func_type );
+		} catch ( Repository_Exception $exception ) {
+			return '';
+		}
+
+		return $func_type;
 	}
 
 

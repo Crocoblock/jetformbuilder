@@ -1,4 +1,5 @@
 import { createConditionItem, createMultiStep } from './functions';
+import OrOperatorItem from './OrOperatorItem';
 
 class ConditionalBlock {
 
@@ -79,9 +80,37 @@ class ConditionalBlock {
 	}
 
 	getResult() {
-		this.invalid = [];
+		this.invalid   = [];
+		let groups     = {};
+		let groupIndex = 0;
 
 		for ( const condition of this.getConditions() ) {
+			if ( condition instanceof OrOperatorItem ) {
+				groupIndex++;
+
+				continue;
+			}
+			groups[ groupIndex ] = groups[ groupIndex ] ?? [];
+			groups[ groupIndex ].push( condition );
+		}
+
+		groups = Object.values( groups );
+
+		if ( ! groups.length ) {
+			return true;
+		}
+
+		for ( const group of groups ) {
+			if ( this.isValidGroup( group ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	isValidGroup( conditionsGroup ) {
+		for ( const condition of conditionsGroup ) {
 			if ( condition.isPassed() ) {
 				continue;
 			}

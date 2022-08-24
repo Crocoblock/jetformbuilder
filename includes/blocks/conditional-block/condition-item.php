@@ -13,7 +13,6 @@ use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 class Condition_Item implements Arrayable {
 
-	private $type;
 	private $value;
 	private $field;
 	private $operator;
@@ -40,7 +39,6 @@ class Condition_Item implements Arrayable {
 		$this->field    = $condition['field'] ?? '';
 		$this->operator = $condition['operator'] ?? '';
 
-		Condition_Manager::instance()->get_functions()->isset_function( $this->type );
 		Condition_Manager::instance()->get_operators()->isset_operator( $this->operator );
 	}
 

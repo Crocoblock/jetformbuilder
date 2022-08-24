@@ -122,7 +122,7 @@ class Conditional_Block extends Base {
 		$conditions = $this->block_attrs['conditions'] ?? array();
 		$parsed     = array();
 
-		if ( ! count( $conditions ) || false !== $func_type ) {
+		if ( ! count( $conditions ) || ! empty( $func_type ) ) {
 			return;
 		}
 
@@ -131,12 +131,12 @@ class Conditional_Block extends Base {
 		} );
 
 		foreach ( $conditions as $condition ) {
-			$condition['type'] = $condition['type'] ?? 'show';
+			$condition['type'] = $condition['type'] ?? '';
 
 			if ( ! in_array( $condition['type'], array( 'show', 'hide' ), true ) ) {
 				continue;
 			}
-			if ( false === $func_type ) {
+			if ( empty( $func_type ) ) {
 				$func_type = $condition['type'];
 			}
 			unset( $condition['type'] );

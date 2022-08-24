@@ -2,8 +2,10 @@ import ConditionFieldItem from './ConditionFieldItem';
 import ConditionPageStateItem from './ConditionPageStateItem';
 import ConditionalBlock from './ConditionalBlock';
 import MultiStepState from '../multi.step/MultiStepState';
+import OrOperatorItem from './OrOperatorItem';
 
 const itemTypes = [
+	OrOperatorItem,
 	ConditionFieldItem,
 	ConditionPageStateItem,
 ];

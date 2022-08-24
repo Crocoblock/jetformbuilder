@@ -36,6 +36,11 @@ class Condition_Manager implements Arrayable {
 		$response = array();
 
 		foreach ( $conditions as $condition ) {
+			if ( isset( $condition['or_operator'] ) ) {
+				$response[] = $condition;
+
+				continue;
+			}
 			try {
 				$item = new Condition_Item( $condition );
 			} catch ( Repository_Exception $exception ) {

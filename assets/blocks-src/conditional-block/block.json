@@ -25,7 +25,7 @@
 		},
 		"func_type": {
 			"type": "string",
-			"default": "show"
+			"default": ""
 		},
 		"conditions": {
 			"type": "array",

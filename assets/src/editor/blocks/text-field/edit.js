@@ -15,6 +15,10 @@ const {
 	      ValidationBlockMessage,
 	      BaseHelp,
 	      BlockValueItemContext,
+	      ActionModal,
+	      ActionModalContext,
+	      Repeater,
+	      RepeaterAddNew,
       } = JetFBComponents;
 const {
 	      Tools,
@@ -24,9 +28,15 @@ const {
 	      useBlockAttributes,
 	      useUniqKey,
       } = JetFBHooks;
-
-const { __ } = wp.i18n;
-
+const {
+	      __,
+	      sprintf,
+      } = wp.i18n;
+const {
+	      useState,
+	      useContext,
+	      useEffect,
+      } = wp.element;
 const {
 	      InspectorControls,
 	      useBlockProps,
@@ -38,6 +48,8 @@ const {
 	      ToggleControl,
 	      PanelBody,
 	      Button,
+	      ButtonGroup,
+	      Flex,
 	      __experimentalNumberControl,
       } = wp.components;
 
@@ -45,6 +57,53 @@ let { NumberControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
+}
+
+function DynamicItemBody() {
+	const {
+		      current: currentValue,
+		      update,
+	      } = useContext( BlockValueItemContext );
+	const {
+		      actionClick,
+		      onRequestClose,
+	      } = useContext( ActionModalContext );
+
+	const [ current, setCurrent ] = useState( () => currentValue );
+
+	const updateConditions = conditions => {
+		setCurrent( {
+			...current,
+			conditions: 'function' === typeof conditions
+			            ? conditions( current.conditions ?? [] )
+			            : conditions,
+		} );
+	};
+
+	useEffect( () => {
+		// update field attributes
+		if ( actionClick ) {
+			update( current );
+		}
+
+		if ( null !== actionClick ) {
+			onRequestClose();
+		}
+	}, [ actionClick ] );
+
+	return <>
+		<Repeater
+			onSetState={ updateConditions }
+			items={ current.conditions ?? [] }
+		>
+			Test
+		</Repeater>
+		<RepeaterAddNew
+			onSetState={ updateConditions }
+		>
+			{ __( 'Add New Condition', 'jet-form-builder' ) }
+		</RepeaterAddNew>
+	</>;
 }
 
 function DynamicValueItem( { current, update } ) {
@@ -67,6 +126,52 @@ function DynamicValueItem( { current, update } ) {
 			return { groups };
 		} );
 	};
+
+	const deleteCurrent = () => {
+		update( value => {
+			const groups = JSON.parse( JSON.stringify( value.groups ) );
+
+			return { groups: groups.filter( ( { id } ) => id !== current.id ) };
+		} );
+	};
+
+	const [ showModal, setShowModal ] = useState( false );
+
+	return <BlockValueItemContext.Provider value={ {
+		update: updateCurrent,
+		current,
+	} }>
+		<div className={ 'jet-form-action-details' }>
+			<div data-title={ 'ID:' }>{ current.id }</div>
+			<ButtonGroup
+				style={ {
+					alignSelf: 'flex-end',
+				} }
+			>
+				<Button
+					isSmall
+					isSecondary
+					className={ 'jet-fb-is-thick' }
+					icon={ showModal ? 'no-alt' : 'edit' }
+					onClick={ () => setShowModal( prev => !prev ) }
+				/>
+				<Button
+					isSmall
+					isDestructive
+					className={ 'jet-fb-is-thick' }
+					icon={ 'trash' }
+					onClick={ deleteCurrent }
+				/>
+			</ButtonGroup>
+		</div>
+		{ showModal && <ActionModal
+			classNames={ [ 'width-60' ] }
+			onRequestClose={ () => setShowModal( false ) }
+			title={ __( 'Edit Dynamic Value', 'jet-form-builder' ) }
+		>
+			<DynamicItemBody/>
+		</ActionModal> }
+	</BlockValueItemContext.Provider>;
 
 }
 
@@ -101,13 +206,21 @@ function DynamicValues() {
 				'jet-form-builder',
 			) }
 		</BaseHelp>
-		{ Boolean( groups.length ) ? groups.map( current => (
-			<DynamicValueItem
-				key={ uniqKey( current.id ) }
-				current={ current }
-				update={ updateValue }
-			/>
-		) ) : null }
+		{ Boolean( groups.length ) ? <Flex
+			direction={ 'column' }
+			align={ 'center' }
+			style={ {
+				marginBottom: '1em',
+			} }
+		>
+			{ groups.map( current => (
+				<DynamicValueItem
+					key={ uniqKey( current.id ) }
+					current={ current }
+					update={ updateValue }
+				/>
+			) ) }
+		</Flex> : null }
 		<Button
 			isSecondary
 			onClick={ () => {
@@ -267,6 +380,7 @@ export default function TextEdit( props ) {
 					<ValidationBlockMessage name="char_min"/>
 				</> }
 			</PanelBody>
+			<DynamicValues/>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }
@@ -286,4 +400,5 @@ export default function TextEdit( props ) {
 			</FieldWrapper>
 		</div>,
 	];
-};
+}
+;

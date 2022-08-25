@@ -43,16 +43,10 @@ export default function ConditionalBlockEdit( props ) {
 
 	const [ showModal, setShowModal ] = useState( false );
 
-	const countConditions = ( prev, current ) => {
-		return (
-			       current.or_operator ?? false
-		       ) ? prev : prev + 1;
-	};
-
 	const conditionsIcon = attributes?.conditions?.length ? <span
 		className="dashicon dashicons dashicons-randomize"
 		data-count={ attributes.conditions.reduce(
-			countConditions,
+			( prev, current ) => current?.or_operator ? prev : prev + 1,
 			0,
 		) }
 	/> : <span className="dashicon dashicons dashicons-randomize"/>;

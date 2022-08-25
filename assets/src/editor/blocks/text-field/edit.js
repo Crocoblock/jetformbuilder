@@ -13,30 +13,14 @@ const {
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
-	      BaseHelp,
-	      BlockValueItemContext,
-	      ActionModal,
-	      ActionModalContext,
-	      Repeater,
-	      RepeaterAddNew,
+	      DynamicValues,
       } = JetFBComponents;
 const {
-	      Tools,
-      } = JetFBActions;
-const {
 	      useIsAdvancedValidation,
-	      useBlockAttributes,
-	      useUniqKey,
       } = JetFBHooks;
 const {
 	      __,
-	      sprintf,
       } = wp.i18n;
-const {
-	      useState,
-	      useContext,
-	      useEffect,
-      } = wp.element;
 const {
 	      InspectorControls,
 	      useBlockProps,
@@ -47,9 +31,6 @@ const {
 	      SelectControl,
 	      ToggleControl,
 	      PanelBody,
-	      Button,
-	      ButtonGroup,
-	      Flex,
 	      __experimentalNumberControl,
       } = wp.components;
 
@@ -57,181 +38,6 @@ let { NumberControl } = wp.components;
 
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
-}
-
-function DynamicItemBody() {
-	const {
-		      current: currentValue,
-		      update,
-	      } = useContext( BlockValueItemContext );
-	const {
-		      actionClick,
-		      onRequestClose,
-	      } = useContext( ActionModalContext );
-
-	const [ current, setCurrent ] = useState( () => currentValue );
-
-	const updateConditions = conditions => {
-		setCurrent( {
-			...current,
-			conditions: 'function' === typeof conditions
-			            ? conditions( current.conditions ?? [] )
-			            : conditions,
-		} );
-	};
-
-	useEffect( () => {
-		// update field attributes
-		if ( actionClick ) {
-			update( current );
-		}
-
-		if ( null !== actionClick ) {
-			onRequestClose();
-		}
-	}, [ actionClick ] );
-
-	return <>
-		<Repeater
-			onSetState={ updateConditions }
-			items={ current.conditions ?? [] }
-		>
-			Test
-		</Repeater>
-		<RepeaterAddNew
-			onSetState={ updateConditions }
-		>
-			{ __( 'Add New Condition', 'jet-form-builder' ) }
-		</RepeaterAddNew>
-	</>;
-}
-
-function DynamicValueItem( { current, update } ) {
-	const updateCurrent = settings => {
-		update( value => {
-			const groups = JSON.parse( JSON.stringify( value.groups ) );
-
-			for ( const groupIndex in groups ) {
-				if (
-					!groups.hasOwnProperty( groupIndex ) ||
-					current.id !== groups[ groupIndex ].id
-				) {
-					continue;
-				}
-				groups[ groupIndex ] = {
-					...groups[ groupIndex ],
-					...settings,
-				};
-			}
-			return { groups };
-		} );
-	};
-
-	const deleteCurrent = () => {
-		update( value => {
-			const groups = JSON.parse( JSON.stringify( value.groups ) );
-
-			return { groups: groups.filter( ( { id } ) => id !== current.id ) };
-		} );
-	};
-
-	const [ showModal, setShowModal ] = useState( false );
-
-	return <BlockValueItemContext.Provider value={ {
-		update: updateCurrent,
-		current,
-	} }>
-		<div className={ 'jet-form-action-details' }>
-			<div data-title={ 'ID:' }>{ current.id }</div>
-			<ButtonGroup
-				style={ {
-					alignSelf: 'flex-end',
-				} }
-			>
-				<Button
-					isSmall
-					isSecondary
-					className={ 'jet-fb-is-thick' }
-					icon={ showModal ? 'no-alt' : 'edit' }
-					onClick={ () => setShowModal( prev => !prev ) }
-				/>
-				<Button
-					isSmall
-					isDestructive
-					className={ 'jet-fb-is-thick' }
-					icon={ 'trash' }
-					onClick={ deleteCurrent }
-				/>
-			</ButtonGroup>
-		</div>
-		{ showModal && <ActionModal
-			classNames={ [ 'width-60' ] }
-			onRequestClose={ () => setShowModal( false ) }
-			title={ __( 'Edit Dynamic Value', 'jet-form-builder' ) }
-		>
-			<DynamicItemBody/>
-		</ActionModal> }
-	</BlockValueItemContext.Provider>;
-
-}
-
-function DynamicValues() {
-	const [ attributes, setAttributes ] = useBlockAttributes();
-
-	const uniqKey = useUniqKey();
-	const value   = attributes.value ?? {};
-	const groups  = value.groups ?? [];
-
-	const updateValue = settings => {
-		setAttributes( {
-			...attributes,
-			value: {
-				...value,
-				...(
-					'function' === typeof settings
-					? settings( value )
-					: settings
-				),
-			},
-		} );
-	};
-
-	return <PanelBody
-		title={ __( 'Dynamic Value', 'jet-form-builder' ) }
-	>
-		<BaseHelp>
-			{ __(
-				`This is a moved functionality from 
-					the conditional block with the Set Value function`,
-				'jet-form-builder',
-			) }
-		</BaseHelp>
-		{ Boolean( groups.length ) ? <Flex
-			direction={ 'column' }
-			align={ 'center' }
-			style={ {
-				marginBottom: '1em',
-			} }
-		>
-			{ groups.map( current => (
-				<DynamicValueItem
-					key={ uniqKey( current.id ) }
-					current={ current }
-					update={ updateValue }
-				/>
-			) ) }
-		</Flex> : null }
-		<Button
-			isSecondary
-			onClick={ () => {
-				updateValue( {
-					groups: [ ...groups, { id: Tools.getRandomID() } ],
-				} );
-			} }
-		>
-			{ __( 'Add Value', 'jet-form-builder' ) }
-		</Button>
-	</PanelBody>;
 }
 
 export default function TextEdit( props ) {

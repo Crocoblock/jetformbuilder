@@ -129,6 +129,7 @@ import ActionFieldsMapContext from './context/action.fields.map.context';
 import CurrentPropertyMapContext from './context/current.property.map';
 import DynamicPropertySelect from './components/dynamic.property.select';
 import ActionFetchButton from './components/action.fetch.button';
+import DynamicValues from './components/dynamic.value/DynamicValues';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -178,6 +179,7 @@ window.JetFBComponents = {
 	ValidationBlockMessage,
 	ValidationMetaMessage,
 	ActionFetchButton,
+	DynamicValues,
 };
 
 // JFBFunctions

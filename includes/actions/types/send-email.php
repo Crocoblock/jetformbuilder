@@ -58,6 +58,20 @@ class Send_Email extends Base {
 		);
 	}
 
+	public function editor_labels_help() {
+		return array(
+			'custom_email' => __(
+				'To apply multiple mailing addresses, separate them with commas',
+				'jet-form-builder'
+			),
+			'from_field' => __(
+				'To apply multiple mailing addresses, you can select a "Checkbox Field" 
+				or a "Select field" with enabled "Is multiple" option.',
+				'jet-form-builder'
+			),
+		);
+	}
+
 	public function action_attributes() {
 		return array(
 			'mail_to'          => array(

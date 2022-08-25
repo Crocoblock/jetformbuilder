@@ -71,7 +71,7 @@ function ActiveCampaignAction( props ) {
 	useEffect( () => {
 		const fields_map = {};
 
-		for ( const [ property, value ] of Object.entries( settings.fields_map ) ) {
+		for ( const [ property, value ] of Object.entries( settings.fields_map ?? {} ) ) {
 			if ( ! legacy_map.hasOwnProperty( property ) ) {
 				fields_map[ property ] = value;
 

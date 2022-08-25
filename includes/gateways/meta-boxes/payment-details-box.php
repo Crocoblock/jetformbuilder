@@ -8,9 +8,12 @@ use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Updated_At_Column;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Gateways\Meta_Boxes\Actions\Delete_Payment_Action;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Gateway_Type_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Amount_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Currency_Column;
+use Jet_Form_Builder\Gateways\Pages\Payments_Page;
+use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Rest_Api\Receive_Payment;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
@@ -29,6 +32,16 @@ class Payment_Details_Box extends Base_List_Box {
 			'status'     => new Payment_Status_Column(),
 			'created_at' => new Created_At_Column(),
 			'updated_at' => new Updated_At_Column(),
+		);
+	}
+
+	public function get_actions(): array {
+		if ( ! is_a( jet_fb_current_page(), Single_Payment_Page::class ) ) {
+			return array();
+		}
+
+		return array(
+			new Delete_Payment_Action(),
 		);
 	}
 

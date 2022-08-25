@@ -2,6 +2,7 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Payments', 'jet-form-builder' )"
 	>
+		<ActionsWithFilters/>
 		<TablePagination/>
 		<EntriesTable/>
 		<template v-if="$slots.default">
@@ -12,24 +13,58 @@
 </template>
 
 <script>
+import ActionsWithFilters from './ActionsWithFilters';
 import TablePagination from '../TablePagination';
 import EntriesTable from '../EntriesTable';
 import FormBuilderPage from '../FormBuilderPage';
 
-Vue.config.devtools = true;
-
-const { GetIncoming, i18n } = JetFBMixins;
-const { apiFetch } = wp;
-const { mapState, mapGetters } = Vuex;
+const {
+	      GetIncoming,
+	      i18n,
+	      PromiseWrapper,
+      } = JetFBMixins;
+const {
+	      apiFetch,
+      } = wp;
+const {
+	      mapMutations,
+	      mapState,
+	      mapActions,
+	      mapGetters,
+      } = Vuex;
 
 export default {
 	name: 'payments-table-core',
 	components: {
+		ActionsWithFilters,
 		FormBuilderPage,
 		EntriesTable,
 		TablePagination,
 	},
-	mixins: [ GetIncoming, i18n ],
+	mixins: [ GetIncoming, i18n, PromiseWrapper ],
+	created() {
+		/** Delete */
+		this.setActionPromises( {
+			action: 'delete',
+			promise: this.promiseWrapper( this.delete.bind( this ) ),
+		} );
+	},
+	methods: {
+		...mapMutations( 'scope-default', [
+			'setActionPromises',
+		] ),
+		...mapActions( 'scope-default', [
+			'updateList',
+			'apiFetch',
+		] ),
+		delete( { resolve, reject } ) {
+			this.apiFetch().then( response => {
+				this.updateList( response );
+
+				resolve( response.message );
+			} ).catch( reject );
+		},
+	},
 };
 
 </script>

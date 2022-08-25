@@ -26,6 +26,26 @@
 		background-color: #d3d3d35e;
 	}
 
+	&-control {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	&-details {
+		border: 1px dashed darkgrey;
+		padding: 0.6em;
+		margin-top: 0.5em;
+
+		[data-title] {
+			&:before {
+				content: attr(data-title);
+				color: darkgrey;
+				margin-right: 0.5em;
+			}
+		}
+	}
+
 	.jfb-events-item {
 		padding: 0 4px;
 		border-radius: 5px;

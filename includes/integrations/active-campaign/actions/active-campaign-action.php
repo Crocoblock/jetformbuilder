@@ -1,10 +1,14 @@
 <?php
 
-namespace Jet_Form_Builder\Actions\Types;
+namespace Jet_Form_Builder\Integrations\Active_Campaign\Actions;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Integrations\Active_Campaign_Handler;
+use Jet_Form_Builder\Integrations\Active_Campaign\Methods\Contact_Modifier;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Editor_Fetch_Endpoint;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Lists;
+use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Custom_Fields;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,8 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Base_Type class
  */
-class Active_Campaign extends Integration_Base_Action {
-	protected $action = 'jet_form_builder_get_activecampaign_data';
+class Active_Campaign_Action extends Base {
 
 	public $option_name = 'active-campaign-tab';
 
@@ -25,10 +28,6 @@ class Active_Campaign extends Integration_Base_Action {
 
 	public function get_id() {
 		return 'active_campaign';
-	}
-
-	public function api_handler( $settings ) {
-		return new Active_Campaign_Handler( $settings );
 	}
 
 	public function action_attributes() {
@@ -67,14 +66,13 @@ class Active_Campaign extends Integration_Base_Action {
 	/**
 	 * Run a hook notification
 	 *
-	 * @param array          $request
+	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-
 		$settings = $this->global_settings(
 			array(
 				'api_url' => '',
@@ -82,43 +80,20 @@ class Active_Campaign extends Integration_Base_Action {
 			)
 		);
 
-		if ( empty( $settings['api_url'] ) || empty( $settings['api_key'] ) ) {
-			throw new Action_Exception( 'invalid_api_key' );
-		}
+		$list_id    = $this->settings['list_id'] ?? 0;
+		$tags       = $this->settings['tags'] ?? '';
+		$fields_map = $this->settings['fields_map'] ?? array();
 
-		$body_args = array();
-
-		$fields_map = ! empty( $this->settings['fields_map'] ) ? $this->settings['fields_map'] : array();
-
-		foreach ( $fields_map as $param => $field ) {
-
-			if ( empty( $field ) || empty( $request[ $field ] ) ) {
-				continue;
-			}
-
-			$body_args[ $param ] = $request[ $field ];
-		}
-
-		$list_id = ! empty( $this->settings['list_id'] ) ? $this->settings['list_id'] : false;
-
-		if ( $list_id ) {
-			$body_args[ 'p[' . $list_id . ']' ] = $list_id;
-		}
-
-		if ( ! empty( $this->settings['tags'] ) ) {
-			$body_args['tags'] = $this->settings['tags'];
-		}
-
-		if ( empty( $body_args['email'] ) ) {
-			throw new Action_Exception( 'empty_field', $body_args['email'] );
-		}
-
-		$this->api_handler( $settings )->request( false, $body_args );
+		( new Contact_Modifier() )
+			->set_request( $request )
+			->set_fields_map( $fields_map, true )
+			->set_api_key( $settings['api_key'] )
+			->set_api_url( $settings['api_url'] )
+			->set( '#list', $list_id )
+			->set( '#tags', $tags )
+			->run();
 	}
 
-	public function self_script_name() {
-		return 'jetFormActiveCampaignData';
-	}
 
 	public function editor_labels() {
 		return array(
@@ -151,7 +126,10 @@ class Active_Campaign extends Integration_Base_Action {
 	 */
 	public function action_data() {
 		return array(
-			'activecampaign_fields' => $this->get_fields(),
+			'fetch' => array(
+				'url'    => Editor_Fetch_Endpoint::rest_url(),
+				'method' => Editor_Fetch_Endpoint::get_methods(),
+			),
 		);
 	}
 

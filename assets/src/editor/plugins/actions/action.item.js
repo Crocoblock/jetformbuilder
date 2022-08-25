@@ -5,10 +5,15 @@ const {
 	      useDispatch,
 	      useSelect,
       } = wp.data;
-
-const { applyFilters } = wp.hooks;
-
-const { __ } = wp.i18n;
+const {
+	      applyFilters,
+      } = wp.hooks;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      useState,
+      } = wp.element;
 
 const {
 	      SelectControl,
@@ -115,6 +120,7 @@ function ListActionItem( props ) {
 		key={ action.id }
 		size={ 'extraSmall' }
 		className={ wrapper }
+		elevation={ 2 }
 	>
 		{ header && <CardHeader>
 			{ header }

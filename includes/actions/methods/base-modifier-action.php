@@ -4,14 +4,12 @@
 namespace Jet_Form_Builder\Actions\Methods;
 
 
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 
-abstract class Base_Modifier_Action implements Repository_Item_Instance_Trait {
+abstract class Base_Modifier_Action implements Collection_Item_Interface {
 
 	/** @var Abstract_Modifier */
 	protected $modifier;
-
-	abstract public function get_id(): string;
 
 	abstract public function do_action();
 

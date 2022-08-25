@@ -32,10 +32,6 @@ class Send_Email extends Base {
 		return 'send_email';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'mail_to', 'subject' );
-	}
-
 	public function self_script_name() {
 		return 'jetFormEmailData';
 	}

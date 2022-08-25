@@ -1,9 +1,13 @@
-import { fromLocalizeHelper } from "./action-helper";
+import { fromLocalizeHelper } from './action-helper';
+import CurrentActionEdit from '../../context/current.action.edit';
 
-const { applyFilters } = wp.hooks;
+const {
+	      withFilters,
+      } = wp.components;
 
 export default function withActionLocalizeScript( actionType, ActionInstance ) {
-	const localizedData = fromLocalizeHelper( 'getLocalizedFullPack' )( actionType );
+	const localizedData = fromLocalizeHelper( 'getLocalizedFullPack' )(
+		actionType );
 
 	return props => {
 		const onChangeSetting = ( value, key ) => {
@@ -23,7 +27,8 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 		const getMapField = ( { source = 'fields_map', name } ) => {
 			const settings = props.settings;
 
-			if ( typeof settings[ source ] !== 'undefined' && typeof settings[ source ][ name ] !== 'undefined' ) {
+			if ( typeof settings[ source ] !== 'undefined' &&
+				typeof settings[ source ][ name ] !== 'undefined' ) {
 				return settings[ source ][ name ];
 			}
 			return '';
@@ -39,14 +44,26 @@ export default function withActionLocalizeScript( actionType, ActionInstance ) {
 				...props.settings,
 				[ source ]: fieldsMap,
 			} );
-		}
+		};
 
-		const additionalProps = { onChangeSetting, getMapField, setMapField, onChangeSettingObj };
+		const additionalProps = {
+			onChangeSetting,
+			getMapField,
+			setMapField,
+			onChangeSettingObj,
+		};
+
 		const resultProps = { ...props, ...localizedData, ...additionalProps };
 
-		return <>
+		const CustomSettings = withFilters(
+			`jet.fb.render.action.${ actionType }`,
+		)(
+			() => null,
+		);
+
+		return <CurrentActionEdit.Provider value={ resultProps }>
 			<ActionInstance { ...resultProps } />
-			{ applyFilters( `jet.fb.render.action.${ actionType }`, <></>, resultProps ) }
-		</>
+			<CustomSettings { ...resultProps } />
+		</CurrentActionEdit.Provider>;
 	};
 }

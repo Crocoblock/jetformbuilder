@@ -35,7 +35,6 @@ class Manager {
 			new Types\Register_User(),
 			new Types\Fake_User_Login(),
 			new Types\Update_User(),
-			new Types\Update_Options(),
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),
@@ -147,7 +146,6 @@ class Manager {
 			$action_localize['__messages']           = $type->get_messages_default();
 			$action_localize['__labels']             = $type->editor_labels();
 			$action_localize['__help_messages']      = $type->editor_labels_help();
-			$action_localize['__gateway_attrs']      = $type->visible_attributes_for_gateway_editor();
 			$action_localize['__unsupported_events'] = $type->unsupported_events();
 			$action_localize['__supported_events']   = $type->supported_events();
 

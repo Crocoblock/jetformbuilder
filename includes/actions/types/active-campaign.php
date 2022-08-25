@@ -120,10 +120,6 @@ class Active_Campaign extends Integration_Base_Action {
 		return 'jetFormActiveCampaignData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'list_id' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'api_data'         => __( 'API Data', 'jet-form-builder' ),

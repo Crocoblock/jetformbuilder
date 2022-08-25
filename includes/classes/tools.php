@@ -117,6 +117,21 @@ class Tools {
 		return self::with_placeholder( self::prepare_list_for_js( $taxonomies, 'name', 'label' ) );
 	}
 
+	public static function get_taxonomies_for_modify( array $args = array() ): array {
+		$taxonomies = get_taxonomies( $args, 'objects' );
+		$response   = array();
+
+		/** @var \WP_Taxonomy $taxonomy */
+		foreach ( $taxonomies as $taxonomy ) {
+			$response[] = array(
+				'label' => $taxonomy->label,
+				'value' => "jet_tax__{$taxonomy->name}",
+			);
+		}
+
+		return self::with_placeholder( $response );
+	}
+
 	public static function get_generators_list_for_js() {
 		$generators = Plugin::instance()->form->get_generators_list();
 
@@ -352,6 +367,7 @@ class Tools {
 			foreach ( $json as $key => $row ) {
 				$json[ $key ] = static::decode_json( $row );
 			}
+
 			return $json;
 		}
 		if ( defined( 'JSON_INVALID_UTF8_IGNORE' ) ) {

@@ -119,7 +119,6 @@ class Preset_Manager {
 				new Sources\Preset_Source_Post(),
 				new Sources\Preset_Source_User(),
 				new Sources\Preset_Source_Query_Var(),
-				new Sources\Preset_Source_Options_Page(),
 			)
 		);
 

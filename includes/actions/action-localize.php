@@ -9,10 +9,6 @@ trait Action_Localize {
 
 	abstract public function get_name();
 
-	public function visible_attributes_for_gateway_editor() {
-		return array();
-	}
-
 	public function self_script_name() {
 		$id = str_replace( '-', '_', $this->get_id() );
 

@@ -11,18 +11,13 @@ import './form-actions/mailchimp';
 import './form-actions/getresponse';
 import './form-actions/activecampaign';
 import './form-actions/save-record';
-import RegisterPlugins from "./plugins/manager";
-import RegisterFormFields from "./blocks/form-fields";
+
+import RegisterPlugins from './plugins/manager';
+import RegisterFormFields from './blocks/form-fields';
 
 const { event } = JetFBActions;
 
 event( 'jet-form-builder-initialize' )();
-
-window.jetFormActionTypes.forEach( function ( action, index ) {
-	if ( window.jetFormDefaultActions && window.jetFormDefaultActions[ action.id ] ) {
-		window.jetFormActionTypes[ index ].callback = window.jetFormDefaultActions[ action.id ];
-	}
-} );
 
 RegisterPlugins();
 RegisterFormFields();

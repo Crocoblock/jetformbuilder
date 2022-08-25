@@ -48,10 +48,6 @@ class Register_User extends Base {
 		return 'jetFormRegisterUserData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'user_role' );
-	}
-
 	public function editor_labels() {
 		return array(
 			'allow_register'    => __( 'Allow creating new users by existing users', 'jet-form-builder' ),

@@ -146,10 +146,6 @@ class Redirect_To_Page extends Base {
 		return 'jetFormRedirectToPageData';
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array();
-	}
-
 	public function editor_labels() {
 		return array(
 			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),

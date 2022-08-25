@@ -36,15 +36,15 @@ class Form_Manager {
 
 		if ( false === $this->generators ) {
 
-			$instances = array(
-				new Num_Range(),
-				new Num_Range_Manual(),
-				new Get_From_DB(),
-				new Get_From_Field(),
-				new Get_From_Je_Query(),
+			$instances = apply_filters(
+				'jet-form-builder/forms/options-generators',
+				array(
+					new Num_Range(),
+					new Num_Range_Manual(),
+					new Get_From_DB(),
+				),
+				$this
 			);
-
-			$instances = apply_filters( 'jet-form-builder/forms/options-generators', $instances, $this );
 
 			foreach ( $instances as $instance ) {
 				if ( $instance->can_generate() ) {

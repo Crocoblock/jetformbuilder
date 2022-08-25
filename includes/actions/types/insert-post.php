@@ -3,9 +3,10 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Methods\Post_Modification\Abstract_Post_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -16,6 +17,27 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 class Insert_Post extends Base {
+
+	/** @var Abstract_Post_Modifier[] */
+	protected $modifiers;
+
+	public function __construct() {
+		parent::__construct();
+
+		/**
+		 * Just add a new element to the end.
+		 * When the action is executed, this array is flipped,
+		 * which puts the \Jet_Form_Builder\Actions\Methods\Post_Modifier at the end.
+		 *
+		 * @since 2.1.4
+		 */
+		$this->modifiers = apply_filters(
+			'jet-form-builder/action/insert-post/modifiers',
+			array(
+				new Post_Modifier(),
+			)
+		);
+	}
 
 	public function get_name() {
 		return __( 'Insert/Update Post', 'jet-form-builder' );
@@ -47,29 +69,23 @@ class Insert_Post extends Base {
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
-	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$post_type   = $this->settings['post_type'] ?? false;
-		$fields_map  = $this->settings['fields_map'] ?? array();
-		$post_status = $this->settings['post_status'] ?? '';
-		$meta        = $this->settings['default_meta'] ?? array();
+		$modifiers = array_reverse( $this->modifiers );
 
-		$modifier = ( new Post_Modifier() )
-			->suppress_filters( false )
-			->set_post_type( $post_type )
-			->set_meta( $meta )
-			->set_fields_map( $fields_map )
-			->set_request( $request );
-
-		if ( 'keep-current' === $post_status ) {
-			$modifier->exclude_prop( 'post_status' );
-		} else if ( $post_status && 'from-field' !== $post_status ) {
-			$modifier->global_status             = true;
-			$modifier->source_arr['post_status'] = $post_status;
+		/** @var Abstract_Post_Modifier $modifier */
+		foreach ( $modifiers as $modifier ) {
+			if ( ! $modifier->is_supported( $this ) ) {
+				continue;
+			}
+			$modifier->before_run( $this );
+			$modifier->run();
+			break;
 		}
+	}
 
-		$modifier->run();
+	public function get_post_type(): string {
+		return $this->settings['post_type'] ?? '';
 	}
 
 	public function get_inserted_post_context( $post_id = false ) {
@@ -83,10 +99,6 @@ class Insert_Post extends Base {
 
 	public static function get_context_post_key( $post_id ) {
 		return "post-id-{$post_id}";
-	}
-
-	public function self_script_name() {
-		return 'jetFormInsertPostData';
 	}
 
 	public function editor_labels() {
@@ -105,23 +117,26 @@ class Insert_Post extends Base {
 		);
 	}
 
-	public function visible_attributes_for_gateway_editor() {
-		return array( 'post_type', 'post_status' );
-	}
-
 	/**
 	 * Regsiter custom action data for the editor
 	 *
 	 * @return [type] [description]
 	 */
 	public function action_data() {
+		$properties = array();
+
+		foreach ( $this->modifiers as $modifier ) {
+			$properties[ $modifier->get_id() ] = Tools::with_placeholder(
+				Array_Tools::to_array( $modifier->properties->all() )
+			);
+		}
+
 		return array(
-			'postTypes'        => Tools::get_post_types_for_js(),
-			'taxonomies'       => Tools::get_taxonomies_for_js(),
-			'postStatuses'     => $this->get_post_statuses_for_options(),
-			'postFields'       => $this->get_post_fields_for_options(),
-			'fieldsMapOptions' => $this->get_fields_map_options(),
-			'requestFields'    => array(
+			'postTypes'     => Tools::get_post_types_for_js(),
+			'taxonomies'    => Tools::get_taxonomies_for_modify(),
+			'postStatuses'  => $this->get_post_statuses_for_options(),
+			'properties'    => $properties,
+			'requestFields' => array(
 				'inserted_post_id' => array(
 					'name' => 'inserted_post_id',
 					'help' => __( "A computed field from the <b>{$this->get_name()}</b> action.", 'jet-form-builder' ),
@@ -167,90 +182,6 @@ class Insert_Post extends Base {
 		);
 
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
-
-	}
-
-	/**
-	 * Returns allowed chilces for the fields map control
-	 *
-	 * @return [type] [description]
-	 */
-	public function get_fields_map_options() {
-
-		$post_fields = $this->get_post_fields_for_options();
-
-		foreach ( $post_fields as $index => $data ) {
-			if ( 'ID' === $data['value'] ) {
-				$post_fields[ $index ]['label'] = 'Post ID (will update the post)';
-			}
-		}
-
-		$post_fields[] = array(
-			'value' => '_thumbnail_id',
-			'label' => 'Post Thumbnail',
-		);
-
-		$post_fields[] = array(
-			'value' => 'post_meta',
-			'label' => 'Post Meta',
-		);
-
-		$post_fields[] = array(
-			'value' => 'post_terms',
-			'label' => 'Post Terms',
-		);
-
-		return $post_fields;
-
-	}
-
-	/**
-	 * Returns post object fields list for the options
-	 *
-	 * @return array
-	 */
-	public function get_post_fields_for_options() {
-
-		return Tools::with_placeholder(
-			apply_filters(
-				'jet-form-builder/actions/insert-post/allowed-post-fields',
-				array(
-					array(
-						'value' => 'ID',
-						'label' => __( 'Post ID', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_title',
-						'label' => __( 'Post Title', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_content',
-						'label' => __( 'Post Content', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_excerpt',
-						'label' => __( 'Post Excerpt', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_status',
-						'label' => __( 'Post Status', 'jet-form-builder' ),
-
-					),
-					array(
-						'value' => 'post_date',
-						'label' => __( 'Post Date', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_date_gmt',
-						'label' => __( 'Post Date GMT', 'jet-form-builder' ),
-					),
-					array(
-						'value' => 'post_author',
-						'label' => __( 'Post Author', 'jet-form-builder' ),
-					),
-				)
-			)
-		);
 
 	}
 

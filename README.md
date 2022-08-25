@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.5
+* ADD: Multiple recipients support for send email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+
 ## 2.1.4
 * FIX: Action conditions with AND relation - only the last condition has counted
 * FIX: Conditional block with set value & without any show/hide logic

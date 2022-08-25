@@ -54,6 +54,20 @@ class Send_Email extends Base {
 		);
 	}
 
+	public function editor_labels_help() {
+		return array(
+			'custom_email' => __(
+				'To apply multiple mailing addresses, separate them with commas',
+				'jet-form-builder'
+			),
+			'from_field' => __(
+				'To apply multiple mailing addresses, you can select a "Checkbox Field" 
+				or a "Select field" with enabled "Is multiple" option.',
+				'jet-form-builder'
+			),
+		);
+	}
+
 	public function action_attributes() {
 		return array(
 			'mail_to'          => array(
@@ -197,8 +211,16 @@ class Send_Email extends Base {
 				break;
 		}
 
-		if ( ! $email || ! is_email( $email ) ) {
-			throw new Action_Exception( 'invalid_email' );
+		if ( ! is_array( $email ) ) {
+			$email = explode( ',', $email );
+		}
+
+		foreach ( $email as $value ) {
+			$value = trim( $value );
+
+			if ( ! $value || ! is_email( $value ) ) {
+				throw new Action_Exception( 'invalid_email' );
+			}
 		}
 
 		$this->parser = ( new Macros_Parser() )->set_replacements( $request );

@@ -108,7 +108,7 @@ class Custom_Contact_Property extends Base_Object_Property implements Object_Dyn
 			->set_token( $modifier->token );
 
 		try {
-			$fields->request()->check_response_code();
+			$fields->request()->check_response_code()->response_body_as_array();
 		} catch ( Gateway_Exception $exception ) {
 			throw new Action_Exception( 'internal_error', $fields->get_request_args() );
 		}

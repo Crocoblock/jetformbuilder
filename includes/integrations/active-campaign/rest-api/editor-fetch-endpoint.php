@@ -33,7 +33,8 @@ class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 				->set_base( $url )
 				->set_token( $token )
 				->request()
-				->check_response_code();
+				->check_response_code()
+				->response_body_as_array();
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
@@ -50,7 +51,8 @@ class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 				->set_base( $url )
 				->set_token( $token )
 				->request()
-				->check_response_code();
+				->check_response_code()
+				->response_body_as_array();
 
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(

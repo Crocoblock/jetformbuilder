@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.0.1
 Requires PHP: 7.0
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -273,7 +273,12 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 == Changelog ==
 
 **2.1.5**
- - ADD: Multiple recipients support for send email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+ - ADD: Support custom fields in ActiveCampaign action
+ - ADD: Support for Insert/Update Product (WooCommerce)
+ - ADD: Multiple recipients support for Send Email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+ - ADD: Ability to delete payments via admin pages
+ - FIX: Listing template for checkbox and radio fields
+ - Tweak: Sanitize fields map in Insert/Update Post & Update User
 
 **2.1.4**
  - FIX: Action conditions with AND relation - only the last condition has counted

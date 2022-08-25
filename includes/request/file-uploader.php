@@ -172,6 +172,10 @@ class File_Uploader {
 			throw new Upload_Exception( 'upload_max_size' );
 		}
 
+		if ( empty( $this->allowed_mimes ) ) {
+			return;
+		}
+
 		if ( ! in_array( $file->get_type(), $this->allowed_mimes, true ) ) {
 			throw new Upload_Exception( 'upload_mime_types' );
 		}

@@ -279,6 +279,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
  - ADD: Ability to delete payments via admin pages
  - FIX: Listing template for checkbox and radio fields
  - Tweak: Sanitize fields map in Insert/Update Post & Update User
+ - Tweak: Allow leave empty mime types option in Media Field
 
 **2.1.4**
  - FIX: Action conditions with AND relation - only the last condition has counted

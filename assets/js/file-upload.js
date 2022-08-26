@@ -350,12 +350,14 @@
 			}
 		}
 
-		$( document ).
-			on( 'jet-form-builder/init', JetFormBuilderFileUpload.init ).
-			on( 'change', '.jet-form-builder-file-upload__input',
-				JetFormBuilderFileUpload.processUpload ).
-			on( 'click', '.jet-form-builder-file-upload__file-remove',
-				JetFormBuilderFileUpload.deleteUpload );
+		$( window ).on( "load", () => {
+			$( document ).
+				on( 'jet-form-builder/init', JetFormBuilderFileUpload.init ).
+				on( 'change', '.jet-form-builder-file-upload__input',
+					JetFormBuilderFileUpload.processUpload ).
+				on( 'click', '.jet-form-builder-file-upload__file-remove',
+					JetFormBuilderFileUpload.deleteUpload );
+		} );
 
 	}( jQuery )
 );

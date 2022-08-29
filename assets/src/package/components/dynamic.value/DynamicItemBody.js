@@ -36,7 +36,7 @@ const help = [
 		key: 'macros',
 		render: () => <li>
 			{ __( `You can use the following macros:`, 'jet-form-builder' ) }
-			<ul>
+			<ul className={ 'jet-fb-ul-revert-layer' }>
 				<li>{
 					__(
 						`%this% - returns value of current field`,
@@ -115,7 +115,10 @@ function DynamicItemBody() {
 			labelPosition={ 'side' }
 			onChange={ method => updateCurrent( { method } ) }
 		/>
-		<Flex align={ 'flex-start' }>
+		<Flex
+			align={ 'flex-start' }
+			className={ 'components-base-control__field' }
+		>
 			<FlexItem isBlock>
 				<Flex
 					align={ 'center' }
@@ -157,6 +160,7 @@ function DynamicItemBody() {
 		{ showPreset && <ActionModal
 			classNames={ [ 'width-60' ] }
 			title={ __( 'Edit Preset for Dynamic Value', 'jet-form-builder' ) }
+			onRequestClose={ () => setShowPreset( false ) }
 		>
 			<DynamicPreset
 				key={ 'dynamic_key_preset' }
@@ -170,7 +174,7 @@ function DynamicItemBody() {
 				  onSetState={ updateConditions }
 				  items={ current.conditions ?? [] }
 			  >
-				  Test
+				  Тут могло бы быть ваше условие
 			  </Repeater>
 			  <RepeaterAddNew
 				  onSetState={ updateConditions }

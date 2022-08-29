@@ -754,8 +754,11 @@ select.components-select-control__input.components-select-control__input.compone
 	}
 }
 
-ul.jet-fb-ul-revert-layer li {
+ul.jet-fb-ul-revert-layer {
 	list-style: revert-layer;
+	li {
+		list-style: revert-layer;
+	}
 }
 
 $sizes: ("xs":320px, "sm":576px, "md":768px, "lg":992px, "xl":1200px);

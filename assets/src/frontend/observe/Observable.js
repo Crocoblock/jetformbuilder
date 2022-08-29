@@ -1,9 +1,11 @@
-import { createInput } from './functions';
+import { createInput, iterateComments } from './functions';
 import {
 	createConditionalBlock,
 	createMultiStep,
 } from '../conditional.logic/functions';
 import FormSubmit from '../submit.logic/FormSubmit';
+import RadioData from './RadioData';
+import CheckboxData from './CheckboxData';
 
 class Observable {
 	constructor( parent = null ) {
@@ -62,6 +64,8 @@ class Observable {
 		this.initConditionalBlocks();
 
 		this.initMultistep();
+
+		this.initMacros();
 	}
 
 	initFields() {
@@ -88,6 +92,139 @@ class Observable {
 		}
 
 		this.multistep = multistep;
+	}
+
+	initMacros() {
+		const macrosPrefix   = ( suffix = '' ) => 'JFB_FIELD::' + suffix;
+		const acceptCallback = node => {
+			return node.textContent.includes( macrosPrefix() );
+		};
+
+		const replaceMacros = (
+			replaceFrom, fieldName, fieldValue, withBrackets = true ) => {
+			const regExp = withBrackets
+			               ? new RegExp( `<!--\\s*JFB_FIELD::${ fieldName }\\s*-->`,
+					'gi' )
+			               : new RegExp( `\\s*JFB_FIELD::${ fieldName }\\s*`,
+					'gi' );
+
+			return replaceFrom.replace( regExp, fieldValue );
+		};
+
+		const getValueFromField = field => {
+			const is_radio = (
+				field instanceof RadioData
+			);
+
+			if ( !is_radio ) {
+				return field.value.current;
+			}
+
+			return [ ...field.value.current ].join( ', ' );
+		};
+
+		const getFieldNamesWithBrackets = macrosValue => {
+			const matches = macrosValue.match(
+				/(?:<!\-{2}\s*JFB_FIELD::)([\w\-]+)\s*(?:\-{2}>)/gi );
+
+			if ( !matches ) {
+				return [];
+			}
+
+			return matches.map(
+				match => match.replace( /<!\-{2}\s*JFB_FIELD::/gi, '' ).
+					replace( /\-{2}>/gi, '' ),
+			);
+		};
+
+		const getFieldNamesWithOutBrackets = macrosValue => {
+			const matches = macrosValue.match(
+				/(?:\s*JFB_FIELD::)([\w\-]+)\s*/gi );
+
+			if ( !matches ) {
+				return [];
+			}
+
+			return matches.map(
+				match => match.replace( /\s*JFB_FIELD::/gi, '' ),
+			);
+		};
+
+		const getFieldNames = ( macrosValue, withBrackets = true ) => {
+			return withBrackets
+			       ? getFieldNamesWithBrackets( macrosValue )
+			       : getFieldNamesWithOutBrackets( macrosValue );
+		};
+
+		const prepareValueFromMacros = (
+			initialValue, withBrackets = true,
+		) => {
+
+			const fieldNames       = getFieldNames(
+				initialValue,
+				withBrackets,
+			);
+			const { applyFilters } = wp.hooks;
+
+			fieldNames.forEach( name => {
+				const fieldElement = this.getInput( name );
+
+				let fieldValue = applyFilters(
+					'jet.fb.macro.field.value',
+					false,
+					jQuery( fieldElement.nodes[ 0 ] ),
+				);
+
+				if ( false === fieldValue ) {
+					fieldValue = getValueFromField( fieldElement );
+				}
+
+				initialValue = replaceMacros(
+					initialValue,
+					name,
+					fieldValue,
+					withBrackets,
+				);
+			} );
+
+			return initialValue;
+		};
+
+		for (
+			const comment of iterateComments( this.rootNode, acceptCallback )
+			) {
+			const [ , fieldName ] = comment.textContent.split(
+				'JFB_FIELD::',
+			);
+
+			if ( !this.dataInputs.hasOwnProperty( fieldName ) ) {
+				console.groupCollapsed(
+					`Undefined field name: ${ fieldName } in this scope`,
+				);
+				console.warn( 'Scope:', this.rootNode );
+				console.warn( 'Comment:', comment );
+				console.groupEnd();
+
+				continue;
+			}
+			const input = this.getInput( fieldName );
+
+			const wrapper     = document.createElement( 'span' );
+			wrapper.innerHTML = prepareValueFromMacros( comment.nodeValue,
+				false );
+
+			let prevSibling = comment.parentNode.insertBefore(
+				wrapper,
+				comment,
+			);
+
+			input.watch( () => {
+				prevSibling.innerHTML = prepareValueFromMacros(
+					comment.nodeValue,
+					false,
+				);
+			} );
+		}
 	}
 
 	initSubmitHandler() {

@@ -53,17 +53,21 @@ class Post_Terms_Property extends Base_Object_Property implements Object_Dynamic
 	 * @param Abstract_Modifier|Post_Modifier $modifier
 	 */
 	public function do_after( Abstract_Modifier $modifier ) {
+		/** @var Base_Post_Action $action */
 		$action = $modifier->get_action();
 
 		if ( is_a( $action, Trash_Action::class ) ) {
 			return;
 		}
 
-		/** @var Base_Post_Action $action */
-		$action = $modifier->get_action();
+		$id = $action->get_inserted();
+
+		if ( ! $id ) {
+			return;
+		}
 
 		foreach ( $this->taxonomies as $tax => $terms ) {
-			wp_set_post_terms( $action->get_inserted(), $terms, $tax );
+			wp_set_post_terms( $id, $terms, $tax );
 		}
 	}
 

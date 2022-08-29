@@ -130,6 +130,7 @@ import CurrentPropertyMapContext from './context/current.property.map';
 import DynamicPropertySelect from './components/dynamic.property.select';
 import ActionFetchButton from './components/action.fetch.button';
 import DynamicValues from './components/dynamic.value/DynamicValues';
+import RepeaterAddOrOperator from './components/fields/repeater.add.or';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -149,6 +150,7 @@ window.JetFBComponents = {
 	DynamicPropertySelect,
 	SafeDeleteToggle,
 	RepeaterAddNew,
+	RepeaterAddOrOperator,
 	Repeater,
 	RequestButton,
 	ValidateButton,

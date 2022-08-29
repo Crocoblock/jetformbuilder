@@ -4,6 +4,7 @@ const {
 	      ActionModalContext,
 	      Repeater,
 	      RepeaterAddNew,
+	      RepeaterAddOrOperator,
 	      RepeaterItemContext,
 	      RepeaterBodyContext,
 	      RepeaterHeadContext,
@@ -127,5 +128,10 @@ export default function () {
 		>
 			{ __( 'Add New Condition', 'jet-form-builder' ) }
 		</RepeaterAddNew>
+		<RepeaterAddOrOperator
+			onSetState={ updateConditions }
+		>
+			{ __( 'Add OR Operator', 'jet-form-builder' ) }
+		</RepeaterAddOrOperator>
 	</>;
 }

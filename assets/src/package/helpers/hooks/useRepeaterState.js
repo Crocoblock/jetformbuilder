@@ -1,13 +1,14 @@
 import SafeDeleteContext from '../../context/safe.delete';
 
 const {
-	useContext,
-} = wp.element;
+	      useContext,
+      } = wp.element;
 
 const { __ } = wp.i18n;
 
 const onSaveDeleting = index => {
-	return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`, 'jet-form-builder' ) );
+	return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`,
+		'jet-form-builder' ) );
 };
 
 /**
@@ -39,7 +40,7 @@ function useRepeaterState( setItemsData ) {
 	};
 
 	const removeOption = function ( index ) {
-		if ( isSafeDeleting && ! onSaveDeleting( index ) ) {
+		if ( isSafeDeleting && !onSaveDeleting( index ) ) {
 			return;
 		}
 
@@ -54,16 +55,19 @@ function useRepeaterState( setItemsData ) {
 	const addNewItem = function ( value ) {
 		setItemsData( prev => [
 			...prev, {
-				...value,
 				__visible: true,
+				...value,
 			},
 		] );
 	};
 
 	const cloneItem = function ( index ) {
 		setItemsData( prev => {
-			const prevClone = JSON.parse( JSON.stringify( prev ) );
-			const [ before, after ] = [ prevClone.slice( 0, index + 1 ), prevClone.slice( index + 1 ) ];
+			const prevClone         = JSON.parse( JSON.stringify( prev ) );
+			const [ before, after ] = [
+				prevClone.slice( 0, index + 1 ),
+				prevClone.slice( index + 1 ),
+			];
 
 			return [ ...before, prevClone[ index ], ...after ];
 		} );
@@ -73,13 +77,16 @@ function useRepeaterState( setItemsData ) {
 		setItemsData( prev => {
 			const prevClone = JSON.parse( JSON.stringify( prev ) );
 
-			[ prevClone[ newIndex ], prevClone[ oldIndex ] ] = [ prevClone[ oldIndex ], prevClone[ newIndex ] ];
+			[
+				prevClone[ newIndex ],
+				prevClone[ oldIndex ],
+			] = [ prevClone[ oldIndex ], prevClone[ newIndex ] ];
 
 			return prevClone;
 		} );
 	};
 
-	const moveUp = function ( index ) {
+	const moveUp   = function ( index ) {
 		moveRepeaterItem( { oldIndex: index, newIndex: index - 1 } );
 	};
 	const moveDown = function ( index ) {
@@ -88,8 +95,8 @@ function useRepeaterState( setItemsData ) {
 
 	const toggleVisible = function ( index ) {
 		setItemsData( prev => {
-			const prevClone = JSON.parse( JSON.stringify( prev ) );
-			prevClone[ index ].__visible = ! (
+			const prevClone              = JSON.parse( JSON.stringify( prev ) );
+			prevClone[ index ].__visible = !(
 				prevClone[ index ].__visible
 			);
 

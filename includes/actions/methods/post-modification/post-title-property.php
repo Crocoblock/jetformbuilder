@@ -43,6 +43,10 @@ class Post_Title_Property extends Base_Object_Property {
 		$action = $modifier->get_action();
 		$id     = $action->get_inserted();
 
+		if ( ! $id ) {
+			return;
+		}
+
 		$post_type_obj = get_post_type_object( $modifier->source_arr['post_type'] );
 		$title         = "{$post_type_obj->labels->singular_name} #{$id}";
 		$name          = "{$post_type_obj->labels->singular_name}-{$id}";

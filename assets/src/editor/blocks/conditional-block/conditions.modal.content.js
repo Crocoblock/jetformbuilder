@@ -1,12 +1,10 @@
 import ConditionOptions from './condition.options';
 
 const {
-	      ActionModalContext,
 	      Repeater,
 	      RepeaterAddNew,
 	      RepeaterAddOrOperator,
 	      RepeaterItemContext,
-	      RepeaterState,
 	      RepeaterHeadContext,
 	      RepeaterButtonsContext,
       } = JetFBComponents;
@@ -19,6 +17,7 @@ const {
 	      useBlockAttributes,
 	      useBlockConditions,
 	      useUniqKey,
+	      useOnUpdateModal,
       } = JetFBHooks;
 const {
 	      SelectControl,
@@ -32,7 +31,8 @@ function RepeaterItem() {
 	const {
 		      currentItem,
 		      changeCurrentItem,
-	      }             = useContext( RepeaterItemContext );
+	      } = useContext( RepeaterItemContext );
+
 	const uniqKey       = useUniqKey();
 	const { operators } = useBlockConditions();
 
@@ -53,11 +53,10 @@ function RepeaterItem() {
 }
 
 export default function () {
-	const { actionClick, onRequestClose } = useContext( ActionModalContext );
-	const [ attributes, setAttributes ]   = useBlockAttributes();
-	const [ current, setCurrent ]         = useState( () => attributes );
-	const { functions }                   = useBlockConditions();
-	const uniqKey                         = useUniqKey();
+	const [ attributes, setAttributes ] = useBlockAttributes();
+	const [ current, setCurrent ]       = useState( () => attributes );
+	const { functions }                 = useBlockConditions();
+	const uniqKey                       = useUniqKey();
 
 	const updateConditions = conditions => {
 		const update = 'function' === typeof conditions
@@ -71,23 +70,16 @@ export default function () {
 		) );
 	};
 
-	useEffect( () => {
-		if ( actionClick ) {
-			setAttributes( current );
-		}
+	useOnUpdateModal( () => setAttributes( current ) );
 
-		if ( null !== actionClick ) {
-			onRequestClose();
-		}
-	}, [ actionClick ] );
-
-	const FullRepeater = <RepeaterState state={ updateConditions }>
+	const FullRepeater = <>
 		<Repeater
 			items={ current.conditions ?? [] }
+			onSetState={ updateConditions }
 		>
 			<RepeaterItem/>
 		</Repeater>
-	</RepeaterState>;
+	</>;
 
 	const RepeaterWithHead = <RepeaterHeadContext.Provider
 		value={ {
@@ -124,13 +116,11 @@ export default function () {
 			) ) }
 		/>
 		{ RepeaterComplete }
-		<RepeaterState state={ updateConditions }>
-			<RepeaterAddNew>
-				{ __( 'Add New Condition', 'jet-form-builder' ) }
-			</RepeaterAddNew>
-			<RepeaterAddOrOperator>
-				{ __( 'Add OR Operator', 'jet-form-builder' ) }
-			</RepeaterAddOrOperator>
-		</RepeaterState>
+		<RepeaterAddNew onSetState={ updateConditions }>
+			{ __( 'Add New Condition', 'jet-form-builder' ) }
+		</RepeaterAddNew>
+		<RepeaterAddOrOperator onSetState={ updateConditions }>
+			{ __( 'Add OR Operator', 'jet-form-builder' ) }
+		</RepeaterAddOrOperator>
 	</>;
 }

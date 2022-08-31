@@ -1,6 +1,5 @@
-import RepeaterItemContext from '../../context/repeater.item';
 import Tools from '../../helpers/tools';
-import { useUniqKey } from '../../helpers/hooks/blocks';
+import RepeaterItemContext from '../../context/repeater.item';
 
 const {
 	      SelectControl,
@@ -9,6 +8,9 @@ const {
       } = wp.components;
 const {
 	      useContext,
+	      Fragment,
+	      useState,
+	      useEffect,
       } = wp.element;
 const {
 	      __,
@@ -17,60 +19,32 @@ const {
 	      rule_types,
       } = window.jetFormValidation;
 
-/**
- *
- * @param currentItem
- * @param changeCurrentItem
- * @param currentIndex
- * @param uniqKey
- * @returns {JSX.Element|null}
- * @constructor
- */
-let CustomSettings = function ( {
-	currentItem,
-	changeCurrentItem,
-	currentIndex,
-	uniqKey,
-} ) {
-
-	let label;
-	switch ( currentItem.type ) {
+function getLabel( type ) {
+	switch ( type ) {
 		case 'contain':
 		case 'contain_not':
-			label = __( 'Symbols', 'jet-form-builder' );
-			break;
+			return __( 'Symbols', 'jet-form-builder' );
 		case 'regexp':
 		case 'regexp_not':
-			label = __( 'Regular expression', 'jet-form-builder' );
-			break;
-	}
+			return __( 'Regular expression', 'jet-form-builder' );
 
-	switch ( currentItem.type ) {
-		case 'contain':
-		case 'contain_not':
-		case 'regexp':
-		case 'regexp_not':
-			return <TextControl
-				key={ uniqKey( 'custom-settings-control-' + currentIndex ) }
-				label={ label }
-				value={ currentItem.value }
-				onChange={ value => changeCurrentItem( { value } ) }
-			/>;
-		default:
-			return null;
 	}
-};
+	return '';
+}
 
 function AdvancedRuleItem() {
 	const {
 		      currentItem,
 		      changeCurrentItem,
-		      currentIndex,
 	      } = useContext( RepeaterItemContext );
 
-	const uniqKey = useUniqKey();
+	const [ label, setLabel ] = useState( () => getLabel( currentItem.type ) );
 
-	return <>
+	useEffect( () => {
+		setLabel( getLabel( currentItem.type ) );
+	}, [ currentItem.type ] );
+
+	const Select = <Fragment>
 		<SelectControl
 			labelPosition="side"
 			options={ Tools.withPlaceholder( rule_types ) }
@@ -78,13 +52,28 @@ function AdvancedRuleItem() {
 			value={ currentItem.type }
 			onChange={ type => changeCurrentItem( { type } ) }
 		/>
-		<CustomSettings
-			key={ uniqKey( 'custom-settings-' + currentIndex ) }
-			uniqKey={ uniqKey }
-			currentIndex={ currentIndex }
-			currentItem={ currentItem }
-			changeCurrentItem={ changeCurrentItem }
-		/>
+	</Fragment>;
+
+	let Control;
+
+	switch ( currentItem.type ) {
+		case 'contain':
+		case 'contain_not':
+		case 'regexp':
+		case 'regexp_not':
+			Control = <TextControl
+				label={ label }
+				value={ currentItem.value }
+				onChange={ value => changeCurrentItem( { value } ) }
+			/>;
+			break;
+		default:
+			Control = null;
+	}
+
+	return <>
+		{ Select }
+		{ Control }
 	</>;
 }
 

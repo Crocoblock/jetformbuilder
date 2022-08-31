@@ -10,6 +10,7 @@ module.exports = {
 	output: {
 		path: path.resolve( __dirname, 'js' ),
 		filename: '[name]',
+		chunkFilename: '[name].chunk.js',
 	},
 	devtool: 'eval-source-map',
 	resolve: {
@@ -26,9 +27,6 @@ module.exports = {
 			'@admin': path.resolve( __dirname, 'src/admin' ),
 			'@blocks': path.resolve( __dirname, 'blocks-src' ),
 		},
-	},
-	externals: {
-		jquery: 'jQuery',
 	},
 	plugins: [
 		new VueLoaderPlugin(),

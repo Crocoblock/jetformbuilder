@@ -14,6 +14,7 @@ const {
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
 	      DynamicValues,
+	      EditAdvancedRulesButton,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
@@ -172,6 +173,9 @@ export default function TextEdit( props ) {
 			>
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
+					<EditAdvancedRulesButton
+						key={ uniqKey( 'EditAdvancedRulesButton' ) }
+					/>
 					{ 'email' === attributes.field_type && (
 						<ValidationBlockMessage name="email"/>
 					) }

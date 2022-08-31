@@ -1,4 +1,4 @@
-import RepeaterStateContext from '../../context/repeater.state';
+import useRepeaterState from '../../helpers/hooks/useRepeaterState';
 
 const {
 	      Button,
@@ -9,11 +9,12 @@ const {
 
 function RepeaterAddOrOperator( props ) {
 	const {
+		      onSetState,
 		      functions,
 		      children,
 	      } = props;
 
-	const { addNewItem } = functions ?? useContext( RepeaterStateContext );
+	const { addNewItem } = functions ?? useRepeaterState( onSetState );
 
 	return <Button
 		isSecondary

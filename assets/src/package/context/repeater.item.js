@@ -1,7 +1,9 @@
 const { createContext } = wp.element;
 
-export default createContext( {
+const RepeaterItemContext = createContext( {
 	currentItem: {},
 	changeCurrentItem: () => {},
 	currentIndex: -1,
 } );
+
+export default RepeaterItemContext;

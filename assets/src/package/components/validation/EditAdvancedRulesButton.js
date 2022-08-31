@@ -14,9 +14,9 @@ const {
       } = wp.i18n;
 
 function EditAdvancedRulesButton() {
-	const [ showModal, setShowModal ] = useState( false );
-	const [ attributes ]              = useBlockAttributes();
-	const uniqKey                     = useUniqKey();
+	const [ showModal, setShowModal ]   = useState( false );
+	const [ attributes ] = useBlockAttributes();
+	const uniqKey                       = useUniqKey();
 
 	const rules = attributes.validation?.rules ?? [];
 
@@ -27,10 +27,10 @@ function EditAdvancedRulesButton() {
 
 	return <Fragment key={ uniqKey( 'edit-rule-component' ) }>
 		<Button
+			isSecondary
 			icon={ icon }
 			className={ 'jfb-button' }
 			onClick={ () => setShowModal( prev => !prev ) }
-			key={ uniqKey( 'edit-rule-button' ) }
 		>
 			{ __( 'Edit Advanced Rules', 'jet-form-builder' ) }
 		</Button>

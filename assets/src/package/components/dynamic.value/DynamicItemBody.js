@@ -5,7 +5,6 @@ import BaseHelp from '../controls/base-help';
 import ActionModal from '../action-modal';
 import DynamicPreset from '../presets/dynamic-preset';
 import { useOnUpdateModal } from '../../helpers/hooks/modal';
-import RepeaterState from '../fields/repeater.state';
 
 const {
 	      __,
@@ -158,16 +157,15 @@ function DynamicItemBody() {
 		</ActionModal> }
 		{ 'value_change' === current.method ? <>
 		</> : <>
-			  <RepeaterState state={ updateConditions }>
-				  <Repeater
-					  items={ current.conditions ?? [] }
-				  >
-					  Тут могло бы быть ваше условие
-				  </Repeater>
-				  <RepeaterAddNew>
-					  { __( 'Add New Condition', 'jet-form-builder' ) }
-				  </RepeaterAddNew>
-			  </RepeaterState>
+			  <Repeater
+				  items={ current.conditions ?? [] }
+				  onSetState={ updateConditions }
+			  >
+				  Тут могло бы быть ваше условие
+			  </Repeater>
+			  <RepeaterAddNew onSetState={ updateConditions }>
+				  { __( 'Add New Condition', 'jet-form-builder' ) }
+			  </RepeaterAddNew>
 		  </> }
 	</>;
 }

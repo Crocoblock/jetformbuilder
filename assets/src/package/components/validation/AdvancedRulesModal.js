@@ -1,9 +1,8 @@
-import { useBlockAttributes } from '../../helpers/hooks/blocks';
+import { useBlockAttributes, useUniqKey } from '../../helpers/hooks/blocks';
 import { useOnUpdateModal } from '../../helpers/hooks/modal';
 import Repeater from '../fields/repeater';
 import RepeaterAddNew from '../fields/repeater.add.new';
 import AdvancedRuleItem from './AdvancedRuleItem';
-import RepeaterState from '../fields/repeater.state';
 
 const {
 	      useState,
@@ -31,16 +30,15 @@ function AdvancedRulesModal() {
 	} );
 
 	return <>
-		<RepeaterState state={ setCurrent }>
-			<Repeater
-				items={ current }
-			>
-				<AdvancedRuleItem/>
-			</Repeater>
-			<RepeaterAddNew>
-				{ __( 'Add Rule', 'jet-form-builder' ) }
-			</RepeaterAddNew>
-		</RepeaterState>
+		<Repeater
+			items={ current }
+			onSetState={ setCurrent }
+		>
+			<AdvancedRuleItem/>
+		</Repeater>
+		<RepeaterAddNew onSetState={ setCurrent }>
+			{ __( 'Add Rule', 'jet-form-builder' ) }
+		</RepeaterAddNew>
 	</>;
 
 }

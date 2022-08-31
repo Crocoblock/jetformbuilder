@@ -2,6 +2,7 @@ import { prepareActionsListByType } from '../actions/action-helper';
 import { globalTab } from '../settings/helper';
 import { gatewayAttr, gatewayLabel } from '../gateways/gateway-helper';
 import CurrentActionEditContext from '../../context/current.action.edit';
+import RepeaterItemContext from '../../context/repeater.item';
 import { getFormFieldsBlocks } from '../blocks/blocks-helper';
 
 const {
@@ -17,7 +18,8 @@ const {
 
 const { applyFilters } = wp.hooks;
 
-export const useMetaState = ( key, ifEmpty = '{}', dependencies = undefined ) => {
+export const useMetaState = (
+	key, ifEmpty = '{}', dependencies = undefined ) => {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	}, dependencies );

@@ -133,8 +133,7 @@ import DynamicValues from './components/dynamic.value/DynamicValues';
 import RepeaterAddOrOperator from './components/fields/repeater.add.or';
 import EditAdvancedRulesButton
 	from './components/validation/EditAdvancedRulesButton';
-import RepeaterStateContext from './context/repeater.state';
-import RepeaterState from './components/fields/repeater.state';
+import { useOnUpdateModal } from './helpers/hooks/modal';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -187,8 +186,6 @@ window.JetFBComponents = {
 	ActionFetchButton,
 	DynamicValues,
 	EditAdvancedRulesButton,
-	RepeaterStateContext,
-	RepeaterState,
 };
 
 // JFBFunctions
@@ -252,5 +249,6 @@ window.JetFBHooks = {
 	withSelectGateways,
 	withDispatchGateways,
 	withSelectActionsByType,
+	useOnUpdateModal,
 };
 

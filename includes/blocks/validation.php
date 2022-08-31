@@ -50,7 +50,7 @@ class Validation implements Arrayable {
 		);
 		add_action(
 			'jet-form-builder/before-start-form-row',
-			array( $this, 'add_validation_messages_block' )
+			array( $this, 'add_validation_block' )
 		);
 	}
 
@@ -91,7 +91,7 @@ class Validation implements Arrayable {
 		return $markup;
 	}
 
-	public function add_validation_messages_block( Base $block ) {
+	public function add_validation_block( Base $block ) {
 		/**
 		 * If in post meta enable Advanced validation
 		 * or right in block settings
@@ -111,9 +111,10 @@ class Validation implements Arrayable {
 		}
 
 		$messages = $block->block_attrs['validation']['messages'] ?? array();
+		$rules    = $block->block_attrs['validation']['rules'] ?? array();
 
 		$block->add_attribute( 'data-validation-messages', Tools::encode_json( $messages ) );
-
+		$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
 	}
 
 	public function get_settings(): array {

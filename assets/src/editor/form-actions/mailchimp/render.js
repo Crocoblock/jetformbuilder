@@ -137,7 +137,7 @@ function MailChimpRender( props ) {
 				</div>
 			</BaseControl>
 			<div/>
-			<div className="margin-bottom--small">{ help(
+			<div className="jfb-margin-bottom--small">{ help(
 				'api_key_link_prefix' ) } <a
 				href={ help( 'api_key_link' ) }>{ help(
 				'api_key_link_suffix' ) }</a>

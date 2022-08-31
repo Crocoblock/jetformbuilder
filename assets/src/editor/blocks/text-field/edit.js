@@ -173,9 +173,7 @@ export default function TextEdit( props ) {
 			>
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
-					<EditAdvancedRulesButton
-						key={ uniqKey( 'EditAdvancedRulesButton' ) }
-					/>
+					<EditAdvancedRulesButton/>
 					{ 'email' === attributes.field_type && (
 						<ValidationBlockMessage name="email"/>
 					) }

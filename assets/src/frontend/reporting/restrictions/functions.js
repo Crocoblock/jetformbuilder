@@ -7,6 +7,7 @@ import NotEmail from './NotEmail';
 import NotUrl from './NotUrl';
 import ReachLimitNumbers from './ReachLimitNumbers';
 import NotEnoughNumbers from './NotEnoughNumbers';
+import CustomRulesRestriction from './CustomRulesRestriction';
 
 const restrictions = () => (
 	[
@@ -19,6 +20,7 @@ const restrictions = () => (
 		new NotEnoughChars(),
 		new ReachLimitChars(),
 		new NotEmptyRestriction(),
+		new CustomRulesRestriction(),
 	]
 );
 

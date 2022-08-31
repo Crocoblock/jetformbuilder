@@ -3,7 +3,6 @@ import {
 	getInheritValidationType,
 	getNodeValidationType,
 	getValidationMessages,
-	getValidationType,
 } from './functions';
 import { getRestrictions } from './restrictions/functions';
 

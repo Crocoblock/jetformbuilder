@@ -1,10 +1,11 @@
 import BlockValueItemContext from '../../context/block.value.item.context';
-import ActionModalContext from '../../context/action.modal';
 import Repeater from '../fields/repeater';
 import RepeaterAddNew from '../fields/repeater.add.new';
 import BaseHelp from '../controls/base-help';
 import ActionModal from '../action-modal';
 import DynamicPreset from '../presets/dynamic-preset';
+import { useOnUpdateModal } from '../../helpers/hooks/modal';
+import RepeaterState from '../fields/repeater.state';
 
 const {
 	      __,
@@ -60,10 +61,6 @@ function DynamicItemBody() {
 		      current: currentValue,
 		      update,
 	      } = useContext( BlockValueItemContext );
-	const {
-		      actionClick,
-		      onRequestClose,
-	      } = useContext( ActionModalContext );
 
 	const [ current, setCurrent ] = useState( () => currentValue );
 
@@ -84,16 +81,7 @@ function DynamicItemBody() {
 		} );
 	};
 
-	useEffect( () => {
-		// update field attributes
-		if ( actionClick ) {
-			update( current );
-		}
-
-		if ( null !== actionClick ) {
-			onRequestClose();
-		}
-	}, [ actionClick ] );
+	useOnUpdateModal( () => update( current ) );
 
 	const [ showDetails, setShowDetails ] = useState( false );
 	const [ showPreset, setShowPreset ]   = useState( false );
@@ -170,17 +158,16 @@ function DynamicItemBody() {
 		</ActionModal> }
 		{ 'value_change' === current.method ? <>
 		</> : <>
-			  <Repeater
-				  onSetState={ updateConditions }
-				  items={ current.conditions ?? [] }
-			  >
-				  Тут могло бы быть ваше условие
-			  </Repeater>
-			  <RepeaterAddNew
-				  onSetState={ updateConditions }
-			  >
-				  { __( 'Add New Condition', 'jet-form-builder' ) }
-			  </RepeaterAddNew>
+			  <RepeaterState state={ updateConditions }>
+				  <Repeater
+					  items={ current.conditions ?? [] }
+				  >
+					  Тут могло бы быть ваше условие
+				  </Repeater>
+				  <RepeaterAddNew>
+					  { __( 'Add New Condition', 'jet-form-builder' ) }
+				  </RepeaterAddNew>
+			  </RepeaterState>
 		  </> }
 	</>;
 }

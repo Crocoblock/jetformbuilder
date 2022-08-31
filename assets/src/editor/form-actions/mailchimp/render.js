@@ -1,25 +1,25 @@
 const {
-	addAction,
-	globalTab,
-} = JetFBActions;
+	      addAction,
+	      globalTab,
+      } = JetFBActions;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	CheckboxControl,
-	BaseControl,
-	Button,
-} = wp.components;
+	      TextControl,
+	      ToggleControl,
+	      SelectControl,
+	      CheckboxControl,
+	      BaseControl,
+	      Button,
+      } = wp.components;
 
 const {
-	ActionFieldsMap,
-	WrapperRequiredControl,
-	ValidateButtonWithStore,
-} = JetFBComponents;
+	      ActionFieldsMap,
+	      WrapperRequiredControl,
+	      ValidateButtonWithStore,
+      } = JetFBComponents;
 
 const { convertObjectToOptionsList, getFormFieldsBlocks } = JetFBActions;
 
@@ -28,37 +28,38 @@ const { __ } = wp.i18n;
 const { withRequestFields, withSelectActionLoading } = JetFBHooks;
 
 const {
-	withSelect,
-	withDispatch,
-} = wp.data;
+	      withSelect,
+	      withDispatch,
+      } = wp.data;
 
 const { compose } = wp.compose;
 
 const {
-	useState,
-	useEffect,
-} = wp.element;
+	      useState,
+	      useEffect,
+      } = wp.element;
 
-function MailChimpAction( props ) {
+function MailChimpRender( props ) {
 
 	const {
-		settings,
-		label,
-		help,
-		requestFields = [],
-		onChangeSettingObj,
-		getMapField,
-		setMapField,
-		source,
-		loadingState,
-	} = props;
+		      settings,
+		      label,
+		      help,
+		      requestFields = [],
+		      onChangeSettingObj,
+		      getMapField,
+		      setMapField,
+		      source,
+		      loadingState,
+	      } = props;
 
 	const currentTab = globalTab( { slug: 'mailchimp-tab' } );
 
 	const [ formFieldsList, setFormFields ] = useState( [] );
 
 	useEffect( () => {
-		setFormFields( [ ...getFormFieldsBlocks( [], '--' ), ...requestFields ] );
+		setFormFields(
+			[ ...getFormFieldsBlocks( [], '--' ), ...requestFields ] );
 	}, [] );
 
 	const getFields = () => {
@@ -88,19 +89,17 @@ function MailChimpAction( props ) {
 		return [];
 	};
 
-
 	const isCheckedGroup = value => {
 		return (
-			value && settings.groups_ids && settings.groups_ids[ value ]
-		)
-			? settings.groups_ids[ value ]
-			: false;
+			       value && settings.groups_ids && settings.groups_ids[ value ]
+		       )
+		       ? settings.groups_ids[ value ]
+		       : false;
 	};
 
 	const getApiKey = () => {
 		return settings.use_global ? currentTab.api_key : settings.api_key;
 	};
-
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
@@ -121,10 +120,11 @@ function MailChimpAction( props ) {
 			>
 				<div className="jet-control-clear-full jet-d-flex-between">
 					<TextControl
-						key='api_key'
+						key="api_key"
 						disabled={ settings.use_global }
 						value={ getApiKey() }
-						onChange={ api_key => onChangeSettingObj( { api_key } ) }
+						onChange={ api_key => onChangeSettingObj(
+							{ api_key } ) }
 					/>
 					<ValidateButtonWithStore
 						initialLabel={ label( 'validate_api_key' ) }
@@ -137,14 +137,16 @@ function MailChimpAction( props ) {
 				</div>
 			</BaseControl>
 			<div/>
-			<div className='margin-bottom--small'>{ help( 'api_key_link_prefix' ) } <a
-				href={ help( 'api_key_link' ) }>{ help( 'api_key_link_suffix' ) }</a>
+			<div className="margin-bottom--small">{ help(
+				'api_key_link_prefix' ) } <a
+				href={ help( 'api_key_link' ) }>{ help(
+				'api_key_link_suffix' ) }</a>
 			</div>
 			{ loadingState.success && <React.Fragment>
 				<SelectControl
 					label={ label( 'list_id' ) }
-					key='list_id'
-					labelPosition='side'
+					key="list_id"
+					labelPosition="side"
 					value={ settings.list_id }
 					onChange={ list_id => onChangeSettingObj( { list_id } ) }
 					options={ getLists() }
@@ -153,7 +155,7 @@ function MailChimpAction( props ) {
 					<BaseControl
 						label={ label( 'groups_ids' ) }
 					>
-						<div className='jet-user-fields-map__list'>
+						<div className="jet-user-fields-map__list">
 							{ getGroups().map( group => <CheckboxControl
 								key={ `groups_ids_${ group.value }` }
 								checked={ isCheckedGroup( group.value ) }
@@ -170,7 +172,7 @@ function MailChimpAction( props ) {
 						</div>
 					</BaseControl>
 					<TextControl
-						key='mailchimp_tags'
+						key="mailchimp_tags"
 						value={ settings.tags }
 						label={ label( 'tags' ) }
 						help={ help( 'tags' ) }
@@ -186,20 +188,22 @@ function MailChimpAction( props ) {
 					/>
 					<ActionFieldsMap
 						label={ label( 'fields_map' ) }
-						key='mailchimp'
+						key="mailchimp"
 						fields={ getFields() }
 					>
-						{ ( { fieldId, fieldData, index } ) => <WrapperRequiredControl
-							field={ [ fieldId, fieldData ] }
-						>
-							<SelectControl
-								className="full-width"
-								key={ fieldId + index }
-								value={ getMapField( { name: fieldId } ) }
-								onChange={ value => setMapField( { nameField: fieldId, value } ) }
-								options={ formFieldsList }
-							/>
-						</WrapperRequiredControl> }
+						{ ( { fieldId, fieldData, index } ) =>
+							<WrapperRequiredControl
+								field={ [ fieldId, fieldData ] }
+							>
+								<SelectControl
+									className="full-width"
+									key={ fieldId + index }
+									value={ getMapField( { name: fieldId } ) }
+									onChange={ value => setMapField(
+										{ nameField: fieldId, value } ) }
+									options={ formFieldsList }
+								/>
+							</WrapperRequiredControl> }
 					</ActionFieldsMap>
 				</> }
 			</React.Fragment> }
@@ -208,7 +212,7 @@ function MailChimpAction( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'mailchimp', compose(
+export default compose(
 	withSelect( withRequestFields ),
 	withSelect( withSelectActionLoading ),
-)( MailChimpAction ) );
+)( MailChimpRender );

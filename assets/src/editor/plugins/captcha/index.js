@@ -1,5 +1,3 @@
-import PluginCaptcha from "./render";
-
 const { __ } = wp.i18n;
 
 const base = {
@@ -7,8 +5,17 @@ const base = {
 	title: __( 'Captcha Settings', 'jet-form-builder' )
 };
 
+const {
+	      lazy,
+	      Suspense,
+      } = wp.element;
+
+const PluginCaptcha = lazy( () => import('./render') );
+
 const settings = {
-	render: PluginCaptcha,
+	render: () => <Suspense fallback={ 'Loading...' }>
+		<PluginCaptcha/>
+	</Suspense>,
 	icon: 'filter'
 };
 

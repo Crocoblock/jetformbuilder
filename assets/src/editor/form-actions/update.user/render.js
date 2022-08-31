@@ -1,4 +1,4 @@
-import UserPropertySelect from '../components/user.property.select';
+import UserPropertySelect from '../../components/user.property.select';
 
 const {
 	      addAction,
@@ -31,7 +31,7 @@ const {
 	      useEffect,
       } = wp.element;
 
-function UpdateUserAction( props ) {
+function UpdateUserRender( props ) {
 
 	const [ fields, setFields ] = useState( [] );
 
@@ -81,4 +81,4 @@ function UpdateUserAction( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'update_user', withSelect( withRequestFields )( UpdateUserAction ) );
+export default withSelect( withRequestFields )( UpdateUserRender );

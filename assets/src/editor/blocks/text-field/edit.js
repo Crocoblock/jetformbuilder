@@ -206,5 +206,4 @@ export default function TextEdit( props ) {
 			</FieldWrapper>
 		</div>,
 	];
-}
-;
+};

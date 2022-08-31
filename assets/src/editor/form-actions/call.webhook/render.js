@@ -1,6 +1,4 @@
 const {
-	Tools,
-	addAction,
 	getFormFieldsBlocks
 } = JetFBActions;
 
@@ -9,18 +7,9 @@ const {
  */
 const {
 	TextControl,
-	ToggleControl,
-	SelectControl,
-	BaseControl
 } = wp.components;
 
-const { __ } = wp.i18n;
-
-const {
-	useState
-} = wp.element;
-
-addAction( 'call_webhook', class CallWebHookAction extends wp.element.Component {
+class CallWebHookRender extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -40,4 +29,6 @@ addAction( 'call_webhook', class CallWebHookAction extends wp.element.Component 
 		/>;
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-} );
+}
+
+export default CallWebHookRender;

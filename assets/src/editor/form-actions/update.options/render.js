@@ -1,6 +1,5 @@
 const {
 		  getFormFieldsBlocks,
-		  addAction,
 	  } = JetFBActions;
 
 /**
@@ -8,18 +7,11 @@ const {
  */
 const {
 		  TextControl,
-		  ToggleControl,
 		  SelectControl,
 		  BaseControl,
 	  } = wp.components;
 
-const { __ } = wp.i18n;
-
-const {
-		  useState,
-	  } = wp.element;
-
-addAction( 'update_options', class UpdateOptionsAction extends wp.element.Component {
+class UpdateOptionsRender extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
@@ -106,4 +98,6 @@ addAction( 'update_options', class UpdateOptionsAction extends wp.element.Compon
 		</div> );
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
-} );
+}
+
+export default UpdateOptionsRender;

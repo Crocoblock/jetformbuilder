@@ -1,5 +1,5 @@
-import JetDefaultMetaControl from '../blocks/controls/default-meta';
-import PostPropertySelect from '../components/post.property.select';
+import JetDefaultMetaControl from '../../blocks/controls/default-meta';
+import PostPropertySelect from '../../components/post.property.select';
 
 const {
 	      addAction,
@@ -60,7 +60,7 @@ const getActionModifierId = settings => {
 	}
 };
 
-function InsertPostAction( props ) {
+function InsertPostRender( props ) {
 	const {
 		      settings,
 		      onChangeSettingObj,
@@ -153,4 +153,4 @@ function InsertPostAction( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'insert_post', withSelect( withRequestFields )( InsertPostAction ) );
+export default withSelect( withRequestFields )( InsertPostRender );

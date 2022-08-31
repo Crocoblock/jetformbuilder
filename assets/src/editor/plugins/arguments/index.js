@@ -1,5 +1,3 @@
-import PluginArgs from "./render";
-
 const { __ } = wp.i18n;
 
 const base = {
@@ -7,8 +5,17 @@ const base = {
 	title: __( 'Form Settings' )
 };
 
+const {
+	      lazy,
+	      Suspense,
+      } = wp.element;
+
+const PluginArgs = lazy( () => import('./render') );
+
 const settings = {
-	render: PluginArgs,
+	render: () => <Suspense fallback={ 'Loading...' }>
+		<PluginArgs/>
+	</Suspense>,
 	icon: 'admin-settings'
 };
 

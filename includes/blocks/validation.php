@@ -168,6 +168,31 @@ class Validation implements Arrayable {
 		);
 	}
 
+	public function rule_types(): array {
+		return array(
+			array(
+				'value' => 'contain',
+				'label' => __( 'Must contain characters', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'contain_not',
+				'label' => __( 'Must not contain characters', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'regexp',
+				'label' => __( 'Matches regular expression', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'regexp_not',
+				'label' => __( 'Does not match regular expression', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'ssr',
+				'label' => __( 'Server-Side validation', 'jet-form-builder' ),
+			)
+		);
+	}
+
 	/**
 	 * @return Base_Message[]
 	 */
@@ -177,8 +202,9 @@ class Validation implements Arrayable {
 
 	public function to_array(): array {
 		return array(
-			'messages' => Array_Tools::to_array( $this->messages() ),
-			'formats'  => $this->formats(),
+			'messages'   => Array_Tools::to_array( $this->messages() ),
+			'formats'    => $this->formats(),
+			'rule_types' => $this->rule_types(),
 		);
 	}
 

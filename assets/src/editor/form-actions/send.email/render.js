@@ -1,35 +1,31 @@
-/**
- * Internal dependencies
- */
+const {
+	      MacrosInserter,
+      } = JetFBComponents;
 
 const {
-	MacrosInserter,
-} = JetFBComponents;
+	      addAction,
+	      getFormFieldsBlocks,
+	      Tools: { withPlaceholder },
+      } = JetFBActions;
 
 const {
-	addAction,
-	getFormFieldsBlocks,
-	Tools: { withPlaceholder },
-} = JetFBActions;
+	      TextControl,
+	      TextareaControl,
+	      SelectControl,
+	      FormTokenField,
+	      BaseControl,
+      } = wp.components;
 
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	FormTokenField,
-	BaseControl,
-} = wp.components;
-
-const {
-	useState,
-	useEffect,
-} = wp.element;
+	      useState,
+	      useEffect,
+      } = wp.element;
 
 const { withRequestFields } = JetFBHooks;
 
 const { withSelect } = wp.data;
 
-function SendEmailAction( {
+function SendEmailRender( {
 	settings,
 	source,
 	label,
@@ -39,7 +35,7 @@ function SendEmailAction( {
 	requestFields,
 } ) {
 
-	const [ formFields, setFormFields ] = useState( [] );
+	const [ formFields, setFormFields ]             = useState( [] );
 	const [ formFieldsTokens, setFormFieldsTokens ] = useState( [] );
 
 	useEffect( () => {
@@ -51,8 +47,8 @@ function SendEmailAction( {
 
 	const insertMacros = ( macros ) => {
 		const content = (
-			                settings.content || ''
-		                ) + '%' + macros + '%';
+			settings.content || ''
+		) + '%' + macros + '%';
 		onChangeSetting( content, 'content' );
 	};
 
@@ -159,7 +155,8 @@ function SendEmailAction( {
 			options={ source.content_type }
 			label={ label( 'content_type' ) }
 			help={ help( 'content_type' ) }
-			onChange={ ( newValue ) => onChangeSetting( newValue, 'content_type' ) }
+			onChange={ ( newValue ) => onChangeSetting( newValue,
+				'content_type' ) }
 		/>
 		<div className="jet-form-editor__macros-wrap">
 			<TextareaControl
@@ -186,12 +183,12 @@ function SendEmailAction( {
 				label={ label( 'add_attachment' ) }
 				value={ settings.attachments }
 				suggestions={ formFieldsTokens }
-				onChange={ tokens => onChangeSettingObj( { attachments: [ ...new Set( tokens ) ] } ) }
+				onChange={ tokens => onChangeSettingObj(
+					{ attachments: [ ...new Set( tokens ) ] } ) }
 				tokenizeOnSpace
 			/>
 		</BaseControl>
 	</>;
-	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'send_email', withSelect( withRequestFields )( SendEmailAction ) );
+export default withSelect( withRequestFields )( SendEmailRender );

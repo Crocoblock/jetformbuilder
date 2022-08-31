@@ -131,6 +131,10 @@ import DynamicPropertySelect from './components/dynamic.property.select';
 import ActionFetchButton from './components/action.fetch.button';
 import DynamicValues from './components/dynamic.value/DynamicValues';
 import RepeaterAddOrOperator from './components/fields/repeater.add.or';
+import EditAdvancedRulesButton
+	from './components/validation/EditAdvancedRulesButton';
+import RepeaterStateContext from './context/repeater.state';
+import RepeaterState from './components/fields/repeater.state';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -182,6 +186,9 @@ window.JetFBComponents = {
 	ValidationMetaMessage,
 	ActionFetchButton,
 	DynamicValues,
+	EditAdvancedRulesButton,
+	RepeaterStateContext,
+	RepeaterState,
 };
 
 // JFBFunctions

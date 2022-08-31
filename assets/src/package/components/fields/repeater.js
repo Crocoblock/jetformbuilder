@@ -1,8 +1,8 @@
-import useRepeaterState from '../../helpers/hooks/useRepeaterState';
 import RepeaterItemContext from '../../context/repeater.item';
 import RepeaterBodyContext from '../../context/repeater.custom.item.body';
 import RepeaterHeadContext from '../../context/repeater.custom.item.head';
 import RepeaterButtonsContext from '../../context/repeater.custom.item.buttons';
+import RepeaterStateContext from '../../context/repeater.state';
 
 const {
 	      Card,
@@ -16,8 +16,14 @@ const {
       } = wp.i18n;
 const {
 	      useContext,
+	      Fragment,
       } = wp.element;
 
+/**
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function Repeater( props ) {
 	const {
 		      items,
@@ -33,7 +39,7 @@ function Repeater( props ) {
 		      toggleVisible,
 		      changeCurrentItem,
 		      removeOption,
-	      } = functions ?? useRepeaterState( onSetState );
+	      } = functions ?? useContext( RepeaterStateContext );
 
 	const {
 		      isSupported: isSupportedBody,
@@ -146,6 +152,7 @@ function Repeater( props ) {
 			className={ 'repeater-item__content' }
 		>
 			<RepeaterBody
+				key={ `jet-form-builder__repeater-body-${ index }` }
 				currentItem={ currentItem }
 				index={ index }
 			/>
@@ -156,19 +163,22 @@ function Repeater( props ) {
 		className={ 'jet-form-builder__repeater-component' }
 		key={ 'jet-form-builder-repeater' }
 	>
-		{ items.map( ( currentItem, index ) => {
-			return isSupportedBody( currentItem )
-			       ? <CustomLayout>
-				       <RepeaterBody
-					       currentItem={ currentItem }
-					       index={ index }
-				       />
-			       </CustomLayout>
-			       : <DefaultLayout
-				       currentItem={ currentItem }
-				       index={ index }
-			       />;
-		} ) }
+		{ items.map( ( currentItem, index ) => <Fragment
+			key={ `jet-form-builder__repeater-wrapper-item-${ index }` }
+		>
+			{ isSupportedBody( currentItem )
+			  ? <CustomLayout>
+				  <RepeaterBody
+					  currentItem={ currentItem }
+					  index={ index }
+				  />
+			  </CustomLayout>
+			  : <DefaultLayout
+				  key={ `jet-form-builder__repeater-default-body-${ index }` }
+				  currentItem={ currentItem }
+				  index={ index }
+			  /> }
+		</Fragment> ) }
 	</div>;
 }
 

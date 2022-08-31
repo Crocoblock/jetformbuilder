@@ -1,16 +1,16 @@
 import './blocks/form-fields';
-import './form-actions/send-email';
-import './form-actions/insert-post';
-import './form-actions/register-user';
-import './form-actions/update-user';
-import './form-actions/update-options';
-import './form-actions/call-hook';
-import './form-actions/call-webhook';
-import './form-actions/redirect-to-page';
-import './form-actions/mailchimp';
-import './form-actions/getresponse';
-import './form-actions/activecampaign';
-import './form-actions/save-record';
+import './form-actions/send.email/index';
+import './form-actions/insert.post/index';
+import './form-actions/register.user/index';
+import './form-actions/update.user/index';
+import './form-actions/update.options/index';
+import './form-actions/call.hook/index';
+import './form-actions/call.webhook/index';
+import './form-actions/redirect.to.page/index';
+import './form-actions/mailchimp/index';
+import './form-actions/getresponse/index';
+import './form-actions/activecampaign/index';
+import './form-actions/save.record/index';
 
 import RegisterPlugins from './plugins/manager';
 import RegisterFormFields from './blocks/form-fields';

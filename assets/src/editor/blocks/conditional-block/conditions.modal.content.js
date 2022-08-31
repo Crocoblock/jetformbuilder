@@ -6,7 +6,7 @@ const {
 	      RepeaterAddNew,
 	      RepeaterAddOrOperator,
 	      RepeaterItemContext,
-	      RepeaterBodyContext,
+	      RepeaterState,
 	      RepeaterHeadContext,
 	      RepeaterButtonsContext,
       } = JetFBComponents;
@@ -81,12 +81,13 @@ export default function () {
 		}
 	}, [ actionClick ] );
 
-	const FullRepeater = <Repeater
-		onSetState={ updateConditions }
-		items={ current.conditions ?? [] }
-	>
-		<RepeaterItem/>
-	</Repeater>;
+	const FullRepeater = <RepeaterState state={ updateConditions }>
+		<Repeater
+			items={ current.conditions ?? [] }
+		>
+			<RepeaterItem/>
+		</Repeater>
+	</RepeaterState>;
 
 	const RepeaterWithHead = <RepeaterHeadContext.Provider
 		value={ {
@@ -123,15 +124,13 @@ export default function () {
 			) ) }
 		/>
 		{ RepeaterComplete }
-		<RepeaterAddNew
-			onSetState={ updateConditions }
-		>
-			{ __( 'Add New Condition', 'jet-form-builder' ) }
-		</RepeaterAddNew>
-		<RepeaterAddOrOperator
-			onSetState={ updateConditions }
-		>
-			{ __( 'Add OR Operator', 'jet-form-builder' ) }
-		</RepeaterAddOrOperator>
+		<RepeaterState state={ updateConditions }>
+			<RepeaterAddNew>
+				{ __( 'Add New Condition', 'jet-form-builder' ) }
+			</RepeaterAddNew>
+			<RepeaterAddOrOperator>
+				{ __( 'Add OR Operator', 'jet-form-builder' ) }
+			</RepeaterAddOrOperator>
+		</RepeaterState>
 	</>;
 }

@@ -1,5 +1,4 @@
 const {
-	      addAction,
 	      globalTab,
 	      Tools: { withPlaceholder },
 	      getFormFieldsBlocks,
@@ -8,7 +7,6 @@ const {
 const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
-	      PlaceholderMessage,
 	      ActionFetchButton,
 	      DynamicPropertySelect,
       } = JetFBComponents;
@@ -159,7 +157,7 @@ function ActiveCampaignAction( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-addAction( 'active_campaign', compose(
+export default compose(
 	withSelect( withRequestFields ),
 	withSelect( withSelectActionLoading ),
-)( ActiveCampaignAction ) );
+)( ActiveCampaignAction );

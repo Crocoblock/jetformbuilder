@@ -1,40 +1,22 @@
-
-const { Tools, addAction } = JetFBActions;
-
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	BaseControl
-} = wp.components;
+	      TextControl,
+	      BaseControl
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
-const {
-	useState
-} = wp.element;
 
-addAction( 'call_hook', function CallHookAction( { settings, onChange, source, label, help } ) {
-
-	const onChangeSetting = ( value, key ) => {
-		onChange( {
-			...settings,
-			[ key ]: value
-		} );
-	};
-
+function CallHookRender( { settings, onChangeSettingObj, source, label, help } ) {
 	/* eslint-disable jsx-a11y/no-onchange */
 	return ( <div key="call_hook">
 		<TextControl
 			key='hook_name'
 			label={ label( 'hook_name' ) }
 			value={ settings.hook_name }
-			onChange={ newVal => {
-				onChangeSetting( newVal, 'hook_name' )
-			} }
+			onChange={ hook_name => onChangeSettingObj( { hook_name } ) }
 		/>
 		<BaseControl
 			key='help_message'
@@ -63,4 +45,6 @@ addAction( 'call_hook', function CallHookAction( { settings, onChange, source, l
 
 	</div> );
 	/* eslint-enable jsx-a11y/no-onchange */
-} );
+}
+
+export default CallHookRender;

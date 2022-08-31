@@ -1,5 +1,3 @@
-import PluginGateways from "./render";
-
 const { __ } = wp.i18n;
 
 const base = {
@@ -8,8 +6,17 @@ const base = {
 	condition: window.JetFormEditorData.gateways.allowed
 };
 
+const {
+	      lazy,
+	      Suspense,
+      } = wp.element;
+
+const PluginGateways = lazy( () => import('./render') );
+
 const settings = {
-	render: PluginGateways,
+	render: () => <Suspense fallback={ 'Loading...' }>
+		<PluginGateways/>
+	</Suspense>,
 	icon: 'money-alt'
 };
 

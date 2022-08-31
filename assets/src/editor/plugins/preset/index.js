@@ -1,5 +1,3 @@
-import PluginPreset from "./render";
-
 const { __ } = wp.i18n;
 
 const base = {
@@ -7,8 +5,17 @@ const base = {
 	title: __( 'Preset Settings', 'jet-form-builder' ),
 };
 
+const {
+	      lazy,
+	      Suspense,
+      } = wp.element;
+
+const PluginPreset = lazy( () => import('./render') );
+
 const settings = {
-	render: PluginPreset,
+	render: () => <Suspense fallback={ 'Loading...' }>
+		<PluginPreset/>
+	</Suspense>,
 	icon: 'database-import'
 };
 

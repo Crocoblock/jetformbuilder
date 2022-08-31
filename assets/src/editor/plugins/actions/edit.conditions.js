@@ -9,7 +9,7 @@ const {
 	      Repeater,
 	      RepeaterAddNew,
 	      SafeDeleteToggle,
-	      HorizontalLine,
+	      RepeaterState,
       } = JetFBComponents;
 
 const {
@@ -176,7 +176,7 @@ function EditEvents( { events } ) {
 				  : __( 'Details', 'jet-form-builder' ) }
 			</a>
 		</BaseHelp>
-		{ showDetails && <ul>
+		{ showDetails && <ul className={ 'jet-fb-ul-revert-layer' }>
 			{ events.map(
 				event => <li>
 					<b>{ event }</b>: <RawHTML>{ helpMap[ event ] }</RawHTML>
@@ -211,19 +211,16 @@ function EditFields() {
 				{ ...currentAction, condition_operator },
 			) }
 		/>
-		<SafeDeleteToggle>
-			<Repeater
-				onSetState={ updateCurrentConditions }
-				items={ currentAction.conditions ?? [] }
-			>
-				<RepeaterItem formFields={ formFields }/>
-			</Repeater>
-		</SafeDeleteToggle>
-		<RepeaterAddNew
-			onSetState={ updateCurrentConditions }
-		>
-			{ __( 'Add New Condition', 'jet-form-builder' ) }
-		</RepeaterAddNew>
+		<RepeaterState state={ updateCurrentConditions }>
+			<SafeDeleteToggle>
+				<Repeater items={ currentAction.conditions ?? [] }>
+					<RepeaterItem formFields={ formFields }/>
+				</Repeater>
+			</SafeDeleteToggle>
+			<RepeaterAddNew>
+				{ __( 'Add New Condition', 'jet-form-builder' ) }
+			</RepeaterAddNew>
+		</RepeaterState>
 	</>;
 }
 

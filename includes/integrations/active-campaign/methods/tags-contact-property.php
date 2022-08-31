@@ -46,7 +46,7 @@ class Tags_Contact_Property extends Base_Object_Property {
 			->request();
 
 		try {
-			$api_tags->check_response_code();
+			$api_tags->check_response_code()->response_body_as_array();
 		} catch ( Gateway_Exception $exception ) {
 			throw new Action_Exception( 'internal_error', $api_tags->get_request_args() );
 		}

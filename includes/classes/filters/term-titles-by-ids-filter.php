@@ -4,6 +4,12 @@
 namespace Jet_Form_Builder\Classes\Filters;
 
 
+/**
+ * @deprecated 2.1.6
+ *
+ * Class Term_Titles_By_Ids_Filter
+ * @package Jet_Form_Builder\Classes\Filters
+ */
 class Term_Titles_By_Ids_Filter extends Base_Filter {
 
 	public function get_id(): string {

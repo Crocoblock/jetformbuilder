@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views;
 
+use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -19,7 +20,6 @@ use Jet_Form_Builder\Gateways\Table_Views\Columns\Payer_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Type_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Row_Actions_Column;
-use Jet_Form_Builder\Gateways\Table_Views\Columns\Transaction_Column;
 
 class Payments extends View_Advanced_Base {
 
@@ -57,14 +57,29 @@ class Payments extends View_Advanced_Base {
 		return __( 'No payments found.', 'jet-form-builder' );
 	}
 
+	public function get_global_actions(): array {
+		return ( new Header_Actions_Column() )->get_value();
+	}
+
 	public function get_columns(): array {
 		return array(
-			'type'           => new Payment_Type_Column(),
-			'date'           => new Created_At_Column(),
-			'payment_status' => new Payment_Status_Column(),
-			'gross'          => new Gross_Column(),
-			'payer'          => new Payer_Column(),
-			'id'             => new Record_Id_Column_Advanced(),
+			Column_Base::CHOOSE  => new Record_Id_Column_Advanced(),
+			Column_Base::ACTIONS => new Row_Actions_Column(),
+			'type'               => new Payment_Type_Column(),
+			'date'               => new Created_At_Column(),
+			'payment_status'     => new Payment_Status_Column(),
+			'gross'              => new Gross_Column(),
+			'payer'              => new Payer_Column(),
+			'id'                 => new Record_Id_Column_Advanced(),
+		);
+	}
+
+	public function load_data(): array {
+		return array(
+			'messages' => array(
+				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),
+				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
+			),
 		);
 	}
 

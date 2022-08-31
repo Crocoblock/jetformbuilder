@@ -10,9 +10,12 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
 
 abstract class Base_Post_Action extends Base_Modifier_Action {
 
-	protected $inserted_id;
+	protected $inserted_id = 0;
 
 	public function do_after() {
+		if ( ! $this->inserted_id ) {
+			return;
+		}
 		$this->add_inserted_post_id();
 		$this->add_context_once();
 

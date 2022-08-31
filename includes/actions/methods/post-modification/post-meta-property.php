@@ -50,9 +50,14 @@ class Post_Meta_Property extends Base_Object_Property implements
 	public function do_after( Abstract_Modifier $modifier ) {
 		/** @var Base_Post_Action $action */
 		$action = $modifier->get_action();
+		$id     = $action->get_inserted();
+
+		if ( ! $id ) {
+			return;
+		}
 
 		foreach ( $this->value as $key => $value ) {
-			update_post_meta( $action->get_inserted(), $key, $value );
+			update_post_meta( $id, $key, $value );
 		}
 	}
 

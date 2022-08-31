@@ -38,6 +38,11 @@ const {
 	      compose,
       } = wp.compose;
 
+const legacy_map = {
+	first_name: 'firstName',
+	last_name: 'lastName',
+};
+
 function ActiveCampaignAction( props ) {
 
 	const {
@@ -60,6 +65,21 @@ function ActiveCampaignAction( props ) {
 			]
 		),
 	);
+
+	useEffect( () => {
+		const fields_map = {};
+
+		for ( const [ property, value ] of Object.entries( settings.fields_map ?? {} ) ) {
+			if ( ! legacy_map.hasOwnProperty( property ) ) {
+				fields_map[ property ] = value;
+
+				continue;
+			}
+			fields_map[ legacy_map[ property ] ] = value;
+		}
+
+		onChangeSettingObj( { fields_map } );
+	}, [] );
 
 	const getAPI = prop => settings.use_global
 	                       ? currentTab[ prop ]

@@ -13,6 +13,7 @@ const {
       } = JetFBComponents;
 const {
 	      withRequestFields,
+	      useSanitizeFieldsMap,
       } = JetFBHooks;
 
 /**
@@ -91,6 +92,11 @@ function InsertPostRender( props ) {
 
 		setProperties( source.properties[ id ] ?? [] );
 	}, [ settings ] );
+
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 */
+	useSanitizeFieldsMap();
 
 	/* eslint-disable jsx-a11y/no-onchange */
 

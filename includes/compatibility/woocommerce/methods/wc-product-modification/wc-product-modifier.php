@@ -27,8 +27,8 @@ class Wc_Product_Modifier extends Abstract_Post_Modifier {
 		// for property post_title
 		$this->source_arr['post_type'] = 'product';
 
-		$post_status = $this->settings['post_status'] ?? '';
-		$meta        = $this->settings['default_meta'] ?? array();
+		$post_status = $action->settings['post_status'] ?? '';
+		$meta        = $action->settings['default_meta'] ?? array();
 
 		$this->set( 'meta_input', $meta );
 		$this->set( 'post_status', $post_status );

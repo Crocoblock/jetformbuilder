@@ -43,8 +43,6 @@ const gatewaysData = gatewayAttr();
 const label = gatewayAttr( 'labels' );
 const callableGateway = gatewayAttr( 'additional' );
 
-const { isInDefaultFlow } = JetFBLocalizeHelper;
-
 function GatewaysEditor( {
 	_jf_actions: ActionsMeta,
 	setGateway,
@@ -57,9 +55,6 @@ function GatewaysEditor( {
 	currentScenario,
 } ) {
 
-	const availableActions = ActionsMeta.filter( action => (
-		action.type !== 'redirect_to_page' && isInDefaultFlow( action.type )
-	) );
 	const insertPostActions = prepareActionsListByType( ActionsMeta, 'insert_post', true );
 
 	const additional = callableGateway( gatewayGeneral.gateway );

@@ -5,7 +5,8 @@ const {
 	      TextControl,
 	      SelectControl,
 	      ToggleControl,
-      }      = wp.components;
+      } = wp.components;
+
 const { __ } = wp.i18n;
 
 const source = window.JetFormEditorData.argumentsSource || {};

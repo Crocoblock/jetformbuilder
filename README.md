@@ -5,7 +5,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 # ChangeLog
 
 ## 2.1.5
-* ADD: Multiple recipients support for send email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+* ADD: Support custom fields in ActiveCampaign action
+* ADD: Support for Insert/Update Product (WooCommerce)
+* ADD: Multiple recipients support for Send Email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+* ADD: Ability to delete payments via admin pages
+* FIX: Listing template for checkbox and radio fields
+* Tweak: Sanitize fields map in Insert/Update Post & Update User
+* Tweak: Allow leave empty mime types option in Media Field
 
 ## 2.1.4
 * FIX: Action conditions with AND relation - only the last condition has counted

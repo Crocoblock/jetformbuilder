@@ -12,8 +12,10 @@ const {
 	      ActionMessages,
 	      DynamicPropertySelect,
       } = JetFBComponents;
-
-const { withRequestFields } = JetFBHooks;
+const {
+	      withRequestFields,
+	      useSanitizeFieldsMap,
+      } = JetFBHooks;
 
 const { withSelect } = wp.data;
 
@@ -48,6 +50,11 @@ function UpdateUserRender( props ) {
 			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
 		);
 	}, [] );
+
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 */
+	useSanitizeFieldsMap();
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (

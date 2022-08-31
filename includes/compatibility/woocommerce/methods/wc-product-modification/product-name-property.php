@@ -14,8 +14,6 @@ class Product_Name_Property extends Post_Title_Property {
 	/**
 	 * @param Abstract_Modifier $modifier
 	 *
-	 * @return null
-	 * @throws Silence_Exception
 	 */
 	public function get_value( Abstract_Modifier $modifier ) {
 		$action = $modifier->get_action();
@@ -30,16 +28,16 @@ class Product_Name_Property extends Post_Title_Property {
 		     $this->value
 		) {
 			if ( is_null( $this->value ) ) {
-				throw new Silence_Exception();
+				return;
 			}
 
-			return $this->value;
+			$product->set_name( $this->value );
+
+			return;
 		}
 
-		$this->value    = '(empty)';
+		$product->set_name( '(empty)' );
 		$this->is_empty = true;
-
-		return $this->value;
 	}
 
 }

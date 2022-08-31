@@ -83,7 +83,7 @@ abstract class Abstract_Modifier {
 			}
 
 			if ( ! is_array( $value ) || ! $property->is_merge_value() ) {
-				$this->source_arr[ $property->get_id() ] = $value;
+				$this->source_arr[ $property->get_attach_id() ] = $value;
 
 				continue;
 			}

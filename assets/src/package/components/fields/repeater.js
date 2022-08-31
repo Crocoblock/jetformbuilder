@@ -2,6 +2,7 @@ import RepeaterHeadContext from '../../context/repeater.custom.item.head';
 import RepeaterButtonsContext from '../../context/repeater.custom.item.buttons';
 import useRepeaterState from '../../helpers/hooks/useRepeaterState';
 import RepeaterItemContext from '../../context/repeater.item';
+import RepeaterStateContext from '../../context/repeater.state';
 
 const {
 	      Card,
@@ -34,7 +35,9 @@ function Repeater( props ) {
 		      toggleVisible,
 		      changeCurrentItem,
 		      removeOption,
-	      } = functions ?? useRepeaterState( onSetState );
+	      } = functions
+	?? useRepeaterState( onSetState )
+	?? useContext( RepeaterStateContext );
 
 	const {
 		      isSupported: isSupportedHeader,

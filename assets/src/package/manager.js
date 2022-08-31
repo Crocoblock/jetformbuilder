@@ -134,6 +134,9 @@ import RepeaterAddOrOperator from './components/fields/repeater.add.or';
 import EditAdvancedRulesButton
 	from './components/validation/EditAdvancedRulesButton';
 import { useOnUpdateModal } from './helpers/hooks/modal';
+import RepeaterStateContext from './context/repeater.state';
+import RepeaterState from './components/fields/repeater.state';
+
 
 // JFBComponents
 window.JetFBComponents = {
@@ -186,6 +189,8 @@ window.JetFBComponents = {
 	ActionFetchButton,
 	DynamicValues,
 	EditAdvancedRulesButton,
+	RepeaterStateContext,
+	RepeaterState,
 };
 
 // JFBFunctions

@@ -3,7 +3,6 @@ import RepeaterItemContext from '../../context/repeater.item';
 
 const {
 	      SelectControl,
-	      withFilters,
 	      TextControl,
       } = wp.components;
 const {

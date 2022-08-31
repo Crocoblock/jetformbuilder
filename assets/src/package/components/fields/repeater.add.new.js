@@ -1,8 +1,12 @@
 import useRepeaterState from '../../helpers/hooks/useRepeaterState';
+import RepeaterStateContext from '../../context/repeater.state';
 
 const {
 	      Button,
       } = wp.components;
+const {
+	      useContext,
+      } = wp.element;
 
 function RepeaterAddNew( props ) {
 	const {
@@ -12,7 +16,9 @@ function RepeaterAddNew( props ) {
 		      children,
 	      } = props;
 
-	const { addNewItem } = functions ?? useRepeaterState( onSetState );
+	const { addNewItem } = functions
+	?? useRepeaterState( onSetState )
+	?? useContext( RepeaterStateContext );
 
 	return <Button
 		isSecondary

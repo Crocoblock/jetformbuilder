@@ -22,9 +22,13 @@ const onSaveDeleting = index => {
  * moveDown: function,
  * moveUp: function,
  * removeOption: function
- * }}
+ * }|null}
  */
 function useRepeaterState( setItemsData ) {
+	if ( 'undefined' === typeof setItemsData ) {
+		return null;
+	}
+
 	const isSafeDeleting = useContext( SafeDeleteContext );
 
 	const changeCurrentItem = function ( valueToSet, index ) {

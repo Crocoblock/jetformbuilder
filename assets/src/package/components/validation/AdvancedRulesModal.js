@@ -3,6 +3,7 @@ import { useOnUpdateModal } from '../../helpers/hooks/modal';
 import Repeater from '../fields/repeater';
 import RepeaterAddNew from '../fields/repeater.add.new';
 import AdvancedRuleItem from './AdvancedRuleItem';
+import RepeaterState from '../fields/repeater.state';
 
 const {
 	      useState,
@@ -29,17 +30,14 @@ function AdvancedRulesModal() {
 		) );
 	} );
 
-	return <>
-		<Repeater
-			items={ current }
-			onSetState={ setCurrent }
-		>
+	return <RepeaterState state={ setCurrent }>
+		<Repeater items={ current }>
 			<AdvancedRuleItem/>
 		</Repeater>
-		<RepeaterAddNew onSetState={ setCurrent }>
+		<RepeaterAddNew>
 			{ __( 'Add Rule', 'jet-form-builder' ) }
 		</RepeaterAddNew>
-	</>;
+	</RepeaterState>;
 
 }
 

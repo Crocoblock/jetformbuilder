@@ -37,31 +37,6 @@ class File_Upload {
 	}
 
 	/**
-	 * Resturns max upload size based on field arguments
-	 *
-	 * @param array $args [description]
-	 *
-	 * @return [type]       [description]
-	 */
-	public function get_max_size_for_field( $args = array() ) {
-
-		$max_size       = wp_max_upload_size();
-		$field_max_size = $max_size;
-
-		if ( ! empty( $args['max_size'] ) ) {
-
-			$field_max_size = intval( floatval( $args['max_size'] ) * MB_IN_BYTES );
-
-			if ( $field_max_size > $max_size ) {
-				$field_max_size = $max_size;
-			}
-		}
-
-		return $field_max_size;
-
-	}
-
-	/**
 	 * Register form-specific assets
 	 *
 	 * @return void

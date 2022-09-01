@@ -16,9 +16,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Media_Field extends Base {
 
-	protected $value_format = 'url';
-	protected $max_files    = 1;
-	protected $max_size     = 1;
+	protected $value_format    = 'url';
+	protected $max_files       = 1;
+	protected $max_size        = 1;
+	protected $max_size_format = '';
 
 	/**
 	 * Returns block name
@@ -114,6 +115,16 @@ class Media_Field extends Base {
 		$scripts = File_Upload::instance()->ensure_media_js();
 
 		return $scripts . ( new Media_Field_Render( $this ) )->render();
+	}
+
+	public function get_max_size_message(): string {
+		$message = $this->block_attrs['validation']['messages']['max_size'];
+
+		if ( empty( $message ) ) {
+			$message = 'Maximum file size: %max_size%';
+		}
+
+		return str_replace( '%max_size%', size_format( $this->get_max_size() ), $message );
 	}
 
 	public function block_data( $editor, $handle ) {

@@ -1,18 +1,22 @@
 import Restriction from './Restriction';
+import { getPreparedRules } from './functions';
 
 class CustomRulesRestriction extends Restriction {
 
-	constructor() {
-		super();
-
-		this.rules = [];
-	}
-
 	isSupported( node, reporting ) {
-		const root = node.closest( '.jet-form-builder-row' );
-		this.rules = JSON.parse( root.dataset?.validationRules ?? '[]' );
+		const root  = node.closest( '.jet-form-builder-row' );
+		const rules = JSON.parse( root.dataset?.validationRules ?? '[]' );
 
-		return Boolean( this.rules.length );
+		if ( !Boolean( rules.length ) ) {
+			return false;
+		}
+
+		reporting.restrictions = [
+			...reporting.restrictions,
+			...getPreparedRules( rules, reporting ),
+		];
+
+		return false;
 	}
 
 }

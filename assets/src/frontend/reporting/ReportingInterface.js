@@ -1,5 +1,27 @@
 import { isRequired } from '../observe/functions';
 
+/**
+ * Validation logic: on change input value we run
+ * @see ReportingInterface.validateWithNotice
+ *
+ * In that function we clear stored errors
+ * @see ReportingInterface.errors
+ * check all restrictions again and save errors
+ * to the same property.
+ *
+ * When user tries to submit form we run
+ * @see ReportingInterface.validate
+ * If there was stored errors - it will return them.
+ * Otherwise we check all and save errors.
+ *
+ * In the case when we run the validation through the
+ * @see ReportingInterface.isValid
+ * We "block the form" through the "test" property.
+ * This property is reactive, and when it changes,
+ * the state of the button for submitting the form
+ * and the navigation buttons between pages changes.
+ *
+ */
 class ReportingInterface {
 
 	constructor() {
@@ -8,10 +30,21 @@ class ReportingInterface {
 		 */
 		this.input = null;
 		this.isRequired = false;
+		/**
+		 * @type {array|null}
+		 */
+		this.errors = null;
 	}
 
-	validateWithNotice() {
-		const errors = this.getErrors();
+	/**
+	 * Runs on changing value in the field
+	 * @see InputData.onChange
+	 *
+	 * @returns {boolean}
+	 */
+	async validateWithNotice() {
+		this.errors  = null;
+		const errors = await this.getErrors();
 
 		if ( errors.length ) {
 			this.report( errors );
@@ -19,19 +52,45 @@ class ReportingInterface {
 		else {
 			this.clearReport();
 		}
-
-		return !errors.length;
-	}
-
-	validate() {
-		return !this.getErrors()?.length;
 	}
 
 	/**
-	 * @returns {array}
+	 * Runs on trying to submit form
+	 * @see Observable.inputsAreValid
+	 *
+	 * Runs on changing value, if this field inside page
+	 * @see InputData.setPage
+	 * @see PageState.isValidInputs
+	 *
+	 * @returns {Promise<boolean>}
 	 */
-	getErrors() {
-		return this.isRequired ? this.isValid() : [];
+	async validate() {
+		const errors = await this.getErrors();
+
+		return !errors?.length;
+	}
+
+	/**
+	 * @returns {Promise<*[]|array|null>}
+	 */
+	async getErrors() {
+		if ( !this.isRequired ) {
+			return [];
+		}
+
+		if ( Array.isArray( this.errors ) ) {
+			return this.errors;
+		}
+
+		// disable buttons
+		this.input.getSubmit().lock();
+
+		this.errors = await this.isValid();
+
+		// enable buttons
+		this.input.getSubmit().unlock();
+
+		return this.errors;
 	}
 
 	/**
@@ -47,9 +106,9 @@ class ReportingInterface {
 	}
 
 	/**
-	 * @return {array}
+	 * @returns {Promise<*[]>}
 	 */
-	isValid() {
+	async isValid() {
 		throw new Error( 'isValid is empty' );
 	}
 

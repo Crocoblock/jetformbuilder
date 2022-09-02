@@ -1,5 +1,6 @@
 import AjaxSubmit from './AjaxSubmit';
 import ReloadSubmit from './ReloadSubmit';
+import ReactiveVar from '../ReactiveVar';
 
 class FormSubmit {
 
@@ -8,6 +9,8 @@ class FormSubmit {
 	 */
 	constructor( observable ) {
 		this.observable = observable;
+		this.lockState  = new ReactiveVar( false );
+		this.lockState.make();
 
 		this.observable.rootNode.addEventListener(
 			'submit',
@@ -15,16 +18,11 @@ class FormSubmit {
 		);
 
 		/**
-		 * @type {NodeListOf<Element>}
-		 */
-		this.buttons = this.observable.rootNode.querySelectorAll(
-			'.jet-form-builder__submit',
-		);
-
-		/**
 		 * @type {AjaxSubmit|ReloadSubmit}
 		 */
 		this.submitter = this.createSubmitter();
+
+		this.handleButtons();
 	}
 
 	/**
@@ -57,14 +55,26 @@ class FormSubmit {
 	}
 
 	toggle() {
+		this.lockState.current = !this.lockState.current;
 		this.toggleLoading();
-		this.toggleDisableButtons();
 	}
 
-	toggleDisableButtons() {
-		for ( const button of this.buttons ) {
-			button.disabled = !button.disabled;
-		}
+	/**
+	 * @private
+	 */
+	handleButtons() {
+		/**
+		 * @type {NodeListOf<Element>}
+		 */
+		const buttons = this.observable.rootNode.querySelectorAll(
+			'.jet-form-builder__submit',
+		);
+
+		this.lockState.watch( () => {
+			for ( const button of buttons ) {
+				button.disabled = this.lockState.current;
+			}
+		} );
 	}
 
 	toggleLoading() {
@@ -84,6 +94,17 @@ class FormSubmit {
 		return +rootNode.dataset.formId;
 	}
 
+	lock() {
+		this.lockState.current = true;
+	}
+
+	unlock() {
+		this.lockState.current = false;
+	}
+
+	toggleLock() {
+		this.lockState.current = !this.lockState.current;
+	}
 }
 
 export default FormSubmit;

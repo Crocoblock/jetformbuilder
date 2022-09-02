@@ -39,10 +39,25 @@ class Restriction {
 	}
 
 	/**
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	validate() {
 		throw new Error( 'validate is wrong' );
+	}
+
+	async validatePromise() {
+		let validationResult;
+
+		try {
+			validationResult = this.validate();
+		}
+		catch ( error ) {
+			return Promise.reject( error?.message ?? error );
+		}
+
+		return validationResult
+		       ? Promise.resolve()
+		       : Promise.reject( 'validate is wrong' );
 	}
 
 	getMessage() {

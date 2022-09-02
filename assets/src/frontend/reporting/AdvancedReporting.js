@@ -4,7 +4,7 @@ import {
 	getNodeValidationType,
 	getValidationMessages,
 } from './functions';
-import { getRestrictions } from './restrictions/functions';
+import { setRestrictions } from './restrictions/functions';
 
 class AdvancedReporting extends ReportingInterface {
 
@@ -30,17 +30,28 @@ class AdvancedReporting extends ReportingInterface {
 		return !!inherit?.length;
 	}
 
-	isValid() {
-		const invalid = [];
+	/**
+	 * @returns {Promise<*[]>}
+	 */
+	async isValid() {
+		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
-			if ( restriction.validate() ) {
-				continue;
-			}
-			invalid.push( restriction );
+			promises.push( new Promise( ( resolve, reject ) => {
+				restriction.validatePromise().then( resolve ).catch( () => {
+					reject( restriction );
+				} );
+			} ) );
 		}
 
-		return invalid;
+		const results = await Promise.allSettled( promises );
+		const invalid = results.filter(
+			( { status } ) => 'rejected' === status,
+		);
+
+		return invalid.map( ( { reason, value } ) => (
+			reason ?? value
+		) );
 	}
 
 	report( validationErrors ) {
@@ -52,13 +63,15 @@ class AdvancedReporting extends ReportingInterface {
 
 		this.messages = getValidationMessages( input.nodes[ 0 ] );
 
-		this.restrictions = (
-			this.isRequired ? this.getRestrictions() : []
-		);
+		if ( ! this.isRequired ) {
+			return;
+		}
+
+		this.setRestrictions();
 	}
 
-	getRestrictions() {
-		return getRestrictions( this );
+	setRestrictions() {
+		return setRestrictions( this );
 	}
 
 	clearReport() {

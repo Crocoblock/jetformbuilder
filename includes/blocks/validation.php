@@ -4,6 +4,11 @@
 namespace Jet_Form_Builder\Blocks;
 
 
+use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Not_Regexp_Rule;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Regexp_Rule;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Contain_Characters_Rule;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Not_Contain_Characters_Rule;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Blocks\Types\Text_Field;
@@ -99,9 +104,11 @@ class Validation implements Arrayable {
 		if ( ! $this->is_advanced( $block ) ) {
 			return;
 		}
-		$type = $this->get_block_type( $block );
+		$type  = $this->get_block_type( $block );
+		$rules = $block->block_attrs['validation']['rules'] ?? array();
 
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
+		$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
 
 		/**
 		 * If advanced validation not enabled right in block settings
@@ -111,10 +118,8 @@ class Validation implements Arrayable {
 		}
 
 		$messages = $block->block_attrs['validation']['messages'] ?? array();
-		$rules    = $block->block_attrs['validation']['rules'] ?? array();
 
 		$block->add_attribute( 'data-validation-messages', Tools::encode_json( $messages ) );
-		$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
 	}
 
 	public function get_settings(): array {
@@ -170,26 +175,13 @@ class Validation implements Arrayable {
 	}
 
 	public function rule_types(): array {
-		return array(
+		return Array_Tools::to_array(
 			array(
-				'value' => 'contain',
-				'label' => __( 'Must contain characters', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'contain_not',
-				'label' => __( 'Must not contain characters', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'regexp',
-				'label' => __( 'Matches regular expression', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'regexp_not',
-				'label' => __( 'Does not match regular expression', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'ssr',
-				'label' => __( 'Server-Side validation', 'jet-form-builder' ),
+				new Must_Contain_Characters_Rule(),
+				new Must_Not_Contain_Characters_Rule(),
+				new Match_Regexp_Rule(),
+				new Match_Not_Regexp_Rule(),
+				new Server_Side_Rule(),
 			)
 		);
 	}

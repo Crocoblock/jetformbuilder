@@ -226,7 +226,11 @@ class Observable {
 		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
 			return this.dataInputs[ fieldName ];
 		}
-		const root = this.parent.root;
+		const root = this.parent?.root ?? null;
+
+		if ( !root ) {
+			return null;
+		}
 
 		if ( root.dataInputs.hasOwnProperty( fieldName ) ) {
 			return root.dataInputs[ fieldName ];

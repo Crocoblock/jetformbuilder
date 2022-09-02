@@ -27,6 +27,16 @@ class PageState {
 
 		this.addButtonsListeners();
 		this.updateState();
+
+		/**
+		 * @type {Observable}
+		 */
+		const root = this.state.getRoot();
+		const form = root?.parent?.root?.form ?? root.form;
+
+		form.lockState.watch( () => {
+			this.canSwitch.current = !form.lockState.current;
+		} );
 	}
 
 	parseDom() {
@@ -79,8 +89,18 @@ class PageState {
 		this.node.classList.add( 'jet-form-builder-page--hidden' );
 	}
 
-	updateState( withNotice = false ) {
-		this.canSwitch.current = this.isValidInputs( withNotice );
+	updateState() {
+		const callbacks = [];
+
+		for ( const input of this.getInputs() ) {
+			callbacks.push( input.reporting.validate() );
+		}
+
+		Promise.all( callbacks ).then( () => {
+			this.canSwitch.current = true;
+		} ).catch( () => {
+			this.canSwitch.current = false;
+		} );
 	}
 
 	addButtonsListeners() {
@@ -117,21 +137,6 @@ class PageState {
 		}
 
 		this.state.index.current = this.index + 1;
-	}
-
-	isValidInputs( withNotice = false ) {
-		for ( const input of this.getInputs() ) {
-			const callback = withNotice
-			                 ? input.reporting.validateWithNotice
-			                 : input.reporting.validate;
-
-			if ( callback.call( input.reporting ) ) {
-				continue;
-			}
-			return false;
-		}
-
-		return true;
 	}
 
 	isNodeBelongThis( node ) {

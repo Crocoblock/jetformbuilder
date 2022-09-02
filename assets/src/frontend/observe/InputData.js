@@ -4,13 +4,12 @@ import SignalCheckbox from '../signals/SignalCheckbox';
 import SignalRadio from '../signals/SignalRadio';
 import SignalText from '../signals/SignalText';
 import SignalRepeater from '../signals/SignalRepeater';
-import { createReport, getParsedName, isRequired } from './functions';
+import { createReport, getParsedName } from './functions';
 import SignalCalculated from '../signals/SignalCalculated';
 import SignalMultiSelect from '../signals/SignalMultiSelect';
 import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
 import SignalWysiwyg from '../signals/SignalWysiwyg';
-import ReportingField from '../reporting/ReportingInterface';
 import SignalRange from '../signals/SignalRange';
 
 /**
@@ -204,9 +203,14 @@ class InputData {
 	 * @returns {FormSubmit}
 	 */
 	getSubmit() {
-		return this.root.form
-		       ? this.root.form
-		       : this.root.parent.root.form;
+		return this.getRoot().form;
+	}
+
+	/**
+	 * @returns {Observable}
+	 */
+	getRoot() {
+		return this.root?.parent?.root ?? this.root;
 	}
 
 	/**

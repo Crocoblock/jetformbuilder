@@ -8,37 +8,86 @@ import NotUrl from './NotUrl';
 import ReachLimitNumbers from './ReachLimitNumbers';
 import NotEnoughNumbers from './NotEnoughNumbers';
 import CustomRulesRestriction from './CustomRulesRestriction';
+import MustContainCharacters from './MustContainCharacters';
+import MustNotContainCharacters from './MustNotContainCharacters';
+import MatchRegexp from './MatchRegexp';
+import NotMatchRegexp from './NotMatchRegexp';
 
-const restrictions = () => (
+const {
+	      applyFilters,
+      } = wp.hooks;
+
+const restrictions = applyFilters(
+	'jet.fb.restrictions',
 	[
-		new ReachLimitNumbers(),
-		new NotEnoughNumbers(),
-		new NotUrl(),
-		new NotEmail(),
-		new NotCompleteInputmask(),
-		new NotEmptyRepeater(),
-		new NotEnoughChars(),
-		new ReachLimitChars(),
-		new NotEmptyRestriction(),
-		new CustomRulesRestriction(),
-	]
+		ReachLimitNumbers,
+		NotEnoughNumbers,
+		NotUrl,
+		NotEmail,
+		NotCompleteInputmask,
+		NotEmptyRepeater,
+		NotEnoughChars,
+		ReachLimitChars,
+		NotEmptyRestriction,
+		CustomRulesRestriction,
+	],
+);
+
+/**
+ * @type {array<AdvancedRestriction>}
+ */
+const advancedRules = applyFilters(
+	'jet.fb.advanced.rules',
+	[
+		MustContainCharacters,
+		MustNotContainCharacters,
+		MatchRegexp,
+		NotMatchRegexp,
+	],
 );
 
 /**
  * @param reporting {AdvancedReporting}
  * @return {Restriction[]}
  */
-function getRestrictions( reporting ) {
-	return restrictions().filter(
-		current => current.isSupported( reporting.getNode(), reporting ),
-	).map(
-		item => {
-			item.setReporting( reporting );
-			return item;
-		},
-	);
+function setRestrictions( reporting ) {
+
+	for ( const restriction of restrictions ) {
+		const current = new restriction();
+
+		if ( !current.isSupported( reporting.getNode(), reporting ) ) {
+			continue;
+		}
+		current.setReporting( reporting );
+
+		reporting.restrictions.push( current );
+	}
+}
+
+function getPreparedRules( rules, reporting ) {
+	const response = [];
+
+	for ( const rule of rules ) {
+		for ( const advancedRule of advancedRules ) {
+			const current = new advancedRule();
+
+			if ( rule.type !== current.getSlug() ) {
+				continue;
+			}
+			delete rule.type;
+
+			current.setReporting( reporting );
+			current.attrs = { ...rule };
+
+			response.push( current );
+			break;
+		}
+	}
+
+	return response;
 }
 
 export {
-	getRestrictions,
+	setRestrictions,
+	getPreparedRules,
 };

@@ -4,10 +4,10 @@ import RepeaterItemContext from '../../context/repeater.item';
 const {
 	      SelectControl,
 	      TextControl,
+	      withFilters,
       } = wp.components;
 const {
 	      useContext,
-	      Fragment,
 	      useState,
 	      useEffect,
       } = wp.element;
@@ -19,17 +19,44 @@ const {
       } = window.jetFormValidation;
 
 function getLabel( type ) {
-	switch ( type ) {
+	const indexRule = rule_types.findIndex( ( { value } ) => value === type );
+	const fallback  = __( 'Enter value', 'jet-form-builder' );
+
+	if ( -1 === indexRule ) {
+		return fallback;
+	}
+
+	return rule_types[ indexRule ]?.control_label ?? fallback;
+}
+
+function RuleSpecificControls( {
+	currentItem,
+	changeCurrentItem,
+} ) {
+	const [ label, setLabel ] = useState( () => getLabel( currentItem.type ) );
+
+	useEffect( () => {
+		setLabel( getLabel( currentItem.type ) );
+	}, [ currentItem.type ] );
+
+	switch ( currentItem.type ) {
 		case 'contain':
 		case 'contain_not':
-			return __( 'Symbols', 'jet-form-builder' );
 		case 'regexp':
 		case 'regexp_not':
-			return __( 'Regular expression', 'jet-form-builder' );
-
+			return <TextControl
+				label={ label }
+				value={ currentItem.value }
+				onChange={ value => changeCurrentItem( { value } ) }
+			/>;
+		default:
+			return null;
 	}
-	return '';
 }
+
+const RuleControls = withFilters(
+	'jet.fb.advanced.rule.controls',
+)( RuleSpecificControls );
 
 function AdvancedRuleItem() {
 	const {
@@ -37,13 +64,7 @@ function AdvancedRuleItem() {
 		      changeCurrentItem,
 	      } = useContext( RepeaterItemContext );
 
-	const [ label, setLabel ] = useState( () => getLabel( currentItem.type ) );
-
-	useEffect( () => {
-		setLabel( getLabel( currentItem.type ) );
-	}, [ currentItem.type ] );
-
-	const Select = <Fragment>
+	return <>
 		<SelectControl
 			labelPosition="side"
 			options={ Tools.withPlaceholder( rule_types ) }
@@ -51,28 +72,15 @@ function AdvancedRuleItem() {
 			value={ currentItem.type }
 			onChange={ type => changeCurrentItem( { type } ) }
 		/>
-	</Fragment>;
-
-	let Control;
-
-	switch ( currentItem.type ) {
-		case 'contain':
-		case 'contain_not':
-		case 'regexp':
-		case 'regexp_not':
-			Control = <TextControl
-				label={ label }
-				value={ currentItem.value }
-				onChange={ value => changeCurrentItem( { value } ) }
-			/>;
-			break;
-		default:
-			Control = null;
-	}
-
-	return <>
-		{ Select }
-		{ Control }
+		<RuleControls
+			currentItem={ currentItem }
+			changeCurrentItem={ changeCurrentItem }
+		/>
+		<TextControl
+			label={ __( 'Error message', 'jet-form-builder' ) }
+			value={ currentItem.message }
+			onChange={ message => changeCurrentItem( { message } ) }
+		/>
 	</>;
 }
 

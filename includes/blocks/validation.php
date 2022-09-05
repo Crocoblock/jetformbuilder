@@ -9,9 +9,8 @@ use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Regexp_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Contain_Characters_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Not_Contain_Characters_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
-use Jet_Form_Builder\Blocks\Render\Form_Builder;
+use Jet_Form_Builder\Blocks\Ssr_Validation\Validation_Callbacks;
 use Jet_Form_Builder\Blocks\Types\Base;
-use Jet_Form_Builder\Blocks\Types\Text_Field;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
@@ -25,7 +24,6 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Post_Meta\Validation_Meta;
 
 /**
  * @method static Validation instance()
@@ -40,7 +38,11 @@ class Validation implements Arrayable {
 	const FORMAT_ADVANCED = 'advanced';
 	const FORMAT_BROWSER  = 'browser';
 
+	/**
+	 * @var Base_Message[]
+	 */
 	private $messages;
+	public $callbacks;
 	private $settings = array();
 
 	public function __construct() {
@@ -48,6 +50,8 @@ class Validation implements Arrayable {
 			'jet-form-builder/validation-messages',
 			$this->get_messages()
 		);
+
+		$this->callbacks = new Validation_Callbacks();
 
 		add_filter(
 			'jet-form-builder/before-start-form',
@@ -134,7 +138,7 @@ class Validation implements Arrayable {
 			return $response;
 		}
 
-		foreach ( $this->messages() as $message ) {
+		foreach ( $this->messages as $message ) {
 			$response['messages'][ $message->get_id() ] = (
 				$validation['messages'][ $message->get_id() ] ?? $message->get_initial()
 			);
@@ -186,18 +190,12 @@ class Validation implements Arrayable {
 		);
 	}
 
-	/**
-	 * @return Base_Message[]
-	 */
-	public function messages(): array {
-		return $this->messages;
-	}
-
 	public function to_array(): array {
 		return array(
-			'messages'   => Array_Tools::to_array( $this->messages() ),
-			'formats'    => $this->formats(),
-			'rule_types' => $this->rule_types(),
+			'messages'      => Array_Tools::to_array( $this->messages ),
+			'ssr_callbacks' => Array_Tools::to_array( $this->callbacks->get_items() ),
+			'formats'       => $this->formats(),
+			'rule_types'    => $this->rule_types(),
 		);
 	}
 

@@ -12,6 +12,7 @@ import MustContainCharacters from './MustContainCharacters';
 import MustNotContainCharacters from './MustNotContainCharacters';
 import MatchRegexp from './MatchRegexp';
 import NotMatchRegexp from './NotMatchRegexp';
+import ServerSideCallback from './ServerSideCallback';
 
 const {
 	      applyFilters,
@@ -43,6 +44,7 @@ const advancedRules = applyFilters(
 		MustNotContainCharacters,
 		MatchRegexp,
 		NotMatchRegexp,
+		ServerSideCallback,
 	],
 );
 

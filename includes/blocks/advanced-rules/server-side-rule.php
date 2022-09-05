@@ -13,4 +13,5 @@ class Server_Side_Rule extends Match_Regexp_Rule {
 	public function get_label(): string {
 		return __( 'Server-Side callback', 'jet-form-builder' );
 	}
+
 }

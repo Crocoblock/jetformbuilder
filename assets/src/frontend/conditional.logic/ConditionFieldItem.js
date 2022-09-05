@@ -7,7 +7,7 @@ class ConditionFieldItem extends ConditionItem {
 	}
 
 	observe() {
-		const input      = this.getInput();
+		const input        = this.getInput();
 		this.block._fields = this.block._fields ?? [];
 
 		if ( !input || this.block._fields.includes( this.field ) ) {
@@ -22,20 +22,13 @@ class ConditionFieldItem extends ConditionItem {
 	 * @returns {InputData|boolean}
 	 */
 	getInput() {
-		const root = this.block.root;
-
-		return (
-			root.dataInputs[ this.field ] ??
-			root.parent.root.dataInputs[ this.field ] ?? false
-		);
+		return this.block.root.getInput( this.field );
 	}
 
 	isPassed() {
-		const root  = this.block.root;
-		const input = root.dataInputs[ this.field ] ??
-			root.parent.root.dataInputs[ this.field ] ?? false;
+		const input = this.getInput();
 
-		if ( false === input ) {
+		if ( !input ) {
 			return false;
 		}
 

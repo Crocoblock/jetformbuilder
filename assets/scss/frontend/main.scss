@@ -19,6 +19,10 @@
 	flex-wrap: wrap;
 	margin: 0;
 	padding: 5px 0;
+
+	&.is-loading {
+		opacity: 0.5;
+	}
 }
 
 .jet-form-builder-row.jet-form-builder-row--hidden {
@@ -559,7 +563,6 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 }
 
 
-
 .jet-form-builder__field-wrap:not(.checkradio-wrap) {
 	width: 100%;
 }
@@ -675,6 +678,7 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 .rtl .jet-form-builder__next-page-wrap {
 	text-align: right;
 }
+
 .rtl .jet-form-builder__field-label > span::before {
 	margin-right: unset;
 	margin-left: 0.5em;
@@ -689,6 +693,7 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	& + .error-message {
 		@include error-message;
 	}
+
 	.error-message {
 		@include error-message;
 	}

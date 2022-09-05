@@ -37,14 +37,17 @@ class AdvancedReporting extends ReportingInterface {
 		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
-			promises.push( new Promise( ( resolve, reject ) => {
+			promises.push( ( resolve, reject ) => {
 				restriction.validatePromise().then( resolve ).catch( () => {
 					reject( restriction );
 				} );
-			} ) );
+			} );
 		}
 
-		const results = await Promise.allSettled( promises );
+		const results = await Promise.allSettled(
+			promises.map( current => new Promise( current ) ),
+		);
+
 		const invalid = results.filter(
 			( { status } ) => 'rejected' === status,
 		);
@@ -63,11 +66,18 @@ class AdvancedReporting extends ReportingInterface {
 
 		this.messages = getValidationMessages( input.nodes[ 0 ] );
 
-		if ( ! this.isRequired ) {
+		if ( !this.isRequired ) {
 			return;
 		}
 
+		/**
+		 * @see this.restrictions
+		 */
 		this.setRestrictions();
+
+		this.needDebounce = this.restrictions.some(
+			current => current.isServerSide(),
+		);
 	}
 
 	setRestrictions() {

@@ -11,6 +11,8 @@ import SignalFile from '../signals/SignalFile';
 import ReactiveVar from '../ReactiveVar';
 import SignalWysiwyg from '../signals/SignalWysiwyg';
 import SignalRange from '../signals/SignalRange';
+import LoadingReactiveVar from '../reactive/LoadingReactiveVar';
+import AdvancedReporting from '../reporting/AdvancedReporting';
 
 /**
  * @type {(BaseSignal)[]}
@@ -62,6 +64,9 @@ class InputData {
 		 * @type {PageState}
 		 */
 		this.page = null;
+
+		this.loading = new LoadingReactiveVar( false );
+		this.loading.make();
 	}
 
 	isSupported( node ) {
@@ -89,7 +94,9 @@ class InputData {
 
 		// apply changes in DOM
 		this.callable.runSignal();
-		this.reporting.validateWithNotice();
+
+		// show errors
+		this.reporting.validateWithNoticeDebounced();
 	}
 
 	watch( callable ) {
@@ -141,6 +148,17 @@ class InputData {
 		this.callable.setInput( this );
 
 		this.reporting = createReport( this );
+
+		this.loading.watch( () => this.onChangeLoading() );
+	}
+
+	onChangeLoading() {
+		this.getSubmit().lockState.current = this.loading.current;
+
+		const [ node ] = this.nodes;
+		const wrapper  = node.closest( '.jet-form-builder-row' );
+
+		wrapper.classList.toggle( 'is-loading', this.loading.current );
 	}
 
 	/**

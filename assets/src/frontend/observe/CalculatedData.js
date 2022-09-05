@@ -64,9 +64,9 @@ class CalculatedData extends InputData {
 
 	setListenTo() {
 		for ( const [ , fieldName ] of this.formula.matchAll( this.regexp ) ) {
-			const input = this.getInput( fieldName );
+			const input = this.root.getInput( fieldName );
 
-			if ( false === input ) {
+			if ( ! input ) {
 				continue;
 			}
 
@@ -78,19 +78,8 @@ class CalculatedData extends InputData {
 
 	addWatchers() {
 		for ( const fieldName of this.listenTo ) {
-			this.getInput( fieldName ).watch( () => this.reCalculate() );
+			this.root.getInput( fieldName ).watch( () => this.reCalculate() );
 		}
-	}
-
-	/**
-	 * @param fieldName
-	 * @returns {boolean|InputData}
-	 */
-	getInput( fieldName ) {
-		return (
-			this.root.dataInputs[ fieldName ] ??
-			this.root.parent.root.dataInputs[ fieldName ] ?? false
-		);
 	}
 
 	addListeners() {

@@ -115,6 +115,7 @@ class Plugin {
 		new Elementor_Controller();
 		( new Migrations\Rest_Api\Controller() )->rest_api_init();
 		( new Blocks\Conditional_Block\Rest_Api\Rest_Api_Controller() )->rest_api_init();
+		( new Blocks\Ssr_Validation\Rest_Controller() )->rest_api_init();
 
 		if ( is_admin() ) {
 			Preset_Manager::instance();

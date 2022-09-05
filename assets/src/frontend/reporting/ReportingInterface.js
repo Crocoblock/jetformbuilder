@@ -34,6 +34,24 @@ class ReportingInterface {
 		 * @type {array|null}
 		 */
 		this.errors = null;
+
+		// true, when field has server-side restrictions
+		this.needDebounce = false;
+	}
+
+	validateWithNoticeDebounced( force = false ) {
+		if ( force || ! this.needDebounce ) {
+			this.validateWithNotice();
+
+			return;
+		}
+
+		const validateFunc = window._.debounce(
+			() => this.validateWithNotice(),
+			1000,
+		);
+
+		validateFunc();
 	}
 
 	/**
@@ -74,7 +92,7 @@ class ReportingInterface {
 	 * @returns {Promise<*[]|array|null>}
 	 */
 	async getErrors() {
-		if ( !this.isRequired ) {
+		if ( !this.isRequired || this.input.loading.current ) {
 			return [];
 		}
 
@@ -82,13 +100,11 @@ class ReportingInterface {
 			return this.errors;
 		}
 
-		// disable buttons
-		this.input.getSubmit().lock();
+		this.input.loading.start();
 
 		this.errors = await this.isValid();
 
-		// enable buttons
-		this.input.getSubmit().unlock();
+		this.input.loading.end();
 
 		return this.errors;
 	}

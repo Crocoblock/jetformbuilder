@@ -20,6 +20,16 @@ class Restriction {
 	}
 
 	/**
+	 * If returns true -> validation will be
+	 * started with 1000 ms delay
+	 *
+	 * @return {boolean}
+	 */
+	isServerSide() {
+		return false;
+	}
+
+	/**
 	 * @param reporting {AdvancedReporting}
 	 */
 	setReporting( reporting ) {
@@ -45,6 +55,9 @@ class Restriction {
 		throw new Error( 'validate is wrong' );
 	}
 
+	/**
+	 * @return {Promise<*>}
+	 */
 	async validatePromise() {
 		let validationResult;
 

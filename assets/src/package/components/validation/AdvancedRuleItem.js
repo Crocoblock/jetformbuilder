@@ -1,5 +1,6 @@
 import Tools from '../../helpers/tools';
 import RepeaterItemContext from '../../context/repeater.item';
+import BaseHelp from '../controls/base-help';
 
 const {
 	      SelectControl,
@@ -15,8 +16,14 @@ const {
 	      __,
       } = wp.i18n;
 const {
+	      addFilter,
+      } = wp.hooks;
+const {
 	      rule_types,
+	      ssr_callbacks,
       } = window.jetFormValidation;
+
+const ssr_callbacks_keys = ssr_callbacks.map( ( { value } ) => value );
 
 function getLabel( type ) {
 	const indexRule = rule_types.findIndex( ( { value } ) => value === type );
@@ -53,6 +60,59 @@ function RuleSpecificControls( {
 			return null;
 	}
 }
+
+addFilter(
+	'jet.fb.advanced.rule.controls',
+	'jet-form-builder',
+	( DefaultControls ) => ( props ) => {
+		const { currentItem, changeCurrentItem } = props;
+		const [ showDetails, setShowDetails ]    = useState( false );
+
+		if ( 'ssr' !== currentItem.type ) {
+			return <DefaultControls { ...props } />;
+		}
+
+		const functionName = currentItem.value || 'custom_jfb_field_validation';
+
+		return <>
+			<SelectControl
+				labelPosition="side"
+				options={ Tools.withPlaceholder(
+					ssr_callbacks,
+					__( 'Custom function', 'jet-form-builder' ),
+				) }
+				label={ __( 'Choose callback', 'jet-form-builder' ) }
+				value={ currentItem.value }
+				onChange={ value => changeCurrentItem( { value } ) }
+			/>
+			{ !ssr_callbacks_keys.includes( currentItem.value ) && <>
+				<TextControl
+					label={ __( 'Function name', 'jet-form-builder' ) }
+					value={ currentItem.value }
+					onChange={ value => changeCurrentItem( { value } ) }
+				/>
+				<BaseHelp>
+					{ __( 'Example of registering a function below.' ) + ' ' }
+					<a
+						href="javascript:void(0)"
+						onClick={ () => setShowDetails( prev => !prev ) }
+					>
+						{ showDetails
+						  ? __( 'Hide', 'jet-form-builder' )
+						  : __( 'Show', 'jet-form-builder' ) }
+					</a>
+				</BaseHelp>
+				{ showDetails && <pre>
+					{ `function ${ functionName }( $value, \\WP_REST_Request $request ): bool {
+	// your logic
+	return true;
+}` }
+				</pre> }
+
+			</> }
+		</>;
+	},
+);
 
 const RuleControls = withFilters(
 	'jet.fb.advanced.rule.controls',

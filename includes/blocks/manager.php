@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks;
 
+use Jet_Form_Builder\Blocks\Ssr_Validation\Rest_Validation_Endpoint;
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
@@ -214,7 +215,12 @@ class Manager {
 			'jet-form-builder-frontend-forms',
 			// assets/js/frontend-forms.js
 			Plugin::instance()->plugin_url( 'assets/js/frontend-forms-v3.js' ),
-			array( 'jquery', 'wp-i18n', 'wp-hooks' ),
+			array(
+				'jquery',
+				'wp-i18n',
+				'wp-hooks',
+				'wp-api-fetch',
+			),
 			Plugin::instance()->get_version(),
 			true
 		);
@@ -225,12 +231,13 @@ class Manager {
 			apply_filters(
 				'jet-form-builder/frontend-settings',
 				array(
-					'ajaxurl'      => Http_Tools::get_form_action_url(
+					'ajaxurl'             => Http_Tools::get_form_action_url(
 						array( 'method' => 'ajax' )
 					),
-					'devmode'      => Dev_Mode\Manager::instance()->active(),
-					'scrollOffset' => - 50,
-					'replaceAttrs' => array(
+					'devmode'             => Dev_Mode\Manager::instance()->active(),
+					'scrollOffset'        => - 50,
+					'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
+					'replaceAttrs'        => array(
 						'href',
 						'src',
 						'alt',

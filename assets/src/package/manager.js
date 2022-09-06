@@ -1,9 +1,10 @@
-import ActionFieldsMap from './components/action-fields-map';
-import ActionModal from './components/action-modal';
-import WrapperRequiredControl from './components/wrapper-required-control';
-import RequestButton from './components/request-button';
-import ValidateButton from './components/validate-button';
-import addAction from './helpers/actions/action-manager';
+import ActionFieldsMap from './action-fields-map/components/ActionFieldsMap';
+import ActionModal from './action-modal/components/ActionModal';
+import WrapperRequiredControl
+	from './action-fields-map/components/WrapperRequiredControl';
+import RequestButton from './actions/components/RequestButton';
+import ValidateButton from './actions/components/ValidateButton';
+import addAction from './actions/helpers/addAction';
 import Tools, {
 	classnames,
 	event,
@@ -12,131 +13,108 @@ import Tools, {
 	maybeCyrToLatin,
 	versionCompare,
 	convertObjectToOptionsList,
-} from './helpers/tools';
-import DynamicPreset from './components/presets/dynamic-preset';
+} from './tools';
+
+import getAvailableFields from './blocks/helpers/getAvailableFields';
+import getAvailableFieldsString
+	from './blocks/helpers/getAvailableFieldsString';
+import getBlocksByName from './blocks/helpers/getBlocksByName';
+import getFieldsWithoutCurrent from './blocks/helpers/getFieldsWithoutCurrent';
+import getFormFieldsBlocks from './blocks/helpers/getFormFieldsBlocks';
+import getInnerBlocks from './blocks/helpers/getInnerBlocks';
+import appendField from './blocks/helpers/appendField';
+
+import gatewayAttr from './gateways/helpers/gatewayAttr';
+import gatewayLabel from './gateways/helpers/gatewayLabel';
+import registerGateway from './gateways/helpers/registerGateway';
+import renderGateway from './gateways/helpers/renderGateway';
+import renderGatewayWithPlaceholder
+	from './gateways/helpers/renderGatewayWithPlaceholder';
+import useActions from './hooks/useActions';
+import useMetaState from './hooks/useMetaState';
+import useStateLoadingClasses from './hooks/useStateLoadingClasses';
+import useStateValidClasses from './hooks/useStateValidClasses';
+import useSuccessNotice from './hooks/useSuccessNotice';
+import useRequestFields from './actions/hooks/useRequestFields';
+import useSelectPostMeta from './hooks/useSelectPostMeta';
+import withRequestFields from './actions/hooks/withRequestFields';
+import useOnUpdateModal from './action-modal/hooks/useOnUpdateModal';
+import withSelectFormFields from './hooks/withSelectFormFields';
+import withSelectGateways from './gateways/hooks/withSelectGateways';
+import withDispatchGateways from './gateways/hooks/withDispatchGateways';
+import useSanitizeFieldsMap from './actions/hooks/useSanitizeFieldsMap';
+import withSelectActionLoading from './actions/hooks/withSelectActionLoading';
+import useRequestEvents from './events/hooks/useRequestEvents';
+import useBlockConditions from './block-conditions/hooks/useBlockConditions';
+import useUniqKey from './blocks/hooks/useUniqKey';
+import useIsAdvancedValidation from './blocks/hooks/useIsAdvancedValidation';
+import useBlockAttributes from './blocks/hooks/useBlockAttributes';
+
+import useActionButtonEdit from './action-buttons/hooks/useActionButtonEdit';
+import globalTab from './actions/helpers/globalTab';
+
+import DynamicPreset from './components/DynamicPreset';
 import JetFieldsMapControl from '../editor/blocks/controls/fields-map';
-import FieldWithPreset from './components/fields/field-with-preset';
-import {
-	GlobalField,
-	AvailableMapField,
-	MapField,
-} from './components/presets/preset-render';
-
-import {
-	getAvailableFields,
-	getAvailableFieldsString,
-	getBlocksByName,
-	getFieldsWithoutCurrent,
-	getFormFieldsBlocks,
-	getFormFieldsByBlock,
-	getInnerBlocks,
-	appendField,
-} from './helpers/blocks/blocks-helper';
-import {
-	gatewayAttr,
-	gatewayLabel,
-	registerGateway,
-	renderGateway,
-	renderGatewayWithPlaceholder,
-} from './helpers/gateways/gateway-helper';
-import {
-	useActions,
-	useMetaState,
-	useStateValidClasses,
-	useStateLoadingClasses,
-	useSuccessNotice,
-	useRequestFields,
-	useSelectPostMeta,
-	withRequestFields,
-	withSelectActionLoading,
-	withDispatchMeta,
-	withSelectMeta,
-	withDispatchNotice,
-	withSelectFormFields,
-	withSelectGateways,
-	withDispatchGateways,
-	withSelectActionsByType, useSanitizeFieldsMap,
-} from './helpers/hooks/hooks-helper';
-import {
-	useRequestEvents,
-} from './helpers/hooks/event-types';
-import {
-	useBlockConditions,
-} from './helpers/hooks/block-conditions';
-import {
-	useUniqKey,
-	useIsAdvancedValidation,
-	useBlockAttributes,
-} from './helpers/hooks/blocks';
-import {
-	useActionButtonEdit,
-} from './helpers/hooks/action.buttons';
-import {
-	useGroupedValidationMessages,
-} from './components/validation/hooks';
-import FieldWrapper from './components/fields/field-wrapper';
-import MacrosInserter from './components/fields/macros-inserter';
-import RepeaterWithState from './components/fields/repeater-with-state';
-import withPreset from './components/presets/preset-editor';
-import {
-	AdvancedFields,
-	GeneralFields,
-	ToolBarFields,
-	FieldControl,
-} from './components/fields/field-control';
-import PlaceholderMessage from './components/actions/placeholder-message';
-import ActionMessages from './components/actions/action-messages';
-import HorizontalLine from './components/horizontal-line';
-import RequestLoadingButton from './components/request-loading-button';
-import {
-	actionByTypeList,
-	convertListToFieldsMap,
-	fromLocalizeHelper,
-	getActionSettings,
-	prepareActionsListByType,
-} from './helpers/actions/action-helper';
-import gatewayActionAttributes
-	from './helpers/gateways/gateway-action-attrubites';
-import { globalTab } from './helpers/settings/helper';
-import FieldSettingsWrapper from './components/fields/field-settings-wrapper';
-import GroupedSelectControl from './components/grouped-select-control';
-import {
-	getBlockControls,
-} from './components/fields/controls';
-import BaseHelp from './components/controls/base-help';
-import ValidateButtonWithStore from './components/validate-button-with-store';
-import GatewayFetchButton from './components/gateway-fetch-button';
-import './stores/manager';
-import ActionModalContext from './context/action.modal';
-import SafeDeleteContext from './context/safe.delete';
-import RepeaterItemContext from './context/repeater.item';
+import FieldWithPreset from './components/FieldWithPreset';
+import GlobalFieldPreset from './components/GlobalFieldPreset';
+import AvailableMapFieldPreset from './components/AvailableMapFieldPreset';
+import MapFieldPreset from './components/MapFieldPreset';
+import useGroupedValidationMessages
+	from './validation/hooks/useGroupedValidationMessages';
+import FieldWrapper from './blocks/components/FieldWrapper';
+import MacrosInserter from './components/MacrosInserter';
+import RepeaterWithState from './repeater/components/RepeaterWithState';
+import withPreset from './components/withPreset';
+import AdvancedFields from './blocks/components/AdvancedFields';
+import GeneralFields from './blocks/components/GeneralFields';
+import ToolBarFields from './blocks/components/ToolBarFields';
+import PlaceholderMessage from './actions/components/PlaceholderMessage';
+import ActionMessages from './actions/components/ActionMessages';
+import HorizontalLine from './components/HorizontalLine';
+import RequestLoadingButton from './actions/components/RequestLoadingButton';
+import convertListToFieldsMap from './actions/helpers/convertListToFieldsMap';
+import FieldSettingsWrapper from './blocks/components/FieldSettingsWrapper';
+import GroupedSelectControl from './components/GroupedSelectControl';
+import getBlockControls from './blocks/helpers/getBlockControls';
+import BaseHelp from './components/BaseHelp';
+import ValidateButtonWithStore
+	from './actions/components/ValidateButtonWithStore';
+import GatewayFetchButton from './gateways/components/GatewayFetchButton';
+import './store.manager';
+import ActionModalContext from './action-modal/context/ActionModalContext';
+import SafeDeleteContext from './repeater/context/safe.delete';
+import RepeaterItemContext from './repeater/context/repeater.item';
 import ActionListItemContext from './context/action.list.item';
-import RepeaterBodyContext from './context/repeater.custom.item.body';
-import RepeaterHeadContext from './context/repeater.custom.item.head';
-import RepeaterButtonsContext from './context/repeater.custom.item.buttons';
+import RepeaterBodyContext from './repeater/context/repeater.custom.item.body';
+import RepeaterHeadContext from './repeater/context/repeater.custom.item.head';
+import RepeaterButtonsContext
+	from './repeater/context/repeater.custom.item.buttons';
 import BlockValueItemContext from './context/block.value.item.context';
-import SafeDeleteToggle from './components/fields/safe.delete.toggle';
-import RepeaterAddNew from './components/fields/repeater.add.new';
-import Repeater from './components/fields/repeater';
+import SafeDeleteToggle from './repeater/components/safe.delete.toggle';
+import RepeaterAddNew from './repeater/components/repeater.add.new';
+import Repeater from './repeater/components/repeater';
 import ValidationToggleGroup
-	from './components/validation/validationToggleGroup';
+	from './validation/components/ValidationToggleGroup';
 import ValidationBlockMessage
-	from './components/validation/ValidationBlockMessage';
+	from './validation/components/ValidationBlockMessage';
 import ValidationMetaMessage
-	from './components/validation/ValidationMetaMessage';
-import CurrentActionEditContext from './context/current.action.edit';
-import ActionFieldsMapContext from './context/action.fields.map.context';
-import CurrentPropertyMapContext from './context/current.property.map';
-import DynamicPropertySelect from './components/dynamic.property.select';
-import ActionFetchButton from './components/action.fetch.button';
-import DynamicValues from './components/dynamic.value/DynamicValues';
-import RepeaterAddOrOperator from './components/fields/repeater.add.or';
+	from './validation/components/ValidationMetaMessage';
+import CurrentActionEditContext
+	from './actions/context/CurrentActionEditContext';
+import ActionFieldsMapContext
+	from './action-fields-map/context/ActionFieldsMapContext';
+import CurrentPropertyMapContext
+	from './action-fields-map/context/CurrentPropertyMapContext';
+import DynamicPropertySelect
+	from './action-fields-map/components/DynamicPropertySelect';
+import ActionFetchButton from './actions/components/ActionFetchButton';
+import DynamicValues from './dynamic.value/components/DynamicValues';
+import RepeaterAddOrOperator from './repeater/components/repeater.add.or';
 import EditAdvancedRulesButton
-	from './components/validation/EditAdvancedRulesButton';
-import { useOnUpdateModal } from './helpers/hooks/modal';
-import RepeaterStateContext from './context/repeater.state';
-import RepeaterState from './components/fields/repeater.state';
-
+	from './validation/components/EditAdvancedRulesButton';
+import RepeaterStateContext from './repeater/context/repeater.state';
+import RepeaterState from './repeater/components/repeater.state';
+import FieldControl from './blocks/components/FieldControl';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -165,9 +143,9 @@ window.JetFBComponents = {
 	DynamicPreset,
 	JetFieldsMapControl,
 	FieldWithPreset,
-	GlobalField,
-	AvailableMapField,
-	MapField,
+	GlobalField: GlobalFieldPreset,
+	AvailableMapField: AvailableMapFieldPreset,
+	MapField: MapFieldPreset,
 	FieldWrapper,
 	MacrosInserter,
 	RepeaterWithState,
@@ -197,7 +175,6 @@ window.JetFBComponents = {
 window.JetFBActions = {
 	addAction,
 	withPreset,
-	getFormFieldsByBlock,
 	getInnerBlocks,
 	getAvailableFieldsString,
 	getAvailableFields,
@@ -209,12 +186,8 @@ window.JetFBActions = {
 	Tools,
 	event,
 	listen,
-	actionByTypeList,
-	getActionSettings,
-	fromLocalizeHelper,
 	renderGateway,
 	renderGatewayWithPlaceholder,
-	gatewayActionAttributes,
 	globalTab,
 	versionCompare,
 	convertListToFieldsMap,
@@ -224,7 +197,6 @@ window.JetFBActions = {
 	classnames,
 	getBlocksByName,
 	convertObjectToOptionsList,
-	prepareActionsListByType,
 	appendField,
 };
 
@@ -247,13 +219,9 @@ window.JetFBHooks = {
 	withRequestFields,
 	useRequestFields,
 	withSelectActionLoading,
-	withDispatchMeta,
-	withSelectMeta,
-	withDispatchNotice,
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
-	withSelectActionsByType,
 	useOnUpdateModal,
 };
 

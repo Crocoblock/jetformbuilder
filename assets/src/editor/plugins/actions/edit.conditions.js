@@ -1,6 +1,5 @@
 import { conditionSettings } from './options';
 import { useCurrentAction, useUpdateCurrentAction } from './hooks';
-import BaseHelp from '../../../package/components/controls/base-help';
 
 const {
 	      FieldWithPreset,
@@ -10,6 +9,7 @@ const {
 	      RepeaterAddNew,
 	      SafeDeleteToggle,
 	      RepeaterState,
+	      BaseHelp,
       } = JetFBComponents;
 
 const {

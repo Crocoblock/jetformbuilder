@@ -1,6 +1,7 @@
 import ValueMacro from './ValueMacro';
 import MinAttrMacro from './MinAttrMacro';
 import MaxAttrMacro from './MaxAttrMacro';
+import RemainingMacro from './RemainingMacro';
 
 const {
 	      applyFilters,
@@ -12,6 +13,7 @@ const macros = applyFilters(
 		ValueMacro,
 		MinAttrMacro,
 		MaxAttrMacro,
+		RemainingMacro,
 	],
 );
 

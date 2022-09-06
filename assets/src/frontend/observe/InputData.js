@@ -158,6 +158,7 @@ class InputData {
 		const [ node ] = this.nodes;
 		const wrapper  = node.closest( '.jet-form-builder-row' );
 
+		node.disabled = this.loading.current;
 		wrapper.classList.toggle( 'is-loading', this.loading.current );
 	}
 

@@ -1,6 +1,8 @@
 const { createContext } = wp.element;
 
-export default createContext( {
+const ActionListItemContext = createContext( {
 	index: - 1,
 	action: {},
 } );
+
+export default ActionListItemContext;

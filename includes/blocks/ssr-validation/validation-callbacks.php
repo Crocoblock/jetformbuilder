@@ -45,7 +45,7 @@ class Validation_Callbacks {
 	}
 
 	protected function validate_custom( $value, string $function_name ): bool {
-		$name = preg_replace( '/[^a-z0-9_\-]/i', '', $function_name );
+		$name = preg_replace( '/[^\w\-]/i', '', $function_name );
 
 		if ( ! function_exists( $name ) ) {
 			return false;

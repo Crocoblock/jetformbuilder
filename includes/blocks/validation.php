@@ -12,6 +12,7 @@ use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
 use Jet_Form_Builder\Blocks\Ssr_Validation\Validation_Callbacks;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
+use Jet_Form_Builder\Blocks\Validation_Messages\Has_Remaining_Chars;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
@@ -42,7 +43,7 @@ class Validation implements Arrayable {
 	 * @var Base_Message[]
 	 */
 	private $messages;
-	public $callbacks;
+	public  $callbacks;
 	private $settings = array();
 
 	public function __construct() {
@@ -68,6 +69,7 @@ class Validation implements Arrayable {
 	 */
 	private function get_messages(): array {
 		return array(
+			new Has_Remaining_Chars(),
 			new Is_Number_Max(),
 			new Is_Number_Min(),
 			new Is_Char_Max(),

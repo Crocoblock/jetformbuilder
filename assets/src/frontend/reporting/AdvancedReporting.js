@@ -75,7 +75,7 @@ class AdvancedReporting extends ReportingInterface {
 		 */
 		this.setRestrictions();
 
-		this.needDebounce = this.restrictions.some(
+		this.hasServerSide = this.restrictions.some(
 			current => current.isServerSide(),
 		);
 	}

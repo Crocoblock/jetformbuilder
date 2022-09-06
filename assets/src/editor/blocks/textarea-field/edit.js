@@ -83,9 +83,12 @@ export default function TextareaEdit( props ) {
 			>
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
-					<ValidationBlockMessage name="empty"/>
-					<ValidationBlockMessage name="char_max"/>
+					{ Boolean( attributes.maxlength ) && <>
+						<ValidationBlockMessage name="has_remaining_chars"/>
+						<ValidationBlockMessage name="char_max"/>
+					</> }
 					<ValidationBlockMessage name="char_min"/>
+					<ValidationBlockMessage name="empty"/>
 				</> }
 			</PanelBody>
 			<AdvancedFields

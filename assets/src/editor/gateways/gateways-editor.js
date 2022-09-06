@@ -1,11 +1,8 @@
 import * as paypal from './paypal';
 
 const {
-	prepareActionsListByType,
-	fromLocalizeHelper,
 	gatewayAttr,
 	renderGateway,
-	gatewayActionAttributes,
 	renderGatewayWithPlaceholder,
 } = JetFBActions;
 
@@ -13,11 +10,7 @@ const { __ } = wp.i18n;
 
 const {
 	TextareaControl,
-	CheckboxControl,
-	SelectControl,
 	BaseControl,
-	RadioControl,
-	ToggleControl,
 } = wp.components;
 
 const {
@@ -27,37 +20,23 @@ const {
 
 const { compose } = wp.compose;
 
-const {
-	useState,
-	useEffect,
-} = wp.element;
 
 const {
-	withSelectMeta,
 	withSelectGateways,
 	withDispatchGateways,
-	withSelectFormFields,
 } = JetFBHooks;
 
 const gatewaysData = gatewayAttr();
 const label = gatewayAttr( 'labels' );
-const callableGateway = gatewayAttr( 'additional' );
 
 function GatewaysEditor( {
-	_jf_actions: ActionsMeta,
-	setGateway,
 	gatewayGeneral,
 	setGatewayInner,
-	formFields,
 	loadingGateway,
 	gatewayRequest,
 	CURRENT_SCENARIO,
 	currentScenario,
 } ) {
-
-	const insertPostActions = prepareActionsListByType( ActionsMeta, 'insert_post', true );
-
-	const additional = callableGateway( gatewayGeneral.gateway );
 
 	/**
 	 * Used for set notifications and gateway type settings
@@ -97,33 +76,6 @@ function GatewaysEditor( {
 	};
 
 	const GatewayFooter = <>
-		{ 1 !== additional.version && <>
-			<BaseControl
-				label={ label( 'action_order' ) }
-				key='gateway_action_order_base_control'
-			>
-				<RadioControl
-					className='jet-control-clear-full jet-user-fields-map__list'
-					key='gateway_action_order'
-					options={ insertPostActions }
-					selected={ gatewayGeneral.action_order }
-					onChange={ newVal => {
-						setGateway( { action_order: Number( newVal ) } );
-					} }
-				/>
-			</BaseControl>
-
-			<SelectControl
-				label={ label( 'price_field' ) }
-				key={ 'form_fields_price_field' }
-				value={ gatewayGeneral.price_field }
-				labelPosition='side'
-				onChange={ price_field => {
-					setGateway( { price_field } );
-				} }
-				options={ formFields }
-			/>
-		</> }
 		{ renderGatewayWithPlaceholder(
 			gatewayGeneral.gateway,
 			{ gatewayGeneral, CURRENT_SCENARIO, currentScenario },
@@ -165,8 +117,6 @@ function GatewaysEditor( {
 export default compose(
 	withSelect( ( ...props ) => (
 		{
-			...withSelectMeta( '_jf_actions' )( ...props ),
-			...withSelectFormFields( [], '--' )( ...props ),
 			...withSelectGateways( ...props ),
 		}
 	) ),

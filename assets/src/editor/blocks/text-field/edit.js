@@ -72,6 +72,7 @@ export default function TextEdit( props ) {
 				key={ uniqKey( 'GeneralFields' ) }
 				{ ...props }
 			/>
+			<DynamicValues/>
 			<FieldSettingsWrapper { ...props }>
 				<SelectControl
 					key="field_type"
@@ -183,12 +184,14 @@ export default function TextEdit( props ) {
 					{ attributes.enable_input_mask && (
 						<ValidationBlockMessage name="inputmask"/>
 					) }
-					<ValidationBlockMessage name="empty"/>
-					<ValidationBlockMessage name="char_max"/>
+					{ Boolean( attributes.maxlength ) && <>
+						<ValidationBlockMessage name="has_remaining_chars"/>
+						<ValidationBlockMessage name="char_max"/>
+					</> }
 					<ValidationBlockMessage name="char_min"/>
+					<ValidationBlockMessage name="empty"/>
 				</> }
 			</PanelBody>
-			<DynamicValues/>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }

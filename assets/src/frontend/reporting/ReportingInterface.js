@@ -36,11 +36,11 @@ class ReportingInterface {
 		this.errors = null;
 
 		// true, when field has server-side restrictions
-		this.needDebounce = false;
+		this.hasServerSide = false;
 	}
 
 	validateWithNoticeDebounced( force = false ) {
-		if ( force || ! this.needDebounce ) {
+		if ( force || !this.hasServerSide ) {
 			this.validateWithNotice();
 
 			return;
@@ -100,11 +100,15 @@ class ReportingInterface {
 			return this.errors;
 		}
 
-		this.input.loading.start();
+		if ( this.hasServerSide ) {
+			this.input.loading.start();
+		}
 
 		this.errors = await this.isValid();
 
-		this.input.loading.end();
+		if ( this.hasServerSide ) {
+			this.input.loading.end();
+		}
 
 		return this.errors;
 	}

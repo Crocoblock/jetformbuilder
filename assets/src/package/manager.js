@@ -53,18 +53,18 @@ import useBlockAttributes from './blocks/hooks/useBlockAttributes';
 import useActionButtonEdit from './action-buttons/hooks/useActionButtonEdit';
 import globalTab from './actions/helpers/globalTab';
 
-import DynamicPreset from './components/DynamicPreset';
+import DynamicPreset from './preset/components/DynamicPreset';
 import JetFieldsMapControl from '../editor/blocks/controls/fields-map';
-import FieldWithPreset from './components/FieldWithPreset';
-import GlobalFieldPreset from './components/GlobalFieldPreset';
-import AvailableMapFieldPreset from './components/AvailableMapFieldPreset';
-import MapFieldPreset from './components/MapFieldPreset';
+import FieldWithPreset from './preset/components/FieldWithPreset';
+import GlobalFieldPreset from './preset/components/GlobalFieldPreset';
+import AvailableMapFieldPreset from './preset/components/AvailableMapFieldPreset';
+import MapFieldPreset from './preset/components/MapFieldPreset';
 import useGroupedValidationMessages
 	from './validation/hooks/useGroupedValidationMessages';
 import FieldWrapper from './blocks/components/FieldWrapper';
 import MacrosInserter from './components/MacrosInserter';
 import RepeaterWithState from './repeater/components/RepeaterWithState';
-import withPreset from './components/withPreset';
+import withPreset from './preset/components/withPreset';
 import AdvancedFields from './blocks/components/AdvancedFields';
 import GeneralFields from './blocks/components/GeneralFields';
 import ToolBarFields from './blocks/components/ToolBarFields';
@@ -132,6 +132,7 @@ import MacrosButtonTemplate
 import MacrosFields from './macros.button/components/MacrosFields';
 import ShowPopoverContext from './macros.button/context/ShowPopoverContext';
 import PopoverItem from './macros.button/context/PopoverItem';
+import PresetButton from './preset/components/PresetButton';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -201,6 +202,7 @@ window.JetFBComponents = {
 	MacrosFieldsTemplate,
 	ShowPopoverContext,
 	PopoverItem,
+	PresetButton,
 };
 
 // JFBFunctions

@@ -1,7 +1,7 @@
 import withPreset from './withPreset';
 import GlobalFieldPreset from './GlobalFieldPreset';
 import MapFieldPreset from './MapFieldPreset';
-import ActionModalContext from '../action-modal/context/ActionModalContext';
+import ActionModalContext from '../../action-modal/context/ActionModalContext';
 
 const {
 	      useState,

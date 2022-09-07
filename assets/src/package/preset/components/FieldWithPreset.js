@@ -1,4 +1,4 @@
-import ActionModal from '../action-modal/components/ActionModal';
+import ActionModal from '../../action-modal/components/ActionModal';
 
 const {
 	      Path,

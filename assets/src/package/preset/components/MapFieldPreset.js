@@ -1,4 +1,4 @@
-import GroupedSelectControl from './GroupedSelectControl';
+import GroupedSelectControl from '../../components/GroupedSelectControl';
 
 const {
 	      TextControl,

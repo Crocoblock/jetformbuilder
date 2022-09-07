@@ -57,6 +57,10 @@ function ListActionItem( props ) {
 		      setMeta,
 	      } = useDispatch( 'jet-forms/actions', [] );
 
+	const currentAction = useSelect(
+		select => select( 'jet-forms/actions' ).getCurrentAction(),
+	);
+
 	const header = applyFilters(
 		`jet.fb.section.actions.header.${ action.type }`, null, action );
 
@@ -73,6 +77,12 @@ function ListActionItem( props ) {
 	if ( !isExecute ) {
 		wrapper.push( 'is-disabled' );
 	}
+
+	if ( currentAction?.id === action.id ) {
+		wrapper.push( 'is-current' );
+	}
+
+	const [ showDetails, setShowDetails ] = useState( false );
 
 	const ActionDropDown = () => <DropdownMenu
 		icon={ 'ellipsis' }
@@ -125,18 +135,38 @@ function ListActionItem( props ) {
 			{ header }
 		</CardHeader> }
 		<CardBody>
-			<SelectControl
-				value={ action.type }
-				options={ actionTypes }
-				onChange={ type => updateActionObj( action.id, { type } ) }
+			<div
+				className={ 'jet-form-action-control' }
 			>
-				{ actionTypes.map( type => <option
-					key={ action.id + '__' + type.value }
-					value={ type.value }
-					disabled={ type.disabled }
-					dangerouslySetInnerHTML={ { __html: type.label } }
-				/> ) }
-			</SelectControl>
+				<Button
+					isSmall
+					variant="tertiary"
+					icon={ showDetails ? 'hidden' : 'editor-help' }
+					label={ __(
+						'Show details about selected action',
+						'jet-form-builder',
+					) }
+					className={ 'jet-fb-is-thick' }
+					onClick={ () => setShowDetails( prev => !prev ) }
+				/>
+				<SelectControl
+					value={ action.type }
+					options={ actionTypes }
+					onChange={ type => updateActionObj( action.id, { type } ) }
+				>
+					{ actionTypes.map( type => <option
+						key={ action.id + '__' + type.value }
+						value={ type.value }
+						disabled={ type.disabled }
+						dangerouslySetInnerHTML={ { __html: type.label } }
+					/> ) }
+				</SelectControl>
+			</div>
+			{ showDetails && <div className="jet-form-action-details">
+				<div data-title={ __( 'Action ID:', 'jet-form-builder' ) }>
+					{ action.id }
+				</div>
+			</div> }
 			{ applyFilters(
 				`jet.fb.section.actions.afterSelect.${ action.type }`, null,
 				action, actions ) }

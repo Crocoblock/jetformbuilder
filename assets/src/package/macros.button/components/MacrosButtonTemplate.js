@@ -23,16 +23,17 @@ function MacrosButtonTemplate( {
 			icon={ showPopover ? 'no-alt' : 'admin-tools' }
 			variant="tertiary"
 			isSmall
+			isDestructive={ showPopover }
 			className={ 'jet-fb-is-thick' }
 			onClick={ () => setShowPopover( prev => !prev ) }
 			{ ...props }
 		/>
 		{ showPopover && (
 			<Popover
-				anchorRef={ buttonRef }
+				anchorRef={ buttonRef.current }
 				position={ 'top' }
 				noArrow={ false }
-				headerTitle={ title }
+				isAlternate
 			>
 				{ children }
 			</Popover>

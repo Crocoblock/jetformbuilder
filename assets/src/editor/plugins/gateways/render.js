@@ -1,35 +1,34 @@
 import GatewaysEditor from '../../gateways/gateways-editor';
 
-const { __ } = wp.i18n;
+const {
+	      RadioControl,
+	      Button,
+      } = wp.components;
 
 const {
-		  RadioControl,
-		  Button,
-		  withFilters,
-	  } = wp.components;
+	      withDispatch,
+	      withSelect,
+      } = wp.data;
 
 const {
-		  withDispatch,
-		  withSelect,
-	  } = wp.data;
+	      useState,
+	      useEffect,
+      } = wp.element;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      compose,
+      } = wp.compose;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
-
-const { applyFilters } = wp.hooks;
-
-const { compose } = wp.compose;
-
-const { ActionModal } = JetFBComponents;
-
+	      ActionModal,
+      } = JetFBComponents;
 const {
-		  withDispatchMeta,
-		  withSelectMeta,
-		  withDispatchGateways,
-		  withSelectGateways,
-	  } = JetFBHooks;
+	      withDispatchGateways,
+	      withSelectGateways,
+	      useMetaState,
+      } = JetFBHooks;
 
 const gatewaysData = window.JetFormEditorData.gateways;
 
@@ -42,97 +41,58 @@ const getGatewayLabel = ( type ) => {
 function PluginGateways( props ) {
 
 	const {
-			  _jf_gateways: GatewaysMeta,
-			  _jf_actions: ActionsMeta,
-			  ChangeGateway,
-			  setGateway,
-			  setGatewayScenario,
-			  clearGateway,
-			  clearScenario,
-			  gatewayGeneral,
-			  gatewayScenario,
-		  } = props;
+		      setGateway,
+		      setGatewayScenario,
+		      clearGateway,
+		      clearScenario,
+		      gatewayGeneral,
+		      gatewayScenario,
+	      } = props;
 
-	const issetActionType = type => {
-		return Boolean( ActionsMeta.find( action => type === action.type ) );
-	};
-
-	const getDisabledStateButton = () => {
-		return applyFilters( 'jet.fb.gateways.getDisabledStateButton', ! issetActionType( 'insert_post' ), props, issetActionType );
-	};
-
-	const getDisabledInfo = () => {
-		return applyFilters(
-			'jet.fb.gateways.getDisabledInfo',
-			<p>{ __( 'Please add \`Insert/Update Post\` action', 'jet-form-builder' ) }</p>,
-			props,
-		);
-	};
-
-	const isIssetGateway = () => {
-		return - 1 !== gatewaysData.list.findIndex( gateway => GatewaysMeta.gateway === gateway.value );
-	};
-
+	const [ meta, setMeta ]   = useMetaState( '_jf_gateways' );
 	const [ isEdit, setEdit ] = useState( false );
-	const [ isDisabled, setDisabled ] = useState( getDisabledStateButton );
-	const [ disabledInfo, setDisabledInfo ] = useState( getDisabledInfo );
-	const [ issetGateway, setIssetGateway ] = useState( isIssetGateway );
 
 	useEffect( () => {
 		if ( isEdit ) {
-			setGateway( GatewaysMeta );
-			setGatewayScenario( GatewaysMeta[ GatewaysMeta.gateway ]?.scenario );
-		} else {
+			setGateway( meta );
+			setGatewayScenario(
+				meta[ meta.gateway ]?.scenario );
+		}
+		else {
 			clearGateway();
 			clearScenario();
 		}
 	}, [ isEdit ] );
 
-
 	const closeModal = ( newMeta = false ) => {
 		if ( false !== newMeta ) {
-			ChangeGateway( newMeta );
+			setMeta( newMeta );
 		}
 		setEdit( false );
 	};
 
-	useEffect( () => {
-		setDisabled( getDisabledStateButton() );
-		setDisabledInfo( getDisabledInfo() );
-		setIssetGateway( isIssetGateway() );
-	}, [ GatewaysMeta.gateway, ActionsMeta ] );
-
 	return <>
 		<RadioControl
 			key={ 'gateways_radio_control' }
-			selected={ GatewaysMeta.gateway }
+			selected={ meta.gateway }
 			options={ [
 				{ label: 'None', value: 'none' },
 				...gatewaysData.list,
 			] }
-			onChange={ val => {
-				ChangeGateway( {
-					...GatewaysMeta,
-					gateway: val,
-				} );
+			onChange={ gateway => {
+				setMeta( { ...meta, gateway } );
 			} }
 		/>
-		{ (
-			GatewaysMeta.gateway && 'none' !== GatewaysMeta.gateway && issetGateway
-		) && <>
-			<Button
-				onClick={ () => setEdit( true ) }
-				icon={ 'admin-tools' }
-				style={ {
-					margin: '1em 0',
-				} }
-				isSecondary
-				disabled={ isDisabled }
-			>
-				{ __( 'Edit' ) }
-			</Button>
-			{ isDisabled && disabledInfo }
-		</> }
+		<Button
+			onClick={ () => setEdit( true ) }
+			icon={ 'admin-tools' }
+			style={ {
+				margin: '1em 0',
+			} }
+			isSecondary
+		>
+			{ __( 'Edit', 'jet-form-builder' ) }
+		</Button>
 		{ isEdit && (
 			<ActionModal
 				classNames={ [ 'width-60' ] }
@@ -147,7 +107,7 @@ function PluginGateways( props ) {
 						scenario: gatewayScenario,
 					},
 				} ) }
-				title={ `Edit ${ getGatewayLabel( GatewaysMeta.gateway ) } Settings` }
+				title={ `Edit ${ getGatewayLabel( meta.gateway ) } Settings` }
 			>
 				<GatewaysEditor/>
 			</ActionModal>
@@ -156,18 +116,6 @@ function PluginGateways( props ) {
 }
 
 export default compose(
-	withDispatch( ( ...props ) => (
-		{
-			...withDispatchMeta( '_jf_gateways', 'ChangeGateway' )( ...props ),
-			...withDispatchGateways( ...props ),
-		}
-	) ),
-	withSelect( ( ...props ) => (
-		{
-			...withSelectGateways( ...props ),
-			...withSelectMeta( '_jf_gateways' )( ...props ),
-			...withSelectMeta( '_jf_actions' )( ...props ),
-
-		}
-	) ),
+	withDispatch( withDispatchGateways ),
+	withSelect( withSelectGateways ),
 )( PluginGateways );

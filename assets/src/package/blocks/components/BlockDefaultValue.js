@@ -1,7 +1,6 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
-import DynamicPreset from '../../components/DynamicPreset';
-import ActionModal from '../../action-modal/components/ActionModal';
 import MacrosFields from '../../macros.button/components/MacrosFields';
+import PresetButton from '../../preset/components/PresetButton';
 
 const {
 	      __,
@@ -9,11 +8,7 @@ const {
 const {
 	      TextControl,
 	      Flex,
-	      Button,
       } = wp.components;
-const {
-	      useState,
-      } = wp.element;
 const {
 	      useInstanceId,
       } = wp.compose;
@@ -23,8 +18,6 @@ function BlockDefaultValue( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
-
-	const [ showModal, setShowModal ] = useState( false );
 
 	const instanceId = useInstanceId( TextControl, 'jfb-field--name' );
 
@@ -39,18 +32,14 @@ function BlockDefaultValue( { label, help } ) {
 			<label htmlFor={ instanceId }>
 				{ label ?? __( 'Default Value', 'jet-form-builder' ) }
 			</label>
-			<Button
-				icon={ 'database' }
-				variant="tertiary"
-				isSmall
-				className={ 'jet-fb-is-thick' }
-				onClick={ () => setShowModal( true ) }
+			<PresetButton
+				value={ attributes.default }
+				onChange={ val => setAttributes( { default: val } ) }
 			/>
 			<MacrosFields
 				onClick={ name => setAttributes( {
-					default: `%${ name }%`,
+					default: attributes.default + `%${ name }%`,
 				} ) }
-				title={ 'Form Fields' }
 			/>
 		</Flex>
 		<TextControl
@@ -60,17 +49,6 @@ function BlockDefaultValue( { label, help } ) {
 			hideLabelFromVision
 			onChange={ val => setAttributes( { default: val } ) }
 		/>
-		{ showModal && <ActionModal
-			classNames={ [ 'width-60' ] }
-			title={ __( 'Edit Preset for Dynamic Value', 'jet-form-builder' ) }
-			onRequestClose={ () => setShowModal( false ) }
-		>
-			<DynamicPreset
-				key={ 'dynamic_key_preset' }
-				value={ attributes.default }
-				onSavePreset={ val => setAttributes( { default: val } ) }
-			/>
-		</ActionModal> }
 	</>;
 }
 

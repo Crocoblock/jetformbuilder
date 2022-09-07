@@ -18,12 +18,17 @@ function MacrosFieldsTemplate( { children, ...props } ) {
 	);
 
 	return <MacrosButtonTemplate disabled={ !fields.length } { ...props }>
-		{ Boolean( fields.length ) &&
-		fields.map( current => <div key={ 'field_' + current.value }>
-			<PopoverItem.Provider value={ current }>
-				{ children }
-			</PopoverItem.Provider>
-		</div> ) }
+		{ Boolean( fields.length ) && <ul style={ {
+			padding: '0 1em',
+		} }>
+			{ fields.map( ( current, index ) => <li
+				key={ index + 'field_' + current.value }
+			>
+				<PopoverItem.Provider value={ current }>
+					{ children }
+				</PopoverItem.Provider>
+			</li> ) }
+		</ul> }
 	</MacrosButtonTemplate>;
 
 }

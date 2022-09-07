@@ -3,9 +3,9 @@ import Repeater from '../../repeater/components/repeater';
 import RepeaterAddNew from '../../repeater/components/repeater.add.new';
 import BaseHelp from '../../components/BaseHelp';
 import RepeaterState from '../../repeater/components/repeater.state';
-import ActionModal from '../../action-modal/components/ActionModal';
-import DynamicPreset from '../../components/DynamicPreset';
 import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
+import PresetButton from '../../preset/components/PresetButton';
+import MacrosFields from '../../macros.button/components/MacrosFields';
 
 const {
 	      __,
@@ -13,7 +13,6 @@ const {
 const {
 	      useState,
 	      useContext,
-	      useEffect,
 	      Fragment,
       } = wp.element;
 const {
@@ -84,24 +83,23 @@ function DynamicItemBody() {
 	useOnUpdateModal( () => update( current ) );
 
 	const [ showDetails, setShowDetails ] = useState( false );
-	const [ showPreset, setShowPreset ]   = useState( false );
 
 	return <>
 		<SelectControl
 			options={ [
 				{
-					value: 'conditions_met',
-					label: __( 'On conditions met', 'jet-form-builder' ),
+					value: 'once',
+					label: __( 'Once', 'jet-form-builder' ),
 				},
 				{
-					value: 'value_change',
-					label: __( 'On value change', 'jet-form-builder' ),
+					value: 'always',
+					label: __( 'Always', 'jet-form-builder' ),
 				},
 			] }
-			value={ current.method ?? 'conditions_met' }
-			label={ __( 'Choose a method of application', 'jet-form-builder' ) }
+			value={ current.frequency ?? 'always' }
+			label={ __( 'Choose a frequency', 'jet-form-builder' ) }
 			labelPosition={ 'side' }
-			onChange={ method => updateCurrent( { method } ) }
+			onChange={ frequency => updateCurrent( { frequency } ) }
 		/>
 		<Flex
 			align={ 'flex-start' }
@@ -120,12 +118,16 @@ function DynamicItemBody() {
 						className={ 'jet-fb-is-thick' }
 						onClick={ () => setShowDetails( prev => !prev ) }
 					/>
-					<Button
-						icon={ 'database' }
-						variant="tertiary"
-						isSmall
-						className={ 'jet-fb-is-thick' }
-						onClick={ () => setShowPreset( prev => !prev ) }
+					<PresetButton
+						value={ current.to_set }
+						onChange={ to_set => updateCurrent( { to_set } ) }
+					/>
+					<MacrosFields
+						onClick={ name => updateCurrent( {
+							to_set: (
+								current.to_set ?? ''
+							) + `%${ name }%`,
+						} ) }
 					/>
 				</Flex>
 				{ showDetails && <BaseHelp>
@@ -145,26 +147,14 @@ function DynamicItemBody() {
 				/>
 			</FlexItem>
 		</Flex>
-		{ showPreset && <ActionModal
-			classNames={ [ 'width-60' ] }
-			title={ __( 'Edit Preset for Dynamic Value', 'jet-form-builder' ) }
-			onRequestClose={ () => setShowPreset( false ) }
-		>
-			<DynamicPreset
-				key={ 'dynamic_key_preset' }
-				value={ current.to_set }
-				onSavePreset={ to_set => updateCurrent( { to_set } ) }
-			/>
-		</ActionModal> }
-		{ 'value_change' === current.method ? <>
-		</> : <RepeaterState state={ updateConditions }>
-			  <Repeater items={ current.conditions ?? [] }>
-				  Тут могло бы быть ваше условие
-			  </Repeater>
-			  <RepeaterAddNew>
-				  { __( 'Add New Condition', 'jet-form-builder' ) }
-			  </RepeaterAddNew>
-		  </RepeaterState> }
+		<RepeaterState state={ updateConditions }>
+			<Repeater items={ current.conditions ?? [] }>
+				Тут могло бы быть ваше условие
+			</Repeater>
+			<RepeaterAddNew>
+				{ __( 'Add New Condition', 'jet-form-builder' ) }
+			</RepeaterAddNew>
+		</RepeaterState>
 	</>;
 }
 

@@ -29,9 +29,10 @@ if ( ! empty( $args['allowed_mimes'] ) ) {
 	$this->add_attribute( 'accept', implode( ',', $args['allowed_mimes'] ) );
 }
 
-$max_size = File_Upload::instance()->get_max_size_for_field( $args );
+$max_size = $this->block_type->get_max_size();
 
 $this->add_attribute( 'data-max_size', $max_size );
+$max_size_message = $this->block_type->get_max_size_message();
 
 //$value = File_Upload::instance()->get_result_value( $args );
 //$value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) : $value;
@@ -50,7 +51,7 @@ $this->add_attribute( 'data-max_size', $max_size );
 		<input <?php $this->render_attributes_string(); ?>>
 		<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 	</div>
-	<div class="jet-form-builder-file-upload__message"><small><?php echo __( 'Maximum file size', 'jet-form-builder' ); ?>: <?php echo size_format( $max_size ); ?></small></div>
+	<div class="jet-form-builder-file-upload__message"><small><?php echo wp_kses_post( $max_size_message ); ?></small></div>
 	<div class="jet-form-builder-file-upload__errors is-hidden"></div>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

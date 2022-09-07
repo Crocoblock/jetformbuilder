@@ -29,12 +29,14 @@ class Trash_Action extends Base_Post_Action {
 			return;
 		}
 
-		$this->inserted_id = wp_trash_post(
+		$post = wp_trash_post(
 			$this->modifier->source_arr['ID'] ?? 0
 		);
 
-		if ( ! is_a( $this->inserted_id, \WP_Post::class ) ) {
+		if ( ! is_a( $post, \WP_Post::class ) ) {
 			throw new Action_Exception( 'failed' );
 		}
+
+		$this->inserted_id = $post->ID;
 	}
 }

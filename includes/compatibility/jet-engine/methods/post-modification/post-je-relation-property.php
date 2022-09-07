@@ -39,11 +39,17 @@ class Post_Je_Relation_Property extends Base_Object_Property implements
 
 		/** @var Base_Post_Action $action */
 		$action = $modifier->get_action();
+		$id     = $action->get_inserted();
+
+		if ( ! $id ) {
+			return;
+		}
+
 
 		foreach ( $this->relation as $rel_key => $rel_posts ) {
 			jet_engine()->relations->process_meta(
 				false,
-				$action->get_inserted(),
+				$id,
 				$rel_key,
 				$rel_posts
 			);

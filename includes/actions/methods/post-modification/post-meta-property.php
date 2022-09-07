@@ -50,17 +50,26 @@ class Post_Meta_Property extends Base_Object_Property implements
 	public function do_after( Abstract_Modifier $modifier ) {
 		/** @var Base_Post_Action $action */
 		$action = $modifier->get_action();
+		$id     = $action->get_inserted();
+
+		if ( ! $id ) {
+			return;
+		}
 
 		foreach ( $this->value as $key => $value ) {
-			update_post_meta( $action->get_inserted(), $key, $value );
+			update_post_meta( $id, $key, $value );
 		}
 	}
 
-	private function set_meta( array $meta ) {
+	public function set_meta( array $meta ) {
 		if ( ! is_array( $this->value ) ) {
 			$this->value = array();
 		}
 
+		$this->value = array_merge( $this->value, $meta );
+	}
+
+	public static function prepare_meta( array $meta ): array {
 		foreach ( $meta as $meta_key => $meta_row ) {
 			if ( ! empty( $meta_row['key'] ) ) {
 				$meta[ $meta_row['key'] ] = $meta_row['value'];
@@ -68,7 +77,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 			}
 		}
 
-		$this->value = array_merge( $this->value, $meta );
+		return $meta;
 	}
 
 	public function get_value( Abstract_Modifier $modifier ) {

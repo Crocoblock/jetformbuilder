@@ -78,8 +78,10 @@ class Insert_Post extends Base {
 			if ( ! $modifier->is_supported( $this ) ) {
 				continue;
 			}
-			$modifier->before_run( $this );
-			$modifier->run();
+			$current = clone $modifier;
+
+			$current->before_run( $this );
+			$current->run();
 			break;
 		}
 	}

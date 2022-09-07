@@ -1,3 +1,9 @@
+import BlockPlaceholder from './BlockPlaceholder';
+import BlockAddPrevButton from './BlockAddPrevButton';
+import BlockPrevButtonLabel from './BlockPrevButtonLabel';
+import BlockVisibility from './BlockVisibility';
+import BlockClassName from './BlockClassName';
+
 const {
 	      PanelBody,
       } = wp.components;
@@ -11,7 +17,11 @@ function AdvancedFields() {
 		key={ 'jet-form-advanced-fields' }
 		initialOpen={ false }
 	>
-		// controls
+		<BlockPlaceholder/>
+		<BlockAddPrevButton/>
+		<BlockPrevButtonLabel/>
+		<BlockVisibility/>
+		<BlockClassName/>
 	</PanelBody>;
 }
 

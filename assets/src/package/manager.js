@@ -115,6 +115,23 @@ import EditAdvancedRulesButton
 import RepeaterStateContext from './repeater/context/repeater.state';
 import RepeaterState from './repeater/components/repeater.state';
 import FieldControl from './blocks/components/FieldControl';
+import BlockLabel from './blocks/components/BlockLabel';
+import BlockName from './blocks/components/BlockName';
+import BlockDescription from './blocks/components/BlockDescription';
+import BlockDefaultValue from './blocks/components/BlockDefaultValue';
+import BlockPlaceholder from './blocks/components/BlockPlaceholder';
+import BlockAddPrevButton from './blocks/components/BlockAddPrevButton';
+import BlockPrevButtonLabel from './blocks/components/BlockPrevButtonLabel';
+import BlockVisibility from './blocks/components/BlockVisibility';
+import BlockClassName from './blocks/components/BlockClassName';
+import BlockAdvancedValue from './blocks/components/BlockAdvancedValue';
+import MacrosFieldsTemplate
+	from './macros.button/components/MacrosFieldsTemplate';
+import MacrosButtonTemplate
+	from './macros.button/components/MacrosButtonTemplate';
+import MacrosFields from './macros.button/components/MacrosFields';
+import ShowPopoverContext from './macros.button/context/ShowPopoverContext';
+import PopoverItem from './macros.button/context/PopoverItem';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -169,6 +186,21 @@ window.JetFBComponents = {
 	EditAdvancedRulesButton,
 	RepeaterStateContext,
 	RepeaterState,
+	BlockLabel,
+	BlockName,
+	BlockDescription,
+	BlockDefaultValue,
+	BlockPlaceholder,
+	BlockAddPrevButton,
+	BlockPrevButtonLabel,
+	BlockVisibility,
+	BlockClassName,
+	BlockAdvancedValue,
+	MacrosFields,
+	MacrosButtonTemplate,
+	MacrosFieldsTemplate,
+	ShowPopoverContext,
+	PopoverItem,
 };
 
 // JFBFunctions

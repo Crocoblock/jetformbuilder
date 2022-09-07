@@ -1,6 +1,7 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
 import DynamicPreset from '../../components/DynamicPreset';
 import ActionModal from '../../action-modal/components/ActionModal';
+import MacrosFields from '../../macros.button/components/MacrosFields';
 
 const {
 	      __,
@@ -31,6 +32,9 @@ function BlockDefaultValue( { label, help } ) {
 		<Flex
 			align={ 'center' }
 			justify={ 'flex-start' }
+			style={ {
+				marginBottom: '8px',
+			} }
 		>
 			<label htmlFor={ instanceId }>
 				{ label ?? __( 'Default Value', 'jet-form-builder' ) }
@@ -42,13 +46,19 @@ function BlockDefaultValue( { label, help } ) {
 				className={ 'jet-fb-is-thick' }
 				onClick={ () => setShowModal( true ) }
 			/>
+			<MacrosFields
+				onClick={ name => setAttributes( {
+					default: `%${ name }%`,
+				} ) }
+				title={ 'Form Fields' }
+			/>
 		</Flex>
 		<TextControl
 			id={ instanceId }
 			value={ attributes.default }
 			help={ help ?? '' }
 			hideLabelFromVision
-			onChange={ desc => setAttributes( { desc } ) }
+			onChange={ val => setAttributes( { default: val } ) }
 		/>
 		{ showModal && <ActionModal
 			classNames={ [ 'width-60' ] }

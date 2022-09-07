@@ -1,8 +1,8 @@
 import {
 	classnames,
-	getConvertedName,
 } from '../../tools';
 import useSelectPostMeta from '../../hooks/useSelectPostMeta';
+import ChangeNameByLabel from '../helpers/ChangeNameByLabel';
 
 const {
 	      BaseControl,
@@ -38,20 +38,13 @@ function FieldWrapper( props ) {
 
 	const _jf_args = useSelectPostMeta( '_jf_args' );
 
-	const setDynamicName = () => {
-		if ( 1 < attributes.label.length
-			&& (
-				!attributes.name || 'field_name' === attributes.name
-			)
-		) {
-			setAttributes( { name: getConvertedName( attributes.label ) } );
-		}
-	};
-
 	function renderLabel() {
 		return <BaseControl.VisualLabel>
 			{ RichDescription( __( 'input label:', 'jet-form-builder' ) ) }
-			<div onBlur={ setDynamicName } className="jet-form-builder__label">
+			<div
+				onBlur={ () => ChangeNameByLabel( attributes, setAttributes ) }
+				className="jet-form-builder__label"
+			>
 				<RichText
 					key={ uniqKey( 'rich-label' ) }
 					placeholder="Label..."

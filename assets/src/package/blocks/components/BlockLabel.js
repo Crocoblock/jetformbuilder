@@ -1,5 +1,5 @@
-import { getConvertedName } from '../../tools';
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import ChangeNameByLabel from '../helpers/ChangeNameByLabel';
 
 const {
 	      __,
@@ -19,18 +19,7 @@ function BlockLabel( { label, help } ) {
 		value={ attributes.label }
 		help={ help ?? '' }
 		onChange={ label => setAttributes( { label } ) }
-		onBlur={ () => {
-			if ( 1 < attributes.label.length
-				&& (
-					!attributes.name || 'field_name' ===
-					attributes.name
-				)
-			) {
-				setAttributes( {
-					name: getConvertedName( attributes.label ),
-				} );
-			}
-		} }
+		onBlur={ () => ChangeNameByLabel( attributes, setAttributes ) }
 	/>;
 }
 

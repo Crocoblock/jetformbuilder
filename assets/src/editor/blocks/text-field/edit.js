@@ -7,13 +7,15 @@ import {
 
 const {
 	      ToolBarFields,
-	      GeneralFields,
+	      BlockName,
+	      BlockLabel,
+	      BlockDescription,
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
-	      DynamicValues,
+	      BlockAdvancedValue,
 	      EditAdvancedRulesButton,
       } = JetFBComponents;
 const {
@@ -68,11 +70,14 @@ export default function TextEdit( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
-			/>
-			<DynamicValues/>
+			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+				<BlockLabel/>
+				<BlockName/>
+				<BlockDescription/>
+			</PanelBody>
+			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+				<BlockAdvancedValue/>
+			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
 				<SelectControl
 					key="field_type"

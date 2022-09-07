@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import SanitizeFieldName from '../helpers/SanitizeFieldName';
 
 const {
 	      __,
@@ -20,7 +21,9 @@ function BlockName( { label, help } ) {
 			'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case',
 			'jet-form-builder',
 		) }
-		onChange={ name => setAttributes( { name } ) }
+		onChange={ name => setAttributes( {
+			name: SanitizeFieldName( name ),
+		} ) }
 	/>;
 }
 

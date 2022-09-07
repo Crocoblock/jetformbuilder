@@ -19,13 +19,9 @@ function getFieldsWithoutCurrent(
 
 	const current = wp.data.select( 'core/block-editor' ).getSelectedBlock();
 
-	if ( null === current ) {
-		return [];
-	}
-
 	blocksRecursiveIterator( block => {
 		if ( block.name.includes( 'jet-forms/' )
-			&& current.clientId !== block.clientId
+			&& current?.clientId !== block.clientId
 			&& !skipFields.find( field => block.name.includes( field ) )
 		) {
 			formFields.push( {

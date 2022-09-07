@@ -9,7 +9,6 @@ const {
       } = wp.i18n;
 const {
 
-	      PanelBody,
 	      Button,
 	      Flex,
       } = wp.components;
@@ -35,9 +34,7 @@ function DynamicValues() {
 		} );
 	};
 
-	return <PanelBody
-		title={ __( 'Dynamic Value', 'jet-form-builder' ) }
-	>
+	return <>
 		<BaseHelp>
 			{ __(
 				`This is a moved functionality from 
@@ -70,7 +67,7 @@ function DynamicValues() {
 		>
 			{ __( 'Add Value', 'jet-form-builder' ) }
 		</Button>
-	</PanelBody>;
+	</>;
 }
 
 export default DynamicValues;

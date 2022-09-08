@@ -45,7 +45,7 @@ class User_Modifier extends Abstract_Modifier {
 	 * @throws Action_Exception
 	 */
 	public function run() {
-		if ( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() && ! Tools::is_webhook() ) {
 			// Only logged in users can edit other users
 			throw new Action_Exception( 'internal_error' );
 		}

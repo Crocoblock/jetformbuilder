@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
@@ -40,6 +41,7 @@ class Post_Id_Property extends Base_Object_Property {
 			|| (
 				absint( $post->post_author ) !== get_current_user_id()
 				&& ! current_user_can( 'edit_post', $post->ID )
+				&& ! Tools::is_webhook()
 			)
 		) {
 			throw new Action_Exception(

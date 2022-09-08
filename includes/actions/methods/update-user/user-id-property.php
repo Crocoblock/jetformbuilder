@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Actions\Methods\Update_User;
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Actions\Methods\Update_User\User_Modifier;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
@@ -38,7 +39,11 @@ class User_Id_Property extends Base_Object_Property {
 			throw new Action_Exception( 'sanitize_user' );
 		}
 
-		if ( get_current_user_id() !== $this->value && ! current_user_can( 'edit_users' ) ) {
+		if (
+			get_current_user_id() !== $this->value &&
+			! current_user_can( 'edit_users' ) &&
+			! Tools::is_webhook()
+		) {
 			// Only users with appropriate capabilities can edit other users, also user can edit himself
 			throw new Action_Exception( 'internal_error' );
 		}

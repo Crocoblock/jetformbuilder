@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
+use Jet_Engine\Modules\Profile_Builder\Module;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 
 class Preset_Source_User extends Base_Source {
@@ -31,15 +32,19 @@ class Preset_Source_User extends Base_Source {
 		}
 
 		if ( 'queried_user' === $user_from ) {
-			$user = get_queried_object();
-
-			return is_a( $user, \WP_User::class ) ? $user : false;
+			return $this->get_queried_user();
 		}
 
 		$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : 'user_id';
 		$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 
 		return get_user_by( 'ID', $user_id );
+	}
+
+	protected function get_queried_user() {
+		$user = get_queried_object();
+
+		return is_a( $user, \WP_User::class ) ? $user : false;
 	}
 
 	/**

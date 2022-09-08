@@ -74,7 +74,7 @@ class Redirect_To_Page extends Base {
 					return false;
 				}
 
-				if ( 'insert' === $context['__action'] && 'publish' === $context['post_status'] ) {
+				if ( 'publish' === $context['post_status'] ) {
 					return get_permalink( $context['ID'] );
 				}
 
@@ -191,7 +191,7 @@ class Redirect_To_Page extends Base {
 			),
 			array(
 				'value' => 'inserted_post',
-				'label' => __( 'Inserted post', 'jet-form-builder' ),
+				'label' => __( 'Inserted/Updated post', 'jet-form-builder' ),
 			),
 		);
 	}

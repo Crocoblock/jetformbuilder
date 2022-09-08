@@ -6,7 +6,9 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
+use Jet_Form_Builder\Compatibility\Elementor\Elementor;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
 use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
@@ -96,9 +98,13 @@ class Plugin {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
 
+		/**
+		 * Compatibility & Integrations
+		 */
 		Woocommerce::register();
 		Jet_Engine::register();
 		Active_Campaign::register();
+		Elementor::register();
 
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();
@@ -112,7 +118,11 @@ class Plugin {
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
-		new Elementor_Controller();
+		new Dynamic_Value();
+
+		/**
+		 * REST API
+		 */
 		( new Migrations\Rest_Api\Controller() )->rest_api_init();
 		( new Blocks\Conditional_Block\Rest_Api\Rest_Api_Controller() )->rest_api_init();
 		( new Blocks\Ssr_Validation\Rest_Controller() )->rest_api_init();

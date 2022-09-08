@@ -1,17 +1,18 @@
 <?php
 
 
-namespace Jet_Form_Builder\Widgets\Types;
+namespace Jet_Form_Builder\Compatibility\Elementor\Widgets;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
+use Elementor\Widget_Base;
 use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
 
-class Form extends Jfb_Widget_Base {
+class Form extends Widget_Base implements Widget_Base_It {
 
 	use General_Style_Functions;
 
@@ -676,15 +677,15 @@ class Form extends Jfb_Widget_Base {
 			'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
 			'active-circle'    => "$wrapper.active-page .%s$item--circle",
 
-			'next-wrapper'     => "$wrapper:not(.passed-page):not(.active-page)",
-			'next-item'        => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
-			'next-separator'   => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
-			'next-circle'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+			'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
+			'next-item'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
+			'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+			'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
 
-			'prev-wrapper'     => "$wrapper.passed-page",
-			'prev-item'        => "$wrapper.passed-page .%s$item",
-			'prev-separator'   => "$wrapper.passed-page .%s-progress-pages__separator",
-			'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
+			'prev-wrapper'   => "$wrapper.passed-page",
+			'prev-item'      => "$wrapper.passed-page .%s$item",
+			'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
+			'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
 		);
 
 		/**
@@ -1869,9 +1870,9 @@ class Form extends Jfb_Widget_Base {
 			$this->add_responsive_control(
 				'calc_fields_flex_align',
 				array(
-					'label'   => __( 'Content Align', 'jet-form-builder' ),
-					'type'    => Controls_Manager::SELECT,
-					'options' => array(
+					'label'     => __( 'Content Align', 'jet-form-builder' ),
+					'type'      => Controls_Manager::SELECT,
+					'options'   => array(
 						''              => __( 'Default', 'jet-form-builder' ),
 						'start'         => __( 'Left', 'jet-form-builder' ),
 						'center'        => __( 'Center', 'jet-form-builder' ),
@@ -1880,7 +1881,7 @@ class Form extends Jfb_Widget_Base {
 						'space-evenly'  => __( 'Space Evenly', 'jet-form-builder' ),
 						'space-around'  => __( 'Space Around', 'jet-form-builder' ),
 					),
-					'selectors'  => array(
+					'selectors' => array(
 						$this->selector( '__calculated-field' ) => 'justify-content: {{VALUE}};',
 					),
 				)
@@ -3047,15 +3048,15 @@ class Form extends Jfb_Widget_Base {
 					'type'        => Controls_Manager::CHOOSE,
 					'label_block' => false,
 					'options'     => array(
-						'flex-start'   => array(
+						'flex-start' => array(
 							'title' => __( 'Left', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-left',
 						),
-						'center' => array(
+						'center'     => array(
 							'title' => __( 'Center', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-center',
 						),
-						'flex-end'  => array(
+						'flex-end'   => array(
 							'title' => __( 'Right', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-right',
 						),
@@ -3198,15 +3199,15 @@ class Form extends Jfb_Widget_Base {
 					'type'        => Controls_Manager::CHOOSE,
 					'label_block' => false,
 					'options'     => array(
-						'flex-start'   => array(
+						'flex-start' => array(
 							'title' => __( 'Left', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-left',
 						),
-						'center' => array(
+						'center'     => array(
 							'title' => __( 'Center', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-center',
 						),
-						'flex-end'  => array(
+						'flex-end'   => array(
 							'title' => __( 'Right', 'jet-form-builder' ),
 							'icon'  => 'eicon-h-align-right',
 						),

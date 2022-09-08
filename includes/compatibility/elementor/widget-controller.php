@@ -1,17 +1,18 @@
 <?php
 
 
-namespace Jet_Form_Builder\Widgets;
+namespace Jet_Form_Builder\Compatibility\Elementor;
 
-use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Widgets\Types;
 
-class Elementor_Controller {
+use Elementor\Widget_Base;
+use Jet_Form_Builder\Compatibility\Elementor\Widgets\Form;
 
-	private $_types = array();
+class Widget_Controller {
+
+	private $types;
 
 	public function __construct() {
-		add_action( 'elementor/init', array( $this, 'setup_widgets' ) );
+		add_action( 'elementor/init', array( $this, 'init_widgets' ) );
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
 		add_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_assets' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
@@ -27,14 +28,18 @@ class Elementor_Controller {
 		}
 	}
 
-	public function enqueue_form_assets() {
-		wp_enqueue_style( 'jet-form-builder-frontend' );
+	public function init_widgets() {
+		$this->types = array(
+			new Form(),
+		);
+
+		foreach ( $this->types as $type ) {
+			$type->init_hooks();
+		}
 	}
 
-	private function widgets() {
-		return array(
-			new Types\Form(),
-		);
+	public function enqueue_form_assets() {
+		wp_enqueue_style( 'jet-form-builder-frontend' );
 	}
 
 	/**
@@ -67,22 +72,11 @@ class Elementor_Controller {
 			array(),
 			jet_form_builder()->get_version()
 		);
-
 	}
 
-	public function setup_widgets() {
-		foreach ( $this->widgets() as $widget ) {
-			$this->setup_widget( $widget );
-		}
-	}
-
-	private function setup_widget( $widget ) {
-		$widget->init_hooks();
-		$this->_types[ $widget->get_name() ] = $widget;
-	}
 
 	public function register_widgets( $manager ) {
-		foreach ( $this->_types as $widget ) {
+		foreach ( $this->types as $widget ) {
 			// compatibility with 3.7
 			if ( method_exists( $manager, 'register' ) ) {
 				$manager->register( $widget );

@@ -18,7 +18,6 @@
 		"value": {
 			"type": "object",
 			"default": {
-				"is_advanced": false,
 				"groups": []
 			}
 		},

@@ -122,6 +122,19 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 	function jet_fb_events(): \Jet_Form_Builder\Actions\Events_Manager {
 		return \Jet_Form_Builder\Actions\Events_Manager::instance();
 	}
+
+	/**
+	 * Parse dynamic preset
+	 * If this hasn't json preset
+	 * it will return the incoming value
+	 *
+	 * @param string $value
+	 *
+	 * @return mixed|string
+	 */
+	function jet_fb_parse_dynamic( string $value ) {
+		return ( new \Jet_Form_Builder\Presets\Types\Dynamic_Preset() )->parse_json( $value );
+	}
 } else {
 	add_action(
 		'admin_notices',

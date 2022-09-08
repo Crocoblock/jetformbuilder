@@ -36,8 +36,12 @@ abstract class Base {
 	 */
 	public $live_form;
 
-	const FIELD_ERROR_CLASS = 'field-has-error';
+	/**
+	 * @var array
+	 */
+	public $args;
 
+	const FIELD_ERROR_CLASS = 'field-has-error';
 
 	public function __construct( $block_type ) {
 		$this->form_id = Live_Form::instance()->form_id;
@@ -155,6 +159,7 @@ abstract class Base {
 			$args = $this->get_default_args_with_filter();
 		}
 
+		$this->args = $args;
 		$this->before_render( $args );
 
 		if ( is_null( $template ) ) {
@@ -257,6 +262,16 @@ abstract class Base {
 	 */
 	public function get_custom_template( $object_id, $args, $checked = false ) {
 		return ( new Builder_Helper() )->get_custom_template( $object_id, $args, $checked );
+	}
+
+	protected function set_value() {
+		if ( ! preg_match( '/%\w+::[\w\-]+%/', $this->args['default'] ) ) {
+			$this->add_attribute( 'value', $this->args['default'] );
+
+			return;
+		}
+
+		$this->add_attribute( 'data-value', $this->args['default'] );
 	}
 
 }

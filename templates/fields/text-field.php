@@ -9,8 +9,8 @@
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Tools;
 
+$this->set_value();
 $this->add_attribute( 'placeholder', $args['placeholder'] );
-$this->add_attribute( 'value', $args['default'] );
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );

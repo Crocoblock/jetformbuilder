@@ -37,12 +37,6 @@ abstract class Abstract_Modifier {
 		$this->actions = $this->get_actions();
 	}
 
-	public function __clone() {
-		$this->properties = $this->get_properties();
-		// install actions
-		$this->actions = $this->get_actions();
-	}
-
 	public function run() {
 		foreach ( $this->request as $key => $value ) {
 			$this->attach_item( $key, $value );

@@ -181,6 +181,12 @@ class Controller {
 		return $errors;
 	}
 
+	/**
+	 * @since 2.1.6 https://github.com/Crocoblock/issues-tracker/issues/1436
+	 * @since 2.0.0 Introduced
+	 *
+	 * @return array
+	 */
 	private function get_prepared_fields(): array {
 		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
 		$fields      = array();
@@ -188,8 +194,8 @@ class Controller {
 		foreach ( jet_fb_action_handler()->request_data as $field_name => $value ) {
 			// like 1=1 SQL-trick
 			if ( false
-				|| isset( $core_fields[ $field_name ] )
-				|| ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+			     || isset( $core_fields[ $field_name ] )
+			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
 			) {
 				continue;
 			}
@@ -205,11 +211,17 @@ class Controller {
 			$type          = Block_Helper::delete_namespace( $current_attrs );
 			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
 
+			if ( ! is_scalar( $value ) ) {
+				$value = Tools::encode_json( $value );
+
+				$attrs_to_save['is_encoded'] = true;
+			}
+
 			$fields[] = array(
 				'record_id'   => $this->record_id,
 				'field_name'  => $field_name,
 				'field_type'  => empty( $type ) ? 'computed' : $type,
-				'field_value' => is_scalar( $value ) ? $value : Tools::encode_json( $value ),
+				'field_value' => $value,
 				'field_attrs' => Tools::encode_json( $attrs_to_save ),
 			);
 		}

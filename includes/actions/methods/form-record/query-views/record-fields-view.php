@@ -53,8 +53,28 @@ class Record_Fields_View extends View_Base {
 		return $this;
 	}
 
+	/**
+	 * @since 2.1.6 https://github.com/Crocoblock/issues-tracker/issues/1436
+	 * @since 2.0.0 Introduced
+	 *
+	 * @param $record_id
+	 * @param string $value_key
+	 * @param string $label_key
+	 *
+	 * @return array
+	 */
 	public static function get_request_list( $record_id, $value_key = 'field_name', $label_key = 'field_value' ): array {
 		$request = static::get_request( $record_id );
+
+		foreach ( $request as &$field ) {
+			$attrs = Tools::decode_json( $field['field_attrs'] );
+
+			if ( empty( $attrs['is_encoded'] ) ) {
+				continue;
+			}
+
+			$field['field_value'] = Tools::decode_json( $field['field_value'] );
+		}
 
 		return Tools::prepare_list_for_js( $request, $value_key, $label_key, true );
 	}

@@ -1,7 +1,6 @@
 const
 	path = require( 'path' ),
-	fs = require( 'fs' );
-
+	fs   = require( 'fs' );
 
 function getIndexFiles( dirPath ) {
 	const savePaths = {};
@@ -9,9 +8,11 @@ function getIndexFiles( dirPath ) {
 	fs.readdirSync( dirPath ).map( pageDir => {
 
 		const pathPage = path.join( dirPath, pageDir );
-		const file = fs.readdirSync( pathPage ).find( file => /^index\.js$/.test( file ) );
+		const file     = fs.readdirSync( pathPage ).
+			find( file => /^index\.js$/.test( file ) );
 
-		savePaths[ `admin/pages/${ pageDir }.js` ] = path.join( pathPage, file );
+		savePaths[ `admin/pages/${ pageDir }` ] = path.join( pathPage,
+			file );
 	} );
 
 	return savePaths;
@@ -23,16 +24,27 @@ function getAdminPagesEntries() {
 	return getIndexFiles( pagesPath );
 }
 
+function isDev() {
+	return process.env.npm_lifecycle_event === 'dev';
+}
+
 module.exports = {
 	getAllEntries() {
 		return {
-			'frontend-forms-v3.js': './frontend/main.js',
-			'editor.js': './editor/main.js',
-			'form-block.js': './editor/form-block.js',
-			'package.js': './package/manager.js',
-			'admin-package.js': './admin-package/manager.js',
-			'admin-vuex-package.js': './admin-vuex-package/manager.js',
-			...getAdminPagesEntries()
+			'frontend/main': './frontend/main/main.js',
+			'frontend/media.field': './frontend/media.field/main.js',
+			'frontend/multi.step': './frontend/multi.step/main.js',
+			'frontend/repeater.field': './frontend/repeater.field/main.js',
+			'frontend/calculated.field': './frontend/calculated.field/main.js',
+			'frontend/conditional.block': './frontend/conditional.block/main.js',
+			'frontend/advanced.reporting': './frontend/advanced.reporting/main.js',
+			'editor/form.builder': './editor/main.js',
+			'editor/default.builder': './editor/form-block.js',
+			'editor/package': './package/manager.js',
+			'admin/package': './admin-package/manager.js',
+			'admin/vuex.package': './admin-vuex-package/manager.js',
+			...getAdminPagesEntries(),
 		};
-	}
+	},
+	isDev,
 };

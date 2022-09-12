@@ -1,17 +1,14 @@
-class ProgressBar {
-
+function ProgressBar( node, state ) {
 	/**
 	 * @param node {HTMLElement}
 	 * @param state {MultiStepState}
 	 */
-	constructor( node, state ) {
-		this.node  = node;
-		this.state = state;
+	this.node = node;
+	this.state = state;
 
-		this.state.index.watch( () => this.updateItems() );
-	}
+	this.state.index.watch( () => this.updateItems() );
 
-	updateItems() {
+	this.updateItems = function () {
 		const { current } = this.state.index;
 
 		for ( const item of this.node.children ) {
@@ -27,27 +24,27 @@ class ProgressBar {
 				this.makeNotPassed( item );
 			}
 		}
-	}
+	};
 
 	/**
 	 * @param element {HTMLElement}
 	 */
-	makeActive( element ) {
+	this.makeActive = function ( element ) {
 		element.classList.remove( 'passed-page' );
 		element.classList.add( 'active-page' );
-	}
+	};
 
 	/**
 	 * @param element {HTMLElement}
 	 */
-	makePassed( element ) {
+	this.makePassed = function ( element ) {
 		element.classList.add( 'passed-page' );
 		element.classList.remove( 'active-page' );
-	}
+	};
 
-	makeNotPassed( element ) {
+	this.makeNotPassed = function ( element ) {
 		element.classList.remove( 'active-page', 'passed-page' );
-	}
+	};
 }
 
 export default ProgressBar;

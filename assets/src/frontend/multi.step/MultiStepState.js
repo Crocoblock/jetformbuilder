@@ -1,45 +1,44 @@
-import ConditionalBlock from '../conditional.logic/ConditionalBlock';
 import PageState from './PageState';
-import ReactiveVar from '../ReactiveVar';
 import ProgressBar from './ProgressBar';
 
-class MultiStepState {
+const {
+	      ConditionalBlock,
+	      ReactiveVar,
+      } = JetFormBuilderAbstract;
 
-	constructor() {
+function MultiStepState() {
 
-		/**
-		 * @type {Observable}
-		 */
-		this.root = null;
+	/**
+	 * @type {Observable}
+	 */
+	this.root = null;
 
-		/**
-		 * @type {ConditionalBlock}
-		 */
-		this.block = null;
+	/**
+	 * @type {ConditionalBlock}
+	 */
+	this.block = null;
 
-		/**
-		 * Current page index
-		 * @type {ReactiveVar}
-		 */
-		this.index = null;
+	/**
+	 * Current page index
+	 * @type {ReactiveVar}
+	 */
+	this.index = null;
 
-		/**
-		 * Node elements of pages
-		 * @type {array<PageState>|*}
-		 */
-		this.elements = [];
-	}
+	/**
+	 * Node elements of pages
+	 * @type {array<PageState>|*}
+	 */
+	this.elements = [];
 
-	setScope( rootOrBlock ) {
+	this.setScope      = function ( rootOrBlock ) {
 		if ( rootOrBlock instanceof ConditionalBlock ) {
 			this.block = rootOrBlock;
 		}
 		else {
 			this.root = rootOrBlock;
 		}
-	}
-
-	setPages() {
+	};
+	this.setPages      = function () {
 		/**
 		 * Multistep is initializing for all form or
 		 * specific conditional block.
@@ -49,7 +48,7 @@ class MultiStepState {
 		this.elements = [
 			...this.getScopeNode().children,
 		].filter(
-			page =>  page.matches( '.jet-form-builder-page' ),
+			page => page.matches( '.jet-form-builder-page' ),
 		).map(
 			page => new PageState( page, this ),
 		);
@@ -63,34 +62,29 @@ class MultiStepState {
 		this.index.watch( () => this.onChangeIndex() );
 
 		for ( const child of this.getScopeNode().children ) {
-			if ( ! child.matches( '.jet-form-builder-progress-pages' ) ) {
+			if ( !child.matches( '.jet-form-builder-progress-pages' ) ) {
 				continue;
 			}
 			this.progress = new ProgressBar( child, this );
 		}
-	}
-
-	onChangeIndex() {
+	};
+	this.onChangeIndex = function () {
 		for ( const page of this.getPages() ) {
 			page.isShow.current = page.index === this.index.current;
 		}
-	}
-
+	};
 	/**
 	 * @returns {array<PageState>}
 	 */
-	getPages() {
+	this.getPages = function () {
 		return this.elements;
-	}
-
-	getScopeNode() {
+	};
+	this.getScopeNode = function () {
 		return this.block?.node ?? this.root.rootNode;
-	}
-
-	getRoot() {
+	};
+	this.getRoot      = function () {
 		return this.block?.root ?? this.root;
-	}
-
+	};
 }
 
 export default MultiStepState;

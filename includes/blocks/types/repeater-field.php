@@ -2,7 +2,9 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -13,6 +15,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Text field block class
  */
 class Repeater_Field extends Base {
+
+	const HANDLE = 'jet-fb-repeater-field';
 
 	public $manage_items;
 	public $items_field;
@@ -43,7 +47,7 @@ class Repeater_Field extends Base {
 		);
 	}
 
-	public function _jsm_register_controls() {
+	public function jsm_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',
@@ -347,6 +351,24 @@ class Repeater_Field extends Base {
 		return false;
 	}
 
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
+	}
+
 	/**
 	 * Returns current block render
 	 *
@@ -355,6 +377,8 @@ class Repeater_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script( self::HANDLE );
+
 		$this->set_manage_items();
 		$this->set_items_field();
 		$this->set_repeater_calc_type();

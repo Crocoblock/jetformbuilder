@@ -8,6 +8,7 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
+use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
 use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
@@ -118,6 +119,7 @@ class Plugin {
 
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
+		Validation::instance();
 		new Dynamic_Value();
 
 		/**
@@ -193,18 +195,29 @@ class Plugin {
 	 *
 	 * @return string
 	 */
-	public function plugin_url( $path = null ) {
+	public function plugin_url( string $path = '' ): string {
+		$suffix = '.min';
+
+		if (
+			( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ||
+			Dev_Mode\Manager::instance()->active()
+		) {
+			$suffix = '';
+		}
+
+		$path = str_replace( '{min}', $suffix, $path );
+
 		return JET_FORM_BUILDER_URL . $path;
 	}
 
-	public function plugin_dir( $path = '' ) {
+	public function plugin_dir( string $path = '' ): string {
 		return JET_FORM_BUILDER_PATH . $path;
 	}
 
 	/**
 	 * Returns plugin version
 	 */
-	public function get_version() {
+	public function get_version(): string {
 		return JET_FORM_BUILDER_VERSION;
 	}
 

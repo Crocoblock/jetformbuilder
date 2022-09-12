@@ -25,6 +25,7 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Plugin;
 
 /**
  * @method static Validation instance()
@@ -38,6 +39,7 @@ class Validation implements Arrayable {
 
 	const FORMAT_ADVANCED = 'advanced';
 	const FORMAT_BROWSER  = 'browser';
+	const HANDLE          = 'jet-fb-advanced-reporting';
 
 	/**
 	 * @var Base_Message[]
@@ -62,6 +64,10 @@ class Validation implements Arrayable {
 			'jet-form-builder/before-start-form-row',
 			array( $this, 'add_validation_block' )
 		);
+		add_action(
+			'wp_enqueue_scripts',
+			array( $this, 'register_scripts' )
+		);
 	}
 
 	/**
@@ -78,6 +84,18 @@ class Validation implements Arrayable {
 			new Is_Not_Valid_Email(),
 			new Is_Not_Valid_Url(),
 			new Is_Not_Complete_Mask(),
+		);
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/advanced.reporting{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			Plugin::instance()->get_version(),
+			true
 		);
 	}
 
@@ -110,6 +128,8 @@ class Validation implements Arrayable {
 		if ( ! $this->is_advanced( $block ) ) {
 			return;
 		}
+		wp_enqueue_script( self::HANDLE );
+
 		$type  = $this->get_block_type( $block );
 		$rules = $block->block_attrs['validation']['rules'] ?? array();
 

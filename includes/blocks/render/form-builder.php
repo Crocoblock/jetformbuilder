@@ -118,10 +118,6 @@ class Form_Builder {
 	 * @return string [type] [description]
 	 */
 	public function start_form() {
-
-		Validation::instance();
-		Plugin::instance()->blocks->enqueue_frontend_assets();
-
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
 		$start_form .= $this->maybe_render_fonts_block();
@@ -152,6 +148,7 @@ class Form_Builder {
 	 * @return string [type] [description]
 	 */
 	public function end_form() {
+		Plugin::instance()->blocks->enqueue_frontend_assets();
 
 		$end_form = apply_filters( 'jet-form-builder/before-end-form', '', $this );
 		$form_id  = $this->form_id;

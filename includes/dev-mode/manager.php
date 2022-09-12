@@ -15,18 +15,14 @@ class Manager {
 
 	use Instance_Trait;
 
-	private $is_active = false;
+	private $is_active;
 
 	private function __construct() {
-		$this->setup_mode();
-	}
-
-	public function active() {
-		return $this->is_active;
-	}
-
-	private function setup_mode() {
 		$this->is_active = apply_filters( 'jet-form-builder/dev-mode/activate', false );
+	}
+
+	public function active(): bool {
+		return $this->is_active;
 	}
 
 

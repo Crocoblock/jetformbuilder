@@ -1,0 +1,162 @@
+import { createConditionItem } from './functions';
+import OrOperatorItem from './OrOperatorItem';
+
+const { doAction } = wp.hooks;
+
+function ConditionalBlock( node, observable ) {
+
+	this.node           = node;
+	node.jfbConditional = this;
+	/**
+	 * @type {Observable}
+	 */
+	this.root = observable;
+	this.invalid         = [];
+	this.undefinedFields = [];
+	this.isObserved      = false;
+
+	/**
+	 * @type {PageState}
+	 */
+	this.page = null;
+
+	/**
+	 * @type {MultiStepState}
+	 */
+	this.multistep = null;
+
+	/**
+	 * @type {Node}
+	 */
+	this.comment = null;
+
+	this.setConditions();
+
+	doAction( 'jet.fb.conditional.init', this );
+}
+
+ConditionalBlock.prototype = {
+	setConditions() {
+		this.conditions = JSON.parse( this.node.dataset.jfbConditional ).
+			map(
+				item => createConditionItem( item, this ),
+			).
+			filter( item => item );
+	},
+	insertComment() {
+		if ( !this.willDomChange() ) {
+			return;
+		}
+
+		this.comment = document.createComment( '' );
+
+		// insert comment after conditional block
+		this.node.parentElement.insertBefore(
+			this.comment,
+			this.node.nextSibling,
+		);
+	},
+	observe() {
+		if ( this.isObserved ) {
+			return;
+		}
+		this.isObserved = true;
+		this.insertComment();
+
+		for ( const condition of this.getConditions() ) {
+			condition.observe();
+		}
+	},
+	calculate() {
+		this.runFunction( this.getResult() );
+	},
+	getResult() {
+		this.invalid   = [];
+		let groups     = {};
+		let groupIndex = 0;
+
+		for ( const condition of this.getConditions() ) {
+			if ( condition instanceof OrOperatorItem ) {
+				groupIndex++;
+
+				continue;
+			}
+			groups[ groupIndex ] = groups[ groupIndex ] ?? [];
+			groups[ groupIndex ].push( condition );
+		}
+
+		groups = Object.values( groups );
+
+		if ( !groups.length ) {
+			return true;
+		}
+
+		for ( const group of groups ) {
+			if ( this.isValidGroup( group ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	},
+	isValidGroup( conditionsGroup ) {
+		for ( const condition of conditionsGroup ) {
+			if ( condition.isPassed() ) {
+				continue;
+			}
+			this.invalid.push( condition );
+
+			return false;
+		}
+
+		return true;
+	},
+	runFunction( result ) {
+		switch ( this.getFunction() ) {
+			case 'show_dom':
+				this.showBlockDom( result );
+				break;
+			case 'hide_dom':
+				this.showBlockDom( !result );
+				break;
+			case 'show':
+				this.showBlockCss( result );
+				break;
+			case 'hide':
+				this.showBlockCss( !result );
+				break;
+			case 'disable':
+				this.disableBlock( result );
+				break;
+		}
+	},
+	showBlockCss( result ) {
+		this.node.style.display = result ? 'block' : 'none';
+	},
+	showBlockDom( result ) {
+		if ( !result ) {
+			this.node.remove();
+
+			return;
+		}
+
+		this.comment.parentElement.insertBefore( this.node, this.comment );
+	},
+	disableBlock( result ) {
+		this.node.disabled = result;
+	},
+	willDomChange() {
+		return [ 'show_dom', 'hide_dom' ].includes( this.getFunction() );
+	},
+	getFunction() {
+		return this.node.dataset.jfbFunc;
+	},
+	/**
+	 * @returns {array<ConditionFieldItem|ConditionPageStateItem>}
+	 */
+	getConditions() {
+		return this.conditions;
+	},
+};
+
+export default ConditionalBlock;

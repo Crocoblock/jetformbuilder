@@ -4,10 +4,11 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
-use Jet_Form_Builder\Blocks\Render\Conditional_Block_Render;
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
 // If this file is called directly, abort.
@@ -19,6 +20,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Text field block class
  */
 class Conditional_Block extends Base {
+
+	const HANDLE = 'jet-fb-conditional-block';
 
 	/**
 	 * Returns block name
@@ -89,10 +92,30 @@ class Conditional_Block extends Base {
 		$this->controls_manager->end_section();
 	}
 
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/conditional.block{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
+	}
+
 	protected function render_field( array $attrs, $content = null, $wp_block = null ): string {
 		if ( ! Live_Form::instance()->form_id ) {
 			return '';
 		}
+		wp_enqueue_script( self::HANDLE );
+
 		$this->set_block_data( $attrs, $content, $wp_block );
 
 		$conditions = $this->get_conditions();

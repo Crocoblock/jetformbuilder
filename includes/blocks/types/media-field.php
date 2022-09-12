@@ -2,9 +2,11 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Media_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\File_Upload;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -15,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Text field block class
  */
 class Media_Field extends Base {
+
+	const HANDLE = 'jet-fb-media-field';
 
 	protected $value_format = 'url';
 	protected $max_files    = 1;
@@ -103,6 +107,24 @@ class Media_Field extends Base {
 		return $files;
 	}
 
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
+	}
+
 	/**
 	 * Returns current block render instatnce
 	 *
@@ -111,9 +133,9 @@ class Media_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		$scripts = File_Upload::instance()->ensure_media_js();
+		wp_enqueue_script( self::HANDLE );
 
-		return $scripts . ( new Media_Field_Render( $this ) )->render();
+		return ( new Media_Field_Render( $this ) )->render();
 	}
 
 	public function block_data( $editor, $handle ) {

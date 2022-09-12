@@ -23,6 +23,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Manager {
 
+	const MAIN_SCRIPT_HANDLE = 'jet-form-builder-frontend-forms';
+
 	/**
 	 * @var bool
 	 */
@@ -211,10 +213,11 @@ class Manager {
 		if ( $this->_registered_scripts ) {
 			return;
 		}
+		$this->_registered_scripts = true;
+
 		wp_register_script(
-			'jet-form-builder-frontend-forms',
-			// assets/js/frontend-forms.js
-			Plugin::instance()->plugin_url( 'assets/js/frontend-forms-v3.js' ),
+			self::MAIN_SCRIPT_HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
 			array(
 				'jquery',
 				'wp-i18n',
@@ -254,15 +257,6 @@ class Manager {
 			Plugin::instance()->get_version(),
 			true
 		);
-
-		/*wp_register_script(
-			'jet-form-builder-file-upload',
-			Plugin::instance()->plugin_url( 'assets/js/file-upload.js' ),
-			array( 'jet-form-builder-sortable' ),
-			Plugin::instance()->get_version(),
-			true
-		);*/
-		$this->_registered_scripts = true;
 	}
 
 	/**

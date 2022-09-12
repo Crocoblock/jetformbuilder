@@ -2,7 +2,9 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
+use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,10 +16,29 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Calculated_Field extends Base {
 
+	const HANDLE = 'jet-fb-calculated-field';
+
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
+	}
+
 	public function general_style_unregister() {
 		return array( 'required' );
 	}
-
 
 	public function get_field_input() {
 		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child';
@@ -70,6 +91,8 @@ class Calculated_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script( self::HANDLE );
+
 		$is_hidden = $this->block_attrs['calc_hidden'] ?? false;
 
 		if ( $is_hidden ) {

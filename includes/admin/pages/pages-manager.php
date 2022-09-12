@@ -140,15 +140,9 @@ class Pages_Manager {
 	}
 
 	public function register_scripts() {
-		$suffix = '.min';
-
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$suffix = '';
-		}
-
 		wp_register_script(
 			self::SCRIPT_VUEX,
-			Plugin::instance()->plugin_url( 'assets/lib/vuex' . $suffix . '.js' ),
+			Plugin::instance()->plugin_url( 'assets/lib/vuex{min}.js' ),
 			array(),
 			'3.6.2',
 			true
@@ -167,7 +161,7 @@ class Pages_Manager {
 
 		wp_register_script(
 			self::SCRIPT_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin-package.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/admin/package{min}.js' ),
 			array(
 				'wp-api',
 				'wp-api-fetch',
@@ -178,7 +172,7 @@ class Pages_Manager {
 
 		wp_register_script(
 			self::SCRIPT_VUEX_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin-vuex-package.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/admin/vuex.package{min}.js' ),
 			array(
 				'jet-form-builder-admin-vuex',
 				'jet-form-builder-admin-package',

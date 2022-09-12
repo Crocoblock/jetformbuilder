@@ -1,7 +1,11 @@
-const path = require( 'path' );
-const webpack = require( 'webpack' );
+const path                = require( 'path' );
+const webpack             = require( 'webpack' );
 const { VueLoaderPlugin } = require( 'vue-loader' );
-const { getAllEntries } = require( './webpack.helper' );
+
+const {
+	      getAllEntries,
+	      isDev,
+      } = require( './webpack.helper' );
 
 module.exports = {
 	name: 'js_bundle',
@@ -9,10 +13,10 @@ module.exports = {
 	entry: getAllEntries(),
 	output: {
 		path: path.resolve( __dirname, 'js' ),
-		filename: '[name]',
-		chunkFilename: '[name].chunk.js',
+		filename: isDev() ? '[name].js' : '[name].min.js',
+		chunkFilename: 'chunks/[name].chunk.js',
 	},
-	devtool: 'eval-source-map',
+	devtool: 'eval',
 	resolve: {
 		modules: [
 			path.resolve( __dirname, 'src' ),
@@ -72,3 +76,7 @@ module.exports = {
 		maxAssetSize: 512000,
 	},
 };
+
+if ( !isDev() ) {
+	delete module.exports.devtool;
+}

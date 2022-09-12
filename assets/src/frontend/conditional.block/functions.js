@@ -1,5 +1,4 @@
 import ConditionFieldItem from './ConditionFieldItem';
-import ConditionPageStateItem from './ConditionPageStateItem';
 import ConditionalBlock from './ConditionalBlock';
 import ConditionChecker from './ConditionChecker';
 import MultipleConditionChecker from './MultipleConditionChecker';
@@ -7,13 +6,17 @@ import OrOperatorItem from './OrOperatorItem';
 
 const { applyFilters } = wp.hooks;
 
-const itemTypes = [
-	OrOperatorItem,
-	ConditionFieldItem,
-	ConditionPageStateItem,
-];
+const getItemTypes = () => applyFilters(
+	'jet.fb.conditional.types',
+	[
+		OrOperatorItem,
+		ConditionFieldItem,
+	],
+);
 
-const checkers = applyFilters(
+let itemTypes = [];
+
+const getCheckers = () => applyFilters(
 	'jet.fb.conditional.checkers',
 	[
 		MultipleConditionChecker,
@@ -21,7 +24,13 @@ const checkers = applyFilters(
 	],
 );
 
+let checkers = [];
+
 function createConditionItem( options, block ) {
+	if ( !itemTypes.length ) {
+		itemTypes = getItemTypes();
+	}
+
 	for ( const dataType of itemTypes ) {
 		const current = new dataType();
 
@@ -51,6 +60,10 @@ function createConditionalBlock( node, root ) {
  * @param input {InputData}
  */
 function createChecker( input ) {
+	if ( !checkers.length ) {
+		checkers = getCheckers();
+	}
+
 	for ( const checker of checkers ) {
 		const current = new checker();
 

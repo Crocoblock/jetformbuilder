@@ -1,8 +1,7 @@
-import { createConditionalBlock } from '../conditional.block/functions';
-
 const {
 	      ReactiveVar,
 	      ConditionPageStateItem,
+	      createConditionalBlock,
       } = JetFormBuilderAbstract;
 
 /**

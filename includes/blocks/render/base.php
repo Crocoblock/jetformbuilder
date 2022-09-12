@@ -265,7 +265,7 @@ abstract class Base {
 	}
 
 	protected function set_value() {
-		if ( ! preg_match( '/%\w+::[\w\-]+%/', $this->args['default'] ) ) {
+		if ( ! preg_match( '/%[\w\-]+%/', $this->args['default'] ) ) {
 			$this->add_attribute( 'value', $this->args['default'] );
 
 			return;

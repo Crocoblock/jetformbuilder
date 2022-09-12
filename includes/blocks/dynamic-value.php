@@ -10,6 +10,8 @@ use Jet_Form_Builder\Classes\Tools;
 
 class Dynamic_Value {
 
+	const HANDLE = 'jet-fb-dynamic-value';
+
 	public function __construct() {
 		add_action(
 			'jet-form-builder/before-start-form-row',

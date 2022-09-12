@@ -1,6 +1,7 @@
 import { createMultiStep } from './functions';
+import ConditionPageStateItem from './ConditionPageStateItem';
 
-const { addAction } = wp.hooks;
+const { addAction, addFilter } = wp.hooks;
 
 addAction(
 	'jet.fb.observe.after',
@@ -27,5 +28,15 @@ addAction(
 		}
 
 		block.multistep = multistep;
+	},
+);
+
+addFilter(
+	'jet.fb.conditional.types',
+	'jet-form-builder/multi-step',
+	function ( items ) {
+		items = [ ConditionPageStateItem, ...items ];
+
+		return items;
 	},
 );

@@ -1,4 +1,4 @@
-import ConditionItem from './ConditionItem';
+const { ConditionItem } = JetFormBuilderAbstract;
 
 function ConditionPageStateItem() {
 	ConditionItem.call( this );

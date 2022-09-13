@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
@@ -22,6 +23,7 @@ class Controller {
 	);
 	protected $columns  = array();
 	protected $record_id;
+	protected $is_new   = true;
 
 	public function get_record_id(): int {
 		return (int) $this->record_id;
@@ -29,6 +31,7 @@ class Controller {
 
 	public function set_record_id( $record_id ): Controller {
 		$this->record_id = (int) $record_id;
+		$this->is_new    = false;
 
 		return $this;
 	}
@@ -43,7 +46,7 @@ class Controller {
 		 * in `*_jet_fb_records`
 		 * by \Jet_Form_Builder\Actions\Methods\Form_Record\Record_Model
 		 */
-		$this->set_record_id( $this->save_record() );
+		$this->record_id = $this->save_record();
 
 		/**
 		 * Saving each field as a separate record
@@ -188,17 +191,38 @@ class Controller {
 	 * @return array
 	 */
 	private function get_prepared_fields(): array {
+		$fields = array();
+
+		foreach ( $this->generate_request() as list( $field_name, $value, $type, $attrs ) ) {
+			$fields[] = array(
+				'record_id'   => $this->record_id,
+				'field_name'  => $field_name,
+				'field_type'  => empty( $type ) ? 'computed' : $type,
+				'field_value' => $value,
+				'field_attrs' => Tools::encode_json( $attrs ),
+			);
+		}
+
+		return $fields;
+	}
+
+	private function generate_request(): \Generator {
 		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
-		$fields      = array();
+		$saved       = array();
+
+		if ( ! $this->is_new ) {
+			$saved = Record_Fields_View::get_request_list( $this->record_id );
+		}
 
 		foreach ( jet_fb_action_handler()->request_data as $field_name => $value ) {
-			// like 1=1 SQL-trick
-			if ( false
-			     || isset( $core_fields[ $field_name ] )
-			     || ( empty( $this->settings['save_empty_fields'] ) && empty( $value ) )
+			if (
+				isset( $core_fields[ $field_name ] ) ||
+				( empty( $this->settings['save_empty_fields'] ) && empty( $value ) ) ||
+				array_key_exists( $field_name, $saved )
 			) {
 				continue;
 			}
+
 			$current_attrs = Block_Helper::find_block_by_name(
 				$field_name,
 				jet_form_builder()->form_handler->request_handler->_fields
@@ -217,16 +241,8 @@ class Controller {
 				$attrs_to_save['is_encoded'] = true;
 			}
 
-			$fields[] = array(
-				'record_id'   => $this->record_id,
-				'field_name'  => $field_name,
-				'field_type'  => empty( $type ) ? 'computed' : $type,
-				'field_value' => $value,
-				'field_attrs' => Tools::encode_json( $attrs_to_save ),
-			);
+			yield array( $field_name, $value, $type, $attrs_to_save );
 		}
-
-		return $fields;
 	}
 
 	private function get_attrs_by_field_type( string $type, array $block ) {

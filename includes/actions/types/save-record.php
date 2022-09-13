@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Controller;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Manager;
@@ -82,6 +83,7 @@ class Save_Record extends Base {
 		$controller->set_setting( 'save_errors', Manager::instance()->active() );
 
 		try {
+			$controller->save_fields();
 			$controller->save_actions();
 			$controller->save_errors();
 

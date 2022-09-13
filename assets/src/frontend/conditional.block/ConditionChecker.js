@@ -1,6 +1,16 @@
 function ConditionChecker() {
 }
 
+const prepareValue = value => {
+	if ( Array.isArray( value ) ) {
+		return value.map( prepareValue );
+	}
+	if ( !value && 0 !== value ) {
+		return value;
+	}
+	return Number.isNaN( Number( value ) ) ? value : Number( value );
+};
+
 /**
  * @param condition {ConditionFieldItem}
  * @param input {InputData}
@@ -8,42 +18,38 @@ function ConditionChecker() {
 ConditionChecker.prototype = {
 	isSupported: () => true,
 	check: function ( condition, input ) {
-		const { current } = input.value;
+		const current        = prepareValue( input.value.current );
+		const conditionValue = prepareValue( condition.value );
 
 		switch ( condition.operator ) {
 			case 'equal':
-				return current === condition.value;
+				return current === conditionValue;
 
 			case 'greater':
-				return parseFloat( current ) >
-					parseFloat( condition.value );
+				return current > conditionValue;
 
 			case 'less':
-				return parseFloat( current ) <
-					parseFloat( condition.value );
+				return current < conditionValue;
 
 			case 'between':
-				if ( 2 > condition.value?.length ) {
+				if ( !conditionValue?.length ) {
 					return false;
 				}
 
-				const from  = parseFloat( condition.value[ 0 ] ),
-				      to    = parseFloat( condition.value[ 1 ] ),
-				      value = parseFloat( current );
-
 				return (
-					from <= value && value <= to
+					conditionValue[ 0 ] <= current &&
+					current <= conditionValue[ 1 ]
 				);
 
 			case 'one_of':
-				if ( !condition.value?.length ) {
+				if ( !conditionValue?.length ) {
 					return false;
 				}
 
-				return 0 <= condition.value.indexOf( current );
+				return 0 <= conditionValue.indexOf( current );
 
 			case 'contain':
-				return 0 <= current.indexOf( condition.value );
+				return 0 <= current.indexOf( conditionValue );
 
 			default:
 				return false;

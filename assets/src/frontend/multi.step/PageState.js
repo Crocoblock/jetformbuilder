@@ -1,6 +1,7 @@
+import ConditionPageStateItem from './ConditionPageStateItem';
+
 const {
 	      ReactiveVar,
-	      ConditionPageStateItem,
 	      createConditionalBlock,
       } = JetFormBuilderAbstract;
 
@@ -70,14 +71,14 @@ PageState.prototype.parseDom            = function () {
 			this.state.getRoot(),
 		);
 
-		for ( const condition of block.getConditions() ) {
+		for ( const condition of block.list.getConditions() ) {
 			if ( !(
 				condition instanceof ConditionPageStateItem
 			) ) {
 				continue;
 			}
 			block.page = this;
-			this.canSwitch.watch( () => block.calculate() );
+			this.canSwitch.watch( () => block.list.calculate() );
 
 			break;
 		}

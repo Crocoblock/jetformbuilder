@@ -1,6 +1,7 @@
 import { createChecker, createConditionalBlock } from './functions';
 import ConditionalBlock from './ConditionalBlock';
 import ConditionItem from './ConditionItem';
+import ConditionsList from './ConditionsList';
 
 const { addAction } = wp.hooks;
 
@@ -32,4 +33,5 @@ window.JetFormBuilderAbstract = {
 	ConditionalBlock,
 	createConditionalBlock,
 	createChecker,
+	ConditionsList,
 };

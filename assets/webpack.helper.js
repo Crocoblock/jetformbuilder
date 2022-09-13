@@ -38,6 +38,7 @@ module.exports = {
 			'frontend/calculated.field': './frontend/calculated.field/main.js',
 			'frontend/conditional.block': './frontend/conditional.block/main.js',
 			'frontend/advanced.reporting': './frontend/advanced.reporting/main.js',
+			'frontend/dynamic.value': './frontend/dynamic.value/main.js',
 			'editor/form.builder': './editor/main.js',
 			'editor/default.builder': './editor/form-block.js',
 			'editor/package': './package/manager.js',

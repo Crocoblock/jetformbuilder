@@ -1,29 +1,27 @@
-const {
-	Button,
-	TextControl,
-} = wp.components;
-
-const { __ } = wp.i18n;
+import ActionModal from '../../action-modal/components/ActionModal';
 
 const {
-	useState,
-} = wp.element;
+	      Button,
+	      TextControl,
+      } = wp.components;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      useState,
+      } = wp.element;
 
 const {
-	useSelect,
-	useDispatch,
-} = wp.data;
+	      useSelect,
+	      useDispatch,
+      } = wp.data;
 
 const { apiFetch } = wp;
 
 const {
-	ActionModal,
-} = JetFBComponents;
-
-const {
-	rest_add_state,
-	rest_delete_state,
-} = window.jetFormBlockConditions;
+	      rest_add_state,
+	      rest_delete_state,
+      } = window.jetFormBlockConditions;
 
 const NoticeInfo = ( { ...props } ) => {
 	return <div className="jet-fb-notice" { ...props }>
@@ -34,17 +32,25 @@ const NoticeInfo = ( { ...props } ) => {
 	</div>;
 };
 
-const EditCustomRenderStates = ( { setShowModal, changeCurrentItem, currentItem } ) => {
+const EditCustomRenderStates = ( {
+	setShowModal,
+	changeCurrentItem,
+	currentItem,
+} ) => {
 
-	const [ isLoading, setButtonLoading ] = useState( false );
+	const [ isLoading, setButtonLoading ]   = useState( false );
 	const [ isLoadingItem, setItemLoading ] = useState( {} );
-	const [ value, setValue ] = useState( '' );
-	let current = [ ...currentItem.render_state ];
+	const [ value, setValue ]               = useState( '' );
+	let current                             = [ ...currentItem.render_state ];
 
-	const { addRenderState, deleteRenderStates } = useDispatch( 'jet-forms/block-conditions', [] );
+	const {
+		      addRenderState,
+		      deleteRenderStates,
+	      } = useDispatch( 'jet-forms/block-conditions', [] );
 
 	const customStates = useSelect(
-		select => select( 'jet-forms/block-conditions' ).getCustomRenderStates(),
+		select => select( 'jet-forms/block-conditions' ).
+			getCustomRenderStates(),
 		[ isLoading, isLoadingItem ],
 	);
 

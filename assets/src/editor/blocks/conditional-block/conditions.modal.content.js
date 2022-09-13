@@ -1,15 +1,12 @@
-import ConditionOptions from './condition.options';
-
 const {
 	      Repeater,
 	      RepeaterAddNew,
 	      RepeaterAddOrOperator,
-	      RepeaterItemContext,
 	      RepeaterHeadContext,
 	      RepeaterButtonsContext,
+	      ConditionItem,
       } = JetFBComponents;
 const {
-	      useEffect,
 	      useState,
 	      useContext,
       } = wp.element;
@@ -25,32 +22,6 @@ const {
 const {
 	      __,
       } = wp.i18n;
-
-function RepeaterItem() {
-
-	const {
-		      currentItem,
-		      changeCurrentItem,
-	      } = useContext( RepeaterItemContext );
-
-	const uniqKey       = useUniqKey();
-	const { operators } = useBlockConditions();
-
-	return <>
-		<SelectControl
-			key={ uniqKey( 'SelectControl-operator' ) }
-			label="Operator"
-			labelPosition="side"
-			value={ currentItem.operator }
-			options={ operators }
-			onChange={ newValue => changeCurrentItem( { operator: newValue } ) }
-		/>
-		<ConditionOptions
-			currentItem={ currentItem }
-			changeCurrentItem={ changeCurrentItem }
-		/>
-	</>;
-}
 
 export default function () {
 	const [ attributes, setAttributes ] = useBlockAttributes();
@@ -77,7 +48,7 @@ export default function () {
 			items={ current.conditions ?? [] }
 			onSetState={ updateConditions }
 		>
-			<RepeaterItem/>
+			<ConditionItem/>
 		</Repeater>
 	</>;
 

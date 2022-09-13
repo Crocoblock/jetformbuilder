@@ -133,6 +133,7 @@ import MacrosFields from './macros.button/components/MacrosFields';
 import ShowPopoverContext from './macros.button/context/ShowPopoverContext';
 import PopoverItem from './macros.button/context/PopoverItem';
 import PresetButton from './preset/components/PresetButton';
+import ConditionItem from './block-conditions/components/ConditionItem';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -203,6 +204,7 @@ window.JetFBComponents = {
 	ShowPopoverContext,
 	PopoverItem,
 	PresetButton,
+	ConditionItem,
 };
 
 // JFBFunctions

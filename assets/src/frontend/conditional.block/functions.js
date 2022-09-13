@@ -13,8 +13,10 @@ const getItemTypes = () => applyFilters(
 		ConditionFieldItem,
 	],
 );
-
-let itemTypes = [];
+/**
+ * @type {ConditionItem[]}
+ */
+let itemTypes      = [];
 
 const getCheckers = () => applyFilters(
 	'jet.fb.conditional.checkers',
@@ -26,19 +28,27 @@ const getCheckers = () => applyFilters(
 
 let checkers = [];
 
-function createConditionItem( options, block ) {
+/**
+ * @param options {{}}
+ * @param list {ConditionsList}
+ * @return {*}
+ */
+function createConditionItem( options, list ) {
 	if ( !itemTypes.length ) {
 		itemTypes = getItemTypes();
 	}
 
 	for ( const dataType of itemTypes ) {
+		/**
+		 * @type {ConditionItem}
+		 */
 		const current = new dataType();
 
 		if ( !current.isSupported( options ) ) {
 			continue;
 		}
+		current.setList( list );
 		current.setOptions( options );
-		current.setBlock( block );
 
 		return current;
 	}
@@ -51,7 +61,7 @@ function createConditionalBlock( node, root ) {
 	const block = new ConditionalBlock( node, root );
 
 	block.observe();
-	block.calculate();
+	block.list.onChangeRelated();
 
 	return block;
 }

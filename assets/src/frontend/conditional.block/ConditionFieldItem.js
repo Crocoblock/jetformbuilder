@@ -1,5 +1,7 @@
 import ConditionItem from './ConditionItem';
 
+const { CalculatedFormula } = JetFormBuilderAbstract;
+
 function ConditionFieldItem() {
 	ConditionItem.call( this );
 
@@ -7,21 +9,21 @@ function ConditionFieldItem() {
 		return !!options?.field?.length;
 	};
 	this.observe     = function () {
-		const input        = this.getInput();
-		this.block._fields = this.block._fields ?? [];
+		const input       = this.getInput();
+		this.list._fields = this.list._fields ?? [];
 
-		if ( !input || this.block._fields.includes( this.field ) ) {
+		if ( !input || this.list._fields.includes( this.field ) ) {
 			return;
 		}
 
-		this.block._fields.push( this.field );
-		input.watch( () => this.block.calculate() );
+		this.list._fields.push( this.field );
+		input.watch( () => this.list.onChangeRelated() );
 	};
 	/**
 	 * @returns {InputData|boolean}
 	 */
 	this.getInput = function () {
-		return this.block.root.getInput( this.field );
+		return this.list.root.getInput( this.field );
 	};
 	this.isPassed   = function () {
 		const input = this.getInput();
@@ -40,8 +42,15 @@ function ConditionFieldItem() {
 	} ) {
 		this.field        = field;
 		this.operator     = operator;
-		this.value        = value;
 		this.render_state = render_state;
+
+		const formula = new CalculatedFormula( value, this.list.root );
+
+		formula.setResult = () => {
+			this.value = formula.calculate();
+			this.list.onChangeRelated();
+		};
+		formula.setResult();
 	};
 }
 

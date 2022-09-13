@@ -1,19 +1,20 @@
-import { createConditionItem } from './functions';
-import OrOperatorItem from './OrOperatorItem';
+import ConditionsList from './ConditionsList';
 
 const { doAction } = wp.hooks;
 
 function ConditionalBlock( node, observable ) {
-
 	this.node           = node;
 	node.jfbConditional = this;
 	/**
 	 * @type {Observable}
 	 */
 	this.root = observable;
-	this.invalid         = [];
-	this.undefinedFields = [];
-	this.isObserved      = false;
+	this.isObserved = false;
+
+	/**
+	 * @type {ConditionsList}
+	 */
+	this.list = null;
 
 	/**
 	 * @type {PageState}
@@ -37,11 +38,13 @@ function ConditionalBlock( node, observable ) {
 
 ConditionalBlock.prototype = {
 	setConditions() {
-		this.conditions = JSON.parse( this.node.dataset.jfbConditional ).
-			map(
-				item => createConditionItem( item, this ),
-			).
-			filter( item => item );
+		const { jfbConditional } = this.node.dataset;
+
+		this.list = new ConditionsList( jfbConditional, this.root );
+
+		this.list.onChangeRelated = () => {
+			this.runFunction( this.list.getResult() );
+		};
 	},
 	insertComment() {
 		if ( !this.willDomChange() ) {
@@ -63,53 +66,7 @@ ConditionalBlock.prototype = {
 		this.isObserved = true;
 		this.insertComment();
 
-		for ( const condition of this.getConditions() ) {
-			condition.observe();
-		}
-	},
-	calculate() {
-		this.runFunction( this.getResult() );
-	},
-	getResult() {
-		this.invalid   = [];
-		let groups     = {};
-		let groupIndex = 0;
-
-		for ( const condition of this.getConditions() ) {
-			if ( condition instanceof OrOperatorItem ) {
-				groupIndex++;
-
-				continue;
-			}
-			groups[ groupIndex ] = groups[ groupIndex ] ?? [];
-			groups[ groupIndex ].push( condition );
-		}
-
-		groups = Object.values( groups );
-
-		if ( !groups.length ) {
-			return true;
-		}
-
-		for ( const group of groups ) {
-			if ( this.isValidGroup( group ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	},
-	isValidGroup( conditionsGroup ) {
-		for ( const condition of conditionsGroup ) {
-			if ( condition.isPassed() ) {
-				continue;
-			}
-			this.invalid.push( condition );
-
-			return false;
-		}
-
-		return true;
+		this.list.observe();
 	},
 	runFunction( result ) {
 		switch ( this.getFunction() ) {
@@ -150,12 +107,6 @@ ConditionalBlock.prototype = {
 	},
 	getFunction() {
 		return this.node.dataset.jfbFunc;
-	},
-	/**
-	 * @returns {array<ConditionFieldItem|ConditionPageStateItem>}
-	 */
-	getConditions() {
-		return this.conditions;
 	},
 };
 

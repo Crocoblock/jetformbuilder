@@ -6,6 +6,7 @@ import RepeaterState from '../../repeater/components/repeater.state';
 import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
 import PresetButton from '../../preset/components/PresetButton';
 import MacrosFields from '../../macros.button/components/MacrosFields';
+import ConditionItem from '../../block-conditions/components/ConditionItem';
 
 const {
 	      __,
@@ -149,7 +150,7 @@ function DynamicItemBody() {
 		</Flex>
 		<RepeaterState state={ updateConditions }>
 			<Repeater items={ current.conditions ?? [] }>
-				Тут могло бы быть ваше условие
+				<ConditionItem/>
 			</Repeater>
 			<RepeaterAddNew>
 				{ __( 'Add New Condition', 'jet-form-builder' ) }

@@ -1,4 +1,8 @@
-import RenderStateOptions from './render.state.options';
+import RenderStateOptions from './RenderStateOptions';
+import MacrosFields from '../../macros.button/components/MacrosFields';
+import PresetButton from '../../preset/components/PresetButton';
+import getFormFieldsBlocks from '../../blocks/helpers/getFormFieldsBlocks';
+import useUniqKey from '../../blocks/hooks/useUniqKey';
 
 const {
 	      TextareaControl,
@@ -7,16 +11,6 @@ const {
 	      Flex,
 	      FlexItem,
       } = wp.components;
-const {
-	      MacrosFields,
-	      PresetButton,
-      } = JetFBComponents;
-const {
-	      getFormFieldsBlocks,
-      } = JetFBActions;
-const {
-	      useUniqKey,
-      } = JetFBHooks;
 const {
 	      __,
       } = wp.i18n;
@@ -43,7 +37,7 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )(
 				return <>
 					<SelectControl
 						key={ uniqKey( 'SelectControl-field' ) }
-						label="Field"
+						label={ __( 'Field', 'jet-form-builder' ) }
 						labelPosition="side"
 						value={ currentItem.field }
 						options={ formFields }

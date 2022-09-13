@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -270,6 +271,7 @@ abstract class Base {
 
 			return;
 		}
+		wp_enqueue_script( Dynamic_Value::HANDLE );
 
 		$this->add_attribute( 'data-value', $this->args['default'] );
 	}

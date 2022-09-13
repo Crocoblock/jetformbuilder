@@ -1,20 +1,20 @@
-import EditCustomRenderStates from './edit.custom.render.states';
+import EditCustomRenderStates from './EditCustomRenderStates';
 
 const {
-	Button,
-	BaseControl,
-	FormTokenField,
-} = wp.components;
+	      Button,
+	      BaseControl,
+	      FormTokenField,
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	useState,
-} = wp.element;
+	      useState,
+      } = wp.element;
 
 const {
-	useSelect,
-} = wp.data;
+	      useSelect,
+      } = wp.data;
 
 const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 	const [ showModal, setShowModal ] = useState( false );
@@ -34,7 +34,8 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 					label={ __( 'Add render state', 'jet-form-builder' ) }
 					value={ currentItem.render_state }
 					suggestions={ renderStates }
-					onChange={ render_state => changeCurrentItem( { render_state } ) }
+					onChange={ render_state => changeCurrentItem(
+						{ render_state } ) }
 					tokenizeOnSpace
 					__experimentalExpandOnFocus
 				/>

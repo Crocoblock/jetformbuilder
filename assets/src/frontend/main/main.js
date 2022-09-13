@@ -9,6 +9,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
+import CalculatedFormula from './CalculatedFormula';
 
 (
 	function ( $ ) {
@@ -26,6 +27,7 @@ import MultiSelectData from './inputs/MultiSelectData';
 			ReportingInterface,
 			CheckboxData,
 			MultiSelectData,
+			CalculatedFormula,
 		};
 
 		$( initCommon );

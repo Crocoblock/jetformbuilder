@@ -1,8 +1,7 @@
 /**
- * @property {ConditionalBlock} block
+ * @property {ConditionsList} list
  */
 function ConditionItem() {
-	this.block = null;
 }
 
 ConditionItem.prototype.isSupported = function ( options ) {
@@ -17,8 +16,8 @@ ConditionItem.prototype.isPassed    = function () {
 		'You must provide ConditionItem::isPassed function',
 	);
 };
-ConditionItem.prototype.setBlock    = function ( block ) {
-	this.block = block;
+ConditionItem.prototype.setList     = function ( list ) {
+	this.list = list;
 };
 
 export default ConditionItem;

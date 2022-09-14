@@ -3,6 +3,9 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -22,6 +25,19 @@ class Register_User extends Base {
 
 	public function get_id() {
 		return 'register_user';
+	}
+
+	/**
+	 * @since 2.1.6 https://github.com/Crocoblock/issues-tracker/issues/1445
+	 *
+	 * @return string[]
+	 */
+	public function supported_events(): array {
+		return array(
+			Default_Process_Event::class,
+			Default_Required_Event::class,
+			Bad_Request_Event::class,
+		);
 	}
 
 	public function action_attributes() {

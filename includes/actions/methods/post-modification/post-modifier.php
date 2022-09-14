@@ -22,12 +22,7 @@ class Post_Modifier extends Abstract_Post_Modifier {
 	public function before_run( Insert_Post $action ) {
 		parent::before_run( $action );
 
-		$post_status = $action->settings['post_status'] ?? '';
-		$meta        = $action->settings['default_meta'] ?? array();
-
 		$this->set( 'post_type', $action->get_post_type() );
-		$this->set( 'meta_input', $meta );
-		$this->set( 'post_status', $post_status );
 	}
 
 	protected function get_properties(): Object_Properties_Collection {

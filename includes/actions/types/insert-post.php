@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Abstract_Post_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
@@ -17,27 +18,6 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Base_Type class
  */
 class Insert_Post extends Base {
-
-	/** @var Abstract_Post_Modifier[] */
-	protected $modifiers;
-
-	public function __construct() {
-		parent::__construct();
-
-		/**
-		 * Just add a new element to the end.
-		 * When the action is executed, this array is flipped,
-		 * which puts the \Jet_Form_Builder\Actions\Methods\Post_Modifier at the end.
-		 *
-		 * @since 2.1.4
-		 */
-		$this->modifiers = apply_filters(
-			'jet-form-builder/action/insert-post/modifiers',
-			array(
-				new Post_Modifier(),
-			)
-		);
-	}
 
 	public function get_name() {
 		return __( 'Insert/Update Post', 'jet-form-builder' );
@@ -71,13 +51,14 @@ class Insert_Post extends Base {
 	 * @return void
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$modifiers = array_reverse( $this->modifiers );
+		$modifiers = array_reverse( $this->get_modifiers() );
 
 		/** @var Abstract_Post_Modifier $modifier */
 		foreach ( $modifiers as $modifier ) {
 			if ( ! $modifier->is_supported( $this ) ) {
 				continue;
 			}
+
 			$modifier->before_run( $this );
 			$modifier->run();
 			break;
@@ -124,8 +105,9 @@ class Insert_Post extends Base {
 	 */
 	public function action_data() {
 		$properties = array();
+		$modifiers  = $this->get_modifiers();
 
-		foreach ( $this->modifiers as $modifier ) {
+		foreach ( $modifiers as $modifier ) {
 			$properties[ $modifier->get_id() ] = Tools::with_placeholder(
 				Array_Tools::to_array( $modifier->properties->all() )
 			);
@@ -145,6 +127,23 @@ class Insert_Post extends Base {
 		);
 	}
 
+	/**
+	 * Just add a new element to the end.
+	 * When the action is executed, this array is flipped,
+	 * which puts the \Jet_Form_Builder\Actions\Methods\Post_Modifier at the end.
+	 *
+	 * @return Abstract_Post_Modifier[]
+	 * @since 2.1.4
+	 *
+	 */
+	public function get_modifiers(): array {
+		return apply_filters(
+			'jet-form-builder/action/insert-post/modifiers',
+			array(
+				new Post_Modifier(),
+			)
+		);
+	}
 
 	/**
 	 * Returns post statuses list for the options

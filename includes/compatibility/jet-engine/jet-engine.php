@@ -13,6 +13,7 @@ use Jet_Form_Builder\Compatibility\Jet_Engine\Generators\Get_From_Je_Query;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Methods\Post_Modification\Post_Je_Relation_Property;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Parsers\Map_Field_Parser;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
+use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_User;
 
 class Jet_Engine {
 
@@ -54,7 +55,11 @@ class Jet_Engine {
 	}
 
 	public function add_sources( array $sources ): array {
-		$sources[] = new Preset_Source_Options_Page();
+		array_push(
+			$sources,
+			new Preset_Source_Options_Page(),
+			new Preset_User()
+		);
 
 		return $sources;
 	}

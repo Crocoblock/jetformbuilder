@@ -23,42 +23,11 @@ class File_Upload {
 
 	use Instance_Trait;
 
-	private $rendered_scripts = false;
-
-	public function __construct() {
-	}
-
-
 	public function get_loader() {
 		return '<div class="jet-form-builder-file-upload__loader">' . apply_filters(
-			'jet-form-builder/file-upload/loader',
-			'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
-		) . '</div>';
-	}
-
-	/**
-	 * Resturns max upload size based on field arguments
-	 *
-	 * @param array $args [description]
-	 *
-	 * @return [type]       [description]
-	 */
-	public function get_max_size_for_field( $args = array() ) {
-
-		$max_size       = wp_max_upload_size();
-		$field_max_size = $max_size;
-
-		if ( ! empty( $args['max_size'] ) ) {
-
-			$field_max_size = intval( floatval( $args['max_size'] ) * MB_IN_BYTES );
-
-			if ( $field_max_size > $max_size ) {
-				$field_max_size = $max_size;
-			}
-		}
-
-		return $field_max_size;
-
+				'jet-form-builder/file-upload/loader',
+				'<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" stroke="#fff"><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle stroke-opacity=".5" cx="18" cy="18" r="18"/><path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(137.826 18 18)"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/></path></g></g></svg>'
+			) . '</div>';
 	}
 
 	/**
@@ -82,21 +51,6 @@ class File_Upload {
 			window.JetFormBuilderFileUploadConfig.errors[ $form_id ] = $messages;  
 		"
 		);
-	}
-
-	public function ensure_media_js( $content = '' ) {
-		if ( $this->rendered_scripts ) {
-			return $content;
-		}
-		$this->rendered_scripts = true;
-
-		ob_start();
-		jet_form_builder()->blocks->register_form_scripts();
-
-		$this->enqueue_scripts();
-		wp_scripts()->print_scripts( 'jet-form-builder-file-upload' );
-
-		return $content . ob_get_clean();
 	}
 
 }

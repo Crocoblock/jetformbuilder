@@ -128,6 +128,10 @@ class Editor {
 									'label' => __( 'Current user', 'jet-form-builder' ),
 								),
 								array(
+									'value' => 'queried_user',
+									'label' => __( 'Queried user', 'jet-form-builder' ),
+								),
+								array(
 									'value' => 'query_var',
 									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
 								),

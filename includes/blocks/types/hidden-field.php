@@ -352,12 +352,24 @@ class Hidden_Field extends Base {
 								'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
 							),
 							array(
-								'value' => 'term_url',
-								'label' => __( 'Current Term URL', 'jet-form-builder' ),
-							),
-							array(
 								'value' => 'post_meta',
 								'label' => __( 'Current Post Meta', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_id',
+								'label' => __( 'Current Post Author ID', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_email',
+								'label' => __( 'Current Post Author Email', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'author_name',
+								'label' => __( 'Current Post Author Name', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'term_url',
+								'label' => __( 'Current Term URL', 'jet-form-builder' ),
 							),
 							array(
 								'value' => 'user_id',
@@ -374,18 +386,6 @@ class Hidden_Field extends Base {
 							array(
 								'value' => 'user_meta',
 								'label' => __( 'Current User Meta', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_id',
-								'label' => __( 'Current Post Author ID', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_email',
-								'label' => __( 'Current Post Author Email', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_name',
-								'label' => __( 'Current Post Author Name', 'jet-form-builder' ),
 							),
 							array(
 								'value' => 'query_var',

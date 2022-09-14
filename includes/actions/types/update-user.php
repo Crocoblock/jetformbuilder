@@ -32,18 +32,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Update_User extends Base {
 
-	/** @var User_Modifier */
-	private $modifier;
-
-	public function __construct() {
-		parent::__construct();
-
-		/**
-		 * @since 2.1.4
-		 */
-		$this->modifier = new User_Modifier();
-	}
-
 	public function get_name() {
 		return __( 'Update User', 'jet-form-builder' );
 	}
@@ -98,7 +86,7 @@ class Update_User extends Base {
 		return array(
 			'userRoles'  => Tools::get_user_roles_for_js(),
 			'properties' => Tools::with_placeholder(
-				Array_Tools::to_array( $this->modifier->properties->all() )
+				Array_Tools::to_array( ( new User_Modifier() )->properties->all() )
 			),
 		);
 	}

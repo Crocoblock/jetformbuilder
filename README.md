@@ -4,6 +4,18 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.6
+* ADD: The ability to get the queried user through a preset and compatibility with the JetEngine Profile Builder
+* ADD: Ability to edit the text of Media Field 'Maximum file size'
+* FIX: Most macro filters support multi-value fields in email content
+* FIX: Media field & Elementor Pro Popup compatibility
+* FIX: Insert Post action throws fatal error when pre-check is false
+* FIX: Redirect to inserted product action fail
+* FIX: Default fields don't insert into post
+* Tweak: Allow redirect to updated post via Redirect to Inserted post action
+* Tweak: Save request changes in database on non default events
+* Tweak: Decoding request on query from table
+
 ## 2.1.5
 * ADD: Support custom fields in ActiveCampaign action
 * ADD: Support for Insert/Update Product (WooCommerce)

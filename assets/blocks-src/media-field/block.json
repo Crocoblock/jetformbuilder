@@ -19,7 +19,11 @@
 	"attributes": {
 		"validation": {
 			"type": "object",
-			"default": {}
+			"default": {
+				"messages": {
+					"max_size": "Maximum file size: %max_size%"
+				}
+			}
 		},
 		"allowed_user_cap": {
 			"type": "string",

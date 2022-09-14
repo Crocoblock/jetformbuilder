@@ -4,27 +4,28 @@ import {
 } from './options';
 
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-	FieldSettingsWrapper,
-} = JetFBComponents;
+	      ToolBarFields,
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+      } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	useBlockProps,
-	InspectorControls,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      useBlockProps,
+	      InspectorControls,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	SelectControl,
-	ToggleControl,
-	FormTokenField,
-	__experimentalNumberControl,
-	__experimentalInputControl,
-} = wp.components;
+	      SelectControl,
+	      ToggleControl,
+	      FormTokenField,
+	      TextControl,
+	      __experimentalNumberControl,
+	      __experimentalInputControl,
+      } = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
 
@@ -43,11 +44,11 @@ export default function MediaEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp },
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey, attrHelp },
+	      } = props;
 
 	return [
 		<ToolBarFields
@@ -64,9 +65,9 @@ export default function MediaEdit( props ) {
 				/>
 				<FieldSettingsWrapper { ...props }>
 					<SelectControl
-						key='allowed_user_cap'
+						key="allowed_user_cap"
 						label={ __( 'User access' ) }
-						labelPosition='top'
+						labelPosition="top"
 						value={ attributes.allowed_user_cap }
 						onChange={ ( newValue ) => {
 							setAttributes( { allowed_user_cap: newValue } );
@@ -75,52 +76,77 @@ export default function MediaEdit( props ) {
 					/>
 					{ 'any_user' !== attributes.allowed_user_cap && <>
 						<ToggleControl
-							key='insert_attachment'
+							key="insert_attachment"
 							label={ __( 'Insert attachment' ) }
 							checked={ attributes.insert_attachment }
 							help={ attrHelp( 'insert_attachment' ) }
 							onChange={ ( newValue ) => {
-								setAttributes( { insert_attachment: Boolean( newValue ) } );
+								setAttributes( {
+									insert_attachment: Boolean( newValue ),
+								} );
 							} }
 						/>
 						{ attributes.insert_attachment && <SelectControl
-							key='value_format'
+							key="value_format"
 							label={ __( 'Field value' ) }
-							labelPosition='top'
+							labelPosition="top"
 							value={ attributes.value_format }
 							onChange={ ( newValue ) => {
-								props.setAttributes( { value_format: newValue } );
+								props.setAttributes(
+									{ value_format: newValue } );
 							} }
 							options={ valueFormats }
 						/> }
 					</> }
 					<NumberControl
-						key='max_files'
+						key="max_files"
 						label={ __( 'Maximum allowed files to upload' ) }
-						labelPosition='top'
+						labelPosition="top"
 						help={ attrHelp( 'max_files' ) }
 						value={ attributes.max_files }
 						onChange={ ( newValue ) => {
-							props.setAttributes( { max_files: parseInt( newValue ) } );
+							props.setAttributes(
+								{ max_files: parseInt( newValue ) } );
 						} }
 					/>
 					<NumberControl
 						label={ __( 'Maximum size in Mb' ) }
-						labelPosition='top'
-						key='max_size'
+						labelPosition="top"
+						key="max_size"
 						help={ attrHelp( 'max_size' ) }
 						value={ attributes.max_size }
 						step={ 0.01 }
 						onChange={ newValue => {
-							props.setAttributes( { max_size: Number( newValue ) } );
+							props.setAttributes(
+								{ max_size: Number( newValue ) } );
 						} }
 					/>
+					<TextControl
+						label={ __(
+							'Maximum file size message',
+							'jet-form-builder',
+						) }
+						value={ attributes.validation.messages.max_size }
+						onChange={ max_size => {
+							setAttributes( {
+								validation: {
+									messages: { max_size },
+								},
+							} );
+						} }
+						help={ __(
+							`Use the %max_size% macro to display 
+							the maximum allowed file size`,
+							'jet-form-builder',
+						) }
+					/>
 					<FormTokenField
-						key='allowed_mimes'
+						key="allowed_mimes"
 						value={ attributes.allowed_mimes }
 						label={ __( 'Allow MIME types', 'jet-form-builder' ) }
 						suggestions={ localizeData.mime_types }
-						onChange={ allowed_mimes => setAttributes( { allowed_mimes } ) }
+						onChange={ allowed_mimes => setAttributes(
+							{ allowed_mimes } ) }
 						tokenizeOnSpace
 					/>
 				</FieldSettingsWrapper>

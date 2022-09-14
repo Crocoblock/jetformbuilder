@@ -68,7 +68,9 @@ class Events_Manager implements Arrayable {
 		// save all form actions
 		jet_fb_action_handler()->set_form_id( $form_id );
 
+		do_action( 'jet-form-builder/before-trigger-event', $event );
 		$event->execute();
+		do_action( 'jet-form-builder/after-trigger-event', $event );
 	}
 
 	/**
@@ -106,7 +108,6 @@ class Events_Manager implements Arrayable {
 
 		return $response;
 	}
-
 
 
 	/**

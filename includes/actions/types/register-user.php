@@ -27,19 +27,6 @@ class Register_User extends Base {
 		return 'register_user';
 	}
 
-	/**
-	 * @since 2.1.6 https://github.com/Crocoblock/issues-tracker/issues/1445
-	 *
-	 * @return string[]
-	 */
-	public function supported_events(): array {
-		return array(
-			Default_Process_Event::class,
-			Default_Required_Event::class,
-			Bad_Request_Event::class,
-		);
-	}
-
 	public function action_attributes() {
 		return array(
 			'fields_map'      => array(

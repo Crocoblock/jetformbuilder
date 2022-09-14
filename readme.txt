@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 6.0.1
+Tested up to: 6.0.2
 Requires PHP: 7.0
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,18 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**2.1.6**
+ - ADD: The ability to get the queried user through a preset and compatibility with the JetEngine Profile Builder
+ - ADD: Ability to edit the text of Media Field 'Maximum file size'
+ - FIX: Most macro filters support multi-value fields in email content
+ - FIX: Media field & Elementor Pro Popup compatibility
+ - FIX: Insert Post action throws fatal error when pre-check is false
+ - FIX: Redirect to inserted product action fail
+ - FIX: Default fields don't insert into post
+ - Tweak: Allow redirect to updated post via Redirect to Inserted post action
+ - Tweak: Save request changes in database on non default events
+ - Tweak: Decoding request on query from table
 
 **2.1.5**
  - ADD: Support custom fields in ActiveCampaign action

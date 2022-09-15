@@ -89,6 +89,13 @@ function DynamicItemBody() {
 		<SelectControl
 			options={ [
 				{
+					value: 'on_change',
+					label: __(
+						'On change conditions result',
+						'jet-form-builder',
+					),
+				},
+				{
 					value: 'once',
 					label: __( 'Once', 'jet-form-builder' ),
 				},

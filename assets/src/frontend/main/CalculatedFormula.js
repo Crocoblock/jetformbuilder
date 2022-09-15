@@ -71,7 +71,7 @@ CalculatedFormula.prototype = {
 			const result = current();
 
 			if ( !Number.isNaN( Number( result ) ) && result ) {
-				return Number( result );
+				return result;
 			}
 
 			return `'${ result }'`;

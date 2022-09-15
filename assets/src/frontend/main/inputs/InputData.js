@@ -83,6 +83,9 @@ InputData.prototype.onChange     = function () {
 InputData.prototype.watch        = function ( callable ) {
 	this.value.watch( callable );
 };
+InputData.prototype.unWatch = function ( callable ) {
+	this.value.unWatch( callable );
+};
 /**
  * @param inputData {InputData}
  */

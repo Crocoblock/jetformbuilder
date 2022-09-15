@@ -23,12 +23,17 @@ ConditionsList.prototype = {
 		if ( !this.getResult() ) {
 			return;
 		}
-		this.calculate();
+		this.onMatchConditions();
 	},
-	calculate() {},
+	onMatchConditions() {},
 	observe() {
 		for ( const condition of this.getConditions() ) {
 			condition.observe();
+		}
+	},
+	unObserve() {
+		for ( const input of this.root.generateInputs() ) {
+			input.unWatch( this.onChangeRelated );
 		}
 	},
 	setConditions( conditions ) {

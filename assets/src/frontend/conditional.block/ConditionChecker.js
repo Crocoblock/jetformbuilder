@@ -1,16 +1,6 @@
 function ConditionChecker() {
 }
 
-const prepareValue = value => {
-	if ( Array.isArray( value ) ) {
-		return value.map( prepareValue );
-	}
-	if ( !value && 0 !== value ) {
-		return value;
-	}
-	return Number.isNaN( Number( value ) ) ? value : Number( value );
-};
-
 /**
  * @param condition {ConditionFieldItem}
  * @param input {InputData}
@@ -18,8 +8,8 @@ const prepareValue = value => {
 ConditionChecker.prototype = {
 	isSupported: () => true,
 	check: function ( condition, input ) {
-		const current        = prepareValue( input.value.current );
-		const conditionValue = prepareValue( condition.value );
+		const current        = input.value.current;
+		const conditionValue = condition.value;
 
 		switch ( condition.operator ) {
 			case 'equal':

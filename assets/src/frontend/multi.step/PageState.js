@@ -78,7 +78,7 @@ PageState.prototype.parseDom            = function () {
 				continue;
 			}
 			block.page = this;
-			this.canSwitch.watch( () => block.list.calculate() );
+			this.canSwitch.watch( () => block.list.onChangeRelated() );
 
 			break;
 		}

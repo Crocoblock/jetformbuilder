@@ -22,6 +22,7 @@ const {
 	      FlexItem,
 	      Button,
 	      Flex,
+	      ToggleControl,
       } = wp.components;
 
 const help = [
@@ -104,10 +105,18 @@ function DynamicItemBody() {
 					label: __( 'Always', 'jet-form-builder' ),
 				},
 			] }
-			value={ current.frequency ?? 'always' }
+			value={ current.frequency ?? 'on_change' }
 			label={ __( 'Choose a frequency', 'jet-form-builder' ) }
 			labelPosition={ 'side' }
 			onChange={ frequency => updateCurrent( { frequency } ) }
+		/>
+		<ToggleControl
+			label={ __(
+				'Set value only if field is empty',
+				'jet-form-builder',
+			) }
+			checked={ current.set_on_empty ?? false }
+			onChange={ set_on_empty => updateCurrent( { set_on_empty } ) }
 		/>
 		<Flex
 			align={ 'flex-start' }
@@ -155,6 +164,7 @@ function DynamicItemBody() {
 				/>
 			</FlexItem>
 		</Flex>
+
 		<RepeaterState state={ updateConditions }>
 			<Repeater items={ current.conditions ?? [] }>
 				<ConditionItem/>

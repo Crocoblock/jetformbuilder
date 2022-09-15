@@ -31,11 +31,6 @@ ConditionsList.prototype = {
 			condition.observe();
 		}
 	},
-	unObserve() {
-		for ( const input of this.root.generateInputs() ) {
-			input.unWatch( this.onChangeRelated );
-		}
-	},
 	setConditions( conditions ) {
 		if ( 'string' === typeof conditions ) {
 			conditions = JSON.parse( conditions );

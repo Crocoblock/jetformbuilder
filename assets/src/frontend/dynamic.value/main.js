@@ -1,26 +1,16 @@
-import DynamicStaticValue from './DynamicStaticValue';
-import createValues from './createValues';
+import parseInput from './parseInput';
 
 const { addAction } = wp.hooks;
 
 addAction(
-	'jet.fb.input.onObserve',
+	'jet.fb.observe.after',
 	'jet-form-builder/dynamic-value',
 	/**
-	 * @param input {InputData}
+	 * @param observable {Observable}
 	 */
-	function ( input ) {
-		const [ node ] = input.nodes;
-		const wrapper  = node.closest( '.jet-form-builder-row' );
-
-		if ( wrapper && wrapper.dataset.hasOwnProperty( 'value' ) ) {
-			createValues( wrapper.dataset.value, input );
-
-			return;
+	function ( observable ) {
+		for ( const input of observable.generateInputs() ) {
+			parseInput( input );
 		}
-
-		if ( node.dataset.hasOwnProperty( 'value' ) ) {
-			new DynamicStaticValue( node.dataset.value, input );
-		}
-	},
+	}
 );

@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Not_Regexp_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Regexp_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Contain_Characters_Rule;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Equal_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Not_Contain_Characters_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
 use Jet_Form_Builder\Blocks\Ssr_Validation\Validation_Callbacks;
@@ -203,6 +204,7 @@ class Validation implements Arrayable {
 	public function rule_types(): array {
 		return Array_Tools::to_array(
 			array(
+				new Must_Equal_Rule(),
 				new Must_Contain_Characters_Rule(),
 				new Must_Not_Contain_Characters_Rule(),
 				new Match_Regexp_Rule(),

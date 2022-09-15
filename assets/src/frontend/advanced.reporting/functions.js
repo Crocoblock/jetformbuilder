@@ -19,6 +19,7 @@ import MaxAttrMacro from './macros/MaxAttrMacro';
 import RemainingMacro from './macros/RemainingMacro';
 import LengthFilter from './filters/LengthFilter';
 import FallBackFilter from './filters/FallBackFilter';
+import MustEqual from './restrictions/MustEqual';
 
 const { applyFilters } = wp.hooks;
 
@@ -48,6 +49,7 @@ const getAdvancedRules = () => applyFilters(
 		MatchRegexp,
 		NotMatchRegexp,
 		ServerSideCallback,
+		MustEqual,
 	],
 );
 
@@ -187,7 +189,7 @@ function getPreparedRules( rules, reporting ) {
 			delete rule.type;
 
 			current.setReporting( reporting );
-			current.attrs = { ...rule };
+			current.setAttrs( { ...rule } );
 
 			response.push( current );
 			break;

@@ -47,7 +47,7 @@ function ConditionFieldItem() {
 		const formula = new CalculatedFormula( value, this.list.root );
 
 		formula.setResult = () => {
-			this.value = formula.calculate();
+			this.value = '' + formula.calculate();
 			this.list.onChangeRelated();
 		};
 		formula.setResult();

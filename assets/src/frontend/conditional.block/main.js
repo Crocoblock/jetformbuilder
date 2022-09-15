@@ -18,7 +18,7 @@ addAction(
 );
 
 addAction(
-	'jet.fb.input.onObserve',
+	'jet.fb.input.makeReactive',
 	'jet-form-builder/conditional-block',
 	function ( input ) {
 		input.checker = createChecker( input );

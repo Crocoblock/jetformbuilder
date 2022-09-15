@@ -21,6 +21,7 @@ function RepeaterAddNew( props ) {
 	?? useContext( RepeaterStateContext );
 
 	return <Button
+		icon={ 'plus-alt2' }
 		isSecondary
 		onClick={ () => addNewItem( item ) }
 	>

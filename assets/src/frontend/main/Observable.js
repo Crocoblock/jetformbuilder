@@ -130,13 +130,8 @@ function Observable( parent = null ) {
 	};
 
 	this.makeReactiveProxy = function () {
-		for ( const fieldName in this.dataInputs ) {
-			if ( !this.dataInputs.hasOwnProperty( fieldName ) ) {
-				continue;
-			}
-			const current = this.getInput( fieldName );
+		for ( const current of this.getInputs() ) {
 			current.makeReactive();
-
 			current.watch( () => current.onChange() );
 
 			if ( this.parent ) {
@@ -145,7 +140,7 @@ function Observable( parent = null ) {
 				} );
 			}
 
-			Object.defineProperty( this.data, fieldName, {
+			Object.defineProperty( this.data, current.name, {
 				get() {
 					return current.value.current;
 				},
@@ -191,22 +186,22 @@ function Observable( parent = null ) {
 	 * @returns {array<InputData>}
 	 */
 	this.getInputs = function () {
-		return this.dataInputs;
+		return Object.values( this.dataInputs );
 	};
 
 	/**
 	 * @returns {Generator<void|InputData>}
 	 */
 	this.generateInputs = function* () {
-		for ( const dataInput of this.dataInputs ) {
+		for ( const dataInput of this.getInputs() ) {
 			yield dataInput;
 		}
 
-		if ( ! this.parent ) {
+		if ( !this.parent ) {
 			return;
 		}
 
-		for ( const input of this.parent.root.dataInputs ) {
+		for ( const input of this.parent.root.getInputs() ) {
 			yield input;
 		}
 	};

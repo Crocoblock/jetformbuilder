@@ -3,6 +3,9 @@ import RepeaterButtonsContext from '../context/repeater.custom.item.buttons';
 import useRepeaterState from '../../hooks/useRepeaterState';
 import RepeaterItemContext from '../context/repeater.item';
 import RepeaterStateContext from '../context/repeater.state';
+import MacrosButtonTemplate
+	from '../../macros.button/components/MacrosButtonTemplate';
+import ShowPopoverContext from '../../macros.button/context/ShowPopoverContext';
 
 const {
 	      Card,
@@ -14,6 +17,9 @@ const {
 const {
 	      useContext,
       } = wp.element;
+const {
+	      __,
+      } = wp.i18n;
 
 /**
  * @param props
@@ -126,37 +132,64 @@ function Repeater( props ) {
 					/> }
 					{ (
 						!supportDelete || supportDelete( currentItem )
-					) && <Button
-						isSmall
-						isSecondary
-						isDestructive
-						onClick={ () => removeOption( index ) }
-						className={ 'jet-fb-is-thick' }
+					) && <MacrosButtonTemplate
 						icon={ 'trash' }
-					/> }
+						isDestructive
+					>
+						<ShowPopoverContext.Consumer>
+							{ ( { setShowPopover } ) => <div
+								style={ {
+									padding: '0.5em',
+									width: 'max-content',
+								} }
+							>
+								<span>{ __(
+									'Delete this item?',
+									'jet-form-builder',
+								) }</span>
+								&nbsp;
+								<Button
+									isLink
+									isDestructive
+									onClick={ () => removeOption( index ) }
+								>
+									{ __( 'Yes', 'jet-form-builder' ) }
+								</Button>
+								{ ' / ' }
+								<Button
+									isLink
+									onClick={ () => setShowPopover( false ) }
+								>
+									{ __( 'No', 'jet-form-builder' ) }
+								</Button>
+							</div> }
+						</ShowPopoverContext.Consumer>
+					</MacrosButtonTemplate> }
 				</ButtonGroup>
 			</CardHeader>
 			{ currentItem.__visible && <CardBody
 				className={ 'repeater-item__content' }
 				key={ `jet-form-builder__card-body-${ index }` }
 			>
-				{ (() => {
-					const context = {
-						currentItem,
-						changeCurrentItem: data => changeCurrentItem(
-							data, index ),
-						currentIndex: index,
-					};
+				{ (
+					() => {
+						const context = {
+							currentItem,
+							changeCurrentItem: data => changeCurrentItem(
+								data, index ),
+							currentIndex: index,
+						};
 
-					return <RepeaterItemContext.Provider value={ context }>
-						{ !children &&
-						'Set up your Repeater Template, please.' }
-						{ 'function' === typeof children
-						  ? children( context )
-						  : children
-						}
-					</RepeaterItemContext.Provider>;
-				})() }
+						return <RepeaterItemContext.Provider value={ context }>
+							{ !children &&
+							'Set up your Repeater Template, please.' }
+							{ 'function' === typeof children
+							  ? children( context )
+							  : children
+							}
+						</RepeaterItemContext.Provider>;
+					}
+				)() }
 			</CardBody> }
 		</Card> ) }
 	</div>;

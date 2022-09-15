@@ -70,6 +70,8 @@ InputData.prototype.makeReactive = function () {
 	this.setValue();
 
 	this.value.make();
+
+	doAction( 'jet.fb.input.makeReactive', this );
 };
 InputData.prototype.onChange     = function () {
 	this.calcValue = this.value.current;
@@ -82,9 +84,6 @@ InputData.prototype.onChange     = function () {
 };
 InputData.prototype.watch        = function ( callable ) {
 	this.value.watch( callable );
-};
-InputData.prototype.unWatch = function ( callable ) {
-	this.value.unWatch( callable );
 };
 /**
  * @param inputData {InputData}
@@ -125,8 +124,6 @@ InputData.prototype.onObserve = function () {
 	this.reporting = createReport( this );
 
 	this.loading.watch( () => this.onChangeLoading() );
-
-	doAction( 'jet.fb.input.onObserve', this );
 };
 InputData.prototype.onChangeLoading = function () {
 	this.getSubmit().lockState.current = this.loading.current;

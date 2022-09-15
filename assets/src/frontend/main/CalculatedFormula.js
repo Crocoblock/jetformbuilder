@@ -26,6 +26,7 @@ CalculatedFormula.prototype = {
 		return relatedInput.value.current;
 	},
 	/**
+	 * @private
 	 * @param value
 	 * @param root {Observable}
 	 */

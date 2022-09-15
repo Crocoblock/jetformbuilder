@@ -5,6 +5,7 @@ const {
 	      RepeaterHeadContext,
 	      RepeaterButtonsContext,
 	      ConditionItem,
+	      RepeaterState,
       } = JetFBComponents;
 const {
 	      useState,
@@ -87,11 +88,13 @@ export default function () {
 			) ) }
 		/>
 		{ RepeaterComplete }
-		<RepeaterAddNew onSetState={ updateConditions }>
-			{ __( 'Add New Condition', 'jet-form-builder' ) }
-		</RepeaterAddNew>
-		<RepeaterAddOrOperator onSetState={ updateConditions }>
-			{ __( 'Add OR Operator', 'jet-form-builder' ) }
-		</RepeaterAddOrOperator>
+		<RepeaterState state={ updateConditions }>
+			<RepeaterAddNew>
+				{ __( 'Add New Condition', 'jet-form-builder' ) }
+			</RepeaterAddNew>
+			<RepeaterAddOrOperator>
+				{ __( 'Add OR Operator', 'jet-form-builder' ) }
+			</RepeaterAddOrOperator>
+		</RepeaterState>
 	</>;
 }

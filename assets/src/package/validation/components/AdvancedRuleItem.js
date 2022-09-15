@@ -1,11 +1,16 @@
 import Tools from '../../tools';
 import RepeaterItemContext from '../../repeater/context/repeater.item';
 import BaseHelp from '../../components/BaseHelp';
+import PresetButton from '../../preset/components/PresetButton';
+import MacrosFields from '../../macros.button/components/MacrosFields';
 
 const {
 	      SelectControl,
+	      TextareaControl,
 	      TextControl,
 	      withFilters,
+	      Flex,
+	      FlexItem,
       } = wp.components;
 const {
 	      useContext,
@@ -47,15 +52,41 @@ function RuleSpecificControls( {
 	}, [ currentItem.type ] );
 
 	switch ( currentItem.type ) {
+		case 'equal':
 		case 'contain':
 		case 'contain_not':
 		case 'regexp':
 		case 'regexp_not':
-			return <TextControl
-				label={ label }
-				value={ currentItem.value }
-				onChange={ value => changeCurrentItem( { value } ) }
-			/>;
+			return <Flex
+				align={ 'flex-start' }
+				className={ 'components-base-control__field' }
+			>
+				<FlexItem isBlock>
+					<Flex
+						align={ 'center' }
+						justify={ 'flex-start' }
+					>
+						<span>{ label }</span>
+						<PresetButton
+							value={ currentItem.value }
+							onChange={ value => changeCurrentItem( { value } ) }
+						/>
+						<MacrosFields
+							onClick={ name => changeCurrentItem( {
+								value: (
+									currentItem.value ?? ''
+								) + `%${ name }%`,
+							} ) }
+						/>
+					</Flex>
+				</FlexItem>
+				<FlexItem isBlock style={ { flex: 3, marginLeft: 'unset' } }>
+					<TextareaControl
+						value={ currentItem.value }
+						onChange={ value => changeCurrentItem( { value } ) }
+					/>
+				</FlexItem>
+			</Flex>;
 		default:
 			return null;
 	}
@@ -136,7 +167,7 @@ function AdvancedRuleItem() {
 			currentItem={ currentItem }
 			changeCurrentItem={ changeCurrentItem }
 		/>
-		<TextControl
+		<TextareaControl
 			label={ __( 'Error message', 'jet-form-builder' ) }
 			value={ currentItem.message }
 			onChange={ message => changeCurrentItem( { message } ) }

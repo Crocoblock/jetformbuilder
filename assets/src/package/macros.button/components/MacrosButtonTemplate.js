@@ -17,23 +17,26 @@ function MacrosButtonTemplate( {
 	const [ showPopover, setShowPopover ] = useState( false );
 	const buttonRef                       = useRef();
 
-	return <ShowPopoverContext.Provider value={ showPopover }>
+	return <ShowPopoverContext.Provider
+		value={ { showPopover, setShowPopover } }
+	>
 		<Button
 			ref={ buttonRef }
-			icon={ showPopover ? 'no-alt' : 'admin-tools' }
+			icon={ 'admin-tools' }
 			variant="tertiary"
 			isSmall
 			isDestructive={ showPopover }
 			className={ 'jet-fb-is-thick' }
-			onClick={ () => setShowPopover( prev => !prev ) }
+			onClick={ () => setShowPopover( true ) }
 			{ ...props }
 		/>
 		{ showPopover && (
 			<Popover
 				anchorRef={ buttonRef.current }
-				position={ 'top' }
+				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
+				onClose={ () => setShowPopover( false ) }
 			>
 				{ children }
 			</Popover>

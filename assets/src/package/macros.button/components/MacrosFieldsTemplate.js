@@ -10,7 +10,7 @@ const {
       } = wp.element;
 
 function MacrosFieldsTemplate( { children, ...props } ) {
-	const showPopover = useContext( ShowPopoverContext );
+	const { showPopover } = useContext( ShowPopoverContext );
 
 	const fields = useMemo(
 		() => getFieldsWithoutCurrent(),

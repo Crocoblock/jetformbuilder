@@ -54,7 +54,11 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	 */
 	public function add_attachment() {
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-			include_once ABSPATH . 'wp-admin/includes/image.php';
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+		}
+
+		if ( ! function_exists( 'wp_read_video_metadata' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/media.php';
 		}
 
 		$attachment = wp_insert_attachment(

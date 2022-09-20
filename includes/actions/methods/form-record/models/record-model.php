@@ -12,6 +12,11 @@ class Record_Model extends Base_Db_Model {
 		return 'records';
 	}
 
+	/**
+	 * @since 2.1.7 https://github.com/Crocoblock/issues-tracker/issues/1476
+	 *
+	 * @return string[]
+	 */
 	public static function schema(): array {
 		return array(
 			'id'                => 'bigint(20) NOT NULL AUTO_INCREMENT',

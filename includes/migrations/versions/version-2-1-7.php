@@ -6,6 +6,12 @@ namespace Jet_Form_Builder\Migrations\Versions;
 
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
 
+/**
+ * @since 2.1.7 https://github.com/Crocoblock/issues-tracker/issues/1476
+ *
+ * Class Version_2_1_7
+ * @package Jet_Form_Builder\Migrations\Versions
+ */
 class Version_2_1_7 extends Base_Migration {
 
 	public function up( \wpdb $wpdb ) {

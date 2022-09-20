@@ -10,6 +10,7 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Migrations\Profilers\Base_Migration_Profiler;
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_0;
+use Jet_Form_Builder\Migrations\Versions\Version_2_1_7;
 
 /**
  * @method static Migrator instance()
@@ -34,6 +35,7 @@ class Migrator {
 	public function rep_instances(): array {
 		return array(
 			new Version_2_1_0(),
+			new Version_2_1_7(),
 		);
 	}
 

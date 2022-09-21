@@ -44,13 +44,21 @@ function ConditionFieldItem() {
 		this.operator     = operator;
 		this.render_state = render_state;
 
-		const formula = new CalculatedFormula( value, this.list.root );
+		if ( !Array.isArray( value ) ) {
+			value = value.split( ',' ).map( item => item.trim() );
+		}
 
-		formula.setResult = () => {
-			this.value = '' + formula.calculate();
-			this.list.onChangeRelated();
-		};
-		formula.setResult();
+		this.value = {};
+
+		for ( const [ index, formula ] of Object.entries( value ) ) {
+			const current = new CalculatedFormula( formula, this.list.root );
+
+			current.setResult = () => {
+				this.value[ index ] = '' + current.calculate();
+				this.list.onChangeRelated();
+			};
+			current.setResult();
+		}
 	};
 }
 

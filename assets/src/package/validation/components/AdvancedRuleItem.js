@@ -1,16 +1,14 @@
 import Tools from '../../tools';
 import RepeaterItemContext from '../../repeater/context/repeater.item';
 import BaseHelp from '../../components/BaseHelp';
-import PresetButton from '../../preset/components/PresetButton';
-import MacrosFields from '../../macros.button/components/MacrosFields';
+import AdvancedModalControl from '../../components/AdvancedModalControl';
+import ChooseRelatedField from './ChooseRelatedField';
 
 const {
 	      SelectControl,
 	      TextareaControl,
 	      TextControl,
 	      withFilters,
-	      Flex,
-	      FlexItem,
       } = wp.components;
 const {
 	      useContext,
@@ -57,36 +55,25 @@ function RuleSpecificControls( {
 		case 'contain_not':
 		case 'regexp':
 		case 'regexp_not':
-			return <Flex
-				align={ 'flex-start' }
-				className={ 'components-base-control__field' }
-			>
-				<FlexItem isBlock>
-					<Flex
-						align={ 'center' }
-						justify={ 'flex-start' }
-					>
-						<span>{ label }</span>
-						<PresetButton
-							value={ currentItem.value }
-							onChange={ value => changeCurrentItem( { value } ) }
-						/>
-						<MacrosFields
-							onClick={ name => changeCurrentItem( {
-								value: (
-									currentItem.value ?? ''
-								) + `%${ name }%`,
-							} ) }
-						/>
-					</Flex>
-				</FlexItem>
-				<FlexItem isBlock style={ { flex: 3, marginLeft: 'unset' } }>
-					<TextareaControl
+			return <>
+				<ChooseRelatedField/>
+				{ !Boolean( currentItem.field ) && <AdvancedModalControl
+					value={ currentItem.value }
+					label={ label }
+					onChangePreset={ value => changeCurrentItem( { value } ) }
+					onChangeMacros={ name => changeCurrentItem( {
+						value: (
+							currentItem.value ?? ''
+						) + `%${ name }%`,
+					} ) }
+				>
+					{ ( { instanceId } ) => <TextareaControl
+						id={ instanceId }
 						value={ currentItem.value }
 						onChange={ value => changeCurrentItem( { value } ) }
-					/>
-				</FlexItem>
-			</Flex>;
+					/> }
+				</AdvancedModalControl> }
+			</>;
 		default:
 			return null;
 	}
@@ -134,7 +121,7 @@ addFilter(
 					</a>
 				</BaseHelp>
 				{ showDetails && <pre>
-					{ `function ${ functionName }( $value, \\WP_REST_Request $request ): bool {
+					{ `function ${ functionName }( $value ): bool {
 	// your logic
 	return true;
 }` }

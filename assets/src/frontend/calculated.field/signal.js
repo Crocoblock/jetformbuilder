@@ -24,7 +24,12 @@ function SignalCalculated() {
 			      value,
 			      sepThousands,
 			      sepDecimal,
+			      valueTypeProp,
 		      } = this.input;
+
+		if ( 'number' !== valueTypeProp ) {
+			return value.current;
+		}
 
 		const parts = value.current.toString().split( '.' );
 

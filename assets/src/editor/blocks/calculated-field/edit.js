@@ -1,39 +1,38 @@
 const {
-	AdvancedFields,
-	GeneralFields,
-	FieldWrapper,
-	FieldSettingsWrapper,
-	BaseHelp,
-	ToolBarFields,
-} = JetFBComponents;
+	      AdvancedFields,
+	      GeneralFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+	      BaseHelp,
+	      ToolBarFields,
+      } = JetFBComponents;
 
 const {
-	getFieldsWithoutCurrent,
-} = JetFBActions;
+	      getFieldsWithoutCurrent,
+      } = JetFBActions;
 
 const { __ } = wp.i18n;
 
 const {
-	BlockControls,
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor;
 
 const {
-	TextControl,
-	TextareaControl,
-	ToggleControl,
-	PanelBody,
-	Button,
-	Popover,
-	ToolbarGroup,
-	__experimentalNumberControl,
-} = wp.components;
+	      TextControl,
+	      TextareaControl,
+	      ToggleControl,
+	      PanelBody,
+	      Button,
+	      Popover,
+	      SelectControl,
+	      __experimentalNumberControl,
+      } = wp.components;
 
 const NumberControl = __experimentalNumberControl;
 
 const { useState, RawHTML } = wp.element;
-const { applyFilters } = wp.hooks;
+const { applyFilters }      = wp.hooks;
 
 const help = {
 	calc_hidden: __( 'Check this to hide calculated field' ),
@@ -43,13 +42,13 @@ export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey },
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey },
+	      } = props;
 
-	const insertMacros = ( macros ) => {
+	const insertMacros  = ( macros ) => {
 		setAttributes( {
 			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
 		} );
@@ -59,8 +58,9 @@ export default function EditCalculated( props ) {
 			'%FIELD::' + value + '%'
 		) );
 
-		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields', fields ) );
-		setShowMacros( toggle => ! toggle );
+		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields',
+			fields ) );
+		setShowMacros( toggle => !toggle );
 	};
 
 	const [ formFields, setFormFields ] = useState( [] );
@@ -83,7 +83,8 @@ export default function EditCalculated( props ) {
 				placement={ 'bottom-end' }
 			>
 				{ formFields.length && <PanelBody title={ 'Form Fields' }>
-					{ formFields.map( ( value, index ) => <div key={ uniqKey( `formFields-${ index }` ) }>
+					{ formFields.map( ( value, index ) => <div
+							key={ uniqKey( `formFields-${ index }` ) }>
 							<Button
 								isLink
 								onClick={ () => {
@@ -108,29 +109,47 @@ export default function EditCalculated( props ) {
 					style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
 					dangerouslySetInnerHTML={ { __html: JetFormCalculatedField.field_desc } }
 				/>
+				<SelectControl
+					label={ __( 'Value type', 'jet-form-builder' ) }
+					labelPosition="top"
+					value={ attributes.value_type }
+					onChange={ value_type => setAttributes( { value_type } ) }
+					options={ [
+						{
+							value: 'number',
+							label: __( 'as Number', 'jet-form-builder' ),
+						},
+						{
+							value: 'string',
+							label: __( 'as String', 'jet-form-builder' ),
+						},
+					] }
+				/>
 				<NumberControl
-					label={ __( 'Decimal Places Number' ) }
-					labelPosition='top'
-					key='precision'
+					label={ __( 'Decimal Places Number', 'jet-form-builder' ) }
+					labelPosition="top"
+					key="precision"
 					value={ attributes.precision }
 					onChange={ ( newValue ) => {
 						setAttributes( { precision: parseInt( newValue ) } );
 					} }
 				/>
 				<TextControl
-					key='calc_separate_decimals'
+					key="calc_separate_decimals"
 					label={ __( 'Decimals separator' ) }
 					value={ attributes.separate_decimals }
-					onChange={ separate_decimals => setAttributes( { separate_decimals } ) }
+					onChange={ separate_decimals => setAttributes(
+						{ separate_decimals } ) }
 				/>
 				<TextControl
-					key='calc_separate_thousands'
+					key="calc_separate_thousands"
 					label={ __( 'Thousands separator' ) }
 					value={ attributes.separate_thousands }
-					onChange={ separate_thousands => setAttributes( { separate_thousands } ) }
+					onChange={ separate_thousands => setAttributes(
+						{ separate_thousands } ) }
 				/>
 				<TextControl
-					key='calc_prefix'
+					key="calc_prefix"
 					label={ __( 'Calculated Value Prefix' ) }
 					value={ attributes.calc_prefix }
 					help={ __( 'For space before or after text use: &nbsp;' ) }
@@ -139,7 +158,7 @@ export default function EditCalculated( props ) {
 					} }
 				/>
 				<TextControl
-					key='calc_suffix'
+					key="calc_suffix"
 					label={ __( 'Calculated Value Suffix' ) }
 					value={ attributes.calc_suffix }
 					help={ __( 'For space before or after text use: &nbsp;' ) }
@@ -170,9 +189,12 @@ export default function EditCalculated( props ) {
 				{ ...props }
 			>
 				<div className={ 'jet-form-builder__calculated-field' }>
-					<div className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
-					<div className={ 'calc-formula' }>{ attributes.calc_formula }</div>
-					<div className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
+					<div
+						className={ 'calc-prefix' }>{ attributes.calc_prefix }</div>
+					<div
+						className={ 'calc-formula' }>{ attributes.calc_formula }</div>
+					<div
+						className={ 'calc-suffix' }>{ attributes.calc_suffix }</div>
 				</div>
 				{ props.isSelected && <>
 					<TextareaControl

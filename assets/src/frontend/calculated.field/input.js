@@ -5,8 +5,6 @@ const {
 	      CalculatedFormula,
       } = window.JetFormBuilderAbstract;
 
-let firstFormula = null;
-
 function CalculatedData() {
 	InputData.call( this );
 
@@ -15,6 +13,7 @@ function CalculatedData() {
 	this.sepDecimal     = '';
 	this.sepThousands   = '';
 	this.visibleValNode = null;
+	this.valueTypeProp  = 'number';
 
 	this.isSupported  = function ( node ) {
 		return isCalculated( node );
@@ -26,7 +25,9 @@ function CalculatedData() {
 			this.value.current = formula.calculate();
 		};
 		formula.relatedCallback = ( input ) => {
-			return input.calcValue;
+			return 'number' === this.valueTypeProp
+			       ? input.calcValue
+			       : input.value.current;
 		};
 		formula.setResult();
 	};
@@ -43,12 +44,14 @@ function CalculatedData() {
 			      formula,
 			      precision,
 			      sepDecimal,
+			      valueType,
 		      } = node.parentElement.dataset;
 
 		this.formula        = formula;
 		this.precision      = +precision;
 		this.sepDecimal     = sepDecimal;
 		this.visibleValNode = node.nextElementSibling;
+		this.valueTypeProp  = valueType;
 	};
 	this.addListeners = function () {
 		// silence is golden

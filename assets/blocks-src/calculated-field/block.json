@@ -20,6 +20,10 @@
 			"type": "object",
 			"default": {}
 		},
+		"value_type": {
+			"type": "string",
+			"default": "number"
+		},
 		"separate_decimals": {
 			"type": "string",
 			"default": "."

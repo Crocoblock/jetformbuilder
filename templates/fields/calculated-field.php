@@ -3,6 +3,7 @@
  * Calculated field template
  *
  * @var Calculated_Field_Render $this
+ * @var $args
  */
 
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
@@ -26,6 +27,7 @@ $this->add_attribute( 'data-name', $args['name'] );
 $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
+$this->add_attribute( 'data-value-type', $this->args['value_type'] );
 
 $this->add_attribute(
 	'class',

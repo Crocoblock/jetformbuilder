@@ -1,40 +1,44 @@
 const { __ } = wp.i18n;
-const { addFilter } = wp.hooks;
 
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldSettingsWrapper,
-} = JetFBComponents;
+	      AdvancedFields,
+	      FieldSettingsWrapper,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      BlockName,
+      } = JetFBComponents;
 
 const {
-	InspectorControls,
-	useBlockProps,
-	RichText,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+	      RichText,
+      } = wp.blockEditor;
 
 const {
-	TextControl,
-	SelectControl,
-	ToggleControl,
-	Card,
-	CardHeader,
-	CardBody,
-	withFilters,
-} = wp.components;
+	      TextControl,
+	      SelectControl,
+	      ToggleControl,
+	      Card,
+	      CardHeader,
+	      CardBody,
+	      withFilters,
+	      PanelBody,
+      } = wp.components;
 
 const {
-	useState,
-	useEffect,
-} = wp.element;
+	      useEffect,
+      } = wp.element;
 
 function FieldValueControls( { attributes, setAttributes } ) {
 	return <>
-		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) && <TextControl
+		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) &&
+		<TextControl
 			key="hidden_value_field"
 			label="Meta Field to Get Value From"
 			value={ attributes.hidden_value_field }
-			onChange={ hidden_value_field => setAttributes( { hidden_value_field } ) }
+			onChange={ hidden_value_field => setAttributes(
+				{ hidden_value_field } ) }
 		/> }
 		{ 'query_var' === attributes.field_value && <TextControl
 			key="query_var_key"
@@ -50,7 +54,8 @@ function FieldValueControls( { attributes, setAttributes } ) {
 				onChange={ date_format => setAttributes( { date_format } ) }
 			/>
 			<b>{ __( 'Example:', 'jet-form-builder' ) }</b><br/>
-			<i>Y-m-d\TH:i - </i>{ __( 'datetime format', 'jet-form-builder' ) }<br/>
+			<i>Y-m-d\TH:i - </i>{ __( 'datetime format',
+			'jet-form-builder' ) }<br/>
 			<i>U - </i>{ __( 'timestamp format', 'jet-form-builder' ) }
 		</> }
 		{ 'manual_input' === attributes.field_value && <TextControl
@@ -64,24 +69,25 @@ function FieldValueControls( { attributes, setAttributes } ) {
 	</>;
 }
 
-const FieldsValueControlsWithFilters = withFilters( 'jfb.hidden-field.field-value.controls' )( FieldValueControls );
+const FieldsValueControlsWithFilters = withFilters(
+	'jfb.hidden-field.field-value.controls' )( FieldValueControls );
 
 export default function HiddenEdit( props ) {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey },
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey },
+	      } = props;
 
 	const blockProps = useBlockProps();
 
 	const setDynamicName = newValue => {
 		if ( newValue
-		     && (
-			     ! attributes.name || 'hidden_field_name' === attributes.name
-		     )
+			&& (
+				!attributes.name || 'hidden_field_name' === attributes.name
+			)
 		) {
 			setAttributes( { name: newValue } );
 		}
@@ -101,10 +107,11 @@ export default function HiddenEdit( props ) {
 			key={ uniqKey( 'render_in_html' ) }
 			label={ __( 'Render in HTML', 'jet-form-builder' ) }
 			checked={ attributes.render }
-			onChange={ render => setAttributes( { render: Boolean( render ) } ) }
+			onChange={ render => setAttributes(
+				{ render: Boolean( render ) } ) }
 		/> }
 		<SelectControl
-			key='field_value'
+			key="field_value"
 			label="Field Value"
 			labelPosition="top"
 			value={ attributes.field_value }
@@ -120,9 +127,10 @@ export default function HiddenEdit( props ) {
 		/>
 	</>;
 
-	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find( option => option.value ===
-	                                                                                          attributes.field_value );
-	const resultLabel = [ label ];
+	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find(
+		option => option.value ===
+			attributes.field_value );
+	const resultLabel                            = [ label ];
 
 	switch ( attributes.field_value ) {
 		case 'post_meta':
@@ -145,10 +153,14 @@ export default function HiddenEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'GeneralFields' ) }
-					{ ...props }
-				/>
+				<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+					<BlockLabel/>
+					<BlockName/>
+					<BlockDescription/>
+				</PanelBody>
+				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+					<BlockAdvancedValue/>
+				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
 					{ checkFieldValueInput() }
 				</FieldSettingsWrapper>
@@ -162,7 +174,7 @@ export default function HiddenEdit( props ) {
 			<Card elevation={ 2 }>
 				<CardHeader>
 					<RichText
-						placeholder='hidden_field_name...'
+						placeholder="hidden_field_name..."
 						allowedFormats={ [] }
 						value={ attributes.name }
 						onChange={ name => setAttributes( { name } ) }
@@ -170,7 +182,7 @@ export default function HiddenEdit( props ) {
 				</CardHeader>
 				<CardBody>
 					{ isSelected && checkFieldValueInput() }
-					{ ! isSelected && resultLabel.join( ': ' ) }
+					{ !isSelected && resultLabel.join( ': ' ) }
 				</CardBody>
 			</Card>
 		</div>,

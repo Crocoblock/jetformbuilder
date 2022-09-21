@@ -1,24 +1,26 @@
 const {
-		  ToolBarFields,
-		  GeneralFields,
-		  AdvancedFields,
-		  FieldWrapper,
-		  FieldSettingsWrapper,
-	  } = JetFBComponents;
-
-const { __ } = wp.i18n;
-
+	      ToolBarFields,
+	      BlockLabel,
+	      BlockName,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      AdvancedFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+      } = JetFBComponents;
 const {
-		  InspectorControls,
-		  useBlockProps,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
-
+	      __,
+      } = wp.i18n;
 const {
-		  TextControl,
-		  ToggleControl,
-		  PanelBody,
-		  __experimentalInputControl,
-	  } = wp.components;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor;
+const {
+	      TextControl,
+	      ToggleControl,
+	      PanelBody,
+	      __experimentalInputControl,
+      } = wp.components;
 
 let { InputControl } = wp.components;
 
@@ -30,11 +32,11 @@ export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-			  attributes,
-			  isSelected,
-			  setAttributes,
-			  editProps: { uniqKey, blockName, attrHelp },
-		  } = props;
+		      attributes,
+		      isSelected,
+		      setAttributes,
+		      editProps: { uniqKey, blockName, attrHelp },
+	      } = props;
 
 	return [
 		<ToolBarFields
@@ -44,13 +46,18 @@ export default function DateEdit( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
-			/>
+			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+				<BlockLabel/>
+				<BlockName/>
+				<BlockDescription/>
+			</PanelBody>
+			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+				<BlockAdvancedValue/>
+			</PanelBody>
+			<AdvancedFields/>
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
-					key='is_timestamp'
+					key="is_timestamp"
 					label={ __( 'Is Timestamp' ) }
 					checked={ attributes.is_timestamp }
 					help={ attrHelp( 'is_timestamp' ) }

@@ -1,21 +1,25 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+	      ToolBarFields,
+	      BlockName,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      AdvancedFields,
+	      FieldWrapper,
+      } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor;
 
 const {
-	TextControl,
-	__experimentalInputControl,
-} = wp.components;
+	      TextControl,
+	      PanelBody,
+	      __experimentalInputControl,
+      } = wp.components;
 
 let { InputControl } = wp.components;
 
@@ -25,10 +29,9 @@ if ( typeof InputControl === 'undefined' ) {
 
 export default function TimeEdit( props ) {
 	const {
-		attributes,
-		isSelected,
-		editProps: { uniqKey }
-	} = props;
+		      isSelected,
+		      editProps: { uniqKey },
+	      } = props;
 
 	const blockProps = useBlockProps();
 
@@ -40,14 +43,15 @@ export default function TimeEdit( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
-			/>
-			<AdvancedFields
-				key={ uniqKey( 'AdvancedFields' ) }
-				{ ...props }
-			/>
+			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+				<BlockLabel/>
+				<BlockName/>
+				<BlockDescription/>
+			</PanelBody>
+			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+				<BlockAdvancedValue/>
+			</PanelBody>
+			<AdvancedFields/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper
@@ -61,6 +65,6 @@ export default function TimeEdit( props ) {
 					placeholder={ 'Input type="time"' }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

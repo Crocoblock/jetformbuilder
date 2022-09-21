@@ -82,8 +82,12 @@ InputData.prototype.onChange     = function () {
 	// show errors
 	this.reporting.validateWithNoticeDebounced();
 };
+/**
+ * @param callable
+ * @returns {(function(): *|*[])|*}
+ */
 InputData.prototype.watch        = function ( callable ) {
-	this.value.watch( callable );
+	return this.value.watch( callable );
 };
 /**
  * @param inputData {InputData}

@@ -124,19 +124,17 @@ function Observable( parent = null ) {
 			( { status } ) => 'rejected' === status,
 		);
 
-		return ! invalid.length;
+		return !invalid.length;
 	};
 
 	this.watch = function ( fieldName, callable ) {
 		const input = this.getInput( fieldName );
 
 		if ( input ) {
-			input.watch( callable );
-
-			return;
+			return input.watch( callable );
 		}
 
-		console.error(
+		throw new Error(
 			`dataInputs in Observable don\'t have ${ fieldName } field`,
 		);
 	};

@@ -1,36 +1,36 @@
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-	FieldSettingsWrapper,
-} = JetFBComponents;
+	      ToolBarFields,
+	      BlockName,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      AdvancedFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+      } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	ToggleControl,
-	PanelBody,
-} = wp.components;
-
+	      TextControl,
+	      ToggleControl,
+	      PanelBody,
+      } = wp.components;
 
 export default function DateTimeEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp }
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey, attrHelp },
+	      } = props;
 
 	return [
 		<ToolBarFields
@@ -41,10 +41,14 @@ export default function DateTimeEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'JetForm-general' ) }
-					{ ...props }
-				/>
+				<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+					<BlockLabel/>
+					<BlockName/>
+					<BlockDescription/>
+				</PanelBody>
+				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+					<BlockAdvancedValue/>
+				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
 					<ToggleControl
 						key={ uniqKey( 'is_timestamp' ) }
@@ -52,7 +56,8 @@ export default function DateTimeEdit( props ) {
 						checked={ attributes.is_timestamp }
 						help={ attrHelp( 'is_timestamp' ) }
 						onChange={ newValue => {
-							setAttributes( { is_timestamp: Boolean( newValue ) } );
+							setAttributes(
+								{ is_timestamp: Boolean( newValue ) } );
 						} }
 					/>
 				</FieldSettingsWrapper>
@@ -74,6 +79,6 @@ export default function DateTimeEdit( props ) {
 					placeholder={ 'Input type="datetime-local"' }
 				/>
 			</FieldWrapper>
-		</div>
+		</div>,
 	];
 }

@@ -1,11 +1,14 @@
 const {
 	      ToolBarFields,
-	      GeneralFields,
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockName,
+	      BlockAdvancedValue,
       } = JetFBComponents;
 
 const { useIsAdvancedValidation } = JetFBHooks;
@@ -15,7 +18,7 @@ const { __ } = wp.i18n;
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      TextareaControl,
@@ -54,10 +57,14 @@ export default function TextareaEdit( props ) {
 			{ ...props }
 		/>,
 		isSelected && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
-			/>
+			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+				<BlockLabel/>
+				<BlockName/>
+				<BlockDescription/>
+			</PanelBody>
+			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+				<BlockAdvancedValue/>
+			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
 				<NumberControl
 					label={ __( 'Min length (symbols)' ) }

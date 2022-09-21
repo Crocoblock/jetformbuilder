@@ -1,28 +1,32 @@
 const {
-	      GeneralFields,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      BlockName,
 	      AdvancedFields,
 	      FieldWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
       } = JetFBComponents;
-
-const { useIsAdvancedValidation } = JetFBHooks;
-
-const { __ } = wp.i18n;
-
+const {
+	      useIsAdvancedValidation,
+      } = JetFBHooks;
+const {
+	      __,
+      } = wp.i18n;
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
-
+      } = wp.blockEditor;
 const {
 	      TextControl,
 	      PanelBody,
 	      __experimentalNumberControl,
 	      __experimentalInputControl,
       } = wp.components;
-
-const { useState } = wp.element;
+const {
+	      useState,
+      } = wp.element;
 
 let { NumberControl, InputControl } = wp.components;
 
@@ -52,10 +56,14 @@ export default function RangeEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'GeneralFields' ) }
-					{ ...props }
-				/>
+				<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+					<BlockLabel/>
+					<BlockName/>
+					<BlockDescription/>
+				</PanelBody>
+				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+					<BlockAdvancedValue/>
+				</PanelBody>
 				<PanelBody
 					title={ __( 'Field Settings' ) }
 					key={ uniqKey( 'PanelBody' ) }

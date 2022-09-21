@@ -1,22 +1,25 @@
 const {
 	      ToolBarFields,
-	      GeneralFields,
+	      BlockLabel,
+	      BlockDescription,
+	      BlockAdvancedValue,
+	      BlockName,
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
       } = JetFBComponents;
-
-const { useIsAdvancedValidation } = JetFBHooks;
-
-const { __ } = wp.i18n;
-
+const {
+	      useIsAdvancedValidation,
+      } = JetFBHooks;
+const {
+	      __,
+      } = wp.i18n;
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
-
+      } = wp.blockEditor;
 const {
 	      PanelBody,
 	      __experimentalInputControl,
@@ -34,7 +37,7 @@ if ( typeof NumberControl === 'undefined' ) {
 }
 
 export default function NumberEdit( props ) {
-	const blockProps = useBlockProps();
+	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	const {
@@ -58,10 +61,14 @@ export default function NumberEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'GeneralFields' ) }
-					{ ...props }
-				/>
+				<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+					<BlockLabel/>
+					<BlockName/>
+					<BlockDescription/>
+				</PanelBody>
+				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+					<BlockAdvancedValue/>
+				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
 					<NumberControl
 						label={ __( 'Min Value' ) }

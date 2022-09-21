@@ -6,6 +6,10 @@ function ReactiveVar( value ) {
 ReactiveVar.prototype = {
 	watch: function ( callable ) {
 		this.signals.push( callable.bind( this ) );
+
+		const index = this.signals.length - 1;
+
+		return () => this.signals.splice( index, 1 );
 	},
 	make: function () {
 		let current = this.current;
@@ -28,7 +32,13 @@ ReactiveVar.prototype = {
 		this.signals.forEach( signal => signal() );
 	},
 	setIfEmpty( newValue ) {
-		if ( this.current ) {
+		if ( (
+			!this.current.hasOwnProperty( 'length' ) && this.current
+			) ||
+			(
+				this.current.hasOwnProperty( 'length' ) && this.current.length
+			)
+		) {
 			return;
 		}
 

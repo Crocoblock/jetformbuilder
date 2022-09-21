@@ -84,7 +84,7 @@ function DynamicItemBody() {
 
 	useOnUpdateModal( () => update( current ) );
 
-	const [ showDetails, setShowDetails ] = useState( false );
+	const [ showDetails, setShowDetails ] = useState( true );
 
 	return <>
 		<SelectControl

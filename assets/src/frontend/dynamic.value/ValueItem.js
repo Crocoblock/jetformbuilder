@@ -4,37 +4,10 @@ const {
       } = JetFormBuilderAbstract;
 
 /**
- * @param to_set
- * @param conditions
- * @param set_on_empty {Boolean}
- * @param frequency {'once'|'always'|'on_change'}
- * @param input {InputData}
+ * @type {Function}
  * @constructor
  */
-function ValueItem(
-	{
-		to_set,
-		conditions = [],
-		set_on_empty = false,
-		frequency = 'on_change',
-	},
-	input,
-) {
-	this.input        = input;
-	this.frequency    = frequency;
-	this.set_on_empty = set_on_empty;
-
-	const formula = new CalculatedFormula( to_set, input.root );
-	const list    = new ConditionsList( conditions, input.root );
-
-	formula.setResult = () => {
-		this.to_set = '' + formula.calculate();
-	};
-	formula.setResult();
-
-	list.onChangeRelated = () => this.applyValue( list );
-	list.observe();
-	list.onChangeRelated();
+function ValueItem() {
 }
 
 ValueItem.prototype = {
@@ -47,6 +20,52 @@ ValueItem.prototype = {
 	input: null,
 	frequency: '',
 	set_on_empty: false,
+	/**
+	 * @param input {InputData}
+	 * @returns {boolean}
+	 */
+	isSupported( input ) {
+		return true;
+	},
+	/**
+	 * @param to_set
+	 * @param conditions
+	 * @param set_on_empty {Boolean}
+	 * @param frequency {'once'|'always'|'on_change'}
+	 * @param input {InputData}
+	 */
+	observe(
+		{
+			to_set,
+			conditions = [],
+			set_on_empty = false,
+			frequency = 'on_change',
+		},
+		input,
+	) {
+		this.input        = input;
+		this.frequency    = frequency;
+		this.set_on_empty = set_on_empty;
+		this.prevResult   = null;
+		this.prevValue    = null;
+		this.to_set       = to_set;
+
+		this.observeSetValue( conditions, input );
+
+		const list = new ConditionsList( conditions, input.root );
+
+		list.onChangeRelated = () => this.applyValue( list );
+		list.observe();
+		list.onChangeRelated();
+	},
+	observeSetValue( conditions, input ) {
+		const formula = new CalculatedFormula( this.to_set, input.root );
+
+		formula.setResult = () => {
+			this.to_set = '' + formula.calculate();
+		};
+		formula.setResult();
+	},
 	/**
 	 * @param list {ConditionsList}
 	 */

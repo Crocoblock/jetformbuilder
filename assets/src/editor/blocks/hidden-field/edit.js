@@ -164,10 +164,7 @@ export default function HiddenEdit( props ) {
 				<FieldSettingsWrapper { ...props }>
 					{ checkFieldValueInput() }
 				</FieldSettingsWrapper>
-				<AdvancedFields
-					key={ uniqKey( 'AdvancedFields' ) }
-					{ ...props }
-				/>
+				<AdvancedFields/>
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>

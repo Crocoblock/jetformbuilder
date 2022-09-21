@@ -106,10 +106,7 @@ export default function NumberEdit( props ) {
 						<ValidationBlockMessage name="number_min"/>
 					</> }
 				</PanelBody>
-				<AdvancedFields
-					key={ uniqKey( 'AdvancedFields' ) }
-					{ ...props }
-				/>
+				<AdvancedFields/>
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>

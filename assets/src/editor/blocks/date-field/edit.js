@@ -54,7 +54,6 @@ export default function DateEdit( props ) {
 			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
 				<BlockAdvancedValue/>
 			</PanelBody>
-			<AdvancedFields/>
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
 					key="is_timestamp"
@@ -66,10 +65,7 @@ export default function DateEdit( props ) {
 					} }
 				/>
 			</FieldSettingsWrapper>
-			<AdvancedFields
-				key={ uniqKey( 'AdvancedFields' ) }
-				{ ...props }
-			/>
+			<AdvancedFields/>
 		</InspectorControls>,
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper

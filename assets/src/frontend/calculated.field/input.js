@@ -5,6 +5,10 @@ const {
 	      CalculatedFormula,
       } = window.JetFormBuilderAbstract;
 
+const {
+	      applyFilters,
+      } = wp.hooks;
+
 function CalculatedData() {
 	InputData.call( this );
 
@@ -25,6 +29,17 @@ function CalculatedData() {
 			this.value.current = formula.calculate();
 		};
 		formula.relatedCallback = ( input ) => {
+			const value = applyFilters(
+				'jet.fb.calculated.callback',
+				false,
+				input,
+				this,
+			);
+
+			if ( false !== value ) {
+				return value;
+			}
+
 			return 'number' === this.valueTypeProp
 			       ? input.calcValue
 			       : input.value.current;

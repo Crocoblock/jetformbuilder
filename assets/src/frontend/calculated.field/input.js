@@ -5,6 +5,8 @@ const {
 	      CalculatedFormula,
       } = window.JetFormBuilderAbstract;
 
+let firstFormula = null;
+
 function CalculatedData() {
 	InputData.call( this );
 

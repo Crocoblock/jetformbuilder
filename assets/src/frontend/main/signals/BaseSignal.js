@@ -1,11 +1,12 @@
 function BaseSignal() {
-	/**
-	 * @type {InputData}
-	 */
 	this.input = null;
 }
 
 BaseSignal.prototype = {
+	/**
+	 * @type {InputData}
+	 */
+	input: null,
 	/**
 	 * @param node {HTMLElement}
 	 * @param inputData {InputData}

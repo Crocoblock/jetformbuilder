@@ -1,4 +1,4 @@
-import ConditionsList from './ConditionsList';
+import ConditionsBlockList from './ConditionsBlockList';
 
 const { doAction } = wp.hooks;
 
@@ -12,7 +12,7 @@ function ConditionalBlock( node, observable ) {
 	this.isObserved = false;
 
 	/**
-	 * @type {ConditionsList}
+	 * @type {ConditionsBlockList}
 	 */
 	this.list = null;
 
@@ -40,7 +40,9 @@ ConditionalBlock.prototype = {
 	setConditions() {
 		const { jfbConditional } = this.node.dataset;
 
-		this.list = new ConditionsList( jfbConditional, this.root );
+		this.list = new ConditionsBlockList( jfbConditional, this.root );
+
+		this.list.block = this;
 
 		this.list.onChangeRelated = () => {
 			this.runFunction( this.list.getResult() );

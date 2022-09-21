@@ -1,5 +1,5 @@
 /**
- * @property {ConditionsList} list
+ * @property {ConditionsList|ConditionsBlockList} list
  */
 function ConditionItem() {
 }

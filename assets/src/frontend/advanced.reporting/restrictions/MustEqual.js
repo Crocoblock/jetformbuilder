@@ -1,4 +1,5 @@
 import AdvancedRestriction from './AdvancedRestriction';
+import { observeFieldRestriction } from '../functions';
 
 function MustEqual() {
 	AdvancedRestriction.call( this );
@@ -13,8 +14,12 @@ function MustEqual() {
 	};
 }
 
-MustEqual.prototype = Object.create(
+MustEqual.prototype          = Object.create(
 	AdvancedRestriction.prototype,
 );
+MustEqual.prototype.setAttrs = function ( attrs ) {
+	AdvancedRestriction.prototype.setAttrs.call( this, attrs );
+	observeFieldRestriction.call( this );
+};
 
 export default MustEqual;

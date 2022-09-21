@@ -100,19 +100,31 @@ function Observable( parent = null ) {
 		this.form = new FormSubmit( this );
 	};
 
-	this.inputsAreValid = function () {
+	this.inputsAreValid = async function () {
+		const callbacks = [];
+
 		for ( const inputName in this.dataInputs ) {
 			if ( !this.dataInputs.hasOwnProperty( inputName ) ) {
 				continue;
 			}
 			const input = this.getInput( inputName );
 
-			if ( !input.reporting.validate() ) {
-				return false;
-			}
+			callbacks.push(
+				( resolve, reject ) => input.reporting.validate().
+					then( resolve ).
+					catch( reject ),
+			);
 		}
 
-		return true;
+		const results = await Promise.allSettled(
+			callbacks.map( current => new Promise( current ) ),
+		);
+
+		const invalid = results.filter(
+			( { status } ) => 'rejected' === status,
+		);
+
+		return ! invalid.length;
 	};
 
 	this.watch = function ( fieldName, callable ) {

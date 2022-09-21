@@ -54,7 +54,7 @@ Restriction.prototype = {
 		let validationResult;
 
 		try {
-			validationResult = this.validate();
+			validationResult = await this.validate();
 		}
 		catch ( error ) {
 			return Promise.reject( error?.message ?? error );

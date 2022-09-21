@@ -12,7 +12,7 @@ function ConditionPageStateItem() {
 	this.isPassed    = function () {
 		switch ( this.pageState ) {
 			case 'active':
-				return !this.block?.page?.canSwitch?.current;
+				return !this.list?.block?.page?.canSwitch?.current;
 			default:
 				return false;
 		}

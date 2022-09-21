@@ -7,7 +7,10 @@ function SignalText() {
 		return true;
 	};
 	this.runSignal   = function () {
-		this.input.calcValue        = parseFloat( this.input.calcValue );
+		this.input.calcValue = Number.isNaN( Number( this.input.calcValue ) )
+		                       ? 0
+		                       : parseFloat( this.input.calcValue );
+
 		this.input.nodes[ 0 ].value = this.input.value.current;
 	};
 }

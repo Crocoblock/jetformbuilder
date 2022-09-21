@@ -94,10 +94,16 @@ PageState.prototype.updateState         = function () {
 	const callbacks = [];
 
 	for ( const input of this.getInputs() ) {
-		callbacks.push( input.reporting.validate() );
+		callbacks.push(
+			( resolve, reject ) => input.reporting.validate().
+				then( resolve ).
+				catch( reject ),
+		);
 	}
 
-	Promise.all( callbacks ).then( () => {
+	Promise.all(
+		callbacks.map( current => new Promise( current ) ),
+	).then( () => {
 		this.canSwitch.current = true;
 	} ).catch( () => {
 		this.canSwitch.current = false;

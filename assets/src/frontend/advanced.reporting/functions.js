@@ -254,6 +254,22 @@ function getMessageBySlug( restriction, slug ) {
 	return messages[ slug ] ?? '';
 }
 
+/**
+ * @this {AdvancedRestriction}
+ */
+function observeFieldRestriction() {
+	if ( !this.attrs?.field ) {
+		return;
+	}
+	const { root } = this.reporting.input;
+	const input    = root.getInput( this.attrs.field );
+
+	input.watch( () => {
+		this.attrs.value = input.value.current;
+		this.reporting.validateWithNoticeDebounced();
+	} );
+}
+
 export {
 	getNodeValidationType,
 	getFilters,
@@ -263,4 +279,5 @@ export {
 	getValidationMessages,
 	getPreparedRules,
 	setRestrictions,
+	observeFieldRestriction,
 };

@@ -11,16 +11,7 @@ AdvancedRestriction.prototype               = Object.create(
 );
 AdvancedRestriction.prototype.attrs         = {};
 AdvancedRestriction.prototype.setAttrs      = function ( attrs ) {
-	this.attrs     = attrs;
-	const { root } = this.reporting.input;
-
-	const formula = new CalculatedFormula( attrs.value, root );
-
-	formula.setResult = () => {
-		this.attrs.value = String( formula.calculate() );
-		this.reporting.input.value.notify();
-	};
-	formula.setResult();
+	this.attrs = attrs;
 };
 AdvancedRestriction.prototype.getSlug       = function () {
 	throw new Error( 'you need to return slug of rule' );

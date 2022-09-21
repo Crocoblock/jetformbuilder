@@ -1,9 +1,12 @@
 /**
  * @param formula
  * @param root {Observable}
+ * @constructor
  */
 function CalculatedFormula( formula, root ) {
 	this.formula = formula;
+	this.parts   = [];
+	this.related = [];
 	this.observe( formula, root );
 }
 
@@ -75,8 +78,11 @@ CalculatedFormula.prototype = {
 				return result;
 			}
 
-			return `'${ result }'`;
+			if ( null === result ) {
+				return 0;
+			}
 
+			return `'${ result }'`;
 		} ).join( '' );
 
 		return (

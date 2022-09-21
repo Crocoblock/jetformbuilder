@@ -38,25 +38,28 @@ function ReportingInterface() {
 }
 
 ReportingInterface.prototype = {
+	/**
+	 * Runs on changing value in the field
+	 * @see InputData.onChange
+	 *
+	 * @param force
+	 */
 	validateWithNoticeDebounced: function ( force = false ) {
 		if ( force || !this.hasServerSide ) {
-			this.validateWithNotice();
+			this.validateWithNotice().then( () => {} ).catch( () => {} );
 
 			return;
 		}
 
 		const validateFunc = window._.debounce(
-			() => this.validateWithNotice(),
+			() => this.validateWithNotice().then( () => {} ).catch( () => {} ),
 			1000,
 		);
 
 		validateFunc();
 	},
 	/**
-	 * Runs on changing value in the field
-	 * @see InputData.onChange
-	 *
-	 * @returns {boolean}
+	 * @returns {Promise<void>}
 	 */
 	validateWithNotice: async function () {
 		this.errors  = null;
@@ -64,6 +67,8 @@ ReportingInterface.prototype = {
 
 		if ( errors.length ) {
 			this.report( errors );
+
+			throw new Error( errors[ 0 ].name );
 		}
 		else {
 			this.clearReport();
@@ -75,14 +80,18 @@ ReportingInterface.prototype = {
 	 *
 	 * Runs on changing value, if this field inside page
 	 * @see InputData.setPage
-	 * @see PageState.isValidInputs
+	 * @see PageState.updateState
 	 *
 	 * @returns {Promise<boolean>}
 	 */
 	validate: async function () {
 		const errors = await this.getErrors();
 
-		return !errors?.length;
+		if ( errors?.length ) {
+			throw new Error( errors[ 0 ].name );
+		}
+
+		return true;
 	},
 	/**
 	 * @returns {Promise<*[]|array|null>}

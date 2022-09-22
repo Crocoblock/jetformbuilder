@@ -99,10 +99,7 @@ export default function EditCalculated( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields
-				key={ uniqKey( 'JetForm-general' ) }
-				{ ...props }
-			/>
+			<GeneralFields/>
 			<FieldSettingsWrapper { ...props }>
 				<p
 					className={ 'components-base-control__help' }
@@ -125,47 +122,53 @@ export default function EditCalculated( props ) {
 						},
 					] }
 				/>
-				<NumberControl
-					label={ __( 'Decimal Places Number', 'jet-form-builder' ) }
-					labelPosition="top"
-					key="precision"
-					value={ attributes.precision }
-					onChange={ ( newValue ) => {
-						setAttributes( { precision: parseInt( newValue ) } );
-					} }
-				/>
-				<TextControl
-					key="calc_separate_decimals"
-					label={ __( 'Decimals separator' ) }
-					value={ attributes.separate_decimals }
-					onChange={ separate_decimals => setAttributes(
-						{ separate_decimals } ) }
-				/>
-				<TextControl
-					key="calc_separate_thousands"
-					label={ __( 'Thousands separator' ) }
-					value={ attributes.separate_thousands }
-					onChange={ separate_thousands => setAttributes(
-						{ separate_thousands } ) }
-				/>
-				<TextControl
-					key="calc_prefix"
-					label={ __( 'Calculated Value Prefix' ) }
-					value={ attributes.calc_prefix }
-					help={ __( 'For space before or after text use: &nbsp;' ) }
-					onChange={ ( newValue ) => {
-						setAttributes( { calc_prefix: newValue } );
-					} }
-				/>
-				<TextControl
-					key="calc_suffix"
-					label={ __( 'Calculated Value Suffix' ) }
-					value={ attributes.calc_suffix }
-					help={ __( 'For space before or after text use: &nbsp;' ) }
-					onChange={ ( newValue ) => {
-						setAttributes( { calc_suffix: newValue } );
-					} }
-				/>
+				{ 'number' === attributes.value_type ? <>
+					<NumberControl
+						label={ __( 'Decimal Places Number',
+							'jet-form-builder' ) }
+						labelPosition="top"
+						key="precision"
+						value={ attributes.precision }
+						onChange={ ( newValue ) => {
+							setAttributes(
+								{ precision: parseInt( newValue ) } );
+						} }
+					/>
+					<TextControl
+						key="calc_separate_decimals"
+						label={ __( 'Decimals separator' ) }
+						value={ attributes.separate_decimals }
+						onChange={ separate_decimals => setAttributes(
+							{ separate_decimals } ) }
+					/>
+					<TextControl
+						key="calc_separate_thousands"
+						label={ __( 'Thousands separator' ) }
+						value={ attributes.separate_thousands }
+						onChange={ separate_thousands => setAttributes(
+							{ separate_thousands } ) }
+					/>
+					<TextControl
+						key="calc_prefix"
+						label={ __( 'Calculated Value Prefix' ) }
+						value={ attributes.calc_prefix }
+						help={ __(
+							'For space before or after text use: &nbsp;' ) }
+						onChange={ ( newValue ) => {
+							setAttributes( { calc_prefix: newValue } );
+						} }
+					/>
+					<TextControl
+						key="calc_suffix"
+						label={ __( 'Calculated Value Suffix' ) }
+						value={ attributes.calc_suffix }
+						help={ __(
+							'For space before or after text use: &nbsp;' ) }
+						onChange={ ( newValue ) => {
+							setAttributes( { calc_suffix: newValue } );
+						} }
+					/>
+				</> : null }
 				<ToggleControl
 					key={ 'calc_hidden' }
 					label={ __( 'Hidden' ) }

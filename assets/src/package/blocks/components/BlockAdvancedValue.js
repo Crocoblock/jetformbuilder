@@ -1,9 +1,12 @@
 import BlockDefaultValue from './BlockDefaultValue';
 import DynamicValues from '../../dynamic.value/components/DynamicValues';
 
-function BlockAdvancedValue() {
+function BlockAdvancedValue( { help, label } ) {
 	return <>
-		<BlockDefaultValue/>
+		<BlockDefaultValue
+			help={ help }
+			label={ label }
+		/>
 		<hr/>
 		<DynamicValues/>
 	</>;

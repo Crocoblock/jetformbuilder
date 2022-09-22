@@ -23,6 +23,14 @@
 			"type": "object",
 			"default": {}
 		},
+		"min": {
+			"type": "string",
+			"default": ""
+		},
+		"max": {
+			"type": "string",
+			"default": ""
+		},
 		"is_timestamp": {
 			"type": "boolean",
 			"default": false

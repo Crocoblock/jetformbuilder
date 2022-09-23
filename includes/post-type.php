@@ -7,6 +7,7 @@ use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Post_Meta\Actions_Meta;
 use Jet_Form_Builder\Post_Meta\Base_Meta_Type;
@@ -280,6 +281,23 @@ class Post_Type {
 
 	public function get_validation( $form_id ) {
 		return $this->get_meta( Validation_Meta::class )->query( $form_id );
+	}
+
+	/**
+	 * @param $meta_key
+	 * @param $form_id
+	 *
+	 * @return array|mixed
+	 * @deprecated since 3.0.0
+	 */
+	public function get_form_meta( $meta_key, $form_id ) {
+		return Tools::decode_json(
+			get_post_meta(
+				$form_id,
+				$meta_key,
+				true
+			)
+		);
 	}
 
 	public function maybe_get_jet_sm_ready_styles( $form_id ) {

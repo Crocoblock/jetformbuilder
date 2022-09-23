@@ -64,16 +64,19 @@ export default function DateEdit( props ) {
 				<AdvancedInspectorControl
 					value={ attributes.min }
 					label={ __( 'Starting from date', 'jet-form-builder' ) }
-					onChangePreset={ val => setAttributes( { default: val } ) }
+					onChangePreset={ min => setAttributes( { min } ) }
 					onChangeMacros={ name => setAttributes( {
-						default: attributes.default + `%${ name }%`,
+						min: attributes.min + `%${ name }%`,
 					} ) }
 				>
 					{ ( { instanceId } ) => <TextControl
 						id={ instanceId }
-						value={ attributes.default }
-						help={ help ?? '' }
-						onChange={ val => setAttributes( { default: val } ) }
+						value={ attributes.min }
+						help={ __(
+							'Plain date should be in yyyy-mm-dd format',
+							'jet-form-builder',
+						) }
+						onChange={ min => setAttributes( { min } ) }
 					/> }
 				</AdvancedInspectorControl>
 			</PanelBody>

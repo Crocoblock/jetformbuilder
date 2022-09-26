@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Classes\Attributes_Trait;
@@ -236,7 +237,12 @@ abstract class Base {
 		$format = '<div class="jet-form-builder__next-page-msg" %2$s>%1$s</div>';
 
 		if ( ! empty( $args['page_break_disabled'] ) && ! Tools::is_editor() ) {
-			return sprintf( $format, $args['page_break_disabled'], '' );
+			$attrs = array(
+				sprintf( 'data-jfb-conditional="%s"', Button_Next::get_conditions() ),
+				'data-jfb-func="show_dom"',
+			);
+
+			return sprintf( $format, $args['page_break_disabled'], implode( ' ', $attrs ) );
 
 		} elseif ( Tools::is_editor() ) {
 

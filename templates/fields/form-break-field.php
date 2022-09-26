@@ -1,6 +1,8 @@
 <?php
 /**
  * next page button template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
 use Jet_Form_Builder\Classes\Tools;

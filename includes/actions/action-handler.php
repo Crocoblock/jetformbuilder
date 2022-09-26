@@ -23,10 +23,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id          = null;
-	public $request_data     = array();
-	public $form_actions     = array();
-	public $is_ajax          = false;
+	public  $form_id         = null;
+	public  $request_data    = array();
+	public  $form_actions    = array();
+	public  $is_ajax         = false;
 	private $form_conditions = array();
 	private $form_events     = array();
 
@@ -316,7 +316,7 @@ class Action_Handler {
 	}
 
 	public function in_loop(): bool {
-		return false !== $this->current_position;
+		return ( 0 < (int) $this->current_position );
 	}
 
 	public function in_loop_or_die() {
@@ -406,9 +406,9 @@ class Action_Handler {
 
 	/**
 	 * Use jet_fb_handler()->refer
+	 * @return mixed|string
 	 * @deprecated 2.1.3
 	 *
-	 * @return mixed|string
 	 */
 	public function get_refer() {
 		return $this->request_data['__refer'] ?? '';

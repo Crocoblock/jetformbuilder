@@ -130,10 +130,14 @@ import MacrosFieldsTemplate
 import MacrosButtonTemplate
 	from './macros.button/components/MacrosButtonTemplate';
 import MacrosFields from './macros.button/components/MacrosFields';
-import ShowPopoverContext from './macros.button/context/ShowPopoverContext';
+import PopoverContext from './macros.button/context/PopoverContext';
 import PopoverItem from './macros.button/context/PopoverItem';
 import PresetButton from './preset/components/PresetButton';
 import ConditionItem from './block-conditions/components/ConditionItem';
+import AdvancedInspectorControl from './components/AdvancedInspectorControl';
+import AdvancedModalControl from './components/AdvancedModalControl';
+import ClientSideExtraMacros
+	from './macros.button/components/ClientSideExtraMacros';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -201,10 +205,13 @@ window.JetFBComponents = {
 	MacrosFields,
 	MacrosButtonTemplate,
 	MacrosFieldsTemplate,
-	ShowPopoverContext,
+	ShowPopoverContext: PopoverContext,
 	PopoverItem,
 	PresetButton,
 	ConditionItem,
+	AdvancedInspectorControl,
+	AdvancedModalControl,
+	ClientSideExtraMacros,
 };
 
 // JFBFunctions

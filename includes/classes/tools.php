@@ -305,7 +305,7 @@ class Tools {
 	 *
 	 * @return boolean
 	 */
-	public static function is_valid_timestamp( $timestamp ) {
+	public static function is_valid_timestamp( $timestamp ): bool {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
 		       && ( $timestamp <= PHP_INT_MAX )
 		       && ( $timestamp >= ~PHP_INT_MAX );

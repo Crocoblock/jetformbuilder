@@ -3,10 +3,15 @@
  * @param root {Observable}
  * @constructor
  */
+import replaceStatic from './replaceStatic';
+
 function CalculatedFormula( formula, root ) {
 	this.formula = formula;
 	this.parts   = [];
 	this.related = [];
+
+	//formula = replaceStatic( formula, root );
+
 	this.observe( formula, root );
 }
 
@@ -15,7 +20,7 @@ CalculatedFormula.prototype = {
 	formula: null,
 	parts: [],
 	related: [],
-	regexp: /%([\w\-]+)%/g,
+	regexp: /%(STATIC::)?([\w\-]+)%/g,
 	/**
 	 * @type {Function}
 	 */

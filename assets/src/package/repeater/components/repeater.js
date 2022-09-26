@@ -5,7 +5,7 @@ import RepeaterItemContext from '../context/repeater.item';
 import RepeaterStateContext from '../context/repeater.state';
 import MacrosButtonTemplate
 	from '../../macros.button/components/MacrosButtonTemplate';
-import ShowPopoverContext from '../../macros.button/context/ShowPopoverContext';
+import PopoverContext from '../../macros.button/context/PopoverContext';
 
 const {
 	      Card,
@@ -136,7 +136,7 @@ function Repeater( props ) {
 						icon={ 'trash' }
 						isDestructive
 					>
-						<ShowPopoverContext.Consumer>
+						<PopoverContext.Consumer>
 							{ ( { setShowPopover } ) => <div
 								style={ {
 									padding: '0.5em',
@@ -163,7 +163,7 @@ function Repeater( props ) {
 									{ __( 'No', 'jet-form-builder' ) }
 								</Button>
 							</div> }
-						</ShowPopoverContext.Consumer>
+						</PopoverContext.Consumer>
 					</MacrosButtonTemplate> }
 				</ButtonGroup>
 			</CardHeader>

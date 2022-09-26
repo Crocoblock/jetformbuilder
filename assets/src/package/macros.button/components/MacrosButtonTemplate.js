@@ -1,4 +1,4 @@
-import ShowPopoverContext from '../context/ShowPopoverContext';
+import PopoverContext from '../context/PopoverContext';
 
 const {
 	      useState,
@@ -17,7 +17,7 @@ function MacrosButtonTemplate( {
 	const [ showPopover, setShowPopover ] = useState( false );
 	const buttonRef                       = useRef();
 
-	return <ShowPopoverContext.Provider
+	return <PopoverContext.Provider
 		value={ { showPopover, setShowPopover } }
 	>
 		<Button
@@ -41,7 +41,7 @@ function MacrosButtonTemplate( {
 				{ children }
 			</Popover>
 		) }
-	</ShowPopoverContext.Provider>;
+	</PopoverContext.Provider>;
 }
 
 export default MacrosButtonTemplate;

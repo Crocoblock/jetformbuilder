@@ -1,6 +1,3 @@
-import AdvancedInspectorControl
-	from '../../../package/components/AdvancedInspectorControl';
-
 const {
 	      ToolBarFields,
 	      BlockLabel,
@@ -10,6 +7,8 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
+	      AdvancedInspectorControl,
+	      ClientSideExtraMacros,
       } = JetFBComponents;
 const {
 	      __,
@@ -60,25 +59,46 @@ export default function DateEdit( props ) {
 						'Plain date should be in yyyy-mm-dd format',
 						'jet-form-builder',
 					) }
+					style={ { marginBottom: '1em' } }
 				/>
-				<AdvancedInspectorControl
-					value={ attributes.min }
-					label={ __( 'Starting from date', 'jet-form-builder' ) }
-					onChangePreset={ min => setAttributes( { min } ) }
-					onChangeMacros={ name => setAttributes( {
-						min: attributes.min + `%${ name }%`,
-					} ) }
-				>
-					{ ( { instanceId } ) => <TextControl
-						id={ instanceId }
+				<ClientSideExtraMacros>
+					<AdvancedInspectorControl
 						value={ attributes.min }
-						help={ __(
-							'Plain date should be in yyyy-mm-dd format',
-							'jet-form-builder',
-						) }
-						onChange={ min => setAttributes( { min } ) }
-					/> }
-				</AdvancedInspectorControl>
+						label={ __( 'Starting from date', 'jet-form-builder' ) }
+						onChangePreset={ min => setAttributes( { min } ) }
+						onChangeMacros={ name => setAttributes( {
+							min: attributes.min + `%${ name }%`,
+						} ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							value={ attributes.min }
+							help={ __(
+								'Plain date should be in yyyy-mm-dd format',
+								'jet-form-builder',
+							) }
+							onChange={ min => setAttributes( { min } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AdvancedInspectorControl
+						value={ attributes.max }
+						label={ __( 'Limit dates to', 'jet-form-builder' ) }
+						onChangePreset={ max => setAttributes( { max } ) }
+						onChangeMacros={ name => setAttributes( {
+							max: attributes.max + `%${ name }%`,
+						} ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							value={ attributes.max }
+							help={ __(
+								'Plain date should be in yyyy-mm-dd format',
+								'jet-form-builder',
+							) }
+							onChange={ max => setAttributes( { max } ) }
+						/> }
+					</AdvancedInspectorControl>
+				</ClientSideExtraMacros>
 			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl

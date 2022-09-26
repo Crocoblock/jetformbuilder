@@ -9,7 +9,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import CalculatedFormula from './CalculatedFormula';
+import CalculatedFormula from './calculated/CalculatedFormula';
 
 (
 	function ( $ ) {

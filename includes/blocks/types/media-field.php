@@ -116,10 +116,18 @@ class Media_Field extends Base {
 
 	public function register_scripts() {
 		wp_register_script(
+			'jet-form-builder-sortable',
+			Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
+			array(),
+			Plugin::instance()->get_version(),
+			true
+		);
+		wp_register_script(
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field{min}.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE,
+				'jet-form-builder-sortable'
 			),
 			Plugin::instance()->get_version(),
 			true

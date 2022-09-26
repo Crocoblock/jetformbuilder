@@ -249,14 +249,6 @@ class Manager {
 				)
 			)
 		);
-
-		wp_register_script(
-			'jet-form-builder-sortable',
-			Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
-			array(),
-			Plugin::instance()->get_version(),
-			true
-		);
 	}
 
 	/**

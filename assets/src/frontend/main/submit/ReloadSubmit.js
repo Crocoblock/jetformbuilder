@@ -1,7 +1,7 @@
 import BaseSubmit from './BaseSubmit';
 
-function ReloadSubmit() {
-	BaseSubmit.call( this );
+function ReloadSubmit( form ) {
+	BaseSubmit.call( this, form );
 
 	this.submit = function () {
 		const { rootNode }     = this.form.observable;

@@ -1,9 +1,9 @@
 import BaseSubmit from './BaseSubmit';
 
-function AjaxSubmit() {
-	BaseSubmit.call( this );
+function AjaxSubmit( form ) {
+	BaseSubmit.call( this, form );
 
-	this.submit       = function () {
+	this.submit        = function () {
 		const $form            = jQuery( this.form.observable.rootNode );
 		const { applyFilters } = wp.hooks;
 
@@ -19,7 +19,7 @@ function AjaxSubmit() {
 			() => this.form.toggle(),
 		);
 	};
-	this.runSubmit    = function () {
+	this.runSubmit     = function () {
 		const { rootNode } = this.form.observable;
 
 		const formData = new FormData( rootNode );
@@ -42,11 +42,13 @@ function AjaxSubmit() {
 			this.onFail.bind( this ),
 		);
 	};
-	this.onSuccess    = function ( response ) {
+	this.onSuccess     = function ( response ) {
 		this.form.toggle();
 
+		const { rootNode } = this.form.observable;
+
 		this.lastResponse = response;
-		const $form       = jQuery( this.form.observable.rootNode );
+		const $form       = jQuery( rootNode );
 
 		switch ( response.status ) {
 			case 'validation_failed':
@@ -66,12 +68,24 @@ function AjaxSubmit() {
 		else if ( response.reload ) {
 			window.location.reload();
 		}
+
+		this.insertMessage( response.message );
 	};
-	this.onFail       = function ( jqXHR, textStatus, errorThrown ) {
+	this.onFail        = function ( jqXHR, textStatus, errorThrown ) {
 		this.form.toggle();
 
 		console.error( jqXHR.responseText, errorThrown );
 	};
+	this.insertMessage = function ( message ) {
+		const { rootNode } = this.form.observable;
+
+		const node = document.createElement( 'div' );
+		node.classList.add( 'jet-form-builder-messages-wrap' );
+		node.innerHTML = message;
+
+		rootNode.appendChild( node );
+	};
+
 	this.insertErrors = function ( fields ) {
 		for ( const [ fieldName, fieldData ] of Object.entries( fields ) ) {
 			const input = this.form.observable.getInput( fieldName );
@@ -85,6 +99,6 @@ function AjaxSubmit() {
 	};
 }
 
-AjaxSubmit.prototype   = Object.create( BaseSubmit.prototype );
+AjaxSubmit.prototype = Object.create( BaseSubmit.prototype );
 
 export default AjaxSubmit;

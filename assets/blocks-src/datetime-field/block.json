@@ -27,6 +27,14 @@
 			"type": "boolean",
 			"default": false
 		},
+		"min": {
+			"type": "string",
+			"default": ""
+		},
+		"max": {
+			"type": "string",
+			"default": ""
+		},
 		"label": {
 			"type": "string",
 			"default": ""

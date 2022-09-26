@@ -6,11 +6,9 @@
 import replaceStatic from './replaceStatic';
 
 function CalculatedFormula( formula, root ) {
-	this.formula = formula;
+	this.formula = replaceStatic( formula, root );
 	this.parts   = [];
 	this.related = [];
-
-	//formula = replaceStatic( formula, root );
 
 	this.observe( formula, root );
 }
@@ -20,7 +18,7 @@ CalculatedFormula.prototype = {
 	formula: null,
 	parts: [],
 	related: [],
-	regexp: /%(STATIC::)?([\w\-]+)%/g,
+	regexp: /%([\w\-]+)%/g,
 	/**
 	 * @type {Function}
 	 */

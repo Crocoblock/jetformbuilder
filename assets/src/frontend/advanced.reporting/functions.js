@@ -17,8 +17,8 @@ import ValueMacro from './macros/ValueMacro';
 import MinAttrMacro from './macros/MinAttrMacro';
 import MaxAttrMacro from './macros/MaxAttrMacro';
 import RemainingMacro from './macros/RemainingMacro';
-import LengthFilter from './filters/LengthFilter';
-import FallBackFilter from './filters/FallBackFilter';
+import LengthFilter from '../main/calculated/filters/LengthFilter';
+import FallBackFilter from '../main/calculated/filters/FallBackFilter';
 import MustEqual from './restrictions/MustEqual';
 
 const { applyFilters } = wp.hooks;
@@ -73,59 +73,7 @@ const getMacros = () => applyFilters(
  */
 let macros = [];
 
-const getFilterItems = () => applyFilters(
-	'jet.fb.restrictions.filters',
-	[
-		LengthFilter,
-		FallBackFilter,
-	],
-);
 
-/**
- * @type {array<Filter>}
- */
-let filters  = [];
-let response = [];
-
-function pushFilter( name, props = '' ) {
-	if ( !filters.length ) {
-		filters = getFilterItems().map( current => new current() );
-	}
-
-	const filter = filters.find(
-		current => name === current.getSlug(),
-	);
-
-	if ( !filter ) {
-		return;
-	}
-	props = props.split( ',' ).map(
-		item => item.trim(),
-	);
-
-	filter.setProps( props );
-	response.push( filter );
-}
-
-function getFilters( filtersList ) {
-
-	for ( let filterName of filtersList ) {
-		const matches = filterName.match( /^(\w+)\(([^()]+)\)/ );
-
-		if ( null === matches ) {
-			pushFilter( filterName );
-
-			continue;
-		}
-
-		pushFilter( matches[ 1 ], matches[ 2 ] );
-	}
-
-	const tempResponse = [ ...response ];
-	response           = [];
-
-	return tempResponse;
-}
 
 /**
  * @param restriction {Restriction}
@@ -272,7 +220,6 @@ function observeFieldRestriction() {
 
 export {
 	getNodeValidationType,
-	getFilters,
 	getInheritValidationType,
 	getSupportedMacros,
 	getMessageBySlug,

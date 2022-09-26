@@ -1,8 +1,10 @@
 import CurrentDate from './CurrentDate';
+import getFilters from './getFilters';
+import applyFilters from './applyFilters';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters: wpApplyFilters } = wp.hooks;
 
-const getStaticFunctions = () => applyFilters(
+const getStaticFunctions = () => wpApplyFilters(
 	'jet.fb.static.functions',
 	[
 		CurrentDate,
@@ -24,10 +26,12 @@ function getFunction( slug ) {
 	}
 
 	for ( const staticFunction of staticFunctions ) {
-		if ( staticFunction.getId() !== slug ) {
+		const current = new staticFunction();
+
+		if ( current.getId() !== slug ) {
 			continue;
 		}
-		return staticFunction;
+		return current;
 	}
 
 	return false;
@@ -39,18 +43,20 @@ function getFunction( slug ) {
  * @return {*}
  */
 function replaceStatic( formula, root ) {
-	const parts = formula.split( /%STATIC::(.+)%/g );
+	const parts = formula.split( /%STATIC::(.*?)%/g );
 
-	const prepared = parts.map( current => {
-		const slugWithFilters = current.split( '|' );
+	return parts.map( current => {
+		const [ slug, ...filters ] = current.split( '|' );
 
-		const staticFunc = getFunction( slugWithFilters[ 0 ] );
+		const staticFunc = getFunction( slug );
 
 		if ( false === staticFunc ) {
 			return current;
 		}
 
-		return () => staticFunc.getResult();
+		const filtersList = getFilters( filters );
+
+		return applyFilters( staticFunc.getResult(), filtersList );
 	} ).join( '' );
 }
 

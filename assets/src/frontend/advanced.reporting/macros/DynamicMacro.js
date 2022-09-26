@@ -1,4 +1,4 @@
-import { getFilters } from '../functions';
+const { getFilters } = JetFormBuilderFunctions;
 
 function DynamicMacro() {
 	/**

@@ -10,6 +10,7 @@ import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import CalculatedFormula from './calculated/CalculatedFormula';
+import getFilters from './calculated/getFilters';
 
 (
 	function ( $ ) {
@@ -29,6 +30,13 @@ import CalculatedFormula from './calculated/CalculatedFormula';
 			MultiSelectData,
 			CalculatedFormula,
 		};
+
+		window.JetFormBuilderFunctions = {
+			...(
+				window.JetFormBuilderFunctions ?? {}
+			),
+			getFilters
+		}
 
 		$( initCommon );
 		$( window ).on( 'elementor/frontend/init', initElementor );

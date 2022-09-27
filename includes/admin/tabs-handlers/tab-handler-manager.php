@@ -8,8 +8,8 @@ use Jet_Form_Builder\Plugin;
 class Tab_Handler_Manager {
 
 	public static $instance;
-	private $_tabs         = array();
-	private $_tabs_options = array();
+	private       $_tabs         = array();
+	private       $_tabs_options = array();
 
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
@@ -33,6 +33,7 @@ class Tab_Handler_Manager {
 				new Get_Response_Handler(),
 				new Paypal_Handler(),
 				new Payments_Gateways_Handler(),
+				new Options_Handler(),
 			)
 		);
 

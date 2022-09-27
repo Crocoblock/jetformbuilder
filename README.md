@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.7
+* ADD: Toggle dev-mode from page Settings
+* FIX: Video uploading in media-field
+* FIX: Save long referrer by Save Record action 
+
 ## 2.1.6
 * ADD: The ability to get the queried user through a preset and compatibility with the JetEngine Profile Builder
 * ADD: Ability to edit the text of Media Field 'Maximum file size'

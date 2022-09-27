@@ -77,15 +77,7 @@ CalculatedFormula.prototype = {
 			}
 			const result = current();
 
-			if ( !Number.isNaN( Number( result ) ) && result ) {
-				return result;
-			}
-
-			if ( null === result ) {
-				return 0;
-			}
-
-			return `'${ result }'`;
+			return null === result ? 0 : result;
 		} ).join( '' );
 
 		return (

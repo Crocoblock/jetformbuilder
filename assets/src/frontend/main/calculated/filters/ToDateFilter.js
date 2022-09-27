@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import toDate from './toDate';
 
 function ToDateFilter() {
 	Filter.call( this );
@@ -7,10 +8,7 @@ function ToDateFilter() {
 		return 'toDate';
 	};
 	this.apply   = function ( value ) {
-		const dateString = new Date( value ).toISOString();
-		const [ date ]   = dateString.split( 'T' );
-
-		return date;
+		return toDate( new Date( value ) );
 	};
 }
 

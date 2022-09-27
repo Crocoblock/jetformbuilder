@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import toTime from './toTime';
 
 function ToTimeFilter() {
 	Filter.call( this );
@@ -7,11 +8,7 @@ function ToTimeFilter() {
 		return 'toTime';
 	};
 	this.apply   = function ( value ) {
-		const dateString = new Date( value ).toISOString();
-
-		const [ time = '00:00' ] = dateString.match( /\d{2}:\d{2}/ ) ?? [];
-
-		return time;
+		return toTime( new Date( value ) );
 	};
 }
 

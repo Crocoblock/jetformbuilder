@@ -3,6 +3,7 @@ import FallBackFilter from './filters/FallBackFilter';
 import ToDateFilter from './filters/ToDateFilter';
 import ToTimeFilter from './filters/ToTimeFilter';
 import ToDateTimeFilter from './filters/ToDateTimeFilter';
+import AddDayFilter from './filters/AddDayFilter';
 
 const { applyFilters } = wp.hooks;
 
@@ -14,6 +15,7 @@ const getFilterItems = () => applyFilters(
 		ToDateFilter,
 		ToTimeFilter,
 		ToDateTimeFilter,
+		AddDayFilter,
 	],
 );
 
@@ -44,6 +46,10 @@ function pushFilter( name, props = '' ) {
 }
 
 function getFilters( filtersList ) {
+	if ( null === filtersList || !filtersList?.length ) {
+		return null;
+	}
+
 	for ( let filterName of filtersList ) {
 		const matches = filterName.match( /^(\w+)\(([^()]+)\)/ );
 

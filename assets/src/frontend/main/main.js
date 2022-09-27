@@ -11,9 +11,8 @@ import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import CalculatedFormula from './calculated/CalculatedFormula';
 import getFilters from './calculated/getFilters';
-import toDate from './calculated/filters/toDate';
-import toDateTime from './calculated/filters/toDateTime';
-import toTime from './calculated/filters/toTime';
+import applyFilters from './calculated/applyFilters';
+import { toDate, toDateTime, toTime } from './calculated/filters/functions';
 
 (
 	function ( $ ) {
@@ -39,10 +38,11 @@ import toTime from './calculated/filters/toTime';
 				window.JetFormBuilderFunctions ?? {}
 			),
 			getFilters,
+			applyFilters,
 			toDate,
 			toDateTime,
-			toTime
-		}
+			toTime,
+		};
 
 		$( initCommon );
 		$( window ).on( 'elementor/frontend/init', initElementor );

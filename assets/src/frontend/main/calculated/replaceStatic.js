@@ -38,26 +38,30 @@ function getFunction( slug ) {
 }
 
 /**
- * @param formula {String}
+ * @param current {String}
+ * @param name {String}
+ * @param filters {Filter[]}
  * @param root {Observable}
  * @return {*}
  */
-function replaceStatic( formula, root ) {
-	const parts = formula.split( /%STATIC::(.*?)%/g );
+function replaceStatic(
+	current,
+	name,
+	filters,
+	root,
+) {
+	if ( !name.includes( 'STATIC::' ) ) {
+		return current;
+	}
+	name = name.replace( 'STATIC::', '' );
 
-	return parts.map( current => {
-		const [ slug, ...filters ] = current.split( '|' );
+	const staticFunc = getFunction( name );
 
-		const staticFunc = getFunction( slug );
+	if ( false === staticFunc ) {
+		return current;
+	}
 
-		if ( false === staticFunc ) {
-			return current;
-		}
-
-		const filtersList = getFilters( filters );
-
-		return applyFilters( staticFunc.getResult(), filtersList );
-	} ).join( '' );
+	return applyFilters( staticFunc.getResult(), filters );
 }
 
 export default replaceStatic;

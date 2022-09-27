@@ -1,5 +1,5 @@
 import Filter from './Filter';
-import toDate from './toDate';
+import { toDate } from './functions';
 
 function ToDateFilter() {
 	Filter.call( this );

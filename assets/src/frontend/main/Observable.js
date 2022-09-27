@@ -200,23 +200,6 @@ function Observable( parent = null ) {
 	};
 
 	/**
-	 * @returns {Generator<void|InputData>}
-	 */
-	this.generateInputs = function* () {
-		for ( const dataInput of this.getInputs() ) {
-			yield dataInput;
-		}
-
-		if ( !this.parent ) {
-			return;
-		}
-
-		for ( const input of this.parent.root.getInputs() ) {
-			yield input;
-		}
-	};
-
-	/**
 	 * @param fieldName
 	 * @returns {null|InputData}
 	 */

@@ -1,5 +1,5 @@
 import createValues from './createValues';
-import DynamicStaticValue from './DynamicStaticValue';
+import getProperties from './getProperties';
 
 function parseInput( input ) {
 	const [ node ] = input.nodes;
@@ -11,9 +11,10 @@ function parseInput( input ) {
 		return;
 	}
 
-	if ( node.dataset.hasOwnProperty( 'value' ) ) {
-		new DynamicStaticValue( node.dataset.value, input );
+	for ( const property of getProperties( input ) ) {
+		property.runObserve( input );
 	}
+
 }
 
 export default parseInput;

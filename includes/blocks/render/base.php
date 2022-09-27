@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Classes\Regexp_Tools;
 
 // If this file is called directly, abort.
 
@@ -272,7 +273,7 @@ abstract class Base {
 	}
 
 	protected function set_value() {
-		if ( ! preg_match( '/%(STATIC::)?(.*?)%/', $this->args['default'] ) ) {
+		if ( ! Regexp_Tools::has_macro( $this->args['default'] ) ) {
 			$this->add_attribute( 'value', $this->args['default'] );
 
 			return;

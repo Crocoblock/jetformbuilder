@@ -3,10 +3,23 @@
  * @param root {Observable}
  * @constructor
  */
+import applyFilters from './applyFilters';
+import getFilters from './getFilters';
 import replaceStatic from './replaceStatic';
 
+const {
+	      applyFilters: wpFilters,
+	      addFilter,
+      } = wp.hooks;
+
+addFilter(
+	'jet.fb.custom.formula.macro',
+	'jet-form-builder',
+	replaceStatic,
+);
+
 function CalculatedFormula( formula, root ) {
-	this.formula = replaceStatic( formula, root );
+	this.formula = formula;
 	this.parts   = [];
 	this.related = [];
 
@@ -18,7 +31,7 @@ CalculatedFormula.prototype = {
 	formula: null,
 	parts: [],
 	related: [],
-	regexp: /%([\w\-]+)%/g,
+	regexp: /%(.*?)%/g,
 	/**
 	 * @type {Function}
 	 */
@@ -26,10 +39,13 @@ CalculatedFormula.prototype = {
 		throw new Error( 'CalculatedFormula.setResult is not set!' );
 	},
 	/**
+	 *
 	 * @param relatedInput {InputData}
+	 * @param filters {Filter[]}
+	 * @return {*}
 	 */
-	relatedCallback( relatedInput ) {
-		return relatedInput.value.current;
+	relatedCallback( relatedInput, filters ) {
+		return applyFilters( relatedInput.value.current, filters );
 	},
 	/**
 	 * @private
@@ -51,10 +67,23 @@ CalculatedFormula.prototype = {
 		}
 
 		this.parts = rawParts.map( current => {
-			const relatedInput = root.getInput( current );
+			const [ name, ...filters ] = current.split( '|' );
+			const relatedInput         = root.getInput( name );
 
-			if ( !relatedInput ) {
+			if ( !relatedInput && !name.includes( '::' ) ) {
 				return current;
+			}
+
+			const filtersList = getFilters( filters );
+
+			if ( name.includes( '::' ) ) {
+				return wpFilters(
+					'jet.fb.custom.formula.macro',
+					current,
+					name,
+					filtersList,
+					root,
+				);
 			}
 
 			if ( !this.related.includes( relatedInput.name ) ) {
@@ -63,7 +92,7 @@ CalculatedFormula.prototype = {
 				relatedInput.watch( () => this.setResult() );
 			}
 
-			return () => this.relatedCallback( relatedInput );
+			return () => this.relatedCallback( relatedInput, filtersList );
 		} );
 	},
 	calculate() {

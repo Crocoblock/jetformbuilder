@@ -9,8 +9,8 @@ addAction(
 	 * @param observable {Observable}
 	 */
 	function ( observable ) {
-		for ( const input of observable.generateInputs() ) {
-			parseInput( input );
+		for ( const dataInput of observable.getInputs() ) {
+			parseInput( dataInput );
 		}
 	}
 );

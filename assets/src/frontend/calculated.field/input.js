@@ -4,9 +4,12 @@ const {
 	      InputData,
 	      CalculatedFormula,
       } = window.JetFormBuilderAbstract;
-
 const {
 	      applyFilters,
+      } = JetFormBuilderFunctions;
+
+const {
+	      applyFilters: wpFilters,
       } = wp.hooks;
 
 function CalculatedData() {
@@ -28,8 +31,8 @@ function CalculatedData() {
 		formula.setResult       = () => {
 			this.value.current = formula.calculate();
 		};
-		formula.relatedCallback = ( input ) => {
-			const value = applyFilters(
+		formula.relatedCallback = ( input, filters ) => {
+			const value = wpFilters(
 				'jet.fb.calculated.callback',
 				false,
 				input,
@@ -40,9 +43,11 @@ function CalculatedData() {
 				return value;
 			}
 
-			return 'number' === this.valueTypeProp
-			       ? input.calcValue
-			       : input.value.current;
+			const current = 'number' === this.valueTypeProp
+			                ? input.calcValue
+			                : input.value.current;
+
+			return applyFilters( current, filters );
 		};
 		formula.setResult();
 	};

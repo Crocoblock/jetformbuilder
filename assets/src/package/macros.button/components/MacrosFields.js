@@ -11,11 +11,15 @@ const {
 function FieldItem( { onClick } ) {
 	const field = useContext( PopoverItem );
 
+	const value = field.fullName
+	              ? field.fullName()
+	              : `%${ field.value }%`;
+
 	return <Button
 		isLink
-		onClick={ () => onClick( field.value ) }
+		onClick={ () => onClick( value ) }
 	>
-		{ '%' + field.value + '%' }
+		{ value }
 	</Button>;
 }
 

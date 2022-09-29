@@ -1,7 +1,5 @@
 import Restriction from './Restriction';
 
-const { CalculatedFormula } = JetFormBuilderAbstract;
-
 function AdvancedRestriction() {
 	Restriction.call( this );
 }

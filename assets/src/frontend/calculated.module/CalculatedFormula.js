@@ -5,7 +5,7 @@
  */
 import applyFilters from './applyFilters';
 import getFilters from './getFilters';
-import replaceStatic from './replaceStatic';
+import attachConstNamespace from './attachConstNamespace';
 
 const {
 	      applyFilters: wpFilters,
@@ -15,7 +15,7 @@ const {
 addFilter(
 	'jet.fb.custom.formula.macro',
 	'jet-form-builder',
-	replaceStatic,
+	attachConstNamespace,
 );
 
 function CalculatedFormula( formula, root ) {

@@ -57,7 +57,8 @@ import DynamicPreset from './preset/components/DynamicPreset';
 import JetFieldsMapControl from '../editor/blocks/controls/fields-map';
 import FieldWithPreset from './preset/components/FieldWithPreset';
 import GlobalFieldPreset from './preset/components/GlobalFieldPreset';
-import AvailableMapFieldPreset from './preset/components/AvailableMapFieldPreset';
+import AvailableMapFieldPreset
+	from './preset/components/AvailableMapFieldPreset';
 import MapFieldPreset from './preset/components/MapFieldPreset';
 import useGroupedValidationMessages
 	from './validation/hooks/useGroupedValidationMessages';
@@ -136,8 +137,9 @@ import PresetButton from './preset/components/PresetButton';
 import ConditionItem from './block-conditions/components/ConditionItem';
 import AdvancedInspectorControl from './components/AdvancedInspectorControl';
 import AdvancedModalControl from './components/AdvancedModalControl';
-import ClientSideExtraMacros
-	from './macros.button/components/ClientSideExtraMacros';
+import ClientSideMacros
+	from './macros.button/components/ClientSideMacros';
+import { insertMacro } from './macros.button/functions';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -211,7 +213,7 @@ window.JetFBComponents = {
 	ConditionItem,
 	AdvancedInspectorControl,
 	AdvancedModalControl,
-	ClientSideExtraMacros,
+	ClientSideMacros,
 };
 
 // JFBFunctions
@@ -241,6 +243,7 @@ window.JetFBActions = {
 	getBlocksByName,
 	convertObjectToOptionsList,
 	appendField,
+	insertMacro,
 };
 
 // JFBHooks

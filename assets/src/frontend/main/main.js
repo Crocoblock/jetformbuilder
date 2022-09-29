@@ -9,10 +9,6 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import CalculatedFormula from './calculated/CalculatedFormula';
-import getFilters from './calculated/getFilters';
-import applyFilters from './calculated/applyFilters';
-import { toDate, toDateTime, toTime } from './calculated/filters/functions';
 
 (
 	function ( $ ) {
@@ -30,18 +26,6 @@ import { toDate, toDateTime, toTime } from './calculated/filters/functions';
 			ReportingInterface,
 			CheckboxData,
 			MultiSelectData,
-			CalculatedFormula,
-		};
-
-		window.JetFormBuilderFunctions = {
-			...(
-				window.JetFormBuilderFunctions ?? {}
-			),
-			getFilters,
-			applyFilters,
-			toDate,
-			toDateTime,
-			toTime,
 		};
 
 		$( initCommon );

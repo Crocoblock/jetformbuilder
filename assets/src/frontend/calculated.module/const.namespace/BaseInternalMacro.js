@@ -1,8 +1,7 @@
-function BaseStaticMacro() {
-
+function BaseInternalMacro() {
 }
 
-BaseStaticMacro.prototype = {
+BaseInternalMacro.prototype = {
 	/**
 	 * @return {String}
 	 */
@@ -14,4 +13,4 @@ BaseStaticMacro.prototype = {
 	},
 };
 
-export default BaseStaticMacro;
+export default BaseInternalMacro;

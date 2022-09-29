@@ -31,7 +31,7 @@ class Dynamic_Value {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/dynamic.value{min}.js' ),
 			array(
 				Conditional_Block::HANDLE,
-				Manager::MAIN_SCRIPT_HANDLE,
+				Manager::CALCULATED_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

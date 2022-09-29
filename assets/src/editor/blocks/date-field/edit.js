@@ -8,8 +8,11 @@ const {
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      AdvancedInspectorControl,
-	      ClientSideExtraMacros,
+	      ClientSideMacros,
       } = JetFBComponents;
+const {
+	      insertMacro,
+      } = JetFBActions;
 const {
 	      __,
       } = wp.i18n;
@@ -23,6 +26,9 @@ const {
 	      PanelBody,
 	      __experimentalInputControl,
       } = wp.components;
+const {
+	      useRef,
+      } = wp.element;
 
 let { InputControl } = wp.components;
 
@@ -32,6 +38,8 @@ if ( typeof InputControl === 'undefined' ) {
 
 export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
+	const minInput   = useRef();
+	const maxInput   = useRef();
 
 	const {
 		      attributes,
@@ -61,17 +69,24 @@ export default function DateEdit( props ) {
 					) }
 					style={ { marginBottom: '1em' } }
 				/>
-				<ClientSideExtraMacros>
+				<ClientSideMacros>
 					<AdvancedInspectorControl
 						value={ attributes.min }
 						label={ __( 'Starting from date', 'jet-form-builder' ) }
 						onChangePreset={ min => setAttributes( { min } ) }
-						onChangeMacros={ name => setAttributes( {
-							min: attributes.min + `%${ name }%`,
-						} ) }
+						onChangeMacros={ name => {
+							setAttributes( {
+								min: insertMacro(
+									attributes.min,
+									name,
+									minInput.current,
+								),
+							} );
+						} }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }
+							ref={ minInput }
 							value={ attributes.min }
 							help={ __(
 								'Plain date should be in yyyy-mm-dd format',
@@ -84,12 +99,19 @@ export default function DateEdit( props ) {
 						value={ attributes.max }
 						label={ __( 'Limit dates to', 'jet-form-builder' ) }
 						onChangePreset={ max => setAttributes( { max } ) }
-						onChangeMacros={ name => setAttributes( {
-							max: attributes.max + `%${ name }%`,
-						} ) }
+						onChangeMacros={ name => {
+							setAttributes( {
+								max: insertMacro(
+									attributes.max,
+									name,
+									minInput.current,
+								),
+							} );
+						} }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }
+							ref={ maxInput }
 							value={ attributes.max }
 							help={ __(
 								'Plain date should be in yyyy-mm-dd format',
@@ -98,7 +120,7 @@ export default function DateEdit( props ) {
 							onChange={ max => setAttributes( { max } ) }
 						/> }
 					</AdvancedInspectorControl>
-				</ClientSideExtraMacros>
+				</ClientSideMacros>
 			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl

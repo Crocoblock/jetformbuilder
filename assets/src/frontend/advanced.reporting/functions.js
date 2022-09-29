@@ -17,8 +17,8 @@ import ValueMacro from './macros/ValueMacro';
 import MinAttrMacro from './macros/MinAttrMacro';
 import MaxAttrMacro from './macros/MaxAttrMacro';
 import RemainingMacro from './macros/RemainingMacro';
-import LengthFilter from '../main/calculated/filters/LengthFilter';
-import FallBackFilter from '../main/calculated/filters/FallBackFilter';
+import LengthFilter from '../calculated.module/filters/LengthFilter';
+import FallBackFilter from '../calculated.module/filters/FallBackFilter';
 import MustEqual from './restrictions/MustEqual';
 
 const { applyFilters } = wp.hooks;

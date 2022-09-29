@@ -16,10 +16,10 @@ ConditionChecker.prototype = {
 				return current === conditionValue[ 0 ];
 
 			case 'greater':
-				return current > conditionValue[ 0 ];
+				return +(current) > +(conditionValue[ 0 ]);
 
 			case 'less':
-				return current < conditionValue[ 0 ];
+				return +(current) < +(conditionValue[ 0 ]);
 
 			case 'between':
 				if ( !Object.keys( conditionValue )?.length ) {

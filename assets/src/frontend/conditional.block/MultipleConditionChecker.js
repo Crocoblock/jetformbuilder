@@ -20,8 +20,13 @@ function MultipleConditionChecker() {
 
 		switch ( condition.operator ) {
 			case 'one_of':
-				return condition.value.length && current.some(
-					val => 0 <= condition.value.indexOf( val ),
+				if ( !Object.keys( condition.value )?.length ) {
+					return false;
+				}
+				return current.some(
+					val => -1 !== Object.values(
+						condition.value,
+					).indexOf( val ),
 				);
 			case 'contain':
 				return current.some(

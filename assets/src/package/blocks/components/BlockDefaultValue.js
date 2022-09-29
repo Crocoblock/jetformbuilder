@@ -6,7 +6,7 @@ const {
 	      __,
       } = wp.i18n;
 const {
-	      TextControl,
+	      TextareaControl,
       } = wp.components;
 
 function BlockDefaultValue( { label, help } ) {
@@ -23,7 +23,8 @@ function BlockDefaultValue( { label, help } ) {
 			default: attributes.default + `%${ name }%`,
 		} ) }
 	>
-		{ ( { instanceId } ) => <TextControl
+		{ ( { instanceId } ) => <TextareaControl
+			rows={ 1 }
 			id={ instanceId }
 			value={ attributes.default }
 			help={ help ?? '' }

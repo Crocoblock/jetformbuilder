@@ -6,6 +6,12 @@ import DayInSecMacro from '../macros/DayInSecMacro';
 import YearInSecMacro from '../macros/YearInSecMacro';
 import AddDayFilter from '../filters/AddDayFilter';
 import AddMonthFilter from '../filters/AddMonthFilter';
+import AddYearFilter from '../filters/AddYearFilter';
+import FallbackFilter from '../filters/FallbackFilter';
+import LengthFilter from '../filters/LengthFilter';
+import ToDateFilter from '../filters/ToDateFilter';
+import ToDateTimeFilter from '../filters/ToDateTimeFilter';
+import ToTimeFilter from '../filters/ToTimeFilter';
 
 /**
  *
@@ -23,8 +29,14 @@ const DEFAULT_STATE = {
 		new YearInSecMacro(),
 	],
 	filters: [
+		new FallbackFilter(),
+		new LengthFilter(),
 		new AddDayFilter(),
 		new AddMonthFilter(),
+		new AddYearFilter(),
+		new ToDateFilter(),
+		new ToDateTimeFilter(),
+		new ToTimeFilter(),
 	],
 };
 

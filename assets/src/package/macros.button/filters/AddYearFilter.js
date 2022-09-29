@@ -4,20 +4,20 @@ const {
 	      __,
       } = wp.i18n;
 
-function AddDayFilter() {
+function AddYearFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'addDay';
+	this.fullName     = () => 'addYear';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 
 	this.help = __(
-		`Adds the passed number of days via an argument 
+		`Adds the passed number of years through an argument 
 		to a macro that returns a date or a timestamp.`,
 		'jet-form-builder',
 	);
 }
 
-AddDayFilter.prototype = Object.create( BaseFilter.prototype );
+AddYearFilter.prototype = Object.create( BaseFilter.prototype );
 
-export default AddDayFilter;
+export default AddYearFilter;

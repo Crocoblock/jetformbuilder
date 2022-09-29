@@ -101,7 +101,7 @@ CalculatedFormula.prototype = {
 		}
 
 		const formula = this.parts.map( current => {
-			if ( 'string' === typeof current ) {
+			if ( 'function' !== typeof current ) {
 				return current;
 			}
 			const result = current();

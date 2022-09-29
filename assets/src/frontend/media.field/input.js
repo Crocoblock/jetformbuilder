@@ -38,6 +38,9 @@ function FileData() {
 	this.addListeners   = function () {
 		const [ node ] = this.nodes;
 
+		this.sortable();
+		this.loadFiles();
+
 		node.addEventListener( 'change', event => {
 			const { files } = event.target;
 
@@ -66,9 +69,6 @@ function FileData() {
 			querySelector( '.jet-form-builder__preview-template' );
 
 		this.isMultiple = node.multiple;
-
-		this.sortable();
-		this.loadFiles();
 	};
 	this.sortable       = function () {
 		jQuery( this.previewsContainer ).unbind();

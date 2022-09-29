@@ -11,8 +11,8 @@ const {
 	      ClientSideMacros,
       } = JetFBComponents;
 const {
-	      insertMacro,
-      } = JetFBActions;
+	      useInsertMacro,
+      } = JetFBHooks;
 const {
 	      __,
       } = wp.i18n;
@@ -26,9 +26,6 @@ const {
 	      PanelBody,
 	      __experimentalInputControl,
       } = wp.components;
-const {
-	      useRef,
-      } = wp.element;
 
 let { InputControl } = wp.components;
 
@@ -38,8 +35,9 @@ if ( typeof InputControl === 'undefined' ) {
 
 export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
-	const minInput   = useRef();
-	const maxInput   = useRef();
+
+	const [ minInput, updateMin ] = useInsertMacro( 'min' );
+	const [ maxInput, updateMax ] = useInsertMacro( 'max' );
 
 	const {
 		      attributes,
@@ -74,15 +72,7 @@ export default function DateEdit( props ) {
 						value={ attributes.min }
 						label={ __( 'Starting from date', 'jet-form-builder' ) }
 						onChangePreset={ min => setAttributes( { min } ) }
-						onChangeMacros={ name => {
-							setAttributes( {
-								min: insertMacro(
-									attributes.min,
-									name,
-									minInput.current,
-								),
-							} );
-						} }
+						onChangeMacros={ updateMin }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }
@@ -99,15 +89,7 @@ export default function DateEdit( props ) {
 						value={ attributes.max }
 						label={ __( 'Limit dates to', 'jet-form-builder' ) }
 						onChangePreset={ max => setAttributes( { max } ) }
-						onChangeMacros={ name => {
-							setAttributes( {
-								max: insertMacro(
-									attributes.max,
-									name,
-									minInput.current,
-								),
-							} );
-						} }
+						onChangeMacros={ updateMax }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }

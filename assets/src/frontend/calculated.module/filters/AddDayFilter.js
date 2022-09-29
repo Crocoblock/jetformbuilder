@@ -7,7 +7,7 @@ function AddDayFilter() {
 		return 'addDay';
 	};
 	this.apply   = function ( value, days ) {
-		days          = days ? +days.trim() : 1;
+		days          = days ? +(days.trim()) : 1;
 		const current = new Date( value );
 
 		current.setDate( current.getDate() + days );

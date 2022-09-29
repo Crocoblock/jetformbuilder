@@ -1,31 +1,43 @@
+import BasePopoverItem from './BasePopoverItem';
+
 function BaseMacro() {
+	BasePopoverItem.call( this );
 }
 
-BaseMacro.prototype = {
-	/**
-	 * Can be used in Send Email action & other actions...
-	 */
-	isServerSide: false,
-	/**
-	 * Can be used in Calculated field & other field attributes
-	 */
-	isClientSide: false,
-	/**
-	 * Ex.: CurrentDate
-	 */
-	name: '',
-	/**
-	 * With namespace
-	 * Ex.: CT
-	 */
-	namespace: 'CT',
-	/**
-	 * @type {null|String|Function}
-	 */
-	help: null,
-	fullName() {
-		return `%${ this.namespace }::${ this.name }%`;
-	},
+BaseMacro.prototype = Object.create( BasePopoverItem.prototype );
+
+/**
+ * Can be used in Send Email action & other actions...
+ */
+BaseMacro.prototype.isServerSide = false;
+
+/**
+ * Can be used in Calculated field & other field attributes
+ */
+BaseMacro.prototype.isClientSide = false;
+
+/**
+ * Ex.: CurrentDate
+ */
+BaseMacro.prototype.name = '';
+
+/**
+ * With namespace
+ * Ex.: CT
+ */
+BaseMacro.prototype.namespace = 'CT';
+
+/**
+ * @type {null|String|Function}
+ */
+BaseMacro.prototype.help = null;
+
+BaseMacro.prototype.fullHelp = function () {
+	return this.help;
+};
+
+BaseMacro.prototype.fullName = function () {
+	return `%${ this.namespace }::${ this.name }%`;
 };
 
 export default BaseMacro;

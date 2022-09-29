@@ -140,6 +140,7 @@ import AdvancedModalControl from './components/AdvancedModalControl';
 import ClientSideMacros
 	from './macros.button/components/ClientSideMacros';
 import { insertMacro } from './macros.button/functions';
+import useInsertMacro from './macros.button/hooks/useInsertMacro';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -269,5 +270,6 @@ window.JetFBHooks = {
 	withSelectGateways,
 	withDispatchGateways,
 	useOnUpdateModal,
+	useInsertMacro,
 };
 

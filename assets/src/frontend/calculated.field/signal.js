@@ -21,17 +21,26 @@ function SignalCalculated() {
 	};
 	this.convertValue = function () {
 		const {
-			      value,
 			      sepThousands,
 			      sepDecimal,
 			      valueTypeProp,
+			      precision,
 		      } = this.input;
 
+		const { current } = this.input.value;
+
 		if ( 'number' !== valueTypeProp ) {
-			return value.current;
+			return current;
 		}
 
-		const parts = value.current.toString().split( '.' );
+		if ( Number.isNaN( Number( current ) ) ) {
+			return 0;
+		}
+
+		const parts = Number( current ).
+			toFixed( precision ).
+			toString().
+			split( '.' );
 
 		parts[ 0 ] = parts[ 0 ].replace(
 			/\B(?=(\d{3})+(?!\d))/g,

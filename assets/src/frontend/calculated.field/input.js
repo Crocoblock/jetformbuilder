@@ -50,6 +50,7 @@ function CalculatedData() {
 			return applyFilters( current, filters );
 		};
 		formula.setResult();
+		this.onChange();
 	};
 	this.makeReactive = function () {
 		InputData.prototype.makeReactive.call( this );

@@ -93,7 +93,7 @@ class Validation implements Arrayable {
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/advanced.reporting{min}.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::CALCULATED_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

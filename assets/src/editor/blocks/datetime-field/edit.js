@@ -7,23 +7,31 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
+	      AdvancedInspectorControl,
       } = JetFBComponents;
-
-const { __ } = wp.i18n;
-
+const {
+	      useInsertMacro,
+      } = JetFBHooks;
+const {
+	      __,
+      } = wp.i18n;
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      TextControl,
+	      TextareaControl,
 	      ToggleControl,
 	      PanelBody,
       } = wp.components;
 
 export default function DateTimeEdit( props ) {
 	const blockProps = useBlockProps();
+
+	const [ minInput, updateMin ] = useInsertMacro( 'min' );
+	const [ maxInput, updateMax ] = useInsertMacro( 'max' );
 
 	const {
 		      attributes,
@@ -47,7 +55,49 @@ export default function DateTimeEdit( props ) {
 					<BlockDescription/>
 				</PanelBody>
 				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
-					<BlockAdvancedValue/>
+					<BlockAdvancedValue
+						help={ __(
+							'Plain date should be in yyyy-MM-ddThh:mm format',
+							'jet-form-builder',
+						) }
+						style={ { marginBottom: '1em' } }
+					/>
+					<AdvancedInspectorControl
+						value={ attributes.min }
+						label={ __( 'Starting from date', 'jet-form-builder' ) }
+						onChangePreset={ min => setAttributes( { min } ) }
+						onChangeMacros={ updateMin }
+					>
+						{ ( { instanceId } ) => <TextareaControl
+							rows={ 1 }
+							id={ instanceId }
+							ref={ minInput }
+							value={ attributes.min }
+							help={ __(
+								'Plain date should be in yyyy-MM-ddThh:mm format',
+								'jet-form-builder',
+							) }
+							onChange={ min => setAttributes( { min } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AdvancedInspectorControl
+						value={ attributes.max }
+						label={ __( 'Limit dates to', 'jet-form-builder' ) }
+						onChangePreset={ max => setAttributes( { max } ) }
+						onChangeMacros={ updateMax }
+					>
+						{ ( { instanceId } ) => <TextareaControl
+							rows={ 1 }
+							id={ instanceId }
+							ref={ maxInput }
+							value={ attributes.max }
+							help={ __(
+								'Plain date should be in yyyy-MM-ddThh:mm format',
+								'jet-form-builder',
+							) }
+							onChange={ max => setAttributes( { max } ) }
+						/> }
+					</AdvancedInspectorControl>
 				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
 					<ToggleControl

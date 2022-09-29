@@ -8,7 +8,7 @@ function CurrentDateMacro() {
 	this.name         = 'CurrentDate';
 	this.isClientSide = true;
 
-	this.help = () => <>
+	this.fullHelp = () => <>
 		{ __( 'Returns the current timestamp. Replacing', 'jet-form-builder' ) }
 		{ ' ' }
 		<code>Date.now()</code>

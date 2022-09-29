@@ -41,7 +41,9 @@ function ToolBarDefault( { children = null } ) {
 			key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }
 			className="jet-fb-block-toolbar"
 		>
-			<ToolbarItem as="div" className={ 'jet-input-with-button' }>
+			<ToolbarItem as="div" style={ {
+				display: 'flex',
+			} }>
 				<Button
 					isSmall
 					icon="admin-page"

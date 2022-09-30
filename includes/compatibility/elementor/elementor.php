@@ -14,6 +14,7 @@ class Elementor {
 	}
 
 	public function __construct() {
+		new Widget_Controller();
 	}
 
 }

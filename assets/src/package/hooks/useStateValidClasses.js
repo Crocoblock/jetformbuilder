@@ -1,5 +1,9 @@
 export const initClasses = [ 'jet-form-validate-button' ];
 
+const {
+	      useState,
+      } = wp.element;
+
 function useStateValidClasses( initialValid ) {
 	const validClass   = 'is-valid';
 	const invalidClass = 'is-invalid';

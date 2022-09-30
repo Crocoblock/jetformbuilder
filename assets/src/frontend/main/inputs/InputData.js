@@ -10,7 +10,7 @@ const { doAction } = wp.hooks;
  * @property {string} rawName
  * @property {string} name
  * @property {Node|boolean} comment
- * @property {Node|*[]} nodes
+ * @property {HTMLInputElement|*[]} nodes
  * @property {ReactiveVar} value
  * @property {ConditionChecker|null} checker
  * @property {*} calcValue

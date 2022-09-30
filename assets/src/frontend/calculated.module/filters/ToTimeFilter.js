@@ -1,5 +1,5 @@
 import Filter from './Filter';
-import { toTime } from './functions';
+import { toTime } from '../functions';
 
 function ToTimeFilter() {
 	Filter.call( this );

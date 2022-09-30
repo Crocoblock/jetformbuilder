@@ -1,17 +1,17 @@
 function ConditionChecker() {
 }
 
-/**
- * @param condition {ConditionFieldItem}
- * @param input {InputData}
- */
+
 ConditionChecker.prototype = {
 	/**
 	 * @param input {InputData}
 	 * @return {boolean}
 	 */
 	isSupported: ( input ) => true,
-
+	/**
+	 * @param condition {ConditionFieldItem}
+	 * @param input {InputData}
+	 */
 	check: function ( condition, input ) {
 		const current        = input.value.current;
 		const conditionValue = condition.value;
@@ -35,7 +35,7 @@ ConditionChecker.prototype = {
 				);
 
 			case 'between':
-				if ( !Object.keys( conditionValue )?.length ) {
+				if ( !conditionValue?.length ) {
 					return false;
 				}
 
@@ -45,7 +45,7 @@ ConditionChecker.prototype = {
 				);
 
 			case 'one_of':
-				if ( !Object.keys( conditionValue )?.length ) {
+				if ( !conditionValue?.length ) {
 					return false;
 				}
 

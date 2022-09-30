@@ -2,7 +2,7 @@ import CalculatedFormula from './CalculatedFormula';
 import BaseInternalMacro from './const.namespace/BaseInternalMacro';
 import getFilters from './getFilters';
 import applyFilters from './applyFilters';
-import { toDate, toDateTime, toTime } from './filters/functions';
+import { toDate, toDateTime, toTime, getTimestamp } from './functions';
 import Constants from './constants';
 
 window.JetFormBuilderAbstract = {
@@ -22,6 +22,7 @@ window.JetFormBuilderFunctions = {
 	toDate,
 	toDateTime,
 	toTime,
+	getTimestamp,
 };
 
 window.JetFormBuilderConst = {

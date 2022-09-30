@@ -3,6 +3,7 @@ import ConditionalBlock from './ConditionalBlock';
 import ConditionChecker from './ConditionChecker';
 import MultipleConditionChecker from './MultipleConditionChecker';
 import OrOperatorItem from './OrOperatorItem';
+import DateTimeConditionChecker from './DateTimeConditionChecker';
 
 const { applyFilters } = wp.hooks;
 
@@ -22,6 +23,7 @@ const getCheckers = () => applyFilters(
 	'jet.fb.conditional.checkers',
 	[
 		MultipleConditionChecker,
+		DateTimeConditionChecker,
 		ConditionChecker,
 	],
 );

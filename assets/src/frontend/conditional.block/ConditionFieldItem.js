@@ -2,6 +2,11 @@ import ConditionItem from './ConditionItem';
 
 const { CalculatedFormula } = JetFormBuilderAbstract;
 
+/**
+ * @property  operator
+ *
+ * @constructor
+ */
 function ConditionFieldItem() {
 	ConditionItem.call( this );
 
@@ -41,6 +46,9 @@ function ConditionFieldItem() {
 		render_state,
 	} ) {
 		this.field        = field;
+		/**
+		 * @type {'equal'|'greater'|'less'|'between'|'one_of'|'contain'}
+		 */
 		this.operator     = operator;
 		this.render_state = render_state;
 
@@ -48,6 +56,9 @@ function ConditionFieldItem() {
 			value = value.split( ',' ).map( item => item.trim() );
 		}
 
+		/**
+		 * @type {Array}
+		 */
 		this.value = {};
 
 		for ( const [ index, formula ] of Object.entries( value ) ) {
@@ -59,6 +70,8 @@ function ConditionFieldItem() {
 			};
 			current.setResult();
 		}
+
+		this.value = Object.values( this.value );
 	};
 }
 

@@ -54,6 +54,11 @@ function createConditionItem( options, list ) {
 	}
 }
 
+/**
+ * @param node
+ * @param root
+ * @return {ConditionalBlock}
+ */
 function createConditionalBlock( node, root ) {
 	if ( node.hasOwnProperty( 'jfbConditional' ) ) {
 		return node.jfbConditional;

@@ -6,7 +6,12 @@ function ConditionChecker() {
  * @param input {InputData}
  */
 ConditionChecker.prototype = {
-	isSupported: () => true,
+	/**
+	 * @param input {InputData}
+	 * @return {boolean}
+	 */
+	isSupported: ( input ) => true,
+
 	check: function ( condition, input ) {
 		const current        = input.value.current;
 		const conditionValue = condition.value;
@@ -16,10 +21,18 @@ ConditionChecker.prototype = {
 				return current === conditionValue[ 0 ];
 
 			case 'greater':
-				return +(current) > +(conditionValue[ 0 ]);
+				return +(
+					current
+				) > +(
+					conditionValue[ 0 ]
+				);
 
 			case 'less':
-				return +(current) < +(conditionValue[ 0 ]);
+				return +(
+					current
+				) < +(
+					conditionValue[ 0 ]
+				);
 
 			case 'between':
 				if ( !Object.keys( conditionValue )?.length ) {

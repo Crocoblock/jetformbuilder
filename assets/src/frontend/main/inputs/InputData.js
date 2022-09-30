@@ -86,7 +86,7 @@ InputData.prototype.onChange     = function () {
  * @param callable
  * @returns {(function(): *|*[])|*}
  */
-InputData.prototype.watch        = function ( callable ) {
+InputData.prototype.watch = function ( callable ) {
 	return this.value.watch( callable );
 };
 /**
@@ -198,6 +198,14 @@ InputData.prototype.setPage = function ( page ) {
 	this.page = page;
 
 	this.watch( () => page.updateState() );
+};
+
+InputData.prototype.isVisible = function () {
+	const [ node ] = this.nodes;
+
+	return (
+		node.isConnected && null !== node.offsetParent
+	);
 };
 
 export default InputData;

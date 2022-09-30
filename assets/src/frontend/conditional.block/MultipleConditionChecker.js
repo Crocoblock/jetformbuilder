@@ -1,21 +1,13 @@
 import ConditionChecker from './ConditionChecker';
 
-const {
-	      CheckboxData,
-	      MultiSelectData,
-      } = JetFormBuilderAbstract;
-
 function MultipleConditionChecker() {
 	ConditionChecker.call( this );
 
 	this.isSupported = function ( input ) {
-		return (
-			input instanceof CheckboxData
-		) || (
-			input instanceof MultiSelectData
-		);
+		return input.isArray();
 	};
-	this.check       = function ( condition, input ) {
+
+	this.check = function ( condition, input ) {
 		const { current } = input.value;
 
 		switch ( condition.operator ) {

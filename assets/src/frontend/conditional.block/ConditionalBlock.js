@@ -1,6 +1,11 @@
 import ConditionsBlockList from './ConditionsBlockList';
 
-const { doAction } = wp.hooks;
+const {
+	      doAction,
+      } = wp.hooks;
+const {
+	      ReactiveVar,
+      } = JetFormBuilderAbstract;
 
 function ConditionalBlock( node, observable ) {
 	this.node           = node;
@@ -31,6 +36,9 @@ function ConditionalBlock( node, observable ) {
 	 */
 	this.comment = null;
 
+	this.isRight = new ReactiveVar( null );
+	this.isRight.make();
+
 	this.setConditions();
 
 	doAction( 'jet.fb.conditional.init', this );
@@ -40,12 +48,11 @@ ConditionalBlock.prototype = {
 	setConditions() {
 		const { jfbConditional } = this.node.dataset;
 
-		this.list = new ConditionsBlockList( jfbConditional, this.root );
-
+		this.list       = new ConditionsBlockList( jfbConditional, this.root );
 		this.list.block = this;
 
 		this.list.onChangeRelated = () => {
-			this.runFunction( this.list.getResult() );
+			this.isRight.current = this.list.getResult();
 		};
 	},
 	insertComment() {
@@ -68,9 +75,12 @@ ConditionalBlock.prototype = {
 		this.isObserved = true;
 		this.insertComment();
 
+		this.isRight.watch( () => this.runFunction() );
 		this.list.observe();
 	},
-	runFunction( result ) {
+	runFunction() {
+		const result = this.isRight.current;
+
 		switch ( this.getFunction() ) {
 			case 'show_dom':
 				this.showBlockDom( result );

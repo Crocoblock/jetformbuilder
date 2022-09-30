@@ -17,7 +17,8 @@ function PageState( node, state ) {
 	this.canSwitch = new ReactiveVar( false );
 	this.isShow    = new ReactiveVar( 1 === this.index );
 
-	this.parseDom();
+	this.observeInputs();
+	this.observeConditionalBlocks();
 
 	this.canSwitch.make();
 	this.isShow.make();
@@ -39,7 +40,7 @@ function PageState( node, state ) {
 	} );
 }
 
-PageState.prototype.parseDom            = function () {
+PageState.prototype.observeInputs = function () {
 	for ( const node of this.node.querySelectorAll(
 		'[data-jfb-sync]' ) ) {
 		if (
@@ -54,12 +55,13 @@ PageState.prototype.parseDom            = function () {
 
 		node.jfbSync.setPage( this );
 	}
-
-	/**
-	 * Buttons for switching between pages are hidden conditional blocks
-	 * that perform their function (disable)
-	 * if all required fields are filled in the page.
-	 */
+};
+/**
+ * Buttons for switching between pages are hidden conditional blocks
+ * that perform their function (disable)
+ * if all required fields are filled in the page.
+ */
+PageState.prototype.observeConditionalBlocks = function () {
 	for ( const node of this.node.querySelectorAll(
 		'[data-jfb-conditional]',
 	) ) {
@@ -71,16 +73,18 @@ PageState.prototype.parseDom            = function () {
 			this.state.getRoot(),
 		);
 
-		for ( const condition of block.list.getConditions() ) {
-			if ( !(
-				condition instanceof ConditionPageStateItem
-			) ) {
-				continue;
-			}
-			block.page = this;
-			this.canSwitch.watch( () => block.list.onChangeRelated() );
+		/**
+		 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
+		 */
+		block.isRight.watch( () => this.updateState() );
 
-			break;
+		for ( const condition of block.list.getConditions() ) {
+			if ( condition instanceof ConditionPageStateItem ) {
+				block.page = this;
+				this.canSwitch.watch( () => block.list.onChangeRelated() );
+
+				break;
+			}
 		}
 	}
 };

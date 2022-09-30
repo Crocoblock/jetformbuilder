@@ -1,6 +1,6 @@
 /**
  * Validation logic: on change input value we run
- * @see ReportingInterface.validateWithNotice
+ * @see ReportingInterface.validateWithNoticeDebounced
  *
  * In that function we clear stored errors
  * @see ReportingInterface.errors
@@ -97,7 +97,10 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<*[]|array|null>}
 	 */
 	getErrors: async function () {
-		if ( !this.isRequired || this.input.loading.current ) {
+		if ( !this.isRequired ||
+			this.input.loading.current ||
+			!this.input.isVisible()
+		) {
 			return [];
 		}
 

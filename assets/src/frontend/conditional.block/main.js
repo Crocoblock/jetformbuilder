@@ -15,6 +15,7 @@ addAction(
 			createConditionalBlock( node, observable );
 		}
 	},
+	20
 );
 
 addAction(

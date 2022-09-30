@@ -28,9 +28,7 @@
 				:scope="scope"
 			/>
 		</template>
-		<template v-else>
-			{{ value }}
-		</template>
+		<div v-else v-html="value"/>
 	</div>
 </template>
 
@@ -95,7 +93,7 @@ export default {
 						value,
 					},
 				} );
-				jfbEventBus.reactiveCounter ++;
+				jfbEventBus.reactiveCounter++;
 			},
 		},
 	},
@@ -104,7 +102,7 @@ export default {
 			this.commit( 'revertChangesColumn', {
 				column: this.column,
 			} );
-			jfbEventBus.reactiveCounter ++;
+			jfbEventBus.reactiveCounter++;
 		},
 	},
 };

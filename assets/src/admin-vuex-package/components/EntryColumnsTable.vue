@@ -38,9 +38,8 @@
 			<div
 				v-else
 				class="list-table-item__cell--body-value"
-			>
-				{{ value }}
-			</div>
+				v-html="value"
+			/>
 		</div>
 		<div
 			class="list-table-item__cell--actions"

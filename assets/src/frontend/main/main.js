@@ -9,6 +9,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
+import allRejected from './functions/allRejected';
 
 (
 	function ( $ ) {
@@ -26,6 +27,13 @@ import MultiSelectData from './inputs/MultiSelectData';
 			ReportingInterface,
 			CheckboxData,
 			MultiSelectData,
+		};
+
+		window.JetFormBuilderFunctions = {
+			...(
+				window.JetFormBuilderFunctions ?? {}
+			),
+			allRejected,
 		};
 
 		$( initCommon );

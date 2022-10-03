@@ -33,6 +33,10 @@ function createFileList( inputFileArray ) {
 	return transfer.files;
 }
 
+function createFile( blob, fileName ) {
+	return new File( [ blob ], fileName, blob );
+}
+
 /**
  * @param node {HTMLElement}
  * @returns {boolean}
@@ -41,4 +45,4 @@ function isFile( node ) {
 	return 'file' === node.type;
 }
 
-export { appendNodes, createFileList, isFile };
+export { appendNodes, createFileList, isFile, createFile };

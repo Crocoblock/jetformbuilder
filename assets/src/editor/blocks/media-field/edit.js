@@ -9,14 +9,20 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
+	      ValidationBlockMessage,
+	      ValidationToggleGroup,
       } = JetFBComponents;
-
-const { __ } = wp.i18n;
+const {
+	      useIsAdvancedValidation,
+      } = JetFBHooks;
+const {
+	      __,
+      } = wp.i18n;
 
 const {
 	      useBlockProps,
 	      InspectorControls,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      SelectControl,
@@ -25,6 +31,7 @@ const {
 	      TextControl,
 	      __experimentalNumberControl,
 	      __experimentalInputControl,
+	      PanelBody,
       } = wp.components;
 
 let { NumberControl, InputControl } = wp.components;
@@ -41,7 +48,8 @@ const localizeData = window.jetFormMediaFieldData;
 
 export default function MediaEdit( props ) {
 
-	const blockProps = useBlockProps();
+	const blockProps           = useBlockProps();
+	const isAdvancedValidation = useIsAdvancedValidation();
 
 	const {
 		      attributes,
@@ -150,6 +158,15 @@ export default function MediaEdit( props ) {
 						tokenizeOnSpace
 					/>
 				</FieldSettingsWrapper>
+				<PanelBody
+					title={ __( 'Validation', 'jet-form-builder' ) }
+				>
+					<ValidationToggleGroup/>
+					{ isAdvancedValidation && <>
+						<ValidationBlockMessage name="max_files"/>
+						<ValidationBlockMessage name="file_max_size"/>
+					</> }
+				</PanelBody>
 				<AdvancedFields
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }

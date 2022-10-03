@@ -5,6 +5,7 @@ import {
 	observeComment, observeMacroAttr,
 	queryByAttrValue,
 } from './html.macro/functions';
+import allRejected from './functions/allRejected';
 
 const {
 	      doAction,
@@ -116,13 +117,7 @@ function Observable( parent = null ) {
 			);
 		}
 
-		const results = await Promise.allSettled(
-			callbacks.map( current => new Promise( current ) ),
-		);
-
-		const invalid = results.filter(
-			( { status } ) => 'rejected' === status,
-		);
+		const invalid = await allRejected( callbacks );
 
 		return !invalid.length;
 	};

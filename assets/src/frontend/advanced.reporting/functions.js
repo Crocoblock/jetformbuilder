@@ -17,15 +17,17 @@ import ValueMacro from './macros/ValueMacro';
 import MinAttrMacro from './macros/MinAttrMacro';
 import MaxAttrMacro from './macros/MaxAttrMacro';
 import RemainingMacro from './macros/RemainingMacro';
-import LengthFilter from '../calculated.module/filters/LengthFilter';
-import FallBackFilter from '../calculated.module/filters/FallBackFilter';
 import MustEqual from './restrictions/MustEqual';
+import MaxFilesRestriction from './file.restrictions/MaxFilesRestriction';
+import SingleFileRestriction from './file.restrictions/SingleFileRestriction';
 
 const { applyFilters } = wp.hooks;
 
 const getRestrictions = () => applyFilters(
 	'jet.fb.restrictions',
 	[
+		MaxFilesRestriction,
+		SingleFileRestriction,
 		ReachLimitNumbers,
 		NotEnoughNumbers,
 		NotUrl,
@@ -39,6 +41,9 @@ const getRestrictions = () => applyFilters(
 	],
 );
 
+/**
+ * @type {Restriction[]}
+ */
 let restrictions = [];
 
 const getAdvancedRules = () => applyFilters(
@@ -72,8 +77,6 @@ const getMacros = () => applyFilters(
  * @type {array<DynamicMacro>}
  */
 let macros = [];
-
-
 
 /**
  * @param restriction {Restriction}
@@ -111,7 +114,12 @@ function setRestrictions( reporting ) {
 	for ( const restriction of restrictions ) {
 		const current = new restriction();
 
-		if ( !current.isSupported( reporting.getNode(), reporting ) ) {
+		if (
+			!current.isSupported( reporting.getNode(), reporting ) ||
+			(
+				!reporting.isRequired && current.runOnlyIfRequired()
+			)
+		) {
 			continue;
 		}
 		current.setReporting( reporting );

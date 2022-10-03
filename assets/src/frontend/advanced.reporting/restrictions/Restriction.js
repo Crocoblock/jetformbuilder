@@ -17,6 +17,15 @@ Restriction.prototype = {
 		return true;
 	},
 	/**
+	 * Return false from this method so that this constraint
+	 * is checked regardless of whether this field is required or not.
+	 *
+	 * @return {boolean}
+	 */
+	runOnlyIfRequired: function () {
+		return true;
+	},
+	/**
 	 * If returns true -> validation will be
 	 * started with 1000 ms delay
 	 *

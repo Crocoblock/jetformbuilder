@@ -5,7 +5,12 @@ import {
 	setRestrictions,
 } from './functions';
 
-const { ReportingInterface } = JetFormBuilderAbstract;
+const {
+	      ReportingInterface,
+      } = JetFormBuilderAbstract;
+const {
+	      allRejected,
+      } = JetFormBuilderFunctions;
 
 /**
  * @this {ReportingInterface}
@@ -41,17 +46,7 @@ function AdvancedReporting() {
 			} );
 		}
 
-		const results = await Promise.allSettled(
-			promises.map( current => new Promise( current ) ),
-		);
-
-		const invalid = results.filter(
-			( { status } ) => 'rejected' === status,
-		);
-
-		return invalid.map( ( { reason, value } ) => (
-			reason ?? value
-		) );
+		return await allRejected( promises );
 	};
 	this.report          = function ( validationErrors ) {
 		this.insertError( validationErrors[ 0 ].getMessage() );
@@ -60,11 +55,6 @@ function AdvancedReporting() {
 		ReportingInterface.prototype.setInput.call( this, input );
 
 		this.messages = getValidationMessages( input.nodes[ 0 ] );
-
-		if ( !this.isRequired ) {
-			return;
-		}
-
 		/**
 		 * @see this.restrictions
 		 */
@@ -90,6 +80,11 @@ function AdvancedReporting() {
 		error.remove();
 	};
 	this.insertError     = function ( message ) {
+		if ( ! message ) {
+			this.clearReport();
+
+			return;
+		}
 		const node  = this.getNode();
 		const error = this.createError( node, message );
 

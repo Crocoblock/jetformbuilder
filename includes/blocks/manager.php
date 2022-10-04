@@ -62,6 +62,7 @@ class Manager {
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_form_scripts' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_form_scripts' ) );
 	}
 

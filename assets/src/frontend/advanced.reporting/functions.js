@@ -20,6 +20,7 @@ import RemainingMacro from './macros/RemainingMacro';
 import MustEqual from './restrictions/MustEqual';
 import MaxFilesRestriction from './file.restrictions/MaxFilesRestriction';
 import SingleFileRestriction from './file.restrictions/SingleFileRestriction';
+import MaxFileSizeMacro from './file.macro/MaxFileSizeMacro';
 
 const { applyFilters } = wp.hooks;
 
@@ -66,6 +67,7 @@ let advancedRules = [];
 const getMacros = () => applyFilters(
 	'jet.fb.restrictions.macros',
 	[
+		MaxFileSizeMacro,
 		ValueMacro,
 		MinAttrMacro,
 		MaxAttrMacro,

@@ -5,6 +5,12 @@ const {
 	      allRejected,
       } = JetFormBuilderFunctions;
 
+/**
+ * This restriction used for implement file-specific
+ * restrictions for each single file
+ *
+ * @constructor
+ */
 function SingleFileRestriction() {
 	Restriction.call( this );
 

@@ -3,13 +3,18 @@ import BaseFileRestriction from './BaseFileRestriction';
 function FileSizeRestriction() {
 	BaseFileRestriction.call( this );
 
-	this.validate = function () {
+	this.setReporting = function ( reporting ) {
+		BaseFileRestriction.prototype.setReporting.call( this, reporting );
 		/**
 		 * @type {SignalFile}
 		 */
 		const callable = this.reporting.input.callable;
 
-		return this.file.size < callable.settings.max_size;
+		this.max_size = callable.settings.max_size;
+	};
+
+	this.validate = function () {
+		return this.file.size < this.max_size;
 	};
 
 	this.getRawMessage = function () {
@@ -19,5 +24,7 @@ function FileSizeRestriction() {
 }
 
 FileSizeRestriction.prototype = Object.create( BaseFileRestriction.prototype );
+
+FileSizeRestriction.prototype.max_size = null;
 
 export default FileSizeRestriction;

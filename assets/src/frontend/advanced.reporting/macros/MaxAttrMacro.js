@@ -14,6 +14,6 @@ function MaxAttrMacro() {
 	};
 }
 
-MaxAttrMacro.prototype   = Object.create( DynamicMacro.prototype );
+MaxAttrMacro.prototype = Object.create( DynamicMacro.prototype );
 
 export default MaxAttrMacro;

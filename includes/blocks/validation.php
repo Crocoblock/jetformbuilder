@@ -71,6 +71,14 @@ class Validation implements Arrayable {
 			'wp_enqueue_scripts',
 			array( $this, 'register_scripts' )
 		);
+
+		/**
+		 * @link https://github.com/Crocoblock/issues-tracker/issues/1542
+		 */
+		add_action(
+			'jet_plugins/frontend/register_scripts',
+			array( $this, 'register_scripts' )
+		);
 	}
 
 	/**

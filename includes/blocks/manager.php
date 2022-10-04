@@ -24,7 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Manager {
 
 	const MAIN_SCRIPT_HANDLE = 'jet-form-builder-frontend-forms';
-	const CALCULATED_HANDLE = 'jet-form-builder-calculated-module';
+	const CALCULATED_HANDLE  = 'jet-form-builder-calculated-module';
 
 	/**
 	 * @var bool
@@ -66,8 +66,12 @@ class Manager {
 
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_form_scripts' ) );
-		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_form_scripts' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_form_scripts' ) );
+
+		/**
+		 * @link https://github.com/Crocoblock/issues-tracker/issues/1542
+		 */
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_form_scripts' ) );
 	}
 
 	public function init_jet_sm_block_manager() {

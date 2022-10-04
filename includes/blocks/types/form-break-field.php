@@ -25,6 +25,11 @@ class Form_Break_Field extends Base {
 		parent::register_block_type();
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+
+		/**
+		 * @link https://github.com/Crocoblock/issues-tracker/issues/1542
+		 */
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
 	}
 
 	public function register_scripts() {

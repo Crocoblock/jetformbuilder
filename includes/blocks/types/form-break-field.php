@@ -86,6 +86,7 @@ class Form_Break_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
+		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		return ( new class( $this ) extends \Jet_Form_Builder\Blocks\Render\Base {
 			public function get_name() {

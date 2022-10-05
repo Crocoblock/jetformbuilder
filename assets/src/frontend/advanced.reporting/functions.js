@@ -27,8 +27,6 @@ const { applyFilters } = wp.hooks;
 const getRestrictions = () => applyFilters(
 	'jet.fb.restrictions',
 	[
-		MaxFilesRestriction,
-		SingleFileRestriction,
 		ReachLimitNumbers,
 		NotEnoughNumbers,
 		NotUrl,
@@ -67,7 +65,6 @@ let advancedRules = [];
 const getMacros = () => applyFilters(
 	'jet.fb.restrictions.macros',
 	[
-		MaxFileSizeMacro,
 		ValueMacro,
 		MinAttrMacro,
 		MaxAttrMacro,

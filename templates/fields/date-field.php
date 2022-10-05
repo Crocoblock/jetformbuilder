@@ -6,6 +6,7 @@
 
 use Jet_Form_Builder\Classes\Date_Tools;
 use Jet_Form_Builder\Classes\Regexp_Tools;
+use Jet_Form_Builder\Classes\Tools;
 
 $this->set_value();
 $this->add_attribute( 'class', 'jet-form-builder__field date-field' );
@@ -29,5 +30,6 @@ if ( Regexp_Tools::has_macro( $this->args['max'] ) ) {
 } else {
 	$this->add_attribute( 'max', Date_Tools::time_to_string( $this->args['max'] ) );
 }
+$this->add_attribute( 'data-watch-attrs', array( 'min', 'max' ) );
 ?>
 <input <?php $this->render_attributes_string(); ?>>

@@ -148,6 +148,7 @@ class Media_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
+		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		return ( new Media_Field_Render( $this ) )->render();
 	}

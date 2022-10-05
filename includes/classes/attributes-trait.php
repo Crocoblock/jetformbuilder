@@ -18,8 +18,11 @@ trait Attributes_Trait {
 			foreach ( $value as $item ) {
 				$this->add_attribute( $attr, $item );
 			}
+
 			return;
 		}
+
+		$value = is_scalar( $value ) ? $value : Tools::encode_json( $value );
 
 		if ( ! isset( $this->attrs[ $attr ] ) ) {
 			$this->attrs[ $attr ] = $value;

@@ -50,6 +50,7 @@ class Dynamic_Value {
 		}
 
 		wp_enqueue_script( self::HANDLE );
+		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		foreach ( $groups as &$group ) {
 			$group['to_set'] = jet_fb_parse_dynamic( $group['to_set'] ?? '' );

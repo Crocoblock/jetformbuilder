@@ -1,6 +1,7 @@
 const { CalculatedFormula } = JetFormBuilderAbstract;
 
-function BaseReactiveProperty() {
+function BaseReactiveProperty( name = '' ) {
+	this.attrName = name;
 }
 
 BaseReactiveProperty.prototype = {
@@ -16,25 +17,34 @@ BaseReactiveProperty.prototype = {
 	 * @return {boolean}
 	 */
 	isSupported( input ) {
-		return false;
+		return input.attrs.hasOwnProperty( this.attrName );
 	},
-	/**
-	 * @param input {InputData}
-	 * @param formula {CalculatedFormula}
-	 */
-	observe( input, formula ) {},
+
 	/**
 	 * @param input {InputData}
 	 */
 	runObserve( input ) {
-		const [ node ] = input.nodes;
+		/**
+		 * @type {BaseHtmlAttr}
+		 */
+		const htmlAttr = input.attrs[ this.attrName ];
 
 		const formula = new CalculatedFormula(
-			node.dataset[ this.attrName ] ?? '',
-			input.root,
+			htmlAttr.initial,
+			input,
 		);
 
-		this.observe( input, formula );
+		this.observe( htmlAttr, formula );
+	},
+	/**
+	 * @param attr {BaseHtmlAttr}
+	 * @param formula {CalculatedFormula}
+	 */
+	observe( attr, formula ) {
+		formula.setResult = () => {
+			attr.value.current = formula.calculate();
+		};
+		formula.setResult();
 	},
 };
 

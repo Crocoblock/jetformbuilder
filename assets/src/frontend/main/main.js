@@ -9,7 +9,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import allRejected from './functions/allRejected';
+import { allRejected, getLanguage } from './functions';
 
 (
 	function ( $ ) {
@@ -34,6 +34,7 @@ import allRejected from './functions/allRejected';
 				window.JetFormBuilderFunctions ?? {}
 			),
 			allRejected,
+			getLanguage,
 		};
 
 		$( initCommon );

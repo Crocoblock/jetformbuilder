@@ -142,6 +142,7 @@ class Validation implements Arrayable {
 			return;
 		}
 		wp_enqueue_script( self::HANDLE );
+		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		$type  = $this->get_block_type( $block );
 		$rules = $block->block_attrs['validation']['rules'] ?? array();

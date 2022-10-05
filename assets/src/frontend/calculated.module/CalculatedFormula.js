@@ -8,6 +8,9 @@ import getFilters from './getFilters';
 import attachConstNamespace from './attachConstNamespace';
 
 const {
+	      InputData,
+      } = JetFormBuilderAbstract;
+const {
 	      applyFilters: wpFilters,
 	      addFilter,
       } = wp.hooks;
@@ -18,12 +21,23 @@ addFilter(
 	attachConstNamespace,
 );
 
+/**
+ * @param formula {String}
+ * @param root {InputData|Observable}
+ * @constructor
+ */
 function CalculatedFormula( formula, root ) {
-	this.formula = formula;
-	this.parts   = [];
-	this.related = [];
+	this.formula      = formula;
+	this.parts        = [];
+	this.related      = [];
+	this.relatedAttrs = [];
 
-	this.observe( formula, root );
+	if ( root instanceof InputData ) {
+		this.input = root;
+		this.related.push( root.name );
+	}
+
+	this.observe( formula, this.input?.root ?? root );
 }
 
 CalculatedFormula.prototype = {
@@ -31,7 +45,12 @@ CalculatedFormula.prototype = {
 	formula: null,
 	parts: [],
 	related: [],
+	relatedAttrs: [],
 	regexp: /%(.*?)%/g,
+	/**
+	 * @type {InputData}
+	 */
+	input: null,
 	/**
 	 * @type {Function}
 	 */
@@ -41,11 +60,10 @@ CalculatedFormula.prototype = {
 	/**
 	 *
 	 * @param relatedInput {InputData}
-	 * @param filters {Filter[]}
 	 * @return {*}
 	 */
-	relatedCallback( relatedInput, filters ) {
-		return applyFilters( relatedInput.value.current, filters );
+	relatedCallback( relatedInput ) {
+		return relatedInput.value.current;
 	},
 	/**
 	 * @private
@@ -67,23 +85,34 @@ CalculatedFormula.prototype = {
 		}
 
 		this.parts = rawParts.map( current => {
-			const [ name, ...filters ] = current.split( '|' );
-			const relatedInput         = root.getInput( name );
+			const [ name, ...filters ]     = current.split( '|' );
+			const [ fieldName, ...params ] = name.match( /[\w\-:]+/g );
 
-			if ( !relatedInput && !name.includes( '::' ) ) {
+			const relatedInput = name !== 'this'
+			                     ? root.getInput( fieldName )
+			                     : this.input;
+
+			if ( !relatedInput && !fieldName.includes( '::' ) ) {
 				return current;
 			}
 
 			const filtersList = getFilters( filters );
 
-			if ( name.includes( '::' ) ) {
-				return wpFilters(
+			if ( fieldName.includes( '::' ) ) {
+				const customValue = wpFilters(
 					'jet.fb.custom.formula.macro',
-					current,
-					name,
-					filtersList,
+					false,
+					fieldName,
+					params,
 					root,
+					this,
 				);
+
+				if ( false === customValue ) {
+					return current;
+				}
+
+				return applyFilters( customValue, filtersList );
 			}
 
 			if ( !this.related.includes( relatedInput.name ) ) {
@@ -92,7 +121,30 @@ CalculatedFormula.prototype = {
 				relatedInput.watch( () => this.setResult() );
 			}
 
-			return () => this.relatedCallback( relatedInput, filtersList );
+			if ( !params?.length ) {
+				return () => applyFilters(
+					this.relatedCallback( relatedInput ),
+					filtersList,
+				);
+			}
+
+			const [ attrName ] = params;
+
+			if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
+				return current;
+			}
+			/**
+			 * @type {BaseHtmlAttr}
+			 */
+			const htmlAttr = relatedInput.attrs[ attrName ];
+
+			if ( !this.relatedAttrs.includes( relatedInput.name + attrName ) ) {
+				this.relatedAttrs.push( relatedInput.name + attrName );
+
+				htmlAttr.value.watch( () => this.setResult() );
+			}
+
+			return () => applyFilters( htmlAttr.value.current, filtersList );
 		} );
 	},
 	calculate() {

@@ -3,6 +3,7 @@ import ReactiveVar from '../reactive/ReactiveVar';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
+import { getAttrs } from '../functions';
 
 const { doAction } = wp.hooks;
 
@@ -18,6 +19,7 @@ const { doAction } = wp.hooks;
  * @property {Observable} root
  * @property {PageState} page
  * @property {LoadingReactiveVar} loading
+ * @property {Object<ReactiveVar>} attrs
  *
  * @constructor
  */
@@ -26,6 +28,7 @@ function InputData() {
 	this.name    = '';
 	this.comment = false;
 	this.nodes   = [];
+	this.attrs   = {};
 
 	/**
 	 * @type {ReactiveVar}
@@ -54,6 +57,7 @@ function InputData() {
 	this.loading.make();
 }
 
+InputData.prototype.attrs        = {};
 InputData.prototype.isSupported  = function ( node ) {
 	return true;
 };
@@ -128,6 +132,8 @@ InputData.prototype.onObserve = function () {
 	this.reporting = createReport( this );
 
 	this.loading.watch( () => this.onChangeLoading() );
+
+	this.attrs = getAttrs( this );
 };
 InputData.prototype.onChangeLoading = function () {
 	this.getSubmit().lockState.current = this.loading.current;

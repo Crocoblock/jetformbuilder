@@ -1,5 +1,4 @@
 import CurrentDate from './const.namespace/CurrentDate';
-import applyFilters from './applyFilters';
 import Min_In_Sec from './const.namespace/Min_In_Sec';
 import Month_In_Sec from './const.namespace/Month_In_Sec';
 import Hour_In_Sec from './const.namespace/Hour_In_Sec';
@@ -47,30 +46,28 @@ function getFunction( slug ) {
 }
 
 /**
- * @param current {String}
- * @param name {String}
- * @param filters {Filter[]}
- * @param root {Observable}
+ * @param result {String}
+ * @param fieldName {String}
+ * @param params {String[]}
  * @return {*}
  */
 function attachConstNamespace(
-	current,
-	name,
-	filters,
-	root,
+	result,
+	fieldName,
+	params,
 ) {
-	if ( !name.includes( 'CT::' ) ) {
-		return current;
+	if ( !fieldName.includes( 'CT::' ) ) {
+		return result;
 	}
-	name = name.replace( 'CT::', '' );
+	fieldName = fieldName.replace( 'CT::', '' );
 
-	const staticFunc = getFunction( name );
+	const staticFunc = getFunction( fieldName );
 
 	if ( false === staticFunc ) {
-		return current;
+		return result;
 	}
 
-	return applyFilters( staticFunc.getResult(), filters );
+	return staticFunc.getResult();
 }
 
 export default attachConstNamespace;

@@ -5,7 +5,7 @@ import {
 	observeComment, observeMacroAttr,
 	queryByAttrValue,
 } from './html.macro/functions';
-import allRejected from './functions/allRejected';
+import { allRejected } from './functions';
 
 const {
 	      doAction,

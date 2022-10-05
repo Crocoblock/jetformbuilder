@@ -1,4 +1,4 @@
-import parseInput from './parseInput';
+import { parseInput } from './functions';
 
 const { addAction } = wp.hooks;
 

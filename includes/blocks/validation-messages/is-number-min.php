@@ -26,7 +26,7 @@ class Is_Number_Min extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please enter a number greater than %min%. Current value %value|ifEmpty(is empty)%.',
+			'Please enter a number greater than %this(min)%. Current value %this|ifEmpty(is empty)%.',
 			'jet-form-builder'
 		);
 	}

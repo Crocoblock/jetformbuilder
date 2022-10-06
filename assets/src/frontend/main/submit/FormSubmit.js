@@ -22,13 +22,12 @@ function FormSubmit( observable ) {
 	};
 
 	this.submit = function () {
-		if ( !this.observable.inputsAreValid() ) {
-			return;
-		}
-		this.clearErrors();
-		this.toggle();
+		this.observable.inputsAreValid().then( () => {
+			this.clearErrors();
+			this.toggle();
 
-		this.submitter.submit();
+			this.submitter.submit();
+		} ).catch( () => {} );
 	};
 
 	this.clearErrors = function () {

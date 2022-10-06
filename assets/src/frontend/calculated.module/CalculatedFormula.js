@@ -45,7 +45,6 @@ CalculatedFormula.prototype = {
 	parts: [],
 	related: [],
 	relatedAttrs: [],
-	regexp: /%(.*?)%/g,
 	/**
 	 * @type {InputData}
 	 */
@@ -77,7 +76,7 @@ CalculatedFormula.prototype = {
 
 			return;
 		}
-		const rawParts = value.split( this.regexp );
+		const rawParts = value.split( /%(.*?)%/g );
 
 		if ( 1 === rawParts.length ) {
 			return;

@@ -22,6 +22,18 @@ function MaxFilesRestriction() {
 		return current <= max_files.value.current;
 	};
 
+	this.setReporting = function ( reporting ) {
+		Restriction.prototype.setReporting.call(this, reporting );
+
+		const { max_files } = reporting.input.attrs;
+
+		const validate = () => {
+			reporting.validateWithNotice().then( () => {} ).catch( () => {} );
+		};
+
+		max_files.value.watch( validate );
+	};
+
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'max_files' );
 	};

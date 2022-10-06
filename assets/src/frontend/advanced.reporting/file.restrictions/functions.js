@@ -37,6 +37,8 @@ function getFileRestrictions( reporting ) {
 		}
 
 		current.setReporting( reporting );
+		current.onReady();
+
 		response.push( current );
 	}
 

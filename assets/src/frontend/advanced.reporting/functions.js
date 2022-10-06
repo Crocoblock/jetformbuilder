@@ -76,6 +76,7 @@ function setRestrictions( reporting ) {
 			continue;
 		}
 		current.setReporting( reporting );
+		current.onReady();
 
 		reporting.restrictions.push( current );
 	}
@@ -99,6 +100,7 @@ function getPreparedRules( rules, reporting ) {
 
 			current.setReporting( reporting );
 			current.setAttrs( { ...rule } );
+			current.onReady();
 
 			response.push( current );
 			break;

@@ -86,7 +86,6 @@ class Validation implements Arrayable {
 	 */
 	private function get_messages(): array {
 		return array(
-			new Has_Remaining_Chars(),
 			new Is_Number_Max(),
 			new Is_Number_Min(),
 			new Is_Char_Max(),

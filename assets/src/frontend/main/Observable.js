@@ -101,6 +101,9 @@ function Observable( parent = null ) {
 		this.form = new FormSubmit( this );
 	};
 
+	/**
+	 * @return {Promise<Promise<never>|Promise<void>>}
+	 */
 	this.inputsAreValid = async function () {
 		const callbacks = [];
 
@@ -111,7 +114,7 @@ function Observable( parent = null ) {
 			const input = this.getInput( inputName );
 
 			callbacks.push(
-				( resolve, reject ) => input.reporting.validate().
+				( resolve, reject ) => input.reporting.validateWithNotice().
 					then( resolve ).
 					catch( reject ),
 			);
@@ -119,7 +122,9 @@ function Observable( parent = null ) {
 
 		const invalid = await allRejected( callbacks );
 
-		return !invalid.length;
+		return Boolean( invalid.length )
+		       ? Promise.reject( invalid )
+		       : Promise.resolve();
 	};
 
 	this.watch = function ( fieldName, callable ) {
@@ -137,7 +142,6 @@ function Observable( parent = null ) {
 	this.makeReactiveProxy = function () {
 		for ( const current of this.getInputs() ) {
 			current.makeReactive();
-			current.watch( () => current.onChange() );
 
 			if ( this.parent ) {
 				current.watch( () => {

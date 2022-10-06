@@ -28,6 +28,8 @@ function RemainingCalcAttr() {
 		this.initial = this.initial - current;
 	};
 
+	this.addWatcherAttr = () => {};
+
 	this.observe = function () {
 		BaseHtmlAttr.prototype.observe.call( this );
 

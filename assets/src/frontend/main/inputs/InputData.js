@@ -74,6 +74,7 @@ InputData.prototype.makeReactive = function () {
 	this.setValue();
 
 	this.value.make();
+	this.value.watch( this.onChange.bind( this ) );
 
 	doAction( 'jet.fb.input.makeReactive', this );
 };
@@ -84,6 +85,9 @@ InputData.prototype.onChange     = function () {
 	this.callable.runSignal();
 
 	// show errors
+	this.report();
+};
+InputData.prototype.report  = function () {
 	this.reporting.validateWithNoticeDebounced();
 };
 /**

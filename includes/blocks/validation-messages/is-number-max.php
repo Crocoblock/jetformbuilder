@@ -26,7 +26,7 @@ class Is_Number_Max extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please enter a number not greater than %max%. Current value %value|ifEmpty(is empty)%.',
+			'Please enter a number not greater than %this(max)%. Current value %this|ifEmpty(is empty)%.',
 			'jet-form-builder'
 		);
 	}

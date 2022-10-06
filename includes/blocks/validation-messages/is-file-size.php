@@ -24,7 +24,7 @@ class Is_File_Size extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please reduce this text to %max% characters or less (currently you contain %value|length% characters).',
+			'The size of this file cannot exceed %this(max_size)|sizeFormat%',
 			'jet-form-builder'
 		);
 	}

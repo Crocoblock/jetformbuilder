@@ -45,15 +45,6 @@ Restriction.prototype = {
 	 */
 	setReporting: function ( reporting ) {
 		this.reporting = reporting;
-
-		this.formula           = new CalculatedFormula(
-			this.getRawMessage(),
-			reporting.input,
-		);
-		this.formula.setResult = () => {
-			this.message = this.formula.calculateString();
-		};
-		this.formula.setResult();
 	},
 	getValue: function () {
 		return this.reporting.input.value.current;
@@ -95,6 +86,16 @@ Restriction.prototype = {
 	},
 	getMessageBySlug: function ( slug ) {
 		return getMessageBySlug( this, slug );
+	},
+	onReady() {
+		this.formula           = new CalculatedFormula(
+			this.getRawMessage(),
+			this.reporting.input,
+		);
+		this.formula.setResult = () => {
+			this.message = this.formula.calculateString();
+		};
+		this.formula.setResult();
 	},
 };
 

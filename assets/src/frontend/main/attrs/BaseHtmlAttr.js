@@ -17,7 +17,6 @@ BaseHtmlAttr.prototype = {
 	 */
 	input: null,
 	initial: null,
-	isFromData: false,
 	/**
 	 * @type {ReactiveVar}
 	 */
@@ -26,9 +25,9 @@ BaseHtmlAttr.prototype = {
 		this.value = new ReactiveVar( this.initial );
 		this.value.make();
 
-		this.addWatcher();
+		this.addWatcherAttr();
 	},
-	addWatcher() {
+	addWatcherAttr() {
 		const [ node ] = this.input.nodes;
 
 		this.value.watch( () => {
@@ -58,7 +57,10 @@ BaseHtmlAttr.prototype = {
 
 		return Boolean( this.initial );
 	},
-
+	/**
+	 * @param input {InputData}
+	 * @return {*|boolean}
+	 */
 	getInitial( input ) {
 		const [ node ] = input.nodes;
 
@@ -69,10 +71,7 @@ BaseHtmlAttr.prototype = {
 	 * @param input {InputData}
 	 */
 	setInput( input ) {
-		this.input     = input;
-		const [ node ] = input.nodes;
-
-		this.isFromData = this.initial === node.dataset[ this.attrName ];
+		this.input = input;
 	},
 };
 

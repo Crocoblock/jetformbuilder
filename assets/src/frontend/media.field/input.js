@@ -14,6 +14,7 @@ const { InputData } = window.JetFormBuilderAbstract;
  * @property {Observable} root
  * @property {PageState} page
  * @property {LoadingReactiveVar} loading
+ * @property {SignalFile} callable
  *
  * @constructor
  */

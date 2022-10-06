@@ -25,8 +25,6 @@ function SignalFile() {
 		this.template          = this.wrapper.
 			closest( '.field-type-media-field' ).
 			querySelector( '.jet-form-builder__preview-template' );
-
-		this.settings = JSON.parse( this.previewsContainer.dataset.args );
 	};
 
 	this.runSignal = function () {

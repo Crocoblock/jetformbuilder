@@ -13,14 +13,7 @@ import MustNotContainCharacters from './restrictions/MustNotContainCharacters';
 import MatchRegexp from './restrictions/MatchRegexp';
 import NotMatchRegexp from './restrictions/NotMatchRegexp';
 import ServerSideCallback from './restrictions/ServerSideCallback';
-import ValueMacro from './macros/ValueMacro';
-import MinAttrMacro from './macros/MinAttrMacro';
-import MaxAttrMacro from './macros/MaxAttrMacro';
-import RemainingMacro from './macros/RemainingMacro';
 import MustEqual from './restrictions/MustEqual';
-import MaxFilesRestriction from './file.restrictions/MaxFilesRestriction';
-import SingleFileRestriction from './file.restrictions/SingleFileRestriction';
-import MaxFileSizeMacro from './file.macro/MaxFileSizeMacro';
 
 const { applyFilters } = wp.hooks;
 
@@ -61,45 +54,6 @@ const getAdvancedRules = () => applyFilters(
  * @type {array<AdvancedRestriction>}
  */
 let advancedRules = [];
-
-const getMacros = () => applyFilters(
-	'jet.fb.restrictions.macros',
-	[
-		ValueMacro,
-		MinAttrMacro,
-		MaxAttrMacro,
-		RemainingMacro,
-	],
-);
-
-/**
- * @type {array<DynamicMacro>}
- */
-let macros = [];
-
-/**
- * @param restriction {Restriction}
- */
-function getSupportedMacros( restriction ) {
-	const response = {};
-
-	if ( !macros.length ) {
-		macros = getMacros();
-	}
-
-	for ( const macro of macros ) {
-		const current = new macro();
-
-		if ( !current.isSupported( restriction ) ) {
-			continue;
-		}
-		current.setRestriction( restriction );
-
-		response[ current.getSlug() ] = current;
-	}
-
-	return response;
-}
 
 /**
  * @param reporting {AdvancedReporting}
@@ -228,7 +182,6 @@ function observeFieldRestriction() {
 export {
 	getNodeValidationType,
 	getInheritValidationType,
-	getSupportedMacros,
 	getMessageBySlug,
 	getValidationMessages,
 	getPreparedRules,

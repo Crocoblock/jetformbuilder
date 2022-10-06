@@ -27,9 +27,6 @@ function NotEmptyRestriction() {
 				return !!value.length;
 		}
 	};
-	this.getSupportedMacros = function () {
-		return {};
-	};
 	this.getRawMessage      = function () {
 		return this.getMessageBySlug( 'empty' );
 	};

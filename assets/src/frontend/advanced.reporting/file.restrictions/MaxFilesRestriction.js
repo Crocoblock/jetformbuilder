@@ -9,25 +9,17 @@ function MaxFilesRestriction() {
 		);
 	};
 
-	this.setReporting = function ( reporting ) {
-		Restriction.prototype.setReporting.call( this, reporting );
-		/**
-		 * @type {SignalFile}
-		 */
-		const callable          = this.reporting.input.callable;
-		const { max_files = 1 } = callable.settings;
-
-		this.max = max_files;
-	};
-
 	this.runOnlyIfRequired = function () {
 		return false;
 	};
 
 	this.validate = function () {
-		const { current } = this.reporting.input.value;
+		const { max_files } = this.reporting.input.attrs;
+		let { current }     = this.reporting.input.value;
 
-		return current?.length <= this.max;
+		current = current?.length ?? 0;
+
+		return current <= max_files.value.current;
 	};
 
 	this.getRawMessage = function () {
@@ -36,7 +28,5 @@ function MaxFilesRestriction() {
 }
 
 MaxFilesRestriction.prototype = Object.create( Restriction.prototype );
-
-MaxFilesRestriction.prototype.max = null;
 
 export default MaxFilesRestriction;

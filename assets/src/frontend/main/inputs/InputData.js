@@ -129,11 +129,11 @@ InputData.prototype.onObserve = function () {
 	this.callable = getSignal( node, this );
 	this.callable.setInput( this );
 
+	this.attrs = getAttrs( this );
+
 	this.reporting = createReport( this );
 
 	this.loading.watch( () => this.onChangeLoading() );
-
-	this.attrs = getAttrs( this );
 };
 InputData.prototype.onChangeLoading = function () {
 	this.getSubmit().lockState.current = this.loading.current;

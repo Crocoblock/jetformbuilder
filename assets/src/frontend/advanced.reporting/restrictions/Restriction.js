@@ -1,11 +1,17 @@
-import { getMessageBySlug, getSupportedMacros } from '../functions';
+import { getMessageBySlug } from '../functions';
+
+const { CalculatedFormula } = JetFormBuilderAbstract;
 
 function Restriction() {
 	/**
 	 * @type {AdvancedReporting}
 	 */
 	this.reporting = null;
-	this.macros = {};
+	this.message = '';
+	/**
+	 * @type {CalculatedFormula}
+	 */
+	this.formula = null;
 }
 
 Restriction.prototype = {
@@ -39,13 +45,15 @@ Restriction.prototype = {
 	 */
 	setReporting: function ( reporting ) {
 		this.reporting = reporting;
-		this.macros    = this.getSupportedMacros();
-	},
-	/**
-	 * @return {Object}
-	 */
-	getSupportedMacros: function () {
-		return getSupportedMacros( this );
+
+		this.formula           = new CalculatedFormula(
+			this.getRawMessage(),
+			reporting.input,
+		);
+		this.formula.setResult = () => {
+			this.message = this.formula.calculateString();
+		};
+		this.formula.setResult();
 	},
 	getValue: function () {
 		return this.reporting.input.value.current;
@@ -74,27 +82,7 @@ Restriction.prototype = {
 		       : Promise.reject( 'validate is wrong' );
 	},
 	getMessage: function () {
-		if ( !Object.keys( this.macros )?.length ) {
-			return this.getRawMessage();
-		}
-		return this.getRawMessage().replace(
-			/%(.+?)%/g,
-			( all, fullMacro ) => {
-				let [ macro, ...filters ] = fullMacro.split( '|' );
-
-				if ( !this.macros.hasOwnProperty( macro ) ) {
-					return all;
-				}
-
-				/**
-				 * @type {DynamicMacro}
-				 */
-				macro = this.macros[ macro ];
-				macro.setFilters( filters );
-
-				return macro.apply();
-			},
-		);
+		return this.message;
 	},
 	/**
 	 * Here you need to return a prepared message,

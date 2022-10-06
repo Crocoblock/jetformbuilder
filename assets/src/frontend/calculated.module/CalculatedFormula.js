@@ -24,7 +24,6 @@ addFilter(
 /**
  * @param formula {String}
  * @param root {InputData|Observable}
- * @constructor
  */
 function CalculatedFormula( formula, root ) {
 	this.formula      = formula;
@@ -85,10 +84,16 @@ CalculatedFormula.prototype = {
 		}
 
 		this.parts = rawParts.map( current => {
-			const [ name, ...filters ]     = current.split( '|' );
-			const [ fieldName, ...params ] = name.match( /[\w\-:]+/g );
+			const [ name, ...filters ] = current.split( '|' );
+			const parsedName           = name.match( /[\w\-:]+/g );
 
-			const relatedInput = name !== 'this'
+			if ( !parsedName ) {
+				return current;
+			}
+
+			const [ fieldName, ...params ] = parsedName;
+
+			const relatedInput = fieldName !== 'this'
 			                     ? root.getInput( fieldName )
 			                     : this.input;
 
@@ -147,12 +152,12 @@ CalculatedFormula.prototype = {
 			return () => applyFilters( htmlAttr.value.current, filtersList );
 		} );
 	},
-	calculate() {
+	calculateString() {
 		if ( !this.parts.length ) {
 			return this.formula;
 		}
 
-		const formula = this.parts.map( current => {
+		return this.parts.map( current => {
 			if ( 'function' !== typeof current ) {
 				return current;
 			}
@@ -160,6 +165,12 @@ CalculatedFormula.prototype = {
 
 			return null === result ? 0 : result;
 		} ).join( '' );
+	},
+	calculate() {
+		if ( !this.parts.length ) {
+			return this.formula;
+		}
+		const formula = this.calculateString();
 
 		return (
 			new Function( 'return ' + formula )

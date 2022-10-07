@@ -32,4 +32,10 @@ LEFT JOIN `{$records}` ON 1=1
     AND `{$records}`.`id` = `{$payment_to_record}`.`record_id`
 		";
 	}
+
+	public function query(): Query_Builder {
+		$this->prepare_dependencies();
+
+		return ( new Query_Builder() )->set_view( $this );
+	}
 }

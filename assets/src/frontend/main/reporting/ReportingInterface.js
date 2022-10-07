@@ -97,7 +97,7 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<*[]|array|null>}
 	 */
 	getErrors: async function () {
-		if ( !this.isRequired ||
+		if (
 			this.input.loading.current ||
 			!this.input.isVisible()
 		) {

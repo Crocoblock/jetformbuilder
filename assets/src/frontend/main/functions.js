@@ -2,6 +2,7 @@ import BaseHtmlAttr from './attrs/BaseHtmlAttr';
 import MaxFilesHtmlAttr from './attrs/MaxFilesHtmlAttr';
 import MaxFileSizeHtmlAttr from './attrs/MaxFileSizeHtmlAttr';
 import RemainingCalcAttr from './attrs/RemainingCalcAttr';
+import FileExtensionHtmlAttr from './attrs/FileExtensionHtmlAttr';
 
 const { applyFilters } = wp.hooks;
 
@@ -41,6 +42,7 @@ const getInputHtmlAttr = () => applyFilters(
 		MaxFilesHtmlAttr,
 		MaxFileSizeHtmlAttr,
 		RemainingCalcAttr,
+		FileExtensionHtmlAttr,
 	],
 );
 

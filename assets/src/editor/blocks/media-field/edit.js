@@ -165,6 +165,9 @@ export default function MediaEdit( props ) {
 					{ isAdvancedValidation && <>
 						<ValidationBlockMessage name="max_files"/>
 						<ValidationBlockMessage name="file_max_size"/>
+						{ Boolean( attributes.allowed_mimes.length ) && (
+							<ValidationBlockMessage name="file_ext"/>
+						) }
 					</> }
 				</PanelBody>
 				<AdvancedFields

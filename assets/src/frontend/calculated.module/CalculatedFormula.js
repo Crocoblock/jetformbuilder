@@ -33,7 +33,6 @@ function CalculatedFormula( formula, root ) {
 
 	if ( root instanceof InputData ) {
 		this.input = root;
-		this.related.push( root.name );
 	}
 
 	this.observe( formula, this.input?.root ?? root );

@@ -21,14 +21,17 @@ const { InputData } = window.JetFormBuilderAbstract;
 function FileData() {
 	InputData.call( this );
 
-	this.isMultiple        = false;
-	this.prevFiles         = null;
+	this.isMultiple = false;
+	this.prevFiles  = null;
 
-	this.isSupported  = function ( node ) {
+	this.isSupported = function ( node ) {
 		return isFile( node );
 	};
+
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
+
+		this.callable.loadFiles();
 
 		node.addEventListener( 'change', event => {
 			const { files } = event.target;

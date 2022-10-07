@@ -7,7 +7,7 @@ function LengthFilter() {
 		return 'length';
 	};
 	this.apply   = function ( value ) {
-		return value.length;
+		return value?.length ?? 0;
 	};
 }
 

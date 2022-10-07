@@ -17,6 +17,7 @@ use Jet_Form_Builder\Blocks\Validation_Messages\Has_Remaining_Chars;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_File_Ext;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_File_Size;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Files_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Not_Complete_Mask;
@@ -96,6 +97,7 @@ class Validation implements Arrayable {
 			new Is_Not_Complete_Mask(),
 			new Is_File_Size(),
 			new Is_Files_Max(),
+			new Is_File_Ext(),
 		);
 	}
 

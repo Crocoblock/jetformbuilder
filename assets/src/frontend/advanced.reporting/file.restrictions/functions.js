@@ -1,4 +1,5 @@
 import FileSizeRestriction from './FileSizeRestriction';
+import FileExtensionRestriction from './FileExtensionRestriction';
 
 const {
 	      applyFilters,
@@ -8,6 +9,7 @@ const getSingleFileRestrictions = () => applyFilters(
 	'jet.fb.restrictions.file',
 	[
 		FileSizeRestriction,
+		FileExtensionRestriction,
 	],
 );
 

@@ -177,7 +177,7 @@ function observeFieldRestriction() {
 
 	input.watch( () => {
 		this.attrs.value = input.value.current;
-		this.reporting.validateWithNoticeDebounced();
+		this.reporting.validateWithNotice().then( () => {} ).catch( () => {} );
 	} );
 }
 

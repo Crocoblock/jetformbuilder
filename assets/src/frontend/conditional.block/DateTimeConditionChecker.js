@@ -17,7 +17,11 @@ function DateTimeConditionChecker() {
 	 */
 	this.check = function ( condition, input ) {
 		const current        = getTimestamp( input.value.current );
-		const conditionValue = condition.value.map( getTimestamp );
+		let conditionValue = condition.value.map( getTimestamp );
+
+		if ( condition.use_preset ) {
+			conditionValue = conditionValue.map( time => time * 1000 );
+		}
 
 		switch ( condition.operator ) {
 			case 'equal':

@@ -16,6 +16,7 @@ class Condition_Item implements Arrayable {
 	private $value;
 	private $field;
 	private $operator;
+	private $use_preset = false;
 
 	private $parsed_value;
 
@@ -44,9 +45,10 @@ class Condition_Item implements Arrayable {
 
 	public function to_array(): array {
 		$base = array(
-			'value'    => $this->get_parsed_value(),
-			'field'    => $this->get_field(),
-			'operator' => $this->get_operator(),
+			'value'      => $this->get_parsed_value(),
+			'field'      => $this->get_field(),
+			'operator'   => $this->get_operator(),
+			'use_preset' => $this->use_preset,
 		);
 
 		return array_merge(
@@ -68,8 +70,9 @@ class Condition_Item implements Arrayable {
 			return $this->parsed_value;
 		}
 
-		$value = ( new Dynamic_Preset() )->parse_json( $this->value );
+		$value = jet_fb_parse_dynamic( $this->value );
 
+		$this->use_preset   = $this->value !== $value;
 		$this->parsed_value = $this->parse_string( $value );
 
 		return $this->parsed_value;

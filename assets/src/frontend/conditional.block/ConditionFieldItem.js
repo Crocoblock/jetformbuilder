@@ -44,21 +44,23 @@ function ConditionFieldItem() {
 		operator,
 		value,
 		render_state,
+		use_preset,
 	} ) {
 		this.field        = field;
-		/**
-		 * @type {'equal'|'greater'|'less'|'between'|'one_of'|'contain'}
-		 */
 		this.operator     = operator;
 		this.render_state = render_state;
+		this.use_preset   = use_preset;
 
 		if ( !Array.isArray( value ) ) {
 			value = value.split( ',' ).map( item => item.trim() );
 		}
 
-		/**
-		 * @type {Array}
-		 */
+		if ( this.use_preset ) {
+			this.value = value;
+
+			return;
+		}
+
 		this.value = {};
 
 		for ( const [ index, formula ] of Object.entries( value ) ) {
@@ -76,5 +78,19 @@ function ConditionFieldItem() {
 }
 
 ConditionFieldItem.prototype = Object.create( ConditionItem.prototype );
+
+ConditionFieldItem.prototype.field = null;
+/**
+ * @type {Array}
+ */
+ConditionFieldItem.prototype.value = null;
+/**
+ * @type {'equal'|'greater'|'less'|'between'|'one_of'|'contain'}
+ */
+ConditionFieldItem.prototype.operator = null;
+/**
+ * @type {Boolean}
+ */
+ConditionFieldItem.prototype.use_preset = null;
 
 export default ConditionFieldItem;

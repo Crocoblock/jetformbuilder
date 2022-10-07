@@ -190,7 +190,6 @@ export default function TextEdit( props ) {
 						<ValidationBlockMessage name="inputmask"/>
 					) }
 					{ Boolean( attributes.maxlength ) && <>
-						<ValidationBlockMessage name="has_remaining_chars"/>
 						<ValidationBlockMessage name="char_max"/>
 					</> }
 					<ValidationBlockMessage name="char_min"/>

@@ -3,18 +3,18 @@ import Restriction from './Restriction';
 function NotEnoughChars() {
 	Restriction.call( this );
 
-	this.isSupported   = function ( node, reporting ) {
-		return 0 <= node?.minLength;
-	};
-	this.setReporting  = function ( reporting ) {
-		const [ node ] = reporting.input.nodes;
-		this.min       = node.minLength;
+	this.isSupported = function ( node, reporting ) {
+		const { minLength = false } = reporting.input.attrs;
 
-		Restriction.prototype.setReporting.call( this, reporting );
+		return false !== minLength;
 	};
-	this.validate      = function () {
-		return this.getValue()?.length >= this.min;
+
+	this.validate = function () {
+		const { minLength } = this.reporting.input.attrs;
+
+		return this.getValue()?.length >= minLength.value.current;
 	};
+
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'char_min' );
 	};

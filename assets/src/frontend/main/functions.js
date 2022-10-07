@@ -37,8 +37,8 @@ const getInputHtmlAttr = () => applyFilters(
 	[
 		'min',
 		'max',
-		'minlength',
-		'maxlength',
+		'minLength',
+		'maxLength',
 		MaxFilesHtmlAttr,
 		MaxFileSizeHtmlAttr,
 		RemainingCalcAttr,

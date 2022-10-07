@@ -44,12 +44,10 @@ BaseHtmlAttr.prototype = {
 	isSupported( input ) {
 		const [ node ] = input.nodes;
 
-		const hasProp = (
-			node.hasOwnProperty( this.attrName ) ||
-			node.dataset.hasOwnProperty( this.attrName )
-		);
+		const hasInRoot    = -1 !== node[ this.attrName ] ?? -1;
+		const hasInDataSet = node.dataset.hasOwnProperty( this.attrName );
 
-		if ( !hasProp ) {
+		if ( !hasInDataSet && !hasInRoot ) {
 			return false;
 		}
 

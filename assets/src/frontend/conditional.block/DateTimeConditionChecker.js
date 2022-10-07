@@ -1,6 +1,14 @@
 import ConditionChecker from './ConditionChecker';
 
-const { getTimestamp } = JetFormBuilderFunctions;
+const {
+	      getTimestamp,
+      } = JetFormBuilderFunctions;
+const {
+	      Min_In_Sec,
+	      Milli_In_Sec,
+      } = JetFormBuilderConst;
+
+const offset = new Date().getTimezoneOffset();
 
 function DateTimeConditionChecker() {
 	ConditionChecker.call( this );
@@ -16,11 +24,13 @@ function DateTimeConditionChecker() {
 	 * @param input {InputData}
 	 */
 	this.check = function ( condition, input ) {
-		const current        = getTimestamp( input.value.current );
+		const current      = getTimestamp( input.value.current );
 		let conditionValue = condition.value.map( getTimestamp );
 
 		if ( condition.use_preset ) {
-			conditionValue = conditionValue.map( time => time * 1000 );
+			conditionValue = conditionValue.map(
+				time => time * Milli_In_Sec + offset * Min_In_Sec,
+			);
 		}
 
 		switch ( condition.operator ) {

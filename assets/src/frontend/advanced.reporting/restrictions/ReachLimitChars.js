@@ -3,17 +3,16 @@ import Restriction from './Restriction';
 function ReachLimitChars() {
 	Restriction.call( this );
 
-	this.isSupported   = function ( node, reporting ) {
-		return 0 <= node?.maxLength;
-	};
-	this.setReporting  = function ( reporting ) {
-		const [ node ] = reporting.input.nodes;
-		this.max       = node.maxLength;
+	this.isSupported = function ( node, reporting ) {
+		const { maxLength = false } = reporting.input.attrs;
 
-		Restriction.prototype.setReporting.call( this, reporting );
+		return false !== maxLength;
 	};
+
 	this.validate      = function () {
-		return this.getValue()?.length <= this.max;
+		const { maxLength } = this.reporting.input.attrs;
+
+		return this.getValue()?.length <= maxLength.value.current;
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'char_max' );

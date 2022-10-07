@@ -6,26 +6,15 @@ function RemainingCalcAttr() {
 	this.attrName = 'remaining';
 
 	this.isSupported = function ( input ) {
-		const attr    = this.attrName;
-		this.attrName = 'max';
-
-		const result = BaseHtmlAttr.prototype.isSupported.call( this, input );
-
-		this.attrName = attr;
-
-		return result;
-	};
-	this.getInitial  = function ( input ) {
-		const { max } = input.attrs;
-
-		return max.value.current;
+		return input.attrs.hasOwnProperty( 'maxLength' );
 	};
 
 	this.setInput = function ( input ) {
 		BaseHtmlAttr.prototype.setInput.call( this, input );
+		const { maxLength } = input.attrs;
 		const current = input.value.current?.length ?? 0;
 
-		this.initial = this.initial - current;
+		this.initial = maxLength.value.current - current;
 	};
 
 	this.addWatcherAttr = () => {};
@@ -34,14 +23,14 @@ function RemainingCalcAttr() {
 		BaseHtmlAttr.prototype.observe.call( this );
 
 		this.input.value.watch( () => this.updateAttr() );
-		this.input.attrs.max.value.watch( () => this.updateAttr() );
+		this.input.attrs.maxLength.value.watch( () => this.updateAttr() );
 	};
 
 	this.updateAttr = function () {
-		const { max } = this.input.attrs;
+		const { maxLength } = this.input.attrs;
 		const current = this.input.value.current?.length ?? 0;
 
-		this.value.current = max.value.current - current;
+		this.value.current = maxLength.value.current - current;
 	};
 }
 

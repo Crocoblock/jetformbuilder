@@ -167,8 +167,10 @@ SignalFile.prototype.createPreview = function ( file ) {
 	innerHTML         = innerHTML.replace( '%file_url%', url );
 	innerHTML         = innerHTML.replace( '%file_name%', file.name );
 
-	const node     = document.createElement( 'template' );
-	node.innerHTML = innerHTML;
+	const wrapper     = document.createElement( 'template' );
+	wrapper.innerHTML = innerHTML;
+
+	const node = wrapper.content.firstChild;
 
 	if ( /^image\//.test( file.type ) ) {
 		const image = document.createElement( 'img' );
@@ -178,7 +180,7 @@ SignalFile.prototype.createPreview = function ( file ) {
 		node.prepend( image );
 	}
 
-	return node.content.firstChild;
+	return node;
 };
 
 SignalFile.prototype.removeFile = function ( { target } ) {

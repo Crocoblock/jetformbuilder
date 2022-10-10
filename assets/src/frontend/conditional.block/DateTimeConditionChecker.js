@@ -24,14 +24,16 @@ function DateTimeConditionChecker() {
 	 * @param input {InputData}
 	 */
 	this.check = function ( condition, input ) {
-		const current      = getTimestamp( input.value.current );
-		let conditionValue = condition.value.map( getTimestamp );
+		const { time: current } = getTimestamp( input.value.current );
+		let conditionValue      = condition.value.map( value => {
+			const { time, type } = getTimestamp( value );
 
-		if ( condition.use_preset ) {
-			conditionValue = conditionValue.map(
-				time => time * Milli_In_Sec + offset * Min_In_Sec,
-			);
-		}
+			if ( 'number' === type && condition.use_preset ) {
+				return time * Milli_In_Sec + offset * Min_In_Sec;
+			}
+
+			return time;
+		} );
 
 		switch ( condition.operator ) {
 			case 'equal':

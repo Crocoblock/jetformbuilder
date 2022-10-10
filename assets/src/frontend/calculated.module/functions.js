@@ -37,11 +37,11 @@ function toDateTime( date ) {
 
 /**
  * @param timeOrDate {String|Number}
- * @return {number}
+ * @return {{time: number, type: string}}
  */
 function getTimestamp( timeOrDate ) {
 	if ( !Number.isNaN( +timeOrDate ) ) {
-		return +timeOrDate;
+		return { time: +timeOrDate, type: 'number' };
 	}
 
 	timeOrDate = timeOrDate.toString();
@@ -49,7 +49,10 @@ function getTimestamp( timeOrDate ) {
 	const dateParts = timeOrDate.split( '-' );
 
 	if ( dateParts.length > 1 ) {
-		return new Date( timeOrDate ).getTime();
+		return {
+			time: new Date( timeOrDate ).getTime(),
+			type: 'date',
+		};
 	}
 
 	const timeParts = timeOrDate.split( ':' );
@@ -72,7 +75,10 @@ function getTimestamp( timeOrDate ) {
 		callbacks[ index ].call( time, timeParts[ index ] );
 	}
 
-	return time.getTime();
+	return {
+		time: time.getTime(),
+		type: 'time',
+	};
 }
 
 export { toDate, toTime, toDateTime, getTimestamp };

@@ -8,6 +8,10 @@ const {
 	      applyFilters,
       } = wp.hooks;
 
+const {
+	      applyFilters: deprecatedApplyFilters = false,
+      } = JetFormBuilderMain ?? {};
+
 function CalculatedData() {
 	InputData.call( this );
 
@@ -18,11 +22,13 @@ function CalculatedData() {
 	this.visibleValNode = null;
 	this.valueTypeProp  = 'number';
 
+	this.deprecatedField = null;
+
 	this.isSupported  = function ( node ) {
 		return isCalculated( node );
 	};
 	this.setValue     = function () {
-		const formula = new CalculatedFormula( this.formula, this.root );
+		const formula = new CalculatedFormula( this.formula, this );
 
 		formula.setResult       = () => {
 			this.value.current = formula.calculate();
@@ -39,10 +45,19 @@ function CalculatedData() {
 				return value;
 			}
 
-			return 'number' === this.valueTypeProp
-			       ? input.calcValue
-			       : input.value.current;
+			const response = 'number' === this.valueTypeProp
+			                 ? input.calcValue
+			                 : input.value.current;
 
+			if ( false === deprecatedApplyFilters ) {
+				return response;
+			}
+
+			return deprecatedApplyFilters(
+				'forms/calculated-field-value',
+				response,
+				jQuery( input.nodes[0] )
+			);
 		};
 		formula.setResult();
 		this.onChange();

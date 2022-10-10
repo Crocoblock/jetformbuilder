@@ -25,6 +25,7 @@ class Manager {
 
 	const MAIN_SCRIPT_HANDLE = 'jet-form-builder-frontend-forms';
 	const CALCULATED_HANDLE  = 'jet-form-builder-calculated-module';
+	const DEPRECATED_HANDLE  = 'jet-form-builder-deprecated';
 
 	/**
 	 * @var bool
@@ -212,7 +213,8 @@ class Manager {
 		$this->register_form_scripts();
 		$this->enqueue_frontend_styles();
 
-		wp_enqueue_script( 'jet-form-builder-frontend-forms' );
+		wp_enqueue_script( self::MAIN_SCRIPT_HANDLE );
+		wp_enqueue_script( self::DEPRECATED_HANDLE );
 	}
 
 	public function register_form_scripts() {
@@ -230,6 +232,14 @@ class Manager {
 				'wp-hooks',
 				'wp-api-fetch',
 			),
+			Plugin::instance()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			self::DEPRECATED_HANDLE,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/deprecated.js' ),
+			array(),
 			Plugin::instance()->get_version(),
 			true
 		);

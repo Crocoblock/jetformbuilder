@@ -15,6 +15,10 @@ const {
 	      addFilter,
       } = wp.hooks;
 
+const {
+	      applyFilters: deprecatedApplyFilters = false,
+      } = JetFormBuilderMain ?? {};
+
 addFilter(
 	'jet.fb.custom.formula.macro',
 	'jet-form-builder',
@@ -75,6 +79,15 @@ CalculatedFormula.prototype = {
 
 			return;
 		}
+
+		if ( this.input?.nodes && deprecatedApplyFilters ) {
+			value = deprecatedApplyFilters(
+				'forms/calculated-formula-before-value',
+				value,
+				jQuery( this.input.nodes[ 0 ] ),
+			);
+		}
+
 		const rawParts = value.split( /%(.*?)%/g );
 
 		if ( 1 === rawParts.length ) {

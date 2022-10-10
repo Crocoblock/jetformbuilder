@@ -22,8 +22,6 @@ function CalculatedData() {
 	this.visibleValNode = null;
 	this.valueTypeProp  = 'number';
 
-	this.deprecatedField = null;
-
 	this.isSupported  = function ( node ) {
 		return isCalculated( node );
 	};

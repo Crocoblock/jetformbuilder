@@ -50,6 +50,8 @@ function Observable( parent = null ) {
 		this.isObserved = true;
 		this.rootNode   = root;
 
+		doAction( 'jet.fb.observe.before', this );
+
 		this.initSubmitHandler();
 
 		/**

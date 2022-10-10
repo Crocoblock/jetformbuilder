@@ -50,7 +50,8 @@ class Validation implements Arrayable {
 	 */
 	private $messages;
 	public  $callbacks;
-	private $settings = array();
+	private $settings        = array();
+	private $inline_messages = array();
 
 	public function __construct() {
 		$this->messages = apply_filters(
@@ -113,15 +114,18 @@ class Validation implements Arrayable {
 		);
 	}
 
-	public function add_validation_messages_global( string $markup ): string {
+	public function add_validation_messages_global( string $markup, bool $force = false ): string {
 		$this->settings = $this->get_settings();
+		$form_id        = jet_fb_live()->form_id;
 
-		if ( ! $this->is_advanced_form() ) {
+		if (
+			( ! $this->is_advanced_form() && ! $force ) ||
+			in_array( $form_id, $this->inline_messages, true )
+		) {
 			return $markup;
 		}
 
-		$data    = Tools::encode_json( $this->settings );
-		$form_id = jet_fb_live()->form_id;
+		$data = Tools::encode_json( $this->settings );
 
 		wp_add_inline_script(
 			'jet-form-builder-frontend-forms',
@@ -130,6 +134,8 @@ class Validation implements Arrayable {
 			window.JetFormsValidation[ {$form_id} ] = $data;
 			"
 		);
+
+		$this->inline_messages[] = $form_id;
 
 		return $markup;
 	}
@@ -144,6 +150,8 @@ class Validation implements Arrayable {
 		}
 		wp_enqueue_script( self::HANDLE );
 		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
+
+		$this->add_validation_messages_global( '', true );
 
 		$type  = $this->get_block_type( $block );
 		$rules = $block->block_attrs['validation']['rules'] ?? array();
@@ -170,10 +178,6 @@ class Validation implements Arrayable {
 			'type'     => $validation['type'] ?? self::FORMAT_BROWSER,
 			'messages' => array(),
 		);
-
-		if ( self::FORMAT_BROWSER === $response['type'] ) {
-			return $response;
-		}
 
 		foreach ( $this->messages as $message ) {
 			$response['messages'][ $message->get_id() ] = (

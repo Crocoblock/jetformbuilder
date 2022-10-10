@@ -154,7 +154,7 @@ function getMessageBySlug( restriction, slug ) {
 	const { reporting } = restriction;
 	const message       = reporting.messages[ slug ] ?? '';
 
-	if ( message && 'inherit' !== reporting.type ) {
+	if ( message ) {
 		return message;
 	}
 

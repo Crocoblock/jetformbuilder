@@ -158,9 +158,14 @@ function getMessageBySlug( restriction, slug ) {
 		return message;
 	}
 
-	const form         = reporting.input.getSubmit();
-	const { messages } = window.JetFormsValidation[ form.getFormId() ] ??
-	{};
+	const form        = reporting.input.getSubmit();
+	const allMessages = window.JetFormsValidation ?? false;
+
+	if ( false === allMessages ) {
+		return '';
+	}
+
+	const { messages } = allMessages[ form.getFormId() ] ?? {};
 
 	return messages[ slug ] ?? '';
 }

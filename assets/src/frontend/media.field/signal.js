@@ -94,7 +94,12 @@ SignalFile.prototype.loadFiles = function () {
 	) ) ).then( values => {
 		const files = values.map( ( { value } ) => value );
 
+		const report      = this.input.report.bind( this.input );
+		this.input.report = () => {};
+
 		this.input.value.current = createFileList( files );
+
+		this.input.report = report;
 	} );
 };
 

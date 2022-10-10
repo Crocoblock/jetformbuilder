@@ -49,8 +49,14 @@ function getTimestamp( timeOrDate ) {
 	const dateParts = timeOrDate.split( '-' );
 
 	if ( dateParts.length > 1 ) {
+		const date = new Date( timeOrDate );
+
+		if ( !timeOrDate.includes( 'T' ) ) {
+			date.setHours( 0, 0, 0 );
+		}
+
 		return {
-			time: new Date( timeOrDate ).getTime(),
+			time: date.getTime(),
 			type: 'date',
 		};
 	}

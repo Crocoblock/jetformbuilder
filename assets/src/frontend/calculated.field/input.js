@@ -10,7 +10,7 @@ const {
 
 const {
 	      applyFilters: deprecatedApplyFilters = false,
-      } = JetFormBuilderMain ?? {};
+      } = window?.JetFormBuilderMain ?? {};
 
 function CalculatedData() {
 	InputData.call( this );

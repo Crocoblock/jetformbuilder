@@ -8,10 +8,12 @@ window.JetFormBuilderMain = {
 			return {
 
 				addFilter: function ( name, callback ) {
-					console.warn(
-						`This method is deprecated since JetFormBuilder 3.0.0. 
+					if ( Boolean( window.JetFormBuilderSettings.devmode ) ) {
+						console.warn(
+							`This method is deprecated since JetFormBuilder 3.0.0. 
 Use wp.hooks.addFilter instead.`,
-					);
+						);
+					}
 
 					if ( !callbacks.hasOwnProperty( name ) ) {
 						callbacks[ name ] = [];

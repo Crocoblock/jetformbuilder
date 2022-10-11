@@ -42,7 +42,7 @@ function ConditionFieldItem() {
 	this.setOptions = function ( {
 		field,
 		operator,
-		value,
+		value = '',
 		render_state,
 		use_preset,
 	} ) {

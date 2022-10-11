@@ -6,6 +6,7 @@ use Jet_Form_Builder\Blocks\Ssr_Validation\Rest_Validation_Endpoint;
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
+use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -25,7 +26,6 @@ class Manager {
 
 	const MAIN_SCRIPT_HANDLE = 'jet-form-builder-frontend-forms';
 	const CALCULATED_HANDLE  = 'jet-form-builder-calculated-module';
-	const DEPRECATED_HANDLE  = 'jet-form-builder-deprecated';
 
 	/**
 	 * @var bool
@@ -214,7 +214,6 @@ class Manager {
 		$this->enqueue_frontend_styles();
 
 		wp_enqueue_script( self::MAIN_SCRIPT_HANDLE );
-		wp_enqueue_script( self::DEPRECATED_HANDLE );
 	}
 
 	public function register_form_scripts() {
@@ -237,17 +236,10 @@ class Manager {
 		);
 
 		wp_register_script(
-			self::DEPRECATED_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/deprecated.js' ),
-			array(),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-		wp_register_script(
 			self::CALCULATED_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.module{min}.js' ),
 			array(
+				Deprecated::HANDLE,
 				Manager::MAIN_SCRIPT_HANDLE
 			),
 			Plugin::instance()->get_version(),

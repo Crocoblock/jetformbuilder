@@ -9,7 +9,10 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
+use Jet_Form_Builder\Compatibility\Jet_Appointment\Jet_Appointment;
+use Jet_Form_Builder\Compatibility\Jet_Booking\Jet_Booking;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
 use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
@@ -57,6 +60,8 @@ class Plugin {
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
+
+	private $suffix;
 
 	public static $instance;
 
@@ -106,6 +111,9 @@ class Plugin {
 		Jet_Engine::register();
 		Active_Campaign::register();
 		Elementor::register();
+		Jet_Appointment::register();
+		Jet_Booking::register();
+		new Deprecated();
 
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();
@@ -196,16 +204,7 @@ class Plugin {
 	 * @return string
 	 */
 	public function plugin_url( string $path = '' ): string {
-		$suffix = '.min';
-
-		if (
-			( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ||
-			Dev_Mode\Manager::instance()->active()
-		) {
-			$suffix = '';
-		}
-
-		$path = str_replace( '{min}', $suffix, $path );
+		$path = str_replace( '{min}', $this->get_suffix(), $path );
 
 		return JET_FORM_BUILDER_URL . $path;
 	}
@@ -243,6 +242,24 @@ class Plugin {
 
 		$this->init_framework();
 		Wp_Cli_Manager::register();
+	}
+
+	public function get_suffix(): string {
+		if ( ! is_null( $this->suffix ) ) {
+			return $this->suffix;
+		}
+		$suffix = '.min';
+
+		if (
+			( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ||
+			Dev_Mode\Manager::instance()->active()
+		) {
+			$suffix = '';
+		}
+
+		$this->suffix = $suffix;
+
+		return $this->suffix;
 	}
 
 }

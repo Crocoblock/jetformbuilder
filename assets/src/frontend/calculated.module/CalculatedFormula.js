@@ -17,7 +17,7 @@ const {
 
 const {
 	      applyFilters: deprecatedApplyFilters = false,
-      } = window?.JetFormBuilderMain ?? {};
+      } = window?.JetFormBuilderMain?.filters ?? {};
 
 addFilter(
 	'jet.fb.custom.formula.macro',

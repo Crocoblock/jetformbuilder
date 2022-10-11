@@ -10,7 +10,7 @@ const {
 
 const {
 	      applyFilters: deprecatedApplyFilters = false,
-      } = window?.JetFormBuilderMain ?? {};
+      } = window?.JetFormBuilderMain?.filters ?? {};
 
 function CalculatedData() {
 	InputData.call( this );
@@ -51,11 +51,15 @@ function CalculatedData() {
 				return response;
 			}
 
-			return deprecatedApplyFilters(
+			const filterResult = deprecatedApplyFilters(
 				'forms/calculated-field-value',
-				response,
-				jQuery( input.nodes[0] )
+				input.value.current,
+				jQuery( input.nodes[ 0 ] ),
 			);
+
+			return filterResult === input.value.current
+			       ? response
+			       : filterResult;
 		};
 		formula.setResult();
 		this.onChange();

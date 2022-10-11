@@ -41,6 +41,7 @@ module.exports = {
 			'frontend/dynamic.value': './frontend/dynamic.value/main.js',
 			'frontend/calculated.module': './frontend/calculated.module/main.js',
 			'frontend/deprecated': './frontend/deprecated/main.js',
+			'frontend/jet-appointment': './frontend/compatibility/jet-appointment.js',
 			'editor/form.builder': './editor/main.js',
 			'editor/default.builder': './editor/form-block.js',
 			'editor/package': './package/manager.js',

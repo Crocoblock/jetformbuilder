@@ -1,7 +1,6 @@
 function ConditionChecker() {
 }
 
-
 ConditionChecker.prototype = {
 	/**
 	 * @param input {InputData}
@@ -52,6 +51,9 @@ ConditionChecker.prototype = {
 				return 0 <= conditionValue.indexOf( current );
 
 			case 'contain':
+				if ( !current ) {
+					return false;
+				}
 				return 0 <= current.indexOf( conditionValue[ 0 ] );
 
 			default:

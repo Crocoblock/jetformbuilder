@@ -49,3 +49,15 @@ Use wp.hooks.addFilter instead.`,
 	)(),
 
 };
+
+window.JetFormBuilder = {
+	getFieldValue( $field ) {
+		const value = $field.val();
+
+		return JetFormBuilderMain.filters.applyFilters(
+			'forms/calculated-field-value',
+			value,
+			$field,
+		);
+	},
+};

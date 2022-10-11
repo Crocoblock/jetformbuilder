@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Compatibility\Jet_Booking;
 
 
 use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Plugin;
 
 class Jet_Booking {
@@ -35,6 +36,7 @@ class Jet_Booking {
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/jet-booking{min}.js' ),
 			array(
+				Deprecated::HANDLE,
 				Manager::MAIN_SCRIPT_HANDLE
 			),
 			Plugin::instance()->get_version(),

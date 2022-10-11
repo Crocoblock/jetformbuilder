@@ -80,14 +80,6 @@ CalculatedFormula.prototype = {
 			return;
 		}
 
-		if ( this.input?.nodes && deprecatedApplyFilters ) {
-			value = deprecatedApplyFilters(
-				'forms/calculated-formula-before-value',
-				value,
-				jQuery( this.input.nodes[ 0 ] ),
-			);
-		}
-
 		const rawParts = value.split( /%(.*?)%/g );
 
 		if ( 1 === rawParts.length ) {
@@ -170,7 +162,19 @@ CalculatedFormula.prototype = {
 
 		return this.parts.map( current => {
 			if ( 'function' !== typeof current ) {
-				return current;
+				if ( !this.input?.nodes || false === deprecatedApplyFilters ) {
+					return current;
+				}
+				current = wpFilters(
+					'jet.fb.onCalculate.part',
+					current,
+					this
+				);
+				return deprecatedApplyFilters(
+					'forms/calculated-formula-before-value',
+					current,
+					jQuery( this.input.nodes[ 0 ] )
+				);
 			}
 			const result = current();
 

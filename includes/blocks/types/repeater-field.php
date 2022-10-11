@@ -456,16 +456,12 @@ class Repeater_Field extends Base {
 			return '';
 		}
 
-		$listen_fields = array();
-
 		$formula = preg_replace_callback(
 			'/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
 			function ( $matches ) use ( &$listen_fields ) {
 
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
-						$listen_fields[] = $matches[2];
-
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
@@ -479,11 +475,6 @@ class Repeater_Field extends Base {
 
 					default:
 						$macros_name = $matches[1];
-						$field_key   = isset( $matches[2] ) ? $matches[2] : '';
-
-						if ( $field_key ) {
-							$listen_fields[] = $field_key;
-						}
 
 						return apply_filters( "jet-form-builder/calculated-data/$macros_name", $matches[0], $matches );
 				}
@@ -493,9 +484,7 @@ class Repeater_Field extends Base {
 		);
 
 		return array(
-			'formula'       => $formula,
-			'listen_fields' => $listen_fields,
-			'listen_to'     => $listen_fields,
+			'formula' => $formula,
 		);
 	}
 

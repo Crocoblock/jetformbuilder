@@ -1,6 +1,9 @@
 import { isRepeater } from './functions';
 
-const { BaseSignal } = window.JetFormBuilderAbstract;
+const {
+	      BaseSignal,
+	      CalculatedFormula,
+      } = window.JetFormBuilderAbstract;
 
 /**
  * @property {RepeaterData} input
@@ -12,8 +15,7 @@ function SignalRepeater() {
 		return isRepeater( node );
 	};
 	this.runSignal   = function () {
-		const { current }    = this.input.value;
-		this.input.calcValue = current.length;
+		const { current } = this.input.value;
 
 		for ( const index in current ) {
 			if ( !current.hasOwnProperty( index ) ) {
@@ -21,6 +23,10 @@ function SignalRepeater() {
 			}
 			this.runItem( index );
 		}
+
+		this.input.calcValue = Object.values( this.calcValues ).reduce(
+			( prev, next ) => prev + next,
+		);
 	};
 	/**
 	 * @param current {string}
@@ -36,8 +42,10 @@ function SignalRepeater() {
 
 		// set current index
 		const currentIndex = this.input.value.current.length - 1;
-		template.innerHTML = template.innerHTML.replace( /__i__/g,
-			currentIndex );
+		template.innerHTML = template.innerHTML.replace(
+			/__i__/g,
+			currentIndex,
+		);
 
 		template.content.firstChild.dataset.index = '' + currentIndex;
 		this.input.container.append( template.content.firstChild );
@@ -64,9 +72,32 @@ function SignalRepeater() {
 		);
 
 		observable.observe( appended );
+		this.setCalcItem( current );
+	};
+
+	this.setCalcItem = function ( currentIndex ) {
+		const [ node ]      = this.input.nodes;
+		const formulaString = node.dataset?.formula;
+
+		this.calcValues[ currentIndex ] = 1;
+
+		if ( !formulaString ) {
+			return;
+		}
+
+		const observable = this.input.value.current[ currentIndex ];
+		const formula    = new CalculatedFormula( formulaString, observable );
+
+		formula.setResult = () => {
+			this.calcValues[ currentIndex ] = formula.calculate();
+			this.input.value.notify();
+		};
+		formula.setResult();
 	};
 }
 
 SignalRepeater.prototype = Object.create( BaseSignal.prototype );
+
+SignalRepeater.prototype.calcValues = {};
 
 export default SignalRepeater;

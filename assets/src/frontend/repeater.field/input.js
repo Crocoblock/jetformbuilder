@@ -60,4 +60,8 @@ function RepeaterData() {
 
 RepeaterData.prototype = Object.create( InputData.prototype );
 
+RepeaterData.prototype.buttonNode = null;
+RepeaterData.prototype.template   = null;
+RepeaterData.prototype.container  = null;
+
 export default RepeaterData;

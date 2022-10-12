@@ -9,7 +9,6 @@ const {
       } = JetFBComponents;
 const {
 	      useState,
-	      useContext,
       } = wp.element;
 const {
 	      useBlockAttributes,
@@ -19,6 +18,7 @@ const {
       } = JetFBHooks;
 const {
 	      SelectControl,
+	      ButtonGroup,
       } = wp.components;
 const {
 	      __,
@@ -89,12 +89,18 @@ export default function () {
 		/>
 		{ RepeaterComplete }
 		<RepeaterState state={ updateConditions }>
-			<RepeaterAddNew>
-				{ __( 'Add New Condition', 'jet-form-builder' ) }
-			</RepeaterAddNew>
-			<RepeaterAddOrOperator>
-				{ __( 'Add OR Operator', 'jet-form-builder' ) }
-			</RepeaterAddOrOperator>
+			<ButtonGroup
+				style={ {
+					display: 'flex',
+				} }
+			>
+				<RepeaterAddNew>
+					{ __( 'New Condition', 'jet-form-builder' ) }
+				</RepeaterAddNew>
+				<RepeaterAddOrOperator>
+					{ __( 'Add OR Operator', 'jet-form-builder' ) }
+				</RepeaterAddOrOperator>
+			</ButtonGroup>
 		</RepeaterState>
 	</>;
 }

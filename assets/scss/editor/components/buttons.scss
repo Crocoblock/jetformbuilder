@@ -3,4 +3,7 @@
 		padding: unset;
 		min-width: unset;
 	}
+	&.is-tertiary {
+		box-shadow: none;
+	}
 }

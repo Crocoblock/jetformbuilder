@@ -87,6 +87,7 @@ function Repeater( props ) {
 						{ (
 							!supportEdit || supportEdit( currentItem )
 						) && <Button
+							variant="tertiary"
 							isSmall
 							icon={ currentItem.__visible ? 'no-alt' : 'edit' }
 							onClick={ () => toggleVisible( index ) }
@@ -95,6 +96,7 @@ function Repeater( props ) {
 						{ (
 							!supportMove || supportMove( currentItem )
 						) && <Button
+							variant="tertiary"
 							isSmall
 							isSecondary
 							disabled={ !Boolean( index ) }
@@ -105,6 +107,7 @@ function Repeater( props ) {
 						{ (
 							!supportMove || supportMove( currentItem )
 						) && <Button
+							variant="tertiary"
 							isSmall
 							isSecondary
 							disabled={ !(
@@ -124,6 +127,7 @@ function Repeater( props ) {
 					{ (
 						!supportClone || supportClone( currentItem )
 					) && <Button
+						variant="tertiary"
 						isSmall
 						isSecondary
 						onClick={ () => cloneItem( index ) }

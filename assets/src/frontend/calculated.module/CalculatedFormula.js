@@ -168,17 +168,19 @@ CalculatedFormula.prototype = {
 				current = wpFilters(
 					'jet.fb.onCalculate.part',
 					current,
-					this
+					this,
 				);
 				return deprecatedApplyFilters(
 					'forms/calculated-formula-before-value',
 					current,
-					jQuery( this.input.nodes[ 0 ] )
+					jQuery( this.input.nodes[ 0 ] ),
 				);
 			}
 			const result = current();
 
-			return null === result ? 0 : result;
+			return (
+				       null === result || '' === result
+			       ) ? 0 : result;
 		} ).join( '' );
 	},
 	calculate() {

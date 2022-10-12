@@ -1,12 +1,12 @@
 import Observable from '../Observable';
 
-window.JetFBReactive = window.JetFBReactive ?? {};
+window.JetFormBuilder = window.JetFormBuilder ?? {};
 
 function initForm( $scope ) {
 	const form       = $scope[ 0 ].querySelector( 'form' );
 	const observable = new Observable();
 
-	JetFBReactive[ form.dataset.formId ] = observable;
+	JetFormBuilder[ form.dataset.formId ] = observable;
 
 	jQuery( document ).trigger(
 		'jet-form-builder/init',

@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Condition_Field_Item;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Condition_Render_State_Item;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Or_Operator_Item;
 use Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api\Add_Render_State_Endpoint_Option;
 use Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api\Delete_Render_States_Endpoint;
 use Jet_Form_Builder\Blocks\Conditional_Block\Rest_Api\Get_Render_States_Endpoint;
@@ -27,22 +31,31 @@ class Condition_Manager implements Arrayable {
 	private $operators;
 	private $functions;
 
+	/**
+	 * @var Base_Condition_Type[]
+	 */
+	private $types;
+
 	private function __construct() {
 		$this->operators = new Operators();
 		$this->functions = new Functions();
+
+		$this->types = apply_filters(
+			'jet-form-builder/conditional-block/types',
+			array(
+				new Condition_Render_State_Item(),
+				new Or_Operator_Item(),
+				new Condition_Field_Item(),
+			)
+		);
 	}
 
 	public function prepare( array $conditions ): array {
 		$response = array();
 
 		foreach ( $conditions as $condition ) {
-			if ( isset( $condition['or_operator'] ) ) {
-				$response[] = $condition;
-
-				continue;
-			}
 			try {
-				$item = new Condition_Item( $condition );
+				$item = $this->get_current_type( $condition );
 			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
@@ -86,6 +99,25 @@ class Condition_Manager implements Arrayable {
 
 	public function get_functions(): Functions {
 		return $this->functions;
+	}
+
+	/**
+	 * @param array $condition
+	 *
+	 * @return Base_Condition_Type
+	 * @throws Repository_Exception
+	 */
+	protected function get_current_type( array $condition ): Base_Condition_Type {
+		foreach ( $this->types as $type ) {
+			if ( ! $type->is_supported( $condition ) ) {
+				continue;
+			}
+			$type->init( $condition );
+
+			return $type;
+		}
+
+		throw new Repository_Exception( 'Undefined condition type' );
 	}
 
 }

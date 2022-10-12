@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Functions;
 
 
-use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
+use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
 use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
 
 class Function_Show extends Base_Function {
@@ -21,12 +21,12 @@ class Function_Show extends Base_Function {
 
 	/**
 	 * @param array $base
-	 * @param Condition_Item $item
+	 * @param Base_Condition_Type $item
 	 *
 	 * @return array
 	 * @throws Condition_Exception
 	 */
-	public function to_response( array $base, Condition_Item $item ): array {
+	public function to_response( array $base, Base_Condition_Type $item ): array {
 		$result = $base['check_result'] ?? null;
 
 		// if operator not checked on server-side

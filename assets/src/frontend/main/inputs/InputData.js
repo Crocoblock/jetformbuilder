@@ -3,7 +3,7 @@ import ReactiveVar from '../reactive/ReactiveVar';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
-import { getAttrs } from '../functions';
+import { setAttrs } from '../functions';
 
 const { doAction } = wp.hooks;
 
@@ -134,7 +134,7 @@ InputData.prototype.onObserve = function () {
 	this.callable = getSignal( node, this );
 	this.callable.setInput( this );
 
-	this.attrs = getAttrs( this );
+	setAttrs( this );
 
 	this.reporting = createReport( this );
 

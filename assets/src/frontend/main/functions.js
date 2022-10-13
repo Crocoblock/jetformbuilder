@@ -64,12 +64,10 @@ function getDefaultAttrByName( name ) {
 /**
  * @param input {InputData}
  */
-function getAttrs( input ) {
+function setAttrs( input ) {
 	if ( !inputHtmlAttrs.length ) {
 		inputHtmlAttrs = getInputHtmlAttr();
 	}
-
-	const response = {};
 
 	for ( let inputHtmlAttr of inputHtmlAttrs ) {
 		let current;
@@ -86,10 +84,8 @@ function getAttrs( input ) {
 		current.setInput( input );
 		current.observe();
 
-		response[ current.attrName ] = current;
+		input.attrs[ current.attrName ] = current;
 	}
-
-	return response;
 }
 
-export { allRejected, getLanguage, getAttrs };
+export { allRejected, getLanguage, setAttrs };

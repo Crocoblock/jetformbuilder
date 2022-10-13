@@ -28,7 +28,7 @@ function RemainingCalcAttr() {
 
 	this.updateAttr = function () {
 		const { maxLength } = this.input.attrs;
-		const current = this.input.value.current?.length ?? 0;
+		const current       = this.input.value.current?.length ?? 0;
 
 		this.value.current = maxLength.value.current - current;
 	};

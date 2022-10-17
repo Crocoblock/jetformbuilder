@@ -4,6 +4,7 @@ import ToDateFilter from './filters/ToDateFilter';
 import ToTimeFilter from './filters/ToTimeFilter';
 import ToDateTimeFilter from './filters/ToDateTimeFilter';
 import AddDayFilter from './filters/AddDayFilter';
+import TimestampFilter from './filters/TimestampFilter';
 
 const { applyFilters } = wp.hooks;
 
@@ -16,6 +17,7 @@ const getFilterItems = () => applyFilters(
 		ToTimeFilter,
 		ToDateTimeFilter,
 		AddDayFilter,
+		TimestampFilter,
 	],
 );
 

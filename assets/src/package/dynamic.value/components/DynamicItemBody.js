@@ -106,7 +106,7 @@ function DynamicItemBody() {
 				},
 			] }
 			value={ current.frequency ?? 'on_change' }
-			label={ __( 'Choose a frequency', 'jet-form-builder' ) }
+			label={ __( 'Apply value', 'jet-form-builder' ) }
 			labelPosition={ 'side' }
 			onChange={ frequency => updateCurrent( { frequency } ) }
 		/>

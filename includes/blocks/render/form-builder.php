@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -182,6 +183,7 @@ class Form_Builder {
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
 		);
 		wp_enqueue_style( 'jet-form-builder-frontend' );
+		Jet_Plugins_Ajax::register_style( 'jet-form-builder-frontend' );
 
 		return '';
 	}

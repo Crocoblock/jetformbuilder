@@ -7,6 +7,7 @@ use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
+use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
@@ -214,6 +215,7 @@ class Manager {
 		$this->enqueue_frontend_styles();
 
 		wp_enqueue_script( self::MAIN_SCRIPT_HANDLE );
+		Jet_Plugins_Ajax::register_script( self::MAIN_SCRIPT_HANDLE );
 	}
 
 	public function register_form_scripts() {
@@ -247,7 +249,7 @@ class Manager {
 		);
 
 		wp_localize_script(
-			'jet-form-builder-frontend-forms',
+			self::MAIN_SCRIPT_HANDLE,
 			'JetFormBuilderSettings',
 			apply_filters(
 				'jet-form-builder/frontend-settings',

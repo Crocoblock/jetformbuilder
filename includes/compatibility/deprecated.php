@@ -19,6 +19,10 @@ class Deprecated {
 			'wp_enqueue_scripts',
 			array( $this, 'register_scripts' )
 		);
+		add_action(
+			'jet_plugins/frontend/register_scripts',
+			array( $this, 'register_scripts' )
+		);
 	}
 
 	public function register_scripts() {

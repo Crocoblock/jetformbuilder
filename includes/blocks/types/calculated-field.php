@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
 use Jet_Form_Builder\Compatibility\Deprecated;
+use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -98,6 +99,7 @@ class Calculated_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
+		Jet_Plugins_Ajax::register_script( self::HANDLE );
 
 		$is_hidden = $this->block_attrs['calc_hidden'] ?? false;
 

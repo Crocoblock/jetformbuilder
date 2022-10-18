@@ -114,9 +114,9 @@ class Form extends Widget_Base implements Widget_Base_It {
 		return array( 'jet-form-builder' );
 	}
 
-	public function get_script_depends() {
+	/*public function get_script_depends() {
 		return array( 'jet-form-builder-frontend-forms' );
-	}
+	}*/
 
 	private function jet_form_builder_slug() {
 		return jet_form_builder()->post_type->slug();

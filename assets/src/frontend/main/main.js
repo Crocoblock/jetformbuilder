@@ -39,5 +39,13 @@ import { allRejected, getLanguage } from './functions';
 
 		$( initCommon );
 		$( window ).on( 'elementor/frontend/init', initElementor );
+
+		$( window ).on(
+			'jet-popup/ajax/frontend-init/before',
+			( event, { $container } ) => {
+				initCommon( $container );
+				initElementor();
+			},
+		);
 	}
 )( jQuery );

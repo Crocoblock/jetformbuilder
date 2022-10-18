@@ -11,8 +11,6 @@ const {
 	      doAction,
       } = wp.hooks;
 
-const { replaceAttrs = [] } = window.JetFormBuilderSettings;
-
 function Observable( parent = null ) {
 
 	/**
@@ -86,6 +84,8 @@ function Observable( parent = null ) {
 		}
 
 		const nodes = queryByAttrValue( this.rootNode, macrosPrefix() );
+
+		const { replaceAttrs = [] } = window.JetFormBuilderSettings;
 
 		for ( const node of nodes ) {
 			for ( const replaceAttr of replaceAttrs ) {

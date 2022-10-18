@@ -97,9 +97,9 @@ function* iterateComments(
 	}
 }
 
-const { replaceAttrs = [] } = window.JetFormBuilderSettings;
-
 function queryByAttrValue( rootNode, value ) {
+	const { replaceAttrs = [] } = window.JetFormBuilderSettings;
+
 	const querySelector = [];
 
 	for ( let i = 0; i < replaceAttrs.length; i++ ) {

@@ -1,6 +1,9 @@
 import initForm from './initForm';
 
 function initElementor() {
+	if ( ! window.elementorFrontend ) {
+		return;
+	}
 	const widgets = {
 		'jet-engine-booking-form.default': initForm,
 		'jet-form-builder-form.default': initForm,

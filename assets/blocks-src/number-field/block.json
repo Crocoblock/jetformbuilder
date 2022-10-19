@@ -26,15 +26,15 @@
 			"default": {}
 		},
 		"min": {
-			"type": "number",
+			"type": "string",
 			"default": ""
 		},
 		"max": {
-			"type": "number",
+			"type": "string",
 			"default": ""
 		},
 		"step": {
-			"type": "number",
+			"type": "string",
 			"default": ""
 		},
 		"label": {

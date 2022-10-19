@@ -47,11 +47,6 @@ export default function NumberEdit( props ) {
 		      editProps: { uniqKey },
 	      } = props;
 
-	const changeNumberValue = ( key, newValue ) => {
-		props.setAttributes(
-			{ [ key ]: newValue ? parseFloat( newValue ) : null } );
-	};
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -75,16 +70,14 @@ export default function NumberEdit( props ) {
 						labelPosition="top"
 						key="min"
 						value={ attributes.min }
-						onChange={ newValue => changeNumberValue( 'min',
-							newValue ) }
+						onChange={ min => setAttributes( { min } ) }
 					/>
 					<NumberControl
 						label={ __( 'Max Value' ) }
 						labelPosition="top"
 						key="max"
 						value={ attributes.max }
-						onChange={ newValue => changeNumberValue( 'max',
-							newValue ) }
+						onChange={ max => setAttributes( { max } ) }
 					/>
 					<NumberControl
 						label={ __( 'Step' ) }
@@ -92,8 +85,7 @@ export default function NumberEdit( props ) {
 						key="step"
 						step={ 0.01 }
 						value={ attributes.step }
-						onChange={ newValue => changeNumberValue( 'step',
-							newValue ) }
+						onChange={ step => setAttributes( { step } ) }
 					/>
 				</FieldSettingsWrapper>
 				<PanelBody

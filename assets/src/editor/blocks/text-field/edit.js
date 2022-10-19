@@ -95,8 +95,7 @@ export default function TextEdit( props ) {
 					key="minlength"
 					min={ 1 }
 					value={ attributes.minlength }
-					onChange={ ( newValue ) => changeNumberValue( 'minlength',
-						newValue ) }
+					onChange={ minlength => setAttributes( { minlength } ) }
 				/>
 				<NumberControl
 					label={ __( 'Max length (symbols)' ) }
@@ -104,8 +103,7 @@ export default function TextEdit( props ) {
 					key="maxlength"
 					min={ 1 }
 					value={ attributes.maxlength }
-					onChange={ ( newValue ) => changeNumberValue( 'maxlength',
-						newValue ) }
+					onChange={ maxlength => setAttributes( { maxlength } ) }
 				/>
 				<ToggleControl
 					key={ 'enable_input_mask' }

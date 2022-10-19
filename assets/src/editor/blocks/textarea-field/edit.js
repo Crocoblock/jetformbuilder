@@ -72,8 +72,7 @@ export default function TextareaEdit( props ) {
 					key="minlength"
 					min={ 1 }
 					value={ attributes.minlength }
-					onChange={ ( newValue ) => changeNumberValue( 'minlength',
-						newValue ) }
+					onChange={ minlength => setAttributes( { minlength } ) }
 				/>
 				<NumberControl
 					label={ __( 'Max length (symbols)' ) }
@@ -81,8 +80,7 @@ export default function TextareaEdit( props ) {
 					key="maxlength"
 					min={ 1 }
 					value={ attributes.maxlength }
-					onChange={ ( newValue ) => changeNumberValue( 'maxlength',
-						newValue ) }
+					onChange={ maxlength => setAttributes( { maxlength } ) }
 				/>
 			</FieldSettingsWrapper>
 			<PanelBody

@@ -4,10 +4,14 @@ const {
 const {
 	      PanelBody,
       } = wp.components;
+const {
+	      applyFilters,
+      } = wp.hooks;
+const {
+	      useBlockProps,
+      } = wp.blockEditor;
 
 /**
- * @deprecated 3.0.0
- *
  * @param props
  * @return {boolean|JSX.Element}
  * @constructor
@@ -18,10 +22,21 @@ function FieldSettingsWrapper( props ) {
 		      children,
 	      } = props;
 
-	return <PanelBody
+	const blockProps = useBlockProps();
+	const blockName = blockProps[ 'data-type' ].replace( '/', '-' );
+
+	const CustomSettings = applyFilters(
+		`jet.fb.render.settings.${ blockName }`,
+		null,
+	);
+
+	return (
+		children || CustomSettings
+	) && <PanelBody
 		title={ title || __( 'Field Settings', 'jet-form-builder' ) }
 	>
 		{ children }
+		{ CustomSettings }
 	</PanelBody>;
 }
 

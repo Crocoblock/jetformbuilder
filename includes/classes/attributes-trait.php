@@ -22,7 +22,7 @@ trait Attributes_Trait {
 			return;
 		}
 
-		$value = is_scalar( $value ) ? $value : Tools::encode_json( $value );
+		$value = is_scalar( $value ) || is_null( $value ) ? $value : Tools::encode_json( $value );
 
 		if ( ! isset( $this->attrs[ $attr ] ) ) {
 			$this->attrs[ $attr ] = $value;

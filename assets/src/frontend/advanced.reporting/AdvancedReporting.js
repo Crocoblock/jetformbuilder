@@ -80,7 +80,7 @@ function AdvancedReporting() {
 		error.remove();
 	};
 	this.insertError     = function ( message ) {
-		if ( ! message ) {
+		if ( !message ) {
 			this.clearReport();
 
 			return;
@@ -109,6 +109,9 @@ function AdvancedReporting() {
 		div.innerHTML = message;
 
 		return div;
+	};
+	this.validateOnBlur  = function () {
+		this.validateWithNotice().then( () => {} ).catch( () => {} );
 	};
 }
 

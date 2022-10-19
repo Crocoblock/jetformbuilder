@@ -46,9 +46,7 @@ ReportingInterface.prototype = {
 	 */
 	validateWithNoticeDebounced: function ( force = false ) {
 		if ( force || !this.hasServerSide ) {
-			this.validateWithNotice().then( () => {} ).catch( () => {} );
-
-			return;
+			return this.validateWithNotice().then( () => {} ).catch( () => {} );
 		}
 
 		const validateFunc = window._.debounce(
@@ -56,7 +54,9 @@ ReportingInterface.prototype = {
 			1000,
 		);
 
-		validateFunc();
+		return validateFunc();
+	},
+	validateOnBlur: function () {
 	},
 	/**
 	 * @returns {Promise<void>}

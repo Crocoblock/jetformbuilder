@@ -67,6 +67,8 @@ InputData.prototype.addListeners = function () {
 	node.addEventListener( 'input', event => {
 		this.value.current = event.target.value;
 	} );
+
+	node.addEventListener( 'blur', () => this.reportOnBlur() );
 };
 InputData.prototype.makeReactive = function () {
 	this.onObserve();
@@ -87,8 +89,11 @@ InputData.prototype.onChange     = function () {
 	// show errors
 	this.report();
 };
-InputData.prototype.report  = function () {
+InputData.prototype.report       = function () {
 	this.reporting.validateWithNoticeDebounced();
+};
+InputData.prototype.reportOnBlur       = function () {
+	this.reporting.validateOnBlur();
 };
 /**
  * @param callable

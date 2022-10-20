@@ -13,7 +13,15 @@ function BrowserReporting() {
 		if ( !this.getNode()?.checkValidity ) {
 			return [];
 		}
-		return this.getNode().checkValidity() ? [] : [ true ];
+		const { nodes } = this.input;
+
+		for ( const node of nodes ) {
+			if ( node.checkValidity() ) {
+				return [];
+			}
+		}
+
+		return [ true ];
 	};
 	this.clearReport = function () {
 		// browser automatically hide tooltip messages

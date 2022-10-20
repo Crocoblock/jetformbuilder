@@ -12,36 +12,44 @@ const {
       } = wp.hooks;
 
 function Observable( parent = null ) {
-
-	/**
-	 * @type {RepeaterData}
-	 */
 	this.parent = parent;
+	this.dataInputs = {};
+	this.data = {};
+	this.form = null;
+	this.multistep = null;
+	this.rootNode = null;
+	this.isObserved = false;
+}
+
+Observable.prototype = {
+	/**
+	 * @type {RepeaterData|null}
+	 */
+	parent: null,
 	/**
 	 * {
 	 *     [field_name]: {InputData}
 	 * }
 	 */
-	this.dataInputs = {};
-	this.data = {};
+	dataInputs: {},
+	data: {},
 
 	/**
 	 * @type {FormSubmit}
 	 */
-	this.form = null;
+	form: null,
 
 	/**
 	 * @type {MultiStepState}
 	 */
-	this.multistep = null;
+	multistep: null,
 
 	/**
 	 * @type {HTMLElement|HTMLFormElement}
 	 */
-	this.rootNode = null;
-	this.isObserved = false;
-
-	this.observe = function ( root ) {
+	rootNode: null,
+	isObserved: false,
+	observe: function ( root ) {
 		if ( this.isObserved ) {
 			return;
 		}
@@ -66,17 +74,17 @@ function Observable( parent = null ) {
 		this.initMacros();
 
 		doAction( 'jet.fb.observe.after', this );
-	};
+	},
 
-	this.initFields = function () {
+	initFields: function () {
 		for ( const formElement of this.rootNode.querySelectorAll(
 			'[data-jfb-sync]',
 		) ) {
 			this.pushData( createInput( formElement, this ) );
 		}
-	};
+	},
 
-	this.initMacros = function () {
+	initMacros: function () {
 		for (
 			const comment of iterateJfbComments( this.rootNode )
 			) {
@@ -92,21 +100,21 @@ function Observable( parent = null ) {
 				observeMacroAttr( node, replaceAttr, this );
 			}
 		}
-	};
+	},
 
-	this.initSubmitHandler = function () {
+	initSubmitHandler: function () {
 		// check is current object related for global form element
 		if ( this.parent ) {
 			return;
 		}
 
 		this.form = new FormSubmit( this );
-	};
+	},
 
 	/**
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
-	this.inputsAreValid = async function () {
+	inputsAreValid: async function () {
 		const callbacks = [];
 
 		for ( const inputName in this.dataInputs ) {
@@ -127,9 +135,9 @@ function Observable( parent = null ) {
 		return Boolean( invalid.length )
 		       ? Promise.reject( invalid )
 		       : Promise.resolve();
-	};
+	},
 
-	this.watch = function ( fieldName, callable ) {
+	watch: function ( fieldName, callable ) {
 		const input = this.getInput( fieldName );
 
 		if ( input ) {
@@ -139,9 +147,9 @@ function Observable( parent = null ) {
 		throw new Error(
 			`dataInputs in Observable don\'t have ${ fieldName } field`,
 		);
-	};
+	},
 
-	this.makeReactiveProxy = function () {
+	makeReactiveProxy: function () {
 		for ( const current of this.getInputs() ) {
 			current.makeReactive();
 
@@ -160,21 +168,21 @@ function Observable( parent = null ) {
 				},
 			} );
 		}
-	};
+	},
 
-	this.onRemove = function () {
+	onRemove: function () {
 		for ( const name in this.dataInputs ) {
 			if ( !this.dataInputs.hasOwnProperty( name ) ) {
 				continue;
 			}
 			this.dataInputs[ name ].onRemove();
 		}
-	};
+	},
 
 	/**
 	 * @param inputData {InputData}
 	 */
-	this.pushData = function ( inputData ) {
+	pushData: function ( inputData ) {
 		const findInput = this.dataInputs[ inputData.getName() ] ?? false;
 
 		if ( false === findInput ) {
@@ -191,20 +199,20 @@ function Observable( parent = null ) {
 		}
 
 		findInput.merge( inputData );
-	};
+	},
 
 	/**
 	 * @returns {array<InputData>}
 	 */
-	this.getInputs = function () {
+	getInputs: function () {
 		return Object.values( this.dataInputs );
-	};
+	},
 
 	/**
 	 * @param fieldName
 	 * @returns {null|InputData}
 	 */
-	this.getInput = function ( fieldName ) {
+	getInput: function ( fieldName ) {
 		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
 			return this.dataInputs[ fieldName ];
 		}
@@ -219,7 +227,7 @@ function Observable( parent = null ) {
 		}
 
 		return null;
-	};
-}
+	},
+};
 
 export default Observable;

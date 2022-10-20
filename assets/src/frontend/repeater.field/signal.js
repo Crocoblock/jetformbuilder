@@ -2,7 +2,6 @@ import { isRepeater } from './functions';
 
 const {
 	      BaseSignal,
-	      CalculatedFormula,
       } = window.JetFormBuilderAbstract;
 
 /**
@@ -15,18 +14,16 @@ function SignalRepeater() {
 		return isRepeater( node );
 	};
 	this.runSignal   = function () {
-		const { current } = this.input.value;
+		const { current }    = this.input.value;
+		this.input.calcValue = 0;
 
-		for ( const index in current ) {
+		for ( const [ index, row ] of Object.entries( current ) ) {
 			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
 			this.runItem( index );
+			this.input.calcValue += row.calc;
 		}
-
-		this.input.calcValue = Object.values( this.calcValues ).reduce(
-			( prev, next ) => prev + next,
-		);
 	};
 	/**
 	 * @param current {string}
@@ -56,48 +53,30 @@ function SignalRepeater() {
 			'.jet-form-builder-repeater__remove',
 		).addEventListener(
 			'click',
-			() => {
-				appended.remove();
-				this.input.value.current = this.input.value.current.filter(
-					( item, index ) => {
-						if ( +index !== +current ) {
-							return true;
-						}
-						item.onRemove();
-
-						return false;
-					},
-				);
-			},
+			() => this.removeItem( appended ),
 		);
 
 		observable.observe( appended );
-		this.setCalcItem( current );
 	};
 
-	this.setCalcItem = function ( currentIndex ) {
-		const [ node ]      = this.input.nodes;
-		const formulaString = node.dataset?.formula;
+	this.removeItem = function ( repeaterRow ) {
+		repeaterRow.remove();
 
-		this.calcValues[ currentIndex ] = 1;
+		const { value } = this.input;
 
-		if ( !formulaString ) {
-			return;
-		}
+		value.current = value.current.filter(
+			( item ) => {
+				if ( !item.rootNode.isEqualNode( repeaterRow ) ) {
+					return true;
+				}
+				item.onRemove();
 
-		const observable = this.input.value.current[ currentIndex ];
-		const formula    = new CalculatedFormula( formulaString, observable );
-
-		formula.setResult = () => {
-			this.calcValues[ currentIndex ] = formula.calculate();
-			this.input.value.notify();
-		};
-		formula.setResult();
+				return false;
+			},
+		);
 	};
 }
 
 SignalRepeater.prototype = Object.create( BaseSignal.prototype );
-
-SignalRepeater.prototype.calcValues = {};
 
 export default SignalRepeater;

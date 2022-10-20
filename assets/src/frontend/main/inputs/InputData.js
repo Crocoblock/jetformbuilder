@@ -33,7 +33,9 @@ function InputData() {
 	/**
 	 * @type {ReactiveVar}
 	 */
-	this.value = null;
+	this.value = new ReactiveVar( null );
+	this.value.watch( this.onChange.bind( this ) );
+
 	this.calcValue = null;
 
 	/**
@@ -76,7 +78,6 @@ InputData.prototype.makeReactive = function () {
 	this.setValue();
 
 	this.value.make();
-	this.value.watch( this.onChange.bind( this ) );
 
 	doAction( 'jet.fb.input.makeReactive', this );
 };
@@ -92,7 +93,7 @@ InputData.prototype.onChange     = function () {
 InputData.prototype.report       = function () {
 	this.reporting.validateWithNoticeDebounced();
 };
-InputData.prototype.reportOnBlur       = function () {
+InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
 /**
@@ -127,7 +128,6 @@ InputData.prototype.setNode  = function ( node ) {
  * Runs once in lifecycle.
  */
 InputData.prototype.onObserve = function () {
-	this.value     = new ReactiveVar( null );
 	const [ node ] = this.nodes;
 
 	/**

@@ -1,7 +1,7 @@
 import { isRepeater } from './functions';
+import ObservableRow from './ObservableRow';
 
 const {
-	      Observable,
 	      InputData,
       } = JetFormBuilderAbstract;
 
@@ -22,7 +22,7 @@ function RepeaterData() {
 		this.buttonNode.addEventListener( 'click', () => {
 			this.value.current = [
 				...this.value.current,
-				new Observable( this ),
+				new ObservableRow( this ),
 			];
 		} );
 	};
@@ -33,7 +33,7 @@ function RepeaterData() {
 		for ( const row of node.querySelectorAll(
 			'.jet-form-builder-repeater__row',
 		) ) {
-			const current = new Observable( this );
+			const current = new ObservableRow( this );
 			current.observe( row );
 
 			this.value.current.push( current );

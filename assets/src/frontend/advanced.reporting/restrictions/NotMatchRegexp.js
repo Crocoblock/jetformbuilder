@@ -7,7 +7,9 @@ function NotMatchRegexp() {
 		return 'regexp_not';
 	};
 	this.validate = function () {
-		return !MatchRegexp.prototype.validate.call( this );
+		const value = this.getValue();
+
+		return !value || !MatchRegexp.prototype.validate.call( this );
 	};
 }
 

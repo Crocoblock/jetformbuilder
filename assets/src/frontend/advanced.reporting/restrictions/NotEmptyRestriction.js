@@ -1,14 +1,14 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function NotEmptyRestriction() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
-	this.isSupported        = function ( node, reporting ) {
-		return [ String, Array, FileList ].includes(
+	this.isSupported   = function ( node, reporting ) {
+		return reporting.isRequired && [ String, Array, FileList ].includes(
 			reporting.input.valueType(),
 		);
 	};
-	this.validate           = function () {
+	this.validate      = function () {
 		const value = this.getValue();
 
 		if ( null === value ) {
@@ -27,11 +27,11 @@ function NotEmptyRestriction() {
 				return !!value.length;
 		}
 	};
-	this.getRawMessage      = function () {
+	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'empty' );
 	};
 }
 
-NotEmptyRestriction.prototype = Object.create( Restriction.prototype );
+NotEmptyRestriction.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default NotEmptyRestriction;

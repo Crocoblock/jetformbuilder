@@ -1,10 +1,12 @@
-import Restriction from '../restrictions/Restriction';
+const {
+	      AdvancedRestriction,
+      } = JetFormBuilderAbstract;
 
 function BaseFileRestriction() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 }
 
-BaseFileRestriction.prototype = Object.create( Restriction.prototype );
+BaseFileRestriction.prototype = Object.create( AdvancedRestriction.prototype );
 
 /**
  * @type {File}

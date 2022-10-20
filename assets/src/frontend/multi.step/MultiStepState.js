@@ -82,6 +82,9 @@ function MultiStepState() {
 	this.getScopeNode = function () {
 		return this.block?.node ?? this.root.rootNode;
 	};
+	/**
+	 * @returns {Observable}
+	 */
 	this.getRoot      = function () {
 		return this.block?.root ?? this.root;
 	};

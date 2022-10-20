@@ -7,7 +7,9 @@ function MustNotContainCharacters() {
 		return 'contain_not';
 	};
 	this.validate = function () {
-		return !MustContainCharacters.prototype.validate.call( this );
+		const value = this.getValue();
+
+		return !value || !MustContainCharacters.prototype.validate.call( this );
 	};
 }
 

@@ -1,9 +1,11 @@
-import Restriction from '../restrictions/Restriction';
 import { getFileRestrictions } from './functions';
 
 const {
 	      allRejected,
       } = JetFormBuilderFunctions;
+const {
+	      AdvancedRestriction,
+      } = JetFormBuilderAbstract;
 
 /**
  * This restriction used for implement file-specific
@@ -12,7 +14,7 @@ const {
  * @constructor
  */
 function SingleFileRestriction() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
 		return (
@@ -20,16 +22,12 @@ function SingleFileRestriction() {
 		);
 	};
 
-	this.runOnlyIfRequired = function () {
-		return false;
-	};
-
 	this.getRawMessage = function () {
 		return '';
 	};
 }
 
-SingleFileRestriction.prototype = Object.create( Restriction.prototype );
+SingleFileRestriction.prototype = Object.create( AdvancedRestriction.prototype );
 
 /**
  * @type {BaseFileRestriction[]}
@@ -37,7 +35,7 @@ SingleFileRestriction.prototype = Object.create( Restriction.prototype );
 SingleFileRestriction.prototype.singleFileRestrictions = [];
 
 SingleFileRestriction.prototype.setReporting = function ( reporting ) {
-	Restriction.prototype.setReporting.call( this, reporting );
+	AdvancedRestriction.prototype.setReporting.call( this, reporting );
 
 	this.singleFileRestrictions = getFileRestrictions( reporting );
 };

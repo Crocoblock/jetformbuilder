@@ -1,7 +1,8 @@
 import {
 	getInheritValidationType,
 	getNodeValidationType,
-	getValidationMessages, getWrapper,
+	getValidationMessages,
+	getWrapper,
 	setRestrictions,
 } from './functions';
 
@@ -13,23 +14,25 @@ const {
       } = JetFormBuilderFunctions;
 
 /**
+ * @property {AdvancedRestriction} restrictions
+ *
  * @this {ReportingInterface}
  * @constructor
  */
 function AdvancedReporting() {
 	ReportingInterface.call( this );
 
-	this.type = 'inherit';
-	/**
-	 * @type {Restriction[]}
-	 */
-	this.restrictions = [];
+	this.type     = 'inherit';
 	this.messages = {};
 }
 
 AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
 
-AdvancedReporting.prototype.isSupported     = function ( node, input ) {
+AdvancedReporting.prototype.setRestrictions = function () {
+	setRestrictions( this );
+};
+
+AdvancedReporting.prototype.isSupported = function ( node, input ) {
 	this.type = getNodeValidationType( node );
 
 	const inherit = 'inherit' === this.type
@@ -38,39 +41,23 @@ AdvancedReporting.prototype.isSupported     = function ( node, input ) {
 
 	return !!inherit?.length;
 };
-AdvancedReporting.prototype.isValid         = async function () {
-	const promises = [];
 
-	for ( const restriction of this.restrictions ) {
-		promises.push( ( resolve, reject ) => {
-			restriction.validatePromise().then( resolve ).catch( () => {
-				reject( restriction );
-			} );
-		} );
-	}
-
-	return await allRejected( promises );
-};
-AdvancedReporting.prototype.report          = function ( validationErrors ) {
+/**
+ * @param validationErrors {AdvancedRestriction[]|Restriction[]}
+ */
+AdvancedReporting.prototype.report = function ( validationErrors ) {
 	this.insertError( validationErrors[ 0 ].getMessage() );
 };
-AdvancedReporting.prototype.setInput        = function ( input ) {
+AdvancedReporting.prototype.setInput       = function ( input ) {
 	ReportingInterface.prototype.setInput.call( this, input );
 
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
-	/**
-	 * @see this.restrictions
-	 */
-	this.setRestrictions();
 
 	this.hasServerSide = this.restrictions.some(
 		current => current.isServerSide(),
 	);
 };
-AdvancedReporting.prototype.setRestrictions = function () {
-	return setRestrictions( this );
-};
-AdvancedReporting.prototype.clearReport     = function () {
+AdvancedReporting.prototype.clearReport    = function () {
 	const node = getWrapper( this.getNode() );
 	node.classList.remove( 'field-has-error' );
 
@@ -82,7 +69,7 @@ AdvancedReporting.prototype.clearReport     = function () {
 
 	error.remove();
 };
-AdvancedReporting.prototype.insertError     = function ( message ) {
+AdvancedReporting.prototype.insertError    = function ( message ) {
 	if ( !message ) {
 		this.clearReport();
 
@@ -97,7 +84,7 @@ AdvancedReporting.prototype.insertError     = function ( message ) {
 		node.appendChild( error );
 	}
 };
-AdvancedReporting.prototype.createError     = function ( node, message ) {
+AdvancedReporting.prototype.createError    = function ( node, message ) {
 	const error = node.querySelector( '.error-message' );
 
 	if ( error ) {
@@ -113,7 +100,7 @@ AdvancedReporting.prototype.createError     = function ( node, message ) {
 
 	return div;
 };
-AdvancedReporting.prototype.validateOnBlur  = function () {
+AdvancedReporting.prototype.validateOnBlur = function () {
 	this.validateWithNotice().then( () => {} ).catch( () => {} );
 };
 

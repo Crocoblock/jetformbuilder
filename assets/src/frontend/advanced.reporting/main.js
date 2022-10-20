@@ -1,7 +1,5 @@
 import AdvancedReporting from './AdvancedReporting';
-import SizeFormatFilter from './file.macro/SizeFormatFilter';
-import MaxFilesRestriction from './file.restrictions/MaxFilesRestriction';
-import SingleFileRestriction from './file.restrictions/SingleFileRestriction';
+import AdvancedRestriction from './restrictions/AdvancedRestriction';
 
 const { addFilter } = wp.hooks;
 
@@ -15,26 +13,9 @@ addFilter(
 	},
 );
 
-addFilter(
-	'jet.fb.restrictions',
-	'jet-form-builder/advanced-reporting',
-	function ( restrictions ) {
-		restrictions = [
-			MaxFilesRestriction,
-			SingleFileRestriction,
-			...restrictions,
-		];
-
-		return restrictions;
-	},
-);
-
-addFilter(
-	'jet.fb.restrictions.filters',
-	'jet-form-builder/advanced-reporting',
-	function ( filters ) {
-		filters.push( SizeFormatFilter );
-
-		return filters;
-	},
-);
+window.JetFormBuilderAbstract = {
+	...(
+		window.JetFormBuilderAbstract ?? {}
+	),
+	AdvancedRestriction,
+};

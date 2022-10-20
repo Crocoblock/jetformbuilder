@@ -1,14 +1,16 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function NotUrl() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
 		return 'url' === node.type;
 	};
 	this.validate      = function () {
-		return /((mailto\:|(news|(ht|f)tp(s?))\:\/\/)\S+)/.test(
-			this.getValue(),
+		const value = this.getValue();
+
+		return (
+			!value || /((mailto\:|(news|(ht|f)tp(s?))\:\/\/)\S+)/.test( value )
 		);
 	};
 	this.getRawMessage = function () {
@@ -16,6 +18,6 @@ function NotUrl() {
 	};
 }
 
-NotUrl.prototype = Object.create( Restriction.prototype );
+NotUrl.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default NotUrl;

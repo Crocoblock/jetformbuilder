@@ -1,7 +1,7 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function ReachLimitChars() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
 		const { maxLength = false } = reporting.input.attrs;
@@ -10,15 +10,16 @@ function ReachLimitChars() {
 	};
 
 	this.validate      = function () {
+		const value         = this.getValue()?.length;
 		const { maxLength } = this.reporting.input.attrs;
 
-		return this.getValue()?.length <= maxLength.value.current;
+		return !value || value <= +maxLength.value.current;
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'char_max' );
 	};
 }
 
-ReachLimitChars.prototype = Object.create( Restriction.prototype );
+ReachLimitChars.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default ReachLimitChars;

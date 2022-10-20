@@ -21,6 +21,7 @@
  *
  */
 import { isRequired } from './functions';
+import { allRejected } from '../functions';
 
 function ReportingInterface() {
 	/**
@@ -35,9 +36,14 @@ function ReportingInterface() {
 
 	// true, when field has server-side restrictions
 	this.hasServerSide = false;
+	this.restrictions  = [];
 }
 
 ReportingInterface.prototype = {
+	/**
+	 * @type {Restriction[]}
+	 */
+	restrictions: [],
 	/**
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
@@ -121,7 +127,7 @@ ReportingInterface.prototype = {
 		return this.errors;
 	},
 	/**
-	 * @param validationErrors {array<Restriction>}
+	 * @param validationErrors {Restriction[]}
 	 * @return void
 	 */
 	report: function ( validationErrors ) {
@@ -134,7 +140,17 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<*[]>}
 	 */
 	isValid: async function () {
-		throw new Error( 'isValid is empty' );
+		const promises = [];
+
+		for ( const restriction of this.restrictions ) {
+			promises.push( ( resolve, reject ) => {
+				restriction.validatePromise().then( resolve ).catch( () => {
+					reject( restriction );
+				} );
+			} );
+		}
+
+		return await allRejected( promises );
 	},
 	/**
 	 * @param node
@@ -153,6 +169,9 @@ ReportingInterface.prototype = {
 
 		this.input      = input;
 		this.isRequired = isRequired( node );
+		this.setRestrictions();
+	},
+	setRestrictions: function () {
 	},
 	/**
 	 * @return {HTMLInputElement|HTMLElement}

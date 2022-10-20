@@ -1,8 +1,9 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
+
 import { getPreparedRules } from '../functions';
 
 function CustomRulesRestriction() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
 		const root  = node.closest( '.jet-form-builder-row' );
@@ -21,6 +22,8 @@ function CustomRulesRestriction() {
 	};
 }
 
-CustomRulesRestriction.prototype = Object.create( Restriction.prototype );
+CustomRulesRestriction.prototype = Object.create(
+	AdvancedRestriction.prototype,
+);
 
 export default CustomRulesRestriction;

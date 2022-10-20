@@ -1,7 +1,7 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function NotEnoughChars() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
 		const { minLength = false } = reporting.input.attrs;
@@ -10,9 +10,10 @@ function NotEnoughChars() {
 	};
 
 	this.validate = function () {
+		const length        = this.getValue()?.length;
 		const { minLength } = this.reporting.input.attrs;
 
-		return this.getValue()?.length >= minLength.value.current;
+		return !length || length >= +minLength.value.current;
 	};
 
 	this.getRawMessage = function () {
@@ -20,6 +21,6 @@ function NotEnoughChars() {
 	};
 }
 
-NotEnoughChars.prototype = Object.create( Restriction.prototype );
+NotEnoughChars.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default NotEnoughChars;

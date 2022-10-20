@@ -1,25 +1,24 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function NotEnoughNumbers() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
-		return '' !== node?.min && node.type === 'number';
-	};
-	this.setReporting  = function ( reporting ) {
-		const [ node ] = reporting.input.nodes;
-		this.min       = +node?.min;
+		const { min = false } = reporting.input.attrs;
 
-		Restriction.prototype.setReporting.call( this, reporting );
+		return false !== min;
 	};
 	this.validate      = function () {
-		return this.getValue() >= this.min;
+		const value   = this.getValue();
+		const { min } = this.reporting.input.attrs;
+
+		return !value || +value >= +min.value.current;
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'number_min' );
 	};
 }
 
-NotEnoughNumbers.prototype = Object.create( Restriction.prototype );
+NotEnoughNumbers.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default NotEnoughNumbers;

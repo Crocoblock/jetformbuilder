@@ -2,11 +2,11 @@ import ReachLimitNumbers from './restrictions/ReachLimitNumbers';
 import NotEnoughNumbers from './restrictions/NotEnoughNumbers';
 import NotUrl from './restrictions/NotUrl';
 import NotEmail from './restrictions/NotEmail';
-import NotCompleteInputmask from './restrictions/NotCompleteInputmask';
-import NotEmptyRepeater from './restrictions/NotEmptyRepeater';
 import NotEnoughChars from './restrictions/NotEnoughChars';
 import ReachLimitChars from './restrictions/ReachLimitChars';
 import NotEmptyRestriction from './restrictions/NotEmptyRestriction';
+import NotCompleteInputmask from './restrictions/NotCompleteInputmask';
+import NotEmptyRepeater from './restrictions/NotEmptyRepeater';
 import CustomRulesRestriction from './restrictions/CustomRulesRestriction';
 import MustContainCharacters from './restrictions/MustContainCharacters';
 import MustNotContainCharacters from './restrictions/MustNotContainCharacters';
@@ -15,7 +15,24 @@ import NotMatchRegexp from './restrictions/NotMatchRegexp';
 import ServerSideCallback from './restrictions/ServerSideCallback';
 import MustEqual from './restrictions/MustEqual';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters, addFilter } = wp.hooks;
+
+const getAdvancedRules = () => applyFilters(
+	'jet.fb.advanced.rules',
+	[
+		MustContainCharacters,
+		MustNotContainCharacters,
+		MatchRegexp,
+		NotMatchRegexp,
+		ServerSideCallback,
+		MustEqual,
+	],
+);
+
+/**
+ * @type {array<CustomBaseRestriction>}
+ */
+let advancedRules = [];
 
 const getRestrictions = () => applyFilters(
 	'jet.fb.restrictions',
@@ -37,50 +54,6 @@ const getRestrictions = () => applyFilters(
  * @type {Restriction[]}
  */
 let restrictions = [];
-
-const getAdvancedRules = () => applyFilters(
-	'jet.fb.advanced.rules',
-	[
-		MustContainCharacters,
-		MustNotContainCharacters,
-		MatchRegexp,
-		NotMatchRegexp,
-		ServerSideCallback,
-		MustEqual,
-	],
-);
-
-/**
- * @type {array<AdvancedRestriction>}
- */
-let advancedRules = [];
-
-/**
- * @param reporting {AdvancedReporting}
- * @return {Restriction[]}
- */
-function setRestrictions( reporting ) {
-	if ( !restrictions.length ) {
-		restrictions = getRestrictions();
-	}
-
-	for ( const restriction of restrictions ) {
-		const current = new restriction();
-
-		if (
-			!current.isSupported( reporting.getNode(), reporting ) ||
-			(
-				!reporting.isRequired && current.runOnlyIfRequired()
-			)
-		) {
-			continue;
-		}
-		current.setReporting( reporting );
-		current.onReady();
-
-		reporting.restrictions.push( current );
-	}
-}
 
 function getPreparedRules( rules, reporting ) {
 	const response = [];
@@ -171,7 +144,7 @@ function getMessageBySlug( restriction, slug ) {
 }
 
 /**
- * @this {AdvancedRestriction}
+ * @this {CustomBaseRestriction}
  */
 function observeFieldRestriction() {
 	if ( !this.attrs?.field ) {
@@ -184,6 +157,29 @@ function observeFieldRestriction() {
 		this.attrs.value = input.value.current;
 		this.reporting.validateWithNotice().then( () => {} ).catch( () => {} );
 	} );
+}
+
+/**
+ * @param reporting {ReportingInterface}
+ */
+function setRestrictions( reporting ) {
+	if ( !restrictions.length ) {
+		restrictions = getRestrictions();
+	}
+
+	for ( const restriction of restrictions ) {
+		const current = new restriction();
+
+		if (
+			!current.isSupported( reporting.getNode(), reporting )
+		) {
+			continue;
+		}
+		current.setReporting( reporting );
+		current.onReady();
+
+		reporting.restrictions.push( current );
+	}
 }
 
 export {

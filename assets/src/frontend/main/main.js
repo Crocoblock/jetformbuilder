@@ -10,6 +10,7 @@ import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import { allRejected, getLanguage } from './functions';
+import Restriction from './reporting/restrictions/Restriction';
 
 (
 	function ( $ ) {
@@ -27,6 +28,7 @@ import { allRejected, getLanguage } from './functions';
 			ReportingInterface,
 			CheckboxData,
 			MultiSelectData,
+			Restriction,
 		};
 
 		window.JetFormBuilderFunctions = {

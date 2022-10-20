@@ -1,7 +1,7 @@
-import AdvancedRestriction from './AdvancedRestriction';
+import CustomBaseRestriction from './AdvancedRestriction';
 
 function ServerSideCallback() {
-	AdvancedRestriction.call( this );
+	CustomBaseRestriction.call( this );
 
 	const { apiFetch }            = wp;
 	const { validation_endpoint } = JetFormBuilderSettings;
@@ -13,9 +13,14 @@ function ServerSideCallback() {
 		return true;
 	};
 	this.validatePromise = async function () {
+		const current = this.getValue();
+
+		if ( !current ) {
+			return Promise.resolve();
+		}
+
 		const { rootNode } = this.reporting.input.getRoot();
 		const formData     = new FormData( rootNode );
-		const current      = this.getValue();
 
 		return await apiFetch( {
 			...validation_endpoint,
@@ -29,7 +34,7 @@ function ServerSideCallback() {
 }
 
 ServerSideCallback.prototype = Object.create(
-	AdvancedRestriction.prototype,
+	CustomBaseRestriction.prototype,
 );
 
 export default ServerSideCallback;

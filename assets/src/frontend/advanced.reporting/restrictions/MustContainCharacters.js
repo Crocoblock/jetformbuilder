@@ -1,8 +1,8 @@
-import AdvancedRestriction from './AdvancedRestriction';
+import CustomBaseRestriction from './AdvancedRestriction';
 import { observeFieldRestriction } from '../functions';
 
 function MustContainCharacters() {
-	AdvancedRestriction.call( this );
+	CustomBaseRestriction.call( this );
 
 	this.getSlug  = function () {
 		return 'contain';
@@ -10,15 +10,15 @@ function MustContainCharacters() {
 	this.validate = function () {
 		const value = this.getValue();
 
-		return value.includes( this.attrs.value );
+		return !value || value.includes( this.attrs.value );
 	};
 }
 
-MustContainCharacters.prototype = Object.create(
-	AdvancedRestriction.prototype,
+MustContainCharacters.prototype          = Object.create(
+	CustomBaseRestriction.prototype,
 );
 MustContainCharacters.prototype.setAttrs = function ( attrs ) {
-	AdvancedRestriction.prototype.setAttrs.call( this, attrs );
+	CustomBaseRestriction.prototype.setAttrs.call( this, attrs );
 	observeFieldRestriction.call( this );
 };
 

@@ -1,16 +1,14 @@
-import Restriction from '../restrictions/Restriction';
+const {
+	      AdvancedRestriction,
+      } = JetFormBuilderAbstract;
 
 function MaxFilesRestriction() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
 		return (
 			'file' === node?.type
 		);
-	};
-
-	this.runOnlyIfRequired = function () {
-		return false;
 	};
 
 	this.validate = function () {
@@ -19,11 +17,11 @@ function MaxFilesRestriction() {
 
 		current = current?.length ?? 0;
 
-		return current <= max_files.value.current;
+		return !current || current <= max_files.value.current;
 	};
 
 	this.setReporting = function ( reporting ) {
-		Restriction.prototype.setReporting.call(this, reporting );
+		AdvancedRestriction.prototype.setReporting.call( this, reporting );
 
 		const { max_files } = reporting.input.attrs;
 
@@ -39,6 +37,6 @@ function MaxFilesRestriction() {
 	};
 }
 
-MaxFilesRestriction.prototype = Object.create( Restriction.prototype );
+MaxFilesRestriction.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default MaxFilesRestriction;

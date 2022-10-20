@@ -1,25 +1,24 @@
-import Restriction from './Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function ReachLimitNumbers() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
-		return '' !== node?.min && 'number' === node.type;
-	};
-	this.setReporting  = function ( reporting ) {
-		const [ node ] = reporting.input.nodes;
-		this.max       = +node.max;
+		const { max = false } = reporting.input.attrs;
 
-		Restriction.prototype.setReporting.call( this, reporting );
+		return false !== max;
 	};
 	this.validate      = function () {
-		return this.getValue() <= this.max;
+		const value   = this.getValue();
+		const { max } = this.reporting.input.attrs;
+
+		return !value || +value <= +max.value.current;
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'number_max' );
 	};
 }
 
-ReachLimitNumbers.prototype = Object.create( Restriction.prototype );
+ReachLimitNumbers.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default ReachLimitNumbers;

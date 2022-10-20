@@ -1,4 +1,4 @@
-import Restriction from './Restriction';
+import Restriction from '../../main/reporting/restrictions/Restriction';
 
 function NotCompleteInputmask() {
 	Restriction.call( this );
@@ -10,9 +10,10 @@ function NotCompleteInputmask() {
 		);
 	};
 	this.validate      = function () {
-		const node = this.reporting.getNode();
+		const value = this.getValue();
+		const node  = this.reporting.getNode();
 
-		return node.inputmask.isComplete();
+		return !value || node.inputmask.isComplete();
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'inputmask' );

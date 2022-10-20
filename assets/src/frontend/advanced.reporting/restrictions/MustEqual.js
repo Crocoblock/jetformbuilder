@@ -1,8 +1,8 @@
-import AdvancedRestriction from './AdvancedRestriction';
+import CustomBaseRestriction from './AdvancedRestriction';
 import { observeFieldRestriction } from '../functions';
 
 function MustEqual() {
-	AdvancedRestriction.call( this );
+	CustomBaseRestriction.call( this );
 
 	this.getSlug  = function () {
 		return 'equal';
@@ -10,15 +10,15 @@ function MustEqual() {
 	this.validate = function () {
 		const value = String( this.getValue() );
 
-		return value === this.attrs.value;
+		return !value || value === this.attrs.value;
 	};
 }
 
 MustEqual.prototype          = Object.create(
-	AdvancedRestriction.prototype,
+	CustomBaseRestriction.prototype,
 );
 MustEqual.prototype.setAttrs = function ( attrs ) {
-	AdvancedRestriction.prototype.setAttrs.call( this, attrs );
+	CustomBaseRestriction.prototype.setAttrs.call( this, attrs );
 	observeFieldRestriction.call( this );
 };
 

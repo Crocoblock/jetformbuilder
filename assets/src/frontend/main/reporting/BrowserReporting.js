@@ -1,29 +1,19 @@
 import ReportingInterface from './ReportingInterface';
+import NativeRestriction from './restrictions/NativeRestriction';
 
 function BrowserReporting() {
 	ReportingInterface.call( this );
 
-	this.isSupported = function ( node, input ) {
+	this.isSupported     = function ( node, input ) {
 		return true;
 	};
-	this.report      = function ( validationErrors ) {
+	this.report          = function ( validationErrors ) {
 		this.getNode().reportValidity();
 	};
-	this.isValid     = async function () {
-		if ( !this.getNode()?.checkValidity ) {
-			return [];
-		}
-		const { nodes } = this.input;
-
-		for ( const node of nodes ) {
-			if ( node.checkValidity() ) {
-				return [];
-			}
-		}
-
-		return [ true ];
+	this.setRestrictions = function () {
+		this.restrictions = [ NativeRestriction ];
 	};
-	this.clearReport = function () {
+	this.clearReport     = function () {
 		// browser automatically hide tooltip messages
 	};
 }

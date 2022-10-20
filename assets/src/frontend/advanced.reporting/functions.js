@@ -194,4 +194,5 @@ export {
 	getPreparedRules,
 	setRestrictions,
 	observeFieldRestriction,
+	getWrapper,
 };

@@ -681,6 +681,12 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	font-size: 0.8rem;
 }
 
+.jet-form-builder-row.field-has-error {
+	.error-message {
+		@include error-message;
+	}
+}
+
 .jet-form-builder__field.field-has-error {
 	& + .error-message {
 		@include error-message;

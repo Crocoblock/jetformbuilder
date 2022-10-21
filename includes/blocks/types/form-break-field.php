@@ -96,17 +96,6 @@ class Form_Break_Field extends Base {
 			public function label_allowed() {
 				return false;
 			}
-
-			public function before_render( $args ) {
-				parent::before_render( $args );
-
-				if ( empty( $args['add_next_button'] ) ) {
-					return;
-				}
-
-				$this->add_attribute( 'data-jfb-conditional', Button_Next::get_conditions() );
-				$this->add_attribute( 'data-jfb-func', 'disable' );
-			}
 		} )->render();
 	}
 

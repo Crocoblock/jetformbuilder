@@ -47,6 +47,14 @@ export default function NumberEdit( props ) {
 		      editProps: { uniqKey },
 	      } = props;
 
+	const changeNumberAttr = attr => {
+		for ( const [ name, value ] of Object.entries( attr ) ) {
+			attr[ name ] = '' === value ? null : Number( value );
+		}
+
+		setAttributes( attr );
+	};
+
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -68,16 +76,16 @@ export default function NumberEdit( props ) {
 					<NumberControl
 						label={ __( 'Min Value' ) }
 						labelPosition="top"
-						key="min"
+						step={ 0.01 }
 						value={ attributes.min }
-						onChange={ min => setAttributes( { min } ) }
+						onChange={ min => changeNumberAttr( { min } ) }
 					/>
 					<NumberControl
 						label={ __( 'Max Value' ) }
 						labelPosition="top"
-						key="max"
+						step={ 0.01 }
 						value={ attributes.max }
-						onChange={ max => setAttributes( { max } ) }
+						onChange={ max => changeNumberAttr( { max } ) }
 					/>
 					<NumberControl
 						label={ __( 'Step' ) }
@@ -85,7 +93,7 @@ export default function NumberEdit( props ) {
 						key="step"
 						step={ 0.01 }
 						value={ attributes.step }
-						onChange={ step => setAttributes( { step } ) }
+						onChange={ step => changeNumberAttr( { step } ) }
 					/>
 				</FieldSettingsWrapper>
 				<PanelBody
@@ -93,9 +101,13 @@ export default function NumberEdit( props ) {
 				>
 					<ValidationToggleGroup/>
 					{ isAdvancedValidation && <>
+						{ null !== attributes.min && (
+							<ValidationBlockMessage name="number_min"/>
+						) }
+						{ null !== attributes.max && (
+							<ValidationBlockMessage name="number_max"/>
+						) }
 						<ValidationBlockMessage name="empty"/>
-						<ValidationBlockMessage name="number_max"/>
-						<ValidationBlockMessage name="number_min"/>
 					</> }
 				</PanelBody>
 				<AdvancedFields/>

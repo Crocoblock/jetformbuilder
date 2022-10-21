@@ -26,16 +26,16 @@
 			"default": {}
 		},
 		"min": {
-			"type": "string",
-			"default": ""
+			"type": "number",
+			"default": null
 		},
 		"max": {
-			"type": "string",
-			"default": ""
+			"type": "number",
+			"default": null
 		},
 		"step": {
-			"type": "string",
-			"default": ""
+			"type": "number",
+			"default": null
 		},
 		"label": {
 			"type": "string",

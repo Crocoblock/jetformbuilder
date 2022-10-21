@@ -103,7 +103,9 @@ export default function TextEdit( props ) {
 					key="maxlength"
 					min={ 1 }
 					value={ attributes.maxlength }
-					onChange={ maxlength => setAttributes( { maxlength } ) }
+					onChange={ maxlength => {
+						setAttributes( { maxlength } )
+					} }
 				/>
 				<ToggleControl
 					key={ 'enable_input_mask' }
@@ -190,7 +192,9 @@ export default function TextEdit( props ) {
 					{ Boolean( attributes.maxlength ) && <>
 						<ValidationBlockMessage name="char_max"/>
 					</> }
-					<ValidationBlockMessage name="char_min"/>
+					{ Boolean( attributes.minlength ) && <>
+						<ValidationBlockMessage name="char_min"/>
+					</> }
 					<ValidationBlockMessage name="empty"/>
 				</> }
 			</PanelBody>

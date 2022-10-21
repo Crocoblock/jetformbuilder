@@ -11,6 +11,7 @@ import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import { allRejected, getLanguage } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
+import RestrictionError from './reporting/RestrictionError';
 
 (
 	function ( $ ) {
@@ -29,6 +30,7 @@ import Restriction from './reporting/restrictions/Restriction';
 			CheckboxData,
 			MultiSelectData,
 			Restriction,
+			RestrictionError,
 		};
 
 		window.JetFormBuilderFunctions = {

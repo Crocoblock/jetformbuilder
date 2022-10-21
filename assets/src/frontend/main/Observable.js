@@ -6,18 +6,19 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { allRejected } from './functions';
+import RestrictionError from './reporting/RestrictionError';
 
 const {
 	      doAction,
       } = wp.hooks;
 
 function Observable( parent = null ) {
-	this.parent = parent;
+	this.parent     = parent;
 	this.dataInputs = {};
-	this.data = {};
-	this.form = null;
-	this.multistep = null;
-	this.rootNode = null;
+	this.data       = {};
+	this.form       = null;
+	this.multistep  = null;
+	this.rootNode   = null;
 	this.isObserved = false;
 }
 

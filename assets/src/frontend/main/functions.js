@@ -3,6 +3,7 @@ import MaxFilesHtmlAttr from './attrs/MaxFilesHtmlAttr';
 import MaxFileSizeHtmlAttr from './attrs/MaxFileSizeHtmlAttr';
 import RemainingCalcAttr from './attrs/RemainingCalcAttr';
 import FileExtensionHtmlAttr from './attrs/FileExtensionHtmlAttr';
+import RestrictionError from './reporting/RestrictionError';
 
 const { applyFilters } = wp.hooks;
 
@@ -16,7 +17,22 @@ async function allRejected( callbacks ) {
 	);
 
 	const invalid = results.filter(
-		( { status } ) => 'rejected' === status,
+		( error ) => {
+			if ( 'rejected' !== error.status ) {
+				return false;
+			}
+
+			if (
+				'object' === typeof error.reason ||
+				!window?.JetFormBuilderSettings?.devmode
+			) {
+				return true;
+			}
+
+			console.error( error.reason );
+
+			return true;
+		},
 	);
 
 	return invalid.map( ( { reason, value } ) => (

@@ -14,8 +14,8 @@ function PageState( node, state ) {
 	this.index     = +node.dataset.page;
 	this.state     = state;
 	this.inputs    = [];
-	this.canSwitch = new ReactiveVar( false );
-	this.isShow    = new ReactiveVar( 1 === this.index );
+	this.canSwitch = new ReactiveVar( null );
+	this.isShow = new ReactiveVar( 1 === this.index );
 
 	this.observeInputs();
 	this.observeConditionalBlocks();
@@ -46,7 +46,7 @@ PageState.prototype.observeInputs = function () {
 		if (
 			!this.isNodeBelongThis( node ) ||
 			!node.hasOwnProperty( 'jfbSync' ) ||
-			!node.jfbSync.reporting.isRequired
+			!node.jfbSync.reporting.restrictions.length
 		) {
 			continue;
 		}
@@ -88,30 +88,42 @@ PageState.prototype.observeConditionalBlocks = function () {
 		}
 	}
 };
-PageState.prototype.onShow              = function () {
+PageState.prototype.onShow      = function () {
 	this.node.classList.remove( 'jet-form-builder-page--hidden' );
 };
-PageState.prototype.onHide              = function () {
+PageState.prototype.onHide      = function () {
 	this.node.classList.add( 'jet-form-builder-page--hidden' );
 };
-PageState.prototype.updateState         = function () {
+PageState.prototype.updateState = function () {
+	this.updateStateAsync().then( () => {} ).catch( () => {} );
+};
+
+PageState.prototype.updateStateAsync    = async function ( silence = true ) {
 	const callbacks = [];
 
 	for ( const input of this.getInputs() ) {
+		const validate = silence
+		                 ? input.reporting.validate
+		                 : input.reporting.validateWithNotice;
+
 		callbacks.push(
-			( resolve, reject ) => input.reporting.validate().
-				then( resolve ).
-				catch( reject ),
+			( resolve, reject ) => {
+				validate.call( input.reporting ).then( resolve ).catch( reject );
+			},
 		);
 	}
 
-	Promise.all(
-		callbacks.map( current => new Promise( current ) ),
-	).then( () => {
+	try {
+		await Promise.all(
+			callbacks.map( current => new Promise( current ) ),
+		);
+
 		this.canSwitch.current = true;
-	} ).catch( () => {
+	}
+	catch ( error ) {
 		this.canSwitch.current = false;
-	} );
+	}
+
 };
 PageState.prototype.addButtonsListeners = function () {
 	const switchButtons = this.node.querySelectorAll(
@@ -132,14 +144,14 @@ PageState.prototype.addButtonsListeners = function () {
 		);
 	}
 };
-PageState.prototype.changePage          = function ( isBack ) {
+PageState.prototype.changePage          = async function ( isBack ) {
 	if ( isBack ) {
 		this.state.index.current = this.index - 1;
 
 		return;
 	}
 
-	this.updateState();
+	await this.updateStateAsync( false );
 
 	if ( !this.canSwitch.current ) {
 		return;

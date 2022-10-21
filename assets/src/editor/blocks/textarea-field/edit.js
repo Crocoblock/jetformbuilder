@@ -44,13 +44,6 @@ export default function TextareaEdit( props ) {
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
-	const changeNumberValue = ( key, newValue ) => {
-		const value = (
-			              newValue && newValue > 0
-		              ) ? parseInt( newValue ) : null;
-		setAttributes( { [ key ]: value } );
-	};
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -91,7 +84,9 @@ export default function TextareaEdit( props ) {
 					{ Boolean( attributes.maxlength ) && <>
 						<ValidationBlockMessage name="char_max"/>
 					</> }
-					<ValidationBlockMessage name="char_min"/>
+					{ Boolean( attributes.minlength ) && <>
+						<ValidationBlockMessage name="char_min"/>
+					</> }
 					<ValidationBlockMessage name="empty"/>
 				</> }
 			</PanelBody>

@@ -558,4 +558,12 @@ class Tools {
 		);
 	}
 
+	public static function esc_attr( $value ) {
+		if ( ! is_scalar( $value ) && $value ) {
+			return esc_attr( Tools::encode_json( $value ) );
+		}
+
+		return esc_attr( $value );
+	}
+
 }

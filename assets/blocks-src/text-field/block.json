@@ -50,12 +50,12 @@
 			"default": "_"
 		},
 		"minlength": {
-			"type": "string",
-			"default": ""
+			"type": "number",
+			"default": null
 		},
 		"maxlength": {
-			"type": "string",
-			"default": ""
+			"type": "number",
+			"default": null
 		},
 		"label": {
 			"type": "string",

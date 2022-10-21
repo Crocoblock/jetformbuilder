@@ -22,6 +22,7 @@
  */
 import { isRequired } from './functions';
 import { allRejected } from '../functions';
+import RestrictionError from './RestrictionError';
 
 function ReportingInterface() {
 	/**
@@ -51,16 +52,6 @@ ReportingInterface.prototype = {
 	 * @param force
 	 */
 	validateWithNoticeDebounced: function ( force = false ) {
-		if ( force || !this.hasServerSide ) {
-			return this.validateWithNotice().then( () => {} ).catch( () => {} );
-		}
-
-		const validateFunc = window._.debounce(
-			() => this.validateWithNotice().then( () => {} ).catch( () => {} ),
-			1000,
-		);
-
-		return validateFunc();
 	},
 	validateOnBlur: function () {
 	},
@@ -74,7 +65,7 @@ ReportingInterface.prototype = {
 		if ( errors.length ) {
 			this.report( errors );
 
-			throw new Error( errors[ 0 ].name );
+			throw new RestrictionError( errors[ 0 ].name );
 		}
 		else {
 			this.clearReport();
@@ -94,7 +85,7 @@ ReportingInterface.prototype = {
 		const errors = await this.getErrors();
 
 		if ( errors?.length ) {
-			throw new Error( errors[ 0 ].name );
+			throw new RestrictionError( errors[ 0 ].name );
 		}
 
 		return true;

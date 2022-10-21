@@ -239,7 +239,14 @@ abstract class Base {
 
 		if ( ! empty( $args['page_break_disabled'] ) && ! Tools::is_editor() ) {
 			$attrs = array(
-				sprintf( 'data-jfb-conditional="%s"', Button_Next::get_conditions() ),
+				sprintf(
+					'data-jfb-conditional="%s"',
+					Tools::esc_attr( array(
+						array(
+							'page_state' => 'active'
+						),
+					) )
+				),
 				'data-jfb-func="show_dom"',
 			);
 

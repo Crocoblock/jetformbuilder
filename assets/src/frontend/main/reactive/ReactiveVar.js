@@ -1,6 +1,7 @@
 function ReactiveVar( value ) {
 	this.current = value;
 	this.signals = [];
+	this.isDebug = false;
 }
 
 ReactiveVar.prototype = {
@@ -29,11 +30,14 @@ ReactiveVar.prototype = {
 		} );
 	},
 	notify: function () {
+		if ( this.isDebug ) {
+			debugger;
+		}
 		this.signals.forEach( signal => signal() );
 	},
 	setIfEmpty( newValue ) {
 		if ( (
-			!this.current.hasOwnProperty( 'length' ) && this.current
+				!this.current.hasOwnProperty( 'length' ) && this.current
 			) ||
 			(
 				this.current.hasOwnProperty( 'length' ) && this.current.length
@@ -43,6 +47,9 @@ ReactiveVar.prototype = {
 		}
 
 		this.current = newValue;
+	},
+	debug() {
+		this.isDebug = !this.isDebug;
 	},
 };
 

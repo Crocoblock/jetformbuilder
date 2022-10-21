@@ -1,4 +1,4 @@
-import CustomBaseRestriction from './AdvancedRestriction';
+import CustomBaseRestriction from './CustomBaseRestriction';
 import { observeFieldRestriction } from '../functions';
 
 function MustEqual() {

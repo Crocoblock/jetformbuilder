@@ -2,11 +2,14 @@ import AdvancedRestriction from './AdvancedRestriction';
 
 function CustomBaseRestriction() {
 	AdvancedRestriction.call( this );
+
+	this.attrs = {};
 }
 
-CustomBaseRestriction.prototype               = Object.create(
+CustomBaseRestriction.prototype = Object.create(
 	AdvancedRestriction.prototype,
 );
+
 CustomBaseRestriction.prototype.attrs         = {};
 CustomBaseRestriction.prototype.setAttrs      = function ( attrs ) {
 	this.attrs = attrs;

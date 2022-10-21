@@ -1,4 +1,4 @@
-import CustomBaseRestriction from './AdvancedRestriction';
+import CustomBaseRestriction from './CustomBaseRestriction';
 import { observeFieldRestriction } from '../functions';
 
 function MatchRegexp() {
@@ -13,7 +13,7 @@ function MatchRegexp() {
 		if ( !value ) {
 			return true;
 		}
-		const regexp = new RegExp( this.attrs.value, 'gi' );
+		const regexp = new RegExp( this.attrs.value, 'g' );
 
 		return regexp.test( value );
 	};

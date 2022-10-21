@@ -1,7 +1,7 @@
-import Restriction from '../../main/reporting/restrictions/Restriction';
+import AdvancedRestriction from './AdvancedRestriction';
 
 function NotCompleteInputmask() {
-	Restriction.call( this );
+	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
 		return (
@@ -20,6 +20,6 @@ function NotCompleteInputmask() {
 	};
 }
 
-NotCompleteInputmask.prototype = Object.create( Restriction.prototype );
+NotCompleteInputmask.prototype = Object.create( AdvancedRestriction.prototype );
 
 export default NotCompleteInputmask;

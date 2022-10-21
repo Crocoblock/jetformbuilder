@@ -13,7 +13,6 @@ use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
 use Jet_Form_Builder\Blocks\Ssr_Validation\Validation_Callbacks;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
-use Jet_Form_Builder\Blocks\Validation_Messages\Has_Remaining_Chars;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
@@ -188,7 +187,7 @@ class Validation implements Arrayable {
 		return $response;
 	}
 
-	protected function is_advanced( Base $block ): bool {
+	public function is_advanced( Base $block ): bool {
 		$type = $this->get_block_type( $block );
 
 		return $type
@@ -196,7 +195,7 @@ class Validation implements Arrayable {
 			: $this->is_advanced_form();
 	}
 
-	protected function is_advanced_form(): bool {
+	public function is_advanced_form(): bool {
 		return self::FORMAT_ADVANCED === ( $this->settings['type'] ?? '' );
 	}
 

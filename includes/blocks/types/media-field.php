@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Media_Field_Render;
+use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Plugin;
@@ -18,11 +19,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Media_Field extends Base {
 
-	const HANDLE = 'jet-fb-media-field';
+	const HANDLE       = 'jet-fb-media-field';
+	const RESTRICTIONS = self::HANDLE . '-restrictions';
 
-	protected $value_format = 'url';
-	protected $max_files    = 1;
-	protected $max_size     = 1;
+	protected $value_format    = 'url';
+	protected $max_files       = 1;
+	protected $max_size        = 1;
 	protected $max_size_format = '';
 
 	/**
@@ -137,6 +139,16 @@ class Media_Field extends Base {
 			Plugin::instance()->get_version(),
 			true
 		);
+		wp_register_script(
+			self::RESTRICTIONS,
+			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions{min}.js' ),
+			array(
+				Validation::HANDLE,
+				Manager::CALCULATED_HANDLE,
+			),
+			Plugin::instance()->get_version(),
+			true
+		);
 	}
 
 	/**
@@ -148,7 +160,10 @@ class Media_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
-		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
+
+		if ( Validation::instance()->is_advanced( $this ) ) {
+			wp_enqueue_script( self::RESTRICTIONS );
+		}
 
 		return ( new Media_Field_Render( $this ) )->render();
 	}

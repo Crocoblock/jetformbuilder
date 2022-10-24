@@ -25,11 +25,11 @@
 		},
 		"minlength": {
 			"type": "number",
-			"default": null
+			"default": ""
 		},
 		"maxlength": {
 			"type": "number",
-			"default": null
+			"default": ""
 		},
 		"label": {
 			"type": "string",

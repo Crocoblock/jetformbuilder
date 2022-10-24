@@ -27,7 +27,8 @@ function SingleFileRestriction() {
 	};
 }
 
-SingleFileRestriction.prototype = Object.create( AdvancedRestriction.prototype );
+SingleFileRestriction.prototype = Object.create(
+	AdvancedRestriction.prototype );
 
 /**
  * @type {BaseFileRestriction[]}
@@ -51,6 +52,11 @@ SingleFileRestriction.prototype.validatePromise = async function () {
 	const fieldCallbacks = [];
 
 	for ( const currentFile of current ) {
+		if ( !(
+			currentFile instanceof File
+		) ) {
+			continue;
+		}
 		const fileCallbacks = this.singleFileRestrictions.map(
 			item => ( resolve, reject ) => {
 				item.setFile( currentFile );
@@ -84,6 +90,10 @@ SingleFileRestriction.prototype.validatePromise = async function () {
 				fileCallbacks.map( call => new Promise( call ) ),
 			).then( onValidate );
 		} );
+	}
+
+	if ( !fieldCallbacks?.length ) {
+		return Promise.resolve();
 	}
 
 	const results = await allRejected( fieldCallbacks );

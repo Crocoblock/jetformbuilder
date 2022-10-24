@@ -49,7 +49,7 @@ export default function NumberEdit( props ) {
 
 	const changeNumberAttr = attr => {
 		for ( const [ name, value ] of Object.entries( attr ) ) {
-			attr[ name ] = '' === value ? null : Number( value );
+			attr[ name ] = '' === value ? '' : Number( value );
 		}
 
 		setAttributes( attr );

@@ -14,7 +14,7 @@ trait Attributes_Trait {
 			return;
 		}
 
-		if ( is_array( $value ) ) {
+		if ( wp_is_numeric_array( $value ) ) {
 			foreach ( $value as $item ) {
 				$this->add_attribute( $attr, $item );
 			}

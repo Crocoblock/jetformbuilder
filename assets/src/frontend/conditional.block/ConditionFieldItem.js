@@ -39,20 +39,16 @@ function ConditionFieldItem() {
 
 		return input.checker.check( this, input );
 	};
-	this.setOptions = function ( {
-		field,
-		operator,
-		value = '',
-		render_state,
-		use_preset,
-	} ) {
-		this.field        = field;
-		this.operator     = operator;
-		this.render_state = render_state;
-		this.use_preset   = use_preset;
+	this.setOptions = function ( options ) {
+		this.field        = options.field;
+		this.operator     = options.operator;
+		this.render_state = options.render_state;
+		this.use_preset   = options.use_preset;
 
-		if ( !Array.isArray( value ) ) {
-			value = value.split( ',' ).map( item => item.trim() );
+		let value;
+
+		if ( !Array.isArray( options?.value ) ) {
+			value = options.value.split( ',' ).map( item => item.trim() );
 		}
 
 		if ( this.use_preset ) {

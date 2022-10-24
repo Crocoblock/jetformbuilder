@@ -18,6 +18,9 @@ class Condition_Field_Item extends Base_Condition_Type {
 	public function init( array $condition ) {
 		parent::init( $condition );
 
+		$this->use_preset   = false;
+		$this->parsed_value = null;
+
 		$this->value = $condition['value'] ?? '';
 		$this->field = $condition['field'] ?? '';
 	}

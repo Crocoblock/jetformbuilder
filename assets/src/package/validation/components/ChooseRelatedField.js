@@ -32,7 +32,7 @@ function ChooseRelatedField() {
 		options={ fields }
 		label={ __( 'Choose field', 'jet-form-builder' ) }
 		value={ currentItem.field }
-		onChange={ type => changeCurrentItem( { type } ) }
+		onChange={ field => changeCurrentItem( { field } ) }
 	/>;
 }
 

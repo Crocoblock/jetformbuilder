@@ -20,16 +20,17 @@ $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'data-jfb-sync' );
 
 if ( Regexp_Tools::has_macro( $this->args['min'] ) ) {
+	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-min', $this->args['min'] );
 } else {
 	$this->add_attribute( 'min', Date_Tools::time_to_string( $this->args['min'] ) );
 }
 
 if ( Regexp_Tools::has_macro( $this->args['max'] ) ) {
+	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-max', $this->args['max'] );
 } else {
 	$this->add_attribute( 'max', Date_Tools::time_to_string( $this->args['max'] ) );
 }
-$this->add_attribute( 'data-watch-attrs', array( 'min', 'max' ) );
 ?>
 <input <?php $this->render_attributes_string(); ?>>

@@ -14,16 +14,18 @@ function SignalRepeater() {
 		return isRepeater( node );
 	};
 	this.runSignal   = function () {
-		const { current }    = this.input.value;
-		this.input.calcValue = 0;
+		const { current } = this.input.value;
+		let calcValue     = 0;
 
 		for ( const [ index, row ] of Object.entries( current ) ) {
 			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
 			this.runItem( index );
-			this.input.calcValue += row.calc;
+			calcValue += row.calc;
 		}
+
+		this.input.calcValue = calcValue;
 	};
 	/**
 	 * @param current {string}

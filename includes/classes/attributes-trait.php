@@ -39,5 +39,8 @@ trait Attributes_Trait {
 		return $this->attrs;
 	}
 
+	public function has_attribute( string $name ): bool {
+		return array_key_exists( $name, $this->attrs );
+	}
 
 }

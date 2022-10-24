@@ -3,7 +3,7 @@
  * input[type="hidden"] template
  */
 
-$this->set_vale();
+$this->set_value();
 $this->add_attribute( 'class', 'jet-form-builder__field text-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'placeholder', $args['placeholder'] );

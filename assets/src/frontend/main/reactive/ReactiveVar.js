@@ -24,15 +24,15 @@ ReactiveVar.prototype = {
 				if ( current === newVal ) {
 					return;
 				}
+				if ( self.isDebug ) {
+					debugger;
+				}
 				current = newVal;
 				self.notify();
 			},
 		} );
 	},
 	notify: function () {
-		if ( this.isDebug ) {
-			debugger;
-		}
 		this.signals.forEach( signal => signal() );
 	},
 	setIfEmpty( newValue ) {

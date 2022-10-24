@@ -11,7 +11,11 @@ function SignalText() {
 		                       ? 0
 		                       : parseFloat( this.input.calcValue );
 
-		this.input.nodes[ 0 ].value = this.input.value.current;
+		const [ node ] = this.input.nodes;
+
+		if ( node.value !== this.input.value.current ) {
+			node.value = this.input.value.current;
+		}
 	};
 }
 

@@ -6,7 +6,6 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { allRejected } from './functions';
-import RestrictionError from './reporting/RestrictionError';
 
 const {
 	      doAction,

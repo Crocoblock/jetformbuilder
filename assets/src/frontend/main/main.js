@@ -9,7 +9,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import { allRejected, getLanguage } from './functions';
+import { allRejected, getLanguage, toHTML } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
 
@@ -39,6 +39,7 @@ import RestrictionError from './reporting/RestrictionError';
 			),
 			allRejected,
 			getLanguage,
+			toHTML,
 		};
 
 		$( initCommon );

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Compatibility\Jet_Engine\Blocks;
 
 use Jet_Engine\Modules\Maps_Listings\Base_Provider;
 use Jet_Engine\Modules\Maps_Listings\Module;
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
@@ -12,11 +13,48 @@ use Jet_Form_Builder\Presets\Sources\Base_Source;
 
 class Map_Field extends Base {
 
+	const HANDLE = 'jet-fb-map-field';
+
 	/**
 	 * @return string
 	 */
 	public function get_name() {
 		return 'map-field';
+	}
+
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			jet_form_builder()->plugin_url( 'assets/js/frontend/map.field{min}.js' ),
+			array(
+				Manager::MAIN_SCRIPT_HANDLE
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
+
+		wp_localize_script(
+			self::HANDLE,
+			'JetMapFieldsSettings',
+			array(
+				'api'     => jet_engine()->api->get_route( 'get-map-point-data' ),
+				'apiHash' => jet_engine()->api->get_route( 'get-map-location-hash' ),
+				'nonce'   => wp_create_nonce( 'jet-map-field' ),
+				'i18n'    => array(
+					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
+					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),
+					'resetBtn'  => esc_html__( 'Reset location', 'jet-form-builder' ),
+					'descTitle' => esc_html__( 'Lat and Lng are separately stored in the following fields', 'jet-form-builder' ),
+				),
+			)
+		);
 	}
 
 	public function get_field_settings(): array {
@@ -79,29 +117,7 @@ class Map_Field extends Base {
 		$provider->register_public_assets();
 		$provider->public_assets( null, array( 'marker_clustering' => false ), null );
 
-		wp_enqueue_script(
-			'jet-fb-map-field',
-			jet_form_builder()->plugin_url( 'assets/js/map-field.js' ),
-			array( 'jquery', 'wp-api-fetch' ),
-			jet_form_builder()->get_version(),
-			true
-		);
-
-		wp_localize_script(
-			'jet-fb-map-field',
-			'JetMapFieldsSettings',
-			array(
-				'api'     => jet_engine()->api->get_route( 'get-map-point-data' ),
-				'apiHash' => jet_engine()->api->get_route( 'get-map-location-hash' ),
-				'nonce'   => wp_create_nonce( 'jet-map-field' ),
-				'i18n'    => array(
-					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
-					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),
-					'resetBtn'  => esc_html__( 'Reset location', 'jet-form-builder' ),
-					'descTitle' => esc_html__( 'Lat and Lng are separately stored in the following fields', 'jet-form-builder' ),
-				),
-			)
-		);
+		wp_enqueue_script( self::HANDLE );
 
 		return ( new class( $this ) extends RenderBase {
 			public function get_name() {

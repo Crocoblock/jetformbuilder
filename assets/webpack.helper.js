@@ -33,6 +33,7 @@ module.exports = {
 		return {
 			'frontend/main': './frontend/main/main.js',
 			'frontend/media.field': './frontend/media.field/main.js',
+			'frontend/map.field': './frontend/map.field/main.js',
 			'frontend/media.field.restrictions': './frontend/media.field.restrictions/main.js',
 			'frontend/multi.step': './frontend/multi.step/main.js',
 			'frontend/repeater.field': './frontend/repeater.field/main.js',

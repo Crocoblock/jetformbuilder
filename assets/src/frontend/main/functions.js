@@ -3,7 +3,6 @@ import MaxFilesHtmlAttr from './attrs/MaxFilesHtmlAttr';
 import MaxFileSizeHtmlAttr from './attrs/MaxFileSizeHtmlAttr';
 import RemainingCalcAttr from './attrs/RemainingCalcAttr';
 import FileExtensionHtmlAttr from './attrs/FileExtensionHtmlAttr';
-import RestrictionError from './reporting/RestrictionError';
 
 const { applyFilters } = wp.hooks;
 
@@ -104,4 +103,11 @@ function setAttrs( input ) {
 	}
 }
 
-export { allRejected, getLanguage, setAttrs };
+function toHTML( text ) {
+	const template     = document.createElement( 'template' );
+	template.innerHTML = text.trim();
+
+	return template.content;
+}
+
+export { allRejected, getLanguage, setAttrs, toHTML };

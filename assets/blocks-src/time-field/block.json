@@ -19,6 +19,14 @@
 			"type": "object",
 			"default": {}
 		},
+		"min": {
+			"type": "string",
+			"default": ""
+		},
+		"max": {
+			"type": "string",
+			"default": ""
+		},
 		"validation": {
 			"type": "object",
 			"default": {}

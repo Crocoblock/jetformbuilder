@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 function MinInSecMacro() {
 	BaseMacro.call( this );
 
-	this.name         = 'Min_In_MilliSec';
+	this.name         = 'Min_In_Sec';
 	this.isClientSide = true;
 
 	this.help = __(

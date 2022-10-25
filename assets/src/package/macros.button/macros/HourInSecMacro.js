@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 function HourInSecMacro() {
 	BaseMacro.call( this );
 
-	this.name         = 'Hour_In_MilliSec';
+	this.name         = 'Hour_In_Sec';
 	this.isClientSide = true;
 
 	this.help = __( 'Number of milliseconds in one hour', 'jet-form-builder' );

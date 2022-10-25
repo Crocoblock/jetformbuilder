@@ -10,6 +10,16 @@ const {
 function SignalMapField() {
 	BaseSignal.call( this );
 
+	this.map      = null;
+	this.marker   = null;
+	this.mapFrame = null;
+	this.position = null;
+	this.preview  = null;
+
+	this.markerDefaults = {
+		...SignalMapField.prototype.markerDefaults,
+	};
+
 	this.isSupported = function ( node, input ) {
 		return isMapField( node );
 	};

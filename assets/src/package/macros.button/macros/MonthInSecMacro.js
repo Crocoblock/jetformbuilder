@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 function MonthInSecMacro() {
 	BaseMacro.call( this );
 
-	this.name         = 'Month_In_MilliSec';
+	this.name         = 'Month_In_Sec';
 	this.isClientSide = true;
 
 	this.help = __( 'Number of milliseconds in one month', 'jet-form-builder' );

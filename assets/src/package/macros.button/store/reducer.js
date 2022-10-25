@@ -12,6 +12,9 @@ import LengthFilter from '../filters/LengthFilter';
 import ToDateFilter from '../filters/ToDateFilter';
 import ToDateTimeFilter from '../filters/ToDateTimeFilter';
 import ToTimeFilter from '../filters/ToTimeFilter';
+import SubtractDayFilter from '../filters/SubtractDayFilter';
+import SubtractMonthFilter from '../filters/SubtractMonthFilter';
+import SubtractYearFilter from '../filters/SubtractYearFilter';
 
 /**
  *
@@ -34,6 +37,9 @@ const DEFAULT_STATE = {
 		new AddDayFilter(),
 		new AddMonthFilter(),
 		new AddYearFilter(),
+		new SubtractDayFilter(),
+		new SubtractMonthFilter(),
+		new SubtractYearFilter(),
 		new ToDateFilter(),
 		new ToDateTimeFilter(),
 		new ToTimeFilter(),

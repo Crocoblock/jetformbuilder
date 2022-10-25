@@ -1,5 +1,7 @@
 import ReportingInterface from './ReportingInterface';
 import NativeRestriction from './restrictions/NativeRestriction';
+import HiddenRequiredRestriction
+	from './restrictions/HiddenRequiredRestriction';
 
 function BrowserReporting() {
 	ReportingInterface.call( this );
@@ -16,7 +18,13 @@ function BrowserReporting() {
 		if ( !node.checkValidity ) {
 			return;
 		}
-		this.restrictions = [ new NativeRestriction() ];
+		this.restrictions = [
+			new NativeRestriction(),
+			new HiddenRequiredRestriction(),
+		].filter(
+			current => current.isSupported( node, this )
+		);
+
 		this.restrictions.forEach( current => current.setReporting( this ) );
 	};
 	this.clearReport                 = function () {

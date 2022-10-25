@@ -141,10 +141,18 @@ SignalMapField.prototype.removeMarker = function () {
 	this.setPreview( null );
 	main.value = null;
 
-	if ( lat && lng ) {
+	if ( lat ) {
 		lat.value = null;
+	}
+
+	if ( lng ) {
 		lng.value = null;
 	}
+
+	if ( hash ) {
+		hash.value = null;
+	}
+
 };
 
 SignalMapField.prototype.setPreview = function ( position ) {

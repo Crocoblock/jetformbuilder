@@ -17,7 +17,22 @@ ObservableRow.prototype.observe = function ( root ) {
 	Observable.prototype.observe.call( this, root );
 
 	this.initCalc();
-}
+};
+
+ObservableRow.prototype.remove = function () {
+	for ( const name in this.dataInputs ) {
+		if ( !this.dataInputs.hasOwnProperty( name ) ) {
+			continue;
+		}
+		this.dataInputs[ name ].onRemove();
+	}
+
+	this.parent.value.current = this.parent.value.current.filter(
+		current => current !== this,
+	);
+
+	this.rootNode.remove();
+};
 
 ObservableRow.prototype.initCalc = function () {
 	const [ node ]      = this.parent.nodes;
@@ -29,7 +44,7 @@ ObservableRow.prototype.initCalc = function () {
 
 	const formula = new CalculatedFormula( formulaString, this );
 
-	formula.setResult = () => {
+	formula.setResult       = () => {
 		this.calc = formula.calculate();
 		this.parent.value.notify();
 	};

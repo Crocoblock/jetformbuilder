@@ -1,6 +1,6 @@
 const {
 	      useMetaState,
-      }      = JetFBHooks;
+      } = JetFBHooks;
 const {
 	      TextControl,
 	      SelectControl,
@@ -83,6 +83,18 @@ export default function PluginArgs() {
 
 					return { ...prev, enable_progress };
 				} );
+			} }
+		/>
+		<ToggleControl
+			key={ 'clear_on_ajax' }
+			label={ __( 'Clear data on success submit', 'jet-from-builder' ) }
+			checked={ args.clear }
+			help={ __( 'Remove input values on successful submit',
+				'jet-form-builder' ) }
+			onChange={ () => {
+				setArgs( prev => (
+					{ ...prev, clear: !Boolean( prev.clear ) }
+				) );
 			} }
 		/>
 	</>;

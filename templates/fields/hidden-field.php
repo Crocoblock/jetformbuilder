@@ -10,7 +10,6 @@ use Jet_Form_Builder\Classes\Regexp_Tools;
 $this->add_attribute( 'class', 'jet-form-builder__field hidden-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
-$this->add_attribute( 'value', $args['field_value'] );
 $this->add_attribute( 'data-field-name', $args['name'] );
 
 if ( ! Regexp_Tools::has_macro( $this->args['field_value'] ) ) {

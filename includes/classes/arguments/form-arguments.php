@@ -7,19 +7,37 @@ use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
+/**
+ * @property int form_id
+ * @property string submit_type
+ * @property string required_mark
+ * @property string fields_layout
+ * @property bool enable_progress
+ * @property string fields_label_tag
+ * @property string load_nonce
+ * @property bool use_csrf
+ * @property string validation_type
+ * @property string clear
+ *
+ * Class Form_Arguments
+ * @package Jet_Form_Builder\Classes\Arguments
+ */
 class Form_Arguments implements Arrayable {
 
-	const SETTER_PREFIX       = 'set_';
+	const SETTER_PREFIX = 'set_';
 
-	public $form_id          = '';
-	public $submit_type      = '';
-	public $required_mark    = '';
-	public $fields_layout    = '';
-	public $enable_progress  = null;
-	public $fields_label_tag = '';
-	public $load_nonce       = '';
-	public $use_csrf         = null;
-	public $validation_type  = '';
+	public $props = array(
+		'form_id'          => '',
+		'submit_type'      => '',
+		'required_mark'    => '',
+		'fields_layout'    => '',
+		'enable_progress'  => null,
+		'fields_label_tag' => '',
+		'load_nonce'       => '',
+		'use_csrf'         => '',
+		'validation_type'  => '',
+		'clear'            => '',
+	);
 
 	public function __construct( $form_id = 0 ) {
 		$this->set_form_id( (int) $form_id );
@@ -73,6 +91,13 @@ class Form_Arguments implements Arrayable {
 	 */
 	public function set_enable_progress( $enable_progress ) {
 		$this->enable_progress = (bool) $enable_progress;
+	}
+
+	/**
+	 * @param null $clear
+	 */
+	public function set_clear( $clear ) {
+		$this->clear = $clear;
 	}
 
 	/**
@@ -156,7 +181,7 @@ class Form_Arguments implements Arrayable {
 
 	public function set_from_array( array $attributes ) {
 		foreach ( $attributes as $attr => $value ) {
-			if ( ! property_exists( $this, $attr ) ) {
+			if ( ! array_key_exists( $attr, $this->props ) ) {
 				continue;
 			}
 			$setter = array( $this, self::SETTER_PREFIX . $attr );
@@ -167,7 +192,7 @@ class Form_Arguments implements Arrayable {
 				continue;
 			}
 
-			$this->$attr = $value;
+			$this->props[ $attr ] = $value;
 		}
 	}
 
@@ -178,10 +203,10 @@ class Form_Arguments implements Arrayable {
 	 * @return mixed
 	 */
 	public function argument( $property, $default = '' ) {
-		if ( ! property_exists( $this, $property ) ) {
+		if ( ! array_key_exists( $property, $this->props ) ) {
 			return $default;
 		}
-		$value = $this->{$property};
+		$value = $this->props[ $property ];
 
 		return ( is_null( $value ) || '' === $value ) ? $default : $value;
 	}
@@ -242,6 +267,22 @@ class Form_Arguments implements Arrayable {
 	 */
 	public function get_submit_type(): string {
 		return $this->submit_type ?: 'reload';
+	}
+
+	public function __get( $name ) {
+		if ( ! array_key_exists( $name, $this->props ) ) {
+			return null;
+		}
+
+		return $this->props[ $name ];
+	}
+
+	public function __set( $name, $value ) {
+		if ( ! array_key_exists( $name, $this->props ) ) {
+			return;
+		}
+
+		$this->props[ $name ] = $value;
 	}
 
 }

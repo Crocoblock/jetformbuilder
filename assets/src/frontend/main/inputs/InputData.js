@@ -224,4 +224,8 @@ InputData.prototype.isVisible = function () {
 	);
 };
 
+InputData.prototype.onClear = function () {
+	this.value.current = null;
+};
+
 export default InputData;

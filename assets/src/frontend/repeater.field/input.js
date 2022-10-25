@@ -56,6 +56,13 @@ function RepeaterData() {
 			'.jet-form-builder-repeater__items',
 		);
 	};
+
+	this.onClear = function () {
+		if ( !this.value.current ) {
+			return;
+		}
+		this.value.current.forEach( current => current.remove() );
+	};
 }
 
 RepeaterData.prototype = Object.create( InputData.prototype );

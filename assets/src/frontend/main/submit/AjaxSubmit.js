@@ -51,14 +51,14 @@ function AjaxSubmit( form ) {
 		const $form       = jQuery( rootNode );
 
 		switch ( response.status ) {
-			case 'validation_failed':
-				this.insertErrors( response.fields );
-				break;
 			case 'success':
 				jQuery( document ).trigger(
 					'jet-form-builder/ajax/on-success',
 					[ response, $form ],
 				);
+				for ( const dataInput of this.form.observable.getInputs() ) {
+					dataInput.onClear();
+				}
 				break;
 		}
 
@@ -84,18 +84,6 @@ function AjaxSubmit( form ) {
 		node.innerHTML = message;
 
 		rootNode.appendChild( node );
-	};
-
-	this.insertErrors = function ( fields ) {
-		for ( const [ fieldName, fieldData ] of Object.entries( fields ) ) {
-			const input = this.form.observable.getInput( fieldName );
-
-			if ( !input ) {
-				continue;
-			}
-
-			input.insertError( fieldData.message );
-		}
 	};
 }
 

@@ -10,7 +10,7 @@ function SignalHiddenArray() {
 	this.runSignal   = function () {
 		const { current } = this.input.value;
 
-		if ( !current.length ) {
+		if ( !current?.length ) {
 			for ( const node of this.input.nodes ) {
 				node.remove();
 			}

@@ -31,6 +31,9 @@ function SignalRepeater() {
 	 * @param current {string}
 	 */
 	this.runItem = function ( current ) {
+		/**
+		 * @type {ObservableRow}
+		 */
 		const observable = this.input.value.current[ current ];
 
 		if ( observable.isObserved ) {
@@ -55,28 +58,12 @@ function SignalRepeater() {
 			'.jet-form-builder-repeater__remove',
 		).addEventListener(
 			'click',
-			() => this.removeItem( appended ),
+			() => observable.remove(),
 		);
 
 		observable.observe( appended );
 	};
 
-	this.removeItem = function ( repeaterRow ) {
-		repeaterRow.remove();
-
-		const { value } = this.input;
-
-		value.current = value.current.filter(
-			( item ) => {
-				if ( !item.rootNode.isEqualNode( repeaterRow ) ) {
-					return true;
-				}
-				item.onRemove();
-
-				return false;
-			},
-		);
-	};
 }
 
 SignalRepeater.prototype = Object.create( BaseSignal.prototype );

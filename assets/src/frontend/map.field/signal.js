@@ -78,7 +78,7 @@ function SignalMapField() {
 							this.updateHashFieldPromise( response.data ).
 								then( () => {
 									main.value = response.data;
-									self.setPreview( response.data );
+									this.setPreview( response.data );
 								} );
 						}
 						else {
@@ -147,7 +147,10 @@ SignalMapField.prototype.markerDefaults = {
 SignalMapField.prototype.removeMarker = function () {
 	const [ main, hash, lat, lng ] = this.input.nodes;
 
-	getProvider().removeMarker( this.marker );
+	if ( this.marker ) {
+		getProvider().removeMarker( this.marker );
+	}
+
 	this.setPreview( null );
 	main.value = null;
 
@@ -240,8 +243,11 @@ SignalMapField.prototype.render = function () {
 	const provider = getProvider();
 
 	if ( null !== this.input.value.current ) {
-		this.mapDefaults.center = this.input.value.current;
-		this.mapDefaults.zoom   = 14;
+		this.mapDefaults = {
+			...this.mapDefaults,
+			center: this.input.value.current,
+			zoom: 14,
+		};
 	}
 
 	this.map = provider.initMap( this.mapFrame, this.mapDefaults );

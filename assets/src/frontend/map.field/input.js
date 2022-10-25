@@ -80,18 +80,19 @@ function MapFieldData() {
 		const observer = new IntersectionObserver( ( entries, observer ) => {
 
 			entries.forEach( ( entry ) => {
-				if ( ! entry.isIntersecting ) {
+				if ( !entry.isIntersecting ) {
 					return;
 				}
 
 				this.callable.render();
+				this.value.notify();
 
 				// Detach observer after the first render the map
 				observer.unobserve( entry.target );
 			} );
 		} );
 
-		observer.observe( this.nodes[0].parentElement );
+		observer.observe( this.nodes[ 0 ].parentElement );
 	};
 
 }

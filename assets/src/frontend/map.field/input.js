@@ -42,18 +42,20 @@ function MapFieldData() {
 
 		switch ( this.fieldSettings.format ) {
 			case 'location_string':
-				const valueParts = node.value.split( ',' );
+				const valueParts = node.value.split( ',' ),
+				      latNum     = Number( valueParts[ 0 ] ),
+				      lngNum     = Number( valueParts[ 1 ] );
 
 				if ( 2 !== valueParts.length ||
-					Number( valueParts[ 0 ] ) ||
-					Number( valueParts[ 1 ] )
+					Number.isNaN( latNum ) ||
+					Number.isNaN( lngNum )
 				) {
 					return;
 				}
 
 				this.value.current = {
-					lat: Number( valueParts[ 0 ] ),
-					lng: Number( valueParts[ 1 ] ),
+					lat: latNum,
+					lng: lngNum,
 				};
 				break;
 			case 'location_address':

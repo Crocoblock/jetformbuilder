@@ -23,6 +23,11 @@ function CheckOutInput() {
 		} );
 	};
 
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1562
+	 *
+	 * @returns {boolean}
+	 */
 	this.checkIsRequired = function () {
 		const [ node ] = this.nodes;
 

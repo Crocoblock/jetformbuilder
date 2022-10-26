@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Classes;
 
+use Jet_Form_Builder\Blocks\Manager;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -57,6 +59,8 @@ class Builder_Helper {
 		$content = jet_engine()->frontend->get_listing_item( $object );
 
 		$content .= ob_get_clean();
+
+		wp_enqueue_script( Manager::LISTING_OPTIONS_HANDLE );
 
 		$result = sprintf(
 			'<div class="%3$s" data-value="%1$d">%2$s</div>',

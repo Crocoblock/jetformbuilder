@@ -45,6 +45,7 @@ module.exports = {
 			'frontend/deprecated': './frontend/deprecated/main.js',
 			'frontend/jet-appointment': './frontend/compatibility/jet-appointment.js',
 			'frontend/jet-booking': './frontend/compatibility/jet-booking.js',
+			'frontend/listing.options': './frontend/listing.options/main.js',
 			'editor/form.builder': './editor/main.js',
 			'editor/default.builder': './editor/form-block.js',
 			'editor/package': './package/manager.js',

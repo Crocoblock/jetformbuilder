@@ -1,4 +1,4 @@
-function ReactiveVar( value ) {
+function ReactiveVar( value = null ) {
 	this.current = value;
 	this.signals = [];
 	this.isDebug = false;

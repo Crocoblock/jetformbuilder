@@ -7,6 +7,7 @@ import WysiwygData from './WysiwygData';
 import RadioData from './RadioData';
 import NoListenData from './NoListenData';
 import InputMaskedData from './InputMaskedData';
+import RenderStateData from './RenderStateData';
 
 const {
 	      applyFilters,
@@ -18,6 +19,7 @@ const {
 const getDataTypes = () => applyFilters(
 	'jet.fb.inputs',
 	[
+		RenderStateData,
 		RangeData,
 		WysiwygData,
 		MultiSelectData,

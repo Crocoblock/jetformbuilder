@@ -33,7 +33,7 @@ function InputData() {
 	/**
 	 * @type {ReactiveVar}
 	 */
-	this.value = new ReactiveVar( null );
+	this.value = this.getReactive();
 	this.value.watch( this.onChange.bind( this ) );
 
 	this.calcValue = null;
@@ -226,6 +226,10 @@ InputData.prototype.isVisible = function () {
 
 InputData.prototype.onClear = function () {
 	this.value.current = null;
+};
+
+InputData.prototype.getReactive = function () {
+	return new ReactiveVar();
 };
 
 export default InputData;

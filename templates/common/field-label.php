@@ -18,10 +18,12 @@ printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo wp_kses_post( $args['label'] );
 
-		if ( $this->block_type->get_required_val() && ! empty( $this->live_form->spec_data->required_mark ) ) {
+		$mark = jet_fb_live_args()->required_mark;
+
+		if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
 			printf(
 				' <span class="jet-form-builder__required">%s</span>',
-				wp_kses_post( $this->live_form->spec_data->required_mark )
+				wp_kses_post( $mark )
 			);
 		}
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

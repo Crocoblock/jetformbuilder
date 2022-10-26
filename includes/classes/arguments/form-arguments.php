@@ -70,6 +70,9 @@ class Form_Arguments implements Arrayable {
 		$attributes_from_post_type = array_diff( $jf_args, $this->to_array() );
 		$form_block_or_widget      = array_diff( $block_attributes, $this->to_array() );
 
+		/**
+		 * @var $render_attributes array
+		 */
 		$render_attributes = array_merge(
 			...apply_filters(
 				'jet-form-builder/form-render/attributes',

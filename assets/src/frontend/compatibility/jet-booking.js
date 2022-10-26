@@ -22,6 +22,18 @@ function CheckOutInput() {
 			this.value.current = node.value;
 		} );
 	};
+
+	this.checkIsRequired = function () {
+		const [ node ] = this.nodes;
+
+		if ( node.required ) {
+			return true;
+		}
+
+		return !!node.parentElement.querySelector(
+			'.jet-abaf-field__input[required]',
+		);
+	};
 }
 
 function CheckOutSignal() {
@@ -94,7 +106,7 @@ addFilter(
 	 * @param formula {CalculatedFormula}
 	 * @return {*}
 	 */
-	function ( macroPart, formula  ) {
+	function ( macroPart, formula ) {
 		const matches = macroPart.match( /ADVANCED_PRICE::([\w\-]+)/ );
 
 		if ( !matches?.length || !formula?.input ) {

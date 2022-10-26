@@ -4,7 +4,7 @@ function NotEmptyRestriction() {
 	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
-		return reporting.isRequired && [ String, Array, FileList ].includes(
+		return reporting.input.isRequired && [ String, Array, FileList ].includes(
 			reporting.input.valueType(),
 		);
 	};

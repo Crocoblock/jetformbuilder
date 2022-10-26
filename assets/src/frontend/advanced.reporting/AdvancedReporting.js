@@ -9,9 +9,6 @@ import {
 const {
 	      ReportingInterface,
       } = JetFormBuilderAbstract;
-const {
-	      allRejected,
-      } = JetFormBuilderFunctions;
 
 /**
  * @property {AdvancedRestriction} restrictions

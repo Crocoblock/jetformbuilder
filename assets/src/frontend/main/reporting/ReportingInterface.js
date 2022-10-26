@@ -20,7 +20,6 @@
  * and the navigation buttons between pages changes.
  *
  */
-import { isRequired } from './functions';
 import { allRejected } from '../functions';
 import RestrictionError from './RestrictionError';
 
@@ -156,10 +155,7 @@ ReportingInterface.prototype = {
 	 * @param input {InputData}
 	 */
 	setInput: function ( input ) {
-		const [ node ] = input.nodes;
-
-		this.input      = input;
-		this.isRequired = isRequired( node );
+		this.input = input;
 		this.setRestrictions();
 	},
 	setRestrictions: function () {

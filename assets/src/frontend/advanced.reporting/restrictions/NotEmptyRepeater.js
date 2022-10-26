@@ -4,7 +4,7 @@ function NotEmptyRepeater() {
 	NotEmptyRestriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
-		return reporting.isRequired && 1 === +node.dataset.repeater;
+		return reporting.input.isRequired && 1 === +node.dataset.repeater;
 	};
 	this.validate    = function () {
 		const value = this.getValue();

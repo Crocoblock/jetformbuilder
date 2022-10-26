@@ -7,10 +7,6 @@ const {
 	      applyFilters,
       } = wp.hooks;
 
-function isRequired( node ) {
-	return node.required ?? !!node.dataset.required?.length;
-}
-
 const getReportTypes = () => applyFilters(
 	'jet.fb.reporting',
 	[
@@ -43,4 +39,4 @@ function createReport( input ) {
 	throw new Error( 'Something went wrong' );
 }
 
-export { isRequired, createReport };
+export { createReport };

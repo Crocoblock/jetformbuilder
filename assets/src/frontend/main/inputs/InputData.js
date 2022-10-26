@@ -20,6 +20,7 @@ const { doAction } = wp.hooks;
  * @property {PageState} page
  * @property {LoadingReactiveVar} loading
  * @property {Object<ReactiveVar>} attrs
+ * @property {boolean} isRequired
  *
  * @constructor
  */
@@ -36,7 +37,8 @@ function InputData() {
 	this.value = this.getReactive();
 	this.value.watch( this.onChange.bind( this ) );
 
-	this.calcValue = null;
+	this.isRequired = false;
+	this.calcValue  = null;
 
 	/**
 	 * @type {AdvancedReporting|BrowserReporting}
@@ -136,6 +138,8 @@ InputData.prototype.onObserve = function () {
 	 */
 	node.jfbSync = this;
 
+	this.isRequired = this.checkIsRequired();
+
 	this.callable = getSignal( node, this );
 	this.callable.setInput( this );
 
@@ -230,6 +234,12 @@ InputData.prototype.onClear = function () {
 
 InputData.prototype.getReactive = function () {
 	return new ReactiveVar();
+};
+
+InputData.prototype.checkIsRequired = function () {
+	const [ node ] = this.nodes;
+
+	return node.required ?? !!node.dataset.required?.length;
 };
 
 export default InputData;

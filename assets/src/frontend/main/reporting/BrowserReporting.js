@@ -1,7 +1,6 @@
 import ReportingInterface from './ReportingInterface';
 import NativeRestriction from './restrictions/NativeRestriction';
-import HiddenRequiredRestriction
-	from './restrictions/HiddenRequiredRestriction';
+import RequiredRestriction from './restrictions/RequiredRestriction';
 
 function BrowserReporting() {
 	ReportingInterface.call( this );
@@ -20,7 +19,7 @@ function BrowserReporting() {
 		}
 		this.restrictions = [
 			new NativeRestriction(),
-			new HiddenRequiredRestriction(),
+			new RequiredRestriction(),
 		].filter(
 			current => current.isSupported( node, this )
 		);

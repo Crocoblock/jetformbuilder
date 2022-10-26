@@ -80,7 +80,16 @@ AdvancedReporting.prototype.insertError                 = function ( message ) {
 
 	node.classList.add( 'field-has-error' );
 
-	if ( !error.isConnected ) {
+	if ( error.isConnected ) {
+		return;
+	}
+
+	// it can be on fields_layout === 'row'
+	const colEnd = node.querySelector( '.jet-form-builder-col__end' );
+
+	if ( colEnd ) {
+		colEnd.appendChild( error );
+	} else {
 		node.appendChild( error );
 	}
 };

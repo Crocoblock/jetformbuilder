@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -12,6 +13,10 @@ function BlockDescription( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( ! useIsHasAttribute( 'desc' ) ) {
+		return null;
+	}
 
 	return <TextControl
 		label={ label ?? __( "Field Description", 'jet-form-builder' ) }

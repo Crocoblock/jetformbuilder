@@ -1,6 +1,7 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
 import AdvancedInspectorControl
 	from '../../components/AdvancedInspectorControl';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -14,6 +15,10 @@ function BlockDefaultValue( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( ! useIsHasAttribute( 'default' ) ) {
+		return null;
+	}
 
 	return <AdvancedInspectorControl
 		value={ attributes.default }

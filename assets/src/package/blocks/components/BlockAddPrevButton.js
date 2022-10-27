@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -12,6 +13,10 @@ function BlockAddPrevButton( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( ! useIsHasAttribute( 'add_prev' ) ) {
+		return null;
+	}
 
 	return <ToggleControl
 		label={ label ?? __( 'Add Prev Page Button', 'jet-form-builder' ) }

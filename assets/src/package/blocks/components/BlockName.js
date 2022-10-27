@@ -1,5 +1,6 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
 import SanitizeFieldName from '../helpers/SanitizeFieldName';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -13,6 +14,10 @@ function BlockName( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( ! useIsHasAttribute( 'name' ) ) {
+		return null;
+	}
 
 	return <TextControl
 		label={ label ?? __( 'Form field name', 'jet-form-builder' ) }

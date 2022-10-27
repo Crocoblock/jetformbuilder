@@ -49,8 +49,8 @@ import useBlockConditions from './block-conditions/hooks/useBlockConditions';
 import useUniqKey from './blocks/hooks/useUniqKey';
 import useIsAdvancedValidation from './blocks/hooks/useIsAdvancedValidation';
 import useBlockAttributes from './blocks/hooks/useBlockAttributes';
-
 import useActionButtonEdit from './action-buttons/hooks/useActionButtonEdit';
+import useIsHasAttribute from './hooks/useIsHasAttribute';
 import globalTab from './actions/helpers/globalTab';
 
 import DynamicPreset from './preset/components/DynamicPreset';
@@ -271,5 +271,6 @@ window.JetFBHooks = {
 	withDispatchGateways,
 	useOnUpdateModal,
 	useInsertMacro,
+	useIsHasAttribute,
 };
 

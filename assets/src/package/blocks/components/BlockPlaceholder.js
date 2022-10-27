@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -12,6 +13,10 @@ function BlockPlaceholder( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( ! useIsHasAttribute( 'placeholder' ) ) {
+		return null;
+	}
 
 	return <TextControl
 		label={ label ?? __( 'Placeholder', 'jet-form-builder' ) }

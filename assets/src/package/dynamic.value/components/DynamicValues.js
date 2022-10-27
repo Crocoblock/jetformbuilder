@@ -3,6 +3,7 @@ import Tools from '../../tools';
 import BaseHelp from '../../components/BaseHelp';
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -19,6 +20,10 @@ function DynamicValues() {
 	const uniqKey = useUniqKey();
 	const value   = attributes.value ?? {};
 	const groups  = value.groups ?? [];
+
+	if ( ! useIsHasAttribute( 'value' ) ) {
+		return null;
+	}
 
 	const updateValue = settings => {
 		setAttributes( {

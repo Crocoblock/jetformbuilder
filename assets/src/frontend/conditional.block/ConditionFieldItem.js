@@ -44,11 +44,10 @@ function ConditionFieldItem() {
 		this.operator     = options.operator;
 		this.render_state = options.render_state;
 		this.use_preset   = options.use_preset;
+		let value         = options?.value;
 
-		let value;
-
-		if ( !Array.isArray( options?.value ) ) {
-			value = options.value.split( ',' ).map( item => item.trim() );
+		if ( !Array.isArray( value ) ) {
+			value = value.split( ',' ).map( item => item.trim() );
 		}
 
 		if ( this.use_preset ) {

@@ -15,6 +15,48 @@ function isSupported( input ) {
 	return false;
 }
 
+function ListingTemplateClick( { pointerId, target } ) {
+	// prevent recursive call by .click()
+	if ( -1 === pointerId ) {
+		return;
+	}
+
+	if ( !target.classList.contains(
+		'jet-form-builder__field-template',
+	) ) {
+		target = target.closest(
+			'.jet-form-builder__field-template',
+		);
+	}
+
+	// click on <label> programmatically
+	// it has <input> inside
+	target.nextElementSibling.click();
+}
+
+/**
+ * @param input {InputData}
+ */
+function ListingAddTemplateWatcher( input ) {
+	input.watch( () => {
+		const [ node ] = input.nodes;
+		const row      = node.closest( '.jet-form-builder-row' );
+
+		for ( const node of row.querySelectorAll( 'input.checkradio-field' ) ) {
+			const currentTemp = node.closest(
+				'.jet-form-builder__field-wrap',
+			).querySelector(
+				'.jet-form-builder__field-template',
+			);
+
+			currentTemp.classList.toggle(
+				'jet-form-builder__field-template--checked',
+				node.checked,
+			);
+		}
+	} );
+}
+
 addAction(
 	'jet.fb.input.makeReactive',
 	'jet-form-builder/listing-options',
@@ -42,38 +84,21 @@ addAction(
 				continue;
 			}
 
-			template.addEventListener( 'click', ( { target } ) => {
-				if ( !target.classList.contains(
-					'jet-form-builder__field-template',
-				) ) {
-					target = target.closest(
-						'.jet-form-builder__field-template',
-					);
-				}
-
-				// click on <label> programmatically
-				// it has <input> inside
-				target.nextElementSibling.click();
-			} );
+			template.addEventListener( 'click', ListingTemplateClick );
 		}
 
 		if ( !template ) {
 			return;
 		}
 
-		input.watch( () => {
-			for ( const node of input.nodes ) {
-				const currentTemp = node.closest(
-					'.jet-form-builder__field-wrap',
-				).querySelector(
-					'.jet-form-builder__field-template',
-				);
-
-				currentTemp.classList.toggle(
-					'jet-form-builder__field-template--checked',
-					node.checked,
-				);
-			}
-		} );
+		ListingAddTemplateWatcher( input );
 	},
 );
+
+window.JetFormBuilderFunctions = {
+	...(
+		window.JetFormBuilderFunctions ?? {}
+	),
+	ListingAddTemplateWatcher,
+	ListingTemplateClick,
+};

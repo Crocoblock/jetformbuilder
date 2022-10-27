@@ -26,7 +26,8 @@ class Jet_Appointment {
 
 		add_filter(
 			'render_block_jet-forms/appointment-date',
-			array( $this, 'add_compatibility_script' )
+			array( $this, 'add_compatibility_script' ),
+			10, 3
 		);
 	}
 
@@ -35,14 +36,15 @@ class Jet_Appointment {
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/jet-appointment{min}.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE,
+				Manager::LISTING_OPTIONS_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true
 		);
 	}
 
-	public function add_compatibility_script( string $markup ): string {
+	public function add_compatibility_script( string $markup, array $parsed, $block ): string {
 		wp_enqueue_script( self::HANDLE );
 
 		return $markup;

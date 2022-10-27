@@ -1,7 +1,11 @@
 const {
 	      InputData,
-	      BaseSignal,
       } = JetFormBuilderAbstract;
+
+const {
+	      ListingAddTemplateWatcher,
+	      ListingTemplateClick,
+      } = JetFormBuilderFunctions;
 
 const {
 	      addAction,
@@ -22,22 +26,89 @@ function AppointmentInput() {
 			this.value.current = node.value;
 		} );
 	};
-}
 
-function AppointmentSignal() {
-	BaseSignal.call( this );
+	this.onObserve = function () {
+		InputData.prototype.onObserve.call( this );
 
-	this.isSupported = function ( node, input ) {
-		return input instanceof AppointmentInput;
-	};
-
-	this.runSignal = function () {
-
+		this.callable = null;
 	};
 }
 
-AppointmentInput.prototype  = Object.create( InputData.prototype );
-AppointmentSignal.prototype = Object.create( BaseSignal.prototype );
+function AppointmentProvider() {
+	InputData.call( this );
+
+	/**
+	 * Node can be <div> or <select>
+	 *
+	 * @param node {Element}
+	 * @returns {boolean}
+	 */
+	this.isSupported = function ( node ) {
+		return node.classList.contains( 'appointment-provider' );
+	};
+
+	this.setNode = function ( node ) {
+		InputData.prototype.setNode.call( this, node );
+
+		this.name = node.dataset.field;
+	};
+
+	this.addListeners = function () {
+		const [ node ] = this.nodes;
+
+		node.addEventListener( 'change', ( { target } ) => {
+			this.value.current = target.value;
+		} );
+
+		if ( 'SELECT' === node.nodeName ) {
+			node.addEventListener( 'blur', () => this.reportOnBlur() );
+		}
+
+		this.addListingTemplateListener();
+		this.addServiceListener();
+	};
+
+	this.addServiceListener = function () {
+		const [ node ] = this.nodes;
+
+		const args = JSON.parse( node.dataset.args );
+
+		if ( !args?.service?.field ) {
+			return;
+		}
+
+		const service = this.root.getInput( args.service.field );
+
+		if ( !service ) {
+			return;
+		}
+
+		service.watch( () => {
+			this.value.current = null;
+		} );
+	};
+
+	this.addListingTemplateListener = function () {
+		const [ node ] = this.nodes;
+
+		// has template?
+		if ( 'DIV' !== node.nodeName ) {
+			return;
+		}
+
+		node.addEventListener( 'click', ListingTemplateClick );
+		ListingAddTemplateWatcher( this );
+	};
+
+	this.onObserve = function () {
+		InputData.prototype.onObserve.call( this );
+
+		this.callable = null;
+	};
+}
+
+AppointmentInput.prototype    = Object.create( InputData.prototype );
+AppointmentProvider.prototype = Object.create( InputData.prototype );
 
 addAction(
 	'jet.fb.observe.before',
@@ -59,6 +130,12 @@ addAction(
 
 			input.dataset.jfbSync = 1;
 		}
+
+		for ( const provider of rootNode.querySelectorAll(
+			'.field-type-appointment-provider .appointment-provider',
+		) ) {
+			provider.dataset.jfbSync = 1;
+		}
 	},
 );
 
@@ -66,18 +143,12 @@ addFilter(
 	'jet.fb.inputs',
 	'jet-form-builder/appointment-field',
 	function ( inputs ) {
-		inputs = [ AppointmentInput, ...inputs ];
+		inputs = [
+			AppointmentInput,
+			AppointmentProvider,
+			...inputs,
+		];
 
 		return inputs;
-	},
-);
-
-addFilter(
-	'jet.fb.signals',
-	'jet-form-builder/appointment-field',
-	function ( signals ) {
-		signals = [ AppointmentSignal, ...signals ];
-
-		return signals;
 	},
 );

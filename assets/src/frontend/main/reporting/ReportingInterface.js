@@ -1,6 +1,6 @@
 /**
  * Validation logic: on change input value we run
- * @see ReportingInterface.validateWithNoticeDebounced
+ * @see ReportingInterface.validateOnChange
  *
  * In that function we clear stored errors
  * @see ReportingInterface.errors
@@ -33,10 +33,7 @@ function ReportingInterface() {
 	 * @type {array|null}
 	 */
 	this.errors = null;
-
-	// true, when field has server-side restrictions
-	this.hasServerSide = false;
-	this.restrictions  = [];
+	this.restrictions = [];
 }
 
 ReportingInterface.prototype = {
@@ -50,7 +47,7 @@ ReportingInterface.prototype = {
 	 *
 	 * @param force
 	 */
-	validateWithNoticeDebounced: function ( force = false ) {
+	validateOnChange: function ( force = false ) {
 	},
 	validateOnBlur: function () {
 	},
@@ -93,28 +90,7 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<*[]|array|null>}
 	 */
 	getErrors: async function () {
-		if (
-			this.input.loading.current ||
-			!this.input.isVisible()
-		) {
-			return [];
-		}
-
-		if ( Array.isArray( this.errors ) ) {
-			return this.errors;
-		}
-
-		if ( this.hasServerSide ) {
-			this.input.loading.start();
-		}
-
-		this.errors = await this.isValid();
-
-		if ( this.hasServerSide ) {
-			this.input.loading.end();
-		}
-
-		return this.errors;
+		throw new Error( 'getError must return a Promise' );
 	},
 	/**
 	 * @param validationErrors {Restriction[]}
@@ -126,13 +102,15 @@ ReportingInterface.prototype = {
 	clearReport: function () {
 		throw new Error( 'clearReport is empty' );
 	},
-	/**
-	 * @returns {Promise<*[]>}
-	 */
-	isValid: async function () {
+	getPromises: function () {
 		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
+			if ( !this.canProcessRestriction( restriction ) ) {
+				continue;
+			}
+			this.beforeProcessRestriction( restriction );
+
 			promises.push( ( resolve, reject ) => {
 				restriction.validatePromise().then( resolve ).catch( () => {
 					reject( restriction );
@@ -140,7 +118,20 @@ ReportingInterface.prototype = {
 			} );
 		}
 
-		return await allRejected( promises );
+		return promises;
+	},
+	/**
+	 * @param restriction {Restriction}
+	 * @return {Boolean}
+	 */
+	canProcessRestriction: function ( restriction ) {
+		return true;
+	},
+
+	/**
+	 * @param restriction {Restriction}
+	 */
+	beforeProcessRestriction: function ( restriction ) {
 	},
 	/**
 	 * @param node

@@ -2,9 +2,10 @@ import {
 	getInheritValidationType,
 	getNodeValidationType,
 	getValidationMessages,
-	getWrapper,
+	getWrapper, hasServerSide,
 	setRestrictions,
 } from './functions';
+import { allRejected } from '../main/functions';
 
 const {
 	      ReportingInterface,
@@ -19,11 +20,17 @@ const {
 function AdvancedReporting() {
 	ReportingInterface.call( this );
 
-	this.type     = 'inherit';
-	this.messages = {};
+	this.type           = 'inherit';
+	this.messages       = {};
+	this.skipServerSide = true;
+	this.valueChanged   = false;
 }
 
 AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
+
+AdvancedReporting.prototype.skipServerSide = true;
+AdvancedReporting.prototype.hasServerSide  = false;
+AdvancedReporting.prototype.valueChanged   = false;
 
 AdvancedReporting.prototype.setRestrictions = function () {
 	setRestrictions( this );
@@ -39,22 +46,50 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 	return !!inherit?.length;
 };
 
+AdvancedReporting.prototype.getErrors = async function () {
+	if (
+		this.input.loading.current ||
+		!this.input.isVisible()
+	) {
+		return [];
+	}
+
+	if ( Array.isArray( this.errors ) ) {
+		return this.errors;
+	}
+
+	this.errors    = [];
+	const promises = this.getPromises();
+
+	if ( !promises.length ) {
+		return this.errors;
+	}
+
+	if ( this.hasServerSide ) {
+		this.input.loading.start();
+	}
+
+	this.errors = await allRejected( promises );
+
+	if ( this.hasServerSide ) {
+		this.input.loading.end();
+	}
+
+	return this.errors;
+};
+
 /**
  * @param validationErrors {AdvancedRestriction[]|Restriction[]}
  */
 AdvancedReporting.prototype.report = function ( validationErrors ) {
 	this.insertError( validationErrors[ 0 ].getMessage() );
 };
-AdvancedReporting.prototype.setInput                    = function ( input ) {
+AdvancedReporting.prototype.setInput         = function ( input ) {
 	ReportingInterface.prototype.setInput.call( this, input );
 
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
-
-	this.hasServerSide = this.restrictions.some(
-		current => current.isServerSide(),
-	);
 };
-AdvancedReporting.prototype.clearReport                 = function () {
+AdvancedReporting.prototype.clearReport      = function () {
 	const node = getWrapper( this.getNode() );
 	node.classList.remove( 'field-has-error' );
 
@@ -66,7 +101,7 @@ AdvancedReporting.prototype.clearReport                 = function () {
 
 	error.remove();
 };
-AdvancedReporting.prototype.insertError                 = function ( message ) {
+AdvancedReporting.prototype.insertError      = function ( message ) {
 	if ( !message ) {
 		this.clearReport();
 
@@ -86,11 +121,12 @@ AdvancedReporting.prototype.insertError                 = function ( message ) {
 
 	if ( colEnd ) {
 		colEnd.appendChild( error );
-	} else {
+	}
+	else {
 		node.appendChild( error );
 	}
 };
-AdvancedReporting.prototype.createError                 = function (
+AdvancedReporting.prototype.createError      = function (
 	node, message ) {
 	const error = node.querySelector( '.error-message' );
 
@@ -107,21 +143,40 @@ AdvancedReporting.prototype.createError                 = function (
 
 	return div;
 };
-AdvancedReporting.prototype.validateWithNoticeDebounced = function ( force = false ) {
-	if ( force || !this.hasServerSide ) {
-		return this.validateWithNotice().then( () => {} ).catch( () => {} );
-	}
-
-	const validateFunc = window._.debounce(
-		() => this.validateWithNotice().then( () => {} ).catch( () => {} ),
-		1000,
-	);
-
-	return validateFunc();
+AdvancedReporting.prototype.validateOnChange = function () {
+	this.validateWithNotice().then( () => {} ).catch( () => {} );
 };
 
 AdvancedReporting.prototype.validateOnBlur = function () {
-	this.validateWithNotice().then( () => {} ).catch( () => {} );
+	this.skipServerSide = false;
+
+	this.validateWithNotice().
+		then( () => {} ).
+		catch( () => {} ).
+		finally( () => {
+			this.skipServerSide = true;
+			this.hasServerSide  = false;
+		} );
+};
+
+/**
+ * @param restriction {AdvancedRestriction|Restriction}
+ * @return {boolean}
+ */
+AdvancedReporting.prototype.canProcessRestriction = function ( restriction ) {
+	return (
+		// allow all
+		!this.skipServerSide ||
+		// or only not-ServerSide
+		!restriction.isServerSide()
+	);
+};
+
+/**
+ * @param restriction {AdvancedRestriction|Restriction}
+ */
+AdvancedReporting.prototype.beforeProcessRestriction = function ( restriction ) {
+	this.hasServerSide = restriction.isServerSide() ? true : this.hasServerSide;
 };
 
 export default AdvancedReporting;

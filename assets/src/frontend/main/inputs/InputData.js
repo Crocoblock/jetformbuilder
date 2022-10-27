@@ -95,7 +95,7 @@ InputData.prototype.onChange     = function () {
 	this.report();
 };
 InputData.prototype.report       = function () {
-	this.reporting.validateWithNoticeDebounced();
+	this.reporting.validateOnChange();
 };
 InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();

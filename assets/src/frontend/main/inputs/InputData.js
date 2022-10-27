@@ -231,7 +231,17 @@ InputData.prototype.isVisible = function () {
 };
 
 InputData.prototype.onClear = function () {
+	/**
+	 * Related to issue
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
+	 */
+	const tempReport = this.report.bind( this );
+
+	this.report = () => {};
+
 	this.value.current = null;
+
+	this.report = tempReport;
 };
 
 InputData.prototype.getReactive = function () {

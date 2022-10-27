@@ -31,15 +31,16 @@ function SignalFile() {
 		const [ node ]    = this.input.nodes;
 		const previews    = [];
 		const { current } = this.input.value;
+		const files       = current ?? [];
 
-		for ( const file of current ) {
+		for ( const file of files ) {
 			previews.push( this.getPreview( file ) );
 		}
 
 		appendNodes( this.previewsContainer, previews );
 
-		node.files           = createFileList( [ ...current ] );
-		this.input.prevFiles = current;
+		node.files           = createFileList( [ ...files ] );
+		this.input.prevFiles = files;
 	};
 }
 

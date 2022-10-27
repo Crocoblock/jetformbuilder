@@ -11,7 +11,7 @@ function SignalCheckbox() {
 		this.input.calcValue = 0;
 
 		for ( const node of this.input.nodes ) {
-			node.checked = this.input.value.current.includes( node.value );
+			node.checked = this.input.value.current?.includes( node.value );
 
 			if ( !node.checked ) {
 				continue;

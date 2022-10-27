@@ -14,7 +14,7 @@ function SignalWysiwyg() {
 		if ( this.input.value.current === this.input.editor.getContent() ) {
 			return;
 		}
-		this.input.editor.setContent( this.input.value.current );
+		this.input.editor.setContent( this.input.value.current ?? '' );
 	};
 }
 

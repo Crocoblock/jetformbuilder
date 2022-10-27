@@ -1,5 +1,14 @@
 function appendNodes( container, nodes ) {
-	for ( const child of container.children ) {
+	/**
+	 * We use querySelectorAll because we need a static set of elements.
+	 * If you apply the .children or .childNodes property,
+	 * they will always return the list of currently available elements.
+	 */
+	let children = container.querySelectorAll(
+		'.jet-form-builder-file-upload__file',
+	);
+
+	for ( const child of children ) {
 		if ( nodes.some( node => node.isEqualNode( child ) ) ) {
 			continue;
 		}

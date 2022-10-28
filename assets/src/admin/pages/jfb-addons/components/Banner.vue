@@ -21,9 +21,7 @@
 				<div class="promocode-title">Use & Save up to 30%</div>
 			</div>
 			<div>
-				<a class="btn" target="_blank"
-				   href="https://jetformbuilder.com/pricing/?utm_source=dashboard%2Fjet-form-builder-addons-page&utm_medium=crocoblock-license%28license-not-activated%29%2Ftheme-author&utm_campaign=sale-halloween-2022">Get
-					now</a>
+				<a class="btn" target="_blank" :href="pricingUrl">Get now</a>
 			</div>
 		</div>
 	</div>
@@ -32,6 +30,17 @@
 <script>
 export default {
 	name: 'Banner',
+	computed: {
+		pricingUrl() {
+			const license = this.$parent.isLicenseActivated ? 'crocoblock-license' : 'license-not-activated';
+
+			return this.$parent.getUtmParamsString( {
+				utm_source: `dashboard/jet-form-builder-addons-page`,
+				utm_medium: `${license}/${ this.$parent.themeInfo.authorSlug }`,
+				utm_campaign: 'sale-halloween-2022',
+			} );
+		},
+	},
 };
 </script>
 

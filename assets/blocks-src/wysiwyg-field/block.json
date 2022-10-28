@@ -18,7 +18,10 @@
 	"attributes": {
 		"label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"name": {
 			"type": "string",
@@ -26,7 +29,10 @@
 		},
 		"desc": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"required": {
 			"type": "boolean",
@@ -42,7 +48,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"visibility": {
 			"type": "string",

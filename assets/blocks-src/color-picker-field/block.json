@@ -19,7 +19,10 @@
 	"attributes": {
 		"label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"name": {
 			"type": "string",
@@ -27,7 +30,10 @@
 		},
 		"desc": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"default": {
 			"type": "string",
@@ -43,7 +49,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"visibility": {
 			"type": "string",

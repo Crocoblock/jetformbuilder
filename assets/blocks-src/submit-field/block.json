@@ -22,7 +22,10 @@
 	"attributes": {
 		"label": {
 			"type": "string",
-			"default": "Submit"
+			"default": "Submit",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"action_type": {
 			"type": "string",
@@ -34,7 +37,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"class_name": {
 			"type": "string",

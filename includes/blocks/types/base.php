@@ -33,7 +33,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	protected $controls_manager;
 	protected $css_scheme;
-	public $style_attributes = array();
+	public    $style_attributes = array();
 
 	/**
 	 * Block attributes on render
@@ -55,7 +55,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @var array
 	 */
-	public $attrs               = array();
+	public    $attrs            = array();
 	protected $provides_context = array();
 	protected $uses_context     = array();
 
@@ -272,6 +272,13 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 		$this->block_attrs['blockName'] = $this->block_name();
 		$this->block_attrs['type']      = $this->get_name();
+
+		foreach ( $this->attrs as $name => $settings ) {
+			if ( ! array_key_exists( $name, $this->block_attrs ) ) {
+				continue;
+			}
+			$this->block_attrs[ $name ] = $this->apply_attribute( $name );
+		}
 	}
 
 	public function set_context( array $context ): Base {
@@ -286,6 +293,22 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		$this->block_attrs['default'] = $this->get_prepared_default( $this->get_default_from_preset() );
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return mixed
+	 */
+	protected function apply_attribute( string $name ) {
+		$shortcode = $this->attrs['jfb']['shortcode'] ?? false;
+		$value     = $this->block_attrs[ $name ];
+
+		if ( $shortcode ) {
+			$value = do_shortcode( $value );
+		}
+
+		return $value;
 	}
 
 	/**

@@ -1177,7 +1177,7 @@
 					$msg.addClass( 'jet-form-builder__next-page-msg--visible' );
 				}
 
-				$button.attr( 'disabled', true );
+				//$button.attr( 'disabled', true );
 			} else {
 
 				if ( $msg.length ) {

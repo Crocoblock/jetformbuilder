@@ -514,9 +514,8 @@
 			if ( ! $page.length ) {
 			    return
             }
-			const $form = self.closest( 'form.jet-form-builder' );
 
-			JetFormBuilder.initSingleFormPage( $page, $form, self );
+			JetFormBuilder.initSingleFormPage( $page, self );
 		},
 
 		inputTextFields: function() {
@@ -1106,19 +1105,16 @@
 				var $page = $( this );
 
 				if ( ! $page.hasClass( '.jet-form-builder-page--hidden' ) ) {
-					JetFormBuilder.initSingleFormPage( $page, $form, false );
+					JetFormBuilder.initSingleFormPage( $page, false );
 				}
 
 			} );
 
 		},
 
-		initSingleFormPage: function( $page, $form, $changedField ) {
-
-			var $button        = $page.find( '.jet-form-builder__next-page' ),
-				$msg           = $page.find( '.jet-form-builder__next-page-msg' ),
+		initSingleFormPage: function( $page, $changedField ) {
+			let $msg           = $page.find( '.jet-form-builder__next-page-msg' ),
 				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
-				pageNum        = parseInt( $page.data( 'page' ), 10 ),
 				disabled       = false,
 				radioFields    = {};
 
@@ -1171,34 +1167,18 @@
 				}
 			}
 
-			if ( disabled ) {
+			if ( disabled && $msg.length ) {
+				$msg.addClass( 'jet-form-builder__next-page-msg--visible' );
 
-				if ( $msg.length ) {
-					$msg.addClass( 'jet-form-builder__next-page-msg--visible' );
-				}
-
-				//$button.attr( 'disabled', true );
-			} else {
-
-				if ( $msg.length ) {
-					$msg.removeClass( 'jet-form-builder__next-page-msg--visible' );
-				}
-
-				$button.attr( 'disabled', false );
-			}
-
-			if ( ! JetFormBuilder.pages[ pageNum ] ) {
-				JetFormBuilder.pages[ pageNum ] = {
-					page: $page,
-					disabled: disabled,
-				};
-			} else {
-				JetFormBuilder.pages[ pageNum ].disabled = disabled;
+			} else if ( $msg.length ) {
+				$msg.removeClass( 'jet-form-builder__next-page-msg--visible' );
 			}
 
 			if ( $changedField ) {
 				$( document ).trigger( 'jet-form-builder/page/field-changed', [ $changedField, $page, disabled ] );
 			}
+
+			return disabled;
 		},
 
 		nextFormPage: function() {
@@ -1208,7 +1188,10 @@
 				$pageFields = $fromPage.find( '.jet-form-builder__field' ).filter( ':input' ),
 				$toPage     = $fromPage.next();
 
-			if ( ! JetFormBuilder.isFieldsValid( $pageFields ) ) {
+			if (
+				! JetFormBuilder.isFieldsValid( $pageFields ) ||
+				JetFormBuilder.initSingleFormPage( $fromPage, false )
+			) {
 				return;
 			}
 
@@ -1265,7 +1248,7 @@
 
 			window.scrollTo( 0, $toPage.offset().top + ( +JetFormBuilderSettings.scrollOffset ) );
 
-			JetFormBuilder.initSingleFormPage( $toPage, $form, false );
+			JetFormBuilder.initSingleFormPage( $toPage, false );
 
 			$( '.jet-form-builder-messages-wrap[data-form-id="' + $form.data( 'form-id' ) + '"]' ).html( '' );
 			$( document ).trigger( 'jet-form-builder/switch-page', [ $fromPage, $toPage, $progress ] );
@@ -1561,6 +1544,8 @@
 				event.target.reportValidity();
 
 				return;
+			} else if ( JetFormBuilder.initSingleFormPage( $target, false ) ) {
+				return;
 			}
 
 			if ( $maskedFields && $maskedFields.length ) {
@@ -1604,6 +1589,8 @@
 			if ( $form[ 0 ]?.checkValidity && $form[ 0 ]?.reportValidity && ! $form[ 0 ].checkValidity() ) {
 				$form[ 0 ].reportValidity();
 
+				return;
+			} else if ( JetFormBuilder.initSingleFormPage( $form, false ) ) {
 				return;
 			}
 

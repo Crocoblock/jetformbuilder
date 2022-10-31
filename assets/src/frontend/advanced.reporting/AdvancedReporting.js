@@ -24,6 +24,7 @@ function AdvancedReporting() {
 	this.messages       = {};
 	this.skipServerSide = true;
 	this.valuePrev      = null;
+	this.promisesCount  = 0;
 }
 
 AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
@@ -31,6 +32,7 @@ AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
 AdvancedReporting.prototype.skipServerSide = true;
 AdvancedReporting.prototype.hasServerSide  = false;
 AdvancedReporting.prototype.valuePrev      = null;
+AdvancedReporting.prototype.promisesCount  = 0;
 
 AdvancedReporting.prototype.setRestrictions = function () {
 	setRestrictions( this );
@@ -54,12 +56,14 @@ AdvancedReporting.prototype.getErrors = async function () {
 		return [];
 	}
 
-	if ( !this.hasChangedValue() ) {
+	const promises = this.getPromises();
+
+	if ( !this.hasChangedValue() && this.promisesCount === promises.length ) {
 		return this.errors ?? [];
 	}
 
-	this.errors    = [];
-	const promises = this.getPromises();
+	this.errors        = [];
+	this.promisesCount = promises.length;
 
 	if ( !promises.length ) {
 		return this.errors;

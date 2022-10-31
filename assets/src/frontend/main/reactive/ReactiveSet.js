@@ -20,7 +20,13 @@ ReactiveSet.prototype.remove = function ( stateName ) {
 	);
 };
 
-ReactiveSet.prototype.toggle = function ( stateName ) {
+ReactiveSet.prototype.toggle = function ( stateName, force = null ) {
+	if ( null !== force ) {
+		force ? this.add( stateName ) : this.remove( stateName );
+
+		return;
+	}
+
 	if ( this.current.includes( stateName ) ) {
 		this.remove( stateName );
 	}

@@ -16,16 +16,26 @@ function RenderStateData() {
 		);
 	};
 
+	/**
+	 * @param stateName {String}
+	 */
 	this.add = function ( stateName ) {
 		this.value.add( stateName );
 	};
 
+	/**
+	 * @param stateName {String}
+	 */
 	this.remove = function ( stateName ) {
 		this.value.remove( stateName );
 	};
 
-	this.toggle = function ( stateName ) {
-		this.value.toggle( stateName );
+	/**
+	 * @param stateName {String}
+	 * @param force {null|Boolean}
+	 */
+	this.toggle = function ( stateName, force = null ) {
+		this.value.toggle( stateName, force );
 	};
 }
 

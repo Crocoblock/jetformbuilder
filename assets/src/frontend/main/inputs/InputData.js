@@ -231,17 +231,7 @@ InputData.prototype.isVisible = function () {
 };
 
 InputData.prototype.onClear = function () {
-	/**
-	 * Related to issue
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
-	 */
-	const tempReport = this.report.bind( this );
-
-	this.report = () => {};
-
-	this.value.current = null;
-
-	this.report = tempReport;
+	this.silenceSet( null );
 };
 
 InputData.prototype.getReactive = function () {
@@ -252,6 +242,20 @@ InputData.prototype.checkIsRequired = function () {
 	const [ node ] = this.nodes;
 
 	return node.required ?? !!node.dataset.required?.length;
+};
+
+InputData.prototype.silenceSet = function ( value ) {
+	/**
+	 * Related to issue
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
+	 */
+	const tempReport = this.report.bind( this );
+
+	this.report = () => {};
+
+	this.value.current = value;
+
+	this.report = tempReport;
 };
 
 export default InputData;

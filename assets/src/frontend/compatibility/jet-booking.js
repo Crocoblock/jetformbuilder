@@ -22,7 +22,8 @@ function CheckOutInput() {
 			this.value.current = node.value;
 		} );
 
-		const inputs = node.parentElement.querySelectorAll( '.jet-abaf-field__input' );
+		const inputs = node.parentElement.querySelectorAll(
+			'.jet-abaf-field__input' );
 
 		for ( const input of inputs ) {
 			input.addEventListener( 'blur', () => this.reportOnBlur() );
@@ -44,6 +45,10 @@ function CheckOutInput() {
 		return !!node.parentElement.querySelector(
 			'.jet-abaf-field__input[required]',
 		);
+	};
+
+	this.onClear = function () {
+		this.silenceSet( '' );
 	};
 }
 

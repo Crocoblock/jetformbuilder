@@ -113,9 +113,9 @@ ReportingInterface.prototype = {
 			this.beforeProcessRestriction( restriction );
 
 			promises.push( ( resolve, reject ) => {
-				restriction.validatePromise().then( resolve ).catch( () => {
-					reject( restriction );
-				} );
+				restriction.validatePromise().
+					then( () => resolve( restriction ) ).
+					catch( () => reject( restriction ) );
 			} );
 		}
 

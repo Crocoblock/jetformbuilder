@@ -15,23 +15,14 @@ async function allRejected( callbacks ) {
 		callbacks.map( current => new Promise( current ) ),
 	);
 
+	if ( window?.JetFormBuilderSettings?.devmode ) {
+		console.group( 'allRejected' );
+		console.info( ...results );
+		console.groupEnd();
+	}
+
 	const invalid = results.filter(
-		( error ) => {
-			if ( 'rejected' !== error.status ) {
-				return false;
-			}
-
-			if (
-				'object' === typeof error.reason ||
-				!window?.JetFormBuilderSettings?.devmode
-			) {
-				return true;
-			}
-
-			console.error( error.reason );
-
-			return true;
-		},
+		( error ) => 'rejected' === error.status,
 	);
 
 	return invalid.map( ( { reason, value } ) => (

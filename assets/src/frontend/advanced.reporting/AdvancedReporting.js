@@ -2,7 +2,7 @@ import {
 	getInheritValidationType,
 	getNodeValidationType,
 	getValidationMessages,
-	getWrapper, hasServerSide,
+	getWrapper,
 	setRestrictions,
 } from './functions';
 import { allRejected } from '../main/functions';
@@ -23,14 +23,14 @@ function AdvancedReporting() {
 	this.type           = 'inherit';
 	this.messages       = {};
 	this.skipServerSide = true;
-	this.valueChanged   = false;
+	this.valuePrev      = null;
 }
 
 AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
 
 AdvancedReporting.prototype.skipServerSide = true;
 AdvancedReporting.prototype.hasServerSide  = false;
-AdvancedReporting.prototype.valueChanged   = false;
+AdvancedReporting.prototype.valuePrev      = null;
 
 AdvancedReporting.prototype.setRestrictions = function () {
 	setRestrictions( this );
@@ -54,8 +54,8 @@ AdvancedReporting.prototype.getErrors = async function () {
 		return [];
 	}
 
-	if ( Array.isArray( this.errors ) ) {
-		return this.errors;
+	if ( !this.hasChangedValue() ) {
+		return this.errors ?? [];
 	}
 
 	this.errors    = [];
@@ -69,7 +69,8 @@ AdvancedReporting.prototype.getErrors = async function () {
 		this.input.loading.start();
 	}
 
-	this.errors = await allRejected( promises );
+	this.errors    = await allRejected( promises );
+	this.valuePrev = this.input.getValue();
 
 	if ( this.hasServerSide ) {
 		this.input.loading.end();

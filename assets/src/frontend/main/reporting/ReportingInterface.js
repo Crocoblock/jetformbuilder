@@ -20,7 +20,6 @@
  * and the navigation buttons between pages changes.
  *
  */
-import { allRejected } from '../functions';
 import RestrictionError from './RestrictionError';
 
 function ReportingInterface() {
@@ -34,6 +33,8 @@ function ReportingInterface() {
 	 */
 	this.errors = null;
 	this.restrictions = [];
+
+	this.valuePrev = null;
 }
 
 ReportingInterface.prototype = {
@@ -41,6 +42,7 @@ ReportingInterface.prototype = {
 	 * @type {Restriction[]}
 	 */
 	restrictions: [],
+	valuePrev: null,
 	/**
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
@@ -55,7 +57,6 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<void>}
 	 */
 	validateWithNotice: async function () {
-		this.errors  = null;
 		const errors = await this.getErrors();
 
 		if ( errors.length ) {
@@ -156,6 +157,10 @@ ReportingInterface.prototype = {
 	 */
 	getNode: function () {
 		return this.input.nodes[ 0 ];
+	},
+
+	hasChangedValue: function () {
+		return this.valuePrev !== this.input.getValue();
 	},
 };
 

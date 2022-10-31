@@ -3,7 +3,7 @@ import { getMessageBySlug } from '../functions';
 const {
 	      Restriction,
 	      CalculatedFormula,
-      } = JetFormBuilderAbstract;
+      } = window.JetFormBuilderAbstract;
 
 function AdvancedRestriction() {
 	Restriction.call( this );

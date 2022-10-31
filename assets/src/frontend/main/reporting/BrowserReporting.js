@@ -31,7 +31,6 @@ function BrowserReporting() {
 		// browser automatically hide tooltip messages
 	};
 	this.validateOnChange = function () {
-		this.errors = null;
 		this.validate().then( () => {} ).catch( () => {} );
 	};
 
@@ -43,8 +42,8 @@ function BrowserReporting() {
 			return [];
 		}
 
-		if ( Array.isArray( this.errors ) ) {
-			return this.errors;
+		if ( !this.hasChangedValue() ) {
+			return this.errors ?? [];
 		}
 
 		this.errors    = [];
@@ -54,7 +53,8 @@ function BrowserReporting() {
 			return this.errors;
 		}
 
-		this.errors = await allRejected( promises );
+		this.errors    = await allRejected( promises );
+		this.valuePrev = this.input.getValue();
 
 		return this.errors;
 	};

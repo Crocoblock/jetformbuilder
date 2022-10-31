@@ -15,7 +15,7 @@ function PageState( node, state ) {
 	this.state     = state;
 	this.inputs    = [];
 	this.canSwitch = new ReactiveVar( null );
-	this.isShow = new ReactiveVar( 1 === this.index );
+	this.isShow    = new ReactiveVar( 1 === this.index );
 
 	this.observeInputs();
 	this.observeConditionalBlocks();
@@ -29,14 +29,8 @@ function PageState( node, state ) {
 	this.addButtonsListeners();
 	this.updateState();
 
-	/**
-	 * @type {Observable}
-	 */
-	const root = this.state.getRoot();
-	const form = root?.parent?.root?.form ?? root.form;
-
-	form.lockState.watch( () => {
-		this.canSwitch.current = !form.lockState.current;
+	this.getLockState().watch( () => {
+		this.canSwitch.current = !this.getLockState().current;
 	} );
 }
 
@@ -108,7 +102,9 @@ PageState.prototype.updateStateAsync    = async function ( silence = true ) {
 
 		callbacks.push(
 			( resolve, reject ) => {
-				validate.call( input.reporting ).then( resolve ).catch( reject );
+				validate.call( input.reporting ).
+					then( resolve ).
+					catch( reject );
 			},
 		);
 	}
@@ -151,6 +147,10 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
+	if ( this.getLockState().current ) {
+		return;
+	}
+
 	await this.updateStateAsync( false );
 
 	if ( !this.canSwitch.current ) {
@@ -169,6 +169,19 @@ PageState.prototype.isNodeBelongThis    = function ( node ) {
  */
 PageState.prototype.getInputs = function () {
 	return this.inputs;
+};
+
+/**
+ * @return {LoadingReactiveVar}
+ */
+PageState.prototype.getLockState = function () {
+	/**
+	 * @type {Observable}
+	 */
+	const root = this.state.getRoot();
+	const form = root?.parent?.root?.form ?? root.form;
+
+	return form.lockState;
 };
 
 export default PageState;

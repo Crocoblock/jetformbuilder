@@ -6,9 +6,6 @@ function ServerSideCallback() {
 	const { apiFetch }            = wp;
 	const { validation_endpoint } = JetFormBuilderSettings;
 
-	this.prevCurrent = null;
-	this.prevResult  = null;
-
 	this.getSlug         = function () {
 		return 'ssr';
 	};
@@ -18,17 +15,6 @@ function ServerSideCallback() {
 	this.validatePromise = async function () {
 		const current = this.getValue();
 
-		if ( null !== this.prevResult && current === this.prevCurrent ) {
-			return this.prevResult;
-		}
-
-		this.prevCurrent = current;
-		this.prevResult  = await this._validatePromise( current );
-
-		return this.prevResult;
-	};
-
-	this._validatePromise = async function ( current ) {
 		if ( !current ) {
 			return Promise.resolve();
 		}
@@ -50,8 +36,5 @@ function ServerSideCallback() {
 ServerSideCallback.prototype = Object.create(
 	CustomBaseRestriction.prototype,
 );
-
-ServerSideCallback.prototype.prevCurrent = null;
-ServerSideCallback.prototype.prevResult  = null;
 
 export default ServerSideCallback;

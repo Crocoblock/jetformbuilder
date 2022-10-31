@@ -8,6 +8,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * ADD: Shortcodes compatibility (label, desc, etc.)
 * FIX: Change User email by Update user action
 * FIX: Same validation for next step & submit event.
+* FIX: Show all ActiveCampaign lists.
 * UPD: Preventing disabling next button
 
 ## 2.1.7

@@ -276,6 +276,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
  - ADD: Shortcodes compatibility (label, desc, etc.)
  - FIX: Change User email by Update user action
  - FIX: Same validation for next step & submit event.
+ - FIX: Show all ActiveCampaign lists.
  - UPD: Preventing disabling next button
 
 **2.1.7**

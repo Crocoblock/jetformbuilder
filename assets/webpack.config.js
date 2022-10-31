@@ -74,3 +74,7 @@ module.exports = {
 		maxAssetSize: 512000,
 	},
 };
+
+if ( process.env.npm_lifecycle_event !== 'dev' ) {
+	delete module.exports.devtool;
+}

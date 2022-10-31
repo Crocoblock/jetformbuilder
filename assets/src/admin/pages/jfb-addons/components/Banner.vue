@@ -32,13 +32,15 @@ export default {
 	name: 'Banner',
 	computed: {
 		pricingUrl() {
-			const license = this.$parent.isLicenseActivated ? 'crocoblock-license' : 'license-not-activated';
-
-			return this.$parent.getUtmParamsString( {
+			const license        = this.$parent.isLicenseActivated ? 'crocoblock-license' : 'license-not-activated';
+			const pricingPageUrl = this.$parent.miscInfo.pricingPageUrl;
+			const utmParams      = this.$parent.getUtmParamsString( {
 				utm_source: `dashboard/jet-form-builder-addons-page`,
-				utm_medium: `${license}/${ this.$parent.themeInfo.authorSlug }`,
+				utm_medium: `${ license }/${ this.$parent.themeInfo.authorSlug }`,
 				utm_campaign: 'sale-halloween-2022',
 			} );
+
+			return `${ pricingPageUrl }?${ utmParams }`;
 		},
 	},
 };

@@ -226,7 +226,7 @@ InputData.prototype.isVisible = function () {
 	const [ node ] = this.nodes;
 
 	return (
-		node.isConnected
+		node?.isConnected
 	);
 };
 

@@ -1,5 +1,4 @@
 import ExtraMacroContext from '../context/ExtraMacroContext';
-import FiltersMacroContext from '../context/FiltersMacroContext';
 
 const {
 	      useSelect,
@@ -11,16 +10,9 @@ function ClientSideMacros( { children } ) {
 		[],
 	);
 
-	const filters = useSelect(
-		( select ) => select( 'jet-forms/macros' ).getClientFilters(),
-		[],
-	);
-
-	return <FiltersMacroContext.Provider value={ filters }>
-		<ExtraMacroContext.Provider value={ macros }>
-			{ children }
-		</ExtraMacroContext.Provider>
-	</FiltersMacroContext.Provider>;
+	return <ExtraMacroContext.Provider value={ macros }>
+		{ children }
+	</ExtraMacroContext.Provider>;
 }
 
 export default ClientSideMacros;

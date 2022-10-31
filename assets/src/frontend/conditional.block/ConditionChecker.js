@@ -34,7 +34,7 @@ ConditionChecker.prototype = {
 				);
 
 			case 'between':
-				if ( !conditionValue?.length ) {
+				if ( !conditionValue?.length || null === current ) {
 					return false;
 				}
 

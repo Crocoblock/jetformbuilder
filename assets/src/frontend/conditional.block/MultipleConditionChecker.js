@@ -12,13 +12,16 @@ function MultipleConditionChecker() {
 
 		switch ( condition.operator ) {
 			case 'one_of':
-				if ( !condition.value?.length ) {
+				if ( !condition.value?.length || ! current?.length ) {
 					return false;
 				}
 				return current.some(
 					val => -1 !== condition.value.indexOf( val ),
 				);
 			case 'contain':
+				if ( ! current?.length ) {
+					return false;
+				}
 				return current.some(
 					val => val.indexOf( condition.value[ 0 ] ) !== -1,
 				);

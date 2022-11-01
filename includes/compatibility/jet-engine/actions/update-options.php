@@ -69,6 +69,13 @@ class Update_Options extends Base {
 
 		$option_name = $this->settings['options_page'];
 
+		$page = isset( jet_engine()->options_pages->registered_pages[ $option_name ] ) ? jet_engine()->options_pages->registered_pages[ $option_name ] : false;
+
+		if ( $page && method_exists( $page, 'update_options' ) ) {
+			$page->update_options( $options_data, false );
+			return;
+		}
+
 		$current_value = get_option( $option_name, array() );
 		$new_value     = array_merge( $current_value, $options_data );
 

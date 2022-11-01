@@ -11,7 +11,6 @@ const {
 
 function MacrosButtonTemplate( {
 	children,
-	title = '',
 	...props
 } ) {
 	const [ showPopover, setShowPopover ] = useState( false );

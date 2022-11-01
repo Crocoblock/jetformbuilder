@@ -1,5 +1,8 @@
+import RegisterUserDetails from './details';
+
 const {
 	      addAction,
+	      addDetail,
       } = JetFBActions;
 const {
 	      Suspense,
@@ -15,3 +18,4 @@ function RegisterUserAction( props ) {
 }
 
 addAction( 'register_user', RegisterUserAction );
+addDetail( 'register_user', RegisterUserDetails );

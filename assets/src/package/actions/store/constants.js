@@ -5,6 +5,7 @@ export default {
 	updateCurrentSettings: 'UPDATE_ACTION_SETTINGS',
 	updateCurrentConditions: 'UPDATE_ACTION_CONDITIONS',
 	addCallback: 'ADD_CALLBACK',
+	addDetail: 'ADD_DETAIL',
 	setMeta: 'SET_CURRENT_META',
 	clearCurrent: 'CLEAR_CURRENT',
-}
+};

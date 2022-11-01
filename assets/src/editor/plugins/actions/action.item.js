@@ -1,4 +1,4 @@
-import { useActionCallback, useActionsEdit } from './hooks';
+import { useActionCallback, useActionsEdit, useActionDetail } from './hooks';
 import EventsList from './events.list';
 
 const {
@@ -11,9 +11,6 @@ const {
 const {
 	      __,
       } = wp.i18n;
-const {
-	      useState,
-      } = wp.element;
 
 const {
 	      SelectControl,
@@ -24,11 +21,11 @@ const {
 	      CardFooter,
 	      DropdownMenu,
 	      Flex,
-	      Icon,
       } = wp.components;
 
 const {
 	      ActionListItemContext,
+	      MacrosButtonTemplate,
       } = JetFBComponents;
 
 const actionTypes = window.jetFormActionTypes.map( function ( action ) {
@@ -51,6 +48,7 @@ function ListActionItem( props ) {
 	      } = useActionsEdit();
 
 	const ActionCallback = useActionCallback( action.type );
+	const ActionDetails  = useActionDetail( action.type );
 
 	const {
 		      setCurrentAction,
@@ -81,8 +79,6 @@ function ListActionItem( props ) {
 	if ( currentAction?.id === action.id ) {
 		wrapper.push( 'is-current' );
 	}
-
-	const [ showDetails, setShowDetails ] = useState( false );
 
 	const ActionDropDown = () => <DropdownMenu
 		icon={ 'ellipsis' }
@@ -135,38 +131,18 @@ function ListActionItem( props ) {
 			{ header }
 		</CardHeader> }
 		<CardBody>
-			<div
-				className={ 'jet-form-action-control' }
+			<SelectControl
+				value={ action.type }
+				options={ actionTypes }
+				onChange={ type => updateActionObj( action.id, { type } ) }
 			>
-				<Button
-					isSmall
-					variant="tertiary"
-					icon={ showDetails ? 'hidden' : 'editor-help' }
-					label={ __(
-						'Show details about selected action',
-						'jet-form-builder',
-					) }
-					className={ 'jet-fb-is-thick' }
-					onClick={ () => setShowDetails( prev => !prev ) }
-				/>
-				<SelectControl
-					value={ action.type }
-					options={ actionTypes }
-					onChange={ type => updateActionObj( action.id, { type } ) }
-				>
-					{ actionTypes.map( type => <option
-						key={ action.id + '__' + type.value }
-						value={ type.value }
-						disabled={ type.disabled }
-						dangerouslySetInnerHTML={ { __html: type.label } }
-					/> ) }
-				</SelectControl>
-			</div>
-			{ showDetails && <div className="jet-form-action-details">
-				<div data-title={ __( 'Action ID:', 'jet-form-builder' ) }>
-					{ action.id }
-				</div>
-			</div> }
+				{ actionTypes.map( type => <option
+					key={ action.id + '__' + type.value }
+					value={ type.value }
+					disabled={ type.disabled }
+					dangerouslySetInnerHTML={ { __html: type.label } }
+				/> ) }
+			</SelectControl>
 			{ applyFilters(
 				`jet.fb.section.actions.afterSelect.${ action.type }`, null,
 				action, actions ) }
@@ -193,6 +169,21 @@ function ListActionItem( props ) {
 					} }
 				/>
 				<ActionDropDown/>
+				<MacrosButtonTemplate
+					variant={ null }
+					isSmall={ false }
+					icon={ 'editor-help' }
+					label={ __(
+						'Show details about selected action',
+						'jet-form-builder',
+					) }
+				>
+					<div className="jet-form-action-details">
+						<div data-title={ __( 'ID:',
+							'jet-form-builder' ) }><b>{ action.id }</b></div>
+						{ ActionDetails && <ActionDetails/> }
+					</div>
+				</MacrosButtonTemplate>
 			</Flex>
 		</CardBody>
 		{ Boolean( action.events?.length ) && <CardFooter

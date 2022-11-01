@@ -89,7 +89,18 @@ export default {
 			callbacks: {
 				...state.callbacks,
 				[ action.actionType ]: withActionLocalizeScript(
-					action.actionType, action.callback ),
+					action.actionType,
+					action.callback,
+				),
+			},
+		}
+	),
+	[ constants.addDetail ]: ( state, action ) => (
+		{
+			...state,
+			details: {
+				...state.details,
+				[ action.actionType ]: action.item,
 			},
 		}
 	),

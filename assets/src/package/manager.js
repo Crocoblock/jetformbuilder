@@ -141,6 +141,7 @@ import ClientSideMacros
 	from './macros.button/components/ClientSideMacros';
 import { insertMacro } from './macros.button/functions';
 import useInsertMacro from './macros.button/hooks/useInsertMacro';
+import addDetail from './actions/helpers/addDetail';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -245,6 +246,7 @@ window.JetFBActions = {
 	convertObjectToOptionsList,
 	appendField,
 	insertMacro,
+	addDetail,
 };
 
 // JFBHooks

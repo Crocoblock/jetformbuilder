@@ -1,5 +1,8 @@
+import SaveRecordDetails from './details';
+
 const {
 	      addAction,
+	      addDetail,
       } = JetFBActions;
 const {
 	      Suspense,
@@ -14,4 +17,8 @@ function SaveRecordAction( props ) {
 	</Suspense>;
 }
 
-addAction( 'save_record', SaveRecordAction );
+const id = 'save_record';
+
+addAction( id, SaveRecordAction );
+addDetail( id, SaveRecordDetails )
+

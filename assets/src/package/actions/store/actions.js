@@ -57,4 +57,11 @@ export default {
 			callback,
 		};
 	},
+	addDetail( actionType, item ) {
+		return {
+			type: constants.addDetail,
+			actionType,
+			item,
+		};
+	},
 };

@@ -1,5 +1,8 @@
+import InsertUpdatePostDetails from './details';
+
 const {
 	      addAction,
+	      addDetail,
       } = JetFBActions;
 const {
 	      Suspense,
@@ -15,3 +18,4 @@ function InsertPostAction( props ) {
 }
 
 addAction( 'insert_post', InsertPostAction );
+addDetail( 'insert_post', InsertUpdatePostDetails );

@@ -22,7 +22,7 @@ function ServerSideCallback() {
 		const { rootNode } = this.reporting.input.getRoot();
 		const formData     = new FormData( rootNode );
 
-		return await apiFetch( {
+		const response = await apiFetch( {
 			...validation_endpoint,
 			data: {
 				callback: this.attrs.value,
@@ -30,6 +30,8 @@ function ServerSideCallback() {
 				current,
 			},
 		} );
+
+		return response?.result ? Promise.resolve() : Promise.reject();
 	};
 }
 

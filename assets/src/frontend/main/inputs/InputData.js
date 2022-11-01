@@ -72,7 +72,9 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
-	node.addEventListener( 'blur', () => this.reportOnBlur() );
+	node.addEventListener( 'blur', event => {
+		this.reportOnBlur();
+	} );
 };
 InputData.prototype.makeReactive = function () {
 	this.onObserve();

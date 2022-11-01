@@ -33,6 +33,11 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 
 		$result = Validation::instance()->callbacks->validate( $value, $callback );
 
-		return new \WP_REST_Response( array(), $result ? 200 : 400 );
+		return new \WP_REST_Response(
+			array(
+				'result' => $result
+			),
+			200
+		);
 	}
 }

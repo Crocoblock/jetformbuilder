@@ -38,10 +38,12 @@ const EditCustomRenderStates = ( {
 	currentItem,
 } ) => {
 
-	const [ isLoading, setButtonLoading ]   = useState( false );
+	const [ isLoading, setButtonLoading ] = useState( false );
 	const [ isLoadingItem, setItemLoading ] = useState( {} );
-	const [ value, setValue ]               = useState( '' );
-	let current                             = [ ...currentItem.render_state ];
+	const [ value, setValue ] = useState( '' );
+	let current = [
+		...currentItem.render_state ?? [],
+	];
 
 	const {
 		      addRenderState,

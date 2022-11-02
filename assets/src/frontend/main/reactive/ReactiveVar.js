@@ -1,7 +1,8 @@
 function ReactiveVar( value = null ) {
-	this.current = value;
-	this.signals = [];
-	this.isDebug = false;
+	this.current    = value;
+	this.signals    = [];
+	this.sanitizers = [];
+	this.isDebug    = false;
 }
 
 ReactiveVar.prototype = {
@@ -11,6 +12,13 @@ ReactiveVar.prototype = {
 		const index = this.signals.length - 1;
 
 		return () => this.signals.splice( index, 1 );
+	},
+	sanitize: function ( callable ) {
+		this.sanitizers.push( callable.bind( this ) );
+
+		const index = this.sanitizers.length - 1;
+
+		return () => this.sanitizers.splice( index, 1 );
 	},
 	make: function () {
 		let current = this.current;
@@ -27,13 +35,20 @@ ReactiveVar.prototype = {
 				if ( self.isDebug ) {
 					debugger;
 				}
-				current = newVal;
+				current = self.applySanitizers( newVal );
 				self.notify();
 			},
 		} );
 	},
 	notify: function () {
 		this.signals.forEach( signal => signal() );
+	},
+	applySanitizers: function (value) {
+		for ( const sanitizer of this.sanitizers ) {
+			value = sanitizer( value );
+		}
+
+		return value;
 	},
 	setIfEmpty( newValue ) {
 		if ( (

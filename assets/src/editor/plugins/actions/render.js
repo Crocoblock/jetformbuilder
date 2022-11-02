@@ -8,7 +8,6 @@ const {
 	      Tools,
       } = JetFBActions;
 const {
-	      useState,
 	      useEffect,
       } = wp.element;
 const {

@@ -6,7 +6,7 @@ const href = 'https://jetformbuilder.com/features/wordpress-custom-form-records-
 
 function SaveRecordDetails() {
 	return <>
-		<div data-title={ __( 'Info:', 'jet-form-builder' ) }>
+		{/*<div data-title={ __( 'Info:', 'jet-form-builder' ) }>
 			{ __(
 				'Action that stores the form entries in the database',
 				'jet-form-builder',
@@ -16,7 +16,7 @@ function SaveRecordDetails() {
 				'and makes them easily accessible from the dashboard.',
 				'jet-form-builder',
 			) }
-		</div>
+		</div>*/}
 		<div data-title={ __( 'Tutorial:', 'jet-form-builder' ) }>
 			<a href={ href }>{ __( 'Form Records Page',
 				'jet-form-builder' ) }</a>

@@ -110,6 +110,13 @@ InputData.prototype.watch = function ( callable ) {
 	return this.value.watch( callable );
 };
 /**
+ * @param callable
+ * @returns {(function(): *|*[])|*}
+ */
+InputData.prototype.sanitize = function ( callable ) {
+	return this.value.sanitize( callable );
+};
+/**
  * @param inputData {InputData}
  */
 InputData.prototype.merge = function ( inputData ) {

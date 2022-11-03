@@ -155,7 +155,9 @@ function observeFieldRestriction() {
 
 	input.watch( () => {
 		this.attrs.value = input.value.current;
-		this.reporting.validateWithNotice().then( () => {} ).catch( () => {} );
+
+		this.reporting.valuePrev = null;
+		this.reporting.validateOnChange();
 	} );
 }
 

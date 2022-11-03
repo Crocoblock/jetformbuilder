@@ -46,10 +46,8 @@ ReportingInterface.prototype = {
 	/**
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
-	 *
-	 * @param force
 	 */
-	validateOnChange: function ( force = false ) {
+	validateOnChange: function () {
 	},
 	validateOnBlur: function () {
 	},

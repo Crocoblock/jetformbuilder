@@ -3,6 +3,7 @@ function ReactiveVar( value = null ) {
 	this.signals    = [];
 	this.sanitizers = [];
 	this.isDebug    = false;
+	this.isSilence  = false;
 }
 
 ReactiveVar.prototype = {
@@ -29,10 +30,14 @@ ReactiveVar.prototype = {
 				return current;
 			},
 			set( newVal ) {
-				if ( current === newVal ) {
+				if ( current === newVal || self.isSilence ) {
 					return;
 				}
 				if ( self.isDebug ) {
+					console.group( 'ReactiveVar has changed' );
+					console.log( 'current:', current );
+					console.log( 'newVal:', newVal );
+					console.groupEnd();
 					debugger;
 				}
 				current = self.applySanitizers( newVal );
@@ -43,7 +48,7 @@ ReactiveVar.prototype = {
 	notify: function () {
 		this.signals.forEach( signal => signal() );
 	},
-	applySanitizers: function (value) {
+	applySanitizers: function ( value ) {
 		for ( const sanitizer of this.sanitizers ) {
 			value = sanitizer( value );
 		}
@@ -65,6 +70,9 @@ ReactiveVar.prototype = {
 	},
 	debug() {
 		this.isDebug = !this.isDebug;
+	},
+	silence() {
+		this.isSilence = !this.isSilence;
 	},
 };
 

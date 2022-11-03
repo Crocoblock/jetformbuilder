@@ -30,7 +30,7 @@ function MultiStepState() {
 	 */
 	this.elements = [];
 
-	this.setScope      = function ( rootOrBlock ) {
+	this.setScope = function ( rootOrBlock ) {
 		if ( rootOrBlock instanceof ConditionalBlock ) {
 			this.block = rootOrBlock;
 		}
@@ -38,24 +38,29 @@ function MultiStepState() {
 			this.root = rootOrBlock;
 		}
 	};
-	this.setPages      = function () {
+	/**
+	 * @param pages {Element[]}
+	 */
+	this.setPages = function ( pages ) {
 		/**
 		 * Multistep is initializing for all form or
 		 * specific conditional block.
 		 *
 		 * We need to separate global & block multistep
 		 */
-		this.elements = [
-			...this.getScopeNode().children,
-		].filter(
-			page => page.matches( '.jet-form-builder-page' ),
-		).map(
+		this.elements = pages.map(
 			page => new PageState( page, this ),
 		);
 
-		if ( !this.elements.length ) {
+		const { submitter } = this.getRoot().getSubmit();
+		// is ajax
+		if ( !submitter.hasOwnProperty( 'status' ) ) {
 			return;
 		}
+
+		submitter.watchReset( () => {
+			this.index.current = 1;
+		} );
 
 		this.index = new ReactiveVar( 1 );
 		this.index.make();
@@ -79,13 +84,16 @@ function MultiStepState() {
 	this.getPages = function () {
 		return this.elements;
 	};
+	/**
+	 * @return {HTMLElement|HTMLFormElement}
+	 */
 	this.getScopeNode = function () {
 		return this.block?.node ?? this.root.rootNode;
 	};
 	/**
 	 * @returns {Observable}
 	 */
-	this.getRoot      = function () {
+	this.getRoot = function () {
 		return this.block?.root ?? this.root;
 	};
 }

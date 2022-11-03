@@ -1,7 +1,12 @@
 import BaseSubmit from './BaseSubmit';
+import ReactiveVar from '../reactive/ReactiveVar';
+import { isSuccessStatus } from './functions';
 
 function AjaxSubmit( form ) {
 	BaseSubmit.call( this, form );
+
+	this.status = new ReactiveVar();
+	this.status.make();
 
 	this.submit        = function () {
 		const $form            = jQuery( this.form.observable.rootNode );
@@ -27,6 +32,14 @@ function AjaxSubmit( form ) {
 			'_jet_engine_booking_form_id',
 			this.form.getFormId(),
 		);
+
+		// disable watchers
+		this.status.silence();
+
+		this.status.current = null;
+
+		// enable watchers
+		this.status.silence();
 
 		jQuery.ajax( {
 			url: JetFormBuilderSettings.ajaxurl,
@@ -56,11 +69,12 @@ function AjaxSubmit( form ) {
 					'jet-form-builder/ajax/on-success',
 					[ response, $form ],
 				);
-				for ( const dataInput of this.form.observable.getInputs() ) {
-					dataInput.onClear();
-				}
 				break;
 		}
+		/**
+		 * Run status watchers
+		 */
+		this.status.current = response.status;
 
 		if ( response.redirect ) {
 			window.location = response.redirect;
@@ -73,6 +87,7 @@ function AjaxSubmit( form ) {
 	};
 	this.onFail        = function ( jqXHR, textStatus, errorThrown ) {
 		this.form.toggle();
+		this.status.current = false;
 
 		console.error( jqXHR.responseText, errorThrown );
 	};
@@ -88,5 +103,39 @@ function AjaxSubmit( form ) {
 }
 
 AjaxSubmit.prototype = Object.create( BaseSubmit.prototype );
+/**
+ * @type {ReactiveVar}
+ */
+AjaxSubmit.prototype.status = null;
+
+AjaxSubmit.prototype.watchReset = function ( callable ) {
+	const { rootNode } = this.form.observable;
+
+	if ( !rootNode.dataset?.clear ) {
+		return;
+	}
+
+	this.watchSuccess( callable );
+};
+
+AjaxSubmit.prototype.watchSuccess = function ( callable ) {
+	const status = this.status;
+
+	status.watch( () => {
+		if ( isSuccessStatus( status.current ) ) {
+			callable();
+		}
+	} );
+};
+
+AjaxSubmit.prototype.watchFail = function ( callable ) {
+	const status = this.status;
+
+	status.watch( () => {
+		if ( !isSuccessStatus( status.current ) ) {
+			callable();
+		}
+	} );
+};
 
 export default AjaxSubmit;

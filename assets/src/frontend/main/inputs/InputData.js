@@ -159,6 +159,16 @@ InputData.prototype.onObserve = function () {
 	this.reporting = createReport( this );
 
 	this.loading.watch( () => this.onChangeLoading() );
+
+	if (
+		// is ajax
+		!this.getSubmit().submitter.hasOwnProperty( 'status' ) ||
+		this.root?.parent
+	) {
+		return;
+	}
+
+	this.getSubmit().submitter.watchReset( () => this.onClear() );
 };
 InputData.prototype.onChangeLoading = function () {
 	this.getSubmit().lockState.current = this.loading.current;

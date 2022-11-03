@@ -212,6 +212,9 @@ Observable.prototype = {
 
 		return null;
 	},
+	getSubmit: function () {
+		return this.form ? this.form : this.parent.root.form;
+	},
 };
 
 export default Observable;

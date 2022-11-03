@@ -43,7 +43,6 @@ class Parser_Manager {
 				new Fields\Media_Field_Parser(),
 				new Fields\Datetime_Field_Parser(),
 				new Fields\Hidden_Field_Parser(),
-				new Fields\Checkbox_Field_Parser(),
 			)
 		);
 	}
@@ -105,7 +104,6 @@ class Parser_Manager {
 			$output[ $context->get_name() ] = $parser->get_parsed_value( $context );
 		} catch ( Parse_Exception $exception ) {
 			$output = array_merge( $output, $exception->get_inner() );
-
 			return;
 
 		} catch ( Exclude_Field_Exception $exception ) {

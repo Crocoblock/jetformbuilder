@@ -4,26 +4,26 @@ import { isMultiSelect } from '../supports';
 function MultiSelectData() {
 	InputData.call( this );
 
-	this.isSupported  = function ( node ) {
+	this.isSupported    = function ( node ) {
 		return isMultiSelect( node );
 	};
-	this.addListeners = function () {
+	this.addListeners   = function () {
 		const [ node ] = this.nodes;
 
-		node.addEventListener( 'change', event => {
-			const values = [];
-
-			for ( const option of event.target.options ) {
-				if ( !option.selected ) {
-					continue;
-				}
-				values.push( option.value );
-			}
-
-			this.value.current = values;
-		} );
+		node.addEventListener( 'change', () => this.setValue() );
+		node.addEventListener( 'blur', () => this.reportOnBlur() );
 	};
-	this.valueType    = function () {
+	this.setValue       = function () {
+		this.value.current = this.getActiveValue();
+	};
+	this.getActiveValue = function () {
+		const [ node ] = this.nodes;
+
+		return Array.from( node.options ).
+			filter( item => item.selected ).
+			map( item => item.value );
+	};
+	this.valueType      = function () {
 		return Array;
 	};
 }

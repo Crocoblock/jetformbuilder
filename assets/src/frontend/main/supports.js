@@ -3,7 +3,7 @@
  * @returns {boolean}
  */
 function isChangeType( node ) {
-	return [ 'select', 'range' ].includes( node.type );
+	return [ 'select-one', 'range' ].includes( node.type );
 }
 
 /**

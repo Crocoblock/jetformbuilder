@@ -14,6 +14,10 @@ function ChangeData() {
 			this.value.current = event.target.value;
 		} );
 	};
+
+	this.onClear = function () {
+		this.silenceSet( '' );
+	};
 }
 
 ChangeData.prototype = Object.create( InputData.prototype );

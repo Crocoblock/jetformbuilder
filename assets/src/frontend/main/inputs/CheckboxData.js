@@ -9,9 +9,7 @@ function CheckboxData() {
 	};
 	this.addListeners   = function () {
 		for ( const node of this.nodes ) {
-			node.addEventListener( 'change', event => {
-				this.setValue();
-			} );
+			node.addEventListener( 'change', () => this.setValue() );
 		}
 	};
 	this.setValue       = function () {

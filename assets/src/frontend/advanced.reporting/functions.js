@@ -156,6 +156,16 @@ function observeFieldRestriction() {
 	input.watch( () => {
 		this.attrs.value = input.value.current;
 
+		/**
+		 * Here we need to reset the `valuePrev` property,
+		 * because reporting logic remember previous value, which it check.
+		 *
+		 * And if .valuePrev === .current.value -> reporting will be skipped
+		 *
+		 * @see AdvancedReporting.getErrors
+		 * @see ReportingInterface.hasChangedValue
+		 * @type {null}
+		 */
 		this.reporting.valuePrev = null;
 		this.reporting.validateOnChange();
 	} );

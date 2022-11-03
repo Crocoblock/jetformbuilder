@@ -33,6 +33,7 @@ AdvancedReporting.prototype.skipServerSide = true;
 AdvancedReporting.prototype.hasServerSide  = false;
 AdvancedReporting.prototype.valuePrev      = null;
 AdvancedReporting.prototype.promisesCount  = 0;
+AdvancedReporting.prototype.isProcess      = null;
 
 AdvancedReporting.prototype.setRestrictions = function () {
 	setRestrictions( this );
@@ -149,10 +150,26 @@ AdvancedReporting.prototype.createError      = function (
 	return div;
 };
 AdvancedReporting.prototype.validateOnChange = function () {
-	this.validateWithNotice().then( () => {} ).catch( () => {} );
+	if ( this.isProcess ) {
+		return;
+	}
+
+	this.isProcess = true;
+
+	this.validateWithNotice().
+		then( () => {} ).
+		catch( () => {} ).
+		finally( () => {
+			this.isProcess = null;
+		} );
 };
 
 AdvancedReporting.prototype.validateOnBlur = function () {
+	if ( this.isProcess ) {
+		return;
+	}
+
+	this.isProcess      = true;
 	this.skipServerSide = false;
 
 	this.validateWithNotice().
@@ -161,6 +178,7 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 		finally( () => {
 			this.skipServerSide = true;
 			this.hasServerSide  = false;
+			this.isProcess      = null;
 		} );
 };
 

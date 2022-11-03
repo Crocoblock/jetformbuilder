@@ -188,6 +188,25 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 		} );
 };
 
+AdvancedReporting.prototype.validateOnChangeState = function ( silence = false ) {
+	if ( this.isProcess ) {
+		return;
+	}
+	this.isProcess      = true;
+	this.skipServerSide = false;
+	const promise       = silence ? this.validate() : this.validateWithNotice();
+
+	return new Promise( ( resolve, reject ) => {
+		promise.then( resolve ).catch( reject ).finally(
+			() => {
+				this.skipServerSide = true;
+				this.hasServerSide  = false;
+				this.isProcess      = null;
+			},
+		);
+	} );
+};
+
 /**
  * @param restriction {AdvancedRestriction|Restriction}
  * @return {boolean}

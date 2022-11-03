@@ -52,6 +52,14 @@ ReportingInterface.prototype = {
 	validateOnBlur: function () {
 	},
 	/**
+	 * Runs on try to submit form or
+	 * go to next page
+	 *
+	 * @return {Promise<*>}
+	 */
+	validateOnChangeState: function ( silence = false ) {
+	},
+	/**
 	 * @returns {Promise<void>}
 	 */
 	validateWithNotice: async function () {

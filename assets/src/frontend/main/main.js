@@ -12,6 +12,7 @@ import MultiSelectData from './inputs/MultiSelectData';
 import { allRejected, getLanguage, toHTML } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
+import { validateInputs, validateInputsAll } from './reporting/functions';
 
 (
 	function ( $ ) {
@@ -40,6 +41,8 @@ import RestrictionError from './reporting/RestrictionError';
 			allRejected,
 			getLanguage,
 			toHTML,
+			validateInputs,
+			validateInputsAll,
 		};
 
 		$( initCommon );

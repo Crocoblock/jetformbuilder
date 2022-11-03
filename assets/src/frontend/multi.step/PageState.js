@@ -5,6 +5,10 @@ const {
 	      createConditionalBlock,
       } = JetFormBuilderAbstract;
 
+const {
+	      validateInputs,
+      } = JetFormBuilderFunctions;
+
 /**
  * @property {array<InputData>|*} inputs
  * @property {MultiStepState} state
@@ -93,33 +97,14 @@ PageState.prototype.updateState = function () {
 };
 
 PageState.prototype.updateStateAsync    = async function ( silence = true ) {
-	const callbacks = [];
-
-	for ( const input of this.getInputs() ) {
-		const validate = silence
-		                 ? input.reporting.validate
-		                 : input.reporting.validateWithNotice;
-
-		callbacks.push(
-			( resolve, reject ) => {
-				validate.call( input.reporting ).
-					then( resolve ).
-					catch( reject );
-			},
-		);
-	}
-
 	try {
-		await Promise.all(
-			callbacks.map( current => new Promise( current ) ),
-		);
+		await validateInputs( this.getInputs(), silence );
 
 		this.canSwitch.current = true;
 	}
 	catch ( error ) {
 		this.canSwitch.current = false;
 	}
-
 };
 PageState.prototype.addButtonsListeners = function () {
 	const switchButtons = this.node.querySelectorAll(

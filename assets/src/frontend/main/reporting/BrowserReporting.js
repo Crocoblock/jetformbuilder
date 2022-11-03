@@ -58,6 +58,10 @@ function BrowserReporting() {
 
 		return this.errors;
 	};
+
+	this.validateOnChangeState = function ( silence = false ) {
+		return silence ? this.validate() : this.validateWithNotice();
+	};
 }
 
 BrowserReporting.prototype = Object.create( ReportingInterface.prototype );

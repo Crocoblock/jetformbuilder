@@ -2,6 +2,7 @@
  * @param node {HTMLElement}
  */
 import BrowserReporting from './BrowserReporting';
+import { allRejected } from '../functions';
 
 const {
 	      applyFilters,
@@ -39,4 +40,44 @@ function createReport( input ) {
 	throw new Error( 'Something went wrong' );
 }
 
-export { createReport };
+/**
+ * @param inputs {InputData[]}
+ * @param silence {Boolean}
+ *
+ * @return {Function[]}
+ */
+function getValidateCallbacks( inputs, silence = false ) {
+	const callbacks = [];
+
+	for ( const input of inputs ) {
+		callbacks.push(
+			( resolve, reject ) => {
+				input.reporting.validateOnChangeState( silence ).
+					then( resolve ).
+					catch( reject );
+			},
+		);
+	}
+
+	return callbacks;
+}
+
+/**
+ * @param inputs {InputData[]}
+ * @param silence {Boolean}
+ */
+function validateInputs( inputs, silence = false ) {
+	return Promise.all( getValidateCallbacks( inputs, silence ).map(
+		current => new Promise( current ),
+	) );
+}
+
+/**
+ * @param inputs {InputData[]}
+ * @param silence {Boolean}
+ */
+function validateInputsAll( inputs, silence = false ) {
+	return allRejected( getValidateCallbacks( inputs, silence ) );
+}
+
+export { createReport, validateInputs, validateInputsAll };

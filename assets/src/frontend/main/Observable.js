@@ -6,6 +6,7 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { allRejected } from './functions';
+import { validateInputsAll } from './reporting/functions';
 
 const {
 	      doAction,
@@ -115,22 +116,7 @@ Observable.prototype = {
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
 	inputsAreValid: async function () {
-		const callbacks = [];
-
-		for ( const inputName in this.dataInputs ) {
-			if ( !this.dataInputs.hasOwnProperty( inputName ) ) {
-				continue;
-			}
-			const input = this.getInput( inputName );
-
-			callbacks.push(
-				( resolve, reject ) => input.reporting.validateWithNotice().
-					then( resolve ).
-					catch( reject ),
-			);
-		}
-
-		const invalid = await allRejected( callbacks );
+		const invalid = await validateInputsAll( this.getInputs() );
 
 		return Boolean( invalid.length )
 		       ? Promise.reject( invalid )

@@ -12,7 +12,7 @@ function SignalMultiSelect() {
 		const [ node ]       = this.input.nodes;
 
 		for ( const option of node.options ) {
-			option.selected = this.input.value.current.includes(
+			option.selected = this.input.value.current?.includes(
 				option.value );
 
 			if ( !option.selected ) {

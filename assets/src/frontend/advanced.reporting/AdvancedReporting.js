@@ -150,6 +150,9 @@ AdvancedReporting.prototype.createError      = function (
 	return div;
 };
 AdvancedReporting.prototype.validateOnChange = function () {
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 */
 	if ( this.isProcess ) {
 		return;
 	}
@@ -165,6 +168,9 @@ AdvancedReporting.prototype.validateOnChange = function () {
 };
 
 AdvancedReporting.prototype.validateOnBlur = function () {
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 */
 	if ( this.isProcess ) {
 		return;
 	}

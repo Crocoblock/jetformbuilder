@@ -95,7 +95,7 @@ function AppointmentProvider() {
 		}
 
 		service.watch( () => {
-			this.value.current = null;
+			this.value.setIfEmpty( null );
 		} );
 	};
 

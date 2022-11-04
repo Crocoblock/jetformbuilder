@@ -56,12 +56,10 @@ ReactiveVar.prototype = {
 		return value;
 	},
 	setIfEmpty( newValue ) {
-		if ( (
-				!this.current.hasOwnProperty( 'length' ) && this.current
-			) ||
-			(
-				this.current.hasOwnProperty( 'length' ) && this.current.length
-			)
+		if (
+			null === this.current ||
+			undefined === this.current ||
+			!this.current?.length
 		) {
 			return;
 		}

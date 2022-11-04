@@ -53,6 +53,13 @@ function AppointmentProvider() {
 		this.name = node.dataset.field;
 	};
 
+	this.checkIsRequired = function () {
+		const [ node ] = this.nodes;
+		const args     = JSON.parse( node.dataset.args );
+
+		return args?.args_str?.includes( 'required' );
+	};
+
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
 

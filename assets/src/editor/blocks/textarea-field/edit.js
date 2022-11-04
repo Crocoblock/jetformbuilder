@@ -44,6 +44,14 @@ export default function TextareaEdit( props ) {
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
+	const changeNumberAttr = attr => {
+		for ( const [ name, value ] of Object.entries( attr ) ) {
+			attr[ name ] = '' === value ? '' : Number( value );
+		}
+
+		setAttributes( attr );
+	};
+
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -65,7 +73,7 @@ export default function TextareaEdit( props ) {
 					key="minlength"
 					min={ 1 }
 					value={ attributes.minlength }
-					onChange={ minlength => setAttributes( { minlength } ) }
+					onChange={ minlength => changeNumberAttr( { minlength } ) }
 				/>
 				<NumberControl
 					label={ __( 'Max length (symbols)' ) }
@@ -73,7 +81,7 @@ export default function TextareaEdit( props ) {
 					key="maxlength"
 					min={ 1 }
 					value={ attributes.maxlength }
-					onChange={ maxlength => setAttributes( { maxlength } ) }
+					onChange={ maxlength => changeNumberAttr( { maxlength } ) }
 				/>
 			</FieldSettingsWrapper>
 			<PanelBody

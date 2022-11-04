@@ -51,12 +51,12 @@ export default function TextEdit( props ) {
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
 
-	const changeNumberValue = ( key, newValue ) => {
-		const value = (
-			              newValue && newValue > 0
-		              ) ? parseInt( newValue ) : null;
+	const changeNumberAttr = attr => {
+		for ( const [ name, value ] of Object.entries( attr ) ) {
+			attr[ name ] = '' === value ? '' : Number( value );
+		}
 
-		props.setAttributes( { [ key ]: value } );
+		setAttributes( attr );
 	};
 
 	const blockProps           = useBlockProps();
@@ -95,7 +95,7 @@ export default function TextEdit( props ) {
 					key="minlength"
 					min={ 1 }
 					value={ attributes.minlength }
-					onChange={ minlength => setAttributes( { minlength } ) }
+					onChange={ minlength => changeNumberAttr( { minlength } ) }
 				/>
 				<NumberControl
 					label={ __( 'Max length (symbols)' ) }
@@ -103,9 +103,7 @@ export default function TextEdit( props ) {
 					key="maxlength"
 					min={ 1 }
 					value={ attributes.maxlength }
-					onChange={ maxlength => {
-						setAttributes( { maxlength } )
-					} }
+					onChange={ maxlength => changeNumberAttr( { maxlength } ) }
 				/>
 				<ToggleControl
 					key={ 'enable_input_mask' }

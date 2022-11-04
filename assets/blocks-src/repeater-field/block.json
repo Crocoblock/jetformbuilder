@@ -29,7 +29,10 @@
 		},
 		"new_item_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"manage_items_count_field": {
 			"type": "string",
@@ -41,7 +44,10 @@
 		},
 		"label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"name": {
 			"type": "string",
@@ -49,7 +55,10 @@
 		},
 		"desc": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"default": {
 			"type": "string",
@@ -65,7 +74,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"visibility": {
 			"type": "string",

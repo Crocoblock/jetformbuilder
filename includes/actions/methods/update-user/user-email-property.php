@@ -44,6 +44,8 @@ class User_Email_Property extends Base_Object_Property {
 		if ( $email_exists && $id->value !== $email_exists ) {
 			throw new Action_Exception( 'email_exists' );
 		}
+
+		parent::do_before( $key, $value, $modifier );
 	}
 
 	public function get_related(): array {

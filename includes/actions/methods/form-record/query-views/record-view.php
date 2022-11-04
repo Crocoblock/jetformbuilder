@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views;
 
 
+use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 
@@ -47,5 +48,11 @@ class Record_View extends View_Base {
 		);
 
 		return $this;
+	}
+
+	public function query(): Query_Builder {
+		$this->prepare_dependencies();
+
+		return ( new Query_Builder() )->set_view( $this );
 	}
 }

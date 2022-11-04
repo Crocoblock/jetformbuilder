@@ -23,7 +23,10 @@
 		},
 		"page_break_disabled": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"label_progress": {
 			"type": "string",
@@ -31,7 +34,10 @@
 		},
 		"label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"add_prev": {
 			"type": "boolean",
@@ -39,7 +45,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"class_name": {
 			"type": "string",

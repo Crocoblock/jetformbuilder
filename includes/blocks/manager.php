@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Ssr_Validation\Rest_Validation_Endpoint;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
@@ -259,12 +260,15 @@ class Manager {
 			true
 		);
 
+		$options = Tab_Handler_Manager::get_options( 'options-tab' );
+
 		wp_localize_script(
 			self::MAIN_SCRIPT_HANDLE,
 			'JetFormBuilderSettings',
 			apply_filters(
 				'jet-form-builder/frontend-settings',
 				array(
+					'disable_next'        => $options['disable_next_button'] ?? true,
 					'ajaxurl'             => Http_Tools::get_form_action_url(
 						array( 'method' => 'ajax' )
 					),

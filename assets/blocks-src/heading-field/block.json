@@ -17,11 +17,17 @@
 	"attributes": {
 		"label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"desc": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"add_prev": {
 			"type": "boolean",
@@ -29,7 +35,10 @@
 		},
 		"prev_label": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"visibility": {
 			"type": "string",

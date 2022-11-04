@@ -19,6 +19,13 @@ class Tab_Handler_Manager {
 		return self::$instance;
 	}
 
+	public static function get_options( string $slug ): array {
+		$tab = static::instance()->tab( $slug );
+		$tab->save_global_options();
+
+		return $tab->get_global_options();
+	}
+
 	public function __construct() {
 		$this->register_tabs();
 	}

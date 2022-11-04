@@ -1114,6 +1114,7 @@
 
 		initSingleFormPage: function( $page, $changedField ) {
 			let $msg           = $page.find( '.jet-form-builder__next-page-msg' ),
+			    $button        = $page.find( '.jet-form-builder__next-page' ),
 				requiredFields = $page[ 0 ].querySelectorAll( '.jet-form-builder__field[required]' ),
 				disabled       = false,
 				radioFields    = {};
@@ -1165,6 +1166,10 @@
 					}
 
 				}
+			}
+
+			if ( window.JetFormBuilderSettings.disable_next ) {
+				$button.attr( 'disabled', disabled );
 			}
 
 			if ( disabled && $msg.length ) {

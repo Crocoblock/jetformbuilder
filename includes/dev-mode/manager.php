@@ -19,11 +19,7 @@ class Manager {
 	private $is_active = false;
 
 	private function __construct() {
-		$options_tab = Tab_Handler_Manager::instance()->tab( 'options-tab' );
-
-		$options_tab->save_global_options();
-		$options = $options_tab->get_global_options();
-
+		$options         = Tab_Handler_Manager::get_options( 'options-tab' );
 		$this->is_active = apply_filters( 'jet-form-builder/dev-mode/activate', false );
 
 		if ( isset( $options['enable_dev_mode'] ) ) {

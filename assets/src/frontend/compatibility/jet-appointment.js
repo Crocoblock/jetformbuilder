@@ -31,6 +31,10 @@ function AppointmentInput() {
 		InputData.prototype.onObserve.call( this );
 
 		this.callable = null;
+
+		this.value.sanitize( value => {
+			return [ '{}', '[]' ].includes( value ) ? '' : value;
+		} );
 	};
 }
 

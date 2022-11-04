@@ -92,6 +92,10 @@ addAction(
 		}
 
 		ListingAddTemplateWatcher( input );
+
+		if ( input.getValue() ) {
+			input.value.notify();
+		}
 	},
 );
 

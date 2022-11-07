@@ -21,14 +21,20 @@ if ( Regexp_Tools::has_macro( $this->args['min'] ) ) {
 	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-min', $this->args['min'] );
 } else {
-	$this->add_attribute( 'min', Date_Tools::time_to_string( $this->args['min'], true ) );
+	$this->add_attribute(
+		'min',
+		Date_Tools::time_to_string( $this->args['min'], Date_Tools::DATETIME )
+	);
 }
 
 if ( Regexp_Tools::has_macro( $this->args['max'] ) ) {
 	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-max', $this->args['max'] );
 } else {
-	$this->add_attribute( 'max', Date_Tools::time_to_string( $this->args['max'], true ) );
+	$this->add_attribute(
+		'max',
+		Date_Tools::time_to_string( $this->args['max'], Date_Tools::DATETIME )
+	);
 }
 ?>
 <input <?php $this->render_attributes_string(); ?>>

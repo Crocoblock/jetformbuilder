@@ -10,9 +10,7 @@ function AddDayFilter() {
 		days          = days ? +(days.trim()) : 1;
 		const current = new Date( value );
 
-		current.setDate( current.getDate() + days );
-
-		return current.getTime();
+		return current.setDate( current.getDate() + days );
 	};
 }
 

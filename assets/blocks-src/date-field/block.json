@@ -25,7 +25,11 @@
 		},
 		"min": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"macro": true,
+				"dynamic": true
+			}
 		},
 		"max": {
 			"type": "string",

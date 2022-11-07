@@ -10,9 +10,7 @@ function AddDayFilter() {
 		months         = months ? +months.trim() : 1;
 		const current = new Date( value );
 
-		current.setMonth( current.getMonth() + months );
-
-		return current.getTime();
+		return current.setMonth( current.getMonth() + months );
 	};
 }
 

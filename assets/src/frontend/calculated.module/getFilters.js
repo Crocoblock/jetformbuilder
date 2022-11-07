@@ -5,12 +5,32 @@ import ToTimeFilter from './filters/ToTimeFilter';
 import ToDateTimeFilter from './filters/ToDateTimeFilter';
 import AddDayFilter from './filters/AddDayFilter';
 import TimestampFilter from './filters/TimestampFilter';
+import SetHourFilter from './filters/SetHourFilter';
+import SetMinFilter from './filters/SetMinFilter';
+import SetDayFilter from './filters/SetDayFilter';
+import SetYearFilter from './filters/SetYearFilter';
+import SetMonthFilter from './filters/SetMonthFilter';
+import SubtractHourFilter from './filters/SubtractHourFilter';
+import SubtractDayFilter from './filters/SubtractDayFilter';
+import SubtractMinFilter from './filters/SubtractMinFilter';
+import SubtractMonthFilter from './filters/SubtractMonthFilter';
+import SubtractYearFilter from './filters/SubtractYearFilter';
 
 const { applyFilters } = wp.hooks;
 
 const getFilterItems = () => applyFilters(
 	'jet.fb.restrictions.filters',
 	[
+		SetYearFilter,
+		SetMonthFilter,
+		SetDayFilter,
+		SetHourFilter,
+		SetMinFilter,
+		SubtractYearFilter,
+		SubtractMonthFilter,
+		SubtractDayFilter,
+		SubtractHourFilter,
+		SubtractMinFilter,
 		LengthFilter,
 		FallBackFilter,
 		ToDateFilter,

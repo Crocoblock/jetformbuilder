@@ -10,9 +10,7 @@ function AddYearFilter() {
 		years         = years ? +years.trim() : 1;
 		const current = new Date( value );
 
-		current.setFullYear( current.getFullYear() + years );
-
-		return current.getTime();
+		return current.setFullYear( current.getFullYear() + years );
 	};
 }
 

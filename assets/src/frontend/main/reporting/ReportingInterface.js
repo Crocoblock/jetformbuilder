@@ -21,6 +21,7 @@
  *
  */
 import RestrictionError from './RestrictionError';
+import ReactiveVar from '../reactive/ReactiveVar';
 
 function ReportingInterface() {
 	/**
@@ -34,7 +35,9 @@ function ReportingInterface() {
 	this.errors = null;
 	this.restrictions = [];
 
-	this.valuePrev = null;
+	this.valuePrev     = null;
+	this.validityState = null;
+	this.promisesCount = 0;
 }
 
 ReportingInterface.prototype = {
@@ -43,6 +46,11 @@ ReportingInterface.prototype = {
 	 */
 	restrictions: [],
 	valuePrev: null,
+	/**
+	 * @type {ReactiveVar}
+	 */
+	validityState: null,
+	promisesCount: 0,
 	/**
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
@@ -64,6 +72,8 @@ ReportingInterface.prototype = {
 	 */
 	validateWithNotice: async function () {
 		const errors = await this.getErrors();
+
+		this.validityState.current = !Boolean( errors.length );
 
 		if ( errors.length ) {
 			this.report( errors );
@@ -87,6 +97,8 @@ ReportingInterface.prototype = {
 	validate: async function () {
 		const errors = await this.getErrors();
 
+		this.validityState.current = !Boolean( errors.length );
+
 		if ( errors?.length ) {
 			throw new RestrictionError( errors[ 0 ].name );
 		}
@@ -94,10 +106,43 @@ ReportingInterface.prototype = {
 		return true;
 	},
 	/**
-	 * @returns {Promise<*[]|array|null>}
+	 * @param promises {Function[]}
+	 * @return {Promise<array|null>}
+	 */
+	getErrorsRaw: async function ( promises ) {
+		throw new Error( 'getError must return a Promise' );
+	},
+
+	/**
+	 * @return {Promise<array|*[]|null>}
 	 */
 	getErrors: async function () {
-		throw new Error( 'getError must return a Promise' );
+		if (
+			this.input.loading.current ||
+			!this.input.isVisible()
+		) {
+			return [];
+		}
+
+		const promises = this.getPromises();
+
+		if (
+			!this.hasChangedValue() &&
+			this.promisesCount === promises.length
+		) {
+			return this.errors ?? [];
+		}
+
+		this.promisesCount = promises.length;
+		this.errors        = [];
+
+		if ( !promises.length ) {
+			return this.errors;
+		}
+
+		this.errors = await this.getErrorsRaw( promises );
+
+		return this.errors;
 	},
 	/**
 	 * @param validationErrors {Restriction[]}
@@ -153,6 +198,9 @@ ReportingInterface.prototype = {
 	 * @param input {InputData}
 	 */
 	setInput: function ( input ) {
+		this.validityState = new ReactiveVar();
+		this.validityState.make();
+
 		this.input = input;
 		this.setRestrictions();
 	},

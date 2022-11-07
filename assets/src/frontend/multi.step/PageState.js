@@ -31,7 +31,7 @@ function PageState( node, state ) {
 	} );
 
 	this.addButtonsListeners();
-	this.updateState();
+	this.updateStateAsync().then( () => {} ).catch( () => {} );
 
 	this.getLockState().watch( () => {
 		this.canSwitch.current = !this.getLockState().current;
@@ -51,7 +51,7 @@ PageState.prototype.observeInputs = function () {
 
 		this.inputs.push( node.jfbSync );
 
-		node.jfbSync.setPage( this );
+		node.jfbSync.watchValidity( () => this.updateState() );
 	}
 };
 /**
@@ -71,11 +71,6 @@ PageState.prototype.observeConditionalBlocks = function () {
 			this.state.getRoot(),
 		);
 
-		/**
-		 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
-		 */
-		block.isRight.watch( () => this.updateState() );
-
 		for ( const condition of block.list.getConditions() ) {
 			if ( condition instanceof ConditionPageStateItem ) {
 				block.page = this;
@@ -93,7 +88,15 @@ PageState.prototype.onHide      = function () {
 	this.node.classList.add( 'jet-form-builder-page--hidden' );
 };
 PageState.prototype.updateState = function () {
-	this.updateStateAsync().then( () => {} ).catch( () => {} );
+	for ( const input of this.getInputs() ) {
+		if ( input.reporting.validityState.current ) {
+			continue;
+		}
+		this.canSwitch.current = false;
+		return;
+	}
+
+	this.canSwitch.current = true;
 };
 
 PageState.prototype.updateStateAsync    = async function ( silence = true ) {

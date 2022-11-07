@@ -52,11 +52,6 @@ function InputData() {
 	 */
 	this.root = null;
 
-	/**
-	 * @type {PageState}
-	 */
-	this.page = null;
-
 	this.loading = new LoadingReactiveVar( false );
 	this.loading.make();
 }
@@ -108,6 +103,9 @@ InputData.prototype.reportOnBlur = function () {
  */
 InputData.prototype.watch = function ( callable ) {
 	return this.value.watch( callable );
+};
+InputData.prototype.watchValidity = function ( callable ) {
+	return this.reporting.validityState.watch( callable );
 };
 /**
  * @param callable
@@ -231,14 +229,6 @@ InputData.prototype.getSubmit = function () {
  */
 InputData.prototype.getRoot = function () {
 	return this.root?.parent?.root ?? this.root;
-};
-/**
- * @param page {PageState}
- */
-InputData.prototype.setPage = function ( page ) {
-	this.page = page;
-
-	this.watch( () => page.updateState() );
 };
 
 InputData.prototype.isVisible = function () {

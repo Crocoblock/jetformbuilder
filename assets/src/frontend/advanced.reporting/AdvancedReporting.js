@@ -32,7 +32,6 @@ AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
 AdvancedReporting.prototype.skipServerSide = true;
 AdvancedReporting.prototype.hasServerSide  = false;
 AdvancedReporting.prototype.valuePrev      = null;
-AdvancedReporting.prototype.promisesCount  = 0;
 AdvancedReporting.prototype.isProcess      = null;
 
 AdvancedReporting.prototype.setRestrictions = function () {
@@ -49,39 +48,19 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 	return !!inherit?.length;
 };
 
-AdvancedReporting.prototype.getErrors = async function () {
-	if (
-		this.input.loading.current ||
-		!this.input.isVisible()
-	) {
-		return [];
-	}
-
-	const promises = this.getPromises();
-
-	if ( !this.hasChangedValue() && this.promisesCount === promises.length ) {
-		return this.errors ?? [];
-	}
-
-	this.errors        = [];
-	this.promisesCount = promises.length;
-
-	if ( !promises.length ) {
-		return this.errors;
-	}
-
+AdvancedReporting.prototype.getErrorsRaw = async function ( promises ) {
 	if ( this.hasServerSide ) {
 		this.input.loading.start();
 	}
 
-	this.errors    = await allRejected( promises );
+	const errors   = await allRejected( promises );
 	this.valuePrev = this.input.getValue();
 
 	if ( this.hasServerSide ) {
 		this.input.loading.end();
 	}
 
-	return this.errors;
+	return errors;
 };
 
 /**
@@ -190,13 +169,14 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 
 AdvancedReporting.prototype.validateOnChangeState = function ( silence = false ) {
 	if ( this.isProcess ) {
-		return;
+		return Promise.resolve();
 	}
 	this.isProcess      = true;
 	this.skipServerSide = false;
-	const promise       = silence ? this.validate() : this.validateWithNotice();
 
 	return new Promise( ( resolve, reject ) => {
+		const promise = silence ? this.validate() : this.validateWithNotice();
+
 		promise.then( resolve ).catch( reject ).finally(
 			() => {
 				this.skipServerSide = true;

@@ -3,6 +3,7 @@
  */
 import BrowserReporting from './BrowserReporting';
 import { allRejected } from '../functions';
+import InputData from '../inputs/InputData';
 
 const {
 	      applyFilters,
@@ -50,6 +51,15 @@ function getValidateCallbacks( inputs, silence = false ) {
 	const callbacks = [];
 
 	for ( const input of inputs ) {
+		if ( !(
+			input instanceof InputData
+		) ) {
+			console.group( 'Input are not instance of InputData' );
+			console.error( input );
+			console.groupEnd();
+
+			return [];
+		}
 		callbacks.push(
 			( resolve, reject ) => {
 				input.reporting.validateOnChangeState( silence ).
@@ -65,6 +75,7 @@ function getValidateCallbacks( inputs, silence = false ) {
 /**
  * @param inputs {InputData[]}
  * @param silence {Boolean}
+ * @return {Promise<unknown[]>}
  */
 function validateInputs( inputs, silence = false ) {
 	return Promise.all( getValidateCallbacks( inputs, silence ).map(

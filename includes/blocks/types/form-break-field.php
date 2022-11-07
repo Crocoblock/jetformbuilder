@@ -86,7 +86,6 @@ class Form_Break_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
-		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		return ( new class( $this ) extends \Jet_Form_Builder\Blocks\Render\Base {
 			public function get_name() {
@@ -95,6 +94,16 @@ class Form_Break_Field extends Base {
 
 			public function label_allowed() {
 				return false;
+			}
+
+			public function before_render( $args ) {
+				parent::before_render( $args );
+
+				if ( empty( $args['add_next_button'] ) ) {
+					return;
+				}
+
+				Button_Next::add_next_disable( $this );
 			}
 		} )->render();
 	}

@@ -6,6 +6,9 @@ const {
 const {
 	      ReactiveVar,
       } = JetFormBuilderAbstract;
+const {
+	      validateInputsAll,
+      } = JetFormBuilderFunctions;
 
 function ConditionalBlock( node, observable ) {
 	this.node           = node;
@@ -36,10 +39,16 @@ function ConditionalBlock( node, observable ) {
 	 */
 	this.comment = null;
 
+	/**
+	 * @type {InputData[]}
+	 */
+	this.inputs = [];
+
 	this.isRight = new ReactiveVar( null );
 	this.isRight.make();
 
 	this.setConditions();
+	this.setInputs();
 
 	doAction( 'jet.fb.conditional.init', this );
 }
@@ -54,6 +63,17 @@ ConditionalBlock.prototype = {
 		this.list.onChangeRelated = () => {
 			this.isRight.current = this.list.getResult();
 		};
+	},
+	setInputs() {
+		if ( !this.willDomChange() ) {
+			return;
+		}
+
+		this.inputs = Array.from(
+			this.node.querySelectorAll( '[data-jfb-sync]' ),
+		).map(
+			item => item.jfbSync,
+		);
 	},
 	insertComment() {
 		if ( !this.willDomChange() ) {
@@ -76,6 +96,7 @@ ConditionalBlock.prototype = {
 		this.insertComment();
 
 		this.isRight.watch( () => this.runFunction() );
+		this.isRight.watch( () => this.validateInputs() );
 		this.list.observe();
 	},
 	runFunction() {
@@ -98,6 +119,14 @@ ConditionalBlock.prototype = {
 				this.disableBlock( result );
 				break;
 		}
+	},
+	/**
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
+	 */
+	validateInputs() {
+		validateInputsAll( this.inputs, true ).
+			then( () => {} ).
+			catch( () => {} );
 	},
 	showBlockCss( result ) {
 		this.node.style.display = result ? 'block' : 'none';

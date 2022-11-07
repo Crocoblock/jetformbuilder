@@ -34,29 +34,10 @@ function BrowserReporting() {
 		this.validate().then( () => {} ).catch( () => {} );
 	};
 
-	this.getErrors = async function () {
-		if (
-			this.input.loading.current ||
-			!this.input.isVisible()
-		) {
-			return [];
-		}
-
-		if ( !this.hasChangedValue() ) {
-			return this.errors ?? [];
-		}
-
-		this.errors    = [];
-		const promises = this.getPromises();
-
-		if ( !promises.length ) {
-			return this.errors;
-		}
-
-		this.errors    = await allRejected( promises );
+	this.getErrorsRaw = async function ( promises ) {
 		this.valuePrev = this.input.getValue();
 
-		return this.errors;
+		return await allRejected( promises );
 	};
 
 	this.validateOnChangeState = function ( silence = false ) {

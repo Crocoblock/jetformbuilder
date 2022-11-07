@@ -187,11 +187,11 @@ export default function TextEdit( props ) {
 					{ attributes.enable_input_mask && (
 						<ValidationBlockMessage name="inputmask"/>
 					) }
-					{ Boolean( attributes.maxlength ) && <>
-						<ValidationBlockMessage name="char_max"/>
-					</> }
 					{ Boolean( attributes.minlength ) && <>
 						<ValidationBlockMessage name="char_min"/>
+					</> }
+					{ Boolean( attributes.maxlength ) && <>
+						<ValidationBlockMessage name="char_max"/>
 					</> }
 					<ValidationBlockMessage name="empty"/>
 				</> }

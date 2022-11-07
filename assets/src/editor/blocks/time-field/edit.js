@@ -8,9 +8,12 @@ const {
 	      FieldWrapper,
 	      AdvancedInspectorControl,
 	      ClientSideMacros,
+	      ValidationToggleGroup,
+	      ValidationBlockMessage,
       } = JetFBComponents;
 const {
 	      useInsertMacro,
+	      useIsAdvancedValidation,
       } = JetFBHooks;
 
 const { __ } = wp.i18n;
@@ -44,6 +47,7 @@ export default function TimeEdit( props ) {
 
 	const [ minInput, updateMin ] = useInsertMacro( 'min' );
 	const [ maxInput, updateMax ] = useInsertMacro( 'max' );
+	const isAdvancedValidation    = useIsAdvancedValidation();
 
 	return [
 		<ToolBarFields
@@ -102,6 +106,20 @@ export default function TimeEdit( props ) {
 						/> }
 					</AdvancedInspectorControl>
 				</ClientSideMacros>
+			</PanelBody>
+			<PanelBody
+				title={ __( 'Validation', 'jet-form-builder' ) }
+			>
+				<ValidationToggleGroup/>
+				{ isAdvancedValidation && <>
+					{ Boolean( attributes.min ) && <>
+						<ValidationBlockMessage name="date_min"/>
+					</> }
+					{ Boolean( attributes.max ) && <>
+						<ValidationBlockMessage name="date_max"/>
+					</> }
+					<ValidationBlockMessage name="empty"/>
+				</> }
 			</PanelBody>
 			<AdvancedFields/>
 		</InspectorControls>,

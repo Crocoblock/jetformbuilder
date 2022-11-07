@@ -6,7 +6,7 @@ function ReachLimitNumbers() {
 	this.isSupported   = function ( node, reporting ) {
 		const { max = false } = reporting.input.attrs;
 
-		return false !== max;
+		return false !== max && [ 'number', 'range' ].includes( node.type );
 	};
 	this.validate      = function () {
 		const value   = this.getValue();

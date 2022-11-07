@@ -15,6 +15,8 @@ use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Min;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_Date_Max;
+use Jet_Form_Builder\Blocks\Validation_Messages\Is_Date_Min;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Empty_Value;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_File_Ext;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_File_Size;
@@ -98,6 +100,8 @@ class Validation implements Arrayable {
 			new Is_File_Size(),
 			new Is_Files_Max(),
 			new Is_File_Ext(),
+			new Is_Date_Max(),
+			new Is_Date_Min(),
 		);
 	}
 

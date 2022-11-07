@@ -87,10 +87,10 @@ function setAttrs( input ) {
 		if ( !current.isSupported( input ) ) {
 			continue;
 		}
+		input.attrs[ current.attrName ] = current;
+
 		current.setInput( input );
 		current.observe();
-
-		input.attrs[ current.attrName ] = current;
 	}
 }
 

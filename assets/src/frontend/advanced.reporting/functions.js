@@ -14,6 +14,8 @@ import MatchRegexp from './restrictions/MatchRegexp';
 import NotMatchRegexp from './restrictions/NotMatchRegexp';
 import ServerSideCallback from './restrictions/ServerSideCallback';
 import MustEqual from './restrictions/MustEqual';
+import TooEarlyTimestamp from './restrictions/TooEarlyTimestamp';
+import TooLateTimestamp from './restrictions/TooLateTimestamp';
 
 const { applyFilters, addFilter } = wp.hooks;
 
@@ -37,6 +39,8 @@ let advancedRules = [];
 const getRestrictions = () => applyFilters(
 	'jet.fb.restrictions',
 	[
+		TooEarlyTimestamp,
+		TooLateTimestamp,
 		ReachLimitNumbers,
 		NotEnoughNumbers,
 		NotUrl,

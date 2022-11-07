@@ -6,7 +6,7 @@ function NotEnoughNumbers() {
 	this.isSupported   = function ( node, reporting ) {
 		const { min = false } = reporting.input.attrs;
 
-		return false !== min;
+		return false !== min && [ 'number', 'range' ].includes( node.type );
 	};
 	this.validate      = function () {
 		const value   = this.getValue();

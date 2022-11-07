@@ -8,9 +8,12 @@ const {
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      AdvancedInspectorControl,
+	      ValidationToggleGroup,
+	      ValidationBlockMessage,
       } = JetFBComponents;
 const {
 	      useInsertMacro,
+	      useIsAdvancedValidation,
       } = JetFBHooks;
 const {
 	      __,
@@ -39,6 +42,8 @@ export default function DateTimeEdit( props ) {
 		      isSelected,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
+
+	const isAdvancedValidation = useIsAdvancedValidation();
 
 	return [
 		<ToolBarFields
@@ -111,10 +116,21 @@ export default function DateTimeEdit( props ) {
 						} }
 					/>
 				</FieldSettingsWrapper>
-				<AdvancedFields
-					key={ uniqKey( 'JetForm-advanced' ) }
-					{ ...props }
-				/>
+				<PanelBody
+					title={ __( 'Validation', 'jet-form-builder' ) }
+				>
+					<ValidationToggleGroup/>
+					{ isAdvancedValidation && <>
+						{ Boolean( attributes.min ) && <>
+							<ValidationBlockMessage name="date_min"/>
+						</> }
+						{ Boolean( attributes.max ) && <>
+							<ValidationBlockMessage name="date_max"/>
+						</> }
+						<ValidationBlockMessage name="empty"/>
+					</> }
+				</PanelBody>
+				<AdvancedFields/>
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>

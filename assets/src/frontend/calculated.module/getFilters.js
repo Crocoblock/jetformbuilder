@@ -57,12 +57,20 @@ let response         = [];
 
 function pushFilter( name, props = '' ) {
 	if ( !filters.length ) {
-		filters = getFilterItems().map( current => new current() );
+		filters = getFilterItems();
 	}
 
-	const filter = filters.find(
-		current => name === current.getSlug(),
-	);
+	let filter;
+
+	for ( let current of filters ) {
+		current = new current();
+
+		if ( name === current.getSlug() ) {
+			filter = current;
+
+			break;
+		}
+	}
 
 	if ( !filter ) {
 		return;

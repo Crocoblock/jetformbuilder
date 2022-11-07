@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.9
+* UPD: Update Options action (add compat with stored type)
+* ADD: Option disable "next button"
+
 ## 2.1.8
 * ADD: Shortcodes compatibility (label, desc, etc.)
 * FIX: Change User email by Update user action

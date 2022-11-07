@@ -3,7 +3,11 @@ import FallBackFilter from './filters/FallBackFilter';
 import ToDateFilter from './filters/ToDateFilter';
 import ToTimeFilter from './filters/ToTimeFilter';
 import ToDateTimeFilter from './filters/ToDateTimeFilter';
+import AddYearFilter from './filters/AddYearFilter';
+import AddMonthFilter from './filters/AddMonthFilter';
 import AddDayFilter from './filters/AddDayFilter';
+import AddHourFilter from './filters/AddHourFilter';
+import AddMinFilter from './filters/AddMinFilter';
 import TimestampFilter from './filters/TimestampFilter';
 import SetHourFilter from './filters/SetHourFilter';
 import SetMinFilter from './filters/SetMinFilter';
@@ -18,6 +22,11 @@ import SubtractYearFilter from './filters/SubtractYearFilter';
 
 const { applyFilters } = wp.hooks;
 
+/**
+ * @type {array<Filter>}
+ */
+let filters = [];
+
 const getFilterItems = () => applyFilters(
 	'jet.fb.restrictions.filters',
 	[
@@ -31,21 +40,20 @@ const getFilterItems = () => applyFilters(
 		SubtractDayFilter,
 		SubtractHourFilter,
 		SubtractMinFilter,
+		AddYearFilter,
+		AddMonthFilter,
+		AddDayFilter,
+		AddHourFilter,
+		AddMinFilter,
 		LengthFilter,
 		FallBackFilter,
 		ToDateFilter,
 		ToTimeFilter,
 		ToDateTimeFilter,
-		AddDayFilter,
 		TimestampFilter,
 	],
 );
-
-/**
- * @type {array<Filter>}
- */
-let filters  = [];
-let response = [];
+let response         = [];
 
 function pushFilter( name, props = '' ) {
 	if ( !filters.length ) {

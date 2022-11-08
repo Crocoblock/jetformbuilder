@@ -44,15 +44,6 @@ function CalculatedFormula( formula, root ) {
 	this.observe( formula );
 }
 
-const allowedSymbols = [
-	'+', '-', '\/', '*', '^', '?', ':', '%',
-];
-
-const symbolsRegexp = new RegExp(
-	'[\\' + allowedSymbols.join( '\\' ) + ']',
-	'g',
-);
-
 CalculatedFormula.prototype = {
 	// raw value
 	formula: null,
@@ -97,11 +88,6 @@ CalculatedFormula.prototype = {
 		const rawParts = value.split( /%(.*?)%/g );
 
 		if ( 1 === rawParts.length ) {
-
-			if ( value.match( symbolsRegexp )?.length ) {
-				this.parts.push( value );
-			}
-
 			return;
 		}
 

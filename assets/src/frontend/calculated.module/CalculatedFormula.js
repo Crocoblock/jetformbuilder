@@ -28,12 +28,21 @@ addFilter(
 /**
  * @param formula {String}
  * @param root {InputData|Observable}
+ * @param options {{forceFunction: boolean}}
  */
-function CalculatedFormula( formula, root ) {
+function CalculatedFormula(
+	formula,
+	root,
+	options = {},
+) {
 	this.formula      = formula;
 	this.parts        = [];
 	this.related      = [];
 	this.relatedAttrs = [];
+
+	const { forceFunction = false } = options;
+
+	this.forceFunction = forceFunction;
 
 	if ( root instanceof InputData ) {
 		this.input = root;
@@ -58,6 +67,8 @@ CalculatedFormula.prototype = {
 	 * @type {Observable}
 	 */
 	root: null,
+
+	forceFunction: false,
 	/**
 	 * @type {Function}
 	 */
@@ -192,7 +203,7 @@ CalculatedFormula.prototype = {
 		} ).join( '' );
 	},
 	calculate() {
-		if ( !this.parts.length ) {
+		if ( !this.parts.length && !this.forceFunction ) {
 			return this.formula;
 		}
 		const formula = this.calculateString();

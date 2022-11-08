@@ -8,8 +8,9 @@ const {
 function AdvancedRestriction() {
 	Restriction.call( this );
 
-	this.message = '';
-	this.formula = null;
+	this.message      = '';
+	this.formula      = null;
+	this.watchedAttrs = [];
 }
 
 AdvancedRestriction.prototype = Object.create( Restriction.prototype );
@@ -19,6 +20,10 @@ AdvancedRestriction.prototype.message = '';
  * @type {CalculatedFormula}
  */
 AdvancedRestriction.prototype.formula = null;
+/**
+ * @type {Array}
+ */
+AdvancedRestriction.prototype.watchedAttrs = [];
 
 /**
  * If returns true -> validation will be
@@ -55,6 +60,17 @@ AdvancedRestriction.prototype.onReady = function () {
 		this.message = this.formula.calculateString();
 	};
 	this.formula.setResult();
+
+	if ( !this.watchedAttrs.length ) {
+		return;
+	}
+
+	this.reporting.watchAttrs = [
+		...new Set( [
+			...this.reporting.watchAttrs,
+			...this.watchedAttrs,
+		] ),
+	];
 };
 
 export default AdvancedRestriction;

@@ -5,6 +5,8 @@ const { getTimestamp } = JetFormBuilderFunctions;
 function TooEarlyTimestamp() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'min' );
+
 	this.isSupported = function ( node, reporting ) {
 		const { min = false } = reporting.input.attrs;
 

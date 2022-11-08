@@ -59,8 +59,6 @@ function parseInput( input ) {
 
 	if ( wrapper && wrapper.dataset.hasOwnProperty( 'value' ) ) {
 		createValues( wrapper.dataset.value, input );
-
-		return;
 	}
 
 	for ( const property of getProperties( input ) ) {

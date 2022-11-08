@@ -5,6 +5,8 @@ const { getTimestamp } = JetFormBuilderFunctions;
 function TooLateTimestamp() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'max' );
+
 	this.isSupported = function ( node, reporting ) {
 		const { max = false } = reporting.input.attrs;
 
@@ -23,9 +25,9 @@ function TooLateTimestamp() {
 
 		const { max }           = this.reporting.input.attrs;
 		const { time }          = getTimestamp( value );
-		const { time: minTime } = getTimestamp( max.value.current );
+		const { time: maxTime } = getTimestamp( max.value.current );
 
-		return time <= minTime;
+		return time <= maxTime;
 	};
 
 	this.getRawMessage = function () {

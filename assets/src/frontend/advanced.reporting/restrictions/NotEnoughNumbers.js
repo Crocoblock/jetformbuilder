@@ -3,6 +3,8 @@ import AdvancedRestriction from './AdvancedRestriction';
 function NotEnoughNumbers() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'min' );
+
 	this.isSupported   = function ( node, reporting ) {
 		const { min = false } = reporting.input.attrs;
 

@@ -5,6 +5,8 @@ const {
 function MaxFilesRestriction() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'max_files' );
+
 	this.isSupported = function ( node, reporting ) {
 		return (
 			'file' === node?.type
@@ -18,18 +20,6 @@ function MaxFilesRestriction() {
 		current = current?.length ?? 0;
 
 		return !current || current <= max_files.value.current;
-	};
-
-	this.setReporting = function ( reporting ) {
-		AdvancedRestriction.prototype.setReporting.call( this, reporting );
-
-		const { max_files } = reporting.input.attrs;
-
-		const validate = () => {
-			reporting.validateWithNotice().then( () => {} ).catch( () => {} );
-		};
-
-		max_files.value.watch( validate );
 	};
 
 	this.getRawMessage = function () {

@@ -3,6 +3,8 @@ import AdvancedRestriction from './AdvancedRestriction';
 function NotEnoughChars() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'minLength' );
+
 	this.isSupported = function ( node, reporting ) {
 		const { minLength = false } = reporting.input.attrs;
 

@@ -3,6 +3,8 @@ import AdvancedRestriction from './AdvancedRestriction';
 function ReachLimitChars() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'maxLength' );
+
 	this.isSupported = function ( node, reporting ) {
 		const { maxLength = false } = reporting.input.attrs;
 

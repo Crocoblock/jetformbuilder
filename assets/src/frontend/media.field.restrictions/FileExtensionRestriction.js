@@ -3,6 +3,8 @@ import BaseFileRestriction from './BaseFileRestriction';
 function FileExtensionRestriction() {
 	BaseFileRestriction.call( this );
 
+	this.watchedAttrs.push( 'file_ext' );
+
 	this.isSupported = function ( node, reporting ) {
 		const { file_ext = false } = reporting.input.attrs;
 

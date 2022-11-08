@@ -23,16 +23,26 @@ function AdvancedReporting() {
 	this.type           = 'inherit';
 	this.messages       = {};
 	this.skipServerSide = true;
-	this.valuePrev      = null;
-	this.promisesCount  = 0;
+
+	/**
+	 * Computed property which contain all attrs
+	 * for all supported restrictions
+	 *
+	 * @see AdvancedRestriction.onReady
+	 *
+	 * @type {String[]}
+	 */
+	this.watchAttrs = [];
+
+	this.queue = [];
 }
 
 AdvancedReporting.prototype = Object.create( ReportingInterface.prototype );
 
 AdvancedReporting.prototype.skipServerSide = true;
 AdvancedReporting.prototype.hasServerSide  = false;
-AdvancedReporting.prototype.valuePrev      = null;
 AdvancedReporting.prototype.isProcess      = null;
+AdvancedReporting.prototype.queue          = [];
 
 AdvancedReporting.prototype.setRestrictions = function () {
 	setRestrictions( this );
@@ -73,6 +83,20 @@ AdvancedReporting.prototype.setInput         = function ( input ) {
 	ReportingInterface.prototype.setInput.call( this, input );
 
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
+
+	for ( const watchAttr of this.watchAttrs ) {
+		if ( !input.attrs.hasOwnProperty( watchAttr ) ) {
+			continue;
+		}
+		/**
+		 * @type {BaseHtmlAttr}
+		 */
+		const attr = input.attrs[ watchAttr ];
+
+		attr.value.watch( () => {
+			this.validateOnChange( true );
+		} );
+	}
 };
 AdvancedReporting.prototype.clearReport      = function () {
 	const node = getWrapper( this.getNode() );
@@ -128,22 +152,40 @@ AdvancedReporting.prototype.createError      = function (
 
 	return div;
 };
-AdvancedReporting.prototype.validateOnChange = function () {
+AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
+	const callback = () => {
+		this.validateWithNotice().
+			then( () => {} ).
+			catch( () => {} ).
+			finally( () => {
+				this.isProcess = null;
+
+				const queue = [ ...this.queue ];
+				this.queue  = [];
+
+				if ( !queue.length ) {
+					return;
+				}
+
+				this.valuePrev = null;
+				queue.forEach( current => current() );
+			} );
+	};
+
 	/**
 	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
+	if ( addToQueue && this.isProcess ) {
+		this.queue = [ callback ];
+	}
+
 	if ( this.isProcess ) {
 		return;
 	}
 
 	this.isProcess = true;
 
-	this.validateWithNotice().
-		then( () => {} ).
-		catch( () => {} ).
-		finally( () => {
-			this.isProcess = null;
-		} );
+	callback();
 };
 
 AdvancedReporting.prototype.validateOnBlur = function () {

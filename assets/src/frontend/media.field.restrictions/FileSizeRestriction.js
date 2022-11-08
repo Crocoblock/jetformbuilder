@@ -3,22 +3,12 @@ import BaseFileRestriction from './BaseFileRestriction';
 function FileSizeRestriction() {
 	BaseFileRestriction.call( this );
 
+	this.watchedAttrs.push( 'max_size' );
+
 	this.validate = function () {
 		const { max_size } = this.reporting.input.attrs;
 
 		return this.file.size < max_size.value.current;
-	};
-
-	this.setReporting = function ( reporting ) {
-		BaseFileRestriction.prototype.setReporting.call( this, reporting );
-
-		const { max_size } = reporting.input.attrs;
-
-		const validate = () => {
-			reporting.validateWithNotice().then( () => {} ).catch( () => {} );
-		};
-
-		max_size.value.watch( validate );
 	};
 
 	this.getRawMessage = function () {

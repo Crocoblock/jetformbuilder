@@ -3,6 +3,8 @@ import AdvancedRestriction from './AdvancedRestriction';
 function ReachLimitNumbers() {
 	AdvancedRestriction.call( this );
 
+	this.watchedAttrs.push( 'max' );
+
 	this.isSupported   = function ( node, reporting ) {
 		const { max = false } = reporting.input.attrs;
 

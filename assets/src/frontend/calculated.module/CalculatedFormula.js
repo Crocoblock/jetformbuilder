@@ -39,8 +39,19 @@ function CalculatedFormula( formula, root ) {
 		this.input = root;
 	}
 
-	this.observe( formula, this.input?.root ?? root );
+	this.root = this.input?.root ?? root;
+
+	this.observe( formula );
 }
+
+const allowedSymbols = [
+	'+', '-', '\/', '*', '^', '?', ':', '%',
+];
+
+const symbolsRegexp = new RegExp(
+	'[\\' + allowedSymbols.join( '\\' ) + ']',
+	'g',
+);
 
 CalculatedFormula.prototype = {
 	// raw value
@@ -52,6 +63,10 @@ CalculatedFormula.prototype = {
 	 * @type {InputData}
 	 */
 	input: null,
+	/**
+	 * @type {Observable}
+	 */
+	root: null,
 	/**
 	 * @type {Function}
 	 */
@@ -69,12 +84,11 @@ CalculatedFormula.prototype = {
 	/**
 	 * @private
 	 * @param value
-	 * @param root {Observable}
 	 */
-	observe( value, root ) {
+	observe( value ) {
 		if ( Array.isArray( value ) ) {
 			value.forEach( item => {
-				this.observe( item, root );
+				this.observe( item );
 			} );
 
 			return;
@@ -83,77 +97,85 @@ CalculatedFormula.prototype = {
 		const rawParts = value.split( /%(.*?)%/g );
 
 		if ( 1 === rawParts.length ) {
+
+			if ( value.match( symbolsRegexp )?.length ) {
+				this.parts.push( value );
+			}
+
 			return;
 		}
 
-		this.parts = rawParts.map( current => {
-			const [ name, ...filters ] = current.split( '|' );
-			const parsedName           = name.match( /[\w\-:]+/g );
+		this.parts = [
+			...this.parts,
+			...rawParts.map( this.observeMacro.bind( this ) ),
+		];
+	},
+	observeMacro( current ) {
+		const [ name, ...filters ] = current.split( '|' );
+		const parsedName           = name.match( /[\w\-:]+/g );
 
-			if ( !parsedName ) {
+		if ( !parsedName ) {
+			return current;
+		}
+
+		const [ fieldName, ...params ] = parsedName;
+
+		const relatedInput = fieldName !== 'this'
+		                     ? this.root.getInput( fieldName )
+		                     : this.input;
+
+		if ( !relatedInput && !fieldName.includes( '::' ) ) {
+			return current;
+		}
+
+		const filtersList = getFilters( filters );
+
+		if ( fieldName.includes( '::' ) ) {
+			const customValue = wpFilters(
+				'jet.fb.custom.formula.macro',
+				false,
+				fieldName,
+				params,
+				this,
+			);
+
+			if ( false === customValue ) {
 				return current;
 			}
 
-			const [ fieldName, ...params ] = parsedName;
+			return applyFilters( customValue, filtersList );
+		}
 
-			const relatedInput = fieldName !== 'this'
-			                     ? root.getInput( fieldName )
-			                     : this.input;
+		if ( !this.related.includes( relatedInput.name ) ) {
+			this.related.push( relatedInput.name );
 
-			if ( !relatedInput && !fieldName.includes( '::' ) ) {
-				return current;
-			}
+			relatedInput.watch( () => this.setResult() );
+		}
 
-			const filtersList = getFilters( filters );
+		if ( !params?.length ) {
+			return () => applyFilters(
+				this.relatedCallback( relatedInput ),
+				filtersList,
+			);
+		}
 
-			if ( fieldName.includes( '::' ) ) {
-				const customValue = wpFilters(
-					'jet.fb.custom.formula.macro',
-					false,
-					fieldName,
-					params,
-					root,
-					this,
-				);
+		const [ attrName ] = params;
 
-				if ( false === customValue ) {
-					return current;
-				}
+		if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
+			return current;
+		}
+		/**
+		 * @type {BaseHtmlAttr}
+		 */
+		const htmlAttr = relatedInput.attrs[ attrName ];
 
-				return applyFilters( customValue, filtersList );
-			}
+		if ( !this.relatedAttrs.includes( relatedInput.name + attrName ) ) {
+			this.relatedAttrs.push( relatedInput.name + attrName );
 
-			if ( !this.related.includes( relatedInput.name ) ) {
-				this.related.push( relatedInput.name );
+			htmlAttr.value.watch( () => this.setResult() );
+		}
 
-				relatedInput.watch( () => this.setResult() );
-			}
-
-			if ( !params?.length ) {
-				return () => applyFilters(
-					this.relatedCallback( relatedInput ),
-					filtersList,
-				);
-			}
-
-			const [ attrName ] = params;
-
-			if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
-				return current;
-			}
-			/**
-			 * @type {BaseHtmlAttr}
-			 */
-			const htmlAttr = relatedInput.attrs[ attrName ];
-
-			if ( !this.relatedAttrs.includes( relatedInput.name + attrName ) ) {
-				this.relatedAttrs.push( relatedInput.name + attrName );
-
-				htmlAttr.value.watch( () => this.setResult() );
-			}
-
-			return () => applyFilters( htmlAttr.value.current, filtersList );
-		} );
+		return () => applyFilters( htmlAttr.value.current, filtersList );
 	},
 	calculateString() {
 		if ( !this.parts.length ) {

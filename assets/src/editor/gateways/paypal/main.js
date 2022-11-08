@@ -1,29 +1,35 @@
 const { compose } = wp.compose;
 
 const {
-	withSelect,
-	withDispatch,
-} = wp.data;
+	      withSelect,
+	      withDispatch,
+      } = wp.data;
+const {
+	      __,
+      } = wp.i18n;
 
 const {
-	TextControl,
-	ToggleControl,
-	SelectControl,
-	withNotices,
-} = wp.components;
+	      TextControl,
+	      SelectControl,
+	      withNotices,
+      } = wp.components;
 
 const {
-	useEffect,
-} = wp.element;
+	      useEffect,
+      } = wp.element;
 
 const {
-	renderGateway,
-} = JetFBActions;
+	      renderGateway,
+      } = JetFBActions;
 
 const {
-	withSelectGateways,
-	withDispatchGateways,
-} = JetFBHooks;
+	      withSelectGateways,
+	      withDispatchGateways,
+      } = JetFBHooks;
+
+const {
+	      ToggleControl,
+      } = JetFBComponents;
 
 function PaypalMain( {
 	setGatewayRequest,
@@ -39,8 +45,8 @@ function PaypalMain( {
 } ) {
 
 	const {
-		id: scenario = 'PAY_NOW',
-	} = gatewayScenario;
+		      id: scenario = 'PAY_NOW',
+	      } = gatewayScenario;
 
 	useEffect( () => {
 		setGatewayRequest( { id: scenario } );
@@ -53,27 +59,31 @@ function PaypalMain( {
 	return <>
 		{ noticeUI }
 		<ToggleControl
-			key={ 'use_global' }
-			label={ specificGatewayLabel( 'use_global' ) }
 			checked={ gatewaySpecific.use_global }
 			onChange={ use_global => setGatewaySpecific( { use_global } ) }
-		/>
+		>
+			{ __( 'Use', 'jet-form-builder' ) + ' ' }
+			<a href={ JetFormEditorData.global_settings_url +
+			'#payments-gateways__paypal' }>
+				{ __( 'Global Settings', 'jet-form-builder' ) }
+			</a>
+		</ToggleControl>
 		<TextControl
 			label={ specificGatewayLabel( 'client_id' ) }
-			key='paypal_client_id_setting'
+			key="paypal_client_id_setting"
 			value={ getSpecificOrGlobal( 'client_id' ) }
 			onChange={ client_id => setGatewaySpecific( { client_id } ) }
 			disabled={ gatewaySpecific.use_global }
 		/>
 		<TextControl
 			label={ specificGatewayLabel( 'secret' ) }
-			key='paypal_secret_setting'
+			key="paypal_secret_setting"
 			value={ getSpecificOrGlobal( 'secret' ) }
 			onChange={ secret => setGatewaySpecific( { secret } ) }
 			disabled={ gatewaySpecific.use_global }
 		/>
 		<SelectControl
-			labelPosition='side'
+			labelPosition="side"
 			label={ specificGatewayLabel( 'gateway_type' ) }
 			value={ scenario }
 			onChange={ id => {

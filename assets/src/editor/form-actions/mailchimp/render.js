@@ -8,7 +8,7 @@ const {
  */
 const {
 	      TextControl,
-	      ToggleControl,
+	      ToggleControl: CoreToggleControl,
 	      SelectControl,
 	      CheckboxControl,
 	      BaseControl,
@@ -19,13 +19,20 @@ const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
 	      ValidateButtonWithStore,
+	      ToggleControl,
       } = JetFBComponents;
 
-const { convertObjectToOptionsList, getFormFieldsBlocks } = JetFBActions;
+const {
+	      convertObjectToOptionsList,
+	      getFormFieldsBlocks,
+      } = JetFBActions;
 
 const { __ } = wp.i18n;
 
-const { withRequestFields, withSelectActionLoading } = JetFBHooks;
+const {
+	      withRequestFields,
+	      withSelectActionLoading,
+      } = JetFBHooks;
 
 const {
 	      withSelect,
@@ -105,15 +112,19 @@ function MailChimpRender( props ) {
 	return (
 		<div key="mailchimp">
 			<ToggleControl
-				key={ 'use_global' }
-				label={ label( 'use_global' ) }
 				checked={ settings.use_global }
-				onChange={ use_global => {
+				onChange={ val => {
 					onChangeSettingObj( {
-						use_global: Boolean( use_global ),
+						use_global: Boolean( val ),
 					} );
 				} }
-			/>
+			>
+				{ __( 'Use', 'jet-form-builder' ) + ' ' }
+				<a href={ JetFormEditorData.global_settings_url +
+				'#mailchimp-tab' }>
+					{ __( 'Global Settings', 'jet-form-builder' ) }
+				</a>
+			</ToggleControl>
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
 				label={ label( 'api_key' ) }
@@ -178,7 +189,7 @@ function MailChimpRender( props ) {
 						help={ help( 'tags' ) }
 						onChange={ tags => onChangeSettingObj( { tags } ) }
 					/>
-					<ToggleControl
+					<CoreToggleControl
 						key={ 'double_opt_in' }
 						label={ label( 'double_opt_in' ) }
 						checked={ settings.double_opt_in }

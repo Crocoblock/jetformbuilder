@@ -72,7 +72,7 @@ export default function ConditionalBlockEdit( props ) {
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
 				<Button
-					className={ 'jfb-button' }
+					className={ 'jet-fb-button' }
 					key={ uniqKey( 'randomize' ) }
 					isTertiary
 					isSmall

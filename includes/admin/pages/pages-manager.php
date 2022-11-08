@@ -59,6 +59,16 @@ class Pages_Manager {
 		return $this->single_manager;
 	}
 
+	public function get_stable_url( string $slug, array $query_args = array() ): string {
+		try {
+			$page = $this->get_stable( $slug );
+		} catch ( Repository_Exception $exception ) {
+			return '';
+		}
+
+		return $page->get_url( $query_args );
+	}
+
 	/**
 	 * @param string $slug
 	 *

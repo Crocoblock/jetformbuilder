@@ -5,6 +5,7 @@
 @import "./components/toolbar";
 @import "./components/buttons";
 @import "./components/repeater";
+@import "./components/controls";
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;
@@ -489,10 +490,6 @@
 	flex-wrap: wrap;
 }
 
-.jfb-margin-bottom--small {
-	margin-bottom: 0.7em;
-}
-
 select.components-select-control__input.components-select-control__input.components-select-control__input {
 	max-width: 100vw;
 	width: 100%;
@@ -756,6 +753,7 @@ select.components-select-control__input.components-select-control__input.compone
 
 ul.jet-fb-ul-revert-layer {
 	list-style: revert-layer;
+
 	li {
 		list-style: revert-layer;
 	}

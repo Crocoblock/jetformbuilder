@@ -65,7 +65,7 @@ export default function RangeEdit( props ) {
 					<BlockAdvancedValue/>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Field Settings' ) }
+					title={ __( 'Field', 'jet-form-builder' ) }
 					key={ uniqKey( 'PanelBody' ) }
 				>
 					<NumberControl

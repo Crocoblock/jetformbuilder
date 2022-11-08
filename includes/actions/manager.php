@@ -148,6 +148,7 @@ class Manager {
 			$action_localize['__help_messages']      = $type->editor_labels_help();
 			$action_localize['__unsupported_events'] = $type->unsupported_events();
 			$action_localize['__supported_events']   = $type->supported_events();
+			$action_localize['__global_tab']         = $type->option_name;
 
 			if ( ! empty( $action_localize ) && $type_script_name ) {
 				$this->localized_actions[ $type->self_script_name() ] = $action_localize;

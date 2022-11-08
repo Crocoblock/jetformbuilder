@@ -108,7 +108,7 @@ export default function RepeaterEdit( props ) {
 				{ ...props }
 			/>
 			<PanelBody
-				title={ __( 'Field Settings' ) }
+				title={ __( 'Field', 'jet-form-builder' ) }
 				key={ uniqKey( 'PanelBody' ) }
 			>
 				<SelectControl

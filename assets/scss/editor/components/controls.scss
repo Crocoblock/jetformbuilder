@@ -1,0 +1,13 @@
+.jet-fb-control {
+	&.flex {
+		display: flex;
+	}
+
+	&.jc-space-between {
+		justify-content: space-between;
+	}
+
+	&.mb-24 {
+		margin-bottom: 24px;
+	}
+}

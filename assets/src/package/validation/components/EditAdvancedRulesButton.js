@@ -30,7 +30,7 @@ function EditAdvancedRulesButton() {
 		<Button
 			isSecondary
 			icon={ icon }
-			className={ [ 'jfb-button', 'jfb-margin-bottom--small' ] }
+			className={ 'jet-fb-button w-100 jc-center jet-fb-control mb-24' }
 			onClick={ () => setShowModal( prev => !prev ) }
 		>
 			{ __( 'Edit Advanced Rules', 'jet-form-builder' ) }

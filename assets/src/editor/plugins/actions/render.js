@@ -31,7 +31,7 @@ function PluginActions() {
 			action={ action }
 			index={ index }
 		/> ) }
-		<div className="jfb-button-group">
+		<div className="jet-fb-control flex jc-space-between">
 			<Button
 				isPrimary
 				onClick={ () => {

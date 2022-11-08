@@ -9,6 +9,7 @@ const {
 	      WrapperRequiredControl,
 	      ActionFetchButton,
 	      DynamicPropertySelect,
+	      ToggleControl,
       } = JetFBComponents;
 const {
 	      withRequestFields,
@@ -19,10 +20,8 @@ const {
  */
 const {
 	      TextControl,
-	      ToggleControl,
 	      SelectControl,
 	      BaseControl,
-	      Button,
       } = wp.components;
 const {
 	      __,
@@ -69,8 +68,9 @@ function ActiveCampaignAction( props ) {
 	useEffect( () => {
 		const fields_map = {};
 
-		for ( const [ property, value ] of Object.entries( settings.fields_map ?? {} ) ) {
-			if ( ! legacy_map.hasOwnProperty( property ) ) {
+		for ( const [ property, value ] of Object.entries(
+			settings.fields_map ?? {} ) ) {
+			if ( !legacy_map.hasOwnProperty( property ) ) {
 				fields_map[ property ] = value;
 
 				continue;
@@ -90,13 +90,17 @@ function ActiveCampaignAction( props ) {
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <>
 		<ToggleControl
-			key={ 'use_global' }
-			label={ label( 'use_global' ) }
 			checked={ settings.use_global }
 			onChange={
 				val => onChangeSettingObj( { use_global: Boolean( val ) } )
 			}
-		/>
+		>
+			{ __( 'Use', 'jet-form-builder' ) + ' ' }
+			<a href={ JetFormEditorData.global_settings_url +
+			'#active-campaign-tab' }>
+				{ __( 'Global Settings', 'jet-form-builder' ) }
+			</a>
+		</ToggleControl>
 		<BaseControl
 			label={ label( 'api_data' ) }
 			key={ 'activecampaign_input_key' }

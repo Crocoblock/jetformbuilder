@@ -33,7 +33,7 @@ function FieldSettingsWrapper( props ) {
 	return (
 		children || CustomSettings
 	) && <PanelBody
-		title={ title || __( 'Field Settings', 'jet-form-builder' ) }
+		title={ title || __( 'Field', 'jet-form-builder' ) }
 	>
 		{ children }
 		{ CustomSettings }

@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Admin;
 
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager as Action_Condition_Manager;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
@@ -397,6 +398,7 @@ class Editor {
 				'gateways'                => Gateway_Manager::instance()->editor_data(),
 				'helpForRepeaters'        => $this->get_help_for_repeaters(),
 				'global_settings'         => Tab_Handler_Manager::instance()->all(),
+				'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),
 				'jetEngineVersion'        => Tools::get_jet_engine_version(),
 				'actionConditionSettings' => $conditions_settings,
 				'argumentsSource'         => Form_Arguments::get_options(),
@@ -406,7 +408,6 @@ class Editor {
 					'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
 				),
 				'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
-				'validationMessages'
 			)
 		);
 

@@ -157,7 +157,7 @@ function ListActionItem( props ) {
 					} }
 				/>
 				<Button
-					className={ 'jfb-button' }
+					className={ 'jet-fb-button' }
 					icon={ conditionsIcon }
 					label={ __(
 						'Edit Conditions & Events',

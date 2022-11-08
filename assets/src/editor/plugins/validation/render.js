@@ -72,11 +72,14 @@ function ValidationPlugin() {
 				/> ) }
 		</ToggleGroupControl>
 		{ 'advanced' === validation.type && <Button
-			isTertiary
+			className={ 'jet-fb-button w-100 jc-center' }
+			isSecondary
 			isSmall
 			icon={ 'edit' }
 			onClick={ () => setEditValidation( true ) }
-		/> }
+		>
+			{ __( 'Edit validation messages', 'jet-form-builder' ) }
+		</Button> }
 		{ isEditValidation && <ActionModal
 			title={ 'Edit Manual Options' }
 			onRequestClose={ () => setEditValidation( false ) }

@@ -142,6 +142,7 @@ import ClientSideMacros
 import { insertMacro } from './macros.button/functions';
 import useInsertMacro from './macros.button/hooks/useInsertMacro';
 import addDetail from './actions/helpers/addDetail';
+import ToggleControl from './components/ToggleControl';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -216,6 +217,7 @@ window.JetFBComponents = {
 	AdvancedInspectorControl,
 	AdvancedModalControl,
 	ClientSideMacros,
+	ToggleControl,
 };
 
 // JFBFunctions

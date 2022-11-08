@@ -160,7 +160,10 @@ class Validation implements Arrayable {
 		$rules = $block->block_attrs['validation']['rules'] ?? array();
 
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
-		$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
+
+		if ( ! empty( $rules ) ) {
+			$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
+		}
 
 		/**
 		 * If advanced validation not enabled right in block settings
@@ -171,7 +174,9 @@ class Validation implements Arrayable {
 
 		$messages = $block->block_attrs['validation']['messages'] ?? array();
 
-		$block->add_attribute( 'data-validation-messages', Tools::encode_json( $messages ) );
+		if ( ! empty( $messages ) ) {
+			$block->add_attribute( 'data-validation-messages', Tools::encode_json( $messages ) );
+		}
 	}
 
 	public function get_settings(): array {

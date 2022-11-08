@@ -80,9 +80,9 @@ AdvancedReporting.prototype.report = function ( validationErrors ) {
 	this.insertError( validationErrors[ 0 ].getMessage() );
 };
 AdvancedReporting.prototype.setInput         = function ( input ) {
-	ReportingInterface.prototype.setInput.call( this, input );
-
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
+
+	ReportingInterface.prototype.setInput.call( this, input );
 
 	for ( const watchAttr of this.watchAttrs ) {
 		if ( !input.attrs.hasOwnProperty( watchAttr ) ) {

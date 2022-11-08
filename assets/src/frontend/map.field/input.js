@@ -87,7 +87,7 @@ function MapFieldData() {
 				}
 
 				this.callable.render();
-				this.value.notify();
+				this.silenceNotify();
 
 				// Detach observer after the first render the map
 				observer.unobserve( entry.target );

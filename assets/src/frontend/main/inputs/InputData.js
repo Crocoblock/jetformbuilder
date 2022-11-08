@@ -267,4 +267,14 @@ InputData.prototype.silenceSet = function ( value ) {
 	this.report = tempReport;
 };
 
+InputData.prototype.silenceNotify = function () {
+	const tempReport = this.report.bind( this );
+
+	this.report = () => {};
+
+	this.value.notify();
+
+	this.report = tempReport;
+};
+
 export default InputData;

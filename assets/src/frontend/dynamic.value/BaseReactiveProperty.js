@@ -44,11 +44,7 @@ BaseReactiveProperty.prototype = {
 		formula.setResult = () => {
 			attr.value.current = formula.calculate();
 		};
-		attr.value.silence();
 		formula.setResult();
-		attr.value.silence();
-
-		attr.nodeSignal();
 	},
 };
 

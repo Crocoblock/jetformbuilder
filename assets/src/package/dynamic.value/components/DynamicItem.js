@@ -1,16 +1,17 @@
 import DynamicItemBody from './DynamicItemBody';
 import BlockValueItemContext from '../../context/block.value.item.context';
 import ActionModal from '../../action-modal/components/ActionModal';
+import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
 
 const {
 	      __,
       } = wp.i18n;
 const {
 	      useState,
+	      RawHTML,
       } = wp.element;
 const {
 	      Button,
-	      ButtonGroup,
       } = wp.components;
 
 function DynamicItem( { current, update } ) {
@@ -43,33 +44,71 @@ function DynamicItem( { current, update } ) {
 	};
 
 	const [ showModal, setShowModal ] = useState( false );
+	const [ isHover, setHover ]       = useState( false );
+
+	const isEmpty = 1 >= Object.keys( current )?.length;
 
 	return <BlockValueItemContext.Provider value={ {
 		update: updateCurrent,
 		current,
 	} }>
-		<div className={ 'jet-form-action-details' }>
-			<div data-title={ 'ID:' }>{ current.id }</div>
-			<ButtonGroup
+		<div
+			className="jet-fb-control p-relative"
+			onMouseOver={ () => setHover( true ) }
+			onMouseOut={ () => setHover( false ) }
+		>
+			<div
+				className={ [
+					'jet-fb-control',
+					isHover ? 'show' : 'hide',
+					'p-absolute',
+					'wh-100',
+					'flex-center',
+					'gap-05em',
+				].join( ' ' ) }
 				style={ {
-					alignSelf: 'flex-end',
+					backgroundColor: '#ffffffcc',
+					transition: '0.3s',
 				} }
 			>
 				<Button
 					isSmall
 					isSecondary
-					className={ 'jet-fb-is-thick' }
 					icon={ showModal ? 'no-alt' : 'edit' }
 					onClick={ () => setShowModal( prev => !prev ) }
-				/>
+				>
+					{ __( 'Edit', 'jet-form-builder' ) }
+				</Button>
 				<Button
 					isSmall
 					isDestructive
-					className={ 'jet-fb-is-thick' }
 					icon={ 'trash' }
 					onClick={ deleteCurrent }
-				/>
-			</ButtonGroup>
+				>
+					{ __( 'Delete', 'jet-form-builder' ) }
+				</Button>
+			</div>
+			<div
+				className={ [
+					'jet-fb-control',
+					'flex',
+					'f-dir-column',
+					'p-06em',
+					'container',
+				].join( ' ' ) }
+			>
+				{ isEmpty ? <div
+					data-title={ __(
+						'This value item is empty',
+						'jet-form-builder',
+					) }
+				/> : <>
+					  <div data-title={ __( 'Set', 'jet-form-builder' ) + ':' }>
+						  <RawHTML>{ humanReadablePreset(
+							  current.to_set ) }</RawHTML>
+					  </div>
+				  </> }
+			</div>
 		</div>
 		{ showModal && <ActionModal
 			classNames={ [ 'width-60' ] }

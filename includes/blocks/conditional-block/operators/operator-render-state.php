@@ -26,4 +26,8 @@ class Operator_Render_State extends Base_Operator {
 		return false;
 	}
 
+	public function is_field_relative(): bool {
+		return false;
+	}
+
 }

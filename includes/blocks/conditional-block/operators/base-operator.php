@@ -4,7 +4,6 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Operators;
 
 
-use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Response_Object;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
@@ -25,7 +24,7 @@ abstract class Base_Operator implements
 		return $this->get_id();
 	}
 
-	protected function check( Condition_Item $item ): bool {
+	protected function check( Base_Condition_Type $item ): bool {
 		return true;
 	}
 
@@ -33,6 +32,7 @@ abstract class Base_Operator implements
 		if ( ! $this->is_supported() ) {
 			return array();
 		}
+
 		return array(
 			'check_result' => $this->check( $item ),
 		);
@@ -40,9 +40,22 @@ abstract class Base_Operator implements
 
 	public function to_array(): array {
 		return array(
-			'label' => $this->get_title(),
-			'value' => $this->get_id(),
+			'label'             => $this->get_title(),
+			'value'             => $this->get_id(),
+			'is_field_relative' => $this->is_field_relative(),
 		);
+	}
+
+	/**
+	 * This method is needed to distinguish operators that have a field dependency.
+	 * For example, the 'render_state' operator does not have such a dependency.
+	 *
+	 * The result of this method is used only on the editor side.
+	 *
+	 * @return bool
+	 */
+	public function is_field_relative(): bool {
+		return true;
 	}
 
 }

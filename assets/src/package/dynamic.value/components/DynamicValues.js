@@ -21,7 +21,7 @@ function DynamicValues() {
 	const value   = attributes.value ?? {};
 	const groups  = value.groups ?? [];
 
-	if ( ! useIsHasAttribute( 'value' ) ) {
+	if ( !useIsHasAttribute( 'value' ) ) {
 		return null;
 	}
 
@@ -42,10 +42,19 @@ function DynamicValues() {
 	return <>
 		<BaseHelp>
 			{ __(
-				`This is a moved functionality from 
-					the conditional block with the Set Value function`,
+				`Or set value with conditions`,
 				'jet-form-builder',
-			) }
+			) + ' ' }
+			<Button
+				isLink
+				onClick={ () => {} }
+				label={ __(
+					`This is a moved functionality from 
+					the conditional block with the Set Value function`,
+					'jet-form-builder',
+				) }
+				showTooltip
+			>(?)</Button>
 		</BaseHelp>
 		{ Boolean( groups.length ) ? <Flex
 			direction={ 'column' }
@@ -63,6 +72,7 @@ function DynamicValues() {
 			) ) }
 		</Flex> : null }
 		<Button
+			icon={ 'plus-alt2' }
 			isSecondary
 			onClick={ () => {
 				updateValue( {
@@ -70,7 +80,7 @@ function DynamicValues() {
 				} );
 			} }
 		>
-			{ __( 'Add Value', 'jet-form-builder' ) }
+			{ __( 'Add Dynamic Value', 'jet-form-builder' ) }
 		</Button>
 	</>;
 }

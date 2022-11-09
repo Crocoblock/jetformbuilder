@@ -5,11 +5,14 @@ import {
 	getWrapper,
 	setRestrictions,
 } from './functions';
-import { allRejected } from '../main/functions';
 
 const {
 	      ReportingInterface,
       } = JetFormBuilderAbstract;
+
+const {
+	      allRejected,
+      } = JetFormBuilderFunctions;
 
 /**
  * @property {AdvancedRestriction} restrictions

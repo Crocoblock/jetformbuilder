@@ -27,12 +27,13 @@ BaseHtmlAttr.prototype = {
 
 		this.addWatcherAttr();
 	},
-	addWatcherAttr() {
+	nodeSignal() {
 		const [ node ] = this.input.nodes;
 
-		this.value.watch( () => {
-			node[ this.attrName ] = this.value.current;
-		} );
+		node[ this.attrName ] = this.value.current;
+	},
+	addWatcherAttr() {
+		this.value.watch( () => this.nodeSignal() );
 	},
 	/**
 	 * If you need specific check,

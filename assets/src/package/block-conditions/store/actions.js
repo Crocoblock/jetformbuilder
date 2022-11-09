@@ -7,12 +7,6 @@ export default {
 			items,
 		};
 	},
-	registerFunctionsFilters( item ) {
-		return {
-			type: constants.registerFunctionsFilters,
-			item,
-		};
-	},
 	addRenderState( item ) {
 		return {
 			type: constants.addRenderState,

@@ -10,14 +10,6 @@ const dispatchers = {
 
 		return state;
 	},
-	[ constants.registerFunctionsFilters ]( state, action ) {
-		state.functionFilters = {
-			...state.functionFilters,
-			...action.item,
-		};
-
-		return state;
-	},
 	[ constants.addRenderState ]( state, action ) {
 		state.renderStates.push( action.item );
 

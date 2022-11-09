@@ -30,7 +30,7 @@ ReactiveVar.prototype = {
 				return current;
 			},
 			set( newVal ) {
-				if ( current === newVal || self.isSilence ) {
+				if ( current === newVal ) {
 					return;
 				}
 				if ( self.isDebug ) {
@@ -41,6 +41,10 @@ ReactiveVar.prototype = {
 					debugger;
 				}
 				current = self.applySanitizers( newVal );
+
+				if ( self.isSilence ) {
+					return;
+				}
 				self.notify();
 			},
 		} );

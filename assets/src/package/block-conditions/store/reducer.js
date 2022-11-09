@@ -1,17 +1,28 @@
 import dispatchers from './dispatchers';
-import getInnerBlocks from '../../blocks/helpers/getInnerBlocks';
+
+const {
+	select
+} = wp.data;
 
 const DEFAULT_STATE = {
 	functions: [],
 	operators: [],
-	renderStates: [],
-	functionFilters: {
-		set_value( item, blockProps ) {
-			const { [ 'data-block' ]: clientId } = blockProps;
+	conditionReaders: {
+		default: function ( condition ) {
+			const operatorOptions = select( 'jet-forms/block-conditions' ).
+				getOperator( condition?.operator );
 
-			return 1 === getInnerBlocks( clientId ).length;
+			if ( ! operatorOptions ) {
+				return '';
+			}
+			const field = condition?.field || '(no field)';
+
+
+
+
 		},
 	},
+	renderStates: [],
 };
 
 export default function ( state = DEFAULT_STATE, action ) {

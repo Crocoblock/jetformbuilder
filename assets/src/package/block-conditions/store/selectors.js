@@ -3,10 +3,7 @@ const selectors = {
 		return state.functions;
 	},
 	getOperators( state ) {
-		return state.operators;
-	},
-	getFunctionFilters( state ) {
-		return state.functionFilters;
+		return state.operator;
 	},
 	getRenderStates( state ) {
 		return state.renderStates;
@@ -15,21 +12,23 @@ const selectors = {
 		return state.renderStates.map( ( { value } ) => value );
 	},
 	getCustomRenderStates( state ) {
-		return state.renderStates.filter( ( { is_custom = false } ) => is_custom );
+		return state.renderStates.filter(
+			( { is_custom = false } ) => is_custom );
 	},
 	getCustomRenderStatesList( state ) {
-		return selectors.getCustomRenderStates( state ).map( ( { value } ) => value );
+		return selectors.getCustomRenderStates( state ).
+			map( ( { value } ) => value );
 	},
-	getFilteredFunctions( state, blockProps ) {
-		return state.functions.filter( item => {
-			const callback = state.functionFilters[ item.value ] ?? false;
+	getOperator( state, operator ) {
+		const index = state.operators.findIndex(
+			( { value } ) => value === operator,
+		);
 
-			if ( false === callback ) {
-				return true;
-			}
+		if ( -1 === index ) {
+			return false;
+		}
 
-			return callback( item, blockProps );
-		} );
+		return state.operators[ index ];
 	},
 };
 

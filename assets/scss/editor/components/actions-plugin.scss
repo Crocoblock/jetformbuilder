@@ -1,4 +1,24 @@
 .jet-form-action {
+	margin-bottom: 10px;
+
+	.components-base-control__field {
+		margin: 0;
+	}
+
+	&.is-disabled {
+		background-image: repeating-linear-gradient(-45deg, #ffffff75 0 20px, #d5d5d57d 20px 40px);
+	}
+
+	&.is-current {
+		animation: show-current 2s infinite;
+	}
+
+	@keyframes show-current {
+		50% {
+			box-shadow: rgba(3, 102, 214, 0.3) 0 0 0 3px;
+		}
+	}
+
 	option[disabled] {
 		background-color: #d3d3d35e;
 	}
@@ -15,14 +35,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5em;
-
-		[data-title] {
-			&:before {
-				content: attr(data-title);
-				color: darkgrey;
-				margin-right: 0.5em;
-			}
-		}
 	}
 
 	.jfb-events-item {

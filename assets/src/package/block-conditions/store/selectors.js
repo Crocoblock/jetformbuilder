@@ -3,7 +3,7 @@ const selectors = {
 		return state.functions;
 	},
 	getOperators( state ) {
-		return state.operator;
+		return state.operators;
 	},
 	getRenderStates( state ) {
 		return state.renderStates;
@@ -29,6 +29,24 @@ const selectors = {
 		}
 
 		return state.operators[ index ];
+	},
+	readCondition( state, condition ) {
+		const { operator = '' } = condition;
+
+		if ( !operator ) {
+			return '';
+		}
+
+		/**
+		 * @type {Function}
+		 */
+		const callback = state.conditionReaders[ operator ] ?? false;
+
+		if ( 'function' === typeof callback ) {
+			return callback( condition );
+		}
+
+		return state.conditionReaders.default( condition );
 	},
 };
 

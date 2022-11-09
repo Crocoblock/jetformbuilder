@@ -2,6 +2,8 @@ import DynamicItemBody from './DynamicItemBody';
 import BlockValueItemContext from '../../context/block.value.item.context';
 import ActionModal from '../../action-modal/components/ActionModal';
 import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
+import humanReadableCondition
+	from '../../block-conditions/helpers/humanReadableCondition';
 
 const {
 	      __,
@@ -9,6 +11,8 @@ const {
 const {
 	      useState,
 	      RawHTML,
+	      Children,
+	      cloneElement,
       } = wp.element;
 const {
 	      Button,
@@ -47,6 +51,25 @@ function DynamicItem( { current, update } ) {
 	const [ isHover, setHover ]       = useState( false );
 
 	const isEmpty = 1 >= Object.keys( current )?.length;
+
+	let conditionsElements = [];
+	let firstReadCondition = '';
+
+	if ( !isEmpty && Boolean( current?.conditions?.length ) ) {
+		firstReadCondition = humanReadableCondition( current?.conditions[ 0 ] );
+
+		conditionsElements = current.conditions.filter(
+			// Exclude first item
+			( c, index ) => 0 !== index,
+		).map(
+			condition => <span
+				data-title={ __( 'And', 'jet-form-builder' ) + ':' }
+				dangerouslySetInnerHTML={ {
+					__html: humanReadableCondition( condition ),
+				} }
+			/>,
+		);
+	}
 
 	return <BlockValueItemContext.Provider value={ {
 		update: updateCurrent,
@@ -95,6 +118,7 @@ function DynamicItem( { current, update } ) {
 					'f-dir-column',
 					'p-06em',
 					'container',
+					'gap-1em',
 				].join( ' ' ) }
 			>
 				{ isEmpty ? <div
@@ -103,10 +127,23 @@ function DynamicItem( { current, update } ) {
 						'jet-form-builder',
 					) }
 				/> : <>
-					  <div data-title={ __( 'Set', 'jet-form-builder' ) + ':' }>
-						  <RawHTML>{ humanReadablePreset(
-							  current.to_set ) }</RawHTML>
-					  </div>
+					  <span
+						  data-title={ __( 'Set', 'jet-form-builder' ) + ':' }
+						  dangerouslySetInnerHTML={ {
+							  __html: humanReadablePreset( current.to_set ),
+						  } }
+					  />
+					  { firstReadCondition && <>
+						  <span
+							  data-title={ __(
+								  'If', 'jet-form-builder',
+							  ) + ':' }
+							  dangerouslySetInnerHTML={ {
+								  __html: firstReadCondition,
+							  } }
+						  />
+						  { Children.map( conditionsElements, cloneElement ) }
+					  </> }
 				  </> }
 			</div>
 		</div>

@@ -4,7 +4,7 @@ const {
 	      __,
       } = wp.i18n;
 
-function humanReadablePreset( value ) {
+function humanReadablePreset( value, highlight = 'code' ) {
 	value = value ?? '';
 
 	if ( !isPresetString( value ) ) {
@@ -13,8 +13,23 @@ function humanReadablePreset( value ) {
 
 	const parsedPreset = JSON.parse( value );
 	const label        = __( 'Preset from', 'jet-form-builder' );
+	const from         = parsedPreset?.from ?? '(empty)';
 
-	return `${ label } <code>${ parsedPreset?.from ?? '(empty)' }</code>`;
+	let highlightedFrom;
+
+	switch ( highlight ) {
+		case 'code':
+			highlightedFrom = `<code>${ from }</code>`;
+			break;
+		case 'b':
+			highlightedFrom = `<b>${ from }</b>`;
+			break;
+	}
+
+	return [
+		label,
+		highlightedFrom,
+	].join( ' ' );
 }
 
 export default humanReadablePreset;

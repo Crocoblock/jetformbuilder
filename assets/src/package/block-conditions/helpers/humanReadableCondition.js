@@ -7,14 +7,7 @@ const {
  * @return {boolean|string}
  */
 function humanReadableCondition( condition ) {
-	const operator = select( 'jet-forms/block-conditions' ).getOperator(
-		condition.operator,
-	);
-
-	if ( !operator ) {
-		return false;
-	}
-
+	return select( 'jet-forms/block-conditions' ).readCondition( condition );
 }
 
 export default humanReadableCondition;

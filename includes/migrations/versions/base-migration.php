@@ -33,7 +33,13 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 		if ( $this->is_installed() ) {
 			return;
 		}
-		$this->run_up();
+
+		try {
+			$this->run_up();
+		} catch ( Migration_Exception $exception ) {
+			throw $exception->set_version( static::class );
+		}
+
 		$this->set_installed();
 	}
 

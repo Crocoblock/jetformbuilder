@@ -121,12 +121,24 @@ addFilter(
 					</a>
 				</BaseHelp>
 				{ showDetails && <pre>
-					{ `function ${ functionName }( $value ): bool {
+					{ `/**
+ * To get all the values of the fields in the form, you can use the expression:
+ * jet_fb_request_handler()->get_request() or $context->get_request()
+ *
+ * If the field is located in the middle of the repeater, then only
+ * jet_fb_request_handler()->get_request(), but $context->get_request() 
+ * will return the values of all fields of the current repeater element
+ *
+ * @param $value mixed
+ * @param $context \\Jet_Form_Builder\\Request\\Parser_Context
+ *
+ * @return bool
+ */
+function ${ functionName }( $value, $context ): bool {
 	// your logic
 	return true;
 }` }
 				</pre> }
-
 			</> }
 		</>;
 	},

@@ -17,13 +17,11 @@ use Jet_Form_Builder\Live_Form;
 
 class Request_Handler {
 
-	public $_fields = array();
+	public  $_fields       = array();
 	private $request_types = array();
 	private $request_attrs = array();
-	private $raw_request = array();
-	private $files = array();
-
-	const FILE_PROPERTIES = array( 'name', 'size', 'error', 'type', 'tmp_name' );
+	private $raw_request   = array();
+	private $files         = array();
 
 	public function set_request_type( array $types ): Request_Handler {
 		$this->request_types = array_merge( $this->request_types, $types );
@@ -64,102 +62,6 @@ class Request_Handler {
 		return $this->request_attrs[ $name ] ?? array();
 	}
 
-	private function get_raw_files(): array {
-		$response = array();
-
-		foreach ( $_FILES as $fields_name => $files ) {
-			$is_repeater = isset( $files['name'][0] ) && is_array( $files['name'][0] );
-
-			if ( $is_repeater ) {
-				$response[ $fields_name ] = $this->get_repeating_raw_files( $files );
-
-				continue;
-			}
-
-			$is_collection = is_array( $files['name'] );
-
-			if ( ! $is_collection ) {
-				try {
-					$file = new File( $files );
-				} catch ( Sanitize_File_Exception $exception ) {
-					continue;
-				}
-				$response[ $fields_name ] = $file;
-
-				continue;
-			}
-
-			$count_collection = count( $files['name'] );
-			$collection       = array();
-
-			for ( $index = 0; $index < $count_collection; $index ++ ) {
-				$file = array();
-
-				foreach ( self::FILE_PROPERTIES as $property ) {
-					$file[ $property ] = $files[ $property ][ $index ];
-				}
-
-				$collection[ $index ] = $file;
-			}
-
-			$response[ $fields_name ] = ( new File_Collection() )->push_files( $collection );
-		}
-
-		return $response;
-	}
-
-	/**
-	 *
-	 */
-	private function get_repeating_raw_files( array $files ): array {
-		$rows     = count( $files['name'] );
-		$repeater = array();
-
-		for ( $current = 0; $current < $rows; $current ++ ) {
-			$row = array();
-
-			foreach ( self::FILE_PROPERTIES as $property ) {
-				foreach ( $files[ $property ][ $current ] as $field_name => $values ) {
-					if ( ! isset( $row[ $field_name ] ) ) {
-						$row[ $field_name ] = array();
-					}
-
-					if ( is_array( $values ) ) {
-						$count_values = count( $values );
-
-						for ( $index_value = 0; $index_value < $count_values; $index_value ++ ) {
-							if ( ! isset( $row[ $field_name ][ $index_value ] ) ) {
-								$row[ $field_name ][ $index_value ] = array();
-							}
-							$row[ $field_name ][ $index_value ][ $property ] = $values[ $index_value ];
-						}
-					} else {
-						$row[ $field_name ][ $property ] = $values;
-					}
-				}
-			}
-			unset( $field_name, $values );
-
-			foreach ( $row as $field_name => $values ) {
-				if ( isset( $values[0] ) ) {
-					$row[ $field_name ] = ( new File_Collection() )->push_files( $values );
-				} else {
-					try {
-						$file = new File( $values );
-					} catch ( Sanitize_File_Exception $exception ) {
-						unset( $row[ $field_name ] );
-						continue;
-					}
-					$row[ $field_name ] = $file;
-				}
-			}
-
-			$repeater[ $current ] = $row;
-		}
-
-		return $repeater;
-	}
-
 	private function get_raw_request(): array {
 		$this->_fields = Block_Helper::get_blocks_by_post(
 			jet_fb_handler()->get_form_id()
@@ -169,8 +71,8 @@ class Request_Handler {
 		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
 
 		Live_Form::instance()
-				->set_form_id( jet_fb_handler()->get_form_id() )
-				->set_specific_data_for_render();
+		         ->set_form_id( jet_fb_handler()->get_form_id() )
+		         ->set_specific_data_for_render();
 
 		return apply_filters( 'jet-form-builder/request-handler/request', $values );
 	}
@@ -181,8 +83,8 @@ class Request_Handler {
 	 * @throws Action_Exception|Request_Exception
 	 */
 	public function set_form_data() {
-		$this->raw_request = $this->get_raw_request();
-		$this->files       = $this->get_raw_files();
+		$this->set_raw_request( $this->get_raw_request() );
+		$this->set_raw_files( Request_Tools::get_files( $_FILES ) );
 
 		$context = ( new Parser_Context() )
 			->set_files_context( $this->files )
@@ -207,6 +109,18 @@ class Request_Handler {
 			Error_Handler::instance()->errors(),
 			$request
 		);
+	}
+
+	public function set_raw_request( array $request ): Request_Handler {
+		$this->raw_request = $request;
+
+		return $this;
+	}
+
+	public function set_raw_files( array $files ): Request_Handler {
+		$this->files = $files;
+
+		return $this;
 	}
 
 	/**

@@ -48,6 +48,7 @@ class Install_Migrations_Endpoint extends Rest_Api_Endpoint_Base {
 			return new \WP_REST_Response(
 				array(
 					'message' => $exception->getMessage(),
+					'version' => $exception->get_version(),
 				),
 				400
 			);

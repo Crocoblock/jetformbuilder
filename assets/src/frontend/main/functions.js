@@ -25,9 +25,11 @@ async function allRejected( callbacks ) {
 		( error ) => 'rejected' === error.status,
 	);
 
-	return invalid.map( ( { reason, value } ) => (
-		reason ?? value
-	) );
+	return invalid.map( ( { reason, value } ) => {
+		return reason?.length ? reason[ 0 ] : (
+			reason ?? value
+		);
+	} );
 }
 
 function getLanguage() {

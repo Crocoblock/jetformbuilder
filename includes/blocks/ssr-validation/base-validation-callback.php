@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Request\Parser_Context;
 
 abstract class Base_Validation_Callback
 	implements Arrayable, Repository_Item_Instance_Trait {
@@ -19,7 +20,7 @@ abstract class Base_Validation_Callback
 	 *
 	 * @return bool
 	 */
-	abstract public function is_valid( $value ): bool;
+	abstract public function is_valid( $value, Parser_Context $context ): bool;
 
 	public function to_array(): array {
 		return array(

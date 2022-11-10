@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Request\Parser_Context;
 
 class Validation_Callbacks {
 
@@ -33,24 +34,24 @@ class Validation_Callbacks {
 	}
 
 
-	public function validate( $value, string $function_name ): bool {
+	public function validate( $value, string $function_name, Parser_Context $context ): bool {
 		try {
 			/** @var Base_Validation_Callback $callback */
 			$callback = $this->rep_get_item( $function_name );
 		} catch ( Repository_Exception $exception ) {
-			return $this->validate_custom( $value, $function_name );
+			return $this->validate_custom( $value, $function_name, $context );
 		}
 
-		return $callback->is_valid( $value );
+		return $callback->is_valid( $value, $context );
 	}
 
-	protected function validate_custom( $value, string $function_name ): bool {
+	protected function validate_custom( $value, string $function_name, Parser_Context $context ): bool {
 		$name = preg_replace( '/[^\w\-]/i', '', $function_name );
 
 		if ( ! function_exists( $name ) ) {
 			return false;
 		}
 
-		return (bool) call_user_func( $name, $value );
+		return (bool) call_user_func( $name, $value, $context );
 	}
 }

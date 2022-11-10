@@ -166,7 +166,7 @@ ReportingInterface.prototype = {
 			promises.push( ( resolve, reject ) => {
 				restriction.validatePromise().
 					then( () => resolve( restriction ) ).
-					catch( () => reject( restriction ) );
+					catch( error => reject( [ restriction, error ] ) );
 			} );
 		}
 

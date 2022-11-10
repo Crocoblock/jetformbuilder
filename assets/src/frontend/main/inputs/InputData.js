@@ -174,7 +174,7 @@ InputData.prototype.onChangeLoading = function () {
 	const [ node ] = this.nodes;
 	const wrapper  = node.closest( '.jet-form-builder-row' );
 
-	node.disabled = this.loading.current;
+	node.readOnly = this.loading.current;
 	wrapper.classList.toggle( 'is-loading', this.loading.current );
 };
 /**
@@ -275,6 +275,13 @@ InputData.prototype.silenceNotify = function () {
 	this.value.notify();
 
 	this.report = tempReport;
+};
+
+/**
+ * @return {boolean}
+ */
+InputData.prototype.hasParent = function () {
+	return !!this.root?.parent;
 };
 
 export default InputData;

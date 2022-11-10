@@ -9,6 +9,9 @@ const {
 	      __,
       } = wp.i18n;
 const {
+	      useState,
+      } = wp.element;
+const {
 
 	      Button,
 	      Flex,
@@ -20,6 +23,13 @@ function DynamicValues() {
 	const uniqKey = useUniqKey();
 	const value   = attributes.value ?? {};
 	const groups  = value.groups ?? [];
+
+	const orGroups = groups.filter(
+		// Exclude first item
+		( c, index ) => 0 !== index,
+	);
+
+	const [ openModal, setOpenModal ] = useState( false );
 
 	if ( !useIsHasAttribute( 'value' ) ) {
 		return null;
@@ -63,21 +73,38 @@ function DynamicValues() {
 				marginBottom: '1em',
 			} }
 		>
-			{ groups.map( current => (
+			<DynamicItem
+				key={ uniqKey( groups[ 0 ].id ) }
+				current={ groups[ 0 ] }
+				update={ updateValue }
+				isOpenModal={ openModal }
+				setOpenModal={ setOpenModal }
+			/>
+			{ Boolean( orGroups.length ) && orGroups.map( current => <>
+				<b>{ __( 'OR', 'jet-form-builder' ) }</b>
 				<DynamicItem
 					key={ uniqKey( current.id ) }
 					current={ current }
 					update={ updateValue }
+					isOpenModal={ openModal }
+					setOpenModal={ setOpenModal }
 				/>
-			) ) }
+			</> ) }
 		</Flex> : null }
 		<Button
 			icon={ 'plus-alt2' }
 			isSecondary
 			onClick={ () => {
+				const id = Tools.getRandomID();
+
 				updateValue( {
-					groups: [ ...groups, { id: Tools.getRandomID() } ],
+					groups: [
+						...groups,
+						{ id, conditions: [ { __visible: true } ] },
+					],
 				} );
+
+				setOpenModal( id );
 			} }
 		>
 			{ __( 'Add Dynamic Value', 'jet-form-builder' ) }

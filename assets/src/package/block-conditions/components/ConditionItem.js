@@ -2,6 +2,7 @@ import RepeaterItemContext from '../../repeater/context/repeater.item';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
 import useBlockConditions from '../hooks/useBlockConditions';
 import ConditionOptions from './ConditionOptions';
+import BeforeConditionOptions from './BeforeConditionOptions';
 
 const {
 	      useContext,
@@ -23,6 +24,10 @@ function ConditionItem() {
 	const { operators } = useBlockConditions();
 
 	return <>
+		<BeforeConditionOptions
+			currentItem={ currentItem }
+			changeCurrentItem={ changeCurrentItem }
+		/>
 		<SelectControl
 			key={ uniqKey( 'SelectControl-operator' ) }
 			label={ __( 'Operator', 'jet-form-builder' ) }

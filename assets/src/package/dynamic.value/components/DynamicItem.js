@@ -18,7 +18,7 @@ const {
 	      Button,
       } = wp.components;
 
-function DynamicItem( { current, update } ) {
+function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 	const updateCurrent = settings => {
 		update( value => {
 			const groups = JSON.parse( JSON.stringify( value.groups ) );
@@ -116,7 +116,6 @@ function DynamicItem( { current, update } ) {
 					'jet-fb-control',
 					'flex',
 					'f-dir-column',
-					'p-06em',
 					'container',
 					'gap-1em',
 				].join( ' ' ) }
@@ -147,9 +146,14 @@ function DynamicItem( { current, update } ) {
 				  </> }
 			</div>
 		</div>
-		{ showModal && <ActionModal
+		{ (
+			showModal || isOpenModal === current.id
+		) && <ActionModal
 			classNames={ [ 'width-60' ] }
-			onRequestClose={ () => setShowModal( false ) }
+			onRequestClose={ () => {
+				setShowModal( false );
+				setOpenModal( false );
+			} }
 			title={ __( 'Edit Dynamic Value', 'jet-form-builder' ) }
 		>
 			<DynamicItemBody/>

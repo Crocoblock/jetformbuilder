@@ -3,7 +3,7 @@
  * Plugin Name: JetFormBuilder
  * Plugin URI:  https://jetformbuilder.com/
  * Description: Advanced form builder plugin for WordPress block editor. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.
- * Version:     3.0.0.31
+ * Version:     3.0.0.32
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-form-builder
@@ -17,27 +17,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-/**
- * To get all the values of the fields in the form, you can use the expression:
- * jet_fb_request_handler()->get_request() or $context->get_request()
- *
- * If the field is located in the middle of the repeater, then only
- * jet_fb_request_handler()->get_request(), a $context->get_request()
- * will return the values of all fields of the current repeater element
- *
- * @param $value mixed
- * @param $context \Jet_Form_Builder\Request\Parser_Context
- *
- * @return bool
- */
-function jet_fb_field_has_woo( $value, $context ): bool {
-	// your logic
-	return true;
-}
-
 function jet_form_builder_init() {
 
-	define( 'JET_FORM_BUILDER_VERSION', '3.0.0.30' );
+	define( 'JET_FORM_BUILDER_VERSION', '3.0.0.32' );
 
 	define( 'JET_FORM_BUILDER__FILE__', __FILE__ );
 	define( 'JET_FORM_BUILDER_PLUGIN_BASE', plugin_basename( JET_FORM_BUILDER__FILE__ ) );

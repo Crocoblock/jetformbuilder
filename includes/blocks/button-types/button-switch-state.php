@@ -23,7 +23,7 @@ class Button_Switch_State extends Button_Type_Base {
 	public function before_render( Base $render, array $args ) {
 		$switch_on = $args['buttons'][ $this->slug() ]['switch_on'] ?? array();
 
-		$render->add_attribute( 'data-switch-on', Tools::encode_json( $switch_on ) );
+		$render->add_attribute( 'data-switch-on', Tools::esc_attr( $switch_on ) );
 	}
 
 

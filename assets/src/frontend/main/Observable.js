@@ -5,7 +5,6 @@ import {
 	observeComment, observeMacroAttr,
 	queryByAttrValue,
 } from './html.macro/functions';
-import { allRejected } from './functions';
 import { validateInputsAll } from './reporting/functions';
 
 const {
@@ -74,6 +73,8 @@ Observable.prototype = {
 
 		this.initMacros();
 
+		this.initActionButtons()
+
 		doAction( 'jet.fb.observe.after', this );
 	},
 
@@ -110,6 +111,26 @@ Observable.prototype = {
 		}
 
 		this.form = new FormSubmit( this );
+	},
+
+	initActionButtons: function () {
+		if ( this.parent ) {
+			return;
+		}
+		for ( const button of this.rootNode.querySelectorAll(
+			'.jet-form-builder__button-switch-state',
+		) ) {
+			let states;
+			try {
+				states = JSON.parse( button.dataset.switchOn );
+			} catch ( error ) {
+				continue;
+			}
+
+			button.addEventListener( 'click', () => {
+				this.getState().value.current = states;
+			} )
+		}
 	},
 
 	/**

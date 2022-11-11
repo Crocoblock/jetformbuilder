@@ -12,7 +12,7 @@ import Tools, {
 	listen,
 	maybeCyrToLatin,
 	versionCompare,
-	convertObjectToOptionsList,
+	convertObjectToOptionsList, column,
 } from './tools';
 
 import getAvailableFields from './blocks/helpers/getAvailableFields';
@@ -249,6 +249,7 @@ window.JetFBActions = {
 	appendField,
 	insertMacro,
 	addDetail,
+	column,
 };
 
 // JFBHooks

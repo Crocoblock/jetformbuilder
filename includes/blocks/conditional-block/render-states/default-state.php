@@ -20,4 +20,8 @@ class Default_State extends Base_Render_State {
 	public function is_supported(): bool {
 		return true;
 	}
+
+	public function can_be_switched(): bool {
+		return true;
+	}
 }

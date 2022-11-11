@@ -1,14 +1,17 @@
-const { __ } = wp.i18n;
-const { useSelect } = wp.data;
+const { __ }             = wp.i18n;
+const { useSelect }      = wp.data;
 const { FormTokenField } = wp.components;
-const { useUniqKey } = JetFBHooks;
-const { Tools } = JetFBActions;
+const { useUniqKey }     = JetFBHooks;
+const { Tools, column }  = JetFBActions;
 
 function SwitcherRenderStateButton( { attributes, setAttributes } ) {
 	const uniqKey = useUniqKey();
 
 	const customStates = useSelect(
-		select => select( 'jet-forms/block-conditions' ).getCustomRenderStatesList(),
+		select => column(
+			select( 'jet-forms/block-conditions' ).getSwitchableRenderStates(),
+			'value',
+		),
 		[],
 	);
 

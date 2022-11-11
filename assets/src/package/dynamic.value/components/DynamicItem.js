@@ -115,7 +115,7 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 				className={ [
 					'jet-fb-control',
 					'flex',
-					'f-dir-column',
+					'flex-dir-column',
 					'container',
 					'gap-1em',
 				].join( ' ' ) }

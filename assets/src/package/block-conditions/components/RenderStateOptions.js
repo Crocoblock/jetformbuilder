@@ -1,4 +1,5 @@
 import EditCustomRenderStates from './EditCustomRenderStates';
+import { column } from '../../tools';
 
 const {
 	      Button,
@@ -20,7 +21,10 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
 	const renderStates = useSelect(
-		select => select( 'jet-forms/block-conditions' ).getRenderStatesList(),
+		select => column(
+			select( 'jet-forms/block-conditions' ).getRenderStates(),
+			'value',
+		),
 		[ showModal ],
 	);
 

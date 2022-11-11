@@ -88,7 +88,6 @@ class Condition_Manager implements Arrayable {
 			'operators'         => Tools::with_placeholder( $this->get_operators()->to_array() ),
 			'render_states'     => Render_State::instance()->to_array(),
 			'rest_add_state'    => Add_Render_State_Endpoint_Option::get_endpoint(),
-			'rest_query_states' => Get_Render_States_Endpoint::get_endpoint(),
 			'rest_delete_state' => Delete_Render_States_Endpoint::get_endpoint(),
 		);
 	}

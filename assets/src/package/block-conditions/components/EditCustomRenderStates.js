@@ -38,10 +38,10 @@ const EditCustomRenderStates = ( {
 	currentItem,
 } ) => {
 
-	const [ isLoading, setButtonLoading ] = useState( false );
+	const [ isLoading, setButtonLoading ]   = useState( false );
 	const [ isLoadingItem, setItemLoading ] = useState( {} );
-	const [ value, setValue ] = useState( '' );
-	let current = [
+	const [ value, setValue ]               = useState( '' );
+	let current                             = [
 		...currentItem.render_state ?? [],
 	];
 
@@ -62,7 +62,11 @@ const EditCustomRenderStates = ( {
 
 		apiFetch( rest_add_state ).then( response => {
 			onSuccessAdd( response.state );
-		} ).catch( console.error ).finally( () => {
+			setButtonLoading( false );
+			setShowModal( false );
+
+		} ).catch( error => {
+			console.error( error );
 			setButtonLoading( false );
 		} );
 	};
@@ -89,8 +93,6 @@ const EditCustomRenderStates = ( {
 		changeCurrentItem( {
 			render_state: current,
 		} );
-
-		setShowModal( false );
 	};
 
 	const onDelete = name => {

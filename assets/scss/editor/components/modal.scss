@@ -83,6 +83,7 @@
 		display: flex;
 		padding: 12px 0 5px;
 		border-top: 1px solid #ddd;
+		gap: 8px;
 
 		& > .input_with_button {
 			width: 55%;
@@ -186,4 +187,6 @@
 	.repeater__item__header {
 		padding: 0.5em;
 	}
+
+
 }

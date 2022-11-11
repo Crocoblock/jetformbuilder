@@ -1,27 +1,29 @@
 .jet-fb-control {
 	&.flex {
 		display: flex;
+
+		&-center {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		&-dir-column {
+			flex-direction: column;
+		}
 	}
 
-	&.f-dir-column {
-		flex-direction: column;
-	}
+	&.jc {
+		&-space-between {
+			justify-content: space-between;
+		}
 
-	&.jc-space-between {
-		justify-content: space-between;
-	}
-
-	&.jc-center {
-		justify-content: center;
+		&-center {
+			justify-content: center;
+		}
 	}
 
 	&.ai-center {
-		align-items: center;
-	}
-
-	&.flex-center {
-		display: flex;
-		justify-content: center;
 		align-items: center;
 	}
 
@@ -51,12 +53,14 @@
 		padding: 12px 15px 15px;
 	}
 
-	&.p-absolute {
-		position: absolute;
-	}
+	&.p {
+		&-absolute {
+			position: absolute;
+		}
 
-	&.p-relative {
-		position: relative;
+		&-relative {
+			position: relative;
+		}
 	}
 
 	&.w-100 {
@@ -72,12 +76,18 @@
 		height: 100%;
 	}
 
-	&.gap-1em {
-		gap: 1em;
-	}
+	&.gap {
+		&-1em {
+			gap: 1em;
+		}
 
-	&.gap-05em {
-		gap: 0.5em;
+		&-05em {
+			gap: 0.5em;
+		}
+
+		&-default {
+			gap: 8px;
+		}
 	}
 
 	[data-title] {

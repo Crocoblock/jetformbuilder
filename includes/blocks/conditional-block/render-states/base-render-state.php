@@ -30,10 +30,21 @@ abstract class Base_Render_State implements
 		);
 	}
 
+	/**
+	 * Determines the availability of this state for switching
+	 * to it using the Action Button
+	 *
+	 * @return bool
+	 */
+	public function can_be_switched(): bool {
+		return false;
+	}
+
 	public function to_array(): array {
 		return array(
-			'value' => $this->get_id(),
-			'label' => $this->get_title(),
+			'value'           => $this->get_id(),
+			'label'           => $this->get_title(),
+			'can_be_switched' => $this->can_be_switched(),
 		);
 	}
 

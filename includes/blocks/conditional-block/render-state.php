@@ -105,7 +105,16 @@ class Render_State implements Arrayable {
 	}
 
 	public function to_array(): array {
-		return Array_Tools::to_array( $this->rep_get_items() );
+		$custom = self::get_states();
+
+		foreach ( $custom as &$current ) {
+			$current['is_custom'] = true;
+		}
+
+		return array_merge(
+			Array_Tools::to_array( $this->rep_get_items() ),
+			$custom
+		);
 	}
 
 	public function clear_current(): Render_State {

@@ -57,6 +57,16 @@ export function versionCompare( version1, version2, operator ) {
 	}
 }
 
+export function column( listArr, name ) {
+	if ( !listArr?.length ) {
+		return [];
+	}
+
+	return listArr.map( current => {
+		return 'object' === typeof current ? current[ name ] : current;
+	} );
+}
+
 const convertSymbols = applyFilters( 'jet.fb.tools.convertSymbols', {
 	checkCyrRegex: /[а-яёїєґі]/i,
 	cyrRegex: /[а-яёїєґі]/gi,

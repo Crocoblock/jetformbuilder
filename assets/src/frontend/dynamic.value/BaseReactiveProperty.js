@@ -29,10 +29,8 @@ BaseReactiveProperty.prototype = {
 		 */
 		const htmlAttr = input.attrs[ this.attrName ];
 
-		const formula = new CalculatedFormula(
-			htmlAttr.initial,
-			input,
-		);
+		const formula = new CalculatedFormula( input );
+		formula.observe( htmlAttr.initial );
 
 		this.observe( htmlAttr, formula );
 	},

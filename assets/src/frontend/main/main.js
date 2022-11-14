@@ -4,7 +4,6 @@ import BaseSignal from './signals/BaseSignal';
 import ReactiveVar from './reactive/ReactiveVar';
 import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
-import HtmlMacro from './html.macro/HtmlMacro';
 import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
@@ -13,6 +12,8 @@ import { allRejected, getLanguage, toHTML } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
 import { validateInputs, validateInputsAll } from './reporting/functions';
+
+import './calc.module/main';
 
 (
 	function ( $ ) {
@@ -23,7 +24,6 @@ import { validateInputs, validateInputsAll } from './reporting/functions';
 			),
 			InputData,
 			BaseSignal,
-			HtmlMacro,
 			ReactiveVar,
 			LoadingReactiveVar,
 			Observable,

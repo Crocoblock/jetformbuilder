@@ -13,11 +13,9 @@ function ReactiveValue() {
 	this.runObserve = function ( input ) {
 		const [ node ] = input.nodes;
 
-		const formula = new CalculatedFormula(
-			node.dataset.value,
-			input,
-		);
+		const formula = new CalculatedFormula( input );
 
+		formula.observe( node.dataset.value );
 		formula.setResult = () => {
 			input.value.current = formula.calculate();
 		};

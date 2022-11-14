@@ -42,8 +42,9 @@ ObservableRow.prototype.initCalc = function () {
 		return;
 	}
 
-	const formula = new CalculatedFormula( formulaString, this );
+	const formula = new CalculatedFormula( this );
 
+	formula.observe( formulaString );
 	formula.setResult       = () => {
 		this.calc = formula.calculate();
 		this.parent.value.notify();

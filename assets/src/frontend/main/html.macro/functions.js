@@ -1,49 +1,32 @@
-/**
- * @type {(HtmlMacro)[]}
- */
-import HtmlMacro from './HtmlMacro';
-import CheckboxHtmlMacro from './CheckboxHtmlMacro';
-
-const htmlMacros = [
-	CheckboxHtmlMacro,
-	HtmlMacro,
-];
-
-const macrosPrefix = ( suffix = '' ) => 'JFB_FIELD::' + suffix;
+import CalculatedHtmlString from './CalculatedHtmlString';
 
 /**
  * @param comment
  * @param root {Observable}
- * @returns {null|HtmlMacro}
  */
 function observeComment( comment, root ) {
-	const [ , fieldName ] = comment.textContent.split(
-		'JFB_FIELD::',
+	const formula = new CalculatedHtmlString( root );
+	formula.observe( comment.textContent );
+
+	if ( !formula.parts?.length ) {
+		console.info(
+			`Invalid macro ${ comment.textContent } in this scope`,
+		);
+
+		return;
+	}
+
+	const wrapper = document.createElement( 'span' );
+
+	let prevSibling = comment.parentNode.insertBefore(
+		wrapper,
+		comment,
 	);
 
-	const input = root.getInput( fieldName );
-
-	if ( !input ) {
-		console.groupCollapsed(
-			`Undefined field name: ${ fieldName } in this scope`,
-		);
-		console.warn( 'Comment:', comment );
-		console.groupEnd();
-
-		return null;
-	}
-
-	for ( const current of htmlMacros ) {
-		const macro = new current();
-
-		if ( !macro.isSupported( input ) ) {
-			continue;
-		}
-
-		macro.setRoot( root );
-		macro.observeComment( input, comment );
-		break;
-	}
+	formula.setResult = () => {
+		prevSibling.innerHTML = formula.calculateString();
+	};
+	formula.setResult();
 }
 
 /**
@@ -55,23 +38,22 @@ function observeComment( comment, root ) {
 function observeMacroAttr( node, attrName, root ) {
 	const nodeValue = node[ attrName ] ?? '';
 
-	if (
-		'string' !== typeof nodeValue ||
-		!nodeValue.toLowerCase().includes( macrosPrefix().toLowerCase() )
-	) {
+	if ( 'string' !== typeof nodeValue ) {
 		return null;
 	}
 
-	const macro = new HtmlMacro();
-	macro.setRoot( root );
-	macro.observeMacroAttr( node, attrName );
+	const formula = new CalculatedHtmlString( root );
+	formula.observe( nodeValue );
 
-	return macro;
+	formula.setResult = () => {
+		node[ attrName ] = formula.calculateString();
+	};
+	formula.setResult();
 }
 
 function* iterateJfbComments( rootNode ) {
 	const acceptCallback = node => {
-		return node.textContent.includes( macrosPrefix() );
+		return node.textContent.includes( 'JFB_FIELD::' );
 	};
 
 	yield* iterateComments( rootNode, acceptCallback );
@@ -110,7 +92,6 @@ function queryByAttrValue( rootNode, value ) {
 }
 
 export {
-	macrosPrefix,
 	observeComment,
 	observeMacroAttr,
 	iterateComments,

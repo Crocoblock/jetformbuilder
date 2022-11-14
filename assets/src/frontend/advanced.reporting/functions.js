@@ -108,9 +108,14 @@ function getNodeValidationType( node ) {
  * @param input {InputData}
  */
 function getInheritValidationType( input ) {
-	const form          = input.getSubmit();
-	const { type = '' } = window.JetFormsValidation[ form.getFormId() ] ??
-	{};
+	const formId   = input.getSubmit().getFormId();
+	const allForms = window?.JetFormsValidation ?? false;
+
+	if ( false === allForms ) {
+		return '';
+	}
+
+	const { type = '' } = allForms[ formId ] ?? {};
 
 	return type;
 }
@@ -136,7 +141,7 @@ function getMessageBySlug( restriction, slug ) {
 	}
 
 	const form        = reporting.input.getSubmit();
-	const allMessages = window.JetFormsValidation ?? false;
+	const allMessages = window?.JetFormsValidation ?? false;
 
 	if ( false === allMessages ) {
 		return '';

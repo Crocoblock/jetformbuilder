@@ -6,10 +6,8 @@
 import applyFilters from './applyFilters';
 import getFilters from './getFilters';
 import attachConstNamespace from './attachConstNamespace';
+import InputData from '../inputs/InputData';
 
-const {
-	      InputData,
-      } = JetFormBuilderAbstract;
 const {
 	      applyFilters: wpFilters,
 	      addFilter,
@@ -26,16 +24,13 @@ addFilter(
 );
 
 /**
- * @param formula {String}
  * @param root {InputData|Observable}
  * @param options {{forceFunction: boolean}}
  */
 function CalculatedFormula(
-	formula,
 	root,
 	options = {},
 ) {
-	this.formula      = formula;
 	this.parts        = [];
 	this.related      = [];
 	this.relatedAttrs = [];
@@ -49,8 +44,6 @@ function CalculatedFormula(
 	}
 
 	this.root = this.input?.root ?? root;
-
-	this.observe( formula );
 }
 
 CalculatedFormula.prototype = {
@@ -67,7 +60,7 @@ CalculatedFormula.prototype = {
 	 * @type {Observable}
 	 */
 	root: null,
-
+	regexp: /%(.*?)%/g,
 	forceFunction: false,
 	/**
 	 * @type {Function}
@@ -84,19 +77,28 @@ CalculatedFormula.prototype = {
 		return relatedInput.value.current;
 	},
 	/**
-	 * @private
+	 *
 	 * @param value
 	 */
 	observe( value ) {
-		if ( Array.isArray( value ) ) {
-			value.forEach( item => {
-				this.observe( item );
-			} );
+		this.formula = value;
+
+		if ( !Array.isArray( value ) ) {
+			this.observeItem( value );
 
 			return;
 		}
 
-		const rawParts = value.split( /%(.*?)%/g );
+		value.forEach( item => {
+			this.observeItem( item );
+		} );
+	},
+	/**
+	 * @private
+	 * @param value {String}
+	 */
+	observeItem( value ) {
+		const rawParts = value.split( this.regexp );
 
 		if ( 1 === rawParts.length ) {
 			return;
@@ -107,7 +109,15 @@ CalculatedFormula.prototype = {
 			...rawParts.map( this.observeMacro.bind( this ) ),
 		];
 	},
+	/**
+	 * @param current {String}
+	 * @return {(function(): *)|*}
+	 */
 	observeMacro( current ) {
+		if ( null === this.formula ) {
+			this.formula = current;
+		}
+
 		const [ name, ...filters ] = current.split( '|' );
 		const parsedName           = name.match( /[\w\-:]+/g );
 

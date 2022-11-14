@@ -26,12 +26,9 @@ function CalculatedData() {
 		return isCalculated( node );
 	};
 	this.setValue     = function () {
-		const formula = new CalculatedFormula(
-			this.formula,
-			this,
-			{ forceFunction: true },
-		);
+		const formula = new CalculatedFormula( this, { forceFunction: true } );
 
+		formula.observe( this.formula );
 		formula.setResult       = () => {
 			this.value.current = formula.calculate();
 		};

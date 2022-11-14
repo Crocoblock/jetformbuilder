@@ -22,8 +22,9 @@ MultipleValueItem.prototype.observeSetValue = function ( conditions, input ) {
 	this.to_set = {};
 
 	for ( const [ index, toSetElement ] of Object.entries( toSet ) ) {
-		const formula = new CalculatedFormula( toSetElement, input.root );
+		const formula = new CalculatedFormula( input.root );
 
+		formula.observe( toSetElement );
 		formula.setResult = () => {
 			this.to_set[ index ] = '' + formula.calculate();
 

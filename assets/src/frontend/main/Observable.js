@@ -1,8 +1,9 @@
 import { createInput } from './inputs/functions';
 import FormSubmit from './submit/FormSubmit';
 import {
-	iterateJfbComments, macrosPrefix,
-	observeComment, observeMacroAttr,
+	iterateJfbComments,
+	observeComment,
+	observeMacroAttr,
 	queryByAttrValue,
 } from './html.macro/functions';
 import { validateInputsAll } from './reporting/functions';
@@ -73,7 +74,7 @@ Observable.prototype = {
 
 		this.initMacros();
 
-		this.initActionButtons()
+		this.initActionButtons();
 
 		doAction( 'jet.fb.observe.after', this );
 	},
@@ -93,7 +94,7 @@ Observable.prototype = {
 			observeComment( comment, this );
 		}
 
-		const nodes = queryByAttrValue( this.rootNode, macrosPrefix() );
+		const nodes = queryByAttrValue( this.rootNode, 'JFB_FIELD::' );
 
 		const { replaceAttrs = [] } = window.JetFormBuilderSettings;
 
@@ -123,13 +124,14 @@ Observable.prototype = {
 			let states;
 			try {
 				states = JSON.parse( button.dataset.switchOn );
-			} catch ( error ) {
+			}
+			catch ( error ) {
 				continue;
 			}
 
 			button.addEventListener( 'click', () => {
 				this.getState().value.current = states;
-			} )
+			} );
 		}
 	},
 

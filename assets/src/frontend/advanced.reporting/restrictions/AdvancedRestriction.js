@@ -52,10 +52,9 @@ AdvancedRestriction.prototype.getMessageBySlug = function ( slug ) {
 };
 
 AdvancedRestriction.prototype.onReady = function () {
-	this.formula           = new CalculatedFormula(
-		this.getRawMessage(),
-		this.reporting.input,
-	);
+	this.formula = new CalculatedFormula( this.reporting.input );
+
+	this.formula.observe( this.getRawMessage() );
 	this.formula.setResult = () => {
 		this.message = this.formula.calculateString();
 	};

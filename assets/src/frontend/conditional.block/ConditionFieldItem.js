@@ -59,8 +59,9 @@ function ConditionFieldItem() {
 		this.value = {};
 
 		for ( const [ index, formula ] of Object.entries( value ) ) {
-			const current = new CalculatedFormula( formula, this.list.root );
+			const current = new CalculatedFormula( this.list.root );
 
+			current.observe( formula );
 			current.setResult = () => {
 				this.value[ index ] = '' + current.calculate();
 				this.list.onChangeRelated();

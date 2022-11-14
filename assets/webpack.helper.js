@@ -41,7 +41,6 @@ module.exports = {
 			'frontend/conditional.block': './frontend/conditional.block/main.js',
 			'frontend/advanced.reporting': './frontend/advanced.reporting/main.js',
 			'frontend/dynamic.value': './frontend/dynamic.value/main.js',
-			'frontend/calculated.module': './frontend/calculated.module/main.js',
 			'frontend/deprecated': './frontend/deprecated/main.js',
 			'frontend/jet-appointment': './frontend/compatibility/jet-appointment.js',
 			'frontend/jet-booking': './frontend/compatibility/jet-booking.js',

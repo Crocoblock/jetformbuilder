@@ -89,19 +89,19 @@ class Validation implements Arrayable {
 	 */
 	private function get_messages(): array {
 		return array(
-			new Is_Number_Max(),
-			new Is_Number_Min(),
-			new Is_Char_Max(),
-			new Is_Char_Min(),
 			new Is_Empty_Value(),
+			new Is_Number_Min(),
+			new Is_Number_Max(),
+			new Is_Char_Min(),
+			new Is_Char_Max(),
 			new Is_Not_Valid_Email(),
 			new Is_Not_Valid_Url(),
 			new Is_Not_Complete_Mask(),
-			new Is_File_Size(),
 			new Is_Files_Max(),
+			new Is_File_Size(),
 			new Is_File_Ext(),
-			new Is_Date_Max(),
 			new Is_Date_Min(),
+			new Is_Date_Max(),
 		);
 	}
 

@@ -5,29 +5,43 @@ const {
       } = wp.components;
 
 function ValidationMetaMessage( {
-	name,
-	messages,
+	message,
 	update,
-	label = null,
-	initial = null,
+	value = null,
 	help = null,
+	...props
 } ) {
-	const current = getItemByName( name );
+	const current = getItemByName( message.id );
 
-	return <>
+	return <div { ...props }>
+		<label
+			htmlFor={ message.id }
+			className={ 'jet-fb-control flex jc-space-between' }
+		>
+			<span>{ current.label }</span>
+			<span className={ 'jet-fb-control flex gap-1em' }>
+			{ message.blocks.map( block => <span
+				key={ 'message_block_item' + block.title }
+				className="jet-fb-validation-messages-item-heading-pair__icon"
+				title={ block.title }
+			>
+				{ block.icon }
+			</span> ) }
+		</span>
+		</label>
 		<TextControl
-			key={ 'validation_message_' + name }
-			label={ label ?? current?.label }
+			id={ message.id }
+			key={ 'validation_message_' + message.id }
 			help={ help ?? current?.help }
-			value={ messages[ name ] ?? initial ?? current?.initial }
+			value={ value ?? current?.initial }
 			onChange={ value => update( prev => (
 				{
 					...prev,
-					[ name ]: value,
+					[ message.id ]: value,
 				}
 			) ) }
 		/>
-	</>;
+	</div>;
 }
 
 export default ValidationMetaMessage;

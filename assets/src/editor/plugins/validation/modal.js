@@ -11,11 +11,7 @@ const {
 	      useState,
 	      useContext,
       } = wp.element;
-const {
-	      Card,
-	      CardBody,
-	      CardHeader,
-      } = wp.components;
+
 const {
 	      __,
       } = wp.i18n;
@@ -45,40 +41,15 @@ function ValidationModal() {
 	}, [ actionClick ] );
 
 	return <>
-		<div className="jet-fb-validation-messages">
-			{ messages.map( message => <Card
+		<div className="jet-fb-validation-messages jet-control-clear-full">
+			{ messages.map( ( message, index ) => <ValidationMetaMessage
 				key={ 'message_item' + message.id }
-				size={ 'extraSmall' }
-				className="jet-fb-validation-messages-item"
-				elevation={ 2 }
-			>
-				{ !!message.blocks.length && <CardHeader
-					className="jet-fb-validation-messages-item-heading"
-				>
-					{ __(
-						'Used by the following blocks:',
-						'jet-form-builder',
-					) }
-					{ message.blocks.map( block => <span
-						key={ 'message_block_item' + block.title }
-						className="jet-fb-validation-messages-item-heading-pair"
-					>
-						<span
-							className="jet-fb-validation-messages-item-heading-pair__icon"
-						>{ block.icon }</span>
-						<span
-							className="jet-fb-validation-messages-item-heading-pair__title"
-						>{ block.title }</span>
-					</span> ) }
-				</CardHeader> }
-				<CardBody>
-					<ValidationMetaMessage
-						name={ message.id }
-						messages={ current }
-						update={ setCurrent }
-					/>
-				</CardBody>
-			</Card> ) }
+				message={ message }
+				messages={ current }
+				update={ setCurrent }
+				className={ index !== 0 ? 'jet-control-full' : '' }
+				style={ index !== 0 ? {} : { paddingBottom: '5px' } }
+			/> ) }
 		</div>
 	</>;
 }

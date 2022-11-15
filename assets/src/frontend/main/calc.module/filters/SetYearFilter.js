@@ -8,7 +8,12 @@ function SetYearFilter() {
 	};
 
 	this.apply = function ( value, year ) {
-		year          = year ? +year.trim() : 1;
+		year = year ? +year.trim() : false;
+
+		if ( !year ) {
+			return value;
+		}
+
 		const current = new Date( value );
 
 		return current.setFullYear( year );

@@ -12,9 +12,9 @@ function SetMinFilter() {
 		const current  = new Date( time );
 
 		if ( Number.isNaN( current.getTime() ) ) {
-			return 0;
+			return value;
 		}
-		min = min ? +min.trim() : 1;
+		min = min ? +min.trim() : 0;
 
 		return current.setMinutes( min );
 	};

@@ -12,9 +12,9 @@ function SetHourFilter() {
 		const current  = new Date( time );
 
 		if ( Number.isNaN( current.getTime() ) ) {
-			return 0;
+			return value;
 		}
-		hour = hour ? +hour.trim() : 1;
+		hour = hour ? +hour.trim() : 0;
 
 		return current.setHours( hour );
 	};

@@ -13,7 +13,7 @@ class Is_File_Ext extends Base_Message {
 	}
 
 	public function get_label(): string {
-		return __( 'The file type is not included in the list of allowed types', 'jet-form-builder' );
+		return __( 'File type is not included in the allowed types list', 'jet-form-builder' );
 	}
 
 	public function supported_blocks(): array {
@@ -24,7 +24,7 @@ class Is_File_Ext extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'The file type is not allowed',
+			'The file type is not allowed.',
 			'jet-form-builder'
 		);
 	}

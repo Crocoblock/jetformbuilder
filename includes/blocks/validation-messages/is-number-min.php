@@ -14,7 +14,7 @@ class Is_Number_Min extends Base_Message {
 	}
 
 	public function get_label(): string {
-		return __( 'Value does not reach minimum', 'jet-form-builder' );
+		return __( 'Value does not reach the minimum', 'jet-form-builder' );
 	}
 
 	public function supported_blocks(): array {

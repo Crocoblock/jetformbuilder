@@ -11,7 +11,7 @@ class Is_Empty_Value extends Base_Message {
 	}
 
 	public function get_label(): string {
-		return __( 'If Field is empty', 'jet-form-builder' );
+		return __( 'Field is empty', 'jet-form-builder' );
 	}
 
 	public function get_initial(): string {

@@ -28,7 +28,7 @@ class Is_Char_Min extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please lengthen this text to %this(minLength)% characters or more (you are currently using %this|length% characters).',
+			'Please increase the text length to at least %this(minLength)% characters (you are currently using %this|length% characters).',
 			'jet-form-builder'
 		);
 	}

@@ -28,7 +28,7 @@ class Is_Char_Max extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please reduce this text to %this(maxLength)% characters or less (currently you contain %this|length% characters).',
+			'Please reduce the text length to %this(maxLength)% characters or fewer (you currently have %this|length% characters).',
 			'jet-form-builder'
 		);
 	}

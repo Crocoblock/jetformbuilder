@@ -2,7 +2,7 @@ const { __ } = wp.i18n;
 
 const label = {
 	enable_dev_mode: __( 'Enable Dev-Mode', 'jet-form-builder' ),
-	disable_next_button: __( 'Disable "Next button"', 'jet-form-builder' ),
+	disable_next_button: __( 'Disable "Next" button', 'jet-form-builder' ),
 };
 
 const help = {
@@ -11,9 +11,8 @@ const help = {
 		'jet-form-builder',
 	),
 	disable_next_button: __(
-		`If this option is enabled, the button to go to the next page 
-(when using a multi-step form) will become disabled if 
-there are unfilled required fields on the page.`,
+		`If this option is active, the Next button in a multi-step 
+form won't become clickable until all the required fields are completed.`,
 		'jet-form-builder',
 	),
 };

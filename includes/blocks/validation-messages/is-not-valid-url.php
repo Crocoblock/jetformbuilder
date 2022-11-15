@@ -24,7 +24,7 @@ class Is_Not_Valid_Url extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please enter a URL.',
+			'Please enter a valid URL.',
 			'jet-form-builder'
 		);
 	}

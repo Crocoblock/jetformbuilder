@@ -15,6 +15,7 @@ const {
 	      useState,
 	      useContext,
 	      Fragment,
+	      useEffect,
       } = wp.element;
 const {
 	      SelectControl,
@@ -29,33 +30,54 @@ const help = [
 	{
 		key: 'commas',
 		render: () => <li>{ __(
-			`If this field support multiple values, 
-			you can separate them by commas`,
+			`If this field supports multiple values, 
+			you can separate them with commas`,
 			'jet-form-builder',
 		) }</li>,
 	},
+];
+
+const options = [
 	{
-		key: 'macros',
-		render: () => <li>
-			{ __( `You can use the following macros:`, 'jet-form-builder' ) }
-			<ul className={ 'jet-fb-ul-revert-layer' }>
-				<li>{
-					__(
-						`%this% - returns value of current field`,
-						'jet-form-builder',
-					)
-				}</li>
-				<li>{
-					__(
-						`%field_name% - where "field_name" 
-					is value in Field Name option`,
-						'jet-form-builder',
-					)
-				}</li>
-			</ul>
-		</li>,
+		value: 'on_change',
+		label: __(
+			'On change conditions result',
+			'jet-form-builder',
+		),
+		help: __(
+			`The value will be applied if condition check-ups return a result 
+different from the first check-up's cached value`,
+			'jet-form-builder'
+		)
+	},
+	{
+		value: 'once',
+		label: __( 'Once', 'jet-form-builder' ),
+		help: __(
+			`The value will be applied only the first time 
+the condition is matched`,
+			'jet-form-builder'
+		)
+	},
+	{
+		value: 'always',
+		label: __( 'Always', 'jet-form-builder' ),
+		help: __(
+			`The value will be applied every time the condition is matched`,
+			'jet-form-builder'
+		)
 	},
 ];
+
+const getHelp = frequency => {
+	const option = options.find( current => {
+		return current.value === (
+			frequency ?? 'on_change'
+		);
+	} );
+
+	return option.help;
+};
 
 function DynamicItemBody() {
 	const {
@@ -64,6 +86,14 @@ function DynamicItemBody() {
 	      } = useContext( BlockValueItemContext );
 
 	const [ current, setCurrent ] = useState( () => currentValue );
+
+	const [ currentHelp, setCurrentHelp ] = useState(
+		() => getHelp( current.frequency ),
+	);
+
+	useEffect( () => {
+		setCurrentHelp( getHelp( current.frequency ) );
+	}, [ current.frequency ] );
 
 	const updateCurrent = settings => {
 		setCurrent( prev => (
@@ -84,31 +114,14 @@ function DynamicItemBody() {
 
 	useOnUpdateModal( () => update( current ) );
 
-	const [ showDetails, setShowDetails ] = useState( true );
-
 	return <>
 		<SelectControl
-			options={ [
-				{
-					value: 'on_change',
-					label: __(
-						'On change conditions result',
-						'jet-form-builder',
-					),
-				},
-				{
-					value: 'once',
-					label: __( 'Once', 'jet-form-builder' ),
-				},
-				{
-					value: 'always',
-					label: __( 'Always', 'jet-form-builder' ),
-				},
-			] }
+			options={ options }
 			value={ current.frequency ?? 'on_change' }
 			label={ __( 'Apply value', 'jet-form-builder' ) }
 			labelPosition={ 'side' }
 			onChange={ frequency => updateCurrent( { frequency } ) }
+			help={ currentHelp }
 		/>
 		<ToggleControl
 			label={ __(
@@ -128,13 +141,6 @@ function DynamicItemBody() {
 					justify={ 'flex-start' }
 				>
 					<span>{ __( 'Value to set', 'jet-form-builder' ) }</span>
-					<Button
-						icon={ 'editor-help' }
-						variant="tertiary"
-						isSmall
-						className={ 'jet-fb-is-thick' }
-						onClick={ () => setShowDetails( prev => !prev ) }
-					/>
 					<PresetButton
 						value={ current.to_set }
 						onChange={ to_set => updateCurrent( { to_set } ) }
@@ -147,13 +153,13 @@ function DynamicItemBody() {
 						} ) }
 					/>
 				</Flex>
-				{ showDetails && <BaseHelp>
-					<ul className={ 'jet-fb-ul-revert-layer' }>
+				<BaseHelp>
+					<ul>
 						{ help.map( helpItem => <Fragment key={ helpItem.key }>
 							{ helpItem.render() }
 						</Fragment> ) }
 					</ul>
-				</BaseHelp> }
+				</BaseHelp>
 			</FlexItem>
 			<FlexItem isBlock style={ { flex: 3, marginLeft: 'unset' } }>
 				<TextareaControl

@@ -24,7 +24,7 @@ class Is_File_Size extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'The size of this file cannot exceed %this(max_size)|sizeFormat%',
+			'The file size cannot exceed %this(max_size)|sizeFormat%.',
 			'jet-form-builder'
 		);
 	}

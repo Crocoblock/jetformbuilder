@@ -24,7 +24,7 @@ class Is_Not_Valid_Email extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'The "%this%" address is missing the "@" character.',
+			'Please enter a valid email.',
 			'jet-form-builder'
 		);
 	}

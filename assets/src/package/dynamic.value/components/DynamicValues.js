@@ -52,15 +52,14 @@ function DynamicValues() {
 	return <>
 		<BaseHelp>
 			{ __(
-				`Or set value with conditions`,
+				`Or use a condition-dependent value`,
 				'jet-form-builder',
 			) + ' ' }
 			<Button
 				isLink
 				onClick={ () => {} }
 				label={ __(
-					`This is a moved functionality from 
-					the conditional block with the Set Value function`,
+					`Former Set Value functionality, moved from the Conditional Block`,
 					'jet-form-builder',
 				) }
 				showTooltip

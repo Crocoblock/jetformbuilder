@@ -27,6 +27,6 @@ class Is_Date_Max extends Base_Message {
 	}
 
 	public function get_initial(): string {
-		return __( 'Timestamp is too late', 'jet-form-builder' );
+		return __( 'Timestamp exceeds the maximum allowed value.', 'jet-form-builder' );
 	}
 }

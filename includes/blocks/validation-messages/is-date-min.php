@@ -27,6 +27,6 @@ class Is_Date_Min extends Base_Message {
 	}
 
 	public function get_initial(): string {
-		return __( 'Timestamp is too early', 'jet-form-builder' );
+		return __( 'Timestamp is below the minimum allowed value.', 'jet-form-builder' );
 	}
 }

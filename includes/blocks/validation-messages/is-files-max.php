@@ -24,7 +24,7 @@ class Is_Files_Max extends Base_Message {
 
 	public function get_initial(): string {
 		return __(
-			'Please reduce this text to %this(max_files)% characters or less (currently you contain %this|length% characters).',
+			'Please reduce the files total to %this(max_files)% or fewer (you currently have %this|length% files).',
 			'jet-form-builder'
 		);
 	}

@@ -178,7 +178,7 @@ function ListActionItem( props ) {
 						'jet-form-builder',
 					) }
 				>
-					<div className="jet-form-action-details">
+					<div className="jet-fb-control p-06em flex flex-dir-column gap-default">
 						<div data-title={ __( 'ID:',
 							'jet-form-builder' ) }><b>{ action.id }</b></div>
 						{ ActionDetails && <ActionDetails/> }

@@ -7,6 +7,7 @@ import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
 import PresetButton from '../../preset/components/PresetButton';
 import MacrosFields from '../../macros.button/components/MacrosFields';
 import ConditionItem from '../../block-conditions/components/ConditionItem';
+import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 
 const {
 	      __,
@@ -47,8 +48,8 @@ const options = [
 		help: __(
 			`The value will be applied if condition check-ups return a result 
 different from the first check-up's cached value`,
-			'jet-form-builder'
-		)
+			'jet-form-builder',
+		),
 	},
 	{
 		value: 'once',
@@ -56,16 +57,16 @@ different from the first check-up's cached value`,
 		help: __(
 			`The value will be applied only the first time 
 the condition is matched`,
-			'jet-form-builder'
-		)
+			'jet-form-builder',
+		),
 	},
 	{
 		value: 'always',
 		label: __( 'Always', 'jet-form-builder' ),
 		help: __(
 			`The value will be applied every time the condition is matched`,
-			'jet-form-builder'
-		)
+			'jet-form-builder',
+		),
 	},
 ];
 
@@ -145,13 +146,15 @@ function DynamicItemBody() {
 						value={ current.to_set }
 						onChange={ to_set => updateCurrent( { to_set } ) }
 					/>
-					<MacrosFields
-						onClick={ name => updateCurrent( {
-							to_set: (
-								current.to_set ?? ''
-							) + `%${ name }%`,
-						} ) }
-					/>
+					<ClientSideMacros>
+						<MacrosFields
+							onClick={ name => updateCurrent( {
+								to_set: (
+									current.to_set ?? ''
+								) + `%${ name }%`,
+							} ) }
+						/>
+					</ClientSideMacros>
 				</Flex>
 				<BaseHelp>
 					<ul>

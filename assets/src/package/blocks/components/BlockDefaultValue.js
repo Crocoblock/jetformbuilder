@@ -2,6 +2,7 @@ import useBlockAttributes from '../hooks/useBlockAttributes';
 import AdvancedInspectorControl
 	from '../../components/AdvancedInspectorControl';
 import useIsHasAttribute from '../../hooks/useIsHasAttribute';
+import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 
 const {
 	      __,
@@ -16,26 +17,28 @@ function BlockDefaultValue( { label, help } ) {
 		      setAttributes,
 	      ] = useBlockAttributes();
 
-	if ( ! useIsHasAttribute( 'default' ) ) {
+	if ( !useIsHasAttribute( 'default' ) ) {
 		return null;
 	}
 
-	return <AdvancedInspectorControl
-		value={ attributes.default }
-		label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
-		onChangePreset={ val => setAttributes( { default: val } ) }
-		onChangeMacros={ name => setAttributes( {
-			default: attributes.default + `%${ name }%`,
-		} ) }
-	>
-		{ ( { instanceId } ) => <TextareaControl
-			rows={ 1 }
-			id={ instanceId }
+	return <ClientSideMacros>
+		<AdvancedInspectorControl
 			value={ attributes.default }
-			help={ help ?? '' }
-			onChange={ val => setAttributes( { default: val } ) }
-		/> }
-	</AdvancedInspectorControl>;
+			label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
+			onChangePreset={ val => setAttributes( { default: val } ) }
+			onChangeMacros={ name => setAttributes( {
+				default: attributes.default + `%${ name }%`,
+			} ) }
+		>
+			{ ( { instanceId } ) => <TextareaControl
+				rows={ 1 }
+				id={ instanceId }
+				value={ attributes.default }
+				help={ help ?? '' }
+				onChange={ val => setAttributes( { default: val } ) }
+			/> }
+		</AdvancedInspectorControl>
+	</ClientSideMacros>;
 }
 
 export default BlockDefaultValue;

@@ -2,6 +2,7 @@ import RenderStateOptions from './RenderStateOptions';
 import MacrosFields from '../../macros.button/components/MacrosFields';
 import PresetButton from '../../preset/components/PresetButton';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
+import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 
 const {
 	      TextareaControl,
@@ -44,13 +45,15 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )(
 								onChange={ value => changeCurrentItem(
 									{ value } ) }
 							/>
-							<MacrosFields
-								onClick={ name => changeCurrentItem( {
-									value: (
-										currentItem.value ?? ''
-									) + `%${ name }%`,
-								} ) }
-							/>
+							<ClientSideMacros>
+								<MacrosFields
+									onClick={ name => changeCurrentItem( {
+										value: (
+											currentItem.value ?? ''
+										) + `%${ name }%`,
+									} ) }
+								/>
+							</ClientSideMacros>
 						</Flex>
 					</FlexItem>
 					<FlexItem isBlock

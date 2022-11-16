@@ -10,6 +10,7 @@ const {
 	      AdvancedInspectorControl,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      ClientSideMacros,
       } = JetFBComponents;
 const {
 	      useInsertMacro,
@@ -67,42 +68,45 @@ export default function DateTimeEdit( props ) {
 						) }
 						style={ { marginBottom: '1em' } }
 					/>
-					<AdvancedInspectorControl
-						value={ attributes.min }
-						label={ __( 'Starting from date', 'jet-form-builder' ) }
-						onChangePreset={ min => setAttributes( { min } ) }
-						onChangeMacros={ updateMin }
-					>
-						{ ( { instanceId } ) => <TextareaControl
-							rows={ 1 }
-							id={ instanceId }
-							ref={ minInput }
+					<ClientSideMacros>
+						<AdvancedInspectorControl
 							value={ attributes.min }
-							help={ __(
-								'Plain date should be in yyyy-MM-ddThh:mm format',
-								'jet-form-builder',
-							) }
-							onChange={ min => setAttributes( { min } ) }
-						/> }
-					</AdvancedInspectorControl>
-					<AdvancedInspectorControl
-						value={ attributes.max }
-						label={ __( 'Limit dates to', 'jet-form-builder' ) }
-						onChangePreset={ max => setAttributes( { max } ) }
-						onChangeMacros={ updateMax }
-					>
-						{ ( { instanceId } ) => <TextareaControl
-							rows={ 1 }
-							id={ instanceId }
-							ref={ maxInput }
+							label={ __( 'Starting from date',
+								'jet-form-builder' ) }
+							onChangePreset={ min => setAttributes( { min } ) }
+							onChangeMacros={ updateMin }
+						>
+							{ ( { instanceId } ) => <TextareaControl
+								rows={ 1 }
+								id={ instanceId }
+								ref={ minInput }
+								value={ attributes.min }
+								help={ __(
+									'Plain date should be in yyyy-MM-ddThh:mm format',
+									'jet-form-builder',
+								) }
+								onChange={ min => setAttributes( { min } ) }
+							/> }
+						</AdvancedInspectorControl>
+						<AdvancedInspectorControl
 							value={ attributes.max }
-							help={ __(
-								'Plain date should be in yyyy-MM-ddThh:mm format',
-								'jet-form-builder',
-							) }
-							onChange={ max => setAttributes( { max } ) }
-						/> }
-					</AdvancedInspectorControl>
+							label={ __( 'Limit dates to', 'jet-form-builder' ) }
+							onChangePreset={ max => setAttributes( { max } ) }
+							onChangeMacros={ updateMax }
+						>
+							{ ( { instanceId } ) => <TextareaControl
+								rows={ 1 }
+								id={ instanceId }
+								ref={ maxInput }
+								value={ attributes.max }
+								help={ __(
+									'Plain date should be in yyyy-MM-ddThh:mm format',
+									'jet-form-builder',
+								) }
+								onChange={ max => setAttributes( { max } ) }
+							/> }
+						</AdvancedInspectorControl>
+					</ClientSideMacros>
 				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
 					<ToggleControl

@@ -2,7 +2,6 @@ import MacrosButtonTemplate from './MacrosButtonTemplate';
 import getFieldsWithoutCurrent
 	from '../../blocks/helpers/getFieldsWithoutCurrent';
 import ExtraMacroContext from '../context/ExtraMacroContext';
-import FiltersMacroContext from '../context/FiltersMacroContext';
 import GroupItemsPopover from './GroupItemsPopover';
 
 const {
@@ -20,31 +19,42 @@ function MacrosFieldsTemplate( { children, ...props } ) {
 	);
 
 	/**
-	 * @type {BaseMacro[]}
+	 * @type {{
+	 * extra: BaseMacro[],
+	 * filters: BaseFilter[]
+	 * beforeFields: BasePopoverItem[]
+	 * afterFields: BasePopoverItem[]
+	 * }}
 	 */
-	const extra   = useContext( ExtraMacroContext );
-	/**
-	 * @type {BaseFilter[]}
-	 */
-	const filters = useContext( FiltersMacroContext );
+	const macros = useContext( ExtraMacroContext );
 
-	return <MacrosButtonTemplate disabled={ !fields.length } { ...props }>
-		{ Boolean( fields.length ) && <GroupItemsPopover
+	const fullFields = [
+		...(
+			macros.beforeFields ?? []
+		),
+		...fields,
+		...(
+			macros.afterFields ?? []
+		),
+	];
+
+	return <MacrosButtonTemplate { ...props }>
+		{ Boolean( fullFields.length ) && <GroupItemsPopover
 			title={ __( 'Fields:', 'jet-form-builder' ) }
-			items={ fields }
+			items={ fullFields }
 			initialOpen={ true }
 		>
 			{ children }
 		</GroupItemsPopover> }
-		{ Boolean( extra.length ) && <GroupItemsPopover
+		{ Boolean( macros?.extra?.length ) && <GroupItemsPopover
 			title={ __( 'Extra macros:', 'jet-form-builder' ) }
-			items={ extra }
+			items={ macros.extra }
 		>
 			{ children }
 		</GroupItemsPopover> }
-		{ Boolean( filters.length ) && <GroupItemsPopover
+		{ Boolean( macros?.filters?.length ) && <GroupItemsPopover
 			title={ __( 'Filters:', 'jet-form-builder' ) }
-			items={ filters }
+			items={ macros.filters }
 		>
 			{ children }
 		</GroupItemsPopover> }

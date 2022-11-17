@@ -29,6 +29,10 @@ function NoListenData() {
 
 		node.parentElement.insertBefore( this.comment, node );
 	};
+
+	this.merge = function ( input ) {
+		this.nodes.push( ...input.getNode() );
+	};
 }
 
 NoListenData.prototype = Object.create( InputData.prototype );

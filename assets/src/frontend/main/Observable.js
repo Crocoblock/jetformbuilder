@@ -83,7 +83,7 @@ Observable.prototype = {
 		for ( const formElement of this.rootNode.querySelectorAll(
 			'[data-jfb-sync]',
 		) ) {
-			this.pushData( createInput( formElement, this ) );
+			this.pushInput( formElement );
 		}
 	},
 
@@ -158,47 +158,59 @@ Observable.prototype = {
 		);
 	},
 
+	/**
+	 * @param node {Element}
+	 */
+	observeInput: function ( node ) {
+		const input = this.pushInput( node );
+
+		this.makeReactiveInput( input );
+	},
+
 	makeReactiveProxy: function () {
 		for ( const current of this.getInputs() ) {
-			current.makeReactive();
-
-			if ( this.parent ) {
-				current.watch( () => {
-					this.parent.report();
-				} );
-			}
-
-			Object.defineProperty( this.data, current.name, {
-				get() {
-					return current.value.current;
-				},
-				set( newValue ) {
-					current.value.current = newValue;
-				},
-			} );
+			this.makeReactiveInput( current );
 		}
 	},
 
 	/**
-	 * @param inputData {InputData}
+	 * @param input {InputData}
 	 */
-	pushData: function ( inputData ) {
+	makeReactiveInput: function ( input ) {
+		input.makeReactive();
+
+		if ( this.parent ) {
+			input.watch( () => {
+				this.parent.report();
+			} );
+		}
+
+		Object.defineProperty( this.data, input.name, {
+			get() {
+				return input.value.current;
+			},
+			set( newValue ) {
+				input.value.current = newValue;
+			},
+		} );
+	},
+
+	/**
+	 * @param node {Element}
+	 */
+	pushInput: function ( node ) {
+		const inputData = createInput( node, this );
 		const findInput = this.dataInputs[ inputData.getName() ] ?? false;
 
 		if ( false === findInput ) {
 			this.dataInputs[ inputData.getName() ] = inputData;
 
-			return;
-		}
-
-		const [ findNode ]  = findInput.getNode();
-		const [ inputNode ] = inputData.getNode();
-
-		if ( findNode.type !== inputNode.type ) {
-			return;
+			return inputData;
 		}
 
 		findInput.merge( inputData );
+
+		return findInput;
 	},
 
 	/**

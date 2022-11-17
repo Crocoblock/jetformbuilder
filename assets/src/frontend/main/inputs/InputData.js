@@ -118,7 +118,7 @@ InputData.prototype.sanitize = function ( callable ) {
  * @param inputData {InputData}
  */
 InputData.prototype.merge = function ( inputData ) {
-	this.nodes.push( ...inputData.getNode() );
+	this.nodes = [ ...inputData.getNode() ];
 };
 InputData.prototype.setValue = function () {
 	if ( this.isArray() ) {

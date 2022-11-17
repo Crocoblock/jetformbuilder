@@ -22,7 +22,6 @@ class Is_Char_Max extends Base_Message {
 		return array(
 			Text_Field::class,
 			Textarea_Field::class,
-			Wysiwyg_Field::class
 		);
 	}
 

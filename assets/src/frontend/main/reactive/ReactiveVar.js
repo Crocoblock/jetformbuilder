@@ -8,7 +8,10 @@ function ReactiveVar( value = null ) {
 
 ReactiveVar.prototype = {
 	watch: function ( callable ) {
-		this.signals.push( callable.bind( this ) );
+		this.signals.push( {
+			signal: callable.bind( this ),
+			trace: new Error().stack,
+		} );
 
 		const index = this.signals.length - 1;
 
@@ -22,8 +25,9 @@ ReactiveVar.prototype = {
 		return () => this.sanitizers.splice( index, 1 );
 	},
 	make: function () {
-		let current = this.current;
-		const self  = this;
+		let current   = this.current;
+		let prevValue = null;
+		const self    = this;
 
 		Object.defineProperty( this, 'current', {
 			get() {
@@ -33,6 +37,7 @@ ReactiveVar.prototype = {
 				if ( current === newVal ) {
 					return;
 				}
+				prevValue = current;
 				if ( self.isDebug ) {
 					console.group( 'ReactiveVar has changed' );
 					console.log( 'current:', current );
@@ -45,12 +50,12 @@ ReactiveVar.prototype = {
 				if ( self.isSilence ) {
 					return;
 				}
-				self.notify();
+				self.notify( prevValue );
 			},
 		} );
 	},
-	notify: function () {
-		this.signals.forEach( signal => signal() );
+	notify: function ( prevValue = null ) {
+		this.signals.forEach( ( { signal } ) => signal( prevValue ) );
 	},
 	applySanitizers: function ( value ) {
 		for ( const sanitizer of this.sanitizers ) {

@@ -19,12 +19,7 @@ function RepeaterData() {
 		return false;
 	};
 	this.addListeners = function () {
-		this.buttonNode.addEventListener( 'click', () => {
-			this.value.current = [
-				...this.value.current,
-				new ObservableRow( this ),
-			];
-		} );
+		this.buttonNode.addEventListener( 'click', () => this.addNew() );
 	};
 	this.setValue     = function () {
 		const [ node ]     = this.nodes;
@@ -70,5 +65,24 @@ RepeaterData.prototype = Object.create( InputData.prototype );
 RepeaterData.prototype.buttonNode = null;
 RepeaterData.prototype.template   = null;
 RepeaterData.prototype.container  = null;
+
+RepeaterData.prototype.addNew = function () {
+	this.value.current = [
+		...this.value.current,
+		new ObservableRow( this ),
+	];
+};
+
+RepeaterData.prototype.findIndex = function ( observableRow ) {
+	return this.value.current.findIndex(
+		current => current === observableRow
+	);
+};
+
+RepeaterData.prototype.remove = function ( observableRow ) {
+	this.value.current = this.value.current.filter(
+		current => current !== observableRow
+	);
+};
 
 export default RepeaterData;

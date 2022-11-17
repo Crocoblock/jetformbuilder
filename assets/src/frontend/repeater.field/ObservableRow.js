@@ -20,17 +20,11 @@ ObservableRow.prototype.observe = function ( root ) {
 };
 
 ObservableRow.prototype.remove = function () {
-	for ( const name in this.dataInputs ) {
-		if ( !this.dataInputs.hasOwnProperty( name ) ) {
-			continue;
-		}
-		this.dataInputs[ name ].onRemove();
+	for ( const input of this.getInputs() ) {
+		input.onRemove();
 	}
 
-	this.parent.value.current = this.parent.value.current.filter(
-		current => current !== this,
-	);
-
+	this.parent.remove( this );
 	this.rootNode.remove();
 };
 

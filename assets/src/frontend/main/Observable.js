@@ -164,7 +164,7 @@ Observable.prototype = {
 
 			if ( this.parent ) {
 				current.watch( () => {
-					this.parent.value.notify();
+					this.parent.report();
 				} );
 			}
 

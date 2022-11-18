@@ -10,6 +10,8 @@ const {
 function SignalMapField() {
 	BaseSignal.call( this );
 
+	this.lock.current = true;
+
 	this.map      = null;
 	this.marker   = null;
 	this.mapFrame = null;
@@ -276,6 +278,9 @@ SignalMapField.prototype.render = function () {
 	resetBtn.addEventListener( 'click', () => {
 		this.input.value.current = null;
 	} );
+
+	// allow to run signal
+	this.lock.current = false;
 };
 
 export default SignalMapField;

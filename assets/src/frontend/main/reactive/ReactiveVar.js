@@ -7,6 +7,12 @@ function ReactiveVar( value = null ) {
 }
 
 ReactiveVar.prototype = {
+	watchOnce: function ( callable ) {
+		const clearWatcher = this.watch( () => {
+			clearWatcher();
+			callable();
+		} );
+	},
 	watch: function ( callable ) {
 		this.signals.push( {
 			signal: callable.bind( this ),

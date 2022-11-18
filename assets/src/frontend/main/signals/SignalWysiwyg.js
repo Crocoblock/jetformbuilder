@@ -7,6 +7,8 @@ import { isWysiwyg } from '../supports';
 function SignalWysiwyg() {
 	BaseSignal.call( this );
 
+	this.lock.current = true;
+
 	this.isSupported = function ( node, inputData ) {
 		return isWysiwyg( node );
 	};

@@ -83,10 +83,8 @@ InputData.prototype.makeReactive = function () {
 InputData.prototype.onChange     = function () {
 	this.calcValue = this.value.current;
 
-	if ( this.callable ) {
-		// apply changes in DOM
-		this.callable.runSignal();
-	}
+	// apply changes in DOM
+	this?.callable?.run();
 
 	// show errors
 	this.report();

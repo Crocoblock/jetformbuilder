@@ -3,11 +3,14 @@ import ConditionPageStateItem from './ConditionPageStateItem';
 const {
 	      ReactiveVar,
 	      createConditionalBlock,
+	      InputData,
       } = JetFormBuilderAbstract;
 
 const {
 	      validateInputs,
       } = JetFormBuilderFunctions;
+
+const { addAction } = wp.hooks;
 
 /**
  * @property {array<InputData>|*} inputs
@@ -36,23 +39,35 @@ function PageState( node, state ) {
 	this.getLockState().watch( () => {
 		this.canSwitch.current = !this.getLockState().current;
 	} );
+
+	addAction(
+		'jet.fb.observe.input.manual',
+		'jet-form-builder/page-state',
+		input => this.observeInput( input.nodes[ 0 ] ),
+	);
 }
 
 PageState.prototype.observeInputs = function () {
-	for ( const node of this.node.querySelectorAll(
-		'[data-jfb-sync]' ) ) {
-		if (
-			!this.isNodeBelongThis( node ) ||
-			!node.hasOwnProperty( 'jfbSync' ) ||
-			!node.jfbSync.reporting.restrictions.length
-		) {
-			continue;
-		}
-
-		this.inputs.push( node.jfbSync );
-
-		node.jfbSync.watchValidity( () => this.updateState() );
+	for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
+		this.observeInput( node );
 	}
+};
+
+/**
+ * @param node {Element}
+ */
+PageState.prototype.observeInput = function ( node ) {
+	if (
+		!this.isNodeBelongThis( node ) ||
+		!node.hasOwnProperty( 'jfbSync' ) ||
+		!node.jfbSync.reporting.restrictions.length
+	) {
+		return;
+	}
+
+	this.inputs.push( node.jfbSync );
+
+	node.jfbSync.watchValidity( () => this.updateState() );
 };
 /**
  * Buttons for switching between pages are hidden conditional blocks

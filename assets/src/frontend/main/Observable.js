@@ -160,11 +160,14 @@ Observable.prototype = {
 
 	/**
 	 * @param node {Element}
+	 * @param replace {Boolean}
 	 */
-	observeInput: function ( node ) {
-		const input = this.pushInput( node );
+	observeInput: function ( node, replace = false ) {
+		const input = this.pushInput( node, replace );
 
 		this.makeReactiveInput( input );
+
+		doAction( 'jet.fb.observe.input.manual', this );
 	},
 
 	makeReactiveProxy: function () {
@@ -197,12 +200,13 @@ Observable.prototype = {
 
 	/**
 	 * @param node {Element}
+	 * @param replace {Boolean}
 	 */
-	pushInput: function ( node ) {
+	pushInput: function ( node, replace = false ) {
 		const inputData = createInput( node, this );
 		const findInput = this.dataInputs[ inputData.getName() ] ?? false;
 
-		if ( false === findInput ) {
+		if ( false === findInput || replace ) {
 			this.dataInputs[ inputData.getName() ] = inputData;
 
 			return inputData;

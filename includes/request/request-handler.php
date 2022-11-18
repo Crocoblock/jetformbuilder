@@ -86,8 +86,6 @@ class Request_Handler {
 		$this->set_raw_request( $this->get_raw_request() );
 		$this->set_raw_files( Request_Tools::get_files( $_FILES ) );
 
-		var_dump( $this->get_files() ); die;
-
 		$context = ( new Parser_Context() )
 			->set_files_context( $this->files )
 			->set_request_context( $this->raw_request );

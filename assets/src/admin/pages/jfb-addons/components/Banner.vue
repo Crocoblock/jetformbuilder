@@ -39,7 +39,7 @@ export default {
 			const params = this.$parent.getUtmParamsString( {
 				utm_source: `dashboard/jet-form-builder-addons-page`,
 				utm_medium: `${ license }/${ this.$parent.themeInfo.authorSlug }`,
-				utm_campaign: 'sale-black-friday-2022',
+				utm_campaign: 'black-friday-2022',
 			} );
 
 			return `${ pricingUrl }?${ params }`;

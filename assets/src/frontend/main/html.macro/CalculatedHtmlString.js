@@ -7,7 +7,7 @@ const {
 function CalculatedHtmlString( root, options ) {
 	CalculatedFormula.call( this, root, options );
 
-	this.regexp = /JFB_FIELD::(.*?)/gi;
+	this.regexp = /JFB_FIELD::(.+)/gi;
 
 	this.relatedCallback = function ( input ) {
 		let fieldValue = applyFilters(
@@ -17,6 +17,9 @@ function CalculatedHtmlString( root, options ) {
 		);
 
 		return false === fieldValue ? input.value.current : fieldValue;
+	};
+
+	this.onMissingPart = function ( inputMatch ) {
 	};
 }
 

@@ -34,6 +34,7 @@ function CalculatedFormula(
 	this.parts        = [];
 	this.related      = [];
 	this.relatedAttrs = [];
+	this.regexp       = /%(.*?)%/g;
 
 	const { forceFunction = false } = options;
 
@@ -60,7 +61,10 @@ CalculatedFormula.prototype = {
 	 * @type {Observable}
 	 */
 	root: null,
-	regexp: /%(.*?)%/g,
+	/**
+	 * @type {RegExp}
+	 */
+	regexp: null,
 	forceFunction: false,
 	/**
 	 * @type {Function}
@@ -98,16 +102,40 @@ CalculatedFormula.prototype = {
 	 * @param value {String}
 	 */
 	observeItem( value ) {
-		const rawParts = value.split( this.regexp );
+		let match;
+		let prevIndex = 0;
 
-		if ( 1 === rawParts.length ) {
+		while ( (
+			match = this.regexp.exec( value )
+		) !== null ) {
+			const part = this.observeMacro( match[ 1 ] );
+
+			if ( 0 !== match.index ) {
+				this.parts.push( value.slice( prevIndex, match.index ) );
+			}
+
+			prevIndex = match.index + match[ 0 ].length;
+
+			if ( false === part ) {
+				this.onMissingPart( match[ 0 ] );
+			}
+			else {
+				this.parts.push( part );
+			}
+		}
+
+		// save last part
+		if ( prevIndex === value.length ) {
 			return;
 		}
 
-		this.parts = [
-			...this.parts,
-			...rawParts.map( this.observeMacro.bind( this ) ),
-		];
+		this.parts.push( value.slice( prevIndex ) );
+	},
+	/**
+	 * @param inputMatch {String}
+	 */
+	onMissingPart: function ( inputMatch ) {
+		this.parts.push( inputMatch );
 	},
 	/**
 	 * @param current {String}
@@ -122,7 +150,7 @@ CalculatedFormula.prototype = {
 		const parsedName           = name.match( /[\w\-:]+/g );
 
 		if ( !parsedName ) {
-			return current;
+			return false;
 		}
 
 		const [ fieldName, ...params ] = parsedName;
@@ -132,7 +160,7 @@ CalculatedFormula.prototype = {
 		                     : this.input;
 
 		if ( !relatedInput && !fieldName.includes( '::' ) ) {
-			return current;
+			return false;
 		}
 
 		const filtersList = getFilters( filters );
@@ -147,7 +175,7 @@ CalculatedFormula.prototype = {
 			);
 
 			if ( false === customValue ) {
-				return current;
+				return false;
 			}
 
 			return applyFilters( customValue, filtersList );
@@ -169,7 +197,7 @@ CalculatedFormula.prototype = {
 		const [ attrName ] = params;
 
 		if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
-			return current;
+			return false;
 		}
 		/**
 		 * @type {BaseHtmlAttr}

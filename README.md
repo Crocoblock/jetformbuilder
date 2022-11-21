@@ -4,6 +4,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.10
+* ADD: Support macros for webhook url in Call Webhook action
+* Tweak: added php-filter `jet-form-builder/action/webhook/request-url`
+
 ## 2.1.9
 * UPD: Update Options action (add compat with stored type)
 * ADD: Option disable "next button"

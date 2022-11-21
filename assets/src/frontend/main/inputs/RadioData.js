@@ -26,6 +26,10 @@ function RadioData() {
 
 		return '';
 	};
+
+	this.merge = function ( inputData ) {
+		this.nodes.push( ...inputData.getNode() );
+	};
 }
 
 RadioData.prototype = Object.create( InputData.prototype );

@@ -4,17 +4,22 @@ import { isCheckbox } from '../supports';
 function CheckboxData() {
 	InputData.call( this );
 
-	this.isSupported    = function ( node ) {
+	this.isSupported  = function ( node ) {
 		return isCheckbox( node );
 	};
-	this.addListeners   = function () {
+	this.addListeners = function () {
 		for ( const node of this.nodes ) {
 			node.addEventListener( 'change', () => this.setValue() );
 		}
 	};
-	this.setValue       = function () {
+	this.setValue     = function () {
 		this.value.current = this.getActiveValue();
 	};
+
+	this.merge = function ( inputData ) {
+		this.nodes.push( ...inputData.getNode() );
+	};
+
 	this.getActiveValue = function () {
 		return Array.from( this.nodes ).
 			filter( item => item.checked ).

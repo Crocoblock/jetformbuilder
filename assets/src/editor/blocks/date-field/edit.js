@@ -64,7 +64,7 @@ export default function DateEdit( props ) {
 				<BlockName/>
 				<BlockDescription/>
 			</PanelBody>
-			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 				<BlockAdvancedValue
 					help={ __(
 						'Plain date should be in yyyy-mm-dd format',

@@ -69,7 +69,7 @@ export default function NumberEdit( props ) {
 					<BlockName/>
 					<BlockDescription/>
 				</PanelBody>
-				<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+				<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 					<BlockAdvancedValue/>
 				</PanelBody>
 				<FieldSettingsWrapper { ...props }>

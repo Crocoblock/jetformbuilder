@@ -62,7 +62,7 @@ export default function TimeEdit( props ) {
 				<BlockName/>
 				<BlockDescription/>
 			</PanelBody>
-			<PanelBody title={ __( 'Value settings', 'jet-form-builder' ) }>
+			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 				<BlockAdvancedValue
 					help={ __(
 						'Plain date should be in hh:mm format',

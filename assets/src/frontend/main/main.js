@@ -14,6 +14,7 @@ import RestrictionError from './reporting/RestrictionError';
 import { validateInputs, validateInputsAll } from './reporting/functions';
 
 import './calc.module/main';
+import './switch-page-on-change/main';
 
 (
 	function ( $ ) {

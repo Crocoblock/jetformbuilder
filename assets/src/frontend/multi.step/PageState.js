@@ -10,7 +10,7 @@ const {
 	      validateInputs,
       } = JetFormBuilderFunctions;
 
-const { addAction } = wp.hooks;
+const { addAction, doAction } = wp.hooks;
 
 /**
  * @property {array<InputData>|*} inputs
@@ -45,6 +45,8 @@ function PageState( node, state ) {
 		'jet-form-builder/page-state',
 		input => this.observeInput( input.nodes[ 0 ] ),
 	);
+
+	doAction( 'jet.fb.multistep.page.init', this );
 }
 
 PageState.prototype.observeInputs = function () {

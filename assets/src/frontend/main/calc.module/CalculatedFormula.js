@@ -124,16 +124,16 @@ CalculatedFormula.prototype = {
 			}
 		}
 
-		if ( 1 === this.parts.length ) {
-			this.parts = [];
-		}
-
 		// save last part
 		if ( prevIndex === value.length ) {
 			return;
 		}
 
 		this.parts.push( value.slice( prevIndex ) );
+
+		if ( 1 === this.parts.length ) {
+			this.parts = [];
+		}
 	},
 	/**
 	 * @param inputMatch {String}

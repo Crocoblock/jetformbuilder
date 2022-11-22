@@ -130,6 +130,14 @@ class Validation implements Arrayable {
 
 		$data = Tools::encode_json( $this->settings );
 
+		wp_add_inline_script(
+			Manager::MAIN_SCRIPT_HANDLE,
+			"
+			window.JetFormsValidation = window.JetFormsValidation ?? {};
+			window.JetFormsValidation[ {$form_id} ] = $data;
+			"
+		);
+
 		add_action(
 			'wp_enqueue_scripts',
 			function () use ( $form_id, $data ) {

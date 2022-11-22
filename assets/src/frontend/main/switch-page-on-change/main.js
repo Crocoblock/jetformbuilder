@@ -18,7 +18,7 @@ addAction(
 		for ( const wrapper of wrappers ) {
 			const node = wrapper.querySelector( '[data-jfb-sync]' );
 
-			if ( !node?.jfbSync ) {
+			if ( !node?.jfbSync || ! page.isNodeBelongThis( node ) ) {
 				continue;
 			}
 

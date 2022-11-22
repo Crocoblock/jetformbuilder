@@ -8,6 +8,7 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
+use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
@@ -128,6 +129,7 @@ class Plugin {
 		File_Upload::instance();
 		Validation::instance();
 		new Dynamic_Value();
+		new Switch_Page_On_Change();
 
 		/**
 		 * REST API

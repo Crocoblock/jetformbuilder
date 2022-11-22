@@ -124,6 +124,10 @@ CalculatedFormula.prototype = {
 			}
 		}
 
+		if ( 1 === this.parts.length ) {
+			this.parts = [];
+		}
+
 		// save last part
 		if ( prevIndex === value.length ) {
 			return;

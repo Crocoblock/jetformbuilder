@@ -167,7 +167,7 @@ Observable.prototype = {
 
 		this.makeReactiveInput( input );
 
-		doAction( 'jet.fb.observe.input.manual', this );
+		doAction( 'jet.fb.observe.input.manual', input );
 	},
 
 	makeReactiveProxy: function () {
@@ -182,19 +182,12 @@ Observable.prototype = {
 	makeReactiveInput: function ( input ) {
 		input.makeReactive();
 
-		if ( this.parent ) {
-			input.watch( () => {
-				this.parent.report();
-			} );
+		if ( !this.parent ) {
+			return;
 		}
 
-		Object.defineProperty( this.data, input.name, {
-			get() {
-				return input.value.current;
-			},
-			set( newValue ) {
-				input.value.current = newValue;
-			},
+		input.watch( () => {
+			this.parent.report();
 		} );
 	},
 

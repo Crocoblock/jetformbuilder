@@ -59,9 +59,6 @@ if ( ! empty( $args['field_options'] ) ) {
 					if ( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
 						echo ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
 					}
-					if ( ! empty( $args['switch_on_change'] ) ) {
-						echo ' data-switch="1"';
-					}
 					?>
 				>
 				<span><?php echo wp_kses_post( $label ); ?></span>

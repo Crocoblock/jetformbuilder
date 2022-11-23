@@ -25,10 +25,6 @@ $this->add_attribute(
 );
 $this->add_attribute( 'data-jfb-sync' );
 
-if ( ! empty( $args['switch_on_change'] ) ) {
-	$this->add_attribute( 'data-switch', 1 );
-}
-
 $placeholder = $args['placeholder'] ?? false;
 $default     = $args['default'] ?? false;
 

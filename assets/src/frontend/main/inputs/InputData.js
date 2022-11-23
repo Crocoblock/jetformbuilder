@@ -159,7 +159,7 @@ InputData.prototype.onObserve = function () {
 	if (
 		// is ajax
 		!this.getSubmit().submitter.hasOwnProperty( 'status' ) ||
-		this.root?.parent
+		this.hasParent()
 	) {
 		return;
 	}

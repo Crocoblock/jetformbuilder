@@ -38,7 +38,7 @@ BaseSignal.prototype = {
 		}
 	},
 	/**
-	 * @private
+	 * @protected
 	 */
 	runSignal: function () {
 		// your code

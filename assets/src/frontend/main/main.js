@@ -15,6 +15,7 @@ import { validateInputs, validateInputsAll } from './reporting/functions';
 
 import './calc.module/main';
 import './switch-page-on-change/main';
+import { getParsedName } from './inputs/functions';
 
 (
 	function ( $ ) {
@@ -44,6 +45,7 @@ import './switch-page-on-change/main';
 			toHTML,
 			validateInputs,
 			validateInputsAll,
+			getParsedName,
 		};
 
 		$( initCommon );

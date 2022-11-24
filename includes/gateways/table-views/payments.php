@@ -20,6 +20,7 @@ use Jet_Form_Builder\Gateways\Table_Views\Columns\Payer_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Type_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Row_Actions_Column;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Transaction_Column;
 
 class Payments extends View_Advanced_Base {
 
@@ -70,6 +71,7 @@ class Payments extends View_Advanced_Base {
 			'payment_status'     => new Payment_Status_Column(),
 			'gross'              => new Gross_Column(),
 			'payer'              => new Payer_Column(),
+			'transaction'        => new Transaction_Column(),
 			'id'                 => new Record_Id_Column_Advanced(),
 		);
 	}

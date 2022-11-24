@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import { getTimestamp } from '../functions';
 
 function SetDayFilter() {
 	Filter.call( this );
@@ -7,8 +8,13 @@ function SetDayFilter() {
 		return 'setDay';
 	};
 	this.apply   = function ( value, day ) {
-		day          = day ? +day.trim() : 1;
-		const current = new Date( value );
+		const { time } = getTimestamp( value );
+		const current  = new Date( time );
+
+		if ( Number.isNaN( current.getTime() ) ) {
+			return 0;
+		}
+		day = day ? +day.trim() : 1;
 
 		return current.setDate( day );
 	};

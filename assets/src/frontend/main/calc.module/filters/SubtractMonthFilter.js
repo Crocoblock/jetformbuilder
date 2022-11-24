@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import { getTimestamp } from '../functions';
 
 function SubtractMonthFilter() {
 	Filter.call( this );
@@ -8,8 +9,14 @@ function SubtractMonthFilter() {
 	};
 
 	this.apply = function ( value, months ) {
-		months        = months ? +months.trim() : 1;
-		const current = new Date( value );
+		const { time } = getTimestamp( value );
+		const current  = new Date( time );
+
+		if ( Number.isNaN( current.getTime() ) ) {
+			return 0;
+		}
+
+		months = months ? +months.trim() : 1;
 
 		return current.setMonth( current.getMonth() - months );
 	};

@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import { getTimestamp } from '../functions';
 
 function SubtractDayFilter() {
 	Filter.call( this );
@@ -7,8 +8,14 @@ function SubtractDayFilter() {
 		return 'subDay';
 	};
 	this.apply   = function ( value, days ) {
-		days          = days ? +days.trim() : 1;
-		const current = new Date( value );
+		const { time } = getTimestamp( value );
+		const current  = new Date( time );
+
+		if ( Number.isNaN( current.getTime() ) ) {
+			return 0;
+		}
+
+		days = days ? +days.trim() : 1;
 
 		return current.setDate( current.getDate() - days );
 	};

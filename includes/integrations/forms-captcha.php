@@ -80,9 +80,15 @@ class Forms_Captcha {
 		$body = wp_remote_retrieve_body( $response );
 		$body = json_decode( $body, true );
 
-		if ( ! empty( $body['action'] ) && ( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] ) {
-			return $body['success'];
+		if (
+			! empty( $body['action'] ) &&
+			( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] &&
+			$body['success']
+		) {
+			return true;
 		}
+
+		new Request_Exception( 'captcha-failed_details', $body );
 
 		return false;
 	}
@@ -148,7 +154,7 @@ class Forms_Captcha {
 		);
 
 		?>
-		<input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
+        <input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
 		<?php
 	}
 

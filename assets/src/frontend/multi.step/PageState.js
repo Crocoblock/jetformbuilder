@@ -36,10 +36,6 @@ function PageState( node, state ) {
 	this.addButtonsListeners();
 	this.updateStateAsync().then( () => {} ).catch( () => {} );
 
-	this.getLockState().watch( () => {
-		this.canSwitch.current = !this.getLockState().current;
-	} );
-
 	addAction(
 		'jet.fb.observe.input.manual',
 		'jet-form-builder/page-state',
@@ -61,15 +57,31 @@ PageState.prototype.observeInputs = function () {
 PageState.prototype.observeInput = function ( node ) {
 	if (
 		!this.isNodeBelongThis( node ) ||
-		!node.hasOwnProperty( 'jfbSync' ) ||
-		!node.jfbSync.reporting.restrictions.length
+		!node.hasOwnProperty( 'jfbSync' )
 	) {
 		return;
 	}
 
-	this.inputs.push( node.jfbSync );
+	/**
+	 * @type {InputData}
+	 */
+	const input = node.jfbSync;
 
-	node.jfbSync.watchValidity( () => this.updateState() );
+	input.loading.watch( () => {
+		if ( input.loading.current ) {
+			this.canSwitch.current = false;
+		}
+		else {
+			this.updateState();
+		}
+	} );
+
+	if ( !input.reporting.restrictions.length ) {
+		return;
+	}
+
+	this.inputs.push( input );
+	input.watchValidity( () => this.updateState() );
 };
 /**
  * Buttons for switching between pages are hidden conditional blocks
@@ -149,10 +161,6 @@ PageState.prototype.changePage          = async function ( isBack ) {
 	if ( isBack ) {
 		this.state.index.current = this.index - 1;
 
-		return;
-	}
-
-	if ( this.getLockState().current ) {
 		return;
 	}
 

@@ -113,7 +113,9 @@ class Media_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		jet_form_builder()->blocks->register_form_scripts();
-		File_Upload::instance()->enqueue_scripts();
+		if ( ! Tools::is_editor() ) {
+			File_Upload::instance()->enqueue_scripts();
+		}
 
 		return ( new Media_Field_Render( $this ) )->render();
 	}

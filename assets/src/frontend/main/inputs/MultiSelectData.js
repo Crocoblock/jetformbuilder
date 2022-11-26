@@ -8,6 +8,8 @@ function MultiSelectData() {
 		return isMultiSelect( node );
 	};
 	this.addListeners   = function () {
+		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
+
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', () => this.setValue() );

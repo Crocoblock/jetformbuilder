@@ -148,5 +148,10 @@ class Render_State implements Arrayable {
 		);
 	}
 
+	public function get_from_request(): array {
+		$request = jet_fb_request_handler()->get_request();
+
+		return $request[ self::FIELD_NAME ] ?? array();
+	}
 
 }

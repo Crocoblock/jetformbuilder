@@ -11,7 +11,7 @@ class Regexp_Tools {
 			return false;
 		}
 
-		return preg_match( '/%(STATIC::)?(.*?)%/', (string) $value );
+		return preg_match( '/%([\w\-]+::)?(.*?)%/', (string) $value );
 	}
 
 }

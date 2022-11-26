@@ -8,6 +8,8 @@ function CheckboxData() {
 		return isCheckbox( node );
 	};
 	this.addListeners = function () {
+		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
+
 		for ( const node of this.nodes ) {
 			node.addEventListener( 'change', () => this.setValue() );
 		}

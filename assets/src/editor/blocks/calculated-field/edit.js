@@ -1,10 +1,12 @@
 const {
 	      AdvancedFields,
-	      GeneralFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
 	      BaseHelp,
 	      ToolBarFields,
+	      BlockName,
+	      BlockDescription,
+	      BlockLabel,
       } = JetFBComponents;
 
 const {
@@ -55,7 +57,7 @@ export default function EditCalculated( props ) {
 	};
 	const togglePopover = () => {
 		const fields = getFieldsWithoutCurrent().map( ( { value } ) => (
-			'%FIELD::' + value + '%'
+			'%' + value + '%'
 		) );
 
 		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields',
@@ -99,7 +101,12 @@ export default function EditCalculated( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields/>
+			<PanelBody title={ __( 'General', 'jet-form-builder' ) }
+			           key={ 'jet-form-general-fields' }>
+				<BlockLabel/>
+				<BlockName/>
+				<BlockDescription/>
+			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
 				<p
 					className={ 'components-base-control__help' }

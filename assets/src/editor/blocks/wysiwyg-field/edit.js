@@ -37,10 +37,7 @@ export default function WysiwygEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'GeneralFields' ) }
-					{ ...props }
-				/>
+				<GeneralFields hasMacro={ false }/>
 				<PanelBody
 					title={ __( 'Validation', 'jet-form-builder' ) }
 				>

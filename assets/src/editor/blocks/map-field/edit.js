@@ -1,46 +1,47 @@
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-	ToolBarFields,
-} = JetFBComponents;
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+	      ToolBarFields,
+      } = JetFBComponents;
 
 const {
-	PanelBody,
-	RangeControl,
-	__experimentalToggleGroupControl: ToggleGroupControl,
-	__experimentalToggleGroupControlOption: ToggleGroupControlOption,
-} = wp.components;
+	      PanelBody,
+	      RangeControl,
+	      __experimentalToggleGroupControl: ToggleGroupControl,
+	      __experimentalToggleGroupControlOption: ToggleGroupControlOption,
+      } = wp.components;
 
 const { __ } = wp.i18n;
 
 const { RawHTML } = wp.element;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor;
 
 export default function MapEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const {
-		isSelected,
-		attributes,
-		setAttributes,
-		editProps: { uniqKey },
-	} = props;
-
+		      isSelected,
+		      attributes,
+		      setAttributes,
+		      editProps: { uniqKey },
+	      } = props;
 
 	return [
 		JetFBMapField.is_supported && <ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
 			{ ...props }
 		/>,
-		( isSelected && JetFBMapField.is_supported ) && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
+		(
+			isSelected && JetFBMapField.is_supported
+		) && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>
 			<GeneralFields
 				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
+				hasMacro={ false }
 			/>
 			<PanelBody title={ __( 'Map Settings', 'jet-form-builder' ) }>
 				<ToggleGroupControl
@@ -50,13 +51,14 @@ export default function MapEdit( props ) {
 					isBlock={ true }
 					isAdaptiveWidth={ false }
 				>
-					{ JetFBMapField.formats.map( current => <ToggleGroupControlOption
-						key={ uniqKey( current.value ) }
-						label={ current.label }
-						value={ current.value }
-						aria-label={ current.title }
-						showTooltip
-					/> ) }
+					{ JetFBMapField.formats.map(
+						current => <ToggleGroupControlOption
+							key={ uniqKey( current.value ) }
+							label={ current.label }
+							value={ current.value }
+							aria-label={ current.title }
+							showTooltip
+						/> ) }
 				</ToggleGroupControl>
 				<RangeControl
 					label={ __( 'Height', 'jet-form-builder' ) }
@@ -83,7 +85,7 @@ export default function MapEdit( props ) {
 					src={ JetFBMapField.image }
 					alt={ __( 'Map Field placeholder', 'jet-form-builder' ) }
 				/>
-			</FieldWrapper> : <RawHTML>{ JetFBMapField.help }</RawHTML>}
+			</FieldWrapper> : <RawHTML>{ JetFBMapField.help }</RawHTML> }
 		</div>,
 	];
 }

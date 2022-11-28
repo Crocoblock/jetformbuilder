@@ -10,13 +10,13 @@ const {
 	      __,
       } = wp.i18n;
 
-function GeneralFields() {
+function GeneralFields( { hasMacro = true } ) {
 	return <PanelBody title={ __( 'General', 'jet-form-builder' ) }
 	                  key={ 'jet-form-general-fields' }>
 		<BlockLabel/>
 		<BlockName/>
 		<BlockDescription/>
-		<BlockDefaultValue/>
+		<BlockDefaultValue hasMacro={ hasMacro } />
 	</PanelBody>;
 }
 

@@ -9,6 +9,7 @@ const {
 	      BlockDescription,
 	      BlockName,
 	      BlockAdvancedValue,
+	      EditAdvancedRulesButton,
       } = JetFBComponents;
 
 const { useIsAdvancedValidation } = JetFBHooks;
@@ -89,6 +90,7 @@ export default function TextareaEdit( props ) {
 			>
 				<ValidationToggleGroup/>
 				{ isAdvancedValidation && <>
+					<EditAdvancedRulesButton/>
 					{ Boolean( attributes.minlength ) && <>
 						<ValidationBlockMessage name="char_min"/>
 					</> }

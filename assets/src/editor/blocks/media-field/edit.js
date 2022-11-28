@@ -67,10 +67,7 @@ export default function MediaEdit( props ) {
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<GeneralFields
-					key={ uniqKey( 'GeneralFields' ) }
-					{ ...props }
-				/>
+				<GeneralFields/>
 				<FieldSettingsWrapper { ...props }>
 					<SelectControl
 						key="allowed_user_cap"

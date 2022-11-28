@@ -58,14 +58,14 @@ export default function RepeaterEdit( props ) {
 		attributes,
 		setAttributes,
 		isSelected,
-		editProps: { uniqKey, attrHelp },
+		editProps: { uniqKey },
 	} = props;
 
 	const formFields = getFieldsWithoutCurrent();
 
 	const insertMacros = ( macros ) => {
 		const formula = attributes.calc_formula || '';
-		props.setAttributes( { calc_formula: formula + '%FIELD::' + macros + '%' } );
+		props.setAttributes( { calc_formula: formula + '%' + macros + '%' } );
 	};
 
 	return [
@@ -103,10 +103,7 @@ export default function RepeaterEdit( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				{ ...props }
-			/>
+			<GeneralFields hasMacro={ false } />
 			<PanelBody
 				title={ __( 'Field', 'jet-form-builder' ) }
 				key={ uniqKey( 'PanelBody' ) }

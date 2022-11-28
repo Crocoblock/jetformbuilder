@@ -3,19 +3,22 @@ import AdvancedInspectorControl
 	from '../../components/AdvancedInspectorControl';
 import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
+import useInsertMacro from '../../macros.button/hooks/useInsertMacro';
 
 const {
 	      __,
       } = wp.i18n;
 const {
-	      TextareaControl,
+	      TextControl,
       } = wp.components;
 
-function BlockDefaultValue( { label, help } ) {
+function BlockDefaultValue( { label, help, hasMacro = true } ) {
 	const [
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	const [ input, updateInput ] = useInsertMacro( 'default' );
 
 	if ( !useIsHasAttribute( 'default' ) ) {
 		return null;
@@ -26,12 +29,10 @@ function BlockDefaultValue( { label, help } ) {
 			value={ attributes.default }
 			label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
 			onChangePreset={ val => setAttributes( { default: val } ) }
-			onChangeMacros={ name => setAttributes( {
-				default: attributes.default + `%${ name }%`,
-			} ) }
+			onChangeMacros={ hasMacro ? updateInput : false }
 		>
-			{ ( { instanceId } ) => <TextareaControl
-				rows={ 1 }
+			{ ( { instanceId } ) => <TextControl
+				ref={ input }
 				id={ instanceId }
 				value={ attributes.default }
 				help={ help ?? '' }

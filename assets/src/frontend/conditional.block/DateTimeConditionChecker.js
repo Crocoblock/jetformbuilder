@@ -35,25 +35,7 @@ function DateTimeConditionChecker() {
 			return time;
 		} );
 
-		switch ( condition.operator ) {
-			case 'equal':
-				return current === conditionValue[ 0 ];
-			case 'greater':
-				return current > conditionValue[ 0 ];
-			case 'less':
-				return current < conditionValue[ 0 ];
-			case 'between':
-				if ( !conditionValue?.length ) {
-					return false;
-				}
-
-				return (
-					conditionValue[ 0 ] <= current &&
-					current <= conditionValue[ 1 ]
-				);
-			default:
-				return false;
-		}
+		return this.checkRaw( condition.operator, current, conditionValue );
 	};
 }
 

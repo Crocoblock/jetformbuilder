@@ -8,7 +8,7 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import { allRejected, getLanguage, toHTML } from './functions';
+import { allRejected, getLanguage, toHTML, isEmpty } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
 import { validateInputs, validateInputsAll } from './reporting/functions';
@@ -46,6 +46,7 @@ import { getParsedName } from './inputs/functions';
 			validateInputs,
 			validateInputsAll,
 			getParsedName,
+			isEmpty,
 		};
 
 		$( initCommon );

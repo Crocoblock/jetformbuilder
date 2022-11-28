@@ -20,6 +20,10 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )(
 
 		const uniqKey = useUniqKey();
 
+		if ( [ 'empty', 'not_empty' ].includes( currentItem.operator ) ) {
+			return null;
+		}
+
 		switch ( currentItem.operator ) {
 			case 'render_state':
 				return <RenderStateOptions

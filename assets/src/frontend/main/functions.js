@@ -103,4 +103,8 @@ function toHTML( text ) {
 	return template.content;
 }
 
-export { allRejected, getLanguage, setAttrs, toHTML };
+function isEmpty( value ) {
+	return null === value || undefined === value || !value?.length;
+}
+
+export { allRejected, getLanguage, setAttrs, toHTML, isEmpty };

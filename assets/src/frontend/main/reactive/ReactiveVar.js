@@ -1,3 +1,5 @@
+import { isEmpty } from '../functions';
+
 function ReactiveVar( value = null ) {
 	this.current    = value;
 	this.signals    = [];
@@ -71,11 +73,7 @@ ReactiveVar.prototype = {
 		return value;
 	},
 	setIfEmpty( newValue ) {
-		if (
-			null === this.current ||
-			undefined === this.current ||
-			!this.current?.length
-		) {
+		if ( !isEmpty( newValue ) ) {
 			return;
 		}
 

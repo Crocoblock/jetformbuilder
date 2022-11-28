@@ -3,31 +3,26 @@ import ConditionChecker from './ConditionChecker';
 function MultipleConditionChecker() {
 	ConditionChecker.call( this );
 
-	this.isSupported = function ( input ) {
-		return input.isArray();
+	this.operators.one_of = ( current, conditionValues ) => {
+		if ( !conditionValues?.length || !current?.length ) {
+			return false;
+		}
+		return current.some(
+			val => -1 !== conditionValues.indexOf( val ),
+		);
 	};
 
-	this.check = function ( condition, input ) {
-		const { current } = input.value;
-
-		switch ( condition.operator ) {
-			case 'one_of':
-				if ( !condition.value?.length || ! current?.length ) {
-					return false;
-				}
-				return current.some(
-					val => -1 !== condition.value.indexOf( val ),
-				);
-			case 'contain':
-				if ( ! current?.length ) {
-					return false;
-				}
-				return current.some(
-					val => val.indexOf( condition.value[ 0 ] ) !== -1,
-				);
-			default:
-				return false;
+	this.operators.contain = ( current, conditionValues ) => {
+		if ( !current?.length ) {
+			return false;
 		}
+		return current.some(
+			val => val.indexOf( conditionValues[ 0 ] ) !== -1,
+		);
+	};
+
+	this.isSupported = function ( input ) {
+		return input.isArray();
 	};
 }
 

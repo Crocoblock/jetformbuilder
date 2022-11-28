@@ -7,7 +7,13 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Between;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Contain;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Empty;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Equal;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Not_Between;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Not_Contain;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Not_Empty;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Not_Equal;
+use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Not_In_The_List;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Greater;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_In_The_List;
@@ -31,11 +37,17 @@ class Operators implements Arrayable {
 	public function rep_instances(): array {
 		$operators = array(
 			new Operator_Equal(),
+			new Operator_Not_Equal(),
+			new Operator_Empty(),
+			new Operator_Not_Empty(),
 			new Operator_Greater(),
 			new Operator_Less(),
 			new Operator_Between(),
+			new Operator_Not_Between(),
 			new Operator_In_The_List(),
+			new Operator_Not_In_The_List(),
 			new Operator_Contain(),
+			new Operator_Not_Contain(),
 		);
 
 		if ( Render_State::instance()->is_multiple() ) {

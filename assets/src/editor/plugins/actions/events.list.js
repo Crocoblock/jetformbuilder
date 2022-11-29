@@ -17,7 +17,7 @@ const { __ } = wp.i18n;
 
 function EventItem( props ) {
 	const { slug, index: eventIndex } = props;
-	const event = useSelect( select => select( 'jet-forms/events' ).getType( slug ), [] );
+	const event = useSelect( select => select( 'jet-forms/events' ).getType( slug ) );
 	const { action } = useContext( ActionListItemContext );
 
 	const { updateActionObj } = useActionsEdit();

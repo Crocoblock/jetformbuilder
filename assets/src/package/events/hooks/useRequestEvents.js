@@ -1,6 +1,7 @@
 import useEventsFromActions from './useEventsFromActions';
 import useEventsFromGateways from './useEventsFromGateways';
 import useDefaultEvents from './useDefaultEvents';
+import useDynamicEvents from './useDynamicEvents';
 
 const { useSelect } = wp.data;
 
@@ -13,6 +14,7 @@ function useRequestEvents() {
 		...useDefaultEvents( currentAction ),
 		...useEventsFromGateways( currentAction ),
 		...useEventsFromActions( currentAction ),
+		...useDynamicEvents( currentAction ),
 	];
 
 	return useSelect(
@@ -20,7 +22,6 @@ function useRequestEvents() {
 			currentAction.type,
 			list,
 		),
-		[ currentAction.id ],
 	);
 }
 

@@ -13,7 +13,7 @@ class Operator_Not_Equal extends Base_Operator {
 	}
 
 	public function get_title(): string {
-		return __( 'Not Equal', 'jet-form-builder' );
+		return __( 'Not equal', 'jet-form-builder' );
 	}
 
 	public function is_supported(): bool {

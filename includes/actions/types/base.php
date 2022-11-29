@@ -51,7 +51,6 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	private $executed_on;
 
 	public function __construct() {
-		$this->set_action_messages();
 	}
 
 	public function rep_item_id() {
@@ -111,17 +110,6 @@ abstract class Base implements Repository_Item_Instance_Trait {
 
 	public function get_required_events(): array {
 		return array();
-	}
-
-	public function messages() {
-		return array();
-	}
-
-	public function set_action_messages() {
-		$this->messages = apply_filters(
-			'jet-form-builder/message-types/' . $this->get_id(),
-			$this->messages()
-		);
 	}
 
 	public function is_repeater_val( $value ) {

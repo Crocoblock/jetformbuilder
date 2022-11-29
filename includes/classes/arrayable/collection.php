@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Classes\Arrayable;
 
 
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Dynamic_Id;
+
 class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	protected $position = 0;
@@ -32,6 +34,9 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 */
 	public function in_array( $state ): bool {
 		if ( is_object( $state ) ) {
+			if ( $state instanceof Repository_Item_Dynamic_Id ) {
+				return $this->in_array_by_dynamic( $state );
+			}
 			$state = get_class( $state );
 		}
 
@@ -45,6 +50,19 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	protected function in_array_by_class( $state_class ): bool {
 		foreach ( $this as $state ) {
 			if ( is_a( $state, $state_class ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected function in_array_by_dynamic( Repository_Item_Dynamic_Id $object ): bool {
+		foreach ( $this as $state ) {
+			if ( ! is_a( $state, Repository_Item_Dynamic_Id::class ) ) {
+				continue;
+			}
+			if ( $state->get_dynamic_id() === $object->get_dynamic_id() ) {
 				return true;
 			}
 		}
@@ -66,7 +84,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		if ( ! is_a( $item, Collection_Item_Interface::class ) ) {
 			return $this;
 		}
-		$this->items[] = $item;
+		$this->items[]                   = $item;
 		$this->groups[ $item->get_id() ] = array();
 
 		return $this->add_to_group( $item );

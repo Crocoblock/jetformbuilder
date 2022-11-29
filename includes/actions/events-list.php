@@ -25,7 +25,7 @@ class Events_List extends Collection {
 		}
 
 		try {
-			$item = Events_Manager::instance()->rep_get_item( $event );
+			$item = Events_Manager::instance()->rep_clone_item( $event );
 		} catch ( Repository_Exception $exception ) {
 			return $this;
 		}

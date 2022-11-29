@@ -15,6 +15,9 @@ const selectors = {
 			'always' in event
 		) );
 	},
+	getDynamicTypes( state ) {
+		return state.types.filter( ( { isDynamic } ) => isDynamic );
+	},
 	getType( state, slug ) {
 		const index = selectors.getTypeIndex( state, slug );
 

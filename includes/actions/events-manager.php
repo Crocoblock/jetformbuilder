@@ -11,9 +11,12 @@ use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Dynamic_Items_It;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -24,7 +27,7 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
  * Class Events_Manager
  * @package Jet_Form_Builder\Actions
  */
-class Events_Manager implements Arrayable {
+class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 
 	use Instance_Trait;
 	use Repository_Pattern_Trait;
@@ -47,6 +50,7 @@ class Events_Manager implements Arrayable {
 				new Gateway_Failed_Event(),
 				new Bad_Request_Event(),
 				new Default_Required_Event(),
+				new On_Dynamic_State_Event(),
 			)
 		);
 	}
@@ -61,8 +65,7 @@ class Events_Manager implements Arrayable {
 		try {
 			$event = $this->get_event( $current );
 		} catch ( Repository_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $exception->getMessage() );
+			return;
 		}
 
 		// save all form actions

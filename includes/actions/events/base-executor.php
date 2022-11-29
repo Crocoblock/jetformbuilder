@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Events;
 
 use Jet_Form_Builder\Actions\Events_List;
+use Jet_Form_Builder\Actions\Events_Manager;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -12,7 +13,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/** @var Base_Event */
 	private $event;
 	private $action_ids = array();
-	private $position = 0;
+	private $position   = 0;
 
 	abstract public function is_supported(): bool;
 

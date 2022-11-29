@@ -11,8 +11,6 @@ abstract class Integration_Base_Action extends Base {
 	protected $action;
 
 	public function __construct() {
-		parent::__construct();
-
 		if ( wp_doing_ajax() && ! empty( $this->action ) ) {
 			add_action( 'wp_ajax_' . $this->action, array( $this, 'get_api_data' ) );
 		}

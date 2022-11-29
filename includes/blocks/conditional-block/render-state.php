@@ -3,6 +3,9 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
+use Jet_Form_Builder\Actions\Events\Base_Event;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Example_Render_State;
@@ -33,6 +36,8 @@ class Render_State implements Arrayable {
 	protected function __construct() {
 		$this->current = new Render_States_Collection();
 		$this->rep_install();
+
+		add_action( 'jet-form-builder/after-trigger-event', array( $this, 'execute_render_states_events' ) );
 	}
 
 	/**
@@ -49,12 +54,29 @@ class Render_State implements Arrayable {
 	}
 
 	/**
+	 * Execute actions on each render state from
+	 * _jfb_current_render_states[] hidden field
+	 *
+	 * @throws \Jet_Form_Builder\Exceptions\Action_Exception
+	 */
+	public function execute_render_states_events( Base_Event $event ) {
+		if ( ! is_a( $event, Default_Process_Event::class ) ) {
+			return;
+		}
+		$render_states = self::get_from_request();
+
+		foreach ( $render_states as $state ) {
+			jet_fb_events()->execute( $state );
+		}
+	}
+
+	/**
 	 * @param string $slug
 	 *
-	 * @return mixed
+	 * @return Base_Render_State
 	 * @throws Repository_Exception
 	 */
-	public function get_item( string $slug ) {
+	public function get_item( string $slug ): Base_Render_State {
 		return $this->rep_get_item( $slug );
 	}
 
@@ -148,7 +170,7 @@ class Render_State implements Arrayable {
 		);
 	}
 
-	public function get_from_request(): array {
+	public static function get_from_request(): array {
 		$request = jet_fb_request_handler()->get_request();
 
 		return $request[ self::FIELD_NAME ] ?? array();

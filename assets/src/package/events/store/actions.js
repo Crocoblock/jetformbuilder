@@ -12,5 +12,15 @@ export default {
 			type: constants.lockActions,
 		};
 	},
-
-}
+	unRegister( types ) {
+		return {
+			type: constants.unRegister,
+			types,
+		};
+	},
+	clearDynamicEvents() {
+		return {
+			type: constants.clearDynamicEvents,
+		};
+	},
+};

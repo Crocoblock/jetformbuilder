@@ -141,6 +141,23 @@ trait Repository_Pattern_Trait {
 	 * @throws Repository_Exception
 	 */
 	public function rep_get_item( $class_or_slug ) {
+		if ( is_a( $this, Repository_Dynamic_Items_It::class ) ) {
+			foreach ( $this->rep_get_items() as $current ) {
+				if ( ! is_a( $current, Repository_Item_Dynamic_Id::class ) ) {
+					continue;
+				}
+				$id = $current->create_dynamic_id( $class_or_slug );
+
+				if ( ! $id ) {
+					continue;
+				}
+
+				$current->set_dynamic_id( $id );
+
+				return $current;
+			}
+		}
+
 		// if we got normal slug
 		if ( ! class_exists( $class_or_slug ) ) {
 			$this->rep_throw_if_undefined( $class_or_slug );

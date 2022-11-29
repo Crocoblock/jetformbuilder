@@ -151,7 +151,6 @@ function EditEvents( { events } ) {
 
 	const helpMap = useSelect(
 		select => select( 'jet-forms/events' ).getHelpMap(),
-		[],
 	);
 
 	return <>

@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Gateways;
 
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
 use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
@@ -35,9 +36,9 @@ class Gateway_Manager {
 	private $gateways_form_data = array();
 	private $form_id;
 
-	public $message = null;
-	public $data    = null;
-	public $is_sandbox;
+	public  $message = null;
+	public  $data    = null;
+	public  $is_sandbox;
 	private $current_gateway_type;
 
 	/**
@@ -52,7 +53,14 @@ class Gateway_Manager {
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
-		add_filter( 'jet-form-builder/page-containers/jfb-records-single', array( $this, 'add_box_to_single_record' ), 0 );
+		add_filter(
+			'jet-form-builder/page-containers/jfb-records-single',
+			array( $this, 'add_box_to_single_record' ), 0
+		);
+		add_filter(
+			'jet-form-builder/default-process-event/executors',
+			array( $this, 'add_executor_to_default_process' )
+		);
 
 		$this->catch_payment_result();
 	}
@@ -60,6 +68,15 @@ class Gateway_Manager {
 	public function rep_instances(): array {
 		return array(
 			new Paypal\Controller(),
+		);
+	}
+
+	public function add_executor_to_default_process( array $executors ): array {
+		return array_merge(
+			array(
+				new Default_With_Gateway_Executor(),
+			),
+			$executors
 		);
 	}
 

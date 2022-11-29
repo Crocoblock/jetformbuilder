@@ -28,9 +28,11 @@ to perform before redirecting to checkout;',
 	}
 
 	public function executors(): array {
-		return array(
-			new Default_With_Gateway_Executor(),
-			new Default_Process_Executor(),
+		return apply_filters(
+			'jet-form-builder/default-process-event/executors',
+			array(
+				new Default_Process_Executor(),
+			)
 		);
 	}
 

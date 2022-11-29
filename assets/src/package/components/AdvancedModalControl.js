@@ -19,32 +19,34 @@ function AdvancedModalControl( {
 
 	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedModalControl' );
 
-	return <Flex
-		align={ 'flex-start' }
-		className={ 'components-base-control__field' }
-	>
-		<FlexItem isBlock>
-			<Flex
-				align={ 'center' }
-				justify={ 'flex-start' }
-			>
-				<label htmlFor={ instanceId }>{ label }</label>
-				{ false !== onChangePreset && <PresetButton
-					value={ value }
-					onChange={ onChangePreset }
-				/> }
-				{ false !== onChangeMacros && <MacrosFields
-					onClick={ onChangeMacros }
-				/> }
-			</Flex>
-		</FlexItem>
-		<FlexItem isBlock style={ { flex: 3, marginLeft: 'unset' } }>
-			{ 'function' === typeof children
-			  ? children( { instanceId } )
-			  : children
-			}
-		</FlexItem>
-	</Flex>;
+	return <div className={ 'components-base-control' }>
+		<Flex
+			align={ 'flex-start' }
+			className={ 'components-base-control__field' }
+		>
+			<FlexItem isBlock>
+				<Flex
+					align={ 'center' }
+					justify={ 'flex-start' }
+				>
+					<label htmlFor={ instanceId }>{ label }</label>
+					{ false !== onChangePreset && <PresetButton
+						value={ value }
+						onChange={ onChangePreset }
+					/> }
+					{ false !== onChangeMacros && <MacrosFields
+						onClick={ onChangeMacros }
+					/> }
+				</Flex>
+			</FlexItem>
+			<FlexItem isBlock style={ { flex: 3, marginLeft: 'unset' } }>
+				{ 'function' === typeof children
+				  ? children( { instanceId } )
+				  : children
+				}
+			</FlexItem>
+		</Flex>
+	</div>;
 }
 
 export default AdvancedModalControl;

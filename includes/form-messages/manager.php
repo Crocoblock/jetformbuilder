@@ -40,7 +40,7 @@ class Manager {
 
 		/** @var Base $action */
 		foreach ( jet_form_builder()->msg_router->get_actions() as $action ) {
-			$messages = array_merge( $messages, Action_Messages_Manager::instance()->get_messages( $action ) );
+			$messages = array_merge( $messages, Action_Messages_Manager::instance()->get_messages_values( $action ) );
 		}
 
 		return $messages;

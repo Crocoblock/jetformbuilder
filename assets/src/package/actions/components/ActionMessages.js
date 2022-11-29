@@ -1,35 +1,35 @@
 const {
-		  TextControl,
-		  BaseControl,
-	  } = wp.components;
+	      TextControl,
+	      BaseControl,
+      } = wp.components;
 
 const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
+	      useState,
+	      useEffect,
+      } = wp.element;
 
 const { __ } = wp.i18n;
 
 function ActionMessages( props ) {
 
 	const {
-			  settings,
-			  source,
-			  getMapField,
-			  setMapField,
-			  messages,
-			  onChangeSetting,
-		  } = props;
+		      settings,
+		      source,
+		      getMapField,
+		      setMapField,
+		      messages,
+		      onChangeSetting,
+	      } = props;
 
 	useEffect( () => {
 		const oldMessages = settings.messages || {};
-		const messages = {};
+		const messages    = {};
 
 		Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
-			if ( ! oldMessages[ type ] ) {
+			if ( !oldMessages[ type ] ) {
 				messages[ type ] = data.value;
 			}
-		} )
+		} );
 
 		if ( messages ) {
 			onChangeSetting( { ...oldMessages, ...messages }, 'messages' );
@@ -45,16 +45,16 @@ function ActionMessages( props ) {
 	const getMessage = name => {
 		const source = 'messages';
 
-		return getMapField( { name, source } )
+		return getMapField( { name, source } );
 	};
 
 	return <BaseControl
 		label={ __( 'Messages Settings:' ) }
-		key='messages_settings_fields'
+		key="messages_settings_fields"
 	>
-		<div className='jet-user-fields-map__list'>
-			{ settings.messages && Object.entries( settings.messages )
-				.map( ( [ type, data ], id ) => <div
+		<div className="jet-user-fields-map__list">
+			{ settings.messages && Object.entries( settings.messages ).
+				map( ( [ type, data ], id ) => <div
 						className="jet-user-meta__row"
 						key={ 'message_' + type + id }
 					>

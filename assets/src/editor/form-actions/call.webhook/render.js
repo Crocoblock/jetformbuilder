@@ -1,13 +1,16 @@
 const {
-	getFormFieldsBlocks
-} = JetFBActions;
+	      getFormFieldsBlocks,
+      } = JetFBActions;
+const {
+	      AdvancedModalControl,
+      } = JetFBComponents;
 
 /**
  * Internal dependencies
  */
 const {
-	TextControl,
-} = wp.components;
+	      TextControl,
+      } = wp.components;
 
 class CallWebHookRender extends wp.element.Component {
 
@@ -18,15 +21,26 @@ class CallWebHookRender extends wp.element.Component {
 	}
 
 	render() {
-		const { settings, label, onChangeSetting } = this.props;
+		const { settings, label, onChangeSettingObj } = this.props;
 
 		/* eslint-disable jsx-a11y/no-onchange */
-		return <TextControl
-			key='webhook_url'
-			label={ label( 'webhook_url' ) }
+		return <AdvancedModalControl
 			value={ settings.webhook_url }
-			onChange={ newVal => onChangeSetting( newVal, 'webhook_url' ) }
-		/>;
+			label={ label( 'webhook_url' ) }
+			onChangeMacros={ name => onChangeSettingObj( {
+				webhook_url: (
+					settings.webhook_url ?? ''
+				) + name,
+			} ) }
+		>
+			{ ( { instanceId } ) => <TextControl
+				id={ instanceId }
+				value={ settings.webhook_url }
+				onChange={ webhook_url => onChangeSettingObj(
+					{ webhook_url },
+				) }
+			/> }
+		</AdvancedModalControl>;
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
 }

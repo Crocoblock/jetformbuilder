@@ -64,7 +64,7 @@ function RuleSpecificControls( {
 					onChangeMacros={ name => changeCurrentItem( {
 						value: (
 							currentItem.value ?? ''
-						) + `%${ name }%`,
+						) + name,
 					} ) }
 				>
 					{ ( { instanceId } ) => <TextareaControl

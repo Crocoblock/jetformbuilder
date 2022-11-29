@@ -1,12 +1,9 @@
 const {
-	      Tools,
-	      addAction,
 	      getFormFieldsBlocks,
       } = JetFBActions;
 
 const {
-	      FieldWithPreset,
-	      DynamicPreset,
+	      AdvancedModalControl,
       } = JetFBComponents;
 
 /**
@@ -113,28 +110,26 @@ function RedirectToPageRender( props ) {
 					{ redirect_page } ) }
 			/> }
 
-			{ 'custom_url' === settings.redirect_type && <FieldWithPreset
-				key={ 'custom_url-FieldWithPreset' }
-				ModalEditor={ ( { actionClick, onRequestClose } ) =>
-					<DynamicPreset
-						value={ settings.redirect_url }
-						isSaveAction={ actionClick }
-						onSavePreset={ redirect_url => onChangeSettingObj(
-							{ redirect_url } ) }
-						onUnMount={ onRequestClose }
-						excludeSources={ [ 'query_var' ] }
-					/> }
-				triggerClasses={ [ 'trigger__text-control' ] }
+			{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
+				value={ settings.redirect_url }
+				label={ label( 'redirect_url' ) }
+				onChangePreset={ redirect_url => onChangeSettingObj(
+					{ redirect_url },
+				) }
+				onChangeMacros={ name => onChangeSettingObj( {
+					redirect_url: (
+						settings.redirect_url ?? ''
+					) + name,
+				} ) }
 			>
-				<TextControl
-					key="redirect_url_control"
-					label={ label( 'redirect_url' ) }
+				{ ( { instanceId } ) => <TextControl
+					id={ instanceId }
 					value={ settings.redirect_url }
-					className={ 'jet-control-with-dynamic' }
 					onChange={ redirect_url => onChangeSettingObj(
-						{ redirect_url } ) }
-				/>
-			</FieldWithPreset> }
+						{ redirect_url },
+					) }
+				/> }
+			</AdvancedModalControl> }
 			<BaseControl
 				label={ label( 'redirect_args' ) }
 				key="redirect_args_control"

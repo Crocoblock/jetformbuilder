@@ -3,6 +3,7 @@ const {
       } = JetFormBuilderFunctions;
 
 function ConditionChecker() {
+	this.operators = this.getOperators();
 }
 
 ConditionChecker.prototype = {
@@ -11,43 +12,46 @@ ConditionChecker.prototype = {
 	 * @return {boolean}
 	 */
 	isSupported: ( input ) => true,
-	operators: {
-		equal: ( current, conditionValue ) => current === conditionValue[ 0 ],
-		empty: ( current ) => isEmpty( current ),
-		greater: ( current, conditionValue ) => +(
-			current
-		) > +(
-			conditionValue[ 0 ]
-		),
-		less: ( current, conditionValue ) => +(
-			current
-		) < +(
-			conditionValue[ 0 ]
-		),
-		between: ( current, conditionValue ) => {
-			if ( !conditionValue?.length || null === current ) {
-				return false;
-			}
+	operators: {},
+	getOperators: function () {
+		return {
+			equal: ( current, conditionValue ) => current ===
+				conditionValue[ 0 ],
+			empty: ( current ) => isEmpty( current ),
+			greater: ( current, conditionValue ) => +(
+				current
+			) > +(
+				conditionValue[ 0 ]
+			),
+			less: ( current, conditionValue ) => +(
+				current
+			) < +(
+				conditionValue[ 0 ]
+			),
+			between: ( current, conditionValue ) => {
+				if ( !conditionValue?.length || null === current ) {
+					return false;
+				}
 
-			return (
-				conditionValue[ 0 ] <= +current &&
-				+current <= conditionValue[ 1 ]
-			);
-		},
-		one_of: ( current, conditionValue ) => {
-			if ( !conditionValue?.length ) {
-				return false;
-			}
+				return (
+					conditionValue[ 0 ] <= +current &&
+					+current <= conditionValue[ 1 ]
+				);
+			},
+			one_of: ( current, conditionValue ) => {
+				if ( !conditionValue?.length ) {
+					return false;
+				}
 
-			return 0 <= conditionValue.indexOf( current );
-		},
-		contain: ( current, conditionValue ) => {
-			if ( !current ) {
-				return false;
-			}
-			return 0 <= current.indexOf( conditionValue[ 0 ] );
-		},
-
+				return 0 <= conditionValue.indexOf( current );
+			},
+			contain: ( current, conditionValue ) => {
+				if ( !current ) {
+					return false;
+				}
+				return 0 <= current.indexOf( conditionValue[ 0 ] );
+			},
+		};
 	},
 	/**
 	 * @param condition {ConditionFieldItem}
@@ -72,6 +76,10 @@ ConditionChecker.prototype = {
 		}
 
 		const operatorName = operator.slice( 4 );
+
+		if ( !this.operators.hasOwnProperty( operatorName ) ) {
+			return false;
+		}
 
 		return !this.operators[ operatorName ](
 			current,

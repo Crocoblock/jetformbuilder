@@ -8,6 +8,21 @@ const {
 	      __,
       } = wp.i18n;
 
+const emptyCondition = function ( condition ) {
+	const operatorOptions = select( 'jet-forms/block-conditions' ).
+		getOperator( condition?.operator );
+
+	if ( !operatorOptions ) {
+		return '';
+	}
+	const field = condition?.field || '(no field)';
+
+	return [
+		`<code>${ field }</code>`,
+		operatorOptions.label,
+	].join( ' ' );
+};
+
 const DEFAULT_STATE = {
 	functions: [],
 	operators: [],
@@ -30,6 +45,8 @@ const DEFAULT_STATE = {
 				`<code>${ value }</code>`,
 			].join( ' ' );
 		},
+		empty: emptyCondition,
+		not_empty: emptyCondition,
 		render_state: function ( condition ) {
 			const states = (
 				condition?.render_state ?? []

@@ -26,7 +26,7 @@ abstract class Base_Event implements
 	/**
 	 * @throws Action_Exception
 	 */
-	final public function execute() {
+	public function execute() {
 		$this->get_executor()->execute();
 	}
 

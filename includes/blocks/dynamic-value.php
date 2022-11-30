@@ -9,6 +9,8 @@ use Jet_Form_Builder\Blocks\Types\Conditional_Block;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
+use \Jet_Form_Builder\Blocks\Render\Base as RenderBase;
+
 
 class Dynamic_Value {
 
@@ -18,6 +20,11 @@ class Dynamic_Value {
 		add_action(
 			'jet-form-builder/before-start-form-row',
 			array( $this, 'add_dynamic_value_block' )
+		);
+		add_filter(
+			'jet-form-builder/render/hidden-field',
+			array( $this, 'on_render_hidden_field' ),
+			10, 2
 		);
 		add_action(
 			'wp_enqueue_scripts',
@@ -43,10 +50,32 @@ class Dynamic_Value {
 	}
 
 	public function add_dynamic_value_block( Base $block ) {
+		$groups = $this->get_groups_json( $block );
+
+		if ( ! $groups ) {
+			return;
+		}
+
+		$block->add_attribute( 'data-value', $groups );
+	}
+
+	public function on_render_hidden_field( array $args, RenderBase $block ): array {
+		$groups = $this->get_groups_json( $block->block_type );
+
+		if ( ! $groups ) {
+			return $args;
+		}
+
+		$block->add_attribute( 'data-dynamic-value', $groups );
+
+		return $args;
+	}
+
+	protected function get_groups_json( Base $block ): string {
 		$groups = $block->block_attrs['value']['groups'] ?? array();
 
 		if ( ! count( $groups ) ) {
-			return;
+			return '';
 		}
 
 		wp_enqueue_script( self::HANDLE );
@@ -63,7 +92,7 @@ class Dynamic_Value {
 			}
 		}
 
-		$block->add_attribute( 'data-value', Tools::encode_json( $groups ) );
+		return Tools::encode_json( $groups );
 	}
 
 }

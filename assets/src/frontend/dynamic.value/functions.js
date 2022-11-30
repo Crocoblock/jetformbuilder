@@ -14,21 +14,21 @@ const getValues = () => applyFilters(
 /**
  * @type {ValueItem[]}
  */
-let values = [];
+let values      = [];
 
 /**
  * @param input
  * @returns {ValueItem}
  */
-const getValue = (input) => {
-	if ( ! values.length ) {
+const getValue = ( input ) => {
+	if ( !values.length ) {
 		values = getValues();
 	}
 
 	for ( const value of values ) {
 		const current = new value();
 
-		if ( ! current.isSupported( input ) ) {
+		if ( !current.isSupported( input ) ) {
 			continue;
 		}
 		return current;
@@ -59,6 +59,10 @@ function parseInput( input ) {
 
 	if ( wrapper && wrapper.dataset.hasOwnProperty( 'value' ) ) {
 		createValues( wrapper.dataset.value, input );
+	}
+	// for hidden-field case
+	else if ( node.dataset.hasOwnProperty( 'dynamicValue' ) ) {
+		createValues( node.dataset.dynamicValue, input );
 	}
 
 	for ( const property of getProperties( input ) ) {

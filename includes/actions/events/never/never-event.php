@@ -17,6 +17,9 @@ class Never_Event extends Base_Event {
 		return array();
 	}
 
+	public function execute() {
+	}
+
 	/**
 	 * @return array
 	 * @throws Array_Continue_Exception

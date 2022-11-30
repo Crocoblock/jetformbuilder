@@ -25,6 +25,11 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 		);
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return false|string
+	 */
 	public function create_dynamic_id( string $name ) {
 		if ( 0 === stripos( $name, self::ID_PREFIX ) ) {
 			$name = str_replace( self::ID_PREFIX, '', $name );
@@ -34,6 +39,10 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 			$state = Render_State::instance()->get_item( $name );
 		} catch ( Repository_Exception $exception ) {
 			return $this->get_custom_state_id( $name );
+		}
+
+		if ( ! $state->is_supported() ) {
+			return false;
 		}
 
 		return $state->get_id();

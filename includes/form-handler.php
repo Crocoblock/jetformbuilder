@@ -168,8 +168,17 @@ class Form_Handler {
 	 *
 	 * @return boolean [description]
 	 */
-	public function is_ajax() {
+	public function is_ajax(): bool {
 		return $this->is_ajax;
+	}
+
+	/**
+	 * Is form processing or not
+	 *
+	 * @return bool
+	 */
+	public function is_process(): bool {
+		return ! empty( $this->refer );
 	}
 
 	/**

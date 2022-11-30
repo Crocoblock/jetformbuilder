@@ -7,6 +7,8 @@ use Jet_Form_Builder\Plugin;
 
 class Http_Tools {
 
+	protected static $query;
+
 	public static function get_site_host() {
 		return str_ireplace( 'www.', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 	}
@@ -42,7 +44,7 @@ class Http_Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function ( $matches ) use ( $value ) {
+			$patterns["#\(\?P<$key\>\S+\)#"] = function ( $matches ) use ( $value ) {
 				return (string) $value;
 			};
 		}
@@ -100,6 +102,30 @@ class Http_Tools {
 		}
 
 		return apply_filters( 'jet-form-builder/form-refer-url', $refer );
+	}
+
+	public static function get_query(): array {
+		if ( ! is_null( self::$query ) ) {
+			return self::$query;
+		}
+
+		if ( ! jet_fb_handler()->is_process() ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			self::$query = wp_unslash( $_GET );
+
+			return self::$query;
+		}
+
+		$query = array();
+
+		wp_parse_str(
+			wp_parse_url( jet_fb_handler()->refer, PHP_URL_QUERY ),
+			$query
+		);
+
+		self::$query = wp_unslash( $query );
+
+		return self::$query;
 	}
 
 }

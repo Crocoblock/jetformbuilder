@@ -11,6 +11,7 @@ use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
+use Jet_Form_Builder\Actions\Events\Never\Never_Event;
 use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
@@ -45,6 +46,7 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 		return apply_filters(
 			'jet-form-builder/event-types',
 			array(
+				new Never_Event(),
 				new Default_Process_Event(),
 				new Gateway_Success_Event(),
 				new Gateway_Failed_Event(),
@@ -120,5 +122,9 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 		return array(
 			'types' => Array_Tools::to_array( $this->rep_get_items() ),
 		);
+	}
+
+	public function get_never_event(): Never_Event {
+		return self::instance()->rep_get_item( Never_Event::class );
 	}
 }

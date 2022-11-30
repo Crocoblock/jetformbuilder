@@ -51,14 +51,13 @@ abstract class Base_Preset {
 		return $this;
 	}
 
-
 	/**
 	 * @param $args array - Field attributes
 	 *
 	 * @return Base_Source
 	 * @throws Preset_Exception
 	 */
-	public function get_new_source( $args = array() ): Base_Source {
+	public function get_source( $args = array() ): Base_Source {
 		$from = ! empty( $this->data['from'] ) ? $this->data['from'] : $this->defaults['from'];
 
 		$source = Preset_Manager::instance()->get_source_by_type( $from );
@@ -68,26 +67,6 @@ abstract class Base_Preset {
 			$this->data,
 			$args
 		)->maybe_query_source()->after_init();
-	}
-
-	/**
-	 * @param array $args
-	 *
-	 * @return Base_Source
-	 * @throws Preset_Exception
-	 */
-	public function get_source( $args = array() ): Base_Source {
-		if ( ! $this->current_source ) {
-			$this->current_source = $this->get_new_source( $args );
-		} else {
-			$this->current_source->init_source(
-				$this->get_fields_map(),
-				$this->data,
-				$args
-			);
-		}
-
-		return $this->current_source;
 	}
 
 	/**

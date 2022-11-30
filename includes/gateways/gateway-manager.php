@@ -222,6 +222,10 @@ class Gateway_Manager {
 	}
 
 	public function has_gateway( $form_id ) {
+		if ( ! jet_form_builder()->allow_gateways ) {
+			return false;
+		}
+		
 		$this->set_gateways_options_by_form_id( $form_id );
 
 		return $this->get_gateway_id( false );

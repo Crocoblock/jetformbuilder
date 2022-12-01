@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 2.1.11
+* ADD: Transaction column for payments
+* FIX: Freeze Drag n Drop all widgets in Elementor editor
+* FIX: Ignore caching source for global preset
+
 ## 2.1.10
 * ADD: Support macros for webhook url in Call Webhook action
 * Tweak: added php-filter `jet-form-builder/action/webhook/request-url`

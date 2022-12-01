@@ -18,7 +18,7 @@ function InputMaskedData() {
 		InputData.prototype.setNode.call( this, node );
 
 		jQuery( node ).inputmask();
-		this.getSubmit().submitter.promise( this.removeMask.bind( this ) );
+		this.beforeSubmit( this.removeMask.bind( this ) );
 	};
 	this.removeMask   = function ( resolve ) {
 		const $maskedField = jQuery( this.nodes[ 0 ] );

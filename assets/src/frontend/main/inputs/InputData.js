@@ -217,6 +217,12 @@ InputData.prototype.valueType = function () {
 	return String;
 };
 /**
+ * @param callable {Function|mixed}
+ */
+InputData.prototype.beforeSubmit = function ( callable ) {
+	this.getSubmit().submitter.promise( callable );
+};
+/**
  * @returns {FormSubmit}
  */
 InputData.prototype.getSubmit = function () {

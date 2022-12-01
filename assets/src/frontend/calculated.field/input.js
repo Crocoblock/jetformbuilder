@@ -64,6 +64,15 @@ function CalculatedData() {
 		};
 		formula.setResult();
 		this.onChange();
+
+		this.beforeSubmit( ( resolve ) => {
+			this.value.silence();
+			this.value.current = null;
+			this.value.silence();
+
+			formula.setResult();
+			resolve();
+		} );
 	};
 	this.makeReactive = function () {
 		InputData.prototype.makeReactive.call( this );

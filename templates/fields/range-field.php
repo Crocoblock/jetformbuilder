@@ -1,11 +1,13 @@
 <?php
 /**
  * input[type="range"] template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
+$this->set_value();
 $this->add_attribute( 'class', 'jet-form-builder__field range-field' );
 $this->add_attribute( 'class', $args['class_name'] );
-$this->add_attribute( 'value', $args['default'] );
 $this->add_attribute( 'min', $args['min'] );
 $this->add_attribute( 'max', $args['max'] );
 $this->add_attribute( 'step', $args['step'] );

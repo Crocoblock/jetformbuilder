@@ -223,16 +223,13 @@ class Controller {
 				continue;
 			}
 
-			$current_attrs = Block_Helper::find_block_by_name(
-				$field_name,
-				jet_form_builder()->form_handler->request_handler->_fields
-			);
+			$current_attrs = jet_fb_request_handler()->get_attrs_by_name( $field_name );
 
-			if ( 'password' === ( $current_attrs['attrs']['field_type'] ?? '' ) ) {
+			if ( 'password' === ( $current_attrs['field_type'] ?? '' ) ) {
 				continue;
 			}
 
-			$type          = Block_Helper::delete_namespace( $current_attrs );
+			$type          = jet_fb_request_handler()->get_type( $field_name );
 			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
 
 			if ( ! is_scalar( $value ) ) {

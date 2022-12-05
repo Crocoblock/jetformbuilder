@@ -23,60 +23,6 @@ class Request_Handler {
 	private $raw_request   = array();
 	private $files         = array();
 
-	public function set_request_type( array $types ): Request_Handler {
-		$this->request_types = array_merge( $this->request_types, $types );
-
-		return $this;
-	}
-
-	public function set_request_attrs( array $attrs ): Request_Handler {
-		$this->request_attrs = array_merge( $this->request_attrs, $attrs );
-
-		return $this;
-	}
-
-	public function get_types(): array {
-		return $this->request_types;
-	}
-
-	public function get_attrs(): array {
-		return $this->request_attrs;
-	}
-
-	/**
-	 * @param string $name
-	 * @param string $field_type
-	 *
-	 * @return bool
-	 */
-	public function is_type( string $name, string $field_type ): bool {
-		return ( ( $this->request_types[ $name ] ?? false ) === $field_type );
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return array
-	 */
-	public function get_attrs_by_name( string $name ): array {
-		return $this->request_attrs[ $name ] ?? array();
-	}
-
-	private function get_raw_request(): array {
-		$this->_fields = Block_Helper::get_blocks_by_post(
-			jet_fb_handler()->get_form_id()
-		);
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
-
-		Live_Form::instance()
-		         ->set_form_id( jet_fb_handler()->get_form_id() )
-		         ->set_specific_data_for_render();
-
-		return apply_filters( 'jet-form-builder/request-handler/request', $values );
-	}
-
 	/**
 	 * Get submitted form data
 	 *
@@ -109,6 +55,79 @@ class Request_Handler {
 			Error_Handler::instance()->errors(),
 			$request
 		);
+	}
+
+	private function get_raw_request(): array {
+		$this->_fields = Block_Helper::get_blocks_by_post(
+			jet_fb_handler()->get_form_id()
+		);
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
+
+		Live_Form::instance()
+		         ->set_form_id( jet_fb_handler()->get_form_id() )
+		         ->set_specific_data_for_render();
+
+		return apply_filters( 'jet-form-builder/request-handler/request', $values );
+	}
+
+	public function exclude( string $field_name ): Request_Handler {
+		$attrs = $this->get_attrs_by_name( $field_name );
+
+		/**
+		 * @see \Jet_Form_Builder\Actions\Methods\Form_Record\Controller::generate_request
+		 */
+		$attrs['field_type'] = 'password';
+
+		return $this->set_request_attrs(
+			array(
+				$field_name => $attrs
+			)
+		);
+	}
+
+	public function set_request_type( array $types ): Request_Handler {
+		$this->request_types = array_merge( $this->request_types, $types );
+
+		return $this;
+	}
+
+	public function set_request_attrs( array $attrs ): Request_Handler {
+		$this->request_attrs = array_merge( $this->request_attrs, $attrs );
+
+		return $this;
+	}
+
+	public function get_types(): array {
+		return $this->request_types;
+	}
+
+	public function get_attrs(): array {
+		return $this->request_attrs;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $field_type
+	 *
+	 * @return bool
+	 */
+	public function is_type( string $name, string $field_type ): bool {
+		return $this->get_type( $name ) === $field_type;
+	}
+
+	public function get_type( string $name ): string {
+		return $this->request_types[ $name ] ?? '';
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return array
+	 */
+	public function get_attrs_by_name( string $name ): array {
+		return $this->request_attrs[ $name ] ?? array();
 	}
 
 	public function set_raw_request( array $request ): Request_Handler {
@@ -162,6 +181,7 @@ class Request_Handler {
 	/**
 	 * @param $field_name
 	 * @param string $attr_name
+	 * @param bool $if_empty
 	 *
 	 * @return array
 	 * @deprecated since 2.0.0

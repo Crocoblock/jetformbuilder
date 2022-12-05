@@ -6,6 +6,7 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
@@ -125,9 +126,13 @@ class Plugin {
 		$this->captcha        = new Forms_Captcha();
 		$this->addons_manager = new AddonsManager();
 
+		/**
+		 * Modules & components
+		 */
 		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		Validation::instance();
+		Render_State::instance();
 		new Dynamic_Value();
 		new Switch_Page_On_Change();
 

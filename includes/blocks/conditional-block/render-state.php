@@ -9,6 +9,7 @@ use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Example_Render_State;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Render_State_Replace_Exception;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
@@ -38,6 +39,7 @@ class Render_State implements Arrayable {
 		$this->rep_install();
 
 		add_action( 'jet-form-builder/after-trigger-event', array( $this, 'execute_render_states_events' ) );
+		add_action( 'jet-form-builder/form-handler/before-send', array( $this, 'set_current' ) );
 	}
 
 	/**
@@ -48,7 +50,6 @@ class Render_State implements Arrayable {
 			'jet-form-builder/render-states',
 			array(
 				new Default_State(),
-				new Example_Render_State(),
 			)
 		);
 	}
@@ -97,9 +98,16 @@ class Render_State implements Arrayable {
 
 		/** @var Base_Render_State $render_state */
 		foreach ( $items as $render_state ) {
-			if ( ! $render_state->is_supported() ) {
+			try {
+				if ( ! $render_state->is_supported() ) {
+					continue;
+				}
+			} catch ( Render_State_Replace_Exception $exception ) {
+				$this->current->push( $exception->get_state() );
+
 				continue;
 			}
+
 			$this->current->push( $render_state );
 		}
 

@@ -339,7 +339,7 @@ class Manager {
 	/**
 	 * @param $block_name
 	 *
-	 * @return mixed
+	 * @return Types\Base|bool
 	 */
 	public function get_field_by_name( $block_name ) {
 		$block_id = Block_Helper::delete_namespace( $block_name );

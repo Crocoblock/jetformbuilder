@@ -8,4 +8,5 @@ export default {
 	addDetail: 'ADD_DETAIL',
 	setMeta: 'SET_CURRENT_META',
 	clearCurrent: 'CLEAR_CURRENT',
+	addComputedField: 'ADD_COMPUTED_FIELD',
 };

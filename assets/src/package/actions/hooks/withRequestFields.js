@@ -1,4 +1,4 @@
-import { getRequestFields } from './useRequestFields';
+import { getRequestFields, getComputedFields } from './useRequestFields';
 
 function withRequestFields( select ) {
 	const meta          = select( 'core/editor' ).
@@ -8,7 +8,9 @@ function withRequestFields( select ) {
 
 	actions.splice( currentAction.index );
 
-	return { requestFields: getRequestFields( actions ) };
+	const fields = getRequestFields( actions );
+
+	return { requestFields: getComputedFields( fields, actions ) };
 }
 
 export default withRequestFields;

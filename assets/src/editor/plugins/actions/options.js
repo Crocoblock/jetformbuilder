@@ -1,17 +1,10 @@
-const { Tools } = JetFBActions;
-
-const defaultAction = {
-	type: 'send_email',
-	id: Tools.getRandomID(),
-	settings: {},
-	conditions: [],
-	events: [],
-	provideEvents: [],
-};
+const {
+	      BaseAction,
+      } = JetFBComponents;
 
 const defaultActions = [
 	{
-		...JSON.parse( JSON.stringify( defaultAction ) ),
+		...JSON.parse( JSON.stringify( new BaseAction() ) ),
 		settings: {
 			send_email: {
 				subject: 'New order on website',
@@ -26,5 +19,4 @@ const conditionSettings = window.JetFormEditorData.actionConditionSettings;
 export {
 	defaultActions,
 	conditionSettings,
-	defaultAction,
 };

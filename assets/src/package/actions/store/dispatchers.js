@@ -104,5 +104,14 @@ export default {
 			},
 		}
 	),
+	[ constants.addComputedField ]: ( state, action ) => (
+		{
+			...state,
+			computedFields: [
+				...state.computedFields,
+				action.field
+			]
+		}
+	),
 
 };

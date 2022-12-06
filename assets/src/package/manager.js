@@ -143,6 +143,9 @@ import { insertMacro } from './macros.button/functions';
 import useInsertMacro from './macros.button/hooks/useInsertMacro';
 import addDetail from './actions/helpers/addDetail';
 import ToggleControl from './components/ToggleControl';
+import BaseAction from './actions/abstract/BaseAction';
+import addComputedField from './actions/helpers/addComputedField';
+import BaseComputedField from './actions/abstract/BaseComputedField';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -218,6 +221,8 @@ window.JetFBComponents = {
 	AdvancedModalControl,
 	ClientSideMacros,
 	ToggleControl,
+	BaseAction,
+	BaseComputedField,
 };
 
 // JFBFunctions
@@ -250,6 +255,7 @@ window.JetFBActions = {
 	insertMacro,
 	addDetail,
 	column,
+	addComputedField,
 };
 
 // JFBHooks

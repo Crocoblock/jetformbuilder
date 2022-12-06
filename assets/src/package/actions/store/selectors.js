@@ -17,6 +17,9 @@ const self = {
 	getDetail( state, actionType ) {
 		return state.details[ actionType ];
 	},
+	getComputedFields( state ) {
+		return state.computedFields;
+	},
 };
 
 export default {

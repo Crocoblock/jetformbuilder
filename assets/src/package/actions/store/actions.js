@@ -64,4 +64,10 @@ export default {
 			item,
 		};
 	},
+	addComputedField( field ) {
+		return {
+			type: constants.addComputedField,
+			field,
+		};
+	},
 };

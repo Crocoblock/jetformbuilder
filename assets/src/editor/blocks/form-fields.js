@@ -22,15 +22,15 @@ import * as colorPicker from './color-picker-field';
 import * as progressBar from './progress-bar';
 import * as formBreakStart from './form-break-start';
 import * as map from './map-field';
-import * as wrappers from "./block-wrappers";
+import * as wrappers from './block-wrappers';
 
 const {
-		  registerBlockType,
-	  } = wp.blocks;
+	      registerBlockType,
+      } = wp.blocks;
 
 const {
-		  applyFilters,
-	  } = wp.hooks;
+	      applyFilters,
+      } = wp.hooks;
 
 const fields = applyFilters( 'jet.fb.register.fields', [
 	calculated,
@@ -60,12 +60,30 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 ] );
 
 const registerFormField = block => {
-	if ( ! block ) {
+	if ( !block ) {
 		return;
 	}
 	const { metadata, settings, name } = block;
 
 	settings.edit = wrappers.withCustomProps( block );
+
+	if ( !settings.hasOwnProperty( 'jfbGetFields' ) ) {
+		settings.jfbGetFields = function ( context = 'default' ) {
+			if ( !this.attributes?.name ) {
+				return [];
+			}
+
+			return [
+				{
+					blockName: this.name,
+					name: this.attributes.name,
+					label: this.attributes.label || this.attributes.name,
+					value: this.attributes.name,
+					//icon: blockType.icon.src,
+				},
+			];
+		};
+	}
 
 	registerBlockType( name, {
 		...metadata,
@@ -82,12 +100,14 @@ function sortBlocks( first, next ) {
 
 	try {
 		return a.localeCompare( b );
-	} catch ( e ) {
+	}
+	catch ( e ) {
 		return 0;
 	}
 }
 
 export default function RegisterFormFields( blocks = fields ) {
 	blocks.sort( sortBlocks );
-	blocks.forEach( applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
+	blocks.forEach(
+		applyFilters( 'jet.fb.register.fields.handler', registerFormField ) );
 }

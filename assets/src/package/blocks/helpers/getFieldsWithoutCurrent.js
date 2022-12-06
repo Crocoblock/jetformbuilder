@@ -1,6 +1,12 @@
 import blocksRecursiveIterator from './blocksRecursiveIterator';
 
-const { applyFilters, addFilter } = wp.hooks;
+const {
+	      applyFilters,
+	      addFilter,
+      } = wp.hooks;
+const {
+	      select,
+      } = wp.data;
 
 function getFieldsWithoutCurrent(
 	placeholder    = false,
@@ -24,11 +30,20 @@ function getFieldsWithoutCurrent(
 			&& current?.clientId !== block.clientId
 			&& !skipFields.find( field => block.name.includes( field ) )
 		) {
-			formFields.push( {
-				blockName: block.name,
-				label: block.attributes.label || block.attributes.name,
-				value: block.attributes.name,
-			} );
+			const blockType = select( 'core/blocks' ).
+				getBlockType( block.name );
+
+			if ( !blockType.hasOwnProperty( 'jfbGetFields' ) ) {
+				return;
+			}
+
+			const newFields = blockType.jfbGetFields.call( block, context );
+
+			formFields.push(
+				...newFields.filter( current => !formFields.some(
+					( { value } ) => value === current.value,
+				) ),
+			);
 		}
 	} );
 

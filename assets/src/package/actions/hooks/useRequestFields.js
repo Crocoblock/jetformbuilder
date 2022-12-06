@@ -36,6 +36,58 @@ const getRequestFields = actions => {
 	return requestFields;
 };
 
+function getComputedFields( fields, actions ) {
+	const computed = useSelect(
+		select => select( 'jet-forms/actions' ).getComputedFields(),
+		[],
+	);
+
+	for ( const baseComputedField of computed ) {
+		/**
+		 * @type {BaseComputedField}
+		 */
+		const current = new baseComputedField();
+
+		for ( const action of actions ) {
+			if ( !current.isSupported( action ) ) {
+				continue;
+			}
+			current.setAction( action );
+
+			const label = current.getLabel();
+			const name  = current.getName();
+
+			if ( fields.some( ( { value } ) => value === name ) ) {
+				continue;
+			}
+
+			fields.push( {
+				from: action.type,
+				id: action.id,
+				label: label || name,
+				value: name,
+				name: name,
+				help: current.getHelp(),
+			} );
+		}
+
+		if ( current.action || !current.isSupportedGlobal() ) {
+			continue;
+		}
+		const label = current.getLabel();
+		const name  = current.getName();
+
+		fields.push( {
+			label: label || name,
+			value: name,
+			name: name,
+			help: current.getHelp(),
+		} );
+	}
+
+	return fields;
+}
+
 function useRequestFields() {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
@@ -50,8 +102,15 @@ function useRequestFields() {
 
 	actions.splice( currentAction.index );
 
-	return getRequestFields( actions );
+	/**
+	 * Should be deprecated
+	 *
+	 * @type {*[]}
+	 */
+	const fields = getRequestFields( actions );
+
+	return getComputedFields( fields, actions );
 }
 
-export { getRequestFields };
+export { getRequestFields, getComputedFields };
 export default useRequestFields;

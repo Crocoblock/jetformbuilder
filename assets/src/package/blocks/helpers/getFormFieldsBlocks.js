@@ -1,6 +1,12 @@
 import blocksRecursiveIterator from './blocksRecursiveIterator';
 
-const { applyFilters, addFilter } = wp.hooks;
+const {
+	      applyFilters,
+	      addFilter,
+      } = wp.hooks;
+const {
+	      select,
+      } = wp.data;
 
 function getFormFieldsBlocks(
 	exclude        = [],
@@ -20,19 +26,23 @@ function getFormFieldsBlocks(
 
 	blocksRecursiveIterator( block => {
 		if ( block.name.includes( 'jet-forms/' )
-			&& block.attributes.name
 			&& !skipFields.find( field => block.name.includes( field ) )
 		) {
 
-			/*const blockType = select( blocksStore ).getBlockType( block.name );*/
+			const blockType = select( 'core/blocks' ).
+				getBlockType( block.name );
 
-			formFields.push( {
-				blockName: block.name,
-				name: block.attributes.name,
-				label: block.attributes.label || block.attributes.name,
-				value: block.attributes.name,
-				//icon: blockType.icon.src,
-			} );
+			if ( !blockType.hasOwnProperty( 'jfbGetFields' ) ) {
+				return;
+			}
+
+			const newFields = blockType.jfbGetFields.call( block, context );
+
+			formFields.push(
+				...newFields.filter( current => !formFields.some(
+					( { value } ) => value === current.value,
+				) ),
+			);
 		}
 	} );
 

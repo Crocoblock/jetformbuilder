@@ -1,12 +1,9 @@
-import { defaultAction, defaultActions } from './options';
+import { defaultActions } from './options';
 import { useActionsEdit } from './hooks';
 import EditSettingsModal from './edit.settings.modal';
 import EditConditionsModal from './edit.conditions.modal';
 import ListActionItem from './action.item';
 
-const {
-	      Tools,
-      } = JetFBActions;
 const {
 	      useEffect,
       } = wp.element;
@@ -15,6 +12,10 @@ const {
       } = wp.components;
 
 const { __ } = wp.i18n;
+
+const {
+	      BaseAction,
+      } = JetFBComponents;
 
 function PluginActions() {
 	const { actions, setActions } = useActionsEdit();
@@ -35,13 +36,7 @@ function PluginActions() {
 			<Button
 				isPrimary
 				onClick={ () => {
-					setActions( [
-						...actions,
-						{
-							...JSON.parse( JSON.stringify( defaultAction ) ),
-							id: Tools.getRandomID(),
-						},
-					] );
+					setActions( [ ...actions, { ...new BaseAction() } ] );
 				} }
 			>
 				{ __( '+ New Action', 'jet-form-builder' ) }

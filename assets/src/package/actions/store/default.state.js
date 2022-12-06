@@ -8,4 +8,5 @@ export default {
 	loadingState: [
 		Functions.getLoadingItem(),
 	],
+	computedFields: [],
 };

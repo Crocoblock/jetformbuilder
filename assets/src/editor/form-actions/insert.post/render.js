@@ -79,9 +79,14 @@ function InsertPostRender( props ) {
 	} );
 
 	useEffect( () => {
-		onChangeSettingObj(
-			{ requestFields: [ source.requestFields.inserted_post_id ] },
-		);
+		/**
+		 * Clear deprecated data
+		 *
+		 * @since 3.0
+		 */
+		if ( settings.requestFields?.length ) {
+			onChangeSettingObj( { requestFields: null } );
+		}
 		setFormFields(
 			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
 		);

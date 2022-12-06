@@ -1,3 +1,5 @@
+import BaseAction from '../abstract/BaseAction';
+
 const {
 	      useSelect,
       } = wp.data;
@@ -42,13 +44,18 @@ function getComputedFields( fields, actions ) {
 		[],
 	);
 
+	/**
+	 * @type {BaseAction[]}
+	 */
+	actions = actions.map( item => new BaseAction( item ) );
+
 	for ( const baseComputedField of computed ) {
 		/**
 		 * @type {BaseComputedField}
 		 */
 		const current = new baseComputedField();
 
-		for ( const action of actions ) {
+		for ( let action of actions ) {
 			if ( !current.isSupported( action ) ) {
 				continue;
 			}

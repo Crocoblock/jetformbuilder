@@ -93,33 +93,6 @@ class Save_Record extends Base {
 	}
 
 	/**
-	 * Run 'Save record' action only once.
-	 */
-	public static function add_hidden() {
-		if ( has_action(
-			'jet-form-builder/form-handler/after-send',
-			array( self::class, 'do_action_hidden' )
-		) ) {
-			return;
-		}
-		add_action( 'jet-form-builder/form-handler/after-send', array( self::class, 'do_action_hidden' ), 0 );
-	}
-
-	/**
-	 * @throws Sql_Exception
-	 */
-	public static function do_action_hidden() {
-		if ( false !== jet_fb_action_handler()->get_action_by_slug( self::ID ) ) {
-			return;
-		}
-		/** @var Save_Record $self */
-		$self = jet_form_builder()->actions->rep_get_item_or_die( self::ID );
-
-		$self->do_action( array(), jet_fb_action_handler() );
-	}
-
-
-	/**
 	 * @param array $request
 	 * @param Action_Handler $handler
 	 *

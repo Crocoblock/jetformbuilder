@@ -51,6 +51,13 @@ class Action_Handler {
 	 */
 	protected $skipped = array();
 
+	/**
+	 * Hidden actions
+	 *
+	 * @var array<string, bool>
+	 */
+	private $hidden = array();
+
 	public function get_form_id() {
 		return (int) $this->form_id;
 	}
@@ -87,8 +94,7 @@ class Action_Handler {
 
 		foreach ( $form_actions as $form_action ) {
 			try {
-				list( $action ) = $this->save_form_action( $form_action );
-				$action->on_register_in_flow();
+				$this->save_form_action( $form_action )->on_register_in_flow();
 			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
@@ -100,24 +106,21 @@ class Action_Handler {
 	/**
 	 * @param $form_action
 	 *
-	 * @return Base[]|Condition_Manager[]
+	 * @return Base
 	 * @throws Repository_Exception
 	 */
-	public function save_form_action( $form_action ): array {
+	private function save_form_action( $form_action ): Base {
 		$type = $form_action['type'];
 
 		if ( ! ( $form_action['is_execute'] ?? true ) ) {
 			throw new Repository_Exception( 'This action is turned off' );
 		}
 
-		/** @var Base $action */
 		$action = jet_form_builder()->actions->get_action_clone( $type );
+		$this->remove_hidden( $type );
 
-		$id         = $form_action['id'];
-		$settings   = $form_action['settings'][ $type ] ?? $form_action['settings'];
-		$conditions = $form_action['conditions'] ?? array();
-		$operator   = $form_action['condition_operator'] ?? 'and';
-		$events     = $form_action['events'] ?? array();
+		$id       = $form_action['id'];
+		$settings = $form_action['settings'][ $type ] ?? $form_action['settings'];
 
 		/**
 		 * Save action settings to the class field,
@@ -127,17 +130,9 @@ class Action_Handler {
 		$action->_id      = $id;
 		$action->settings = $settings;
 
-		$condition = new Condition_Manager();
-		$condition->set_conditions( $conditions );
-		$condition->set_condition_operator( $operator );
+		$this->save_action( $action, $form_action );
 
-		$this->form_conditions[ $id ] = $condition;
-		$this->form_actions[ $id ]    = $action;
-		$this->form_events[ $id ]     = Events_List::create(
-			array_merge( $events, $action->get_required_events() )
-		);
-
-		return array( $action, $condition );
+		return $action;
 	}
 
 	/**
@@ -331,7 +326,7 @@ class Action_Handler {
 	public function get_current_action(): Base {
 		$this->in_loop_or_die();
 
-		return $this->get_action_by_id( $this->get_position() );
+		return $this->get_action( $this->get_position() );
 	}
 
 	public function get_current_condition_manager(): Condition_Manager {
@@ -344,9 +339,11 @@ class Action_Handler {
 	 * @param $id
 	 *
 	 * @return false|Base
+	 * @deprecated since 3.0.0
+	 * Use \Jet_Form_Builder\Actions\Action_Handler::get_action instead
 	 */
 	public function get_action_by_id( $id ) {
-		return $this->form_actions[ $id ] ?? false;
+		return $this->get_action( $id );
 	}
 
 	/**
@@ -386,12 +383,36 @@ class Action_Handler {
 	 * @param $slug
 	 *
 	 * @return false|Base
+	 * @deprecated since 3.0.0
+	 * Use \Jet_Form_Builder\Actions\Action_Handler::get_action instead
 	 */
 	public function get_action_by_slug( $slug ) {
+		return $this->get_action( $slug );
+	}
+
+	/**
+	 * @param int|string $class_slug_or_id
+	 *
+	 * @return false|Base
+	 */
+	public function get_action( $class_slug_or_id ) {
+		$is_number = is_numeric( $class_slug_or_id );
+		$is_class  = ! $is_number && class_exists( $class_slug_or_id );
+
+		if ( $is_number ) {
+			return $this->form_actions[ $class_slug_or_id ] ?? false;
+		}
+
 		foreach ( $this->form_actions as $action ) {
 			/** @var Base $action */
 
-			if ( $action->get_id() !== $slug ) {
+			if ( $is_class && is_a( $action, $class_slug_or_id ) ) {
+				return $action;
+			} else if ( $is_class ) {
+				continue;
+			}
+
+			if ( $action->get_id() !== $class_slug_or_id ) {
 				continue;
 			}
 
@@ -464,6 +485,64 @@ class Action_Handler {
 		$this->current_flow_handler = '';
 
 		return $this;
+	}
+
+	/**
+	 * @param string $action_class
+	 * @param array $props
+	 *
+	 * @return false|Base
+	 * False if action not founded or already added as hidden
+	 */
+	public function add_hidden( string $action_class, array $props = array() ) {
+		try {
+			$action = jet_form_builder()->actions->get_action( $action_class );
+		} catch ( Repository_Exception $exception ) {
+			return false;
+		}
+
+		if ( array_key_exists( $action->get_id(), $this->hidden ) ) {
+			return false;
+		}
+		$clone_action = clone $action;
+
+		$clone_action->_id = count( $this->hidden );
+
+		$this->save_action( $clone_action, $props );
+		$this->hidden[ $clone_action->get_id() ] = $clone_action->_id;
+
+		return $clone_action;
+	}
+
+	public function remove_hidden( $action_slug ) {
+		$id = $this->hidden[ $action_slug ] ?? false;
+
+		if ( false === $id ) {
+			return;
+		}
+
+		unset( $this->form_actions[ $id ] );
+		unset( $this->hidden[ $action_slug ] );
+	}
+
+	public function isset_hidden( $action_slug ): bool {
+		return isset( $this->hidden[ $action_slug ] );
+	}
+
+	private function save_action( Base $action, array $props ) {
+		$conditions = $props['conditions'] ?? array();
+		$operator   = $props['condition_operator'] ?? 'and';
+		$events     = $props['events'] ?? array();
+
+		$condition = new Condition_Manager();
+		$condition->set_conditions( $conditions );
+		$condition->set_condition_operator( $operator );
+
+		$this->form_conditions[ $action->_id ] = $condition;
+		$this->form_actions[ $action->_id ]    = $action;
+		$this->form_events[ $action->_id ]     = Events_List::create(
+			array_merge( $events, $action->get_required_events() )
+		);
 	}
 
 

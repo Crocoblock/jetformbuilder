@@ -1,4 +1,3 @@
-import Tools from '../../tools';
 import RepeaterItemContext from '../../repeater/context/repeater.item';
 import getFieldsWithoutCurrent
 	from '../../blocks/helpers/getFieldsWithoutCurrent';

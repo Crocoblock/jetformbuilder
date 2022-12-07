@@ -177,5 +177,11 @@ abstract class Base implements Repository_Item_Instance_Trait {
 		return $this->executed_on;
 	}
 
+	/**
+	 * Run current action only once, if it not isset
+	 */
+	public static function add_hidden( array $props = array() ) {
+		return jet_fb_action_handler()->add_hidden( static::class, $props );
+	}
 
 }

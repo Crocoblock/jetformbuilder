@@ -96,7 +96,7 @@ function InsertPostRender( props ) {
 		const id = getActionModifierId( settings );
 
 		setProperties( source.properties[ id ] ?? [] );
-	}, [ settings ] );
+	}, [ settings.post_type ] );
 
 	/**
 	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315

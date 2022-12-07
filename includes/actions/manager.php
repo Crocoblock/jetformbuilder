@@ -104,21 +104,21 @@ class Manager {
 	 * @return Types\Base
 	 * @throws Repository_Exception
 	 */
-	public function get_action( $type ) {
+	public function get_action( $type ): Types\Base {
 		return $this->rep_get_item( $type );
 	}
 
 	/**
 	 * @param $type
 	 *
-	 * @return mixed
+	 * @return Types\Base
 	 * @throws Repository_Exception
 	 */
-	public function get_action_clone( $type ) {
+	public function get_action_clone( $type ): Types\Base {
 		return $this->rep_clone_item( $type );
 	}
 
-	public function has_action_type( $type ) {
+	public function has_action_type( $type ): bool {
 		return $this->rep_isset_item( $type );
 	}
 

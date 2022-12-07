@@ -27,7 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Manager {
 
 	const MAIN_SCRIPT_HANDLE     = 'jet-form-builder-frontend-forms';
-	const CALCULATED_HANDLE      = 'jet-form-builder-calculated-module';
 	const LISTING_OPTIONS_HANDLE = 'jet-form-builder-listing-options';
 
 	/**
@@ -244,17 +243,6 @@ class Manager {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/listing.options{min}.js' ),
 			array(
 				'wp-hooks',
-			),
-			Plugin::instance()->get_version(),
-			true
-		);
-
-		wp_register_script(
-			self::CALCULATED_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.module{min}.js' ),
-			array(
-				Deprecated::HANDLE,
-				Manager::MAIN_SCRIPT_HANDLE
 			),
 			Plugin::instance()->get_version(),
 			true

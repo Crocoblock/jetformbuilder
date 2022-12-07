@@ -36,7 +36,7 @@ class Calculated_Field extends Base {
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field{min}.js' ),
 			array(
-				Manager::CALCULATED_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE
 			),
 			Plugin::instance()->get_version(),
 			true

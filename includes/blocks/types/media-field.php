@@ -144,7 +144,7 @@ class Media_Field extends Base {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions{min}.js' ),
 			array(
 				Validation::HANDLE,
-				Manager::CALCULATED_HANDLE,
+				Manager::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

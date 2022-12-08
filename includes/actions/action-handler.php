@@ -506,7 +506,7 @@ class Action_Handler {
 		}
 		$clone_action = clone $action;
 
-		$clone_action->_id = count( $this->hidden );
+		$clone_action->_id = count( $this->hidden ) + 1;
 
 		$this->save_action( $clone_action, $props );
 		$this->hidden[ $clone_action->get_id() ] = $clone_action->_id;
@@ -545,5 +545,18 @@ class Action_Handler {
 		);
 	}
 
+
+	public function sort_hidden_actions() {
+		$action_ids = array_values( $this->hidden );
+
+		$hidden = array();
+
+		foreach ( $action_ids as $id ) {
+			$hidden[ $id ] = $this->get_action( $id );
+			unset( $this->form_actions[ $id ] );
+		}
+
+		$this->form_actions = $hidden + $this->form_actions;
+	}
 
 }

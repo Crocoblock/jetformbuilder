@@ -30,8 +30,10 @@ class Execution_Builder {
 		global $wpdb;
 		$model->before_create();
 
+		$sql = $this->create_table_schema( $model );
+
 		// phpcs:ignore WordPress.DB
-		$wpdb->query( $this->create_table_schema( $model ) );
+		$wpdb->query( $sql );
 
 		$model->after_create();
 		$this->add_foreign_relations( $model );
@@ -49,7 +51,7 @@ class Execution_Builder {
 			// Fool protection
 			if ( get_class( $constraint->get_model() ) === get_class( $model ) ) {
 				_doing_it_wrong(
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					get_class( $model ) . '::foreign_relations',
 					'You have a logical error. A model cannot be dependent on itself.',
 					'2.0.0'

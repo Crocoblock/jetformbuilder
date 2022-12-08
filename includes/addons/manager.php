@@ -47,6 +47,8 @@ class Manager {
 	 */
 	public $update_plugins = false;
 
+	private $addons_info;
+
 	/**
 	 * @param false $addon_filename
 	 *
@@ -101,9 +103,15 @@ class Manager {
 	 */
 	public function get_jfb_remote_plugin_list() {
 
+		if ( ! is_null( $this->addons_info ) ) {
+			return $this->addons_info;
+		}
+
 		$remote_jfb_addons_info = get_site_transient( 'jfb_remote_addons_list' );
 
 		if ( $remote_jfb_addons_info ) {
+			$this->addons_info = $remote_jfb_addons_info;
+
 			return $remote_jfb_addons_info;
 		}
 

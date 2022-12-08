@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -12,6 +13,10 @@ function BlockVisibility( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( !useIsHasAttribute( 'visibility' ) ) {
+		return null;
+	}
 
 	return <SelectControl
 		options={ [

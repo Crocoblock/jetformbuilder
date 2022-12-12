@@ -1,9 +1,10 @@
 <template>
 	<div class="field-name-template">
 		<span
+			v-if="value.label"
 			class="field-name-template--label"
 		>
-			<b>{{ value.label || value.name }}</b>
+			<b>{{ value.label }}</b>
 		</span>
 		<span class="field-name-template--name">
 			<code>{{ value.name }}</code>

@@ -15,7 +15,7 @@ addAction(
 			createConditionalBlock( node, observable );
 		}
 	},
-	20
+	20,
 );
 
 addAction(
@@ -23,6 +23,22 @@ addAction(
 	'jet-form-builder/conditional-block',
 	function ( input ) {
 		input.checker = createChecker( input );
+	},
+);
+
+addAction(
+	'jet.fb.conditional.block.runFunction',
+	'jet-form-builder/conditional-block',
+	/**
+	 * @param funcName
+	 * @param result
+	 * @param conditionalBlock {ConditionalBlock}
+	 */
+	function ( funcName, result, conditionalBlock ) {
+		if ( !funcName.hasOwnProperty( 'setCssClass' ) ) {
+			return;
+		}
+		conditionalBlock.node.classList.toggle( funcName.setCssClass, result );
 	},
 );
 

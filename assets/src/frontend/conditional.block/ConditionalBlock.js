@@ -25,6 +25,11 @@ function ConditionalBlock( node, observable ) {
 	this.list = null;
 
 	/**
+	 * @type {String|Object}
+	 */
+	this.function = null;
+
+	/**
 	 * @type {PageState}
 	 */
 	this.page = null;
@@ -49,6 +54,7 @@ function ConditionalBlock( node, observable ) {
 
 	this.setConditions();
 	this.setInputs();
+	this.setFunction();
 
 	doAction( 'jet.fb.conditional.init', this );
 }
@@ -63,6 +69,10 @@ ConditionalBlock.prototype = {
 		this.list.onChangeRelated = () => {
 			this.isRight.current = this.list.getResult();
 		};
+
+		if ( !window?.JetFormBuilderSettings?.devmode ) {
+			delete this.node.dataset.jfbConditional;
+		}
 	},
 	setInputs() {
 		if ( !this.willDomChange() ) {
@@ -102,7 +112,18 @@ ConditionalBlock.prototype = {
 	runFunction() {
 		const result = this.isRight.current;
 
-		switch ( this.getFunction() ) {
+		if ( 'string' !== typeof this.function ) {
+			doAction(
+				'jet.fb.conditional.block.runFunction',
+				this.function,
+				result,
+				this,
+			);
+
+			return;
+		}
+
+		switch ( this.function ) {
 			case 'show_dom':
 				this.showBlockDom( result );
 				break;
@@ -118,6 +139,15 @@ ConditionalBlock.prototype = {
 			case 'disable':
 				this.disableBlock( result );
 				break;
+			default:
+				doAction(
+					'jet.fb.conditional.block.runFunction',
+					this.function,
+					result,
+					this,
+				);
+				break;
+
 		}
 	},
 	/**
@@ -144,10 +174,27 @@ ConditionalBlock.prototype = {
 		this.node.disabled = result;
 	},
 	willDomChange() {
-		return [ 'show_dom', 'hide_dom' ].includes( this.getFunction() );
+		if ( 'string' !== typeof this.function ) {
+			return false;
+		}
+		return [ 'show_dom', 'hide_dom' ].includes( this.function );
+	},
+	setFunction() {
+		this.function = this.getFunction();
+
+		if ( !window?.JetFormBuilderSettings?.devmode ) {
+			delete this.node.dataset.jfbFunc;
+		}
 	},
 	getFunction() {
-		return this.node.dataset.jfbFunc;
+		let simpleFunc = this.node.dataset.jfbFunc;
+
+		try {
+			return JSON.parse( simpleFunc );
+		}
+		catch ( error ) {
+			return simpleFunc;
+		}
 	},
 };
 

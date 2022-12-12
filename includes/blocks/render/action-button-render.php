@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Blocks\Render;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
 use Jet_Form_Builder\Blocks\Types\Action_Button;
-use Jet_Form_Builder\Blocks\Types\Submit_Field;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -19,6 +18,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Button_Render extends Base {
 
+	/**
+	 * @var Attributes_Trait
+	 */
 	public $wrapper;
 
 	public function get_name() {

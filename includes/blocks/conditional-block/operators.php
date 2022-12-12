@@ -48,11 +48,8 @@ class Operators implements Arrayable {
 			new Operator_Not_In_The_List(),
 			new Operator_Contain(),
 			new Operator_Not_Contain(),
+			new Operator_Render_State()
 		);
-
-		if ( Render_State::instance()->is_multiple() ) {
-			$operators[] = new Operator_Render_State();
-		}
 
 		return apply_filters(
 			'jet-form-builder/conditional-block/operators',

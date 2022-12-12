@@ -63,7 +63,9 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	 */
 	abstract public function get_name();
 
-	abstract protected function options_list();
+	protected function options_list() {
+		return array();
+	}
 
 	abstract protected function retrieve_gateway_meta();
 

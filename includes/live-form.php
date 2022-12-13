@@ -28,6 +28,9 @@ class Live_Form {
 	use Get_Template_Trait;
 	use Instance_Trait;
 
+	/**
+	 * @var bool|int
+	 */
 	public $form_id = false;
 	/** @var Form_Arguments */
 	public $spec_data;

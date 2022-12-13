@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
@@ -117,7 +118,6 @@ class Action_Handler {
 		}
 
 		$action = jet_form_builder()->actions->get_action_clone( $type );
-		$this->remove_hidden( $type );
 
 		$id       = $form_action['id'];
 		$settings = $form_action['settings'][ $type ] ?? $form_action['settings'];
@@ -547,9 +547,15 @@ class Action_Handler {
 
 
 	public function sort_hidden_actions() {
-		$action_ids = array_values( $this->hidden );
+		/**
+		 * @var Base $action
+		 */
+		foreach ( $this->form_actions as $action ) {
+			$this->remove_hidden( $action->get_id() );
+		}
 
-		$hidden = array();
+		$action_ids = array_values( $this->hidden );
+		$hidden     = array();
 
 		foreach ( $action_ids as $id ) {
 			$hidden[ $id ] = $this->get_action( $id );

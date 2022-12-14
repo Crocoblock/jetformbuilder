@@ -1,6 +1,4 @@
-import RenderStateOptions from './RenderStateOptions';
-import MacrosFields from '../../macros.button/components/MacrosFields';
-import PresetButton from '../../preset/components/PresetButton';
+import RenderStateOptions from './RenderStateOptions';;
 import useUniqKey from '../../blocks/hooks/useUniqKey';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import AdvancedModalControl from '../../components/AdvancedModalControl';
@@ -8,8 +6,6 @@ import AdvancedModalControl from '../../components/AdvancedModalControl';
 const {
 	      TextareaControl,
 	      withFilters,
-	      Flex,
-	      FlexItem,
       } = wp.components;
 const {
 	      __,
@@ -33,22 +29,25 @@ const ConditionOptions = withFilters( 'jet.fb.block.conditions.options' )(
 					currentItem={ currentItem }
 				/>;
 			default:
-				return <AdvancedModalControl
-					value={ currentItem.value }
-					label={ __( 'Value to compare', 'jet-form-builder' ) }
-					onChangePreset={ value => changeCurrentItem( { value } ) }
-					onChangeMacros={ name => changeCurrentItem( {
-						value: (
-							currentItem.value ?? ''
-						) + name,
-					} ) }
-				>
-					{ ( { instanceId } ) => <TextareaControl
-						id={ instanceId }
+				return <ClientSideMacros>
+					<AdvancedModalControl
 						value={ currentItem.value }
-						onChange={ value => changeCurrentItem( { value } ) }
-					/> }
-				</AdvancedModalControl>;
+						label={ __( 'Value to compare', 'jet-form-builder' ) }
+						onChangePreset={ value => changeCurrentItem(
+							{ value } ) }
+						onChangeMacros={ name => changeCurrentItem( {
+							value: (
+								currentItem.value ?? ''
+							) + name,
+						} ) }
+					>
+						{ ( { instanceId } ) => <TextareaControl
+							id={ instanceId }
+							value={ currentItem.value }
+							onChange={ value => changeCurrentItem( { value } ) }
+						/> }
+					</AdvancedModalControl>
+				</ClientSideMacros>;
 		}
 	} );
 

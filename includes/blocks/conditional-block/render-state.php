@@ -99,7 +99,7 @@ class Render_State implements Arrayable {
 		/** @var Base_Render_State $render_state */
 		foreach ( $items as $render_state ) {
 			try {
-				if ( ! $render_state->is_supported() ) {
+				if ( ! $render_state->is_supported_on_current() ) {
 					continue;
 				}
 			} catch ( Render_State_Replace_Exception $exception ) {
@@ -111,6 +111,7 @@ class Render_State implements Arrayable {
 			$this->current->push( $render_state );
 		}
 
+		$this->current->confirm();
 		$this->set_current_default();
 
 		return $this;

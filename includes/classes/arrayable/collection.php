@@ -91,6 +91,10 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	}
 
 	public function delete( $position ): Collection {
+		/** @var Collection_Item_Interface $item */
+		$item = $this->items[ $position ];
+
+		unset( $this->groups[ $item->get_id() ] );
 		unset( $this->items[ $position ] );
 
 		return $this;
@@ -135,6 +139,16 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	public function all(): array {
 		return $this->items;
+	}
+
+	public function remove( ...$positions ) {
+		if ( is_array( $positions[0] ) ) {
+			$positions = $positions[0];
+		}
+		foreach ( $positions as $position ) {
+			$this->delete( $position );
+		}
+		$this->items = array_values( $this->items );
 	}
 
 	/*
@@ -209,7 +223,8 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 * @param mixed $offset
 	 */
 	public function offsetUnset( $offset ) {
-		unset( $this->items[ $offset ] );
+		$this->delete( $offset );
+		$this->items = array_values( $this->items );
 	}
 
 	/*

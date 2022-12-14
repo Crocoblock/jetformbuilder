@@ -108,12 +108,17 @@ const EditCustomRenderStates = ( {
 		title={ __( 'Register custom render state' ) }
 		onRequestClose={ () => setShowModal( false ) }
 		isUseActions={ false }
+		classNames={ [ 'width-45' ] }
 	>
 		<NoticeInfo style={ { marginBottom: '1em' } }/>
-		<div className={ 'jet-fb-field-with-button' }>
+		<div className={ 'jet-fb with-button' }>
 			<TextControl
 				value={ value }
 				onChange={ newValue => setValue( newValue ) }
+				placeholder={ __(
+					'Set your custom state name',
+					'jet-form-builder',
+				) }
 			/>
 			<Button
 				variant={ 'secondary' }
@@ -124,17 +129,22 @@ const EditCustomRenderStates = ( {
 				{ __( 'Add', 'jet-form-builder' ) }
 			</Button>
 		</div>
-		<div className={ 'jet-fb-buttons-flex' }>
-			{ customStates.map( state => <Button
-				key={ state.value }
-				icon={ 'no-alt' }
-				iconPosition={ 'right' }
-				onClick={ () => removeState( state.value ) }
-				isBusy={ isLoadingItem[ state.value ] ?? false }
-			>
-				{ state.label }
-			</Button> ) }
-		</div>
+		{ Boolean( customStates?.length ) && <>
+			<b className={ 'jet-fb flex mb-05-em' }>
+				{ __( 'Manage your custom states:', 'jet-form-builder' ) }
+			</b>
+			<div className={ 'jet-fb-buttons-flex' }>
+				{ customStates.map( state => <Button
+					key={ state.value }
+					icon={ 'no-alt' }
+					iconPosition={ 'right' }
+					onClick={ () => removeState( state.value ) }
+					isBusy={ isLoadingItem[ state.value ] ?? false }
+				>
+					{ state.label }
+				</Button> ) }
+			</div>
+		</> }
 	</ActionModal>;
 };
 

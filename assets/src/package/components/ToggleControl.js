@@ -8,12 +8,12 @@ function ToggleControl( {
 	children = null,
 } ) {
 
-	return <div className={ 'jet-fb-control flex' }>
+	return <div className={ 'jet-fb flex' }>
 		<CoreToggleControl
 			checked={ checked }
 			onChange={ onChange }
 		/>
-		<div className={ 'jet-fb-control--label' }>
+		<div className={ 'jet-fb--label' }>
 			{ children }
 		</div>
 	</div>;

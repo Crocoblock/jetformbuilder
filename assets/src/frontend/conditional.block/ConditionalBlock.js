@@ -28,6 +28,7 @@ function ConditionalBlock( node, observable ) {
 	 * @type {String|Object}
 	 */
 	this.function = null;
+	this.settings = null;
 
 	/**
 	 * @type {PageState}
@@ -56,6 +57,11 @@ function ConditionalBlock( node, observable ) {
 	this.setInputs();
 	this.setFunction();
 
+	if ( !window?.JetFormBuilderSettings?.devmode ) {
+		delete this.node.dataset.jfbConditional;
+		delete this.node.dataset.jfbFunc;
+	}
+
 	doAction( 'jet.fb.conditional.init', this );
 }
 
@@ -69,13 +75,9 @@ ConditionalBlock.prototype = {
 		this.list.onChangeRelated = () => {
 			this.isRight.current = this.list.getResult();
 		};
-
-		if ( !window?.JetFormBuilderSettings?.devmode ) {
-			delete this.node.dataset.jfbConditional;
-		}
 	},
 	setInputs() {
-		if ( !this.willDomChange() ) {
+		if ( !this.settings?.dom ) {
 			return;
 		}
 
@@ -86,7 +88,7 @@ ConditionalBlock.prototype = {
 		);
 	},
 	insertComment() {
-		if ( !this.willDomChange() ) {
+		if ( !this.settings?.dom ) {
 			return;
 		}
 
@@ -112,29 +114,12 @@ ConditionalBlock.prototype = {
 	runFunction() {
 		const result = this.isRight.current;
 
-		if ( 'string' !== typeof this.function ) {
-			doAction(
-				'jet.fb.conditional.block.runFunction',
-				this.function,
-				result,
-				this,
-			);
-
-			return;
-		}
-
 		switch ( this.function ) {
-			case 'show_dom':
-				this.showBlockDom( result );
-				break;
-			case 'hide_dom':
-				this.showBlockDom( !result );
-				break;
 			case 'show':
-				this.showBlockCss( result );
+				this.showBlock( result );
 				break;
 			case 'hide':
-				this.showBlockCss( !result );
+				this.showBlock( !result );
 				break;
 			case 'disable':
 				this.disableBlock( result );
@@ -158,7 +143,12 @@ ConditionalBlock.prototype = {
 			then( () => {} ).
 			catch( () => {} );
 	},
-	showBlockCss( result ) {
+	showBlock( result ) {
+		if ( this.settings?.dom ) {
+			this.showBlockDom( result );
+
+			return;
+		}
 		this.node.style.display = result ? 'block' : 'none';
 	},
 	showBlockDom( result ) {
@@ -173,28 +163,20 @@ ConditionalBlock.prototype = {
 	disableBlock( result ) {
 		this.node.disabled = result;
 	},
-	willDomChange() {
-		if ( 'string' !== typeof this.function ) {
-			return false;
-		}
-		return [ 'show_dom', 'hide_dom' ].includes( this.function );
-	},
 	setFunction() {
-		this.function = this.getFunction();
+		this.function = this.node.dataset.jfbFunc;
 
-		if ( !window?.JetFormBuilderSettings?.devmode ) {
-			delete this.node.dataset.jfbFunc;
-		}
-	},
-	getFunction() {
-		let simpleFunc = this.node.dataset.jfbFunc;
-
+		let parsed;
 		try {
-			return JSON.parse( simpleFunc );
+			parsed = JSON.parse( this.function );
 		}
 		catch ( error ) {
-			return simpleFunc;
+			return;
 		}
+		const [ [ name, settings ] ] = Object.entries( parsed );
+
+		this.function = name;
+		this.settings = settings;
 	},
 };
 

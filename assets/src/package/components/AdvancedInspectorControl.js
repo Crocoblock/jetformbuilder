@@ -27,7 +27,10 @@ function AdvancedInspectorControl( {
 				marginBottom: '8px',
 			} }
 		>
-			<label htmlFor={ instanceId }>{ label }</label>
+			<label
+				htmlFor={ instanceId }
+				className={ 'jet-fb label' }
+			>{ label }</label>
 			{ false !== onChangePreset && <PresetButton
 				value={ value }
 				onChange={ onChangePreset }

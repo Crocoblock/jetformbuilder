@@ -8,13 +8,36 @@ use Jet_Form_Builder\Classes\Arrayable\Collection;
 
 class Render_States_Collection extends Collection {
 
+	private $exclude_list = array();
+
 	/**
 	 * @param Base_Render_State $item
 	 *
 	 * @return Collection
 	 */
 	public function push( Base_Render_State $item ): Collection {
-		return parent::add( $item );
+		array_push( $this->exclude_list, ...$item->exclude_states() );
+
+		return $this->add( $item );
+	}
+
+	public function confirm(): Collection {
+		$positions = array();
+
+		foreach ( $this as $position => $state ) {
+			$current = get_class( $state );
+
+			if ( ! in_array( $current, $this->exclude_list, true ) ) {
+				continue;
+			}
+
+			$positions[] = $position;
+		}
+
+		$this->remove( $positions );
+		$this->exclude_list = array();
+
+		return $this;
 	}
 
 	public function render(): string {

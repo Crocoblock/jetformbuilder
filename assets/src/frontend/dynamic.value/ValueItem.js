@@ -59,7 +59,7 @@ ValueItem.prototype = {
 		list.onChangeRelated();
 	},
 	observeSetValue( conditions, input ) {
-		const formula = new CalculatedFormula( input.root );
+		const formula = new CalculatedFormula( input );
 
 		formula.observe( this.to_set );
 		formula.setResult = () => {

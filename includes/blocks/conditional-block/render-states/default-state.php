@@ -24,4 +24,8 @@ class Default_State extends Base_Render_State {
 	public function can_be_switched(): bool {
 		return true;
 	}
+
+	public function exclude_states(): array {
+		return array();
+	}
 }

@@ -27,27 +27,33 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 		),
 		[ showModal ],
 	);
-
+	// label={  }
 	return <>
 		<BaseControl
 			label={ __( 'Render State', 'jet-form-builder' ) }
 			className={ 'control-flex' }
 		>
-			<div className={ 'jet-fb-field-with-button' }>
-				<FormTokenField
-					label={ __( 'Add render state', 'jet-form-builder' ) }
-					value={ currentItem.render_state }
-					suggestions={ renderStates }
-					onChange={ render_state => changeCurrentItem(
-						{ render_state } ) }
-					tokenizeOnSpace
-					__experimentalExpandOnFocus
-				/>
-				<Button
-					variant={ 'secondary' }
-					icon={ 'plus-alt2' }
-					onClick={ () => setShowModal( true ) }
-				/>
+
+			<div>
+				<label className={ 'jet-fb label mb-05-em' }>
+					{ __( 'Add render state', 'jet-form-builder' ) }
+				</label>
+				<div className={ 'jet-fb with-button clear-label' }>
+					<FormTokenField
+						value={ currentItem.render_state }
+						suggestions={ renderStates }
+						onChange={ render_state => changeCurrentItem(
+							{ render_state } ) }
+						tokenizeOnSpace
+						__experimentalExpandOnFocus
+					/>
+					<Button
+						label={ __( 'New render state', 'jet-form-builder' ) }
+						variant={ 'secondary' }
+						icon={ 'plus-alt2' }
+						onClick={ () => setShowModal( true ) }
+					/>
+				</div>
 			</div>
 		</BaseControl>
 		{ showModal && <EditCustomRenderStates

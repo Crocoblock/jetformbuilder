@@ -1,8 +1,10 @@
 .jet-form-edit-modal {
 	@import "validation";
 
-	.components-flex-item, .components-flex__item {
-		flex: 1;
+	.components-select-control {
+		.components-flex-item, .components-flex__item {
+			flex: 1;
+		}
 	}
 
 	.components-base-control__label {
@@ -128,6 +130,10 @@
 		width: 60vw;
 	}
 
+	&.width-45 {
+		width: 45vw;
+	}
+
 	&.without-margin .components-modal__content:before {
 		display: none;
 	}
@@ -151,24 +157,9 @@
 		padding-bottom: unset;
 	}
 
-	.jet-fb-field-with-button {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		& > *:first-child {
-			flex: 0.97;
-		}
-
-		& > button {
-			margin-bottom: 1.1em
-		}
-	}
-
 	.jet-fb-buttons-flex {
 		display: flex;
 		gap: 0.8em;
-		width: 45vw;
 		flex-wrap: wrap;
 		justify-content: flex-start;
 

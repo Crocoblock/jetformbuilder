@@ -8,7 +8,6 @@ const {
 
 const {
 	useState,
-	useEffect,
 } = wp.element;
 
 function ActionModal( {

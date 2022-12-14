@@ -247,7 +247,14 @@ abstract class Base {
 						),
 					) )
 				),
-				'data-jfb-func="show_dom"',
+				sprintf(
+					'data-jfb-func="%s"',
+					Tools::esc_attr( array(
+						array(
+							'show' => array( 'dom' => true ),
+						),
+					) )
+				),
 			);
 
 			return sprintf( $format, $args['page_break_disabled'], implode( ' ', $attrs ) );

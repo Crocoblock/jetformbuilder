@@ -29,7 +29,10 @@ function AdvancedModalControl( {
 					align={ 'center' }
 					justify={ 'flex-start' }
 				>
-					<label htmlFor={ instanceId }>{ label }</label>
+					<label
+						htmlFor={ instanceId }
+						className={ 'jet-fb label' }
+					>{ label }</label>
 					{ false !== onChangePreset && <PresetButton
 						value={ value }
 						onChange={ onChangePreset }

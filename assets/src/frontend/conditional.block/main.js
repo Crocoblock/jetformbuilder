@@ -35,10 +35,17 @@ addAction(
 	 * @param conditionalBlock {ConditionalBlock}
 	 */
 	function ( funcName, result, conditionalBlock ) {
-		if ( !funcName.hasOwnProperty( 'setCssClass' ) ) {
+		if (
+			'setCssClass' !== funcName ||
+			!conditionalBlock.settings?.className
+		) {
 			return;
 		}
-		conditionalBlock.node.classList.toggle( funcName.setCssClass, result );
+
+		conditionalBlock.node.classList.toggle(
+			conditionalBlock.settings.className,
+			result,
+		);
 	},
 );
 

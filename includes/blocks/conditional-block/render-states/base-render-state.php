@@ -18,6 +18,10 @@ abstract class Base_Render_State implements
 
 	abstract public function is_supported(): bool;
 
+	public function is_supported_on_current(): bool {
+		return $this->is_supported();
+	}
+
 	public function rep_item_id() {
 		return $this->get_id();
 	}
@@ -38,6 +42,12 @@ abstract class Base_Render_State implements
 	 */
 	public function can_be_switched(): bool {
 		return false;
+	}
+
+	public function exclude_states(): array {
+		return array(
+			Default_State::class
+		);
 	}
 
 	public function to_array(): array {

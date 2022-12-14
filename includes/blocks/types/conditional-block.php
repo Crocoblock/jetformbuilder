@@ -193,14 +193,17 @@ class Conditional_Block extends Base {
 
 	protected function get_function(): string {
 		$func_type = $this->block_attrs['func_type'] ?? '';
+		$settings  = $this->block_attrs['func_settings'] ?? array();
 
 		try {
-			Condition_Manager::instance()->get_functions()->isset_function( $func_type );
+			return Condition_Manager::instance()
+			                        ->get_functions()
+			                        ->get_function( $func_type )
+			                        ->to_string( $settings );
+
 		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
-
-		return $func_type;
 	}
 
 

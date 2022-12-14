@@ -4,11 +4,11 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Functions;
 
 
-use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Item;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Response_Object;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 
 abstract class Base_Function implements
 	Repository_Item_Instance_Trait,
@@ -25,6 +25,21 @@ abstract class Base_Function implements
 
 	public function to_response( array $base, Base_Condition_Type $item ): array {
 		return array();
+	}
+
+	public function to_string( array $settings ): string {
+		$slug    = $this->get_id();
+		$current = $settings[ $slug ] ?? array();
+
+		if ( empty( $current ) ) {
+			return $slug;
+		}
+
+		return Tools::esc_attr(
+			array(
+				$slug => $current
+			)
+		);
 	}
 
 	public function to_array(): array {

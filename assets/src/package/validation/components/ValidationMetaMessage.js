@@ -16,10 +16,10 @@ function ValidationMetaMessage( {
 	return <div { ...props }>
 		<label
 			htmlFor={ message.id }
-			className={ 'jet-fb-control flex jc-space-between' }
+			className={ 'jet-fb flex jc-space-between' }
 		>
 			<span>{ current.label }</span>
-			<span className={ 'jet-fb-control flex gap-1em' }>
+			<span className={ 'jet-fb flex gap-1em' }>
 			{ message.blocks.map( block => <span
 				key={ 'message_block_item' + block.title }
 				className="jet-fb-validation-messages-item-heading-pair__icon"

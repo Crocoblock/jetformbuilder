@@ -4,10 +4,9 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 
+use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Base_Function;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide;
-use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide_Dom;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show;
-use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show_Dom;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
@@ -25,10 +24,8 @@ class Functions implements Arrayable {
 		return apply_filters(
 			'jet-form-builder/conditional-block/functions',
 			array(
-				new Function_Hide(),
 				new Function_Show(),
-				new Function_Show_Dom(),
-				new Function_Hide_Dom(),
+				new Function_Hide(),
 			)
 		);
 	}
@@ -36,10 +33,11 @@ class Functions implements Arrayable {
 	/**
 	 * @param string $slug
 	 *
+	 * @return Base_Function
 	 * @throws Repository_Exception
 	 */
-	public function isset_function( string $slug ) {
-		$this->rep_throw_if_undefined( $slug );
+	public function get_function( string $slug ): Base_Function {
+		return $this->rep_get_item( $slug );
 	}
 
 	/**

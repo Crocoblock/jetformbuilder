@@ -76,13 +76,13 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 		current,
 	} }>
 		<div
-			className="jet-fb-control p-relative"
+			className="jet-fb p-relative"
 			onMouseOver={ () => setHover( true ) }
 			onMouseOut={ () => setHover( false ) }
 		>
 			<div
 				className={ [
-					'jet-fb-control',
+					'jet-fb',
 					isHover ? 'show' : 'hide',
 					'p-absolute',
 					'wh-100',
@@ -113,7 +113,7 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 			</div>
 			<div
 				className={ [
-					'jet-fb-control',
+					'jet-fb',
 					'flex',
 					'flex-dir-column',
 					'container',

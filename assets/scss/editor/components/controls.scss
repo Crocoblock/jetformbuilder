@@ -1,4 +1,4 @@
-.jet-fb-control {
+.jet-fb {
 	&.flex {
 		display: flex;
 
@@ -31,12 +31,22 @@
 		margin-bottom: 24px;
 	}
 
+	&.mb-05-em {
+		margin-bottom: 0.5em;
+	}
+
 	&.p-06em {
 		padding: 0.6em;
 	}
 
-	&.m-top-05em {
-		margin-top: 0.5em;
+	&.m {
+		&-unset {
+			margin: unset;
+		}
+
+		&-top-05em {
+			margin-top: 0.5em;
+		}
 	}
 
 	&.show {
@@ -95,6 +105,48 @@
 			content: attr(data-title);
 			color: darkgrey;
 			margin-right: 0.5em;
+		}
+	}
+
+	&.clear-control {
+		.components-base-control__field {
+			padding-top: unset;
+			border-top: unset;
+		}
+	}
+
+	&.label {
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.4;
+		text-transform: uppercase;
+		box-sizing: border-box;
+		display: block;
+		padding-top: 0;
+		padding-bottom: 0;
+		max-width: 100%;
+		z-index: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&.with-button {
+		display: flex;
+		justify-content: space-between;
+
+		& > *:first-child {
+			flex: 0.97;
+		}
+
+		& > button {
+			margin-bottom: 1.1em
+		}
+
+		&.clear-label {
+			.components-form-token-field__label {
+				display: none;
+			}
 		}
 	}
 }

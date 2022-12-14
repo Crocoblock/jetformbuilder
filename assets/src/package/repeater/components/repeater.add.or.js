@@ -21,6 +21,7 @@ function RepeaterAddOrOperator( props ) {
 
 	return <Button
 		isSecondary
+		icon={ 'randomize' }
 		onClick={ () => addNewItem( {
 			__visible: false,
 			or_operator: true,

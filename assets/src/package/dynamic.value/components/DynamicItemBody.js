@@ -116,37 +116,20 @@ function DynamicItemBody() {
 	useOnUpdateModal( () => update( current ) );
 
 	return <>
-		<SelectControl
-			options={ options }
-			value={ current.frequency ?? 'on_change' }
-			label={ __( 'Apply value', 'jet-form-builder' ) }
-			labelPosition={ 'side' }
-			onChange={ frequency => updateCurrent( { frequency } ) }
-			help={ currentHelp }
-		/>
-		<ToggleControl
-			label={ __(
-				'Set value only if field is empty',
-				'jet-form-builder',
-			) }
-			checked={ current.set_on_empty ?? false }
-			onChange={ set_on_empty => updateCurrent( { set_on_empty } ) }
-		/>
-		<Flex
-			align={ 'flex-start' }
-			className={ 'components-base-control__field' }
-		>
+		<Flex align={ 'flex-start' }>
 			<FlexItem isBlock>
 				<Flex
 					align={ 'center' }
 					justify={ 'flex-start' }
 				>
-					<span>{ __( 'Value to set', 'jet-form-builder' ) }</span>
+					<span className={ 'jet-fb label' }>
+						{ __( 'Value to set', 'jet-form-builder' ) }
+					</span>
 					<PresetButton
 						value={ current.to_set }
 						onChange={ to_set => updateCurrent( { to_set } ) }
 					/>
-					<ClientSideMacros>
+					<ClientSideMacros withThis>
 						<MacrosFields
 							onClick={ name => updateCurrent( {
 								to_set: (
@@ -173,14 +156,36 @@ function DynamicItemBody() {
 				/>
 			</FlexItem>
 		</Flex>
-
+		<SelectControl
+			options={ options }
+			value={ current.frequency ?? 'on_change' }
+			label={ __( 'Apply type', 'jet-form-builder' ) }
+			labelPosition={ 'side' }
+			onChange={ frequency => updateCurrent( { frequency } ) }
+			help={ currentHelp }
+		/>
 		<RepeaterState state={ updateConditions }>
 			<Repeater items={ current.conditions ?? [] }>
 				<ConditionItem/>
 			</Repeater>
-			<RepeaterAddNew>
-				{ __( 'Add New Condition', 'jet-form-builder' ) }
-			</RepeaterAddNew>
+			<div
+				className={ 'jet-fb flex jc-space-between ai-center' }
+			>
+				<RepeaterAddNew>
+					{ __( 'Add New Condition', 'jet-form-builder' ) }
+				</RepeaterAddNew>
+				<ToggleControl
+					className={ 'jet-fb m-unset clear-control' }
+					label={ __(
+						'Set value only if field is empty',
+						'jet-form-builder',
+					) }
+					checked={ current.set_on_empty ?? false }
+					onChange={ set_on_empty => updateCurrent(
+						{ set_on_empty },
+					) }
+				/>
+			</div>
 		</RepeaterState>
 	</>;
 }

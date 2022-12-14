@@ -4,10 +4,17 @@ import BaseMacro from '../abstract/BaseMacro';
 const {
 	      useSelect,
       } = wp.data;
+const {
+	      __,
+      } = wp.i18n;
 
-const thisMacro    = new BaseMacro();
+const thisMacro = new BaseMacro();
+
 thisMacro.fullName = () => '%this%';
-thisMacro.fullHelp = () => 'Test help';
+thisMacro.fullHelp = () => __(
+	'Returns current field value',
+	'jet-form-builder',
+);
 
 function ClientSideMacros( { children, withThis = false } ) {
 	const extra = useSelect(

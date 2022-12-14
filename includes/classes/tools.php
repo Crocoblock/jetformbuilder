@@ -566,4 +566,8 @@ class Tools {
 		return esc_attr( $value );
 	}
 
+	public static function get_suffix(): string {
+		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	}
+
 }

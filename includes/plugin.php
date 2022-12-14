@@ -11,6 +11,7 @@ use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
 use Jet_Form_Builder\Compatibility\Jet_Appointment\Jet_Appointment;
@@ -210,7 +211,7 @@ class Plugin {
 	 * @return string
 	 */
 	public function plugin_url( string $path = '' ): string {
-		$path = str_replace( '{min}', $this->get_suffix(), $path );
+		$path = str_replace( '{min}', Tools::get_suffix(), $path );
 
 		return JET_FORM_BUILDER_URL . $path;
 	}
@@ -248,24 +249,6 @@ class Plugin {
 
 		$this->init_framework();
 		Wp_Cli_Manager::register();
-	}
-
-	public function get_suffix(): string {
-		if ( ! is_null( $this->suffix ) ) {
-			return $this->suffix;
-		}
-		$suffix = '.min';
-
-		if (
-			( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ||
-			Dev_Mode\Manager::instance()->active()
-		) {
-			$suffix = '';
-		}
-
-		$this->suffix = $suffix;
-
-		return $this->suffix;
 	}
 
 }

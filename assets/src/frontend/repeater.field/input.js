@@ -19,7 +19,44 @@ function RepeaterData() {
 		return false;
 	};
 	this.addListeners = function () {
-		this.buttonNode.addEventListener( 'click', () => this.addNew() );
+		if ( !this.itemsField ) {
+			this.buttonNode.addEventListener( 'click', () => this.addNew() );
+
+			return;
+		}
+
+		const input = this.root.getInput( this.itemsField );
+
+		if ( !input ) {
+			console.error(
+				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
+			);
+
+			return;
+		}
+
+		input.watch( () => {
+			const currentCount = this.value.current?.length ?? 0;
+
+			// if it < 0 ==> we should add {diff} new repeater items
+			// if it > 0 ==> we should remove last {diff} items
+			const diff = currentCount - input.calcValue;
+
+			if ( diff < 0 ) {
+				this.addNew( -1 * diff );
+
+				return;
+			}
+
+			const stayItems   = this.value.current.slice( 0, -1 * diff );
+			const { current } = this.value;
+
+			current.filter(
+				row => !stayItems.includes( row ),
+			).forEach(
+				row => row.remove(),
+			);
+		} );
 	};
 	this.setValue     = function () {
 		const [ node ]     = this.nodes;
@@ -40,6 +77,15 @@ function RepeaterData() {
 		this.nodes   = [ node ];
 		this.name    = node.dataset.fieldName;
 		this.rawName = this.name;
+
+		try {
+			const settings = JSON.parse( node.dataset.settings );
+
+			this.itemsField = settings?.itemsField;
+		}
+		catch ( error ) {
+			// silence
+		}
 
 		this.buttonNode = node.querySelector(
 			'.jet-form-builder-repeater__new',
@@ -65,23 +111,28 @@ RepeaterData.prototype = Object.create( InputData.prototype );
 RepeaterData.prototype.buttonNode = null;
 RepeaterData.prototype.template   = null;
 RepeaterData.prototype.container  = null;
+RepeaterData.prototype.itemsField = false;
 
-RepeaterData.prototype.addNew = function () {
+RepeaterData.prototype.addNew = function ( count = 1 ) {
 	this.value.current = [
 		...this.value.current,
-		new ObservableRow( this ),
+		...(
+			new Array( count )
+		).fill( null ).map(
+			() => new ObservableRow( this ),
+		),
 	];
 };
 
 RepeaterData.prototype.findIndex = function ( observableRow ) {
 	return this.value.current.findIndex(
-		current => current === observableRow
+		current => current === observableRow,
 	);
 };
 
 RepeaterData.prototype.remove = function ( observableRow ) {
 	this.value.current = this.value.current.filter(
-		current => current !== observableRow
+		current => current !== observableRow,
 	);
 };
 

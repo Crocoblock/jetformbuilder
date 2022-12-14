@@ -260,7 +260,7 @@ class Manager {
 					'ajaxurl'             => Http_Tools::get_form_action_url(
 						array( 'method' => 'ajax' )
 					),
-					'devmode'             => Dev_Mode\Manager::instance()->active(),
+					'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
 					'scrollOffset'        => - 50,
 					'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
 					'replaceAttrs'        => array(

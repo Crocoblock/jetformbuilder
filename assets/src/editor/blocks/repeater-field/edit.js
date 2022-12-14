@@ -134,7 +134,7 @@ export default function RepeaterEdit( props ) {
 					onChange={ newValue => {
 						props.setAttributes( { manage_items_count_field: newValue } );
 					} }
-					options={ formFields }
+					options={ Tools.withPlaceholder( formFields ) }
 				/> }
 
 				<SelectControl

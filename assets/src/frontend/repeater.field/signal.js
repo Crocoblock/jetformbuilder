@@ -54,12 +54,14 @@ function SignalRepeater() {
 
 		const appended = this.input.container.lastChild;
 
-		appended.querySelector(
-			'.jet-form-builder-repeater__remove',
-		).addEventListener(
-			'click',
-			() => observable.remove(),
-		);
+		if ( !this.input.itemsField ) {
+			appended.querySelector(
+				'.jet-form-builder-repeater__remove',
+			).addEventListener(
+				'click',
+				() => observable.remove(),
+			);
+		}
 
 		observable.observe( appended );
 	};

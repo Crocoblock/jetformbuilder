@@ -42,20 +42,17 @@ function RepeaterData() {
 			// if it > 0 ==> we should remove last {diff} items
 			const diff = currentCount - input.calcValue;
 
+			if ( 0 === diff ) {
+				return;
+			}
+
 			if ( diff < 0 ) {
 				this.addNew( -1 * diff );
 
 				return;
 			}
 
-			const stayItems   = this.value.current.slice( 0, -1 * diff );
-			const { current } = this.value;
-
-			current.filter(
-				row => !stayItems.includes( row ),
-			).forEach(
-				row => row.remove(),
-			);
+			this.value.current = this.value.current.slice( 0, -1 * diff );
 		} );
 	};
 	this.setValue     = function () {

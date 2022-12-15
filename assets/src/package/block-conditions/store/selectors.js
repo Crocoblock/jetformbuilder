@@ -49,6 +49,13 @@ const selectors = {
 
 		return state.conditionReaders.default( condition );
 	},
+	getFunctionDisplay( state, funcType ) {
+		const funcItem = state.functions.find(
+			( { value } ) => value === funcType,
+		);
+
+		return funcItem?.display;
+	},
 };
 
 export default {

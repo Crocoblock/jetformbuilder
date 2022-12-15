@@ -13,6 +13,7 @@ ConditionsList.prototype = {
 	root: null,
 	conditions: [],
 	invalid: [],
+	groups: [],
 	/**
 	 * You can override this callback.
 	 * It used in ConditionFieldItem.
@@ -39,10 +40,8 @@ ConditionsList.prototype = {
 		this.conditions = conditions.map(
 			item => createConditionItem( item, this ),
 		).filter( item => item );
-	},
-	getResult() {
-		this.invalid   = [];
-		let groups     = {};
+
+		const groups   = {};
 		let groupIndex = 0;
 
 		for ( const condition of this.getConditions() ) {
@@ -55,13 +54,16 @@ ConditionsList.prototype = {
 			groups[ groupIndex ].push( condition );
 		}
 
-		groups = Object.values( groups );
+		this.groups = Object.values( groups );
+	},
+	getResult() {
+		this.invalid = [];
 
-		if ( !groups.length ) {
+		if ( !this.groups.length ) {
 			return true;
 		}
 
-		for ( const group of groups ) {
+		for ( const group of this.groups ) {
 			if ( this.isValidGroup( group ) ) {
 				return true;
 			}

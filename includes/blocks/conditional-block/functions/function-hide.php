@@ -19,4 +19,8 @@ class Function_Hide extends Base_Function {
 		return __( 'Hide if...', 'jet-form-builder' );
 	}
 
+	public function get_display(): string {
+		return __( 'Hide current block', 'jet-form-builder' );
+	}
+
 }

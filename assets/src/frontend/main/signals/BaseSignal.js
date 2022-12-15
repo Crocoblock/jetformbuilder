@@ -26,21 +26,21 @@ BaseSignal.prototype = {
 	setInput: function ( input ) {
 		this.input = input;
 	},
-	run: function () {
+	run: function ( prevValue ) {
 		if ( !this.lock.current ) {
-			this.runSignal();
+			this.runSignal( prevValue );
 
 			return;
 		}
 
 		if ( !this.lock.signals.length ) {
-			this.lock.watchOnce( () => this.runSignal() );
+			this.lock.watchOnce( () => this.runSignal( prevValue ) );
 		}
 	},
 	/**
 	 * @protected
 	 */
-	runSignal: function () {
+	runSignal: function ( prevValue ) {
 		// your code
 	},
 };

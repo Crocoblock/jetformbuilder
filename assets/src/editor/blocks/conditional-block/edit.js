@@ -1,28 +1,40 @@
 import ConditionsModal from './conditions.modal';
+import ConditionsList from './conditions.list';
+import ConditionalModalContext from './conditional.model.context';
 
 const {
-	      FieldSettingsWrapper,
-      } = JetFBComponents;
+	      getCurrentInnerBlocks,
+      } = JetFBActions;
 
-const { __ } = wp.i18n;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      useSelect,
+      } = wp.data;
 
 const {
 	      BlockControls,
 	      InnerBlocks,
 	      useBlockProps,
 	      InspectorControls,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      Button,
 	      ToolbarGroup,
 	      TextControl,
+	      PanelBody,
       } = wp.components;
 
 const {
 	      useState,
 	      useEffect,
       } = wp.element;
+
+function hasFormBreakField( blocks ) {
+	return blocks.some( ( { name } ) => name.includes( 'form-break-field' ) );
+}
 
 export default function ConditionalBlockEdit( props ) {
 
@@ -41,7 +53,25 @@ export default function ConditionalBlockEdit( props ) {
 		}
 	}, [] );
 
-	const [ showModal, setShowModal ] = useState( false );
+	const blocks     = getCurrentInnerBlocks();
+	const blockNames = blocks.reduce(
+		( prev, { name } ) => prev + name, '',
+	);
+
+	const [ showModal, setShowModal ]         = useState( false );
+	const [ showMultistep, setShowMultistep ] = useState(
+		() => hasFormBreakField( blocks ),
+	);
+
+	useEffect( () => {
+		setShowMultistep( hasFormBreakField( blocks ) );
+	}, [ blockNames ] );
+
+	const functionDisplay = useSelect( select => (
+		select( 'jet-forms/block-conditions' ).getFunctionDisplay(
+			attributes.func_type || 'show',
+		)
+	), [ attributes.func_type ] );
 
 	const conditionsIcon = attributes?.conditions?.length ? <span
 		className="dashicon dashicons dashicons-randomize"
@@ -53,9 +83,19 @@ export default function ConditionalBlockEdit( props ) {
 
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
-			<FieldSettingsWrapper
-				key={ uniqKey( 'FieldSettingsWrapper' ) }
-				{ ...props }
+			<PanelBody
+				title={ __( 'Conditions', 'jet-form-builder' ) }
+				initialOpen
+			>
+				<p><b>{ functionDisplay }</b></p>
+				<ConditionalModalContext.Provider value={ {
+					showModal, setShowModal,
+				} }>
+					<ConditionsList attributes={ attributes }/>
+				</ConditionalModalContext.Provider>
+			</PanelBody>
+			{ showMultistep && <PanelBody
+				title={ __( 'Multistep', 'jet-form-builder' ) }
 			>
 				<TextControl
 					label={ __( 'Last Page Name', 'jet-form-builder' ) }
@@ -65,9 +105,10 @@ export default function ConditionalBlockEdit( props ) {
 						'The value of this field will be set as the name of the last page with the "Progress Bar" block.',
 						'jet-form-builder' ) }
 					onChange={ last_page_name => setAttributes(
-						{ last_page_name } ) }
+						{ last_page_name },
+					) }
 				/>
-			</FieldSettingsWrapper>
+			</PanelBody> }
 		</InspectorControls>,
 		<BlockControls key={ uniqKey( 'BlockControls' ) }>
 			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>

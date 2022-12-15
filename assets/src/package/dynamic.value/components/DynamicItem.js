@@ -4,15 +4,16 @@ import ActionModal from '../../action-modal/components/ActionModal';
 import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
 import humanReadableCondition
 	from '../../block-conditions/helpers/humanReadableCondition';
+import HumanReadableConditions
+	from '../../block-conditions/components/HumanReadableConditions';
+import HoverContainer from '../../components/HoverContainer';
+import DetailsContainer from '../../components/DetailsContainer';
 
 const {
 	      __,
       } = wp.i18n;
 const {
 	      useState,
-	      RawHTML,
-	      Children,
-	      cloneElement,
       } = wp.element;
 const {
 	      Button,
@@ -52,25 +53,6 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 
 	const isEmpty = 1 >= Object.keys( current )?.length;
 
-	let conditionsElements = [];
-	let firstReadCondition = '';
-
-	if ( !isEmpty && Boolean( current?.conditions?.length ) ) {
-		firstReadCondition = humanReadableCondition( current?.conditions[ 0 ] );
-
-		conditionsElements = current.conditions.filter(
-			// Exclude first item
-			( c, index ) => 0 !== index,
-		).map(
-			condition => <span
-				data-title={ __( 'And', 'jet-form-builder' ) + ':' }
-				dangerouslySetInnerHTML={ {
-					__html: humanReadableCondition( condition ),
-				} }
-			/>,
-		);
-	}
-
 	return <BlockValueItemContext.Provider value={ {
 		update: updateCurrent,
 		current,
@@ -80,20 +62,7 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 			onMouseOver={ () => setHover( true ) }
 			onMouseOut={ () => setHover( false ) }
 		>
-			<div
-				className={ [
-					'jet-fb',
-					isHover ? 'show' : 'hide',
-					'p-absolute',
-					'wh-100',
-					'flex-center',
-					'gap-05em',
-				].join( ' ' ) }
-				style={ {
-					backgroundColor: '#ffffffcc',
-					transition: '0.3s',
-				} }
-			>
+			<HoverContainer isHover={ isHover }>
 				<Button
 					isSmall
 					isSecondary
@@ -110,16 +79,8 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 				>
 					{ __( 'Delete', 'jet-form-builder' ) }
 				</Button>
-			</div>
-			<div
-				className={ [
-					'jet-fb',
-					'flex',
-					'flex-dir-column',
-					'container',
-					'gap-1em',
-				].join( ' ' ) }
-			>
+			</HoverContainer>
+			<DetailsContainer>
 				{ isEmpty ? <div
 					data-title={ __(
 						'This value item is empty',
@@ -132,19 +93,11 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 							  __html: humanReadablePreset( current.to_set ),
 						  } }
 					  />
-					  { firstReadCondition && <>
-						  <span
-							  data-title={ __(
-								  'If', 'jet-form-builder',
-							  ) + ':' }
-							  dangerouslySetInnerHTML={ {
-								  __html: firstReadCondition,
-							  } }
-						  />
-						  { Children.map( conditionsElements, cloneElement ) }
-					  </> }
+					  <HumanReadableConditions
+						  conditions={ current?.conditions }
+					  />
 				  </> }
-			</div>
+			</DetailsContainer>
 		</div>
 		{ (
 			showModal || isOpenModal === current.id

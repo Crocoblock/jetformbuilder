@@ -80,11 +80,11 @@ InputData.prototype.makeReactive = function () {
 
 	doAction( 'jet.fb.input.makeReactive', this );
 };
-InputData.prototype.onChange     = function () {
+InputData.prototype.onChange     = function ( prevValue ) {
 	this.calcValue = this.value.current;
 
 	// apply changes in DOM
-	this?.callable?.run();
+	this?.callable?.run( prevValue );
 
 	// show errors
 	this.report();

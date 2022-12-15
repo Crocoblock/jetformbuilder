@@ -13,9 +13,13 @@ function SignalRepeater() {
 	this.isSupported = function ( node, inputData ) {
 		return isRepeater( node );
 	};
-	this.runSignal   = function () {
+	this.runSignal   = function ( prevValue ) {
 		const { current } = this.input.value;
 		let calcValue     = 0;
+
+		if ( prevValue.length > current.length ) {
+			this.removePrevItems( prevValue );
+		}
 
 		for ( const [ index, row ] of Object.entries( current ) ) {
 			if ( !current.hasOwnProperty( index ) ) {
@@ -66,6 +70,13 @@ function SignalRepeater() {
 		observable.observe( appended );
 	};
 
+	this.removePrevItems = function ( prevRows ) {
+		const { current } = this.input.value;
+
+		const diff = prevRows.length > current.length;
+
+		prevRows.slice( -1 * diff ).forEach( row => row.remove() );
+	};
 }
 
 SignalRepeater.prototype = Object.create( BaseSignal.prototype );

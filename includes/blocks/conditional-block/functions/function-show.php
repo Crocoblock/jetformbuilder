@@ -19,6 +19,8 @@ class Function_Show extends Base_Function {
 		return __( 'Show if...', 'jet-form-builder' );
 	}
 
-
+	public function get_display(): string {
+		return __( 'Show current block', 'jet-form-builder' );
+	}
 
 }

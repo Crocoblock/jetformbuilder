@@ -1,5 +1,5 @@
 const {
-	      MacrosInserter,
+	      AdvancedModalControl,
       } = JetFBComponents;
 
 const {
@@ -44,13 +44,6 @@ function SendEmailRender( {
 
 		setFormFieldsTokens( fields.map( ( { value } ) => value ) );
 	}, [] );
-
-	const insertMacros = ( macros ) => {
-		const content = (
-			settings.content || ''
-		) + '%' + macros + '%';
-		onChangeSetting( content, 'content' );
-	};
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <>
@@ -158,23 +151,21 @@ function SendEmailRender( {
 			onChange={ ( newValue ) => onChangeSetting( newValue,
 				'content_type' ) }
 		/>
-		<div className="jet-form-editor__macros-wrap">
+		<AdvancedModalControl
+			value={ settings.content }
+			label={ label( 'content' ) }
+			onChangeMacros={ name => onChangeSettingObj( {
+				content: (
+					settings?.content ?? ''
+				) + name,
+			} ) }
+		>
 			<TextareaControl
-				key="content"
 				value={ settings.content }
-				label={ label( 'content' ) }
 				help={ help( 'content' ) }
-				onChange={ ( newValue ) => {
-					onChangeSetting( newValue, 'content' );
-				} }
+				onChange={ content => onChangeSettingObj( { content } ) }
 			/>
-			<MacrosInserter
-				fields={ formFields }
-				onFieldClick={ insertMacros }
-				customMacros={ source.customMacros }
-				zIndex={ 10000000 }
-			/>
-		</div>
+		</AdvancedModalControl>
 		<BaseControl
 			label={ label( 'attachments' ) }
 			className={ 'control-flex' }

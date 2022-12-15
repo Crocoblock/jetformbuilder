@@ -4,6 +4,7 @@ import BaseHelp from '../../components/BaseHelp';
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
 import useIsHasAttribute from '../../hooks/useIsHasAttribute';
+import ContainersList from '../../components/ContainersList';
 
 const {
 	      __,
@@ -65,13 +66,7 @@ function DynamicValues() {
 				showTooltip
 			>(?)</Button>
 		</BaseHelp>
-		{ Boolean( groups.length ) ? <Flex
-			direction={ 'column' }
-			align={ 'center' }
-			style={ {
-				marginBottom: '1em',
-			} }
-		>
+		{ Boolean( groups.length ) ? <ContainersList>
 			<DynamicItem
 				key={ uniqKey( groups[ 0 ].id ) }
 				current={ groups[ 0 ] }
@@ -89,7 +84,7 @@ function DynamicValues() {
 					setOpenModal={ setOpenModal }
 				/>
 			</> ) }
-		</Flex> : null }
+		</ContainersList> : null }
 		<Button
 			icon={ 'plus-alt2' }
 			isSecondary

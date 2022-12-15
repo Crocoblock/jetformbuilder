@@ -146,6 +146,12 @@ import ToggleControl from './components/ToggleControl';
 import BaseAction from './actions/abstract/BaseAction';
 import addComputedField from './actions/helpers/addComputedField';
 import BaseComputedField from './actions/abstract/BaseComputedField';
+import DetailsContainer from './components/DetailsContainer';
+import HoverContainer from './components/HoverContainer';
+import getCurrentInnerBlocks from './blocks/helpers/getCurrentInnerBlocks';
+import ContainersList from './components/ContainersList';
+import HumanReadableConditions
+	from './block-conditions/components/HumanReadableConditions';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -223,6 +229,10 @@ window.JetFBComponents = {
 	ToggleControl,
 	BaseAction,
 	BaseComputedField,
+	DetailsContainer,
+	HoverContainer,
+	ContainersList,
+	HumanReadableConditions,
 };
 
 // JFBFunctions
@@ -256,6 +266,7 @@ window.JetFBActions = {
 	addDetail,
 	column,
 	addComputedField,
+	getCurrentInnerBlocks,
 };
 
 // JFBHooks

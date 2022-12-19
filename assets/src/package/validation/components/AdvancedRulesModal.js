@@ -2,7 +2,7 @@ import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
 import Repeater from '../../repeater/components/repeater';
 import RepeaterAddNew from '../../repeater/components/repeater.add.new';
-import AdvancedRuleItem from './AdvancedRuleItem';
+import AdvancedRuleModalItem from './AdvancedRuleModalItem';
 import RepeaterState from '../../repeater/components/repeater.state';
 
 const {
@@ -32,7 +32,7 @@ function AdvancedRulesModal() {
 
 	return <RepeaterState state={ setCurrent }>
 		<Repeater items={ current }>
-			<AdvancedRuleItem/>
+			<AdvancedRuleModalItem/>
 		</Repeater>
 		<RepeaterAddNew>
 			{ __( 'Add Rule', 'jet-form-builder' ) }

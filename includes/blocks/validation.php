@@ -176,7 +176,12 @@ class Validation implements Arrayable {
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
 
 		if ( ! empty( $rules ) ) {
-			$block->add_attribute( 'data-validation-rules', Tools::encode_json( $rules ) );
+			$this->prepare_rules( $rules );
+
+			$block->add_attribute(
+				'data-validation-rules',
+				Tools::encode_json( $rules )
+			);
 		}
 
 		/**
@@ -261,6 +266,12 @@ class Validation implements Arrayable {
 			'formats'       => $this->formats(),
 			'rule_types'    => $this->rule_types(),
 		);
+	}
+
+	public function prepare_rules( array &$rules ) {
+		foreach ( $rules as &$rule ) {
+			$rule['value'] = jet_fb_parse_dynamic( $rule['value'] ?? '' );
+		}
 	}
 
 }

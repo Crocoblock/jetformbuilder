@@ -152,6 +152,8 @@ import getCurrentInnerBlocks from './blocks/helpers/getCurrentInnerBlocks';
 import ContainersList from './components/ContainersList';
 import HumanReadableConditions
 	from './block-conditions/components/HumanReadableConditions';
+import humanReadableCondition
+	from './block-conditions/helpers/humanReadableCondition';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -267,6 +269,7 @@ window.JetFBActions = {
 	column,
 	addComputedField,
 	getCurrentInnerBlocks,
+	humanReadableCondition,
 };
 
 // JFBHooks

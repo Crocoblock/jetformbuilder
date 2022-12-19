@@ -87,7 +87,15 @@ export default function ConditionalBlockEdit( props ) {
 				title={ __( 'Conditions', 'jet-form-builder' ) }
 				initialOpen
 			>
-				<p><b>{ functionDisplay }</b></p>
+				<p className={ 'jet-fb flex ai-center gap-05em' }>
+					<b>{ functionDisplay }</b>
+					<Button
+						isTertiary
+						isSmall
+						icon={ 'edit' }
+						onClick={ () => setShowModal( true ) }
+					/>
+				</p>
 				<ConditionalModalContext.Provider value={ {
 					showModal, setShowModal,
 				} }>

@@ -9,6 +9,9 @@ const {
 	      ToggleControl,
       } = JetFBComponents;
 const {
+	      humanReadableCondition,
+      } = JetFBActions;
+const {
 	      useState,
       } = wp.element;
 const {
@@ -120,12 +123,15 @@ export default function () {
 
 	const RepeaterWithHead = <RepeaterHeadContext.Provider
 		value={ {
-			isSupported: item => item.or_operator,
-			render: () => <span
+			isSupported: () => true,
+			render: ( { currentItem } ) => <span
 				className={ 'repeater-item-title' }
-			>
-				{ __( 'OR', 'jet-form-builder' ) }
-			</span>,
+				dangerouslySetInnerHTML={ {
+					__html: currentItem?.or_operator
+					        ? __( 'OR', 'jet-form-builder' )
+					        : humanReadableCondition( currentItem ),
+				} }
+			/>,
 		} }
 	>
 		{ FullRepeater }

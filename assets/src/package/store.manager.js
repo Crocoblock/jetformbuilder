@@ -4,6 +4,7 @@ import events from './events/store';
 import blockConditions from './block-conditions/store';
 import actionButtons from './action-buttons/store';
 import macros from './macros.button/store';
+import validation from './validation/store';
 import './migrations/migrate.gateways.settings';
 
 const {
@@ -14,15 +15,21 @@ const {
 	      addAction,
       } = wp.hooks;
 
-register( gateways );
-register( events );
-register( actions );
-register( blockConditions );
-register( actionButtons );
-register( macros );
+const stores = [
+	gateways,
+	events,
+	actions,
+	actionButtons,
+	blockConditions,
+	macros,
+	validation,
+];
+
+stores.forEach( register );
 
 dispatch( 'jet-forms/events' ).register( window.jetFormEvents.types );
 dispatch( 'jet-forms/events' ).lockActions();
+dispatch( 'jet-forms/validation' ).register( window.jetFormValidation );
 
 addAction(
 	'jet.fb.change.blockConditions.renderState',

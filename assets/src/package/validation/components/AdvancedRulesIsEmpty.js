@@ -2,7 +2,6 @@ import EditRulesModalContext from './EditRulesModalContext';
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import DetailsContainer from '../../components/DetailsContainer';
 import HoverContainer from '../../components/HoverContainer';
-import HumanReadableRule from './HumanReadableRule';
 
 const {
 	      useContext,
@@ -15,7 +14,7 @@ const {
 	      Button,
       } = wp.components;
 
-function AdvancedRuleItem( { rule, index = 0 } ) {
+function AdvancedRulesIsEmpty() {
 	const { setShowModal }              = useContext( EditRulesModalContext );
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
@@ -30,48 +29,33 @@ function AdvancedRuleItem( { rule, index = 0 } ) {
 			<Button
 				isSmall
 				isSecondary
-				icon={ 'edit' }
+				icon={ 'plus-alt2' }
 				onClick={ () => {
 					setAttributes( {
 						validation: {
 							...attributes.validation,
-							rules: attributes.validation.rules.map(
-								( current, currentIndex ) => {
-									current.__visible = index === currentIndex;
-									return current;
-								},
-							),
+							rules: [
+								{ __visible: true },
+							],
 						},
 					} );
 					setShowModal( prev => !prev );
 				} }
 			>
-				{ __( 'Edit', 'jet-form-builder' ) }
-			</Button>
-			<Button
-				isSmall
-				isDestructive
-				icon={ 'trash' }
-				onClick={ () => {
-					setAttributes( {
-						validation: {
-							...attributes.validation,
-							rules: attributes.validation.rules.filter(
-								( current, currentIndex ) => (
-									currentIndex !== index
-								),
-							),
-						},
-					} );
-				} }
-			>
-				{ __( 'Delete', 'jet-form-builder' ) }
+				{ __( 'Add new', 'jet-form-builder' ) }
 			</Button>
 		</HoverContainer>
 		<DetailsContainer>
-			<HumanReadableRule rule={ rule }/>
+			<span data-title={ __(
+				'You have no rules for this field.',
+				'jet-form-builder',
+			) }/>
+			<span data-title={ __(
+				'Please click here to add new.',
+				'jet-form-builder',
+			) }/>
 		</DetailsContainer>
 	</div>;
 }
 
-export default AdvancedRuleItem;
+export default AdvancedRulesIsEmpty;

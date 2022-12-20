@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Tools;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -96,15 +97,12 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 			return jet_fb_action_handler()->request_data;
 		}
 		$record = $this->get_scenario_row( 'record' );
-
-		$request = Record_Fields_View::get_request_list( $record['id'] ?? 0 );
+		$values = Tools::apply_record( $record );
 
 		// For backward compatibility with JetAppointment & JetBooking
-		jet_fb_gateway_current()->set_form_data( $request );
-		jet_fb_action_handler()->add_request( $request );
-		jet_fb_handler()->set_referrer( $record['referrer'] ?? '' );
+		jet_fb_gateway_current()->set_form_data( $values );
 
-		return $request;
+		return $values;
 	}
 
 	public function init_actions() {

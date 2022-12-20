@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Query_Conditions_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Actions\Methods\Form_Record\Tools as RecordTools;
 
 class Record_Fields_View extends View_Base {
 
@@ -66,16 +67,10 @@ class Record_Fields_View extends View_Base {
 	public static function get_request_list( $record_id, $value_key = 'field_name', $label_key = 'field_value' ): array {
 		$request = static::get_request( $record_id );
 
-		foreach ( $request as &$field ) {
-			$attrs = Tools::decode_json( $field['field_attrs'] );
-
-			if ( empty( $attrs['is_encoded'] ) ) {
-				continue;
-			}
-
-			$field['field_value'] = Tools::decode_json( $field['field_value'] );
-		}
+		RecordTools::parse_values( $request );
 
 		return Tools::prepare_list_for_js( $request, $value_key, $label_key, true );
 	}
+
+
 }

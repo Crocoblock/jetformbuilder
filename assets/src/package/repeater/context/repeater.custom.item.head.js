@@ -1,6 +1,8 @@
 const { createContext } = wp.element;
 
-export default createContext( {
+const RepeaterHeadContext = createContext( {
 	isSupported: item => false,
 	render: ({currentItem, index}) => null,
 } );
+
+export default RepeaterHeadContext;

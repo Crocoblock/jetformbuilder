@@ -6,7 +6,7 @@ const {
 const {
 	      addAction,
 	      addFilter,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 function CheckOutInput() {
 	InputData.call( this );

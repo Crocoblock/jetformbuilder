@@ -73,7 +73,7 @@ ReactiveVar.prototype = {
 		return value;
 	},
 	setIfEmpty( newValue ) {
-		if ( !isEmpty( newValue ) ) {
+		if ( !isEmpty( this.current ) ) {
 			return;
 		}
 

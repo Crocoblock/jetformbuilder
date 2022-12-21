@@ -1,7 +1,7 @@
 import AdvancedReporting from './AdvancedReporting';
 import AdvancedRestriction from './restrictions/AdvancedRestriction';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.reporting',

@@ -11,7 +11,7 @@ window.JetFormBuilderMain = {
 					if ( Boolean( window.JetFormBuilderSettings.devmode ) ) {
 						console.warn(
 							`This method is deprecated since JetFormBuilder 3.0.0. 
-Use wp.hooks.addFilter instead.`,
+Use JetPlugins.hooks.addFilter instead.`,
 						);
 					}
 

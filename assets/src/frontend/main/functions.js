@@ -4,7 +4,7 @@ import MaxFileSizeHtmlAttr from './attrs/MaxFileSizeHtmlAttr';
 import RemainingCalcAttr from './attrs/RemainingCalcAttr';
 import FileExtensionHtmlAttr from './attrs/FileExtensionHtmlAttr';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters } = JetPlugins.hooks;
 
 /**
  * @param callbacks {Function[]}

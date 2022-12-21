@@ -47,6 +47,7 @@ function ValidationModal() {
 				message={ message }
 				messages={ current }
 				update={ setCurrent }
+				value={ current[ message.id ] }
 				className={ index !== 0 ? 'jet-control-full' : '' }
 				style={ index !== 0 ? {} : { paddingBottom: '5px' } }
 			/> ) }

@@ -20,7 +20,7 @@ import SubtractMinFilter from './filters/SubtractMinFilter';
 import SubtractMonthFilter from './filters/SubtractMonthFilter';
 import SubtractYearFilter from './filters/SubtractYearFilter';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters } = JetPlugins.hooks;
 
 /**
  * @type {array<Filter>}

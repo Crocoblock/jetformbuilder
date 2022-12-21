@@ -5,7 +5,7 @@ function ReloadSubmit( form ) {
 
 	this.submit = function () {
 		const { rootNode }     = this.form.observable;
-		const { applyFilters } = wp.hooks;
+		const { applyFilters } = JetPlugins.hooks;
 
 		Promise.all(
 			applyFilters(

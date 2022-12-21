@@ -6,7 +6,7 @@ import OrOperatorItem from './OrOperatorItem';
 import DateTimeConditionChecker from './DateTimeConditionChecker';
 import ConditionRenderStateItem from './ConditionRenderStateItem';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters } = JetPlugins.hooks;
 
 const getItemTypes = () => applyFilters(
 	'jet.fb.conditional.types',

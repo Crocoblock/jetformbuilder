@@ -10,7 +10,7 @@ const {
 	      validateInputs,
       } = JetFormBuilderFunctions;
 
-const { addAction, doAction } = wp.hooks;
+const { addAction, doAction } = JetPlugins.hooks;
 
 /**
  * @property {array<InputData>|*} inputs

@@ -1,6 +1,6 @@
 import { parseInput } from './functions';
 
-const { addAction } = wp.hooks;
+const { addAction } = JetPlugins.hooks;
 
 addAction(
 	'jet.fb.observe.after',

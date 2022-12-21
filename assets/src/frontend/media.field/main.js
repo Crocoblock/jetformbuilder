@@ -1,7 +1,7 @@
 import FileData from './input';
 import SignalFile from './signal';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.inputs',

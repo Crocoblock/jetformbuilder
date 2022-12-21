@@ -1,8 +1,10 @@
 const { createContext } = wp.element;
 
-export default createContext( {
+const RepeaterButtonsContext = createContext( {
 	edit: item => true,
 	move: item => true,
 	clone: item => true,
 	delete: item => true,
 } );
+
+export default RepeaterButtonsContext;

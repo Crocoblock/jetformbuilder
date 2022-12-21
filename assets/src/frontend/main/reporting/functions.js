@@ -7,7 +7,7 @@ import InputData from '../inputs/InputData';
 
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 const getReportTypes = () => applyFilters(
 	'jet.fb.reporting',

@@ -3,7 +3,7 @@ import FileExtensionRestriction from './FileExtensionRestriction';
 
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 const getSingleFileRestrictions = () => applyFilters(
 	'jet.fb.restrictions.file',

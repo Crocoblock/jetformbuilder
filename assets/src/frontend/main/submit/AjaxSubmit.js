@@ -10,7 +10,7 @@ function AjaxSubmit( form ) {
 
 	this.submit        = function () {
 		const $form            = jQuery( this.form.observable.rootNode );
-		const { applyFilters } = wp.hooks;
+		const { applyFilters } = JetPlugins.hooks;
 
 		Promise.all(
 			applyFilters(

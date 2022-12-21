@@ -1,6 +1,6 @@
 const {
 	      addAction,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 /**
  * @param input {InputData}

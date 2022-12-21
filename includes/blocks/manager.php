@@ -226,12 +226,19 @@ class Manager {
 		$this->_registered_scripts = true;
 
 		wp_register_script(
+			'jet-plugins',
+			Plugin::instance()->plugin_url( 'assets/js/frontend/lib/jet.plugins{min}.js' ),
+			array( 'jquery' ),
+			'1.0.0',
+			true
+		);
+
+		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/main{min}.js' ),
 			array(
-				'jquery',
+				'jet-plugins',
 				'wp-i18n',
-				'wp-hooks',
 				'wp-api-fetch',
 			),
 			Plugin::instance()->get_version(),
@@ -242,7 +249,7 @@ class Manager {
 			self::LISTING_OPTIONS_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/listing.options{min}.js' ),
 			array(
-				'wp-hooks',
+				self::MAIN_SCRIPT_HANDLE
 			),
 			Plugin::instance()->get_version(),
 			true

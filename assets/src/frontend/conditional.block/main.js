@@ -3,7 +3,7 @@ import ConditionalBlock from './ConditionalBlock';
 import ConditionItem from './ConditionItem';
 import ConditionsList from './ConditionsList';
 
-const { addAction } = wp.hooks;
+const { addAction } = JetPlugins.hooks;
 
 addAction(
 	'jet.fb.observe.after',

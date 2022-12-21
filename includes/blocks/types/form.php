@@ -39,8 +39,9 @@ class Form extends Base {
 	 */
 	public function render_callback_field( array $attrs, $content = null, $wp_block = null ) {
 		return sprintf(
-			'<div class="jet-fb-form-block">%s</div>',
-			$this->render_form( $attrs, $content, $wp_block )
+			'<div class="jet-fb-form-block" data-is-block="jet-forms/%2$s">%1$s</div>',
+			$this->render_form( $attrs, $content, $wp_block ),
+			$this->get_name()
 		);
 	}
 

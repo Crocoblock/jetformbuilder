@@ -11,7 +11,7 @@ import InputData from '../inputs/InputData';
 const {
 	      applyFilters: wpFilters,
 	      addFilter,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 const {
 	      applyFilters: deprecatedApplyFilters = false,
@@ -241,8 +241,11 @@ CalculatedFormula.prototype = {
 
 			return (
 				       null === result || '' === result
-			       ) ? 0 : result;
+			       ) ? this.emptyValue() : result;
 		} ).join( '' );
+	},
+	emptyValue() {
+		return '';
 	},
 	calculate() {
 		if ( !this.parts.length && !this.forceFunction ) {

@@ -10,7 +10,7 @@ const {
 const {
 	      addAction,
 	      addFilter,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 function AppointmentInput() {
 	InputData.call( this );

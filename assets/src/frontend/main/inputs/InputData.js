@@ -5,7 +5,7 @@ import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
 import { setAttrs } from '../functions';
 
-const { doAction } = wp.hooks;
+const { doAction } = JetPlugins.hooks;
 
 /**
  * @property {string} rawName

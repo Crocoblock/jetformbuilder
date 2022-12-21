@@ -10,7 +10,7 @@ import { validateInputsAll } from './reporting/functions';
 
 const {
 	      doAction,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 function Observable( parent = null ) {
 	this.parent     = parent;

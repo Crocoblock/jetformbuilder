@@ -7,6 +7,8 @@ const {
 	      BlockName,
 	      BlockDescription,
 	      BlockLabel,
+	      MacrosFields,
+	      ClientSideMacros,
       } = JetFBComponents;
 
 const {
@@ -33,9 +35,6 @@ const {
 
 const NumberControl = __experimentalNumberControl;
 
-const { useState, RawHTML } = wp.element;
-const { applyFilters }      = wp.hooks;
-
 const help = {
 	calc_hidden: __( 'Check this to hide calculated field' ),
 };
@@ -50,53 +49,22 @@ export default function EditCalculated( props ) {
 		      editProps: { uniqKey },
 	      } = props;
 
-	const insertMacros  = ( macros ) => {
+	const insertMacros = ( macros ) => {
 		setAttributes( {
 			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
 		} );
 	};
-	const togglePopover = () => {
-		const fields = getFieldsWithoutCurrent().map( ( { value } ) => (
-			'%' + value + '%'
-		) );
-
-		setFormFields( applyFilters( 'jet.fb.calculated.field.available.fields',
-			fields ) );
-		setShowMacros( toggle => !toggle );
-	};
-
-	const [ formFields, setFormFields ] = useState( [] );
-	const [ showMacros, setShowMacros ] = useState( false );
 
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
 			{ ...props }
 		>
-			<Button
-				key={ uniqKey( 'show-popover' ) }
-				isTertiary
-				isSmall
-				icon={ showMacros ? 'no-alt' : 'admin-tools' }
-				onClick={ togglePopover }
-			/>
-			{ showMacros && <Popover
-				key={ uniqKey( 'Popover' ) }
-				placement={ 'bottom-end' }
-			>
-				{ formFields.length && <PanelBody title={ 'Form Fields' }>
-					{ formFields.map( ( value, index ) => <div
-							key={ uniqKey( `formFields-${ index }` ) }>
-							<Button
-								isLink
-								onClick={ () => {
-									insertMacros( value );
-								} }
-							>{ value }</Button>
-						</div>,
-					) }
-				</PanelBody> }
-			</Popover> }
+			<ClientSideMacros withThis>
+				<MacrosFields
+					onClick={ insertMacros }
+				/>
+			</ClientSideMacros>
 		</ToolBarFields>,
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }

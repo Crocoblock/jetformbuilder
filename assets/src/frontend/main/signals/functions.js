@@ -8,7 +8,7 @@ import SignalText from './SignalText';
 
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 const getSignalTypes = () => applyFilters(
 	'jet.fb.signals',

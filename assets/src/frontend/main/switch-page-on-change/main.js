@@ -1,4 +1,4 @@
-const { addAction } = wp.hooks;
+const { addAction } = JetPlugins.hooks;
 
 addAction(
 	'jet.fb.multistep.page.init',

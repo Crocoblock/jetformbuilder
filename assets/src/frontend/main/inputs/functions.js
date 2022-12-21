@@ -11,7 +11,7 @@ import RenderStateData from './RenderStateData';
 
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 /**
  * @type {function(): *}

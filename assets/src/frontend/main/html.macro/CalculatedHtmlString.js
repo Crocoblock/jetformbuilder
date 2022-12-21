@@ -2,7 +2,7 @@ import CalculatedFormula from '../calc.module/CalculatedFormula';
 
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 function CalculatedHtmlString( root, options ) {
 	CalculatedFormula.call( this, root, options );

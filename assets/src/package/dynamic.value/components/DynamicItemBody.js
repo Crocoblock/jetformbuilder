@@ -8,6 +8,8 @@ import PresetButton from '../../preset/components/PresetButton';
 import MacrosFields from '../../macros.button/components/MacrosFields';
 import ConditionItem from '../../block-conditions/components/ConditionItem';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
+import ConditionsRepeaterContextProvider
+	from '../../block-conditions/components/ConditionsRepeaterContextProvider';
 
 const {
 	      __,
@@ -132,9 +134,7 @@ function DynamicItemBody() {
 					<ClientSideMacros withThis>
 						<MacrosFields
 							onClick={ name => updateCurrent( {
-								to_set: (
-									current.to_set ?? ''
-								) + `%${ name }%`,
+								to_set: `${ current.to_set ?? '' }${ name }`,
 							} ) }
 						/>
 					</ClientSideMacros>
@@ -165,9 +165,11 @@ function DynamicItemBody() {
 			help={ currentHelp }
 		/>
 		<RepeaterState state={ updateConditions }>
-			<Repeater items={ current.conditions ?? [] }>
-				<ConditionItem/>
-			</Repeater>
+			<ConditionsRepeaterContextProvider>
+				<Repeater items={ current.conditions ?? [] }>
+					<ConditionItem/>
+				</Repeater>
+			</ConditionsRepeaterContextProvider>
 			<div
 				className={ 'jet-fb flex jc-space-between ai-center' }
 			>

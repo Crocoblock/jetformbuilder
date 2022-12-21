@@ -2,7 +2,7 @@ import MaxFilesRestriction from './MaxFilesRestriction';
 import SingleFileRestriction from './SingleFileRestriction';
 import SizeFormatFilter from './SizeFormatFilter';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.restrictions',

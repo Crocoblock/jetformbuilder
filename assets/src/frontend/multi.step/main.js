@@ -1,7 +1,7 @@
 import { createMultiStep } from './functions';
 import ConditionPageStateItem from './ConditionPageStateItem';
 
-const { addAction, addFilter } = wp.hooks;
+const { addAction, addFilter } = JetPlugins.hooks;
 
 addAction(
 	'jet.fb.observe.after',

@@ -7,6 +7,7 @@ const {
 	      ConditionItem,
 	      RepeaterState,
 	      ToggleControl,
+	      ConditionsRepeaterContextProvider,
       } = JetFBComponents;
 const {
 	      humanReadableCondition,
@@ -112,39 +113,6 @@ export default function () {
 		}
 	) );
 
-	const FullRepeater = <>
-		<Repeater
-			items={ current.conditions ?? [] }
-			onSetState={ updateConditions }
-		>
-			<ConditionItem/>
-		</Repeater>
-	</>;
-
-	const RepeaterWithHead = <RepeaterHeadContext.Provider
-		value={ {
-			isSupported: () => true,
-			render: ( { currentItem } ) => <span
-				className={ 'repeater-item-title' }
-				dangerouslySetInnerHTML={ {
-					__html: currentItem?.or_operator
-					        ? __( 'OR', 'jet-form-builder' )
-					        : humanReadableCondition( currentItem ),
-				} }
-			/>,
-		} }
-	>
-		{ FullRepeater }
-	</RepeaterHeadContext.Provider>;
-
-	const RepeaterComplete = <RepeaterButtonsContext.Provider
-		value={ {
-			edit: item => !item.or_operator,
-		} }
-	>
-		{ RepeaterWithHead }
-	</RepeaterButtonsContext.Provider>;
-
 	return <>
 		<SelectControl
 			key={ uniqKey( 'SelectControl-operator' ) }
@@ -163,7 +131,14 @@ export default function () {
 			settings={ funcSettings }
 			update={ setFuncSettings }
 		/>
-		{ RepeaterComplete }
+		<ConditionsRepeaterContextProvider>
+			<Repeater
+				items={ current.conditions ?? [] }
+				onSetState={ updateConditions }
+			>
+				<ConditionItem/>
+			</Repeater>
+		</ConditionsRepeaterContextProvider>
 		<RepeaterState state={ updateConditions }>
 			<ButtonGroup
 				style={ {

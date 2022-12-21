@@ -2,7 +2,7 @@ import ValueItem from './ValueItem';
 import MultipleValueItem from './MultipleValueItem';
 import ReactiveValue from './ReactiveValue';
 
-const { applyFilters } = wp.hooks;
+const { applyFilters } = JetPlugins.hooks;
 
 const getValues = () => applyFilters(
 	'jet.fb.dynamic.value.types',

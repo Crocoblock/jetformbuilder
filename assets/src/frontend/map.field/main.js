@@ -1,7 +1,7 @@
 import MapFieldData from './input';
 import SignalMapField from './signal';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.inputs',

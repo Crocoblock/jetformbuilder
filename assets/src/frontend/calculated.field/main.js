@@ -1,7 +1,7 @@
 import CalculatedData from './input';
 import SignalCalculated from './signal';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.inputs',

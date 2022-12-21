@@ -17,7 +17,7 @@ import MustEqual from './restrictions/MustEqual';
 import TooEarlyTimestamp from './restrictions/TooEarlyTimestamp';
 import TooLateTimestamp from './restrictions/TooLateTimestamp';
 
-const { applyFilters, addFilter } = wp.hooks;
+const { applyFilters, addFilter } = JetPlugins.hooks;
 
 const getAdvancedRules = () => applyFilters(
 	'jet.fb.advanced.rules',

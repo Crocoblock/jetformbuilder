@@ -16,6 +16,7 @@ import { validateInputs, validateInputsAll } from './reporting/functions';
 import './calc.module/main';
 import './switch-page-on-change/main';
 import { getParsedName } from './inputs/functions';
+import initForm from './init/initForm';
 
 (
 	function ( $ ) {
@@ -52,12 +53,11 @@ import { getParsedName } from './inputs/functions';
 		$( initCommon );
 		$( window ).on( 'elementor/frontend/init', initElementor );
 
-		$( window ).on(
-			'jet-popup/ajax/frontend-init/before',
-			( event, { $container } ) => {
-				initCommon( $container );
-				initElementor();
+		JetPlugins.bulkBlocksInit( [
+			{
+				block: 'jet-forms/form-block',
+				callback: initForm,
 			},
-		);
+		] );
 	}
 )( jQuery );

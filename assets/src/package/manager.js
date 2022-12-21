@@ -154,6 +154,8 @@ import HumanReadableConditions
 	from './block-conditions/components/HumanReadableConditions';
 import humanReadableCondition
 	from './block-conditions/helpers/humanReadableCondition';
+import ConditionsRepeaterContextProvider
+	from './block-conditions/components/ConditionsRepeaterContextProvider';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -235,6 +237,7 @@ window.JetFBComponents = {
 	HoverContainer,
 	ContainersList,
 	HumanReadableConditions,
+	ConditionsRepeaterContextProvider,
 };
 
 // JFBFunctions

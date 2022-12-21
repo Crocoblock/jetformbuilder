@@ -1,7 +1,7 @@
 import RepeaterData from './input';
 import SignalRepeater from './signal';
 
-const { addFilter } = wp.hooks;
+const { addFilter } = JetPlugins.hooks;
 
 addFilter(
 	'jet.fb.inputs',

@@ -2,7 +2,7 @@ import ConditionsBlockList from './ConditionsBlockList';
 
 const {
 	      doAction,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 const {
 	      ReactiveVar,
       } = JetFormBuilderAbstract;

@@ -6,7 +6,7 @@ const {
       } = window.JetFormBuilderAbstract;
 const {
 	      applyFilters,
-      } = wp.hooks;
+      } = JetPlugins.hooks;
 
 const {
 	      applyFilters: deprecatedApplyFilters = false,
@@ -62,6 +62,10 @@ function CalculatedData() {
 			       ? response
 			       : filterResult;
 		};
+
+		formula.emptyValue = () => 'number' === this.valueTypeProp
+		                           ? 0
+		                           : '';
 		formula.setResult();
 		this.onChange();
 

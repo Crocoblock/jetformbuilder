@@ -5,7 +5,7 @@ import Hour_In_Sec from './const.namespace/Hour_In_Sec';
 import Day_In_Sec from './const.namespace/Day_In_Sec';
 import Year_In_Sec from './const.namespace/Year_In_Sec';
 
-const { applyFilters: wpApplyFilters } = wp.hooks;
+const { applyFilters: wpApplyFilters } = JetPlugins.hooks;
 
 const getStaticFunctions = () => wpApplyFilters(
 	'jet.fb.static.functions',

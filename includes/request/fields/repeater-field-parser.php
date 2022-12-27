@@ -38,9 +38,13 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 			$this->file = array();
 		}
 
-		$indexes = array_keys( $this->value );
+		$indexes      = array_keys( $this->value );
+		$file_indexes = array_keys( $this->file );
 
-		return count( $indexes ) ? $indexes : array_keys( $this->file );
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/2095
+		 */
+		return max( $indexes, $file_indexes );
 	}
 
 }

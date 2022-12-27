@@ -110,7 +110,7 @@ const EditCustomRenderStates = ( {
 		isUseActions={ false }
 		classNames={ [ 'width-45' ] }
 	>
-		<NoticeInfo style={ { marginBottom: '1em' } }/>
+		{/*<NoticeInfo style={ { marginBottom: '1em' } }/>*/}
 		<div className={ 'jet-fb with-button' }>
 			<TextControl
 				value={ value }

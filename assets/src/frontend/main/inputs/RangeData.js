@@ -18,7 +18,7 @@ function RangeData() {
 			'.jet-form-builder__field-value-number',
 		);
 
-		this.numberNode.textContent = '' + node.max || 100;
+		this.numberNode.textContent = '' + node.value || node.max || 100;
 	};
 }
 

@@ -25,9 +25,13 @@ function FieldItem( { onClick } ) {
 
 function MacrosFields( {
 	onClick = () => {},
+	withCurrent = false,
 	...props
 } ) {
-	return <MacrosFieldsTemplate { ...props }>
+	return <MacrosFieldsTemplate
+		withCurrent={ withCurrent }
+		{ ...props }
+	>
 		<FieldItem onClick={ onClick }/>
 	</MacrosFieldsTemplate>;
 }

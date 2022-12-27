@@ -27,6 +27,7 @@ class CallWebHookRender extends wp.element.Component {
 		return <AdvancedModalControl
 			value={ settings.webhook_url }
 			label={ label( 'webhook_url' ) }
+			macroWithCurrent
 			onChangeMacros={ name => onChangeSettingObj( {
 				webhook_url: (
 					settings.webhook_url ?? ''

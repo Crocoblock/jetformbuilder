@@ -154,6 +154,7 @@ function SendEmailRender( {
 		<AdvancedModalControl
 			value={ settings.content }
 			label={ label( 'content' ) }
+			macroWithCurrent
 			onChangeMacros={ name => onChangeSettingObj( {
 				content: (
 					settings?.content ?? ''

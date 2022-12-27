@@ -113,6 +113,7 @@ function RedirectToPageRender( props ) {
 			{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
 				value={ settings.redirect_url }
 				label={ label( 'redirect_url' ) }
+				macroWithCurrent
 				onChangePreset={ redirect_url => onChangeSettingObj(
 					{ redirect_url },
 				) }

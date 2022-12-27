@@ -15,6 +15,7 @@ function AdvancedModalControl( {
 	label,
 	onChangePreset = false,
 	onChangeMacros = false,
+	macroWithCurrent = false,
 } ) {
 
 	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedModalControl' );
@@ -39,6 +40,7 @@ function AdvancedModalControl( {
 					/> }
 					{ false !== onChangeMacros && <MacrosFields
 						onClick={ onChangeMacros }
+						withCurrent={ macroWithCurrent }
 					/> }
 				</Flex>
 			</FlexItem>

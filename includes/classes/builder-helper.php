@@ -11,6 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Builder_Helper {
 
+	private static $html_ids = array();
+
 	/**
 	 * @param $object_id
 	 * @param $args
@@ -73,6 +75,16 @@ class Builder_Helper {
 		jet_engine()->listings->data->set_current_object( $wp_query->queried_object );
 
 		return $result;
+	}
+
+	public static function get_unique_id( string $html_id ): string {
+		if ( ! array_key_exists( $html_id, self::$html_ids ) ) {
+			self::$html_ids[ $html_id ] = 0;
+
+			return $html_id;
+		}
+
+		return sprintf( '%1$s_%2$d', $html_id, ++ self::$html_ids[ $html_id ] );
 	}
 
 }

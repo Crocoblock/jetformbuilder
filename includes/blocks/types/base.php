@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
+use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Form_Break;
@@ -409,7 +410,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			);
 		}
 
-		return $name;
+		return Builder_Helper::get_unique_id( $name );
 	}
 
 	/**

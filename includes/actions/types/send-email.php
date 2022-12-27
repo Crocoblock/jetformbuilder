@@ -67,7 +67,7 @@ class Send_Email extends Base {
 				'To apply multiple mailing addresses, separate them with commas',
 				'jet-form-builder'
 			),
-			'from_field' => __(
+			'from_field'   => __(
 				'To apply multiple mailing addresses, you can select a "Checkbox Field" 
 				or a "Select field" with enabled "Is multiple" option.',
 				'jet-form-builder'
@@ -270,6 +270,7 @@ class Send_Email extends Base {
 		$content_type = $this->get_content_type();
 		$subject      = $this->parser->parse_macros( $subject );
 		$message      = $this->parser->parse_macros( $message );
+		$message      = do_shortcode( $message );
 
 		if ( 'text/html' === $content_type ) {
 			$message = make_clickable( wpautop( $message ) );

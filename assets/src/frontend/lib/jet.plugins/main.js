@@ -25,9 +25,15 @@ class JetPlugins {
 		$scope = $scope || jQuery( 'body' );
 
 		$scope.find( '[data-is-block*="/"]' ).each( ( index, el ) => {
-			this.hooks.doAction( this.hookNameFromBlock( el.dataset.isBlock ), jQuery( el ) );
+			this.initBlock( el );
 		} );
 
+	}
+
+	initBlock( el ) {
+		if ( el.dataset.isBlock ) {
+			this.hooks.doAction( this.hookNameFromBlock( el.dataset.isBlock ), jQuery( el ) );
+		}
 	}
 
 	bulkBlocksInit( blocks ) {

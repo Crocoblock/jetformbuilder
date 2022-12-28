@@ -43,6 +43,13 @@ function MacrosFieldsTemplate( {
 		),
 	];
 
+	if ( !fullFields.length &&
+		!macros?.extra?.length &&
+		!macros?.filters?.length
+	) {
+		return null;
+	}
+
 	return <MacrosButtonTemplate { ...props }>
 		{ Boolean( fullFields.length ) && <GroupItemsPopover
 			title={ __( 'Fields:', 'jet-form-builder' ) }

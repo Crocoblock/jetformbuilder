@@ -156,6 +156,7 @@ import humanReadableCondition
 	from './block-conditions/helpers/humanReadableCondition';
 import ConditionsRepeaterContextProvider
 	from './block-conditions/components/ConditionsRepeaterContextProvider';
+import ServerSideMacros from './macros.button/components/ServerSideMacros';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -238,6 +239,7 @@ window.JetFBComponents = {
 	ContainersList,
 	HumanReadableConditions,
 	ConditionsRepeaterContextProvider,
+	ServerSideMacros,
 };
 
 // JFBFunctions

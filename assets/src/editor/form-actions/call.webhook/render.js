@@ -1,8 +1,6 @@
 const {
-	      getFormFieldsBlocks,
-      } = JetFBActions;
-const {
 	      AdvancedModalControl,
+	      ServerSideMacros,
       } = JetFBComponents;
 
 /**
@@ -12,19 +10,11 @@ const {
 	      TextControl,
       } = wp.components;
 
-class CallWebHookRender extends wp.element.Component {
+function CallWebHookRender( { settings, label, onChangeSettingObj } ) {
 
-	constructor( props ) {
-		super( props );
-
-		this.fields = getFormFieldsBlocks();
-	}
-
-	render() {
-		const { settings, label, onChangeSettingObj } = this.props;
-
-		/* eslint-disable jsx-a11y/no-onchange */
-		return <AdvancedModalControl
+	/* eslint-disable jsx-a11y/no-onchange */
+	return <ServerSideMacros>
+		<AdvancedModalControl
 			value={ settings.webhook_url }
 			label={ label( 'webhook_url' ) }
 			macroWithCurrent
@@ -41,9 +31,8 @@ class CallWebHookRender extends wp.element.Component {
 					{ webhook_url },
 				) }
 			/> }
-		</AdvancedModalControl>;
-		/* eslint-enable jsx-a11y/no-onchange */
-	}
+		</AdvancedModalControl>
+	</ServerSideMacros>;
 }
 
 export default CallWebHookRender;

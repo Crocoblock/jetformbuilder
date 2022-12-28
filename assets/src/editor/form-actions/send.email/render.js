@@ -1,5 +1,6 @@
 const {
 	      AdvancedModalControl,
+	      ServerSideMacros,
       } = JetFBComponents;
 
 const {
@@ -151,22 +152,24 @@ function SendEmailRender( {
 			onChange={ ( newValue ) => onChangeSetting( newValue,
 				'content_type' ) }
 		/>
-		<AdvancedModalControl
-			value={ settings.content }
-			label={ label( 'content' ) }
-			macroWithCurrent
-			onChangeMacros={ name => onChangeSettingObj( {
-				content: (
-					settings?.content ?? ''
-				) + name,
-			} ) }
-		>
-			<TextareaControl
+		<ServerSideMacros>
+			<AdvancedModalControl
 				value={ settings.content }
-				help={ help( 'content' ) }
-				onChange={ content => onChangeSettingObj( { content } ) }
-			/>
-		</AdvancedModalControl>
+				label={ label( 'content' ) }
+				macroWithCurrent
+				onChangeMacros={ name => onChangeSettingObj( {
+					content: (
+						settings?.content ?? ''
+					) + name,
+				} ) }
+			>
+				<TextareaControl
+					value={ settings.content }
+					help={ help( 'content' ) }
+					onChange={ content => onChangeSettingObj( { content } ) }
+				/>
+			</AdvancedModalControl>
+		</ServerSideMacros>
 		<BaseControl
 			label={ label( 'attachments' ) }
 			className={ 'control-flex' }

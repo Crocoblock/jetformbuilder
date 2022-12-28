@@ -4,19 +4,10 @@ import { observeFieldRestriction } from '../functions';
 function MatchRegexp() {
 	CustomBaseRestriction.call( this );
 
-	this.getSlug  = function () {
+	this.getSlug = function () {
 		return 'regexp';
 	};
-	this.validate = function () {
-		const value = this.getValue();
 
-		if ( !value ) {
-			return true;
-		}
-		const regexp = new RegExp( this.attrs.value, 'g' );
-
-		return regexp.test( value );
-	};
 }
 
 MatchRegexp.prototype          = Object.create(
@@ -25,6 +16,16 @@ MatchRegexp.prototype          = Object.create(
 MatchRegexp.prototype.setAttrs = function ( attrs ) {
 	CustomBaseRestriction.prototype.setAttrs.call( this, attrs );
 	observeFieldRestriction.call( this );
+};
+MatchRegexp.prototype.validate = function () {
+	const value = this.getValue();
+
+	if ( !value ) {
+		return true;
+	}
+	const regexp = new RegExp( this.attrs.value, 'g' );
+
+	return regexp.test( value );
 };
 
 export default MatchRegexp;

@@ -8,7 +8,7 @@ function MustEqual() {
 		return 'equal';
 	};
 	this.validate = function () {
-		const value = String( this.getValue() );
+		const value = this.getValue();
 
 		return !value || value === this.attrs.value;
 	};

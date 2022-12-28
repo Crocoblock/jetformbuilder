@@ -169,10 +169,11 @@ class Media_Field extends Base {
 	}
 
 	public function get_max_size_message(): string {
-		$message = $this->block_attrs['validation']['messages']['max_size'];
+		$on_empty = 'Maximum file size: %max_size%';
+		$message  = $this->block_attrs['validation']['messages']['max_size'] ?? $on_empty;
 
 		if ( empty( $message ) ) {
-			$message = 'Maximum file size: %max_size%';
+			$message = $on_empty;
 		}
 
 		return str_replace( '%max_size%', size_format( $this->get_max_size() ), $message );

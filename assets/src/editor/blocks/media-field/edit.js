@@ -131,7 +131,8 @@ export default function MediaEdit( props ) {
 							'Maximum file size message',
 							'jet-form-builder',
 						) }
-						value={ attributes.validation.messages.max_size }
+						value={ attributes?.validation?.messages?.max_size ??
+						'Maximum file size: %max_size%' }
 						onChange={ max_size => {
 							setAttributes( {
 								validation: {

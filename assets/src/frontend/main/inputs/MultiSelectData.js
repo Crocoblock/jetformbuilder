@@ -28,6 +28,9 @@ function MultiSelectData() {
 	this.valueType      = function () {
 		return Array;
 	};
+	this.onClear        = function () {
+		this.silenceSet( [] );
+	};
 }
 
 MultiSelectData.prototype = Object.create( InputData.prototype );

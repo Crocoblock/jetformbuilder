@@ -9,7 +9,6 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
-use phpDocumentor\Reflection\Types\False_;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -83,12 +82,9 @@ class Redirect_To_Page extends Base {
 			default:
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
 
-				$request = jet_fb_action_handler()->request_data;
-
-				$to_url = ( new Dynamic_Preset() )->parse_value( $this->settings, 'redirect_url' );
-				$parser = ( new Macros_Parser() )->set_replacements( $request );
-
-				return $parser->parse_macros( $to_url );
+				return jet_fb_parse_macro(
+					jet_fb_parse_dynamic( $this->settings['redirect_url'] )
+				);
 		}
 	}
 

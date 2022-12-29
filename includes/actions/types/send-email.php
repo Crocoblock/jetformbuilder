@@ -28,7 +28,6 @@ add_filter(
  */
 class Send_Email extends Base {
 
-	private $parser;
 	private $content_type;
 
 	public function get_name() {
@@ -230,8 +229,6 @@ class Send_Email extends Base {
 			}
 		}
 
-		$this->parser = ( new Macros_Parser() )->set_replacements( $request );
-
 		$subject = ! empty( $this->settings['subject'] ) ? $this->settings['subject'] : sprintf(
 			__( 'Form on %s Submitted', 'jet-form-builder' ),
 			home_url( '' )
@@ -268,8 +265,8 @@ class Send_Email extends Base {
 		do_action( 'jet-form-builder/send-email/send-before', $this );
 
 		$content_type = $this->get_content_type();
-		$subject      = $this->parser->parse_macros( $subject );
-		$message      = $this->parser->parse_macros( $message );
+		$subject      = jet_fb_parse_macro( $subject );
+		$message      = jet_fb_parse_macro( $message );
 		$message      = do_shortcode( $message );
 
 		if ( 'text/html' === $content_type ) {
@@ -383,7 +380,7 @@ class Send_Email extends Base {
 	 */
 	public function get_from_name() {
 		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
-		$name = $this->parser->parse_macros( $name );
+		$name = jet_fb_parse_macro( $name );
 
 		return apply_filters( 'jet-form-builder/send-email/from-name', wp_specialchars_decode( $name ), $this );
 	}
@@ -396,6 +393,7 @@ class Send_Email extends Base {
 	public function get_reply_to() {
 
 		$address = ! empty( $this->settings['reply_email'] ) ? $this->settings['reply_email'] : '';
+		$address = jet_fb_parse_macro( $address );
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = 'noreply@' . Http_Tools::get_site_host();
@@ -411,7 +409,7 @@ class Send_Email extends Base {
 	public function get_from_address() {
 
 		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
-		$address = $this->parser->parse_macros( $address );
+		$address = jet_fb_parse_macro( $address );
 
 		if ( empty( $address ) || ! is_email( $address ) ) {
 			$address = get_option( 'admin_email' );

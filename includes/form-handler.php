@@ -6,6 +6,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
+use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
@@ -59,6 +60,9 @@ class Form_Handler {
 	/** @var Csrf_Tools */
 	public $csrf;
 
+	/** @var Macros_Parser */
+	public $parser;
+
 
 	/**
 	 * Constructor for the class
@@ -67,6 +71,7 @@ class Form_Handler {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
 		$this->csrf            = new Csrf_Tools();
+		$this->parser          = new Macros_Parser();
 	}
 
 	public function call_form() {

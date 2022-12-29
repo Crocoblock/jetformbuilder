@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;

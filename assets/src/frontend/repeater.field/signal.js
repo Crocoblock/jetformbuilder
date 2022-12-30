@@ -73,9 +73,11 @@ function SignalRepeater() {
 	this.removePrevItems = function ( prevRows ) {
 		const { current } = this.input.value;
 
-		const diff = prevRows.length > current.length;
-
-		prevRows.slice( -1 * diff ).forEach( row => row.remove() );
+		for ( const prevRow of prevRows ) {
+			if ( !current.includes( prevRow ) ) {
+				prevRow.remove();
+			}
+		}
 	};
 }
 

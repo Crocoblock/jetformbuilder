@@ -139,6 +139,9 @@ Observable.prototype = {
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
 	inputsAreValid: async function () {
+		for ( const input of this.getInputs() ) {
+			input.onForceValidate();
+		}
 		const invalid = await validateInputsAll( this.getInputs() );
 
 		return Boolean( invalid.length )
@@ -165,30 +168,15 @@ Observable.prototype = {
 	observeInput: function ( node, replace = false ) {
 		const input = this.pushInput( node, replace );
 
-		this.makeReactiveInput( input );
+		input.makeReactive();
 
 		doAction( 'jet.fb.observe.input.manual', input );
 	},
 
 	makeReactiveProxy: function () {
 		for ( const current of this.getInputs() ) {
-			this.makeReactiveInput( current );
+			current.makeReactive();
 		}
-	},
-
-	/**
-	 * @param input {InputData}
-	 */
-	makeReactiveInput: function ( input ) {
-		input.makeReactive();
-
-		if ( !this.parent ) {
-			return;
-		}
-
-		input.watch( () => {
-			this.parent.report();
-		} );
 	},
 
 	/**

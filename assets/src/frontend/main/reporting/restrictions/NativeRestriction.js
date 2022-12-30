@@ -3,6 +3,10 @@ import Restriction from './Restriction';
 function NativeRestriction() {
 	Restriction.call( this );
 
+	this.isSupported = function ( node, reporting ) {
+		return !!node.checkValidity;
+	};
+
 	this.validate = function () {
 		const { nodes } = this.reporting.input;
 

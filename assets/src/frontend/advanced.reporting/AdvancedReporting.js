@@ -1,4 +1,5 @@
 import {
+	getErrorNode,
 	getInheritValidationType,
 	getNodeValidationType,
 	getValidationMessages,
@@ -105,7 +106,7 @@ AdvancedReporting.prototype.clearReport      = function () {
 	const node = getWrapper( this.getNode() );
 	node.classList.remove( 'field-has-error' );
 
-	const error = node.querySelector( '.error-message' );
+	const error = getErrorNode( node );
 
 	if ( !error ) {
 		return;
@@ -140,7 +141,7 @@ AdvancedReporting.prototype.insertError      = function ( message ) {
 };
 AdvancedReporting.prototype.createError      = function (
 	node, message ) {
-	const error = node.querySelector( '.error-message' );
+	const error = getErrorNode( node );
 
 	if ( error ) {
 		error.innerHTML = message;

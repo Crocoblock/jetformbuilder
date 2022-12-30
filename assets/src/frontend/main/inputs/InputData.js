@@ -288,4 +288,15 @@ InputData.prototype.hasParent = function () {
 	return !!this.root?.parent;
 };
 
+/**
+ * For insert errors in advanced validation mode
+ * @returns {*}
+ */
+InputData.prototype.getWrapperNode = function () {
+	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
+};
+
+InputData.prototype.onForceValidate = function () {
+};
+
 export default InputData;

@@ -38,6 +38,8 @@ function ReportingInterface() {
 	this.valuePrev     = null;
 	this.validityState = null;
 	this.promisesCount = 0;
+	this.isSilence     = null;
+	this.isClick       = null;
 }
 
 ReportingInterface.prototype = {
@@ -71,7 +73,8 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<void>}
 	 */
 	validateWithNotice: async function () {
-		const errors = await this.getErrors();
+		this.isSilence = false;
+		const errors   = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );
 
@@ -95,7 +98,8 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<boolean>}
 	 */
 	validate: async function () {
-		const errors = await this.getErrors();
+		this.isSilence = true;
+		const errors   = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );
 
@@ -215,6 +219,31 @@ ReportingInterface.prototype = {
 
 	hasChangedValue: function () {
 		return this.valuePrev !== this.input.getValue();
+	},
+	/**
+	 *
+	 * @param forceSilence
+	 * @returns {Promise<*>}
+	 */
+	checkValidity: function ( forceSilence = null ) {
+		const isSilence = (
+			this.isSilence && null === forceSilence
+		) || forceSilence;
+
+		if ( null === this.validityState.current ) {
+			return this.validateOnChangeState( isSilence );
+		}
+		if ( this.validityState.current ) {
+			return Promise.resolve();
+		}
+
+		if ( isSilence ) {
+			return Promise.reject();
+		}
+
+		!isSilence && this.report( this.errors || [] );
+
+		return Promise.reject();
 	},
 };
 

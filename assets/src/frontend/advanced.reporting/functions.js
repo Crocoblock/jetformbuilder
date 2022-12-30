@@ -6,7 +6,6 @@ import NotEnoughChars from './restrictions/NotEnoughChars';
 import ReachLimitChars from './restrictions/ReachLimitChars';
 import NotEmptyRestriction from './restrictions/NotEmptyRestriction';
 import NotCompleteInputmask from './restrictions/NotCompleteInputmask';
-import NotEmptyRepeater from './restrictions/NotEmptyRepeater';
 import CustomRulesRestriction from './restrictions/CustomRulesRestriction';
 import MustContainCharacters from './restrictions/MustContainCharacters';
 import MustNotContainCharacters from './restrictions/MustNotContainCharacters';
@@ -46,7 +45,6 @@ const getRestrictions = () => applyFilters(
 		NotUrl,
 		NotEmail,
 		NotCompleteInputmask,
-		NotEmptyRepeater,
 		NotEnoughChars,
 		ReachLimitChars,
 		NotEmptyRestriction,
@@ -203,6 +201,20 @@ function setRestrictions( reporting ) {
 	}
 }
 
+/**
+ * @param wrapper {Element}
+ * @returns {boolean|Element}
+ */
+function getErrorNode( wrapper ) {
+	for ( const child of wrapper.children ) {
+		if ( !child.classList.contains( 'error-message' ) ) {
+			continue;
+		}
+		return child;
+	}
+	return false;
+}
+
 export {
 	getNodeValidationType,
 	getInheritValidationType,
@@ -212,4 +224,5 @@ export {
 	setRestrictions,
 	observeFieldRestriction,
 	getWrapper,
+	getErrorNode,
 };

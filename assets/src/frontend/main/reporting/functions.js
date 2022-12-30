@@ -4,6 +4,8 @@
 import BrowserReporting from './BrowserReporting';
 import { allRejected } from '../functions';
 import InputData from '../inputs/InputData';
+import NativeRestriction from './restrictions/NativeRestriction';
+import RequiredRestriction from './restrictions/RequiredRestriction';
 
 const {
 	      applyFilters,
@@ -17,6 +19,39 @@ const getReportTypes = () => applyFilters(
 );
 
 let reportTypes = [];
+
+const getDefaultRestrictions = () => applyFilters(
+	'jet.fb.restrictions.default',
+	[
+		NativeRestriction,
+		RequiredRestriction,
+	],
+);
+
+let defaultRestrictions = [];
+
+/**
+ * @param reporting {BrowserReporting}
+ * @param node
+ * @returns {*}
+ */
+function createDefaultRestrictions( reporting, node ) {
+	if ( !defaultRestrictions.length ) {
+		defaultRestrictions = getDefaultRestrictions();
+	}
+
+	for ( const restriction of defaultRestrictions ) {
+		const current = new restriction();
+
+		if ( !current.isSupported( node, reporting ) ) {
+			continue;
+		}
+
+		reporting.restrictions.push( current );
+	}
+
+	reporting.restrictions.forEach( item => item.setReporting( reporting ) );
+}
 
 /**
  * @param input {InputData}
@@ -64,7 +99,12 @@ function getValidateCallbacks( inputs, silence = false ) {
 			( resolve, reject ) => {
 				input.reporting.validateOnChangeState( silence ).
 					then( resolve ).
-					catch( reject );
+					catch( reject ).finally(
+					() => {
+						input.reporting.isSilence = null;
+						input.reporting.isClick = null;
+					},
+				);
 			},
 		);
 	}
@@ -91,4 +131,10 @@ function validateInputsAll( inputs, silence = false ) {
 	return allRejected( getValidateCallbacks( inputs, silence ) );
 }
 
-export { createReport, validateInputs, validateInputsAll };
+export {
+	createReport,
+	validateInputs,
+	validateInputsAll,
+	createDefaultRestrictions,
+	getValidateCallbacks,
+};

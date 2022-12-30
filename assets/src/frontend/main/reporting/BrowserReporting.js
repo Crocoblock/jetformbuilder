@@ -1,7 +1,6 @@
 import ReportingInterface from './ReportingInterface';
-import NativeRestriction from './restrictions/NativeRestriction';
-import RequiredRestriction from './restrictions/RequiredRestriction';
 import { allRejected } from '../functions';
+import { createDefaultRestrictions } from './functions';
 
 function BrowserReporting() {
 	ReportingInterface.call( this );
@@ -15,17 +14,7 @@ function BrowserReporting() {
 	this.setRestrictions  = function () {
 		const [ node ] = this.input.nodes;
 
-		if ( !node.checkValidity ) {
-			return;
-		}
-		this.restrictions = [
-			new NativeRestriction(),
-			new RequiredRestriction(),
-		].filter(
-			current => current.isSupported( node, this ),
-		);
-
-		this.restrictions.forEach( current => current.setReporting( this ) );
+		createDefaultRestrictions( this, node );
 	};
 	this.clearReport      = function () {
 		// browser automatically hide tooltip messages

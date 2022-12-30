@@ -17,6 +17,7 @@ ObservableRow.prototype.observe = function ( root ) {
 	Observable.prototype.observe.call( this, root );
 
 	this.initCalc();
+	this.parent.lastObserved.current = this;
 };
 
 ObservableRow.prototype.remove = function () {

@@ -129,6 +129,9 @@ PageState.prototype.updateState = function () {
 };
 
 PageState.prototype.updateStateAsync    = async function ( silence = true ) {
+	for ( const input of this.getInputs() ) {
+		input.onForceValidate();
+	}
 	try {
 		await validateInputs( this.getInputs(), silence );
 
@@ -161,6 +164,10 @@ PageState.prototype.changePage          = async function ( isBack ) {
 	if ( isBack ) {
 		this.state.index.current = this.index - 1;
 
+		return;
+	}
+
+	if ( this.getLockState().current ) {
 		return;
 	}
 

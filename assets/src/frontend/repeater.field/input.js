@@ -3,14 +3,17 @@ import ObservableRow from './ObservableRow';
 
 const {
 	      InputData,
+	      ReactiveVar,
       } = JetFormBuilderAbstract;
 
 function RepeaterData() {
 	InputData.call( this );
 
-	this.buttonNode = false;
-	this.template   = null;
-	this.container  = null;
+	this.buttonNode   = false;
+	this.template     = null;
+	this.container    = null;
+	this.lastObserved = new ReactiveVar();
+	this.lastObserved.make();
 
 	this.isSupported  = function ( node ) {
 		return isRepeater( node );
@@ -96,10 +99,12 @@ function RepeaterData() {
 	};
 
 	this.onClear = function () {
-		if ( !this.value.current ) {
-			return;
-		}
-		this.value.current.forEach( current => current.remove() );
+		this.value.current = [];
+	};
+
+	this.onForceValidate = function () {
+		this.reporting.isClick   = true;
+		this.reporting.valuePrev = null;
 	};
 }
 
@@ -109,6 +114,10 @@ RepeaterData.prototype.buttonNode = null;
 RepeaterData.prototype.template   = null;
 RepeaterData.prototype.container  = null;
 RepeaterData.prototype.itemsField = false;
+/**
+ * @type {ReactiveVar}
+ */
+RepeaterData.prototype.lastObserved = null;
 
 RepeaterData.prototype.addNew = function ( count = 1 ) {
 	this.value.current = [

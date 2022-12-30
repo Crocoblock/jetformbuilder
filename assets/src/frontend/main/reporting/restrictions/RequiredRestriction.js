@@ -4,7 +4,7 @@ function RequiredRestriction() {
 	Restriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
-		return reporting.input.isRequired;
+		return reporting.input.isRequired && !Boolean( node.checkValidity );
 	};
 
 	this.validate = function () {

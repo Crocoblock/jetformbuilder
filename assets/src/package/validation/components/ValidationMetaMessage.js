@@ -2,6 +2,7 @@ import getItemByName from '../helpers/getItemByName';
 
 const {
 	      TextControl,
+	      Tooltip,
       } = wp.components;
 
 function ValidationMetaMessage( {
@@ -23,9 +24,14 @@ function ValidationMetaMessage( {
 			{ message.blocks.map( block => <span
 				key={ 'message_block_item' + block.title }
 				className="jet-fb-validation-messages-item-heading-pair__icon"
-				title={ block.title }
 			>
-				{ block.icon }
+				<Tooltip
+					text={ block.title }
+					delay={ 200 }
+					position={ 'top center' }
+				>
+					<div>{ block.icon }</div>
+			    </Tooltip>
 			</span> ) }
 		</span>
 		</label>

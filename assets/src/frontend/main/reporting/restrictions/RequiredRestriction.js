@@ -1,16 +1,17 @@
 import Restriction from './Restriction';
+import { isEmpty } from '../../functions';
 
 function RequiredRestriction() {
 	Restriction.call( this );
 
 	this.isSupported = function ( node, reporting ) {
-		return reporting.input.isRequired && !Boolean( node.checkValidity );
+		return reporting.input.isRequired;
 	};
 
 	this.validate = function () {
-		const [ node ] = this.reporting.input.nodes;
+		const { current } = this.reporting.input.value;
 
-		return !!node.value;
+		return !isEmpty( current );
 	};
 }
 

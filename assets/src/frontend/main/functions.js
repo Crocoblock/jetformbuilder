@@ -104,6 +104,9 @@ function toHTML( text ) {
 }
 
 function isEmpty( value ) {
+	if ( 'object' === typeof value && !Array.isArray( value ) ) {
+		return !Object.keys( value )?.length;
+	}
 	return null === value || undefined === value || !value?.length;
 }
 

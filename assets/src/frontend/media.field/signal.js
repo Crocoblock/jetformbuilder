@@ -41,6 +41,8 @@ function SignalFile() {
 
 		node.files           = createFileList( [ ...files ] );
 		this.input.prevFiles = files;
+
+		this.sortable();
 	};
 }
 

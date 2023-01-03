@@ -41,7 +41,7 @@ function WysiwygData() {
 
 		this.editor.on( 'init', () => {
 			this.callable.lock.current = false;
-			update();
+			this.silenceSet( this.editor.getContent() );
 		} );
 		this.editor.on( 'input', update ).on( 'change', update );
 	};

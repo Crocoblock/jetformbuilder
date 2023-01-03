@@ -110,7 +110,7 @@ const EditCustomRenderStates = ( {
 		isUseActions={ false }
 		classNames={ [ 'width-45' ] }
 	>
-		{/*<NoticeInfo style={ { marginBottom: '1em' } }/>*/}
+		{/*<NoticeInfo style={ { marginBottom: '1em' } }/>*/ }
 		<div className={ 'jet-fb with-button' }>
 			<TextControl
 				value={ value }
@@ -125,6 +125,10 @@ const EditCustomRenderStates = ( {
 				onClick={ addState }
 				disabled={ isLoading }
 				isBusy={ isLoading }
+				style={ {
+					padding: '7px 12px',
+					height: 'unset',
+				} }
 			>
 				{ __( 'Add', 'jet-form-builder' ) }
 			</Button>

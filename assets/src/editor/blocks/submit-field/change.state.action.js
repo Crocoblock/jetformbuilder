@@ -17,7 +17,7 @@ function SwitcherRenderStateButton( { attributes, setAttributes } ) {
 
 	return <FormTokenField
 		key={ uniqKey( 'switch_on' ) }
-		label={ __( 'Switch on state', 'jet-form-builder' ) }
+		label={ __( 'Switch state', 'jet-form-builder' ) }
 		value={ attributes.switch_on }
 		suggestions={ customStates }
 		onChange={ switch_on => setAttributes( { switch_on } ) }

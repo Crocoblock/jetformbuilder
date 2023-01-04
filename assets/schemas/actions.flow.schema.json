@@ -18,7 +18,7 @@
 		"required": [
 			"type"
 		],
-		"allOf": [
+		"oneOf": [
 			{
 				"if": {
 					"properties": {

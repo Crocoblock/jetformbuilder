@@ -44,6 +44,7 @@ class Filters_Manager {
 				new Term_Title_By_Id_Filter(),
 				new Term_Titles_By_Ids_Filter(),
 				new Md5_Filter(),
+				new User_Prop_By_Id_Filter(),
 			)
 		);
 	}

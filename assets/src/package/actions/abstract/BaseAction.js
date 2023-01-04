@@ -17,6 +17,16 @@ BaseAction.prototype.initData = function ( props ) {
 			       ? this.settings[ this.type ]
 			       : {};
 		},
+		set: value => {
+			if ( this.settings.hasOwnProperty( this.type ?? '' ) ) {
+				this.settings[ this.type ] = {};
+			}
+
+			this.settings[ this.type ] = {
+				...this.settings[ this.type ],
+				...value,
+			};
+		},
 	} );
 
 	Object.defineProperty( this, 'index', {
@@ -24,6 +34,10 @@ BaseAction.prototype.initData = function ( props ) {
 			return props?.index ?? 0;
 		},
 	} );
+};
+
+BaseAction.prototype.resetID = function () {
+	this.id = Tools.getRandomID();
 };
 
 export default BaseAction;

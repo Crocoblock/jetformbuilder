@@ -1,0 +1,105 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"type": {
+				"type": "string"
+			},
+			"conditions": {
+				"type": "array"
+			},
+			"events": {
+				"type": "array"
+			}
+		},
+		"required": [
+			"type"
+		],
+		"allOf": [
+			{
+				"if": {
+					"properties": {
+						"type": {
+							"const": "send_email"
+						}
+					}
+				},
+				"then": {
+					"properties": {
+						"settings": {
+							"$ref": "#/definitions/send_email"
+						}
+					}
+				}
+			}
+		]
+	},
+	"definitions": {
+		"send_email": {
+			"type": "object",
+			"properties": {
+				"mail_to": {
+					"type": "string",
+					"enum": [
+						"admin",
+						"form",
+						"custom"
+					]
+				},
+				"subject": {
+					"type": "string"
+				},
+				"content": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"content",
+				"mail_to"
+			],
+			"allOf": [
+				{
+					"if": {
+						"properties": {
+							"mail_to": {
+								"const": "custom"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"custom_email": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"custom_email"
+						]
+					}
+				},
+				{
+					"if": {
+						"properties": {
+							"mail_to": {
+								"const": "form"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"from_field": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"from_field"
+						]
+					}
+				}
+			]
+		}
+	}
+}

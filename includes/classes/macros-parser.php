@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Classes;
 
 use Jet_Form_Builder\Classes\Filters\Filters_Manager;
+use Jet_Form_Builder\Classes\Macro_Constants\Constants_Manager;
 
 class Macros_Parser {
 
@@ -46,6 +47,7 @@ class Macros_Parser {
 	 * @return [type]          [description]
 	 */
 	public function macros_replace() {
+		Constants_Manager::instance();
 
 		return preg_replace_callback(
 			'/%(.+?)%/',
@@ -53,6 +55,21 @@ class Macros_Parser {
 				$filters = explode( '|', $match[1] );
 				$name    = $filters[0];
 				array_shift( $filters );
+
+				if ( false !== strpos( $name, '::' ) ) {
+					$value = apply_filters(
+						'jet-form-builder/custom-macro',
+						null,
+						$name,
+						$this
+					);
+
+					if ( is_null( $value ) ) {
+						return $match[0];
+					}
+
+					return Filters_Manager::instance()->apply( $value, $filters );
+				}
 
 				if ( ! isset( $this->replacements[ $name ] ) ) {
 					return $match[0];

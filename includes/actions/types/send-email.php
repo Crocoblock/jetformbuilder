@@ -379,10 +379,10 @@ class Send_Email extends Base {
 	 * Get the email from name
 	 */
 	public function get_from_name() {
-		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : get_bloginfo( 'name' );
+		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : Tools::get_site_name();
 		$name = jet_fb_parse_macro( $name );
 
-		return apply_filters( 'jet-form-builder/send-email/from-name', wp_specialchars_decode( $name ), $this );
+		return apply_filters( 'jet-form-builder/send-email/from-name', $name, $this );
 	}
 
 	/**

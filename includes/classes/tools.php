@@ -570,4 +570,22 @@ class Tools {
 		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	}
 
+	/**
+	 * Get from function below
+	 * @return string
+	 * @see \retrieve_password
+	 */
+	public static function get_site_name(): string {
+		if ( is_multisite() ) {
+			return get_network()->site_name;
+		}
+
+		/*
+		 * The blogname option is escaped with esc_html on the way into the database
+		 * in sanitize_option. We want to reverse this for the plain text arena of emails.
+		 */
+
+		return wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+	}
+
 }

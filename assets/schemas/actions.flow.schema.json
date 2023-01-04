@@ -30,7 +30,7 @@
 				"then": {
 					"properties": {
 						"settings": {
-							"$ref": "#/definitions/send_email"
+							"$ref": "https://raw.githubusercontent.com/Crocoblock/jetformbuilder/dev/custom-render-states/assets/schemas/send.email.schema.json"
 						}
 					}
 				}
@@ -46,7 +46,7 @@
 				"then": {
 					"properties": {
 						"settings": {
-							"$ref": "#/definitions/reset_password"
+							"$ref": "https://raw.githubusercontent.com/Crocoblock/jetformbuilder/dev/custom-render-states/assets/schemas/reset.password.schema.json"
 						}
 					}
 				}

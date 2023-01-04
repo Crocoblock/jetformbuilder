@@ -1,24 +1,33 @@
-import { useActionsEdit } from './hooks';
+const {
+	      useDispatch,
+	      useSelect,
+      } = wp.data;
 
 const {
-	useDispatch,
-	useSelect,
-} = wp.data;
-
-const { Popover } = wp.components;
-
-const { useContext, useState } = wp.element;
+	      useContext,
+      } = wp.element;
 
 const {
-	ActionListItemContext,
-} = JetFBComponents;
+	      ActionListItemContext,
+      } = JetFBComponents;
+const {
+	      useActionsEdit,
+      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 function EventItem( props ) {
-	const { slug, index: eventIndex } = props;
-	const event = useSelect( select => select( 'jet-forms/events' ).getType( slug ) );
-	const { action } = useContext( ActionListItemContext );
+	const {
+		      slug,
+		      index: eventIndex,
+	      } = props;
+	const {
+		      action,
+	      } = useContext( ActionListItemContext );
+
+	const event = useSelect(
+		select => select( 'jet-forms/events' ).getType( slug ),
+	);
 
 	const { updateActionObj } = useActionsEdit();
 
@@ -28,7 +37,10 @@ function EventItem( props ) {
 		updateActionObj( action.id, { ...action } );
 	};
 
-	const title = [ event?.title ?? '', __( '(Click to delete)', 'jet-form-builder' ) ].join( ' ' );
+	const title = [
+		event?.title ?? '',
+		__( '(Click to delete)', 'jet-form-builder' ),
+	].join( ' ' );
 
 	return <button
 		type={ 'button' }

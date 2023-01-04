@@ -1,22 +1,33 @@
 import EditConditions from './edit.conditions';
-import { useCurrentAction, useUpdateCurrentActionMeta } from './hooks';
 
-const { __ } = wp.i18n;
-const { ActionModal } = JetFBComponents;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      ActionModal,
+      } = JetFBComponents;
 
-const { useRequestEvents } = JetFBHooks;
+const {
+	      useRequestEvents,
+	      useUpdateCurrentActionMeta,
+	      useCurrentAction,
+      } = JetFBHooks;
 
-const { useDispatch, useSelect } = wp.data;
+const {
+	      useDispatch,
+	      useSelect,
+      } = wp.data;
 
 function EditConditionsModal() {
-	const isConditionalModal = useSelect( select => select( 'jet-forms/actions' ).isConditionalModal() );
+	const isConditionalModal = useSelect(
+		select => select( 'jet-forms/actions' ).isConditionalModal() );
 
-	const { clearCurrent } = useDispatch( 'jet-forms/actions', [] );
-	const updateAction = useUpdateCurrentActionMeta();
+	const { clearCurrent }  = useDispatch( 'jet-forms/actions', [] );
+	const updateAction      = useUpdateCurrentActionMeta();
 	const { currentAction } = useCurrentAction();
-	const provideEvents = useRequestEvents();
+	const provideEvents     = useRequestEvents();
 
-	if ( ! isConditionalModal ) {
+	if ( !isConditionalModal ) {
 		return null;
 	}
 
@@ -36,7 +47,7 @@ function EditConditionsModal() {
 			clearCurrent();
 		} }
 	>
-		<EditConditions />
+		<EditConditions/>
 	</ActionModal>;
 }
 

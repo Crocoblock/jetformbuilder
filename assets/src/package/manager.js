@@ -30,7 +30,7 @@ import registerGateway from './gateways/helpers/registerGateway';
 import renderGateway from './gateways/helpers/renderGateway';
 import renderGatewayWithPlaceholder
 	from './gateways/helpers/renderGatewayWithPlaceholder';
-import useActions from './hooks/useActions';
+import useActions from './actions/hooks/useActions';
 import useMetaState from './hooks/useMetaState';
 import useStateLoadingClasses from './hooks/useStateLoadingClasses';
 import useStateValidClasses from './hooks/useStateValidClasses';
@@ -157,6 +157,15 @@ import humanReadableCondition
 import ConditionsRepeaterContextProvider
 	from './block-conditions/components/ConditionsRepeaterContextProvider';
 import ServerSideMacros from './macros.button/components/ServerSideMacros';
+import convertFlow from './actions/helpers/convertFlow';
+import ActionsFlow from './actions/abstract/ActionsFlow';
+import useCurrentAction from './actions/hooks/useCurrentAction';
+import useUpdateCurrentAction from './actions/hooks/useUpdateCurrentAction';
+import useUpdateCurrentActionMeta
+	from './actions/hooks/useUpdateCurrentActionMeta';
+import useActionsEdit from './actions/hooks/useActionsEdit';
+import useActionCallback from './actions/hooks/useActionCallback';
+import useActionDetail from './actions/hooks/useActionDetail';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -240,6 +249,7 @@ window.JetFBComponents = {
 	HumanReadableConditions,
 	ConditionsRepeaterContextProvider,
 	ServerSideMacros,
+	ActionsFlow,
 };
 
 // JFBFunctions
@@ -275,6 +285,7 @@ window.JetFBActions = {
 	addComputedField,
 	getCurrentInnerBlocks,
 	humanReadableCondition,
+	convertFlow,
 };
 
 // JFBHooks
@@ -302,5 +313,11 @@ window.JetFBHooks = {
 	useOnUpdateModal,
 	useInsertMacro,
 	useIsHasAttribute,
+	useCurrentAction,
+	useUpdateCurrentAction,
+	useUpdateCurrentActionMeta,
+	useActionsEdit,
+	useActionCallback,
+	useActionDetail,
 };
 

@@ -1,4 +1,4 @@
-import useMetaState from './useMetaState';
+import useMetaState from '../../hooks/useMetaState';
 
 function useActions( deps = undefined ) {
 	return useMetaState( '_jf_actions', '[]', deps );

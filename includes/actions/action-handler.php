@@ -179,7 +179,7 @@ class Action_Handler {
 		$this->set_current_action( false );
 	}
 
-	private function process_single_action( Base $action ) {
+	public function process_single_action( Base $action ) {
 		/**
 		 * Start the cycle
 		 *
@@ -507,7 +507,7 @@ class Action_Handler {
 		}
 		$clone_action = clone $action;
 
-		$clone_action->_id = count( $this->hidden ) + 1;
+		$clone_action->_id = $this->get_unique_id();
 
 		$this->save_action( $clone_action, $props );
 		$this->hidden[ $clone_action->get_id() ] = $clone_action->_id;
@@ -564,6 +564,14 @@ class Action_Handler {
 		}
 
 		$this->form_actions = $hidden + $this->form_actions;
+	}
+
+	public function get_unique_id( int $start_from = 1 ): int {
+		if ( ! array_key_exists( $start_from, $this->form_actions ) ) {
+			return $start_from;
+		}
+
+		return $this->get_unique_id( ++ $start_from );
 	}
 
 }

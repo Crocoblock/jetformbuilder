@@ -1,19 +1,26 @@
-import { useActionCallback, useCurrentAction, useUpdateCurrentActionMeta } from './hooks';
-import { useUpdateCurrentAction } from './hooks';
-
-const { ActionModal } = JetFBComponents;
+const {
+	      ActionModal,
+      } = JetFBComponents;
+const {
+	      useCurrentAction,
+	      useActionCallback,
+	      useUpdateCurrentAction,
+	      useUpdateCurrentActionMeta,
+      } = JetFBHooks;
 
 const { useSelect } = wp.data;
 
 function EditSettingsModal() {
+	const isSettingsModal = useSelect(
+		select => select( 'jet-forms/actions' ).isSettingsModal(),
+	);
+
+	const ActionCallback                     = useActionCallback();
+	const updateAction                       = useUpdateCurrentActionMeta();
+	const { setTypeSettings, clearCurrent }  = useUpdateCurrentAction();
 	const { currentAction, currentSettings } = useCurrentAction();
-	const isSettingsModal = useSelect( select => select( 'jet-forms/actions' ).isSettingsModal() );
 
-	const ActionCallback = useActionCallback();
-	const updateAction = useUpdateCurrentActionMeta();
-	const { setTypeSettings, clearCurrent } = useUpdateCurrentAction();
-
-	if ( ! isSettingsModal ) {
+	if ( !isSettingsModal ) {
 		return null;
 	}
 

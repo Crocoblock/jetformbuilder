@@ -1,4 +1,3 @@
-import { useActionCallback, useActionsEdit, useActionDetail } from './hooks';
 import EventsList from './events.list';
 
 const {
@@ -27,6 +26,12 @@ const {
 	      ActionListItemContext,
 	      MacrosButtonTemplate,
       } = JetFBComponents;
+
+const {
+	      useActionCallback,
+	      useActionsEdit,
+	      useActionDetail,
+      } = JetFBHooks;
 
 const actionTypes = window.jetFormActionTypes.map( function ( action ) {
 	return {
@@ -178,7 +183,8 @@ function ListActionItem( props ) {
 						'jet-form-builder',
 					) }
 				>
-					<div className="jet-fb p-06em flex flex-dir-column gap-default">
+					<div
+						className="jet-fb p-06em flex flex-dir-column gap-default">
 						<div data-title={ __( 'ID:',
 							'jet-form-builder' ) }><b>{ action.id }</b></div>
 						{ ActionDetails && <ActionDetails/> }

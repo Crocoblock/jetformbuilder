@@ -1,5 +1,4 @@
 import { conditionSettings } from './options';
-import { useCurrentAction, useUpdateCurrentAction } from './hooks';
 
 const {
 	      FieldWithPreset,
@@ -14,6 +13,8 @@ const {
 
 const {
 	      useRequestEvents,
+	      useCurrentAction,
+	      useUpdateCurrentAction,
       } = JetFBHooks;
 
 const {
@@ -29,12 +30,20 @@ const {
 	      TabPanel,
       } = wp.components;
 
-const { __ } = wp.i18n;
+const {
+	      __,
+      } = wp.i18n;
 
-const { compose }   = wp.compose;
-const { useSelect } = wp.data;
+const {
+	      useSelect,
+      } = wp.data;
 
-const { useEffect, useState, useContext, RawHTML } = wp.element;
+const {
+	      useEffect,
+	      useState,
+	      useContext,
+	      RawHTML,
+      } = wp.element;
 
 const operators = [
 	{

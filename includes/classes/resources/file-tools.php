@@ -31,4 +31,20 @@ class File_Tools {
 		return $file->get_name() === ( $info['basename'] ?? '' );
 	}
 
+	public static function is_same_ext( string $file_name, string $need_ext ): bool {
+		$ext = self::get_file_ext( $file_name );
+
+		if ( 0 === strpos( $need_ext, '.' ) ) {
+			$need_ext = substr( $need_ext, 1, strlen( $need_ext ) - 1 );
+		}
+
+		return $ext === $need_ext;
+	}
+
+	public static function get_file_ext( string $file_name ): string {
+		$file_parts = explode( '.', $file_name );
+
+		return end( $file_parts );
+	}
+
 }

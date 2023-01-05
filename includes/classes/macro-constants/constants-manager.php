@@ -24,7 +24,11 @@ class Constants_Manager {
 	public function __construct() {
 		$this->rep_install();
 
-		add_filter( 'jet-form-builder/custom-macro', array( $this, 'apply_constant_macro' ) );
+		add_filter(
+			'jet-form-builder/custom-macro',
+			array( $this, 'apply_constant_macro' ),
+			10, 2
+		);
 	}
 
 	public function rep_instances(): array {

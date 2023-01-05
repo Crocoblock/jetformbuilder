@@ -9,11 +9,13 @@ use Jet_Form_Builder\Classes\Resources\File_Tools;
 class Actions_Tools {
 
 	public static function run_flow( string $flow_path ) {
-		$flow = self::load_flow( $flow_path );
-
-		if ( ! $flow ) {
-			return;
+		foreach ( self::get_flow( $flow_path ) as $action ) {
+			jet_fb_action_handler()->process_single_action( $action );
 		}
+	}
+
+	public static function get_flow( string $flow_path ): \Generator {
+		$flow = self::load_flow( $flow_path );
 
 		foreach ( $flow as $action ) {
 			$current = jet_fb_action_handler()->add_hidden( $action['type'], $action );
@@ -22,18 +24,19 @@ class Actions_Tools {
 				continue;
 			}
 			$current->settings = $action['settings'] ?? array();
-			jet_fb_action_handler()->process_single_action( $current );
+
+			yield $current;
 		}
 	}
 
 	/**
 	 * @param string $flow_path
 	 *
-	 * @return array|false
+	 * @return array
 	 */
-	public static function load_flow( string $flow_path ) {
+	public static function load_flow( string $flow_path ): array {
 		if ( ! file_exists( $flow_path ) ) {
-			return false;
+			return array();
 		}
 
 		return is_file( $flow_path )
@@ -75,7 +78,7 @@ class Actions_Tools {
 		}
 
 		if ( ! is_array( $flow ) || empty( $flow ) ) {
-			return false;
+			return array();
 		}
 
 		return $flow;

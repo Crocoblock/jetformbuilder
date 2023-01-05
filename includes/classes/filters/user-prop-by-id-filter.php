@@ -10,9 +10,12 @@ class User_Prop_By_Id_Filter extends Base_Filter {
 		return 'user';
 	}
 
+	public function callback_args(): array {
+		return array( 'user_login' );
+	}
+
 	public function apply_macros( $value, ...$args ): string {
-		$prop = $args[0] ?? 'user_login';
-		$prop = $prop || 'user_login';
+		list( $prop ) = $args;
 
 		$user = get_user_by( 'ID', $value );
 

@@ -3,6 +3,7 @@ function BaseComputedField() {
 	 * @type {BaseAction}
 	 */
 	this.action = null;
+	this.hasInList = false;
 }
 
 /**

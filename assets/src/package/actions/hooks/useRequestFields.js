@@ -48,6 +48,7 @@ function getComputedFields( fields, actions ) {
 	 * @type {BaseAction[]}
 	 */
 	actions = actions.map( item => new BaseAction( item ) );
+	const nameSet = new Set();
 
 	for ( const baseComputedField of computed ) {
 		/**
@@ -60,13 +61,22 @@ function getComputedFields( fields, actions ) {
 				continue;
 			}
 			current.setAction( action );
+			current.hasInList = false;
 
 			const label = current.getLabel();
-			const name  = current.getName();
+			let name    = current.getName();
+
+			if ( nameSet.has( name ) ) {
+				current.hasInList = true;
+
+				name = current.getName();
+			}
 
 			if ( fields.some( ( { value } ) => value === name ) ) {
 				continue;
 			}
+
+			nameSet.add( name );
 
 			fields.push( {
 				from: action.type,

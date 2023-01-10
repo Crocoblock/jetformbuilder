@@ -107,6 +107,11 @@ function isEmpty( value ) {
 	if ( 'object' === typeof value && !Array.isArray( value ) ) {
 		return !Object.keys( value )?.length;
 	}
+
+	if ( 'number' === typeof value ) {
+		return 0 === value;
+	}
+
 	return null === value || undefined === value || !value?.length;
 }
 

@@ -225,7 +225,7 @@ function EditFields() {
 					<RepeaterItem formFields={ formFields }/>
 				</Repeater>
 			</SafeDeleteToggle>
-			<RepeaterAddNew>
+			<RepeaterAddNew item={ { execute: true } }>
 				{ __( 'Add New Condition', 'jet-form-builder' ) }
 			</RepeaterAddNew>
 		</RepeaterState>

@@ -7,7 +7,7 @@ const href = 'https://jetformbuilder.com/features/insert-update-post/';
 function InsertUpdatePostDetails() {
 	return <>
 		<div data-title={ __( 'Tutorial:', 'jet-form-builder' ) }>
-			<a href={ href }>{ __( 'Insert/Update Post',
+			<a href={ href }>{ __( 'Insert Post',
 				'jet-form-builder' ) }</a>
 		</div>
 	</>;

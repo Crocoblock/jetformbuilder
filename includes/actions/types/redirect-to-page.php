@@ -73,11 +73,7 @@ class Redirect_To_Page extends Base {
 					return false;
 				}
 
-				if ( 'publish' === $context['post_status'] ) {
-					return get_permalink( $context['ID'] );
-				}
-
-				return false;
+				return get_permalink( $context['ID'] );
 
 			default:
 				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;

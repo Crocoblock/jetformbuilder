@@ -12,7 +12,7 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Actions\Delete_Payment_Action;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Gateway_Type_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Amount_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Payment_Currency_Column;
-use Jet_Form_Builder\Gateways\Pages\Payments_Page;
+use Jet_Form_Builder\Gateways\Table_Views\Columns\Transaction_Column;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Rest_Api\Receive_Payment;
@@ -26,12 +26,13 @@ class Payment_Details_Box extends Base_List_Box {
 
 	public function get_columns(): array {
 		return array(
-			'amount'     => new Payment_Amount_Column(),
-			'code'       => new Payment_Currency_Column(),
-			'gateway'    => new Gateway_Type_Column(),
-			'status'     => new Payment_Status_Column(),
-			'created_at' => new Created_At_Column(),
-			'updated_at' => new Updated_At_Column(),
+			'amount'      => new Payment_Amount_Column(),
+			'code'        => new Payment_Currency_Column(),
+			'gateway'     => new Gateway_Type_Column(),
+			'status'      => new Payment_Status_Column(),
+			'transaction' => new Transaction_Column(),
+			'created_at'  => new Created_At_Column(),
+			'updated_at'  => new Updated_At_Column(),
 		);
 	}
 

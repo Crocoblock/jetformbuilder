@@ -72,7 +72,7 @@ class Update_Options extends Base {
 		$page = isset( jet_engine()->options_pages->registered_pages[ $option_name ] ) ? jet_engine()->options_pages->registered_pages[ $option_name ] : false;
 
 		if ( $page && method_exists( $page, 'update_options' ) ) {
-			$page->update_options( $options_data, false );
+			$page->update_options( $options_data, false, false );
 			return;
 		}
 

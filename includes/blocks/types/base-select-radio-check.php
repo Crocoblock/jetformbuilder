@@ -106,7 +106,8 @@ trait Base_Select_Radio_Check {
 						'post_status'    => 'publish',
 						'posts_per_page' => - 1,
 						'post_type'      => $post_type,
-					)
+					),
+					$args
 				)
 			);
 
@@ -157,7 +158,8 @@ trait Base_Select_Radio_Check {
 					array(
 						'taxonomy'   => $tax,
 						'hide_empty' => false,
-					)
+					),
+					$args
 				)
 			);
 

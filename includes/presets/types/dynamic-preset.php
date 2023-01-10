@@ -29,10 +29,16 @@ class Dynamic_Preset extends Base_Preset {
 		return $this;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return Base_Source
+	 * @throws Preset_Exception
+	 */
 	public function get_source( $args = array() ): Base_Source {
 		$this->field = $args['name'] ?? '';
 
-		return $this->get_new_source( $args );
+		return parent::get_source( $args );
 	}
 
 	public function get_fields_map() {

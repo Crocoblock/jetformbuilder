@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -49,6 +50,14 @@ class Call_Webhook extends Base {
 			'jet-form-builder/action/webhook/request-args',
 			$args,
 			$this->settings,
+			$this
+		);
+
+		$webhook_url = ( new Macros_Parser() )->parse_macros( $webhook_url, $request );
+
+		$webhook_url = apply_filters(
+			'jet-form-builder/action/webhook/request-url',
+			$webhook_url,
 			$this
 		);
 

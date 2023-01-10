@@ -159,13 +159,19 @@ class Media_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		$render = ( new Media_Field_Render( $this ) )->render();
+
+		if ( Tools::is_editor() ) {
+			return $render;
+		}
+
 		wp_enqueue_script( self::HANDLE );
 
 		if ( Validation::instance()->is_advanced( $this ) ) {
 			wp_enqueue_script( self::RESTRICTIONS );
 		}
 
-		return ( new Media_Field_Render( $this ) )->render();
+		return $render;
 	}
 
 	public function get_max_size_message(): string {

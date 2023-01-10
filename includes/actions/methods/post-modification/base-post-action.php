@@ -54,6 +54,14 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 				'action_id' => $handler->get_current_action()->_id,
 			);
 		}
+
+		$inserted_key = 'inserted_' . $this->modifier->source_arr['post_type'];
+
+		$handler->add_request(
+			array(
+				$inserted_key => $this->inserted_id,
+			)
+		);
 	}
 
 	public function add_context_once() {

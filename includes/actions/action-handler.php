@@ -80,7 +80,17 @@ class Action_Handler {
 	}
 
 	public function add_request( $request ): Action_Handler {
-		$this->request_data = array_merge( $this->request_data, $request );
+		if ( ! $this->in_loop() ) {
+			$this->request_data = array_merge( $this->request_data, $request );
+
+			return $this;
+		}
+
+		foreach ( $request as $field_name => $value ) {
+			$field_name = $this->get_unique_field_id( $field_name );
+
+			$this->request_data[ $field_name ] = $value;
+		}
 
 		return $this;
 	}
@@ -507,7 +517,7 @@ class Action_Handler {
 		}
 		$clone_action = clone $action;
 
-		$clone_action->_id = $this->get_unique_id();
+		$clone_action->_id = $this->get_unique_action_id();
 
 		$this->save_action( $clone_action, $props );
 		$this->hidden[ $clone_action->get_id() ] = $clone_action->_id;
@@ -566,12 +576,25 @@ class Action_Handler {
 		$this->form_actions = $hidden + $this->form_actions;
 	}
 
-	public function get_unique_id( int $start_from = 1 ): int {
+	public function get_unique_action_id( int $start_from = 1 ): int {
 		if ( ! array_key_exists( $start_from, $this->form_actions ) ) {
 			return $start_from;
 		}
 
-		return $this->get_unique_id( ++ $start_from );
+		return $this->get_unique_action_id( ++ $start_from );
+	}
+
+	public function get_unique_field_id( string $computed_field ): string {
+		if (
+			! array_key_exists( $computed_field, $this->request_data ) ||
+			! $this->in_loop()
+		) {
+			return $computed_field;
+		}
+
+		$computed_field .= '_' . $this->get_current_action()->_id;
+
+		return $computed_field;
 	}
 
 }

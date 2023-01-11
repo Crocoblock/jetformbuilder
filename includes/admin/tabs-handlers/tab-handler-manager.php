@@ -68,7 +68,7 @@ class Tab_Handler_Manager {
 	}
 
 	private function register_hooks_for_tab( Base_Handler $tab ) {
-		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_get_request' ) );
+		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_raw_request' ) );
 
 		add_filter(
 			'jet-form-builder/page-config/jfb-settings',

@@ -176,6 +176,14 @@ class Pages_Manager {
 			true
 		);
 
+		wp_localize_script(
+			self::SCRIPT_PACKAGE,
+			'JetFBPageConfigPackage',
+			array(
+				'nonce' => wp_create_nonce( $this->current_page->slug() )
+			)
+		);
+
 		wp_register_script(
 			self::SCRIPT_VUEX_PACKAGE,
 			Plugin::instance()->plugin_url( 'assets/js/admin-vuex-package.js' ),

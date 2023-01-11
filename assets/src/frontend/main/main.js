@@ -57,7 +57,7 @@ jQuery( window ).on( 'elementor/frontend/init', initElementor );
 
 JetPlugins.bulkBlocksInit( [
 	{
-		block: 'jet-forms/form-block',
+		block: 'jet-forms.form-block',
 		callback: initForm,
 	},
 ] );

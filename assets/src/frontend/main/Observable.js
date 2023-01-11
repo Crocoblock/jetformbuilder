@@ -206,7 +206,7 @@ Observable.prototype = {
 	},
 
 	/**
-	 * @returns {null|RenderStateData}
+	 * @returns {null|RenderStateData|InputData}
 	 */
 	getState: function () {
 		return this.getInput( '_jfb_current_render_states' );

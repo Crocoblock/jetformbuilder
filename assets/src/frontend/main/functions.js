@@ -104,6 +104,10 @@ function toHTML( text ) {
 }
 
 function isEmpty( value ) {
+	if ( null === value || undefined === value ) {
+		return true;
+	}
+
 	if ( 'object' === typeof value && !Array.isArray( value ) ) {
 		return !Object.keys( value )?.length;
 	}
@@ -112,7 +116,7 @@ function isEmpty( value ) {
 		return 0 === value;
 	}
 
-	return null === value || undefined === value || !value?.length;
+	return !value?.length;
 }
 
 export { allRejected, getLanguage, setAttrs, toHTML, isEmpty };

@@ -8,11 +8,15 @@ use Jet_Form_Builder\Classes\Macro_Constants\Constants_Manager;
 
 class Macros_Parser {
 
-	private $content;
-	private $replacements;
+	private $content      = '';
+	private $replacements = array();
 
-	public function set_content( $content ) {
-		if ( ! $content ) {
+	public function set_content( $content ): Macros_Parser {
+		if ( is_array( $content ) ) {
+			$content = $content[0] ?? '';
+		}
+
+		if ( ! $content || ! is_string( $content ) ) {
 			return $this;
 		}
 		$this->content = $content;
@@ -20,7 +24,7 @@ class Macros_Parser {
 		return $this;
 	}
 
-	public function set_replacements( $replacements ) {
+	public function set_replacements( $replacements ): Macros_Parser {
 		if ( ! $replacements ) {
 			return $this;
 		}
@@ -29,7 +33,7 @@ class Macros_Parser {
 		return $this;
 	}
 
-	public function parse_macros( $content = false, $replacements = false ) {
+	public function parse_macros( $content = false, $replacements = false ): string {
 		$this->set_content( $content )->set_replacements( $replacements );
 
 		if ( ! $this->content || ! $this->replacements ) {
@@ -42,14 +46,12 @@ class Macros_Parser {
 	/**
 	 * Parse macros in content
 	 *
-	 * @param  [type] $content [description]
-	 *
-	 * @return [type]          [description]
+	 * @return string
 	 */
-	public function macros_replace() {
+	public function macros_replace(): string {
 		Constants_Manager::instance();
 
-		return preg_replace_callback(
+		$content = preg_replace_callback(
 			'/%(.+?)%/',
 			function ( $match ) {
 				$filters = explode( '|', $match[1] );
@@ -94,6 +96,7 @@ class Macros_Parser {
 			$this->content
 		);
 
+		return is_string( $content ) ? $content : '';
 	}
 
 	/**

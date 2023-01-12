@@ -136,7 +136,7 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return ( new \Jet_Form_Builder\Presets\Types\Dynamic_Preset() )->parse_json( $value );
 	}
 
-	function jet_fb_parse_macro( string $content ) {
+	function jet_fb_parse_macro( $content ): string {
 		return jet_fb_handler()->parser->parse_macros(
 			$content,
 			jet_fb_action_handler()->request_data

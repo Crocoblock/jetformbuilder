@@ -13,10 +13,6 @@ const {
 	      addFilter,
       } = JetPlugins.hooks;
 
-const {
-	      applyFilters: deprecatedApplyFilters = false,
-      } = window?.JetFormBuilderMain?.filters ?? {};
-
 addFilter(
 	'jet.fb.custom.formula.macro',
 	'jet-form-builder',
@@ -220,6 +216,10 @@ CalculatedFormula.prototype = {
 		if ( !this.parts.length ) {
 			return this.formula;
 		}
+
+		const {
+			      applyFilters: deprecatedApplyFilters = false,
+		      } = window?.JetFormBuilderMain?.filters ?? {};
 
 		return this.parts.map( current => {
 			if ( 'function' !== typeof current ) {

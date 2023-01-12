@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Compatibility;
 
 
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Plugin;
 
 class Deprecated {
@@ -12,7 +13,7 @@ class Deprecated {
 
 	public function __construct() {
 		add_filter(
-			'jet-form-builder/before-end-form',
+			'jet-form-builder/before-start-form',
 			array( $this, 'add_deprecated_script' )
 		);
 		add_action(

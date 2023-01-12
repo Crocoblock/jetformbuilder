@@ -144,6 +144,6 @@ addFilter(
 			checkoutField.watch( () => formula.setResult() );
 		}
 
-		return macroPart.replace( /(ADVANCED_PRICE::[\w\-]+)/, '%$1%' );
+		return macroPart;
 	},
 );

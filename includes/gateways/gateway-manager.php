@@ -3,15 +3,11 @@
 namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
-use Jet_Form_Builder\Actions\Executors\Action_Default_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
-use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;

@@ -24,16 +24,46 @@ class JetPlugins {
 		// Init in some scope if needed. By default on body
 		$scope = $scope || jQuery( 'body' );
 
-		$scope.find( '[data-is-block*="/"]' ).each( ( index, el ) => {
-			this.initBlock( el );
-		} );
+		if ( $scope && $scope.length ) {
+			let $blocksList = $scope.find( '[data-is-block*="/"]' );
+			$blocksList && $blocksList.length && $blocksList.each( ( index, el ) => {
+				this.initBlock( el );
+			} );
+		}
 
 	}
 
-	initBlock( el ) {
-		if ( el.dataset.isBlock ) {
-			this.hooks.doAction( this.hookNameFromBlock( el.dataset.isBlock ), jQuery( el ) );
+	initBlock( el, forceInit ) {
+
+		forceInit = forceInit || false;
+
+		if ( el.dataset.isBlock && this.hasHandlers( this.hookNameFromBlock( el.dataset.isBlock ) ) ) {
+
+			let needInit = forceInit;
+
+			if ( ! needInit ) {
+				needInit = undefined === el.dataset.jetInited;
+			}
+
+			if ( needInit ) {
+				this.hooks.doAction( this.hookNameFromBlock( el.dataset.isBlock ), jQuery( el ) );
+				el.dataset.jetInited = true;
+			}
+
 		}
+	}
+
+	hasHandlers( hookName ) {
+
+		if ( ! this.hooks.actions[ hookName ] ) {
+			return false;
+		}
+
+		if ( ! this.hooks.actions[ hookName ].handlers || ! this.hooks.actions[ hookName ].handlers.length ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	bulkBlocksInit( blocks ) {

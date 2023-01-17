@@ -5,12 +5,23 @@ const {
 	      ToggleControl,
 	      __experimentalToggleGroupControl: ToggleGroupControl,
 	      __experimentalToggleGroupControlOption: ToggleGroupControlOption,
-      }                = wp.components;
-const { __ }           = wp.i18n;
-const { useState }     = wp.element;
-const { useMetaState } = JetFBHooks;
-const { ActionModal }  = JetFBComponents;
-const { formats }      = window.jetFormValidation;
+      } = wp.components;
+const {
+	      __,
+      } = wp.i18n;
+const {
+	      useState,
+	      useEffect,
+      } = wp.element;
+const {
+	      useMetaState,
+      } = JetFBHooks;
+const {
+	      ActionModal,
+      } = JetFBComponents;
+const {
+	      formats,
+      } = window.jetFormValidation;
 
 function ValidationPlugin() {
 	const [ validation, setValidation ] = useMetaState( '_jf_validation' );
@@ -20,6 +31,16 @@ function ValidationPlugin() {
 	const [ isLoadNonce, setLoadNonce ]           = useState( 'render' === (
 		args?.load_nonce ?? 'render'
 	) );
+
+	useEffect( () => {
+		setArgs( prev => {
+			const load_nonce = (
+				                   !isLoadNonce
+			                   ) ? 'hide' : 'render';
+
+			return { ...prev, load_nonce };
+		} );
+	}, [ isLoadNonce ] );
 
 	return <>
 		<ToggleControl
@@ -31,13 +52,6 @@ function ValidationPlugin() {
 				'jet-form-builder' ) }
 			onChange={ () => {
 				setLoadNonce( prev => !prev );
-				setArgs( prev => {
-					const load_nonce = (
-						                   !isLoadNonce
-					                   ) ? 'hide' : 'render';
-
-					return { ...prev, load_nonce };
-				} );
 			} }
 		/>
 

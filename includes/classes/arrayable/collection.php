@@ -126,11 +126,12 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * @return mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return $this->items[ $this->position ];
 	}
 
-
+	#[\ReturnTypeWillChange]
 	public function next() {
 		++ $this->position;
 	}
@@ -138,6 +139,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * @return bool|float|int|string|null
 	 */
+	#[\ReturnTypeWillChange]
 	public function key() {
 		return $this->position;
 	}
@@ -145,10 +147,11 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * @return bool
 	 */
-	public function valid() {
+	public function valid(): bool {
 		return isset( $this->items[ $this->position ] );
 	}
 
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		$this->position = 0;
 	}
@@ -162,7 +165,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 *
 	 * @return bool
 	 */
-	public function offsetExists( $offset ) {
+	public function offsetExists( $offset ): bool {
 		return isset( $this->items[ $offset ] );
 	}
 
@@ -171,6 +174,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 *
 	 * @return mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet( $offset ) {
 		return $this->items[ $offset ] ?? null;
 	}
@@ -179,6 +183,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 * @param mixed $offset
 	 * @param mixed $value
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet( $offset, $value ) {
 		if ( is_null( $offset ) ) {
 			$this->items[] = $value;
@@ -190,6 +195,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * @param mixed $offset
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
 		unset( $this->items[ $offset ] );
 	}
@@ -198,10 +204,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 * \Countable
 	 */
 
-	/**
-	 * @return int
-	 */
-	public function count() {
+	public function count(): int {
 		return count( $this->items );
 	}
 

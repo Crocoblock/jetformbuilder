@@ -1,4 +1,5 @@
 import Filter from './Filter';
+import { isEmpty } from '../../functions';
 
 function FallBackFilter() {
 	Filter.call( this );
@@ -7,7 +8,7 @@ function FallBackFilter() {
 		return 'ifEmpty';
 	};
 	this.apply   = function ( value, fallback ) {
-		return value ? value : fallback;
+		return isEmpty( value ) ? value : fallback;
 	};
 }
 

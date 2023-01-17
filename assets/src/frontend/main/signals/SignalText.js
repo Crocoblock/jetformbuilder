@@ -8,7 +8,7 @@ function SignalText() {
 	};
 	this.runSignal   = function () {
 		this.input.calcValue = Number.isNaN( Number( this.input.calcValue ) )
-		                       ? 0
+		                       ? this.input.calcValue
 		                       : parseFloat( this.input.calcValue );
 
 		const [ node ] = this.input.nodes;

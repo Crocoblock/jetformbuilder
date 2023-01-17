@@ -19,7 +19,7 @@ addFilter(
 );
 
 addFilter(
-	'jet.fb.restrictions.filters',
+	'jet.fb.filters',
 	'jet-form-builder/media-field',
 	function ( filters ) {
 		filters.push( SizeFormatFilter );

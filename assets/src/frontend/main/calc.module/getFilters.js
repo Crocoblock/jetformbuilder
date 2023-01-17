@@ -28,7 +28,7 @@ const { applyFilters } = JetPlugins.hooks;
 let filters = [];
 
 const getFilterItems = () => applyFilters(
-	'jet.fb.restrictions.filters',
+	'jet.fb.filters',
 	[
 		SetYearFilter,
 		SetMonthFilter,

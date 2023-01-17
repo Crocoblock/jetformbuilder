@@ -250,10 +250,8 @@ abstract class Base {
 				sprintf(
 					'data-jfb-func="%s"',
 					Tools::esc_attr( array(
-						array(
-							'show' => array( 'dom' => true ),
-						),
-					) )
+						'show' => array( 'dom' => true ),
+					), )
 				),
 			);
 

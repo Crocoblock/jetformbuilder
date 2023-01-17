@@ -53,7 +53,7 @@ class Call_Webhook extends Base {
 			$this
 		);
 
-		$webhook_url = ( new Macros_Parser() )->parse_macros( $webhook_url, $request );
+		$webhook_url = jet_fb_parse_macro( $webhook_url );
 
 		$webhook_url = apply_filters(
 			'jet-form-builder/action/webhook/request-url',

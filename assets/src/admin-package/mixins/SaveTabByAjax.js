@@ -87,6 +87,10 @@ export default {
 				...ajaxRequest.data,
 			};
 
+			if ( window?.JetFBPageConfigPackage?.nonce ) {
+				ajaxRequest.data._nonce = window.JetFBPageConfigPackage.nonce;
+			}
+
 			return ajaxRequest;
 		},
 	},

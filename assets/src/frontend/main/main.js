@@ -52,12 +52,13 @@ window.JetFormBuilderFunctions = {
 	getValidateCallbacks,
 };
 
-jQuery( initCommon );
+jQuery( () => {
+	JetPlugins.init( false, [
+		{
+			block: 'jet-forms.form-block',
+			callback: initForm,
+		},
+	] );
+} );
 jQuery( window ).on( 'elementor/frontend/init', initElementor );
 
-JetPlugins.init( false, [
-	{
-		block: 'jet-forms.form-block',
-		callback: initForm,
-	},
-] );

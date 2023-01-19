@@ -52,13 +52,15 @@ window.JetFormBuilderFunctions = {
 	getValidateCallbacks,
 };
 
-jQuery( () => {
-	JetPlugins.init( false, [
-		{
-			block: 'jet-forms.form-block',
-			callback: initForm,
-		},
-	] );
-} );
+jQuery( () => JetPlugins.init() );
+
+JetPlugins.bulkBlocksInit( [
+	{
+		block: 'jet-forms.form-block',
+		callback: initForm,
+		condition: () => 'loading' !== document.readyState,
+	},
+] );
+
 jQuery( window ).on( 'elementor/frontend/init', initElementor );
 

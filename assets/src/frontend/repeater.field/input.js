@@ -70,6 +70,20 @@ function RepeaterData() {
 
 			this.value.current.push( current );
 		}
+
+		const removeButtons = this.container.querySelectorAll(
+			'.jet-form-builder-repeater__remove',
+		);
+
+		for ( const button of removeButtons ) {
+			const row = this.closestRow( button );
+
+			if ( !row ) {
+				continue;
+			}
+
+			button.addEventListener( 'click', () => row.remove() );
+		}
 	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
@@ -134,10 +148,29 @@ RepeaterData.prototype.addNew = function ( count = 1 ) {
 	];
 };
 
-RepeaterData.prototype.findIndex = function ( observableRow ) {
-	return this.value.current.findIndex(
-		current => current === observableRow,
-	);
+/**
+ * @param node {Element}
+ * @return {boolean|ObservableRow}
+ */
+RepeaterData.prototype.closestRow = function ( node ) {
+	const rowNode = node.closest( '.jet-form-builder-repeater__row' );
+
+	if ( !rowNode ) {
+		return false;
+	}
+
+	/**
+	 * @type {ObservableRow[]}
+	 */
+	const rows = this.value.current;
+
+	for ( const row of rows ) {
+		if ( row.rootNode === rowNode ) {
+			return row;
+		}
+	}
+
+	return false;
 };
 
 RepeaterData.prototype.remove = function ( observableRow ) {

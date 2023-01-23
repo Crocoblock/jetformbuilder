@@ -150,7 +150,7 @@ class Controller extends Base_Scenario_Gateway {
 		if ( ! $client_id || ! $secret ) {
 			throw new Gateway_Exception( 'Empty `client_id` or `secret_key`.', array( $client_id, $secret ) );
 		}
-		$hash  = md5( $client_id . $secret );
+		$hash  = 'jet_fb_pp_token_' . md5( $client_id . $secret );
 		$token = get_transient( $hash );
 
 		if ( $token ) {

@@ -14,4 +14,16 @@ abstract class Base_Action extends Base_Gateway_Action {
 			: 'https://api-m.paypal.com/';
 	}
 
+	public function get_request_args(): array {
+		$args = parent::get_request_args();
+
+		$args['user-agent'] = sprintf(
+			'JetFormBuilder/%s; %s',
+			jet_form_builder()->get_version(),
+			get_bloginfo( 'name' )
+		);
+
+		return $args;
+	}
+
 }

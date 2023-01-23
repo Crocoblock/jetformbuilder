@@ -16,11 +16,12 @@ function CalculatedHtmlString( root, options ) {
 			jQuery( input.nodes[ 0 ] ),
 		);
 
-		fieldValue = wp?.hooks?.applyFilters(
-			'jet.fb.macro.field.value',
-			fieldValue,
-			jQuery( input.nodes[ 0 ] ),
-		);
+		fieldValue = wp?.hooks?.applyFilters ?
+		             wp.hooks.applyFilters(
+			             'jet.fb.macro.field.value',
+			             fieldValue,
+			             jQuery( input.nodes[ 0 ] ),
+		             ) : fieldValue;
 
 		return false === fieldValue ? input.value.current : fieldValue;
 	};

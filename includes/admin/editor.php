@@ -441,7 +441,6 @@ class Editor {
 			$handle,
 			Plugin::instance()->plugin_url( 'assets/js/editor/default.builder{min}.js' ),
 			array(
-				'wp-editor',
 				'wp-core-data',
 				'wp-data',
 				'wp-block-library',

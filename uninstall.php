@@ -9,6 +9,18 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die;
 }
 
+$options = get_option( 'jet_form_builder_settings__options-tab' );
+
+if ( ! $options ) {
+	return;
+}
+
+$options = json_decode( $options, true );
+
+if ( empty( $options['clear_on_uninstall'] ) ) {
+	return;
+}
+
 $opt_prefixes = array(
 	'jet\_form\_builder\_settings\_\_',
 	'jet\_fb\_'
@@ -42,7 +54,7 @@ $tables = array(
 global $wpdb;
 
 foreach ( $tables as $table_name ) {
-	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'jet_fb_' . $table_name  );
+	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'jet_fb_' . $table_name );
 }
 
 foreach ( $opt_prefixes as $opt_prefix ) {

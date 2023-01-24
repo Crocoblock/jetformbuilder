@@ -18,6 +18,15 @@
 			:disabled="isLoading"
 			@input="changeVal( 'disable_next_button', $event )"
 		></cx-vui-switcher>
+		<cx-vui-switcher
+			name="clear_on_uninstall"
+			:wrapper-css="[ 'equalwidth' ]"
+			:label="loading.clear_on_uninstall ? `${label.clear_on_uninstall} (loading...)` : label.clear_on_uninstall"
+			:description="help.clear_on_uninstall"
+			:value="storage.clear_on_uninstall"
+			:disabled="isLoading"
+			@input="changeVal( 'clear_on_uninstall', $event )"
+		></cx-vui-switcher>
 	</div>
 </template>
 

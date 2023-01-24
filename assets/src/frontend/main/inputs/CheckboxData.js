@@ -16,6 +16,7 @@ function CheckboxData() {
 	};
 	this.setValue     = function () {
 		this.value.current = this.getActiveValue();
+		this.callable.run();
 	};
 
 	this.merge = function ( inputData ) {

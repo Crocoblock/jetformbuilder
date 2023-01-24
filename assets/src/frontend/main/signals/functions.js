@@ -1,4 +1,4 @@
-import SignalMultiSelect from './SignalMultiSelect';
+import SignalSelect from './SignalSelect';
 import SignalCheckbox from './SignalCheckbox';
 import SignalRadio from './SignalRadio';
 import SignalHiddenArray from './SignalHiddenArray';
@@ -15,7 +15,7 @@ const getSignalTypes = () => applyFilters(
 	[
 		SignalRange,
 		SignalWysiwyg,
-		SignalMultiSelect,
+		SignalSelect,
 		SignalCheckbox,
 		SignalRadio,
 		SignalHiddenArray,

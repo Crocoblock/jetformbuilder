@@ -16,6 +16,7 @@ function RadioData() {
 	};
 	this.setValue       = function () {
 		this.value.current = this.getActiveValue();
+		this.callable.run();
 	};
 	this.getActiveValue = function () {
 		for ( const node of this.nodes ) {

@@ -29,8 +29,12 @@ function isInputMask( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
+function isSelect( node ) {
+	return [ 'select-multiple', 'select-one' ].includes( node?.type );
+}
+
 function isMultiSelect( node ) {
-	return 'select-multiple' === node.type;
+	return 'select-multiple' === node?.type;
 }
 
 /**
@@ -71,6 +75,7 @@ export {
 	isHidden,
 	isRange,
 	isCheckbox,
+	isSelect,
 	isMultiSelect,
 	isChangeType,
 	isInputMask,

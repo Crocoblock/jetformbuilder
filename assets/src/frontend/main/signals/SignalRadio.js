@@ -20,6 +20,8 @@ function SignalRadio() {
 			this.input.calcValue += parseFloat(
 				node.dataset?.calculate ?? node.value,
 			);
+
+			break;
 		}
 	};
 }

@@ -127,6 +127,7 @@ InputData.prototype.setValue = function () {
 		this.value.current = this.nodes[ 0 ]?.value;
 	}
 	this.calcValue = this.value.current;
+	this?.callable?.run();
 };
 InputData.prototype.setNode  = function ( node ) {
 	this.nodes   = [ node ];

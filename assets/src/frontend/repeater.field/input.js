@@ -148,6 +148,12 @@ RepeaterData.prototype.addNew = function ( count = 1 ) {
 	];
 };
 
+RepeaterData.prototype.findIndex = function ( observableRow ) {
+	return this.value.current.findIndex(
+		current => current === observableRow,
+	);
+};
+
 /**
  * @param node {Element}
  * @return {boolean|ObservableRow}

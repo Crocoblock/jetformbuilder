@@ -21,10 +21,27 @@ if ( empty( $options['clear_on_uninstall'] ) ) {
 	return;
 }
 
-$opt_prefixes = array(
+$opt_prefixes        = array(
 	'jet\_form\_builder\_settings\_\_',
-	'jet\_fb\_'
+	'jet\_fb\_',
+	'jfb\-',
+	'jfb\_'
 );
+$additional_prefixes = array();
+
+foreach ( $opt_prefixes as $prefix ) {
+	array_push(
+		$additional_prefixes,
+		'\_transient\_' . $prefix,
+		'\_site\_transient\_' . $prefix,
+		'\_transient\_timeout\_' . $prefix,
+		'\_site\_transient\_timeout\_' . $prefix
+	);
+}
+
+$opt_prefixes = array_merge( $opt_prefixes, $additional_prefixes );
+
+$options_condition = 'option_name LIKE ' . implode( "%' OR option_name LIKE '", $opt_prefixes ) . "%'";
 
 $tables = array(
 	// secondary tables
@@ -57,9 +74,7 @@ foreach ( $tables as $table_name ) {
 	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'jet_fb_' . $table_name );
 }
 
-foreach ( $opt_prefixes as $opt_prefix ) {
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '{$opt_prefix}%'" );
-}
+$wpdb->query( "DELETE FROM {$wpdb->options} WHERE {$options_condition}" );
 
 $forms = get_posts(
 	[

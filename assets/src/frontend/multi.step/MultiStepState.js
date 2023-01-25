@@ -52,6 +52,8 @@ function MultiStepState() {
 			page => new PageState( page, this ),
 		);
 
+		this.elements.forEach( page => page.observe() );
+
 		this.index = new ReactiveVar( 1 );
 		this.index.make();
 		this.index.watch( this.onChangeIndex.bind( this ) );
@@ -100,6 +102,13 @@ function MultiStepState() {
 	this.getRoot = function () {
 		return this.block?.root ?? this.root;
 	};
+
+	/**
+	 * @param page {PageState}
+	 */
+	this.isLastPage = function ( page ) {
+		return this.elements.at( -1 ) === page;
+	}
 }
 
 export default MultiStepState;

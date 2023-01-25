@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { isRadio } from '../supports';
+import ReactiveHook from '../reactive/ReactiveHook';
 
 function RadioData() {
 	InputData.call( this );
@@ -8,10 +9,17 @@ function RadioData() {
 		return isRadio( node );
 	};
 	this.addListeners   = function () {
+		this.enterKey = new ReactiveHook();
+
 		for ( const nodeElement of this.nodes ) {
 			nodeElement.addEventListener( 'change', event => {
 				this.setValue();
 			} );
+
+			nodeElement.addEventListener(
+				'keydown',
+				this.handleEnterKey.bind( this ),
+			);
 		}
 	};
 	this.setValue       = function () {

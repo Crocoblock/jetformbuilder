@@ -23,7 +23,9 @@ function PageState( node, state ) {
 	this.inputs    = [];
 	this.canSwitch = new ReactiveVar( null );
 	this.isShow    = new ReactiveVar( 1 === this.index );
+}
 
+PageState.prototype.observe = function () {
 	this.observeInputs();
 	this.observeConditionalBlocks();
 
@@ -43,7 +45,7 @@ function PageState( node, state ) {
 	);
 
 	doAction( 'jet.fb.multistep.page.init', this );
-}
+};
 
 PageState.prototype.observeInputs = function () {
 	for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
@@ -66,6 +68,10 @@ PageState.prototype.observeInput = function ( node ) {
 	 * @type {InputData}
 	 */
 	const input = node.jfbSync;
+
+	if ( !this.isLast() ) {
+		this.handleInputEnter( input );
+	}
 
 	input.loading.watch( () => {
 		if ( input.loading.current ) {
@@ -202,6 +208,43 @@ PageState.prototype.getLockState = function () {
 	const form = root?.parent?.root?.form ?? root.form;
 
 	return form.lockState;
+};
+
+PageState.prototype.isLast = function () {
+	return this.state.isLastPage( this );
+};
+
+/**
+ * @param input {InputData|RepeaterData}
+ */
+PageState.prototype.handleInputEnter = function ( input ) {
+	input?.enterKey?.addFilter( canSubmit => {
+		this.changePage().then( () => {} ).catch( () => {} );
+
+		// prevent submit
+		return false;
+	} );
+
+	if ( 'repeater' !== input.inputType ) {
+		return;
+	}
+
+	/**
+	 * @type {ObservableRow[]}
+	 */
+	const rows = input.getValue();
+
+	for ( const row of rows ) {
+		for ( const inputRow of row.getInputs() ) {
+			this.handleInputEnter( inputRow );
+		}
+	}
+
+	input.lastObserved.watch( () => {
+		for ( const curInput of input.lastObserved.current.getInputs() ) {
+			this.handleInputEnter( curInput );
+		}
+	} );
 };
 
 export default PageState;

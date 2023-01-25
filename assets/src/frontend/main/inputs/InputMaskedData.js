@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { isInputMask } from '../supports';
+import ReactiveHook from '../reactive/ReactiveHook';
 
 function InputMaskedData() {
 	InputData.call( this );
@@ -13,6 +14,9 @@ function InputMaskedData() {
 		node.addEventListener( 'blur', () => {
 			this.value.current = node.inputmask.unmaskedvalue();
 		} );
+
+		this.enterKey = new ReactiveHook();
+		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );

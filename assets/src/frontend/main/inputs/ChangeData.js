@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { isChangeType } from '../supports';
+import ReactiveHook from '../reactive/ReactiveHook';
 
 function ChangeData() {
 	InputData.call( this );
@@ -13,6 +14,9 @@ function ChangeData() {
 		node.addEventListener( 'change', event => {
 			this.value.current = event.target.value;
 		} );
+
+		this.enterKey = new ReactiveHook();
+		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
 
 	this.onClear = function () {

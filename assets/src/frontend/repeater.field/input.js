@@ -88,9 +88,10 @@ function RepeaterData() {
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
-		this.nodes   = [ node ];
-		this.name    = node.dataset.fieldName;
-		this.rawName = this.name;
+		this.nodes     = [ node ];
+		this.name      = node.dataset.fieldName;
+		this.rawName   = this.name;
+		this.inputType = 'repeater';
 
 		try {
 			const settings = JSON.parse( node.dataset.settings );

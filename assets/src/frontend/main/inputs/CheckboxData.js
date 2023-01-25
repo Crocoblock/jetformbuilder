@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { isCheckbox } from '../supports';
+import ReactiveHook from '../reactive/ReactiveHook';
 
 function CheckboxData() {
 	InputData.call( this );
@@ -9,9 +10,14 @@ function CheckboxData() {
 	};
 	this.addListeners = function () {
 		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
+		this.enterKey = new ReactiveHook();
 
 		for ( const node of this.nodes ) {
 			node.addEventListener( 'change', () => this.setValue() );
+			node.addEventListener(
+				'keydown',
+				this.handleEnterKey.bind( this ),
+			);
 		}
 	};
 	this.setValue     = function () {

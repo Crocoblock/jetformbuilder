@@ -1,5 +1,6 @@
 import LoadingReactiveVar from '../reactive/LoadingReactiveVar';
 import ReactiveVar from '../reactive/ReactiveVar';
+import ReactiveHook from '../reactive/ReactiveHook';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
@@ -21,15 +22,19 @@ const { doAction } = JetPlugins.hooks;
  * @property {LoadingReactiveVar} loading
  * @property {Object<ReactiveVar>} attrs
  * @property {boolean} isRequired
+ * @property {null|ReactiveHook} enterKey
+ * @property {null|string} inputType
  *
  * @constructor
  */
 function InputData() {
-	this.rawName = '';
-	this.name    = '';
-	this.comment = false;
-	this.nodes   = [];
-	this.attrs   = {};
+	this.rawName  = '';
+	this.name     = '';
+	this.comment  = false;
+	this.nodes    = [];
+	this.attrs    = {};
+	this.enterKey = null;
+	this.inputType = null;
 
 	/**
 	 * @type {ReactiveVar}
@@ -70,6 +75,9 @@ InputData.prototype.addListeners = function () {
 	node.addEventListener( 'blur', event => {
 		this.reportOnBlur();
 	} );
+
+	this.enterKey = new ReactiveHook();
+	node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 };
 InputData.prototype.makeReactive = function () {
 	this.onObserve();
@@ -133,6 +141,8 @@ InputData.prototype.setNode  = function ( node ) {
 	this.nodes   = [ node ];
 	this.rawName = node.name ?? '';
 	this.name    = getParsedName( this.rawName );
+
+	this.inputType = node.nodeName.toLowerCase();
 };
 /**
  * Runs once in lifecycle.
@@ -298,6 +308,25 @@ InputData.prototype.getWrapperNode = function () {
 };
 
 InputData.prototype.onForceValidate = function () {
+};
+
+InputData.prototype.handleEnterKey = function ( event ) {
+	// not enter
+	if ( +event.keyCode !== 13 ) {
+		return;
+	}
+
+	event.preventDefault();
+
+	this.onEnterKey();
+};
+
+InputData.prototype.onEnterKey = function () {
+	const canSubmit = this.enterKey.applyFilters( true );
+
+	if ( canSubmit ) {
+		this.getSubmit().submit();
+	}
 };
 
 export default InputData;

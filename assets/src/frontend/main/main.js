@@ -1,7 +1,7 @@
-import initCommon from './init/initCommon';
 import initElementor from './init/initElementor';
 import BaseSignal from './signals/BaseSignal';
 import ReactiveVar from './reactive/ReactiveVar';
+import ReactiveHook from './reactive/ReactiveHook';
 import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
 import Observable from './Observable';
@@ -29,6 +29,7 @@ window.JetFormBuilderAbstract = {
 	InputData,
 	BaseSignal,
 	ReactiveVar,
+	ReactiveHook,
 	LoadingReactiveVar,
 	Observable,
 	ReportingInterface,

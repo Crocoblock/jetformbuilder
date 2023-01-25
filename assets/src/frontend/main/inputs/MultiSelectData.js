@@ -1,5 +1,6 @@
 import InputData from './InputData';
 import { isMultiSelect } from '../supports';
+import ReactiveHook from '../reactive/ReactiveHook';
 
 function MultiSelectData() {
 	InputData.call( this );
@@ -14,6 +15,9 @@ function MultiSelectData() {
 
 		node.addEventListener( 'change', () => this.setValue() );
 		node.addEventListener( 'blur', () => this.reportOnBlur() );
+
+		this.enterKey = new ReactiveHook();
+		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
 	this.setValue       = function () {
 		this.value.current = this.getActiveValue();

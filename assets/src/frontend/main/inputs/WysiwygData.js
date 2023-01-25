@@ -11,6 +11,8 @@ function WysiwygData() {
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
+		this.inputType = 'wysiwyg';
+
 		this.getSubmit().submitter.promise( resolve => {
 			window.tinyMCE.triggerSave();
 			resolve();

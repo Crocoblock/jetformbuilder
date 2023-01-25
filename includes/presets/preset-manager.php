@@ -40,8 +40,6 @@ class Preset_Manager {
 	private $_preset_types = array();
 	private $_source_types;
 
-	private $general_initialized = false;
-
 
 	protected function __construct() {
 		$this->register_preset_types();
@@ -51,7 +49,7 @@ class Preset_Manager {
 	}
 
 	public function set_form_id( $form_id ): Preset_Manager {
-		if ( ! $form_id || $this->general_initialized ) {
+		if ( ! $form_id ) {
 			return $this;
 		}
 		$this->general()->set_init_data( $this->general()->preset_source( $form_id ) );
@@ -61,7 +59,6 @@ class Preset_Manager {
 		} catch ( Preset_Exception $exception ) {
 			// do nothing
 		}
-		$this->general_initialized = true;
 
 		return $this;
 	}
@@ -155,7 +152,7 @@ class Preset_Manager {
 	 */
 	protected function get_preset_type_manager( $args ) {
 		foreach ( $this->preset_types() as $type ) {
-			$preset = $this->get_preset_type( $type->get_slug() );
+			$preset = $type->is_unique() ? clone $type : $type;
 
 			if ( $preset->is_active_preset( $args ) ) {
 				return $preset;

@@ -24,9 +24,6 @@ abstract class Base_Preset {
 	);
 	public $data;
 
-	/** @var Base_Source */
-	public $current_source;
-
 	abstract public function get_fields_map();
 
 	/**
@@ -67,18 +64,6 @@ abstract class Base_Preset {
 			$this->data,
 			$args
 		)->maybe_query_source()->after_init();
-	}
-
-	/**
-	 * @return Base_Source
-	 * @throws Preset_Exception
-	 */
-	public function cached_source(): Base_Source {
-		if ( ! is_a( $this->current_source, Base_Source::class ) ) {
-			throw new Preset_Exception( 'Source is not cached!' );
-		}
-
-		return $this->current_source;
 	}
 
 }

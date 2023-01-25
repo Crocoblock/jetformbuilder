@@ -88,7 +88,7 @@ class Form_Builder {
 		$form .= $this->end_form();
 
 		Live_Form::clear();
-		Preset_Manager::clear();
+		//Preset_Manager::clear();
 
 		return $form;
 	}

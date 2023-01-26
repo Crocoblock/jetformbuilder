@@ -31,8 +31,6 @@ function FileData() {
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
 
-		this.callable.loadFiles();
-
 		node.addEventListener( 'change', event => {
 			const { files } = event.target;
 
@@ -54,6 +52,10 @@ function FileData() {
 	};
 	this.valueType    = function () {
 		return FileList;
+	};
+
+	this.setValue = function () {
+		this.callable.loadFiles();
 	};
 }
 

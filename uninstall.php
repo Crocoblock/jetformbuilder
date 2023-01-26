@@ -41,7 +41,7 @@ foreach ( $opt_prefixes as $prefix ) {
 
 $opt_prefixes = array_merge( $opt_prefixes, $additional_prefixes );
 
-$options_condition = 'option_name LIKE ' . implode( "%' OR option_name LIKE '", $opt_prefixes ) . "%'";
+$options_condition = "option_name LIKE '" . implode( "%' OR option_name LIKE '", $opt_prefixes ) . "%'";
 
 $tables = array(
 	// secondary tables

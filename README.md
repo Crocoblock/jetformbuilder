@@ -19,6 +19,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * ADD: Ability to use required fields in Conditional Block, which removes fields from HTML
 * ADD: Output the label along with the field names in a single form record
 * ADD: `inserted_{$post_type}` to the Form Request
+* ADD: Accessibility improvement in multi-step form
 * UPD: Support shortcodes in the body of the "Send Email" action
 * UPD: Output of unique html ID attribute for each field.
 * FIX: Using the repeater value in the body of the "Send Email" action on events after passing through the payment gateway.

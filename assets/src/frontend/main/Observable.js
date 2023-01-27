@@ -184,6 +184,15 @@ Observable.prototype = {
 	 * @param replace {Boolean}
 	 */
 	pushInput: function ( node, replace = false ) {
+		// prevent saving inputs from preset repeater items in root object
+		// those inputs would saved in ObservableRow object
+
+		if ( !this.parent &&
+			node.parentElement.closest( '.jet-form-builder-repeater' )
+		) {
+			return;
+		}
+
 		const inputData = createInput( node, this );
 		const findInput = this.dataInputs[ inputData.getName() ] ?? false;
 

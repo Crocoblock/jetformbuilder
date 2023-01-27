@@ -8,7 +8,13 @@ import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
 import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
-import { allRejected, getLanguage, toHTML, isEmpty } from './functions';
+import {
+	allRejected,
+	getLanguage,
+	toHTML,
+	isEmpty,
+	getOffsetTop,
+} from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
 import {
@@ -51,6 +57,7 @@ window.JetFormBuilderFunctions = {
 	getParsedName,
 	isEmpty,
 	getValidateCallbacks,
+	getOffsetTop,
 };
 
 jQuery( () => JetPlugins.init() );

@@ -119,4 +119,20 @@ function isEmpty( value ) {
 	return !value?.length;
 }
 
-export { allRejected, getLanguage, setAttrs, toHTML, isEmpty };
+/**
+ * @param node {Element}
+ */
+function getOffsetTop( node ) {
+	const rect = node.getBoundingClientRect();
+
+	return rect?.top + window.scrollY;
+}
+
+export {
+	allRejected,
+	getLanguage,
+	setAttrs,
+	toHTML,
+	isEmpty,
+	getOffsetTop,
+};

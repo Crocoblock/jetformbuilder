@@ -6,6 +6,10 @@ const {
 	      ReactiveVar,
       } = JetFormBuilderAbstract;
 
+const {
+	      doAction,
+      } = JetPlugins.hooks;
+
 function MultiStepState() {
 
 	/**
@@ -75,14 +79,23 @@ function MultiStepState() {
 			this.index.current = 1;
 		} );
 	};
-	this.onChangeIndex = function () {
+	this.onChangeIndex  = function () {
 		for ( const page of this.getPages() ) {
 			page.isShow.current = page.index === this.index.current;
 		}
 
-		jQuery( document ).trigger(
+		window?.jQuery( document )?.trigger(
 			'jet-form-builder/switch-page',
 		);
+	};
+	this.getCurrentPage = function () {
+		for ( const page of this.getPages() ) {
+			if ( page.isShow.current ) {
+				return page;
+			}
+		}
+
+		return false;
 	};
 	/**
 	 * @returns {array<PageState>}
@@ -108,7 +121,11 @@ function MultiStepState() {
 	 */
 	this.isLastPage = function ( page ) {
 		return this.elements.at( -1 ) === page;
-	}
+	};
+
+	this.onReady = function () {
+		doAction( 'jet.fb.multistep.init', this );
+	};
 }
 
 export default MultiStepState;

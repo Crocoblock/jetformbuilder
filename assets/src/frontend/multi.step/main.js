@@ -1,7 +1,13 @@
 import { createMultiStep } from './functions';
 import ConditionPageStateItem from './ConditionPageStateItem';
 
-const { addAction, addFilter } = JetPlugins.hooks;
+const {
+	      addAction,
+	      addFilter,
+      } = JetPlugins.hooks;
+const {
+	      getOffsetTop,
+      } = JetFormBuilderFunctions;
 
 addAction(
 	'jet.fb.observe.after',
@@ -14,6 +20,7 @@ addAction(
 		}
 
 		observable.multistep = multistep;
+		multistep.onReady();
 	},
 );
 
@@ -28,6 +35,7 @@ addAction(
 		}
 
 		block.multistep = multistep;
+		multistep.onReady();
 	},
 );
 

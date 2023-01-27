@@ -57,6 +57,8 @@ function FileData() {
 	this.setValue = function () {
 		this.callable.loadFiles();
 	};
+
+	this.initNotifyValue = () => {};
 }
 
 FileData.prototype = Object.create( InputData.prototype );

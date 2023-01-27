@@ -15,6 +15,7 @@ const { addAction, doAction } = JetPlugins.hooks;
 /**
  * @property {array<InputData>|*} inputs
  * @property {MultiStepState} state
+ * @property {Element} node
  */
 function PageState( node, state ) {
 	this.node      = node;
@@ -59,7 +60,8 @@ PageState.prototype.observeInputs = function () {
 PageState.prototype.observeInput = function ( node ) {
 	if (
 		!this.isNodeBelongThis( node ) ||
-		!node.hasOwnProperty( 'jfbSync' )
+		!node.hasOwnProperty( 'jfbSync' ) ||
+		node.jfbSync.hasParent()
 	) {
 		return;
 	}

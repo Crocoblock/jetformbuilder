@@ -29,9 +29,11 @@ abstract class Shortcode implements Repository_Item_Instance_Trait {
 		$arguments = new Form_Arguments();
 
 		foreach ( $attrs as $name => $attr ) {
-			if ( isset( $arguments->{$name} ) ) {
-				$result[ $name ] = $attr['default'];
+			if ( ! array_key_exists( $name, $arguments->props ) ) {
+				continue;
 			}
+
+			$result[ $name ] = $attr['default'];
 		}
 
 		return $result;

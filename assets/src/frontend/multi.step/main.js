@@ -48,3 +48,24 @@ addFilter(
 		return items;
 	},
 );
+
+addAction(
+	'jet.fb.multistep.init',
+	'jet-form-builder/multi-step/autoscroll',
+	/**
+	 * @param multistep {MultiStepState}
+	 */
+	function ( multistep ) {
+		multistep.index.watch( () => {
+			/**
+			 * @type {PageState|boolean}
+			 */
+			const page = multistep.getCurrentPage();
+
+			window.scrollTo( {
+				top: getOffsetTop( page.node ) - 75,
+				behavior: 'smooth',
+			} );
+		} );
+	},
+);

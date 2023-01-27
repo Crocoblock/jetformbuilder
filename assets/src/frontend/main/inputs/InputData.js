@@ -28,12 +28,12 @@ const { doAction } = JetPlugins.hooks;
  * @constructor
  */
 function InputData() {
-	this.rawName  = '';
-	this.name     = '';
-	this.comment  = false;
-	this.nodes    = [];
-	this.attrs    = {};
-	this.enterKey = null;
+	this.rawName   = '';
+	this.name      = '';
+	this.comment   = false;
+	this.nodes     = [];
+	this.attrs     = {};
+	this.enterKey  = null;
 	this.inputType = null;
 
 	/**
@@ -83,6 +83,7 @@ InputData.prototype.makeReactive = function () {
 	this.onObserve();
 	this.addListeners();
 	this.setValue();
+	this.initNotifyValue();
 
 	this.value.make();
 
@@ -135,7 +136,6 @@ InputData.prototype.setValue = function () {
 		this.value.current = this.nodes[ 0 ]?.value;
 	}
 	this.calcValue = this.value.current;
-	this?.callable?.run();
 };
 InputData.prototype.setNode  = function ( node ) {
 	this.nodes   = [ node ];
@@ -327,6 +327,10 @@ InputData.prototype.onEnterKey = function () {
 	if ( canSubmit ) {
 		this.getSubmit().submit();
 	}
+};
+
+InputData.prototype.initNotifyValue = function () {
+	this.silenceNotify();
 };
 
 export default InputData;

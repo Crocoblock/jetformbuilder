@@ -24,21 +24,6 @@ abstract class Shortcode implements Repository_Item_Instance_Trait {
 		return array();
 	}
 
-	protected function prepare_attributes( $attrs ) {
-		$result    = array();
-		$arguments = new Form_Arguments();
-
-		foreach ( $attrs as $name => $attr ) {
-			if ( ! array_key_exists( $name, $arguments->props ) ) {
-				continue;
-			}
-
-			$result[ $name ] = $attr['default'];
-		}
-
-		return $result;
-	}
-
 	public function add_shortcode_callback( $atts ) {
 		$settings = shortcode_atts( $this->default_args(), $atts, $this->get_name() );
 

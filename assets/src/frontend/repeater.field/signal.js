@@ -13,11 +13,11 @@ function SignalRepeater() {
 	this.isSupported = function ( node, inputData ) {
 		return isRepeater( node );
 	};
-	this.runSignal   = function ( prevValue ) {
+	this.runSignal   = function ( prevValue = [] ) {
 		const { current } = this.input.value;
 		let calcValue     = 0;
 
-		if ( prevValue.length > current.length ) {
+		if ( prevValue?.length && prevValue.length > current.length ) {
 			this.removePrevItems( prevValue );
 		}
 

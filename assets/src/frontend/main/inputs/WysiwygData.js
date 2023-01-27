@@ -50,6 +50,8 @@ function WysiwygData() {
 			this.silenceSet( this.editor.getContent() );
 		} );
 	};
+
+	this.initNotifyValue = () => {};
 }
 
 WysiwygData.prototype = Object.create( InputData.prototype );

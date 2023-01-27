@@ -12,10 +12,7 @@ function RadioData() {
 		this.enterKey = new ReactiveHook();
 
 		for ( const nodeElement of this.nodes ) {
-			nodeElement.addEventListener( 'change', event => {
-				this.setValue();
-			} );
-
+			nodeElement.addEventListener( 'change', () => this.setValue() );
 			nodeElement.addEventListener(
 				'keydown',
 				this.handleEnterKey.bind( this ),
@@ -24,7 +21,6 @@ function RadioData() {
 	};
 	this.setValue       = function () {
 		this.value.current = this.getActiveValue();
-		this.callable.run();
 	};
 	this.getActiveValue = function () {
 		for ( const node of this.nodes ) {

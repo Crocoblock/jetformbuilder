@@ -85,12 +85,14 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/**
 	 * @return Base
 	 */
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return jet_fb_action_handler()->get_action_by_id(
 			$this->action_ids[ $this->position ] ?? 0
 		);
 	}
 
+	#[\ReturnTypeWillChange]
 	public function next() {
 		++ $this->position;
 	}
@@ -98,6 +100,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/**
 	 * @return bool|float|int|string|null
 	 */
+	#[\ReturnTypeWillChange]
 	public function key() {
 		return $this->position;
 	}
@@ -105,11 +108,11 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/**
 	 * @return bool
 	 */
-	public function valid() {
+	public function valid(): bool {
 		return isset( $this->action_ids[ $this->position ] );
 	}
 
-
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		$this->position = 0;
 	}
@@ -119,7 +122,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @return bool
 	 */
-	public function offsetExists( $offset ) {
+	public function offsetExists( $offset ): bool {
 		return isset( jet_fb_action_handler()->form_actions[ $offset ] );
 	}
 
@@ -128,6 +131,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @return mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet( $offset ) {
 		return jet_fb_action_handler()->get_action_by_id( $offset );
 	}
@@ -136,12 +140,14 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	 * @param mixed $offset
 	 * @param mixed $value
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet( $offset, $value ) {
 	}
 
 	/**
 	 * @param mixed $offset
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
 		jet_fb_action_handler()->get_action_by_id( $offset )->unregister();
 	}
@@ -149,7 +155,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	/**
 	 * @return int
 	 */
-	public function count() {
+	public function count(): int {
 		return count( $this->action_ids );
 	}
 }

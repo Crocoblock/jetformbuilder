@@ -268,6 +268,8 @@ abstract class Base_Source {
 			throw new Preset_Exception( 'Undefined block_type: ' . $type, $this->field_args );
 		}
 
+		$block->block_attrs = $this->field_args;
+
 		return $block;
 	}
 

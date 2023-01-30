@@ -371,7 +371,9 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			return $custom_value;
 		}
 
-		return ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
+		$value = ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
+
+		return Preset_Manager::instance()->prepare_result( $this->get_name(), $value );
 	}
 
 

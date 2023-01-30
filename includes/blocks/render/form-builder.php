@@ -88,6 +88,7 @@ class Form_Builder {
 		$form .= $this->end_form();
 
 		Live_Form::clear();
+
 		//Preset_Manager::clear();
 
 		return $form;
@@ -119,6 +120,8 @@ class Form_Builder {
 	 * @return string [type] [description]
 	 */
 	public function start_form() {
+		Plugin::instance()->blocks->enqueue_frontend_styles();
+
 		$start_form = apply_filters( 'jet-form-builder/before-start-form', '', $this );
 
 		$start_form .= $this->maybe_render_fonts_block();
@@ -180,11 +183,11 @@ class Form_Builder {
 			return $this->get_inline_styles();
 		}
 
+		wp_enqueue_style( 'jet-form-builder-frontend' );
 		wp_add_inline_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
 		);
-		wp_enqueue_style( 'jet-form-builder-frontend' );
 
 		return '';
 	}

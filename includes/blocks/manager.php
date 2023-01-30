@@ -213,10 +213,8 @@ class Manager {
 	 */
 	public function enqueue_frontend_assets() {
 		$this->register_form_scripts();
-		$this->enqueue_frontend_styles();
 
 		wp_enqueue_script( self::MAIN_SCRIPT_HANDLE );
-		Jet_Plugins_Ajax::register_script( self::MAIN_SCRIPT_HANDLE );
 	}
 
 	public function register_form_scripts() {

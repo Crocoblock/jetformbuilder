@@ -123,6 +123,7 @@ ReportingInterface.prototype = {
 	getErrors: async function () {
 		if (
 			this.input.loading.current ||
+			this.input?.callable?.lock?.current ||
 			!this.input.isVisible()
 		) {
 			return [];

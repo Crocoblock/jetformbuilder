@@ -202,6 +202,10 @@ function setRestrictions( reporting ) {
 }
 
 /**
+ * You cannot use node.querySelector in this function,
+ * because the Repeater Field validation will return
+ * an error element from the internal field.
+ *
  * @param wrapper {Element}
  * @returns {boolean|Element}
  */
@@ -212,7 +216,16 @@ function getErrorNode( wrapper ) {
 		}
 		return child;
 	}
-	return false;
+
+	const colEndNode = wrapper.querySelector(
+		'.jet-form-builder-col__end',
+	);
+
+	if ( !colEndNode ) {
+		return false;
+	}
+
+	return getErrorNode( colEndNode );
 }
 
 export {

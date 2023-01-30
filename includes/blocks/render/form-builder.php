@@ -185,7 +185,6 @@ class Form_Builder {
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
 		);
 		wp_enqueue_style( 'jet-form-builder-frontend' );
-		Jet_Plugins_Ajax::register_style( 'jet-form-builder-frontend' );
 
 		return '';
 	}

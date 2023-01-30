@@ -705,6 +705,7 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 
 .layout-row .jet-form-builder-row {
 	flex-wrap: nowrap;
+	flex-direction: row;
 }
 
 .jet-fb-map-field {

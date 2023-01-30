@@ -8,6 +8,8 @@ const { BaseSignal } = window.JetFormBuilderAbstract;
 function SignalFile() {
 	BaseSignal.call( this );
 
+	this.lock.current = true;
+
 	this.isSupported = function ( node, inputData ) {
 		return isFile( node );
 	};
@@ -86,6 +88,12 @@ SignalFile.prototype.loadFiles = function () {
 		urls.push( [ url, fileName ] );
 	}
 
+	if ( !urls.length ) {
+		this.lock.current = false;
+
+		return;
+	}
+
 	Promise.allSettled( urls.map( ( [ url, fileName ] ) => (
 		new Promise( ( resolve, reject ) => {
 			fetch( url ).then(
@@ -97,12 +105,10 @@ SignalFile.prototype.loadFiles = function () {
 	) ) ).then( values => {
 		const files = values.map( ( { value } ) => value );
 
-		const report      = this.input.report.bind( this.input );
-		this.input.report = () => {};
-
-		this.input.value.current = createFileList( files );
-
-		this.input.report = report;
+		this.lock.current = false;
+		this.input.silenceSet( createFileList( files ) );
+	} ).catch( () => {
+		this.lock.current = false;
 	} );
 };
 

@@ -47,7 +47,9 @@ ObservableRow.prototype.initCalc = function () {
 	formula.relatedCallback = function ( input ) {
 		return input.calcValue;
 	};
-	formula.setResult();
+
+	this.calc = formula.calculate();
+	this.parent.silenceNotify();
 };
 
 export default ObservableRow;

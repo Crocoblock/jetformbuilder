@@ -39,7 +39,6 @@ function ReportingInterface() {
 	this.validityState = null;
 	this.promisesCount = 0;
 	this.isSilence     = null;
-	this.isClick       = null;
 }
 
 ReportingInterface.prototype = {

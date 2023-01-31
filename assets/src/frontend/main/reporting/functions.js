@@ -102,7 +102,6 @@ function getValidateCallbacks( inputs, silence = false ) {
 					catch( reject ).finally(
 					() => {
 						input.reporting.isSilence = null;
-						input.reporting.isClick = null;
 					},
 				);
 			},

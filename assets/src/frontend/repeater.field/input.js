@@ -122,8 +122,14 @@ function RepeaterData() {
 	};
 
 	this.onForceValidate = function () {
-		this.reporting.isClick   = true;
 		this.reporting.valuePrev = null;
+
+		for ( const restriction of this.reporting.restrictions ) {
+			if ( !restriction.hasOwnProperty( 'silenceInner' ) ) {
+				continue;
+			}
+			restriction.silenceInner = false;
+		}
 	};
 }
 

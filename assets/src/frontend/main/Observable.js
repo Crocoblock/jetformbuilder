@@ -15,7 +15,6 @@ const {
 function Observable( parent = null ) {
 	this.parent     = parent;
 	this.dataInputs = {};
-	this.data       = {};
 	this.form       = null;
 	this.multistep  = null;
 	this.rootNode   = null;
@@ -33,7 +32,6 @@ Observable.prototype = {
 	 * }
 	 */
 	dataInputs: {},
-	data: {},
 
 	/**
 	 * @type {FormSubmit}

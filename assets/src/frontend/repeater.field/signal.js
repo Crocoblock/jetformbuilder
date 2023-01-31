@@ -58,7 +58,7 @@ function SignalRepeater() {
 
 		const appended = this.input.container.lastChild;
 
-		if ( this.input.isDefaultCalc ) {
+		if ( this.input.isManualCount ) {
 			appended.querySelector(
 				'.jet-form-builder-repeater__remove',
 			).addEventListener(

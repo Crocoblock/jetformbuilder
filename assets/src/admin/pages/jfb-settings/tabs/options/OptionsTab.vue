@@ -10,15 +10,6 @@
 			@input="changeVal( 'enable_dev_mode', $event )"
 		></cx-vui-switcher>
 		<cx-vui-switcher
-			name="disable_next_button"
-			:wrapper-css="[ 'equalwidth' ]"
-			:label="loading.disable_next_button ? `${label.disable_next_button} (loading...)` : label.disable_next_button"
-			:description="help.disable_next_button"
-			:value="storage.disable_next_button"
-			:disabled="isLoading"
-			@input="changeVal( 'disable_next_button', $event )"
-		></cx-vui-switcher>
-		<cx-vui-switcher
 			name="clear_on_uninstall"
 			:wrapper-css="[ 'equalwidth' ]"
 			:label="loading.clear_on_uninstall ? `${label.clear_on_uninstall} (loading...)` : label.clear_on_uninstall"
@@ -27,6 +18,31 @@
 			:disabled="isLoading"
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
+		<cx-vui-component-wrapper
+			:label="__( 'Form Navigation', 'jet-form-builder' )"
+			:description="__( 'Settings for multi-step forms' )"
+			:wrapper-css="[ 'equalwidth' ]"
+		/>
+		<div class="cx-vui-inner-panel">
+			<cx-vui-switcher
+				name="disable_next_button"
+				:wrapper-css="[ 'equalwidth' ]"
+				:label="loading.disable_next_button ? `${label.disable_next_button} (loading...)` : label.disable_next_button"
+				:description="help.disable_next_button"
+				:value="storage.disable_next_button"
+				:disabled="isLoading"
+				@input="changeVal( 'disable_next_button', $event )"
+			></cx-vui-switcher>
+			<cx-vui-switcher
+				name="scroll_on_next"
+				:wrapper-css="[ 'equalwidth' ]"
+				:label="loading.scroll_on_next ? `${label.scroll_on_next} (loading...)` : label.scroll_on_next"
+				:description="help.scroll_on_next"
+				:value="storage.scroll_on_next"
+				:disabled="isLoading"
+				@input="changeVal( 'scroll_on_next', $event )"
+			></cx-vui-switcher>
+		</div>
 	</div>
 </template>
 
@@ -37,7 +53,7 @@ import {
 	label,
 } from './source';
 
-const { SaveTabByAjax } = window.JetFBMixins;
+const { SaveTabByAjax, i18n } = window.JetFBMixins;
 
 export default {
 	name: 'options-tab',
@@ -47,7 +63,7 @@ export default {
 			default: {},
 		},
 	},
-	mixins: [ SaveTabByAjax ],
+	mixins: [ SaveTabByAjax, i18n ],
 	data() {
 		return {
 			label, help,

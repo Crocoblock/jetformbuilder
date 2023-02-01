@@ -19,8 +19,7 @@
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
 		<cx-vui-component-wrapper
-			:label="__( 'Form Navigation', 'jet-form-builder' )"
-			:description="__( 'Settings for multi-step forms' )"
+			:label="__( 'Form Accessibility', 'jet-form-builder' )"
 			:wrapper-css="[ 'equalwidth' ]"
 		/>
 		<div class="cx-vui-inner-panel">
@@ -41,6 +40,15 @@
 				:value="storage.scroll_on_next"
 				:disabled="isLoading"
 				@input="changeVal( 'scroll_on_next', $event )"
+			></cx-vui-switcher>
+			<cx-vui-switcher
+				name="auto_focus"
+				:wrapper-css="[ 'equalwidth' ]"
+				:label="loading.auto_focus ? `${label.auto_focus} (loading...)` : label.auto_focus"
+				:description="help.auto_focus"
+				:value="storage.auto_focus"
+				:disabled="isLoading"
+				@input="changeVal( 'auto_focus', $event )"
 			></cx-vui-switcher>
 		</div>
 	</div>

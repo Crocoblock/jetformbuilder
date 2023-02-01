@@ -10,6 +10,7 @@ class Options_Handler extends Base_Handler {
 		'clear_on_uninstall'  => false,
 		'disable_next_button' => true,
 		'scroll_on_next'      => false,
+		'auto_focus'          => false,
 	);
 
 	public function slug() {

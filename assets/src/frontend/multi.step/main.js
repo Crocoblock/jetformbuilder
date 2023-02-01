@@ -5,9 +5,6 @@ const {
 	      addAction,
 	      addFilter,
       } = JetPlugins.hooks;
-const {
-	      getOffsetTop,
-      } = JetFormBuilderFunctions;
 
 addAction(
 	'jet.fb.observe.after',
@@ -66,7 +63,7 @@ addAction(
 			const page = multistep.getCurrentPage();
 
 			window.scrollTo( {
-				top: getOffsetTop( page.node ) - page.offset,
+				top: page.getOffsetTop(),
 				behavior: 'smooth',
 			} );
 		} );

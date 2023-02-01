@@ -1,6 +1,7 @@
 import LoadingReactiveVar from '../reactive/LoadingReactiveVar';
 import AjaxSubmit from './AjaxSubmit';
 import ReloadSubmit from './ReloadSubmit';
+import { getOffsetTop } from '../functions';
 
 /**
  * @param observable {Observable}
@@ -11,6 +12,7 @@ function FormSubmit( observable ) {
 	this.observable = observable;
 	this.lockState  = new LoadingReactiveVar( false );
 	this.lockState.make();
+	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
 
 	/**
 	 * @param event {Event}
@@ -27,7 +29,19 @@ function FormSubmit( observable ) {
 			this.toggle();
 
 			this.submitter.submit();
-		} ).catch( () => {} );
+		} ).catch( () => {
+			if ( !this.autoFocus ) {
+				return;
+			}
+
+			for ( const input of this.observable.getInputs() ) {
+				if ( input.reporting.validityState.current ) {
+					continue;
+				}
+				input.onFocus();
+				break;
+			}
+		} );
 	};
 
 	this.clearErrors = function () {

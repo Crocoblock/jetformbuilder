@@ -260,21 +260,22 @@ class Manager {
 			'JetFormBuilderSettings',
 			apply_filters(
 				'jet-form-builder/frontend-settings',
-				array(
-					'disable_next'        => $options['disable_next_button'] ?? true,
-					'scroll_on_next'      => $options['scroll_on_next'] ?? false,
-					'ajaxurl'             => Http_Tools::get_form_action_url(
-						array( 'method' => 'ajax' )
+				array_merge(
+					array(
+						'ajaxurl'             => Http_Tools::get_form_action_url(
+							array( 'method' => 'ajax' )
+						),
+						'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
+						'version'             => jet_form_builder()->get_version(),
+						'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
+						'replaceAttrs'        => array(
+							'href',
+							'src',
+							'alt',
+							'title',
+						),
 					),
-					'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-					'version'             => jet_form_builder()->get_version(),
-					'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
-					'replaceAttrs'        => array(
-						'href',
-						'src',
-						'alt',
-						'title',
-					),
+					$options
 				)
 			)
 		);

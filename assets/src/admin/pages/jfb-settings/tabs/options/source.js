@@ -11,6 +11,10 @@ const label = {
 		'Scroll to top on switch page',
 		'jet-form-builder',
 	),
+	auto_focus: __(
+		'Automatic focus',
+		'jet-form-builder',
+	),
 };
 
 const help = {
@@ -32,6 +36,12 @@ In particular, those that were uploaded using Media Field.`,
 	scroll_on_next: __(
 		`Automatic scrolling to the top of the form when 
 switching between form pages.`,
+		'jet-form-builder',
+	),
+	auto_focus: __(
+		`Focus on the field is activated when switching between 
+pages of the form. Also when trying to go to the next page or 
+submit a form with an invalid field.`,
 		'jet-form-builder',
 	),
 };

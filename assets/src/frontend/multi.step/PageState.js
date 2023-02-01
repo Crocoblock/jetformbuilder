@@ -8,12 +8,13 @@ const {
 
 const {
 	      validateInputs,
+	      getOffsetTop,
       } = JetFormBuilderFunctions;
 
 const { addAction, doAction } = JetPlugins.hooks;
 
 /**
- * @property {array<InputData>|*} inputs
+ * @property {InputData[]} inputs
  * @property {MultiStepState} state
  * @property {Element} node
  */
@@ -25,6 +26,11 @@ function PageState( node, state ) {
 	this.inputs    = [];
 	this.canSwitch = new ReactiveVar( null );
 	this.isShow    = new ReactiveVar( 1 === this.index );
+
+	/**
+	 * @since 3.0.1
+	 */
+	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
 }
 
 PageState.prototype.observe = function () {
@@ -185,11 +191,23 @@ PageState.prototype.changePage          = async function ( isBack ) {
 
 	await this.updateStateAsync( false );
 
-	if ( !this.canSwitch.current ) {
+	if ( this.canSwitch.current ) {
+		this.state.index.current = this.index + 1;
+
 		return;
 	}
 
-	this.state.index.current = this.index + 1;
+	if ( !this.autoFocus ) {
+		return;
+	}
+
+	for ( const input of this.inputs ) {
+		if ( input.reporting.validityState.current ) {
+			continue;
+		}
+		input.onFocus();
+		break;
+	}
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
@@ -251,6 +269,10 @@ PageState.prototype.handleInputEnter = function ( input ) {
 			this.handleInputEnter( curInput );
 		}
 	} );
+};
+
+PageState.prototype.getOffsetTop = function () {
+	return getOffsetTop( this.node ) - this.offset;
 };
 
 export default PageState;

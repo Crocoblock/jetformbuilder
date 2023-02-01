@@ -4,7 +4,7 @@ import ReactiveHook from '../reactive/ReactiveHook';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
-import { setAttrs } from '../functions';
+import { getOffsetTop, setAttrs } from '../functions';
 
 const { doAction } = JetPlugins.hooks;
 
@@ -28,13 +28,14 @@ const { doAction } = JetPlugins.hooks;
  * @constructor
  */
 function InputData() {
-	this.rawName   = '';
-	this.name      = '';
-	this.comment   = false;
-	this.nodes     = [];
-	this.attrs     = {};
-	this.enterKey  = null;
-	this.inputType = null;
+	this.rawName       = '';
+	this.name          = '';
+	this.comment       = false;
+	this.nodes         = [];
+	this.attrs         = {};
+	this.enterKey      = null;
+	this.inputType     = null;
+	this.offsetOnFocus = 75;
 
 	/**
 	 * @type {ReactiveVar}
@@ -331,6 +332,23 @@ InputData.prototype.onEnterKey = function () {
 
 InputData.prototype.initNotifyValue = function () {
 	this.silenceNotify();
+};
+
+InputData.prototype.onFocus = function () {
+	const [ node ] = this.nodes;
+
+	node?.focus( { preventScroll: true } );
+
+	this.scrollTo();
+};
+
+InputData.prototype.scrollTo = function () {
+	const [ node ] = this.nodes;
+
+	window.scrollTo( {
+		top: getOffsetTop( node ) - this.offsetOnFocus,
+		behavior: 'smooth',
+	} );
 };
 
 export default InputData;

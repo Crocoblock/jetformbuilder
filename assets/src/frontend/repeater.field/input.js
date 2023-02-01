@@ -22,7 +22,7 @@ function RepeaterData() {
 		return false;
 	};
 	this.addListeners = function () {
-		if ( this.isDefaultCalc ) {
+		if ( this.isManualCount ) {
 			this.buttonNode.addEventListener( 'click', () => this.addNew() );
 
 			return;
@@ -96,16 +96,21 @@ function RepeaterData() {
 		try {
 			const settings = JSON.parse( node.dataset.settings );
 
-			this.calcType   = settings?.calcType || 'default';
-			this.itemsField = settings?.itemsField;
+			this.manageItems = settings?.manageItems || 'manually';
+			this.calcType    = settings?.calcType || 'default';
+			this.itemsField  = settings?.itemsField;
 		}
 		catch ( error ) {
-			this.calcType = 'default';
+			this.calcType    = 'default';
+			this.manageItems = 'manually';
 			// silence
 		}
 
-		this.isDefaultCalc = !this.itemsField || 'default' === this.calcType;
+		this.isManualCount = (
+			!this.itemsField || 'manually' === this.manageItems
+		);
 
+		// can be null
 		this.buttonNode = node.querySelector(
 			'.jet-form-builder-repeater__new',
 		);
@@ -122,8 +127,14 @@ function RepeaterData() {
 	};
 
 	this.onForceValidate = function () {
-		this.reporting.isClick   = true;
 		this.reporting.valuePrev = null;
+
+		for ( const restriction of this.reporting.restrictions ) {
+			if ( !restriction.hasOwnProperty( 'silenceInner' ) ) {
+				continue;
+			}
+			restriction.silenceInner = false;
+		}
 	};
 }
 

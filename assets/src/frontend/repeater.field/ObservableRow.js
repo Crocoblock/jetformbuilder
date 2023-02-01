@@ -33,7 +33,7 @@ ObservableRow.prototype.initCalc = function () {
 	const [ node ]      = this.parent.nodes;
 	const formulaString = node.dataset?.formula;
 
-	if ( !formulaString ) {
+	if ( !formulaString || 'default' === this.parent.calcType ) {
 		return;
 	}
 
@@ -46,6 +46,9 @@ ObservableRow.prototype.initCalc = function () {
 	};
 	formula.relatedCallback = function ( input ) {
 		return input.calcValue;
+	};
+	formula.emptyValue      = function () {
+		return 0;
 	};
 
 	this.calc = formula.calculate();

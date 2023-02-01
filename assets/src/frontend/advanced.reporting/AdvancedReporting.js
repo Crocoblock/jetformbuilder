@@ -81,7 +81,17 @@ AdvancedReporting.prototype.getErrorsRaw = async function ( promises ) {
  * @param validationErrors {AdvancedRestriction[]|Restriction[]}
  */
 AdvancedReporting.prototype.report = function ( validationErrors ) {
-	this.insertError( validationErrors[ 0 ].getMessage() );
+	let message = '';
+
+	for ( const validationError of validationErrors ) {
+		message = validationError.getMessage();
+
+		if ( message?.length ) {
+			break;
+		}
+	}
+
+	this.insertError( message );
 };
 AdvancedReporting.prototype.setInput         = function ( input ) {
 	this.messages = getValidationMessages( input.nodes[ 0 ] );

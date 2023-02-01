@@ -14,6 +14,8 @@ const {
 function RepeaterRestriction() {
 	AdvancedRestriction.call( this );
 
+	this.silenceInner = true;
+
 	this.isSupported = function ( node, reporting ) {
 		return isRepeater( node );
 	};
@@ -52,14 +54,16 @@ function RepeaterRestriction() {
 		/**
 		 * @type {Observable[]}
 		 */
-		const rows      = this.reporting.input.value.current;
-		const callbacks = [];
+		const rows         = this.reporting.input.value.current;
+		const callbacks    = [];
+		const silenceInner = this.silenceInner;
+		this.silenceInner  = true;
 
 		for ( const observable of rows ) {
 			for ( const input of observable.getInputs() ) {
 				callbacks.push(
 					( resolve, reject ) => input.reporting.checkValidity(
-						!this.reporting.isClick,
+						silenceInner,
 					).
 						then( resolve ).
 						catch( reject ),
@@ -82,5 +86,7 @@ function RepeaterRestriction() {
 }
 
 RepeaterRestriction.prototype = Object.create( AdvancedRestriction.prototype );
+
+RepeaterRestriction.prototype.silenceInner = null;
 
 export default RepeaterRestriction;

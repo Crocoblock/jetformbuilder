@@ -267,6 +267,7 @@ class Manager {
 						array( 'method' => 'ajax' )
 					),
 					'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
+					'version'             => jet_form_builder()->get_version(),
 					'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
 					'replaceAttrs'        => array(
 						'href',

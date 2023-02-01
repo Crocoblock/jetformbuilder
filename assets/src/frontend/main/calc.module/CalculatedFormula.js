@@ -240,7 +240,9 @@ CalculatedFormula.prototype = {
 			const result = current();
 
 			return (
-				       null === result || '' === result
+				       null === result ||
+				       '' === result ||
+				       Number.isNaN( result )
 			       ) ? this.emptyValue() : result;
 		} ).join( '' );
 	},

@@ -137,9 +137,12 @@ PageState.prototype.updateState = function () {
 };
 
 PageState.prototype.updateStateAsync    = async function ( silence = true ) {
-	for ( const input of this.getInputs() ) {
-		input.onForceValidate();
+	if ( !silence ) {
+		for ( const input of this.getInputs() ) {
+			input.onForceValidate();
+		}
 	}
+
 	try {
 		await validateInputs( this.getInputs(), silence );
 

@@ -262,11 +262,11 @@ class Manager {
 				'jet-form-builder/frontend-settings',
 				array(
 					'disable_next'        => $options['disable_next_button'] ?? true,
+					'scroll_on_next'      => $options['scroll_on_next'] ?? false,
 					'ajaxurl'             => Http_Tools::get_form_action_url(
 						array( 'method' => 'ajax' )
 					),
 					'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-					'scrollOffset'        => - 50,
 					'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
 					'replaceAttrs'        => array(
 						'href',

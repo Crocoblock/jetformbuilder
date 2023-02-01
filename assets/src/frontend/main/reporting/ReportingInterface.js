@@ -245,6 +245,14 @@ ReportingInterface.prototype = {
 
 		return Promise.reject();
 	},
+	/**
+	 * @since 3.0.1
+	 *
+	 * @return {boolean}
+	 */
+	hasAutoScroll: function () {
+		return false;
+	},
 };
 
 export default ReportingInterface;

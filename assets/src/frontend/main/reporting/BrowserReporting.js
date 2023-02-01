@@ -32,6 +32,10 @@ function BrowserReporting() {
 	this.validateOnChangeState = function ( silence = false ) {
 		return silence ? this.validate() : this.validateWithNotice();
 	};
+
+	this.hasAutoScroll = function () {
+		return true;
+	};
 }
 
 BrowserReporting.prototype = Object.create( ReportingInterface.prototype );

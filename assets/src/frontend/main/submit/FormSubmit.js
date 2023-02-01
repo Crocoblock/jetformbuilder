@@ -1,7 +1,7 @@
 import LoadingReactiveVar from '../reactive/LoadingReactiveVar';
 import AjaxSubmit from './AjaxSubmit';
 import ReloadSubmit from './ReloadSubmit';
-import { getOffsetTop } from '../functions';
+import { focusOnInvalidInput, getOffsetTop } from '../functions';
 
 /**
  * @param observable {Observable}
@@ -30,17 +30,9 @@ function FormSubmit( observable ) {
 
 			this.submitter.submit();
 		} ).catch( () => {
-			if ( !this.autoFocus ) {
-				return;
-			}
-
-			for ( const input of this.observable.getInputs() ) {
-				if ( input.reporting.validityState.current ) {
-					continue;
-				}
-				input.onFocus();
-				break;
-			}
+			this.autoFocus && focusOnInvalidInput(
+				this.observable.getInputs(),
+			);
 		} );
 	};
 

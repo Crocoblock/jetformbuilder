@@ -128,6 +128,22 @@ function getOffsetTop( node ) {
 	return rect?.top + window.scrollY;
 }
 
+/**
+ * @param inputs {InputData[]}
+ */
+function focusOnInvalidInput( inputs ) {
+	for ( const input of inputs ) {
+		if (
+			input.reporting.validityState.current ||
+			input.reporting.hasAutoScroll()
+		) {
+			continue;
+		}
+		input.onFocus();
+		break;
+	}
+}
+
 export {
 	allRejected,
 	getLanguage,
@@ -135,4 +151,5 @@ export {
 	toHTML,
 	isEmpty,
 	getOffsetTop,
+	focusOnInvalidInput,
 };

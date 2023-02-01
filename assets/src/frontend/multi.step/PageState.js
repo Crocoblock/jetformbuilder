@@ -9,6 +9,7 @@ const {
 const {
 	      validateInputs,
 	      getOffsetTop,
+	      focusOnInvalidInput,
       } = JetFormBuilderFunctions;
 
 const { addAction, doAction } = JetPlugins.hooks;
@@ -197,17 +198,7 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
-	if ( !this.autoFocus ) {
-		return;
-	}
-
-	for ( const input of this.inputs ) {
-		if ( input.reporting.validityState.current ) {
-			continue;
-		}
-		input.onFocus();
-		break;
-	}
+	this.autoFocus && focusOnInvalidInput( this.inputs );
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );

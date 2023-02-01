@@ -13,7 +13,7 @@ import {
 	getLanguage,
 	toHTML,
 	isEmpty,
-	getOffsetTop,
+	getOffsetTop, focusOnInvalidInput,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -58,6 +58,7 @@ window.JetFormBuilderFunctions = {
 	isEmpty,
 	getValidateCallbacks,
 	getOffsetTop,
+	focusOnInvalidInput,
 };
 
 jQuery( () => JetPlugins.init() );

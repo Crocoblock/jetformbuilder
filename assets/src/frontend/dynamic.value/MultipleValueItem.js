@@ -32,6 +32,8 @@ MultipleValueItem.prototype.observeSetValue = function ( conditions, input ) {
 		};
 
 		formula.setResult();
+
+		this.formulas.push( formula );
 	}
 };
 

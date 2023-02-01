@@ -20,6 +20,7 @@ const { addAction, doAction } = JetPlugins.hooks;
 function PageState( node, state ) {
 	this.node      = node;
 	this.index     = +node.dataset.page;
+	this.offset    = +node.dataset.pageOffset;
 	this.state     = state;
 	this.inputs    = [];
 	this.canSwitch = new ReactiveVar( null );

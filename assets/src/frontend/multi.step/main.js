@@ -56,6 +56,9 @@ addAction(
 	 * @param multistep {MultiStepState}
 	 */
 	function ( multistep ) {
+		if ( !window?.JetFormBuilderSettings?.scroll_on_next ) {
+			return;
+		}
 		multistep.index.watch( () => {
 			/**
 			 * @type {PageState|boolean}
@@ -63,7 +66,7 @@ addAction(
 			const page = multistep.getCurrentPage();
 
 			window.scrollTo( {
-				top: getOffsetTop( page.node ) - 75,
+				top: getOffsetTop( page.node ) - page.offset,
 				behavior: 'smooth',
 			} );
 		} );

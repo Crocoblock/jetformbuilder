@@ -21,6 +21,10 @@ ValueItem.prototype = {
 	frequency: '',
 	set_on_empty: false,
 	/**
+	 * @type {CalculatedFormula[]}
+	 */
+	formulas: [],
+	/**
 	 * @param input {InputData}
 	 * @returns {boolean}
 	 */
@@ -49,14 +53,29 @@ ValueItem.prototype = {
 		this.prevResult   = null;
 		this.prevValue    = null;
 		this.to_set       = to_set;
+		this.formulas     = [];
 
 		this.observeSetValue( conditions, input );
 
 		const list = new ConditionsList( conditions, input.root );
 
-		list.onChangeRelated = () => this.applyValue( list );
-		list.observe();
-		list.onChangeRelated();
+		if ( list.conditions?.length ) {
+			list.onChangeRelated = () => this.applyValue( list );
+			list.observe();
+			list.onChangeRelated();
+
+			return;
+		}
+
+		for ( const formula of this.formulas ) {
+			const resultCallback = formula.setResult.bind( formula );
+
+			formula.setResult = () => {
+				resultCallback();
+				this.applyValue( false, true );
+			};
+			formula.setResult();
+		}
 	},
 	observeSetValue( conditions, input ) {
 		const formula = new CalculatedFormula( input );
@@ -66,12 +85,22 @@ ValueItem.prototype = {
 			this.to_set = '' + formula.calculate();
 		};
 		formula.setResult();
+
+		this.formulas.push( formula );
 	},
 	/**
-	 * @param list {ConditionsList}
+	 * @param list {ConditionsList|boolean}
+	 * @param forceResult {boolean|null}
 	 */
-	applyValue( list ) {
-		const result = list.getResult();
+	applyValue( list, forceResult = null ) {
+		let result = false;
+
+		if ( list ) {
+			result = list.getResult();
+		}
+		else {
+			result = forceResult;
+		}
 
 		switch ( this.frequency ) {
 			case 'always':
@@ -89,7 +118,13 @@ ValueItem.prototype = {
 					break;
 				}
 				this.setValue();
-				list.onChangeRelated = () => {};
+
+				if ( list ) {
+					list.onChangeRelated = () => {};
+				}
+
+				this.formulas.forEach( current => current.clearWatchers() );
+
 				break;
 		}
 	},

@@ -31,6 +31,7 @@ function CalculatedFormula(
 	this.related      = [];
 	this.relatedAttrs = [];
 	this.regexp       = /%(.*?)%/g;
+	this.watchers     = [];
 
 	const { forceFunction = false } = options;
 
@@ -184,7 +185,9 @@ CalculatedFormula.prototype = {
 		if ( !this.related.includes( relatedInput.name ) ) {
 			this.related.push( relatedInput.name );
 
-			relatedInput.watch( () => this.setResult() );
+			this.watchers.push(
+				relatedInput.watch( () => this.setResult() ),
+			);
 		}
 
 		if ( !params?.length ) {
@@ -207,7 +210,9 @@ CalculatedFormula.prototype = {
 		if ( !this.relatedAttrs.includes( relatedInput.name + attrName ) ) {
 			this.relatedAttrs.push( relatedInput.name + attrName );
 
-			htmlAttr.value.watch( () => this.setResult() );
+			this.watchers.push(
+				htmlAttr.value.watch( () => this.setResult() ),
+			);
 		}
 
 		return () => applyFilters( htmlAttr.value.current, filtersList );
@@ -258,6 +263,14 @@ CalculatedFormula.prototype = {
 		return (
 			new Function( 'return ' + formula )
 		)();
+	},
+	clearWatchers() {
+		this.watchers.forEach(
+			current => 'function' === typeof current && current(),
+		);
+		this.watchers     = [];
+		this.relatedAttrs = [];
+		this.related      = [];
 	},
 };
 

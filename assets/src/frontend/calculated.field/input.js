@@ -92,11 +92,13 @@ function CalculatedData() {
 			      precision,
 			      sepDecimal,
 			      valueType,
+			      sepThousands,
 		      } = node.parentElement.dataset;
 
 		this.formula        = formula;
 		this.precision      = +precision;
 		this.sepDecimal     = sepDecimal;
+		this.sepThousands   = sepThousands;
 		this.visibleValNode = node.nextElementSibling;
 		this.valueTypeProp  = valueType;
 
@@ -104,7 +106,7 @@ function CalculatedData() {
 			return;
 		}
 
-		this.sanitize( value => this.convertValue( value ) )
+		this.sanitize( value => this.convertValue( value ) );
 	};
 	this.addListeners = function () {
 		// silence is golden

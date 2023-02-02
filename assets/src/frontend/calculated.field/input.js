@@ -99,6 +99,12 @@ function CalculatedData() {
 		this.sepDecimal     = sepDecimal;
 		this.visibleValNode = node.nextElementSibling;
 		this.valueTypeProp  = valueType;
+
+		if ( 'number' !== this.valueTypeProp ) {
+			return;
+		}
+
+		this.sanitize( value => this.convertValue( value ) )
 	};
 	this.addListeners = function () {
 		// silence is golden
@@ -106,5 +112,23 @@ function CalculatedData() {
 }
 
 CalculatedData.prototype = Object.create( InputData.prototype );
+
+CalculatedData.prototype.convertValue = function ( value ) {
+	if ( Number.isNaN( Number( value ) ) ) {
+		return 0;
+	}
+
+	const parts = Number( value ).
+		toFixed( this.precision ).
+		toString().
+		split( '.' );
+
+	parts[ 0 ] = parts[ 0 ].replace(
+		/\B(?=(\d{3})+(?!\d))/g,
+		this.sepThousands,
+	);
+
+	return parts.join( this.sepDecimal );
+};
 
 export default CalculatedData;

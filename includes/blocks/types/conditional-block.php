@@ -155,7 +155,7 @@ class Conditional_Block extends Base {
 		}
 
 		usort( $conditions, function ( $current ) {
-			return 'show' === $current['type'] ? - 1 : 1;
+			return 'show' === ( $current['type'] ?? '' ) ? - 1 : 1;
 		} );
 
 		foreach ( $conditions as $condition ) {

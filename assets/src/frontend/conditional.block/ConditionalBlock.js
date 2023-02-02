@@ -77,9 +77,9 @@ ConditionalBlock.prototype = {
 		};
 	},
 	setInputs() {
-		if ( !this.settings?.dom ) {
+		/*if ( !this.settings?.dom ) {
 			return;
-		}
+		}*/
 
 		this.inputs = Array.from(
 			this.node.querySelectorAll( '[data-jfb-sync]' ),

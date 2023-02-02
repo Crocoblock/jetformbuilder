@@ -249,8 +249,8 @@ InputData.prototype.getRoot = function () {
 InputData.prototype.isVisible = function () {
 	const [ node ] = this.nodes;
 
-	return (
-		node?.isConnected
+	return !!(
+		node?.offsetParent
 	);
 };
 

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 2.1.11
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,29 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.0.0**
+ - ADD: Self-reactivity is introduced & refactor frontend scripts
+ - ADD: Ability to use the Calculated formula in Set Value (**Advanced Value**) logic
+ - ADD: Support for multiple values to set in **Advanced Value**
+ - ADD: Ability to remove elements from HTML in the Conditional Block
+ - ADD: New field validation operators in the Conditional Block
+ - ADD: New **Render States** logic. Display of fields depending on the state through the Conditional Block
+ - ADD: Support for Date, Datetime and Time Field in the Conditional Block
+ - ADD: Support for any type of value in the Calculated Field formula
+ - ADD: Support for filters in macros for Calculated Field and others
+ - ADD: New **Advanced Validation** logic. Ability to perform server-side-verification.
+ - ADD: The possibility of "resetting" the form after sending it using the ajax method
+ - ADD: Ability to use required fields in Conditional Block, which removes fields from HTML
+ - ADD: Output the label along with the field names in a single form record
+ - ADD: `inserted_{$post_type}` to the Form Request
+ - ADD: Accessibility improvement in multi-step form
+ - UPD: Support shortcodes in the body of the "Send Email" action
+ - UPD: Output of unique html ID attribute for each field.
+ - FIX: Using the repeater value in the body of the "Send Email" action on events after passing through the payment gateway.
+ - FIX: Repeater field and media field only
+ - FIX: Custom listing template in Radio / Checkbox Fields & preset
+ - Tweak: Added dependency on the `jet-plugins` script
 
 **2.1.11**
  - ADD: Transaction column for payments

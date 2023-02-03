@@ -7,6 +7,7 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { validateInputsAll } from './reporting/functions';
+import ValidationContext from './reporting/ValidationContext';
 
 const {
 	      doAction,
@@ -19,6 +20,13 @@ function Observable( parent = null ) {
 	this.multistep  = null;
 	this.rootNode   = null;
 	this.isObserved = false;
+
+	/**
+	 * @since 3.0.1
+	 *
+	 * @type {ValidationContext}
+	 */
+	this.context = new ValidationContext( this );
 }
 
 Observable.prototype = {

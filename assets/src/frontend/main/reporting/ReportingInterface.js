@@ -38,7 +38,6 @@ function ReportingInterface() {
 	this.valuePrev     = null;
 	this.validityState = null;
 	this.promisesCount = 0;
-	this.isSilence     = null;
 }
 
 ReportingInterface.prototype = {
@@ -61,32 +60,6 @@ ReportingInterface.prototype = {
 	validateOnBlur: function () {
 	},
 	/**
-	 * Runs on try to submit form or
-	 * go to next page
-	 *
-	 * @return {Promise<*>}
-	 */
-	validateOnChangeState: function ( silence = false ) {
-	},
-	/**
-	 * @returns {Promise<void>}
-	 */
-	validateWithNotice: async function () {
-		this.isSilence = false;
-		const errors   = await this.getErrors();
-
-		this.validityState.current = !Boolean( errors.length );
-
-		if ( errors.length ) {
-			this.report( errors );
-
-			throw new RestrictionError( errors[ 0 ].name );
-		}
-		else {
-			this.clearReport();
-		}
-	},
-	/**
 	 * Runs on trying to submit form
 	 * @see Observable.inputsAreValid
 	 *
@@ -97,16 +70,19 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<boolean>}
 	 */
 	validate: async function () {
-		this.isSilence = true;
-		const errors   = await this.getErrors();
+		const errors = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );
 
-		if ( errors?.length ) {
-			throw new RestrictionError( errors[ 0 ].name );
+		if ( !errors.length ) {
+			this.clearReport();
+
+			return true;
 		}
 
-		return true;
+		!this.input.root.context.silence && this.report( errors );
+
+		throw new RestrictionError( errors[ 0 ].name );
 	},
 	/**
 	 * @param promises {Function[]}
@@ -148,12 +124,26 @@ ReportingInterface.prototype = {
 
 		return this.errors;
 	},
+	report: function ( validationErrors ) {
+		if ( this.input.root.context.isReportedFirst() ) {
+			this.reportRaw( validationErrors );
+
+			return;
+		}
+
+		this.input.root.context.reportFirst();
+
+		this.reportFirst( validationErrors );
+	},
 	/**
 	 * @param validationErrors {Restriction[]}
 	 * @return void
 	 */
-	report: function ( validationErrors ) {
+	reportRaw: function ( validationErrors ) {
 		throw new Error( 'report is empty' );
+	},
+	reportFirst: function ( validationErrors ) {
+		this.report( validationErrors );
 	},
 	clearReport: function () {
 		throw new Error( 'clearReport is empty' );
@@ -221,17 +211,13 @@ ReportingInterface.prototype = {
 		return this.valuePrev !== this.input.getValue();
 	},
 	/**
-	 *
-	 * @param forceSilence
 	 * @returns {Promise<*>}
 	 */
-	checkValidity: function ( forceSilence = null ) {
-		const isSilence = (
-			this.isSilence && null === forceSilence
-		) || forceSilence;
+	checkValidity: function () {
+		const isSilence = this.input.root.context.silence;
 
 		if ( null === this.validityState.current ) {
-			return this.validateOnChangeState( isSilence );
+			return this.validateOnChangeState();
 		}
 		if ( this.validityState.current ) {
 			return Promise.resolve();

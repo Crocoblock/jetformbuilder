@@ -80,7 +80,7 @@ AdvancedReporting.prototype.getErrorsRaw = async function ( promises ) {
 /**
  * @param validationErrors {AdvancedRestriction[]|Restriction[]}
  */
-AdvancedReporting.prototype.report = function ( validationErrors ) {
+AdvancedReporting.prototype.reportRaw = function ( validationErrors ) {
 	let message = '';
 
 	for ( const validationError of validationErrors ) {
@@ -168,7 +168,7 @@ AdvancedReporting.prototype.createError      = function (
 };
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	const callback = () => {
-		this.validateWithNotice().
+		this.validate().
 			then( () => {} ).
 			catch( () => {} ).
 			finally( () => {
@@ -213,7 +213,7 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
-	this.validateWithNotice().
+	this.validate().
 		then( () => {} ).
 		catch( () => {} ).
 		finally( () => {
@@ -223,7 +223,7 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 		} );
 };
 
-AdvancedReporting.prototype.validateOnChangeState = function ( silence = false ) {
+AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {
 		return Promise.resolve();
 	}
@@ -231,9 +231,7 @@ AdvancedReporting.prototype.validateOnChangeState = function ( silence = false )
 	this.skipServerSide = false;
 
 	return new Promise( ( resolve, reject ) => {
-		const promise = silence ? this.validate() : this.validateWithNotice();
-
-		promise.then( resolve ).catch( reject ).finally(
+		this.validate().then( resolve ).catch( reject ).finally(
 			() => {
 				this.skipServerSide = true;
 				this.hasServerSide  = false;

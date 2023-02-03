@@ -85,6 +85,12 @@ function createReport( input ) {
 function getValidateCallbacks( inputs, silence = false ) {
 	const callbacks = [];
 
+	if ( inputs[ 0 ] ) {
+		const { context } = inputs[ 0 ].root;
+
+		context.reset( { silence } );
+	}
+
 	for ( const input of inputs ) {
 		if ( !(
 			input instanceof InputData
@@ -97,13 +103,9 @@ function getValidateCallbacks( inputs, silence = false ) {
 		}
 		callbacks.push(
 			( resolve, reject ) => {
-				input.reporting.validateOnChangeState( silence ).
+				input.reporting.validateOnChangeState().
 					then( resolve ).
-					catch( reject ).finally(
-					() => {
-						input.reporting.isSilence = null;
-					},
-				);
+					catch( reject );
 			},
 		);
 	}

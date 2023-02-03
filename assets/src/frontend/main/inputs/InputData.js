@@ -325,14 +325,15 @@ InputData.prototype.initNotifyValue = function () {
 	this.silenceNotify();
 };
 
-InputData.prototype.onFocus = function () {
+InputData.prototype.onFocus  = function () {
+	this.scrollTo();
+	this.focusRaw();
+};
+InputData.prototype.focusRaw = function () {
 	const [ node ] = this.nodes;
 
 	node?.focus( { preventScroll: true } );
-
-	this.scrollTo();
 };
-
 InputData.prototype.scrollTo = function () {
 	const [ node ] = this.nodes;
 

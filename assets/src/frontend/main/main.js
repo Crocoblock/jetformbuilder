@@ -25,7 +25,10 @@ import {
 
 import './calc.module/main';
 import './switch-page-on-change/main';
-import { getParsedName } from './inputs/functions';
+import {
+	getParsedName,
+	populateInputs,
+} from './inputs/functions';
 import initForm from './init/initForm';
 
 window.JetFormBuilderAbstract = {
@@ -59,6 +62,7 @@ window.JetFormBuilderFunctions = {
 	getValidateCallbacks,
 	getOffsetTop,
 	focusOnInvalidInput,
+	populateInputs,
 };
 
 jQuery( () => JetPlugins.init() );

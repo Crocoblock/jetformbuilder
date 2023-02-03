@@ -33,9 +33,6 @@ function CheckboxData() {
 			filter( item => item.checked ).
 			map( item => item.value );
 	};
-	this.valueType      = function () {
-		return Array;
-	};
 }
 
 CheckboxData.prototype = Object.create( InputData.prototype );

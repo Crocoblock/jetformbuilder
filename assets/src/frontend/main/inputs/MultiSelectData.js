@@ -29,9 +29,7 @@ function MultiSelectData() {
 			filter( item => item.selected ).
 			map( item => item.value );
 	};
-	this.valueType      = function () {
-		return Array;
-	};
+
 	this.onClear        = function () {
 		this.silenceSet( [] );
 	};

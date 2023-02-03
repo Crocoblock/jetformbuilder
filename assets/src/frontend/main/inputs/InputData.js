@@ -223,12 +223,6 @@ InputData.prototype.isArray = function () {
 	return this.rawName.includes( '[]' );
 };
 /**
- * @return {*}
- */
-InputData.prototype.valueType = function () {
-	return String;
-};
-/**
  * @param callable {Function|mixed}
  */
 InputData.prototype.beforeSubmit = function ( callable ) {
@@ -308,9 +302,6 @@ InputData.prototype.getWrapperNode = function () {
 	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
 };
 
-InputData.prototype.onForceValidate = function () {
-};
-
 InputData.prototype.handleEnterKey = function ( event ) {
 	// not enter
 	if ( +event.keyCode !== 13 ) {
@@ -349,6 +340,20 @@ InputData.prototype.scrollTo = function () {
 		top: getOffsetTop( node ) - this.offsetOnFocus,
 		behavior: 'smooth',
 	} );
+};
+
+/**
+ * @return {ValidationContext}
+ */
+InputData.prototype.getContext = function () {
+	return this.root.getContext();
+};
+
+/**
+ * @return {boolean|InputData[]}
+ */
+InputData.prototype.populateInner = function () {
+	return false;
 };
 
 export default InputData;

@@ -80,7 +80,7 @@ ReportingInterface.prototype = {
 			return true;
 		}
 
-		!this.input.root.context.silence && this.report( errors );
+		!this.input.root.getContext().silence && this.report( errors );
 
 		throw new RestrictionError( errors[ 0 ].name );
 	},
@@ -125,13 +125,13 @@ ReportingInterface.prototype = {
 		return this.errors;
 	},
 	report: function ( validationErrors ) {
-		if ( this.input.root.context.isReportedFirst() ) {
+		if ( this.input.getContext().reportedFirst ) {
 			this.reportRaw( validationErrors );
 
 			return;
 		}
 
-		this.input.root.context.reportFirst();
+		this.input.getContext().reportFirst();
 
 		this.reportFirst( validationErrors );
 	},
@@ -214,7 +214,7 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<*>}
 	 */
 	checkValidity: function () {
-		const isSilence = this.input.root.context.silence;
+		const isSilence = this.input.getContext().silence;
 
 		if ( null === this.validityState.current ) {
 			return this.validateOnChangeState();

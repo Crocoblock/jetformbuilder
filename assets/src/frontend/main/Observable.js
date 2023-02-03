@@ -1,4 +1,4 @@
-import { createInput } from './inputs/functions';
+import { createInput, populateInputs } from './inputs/functions';
 import FormSubmit from './submit/FormSubmit';
 import {
 	iterateJfbComments,
@@ -26,7 +26,7 @@ function Observable( parent = null ) {
 	 *
 	 * @type {ValidationContext}
 	 */
-	this.context = new ValidationContext( this );
+	this.context = this.parent ? null : new ValidationContext( this );
 }
 
 Observable.prototype = {
@@ -145,10 +145,9 @@ Observable.prototype = {
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
 	inputsAreValid: async function () {
-		for ( const input of this.getInputs() ) {
-			input.onForceValidate();
-		}
-		const invalid = await validateInputsAll( this.getInputs() );
+		const invalid = await validateInputsAll(
+			populateInputs( this.getInputs() ),
+		);
 
 		return Boolean( invalid.length )
 		       ? Promise.reject( invalid )
@@ -249,6 +248,9 @@ Observable.prototype = {
 	},
 	getSubmit: function () {
 		return this.form ? this.form : this.parent.root.form;
+	},
+	getContext: function () {
+		return this.context ?? this.parent.root.context;
 	},
 };
 

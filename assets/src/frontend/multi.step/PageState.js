@@ -10,6 +10,7 @@ const {
 	      validateInputs,
 	      getOffsetTop,
 	      focusOnInvalidInput,
+	      populateInputs,
       } = JetFormBuilderFunctions;
 
 const { addAction, doAction } = JetPlugins.hooks;
@@ -35,8 +36,11 @@ function PageState( node, state ) {
 }
 
 PageState.prototype.observe = function () {
-	this.observeInputs();
-	this.observeConditionalBlocks();
+
+	if ( !this.isLast() ) {
+		this.observeInputs();
+		this.observeConditionalBlocks();
+	}
 
 	this.canSwitch.make();
 	this.isShow.make();
@@ -58,7 +62,13 @@ PageState.prototype.observe = function () {
 
 PageState.prototype.observeInputs = function () {
 	for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
-		this.observeInput( node );
+		const input = this.observeInput( node );
+
+		input && doAction(
+			'jet.fb.multistep.page.observed.input',
+			input,
+			this,
+		);
 	}
 };
 
@@ -71,7 +81,7 @@ PageState.prototype.observeInput = function ( node ) {
 		!node.hasOwnProperty( 'jfbSync' ) ||
 		node.jfbSync.hasParent()
 	) {
-		return;
+		return false;
 	}
 
 	/**
@@ -79,9 +89,7 @@ PageState.prototype.observeInput = function ( node ) {
 	 */
 	const input = node.jfbSync;
 
-	if ( !this.isLast() ) {
-		this.handleInputEnter( input );
-	}
+	this.handleInputEnter( input );
 
 	input.loading.watch( () => {
 		if ( input.loading.current ) {
@@ -93,11 +101,13 @@ PageState.prototype.observeInput = function ( node ) {
 	} );
 
 	if ( !input.reporting.restrictions.length ) {
-		return;
+		return input;
 	}
 
 	this.inputs.push( input );
 	input.watchValidity( () => this.updateState() );
+
+	return input;
 };
 /**
  * Buttons for switching between pages are hidden conditional blocks
@@ -145,12 +155,6 @@ PageState.prototype.updateState = function () {
 };
 
 PageState.prototype.updateStateAsync    = async function ( silence = true ) {
-	if ( !silence ) {
-		for ( const input of this.getInputs() ) {
-			input.onForceValidate();
-		}
-	}
-
 	try {
 		await validateInputs( this.getInputs(), silence );
 
@@ -198,7 +202,7 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
-	this.autoFocus && focusOnInvalidInput( this.inputs );
+	this.autoFocus && focusOnInvalidInput( this.getInputs() );
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
@@ -209,7 +213,7 @@ PageState.prototype.isNodeBelongThis    = function ( node ) {
  * @returns {array<InputData>|*}
  */
 PageState.prototype.getInputs = function () {
-	return this.inputs;
+	return populateInputs( this.inputs );
 };
 
 /**
@@ -238,27 +242,6 @@ PageState.prototype.handleInputEnter = function ( input ) {
 
 		// prevent submit
 		return false;
-	} );
-
-	if ( 'repeater' !== input.inputType ) {
-		return;
-	}
-
-	/**
-	 * @type {ObservableRow[]}
-	 */
-	const rows = input.getValue();
-
-	for ( const row of rows ) {
-		for ( const inputRow of row.getInputs() ) {
-			this.handleInputEnter( inputRow );
-		}
-	}
-
-	input.lastObserved.watch( () => {
-		for ( const curInput of input.lastObserved.current.getInputs() ) {
-			this.handleInputEnter( curInput );
-		}
 	} );
 };
 

@@ -18,9 +18,6 @@ function RepeaterData() {
 	this.isSupported  = function ( node ) {
 		return isRepeater( node );
 	};
-	this.valueType    = function () {
-		return false;
-	};
 	this.addListeners = function () {
 		if ( this.isManualCount ) {
 			this.buttonNode.addEventListener( 'click', () => this.addNew() );
@@ -126,8 +123,27 @@ function RepeaterData() {
 		this.value.current = [];
 	};
 
-	this.onForceValidate = function () {
-		this.reporting.valuePrev = null;
+	this.populateInner = function () {
+		if ( !this.value.current?.length ) {
+			return false;
+		}
+
+		const inputs = [];
+		/**
+		 * @type {ObservableRow[]}
+		 */
+		const rows   = this.value.current;
+
+		for ( const row of rows ) {
+			for ( const input of row.getInputs() ) {
+				if ( !input.reporting?.restrictions?.length ) {
+					continue;
+				}
+				inputs.push( input );
+			}
+		}
+
+		return inputs;
 	};
 }
 

@@ -85,11 +85,7 @@ function createReport( input ) {
 function getValidateCallbacks( inputs, silence = false ) {
 	const callbacks = [];
 
-	if ( inputs[ 0 ] ) {
-		const { context } = inputs[ 0 ].root;
-
-		context.reset( { silence } );
-	}
+	inputs?.[ 0 ]?.getContext()?.reset( { silence } );
 
 	for ( const input of inputs ) {
 		if ( !(
@@ -119,9 +115,11 @@ function getValidateCallbacks( inputs, silence = false ) {
  * @return {Promise<unknown[]>}
  */
 function validateInputs( inputs, silence = false ) {
-	return Promise.all( getValidateCallbacks( inputs, silence ).map(
-		current => new Promise( current ),
-	) );
+	return Promise.all(
+		getValidateCallbacks( inputs, silence ).map(
+			current => new Promise( current ),
+		),
+	);
 }
 
 /**

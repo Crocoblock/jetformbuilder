@@ -81,9 +81,9 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 		$parent_name = $body[ self::PARENT_KEY ] ?? false;
 		$field_name  = $body[ self::FIELD_KEY ] ?? false;
 
-		jet_fb_handler()->set_form_id( $body[ jet_fb_handler()->form_key ] ?? false );
-
 		if ( ! $parent_name || empty( $body[ $parent_name ] ) ) {
+			jet_fb_handler()->set_form_id( $body[ jet_fb_handler()->form_key ] ?? false );
+
 			$files = Request_Tools::get_files( $request->get_file_params() );
 
 			jet_fb_request_handler()->set_raw_request( $body );
@@ -104,6 +104,7 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 
 		$context->set_request_context( $row_values );
 		jet_fb_request_handler()->set_raw_request( $all_values );
+		jet_fb_handler()->set_form_id( $all_values[ jet_fb_handler()->form_key ] ?? false );
 
 		$value = $row_values[ $field_name ] ?? false;
 

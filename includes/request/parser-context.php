@@ -58,6 +58,10 @@ class Parser_Context {
 	public function set_field( array $field ): Parser_Context {
 		$this->validate_field( $field );
 
+		return $this->set_raw_field( $field );
+	}
+
+	public function set_raw_field( array $field ): Parser_Context {
 		$this->block      = $field;
 		$this->settings   = $field['attrs'];
 		$this->name       = $field['attrs']['name'] ?? 'field_name';

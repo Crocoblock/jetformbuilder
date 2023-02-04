@@ -99,6 +99,12 @@ class Block_Helper {
 	}
 
 	public static function get_blocks_by_post( $post_id ): array {
+		$post = get_post( $post_id );
+
+		if ( ! is_a( $post, \WP_Post::class ) ) {
+			return array();
+		}
+
 		return array_map( function ( $block ) {
 			if ( 'core/block' !== $block['blockName'] ) {
 				return $block;
@@ -107,7 +113,7 @@ class Block_Helper {
 			$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
 
 			return $block;
-		}, parse_blocks( get_post( $post_id )->post_content ) );
+		}, parse_blocks( $post->post_content ) );
 	}
 
 	public static function delete_namespace( $block ): string {

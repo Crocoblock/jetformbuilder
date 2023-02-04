@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
 
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Request\Parser_Context;
 use Jet_Form_Builder\Request\Request_Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
@@ -27,7 +28,23 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
 
-		list( $value, $context ) = $this->get_validation_context( $request );
+		list(
+			$value,
+			$context,
+			$name,
+			$parent_name
+			) = $this->get_validation_context( $request );
+
+		$context->set_raw_field(
+			array(
+				'blockName' => 'some-field',
+				'attrs'     => array(
+					'name'        => $name,
+					'parent_name' => $parent_name,
+				)
+			)
+		);
+
 		$callback = $body[ self::CALLBACK_KEY ] ?? false;
 
 		if ( ! $value || ! $callback ) {
@@ -65,6 +82,8 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 		$field_name  = $body[ self::FIELD_KEY ] ?? false;
 
 		if ( ! $parent_name || empty( $body[ $parent_name ] ) ) {
+			jet_fb_handler()->set_form_id( $body[ jet_fb_handler()->form_key ] ?? false );
+
 			$files = Request_Tools::get_files( $request->get_file_params() );
 
 			jet_fb_request_handler()->set_raw_request( $body );
@@ -75,7 +94,7 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 
 			$value = $body[ $field_name ] ?? false;
 
-			return array( $value, $context );
+			return array( $value, $context, $field_name, $parent_name );
 		}
 
 		// this field inside repeater row
@@ -85,9 +104,10 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 
 		$context->set_request_context( $row_values );
 		jet_fb_request_handler()->set_raw_request( $all_values );
+		jet_fb_handler()->set_form_id( $all_values[ jet_fb_handler()->form_key ] ?? false );
 
 		$value = $row_values[ $field_name ] ?? false;
 
-		return array( $value, $context );
+		return array( $value, $context, $field_name, $parent_name );
 	}
 }

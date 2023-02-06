@@ -1,5 +1,5 @@
-import ActionButtonEdit from "./edit";
-import metadata from "@blocks/submit-field/block.json";
+import ActionButtonEdit from './edit';
+import metadata from '@blocks/submit-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -20,8 +20,15 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Action Button'
-		}
+			label: 'Action Button',
+		},
+	},
+	__experimentalLabel: ( { action_type } ) => {
+		const action = JetFormActionButton.actions.find(
+			( { value } ) => value === action_type,
+		);
+
+		return action?.label || JetFormActionButton.actions[ 0 ].label;
 	},
 	transforms: {
 		to: [
@@ -31,7 +38,8 @@ const settings = {
 					'jet-forms/text-field',
 				],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},
@@ -60,11 +68,11 @@ const settings = {
 				priority: 0,
 			},
 		],
-	}
+	},
 };
 
 export {
 	metadata,
 	name,
-	settings
+	settings,
 };

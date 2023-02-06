@@ -23,6 +23,7 @@ import * as progressBar from './progress-bar';
 import * as formBreakStart from './form-break-start';
 import * as map from './map-field';
 import * as wrappers from './block-wrappers';
+import { name } from './text-field';
 
 const {
 	      registerBlockType,
@@ -83,6 +84,15 @@ const registerFormField = block => {
 				},
 			];
 		};
+	}
+
+	if (
+		!settings.hasOwnProperty( '__experimentalLabel' ) &&
+		metadata.attributes.hasOwnProperty( 'name' )
+	) {
+		settings.__experimentalLabel = ( attributes ) => (
+			attributes.name || metadata.title
+		);
 	}
 
 	registerBlockType( name, {

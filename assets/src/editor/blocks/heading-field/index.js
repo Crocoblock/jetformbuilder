@@ -1,5 +1,5 @@
-import HeadingEdit from "./edit";
-import metadata from "@blocks/heading-field/block.json";
+import HeadingEdit from './edit';
+import metadata from '@blocks/heading-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -24,13 +24,15 @@ const settings = {
 			desc: 'Field description...',
 		},
 	},
+	__experimentalLabel: ( attributes ) => attributes.label || metadata.title,
 	transforms: {
 		to: [
 			{
 				type: 'block',
 				blocks: [ 'jet-forms/text-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},

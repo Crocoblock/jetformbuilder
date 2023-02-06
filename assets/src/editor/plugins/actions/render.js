@@ -10,6 +10,7 @@ const {
       } = wp.element;
 const {
 	      Button,
+	      ExternalLink,
       } = wp.components;
 
 const { __ } = wp.i18n;
@@ -53,12 +54,11 @@ function PluginActions() {
 			</Button>
 			{ (
 				!JetFormEditorData.isActivePro
-			) && <Button
-				href={ JetFormEditorData.utmLinks.allProActions }
-				variant="link"
-			>
-				{ __( 'All PRO Actions', 'jet-form-builder' ) }
-			</Button> }
+			) && <div className={ 'jet-fb flex-center' } >
+				<ExternalLink href={ JetFormEditorData.utmLinks.allProActions }>
+					{ __( 'All PRO Actions', 'jet-form-builder' ) }
+				</ExternalLink>
+			</div> }
 		</div>
 		<EditSettingsModal/>
 		<EditConditionsModal/>

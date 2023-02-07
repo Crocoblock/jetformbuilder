@@ -67,6 +67,7 @@ function CalculatedData() {
 		                           ? 0
 		                           : '';
 		formula.setResult();
+		this.value.current = this.value.applySanitizers( this.value.current );
 		this.onChange();
 
 		this.beforeSubmit( ( resolve ) => {

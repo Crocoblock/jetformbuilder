@@ -76,6 +76,10 @@ InputData.prototype.addListeners = function () {
 		this.reportOnBlur();
 	} );
 
+	if ( 'input' !== this.inputType ) {
+		return;
+	}
+
 	this.enterKey = new ReactiveHook();
 	node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 };

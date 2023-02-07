@@ -15,50 +15,18 @@ function RepeaterData() {
 	this.lastObserved = new ReactiveVar();
 	this.lastObserved.make();
 
-	this.isSupported  = function ( node ) {
+	this.isSupported = function ( node ) {
 		return isRepeater( node );
 	};
-	this.valueType    = function () {
+	this.valueType   = function () {
 		return false;
 	};
+
 	this.addListeners = function () {
-		if ( this.isManualCount ) {
-			this.buttonNode.addEventListener( 'click', () => this.addNew() );
-
-			return;
-		}
-
-		const input = this.root.getInput( this.itemsField );
-
-		if ( !input ) {
-			console.error(
-				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
-			);
-
-			return;
-		}
-
-		input.watch( () => {
-			const currentCount = this.value.current?.length ?? 0;
-
-			// if it < 0 ==> we should add {diff} new repeater items
-			// if it > 0 ==> we should remove last {diff} items
-			const diff = currentCount - input.calcValue;
-
-			if ( 0 === diff ) {
-				return;
-			}
-
-			if ( diff < 0 ) {
-				this.addNew( -1 * diff );
-
-				return;
-			}
-
-			this.value.current = this.value.current.slice( 0, -1 * diff );
-		} );
+		// silence is golden
 	};
-	this.setValue     = function () {
+
+	this.setValue = function () {
 		const [ node ]     = this.nodes;
 		this.value.current = [];
 
@@ -84,8 +52,27 @@ function RepeaterData() {
 
 			button.addEventListener( 'click', () => row.remove() );
 		}
+
+		if ( this.isManualCount ) {
+			this.buttonNode.addEventListener( 'click', () => this.addNew() );
+
+			return;
+		}
+
+		const input = this.root.getInput( this.itemsField );
+
+		if ( !input ) {
+			console.error(
+				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
+			);
+
+			return;
+		}
+
+		input.watch( () => this.recalculateItems( input ) );
+		this.recalculateItems( input );
 	};
-	this.setNode      = function ( node ) {
+	this.setNode  = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
 		this.nodes     = [ node ];
@@ -151,7 +138,7 @@ RepeaterData.prototype.lastObserved = null;
 
 RepeaterData.prototype.addNew = function ( count = 1 ) {
 	this.value.current = [
-		...this.value.current,
+		...this.value?.current ?? [],
 		...(
 			new Array( count )
 		).fill( null ).map(
@@ -195,6 +182,26 @@ RepeaterData.prototype.remove = function ( observableRow ) {
 	this.value.current = this.value.current.filter(
 		current => current !== observableRow,
 	);
+};
+
+RepeaterData.prototype.recalculateItems = function ( input ) {
+	const currentCount = this.value.current?.length ?? 0;
+
+	// if it < 0 ==> we should add {diff} new repeater items
+	// if it > 0 ==> we should remove last {diff} items
+	const diff = currentCount - input.calcValue;
+
+	if ( 0 === diff ) {
+		return;
+	}
+
+	if ( diff < 0 ) {
+		this.addNew( -1 * diff );
+
+		return;
+	}
+
+	this.value.current = this.value.current.slice( 0, -1 * diff );
 };
 
 export default RepeaterData;

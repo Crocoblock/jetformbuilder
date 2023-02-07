@@ -47,7 +47,7 @@ SingleFileRestriction.prototype.validatePromise = async function () {
 	 */
 	const callable = this.reporting.input.callable;
 
-	const current = Array.from( this.reporting.input.value.current );
+	const current = Array.from( this.reporting.input.value?.current ?? [] );
 
 	const fieldCallbacks = [];
 

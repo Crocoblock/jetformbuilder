@@ -272,6 +272,11 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 
 == Changelog ==
 
+**3.0.0.1**
+ - FIX: Calculated Field with empty separate thousands option
+ - FIX: reCaptcha validation error
+ - FIX: Error when using `term_title_by_id` macro incorrectly
+
 **3.0.0**
  - ADD: Self-reactivity is introduced & refactor frontend scripts
  - ADD: Ability to use the Calculated formula in Set Value (**Advanced Value**) logic

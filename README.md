@@ -4,6 +4,16 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.0.2
+* FIX: Dynamic populate repeater field on page load
+* FIX: Prevent submit/switch page on press enter in textarea field
+* FIX: Validation of empty media field
+* FIX: Console errors when radio field inside conditional block
+* FIX: Submit failed with reloading page
+* FIX: JetBooking compatibility
+* FIX: Save invalid number in Calculated field node element
+* FIX: Rounding number in Calculated Field
+
 ## 3.0.0.1
 * FIX: Calculated Field with empty separate thousands option 
 * FIX: reCaptcha validation error

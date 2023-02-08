@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions\Events\Default_Process;
 
 
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -22,11 +23,17 @@ class Default_With_Gateway_Executor extends Default_Process_Executor {
 		parent::before_execute();
 	}
 
+	protected function execute_actions() {
+		jet_fb_action_handler()->soft_run_actions( $this );
+	}
+
 	/**
 	 * @throws Action_Exception
 	 */
 	public function after_execute() {
 		parent::after_execute();
+
+		Save_Record::add_hidden();
 
 		try {
 			jet_fb_gateway_current()->after_actions( jet_fb_action_handler() );

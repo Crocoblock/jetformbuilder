@@ -43,8 +43,6 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	protected function validate_actions() {
-		jet_fb_action_handler()->sort_hidden_actions();
-		
 		$this->action_ids = array();
 		$actions          = jet_fb_action_handler()->get_all();
 

@@ -20,7 +20,9 @@ use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Dynamic_Items_It;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use MailPoet\Automation\Engine\Validation\WorkflowRules\ValidStepArgsRule;
 
 /**
  * @method static Events_Manager instance()
@@ -34,6 +36,10 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 	use Repository_Pattern_Trait;
 
 	private $types = array();
+	/**
+	 * @var string|null
+	 */
+	private $current;
 
 	public function __construct() {
 		$this->rep_install();
@@ -69,13 +75,18 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
+		$this->current = $event->get_id();
 
 		// save all form actions
 		jet_fb_action_handler()->set_form_id( $form_id );
 
-		do_action( 'jet-form-builder/before-trigger-event', $event );
-		$event->execute();
-		do_action( 'jet-form-builder/after-trigger-event', $event );
+		try {
+			do_action( 'jet-form-builder/before-trigger-event', $event );
+			$event->execute();
+			do_action( 'jet-form-builder/after-trigger-event', $event );
+		} finally {
+			$this->current = null;
+		}
 	}
 
 	/**
@@ -126,5 +137,9 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 
 	public function get_never_event(): Never_Event {
 		return self::instance()->rep_get_item( Never_Event::class );
+	}
+
+	public function is_current( string $event_id ): bool {
+		return $this->current === $event_id;
 	}
 }

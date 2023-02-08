@@ -5,10 +5,8 @@ namespace Jet_Form_Builder\Actions;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager;
@@ -22,8 +20,11 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public  $form_id         = null;
-	public  $request_data    = array();
+	public $form_id      = null;
+	public $request_data = array();
+	/**
+	 * @var Base[]
+	 */
 	public  $form_actions    = array();
 	public  $is_ajax         = false;
 	private $form_conditions = array();
@@ -512,33 +513,18 @@ class Action_Handler {
 			return false;
 		}
 
-		if ( array_key_exists( $action->get_id(), $this->hidden ) ) {
+		if ( jet_fb_action_handler()->get_action( $action->get_id() ) ) {
 			return false;
 		}
-		$clone_action = clone $action;
 
+		$clone_action      = clone $action;
 		$clone_action->_id = $this->get_unique_action_id();
 
 		$this->save_action( $clone_action, $props );
-		$this->hidden[ $clone_action->get_id() ] = $clone_action->_id;
 
 		return $clone_action;
 	}
 
-	public function remove_hidden( $action_slug ) {
-		$id = $this->hidden[ $action_slug ] ?? false;
-
-		if ( false === $id ) {
-			return;
-		}
-
-		unset( $this->form_actions[ $id ] );
-		unset( $this->hidden[ $action_slug ] );
-	}
-
-	public function isset_hidden( $action_slug ): bool {
-		return isset( $this->hidden[ $action_slug ] );
-	}
 
 	private function save_action( Base $action, array $props ) {
 		$conditions = $props['conditions'] ?? array();
@@ -554,26 +540,6 @@ class Action_Handler {
 		$this->form_events[ $action->_id ]     = Events_List::create(
 			array_merge( $events, $action->get_required_events() )
 		);
-	}
-
-
-	public function sort_hidden_actions() {
-		/**
-		 * @var Base $action
-		 */
-		foreach ( $this->form_actions as $action ) {
-			$this->remove_hidden( $action->get_id() );
-		}
-
-		$action_ids = array_values( $this->hidden );
-		$hidden     = array();
-
-		foreach ( $action_ids as $id ) {
-			$hidden[ $id ] = $this->get_action( $id );
-			unset( $this->form_actions[ $id ] );
-		}
-
-		$this->form_actions = $hidden + $this->form_actions;
 	}
 
 	public function get_unique_action_id( int $start_from = 1 ): int {

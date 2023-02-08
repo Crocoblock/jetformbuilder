@@ -4,18 +4,27 @@
 namespace Jet_Form_Builder\Actions;
 
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Resources\File_Tools;
 
 class Actions_Tools {
 
 	public static function run_flow( string $flow_path ) {
-		foreach ( self::get_flow( $flow_path ) as $action ) {
+		$actions = self::get_flow( $flow_path );
+
+		foreach ( $actions as $action ) {
 			jet_fb_action_handler()->process_single_action( $action );
 		}
 	}
 
-	public static function get_flow( string $flow_path ): \Generator {
-		$flow = self::load_flow( $flow_path );
+	/**
+	 * @param string $flow_path
+	 *
+	 * @return Base[]
+	 */
+	public static function get_flow( string $flow_path ): array {
+		$flow    = self::load_flow( $flow_path );
+		$actions = array();
 
 		foreach ( $flow as $action ) {
 			$current = jet_fb_action_handler()->add_hidden( $action['type'], $action );
@@ -25,8 +34,10 @@ class Actions_Tools {
 			}
 			$current->settings = $action['settings'] ?? array();
 
-			yield $current;
+			$actions[] = $current;
 		}
+
+		return $actions;
 	}
 
 	/**

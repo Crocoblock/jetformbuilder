@@ -15,13 +15,21 @@ function SignalCalculated() {
 	};
 	this.runSignal   = function () {
 		const [ node ] = this.input.nodes;
-		node.value     = this.input.value.current;
-
-		this.input.calcValue = Number(
-			node.value.replace( /[^\d\.]/g, '' ),
-		);
 
 		this.input.visibleValNode.textContent = this.input.value.current;
+
+		if ( 'number' !== this.input.valueTypeProp ) {
+			node.value = this.input.value.current;
+
+			return;
+		}
+
+		let calcValue = Number(
+			this.input.value.current.replace( /[^\d\.]/g, '' ),
+		);
+
+		this.input.calcValue = Number.isNaN( calcValue ) ? 0 : calcValue;
+		node.value           = this.input.calcValue;
 	};
 }
 

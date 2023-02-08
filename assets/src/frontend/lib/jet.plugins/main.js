@@ -88,7 +88,6 @@ class JetPlugins {
 			}
 
 			if ( needInit ) {
-				console.log( el.dataset.isBlock );
 				this.hooks.doAction( blockHook, jQuery( el ) );
 				el.dataset.jetInited = true;
 			}

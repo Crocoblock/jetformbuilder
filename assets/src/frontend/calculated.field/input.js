@@ -67,6 +67,7 @@ function CalculatedData() {
 		                           ? 0
 		                           : '';
 		formula.setResult();
+		this.value.current = this.value.applySanitizers( this.value.current );
 		this.onChange();
 
 		this.beforeSubmit( ( resolve ) => {
@@ -97,8 +98,8 @@ function CalculatedData() {
 
 		this.formula        = formula;
 		this.precision      = +precision;
-		this.sepDecimal     = sepDecimal;
-		this.sepThousands   = sepThousands;
+		this.sepDecimal     = sepDecimal ?? '';
+		this.sepThousands   = sepThousands ?? '';
 		this.visibleValNode = node.nextElementSibling;
 		this.valueTypeProp  = valueType;
 
@@ -125,10 +126,12 @@ CalculatedData.prototype.convertValue = function ( value ) {
 		toString().
 		split( '.' );
 
-	parts[ 0 ] = parts[ 0 ].replace(
-		/\B(?=(\d{3})+(?!\d))/g,
-		this.sepThousands,
-	);
+	if ( this.sepThousands ) {
+		parts[ 0 ] = parts[ 0 ].replace(
+			/\B(?=(\d{3})+(?!\d))/g,
+			this.sepThousands,
+		);
+	}
 
 	return parts.join( this.sepDecimal );
 };

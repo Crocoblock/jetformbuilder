@@ -11,6 +11,12 @@ const {
 function CheckOutInput() {
 	InputData.call( this );
 
+	/**
+	 * @see https://github.com/Crocoblock/jetformbuilder/issues/222
+	 * @type {string}
+	 */
+	this.value.current = '';
+
 	this.isSupported = function ( node ) {
 		return 'checkin-checkout' === node.dataset.field;
 	};
@@ -47,8 +53,28 @@ function CheckOutInput() {
 		);
 	};
 
+	this.isVisible = function () {
+		const [ , wrapper ] = this.nodes;
+
+		return (
+			wrapper?.isConnected && null !== wrapper?.offsetParent
+		);
+	};
+
 	this.onClear = function () {
 		this.silenceSet( '' );
+	};
+
+	this.setNode = function ( node ) {
+		InputData.prototype.setNode.call( this, node );
+
+		let fieldsWrapper = node.closest( '.jet-abaf-separate-fields' );
+
+		if ( !fieldsWrapper ) {
+			fieldsWrapper = node.closest( '.jet-abaf-field' );
+		}
+
+		this.nodes.push( fieldsWrapper );
 	};
 }
 

@@ -17,6 +17,10 @@ function SignalCalculated() {
 		const [ node ] = this.input.nodes;
 		node.value     = this.input.value.current;
 
+		this.input.calcValue = Number(
+			node.value.replace( /[^\d\.]/g, '' ),
+		);
+
 		this.input.visibleValNode.textContent = this.input.value.current;
 	};
 }

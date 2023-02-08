@@ -81,6 +81,8 @@ ConditionalBlock.prototype = {
 			this.node.querySelectorAll( '[data-jfb-sync]' ),
 		).map(
 			item => item.jfbSync,
+		).filter(
+			item => item,
 		);
 	},
 	insertComment() {

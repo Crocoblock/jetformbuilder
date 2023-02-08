@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Types\Send_Email;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Invalid_Macro_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 /**
@@ -75,7 +76,11 @@ class Filters_Manager {
 
 		$filter_arg = isset( $filter_data[2] ) ? trim( $filter_data[2], '()' ) : false;
 
-		return $filter->apply( $value, $filter_arg );
+		try {
+			return $filter->apply( $value, $filter_arg );
+		} catch ( Invalid_Macro_Exception $exception ) {
+			return $value;
+		}
 	}
 
 

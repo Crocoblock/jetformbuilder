@@ -13,8 +13,8 @@ class Term_Title_By_Id_Filter extends Base_Multiple_Filter {
 	protected function apply_item( $item, ...$args ): string {
 		$term = get_term( $item );
 
-		if ( is_wp_error( $term ) ) {
-			return $item;
+		if ( is_wp_error( $term ) || ! is_object( $term ) ) {
+			return (string) $item;
 		}
 
 		return $term->name;

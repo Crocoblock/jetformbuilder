@@ -91,11 +91,11 @@ function getValidateCallbacks( inputs, silence = false ) {
 		if ( !(
 			input instanceof InputData
 		) ) {
-			console.group( 'Input are not instance of InputData' );
+			console.group( 'Input is not instance of InputData' );
 			console.error( input );
 			console.groupEnd();
 
-			return [];
+			continue;
 		}
 		callbacks.push(
 			( resolve, reject ) => {

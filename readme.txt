@@ -273,6 +273,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 == Changelog ==
 
 **3.0.0.2**
+ - FIX: Ignore required option in some cases
  - FIX: Dynamic populate repeater field on page load
  - FIX: Prevent submit/switch page on press enter in textarea field
  - FIX: Validation of empty media field

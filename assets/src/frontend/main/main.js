@@ -28,6 +28,7 @@ import './calc.module/main';
 import './switch-page-on-change/main';
 import { getParsedName } from './inputs/functions';
 import initForm from './init/initForm';
+import BaseHtmlAttr from './attrs/BaseHtmlAttr';
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -44,6 +45,7 @@ window.JetFormBuilderAbstract = {
 	MultiSelectData,
 	Restriction,
 	RestrictionError,
+	BaseHtmlAttr,
 };
 
 window.JetFormBuilderFunctions = {

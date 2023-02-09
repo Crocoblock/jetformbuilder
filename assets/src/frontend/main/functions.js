@@ -120,6 +120,15 @@ function isEmpty( value ) {
 }
 
 /**
+ * @param node {HTMLElement}
+ */
+function isVisible( node ) {
+	return (
+		node?.isConnected && null !== node?.offsetParent
+	);
+}
+
+/**
  * @param node {Element}
  */
 function getOffsetTop( node ) {
@@ -135,4 +144,5 @@ export {
 	toHTML,
 	isEmpty,
 	getOffsetTop,
+	isVisible,
 };

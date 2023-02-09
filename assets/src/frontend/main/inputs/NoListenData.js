@@ -30,6 +30,10 @@ function NoListenData() {
 		node.parentElement.insertBefore( this.comment, node );
 	};
 
+	this.isVisible = function () {
+		return false;
+	};
+
 	this.merge = function ( input ) {
 		this.nodes.push( ...input.getNode() );
 	};

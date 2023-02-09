@@ -4,7 +4,7 @@ import ReactiveHook from '../reactive/ReactiveHook';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
-import { setAttrs } from '../functions';
+import { isVisible, setAttrs } from '../functions';
 
 const { doAction } = JetPlugins.hooks;
 
@@ -251,11 +251,9 @@ InputData.prototype.getRoot = function () {
 };
 
 InputData.prototype.isVisible = function () {
-	const [ node ] = this.nodes;
+	const wrapper = this.getWrapperNode();
 
-	return (
-		node?.isConnected && null !== node?.offsetParent
-	);
+	return isVisible( wrapper );
 };
 
 InputData.prototype.onClear = function () {

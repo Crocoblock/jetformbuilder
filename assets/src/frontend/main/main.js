@@ -14,6 +14,7 @@ import {
 	toHTML,
 	isEmpty,
 	getOffsetTop,
+	isVisible,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -58,6 +59,7 @@ window.JetFormBuilderFunctions = {
 	isEmpty,
 	getValidateCallbacks,
 	getOffsetTop,
+	isVisible,
 };
 
 jQuery( () => JetPlugins.init() );

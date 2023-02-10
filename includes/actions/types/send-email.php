@@ -11,6 +11,7 @@ use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Request\Request_Tools;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -329,13 +330,11 @@ class Send_Email extends Base {
 	}
 
 	public function get_attachments(): array {
-		$files       = jet_fb_request_handler()->get_files();
 		$fields      = $this->settings['attachments'] ?? array();
 		$attachments = array();
 
 		foreach ( $fields as $field ) {
-			/** @var Uploaded_File_Path $value */
-			$value = $files[ $field ] ?? false;
+			$value = Request_Tools::get_file( $field );
 
 			if ( ! $value ) {
 				continue;

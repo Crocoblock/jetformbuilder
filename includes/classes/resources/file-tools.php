@@ -47,4 +47,29 @@ class File_Tools {
 		return end( $file_parts );
 	}
 
+	/**
+	 * @param string|int $file_data
+	 *
+	 * @return Uploaded_File|false
+	 */
+	public static function create_uploaded_file( $file_data ) {
+		if ( is_numeric( $file_data ) ) {
+			$uploaded = new Uploaded_File();
+
+			return $uploaded->set_attachment_id( $file_data );
+		}
+
+		if ( ! empty( $file_data['id'] ) && is_numeric( $file_data['id'] ) ) {
+			return self::create_uploaded_file( $file_data['id'] );
+		}
+
+		if ( ! is_string( $file_data ) || false === parse_url( $file_data ) ) {
+			return false;
+		}
+
+		$attachment_id = attachment_url_to_postid( $file_data );
+
+		return $attachment_id ? self::create_uploaded_file( $attachment_id ) : false;
+	}
+
 }

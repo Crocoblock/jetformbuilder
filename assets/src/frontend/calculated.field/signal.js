@@ -24,9 +24,10 @@ function SignalCalculated() {
 			return;
 		}
 
-		let calcValue = Number(
-			this.input.value.current.replace( /[^\d\.]/g, '' ),
-		);
+		let calcValue = 'string' === typeof this.input.value.current
+		                ? Number(
+				this.input.value.current.replace( /[^\d\.]/g, '' ),
+			) : this.input.value.current;
 
 		this.input.calcValue = Number.isNaN( calcValue ) ? 0 : calcValue;
 		node.value           = this.input.calcValue;

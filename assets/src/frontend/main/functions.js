@@ -120,6 +120,15 @@ function isEmpty( value ) {
 }
 
 /**
+ * @param node {HTMLElement}
+ */
+function isVisible( node ) {
+	return (
+		node?.isConnected && null !== node?.offsetParent
+	);
+}
+
+/**
  * @param node {Element}
  */
 function getOffsetTop( node ) {
@@ -152,4 +161,5 @@ export {
 	isEmpty,
 	getOffsetTop,
 	focusOnInvalidInput,
+	isVisible,
 };

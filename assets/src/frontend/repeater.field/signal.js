@@ -25,20 +25,20 @@ function SignalRepeater() {
 			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
-			this.runItem( index );
+			this.runItem( +index );
 			calcValue += row.calc;
 		}
 
 		this.input.calcValue = calcValue;
 	};
 	/**
-	 * @param current {string}
+	 * @param currentIndex {Number}
 	 */
-	this.runItem = function ( current ) {
+	this.runItem = function ( currentIndex ) {
 		/**
 		 * @type {ObservableRow}
 		 */
-		const observable = this.input.value.current[ current ];
+		const observable = this.input.value.current[ currentIndex ];
 
 		if ( observable.isObserved ) {
 			return;
@@ -46,8 +46,6 @@ function SignalRepeater() {
 		const template     = document.createElement( 'template' );
 		template.innerHTML = this.input.template.innerHTML.trim();
 
-		// set current index
-		const currentIndex = this.input.value.current.length - 1;
 		template.innerHTML = template.innerHTML.replace(
 			/__i__/g,
 			currentIndex,

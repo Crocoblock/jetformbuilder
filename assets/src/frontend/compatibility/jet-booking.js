@@ -53,14 +53,6 @@ function CheckOutInput() {
 		);
 	};
 
-	this.isVisible = function () {
-		const [ , wrapper ] = this.nodes;
-
-		return (
-			wrapper?.isConnected && null !== wrapper?.offsetParent
-		);
-	};
-
 	this.onClear = function () {
 		this.silenceSet( '' );
 	};

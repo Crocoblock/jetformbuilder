@@ -13,7 +13,6 @@ $this->add_attribute( 'class', 'jet-form-builder__field hidden-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );
 $this->add_attribute( 'data-field-name', $args['name'] );
-$not_static = empty( $this->args['_static_value'] );
 
 /**
  * We need to watch only real hidden fields.
@@ -21,11 +20,11 @@ $not_static = empty( $this->args['_static_value'] );
  *
  * @see \Jet_Form_Builder\Blocks\Render\Form_Hidden_Fields::render
  */
-if ( $not_static ) {
+if ( empty( $this->args['_static_value'] ) ) {
 	$this->add_attribute( 'data-jfb-sync' );
 }
 
-if ( ! Regexp_Tools::has_macro( $this->args['field_value'] ) || ! $not_static ) {
+if ( ! Regexp_Tools::has_macro( $this->args['field_value'] ) ) {
 	$this->add_attribute( 'value', $this->args['field_value'] );
 } else {
 	wp_enqueue_script( Dynamic_Value::HANDLE );

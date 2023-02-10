@@ -13,7 +13,9 @@ import {
 	getLanguage,
 	toHTML,
 	isEmpty,
-	getOffsetTop, focusOnInvalidInput,
+	getOffsetTop, 
+	focusOnInvalidInput,
+	isVisible,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -30,6 +32,7 @@ import {
 	populateInputs,
 } from './inputs/functions';
 import initForm from './init/initForm';
+import BaseHtmlAttr from './attrs/BaseHtmlAttr';
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -46,6 +49,7 @@ window.JetFormBuilderAbstract = {
 	MultiSelectData,
 	Restriction,
 	RestrictionError,
+	BaseHtmlAttr,
 };
 
 window.JetFormBuilderFunctions = {
@@ -63,6 +67,7 @@ window.JetFormBuilderFunctions = {
 	getOffsetTop,
 	focusOnInvalidInput,
 	populateInputs,
+	isVisible,
 };
 
 jQuery( () => JetPlugins.init() );

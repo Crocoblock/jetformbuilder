@@ -28,8 +28,8 @@ class Payment_View extends View_Base {
 	 */
 	public function get_prepared_join( Query_Builder $builder ) {
 		$payments_to_p_ships = ( new Payment_To_Payer_Shipping_Model() )->create()::table();
+		$payers              = ( new Payer_Model() )->create()::table();
 		$payments            = Payment_Model::table();
-		$payers              = Payer_Model::table();
 		$payers_ship         = Payer_Shipping_Model::table();
 
 		$builder->join = "

@@ -62,8 +62,6 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		 */
 		$this->add_redirect( $payment['links'] ?? array() );
 
-		Save_Record::add_hidden();
-
 		add_action(
 			'jet-form-builder/form-handler/after-send',
 			array( $this, 'attach_record_id' )

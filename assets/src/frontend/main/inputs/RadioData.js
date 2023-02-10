@@ -17,6 +17,11 @@ function RadioData() {
 				'keydown',
 				this.handleEnterKey.bind( this ),
 			);
+
+			/**
+			 * @since 3.0.1
+			 */
+			jQuery( nodeElement ).on( 'change', () => this.setValue() );
 		}
 	};
 	this.setValue       = function () {

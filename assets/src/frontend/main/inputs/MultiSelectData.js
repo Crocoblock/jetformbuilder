@@ -16,6 +16,11 @@ function MultiSelectData() {
 		node.addEventListener( 'change', () => this.setValue() );
 		node.addEventListener( 'blur', () => this.reportOnBlur() );
 
+		/**
+		 * @since 3.0.1
+		 */
+		jQuery( node ).on( 'change', () => this.setValue() );
+
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
@@ -30,7 +35,7 @@ function MultiSelectData() {
 			map( item => item.value );
 	};
 
-	this.onClear        = function () {
+	this.onClear = function () {
 		this.silenceSet( [] );
 	};
 }

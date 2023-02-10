@@ -73,6 +73,16 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
+	/**
+	 * Compatibility with custom scripts, which used
+	 * jQueryElement.trigger( 'change' )
+	 *
+	 * @since 3.0.1
+	 */
+	jQuery( node ).on( 'change', event => {
+		this.value.current = event.target.value;
+	} );
+
 	node.addEventListener( 'blur', event => {
 		this.reportOnBlur();
 	} );

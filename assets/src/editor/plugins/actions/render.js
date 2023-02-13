@@ -21,12 +21,20 @@ const {
 const {
 	      useActionsEdit,
       } = JetFBHooks;
+const {
+	      useSelect,
+      } = wp.data;
 
 function PluginActions() {
 	const { actions, setActions } = useActionsEdit();
 
+	const isNewPost = useSelect(
+		select => select( 'core/editor' ).isEditedPostNew(),
+		[],
+	);
+
 	useEffect( () => {
-		if ( 0 === actions.length ) {
+		if ( 0 === actions.length && isNewPost ) {
 			setActions( defaultActions );
 		}
 	}, [] );
@@ -54,7 +62,7 @@ function PluginActions() {
 			</Button>
 			{ (
 				!JetFormEditorData.isActivePro
-			) && <div className={ 'jet-fb flex-center' } >
+			) && <div className={ 'jet-fb flex-center' }>
 				<ExternalLink href={ JetFormEditorData.utmLinks.allProActions }>
 					{ __( 'All PRO Actions', 'jet-form-builder' ) }
 				</ExternalLink>

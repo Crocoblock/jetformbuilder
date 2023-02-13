@@ -18,6 +18,12 @@ function CheckboxData() {
 				'keydown',
 				this.handleEnterKey.bind( this ),
 			);
+
+			jQuery( node ).on( 'change', event => {
+				this.callable.lockTrigger();
+				this.setValue();
+				this.callable.unlockTrigger();
+			} );
 		}
 	};
 	this.setValue     = function () {

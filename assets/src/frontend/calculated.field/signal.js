@@ -13,7 +13,8 @@ function SignalCalculated() {
 	this.isSupported = function ( node, inputData ) {
 		return isCalculated( node );
 	};
-	this.runSignal   = function () {
+
+	this.baseSignal = function () {
 		const [ node ] = this.input.nodes;
 
 		this.input.visibleValNode.textContent = this.input.value.current;
@@ -31,6 +32,14 @@ function SignalCalculated() {
 
 		this.input.calcValue = Number.isNaN( calcValue ) ? 0 : calcValue;
 		node.value           = this.input.calcValue;
+	};
+
+	this.runSignal = function () {
+		this.baseSignal();
+
+		const [ node ] = this.input.nodes;
+
+		this.triggerJQuery( node );
 	};
 }
 

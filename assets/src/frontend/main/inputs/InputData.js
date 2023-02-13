@@ -76,6 +76,15 @@ InputData.prototype.addListeners = function () {
 		this.reportOnBlur();
 	} );
 
+	/**
+	 * @since 3.0.1
+	 */
+	jQuery( node ).on( 'change', event => {
+		this.callable.lockTrigger();
+		this.value.current = event.target.value;
+		this.callable.unlockTrigger();
+	} );
+
 	if ( 'input' !== this.inputType ) {
 		return;
 	}

@@ -15,6 +15,12 @@ function ChangeData() {
 			this.value.current = event.target.value;
 		} );
 
+		jQuery( node ).on( 'change', event => {
+			this.callable.lockTrigger();
+			this.value.current = event.target.value;
+			this.callable.unlockTrigger();
+		} );
+
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};

@@ -15,6 +15,8 @@ function SignalRange() {
 		node.value     = this.input.value.current;
 
 		this.input.numberNode.textContent = node.value;
+
+		this.triggerJQuery( node );
 	};
 }
 

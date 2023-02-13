@@ -17,8 +17,6 @@ function RangeData() {
 		this.numberNode = node.parentElement.querySelector(
 			'.jet-form-builder__field-value-number',
 		);
-
-		this.numberNode.textContent = '' + node.value || node.max || 100;
 	};
 }
 

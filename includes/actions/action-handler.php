@@ -519,6 +519,7 @@ class Action_Handler {
 
 		$clone_action      = clone $action;
 		$clone_action->_id = $this->get_unique_action_id();
+		$clone_action->toggle_hidden();
 
 		$this->save_action( $clone_action, $props );
 
@@ -540,9 +541,29 @@ class Action_Handler {
 		$this->form_events[ $action->_id ]     = Events_List::create(
 			array_merge( $events, $action->get_required_events() )
 		);
+
+		if ( ! $action->is_hidden() ) {
+			return;
+		}
+
+		$this->reorder_hidden_actions();
 	}
 
-	public function get_unique_action_id( int $start_from = 1 ): int {
+	private function reorder_hidden_actions() {
+		$hidden = array();
+
+		foreach ( $this->form_actions as $action ) {
+			if ( ! $action->is_hidden() ) {
+				continue;
+			}
+			unset( $this->form_actions[ $action->_id ] );
+			$hidden[] = $action;
+		}
+
+		$this->form_actions = $hidden + $this->form_actions;
+	}
+
+	public function get_unique_action_id( int $start_from = 0 ): int {
 		if ( ! array_key_exists( $start_from, $this->form_actions ) ) {
 			return $start_from;
 		}

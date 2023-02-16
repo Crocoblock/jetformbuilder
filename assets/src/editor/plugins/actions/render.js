@@ -5,6 +5,7 @@ import ListActionItem from './action.item';
 
 const {
 	      useEffect,
+	      useState,
 	      Children,
 	      cloneElement,
       } = wp.element;
@@ -25,6 +26,8 @@ const {
 	      useSelect,
       } = wp.data;
 
+let isSetDefault = false;
+
 function PluginActions() {
 	const { actions, setActions } = useActionsEdit();
 
@@ -34,8 +37,9 @@ function PluginActions() {
 	);
 
 	useEffect( () => {
-		if ( 0 === actions.length && isNewPost ) {
+		if ( 0 === actions.length && isNewPost && !isSetDefault ) {
 			setActions( defaultActions );
+			isSetDefault = true;
 		}
 	}, [] );
 

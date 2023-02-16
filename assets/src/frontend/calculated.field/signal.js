@@ -17,21 +17,21 @@ function SignalCalculated() {
 	this.baseSignal = function () {
 		const [ node ] = this.input.nodes;
 
+		const isNumber = 'number' === this.input.valueTypeProp;
+
+		this.input.calcValue = isNumber
+		                       ? this.withPrecision()
+		                       : this.input.value.current;
+
+		this.input.value.silence();
+		this.input.value.current = isNumber
+		                           ? this.convertValue()
+		                           : this.input.value.current;
+		this.input.value.silence();
+
 		this.input.visibleValNode.textContent = this.input.value.current;
 
-		if ( 'number' !== this.input.valueTypeProp ) {
-			node.value = this.input.value.current;
-
-			return;
-		}
-
-		let calcValue = 'string' === typeof this.input.value.current
-		                ? Number(
-				this.input.value.current.replace( /[^\d\.]/g, '' ),
-			) : this.input.value.current;
-
-		this.input.calcValue = Number.isNaN( calcValue ) ? 0 : calcValue;
-		node.value           = this.input.calcValue;
+		node.value = this.input.calcValue;
 	};
 
 	this.runSignal = function () {
@@ -44,5 +44,28 @@ function SignalCalculated() {
 }
 
 SignalCalculated.prototype = Object.create( BaseSignal.prototype );
+
+SignalCalculated.prototype.convertValue = function () {
+	const value = this.input.value.current;
+
+	if ( Number.isNaN( Number( value ) ) ) {
+		return 0;
+	}
+
+	const parts = this.withPrecision().toString().split( '.' );
+
+	if ( this.input.sepThousands ) {
+		parts[ 0 ] = parts[ 0 ].replace(
+			/\B(?=(\d{3})+(?!\d))/g,
+			this.input.sepThousands,
+		);
+	}
+
+	return parts.join( this.input.sepDecimal );
+};
+
+SignalCalculated.prototype.withPrecision = function () {
+	return Number( this.input.value.current ).toFixed( this.input.precision );
+};
 
 export default SignalCalculated;

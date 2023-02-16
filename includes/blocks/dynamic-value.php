@@ -55,7 +55,7 @@ class Dynamic_Value {
 			return;
 		}
 
-		$block->add_attribute( 'data-value', $groups );
+		$block->add_attribute( 'data-value', Tools::esc_attr( $groups ) );
 	}
 
 	public function on_render_hidden_field( array $args, RenderBase $block ): array {
@@ -65,7 +65,7 @@ class Dynamic_Value {
 			return $args;
 		}
 
-		$block->add_attribute( 'data-dynamic-value', $groups );
+		$block->add_attribute( 'data-dynamic-value', Tools::esc_attr( $groups ) );
 
 		return $args;
 	}

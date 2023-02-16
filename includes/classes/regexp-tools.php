@@ -11,13 +11,7 @@ class Regexp_Tools {
 			return false;
 		}
 
-		$parts = parse_url( $value );
-
-		if ( false !== $parts ) {
-			return false;
-		}
-
-		return preg_match( '/%([\w\-]+::)?(.*?)%/', (string) $value );
+		return preg_match( '/%([\w\-]+::)?(.*?)%/', urldecode( (string) $value ) );
 	}
 
 }

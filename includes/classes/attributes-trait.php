@@ -14,7 +14,12 @@ trait Attributes_Trait {
 			return;
 		}
 
-		if ( wp_is_numeric_array( $value ) ) {
+		/**
+		 * Don't use wp_is_numeric_array function
+		 * for backward compatibility
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/2392
+		 */
+		if ( is_array( $value ) ) {
 			foreach ( $value as $item ) {
 				$this->add_attribute( $attr, $item );
 			}

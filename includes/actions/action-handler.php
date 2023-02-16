@@ -54,13 +54,6 @@ class Action_Handler {
 	 */
 	protected $skipped = array();
 
-	/**
-	 * Hidden actions
-	 *
-	 * @var array<string, bool>
-	 */
-	private $hidden = array();
-
 	public function get_form_id() {
 		return (int) $this->form_id;
 	}
@@ -320,7 +313,7 @@ class Action_Handler {
 	}
 
 	public function in_loop(): bool {
-		return ( 0 < (int) $this->current_position );
+		return false !== $this->current_position;
 	}
 
 	public function in_loop_or_die() {
@@ -478,13 +471,13 @@ class Action_Handler {
 	 * @return $this
 	 */
 	public function set_current_action( $action_id ) {
-		$this->current_position = (int) $action_id;
+		$this->current_position = $action_id;
 
 		return $this;
 	}
 
 	public function get_position(): int {
-		return $this->current_position;
+		return (int) $this->current_position;
 	}
 
 	public function start_flow( string $flow_handler ) {

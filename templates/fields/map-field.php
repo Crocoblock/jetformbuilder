@@ -4,12 +4,17 @@
  * @var array $args
  */
 
+use Jet_Form_Builder\Classes\Tools;
+
 $name = $args['name'] ?? '';
 
 $this->add_attribute( 'type', 'hidden' );
 $this->add_attribute( 'name', $this->block_type->get_field_name() );
 $this->add_attribute( 'data-field-name', $args['name'] ?? '' );
-$this->add_attribute( 'data-settings', $this->block_type->get_field_settings() );
+$this->add_attribute(
+	'data-settings',
+	Tools::esc_attr( $this->block_type->get_field_settings() )
+);
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'value', $args['default']['self'] ?? '' );
 $this->add_attribute( 'class', 'jet-form-builder__field' );

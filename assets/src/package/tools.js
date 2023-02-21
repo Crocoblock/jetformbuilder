@@ -97,8 +97,7 @@ export function maybeCyrToLatin( str ) {
 }
 
 export function getConvertedName( valueToChange ) {
-	var regex = /\s+/g,
-	    slug  = valueToChange.toLowerCase().replace( regex, '_' );
+	let slug = valueToChange.toLowerCase();
 
 	// Replace accents
 	slug = slug.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, '' );
@@ -106,12 +105,22 @@ export function getConvertedName( valueToChange ) {
 	// Replace cyrillic
 	slug = maybeCyrToLatin( slug );
 
-	if ( 20 < slug.length ) {
-		// 34 - Lionel Messi's age when he left Barcelona
-		slug = slug.substr( 0, 34 );
+	// Get list of words
+	const slugParts = slug.match( /\b(\w+)\b/g );
 
-		if ( '-' === slug.slice( -1 ) ) {
-			slug = slug.slice( 0, -1 );
+	slug = '';
+
+	for ( const [ slugIndex, slugPart ] of Object.entries( slugParts ) ) {
+		slug += (
+			0 === +slugIndex ? '' : '_'
+		) + slugPart;
+
+		const isLast = 1 + +slugIndex === slugParts.length;
+
+		if ( slug.length > 60 ) {
+			return slug + (
+				isLast ? '' : '__'
+			);
 		}
 	}
 

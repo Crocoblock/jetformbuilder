@@ -10,6 +10,10 @@ const {
       } = JetFBComponents;
 
 const {
+	      useBlockAttributes,
+      } = JetFBHooks;
+
+const {
 	      InspectorControls,
 	      useBlockProps,
 	      RichText,
@@ -83,13 +87,15 @@ export default function HiddenEdit( props ) {
 
 	const blockProps = useBlockProps();
 
+	const [ , setAttrs ] = useBlockAttributes();
+
 	const setDynamicName = newValue => {
 		if ( newValue
 			&& (
 				!attributes.name || 'hidden_field_name' === attributes.name
 			)
 		) {
-			setAttributes( { name: newValue } );
+			setAttrs( { name: newValue } );
 		}
 	};
 
@@ -174,7 +180,7 @@ export default function HiddenEdit( props ) {
 						placeholder="hidden_field_name..."
 						allowedFormats={ [] }
 						value={ attributes.name }
-						onChange={ name => setAttributes( { name } ) }
+						onChange={ name => setAttrs( { name } ) }
 					/>
 				</CardHeader>
 				<CardBody>

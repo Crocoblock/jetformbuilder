@@ -1,7 +1,6 @@
 import dispatchers from './dispatchers';
 
 const DEFAULT_STATE = {
-	hasExecuted: false,
 	propsToSave: [
 		'clientId',
 		'name',
@@ -9,7 +8,12 @@ const DEFAULT_STATE = {
 	blocks: [],
 	blockMap: {},
 	executed: false,
-	recentlyAdded: []
+	recentlyAdded: [],
+	sanitizers: {
+		name: [
+			name => name.replace( /[^\w\-]/gi, '' ),
+		],
+	},
 };
 
 export default function ( state = DEFAULT_STATE, action ) {

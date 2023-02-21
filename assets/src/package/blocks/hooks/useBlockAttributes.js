@@ -4,6 +4,7 @@ const {
 const {
 	      useSelect,
 	      useDispatch,
+	      select,
       } = wp.data;
 
 function useBlockAttributes() {
@@ -16,15 +17,16 @@ function useBlockAttributes() {
 	const { updateBlock } = useDispatch( 'core/block-editor', [] );
 
 	const updateAttributes = props => {
-		if ( 'object' === typeof props ) {
-			updateBlock( clientId, { attributes: props } );
+		props = 'object' === typeof props
+		        ? props
+		        : props( attributes );
 
-			return;
-		}
+		props = select( 'jet-forms/fields' ).getSanitizedAttributes(
+			props,
+			blockProps,
+		);
 
-		updateBlock( clientId, {
-			attributes: props( attributes ),
-		} );
+		updateBlock( clientId, { attributes: props } );
 	};
 
 	return [ attributes, updateAttributes ];

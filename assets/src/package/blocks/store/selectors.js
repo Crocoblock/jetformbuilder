@@ -55,6 +55,34 @@ const selectors = {
 			names: names.join( '|' ),
 		};
 	},
+	getSanitizedAttributes( state, attrs, blockProps = {} ) {
+		const type = blockProps[ 'data-type' ] ?? '';
+
+		for ( const attrsKey in attrs ) {
+			if ( !attrs.hasOwnProperty( attrsKey ) ) {
+				continue;
+			}
+
+			const sanitizers = (
+				state.sanitizers?.[ type ]?.[ attrsKey ] ??
+				state.sanitizers?.[ attrsKey ] ??
+				false
+			);
+
+			if ( !sanitizers?.length ) {
+				continue;
+			}
+
+			for ( const sanitizer of sanitizers ) {
+				if ( 'function' !== typeof sanitizer ) {
+					continue;
+				}
+				attrs[ attrsKey ] = sanitizer( attrs[ attrsKey ] );
+			}
+		}
+
+		return attrs;
+	},
 };
 
 export default {

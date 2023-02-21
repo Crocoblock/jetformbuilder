@@ -510,6 +510,10 @@ class Action_Handler {
 			return false;
 		}
 
+		return $this->add( $action, $props );
+	}
+
+	public function add( Base $action, array $props = array() ): Base {
 		$clone_action      = clone $action;
 		$clone_action->_id = $this->get_unique_action_id();
 		$clone_action->toggle_hidden();
@@ -519,8 +523,7 @@ class Action_Handler {
 		return $clone_action;
 	}
 
-
-	private function save_action( Base $action, array $props ) {
+	public function save_action( Base $action, array $props ) {
 		$conditions = $props['conditions'] ?? array();
 		$operator   = $props['condition_operator'] ?? 'and';
 		$events     = $props['events'] ?? array();

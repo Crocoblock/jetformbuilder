@@ -21,6 +21,7 @@ function SignalRadio() {
 				node.dataset?.calculate ?? node.value,
 			);
 
+			this.triggerJQuery( node );
 			break;
 		}
 	};

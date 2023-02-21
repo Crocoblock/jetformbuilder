@@ -16,10 +16,11 @@ function MultiSelectData() {
 		node.addEventListener( 'change', () => this.setValue() );
 		node.addEventListener( 'blur', () => this.reportOnBlur() );
 
-		/**
-		 * @since 3.0.1
-		 */
-		jQuery( node ).on( 'change', () => this.setValue() );
+		jQuery( node ).on( 'change', event => {
+			this.callable.lockTrigger();
+			this.setValue();
+			this.callable.unlockTrigger();
+		} );
 
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );

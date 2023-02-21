@@ -46,11 +46,11 @@ class Button_Switch_State extends Button_Type_Base {
 		);
 		$render->add_attribute(
 			'data-jfb-func',
-			array(
+			Tools::esc_attr( array(
 				'setCssClass' => array(
 					'className' => 'has-active-state',
 				)
-			)
+			) )
 		);
 
 		$has_active_state = Render_State::instance()->get_current()->intersect( $switch_on );

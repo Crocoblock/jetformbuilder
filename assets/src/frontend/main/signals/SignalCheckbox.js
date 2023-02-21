@@ -11,7 +11,13 @@ function SignalCheckbox() {
 		this.input.calcValue = 0;
 
 		for ( const node of this.input.nodes ) {
+			const prevValue = node.checked;
+
 			node.checked = this.input.value.current?.includes( node.value );
+
+			if ( prevValue !== node.checked ) {
+				this.triggerJQuery( node );
+			}
 
 			if ( !node.checked ) {
 				continue;

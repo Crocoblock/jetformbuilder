@@ -251,7 +251,7 @@ abstract class Base {
 					'data-jfb-func="%s"',
 					Tools::esc_attr( array(
 						'show' => array( 'dom' => true ),
-					), )
+					) )
 				),
 			);
 

@@ -18,10 +18,11 @@ function RadioData() {
 				this.handleEnterKey.bind( this ),
 			);
 
-			/**
-			 * @since 3.0.1
-			 */
-			jQuery( nodeElement ).on( 'change', () => this.setValue() );
+			jQuery( nodeElement ).on( 'change', event => {
+				this.callable.lockTrigger();
+				this.setValue();
+				this.callable.unlockTrigger();
+			} );
 		}
 	};
 	this.setValue       = function () {

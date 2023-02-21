@@ -50,6 +50,8 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	 */
 	private $executed_on;
 
+	private $hidden = false;
+
 	public function __construct() {
 	}
 
@@ -182,6 +184,16 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	 */
 	public static function add_hidden( array $props = array() ) {
 		return jet_fb_action_handler()->add_hidden( static::class, $props );
+	}
+
+	public function toggle_hidden(): Base {
+		$this->hidden = ! $this->hidden;
+
+		return $this;
+	}
+
+	public function is_hidden(): bool {
+		return $this->hidden;
 	}
 
 }

@@ -13,9 +13,13 @@ function SignalText() {
 
 		const [ node ] = this.input.nodes;
 
-		if ( node.value !== this.input.value.current ) {
-			node.value = this.input.value.current;
+		if ( node.value === this.input.value.current ) {
+			return;
 		}
+
+		node.value = this.input.value.current;
+
+		this.triggerJQuery( node );
 	};
 }
 

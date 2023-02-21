@@ -61,9 +61,9 @@ function createInput( node, observable ) {
 function getParsedName( name ) {
 	const regexps = [
 		// multiple fields (checkbox[])
-		/^(\w+)\[\]$/,
+		/^([\w\-]+)\[\]$/,
 		// fields inside repeater (rep_name[1][content_field])
-		/^\w+\[\d+\]\[([\w\-]+)\]\[?\]?$/,
+		/^[\w\-]+\[\d+\]\[([\w\-]+)\]\[?\]?$/,
 	];
 
 	for ( const regExp of regexps ) {

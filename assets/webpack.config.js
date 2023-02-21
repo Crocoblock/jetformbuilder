@@ -14,7 +14,7 @@ module.exports = {
 	output: {
 		path: path.resolve( __dirname, 'js' ),
 		filename: isDev() ? '[name].js' : '[name].min.js',
-		chunkFilename: 'chunks/[name].chunk.js',
+		chunkFilename: 'chunks/[name].[contenthash:8].chunk.js',
 	},
 	devtool: 'eval-source-map',
 	resolve: {

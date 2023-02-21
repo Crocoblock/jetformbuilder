@@ -26,6 +26,8 @@ function SignalSelect() {
 				option.dataset?.calculate ?? option.value,
 			);
 		}
+
+		this.triggerJQuery( node );
 	};
 }
 

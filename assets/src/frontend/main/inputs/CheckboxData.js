@@ -19,10 +19,11 @@ function CheckboxData() {
 				this.handleEnterKey.bind( this ),
 			);
 
-			/**
-			 * @since 3.0.1
-			 */
-			jQuery( node ).on( 'change', () => this.setValue() );
+			jQuery( node ).on( 'change', event => {
+				this.callable.lockTrigger();
+				this.setValue();
+				this.callable.unlockTrigger();
+			} );
 		}
 	};
 	this.setValue     = function () {

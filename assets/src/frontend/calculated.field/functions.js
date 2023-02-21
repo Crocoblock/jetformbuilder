@@ -4,7 +4,7 @@
  */
 function isCalculated( node ) {
 	return !!(
-		node.parentElement.dataset?.formula?.length ?? ''
+		node?.parentElement?.dataset?.formula?.length ?? ''
 	);
 }
 

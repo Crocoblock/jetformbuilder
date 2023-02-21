@@ -6,38 +6,29 @@ namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Resources\File_Tools;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 class Actions_Tools {
-
-	public static function run_flow( string $flow_path ) {
-		$actions = self::get_flow( $flow_path );
-
-		foreach ( $actions as $action ) {
-			jet_fb_action_handler()->process_single_action( $action );
-		}
-	}
 
 	/**
 	 * @param string $flow_path
 	 *
-	 * @return Base[]
+	 * @return \Generator
 	 */
-	public static function get_flow( string $flow_path ): array {
-		$flow    = self::load_flow( $flow_path );
-		$actions = array();
+	public static function get_flow( string $flow_path ): \Generator {
+		$flow = self::load_flow( $flow_path );
 
 		foreach ( $flow as $action ) {
-			$current = jet_fb_action_handler()->add_hidden( $action['type'], $action );
-
-			if ( ! $current ) {
+			try {
+				$current = jet_form_builder()->actions->get_action( $action['type'] );
+			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
+
 			$current->settings = $action['settings'] ?? array();
 
-			$actions[] = $current;
+			yield array( $current, $action );
 		}
-
-		return $actions;
 	}
 
 	/**

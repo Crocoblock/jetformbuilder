@@ -54,13 +54,6 @@ class Action_Handler {
 	 */
 	protected $skipped = array();
 
-	/**
-	 * Hidden actions
-	 *
-	 * @var array<string, bool>
-	 */
-	private $hidden = array();
-
 	public function get_form_id() {
 		return (int) $this->form_id;
 	}
@@ -320,7 +313,7 @@ class Action_Handler {
 	}
 
 	public function in_loop(): bool {
-		return ( 0 < (int) $this->current_position );
+		return false !== $this->current_position;
 	}
 
 	public function in_loop_or_die() {
@@ -478,13 +471,13 @@ class Action_Handler {
 	 * @return $this
 	 */
 	public function set_current_action( $action_id ) {
-		$this->current_position = (int) $action_id;
+		$this->current_position = $action_id;
 
 		return $this;
 	}
 
 	public function get_position(): int {
-		return $this->current_position;
+		return (int) $this->current_position;
 	}
 
 	public function start_flow( string $flow_handler ) {
@@ -517,16 +510,20 @@ class Action_Handler {
 			return false;
 		}
 
+		return $this->add( $action, $props );
+	}
+
+	public function add( Base $action, array $props = array() ): Base {
 		$clone_action      = clone $action;
 		$clone_action->_id = $this->get_unique_action_id();
+		$clone_action->toggle_hidden();
 
 		$this->save_action( $clone_action, $props );
 
 		return $clone_action;
 	}
 
-
-	private function save_action( Base $action, array $props ) {
+	public function save_action( Base $action, array $props ) {
 		$conditions = $props['conditions'] ?? array();
 		$operator   = $props['condition_operator'] ?? 'and';
 		$events     = $props['events'] ?? array();
@@ -540,9 +537,29 @@ class Action_Handler {
 		$this->form_events[ $action->_id ]     = Events_List::create(
 			array_merge( $events, $action->get_required_events() )
 		);
+
+		if ( ! $action->is_hidden() ) {
+			return;
+		}
+
+		$this->reorder_hidden_actions();
 	}
 
-	public function get_unique_action_id( int $start_from = 1 ): int {
+	private function reorder_hidden_actions() {
+		$hidden = array();
+
+		foreach ( $this->form_actions as $action ) {
+			if ( ! $action->is_hidden() ) {
+				continue;
+			}
+			unset( $this->form_actions[ $action->_id ] );
+			$hidden[] = $action;
+		}
+
+		$this->form_actions = $hidden + $this->form_actions;
+	}
+
+	public function get_unique_action_id( int $start_from = 0 ): int {
 		if ( ! array_key_exists( $start_from, $this->form_actions ) ) {
 			return $start_from;
 		}

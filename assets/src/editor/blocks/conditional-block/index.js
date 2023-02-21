@@ -21,7 +21,16 @@ const settings = {
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,
 	useEditProps: [ 'uniqKey' ],
-	__experimentalLabel: ( attributes ) => {
+	/**
+	 * @param attributes
+	 * @param context {{|'accessibility'|'visual'|'list-view'}}
+	 * @returns {*}
+	 * @private
+	 */
+	__experimentalLabel: ( attributes, { context } ) => {
+		if ( context !== 'list-view' ) {
+			return;
+		}
 		const funcObject = wp.data.select( 'jet-forms/block-conditions' ).
 			getFunction(
 				attributes?.func_type,

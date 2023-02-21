@@ -5,6 +5,7 @@ import blockConditions from './block-conditions/store';
 import actionButtons from './action-buttons/store';
 import macros from './macros.button/store';
 import validation from './validation/store';
+import fields from './blocks/store';
 import './migrations/migrate.gateways.settings';
 
 const {
@@ -23,6 +24,7 @@ const stores = [
 	blockConditions,
 	macros,
 	validation,
+	fields,
 ];
 
 stores.forEach( register );

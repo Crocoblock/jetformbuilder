@@ -76,11 +76,9 @@ const registerFormField = block => {
 
 			return [
 				{
-					blockName: this.name,
 					name: this.attributes.name,
 					label: this.attributes.label || this.attributes.name,
 					value: this.attributes.name,
-					//icon: blockType.icon.src,
 				},
 			];
 		};
@@ -90,9 +88,24 @@ const registerFormField = block => {
 		!settings.hasOwnProperty( '__experimentalLabel' ) &&
 		metadata.attributes.hasOwnProperty( 'name' )
 	) {
-		settings.__experimentalLabel = ( attributes ) => (
-			attributes.name || metadata.title
-		);
+		/**
+		 * @param attributes
+		 * @param context {{|'accessibility'|'visual'|'list-view'}}
+		 * @returns {*}
+		 * @private
+		 */
+		settings.__experimentalLabel = ( attributes, { context } ) => {
+			switch ( context ) {
+				case 'list-view':
+					return attributes.name || metadata.title;
+				case 'accessibility':
+					return !!attributes.name?.length
+					       ? `${ metadata.title } (${ attributes.name })`
+					       : metadata.title;
+				default:
+					return metadata.title;
+			}
+		};
 	}
 
 	registerBlockType( name, {

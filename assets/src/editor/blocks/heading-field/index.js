@@ -24,7 +24,18 @@ const settings = {
 			desc: 'Field description...',
 		},
 	},
-	__experimentalLabel: ( attributes ) => attributes.label || metadata.title,
+	/**
+	 * @param attributes
+	 * @param context {{|'accessibility'|'visual'|'list-view'}}
+	 * @returns {*}
+	 * @private
+	 */
+	__experimentalLabel: ( attributes, { context } ) => {
+		if ( context !== 'list-view' ) {
+			return;
+		}
+		return attributes.label || metadata.title;
+	},
 	transforms: {
 		to: [
 			{

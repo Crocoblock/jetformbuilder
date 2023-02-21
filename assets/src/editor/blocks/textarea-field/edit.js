@@ -12,9 +12,14 @@ const {
 	      EditAdvancedRulesButton,
       } = JetFBComponents;
 
-const { useIsAdvancedValidation } = JetFBHooks;
+const {
+	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
 
-const { __ } = wp.i18n;
+const {
+	      __,
+      } = wp.i18n;
 
 const {
 	      InspectorControls,
@@ -44,6 +49,8 @@ export default function TextareaEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	const changeNumberAttr = attr => {
 		for ( const [ name, value ] of Object.entries( attr ) ) {

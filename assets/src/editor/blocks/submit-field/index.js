@@ -23,7 +23,16 @@ const settings = {
 			label: 'Action Button',
 		},
 	},
-	__experimentalLabel: ( { action_type } ) => {
+	/**
+	 * @param attributes
+	 * @param context {{|'accessibility'|'visual'|'list-view'}}
+	 * @returns {*}
+	 * @private
+	 */
+	__experimentalLabel: ( { action_type }, { context } ) => {
+		if ( context !== 'list-view' ) {
+			return;
+		}
 		const action = JetFormActionButton.actions.find(
 			( { value } ) => value === action_type,
 		);

@@ -74,7 +74,7 @@ function PluginGateways( props ) {
 	return <>
 		<RadioControl
 			key={ 'gateways_radio_control' }
-			selected={ meta.gateway }
+			selected={ meta.gateway ?? 'none' }
 			options={ [
 				{ label: 'None', value: 'none' },
 				...gatewaysData.list,
@@ -83,7 +83,9 @@ function PluginGateways( props ) {
 				setMeta( { ...meta, gateway } );
 			} }
 		/>
-		<Button
+		{ (
+			'none' !== meta.gateway && meta.gateway
+		) && <Button
 			onClick={ () => setEdit( true ) }
 			icon={ 'admin-tools' }
 			style={ {
@@ -92,7 +94,8 @@ function PluginGateways( props ) {
 			isSecondary
 		>
 			{ __( 'Edit', 'jet-form-builder' ) }
-		</Button>
+		</Button> }
+
 		{ isEdit && (
 			<ActionModal
 				classNames={ [ 'width-60' ] }

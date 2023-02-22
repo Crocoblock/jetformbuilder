@@ -8,6 +8,33 @@ const selectors = {
 	getPropsToSave( state ) {
 		return state.propsToSave;
 	},
+	getFields(
+		state,
+		{
+			withInner = true,
+			currentId = false,
+		},
+	) {
+		const fields = [];
+
+		const iterateFields = blocks => {
+			for ( const block of blocks ) {
+				if ( block.fields?.length && block.clientId !== currentId ) {
+					fields.push( ...block.fields );
+				}
+
+				if ( !withInner || !block.innerBlocks?.length ) {
+					continue;
+				}
+
+				iterateFields( block.innerBlocks );
+			}
+		};
+
+		iterateFields( state.blocks );
+
+		return fields;
+	},
 	isExecuted( state ) {
 		return state.executed;
 	},
@@ -82,6 +109,11 @@ const selectors = {
 		}
 
 		return attrs;
+	},
+	isUniqueName( state, clientId ) {
+		const { hasChanged } = selectors.getUniqueNames( state, clientId );
+
+		return !hasChanged;
 	},
 };
 

@@ -11,6 +11,7 @@ const {
 
 const {
 	      useBlockAttributes,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 
 const {
@@ -86,6 +87,7 @@ export default function HiddenEdit( props ) {
 	      } = props;
 
 	const blockProps = useBlockProps();
+	useUniqueNameOnDuplicate();
 
 	const [ , setAttrs ] = useBlockAttributes();
 

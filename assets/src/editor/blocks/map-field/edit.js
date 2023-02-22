@@ -4,6 +4,9 @@ const {
 	      FieldWrapper,
 	      ToolBarFields,
       } = JetFBComponents;
+const {
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
 
 const {
 	      PanelBody,
@@ -23,6 +26,7 @@ const {
 
 export default function MapEdit( props ) {
 	const blockProps = useBlockProps();
+	useUniqueNameOnDuplicate();
 
 	const {
 		      isSelected,

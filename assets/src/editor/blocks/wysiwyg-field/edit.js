@@ -7,7 +7,10 @@ const {
 	      ValidationBlockMessage,
       } = JetFBComponents;
 
-const { useIsAdvancedValidation } = JetFBHooks;
+const {
+	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
@@ -27,6 +30,8 @@ export default function WysiwygEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

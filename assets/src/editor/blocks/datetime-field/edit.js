@@ -15,6 +15,7 @@ const {
 const {
 	      useInsertMacro,
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -45,6 +46,7 @@ export default function DateTimeEdit( props ) {
 	      } = props;
 
 	const isAdvancedValidation = useIsAdvancedValidation();
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

@@ -7,7 +7,6 @@ const {
 
 const {
 	      useSelect,
-	      useDispatch,
       } = wp.data;
 
 const {

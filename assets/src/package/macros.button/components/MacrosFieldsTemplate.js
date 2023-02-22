@@ -4,9 +4,9 @@ import getFieldsWithoutCurrent
 import ExtraMacroContext from '../context/ExtraMacroContext';
 import GroupItemsPopover from './GroupItemsPopover';
 import getFormFieldsBlocks from '../../blocks/helpers/getFormFieldsBlocks';
+import useFields from '../../blocks/hooks/useFields';
 
 const {
-	      useMemo,
 	      useContext,
       } = wp.element;
 const {
@@ -18,10 +18,7 @@ function MacrosFieldsTemplate( {
 	children,
 	...props
 } ) {
-	const fields = useMemo(
-		() => withCurrent ? getFormFieldsBlocks() : getFieldsWithoutCurrent(),
-		[],
-	);
+	const fields = useFields( { excludeCurrent: !withCurrent } );
 
 	/**
 	 * @type {{

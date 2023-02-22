@@ -14,6 +14,9 @@ const {
 	      BlockAdvancedValue,
       } = JetFBComponents;
 const {
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
+const {
 	      __,
       } = wp.i18n;
 const {
@@ -29,6 +32,7 @@ const localized = window.JetFormCheckboxFieldData;
 export default function CheckboxEdit( props ) {
 
 	const blockProps = useBlockProps();
+	useUniqueNameOnDuplicate();
 
 	const {
 		      isSelected,

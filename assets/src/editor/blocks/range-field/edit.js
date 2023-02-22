@@ -10,6 +10,7 @@ const {
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -42,6 +43,8 @@ export default function RangeEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	const [ rangeValue, setRangeValue ] = useState( 50 );
 

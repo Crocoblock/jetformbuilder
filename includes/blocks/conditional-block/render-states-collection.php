@@ -16,7 +16,11 @@ class Render_States_Collection extends Collection {
 	 * @return Collection
 	 */
 	public function push( Base_Render_State $item ): Collection {
-		array_push( $this->exclude_list, ...$item->exclude_states() );
+		$states = $item->exclude_states();
+
+		if ( count( $states ) ) {
+			array_push( $this->exclude_list );
+		}
 
 		return $this->add( $item );
 	}

@@ -14,6 +14,7 @@ const {
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -50,6 +51,7 @@ export default function MediaEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+	useUniqueNameOnDuplicate();
 
 	const {
 		      attributes,

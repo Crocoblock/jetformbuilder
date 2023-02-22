@@ -20,6 +20,7 @@ const {
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -61,6 +62,8 @@ export default function TextEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

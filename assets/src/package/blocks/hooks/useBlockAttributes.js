@@ -16,6 +16,9 @@ function useBlockAttributes() {
 	} );
 	const { updateBlock } = useDispatch( 'core/block-editor', [] );
 
+	/**
+	 * @param props {Object|Function}
+	 */
 	const updateAttributes = props => {
 		props = 'object' === typeof props
 		        ? props
@@ -29,7 +32,7 @@ function useBlockAttributes() {
 		updateBlock( clientId, { attributes: props } );
 	};
 
-	return [ attributes, updateAttributes ];
+	return [ attributes, updateAttributes, clientId ];
 }
 
 export default useBlockAttributes;

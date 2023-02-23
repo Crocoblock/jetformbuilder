@@ -1,6 +1,7 @@
 import InputData from './InputData';
 import { isRadio } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
+import { STRICT_MODE } from '../signals/BaseSignal';
 
 function RadioData() {
 	InputData.call( this );
@@ -18,7 +19,7 @@ function RadioData() {
 				this.handleEnterKey.bind( this ),
 			);
 
-			jQuery( nodeElement ).on( 'change', event => {
+			!STRICT_MODE && jQuery( nodeElement ).on( 'change', event => {
 				this.callable.lockTrigger();
 				this.setValue();
 				this.callable.unlockTrigger();

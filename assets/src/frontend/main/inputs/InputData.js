@@ -5,6 +5,7 @@ import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
 import { getOffsetTop, setAttrs, isVisible } from '../functions';
+import { STRICT_MODE } from '../signals/BaseSignal';
 
 const { doAction } = JetPlugins.hooks;
 
@@ -73,16 +74,6 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
-	/**
-	 * Compatibility with custom scripts, which used
-	 * jQueryElement.trigger( 'change' )
-	 *
-	 * @since 3.0.1
-	 */
-	jQuery( node ).on( 'change', event => {
-		this.value.current = event.target.value;
-	} );
-
 	node.addEventListener( 'blur', event => {
 		this.reportOnBlur();
 	} );
@@ -90,7 +81,10 @@ InputData.prototype.addListeners = function () {
 	/**
 	 * @since 3.0.1
 	 */
-	jQuery( node ).on( 'change', event => {
+	!STRICT_MODE && jQuery( node ).on( 'change', event => {
+		if ( this.value.current == event.target.value ) {
+			return;
+		}
 		this.callable.lockTrigger();
 		this.value.current = event.target.value;
 		this.callable.unlockTrigger();

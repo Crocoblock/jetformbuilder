@@ -9,7 +9,6 @@ function CheckboxData() {
 		return isCheckbox( node );
 	};
 	this.addListeners = function () {
-		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
 		this.enterKey = new ReactiveHook();
 
 		for ( const node of this.nodes ) {
@@ -25,6 +24,14 @@ function CheckboxData() {
 				this.callable.unlockTrigger();
 			} );
 		}
+
+		if ( !this.isArray() ) {
+			return;
+		}
+
+		this.sanitize(
+			value => Array.isArray( value ) ? value : [ value ],
+		);
 	};
 	this.setValue     = function () {
 		this.value.current = this.getActiveValue();
@@ -35,12 +42,13 @@ function CheckboxData() {
 	};
 
 	this.getActiveValue = function () {
-		return Array.from( this.nodes ).
+		const value = Array.from( this.nodes ).
 			filter( item => item.checked ).
 			map( item => item.value );
-	};
-	this.valueType      = function () {
-		return Array;
+
+		return this.isArray() ? value : (
+			value?.[ 0 ] ?? ''
+		);
 	};
 }
 

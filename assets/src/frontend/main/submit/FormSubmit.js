@@ -87,6 +87,12 @@ function FormSubmit( observable ) {
 		return +rootNode.dataset.formId;
 	};
 
+	this.onEndSubmit = function ( callable ) {
+		this.submitter.hasOwnProperty( 'status' )
+		? this.submitter.status.watch( callable )
+		: this.submitter.onFailSubmit( callable );
+	};
+
 	this.observable.rootNode.addEventListener(
 		'submit',
 		( event ) => this.onSubmit( event ),

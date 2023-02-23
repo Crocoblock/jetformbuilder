@@ -3,6 +3,8 @@ import BaseSubmit from './BaseSubmit';
 function ReloadSubmit( form ) {
 	BaseSubmit.call( this, form );
 
+	this.failPromises = [];
+
 	this.submit = function () {
 		const { rootNode }     = this.form.observable;
 		const { applyFilters } = JetPlugins.hooks;
@@ -15,9 +17,18 @@ function ReloadSubmit( form ) {
 			),
 		).then(
 			() => rootNode.submit(),
-		).catch(
-			() => this.form.toggle(),
-		);
+		).catch( () => {
+			this.failPromises.forEach( current => current() );
+
+			this.form.toggle();
+		} );
+	};
+
+	this.onFailSubmit = function ( callable ) {
+		if ( 'function' !== typeof callable ) {
+			return;
+		}
+		this.failPromises.push( callable );
 	};
 }
 

@@ -33,6 +33,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"clear_on_submit": {
+			"type": "boolean",
+			"default": false
+		},
 		"mask_type": {
 			"type": "string",
 			"default": ""

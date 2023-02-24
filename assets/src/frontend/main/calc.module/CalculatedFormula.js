@@ -30,7 +30,7 @@ function CalculatedFormula(
 	this.parts        = [];
 	this.related      = [];
 	this.relatedAttrs = [];
-	this.regexp       = /%(.*?)%/g;
+	this.regexp       = /%([\w\-].*?\S?)%/g;
 	this.watchers     = [];
 
 	const { forceFunction = false } = options;

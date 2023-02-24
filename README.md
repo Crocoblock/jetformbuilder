@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.0.3
+* UPD: Listen/trigger jQuery event when field value changes
+* UPD: Adding the default Send Email action to the new form only
+* FIX: Storing an incorrect value for a calculated field
+* FIX: The correct definition of the macro in the value of the Default option
+
 ## 3.0.0.2
 * FIX: Ignore required option in some cases
 * FIX: Dynamic populate repeater field on page load

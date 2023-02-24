@@ -1,4 +1,4 @@
-function ValidationContext( root ) {
+function ReportingContext( root ) {
 	/**
 	 * @type {Observable}
 	 */
@@ -9,7 +9,7 @@ function ValidationContext( root ) {
 
 }
 
-ValidationContext.prototype = {
+ReportingContext.prototype = {
 	reset( props = {} ) {
 		this.reportedFirst = false;
 		this.silence       = props?.silence ?? true;
@@ -19,5 +19,5 @@ ValidationContext.prototype = {
 	},
 };
 
-export default ValidationContext;
+export default ReportingContext;
 

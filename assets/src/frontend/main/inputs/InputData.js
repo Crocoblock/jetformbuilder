@@ -359,7 +359,7 @@ InputData.prototype.scrollTo = function () {
 };
 
 /**
- * @return {ValidationContext}
+ * @return {ReportingContext}
  */
 InputData.prototype.getContext = function () {
 	return this.root.getContext();

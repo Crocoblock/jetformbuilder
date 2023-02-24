@@ -7,7 +7,7 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { validateInputsAll } from './reporting/functions';
-import ValidationContext from './reporting/ValidationContext';
+import ReportingContext from './reporting/ReportingContext';
 
 const {
 	      doAction,
@@ -24,9 +24,9 @@ function Observable( parent = null ) {
 	/**
 	 * @since 3.0.1
 	 *
-	 * @type {ValidationContext}
+	 * @type {ReportingContext}
 	 */
-	this.context = this.parent ? null : new ValidationContext( this );
+	this.context = this.parent ? null : new ReportingContext( this );
 }
 
 Observable.prototype = {

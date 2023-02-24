@@ -168,6 +168,8 @@ AdvancedReporting.prototype.createError      = function (
 };
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	const callback = () => {
+		this.input.getContext().silence = false;
+
 		this.validate().
 			then( () => {} ).
 			catch( () => {} ).
@@ -212,6 +214,8 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 
 	this.isProcess      = true;
 	this.skipServerSide = false;
+
+	this.input.getContext().silence = false;
 
 	this.validate().
 		then( () => {} ).

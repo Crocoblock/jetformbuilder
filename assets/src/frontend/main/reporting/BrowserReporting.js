@@ -39,7 +39,14 @@ function BrowserReporting() {
 	};
 
 	this.hasAutoScroll = function () {
-		return true;
+		return this.input.hasAutoScroll();
+	};
+
+	/**
+	 * @returns {HTMLInputElement|HTMLElement}
+	 */
+	this.getNode = function () {
+		return this.input.getReportingNode();
 	};
 }
 

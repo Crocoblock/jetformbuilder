@@ -58,6 +58,10 @@ function WysiwygData() {
 			{ preventScroll: true },
 		);
 	};
+
+	this.hasAutoScroll = function () {
+		return false;
+	};
 }
 
 WysiwygData.prototype = Object.create( InputData.prototype );

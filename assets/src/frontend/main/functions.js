@@ -142,13 +142,10 @@ function getOffsetTop( node ) {
  */
 function focusOnInvalidInput( inputs ) {
 	for ( const input of inputs ) {
-		if (
-			input.reporting.validityState.current ||
-			input.reporting.hasAutoScroll()
-		) {
+		if ( input.reporting.validityState.current ) {
 			continue;
 		}
-		input.onFocus();
+		!input.reporting.hasAutoScroll() && input.onFocus();
 		break;
 	}
 }

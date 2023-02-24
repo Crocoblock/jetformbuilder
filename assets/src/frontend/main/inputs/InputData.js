@@ -350,10 +350,10 @@ InputData.prototype.focusRaw = function () {
 	node?.focus( { preventScroll: true } );
 };
 InputData.prototype.scrollTo = function () {
-	const [ node ] = this.nodes;
+	const wrapper = this.getWrapperNode();
 
 	window.scrollTo( {
-		top: getOffsetTop( node ) - this.offsetOnFocus,
+		top: getOffsetTop( wrapper ) - this.offsetOnFocus,
 		behavior: 'smooth',
 	} );
 };
@@ -370,6 +370,22 @@ InputData.prototype.getContext = function () {
  */
 InputData.prototype.populateInner = function () {
 	return false;
+};
+
+/**
+ * Executed with default browser validation
+ *
+ * @returns {boolean}
+ */
+InputData.prototype.hasAutoScroll = function () {
+	return true;
+};
+
+/**
+ * @returns {HTMLInputElement|HTMLElement}
+ */
+InputData.prototype.getReportingNode = function () {
+	return this.nodes[ 0 ];
 };
 
 export default InputData;

@@ -97,6 +97,9 @@ function MapFieldData() {
 		observer.observe( this.nodes[ 0 ].parentElement );
 	};
 
+	this.hasAutoScroll = function () {
+		return false;
+	};
 }
 
 MapFieldData.prototype = Object.create( InputData.prototype );

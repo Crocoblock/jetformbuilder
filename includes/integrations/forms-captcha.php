@@ -20,16 +20,17 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Forms_Captcha {
 
-	const CAPTCHA_ACTION_PREFIX = 'jet_form_builder_captcha__';
+	const PREFIX = 'jet_form_builder_captcha__';
 
 	public static $script_rendered = false;
 
 	private $field_key = '_captcha_token';
 	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
 	private $defaults  = array(
-		'enabled' => false,
-		'key'     => '',
-		'secret'  => '',
+		'enabled'   => false,
+		'key'       => '',
+		'secret'    => '',
+		'threshold' => 0.5,
 	);
 
 	public function __construct() {
@@ -43,9 +44,7 @@ class Forms_Captcha {
 	 * @throws Request_Exception
 	 */
 	public function handle_request( $request ) {
-		if ( ! $this->verify( $request ) ) {
-			throw new Request_Exception( 'captcha_failed' );
-		}
+		$this->verify( $request );
 
 		return $request;
 	}
@@ -54,16 +53,21 @@ class Forms_Captcha {
 		return esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
 	}
 
-	public function verify( $request ) {
+	/**
+	 * @param $request
+	 *
+	 * @throws Request_Exception
+	 */
+	protected function verify( $request ) {
 		$form_id = jet_fb_handler()->get_form_id();
 		$captcha = $this->get_data( $form_id );
 
 		if ( empty( $captcha['enabled'] ) ) {
-			return true;
+			return;
 		}
 
 		if ( empty( $request[ $this->field_key ] ) ) {
-			return false;
+			return;
 		}
 
 		$token    = sanitize_text_field( $request[ $this->field_key ] );
@@ -80,17 +84,14 @@ class Forms_Captcha {
 		$body = wp_remote_retrieve_body( $response );
 		$body = json_decode( $body, true );
 
-		if (
-			! empty( $body['action'] ) &&
-			( self::CAPTCHA_ACTION_PREFIX . $form_id ) === $body['action'] &&
-			$body['success']
-		) {
-			return true;
+		$action = $body['action'] ?? '';
+		$score  = $body['score'] ?? 0;
+
+		if ( ( self::PREFIX . $form_id ) === $action && $score > $captcha['threshold'] ) {
+			return;
 		}
 
-		new Request_Exception( 'captcha-failed_details', $body );
-
-		return false;
+		throw new Request_Exception( 'captcha_failed', $body, $response );
 	}
 
 	/**
@@ -142,7 +143,7 @@ class Forms_Captcha {
 			true
 		);
 
-		$action_prefix = self::CAPTCHA_ACTION_PREFIX;
+		$action_prefix = self::PREFIX;
 
 		wp_add_inline_script(
 			'jet-form-builder-recaptcha-handler',

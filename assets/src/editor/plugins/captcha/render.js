@@ -12,7 +12,12 @@ const {
 const {
 	      ToggleControl: CoreToggleControl,
 	      TextControl,
+	      __experimentalNumberControl,
       } = wp.components;
+
+let { NumberControl } = wp.components;
+
+NumberControl = NumberControl || __experimentalNumberControl;
 
 const { globalTab } = JetFBActions;
 const currentTab    = globalTab( { slug: 'captcha-tab' } );
@@ -20,6 +25,10 @@ const currentTab    = globalTab( { slug: 'captcha-tab' } );
 function PluginCaptcha() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_recaptcha' );
+
+	let score = args.use_global
+	            ? currentTab.threshold
+	            : args.threshold;
 
 	return <>
 		<CoreToggleControl
@@ -48,7 +57,8 @@ function PluginCaptcha() {
 				} }
 			>
 				{ __( 'Use', 'jet-form-builder' ) + ' ' }
-				<a href={ JetFormEditorData.global_settings_url + '#captcha-tab' }>
+				<a href={ JetFormEditorData.global_settings_url +
+				'#captcha-tab' }>
 					{ __( 'Global Settings', 'jet-form-builder' ) }
 				</a>
 			</ToggleControl>
@@ -73,6 +83,22 @@ function PluginCaptcha() {
 					{
 						...prevArgs,
 						secret: newValue,
+					}
+				) ) }
+			/>
+			<NumberControl
+				label={ labels.threshold }
+				labelPosition="top"
+				value={ score }
+				disabled={ args.use_global }
+				min={ 0 }
+				max={ 1 }
+				step={ 0.1 }
+				placeholder={ '0.5' }
+				onChange={ newValue => setArgs( ( prevArgs ) => (
+					{
+						...prevArgs,
+						threshold: newValue,
 					}
 				) ) }
 			/>

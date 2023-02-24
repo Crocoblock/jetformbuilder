@@ -12,6 +12,16 @@
 			:size="'fullwidth'"
 			v-model="secret"
 		></cx-vui-input>
+		<cx-vui-input
+			type="number"
+			min="0"
+			max="1"
+			step="0.1"
+			:label="label.threshold"
+			:wrapper-css="[ 'equalwidth' ]"
+			:size="'fullwidth'"
+			v-model="threshold"
+		></cx-vui-input>
 		<p class="fb-description">{{ help.apiPref }} <a :href="help.apiLink" target="_blank">{{ help.apiLinkLabel }}</a>
 		</p>
 	</div>
@@ -21,7 +31,7 @@
 import {
 	label,
 	help,
-} from "./source";
+} from './source';
 
 export default {
 	name: 'captcha-tab',
@@ -36,11 +46,13 @@ export default {
 			label, help,
 			key: '',
 			secret: '',
+			threshold: '',
 		};
 	},
 	created() {
-		this.key = this.incoming.key || '';
-		this.secret = this.incoming.secret || '';
+		this.key       = this.incoming.key || '';
+		this.secret    = this.incoming.secret || '';
+		this.threshold = this.incoming.threshold ?? 0.5;
 	},
 	methods: {
 		getRequestOnSave() {
@@ -48,9 +60,10 @@ export default {
 				data: {
 					secret: this.secret,
 					key: this.key,
+					threshold: this.threshold,
 				},
 			};
 		},
 	},
-}
+};
 </script>

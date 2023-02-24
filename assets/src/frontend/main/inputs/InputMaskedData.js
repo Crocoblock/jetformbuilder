@@ -32,10 +32,7 @@ function InputMaskedData() {
 		jQuery( node ).inputmask( options );
 
 		this.beforeSubmit( this.removeMask.bind( this ) );
-
-		this.clearOnSubmit && (
-			this.getSubmit().onEndSubmit( this.revertMask.bind( this ) )
-		);
+		this.getSubmit().onEndSubmit( this.revertMask.bind( this ) );
 	};
 	this.removeMask   = function ( resolve ) {
 		const $maskedField = jQuery( this.nodes[ 0 ] );
@@ -44,17 +41,25 @@ function InputMaskedData() {
 		// Remove mask if empty value
 		if ( !this.value.current || this.clearOnSubmit ) {
 			$maskedField.inputmask( 'remove' );
+			this.value.notify();
 		}
-
-		this.clearOnSubmit && this.value.notify();
 
 		resolve();
 	};
 	this.revertMask   = function () {
-		const [ node ] = this.nodes;
-
-		jQuery( node ).inputmask( this.maskOptions );
+		const [ node ]   = this.nodes;
+		const opts       = this.maskOptions;
 		this.maskOptions = {};
+
+		if ( node.inputmask ) {
+			return;
+		}
+
+		jQuery( node ).inputmask( opts );
+	};
+
+	this.onClear = function () {
+		this.silenceSet( '' );
 	};
 }
 

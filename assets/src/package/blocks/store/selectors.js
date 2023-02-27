@@ -61,9 +61,15 @@ const selectors = {
 			for ( const field of fields ) {
 				const nameIndex = names.indexOf( field.value );
 
-				if ( -1 === nameIndex || 'field_name' === field.value ) {
+				if ( -1 === nameIndex ) {
 					continue;
 				}
+
+				if ( 'field_name' === field.value ) {
+					hasChanged = true;
+					continue;
+				}
+
 				names[ nameIndex ] = `${ names[ nameIndex ] }_copy`;
 				hasChanged         = true;
 				walkerFields( fields );

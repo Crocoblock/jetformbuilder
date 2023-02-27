@@ -76,6 +76,7 @@ export default function DateEdit( props ) {
 				/>
 				<ClientSideMacros>
 					<AdvancedInspectorControl
+						inBlock
 						value={ attributes.min }
 						label={ __( 'Starting from date', 'jet-form-builder' ) }
 						onChangePreset={ min => setAttributes( { min } ) }
@@ -93,6 +94,7 @@ export default function DateEdit( props ) {
 						/> }
 					</AdvancedInspectorControl>
 					<AdvancedInspectorControl
+						inBlock
 						value={ attributes.max }
 						label={ __( 'Limit dates to', 'jet-form-builder' ) }
 						onChangePreset={ max => setAttributes( { max } ) }

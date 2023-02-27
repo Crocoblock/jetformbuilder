@@ -26,6 +26,7 @@ function BlockDefaultValue( { label, help, hasMacro = true } ) {
 
 	return <ClientSideMacros>
 		<AdvancedInspectorControl
+			inBlock
 			value={ attributes.default }
 			label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
 			onChangePreset={ val => setAttributes( { default: val } ) }

@@ -1,14 +1,16 @@
 import MacrosFieldsTemplate from './MacrosFieldsTemplate';
 import MacroFieldItem from './MacroFieldItem';
-import useFields from '../../blocks/hooks/useFields';
+import useFieldsInBlock from '../../blocks/hooks/useFieldsInBlock';
 
-function MacrosFields( {
+function MacrosFieldsInBlock( {
 	onClick = () => {},
+	withCurrent = false,
 	...props
 } ) {
-	const fields = useFields();
+	const fields = useFieldsInBlock( { excludeCurrent: !withCurrent } );
 
 	return <MacrosFieldsTemplate
+		withCurrent={ withCurrent }
 		fields={ fields }
 		{ ...props }
 	>
@@ -16,4 +18,4 @@ function MacrosFields( {
 	</MacrosFieldsTemplate>;
 }
 
-export default MacrosFields;
+export default MacrosFieldsInBlock;

@@ -1,10 +1,6 @@
 import MacrosButtonTemplate from './MacrosButtonTemplate';
-import getFieldsWithoutCurrent
-	from '../../blocks/helpers/getFieldsWithoutCurrent';
 import ExtraMacroContext from '../context/ExtraMacroContext';
 import GroupItemsPopover from './GroupItemsPopover';
-import getFormFieldsBlocks from '../../blocks/helpers/getFormFieldsBlocks';
-import useFields from '../../blocks/hooks/useFields';
 
 const {
 	      useContext,
@@ -14,11 +10,10 @@ const {
       } = wp.i18n;
 
 function MacrosFieldsTemplate( {
-	withCurrent = false,
 	children,
+	fields,
 	...props
 } ) {
-	const fields = useFields( { excludeCurrent: !withCurrent } );
 
 	/**
 	 * @type {{

@@ -61,7 +61,7 @@ const selectors = {
 			for ( const field of fields ) {
 				const nameIndex = names.indexOf( field.value );
 
-				if ( -1 === nameIndex ) {
+				if ( -1 === nameIndex || 'field_name' === field.value ) {
 					continue;
 				}
 				names[ nameIndex ] = `${ names[ nameIndex ] }_copy`;

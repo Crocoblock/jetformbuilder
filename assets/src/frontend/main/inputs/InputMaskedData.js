@@ -18,6 +18,7 @@ function InputMaskedData() {
 
 		node.addEventListener( 'blur', () => {
 			this.value.current = node.inputmask.unmaskedvalue();
+			this.reporting.validateOnBlur();
 		} );
 
 		this.enterKey = new ReactiveHook();
@@ -61,6 +62,8 @@ function InputMaskedData() {
 	this.onClear = function () {
 		this.silenceSet( '' );
 	};
+
+	this.report = () => {};
 }
 
 InputMaskedData.prototype = Object.create( InputData.prototype );

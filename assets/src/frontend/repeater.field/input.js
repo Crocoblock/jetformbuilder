@@ -15,11 +15,15 @@ function RepeaterData() {
 	this.lastObserved = new ReactiveVar();
 	this.lastObserved.make();
 
-	this.isSupported = function ( node ) {
+	this.isSupported  = function ( node ) {
 		return isRepeater( node );
 	};
 	this.addListeners = function () {
 		// silence is golden
+	};
+
+	this.hasAutoScroll = function () {
+		return false;
 	};
 
 	this.setValue = function () {

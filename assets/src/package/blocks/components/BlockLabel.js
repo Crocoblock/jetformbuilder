@@ -7,6 +7,17 @@ const {
 const {
 	      TextControl,
       } = wp.components;
+const {
+	      useRef,
+	      useEffect,
+      } = wp.element;
+
+let {
+	    __experimentalUseFocusOutside,
+	    useFocusOutside,
+    } = wp.compose;
+
+useFocusOutside = useFocusOutside || __experimentalUseFocusOutside;
 
 function BlockLabel( { label, help } ) {
 	const [
@@ -14,13 +25,25 @@ function BlockLabel( { label, help } ) {
 		      setAttributes,
 	      ] = useBlockAttributes();
 
-	return <TextControl
-		label={ label ?? __( 'Field Label', 'jet-form-builder' ) }
-		value={ attributes.label }
-		help={ help ?? '' }
-		onChange={ label => setAttributes( { label } ) }
-		onBlur={ () => ChangeNameByLabel( attributes, setAttributes ) }
-	/>;
+	function onBlurLabel() {
+		ChangeNameByLabel( attributes, setAttributes );
+	}
+
+	const ref = useFocusOutside( onBlurLabel );
+
+	return <div
+		style={ {
+			marginBottom: '24px',
+		} }
+		{ ...ref }
+	>
+		<TextControl
+			label={ label ?? __( 'Field Label', 'jet-form-builder' ) }
+			value={ attributes.label }
+			help={ help ?? '' }
+			onChange={ label => setAttributes( { label } ) }
+		/>
+	</div>;
 }
 
 export default BlockLabel;

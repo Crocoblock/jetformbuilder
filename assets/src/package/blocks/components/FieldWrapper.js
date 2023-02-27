@@ -11,6 +11,12 @@ const {
 const {
 	      RichText,
       } = wp.blockEditor;
+let {
+	    __experimentalUseFocusOutside,
+	    useFocusOutside,
+    }   = wp.compose;
+
+useFocusOutside = useFocusOutside || __experimentalUseFocusOutside;
 
 const { __ } = wp.i18n;
 
@@ -28,7 +34,7 @@ function FieldWrapper( props ) {
 
 	const {
 		      attributes,
-		      editProps: { uniqKey, blockName = '' },
+		      editProps: { uniqKey },
 		      children,
 		      wrapClasses       = [],
 		      valueIfEmptyLabel = '',
@@ -38,11 +44,16 @@ function FieldWrapper( props ) {
 
 	const _jf_args = useSelectPostMeta( '_jf_args' );
 
+	function onBlurLabel() {
+		ChangeNameByLabel( attributes, setAttributes );
+	}
+
+	const ref = useFocusOutside( onBlurLabel );
+
 	function renderLabel() {
 		return <BaseControl.VisualLabel>
 			{ RichDescription( __( 'input label:', 'jet-form-builder' ) ) }
 			<div
-				onBlur={ () => ChangeNameByLabel( attributes, setAttributes ) }
 				className="jet-form-builder__label"
 			>
 				<RichText
@@ -54,6 +65,8 @@ function FieldWrapper( props ) {
 					        : valueIfEmptyLabel }
 					onChange={ newLabel => setAttributes(
 						{ label: newLabel } ) }
+					isSelected={ false }
+					{ ...ref }
 				/>
 				{ attributes.required &&
 				<span className={ 'jet-form-builder__required' }>

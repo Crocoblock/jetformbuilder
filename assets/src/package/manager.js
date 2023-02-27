@@ -130,7 +130,7 @@ import MacrosFieldsTemplate
 	from './macros.button/components/MacrosFieldsTemplate';
 import MacrosButtonTemplate
 	from './macros.button/components/MacrosButtonTemplate';
-import MacrosFieldsInBlock from './macros.button/components/MacrosFieldsInBlock';
+import MacrosFields from './macros.button/components/MacrosFields';
 import PopoverContext from './macros.button/context/PopoverContext';
 import PopoverItem from './macros.button/context/PopoverItem';
 import PresetButton from './preset/components/PresetButton';
@@ -167,7 +167,7 @@ import useActionsEdit from './actions/hooks/useActionsEdit';
 import useActionCallback from './actions/hooks/useActionCallback';
 import useActionDetail from './actions/hooks/useActionDetail';
 import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
-import useFieldsInBlock from './blocks/hooks/useFieldsInBlock';
+import useFields from './blocks/hooks/useFields';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -232,7 +232,7 @@ window.JetFBComponents = {
 	BlockVisibility,
 	BlockClassName,
 	BlockAdvancedValue,
-	MacrosFields: MacrosFieldsInBlock,
+	MacrosFields,
 	MacrosButtonTemplate,
 	MacrosFieldsTemplate,
 	ShowPopoverContext: PopoverContext,
@@ -322,6 +322,6 @@ window.JetFBHooks = {
 	useActionCallback,
 	useActionDetail,
 	useUniqueNameOnDuplicate,
-	useFields: useFieldsInBlock,
+	useFields: useFields,
 };
 

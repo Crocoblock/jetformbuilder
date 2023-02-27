@@ -88,9 +88,7 @@ const selectors = {
 			names: names.join( '|' ),
 		};
 	},
-	getSanitizedAttributes( state, attrs, blockProps = {} ) {
-		const type = blockProps[ 'data-type' ] ?? '';
-
+	getSanitizedAttributes( state, attrs, { name: type } = {} ) {
 		for ( const attrsKey in attrs ) {
 			if ( !attrs.hasOwnProperty( attrsKey ) ) {
 				continue;

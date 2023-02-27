@@ -16,13 +16,17 @@ const {
 const {
 	      useInstanceId,
       } = wp.compose;
+const {
+	      useBlockEditContext,
+      } = wp.blockEditor;
 
 function BlockName( { label, help } ) {
 	const [
 		      attributes,
 		      setAttributes,
-		      clientId,
 	      ] = useBlockAttributes();
+
+	const { clientId } = useBlockEditContext();
 
 	const isUniqueName = useSelect(
 		select => select( 'jet-forms/fields' ).isUniqueName( clientId ),

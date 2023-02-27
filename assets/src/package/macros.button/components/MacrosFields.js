@@ -4,11 +4,13 @@ import useFields from '../../blocks/hooks/useFields';
 
 function MacrosFields( {
 	onClick = () => {},
+	withCurrent = false,
 	...props
 } ) {
-	const fields = useFields();
+	const fields = useFields( { excludeCurrent: !withCurrent } );
 
 	return <MacrosFieldsTemplate
+		withCurrent={ withCurrent }
 		fields={ fields }
 		{ ...props }
 	>

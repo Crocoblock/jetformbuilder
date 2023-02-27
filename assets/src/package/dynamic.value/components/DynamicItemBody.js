@@ -5,7 +5,7 @@ import BaseHelp from '../../components/BaseHelp';
 import RepeaterState from '../../repeater/components/repeater.state';
 import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
 import PresetButton from '../../preset/components/PresetButton';
-import MacrosFieldsInBlock from '../../macros.button/components/MacrosFieldsInBlock';
+import MacrosFields from '../../macros.button/components/MacrosFields';
 import ConditionItem from '../../block-conditions/components/ConditionItem';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import ConditionsRepeaterContextProvider
@@ -132,7 +132,7 @@ function DynamicItemBody() {
 						onChange={ to_set => updateCurrent( { to_set } ) }
 					/>
 					<ClientSideMacros withThis>
-						<MacrosFieldsInBlock
+						<MacrosFields
 							onClick={ name => updateCurrent( {
 								to_set: `${ current.to_set ?? '' }${ name }`,
 							} ) }

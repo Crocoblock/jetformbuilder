@@ -75,7 +75,6 @@ export default function TimeEdit( props ) {
 				/>
 				<ClientSideMacros>
 					<AdvancedInspectorControl
-						inBlock
 						value={ attributes.min }
 						label={ __( 'Starting from time', 'jet-form-builder' ) }
 						onChangePreset={ min => setAttributes( { min } ) }
@@ -93,7 +92,6 @@ export default function TimeEdit( props ) {
 						/> }
 					</AdvancedInspectorControl>
 					<AdvancedInspectorControl
-						inBlock
 						value={ attributes.max }
 						label={ __( 'Limit time to', 'jet-form-builder' ) }
 						onChangePreset={ max => setAttributes( { max } ) }

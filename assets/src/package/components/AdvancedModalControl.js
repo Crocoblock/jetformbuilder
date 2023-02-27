@@ -1,6 +1,4 @@
 import PresetButton from '../preset/components/PresetButton';
-import MacrosFieldsInBlock
-	from '../macros.button/components/MacrosFieldsInBlock';
 import MacrosFields from '../macros.button/components/MacrosFields';
 
 const {
@@ -15,15 +13,12 @@ function AdvancedModalControl( {
 	children,
 	value,
 	label,
-	inBlock = false,
 	onChangePreset = false,
 	onChangeMacros = false,
 	macroWithCurrent = false,
 } ) {
 
 	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedModalControl' );
-
-	const MacroComponent = inBlock ? MacrosFieldsInBlock : MacrosFields;
 
 	return <div className={ 'components-base-control' }>
 		<Flex
@@ -43,7 +38,7 @@ function AdvancedModalControl( {
 						value={ value }
 						onChange={ onChangePreset }
 					/> }
-					{ false !== onChangeMacros && <MacroComponent
+					{ false !== onChangeMacros && <MacrosFields
 						onClick={ onChangeMacros }
 						withCurrent={ macroWithCurrent }
 					/> }

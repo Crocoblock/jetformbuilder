@@ -74,8 +74,24 @@ function FieldValueControls( { attributes, setAttributes } ) {
 	</>;
 }
 
+function HeaderControls() {
+	const [ attributes, setAttributes ] = useBlockAttributes();
+
+	return <>
+		{ 'referer_url' !== attributes.field_value && <ToggleControl
+			label={ __( 'Render in HTML', 'jet-form-builder' ) }
+			checked={ attributes.render }
+			onChange={ render => setAttributes(
+				{ render: Boolean( render ) } ) }
+		/> }
+	</>;
+}
+
 const FieldsValueControlsWithFilters = withFilters(
 	'jfb.hidden-field.field-value.controls' )( FieldValueControls );
+
+const HeaderControlsWithFilters = withFilters(
+	'jfb.hidden-field.header.controls' )( HeaderControls );
 
 export default function HiddenEdit( props ) {
 
@@ -111,13 +127,7 @@ export default function HiddenEdit( props ) {
 	useEffect( resetRender, [ attributes.field_value ] );
 
 	const checkFieldValueInput = () => <>
-		{ 'referer_url' !== attributes.field_value && <ToggleControl
-			key={ uniqKey( 'render_in_html' ) }
-			label={ __( 'Render in HTML', 'jet-form-builder' ) }
-			checked={ attributes.render }
-			onChange={ render => setAttributes(
-				{ render: Boolean( render ) } ) }
-		/> }
+		<HeaderControlsWithFilters/>
 		<SelectControl
 			key="field_value"
 			label="Field Value"

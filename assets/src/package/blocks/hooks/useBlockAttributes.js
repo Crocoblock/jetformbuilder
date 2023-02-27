@@ -1,5 +1,5 @@
 const {
-	      useBlockProps,
+	      useBlockEditContext,
       } = wp.blockEditor;
 const {
 	      useSelect,
@@ -8,8 +8,8 @@ const {
       } = wp.data;
 
 function useBlockAttributes() {
-	const blockProps = useBlockProps();
-	const clientId   = blockProps[ 'data-block' ];
+	const blockProps   = useBlockEditContext();
+	const { clientId } = blockProps;
 
 	const attributes      = useSelect( select => {
 		return select( 'core/block-editor' ).getBlockAttributes( clientId );
@@ -32,7 +32,7 @@ function useBlockAttributes() {
 		updateBlock( clientId, { attributes: props } );
 	};
 
-	return [ attributes, updateAttributes, clientId ];
+	return [ attributes, updateAttributes ];
 }
 
 export default useBlockAttributes;

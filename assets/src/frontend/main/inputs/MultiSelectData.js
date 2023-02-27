@@ -1,7 +1,6 @@
 import InputData from './InputData';
 import { isMultiSelect } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
-import { STRICT_MODE } from '../signals/BaseSignal';
 
 function MultiSelectData() {
 	InputData.call( this );
@@ -16,12 +15,6 @@ function MultiSelectData() {
 
 		node.addEventListener( 'change', () => this.setValue() );
 		node.addEventListener( 'blur', () => this.reportOnBlur() );
-
-		!STRICT_MODE && jQuery( node ).on( 'change', event => {
-			this.callable.lockTrigger();
-			this.setValue();
-			this.callable.unlockTrigger();
-		} );
 
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );

@@ -16,12 +16,6 @@ function MultiSelectData() {
 		node.addEventListener( 'change', () => this.setValue() );
 		node.addEventListener( 'blur', () => this.reportOnBlur() );
 
-		jQuery( node ).on( 'change', event => {
-			this.callable.lockTrigger();
-			this.setValue();
-			this.callable.unlockTrigger();
-		} );
-
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};

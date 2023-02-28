@@ -347,6 +347,9 @@ InputData.prototype.onFocus  = function () {
 InputData.prototype.focusRaw = function () {
 	const [ node ] = this.nodes;
 
+	/**
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/2265#issuecomment-1447988718
+	 */
 	if ( [ 'date', 'time', 'datetime-local' ].includes( node.type ) ) {
 		return;
 	}

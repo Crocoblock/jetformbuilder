@@ -14,6 +14,10 @@ class Default_State extends Base_Render_State {
 		return __( 'Normal form output process', 'jet-form-builder' );
 	}
 
+	public function is_supported_on_current(): bool {
+		return false;
+	}
+
 	/**
 	 * @return bool
 	 */

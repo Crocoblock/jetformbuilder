@@ -419,7 +419,7 @@ class Tools {
 
 		if ( $sanitize_callback && is_callable( $sanitize_callback ) ) {
 			$filtered = call_user_func( $sanitize_callback, $filtered );
-		} else if ( $replace_enqueue ) {
+		} else if ( $replace_enqueue && false !== strpos( $filtered, '<' ) ) {
 			$filtered = wp_kses_post( $filtered );
 		}
 

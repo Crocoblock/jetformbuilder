@@ -21,6 +21,7 @@ const settings = {
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,
 	useEditProps: [ 'uniqKey' ],
+	jfbGetFields: () => [],
 	/**
 	 * @param attributes
 	 * @param context {{|'accessibility'|'visual'|'list-view'}}

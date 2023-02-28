@@ -1,5 +1,4 @@
 import constants from './constants';
-import { storeName } from './index';
 
 const dispatchers = {
 	[ constants.setBlocks ]( state, action ) {

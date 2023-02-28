@@ -1,4 +1,5 @@
 import { storeName } from '../store';
+import Tools from '../../tools';
 
 const {
 	      useSelect,
@@ -12,6 +13,7 @@ const {
  * withInner: Boolean|undefined,
  * excludeCurrent: Boolean|undefined
  * currentId: String|undefined
+ * placeholder: String|undefined
  * }}
  * @param deps {undefined|Array}
  * @returns {Array}
@@ -23,10 +25,14 @@ function useFields( options = {}, deps = undefined ) {
 		options.currentId = blockProps.clientId;
 	}
 
-	return useSelect(
+	const fields = useSelect(
 		select => select( storeName ).getFields( options ),
 		deps,
 	);
+
+	return options.placeholder
+	       ? Tools.withPlaceholder( fields, options.placeholder )
+	       : fields;
 }
 
 export default useFields;

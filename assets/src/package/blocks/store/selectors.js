@@ -119,6 +119,36 @@ const selectors = {
 
 		return !hasChanged;
 	},
+	getBlockByName( state, fieldName ) {
+		if ( !fieldName ) {
+			return false;
+		}
+
+		const iterateFields = blocks => {
+			for ( const block of blocks ) {
+				if ( block.fields.some(
+					( { value } ) => value === fieldName,
+				) ) {
+					return block;
+				}
+
+				if ( !block.innerBlocks?.length ) {
+					continue;
+				}
+
+				iterateFields( block.innerBlocks );
+			}
+		};
+
+		iterateFields( state.blocks );
+
+		return false;
+	},
+	getBlockNameByName( state, fieldName ) {
+		const block = selectors.getBlockByName( state, fieldName );
+
+		return block?.name ?? '';
+	},
 };
 
 export default {

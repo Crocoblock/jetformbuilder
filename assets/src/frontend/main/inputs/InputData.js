@@ -347,6 +347,10 @@ InputData.prototype.onFocus  = function () {
 InputData.prototype.focusRaw = function () {
 	const [ node ] = this.nodes;
 
+	if ( [ 'date', 'time', 'datetime-local' ].includes( node.type ) ) {
+		return;
+	}
+
 	node?.focus( { preventScroll: true } );
 };
 InputData.prototype.scrollTo = function () {

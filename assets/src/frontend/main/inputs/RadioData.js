@@ -20,6 +20,9 @@ function RadioData() {
 			);
 
 			!STRICT_MODE && jQuery( nodeElement ).on( 'change', event => {
+				if ( this.value.current == event.target.value ) {
+					return;
+				}
 				this.callable.lockTrigger();
 				this.setValue();
 				this.callable.unlockTrigger();

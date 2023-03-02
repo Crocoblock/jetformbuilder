@@ -9,6 +9,11 @@
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Classes\Regexp_Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $this->add_attribute( 'class', 'jet-form-builder__field hidden-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );

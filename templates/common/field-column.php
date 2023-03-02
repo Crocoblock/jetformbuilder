@@ -11,6 +11,11 @@
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 //phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 /*

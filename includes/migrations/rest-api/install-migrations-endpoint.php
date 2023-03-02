@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Migrations\Rest_Api;
 
-
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Install_Migrations_Endpoint extends Rest_Api_Endpoint_Base {
 

@@ -7,6 +7,11 @@ namespace Jet_Form_Builder\Actions\Events\Never;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Never_Event extends Base_Event {
 
 	public function get_id(): string {

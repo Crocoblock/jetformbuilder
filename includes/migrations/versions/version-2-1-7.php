@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Migrations\Versions;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_View;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * @since 2.1.7 https://github.com/Crocoblock/issues-tracker/issues/1476

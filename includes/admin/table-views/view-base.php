@@ -11,6 +11,11 @@ use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class View_Base implements
 	Repository_Static_Item_It,
 	Model_Dependencies_Interface,

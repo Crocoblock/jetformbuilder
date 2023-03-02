@@ -7,6 +7,11 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Button_Next extends Button_Type_Base {
 
 	public function slug(): string {

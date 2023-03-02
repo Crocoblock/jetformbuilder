@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Manager {
 
 	public $_types = array();

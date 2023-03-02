@@ -8,6 +8,11 @@ use Jet_Form_Builder\Gateways\Base_Scenario_Gateway;
 use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Api_Actions\Get_Token;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Controller extends Base_Scenario_Gateway {
 
 	const ID = 'paypal';

@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Admin;
 
-
 use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 interface Admin_Page_Interface {
 

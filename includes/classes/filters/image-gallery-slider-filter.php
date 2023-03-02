@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
-
 use Jet_Form_Builder\Classes\Gallery;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Image_Gallery_Slider_Filter extends Base_Filter {
 

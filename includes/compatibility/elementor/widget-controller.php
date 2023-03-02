@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Compatibility\Elementor;
 
-
 use Elementor\Widget_Base;
 use Jet_Form_Builder\Compatibility\Elementor\Widgets\Form;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Widget_Controller {
 

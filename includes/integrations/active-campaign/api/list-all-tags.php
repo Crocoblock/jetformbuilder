@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Api;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class List_All_Tags extends Base_Action implements Arrayable {
 

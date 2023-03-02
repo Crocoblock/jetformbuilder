@@ -10,6 +10,11 @@ use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
 use Jet_Form_Builder\Request\File_Uploader;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Media_Field_Parser extends Field_Data_Parser {
 
 	public function type() {

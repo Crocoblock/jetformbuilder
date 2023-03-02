@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Query_Views;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Models\Render_State_Model;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Render_States_View extends View_Base {
 

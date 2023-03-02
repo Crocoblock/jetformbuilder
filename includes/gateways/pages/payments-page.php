@@ -7,6 +7,11 @@ use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Gateways\Table_Views\Payments;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Payments_Page extends Base_Page {
 
 	const SLUG = 'jfb-payments';

@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Md5_Filter extends Base_Filter {
 

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Exceptions\Not_Router_Request;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Request_Router {
 
 	abstract protected function get_hook_name(): string;

@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Rest_Endpoint implements Arrayable {
 

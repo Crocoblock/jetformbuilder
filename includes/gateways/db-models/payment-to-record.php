@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Gateways\Db_Models;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Constraints\Record_Model_Constraint;
 use Jet_Form_Builder\Db_Queries\Base_Db_Constraint;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Constraints\Payment_Model_Constraint;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Payment_To_Record extends Base_Db_Model {
 

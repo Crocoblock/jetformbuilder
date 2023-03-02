@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Status_Property;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Product_Status_Property extends Post_Status_Property {
 

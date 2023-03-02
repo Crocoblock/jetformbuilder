@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Column_Advanced_Base extends Column_Base implements Column_Heading_Interface {
 

@@ -10,6 +10,11 @@ use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $value;

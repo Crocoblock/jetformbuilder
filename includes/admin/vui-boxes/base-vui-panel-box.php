@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Vui_Boxes;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Vui_Panel_Box extends Base_Vui_Box {
 

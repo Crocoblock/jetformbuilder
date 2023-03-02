@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views\Columns;
 
-
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Payment_Type_Column extends Column_Advanced_Base {
 

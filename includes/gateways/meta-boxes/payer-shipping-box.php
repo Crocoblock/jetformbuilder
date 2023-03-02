@@ -16,6 +16,11 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\Ship_Full_Name_Column;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Columns\State_Column;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Payer_Shipping_Box extends Base_List_Box {
 
 	public function get_title(): string {

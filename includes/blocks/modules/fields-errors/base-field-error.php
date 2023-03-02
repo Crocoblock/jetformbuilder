@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Blocks\Modules\Fields_Errors;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Field_Error {
 
 	protected $name;

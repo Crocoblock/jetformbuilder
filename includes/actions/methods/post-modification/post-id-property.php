@@ -8,6 +8,10 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Id_Property extends Base_Object_Property {
 

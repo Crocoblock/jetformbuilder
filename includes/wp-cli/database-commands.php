@@ -10,6 +10,11 @@ use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Profilers\Cli_Migration_Profiler;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Database_Commands extends \WP_CLI_Command {
 
 	public function migrate() {

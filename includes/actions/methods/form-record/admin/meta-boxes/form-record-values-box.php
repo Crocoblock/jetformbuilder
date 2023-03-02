@@ -19,6 +19,11 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Record_Values_Box extends Base_List_Box {
 
 	public function get_title(): string {

@@ -9,6 +9,11 @@ use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Blocks\Types\Conditional_Block;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Button_Switch_State extends Button_Type_Base {
 
 	public function slug(): string {

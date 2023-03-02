@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Admin\Vui_Boxes;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Vui_Box implements Repository_Item_Instance_Trait, Arrayable {
 
 	const TYPE_PANEL = 'panel';

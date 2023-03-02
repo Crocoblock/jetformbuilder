@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Form_Response\Types;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Reload_Response extends Response_It {
 
 	public function get_field_errors( $errors ) {

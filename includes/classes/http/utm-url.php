@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Classes\Http;
 use Jet_Form_Builder\Addons\Manager;
 use Jet_Form_Builder\Classes\Theme\Theme_Info;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Utm_Url {
 
 	private $check_license = false;

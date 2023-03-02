@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Db_Queries;
 use Jet_Form_Builder\Db_Queries\Traits\With_View;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method Query_Conditions_Builder set_view( Views\View_Base $view )
  *

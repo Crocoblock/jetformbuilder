@@ -3,6 +3,11 @@
  * input[type="hidden"] template
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $this->set_value();
 $this->add_attribute( 'class', 'jet-form-builder__field text-field' );
 $this->add_attribute( 'class', $args['class_name'] );

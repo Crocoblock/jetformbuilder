@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Multiple_Filter extends Base_Filter {
 

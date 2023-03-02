@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 use Jet_Form_Builder\Gateways\Scenario_Item;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Scenario_View_Base implements Scenario_Item {
 
 	abstract public function get_title(): string;

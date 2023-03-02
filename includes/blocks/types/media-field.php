@@ -6,7 +6,6 @@ use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Media_Field_Render;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.

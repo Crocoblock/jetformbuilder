@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Blocks\Modules;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait General_Style_Functions {
 
 	private $namespace = 'jet-form-builder';

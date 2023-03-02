@@ -6,9 +6,13 @@
  * @var array $args
  */
 
-use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 $this->add_attribute( 'class', 'jet-form-builder__field select-field' );
 $this->add_attribute( 'class', $args['class_name'] );

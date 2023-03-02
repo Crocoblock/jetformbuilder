@@ -9,6 +9,11 @@ use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Event implements
 	Repository_Item_Instance_Trait,
 	Collection_Item_Interface,

@@ -7,6 +7,11 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Table_Views\Records_Table
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Records extends Base_Page {
 
 	const SLUG = 'jfb-records';

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Blocks\Button_Types;
 
 use Jet_Form_Builder\Blocks\Render\Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Button_Type_Base {
 
 	private $html_attrs = array();

@@ -2,13 +2,12 @@
 
 namespace Jet_Form_Builder\Classes;
 
-// If this file is called directly, abort.
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-
 
 class Tools {
 

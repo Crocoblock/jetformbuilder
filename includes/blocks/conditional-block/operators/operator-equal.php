@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Operators;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Operator_Equal extends Base_Operator {
 

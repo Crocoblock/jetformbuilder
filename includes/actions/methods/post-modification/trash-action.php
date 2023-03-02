@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Trash_Action extends Base_Post_Action {
 

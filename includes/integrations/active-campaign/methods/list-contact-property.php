@@ -3,13 +3,17 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Methods;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Integrations\Active_Campaign\Api\Update_List_Status;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class List_Contact_Property extends Base_Object_Property {
 

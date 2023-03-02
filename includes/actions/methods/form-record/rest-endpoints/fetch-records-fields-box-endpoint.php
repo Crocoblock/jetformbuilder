@@ -10,6 +10,11 @@ use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Fetch_Records_Fields_Box_Endpoint extends Rest_Api_Endpoint_Base {
 
 	use Traits\Paginated_Args;

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Security;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Csrf_Token_Model extends Base_Db_Model {
 
 	/**

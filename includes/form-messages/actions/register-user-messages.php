@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Form_Messages\Actions;
 
-
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Actions\Types\Register_User;
 use Jet_Form_Builder\Actions\Types\Update_User;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Register_User_Messages extends Base_Action_Messages {
 

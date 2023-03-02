@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Actions;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Action_Localize {
 
 	abstract public function get_id();

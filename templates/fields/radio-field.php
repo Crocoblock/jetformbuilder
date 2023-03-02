@@ -6,7 +6,11 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
-use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 $required = $this->block_type->get_required_val();
 $name     = $this->block_type->get_field_name( $args['name'] );

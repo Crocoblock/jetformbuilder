@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Admin;
 
-
 use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
 use Jet_Form_Builder\Plugin;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait Admin_Page_Trait {
 

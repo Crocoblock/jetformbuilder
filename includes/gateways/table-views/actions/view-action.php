@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views\Actions;
 
-
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class View_Action extends Link_Single_Action {
 

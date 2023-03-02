@@ -7,6 +7,11 @@
 
 use Jet_Form_Builder\Form_Break;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <?php foreach ( $this->get_breaks() as $index => $break ) : ?>

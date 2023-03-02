@@ -3,7 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Arrayable;
 
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Je_Relation_Property;
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Array_Tools {
 

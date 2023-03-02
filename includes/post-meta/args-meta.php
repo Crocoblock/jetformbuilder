@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Post_Meta;
 
-
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Args_Meta extends Base_Meta_Type {
 

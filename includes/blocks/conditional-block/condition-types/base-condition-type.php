@@ -9,6 +9,11 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Condition_Type implements Arrayable {
 
 	/**

@@ -11,6 +11,11 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Fields;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Parser_Manager instance()
  *

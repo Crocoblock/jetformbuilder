@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Db_Queries\Models;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Core_User_Model extends Base_Db_Model {
 

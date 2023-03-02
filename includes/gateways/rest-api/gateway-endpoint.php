@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Gateways\Rest_Api;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Gateway_Endpoint extends Rest_Api_Endpoint_Base {
 
 	use Dynamic_Rest_Url_Trait;

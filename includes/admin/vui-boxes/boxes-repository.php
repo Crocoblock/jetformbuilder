@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Admin\Vui_Boxes;
 
-
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Boxes_Repository {
 

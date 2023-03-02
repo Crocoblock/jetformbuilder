@@ -8,6 +8,11 @@ use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class User_Modifier extends Abstract_Modifier {
 
 	protected function get_properties(): Object_Properties_Collection {

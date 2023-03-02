@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Actions;
 
-
 use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Delete_Page_Action extends Base_Rest_Page_Action {
 

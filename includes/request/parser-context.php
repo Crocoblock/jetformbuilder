@@ -8,6 +8,11 @@ use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Parser_Context {
 
 	protected $block;

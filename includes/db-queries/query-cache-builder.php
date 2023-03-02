@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method Query_Cache_Builder set_view( View_Base $view )
  *

@@ -8,6 +8,11 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Receive_Payment extends Rest_Api_Endpoint_Base {
 
 	use Dynamic_Rest_Url_Trait;

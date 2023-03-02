@@ -8,6 +8,11 @@ use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;
 use Jet_Form_Builder\Gateways\Table_Views;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Receive_Payments extends Rest_Api_Endpoint_Base {
 
 	use Traits\Paginated_Args;

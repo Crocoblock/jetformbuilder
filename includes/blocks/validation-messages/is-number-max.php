@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Blocks\Validation_Messages;
 
-
 use Jet_Form_Builder\Blocks\Types\Number_Field;
 use Jet_Form_Builder\Blocks\Types\Range_Field;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Is_Number_Max extends Base_Message {
 

@@ -10,6 +10,11 @@ use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Page_Action implements Arrayable {
 
 	const SECONDARY = 'secondary';

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Repository;
 
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Repository_Aborts_Trait {
 
 	/**

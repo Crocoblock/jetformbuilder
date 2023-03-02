@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Advanced_Rules;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Must_Not_Contain_Characters_Rule extends Advanced_Rule {
 

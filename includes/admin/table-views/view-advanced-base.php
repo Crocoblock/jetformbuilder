@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 

@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Get_Token extends Base_Action {
 
 	const SLUG = 'GET_ACCESS_TOKEN';

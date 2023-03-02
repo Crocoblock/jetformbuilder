@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Gateways\Table_Views\Actions;
 
-
 use Jet_Form_Builder\Admin\Table_Views\Actions\Api_Single_Action;
 use Jet_Form_Builder\Gateways\Rest_Api\Delete_Payments_Endpoint;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Delete_Action extends Api_Single_Action {
 

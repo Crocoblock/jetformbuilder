@@ -7,6 +7,11 @@ use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button as Button;
 use Jet_Form_Builder\Admin\Notices\Base_Notice;
 use Jet_Form_Builder\Migrations\Rest_Api\Install_Migrations_Endpoint;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Update_Db_Notice extends Base_Notice {
 
 	/**

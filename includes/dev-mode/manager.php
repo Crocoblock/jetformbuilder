@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Manager instance()
  *

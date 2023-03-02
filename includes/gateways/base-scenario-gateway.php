@@ -11,6 +11,11 @@ use Jet_Form_Builder\Gateways\Gateway_Manager as GM;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Scenario_Gateway extends Base_Gateway {
 
 	/**

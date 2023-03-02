@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views\Actions;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Link_Single_Action extends View_Single_Action {
 

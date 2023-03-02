@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Button_Types\Button_Type_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * CRUD
  *

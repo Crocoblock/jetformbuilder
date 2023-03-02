@@ -7,6 +7,11 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @property array block_attrs
  *

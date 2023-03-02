@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Gateways\Paypal;
 
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Repository;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Scenarios_Logic_Manager extends Scenario_Logic_Repository {
 
 	public function rep_instances(): array {

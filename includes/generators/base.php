@@ -2,6 +2,11 @@
 
 namespace Jet_Form_Builder\Generators;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base {
 
 	/**

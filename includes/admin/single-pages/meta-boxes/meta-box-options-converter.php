@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Meta_Box_Options_Converter implements Arrayable {
 
 	protected $editable_table         = false;

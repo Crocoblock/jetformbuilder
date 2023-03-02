@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Classes;
 use Jet_Form_Builder\Classes\Filters\Filters_Manager;
 use Jet_Form_Builder\Classes\Macro_Constants\Constants_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Macros_Parser {
 
 	private $content      = '';

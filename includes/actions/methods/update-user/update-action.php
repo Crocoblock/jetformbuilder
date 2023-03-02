@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Update_User;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Modifier_Action;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Update_Action extends Base_Modifier_Action {
 

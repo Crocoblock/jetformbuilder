@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Meta_Table_Options_Converter extends Meta_Box_Options_Converter {
 
 	protected $footer_heading        = true;

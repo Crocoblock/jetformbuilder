@@ -4,6 +4,11 @@ namespace Jet_Form_Builder\Admin\Pages;
 
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Addons_Page extends Base_Page {
 
 	/**

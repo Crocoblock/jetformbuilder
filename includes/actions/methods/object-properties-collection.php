@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Actions\Methods;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Object_Properties_Collection extends Collection {
 

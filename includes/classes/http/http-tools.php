@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Http;
 
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Http_Tools {
 
 	protected static $query;

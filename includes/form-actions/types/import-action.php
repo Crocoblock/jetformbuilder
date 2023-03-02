@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Form_Actions\Types;
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Import_Action extends Base_Form_Action {
 
 	use Import_Form_Trait;

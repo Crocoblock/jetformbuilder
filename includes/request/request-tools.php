@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Request;
 
-
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Request_Tools {
 

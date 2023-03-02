@@ -3,12 +3,16 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Methods;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Modifier_Action;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Integrations\Active_Campaign\Api\Sync_Contact_Action as Sync_Contact_Api;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * @property Contact_Modifier $modifier

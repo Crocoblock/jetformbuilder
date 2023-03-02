@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Security;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Wp_Nonce_Tools {
 
 	const KEY = '_wpnonce';

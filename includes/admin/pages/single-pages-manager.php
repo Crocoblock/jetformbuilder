@@ -7,6 +7,11 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Single_Pages_Manager {
 
 	use Repository_Pattern_Trait;

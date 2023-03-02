@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Integrations;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Integration_Base {
 	protected $api_base_url = '';
 	protected $api_key = '';

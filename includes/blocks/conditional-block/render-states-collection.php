@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Render_States_Collection extends Collection {
 
 	private $exclude_list = array();

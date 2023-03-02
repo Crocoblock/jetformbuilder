@@ -12,6 +12,11 @@ use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form extends Widget_Base implements Widget_Base_It {
 
 	use General_Style_Functions;

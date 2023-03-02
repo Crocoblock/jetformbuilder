@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Compatibility\Jet_Engine\Blocks;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Map_Tools {
 
 	const STRING  = 'location_string';

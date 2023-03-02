@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api;
 
-
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Integrations\Active_Campaign\Api\Retrieve_Custom_Fields_Action;
 use Jet_Form_Builder\Integrations\Active_Campaign\Api\Retrieve_Lists_Action;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 

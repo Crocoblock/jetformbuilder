@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Actions;
 
-
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Resources\File_Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Actions_Tools {
 

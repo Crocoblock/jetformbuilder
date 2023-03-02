@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Api;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Update_List_Status extends Base_Action {
 

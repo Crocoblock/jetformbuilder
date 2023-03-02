@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Post_Meta;
 
-
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Messages_Meta extends Base_Meta_Type {
 

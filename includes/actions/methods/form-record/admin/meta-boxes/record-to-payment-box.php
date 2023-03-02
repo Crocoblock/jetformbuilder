@@ -10,6 +10,11 @@ use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Record_To_Payment_Box extends Form_Record_Values_Box {
 
 	public function get_title(): string {

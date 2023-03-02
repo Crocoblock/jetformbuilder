@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Render\Base as BaseRender;
 use Jet_Form_Builder\Form_Break;
 
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Presets\Sources;
 
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Preset_Source_Post extends Base_Source {
 
 	public function get_id() {

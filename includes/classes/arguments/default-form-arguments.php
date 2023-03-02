@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Arguments;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Default_Form_Arguments extends Form_Arguments {
 

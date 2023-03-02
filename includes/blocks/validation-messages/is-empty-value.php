@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Validation_Messages;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Is_Empty_Value extends Base_Message {
 

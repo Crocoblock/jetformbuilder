@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Notices;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait With_Notices_Trait {
 

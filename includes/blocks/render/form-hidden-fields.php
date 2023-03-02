@@ -9,6 +9,11 @@ use Jet_Form_Builder\Classes\Security\Csrf_Tools;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Live_Form;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Hidden_Fields {
 
 	public static function render() {

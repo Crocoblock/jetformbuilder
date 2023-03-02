@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Action;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Save_Action extends Base_Post_Action {
 

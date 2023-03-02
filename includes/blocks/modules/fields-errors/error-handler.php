@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Blocks\Modules\Fields_Errors;
 
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Error_Handler {
 
 	private static $instance = null;

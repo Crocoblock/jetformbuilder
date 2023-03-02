@@ -7,6 +7,11 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Delete_Render_States_Endpoint extends Rest_Api_Endpoint_Base {
 
 	/**

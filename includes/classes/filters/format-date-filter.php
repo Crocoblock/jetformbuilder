@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
-
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Format_Date_Filter extends Base_Filter {
 

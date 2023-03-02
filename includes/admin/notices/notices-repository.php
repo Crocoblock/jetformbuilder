@@ -7,6 +7,11 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Notices_Repository implements Admin_Notices_Interface, Arrayable {
 
 	use Repository_Pattern_Trait;

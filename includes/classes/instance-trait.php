@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Classes;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Instance_Trait {
 
 	public static $instance;

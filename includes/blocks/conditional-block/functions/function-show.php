@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Functions;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
 use Jet_Form_Builder\Blocks\Exceptions\Condition_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Function_Show extends Base_Function {
 

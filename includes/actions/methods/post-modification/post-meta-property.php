@@ -10,6 +10,10 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Meta_Property extends Base_Object_Property implements
 	Object_Dynamic_Property {

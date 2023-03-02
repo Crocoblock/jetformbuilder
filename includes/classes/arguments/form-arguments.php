@@ -7,6 +7,11 @@ use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @property int form_id
  * @property string submit_type

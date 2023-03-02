@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Api;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @since 2.1.4
  * @link https://developers.activecampaign.com/reference/sync-a-contacts-data

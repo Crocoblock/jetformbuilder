@@ -15,6 +15,11 @@ use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Permission_Exception;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class File_Uploader {
 
 	protected $settings = array();

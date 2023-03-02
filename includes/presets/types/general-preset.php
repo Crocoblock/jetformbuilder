@@ -7,6 +7,11 @@ use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class General_Preset extends Base_Preset {
 
 	const SLUG = 'general';

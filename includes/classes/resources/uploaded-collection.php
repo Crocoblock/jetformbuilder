@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Resources;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 

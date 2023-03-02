@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Blocks\Modules;
 
 use JET_SM\Gutenberg\Controls_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @property Controls_Manager controls_manager
  *

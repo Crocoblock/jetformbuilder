@@ -3,9 +3,12 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Product_Weight_Property extends Base_Product_Property {
 

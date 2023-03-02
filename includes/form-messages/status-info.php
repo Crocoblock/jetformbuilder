@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Status_Info {
 

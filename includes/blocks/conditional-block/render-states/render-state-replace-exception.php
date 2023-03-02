@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Render_States;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Render_State_Replace_Exception extends \Exception {
 

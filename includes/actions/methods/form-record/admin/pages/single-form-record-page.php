@@ -11,6 +11,11 @@ use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Single_Form_Record_Page extends Base_Single_Page {
 
 	use With_Notices_Trait;

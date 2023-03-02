@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Tab_Handler_Manager {
 
 	public static $instance;

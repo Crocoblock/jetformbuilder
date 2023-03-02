@@ -8,6 +8,10 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Fetch_Filters_Endpoint extends Rest_Api_Endpoint_Base {
 

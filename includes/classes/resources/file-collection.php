@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Resources;
 
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class File_Collection extends Collection implements Media_Block_Value {
 
 	public function push( array $file ): bool {

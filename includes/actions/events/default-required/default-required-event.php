@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Actions\Events\Default_Required;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Default_Required_Event extends Base_Event {
 
 	public function get_id(): string {

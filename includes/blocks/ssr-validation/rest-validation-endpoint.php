@@ -3,12 +3,16 @@
 
 namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
-
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Request\Parser_Context;
 use Jet_Form_Builder\Request\Request_Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 

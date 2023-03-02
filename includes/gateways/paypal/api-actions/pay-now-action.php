@@ -3,7 +3,10 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
-use Jet_Form_Builder\Gateways\Gateway_Manager;
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Pay_Now_Action extends Base_Action {
 

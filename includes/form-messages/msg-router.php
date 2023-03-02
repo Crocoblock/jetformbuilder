@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Msg_Router {
 
 	/** @var Builder */

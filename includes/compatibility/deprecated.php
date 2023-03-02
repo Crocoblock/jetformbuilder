@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Compatibility;
 
-
 use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Plugin;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Deprecated {
 

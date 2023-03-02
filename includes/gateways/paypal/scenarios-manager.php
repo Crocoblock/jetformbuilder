@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenarios_Manager_Abstract;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * @method static Scenarios_Manager instance()

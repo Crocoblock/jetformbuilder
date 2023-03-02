@@ -11,6 +11,10 @@
 
 use Jet_Form_Builder\Classes\Attributes_Trait;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
     printf( "<%s %s>", $label_text_tag, $label_text->get_attributes_string() );

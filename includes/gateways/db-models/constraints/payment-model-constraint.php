@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Gateways\Db_Models\Constraints;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Constraint;
 use Jet_Form_Builder\Gateways\Db_Models\Payment_Model;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Payment_Model_Constraint extends Base_Db_Constraint {
 

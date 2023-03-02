@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Blocks\Validation_Messages;
 
-
 use Jet_Form_Builder\Blocks\Types\Date_Field;
 use Jet_Form_Builder\Blocks\Types\Datetime_Field;
 use Jet_Form_Builder\Blocks\Types\Time_Field;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Is_Date_Min extends Base_Message {
 

@@ -7,8 +7,6 @@ use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Integrations\Active_Campaign\Methods\Contact_Modifier;
 use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Editor_Fetch_Endpoint;
-use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Lists;
-use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Retrieve_Custom_Fields;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

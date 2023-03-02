@@ -7,6 +7,11 @@ use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Break {
 
 	use Get_Template_Trait;

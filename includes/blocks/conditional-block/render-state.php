@@ -5,10 +5,8 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
-use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Example_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Render_State_Replace_Exception;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
@@ -16,6 +14,11 @@ use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * @method static Render_State instance()

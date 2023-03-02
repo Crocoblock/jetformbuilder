@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign;
 
-
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Integrations\Active_Campaign\Actions\Active_Campaign_Action;
 use Jet_Form_Builder\Integrations\Active_Campaign\Rest_Api\Rest_Controller;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Active_Campaign {
 

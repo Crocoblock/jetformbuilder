@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Actions\Methods;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Modifier_Action implements Collection_Item_Interface {
 

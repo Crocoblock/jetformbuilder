@@ -3,12 +3,16 @@
 
 namespace Jet_Form_Builder\Form_Messages;
 
-
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Form_Messages\Actions\Base_Action_Messages;
 use Jet_Form_Builder\Form_Messages\Actions\Register_User_Messages;
 use Jet_Form_Builder\Form_Messages\Actions\User_Specific_Messages;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 /**
  * @method static Action_Messages_Manager instance()

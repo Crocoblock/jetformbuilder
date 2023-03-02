@@ -7,6 +7,11 @@ use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Form_Messages;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Ajax_Response extends Response_It {
 
 	public function get_field_errors( $errors ) {

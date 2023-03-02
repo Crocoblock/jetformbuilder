@@ -24,6 +24,11 @@ use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use MailPoet\Automation\Engine\Validation\WorkflowRules\ValidStepArgsRule;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Events_Manager instance()
  *

@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 interface Meta_Table_Options extends Meta_Box_Options {
 

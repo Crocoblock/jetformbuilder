@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
-
 use Jet_Form_Builder\Request\Parser_Context;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Is_User_Login_Unique extends Base_Validation_Callback {
 

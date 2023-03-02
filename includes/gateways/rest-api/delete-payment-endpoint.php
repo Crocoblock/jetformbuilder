@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Gateways\Rest_Api;
 
-
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Delete_Payment_Endpoint extends Rest_Api_Endpoint_Base {
 

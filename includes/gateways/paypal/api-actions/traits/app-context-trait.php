@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions\Traits;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * Trait AppContextTrait
  *

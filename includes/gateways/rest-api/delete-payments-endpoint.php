@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Rest_Api;
 
-
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_Count_View;
@@ -11,6 +10,11 @@ use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Table_Views\Payments;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits\Paginated_Args;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Delete_Payments_Endpoint extends Rest_Api_Endpoint_Base {
 

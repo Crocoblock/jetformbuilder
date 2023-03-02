@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Base_Modifier_Action;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Post_Action extends Base_Modifier_Action {
 

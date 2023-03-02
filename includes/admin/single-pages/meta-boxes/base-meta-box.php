@@ -15,6 +15,11 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Meta_Box
 	implements
 	Model_Dependencies_Interface,

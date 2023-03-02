@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Base_Db_Constraint {
 
 	const ACTION_CASCADE     = 'CASCADE';

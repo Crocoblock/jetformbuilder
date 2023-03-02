@@ -8,6 +8,11 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Primary_Form_Column extends Column_Advanced_Base {
 
 	protected $column = 'form_id';

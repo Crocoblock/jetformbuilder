@@ -8,6 +8,11 @@ use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Actions\Events\Base_Gateway_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Executor;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Gateway_Failed_Event extends Base_Gateway_Event {
 
 	public function get_id(): string {

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Classes\Resources;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class File implements Arrayable, Media_Block_Value {
 
 	protected $error    = 0;

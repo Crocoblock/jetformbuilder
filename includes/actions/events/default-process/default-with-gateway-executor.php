@@ -11,6 +11,11 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Default_With_Gateway_Executor extends Default_Process_Executor {
 
 	public function before_execute() {

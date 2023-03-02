@@ -22,6 +22,11 @@ use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_With_Record_View;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 	use Scenarios_Connectors\Pay_Now;

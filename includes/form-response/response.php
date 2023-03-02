@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Form_Response;
 
 use Jet_Form_Builder\Form_Response\Types\Response_It;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Response {
 
 	public $manager;

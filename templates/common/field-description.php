@@ -3,6 +3,11 @@
  * Field description template
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
 	$class  = 'jet-form-builder__heading-desc';
 	$format = '<div class="%1$s">%2$s</div>';

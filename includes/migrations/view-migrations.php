@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Migrations;
 
-
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class View_Migrations extends View_Base {
 

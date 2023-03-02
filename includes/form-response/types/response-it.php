@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Form_Response\Types;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Response_It {
 
 	protected $additional;

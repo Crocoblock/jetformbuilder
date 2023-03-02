@@ -3,12 +3,16 @@
 
 namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
-
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Request\Parser_Context;
 use JET_SM\Gutenberg\Block_Manager;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Validation_Callbacks {
 

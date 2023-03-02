@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Gateways\Paypal\Api_Actions;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Capture_Payment_Action extends Base_Action {
 
 	const SLUG = 'CAPTURE_PAYMENT';

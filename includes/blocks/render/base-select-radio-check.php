@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Blocks\Types\Base_Select_Radio_Check as SRC_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @property SRC_Base block_type
  *

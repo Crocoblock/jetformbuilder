@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Gateways_Editor_Data {
 
 	private function labels() {

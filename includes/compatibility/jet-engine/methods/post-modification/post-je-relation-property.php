@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Compatibility\Jet_Engine\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Action;
@@ -11,6 +10,10 @@ use Jet_Form_Builder\Actions\Methods\Post_Modification\Trash_Action;
 use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Je_Relation_Property extends Base_Object_Property implements
 	Object_Dynamic_Property {

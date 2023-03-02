@@ -18,6 +18,11 @@ use Jet_Form_Builder\Gateways\Query_Views\Payment_View;
 use Jet_Form_Builder\Gateways\Rest_Api\Receive_Payment;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Status_Column;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Payment_Details_Box extends Base_List_Box {
 
 	public function get_title(): string {

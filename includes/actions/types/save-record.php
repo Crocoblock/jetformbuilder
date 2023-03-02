@@ -15,6 +15,11 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes\Record_To_Paym
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Save_Record extends Base {
 
 	const ID = 'save_record';

@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Blocks\Validation_Messages;
 
-
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Message implements Arrayable {
 

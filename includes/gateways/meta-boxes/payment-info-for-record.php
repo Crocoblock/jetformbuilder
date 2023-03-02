@@ -9,6 +9,11 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
 use Jet_Form_Builder\Gateways\Query_Views\Payment_By_Record;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Payment_Info_For_Record extends Payment_Details_Box {
 
 	public function get_title(): string {

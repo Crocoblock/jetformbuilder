@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Blocks_Repository_Base {
 
 	use Repository_Pattern_Trait;

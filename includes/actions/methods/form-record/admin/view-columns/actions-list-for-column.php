@@ -10,6 +10,11 @@ use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\Mark_Viewed_
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\View_Action;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions\View_Related_Form;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Actions_List_For_Column {
 
 	protected function get_actions(): array {

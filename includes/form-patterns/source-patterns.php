@@ -1,5 +1,10 @@
 <?php
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 return array(
 	'contact_form'        => array(
 		'title'   => __( 'Contact Us Form', 'jet-form-builder' ),

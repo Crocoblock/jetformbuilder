@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Api;
 
-
 use Jet_Form_Builder\Gateways\Base_Gateway_Action;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Action extends Base_Gateway_Action {
 

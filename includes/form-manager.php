@@ -4,13 +4,10 @@
 namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Generators\Get_From_DB;
-use Jet_Form_Builder\Generators\Get_From_Field;
-use Jet_Form_Builder\Generators\Get_From_Je_Query;
 use Jet_Form_Builder\Generators\Num_Range;
 use Jet_Form_Builder\Generators\Num_Range_Manual;
 use Jet_Form_Builder\Shortcodes\Manager;
 use Jet_Form_Builder\Blocks\Block_Helper;
-
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

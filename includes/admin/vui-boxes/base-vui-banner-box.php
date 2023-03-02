@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Admin\Vui_Boxes;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Vui_Banner_Box extends Base_Vui_Box {
 
 	abstract public function get_label(): string;

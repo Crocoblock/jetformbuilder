@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Rest_Api;
 
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Rest_Api_Endpoint_Base implements Rest_Fetch_Endpoint {
 
 	final public static function get_namespace(): string {

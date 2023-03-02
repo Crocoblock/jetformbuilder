@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Rest_Api\Traits;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Paginated_Args {
 
 	protected function get_paginate_args( \WP_REST_Request $request ) {

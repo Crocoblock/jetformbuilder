@@ -3,13 +3,17 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Methods;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Integrations\Active_Campaign\Api\Retrieve_Custom_Fields_Action;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Custom_Contact_Property extends Base_Object_Property implements Object_Dynamic_Property {
 

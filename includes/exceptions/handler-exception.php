@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Exceptions;
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Form_Messages\Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Handler_Exception extends \Exception {
 
 	protected $default_type_message = 'failed';

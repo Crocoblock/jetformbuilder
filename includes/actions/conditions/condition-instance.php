@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Actions\Conditions;
 use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Condition_Instance {
 
 	private $type;

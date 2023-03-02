@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Classes\Theme;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait With_Theme_Info {
 

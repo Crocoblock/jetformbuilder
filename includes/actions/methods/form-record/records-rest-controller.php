@@ -3,9 +3,13 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Controller_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Records_Rest_Controller extends Rest_Api_Controller_Base {
 

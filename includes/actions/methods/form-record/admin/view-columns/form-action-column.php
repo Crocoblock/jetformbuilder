@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Columns;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Action_Column extends Column_Advanced_Base {
 
 	public function get_label(): string {

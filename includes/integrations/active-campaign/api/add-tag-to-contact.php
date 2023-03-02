@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Api;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Add_Tag_To_Contact extends Base_Action {
 

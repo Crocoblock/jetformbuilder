@@ -8,6 +8,12 @@
 
 use Jet_Form_Builder\File_Upload;
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $max_files = absint( $args['max_files'] ?? 1 );
 
 $this->add_attribute( 'class', 'jet-form-builder__field file-field jet-form-builder-file-upload__input' );

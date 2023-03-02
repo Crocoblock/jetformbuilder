@@ -12,6 +12,11 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 
 	use Traits\Paginated_Args;

@@ -99,7 +99,6 @@ class Calculated_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
-		Jet_Plugins_Ajax::register_script( self::HANDLE );
 
 		$is_hidden = $this->block_attrs['calc_hidden'] ?? false;
 

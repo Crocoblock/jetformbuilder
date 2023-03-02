@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Render_State;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Condition_Render_State_Item extends Base_Condition_Type {
 

@@ -7,6 +7,11 @@ use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button as Button;
 use Jet_Form_Builder\Admin\Vui_Boxes\Base_Vui_Banner_Box;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Useful_Banner_Box extends Base_Vui_Banner_Box {
 
 	public function get_label(): string {

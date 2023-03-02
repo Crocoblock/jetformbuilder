@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Integrations\Active_Campaign\Methods;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Contact_Modifier extends Abstract_Modifier {
 

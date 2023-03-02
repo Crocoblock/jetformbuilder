@@ -8,6 +8,11 @@
 
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $formula = $this->get_calculated_data( $args );
 
 if ( empty( $formula ) ) {

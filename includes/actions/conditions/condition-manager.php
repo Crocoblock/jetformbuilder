@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Actions\Conditions;
 use Jet_Form_Builder\Exceptions\Condition_Exception;
 use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Condition_Manager {
 
 	const THROW_IF_ONE_MATCH          = 'throw_out_if_at_least_one_match';

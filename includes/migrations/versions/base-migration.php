@@ -11,6 +11,11 @@ use Jet_Form_Builder\Migrations\Migration_Model;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Profilers\Base_Migration_Profiler;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Migration implements Repository_Static_Item_It {
 
 	use Repository_Item_With_Class;

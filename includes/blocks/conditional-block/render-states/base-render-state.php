@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Render_States;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Render_State implements
 	Repository_Item_Instance_Trait,

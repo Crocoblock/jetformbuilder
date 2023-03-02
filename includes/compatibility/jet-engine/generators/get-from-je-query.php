@@ -7,6 +7,11 @@ use Jet_Form_Builder\Compatibility\Jet_Engine\Generators\Je_Query_Object_Handler
 use Jet_Form_Builder\Generators\Base;
 use Jet_Engine\Query_Builder\Manager as Query_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Get_From_Je_Query extends Base {
 
 	private $object_handlers;

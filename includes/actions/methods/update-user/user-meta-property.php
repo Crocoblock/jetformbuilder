@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Update_User;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Classes\Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_Property {
 

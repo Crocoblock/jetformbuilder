@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Admin;
 use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Column_Heading_Interface;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait Table_Advanced_Record_Prepare_Trait {
 
 	use Table_Record_Prepare_Trait;

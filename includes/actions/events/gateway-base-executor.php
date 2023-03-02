@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Actions\Events;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Gateway_Base_Executor extends Base_Executor {
 

@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce;
 
-
 use Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification\Wc_Product_Modifier;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Woocommerce {
 

@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Type_Property extends Base_Object_Property {
 

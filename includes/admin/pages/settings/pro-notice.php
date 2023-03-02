@@ -8,6 +8,11 @@ use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button as Button;
 use Jet_Form_Builder\Admin\Notices\Base_Notice;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Pro_Notice extends Base_Notice {
 
 	public function get_id(): string {

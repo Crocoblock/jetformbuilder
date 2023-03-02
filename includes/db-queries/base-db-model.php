@@ -10,6 +10,11 @@ use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
 use Jet_Form_Builder\Wp_Cli\Cli_Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';

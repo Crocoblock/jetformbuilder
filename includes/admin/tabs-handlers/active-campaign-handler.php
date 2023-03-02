@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Active_Campaign_Handler extends Base_Handler {
 
 	public function slug() {

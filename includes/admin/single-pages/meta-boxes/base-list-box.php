@@ -9,6 +9,11 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_List_Box extends Base_Meta_Box implements
 	Rest_Fetch_Endpoint,
 	Meta_Box_Options {

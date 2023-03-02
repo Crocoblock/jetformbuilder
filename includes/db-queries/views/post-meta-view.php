@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Db_Queries\Views;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Post_Meta_View extends View_Base {
 

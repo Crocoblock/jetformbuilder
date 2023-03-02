@@ -7,6 +7,11 @@ use Jet_Form_Builder\Form_Actions\Types\Duplicate_Action;
 use Jet_Form_Builder\Form_Actions\Types\Export_Action;
 use Jet_Form_Builder\Form_Actions\Types\Import_Action;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Actions_Manager {
 
 	private $_types = array();

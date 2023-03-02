@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Product_Total_Sales_Property extends Base_Product_Property {
 

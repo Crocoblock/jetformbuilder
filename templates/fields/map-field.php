@@ -6,6 +6,11 @@
 
 use Jet_Form_Builder\Classes\Tools;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $name = $args['name'] ?? '';
 
 $this->add_attribute( 'type', 'hidden' );

@@ -7,6 +7,11 @@ use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Request\Field_Data_Parser;
 use Jet_Form_Builder\Request\Parser_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Repeater_Field_Parser extends Field_Data_Parser {
 
 	public function type() {

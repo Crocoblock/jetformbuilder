@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Migrations\Profilers;
 
-
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Cli_Migration_Profiler extends Base_Migration_Profiler {
 

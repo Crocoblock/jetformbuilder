@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Condition_Field_Item extends Base_Condition_Type {
 

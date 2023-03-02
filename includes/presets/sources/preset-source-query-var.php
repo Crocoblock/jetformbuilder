@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Presets\Sources;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Preset_Source_Query_Var extends Base_Source {
 
 	public function get_id() {

@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Column_Base {
 
 	const CHOOSE         = 'choose';

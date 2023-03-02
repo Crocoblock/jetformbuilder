@@ -8,6 +8,11 @@ use Jet_Form_Builder\Actions\Events\Base_Executor;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Events_List extends Collection {
 
 	public static function create( array $events ): Events_List {

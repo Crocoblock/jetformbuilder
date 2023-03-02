@@ -11,6 +11,11 @@ use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Map_Field extends Base {
 
 	const HANDLE = 'jet-fb-map-field';

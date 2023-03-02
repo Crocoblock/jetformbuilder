@@ -4,6 +4,11 @@
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $this->add_attribute( 'value', $args['default'] );
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name( $args['name'] ) );

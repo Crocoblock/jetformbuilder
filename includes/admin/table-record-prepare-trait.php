@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait Table_Record_Prepare_Trait {
 

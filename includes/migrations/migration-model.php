@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Migrations;
 
-
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Migration_Model extends Base_Db_Model {
 

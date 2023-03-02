@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Logger instance()
  *

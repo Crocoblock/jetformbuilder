@@ -8,6 +8,11 @@ use Jet_Form_Builder\Actions\Events_Manager;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 
 	/** @var Base_Event */

@@ -8,6 +8,10 @@ use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Modifier extends Abstract_Post_Modifier {
 

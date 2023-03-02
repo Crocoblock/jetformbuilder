@@ -7,6 +7,11 @@ use Jet_Form_Builder\Gateways\Paypal\Rest_Endpoints\Fetch_Pay_Now_Editor;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Connectors;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_View_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Pay_Now extends Scenario_View_Base {
 
 	use Scenarios_Connectors\Pay_Now;

@@ -16,13 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-add_filter(
-	'jet-form-builder/send-email/message_content',
-	function ( $content ) {
-		return do_shortcode( $content );
-	}
-);
-
 /**
  * Define Base_Type class
  */

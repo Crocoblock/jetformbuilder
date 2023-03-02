@@ -7,6 +7,11 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Rest_Endpoints\Delete_Form_Record_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\Actions\Api_Single_Action;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Delete_Record_Action extends Api_Single_Action {
 
 	public function get_slug(): string {

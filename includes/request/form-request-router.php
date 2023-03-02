@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Request;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Form_Request_Router extends Request_Router {
 

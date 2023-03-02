@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Actions\Methods\Form_Record\Models;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_7;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Record_Model extends Base_Db_Model {
 
 	public static function table_name(): string {

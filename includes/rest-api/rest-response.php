@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Rest_Response extends \WP_REST_Response {
 
 	public function get_custom_header_prefix(): string {

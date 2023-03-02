@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
-
 use Jet_Form_Builder\Admin\Table_Record_Prepare_Trait;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class View_Simple_Base extends View_Base {
 

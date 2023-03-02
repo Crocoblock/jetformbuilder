@@ -1,4 +1,11 @@
-<div class="jet-form-builder-file-upload__file" data-file="%file_url%">
+<?php
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+?><div class="jet-form-builder-file-upload__file" data-file="%file_url%">
     <!-- preview -->
     <!-- field -->
     <div class="jet-form-builder-file-upload__file-remove" data-file-name="%file_name%">

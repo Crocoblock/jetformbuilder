@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Vui_Boxes;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait With_Boxes_Trait {
 

@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Db_Queries\Views;
 
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 trait View_Base_Count_Trait {
 
 	/**

@@ -7,6 +7,11 @@ use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Generators\Base;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Base_Vui_Button implements Arrayable {
 
 	const STYLE_ACCENT              = 'accent';

@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Form_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * Class Helper
  *

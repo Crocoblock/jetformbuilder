@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Arrayable;
 
-
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Dynamic_Id;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Collection implements \Iterator, \Countable, \ArrayAccess {
 

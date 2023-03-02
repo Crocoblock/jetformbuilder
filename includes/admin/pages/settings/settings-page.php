@@ -9,6 +9,11 @@ use Jet_Form_Builder\Admin\Vui_Boxes\With_Boxes_Trait;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Settings_Page extends Base_Page {
 
 	/**

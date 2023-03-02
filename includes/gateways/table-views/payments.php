@@ -22,6 +22,11 @@ use Jet_Form_Builder\Gateways\Table_Views\Columns\Payment_Type_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Row_Actions_Column;
 use Jet_Form_Builder\Gateways\Table_Views\Columns\Transaction_Column;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Payments extends View_Advanced_Base {
 
 	public function get_raw_list( array $args ): array {

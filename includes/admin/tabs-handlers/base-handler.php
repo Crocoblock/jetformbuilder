@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Handler {
 
 	private $prefix = 'jet_form_builder_settings__';

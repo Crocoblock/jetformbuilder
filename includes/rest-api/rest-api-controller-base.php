@@ -3,6 +3,11 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Rest_Api_Controller_Base {
 
 	public function rest_api_init() {

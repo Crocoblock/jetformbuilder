@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Macro_Constants;
 
-
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Constant implements Repository_Item_Instance_Trait {
 

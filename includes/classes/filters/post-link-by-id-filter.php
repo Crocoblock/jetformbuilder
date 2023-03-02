@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
-
 use Jet_Form_Builder\Actions\Types\Send_Email;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Post_Link_By_Id_Filter extends Base_Multiple_Filter {
 

@@ -16,6 +16,11 @@ use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
 
 	use Admin_Page_Trait;

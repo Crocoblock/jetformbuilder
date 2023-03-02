@@ -5,6 +5,11 @@ namespace Jet_Form_Builder\Gateways\Paypal\Scenarios_Logic;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 interface With_Resource_It {
 
 	/**

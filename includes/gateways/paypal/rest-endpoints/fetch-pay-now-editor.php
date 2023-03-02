@@ -7,6 +7,11 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Gateways\Paypal;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Fetch_Pay_Now_Editor extends Rest_Api_Endpoint_Base {
 
 	public static function get_rest_base() {

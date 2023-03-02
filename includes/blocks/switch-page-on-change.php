@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-
 use Jet_Form_Builder\Blocks\Types\Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Switch_Page_On_Change {
 

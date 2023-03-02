@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Form_Actions\Types;
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Get_Form_Data;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Export_Action extends Base_Form_Action {
 
 	use Get_Form_Data;

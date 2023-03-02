@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages;
 
-
 use Jet_Form_Builder\Admin\Exceptions\Failed_Box_Update;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Meta_Box_Update_Callback;
@@ -11,6 +10,11 @@ use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Page_Updater extends Rest_Api_Endpoint_Base {
 

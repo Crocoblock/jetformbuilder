@@ -15,6 +15,11 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Form_Record_Actions_Box extends Base_Table_Box {
 
 	protected $show_overflow = true;

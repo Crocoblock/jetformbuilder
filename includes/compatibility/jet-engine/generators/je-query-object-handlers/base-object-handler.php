@@ -3,6 +3,10 @@
 
 namespace Jet_Form_Builder\Compatibility\Jet_Engine\Generators\Je_Query_Object_Handlers;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Base_Object_Handler {
 

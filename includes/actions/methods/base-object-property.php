@@ -3,11 +3,15 @@
 
 namespace Jet_Form_Builder\Actions\Methods;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Base_Object_Property implements
 	Collection_Item_Interface,

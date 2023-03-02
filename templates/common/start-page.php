@@ -6,5 +6,11 @@
  */
 
 use Jet_Form_Builder\Form_Break;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 ?>
 <div class="jet-form-builder-page <?php echo esc_attr( $hidden_class ); ?>" data-page="<?php echo esc_attr( $this->get_current() ); ?>">

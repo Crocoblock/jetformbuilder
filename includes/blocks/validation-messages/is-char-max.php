@@ -3,10 +3,14 @@
 
 namespace Jet_Form_Builder\Blocks\Validation_Messages;
 
-
 use Jet_Form_Builder\Blocks\Types\Text_Field;
 use Jet_Form_Builder\Blocks\Types\Textarea_Field;
 use Jet_Form_Builder\Blocks\Types\Wysiwyg_Field;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Is_Char_Max extends Base_Message {
 

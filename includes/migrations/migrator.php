@@ -13,6 +13,11 @@ use Jet_Form_Builder\Migrations\Versions\Version_2_1_0;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_7;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_8;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Migrator instance()
  *

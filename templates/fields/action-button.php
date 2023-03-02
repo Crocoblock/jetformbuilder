@@ -5,6 +5,11 @@
  * @var \Jet_Form_Builder\Blocks\Render\Action_Button_Render $this
  */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 $render_wrapper = false;
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

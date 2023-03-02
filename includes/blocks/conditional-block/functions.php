@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Base_Function;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Hide;
 use Jet_Form_Builder\Blocks\Conditional_Block\Functions\Function_Show;
@@ -11,6 +10,11 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Functions implements Arrayable {
 

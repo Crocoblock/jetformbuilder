@@ -7,6 +7,11 @@ use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Exceptions\Integration_Exception;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Integration_Base_Action extends Base {
 	protected $action;
 

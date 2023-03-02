@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Rest_Api;
 
-
 use Jet_Form_Builder\Classes\Http\Http_Tools;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 trait Dynamic_Rest_Url_Trait {
 

@@ -2,15 +2,15 @@
 
 namespace Jet_Form_Builder\Actions\Methods;
 
-use Jet_Form_Builder\Actions\Methods\Exceptions\Modifier_Exclude_Property;
-use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
-use Jet_Theme_Core\Template_Conditions\Page_404;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Abstract_Modifier {
 

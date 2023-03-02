@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Compatibility\Jet_Engine;
 
-
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Actions\Update_Options;
@@ -14,6 +13,11 @@ use Jet_Form_Builder\Compatibility\Jet_Engine\Methods\Post_Modification\Post_Je_
 use Jet_Form_Builder\Compatibility\Jet_Engine\Parsers\Map_Field_Parser;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Preset_Sources\Preset_User;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Jet_Engine {
 

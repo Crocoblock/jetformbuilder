@@ -4,6 +4,11 @@ namespace Jet_Form_Builder\Compatibility\Jet_Engine\Generators;
 
 use Jet_Form_Builder\Generators\Base;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Get_From_Field extends Base {
 
 	/**

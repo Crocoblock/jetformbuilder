@@ -18,6 +18,11 @@ use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Gateways\Scenario_Item;
 use Jet_Form_Builder\Gateways\Paypal\Scenarios_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Scenario_Logic_Base implements Scenario_Item {
 
 	protected $queried_token;

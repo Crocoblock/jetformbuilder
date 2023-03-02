@@ -15,6 +15,11 @@ use Jet_Form_Builder\Gateways\Paypal;
 use Jet_Form_Builder\Gateways\Rest_Api\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 /**
  * @method static Gateway_Manager instance()
  *

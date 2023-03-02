@@ -3,13 +3,17 @@
 
 namespace Jet_Form_Builder\Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Abstract_Post_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Meta_Property;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Terms_Property;
 use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class Wc_Product_Modifier extends Abstract_Post_Modifier {
 

@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Blocks\Advanced_Rules;
 
-
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 abstract class Advanced_Rule implements Arrayable {
 

@@ -11,6 +11,11 @@ use Jet_Form_Builder\Gateways\Meta_Boxes\Payer_Box;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payer_Shipping_Box;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Single_Payment_Page extends Base_Single_Page {
 
 	/**
